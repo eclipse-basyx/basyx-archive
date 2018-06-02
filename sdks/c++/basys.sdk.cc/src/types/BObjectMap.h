@@ -40,7 +40,7 @@ class BObjectMap : public BType {
 
 	// Access members
 	public:
-		std::map<BRef<BType>> *elements() {return &mapElements;}
+		std::map<std::string, BRef<BType>> *elements() {return &mapElements;}
 
 };
 

@@ -47,7 +47,7 @@ class ISubModel : public IElement {
 		/* *******************************************************
 		 * Retrieve list of sub model properties
 		 * *******************************************************/
-		virtual std::map<std::string, IProperty *> getProperties() = 0;
+		virtual std::map<std::string, BRef<BType>> getProperties() = 0;
 
 };
 

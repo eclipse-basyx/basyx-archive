@@ -48,12 +48,12 @@ class IAssetAdministrationShell : public IElement {
 		/* *******************************************************
 		 * Retrieve list of sub models by type
 		 * *******************************************************/
-		virtual std::map<std::string, ISubModel *> getSubModelsByType() = 0;
+		virtual std::map<std::string, BRef<BType>> getSubModelsByType() = 0;
 
 		/* *******************************************************
 		 * Retrieve list of sub models by ID
 		 * *******************************************************/
-		virtual std::map<std::string, ISubModel *> getSubModelsByID() = 0;
+		virtual std::map<std::string, BRef<BType>> getSubModelsByID() = 0;
 };
 
 

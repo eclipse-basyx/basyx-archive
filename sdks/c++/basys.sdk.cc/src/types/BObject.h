@@ -22,7 +22,7 @@
 /* ***********************************************************************
  * Class definition for BObject
  * ***********************************************************************/
-class BObject : public BType {
+class BObject : public BType {   // @suppress("Class has a virtual method and non-virtual destructor")
 
 
 	// Static members

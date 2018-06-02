@@ -100,7 +100,7 @@ class IElement : public BObject {
 	public:
 
 		// Constructor
-		IElement(std::string elementId, std::string elementTypeID, IElement *elementParent = 0) {
+		IElement(std::string elementId, std::string elementTypeID, IElement *elementParent = 0) : BObject() {
 			// Store references
 			id     = elementId;
 			parent = elementParent;

@@ -1,6 +1,8 @@
 /*
  * test_devicestatussm.cc
  *
+ * Test accessing a sub model that does not know about its device
+ *
  *      Author: kuhn
  */
 

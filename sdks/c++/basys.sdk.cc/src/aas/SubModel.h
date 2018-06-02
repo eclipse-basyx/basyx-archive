@@ -19,12 +19,15 @@
 /* *********************************************************************************
  * Sub Model base class
  * *********************************************************************************/
-class SubModel : public ISubModel {
+class SubModel : public ISubModel {  // @suppress("Class has a virtual method and non-virtual destructor")
 
 
 	// Constructor
 	public:
-		// Default constructor
+
+		/**
+		 * Default constructor
+		 */
 		SubModel(std::string aasID, std::string aasTypeID, IElement *aasParent = 0) : ISubModel(aasID, aasTypeID, aasParent) {
 			// Do nothing
 		}
@@ -37,10 +40,27 @@ class SubModel : public ISubModel {
 		/* *******************************************************
 		 * Retrieve list of sub model properties
 		 * *******************************************************/
-		virtual std::map<std::string, IProperty *> getProperties() {
+		virtual std::map<std::string, BRef<BType>> getProperties() {
+			// Create a new property list
+			std::map<std::string, BRef<BType>> result;
 
+			// Create a map iterator that points to beginning of map
+			std::map<std::string, int>::iterator it = rtti_propertyType.begin();
+
+			// Fill property list from RTTI table
+			while (it != rtti_propertyType.end())
+			{
+				// Accessing KEY from element pointed by it.
+				std::string name = it->first;                        // @suppress("Field cannot be resolved")
+
+				// Add result
+				// - For now, the property itself is not added yet
+				result.insert(std::make_pair(name, BRef<BType>(new BNullObject())));
+			}
+
+			// Return list of properties
+			return result;
 		}
-
 
 
 
@@ -50,11 +70,8 @@ class SubModel : public ISubModel {
 		/**
 		 * Fill elements of BaSyx RTTI tables with exported members of this class
 		 */
-		virtual void basyx_fillRTTI() {
-			// Fill elements of base class
-			ISubModel::basyx_fillRTTI();
-		}
-
+		BASYX_RTTI_START(SubModel, ISubModel)
+		BASYX_RTTI_END
 };
 
 
