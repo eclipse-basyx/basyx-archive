@@ -52,16 +52,16 @@ TEST_F(TestDeviceStatusSM, testStatusSMAccess) { // @suppress("Invalid arguments
 
 
 	// Test RTTI values for sub model properties
-	ASSERT_EQ(statusSubModel->rtti_propertyType["statusProperty1"], BASYS_INT);       // @suppress("Invalid arguments")
-	ASSERT_EQ(statusSubModel->rtti_propertyType["statusProperty2"], BASYS_CHAR);      // @suppress("Invalid arguments")
-	ASSERT_EQ(statusSubModel->rtti_propertyType["statusProperty3"], BASYS_BOOLEAN);   // @suppress("Invalid arguments")
+	ASSERT_EQ(statusSubModel->rtti_propertyType["statusProperty1"], BASYS_INT);       // @suppress("Invalid arguments") // @suppress("Field cannot be resolved")
+	ASSERT_EQ(statusSubModel->rtti_propertyType["statusProperty2"], BASYS_CHAR);      // @suppress("Invalid arguments") // @suppress("Field cannot be resolved")
+	ASSERT_EQ(statusSubModel->rtti_propertyType["statusProperty3"], BASYS_BOOLEAN);   // @suppress("Invalid arguments") // @suppress("Field cannot be resolved")
 
 
 	// Test variable value access for sub model properties
 	// - Get pointer to member
-	void *mbr1 = statusSubModel->rtti_propertyValue["statusProperty1"];
-	void *mbr2 = statusSubModel->rtti_propertyValue["statusProperty2"];
-	void *mbr3 = statusSubModel->rtti_propertyValue["statusProperty3"];
+	void *mbr1 = statusSubModel->rtti_propertyValue["statusProperty1"];               // @suppress("Field cannot be resolved")
+	void *mbr2 = statusSubModel->rtti_propertyValue["statusProperty2"];               // @suppress("Field cannot be resolved")
+	void *mbr3 = statusSubModel->rtti_propertyValue["statusProperty3"];               // @suppress("Field cannot be resolved")
 	// - Read variable values via element pointer
 	ASSERT_EQ(*((int  *) mbr1), 13);                                                  // @suppress("Invalid arguments")
 	ASSERT_EQ(*((char *) mbr2), 'a');                                                 // @suppress("Invalid arguments")
