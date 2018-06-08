@@ -52,7 +52,7 @@ BRef<BType> DeviceStatusSM::setBaseline(BRef<BType> param) {
 
 
 	// Check input parameter
-	if (!isParameterList(param)) {
+	if (!isParameterList(param)) { // @suppress("Invalid arguments")
 		// Error message
 		printf("Invalid parameter!\n");
 

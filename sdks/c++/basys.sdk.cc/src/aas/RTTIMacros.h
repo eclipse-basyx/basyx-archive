@@ -34,5 +34,9 @@
 		_basyx_AddHandler(#name, &name);
 
 
+#define RTTI_OPERATION2(name, ptr) \
+		_basyx_AddHandler(#name, &ptr);
+
+
 
 #endif // AAS_RTTIMACROS_H_

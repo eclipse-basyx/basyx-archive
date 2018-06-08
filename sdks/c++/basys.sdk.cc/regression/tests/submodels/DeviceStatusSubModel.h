@@ -50,13 +50,6 @@ class DeviceStatusSM : public SubModel {
 		bool statusProperty3;
 
 
-	// Properties - those are filled with configuration data
-	public:
-		int  configProperty1;
-		char configProperty2;
-		int  configProperty3;
-
-
 	// Exported operations of sub model
 	public:
 		// Example operation: Calibrate  (() -> ())
@@ -75,13 +68,13 @@ class DeviceStatusSM : public SubModel {
 		BASYX_RTTI_START(DeviceStatusSM, SubModel)
 			// Add property elements from this class
 			RTTI_PROPERTY(statusProperty1, BASYS_INT)
-			RTTI_PROPERTY(statusProperty2, BASYS_CHARACTER)
+			RTTI_PROPERTY(statusProperty2, BASYS_CHARACTER)   // FIXME: URI auf statusProperty zusätzlich zu Variablenname
 			RTTI_PROPERTY(statusProperty3, BASYS_BOOLEAN)
 
 			// Add operations for this class
-			RTTI_OPERATION(calibrate)           // @suppress("Invalid arguments")
-			RTTI_OPERATION(setBaseline)         // @suppress("Invalid arguments")
-			RTTI_OPERATION(getRawData)          // @suppress("Invalid arguments")
+			RTTI_OPERATION2(calibrate,   DeviceStatusSM::calibrate)           // @suppress("Invalid arguments")
+			RTTI_OPERATION2(setBaseline, DeviceStatusSM::setBaseline)         // @suppress("Invalid arguments")
+			RTTI_OPERATION2(getRawData,  DeviceStatusSM::getRawData)          // @suppress("Invalid arguments")
 		BASYX_RTTI_END
 
 };
