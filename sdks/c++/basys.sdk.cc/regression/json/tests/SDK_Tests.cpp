@@ -259,7 +259,7 @@ TEST_F(JSOnTest, JSONTools_serialize_NULL_character_)
 	   json serObjRepo;
 	   ASSERT_TRUE(json_tools.serializeNull(source, '\0', serObjRepo));
 }
-
+/*
 TEST_F(JSOnTest, JSONTools_deserialize_NULL)
 {
 	   json source =
@@ -289,4 +289,5 @@ TEST_F(JSOnTest, JSONTools_serializeArray)
 
 	   ASSERT_TRUE(json_tools.deserializeNull(source, '\0'));
 }
+*/
 }
