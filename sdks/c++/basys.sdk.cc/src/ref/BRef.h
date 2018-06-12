@@ -54,7 +54,7 @@ template <typename T> class BRef {
 			// Null pointer check
 			if (containedReference == 0) freeOnZero=false;
 
-			printf("Constructing %i!\n", containedReference);
+			printf("Constructing %i!\n", (int) containedReference);
 		}
 
 
@@ -96,7 +96,7 @@ template <typename T> class BRef {
 			// Increase reference counter
 			(*refCounterRef)++;
 
-			printf("Copying %i %i!\n", containedReference, (*refCounterRef));
+			printf("Copying %i %i!\n", (int) containedReference, (int) (*refCounterRef));
 		}
 
 
@@ -112,7 +112,7 @@ template <typename T> class BRef {
 			// Increase reference counter
 			(*refCounterRef)++;
 
-			printf("Assigning %i %i!\n", containedReference, (*refCounterRef));
+			printf("Assigning %i %i!\n", (int) containedReference, (int) (*refCounterRef));
 
 			// Return assigned value
 			return *this;
@@ -121,7 +121,7 @@ template <typename T> class BRef {
 
 	    // Implicit conversion operator for contained pointer type
 	    template <typename U> operator BRef<U>() const {
-			printf("Casting %i %i!\n", containedReference, (*refCounterRef));
+			printf("Casting %i %i!\n", (int) containedReference, (int) (*refCounterRef));
 
 			// This cast is safe, because the template argument is only used as pointer type, and pointer types always have same size
 	    	return *((BRef<U> *) this);
@@ -130,12 +130,12 @@ template <typename T> class BRef {
 
 		// Destructor
 		~BRef() {
-			printf("Desctructing %i %i %i!\n", containedReference, *refCounterRef, refCounterRef);
+			printf("Desctructing %i %i %i!\n", (int) containedReference, (int) *refCounterRef, (int) refCounterRef);
 
 			// Decrement reference counter
 			(*refCounterRef)--;
 
-			printf("Desctructing2 %i %i %i!\n", containedReference, *refCounterRef, refCounterRef);
+			printf("Desctructing2 %i %i %i!\n", (int) containedReference, (int) *refCounterRef, (int) refCounterRef);
 			// Error check
 			if (*refCounterRef < 0) printf("BRef semantic error!\n");
 

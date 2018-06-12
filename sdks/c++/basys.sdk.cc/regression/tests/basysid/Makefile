@@ -8,7 +8,7 @@ tests: test1 test2
 
 
 test1:
-	gcc test_basysid_1.cc -o test_basysid_1.exe -I../../../src -I../.. -I../../support -lstdc++
+	gcc test_basysid_1.cc -o test_basysid_1.exe -I../../../src -I../.. -I../../support -lstdc++ -Wall -W 
 	./test_basysid_1.exe
 
 

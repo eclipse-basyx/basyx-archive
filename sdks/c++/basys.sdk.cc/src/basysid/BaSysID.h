@@ -139,7 +139,7 @@ class BaSysID {
 		 */
 		static std::string getAASID(std::string path) {
 			std::string result = path;
-			int         offset = 0;
+			std::size_t offset = 0;
 
 			// Check if path contains an AAS part
 			if (path.find_first_of(".") == std::string::npos) return "";
@@ -161,7 +161,7 @@ class BaSysID {
 		 */
 		static std::string getQualifiedAASID(std::string path) {
 			std::string result = path;
-			int         offset = 0;
+			std::size_t offset = 0;
 
 			// Check if path contains an AAS part
 			if (path.find_first_of(".") == std::string::npos) return "";
@@ -179,7 +179,7 @@ class BaSysID {
 		 * Get sub model id from a qualified path <subModelID>.<aasID>/<scope>
 		 */
 		static std::string getSubmodelID(std::string path) {
-			int    offset = 0;
+			std::size_t offset = 0;
 
 			// "aas." is not a sub model
 			if (path.find("aas.") == 0) return "";
@@ -197,7 +197,7 @@ class BaSysID {
 		 * Get qualified path to AAS
 		 */
 		static std::string getPath(std::string path) {
-			int    offset = 0;
+			std::size_t offset = 0;
 
 			// Remove everything but path if a path component is present in string
 			if ((offset = path.find_first_of('/')) != std::string::npos) return path.substr(offset+1);
@@ -295,7 +295,7 @@ class BaSysID {
 		 * Get qualified address (submodel ID and AAS ID)
 		 */
 		static std::string getAddress(std::string path) {
-			int    offset = 0;
+			std::size_t offset = 0;
 
 			// Remove everything but address if a path component is present in string
 			if ((offset = path.find_first_of('/')) != std::string::npos) return path.substr(0, offset);
@@ -318,7 +318,7 @@ class BaSysID {
 		 * - <submodel>.<aasid>.<scope>/<path>  --> <submodel>
 		 */
 		static std::string getElementID(std::string path) {
-			int    offset = 0;
+			std::size_t offset = 0;
 
 			// Remove leading "aas." from path
 			if (path.find("aas.") == 0) path = path.substr(4);
@@ -347,7 +347,7 @@ class BaSysID {
 		 * - <submodel>.<aasid>.<scope>/<path>  --> <submodel>.<scope>
 		 */
 		static std::string getQualifiedElementID(std::string path) {
-			int    offset = 0;
+			std::size_t offset = 0;
 
 			// Remove leading "aas." from path
 			if (path.find("aas.") == 0) path = path.substr(4);

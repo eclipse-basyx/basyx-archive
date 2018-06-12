@@ -47,7 +47,7 @@ TEST_F(TestDeviceAAS, testStatusSMAccess) { // @suppress("Invalid arguments")
 	// Instantiate sub model "status"
 	DeviceAAS *deviceAAS = new DeviceAAS("device-89817-aas", "aas");
 	// - Add sub model "Status"
-	DeviceStatusSM *deviceStatusSM = new DeviceStatusSM("device-89817-status", "SampleDeviceStatus"); printf("Comp: %i\n", deviceStatusSM);
+	DeviceStatusSM *deviceStatusSM = new DeviceStatusSM("device-89817-status", "SampleDeviceStatus");
 	deviceAAS->addSubModel("device-89817-status", "SampleDeviceStatus", deviceStatusSM);               // @suppress("Invalid arguments")
 
 
@@ -71,8 +71,8 @@ TEST_F(TestDeviceAAS, testStatusSMAccess) { // @suppress("Invalid arguments")
 
 
 	// Validate AAS sub model table size
-	ASSERT_EQ(deviceAAS->getSubModelsByType().size(), 1);                                // @suppress("Invalid arguments") // @suppress("Field cannot be resolved")
-	ASSERT_EQ(deviceAAS->getSubModelsByID().size(), 1);                                  // @suppress("Invalid arguments") // @suppress("Field cannot be resolved")
+	ASSERT_EQ(deviceAAS->getSubModelsByType().size(), (std::size_t) 1);                  // @suppress("Invalid arguments") // @suppress("Field cannot be resolved")
+	ASSERT_EQ(deviceAAS->getSubModelsByID().size(), (std::size_t) 1);                    // @suppress("Invalid arguments") // @suppress("Field cannot be resolved")
 
 
 	// Get sub model by its type

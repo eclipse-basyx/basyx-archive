@@ -17,8 +17,19 @@
 /////////////////////////////////////////////////////////////////
 // Implement example operation: Calibrate  (() -> ())
 BRef<BType> DeviceStatusSM::calibrate(BRef<BType> param) {
-	// This operation does not expect any parameter
+
+	// Check input parameter
+	// - Flag that indicates whether parameter list was correct
+	bool parameterCheck;
+	// - This operation does not expect any parameter
+	CHECK_PARAMETER(parameterCheck, param);
+	// - Stop if parameter list is invalid
+	if (parameterCheck == false) return BRef<BNullObject>(new BNullObject());
+
+
+	// Show message
 	printf("Calibrating...\n");
+
 
 	// No return value expected - return null object as result
 	return BRef<BNullObject>(new BNullObject());
@@ -73,7 +84,15 @@ BRef<BType> DeviceStatusSM::setBaseline(BRef<BType> param) {
 /////////////////////////////////////////////////////////////////
 // Get raw data value  (() -> I)
 BRef<BType> DeviceStatusSM::getRawData(BRef<BType> param) {
-	// This operation does not expect any parameter
+
+	// Check input parameter
+	// - Flag that indicates whether parameter list was correct
+	bool parameterCheck;
+	// - This operation does not expect any parameter
+	CHECK_PARAMETER(parameterCheck, param);
+	// - Stop if parameter list is invalid
+	if (parameterCheck == false) return BRef<BNullObject>(new BNullObject());
+
 
 	// Get raw data
 	int rawData = 12;
