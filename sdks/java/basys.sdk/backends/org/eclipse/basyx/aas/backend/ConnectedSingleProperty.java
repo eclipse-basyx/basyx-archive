@@ -19,9 +19,9 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 	 * Constructor - expect the URL to the sub model
 	 * @param connector 
 	 */
-	public ConnectedSingleProperty(String id, String submodelId, String path, String url, IBasysConnector connector) {
+	public ConnectedSingleProperty(String id, String submodelId, String path, String url, IBasysConnector connector, ConnectedAssetAdministrationShellManager aasMngr) {
 		// Invoke base constructor
-		super(id, submodelId, path, url, connector);
+		super(id, submodelId, path, url, connector, aasMngr);
 	}
 
 	

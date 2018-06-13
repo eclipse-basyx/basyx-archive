@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
  * @author kuhn
  *
  */
-class TestAASSimpleGetPropertyValue {
+class TestAASSimpleGetPropertyValueFromDifferentSubmodelProviders {
 	
 
 	/**
@@ -47,21 +47,29 @@ class TestAASSimpleGetPropertyValue {
 		IAssetAdministrationShell connAAS = this.aasManager.retrieveAAS("Stub1AAS");
 		
 		
-		// Connect to sub model
-		// - FIXME: We need to define technology independent query String for directory (e.g. status.sampleAAS)
-		// - Retrieve connected sub model
-		// - FIXME: Get submodel by type or ID		
-		ISubModel submodel = ((HashMap<String, ISubModel>) connAAS.getSubModels()).get("statusSM");		
-		
-		
+		// Connect to first sub model
+		ISubModel submodel1 = ((HashMap<String, ISubModel>) connAAS.getSubModels()).get("statusSM");				
+
 		// Connect to sub model property
 		// - Get property values (shortcut here, we know that it is a single property type)
-		int property1Val = (int) ((ISingleProperty) submodel.getProperties().get("sampleProperty1")).get();
-		int property2Val = (int) ((ISingleProperty) submodel.getProperties().get("sampleProperty2")).get();
+		int property1Val = (int) ((ISingleProperty) submodel1.getProperties().get("sampleProperty1")).get();
+		int property2Val = (int) ((ISingleProperty) submodel1.getProperties().get("sampleProperty2")).get();
+
+		
+		// Connect to second sub model
+		ISubModel submodel2 = ((HashMap<String, ISubModel>) connAAS.getSubModels()).get("Stub2SM");				
+
+		// Connect to sub model property
+		// - Get property values (shortcut here, we know that it is a single property type)
+		int property3Val = (int) ((ISingleProperty) submodel2.getProperties().get("samplePropertyA")).get();
+		int property4Val = (int) ((ISingleProperty) submodel2.getProperties().get("samplePropertyB")).get();
+
 		
 		// Check test case results
 		assertTrue(property1Val == 2);
 		assertTrue(property2Val == 3);
+		assertTrue(property3Val == 5);
+		assertTrue(property4Val == 6);
 	}
 }
 

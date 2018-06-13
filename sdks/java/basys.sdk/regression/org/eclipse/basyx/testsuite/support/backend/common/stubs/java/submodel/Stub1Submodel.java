@@ -8,8 +8,10 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.annotation.AASOperation;
 import org.eclipse.basyx.aas.api.annotation.AASProperty;
+import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
+import org.eclipse.basyx.aas.impl.reference.ElementRef;
 import org.eclipse.basyx.aas.impl.resources.basic.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.resources.basic.AssetKind;
 import org.eclipse.basyx.aas.impl.resources.basic.DataType;
@@ -155,6 +157,37 @@ public class Stub1Submodel extends SubModel {
 
 	
 	
+	
+	/**
+	 * Referenced AAS "Stub2AAS"
+	 */
+	@AASProperty public IElementReference referencedAAS = new ElementRef("Stub2AAS");
+
+
+	/**
+	 * Referenced sub model "subModelRef" of same AAS
+	 */
+	@AASProperty public IElementReference subModelRefLocal = new ElementRef("Stub1AAS", "Stub2SM");
+
+
+	/**
+	 * Referenced sub model "mainSM" of different AAS
+	 */
+	@AASProperty public IElementReference subModelRefGlobal = new ElementRef("Stub2AAS", "mainSM");
+
+
+	/**
+	 * Referenced property of sub model "subModelRef"
+	 */
+	@AASProperty public IElementReference subModelPropertyRefLoc = new ElementRef("Stub1AAS", "Stub2SM", "samplePropertyA");
+
+	
+	/**
+	 * Referenced property of sub model "subModelRef" in different AAS
+	 */
+	@AASProperty public IElementReference subModelPropertyRefGlob = new ElementRef("Stub2AAS", "mainSM", "samplePropertyE");
+
+	
 
 	
 	
@@ -216,6 +249,39 @@ public class Stub1Submodel extends SubModel {
 		this.addProperty(property6);
 
 
+
+		Property property7 = new Property();
+		property7.setName("referencedAAS");
+		property7.setId("referencedAAS");
+		property7.setDataType(DataType.REFERENCE);
+		this.addProperty(property7);
+
+		Property property8 = new Property();
+		property8.setName("subModelRefLocal");
+		property8.setId("subModelRefLocal");
+		property8.setDataType(DataType.REFERENCE);
+		this.addProperty(property8);
+
+		Property property9 = new Property();
+		property9.setName("subModelRefGlobal");
+		property9.setId("subModelRefGlobal");
+		property9.setDataType(DataType.REFERENCE);
+		this.addProperty(property9);
+
+		Property property10 = new Property();
+		property10.setName("subModelPropertyRefLoc");
+		property10.setId("subModelPropertyRefLoc");
+		property10.setDataType(DataType.REFERENCE);
+		this.addProperty(property10);
+
+		Property property11 = new Property();
+		property11.setName("subModelPropertyRefGlob");
+		property11.setId("subModelPropertyRefGlob");
+		property11.setDataType(DataType.REFERENCE);
+		this.addProperty(property11);
+
+		
+		
 		
 		// Create and add operation
 	    Operation op = new Operation();

@@ -12,10 +12,10 @@ import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
  */
 public class ConnectedCollectionProperty extends ConnectedProperty implements ICollectionProperty {
 
-	public ConnectedCollectionProperty(String id, String submodelId, String path, String url, IBasysConnector connector) {
+	public ConnectedCollectionProperty(String id, String submodelId, String path, String url, IBasysConnector connector, ConnectedAssetAdministrationShellManager aasMngr) {
 		
 		// Invoke base constructor
-		super(id, submodelId, path, url, connector);
+		super(id, submodelId, path, url, connector, aasMngr);
 	}
 
 	

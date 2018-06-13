@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.exception.ResourceNotFoundException;
 import org.eclipse.basyx.aas.api.manager.IAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.IOperation;
 import org.eclipse.basyx.aas.api.resources.basic.IProperty;
@@ -90,7 +91,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	 * Create a connected Asset Administration Shell proxy
 	 */
 	@Override
-	public IConnectedAssetAdministrationShell retrieveAAS(String assId) throws Exception {
+	public IConnectedAssetAdministrationShell retrieveAAS(String assId) {
 		// Get AAS from directory
 		String addr = null;
 
@@ -127,9 +128,18 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 
 	
 	/**
+	 * Create a connected asset administration shell proxy
+	 */
+	public IConnectedAssetAdministrationShell retrieveAASProxy(IElementReference elementRef) {
+		// Return connected AAS
+		return retrieveAAS(elementRef.getAASID());
+	}
+
+	
+	/**
 	 * Create a connected sub model proxy
 	 */
-	public ISubModel retrieveSubModelProxy(ElementRef elementRef) {
+	public ISubModel retrieveSubModelProxy(IElementReference elementRef) {
 		// Store network address
 		String addr = null;
 		
@@ -147,7 +157,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	/**
 	 * Create a connected property proxy
 	 */
-	public IProperty retrievePropertyProxy(ElementRef elementRef) {
+	public IProperty retrievePropertyProxy(IElementReference elementRef) {
 		// Store BaSys path and resolved network address
 		String path = BaSysID.instance.buildPath(elementRef.getAASID(), elementRef.getSubModelID());
 		String addr = null;
@@ -155,26 +165,26 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		// Lookup address in directory server
 		addr = directoryService.lookup(path);
 		
-		// Handle the case that submodel was not found
+		// Handle the case that sub model was not found
 		if (addr == null) throw new ResourceNotFoundException(path);
 		
 		// Return specific property class
 		if (elementRef.isMap()) {
-			return new ConnectedMapProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), addr, this.connector);
+			return new ConnectedMapProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), addr, this.connector, this);
 		}
 		
 		if (elementRef.isCollection()) {
-			return new ConnectedCollectionProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), addr, this.connector);
+			return new ConnectedCollectionProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), addr, this.connector, this);
 		}
 		
-		return new ConnectedSingleProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), addr, this.connector);
+		return new ConnectedSingleProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), addr, this.connector, this);
 	}
 
 
 	/**
 	 * Create a connected operation proxy
 	 */
-	public IOperation retrieveOperationProxy(ElementRef elementRef) {
+	public IOperation retrieveOperationProxy(IElementReference elementRef) {
 		// Store BaSys path and resolved network address
 		String path = BaSysID.instance.buildPath(elementRef.getAASID(), elementRef.getSubModelID());
 		String addr = null;

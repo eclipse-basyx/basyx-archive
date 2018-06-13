@@ -3,7 +3,6 @@ package org.eclipse.basyx.aas.backend;
 import java.util.Collection;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.resources.basic.IMapProperty;
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
 
@@ -15,10 +14,10 @@ import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
  */
 public class ConnectedMapProperty extends ConnectedProperty implements IMapProperty  {
 
-	public ConnectedMapProperty(String id, String submodelId, String path, String url, IBasysConnector connector) {
+	public ConnectedMapProperty(String id, String submodelId, String path, String url, IBasysConnector connector, ConnectedAssetAdministrationShellManager aasMngr) {
 		
 		// Invoke base constructor
-		super(id, submodelId, path, url, connector);
+		super(id, submodelId, path, url, connector, aasMngr);
 	}
 
 	@Override

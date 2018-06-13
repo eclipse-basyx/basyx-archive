@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
  *         + status
  * 
  * 
- * Test case: Connect from office.iese.fraunhofer to device2.line2int.line2.manufacturing.de via http-rest web services
+ * Test case: Connect from office.iese.fraunhofer.de to device10.line2int.line2.manufacturing.de via http-rest web services
  * 
  * @author kuhn
  *

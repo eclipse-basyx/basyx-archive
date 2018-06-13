@@ -165,7 +165,7 @@ public class ElementRef implements IElementReference {
 	@Override
 	public boolean isAASReference() {
 		// An AAS reference only defines the unique AAS ID
-		if ((aasID != null) && (subModelID == null) && (propertyPath == null)) return true;
+		if ((aasID != null) && ((subModelID == null) || (subModelID.length() == 0)) && ((propertyPath == null) || (propertyPath.length() == 0))) return true;
 
 		// No AAS reference
 		return false;
@@ -179,7 +179,7 @@ public class ElementRef implements IElementReference {
 	@Override
 	public boolean isSubModelReference() {
 		// A sub model reference only defines the unique sub model ID and optionally the AAS ID
-		if ((subModelID != null) && (propertyPath == null)) return true;
+		if ((subModelID != null) && ((propertyPath == null) || (propertyPath.length() == 0))) return true;
 
 		// No sub model reference
 		return false;
