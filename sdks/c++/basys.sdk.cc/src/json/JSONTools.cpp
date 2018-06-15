@@ -20,7 +20,36 @@ JSONTools::~JSONTools() {
 
 
 
-json JSONTools::serializePrimitive(json target, int serializedObject, std::string type )
+bool JSONTools::serializePrimitive(json *target, int serializedObject, std::string type)
+{
+
+   	target->at("value") = serializedObject;
+	target->at("kind") = "value";
+	target->at("typeid") = type;
+
+	return true;
+}
+
+
+bool JSONTools::serializePrimitive(json *target, float serializedObject, std::string type)
+{
+
+   	target->at("value") = serializedObject;
+	target->at("kind") = "value";
+	target->at("typeid") = type;
+
+	return true;
+}
+
+
+
+
+
+
+
+
+
+json JSONTools::serializePrimitive(json target, int serializedObject, std::string type)
 {
 
    	target.at("value") = serializedObject;
@@ -30,7 +59,8 @@ json JSONTools::serializePrimitive(json target, int serializedObject, std::strin
 	return target;
 }
 
-json JSONTools::serializePrimitive(json target, float serializedObject, std::string type )
+
+json JSONTools::serializePrimitive(json target, float serializedObject, std::string type)
 {
 
    	target.at("value") = serializedObject;
@@ -39,6 +69,8 @@ json JSONTools::serializePrimitive(json target, float serializedObject, std::str
 
 	return target;
 }
+
+
 
 json JSONTools::serializePrimitive(json target, double serializedObject, std::string type )
 {
@@ -428,6 +460,88 @@ bool JSONTools::serialize(double value, json serObjRepo, std::string scope)
 		return serialize(value,  std::numeric_limits<int>::quiet_NaN());
 }
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Serialize null object
+ */
+bool JSONTools::serializeNull(json *target, BRef<BType> value, json *serObjRepo) {
+	// Type check
+	if (value->getType() != BASYS_NULL) return false;
+
+	// Serialize null value
+	target->at("kind") = "null";
+
+	// Value is a null
+	return true;
+}
+
+
+
+/**
+ * Serialize primitive type
+ */
+bool JSONTools::serializePrimitiveType(json *target, BRef<BType> value, json *serObjRepo) {
+	// Type check
+	if (value->getType() == BASYS_INT)   {serializePrimitive(target, ((BRef<BValue>) value)->getInt(),   "int");   return true;}
+	if (value->getType() == BASYS_FLOAT) {serializePrimitive(target, ((BRef<BValue>) value)->getFloat(), "float"); return true;}
+
+
+	// Serialize known primitive types
+	/*if (value instanceof Integer)   {serializePrimitive(target, value, "int");       return true;}
+	if (value instanceof Float)     {serializePrimitive(target, value, "float");     return true;}
+	if (value instanceof Double)    {serializePrimitive(target, value, "double");    return true;}
+	if (value instanceof String)    {serializePrimitive(target, value, "string");    return true;}
+	if (value instanceof Boolean)   {serializePrimitive(target, value, "boolean");   return true;}
+	if (value instanceof Character) {serializePrimitive(target, value, "character"); return true;}*/
+
+	// Value is not a primitive type
+	return false;
+}
+
+
+
+
+
+/**
+ * Serialize object
+ */
+json JSONTools::serialize(BRef<BType> value, json *serObjRepo, char *scope) {
+
+	// Create return value
+	json result;
+
+	// Serialize type
+	if (serializeNull(&result, value, serObjRepo)) return result;
+	if (serializePrimitiveType(&result, value, serObjRepo)) return result;
+
+	// Return result
+	return result;
+}
+
+
+
+
 
 
 ///This needs to be checked///!!!!!*************!!!!!!!!!!!!!!!!!!!!***********!!!!

@@ -127,6 +127,15 @@ TEST_F(TestCXXModelProviderSubModel, testCXXProviderSMAccess) { // @suppress("In
 	//   whose value is 12
 	ASSERT_EQ(res3->getType(), BASYS_INT);
 	ASSERT_EQ(res3->getInt(), 12);
+
+
+
+	// Read values from nested property
+	/* - FIXME: This does not work yet
+	BRef<BValue> valNest41 = (BRef<BValue>) modelProvider->getModelPropertyValue("status/statusProperty4/nestedProperty1");   // @suppress("Invalid arguments")
+	// - Value check
+	ASSERT_EQ(valNest41->getInt(), 20);                          // @suppress("Invalid arguments")
+	*/
 }
 
 

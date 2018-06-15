@@ -12,6 +12,10 @@
 #include "json.hpp"
 using json = nlohmann::json;
 
+
+#include "ref/BRef.h"
+
+
 class JSONTools {
 public:
 	JSONTools();
@@ -105,6 +109,35 @@ public:
 
 
 
+
+	/**
+	 * Serialize integer primitive
+	 */
+	bool serializePrimitive(json *target, int value, std::string type);
+
+	/**
+	 * Serialize float primitive
+	 */
+	bool serializePrimitive(json *target, float value, std::string type);
+
+
+
+
+	/**
+	 * Serialize null object
+	 */
+	bool serializeNull(json *target, BRef<BType> value, json *serObjRepo);
+
+
+	/**
+	 * Serialize primitive value
+	 */
+	bool serializePrimitiveType(json *target, BRef<BType> value, json *serObjRepo);
+
+	/**
+	 * Serialize object
+	 */
+	json serialize(BRef<BType> value, json *serObjRepo, char *scope);
 
 };
 

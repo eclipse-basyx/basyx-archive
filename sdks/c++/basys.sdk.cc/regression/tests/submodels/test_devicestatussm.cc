@@ -49,12 +49,16 @@ TEST_F(TestDeviceStatusSM, testStatusSMAccess) { // @suppress("Invalid arguments
 	statusSubModel->statusProperty1 = 13;
 	statusSubModel->statusProperty2 = 'a';
 	statusSubModel->statusProperty3 = true;
+	statusSubModel->statusProperty4.nestedProperty1 = 20;
+	statusSubModel->statusProperty4.nestedProperty2 = 'b';
+	statusSubModel->statusProperty4.nestedProperty3 = false;
 
 
 	// Test RTTI values for sub model properties
 	ASSERT_EQ(statusSubModel->rtti_propertyType["statusProperty1"], BASYS_INT);       // @suppress("Invalid arguments") // @suppress("Field cannot be resolved")
 	ASSERT_EQ(statusSubModel->rtti_propertyType["statusProperty2"], BASYS_CHAR);      // @suppress("Invalid arguments") // @suppress("Field cannot be resolved")
 	ASSERT_EQ(statusSubModel->rtti_propertyType["statusProperty3"], BASYS_BOOLEAN);   // @suppress("Invalid arguments") // @suppress("Field cannot be resolved")
+	ASSERT_EQ(statusSubModel->rtti_propertyType["statusProperty4"], BASYS_IELEMENT);  // @suppress("Invalid arguments") // @suppress("Field cannot be resolved")
 
 
 	// Test variable value access for sub model properties
@@ -81,6 +85,23 @@ TEST_F(TestDeviceStatusSM, testStatusSMAccess) { // @suppress("Invalid arguments
 	// - Check result
 	ASSERT_EQ(res1->getType(), BASYS_INT);                                            // @suppress("Invalid arguments")
 	ASSERT_EQ(res1->getInt(), 20);                                                    // @suppress("Invalid arguments")
+
+
+	// Test access to nested property
+	void *mbr4 = statusSubModel->rtti_propertyValue["statusProperty4"];               // @suppress("Field cannot be resolved")
+	NestedStatusSubModel *nestedSM = (NestedStatusSubModel *) mbr4;
+	// - Get pointer to member
+	void *nmbr1 = nestedSM->rtti_propertyValue["nestedProperty1"];                    // @suppress("Field cannot be resolved")
+	void *nmbr2 = nestedSM->rtti_propertyValue["nestedProperty2"];                    // @suppress("Field cannot be resolved")
+	void *nmbr3 = nestedSM->rtti_propertyValue["nestedProperty3"];                    // @suppress("Field cannot be resolved")
+	// - Read variable values via element pointer
+	ASSERT_EQ(*((int  *) nmbr1), 20);                                                 // @suppress("Invalid arguments")
+	ASSERT_EQ(*((char *) nmbr2), 'b');                                                // @suppress("Invalid arguments")
+	ASSERT_EQ(*((bool *) nmbr3), false);                                              // @suppress("Invalid arguments")
+	// - Change variable values via element pointer
+	*((int *) nmbr1) = 21;
+	// - Read variable values again via element pointer
+	ASSERT_EQ(*((int  *) nmbr1), 21);                                                 // @suppress("Invalid arguments")
 }
 
 

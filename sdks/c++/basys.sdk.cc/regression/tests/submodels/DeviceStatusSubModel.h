@@ -25,6 +25,39 @@
 
 
 
+/* ***********************************************************************
+ * Nested sub model
+ * ***********************************************************************/
+class NestedStatusSubModel : public IElement {
+
+	// Constructor
+	public:
+		// Default constructor
+		NestedStatusSubModel() : IElement("", "", 0) {
+			// Fill RTTI table
+			basyx_fillRTTI();
+		}
+
+
+	// Properties - those are filled with live status data
+	public:
+		int  nestedProperty1;
+		char nestedProperty2;
+		bool nestedProperty3;
+
+
+	// RTTI information
+	protected:
+		// BaSyx RTTI table
+		BASYX_RTTI_START(NestedStatusSubModel, IElement)
+			// Add property elements from this class
+			RTTI_PROPERTY(nestedProperty1, BASYS_INT)
+			RTTI_PROPERTY(nestedProperty2, BASYS_CHARACTER)   // FIXME: URI auf statusProperty zusätzlich zu Variablenname
+			RTTI_PROPERTY(nestedProperty3, BASYS_BOOLEAN)
+		BASYX_RTTI_END
+};
+
+
 
 /* ***********************************************************************
  * Class definition for sub model
@@ -45,9 +78,10 @@ class DeviceStatusSM : public SubModel {
 
 	// Properties - those are filled with live status data
 	public:
-		int  statusProperty1;
-		char statusProperty2;
-		bool statusProperty3;
+		int                  statusProperty1;
+		char                 statusProperty2;
+		bool                 statusProperty3;
+		NestedStatusSubModel statusProperty4;
 
 
 	// Exported operations of sub model
@@ -70,6 +104,7 @@ class DeviceStatusSM : public SubModel {
 			RTTI_PROPERTY(statusProperty1, BASYS_INT)
 			RTTI_PROPERTY(statusProperty2, BASYS_CHARACTER)   // FIXME: URI auf statusProperty zusätzlich zu Variablenname
 			RTTI_PROPERTY(statusProperty3, BASYS_BOOLEAN)
+			RTTI_PROPERTY(statusProperty4, BASYS_IELEMENT)
 
 			// Add operations for this class
 			RTTI_OPERATION2(calibrate,   DeviceStatusSM::calibrate)           // @suppress("Invalid arguments")
