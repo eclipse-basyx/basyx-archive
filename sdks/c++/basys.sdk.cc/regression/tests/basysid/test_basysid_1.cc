@@ -200,9 +200,64 @@ TEST_F(TestBaSyxID, testPathIdentifier) { // @suppress("Invalid arguments")
 	ASSERT_EQ(BaSysID::getIdentifier("sma.aasid/patha/b"),    "b");                       // @suppress("Invalid arguments")
 	ASSERT_EQ(BaSysID::getIdentifier("sma.aasid/patha/b/c"),  "c");                       // @suppress("Invalid arguments")
 	ASSERT_EQ(BaSysID::getIdentifier("sma.aasid/patha/b/c/"), "c");                       // @suppress("Invalid arguments")
+
+	// Test identifier extraction for paths
+	ASSERT_EQ(BaSysID::getIdentifier("patha"),                "patha");                   // @suppress("Invalid arguments")
+	ASSERT_EQ(BaSysID::getIdentifier("patha/b"),              "b");                       // @suppress("Invalid arguments")
+	ASSERT_EQ(BaSysID::getIdentifier("patha/b/c"),            "c");                       // @suppress("Invalid arguments")
 }
 
 
+// Test paths elements
+TEST_F(TestBaSyxID, testPathElements1) { // @suppress("Invalid arguments")
+
+	// Create path with trailing '/' and extract elements
+	std::list<std::string> pathElements = BaSysID::splitPropertyPath(BaSysID::getPath("aas.aasid/patha/b/c/")); // @suppress("Invalid arguments")
+
+	// Check path elements
+	// - Used iterator
+	std::list<std::string>::const_iterator iterator = pathElements.begin();
+
+	// - Check list elements
+	ASSERT_EQ(*(iterator++), "patha");                                                    // @suppress("Invalid arguments")
+	ASSERT_EQ(*(iterator++), "b");                                                        // @suppress("Invalid arguments")
+	ASSERT_EQ(*(iterator++), "c");                                                        // @suppress("Invalid arguments")
+	ASSERT_EQ(iterator, pathElements.end());                                              // @suppress("Invalid arguments")
+}
+
+
+// Test paths elements
+TEST_F(TestBaSyxID, testPathElements2) { // @suppress("Invalid arguments")
+
+	// Create path without trailing '/' and extract elements
+	std::list<std::string> pathElements = BaSysID::splitPropertyPath(BaSysID::getPath("aas.aasid/patha/b/c")); // @suppress("Invalid arguments")
+
+	// Check path elements
+	// - Used iterator
+	std::list<std::string>::const_iterator iterator = pathElements.begin();
+
+	// - Check list elements
+	ASSERT_EQ(*(iterator++), "patha");                                                    // @suppress("Invalid arguments")
+	ASSERT_EQ(*(iterator++), "b");                                                        // @suppress("Invalid arguments")
+	ASSERT_EQ(*(iterator++), "c");                                                        // @suppress("Invalid arguments")
+	ASSERT_EQ(iterator, pathElements.end());                                              // @suppress("Invalid arguments")
+}
+
+
+// Test paths elements
+TEST_F(TestBaSyxID, testPathElements3) { // @suppress("Invalid arguments")
+
+	// Create path without trailing '/' and extract elements
+	std::list<std::string> pathElements = BaSysID::splitPropertyPath(BaSysID::getPath("aas.aasid/patha")); // @suppress("Invalid arguments")
+
+	// Check path elements
+	// - Used iterator
+	std::list<std::string>::const_iterator iterator = pathElements.begin();
+
+	// - Check list elements
+	ASSERT_EQ(*(iterator++), "patha");                                                    // @suppress("Invalid arguments")
+	ASSERT_EQ(iterator, pathElements.end());                                              // @suppress("Invalid arguments")
+}
 
 
 

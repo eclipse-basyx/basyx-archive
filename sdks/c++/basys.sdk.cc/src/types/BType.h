@@ -42,7 +42,7 @@ class BType {
 
 	// Destructor
 	public:
-		~BType() {printf("Destruct\n");}
+		~BType() { /* Do nothing */ }
 
 
 	// Public member functions

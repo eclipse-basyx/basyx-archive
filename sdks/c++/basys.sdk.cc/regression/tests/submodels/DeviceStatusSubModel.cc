@@ -15,6 +15,26 @@
 
 
 /////////////////////////////////////////////////////////////////
+// Example operation: selfTest  (() -> (B))
+BRef<BType> NestedStatusSubModel::selfTest(BRef<BType> param) {
+	// Check input parameter
+	// - Flag that indicates whether parameter list was correct
+	bool parameterCheck;
+	// - This operation does not expect any parameter
+	CHECK_PARAMETER(parameterCheck, param);
+	// - Stop if parameter list is invalid
+	if (parameterCheck == false) return BRef<BNullObject>(new BNullObject());
+
+
+	// Do something...
+	printf("Self test running...\n");
+
+	// Return increased parameter value
+	return BRef<BValue>(new BValue(true));
+}
+
+
+/////////////////////////////////////////////////////////////////
 // Implement example operation: Calibrate  (() -> ())
 BRef<BType> DeviceStatusSM::calibrate(BRef<BType> param) {
 

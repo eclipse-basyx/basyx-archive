@@ -46,6 +46,12 @@ class NestedStatusSubModel : public IElement {
 		bool nestedProperty3;
 
 
+	// Exported operations of nested element
+	public:
+		// Example operation: selfTest  (() -> (B))
+		BRef<BType> selfTest(BRef<BType> param);
+
+
 	// RTTI information
 	protected:
 		// BaSyx RTTI table
@@ -54,6 +60,9 @@ class NestedStatusSubModel : public IElement {
 			RTTI_PROPERTY(nestedProperty1, BASYS_INT)
 			RTTI_PROPERTY(nestedProperty2, BASYS_CHARACTER)   // FIXME: URI auf statusProperty zusätzlich zu Variablenname
 			RTTI_PROPERTY(nestedProperty3, BASYS_BOOLEAN)
+
+			// Add operations for this class
+			RTTI_OPERATION2(selfTest,   NestedStatusSubModel::selfTest)           // @suppress("Invalid arguments")
 		BASYX_RTTI_END
 };
 
