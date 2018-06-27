@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IProperty;
@@ -507,6 +508,34 @@ public class JSONTools {
 		// Value has been serialized
 		return true;
 	}
+	
+	
+	protected boolean serializeException(JSONObject target, Object value) {
+
+		if (value instanceof Exception) {
+			
+			Exception e = (Exception) value;
+			
+			target.put("kind", "exception");
+			target.put("message", e.getMessage());
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	
+
+	protected Object deserializeException(JSONObject serializedValue) {
+
+		// Only deserialize exceptions
+		if (!(serializedValue.get("kind").equals("exception"))) return null;
+		
+		System.out.println("Deserialize Exception");
+		return new ServerException( (String) serializedValue.get("message"));
+	}
+
 
 
 	
@@ -556,18 +585,18 @@ public class JSONTools {
 		if (serializePrimitiveType(returnValue, value, serObjRepo)) return returnValue;
 		if (serializeArrayType(returnValue, value, serObjRepo, scope)) return returnValue;
 		if (serializeCollectionType(returnValue, value, serObjRepo, scope)) return returnValue;
-		if (serializeMapType(returnValue, value, serObjRepo, scope)) return returnValue; // FIXME serializeMapType is not used for map properties
+		if (serializeMapType(returnValue, value, serObjRepo, scope)) return returnValue; 
 		if (serializeIElement(returnValue, value, serObjRepo, scope)) return returnValue;
-		if (serializeIElementRef(returnValue, value, serObjRepo, scope)) return returnValue; // This always matches
+		if (serializeIElementRef(returnValue, value, serObjRepo, scope)) return returnValue;
 		if (serializeSerializableObject(returnValue, value, serObjRepo, scope)) return returnValue;
-		
+		if (serializeException(returnValue, value)) return returnValue;
 		// Complex types not supported yet
 		
 		
 		return returnValue;
 	}
 
-	
+
 	/**
 	 * Serialize a primitive or complex value into JSON object
 	 */
@@ -602,6 +631,7 @@ public class JSONTools {
 		if ((returnValue = deserializeMapType(serializedValue, serObjRepo, repository)) != null) return returnValue;
 		if ((returnValue = deserializeElementReference(serializedValue, serObjRepo, repository)) != null) return returnValue;
 		if ((returnValue = deserializeSerializableObject(serializedValue, serObjRepo, repository)) != null) return returnValue;
+		if ((returnValue = deserializeException(serializedValue)) != null) return returnValue;
 
 		
 		
@@ -611,6 +641,8 @@ public class JSONTools {
 	}
 
 	
+
+
 	/**
 	 * Deserialize a primitive or complex value from JSON object
 	 */

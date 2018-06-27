@@ -2,6 +2,7 @@ package org.eclipse.basyx.aas.backend;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.exception.TypeMismatchException;
 import org.eclipse.basyx.aas.api.resources.basic.ICollectionProperty;
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
@@ -33,7 +34,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 		// Fetch value at index @objRef
 		Object value = null;
 		if (collection instanceof List<?>) {
-			// May throw IndexOutOfBoundsException.
+			// May throw IndexOutOfBoundsException
 			value = ((List<?>) collection).get((Integer) index);	
 		} else {
 			throw new TypeMismatchException(this.propertyPath, "Collection");
@@ -46,9 +47,10 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	/**
 	 * Sets new collection. Overwrites existing values
 	 * @param collection
+	 * @throws ServerException 
 	 */
 	@Override
-	public void set(Collection<Object> collection) {
+	public void set(Collection<Object> collection) throws ServerException {
 		
 		// Post data to server
 		basysConnector.basysSet(this.modelProviderURL, propertyPath, collection);
@@ -59,9 +61,10 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 
 	/**
 	 * Add item to collection
+	 * @throws Exception 
 	 */
 	@Override
-	public void add(Object newValue) {
+	public void add(Object newValue) throws Exception {
 		
 		// Post data to server
 		basysConnector.basysPost(this.modelProviderURL, propertyPath, "create" , newValue);
@@ -75,14 +78,17 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 			
 			// Type safe add element to collection
 			((List<Object>) collection).add(newValue);
+		} else {
+			throw new TypeMismatchException(this.propertyPath, "Collection");
 		}
 	}
 
 	/**
 	 * Delete item from collection
+	 * @throws Exception 
 	 */
 	@Override
-	public void remove(Object oldValue) {
+	public void remove(Object oldValue) throws Exception {
 		
 		// Post data to server
 		basysConnector.basysPost(this.modelProviderURL, propertyPath, "delete" , oldValue);
@@ -93,6 +99,8 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 			
 			// Check if element is already inside, delete old value in this case (because it is done in the JOP too)
 			((List<?>) collection).remove(oldValue);
+		} else {
+			throw new TypeMismatchException(this.propertyPath, "Collection");
 		}
 	}
 

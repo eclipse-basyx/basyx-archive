@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.exception.ReadOnlyException;
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IElementContainer;
@@ -90,9 +92,10 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	 * 
 	 * @param path Path to the requested value
 	 * @param newValue Updated value
+	 * @throws ServerException 
 	 */
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) {
+	public void setModelPropertyValue(String path, Object newValue) throws ServerException  {
 		System.out.println("HTTP-Prov Set:"+path+" to "+newValue);
 		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
 		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
@@ -113,9 +116,10 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	 * 
 	 * @param path Path to the collection
 	 * @param newValue Inserted value. 
+	 * @throws Exception 
 	 */
 	@Override
-	public void createValue(String path, Object parameter) {
+	public void createValue(String path, Object parameter) throws ServerException {
 		System.out.println("HTTP-Prov create:"+path+" to "+parameter);
 		
 		// Get address from directory
@@ -136,9 +140,10 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	 * 
 	 * @param path Path to the collection
 	 * @param deletedId ID to delete
+	 * @throws Exception 
 	 */
 	@Override
-	public void deleteValue(String path, Object parameter) {
+	public void deleteValue(String path, Object parameter) throws ServerException {
 		System.out.println("HTTP-Prov delete:"+path+" to "+parameter);
 		
 		// Get address from directory
@@ -156,9 +161,10 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	
 	/**
 	 * Invoke an operation
+	 * @throws Exception 
 	 */
 	@Override
-	public Object invokeOperation(String path, Object[] parameter) {
+	public Object invokeOperation(String path, Object[] parameter) throws ServerException {
 		System.out.println("HTTP-Prov invoke:"+path+" with "+parameter);
 		
 		// Get address from directory

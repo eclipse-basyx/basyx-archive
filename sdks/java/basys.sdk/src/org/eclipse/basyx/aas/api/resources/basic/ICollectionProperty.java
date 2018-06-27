@@ -2,6 +2,8 @@ package org.eclipse.basyx.aas.api.resources.basic;
 
 import java.util.Collection;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
+
 
 
 /**
@@ -34,16 +36,18 @@ public interface ICollectionProperty extends IProperty {
 	/**
 	 * Sets new collection value
 	 * @param collection
+	 * @throws ServerException 
 	 */
-	void set(Collection<Object> collection);
+	void set(Collection<Object> collection) throws ServerException;
 
 
 	/**
 	 * Remove property from collection 
 	 * 
 	 * @param objectRef Property reference to be removed
+	 * @throws Exception 
 	 */
-	public abstract void remove(Object objectRef);
+	public abstract void remove(Object objectRef) throws Exception;
 
 
 	/**

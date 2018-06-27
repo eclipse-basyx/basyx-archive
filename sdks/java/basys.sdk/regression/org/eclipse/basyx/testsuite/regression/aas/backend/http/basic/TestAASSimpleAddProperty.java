@@ -23,14 +23,11 @@ import org.junit.jupiter.api.Test;
 
 
 /**
- * AAS Operations test case
+ * AAS Add Property test case
  * 
- * Context: Static configured topology
- * - Connect to AAS "Stub1AAS"
- * - Connect to sub model "statusSM"
- * - Invoke operations "sum", "property3/sub"
+ * Test if all property types can be added to a remote submodel
  * 
- * @author kuhn
+ * @author pschorn
  *
  */
 class TestAASSimpleAddProperty {
@@ -53,6 +50,7 @@ class TestAASSimpleAddProperty {
 		
 	/**
 	 * Test Add Single Property 
+	 * TODO Fix infinite loop fault
 	 * @throws Exception
 	 */
 	@Test 

@@ -1,7 +1,9 @@
 package org.eclipse.basyx.aas.api.services;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 
 
@@ -37,8 +39,9 @@ public interface IModelProvider {
 	 * 
 	 * @param path Path to the requested value
 	 * @param newValue Updated value
+	 * @throws ServerException 
 	 */
-	public void setModelPropertyValue(String path, Object newValue);
+	public void setModelPropertyValue(String path, Object newValue) throws ServerException ;
 	
 	
 	/**
@@ -46,8 +49,9 @@ public interface IModelProvider {
 	 * 
 	 * @param path Path to the collection
 	 * @param newValue Inserted value
+	 * @throws Exception 
 	 */
-	public void createValue(String path, Object addedValue);
+	public void createValue(String path, Object addedValue) throws Exception;
 	
 	
 	/**
@@ -55,8 +59,9 @@ public interface IModelProvider {
 	 * 
 	 * @param path Path to the collection
 	 * @param deletedValue Collection value to delete
+	 * @throws Exception 
 	 */
-	public void deleteValue(String path, Object deletedValue);
+	public void deleteValue(String path, Object deletedValue) throws Exception;
 	
 
 	/**
@@ -65,8 +70,13 @@ public interface IModelProvider {
 	 * @param path Path to operation
 	 * @param parameter Operation parameter
 	 * @return Return value
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws ServerException 
+	 * @throws Exception 
 	 */
-	public Object invokeOperation(String path, Object[] parameter);
+	public Object invokeOperation(String path, Object[] parameter) throws Exception;
 	
 
 	/**
