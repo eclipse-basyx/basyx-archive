@@ -7,6 +7,7 @@ import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
@@ -31,23 +32,19 @@ public class HTTPConnector implements IBasysConnector {
 	 */
 	public Object basysGet(String address, String servicePath) {
 		
-		System.out.println("basysGet "+servicePath);
+		System.out.println("[HTTP BasysGet] "+ address+ ": " + servicePath);
+		
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
 
-		System.out.println("Addr:"+address+"  Path:"+servicePath);
-
 		// Build web service URL
 		Builder request = buildRequest(client, address, "path", servicePath);
+		
 		// Perform request, return response
 		String result = request.get(String.class); 
 		
-		System.out.println(">> RECEIVED RESPONSE: "+result);
-		
 		// Deserialize and return property value
 		Object res = JSONTools.Instance.deserialize(new JSONObject(result));
-		
-		System.out.println(">> PROCESSED RESPONSE");
 		
 		return res;
 	}
@@ -57,6 +54,9 @@ public class HTTPConnector implements IBasysConnector {
 	 * Invoke a BaSys get operation via HTTP
 	 */
 	public JSONObject basysGetRaw(String address, String servicePath) {
+		
+		System.out.println("[HTTP BasysGet Raw] "+ address+ ": " + servicePath);
+		
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
 
@@ -72,6 +72,9 @@ public class HTTPConnector implements IBasysConnector {
 	 * Invoke a BaSys set operation via HTTP
 	 */
 	public void basysSet(String address, String servicePath, Object newValue) {
+		
+		System.out.println("[HTTP BasysSet] "+ address+ ": " + servicePath);
+		
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
 
@@ -89,9 +92,11 @@ public class HTTPConnector implements IBasysConnector {
 	
 	/**
 	 * Invoke a BaSys post operation via HTTP
-	 * @param action may be "invoke", "create" or "delete"
+	 * @param action may be "invoke", "create" or "delete", "createProperty"
 	 */
 	public Object basysPost(String address, String servicePath, String action, Object... newValue) {
+		
+		System.out.println("[HTTP BasysPost] "+ address+ ": " + servicePath);
 		
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
@@ -106,11 +111,12 @@ public class HTTPConnector implements IBasysConnector {
 		Response rsp = request.post(Entity.entity(jsonObject.toString(), MediaType.APPLICATION_JSON));
 		
 		// Try to extract and return response if any
+		
 		try {
 			return JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
 		}
 		catch (JSONException e){
-			e.printStackTrace();
+		    
 			return null;
 		}
 	}
@@ -166,7 +172,21 @@ public class HTTPConnector implements IBasysConnector {
 		return part1+"/"+part2;
 	}
 	
-	
+	/**
+	 * Create servicepath depending on server technology
+	 */
+	public String buildPath(String aasID, String aasSubmodelID, String path) {
+		String servicePath = aasID;
+		if (aasSubmodelID!=null) {
+			servicePath = aasSubmodelID + "." + servicePath;
+			
+			if (path!=null) {
+				servicePath = servicePath +  "/" + path;
+			}
+		}
+		
+		return servicePath;
+	}
 	
 	
 }

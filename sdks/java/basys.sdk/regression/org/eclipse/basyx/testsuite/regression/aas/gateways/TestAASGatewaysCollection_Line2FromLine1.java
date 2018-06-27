@@ -63,7 +63,7 @@ class TestAASGatewaysCollection_Line2FromLine1 {
 		ISubModel submodel1 = tempsensorAAS1.getSubModels().get("description");
 		
 		// Connect to sub model property and create value
-		((ICollectionProperty) submodel1.getProperties().get("testCollection")).set(92); // we know testCollection is currently [5,42]
+		((ICollectionProperty) submodel1.getProperties().get("testCollection")).add(92); // we know testCollection is currently [5,42]
 		Integer ninetytwo = (Integer) ((ICollectionProperty) submodel1.getProperties().get("testCollection")).get(2); 
 		
 		// Check if value has been added

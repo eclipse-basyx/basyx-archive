@@ -1,7 +1,5 @@
 package org.eclipse.basyx.aas.backend;
 
-import java.util.Observable;
-
 import org.eclipse.basyx.aas.api.exception.UnknownElementTypeException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;

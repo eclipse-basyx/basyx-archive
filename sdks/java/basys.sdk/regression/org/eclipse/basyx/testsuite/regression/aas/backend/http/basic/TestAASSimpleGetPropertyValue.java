@@ -8,6 +8,7 @@ import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.backend.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.backend.ConnectedElement;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
 import org.junit.jupiter.api.Test;
 
@@ -52,6 +53,13 @@ class TestAASSimpleGetPropertyValue {
 		// - Retrieve connected sub model
 		// - FIXME: Get submodel by type or ID		
 		ISubModel submodel = ((HashMap<String, ISubModel>) connAAS.getSubModels()).get("statusSM");		
+		
+		// Set up 
+		((ISingleProperty) submodel.getProperties().get("sampleProperty1")).set(2);
+		((ISingleProperty) submodel.getProperties().get("sampleProperty2")).set(3);
+		
+		((ConnectedElement) submodel.getProperties().get("sampleProperty1")).invalidate();
+		((ConnectedElement) submodel.getProperties().get("sampleProperty2")).invalidate();
 		
 		
 		// Connect to sub model property

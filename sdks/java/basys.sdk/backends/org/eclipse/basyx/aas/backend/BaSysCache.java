@@ -9,6 +9,7 @@ import java.util.Observer;
 
 import org.eclipse.basyx.aas.api.resources.basic.IOperation;
 import org.eclipse.basyx.aas.api.resources.basic.IProperty;
+import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
 import org.eclipse.basyx.aas.impl.reference.ElementRef;
 
 /**
@@ -18,17 +19,19 @@ import org.eclipse.basyx.aas.impl.reference.ElementRef;
  */
 public class BaSysCache<T extends ConnectedElement> {
 	
-	/*
+	/**
 	 * Initialize Cache Hash map for proxies
 	 */
-	private HashMap<String, T>  cache_ ;
+	private KeyValueStore<String, T>  cache_ ;
+	
+	
 	
 	/**
 	 * Initialize cache
 	 */
-	public BaSysCache() {
+	public BaSysCache(ConnectedSubmodel submodel) {
 		
-		this.cache_	    = new HashMap<String, T>();
+		this.cache_	    = new KeyValueStore<String, T>(submodel);
 	}
 	
 	/**

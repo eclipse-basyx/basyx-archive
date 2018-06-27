@@ -14,13 +14,19 @@ public interface ISubModel extends IElementContainer {
 	/**
 	 * Indicate if this sub model is frozen. Frozen sub models prevent all further modifications
 	 */
-	//public boolean isFrozen();
+	public boolean isFrozen();
 	
 	
 	/**
 	 * Freeze the sub model
 	 */
-	//public void freeze();
+	public void freeze();
+	
+	
+	/**
+	 * Unfreeze the sub model
+	 */
+	public void unfreeze();
 
 	
 	/**

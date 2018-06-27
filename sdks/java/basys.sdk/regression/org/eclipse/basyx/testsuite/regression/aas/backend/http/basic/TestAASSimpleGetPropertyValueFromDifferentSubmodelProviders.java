@@ -8,6 +8,7 @@ import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.backend.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.backend.ConnectedElement;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +49,15 @@ class TestAASSimpleGetPropertyValueFromDifferentSubmodelProviders {
 		
 		
 		// Connect to first sub model
-		ISubModel submodel1 = ((HashMap<String, ISubModel>) connAAS.getSubModels()).get("statusSM");				
+		ISubModel submodel1 = ((HashMap<String, ISubModel>) connAAS.getSubModels()).get("statusSM");
+		
+		
+		// Set up
+		((ISingleProperty) submodel1.getProperties().get("sampleProperty1")).set(2);
+		((ISingleProperty) submodel1.getProperties().get("sampleProperty2")).set(3);
+		
+		((ConnectedElement) submodel1.getProperties().get("sampleProperty1")).invalidate();
+		((ConnectedElement) submodel1.getProperties().get("sampleProperty2")).invalidate();
 
 		// Connect to sub model property
 		// - Get property values (shortcut here, we know that it is a single property type)

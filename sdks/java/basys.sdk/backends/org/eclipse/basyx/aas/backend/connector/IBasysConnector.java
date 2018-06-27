@@ -35,4 +35,15 @@ public interface IBasysConnector {
 	 * Invoke a BaSys invoke operation. This function can be superseded by basysPost using "invoke" as action parameter
 	 */
 	public Object basysInvoke(String address, String servicePath, Object... parameters);
+	
+	/**
+	 * Assemble request path technology specific: 
+	 * 	HTTP => aasSubmodelID+"."+aasID+"/"+path
+	 *  OPCUA => aasID+"/"+aasSubmodelID+"."+path
+	 * @param aasId
+	 * @param aasSubmodelID
+	 * @param path
+	 * @return 
+	 */
+	public String buildPath(String aasId, String aasSubmodelID, String path) ;
 }

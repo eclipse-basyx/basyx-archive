@@ -1,6 +1,7 @@
 package org.eclipse.basyx.aas.api.resources.basic;
 
 import java.util.Collection;
+import java.util.Map;
 
 
 
@@ -15,8 +16,7 @@ public interface IMapProperty extends IProperty {
 	/**
 	 *Get value for key
 	 */
-	public Object getValue(Object key);
-	
+	public Object getValue(String key) throws Exception;
 	
 	/**
 	 * put entry in map
@@ -24,8 +24,13 @@ public interface IMapProperty extends IProperty {
 	public void put(Object key, Object value);
 	
 	/**
+	 * Set new map object
+	 * @param map
+	 */
+	void set(Map<String, Object> map);
+	
+	/**
 	 * Get map keys
-	 * 
 	 * @return Collection with keys
 	 */
 	public Collection<Object> getKeys();
@@ -39,6 +44,9 @@ public interface IMapProperty extends IProperty {
 	 * Remove entry 
 	 */
 	public void remove(Object key);
+
+
+
 	
 }
 

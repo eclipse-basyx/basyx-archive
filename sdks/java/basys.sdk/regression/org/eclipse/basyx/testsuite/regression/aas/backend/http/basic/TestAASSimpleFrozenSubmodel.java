@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
  * @author kuhn
  *
  */
-class TestAASSimpleSetPropertyValue {
+class TestAASSimpleFrozenSubmodel {
 
 	/**
 	 * Store HTTP asset administration shell manager backend
@@ -44,48 +44,42 @@ class TestAASSimpleSetPropertyValue {
 
 		
 		// Connect to sub model
-		// - FIXME: We need to define technology independent query String for directory (e.g. status.sampleAAS)
-		// - Retrieve connected sub model
-		// - FIXME: Get submodel by type or ID		
 		ISubModel submodel = connAAS.getSubModels().get("statusSM");		
 		ISubModel submodel2 = connAAS2.getSubModels().get("statusSM");		
 
-		// Set up
-		((ISingleProperty) submodel2.getProperties().get("sampleProperty1")).set(2);
-		((ISingleProperty) submodel2.getProperties().get("sampleProperty2")).set(3);
-		
-		// Connect to sub model property and change values
-		// - Change property values (shortcut here, we know that it is a single property type)
-		((ISingleProperty) submodel.getProperties().get("sampleProperty1")).set(5);
-		((ISingleProperty) submodel.getProperties().get("sampleProperty2")).set(6);
 		
 		
-		// - Get property values (shortcut again)
-		int property1Val = (int) ((ISingleProperty) submodel.getProperties().get("sampleProperty1")).get();
-		int property2Val = (int) ((ISingleProperty) submodel.getProperties().get("sampleProperty2")).get();
-
-		// Check changed property values
-		assertTrue(property1Val == 5);
-		assertTrue(property2Val == 6);
-
-
-		// Other connection changes properties
-		((ISingleProperty) submodel2.getProperties().get("sampleProperty1")).set(2);
-		((ISingleProperty) submodel2.getProperties().get("sampleProperty2")).set(3);
+		// Connect to sub model property and change value
+		((ISingleProperty) submodel.getProperties().get("sampleProperty1")).set(4);
 		
-		// Invalidate information of first connection
+		
+		// Freeze Submodel
+		submodel.freeze();
+		assertTrue(submodel.isFrozen());
+		
+		// Test if you can still change any property
+		((ISingleProperty) submodel.getProperties().get("sampleProperty1")).set(6);
+		((ISingleProperty) submodel2.getProperties().get("sampleProperty1")).set(7);
+		
 		((ConnectedElement) submodel.getProperties().get("sampleProperty1")).invalidate();
-		((ConnectedElement) submodel.getProperties().get("sampleProperty2")).invalidate();
+		int property1Val = (int) ((ISingleProperty) submodel.getProperties().get("sampleProperty1")).get();
 		
-		// - Get property values (shortcut again)
+		// Test if property value has (not) changed
+		assertTrue(property1Val == 4);
+		
+		// Unfreeze Submodel
+		submodel.unfreeze();
+		assertTrue(!submodel.isFrozen());
+		
+		// Reset property value
+		((ISingleProperty) submodel.getProperties().get("sampleProperty1")).set(2);
+		((ISingleProperty) submodel.getProperties().get("sampleProperty2")).set(3);
+		
+		// Check if reset ok
+		((ConnectedElement) submodel.getProperties().get("sampleProperty1")).invalidate();
 		property1Val = (int) ((ISingleProperty) submodel.getProperties().get("sampleProperty1")).get();
-		property2Val = (int) ((ISingleProperty) submodel.getProperties().get("sampleProperty2")).get();
-
-		// Check test case results
 		assertTrue(property1Val == 2);
-		assertTrue(property2Val == 3);	
-		
-	
+
 	}
 }
 

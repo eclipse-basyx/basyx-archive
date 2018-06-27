@@ -50,7 +50,23 @@ public class ReferencedSubModel extends BaseElement implements ISubModel {
 
 	@Override
 	public Map<String, IOperation> getOperations() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public boolean isFrozen() {
+		return false;
+	}
+
+
+	@Override
+	public void freeze() {
+		return;
+	}	
+	
+	@Override
+	public void unfreeze() {
+		return;
 	}	
 }

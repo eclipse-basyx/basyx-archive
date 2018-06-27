@@ -70,6 +70,15 @@ public interface IElementReference {
 	 */
 	public boolean isMap();
 	
+	/**
+	 * Indicates Read Only
+	 */
+	public boolean isFrozen();
+	
+	/**
+	 * Set frozen
+	 */
+	public void setFrozen(boolean frozen);
 	
 	/**
 	 * Add scope to aasID of element reference

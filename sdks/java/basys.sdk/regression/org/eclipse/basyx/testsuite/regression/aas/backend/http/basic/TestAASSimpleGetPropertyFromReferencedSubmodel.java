@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 
-import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
@@ -54,6 +53,10 @@ class TestAASSimpleGetPropertyFromReferencedSubmodel {
 		// - Retrieve connected sub model
 		// - FIXME: Get submodel by type or ID		
 		ISubModel submodel = ((HashMap<String, ISubModel>) connAAS.getSubModels()).get("statusSM");		
+		
+		// Set up 
+		((ISingleProperty) submodel.getProperties().get("sampleProperty1")).set(2);
+		((ISingleProperty) submodel.getProperties().get("sampleProperty2")).set(3);
 		
 		// Connect to sub model property
 		// - Get property values (shortcut here, we know that it is a single property type)
