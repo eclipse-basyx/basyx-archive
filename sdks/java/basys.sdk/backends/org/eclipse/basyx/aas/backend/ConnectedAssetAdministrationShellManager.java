@@ -25,8 +25,8 @@ import org.eclipse.basyx.aas.impl.tools.BaSysID;
  * 
  * ToDo:
  * - Access check (set)
- * - Frozen models
- * - Operations
+ * X Frozen models 
+ * X Operations
  *   - create/delete
  * - Events
  * - HTTP server test suite that does not need this SDK
@@ -35,7 +35,7 @@ import org.eclipse.basyx.aas.impl.tools.BaSysID;
  * - Default deployment target for submodels
  * - Custom deployment target for submodels (technology independent)
  * 
- * @author kuhn
+ * @author kuhn, pschorn
  *
  */
 public class ConnectedAssetAdministrationShellManager implements IAssetAdministrationShellManager {

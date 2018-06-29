@@ -13,8 +13,13 @@ import org.eclipse.basyx.aas.api.annotation.AASProperty;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IElementContainer;
+import org.eclipse.basyx.aas.api.resources.basic.IProperty;
+import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.api.services.IModelProvider;
 import org.eclipse.basyx.aas.impl.reference.ElementRef;
+import org.eclipse.basyx.aas.impl.resources.basic.DataType;
+import org.eclipse.basyx.aas.impl.resources.basic.Property;
+import org.eclipse.basyx.aas.impl.resources.basic.SubModel;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
 
 
@@ -159,8 +164,12 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 		if ((result = getMapProperty(obj, propertyName)) != null) return result; // for collection type
 		if ((result = getFieldProperty(obj, propertyName)) != null) return result;
 		
+		// Check for dynamic properties
+		if ((result = ((SubModel) obj).getDynamicPropertyValue(propertyName)) != null) return result;
+		if ((result = ((SubModel) obj).getProperties().get(propertyName)) != null) return result;
+		
+		
 		System.out.println("Object not found");
-
 		// Object not found
 		return result;
 	}
@@ -329,6 +338,7 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 				// Resolve property path
 				for (int i=0; i<pathArray.length-skippedPathEntries; i++) {
 					System.out.println("GG:"+pathArray[i]+" -- "+currentObject);
+					
 					currentObject = getNamedProperty(currentObject, pathArray[i]);
 				}
 				// - Return property
@@ -363,6 +373,24 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 		// Change field 
 		// - Lookup field
 		Field propertyField = getNamedField(containerElement.getClass(), BaSysID.instance.getLastPathEntries(path, 1)[0]);
+		
+		// If not found, look for dynamic properties
+		if (containerElement instanceof SubModel &&
+				propertyField == null) {
+			
+			SubModel submodel = (SubModel) containerElement;
+			IProperty dynamicProperty = submodel.getProperties().get(BaSysID.instance.getLastPathEntries(path, 1)[0]);
+			
+			
+			// If dynamic property exists, set dynamic property value
+			if (dynamicProperty != null) {
+				submodel.putDynamicPropertyValue(dynamicProperty.getId(), newValue);
+				return;
+			}
+			
+			
+		}
+		
 		// - Update field value
 		try {propertyField.setAccessible(true); propertyField.set(containerElement, newValue);} catch (IllegalArgumentException | IllegalAccessException e) {e.printStackTrace();}		
 	}
@@ -371,6 +399,7 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	
 	/**
 	 * Create/insert a value in a collection or map
+	 * Creates a new Property Instance in a submodel
 	 * 
 	 * @param path Path to the collection
 	 * @param newValue Inserted value. 
@@ -378,10 +407,38 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	@Override @SuppressWarnings({ "rawtypes", "unchecked" })
 	public void createValue(String path, Object parameter) {
 		
-		// Get collection reference
+		// Get target reference
 		Object target = getModelPropertyValue(path);
 		
-		// Type check
+		// Type check - create Property
+		if (target instanceof SubModel) {
+			SubModel submodel = (SubModel) target;
+			
+			// Extract Parameters
+			// - Extract Property Reference
+			IElementReference ref = (IElementReference) ((Object[]) parameter)[0];
+			
+			// - Extract Attributes (name, type, isco, ismap)
+			String name = (String) ((Object[]) parameter)[1];
+			DataType type = DataType.valueOf( (String) ((Object[]) parameter)[2]);
+			boolean isCollection = (boolean) ((Object[]) parameter)[3];
+			boolean isMap = (boolean) ((Object[]) parameter)[4];
+				
+			// Create new dynamic property instance without a value and add it to the existing submodel
+			Property property = new Property();
+			property.setId(ref.getId());
+			property.setName(name); 
+			property.setDataType(type);
+			property.setCollection(isCollection);
+			property.setMap(isMap);
+			submodel.addProperty(property);
+			submodel.putDynamicPropertyValue(ref.getId(), null); // TODO what should be the default value?
+			
+			System.out.println("Added new property '" + property.getId() + "' to Submodel: " + submodel.getId());
+			return;
+		}
+		
+		// Type check - add value to collection
 		if (target instanceof Collection) {
 			
 			// Extract new member
@@ -392,7 +449,9 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 			
 			System.out.println("Adding value " + addedMember + " to collection: " + target);
 			((Collection) target).add(addedMember);
-			
+			return;
+		
+		// Type check - add key-value pair to map
 		}  else if (target instanceof Map) {
 			
 			// Extract new member
@@ -402,6 +461,7 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 			// Check if ID is already inside, overwrite value in this case
 			System.out.println("Adding entry " + key + " -> " + value +" from map: " + target);
 			((Map) target).put(key, value);
+			return;
 		}
 	}
 	

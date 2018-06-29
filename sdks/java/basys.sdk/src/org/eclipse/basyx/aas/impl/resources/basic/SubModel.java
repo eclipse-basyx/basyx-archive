@@ -1,7 +1,9 @@
 package org.eclipse.basyx.aas.impl.resources.basic;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.basyx.aas.api.exception.ResourceNotFoundException;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
@@ -17,10 +19,21 @@ public class SubModel extends BaseElement implements ISubModel {
 	protected Map<String, IProperty> properties = new HashMap<>();
 	protected Map<String, Event> events = new HashMap<>();
 	
+	/**
+	 * Map containing dynamically added property values since they cannot be added using reflection
+	 */
+	protected Map<String, Object> dynamicPropertyValues = new HashMap<>();
+	
+	/**
+	 * Server Clock that gets incremented when a property of this submodel is changed
+	 */
 	protected Integer clock = 0;
 	
-	protected Boolean readOnly = false; // TODO implement read only functionality
-	
+	/**
+	 * Indicates that this submodel and all its children are read only / frozen
+	 */
+	protected Boolean frozen = false; 
+
 	/**
 	 * Constructor
 	 * 
@@ -111,6 +124,61 @@ public class SubModel extends BaseElement implements ISubModel {
 		
 		// Return map with elements
 		return result;
+	}
+	
+	/**
+	 * Returns if this submodel is frozen
+	 */
+	@Override
+	public boolean isFrozen() {
+		return this.frozen;
+	}
+	
+	/**
+	 * Makes all properties of this submodel writable TODO Test for Referenced submodels?
+	 */
+	@Override
+	public void unfreeze() {
+		Iterator<Entry<String, IProperty>> it = this.properties.entrySet().iterator();
+		while (it.hasNext()) {
+			Property   p = (Property) it.next().getValue();
+			p.setWriteable(true);
+		}
+		
+		this.frozen = false;
+	}
+
+	/** 
+	 * Sets all properties of this submodel to readonly TODO Test for Referenced submodels?
+	 */
+	@Override
+	public void freeze() {
+		Iterator<Entry<String, IProperty>> it = this.properties.entrySet().iterator();
+		while (it.hasNext()) {
+			Property   p = (Property) it.next().getValue();
+			p.setWriteable(false);
+		}
+		
+		this.frozen = true;
+		
+	}
+
+	/**
+	 * Stores dynamic property value
+	 * @param property
+	 * @param newValue
+	 */
+	public void putDynamicPropertyValue(String id, Object newValue) {
+		this.dynamicPropertyValues.put(id, newValue);
+	}
+	
+	/**
+	 * Returns dynamic property value
+	 * @param property
+	 * @return
+	 */
+	public Object getDynamicPropertyValue(String id) {
+		return this.dynamicPropertyValues.get(id);
 	}
 }
 

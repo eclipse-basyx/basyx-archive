@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.backend;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.exception.TypeMismatchException;
 import org.eclipse.basyx.aas.api.resources.basic.IMapProperty;
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
 
@@ -20,8 +21,12 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 		super(id, submodelId, path, url, connector, aasMngr);
 	}
 
+	/**
+	 * Gets Value for the given key
+	 * @throws TypeMismatchException 
+	 */
 	@Override
-	public Object getValue(Object key) {
+	public Object getValue(String key) throws Exception {
 		
 		Object map = this.getElement();
 		
@@ -31,12 +36,30 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 			
 			// Type safe get value for key
 			value = ((Map<?,?>) map).get(key);
+		} else {
+			// throw type mismatch
+			throw new TypeMismatchException(this.propertyPath, "Map");
 		}
 		
 		// Return property value
 		return value;
 	}
+	
+	/**
+	 * Sets a new map. Overrides existing
+	 */
+	@Override
+	public void set(Map<String, Object> map) {
+		// Post data to server
+		basysConnector.basysSet(this.modelProviderURL, propertyPath, map);
+		
+		// update Cache
+		this.setElement(map);
+	}
 
+	/**
+	 * Puts a key-value pair in the map
+	 */
 	@Override
 	public void put(Object key, Object value) {
 		
@@ -52,6 +75,9 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 		}
 	}
 
+	/**
+	 * Gets all keys for this map
+	 */
 	@Override
 	public Collection<Object> getKeys() {
 		
@@ -63,10 +89,13 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 			return (Collection<Object>) ((Map<?,?>) map).keySet();
 		}
 		
-		return null;
+		return null; // throw 
 		
 	}
 
+	/**
+	 * Returns number of entries in map
+	 */
 	@Override
 	public Integer getEntryCount() {
 		
@@ -81,6 +110,9 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 		return null;
 	}
 
+	/**
+	 * Removes key-value pair for the given key
+	 */
 	@Override
 	public void remove(Object key) {
 		

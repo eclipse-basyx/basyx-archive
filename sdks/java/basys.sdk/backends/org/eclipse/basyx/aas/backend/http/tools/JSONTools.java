@@ -364,7 +364,7 @@ public class JSONTools {
 	@SuppressWarnings("unchecked")
 	protected boolean serializeMapType(JSONObject target, Object value, JSONObject serObjRepo, String scope) {
 		
-		if (value instanceof Property) if (((Property) value).getDataType().equals(DataType.MAP)) {
+		if (value instanceof Property) if (((Property) value).getDataType() == DataType.MAP) {
 			
 			target.put("thekind", "map");
 		}
@@ -422,7 +422,7 @@ public class JSONTools {
 	@SuppressWarnings("unchecked")
 	protected boolean serializeCollectionType(JSONObject target, Object value, JSONObject serObjRepo, String scope) {
 		
-		if (value instanceof Property) if (((Property) value).getDataType().equals(DataType.COLLECTION)) {
+		if (value instanceof Property) if (((Property) value).getDataType() == DataType.COLLECTION) {
 			
 			target.put("thekind", "collection");
 		}

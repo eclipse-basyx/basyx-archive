@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.basyx.aas.api.services.IModelProvider;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -66,6 +67,7 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 	 */
 	protected void sendJSONResponse(String path, HttpServletResponse resp, Object value) {
 		try {
+			
 			// Setup HTML response header
 			resp.setContentType("application/json");
 			resp.setCharacterEncoding("UTF-8");
@@ -120,10 +122,8 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 		
 		// Initialize JSON object
 		JSONObject jsonObj = JSONTools.Instance.serializeProperty(path, providerBackend);
-		System.out.println(">>");
-		System.out.println(">> GOT: " +jsonObj);
-		System.out.println(">>");		
-		System.out.println(">> SEND RESPONSE");		
+		
+		System.out.println("Respond: " +jsonObj);
 		
 		// Send HTML response
 		sendJSONResponse(path, resp, jsonObj);	
@@ -152,13 +152,24 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 		Object newValue   = JSONTools.Instance.deserialize(new JSONObject(serValue.toString()));
 		
 		System.out.println("Put: " + path + " " + newValue);
+		System.out.println("-------------------------- DO PUT "+path+" => " + newValue +" ---------------------------------------------------------");
 		
-		// Increment Clock
+		
+		// Check if submodel is frozen
 		String submodelPath = path.substring(0, path.indexOf("/"));
-		providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
-				
-		// Update property value
-		providerBackend.setModelPropertyValue(path, newValue);
+		boolean frozen = (boolean) providerBackend.getModelPropertyValue(submodelPath +"/frozen");
+		
+		// if not frozen change property
+		// - allow access to frozen attribute
+		if (!frozen || path.endsWith("frozen")) {
+			// Increment Clock
+			providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
+					
+			// Update property value
+			providerBackend.setModelPropertyValue(path, newValue);
+		} else {
+			// TODO Throw "readOnlyException"
+		}
 	}
 
 
@@ -168,56 +179,107 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
 		// Read posted parameter
 		InputStreamReader reader    = new InputStreamReader(req.getInputStream());
 		BufferedReader    bufReader = new BufferedReader(reader);
 		StringBuilder     serValue  = new StringBuilder(); 
+		
 		// Read values
-		while (bufReader.ready()) serValue.append(bufReader.readLine());
+		while (bufReader.ready()) {
+			serValue.append(bufReader.readLine());
+		}
 		
 		// Access parameters from request header
 		String path       = (String) req.getParameter("path"); 
 		String operation  = (String) req.getParameter("op"); 
-		System.out.println("DoPost: "+path+" - op: "+operation+"  - par: "+ serValue.toString());
+		System.out.println("-------------------------- DO POST "+path+" - op: "+operation+"  - par: "+ serValue.toString() + " ------------------");
 		
-		System.out.println("DS: "+serValue.toString());
-		Object[] parameter  = (Object []) JSONTools.Instance.deserialize(new JSONObject(serValue.toString()));
-		String submodelPath = path.substring(0, path.indexOf("/"));
-		
-		// Perform operation
-		switch (operation) {
-			case "create": 
-				// Increment Clock
-				providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
-				
-				// Update data
-				providerBackend.createValue(path, parameter); 
-				break;
-				
-			case "delete": 
-				// Increment Clock
-				providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
-				
-				// Update data
-				providerBackend.deleteValue(path, parameter); 
-				break;
+		// Extract parameters
+		Object[] parameter = null;
+		try {
+			JSONObject json = new JSONObject(serValue.toString()); 	// causes irregular failures because serValue is empty "sometimes"
+			parameter  = (Object []) JSONTools.Instance.deserialize(json); 
+		} catch (JSONException e)   {
+			// no parameters - pass empty json
+			parameter = (Object[]) JSONTools.Instance.deserialize(new JSONObject());
 			
-			case "invoke": {
-				System.out.println("Invoking1:"+path);
-				System.out.println("Invoking2:"+parameter);
-				Object result = providerBackend.invokeOperation(path, parameter);
-				
-				System.out.println("Invoking3:"+result);
-				
-				JSONObject jsonObj2 = JSONTools.Instance.serialize(result);
-				// Send HTML response
-				sendJSONResponse(path, resp, jsonObj2);
-				break;
-			}
-			
-			default:
-				throw new IllegalArgumentException("Action not supported.");
+			e.printStackTrace();
 		}
+		
+		// Extract path to working submodel; Handles Case that there is no property reference
+		String submodelPath = path.substring(0, (path.indexOf("/")!=-1? path.indexOf("/") : path.length()));
+		
+		// Check if submodel is frozen.
+		boolean frozen = (boolean) providerBackend.getModelPropertyValue(submodelPath +"/frozen");
+		
+		if (!frozen) {
+		
+			// Perform operation
+			switch (operation) {
+				case "create": 
+					// Increment Clock
+					providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
+					
+					// Update data 
+					providerBackend.createValue(path, parameter); 
+					break;
+					
+				case "delete": 
+					// Increment Clock
+					providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
+					
+					// Update data
+					providerBackend.deleteValue(path, parameter); 
+					break;
+				
+				case "invoke": {
+					System.out.println("Invoking1:"+path);
+					System.out.println("Invoking2:"+parameter);
+					Object result = providerBackend.invokeOperation(path, parameter);
+					
+					System.out.println("Invoking3:"+result);
+					
+					JSONObject jsonObj2 = JSONTools.Instance.serialize(result);
+					
+					// Send HTML JSON response
+					sendJSONResponse(path, resp, jsonObj2);
+					break;
+				}
+				
+				case "createProperty": {
+					// does not have an impact on submodel clock
+					
+					providerBackend.createValue(submodelPath, parameter); // parameter is ElementRef
+					break;
+				}
+				
+				default:
+					throw new IllegalArgumentException("Action not supported.");
+			}
+		} else {
+			// TODO Throw "readOnlyException" for create and delete, should operations still be callable when a submodel is frozen?
+			
+			switch (operation) {
+				case "invoke": {
+					System.out.println("Invoking1:"+path);
+					System.out.println("Invoking2:"+parameter);
+					
+					Object result = providerBackend.invokeOperation(path, parameter);
+					
+					System.out.println("Invoking3:"+result);
+					
+					JSONObject jsonObj2 = JSONTools.Instance.serialize(result);
+					
+					// Send HTML JSON response
+					sendJSONResponse(path, resp, jsonObj2);
+					break;
+				}
+				default:
+					throw new IllegalArgumentException("Action not supported.");
+			}
+		}
+			
 	}
 	
 	
@@ -238,13 +300,23 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 		String path       = (String) req.getParameter("path"); 
 		Object parameter  = new JSONObject(serValue.toString()).get("value");
 		
-		// Increment Clock
 		String submodelPath = path.substring(0, path.indexOf("/"));
-		providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
 		
+		// Check if submodel is frozen
+		boolean frozen = (boolean) providerBackend.getModelPropertyValue(submodelPath +"/frozen");
 		
-		// Perform delete operation
-		providerBackend.deleteValue(path, parameter);
+		if (!frozen) {
+			
+			// Increment Clock
+			providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
+			
+			
+			// Perform delete operation
+			providerBackend.deleteValue(path, parameter);
+			
+		} else {
+			// TODO Throw "readOnlyException"
+		}
 	}
 }
 

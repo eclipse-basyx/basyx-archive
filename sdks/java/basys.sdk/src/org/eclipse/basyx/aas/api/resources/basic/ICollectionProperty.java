@@ -14,22 +14,28 @@ public interface ICollectionProperty extends IProperty {
 
 	
 	/**
-	 * Get property value
+	 * Get value for a given index
 	 * 
-	 * @param objectRef Referenced property whose value is queried
+	 * @param objectRef Required index
 	 * @return Property value
+	 * @throws Exception 
 	 */
-	public Object get(Object objRef);
+	public Object get(Integer objRef) throws Exception;
 	
 	
 	/**
-	 * Set property value
-	 * 
-	 * Set property value or add property to collection
+	 * Add value to collection
 	 * 
 	 * @param Changed or added object
 	 */
-	public void set(Object newValue);
+	public void add(Object newValue) throws Exception;
+	
+
+	/**
+	 * Sets new collection value
+	 * @param collection
+	 */
+	void set(Collection<Object> collection);
 
 
 	/**
@@ -54,5 +60,7 @@ public interface ICollectionProperty extends IProperty {
 	 * @return Element count
 	 */
 	public int getElementCount();
+
+
 }
 

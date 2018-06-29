@@ -42,10 +42,20 @@ public class ElementRef implements IElementReference {
 	 */
 	protected String serverPropertyPath = null;
 	
-	
+	/**
+	 * Indicates if the referenced value is a collection
+	 */
 	protected boolean isCollection = false;
 	
+	/**
+	 * Indicates if the referenced value is a map
+	 */
 	protected boolean isMap = false;
+	
+	/**
+	 * Indicates read only
+	 */
+	protected boolean frozen = false;
 	
 	/**
 	 * Default constructor
@@ -261,6 +271,21 @@ public class ElementRef implements IElementReference {
 		return this.isMap;
 	}
 
+	/**
+	 * Indicate if the submodel is frozen
+	 */
+	@Override
+	public boolean isFrozen() {
+		return this.frozen;
+	}
+	
+	/**
+	 * Set frozen variable
+	 */
+	@Override
+	public void setFrozen(boolean frozen) {
+		this.frozen = frozen;
+	}
 
 	/**
 	 * Set element type for collections and maps
