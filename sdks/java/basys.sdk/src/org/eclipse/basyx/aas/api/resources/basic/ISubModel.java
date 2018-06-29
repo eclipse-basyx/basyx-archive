@@ -2,6 +2,8 @@ package org.eclipse.basyx.aas.api.resources.basic;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
+
 /**
  * Interface API for sub models
  * 
@@ -19,14 +21,16 @@ public interface ISubModel extends IElementContainer {
 	
 	/**
 	 * Freeze the sub model
+	 * @throws ServerException 
 	 */
-	public void freeze();
+	public void freeze() throws ServerException;
 	
 	
 	/**
 	 * Unfreeze the sub model
+	 * @throws ServerException 
 	 */
-	public void unfreeze();
+	public void unfreeze() throws ServerException;
 
 	
 	/**

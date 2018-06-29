@@ -1,5 +1,6 @@
 package org.eclipse.basyx.aas.backend;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.resources.basic.ISingleProperty;
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
 
@@ -43,9 +44,10 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 
 	/**
 	 * Get property value
+	 * @throws ServerException 
 	 */
 	@Override
-	public void set(Object newValue) {
+	public void set(Object newValue) throws ServerException {
 		// set property value
 		basysConnector.basysSet(this.modelProviderURL, propertyPath, newValue);
 		
@@ -56,9 +58,10 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 
 	/**
 	 * Move property value
+	 * @throws ServerException 
 	 */
 	@Override
-	public void moveTo(ISingleProperty property) {
+	public void moveTo(ISingleProperty property) throws ServerException {
 		Object thisvalue = get();
 		property.set(thisvalue);
 	}

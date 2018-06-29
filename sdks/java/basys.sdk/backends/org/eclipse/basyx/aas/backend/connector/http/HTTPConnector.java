@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.json.JSONException;
@@ -70,8 +71,9 @@ public class HTTPConnector implements IBasysConnector {
 	
 	/**as
 	 * Invoke a BaSys set operation via HTTP
+	 * @throws ServerException 
 	 */
-	public void basysSet(String address, String servicePath, Object newValue) {
+	public void basysSet(String address, String servicePath, Object newValue) throws ServerException {
 		
 		System.out.println("[HTTP BasysSet] "+ address+ ": " + servicePath);
 		
@@ -85,16 +87,28 @@ public class HTTPConnector implements IBasysConnector {
 		Builder request = buildRequest(client, address, "path", servicePath);
 		
 		// Perform request
-		request.put(Entity.entity(jsonObject.toString(), MediaType.APPLICATION_JSON));
+		Response rsp = request.put(Entity.entity(jsonObject.toString(), MediaType.APPLICATION_JSON));
 		
+		try {
+			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
+			
+			if (result instanceof ServerException) {
+				throw (ServerException) result;
+			}
+		}
+		catch (JSONException e){
+		    // Ff there is no return value or deserialization failed
+			return;
+		}
 	}
 	
 	
 	/**
 	 * Invoke a BaSys post operation via HTTP
 	 * @param action may be "invoke", "create" or "delete", "createProperty"
+	 * @throws Exception 
 	 */
-	public Object basysPost(String address, String servicePath, String action, Object... newValue) {
+	public Object basysPost(String address, String servicePath, String action, Object... newValue) throws ServerException {
 		
 		System.out.println("[HTTP BasysPost] "+ address+ ": " + servicePath);
 		
@@ -113,10 +127,17 @@ public class HTTPConnector implements IBasysConnector {
 		// Try to extract and return response if any
 		
 		try {
-			return JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
+			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
+			
+			if (result instanceof ServerException) {
+				throw (ServerException) result;
+			} else {
+				return result;
+			}
+			
 		}
 		catch (JSONException e){
-		    
+		    // Ff there is no return value or deserialization failed
 			return null;
 		}
 	}
@@ -126,8 +147,9 @@ public class HTTPConnector implements IBasysConnector {
 	
 	/**
 	 * Invoke a BaSys invoke operation via HTTP
+	 * @throws Exception 
 	 */
-	public Object basysInvoke(String address, String servicePath, Object... newValue) {
+	public Object basysInvoke(String address, String servicePath, Object... newValue) throws ServerException {
 		
 		return basysPost(address, servicePath, "invoke", newValue);
 		

@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.backend;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.exception.TypeMismatchException;
 import org.eclipse.basyx.aas.api.resources.basic.IMapProperty;
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
@@ -47,9 +48,10 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	
 	/**
 	 * Sets a new map. Overrides existing
+	 * @throws ServerException 
 	 */
 	@Override
-	public void set(Map<String, Object> map) {
+	public void set(Map<String, Object> map) throws ServerException {
 		// Post data to server
 		basysConnector.basysSet(this.modelProviderURL, propertyPath, map);
 		
@@ -59,9 +61,10 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 
 	/**
 	 * Puts a key-value pair in the map
+	 * @throws Exception 
 	 */
 	@Override
-	public void put(Object key, Object value) {
+	public void put(Object key, Object value) throws Exception {
 		
 		// Post data to server
 		basysConnector.basysPost(this.modelProviderURL, propertyPath, "create" , key, value);
@@ -72,14 +75,18 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 			
 			// Type safe cast 
 			((Map) map).put(key, value);
+		} else {
+			// throw type mismatch
+			throw new TypeMismatchException(this.propertyPath, "Map");
 		}
 	}
 
 	/**
 	 * Gets all keys for this map
+	 * @throws TypeMismatchException 
 	 */
 	@Override
-	public Collection<Object> getKeys() {
+	public Collection<Object> getKeys() throws TypeMismatchException {
 		
 		Object map = this.getElement();
 		
@@ -87,17 +94,18 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 			
 			// Type safe get keys for map
 			return (Collection<Object>) ((Map<?,?>) map).keySet();
+		} else {
+			// throw type mismatch
+			throw new TypeMismatchException(this.propertyPath, "Map");
 		}
-		
-		return null; // throw 
-		
 	}
 
 	/**
 	 * Returns number of entries in map
+	 * @throws TypeMismatchException 
 	 */
 	@Override
-	public Integer getEntryCount() {
+	public Integer getEntryCount() throws TypeMismatchException {
 		
 		Object map = this.getElement();
 		
@@ -105,16 +113,18 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 			
 			// Type safe get size for map
 			return ((Map<?,?>) map).size();
+		} else {
+			// throw type mismatch
+			throw new TypeMismatchException(this.propertyPath, "Map");
 		}
-		
-		return null;
 	}
 
 	/**
 	 * Removes key-value pair for the given key
+	 * @throws Exception 
 	 */
 	@Override
-	public void remove(Object key) {
+	public void remove(Object key) throws Exception {
 		
 		// Post data to server
 		basysConnector.basysPost(this.modelProviderURL, propertyPath, "delete" , key);
@@ -125,6 +135,9 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 			
 			// Type safe remove element from map
 			((Map) map).remove(key);
+		} else {
+			// throw type mismatch
+			throw new TypeMismatchException(this.propertyPath, "Map");
 		}
 	}
 

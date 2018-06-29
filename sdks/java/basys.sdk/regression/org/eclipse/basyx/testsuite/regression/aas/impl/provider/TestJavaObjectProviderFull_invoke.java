@@ -2,6 +2,8 @@ package org.eclipse.basyx.testsuite.regression.aas.impl.provider;
 
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.impl.provider.JavaObjectProvider;
@@ -23,9 +25,10 @@ public class TestJavaObjectProviderFull_invoke {
 
 	/**
 	 * Run test case
+	 * @throws Exception 
 	 */
 	@Test
-	void test() {
+	void test() throws Exception {
 		// Create model provider
 		JavaObjectProvider subModelProvider = new JavaObjectProvider();
 		// - Create AAS and sub model instances

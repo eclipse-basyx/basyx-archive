@@ -4,12 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.basyx.aas.api.exception.ReadOnlyException;
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.services.IModelProvider;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.json.JSONException;
@@ -149,7 +152,19 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 		
 		// Access parameters from request header
 		String path       = (String) req.getParameter("path"); 
-		Object newValue   = JSONTools.Instance.deserialize(new JSONObject(serValue.toString()));
+		
+		// Extract parameters
+		Object[] newValue = null;
+		try {
+			JSONObject json = new JSONObject(serValue.toString()); 	// causes irregular failures because serValue is empty "sometimes"
+			newValue  = (Object []) JSONTools.Instance.deserialize(json); 
+		} catch (JSONException e)   {
+			// assume no parameters - pass empty json
+			newValue = (Object[]) JSONTools.Instance.deserialize(new JSONObject());
+			
+			e.printStackTrace();
+		}
+		//Object newValue   = JSONTools.Instance.deserialize(new JSONObject(serValue.toString()));
 		
 		System.out.println("Put: " + path + " " + newValue);
 		System.out.println("-------------------------- DO PUT "+path+" => " + newValue +" ---------------------------------------------------------");
@@ -163,12 +178,17 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 		// - allow access to frozen attribute
 		if (!frozen || path.endsWith("frozen")) {
 			// Increment Clock
-			providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
-					
-			// Update property value
-			providerBackend.setModelPropertyValue(path, newValue);
+			try {
+				providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
+				
+				// Update property value
+				providerBackend.setModelPropertyValue(path, newValue);
+			} catch (ServerException e) {
+				sendException(e, path, resp);
+			}
+			
 		} else {
-			// TODO Throw "readOnlyException"
+			sendException(new ReadOnlyException(submodelPath), path, resp);
 		}
 	}
 
@@ -201,7 +221,7 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 			JSONObject json = new JSONObject(serValue.toString()); 	// causes irregular failures because serValue is empty "sometimes"
 			parameter  = (Object []) JSONTools.Instance.deserialize(json); 
 		} catch (JSONException e)   {
-			// no parameters - pass empty json
+			// assume no parameters - pass empty json
 			parameter = (Object[]) JSONTools.Instance.deserialize(new JSONObject());
 			
 			e.printStackTrace();
@@ -217,69 +237,139 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 		
 			// Perform operation
 			switch (operation) {
+			
+				/**
+				 * Process "create" request that adds a value to the given map or collection
+				 */
 				case "create": 
 					// Increment Clock
-					providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
+					try {
+						providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
+					} catch (ServerException e1) {
+						sendException(e1, path, resp);
+					}
 					
-					// Update data 
-					providerBackend.createValue(path, parameter); 
+					// create value in map or collection
+					try {
+						providerBackend.createValue(path, parameter);
+					} catch (Exception e) {
+						sendException(e, path, resp);
+					} 
 					break;
 					
+				/**
+				 * Process "createProperty" request that creates a new Property in the dynamic properties map of the given submodel
+				 */
+				case "createProperty": {
+					try {
+						providerBackend.createValue(submodelPath, parameter);
+					} catch (Exception e) {
+						sendException(e, path, resp);
+					}
+					break;
+				}
+					
+				/**
+				 * Process "delete" request that removes a value from the given map or collection
+				 */
 				case "delete": 
 					// Increment Clock
-					providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
+					try {
+						providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
+					} catch (ServerException e1) {
+						sendException(e1, path, resp);
+					}
 					
-					// Update data
-					providerBackend.deleteValue(path, parameter); 
+					// Delete Value in map or collection
+					try {
+						providerBackend.deleteValue(path, parameter);
+					} catch (Exception e) {
+						sendException(e, path, resp);
+					} 
 					break;
 				
+				/**
+				 * Process "invoke" request that invokes a function with the given parameters
+				 */
 				case "invoke": {
-					System.out.println("Invoking1:"+path);
-					System.out.println("Invoking2:"+parameter);
-					Object result = providerBackend.invokeOperation(path, parameter);
-					
-					System.out.println("Invoking3:"+result);
-					
-					JSONObject jsonObj2 = JSONTools.Instance.serialize(result);
+					JSONObject result = invokeOperation(path, parameter);
 					
 					// Send HTML JSON response
-					sendJSONResponse(path, resp, jsonObj2);
+					sendJSONResponse(path, resp, result);
+					break;
+				}
+				
+				/**
+				 * If action not recognized, respond with error message
+				 */
+				default:
+					sendException(new IllegalArgumentException("Action not supported."), path, resp);
+					
+			}
+		} else {
+			/**
+			 * Handle Case that the submodel is frozen: Cloning and unfreezing is still allowed but not create and delete 
+			 */
+			switch (operation) {
+
+				case "create": {
+					sendException(new ReadOnlyException(submodelPath), path, resp);
 					break;
 				}
 				
 				case "createProperty": {
-					// does not have an impact on submodel clock
-					
-					providerBackend.createValue(submodelPath, parameter); // parameter is ElementRef
+					sendException(new ReadOnlyException(submodelPath), path, resp);
 					break;
 				}
 				
-				default:
-					throw new IllegalArgumentException("Action not supported.");
-			}
-		} else {
-			// TODO Throw "readOnlyException" for create and delete, should operations still be callable when a submodel is frozen?
-			
-			switch (operation) {
+				case "delete": {
+					sendException(new ReadOnlyException(submodelPath), path, resp);
+					break;
+				}
+				
+				/**
+				 * Invoking Operations is still allowed
+				 */
 				case "invoke": {
-					System.out.println("Invoking1:"+path);
-					System.out.println("Invoking2:"+parameter);
-					
-					Object result = providerBackend.invokeOperation(path, parameter);
-					
-					System.out.println("Invoking3:"+result);
-					
-					JSONObject jsonObj2 = JSONTools.Instance.serialize(result);
+					JSONObject result = invokeOperation(path, parameter);
 					
 					// Send HTML JSON response
-					sendJSONResponse(path, resp, jsonObj2);
+					sendJSONResponse(path, resp, result);
 					break;
 				}
 				default:
-					throw new IllegalArgumentException("Action not supported.");
+					sendException(new IllegalArgumentException("Action not supported."), path, resp);
+				
 			}
 		}
 			
+	}
+	
+	
+
+	private JSONObject invokeOperation(String path, Object[] parameter) {
+		Object result = null;
+		
+		System.out.println("Invoking Service: "+path + " with arguments "+ Arrays.toString((Object[]) parameter));
+		
+		try {
+			result = providerBackend.invokeOperation(path, parameter);
+			System.out.println("Return Value: "+result);
+
+			return JSONTools.Instance.serialize(result);
+			
+		} catch (Exception e) {
+			return JSONTools.Instance.serialize(e);
+		}
+		
+		
+	}
+	
+	private void sendException(Exception e, String path, HttpServletResponse resp) {
+		JSONObject error = JSONTools.Instance.serialize(e);
+		
+		// Send HTML JSON error response
+		sendJSONResponse(path, resp, error);
 	}
 	
 	
@@ -308,14 +398,21 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 		if (!frozen) {
 			
 			// Increment Clock
-			providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
-			
+			try {
+				providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
+			} catch (ServerException e1) {
+				sendException(e1, path, resp);
+			}
 			
 			// Perform delete operation
-			providerBackend.deleteValue(path, parameter);
+			try {
+				providerBackend.deleteValue(path, parameter);
+			} catch (Exception e) {
+				sendException(e, path, resp);
+			}
 			
 		} else {
-			// TODO Throw "readOnlyException"
+			sendException(new ReadOnlyException(submodelPath), path, resp);
 		}
 	}
 }

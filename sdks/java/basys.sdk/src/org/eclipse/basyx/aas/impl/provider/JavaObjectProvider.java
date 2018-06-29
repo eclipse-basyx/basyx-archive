@@ -165,7 +165,7 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 		if ((result = getFieldProperty(obj, propertyName)) != null) return result;
 		
 		// Check for dynamic properties
-		if ((result = ((SubModel) obj).getDynamicPropertyValue(propertyName)) != null) return result;
+		if ((result = ((SubModel) obj).getDynamicPropertyValue(propertyName)) != null) return result; // FIXME: Endless loop if BasysGet is processed before set.
 		if ((result = ((SubModel) obj).getProperties().get(propertyName)) != null) return result;
 		
 		
@@ -501,7 +501,7 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	 * Invoke an operation
 	 */
 	@Override
-	public Object invokeOperation(String path, Object[] parameter) {
+	public Object invokeOperation(String path, Object[] parameter) throws Exception {
 		// Get container element that contains the operation to be invoked
 		Object containerElement = getModelProperty(path, 1);
 
@@ -510,15 +510,13 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 		
 		// Invoke operation
 		try {
-			System.out.println("INV::"+parameter.length);
 			return operation.invoke(containerElement, parameter);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.toString());
+			
+			// Operation invocation failed
+			throw e;
 		}
-		
-		// Operation invocation failed
-		return null;
 	}
 	
 	

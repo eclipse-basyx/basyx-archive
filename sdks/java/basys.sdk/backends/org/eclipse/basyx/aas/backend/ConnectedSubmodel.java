@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.AtomicTransactionFailedException;
 import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IOperation;
 import org.eclipse.basyx.aas.api.resources.basic.IProperty;
@@ -219,9 +220,10 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 
 	/** 
 	 * Freezes this submodel. Sets frozen property true
+	 * @throws ServerException 
 	 */
 	@Override
-	public void freeze() {
+	public void freeze() throws ServerException {
 		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, "frozen"); 
 		
 		// Set "frozen" variable to true
@@ -231,9 +233,10 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	
 	/** 
 	 * Unfreezes this submodel. Sets frozen property false
+	 * @throws ServerException 
 	 */
 	@Override
-	public void unfreeze() {
+	public void unfreeze() throws ServerException {
 		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, "frozen"); 
 		
 		// Set "frozen" variable to false
@@ -244,8 +247,9 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	/**
 	 * Registers the given property on the server
 	 * @param property
+	 * @throws Exception 
 	 */
-	public void createProperty(IProperty property) {
+	public void createProperty(IProperty property) throws Exception {
 		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, property.getId()); 
 		
 		// Set parent references for this property to allow serialization with JSONTools

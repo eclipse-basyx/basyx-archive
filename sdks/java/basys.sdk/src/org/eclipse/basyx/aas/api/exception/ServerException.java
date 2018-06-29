@@ -1,6 +1,6 @@
 package org.eclipse.basyx.aas.api.exception;
 
-public class ReadOnlyException extends Exception {
+public class ServerException extends Exception {
 
 	
 	
@@ -10,9 +10,8 @@ public class ReadOnlyException extends Exception {
 	/**
 	 * Constructor
 	 */
-	public ReadOnlyException(String name) {
-		// Store message
-		message = "The SubModel "+name+" is frozen.";
+	public ServerException(String message) {
+		this.message = message;
 	}
 	
 	
