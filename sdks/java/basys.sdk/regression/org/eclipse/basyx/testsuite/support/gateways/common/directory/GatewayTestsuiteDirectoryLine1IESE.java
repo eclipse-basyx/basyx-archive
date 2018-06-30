@@ -6,7 +6,7 @@ import org.eclipse.basyx.aas.impl.services.PreconfiguredDirectory;
 
 
 /**
- * Implement the test suite directory service with pre-configured directory entries
+ * Implement the test suite directory service for line 1 (office.iese.fraunhofer.de) with pre-configured directory entries
  * 
  * @author kuhn
  *
@@ -28,7 +28,7 @@ public class GatewayTestsuiteDirectoryLine1IESE extends PreconfiguredDirectory {
 	
 		// Define mappings for line 2 in domain manufacturing.de
 		// - Asset administration shells
-		addMapping("aas.device2.line2.manufacturing.de", "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line1/gateway_line12/BaSys/1.0/provider");
+		addMapping("aas.device2.line2.manufacturing.de",         "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line1/gateway_line12/BaSys/1.0/provider");
 		// - Sub models of device2 in line 2 in domain manufacturing.de
 		addMapping("description.device2.line2.manufacturing.de", "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line1/gateway_line12/BaSys/1.0/provider");
 		addMapping("status.device2.line2.manufacturing.de",      "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line1/gateway_line12/BaSys/1.0/provider");

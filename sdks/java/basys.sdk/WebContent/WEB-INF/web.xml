@@ -48,6 +48,18 @@
   </servlet-mapping>
 
 
+  <servlet>
+    <servlet-name>Test_Stub3AAS</servlet-name>
+    <servlet-class> org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.Stub3AASSubmodelServlet </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Test_Stub3AAS</servlet-name>
+    <url-pattern>/Testsuite/Stub3AAS/BaSys/1.0/provider</url-pattern>
+  </servlet-mapping>
+
+
+
+
 
 
   <servlet>

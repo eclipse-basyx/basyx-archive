@@ -343,6 +343,7 @@ public class JSONTools {
 		if (reference.isSubModelReference()) {target.put("aas", reference.getAASID()); target.put("submodel", reference.getSubModelID());}
 		if (reference.isPropertyReference()) {target.put("aas", reference.getAASID()); target.put("submodel", reference.getSubModelID()); target.put("path", reference.getPathToProperty());}
 		
+		// Error check - we always need an Asset Administration Shell ID
 		if (reference.getAASID().length() == 0) {
 			throw new RuntimeException("aasid empty");
 		}

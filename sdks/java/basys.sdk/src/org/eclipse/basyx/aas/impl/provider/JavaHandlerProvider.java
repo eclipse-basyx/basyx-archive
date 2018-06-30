@@ -15,7 +15,7 @@ import org.eclipse.basyx.aas.impl.tools.BaSysID;
 
 
 /**
- * Provider class that export a Java object as BaSys model via HTTP REST interface 
+ * Provider class that export a Java object and uses handlers to access properties 
  * 
  * @author kuhn
  *
@@ -71,7 +71,9 @@ public class JavaHandlerProvider extends AbstractModelScopeProvider implements I
 		
 		// Check sub model ID
 		if (aasID      != null) javaHandler = javaHandlers.get(aasID);
+		System.out.println("JH1::"+javaHandler);
 		if (submodelID != null) javaHandler = javaHandlers.get(submodelID);
+		System.out.println("JH2::"+javaHandler);
 		
 		return javaHandler;
 	}
