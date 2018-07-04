@@ -34,5 +34,12 @@ public class TestsuiteDirectory extends PreconfiguredDirectory {
 		// - Sub model MainSM of Stub2AAS
 		addMapping("mainSM.Stub2AAS",          "http://localhost:8080/basys.sdk/Testsuite/Stub2AASSubmodel/BaSys/1.0/provider");
 		addMapping("mainSM.SubModel2TempAAS",  "http://localhost:8080/basys.sdk/Testsuite/Stub2AASSubmodel/BaSys/1.0/provider");
+		
+		// - Rest Interface conformant AAS
+		addMapping("RestAAS",         			"http://localhost:8080/basys.sdk/");
+		addMapping("RestAAS/submodels/description",       "http://localhost:8080/basys.sdk/");
+		addMapping("RestAAS/submodels/status",          "http://localhost:8080/basys.sdk/");
+
+
 	}	
 }

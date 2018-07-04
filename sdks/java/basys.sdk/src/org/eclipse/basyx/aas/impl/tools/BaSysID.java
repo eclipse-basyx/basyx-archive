@@ -1,5 +1,9 @@
 package org.eclipse.basyx.aas.impl.tools;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.junit.platform.commons.util.StringUtils;
 
 /**
  * Class that supports building IDs of asset administration shell IDs and sub models for the directory server
@@ -75,7 +79,7 @@ public class BaSysID {
 		if (aasID.startsWith("aas.")) aasID = aasID.substring(4);
 		
 		// Build path
-		return subModelID+"."+aasID;
+		return aasID+ "/submodels/" +subModelID;
 	}
 	
 	
@@ -133,28 +137,34 @@ public class BaSysID {
 	
 	
 	/**
-	 * Get unqualified AAS id from a qualified path <subModelID>.<aasID>.<qualifier>/<scope> => <aasID>
+	 * Get unqualified AAS id from a qualified path <aasID>.<qualifier>/<scope> => <aasID> // EDIT <aasID>/<qualifier> => <aasID>
 	 */
 	public String getAASID(String path) {
-		String result = path;
-		int    offset = 0;
 		
-		System.out.println("Getting 2:"+path);
+		String[] pathArray = path.split("/", 2);
 		
-		// Check if path contains an AAS part
-		if (path.indexOf(".") == -1) return "";
+		return pathArray[0];
+				
+				
+		//String result = path;
+		//int    offset = 0;
 		
-		// Remove everything before first '.'
-		result = path.substring(path.indexOf('.')+1);
-		if ((offset = result.indexOf('/')) > -1) result = result.substring(0, offset);
+		//System.out.println("Path="+path);
+		
+		// Check if path contains an AAS part // EDIT Path always contains AAS part except for registry and component API
+		//if (path.indexOf(".") == -1) return "";
+		
+		// Remove everything before first '.' // EDIT Parse everything before first '/', handle case that there is no '/' then only return path
+		//result = path.substring(0, path.indexOf('/') != -1? path.indexOf('/') : path.length());
+		//if ((offset = result.indexOf('/')) > -1) result = result.substring(0, offset);
 
-		// Remove scope (everything after first '.')
-		if (result.indexOf(".") > -1) result=result.substring(0, result.indexOf("."));
+		// Remove scope (everything after first '.') // EDIT not relevant for aasID
+		//if (result.indexOf(".") > -1) result=result.substring(0, result.indexOf("."));
 
-		System.out.println("Getting 3:"+result);
+		//System.out.println("AAS ID="+result);
 
 		// Return AAS ID
-		return result;
+		//return result;
 	}
 
 	
@@ -184,34 +194,101 @@ public class BaSysID {
 	
 
 	/**
-	 * Get sub model id from a qualified path <subModelID>.<aasID>/<scope>
+	 * Get sub model id from a qualified path. Handle the following cases
+	 * - <aasID> -> Return the AAS
+	 * - <aasID>/submodels -> Return all Submodels of this AAS
+	 * - <aasID>/submodels/<submodelID> -> Return Submodel of the AAS
+	 * - <aasID>/submodels/<submodelID>/properties -> Return all properties of this Submodel
 	 */
 	public String getSubmodelID(String path) {
-		int    offset = 0;
-
-		// "aas." is not a sub model
-		if (path.startsWith("aas.")) return "";
-
-		// Extract sub model ID
-		if ((offset = path.indexOf('.')) > -1) return path.substring(0, offset);		
-		if ((offset = path.indexOf('/')) > -1) return path.substring(0, offset);
+		
+		String aasID = this.getAASID(path);
+		
+		// Remove aas part
+		String withoutAAS = path.substring(aasID.length()); 
+		
+		// If there is no remainder or remainder equals "submodels" returrn empty string
+		if (withoutAAS.equals("/submodels") || withoutAAS.isEmpty()) return "";
+	
+		withoutAAS = withoutAAS.substring("/submodels/".length()); // remove '/submodels/'
+		
+		// Remove path qualifiers. if only submodel is requested, handle case that there is no '/' at the end
+		String result = withoutAAS.substring(0, (withoutAAS.indexOf('/') != -1? withoutAAS.indexOf('/') : withoutAAS.length()));
 		
 		// Path only defines the sub model
-		return path;
+		return result;
 	}
 
 
 	/**
-	 * Get qualified path to AAS
+	 * Get qualified path to an object or qualifier. Handle cases
+	 * - <aasID>/submodels/<submodelID>/properties
+	 * - <aasID>/submodels/<submodelID>/operations
+	 * - <aasID>/submodels/<submodelID>/events
+	 * - <aasID>/submodels/<submodelID>/properties/<propertyID> -> Returns the property
+	 * - <aasID>/submodels/<submodelID>/operations/<operationID> -> Returns the operation
+	 * - <aasID>/submodels/<submodelID>/events/<eventID> -> Returns the event
+	 *
 	 */
 	public String getPath(String path) {
-		int    offset = 0;
-
-		// Remove everything but path if a path component is present in string
-		if ((offset = path.indexOf('/')) > -1) return path.substring(offset+1);
 		
-		// Path has no path component
-		return "";
+		String aasID = this.getAASID(path);
+		String submodelID = this.getSubmodelID(path);
+		String prefix1 = aasID+"/submodels";
+		String prefix2 = aasID+"/submodels/"+submodelID+"/properties";
+		String prefix3 = aasID+"/submodels/"+submodelID+"/operations";
+		String prefix4 = aasID+"/submodels/"+submodelID+"/events";
+		String prefix5 = aasID+"/submodels/"+submodelID+"/frozen";
+		String prefix6 = aasID+"/submodels/"+submodelID+"/clock";
+		
+		
+		if (path.equals(prefix1)) {
+			
+			// Returns path qualifier 'submodels'
+			return "submodels";
+		} else if (path.equals(prefix2) || path.equals(prefix3) || path.equals(prefix4) || path.equals(prefix5) || path.equals(prefix6)) {
+			
+			// Returns path qualifiers 'properties' | 'operations' | 'events'
+			return path.substring((aasID+"/submodels/"+submodelID+"/").length());
+	
+		} else if (path.startsWith(prefix2)) {
+			
+			// Returns propertyID
+			return path.substring((prefix2+"/").length());
+		} else if (path.startsWith(prefix3)) {
+			
+			// Returns operationID
+			return path.substring((prefix3+"/").length());
+		} else if (path.startsWith(prefix4)) {
+			
+			// Returns eventID
+			return path.substring((prefix4+"/").length());
+		
+		} else {
+			
+			// Returns empty string if the path does not contain a quantifier or propertyID
+			return "";
+		}
+		
+		/*
+		if (path.indexOf('/') > -1) {
+			
+			String withoutAAS = path.substring(aasID.length() + 1);
+			
+			if (withoutAAS.equals("submodels")) {
+				// return 'submodels'
+				return withoutAAS;
+			} else if (withoutAAS.indexOf('/') > -1){
+				// return <qualifier>
+				return withoutAAS.substring(withoutAAS.indexOf('/') + 1); // +1 for '/'
+			}
+			else {
+				return "";
+			}
+		}*/
+		
+		// Path has no object or qualifier component
+		//return "";
 	}
 	
 	
@@ -250,10 +327,12 @@ public class BaSysID {
 
 
 	/**
-	 * Get the last element of path that identifies the object
+	 * Get the last element of path that identifies the object or qualifier
+	 * Example: <aasID>/submodels/<submodelID>/properties/<propertyID> => <propertyID>
 	 */
 	public String getIdentifier(String path) {
-		// Try to get path
+		
+		// Try to get property/operation path
 		String   propPath   = BaSysID.instance.getPath(path);
 		String   objectId   = null;
 		
@@ -266,7 +345,7 @@ public class BaSysID {
 		}
 		
 		// Try to get sub model ID or AAS ID
-		if ((objectId = getSubmodelID(path)).length() > 0) return objectId;
+		if ((objectId = getSubmodelID(path)).length() > 0) return objectId; // EDIT do these ever match?
 		if ((objectId = getAASID(path)).length() > 0) return objectId;
 		
 		// No identifier given

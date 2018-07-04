@@ -44,14 +44,14 @@ public class ConnectedOperation extends ConnectedElement implements IOperation {
 	 * Constructor - expect the URL to the sub model
 	 * @param connector 
 	 */
-	public ConnectedOperation(String id, String submodelId, String path, String url, IBasysConnector connector) {
+	public ConnectedOperation(String aasId, String submodelId, String path, String url, IBasysConnector connector) {
 		// Invoke base constructor
 		super(url, connector);
 
 		// Store parameter values
-		aasID            = id;
+		aasID            = aasId;
 		aasSubmodelID    = submodelId;
-		operationPath    = submodelId+"/"+path;
+		operationPath    = connector.buildPath(aasId, submodelId, path, "operations");
 		modelProviderURL = url;
 	}
 	

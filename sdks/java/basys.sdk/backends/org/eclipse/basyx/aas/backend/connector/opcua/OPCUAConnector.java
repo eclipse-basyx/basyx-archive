@@ -36,7 +36,7 @@ public class OPCUAConnector implements IBasysConnector {
 	}
 
 	@Override
-	public String buildPath(String aasId, String aasSubmodelID, String path) {
+	public String buildPath(String aasId, String aasSubmodelID, String path, String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}

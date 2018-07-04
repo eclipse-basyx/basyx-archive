@@ -49,5 +49,5 @@ public interface IBasysConnector {
 	 * @param path
 	 * @return 
 	 */
-	public String buildPath(String aasId, String aasSubmodelID, String path) ;
+	public String buildPath(String aasId, String aasSubmodelID, String path, String type) ;
 }

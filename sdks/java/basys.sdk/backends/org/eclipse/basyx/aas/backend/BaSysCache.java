@@ -29,9 +29,9 @@ public class BaSysCache<T extends ConnectedElement> {
 	/**
 	 * Initialize cache
 	 */
-	public BaSysCache(ConnectedSubmodel submodel) {
+	public BaSysCache(ConnectedSubmodel submodel, String type) {
 		
-		this.cache_	    = new KeyValueStore<String, T>(submodel);
+		this.cache_	    = new KeyValueStore<String, T>(submodel, type);
 	}
 	
 	/**

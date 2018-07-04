@@ -74,12 +74,13 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	@Override
 	public Object getModelPropertyValue(String path) {
 		System.out.println("HTTP-Prov Get:"+path);
-		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
 		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
+		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
 		System.out.println("- Element Pth:"+BaSysID.instance.getPath(path));
 
 		// Get address from directory
-		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
+		String addr = directoryService.lookup(BaSysID.instance.getAddress(path)); // FIXME correct address?
+		
 		// - Address check
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
 		// Return model property
@@ -97,8 +98,9 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws ServerException  {
 		System.out.println("HTTP-Prov Set:"+path+" to "+newValue);
-		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
 		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
+		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
+		
 		
 		// Get address from directory
 		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));

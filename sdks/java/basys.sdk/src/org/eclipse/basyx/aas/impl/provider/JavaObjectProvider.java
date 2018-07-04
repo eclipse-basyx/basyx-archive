@@ -165,8 +165,12 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 		if ((result = getFieldProperty(obj, propertyName)) != null) return result;
 		
 		// Check for dynamic properties
+		try  {
 		if ((result = ((SubModel) obj).getDynamicPropertyValue(propertyName)) != null) return result; // FIXME: Endless loop if BasysGet is processed before set.
 		if ((result = ((SubModel) obj).getProperties().get(propertyName)) != null) return result;
+		} catch (ClassCastException e) {
+			System.out.println(e.getMessage());
+		}
 		
 		
 		System.out.println("Object not found");
@@ -360,7 +364,7 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 
 	
 	/**
-	 * Set a sub model property value
+	 * Update an existing sub model property value
 	 * 
 	 * @param path Path to the requested value
 	 * @param newValue Updated value
@@ -392,7 +396,10 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 		}
 		
 		// - Update field value
-		try {propertyField.setAccessible(true); propertyField.set(containerElement, newValue);} catch (IllegalArgumentException | IllegalAccessException e) {e.printStackTrace();}		
+		try {propertyField.setAccessible(true); 
+		propertyField.set(containerElement, newValue);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();}		
 	}
 	
 	
@@ -467,7 +474,7 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	
 	
 	/**
-	 * Delete a value from a collection or map
+	 * Delete a value from a collection or map  TODO allow deleting properties, operations, events, submodels, aas
 	 * 
 	 * @param path Path to the collection
 	 * @param paramete an array of objects size one. If Collection type, it is the member- if Map type, it is the key

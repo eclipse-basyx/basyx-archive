@@ -147,7 +147,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		addr = directoryService.lookup(BaSysID.instance.buildPath(elementRef.getAASID(), elementRef.getSubModelID()));
 		
 		// Handle the case that AAS was not found
-		if (addr == null) throw new ResourceNotFoundException(elementRef.getSubModelID()+"."+elementRef.getAASID());
+		if (addr == null) throw new ResourceNotFoundException(BaSysID.instance.buildPath(elementRef.getAASID(), elementRef.getSubModelID()));
 		
 		// Instantiate sub model
 		return new ConnectedSubmodel(this, elementRef.getAASID(), elementRef.getSubModelID(), addr, this.connector);

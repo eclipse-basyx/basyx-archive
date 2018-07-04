@@ -287,11 +287,6 @@ public class JSONTools {
 		// Create return value
 		JSONObject returnValue = new JSONObject();
 		
-		// Get property name
-		String propertyName = BaSysID.instance.getIdentifier(pathToObject);
-		
-		System.out.println("PropertyName: "+propertyName);
-		
 		// Get value and scope
 		Object value = provider.getModelPropertyValue(pathToObject);
 		String scope = provider.getElementScope(pathToObject);

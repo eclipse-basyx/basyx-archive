@@ -55,6 +55,10 @@ public class ConnectedProperty extends ConnectedElement implements IProperty {
 	protected boolean isMap = false;
 	
 	
+	/**
+	 * Store url reference
+	 */
+	protected static String type = "properties";
 
 	
 	
@@ -65,14 +69,14 @@ public class ConnectedProperty extends ConnectedElement implements IProperty {
 	 * Constructor - expect the URL to the sub model
 	 * @param connector 
 	 */
-	public ConnectedProperty(String id, String submodelId, String path, String url, IBasysConnector connector, ConnectedAssetAdministrationShellManager aasMngr)  {
+	public ConnectedProperty(String aasId, String submodelId, String path, String url, IBasysConnector connector, ConnectedAssetAdministrationShellManager aasMngr)  {
 		// Invoke base constructor
 		super(url, connector);
 
 		// Store parameter values
-		aasID            = id;
+		aasID            = aasId;
 		aasSubmodelID    = submodelId;
-		propertyPath     = submodelId+"."+aasID+"/"+path;
+		propertyPath     = connector.buildPath(aasID, submodelId, path, "properties");
 		modelProviderURL = url;
 		aasManager       = aasMngr;
 	}
