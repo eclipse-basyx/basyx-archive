@@ -1,6 +1,5 @@
 package org.eclipse.basyx.aas.impl.resources.basic;
 
-import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 
 

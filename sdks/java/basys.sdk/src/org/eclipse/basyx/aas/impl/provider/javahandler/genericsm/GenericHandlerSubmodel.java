@@ -2,6 +2,8 @@ package org.eclipse.basyx.aas.impl.provider.javahandler.genericsm;
 
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
@@ -116,7 +118,30 @@ public class GenericHandlerSubmodel extends SubModel {
 		// - Add property handler
 		smHandler.addProperty(name,  (obj) -> {return propertyValues.get(propertyIndex);},  (obj, val) -> {propertyValues.set(propertyIndex, val);},  null,   null);
 	}
+
 	
+	/**
+	 * Add a dynamic value property
+	 * 
+	 * @param name         Property name
+	 * @param type         Property type
+	 * @param initialValue Property initial value
+	 */
+	public void addProperty(String name, DataType type, Function<ISubModel, Object> getOp, BiConsumer<ISubModel, Object> setOp, BiConsumer<ISubModel, Object> addOp, BiConsumer<ISubModel, Object> removeOp) {
+		// Add property descriptor to sub model
+		// - Create property descriptor
+		Property newProperty = new Property();
+		// - Add descriptor values
+		newProperty.setName(name);
+		newProperty.setDataType(type);
+		newProperty.setId(name);
+		// - Add property descriptor to sub model
+		this.addProperty(newProperty);
+
+		// Add property to this provider type
+		smHandler.addProperty(name,  getOp,  setOp,  addOp,  removeOp);
+	}
+
 	
 	/**
 	 * Add an operation
