@@ -14,7 +14,7 @@
 #include <types/BNullObject.h>
 #include <types/BValue.h>
 #include <types/BString.h>
-#include <types/BArray.h>
+//#include <types/BArray.h>
 
 
 /* ****************************************************************
@@ -70,12 +70,13 @@ template <typename T> class BRef {
 		BRef(char   value) : BRef(new BValue(value), true) {}                     // @suppress("Class members should be properly initialized")
 		// Create string references
 		BRef(std::string value) : BRef(new BString(value), true) {}               // @suppress("Class members should be properly initialized")
+		BRef(const char *value) : BRef(new BString(value), true) {}               // @suppress("Class members should be properly initialized")
 		// Create array references
-		BRef(int    *value, int size) : BRef(new BArray(value, size), true) {}    // @suppress("Class members should be properly initialized")
-		BRef(float  *value, int size) : BRef(new BArray(value, size), true) {}    // @suppress("Class members should be properly initialized")
-		BRef(double *value, int size) : BRef(new BArray(value, size), true) {}    // @suppress("Class members should be properly initialized")
-		BRef(bool   *value, int size) : BRef(new BArray(value, size), true) {}    // @suppress("Class members should be properly initialized")
-		BRef(char   *value, int size) : BRef(new BArray(value, size), true) {}    // @suppress("Class members should be properly initialized")
+		//BRef(int    *value, int size) : BRef(new BArray(value, size), true) {}    // @suppress("Class members should be properly initialized")
+		//BRef(float  *value, int size) : BRef(new BArray(value, size), true) {}    // @suppress("Class members should be properly initialized")
+		//BRef(double *value, int size) : BRef(new BArray(value, size), true) {}    // @suppress("Class members should be properly initialized")
+		//BRef(bool   *value, int size) : BRef(new BArray(value, size), true) {}    // @suppress("Class members should be properly initialized")
+		//BRef(char   *value, int size) : BRef(new BArray(value, size), true) {}    // @suppress("Class members should be properly initialized")
 
 
 	// Constructors and operators for reference counting

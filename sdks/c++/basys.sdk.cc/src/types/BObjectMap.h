@@ -38,9 +38,13 @@ class BObjectMap : public BType {
 		BObjectMap() : BType() {baSysTypeID = BASYS_MAP;}
 
 
-	// Access members
+	// Public interface
 	public:
+		// Access members
 		std::map<std::string, BRef<BType>> *elements() {return &mapElements;}
+
+		// Get collection size
+		int size() {return mapElements.size();}
 
 };
 

@@ -46,6 +46,8 @@ class BObjectCollection : public BType {
 		// Add element
 		void add(BRef<BType> element) {listElements.push_back(element);}
 
+		// Get collection size
+		int size() {return listElements.size();}
 
 };
 

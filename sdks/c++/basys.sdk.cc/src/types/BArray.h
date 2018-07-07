@@ -15,10 +15,14 @@
 // BaSyx includes
 #include "BaSysTypes.h"
 #include "BType.h"
+#include <ref/BRef.h>
 
 // C includes
 #include <malloc.h>
 #include <memory.h>
+
+// C++ includes
+#include <string>
 
 
 
@@ -39,12 +43,13 @@ class BArray : public BType {
 
 	// Constructor
 	public:
-		BArray(int        *value, int size)   : BType() {arraySize = size; baSysTypeID = BASYS_INTARRAY;       initArray(value, sizeof(int)*size);}
-		BArray(float      *value, int size)   : BType() {arraySize = size; baSysTypeID = BASYS_FLOATARRAY;     initArray(value, sizeof(float)*size);}
-		BArray(double     *value, int size)   : BType() {arraySize = size; baSysTypeID = BASYS_DOUBLEARRAY;    initArray(value, sizeof(double)*size);}
-		BArray(bool       *value, int size)   : BType() {arraySize = size; baSysTypeID = BASYS_BOOLEANARRAY;   initArray(value, sizeof(bool)*size);}
-		BArray(char       *value, int size)   : BType() {arraySize = size; baSysTypeID = BASYS_CHARACTERARRAY; initArray(value, sizeof(char)*size);}
-		//BArray(std::string value[], int size) : BObject() {arraySize = size; baSysTypeID = BASYS_STRINGARRAY;    initArray(value, sizeof(std::string)*size);}
+		BArray(int         *value, int size)   : BType() {arraySize = size; baSysTypeID = BASYS_INTARRAY;       initArray(value, sizeof(int)*size);}
+		BArray(float       *value, int size)   : BType() {arraySize = size; baSysTypeID = BASYS_FLOATARRAY;     initArray(value, sizeof(float)*size);}
+		BArray(double      *value, int size)   : BType() {arraySize = size; baSysTypeID = BASYS_DOUBLEARRAY;    initArray(value, sizeof(double)*size);}
+		BArray(bool        *value, int size)   : BType() {arraySize = size; baSysTypeID = BASYS_BOOLEANARRAY;   initArray(value, sizeof(bool)*size);}
+		BArray(char        *value, int size)   : BType() {arraySize = size; baSysTypeID = BASYS_CHARACTERARRAY; initArray(value, sizeof(char)*size);}
+		BArray(std::string *value, int size)   : BType() {arraySize = size; baSysTypeID = BASYS_STRINGARRAY;    initArray(value, sizeof(std::string)*size);}
+		BArray(BRef<BType> *value, int size)   : BType() {arraySize = size; baSysTypeID = BASYS_OBJECTARRAY;    initArray(value, sizeof(BRef<BType>)*size);}
 
 
 	// Destructor
@@ -111,6 +116,20 @@ class BArray : public BType {
 
 		// Set array members
 		void setMembersChar(char *value, int size) {arraySize = size; baSysTypeID = BASYS_CHARACTERARRAY; initArray(value, sizeof(char)*size);}
+
+
+		// Get array members
+		std::string *getMembersString() {return (std::string *) valueArray;}
+
+		// Set array members
+		void setMembersString(std::string *value, int size) {arraySize = size; baSysTypeID = BASYS_STRINGARRAY; initArray(value, sizeof(std::string)*size);}
+
+
+		// Get array members
+		BRef<BType> *getMembersObject() {return (BRef<BType> *) valueArray;}
+
+		// Set array members
+		void setMembersObject(BRef<BType> *value, int size) {arraySize = size; baSysTypeID = BASYS_OBJECTARRAY; initArray(value, sizeof(BRef<BType>)*size);}
 };
 
 
