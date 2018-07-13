@@ -1,4 +1,4 @@
-package org.eclipse.basyx.testsuite.support.basyxapi;
+package org.eclipse.basyx.testsuite.support.restAAS;
 
 import java.util.ArrayList;
 

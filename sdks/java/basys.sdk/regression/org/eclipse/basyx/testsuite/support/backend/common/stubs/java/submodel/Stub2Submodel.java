@@ -62,8 +62,8 @@ public class Stub2Submodel extends SubModel {
 	    
 	    // Initialize dummy AAS
 	    AssetAdministrationShell aas = new AssetAdministrationShell();
-	    aas.setId("SubModel2TempAAS");
-	    aas.setName("SubModel2TempAAS");
+	    aas.setId("Stub1AAS");
+	    aas.setName("Stub1AAS");
 	    this.setParent(aas);
 
 
@@ -98,7 +98,7 @@ public class Stub2Submodel extends SubModel {
 
 
 	/**
-	 * Constructor
+	 * Constructor (never called)
 	 */
 	public Stub2Submodel(IAssetAdministrationShell aas) {
 		// Invoke default constructor

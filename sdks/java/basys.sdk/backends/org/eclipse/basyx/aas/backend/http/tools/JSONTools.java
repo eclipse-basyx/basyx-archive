@@ -18,7 +18,6 @@ import org.eclipse.basyx.aas.impl.resources.basic.Event;
 import org.eclipse.basyx.aas.impl.resources.basic.Operation;
 import org.eclipse.basyx.aas.impl.resources.basic.Property;
 import org.eclipse.basyx.aas.impl.resources.connected.ConnectedSerializableObject;
-import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.json.JSONException;
 import org.json.JSONObject;
 

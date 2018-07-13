@@ -1,7 +1,9 @@
-package org.eclipse.basyx.testsuite.support.basyxapi;
+package org.eclipse.basyx.testsuite.support.restAAS;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.eclipse.basyx.aas.api.annotation.AASProperty;
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
@@ -33,6 +35,10 @@ public class Submodel_RestAAS_Description extends SubModel {
 	@AASProperty public Collection<Integer> testCollection = new LinkedList<Integer>();
 
 
+	/**
+	 * Sub model property "testMap"
+	 */
+	@AASProperty public Map<String, String> testMap = new HashMap<String, String>();
 	
 	
 	/**
@@ -46,7 +52,7 @@ public class Submodel_RestAAS_Description extends SubModel {
 	    this.setTypeDefinition("descriptionSM");
 	    
 	    
-	    // Initialize dummy AAS (not needed anymore!)
+	    // Initialize dummy AAS (not needed anymore?)
 	    AssetAdministrationShell aas = new AssetAdministrationShell();
 	    aas.setId("RestAAS");
 	    aas.setName("RestAAS");
@@ -68,6 +74,14 @@ public class Submodel_RestAAS_Description extends SubModel {
 		property2.setId("testCollection");
 		property2.setDataType(DataType.COLLECTION);
 		this.addProperty(property2);
+		
+		testMap.put("five", "isfive");
+		
+		Property property3 = new Property();
+		property3.setName("testMap");
+		property3.setId("testMap");
+		property3.setDataType(DataType.MAP);
+		this.addProperty(property3);
 	}
 
 

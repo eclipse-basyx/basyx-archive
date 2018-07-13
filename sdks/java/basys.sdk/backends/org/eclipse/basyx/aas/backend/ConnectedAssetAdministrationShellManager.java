@@ -14,7 +14,6 @@ import org.eclipse.basyx.aas.api.services.IDirectoryService;
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnector;
 import org.eclipse.basyx.aas.backend.connector.opcua.OPCUAConnector;
-import org.eclipse.basyx.aas.impl.reference.ElementRef;
 import org.eclipse.basyx.aas.impl.resources.basic.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
 

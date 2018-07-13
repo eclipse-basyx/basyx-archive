@@ -19,34 +19,43 @@ public interface IBasysConnector {
 	
 	
 	/**
-	 * Invoke a BaSys set operation. Sets the property at the given path to the specified value.
+	 * Invoke a Basys Put operation. Overrides existing property, operation or event.
 	 * @throws ServerException 
 	 */
-	public void basysSet(String address, String servicePath, Object newValue) throws ServerException;
+	public void basysPut(String address, String servicePath, Object newValue) throws ServerException;
 	
 	/**
-	 * Invoke a BaSys post operation. This function has three different semantics depending on the "action" parameter
-	 * 1) To invoke an operation with the given parameters
-	 * 2) To create a value in a collection OR hash map
-	 * 3) To delete a value in a collection OR hash map
-	 * @param action Valid arguments are "invoke", "create" or "delete".
-	 * @throws Exception 
+	 * Invokes a Basys Update operation. Adds an entry to a map or collection
+	 * @throws ServerException
 	 */
-	public Object basysPost(String address, String servicePath, String action, Object... parameters) throws ServerException;
+	public void basysUpdate(String address, String servicePath, Object... parameters) throws ServerException;
 	
 	/**
-	 * Invoke a BaSys invoke operation. This function can be superseded by basysPost using "invoke" as action parameter
-	 * @throws Exception 
+	 * Invoke a Basys Post operation. Creates a new Property, Operation, Event, Submodel or AAS
+	 * @throws ServerException 
+	 */
+	public Object basysPost(String address, String servicePath, Object... parameters) throws ServerException;
+	
+	/**
+	 * Invoke a Basys Invoke operation. Invokes an operation on the server.
+	 * @throws ServerException 
 	 */
 	public Object basysInvoke(String address, String servicePath, Object... parameters) throws ServerException;
 	
 	/**
-	 * Assemble request path technology specific: 
-	 * 	HTTP => aasSubmodelID+"."+aasID+"/"+path
-	 *  OPCUA => aasID+"/"+aasSubmodelID+"."+path
-	 * @param aasId
-	 * @param aasSubmodelID
-	 * @param path
+	 * Invoke a Basys operation. Deletes any resource under the given path.
+	 * @throws Exception 
+	 */
+	public void basysDelete(String address, String servicePath) throws ServerException;
+	
+	/**
+	 * Invoke a Basys operation. Deletes an entry from a map or collection by the given key or index
+	 * @throws Exception 
+	 */
+	public void basysDelete(String address, String servicePath, Object obj) throws ServerException;
+	
+	/**
+	 * Assemble request path connector specific
 	 * @return 
 	 */
 	public String buildPath(String aasId, String aasSubmodelID, String path, String type) ;

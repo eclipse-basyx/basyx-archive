@@ -35,12 +35,6 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	
 	
 	/**
-	 * Cache for registered sub models
-	 */
-	private BaSysCache cache = null;
-	
-	
-	/**
 	 * Constructor - expect the URL to the administration shell server
 	 * @param connector 
 	 */

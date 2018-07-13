@@ -1,4 +1,4 @@
-package org.eclipse.basyx.testsuite.support.basyxapi;
+package org.eclipse.basyx.testsuite.support.restAAS;
 
 import org.eclipse.basyx.aas.backend.modelprovider.http.HTTPProvider;
 import org.eclipse.basyx.aas.impl.provider.JavaObjectProvider;

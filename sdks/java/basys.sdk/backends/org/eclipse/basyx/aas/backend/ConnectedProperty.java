@@ -100,12 +100,8 @@ public class ConnectedProperty extends ConnectedElement implements IProperty {
 			// Return if element is no reference
 			if (!(result instanceof IElementReference)) return result;
 
-			Integer i = 0;
-			
 			// Resolve references
 			while (result instanceof IElementReference) {
-				i+=1;
-				if (i>99) break; // prevent bufferoverflow
 				
 				// Cast to reference
 				IElementReference elementReference = (IElementReference) result;

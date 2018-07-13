@@ -43,13 +43,13 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 
 
 	/**
-	 * Get property value
+	 * Set property value
 	 * @throws ServerException 
 	 */
 	@Override
 	public void set(Object newValue) throws ServerException {
 		// set property value
-		basysConnector.basysSet(this.modelProviderURL, propertyPath, newValue);
+		basysConnector.basysPut(this.modelProviderURL, propertyPath, newValue);
 		
 		// update Cache
 		this.setElement(newValue);

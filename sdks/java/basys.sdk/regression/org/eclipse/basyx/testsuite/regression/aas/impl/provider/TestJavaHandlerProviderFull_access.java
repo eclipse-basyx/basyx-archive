@@ -33,9 +33,10 @@ public class TestJavaHandlerProviderFull_access {
 
 	/**
 	 * Run test case
+	 * @throws Exception 
 	 */
 	@Test
-	void test() {
+	void test() throws Exception {
 		// Create model provider
 		JavaHandlerProvider subModelProvider = new JavaHandlerProvider();
 		// - Create AAS and sub model instances
@@ -154,7 +155,7 @@ public class TestJavaHandlerProviderFull_access {
 		// -----------------------------------------------------------------------------------------------------------------------------
 		
 		// Delete value from collection
-		subModelProvider.deleteValue("statusSM.Stub1AAS/sampleProperty4", 92);
+		subModelProvider.deleteContainedValue("statusSM.Stub1AAS/sampleProperty4", 92);
 		
 		// Test value has been added
 		property4 = (Collection<Integer>) subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty4");

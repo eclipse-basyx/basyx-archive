@@ -2,6 +2,8 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.http.basic;
 
 import static org.junit.Assert.assertTrue;
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.basic.ICollectionProperty;
+import org.eclipse.basyx.aas.api.resources.basic.IMapProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.backend.ConnectedAssetAdministrationShellManager;
@@ -28,18 +30,17 @@ class TestAASSimpleNewRESTInterface {
 	 */
 	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new TestsuiteDirectory());
 
-	
+	// Retrieve connected AAS from AAS ID
+	IAssetAdministrationShell connAAS = this.aasManager.retrieveAAS("RestAAS");
+
+	// Connect to sub model		
+	ISubModel submodel = connAAS.getSubModels().get("description");		
+
 	/**
-	 * Test Basys Set method implementing HTTP PATCH
+	 * Test new REST API
 	 */
 	@Test
-	void testPatch() throws Exception {
-
-		// Retrieve connected AAS from AAS ID
-		IAssetAdministrationShell connAAS = this.aasManager.retrieveAAS("RestAAS");
-
-		// Connect to sub model		
-		ISubModel submodel = connAAS.getSubModels().get("description");		
+	void runTest() throws Exception {
 
 		// Set property value
 		String expected = "tasty product";
@@ -63,6 +64,65 @@ class TestAASSimpleNewRESTInterface {
 		int expected2 = a - b;
 		
 		assertTrue(result == expected2);
+	}
+	
+	/**
+	 * Test to add a new value to an existing collection
+	 * @throws Exception
+	 */
+	@Test
+	public void testCollections() throws Exception {
+		
+		// Connect to property 
+		ICollectionProperty testCollection= (ICollectionProperty) submodel.getProperties().get("testCollection");
+				
+		// Test to add a new value to an existing map or collection
+		testCollection.add(59);
+		
+		// Clear cache
+		((ConnectedElement) testCollection).invalidate();
+		
+		int val = (int) testCollection.get(testCollection.getElementCount() - 1);
+		assertTrue(val == 59);
+		
+		// Test to remove a value from an existing map or collection by key
+		testCollection.remove(59);
+		
+		// Clear cache
+		((ConnectedElement) testCollection).invalidate();
+	
+		val = (int) testCollection.get(testCollection.getElementCount() - 1);
+		assertTrue(val != 59);
+		
+	}
+	
+	/**
+	 * Test to add a new entry to an existing map 
+	 * @throws Exception
+	 */
+	@Test
+	public void testMaps() throws Exception {
+		
+		// Connect to property 
+		IMapProperty testMap= (IMapProperty) submodel.getProperties().get("testMap");
+				
+		// Test to add a new value to an existing map or collection
+		testMap.put("ten", "isten");
+		
+		// Clear cache
+		((ConnectedElement) testMap).invalidate();
+		
+		String ten = (String) testMap.getValue("ten");
+		assertTrue(ten.equals("isten"));
+		
+		// Test to remove a value from an existing map or collection by key
+		testMap.remove("ten");
+		
+		// Clear cache again		
+		((ConnectedElement) testMap).invalidate();
+
+		assertTrue(((String) testMap.getValue("ten") == null));
+		
 	}
 }
 

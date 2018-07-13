@@ -60,10 +60,10 @@ class TestAASSimpleStructure {
 
 		// Retrieve sub model properties
 		Collection<String> properties = submodel.getProperties().keySet();
-		System.out.println("pop:"+properties);
+		System.out.println("properties:"+properties);
 		
-		// Check property count (expected 11, might be 14 if addProperties test runs first)
-		assertTrue(properties.size() == 11 || properties.size() == 14);
+		// Check property count (expected 11, might be different if addProperties tests run concurrently)
+		assertTrue(properties.size() == 11);
 	}
 }
 

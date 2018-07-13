@@ -7,23 +7,15 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Test_Stub1AAS</servlet-name>
-    <url-pattern>/Testsuite/Stub1AAS/BaSys/1.0/provider</url-pattern>
+    <url-pattern>/Stub1AAS</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>Test_Stub1AASSubmodel1</servlet-name>
-    <servlet-class> org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.Stub1AASSubmodelServlet1 </servlet-class>
+    <servlet-class>org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.Stub1AASSubmodelServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Test_Stub1AASSubmodel1</servlet-name>
-    <url-pattern>/Testsuite/Stub1AASSubmodel1/BaSys/1.0/provider</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>Test_Stub1AASSubmodel2</servlet-name>
-    <servlet-class> org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.Stub1AASSubmodelServlet2 </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Test_Stub1AASSubmodel2</servlet-name>
-    <url-pattern>/Testsuite/Stub1AASSubmodel2/BaSys/1.0/provider</url-pattern>
+    <url-pattern>/Stub1AAS/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>Test_Stub2AAS</servlet-name>
@@ -124,7 +116,7 @@
     <url-pattern>/RestAAS</url-pattern>
   </servlet-mapping>
   <servlet>
-    <description>Submodels of the Basyx API conformant RestAAS</description>
+    <description>Submodels, properties etc. of the Basyx API conformant RestAAS</description>
     <display-name>Servlet_RestAAS_Submodels</display-name>
     <servlet-name>Servlet_RestAAS_Submodels</servlet-name>
     <servlet-class>org.eclipse.basyx.testsuite.support.basyxapi.Servlet_RestAAS_Submodels</servlet-class>

@@ -9,6 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 
 public abstract class BasysHTTPServelet extends HttpServlet {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getMethod().equalsIgnoreCase("PATCH")){
            doPatch(request, response);

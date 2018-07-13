@@ -97,8 +97,6 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 		// Get sub model properties
 		Map<String, ElementRef> elements = (Map<String, ElementRef>) basysConnector.basysGet(modelProviderURL, servicePath);
 		
-		System.out.println(">> [initCache] FINISH BASYS GET");
-		
 		// Add properties to cache 
 		for (String elementId : elements.keySet()) {
 			
@@ -124,8 +122,9 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 * retrieve submodel clock from server
 	 */
 	public Integer getServerClock() {
+		String servicePath = this.basysConnector.buildPath(aasID, aasSubmodelID, "clock", PROPERTIES);		
 		
-		String servicePath = aasSubmodelID + "." + aasID + "/clock";
+		// Retrieve current clock value
 		Integer serverClock = (Integer) basysConnector.basysGet(modelProviderURL, servicePath);
 		
 		return serverClock;
@@ -230,7 +229,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 		
 		// Set "frozen" variable to true
 		System.out.println("Freezing submodel "+ this.aasSubmodelID);
-		basysConnector.basysSet(this.modelProviderURL, servicePath, true);
+		basysConnector.basysPut(this.modelProviderURL, servicePath, true);
 		}
 	
 	/** 
@@ -243,7 +242,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 		
 		// Set "frozen" variable to false
 		System.out.println("Unfreezing submodel "+ this.aasSubmodelID);
-		basysConnector.basysSet(this.modelProviderURL, servicePath, false);
+		basysConnector.basysPut(this.modelProviderURL, servicePath, false);
 	}
 	
 	/**
@@ -269,13 +268,13 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 		property.setParent(tmpSubModel);
 		
 		// Property attributes
-		String name = property.getName();
-		String type = property.getDataType().toString();
-		boolean isCollection = property.isCollection();
-		boolean isMap = property.isMap();
+		//String name = property.getName();
+		//String type = property.getDataType().toString();
+		//boolean isCollection = property.isCollection();
+		//boolean isMap = property.isMap();
 		
 		// Send new property to server
-		basysConnector.basysPost(this.modelProviderURL, servicePath, "createProperty", property, name, type, isCollection, isMap); 
+		basysConnector.basysPost(this.modelProviderURL, servicePath, property); 
 		
 		// Add property to cache
 		// - Create ConnectedProperty

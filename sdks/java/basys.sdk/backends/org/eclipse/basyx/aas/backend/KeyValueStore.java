@@ -1,19 +1,11 @@
 package org.eclipse.basyx.aas.backend;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.api.exception.ResourceNotFoundException;
-import org.eclipse.basyx.aas.api.resources.basic.IOperation;
-import org.eclipse.basyx.aas.api.resources.basic.IProperty;
-import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
-import org.eclipse.basyx.aas.impl.reference.ElementRef;
 
 /**
  * 

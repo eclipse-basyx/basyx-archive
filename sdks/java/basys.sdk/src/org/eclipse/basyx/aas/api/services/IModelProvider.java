@@ -26,7 +26,7 @@ public interface IModelProvider {
 
 	
 	/**
-	 * Get a sub model property value
+	 * Get a property value
 	 * 
 	 * @param path Path to the requested value
 	 * @return Property value. Object type is assumed to be [Integer | ... | Collection]
@@ -35,17 +35,18 @@ public interface IModelProvider {
 
 
 	/**
-	 * Set a sub model property value
+	 * Set a property value
 	 * 
 	 * @param path Path to the requested value
 	 * @param newValue Updated value
 	 * @throws ServerException 
+	 * @throws Exception 
 	 */
-	public void setModelPropertyValue(String path, Object newValue) throws ServerException ;
+	public void setModelPropertyValue(String path, Object newValue) throws Exception ;
 	
 	
 	/**
-	 * Create/insert a value in a collection
+	 * Create a new property, operation, evnet submodel or aas under the given path
 	 * 
 	 * @param path Path to the collection
 	 * @param newValue Inserted value
@@ -53,19 +54,18 @@ public interface IModelProvider {
 	 */
 	public void createValue(String path, Object addedValue) throws Exception;
 	
-	
+
 	/**
-	 * Delete a value from a collection
+	 * Delete a property, operation, event, submodel or aas under the given path
 	 * 
 	 * @param path Path to the collection
 	 * @param deletedValue Collection value to delete
 	 * @throws Exception 
 	 */
-	public void deleteValue(String path, Object deletedValue) throws Exception;
-	
+	public void deleteValue(String path) throws Exception;
 
 	/**
-	 * Invoke an operation
+	 * Invoke an operation with the specified paramter
 	 *
 	 * @param path Path to operation
 	 * @param parameter Operation parameter
@@ -89,5 +89,24 @@ public interface IModelProvider {
 	 * @return Collection of contained elements
 	 */
 	public Map<String, IElementReference> getContainedElements(String path);
+	
+	
+	/**
+	 * Adds an entry to a collection or map 
+	 * @param path
+	 * @param parameter For collections, parameter is expected to be a single element that will be added to
+	 * 					For maps, parameter is expected to be a key-value pair that will be added to the map
+	 * @throws Exception
+	 */
+	public void setContainedValue(String path, Object[] parameter) throws Exception;
+	
+	/**
+	 * Removes an entry from a collection or map 
+	 * @param path
+	 * @param parameter For collections, parameter is the exact object that shall be deleted from the collection
+	 * 					For maps, parameter is a key for a key-value pair that shall be removed from the map	
+	 * @throws Exception
+	 */
+	public void deleteContainedValue(String path, Object[] parameter) throws Exception;
 }
 

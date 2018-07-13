@@ -231,7 +231,7 @@ public class ElementRef implements IElementReference {
 	
 	
 	/**
-	 * Add scope to aasID
+	 * Add scope to aasID FIXME how to deal with the scope
 	 */
 	public void addScope(String scope) {
 		// Only process valid scopes

@@ -1,5 +1,6 @@
 package org.eclipse.basyx.testsuite.support.gateways.common.directory;
 
+import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.services.PreconfiguredDirectory;
 
 
@@ -24,6 +25,12 @@ public class GatewayTestsuiteDirectoryLine1IESE extends PreconfiguredDirectory {
 		addMapping("product_database",          "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/office/product_database/BaSys/1.0/provider");
 		// - Sub models of product_database
 		addMapping("products.product_database", "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/office/products_product_database/BaSys/1.0/provider");
+		
+		
+		// Example call IAssetAdministrationShell tempsensorAAS1 = this.aasManager.retrieveAAS("line2.manufacturing.de/device2/aas");
+		// Sample could-be mapping 
+		// addMapping("line2.manufacturing.de/device2/aas", "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line1/gateway_line12/BaSys/1.0/provider");
+		
 
 	
 		// Define mappings for line 2 in domain manufacturing.de

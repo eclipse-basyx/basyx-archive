@@ -29,7 +29,7 @@ public class AAS_Office_ProductDatabase extends AssetAdministrationShell {
 	    
 	    // Register sub models
 	    
-	    // - Sub model statusSM is a referenced sub model. Its contents are provided by a model provider. 
+	    // - Sub model products is a referenced sub model. Its contents are provided by a model provider. 
 	    //   We do not know its exact internal structure here, since some properties (with varying cardinalities) are unknown. 
 	    ReferencedSubModel statusSM = new ReferencedSubModel();
 	    statusSM.setAssetKind(AssetKind.INSTANCE);
