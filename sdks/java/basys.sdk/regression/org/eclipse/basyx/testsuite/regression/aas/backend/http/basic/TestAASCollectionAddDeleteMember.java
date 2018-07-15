@@ -5,6 +5,7 @@ import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.ICollectionProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.backend.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.backend.connector.http.HTTPConnector;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ class TestAASCollectionAddDeleteMember {
 	public final ExpectedException exception = ExpectedException.none();
 
 
-	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new TestsuiteDirectory());
+	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new TestsuiteDirectory(), new HTTPConnector());
 	
 	
 	

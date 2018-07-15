@@ -54,31 +54,13 @@ public class ConnectedElement implements IElement  {
 		modelProviderURL = url;
 		
 		// Create HTTP connector
-		basysConnector = setConnector(connector);
+		basysConnector = connector;
 		
 		// Set caching information
 		isValid_ 	 = false;
     	isCacheable_ = true; // % TODO Parameterize isCacheable
-    	
-    	
 	}
 	
-	/**
-	 * Initialize new Connector
-	 * @param c
-	 * @return
-	 */
-	private IBasysConnector setConnector(IBasysConnector c) {
-		
-		if (c instanceof OPCUAConnector) {
-			return new OPCUAConnector();
-		}
-		
-		else {
-			return new HTTPConnector();
-		}
-		
-	}
 
 	/**
 	 * TODO where should be decided if an element is cacheable?

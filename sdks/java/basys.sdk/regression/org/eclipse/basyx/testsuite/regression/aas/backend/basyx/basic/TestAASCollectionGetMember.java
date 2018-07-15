@@ -1,4 +1,4 @@
-package org.eclipse.basyx.testsuite.regression.aas.backend.http.basic;
+package org.eclipse.basyx.testsuite.regression.aas.backend.basyx.basic;
 
 import static org.junit.Assert.assertTrue;
 
@@ -6,9 +6,9 @@ import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.ICollectionProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.backend.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnector;
+import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnector;
 import org.eclipse.basyx.aas.impl.reference.ElementRef;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
+import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory_BaSyxNative;
 import org.junit.jupiter.api.Test;
 
 
@@ -32,7 +32,7 @@ class TestAASCollectionGetMember {
 	/**
 	 * Store HTTP asset administration shell manager backend
 	 */
-	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new TestsuiteDirectory(), new HTTPConnector());
+	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new TestsuiteDirectory_BaSyxNative(), new BaSyxConnector());
 	
 	
 	

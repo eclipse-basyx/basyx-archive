@@ -6,6 +6,7 @@ import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.ICollectionProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.backend.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.backend.connector.http.HTTPConnector;
 import org.eclipse.basyx.testsuite.support.gateways.common.directory.GatewayTestsuiteDirectoryLine1IESE;
 import org.junit.jupiter.api.Test;
 
@@ -45,7 +46,7 @@ class TestAASGatewaysCollection_Line2FromLine1 {
 	/**
 	 * Store HTTP asset administration shell manager backend for office.iese.fraunhofer.de
 	 */
-	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new GatewayTestsuiteDirectoryLine1IESE());
+	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new GatewayTestsuiteDirectoryLine1IESE(), new HTTPConnector());
 	
 	
 	

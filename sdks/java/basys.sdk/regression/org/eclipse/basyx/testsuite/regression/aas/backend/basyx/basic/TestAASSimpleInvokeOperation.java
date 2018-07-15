@@ -1,13 +1,12 @@
-package org.eclipse.basyx.testsuite.regression.aas.backend.http.basic;
+package org.eclipse.basyx.testsuite.regression.aas.backend.basyx.basic;
 
 import static org.junit.Assert.assertTrue;
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.basic.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.backend.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnector;
-import org.eclipse.basyx.aas.impl.resources.basic.DataType;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
+import org.eclipse.basyx.aas.backend.ConnectedOperation;
+import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnector;
+import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory_BaSyxNative;
 import org.junit.jupiter.api.Test;
 
 
@@ -19,19 +18,17 @@ import org.junit.jupiter.api.Test;
  * Context: Static configured topology
  * - Connect to AAS "Stub1AAS"
  * - Connect to sub model "statusSM"
- * - Connect to properties "sampleProperty1" and "sampleProperty2"
- * - Retrieve values of both properties
+ * - Invoke operations "sum", "property3/sub"
  * 
  * @author kuhn
  *
  */
-class TestAASSimpleGetPropertyMetaData {
-	
+class TestAASSimpleInvokeOperation {
 
 	/**
 	 * Store HTTP asset administration shell manager backend
 	 */
-	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new TestsuiteDirectory(), new HTTPConnector());
+	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new TestsuiteDirectory_BaSyxNative(), new BaSyxConnector());
 	
 	
 	
@@ -44,22 +41,24 @@ class TestAASSimpleGetPropertyMetaData {
 		// Connect to AAS with ID "Stub1AAS"
 		// - Retrieve connected AAS from AAS ID
 		IAssetAdministrationShell connAAS = this.aasManager.retrieveAAS("Stub1AAS");
-		
-		
+
+
 		// Connect to sub model
 		// - FIXME: We need to define technology independent query String for directory (e.g. status.sampleAAS)
 		// - Retrieve connected sub model
 		// - FIXME: Get submodel by type or ID		
 		ISubModel submodel = connAAS.getSubModels().get("statusSM");		
-		
-		
-		// Connect to sub model property
-		// - Get property values (shortcut here, we know that it is a single property type)
-		DataType property1Type = ((ISingleProperty) submodel.getProperties().get("sampleProperty1")).getDataType();
 
-		
+
+		System.out.println("Get1:"+submodel.getOperations().get("sum"));
+		System.out.println("Get2:"+((ConnectedOperation) submodel.getOperations().get("sum")).invoke(2, 3));
+
+		// Connect to sub model operations
+		// - Invoke operation "sum"
+		int result1 = (int) ((ConnectedOperation) submodel.getOperations().get("sum")).invoke(2, 3);
+
 		// Check test case results
-		assertTrue(property1Type == DataType.INTEGER);
+		assertTrue(result1 == 5);
 	}
 }
 

@@ -1,12 +1,14 @@
-package org.eclipse.basyx.testsuite.regression.aas.backend.http.basic;
+package org.eclipse.basyx.testsuite.regression.aas.backend.basyx.basic;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.IMapProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.backend.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnector;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
+import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnector;
+import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory_BaSyxNative;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
@@ -28,14 +30,14 @@ import org.junit.rules.ExpectedException;
  */
 
 
-class TestAASMapGetMember {
+class TestAASMapAddDeleteMember {
 	
 
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 
 
-	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new TestsuiteDirectory(), new HTTPConnector());
+	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new TestsuiteDirectory_BaSyxNative(), new BaSyxConnector());
 	
 	
 	
@@ -55,13 +57,23 @@ class TestAASMapGetMember {
 		// Connect to property 
 		IMapProperty property6 = (IMapProperty) submodel.getProperties().get("sampleProperty6");
 		
-		// Execute GET
-		int val6 = (int) property6.getValue("magic");
+		// add member entry to collection
+		property6.put("five", 5);
 		
-		// Check if the item has been added
-		assertTrue(val6 == 42);
+		// check if member has been added
+		int five = (int) property6.getValue("five");
+		assertTrue(five==5);
 		
-
+		// delete entry
+		property6.remove("five");
+		
+		// check if the member has been removed
+		Object _null = property6.getValue("five");
+		assertNull(_null);
+		
+		// check if size = 1
+		int size = property6.getKeys().size();
+		assertTrue(size == property6.getEntryCount() && size == 1);
 	}
 }
 

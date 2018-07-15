@@ -29,6 +29,7 @@ public class HTTPConnector implements IBasysConnector {
 	/**
 	 * Invoke a BaSys get operation via HTTP
 	 */
+	@Override
 	public Object basysGet(String address, String servicePath) {
 		
 		System.out.println("basysGet "+servicePath);
@@ -56,6 +57,7 @@ public class HTTPConnector implements IBasysConnector {
 	/**
 	 * Invoke a BaSys get operation via HTTP
 	 */
+	@Override
 	public JSONObject basysGetRaw(String address, String servicePath) {
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
@@ -71,6 +73,7 @@ public class HTTPConnector implements IBasysConnector {
 	/**as
 	 * Invoke a BaSys set operation via HTTP
 	 */
+	@Override
 	public void basysSet(String address, String servicePath, Object newValue) {
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
@@ -91,6 +94,7 @@ public class HTTPConnector implements IBasysConnector {
 	 * Invoke a BaSys post operation via HTTP
 	 * @param action may be "invoke", "create" or "delete"
 	 */
+	@Override
 	public Object basysPost(String address, String servicePath, String action, Object... newValue) {
 		
 		// Invoke service call via web services
@@ -121,10 +125,9 @@ public class HTTPConnector implements IBasysConnector {
 	/**
 	 * Invoke a BaSys invoke operation via HTTP
 	 */
+	@Override
 	public Object basysInvoke(String address, String servicePath, Object... newValue) {
-		
 		return basysPost(address, servicePath, "invoke", newValue);
-		
 	 }
 
 

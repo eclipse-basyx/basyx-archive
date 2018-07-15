@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.services.IDirectoryService;
 
+
+
 /**
  * Implement a preconfigured directory that is compiled into the BaSys SDK
  * 

@@ -1,5 +1,4 @@
-package org.eclipse.basyx.testsuite.regression.aas.backend.opcua.basic;
-
+package org.eclipse.basyx.testsuite.regression.aas.backend.basyx.basic;
 
 import static org.junit.Assert.assertTrue;
 
@@ -9,10 +8,11 @@ import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.backend.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnector;
-import org.eclipse.basyx.aas.backend.connector.opcua.OPCUAConnector;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.OPCUATestsuiteDirectory;
+import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnector;
+import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory_BaSyxNative;
 import org.junit.jupiter.api.Test;
+
+
 
 
 /**
@@ -24,30 +24,34 @@ import org.junit.jupiter.api.Test;
  * - Connect to properties "sampleProperty1" and "sampleProperty2"
  * - Retrieve values of both properties
  * 
- * @author kuhn, pschorn
+ * @author kuhn
  *
  */
 class TestAASSimpleGetPropertyValue {
+	
 
 	/**
 	 * Store HTTP asset administration shell manager backend
 	 */
-	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new OPCUATestsuiteDirectory(), new HTTPConnector());
+	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new TestsuiteDirectory_BaSyxNative(), new BaSyxConnector());
+	
+	
 	
 	/**
 	 * Run JUnit test case
 	 */
 	@Test
 	void runTest() throws Exception {
-		
-		// Set connection technology to opcua
-		aasManager.setConnector(new OPCUAConnector());
 
-		// Connect to AAS with ID "Stub1AAS" Retrieve connected AAS from AAS ID
+		// Connect to AAS with ID "Stub1AAS"
+		// - Retrieve connected AAS from AAS ID
 		IAssetAdministrationShell connAAS = this.aasManager.retrieveAAS("Stub1AAS");
 		
 		
 		// Connect to sub model
+		// - FIXME: We need to define technology independent query String for directory (e.g. status.sampleAAS)
+		// - Retrieve connected sub model
+		// - FIXME: Get submodel by type or ID		
 		ISubModel submodel = ((HashMap<String, ISubModel>) connAAS.getSubModels()).get("statusSM");		
 		
 		
@@ -56,11 +60,9 @@ class TestAASSimpleGetPropertyValue {
 		int property1Val = (int) ((ISingleProperty) submodel.getProperties().get("sampleProperty1")).get();
 		int property2Val = (int) ((ISingleProperty) submodel.getProperties().get("sampleProperty2")).get();
 		
-		
 		// Check test case results
 		assertTrue(property1Val == 2);
 		assertTrue(property2Val == 3);
-		 
 	}
 }
 

@@ -1,12 +1,12 @@
-package org.eclipse.basyx.testsuite.regression.aas.backend.http.basic;
+package org.eclipse.basyx.testsuite.regression.aas.backend.basyx.basic;
 
 import static org.junit.Assert.assertTrue;
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.basic.IMapProperty;
+import org.eclipse.basyx.aas.api.resources.basic.ICollectionProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.backend.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnector;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
+import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnector;
+import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory_BaSyxNative;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
@@ -28,14 +28,14 @@ import org.junit.rules.ExpectedException;
  */
 
 
-class TestAASMapGetMember {
+class TestAASCollectionAddDeleteMember {
 	
 
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 
 
-	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new TestsuiteDirectory(), new HTTPConnector());
+	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new TestsuiteDirectory_BaSyxNative(), new BaSyxConnector());
 	
 	
 	
@@ -53,13 +53,25 @@ class TestAASMapGetMember {
 		ISubModel submodel = connAAS.getSubModels().get("statusSM");				
 		
 		// Connect to property 
-		IMapProperty property6 = (IMapProperty) submodel.getProperties().get("sampleProperty6");
+		ICollectionProperty property4 = ((ICollectionProperty) submodel.getProperties().get("sampleProperty4"));
 		
-		// Execute GET
-		int val6 = (int) property6.getValue("magic");
+		// Add member to collection
+		property4.set(5);
 		
 		// Check if the item has been added
-		assertTrue(val6 == 42);
+		int five = (int) property4.get(1);
+		assertTrue(five==5);
+		
+		// Check if an item has been added 
+		System.out.println("size = " + property4.getElementCount());
+		
+		// Delete member from collection
+		property4.remove(5);
+		
+		// Check if the item has been removed 
+		System.out.println("size = " + property4.getElementCount());
+		
+		assertTrue(property4.getElementCount() == 1);
 		
 
 	}

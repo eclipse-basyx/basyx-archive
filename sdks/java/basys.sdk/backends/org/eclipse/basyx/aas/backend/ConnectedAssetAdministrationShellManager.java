@@ -12,9 +12,6 @@ import org.eclipse.basyx.aas.api.resources.basic.IProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.api.services.IDirectoryService;
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnector;
-import org.eclipse.basyx.aas.backend.connector.opcua.OPCUAConnector;
-import org.eclipse.basyx.aas.impl.reference.ElementRef;
 import org.eclipse.basyx.aas.impl.resources.basic.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
 
@@ -48,19 +45,24 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	
 	
 	/**
-	 * custom IBasysConnector specified by the user
+	 * Custom IBasysConnector specified by the user
 	 */
-	IBasysConnector connector = null;
+	protected IBasysConnector connector = null;
+	
+	
+	
 	
 	/**
 	 * Constructor - create a new HTTP AAS manager
 	 * 
 	 * @param networkDirectoryService The network directory service to use
 	 */
-	public ConnectedAssetAdministrationShellManager(IDirectoryService networkDirectoryService) {
+	public ConnectedAssetAdministrationShellManager(IDirectoryService networkDirectoryService, IBasysConnector basysConnector) {
 		// Set directory service reference
 		directoryService = networkDirectoryService;
-		setConnector(connector);
+		
+		// Set connector reference
+		setConnector(basysConnector);
 	}
 	
 	
@@ -74,16 +76,12 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	}
 	
 	
+	/**
+	 * Set a Basys connector
+	 */
 	public void setConnector(IBasysConnector c) {
-		
-		if (c instanceof OPCUAConnector) {
-			connector = new OPCUAConnector();
-		}
-		
-		else {
-			connector = new HTTPConnector();
-		}
-		
+		// Store connector instance
+		connector = c;
 	}
 
 
