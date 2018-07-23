@@ -52,8 +52,8 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	 */
 	@Override
 	public void set(Map<String, Object> map) throws ServerException {
-		// Post data to server
-		basysConnector.basysSet(this.modelProviderURL, propertyPath, map);
+		// Create or override existing object
+		basysConnector.basysPut(this.modelProviderURL, propertyPath, map);
 		
 		// update Cache
 		this.setElement(map);
@@ -66,8 +66,8 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	@Override
 	public void put(Object key, Object value) throws Exception {
 		
-		// Post data to server
-		basysConnector.basysPost(this.modelProviderURL, propertyPath, "create" , key, value);
+		// Update data on the server
+		basysConnector.basysUpdate(this.modelProviderURL, propertyPath, key, value);
 		
 		// Update cache
 		Object map = this.getElement();
@@ -126,8 +126,8 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	@Override
 	public void remove(Object key) throws Exception {
 		
-		// Post data to server
-		basysConnector.basysPost(this.modelProviderURL, propertyPath, "delete" , key);
+		// Delete entry for key on the server
+		basysConnector.basysDelete(this.modelProviderURL, propertyPath, key);
 		
 		// Update cache
 		Object map = this.getElement();

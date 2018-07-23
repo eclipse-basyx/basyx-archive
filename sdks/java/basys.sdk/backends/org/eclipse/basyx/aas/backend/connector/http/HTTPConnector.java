@@ -7,11 +7,11 @@ import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
+import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,20 +26,21 @@ import org.json.JSONObject;
  */
 public class HTTPConnector implements IBasysConnector {
 
-	
+	private static String ADD_ACTION 	= "add";
+	private static String REMOVE_ACTION = "remove";
 	
 	/**
 	 * Invoke a BaSys get operation via HTTP
 	 */
 	public Object basysGet(String address, String servicePath) {
 		
-		System.out.println("[HTTP BasysGet] "+ address+ ": " + servicePath);
+		System.out.println("[HTTP BasysGet] "+ address + servicePath);
 		
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
 
 		// Build web service URL
-		Builder request = buildRequest(client, address, "path", servicePath);
+		Builder request = buildRequest(client, address+servicePath);
 		
 		// Perform request, return response
 		String result = request.get(String.class); 
@@ -62,32 +63,92 @@ public class HTTPConnector implements IBasysConnector {
 		Client client = ClientBuilder.newClient();
 
 		// Build web service URL
-		Builder request = buildRequest(client, address, "path", servicePath);
+		Builder request = buildRequest(client, address+servicePath);
 		
 		// Perform request, return response
 		return new JSONObject(request.get(String.class)); 
 	}
-
 	
-	/**as
-	 * Invoke a BaSys set operation via HTTP
-	 * @throws ServerException 
+	/**
+	 * Invokes BasysPut method via HTTP PUT. Overrides existing property, operation or event.
 	 */
-	public void basysSet(String address, String servicePath, Object newValue) throws ServerException {
-		
-		System.out.println("[HTTP BasysSet] "+ address+ ": " + servicePath);
+	@Override
+	public void basysPut(String address, String servicePath, Object newValue) throws ServerException {
+		System.out.println("[HTTP BasysPut] "+ address+ servicePath + "  "+ newValue);
 		
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
-
+		
 		// Create JSON value Object 
 		JSONObject jsonObject = JSONTools.Instance.serialize(newValue);
-
+		
 		// Build web service URL
-		Builder request = buildRequest(client, address, "path", servicePath);
+		Builder request = buildRequest(client, address+servicePath);
 		
 		// Perform request
 		Response rsp = request.put(Entity.entity(jsonObject.toString(), MediaType.APPLICATION_JSON));
+		
+		// Try to extract response if any
+		try {
+			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
+			
+			if (result instanceof ServerException) {
+				
+				// Throw server exception
+				throw (ServerException) result;
+			}
+			
+		}
+		catch (JSONException e){
+		    // If there is no return value or deserialization failed
+			return;
+		}
+	}
+
+	
+	/**
+	 * Invoke a BaSys Patch operation via HTTP PATCH.  Updates a map or collection
+	 * @throws ServerException 
+	 */
+	public void basysUpdate(String address, String servicePath, Object... newValue) throws ServerException {
+		
+		httpPatch(address, servicePath, ADD_ACTION, newValue);
+	}
+	
+	/**
+	 * Invoke a BaSys Delete operation via HTTP PATCH.  Deletes an element from a map or collection
+	 * @throws ServerException 
+	 */
+	@Override
+	public void basysDelete(String address, String servicePath, Object obj) throws ServerException {
+		
+		httpPatch(address, servicePath, REMOVE_ACTION, obj);
+	}
+	
+	/**
+	 * Implements HTTP Patch
+	 * @param address
+	 * @param servicePath
+	 * @param action
+	 * @param newValue
+	 * @throws ServerException
+	 */
+	private void httpPatch(String address, String servicePath, String action, Object... newValue) throws ServerException {
+		System.out.println("[HTTP BasysPatch] "+ address+ servicePath + "  "+ newValue);
+		
+		// Invoke service call via web services
+		Client client = ClientBuilder.newClient();
+		
+		// Create JSON value Object 
+		JSONObject jsonObject = JSONTools.Instance.serialize(newValue);
+		
+		// Create and invoke HTTP PATCH request
+		Response rsp = client.target(address + servicePath)
+							.queryParam("action", action)
+							.request()
+							.build("PATCH", Entity.text(jsonObject.toString()))
+			                .property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true)
+			                .invoke();
 		
 		try {
 			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
@@ -97,20 +158,19 @@ public class HTTPConnector implements IBasysConnector {
 			}
 		}
 		catch (JSONException e){
-		    // Ff there is no return value or deserialization failed
+		    // If there is no return value or deserialization failed
 			return;
 		}
 	}
 	
 	
 	/**
-	 * Invoke a BaSys post operation via HTTP
-	 * @param action may be "invoke", "create" or "delete", "createProperty"
+	 * Invoke a BaSys post operation via HTTP POST
 	 * @throws Exception 
 	 */
-	public Object basysPost(String address, String servicePath, String action, Object... newValue) throws ServerException {
+	public Object basysPost(String address, String servicePath, Object... newValue) throws ServerException {
 		
-		System.out.println("[HTTP BasysPost] "+ address+ ": " + servicePath);
+		System.out.println("[HTTP BasysPost] "+ address+ servicePath + " " + newValue);
 		
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
@@ -119,62 +179,87 @@ public class HTTPConnector implements IBasysConnector {
 		JSONObject jsonObject = JSONTools.Instance.serialize(newValue);
 
 		// Build web service URL
-		Builder request = buildRequest(client, address, "path", servicePath, "op", action);
+		Builder request = buildRequest(client, address+servicePath);
 		
 		// Perform request
 		Response rsp = request.post(Entity.entity(jsonObject.toString(), MediaType.APPLICATION_JSON));
 		
 		// Try to extract and return response if any
-		
 		try {
 			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
 			
 			if (result instanceof ServerException) {
+				
+				// Throw server exception
 				throw (ServerException) result;
 			} else {
+				
+				// Return result
 				return result;
 			}
 			
 		}
 		catch (JSONException e){
-		    // Ff there is no return value or deserialization failed
+		    // If there is no return value or deserialization failed
 			return null;
 		}
 	}
 	
-	
-
-	
 	/**
-	 * Invoke a BaSys invoke operation via HTTP
+	 * Invoke a BaSys invoke operation via HTTP. Implemented as HTTP POST.
 	 * @throws Exception 
 	 */
+	@Override
 	public Object basysInvoke(String address, String servicePath, Object... newValue) throws ServerException {
 		
-		return basysPost(address, servicePath, "invoke", newValue);
+		return basysPost(address, servicePath, newValue);
 		
 	 }
-
-
-
-
+	
+	/**
+	 * Invoke basysDelete operation via HTTP DELETE.  Deletes any resource under the given path.
+	 */
+	@Override
+	public void basysDelete(String address, String servicePath) throws ServerException {
+		System.out.println("[HTTP BasysDelete] "+ address+ servicePath);
+		
+		// Invoke service call via web services
+		Client client = ClientBuilder.newClient();
+		
+		// Build web service URL
+		Builder request = buildRequest(client, address+servicePath);
+		
+		// Perform request
+		Response rsp = request.delete();
+		
+		// Try to extract response if any
+		try {
+			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
+			
+			if (result instanceof ServerException) {
+				
+				// Throw server exception
+				throw (ServerException) result;
+			}
+			
+		}
+		catch (JSONException e){
+		    // If there is no return value or deserialization failed
+			return;
+		}
+	}
+	
 	/**
 	 * Execute a web service, return JSON string
 	 */
-	protected Builder buildRequest(Client client, String wsURL, String... parameter) {
+	protected Builder buildRequest(Client client, String wsURL) {
 		// Called URL
 		WebTarget resource = client.target(wsURL);
 				
-		// Add call parameter
-		for (int i=0; i<parameter.length; i+=2) {
-			resource = resource.queryParam(parameter[i], parameter[i+1]);
-		}
-
 		// Build request, set JSON encoding
 		Builder request = resource.request();		
 		request.accept(MediaType.APPLICATION_JSON); 
 		
-
 		// Return JSON request
 		return request;
 	}
@@ -196,20 +281,26 @@ public class HTTPConnector implements IBasysConnector {
 	
 	/**
 	 * Create servicepath depending on server technology
+	 * @param type refers to properties, operations or events
+	 * @param path can be null if a type qualifier and submodel is specified
 	 */
-	public String buildPath(String aasID, String aasSubmodelID, String path) {
+	public String buildPath(String aasID, String aasSubmodelID, String path, String type) {
 		String servicePath = aasID;
 		if (aasSubmodelID!=null) {
-			servicePath = aasSubmodelID + "." + servicePath;
+			servicePath = servicePath + "/submodels/"+aasSubmodelID;
 			
+			if (type!=null) {
+				servicePath = servicePath +  "/" + type;
+				
+			}
 			if (path!=null) {
-				servicePath = servicePath +  "/" + path;
+				servicePath = servicePath + "/" + path;
 			}
 		}
 		
 		return servicePath;
 	}
-	
-	
+
+
 }
 

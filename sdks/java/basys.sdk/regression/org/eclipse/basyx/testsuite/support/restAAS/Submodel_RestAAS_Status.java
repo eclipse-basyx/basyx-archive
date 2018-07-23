@@ -1,6 +1,7 @@
-package org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel;
+package org.eclipse.basyx.testsuite.support.restAAS;
 
 import java.util.ArrayList;
+
 import org.eclipse.basyx.aas.api.annotation.AASOperation;
 import org.eclipse.basyx.aas.api.annotation.AASProperty;
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
@@ -15,13 +16,18 @@ import org.eclipse.basyx.aas.impl.resources.basic.SubModel;
 
 
 /**
- * Implement a submodel stub
+ * Implement status sub model for the example AAS RestAAS
  * 
- * @author kuhn
+ * @author kuhn,pschorn
  *
  */
-public class Stub2Submodel extends SubModel {
+public class Submodel_RestAAS_Status extends SubModel {
 
+
+	/**
+	 * Sub model property "isReady"
+	 */
+	@AASProperty public boolean isReady = true;
 
 	/**
 	 * Sub model operation
@@ -30,57 +36,30 @@ public class Stub2Submodel extends SubModel {
 		return a-b;
 	}
 	
-	
-	
-	/**
-	 * Sub model property "sampleProperty1"
-	 */
-	@AASProperty public int samplePropertyA = 5;
-
-	
-	/**
-	 * Sub model property "sampleProperty2"
-	 */
-	@AASProperty public int samplePropertyB = 6;
-
-	
-	
-
-	
-	
-	
 	/**
 	 * Constructor
 	 */
-	public Stub2Submodel() {
+	public Submodel_RestAAS_Status() {
 		// Initialize this submodel
 	    this.setAssetKind(AssetKind.INSTANCE);
-	    this.setName("subModelExample");
-	    this.setId("Stub2SM");
-	    this.setTypeDefinition("smType");
-	    
-	    
-	    // Initialize dummy AAS
-	    AssetAdministrationShell aas = new AssetAdministrationShell();
-	    aas.setId("Stub1AAS");
-	    aas.setName("Stub1AAS");
-	    this.setParent(aas);
+	    this.setName("Rest Conformant Submodel 'statusSM'");
+	    this.setId("status");
+	    this.setTypeDefinition("statusSM");
 
+	    
+	    // Initialize dummy AAS (not needed anymore!)
+	    AssetAdministrationShell aas = new AssetAdministrationShell();
+	    aas.setId("RestAAS");
+	    aas.setName("RestAAS");
+	    this.setParent(aas);
 
 		
 		// Create and add properties
 		Property property1 = new Property();
-		property1.setName("samplePropertyA");
-		property1.setId("samplePropertyA");
-		property1.setDataType(DataType.INTEGER);
+		property1.setName("isReady");
+		property1.setId("isReady");
+		property1.setDataType(DataType.BOOLEAN);
 		this.addProperty(property1);
-
-		Property property2 = new Property();
-		property2.setName("samplePropertyB");
-		property2.setId("samplePropertyB");
-		property2.setDataType(DataType.INTEGER);
-		this.addProperty(property2);
-
 		
 		// Create and add operation
 	    Operation op = new Operation();
@@ -96,11 +75,10 @@ public class Stub2Submodel extends SubModel {
 	}
 
 
-
 	/**
-	 * Constructor (never called)
+	 * Constructor
 	 */
-	public Stub2Submodel(IAssetAdministrationShell aas) {
+	public Submodel_RestAAS_Status(IAssetAdministrationShell aas) {
 		// Invoke default constructor
 		this();
 		

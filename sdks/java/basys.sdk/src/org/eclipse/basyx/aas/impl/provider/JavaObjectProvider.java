@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.annotation.AASOperation;
 import org.eclipse.basyx.aas.api.annotation.AASProperty;
+import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IElementContainer;
@@ -165,8 +166,12 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 		if ((result = getFieldProperty(obj, propertyName)) != null) return result;
 		
 		// Check for dynamic properties
+		try  {
 		if ((result = ((SubModel) obj).getDynamicPropertyValue(propertyName)) != null) return result; // FIXME: Endless loop if BasysGet is processed before set.
 		if ((result = ((SubModel) obj).getProperties().get(propertyName)) != null) return result;
+		} catch (ClassCastException e) {
+			System.out.println(e.getMessage());
+		}
 		
 		
 		System.out.println("Object not found");
@@ -290,22 +295,6 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	}
 
 	
-	/**
-	 * Delete an element from a collection
-	 */
-	@SuppressWarnings("rawtypes")
-	protected void removeFromCollection(Collection target, Object element) {
-		// Store element in collection
-		Object collectionElement = null;
-		
-		// Check if collection contains element
-		if ((collectionElement = getCollectionElement(target, element)) == null) return;
-		
-		// Remove element
-		// - Serialized elements do not have same identity as collection elements, therefore we only support IElement (with ID) or primitive types
-		target.remove(collectionElement);
-	}
-
 	
 	/**
 	 * Get property from Java instance
@@ -360,46 +349,166 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 
 	
 	/**
-	 * Set a sub model property value
+	 * Update an existing sub model property value
 	 * 
 	 * @param path Path to the requested value
 	 * @param newValue Updated value
+	 * @throws Exception 
 	 */
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) {
+	public void setModelPropertyValue(String path, Object parameter) throws Exception {
 		// Get container element that contains the to be changed element
-		Object containerElement = getModelProperty(path, 1);
+		Object target = getModelProperty(path, 1);
 		
 		// Change field 
 		// - Lookup field
-		Field propertyField = getNamedField(containerElement.getClass(), BaSysID.instance.getLastPathEntries(path, 1)[0]);
+		Field propertyField = getNamedField(target.getClass(), BaSysID.instance.getLastPathEntries(path, 1)[0]);
 		
-		// If not found, look for dynamic properties
-		if (containerElement instanceof SubModel &&
+		/**
+		 * Try to set property value for a property that has been dynamically been created.
+		*/
+		if (target instanceof SubModel &&
 				propertyField == null) {
 			
-			SubModel submodel = (SubModel) containerElement;
+			SubModel submodel = (SubModel) target;
 			IProperty dynamicProperty = submodel.getProperties().get(BaSysID.instance.getLastPathEntries(path, 1)[0]);
-			
 			
 			// If dynamic property exists, set dynamic property value
 			if (dynamicProperty != null) {
-				submodel.putDynamicPropertyValue(dynamicProperty.getId(), newValue);
+				submodel.putDynamicPropertyValue(dynamicProperty.getId(), parameter);
 				return;
 			}
-			
-			
 		}
 		
-		// - Update field value
-		try {propertyField.setAccessible(true); propertyField.set(containerElement, newValue);} catch (IllegalArgumentException | IllegalAccessException e) {e.printStackTrace();}		
+		/**
+		 *  Otherwise, try to set field value
+		 */
+		try {
+			propertyField.setAccessible(true); 
+			propertyField.set(target, parameter);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw e;
+		}	
+		
+	}
+	
+	/**
+	 * Add an entry to a collection or map
+	 */
+	@Override
+	public void setContainedValue(String path, Object[] parameter) throws Exception {
+		
+		Object target = getModelPropertyValue(path);
+		
+		// Type check
+		if (target instanceof Collection) {
+			// Extract value
+			Object element = ((Object[]) parameter)[0];
+			
+			addToCollection((Collection) target, element);
+			//	deleteFromCollection((Collection) target, element);
+			
+		} else if (target instanceof Map) {
+			// Extract key
+			Object key = ((Object[]) parameter)[0];
+			
+			Object value = ((Object[]) parameter)[1];
+			addToMap((Map) target, key, value);
+			//	deleteFromMap((Map) target, key);
+		}
+	}
+	
+	/**
+	 * Delete an entry from a collection or map
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public void deleteContainedValue(String path, Object[] parameter) throws Exception {
+		
+		// Fetch property
+		Object target = getModelPropertyValue(path);
+		
+		// Extract key
+		Object key = parameter[0];
+		
+		// Type check
+		if (target instanceof Collection) {
+
+			deleteFromCollection((Collection<Object>) target, key);
+			
+		} else if (target instanceof Map) {
+			
+			deleteFromMap((Map) target, key);
+		}
+	}
+	
+	/**
+	 * Delete key value pair from map
+	 * @param target
+	 * @param key
+	 */
+	private void deleteFromMap(Map<?,?> target, Object key) {
+		System.out.println("Deleting entry for key " + key +" from map: " + target);
+		
+		// Delete key value pair
+		((Map) target).remove(key);
+	}
+	
+	/**
+	 * Add key value pair to map
+	 * @param target
+	 * @param key
+	 * @param value
+	 */
+	private void addToMap(Map<?,?> target, Object key, Object value) {
+		System.out.println("Adding entry " + key + " -> " + value +" to map: " + target);
+		
+		// Put new key value pair in map
+		((Map) target).put(key, value);
+		}
+	
+	
+	/**
+	 *  Add value to collection
+	 */
+	@SuppressWarnings("unchecked")
+	private void addToCollection(Collection<?> target, Object element) {
+		System.out.println("Add element "+ element + " to collection: " + target);
+		
+		// Check if element is already inside, delete old value in this case
+		if (collectionContains((Collection) target, element)) deleteFromCollection((Collection) target, element);
+		
+		((Collection<Object>) target).add(element);
+	}
+	
+	/**
+	 * Delete value from collection
+	 * @param target
+	 * @param element
+	 */
+	private void deleteFromCollection(Collection<?> target, Object element) {
+		System.out.println("Delete element "+ element + " from collection: " + target);
+		
+		
+		// Check if ID is already inside, delete value in this case
+		if (collectionContains(target, element)) {
+			// Store element in collection
+			Object collectionElement = null;
+			
+			// Check if collection contains element
+			if ((collectionElement = getCollectionElement(target, element)) == null) return;
+			
+			// Remove element
+			// - Serialized elements do not have same identity as collection elements, therefore we only support IElement (with ID) or primitive types
+			target.remove(collectionElement);
+		}
 	}
 	
 	
 	
+	
 	/**
-	 * Create/insert a value in a collection or map
-	 * Creates a new Property Instance in a submodel
+	 * Creates a new Property TODO also new Operation, Event, Submodel or AAS
 	 * 
 	 * @param path Path to the collection
 	 * @param newValue Inserted value. 
@@ -414,6 +523,10 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 		if (target instanceof SubModel) {
 			SubModel submodel = (SubModel) target;
 			
+			// TODO recreate and register new property from JSON! 
+			
+			throw new FeatureNotImplementedException();
+			/*
 			// Extract Parameters
 			// - Extract Property Reference
 			IElementReference ref = (IElementReference) ((Object[]) parameter)[0];
@@ -436,64 +549,34 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 			
 			System.out.println("Added new property '" + property.getId() + "' to Submodel: " + submodel.getId());
 			return;
+			
+			*/
 		}
 		
-		// Type check - add value to collection
-		if (target instanceof Collection) {
-			
-			// Extract new member
-			Object addedMember = ((Object[]) parameter)[0];
-			
-			// Check if element is already inside, delete old value in this case
-			if (collectionContains((Collection) target, addedMember)) removeFromCollection((Collection) target, addedMember);
-			
-			System.out.println("Adding value " + addedMember + " to collection: " + target);
-			((Collection) target).add(addedMember);
-			return;
 		
-		// Type check - add key-value pair to map
-		}  else if (target instanceof Map) {
-			
-			// Extract new member
-			Object key = ((Object[]) parameter)[0];
-			Object value = ((Object[]) parameter)[1];
-			
-			// Check if ID is already inside, overwrite value in this case
-			System.out.println("Adding entry " + key + " -> " + value +" from map: " + target);
-			((Map) target).put(key, value);
-			return;
-		}
 	}
 	
 	
 	/**
-	 * Delete a value from a collection or map
+	 * Delete a value from a collection or map  TODO allow deleting properties, operations, events, submodels, aas
 	 * 
 	 * @param path Path to the collection
 	 * @param paramete an array of objects size one. If Collection type, it is the member- if Map type, it is the key
 	 */
 	@Override @SuppressWarnings({ "rawtypes" })
-	public void deleteValue(String path, Object parameter) {
+	public void deleteValue(String path) {
 		
-		// Get collection reference
+		// Get Element reference
 		Object target = getModelPropertyValue(path);
 		
-		// Extract value to be deleted
-		Object deletedValue = ((Object[]) parameter)[0];
-
-		// Type check
-		if (target instanceof Collection) {
-			
-			// Check if ID is already inside, delete value in this case
-			System.out.println("Delete value " + deletedValue + " from collection: " + target);
-			if (collectionContains((Collection) target, deletedValue)) removeFromCollection((Collection) target, deletedValue);
-			
-		} else if (target instanceof Map) {
-			
-			// Check if ID is already inside, delete value in this case
-			System.out.println("Delete entry " + deletedValue + " from map: " + target);
-			((Map) target).remove(deletedValue);
-		}
+		// If a aas or submodel path has been provided Remove model from basysModels memory
+		if (this.basysModels.remove(target) != null) return;
+		
+		// TODO Remove model from registry
+		
+		// TODO remove property, op, ev
+		//if ()
+		System.out.println("Removeing Object not implemented yet.");
 	}
 	
 	
@@ -591,4 +674,7 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 		// Return member names
 		return result;
 	}
+
+
+	
 }

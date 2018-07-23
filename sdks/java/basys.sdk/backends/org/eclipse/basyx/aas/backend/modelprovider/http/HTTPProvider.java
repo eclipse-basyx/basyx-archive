@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +14,7 @@ import org.eclipse.basyx.aas.api.exception.ReadOnlyException;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.services.IModelProvider;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
+import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,7 +26,7 @@ import org.json.JSONObject;
  * @author kuhn
  *
  */
-public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
+public class HTTPProvider<T extends IModelProvider> extends BasysHTTPServelet {
 
 	
 	/**
@@ -39,9 +39,6 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 	 * Reference to IModelProvider backend
 	 */
 	protected T providerBackend = null;
-	
-	
-	
 	
 	
 	/**
@@ -110,19 +107,28 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 	
 	
 	/**
-	 * Implement "Get" operation 
-	 * 
-	 * Process HTTP get request - get sub model property value
+	 * Handle "Get" operation. Depending on the request, there are multiple semantics:
+	 * - <aasID> -> Return the AAS
+	 * - <aasID>/submodels -> Return all Submodels of this AAS
+	 * - <aasID>/submodels/<submodelID> -> Return Submodel of the AAS
+	 * - <aasID>/submodels/<submodelID>/properties -> Return all properties of this Submodel
+	 * - <aasID>/submodels/<submodelID>/operations -> Return all operations of this Submodel
+	 * - <aasID>/submodels/<submodelID>/events -> Return all events of this Submodel
+	 * - <aasID>/submodels/<submodelID>/properties/<propertyID> -> Returns the property
+	 * - <aasID>/submodels/<submodelID>/operations/<operationID> -> Returns the operation
+	 * - <aasID>/submodels/<submodelID>/events/<eventID> -> Returns the event
 	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		System.out.println("-------------------------- DO GET ---------------------------------------------------------");
 		
+		// process request depending on the path
+		String uri 			= req.getRequestURI();
+		String contextPath  = req.getContextPath();
+		String path 		= uri.substring(contextPath.length()+1); // plus 1 for /
 		
-		// Access parameters
-		String path       = (String) req.getParameter("path"); 
-		
+		System.out.println("-------------------------- DO GET " + path + "---------------------------------------------------------");
+
 		// Initialize JSON object
 		JSONObject jsonObj = JSONTools.Instance.serializeProperty(path, providerBackend);
 		
@@ -133,87 +139,159 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 		
 		// We did process the request
 		return;
+			
+		
+		
+		
 	}
-
 	
-	
-	/**
-	 * Implement "Set" operation
-	 */
-	@Override
-	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// Read posted parameter
+	 /**
+	  * Handle a HTTP PATCH operation. Updates a map or collection respective to action string.
+	  * - <aasID>/submodels/<submodelID>/properties/<propertyID> -> Change property
+	  */
+	 protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	 
+	 	// Extract path
+		String uri 			= req.getRequestURI();
+		String contextPath  = req.getContextPath();
+		String path 		= uri.substring(contextPath.length()+1); // plus 1 for /
+				
+	 	// Read request body
 		InputStreamReader reader    = new InputStreamReader(req.getInputStream());
 		BufferedReader    bufReader = new BufferedReader(reader);
 		StringBuilder     serValue  = new StringBuilder(); 
-		
-		// Read values
 		while (bufReader.ready()) serValue.append(bufReader.readLine());
 		
-		// Access parameters from request header
-		String path       = (String) req.getParameter("path"); 
-		
 		// Extract parameters
-		Object[] newValue = null;
+		Object[] parameter = null;
 		try {
-			JSONObject json = new JSONObject(serValue.toString()); 	// causes irregular failures because serValue is empty "sometimes"
-			newValue  = (Object []) JSONTools.Instance.deserialize(json); 
+			JSONObject json = new JSONObject(serValue.toString()); 	// causes irregular failures because serValue has wrong format!
+			parameter  = (Object[]) JSONTools.Instance.deserialize(json); 
 		} catch (JSONException e)   {
-			// assume no parameters - pass empty json
-			newValue = (Object[]) JSONTools.Instance.deserialize(new JSONObject());
-			
-			e.printStackTrace();
+			sendException(new ServerException("Wrong JSON body format"), path, resp);
 		}
-		//Object newValue   = JSONTools.Instance.deserialize(new JSONObject(serValue.toString()));
 		
-		System.out.println("Put: " + path + " " + newValue);
-		System.out.println("-------------------------- DO PUT "+path+" => " + newValue +" ---------------------------------------------------------");
+		// Extract action parameter
+		String action = req.getParameter("action");
 		
+		System.out.println("-------------------------- DO PATCH "+path+" => "+ action + " " + parameter.toString() +" ---------------------------------------------------------");
 		
 		// Check if submodel is frozen
-		String submodelPath = path.substring(0, path.indexOf("/"));
-		boolean frozen = (boolean) providerBackend.getModelPropertyValue(submodelPath +"/frozen");
+		String aasID = BaSysID.instance.getAASID(path);
+		String submodelPath = aasID + "/submodels/" + BaSysID.instance.getSubmodelID(path);
 		
-		// if not frozen change property
-		// - allow access to frozen attribute
-		if (!frozen || path.endsWith("frozen")) {
+		// If not frozen change property
+		// - Allow access to frozen attribute
+		if (!isFrozen(submodelPath) || path.endsWith("/frozen")) {
 			// Increment Clock
 			try {
-				providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
+				incrementClock(submodelPath);
 				
-				// Update property value
-				providerBackend.setModelPropertyValue(path, newValue);
-			} catch (ServerException e) {
+				switch (action) {
+					/**
+					 * Add an element to a collection / key-value pair to a map
+					 */
+					case "add":
+						providerBackend.setContainedValue(path, parameter);
+						break;
+						
+					/**
+					 * Remove an element from a collection by index / remove from map by key
+					 */
+					case "remove":
+						providerBackend.deleteContainedValue(path, parameter);
+						break;
+						
+					default:
+						sendException(new IllegalArgumentException("Action not supported."), path, resp);
+				}
+				
+			} catch (Exception e) {
 				sendException(e, path, resp);
 			}
 			
 		} else {
 			sendException(new ReadOnlyException(submodelPath), path, resp);
 		}
+    }
+	
+
+	
+	
+	/**
+	 * Handle HTTP PUT operation. Overrides existing property, operation or event.
+	 */
+	@Override
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// Extract path
+		String uri 			= req.getRequestURI();
+		String contextPath  = req.getContextPath();
+		String path 		= uri.substring(contextPath.length()+1); // plus 1 for /
+				
+	 	// Read request body
+		InputStreamReader reader    = new InputStreamReader(req.getInputStream());
+		BufferedReader    bufReader = new BufferedReader(reader);
+		StringBuilder     serValue  = new StringBuilder(); 
+		while (bufReader.ready()) serValue.append(bufReader.readLine());
+		
+		// Deserialize json body
+		Object newValue = null;
+		try {
+			JSONObject json = new JSONObject(serValue.toString()); 	// FIXME causes irregular failures because serValue is empty "sometimes"
+			newValue  = JSONTools.Instance.deserialize(json); 
+		} catch (JSONException e)   {
+			sendException(new IllegalArgumentException("Invalid PUT paramater"), path, resp);
+		}
+		
+		System.out.println("-------------------------- DO PUT "+path+" => " + newValue +" ---------------------------------------------------------");
+		
+		// Check if submodel is frozen
+		String aasID = BaSysID.instance.getAASID(path);
+		String submodelPath = aasID + "/submodels/" + BaSysID.instance.getSubmodelID(path);
+		
+		// If not frozen change property
+		// - Allow access to frozen attribute
+		if (!isFrozen(submodelPath) || path.endsWith("/frozen")) {
+			// Increment Clock
+			try {
+				incrementClock(submodelPath);
+				
+				// Set the value of the element
+				providerBackend.setModelPropertyValue(path, newValue);
+				
+			} catch (Exception e) {
+				sendException(e, path, resp);
+			}
+			
+		} else {
+			sendException(new ReadOnlyException(submodelPath), path, resp);
+		}
+    
 	}
 
 
 	
 	/**
-	 * Implement "Create" and "Invoke" operations
+	 * Handle HTTP POST operation. Creates a new Property, Operation, Event, Submodel or AAS or invokes an operation.
+	 * - <aasID>/submodels -> Add new Submodel to existing AAS 									TODO add Submodel
+	 * - <aasID>/submodels/<submodelID>/properties -> Add new property to existing Submodel		
+	 * - <aasID>/submodels/<submodelID>/operations -> Add new operation to existing Submodel	TODO add Operation
+	 * - <aasID>/submodels/<submodelID>/events -> Add new event to existing Submodel			TODO add Event
+	 * - <aasID>/submodels/<submodelID>/operations/<operationID> -> Invokes a specific operation from the Submodel with a list of input params
 	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
+		// Extract path
+		String uri 			= req.getRequestURI();
+		String contextPath  = req.getContextPath();
+		String path 		= uri.substring(contextPath.length()+1); // plus 1 for /
+				
 		// Read posted parameter
 		InputStreamReader reader    = new InputStreamReader(req.getInputStream());
 		BufferedReader    bufReader = new BufferedReader(reader);
 		StringBuilder     serValue  = new StringBuilder(); 
-		
-		// Read values
-		while (bufReader.ready()) {
-			serValue.append(bufReader.readLine());
-		}
-		
-		// Access parameters from request header
-		String path       = (String) req.getParameter("path"); 
-		String operation  = (String) req.getParameter("op"); 
-		System.out.println("-------------------------- DO POST "+path+" - op: "+operation+"  - par: "+ serValue.toString() + " ------------------");
+		while (bufReader.ready()) {serValue.append(bufReader.readLine());}
 		
 		// Extract parameters
 		Object[] parameter = null;
@@ -222,76 +300,45 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 			parameter  = (Object []) JSONTools.Instance.deserialize(json); 
 		} catch (JSONException e)   {
 			// assume no parameters - pass empty json
-			parameter = (Object[]) JSONTools.Instance.deserialize(new JSONObject());
-			
-			e.printStackTrace();
+			parameter = new Object[0];
 		}
 		
-		// Extract path to working submodel; Handles Case that there is no property reference
-		String submodelPath = path.substring(0, (path.indexOf("/")!=-1? path.indexOf("/") : path.length()));
+		// Determine action
+		// - Checks if path indicates that an operation needs to be executed (the last '/' is important)
+		String action;
+		if (path.contains("/operations/")) {
+			action = "INVOKE";
+		} else {
+			action = "CREATE";
+		}
+	
+		System.out.println("-------------------------- DO POST " + path + " " + action + " " + serValue.toString() + " ------------------");
 		
 		// Check if submodel is frozen.
-		boolean frozen = (boolean) providerBackend.getModelPropertyValue(submodelPath +"/frozen");
+		String aasID = BaSysID.instance.getAASID(path);
+		String submodelPath = aasID + "/submodels/" + BaSysID.instance.getSubmodelID(path);
 		
-		if (!frozen) {
+		if (!isFrozen(submodelPath)) {
 		
 			// Perform operation
-			switch (operation) {
+			switch (action) {
 			
 				/**
-				 * Process "create" request that adds a value to the given map or collection
+				 * Process "create" request: Creates a new Property, Operation, Event, Submodel or AAS
 				 */
-				case "create": 
-					// Increment Clock
-					try {
-						providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
-					} catch (ServerException e1) {
-						sendException(e1, path, resp);
-					}
+				case "CREATE": 
 					
-					// create value in map or collection
 					try {
 						providerBackend.createValue(path, parameter);
 					} catch (Exception e) {
 						sendException(e, path, resp);
-					} 
-					break;
-					
-				/**
-				 * Process "createProperty" request that creates a new Property in the dynamic properties map of the given submodel
-				 */
-				case "createProperty": {
-					try {
-						providerBackend.createValue(submodelPath, parameter);
-					} catch (Exception e) {
-						sendException(e, path, resp);
 					}
 					break;
-				}
-					
+							
 				/**
-				 * Process "delete" request that removes a value from the given map or collection
+				 * Process "invoke" request: Invoke a function with the given parameters
 				 */
-				case "delete": 
-					// Increment Clock
-					try {
-						providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
-					} catch (ServerException e1) {
-						sendException(e1, path, resp);
-					}
-					
-					// Delete Value in map or collection
-					try {
-						providerBackend.deleteValue(path, parameter);
-					} catch (Exception e) {
-						sendException(e, path, resp);
-					} 
-					break;
-				
-				/**
-				 * Process "invoke" request that invokes a function with the given parameters
-				 */
-				case "invoke": {
+				case "INVOKE": {
 					JSONObject result = invokeOperation(path, parameter);
 					
 					// Send HTML JSON response
@@ -306,48 +353,84 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 					sendException(new IllegalArgumentException("Action not supported."), path, resp);
 					
 			}
-		} else {
+		} else if (action.equals("INVOKE")) {
 			/**
-			 * Handle Case that the submodel is frozen: Cloning and unfreezing is still allowed but not create and delete 
+			 * Handle Case that the submodel is frozen: INVOKE is still allowed but not CREATE
 			 */
-			switch (operation) {
-
-				case "create": {
-					sendException(new ReadOnlyException(submodelPath), path, resp);
-					break;
-				}
-				
-				case "createProperty": {
-					sendException(new ReadOnlyException(submodelPath), path, resp);
-					break;
-				}
-				
-				case "delete": {
-					sendException(new ReadOnlyException(submodelPath), path, resp);
-					break;
-				}
-				
-				/**
-				 * Invoking Operations is still allowed
-				 */
-				case "invoke": {
-					JSONObject result = invokeOperation(path, parameter);
-					
-					// Send HTML JSON response
-					sendJSONResponse(path, resp, result);
-					break;
-				}
-				default:
-					sendException(new IllegalArgumentException("Action not supported."), path, resp);
-				
-			}
+			JSONObject result = invokeOperation(path, parameter);
+			
+			// Send HTML JSON response
+			sendJSONResponse(path, resp, result);
+			
+		} else {
+			sendException(new ReadOnlyException(submodelPath), path, resp);
+			
 		}
 			
 	}
 	
 	
-
-	private JSONObject invokeOperation(String path, Object[] parameter) {
+	
+	/**
+	 * Implement "Delete" operation.  Deletes any resource under the given path. Operation has multiple semantics depending on the request URL:
+	 * - <aasID>/submodels/<submodelID> -> Delete Submodel from AAS
+	 * - <aasID>/submodels/<submodelID>/properties/<propertyID> -> Delete property from Submodel
+	 * - <aasID>/submodels/<submodelID>/operations/<operationID> -> Delete operation from Submodel
+	 * - <aasID>/submodels/<submodelID>/events/<eventID> -> Delete event from Submodel
+	 */
+	@Override
+	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		// Extract path
+		String uri 			= req.getRequestURI();
+		String contextPath  = req.getContextPath();
+		String path 		= uri.substring(contextPath.length()+1); // plus 1 for /
+		
+		// Read request body
+		InputStreamReader reader    = new InputStreamReader(req.getInputStream());
+		BufferedReader    bufReader = new BufferedReader(reader);
+		StringBuilder     serValue  = new StringBuilder(); 
+		while (bufReader.ready()) serValue.append(bufReader.readLine());
+		
+		// Extract parameters - if any
+		Object[] parameter = null;
+		try {
+			JSONObject json = new JSONObject(serValue.toString()); 	// causes irregular failures because serValue is empty "sometimes"
+			parameter  = (Object []) JSONTools.Instance.deserialize(json); 
+		} catch (JSONException e)   {
+			// assume no parameters - pass empty json
+			parameter = (Object[]) JSONTools.Instance.deserialize(new JSONObject());
+		}
+		
+		// Check if submodel is frozen
+		String aasID = BaSysID.instance.getAASID(path);
+		String submodelPath = aasID + "/" + BaSysID.instance.getSubmodelID(path);
+		
+		if (!isFrozen(submodelPath)) {
+			
+			try {
+				// Increment Clock
+				incrementClock(submodelPath);
+			
+				// Perform delete operation: Deletes any resource under the given path. 
+				providerBackend.deleteValue(path);
+			
+			} catch (Exception e) {
+				sendException(e, path, resp);
+			}
+			
+		} else {
+			sendException(new ReadOnlyException(submodelPath), path, resp);
+		}
+	}
+	
+	/**
+	 * Invokes operations under the given path
+	 * @param path
+	 * @param parameter
+	 * @return
+	 */
+	public JSONObject invokeOperation(String path, Object[] parameter) {
 		Object result = null;
 		
 		System.out.println("Invoking Service: "+path + " with arguments "+ Arrays.toString((Object[]) parameter));
@@ -360,10 +443,9 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 			
 		} catch (Exception e) {
 			return JSONTools.Instance.serialize(e);
-		}
-		
-		
+		}	
 	}
+	
 	
 	private void sendException(Exception e, String path, HttpServletResponse resp) {
 		JSONObject error = JSONTools.Instance.serialize(e);
@@ -372,48 +454,12 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 		sendJSONResponse(path, resp, error);
 	}
 	
+	private void incrementClock(String submodelPath) throws Exception {
+		providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
+	}
 	
-	/**
-	 * Implement "Delete" operations TODO remove this function since delete is already handled by post
-	 */
-	@Override
-	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// Read posted parameter
-		InputStreamReader reader    = new InputStreamReader(req.getInputStream());
-		BufferedReader    bufReader = new BufferedReader(reader);
-		StringBuilder     serValue  = new StringBuilder(); 
-		
-		// Read values
-		while (bufReader.ready()) serValue.append(bufReader.readLine());
-		
-		// Access parameters from request header
-		String path       = (String) req.getParameter("path"); 
-		Object parameter  = new JSONObject(serValue.toString()).get("value");
-		
-		String submodelPath = path.substring(0, path.indexOf("/"));
-		
-		// Check if submodel is frozen
-		boolean frozen = (boolean) providerBackend.getModelPropertyValue(submodelPath +"/frozen");
-		
-		if (!frozen) {
-			
-			// Increment Clock
-			try {
-				providerBackend.setModelPropertyValue(submodelPath +"/clock", (Integer) providerBackend.getModelPropertyValue(submodelPath +"/clock") + 1);
-			} catch (ServerException e1) {
-				sendException(e1, path, resp);
-			}
-			
-			// Perform delete operation
-			try {
-				providerBackend.deleteValue(path, parameter);
-			} catch (Exception e) {
-				sendException(e, path, resp);
-			}
-			
-		} else {
-			sendException(new ReadOnlyException(submodelPath), path, resp);
-		}
+	private boolean isFrozen(String submodelPath){
+		return (boolean) providerBackend.getModelPropertyValue(submodelPath +"/frozen");
 	}
 }
 

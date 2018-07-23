@@ -21,7 +21,7 @@ public class AssetAdministrationShell extends BaseElement implements IAssetAdmin
 	/**
 	 * Store contained sub models
 	 */
-	public Map<String, ISubModel> subModels = new HashMap<>();
+	public Map<String, ISubModel> submodels = new HashMap<>(); // TODO name has to be  'submodels' enable api conform reflection
 	
 	
 	
@@ -70,7 +70,7 @@ public class AssetAdministrationShell extends BaseElement implements IAssetAdmin
 		if (subModel.getName() == null || subModel.getName().isEmpty()) {
 			throw new IllegalArgumentException();
 		}
-		this.subModels.put(subModel.getId(), subModel);
+		this.submodels.put(subModel.getId(), subModel);
 		subModel.setParent(this);
 	}
 	
@@ -80,7 +80,7 @@ public class AssetAdministrationShell extends BaseElement implements IAssetAdmin
 	 */
 	@Override
 	public Map<String, ISubModel> getSubModels() {
-		return this.subModels;
+		return this.submodels;
 	}
 	
 	
@@ -171,7 +171,7 @@ public class AssetAdministrationShell extends BaseElement implements IAssetAdmin
 	 */
 	@Override
 	public IElement getElement(String name) {
-		return subModels.get(name);
+		return submodels.get(name);
 	}
 
 
@@ -180,7 +180,7 @@ public class AssetAdministrationShell extends BaseElement implements IAssetAdmin
 	 */	
 	@Override @SuppressWarnings({ "unchecked", "rawtypes" }) 
 	public Map<String, IElement> getElements() {
-		return (Map) subModels;
+		return (Map) submodels;
 	}
 }
 

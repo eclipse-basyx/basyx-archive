@@ -1,19 +1,17 @@
-package org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets;
+package org.eclipse.basyx.testsuite.support.restAAS;
 
 import org.eclipse.basyx.aas.backend.modelprovider.http.HTTPProvider;
 import org.eclipse.basyx.aas.impl.provider.JavaObjectProvider;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub1Submodel;
-
 
 
 
 /**
- * Servlet interface for stubbed sub model
+ * Servlet interface for AAS (product_database.office.iese.fraunhofer.de)
  * 
- * @author kuhn
+ * @author kuhn, pschorn
  *
  */
-public class Stub1AASSubmodelServlet1 extends HTTPProvider<JavaObjectProvider> {
+public class Servlet_RestAAS extends HTTPProvider<JavaObjectProvider> {
 
 	
 	/**
@@ -25,11 +23,12 @@ public class Stub1AASSubmodelServlet1 extends HTTPProvider<JavaObjectProvider> {
 	/**
 	 * Constructor
 	 */
-	public Stub1AASSubmodelServlet1() {
+	public Servlet_RestAAS() {
 		// Invoke base constructor
 		super(new JavaObjectProvider());
-
+		
 		// Register provided models and AAS
-		this.getBackendReference().addModel(new Stub1Submodel(), "Stub1AAS");
+		this.getBackendReference().addModel(new RestAAS());
+		
 	}
 }

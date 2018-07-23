@@ -14,7 +14,6 @@ import org.eclipse.basyx.aas.api.services.IDirectoryService;
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnector;
 import org.eclipse.basyx.aas.backend.connector.opcua.OPCUAConnector;
-import org.eclipse.basyx.aas.impl.reference.ElementRef;
 import org.eclipse.basyx.aas.impl.resources.basic.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
 
@@ -147,7 +146,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		addr = directoryService.lookup(BaSysID.instance.buildPath(elementRef.getAASID(), elementRef.getSubModelID()));
 		
 		// Handle the case that AAS was not found
-		if (addr == null) throw new ResourceNotFoundException(elementRef.getSubModelID()+"."+elementRef.getAASID());
+		if (addr == null) throw new ResourceNotFoundException(BaSysID.instance.buildPath(elementRef.getAASID(), elementRef.getSubModelID()));
 		
 		// Instantiate sub model
 		return new ConnectedSubmodel(this, elementRef.getAASID(), elementRef.getSubModelID(), addr, this.connector);

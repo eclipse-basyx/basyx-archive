@@ -223,12 +223,15 @@ public class ElementRef implements IElementReference {
 		if ((propertyPath == null) || (propertyPath.length()==0)) return subModelID;
 		
 		// ID is last part of path to property
-		return BaSysID.instance.getLastPathEntries(subModelID+"/"+propertyPath, 1)[0];
+		//return BaSysID.instance.getLastPathEntries(subModelID+"/"+propertyPath, 1)[0];
+		
+		// ID is in the property path
+		return this.propertyPath;
 	}
 	
 	
 	/**
-	 * Add scope to aasID
+	 * Add scope to aasID FIXME how to deal with the scope
 	 */
 	public void addScope(String scope) {
 		// Only process valid scopes

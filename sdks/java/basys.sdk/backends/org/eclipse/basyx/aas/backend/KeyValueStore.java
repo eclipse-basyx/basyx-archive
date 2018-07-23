@@ -1,19 +1,11 @@
 package org.eclipse.basyx.aas.backend;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.api.exception.ResourceNotFoundException;
-import org.eclipse.basyx.aas.api.resources.basic.IOperation;
-import org.eclipse.basyx.aas.api.resources.basic.IProperty;
-import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
-import org.eclipse.basyx.aas.impl.reference.ElementRef;
 
 /**
  * 
@@ -31,15 +23,22 @@ public class KeyValueStore<String, T extends ConnectedElement> implements Map {
 	 * Submodel reference to be used for unknown properties and operations
 	 */
 	private ConnectedSubmodel connectedSubmodel;
+
+	/**
+	 * Type url 
+	 */
+	private java.lang.String type;
 	
 	/**
 	 * Constructor
 	 */
-	public KeyValueStore(ConnectedSubmodel submodel) {
+	public KeyValueStore(ConnectedSubmodel submodel, java.lang.String type) {
 		
 		this.connectedSubmodel = submodel;
 		
 		this.cache_	          = new HashMap<String, T>();
+		
+		this.type = (java.lang.String) type;
 	}
 	
 	/**
@@ -86,11 +85,13 @@ public class KeyValueStore<String, T extends ConnectedElement> implements Map {
 		// Try to get value from cache
 		if( (value = this.cache_.get(key)) != null ) return value;
 		
+		
+		
 		// Try to get value from server
-		java.lang.String servicePath = this.connectedSubmodel.getConnector().buildPath(connectedSubmodel.getAASID(), connectedSubmodel.getAASSubmodelID(), (java.lang.String) key);
+		java.lang.String servicePath = this.connectedSubmodel.getConnector().buildPath(connectedSubmodel.getAASID(), connectedSubmodel.getAASSubmodelID(), (java.lang.String) key, type);
 		if( (value = connectedSubmodel.getConnector().basysGet(this.connectedSubmodel.getModelProviderUrl(), servicePath)) != null) return value;
 		
-		throw new ResourceNotFoundException("Could not find property '"+key+"' for submodel '"+connectedSubmodel.getAASSubmodelID()+"'");
+		throw new ResourceNotFoundException("Could not find child '"+key+"' for submodel '"+connectedSubmodel.getAASSubmodelID()+"'");
 		
 	}
 

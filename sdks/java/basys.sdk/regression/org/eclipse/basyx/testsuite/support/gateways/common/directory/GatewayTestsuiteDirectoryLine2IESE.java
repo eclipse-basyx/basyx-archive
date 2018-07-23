@@ -25,6 +25,12 @@ public class GatewayTestsuiteDirectoryLine2IESE extends PreconfiguredDirectory {
 		addMapping("aas.device2",                        "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/Device2/BaSys/1.0/provider");
 		addMapping("device2",                            "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/Device2/BaSys/1.0/provider");
 		
+		// sample new mappings
+		// addMapping("device2", 						 "http://localhost:8080/line2.manufacturing.de/basys.sdk/Device2/aas");
+		// addMapping("line2.manufacturing.de.device2", "http://localhost:8080/line2.manufacturing.de/basys.sdk/Device2/aas");
+
+		
+		
 		// - Sub models of device2 in line 2 in domain manufacturing.de
 		addMapping("description.device2.line2.manufacturing.de", "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/Device2/Submodels/BaSys/1.0/provider");
 		addMapping("status.device2.line2.manufacturing.de",      "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/Device2/Submodels/BaSys/1.0/provider");

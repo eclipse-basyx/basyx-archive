@@ -42,6 +42,11 @@ public class ConnectedElement implements IElement  {
 	 * Cached property value
 	 */
 	private Object element_ = null;
+	
+	/**
+	 * Type url
+	 */
+	protected static String type = null;
 
 	
 	/**

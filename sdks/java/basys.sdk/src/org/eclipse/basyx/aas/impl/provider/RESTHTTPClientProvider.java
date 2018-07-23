@@ -9,6 +9,7 @@ import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IElementContainer;
+import org.eclipse.basyx.aas.api.resources.basic.ISingleProperty;
 import org.eclipse.basyx.aas.api.services.IDirectoryService;
 import org.eclipse.basyx.aas.api.services.IModelProvider;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnector;
@@ -74,12 +75,13 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	@Override
 	public Object getModelPropertyValue(String path) {
 		System.out.println("HTTP-Prov Get:"+path);
-		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
 		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
+		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
 		System.out.println("- Element Pth:"+BaSysID.instance.getPath(path));
 
 		// Get address from directory
-		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
+		String addr = directoryService.lookup(BaSysID.instance.getAddress(path)); // FIXME correct address?
+		
 		// - Address check
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
 		// Return model property
@@ -96,9 +98,10 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	 */
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws ServerException  {
-		System.out.println("HTTP-Prov Set:"+path+" to "+newValue);
-		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
+		System.out.println("HTTP-Prov Set Contained:"+path+" to "+newValue);
 		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
+		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
+		
 		
 		// Get address from directory
 		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
@@ -106,13 +109,13 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
 		
 		// Set model property
-		httpConnector.basysSet(addr, path, newValue);
+		httpConnector.basysPut(addr, path, newValue);
 	}
 
 	
 	
 	/**
-	 * Create/insert a value in a collection
+	 * Create new aas, submodel, property, operation or event
 	 * 
 	 * @param path Path to the collection
 	 * @param newValue Inserted value. 
@@ -127,40 +130,34 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		// - Address check
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
 		
-		// Extract new member
-		Object addedMember = ((Object[]) parameter)[0];
-		
-		// Post data to server
-		httpConnector.basysPost(addr, path, "create" , addedMember);
+		// Create new object on the server
+		httpConnector.basysPost(addr, path, parameter);
 	}
 	
 	
 	/**
-	 * Delete a value from a collection
+	 * Delete an aas, submodel, property, event or operation
 	 * 
 	 * @param path Path to the collection
 	 * @param deletedId ID to delete
 	 * @throws Exception 
 	 */
 	@Override
-	public void deleteValue(String path, Object parameter) throws ServerException {
-		System.out.println("HTTP-Prov delete:"+path+" to "+parameter);
+	public void deleteValue(String path) throws ServerException {
+		System.out.println("HTTP-Prov delete:"+path);
 		
 		// Get address from directory
 		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
 		// - Address check
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
 		
-		// Extract new member
-		Object deletedValue = ((Object[]) parameter)[0];
-		
 		// Post data to server
-		httpConnector.basysPost(addr, path, "delete" , deletedValue);
+		httpConnector.basysDelete(addr, path);
 	}
 	
 	
 	/**
-	 * Invoke an operation
+	 * Invoke an operation with the given parameters
 	 * @throws Exception 
 	 */
 	@Override
@@ -173,7 +170,7 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
 				
 		// Invoke Operation on server
-		return httpConnector.basysInvoke(addr, path, parameter);
+		return httpConnector.basysPost(addr, path, parameter);
 	}
 	
 	
@@ -205,5 +202,44 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		
 		// No contained properties
 		return result;
+	}
+
+
+	/**
+	 * Adds an entry to a map or collection 
+	 */
+	@Override
+	public void setContainedValue(String path, Object[] parameter) throws Exception {
+		System.out.println("HTTP-Prov Update:"+path+" to "+parameter.toString());
+		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
+		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
+		
+		// Get address from directory
+		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
+		// - Address check
+		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
+		
+		
+		// Add entry to map or collection
+		httpConnector.basysUpdate(addr, path, parameter);
+	}
+	
+	/**
+	 * Deletes an entry from a map or collection by key
+	 */
+	@Override
+	public void deleteContainedValue(String path, Object[] parameter) throws Exception {
+		System.out.println("HTTP-Prov Delete Contained:"+path+" to "+parameter.toString());
+		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
+		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
+		
+		// Get address from directory
+		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
+		// - Address check
+		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
+		
+		
+		// Remove entry from map or collection
+		httpConnector.basysDelete(addr, path, parameter[0]);
 	}
 }

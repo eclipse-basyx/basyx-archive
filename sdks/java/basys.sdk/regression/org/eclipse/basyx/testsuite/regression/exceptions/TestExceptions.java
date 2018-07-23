@@ -96,7 +96,7 @@ class TestExceptions {
 	void testWrongParameters() throws Exception {
 		
 		try {
-		    // Invoke service
+		    // Invoke service (without expected parameters)
 			((ConnectedOperation) submodel.getOperations().get("sum")).invoke();
 			fail( "ServerException was not thrown" );
 		    

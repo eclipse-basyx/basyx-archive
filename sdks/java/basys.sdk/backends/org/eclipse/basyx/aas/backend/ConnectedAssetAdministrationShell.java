@@ -35,12 +35,6 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	
 	
 	/**
-	 * Cache for registered sub models
-	 */
-	private BaSysCache cache = null;
-	
-	
-	/**
 	 * Constructor - expect the URL to the administration shell server
 	 * @param connector 
 	 */
@@ -61,7 +55,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	@Override @SuppressWarnings("unchecked")
 	public Map<String, ISubModel> getSubModels() {
 		// Get AAS sub models
-		Map<String, ElementRef> subModels = (Map<String, ElementRef>) basysConnector.basysGet(this.modelProviderURL, aasID+"/subModels");
+		Map<String, ElementRef> subModels = (Map<String, ElementRef>) basysConnector.basysGet(this.modelProviderURL, aasID+"/submodels");
 		
 		// Create connected sub model proxies
 		Map<String, ISubModel> result = new HashMap<String, ISubModel>();

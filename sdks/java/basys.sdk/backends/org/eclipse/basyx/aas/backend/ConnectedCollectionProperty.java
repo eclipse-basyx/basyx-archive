@@ -53,7 +53,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	public void set(Collection<Object> collection) throws ServerException {
 		
 		// Post data to server
-		basysConnector.basysSet(this.modelProviderURL, propertyPath, collection);
+		basysConnector.basysPut(this.modelProviderURL, propertyPath, collection);
 		
 		// update Cache
 		this.setElement(collection);
@@ -67,7 +67,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	public void add(Object newValue) throws Exception {
 		
 		// Post data to server
-		basysConnector.basysPost(this.modelProviderURL, propertyPath, "create" , newValue);
+		basysConnector.basysUpdate(this.modelProviderURL, propertyPath, newValue);
 		
 		// Update cache
 		Object collection = this.getElement();
@@ -91,7 +91,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	public void remove(Object oldValue) throws Exception {
 		
 		// Post data to server
-		basysConnector.basysPost(this.modelProviderURL, propertyPath, "delete" , oldValue);
+		basysConnector.basysDelete(this.modelProviderURL, propertyPath, oldValue);
 		
 		// Update cache
 		Object collection = this.getElement();

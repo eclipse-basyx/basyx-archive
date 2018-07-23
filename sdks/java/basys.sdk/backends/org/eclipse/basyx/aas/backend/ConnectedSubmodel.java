@@ -58,10 +58,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 */
 	private Integer localClock;
 	
-	/**
-	 * Indicates that this submodel and all its children are read only / frozen
-	 */
-	protected Boolean frozen;
+	
 	
 	/**
 	 * Constructor - expect the URL to the sub model
@@ -77,8 +74,8 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 		modelProviderURL = url;
 		aasManager       = aasMngr;
 		
-		this.propertyCache  = new BaSysCache<ConnectedProperty>(this);
-		this.operationCache = new BaSysCache<ConnectedOperation>(this);
+		this.propertyCache  = new BaSysCache<ConnectedProperty>(this, PROPERTIES);
+		this.operationCache = new BaSysCache<ConnectedOperation>(this, OPERATIONS);
 		
 		this.initCache(PROPERTIES);
 		this.initCache(OPERATIONS);
@@ -91,28 +88,31 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 * @param path "properties" or "operations"
 	 * Retrieve all registered elements and store in cache
 	 */
-	protected void initCache(String path) {
-		// Get sub model properties
-		Map<String, ElementRef> elements = (Map<String, ElementRef>) basysConnector.basysGet(modelProviderURL, aasSubmodelID+"."+aasID+"/"+path);
+	@SuppressWarnings("unchecked")
+	protected void initCache(String type) {
 		
-		System.out.println(">> [initCache] FINISH BASYS GET");
+		// Assemble servicePath
+		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, null, type);
+		
+		// Get sub model properties
+		Map<String, ElementRef> elements = (Map<String, ElementRef>) basysConnector.basysGet(modelProviderURL, servicePath);
 		
 		// Add properties to cache 
 		for (String elementId : elements.keySet()) {
 			
 			IElement proxy = null;
 			
-			if (path.equals(PROPERTIES)) { 
+			if (type.equals(PROPERTIES)) { 
 				proxy = aasManager.retrievePropertyProxy(elements.get(elementId));  
 				this.propertyCache.put(elementId, (ConnectedProperty) proxy);
 			}
 			
-			if (path.equals(OPERATIONS)) { 
+			if (type.equals(OPERATIONS)) { 
 				proxy = aasManager.retrieveOperationProxy(elements.get(elementId)); 
 				this.operationCache.put(elementId, (ConnectedOperation) proxy);
 			}
 
-			System.out.println("Added "+ path + "/"+elementId + " to cache");
+			System.out.println("Added "+ type + "/"+elementId + " to cache");
 
 		}
 	
@@ -122,8 +122,9 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 * retrieve submodel clock from server
 	 */
 	public Integer getServerClock() {
+		String servicePath = this.basysConnector.buildPath(aasID, aasSubmodelID, "clock", PROPERTIES);		
 		
-		String servicePath = aasSubmodelID + "." + aasID + "/clock";
+		// Retrieve current clock value
 		Integer serverClock = (Integer) basysConnector.basysGet(modelProviderURL, servicePath);
 		
 		return serverClock;
@@ -208,7 +209,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 */
 	@Override
 	public boolean isFrozen() {
-		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, "frozen"); 
+		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, "frozen", PROPERTIES); 
 		
 		// Retrieve "frozen" variable
 		boolean frozen = (boolean) basysConnector.basysGet(modelProviderURL, servicePath);
@@ -224,12 +225,12 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 */
 	@Override
 	public void freeze() throws ServerException {
-		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, "frozen"); 
+		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, "frozen", PROPERTIES); 
 		
 		// Set "frozen" variable to true
 		System.out.println("Freezing submodel "+ this.aasSubmodelID);
-		basysConnector.basysSet(this.modelProviderURL, servicePath, true);
-	}
+		basysConnector.basysPut(this.modelProviderURL, servicePath, true);
+		}
 	
 	/** 
 	 * Unfreezes this submodel. Sets frozen property false
@@ -237,11 +238,11 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 */
 	@Override
 	public void unfreeze() throws ServerException {
-		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, "frozen"); 
+		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, "frozen", PROPERTIES); 
 		
 		// Set "frozen" variable to false
 		System.out.println("Unfreezing submodel "+ this.aasSubmodelID);
-		basysConnector.basysSet(this.modelProviderURL, servicePath, false);
+		basysConnector.basysPut(this.modelProviderURL, servicePath, false);
 	}
 	
 	/**
@@ -250,7 +251,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 * @throws Exception 
 	 */
 	public void createProperty(IProperty property) throws Exception {
-		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, property.getId()); 
+		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, property.getId(), PROPERTIES); 
 		
 		// Set parent references for this property to allow serialization with JSONTools
 		// - Create AAS stub
@@ -267,13 +268,13 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 		property.setParent(tmpSubModel);
 		
 		// Property attributes
-		String name = property.getName();
-		String type = property.getDataType().toString();
-		boolean isCollection = property.isCollection();
-		boolean isMap = property.isMap();
+		//String name = property.getName();
+		//String type = property.getDataType().toString();
+		//boolean isCollection = property.isCollection();
+		//boolean isMap = property.isMap();
 		
 		// Send new property to server
-		basysConnector.basysPost(this.modelProviderURL, servicePath, "createProperty", property, name, type, isCollection, isMap);
+		basysConnector.basysPost(this.modelProviderURL, servicePath, property); 
 		
 		// Add property to cache
 		// - Create ConnectedProperty
@@ -289,6 +290,8 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 * @param property
 	 */
 	public void createOperation(IOperation operation) {
+		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, operation.getId(), OPERATIONS); 
+		
 		// TODO 
 		throw new FeatureNotImplementedException();
 	}

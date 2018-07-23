@@ -18,7 +18,6 @@ import org.eclipse.basyx.aas.impl.resources.basic.Event;
 import org.eclipse.basyx.aas.impl.resources.basic.Operation;
 import org.eclipse.basyx.aas.impl.resources.basic.Property;
 import org.eclipse.basyx.aas.impl.resources.connected.ConnectedSerializableObject;
-import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -286,11 +285,6 @@ public class JSONTools {
 	public JSONObject serializeProperty(String pathToObject, IModelProvider provider) {
 		// Create return value
 		JSONObject returnValue = new JSONObject();
-		
-		// Get property name
-		String propertyName = BaSysID.instance.getIdentifier(pathToObject);
-		
-		System.out.println("PropertyName: "+propertyName);
 		
 		// Get value and scope
 		Object value = provider.getModelPropertyValue(pathToObject);

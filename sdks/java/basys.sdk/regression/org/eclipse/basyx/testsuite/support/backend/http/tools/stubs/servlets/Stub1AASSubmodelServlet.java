@@ -2,6 +2,8 @@ package org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets;
 
 import org.eclipse.basyx.aas.backend.modelprovider.http.HTTPProvider;
 import org.eclipse.basyx.aas.impl.provider.JavaObjectProvider;
+import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.aas.Stub1AAS;
+import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub1Submodel;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub2Submodel;
 
 
@@ -13,7 +15,7 @@ import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.St
  * @author kuhn
  *
  */
-public class Stub1AASSubmodelServlet2 extends HTTPProvider<JavaObjectProvider> {
+public class Stub1AASSubmodelServlet extends HTTPProvider<JavaObjectProvider> {
 
 	
 	/**
@@ -25,11 +27,15 @@ public class Stub1AASSubmodelServlet2 extends HTTPProvider<JavaObjectProvider> {
 	/**
 	 * Constructor
 	 */
-	public Stub1AASSubmodelServlet2() {
+	public Stub1AASSubmodelServlet() {
 		// Invoke base constructor
 		super(new JavaObjectProvider());
+		
+		// Register provided models and AAS
+		this.getBackendReference().addModel(new Stub1AAS());
 
 		// Register provided models and AAS
+		this.getBackendReference().addModel(new Stub1Submodel(), "Stub1AAS");
 		this.getBackendReference().addModel(new Stub2Submodel(), "Stub2AAS");
 	}
 }
