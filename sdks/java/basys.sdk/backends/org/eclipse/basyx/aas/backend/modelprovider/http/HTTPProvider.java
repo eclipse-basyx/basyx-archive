@@ -65,8 +65,12 @@ public class HTTPProvider<T extends IModelProvider> extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// Access parameters
-		String path       = (String) req.getParameter("path"); 
+		// process request depending on the path
+		String uri 			= req.getRequestURI();
+		String contextPath  = req.getContextPath();
+		String path 		= uri.substring(contextPath.length()+1); // plus 1 for "/"
+				
+		System.out.println("-------------------------- DO GET " + path + "---------------------------------------------------------");
 
 		// Setup HTML response header
 		resp.setContentType("application/json");

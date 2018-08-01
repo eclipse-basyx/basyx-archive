@@ -212,8 +212,8 @@ public class ElementRef implements IElementReference {
 		// If path is null or empty, ID is sub model ID
 		if ((propertyPath == null) || (propertyPath.length()==0)) return subModelID;
 		
-		// ID is last part of path to property
-		return BaSysID.instance.getLastPathEntries(subModelID+"/"+propertyPath, 1)[0];
+		// ID is in the property path
+		return this.propertyPath;
 	}
 	
 	

@@ -8,7 +8,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Test_Stub1AAS</servlet-name>
-    <url-pattern>/Testsuite/Stub1AAS/BaSys/1.0/provider</url-pattern>
+    <url-pattern>/Testsuite/Stub1AAS/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
