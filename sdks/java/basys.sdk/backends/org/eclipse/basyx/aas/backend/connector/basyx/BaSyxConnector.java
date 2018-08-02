@@ -177,7 +177,7 @@ public class BaSyxConnector implements IBasysConnector {
 	 * @param action may be "invoke", "create" or "delete"
 	 */
 	@Override
-	public Object basysPost(String address, String servicePath, String action, Object... newValue) {
+	public Object basysPost(String address, String servicePath, String action, Object... newValue) { // FIXME adopt to new IBasysConnector Spec
 		// Catch exceptions
 		try {
 			// Extract host name and port

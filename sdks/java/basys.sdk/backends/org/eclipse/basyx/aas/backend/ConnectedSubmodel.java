@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.AtomicTransactionFailedException;
 import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IOperation;
 import org.eclipse.basyx.aas.api.resources.basic.IProperty;
@@ -72,8 +73,8 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 		modelProviderURL = url;
 		aasManager       = aasMngr;
 		
-		this.propertyCache  = new BaSysCache<ConnectedProperty>();
-		this.operationCache = new BaSysCache<ConnectedOperation>();
+		this.propertyCache  = new BaSysCache<ConnectedProperty>(this, PROPERTIES);
+		this.operationCache = new BaSysCache<ConnectedOperation>(this, OPERATIONS);
 		
 		this.initCache(PROPERTIES);
 		this.initCache(OPERATIONS);
@@ -86,28 +87,30 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 * @param path "properties" or "operations"
 	 * Retrieve all registered elements and store in cache
 	 */
-	protected void initCache(String path) {
-		// Get sub model properties
-		Map<String, ElementRef> elements = (Map<String, ElementRef>) basysConnector.basysGet(modelProviderURL, aasSubmodelID+"."+aasID+"/"+path);
+	protected void initCache(String type) {
 		
-		System.out.println(">> [initCache] FINISH BASYS GET");
+		// Assemble servicePath
+		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, null, type);
+		
+		// Get sub model properties
+		Map<String, ElementRef> elements = (Map<String, ElementRef>) basysConnector.basysGet(modelProviderURL, servicePath);
 		
 		// Add properties to cache 
 		for (String elementId : elements.keySet()) {
 			
 			IElement proxy = null;
 			
-			if (path.equals(PROPERTIES)) { 
+			if (type.equals(PROPERTIES)) { 
 				proxy = aasManager.retrievePropertyProxy(elements.get(elementId));  
 				this.propertyCache.put(elementId, (ConnectedProperty) proxy);
 			}
 			
-			if (path.equals(OPERATIONS)) { 
+			if (type.equals(OPERATIONS)) { 
 				proxy = aasManager.retrieveOperationProxy(elements.get(elementId)); 
 				this.operationCache.put(elementId, (ConnectedOperation) proxy);
 			}
 
-			System.out.println("Added "+ path + "/"+elementId + " to cache");
+			System.out.println("Added "+ type + "/"+elementId + " to cache");
 
 		}
 	
@@ -145,7 +148,47 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 		}
 	
 	}
+
+	/**
+	 * Returns whether this submodel is frozen
+	 */
+	@Override
+	public boolean isFrozen() {
+		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, "frozen", PROPERTIES); 
+		
+		// Retrieve "frozen" variable
+		boolean frozen = (boolean) basysConnector.basysGet(modelProviderURL, servicePath);
+		
+		System.out.println("frozen="+frozen);
+		return frozen;
+	}
+
+
+	/** 
+	 * Freezes this submodel. Sets frozen property true
+	 * @throws ServerException 
+	 */
+	@Override
+	public void freeze() throws ServerException {
+		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, "frozen", PROPERTIES); 
+		
+		// Set "frozen" variable to true
+		System.out.println("Freezing submodel "+ this.aasSubmodelID);
+		basysConnector.basysSet(this.modelProviderURL, servicePath, true);
+		}
 	
+	/** 
+	 * Unfreezes this submodel. Sets frozen property false
+	 * @throws ServerException 
+	 */
+	@Override
+	public void unfreeze() throws ServerException {
+		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, "frozen", PROPERTIES); 
+		
+		// Set "frozen" variable to false
+		System.out.println("Unfreezing submodel "+ this.aasSubmodelID);
+		basysConnector.basysSet(this.modelProviderURL, servicePath, false);
+	}
 
 
 	/**
@@ -181,5 +224,39 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 		// TODO Auto-generated method stub
 		throw new FeatureNotImplementedException();
 	}
+	
+	
+	/**
+	 * Make IBasysConnector accessible for cache
+	 * @return
+	 */
+	protected IBasysConnector getConnector() {
+		return this.basysConnector;
+	}
+	
+	/**
+	 * Make AASID available for cache
+	 * @return
+	 */
+	protected String getAASID() {
+		return this.aasID;
+	}
+	
+	/**
+	 * Make SubmodelID available for cache
+	 * @return
+	 */
+	protected String getAASSubmodelID() {
+		return this.aasSubmodelID;
+	}
+	
+	/**
+	 * Make modelproviderUrl accessible for cache
+	 * @return
+	 */
+	protected String getModelProviderUrl() {
+		return this.modelProviderURL;
+	}
+
 }
 

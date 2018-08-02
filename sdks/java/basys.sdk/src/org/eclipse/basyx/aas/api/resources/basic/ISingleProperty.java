@@ -1,7 +1,6 @@
 package org.eclipse.basyx.aas.api.resources.basic;
 
-
-
+import org.eclipse.basyx.aas.api.exception.ServerException;
 
 /**
  * Interface for AAS properties that carry a single value
@@ -23,12 +22,14 @@ public interface ISingleProperty extends IProperty {
 	
 	/**
 	 * Set property value
+	 * @throws ServerException 
 	 */
-	public void set(Object newValue);
+	public void set(Object newValue) throws ServerException;
 	
 	/**
 	 * Move property value to given property
+	 * @throws ServerException 
 	 */
-	public void moveTo(ISingleProperty propertyName);
+	public void moveTo(ISingleProperty propertyName) throws ServerException;
 
 }
