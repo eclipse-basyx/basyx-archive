@@ -8,7 +8,7 @@
 
 #ifndef JSONTOOLS_H_
 #define JSONTOOLS_H_
-
+//
 
 /* ********************************************************************************************************************************************
  * Includes
@@ -139,6 +139,11 @@ class JSONTools {
 		 * Deserialize a json serialized value into a BRef
 		 */
 		BRef<BType>           deserialize(json serializedValue, json *serObjRepo, std::string scope);
+
+		/**
+		 * Function to get the objects inside a Json. Needed for tests.
+		 */
+		json getJSONObject(json serializedValue, std::string key);
 };
 
 

@@ -22,7 +22,7 @@ using namespace std;
  * Constructor and destructor
  * ********************************************************************************************************************************************/
 
-
+//
 /**
  * Constructor
  */
@@ -124,12 +124,12 @@ bool JSONTools::doSerializeArray(json *target, BRef<BArray> arrayValue, std::str
 		// - Array members are primitive types in C++. Therefore, we need to do some type checks here.
 		switch(arrayValue->getType()) {
 			// These are arrays of primitives
-			case BASYS_INTARRAY:       serializePrimitive(arraymember, ((BRef<BArray>) arrayValue)->getMembersInt()[i],    serObjRepo, "int");       (*target)[""+i] = *arraymember; break;
-			case BASYS_BOOLEANARRAY:   serializePrimitive(arraymember, ((BRef<BArray>) arrayValue)->getMembersBool()[i],   serObjRepo, "boolean");   (*target)[""+i] = *arraymember; break;
-			case BASYS_FLOATARRAY:     serializePrimitive(arraymember, ((BRef<BArray>) arrayValue)->getMembersFloat()[i],  serObjRepo, "float");     (*target)[""+i] = *arraymember; break;
-			case BASYS_DOUBLEARRAY:    serializePrimitive(arraymember, ((BRef<BArray>) arrayValue)->getMembersDouble()[i], serObjRepo, "double");    (*target)[""+i] = *arraymember; break;
-			case BASYS_CHARACTERARRAY: serializePrimitive(arraymember, ((BRef<BArray>) arrayValue)->getMembersChar()[i],   serObjRepo, "character"); (*target)[""+i] = *arraymember; break;
-			case BASYS_STRINGARRAY:    serializePrimitive(arraymember, ((BRef<BArray>) arrayValue)->getMembersString()[i], serObjRepo, "string");    (*target)[""+i] = *arraymember; break;
+			case BASYS_INTARRAY:       serializePrimitive(arraymember, ((BRef<BArray>) arrayValue)->getMembersInt()[i],    serObjRepo, "int");       (*target)[std::to_string(i)] = *arraymember; break;
+			case BASYS_BOOLEANARRAY:   serializePrimitive(arraymember, ((BRef<BArray>) arrayValue)->getMembersBool()[i],   serObjRepo, "boolean");   (*target)[std::to_string(i)] = *arraymember; break;
+			case BASYS_FLOATARRAY:     serializePrimitive(arraymember, ((BRef<BArray>) arrayValue)->getMembersFloat()[i],  serObjRepo, "float");     (*target)[std::to_string(i)] = *arraymember; break;
+			case BASYS_DOUBLEARRAY:    serializePrimitive(arraymember, ((BRef<BArray>) arrayValue)->getMembersDouble()[i], serObjRepo, "double");    (*target)[std::to_string(i)] = *arraymember; break;
+			case BASYS_CHARACTERARRAY: serializePrimitive(arraymember, ((BRef<BArray>) arrayValue)->getMembersChar()[i],   serObjRepo, "character"); (*target)[std::to_string(i)] = *arraymember; break;
+			case BASYS_STRINGARRAY:    serializePrimitive(arraymember, ((BRef<BArray>) arrayValue)->getMembersString()[i], serObjRepo, "string");    (*target)[std::to_string(i)] = *arraymember; break;
 
 			// Array of objects
 			case BASYS_OBJECTARRAY:    (*target)[""+i] = serialize(arrayValue->getMembersObject()[i], serObjRepo, scope); break;
@@ -304,7 +304,7 @@ BRef<BType> JSONTools::deserializeArrayType(json serializedValue, bool *success,
 		int *arrayValue = new int[arraySize];
 		BRef<BArray> result = BRef<BArray>(new BArray(arrayValue, serializedValue["size"]));
 
-		for (int i=0; i<arraySize; i++) doDeserializePrimitive(serializedValue[""+i], &result->getMembersInt()[i], serObjRepo);
+		for (int i=0; i<arraySize; i++) doDeserializePrimitive(serializedValue[std::to_string(i)], &result->getMembersInt()[i], serObjRepo);
 
 		return result;
 	}
@@ -314,7 +314,7 @@ BRef<BType> JSONTools::deserializeArrayType(json serializedValue, bool *success,
 		float *arrayValue = new float[arraySize];
 		BRef<BArray> result = BRef<BArray>(new BArray(arrayValue, serializedValue["size"]));
 
-		for (int i=0; i<arraySize; i++) doDeserializePrimitive(serializedValue[""+i], &result->getMembersFloat()[i], serObjRepo);
+		for (int i=0; i<arraySize; i++) doDeserializePrimitive(serializedValue[std::to_string(i)], &result->getMembersFloat()[i], serObjRepo);
 
 		return result;
 	}
@@ -324,7 +324,7 @@ BRef<BType> JSONTools::deserializeArrayType(json serializedValue, bool *success,
 		double *arrayValue = new double[arraySize];
 		BRef<BArray> result = BRef<BArray>(new BArray(arrayValue, serializedValue["size"]));
 
-		for (int i=0; i<arraySize; i++) doDeserializePrimitive(serializedValue[""+i], &result->getMembersDouble()[i], serObjRepo);
+		for (int i=0; i<arraySize; i++) doDeserializePrimitive(serializedValue[std::to_string(i)], &result->getMembersDouble()[i], serObjRepo);
 
 		return result;
 	}
@@ -334,7 +334,7 @@ BRef<BType> JSONTools::deserializeArrayType(json serializedValue, bool *success,
 		char *arrayValue = new char[arraySize];
 		BRef<BArray> result = BRef<BArray>(new BArray(arrayValue, serializedValue["size"]));
 
-		for (int i=0; i<arraySize; i++) doDeserializePrimitiveChar(serializedValue[""+i], &result->getMembersChar()[i], serObjRepo);
+		for (int i=0; i<arraySize; i++) doDeserializePrimitiveChar(serializedValue[std::to_string(i)], &result->getMembersChar()[i], serObjRepo);
 
 		return result;
 	}
@@ -344,7 +344,7 @@ BRef<BType> JSONTools::deserializeArrayType(json serializedValue, bool *success,
 		bool *arrayValue = new bool[arraySize];
 		BRef<BArray> result = BRef<BArray>(new BArray(arrayValue, serializedValue["size"]));
 
-		for (int i=0; i<arraySize; i++) doDeserializePrimitive(serializedValue[""+i], &result->getMembersBool()[i], serObjRepo);
+		for (int i=0; i<arraySize; i++) doDeserializePrimitive(serializedValue[std::to_string(i)], &result->getMembersBool()[i], serObjRepo);
 
 		return result;
 	}
@@ -354,7 +354,7 @@ BRef<BType> JSONTools::deserializeArrayType(json serializedValue, bool *success,
 		std::string *arrayValue = new std::string[arraySize];
 		BRef<BArray> result = BRef<BArray>(new BArray(arrayValue, serializedValue["size"]));
 
-		for (int i=0; i<arraySize; i++) doDeserializePrimitive(serializedValue[""+i], &result->getMembersString()[i], serObjRepo);
+		for (int i=0; i<arraySize; i++) doDeserializePrimitive(serializedValue[std::to_string(i)], &result->getMembersString()[i], serObjRepo);
 
 		return result;
 	}
@@ -366,7 +366,7 @@ BRef<BType> JSONTools::deserializeArrayType(json serializedValue, bool *success,
 		BRef<BType> *arrayValue = new BRef<BType>[arraySize];
 		BRef<BArray> result = BRef<BArray>(new BArray(arrayValue, serializedValue["size"]));
 
-		for (int i=0; i<arraySize; i++) arrayValue[i] = deserialize(serializedValue[""+i], serObjRepo, scope);
+		for (int i=0; i<arraySize; i++) arrayValue[i] = deserialize(serializedValue[std::to_string(i)], serObjRepo, scope);
 
 		return result;
 	}
@@ -447,6 +447,22 @@ BRef<BType> JSONTools::deserialize(json serializedValue, json *serObjRepo, std::
 	return BRef<BType>();
 }
 
+json JSONTools::getJSONObject(json serializedValue, std::string key)
+{
+	json object =
+		   {
+				{"value", ""},
+				{"kind", ""},
+				{"typeid", ""}
+		   };
+	try {
+		json tmp_json = serializedValue[key];
+		return tmp_json;
+	} catch (int e) {
+
+	}
+	return object;
+}
 
 
 
