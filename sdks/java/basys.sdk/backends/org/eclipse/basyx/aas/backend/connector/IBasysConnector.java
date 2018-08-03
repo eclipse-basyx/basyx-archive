@@ -49,7 +49,7 @@ public interface IBasysConnector {
 	public void basysDelete(String address, String servicePath) throws ServerException;
 	
 	/**
-	 * Invoke a Basys oxperation. Deletes an entry from a map or collection by the given key or index
+	 * Invoke a Basys oxperation. Deletes an entry from a map or collection by the given key
 	 * @throws ServerException that carries the Exceptions thrown on the server
 	 */
 	public void basysDelete(String address, String servicePath, Object obj) throws ServerException;

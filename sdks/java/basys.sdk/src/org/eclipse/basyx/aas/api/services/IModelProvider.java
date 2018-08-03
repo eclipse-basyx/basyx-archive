@@ -9,7 +9,7 @@ import org.eclipse.basyx.aas.api.reference.IElementReference;
 /**
  * Basic model provider backend interface
  * 
- * @author kuhn
+ * @author kuhn, pschorn
  *
  */
 public interface IModelProvider {
@@ -29,34 +29,50 @@ public interface IModelProvider {
 	 * @param path Path to the requested value
 	 * @return Property value. Object type is assumed to be [Integer | ... | Collection]
 	 */
-	public Object getModelPropertyValue(String path);
+	public Object getModelPropertyValue(String path) ;
 
 
 	/**
-	 * Set a sub model property value
+	 * Sets or overrides existing property, operation or event.
 	 * 
 	 * @param path Path to the requested value
 	 * @param newValue Updated value
 	 */
-	public void setModelPropertyValue(String path, Object newValue);
+	public void setModelPropertyValue(String path, Object newValue) throws Exception;
 	
 	
 	/**
-	 * Create/insert a value in a collection
+	 * Adds an entry to a map or collection
 	 * 
-	 * @param path Path to the collection
-	 * @param newValue Inserted value
+	 * @param path Path to the requested value
+	 * @param newValue Entry to be inserted. Make sure to distinguish overloaded method by passing a second "foo" parameter for collections
 	 */
-	public void createValue(String path, Object addedValue);
+	public void setModelPropertyValue(String path, Object... newValue) throws Exception;
 	
 	
 	/**
-	 * Delete a value from a collection
+	 * Create a new property, operation, event submodel or aas under the given path
 	 * 
-	 * @param path Path to the collection
-	 * @param deletedValue Collection value to delete
+	 * @param path Path to the entity where the element should be created
+	 * @param newValue new IElement to be created on the server
 	 */
-	public void deleteValue(String path, Object deletedValue);
+	public void createValue(String path, Object addedValue) throws Exception;
+	
+	
+	/**
+	 * Delete a property, operation, event, submodel or aas under the given path
+	 * 
+	 * @param path Path to the entity that should be deleted
+	 */
+	public void deleteValue(String path) throws Exception;
+	
+	
+	/**
+	 * Deletes an entry from a map or collection by the given key
+	 * 
+	 * @param path Path to the entity that should be deleted
+	 */
+	public void deleteValue(String path, Object obj) throws Exception;
 	
 
 	/**
@@ -66,7 +82,7 @@ public interface IModelProvider {
 	 * @param parameter Operation parameter
 	 * @return Return value
 	 */
-	public Object invokeOperation(String path, Object[] parameter);
+	public Object invokeOperation(String path, Object[] parameter) throws Exception;
 	
 
 	/**

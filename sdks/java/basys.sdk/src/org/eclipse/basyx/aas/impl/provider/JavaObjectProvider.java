@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.annotation.AASOperation;
 import org.eclipse.basyx.aas.api.annotation.AASProperty;
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IElementContainer;
@@ -368,16 +369,15 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	}
 	
 	
-	
 	/**
-	 * Create/insert a value in a collection or map
+	 * Adds an entry to a map or collection
 	 * 
-	 * @param path Path to the collection
-	 * @param newValue Inserted value. 
+	 *  @param path Path to the requested value
+	 *  @param newValue Entry to be inserted 
 	 */
-	@Override @SuppressWarnings({ "rawtypes", "unchecked" })
-	public void createValue(String path, Object parameter) {
-		
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void setModelPropertyValue(String path, Object... parameter) {
 		// Get collection reference
 		Object target = getModelPropertyValue(path);
 		
@@ -406,6 +406,32 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	}
 	
 	
+	
+	/**
+	 * Create a new property, operation, event submodel or aas under the given path
+	 * 
+	 * @param path Path to the entity where the element should be created
+	 * @param newValue new object 
+	 * @throws ServerException 
+	 */
+	@Override
+	public void createValue(String path, Object parameter) throws ServerException {
+		
+		throw new ServerException("Creating property, operation, event submodel or aas under the given path failed. Please use JavaHandlerProvider instead.");
+	}
+	
+	/**
+	 * Delete a value from a collection or map
+	 * 
+	 * @param path Path to the collection
+	 * @param paramete an array of objects size one. If Collection type, it is the member- if Map type, it is the key
+	 */
+	@Override
+	public void deleteValue(String path) throws ServerException  {
+		
+		throw new ServerException("Deleting property, operation, event submodel or aas under the given path failed. Please use JavaHandlerProvider instead.");
+	}
+	
 	/**
 	 * Delete a value from a collection or map
 	 * 
@@ -413,14 +439,11 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	 * @param paramete an array of objects size one. If Collection type, it is the member- if Map type, it is the key
 	 */
 	@Override @SuppressWarnings({ "rawtypes" })
-	public void deleteValue(String path, Object parameter) {
+	public void deleteValue(String path, Object deletedValue) {
 		
 		// Get collection reference
 		Object target = getModelPropertyValue(path);
 		
-		// Extract value to be deleted
-		Object deletedValue = ((Object[]) parameter)[0];
-
 		// Type check
 		if (target instanceof Collection) {
 			
@@ -471,6 +494,7 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	 * @param path Path to sub model or property
 	 * @return Contained properties
 	 */
+	@SuppressWarnings("unchecked")
 	@Override 
 	public Map<String, IElementReference> getContainedElements(String path) {
 		// Return value

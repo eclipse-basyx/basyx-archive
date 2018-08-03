@@ -90,7 +90,7 @@ public class HTTPConnector implements IBasysConnector {
 	}
 	
 	/**
-	 * Invoke a BaSys Delete operation via HTTP PATCH.  Deletes an element from a map or collection by key or index
+	 * Invoke a BaSys Delete operation via HTTP PATCH.  Deletes an element from a map or collection by key
 	 * @param address the server address from the directory
 	 * @param servicePath the URL suffix for the requested property
 	 * @param obj the key or index of the entry that should be deleted
@@ -174,7 +174,7 @@ public class HTTPConnector implements IBasysConnector {
 	public String buildPath(String aasID, String aasSubmodelID, String path, String qualifier) {
 		String servicePath = aasID;
 		if (aasSubmodelID!=null) {
-			servicePath = servicePath + "/submodels/"+aasSubmodelID;
+			servicePath = servicePath + "/aas/submodels/"+aasSubmodelID;
 			
 			if (qualifier!=null) {
 				servicePath = servicePath +  "/" + qualifier;
@@ -183,7 +183,7 @@ public class HTTPConnector implements IBasysConnector {
 			if (path!=null) {
 				servicePath = servicePath + "/" + path;
 			}
-		}
+		} 
 		
 		return servicePath;
 	}

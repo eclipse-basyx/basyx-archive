@@ -61,7 +61,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	@Override @SuppressWarnings("unchecked")
 	public Map<String, ISubModel> getSubModels() {
 		// Get AAS sub models
-		Map<String, ElementRef> subModels = (Map<String, ElementRef>) basysConnector.basysGet(this.modelProviderURL, aasID+"/subModels");
+		Map<String, ElementRef> subModels = (Map<String, ElementRef>) basysConnector.basysGet(this.modelProviderURL, aasID+"/aas/submodels");
 		
 		// Create connected sub model proxies
 		Map<String, ISubModel> result = new HashMap<String, ISubModel>();

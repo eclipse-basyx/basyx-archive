@@ -133,11 +133,13 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		// Store network address
 		String addr = null;
 		
+		String path = BaSysID.instance.buildPath(elementRef.getAASID(), elementRef.getSubModelID());
+		
 		// Lookup address in directory server
-		addr = directoryService.lookup(BaSysID.instance.buildPath(elementRef.getAASID(), elementRef.getSubModelID()));
+		addr = directoryService.lookup(path);
 		
 		// Handle the case that AAS was not found
-		if (addr == null) throw new ResourceNotFoundException(elementRef.getSubModelID()+"."+elementRef.getAASID());
+		if (addr == null) throw new ResourceNotFoundException(path);
 		
 		// Instantiate sub model
 		return new ConnectedSubmodel(this, elementRef.getAASID(), elementRef.getSubModelID(), addr, this.connector);
