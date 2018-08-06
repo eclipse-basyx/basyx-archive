@@ -76,13 +76,18 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
 		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
 		System.out.println("- Element Pth:"+BaSysID.instance.getPath(path));
+		
+		String address = BaSysID.instance.getAddress(path);
 
 		// Get address from directory
-		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
+		String addr = directoryService.lookup(address);
 		// - Address check
-		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
+		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
+		
+		String servicePath = BaSysID.instance.getServicePath(path);
+		
 		// Return model property
-		return httpConnector.basysGet(addr, path);
+		return httpConnector.basysGet(addr, servicePath);
 	}
 
 	
@@ -99,13 +104,17 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
 		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
 		
+		String address = BaSysID.instance.getAddress(path);
+
 		// Get address from directory
-		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
+		String addr = directoryService.lookup(address);
 		// - Address check
-		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
+		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
+		
+		String servicePath = BaSysID.instance.getServicePath(path);
 		
 		// Set model property
-		httpConnector.basysSet(addr, path, newValue);
+		httpConnector.basysSet(addr, servicePath, newValue);
 	}
 	
 	
@@ -118,17 +127,21 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	 */
 	@Override
 	public void setModelPropertyValue(String path, Object... newEntry) throws ServerException {
-		System.out.println("HTTP-Prov Set:"+path+" to "+newEntry);
+		System.out.println("HTTP-Prov Add entry:"+path+" to "+newEntry);
 		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
 		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
 		
+		String address = BaSysID.instance.getAddress(path);
+
 		// Get address from directory
-		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
+		String addr = directoryService.lookup(address);
 		// - Address check
-		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
+		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
+		
+		String servicePath = BaSysID.instance.getServicePath(path);
 		
 		// Set model property
-		httpConnector.basysSet(addr, path, newEntry);
+		httpConnector.basysSet(addr, path, servicePath);
 	}
 
 	
@@ -144,13 +157,17 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	public void createValue(String path, Object newElement) throws ServerException {
 		System.out.println("HTTP-Prov create:"+path+" to "+newElement);
 		
+		String address = BaSysID.instance.getAddress(path);
+
 		// Get address from directory
-		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
+		String addr = directoryService.lookup(address);
 		// - Address check
-		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
+		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
+		
+		String servicePath = BaSysID.instance.getServicePath(path);
 		
 		// Post data to server
-		httpConnector.basysCreate(addr, path, newElement);
+		httpConnector.basysCreate(addr, servicePath, newElement);
 	}
 	
 	
@@ -165,13 +182,17 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	public void deleteValue(String path) throws ServerException {
 		System.out.println("HTTP-Prov delete:"+path);
 		
+		String address = BaSysID.instance.getAddress(path);
+
 		// Get address from directory
-		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
+		String addr = directoryService.lookup(address);
 		// - Address check
-		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
+		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
+		
+		String servicePath = BaSysID.instance.getServicePath(path);
 		
 		// Remove entity
-		httpConnector.basysDelete(addr, path);
+		httpConnector.basysDelete(addr, servicePath);
 	}
 	
 	/**
@@ -183,13 +204,17 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
 		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
 		
+		String address = BaSysID.instance.getAddress(path);
+
 		// Get address from directory
-		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
+		String addr = directoryService.lookup(address);
 		// - Address check
-		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
+		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
+		
+		String servicePath = BaSysID.instance.getServicePath(path);
 		
 		// Remove entry from map or collection
-		httpConnector.basysDelete(addr, path, parameter);
+		httpConnector.basysDelete(addr, servicePath, parameter);
 	}
 	
 	
@@ -201,13 +226,17 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	public Object invokeOperation(String path, Object[] parameter) throws ServerException {
 		System.out.println("HTTP-Prov invoke:"+path+" with "+parameter);
 		
+		String address = BaSysID.instance.getAddress(path);
+
 		// Get address from directory
-		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
+		String addr = directoryService.lookup(address);
 		// - Address check
-		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
+		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
+		
+		String servicePath = BaSysID.instance.getServicePath(path);
 				
 		// Invoke Operation on server
-		return httpConnector.basysInvoke(addr, path, parameter);
+		return httpConnector.basysInvoke(addr, servicePath, parameter);
 	}
 	
 	
@@ -225,19 +254,28 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		// Return value
 		Map<String, IElementReference> result = new HashMap<>();
 
-		System.out.println("GetContained:"+path);
+		String address = BaSysID.instance.getAddress(path);
+
+		// Get address from directory
+		String addr = directoryService.lookup(address);
+		// - Address check
+		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
+		
+		String servicePath = BaSysID.instance.getServicePath(path);
+		
+		System.out.println("GetContained:"+servicePath);
 
 		// Get collection reference
-		Object target = getModelPropertyValue(path);
+		return (Map<String, IElementReference>) getModelPropertyValue(servicePath);
 		
-		System.out.println("ContainedProperties: "+target);
+		
 		
 		// Process return types
-		if (target instanceof Map)               return JavaObjectProvider.createMapFromMap((Map<String, IElement>) target);
-		if (target instanceof Collection)        return JavaObjectProvider.createMapFromCollection((Collection<IElement>) target);
-		if (target instanceof IElementContainer) return JavaObjectProvider.createMapFromIElementContainer((IElementContainer) target);
+		//if (target instanceof Map)               return JavaObjectProvider.createMapFromMap((Map<String, IElement>) target);
+		//if (target instanceof Collection)        return JavaObjectProvider.createMapFromCollection((Collection<IElement>) target);
+		//if (target instanceof IElementContainer) return JavaObjectProvider.createMapFromIElementContainer((IElementContainer) target);
 		
 		// No contained properties
-		return result;
+		//return result;
 	}
 }

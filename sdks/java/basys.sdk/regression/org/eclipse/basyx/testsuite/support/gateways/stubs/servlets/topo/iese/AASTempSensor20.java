@@ -12,13 +12,13 @@ import org.eclipse.basyx.aas.impl.resources.basic.ReferencedSubModel;
  * @author kuhn
  *
  */
-public class TempSensor20AAS extends AssetAdministrationShell {	
+public class AASTempSensor20 extends AssetAdministrationShell {	
 	
 	
 	/**
 	 * Constructor
 	 */
-	public TempSensor20AAS() {
+	public AASTempSensor20() {
 		// Create Asset Administration Shell 
 	    setId("tempsensor20");
 	    setAssetId("assetId");

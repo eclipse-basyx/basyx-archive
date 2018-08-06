@@ -101,7 +101,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	@Override
 	public void remove(Object oldValue) throws ServerException {
 		
-		// Post data to server
+		// Delete value from the collection on the server
 		basysConnector.basysDelete(this.modelProviderURL, propertyPath, oldValue);
 		
 		// Update cache

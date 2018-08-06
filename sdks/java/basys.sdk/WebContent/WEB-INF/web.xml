@@ -55,15 +55,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Test_GW_IESE_Office_ProductDatabase</servlet-name>
-    <url-pattern>/Testsuite/GW/IESE/office/product_database/BaSys/1.0/provider</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>Test_GW_IESE_Office_ProductDatabase_Products</servlet-name>
-    <servlet-class> org.eclipse.basyx.testsuite.support.gateways.stubs.servlets.topo.iese.Servlet_Office_ProductDatabase_Products</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Test_GW_IESE_Office_ProductDatabase_Products</servlet-name>
-    <url-pattern>/Testsuite/GW/IESE/office/products_product_database/BaSys/1.0/provider</url-pattern>
+    <url-pattern>/Testsuite/GW/IESE/office/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>Test_GW_Manufacturing_Line2_Device2</servlet-name>
@@ -71,15 +63,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Test_GW_Manufacturing_Line2_Device2</servlet-name>
-    <url-pattern>/Testsuite/GW/Manufacturing/line2/Device2/BaSys/1.0/provider</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>Test_GW_Manufacturing_Line2_Device2_Submodels</servlet-name>
-    <servlet-class> org.eclipse.basyx.testsuite.support.gateways.stubs.servlets.topo.manufacturing.Servlet_Line2_Device2_Submodels</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Test_GW_Manufacturing_Line2_Device2_Submodels</servlet-name>
-    <url-pattern>/Testsuite/GW/Manufacturing/line2/Device2/Submodels/BaSys/1.0/provider</url-pattern>
+    <url-pattern>/Testsuite/GW/Manufacturing/line2/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>Test_GW_Manufacturing_Line2int_Device10</servlet-name>
@@ -87,15 +71,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Test_GW_Manufacturing_Line2int_Device10</servlet-name>
-    <url-pattern>/Testsuite/GW/Manufacturing/line2int/Device10/BaSys/1.0/provider</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>Test_GW_Manufacturing_Line2int_Device10_Submodels</servlet-name>
-    <servlet-class> org.eclipse.basyx.testsuite.support.gateways.stubs.servlets.topo.manufacturing.Servlet_Line2int_Device10_Submodels</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Test_GW_Manufacturing_Line2int_Device10_Submodels</servlet-name>
-    <url-pattern>/Testsuite/GW/Manufacturing/line2int/Device10/Submodels/BaSys/1.0/provider</url-pattern>
+    <url-pattern>/Testsuite/GW/Manufacturing/line2int/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>Gateway_Line1Line2</servlet-name>
@@ -103,7 +79,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Gateway_Line1Line2</servlet-name>
-    <url-pattern>/Testsuite/GW/IESE/line1/gateway_line12/BaSys/1.0/provider</url-pattern>
+    <url-pattern>/Testsuite/GW/IESE/line1/gateway_line12/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>Gateway_Line2Line2int</servlet-name>
@@ -111,7 +87,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Gateway_Line2Line2int</servlet-name>
-    <url-pattern>/Testsuite/GW/IESE/line2/gateway_line2int/BaSys/1.0/provider</url-pattern>
+    <url-pattern>/Testsuite/GW/IESE/line2/gateway_line2int/*</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>

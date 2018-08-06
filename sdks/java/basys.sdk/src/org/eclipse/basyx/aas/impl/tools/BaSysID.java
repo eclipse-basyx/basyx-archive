@@ -162,11 +162,38 @@ public class BaSysID {
 	
 	
 	/**
-	 * Get qualified AAS id from a qualified path <subModelID>.<aasID>.<qualifier>/<scope> => <aasID>
-	 * FIXME remove this method
+	 * Get qualified service path 
+	 * @param path {@code <aasID>.<scope1>...<scopeN>/<qualifiers> or <submodelID>.<scope1>...<scopeN>/<qualifiers>}
+ 	 * @return {@code <aasID>/<qualifiers> or <submodelID>/<qualifiers>}
 	 */
-	public String getQualifiedAASID(String path) {
-		return getAASID(path);
+	public String getServicePath(String path) {
+		String aasID = getAASID(path);
+		String submodelID = getSubmodelID(path);
+		
+		// return everything behind aasID/....
+		if ((aasID != null) && (aasID.length()!=0))  {
+			
+			String id = null;
+			
+			// Remove scope
+			String[] splitted = aasID.split("\\.");
+			if (splitted.length > 0) {
+				id = splitted[0];
+			}
+			return id + path.substring(path.indexOf("/aas")); // return <aasID>/<qualifiers>
+		}
+		
+		else // return everything behind submodelID/...
+		{
+			String id = null;
+			
+			// Remove scope
+			String[] splitted = submodelID.split("\\.");
+			if (splitted.length > 0) {
+				id = splitted[0];
+			}
+			return id + path.substring(path.indexOf("/submodel")); // return <submodelID>/<qualifiers>
+		}
 	}
 
 	
@@ -307,19 +334,23 @@ public class BaSysID {
 	
 	
 	/**
-	 * Get qualified address (submodel ID and AAS ID) TODO check compatible with version 0.2
+	 * Get qualified address (submodel ID and AAS ID)
+	 * {@code example input: Testsuite/GW/IESE/line1/gateway_line12/device2.line2.manufacturing.de/aas }
+	 * TODO check compatible with version 0.2
 	 */
 	public String getAddress(String path) {
 		
 		System.out.println("getAddress " +path);
 		
-		int    offset = 0;
+		return buildPath(getAASID(path), getSubmodelID(path));
+		
+		/*int    offset = 0;
 
 		// Remove everything but address if a path component is present in string
 		if ((offset = path.indexOf('/')) > -1) return path.substring(0, offset);
 		
 		// Path has no address component
-		return "";
+		return "";*/
 	}	
 }
 
