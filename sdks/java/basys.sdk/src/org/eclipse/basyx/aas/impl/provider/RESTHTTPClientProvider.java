@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IElementContainer;
@@ -90,9 +91,10 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	 * 
 	 * @param path Path to the requested value
 	 * @param newValue Updated value
+	 * @throws ServerException 
 	 */
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) {
+	public void setModelPropertyValue(String path, Object newValue) throws ServerException {
 		System.out.println("HTTP-Prov Set:"+path+" to "+newValue);
 		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
 		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
@@ -105,60 +107,98 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		// Set model property
 		httpConnector.basysSet(addr, path, newValue);
 	}
+	
+	
+	/**
+	 * Add an entry to a map or collection
+	 * 
+	 * @param path Path to the requested value
+	 * @param newEntry Updated value
+	 * @throws ServerException 
+	 */
+	@Override
+	public void setModelPropertyValue(String path, Object... newEntry) throws ServerException {
+		System.out.println("HTTP-Prov Set:"+path+" to "+newEntry);
+		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
+		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
+		
+		// Get address from directory
+		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
+		// - Address check
+		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
+		
+		// Set model property
+		httpConnector.basysSet(addr, path, newEntry);
+	}
 
 	
 	
 	/**
-	 * Create/insert a value in a collection
+	 * Create new entity under the given path
 	 * 
-	 * @param path Path to the collection
+	 * @param path Path to the parent of the new entity
 	 * @param newValue Inserted value. 
+	 * @throws ServerException 
 	 */
 	@Override
-	public void createValue(String path, Object parameter) {
-		System.out.println("HTTP-Prov create:"+path+" to "+parameter);
+	public void createValue(String path, Object newElement) throws ServerException {
+		System.out.println("HTTP-Prov create:"+path+" to "+newElement);
 		
 		// Get address from directory
 		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
 		// - Address check
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
 		
-		// Extract new member
-		Object addedMember = ((Object[]) parameter)[0];
-		
 		// Post data to server
-		httpConnector.basysPost(addr, path, "create" , addedMember);
+		httpConnector.basysCreate(addr, path, newElement);
 	}
 	
 	
 	/**
-	 * Delete a value from a collection
+	 * Delete the entity under the given path
 	 * 
-	 * @param path Path to the collection
+	 * @param path Path to the entity
 	 * @param deletedId ID to delete
+	 * @throws ServerException 
 	 */
 	@Override
-	public void deleteValue(String path, Object parameter) {
-		System.out.println("HTTP-Prov delete:"+path+" to "+parameter);
+	public void deleteValue(String path) throws ServerException {
+		System.out.println("HTTP-Prov delete:"+path);
 		
 		// Get address from directory
 		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
 		// - Address check
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
 		
-		// Extract new member
-		Object deletedValue = ((Object[]) parameter)[0];
+		// Remove entity
+		httpConnector.basysDelete(addr, path);
+	}
+	
+	/**
+	 * Deletes an entry from a map or collection by key
+	 */
+	@Override
+	public void deleteValue(String path, Object parameter) throws Exception {
+		System.out.println("HTTP-Prov Delete Contained:"+path+" to "+parameter.toString());
+		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
+		System.out.println("- Element SM :"+BaSysID.instance.getSubmodelID(path));
 		
-		// Post data to server
-		httpConnector.basysPost(addr, path, "delete" , deletedValue);
+		// Get address from directory
+		String addr = directoryService.lookup(BaSysID.instance.getAddress(path));
+		// - Address check
+		if (addr == null) throw new RuntimeException("Not able to resolve address: "+path);
+		
+		// Remove entry from map or collection
+		httpConnector.basysDelete(addr, path, parameter);
 	}
 	
 	
 	/**
 	 * Invoke an operation
+	 * @throws ServerException 
 	 */
 	@Override
-	public Object invokeOperation(String path, Object[] parameter) {
+	public Object invokeOperation(String path, Object[] parameter) throws ServerException {
 		System.out.println("HTTP-Prov invoke:"+path+" with "+parameter);
 		
 		// Get address from directory
