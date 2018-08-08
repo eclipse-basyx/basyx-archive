@@ -40,13 +40,13 @@ public class TestJavaObjectProviderFull_get {
 		
 		// Get AAS sub model property values via AAS
 		Collection<String>        modelNames   =                             subModelProvider.getAllModels();
-		IAssetAdministrationShell aasStub      = (IAssetAdministrationShell) subModelProvider.getModelPropertyValue("Stub1AAS");
-		ISubModel                 subModelStub = (ISubModel)                 subModelProvider.getModelPropertyValue("statusSM.Stub1AAS");
-		Object                    property1    =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty1");
-		Object                    property2    =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty2");
-		Object                    property3    =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty3");
-		Object                    property3A   =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty3/samplePropertyA");
-		Object                    property3B   =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty3/samplePropertyB");
+		IAssetAdministrationShell aasStub      = (IAssetAdministrationShell) subModelProvider.getModelPropertyValue("Stub1AAS/aas");
+		ISubModel                 subModelStub = (ISubModel)                 subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM");
+		Object                    property1    =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty1");
+		Object                    property2    =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty2");
+		Object                    property3    =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3");
+		Object                    property3A   =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyA");
+		Object                    property3B   =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyB");
 		
 		// - Check results
 		assertTrue(modelNames.size()==2);
@@ -63,9 +63,9 @@ public class TestJavaObjectProviderFull_get {
 		
 		
 		// Get AAS sub model property values via unique sub model ID
-		ISubModel                 subMode2Stub = (ISubModel)                 subModelProvider.getModelPropertyValue("statusSM");
-		Object                    property1a   =                             subModelProvider.getModelPropertyValue("statusSM/sampleProperty1");
-		Object                    property2a   =                             subModelProvider.getModelPropertyValue("statusSM/sampleProperty2");
+		ISubModel                 subMode2Stub = (ISubModel)                 subModelProvider.getModelPropertyValue("statusSM/submodel");
+		Object                    property1a   =                             subModelProvider.getModelPropertyValue("statusSM/submodel/properties/sampleProperty1");
+		Object                    property2a   =                             subModelProvider.getModelPropertyValue("statusSM/submodel/properties/sampleProperty2");
 
 		// - Check results
 		assertTrue(subMode2Stub==stub1SM);

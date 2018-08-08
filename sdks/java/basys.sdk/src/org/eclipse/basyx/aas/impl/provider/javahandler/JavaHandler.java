@@ -201,7 +201,7 @@ public class JavaHandler<T extends IElement> {
 	 * @param id
 	 * @param addedValue
 	 */
-	public void createValue(String id, Object addedValue) {
+	public void setContainedValue(String id, Object... addedValue) {
 		// If id is null pointer
 		if ((id == null) || (id.length() == 0));
 		
@@ -228,7 +228,7 @@ public class JavaHandler<T extends IElement> {
 	 * @param id
 	 * @param addedValue
 	 */
-	public void deleteValue(String id, Object deletedValue) {
+	public void deleteContainedValue(String id, Object deletedValue) {
 		// If id is null pointer
 		if ((id == null) || (id.length() == 0));
 		

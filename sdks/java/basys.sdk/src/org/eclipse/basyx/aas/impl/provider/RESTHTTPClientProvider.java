@@ -141,7 +141,7 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		String servicePath = BaSysID.instance.getServicePath(path);
 		
 		// Set model property
-		httpConnector.basysSet(addr, path, servicePath);
+		httpConnector.basysSet(addr, servicePath, newEntry);
 	}
 
 	

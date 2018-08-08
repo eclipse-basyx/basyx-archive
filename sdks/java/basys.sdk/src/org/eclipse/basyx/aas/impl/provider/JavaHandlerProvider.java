@@ -57,23 +57,17 @@ public class JavaHandlerProvider extends AbstractModelScopeProvider implements I
 	/**
 	 * Get JavaHandler
 	 */
-	private JavaHandler<?> getJavaHandler(String path) {
+	private JavaHandler<?> getJavaHandler(String path, String propPath) {
 		
 		// Get JavaHandler
 		JavaHandler<?> javaHandler = null;
 		
-		// Get model IDs and path
-		String   aasID      = BaSysID.instance.getAASID(path);
-		String   submodelID = BaSysID.instance.getSubmodelID(path);
+		// Get handler by ID
+		if (propPath.equals("submodels") | BaSysID.instance.getSubmodelID(path).equals("")) path = BaSysID.instance.getAASID(path); // return AAS
+		else path = BaSysID.instance.getSubmodelID(path);	// return SubmodelID
 		
-		System.out.println("AID::"+aasID);
-		System.out.println("SID::"+submodelID);
-		
-		// Check sub model ID
-		if (aasID      != null) javaHandler = javaHandlers.get(aasID);
-		System.out.println("JH1::"+javaHandler);
-		if (submodelID != null) javaHandler = javaHandlers.get(submodelID);
-		System.out.println("JH2::"+javaHandler);
+		if (path != null) javaHandler = javaHandlers.get(path);
+		System.out.println("JH::"+javaHandler);
 		
 		return javaHandler;
 	}
@@ -89,12 +83,12 @@ public class JavaHandlerProvider extends AbstractModelScopeProvider implements I
 	public Object getModelPropertyValue(String path) {
 		System.out.println("[JHP] GET PATH::"+path);
 		
-		// Get JavaHandler
-		JavaHandler<?> javaHandler = getJavaHandler(path);
-		
 		// Get Property Path
 		String propPath = BaSysID.instance.getPath(path);
 		System.out.println("PID::"+propPath);
+		
+		// Get JavaHandler
+		JavaHandler<?> javaHandler = getJavaHandler(path, propPath);
 		
 		// Return element value
 		return javaHandler.getValue(propPath);
@@ -111,58 +105,89 @@ public class JavaHandlerProvider extends AbstractModelScopeProvider implements I
 	public void setModelPropertyValue(String path, Object newValue) {
 		System.out.println("[JHP] SET PATH::"+path+ " => " + newValue);
 		
-		// Get JavaHandler
-		JavaHandler<?> javaHandler = getJavaHandler(path);
-		
 		// Get Property Path
 		String propPath = BaSysID.instance.getPath(path);
 		System.out.println("PID::"+propPath);
+				
+		// Get JavaHandler
+		JavaHandler<?> javaHandler = getJavaHandler(path, propPath);
 		
-		// Return element value
+		// Set element value
 		javaHandler.setValue(propPath, newValue);
 		
 	}
 	
+	/**
+	 * Adds a new Entry to a map or collection. // TODO enable adding nested properties
+	 */
 	@Override
 	public void setModelPropertyValue(String path, Object... newValue) throws Exception {
-		// TODO Auto-generated method stub
+		System.out.println("[JHP] SET PATH::"+path+ " => " + newValue);
+		
+		// Get Property Path
+		String propPath = BaSysID.instance.getPath(path);
+		System.out.println("PID::"+propPath);
+				
+		// Get JavaHandler
+		JavaHandler<?> javaHandler = getJavaHandler(path, propPath);
+		
+		// Add entry to container
+		javaHandler.setContainedValue(propPath, newValue);
+	}
+
+	/**
+	 * Creates a new Property, Operation, Event, Submodel or AAS.
+	 * 
+	 * @param path Path to the requested value
+	 * @param newElement the element to be created on the server
+	 */
+	@Override
+	public void createValue(String path, Object newElement) {
+		System.out.println("[JHP] CREATE PATH::"+path+ " ADD: " + newElement);
+		
+		// Get Property Path
+		String propPath = BaSysID.instance.getPath(path);
+		System.out.println("PID::"+propPath);
+						
+		// TODO Create new Javahandler for the new Property, Operation, Event, Submodel or AAS.
+		System.out.println("Creating new Entity " + newElement);	
+	}
+	
+	/**
+	 * Deletes an entry from a collection or map
+	 */
+	@Override
+	public void deleteValue(String path) {
+		System.out.println("[JHP] DELETE PATH::"+path);
+		
+		// Get Property Path
+		String propPath = BaSysID.instance.getPath(path);
+		System.out.println("PID::"+propPath);
+						
+		// Get JavaHandler
+		JavaHandler<?> javaHandler = getJavaHandler(path, propPath);
+		
+		// TODO Delete JavaHandler for Property, Operation, Event, Submodel or AAS.
+		System.out.println("Deleting Entity "+ javaHandler);
 		
 	}
 
 	/**
-	 * Set a submodel property value
-	 * 
-	 * @param path Path to the requested value
+	 * Deletes an entry from a collection or map
 	 */
-	@Override
-	public void createValue(String path, Object addedValue) {
-		System.out.println("[JHP] CREATE PATH::"+path+ " ADD: " + addedValue);
-		
-		// Get JavaHandler
-		JavaHandler<?> javaHandler = getJavaHandler(path);
-		
-		// Get Property Path
-		String propPath = BaSysID.instance.getPath(path);
-		System.out.println("PID::"+propPath);
-		
-		// Return element value
-		javaHandler.createValue(propPath, addedValue);
-		
-	}
-
 	@Override
 	public void deleteValue(String path, Object deletedValue) {
 		System.out.println("[JHP] DELETE PATH::"+path+ " OBJECT: " + deletedValue);
 		
-		// Get JavaHandler
-		JavaHandler<?> javaHandler = getJavaHandler(path);
-		
 		// Get Property Path
 		String propPath = BaSysID.instance.getPath(path);
 		System.out.println("PID::"+propPath);
+						
+		// Get JavaHandler
+		JavaHandler<?> javaHandler = getJavaHandler(path, propPath);
 		
 		// Return element value
-		javaHandler.deleteValue(propPath, deletedValue);
+		javaHandler.deleteContainedValue(propPath, deletedValue);
 		
 	}
 
@@ -170,12 +195,12 @@ public class JavaHandlerProvider extends AbstractModelScopeProvider implements I
 	public Object invokeOperation(String path, Object[] parameter) {
 		System.out.println("[JHP] INVOKE PATH::"+path+ " PARAMETER: " + parameter);
 		
-		// Get JavaHandler
-		JavaHandler<?> javaHandler = getJavaHandler(path);
-		
 		// Get Property Path
 		String propPath = BaSysID.instance.getPath(path);
 		System.out.println("PID::"+propPath);
+				
+		// Get JavaHandler
+		JavaHandler<?> javaHandler = getJavaHandler(path, propPath);
 		
 		// Return element value
 		return javaHandler.invokeOperation(propPath, parameter);
@@ -201,17 +226,4 @@ public class JavaHandlerProvider extends AbstractModelScopeProvider implements I
 		// No contained properties
 		return result;
 	}
-
-
-	
-
-
-	@Override
-	public void deleteValue(String path) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
 }

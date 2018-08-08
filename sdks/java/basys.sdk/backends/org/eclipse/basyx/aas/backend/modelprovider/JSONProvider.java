@@ -71,7 +71,7 @@ public class JSONProvider<T extends IModelProvider> {
 		System.out.println("Sending exception...");
 		JSONObject error = JSONTools.Instance.serialize(e);
 		
-		// Send HTML JSON error response
+		// Send error response
 		sendJSONResponse(path, resp, error);
 	}
 	
@@ -123,7 +123,7 @@ public class JSONProvider<T extends IModelProvider> {
 		// Initialize JSON object
 		JSONObject jsonObj = JSONTools.Instance.serializeProperty(path, providerBackend);
 		
-		// Send HTML response
+		// Send response
 		sendJSONResponse(path, outputStream, jsonObj);		
 	}
 
@@ -256,7 +256,7 @@ public class JSONProvider<T extends IModelProvider> {
 			sendException(e, path, outputStream);
 		}	
 		
-		// Send HTML JSON response
+		// Send response
 		sendJSONResponse(path, outputStream, JSONTools.Instance.serialize(result));
 	}
 	

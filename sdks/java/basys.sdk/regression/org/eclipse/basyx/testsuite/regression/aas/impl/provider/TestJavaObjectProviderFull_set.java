@@ -38,29 +38,29 @@ public class TestJavaObjectProviderFull_set {
 		
 		// Get AAS sub model property values via AAS
 		// - First property "sampleProperty1"
-		assertTrue((int) subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty1") == 2);
-		subModelProvider.setModelPropertyValue("statusSM.Stub1AAS/sampleProperty1", 5);
-		assertTrue((int) subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty1") == 5);
-		subModelProvider.setModelPropertyValue("statusSM.Stub1AAS/sampleProperty1", 2);
-		assertTrue((int) subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty1") == 2);
+		assertTrue((int) subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty1") == 2);
+		subModelProvider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty1", 5);
+		assertTrue((int) subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty1") == 5);
+		subModelProvider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty1", 2);
+		assertTrue((int) subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty1") == 2);
 		// - Second property "sampleProperty2"
-		assertTrue((int) subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty2") == 3);
-		subModelProvider.setModelPropertyValue("statusSM.Stub1AAS/sampleProperty2", 6);
-		assertTrue((int) subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty2") == 6);
-		subModelProvider.setModelPropertyValue("statusSM.Stub1AAS/sampleProperty2", 3);
-		assertTrue((int) subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty2") == 3);
+		assertTrue((int) subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty2") == 3);
+		subModelProvider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty2", 6);
+		assertTrue((int) subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty2") == 6);
+		subModelProvider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty2", 3);
+		assertTrue((int) subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty2") == 3);
 		// - Test nested property "sampleProperty3/samplePropertyA"
-		assertTrue((int) subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty3/samplePropertyA") == 4);
-		subModelProvider.setModelPropertyValue("statusSM.Stub1AAS/sampleProperty3/samplePropertyA", 8);
-		assertTrue((int) subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty3/samplePropertyA") == 8);
-		subModelProvider.setModelPropertyValue("statusSM.Stub1AAS/sampleProperty3/samplePropertyA", 2);
-		assertTrue((int) subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty3/samplePropertyA") == 2);
+		assertTrue((int) subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyA") == 4);
+		subModelProvider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyA", 8);
+		assertTrue((int) subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyA") == 8);
+		subModelProvider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyA", 2);
+		assertTrue((int) subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyA") == 2);
 		
 		
-		System.out.println(subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/clock"));
-		subModelProvider.setModelPropertyValue("statusSM.Stub1AAS/clock", 5);
+		System.out.println(subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/clock"));
+		subModelProvider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/clock", 5);
 		
-		System.out.println(subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/clock"));
+		System.out.println(subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/clock"));
 
 	}
 }

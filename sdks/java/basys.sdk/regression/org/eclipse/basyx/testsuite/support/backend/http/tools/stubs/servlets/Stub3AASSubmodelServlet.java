@@ -36,7 +36,7 @@ public class Stub3AASSubmodelServlet extends GenericHandlerSubmodelHTTPProvider 
 		this.getBackendReference().addHandler(stub3SM.getSubModelHandler());
 		
 		// Register provided sub models and AAS
-		this.getBackendReference().addModel(stub3SM,             "Stub3SM");
+		this.getBackendReference().addModel(stub3SM,             "Stub3AAS");
 		this.getBackendReference().addModel(stub3SM.getParent(), "Stub3AAS");
 	}
 }

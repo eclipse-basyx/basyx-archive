@@ -78,7 +78,7 @@ public class GenericHandlerSubmodel extends SubModel {
 	    // Create dummy AAS handler
 		aasHandler = new JavaHandler<IAssetAdministrationShell>(aas);
 		// -FIXME: Add/remove support
-		aasHandler.addProperty("subModels", (obj) -> {return aas.getSubModels();},  null,  null,  null);
+		aasHandler.addProperty("submodels", (obj) -> {return aas.getSubModels();},  null,  null,  null);
 
 		// Create sub model handler
 		smHandler = new JavaHandler<ISubModel>(this);
@@ -87,6 +87,8 @@ public class GenericHandlerSubmodel extends SubModel {
 		smHandler.addProperty("properties", (obj) -> {return this.getProperties();},  null,  null,  null);
 		smHandler.addProperty("operations", (obj) -> {return this.getOperations();},  null,  null,  null);
 		smHandler.addProperty("clock",      (obj) -> {return this.clock;},  (obj, val) -> {this.clock = (int) val;},  null,  null);
+		smHandler.addProperty("frozen",      (obj) -> {return this.frozen;},  (obj, val) -> {this.frozen = (boolean) val;},  null,  null);
+
 	}
 	
 	
