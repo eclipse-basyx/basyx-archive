@@ -16,7 +16,7 @@ import org.eclipse.basyx.aas.impl.resources.basic.SubModel;
  * @author kuhn
  *
  */
-public class TempSensor20Submodel_TemperatureStatus extends SubModel {
+public class Submodel_TempSensor20_TemperatureStatus extends SubModel {
 
 
 	/**
@@ -29,7 +29,7 @@ public class TempSensor20Submodel_TemperatureStatus extends SubModel {
 	/**
 	 * Constructor
 	 */
-	public TempSensor20Submodel_TemperatureStatus() {
+	public Submodel_TempSensor20_TemperatureStatus() {
 		// Initialize this submodel
 	    this.setAssetKind(AssetKind.INSTANCE);
 	    this.setName("example temperature sensor AAS");
@@ -55,7 +55,7 @@ public class TempSensor20Submodel_TemperatureStatus extends SubModel {
 	/**
 	 * Constructor
 	 */
-	public TempSensor20Submodel_TemperatureStatus(IAssetAdministrationShell aas) {
+	public Submodel_TempSensor20_TemperatureStatus(IAssetAdministrationShell aas) {
 		// Invoke default constructor
 		this();
 		

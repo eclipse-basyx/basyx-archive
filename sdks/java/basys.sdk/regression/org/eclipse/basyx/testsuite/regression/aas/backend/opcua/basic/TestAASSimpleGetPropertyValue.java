@@ -32,16 +32,13 @@ class TestAASSimpleGetPropertyValue {
 	/**
 	 * Store HTTP asset administration shell manager backend
 	 */
-	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new OPCUATestsuiteDirectory(), new HTTPConnector());
+	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new OPCUATestsuiteDirectory(), new OPCUAConnector());
 	
 	/**
 	 * Run JUnit test case
 	 */
 	@Test
 	void runTest() throws Exception {
-		
-		// Set connection technology to opcua
-		aasManager.setConnector(new OPCUAConnector());
 
 		// Connect to AAS with ID "Stub1AAS" Retrieve connected AAS from AAS ID
 		IAssetAdministrationShell connAAS = this.aasManager.retrieveAAS("Stub1AAS");

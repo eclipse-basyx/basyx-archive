@@ -40,10 +40,10 @@ public class TestAASGatewayReferences {
 		subModelProvider.addModel(stub1SM);
 		
 		// Get element references from object provider
-		Map<String, IElementReference> stub1AASModels     = subModelProvider.getContainedElements("aas.device2.line2.manufacturing.de"); // FIXME not able to resolve address
+		Map<String, IElementReference> stub1AASModels     = subModelProvider.getContainedElements("device2.line2.manufacturing.de/aas/submodels/status/properties"); // FIXME not able to resolve address
 		
 		// Print contained elements
-		for (Entry<String, IElementReference> entry : stub1AASModels.entrySet()) {System.out.println(entry.getKey() + " -> "+ entry.getValue().getPathToProperty());}
+		for (Entry<String, IElementReference> entry : stub1AASModels.entrySet()) {System.out.println(entry.getKey() + " -> "+ entry.getValue());}
 			  
 	}
 }

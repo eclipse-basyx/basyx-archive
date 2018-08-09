@@ -57,25 +57,20 @@ class TestAASGatewaysGet_LocalScope {
 
 		// Connect to AAS with ID "aas.product_database" (local scope in iese.fraunhofer)
 		// - Retrieve connected AAS from AAS ID
-		IAssetAdministrationShell databaseAAS1 = this.aasManager.retrieveAAS("aas.product_database");
-		// - Retrieve connected AAS from alternate AAS ID ("product_database")
-		IAssetAdministrationShell databaseAAS2 = this.aasManager.retrieveAAS("product_database");
+		IAssetAdministrationShell databaseAAS1 = this.aasManager.retrieveAAS("product_database");
 		
 		
 		// Connect to sub model
 		ISubModel submodel1 = databaseAAS1.getSubModels().get("products");
-		ISubModel submodel2 = databaseAAS2.getSubModels().get("products");
 		
 		
 		// Connect to sub model property
 		// - Get property values (shortcut here, we know that it is a single property type)
 		int property1Val = (int) ((ISingleProperty) submodel1.getProperties().get("product1Size")).get();
-		int property2Val = (int) ((ISingleProperty) submodel2.getProperties().get("product1Size")).get();
 
 		
 		// Check test case results
 		assertTrue(property1Val == 22);
-		assertTrue(property2Val == 22);
 	}
 }
 

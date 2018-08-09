@@ -29,5 +29,10 @@ public class Servlet_Office_ProductDatabase_AAS extends HTTPProvider<JavaObjectP
 		
 		// Register provided models and AAS
 		this.getBackendReference().addModel(new AAS_Office_ProductDatabase());
+		this.getBackendReference().addModel(new AASTempSensor20());
+		
+		// Register submodels
+		this.getBackendReference().addModel(new Submodel_Office_ProductDatabase_Products(), "product_database");
+		this.getBackendReference().addModel(new Submodel_TempSensor20_TemperatureStatus(),  "tempsensor20");
 	}
 }

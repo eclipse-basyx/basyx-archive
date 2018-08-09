@@ -63,52 +63,52 @@ public class TestAASPath {
 		
 		// Check path components
 		assertTrue(BaSysID.instance.getAASID(qualAASID1).equals("Stub1AAS"));
-		assertTrue(BaSysID.instance.getQualifiedAASID(qualAASID1).equals("Stub1AAS.scopepart.scopepart.topscope"));
+		assertTrue(BaSysID.instance.getServicePath(qualAASID1).equals("Stub1AAS.scopepart.scopepart.topscope"));
 		assertTrue(BaSysID.instance.getSubmodelID(qualAASID1).equals(""));
 		assertTrue(BaSysID.instance.getPath(qualAASID1).equals(""));
 		
 		assertTrue(BaSysID.instance.getAASID(aasID1).equals("Stub1AAS"));
-		assertTrue(BaSysID.instance.getQualifiedAASID(aasID1).equals("Stub1AAS"));
+		assertTrue(BaSysID.instance.getServicePath(aasID1).equals("Stub1AAS"));
 		assertTrue(BaSysID.instance.getSubmodelID(aasID1).equals(""));
 		assertTrue(BaSysID.instance.getPath(aasID1).equals(""));
 		
 		assertTrue(BaSysID.instance.getAASID(smID).equals(""));
-		assertTrue(BaSysID.instance.getQualifiedAASID(smID).equals(""));
+		assertTrue(BaSysID.instance.getServicePath(smID).equals(""));
 		assertTrue(BaSysID.instance.getSubmodelID(smID).equals("statusSM"));
 		assertTrue(BaSysID.instance.getPath(smID).equals(""));
 
 		assertTrue(BaSysID.instance.getAASID(qualSMID).equals("Stub1AAS"));
-		assertTrue(BaSysID.instance.getQualifiedAASID(qualSMID).equals("Stub1AAS"));
+		assertTrue(BaSysID.instance.getServicePath(qualSMID).equals("Stub1AAS"));
 		assertTrue(BaSysID.instance.getSubmodelID(qualSMID).equals("statusSM"));
 		assertTrue(BaSysID.instance.getPath(qualSMID).equals(""));
 
 		assertTrue(BaSysID.instance.getAASID(qualSMID2).equals("Stub1AAS"));
-		assertTrue(BaSysID.instance.getQualifiedAASID(qualSMID2).equals("Stub1AAS.topscope"));
+		assertTrue(BaSysID.instance.getServicePath(qualSMID2).equals("Stub1AAS.topscope"));
 		assertTrue(BaSysID.instance.getSubmodelID(qualSMID2).equals("statusSM"));
 		assertTrue(BaSysID.instance.getPath(qualSMID2).equals(""));
 
 		assertTrue(BaSysID.instance.getAASID(qualProp).equals("Stub1AAS"));
-		assertTrue(BaSysID.instance.getQualifiedAASID(qualProp).equals("Stub1AAS.topscope"));
+		assertTrue(BaSysID.instance.getServicePath(qualProp).equals("Stub1AAS.topscope"));
 		assertTrue(BaSysID.instance.getSubmodelID(qualProp).equals("statusSM"));
 		assertTrue(BaSysID.instance.getPath(qualProp).equals("property3/propertyA"));
 
 		assertTrue(BaSysID.instance.getAASID(qualProp1).equals("Stub1AAS"));
-		assertTrue(BaSysID.instance.getQualifiedAASID(qualProp1).equals("Stub1AAS"));
+		assertTrue(BaSysID.instance.getServicePath(qualProp1).equals("Stub1AAS"));
 		assertTrue(BaSysID.instance.getSubmodelID(qualProp1).equals("statusSM"));
 		assertTrue(BaSysID.instance.getPath(qualProp1).equals("property1"));
 
 		assertTrue(BaSysID.instance.getAASID(qualProp2).equals("Stub1AAS"));
-		assertTrue(BaSysID.instance.getQualifiedAASID(qualProp2).equals("Stub1AAS"));
+		assertTrue(BaSysID.instance.getServicePath(qualProp2).equals("Stub1AAS"));
 		assertTrue(BaSysID.instance.getSubmodelID(qualProp2).equals("statusSM"));
 		assertTrue(BaSysID.instance.getPath(qualProp2).equals("property3/propertyA"));
 		
 		assertTrue(BaSysID.instance.getAASID(qualProp3).equals(""));
-		assertTrue(BaSysID.instance.getQualifiedAASID(qualProp3).equals(""));
+		assertTrue(BaSysID.instance.getServicePath(qualProp3).equals(""));
 		assertTrue(BaSysID.instance.getSubmodelID(qualProp3).equals("statusSM"));
 		assertTrue(BaSysID.instance.getPath(qualProp3).equals("property1"));
 
 		assertTrue(BaSysID.instance.getAASID(qualProp4).equals(""));
-		assertTrue(BaSysID.instance.getQualifiedAASID(qualProp4).equals(""));
+		assertTrue(BaSysID.instance.getServicePath(qualProp4).equals(""));
 		assertTrue(BaSysID.instance.getSubmodelID(qualProp4).equals("statusSM"));
 		assertTrue(BaSysID.instance.getPath(qualProp4).equals("property3/propertyA"));
 	}

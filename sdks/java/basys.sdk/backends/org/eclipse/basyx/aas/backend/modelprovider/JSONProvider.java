@@ -217,10 +217,7 @@ public class JSONProvider<T extends IModelProvider> {
 				 * Process "invoke" request: Invoke a function with the given parameters
 				 */
 				case "INVOKE": {
-					JSONObject result = processBaSysInvoke(path, parameter, outputStream);
-					
-					// Send HTML JSON response
-					sendJSONResponse(path, outputStream, result);
+					processBaSysInvoke(path, parameter, outputStream);
 					break;
 				}
 				
@@ -235,12 +232,8 @@ public class JSONProvider<T extends IModelProvider> {
 			/**
 			 * Handle Case that the submodel is frozen: INVOKE is still allowed but not CREATE
 			 */
-			JSONObject result = processBaSysInvoke(path, parameter, outputStream);
-			
-			// Send HTML JSON response
-			sendJSONResponse(path, outputStream, result);
-			
-			
+			processBaSysInvoke(path, parameter, outputStream);
+						
 		} else {
 			sendException(new ReadOnlyException(submodelPath), path, outputStream);
 		}
@@ -249,9 +242,8 @@ public class JSONProvider<T extends IModelProvider> {
 	
 	/**
 	 * Process a BaSys invoke operation
-	 * @return 
 	 */
-	public JSONObject processBaSysInvoke(String path, Object[] parameter, PrintWriter outputStream) {
+	public void processBaSysInvoke(String path, Object[] parameter, PrintWriter outputStream) {
 		
 		Object result = null;
 		System.out.println("Invoking Service: "+path + " with arguments "+ Arrays.toString((Object[]) parameter));
@@ -260,11 +252,12 @@ public class JSONProvider<T extends IModelProvider> {
 			result = providerBackend.invokeOperation(path, parameter);
 			System.out.println("Return Value: "+result);
 
-			return JSONTools.Instance.serialize(result);
-			
 		} catch (Exception e) {
-			return JSONTools.Instance.serialize(e);
+			sendException(e, path, outputStream);
 		}	
+		
+		// Send HTML JSON response
+		sendJSONResponse(path, outputStream, JSONTools.Instance.serialize(result));
 	}
 	
 	/**

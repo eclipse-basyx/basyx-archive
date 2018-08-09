@@ -29,5 +29,9 @@ public class Servlet_Line2int_Device10_AAS extends HTTPProvider<JavaObjectProvid
 		
 		// Register provided models and AAS
 		this.getBackendReference().addModel(new AAS_Line2Int_Device10());
+		
+		// Register provided models and AAS
+		this.getBackendReference().addModel(new Submodel_Line2Int_Device10_Description(), "Device10");
+		this.getBackendReference().addModel(new Submodel_Line2Int_Device10_Status(),      "Device10");
 	}
 }
