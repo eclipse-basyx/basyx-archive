@@ -237,7 +237,8 @@ public class BaSysID {
 	 * @version 0.2
 	 * @return If an AAS or Submodel is requested, return ""; otherwise, return qualifier or element ID
 	 * @param path has format <br>
-	 * (1) {@code <aasID>/aas/submodels } <br>
+	 * (1) {@code <aasID>/aas/submodels } <br> - return "submodels" identifier
+	 * (1.1) {@code <aasID>/aas/children  -> } return "children" identifier
 	 * (2) {@code <aasID>/aas/submodels/<submodelID>/properties} <br>
 	 * (3) {@code <aasID>/aas/submodels/<submodelID>/operations} <br>
 	 * (4) {@code <aasID>/aas/submodels/<submodelID>/events} <br>
@@ -283,7 +284,12 @@ public class BaSysID {
 				if (splitted.length == i+3 ) return splitted[i+2];
 					
 				// Handle case (1)
-				if (splitted.length == i+1) return splitted[i];
+				if (splitted.length == i+1) return "submodels";
+			}
+			
+			// Handle case 1.1
+			if (splitted[i].equals("children")) {
+				return "children";
 			}
 		}
 		
@@ -293,17 +299,15 @@ public class BaSysID {
 	
 	
 	/**
-	 * Split a property path TODO check compatible with version 0.2
+	 * Split a property path to extract next property id TODO check compatible with version 0.2
 	 */
 	private String[] splitPropertyPath(String pathString) {
-		
-		System.out.println("Error splitPropertyPath called");
 		
 		// Return empty array for empty string
 		if (pathString.length() == 0) return new String[0];
 		
 		// Process paths that have no splitting character
-		if ((pathString.indexOf("/") == -1) && (pathString.indexOf(".") == -1)) return new String[] {pathString};
+		if ((pathString.indexOf(".") == -1)) return new String[] {pathString};
 
 		// Split string into path segments
 		return pathString.split("[/\\.]");
@@ -311,11 +315,9 @@ public class BaSysID {
 
 	
 	/**
-	 * Get the last n path entries of a path TODO check compatible with version 0.2
+	 * Get the last n path entries of a path. Used for identifying nested operations.
 	 */
 	public String[] getLastPathEntries(String path, int lastEntries) {
-		
-		System.out.println("Error splitPropertyPath called");
 		
 		// Return result
 		String[] result = new String[lastEntries];

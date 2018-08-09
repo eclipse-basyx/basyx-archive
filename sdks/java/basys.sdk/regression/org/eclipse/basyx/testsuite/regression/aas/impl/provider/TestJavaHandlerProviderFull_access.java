@@ -33,9 +33,10 @@ public class TestJavaHandlerProviderFull_access {
 
 	/**
 	 * Run test case
+	 * @throws Exception 
 	 */
 	@Test
-	void test() {
+	void test() throws Exception {
 		// Create model provider
 		JavaHandlerProvider subModelProvider = new JavaHandlerProvider();
 		// - Create AAS and sub model instances
@@ -49,15 +50,15 @@ public class TestJavaHandlerProviderFull_access {
 		smHandler.addProperty("sampleProperty1",                  (obj) -> {return obj.sampleProperty1;},                  (obj, val) -> {obj.sampleProperty1=(int) val;},                                  null,   null);
 		smHandler.addProperty("sampleProperty2",                  (obj) -> {return obj.sampleProperty2;},                  (obj, val) -> {obj.sampleProperty2=(int) val;},                                  null,   null);
 		smHandler.addProperty("sampleProperty3",                  (obj) -> {return obj.sampleProperty3;},                  (obj, val) -> {obj.sampleProperty3=(NestedPropertyType) val;},                   null,   null);
-		smHandler.addProperty("sampleProperty3/samplePropertyA",  (obj) -> {return obj.sampleProperty3.samplePropertyA;},  (obj, val) -> {obj.sampleProperty3.samplePropertyA=(int) val;},                  null,   null);
-		smHandler.addProperty("sampleProperty3/samplePropertyB",  (obj) -> {return obj.sampleProperty3.samplePropertyB;},  (obj, val) -> {obj.sampleProperty3.samplePropertyB=(int) val;},                  null,   null);
-		smHandler.addProperty("sampleProperty3/samplePropertyC",  (obj) -> {return obj.sampleProperty3.samplePropertyC;},  (obj, val) -> {obj.sampleProperty3.samplePropertyC=(NestedPropertyType) val;},   null,   null);
-		smHandler.addProperty("sampleProperty4",                  (obj) -> {return obj.sampleProperty4;},                  null,                                                                            (obj, val) -> {obj.sampleProperty4.add((int) val);},                       (obj, val) -> {obj.sampleProperty4.remove((int) val);});
-		smHandler.addProperty("sampleProperty5",                  (obj) -> {return obj.sampleProperty5;},                  null,                                                                            (obj, val) -> {obj.sampleProperty5.add((IElement) val);},                  (obj, val) -> {obj.sampleProperty5.remove((IElement) val);});
+		smHandler.addProperty("sampleProperty3.samplePropertyA",  (obj) -> {return obj.sampleProperty3.samplePropertyA;},  (obj, val) -> {obj.sampleProperty3.samplePropertyA=(int) val;},                  null,   null);
+		smHandler.addProperty("sampleProperty3.samplePropertyB",  (obj) -> {return obj.sampleProperty3.samplePropertyB;},  (obj, val) -> {obj.sampleProperty3.samplePropertyB=(int) val;},                  null,   null);
+		smHandler.addProperty("sampleProperty3.samplePropertyC",  (obj) -> {return obj.sampleProperty3.samplePropertyC;},  (obj, val) -> {obj.sampleProperty3.samplePropertyC=(NestedPropertyType) val;},   null,   null);
+		smHandler.addProperty("sampleProperty4",                  (obj) -> {return obj.sampleProperty4;},                  null,                                                                            (obj, val) -> {obj.sampleProperty4.add((int) ((Object[]) val)[0]);},                       (obj, val) -> {obj.sampleProperty4.remove((int) val);});
+		smHandler.addProperty("sampleProperty5",                  (obj) -> {return obj.sampleProperty5;},                  null,                                                                            (obj, val) -> {obj.sampleProperty5.add((IElement) ((Object[]) val)[0]);},                  (obj, val) -> {obj.sampleProperty5.remove((IElement) val);});
 		//smHandler.addProperty("sampleProperty6",                  (obj) -> {return obj.sampleProperty6;},                  null,                                                                            (obj, val) -> {obj.sampleProperty6.put((String) val[0], (int) val[1]);},   (obj, val) -> {obj.sampleProperty6.remove((String) val);});
 
 		smHandler.addOperation("sum",                 (obj, val) -> {return obj.sum((int) val[0], (int) val[1]);});
-		smHandler.addOperation("sampleProperty3/sub", (obj, val) -> {return obj.sampleProperty3.sub((int) val[0], (int) val[1]);});
+		smHandler.addOperation("sampleProperty3.sub", (obj, val) -> {return obj.sampleProperty3.sub((int) val[0], (int) val[1]);});
 		
 
 		// - Add models to provider
@@ -70,18 +71,18 @@ public class TestJavaHandlerProviderFull_access {
 
 		// Get AAS sub model property values via AAS
 		//Collection<String>        modelNames   =                             subModelProvider.getAllModels();
-		IAssetAdministrationShell aasStub      = (IAssetAdministrationShell) subModelProvider.getModelPropertyValue("Stub1AAS");
-		ISubModel                 subModelStub = (ISubModel)                 subModelProvider.getModelPropertyValue("statusSM.Stub1AAS");
-		Object                    property1N   =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty1");
-		Object                    property1I   =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/0");
-		Object                    property2N   =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty2");
-		Object                    property2I   =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/1");
-		Object                    property3N   =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty3");
-		Object                    property3I   =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/2");
-		Object                    property3AN  =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty3/samplePropertyA");
-		Object                    property3AI  =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/3");
-		Object                    property3BN  =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty3/samplePropertyB");
-		Object                    property3BI  =                             subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/4");
+		IAssetAdministrationShell aasStub      = (IAssetAdministrationShell) subModelProvider.getModelPropertyValue("Stub1AAS/aas");
+		ISubModel                 subModelStub = (ISubModel)                 subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM");
+		Object                    property1N   =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty1");
+		Object                    property1I   =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/0");
+		Object                    property2N   =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty2");
+		Object                    property2I   =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/1");
+		Object                    property3N   =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3");
+		Object                    property3I   =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/2");
+		Object                    property3AN  =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyA");
+		Object                    property3AI  =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/3");
+		Object                    property3BN  =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyB");
+		Object                    property3BI  =                             subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/4");
 
 		// - Check results
 		assertTrue(aasStub==stub1AAS);
@@ -107,11 +108,11 @@ public class TestJavaHandlerProviderFull_access {
 		
 		
 		// Get AAS sub model property values via unique sub model ID
-		ISubModel                 subMode2Stub = (ISubModel)                 subModelProvider.getModelPropertyValue("statusSM");
-		Object                    property1aN  =                             subModelProvider.getModelPropertyValue("statusSM/sampleProperty1");
-		Object                    property1aI  =                             subModelProvider.getModelPropertyValue("statusSM/0");
-		Object                    property2aN  =                             subModelProvider.getModelPropertyValue("statusSM/sampleProperty2");
-		Object                    property2aI  =                             subModelProvider.getModelPropertyValue("statusSM/1");
+		ISubModel                 subMode2Stub = (ISubModel)                 subModelProvider.getModelPropertyValue("statusSM/submodel");
+		Object                    property1aN  =                             subModelProvider.getModelPropertyValue("statusSM/submodel/properties/sampleProperty1");
+		Object                    property1aI  =                             subModelProvider.getModelPropertyValue("statusSM/submodel/properties/0");
+		Object                    property2aN  =                             subModelProvider.getModelPropertyValue("statusSM/submodel/properties/sampleProperty2");
+		Object                    property2aI  =                             subModelProvider.getModelPropertyValue("statusSM/submodel/properties/1");
 
 		// - Check results
 		assertTrue(subMode2Stub==stub1SM);
@@ -125,39 +126,39 @@ public class TestJavaHandlerProviderFull_access {
 		// -----------------------------------------------------------------------------------------------------------------------------
 		
 		// Set AAS submodel property values
-		subModelProvider.setModelPropertyValue("statusSM.Stub1AAS/sampleProperty1", 5);
+		subModelProvider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty1", 5);
 		
 		// Test if property value has been set
-		property1N = subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty1");
+		property1N = subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty1");
 		assertTrue((int) property1N==5);
 		
 		// Set AAS submodel property values over unique ID
-		subModelProvider.setModelPropertyValue("statusSM.Stub1AAS/0", 2);
+		subModelProvider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/0", 2);
 		
 		// Test if property value has been set
-		property1N = subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/0");
+		property1N = subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/0");
 		assertTrue((int) property1N==2);
 		
 		// -----------------------------------------------------------------------------------------------------------------------------
-		// TEST CREATE VALUE
+		// TEST Set Contained VALUE
 		// -----------------------------------------------------------------------------------------------------------------------------
 				
 		// Add collection property value
-		subModelProvider.createValue("statusSM.Stub1AAS/sampleProperty4", 92);
+		subModelProvider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty4", 92, "foo");
 		
 		// Test value has been added
-		Collection<Integer> property4 = (Collection<Integer>) subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty4");
+		Collection<Integer> property4 = (Collection<Integer>) subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty4");
 		assertTrue(property4.contains(92));
 		
 		// -----------------------------------------------------------------------------------------------------------------------------
-		// TEST DELETE VALUE
+		// TEST DELETE Contained VALUE
 		// -----------------------------------------------------------------------------------------------------------------------------
 		
 		// Delete value from collection
-		subModelProvider.deleteValue("statusSM.Stub1AAS/sampleProperty4", 92);
+		subModelProvider.deleteValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty4", 92);
 		
 		// Test value has been added
-		property4 = (Collection<Integer>) subModelProvider.getModelPropertyValue("statusSM.Stub1AAS/sampleProperty4");
+		property4 = (Collection<Integer>) subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty4");
 		assertFalse(property4.contains(92));
 		
 		// -----------------------------------------------------------------------------------------------------------------------------
@@ -165,7 +166,7 @@ public class TestJavaHandlerProviderFull_access {
 		// -----------------------------------------------------------------------------------------------------------------------------
 		
 		// Invoke operation
-		Integer result = (Integer) subModelProvider.invokeOperation("statusSM.Stub1AAS/sum", new Integer[] {2,3});
+		Integer result = (Integer) subModelProvider.invokeOperation("Stub1AAS/aas/submodels/statusSM/operations/sum", new Integer[] {2,3});
 		
 		// Test if result is five
 		assertTrue(result == 5);
@@ -175,8 +176,8 @@ public class TestJavaHandlerProviderFull_access {
 		// -----------------------------------------------------------------------------------------------------------------------------		
 		
 		// Get element references from object provider
-		Map<String, IElementReference> stub1AASModels = subModelProvider.getContainedElements("Stub1AAS"); 
-		Map<String, IElementReference> submodelElements = subModelProvider.getContainedElements("statusSM.Stub1AAS");
+		Map<String, IElementReference> stub1AASModels = subModelProvider.getContainedElements("Stub1AAS/aas"); 
+		Map<String, IElementReference> submodelElements = subModelProvider.getContainedElements("Stub1AAS/aas/submodels/statusSM");
 				
 		// Print contained elements
 		for (Entry<String, IElementReference> entry : stub1AASModels.entrySet()) {System.out.println(entry.getKey() + " -> "+ entry.getValue());}

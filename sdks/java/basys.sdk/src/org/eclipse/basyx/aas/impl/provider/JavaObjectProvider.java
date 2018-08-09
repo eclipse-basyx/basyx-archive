@@ -462,14 +462,19 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	
 	/**
 	 * Invoke an operation
+	 * @throws Exception 
 	 */
 	@Override
-	public Object invokeOperation(String path, Object[] parameter) {
+	public Object invokeOperation(String path, Object[] parameter) throws Exception {
 		// Get container element that contains the operation to be invoked
 		Object containerElement = getModelProperty(path, 1);
+		
+		Method operation = null;
 
-		// Lookup operation
-		Method operation = getNamedOperation(containerElement.getClass(), BaSysID.instance.getLastPathEntries(path, 1)[0]);
+		// Get method reference
+		String[] pathArray = splitPropertyPath(BaSysID.instance.getPath(path));
+		if (containerElement instanceof IElementContainer) operation = getNamedOperation(containerElement.getClass(), pathArray[pathArray.length-1]); // nested operation
+		else operation = getNamedOperation(containerElement.getClass(), BaSysID.instance.getLastPathEntries(path, 1)[0]);							  // regular submodel operation
 		
 		// Invoke operation
 		try {
@@ -477,11 +482,8 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 			return operation.invoke(containerElement, parameter);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw e;
 		}
-		
-		// Operation invocation failed
-		return null;
 	}
 	
 	

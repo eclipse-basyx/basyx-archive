@@ -21,30 +21,39 @@ public class TestsuiteDirectory extends PreconfiguredDirectory {
 		// Define mappings
 		// - Asset administration shells
 		addMapping("Stub1AAS", 							"http://localhost:8080/basys.sdk/Testsuite/");
+		addMapping("Stub1AAS/aas", 							"http://localhost:8080/basys.sdk/Testsuite/");
+		
 		addMapping("RestAAS",         					"http://localhost:8080/basys.sdk/Testsuite/");
+		addMapping("RestAAS/aas",         					"http://localhost:8080/basys.sdk/Testsuite/");
+		
+		addMapping("Stub2AAS", 					"http://localhost:8080/basys.sdk/Testsuite/Stub2AAS/");
+		addMapping("Stub2AAS/aas", 					"http://localhost:8080/basys.sdk/Testsuite/Stub2AAS/");
+		
+		addMapping("Stub3AAS", 					"http://localhost:8080/basys.sdk/Testsuite/Stub3AAS/");
+		addMapping("Stub3AAS/aas", 					"http://localhost:8080/basys.sdk/Testsuite/Stub3AAS/");
+		
+		addMapping("statusSM",                  "http://localhost:8080/basys.sdk/Testsuite/Stub1AASSubmodel1/");
+		addMapping("statusSM/submodel",                  "http://localhost:8080/basys.sdk/Testsuite/Stub1AASSubmodel1/");
+		
 		
 		
 		// - Sub models of Stub1AAS		
 		addMapping("Stub1AAS/aas/submodels/statusSM",   "http://localhost:8080/basys.sdk/Testsuite/");
 		addMapping("Stub1AAS/aas/submodels/Stub2SM",    "http://localhost:8080/basys.sdk/Testsuite/");
+		addMapping("Stub1AAS/aas/submodels/technicalDataSM",  "http://localhost:8080/basys.sdk/Testsuite/Stub1AASSubmodel1/");
+		
 		
 		// - Sub models of RestAAS
 		addMapping("RestAAS/aas/submodels/frozenSM",     "http://localhost:8080/basys.sdk/Testsuite/");
 		
+		// - Sub models oSubModel2TempAAS
+		addMapping("SubModel2TempAAS/aas/submodels/Stub2SM",  "http://localhost:8080/basys.sdk/Testsuite/Stub1AASSubmodel2/");
+		addMapping("SubModel2TempAAS/aas/submodels/mainSM",   "http://localhost:8080/basys.sdk/Testsuite/Stub2AASSubmodel/");
 		
-		addMapping("Stub2AAS", "http://localhost:8080/basys.sdk/Testsuite/Stub2AAS/BaSys/1.0/provider");
-		addMapping("Stub3AAS", "http://localhost:8080/basys.sdk/Testsuite/Stub3AAS/BaSys/1.0/provider");
-		addMapping("statusSM",                 "http://localhost:8080/basys.sdk/Testsuite/Stub1AASSubmodel1/BaSys/1.0/provider");
-		addMapping("technicalDataSM.Stub1AAS", "http://localhost:8080/basys.sdk/Testsuite/Stub1AASSubmodel1/BaSys/1.0/provider");
-		// - Sub model Stub2SM
-		addMapping("Stub2SM.Stub1AAS",         "http://localhost:8080/basys.sdk/Testsuite/Stub1AASSubmodel2/BaSys/1.0/provider");
-		addMapping("Stub2SM.SubModel2TempAAS", "http://localhost:8080/basys.sdk/Testsuite/Stub1AASSubmodel2/BaSys/1.0/provider");
-		// - Sub model Stub3SM (provided by same servlet as Stub3AAS)
-		addMapping("Stub3SM.Stub3AAS",         "http://localhost:8080/basys.sdk/Testsuite/Stub3AAS/BaSys/1.0/provider");
+		// - Sub model of Stub3AAS - Stub3SM (provided by same servlet as Stub3AAS)
+		addMapping("Stub3AAS/aas/submodels/Stub3SM",          "http://localhost:8080/basys.sdk/Testsuite/Stub3AAS/");
 
-		
 		// - Sub model MainSM of Stub2AAS
-		addMapping("mainSM.Stub2AAS",          "http://localhost:8080/basys.sdk/Testsuite/Stub2AASSubmodel/BaSys/1.0/provider");
-		addMapping("mainSM.SubModel2TempAAS",  "http://localhost:8080/basys.sdk/Testsuite/Stub2AASSubmodel/BaSys/1.0/provider");
-	}	
+		addMapping("Stub2AAS/aas/submodels/mainSM",           "http://localhost:8080/basys.sdk/Testsuite/");
+		}	
 }

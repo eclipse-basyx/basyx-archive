@@ -15,7 +15,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Test_Stub1AASSubmodel1</servlet-name>
-    <url-pattern>/Testsuite/Stub1AASSubmodel1/BaSys/1.0/provider</url-pattern>
+    <url-pattern>/Testsuite/Stub1AASSubmodel1/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>Test_Stub1AASSubmodel2</servlet-name>
@@ -31,7 +31,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Test_Stub2AAS</servlet-name>
-    <url-pattern>/Testsuite/Stub2AAS/BaSys/1.0/provider</url-pattern>
+    <url-pattern>/Testsuite/Stub2AAS/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>Test_Stub2AAS_Submodel</servlet-name>
@@ -39,7 +39,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Test_Stub2AAS_Submodel</servlet-name>
-    <url-pattern>/Testsuite/Stub2AASSubmodel/BaSys/1.0/provider</url-pattern>
+    <url-pattern>/Testsuite/Stub2AASSubmodel/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>Test_Stub3AAS</servlet-name>
@@ -47,7 +47,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Test_Stub3AAS</servlet-name>
-    <url-pattern>/Testsuite/Stub3AAS/BaSys/1.0/provider</url-pattern>
+    <url-pattern>/Testsuite/Stub3AAS/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>Test_GW_IESE_Office_ProductDatabase</servlet-name>
@@ -79,7 +79,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Gateway_Line1Line2</servlet-name>
-    <url-pattern>/Testsuite/GW/IESE/line1/gateway_line12/*</url-pattern>
+    <url-pattern>/Testsuite/GW/IESE/line1/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>Gateway_Line2Line2int</servlet-name>
@@ -87,7 +87,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Gateway_Line2Line2int</servlet-name>
-    <url-pattern>/Testsuite/GW/IESE/line2/gateway_line2int/*</url-pattern>
+    <url-pattern>/Testsuite/GW/IESE/line2/*</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>

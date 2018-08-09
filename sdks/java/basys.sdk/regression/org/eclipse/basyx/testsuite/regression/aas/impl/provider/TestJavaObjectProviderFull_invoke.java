@@ -23,9 +23,10 @@ public class TestJavaObjectProviderFull_invoke {
 
 	/**
 	 * Run test case
+	 * @throws Exception 
 	 */
 	@Test
-	void test() {
+	void test() throws Exception {
 		// Create model provider
 		JavaObjectProvider subModelProvider = new JavaObjectProvider();
 		// - Create AAS and sub model instances
@@ -37,12 +38,12 @@ public class TestJavaObjectProviderFull_invoke {
 		
 		
 		// Invoke simple operation "sum" in sub model "statusSM" of AAS "Stub1AAS"
-		Object result = subModelProvider.invokeOperation("statusSM.Stub1AAS/sum", new Object[] {4, 6});
+		Object result = subModelProvider.invokeOperation("Stub1AAS/aas/submodels/statusSM/operations/sum", new Object[] {4, 6});
 		// - Check Result
 		assertTrue((int) result == 10);
 
 		// Invoke simple operation "sub" in property "sampleProperty3" of sub model "statusSM" of AAS "Stub1AAS"
-		Object result2 = subModelProvider.invokeOperation("statusSM.Stub1AAS/sampleProperty3/sub", new Object[] {7, 5});
+		Object result2 = subModelProvider.invokeOperation("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.sub", new Object[] {7, 5});
 		// - Check Result
 		assertTrue((int) result2 == 2);
 	}
