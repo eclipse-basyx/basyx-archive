@@ -53,7 +53,7 @@ public class ConnectedElement implements IElement  {
 		// Store parameter values
 		modelProviderURL = url;
 		
-		// Create HTTP connector
+		// Set connector
 		basysConnector = connector;
 		
 		// Set caching information

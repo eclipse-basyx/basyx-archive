@@ -2,6 +2,8 @@ package org.eclipse.basyx.aas.backend;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
+import org.eclipse.basyx.aas.api.exception.TypeMismatchException;
 import org.eclipse.basyx.aas.api.resources.basic.ICollectionProperty;
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
 
@@ -50,13 +52,32 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	}
 
 	/**
-	 * Add item to collection
+	 * Sets new collection. Overwrites existing values
+	 * @param collection to be set
+	 * @throws ServerException 
 	 */
 	@Override
-	public void set(Object newValue) {
+	public void set(Collection<Object> collection) throws ServerException {
 		
-		// Post data to server
-		basysConnector.basysPost(this.modelProviderURL, propertyPath, "create" , newValue);
+		// Set collection on server
+		basysConnector.basysSet(this.modelProviderURL, propertyPath, collection);
+		
+		// update Cache
+		this.setElement(collection);
+	}
+
+	/**
+	 * Add item to collection
+	 * 
+	 * Note: Whenever more than one overloaded methods can be applied to the argument list, the most specific method is used.
+	 * @param the value to be added
+	 * @throws Exception 
+	 */
+	@Override
+	public void add(Object newValue) throws ServerException, TypeMismatchException {
+		
+		// Add value to collection. Need "foo" to distinguish overloaded method
+		basysConnector.basysSet(this.modelProviderURL, propertyPath, newValue, "foo");
 		
 		// Update cache
 		Object collection = this.getElement();
@@ -67,17 +88,21 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 			
 			// Type safe add element to collection
 			((List<Object>) collection).add(newValue);
+		} else {
+			throw new TypeMismatchException(this.propertyPath, "Collection");
 		}
 	}
 
+
 	/**
 	 * Delete item from collection
+	 * @throws ServerException 
 	 */
 	@Override
-	public void remove(Object oldValue) {
+	public void remove(Object oldValue) throws ServerException {
 		
 		// Post data to server
-		basysConnector.basysPost(this.modelProviderURL, propertyPath, "delete" , oldValue);
+		basysConnector.basysDelete(this.modelProviderURL, propertyPath, oldValue);
 		
 		// Update cache
 		Object collection = this.getElement();

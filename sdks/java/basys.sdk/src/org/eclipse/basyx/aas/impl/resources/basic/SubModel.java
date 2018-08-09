@@ -1,9 +1,12 @@
 package org.eclipse.basyx.aas.impl.resources.basic;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.basyx.aas.api.exception.ResourceNotFoundException;
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IOperation;
 import org.eclipse.basyx.aas.api.resources.basic.IProperty;
@@ -17,9 +20,15 @@ public class SubModel extends BaseElement implements ISubModel {
 	protected Map<String, IProperty> properties = new HashMap<>();
 	protected Map<String, Event> events = new HashMap<>();
 	
+	/**
+	 * Server Clock that gets incremented when a property of this submodel is changed
+	 */
 	protected Integer clock = 0;
 	
-	protected Boolean readOnly = false; // TODO implement read only functionality
+	/**
+	 * Indicates that this submodel and all its children are read only / frozen
+	 */
+	protected Boolean frozen = false; 
 	
 	/**
 	 * Constructor
@@ -111,6 +120,44 @@ public class SubModel extends BaseElement implements ISubModel {
 		
 		// Return map with elements
 		return result;
+	}
+
+	/**
+	 * Returns if this submodel is frozen
+	 */
+	@Override
+	public boolean isFrozen() {
+		return this.frozen;
+	}
+
+	/** 
+	 * Sets all properties of this submodel to readonly TODO Test for Referenced submodels?
+	 */
+	@Override
+	public void freeze() {
+		Iterator<Entry<String, IProperty>> it = this.properties.entrySet().iterator();
+		while (it.hasNext()) {
+			Property   p = (Property) it.next().getValue();
+			p.setWriteable(false);	// TODO writable is never checked when accessing static properties
+		}
+		
+		this.frozen = true;
+		
+	}
+
+
+	/**
+	 * Makes all properties of this submodel writable TODO Test for Referenced submodels?
+	 */
+	@Override
+	public void unfreeze() {
+		Iterator<Entry<String, IProperty>> it = this.properties.entrySet().iterator();
+		while (it.hasNext()) {
+			Property   p = (Property) it.next().getValue();
+			p.setWriteable(true);
+		}
+		
+		this.frozen = false;
 	}
 }
 

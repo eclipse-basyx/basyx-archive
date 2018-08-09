@@ -62,7 +62,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		directoryService = networkDirectoryService;
 		
 		// Set connector reference
-		setConnector(basysConnector);
+		connector = basysConnector;
 	}
 	
 	
@@ -76,14 +76,6 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	}
 	
 	
-	/**
-	 * Set a Basys connector
-	 */
-	public void setConnector(IBasysConnector c) {
-		// Store connector instance
-		connector = c;
-	}
-
 
 	/**
 	 * Create a connected Asset Administration Shell proxy

@@ -2,6 +2,9 @@ package org.eclipse.basyx.aas.api.resources.basic;
 
 import java.util.Collection;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
+import org.eclipse.basyx.aas.api.exception.TypeMismatchException;
+
 
 
 /**
@@ -23,21 +26,28 @@ public interface ICollectionProperty extends IProperty {
 	
 	
 	/**
-	 * Set property value
-	 * 
-	 * Set property value or add property to collection
-	 * 
-	 * @param Changed or added object
+	 * Set or override collection
+	 * @param new Collection to be set
 	 */
-	public void set(Object newValue);
+	public void set(Collection<Object> collection) throws ServerException;
+	
+	
+	/**
+	 * Add value to collection
+	 * @param newValue to be added
+	 * @throws TypeMismatchException 
+	 * @throws Exception
+	 */
+	void add(Object newValue) throws ServerException, TypeMismatchException;
 
 
 	/**
 	 * Remove property from collection 
 	 * 
 	 * @param objectRef Property reference to be removed
+	 * @throws ServerException 
 	 */
-	public abstract void remove(Object objectRef);
+	public abstract void remove(Object objectRef) throws ServerException;
 
 
 	/**
@@ -54,5 +64,8 @@ public interface ICollectionProperty extends IProperty {
 	 * @return Element count
 	 */
 	public int getElementCount();
+
+
+
 }
 

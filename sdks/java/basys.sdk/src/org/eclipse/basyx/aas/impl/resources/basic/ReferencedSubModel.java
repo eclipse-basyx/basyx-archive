@@ -53,4 +53,20 @@ public class ReferencedSubModel extends BaseElement implements ISubModel {
 		// TODO Auto-generated method stub
 		return null;
 	}	
+	
+	@Override
+	public boolean isFrozen() {
+		return false;
+	}
+
+
+	@Override
+	public void freeze() {
+		return;
+	}	
+	
+	@Override
+	public void unfreeze() {
+		return;
+	}	
 }

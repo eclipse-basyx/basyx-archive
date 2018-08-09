@@ -8,9 +8,9 @@ import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.St
 
 
 /**
- * Servlet interface for stubbed sub model
+ * Servlet interface for stubbed standalone submodel
  * 
- * @author kuhn
+ * @author kuhn, pschorn
  *
  */
 public class Stub1AASSubmodelServlet2 extends HTTPProvider<JavaObjectProvider> {
@@ -29,7 +29,7 @@ public class Stub1AASSubmodelServlet2 extends HTTPProvider<JavaObjectProvider> {
 		// Invoke base constructor
 		super(new JavaObjectProvider());
 
-		// Register provided models and AAS
-		this.getBackendReference().addModel(new Stub2Submodel(), "Stub2AAS");
+		// Register standalone submodel
+		this.getBackendReference().addModel(new Stub2Submodel());
 	}
 }

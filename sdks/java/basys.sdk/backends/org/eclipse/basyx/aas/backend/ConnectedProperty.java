@@ -1,7 +1,5 @@
 package org.eclipse.basyx.aas.backend;
 
-import java.util.Observable;
-
 import org.eclipse.basyx.aas.api.exception.UnknownElementTypeException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
@@ -57,6 +55,10 @@ public class ConnectedProperty extends ConnectedElement implements IProperty {
 	protected boolean isMap = false;
 	
 	
+	/**
+	 * Store url reference
+	 */
+	protected static String type = "properties";
 
 	
 	
@@ -67,14 +69,14 @@ public class ConnectedProperty extends ConnectedElement implements IProperty {
 	 * Constructor - expect the URL to the sub model
 	 * @param connector 
 	 */
-	public ConnectedProperty(String id, String submodelId, String path, String url, IBasysConnector connector, ConnectedAssetAdministrationShellManager aasMngr)  {
+	public ConnectedProperty(String aasId, String submodelId, String path, String url, IBasysConnector connector, ConnectedAssetAdministrationShellManager aasMngr)  {
 		// Invoke base constructor
 		super(url, connector);
 
 		// Store parameter values
-		aasID            = id;
+		aasID            = aasId;
 		aasSubmodelID    = submodelId;
-		propertyPath     = submodelId+"."+aasID+"/"+path;
+		propertyPath     = connector.buildPath(aasID, submodelId, path, "properties");
 		modelProviderURL = url;
 		aasManager       = aasMngr;
 	}
@@ -98,10 +100,9 @@ public class ConnectedProperty extends ConnectedElement implements IProperty {
 			// Return if element is no reference
 			if (!(result instanceof IElementReference)) return result;
 
-			
-			
 			// Resolve references
 			while (result instanceof IElementReference) {
+				
 				// Cast to reference
 				IElementReference elementReference = (IElementReference) result;
 								
@@ -120,7 +121,7 @@ public class ConnectedProperty extends ConnectedElement implements IProperty {
 					// Property may be a reference to another property. This needs to be resolved recursively.
 					result = aasManager.retrievePropertyProxy(elementReference);
 				}
-			}
+			} 
 
 			// Type check
 			if (result instanceof IAssetAdministrationShell) return result; 
