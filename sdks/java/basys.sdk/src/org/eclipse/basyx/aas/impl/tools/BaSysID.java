@@ -217,6 +217,7 @@ public class BaSysID {
 	 * (5) {@code <aasID>/aas/submodels/<submodelID>/properties/<propertyID> -> Returns the property ID }<br>
 	 * (6) {@code <aasID>/aas/submodels/<submodelID>/operations/<operationID> -> Returns the operation ID }<br>
 	 * (7) {@code <aasID>/aas/submodels/<submodelID>/events/<eventID> -> Returns the event ID} <br>
+	 * (X) {@code <submodelID>/submodel
 	 * (8) {@code <submodelID>/submodel/properties }<br>
 	 * (9) {@code <submodelID>/submodel/operations }<br>
 	 * (10) {@code <submodelID>/submodel/events} <br>
@@ -231,34 +232,35 @@ public class BaSysID {
 		
 		String[] splitted = path.split("/");
 		
-		// Search for element ID or qualifier 
+		// Search for element ID or qualifier. Start with Index 1 because first identifier is always element ID
 		for (int i = 1; i < splitted.length; i++) {
 			
 			// Handle cases (8 - 13)
 			if (splitted[i].equals("submodel")) {
 				
 				// Handle case (11 - 13)
-				if (splitted.length > i+2) return splitted[i+2];
+				if (splitted.length == i+3 ) return splitted[i+2];
 				
 				// Handle case (8 - 10)
-				if (splitted.length > i+1) return splitted[i+1];
+				if (splitted.length == i+2) return splitted[i+1];
+				
 			}
 			
 			// Handle cases (1 - 7)
 			if (splitted[i].equals("submodels")) {
 				
 				// Handle case (5 - 7)
-				if (splitted.length > i+3) return splitted[i+3];
+				if (splitted.length == i+4) return splitted[i+3];
 				
-				// Handle case (2 - 4)
-				if (splitted.length > i+2) return splitted[i+2];
+				// Handle case (2 - 4) 
+				if (splitted.length == i+3 ) return splitted[i+2];
 					
 				// Handle case (1)
-				if (splitted.length > i+1) return splitted[i+1];
+				if (splitted.length == i+1) return splitted[i];
 			}
 		}
 		
-		// If an AAS or Submodel is requested, return "".
+		// If an AAS or Submodel is requested, return "". Also handles Case (X).
 		return "";
 	}
 	
