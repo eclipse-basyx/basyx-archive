@@ -20,10 +20,16 @@ public class TestsuiteDirectory extends PreconfiguredDirectory {
 	public TestsuiteDirectory() {
 		// Define mappings
 		// - Asset administration shells
-		addMapping("Stub1AAS", 						"http://localhost:8080/basys.sdk");
+		addMapping("Stub1AAS", 							"http://localhost:8080/basys.sdk/Testsuite/");
+		addMapping("RestAAS",         					"http://localhost:8080/basys.sdk/Testsuite/");
+		
 		
 		// - Sub models of Stub1AAS		
-		addMapping("Stub1AAS/submodels/statusSM",   "http://localhost:8080/basys.sdk");
+		addMapping("Stub1AAS/aas/submodels/statusSM",   "http://localhost:8080/basys.sdk/Testsuite/");
+		addMapping("Stub1AAS/aas/submodels/Stub2SM",    "http://localhost:8080/basys.sdk/Testsuite/");
+		
+		// - Sub models of RestAAS
+		addMapping("RestAAS/aas/submodels/frozenSM",     "http://localhost:8080/basys.sdk/Testsuite/");
 		
 		
 		addMapping("Stub2AAS", "http://localhost:8080/basys.sdk/Testsuite/Stub2AAS/BaSys/1.0/provider");

@@ -56,7 +56,7 @@ class TestAASCollectionAddDeleteMember {
 		ICollectionProperty property4 = ((ICollectionProperty) submodel.getProperties().get("sampleProperty4"));
 		
 		// Add member to collection
-		property4.set(5);
+		property4.add(5);
 		
 		// Check if the item has been added
 		int five = (int) property4.get(1);

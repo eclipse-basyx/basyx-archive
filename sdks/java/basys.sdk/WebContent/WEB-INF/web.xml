@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
   <display-name>basys.sdk</display-name>
-
   <servlet>
     <servlet-name>Test_Stub1AAS</servlet-name>
     <servlet-class> org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.Stub1AASServlet </servlet-class>
@@ -10,7 +9,6 @@
     <servlet-name>Test_Stub1AAS</servlet-name>
     <url-pattern>/Testsuite/Stub1AAS/*</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <servlet-name>Test_Stub1AASSubmodel1</servlet-name>
     <servlet-class> org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.Stub1AASSubmodelServlet1 </servlet-class>
@@ -27,8 +25,6 @@
     <servlet-name>Test_Stub1AASSubmodel2</servlet-name>
     <url-pattern>/Testsuite/Stub2SM/*</url-pattern>
   </servlet-mapping>
-
-
   <servlet>
     <servlet-name>Test_Stub2AAS</servlet-name>
     <servlet-class> org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.Stub2AASServlet </servlet-class>
@@ -37,7 +33,6 @@
     <servlet-name>Test_Stub2AAS</servlet-name>
     <url-pattern>/Testsuite/Stub2AAS/BaSys/1.0/provider</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <servlet-name>Test_Stub2AAS_Submodel</servlet-name>
     <servlet-class> org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.Stub2AASSubmodelServlet </servlet-class>
@@ -46,8 +41,6 @@
     <servlet-name>Test_Stub2AAS_Submodel</servlet-name>
     <url-pattern>/Testsuite/Stub2AASSubmodel/BaSys/1.0/provider</url-pattern>
   </servlet-mapping>
-
-
   <servlet>
     <servlet-name>Test_Stub3AAS</servlet-name>
     <servlet-class> org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.Stub3AASSubmodelServlet </servlet-class>
@@ -56,12 +49,6 @@
     <servlet-name>Test_Stub3AAS</servlet-name>
     <url-pattern>/Testsuite/Stub3AAS/BaSys/1.0/provider</url-pattern>
   </servlet-mapping>
-
-
-
-
-
-
   <servlet>
     <servlet-name>Test_GW_IESE_Office_ProductDatabase</servlet-name>
     <servlet-class> org.eclipse.basyx.testsuite.support.gateways.stubs.servlets.topo.iese.Servlet_Office_ProductDatabase_AAS</servlet-class>
@@ -78,9 +65,6 @@
     <servlet-name>Test_GW_IESE_Office_ProductDatabase_Products</servlet-name>
     <url-pattern>/Testsuite/GW/IESE/office/products_product_database/BaSys/1.0/provider</url-pattern>
   </servlet-mapping>
-  
-
-
   <servlet>
     <servlet-name>Test_GW_Manufacturing_Line2_Device2</servlet-name>
     <servlet-class> org.eclipse.basyx.testsuite.support.gateways.stubs.servlets.topo.manufacturing.Servlet_Line2_Device2_AAS</servlet-class>
@@ -97,7 +81,6 @@
     <servlet-name>Test_GW_Manufacturing_Line2_Device2_Submodels</servlet-name>
     <url-pattern>/Testsuite/GW/Manufacturing/line2/Device2/Submodels/BaSys/1.0/provider</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>Test_GW_Manufacturing_Line2int_Device10</servlet-name>
     <servlet-class> org.eclipse.basyx.testsuite.support.gateways.stubs.servlets.topo.manufacturing.Servlet_Line2int_Device10_AAS</servlet-class>
@@ -114,8 +97,6 @@
     <servlet-name>Test_GW_Manufacturing_Line2int_Device10_Submodels</servlet-name>
     <url-pattern>/Testsuite/GW/Manufacturing/line2int/Device10/Submodels/BaSys/1.0/provider</url-pattern>
   </servlet-mapping>
-  
-  
   <servlet>
     <servlet-name>Gateway_Line1Line2</servlet-name>
     <servlet-class> org.eclipse.basyx.testsuite.support.gateways.common.gateways.Gateway_Line1ToLine2</servlet-class>
@@ -124,7 +105,6 @@
     <servlet-name>Gateway_Line1Line2</servlet-name>
     <url-pattern>/Testsuite/GW/IESE/line1/gateway_line12/BaSys/1.0/provider</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <servlet-name>Gateway_Line2Line2int</servlet-name>
     <servlet-class> org.eclipse.basyx.testsuite.support.gateways.common.gateways.Gateway_Line2ToLine2Int</servlet-class>
@@ -133,8 +113,6 @@
     <servlet-name>Gateway_Line2Line2int</servlet-name>
     <url-pattern>/Testsuite/GW/IESE/line2/gateway_line2int/BaSys/1.0/provider</url-pattern>
   </servlet-mapping>
-  
-  
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>
@@ -143,4 +121,14 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>StubRestAASServlet</display-name>
+    <servlet-name>StubRestAASServlet</servlet-name>
+    <servlet-class>org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.StubRestAASServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StubRestAASServlet</servlet-name>
+    <url-pattern>/Testsuite/RestAAS/*</url-pattern>
+  </servlet-mapping>
 </web-app>

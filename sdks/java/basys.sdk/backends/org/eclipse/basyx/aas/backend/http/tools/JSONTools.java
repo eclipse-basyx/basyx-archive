@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IProperty;
@@ -17,7 +18,6 @@ import org.eclipse.basyx.aas.impl.resources.basic.Event;
 import org.eclipse.basyx.aas.impl.resources.basic.Operation;
 import org.eclipse.basyx.aas.impl.resources.basic.Property;
 import org.eclipse.basyx.aas.impl.resources.connected.ConnectedSerializableObject;
-import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -338,7 +338,6 @@ public class JSONTools {
 		if (reference.isSubModelReference()) {target.put("aas", reference.getAASID()); target.put("submodel", reference.getSubModelID());}
 		if (reference.isPropertyReference()) {target.put("aas", reference.getAASID()); target.put("submodel", reference.getSubModelID()); target.put("path", reference.getPathToProperty());}
 		
-		// Error check - we always need an Asset Administration Shell ID
 		if (reference.getAASID().length() == 0) {
 			throw new RuntimeException("aasid empty");
 		}
@@ -360,7 +359,7 @@ public class JSONTools {
 	@SuppressWarnings("unchecked")
 	protected boolean serializeMapType(JSONObject target, Object value, JSONObject serObjRepo, String scope) {
 		
-		if (value instanceof Property) if (((Property) value).getDataType().equals(DataType.MAP)) {
+		if (value instanceof Property) if (((Property) value).getDataType() == DataType.MAP) {
 			
 			target.put("thekind", "map");
 		}
@@ -418,7 +417,7 @@ public class JSONTools {
 	@SuppressWarnings("unchecked")
 	protected boolean serializeCollectionType(JSONObject target, Object value, JSONObject serObjRepo, String scope) {
 		
-		if (value instanceof Property) if (((Property) value).getDataType().equals(DataType.COLLECTION)) {
+		if (value instanceof Property) if (((Property) value).getDataType() == DataType.COLLECTION) {
 			
 			target.put("thekind", "collection");
 		}
@@ -503,6 +502,34 @@ public class JSONTools {
 		// Value has been serialized
 		return true;
 	}
+	
+	
+	protected boolean serializeException(JSONObject target, Object value) {
+
+		if (value instanceof Exception) {
+			
+			Exception e = (Exception) value;
+			
+			target.put("kind", "exception");
+			target.put("message", e.getMessage());
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	
+
+	protected Object deserializeException(JSONObject serializedValue) {
+
+		// Only deserialize exceptions
+		if (!(serializedValue.get("kind").equals("exception"))) return null;
+		
+		System.out.println("Deserialize Exception");
+		return new ServerException( (String) serializedValue.get("message"));
+	}
+
 
 
 	
@@ -552,18 +579,18 @@ public class JSONTools {
 		if (serializePrimitiveType(returnValue, value, serObjRepo)) return returnValue;
 		if (serializeArrayType(returnValue, value, serObjRepo, scope)) return returnValue;
 		if (serializeCollectionType(returnValue, value, serObjRepo, scope)) return returnValue;
-		if (serializeMapType(returnValue, value, serObjRepo, scope)) return returnValue; // FIXME serializeMapType is not used for map properties
+		if (serializeMapType(returnValue, value, serObjRepo, scope)) return returnValue; 
 		if (serializeIElement(returnValue, value, serObjRepo, scope)) return returnValue;
-		if (serializeIElementRef(returnValue, value, serObjRepo, scope)) return returnValue; // This always matches
+		if (serializeIElementRef(returnValue, value, serObjRepo, scope)) return returnValue;
 		if (serializeSerializableObject(returnValue, value, serObjRepo, scope)) return returnValue;
-		
+		if (serializeException(returnValue, value)) return returnValue;
 		// Complex types not supported yet
 		
 		
 		return returnValue;
 	}
 
-	
+
 	/**
 	 * Serialize a primitive or complex value into JSON object
 	 */
@@ -598,6 +625,7 @@ public class JSONTools {
 		if ((returnValue = deserializeMapType(serializedValue, serObjRepo, repository)) != null) return returnValue;
 		if ((returnValue = deserializeElementReference(serializedValue, serObjRepo, repository)) != null) return returnValue;
 		if ((returnValue = deserializeSerializableObject(serializedValue, serObjRepo, repository)) != null) return returnValue;
+		if ((returnValue = deserializeException(serializedValue)) != null) return returnValue;
 
 		
 		
@@ -607,6 +635,8 @@ public class JSONTools {
 	}
 
 	
+
+
 	/**
 	 * Deserialize a primitive or complex value from JSON object
 	 */

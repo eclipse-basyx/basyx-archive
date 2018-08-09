@@ -12,6 +12,7 @@ import org.eclipse.basyx.aas.api.resources.basic.IProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
 import org.eclipse.basyx.aas.impl.reference.ElementRef;
+import org.eclipse.basyx.aas.impl.tools.BaSysID;
 
 
 
@@ -121,7 +122,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 */
 	public Integer getServerClock() {
 		
-		String servicePath = aasSubmodelID + "." + aasID + "/clock";
+		String servicePath = BaSysID.instance.buildPath(aasID, aasSubmodelID)+ "/clock";
 		Integer serverClock = (Integer) basysConnector.basysGet(modelProviderURL, servicePath);
 		
 		return serverClock;
@@ -154,7 +155,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 */
 	@Override
 	public boolean isFrozen() {
-		String servicePath = basysConnector.buildPath(aasID, aasSubmodelID, "frozen", PROPERTIES); 
+		String servicePath = BaSysID.instance.buildPath(aasID, aasSubmodelID)+ "/frozen";
 		
 		// Retrieve "frozen" variable
 		boolean frozen = (boolean) basysConnector.basysGet(modelProviderURL, servicePath);

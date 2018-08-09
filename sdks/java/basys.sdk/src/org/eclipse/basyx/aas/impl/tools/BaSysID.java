@@ -68,7 +68,7 @@ public class BaSysID {
 	 * @param aasID ID of asset administration shell
 	 * @param subModelID ID of sub model
 	 * 
-	 * @return Built ID in format {@code <aasID>/aas} or {@code <smID>} or {@code <aasID>/submodels/<subModelID> }
+	 * @return Built ID in format {@code <aasID>/aas} or {@code <smID>/submodel} or {@code <aasID>/aas/submodels/<subModelID> }
 	 */
 	public String buildPath(String aasID, String subModelID) {
 		// Only return one id if other is is null or empty
@@ -76,7 +76,7 @@ public class BaSysID {
 		if ((subModelID == null) || (subModelID.length()==0)) return buildAASID(aasID);
 
 		// Build path
-		return aasID+ "/submodels/" +subModelID; // return subModelID+"."+aasID;
+		return aasID+ "/aas/submodels/" +subModelID; // return subModelID+"."+aasID;
 	}
 	
 	
@@ -88,7 +88,7 @@ public class BaSysID {
 	 * @param aasID ID of asset administration shell
 	 * @param subModelID ID of sub model
 	 * 
-	 * @return Built ID in format {@code <scope1>.<scope2>. ... .<scopeN>.<aasID>/submodels/<subModelID> } where scope1 is the topscope
+	 * @return Built ID in format {@code <scope1>.<scope2>. ... .<scopeN>.<aasID>/aas/submodels/<subModelID> } where scope1 is the topscope
 	 */
 	public String buildPath(String[] scope, String aasID, String subModelID) {
 		// Support building the result string
@@ -98,7 +98,7 @@ public class BaSysID {
 		for (int i=0; i<scope.length; i++) result.append("/"+scope[i]);
 		
 		// Build sub model and AAS part
-		result.append(aasID + "/submodels/" + subModelID);
+		result.append(aasID + "/aas/submodels/" + subModelID);
 		
 		// Return build ID
 		return result.toString();
