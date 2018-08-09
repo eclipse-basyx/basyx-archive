@@ -20,7 +20,7 @@
 #include "json/JSONTools.h"
 
 
-
+//
 
 /////////////////////////////////////////////////////////////////
 // Test classes
@@ -135,7 +135,99 @@ TEST_F(TestBaSyxJSON_Deserialize, testPrimitiveValues_string) { // @suppress("In
 	ASSERT_EQ(result->getString(), "abcdefgh");
 }
 
+TEST_F(TestBaSyxJSON_Deserialize, JSONTools_deserialize_string_array)
+{
 
+	std::string stringArray[3] = {"ab", "bc", "cd"};
+
+	BArray *bArray = new BArray(stringArray,3);
+	BRef<BArray> bRefArray = BRef<BArray> (bArray);
+
+	json serVal1 = json_tools.serialize(bRefArray, 0, "");
+
+	std::string *result;
+	BArray *bResult = new BArray(result,3);
+	BRef<BArray> bRefResult = BRef<BArray>(bResult);
+
+	bRefResult = json_tools.deserialize(serVal1, NULL , "");
+
+
+	ASSERT_EQ("ab", bRefResult->getMembersString()[0]);
+	ASSERT_EQ("bc", bRefResult->getMembersString()[1]);
+	ASSERT_EQ("cd", bRefResult->getMembersString()[2]);
+
+}
+
+
+TEST_F(TestBaSyxJSON_Deserialize, JSONTools_deserialize_integer_array)
+{
+
+	int intArray[3] = {4, 6, 8};
+
+	BArray *bArray = new BArray(intArray,3);
+	BRef<BArray> bRefArray = BRef<BArray> (bArray);
+
+	json serVal1 = json_tools.serialize(bRefArray, 0, "");
+
+	int *result;
+	BArray *bResult = new BArray(result,3);
+	BRef<BArray> bRefResult = BRef<BArray>(bResult);
+
+	bRefResult = json_tools.deserialize(serVal1, NULL , "");
+
+
+	ASSERT_EQ(4, bRefResult->getMembersInt()[0]);
+	ASSERT_EQ(6, bRefResult->getMembersInt()[1]);
+	ASSERT_EQ(8, bRefResult->getMembersInt()[2]);
+
+}
+
+TEST_F(TestBaSyxJSON_Deserialize, JSONTools_deserialize_float_array)
+{
+
+	float floatArray[3] = {2.3f, 3.4f, 4.5f};
+
+	BArray *bArray = new BArray(floatArray,3);
+	BRef<BArray> bRefArray = BRef<BArray> (bArray);
+
+	json serVal1 = json_tools.serialize(bRefArray, 0, "");
+
+	float *result;
+	BArray *bResult = new BArray(result,3);
+	BRef<BArray> bRefResult = BRef<BArray>(bResult);
+
+	bRefResult = json_tools.deserialize(serVal1, NULL , "");
+
+
+	ASSERT_EQ(2.3f, (float)bRefResult->getMembersFloat()[0]);
+	ASSERT_EQ(3.4f, (float)bRefResult->getMembersFloat()[1]);
+	ASSERT_EQ(4.5f, (float)bRefResult->getMembersFloat()[2]);
+
+}
+
+
+TEST_F(TestBaSyxJSON_Deserialize, JSONTools_deserialize_double_array)
+{
+
+	double doubleArray[3] = {2.300003, 3.400004, 4.400005};
+
+	BArray *bArray = new BArray(doubleArray,3);
+	BRef<BArray> bRefArray = BRef<BArray> (bArray);
+
+	json serVal1 = json_tools.serialize(bRefArray, 0, "");
+
+	double *result;
+	BArray *bResult = new BArray(result,3);
+	BRef<BArray> bRefResult = BRef<BArray>(bResult);
+
+	bRefResult = json_tools.deserialize(serVal1, NULL , "");
+
+
+	ASSERT_EQ(2.300003, (double)bRefResult->getMembersDouble()[0]);
+	ASSERT_EQ(3.400004, (double)bRefResult->getMembersDouble()[1]);
+	ASSERT_EQ(4.400005, (double)bRefResult->getMembersDouble()[2]);
+
+}
 
 
 /* ************************************************
