@@ -120,7 +120,7 @@
 		CHECK_LIST(par, check, number) \
 		if (check) { \
 			std::advance(it, (number-1)); \
-			if (!(*it)->getType() == BASYS_##type) check=false; \
+			if ((*it)->getType() != BASYS_##type) check=false; \
 			if (check) target = ((BRef<BaSyx_type_##type>) *it)->BaSyx_##get_##type; \
 		} \
 	}

@@ -19,6 +19,7 @@
 #include "ref/BRef.h"
 #include "types/BObjectCollection.h"
 #include "parameter/BParameter.h"
+#include "types/BArray.h"
 
 
 
@@ -270,6 +271,43 @@ TEST_F(TestParameter, testIntegerParameterInvalidTypes) { // @suppress("Invalid 
 	ACCESS_PARAMETER_SAFE(parameterCheck, param, DOUBLE, dpar1); ASSERT_EQ(parameterCheck, false);   // @suppress("Invalid arguments")
 	ACCESS_PARAMETER_SAFE(parameterCheck, param, BOOL,   bpar1); ASSERT_EQ(parameterCheck, false);   // @suppress("Invalid arguments")
 	ACCESS_PARAMETER_SAFE(parameterCheck, param, CHAR,   cpar1); ASSERT_EQ(parameterCheck, false);   // @suppress("Invalid arguments")
+}
+
+/////////////////////////////////////////////////////////////////
+// Tests accessing a single parameter from a parameter list with an invalid parameter type
+TEST_F(TestParameter, testSingleIntegerParameterInvalidType) {
+	// Parameter list members
+	bool   parameterCheck;
+	int    par1, par2, par3;
+	float  fpar1;
+	double dpar1;
+	char   cpar1;
+	bool   bpar1;
+
+
+	// Create parameter list
+	BRef<BObjectCollection> param = BRef<BObjectCollection>(new BObjectCollection());
+	param->add(BRef<BValue>(19));
+
+	// Parameter check should fail with those
+	ACCESS_SINGLE_PARAMETER_SAFE(parameterCheck, param, 1, FLOAT, fpar1); ASSERT_EQ(parameterCheck, false);
+	ACCESS_SINGLE_PARAMETER_SAFE(parameterCheck, param, 1, DOUBLE, dpar1); ASSERT_EQ(parameterCheck, false);
+	ACCESS_SINGLE_PARAMETER_SAFE(parameterCheck, param, 1, BOOL, bpar1); ASSERT_EQ(parameterCheck, false);
+	ACCESS_SINGLE_PARAMETER_SAFE(parameterCheck, param, 1, CHAR, cpar1); ASSERT_EQ(parameterCheck, false);
+}
+
+/////////////////////////////////////////////////////////////////
+// Tests accessing a single parameter from a parameter list with an valid parameter type
+TEST_F(TestParameter, testSingleIntegerParameterValidType) {
+	bool   parameterCheck;
+	int    par1;
+	// Create parameter list
+	BRef<BObjectCollection> param = BRef<BObjectCollection>(new BObjectCollection());
+	param->add(BRef<BValue>(19));
+
+	ACCESS_SINGLE_PARAMETER_SAFE(parameterCheck, param, 1, INT, par1);
+	ASSERT_EQ(parameterCheck, true);
+	ASSERT_EQ(par1, 19);
 }
 
 
