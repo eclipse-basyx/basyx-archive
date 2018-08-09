@@ -45,18 +45,18 @@ public interface IModelProvider {
 	 * Adds an entry to a map or collection
 	 * 
 	 * @param path Path to the requested value
-	 * @param newValue Entry to be inserted. Make sure to distinguish overloaded method by passing a second "foo" parameter for collections
+	 * @param newEntry Entry to be inserted. Make sure to distinguish overloaded method by passing a second "foo" parameter for collections
 	 */
-	public void setModelPropertyValue(String path, Object... newValue) throws Exception;
+	public void setModelPropertyValue(String path, Object... newEntry) throws Exception;
 	
 	
 	/**
 	 * Create a new property, operation, event submodel or aas under the given path
 	 * 
 	 * @param path Path to the entity where the element should be created
-	 * @param newValue new IElement to be created on the server
+	 * @param newEntity new Element to be created on the server
 	 */
-	public void createValue(String path, Object addedValue) throws Exception;
+	public void createValue(String path, Object newEntity) throws Exception;
 	
 	
 	/**

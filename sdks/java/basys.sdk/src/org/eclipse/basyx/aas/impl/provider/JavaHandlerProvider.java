@@ -122,6 +122,12 @@ public class JavaHandlerProvider extends AbstractModelScopeProvider implements I
 		javaHandler.setValue(propPath, newValue);
 		
 	}
+	
+	@Override
+	public void setModelPropertyValue(String path, Object... newValue) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 
 	/**
 	 * Set a submodel property value
@@ -194,6 +200,16 @@ public class JavaHandlerProvider extends AbstractModelScopeProvider implements I
 		
 		// No contained properties
 		return result;
+	}
+
+
+	
+
+
+	@Override
+	public void deleteValue(String path) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 
