@@ -15,8 +15,7 @@
  * ************************************************/
 
 // GTest
-#include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
+#include "regression/support/gtest/gtest.h"
 
 // BaSyx
 #include "api/IElement.h"
@@ -75,17 +74,4 @@ TEST_F(TestBaSyxIElement, testIElementSCRTTI) { // @suppress("Invalid arguments"
 
 	// Check RTTI type information
 	ASSERT_EQ(instance->getTypeName(), "IElementSpec1");                            // @suppress("Invalid arguments")
-}
-
-
-
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-	// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-	// Run all tests
-	return RUN_ALL_TESTS();
 }

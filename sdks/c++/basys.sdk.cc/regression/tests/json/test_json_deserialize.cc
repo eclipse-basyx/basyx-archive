@@ -12,8 +12,7 @@
 // Includes
 
 // GTest
-#include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
+#include "regression/support/gtest/gtest.h"
 
 // BaSyx includes
 #include "ref/BRef.h"
@@ -227,18 +226,6 @@ TEST_F(TestBaSyxJSON_Deserialize, JSONTools_deserialize_double_array)
 	ASSERT_EQ(3.400004, (double)bRefResult->getMembersDouble()[1]);
 	ASSERT_EQ(4.400005, (double)bRefResult->getMembersDouble()[2]);
 
-}
-
-
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-	// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-	// Run all tests
-	return RUN_ALL_TESTS();
 }
 
 

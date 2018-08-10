@@ -13,8 +13,7 @@
  * ************************************************/
 
 // GTest
-#include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
+#include "regression/support/gtest/gtest.h"
 
 // BaSyx
 #include "basysid/BaSysID.h"
@@ -143,17 +142,4 @@ TEST_F(TestBaSyxID, testGetElementID_SM) { // @suppress("Invalid arguments")
 	ASSERT_EQ(BaSysID::getQualifiedElementID(smID4), "smid.AAS1");                             // @suppress("Invalid arguments")
 	ASSERT_EQ(BaSysID::getQualifiedElementID(smID5), "smid.AAS1.scope");                       // @suppress("Invalid arguments")
 	ASSERT_EQ(BaSysID::getQualifiedElementID(smID6), "smid.AAS1.scope");                       // @suppress("Invalid arguments")
-}
-
-
-
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-	// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-	// Run all tests
-	return RUN_ALL_TESTS();
 }

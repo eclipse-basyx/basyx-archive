@@ -13,8 +13,7 @@
  * ************************************************/
 
 // GTest
-#include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
+#include "regression/support/gtest/gtest.h"
 
 // BaSyx
 #include "basysid/BaSysID.h"
@@ -257,17 +256,4 @@ TEST_F(TestBaSyxID, testPathElements3) { // @suppress("Invalid arguments")
 	// - Check list elements
 	ASSERT_EQ(*(iterator++), "patha");                                                    // @suppress("Invalid arguments")
 	ASSERT_EQ(iterator, pathElements.end());                                              // @suppress("Invalid arguments")
-}
-
-
-
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-	// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-	// Run all tests
-	return RUN_ALL_TESTS();
 }

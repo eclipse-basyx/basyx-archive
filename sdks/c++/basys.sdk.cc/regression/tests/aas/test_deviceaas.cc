@@ -14,8 +14,7 @@
  * ************************************************/
 
 // GTest
-#include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
+#include "regression/support/gtest/gtest.h"
 
 // BaSyx
 #include "basysid/BaSysID.h"
@@ -100,19 +99,4 @@ TEST_F(TestDeviceAAS, testStatusSMAccess) { // @suppress("Invalid arguments")
 	// Validate that we are really accessing the correct sub model pointers
 	ASSERT_EQ(deviceStatusSM, deviceStatusSMAlt1);                                           // @suppress("Invalid arguments") // @suppress("Field cannot be resolved")
 	ASSERT_EQ(deviceStatusSM, deviceStatusSMAlt2);                                           // @suppress("Invalid arguments") // @suppress("Field cannot be resolved")
-}
-
-
-
-
-
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-	// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-	// Run all tests
-	return RUN_ALL_TESTS();
 }

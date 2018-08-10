@@ -12,8 +12,7 @@
 // Includes
 
 // GTest
-#include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
+#include "regression/support/gtest/gtest.h"
 
 // BaSyx includes
 #include "ref/BRef.h"
@@ -148,19 +147,3 @@ TEST_F(TestBaSyxRef, testValChange) { // @suppress("Invalid arguments")
 	// Test object counter
 	ASSERT_EQ(globalInstCounter, 1);      // @suppress("Invalid arguments")
 }
-
-
-
-
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-	// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-	// Run all tests
-	return RUN_ALL_TESTS();
-}
-
-

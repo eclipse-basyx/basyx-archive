@@ -12,8 +12,7 @@
 // Includes
 
 // GTest
-#include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
+#include "regression/support/gtest/gtest.h"
 
 // BaSyx includes
 #include "ref/BRef.h"
@@ -309,19 +308,4 @@ TEST_F(TestParameter, testSingleIntegerParameterValidType) {
 	ASSERT_EQ(parameterCheck, true);
 	ASSERT_EQ(par1, 19);
 }
-
-
-
-
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-	// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-	// Run all tests
-	return RUN_ALL_TESTS();
-}
-
 

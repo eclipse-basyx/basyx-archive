@@ -13,8 +13,7 @@
  * ************************************************/
 
 // GTest
-#include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
+#include "regression/support/gtest/gtest.h"
 
 // BaSyx
 #include "types/BaSysTypes.h"
@@ -105,15 +104,3 @@ TEST_F(TestRTTIBaSyxArray, testMetaData) { // @suppress("Invalid arguments")
 	ASSERT_EQ(intArray1.isObject(), false);
 }
 
-
-
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-	// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-	// Run all tests
-	return RUN_ALL_TESTS();
-}

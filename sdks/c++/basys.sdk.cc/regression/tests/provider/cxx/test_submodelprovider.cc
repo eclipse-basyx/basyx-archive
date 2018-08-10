@@ -15,8 +15,7 @@
 // Includes
 
 // GTest
-#include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
+#include "regression/support/gtest/gtest.h"
 
 // StdC++ includes
 #include <list>
@@ -156,18 +155,3 @@ TEST_F(TestCXXModelProviderSubModel, testCXXProviderSMAccess) {                 
 	ASSERT_EQ(res4->getBoolean(), true);
 
 }
-
-
-
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-	// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-	// Run all tests
-	return RUN_ALL_TESTS();
-}
-
-

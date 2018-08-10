@@ -14,8 +14,7 @@
  * ************************************************/
 
 // GTest
-#include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
+#include "regression/support/gtest/gtest.h"
 
 // BaSyx
 #include "basysid/BaSysID.h"
@@ -104,17 +103,3 @@ TEST_F(TestDeviceStatusSM, testStatusSMAccess) { // @suppress("Invalid arguments
 	ASSERT_EQ(*((int  *) nmbr1), 21);                                                 // @suppress("Invalid arguments")
 }
 
-
-
-
-
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-	// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-	// Run all tests
-	return RUN_ALL_TESTS();
-}

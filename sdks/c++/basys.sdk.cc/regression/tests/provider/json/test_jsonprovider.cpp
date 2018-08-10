@@ -5,8 +5,7 @@
  *      Author: schnicke
  */
 
-#include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
+#include "regression/support/gtest/gtest.h"
 
 #include "backends/provider/json/JSONProvider.h"
 #include "api/IModelProvider.h"
@@ -172,15 +171,4 @@ TEST(TestJSONProvider, testInvoke) {
 	ASSERT_EQ(val->getType(), BASYS_INT);
 	ASSERT_EQ(val->getInt(), 3);
 
-}
-
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-	// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-	// Run all tests
-	return RUN_ALL_TESTS();
 }

@@ -12,8 +12,7 @@
 // Includes
 
 // GTest
-#include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
+#include "regression/support/gtest/gtest.h"
 
 // BaSyx includes
 #include "ref/BRef.h"
@@ -358,15 +357,4 @@ TEST_F(TestBaSyxJSON_Serialize, test_serialize_array_double) { // @suppress("Inv
 	ASSERT_EQ("value", (json_tools.getJSONObject(serVal1,"2"))["kind"]);
 
 }
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-	// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-	// Run all tests
-	return RUN_ALL_TESTS();
-}
-
 
