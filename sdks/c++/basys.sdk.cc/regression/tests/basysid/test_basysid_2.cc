@@ -5,9 +5,6 @@
  *      Author: kuhn
  */
 
-
-
-
 /* ************************************************
  * Includes
  * ************************************************/
@@ -18,128 +15,92 @@
 // BaSyx
 #include "basysid/BaSysID.h"
 
-
-
-/* ************************************************
- * Test class
- * ************************************************/
-class TestBaSyxID : public ::testing::Test {
-
-};
-
-
-
 /* ************************************************
  * Test cases
  * ************************************************/
 
 // Test retrieving of unscoped submodel IDs
-TEST_F(TestBaSyxID, testUnscopedSubModels) { // @suppress("Invalid arguments")
+TEST(TestBaSyxID, testUnscopedSubModels) {
 
 	// Build example paths
-	std::string smID  = BaSysID::buildSMID("submodel");                                        // @suppress("Invalid arguments")
+	std::string smID = BaSysID::buildSMID("SM1");
 
 	// Checks
-	ASSERT_EQ(smID,                                 "submodel");                               // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getAASID(smID),              "");                                       // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getQualifiedAASID(smID),     "");                                       // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getSubmodelID(smID),         "submodel");                               // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getPath(smID),               "");                                       // @suppress("Invalid arguments")
+	ASSERT_EQ(smID, "SM1/submodel");
+	ASSERT_EQ(BaSysID::getAASID(smID), "");
+	ASSERT_EQ(BaSysID::getSubmodelID(smID), "SM1");
+	ASSERT_EQ(BaSysID::getPath(smID), "");
 }
-
-
-
 
 // Test retrieving of scoped submodel IDs
-TEST_F(TestBaSyxID, testScopedSubModels) { // @suppress("Invalid arguments")
+TEST(TestBaSyxID, testScopedSubModels) {
 
 	// Build example paths
-	std::string smID  = BaSysID::buildSMID("submodel.aas.scope");                              // @suppress("Invalid arguments")
+	std::string smID = BaSysID::buildSMID("s1.scope/SM1");
 
 	// Checks
-	ASSERT_EQ(smID,                                 "submodel.aas.scope");                     // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getAASID(smID),              "aas");                                    // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getQualifiedAASID(smID),     "aas.scope");                              // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getSubmodelID(smID),         "submodel");                               // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getPath(smID),               "");                                       // @suppress("Invalid arguments")
+	ASSERT_EQ(smID, "s1.scope/SM1/submodel");
+	ASSERT_EQ(BaSysID::getSubmodelID(smID), "SM1");
+	ASSERT_EQ(BaSysID::getPath(smID), "");
 }
-
-
 
 // Test retrieving element ID and qualified element ID of scoped Asset Administration Shell IDs
-TEST_F(TestBaSyxID, testGetElementID) { // @suppress("Invalid arguments")
+TEST(TestBaSyxID, testGetElementID) {
 
 	// Build example paths
-	std::string aasID1  = BaSysID::buildAASID("AAS1");                                         // @suppress("Invalid arguments")
-	std::string aasID2  = BaSysID::buildAASID("AAS1/path");                                    // @suppress("Invalid arguments")
-	std::string aasID3  = BaSysID::buildAASID("AAS1.scope");                                   // @suppress("Invalid arguments")
-	std::string aasID4  = BaSysID::buildAASID("AAS1.scope/path");                              // @suppress("Invalid arguments")
-	std::string aasID5  = BaSysID::buildAASID("aas.AAS1");                                     // @suppress("Invalid arguments")
-	std::string aasID6  = BaSysID::buildAASID("aas.AAS1/path");                                // @suppress("Invalid arguments")
-	std::string aasID7  = BaSysID::buildAASID("aas.AAS1.scope");                               // @suppress("Invalid arguments")
-	std::string aasID8  = BaSysID::buildAASID("aas.AAS1.scope/path");                          // @suppress("Invalid arguments")
+	std::string aasID1 = BaSysID::buildAASID("AAS1");
+	std::string aasID2 = BaSysID::buildAASID("s1.scope/AAS1");
 
 	// Checks
-	ASSERT_EQ(aasID1,                               "aas.AAS1");                               // @suppress("Invalid arguments")
-	ASSERT_EQ(aasID2,                               "aas.AAS1/path");                          // @suppress("Invalid arguments")
-	ASSERT_EQ(aasID3,                               "aas.AAS1.scope");                         // @suppress("Invalid arguments")
-	ASSERT_EQ(aasID4,                               "aas.AAS1.scope/path");                    // @suppress("Invalid arguments")
-	ASSERT_EQ(aasID5,                               "aas.AAS1");                               // @suppress("Invalid arguments")
-	ASSERT_EQ(aasID6,                               "aas.AAS1/path");                          // @suppress("Invalid arguments")
-	ASSERT_EQ(aasID7,                               "aas.AAS1.scope");                         // @suppress("Invalid arguments")
-	ASSERT_EQ(aasID8,                               "aas.AAS1.scope/path");                    // @suppress("Invalid arguments")
-
-	ASSERT_EQ(BaSysID::getElementID(aasID1),        "AAS1");                                   // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getElementID(aasID2),        "AAS1");                                   // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getElementID(aasID3),        "AAS1");                                   // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getElementID(aasID4),        "AAS1");                                   // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getElementID(aasID5),        "AAS1");                                   // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getElementID(aasID6),        "AAS1");                                   // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getElementID(aasID7),        "AAS1");                                   // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getElementID(aasID8),        "AAS1");                                   // @suppress("Invalid arguments")
-
-	ASSERT_EQ(BaSysID::getQualifiedElementID(aasID1), "AAS1");                                 // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getQualifiedElementID(aasID2), "AAS1");                                 // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getQualifiedElementID(aasID3), "AAS1.scope");                           // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getQualifiedElementID(aasID4), "AAS1.scope");                           // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getQualifiedElementID(aasID5), "AAS1");                                 // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getQualifiedElementID(aasID6), "AAS1");                                 // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getQualifiedElementID(aasID7), "AAS1.scope");                           // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getQualifiedElementID(aasID8), "AAS1.scope");                           // @suppress("Invalid arguments")
+	ASSERT_EQ(aasID1, "AAS1/aas");
+	ASSERT_EQ(aasID2, "s1.scope/AAS1/aas");
 }
 
-
-
 // Test retrieving element ID and qualified element ID of scoped sub model IDs
-TEST_F(TestBaSyxID, testGetElementID_SM) { // @suppress("Invalid arguments")
+TEST(TestBaSyxID, testGetElementID_SM) {
 
 	// Build example paths
-	std::string smID1  = BaSysID::buildSMID("smid");                                           // @suppress("Invalid arguments")
-	std::string smID2  = BaSysID::buildSMID("smid/path");                                      // @suppress("Invalid arguments")
-	std::string smID3  = BaSysID::buildSMID("smid.AAS1");                                      // @suppress("Invalid arguments")
-	std::string smID4  = BaSysID::buildSMID("smid.AAS1/path");                                 // @suppress("Invalid arguments")
-	std::string smID5  = BaSysID::buildSMID("smid.AAS1.scope");                                // @suppress("Invalid arguments")
-	std::string smID6  = BaSysID::buildSMID("smid.AAS1.scope/path");                           // @suppress("Invalid arguments")
+	std::string smID1 = BaSysID::buildSMID("smid");
+	std::string smID2 = BaSysID::buildSMID("s1.scope/smid");
 
 	// Checks
-	ASSERT_EQ(smID1,                                "smid");                                   // @suppress("Invalid arguments")
-	ASSERT_EQ(smID2,                                "smid/path");                              // @suppress("Invalid arguments")
-	ASSERT_EQ(smID3,                                "smid.AAS1");                              // @suppress("Invalid arguments")
-	ASSERT_EQ(smID4,                                "smid.AAS1/path");                         // @suppress("Invalid arguments")
-	ASSERT_EQ(smID5,                                "smid.AAS1.scope");                        // @suppress("Invalid arguments")
-	ASSERT_EQ(smID6,                                "smid.AAS1.scope/path");                   // @suppress("Invalid arguments")
+	ASSERT_EQ(smID1, "smid/submodel");
+	ASSERT_EQ(smID2, "s1.scope/smid/submodel");
+}
 
-	ASSERT_EQ(BaSysID::getElementID(smID1),         "smid");                                   // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getElementID(smID2),         "smid");                                   // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getElementID(smID3),         "smid");                                   // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getElementID(smID4),         "smid");                                   // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getElementID(smID5),         "smid");                                   // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getElementID(smID6),         "smid");                                   // @suppress("Invalid arguments")
+TEST(TestBaSyxID, testGetScope) {
+	std::string aas = "s1.scope/AAS1/aas/submodels/SM1/properties";
+	std::vector<std::string> scope = BaSysID::getScope(aas);
+	ASSERT_EQ(scope.size(), (size_t ) 2);
+	ASSERT_EQ(scope[0], "s1");
+	ASSERT_EQ(scope[1], "scope");
+}
 
-	ASSERT_EQ(BaSysID::getQualifiedElementID(smID1), "smid");                                  // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getQualifiedElementID(smID2), "smid");                                  // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getQualifiedElementID(smID3), "smid.AAS1");                             // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getQualifiedElementID(smID4), "smid.AAS1");                             // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getQualifiedElementID(smID5), "smid.AAS1.scope");                       // @suppress("Invalid arguments")
-	ASSERT_EQ(BaSysID::getQualifiedElementID(smID6), "smid.AAS1.scope");                       // @suppress("Invalid arguments")
+TEST(TestBaSyxID, testGetScopeNoScope) {
+	std::string aas = "AAS1/aas/submodels/SM1/properties";
+	std::vector<std::string> scope = BaSysID::getScope(aas);
+	ASSERT_EQ(scope.size(), (size_t ) 0);
+}
+
+TEST(TestBaSyxID, testGetAddress) {
+	std::string aas = "s1.scope/AAS1/aas/submodels/SM1/properties";
+	std::string address = BaSysID::getAddress(aas);
+	ASSERT_EQ(address, "s1.scope/AAS1/aas/submodels/SM1");
+}
+
+TEST(TestBaSyxID, testGetAddressNoScope) {
+	std::string aas = "AAS1/aas/submodels/SM1/properties";
+	std::string address = BaSysID::getAddress(aas);
+	ASSERT_EQ(address, "AAS1/aas/submodels/SM1");
+}
+
+/* ************************************************
+ * Run test suite
+ * ************************************************/
+int main(int argc, char **argv) {
+	// Init gtest framework
+	::testing::InitGoogleTest(&argc, argv);
+
+	// Run all tests
+	return RUN_ALL_TESTS();
 }
