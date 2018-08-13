@@ -6,7 +6,6 @@ TESTS := 	aas/tests_aas.mk \
 			ielement/tests_ielement.mk \
 			json/tests_json.mk \
 			parameter/tests_parameter.mk \
-			provider/cxx/tests_provider_cxx.mk \
 			provider/json/tests_provider_json.mk \
 			submodels/tests_parameter.mk \
 			typertti/tests_typertti.mk

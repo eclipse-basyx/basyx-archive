@@ -11,9 +11,10 @@
 
 #include <string>
 #include "json/JSONTools.h"
+#include "basysid/BaSysID.h"
 
-// TODO: Clock?
 // TODO: Repository?
+// TODO: Implement exception when JSONTools support them
 
 template<typename T>
 class JSONProvider {
@@ -35,30 +36,40 @@ public:
 
 	void processBaSysSet(std::string const& path,
 			std::string const& serializedJSONValue) {
-		BRef<BType> deserialized = jsonTools->deserialize(json::parse(serializedJSONValue),
-				0, providerBackend->getElementScope(path));
-		providerBackend->setModelPropertyValue(path, deserialized);
+		if (!isFrozen(BaSysID::getAddress(path))) {
+			BRef<BType> deserialized = jsonTools->deserialize(
+					json::parse(serializedJSONValue), 0,
+					providerBackend->getElementScope(path));
+			providerBackend->setModelPropertyValue(path, deserialized);
+			incrementClock(BaSysID::getAddress(path));
+		}
 	}
 
 	void processBaSysCreate(std::string const& path,
 			std::string const& serializedJSONValue) {
-		BRef<BType> deserialized = jsonTools->deserialize(json::parse(serializedJSONValue),
-				0, providerBackend->getElementScope(path));
+		BRef<BType> deserialized = jsonTools->deserialize(
+				json::parse(serializedJSONValue), 0,
+				providerBackend->getElementScope(path));
 		providerBackend->createValue(path, deserialized);
 	}
 
 	void processBaSysDelete(std::string const& path,
 			std::string const& serializedJSONValue) {
-		BRef<BType> deserialized = jsonTools->deserialize(json::parse(serializedJSONValue),
-				0, providerBackend->getElementScope(path));
-		providerBackend->deleteValue(path, deserialized);
+		if (!isFrozen(BaSysID::getAddress(path))) {
+			BRef<BType> deserialized = jsonTools->deserialize(
+					json::parse(serializedJSONValue), 0,
+					providerBackend->getElementScope(path));
+			providerBackend->deleteValue(path, deserialized);
+			incrementClock(BaSysID::getAddress(path));
+		}
 	}
 
 	void processBaSysInvoke(std::string const& path,
 			std::string const& serializedJSONValue, char* output,
 			size_t* size) {
-		BRef<BType> deserialized = jsonTools->deserialize(json::parse(serializedJSONValue),
-				0, providerBackend->getElementScope(path));
+		BRef<BType> deserialized = jsonTools->deserialize(
+				json::parse(serializedJSONValue), 0,
+				providerBackend->getElementScope(path));
 		BRef<BType> res = providerBackend->invokeOperation(path, deserialized);
 		serializeToJSON(path, res, output, size);
 	}
@@ -73,6 +84,17 @@ private:
 				providerBackend->getElementScope(path)).dump();
 		memcpy(output, serialized.c_str(), serialized.length());
 		*size = serialized.length();
+	}
+
+	void incrementClock(std::string const& submodelPath) {
+		std::string clockPath = submodelPath + "/properties/clock";
+		BRef<BValue> clock = providerBackend->getModelPropertyValue(clockPath);
+		providerBackend->setModelPropertyValue(clockPath, clock->getInt() + 1);
+	}
+
+	bool isFrozen(std::string const& submodelPath) {
+		return static_cast<BRef<BValue>>(providerBackend->getModelPropertyValue(
+				submodelPath + "/properties/frozen"))->getBoolean();
 	}
 };
 

@@ -93,14 +93,3 @@ TEST(TestBaSyxID, testGetAddressNoScope) {
 	std::string address = BaSysID::getAddress(aas);
 	ASSERT_EQ(address, "AAS1/aas/submodels/SM1");
 }
-
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-	// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-	// Run all tests
-	return RUN_ALL_TESTS();
-}
