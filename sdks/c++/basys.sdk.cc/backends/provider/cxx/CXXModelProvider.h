@@ -57,16 +57,14 @@ class CXXModelProvider : public IModelProvider {
 		/**
 		 * Attach a new AAS to this provider
 		 */
-		void attach(IElement *aas, std::string scope) {
-			// Scope name
-			std::string scopeName;
-
-			// Build scope
-			if (scope.empty()) scopeName=aas->getID(); else scopeName=aas->getID()+"."+scope;
-
+		void attach(IElement *aas, std::string const& path) {
+			
+			std::string scope = BaSysID::getScopeString(path);
 			// Add AAS and scoped name
-			servedAAS.insert(std::pair<std::string, IElement *>(scopeName, aas));
-			aasScopes.insert(std::pair<std::string, std::string>(scopeName, scope));
+			
+			std::string qualifiedElementID = BaSysID::getQualifiedElementID(path);
+			servedAAS.insert(std::pair<std::string, IElement *>(qualifiedElementID, aas));
+			aasScopes.insert(std::pair<std::string, std::string>(path, scope));
 		}
 
 
@@ -86,10 +84,10 @@ class CXXModelProvider : public IModelProvider {
 
 			// Access property path elements
 			// - Create list of path elements and a list iterator
-			std::list<std::string>                 pathElements = BaSysID::splitPropertyPath(propertyPath); // @suppress("Invalid arguments")
-			std::list<std::string>::const_iterator iterator     = pathElements.begin();
+			std::vector<std::string>                 pathElements = BaSysID::splitPropertyPath(propertyPath);
+			std::vector<std::string>::const_iterator iterator     = pathElements.begin();
 			// - Get properties
-			for (int i=1; i<pathElements.size(); i++) {
+			for (size_t i=1; i<pathElements.size(); i++) {
 				element = (IElement *) element->rtti_propertyValue[*(iterator++)];
 			}
 
@@ -107,7 +105,7 @@ class CXXModelProvider : public IModelProvider {
 			// - Pointer to IElement that contains property
 			IElement *element = getBaseElementForPath(aas, propertyPath);
 			// - Name of last property in path
-			std::string propertyName = BaSysID::getIdentifier(propertyPath);                         // @suppress("Invalid arguments")
+			std::string propertyName = BaSysID::getIdentifier(propertyPath);                        
 
 			// Get property RTTI
 			int rttitype = element->rtti_propertyType[propertyName];
@@ -154,14 +152,14 @@ class CXXModelProvider : public IModelProvider {
 			// - Pointer to IElement that contains property
 			IElement *element = getBaseElementForPath(aas, propertyPath);
 			// - Name of last property in path
-			std::string propertyName = BaSysID::getIdentifier(propertyPath);                         // @suppress("Invalid arguments")
+			std::string propertyName = BaSysID::getIdentifier(propertyPath);                        
 
 			// Access property path elements
 			// - Create list of path elements and a list iterator
-			std::list<std::string>                 pathElements = BaSysID::splitPropertyPath(propertyName); // @suppress("Invalid arguments")
-			std::list<std::string>::const_iterator iterator     = pathElements.begin();
+			std::vector<std::string>                 pathElements = BaSysID::splitPropertyPath(propertyName);
+			std::vector<std::string>::const_iterator iterator     = pathElements.begin();
 			// - Get properties
-			for (int i=1; i<pathElements.size(); i++) {
+			for (size_t i=1; i<pathElements.size(); i++) {
 				element = (IElement *) element->rtti_propertyValue[*(iterator++)];
 			}
 			// - Name of last property in path
@@ -234,20 +232,7 @@ class CXXModelProvider : public IModelProvider {
 		 * This is the namespace that is served by this model provider. E.g. iese.fraunhofer.de
 		 */
 		virtual std::string getElementScope(std::string elementPath) {
-			// Iterator that points on found element
-			std::map<std::string, std::string>::iterator iterator;
-
-			// Qualified scope of AAS
-			std::string scopedId = BaSysID::getQualifiedElementID(elementPath); // @suppress("Invalid arguments")
-
-			// Lookup element
-			iterator = aasScopes.find(scopedId);
-
-			// Check if iterator points to actual element
-			if (iterator == aasScopes.end()) return "";
-
-			// Return element
-			return iterator->second; // @suppress("Field cannot be resolved")
+			return BaSysID::getScopeString(elementPath);
 		}
 
 
@@ -259,12 +244,13 @@ class CXXModelProvider : public IModelProvider {
 			BRef<BType> result = BRef<BType>(0);
 
 			// Get IElement reference
-			IElement *aas = servedAAS[BaSysID::getQualifiedElementID(path)]; // @suppress("Invalid arguments")
+			std::string qualified = BaSysID::getQualifiedElementID(path);
+			IElement *aas = servedAAS[qualified];
 			// - Check if AAS is valid
 			if (aas == 0) return result;
 
 			// Get path
-			std::string propertyPath = BaSysID::getPath(path); // @suppress("Invalid arguments")
+			std::string propertyPath = BaSysID::getPath(path);
 
 			// Get property
 			result = getBRefToProperty(aas, propertyPath);
@@ -282,12 +268,12 @@ class CXXModelProvider : public IModelProvider {
 			BRef<BType> result = BRef<BType>(0);
 
 			// Get IElement reference
-			IElement *aas = servedAAS[BaSysID::getQualifiedElementID(path)]; // @suppress("Invalid arguments")
+			IElement *aas = servedAAS[BaSysID::getQualifiedElementID(path)];
 			// - Check if AAS is valid
 			if (aas == 0) return;
 
 			// Get path
-			std::string propertyPath = BaSysID::getPath(path); // @suppress("Invalid arguments")
+			std::string propertyPath = BaSysID::getPath(path);
 
 			// Get property
 			setPropertyValue(aas, propertyPath, newValue);
@@ -308,6 +294,14 @@ class CXXModelProvider : public IModelProvider {
 		virtual void deleteValue(std::string path, BRef<BType> deletedValue) {
 
 		}
+		
+		/**
+		 * Delete a value
+		 */
+		virtual void deleteValue(std::string path) {
+
+		}
+
 
 
 		/**
@@ -318,22 +312,22 @@ class CXXModelProvider : public IModelProvider {
 			BRef<BType> result = BRef<BType>(0);
 
 			// Get IElement reference
-			IElement *aas = servedAAS[BaSysID::getQualifiedElementID(path)];           // @suppress("Invalid arguments")
+			IElement *aas = servedAAS[BaSysID::getQualifiedElementID(path)];          
 			// - Check if AAS is valid
 			if (aas == 0) return result;
 
 			// Get path
-			std::string operationPath = BaSysID::getPath(path);                        // @suppress("Invalid arguments")
+			std::string operationPath = BaSysID::getPath(path);                       
 
 			// IElement that implements operation and operation name
 			// - Pointer to IElement that contains property
 			IElement *element = getBaseElementForPath(aas, operationPath);
 			// - Name of last path element
-			std::string operationName = BaSysID::getIdentifier(operationPath);         // @suppress("Invalid arguments")
+			std::string operationName = BaSysID::getIdentifier(operationPath);        
 
 
 			// Invoke a named function on IElement pointer
-			return element->_basyx_handle(operationName.c_str(), parameter);           // @suppress("Invalid arguments")
+			return element->_basyx_handle(operationName.c_str(), parameter);          
 		}
 
 
