@@ -211,6 +211,93 @@ public:
 	}
 
 	/**
+	 * Get the last element of path that identifies the object
+	 */
+	static std::string getIdentifier(std::string path) {
+		// Try to get path
+		std::string propPath = getPath(path);
+		std::string objectId = "";
+
+		// If a path is given, return last path entry
+		if (propPath.length() > 0) {
+			// Return last path element
+			std::vector<std::string> pathArray = splitPropertyPath(propPath);
+
+			return pathArray.back();
+		}
+
+		// Try to get sub model ID or AAS ID
+		if ((objectId = getSubmodelID(path)).length() > 0)
+			return objectId;
+		if ((objectId = getAASID(path)).length() > 0)
+			return objectId;
+
+		// No identifier given
+		return "";
+	}
+
+	/**
+	 * Get IElement ID
+	 *
+	 * (1) <aasid>/aas                        		--> <aasid>
+	 * (2) <scope>/<aasid>/aas                		--> <aasid>
+	 * (3) <aasid>/aas/submodels               		--> <aasid>
+	 * (4) <scope>/<aasid>/aas/submodels       		--> <aasid>
+	 * (5) <aasid>/aas/submodels/<submodel>   		--> <submodel>
+	 * (6) <scope>/<aasid>/aas/submodels/<submodel>	--> <submodel>
+	 * (7) <submodel>/submodel/..						--> <submodel>
+	 * (8) <scope>/<submodel>/submodel/..				--> <submodel>
+	 */
+	static std::string getElementID(std::string path) {
+		std::vector<std::string> splitted = splitPropertyPath(path);
+		if (path.find("/submodel") != std::string::npos) { // (3-8)
+			for (size_t i = 0; i < splitted.size(); i++) {
+				if (splitted[i] == "submodels") {
+					if (splitted.size() > i + 1) { // (5-6)
+						return splitted[i + 1];
+					} else {
+						return splitted[i - 2]; // (3-4)
+					}
+				} else if (splitted[i] == "submodel") { // (7-8)
+					return splitted[i - 1];
+				}
+			}
+		} else { // (1-2)
+			for (size_t i = 0; i < splitted.size(); i++) {
+				if (splitted[i] == "aas") {
+					return splitted[i - 1];
+				}
+			}
+		}
+		return "";
+	}
+
+	/**
+	 * Get qualified IElement ID
+	 *
+	 * (1) <aasid>/aas                        		--> <aasid>
+	 * (2) <scope>/<aasid>/aas                		--> <scope>/<aasid>
+	 * (3) <aasid>/aas/submodels               		--> <aasid>
+	 * (4) <scope>/<aasid>/aas/submodels       		--> <scope>/<aasid>
+	 * (5) <aasid>/aas/submodels/<submodel>   		--> <submodel>
+	 * (6) <scope>/<aasid>/aas/submodels/<submodel>	--> <scope>/<submodel>
+	 * (7) <submodel>/submodel/..					--> <submodel>
+	 * (8) <scope>/<submodel>/submodel/..			--> <scope>/<submodel>
+	 */
+	static std::string getQualifiedElementID(std::string path) {
+		std::string id = getElementID(path);
+		if (path.find(".") == std::string::npos) { // contains no scope
+			return id;
+		} else {  // Handle scoped ids
+			std::size_t offset = path.find("/");
+			if (offset != std::string::npos && offset != 0) {
+				return path.substr(0, offset) + "/" + id;
+			}
+		}
+		return "";
+	}
+
+	/**
 	 * <pre>
 	 * Get qualified element ID or qualifier from path that my contain scope. Handle the following cases <br>
 	 * @version 0.2
