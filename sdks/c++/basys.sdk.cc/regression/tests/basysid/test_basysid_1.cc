@@ -122,6 +122,13 @@ TEST(TestBaSyxID, testPathComponents) {
 	ASSERT_EQ(BaSysID::getPath(qualSMID2), "");
 }
 
+// Test path components for nested properties
+TEST(TestBaSyxID, testNestedPathComponents) {
+	std::string nested = "SM1/submodel/properties/P1/N1/N2";
+	
+	ASSERT_EQ(BaSysID::getPath(nested), "P1/N1/N2");
+}
+
 // Test paths elements
 TEST(TestBaSyxID, testPathElements) {
 

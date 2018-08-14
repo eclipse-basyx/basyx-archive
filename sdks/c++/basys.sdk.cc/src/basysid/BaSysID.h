@@ -215,13 +215,12 @@ public:
 	 */
 	static std::string getIdentifier(std::string path) {
 		// Try to get path
-		std::string propPath = getPath(path);
 		std::string objectId = "";
 
 		// If a path is given, return last path entry
-		if (propPath.length() > 0) {
+		if (path.length() > 0) {
 			// Return last path element
-			std::vector<std::string> pathArray = splitPropertyPath(propPath);
+			std::vector<std::string> pathArray = splitPropertyPath(path);
 
 			return pathArray.back();
 		}
@@ -330,12 +329,12 @@ public:
 			if (splitted[i] == SubmodelQualifier) {
 
 				// Handle case (11 - 13)
-				if (splitted.size() == i + 3)
-					return splitted[i + 2];
+				if (splitted.size() >= i + 3)
+					return buildPathRest(splitted, i + 2);
 
 				// Handle case (8 - 10)
 				if (splitted.size() == i + 2)
-					return splitted[i + 1];
+					return buildPathRest(splitted, i + 1);
 
 			}
 
@@ -344,11 +343,11 @@ public:
 
 				// Handle case (5 - 7)
 				if (splitted.size() == i + 4)
-					return splitted[i + 3];
+					return buildPathRest(splitted, i + 3);
 
 				// Handle case (2 - 4)
 				if (splitted.size() == i + 3)
-					return splitted[i + 2];
+					return buildPathRest(splitted, i + 2);
 
 				// Handle case (1)
 				if (splitted.size() == i + 1)
@@ -460,6 +459,28 @@ public:
 		} else {
 			return std::vector<std::string>();
 		}
+	}
+	
+	/**
+	 * Returns the scope of a path, if there is any
+	 */
+	static std::string getScopeString(std::string path) {
+		if (path.find('.') != std::string::npos) {
+			size_t offset = path.find("/");
+			return path.substr(0, offset);
+		} else {
+			return "";
+		}
+	}
+	
+private:
+	static std::string buildPathRest(std::vector<std::string> const& splitted, size_t start) {
+		std::string ret = splitted[start];
+		start++;
+		for(size_t i = start; i < splitted.size(); i++) {
+			ret += "/" + splitted[i];
+		}
+		return ret;
 	}
 };
 
