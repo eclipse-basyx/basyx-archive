@@ -64,6 +64,13 @@ public:
 		}
 	}
 
+	void processBaSysDelete(std::string const& path) {
+		if (!isFrozen(BaSysID::getAddress(path))) {
+			providerBackend->deleteValue(path);
+			incrementClock(BaSysID::getAddress(path));
+		}
+	}
+
 	void processBaSysInvoke(std::string const& path,
 			std::string const& serializedJSONValue, char* output,
 			size_t* size) {

@@ -17,8 +17,6 @@
  */
 class ModelProviderStub: public IModelProvider {
 public:
-	virtual ~ModelProviderStub() {
-	}
 
 	std::vector<std::string> path;
 	BRef<BType> value;
@@ -71,6 +69,10 @@ public:
 			override {
 		this->path.push_back(path);
 		this->value = deletedValue;
+	}
+
+	virtual void deleteValue(std::string path) override {
+		this->path.push_back(path);
 	}
 
 	/**
@@ -151,8 +153,8 @@ TEST(TestJSONProvider, testCreate) {
 }
 
 /////////////////////////////////////////////////////////////////
-// Tests processBaSysDelete method
-TEST(TestJSONProvider, testDelete) {
+// Tests collection processBaSysDelete method
+TEST(TestJSONProvider, testDeleteFromCollection) {
 	std::unique_ptr<JSONTools> jsonTools(new JSONTools());
 	std::unique_ptr<ModelProviderStub> stub(new ModelProviderStub());
 	JSONProvider<ModelProviderStub> provider(stub.get(), jsonTools.get());
@@ -170,6 +172,27 @@ TEST(TestJSONProvider, testDelete) {
 
 	ASSERT_EQ(stub->value->getType(), BASYS_INT);
 	ASSERT_EQ(static_cast<BRef<BValue>>(stub->value)->getInt(), 6);
+
+	// Check clock
+	ASSERT_EQ(stub->clock, 1);
+}
+
+/////////////////////////////////////////////////////////////////
+// Tests processBaSysDelete method
+TEST(TestJSONProvider, testDelete) {
+	std::unique_ptr<JSONTools> jsonTools(new JSONTools());
+	std::unique_ptr<ModelProviderStub> stub(new ModelProviderStub());
+	JSONProvider<ModelProviderStub> provider(stub.get(), jsonTools.get());
+
+	// Perform call
+	std::string path = "TestPath4/aas/submodels/SM1/";
+	std::string prop = path + "properties/P1";
+	std::string frozen = path + "properties/frozen";
+	provider.processBaSysDelete(prop);
+
+	// Check for correctness
+	ASSERT_EQ(stub->path.at(0), frozen);
+	ASSERT_EQ(stub->path.at(1), prop);
 
 	// Check clock
 	ASSERT_EQ(stub->clock, 1);

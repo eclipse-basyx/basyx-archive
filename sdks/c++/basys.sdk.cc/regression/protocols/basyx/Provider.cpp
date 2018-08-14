@@ -1,19 +1,24 @@
-#define WIN32_LEAN_AND_MEAN
+#define _WIN32_WINNT 0x0501
 
-#include <WinSock2.h>
 #include <WS2tcpip.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 
 //http://www.askyb.com/windows-socket/windows-socket-example-tcp-client-and-server/
 
-// link with Ws2_32.lib
-//#pragma comment(lib, "Ws2_32.lib")
+#include "winsock_fix.h"
 
 #define DEFAULT_PORT "27015"
 #define DEFAULT_BUFFER_LENGTH	512
 
+#include "regression/support/aas/ExampleAAS1.h"
+#include "backends/provider/cxx/CXXModelProvider.h"
+#include <iostream>
+#include "src/json/JSONTools.h"
+
 int main() {
+	setbuf(stdout, NULL);
 
 	WSADATA wsaData;
 
@@ -81,6 +86,23 @@ int main() {
 		return 1;
 	}
 
+
+	ExampleAAS1 *ex1AAS = new ExampleAAS1("aas1", "ExampleAAS1");
+	ExampleAAS1 *ex2AAS = new ExampleAAS1("aas2", "ExampleAAS1");
+
+
+		// Instantiate AAS provider
+	CXXModelProvider *aasProvider = new CXXModelProvider();
+		// - Attach AAS to provider
+	std::string provider = "iese.fraunhofer.de";
+	aasProvider->attach(ex1AAS, "iese.fraunhofer.de");
+	aasProvider->attach(ex2AAS, "iese.fraunhofer.de");
+
+	JSONTools* jTools = new JSONTools();
+
+
+	printf("Startup finished, waiting for connection\n");
+
 	SOCKET ClientSocket;
 
 	ClientSocket = INVALID_SOCKET;
@@ -100,6 +122,9 @@ int main() {
 	char recvbuf[DEFAULT_BUFFER_LENGTH];
 	int iSendResult;
 
+
+
+
 	// reveice until the client shutdown the connection
 	do {
 		iResult = recv(ClientSocket, recvbuf, DEFAULT_BUFFER_LENGTH, 0);
@@ -113,24 +138,31 @@ int main() {
 
 			//split the string in order to retrieve the propertyName and the Scope
 
-			ExampleAAS1 *ex1AAS = new ExampleAAS1();
-			ExampleAAS1 *ex2AAS = new ExampleAAS1();
+			std::string str = std::string(msg);
 
-
-				// Instantiate AAS provider
-			CXXModelProvider *aasProvider = new CXXModelProvider();
-				// - Attach AAS to provider
-			std::string provider;
-			aasProvider->attach(ex1AAS, provider);
+			std::cout << "Received: " << str << std::endl;
+			std::string scope = aasProvider->getElementScope(str);
+			printf("3a :%s\n", scope.c_str());
+			if(scope != "iese.fraunhofer.de") {
+				std::cout << "Unknown scope: " << scope << std::endl;
+			}
 
 			//(Scope is before the property name)
 			//check if the scope is registered
-			//create AAS
+
 			//retrieve the property value //??? From where??
 			//serialize property value in JSON,
 			//send the value to the client
 
-			iSendResult = send(ClientSocket, recvbuf, iResult, 0);
+			BRef<BValue> type = aasProvider->getModelPropertyValue(str);
+
+			std::cout << "Type: " << type->getType() << std::endl;
+			std::cout << "Value: " << type->getInt() << std::endl;
+
+			json json = jTools->serialize(type, 0, scope);
+			std::cout << "Responding: " << json.dump() << std::endl;
+			std::string toSend = json.dump();
+			iSendResult = send(ClientSocket, toSend.c_str(), toSend.size(), 0);
 
 			if (iSendResult == SOCKET_ERROR)
 			{
@@ -141,6 +173,7 @@ int main() {
 			}
 
 			printf("Bytes sent: %i\n", iSendResult);
+			return 0;
 		}
 		else if (iResult == 0)
 			printf("Connection closed\n");

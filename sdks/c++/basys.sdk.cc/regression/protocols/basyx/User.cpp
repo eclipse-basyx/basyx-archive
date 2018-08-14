@@ -5,7 +5,9 @@
 #include <iostream>
 #include <string>
 
-#include "JSONTools.h"
+#include "winsock_fix.h"
+
+#include "json/JSONTools.h"
 
 
 #define DEFAULT_PORT "27015"
@@ -13,7 +15,7 @@
 
 class Client {
 public:
-	Client(char* servername)
+	Client(const char* servername)
 	{
 		szServerName = servername;
 		ConnectSocket = INVALID_SOCKET;
@@ -129,8 +131,11 @@ public:
 			char msg[DEFAULT_BUFFER_LENGTH];
 			memset(&msg, 0, sizeof(msg));
 			strncpy(msg, recvbuf, iResult);
-
 			printf("Received: %s\n", msg);
+			JSONTools* t = new JSONTools();
+			BRef<BValue> val = t->deserialize(json::parse(msg), 0, "iese.fraunhofer.de");
+
+			std::cout << "Type: " << val->getType() << ", Value: " << val->getInt() << std::endl;
 
 			return true;
 		}
@@ -140,25 +145,27 @@ public:
 	}
 
 private:
-	char* szServerName;
+	const char* szServerName;
 	SOCKET ConnectSocket;
 };
 
 
-int main(int argc, CHAR* argv[])
+int main()
 {
-
+	setbuf(stdout, NULL);
 	std::string msg;
 	JSONTools json_tools;
 	//modular client
-	Client client("127.0.0.1");
+	std::string ip = "127.0.0.1";
+	Client client(ip.c_str());
 
 	if (!client.Start())
 		return 1;
 
 	//Client sends plain text command to the server.
-	std::string s = "aas.iese.fraunhofer.de/PartModel.Property1";
+	std::string s = "aas.aas1.iese.fraunhofer.de/property1";
 	client.Send((char*)s.c_str());
+	std::cout << "Send data, waiting for response" << std::endl;
 	client.Recv();
 
 	client.Stop();
