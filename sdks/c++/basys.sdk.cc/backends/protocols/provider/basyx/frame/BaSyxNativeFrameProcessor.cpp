@@ -10,7 +10,7 @@
 #include "backends/protocols/provider/basyx/CoderTools.h"
 #include "backends/protocols/provider/basyx/StringTools.h"
 #include "backends/protocols/provider/basyx/frame/BaSyxNativeFrameHelper.h"
-#include "backends/protocols/provider/basyx/BaSyxCommand.h"
+#include "backends/protocols/basyx/BaSyx.h"
 
 BaSyxNativeFrameProcessor::BaSyxNativeFrameProcessor(IModelProvider* providerBackend,
 		JSONTools* jsonTools) {
@@ -39,7 +39,7 @@ void BaSyxNativeFrameProcessor::processInputFrame(char const* rxFrame,
 		processCreate(rxFrame, txFrame, txSize);
 		break;
 	case BaSyxCommand::DEL:
-		processDelete(rxFrame, rxSize - 1, txFrame, txSize);
+		processDelete(rxFrame, rxSize - offset, txFrame, txSize);
 		break;
 	case BaSyxCommand::INVOKE:
 		processInvoke(rxFrame, txFrame, txSize);
@@ -62,9 +62,9 @@ void BaSyxNativeFrameProcessor::processGet(char const* rxFrame, char* txFrame,
 	// N byte return value
 	jsonProvider->processBaSysGet(path, txFrame + 5, txSize);
 
-	// Set return value size
+	// Set return string size
 	CoderTools::setInt32(txFrame + 1, 0, *txSize);
-	*txSize += 4;
+	*txSize += BASYX_STRINGSIZE_SIZE;
 	
 	// Set result field to 0 to indicate success
 	txFrame[0] = 0;
@@ -102,7 +102,7 @@ void BaSyxNativeFrameProcessor::processDelete(char const* rxFrame, std::size_t r
 	std::string path = BaSyxNativeFrameHelper::getString(rxFrame, 0);
 
 	// Check if there is a serialized json after the path to distinguish between map/collection delete and simple delete
-	if (path.size() + 4 < rxSize) {
+	if (path.size() + BASYX_STRINGSIZE_SIZE < rxSize) {
 		std::string serializedValue = BaSyxNativeFrameHelper::getString(rxFrame,
 				1);
 		jsonProvider->processBaSysDelete(path, serializedValue);
@@ -131,7 +131,7 @@ void BaSyxNativeFrameProcessor::processInvoke(char const* rxFrame, char* txFrame
 
 	// Set return value size
 	CoderTools::setInt32(txFrame + 1, 0, *txSize);
-	*txSize += 4;
+	*txSize += BASYX_STRINGSIZE_SIZE;
 
 	// Set result field to 0 to indicate success
 	txFrame[0] = 0;

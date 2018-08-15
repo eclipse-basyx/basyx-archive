@@ -9,7 +9,7 @@
 #include <memory>
 
 #include "backends/protocols/provider/basyx/frame/BaSyxNativeFrameProcessor.h"
-#include "backends/protocols/provider/basyx/BaSyxCommand.h"
+#include "backends/protocols/basyx/BaSyx.h"
 #include "gtest/gtest.h"
 #include "gtest/gtest-all.cc"
 #include "regression/tests/backends/protocols/provider/basyx/frame/MockupModelProvider.h"

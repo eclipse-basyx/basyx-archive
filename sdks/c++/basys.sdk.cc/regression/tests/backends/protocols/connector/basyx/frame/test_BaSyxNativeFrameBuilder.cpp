@@ -11,7 +11,7 @@
 #include "gtest/gtest-all.cc"
 
 #include "backends/protocols/connector/basyx/frame/BaSyxNativeFrameBuilder.h"
-#include "backends/protocols/provider/basyx/BaSyxCommand.h"
+#include "backends/protocols/basyx/BaSyx.h"
 #include "backends/protocols/provider/basyx/StringTools.h"
 
 

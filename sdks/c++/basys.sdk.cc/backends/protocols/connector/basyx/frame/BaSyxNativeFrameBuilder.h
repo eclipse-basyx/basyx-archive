@@ -10,7 +10,7 @@
 
 #include <string>
 
-#include "backends/protocols/provider/basyx/BaSyxCommand.h"
+#include "backends/protocols/basyx/BaSyx.h"
 #include "backends/protocols/provider/basyx/frame/BaSyxNativeFrameProcessor.h"
 #include "types/BType.h"
 #include "ref/BRef.h"

@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 #include "backends/protocols/provider/basyx/StringTools.h"
+#include "backends/protocols/basyx/BaSyx.h"
 
 class BaSyxNativeFrameHelper {
 public:
@@ -26,7 +27,7 @@ public:
 			std::size_t stringSize = CoderTools::getInt32(data, 0);
 
 			// Increment data pointer to skip string size value and the string itself
-			data += 4 + stringSize;
+			data += BASYX_STRINGSIZE_SIZE + stringSize;
 		}
 
 		return StringTools::fromArray(data);
@@ -36,11 +37,13 @@ public:
 		std::cout << CoderTools::getInt32(data, 0) << " " << (int) data[4];
 		data += 5;
 		size -= 5;
+		
+		// Iterate over the array to find all strings
 		while (size > 0) {
 			std::cout << " ";
 			std::string str = StringTools::fromArray(data);
-			data += str.length() + 4;
-			size -= str.length() + 4;
+			data += str.length() + BASYX_STRINGSIZE_SIZE;
+			size -= str.length() + BASYX_STRINGSIZE_SIZE;
 			std::cout << str;
 		}
 		std::cout << std::endl;
