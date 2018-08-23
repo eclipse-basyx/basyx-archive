@@ -3,6 +3,8 @@ package org.eclipse.basyx.aas.backend.modelprovider.http;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -125,7 +127,7 @@ public class HTTPProvider<T extends IModelProvider> extends BasysHTTPServelet {
 		StringBuilder     serValue  = new StringBuilder(); 
 		while (bufReader.ready()) {serValue.append(bufReader.readLine());}
 		
-		this.providerBackend.processBasysPost(path, serValue.toString(), resp.getWriter());
+		this.providerBackend.processBaSysPost(path, serValue.toString(), resp.getWriter());
 	}
 
 
@@ -148,9 +150,10 @@ public class HTTPProvider<T extends IModelProvider> extends BasysHTTPServelet {
 		
 		// Extract action parameter
 		String action = req.getParameter("action");
+		Map<String, String[]> params = req.getParameterMap();
 		
 		// Process patch request
-		this.providerBackend.processBasysPatch(path, serValue.toString(), action, resp.getWriter());
+		this.providerBackend.processBaSysPatch(path, serValue.toString(), action, resp.getWriter());
 	 }
 	 
 	 
@@ -171,7 +174,7 @@ public class HTTPProvider<T extends IModelProvider> extends BasysHTTPServelet {
 		StringBuilder     serValue  = new StringBuilder(); 
 		while (bufReader.ready()) serValue.append(bufReader.readLine());
 		
-		this.providerBackend.processBasysDelete(path, resp.getWriter());
+		this.providerBackend.processBaSysDelete(path, resp.getWriter());
 	}
 }
 

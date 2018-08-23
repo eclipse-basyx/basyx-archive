@@ -31,7 +31,7 @@ public interface IBasysConnector {
 	public void basysSet(String address, String servicePath, Object... parameters) throws ServerException;
 	
 	/**
-	 * Invoke a Basys Post operation. Creates a new Property, Operation, Event, Submodel or AAS
+	 * Invoke a Basys Create operation. Creates a new Property, Operation, Event, Submodel or AAS
 	 * @throws ServerException that carries the Exceptions thrown on the server
 	 */
 	public Object basysCreate(String address, String servicePath, Object... parameters) throws ServerException;
@@ -43,13 +43,13 @@ public interface IBasysConnector {
 	public Object basysInvoke(String address, String servicePath, Object... parameters) throws ServerException;
 	
 	/**
-	 * Invoke a Basys operation. Deletes any resource under the given path.
+	 * Invoke a Basys Delete operation. Deletes any resource under the given path.
 	 * @throws ServerException that carries the Exceptions thrown on the server
 	 */
 	public void basysDelete(String address, String servicePath) throws ServerException;
 	
 	/**
-	 * Invoke a Basys oxperation. Deletes an entry from a map or collection by the given key
+	 * Invoke a Basys Delete operation. Deletes an entry from a map or collection by the given key
 	 * @throws ServerException that carries the Exceptions thrown on the server
 	 */
 	public void basysDelete(String address, String servicePath, Object obj) throws ServerException;

@@ -46,7 +46,7 @@ public class TestsuiteDirectory extends PreconfiguredDirectory {
 		// - Sub models of RestAAS
 		addMapping("RestAAS/aas/submodels/frozenSM",     "http://localhost:8080/basys.sdk/Testsuite/");
 		
-		// - Sub models oSubModel2TempAAS
+		// - Sub models of SubModel2TempAAS
 		addMapping("SubModel2TempAAS/aas/submodels/Stub2SM",  "http://localhost:8080/basys.sdk/Testsuite/Stub1AASSubmodel2/");
 		addMapping("SubModel2TempAAS/aas/submodels/mainSM",   "http://localhost:8080/basys.sdk/Testsuite/Stub2AASSubmodel/");
 		

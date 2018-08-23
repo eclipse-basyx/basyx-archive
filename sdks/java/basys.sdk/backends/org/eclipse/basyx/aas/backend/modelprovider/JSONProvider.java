@@ -173,7 +173,7 @@ public class JSONProvider<T extends IModelProvider> {
 	 * @param serializedJSONValue
 	 * @param outputStream
 	 */
-	public void processBasysPost(String path, String serializedJSONValue, PrintWriter outputStream) {
+	public void processBaSysPost(String path, String serializedJSONValue, PrintWriter outputStream) {
 		// Extract parameters
 		Object[] parameter = null;
 		try {
@@ -188,7 +188,7 @@ public class JSONProvider<T extends IModelProvider> {
 		// Determine action
 		// - Checks if path indicates that an operation needs to be executed (the last '/' is important to distinguish from creating a new operation)
 		String action;
-		if (path.contains("/operations/")) {
+		if (path.contains("/operations/")) { // FIXME: If a nested operation is called, there is no /operations/
 			action = "INVOKE";
 		} else {
 			action = "CREATE";
@@ -267,13 +267,17 @@ public class JSONProvider<T extends IModelProvider> {
 	 * @param action
 	 * @param outputStream
 	 */
-	public void processBasysPatch(String path, String serializedJSONValue, String action, PrintWriter outputStream) {
+	public void processBaSysPatch(String path, String serializedJSONValue, String action, PrintWriter outputStream) {
 		
 		// Extract parameters
 		Object[] parameter = null;
 		try {
 			JSONObject json = new JSONObject(serializedJSONValue); 
-			parameter  = (Object[]) JSONTools.Instance.deserialize(json); 
+			try {
+				parameter  = (Object[]) JSONTools.Instance.deserialize(json); 
+			} catch (ClassCastException e1) {
+				parameter = new Object[1]; parameter[0] = JSONTools.Instance.deserialize(json);
+			}
 		} catch (JSONException e)   {
 			sendException(new ServerException("HTTP Patch failed. Wrong JSON parameter body format"), path, outputStream);
 		}
@@ -308,7 +312,7 @@ public class JSONProvider<T extends IModelProvider> {
 						break;
 						
 					default:
-						sendException(new IllegalArgumentException("Action not supported."), path, outputStream);
+						sendException(new ServerException("Action not supported."), path, outputStream);
 				}
 				
 			} catch (Exception e) {
@@ -327,7 +331,7 @@ public class JSONProvider<T extends IModelProvider> {
 	 * @param serializedJSONValue
 	 * @param outputStream
 	 */
-	public void processBasysDelete(String path, PrintWriter outputStream) {
+	public void processBaSysDelete(String path, PrintWriter outputStream) {
 		
 		// Make submodel path reference 
 		String aasID = BaSysID.instance.getAASID(path);

@@ -3,6 +3,8 @@ package org.eclipse.basyx.testsuite.support.backend.basyx.servers;
 import org.eclipse.basyx.aas.backend.modelprovider.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.aas.impl.provider.JavaObjectProvider;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.aas.Stub1AAS;
+import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.aas.Stub2AAS;
+import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.MainSMSubmodel;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub1Submodel;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub2Submodel;
 
@@ -27,6 +29,10 @@ public class AASServer {
 		modelProvider.addModel(new Stub1AAS());
 		modelProvider.addModel(new Stub1Submodel(), "Stub1AAS");
 		modelProvider.addModel(new Stub2Submodel(), "Stub1AAS");
+		
+		
+		modelProvider.addModel(new Stub2AAS());
+		modelProvider.addModel(new MainSMSubmodel(), "Stub2AAS" );
 
 		// Create native BaSyx TCP server using default port
 		BaSyxTCPServer<JavaObjectProvider> tcpServer = new BaSyxTCPServer<JavaObjectProvider>(modelProvider);

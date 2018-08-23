@@ -104,7 +104,7 @@ public class HTTPConnector implements IBasysConnector {
 	
 	
 	/**
-	 * Invoke a BaSys post operation via HTTP POST
+	 * Invoke a Basys Post operation. Creates a new Property, Operation, Event, Submodel or AAS via HTTP POST
 	 * @param address the server address from the directory
 	 * @param servicePath the URL suffix for the requested property
 	 * @param parameter 

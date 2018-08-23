@@ -62,8 +62,8 @@ public class MainSMSubmodel extends SubModel {
 	    
 	    // Initialize dummy AAS
 	    AssetAdministrationShell aas = new AssetAdministrationShell();
-	    aas.setId("SubModel2TempAAS");
-	    aas.setName("SubModel2TempAAS");
+	    aas.setId("Stub2AAS"); // ("SubModel2TempAAS");
+	    aas.setName("Stub2AAS"); //SubModel2TempAAS");
 	    this.setParent(aas);
 
 
