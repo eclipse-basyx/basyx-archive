@@ -44,7 +44,9 @@ public class BaSysID {
 	 * 
 	 */
 	public String buildAASID(String aasID) {
-		return aasID + "/aas";
+	
+		return aasID.endsWith("/aas") ? aasID : aasID + "/aas";
+		
 	}
 	
 	
@@ -57,7 +59,8 @@ public class BaSysID {
 	 * @return Built ID in format {@code <smID>/submodel} (mind the "s"!)
 	 */
 	public String buildSMID(String smID) {
-		return smID + "/submodel";
+		
+		return smID.endsWith("/submodel") ? smID : smID + "/submodel";
 	}
 	
 	
@@ -79,6 +82,27 @@ public class BaSysID {
 		return aasID+ "/aas/submodels/" +subModelID; // return subModelID+"."+aasID;
 	}
 	
+	/**
+	 * Create default service path 
+	 * @param qualifier refers to a qualifier "properties", "operations" or "events"
+	 * @param path can be null if a type qualifier
+	 */
+	public String buildPath(String aasID, String aasSubmodelID, String path, String qualifier) {
+		String servicePath = "";
+		
+		if (aasSubmodelID!=null && aasID != null) { 
+			servicePath = buildAASID(aasID) + "/submodels/"+aasSubmodelID;		
+		
+		} else if (aasSubmodelID != null && aasID == null) {
+			servicePath = aasSubmodelID +"/submodel"; // handles single submodel case
+		}
+		
+		if (qualifier!=null) 	 servicePath = servicePath + "/" + qualifier;
+		if (path!=null)      	 servicePath = servicePath + "/" + path;
+		
+		return servicePath;
+	}
+	
 	
 	/**
 	 * Create a scoped ID string for the directory server. The scope will be reversed so that top level scope comes last.
@@ -88,17 +112,17 @@ public class BaSysID {
 	 * @param aasID ID of asset administration shell
 	 * @param subModelID ID of sub model
 	 * 
-	 * @return Built ID in format {@code <scope1>.<scope2>. ... .<scopeN>.<aasID>/aas/submodels/<subModelID> } where scope1 is the topscope
+	 * @return Build ID in format {@code <scope1>.<scope2>. ... .<scopeN>/<aasID>/aas/submodels/<subModelID> } where scope1 is the topscope
 	 */
 	public String buildPath(String[] scope, String aasID, String subModelID) {
 		// Support building the result string
 		StringBuilder result = new StringBuilder();
 		
 		// Append reversed scope
-		for (int i=0; i<scope.length; i++) result.append("/"+scope[i]);
+		for (int i=0; i<scope.length; i++) result.append("."+scope[i]);
 		
 		// Build sub model and AAS part
-		result.append(aasID + "/aas/submodels/" + subModelID);
+		result.append("/" + buildAASID(aasID) + "/submodels/" + subModelID);
 		
 		// Return build ID
 		return result.toString();
@@ -112,7 +136,7 @@ public class BaSysID {
 	 * @param scope sub model scope
 	 * @param subModelID ID of sub model
 	 * 
-	 * @return Built ID in format {@code <scope1>/<scope2>/.../<scopeN>/<subModelID>/submodel } where scope1 is the topscope
+	 * @return Built ID in format {@code <scope1>.<scope2>.....<scopeN>/<subModelID>/submodel } where scope1 is the topscope
 	 */
 	public String buildPath(String[] scope, String subModelID) {
 		// Support building the result string
@@ -122,7 +146,7 @@ public class BaSysID {
 		for (int i=0; i<scope.length; i++) result.append("/"+scope[i]);
 		
 		// Build sub model part
-		result.append(buildSMID(subModelID)); 
+		result.append("/" + buildSMID(subModelID)); 
 		
 		// Return build ID
 		return result.toString();
@@ -133,9 +157,9 @@ public class BaSysID {
 	
 	/**
 	 * <pre>
-	 *   Get aas id from a qualified path that my contain scope. Handle the following cases <br>
+	 *   Get aas id from a qualified path that may contain scope. Handle the following cases <br> Truncates scope!
 	 *  @version 0.2
-	 *  @return "" or aasID if available
+	 *  @return "" or aasID and scope if available
 	 *  @param path has format <br>
 	 *  (1) {@code <aasID>/aas } or <br>
 	 *  (2) {@code <aasID>/aas/submodels } or <br>
@@ -150,7 +174,7 @@ public class BaSysID {
 		// (1-4) search for aas id
 		for (int i=1;i<splitted.length;i++) {
 			
-			// Search for <aasID>/aas pattern and return preceding id
+			// Search for <aasID>/aas pattern and return preceding id (and scope)
 			if (splitted[i].equals("aas")) return splitted[i-1];
 		}
 		// (5) A submodelID gets processed
@@ -162,38 +186,30 @@ public class BaSysID {
 	
 	
 	/**
-	 * Get qualified service path 
-	 * @param path {@code <aasID>.<scope1>...<scopeN>/<qualifiers> or <submodelID>.<scope1>...<scopeN>/<qualifiers>}
- 	 * @return {@code <aasID>/<qualifiers> or <submodelID>/<qualifiers>}
+	 * Takes the possibly scoped address and returns the service path starting from it
+	 * @param path {@code <scope1>...<scopeN>/<aasID>/<qualifiers> or <scope1>...<scopeN>/<submodelID>/<qualifiers>}
+	 * @param address is the scoped aasId or submodel
+ 	 * @return {@code scope/<aasID>/<qualifiers> or scope/<submodelID>/<qualifiers>}
 	 */
-	public String getServicePath(String path) {
+	public String getScopedServicePath(String path, String address) {
+		
+		return path.substring(path.indexOf(address));
+	}
+	
+	
+	
+	/**
+	 * Return un-scoped service path
+	 * @param path
+	 * @return the service path without the scope
+	 */
+	public String getUnScopedServicePath(String path) {
 		String aasID = getAASID(path);
 		String submodelID = getSubmodelID(path);
 		
-		// return everything behind aasID/....
-		if ((aasID != null) && (aasID.length()!=0))  {
-			
-			String id = null;
-			
-			// Remove scope
-			String[] splitted = aasID.split("\\.");
-			if (splitted.length > 0) {
-				id = splitted[0];
-			}
-			return id + path.substring(path.indexOf("/aas")); // return <aasID>/<qualifiers>
-		}
-		
-		else // return everything behind submodelID/...
-		{
-			String id = null;
-			
-			// Remove scope
-			String[] splitted = submodelID.split("\\.");
-			if (splitted.length > 0) {
-				id = splitted[0];
-			}
-			return id + path.substring(path.indexOf("/submodel")); // return <submodelID>/<qualifiers>
-		}
+		if (aasID != null) return aasID + path.substring(path.indexOf("/aas")); 
+		if (submodelID != null) return aasID + path.substring(path.indexOf("/submodel"));
+		return ""; 
 	}
 
 	
@@ -336,7 +352,7 @@ public class BaSysID {
 	
 	
 	/**
-	 * Get qualified address (submodel ID and AAS ID)
+	 * Get scoped, qualified address (submodel ID and AAS ID)
 	 * {@code example input: Testsuite/GW/IESE/line1/gateway_line12/device2.line2.manufacturing.de/aas }
 	 * TODO check compatible with version 0.2
 	 */
@@ -353,6 +369,25 @@ public class BaSysID {
 		
 		// Path has no address component
 		return "";*/
+	}
+
+
+
+
+
+	/**
+	 * Add Scope to an AAS ID
+	 * @param aasID
+	 * @param scope
+	 * @return
+	 */
+	public String addScope(String aasID, String scope) {
+		
+		// Case that aasID has other scope
+		if (aasID.indexOf("/") != -1 ) return scope +"."+ aasID;
+		
+		// Otherwise
+		return scope + "/" + aasID;
 	}	
 }
 

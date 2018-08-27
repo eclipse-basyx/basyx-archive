@@ -29,7 +29,7 @@ public class TestAASGatewayReferences {
 	@Test
 	void test() {
 		// Create model provider
-		RESTHTTPClientProvider subModelProvider = new RESTHTTPClientProvider("device2.line2.manufacturing.de", new GatewayTestsuiteDirectoryLine2IESE());
+		RESTHTTPClientProvider subModelProvider = new RESTHTTPClientProvider("line2.manufacturing.de", new GatewayTestsuiteDirectoryLine2IESE());
 		
 		// - Create AAS and sub model instances
 		IAssetAdministrationShell stub1AAS = new AAS_Line2_Device2();
@@ -40,7 +40,7 @@ public class TestAASGatewayReferences {
 		subModelProvider.addModel(stub1SM);
 		
 		// Get element references from object provider
-		Map<String, IElementReference> stub1AASModels     = subModelProvider.getContainedElements("device2.line2.manufacturing.de/aas/submodels/status/properties"); // FIXME not able to resolve address
+		Map<String, IElementReference> stub1AASModels     = subModelProvider.getContainedElements("line2.manufacturing.de/device2/aas/submodels/status/properties"); // FIXME not able to resolve address
 		
 		// Print contained elements
 		for (Entry<String, IElementReference> entry : stub1AASModels.entrySet()) {System.out.println(entry.getKey() + " -> "+ entry.getValue());}

@@ -57,7 +57,7 @@ class TestAASGatewaysGet_Line2InternalFromLine2 {
 
 		// Connect to AAS with ID "aas.device2.line2.manufacturing.de"
 		// - Retrieve connected AAS from AAS ID
-		IAssetAdministrationShell tempsensorAAS1 = this.aasManager.retrieveAAS("device10.line2int.line2.manufacturing.de");
+		IAssetAdministrationShell tempsensorAAS1 = this.aasManager.retrieveAAS("line2int.line2.manufacturing.de/device10");
 		
 		
 		// Connect to sub models

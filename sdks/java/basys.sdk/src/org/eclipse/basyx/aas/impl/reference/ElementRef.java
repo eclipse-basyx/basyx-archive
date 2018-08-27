@@ -232,7 +232,7 @@ public class ElementRef implements IElementReference {
 		if (aasID.endsWith(scope)) return;
 		
 		// Add scope
-		aasID = aasID+"."+scope;
+		this.aasID = BaSysID.instance.addScope(aasID, scope);
 	}
 	
 	

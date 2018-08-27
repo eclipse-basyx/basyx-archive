@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
+import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -172,20 +173,7 @@ public class HTTPConnector implements IBasysConnector {
 	 * @param path can be null if a type qualifier and submodel is specified
 	 */
 	public String buildPath(String aasID, String aasSubmodelID, String path, String qualifier) {
-		String servicePath = aasID;
-		if (aasSubmodelID!=null) {
-			servicePath = servicePath + "/aas/submodels/"+aasSubmodelID;
-			
-			if (qualifier!=null) {
-				servicePath = servicePath +  "/" + qualifier;
-				
-			}
-			if (path!=null) {
-				servicePath = servicePath + "/" + path;
-			}
-		} 
-		
-		return servicePath;
+		return BaSysID.instance.buildPath(aasID, aasSubmodelID, path, qualifier);
 	}
 
 

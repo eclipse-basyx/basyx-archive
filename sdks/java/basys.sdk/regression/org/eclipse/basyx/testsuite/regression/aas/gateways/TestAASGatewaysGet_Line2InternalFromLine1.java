@@ -7,6 +7,7 @@ import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.backend.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnector;
 import org.eclipse.basyx.testsuite.support.gateways.common.directory.GatewayTestsuiteDirectoryLine1IESE;
+import org.eclipse.basyx.testsuite.support.gateways.common.directory.GatewayTestsuiteDirectoryLine2InternalIESE;
 import org.junit.jupiter.api.Test;
 
 
@@ -45,7 +46,7 @@ class TestAASGatewaysGet_Line2InternalFromLine1 {
 	/**
 	 * Store HTTP asset administration shell manager backend for office.iese.fraunhofer.de
 	 */
-	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new GatewayTestsuiteDirectoryLine1IESE(), new HTTPConnector());
+	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new GatewayTestsuiteDirectoryLine2InternalIESE(), new HTTPConnector());
 	
 	
 	
@@ -57,7 +58,7 @@ class TestAASGatewaysGet_Line2InternalFromLine1 {
 
 		// Connect to AAS with ID "aas.device2.line2.manufacturing.de"
 		// - Retrieve connected AAS from AAS ID
-		IAssetAdministrationShell tempsensorAAS1 = this.aasManager.retrieveAAS("device10.line2int.line2.manufacturing.de");
+		IAssetAdministrationShell tempsensorAAS1 = this.aasManager.retrieveAAS("line2int.line2.manufacturing.de/device10");
 		
 		
 		// Connect to sub models

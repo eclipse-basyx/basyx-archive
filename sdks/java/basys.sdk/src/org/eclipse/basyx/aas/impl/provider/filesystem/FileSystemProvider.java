@@ -45,7 +45,7 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 	}
 	
 	protected String getFolderPath(String root, String address) {
-		return root + "/" + BaSysID.instance.getServicePath(address);
+		return root + "/" + BaSysID.instance.getUnScopedServicePath(address);
 	}
 
 	@Override

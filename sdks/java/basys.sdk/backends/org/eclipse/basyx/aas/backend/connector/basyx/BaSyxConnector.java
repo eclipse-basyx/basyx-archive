@@ -7,7 +7,9 @@ import java.net.Socket;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.connector.IBasysConnector;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
+import org.eclipse.basyx.aas.backend.modelprovider.basyx.BaSyxTCPProvider;
 import org.eclipse.basyx.aas.backend.modelprovider.basyx.CoderTools;
+import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,41 +25,6 @@ import org.json.JSONObject;
 public class BaSyxConnector implements IBasysConnector {
 
 	
-	/**
-	 * BaSyx get command
-	 */
-	public static final byte BASYX_GET = 0x01;
-
-	/**
-	 * BaSyx set command
-	 */
-	public static final byte BASYX_SET = 0x02;
-	
-	/**
-	 * BaSyx set command
-	 */
-	public static final byte BASYX_SET_CONTAINED = 0x03;
-
-	/**
-	 * BaSyx create command
-	 */
-	public static final byte BASYX_CREATE = 0x04;
-
-	/**
-	 * BaSyx delete command
-	 */
-	public static final byte BASYX_DELETE = 0x05;
-	
-	/**
-	 * BaSyx delete command
-	 */
-	public static final byte BASYX_DELETE_CONTAINED = 0x06;
-
-	/**
-	 * BaSyx invoke command
-	 */
-	public static final byte BASYX_INVOKE = 0x07;
-
 	
 	/**
 	 * Invoke a BaSyx operation in a remote provider
@@ -124,7 +91,7 @@ public class BaSyxConnector implements IBasysConnector {
 			// - Encode size does not include leading four bytes
 			CoderTools.setInt32(call, 0, call.length-4);
 			// - Encode operation GET
-			CoderTools.setInt8(call, 4, BASYX_GET);
+			CoderTools.setInt8(call, 4, BaSyxTCPProvider.BASYX_GET);
 			// - Encode path length and path
 			CoderTools.setInt32(call, 5, servicePath.length());
 			CoderTools.setString(call, 9, servicePath);
@@ -196,7 +163,7 @@ public class BaSyxConnector implements IBasysConnector {
 			// - Encode size does not include leading four bytes
 			CoderTools.setInt32(call, 0, call.length-4);
 			// - Encode operation SET
-			CoderTools.setInt8(call, 4, BASYX_SET);
+			CoderTools.setInt8(call, 4, BaSyxTCPProvider.BASYX_SET);
 			// - Encode path
 			CoderTools.setInt32(call, 5, servicePath.length());
 			CoderTools.setString(call, 9, servicePath);
@@ -235,7 +202,7 @@ public class BaSyxConnector implements IBasysConnector {
 			// - Encode size does not include leading four bytes
 			CoderTools.setInt32(call, 0, call.length-4);
 			// - Encode operation SET
-			CoderTools.setInt8(call, 4, BASYX_SET_CONTAINED);
+			CoderTools.setInt8(call, 4, BaSyxTCPProvider.BASYX_SET_CONTAINED);
 			// - Encode path
 			CoderTools.setInt32(call, 5, servicePath.length());
 			CoderTools.setString(call, 9, servicePath);
@@ -305,7 +272,7 @@ public class BaSyxConnector implements IBasysConnector {
 			// - Encode size does not include leading four bytes
 			CoderTools.setInt32(call, 0, call.length-4);
 			// - Encode operation SET
-			CoderTools.setInt8(call, 4, BASYX_INVOKE);
+			CoderTools.setInt8(call, 4, BaSyxTCPProvider.BASYX_INVOKE);
 			// - Encode path
 			CoderTools.setInt32(call, 5, servicePath.length());
 			CoderTools.setString(call, 9, servicePath);
@@ -383,7 +350,7 @@ public class BaSyxConnector implements IBasysConnector {
 			// - Encode size does not include leading four bytes
 			CoderTools.setInt32(call, 0, call.length-4);
 			// - Encode operation SET
-			CoderTools.setInt8(call, 4, BASYX_DELETE_CONTAINED);
+			CoderTools.setInt8(call, 4, BaSyxTCPProvider.BASYX_DELETE_CONTAINED);
 			// - Encode path
 			CoderTools.setInt32(call, 5, servicePath.length());
 			CoderTools.setString(call, 9, servicePath);
@@ -420,25 +387,14 @@ public class BaSyxConnector implements IBasysConnector {
 	}
 	
 	/**
-	 * Create servicepath depending on server technology - Note: Copied from HTTP Connector
+	 * Create servicepath depending on server technology 
 	 * @param qualifier refers to a qualifier "properties", "operations" or "events"
 	 * @param path can be null if a type qualifier and submodel is specified
 	 */
 	public String buildPath(String aasID, String aasSubmodelID, String path, String qualifier) {
-		String servicePath = aasID;
-		if (aasSubmodelID!=null) {
-			servicePath = servicePath + "/aas/submodels/"+aasSubmodelID;
-			
-			if (qualifier!=null) {
-				servicePath = servicePath +  "/" + qualifier;
-				
-			}
-			if (path!=null) {
-				servicePath = servicePath + "/" + path;
-			}
-		} 
-		
-		return servicePath;
+
+		// Use the default path constructor
+		return BaSysID.instance.buildPath(aasID, aasSubmodelID, path, qualifier);
 	}
 }
 

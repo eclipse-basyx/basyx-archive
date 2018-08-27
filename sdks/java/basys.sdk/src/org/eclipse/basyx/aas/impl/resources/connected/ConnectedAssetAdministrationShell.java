@@ -7,7 +7,7 @@ import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.impl.resources.basic.AssetAdministrationShell;
 
 
-
+// TODO Delete this package
 public abstract class ConnectedAssetAdministrationShell extends AssetAdministrationShell {
 	
 	public Map<String, ConnectedSubModel> getConnectedSubModels() {

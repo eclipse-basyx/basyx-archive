@@ -77,14 +77,19 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		System.out.println("- Element AAS:"+BaSysID.instance.getAASID(path));
 		System.out.println("- Element Pth:"+BaSysID.instance.getPath(path));
 		
-		String address = BaSysID.instance.getAddress(path);
+		// Get the scoped path of the addressed aas or submodel 
+		String address = BaSysID.instance.getAddress(path); 
 
-		// Get address from directory
+		// Get server address from directory
 		String addr = directoryService.lookup(address);
 		// - Address check
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
 		
-		String servicePath = BaSysID.instance.getServicePath(path);
+		// Remove Client Provider Scope (if any)
+		path = path.substring( (path.indexOf(clientScope) == -1)? 0 : path.indexOf(this.clientScope));
+		
+		// Get scoped service path
+		String servicePath = BaSysID.instance.getScopedServicePath(path, address); 
 		
 		// Return model property
 		return httpConnector.basysGet(addr, servicePath);
@@ -111,7 +116,10 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		// - Address check
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
 		
-		String servicePath = BaSysID.instance.getServicePath(path);
+		// Remove Client Provider Scope (if any)
+		path = path.substring( (path.indexOf(clientScope) == -1)? 0 : path.indexOf(this.clientScope));
+		
+		String servicePath = BaSysID.instance.getScopedServicePath(path, address);
 		
 		// Set model property
 		httpConnector.basysSet(addr, servicePath, newValue);
@@ -138,7 +146,10 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		// - Address check
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
 		
-		String servicePath = BaSysID.instance.getServicePath(path);
+		// Remove Client Provider Scope (if any)
+		path = path.substring( (path.indexOf(clientScope) == -1)? 0 : path.indexOf(this.clientScope));
+		
+		String servicePath = BaSysID.instance.getScopedServicePath(path, address);
 		
 		// Set model property
 		httpConnector.basysSet(addr, servicePath, newEntry);
@@ -164,7 +175,10 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		// - Address check
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
 		
-		String servicePath = BaSysID.instance.getServicePath(path);
+		// Remove Client Provider Scope (if any)
+		path = path.substring( (path.indexOf(clientScope) == -1)? 0 : path.indexOf(this.clientScope));
+		
+		String servicePath = BaSysID.instance.getScopedServicePath(path, address);
 		
 		// Post data to server
 		httpConnector.basysCreate(addr, servicePath, newElement);
@@ -189,7 +203,10 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		// - Address check
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
 		
-		String servicePath = BaSysID.instance.getServicePath(path);
+		// Remove Client Provider Scope (if any)
+		path = path.substring( (path.indexOf(clientScope) == -1)? 0 : path.indexOf(this.clientScope));
+		
+		String servicePath = BaSysID.instance.getScopedServicePath(path, address);
 		
 		// Remove entity
 		httpConnector.basysDelete(addr, servicePath);
@@ -211,7 +228,10 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		// - Address check
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
 		
-		String servicePath = BaSysID.instance.getServicePath(path);
+		// Remove Client Provider Scope (if any)
+		path = path.substring( (path.indexOf(clientScope) == -1)? 0 : path.indexOf(this.clientScope));
+		
+		String servicePath = BaSysID.instance.getScopedServicePath(path, address);
 		
 		// Remove entry from map or collection
 		httpConnector.basysDelete(addr, servicePath, parameter);
@@ -233,7 +253,10 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		// - Address check
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
 		
-		String servicePath = BaSysID.instance.getServicePath(path);
+		// Remove Client Provider Scope (if any)
+		path = path.substring( (path.indexOf(clientScope) == -1)? 0 : path.indexOf(this.clientScope));
+		
+		String servicePath = BaSysID.instance.getScopedServicePath(path, address);
 				
 		// Invoke Operation on server
 		return httpConnector.basysInvoke(addr, servicePath, parameter);
@@ -261,7 +284,10 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 		// - Address check
 		if (addr == null) throw new RuntimeException("Not able to resolve address: "+address);
 		
-		String servicePath = BaSysID.instance.getServicePath(path);
+		// Remove Client Provider Scope (if any)
+		path = path.substring( (path.indexOf(clientScope) == -1)? 0 : path.indexOf(this.clientScope));
+		
+		String servicePath = BaSysID.instance.getScopedServicePath(path, address);
 		
 		System.out.println("GetContained:"+servicePath);
 

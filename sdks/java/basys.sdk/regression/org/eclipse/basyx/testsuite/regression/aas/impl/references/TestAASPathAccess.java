@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
  * Test case for IModelProviders. It checks whether IModelProviders are able to perform basic VAB operations on AAS without
  * external references in their AAS or sub models.  
  * 
+ *  TODO adapt test cases to new identifier pattern
+ * 
  * @author kuhn
  *
  */
@@ -40,11 +42,11 @@ public class TestAASPathAccess {
 		String aasID     = BaSysID.instance.buildAASID("Stub1AAS");
 		String smID      = BaSysID.instance.buildSMID("statusSM");
 		String qualSMID  = BaSysID.instance.buildPath("Stub1AAS", "statusSM");
-		String prop1ID   = BaSysID.instance.buildPath(new String[] {"sampleProperty1"}, "Stub1AAS", "statusSM");
-		String prop2ID   = BaSysID.instance.buildPath(new String[] {"sampleProperty2"}, "Stub1AAS", "statusSM");
-		String prop3ID   = BaSysID.instance.buildPath(new String[] {"sampleProperty3"}, "Stub1AAS", "statusSM");
-		String prop3AID  = BaSysID.instance.buildPath(new String[] {"sampleProperty3", "samplePropertyA"}, "Stub1AAS", "statusSM");
-		String prop3BID  = BaSysID.instance.buildPath(new String[] {"sampleProperty3", "samplePropertyB"}, "Stub1AAS", "statusSM");
+		String prop1ID   = BaSysID.instance.buildPath("Stub1AAS", "statusSM", "sampleProperty1", "properties");
+		String prop2ID    =BaSysID.instance.buildPath("Stub1AAS", "statusSM", "sampleProperty2", "properties");
+		String prop3ID   = BaSysID.instance.buildPath("Stub1AAS", "statusSM", "sampleProperty3", "properties");
+		String prop3AID  = BaSysID.instance.buildPath("Stub1AAS", "statusSM", "sampleProperty3.samplePropertyA", "properties" );
+		String prop3BID  = BaSysID.instance.buildPath("Stub1AAS", "statusSM", "sampleProperty3.samplePropertyB", "properties" );
 
 		
 		// - Get AAS sub model property values via AAS
@@ -70,9 +72,9 @@ public class TestAASPathAccess {
 		
 		
 		// Get AAS sub model property values via unique sub model ID
-		ISubModel                 subMode2Stub = (ISubModel)                 subModelProvider.getModelPropertyValue("statusSM");
-		Object                    property1a   =                             subModelProvider.getModelPropertyValue("statusSM/sampleProperty1");
-		Object                    property2a   =                             subModelProvider.getModelPropertyValue("statusSM/sampleProperty2");
+		ISubModel                 subMode2Stub = (ISubModel)                 subModelProvider.getModelPropertyValue("statusSM/submodel");
+		Object                    property1a   =                             subModelProvider.getModelPropertyValue("statusSM/submodel/properties/sampleProperty1");
+		Object                    property2a   =                             subModelProvider.getModelPropertyValue("statusSM/submodel/properties/sampleProperty2");
 
 		// - Check results
 		assertTrue(subMode2Stub==stub1SM);
@@ -81,7 +83,7 @@ public class TestAASPathAccess {
 		
 		
 		
-		// Set AAS property values
+		// Set AAS property values TODO expand this to be the ModelProvider Testsuite
 		
 	}
 }

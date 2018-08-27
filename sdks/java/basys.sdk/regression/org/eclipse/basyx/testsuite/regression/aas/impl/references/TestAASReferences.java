@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 /**
  * Test case that ensures that everybody is using the correct path format as defined by class BaSysID
  * 
+ *  TODO adapt test cases to new identifier pattern
+ * 
  * @author kuhn
  *
  */
@@ -37,11 +39,12 @@ public class TestAASReferences {
 		subModelProvider.addModel(stub1SM);
 		
 		// Get element references from object provider
-		Map<String, IElementReference> stub1AASModels     = subModelProvider.getContainedElements("aas.Stub1AAS");
-		Map<String, IElementReference> statusSMProperties = subModelProvider.getContainedElements("statusSM.Stub1AAS");
+		Map<String, IElementReference> stub1AASModels     = subModelProvider.getContainedElements("Stub1AAS/aas");
+		Map<String, IElementReference> statusSMProperties = subModelProvider.getContainedElements("Stub1AAS/aas/submodels/statusSM");
 		
 		// Print contained elements
 		for (Entry<String, IElementReference> entry : stub1AASModels.entrySet()) {System.out.println(entry.getKey() + " -> "+ entry.getValue());}
+		for (Entry<String, IElementReference> entry : statusSMProperties.entrySet()) {System.out.println(entry.getKey() + " -> "+ entry.getValue());}
 					
 	}
 }

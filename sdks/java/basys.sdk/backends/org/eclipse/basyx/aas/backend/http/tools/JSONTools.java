@@ -280,7 +280,7 @@ public class JSONTools {
 
 
 	/**
-	 * Serialize a property into JSON object
+	 * Serialize a property into JSON object TODO make this class independent from IModelProvider?
 	 */
 	public JSONObject serializeProperty(String pathToObject, IModelProvider provider) {
 		// Create return value
@@ -288,7 +288,7 @@ public class JSONTools {
 		
 		// Get value and scope
 		Object value = provider.getModelPropertyValue(pathToObject);
-		String scope = provider.getElementScope(pathToObject);
+		String scope = provider.getElementScope(pathToObject); // we don't need this for sending back
 		
 		// Serialize value
 		returnValue = this.serialize(value, scope);
@@ -323,7 +323,7 @@ public class JSONTools {
 		// Create reference
 		IElementReference reference = (IElementReference) value; 	
 		// Add scope to reference
-		reference.addScope(scope);
+		reference.addScope(scope); // FIXME scope is not serialized
 		
 		// Serialize element
 		// - Indicate that is is a reference
