@@ -1,0 +1,3 @@
+- in admin shell, navigate to sdks\java\basys.sdk\WebContent
+$ docker build -t basys.sdk .
+$ docker container run -d --name basys.sdk -p 8080:8080 -p 8000:8000 basys.sdk
