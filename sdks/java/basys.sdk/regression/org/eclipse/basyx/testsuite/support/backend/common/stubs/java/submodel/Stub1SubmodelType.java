@@ -90,7 +90,7 @@ public class Stub1SubmodelType extends SubModel {
 	 */
 	public Stub1SubmodelType() {
 		// Initialize this submodel
-	    this.setAssetKind(AssetKind.INSTANCE);
+	    this.setAssetKind(AssetKind.TYPE);
 	    this.setName("subModelExample");
 	    this.setId("statusSM");
 	    this.setTypeDefinition("smType");
