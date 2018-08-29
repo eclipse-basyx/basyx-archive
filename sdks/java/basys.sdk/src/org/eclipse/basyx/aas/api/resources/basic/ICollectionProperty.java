@@ -22,7 +22,7 @@ public interface ICollectionProperty extends IProperty {
 	 * @param objectRef Referenced property whose value is queried
 	 * @return Property value
 	 */
-	public Object get(Object objRef);
+	public Object get(Object objRef) throws ServerException;
 	
 	
 	/**
@@ -55,7 +55,7 @@ public interface ICollectionProperty extends IProperty {
 	 * 
 	 * @return Collection with values
 	 */
-	public abstract Collection<Object> getElements();
+	public abstract Collection<Object> getElements() throws ServerException;
 
 
 	/**
@@ -63,7 +63,7 @@ public interface ICollectionProperty extends IProperty {
 	 * 
 	 * @return Element count
 	 */
-	public int getElementCount();
+	public int getElementCount() throws ServerException;
 
 
 

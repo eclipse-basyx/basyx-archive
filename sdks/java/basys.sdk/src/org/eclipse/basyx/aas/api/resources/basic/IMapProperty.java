@@ -20,7 +20,7 @@ public interface IMapProperty extends IProperty {
 	 *Get value for key
 	 * @throws TypeMismatchException 
 	 */
-	public Object getValue(Object key) throws TypeMismatchException;
+	public Object getValue(Object key) throws TypeMismatchException, ServerException;
 	
 	
 	/**
@@ -42,13 +42,13 @@ public interface IMapProperty extends IProperty {
 	 * @return Collection with keys
 	 * @throws TypeMismatchException 
 	 */
-	public Collection<Object> getKeys() throws TypeMismatchException;
+	public Collection<Object> getKeys() throws TypeMismatchException, ServerException;
 	
 	/**
 	 * Get entry count
 	 * @throws TypeMismatchException 
 	 */
-	public Integer getEntryCount() throws TypeMismatchException;
+	public Integer getEntryCount() throws TypeMismatchException, ServerException;
 	
 	/**
 	 * Remove entry 
