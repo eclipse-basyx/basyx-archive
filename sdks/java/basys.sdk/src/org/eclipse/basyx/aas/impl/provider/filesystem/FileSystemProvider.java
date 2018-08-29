@@ -186,6 +186,7 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 		}
 	}
 
+	// TODO: Move this to BaSysID
 	private boolean isNestedProperty(String path) {
 		int index = path.indexOf("/properties");
 		return path.length() > index + "/properties".length();
