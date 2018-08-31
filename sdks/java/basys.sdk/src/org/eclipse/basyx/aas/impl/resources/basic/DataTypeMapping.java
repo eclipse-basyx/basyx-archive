@@ -11,22 +11,18 @@ import java.util.Map;
  */
 public class DataTypeMapping {
 	public static DataType map(Class<?> c) {
-		if (c.isPrimitive()) {
-			if (c == int.class || c == Integer.class) {
-				return DataType.INTEGER;
-			} else if (c == void.class || c == Void.class) {
-				return DataType.VOID;
-			} else if (c == boolean.class || c == Boolean.class) {
-				return DataType.BOOLEAN;
-			} else if (c == float.class || c == Float.class) {
-				return DataType.FLOAT;
-			} else if (c == double.class || c == Double.class) {
-				return DataType.DOUBLE;
-			} else if (c == char.class || c == Character.class) {
-				return DataType.CHARACTER;
-			} else {
-				throw new RuntimeException("Unsupported property type " + c);
-			}
+		if (c == int.class || c == Integer.class) {
+			return DataType.INTEGER;
+		} else if (c == void.class || c == Void.class) {
+			return DataType.VOID;
+		} else if (c == boolean.class || c == Boolean.class) {
+			return DataType.BOOLEAN;
+		} else if (c == float.class || c == Float.class) {
+			return DataType.FLOAT;
+		} else if (c == double.class || c == Double.class) {
+			return DataType.DOUBLE;
+		} else if (c == char.class || c == Character.class) {
+			return DataType.CHARACTER;
 		} else if (c == String.class) {
 			return DataType.STRING;
 		} else if (Map.class.isAssignableFrom(c)) {
