@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
+import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.impl.provider.RESTHTTPClientProvider;
 import org.eclipse.basyx.testsuite.support.gateways.common.directory.GatewayTestsuiteDirectoryLine2IESE;
 import org.eclipse.basyx.testsuite.support.gateways.stubs.servlets.topo.manufacturing.AAS_Line2_Device2;
@@ -29,7 +30,7 @@ public class TestAASGatewayReferences {
 	@Test
 	void test() {
 		// Create model provider
-		RESTHTTPClientProvider subModelProvider = new RESTHTTPClientProvider("line2.manufacturing.de", new GatewayTestsuiteDirectoryLine2IESE());
+		RESTHTTPClientProvider subModelProvider = new RESTHTTPClientProvider("line2.manufacturing.de", new GatewayTestsuiteDirectoryLine2IESE(), new HTTPConnectorProvider());
 		
 		// - Create AAS and sub model instances
 		IAssetAdministrationShell stub1AAS = new AAS_Line2_Device2();

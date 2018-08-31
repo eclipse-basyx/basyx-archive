@@ -1,6 +1,5 @@
 package org.eclipse.basyx.aas.impl.provider;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
@@ -33,10 +32,11 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	/**
 	 * Constructor
 	 */
-	public RESTHTTPClientProvider(String scope, IDirectoryService directory) {
+	public RESTHTTPClientProvider(String scope, IDirectoryService directory, HTTPConnectorProvider connectorProvider) {
 		// Store scope and directory reference
 		directoryService = directory;
 		clientScope = scope;
+		this.connectorProvider = connectorProvider;
 	}
 
 	/**
@@ -297,11 +297,9 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 	 *            Path to sub model or property
 	 * @return Contained properties
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IElementReference> getContainedElements(String path) {
-		// Return value
-		Map<String, IElementReference> result = new HashMap<>();
-
 		String address = BaSysID.instance.getAddress(path);
 
 		// Get address from directory

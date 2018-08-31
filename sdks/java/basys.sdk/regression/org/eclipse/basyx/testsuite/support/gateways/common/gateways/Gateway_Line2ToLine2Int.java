@@ -1,5 +1,6 @@
 package org.eclipse.basyx.testsuite.support.gateways.common.gateways;
 
+import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.backend.modelprovider.http.HTTPProvider;
 import org.eclipse.basyx.aas.impl.provider.RESTHTTPClientProvider;
 import org.eclipse.basyx.testsuite.support.gateways.common.directory.GatewayTestsuiteDirectoryLine2InternalIESE;
@@ -27,6 +28,6 @@ public class Gateway_Line2ToLine2Int extends HTTPProvider<RESTHTTPClientProvider
 	 */
 	public Gateway_Line2ToLine2Int() {
 		// Invoke base constructor
-		super(new RESTHTTPClientProvider("line2int.line2.manufacturing.de", new GatewayTestsuiteDirectoryLine2InternalIESE()));
+		super(new RESTHTTPClientProvider("line2int.line2.manufacturing.de", new GatewayTestsuiteDirectoryLine2InternalIESE(), new HTTPConnectorProvider()));
 	}
 }
