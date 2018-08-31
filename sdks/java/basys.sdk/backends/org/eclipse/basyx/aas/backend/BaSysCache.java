@@ -15,7 +15,7 @@ public class BaSysCache<T extends ConnectedElement> {
 	/**
 	 * Initialize Cache Hash map for proxies
 	 */
-	private KeyValueStore<String, T>  cache_ ;
+	private KeyValueStore<T>  cache_ ;
 	
 	
 	
@@ -24,7 +24,7 @@ public class BaSysCache<T extends ConnectedElement> {
 	 */
 	public BaSysCache(ConnectedSubmodel submodel, String type) {
 		
-		this.cache_	    = new KeyValueStore<String, T>(submodel, type);
+		this.cache_	    = new KeyValueStore<T>(submodel, type);
 	}
 	
 	/**

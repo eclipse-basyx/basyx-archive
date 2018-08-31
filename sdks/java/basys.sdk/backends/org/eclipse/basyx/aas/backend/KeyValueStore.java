@@ -6,53 +6,42 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.api.exception.ResourceNotFoundException;
+import org.eclipse.basyx.aas.impl.tools.BaSysID;
 
 /**
  * 
  * @author pschorn
  *
  */
-public class KeyValueStore<String, T extends ConnectedElement> implements Map {
-	
+public class KeyValueStore <V extends ConnectedElement> implements Map<String, V> {
+
 	/**
 	 * Initialize Cache Hash map for proxies
 	 */
-	private HashMap<String, T>  cache_ ;
-	
+	private HashMap<String, V> cache_;
+
 	/**
 	 * Submodel reference to be used for unknown properties and operations
 	 */
 	private ConnectedSubmodel connectedSubmodel;
 
 	/**
-	 * Type url 
+	 * Type url
 	 */
-	private java.lang.String type;
-	
+	private String type;
+
 	/**
 	 * Constructor
 	 */
-	public KeyValueStore(ConnectedSubmodel submodel, java.lang.String type) {
-		
+	public KeyValueStore(ConnectedSubmodel submodel, String type) {
+
 		this.connectedSubmodel = submodel;
-		
-		this.cache_	          = new HashMap<String, T>();
-		
-		this.type = (java.lang.String) type;
+
+		this.cache_ = new HashMap<String, V>();
+
+		this.type = type;
 	}
 	
-	/**
-	 * Adds new entry in cache
-	 * @param key
-	 * @param proxy
-	 */
-	public void put(String key, T proxy) {
-		
-		// Add proxy to map
-		this.cache_.put(key, proxy);
-	}
-
-		
 	@Override
 	public int size() {
 		return this.cache_.size();
@@ -74,37 +63,38 @@ public class KeyValueStore<String, T extends ConnectedElement> implements Map {
 	}
 
 	/**
-	 * Returns value for the given key.
-	 * If the key is not in cache, query server. 
-	 * If the value is still not found, throw exception
+	 * Returns value for the given key. If the key is not in cache, query server. If
+	 * the value is still not found, throw exception
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object get(Object key) {
+	public V get(Object key) {
 
-		Object value;
+		V value;
 		// Try to get value from cache
-		if( (value = this.cache_.get(key)) != null ) return value;
-		
-		
-		
+		if ((value = this.cache_.get(key)) != null)
+			return value;
+
 		// Try to get value from server
-		java.lang.String servicePath = this.connectedSubmodel.getConnector().buildPath(connectedSubmodel.getAASID(), connectedSubmodel.getAASSubmodelID(), (java.lang.String) key, type);
-		if( (value = connectedSubmodel.getConnector().basysGet(this.connectedSubmodel.getModelProviderUrl(), servicePath)) != null) return value;
-		
-		throw new ResourceNotFoundException("Could not find child '"+key+"' for submodel '"+connectedSubmodel.getAASSubmodelID()+"'");
-		
+		java.lang.String servicePath = BaSysID.instance.buildPath(connectedSubmodel.getAASID(), connectedSubmodel.getAASSubmodelID(), (java.lang.String) key, type);
+		if ((value = (V) connectedSubmodel.getProvider().getModelPropertyValue(servicePath)) != null)
+			return value;
+
+		throw new ResourceNotFoundException("Could not find child '" + key + "' for submodel '" + connectedSubmodel.getAASSubmodelID() + "'");
+
 	}
 
 	@Override
-	public Object put(Object key, Object value) {
-		return this.cache_.put((String) key, (T) value);
+	public V put(String key, V value) {
+		return this.cache_.put(key, value);
 	}
 
 	@Override
-	public Object remove(Object key) {
+	public V remove(Object key) {
 		return this.cache_.remove(key);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void putAll(Map m) {
 		this.cache_.putAll(m);
@@ -116,24 +106,18 @@ public class KeyValueStore<String, T extends ConnectedElement> implements Map {
 	}
 
 	@Override
-	public Set keySet() {
+	public Set<String> keySet() {
 		return this.cache_.keySet();
 	}
 
 	@Override
-	public Collection values() {
+	public Collection<V> values() {
 		return this.cache_.values();
 	}
 
 	@Override
-	public Set entrySet() {
+	public Set<Entry<String,V>> entrySet() {
 		return this.cache_.entrySet();
 	}
-	
-	
-	
-	
 
-
-	
 }

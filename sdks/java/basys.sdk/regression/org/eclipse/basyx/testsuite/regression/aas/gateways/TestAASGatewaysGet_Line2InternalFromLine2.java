@@ -1,11 +1,12 @@
 package org.eclipse.basyx.testsuite.regression.aas.gateways;
 
 import static org.junit.Assert.assertTrue;
+
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.backend.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnector;
+import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.testsuite.support.gateways.common.directory.GatewayTestsuiteDirectoryLine2IESE;
 import org.junit.jupiter.api.Test;
 
@@ -45,7 +46,7 @@ class TestAASGatewaysGet_Line2InternalFromLine2 {
 	/**
 	 * Store HTTP asset administration shell manager backend for office.iese.fraunhofer.de
 	 */
-	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new GatewayTestsuiteDirectoryLine2IESE(), new HTTPConnector());
+	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new GatewayTestsuiteDirectoryLine2IESE(), new HTTPConnectorProvider());
 	
 	
 	
