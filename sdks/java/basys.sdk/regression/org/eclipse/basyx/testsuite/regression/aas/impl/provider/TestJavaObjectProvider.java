@@ -13,7 +13,7 @@ import org.eclipse.basyx.testsuite.regression.aas.impl.provider.testfragments.Te
 import org.eclipse.basyx.testsuite.regression.aas.impl.provider.testfragments.TestProviderFull_invoke;
 import org.eclipse.basyx.testsuite.regression.aas.impl.provider.testfragments.TestProviderFull_set;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.aas.Stub1AAS;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub1Submodel;
+import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub1SubmodelType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +38,7 @@ public class TestJavaObjectProvider {
 		subModelProvider = new JavaObjectProvider();
 		// - Create AAS and sub model instances
 		stub1AAS = new Stub1AAS();
-		stub1SM = new Stub1Submodel(stub1AAS);
+		stub1SM = new Stub1SubmodelType(stub1AAS);
 		// - Add models to provider
 		subModelProvider.addModel(stub1AAS);
 		subModelProvider.addModel(stub1SM);

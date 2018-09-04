@@ -63,7 +63,7 @@ public class JavaHandlerProvider extends AbstractModelScopeProvider implements I
 		JavaHandler<?> javaHandler = null;
 		
 		// Get handler by ID
-		if (propPath.equals("submodels") | BaSysID.instance.getSubmodelID(path).equals("")) path = BaSysID.instance.getAASID(path); // return AAS
+		if (propPath.equals("submodels") || BaSysID.instance.getSubmodelID(path).equals("")) path = BaSysID.instance.getAASID(path); // return AAS
 		else path = BaSysID.instance.getSubmodelID(path);	// return SubmodelID
 		
 		if (path != null) javaHandler = javaHandlers.get(path);
@@ -206,6 +206,7 @@ public class JavaHandlerProvider extends AbstractModelScopeProvider implements I
 		return javaHandler.invokeOperation(propPath, parameter);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IElementReference> getContainedElements(String path) {
 		// Return value

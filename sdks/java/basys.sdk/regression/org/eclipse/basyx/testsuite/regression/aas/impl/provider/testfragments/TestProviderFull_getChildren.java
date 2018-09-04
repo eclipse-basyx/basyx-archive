@@ -1,5 +1,6 @@
 package org.eclipse.basyx.testsuite.regression.aas.impl.provider.testfragments;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -28,7 +29,7 @@ public class TestProviderFull_getChildren {
 		//assertTrue(stub1ChildrenA.size() == 2);
 		System.out.println("StatusSM contains "+ stub1ChildrenA.size() +" children.");
 		
-		assertTrue(stub1ChildrenA.size() == 12);
-		assertTrue(stub1ChildrenB.size() == 12);	
+		assertEquals(4, stub1ChildrenA.size());
+		assertEquals(4, stub1ChildrenB.size());	
 	}
 }

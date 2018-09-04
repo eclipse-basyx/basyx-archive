@@ -20,6 +20,7 @@ import org.eclipse.basyx.aas.impl.provider.AbstractModelScopeProvider;
 import org.eclipse.basyx.aas.impl.provider.filesystem.filesystem.File;
 import org.eclipse.basyx.aas.impl.provider.filesystem.filesystem.FileSystem;
 import org.eclipse.basyx.aas.impl.provider.filesystem.filesystem.FileType;
+import org.eclipse.basyx.aas.impl.reference.ElementRef;
 import org.eclipse.basyx.aas.impl.resources.basic.PropertyContainer;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.json.JSONObject;
@@ -69,21 +70,26 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 		return getFolderPath(getRootDir(), address);
 	}
 
-
 	protected String getFolderPath(String root, String address) throws Exception {
 		String smId = BaSysID.instance.getSubmodelID(address);
 		if (!smId.isEmpty() && getSubModelPath(smId) != null) {
-			String path = BaSysID.instance.getPath(address);
-			String add = "";
-			// Readd properties
-			// TODO: Create method in BaSysID to return the path after <ID>
-			if (address.contains("properties")) {
-				add = "properties/";
-			}
-			return getSubModelPath(smId) + "/" + add + path;
+			String subModelPath = getSubModelPath(smId);
+			String servicePath = getQualifierPath(address);
+			return subModelPath + "/" + servicePath;
 		} else {
 			return root + "/" + BaSysID.instance.getUnScopedServicePath(address);
 		}
+	}
+
+	private String getQualifierPath(String address) {
+		if (address.contains("properties")) {
+			return address.substring(address.indexOf("properties"));
+		} else if (address.contains("operations")) {
+			return address.substring(address.indexOf("operations"));
+		} else if (address.contains("events")) {
+			return address.substring(address.indexOf("evens"));
+		}
+		return "";
 	}
 
 	@SuppressWarnings("unchecked")
@@ -101,6 +107,10 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 		writeObject(metaIdPath, map);
 	}
 
+	private String replacePath(String fileName, String path) {
+		return fileName.replace(path + "/", "");
+	}
+
 	@Override
 	public Object getModelPropertyValue(String address) {
 		try {
@@ -109,11 +119,19 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 				List<File> files;
 				try {
 					files = fileSystem.readDirectory(path);
-					List<String> directories = files.stream().filter(f -> f.getType() == FileType.DIRECTORY).map(f -> f.getName()).collect(Collectors.toList());
-					return directories;
+					List<String> directories = files.stream().filter(f -> f.getType() == FileType.DIRECTORY).map(f -> replacePath(f.getName(), path)).collect(Collectors.toList());
+					Map<String, IElementReference> refMap = new HashMap<>();
+					for (String s : directories) {
+						if (path.endsWith("/operations") || path.endsWith("/properties") || path.endsWith("/events")) {
+							refMap.put(s, new ElementRef(BaSysID.instance.getAASID(address), BaSysID.instance.getSubmodelID(address), s));
+						} else if (path.endsWith("/submodels")) {
+							refMap.put(s, new ElementRef(BaSysID.instance.getAASID(address), s, ""));
+						}
+					}
+					return refMap;
 				} catch (Exception e) {
 					e.printStackTrace();
-					return new ArrayList<String>();
+					return new HashMap<>();
 				}
 			} else {
 				try {
@@ -145,7 +163,11 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 			}
 		} else if (newEntity instanceof ISubModel) {
 			ISubModel sm = (ISubModel) newEntity;
-			setSubModelPath(sm.getId(), address + "/" + sm.getId());
+			String subModelPath = address + "/" + sm.getId();
+			setSubModelPath(sm.getId(), subModelPath);
+			fileSystem.createDirectory(getFolderPath(subModelPath) + "properties");
+			fileSystem.createDirectory(getFolderPath(subModelPath) + "operations");
+			fileSystem.createDirectory(getFolderPath(subModelPath) + "events");
 			for (String key : sm.getProperties().keySet()) {
 				createValue(address + "/" + sm.getId() + "/properties", sm.getProperties().get(key));
 			}

@@ -3,7 +3,6 @@ package org.eclipse.basyx.testsuite.regression.aas.impl.provider;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.impl.provider.JavaHandlerProvider;
 import org.eclipse.basyx.aas.impl.provider.javahandler.JavaHandler;
@@ -40,7 +39,7 @@ public class TestJavaHandlerProvider {
 		stub1SM = new Stub1Submodel(stub1AAS);
 
 		JavaHandler<Stub1AAS> aasHandler = new JavaHandler<Stub1AAS>(stub1AAS);
-		aasHandler.addProperty("statusSM", null, null, null, null);
+		aasHandler.addSubModel("statusSM");
 
 		JavaHandler<Stub1Submodel> smHandler = new JavaHandler<Stub1Submodel>(stub1SM);
 		smHandler.addProperty("sampleProperty1", (obj) -> {
@@ -79,13 +78,6 @@ public class TestJavaHandlerProvider {
 			obj.sampleProperty4.add((int) ((Object[]) val)[0]);
 		}, (obj, val) -> {
 			obj.sampleProperty4.remove((int) val);
-		});
-		smHandler.addProperty("sampleProperty5", (obj) -> {
-			return obj.sampleProperty5;
-		}, null, (obj, val) -> {
-			obj.sampleProperty5.add((IElement) ((Object[]) val)[0]);
-		}, (obj, val) -> {
-			obj.sampleProperty5.remove(val);
 		});
 
 		smHandler.addOperation("sum", (obj, val) -> {
