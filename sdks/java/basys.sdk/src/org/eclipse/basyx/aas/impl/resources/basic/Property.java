@@ -208,5 +208,15 @@ public class Property extends BaseElement implements IProperty {
 	public void setDataType(DataType dataType) {
 		this.dataType = dataType;
 	}
+	
+	public void setContainer(boolean container) {
+		isPropertyContainer = container;
+	}
+
+
+	@Override
+	public boolean isContainer() {
+		return isPropertyContainer;
+	}
 }
 

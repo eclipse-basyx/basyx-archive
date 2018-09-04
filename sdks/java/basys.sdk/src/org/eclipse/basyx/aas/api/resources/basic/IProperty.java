@@ -33,4 +33,12 @@ public interface IProperty extends IElement {
 	 * @return Map flag
 	 */
 	public boolean isMap();
+	
+	
+	/**
+	 * Indicate if this property is a container
+	 * 
+	 * @return Container flag
+	 */
+	public boolean isContainer();
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.ResourceNotFoundException;
+import org.eclipse.basyx.aas.api.resources.basic.IContainerProperty;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IElementContainer;
 import org.eclipse.basyx.aas.api.resources.basic.IProperty;
@@ -16,7 +17,7 @@ import org.eclipse.basyx.aas.api.resources.basic.IProperty;
  * @author kuhn
  *
  */
-public class PropertyContainer extends Property implements IElementContainer {
+public class PropertyContainer extends Property implements IElementContainer, IContainerProperty {
 
 	
 	/**
@@ -25,7 +26,7 @@ public class PropertyContainer extends Property implements IElementContainer {
 	protected String typeDefinition;
 	
 	
-	/**
+	/** 
 	 * Contained operations
 	 */
 	protected Map<String, Operation> operations = new HashMap<>();
@@ -48,6 +49,7 @@ public class PropertyContainer extends Property implements IElementContainer {
 	 */
 	public PropertyContainer() {
 		super();
+		setContainer(true);
 	}
 	
 	public synchronized void addOperation(Operation operation) {
@@ -63,10 +65,10 @@ public class PropertyContainer extends Property implements IElementContainer {
 	}
 	
 	public synchronized void addProperty(IProperty property) {
-		if (property.getName() == null || property.getName().isEmpty()) {
+		if (property.getId() == null || property.getId().isEmpty()) {
 			throw new IllegalArgumentException();
 		}		
-		this.properties.put(property.getName(), property);
+		this.properties.put(property.getId(), property);
 		property.setParent(this);		
 	}
 	
@@ -129,5 +131,10 @@ public class PropertyContainer extends Property implements IElementContainer {
 		
 		// Return map with elements
 		return result;
+	}
+
+	@Override
+	public IProperty getProperty(String name) {
+		return getProperties().get(name);
 	}
 }

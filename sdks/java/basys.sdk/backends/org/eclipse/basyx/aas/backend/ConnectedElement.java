@@ -20,6 +20,7 @@ public class ConnectedElement implements IElement {
 	 */
 	private boolean isValid_;
 	private boolean isCacheable_;
+	private String id;
 
 	/**
 	 * Cached property value
@@ -80,7 +81,7 @@ public class ConnectedElement implements IElement {
 	 * Return true if property has a valid cached value
 	 */
 	public boolean isValid() {
-		return isValid_;
+		return false;
 	}
 
 	/**
@@ -107,8 +108,7 @@ public class ConnectedElement implements IElement {
 	 */
 	@Override
 	public String getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 	/**
@@ -116,8 +116,7 @@ public class ConnectedElement implements IElement {
 	 */
 	@Override
 	public void setId(String id) {
-		// TODO Auto-generated method stub
-
+		this.id = id;
 	}
 
 	/**

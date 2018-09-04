@@ -18,5 +18,6 @@ public enum DataType {
     STRING,              // Primitive: string
     VOID,                // Primitive: void
     COLLECTION,          // Primitive: collection
-    MAP;                 // Primitive: map
+	MAP,                 // Primitive: map
+	CONTAINER;
 }

@@ -3,6 +3,8 @@ package org.eclipse.basyx.aas.impl.resources.basic;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.resources.basic.IContainerProperty;
+
 /**
  * Maps a class to its corresponding DataType
  * 
@@ -29,6 +31,8 @@ public class DataTypeMapping {
 			return DataType.MAP;
 		} else if (Collection.class.isAssignableFrom(c)) {
 			return DataType.COLLECTION;
+		} else if (IContainerProperty.class.isAssignableFrom(c)) {
+			return DataType.CONTAINER;
 		} else {
 			return DataType.REFERENCE;
 		}

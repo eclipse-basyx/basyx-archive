@@ -45,7 +45,7 @@ public class TestProviderFull_get {
 
 		assertTrue(submodels.containsKey("statusSM"));
 
-		Map<String, IElementReference> properties = (Map<String, IElementReference>) provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/submodel/properties");
+		Map<String, IElementReference> properties = (Map<String, IElementReference>) provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties");
 		assertEquals(4, properties.size());
 		assertTrue(properties.containsKey("sampleProperty1"));
 		assertTrue(properties.containsKey("sampleProperty2"));

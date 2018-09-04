@@ -152,15 +152,17 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 			p = new ConnectedMapProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), getProvider(addr), this);
 		} else if (elementRef.isCollection()) {
 			p = new ConnectedCollectionProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), getProvider(addr), this);
+		} else if (elementRef.isPropertyContainer()) {
+			p = new ConnectedContainerProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), getProvider(addr), this);
 		} else {
 			p = new ConnectedSingleProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), getProvider(addr), this);
 		}
-		
+
 		String prop = elementRef.getPathToProperty();
-		if(prop.contains(".")) {
+		if (prop.contains(".")) {
 			p.setId(prop.substring(prop.lastIndexOf(".") + 1));
 		} else {
-			p.setId(prop);	
+			p.setId(prop);
 		}
 		return p;
 	}

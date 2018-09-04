@@ -69,6 +69,12 @@ public interface IElementReference {
 	 * Indicates if it is a map
 	 */
 	public boolean isMap();
+
+	
+	/**
+	 * Indicates if it is a property container
+	 */
+	public boolean isPropertyContainer();
 	
 	
 	/**

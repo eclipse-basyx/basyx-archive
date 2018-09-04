@@ -46,6 +46,8 @@ public class ElementRef implements IElementReference {
 	protected boolean isCollection = false;
 	
 	protected boolean isMap = false;
+
+	private boolean isPropertyContainer;
 	
 	/**
 	 * Default constructor
@@ -205,6 +207,7 @@ public class ElementRef implements IElementReference {
 	 * 
 	 * @return unique ID
 	 */
+	@Override
 	public String getId() {
 		// If sub model is null or empty, ID as AAS ID
 		if ((subModelID == null) || (subModelID.length()==0)) return aasID;
@@ -213,13 +216,20 @@ public class ElementRef implements IElementReference {
 		if ((propertyPath == null) || (propertyPath.length()==0)) return subModelID;
 		
 		// ID is in the property path
-		return this.propertyPath;
+		// check if it is a nested property
+		if(propertyPath.contains(".")) {
+			String[] splitted = propertyPath.split(".");
+			return splitted[splitted.length - 1];
+		} else {
+			return this.propertyPath;
+		}
 	}
 	
 	
 	/**
 	 * Add scope to aasID
 	 */
+	@Override
 	public void addScope(String scope) {
 		// Only process valid scopes
 		if (scope == null) return;
@@ -239,6 +249,7 @@ public class ElementRef implements IElementReference {
 	/**
 	 * Set server path
 	 */
+	@Override
 	public void setServerpath(String serverPath) {
 		serverPropertyPath = serverPath;
 	}
@@ -270,11 +281,18 @@ public class ElementRef implements IElementReference {
 		
 		if (kind.equals("collection")) {
 			this.isCollection = true;
-		}
-		
-		else if (kind.equals("map")) {
+		} else if (kind.equals("map")) {
 			this.isMap =true;
+		} else if (kind.equals("container")) {
+			this.isPropertyContainer = true;
 		}
+	}
+
+
+
+	@Override
+	public boolean isPropertyContainer() {
+		return this.isPropertyContainer;
 	}
 }
 

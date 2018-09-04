@@ -159,4 +159,9 @@ public class ConnectedProperty extends ConnectedElement implements IProperty {
 
 	}
 
+	@Override
+	public boolean isContainer() {
+		return (getDataType() == DataType.CONTAINER);
+	}
+
 }

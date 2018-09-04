@@ -11,6 +11,7 @@ import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.ICollectionProperty;
+import org.eclipse.basyx.aas.api.resources.basic.IContainerProperty;
 import org.eclipse.basyx.aas.api.resources.basic.IMapProperty;
 import org.eclipse.basyx.aas.api.resources.basic.IProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISingleProperty;
@@ -39,6 +40,11 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 	private final String metaDir;
 	private final String metaId;
 
+	private final String CONTAINER = "container";
+	private final String SINGLE = "single";
+	private final String MAP = "map";
+	private final String COLLECTION = "collection";
+
 	public FileSystemProvider(FileSystem fileSystem, String rootDir) throws Exception {
 		this.fileSystem = fileSystem;
 		this.rootDir = rootDir;
@@ -46,15 +52,19 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 		// Create meta files if they do not already exist
 		metaDir = rootDir + "/" + "_meta";
 		metaId = metaDir + "/idMap";
-		String idMap = null;
+		initMapIfNull(metaId);
+	}
+
+	private void initMapIfNull(String path) throws Exception {
+		String map = null;
 		try {
-			idMap = fileSystem.readFile(metaId + DATA);
+			map = fileSystem.readFile(path + "/data");
 		} catch (Exception e) {
 			// e.printStackTrace();
 		}
-		if (idMap == null || idMap.isEmpty()) {
-			createDirectory(metaId);
-			writeObject(metaId, new HashMap<String, String>());
+		if (map == null) {
+			createDirectory(path);
+			writeObject(path, new HashMap<String, String>());
 		}
 	}
 
@@ -72,7 +82,7 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 
 	protected String getFolderPath(String root, String address) throws Exception {
 		String smId = BaSysID.instance.getSubmodelID(address);
-		if (!smId.isEmpty() && getSubModelPath(smId) != null) {
+		if (BaSysID.instance.getAASID(address).isEmpty() && !smId.isEmpty() && getSubModelPath(smId) != null) {
 			String subModelPath = getSubModelPath(smId);
 			String servicePath = getQualifierPath(address);
 			return subModelPath + "/" + servicePath;
@@ -107,6 +117,37 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 		writeObject(metaIdPath, map);
 	}
 
+	@SuppressWarnings("unchecked")
+	private void registerProperty(String path, IProperty prop) throws Exception {
+		String metaProperty = getFolderPath(path);
+		initMapIfNull(metaProperty);
+		Map<String, String> map = (Map<String, String>) readObject(metaProperty);
+
+		String propType = null;
+		if (prop instanceof ISingleProperty) {
+			propType = SINGLE;
+		} else if (prop instanceof ICollectionProperty) {
+			propType = COLLECTION;
+		} else if (prop instanceof IMapProperty) {
+			propType = MAP;
+		} else if (prop instanceof IContainerProperty) {
+			propType = CONTAINER;
+		} else {
+			throw new RuntimeException("Unrecognized property type " + prop);
+		}
+		map.put(prop.getId(), propType);
+
+		writeObject(metaProperty, map);
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private String getPropertyType(String path, String name) throws Exception {
+		String metaProperty = getFolderPath(path);
+		Map<String, String> map = (Map<String, String>) readObject(metaProperty);
+		return map.get(name);
+	}
+
 	private String replacePath(String fileName, String path) {
 		return fileName.replace(path + "/", "");
 	}
@@ -123,7 +164,12 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 					Map<String, IElementReference> refMap = new HashMap<>();
 					for (String s : directories) {
 						if (path.endsWith("/operations") || path.endsWith("/properties") || path.endsWith("/events")) {
-							refMap.put(s, new ElementRef(BaSysID.instance.getAASID(address), BaSysID.instance.getSubmodelID(address), s));
+							ElementRef ref = new ElementRef(BaSysID.instance.getAASID(address), BaSysID.instance.getSubmodelID(address), s);
+							if (path.endsWith("/properties")) {
+								String type = getPropertyType(address, s);
+								ref.setKind(type);
+							}
+							refMap.put(s, ref);
 						} else if (path.endsWith("/submodels")) {
 							refMap.put(s, new ElementRef(BaSysID.instance.getAASID(address), s, ""));
 						}
@@ -165,9 +211,9 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 			ISubModel sm = (ISubModel) newEntity;
 			String subModelPath = address + "/" + sm.getId();
 			setSubModelPath(sm.getId(), subModelPath);
-			fileSystem.createDirectory(getFolderPath(subModelPath) + "properties");
-			fileSystem.createDirectory(getFolderPath(subModelPath) + "operations");
-			fileSystem.createDirectory(getFolderPath(subModelPath) + "events");
+			fileSystem.createDirectory(getFolderPath(subModelPath) + "/properties");
+			fileSystem.createDirectory(getFolderPath(subModelPath) + "/operations");
+			fileSystem.createDirectory(getFolderPath(subModelPath) + "/events");
 			for (String key : sm.getProperties().keySet()) {
 				createValue(address + "/" + sm.getId() + "/properties", sm.getProperties().get(key));
 			}
@@ -201,6 +247,7 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 			} else {
 				throw new RuntimeException("Unknown property " + newEntity);
 			}
+			registerProperty(address, (IProperty) newEntity);
 		} else {
 			String path = getFolderPath(address);
 			createDirectory(path);
