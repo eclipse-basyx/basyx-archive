@@ -66,8 +66,7 @@ public class AssetAdministrationShell extends BaseElement implements IAssetAdmin
 	 */
 	@Override
 	public synchronized void addSubModel(ISubModel subModel) {
-		// - FIXME: Muss hier nicht die ID stehen?
-		if (subModel.getName() == null || subModel.getName().isEmpty()) {
+		if (subModel.getId() == null || subModel.getId().isEmpty()) {
 			throw new IllegalArgumentException();
 		}
 		this.submodels.put(subModel.getId(), subModel);

@@ -25,11 +25,6 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	protected ConnectedAssetAdministrationShellManager aasManager = null;
 
 	/**
-	 * Store AAS ID
-	 */
-	protected String aasID = null;
-
-	/**
 	 * Constructor - expect the URL to the administration shell server
 	 * 
 	 * @param connector
@@ -37,9 +32,8 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	public ConnectedAssetAdministrationShell(ConnectedAssetAdministrationShellManager aasMngr, String id, IModelProvider provider) {
 		// Invoke base constructor
 		super(provider);
-
+		setId(id);
 		// Store variables
-		aasID = id;
 		aasManager = aasMngr;
 	}
 
@@ -50,7 +44,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	@Override
 	public Map<String, ISubModel> getSubModels() {
 		// Get AAS sub models
-		Map<String, ElementRef> subModels = (Map<String, ElementRef>) provider.getModelPropertyValue(aasID + "/aas/submodels");
+		Map<String, ElementRef> subModels = (Map<String, ElementRef>) provider.getModelPropertyValue(getId() + "/aas/submodels");
 
 		// Create connected sub model proxies
 		Map<String, ISubModel> result = new HashMap<String, ISubModel>();
@@ -73,7 +67,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	@Override
 	public void addSubModel(ISubModel subModel) {
 		try {
-			provider.createValue(aasID + "/aas/submodels", subModel);
+			provider.createValue(getId() + "/aas/submodels", subModel);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.basyx.aas.api.exception.ResourceNotFoundException;
-import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IOperation;
 import org.eclipse.basyx.aas.api.resources.basic.IProperty;
@@ -41,10 +40,10 @@ public class SubModel extends BaseElement implements ISubModel {
 	}
 	
 	public synchronized void addOperation(IOperation operation) {
-		if (operation.getName() == null || operation.getName().isEmpty()) {
+		if (operation.getId() == null || operation.getId().isEmpty()) {
 			throw new IllegalArgumentException();
 		}		
-		this.operations.put(operation.getName(), operation);
+		this.operations.put(operation.getId(), operation);
 		operation.setParent(this);
 	}
 	
@@ -54,10 +53,10 @@ public class SubModel extends BaseElement implements ISubModel {
 	}
 	
 	public synchronized void addProperty(IProperty property) {
-		if (property.getName() == null || property.getName().isEmpty()) {
+		if (property.getId() == null || property.getId().isEmpty()) {
 			throw new IllegalArgumentException();
 		}		
-		this.properties.put(property.getName(), property);
+		this.properties.put(property.getId(), property);
 		property.setParent(this);		
 	}
 	
@@ -67,10 +66,10 @@ public class SubModel extends BaseElement implements ISubModel {
 	}
 
 	public synchronized void addEvent(Event event) {
-		if (event.name == null || event.name.isEmpty()) {
+		if (event.getId() == null || event.getId().isEmpty()) {
 			throw new IllegalArgumentException();
 		}		
-		this.events.put(event.name, event);
+		this.events.put(event.getId(), event);
 		event.setParent(this);		
 	}
 	

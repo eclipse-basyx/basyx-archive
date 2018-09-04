@@ -147,15 +147,22 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 			throw new ResourceNotFoundException(path);
 
 		// Return specific property class
+		IProperty p;
 		if (elementRef.isMap()) {
-			return new ConnectedMapProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), getProvider(addr), this);
+			p = new ConnectedMapProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), getProvider(addr), this);
+		} else if (elementRef.isCollection()) {
+			p = new ConnectedCollectionProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), getProvider(addr), this);
+		} else {
+			p = new ConnectedSingleProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), getProvider(addr), this);
 		}
-
-		if (elementRef.isCollection()) {
-			return new ConnectedCollectionProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), getProvider(addr), this);
+		
+		String prop = elementRef.getPathToProperty();
+		if(prop.contains(".")) {
+			p.setId(prop.substring(prop.lastIndexOf(".") + 1));
+		} else {
+			p.setId(prop);	
 		}
-
-		return new ConnectedSingleProperty(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), getProvider(addr), this);
+		return p;
 	}
 
 	/**

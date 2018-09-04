@@ -32,11 +32,6 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	protected String aasID = null;
 
 	/**
-	 * Store sub model ID of this property
-	 */
-	protected String aasSubmodelID = null;
-
-	/**
 	 * Cache for registered elements
 	 */
 	private BaSysCache<ConnectedProperty> propertyCache = null;
@@ -61,7 +56,8 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 
 		// Store parameter values
 		aasID = id;
-		aasSubmodelID = submodelId;
+		setId(submodelId);
+		
 		aasManager = aasMngr;
 
 		this.propertyCache = new BaSysCache<ConnectedProperty>(this, PROPERTIES);
@@ -82,7 +78,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	protected void initCache(String type) {
 
 		// Assemble servicePath
-		String servicePath = BaSysID.instance.buildPath(aasID, aasSubmodelID, null, type);
+		String servicePath = BaSysID.instance.buildPath(aasID, getId(), null, type);
 
 		// Get sub model properties
 		Map<String, ElementRef> elements = (Map<String, ElementRef>) provider.getModelPropertyValue(servicePath);
@@ -113,7 +109,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 */
 	public Integer getServerClock() {
 
-		String servicePath = BaSysID.instance.buildPath(aasID, aasSubmodelID) + "/clock";
+		String servicePath = BaSysID.instance.buildPath(aasID, getId()) + "/clock";
 		Integer serverClock = (Integer) provider.getModelPropertyValue(servicePath);
 
 		return serverClock;
@@ -137,7 +133,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 
 		Integer serverClock = this.getServerClock();
 		if (this.localClock != serverClock) {
-			throw new AtomicTransactionFailedException(this.aasSubmodelID);
+			throw new AtomicTransactionFailedException( getId());
 		}
 
 	}
@@ -147,7 +143,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 */
 	@Override
 	public boolean isFrozen() {
-		String servicePath = BaSysID.instance.buildPath(aasID, aasSubmodelID) + "/frozen";
+		String servicePath = BaSysID.instance.buildPath(aasID,  getId()) + "/frozen";
 
 		// Retrieve "frozen" variable
 		boolean frozen = (boolean) provider.getModelPropertyValue(servicePath);
@@ -163,10 +159,10 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 */
 	@Override
 	public void freeze() throws ServerException {
-		String servicePath = BaSysID.instance.buildPath(aasID, aasSubmodelID, "frozen", PROPERTIES);
+		String servicePath = BaSysID.instance.buildPath(aasID,  getId(), "frozen", PROPERTIES);
 
 		// Set "frozen" variable to true
-		System.out.println("Freezing submodel " + this.aasSubmodelID);
+		System.out.println("Freezing submodel " + getId());
 		try {
 			provider.setModelPropertyValue(servicePath, true);
 		} catch (Exception e) {
@@ -182,10 +178,10 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 */
 	@Override
 	public void unfreeze() throws ServerException {
-		String servicePath = BaSysID.instance.buildPath(aasID, aasSubmodelID, "frozen", PROPERTIES);
+		String servicePath = BaSysID.instance.buildPath(aasID,  getId(), "frozen", PROPERTIES);
 
 		// Set "frozen" variable to false
-		System.out.println("Unfreezing submodel " + this.aasSubmodelID);
+		System.out.println("Unfreezing submodel " +  getId());
 		try {
 			provider.setModelPropertyValue(servicePath, false);
 		} catch (Exception e) {
@@ -246,6 +242,6 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 	 * @return
 	 */
 	protected String getAASSubmodelID() {
-		return this.aasSubmodelID;
+		return getId();
 	}
 }

@@ -33,6 +33,4 @@ public interface IProperty extends IElement {
 	 * @return Map flag
 	 */
 	public boolean isMap();
-	
-
 }

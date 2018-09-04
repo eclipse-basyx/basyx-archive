@@ -85,7 +85,7 @@ public class DescriptorGenerator {
 				p = mapProp;
 			} else if (PropertyContainer.class.isAssignableFrom(f.getType())) {
 				try {
-					p = (Property) f.get(obj);
+					p = (PropertyContainer) f.get(obj);
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					e.printStackTrace();
 					throw new RuntimeException("Reflection error with property " + f.getName() + " of type " + f.getType());

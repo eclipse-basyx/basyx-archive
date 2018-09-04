@@ -58,6 +58,9 @@ public class Property extends BaseElement implements IProperty {
 	 * Property value statements associated with this property
 	 */
 	protected HashMap<String, Statement> statements = new HashMap<>();
+
+
+	private boolean isPropertyContainer;
 	
 	
 	
@@ -94,6 +97,7 @@ public class Property extends BaseElement implements IProperty {
 	 * 
 	 * @return True if this property is a collection
 	 */
+	@Override
 	public boolean isCollection() {
 		return isCollection;
 	}
@@ -117,6 +121,7 @@ public class Property extends BaseElement implements IProperty {
 	 * 
 	 * @return True if this property is a map
 	 */
+	@Override
 	public boolean isMap() {
 		return isMap;
 	}
@@ -195,8 +200,6 @@ public class Property extends BaseElement implements IProperty {
 	public DataType getDataType() {
 		return dataType;
 	}
-	
-	
 	/**
 	 * Set property data type
 	 * 
