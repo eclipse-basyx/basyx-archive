@@ -12,12 +12,12 @@ import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IProperty;
 import org.eclipse.basyx.aas.api.serializableobject.SerializableObject;
 import org.eclipse.basyx.aas.api.services.IModelProvider;
+import org.eclipse.basyx.aas.backend.ConnectedSerializableObject;
 import org.eclipse.basyx.aas.impl.reference.ElementRef;
 import org.eclipse.basyx.aas.impl.resources.basic.DataType;
 import org.eclipse.basyx.aas.impl.resources.basic.Event;
 import org.eclipse.basyx.aas.impl.resources.basic.Operation;
 import org.eclipse.basyx.aas.impl.resources.basic.Property;
-import org.eclipse.basyx.aas.impl.resources.connected.ConnectedSerializableObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -450,7 +450,7 @@ public class JSONTools {
 		if (!(serializedValue.get("kind").equals("collection"))) return null;
 		
 		// Create collection return value
-		Collection<Object> result = (Collection<Object>) new LinkedList<Object>();
+		Collection<Object> result = new LinkedList<Object>();
 		
 		// Deserialize collection elements
 		for (int i=0; i<(int) serializedValue.get("size"); i++) {

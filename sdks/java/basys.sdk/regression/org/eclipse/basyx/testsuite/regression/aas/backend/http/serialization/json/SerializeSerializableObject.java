@@ -2,8 +2,8 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.http.serialization.js
 
 import org.eclipse.basyx.aas.api.annotation.AASProperty;
 import org.eclipse.basyx.aas.api.serializableobject.SerializableObject;
+import org.eclipse.basyx.aas.backend.ConnectedSerializableObject;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
-import org.eclipse.basyx.aas.impl.resources.connected.ConnectedSerializableObject;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package org.eclipse.basyx.aas.impl.resources.connected;
+package org.eclipse.basyx.aas.backend;
 
 import java.util.HashMap;
 import java.util.Map;
