@@ -1,5 +1,7 @@
 package org.eclipse.basyx.aas.api.resources.basic;
 
+import java.util.Map;
+
 /**
  * Interface for AAS properties that contain other properties
  * TODO: Reflexivity?
@@ -7,5 +9,5 @@ package org.eclipse.basyx.aas.api.resources.basic;
  *
  */
 public interface IContainerProperty extends IProperty {
-	IProperty getProperty(String name);
+	Map<String, IProperty> getProperties();
 }

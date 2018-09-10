@@ -20,12 +20,11 @@ public class TestProviderFull_get {
 	public static void testGet(IModelProvider provider) {
 		Object property1N = provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty1");
 		Object property2N = provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty2");
-		// TODO: Reintroduce this when meta data handling is clear
-		// Object property3N =
-		// provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3");
-		Object property3AN = provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyA");
-		Object property3BN = provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyB");
+		
+		Object property3AN = provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.properties.samplePropertyA");
+		Object property3BN = provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.properties.samplePropertyB");
 
+		
 		// - Check results
 		assertTrue((int) property1N == 2);
 		assertTrue((int) property2N == 3);
@@ -51,5 +50,11 @@ public class TestProviderFull_get {
 		assertTrue(properties.containsKey("sampleProperty2"));
 		assertTrue(properties.containsKey("sampleProperty3"));
 		assertTrue(properties.containsKey("sampleProperty4"));
+		
+
+		Map<String, IElementReference> nestedProperties = (Map<String, IElementReference>) provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.properties");
+		assertEquals(2, nestedProperties.size());
+		assertTrue(nestedProperties.containsKey("samplePropertyA"));
+		assertTrue(nestedProperties.containsKey("samplePropertyB"));
 	}
 }

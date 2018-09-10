@@ -25,11 +25,11 @@ public class TestProviderFull_set {
 		provider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty2", 3);
 		assertTrue((int) provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty2") == 3);
 		// - Test nested property "sampleProperty3/samplePropertyA"
-		assertTrue((int) provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyA") == 4);
-		provider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyA", 8);
-		assertTrue((int) provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyA") == 8);
-		provider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyA", 2);
-		assertTrue((int) provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.samplePropertyA") == 2);
+		assertTrue((int) provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.properties.samplePropertyA") == 4);
+		provider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.properties.samplePropertyA", 8);
+		assertTrue((int) provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.properties.samplePropertyA") == 8);
+		provider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.properties.samplePropertyA", 2);
+		assertTrue((int) provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.properties.samplePropertyA") == 2);
 		// TODO: Clock/Frozen?
 	}
 }

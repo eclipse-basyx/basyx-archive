@@ -218,7 +218,7 @@ public class ElementRef implements IElementReference {
 		// ID is in the property path
 		// check if it is a nested property
 		if(propertyPath.contains(".")) {
-			String[] splitted = propertyPath.split(".");
+			String[] splitted = propertyPath.split("\\.");
 			return splitted[splitted.length - 1];
 		} else {
 			return this.propertyPath;

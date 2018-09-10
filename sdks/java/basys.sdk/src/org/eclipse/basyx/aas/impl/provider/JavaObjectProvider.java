@@ -332,6 +332,9 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 					System.out.println("GG:"+pathArray[i]+" -- "+currentObject);
 					currentObject = getNamedProperty(currentObject, pathArray[i]);
 				}
+				
+				
+				
 				// - Return property
 				return currentObject;
 		}		
@@ -346,7 +349,13 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	@Override
 	public Object getModelPropertyValue(String path) {
 		// Return model property
-		return getModelProperty(path, 0);
+		// Is nested property
+
+		return getModelProperty(handleNestedProperty(path), 0);
+	}
+	
+	private String handleNestedProperty(String path) {
+		return path.replace("properties.", "");
 	}
 
 	
@@ -359,6 +368,7 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) {
 		// Get container element that contains the to be changed element
+		path = handleNestedProperty(path);
 		Object containerElement = getModelProperty(path, 1);
 		
 		// Change field 
@@ -379,13 +389,14 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	@Override
 	public void setModelPropertyValue(String path, Object... parameter) {
 		// Get collection reference
+		path = handleNestedProperty(path);
 		Object target = getModelPropertyValue(path);
 		
 		// Type check
 		if (target instanceof Collection) {
 			
 			// Extract new member
-			Object addedMember = ((Object[]) parameter)[0];
+			Object addedMember = parameter[0];
 			
 			// Check if element is already inside, delete old value in this case
 			if (collectionContains((Collection) target, addedMember)) removeFromCollection((Collection) target, addedMember);
@@ -396,8 +407,8 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 		}  else if (target instanceof Map) {
 			
 			// Extract new member
-			Object key = ((Object[]) parameter)[0];
-			Object value = ((Object[]) parameter)[1];
+			Object key = parameter[0];
+			Object value = parameter[1];
 			
 			// Check if ID is already inside, overwrite value in this case
 			System.out.println("Adding entry " + key + " -> " + value +" from map: " + target);
@@ -526,7 +537,7 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 		for (String key: elements.keySet()) {
 			IElement value = elements.get(key);
 			
-			if (value instanceof IElement) result.put(key, new ElementRef((IElement) value));
+			if (value instanceof IElement) result.put(key, new ElementRef(value));
 		}
 		
 		// Return elements
@@ -539,7 +550,7 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 		Map<String, IElementReference> result = new HashMap<>();
 
 		// Process elements
-		for (IElement value: elements) result.put(value.getId(), new ElementRef((IElement) value));
+		for (IElement value: elements) result.put(value.getId(), new ElementRef(value));
 
 		// Return elements
 		return result;

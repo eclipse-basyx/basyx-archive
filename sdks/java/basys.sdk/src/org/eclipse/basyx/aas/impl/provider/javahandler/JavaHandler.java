@@ -72,6 +72,7 @@ public class JavaHandler<T extends IElement> {
 	protected Map<String, IElementReference> submodels = new HashMap<>();
 
 	protected Map<String, IElementReference> properties = new HashMap<>();
+	
 
 	/**
 	 * Constructor
@@ -146,6 +147,7 @@ public class JavaHandler<T extends IElement> {
 			return submodels;
 		} else if (id.equals("properties")) {
 			return properties;
+		} else if (id.contains("properties.")) {
 		}
 
 		// If id is null pointer, return object reference

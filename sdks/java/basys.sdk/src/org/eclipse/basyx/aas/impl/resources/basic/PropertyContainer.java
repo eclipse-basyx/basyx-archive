@@ -72,6 +72,7 @@ public class PropertyContainer extends Property implements IElementContainer, IC
 		property.setParent(this);		
 	}
 	
+	@Override
 	public Map<String, IProperty> getProperties() {
 		return this.properties;
 	}
@@ -131,10 +132,5 @@ public class PropertyContainer extends Property implements IElementContainer, IC
 		
 		// Return map with elements
 		return result;
-	}
-
-	@Override
-	public IProperty getProperty(String name) {
-		return getProperties().get(name);
 	}
 }

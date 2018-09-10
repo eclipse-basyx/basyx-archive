@@ -11,8 +11,8 @@ import org.eclipse.basyx.testsuite.regression.aas.impl.provider.testfragments.Te
 import org.eclipse.basyx.testsuite.regression.aas.impl.provider.testfragments.TestProviderFull_invoke;
 import org.eclipse.basyx.testsuite.regression.aas.impl.provider.testfragments.TestProviderFull_set;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.aas.Stub1AAS;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub1Submodel;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub1Submodel.NestedPropertyType;
+import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub1SubmodelType;
+import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub1SubmodelType.NestedPropertyType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,22 +26,22 @@ import org.junit.Test;
  */
 
 public class TestJavaHandlerProvider {
-	
+
 	JavaHandlerProvider subModelProvider;
 	Stub1AAS stub1AAS;
-	Stub1Submodel stub1SM;
-	
+	Stub1SubmodelType stub1SM;
+
 	@Before
 	public void buildJavaHandler() {
 		subModelProvider = new JavaHandlerProvider();
 		// - Create AAS and sub model instances
 		stub1AAS = new Stub1AAS();
-		stub1SM = new Stub1Submodel(stub1AAS);
+		stub1SM = new Stub1SubmodelType(stub1AAS);
 
 		JavaHandler<Stub1AAS> aasHandler = new JavaHandler<Stub1AAS>(stub1AAS);
 		aasHandler.addSubModel("statusSM");
 
-		JavaHandler<Stub1Submodel> smHandler = new JavaHandler<Stub1Submodel>(stub1SM);
+		JavaHandler<Stub1SubmodelType> smHandler = new JavaHandler<Stub1SubmodelType>(stub1SM);
 		smHandler.addProperty("sampleProperty1", (obj) -> {
 			return obj.sampleProperty1;
 		}, (obj, val) -> {
@@ -57,21 +57,19 @@ public class TestJavaHandlerProvider {
 		}, (obj, val) -> {
 			obj.sampleProperty3 = (NestedPropertyType) val;
 		}, null, null);
-		smHandler.addProperty("sampleProperty3.samplePropertyA", (obj) -> {
+		smHandler.addProperty("sampleProperty3.properties.samplePropertyA", (obj) -> {
 			return obj.sampleProperty3.samplePropertyA;
 		}, (obj, val) -> {
 			obj.sampleProperty3.samplePropertyA = (int) val;
 		}, null, null);
-		smHandler.addProperty("sampleProperty3.samplePropertyB", (obj) -> {
+		smHandler.addProperty("sampleProperty3.properties.samplePropertyB", (obj) -> {
 			return obj.sampleProperty3.samplePropertyB;
 		}, (obj, val) -> {
 			obj.sampleProperty3.samplePropertyB = (int) val;
 		}, null, null);
-		smHandler.addProperty("sampleProperty3.samplePropertyC", (obj) -> {
-			return obj.sampleProperty3.samplePropertyC;
-		}, (obj, val) -> {
-			obj.sampleProperty3.samplePropertyC = (NestedPropertyType) val;
-		}, null, null);
+		smHandler.addProperty("sampleProperty3.properties", (obj) -> {
+			return obj.sampleProperty3.getProperties();
+		}, null, null, null);
 		smHandler.addProperty("sampleProperty4", (obj) -> {
 			return obj.sampleProperty4;
 		}, null, (obj, val) -> {
@@ -91,10 +89,10 @@ public class TestJavaHandlerProvider {
 		subModelProvider.addHandler(aasHandler);
 		subModelProvider.addHandler(smHandler);
 	}
-	
+
 	@Test
 	public void testGet() throws Exception {
-		
+
 		// Java Handler specific testcases
 		Object property1I = subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/0");
 		Object property2I = subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/1");
@@ -109,7 +107,7 @@ public class TestJavaHandlerProvider {
 		assertTrue(subModelStub == stub1SM);
 		assertTrue((int) property1I == 2);
 		assertTrue((int) property2I == 3);
-		assertTrue(property3I instanceof Stub1Submodel.NestedPropertyType);
+		assertTrue(property3I instanceof Stub1SubmodelType.NestedPropertyType);
 		assertTrue((int) property3AI == 4);
 		assertTrue((int) property3BI == 5);
 
@@ -122,29 +120,29 @@ public class TestJavaHandlerProvider {
 		assertTrue(subMode2Stub == stub1SM);
 		assertTrue((int) property1aI == 2);
 		assertTrue((int) property2aI == 3);
-		
+
 		TestProviderFull_get.testGet(subModelProvider);
 	}
-	
+
 	@Test
 	public void testSet() throws Exception {
 		TestProviderFull_set.testSet(subModelProvider);
-		
+
 		// Set AAS submodel property values over unique ID
 		subModelProvider.setModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/0", 2);
-		
+
 		// Test if property value has been set
 		Object prop = subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/0");
-		assertTrue((int) prop==2);
+		assertTrue((int) prop == 2);
 	}
-	
+
 	@Test
 	public void testInvoke() throws Exception {
 		TestProviderFull_invoke.invokeTest(subModelProvider);
 	}
-	
+
 	@Test
-	public void testDelete() throws Exception  {
+	public void testDelete() throws Exception {
 		TestProviderFull_delete.testDelete(subModelProvider);
 	}
 }

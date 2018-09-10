@@ -155,7 +155,7 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 	@Override
 	public Object getModelPropertyValue(String address) {
 		try {
-			String path = getFolderPath(address);
+			String path = getFolderPath(address).replace(".", "/");
 			if (path.endsWith("/operations") || path.endsWith("/properties") || path.endsWith("/events") || path.endsWith("/submodels")) {
 				List<File> files;
 				try {
@@ -164,7 +164,13 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 					Map<String, IElementReference> refMap = new HashMap<>();
 					for (String s : directories) {
 						if (path.endsWith("/operations") || path.endsWith("/properties") || path.endsWith("/events")) {
-							ElementRef ref = new ElementRef(BaSysID.instance.getAASID(address), BaSysID.instance.getSubmodelID(address), s);
+							String propPath;
+							if(address.contains(".")) {
+								propPath = address.substring(address.lastIndexOf("/") + 1, address.indexOf(".") + 1) + "properties." + s;
+							} else {
+								propPath = s;
+							}
+							ElementRef ref = new ElementRef(BaSysID.instance.getAASID(address), BaSysID.instance.getSubmodelID(address), propPath);
 							if (path.endsWith("/properties")) {
 								String type = getPropertyType(address, s);
 								ref.setKind(type);
@@ -242,7 +248,7 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 			} else if (newEntity instanceof PropertyContainer) {
 				PropertyContainer container = (PropertyContainer) newEntity;
 				for (String key : container.getProperties().keySet()) {
-					createValue(newAddress, container.getProperties().get(key));
+					createValue(newAddress + "/properties", container.getProperties().get(key));
 				}
 			} else {
 				throw new RuntimeException("Unknown property " + newEntity);
