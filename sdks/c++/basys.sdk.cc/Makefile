@@ -36,11 +36,11 @@ $(BUILD_DIR)$(EXE_NAME).exe: $(OBJS)
 	$(LD) -o $@ $^ $(LFLAGS)	
 
 $(OBJ_DIR)%.o:: %.cpp
-	-@mkdir $(subst /,\\, $(@D)) ||: 
+	-@mkdir -p $(@D) ||: 
 	$(CC) -c $< $(CFLAGS) -MMD -MP  -o $@
 	
 $(OBJ_DIR)%.o:: %.cc
-	-@mkdir $(subst /,\\, $(@D)) ||: 
+	-@mkdir -p $(@D) ||: 
 	$(CC) -c $< $(CFLAGS) -MMD -MP  -o $@
 
 .PHONY: clean
