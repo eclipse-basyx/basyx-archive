@@ -52,6 +52,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 		for (String submodelName : subModels.keySet()) {
 			System.out.println("Adding Submodel: " + submodelName);
 			ISubModel model = aasManager.retrieveSubModelProxy(subModels.get(submodelName));
+			model.setParent(this);
 			System.out.println("Added Submodel: " + submodelName + ": " + model);
 
 			result.put(submodelName, model);
