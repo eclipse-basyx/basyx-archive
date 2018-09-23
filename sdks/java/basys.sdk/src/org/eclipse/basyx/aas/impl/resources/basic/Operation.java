@@ -45,6 +45,7 @@ public class Operation extends BaseElement implements IOperation {
 	 * 
 	 * @return Parameter types
 	 */
+	@Override
 	public List<ParameterType> getParameterTypes() {
 		return parameterTypes;
 	}
@@ -65,6 +66,7 @@ public class Operation extends BaseElement implements IOperation {
 	 * 
 	 * @return Operation return type
 	 */
+	@Override
 	public DataType getReturnDataType() {
 		return returnDataType;
 	}
@@ -77,6 +79,12 @@ public class Operation extends BaseElement implements IOperation {
 	 */
 	public void setReturnDataType(DataType returnDataType) {
 		this.returnDataType = returnDataType;
+	}
+
+
+	@Override
+	public Object invoke(Object... params) throws Exception {
+		throw new RuntimeException("Can't directly call invoke on descriptor");
 	}
 }
 

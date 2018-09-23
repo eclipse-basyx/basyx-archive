@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.annotation.AASOperation;
-import org.eclipse.basyx.aas.api.annotation.AASProperty;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
@@ -41,61 +39,6 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 		// Split string into path segments
 		return pathString.split("[/\\.]");
 	}
-
-	
-	/**
-	 * Get all fields that are tagged with AASProperty
-	 */
-	protected Collection<Field> getAllFields(Class<?> cls) {
-		// Return value
-		Collection<Field> result = new LinkedList<>();
-		
-		// Try to find field
-	    while (cls != null) {
-	        try {
-	        	// Get fields
-	        	Field[] fields = cls.getDeclaredFields();
-	        	
-	        	// Add fields to result
-	        	for (Field field: fields) if (field.getAnnotation(AASProperty.class) != null) result.add(field);
-	        } catch (Exception e) {
-	        	// Do nothing
-	        }
-	        
-	        cls = cls.getSuperclass();
-	    }
-		
-		// Return result
-		return result;
-	}
-
-	
-	/**
-	 * Get all methods that are tagged with AASOperation
-	 */
-	protected Collection<Method> getAllMethods(Class<?> cls) {
-		// Return value
-		Collection<Method> result = new LinkedList<>();
-		
-		// Try to find field
-	    while (cls != null) {
-	        try {
-	        	// Get fields
-	        	Method[] methods = cls.getDeclaredMethods();
-	        	
-	        	// Add methods to result
-	        	for (Method method: methods) if (method.getAnnotation(AASOperation.class) != null) result.add(method);
-	        } catch (Exception e) {
-	        	// Do nothing
-	        }
-	        
-	        cls = cls.getSuperclass();
-	    }
-		
-		// Return result
-		return result;
-	}
-
 	
 	/**
 	 * Get a named field

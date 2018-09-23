@@ -132,6 +132,7 @@ public class Stub1SubmodelType extends SubModel {
 	    sampleProperty3 = new NestedPropertyType("sampleProperty3", this);
 
 	    DescriptorGenerator.addProperties(this);
+	    DescriptorGenerator.addOperations(this);
 	}
 
 
