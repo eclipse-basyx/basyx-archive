@@ -6,14 +6,13 @@ import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.exception.ResourceNotFoundException;
 import org.eclipse.basyx.aas.api.manager.IAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
-import org.eclipse.basyx.aas.api.resources.basic.IConnectedAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.IOperation;
 import org.eclipse.basyx.aas.api.resources.basic.IProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.api.services.IDirectoryService;
 import org.eclipse.basyx.aas.api.services.IModelProvider;
 import org.eclipse.basyx.aas.backend.connector.ConnectorProvider;
-import org.eclipse.basyx.aas.impl.resources.basic.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
 
 /**
@@ -56,7 +55,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	 * AAS.
 	 */
 	@Override
-	public IConnectedAssetAdministrationShell createAAS(AssetAdministrationShell aas) throws Exception {
+	public IAssetAdministrationShell createAAS(IAssetAdministrationShell aas) throws Exception {
 		throw new RuntimeException("Not implemented");
 	}
 
@@ -64,7 +63,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	 * Create a connected Asset Administration Shell proxy
 	 */
 	@Override
-	public IConnectedAssetAdministrationShell retrieveAAS(String assId) {
+	public IAssetAdministrationShell retrieveAAS(String assId) {
 		// Get AAS from directory
 		String addr = null;
 
@@ -91,7 +90,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	 * server.
 	 */
 	@Override
-	public Collection<IConnectedAssetAdministrationShell> retrieveAASAll() {
+	public Collection<IAssetAdministrationShell> retrieveAASAll() {
 		throw new FeatureNotImplementedException();
 	}
 
@@ -106,7 +105,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	/**
 	 * Create a connected asset administration shell proxy
 	 */
-	public IConnectedAssetAdministrationShell retrieveAASProxy(IElementReference elementRef) {
+	public IAssetAdministrationShell retrieveAASProxy(IElementReference elementRef) {
 		// Return connected AAS
 		return retrieveAAS(elementRef.getAASID());
 	}
