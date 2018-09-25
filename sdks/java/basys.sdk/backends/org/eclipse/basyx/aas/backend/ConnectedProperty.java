@@ -81,7 +81,6 @@ public class ConnectedProperty extends ConnectedElement implements IProperty {
 
 			// Get element from server
 			Object result = provider.getModelPropertyValue(propertyPath);
-			System.out.println("Result: " + result);
 
 			// Return if element is no reference
 			if (!(result instanceof IElementReference))

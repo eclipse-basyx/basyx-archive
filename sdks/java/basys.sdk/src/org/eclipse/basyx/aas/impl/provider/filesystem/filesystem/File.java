@@ -2,6 +2,7 @@ package org.eclipse.basyx.aas.impl.provider.filesystem.filesystem;
 
 /**
  * Represents a generic file which is either data or a directory
+ * 
  * @author schnicke
  *
  */
@@ -23,4 +24,8 @@ public class File {
 		return type;
 	}
 
+	@Override
+	public String toString() {
+		return "File [name=" + name + ", type=" + type + "]";
+	}
 }

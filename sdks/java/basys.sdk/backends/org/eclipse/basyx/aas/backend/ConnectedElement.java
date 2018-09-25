@@ -1,8 +1,6 @@
 package org.eclipse.basyx.aas.backend;
 
-import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.services.IModelProvider;
-import org.eclipse.basyx.aas.impl.resources.basic.AssetKind;
 import org.eclipse.basyx.aas.impl.resources.basic.BaseElement;
 
 /**
@@ -11,7 +9,7 @@ import org.eclipse.basyx.aas.impl.resources.basic.BaseElement;
  * @author kuhn
  *
  */
-public class ConnectedElement implements IElement {
+public class ConnectedElement extends BaseElement {
 
 	protected IModelProvider provider = null;
 
@@ -20,7 +18,6 @@ public class ConnectedElement implements IElement {
 	 */
 	private boolean isValid_;
 	private boolean isCacheable_;
-	private String id;
 
 	/**
 	 * Cached property value
@@ -83,75 +80,4 @@ public class ConnectedElement implements IElement {
 	public boolean isValid() {
 		return false;
 	}
-
-	/**
-	 * Return parent element
-	 */
-	// @Override
-	@Override
-	public BaseElement getParent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Change parent element if possible
-	 */
-	// @Override
-	@Override
-	public void setParent(BaseElement parent) {
-		// TODO Auto-generated method stub
-	}
-
-	/**
-	 * Get element ID
-	 */
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * Set element ID
-	 */
-	@Override
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	/**
-	 * Get asset kind
-	 */
-	@Override
-	public AssetKind getAssetKind() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Set asset kind
-	 */
-	@Override
-	public void setAssetKind(AssetKind kind) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * Get element name
-	 */
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Set element name
-	 */
-	@Override
-	public void setName(String name) {
-		// TODO Auto-generated method stub
-	}
-
 }

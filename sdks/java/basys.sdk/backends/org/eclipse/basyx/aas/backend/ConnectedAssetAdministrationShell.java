@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
-import org.eclipse.basyx.aas.api.resources.basic.IConnectedAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.api.services.IModelProvider;
@@ -17,7 +17,7 @@ import org.eclipse.basyx.aas.impl.reference.ElementRef;
  * @author kuhn
  *
  */
-public class ConnectedAssetAdministrationShell extends ConnectedElement implements IConnectedAssetAdministrationShell {
+public class ConnectedAssetAdministrationShell extends ConnectedElement implements IAssetAdministrationShell {
 
 	/**
 	 * Store AAS manager
@@ -52,6 +52,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 		for (String submodelName : subModels.keySet()) {
 			System.out.println("Adding Submodel: " + submodelName);
 			ISubModel model = aasManager.retrieveSubModelProxy(subModels.get(submodelName));
+			model.setParent(this);
 			System.out.println("Added Submodel: " + submodelName + ": " + model);
 
 			result.put(submodelName, model);

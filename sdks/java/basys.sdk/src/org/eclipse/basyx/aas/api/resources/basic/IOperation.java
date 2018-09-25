@@ -30,5 +30,7 @@ public interface IOperation extends IElement {
 	 * @return Operation return type
 	 */
 	public DataType getReturnDataType();
+	
+	public Object invoke(Object... params) throws Exception;
 }
 

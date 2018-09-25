@@ -35,7 +35,7 @@ import org.json.JSONObject;
 public class FileSystemProvider extends AbstractModelScopeProvider {
 
 	private FileSystem fileSystem;
-	protected static final String DATA = "/data";
+	protected static final String DATA = "/data.json";
 	private final String rootDir;
 	private final String metaDir;
 	private final String metaId;
@@ -58,7 +58,7 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 	private void initMapIfNull(String path) throws Exception {
 		String map = null;
 		try {
-			map = fileSystem.readFile(path + "/data");
+			map = fileSystem.readFile(path + DATA);
 		} catch (Exception e) {
 			// e.printStackTrace();
 		}

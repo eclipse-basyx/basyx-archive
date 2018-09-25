@@ -57,10 +57,11 @@ public class ConnectedOperation extends ConnectedElement implements IOperation {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+ 
 	/**
 	 * Invoke operation
 	 */
+	@Override
 	public Object invoke(Object... parameter) throws Exception {
 		// Get property value
 		Object returnValue = provider.invokeOperation(operationPath, parameter);
