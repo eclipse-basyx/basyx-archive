@@ -24,7 +24,10 @@ import org.eclipse.basyx.components.directory.exception.AASDirectoryProviderExce
 
 
 /**
- * Servlet interface for configuration file sub model provider
+ * Static configuration file based directory provider
+ * 
+ * This directory provider provides a static directory. It therefore only supports get() operations. 
+ * Modification of the directory via PUT/POST/PATCH/DELETE operations is not supported.
  * 
  * @author kuhn
  *
