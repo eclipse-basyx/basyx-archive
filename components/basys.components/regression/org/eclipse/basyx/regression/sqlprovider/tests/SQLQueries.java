@@ -8,7 +8,8 @@ import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.basic.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.backend.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.regression.support.directory.ComponentTestsuiteDirectory;
+import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
+import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.junit.jupiter.api.Test;
 
 
@@ -25,7 +26,7 @@ class SQLQueries {
 	/**
 	 * Store HTTP asset administration shell manager backend
 	 */
-	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new ComponentTestsuiteDirectory());
+	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(new ComponentsTestsuiteDirectory(), new HTTPConnectorProvider());
 
 	
 	/**

@@ -95,10 +95,7 @@ public class SQLSubModelProvider extends GenericHandlerSubmodel {
 			
 			// Trim query string and resultFilterOp (remove '"' at beginning and end)
 			queryString    = queryString.substring(1, queryString.length()-1);
-			System.out.println("RESSS1:"+resultFilterOp);
 			resultFilterOp = resultFilterOp.substring(1, resultFilterOp.length()-1);
-			
-			System.out.println("RESSS2:"+resultFilterOp);
 			
 			// Create dynamic SQL query
 			DynamicSQLQuery getQuery = new DynamicSQLQuery(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, parameterCount, queryString, resultFilterOp);
@@ -111,13 +108,7 @@ public class SQLSubModelProvider extends GenericHandlerSubmodel {
 					null,
 					null,
 					null);
-
-			// Debug output
-			System.out.println("Adding SQL property: "+propertyName);
 		}
-
-		// Print configuration values
-		System.out.println("Starting...");
 	}
 	
 	

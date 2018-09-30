@@ -3,14 +3,11 @@ package org.eclipse.basyx.components.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Properties;
 import javax.servlet.ServletException;
 
 import org.eclipse.basyx.aas.backend.modelprovider.http.GenericHandlerSubmodelHTTPProvider;
 import org.eclipse.basyx.components.sqlprovider.SQLSubModelProvider;
-import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
 
 
 
@@ -108,43 +105,5 @@ public class SQLSubModelProviderServlet extends GenericHandlerSubmodelHTTPProvid
 		this.getBackendReference().addModel(sqlSMProvider,             submodelID);
 		this.getBackendReference().addModel(sqlSMProvider.getParent(), aasID);
 	}	
-		
-		
-	public void callme() {	
-		
-				
-		// Read defined queries and export as sub model properties or operations
-		try {
-			InputStream input = getServletContext().getResourceAsStream("/WEB-INF/config/sqlprovider/sampledb.properties"); 
-
-			Properties properties = new Properties();
-			properties.load(input);
-			String queryStatements = properties.getProperty("queryStatements");
-			System.out.println("Statements:"+queryStatements);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		/**
-		 * Database driver
-		 */
-		 ISQLDriver dbAccess = null;
-		 
-		 // Create MySQL backend
-		//dbAccess = new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver);
-		
-		int elementID = 1;
-
-		// Query database
-		ResultSet resultSet = dbAccess.sqlQuery("SELECT * FROM sensors WHERE sensorID='"+elementID+"'");
-
-		try {
-			System.out.println("RESS:"+resultSet.getString(1));
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }
 

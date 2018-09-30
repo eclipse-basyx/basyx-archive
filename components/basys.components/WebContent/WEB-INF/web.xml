@@ -35,8 +35,27 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Example_CFGProvider</servlet-name>
-    <url-pattern>/Testsuite/components/BaSys/1.0/provider/cfgsm</url-pattern>
+    <url-pattern>/Testsuite/components/BaSys/1.0/provider/cfgsm/*</url-pattern>
   </servlet-mapping>
+  
+  
+  
+  <servlet>
+    <servlet-name>Example_DirectoryProvider_CFGFile</servlet-name>
+    <servlet-class> org.eclipse.basyx.components.servlets.StaticCFGDirectoryServlet </servlet-class>
+ 
+    <init-param>
+        <param-name>config</param-name>
+        <param-value>/WEB-INF/config/directory/cfgdirectory/directory.properties</param-value>
+    </init-param>
+    
+    <load-on-startup>5</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Example_DirectoryProvider_CFGFile</servlet-name>
+    <url-pattern>/Testsuite/Directory/CFGFile/*</url-pattern>
+  </servlet-mapping>
+  
   
   
   <welcome-file-list>

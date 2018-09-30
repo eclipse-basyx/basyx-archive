@@ -9,9 +9,9 @@ import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.impl.provider.javahandler.genericsm.GenericHandlerOperation;
 import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
 import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
-import org.eclipse.basyx.tools.propertyfile.opdef.OperationDefinition;
-import org.eclipse.basyx.tools.propertyfile.opdef.Parameter;
-import org.eclipse.basyx.tools.propertyfile.opdef.ResultFilter;
+import org.eclipse.basyx.components.tools.propertyfile.opdef.OperationDefinition;
+import org.eclipse.basyx.components.tools.propertyfile.opdef.Parameter;
+import org.eclipse.basyx.components.tools.propertyfile.opdef.ResultFilter;
 
 
 
