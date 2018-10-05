@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="4.5.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BaSys40.API\BaSys40.API.csproj" />
+    <ProjectReference Include="..\BaSys40.Utils\BaSys40.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="RegistryClientSettings.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

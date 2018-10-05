@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+   <DebugType>Full</DebugType>
+</PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BaSys40.Models\BaSys40.Models.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SmartControlSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<OperationMode>None</OperationMode>
+  <ClientConfig/>
+	<ServerConfig>
+    <ServerId>SmartControlServer</ServerId>
+		<Endpoint>http://127.0.0.1:5455</Endpoint>
+	</ServerConfig>
+  <PathConfig/>
+	<oneM2MConfig>
+    <ProtocolBinding>Http</ProtocolBinding>
+    <ClientId>admin:admin</ClientId>
+    <Endpoint>http://127.0.0.1:8282</Endpoint>
+    <CSEName>in-name</CSEName>
+	</oneM2MConfig>
+  <Miscellaneous/>
+</SmartControlSettings>

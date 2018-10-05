@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BaSys40.API\BaSys40.API.csproj" />
+    <ProjectReference Include="..\BaSys40.Models\BaSys40.Models.csproj" />
+    <ProjectReference Include="..\BaSys40.Technologies.oneM2M\BaSys40.Technologies.oneM2M.csproj" />
+    <ProjectReference Include="..\BaSys40.Utils\BaSys40.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SmartControlSettings.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
