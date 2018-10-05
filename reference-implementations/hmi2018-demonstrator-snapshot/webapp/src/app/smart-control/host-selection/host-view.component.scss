@@ -1,0 +1,31 @@
+.left {
+    min-width: 115px; // if you want width please write here //
+    text-align: left;
+}
+
+$my-placeholder-color: rgb(209, 209, 209);
+::-webkit-input-placeholder {
+    /* WebKit, Blink, Edge */
+    color: $my-placeholder-color;
+}
+
+::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color:$my-placeholder-color;
+    opacity: 1;
+}
+
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: $my-placeholder-color;
+}
+
+::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: $my-placeholder-color;
+}
+
+::placeholder {
+    /* Most modern browsers support this now. */
+    color: $my-placeholder-color;
+}

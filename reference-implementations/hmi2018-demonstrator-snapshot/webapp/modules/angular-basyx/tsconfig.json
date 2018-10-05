@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "stripInternal": true,
+    "declaration": true,
+    "outDir": "./dist",
+    "lib": [
+      "es2016",
+      "es2017",
+      "dom"
+    ],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules"
+    ],
+    "types": [
+      "node",
+      "mocha",
+      "chai"
+    ]
+  },
+  "files": [
+    "./src/*.ts",
+    "./src/**/*.ts",
+    "./src/**/*.spec.ts"
+  ],
+  "angularCompilerOptions": {
+    "skipTemplateCodegen": true
+  },
+  "skipLibCheck": true
+}

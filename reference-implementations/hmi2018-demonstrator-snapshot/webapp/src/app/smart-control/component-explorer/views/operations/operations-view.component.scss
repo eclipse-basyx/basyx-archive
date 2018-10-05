@@ -1,0 +1,20 @@
+.operations {
+    border-color: rgba(120, 190, 32, 1);
+}
+
+.operations-header {
+    background: rgba(120, 190, 32, 1);
+    padding: 2px 20px;
+}
+
+// TODO row has no border? done with <hr>
+// Gets overwritten somehow, if set in debug console, it´s working
+.operationline {
+    // border-color: gray;
+    // border-bottom-width: 3px;
+    // border-bottom-color: red;
+    // border-width: 2px;
+    // box-shadow: green;
+    // border: blue;
+    border-bottom: 1px green !important;
+}

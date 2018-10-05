@@ -1,0 +1,40 @@
+.main-container{
+    margin-top: 65px;
+    margin-left: 270px;
+    padding: 15px;
+    -ms-overflow-x: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: relative;
+    overflow: hidden;
+
+}
+@media screen and (max-width: 992px) {
+    .main-container {
+        margin-left: 0px !important;
+    }
+}
+
+.search {
+    border-radius: 18px;
+    border-color: lightgray;
+    border-width: 1px;
+    background: white;
+}
+
+.search-icon {
+    border-right: none;
+}
+
+.search-input {
+    border-left: none;
+    border-right: none;
+}
+
+.search-clear {
+    border-left: none;
+}
+
+.search-input:focus {
+    box-shadow: none;
+}

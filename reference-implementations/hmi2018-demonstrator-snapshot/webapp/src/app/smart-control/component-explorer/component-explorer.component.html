@@ -1,0 +1,45 @@
+﻿<div class="row justify-content-between">
+    <div class="col-1">
+
+        <!--Refresh-->
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <button id="refreshingB" type="button" class="btn btn-link" (click)="refresh()">
+                    <div *ngIf='!refreshing'>
+                        <i class="fa fa-fw fa-refresh fa-1x" style="font-size:125%"></i>
+                    </div>
+                    <div *ngIf='refreshing'>
+                        <i class="fa fa-fw fa-refresh fa-spin fa-1x" style="font-size:125%"></i>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-5">
+        <div class="input-group mb-3 search-all">
+            <div class="input-group-prepend">
+                <button type="button" class="btn btn-link search search-icon" (click)="filter()">
+                    <i class="fa fa-search" style="font-size:100%"></i>
+                </button>
+            </div>
+            <input #search type="text" class="form-control search search-input" placeholder="Search components" [(ngModel)]="filterValue"
+                (keyup)="filter()">
+            <!-- (keyup.enter)="filter(search.value)"> -->
+            <div class="input-group-append">
+                <button (click)="search.value='';clearFilter()" type="button" class="btn btn-link search search-clear">
+                    <i class="fa fa-fw fa-remove fa-1x" style="font-size:125%"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12" style="width: 100%">
+        <ng-container *ngFor="let caas of getComponentsFilteredSorted()">
+            <component-view [caas]="caas"></component-view>
+        </ng-container>
+    </div>
+</div>

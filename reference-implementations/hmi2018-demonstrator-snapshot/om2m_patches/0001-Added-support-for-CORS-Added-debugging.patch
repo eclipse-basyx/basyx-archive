@@ -1,0 +1,92 @@
+From 0f6a81832b00f4b824ef6dd7ef8ee5d363f0a215 Mon Sep 17 00:00:00 2001
+From: Michael Schoeffler <michael.schoeffler@de.bosch.com>
+Date: Tue, 24 Oct 2017 16:59:15 +0200
+Subject: [PATCH] Added support for CORS + Added debugging
+
+---
+ .../om2m/binding/http/RestHttpServlet.java    | 33 ++++++++++++++++++-
+ org.eclipse.om2m.site.in-cse/script           |  2 +-
+ 2 files changed, 33 insertions(+), 2 deletions(-)
+
+diff --git a/org.eclipse.om2m.binding.http/src/main/java/org/eclipse/om2m/binding/http/RestHttpServlet.java b/org.eclipse.om2m.binding.http/src/main/java/org/eclipse/om2m/binding/http/RestHttpServlet.java
+index 3c19338..f793cd9 100644
+--- a/org.eclipse.om2m.binding.http/src/main/java/org/eclipse/om2m/binding/http/RestHttpServlet.java
++++ b/org.eclipse.om2m.binding.http/src/main/java/org/eclipse/om2m/binding/http/RestHttpServlet.java
+@@ -70,7 +70,18 @@ public class RestHttpServlet extends HttpServlet {
+ 	 */
+ 	@Override
+ 	protected void service(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
+-		LOGGER.info("----------------------------------------------------------------------------------------------");
++		LOGGER.info("----------------------------------------------------------------------------------------------");		
++		// Support for CORS preflight requests
++		httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
++        httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
++        httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-m2m-origin,x-m2m-ri, X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
++        httpServletResponse.setHeader("Access-Control-Max-Age", "600");		
++		if ("OPTIONS".equals(httpServletRequest.getMethod())) { //&& httpServletRequest.getHeader("Access-Control-Request-Method") != null) {
++			httpServletResponse.setStatus(200);
++			return;			
++		}
++
++		
+ 		// Create generic request
+ 		RequestPrimitive request = new RequestPrimitive();
+ 
+@@ -109,6 +120,7 @@ public class RestHttpServlet extends HttpServlet {
+ 		// Get request parameters
+ 		mapParameters(httpServletRequest, request);
+ 
++		
+ 		// Get the oneM2M operation
+ 		LOGGER.info("Built RequestPrimitive: " + request.toString());
+ 		try{
+@@ -147,6 +159,8 @@ public class RestHttpServlet extends HttpServlet {
+ 		if (response.getFrom() != null){
+ 			httpServletResponse.setHeader(HttpHeaders.ORIGINATOR, response.getFrom());
+ 		}
++	
++    
+ 
+ 		// Set HTTP status code
+ 		int httpStatus = getHttpStatusCode(response.getResponseStatusCode());
+@@ -179,6 +193,22 @@ public class RestHttpServlet extends HttpServlet {
+ 	private static BigInteger getOneM2MOperation(HttpServletRequest httpServletRequest) {
+ 		BigInteger result = null ;
+ 		switch(httpServletRequest.getMethod()){
++		case "GET":
++			return Operation.RETRIEVE;
++		case "POST":
++			if (httpServletRequest.getHeader(HttpHeaders.CONTENT_TYPE) != null &&
++			httpServletRequest.getHeader(HttpHeaders.CONTENT_TYPE).contains("ty=")){
++				result = Operation.CREATE;
++			} else {
++				result = Operation.NOTIFY;
++			}
++			return result;
++		case "PUT":
++			return Operation.UPDATE;
++		case "DELETE":
++			return Operation.DELETE;
++		}
++		switch (httpServletRequest.getHeader("Access-Control-Request-Method")) {
+ 		case "GET":
+ 			return Operation.RETRIEVE;
+ 		case "POST":
+@@ -195,6 +225,7 @@ public class RestHttpServlet extends HttpServlet {
+ 			return Operation.DELETE;
+ 		default:
+ 			throw new BadRequestException("HTTP Operation not supported: " + httpServletRequest.getMethod());
++			
+ 		}
+ 	}
+ 
+diff --git a/org.eclipse.om2m.site.in-cse/script b/org.eclipse.om2m.site.in-cse/script
+index 1f6af33..695122f 100755
+--- a/org.eclipse.om2m.site.in-cse/script
++++ b/org.eclipse.om2m.site.in-cse/script
+@@ -1 +1 @@
+-java -jar -ea -Declipse.ignoreApp=true -Dosgi.clean=true -Ddebug=true plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar -console -noExit
++java -agentlib:jdwp=transport=dt_socket,address=8092,server=y,suspend=n -jar -ea -Declipse.ignoreApp=true -Dosgi.clean=true -Ddebug=true plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar -console -noExit
+-- 
+2.17.1.windows.2
+

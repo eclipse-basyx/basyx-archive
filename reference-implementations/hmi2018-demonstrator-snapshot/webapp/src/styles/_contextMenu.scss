@@ -1,0 +1,32 @@
+$topnav-background-color: #222;
+.ngx-contextmenu .dropdown-menu {
+    border: solid 1px $topnav-background-color;
+    background-color: $topnav-background-color;
+    padding: 0;
+}
+
+.ngx-contextmenu li {
+    display: block;
+    border-top: solid 1px #999; //   text-transform: uppercase;
+    text-align: left;
+    
+    border-top: none;
+    border-bottom: none;
+}
+
+.ngx-contextmenu li:first-child {
+    border-top: none;
+    border-bottom: solid 1px #999;
+}
+
+.ngx-contextmenu a {
+    color: #999;
+    display: block;
+    padding: 0.5em 0.5em;
+    text-decoration: none;
+}
+
+.ngx-contextmenu a:hover {
+    color: #fff; //   background-color:#dddddd;
+    background: darken($topnav-background-color, 10%);
+}

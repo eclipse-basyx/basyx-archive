@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="header">
+        <a class="navbar-brand" href="#"> &nbsp; Eclipse Basyx UI</a>
+        <!-- <a class="navbar-brand" href="#" style="font-size: 125%">Ultrasonic SPR<small> - 1.0</small></a> -->
+    </div>
+    <button class="navbar-toggler" type="button" (click)="toggleSidebar()">
+        <!-- <span class="navbar-toggler-icon"></span> -->
+        <i class="fa fa-bars text-muted" aria-hidden="true"></i>
+    </button>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown" ngbDropdown>
+                <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
+                    <i class="fa fa-user"></i>
+                    <b class="caret"></b>
+                </a>
+                <div class="dropdown-menu-right" ngbDropdownMenu>
+                    <a class="dropdown-item" [routerLink]="['/login']" (click)="onLoggedout()">
+                        <i class="fa fa-fw fa-sign-out"></i>
+                        <!-- {{ 'Log Out' | translate }} -->
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>

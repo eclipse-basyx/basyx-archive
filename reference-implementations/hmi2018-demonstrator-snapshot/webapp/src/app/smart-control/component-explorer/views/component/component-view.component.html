@@ -1,0 +1,42 @@
+﻿<div class="card component mb-1">
+
+    <div class="card-header view-header component-header" (click)="hideContent = !hideContent">
+        <span style="font-size: 150%">{{caas.id}} </span>
+        <button class="btn btn-sm view-header component-header" style="float: right">
+            <div class="fa fa-fw fa-chevron-down" *ngIf="hideContent"></div>
+            <div class="fa fa-fw fa-chevron-up" *ngIf="!hideContent"></div>
+        </button>
+        <button class="btn btn-sm view-header component-header" style="float: right" (click)="openInfo($event, content)">
+            <div class="fa fa-fw fa-info"></div>
+        </button>
+        <ng-template #content let-c="close" let-d="dismiss">
+            <div class="card component wide">
+                <div class="card-header view-header component-header">
+                    <h4 class="component-title">{{caas.id}} </h4>
+                </div>
+                <div class="card-body view-body component-body">
+                    <div class="input-group mb-1">
+                        <input readonly type="text" value='ID:' class="form-control left">
+                        <input disabled type="text" value={{caas.assetId}} class="form-control">
+                    </div>
+                    <div class="input-group mb-1">
+                        <input readonly type="text" value='TypeDefinition:' class="form-control left">
+                        <input disabled type="text" value={{caas.assetTypeDefinition}} class="form-control">
+                    </div>
+                    <div class="input-group mb-1">
+                        <input readonly type="text" value='DisplayName:' class="form-control left">
+                        <input disabled type="text" value={{caas.displayName}} class="form-control">
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+
+    <div class="card-body view-body component-body " id="{{caas.id}} " *ngIf="!hideContent ">
+
+        <ng-container *ngFor="let subModel of util_entries( 'aas-sub-'+caas.id, caas.subModels) ">
+            <submodel-view [subModel]="subModel "></submodel-view>
+        </ng-container>
+
+    </div>
+</div>

@@ -1,0 +1,24 @@
+From 66490443615ffa5fa49ac5e707c227c1c56aeeeb Mon Sep 17 00:00:00 2001
+From: Michael Schoeffler <michael.schoeffler@de.bosch.com>
+Date: Thu, 14 Dec 2017 11:26:39 +0100
+Subject: [PATCH 3/6] Hotfix: Caching
+
+---
+ .../om2m/persistence/eclipselink/internal/dao/ContainerDAO.java  | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/org.eclipse.om2m.persistence.eclipselink/src/main/java/org/eclipse/om2m/persistence/eclipselink/internal/dao/ContainerDAO.java b/org.eclipse.om2m.persistence.eclipselink/src/main/java/org/eclipse/om2m/persistence/eclipselink/internal/dao/ContainerDAO.java
+index 3bb7221..b69f1a2 100644
+--- a/org.eclipse.om2m.persistence.eclipselink/src/main/java/org/eclipse/om2m/persistence/eclipselink/internal/dao/ContainerDAO.java
++++ b/org.eclipse.om2m.persistence.eclipselink/src/main/java/org/eclipse/om2m/persistence/eclipselink/internal/dao/ContainerDAO.java
+@@ -45,6 +45,7 @@ public class ContainerDAO extends AbstractDAO<ContainerEntity>{
+ 		DBTransactionJPAImpl transaction = (DBTransactionJPAImpl) dbTransaction;
+ 		transaction.getEm().remove(resource);
+ 		transaction.getEm().getEntityManagerFactory().getCache().evict(CSEBaseEntity.class);
++		transaction.getEm().getEntityManagerFactory().getCache().evict(ContainerEntity.class);
+ 		transaction.getEm().getEntityManagerFactory().getCache().evict(AeEntity.class);
+ 		transaction.getEm().getEntityManagerFactory().getCache().evict(RemoteCSEEntity.class);
+ 		transaction.getEm().getEntityManagerFactory().getCache().evict(RemoteCseAnncEntity.class);
+-- 
+2.17.1.windows.2
+

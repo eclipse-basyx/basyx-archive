@@ -1,0 +1,33 @@
+<div class="card events mb-1">
+
+    <div class="card-header view-header events-header" (click)="hideContent = !hideContent" style="cursor: pointer">
+        <span style="font-size: 110%"> Events </span>
+        <button class="btn btn-sm view-header events-header" style="float: right">
+            <div class="fa fa-fw fa-chevron-down" *ngIf="hideContent"></div>
+            <div class="fa fa-fw fa-chevron-up" *ngIf="!hideContent"></div>
+        </button>
+    </div>
+
+    <div class="card-body view-body events-body" *ngIf="!hideContent">
+
+        <tr>
+            <td style="width:40%">
+                <strong>Name / datatype</strong>
+            </td>
+            <td style="width:30%">
+                <strong>Latest value</strong>
+            </td>
+            <td style="width:30%">
+                <strong>Update latest value</strong>
+            </td>
+        </tr>
+        <ng-container *ngFor="let event of util_entries('sub-evt-'+subModel[0], subModel[1].events); let last = last">
+            <tr>
+                <td style="padding-top:2px">{{event[1].name}} ({{event[1].datatype}})</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <hr *ngIf='!last' class="seperator">
+        </ng-container>
+    </div>
+</div>

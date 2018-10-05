@@ -1,0 +1,52 @@
+<div class="card submodel mb-1">
+
+    <div class="card-header view-header submodel-header" (click)="hideContent = !hideContent">
+        <span style="font-size: 130%"> {{this.subModel[0]}} </span>
+        <button class="btn btn-sm view-header submodel-header" style="float: right">
+            <div class="fa fa-fw fa-chevron-down" *ngIf="hideContent"></div>
+            <div class="fa fa-fw fa-chevron-up" *ngIf="!hideContent"></div>
+        </button>
+        <button class="btn btn-sm view-header submodel-header" style="float: right" (click)="openInfo($event, infoSubmodel)">
+            <div class="fa fa-fw fa-info"></div>
+        </button>
+        <ng-template #infoSubmodel let-c="close" let-d="dismiss">
+            <div class="card submodel wide">
+                <div class="card-header view-header submodel-header">
+                    <h4 class="submodel-title">{{this.subModel[0]}} </h4>
+                </div>
+                <div class="card-body view-body submodel-body">
+                    <div class="input-group mb-1">
+                        <input readonly type="text" value='ID:' class="form-control left">
+                        <input disabled type="text" value={{subModel[1]?.id}} class="form-control">
+                    </div>
+                    <div class="input-group mb-1">
+                        <input readonly type="text" value='TypeDefinition:' class="form-control left">
+                        <input disabled type="text" value={{subModel[1]?.typeDefinition}} class="form-control">
+                    </div>
+                    <!-- ID: {{subModel[1]?.id}}
+                    <br/> TypeDefinition: {{subModel[1]?.typeDefinition}} -->
+                </div>
+            </div>
+        </ng-template>
+    </div>
+
+    <div class="card-body view-body submodel-body" *ngIf="!hideContent">
+        <!-- <h4 class="card-title submodel-title text-muted ">
+            <small>
+                ID: {{subModel[1]?.id}}
+                <br/> TypeDefinition: {{subModel[1]?.typeDefinition}}
+            </small>
+        </h4> -->
+        <div *ngIf="subModel[1].properties.size > 0">
+            <properties-view [subModel]="subModel"></properties-view>
+        </div>
+
+        <div *ngIf="subModel[1].operations.size > 0">
+            <operations-view [subModel]="subModel"></operations-view>
+        </div>
+
+        <div *ngIf="subModel[1].events.size > 0">
+            <events-view [subModel]="subModel"></events-view>
+        </div>
+    </div>
+</div>
