@@ -47,14 +47,9 @@ public class BaSyxTCPProvider<T extends IModelProvider> extends Thread {
 	public static final byte BASYX_DELETE = 0x05;
 	
 	/**
-	 * BaSyx delete command
-	 */
-	public static final byte BASYX_DELETE_CONTAINED = 0x06;
-
-	/**
 	 * BaSyx invoke command
 	 */
-	public static final byte BASYX_INVOKE = 0x07;
+	public static final byte BASYX_INVOKE = 0x06;
 	
 	
 	
@@ -205,28 +200,22 @@ public class BaSyxTCPProvider<T extends IModelProvider> extends Thread {
 				int    pathLen   = CoderTools.getInt32(rxFrame, 1);
 				String path      = new String(rxFrame, 1+4, pathLen);
 				// Get value string length and value
-				int    jsonValueLen = CoderTools.getInt32(rxFrame, 1+4+pathLen);
-				String jsonValue    = new String(rxFrame, 1+4+pathLen+4, jsonValueLen);
-				// Invoke get operation
-				providerBackend.processBaSysDelete(path, output);
-				// - Create response frame
-				byte[] frameLength     = new byte[4];
-				CoderTools.setInt32(frameLength, 0, 1);
-				// - Transmit response frame				
-				tcpCommSocket.getOutputStream().write(frameLength);
-				tcpCommSocket.getOutputStream().write(0x00);
-				break;
-			}
-			
-			case BASYX_DELETE_CONTAINED: {
-				// Get path string length and value
-				int    pathLen   = CoderTools.getInt32(rxFrame, 1);
-				String path      = new String(rxFrame, 1+4, pathLen);
-				// Get value string length and value
-				int    jsonValueLen = CoderTools.getInt32(rxFrame, 1+4+pathLen);
-				String jsonValue    = new String(rxFrame, 1+4+pathLen+4, jsonValueLen);
-				// Invoke get operation
-				providerBackend.processBaSysPatch(path, jsonValue, "remove", output);
+				
+				int servicePath_length = 1+4+pathLen+4; // - jsonValueLen;
+				int frame_length = rxFrame.length;
+				
+				if (servicePath_length < frame_length) {
+					
+					// There must be some parameter in the frame. Delete map/collection entry
+					int    jsonValueLen = CoderTools.getInt32(rxFrame, 1+4+pathLen);
+					String jsonValue    = new String(rxFrame, 1+4+pathLen+4, jsonValueLen);
+					
+					providerBackend.processBaSysPatch(path, jsonValue, "remove", output);
+				}
+				else {
+					// There is no parameter in the frame. Delete entity
+					providerBackend.processBaSysDelete(path, output);
+				}
 				// - Create response frame
 				byte[] frameLength     = new byte[4];
 				CoderTools.setInt32(frameLength, 0, 1);
