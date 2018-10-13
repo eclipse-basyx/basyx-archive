@@ -1,4 +1,4 @@
-EXE_NAME ?= tests_provider_json
+TARGET_NAME ?= tests_provider_json
 
 MODULE_SRC := test_jsonprovider.cpp
 

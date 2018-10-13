@@ -1,4 +1,4 @@
-EXE_NAME ?= tests_parameter
+TARGET_NAME ?= tests_parameter
 
 MODULE_SRC := test_parameter.cc
 

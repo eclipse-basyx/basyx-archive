@@ -1,4 +1,4 @@
-EXE_NAME ?= tests_basysid
+TARGET_NAME ?= tests_basysid
 
 MODULE_SRC := test_basysid_1.cc test_basysid_2.cc
 

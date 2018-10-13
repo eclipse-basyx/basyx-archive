@@ -1,4 +1,4 @@
-EXE_NAME ?= tests_bref
+TARGET_NAME ?= tests_bref
 
 MODULE_SRC := test_bref.cc
 
