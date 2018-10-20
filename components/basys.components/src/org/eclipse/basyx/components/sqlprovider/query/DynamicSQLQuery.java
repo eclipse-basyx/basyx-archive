@@ -5,8 +5,6 @@ import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
-import org.eclipse.basyx.aas.impl.provider.javahandler.genericsm.GenericHandlerOperation;
 import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
 import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
 import org.eclipse.basyx.components.tools.propertyfile.opdef.OperationDefinition;

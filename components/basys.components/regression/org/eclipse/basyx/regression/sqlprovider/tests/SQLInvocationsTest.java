@@ -1,16 +1,7 @@
 package org.eclipse.basyx.regression.sqlprovider.tests;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
-
-import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.basic.ISingleProperty;
-import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
-import org.eclipse.basyx.aas.backend.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.vab.VABConnectionManager;

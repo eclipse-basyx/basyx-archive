@@ -9,9 +9,6 @@ import java.util.Set;
 
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.services.IModelProvider;
-import org.eclipse.basyx.aas.impl.provider.javahandler.genericsm.GenericHandlerSubmodel;
-import org.eclipse.basyx.aas.impl.resources.basic.AssetKind;
-import org.eclipse.basyx.aas.impl.resources.basic.DataType;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLQuery;
 
 
