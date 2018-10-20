@@ -7,7 +7,8 @@ import java.util.Properties;
 
 import javax.servlet.ServletException;
 
-import org.eclipse.basyx.aas.backend.modelprovider.http.GenericHandlerSubmodelHTTPProvider;
+import org.eclipse.basyx.aas.backend.modelprovider.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.backend.modelprovider.http.VABHTTPInterface;
 import org.eclipse.basyx.components.cfgprovider.CFGSubModelProvider;
 
 
@@ -19,7 +20,7 @@ import org.eclipse.basyx.components.cfgprovider.CFGSubModelProvider;
  * @author kuhn
  *
  */
-public class CFGSubModelProviderServlet extends GenericHandlerSubmodelHTTPProvider {
+public class CFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 
 	
 	/**
@@ -28,22 +29,11 @@ public class CFGSubModelProviderServlet extends GenericHandlerSubmodelHTTPProvid
 	private static final long serialVersionUID = 1L;
 
 	
-
-	/**
-	 * Asset administration shell ID
-	 */
-	protected String aasID        = null;
 	
 	/**
-	 * Sub model ID
+	 * Store ID of the sub model provided by this provider
 	 */
-	protected String submodelID   = null;
-	
-	/**
-	 * Sub model type
-	 */
-	protected String submodelType = null;
-
+	protected String submodelID = null;
 	
 
 	/**
@@ -53,13 +43,12 @@ public class CFGSubModelProviderServlet extends GenericHandlerSubmodelHTTPProvid
 	
 	
 	
-	
 	/**
 	 * Constructor
 	 */
 	public CFGSubModelProviderServlet() {
 		// Invoke base constructor
-		super();
+		super(new VABMultiSubmodelProvider());
 	}
 	
 	
@@ -78,14 +67,10 @@ public class CFGSubModelProviderServlet extends GenericHandlerSubmodelHTTPProvid
 			properties.load(input);
 			
 			// Extract AAS properties
-			this.aasID        = properties.getProperty("basyx_aasID");
 			this.submodelID   = properties.getProperty("basyx_submodelID");
-			this.submodelType = properties.getProperty("basyx_submodelType");
 			
 			// Remove AAS properties
-			properties.remove("basyx_aasID");
 			properties.remove("basyx_submodelID");
-			properties.remove("basyx_submodelType");
 		} catch (IOException e) {
 			// Output exception
 			e.printStackTrace();
@@ -108,14 +93,12 @@ public class CFGSubModelProviderServlet extends GenericHandlerSubmodelHTTPProvid
 		// - Read property file
 		loadProperties(configFilePath);
 		
-		// Create sub model provider
-		CFGSubModelProvider submodelProvider = new CFGSubModelProvider(submodelID, submodelID, submodelType, aasID, aasID, properties);
+		System.out.println("1:"+submodelID);
 		
-		// Register sub model handlers
-		this.getBackendReference().addHandler(submodelProvider.getAASHandler());
-		this.getBackendReference().addHandler(submodelProvider.getSubModelHandler());
-
-
+		// Create sub model provider
+		CFGSubModelProvider submodelProvider = new CFGSubModelProvider(properties);
+		// - Add sub model provider
+		this.getModelProvider().addProvider(submodelID, submodelProvider);
 		
 		System.out.println("CFG file loaded");
 	}

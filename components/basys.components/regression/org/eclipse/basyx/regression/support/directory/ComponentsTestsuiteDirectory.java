@@ -23,7 +23,7 @@ public class ComponentsTestsuiteDirectory extends TestsuiteDirectory {
 
 		// Define mappings
 		// - SQL provider mappings
-		addMapping("SQLTestAAS",               "http://localhost:8080/basys.components/Testsuite/components/BaSys/1.0/provider/sqlsm/");
+		addMapping("SQLTestSubmodel",          "http://localhost:8080/basys.components/Testsuite/components/BaSys/1.0/provider/sqlsm/");
 		addMapping("sampleDB.SQLTestAAS",      "http://localhost:8080/basys.components/Testsuite/components/BaSys/1.0/provider/sqlsm/");
 		// - CFG provider mappings
 		addMapping("CfgFileTestAAS",           "http://localhost:8080/basys.components/Testsuite/components/BaSys/1.0/provider/cfgsm/");

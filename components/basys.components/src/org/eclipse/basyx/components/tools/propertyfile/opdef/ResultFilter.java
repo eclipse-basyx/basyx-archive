@@ -4,7 +4,9 @@ package org.eclipse.basyx.components.tools.propertyfile.opdef;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 
 
@@ -24,7 +26,7 @@ public class ResultFilter {
 	 * @param result     SQL result
 	 * @param columnName Name of column to extract
 	 */
-	public static Object stringArray(ResultSet sqlResult, String columnName) {
+	public static Object stringArray(ResultSet sqlResult, Object... columnName) {
 		// Create result
 		Collection<String> result = new LinkedList<>();
 		
@@ -32,7 +34,35 @@ public class ResultFilter {
 		
 		// Process all SQL results
 		try {
-			while (sqlResult.next()) result.add(sqlResult.getString(columnName));
+			while (sqlResult.next()) result.add(sqlResult.getString((String) columnName[0]));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Return result
+		return result;
+	}
+
+	
+	/**
+	 * Return SQL result set as Map
+	 * 
+	 * @param result     SQL result
+	 * @param columnName Name of column to extract
+	 */
+	public static Object mapArray(ResultSet sqlResult, Object... columnNames) {
+		// Create result
+		Map<String, Object> result = new HashMap<>();
+				
+		// Process all SQL results
+		try {
+			while (sqlResult.next()) {
+				// Process columns
+				for (Object columnName: columnNames) {
+					result.put((String) columnName, sqlResult.getString((String) columnName));
+				}
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

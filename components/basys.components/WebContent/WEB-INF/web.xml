@@ -17,7 +17,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Example_SQLProvider</servlet-name>
-    <url-pattern>/Testsuite/components/BaSys/1.0/provider/sqlsm</url-pattern>
+    <url-pattern>/Testsuite/components/BaSys/1.0/provider/sqlsm/*</url-pattern>
   </servlet-mapping>
 
 

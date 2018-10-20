@@ -51,7 +51,7 @@ class TestStaticDirectoryFileProvider {
 		// Get a specific AAS (1)
 		try {
 			// Get a known AAS by its ID
-			String result = InvokeWebService.invokeWebService(client,  wsURL+"/api/v1/registry/urn:de.FHG:es.iese:0.98:5:lab/"+URLEncoder.encode("microscope#A-19","UTF-8"));
+			String result = InvokeWebService.invokeWebService(client,  wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-19","UTF-8"));
 
 			// Check if all AAS are contained in result
 			assertTrue(result.equals("{content.aas1}"));
@@ -63,7 +63,7 @@ class TestStaticDirectoryFileProvider {
 		// Get a specific AAS (2)
 		try {
 			// Get a known AAS by its ID
-			String result = InvokeWebService.invokeWebService(client,  wsURL+"/api/v1/registry/urn:de.FHG:es.iese:0.98:5:lab/"+URLEncoder.encode("microscope#A-18","UTF-8"));
+			String result = InvokeWebService.invokeWebService(client,  wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-18","UTF-8"));
 
 			// Check if all AAS are contained in result
 			assertTrue(result.equals("{content.aas2}"));
@@ -75,7 +75,7 @@ class TestStaticDirectoryFileProvider {
 		// Get a specific AAS (3)
 		try {
 			// Get a known AAS by its ID
-			String result = InvokeWebService.invokeWebService(client,  wsURL+"/api/v1/registry/urn:de.FHG:es.iese:0.98:5:lab/"+URLEncoder.encode("microscope#A-17","UTF-8"));
+			String result = InvokeWebService.invokeWebService(client,  wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-17","UTF-8"));
 
 			// Check if all AAS are contained in result
 			assertTrue(result.equals("{content.aas3}"));
@@ -87,7 +87,7 @@ class TestStaticDirectoryFileProvider {
 		// Get a specific AAS (4)
 		try {
 			// Get a known AAS by its ID
-			String result = InvokeWebService.invokeWebService(client,  wsURL+"/api/v1/registry/urn:de.FHG:es.iese:0.98:5:lab/"+URLEncoder.encode("microscope#A-16","UTF-8"));
+			String result = InvokeWebService.invokeWebService(client,  wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-16","UTF-8"));
 
 			// Check if all AAS are contained in result
 			assertTrue(result.equals("{content.aas4}"));
@@ -113,7 +113,7 @@ class TestStaticDirectoryFileProvider {
 		// Get unknown AAS ID
 		try {
 			// Get a known AAS by its ID
-			String result = InvokeWebService.invokeWebService(client,  wsURL+"/api/v1/registry/urn:de.FHG:es.iese:0.98:5:lab/"+URLEncoder.encode("unknown","UTF-8"));
+			String result = InvokeWebService.invokeWebService(client,  wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("unknown","UTF-8"));
 
 			// Check if all AAS are contained in result
 			assertTrue(result.equals(""));

@@ -21,7 +21,7 @@ import org.eclipse.basyx.components.tools.propertyfile.opdef.ResultFilter;
  * @author kuhn
  *
  */
-public class DynamicSQLQuery extends GenericHandlerOperation {
+public class DynamicSQLQuery {
 
 	
 	/**
@@ -71,11 +71,11 @@ public class DynamicSQLQuery extends GenericHandlerOperation {
 	 */
 	protected Class<?>[] getMethodParameter(Collection<Parameter> parameter) {
 		// Store operation signature
-		Class<?>[] result = new Class<?>[parameter.size()+1];
+		Class<?>[] result = new Class<?>[2];
 		
 		// Operation signature is ResultSet and a list of string parameter that define column names
 		result[0] = ResultSet.class;
-		for (int i=0; i<parameter.size(); i++) result[i+1]=String.class;
+		result[1] = Object[].class;
 		
 		// Return signature
 		return result;
@@ -97,7 +97,7 @@ public class DynamicSQLQuery extends GenericHandlerOperation {
 	/**
 	 * Execute query without parameter
 	 */
-	public Object runQuery(ISubModel instance) {
+	public Object runQuery() {
 		// Execute SQL query
 		ResultSet sqlResult = sqlDriver.sqlQuery(sqlQueryString);
 
@@ -106,13 +106,60 @@ public class DynamicSQLQuery extends GenericHandlerOperation {
 
 		// Process result
 		try {
+			// Create inner parameter array for call
+			Object[] callParameterInner = new Object[parameter.size()];
+			int i=0; for (String column: getColumnNames(parameter)) callParameterInner[i++]=column;
+
 			// Create parameter array for call
-			Object[] callParameter = new Object[parameter.size()+1];
+			Object[] callParameter = new Object[2];
 			callParameter[0] = sqlResult;
-			int i=0; for (String column: getColumnNames(parameter)) callParameter[++i]=column;
-			
+			callParameter[1] = callParameterInner;
+
 			// Invoke result filter operation using static invocation
 			return ResultFilter.class.getMethod(OperationDefinition.getOperation(resultFilterString), getMethodParameter(parameter)).invoke(null, callParameter);
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// No result
+		return null;
+	}
+
+
+	/**
+	 * Execute query with given parameter
+	 */
+	public Object runQuery(Object[] parameter) {
+		// Create list of query parameter
+		Collection<String> sqlQueryParameter = new LinkedList<>();
+		// - Add parameter
+		for (Object par: parameter) sqlQueryParameter.add(par.toString());
+		
+		// Apply parameter and create SQL query string
+		String sqlQuery = OperationDefinition.getSQLString(sqlQueryString, sqlQueryParameter);
+		
+		System.out.println("Running SQL query:"+sqlQuery);
+
+		// Execute SQL query
+		ResultSet sqlResult = sqlDriver.sqlQuery(sqlQuery);
+		
+		// Extract input parameter definition
+		Collection<Parameter> resultParameter = OperationDefinition.getParameter(resultFilterString);
+
+		// Process result
+		try {
+			// Create inner parameter array for call
+			Object[] callParameterInner = new Object[resultParameter.size()];
+			int i=0; for (String column: getColumnNames(resultParameter)) callParameterInner[i++]=column;
+
+			// Create parameter array for call
+			Object[] callParameter = new Object[2];
+			callParameter[0] = sqlResult;
+			callParameter[1] = callParameterInner;
+			
+			// Invoke result filter operation using static invocation
+			return ResultFilter.class.getMethod(OperationDefinition.getOperation(resultFilterString), getMethodParameter(resultParameter)).invoke(null, callParameter);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -124,10 +171,9 @@ public class DynamicSQLQuery extends GenericHandlerOperation {
 
 
 	/**
-	 * Execute operation
+	 * Execute update with given parameter
 	 */
-	@Override
-	public Object apply(ISubModel instance, Object[] parameter) {
+	public void runUpdate(Object[] parameter) {
 		// Create list of query parameter
 		Collection<String> sqlQueryParameter = new LinkedList<>();
 		// - Add parameter
@@ -135,14 +181,11 @@ public class DynamicSQLQuery extends GenericHandlerOperation {
 		
 		// Apply parameter and create SQL query string
 		String sqlQuery = OperationDefinition.getSQLString(sqlQueryString, sqlQueryParameter);
+		
+		System.out.println("Running SQL update:"+sqlQuery);
 
 		// Execute SQL query
-		ResultSet sqlResult = sqlDriver.sqlQuery(sqlQuery);
-		
-		// Process result
-		
-		// Return result
-		return sqlResult;
+		sqlDriver.sqlUpdate(sqlQuery);
 	}
 }
 

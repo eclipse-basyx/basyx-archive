@@ -2,9 +2,9 @@ package org.eclipse.basyx.components.cfgprovider;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.impl.provider.javahandler.genericsm.GenericHandlerSubmodel;
-import org.eclipse.basyx.aas.impl.resources.basic.AssetKind;
-import org.eclipse.basyx.aas.impl.resources.basic.DataType;
+import org.eclipse.basyx.sdk.provider.hashmap.VABHashmapProvider;
+import org.eclipse.basyx.sdk.provider.hashmap.aas.Submodel;
+import org.eclipse.basyx.sdk.provider.hashmap.aas.property.PropertySingleValued;
 
 
 
@@ -14,20 +14,33 @@ import org.eclipse.basyx.aas.impl.resources.basic.DataType;
  * @author kuhn
  *
  */
-public class CFGSubModelProvider extends GenericHandlerSubmodel {
+public class CFGSubModelProvider extends VABHashmapProvider {
+
+	
+	/**
+	 * This is a sub model
+	 */
+	protected Submodel submodelData = null;
 
 	
 	/**
 	 * Constructor
 	 */
-	public CFGSubModelProvider(String smName, String smID, String smType, String aasName, String aasID, Map<Object, Object> cfgValues) {
+	public CFGSubModelProvider(Map<Object, Object> cfgValues) {
 		// Call base constructor
-		super(AssetKind.INSTANCE, smName, smID, smType, aasName, aasID);
+		super();
+
 		
+		// Create sub model
+		submodelData = new Submodel();
+
+		// Load predefined elements from submodel
+		elements.putAll(submodelData);
+
 		// Add properties
 		for (Object key: cfgValues.keySet()) {
-			// Add properties
-			addProperty(key.toString(), DataType.STRING, cfgValues.get(key));
+			// Create example properties
+			submodelData.getProperties().put(key.toString(), new PropertySingleValued(cfgValues.get(key)));
 			
 			// Debug output
 			System.out.println("Adding property: "+key.toString()+" = "+cfgValues.get(key));

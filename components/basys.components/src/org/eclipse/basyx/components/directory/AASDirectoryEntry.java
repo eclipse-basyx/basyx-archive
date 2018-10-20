@@ -8,7 +8,9 @@ import org.eclipse.basyx.components.directory.exception.AASDirectoryFormatExcept
 
 
 /**
- * Asset Administration Shell entry
+ * Asset Administration Shell or sub model directory entry
+ * 
+ * IDs usually are formed as URIs: urn:<legalBody>:<SubUnit>:<Submodel>:<version>:<revision>:<elementID>#<instance>
  * 
  * @author kuhn
  *
@@ -182,12 +184,12 @@ public class AASDirectoryEntry {
 		// Check if any information is contained in subunit field
 		return idParts[2].trim();
 	}
-	
+
 	
 	/**
-	 * Check if ID contains a version
+	 * Check if ID contains a sub model
 	 */
-	public boolean hasVersion() {
+	public boolean hasSubModel() {
 		// Split ID by ':' token
 		String[] idParts = id.split(":");
 		
@@ -197,12 +199,12 @@ public class AASDirectoryEntry {
 		// Check if any information is contained in subunit field
 		return (idParts[3].trim().length() > 0);
 	}
-
+	
 	
 	/**
-	 * Get AAS version
+	 * Get the sub model of the ID field
 	 */
-	public String getVersion() {
+	public String getSubModel() {
 		// Split ID by ':' token
 		String[] idParts = id.split(":");
 		
@@ -215,9 +217,9 @@ public class AASDirectoryEntry {
 
 	
 	/**
-	 * Check if ID contains a revision
+	 * Check if ID contains a version
 	 */
-	public boolean hasRevision() {
+	public boolean hasVersion() {
 		// Split ID by ':' token
 		String[] idParts = id.split(":");
 		
@@ -230,9 +232,9 @@ public class AASDirectoryEntry {
 
 	
 	/**
-	 * Get AAS revision
+	 * Get AAS version
 	 */
-	public String getRevision() {
+	public String getVersion() {
 		// Split ID by ':' token
 		String[] idParts = id.split(":");
 		
@@ -241,6 +243,36 @@ public class AASDirectoryEntry {
 		
 		// Check if any information is contained in subunit field
 		return idParts[4].trim();
+	}
+
+	
+	/**
+	 * Check if ID contains a revision
+	 */
+	public boolean hasRevision() {
+		// Split ID by ':' token
+		String[] idParts = id.split(":");
+		
+		// Check if subunit is defined
+		if (idParts.length < 6) return false;
+		
+		// Check if any information is contained in subunit field
+		return (idParts[5].trim().length() > 0);
+	}
+
+	
+	/**
+	 * Get AAS revision
+	 */
+	public String getRevision() {
+		// Split ID by ':' token
+		String[] idParts = id.split(":");
+		
+		// Check if subunit is defined
+		if (idParts.length < 6) return null;
+		
+		// Check if any information is contained in subunit field
+		return idParts[5].trim();
 	}
 	
 	
@@ -252,12 +284,12 @@ public class AASDirectoryEntry {
 		String[] idParts = id.split(":");
 		
 		// Check if subunit is defined
-		if (idParts.length < 6) return false;
+		if (idParts.length < 7) return false;
 		
 		// Remove element instance if an instance is defined
-		if (idParts[5].indexOf('#') > -1) idParts[5]=idParts[5].substring(0, idParts[5].indexOf('#'));
+		if (idParts[6].indexOf('#') > -1) idParts[6]=idParts[6].substring(0, idParts[6].indexOf('#'));
 		// Check if any information is contained in subunit field
-		return (idParts[5].trim().length() > 0);
+		return (idParts[6].trim().length() > 0);
 	}
 
 	
@@ -269,12 +301,12 @@ public class AASDirectoryEntry {
 		String[] idParts = id.split(":");
 		
 		// Check if subunit is defined
-		if (idParts.length < 6) return null;
+		if (idParts.length < 7) return null;
 		
 		// Remove element instance if an instance is defined
-		if (idParts[5].indexOf('#') > -1) idParts[5]=idParts[5].substring(0, idParts[5].indexOf('#'));
+		if (idParts[6].indexOf('#') > -1) idParts[6]=idParts[6].substring(0, idParts[6].indexOf('#'));
 		// Check if any information is contained in subunit field
-		return idParts[5].trim();
+		return idParts[6].trim();
 	}
 
 	
@@ -286,12 +318,12 @@ public class AASDirectoryEntry {
 		String[] idParts = id.split(":");
 		
 		// Check if subunit is defined
-		if (idParts.length < 6) return false;
+		if (idParts.length < 7) return false;
 		
 		// Remove element instance if an instance is defined
-		if (idParts[5].indexOf('#') > -1) idParts[5]=idParts[5].substring(idParts[5].indexOf('#'));
+		if (idParts[6].indexOf('#') > -1) idParts[6]=idParts[6].substring(idParts[6].indexOf('#'));
 		// Check if any information is contained in subunit field
-		return (idParts[5].trim().length() > 0);
+		return (idParts[6].trim().length() > 0);
 	}
 
 
@@ -305,13 +337,13 @@ public class AASDirectoryEntry {
 			String[] idParts = id.split(":");
 
 			// Check if subunit is defined
-			if (idParts.length < 6) return null;
+			if (idParts.length < 7) return null;
 
 			// Remove element instance if an instance is defined
-			if (idParts[5].indexOf('#') > -1) idParts[5]=idParts[5].substring(idParts[5].indexOf('#')+1);
+			if (idParts[6].indexOf('#') > -1) idParts[6]=idParts[6].substring(idParts[6].indexOf('#')+1);
 			
 			// Check if any information is contained in subunit field
-			return idParts[5].trim();
+			return idParts[6].trim();
 		} catch (Exception e) {
 			return null;
 		}
