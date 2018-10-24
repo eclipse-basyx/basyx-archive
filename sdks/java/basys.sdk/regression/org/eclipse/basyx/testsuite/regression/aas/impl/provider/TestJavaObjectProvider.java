@@ -48,9 +48,6 @@ public class TestJavaObjectProvider {
 	public void testGet() {
 		// Get AAS sub model property values via AAS
 		Collection<String> modelNames = subModelProvider.getAllModels();
-
-		TestProviderFull_get.testGet(subModelProvider);
-
 		IAssetAdministrationShell aasStub = (IAssetAdministrationShell) subModelProvider.getModelPropertyValue("Stub1AAS/aas");
 		ISubModel subModelStub = (ISubModel) subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM");
 
@@ -64,6 +61,11 @@ public class TestJavaObjectProvider {
 
 		// - Check results
 		assertTrue(subMode2Stub == stub1SM);
+		
+
+		TestProviderFull_get.testGetProperties(subModelProvider);
+		TestProviderFull_get.testGetOperations(subModelProvider);
+		
 	}
 
 	@Test

@@ -72,7 +72,8 @@ public class JavaHandler<T extends IElement> {
 	protected Map<String, IElementReference> submodels = new HashMap<>();
 
 	protected Map<String, IElementReference> properties = new HashMap<>();
-	
+
+	protected Map<String, IElementReference> operations = new HashMap<>();
 
 	/**
 	 * Constructor
@@ -111,10 +112,10 @@ public class JavaHandler<T extends IElement> {
 		addOps.set(propertyID, addOp);
 		removeOps.set(propertyID, removeOp);
 
-		if(propertyName.contains(".")) {
+		if (propertyName.contains(".")) {
 			propertyName = propertyName.split("\\.")[0];
 		}
-		
+
 		properties.put(propertyName, new ElementRef(obj.getParent().getId(), obj.getId(), propertyName));
 	}
 
@@ -137,6 +138,8 @@ public class JavaHandler<T extends IElement> {
 
 		// Store lambdas
 		invokeOps.set(operationID, invocation);
+		
+		operations.put(operationName, new ElementRef(obj.getParent().getId(), obj.getId(), operationName));
 	}
 
 	/**
@@ -145,9 +148,12 @@ public class JavaHandler<T extends IElement> {
 	public Object getValue(String id) {
 		if (id.equals("submodels")) {
 			return submodels;
-		} else if (id.equals("properties")) {
+		} else if (id.endsWith("properties")) {
 			return properties;
 		} else if (id.contains("properties.")) {
+			id = id.substring(id.lastIndexOf(".properties.") + ".properties.".length());
+		} else if (id.endsWith("operations")) {
+			return operations;
 		}
 
 		// If id is null pointer, return object reference
@@ -176,7 +182,11 @@ public class JavaHandler<T extends IElement> {
 	 * Set property value
 	 */
 	public void setValue(String id, Object newValue) {
-
+		
+		if (id.contains("properties.")) {
+			id = id.substring(id.lastIndexOf(".properties.") + ".properties.".length());
+		}
+		
 		// If id is null pointer
 		if ((id == null) || (id.length() == 0))
 			;
@@ -262,6 +272,10 @@ public class JavaHandler<T extends IElement> {
 		if ((id == null) || (id.length() == 0))
 			;
 
+		if (id.contains("operations.")) {
+			id = id.substring(id.lastIndexOf(".operations.") + ".operations.".length());
+		}
+		
 		// Try numeric ID
 		try {
 			// Convert id to integer
