@@ -1,16 +1,19 @@
 package org.eclipse.basyx.components.servlets;
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,13 +21,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.basyx.aas.backend.modelprovider.http.BasysHTTPServelet;
 import org.eclipse.basyx.components.directory.AASDirectoryEntry;
-import org.eclipse.basyx.components.directory.exception.AASDirectoryProviderException;
+import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
 
 
 
 
 /**
- * Static configuration file based directory provider
+ * SQL database based directory provider
  * 
  * This directory provider provides a static directory. It therefore only supports get() operations. 
  * Modification of the directory via PUT/POST/PATCH/DELETE operations is not supported.
@@ -32,7 +35,7 @@ import org.eclipse.basyx.components.directory.exception.AASDirectoryProviderExce
  * @author kuhn
  *
  */
-public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
+public class SQLDirectoryServlet extends BasysHTTPServelet {
 
 	
 	/**
@@ -49,18 +52,6 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
 	
 	
 	/**
-	 * Asset administration shells by ID
-	 */
-	protected Map<String, AASDirectoryEntry> aasByID = new HashMap<>();
-	
-	
-	/**
-	 * Asset administration shells by tag
-	 */
-	protected Map<String, Collection<AASDirectoryEntry>> aasByTag = new HashMap<>();
-	
-	
-	/**
 	 * Uplink server
 	 */
 	protected String uplink = null;
@@ -71,6 +62,42 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
 	 */
 	protected Map<String, String> downlinks = new HashMap<>();
 	
+
+	/**
+	 * Path to database
+	 */
+	protected String path = null;
+	
+	
+	/**
+	 * SQL user name
+	 */
+	protected String user = null;
+	
+	
+	/**
+	 * SQL password
+	 */
+	protected String pass = null;
+	
+	
+	/**
+	 * SQL query prefix
+	 */
+	protected String qryPfx = null;
+	
+	
+	/**
+	 * SQL driver class name
+	 */
+	protected String qDrvCls = null;
+	
+	
+	/**
+	 * SQL driver instance
+	 */
+	protected SQLDriver sqlDriver = null;
+	
 	
 	
 	
@@ -78,7 +105,7 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
 	/**
 	 * Constructor
 	 */
-	public StaticCFGDirectoryServlet() {
+	public SQLDirectoryServlet() {
 		// Invoke base constructor
 		super();
 	}
@@ -208,23 +235,18 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
 			properties = new Properties();
 			properties.load(input);
 			
-			System.out.println("properties:"+properties);
-			System.out.println("properties (keys):"+properties.keySet());
-			System.out.println("properties (cfg.downlink.is.pattern):"+properties.get("cfg.downlink.is.pattern"));
-			
 			// Process properties
 			// - Uplink server
 			uplink = extractProperty(properties, "cfg.uplink");
 			// - Downlink servers
 			downlinks = extractDownlinks(properties);
-			// - AAS by ID
-			aasByID = extractAAS(properties);
-			// - AAS by tag
-			aasByTag = mapAASToTags(aasByID);
-			
-			System.out.println("Downlink:"+downlinks);
-			System.out.println("properties:"+properties);
-			System.out.println("aasbyID:"+aasByID);
+
+			// SQL parameter
+			path    = properties.getProperty("dburl");
+			user    = properties.getProperty("dbuser");
+			pass    = properties.getProperty("dbpass");
+			qryPfx  = properties.getProperty("sqlPrefix");
+			qDrvCls = properties.getProperty("sqlDriver");
 			
 		} catch (IOException e) {
 			// Output exception
@@ -247,6 +269,10 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
 		String configFilePath = (String) getInitParameter("config");
 		// - Read property file
 		loadProperties(configFilePath);
+		
+		
+		// Create SQL driver instance
+		sqlDriver = new SQLDriver(path, user, pass, qryPfx, qDrvCls);
 	}
 	
 	
@@ -261,33 +287,6 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
 		// Output result
 		outputStream.write(value);
 		outputStream.flush();
-	}
-	
-	
-	
-	/**
-	 * Get AAS content from AASDirectoryEntry
-	 */
-	protected String getAASContent(AASDirectoryEntry directoryEntry) {
-		// Process directory entry
-		switch (directoryEntry.getAASContentType()) {
-
-			// Local content type
-			case AASDirectoryEntry.AAS_CONTENTTYPE_LOCAL:
-				return directoryEntry.getAASContent();
-
-			// Remote content type
-			case AASDirectoryEntry.AAS_CONTENTTYPE_REMOTE:
-				throw new AASDirectoryProviderException("Unsupported AAS content type");
-
-			// Proxy content type - content is ID of AAS that contains the information
-			case AASDirectoryEntry.AAS_CONTENTTYPE_PROXY:
-				return getAASContentByID(directoryEntry.getAASContent());
-
-			// Unknown content type
-			default:
-				throw new AASDirectoryProviderException("Unknown AAS content type");
-		}
 	}
 	
 	
@@ -314,23 +313,6 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
 	
 	
 	
-	/**
-	 * Get a specific AAS content with ID
-	 */
-	protected String getAASContentByID(String aasID) {
-		// Extract requested AAS ID
-		AASDirectoryEntry aas = aasByID.get(aasID);
-		
-		// Null pointer check
-		if (aas == null) return null;
-		
-		// Return result
-		return getAASContent(aas);
-	}
-	
-	
-	
-	
 	
 	/**
 	 * Implement "Get" operation 
@@ -344,10 +326,6 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
 		String contextPath  = req.getContextPath();
 		String path 		= URLDecoder.decode(uri.substring(contextPath.length()+1).substring(req.getServletPath().length()), "UTF-8"); // plus 1 for "/"
 				
-		// Extract action parameter
-		Collection<String> alltags = getTagsAsCollection(req.getParameter("tags"));
-		
-		
 		// Setup HTML response header
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
@@ -356,45 +334,49 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
 		// Process get request
 		// - Get all (local) AAS
 		if (path.equals("api/v1/registry")) {
-			// Extract AAS directory entries
-			Collection<AASDirectoryEntry> entries = null;
+			System.out.println("Getting all");
 
-			// Check if tags are to be processed
-			if (alltags.isEmpty()) {
-				// Get all tags
-				entries = aasByID.values();
-			} else {
-				// HashSet that holds all elements
-				Set<AASDirectoryEntry> taggedEntries = new HashSet<>();
-				
-				// Get tagged elements that have all requested tags
-				// - Get first requested tag
-				taggedEntries.addAll(aasByTag.get(alltags.iterator().next()));
-				// - Remove all directory entries that do not have all tags
-				for (String tag: alltags) taggedEntries.retainAll(aasByTag.get(tag));
-				// - Place remaining elements into entries collection
-				entries = taggedEntries;
+			// Query database
+			ResultSet resultSet = sqlDriver.sqlQuery("SELECT * FROM directory.directory");
+			
+			// Write result
+			StringBuilder result = new StringBuilder();
+			
+			// Create result
+			try {
+				// Get results
+				while (resultSet.next()) result.append(resultSet.getString("ElementRef")); 
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
 			
-			// Build response string
-			StringBuilder response = new StringBuilder();
-			for (AASDirectoryEntry entry: entries) response.append(getAASContent(entry));
-
-			// Write result
-			sendResponse(response.toString(), resp.getWriter());
+			// Send result back
+			sendResponse(result.toString(), resp.getWriter());
 			// End processing
 			return;
 		}
 		
 		// Get a specific AAS
 		if (path.startsWith("api/v1/registry/")) {
-			System.out.println("Getting:"+path);
+			System.out.println("Getting:"+path.substring(new String("api/v1/registry/").length()));
 			
-			// Get requested AAS with ID
-			String aas = getAASContentByID(path.substring(new String("api/v1/registry/").length()));
-			
+			// Run query
+			ResultSet resultSet = sqlDriver.sqlQuery("SELECT * FROM directory.directory WHERE \"ElementID\" = '"+path.substring(new String("api/v1/registry/").length())+"'");
+
 			// Write result
-			sendResponse(aas, resp.getWriter());
+			StringBuilder result = new StringBuilder();
+			
+			// Create result
+			try {
+				// Get results
+				while (resultSet.next()) result.append(resultSet.getString("ElementRef")); 
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			// Send result back
+			sendResponse(result.toString(), resp.getWriter());
+			
 			// End processing
 			return;
 		}
@@ -403,12 +385,33 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
 	
 	
 	/**
-	 * Implement "Put" operation
+	 * Implement "Put" operation. Updates a directory entry.
 	 */
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// Indicate an unsupported operation
-		resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED, "Request not implemented for this service");
+		// Process request depending on the path and on parameter
+		String uri 			= req.getRequestURI();
+		String contextPath  = req.getContextPath();
+		String path 		= URLDecoder.decode(uri.substring(contextPath.length()+1).substring(req.getServletPath().length()), "UTF-8"); // plus 1 for "/"
+
+	 	// Read request body
+		InputStreamReader reader    = new InputStreamReader(req.getInputStream());
+		BufferedReader    bufReader = new BufferedReader(reader);
+		StringBuilder     aasValue  = new StringBuilder(); 
+		while (bufReader.ready()) aasValue.append(bufReader.readLine());
+
+		// Check path
+		System.out.println("Putting:"+path);
+		if (!path.startsWith("api/v1/registry/")) {
+			System.out.println("Exception");
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Wrong request path"); return;
+		}
+
+		// Extract AAS ID
+		String aasID = path.substring(new String("api/v1/registry/").length());
+
+		// Update AAS registry
+		sqlDriver.sqlUpdate("UPDATE directory.directory SET \"ElementRef\" = '"+aasValue.toString()+"' WHERE \"ElementID\"='"+aasID+"';");
 	}
 
 
@@ -426,7 +429,7 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
 
 	
 	/**
-	 * Handle a HTTP PATCH operation. Updates a map or collection respective to action string.
+	 * Handle a HTTP PATCH operation. 
 	 * 
 	 */
 	@Override
@@ -442,8 +445,24 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
 	 */
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// Indicate an unsupported operation
-		resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED, "Request not implemented for this service");
+		// Process request depending on the path and on parameter
+		String uri 			= req.getRequestURI();
+		String contextPath  = req.getContextPath();
+		String path 		= URLDecoder.decode(uri.substring(contextPath.length()+1).substring(req.getServletPath().length()), "UTF-8"); // plus 1 for "/"
+
+		// Check path
+		System.out.println("Deleting:"+path);
+		if (!path.startsWith("api/v1/registry/")) {
+			System.out.println("Exception");
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Wrong request path"); return;
+		}
+
+		// Extract AAS ID
+		String aasID = path.substring(new String("api/v1/registry/").length());
+
+		// Delete element
+		// - Delete element from table "directory"
+		sqlDriver.sqlUpdate("DELETE FROM directory.directory WHERE \"ElementID\"='"+aasID+"';");
 	}
 }
 
