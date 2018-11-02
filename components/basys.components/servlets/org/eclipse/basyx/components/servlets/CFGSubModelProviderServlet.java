@@ -67,10 +67,7 @@ public class CFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 			properties.load(input);
 			
 			// Extract AAS properties
-			this.submodelID   = properties.getProperty("basyx_submodelID");
-			
-			// Remove AAS properties
-			properties.remove("basyx_submodelID");
+			this.submodelID   = properties.getProperty("basyx.submodelID");
 		} catch (IOException e) {
 			// Output exception
 			e.printStackTrace();
