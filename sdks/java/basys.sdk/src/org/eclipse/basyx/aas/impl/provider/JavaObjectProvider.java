@@ -421,7 +421,16 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	@Override
 	public Object invokeOperation(String path, Object[] parameter) throws Exception {
 		// Get container element that contains the operation to be invoked
-		Object containerElement = getModelProperty(path, 1);
+		String searchPath;
+		int toSkip;
+		if(path.contains(".operations.")) {
+			searchPath = path.substring(0, path.indexOf(".operations."));
+			toSkip = 0;
+		} else {
+			searchPath = path;
+			toSkip = 1;
+		}
+		Object containerElement = getModelProperty(searchPath, toSkip);
 		
 		Method operation = null;
 

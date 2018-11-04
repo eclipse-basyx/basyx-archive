@@ -1,12 +1,17 @@
 package org.eclipse.basyx.aas.impl.provider;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.reference.IElementReference;
+import org.eclipse.basyx.aas.api.resources.basic.IContainerProperty;
 import org.eclipse.basyx.aas.api.resources.basic.IElement;
 import org.eclipse.basyx.aas.api.resources.basic.IElementContainer;
+import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
 import org.eclipse.basyx.aas.api.services.IModelProvider;
 import org.eclipse.basyx.aas.impl.provider.javahandler.JavaHandler;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
@@ -32,9 +37,39 @@ public class JavaHandlerProvider extends AbstractModelScopeProvider implements I
 	 *            added handler
 	 */
 	public void addHandler(JavaHandler<?> handler) {
-		System.out.println("**:" + handler.getIElement().getId());
 		// Add Java handler
-		javaHandlers.put(handler.getIElement().getId(), handler);
+		String id;
+		IElement elem = handler.getIElement();
+		if (elem instanceof IContainerProperty) {
+			id = getContainerPropertyUniqueId((IContainerProperty) elem);
+		} else {
+			id = elem.getId();
+		}
+
+		System.out.println("**:" + id);
+		javaHandlers.put(id, handler);
+	}
+
+	private String getContainerPropertyUniqueId(IContainerProperty prop) {
+		IElement elem = prop;
+		List<String> ids = new ArrayList<>();
+		while (!(elem instanceof ISubModel)) { 
+			ids.add(elem.getId());
+			elem = elem.getParent();
+		}
+		
+		String smId = elem.getId();
+		
+		Collections.reverse(ids);
+		
+		StringBuilder propPath= new StringBuilder();
+		propPath.append(ids.get(0));
+		
+		for(int i= 1; i < ids.size(); i++) {
+			propPath.append(".").append(ids.get(i));
+		}
+		
+		return smId + "/" + propPath;
 	}
 
 	/**
@@ -57,8 +92,19 @@ public class JavaHandlerProvider extends AbstractModelScopeProvider implements I
 		JavaHandler<?> javaHandler = null;
 
 		// Get handler by ID
-		if (propPath.equals("submodels") || BaSysID.instance.getSubmodelID(path).equals(""))
+		if (propPath.equals("submodels") || BaSysID.instance.getSubmodelID(path).equals("")) {
 			path = BaSysID.instance.getAASID(path); // return AAS
+		} else if(propPath.contains(".")) { // Handle PropertyContainer
+			String smId = BaSysID.instance.getSubmodelID(path);
+			String stripped = propPath.replace(".properties.", "."); // Map to Id
+			if(stripped.contains(".operations.")) { // Remove .operations.
+				stripped = stripped.substring(0, stripped.indexOf(".operations."));
+			}
+			if(stripped.contains(".")) { // Only get parent element
+				stripped =  stripped.substring(0, stripped.lastIndexOf("."));
+			}
+			path = smId + "/" + stripped;
+		}
 		else
 			path = BaSysID.instance.getSubmodelID(path); // return SubmodelID
 
@@ -72,19 +118,20 @@ public class JavaHandlerProvider extends AbstractModelScopeProvider implements I
 	/**
 	 * Get a sub model property value
 	 * 
-	 * @param path Path to the requested value
+	 * @param path
+	 *            Path to the requested value
 	 */
 	@Override
 	public Object getModelPropertyValue(String path) {
-		System.out.println("[JHP] GET PATH::"+path);
-		
+		System.out.println("[JHP] GET PATH::" + path);
+
 		// Get Property Path
 		String propPath = BaSysID.instance.getPath(path);
-		System.out.println("PID::"+propPath);
-		
+		System.out.println("PID::" + propPath);
+
 		// Get JavaHandler
 		JavaHandler<?> javaHandler = getJavaHandler(path, propPath);
-		
+
 		// Return element value
 		return javaHandler.getValue(propPath);
 	}
