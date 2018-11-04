@@ -1,4 +1,4 @@
-EXE_NAME ?= tests_aas
+TARGET_NAME ?= tests_aas
 
 MODULE_SRC := DeviceAAS.cc test_deviceaas.cc ../submodels/DeviceStatusSubModel.cc
 

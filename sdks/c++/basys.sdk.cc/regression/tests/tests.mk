@@ -1,4 +1,4 @@
-EXE_NAME ?= all_test
+TARGET_NAME ?= all_test
 
 TESTS := 	aas/tests_aas.mk \
 			basysid/tests_basysid.mk \

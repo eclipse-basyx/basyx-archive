@@ -2,7 +2,7 @@
 <?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="cdt.managedbuild.toolchain.gnu.mingw.base.1589020495.791069860">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.toolchain.gnu.mingw.base.1589020495.791069860" moduleId="org.eclipse.cdt.core.settings" name="Default">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.toolchain.gnu.mingw.base.1589020495.791069860" moduleId="org.eclipse.cdt.core.settings" name="BaSysID_Test">
 				<externalSettings/>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -18,7 +18,7 @@
 					<folderInfo id="cdt.managedbuild.toolchain.gnu.mingw.base.1589020495.791069860." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.base.180367622" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.PE" id="cdt.managedbuild.target.gnu.platform.mingw.base.340294508" name="Debug Platform" osList="win32" superClass="cdt.managedbuild.target.gnu.platform.mingw.base"/>
-							<builder arguments="MKFILE=regression/tests/basysid/tests_basysid.mk" autoBuildTarget="all" cleanBuildTarget="clean" command="mingw32-make" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="org.eclipse.cdt.build.core.settings.default.builder.2082941056" incrementalBuildTarget="all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+							<builder arguments="MKFILE=regression/tests/basysid/tests_basysid.mk PLATFORM=make/platforms/windows.mk" autoBuildTarget="all" cleanBuildTarget="clean" command="mingw32-make" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="org.eclipse.cdt.build.core.settings.default.builder.2082941056" incrementalBuildTarget="all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.base.1328540965" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.2061915943" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -59,7 +59,7 @@
 					<folderInfo id="cdt.managedbuild.toolchain.gnu.mingw.base.1589020495.791069860.808148327." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.base.1186403263" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.PE" id="cdt.managedbuild.target.gnu.platform.mingw.base.93009463" name="Debug Platform" osList="win32" superClass="cdt.managedbuild.target.gnu.platform.mingw.base"/>
-							<builder arguments="MKFILE=regression/tests/tests.mk" autoBuildTarget="all" cleanBuildTarget="clean" command="mingw32-make" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="org.eclipse.cdt.build.core.settings.default.builder.1114021588" incrementalBuildTarget="all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+							<builder arguments="MKFILE=regression/tests/tests.mk PLATFORM=make/platforms/windows.mk" autoBuildTarget="all" cleanBuildTarget="clean" command="mingw32-make" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="org.eclipse.cdt.build.core.settings.default.builder.1114021588" incrementalBuildTarget="all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.base.1172116100" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.16263985" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -104,16 +104,17 @@
 		<configuration configurationName="User">
 			<resource resourceType="PROJECT" workspacePath="/basys.sdk.cc"/>
 		</configuration>
-		<configuration configurationName="BRefTest"/>
 		<configuration configurationName="All_Tests">
 			<resource resourceType="FOLDER" workspacePath="/basys.sdk.cc/build"/>
 		</configuration>
+		<configuration configurationName="BRefTest"/>
 		<configuration configurationName="AAS_Test">
 			<resource resourceType="FOLDER" workspacePath="/basys.sdk.cc/build"/>
 		</configuration>
 		<configuration configurationName="Default">
 			<resource resourceType="FOLDER" workspacePath="/basys.sdk.cc/build"/>
 		</configuration>
+		<configuration configurationName="BaSysID_Test"/>
 		<configuration configurationName="Provider"/>
 	</storageModule>
 </cproject>

@@ -1,4 +1,4 @@
-EXE_NAME ?= tests_json
+TARGET_NAME ?= tests_json
 
 MODULE_SRC := test_json_deserialize.cc test_json_serialize.cc 
 

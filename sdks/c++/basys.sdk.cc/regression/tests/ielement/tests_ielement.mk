@@ -1,4 +1,4 @@
-EXE_NAME ?= tests_ielement
+TARGET_NAME ?= tests_ielement
 
 MODULE_SRC := test_ielement_1.cc
 

@@ -1,4 +1,4 @@
-EXE_NAME ?= tests_typertti
+TARGET_NAME ?= tests_typertti
 
 MODULE_SRC := test_array.cc test_null.cc test_primitives.cc test_string.cc
 MODULE_INC_DIR += .
