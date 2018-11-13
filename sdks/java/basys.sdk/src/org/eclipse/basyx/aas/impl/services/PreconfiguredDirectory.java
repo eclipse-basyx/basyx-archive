@@ -3,7 +3,7 @@ package org.eclipse.basyx.aas.impl.services;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.services.IDirectoryService;
+import org.eclipse.basyx.vab.core.IDirectoryService;
 
 
 

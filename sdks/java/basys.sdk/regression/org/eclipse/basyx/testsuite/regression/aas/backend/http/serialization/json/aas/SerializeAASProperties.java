@@ -2,10 +2,10 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.http.serialization.js
 
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
+import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
-import org.eclipse.basyx.aas.impl.provider.JavaObjectProvider;
+import org.eclipse.basyx.aas.impl.provider.JavaObjectVABMapper;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.aas.Stub1AAS;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub1Submodel;
 import org.json.JSONObject;
@@ -29,13 +29,13 @@ public class SerializeAASProperties {
 	void test() {
 		
 		// Create model provider
-		JavaObjectProvider subModelProvider = new JavaObjectProvider();
+		JavaObjectVABMapper subModelProvider = new JavaObjectVABMapper();
 		// - Create AAS and sub model instances
 		IAssetAdministrationShell stub1AAS = new Stub1AAS();
 		ISubModel                 stub1SM  = new Stub1Submodel(stub1AAS);
 		// - Add models to provider
-		subModelProvider.addModel(stub1AAS);
-		subModelProvider.addModel(stub1SM);
+		subModelProvider.addScopedModel(stub1AAS);
+		subModelProvider.addScopedModel(stub1SM);
 
 
 		// Serialize primitive properties

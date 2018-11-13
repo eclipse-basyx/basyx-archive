@@ -1,10 +1,14 @@
 package org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets;
 
-import org.eclipse.basyx.aas.backend.modelprovider.http.HTTPProvider;
-import org.eclipse.basyx.aas.impl.provider.JavaObjectProvider;
+import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.impl.provider.JavaObjectVABMapper;
+import org.eclipse.basyx.aas.metamodel.hashmap.VABHashmapProvider;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.aas.Stub1AAS;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub1Submodel;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub2Submodel;
+import org.eclipse.basyx.vab.backend.provider.ConsistencyProvider;
+import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
+import org.eclipse.basyx.vab.backend.server.http._HTTPProvider;
 
 
 
@@ -15,7 +19,7 @@ import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.St
  * @author kuhn
  *
  */
-public class Stub1AASServlet extends HTTPProvider<JavaObjectProvider> {
+public class Stub1AASServlet extends VABHTTPInterface<VABMultiSubmodelProvider<VABHashmapProvider>> {
 
 	
 	/**
@@ -29,13 +33,21 @@ public class Stub1AASServlet extends HTTPProvider<JavaObjectProvider> {
 	 */
 	public Stub1AASServlet() {
 		// Invoke base constructor
-		super(new JavaObjectProvider());
+		super(new VABMultiSubmodelProvider<VABHashmapProvider>());
+		
+		JavaObjectVABMapper instanceModelProvider1 = new JavaObjectVABMapper(); // one AAS per JOP
+		JavaObjectVABMapper instanceModelProvider2 = new JavaObjectVABMapper(); // one AAS per JOP
+		JavaObjectVABMapper instanceModelProvider3 = new JavaObjectVABMapper(); // one AAS per JOP
 		
 		// Register provided models and AAS
-		this.getBackendReference().addModel(new Stub1AAS());
+		instanceModelProvider1.addModel(new Stub1AAS());
+		instanceModelProvider2.addModel(new Stub1Submodel());
+		instanceModelProvider3.addModel(new Stub2Submodel());
 		
-		// Register provided models and AAS
-		this.getBackendReference().addModel(new Stub1Submodel(), "Stub1AAS");
-		this.getBackendReference().addModel(new Stub2Submodel(), "Stub1AAS");
+		// Register provider to MultiSubmodelProvider
+		this.getModelProvider().setAssetAdministrationShell(instanceModelProvider1);
+		this.getModelProvider().addSubmodel("statusSM", instanceModelProvider2);
+		this.getModelProvider().addSubmodel("Stub2SM",  instanceModelProvider3);
+		
 	}
 }

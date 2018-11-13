@@ -2,9 +2,9 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.http.serialization.js
 
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
-import org.eclipse.basyx.aas.impl.resources.basic.AssetAdministrationShell;
-import org.eclipse.basyx.aas.impl.resources.basic.Property;
-import org.eclipse.basyx.aas.impl.resources.basic.SubModel;
+import org.eclipse.basyx.aas.impl.resources.basic._AssetAdministrationShell;
+import org.eclipse.basyx.aas.impl.resources.basic._Property;
+import org.eclipse.basyx.aas.impl.resources.basic._SubModel;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
@@ -26,14 +26,14 @@ public class SerializeIElement {
 	void test() {
 		
 		// Create IElements
-		Property prop1 = new Property();
+		_Property prop1 = new _Property();
 			prop1.setId("prop1");
 			prop1.setName("prop1");
-		SubModel subMod1 = new SubModel();
+		_SubModel subMod1 = new _SubModel();
 			subMod1.setId("submod1");
 			subMod1.setName("submod1");
 			subMod1.addProperty(prop1);
-		AssetAdministrationShell aas1 = new AssetAdministrationShell(); 
+		_AssetAdministrationShell aas1 = new _AssetAdministrationShell(); 
 			aas1.setId("aas1");
 			aas1.addSubModel(subMod1);
 		

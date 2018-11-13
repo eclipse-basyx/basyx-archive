@@ -6,15 +6,15 @@ import java.util.LinkedList;
 
 import org.eclipse.basyx.aas.api.annotation.AASOperation;
 import org.eclipse.basyx.aas.api.annotation.AASProperty;
-import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.ParameterType;
 import org.eclipse.basyx.aas.impl.provider.DescriptorGenerator;
-import org.eclipse.basyx.aas.impl.resources.basic.AssetAdministrationShell;
+import org.eclipse.basyx.aas.impl.resources.basic._AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.resources.basic.AssetKind;
-import org.eclipse.basyx.aas.impl.resources.basic.DataType;
-import org.eclipse.basyx.aas.impl.resources.basic.Operation;
-import org.eclipse.basyx.aas.impl.resources.basic.ParameterType;
-import org.eclipse.basyx.aas.impl.resources.basic.PropertyContainer;
-import org.eclipse.basyx.aas.impl.resources.basic.SubModel;
+import org.eclipse.basyx.aas.impl.resources.basic._Operation;
+import org.eclipse.basyx.aas.impl.resources.basic._PropertyContainer;
+import org.eclipse.basyx.aas.impl.resources.basic._SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.enums.DataObjectType;
 
 
 
@@ -24,14 +24,14 @@ import org.eclipse.basyx.aas.impl.resources.basic.SubModel;
  * @author schnicke
  * 
  */
-public class Stub1SubmodelType extends SubModel {
+public class Stub1SubmodelType extends _SubModel {
 
 
 
 	/**
 	 * Property type with nested property values
 	 */
-	public class NestedPropertyType extends PropertyContainer {
+	public class NestedPropertyType extends _PropertyContainer {
 
 		
 		/**
@@ -57,22 +57,22 @@ public class Stub1SubmodelType extends SubModel {
 		/**
 		 * Constructor
 		 */
-		public NestedPropertyType(String name, SubModel parent) {
+		public NestedPropertyType(String name, _SubModel parent) {
 			setName("sampleProperty3");
 			setId("sampleProperty3");
-			setDataType(DataType.REFERENCE);
+			setDataType(DataObjectType.Reference);
 			parent.addProperty(this);
 			
 			// Create and add operation
-		    Operation op = new Operation();
+		    _Operation op = new _Operation();
 		    op.setAssetKind(AssetKind.INSTANCE);
 		    op.setName("sub");
 		    op.setId("sub");
 		    ArrayList<ParameterType> pt = new ArrayList<>();
-		    pt.add(new ParameterType(0, DataType.INTEGER, "a"));
-		    pt.add(new ParameterType(1, DataType.INTEGER, "b"));
+		    pt.add(new ParameterType(0, DataObjectType.Int32, "a"));
+		    pt.add(new ParameterType(1, DataObjectType.Int32, "b"));
 		    op.setParameterTypes(pt);
-		    op.setReturnDataType(DataType.INTEGER);
+		    op.setReturnDataType(DataObjectType.Int32);
 		    this.addOperation(op);
 		    
 		    DescriptorGenerator.addProperties(this);
@@ -124,7 +124,7 @@ public class Stub1SubmodelType extends SubModel {
 	    
 	    
 	    // Initialize dummy AAS
-	    AssetAdministrationShell aas = new AssetAdministrationShell();
+	    _AssetAdministrationShell aas = new _AssetAdministrationShell();
 	    aas.setId("Stub1AAS");
 	    aas.setName("Stub1AAS");
 	    this.setParent(aas);

@@ -1,8 +1,8 @@
 package org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets;
 
-import org.eclipse.basyx.aas.backend.modelprovider.http.HTTPProvider;
-import org.eclipse.basyx.aas.impl.provider.JavaObjectProvider;
+import org.eclipse.basyx.aas.impl.provider.JavaObjectVABMapper;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.MainSMSubmodel;
+import org.eclipse.basyx.vab.backend.server.http._HTTPProvider;
 
 
 
@@ -13,7 +13,7 @@ import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Ma
  * @author kuhn
  *
  */
-public class Stub2AASSubmodelServlet extends HTTPProvider<JavaObjectProvider> {
+public class Stub2AASSubmodelServlet extends _HTTPProvider<JavaObjectVABMapper> {
 
 	
 	/**
@@ -27,9 +27,9 @@ public class Stub2AASSubmodelServlet extends HTTPProvider<JavaObjectProvider> {
 	 */
 	public Stub2AASSubmodelServlet() {
 		// Invoke base constructor
-		super(new JavaObjectProvider());
+		super(new JavaObjectVABMapper());
 
 		// Register provided models and AAS
-		this.getBackendReference().addModel(new MainSMSubmodel(), "Stub2AAS");
+		this.getBackendReference().addScopedModel(new MainSMSubmodel(), "Stub2AAS");
 	}
 }

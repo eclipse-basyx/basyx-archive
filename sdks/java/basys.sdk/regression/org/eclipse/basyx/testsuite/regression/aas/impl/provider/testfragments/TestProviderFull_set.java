@@ -2,7 +2,7 @@ package org.eclipse.basyx.testsuite.regression.aas.impl.provider.testfragments;
 
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.basyx.aas.api.services.IModelProvider;
+import org.eclipse.basyx.vab.core.IModelProvider;
 
 /**
  * Provides a test method to check the set ability of a generic IModelProvider implementation.

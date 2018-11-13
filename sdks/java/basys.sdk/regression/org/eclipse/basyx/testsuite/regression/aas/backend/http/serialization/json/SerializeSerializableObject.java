@@ -2,7 +2,7 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.http.serialization.js
 
 import org.eclipse.basyx.aas.api.annotation.AASProperty;
 import org.eclipse.basyx.aas.api.serializableobject.SerializableObject;
-import org.eclipse.basyx.aas.backend.ConnectedSerializableObject;
+import org.eclipse.basyx.aas.backend._ConnectedSerializableObject;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -99,13 +99,13 @@ public class SerializeSerializableObject {
 
 
 		// Deserialize object
-		ConnectedSerializableObject connSerObj1 = (ConnectedSerializableObject) JSONTools.Instance.deserialize(serObj1);
-		ConnectedSerializableObject connSerObj2 = (ConnectedSerializableObject) JSONTools.Instance.deserialize(serObj2);
+		_ConnectedSerializableObject connSerObj1 = (_ConnectedSerializableObject) JSONTools.Instance.deserialize(serObj1);
+		_ConnectedSerializableObject connSerObj2 = (_ConnectedSerializableObject) JSONTools.Instance.deserialize(serObj2);
 		
 
 		System.out.println("XX1::"+connSerObj1.getElements().get("simpleProperty1"));
 		System.out.println("XX2::"+connSerObj1.getElements().get("simpleProperty2"));
-		System.out.println("XX3::"+((ConnectedSerializableObject) connSerObj1.getElements().get("complexproperty1")).getElements().get("nameProperty"));
+		System.out.println("XX3::"+((_ConnectedSerializableObject) connSerObj1.getElements().get("complexproperty1")).getElements().get("nameProperty"));
 		System.out.println("XX4::"+connSerObj2.getElements().get("nameProperty"));
 	}
 }

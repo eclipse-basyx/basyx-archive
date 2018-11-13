@@ -12,9 +12,9 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
-import org.eclipse.basyx.aas.api.services.IModelProvider;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
+import org.eclipse.basyx.vab.core.IModelProvider;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,27 +50,6 @@ public class HTTPConnector implements IModelProvider {
 		this.address = address;
 	}
 
-	// /**
-	// * FIXME remove this method?
-	// * Invoke a BaSys get operation via HTTP
-	// * @param address the server address from the directory
-	// * @param servicePath the URL suffix for the requested path
-	// * @return the requested object, but not deserialized
-	// */
-	// public JSONObject basysGetRaw(String address, String servicePath) {
-	//
-	// System.out.println("[HTTP BasysGet Raw] "+ address+ ": " + servicePath);
-	//
-	// // Invoke service call via web services
-	// Client client = ClientBuilder.newClient();
-	//
-	// // Build web service URL
-	// Builder request = buildRequest(client, address+servicePath);
-	//
-	// // Perform request, return response
-	// return new JSONObject(request.get(String.class));
-	// }
-	//
 	/**
 	 * Invokes BasysPut method via HTTP PUT. Overrides existing property, operation
 	 * or event.
@@ -88,22 +67,6 @@ public class HTTPConnector implements IModelProvider {
 		httpPut(servicePath, newValue);
 	}
 
-	/**
-	 * Invoke a BaSys Patch operation via HTTP PATCH. Updates a map or collection
-	 * 
-	 * @param address
-	 *            the server address from the directory
-	 * @param servicePath
-	 *            the URL suffix for the requested property
-	 * @param newValue
-	 *            (pair) that should be added
-	 * @throws ServerException
-	 */
-	@Override
-	public void setModelPropertyValue(String servicePath, Object... newValue) throws ServerException {
-
-		httpPatch(servicePath, ADD_ACTION, newValue);
-	}
 
 	/**
 	 * Invoke a BaSys Delete operation via HTTP PATCH. Deletes an element from a map
@@ -160,7 +123,6 @@ public class HTTPConnector implements IModelProvider {
 		return request;
 	}
 
-	
 	/**
 	 * Create web service path
 	 */
@@ -202,6 +164,8 @@ public class HTTPConnector implements IModelProvider {
 		// Perform request, return response
 		String result = request.get(String.class);
 
+		System.out.println(result);
+
 		// Deserialize and return property value
 		Object res = JSONTools.Instance.deserialize(new JSONObject(result));
 
@@ -226,7 +190,7 @@ public class HTTPConnector implements IModelProvider {
 		// Try to extract response if any
 		try {
 			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
-			
+
 			if (result instanceof ServerException) {
 				// Throw server exception
 				throw (ServerException) result;
@@ -257,7 +221,9 @@ public class HTTPConnector implements IModelProvider {
 		JSONObject jsonObject = JSONTools.Instance.serialize(newValue);
 
 		// Create and invoke HTTP PATCH request
-		Response rsp = client.target(address + servicePath).queryParam("action", action).request().build("PATCH", Entity.text(jsonObject.toString())).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
+		Response rsp = client.target(address + servicePath).queryParam("action", action).request()
+				.build("PATCH", Entity.text(jsonObject.toString()))
+				.property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
 
 		try {
 			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
@@ -323,8 +289,8 @@ public class HTTPConnector implements IModelProvider {
 		try {
 			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
 
-			System.out.println("RES:"+result);
-			
+			System.out.println("RES:" + result);
+
 			if (result instanceof ServerException) {
 
 				// Throw server exception
@@ -335,11 +301,6 @@ public class HTTPConnector implements IModelProvider {
 			// If there is no return value or deserialization failed
 			return;
 		}
-	}
-
-	@Override
-	public String getElementScope(String elementPath) {
-		throw new RuntimeException("Not implemented yet");
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package org.eclipse.basyx.testsuite.support.backend.common.stubs.java.aas;
 
-import org.eclipse.basyx.aas.impl.resources.basic.AssetAdministrationShell;
+import org.eclipse.basyx.aas.impl.resources.basic._AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.resources.basic.AssetKind;
-import org.eclipse.basyx.aas.impl.resources.basic.ReferencedSubModel;
+import org.eclipse.basyx.aas.impl.resources.basic._ReferencedSubModel;
 
 
 
@@ -12,7 +12,7 @@ import org.eclipse.basyx.aas.impl.resources.basic.ReferencedSubModel;
  * @author kuhn
  *
  */
-public class Stub1AAS extends AssetAdministrationShell {	
+public class Stub1AAS extends _AssetAdministrationShell {	
 	
 	
 	/**
@@ -26,12 +26,11 @@ public class Stub1AAS extends AssetAdministrationShell {
 	    setAssetTypeDefinition("assetTypeDefinition");
 	    setDisplayName("displayName");	
 	    
-	    
 	    // Register sub models
 	    
 	    // - Sub model statusSM is a referenced sub model. Its contents are provided by a model provider. 
 	    //   We do not know its exact internal structure here, since some properties (with varying cardinalities) are unknown. 
-	    ReferencedSubModel statusSM = new ReferencedSubModel();
+	    _ReferencedSubModel statusSM = new _ReferencedSubModel();
 	    statusSM.setAssetKind(AssetKind.INSTANCE);
 	    statusSM.setName("statusSM");
 	    statusSM.setId("statusSM");
@@ -40,7 +39,7 @@ public class Stub1AAS extends AssetAdministrationShell {
 
 	    // - Sub model Stub2SM is a referenced sub model. Its contents are provided by a model provider. 
 	    //   We do not know its exact internal structure here, since some properties (with varying cardinalities) are unknown. 
-	    ReferencedSubModel stub2SM = new ReferencedSubModel();
+	    _ReferencedSubModel stub2SM = new _ReferencedSubModel();
 	    stub2SM.setAssetKind(AssetKind.INSTANCE);
 	    stub2SM.setName("Stub2SM");
 	    stub2SM.setId("Stub2SM");

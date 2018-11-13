@@ -1,7 +1,7 @@
 package org.eclipse.basyx.aas.backend.connector.http;
 
-import org.eclipse.basyx.aas.api.services.IModelProvider;
 import org.eclipse.basyx.aas.backend.connector.ConnectorProvider;
+import org.eclipse.basyx.vab.core.IModelProvider;
 
 public class HTTPConnectorProvider extends ConnectorProvider {
 

@@ -7,10 +7,10 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
-import org.eclipse.basyx.aas.api.services.IModelProvider;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
-import org.eclipse.basyx.aas.backend.modelprovider.basyx.BaSyxTCPProvider;
-import org.eclipse.basyx.aas.backend.modelprovider.basyx.CoderTools;
+import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPProvider;
+import org.eclipse.basyx.vab.backend.server.basyx.CoderTools;
+import org.eclipse.basyx.vab.core.IModelProvider;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -126,48 +126,6 @@ public class BaSyxConnector implements IModelProvider {
 
 		// Invoke BaSyx call
 		invokeBaSyx(call);
-	}
-
-	@Override
-	public void setModelPropertyValue(String servicePath, Object... newValue) throws ServerException {
-		// Create JSON value Object
-		JSONObject jsonObject = JSONTools.Instance.serialize(newValue);
-
-		// Create call
-		byte[] call = new byte[4 + 1 + 4 + servicePath.length() + 4 + jsonObject.toString().length()];
-		// - Encode size does not include leading four bytes
-		CoderTools.setInt32(call, 0, call.length - 4);
-		// - Encode operation SET
-		CoderTools.setInt8(call, 4, BaSyxTCPProvider.BASYX_SET_CONTAINED);
-		// - Encode path
-		CoderTools.setInt32(call, 5, servicePath.length());
-		CoderTools.setString(call, 9, servicePath);
-		// - Encode value
-		CoderTools.setInt32(call, 9 + servicePath.length(), jsonObject.toString().length());
-		CoderTools.setString(call, 9 + servicePath.length() + 4, jsonObject.toString());
-
-		// Invoke BaSyx call
-		byte[] result = invokeBaSyx(call);
-
-		// Result check
-		if ((result == null) || (result.length < 2))
-			return;
-
-		// Extract response
-		int jsonResultLen = CoderTools.getInt32(result, 1);
-		String jsonResult = new String(result, 1 + 4, jsonResultLen);
-
-		// Deserialize return value if available, return null if nothing is deserialized
-		// (this is the case if no value is returned)
-		try {
-			Object res = JSONTools.Instance.deserialize(new JSONObject(jsonResult));
-
-			if (res instanceof ServerException) {
-				throw (ServerException) res;
-			}
-		} catch (JSONException e) {
-			return;
-		}
 	}
 
 	@Override
@@ -289,11 +247,6 @@ public class BaSyxConnector implements IModelProvider {
 		} catch (JSONException e) {
 			return;
 		}
-	}
-
-	@Override
-	public String getElementScope(String elementPath) {
-		throw new RuntimeException("Not implemented yet");
 	}
 
 	@Override

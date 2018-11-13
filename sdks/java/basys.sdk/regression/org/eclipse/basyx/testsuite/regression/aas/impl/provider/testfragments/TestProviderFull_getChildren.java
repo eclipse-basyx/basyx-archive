@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.eclipse.basyx.aas.api.resources.basic.IElement;
-import org.eclipse.basyx.aas.api.services.IModelProvider;
+import org.eclipse.basyx.aas.api.resources.IElement;
+import org.eclipse.basyx.vab.core.IModelProvider;
 
 
 /**
@@ -29,7 +29,7 @@ public class TestProviderFull_getChildren {
 		//assertTrue(stub1ChildrenA.size() == 2);
 		System.out.println("StatusSM contains "+ stub1ChildrenA.size() +" children.");
 		
-		assertEquals(5, stub1ChildrenA.size());
-		assertEquals(5, stub1ChildrenB.size());	
+		assertEquals(4, stub1ChildrenA.size());
+		assertEquals(4, stub1ChildrenB.size());	
 	}
 }

@@ -4,16 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.reference.IElementReference;
-import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.basic.ICollectionProperty;
-import org.eclipse.basyx.aas.api.resources.basic.IMapProperty;
-import org.eclipse.basyx.aas.api.resources.basic.IProperty;
-import org.eclipse.basyx.aas.api.resources.basic.ISingleProperty;
-import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
-import org.eclipse.basyx.aas.api.services.IModelProvider;
+import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.ICollectionProperty;
+import org.eclipse.basyx.aas.api.resources.IMapProperty;
+import org.eclipse.basyx.aas.api.resources.IProperty;
+import org.eclipse.basyx.aas.api.resources.ISingleProperty;
+import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.impl.provider.filesystem.TimeProvider;
-import org.eclipse.basyx.aas.impl.resources.basic.PropertyContainer;
-import org.eclipse.basyx.aas.impl.resources.basic.SingleProperty;
+import org.eclipse.basyx.aas.impl.resources.basic._PropertyContainer;
+import org.eclipse.basyx.vab.core.IModelProvider;
 
 /**
  * Wraps two model providers. The first is used to hold the live data, the
@@ -28,7 +27,8 @@ public class HistoryPreservingProvider implements IModelProvider {
 	private IModelProvider historyProvider;
 	private TimeProvider timeProvider;
 
-	public HistoryPreservingProvider(IModelProvider mainProvider, IModelProvider historyProvider, TimeProvider timeProvider) {
+	public HistoryPreservingProvider(IModelProvider mainProvider, IModelProvider historyProvider,
+			TimeProvider timeProvider) {
 		super();
 		this.mainProvider = mainProvider;
 		this.historyProvider = historyProvider;
@@ -39,12 +39,6 @@ public class HistoryPreservingProvider implements IModelProvider {
 	public void setModelPropertyValue(String path, Object newValue) throws Exception {
 		mainProvider.setModelPropertyValue(path, newValue);
 		saveHistory(path, newValue);
-	}
-
-	@Override
-	public void setModelPropertyValue(String address, Object... newEntry) throws Exception {
-		mainProvider.setModelPropertyValue(address, newEntry);
-		saveHistory(address, newEntry[0]);
 	}
 
 	@Override
@@ -67,17 +61,17 @@ public class HistoryPreservingProvider implements IModelProvider {
 			}
 			String newAddress = address + separator + ((IProperty) newEntity).getId();
 			if (newEntity instanceof ISingleProperty) {
-				saveRecursive(newAddress, ((SingleProperty) newEntity).get(), timeStamp);
+				saveRecursive(newAddress, ((ISingleProperty) newEntity).get(), timeStamp);
 			} else if (newEntity instanceof IMapProperty) {
 				// Copy map since there is no getter for the contained map
-				Map<Object, Object> map = new HashMap<>();
+				Map<String, Object> map = new HashMap<>();
 				IMapProperty mapProp = (IMapProperty) newEntity;
-				for (Object key : mapProp.getKeys()) {
+				for (String key : mapProp.getKeys()) {
 					map.put(key, mapProp.getValue(key));
 				}
 				saveRecursive(newAddress, map, timeStamp);
-			} else if (newEntity instanceof PropertyContainer) {
-				PropertyContainer container = (PropertyContainer) newEntity;
+			} else if (newEntity instanceof _PropertyContainer) {
+				_PropertyContainer container = (_PropertyContainer) newEntity;
 				for (String key : container.getProperties().keySet()) {
 					saveRecursive(newAddress, container.getProperties().get(key), timeStamp);
 				}
@@ -89,7 +83,8 @@ public class HistoryPreservingProvider implements IModelProvider {
 		} else if (newEntity instanceof ISubModel) {
 			ISubModel submodel = ((ISubModel) newEntity);
 			for (String p : submodel.getProperties().keySet()) {
-				saveRecursive(address + "/" + submodel.getId() + "/properties", submodel.getProperties().get(p), timeStamp);
+				saveRecursive(address + "/" + submodel.getId() + "/properties", submodel.getProperties().get(p),
+						timeStamp);
 			}
 		} else if (newEntity instanceof IAssetAdministrationShell) {
 			IAssetAdministrationShell shell = (IAssetAdministrationShell) newEntity;
@@ -105,11 +100,6 @@ public class HistoryPreservingProvider implements IModelProvider {
 	private boolean isPathNestedProperty(String address) {
 		int index = address.indexOf("/properties");
 		return address.length() > index + "/properties".length();
-	}
-
-	@Override
-	public String getElementScope(String elementPath) {
-		return mainProvider.getElementScope(elementPath);
 	}
 
 	@Override

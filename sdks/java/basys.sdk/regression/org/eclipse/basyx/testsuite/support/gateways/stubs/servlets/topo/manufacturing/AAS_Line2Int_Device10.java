@@ -1,10 +1,7 @@
 package org.eclipse.basyx.testsuite.support.gateways.stubs.servlets.topo.manufacturing;
 
-import org.eclipse.basyx.aas.impl.resources.basic.AssetAdministrationShell;
-import org.eclipse.basyx.aas.impl.resources.basic.AssetKind;
-import org.eclipse.basyx.aas.impl.resources.basic.ReferencedSubModel;
-
-
+import org.eclipse.basyx.aas.impl.resources.basic._AssetAdministrationShell;
+import org.eclipse.basyx.aas.impl.resources.basic._ReferencedSubModel;
 
 /**
  * Implement an Asset Administration Shell
@@ -12,36 +9,26 @@ import org.eclipse.basyx.aas.impl.resources.basic.ReferencedSubModel;
  * @author kuhn
  *
  */
-public class AAS_Line2Int_Device10 extends AssetAdministrationShell {	
-	
-	
+public class AAS_Line2Int_Device10 extends _AssetAdministrationShell {
+
 	/**
 	 * Constructor
 	 */
 	public AAS_Line2Int_Device10() {
-		// Create Asset Administration Shell 
-	    setId("device10");
-	    setAssetId("assetId");
-	    setAssetKind(AssetKind.INSTANCE);
-	    setAssetTypeDefinition("assetTypeDefinition");
-	    setDisplayName("displayName");
+		// Create Asset Administration Shell
+		setId("device10");
 
-	    
-	    // Register sub models
-	    // - Description sub model with device descriptions
-	    ReferencedSubModel descriptionSM = new ReferencedSubModel();
-	    descriptionSM.setAssetKind(AssetKind.INSTANCE);
-	    descriptionSM.setName("description");
-	    descriptionSM.setId("description");
-	    //descriptionSM.setTypeDefinition("smType");
-	    this.addSubModel(descriptionSM);
+		// Register sub models
+		// - Description sub model with device descriptions
+		_ReferencedSubModel descriptionSM = new _ReferencedSubModel();
+		descriptionSM.setId("description");
+		// descriptionSM.setTypeDefinition("smType");
+		this.addSubModel(descriptionSM);
 
-	    // - Status sub model with device status	
-	    ReferencedSubModel statusSM = new ReferencedSubModel();
-	    statusSM.setAssetKind(AssetKind.INSTANCE);
-	    statusSM.setName("status");
-	    statusSM.setId("status");
-	    //descriptionSM.setTypeDefinition("smType");
-	    this.addSubModel(statusSM);
+		// - Status sub model with device status
+		_ReferencedSubModel statusSM = new _ReferencedSubModel();
+		statusSM.setId("status");
+		// descriptionSM.setTypeDefinition("smType");
+		this.addSubModel(statusSM);
 	}
 }

@@ -1,8 +1,8 @@
 package org.eclipse.basyx.testsuite.support.backend.common.stubs.java.aas;
 
-import org.eclipse.basyx.aas.impl.resources.basic.AssetAdministrationShell;
+import org.eclipse.basyx.aas.impl.resources.basic._AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.resources.basic.AssetKind;
-import org.eclipse.basyx.aas.impl.resources.basic.ReferencedSubModel;
+import org.eclipse.basyx.aas.impl.resources.basic._ReferencedSubModel;
 
 
 
@@ -12,7 +12,7 @@ import org.eclipse.basyx.aas.impl.resources.basic.ReferencedSubModel;
  * @author kuhn, pschorn
  *
  */
-public class StubRestAAS extends AssetAdministrationShell {	
+public class StubRestAAS extends _AssetAdministrationShell {	
 	
 	
 	/**
@@ -30,7 +30,7 @@ public class StubRestAAS extends AssetAdministrationShell {
 	    // Register sub models
 	    
 	    // - Status sub model with device status	
-	    ReferencedSubModel frozenSM = new ReferencedSubModel();
+	    _ReferencedSubModel frozenSM = new _ReferencedSubModel();
 	    frozenSM.setAssetKind(AssetKind.INSTANCE);
 	    frozenSM.setName("frozenSM");
 	    frozenSM.setId("frozenSM");

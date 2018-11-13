@@ -1,10 +1,10 @@
 package org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets;
 
-import org.eclipse.basyx.aas.backend.modelprovider.http.HTTPProvider;
-import org.eclipse.basyx.aas.impl.provider.JavaObjectProvider;
+import org.eclipse.basyx.aas.impl.provider.JavaObjectVABMapper;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.aas.StubRestAAS;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.StubRestAASFrozenSM;
+import org.eclipse.basyx.vab.backend.server.http._HTTPProvider;
 
 
 
@@ -14,7 +14,7 @@ import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.St
  * @author pschorn
  *
  */
-public class StubRestAASServlet extends HTTPProvider<JavaObjectProvider> {
+public class StubRestAASServlet extends _HTTPProvider<JavaObjectVABMapper> {
 
 	
 	/**
@@ -28,13 +28,13 @@ public class StubRestAASServlet extends HTTPProvider<JavaObjectProvider> {
 	 */
 	public StubRestAASServlet() {
 		// Invoke base constructor
-		super(new JavaObjectProvider());
+		super(new JavaObjectVABMapper());
 		
 		// Register AAS
-		this.getBackendReference().addModel(new StubRestAAS());
+		this.getBackendReference().addScopedModel(new StubRestAAS());
 		
 		// Register provided models and AAS
-		this.getBackendReference().addModel(new StubRestAASFrozenSM(),   "RestAAS");
+		this.getBackendReference().addScopedModel(new StubRestAASFrozenSM(),   "RestAAS");
 		
 	}
 }

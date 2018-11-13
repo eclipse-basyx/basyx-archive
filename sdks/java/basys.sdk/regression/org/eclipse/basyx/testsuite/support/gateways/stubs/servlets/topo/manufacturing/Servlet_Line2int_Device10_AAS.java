@@ -1,7 +1,7 @@
 package org.eclipse.basyx.testsuite.support.gateways.stubs.servlets.topo.manufacturing;
 
-import org.eclipse.basyx.aas.backend.modelprovider.http.HTTPProvider;
-import org.eclipse.basyx.aas.impl.provider.JavaObjectProvider;
+import org.eclipse.basyx.aas.impl.provider.JavaObjectVABMapper;
+import org.eclipse.basyx.vab.backend.server.http._HTTPProvider;
 
 
 
@@ -11,7 +11,7 @@ import org.eclipse.basyx.aas.impl.provider.JavaObjectProvider;
  * @author kuhn
  *
  */
-public class Servlet_Line2int_Device10_AAS extends HTTPProvider<JavaObjectProvider> {
+public class Servlet_Line2int_Device10_AAS extends _HTTPProvider<JavaObjectVABMapper> {
 
 	
 	/**
@@ -25,13 +25,13 @@ public class Servlet_Line2int_Device10_AAS extends HTTPProvider<JavaObjectProvid
 	 */
 	public Servlet_Line2int_Device10_AAS() {
 		// Invoke base constructor
-		super(new JavaObjectProvider());
+		super(new JavaObjectVABMapper());
 		
 		// Register provided models and AAS
-		this.getBackendReference().addModel(new AAS_Line2Int_Device10());
+		this.getBackendReference().addScopedModel(new AAS_Line2Int_Device10());
 		
 		// Register provided models and AAS
-		this.getBackendReference().addModel(new Submodel_Line2Int_Device10_Description(), "Device10");
-		this.getBackendReference().addModel(new Submodel_Line2Int_Device10_Status(),      "Device10");
+		this.getBackendReference().addScopedModel(new Submodel_Line2Int_Device10_Description(), "Device10");
+		this.getBackendReference().addScopedModel(new Submodel_Line2Int_Device10_Status(),      "Device10");
 	}
 }

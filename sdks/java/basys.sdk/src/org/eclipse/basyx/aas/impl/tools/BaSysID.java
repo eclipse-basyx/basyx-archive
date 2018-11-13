@@ -388,6 +388,31 @@ public class BaSysID {
 		
 		// Otherwise
 		return scope + "/" + aasID;
+	}
+
+
+
+
+	/**
+	 * Expects '{aasId}/aas' and return '{aasId}/aas/submodels'
+	 * @param id
+	 * @return
+	 */
+	public String buildSubmodelsQuery(String id) {
+		return id + "/submodels";
+	}
+
+
+
+	
+	/**
+	 *  Expects '{aasId}/aas/submodels/{smId}' and returns '{aasId}/aas/submodels/{smId}/{type}'
+	 * @param id
+	 * @param type
+	 * @return
+	 */
+	public String buildQualifiedQuery(String id, String type) {
+		return id + "/" + type;
 	}	
 }
 

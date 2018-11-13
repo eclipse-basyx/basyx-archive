@@ -2,12 +2,12 @@ package org.eclipse.basyx.aas.impl.reference;
 
 import org.eclipse.basyx.aas.api.exception.UnknownElementTypeException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
-import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.basic.IElement;
-import org.eclipse.basyx.aas.api.resources.basic.IProperty;
-import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
-import org.eclipse.basyx.aas.impl.resources.basic.Event;
-import org.eclipse.basyx.aas.impl.resources.basic.Operation;
+import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.IElement;
+import org.eclipse.basyx.aas.api.resources.IProperty;
+import org.eclipse.basyx.aas.api.resources.ISubModel;
+import org.eclipse.basyx.aas.impl.resources.basic._Event;
+import org.eclipse.basyx.aas.impl.resources.basic._Operation;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.eclipse.basyx.aas.impl.tools.ElementTools;
 
@@ -70,8 +70,8 @@ public class ElementRef implements IElementReference {
 		// - Sub model property, event or operation
 		// - FIXME: Interface types
 		else if (element instanceof IProperty) {aasID = ElementTools.getAASID(element); subModelID = ElementTools.getSubmodelID(element); propertyPath = ElementTools.getFullPathToProperty(element);}
-		else if (element instanceof Operation) {aasID = ElementTools.getAASID(element); subModelID = ElementTools.getSubmodelID(element); propertyPath = ElementTools.getFullPathToProperty(element);}
-		else if (element instanceof Event)     {aasID = ElementTools.getAASID(element); subModelID = ElementTools.getSubmodelID(element); propertyPath = ElementTools.getFullPathToProperty(element);}
+		else if (element instanceof _Operation) {aasID = ElementTools.getAASID(element); subModelID = ElementTools.getSubmodelID(element); propertyPath = ElementTools.getFullPathToProperty(element);}
+		else if (element instanceof _Event)     {aasID = ElementTools.getAASID(element); subModelID = ElementTools.getSubmodelID(element); propertyPath = ElementTools.getFullPathToProperty(element);}
 		else {
 			// Element type is not known...
 			throw new UnknownElementTypeException();

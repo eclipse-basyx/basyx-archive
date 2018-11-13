@@ -3,12 +3,12 @@ package org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
+import org.eclipse.basyx.aas.api.resources.ISubModel;
+import org.eclipse.basyx.aas.api.resources.ParameterType;
 import org.eclipse.basyx.aas.impl.provider.javahandler.genericsm.GenericHandlerOperation;
 import org.eclipse.basyx.aas.impl.provider.javahandler.genericsm.GenericHandlerSubmodel;
 import org.eclipse.basyx.aas.impl.resources.basic.AssetKind;
-import org.eclipse.basyx.aas.impl.resources.basic.DataType;
-import org.eclipse.basyx.aas.impl.resources.basic.ParameterType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.enums.DataObjectType;
 
 
 /**
@@ -29,9 +29,9 @@ public class Stub3Submodel extends GenericHandlerSubmodel {
 		
 		
 		// Add properties and operations
-		addProperty("testProp1", DataType.INTEGER, new Integer(1));
-		addProperty("testProp2", DataType.INTEGER, new Integer(2));
-		addOperation("testOp1", new ArrayList<ParameterType>(Arrays.asList(new ParameterType(0, DataType.INTEGER, "par0"), new ParameterType(0, DataType.INTEGER, "par1"))), DataType.INTEGER, new GenericHandlerOperation() {
+		addProperty("testProp1", DataObjectType.Int32, new Integer(1));
+		addProperty("testProp2", DataObjectType.Int32, new Integer(2));
+		addOperation("testOp1", new ArrayList<ParameterType>(Arrays.asList(new ParameterType(0, DataObjectType.Int32, "par0"), new ParameterType(0, DataObjectType.Int32, "par1"))), DataObjectType.Int32, new GenericHandlerOperation() {
 
 			@Override
 			public Object apply(ISubModel instance, Object[] parameter) {

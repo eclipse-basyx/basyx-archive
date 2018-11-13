@@ -4,7 +4,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.Collection;
 
-import org.eclipse.basyx.aas.api.services.IModelProvider;
+import org.eclipse.basyx.vab.core.IModelProvider;
 
 public class TestProviderFull_delete {
 	@SuppressWarnings("unchecked")

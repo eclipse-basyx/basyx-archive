@@ -1,9 +1,9 @@
 package org.eclipse.basyx.aas.impl.tools;
 
 import org.eclipse.basyx.aas.api.exception.ResourceNotFoundException;
-import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.basic.IElement;
-import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
+import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.IElement;
+import org.eclipse.basyx.aas.api.resources.ISubModel;
 
 /**
  * Element utility functions

@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.reference.IElementReference;
-import org.eclipse.basyx.aas.api.services.IModelProvider;
+import org.eclipse.basyx.vab.core.IModelProvider;
 
 /**
  * Provides a test method to check the get ability of a generic IModelProvider
@@ -17,7 +17,7 @@ import org.eclipse.basyx.aas.api.services.IModelProvider;
  */
 public class TestProviderFull_get {
 	@SuppressWarnings("unchecked")
-	public static void testGetProperties(IModelProvider provider) {
+	public static void testGet(IModelProvider provider) {
 		Object property1N = provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty1");
 		Object property2N = provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty2");
 		
@@ -50,23 +50,11 @@ public class TestProviderFull_get {
 		assertTrue(properties.containsKey("sampleProperty2"));
 		assertTrue(properties.containsKey("sampleProperty3"));
 		assertTrue(properties.containsKey("sampleProperty4"));
+		
 
 		Map<String, IElementReference> nestedProperties = (Map<String, IElementReference>) provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.properties");
 		assertEquals(2, nestedProperties.size());
 		assertTrue(nestedProperties.containsKey("samplePropertyA"));
 		assertTrue(nestedProperties.containsKey("samplePropertyB"));
-		
-
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static void testGetOperations(IModelProvider provider) {
-		Map<String, IElementReference> operations =  (Map<String, IElementReference>) provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/operations");
-		assertEquals(1, operations.size());
-		assertTrue(operations.containsKey("sum"));		
-		
-		Map<String, IElementReference> nestedOperations =  (Map<String, IElementReference>) provider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.operations");
-		assertEquals(1, nestedOperations.size());
-		assertTrue(nestedOperations.containsKey("sub"));
 	}
 }

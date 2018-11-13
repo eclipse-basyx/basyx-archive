@@ -3,7 +3,8 @@ package org.eclipse.basyx.aas.impl.resources.basic;
 import java.util.Collection;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.resources.basic.IContainerProperty;
+import org.eclipse.basyx.aas.api.resources.IContainerProperty;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.enums.DataObjectType;
 
 /**
  * Maps a class to its corresponding DataType
@@ -12,29 +13,32 @@ import org.eclipse.basyx.aas.api.resources.basic.IContainerProperty;
  *
  */
 public class DataTypeMapping {
-	public static DataType map(Class<?> c) {
+	public static DataObjectType map(Object obj) {
+		
+		if (obj == null) return DataObjectType.Null;
+		
+		Class<?> c = obj.getClass();
+		
 		if (c == int.class || c == Integer.class) {
-			return DataType.INTEGER;
+			return DataObjectType.Int32;
 		} else if (c == void.class || c == Void.class) {
-			return DataType.VOID;
+			return DataObjectType.Void;
 		} else if (c == boolean.class || c == Boolean.class) {
-			return DataType.BOOLEAN;
+			return DataObjectType.Bool;
 		} else if (c == float.class || c == Float.class) {
-			return DataType.FLOAT;
+			return DataObjectType.Float;
 		} else if (c == double.class || c == Double.class) {
-			return DataType.DOUBLE;
-		} else if (c == char.class || c == Character.class) {
-			return DataType.CHARACTER;
+			return DataObjectType.Double;
 		} else if (c == String.class) {
-			return DataType.STRING;
+			return DataObjectType.String;
 		} else if (Map.class.isAssignableFrom(c)) {
-			return DataType.MAP;
+			return DataObjectType.Map;
 		} else if (Collection.class.isAssignableFrom(c)) {
-			return DataType.COLLECTION;
+			return DataObjectType.Collection;
 		} else if (IContainerProperty.class.isAssignableFrom(c)) {
-			return DataType.CONTAINER;
+			return DataObjectType.PropertyContainer;
 		} else {
-			return DataType.REFERENCE;
+			return DataObjectType.Reference;
 		}
 	}
 }

@@ -3,8 +3,8 @@ package org.eclipse.basyx.aas.backend.connector.basyx;
 import java.io.IOException;
 import java.net.Socket;
 
-import org.eclipse.basyx.aas.api.services.IModelProvider;
 import org.eclipse.basyx.aas.backend.connector.ConnectorProvider;
+import org.eclipse.basyx.vab.core.IModelProvider;
 
 public class BaSyxConnectorProvider extends ConnectorProvider {
 

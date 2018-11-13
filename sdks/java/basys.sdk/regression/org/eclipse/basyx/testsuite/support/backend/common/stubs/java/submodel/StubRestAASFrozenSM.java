@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 import org.eclipse.basyx.aas.api.annotation.AASOperation;
 import org.eclipse.basyx.aas.api.annotation.AASProperty;
-import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.impl.resources.basic.AssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.ParameterType;
+import org.eclipse.basyx.aas.impl.resources.basic._AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.resources.basic.AssetKind;
-import org.eclipse.basyx.aas.impl.resources.basic.DataType;
-import org.eclipse.basyx.aas.impl.resources.basic.Operation;
-import org.eclipse.basyx.aas.impl.resources.basic.ParameterType;
-import org.eclipse.basyx.aas.impl.resources.basic.Property;
-import org.eclipse.basyx.aas.impl.resources.basic.SubModel;
+import org.eclipse.basyx.aas.impl.resources.basic._Operation;
+import org.eclipse.basyx.aas.impl.resources.basic._Property;
+import org.eclipse.basyx.aas.impl.resources.basic._SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.enums.DataObjectType;
 
 
 
@@ -21,7 +21,7 @@ import org.eclipse.basyx.aas.impl.resources.basic.SubModel;
  * @author kuhn,pschorn
  *
  */
-public class StubRestAASFrozenSM extends SubModel {
+public class StubRestAASFrozenSM extends _SubModel {
 
 
 	/**
@@ -54,7 +54,7 @@ public class StubRestAASFrozenSM extends SubModel {
 
 	    
 	    // Initialize dummy AAS (not needed anymore!)
-	    AssetAdministrationShell aas = new AssetAdministrationShell();
+	    _AssetAdministrationShell aas = new _AssetAdministrationShell();
 	    aas.setId("RestAAS");
 	    aas.setName("RestAAS");
 	    this.setParent(aas);
@@ -62,29 +62,29 @@ public class StubRestAASFrozenSM extends SubModel {
 		
 		// Create and add properties
 	    
-		Property property1 = new Property();
+		_Property property1 = new _Property();
 		property1.setName("sampleProperty1");
 		property1.setId("sampleProperty1");
-		property1.setDataType(DataType.INTEGER);
+		property1.setDataType(DataObjectType.Int32);
 		this.addProperty(property1);
 		
 		
-		Property property2 = new Property();
+		_Property property2 = new _Property();
 		property2.setName("isReady");
 		property2.setId("isReady");
-		property2.setDataType(DataType.BOOLEAN);
+		property2.setDataType(DataObjectType.Bool);
 		this.addProperty(property2);
 		
 		// Create and add operation
-	    Operation op = new Operation();
+	    _Operation op = new _Operation();
 	    op.setAssetKind(AssetKind.INSTANCE);
 	    op.setName("sub");
 	    op.setId("sub");
 	    ArrayList<ParameterType> pt = new ArrayList<>();
-	    pt.add(new ParameterType(0, DataType.INTEGER, "a"));
-	    pt.add(new ParameterType(1, DataType.INTEGER, "b"));
+	    pt.add(new ParameterType(0, DataObjectType.Int32, "a"));
+	    pt.add(new ParameterType(1, DataObjectType.Int32, "b"));
 	    op.setParameterTypes(pt);
-	    op.setReturnDataType(DataType.INTEGER);
+	    op.setReturnDataType(DataObjectType.Int32);
 	    this.addOperation(op);
 	}
 

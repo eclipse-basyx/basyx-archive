@@ -1,6 +1,5 @@
 package org.eclipse.basyx.aas.impl.provider.filesystem;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -9,21 +8,21 @@ import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
-import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.basic.ICollectionProperty;
-import org.eclipse.basyx.aas.api.resources.basic.IContainerProperty;
-import org.eclipse.basyx.aas.api.resources.basic.IMapProperty;
-import org.eclipse.basyx.aas.api.resources.basic.IProperty;
-import org.eclipse.basyx.aas.api.resources.basic.ISingleProperty;
-import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
+import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.ICollectionProperty;
+import org.eclipse.basyx.aas.api.resources.IContainerProperty;
+import org.eclipse.basyx.aas.api.resources.IMapProperty;
+import org.eclipse.basyx.aas.api.resources.IProperty;
+import org.eclipse.basyx.aas.api.resources.ISingleProperty;
+import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
-import org.eclipse.basyx.aas.impl.provider.AbstractModelScopeProvider;
 import org.eclipse.basyx.aas.impl.provider.filesystem.filesystem.File;
 import org.eclipse.basyx.aas.impl.provider.filesystem.filesystem.FileSystem;
 import org.eclipse.basyx.aas.impl.provider.filesystem.filesystem.FileType;
 import org.eclipse.basyx.aas.impl.reference.ElementRef;
-import org.eclipse.basyx.aas.impl.resources.basic.PropertyContainer;
+import org.eclipse.basyx.aas.impl.resources.basic._PropertyContainer;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
+import org.eclipse.basyx.vab.core.IModelProvider;
 import org.json.JSONObject;
 
 /**
@@ -32,7 +31,7 @@ import org.json.JSONObject;
  * @author schnicke
  *
  */
-public class FileSystemProvider extends AbstractModelScopeProvider {
+public class FileSystemProvider implements IModelProvider {
 
 	private FileSystem fileSystem;
 	protected static final String DATA = "/data.json";
@@ -156,21 +155,25 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 	public Object getModelPropertyValue(String address) {
 		try {
 			String path = getFolderPath(address).replace(".", "/");
-			if (path.endsWith("/operations") || path.endsWith("/properties") || path.endsWith("/events") || path.endsWith("/submodels")) {
+			if (path.endsWith("/operations") || path.endsWith("/properties") || path.endsWith("/events")
+					|| path.endsWith("/submodels")) {
 				List<File> files;
 				try {
 					files = fileSystem.readDirectory(path);
-					List<String> directories = files.stream().filter(f -> f.getType() == FileType.DIRECTORY).map(f -> replacePath(f.getName(), path)).collect(Collectors.toList());
+					List<String> directories = files.stream().filter(f -> f.getType() == FileType.DIRECTORY)
+							.map(f -> replacePath(f.getName(), path)).collect(Collectors.toList());
 					Map<String, IElementReference> refMap = new HashMap<>();
 					for (String s : directories) {
 						if (path.endsWith("/operations") || path.endsWith("/properties") || path.endsWith("/events")) {
 							String propPath;
-							if(address.contains(".")) {
-								propPath = address.substring(address.lastIndexOf("/") + 1, address.indexOf(".") + 1) + "properties." + s;
+							if (address.contains(".")) {
+								propPath = address.substring(address.lastIndexOf("/") + 1, address.indexOf(".") + 1)
+										+ "properties." + s;
 							} else {
 								propPath = s;
 							}
-							ElementRef ref = new ElementRef(BaSysID.instance.getAASID(address), BaSysID.instance.getSubmodelID(address), propPath);
+							ElementRef ref = new ElementRef(BaSysID.instance.getAASID(address),
+									BaSysID.instance.getSubmodelID(address), propPath);
 							if (path.endsWith("/properties")) {
 								String type = getPropertyType(address, s);
 								ref.setKind(type);
@@ -239,14 +242,14 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 				createValue(newAddress, ((ICollectionProperty) newEntity).getElements());
 			} else if (newEntity instanceof IMapProperty) {
 				// Copy map since there is no getter for the contained map
-				Map<Object, Object> map = new HashMap<>();
+				Map<String, Object> map = new HashMap<>();
 				IMapProperty mapProp = (IMapProperty) newEntity;
-				for (Object key : mapProp.getKeys()) {
+				for (String key : mapProp.getKeys()) {
 					map.put(key, mapProp.getValue(key));
 				}
 				createValue(newAddress, map);
-			} else if (newEntity instanceof PropertyContainer) {
-				PropertyContainer container = (PropertyContainer) newEntity;
+			} else if (newEntity instanceof _PropertyContainer) {
+				_PropertyContainer container = (_PropertyContainer) newEntity;
 				for (String key : container.getProperties().keySet()) {
 					createValue(newAddress + "/properties", container.getProperties().get(key));
 				}
@@ -265,22 +268,6 @@ public class FileSystemProvider extends AbstractModelScopeProvider {
 	private boolean isNestedProperty(String path) {
 		int index = path.indexOf("/properties");
 		return path.length() > index + "/properties".length();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void setModelPropertyValue(String address, Object... newEntry) throws Exception {
-		String path = getFolderPath(address);
-		Object obj = readObject(path);
-		if (obj == null) {
-			obj = new ArrayList<Object>();
-		}
-
-		if (obj instanceof Collection<?>) {
-			Collection<Object> c = (Collection<Object>) ((Collection<?>) obj);
-			c.add(newEntry[0]);
-			writeObject(path, c);
-		}
 	}
 
 	@Override

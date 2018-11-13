@@ -2,7 +2,7 @@ package org.eclipse.basyx.aas.api.manager;
 
 import java.util.Collection;
 
-import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 
 
 
