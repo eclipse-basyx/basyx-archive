@@ -1,3 +1,11 @@
+ifndef PLATFORM
+$(error Variable $$(PLATFORM) has to be set)
+endif
+
+ifndef MKFILE
+$(error Variable $$(MKFILE) has to be set)
+endif
+
 BUILD_DIR := build/$(notdir $(MKFILE))/
 OBJ_DIR := $(BUILD_DIR)objects/
 
@@ -9,7 +17,7 @@ LFLAGS :=
 INC_DIR := src/ .
 SRC :=
 
-
+include $(PLATFORM)
 include $(MKFILE)
 include src/basyx.mk
 
@@ -30,20 +38,19 @@ DEPS := $(OBJS:.o=.d)
 -include $(DEPS)
 
 .PHONY: all
-all: $(BUILD_DIR)$(EXE_NAME).exe 
+all: $(BUILD_DIR)$(TARGET_NAME)$(PLATFORM_EXTENSION)
 
-$(BUILD_DIR)$(EXE_NAME).exe: $(OBJS)
+$(BUILD_DIR)$(TARGET_NAME)$(PLATFORM_EXTENSION): $(OBJS)
 	$(LD) -o $@ $^ $(LFLAGS)	
 
 $(OBJ_DIR)%.o:: %.cpp
-	-@mkdir -p $(@D) ||: 
+	$(call MKDIR,$(@D)) ||: 
 	$(CC) -c $< $(CFLAGS) -MMD -MP  -o $@
 	
 $(OBJ_DIR)%.o:: %.cc
-	-@mkdir -p $(@D) ||: 
+	$(call MKDIR,$(@D)) ||: 
 	$(CC) -c $< $(CFLAGS) -MMD -MP  -o $@
 
 .PHONY: clean
 clean:
-	-rmdir $(subst /,\\,$(OBJ_DIR)) /S /Q ||:
-	del $(subst /,\\,$(BUILD_DIR))$(EXE_NAME).exe
+	$(call RM, $(BUILD_DIR))

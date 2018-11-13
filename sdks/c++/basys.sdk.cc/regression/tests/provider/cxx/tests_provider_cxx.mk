@@ -1,4 +1,4 @@
-EXE_NAME ?= tests_provider_cxx
+TARGET_NAME ?= tests_provider_cxx
 
 MODULE_SRC := test_submodelprovider.cc
 

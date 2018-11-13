@@ -258,7 +258,7 @@ public class BaSyxConnector implements IModelProvider {
 		// - Encode size does not include leading four bytes
 		CoderTools.setInt32(call, 0, call.length - 4);
 		// - Encode operation SET
-		CoderTools.setInt8(call, 4, BaSyxTCPProvider.BASYX_DELETE_CONTAINED);
+		CoderTools.setInt8(call, 4, BaSyxTCPProvider.BASYX_DELETE);
 		// - Encode path
 		CoderTools.setInt32(call, 5, servicePath.length());
 		CoderTools.setString(call, 9, servicePath);

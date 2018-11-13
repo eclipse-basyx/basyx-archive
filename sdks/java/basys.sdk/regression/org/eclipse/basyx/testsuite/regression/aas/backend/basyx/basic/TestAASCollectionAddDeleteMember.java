@@ -69,6 +69,8 @@ class TestAASCollectionAddDeleteMember {
 		// Delete member from collection
 		property4.remove(5);
 		
+		System.out.println("Deleted entry...");
+		
 		// Check if the item has been removed 
 		System.out.println("size = " + property4.getElementCount());
 		

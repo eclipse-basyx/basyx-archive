@@ -57,19 +57,6 @@ public class TestJavaHandlerProvider {
 		}, (obj, val) -> {
 			obj.sampleProperty3 = (NestedPropertyType) val;
 		}, null, null);
-		smHandler.addProperty("sampleProperty3.properties.samplePropertyA", (obj) -> {
-			return obj.sampleProperty3.samplePropertyA;
-		}, (obj, val) -> {
-			obj.sampleProperty3.samplePropertyA = (int) val;
-		}, null, null);
-		smHandler.addProperty("sampleProperty3.properties.samplePropertyB", (obj) -> {
-			return obj.sampleProperty3.samplePropertyB;
-		}, (obj, val) -> {
-			obj.sampleProperty3.samplePropertyB = (int) val;
-		}, null, null);
-		smHandler.addProperty("sampleProperty3.properties", (obj) -> {
-			return obj.sampleProperty3.getProperties();
-		}, null, null, null);
 		smHandler.addProperty("sampleProperty4", (obj) -> {
 			return obj.sampleProperty4;
 		}, null, (obj, val) -> {
@@ -81,13 +68,29 @@ public class TestJavaHandlerProvider {
 		smHandler.addOperation("sum", (obj, val) -> {
 			return obj.sum((int) val[0], (int) val[1]);
 		});
-		smHandler.addOperation("sampleProperty3.sub", (obj, val) -> {
-			return obj.sampleProperty3.sub((int) val[0], (int) val[1]);
+
+		JavaHandler<Stub1SubmodelType.NestedPropertyType> nestedHandler = new JavaHandler<>(stub1SM.sampleProperty3);
+
+		nestedHandler.addOperation("sub", (obj, val) -> {
+			return obj.sub((int) val[0], (int) val[1]);
 		});
+
+		nestedHandler.addProperty("samplePropertyA", (obj) -> {
+			return obj.samplePropertyA;
+		}, (obj, val) -> {
+			obj.samplePropertyA = (int) val;
+		}, null, null);
+
+		nestedHandler.addProperty("samplePropertyB", (obj) -> {
+			return obj.samplePropertyB;
+		}, (obj, val) -> {
+			obj.samplePropertyB = (int) val;
+		}, null, null);
 
 		// - Add models to provider
 		subModelProvider.addHandler(aasHandler);
 		subModelProvider.addHandler(smHandler);
+		subModelProvider.addHandler(nestedHandler);
 	}
 
 	@Test
@@ -97,8 +100,6 @@ public class TestJavaHandlerProvider {
 		Object property1I = subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/0");
 		Object property2I = subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/1");
 		Object property3I = subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/2");
-		Object property3AI = subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/3");
-		Object property3BI = subModelProvider.getModelPropertyValue("Stub1AAS/aas/submodels/statusSM/properties/4");
 
 		// - Check results
 		IAssetAdministrationShell aasStub = (IAssetAdministrationShell) subModelProvider.getModelPropertyValue("Stub1AAS/aas");
@@ -108,8 +109,6 @@ public class TestJavaHandlerProvider {
 		assertTrue((int) property1I == 2);
 		assertTrue((int) property2I == 3);
 		assertTrue(property3I instanceof Stub1SubmodelType.NestedPropertyType);
-		assertTrue((int) property3AI == 4);
-		assertTrue((int) property3BI == 5);
 
 		// Get AAS sub model property values via unique sub model ID
 		ISubModel subMode2Stub = (ISubModel) subModelProvider.getModelPropertyValue("statusSM/submodel");
@@ -121,7 +120,8 @@ public class TestJavaHandlerProvider {
 		assertTrue((int) property1aI == 2);
 		assertTrue((int) property2aI == 3);
 
-		TestProviderFull_get.testGet(subModelProvider);
+		TestProviderFull_get.testGetProperties(subModelProvider);
+		TestProviderFull_get.testGetOperations(subModelProvider);
 	}
 
 	@Test

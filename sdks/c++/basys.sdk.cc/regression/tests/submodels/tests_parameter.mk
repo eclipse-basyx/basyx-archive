@@ -1,4 +1,4 @@
-EXE_NAME ?= tests_submodels
+TARGET_NAME ?= tests_submodels
 
 MODULE_SRC := test_devicestatussm.cc
 MODULE_INC_DIR += .

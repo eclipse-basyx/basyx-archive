@@ -18,7 +18,7 @@ public class TestProviderFull_invoke {
 		assertTrue((int) result == 10);
 
 		// Invoke simple operation "sub" in property "sampleProperty3" of sub model "statusSM" of AAS "Stub1AAS"
-		Object result2 = provider.invokeOperation("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.sub", new Object[] {7, 5});
+		Object result2 = provider.invokeOperation("Stub1AAS/aas/submodels/statusSM/properties/sampleProperty3.operations.sub", new Object[] {7, 5});
 		// - Check Result
 		assertTrue((int) result2 == 2);
 	}

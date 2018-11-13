@@ -341,6 +341,8 @@ public class JSONProvider<T extends IModelProvider> {
 		if (!isFrozen(submodelPath)) {
 			
 			try {
+				System.out.println("-------------------------- DO DELETE " + path + "---------------------------------------------------------");
+				
 				// Increment Clock
 				incrementClock(submodelPath);
 			

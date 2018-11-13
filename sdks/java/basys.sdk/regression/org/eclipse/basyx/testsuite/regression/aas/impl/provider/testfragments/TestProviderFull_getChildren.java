@@ -29,7 +29,7 @@ public class TestProviderFull_getChildren {
 		//assertTrue(stub1ChildrenA.size() == 2);
 		System.out.println("StatusSM contains "+ stub1ChildrenA.size() +" children.");
 		
-		assertEquals(4, stub1ChildrenA.size());
-		assertEquals(4, stub1ChildrenB.size());	
+		assertEquals(5, stub1ChildrenA.size());
+		assertEquals(5, stub1ChildrenB.size());	
 	}
 }
