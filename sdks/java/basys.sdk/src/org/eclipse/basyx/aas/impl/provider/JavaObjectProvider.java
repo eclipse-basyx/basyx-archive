@@ -371,7 +371,7 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	@Override
 	public void createValue(String path, Object parameter) throws ServerException {
 		
-		throw new ServerException("Creating property, operation, event submodel or aas under the given path failed. Please use JavaHandlerProvider instead.");
+		throw new ServerException("UnsupportedOperation", "Creating property, operation, event submodel or aas under the given path failed. Please use JavaHandlerProvider instead.");
 	}
 	
 	/**
@@ -383,7 +383,7 @@ public class JavaObjectProvider extends AbstractModelScopeProvider implements IM
 	@Override
 	public void deleteValue(String path) throws ServerException  {
 		
-		throw new ServerException("Deleting property, operation, event submodel or aas under the given path failed. Please use JavaHandlerProvider instead.");
+		throw new ServerException("UnsupportedOperation", "Deleting property, operation, event submodel or aas under the given path failed. Please use JavaHandlerProvider instead.");
 	}
 	
 	/**

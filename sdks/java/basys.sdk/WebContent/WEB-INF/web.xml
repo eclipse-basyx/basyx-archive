@@ -49,6 +49,28 @@
     <servlet-name>Test_Stub3AAS</servlet-name>
     <url-pattern>/Testsuite/Stub3AAS/*</url-pattern>
   </servlet-mapping>
+  
+  
+  <servlet>
+    <servlet-name>Test_SimpleVABElement</servlet-name>
+    <servlet-class> org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.vab.elements.SimpleVABElementServlet </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Test_SimpleVABElement</servlet-name>
+    <url-pattern>/Testsuite/SimpleVAB/*</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <servlet-name>Test_SimpleAASSubmodel</servlet-name>
+    <servlet-class> org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.vab.elements.SimpleAASSubmodelServlet </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Test_SimpleAASSubmodel</servlet-name>
+    <url-pattern>/Testsuite/SimpleAASSubmodel/*</url-pattern>
+  </servlet-mapping>
+  
+  
   <servlet>
     <servlet-name>Test_GW_IESE_Office_ProductDatabase</servlet-name>
     <servlet-class> org.eclipse.basyx.testsuite.support.gateways.stubs.servlets.topo.iese.Servlet_Office_ProductDatabase_AAS</servlet-class>

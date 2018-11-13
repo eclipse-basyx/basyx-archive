@@ -35,7 +35,7 @@ public class MapReflectionProperty extends AbstractReflectionProperty implements
 			f.set(getObject(), map);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
-			throw new ServerException("Reflection failed");
+			throw new ServerException("ReflectionException", "Reflection failed");
 		}
 	}
 
@@ -60,7 +60,7 @@ public class MapReflectionProperty extends AbstractReflectionProperty implements
 			return (Map<Object, Object>) f.get(o);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
-			throw new ServerException("Reflection failed");
+			throw new ServerException("ReflectionException", "Reflection failed");
 		}
 	}
 

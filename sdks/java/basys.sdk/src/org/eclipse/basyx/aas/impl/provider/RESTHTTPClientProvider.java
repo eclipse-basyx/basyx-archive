@@ -112,7 +112,7 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 			connectorProvider.getProvider(addr).setModelPropertyValue(servicePath, newValue);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServerException("Exception: " + e.toString());
+			throw new ServerException("Generic Exception", "Exception: " + e.toString());
 		}
 	}
 
@@ -149,7 +149,7 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 			connectorProvider.getProvider(addr).setModelPropertyValue(servicePath, newEntry);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServerException("Exception: " + e.toString());
+			throw new ServerException("Generic Exception", "Exception: " + e.toString());
 		}
 		;
 	}
@@ -185,7 +185,7 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 			connectorProvider.getProvider(addr).createValue(servicePath, newElement);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServerException("Exception: " + e.toString());
+			throw new ServerException("Generic Exception", "Exception: " + e.toString());
 		}
 	}
 
@@ -220,7 +220,7 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 			connectorProvider.getProvider(addr).deleteValue(servicePath);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServerException("Exception: " + e.toString());
+			throw new ServerException("Generic Exception", "Exception: " + e.toString());
 		}
 	}
 
@@ -251,7 +251,7 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 			connectorProvider.getProvider(addr).deleteValue(servicePath, parameter);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServerException("Exception: " + e.toString());
+			throw new ServerException("Generic Exception", "Exception: " + e.toString());
 		}
 	}
 
@@ -282,7 +282,7 @@ public class RESTHTTPClientProvider extends AbstractModelScopeProvider implement
 			return connectorProvider.getProvider(addr).invokeOperation(servicePath, parameter);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServerException("Exception: " + e.toString());
+			throw new ServerException("Generic Exception", "Exception: " + e.toString());
 		}
 	}
 

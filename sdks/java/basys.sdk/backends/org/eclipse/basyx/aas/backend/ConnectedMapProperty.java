@@ -66,7 +66,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServerException("Exception: " + e.toString());
+			throw new ServerException("Unknown exception", "");
 		}
 
 	}
@@ -86,7 +86,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 			this.setElement(map);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServerException("Exception: " + e.toString());
+			throw new ServerException("Unknown exception", "");
 		}
 	}
 
@@ -160,7 +160,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 				throw (TypeMismatchException) e;
 			} else {
 				e.printStackTrace();
-				throw new ServerException("Exception: " + e.toString());
+				throw new ServerException("Unknown exception", "");
 			}
 		}
 

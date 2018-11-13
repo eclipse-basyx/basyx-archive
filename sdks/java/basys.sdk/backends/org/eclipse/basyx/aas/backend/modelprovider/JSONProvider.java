@@ -279,7 +279,7 @@ public class JSONProvider<T extends IModelProvider> {
 				parameter = new Object[1]; parameter[0] = JSONTools.Instance.deserialize(json);
 			}
 		} catch (JSONException e)   {
-			sendException(new ServerException("HTTP Patch failed. Wrong JSON parameter body format"), path, outputStream);
+			sendException(new ServerException("Bad parameter", "HTTP Patch failed. Wrong JSON parameter body format"), path, outputStream);
 		}
 
 		System.out.println("-------------------------- DO PATCH "+path+" => "+ action + " " + parameter.toString() +" ---------------------------------------------------------");
@@ -312,7 +312,7 @@ public class JSONProvider<T extends IModelProvider> {
 						break;
 						
 					default:
-						sendException(new ServerException("Action not supported."), path, outputStream);
+						sendException(new ServerException("Unsupported", "Action not supported."), path, outputStream);
 				}
 				
 			} catch (Exception e) {

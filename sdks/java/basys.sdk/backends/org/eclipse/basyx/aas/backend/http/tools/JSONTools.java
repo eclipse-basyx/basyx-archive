@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
@@ -18,6 +19,7 @@ import org.eclipse.basyx.aas.impl.resources.basic.DataType;
 import org.eclipse.basyx.aas.impl.resources.basic.Event;
 import org.eclipse.basyx.aas.impl.resources.basic.Operation;
 import org.eclipse.basyx.aas.impl.resources.basic.Property;
+import org.eclipse.basyx.vab.proxy.members.VABOperation;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,11 +55,13 @@ public class JSONTools {
 	 * Serialize a primitive value
 	 */
 	protected JSONObject serializePrimitive(JSONObject target, Object serializedObject, String type) {
+		System.out.println("SP:"+serializedObject);
+
 		// Serialize values
 		// - Put object value into the JSON object
 		target.put("value", serializedObject);
 		// - Substructure defines a primitive type
-		target.put("kind", "value");
+		target.put("basystype", "value");
 		// - Put type id into JSON Object
 		target.put("typeid", type);
 		
@@ -71,7 +75,7 @@ public class JSONTools {
 	 */
 	protected Object deserializePrimitive(JSONObject serializedValue) {
 		// Type check
-		if (!serializedValue.get("kind").equals("value")) return null;
+		if (!serializedValue.get("basystype").equals("value")) return null;
 		
 		// Return serialized value
 		return serializedValue.get("value");
@@ -103,7 +107,7 @@ public class JSONTools {
 		if (value != null) return false;
 		
 		// Serialize null value
-		target.put("kind", "null");
+		target.put("basystype", "null");
 
 		// Value is a null
 		return true;
@@ -115,7 +119,7 @@ public class JSONTools {
 	 */
 	protected boolean deserializeNull(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
 		// Type check
-		if (!serializedValue.get("kind").equals("null")) return false;
+		if (!serializedValue.get("basystype").equals("null")) return false;
 		
 		// Return serialized value
 		return true;
@@ -127,7 +131,7 @@ public class JSONTools {
 	 */
 	protected <T> boolean doSerializeArray(JSONObject target, T[] arrayValue, String typeName, JSONObject serObjRepo, String scope) {
 		// Serialize array data
-		target.put("kind", "array");
+		target.put("basystype", "array");
 		target.put("size", arrayValue.length);
 		target.put("type", typeName);
 
@@ -182,7 +186,7 @@ public class JSONTools {
 	 */
 	protected Object deserializeArrayType(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
 		// Type check
-		if (!serializedValue.get("kind").equals("array")) return null;
+		if (!serializedValue.get("basystype").equals("array")) return null;
 
 		// Create array
 		switch((String) serializedValue.get("type")) {
@@ -204,8 +208,8 @@ public class JSONTools {
 	 * Check is a given JSON object contains a primitive type
 	 */
 	protected boolean isPrimitive(JSONObject serializedValue) {
-		// Property "kind" defines whether something is a value (primitive) type or not
-		if (serializedValue.get("kind").equals("value")) return true;
+		// Property "basystype" defines whether something is a value (primitive) type or not
+		if (serializedValue.get("basystype").equals("value")) return true;
 		
 		// Type is no primitive type
 		return false;
@@ -233,7 +237,7 @@ public class JSONTools {
 		System.out.println("Serialize "+ reference);
 		// Serialize element
 		// - Indicate that it is a reference
-		target.put("kind", "ref");
+		target.put("basystype", "ref");
 		// - Serialize element type
 		// - FIXME: Use interfaces
 		if (reference instanceof IProperty) target.put("elementType", "property");
@@ -254,7 +258,7 @@ public class JSONTools {
 	 */
 	protected Object deserializeElementReference(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
 		// Type check
-		if (!(serializedValue.get("kind").equals("ref"))) return null;
+		if (!(serializedValue.get("basystype").equals("ref"))) return null;
 		
 		// Get referenced address
 		String refAAS  = ""; if (serializedValue.has("aas"))      refAAS = (String) serializedValue.get("aas");
@@ -281,6 +285,8 @@ public class JSONTools {
 
 	/**
 	 * Serialize a property into JSON object TODO make this class independent from IModelProvider?
+	 * 
+	 * FIXME: Remove
 	 */
 	public JSONObject serializeProperty(String pathToObject, IModelProvider provider) {
 		// Create return value
@@ -327,7 +333,7 @@ public class JSONTools {
 		
 		// Serialize element
 		// - Indicate that is is a reference
-		target.put("kind", "ref");
+		target.put("basystype", "ref");
 		// - Serialize element type
 		// - FIXME: Use interfaces
 		if (value instanceof IProperty) target.put("elementType", "property");
@@ -371,7 +377,7 @@ public class JSONTools {
 			
 			// Convert elements
 			// - Substructure defines a collection
-			target.put("kind", "map");
+			target.put("basystype", "map");
 			target.put("size", map.size());
 			
 			// Serialize collection elements
@@ -391,7 +397,7 @@ public class JSONTools {
 	 */
 	protected Object deserializeMapType(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
 		// Serialize known primitive types
-		if (!(serializedValue.get("kind").equals("map"))) return null;
+		if (!(serializedValue.get("basystype").equals("map"))) return null;
 		
 		// Create hash map return value
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -399,7 +405,7 @@ public class JSONTools {
 		// Deserialize map elements
 		for (String key: serializedValue.keySet()) {
 			// Skip predefined keys
-			if (key.equals("kind")) continue; // this caused kind and size information to be lost!
+			if (key.equals("basystype")) continue; // this caused kind and size information to be lost!
 			if (key.equals("size")) continue;
 			
 			// Deserialize element
@@ -428,7 +434,7 @@ public class JSONTools {
 			
 			// Convert elements
 			// - Substructure defines a collection
-			target.put("kind", "collection");
+			target.put("basystype", "collection");
 			target.put("size", collection.size());
 			
 			// Serialize collection elements
@@ -447,7 +453,7 @@ public class JSONTools {
 	 */
 	protected Object deserializeCollectionType(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
 		// Deserialize known types
-		if (!(serializedValue.get("kind").equals("collection"))) return null;
+		if (!(serializedValue.get("basystype").equals("collection"))) return null;
 		
 		// Create collection return value
 		Collection<Object> result = new LinkedList<Object>();
@@ -493,7 +499,7 @@ public class JSONTools {
 		serializedObjectRepository.put("id_"+serObj.getObjectID(), subStructure);
 		
 		// Serialize reference to serialized object 
-		target.put("kind", "serializedobject");
+		target.put("basystype", "serializedobject");
 		target.put("id",   serObj.getObjectID());
 
 		// Serialized repository with serialized SerializableObjects iff this is the root node
@@ -503,14 +509,22 @@ public class JSONTools {
 		return true;
 	}
 	
-	
-	protected boolean serializeException(JSONObject target, Object value) {
 
+	/**
+	 * Serialize an exception
+	 * 
+	 * @param target
+	 * @param value
+	 * @return
+	 */
+	protected boolean serializeException(JSONObject target, Object value) {
+		// Check if object to be serialized is an exception
 		if (value instanceof Exception) {
 			
 			Exception e = (Exception) value;
 			
-			target.put("kind", "exception");
+			target.put("basystype", "exception");
+			target.put("type", e.getClass().getName());
 			target.put("message", e.getMessage());
 			
 			return true;
@@ -521,15 +535,59 @@ public class JSONTools {
 	
 	
 
+	/**
+	 * Deserialize an exception
+	 * 
+	 * @param serializedValue Serialized JSON object
+	 * @return Server exception object
+	 */
 	protected Object deserializeException(JSONObject serializedValue) {
 
 		// Only deserialize exceptions
-		if (!(serializedValue.get("kind").equals("exception"))) return null;
+		if (!(serializedValue.get("basystype").equals("exception"))) return null;
 		
-		System.out.println("Deserialize Exception");
-		return new ServerException( (String) serializedValue.get("message"));
+		// Get exception type and message
+		// - Store exception details
+		String type    = null;
+		String message = null;
+		// - Get exception details
+		if (serializedValue.has("type"))    type    = (String) serializedValue.get("type");
+		if (serializedValue.has("message")) message = (String) serializedValue.get("message");
+
+		// Return server exception
+		return new ServerException(type, message);
 	}
 
+
+	/**
+	 * Serialize an operation descriptor
+	 */
+	protected boolean serializeOperation(JSONObject target, Object value) {
+		// Check if object to be serialized is a function
+		if ((value instanceof Function) == false) return false;
+			
+		// Serialize operation kind
+		target.put("basystype", "operation");
+
+		// Indicate success
+		return true;
+	}
+
+	
+	/**
+	 * Deserialize an operation
+	 * 
+	 * @param serializedValue Serialized JSON object
+	 * @return Server exception object
+	 */
+	protected Object deserializeOperation(JSONObject serializedValue) {
+
+		// Only deserialize exceptions
+		if (!(serializedValue.get("basystype").equals("operation"))) return null;
+		
+		// Return server exception
+		return new VABOperation();
+	}
 
 
 	
@@ -542,7 +600,7 @@ public class JSONTools {
 		JSONObject          repo                        = repository;
 
 		// Deserialize known types
-		if (!(serializedValue.get("kind").equals("serializedobject"))) return null;
+		if (!(serializedValue.get("basystype").equals("serializedobject"))) return null;
 
 		// Create collection return value
 		ConnectedSerializableObject result = new ConnectedSerializableObject();
@@ -584,6 +642,7 @@ public class JSONTools {
 		if (serializeIElementRef(returnValue, value, serObjRepo, scope)) return returnValue;
 		if (serializeSerializableObject(returnValue, value, serObjRepo, scope)) return returnValue;
 		if (serializeException(returnValue, value)) return returnValue;
+		if (serializeOperation(returnValue, value)) return returnValue;
 		// Complex types not supported yet
 		
 		
@@ -626,7 +685,7 @@ public class JSONTools {
 		if ((returnValue = deserializeElementReference(serializedValue, serObjRepo, repository)) != null) return returnValue;
 		if ((returnValue = deserializeSerializableObject(serializedValue, serObjRepo, repository)) != null) return returnValue;
 		if ((returnValue = deserializeException(serializedValue)) != null) return returnValue;
-
+		if ((returnValue = deserializeOperation(serializedValue)) != null) return returnValue;
 		
 		
 		
@@ -652,7 +711,7 @@ public class JSONTools {
      */
     public DataType decodeDataType(JSONObject element) {
 		// Decode data type
-		switch ((String) element.get("kind")) {
+		switch ((String) element.get("basystype")) {
 			// Primitive values
 			case "value":
 				switch ((String) element.get("typeid")) {

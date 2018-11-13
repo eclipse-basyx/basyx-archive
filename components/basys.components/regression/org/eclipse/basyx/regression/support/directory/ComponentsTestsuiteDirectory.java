@@ -28,5 +28,7 @@ public class ComponentsTestsuiteDirectory extends TestsuiteDirectory {
 		// - CFG provider mappings
 		addMapping("CfgFileTestAAS",           "http://localhost:8080/basys.components/Testsuite/components/BaSys/1.0/provider/cfgsm/");
 		addMapping("sampleCFG.CfgFileTestAAS", "http://localhost:8080/basys.components/Testsuite/components/BaSys/1.0/provider/cfgsm/");
+		// - XQuery provider mappings
+		addMapping("XMLXQueryFileTestAAS",     "http://localhost:8080/basys.components/Testsuite/components/BaSys/1.0/provider/xmlxquery/");
 	}	
 }

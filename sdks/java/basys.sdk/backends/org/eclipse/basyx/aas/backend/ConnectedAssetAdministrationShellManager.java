@@ -14,6 +14,7 @@ import org.eclipse.basyx.aas.api.services.IDirectoryService;
 import org.eclipse.basyx.aas.api.services.IModelProvider;
 import org.eclipse.basyx.aas.backend.connector.ConnectorProvider;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
+import org.eclipse.basyx.vab.proxy.VABElementProxy;
 
 /**
  * Implement a AAS manager backend that communicates via HTTP/REST
@@ -185,3 +186,5 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		return new ConnectedOperation(elementRef.getAASID(), elementRef.getSubModelID(), elementRef.getPathToProperty(), getProvider(addr));
 	}
 }
+
+

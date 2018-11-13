@@ -160,6 +160,7 @@ public class HTTPConnector implements IModelProvider {
 		return request;
 	}
 
+	
 	/**
 	 * Create web service path
 	 */
@@ -225,9 +226,8 @@ public class HTTPConnector implements IModelProvider {
 		// Try to extract response if any
 		try {
 			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
-
+			
 			if (result instanceof ServerException) {
-
 				// Throw server exception
 				throw (ServerException) result;
 			}
@@ -323,6 +323,8 @@ public class HTTPConnector implements IModelProvider {
 		try {
 			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
 
+			System.out.println("RES:"+result);
+			
 			if (result instanceof ServerException) {
 
 				// Throw server exception

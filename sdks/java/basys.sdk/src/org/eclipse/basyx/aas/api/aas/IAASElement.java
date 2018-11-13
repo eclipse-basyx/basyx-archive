@@ -1,5 +1,6 @@
-package org.eclipse.basyx.aas.api.resources.basic;
+package org.eclipse.basyx.aas.api.aas;
 
+import org.eclipse.basyx.aas.api.resources.vab.IElement;
 import org.eclipse.basyx.aas.impl.resources.basic.AssetKind;
 import org.eclipse.basyx.aas.impl.resources.basic.BaseElement;
 
@@ -11,7 +12,7 @@ import org.eclipse.basyx.aas.impl.resources.basic.BaseElement;
  * @author kuhn
  *
  */
-public interface IElement {
+public interface IAASElement extends IElement {
 
 	
 	/**
@@ -28,22 +29,6 @@ public interface IElement {
 	 * @param parent New parent element
 	 */
 	public void setParent(BaseElement parent);
-
-	
-	/**
-	 * Return the unique ID that identifies an element
-	 * 
-	 * @return unique ID
-	 */
-	public String getId();
-
-	
-	/**
-	 * Set the ID of an element
-	 * 
-	 * @param id New/updated element id
-	 */
-	public void setId(String id);
 
 	
 	/**
@@ -77,8 +62,5 @@ public interface IElement {
 	 * @param name New element name
 	 */
 	public void setName(String name);
-
-
-
 }
 

@@ -1,9 +1,7 @@
-package org.eclipse.basyx.aas.api.resources.basic;
-
-import org.eclipse.basyx.aas.impl.resources.basic.DataType;
+package org.eclipse.basyx.aas.api.resources.vab;
 
 /**
- * Interface for AAS properties 
+ * Interface for IElement properties 
  *  
  * @author kuhn
  *

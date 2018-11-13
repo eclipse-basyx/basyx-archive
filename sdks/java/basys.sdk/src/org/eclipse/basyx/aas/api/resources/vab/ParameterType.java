@@ -1,6 +1,4 @@
-package org.eclipse.basyx.aas.impl.resources.basic;
-
-
+package org.eclipse.basyx.aas.api.resources.vab;
 
 /**
  * Store a parameter type
@@ -28,6 +26,7 @@ public class ParameterType {
 	 * Parameter name
 	 */
 	protected String name;	
+	
 	
 	
 	

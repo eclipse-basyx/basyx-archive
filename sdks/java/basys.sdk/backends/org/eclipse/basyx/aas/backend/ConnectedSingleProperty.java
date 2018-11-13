@@ -52,7 +52,7 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 			this.setElement(newValue);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServerException("Exception: " + e.toString());
+			throw new ServerException("Unknown exception", "");
 		}
 
 	}

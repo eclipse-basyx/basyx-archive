@@ -167,7 +167,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 			provider.setModelPropertyValue(servicePath, true);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServerException("Exception: " + e.toString());
+			throw new ServerException("Unknown exception", "");
 		}
 	}
 
@@ -186,7 +186,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubModel {
 			provider.setModelPropertyValue(servicePath, false);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServerException("Exception: " + e.toString());
+			throw new ServerException("Unknown exception", "");
 		}
 	}
 

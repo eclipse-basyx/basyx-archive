@@ -31,6 +31,13 @@ public class TestsuiteDirectory extends PreconfiguredDirectory {
 		
 		addMapping("Stub3AAS", 					"http://localhost:8080/basys.sdk/Testsuite/Stub3AAS/");
 		addMapping("Stub3AAS/aas", 					"http://localhost:8080/basys.sdk/Testsuite/Stub3AAS/");
+
+		addMapping("urn:fhg:es.iese:vab:1:1:simplevabelement",  "http://localhost:8080/basys.sdk/Testsuite/SimpleVAB/");
+		addMapping("SimpleVABElement/aas", 					"http://localhost:8080/basys.sdk/Testsuite/SimpleVAB/");
+
+		addMapping("urn:fhg:es.iese:aas:1:1:submodel", 			"http://localhost:8080/basys.sdk/Testsuite/SimpleAASSubmodel/");
+		addMapping("SimpleAASSubmodel/aas", 					"http://localhost:8080/basys.sdk/Testsuite/SimpleAASSubmodel/");
+
 		
 		addMapping("statusSM",                  "http://localhost:8080/basys.sdk/Testsuite/Stub1AASSubmodel1/");
 		addMapping("statusSM/submodel",                  "http://localhost:8080/basys.sdk/Testsuite/Stub1AASSubmodel1/");

@@ -6,16 +6,11 @@ import java.io.InputStreamReader;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.services.IModelProvider;
-import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.eclipse.basyx.aas.backend.modelprovider.JSONProvider;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 
@@ -75,7 +70,7 @@ public class HTTPProvider<T extends IModelProvider> extends BasysHTTPServelet {
 		String uri 			= req.getRequestURI();
 		String contextPath  = req.getContextPath();
 		String path 		= uri.substring(contextPath.length()+1); // plus 1 for "/"
-				
+
 		// Setup HTML response header
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");

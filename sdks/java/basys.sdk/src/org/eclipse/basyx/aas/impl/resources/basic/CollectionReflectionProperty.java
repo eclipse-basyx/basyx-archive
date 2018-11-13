@@ -31,7 +31,7 @@ public class CollectionReflectionProperty extends AbstractReflectionProperty imp
 			f.set(getObject(), collection);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
-			throw new ServerException("Reflection failed");
+			throw new ServerException("ReflectionException", "Reflection failed");
 		}
 	}
 
@@ -62,7 +62,7 @@ public class CollectionReflectionProperty extends AbstractReflectionProperty imp
 			return (Collection<Object>) f.get(getObject());
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
-			throw new ServerException("Reflection failed");
+			throw new ServerException("ReflectionException", "Reflection failed");
 		}
 	}
 

@@ -1,0 +1,30 @@
+<sensors>
+  <sensor>
+    <name>SensorA</name>
+    <kind>LightSensor</kind>
+    <weight>14.06</weight>
+  </sensor>
+  <sensor>
+    <name>SensorB</name>
+    <kind>LightSensor</kind>
+    <weight>8.03</weight>
+  </sensor>
+  <sensor>
+    <name>SensorC</name>
+    <kind>WeightSensor</kind>
+    <weight>21</weight>
+  </sensor>
+  <sensor>
+    <name hasLongName='true'>
+    	SensD
+    	<longName>SensorD</longName>
+    </name>
+    <kind>LightSensor</kind>
+    <weight>18.01</weight>
+  </sensor>
+  <sensor>
+    <name>13</name>
+    <kind>WeightSensor</kind>
+    <weight>21</weight>
+  </sensor>
+</sensors>

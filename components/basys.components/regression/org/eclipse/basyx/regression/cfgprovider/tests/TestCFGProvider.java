@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
  * @author kuhn
  *
  */
-class CFGProviderQueries {
+class TestCFGProvider {
 
 	
 	/**

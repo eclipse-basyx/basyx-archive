@@ -74,9 +74,8 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 			this.setElement(collection);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServerException("Exception: " + e.toString());
+			throw new ServerException("Unknown exception", "");
 		}
-
 	}
 
 	/**
@@ -114,7 +113,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 				throw (TypeMismatchException) e;
 			} else {
 				e.printStackTrace();
-				throw new ServerException("Exception: " + e.toString());
+				throw new ServerException("Unknown exception", "");
 			}
 		}
 
@@ -142,7 +141,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServerException("Exception: " + e.toString());
+			throw new ServerException("Unknown exception", "");
 		}
 
 	}
