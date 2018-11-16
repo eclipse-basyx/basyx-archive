@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
 /**
  * Snippet to test get functionality of a IModelProvider
@@ -25,11 +26,22 @@ public class GetPropertyValue {
 		// Get property value
 		Object value1 = connVABElement.readElementValue("property1");
 		Object value2 = connVABElement.readElementValue("property1/property1.1");
-
+		
 		// Check test case results
 		assertTrue(value1 instanceof HashMap);
-		assertEquals(4, ((Map<?, ?>) value1).size());
-		assertTrue(value2 instanceof Integer);
-		assertEquals(7, value2);
+		assertTrue(value2 instanceof HashMap);
+		
+		// Can use hashmap provider to test deserialized response
+		VABHashmapProvider value1_provider = new VABHashmapProvider((Map<String, Object>) value1);
+		Map<?, ?> containedElements = (Map<?, ?>) value1_provider.getModelPropertyValue("entity");
+		assertEquals(4, containedElements.size());
+		
+		// Can use hashmap provider to test deserialized response
+		VABHashmapProvider value2_provider = new VABHashmapProvider((Map<String, Object>) value2);
+		int val2 = (int) value2_provider.getModelPropertyValue("entity/value");
+		assertEquals(7, val2);
+
+		
 	}
+	
 }

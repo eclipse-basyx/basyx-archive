@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.eclipse.basyx.vab.backend.server.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
+import org.json.JSONObject;
 
 
 
@@ -18,7 +20,7 @@ import org.eclipse.basyx.vab.core.IModelProvider;
  * @author kuhn
  *
  */
-public class BaSyxTCPProvider<T extends IModelProvider> extends Thread {
+public class VABBaSyxTCPInterface<T extends IModelProvider> extends Thread {
 
 	
 	/**
@@ -84,7 +86,7 @@ public class BaSyxTCPProvider<T extends IModelProvider> extends Thread {
 	/**
 	 * Constructor
 	 */
-	public BaSyxTCPProvider(T modelProviderBackend, Socket communicationSocket) {
+	public VABBaSyxTCPInterface(T modelProviderBackend, Socket communicationSocket) {
 		// Store reference to socket and backend
 		providerBackend = new JSONProvider<T>(modelProviderBackend);
 		tcpCommSocket   = communicationSocket; 
@@ -107,6 +109,15 @@ public class BaSyxTCPProvider<T extends IModelProvider> extends Thread {
 		return providerBackend.getBackendReference();
 	}
 	
+	/**
+	 * Send JSON encoded response
+	 */
+	private void sendJSONResponse(PrintWriter outputStream, JSONObject jsonValue) {
+		// Output result
+		outputStream.write(jsonValue.toString()); 
+		outputStream.flush();
+	}
+	
 	
 	/**
 	 * Process input frame
@@ -123,8 +134,10 @@ public class BaSyxTCPProvider<T extends IModelProvider> extends Thread {
 					// Get path string
 					int    pathLen = CoderTools.getInt32(rxFrame, 1);
 					String path    = new String(rxFrame, 1+4, pathLen);
-					// Invoke get operation
+					
+					// Forward request to provider
 					providerBackend.processBaSysGet(path, output);
+					
 					// - Create response frame
 					byte[] encodedResult       = byteArrayOutput.toByteArray();
 					int    resultFrameSize     = encodedResult.length+1;
@@ -148,8 +161,10 @@ public class BaSyxTCPProvider<T extends IModelProvider> extends Thread {
 					// Get value string length and value
 					int    jsonValueLen = CoderTools.getInt32(rxFrame, 1+4+pathLen);
 					String jsonValue    = new String(rxFrame, 1+4+pathLen+4, jsonValueLen);
+					
 					// Invoke get operation
 					providerBackend.processBaSysSet(path, jsonValue, output);
+					
 					// - Create response frame
 					byte[] frameLength     = new byte[4];
 					CoderTools.setInt32(frameLength, 0, 1);
@@ -166,8 +181,10 @@ public class BaSyxTCPProvider<T extends IModelProvider> extends Thread {
 				// Get value string length and value
 				int    jsonValueLen = CoderTools.getInt32(rxFrame, 1+4+pathLen);
 				String jsonValue    = new String(rxFrame, 1+4+pathLen+4, jsonValueLen);
+				
 				// Invoke get operation
 				providerBackend.processBaSysPatch(path, jsonValue, "add", output);
+				
 				// - Create response frame
 				byte[] frameLength     = new byte[4];
 				CoderTools.setInt32(frameLength, 0, 1);
@@ -184,8 +201,10 @@ public class BaSyxTCPProvider<T extends IModelProvider> extends Thread {
 				// Get value string length and value
 				int    jsonValueLen = CoderTools.getInt32(rxFrame, 1+4+pathLen);
 				String jsonValue    = new String(rxFrame, 1+4+pathLen+4, jsonValueLen);
+				
 				// Invoke get operation
-				providerBackend.processBaSysPost(path, jsonValue, output);
+				providerBackend.processBaSysCreate(path, jsonValue, output);
+				
 				// - Create response frame
 				byte[] frameLength     = new byte[4];
 				CoderTools.setInt32(frameLength, 0, 1);
@@ -201,18 +220,11 @@ public class BaSyxTCPProvider<T extends IModelProvider> extends Thread {
 				String path      = new String(rxFrame, 1+4, pathLen);
 				// Get value string length and value
 				int jsonValueLen = CoderTools.getInt32(rxFrame, 1+4+pathLen);
-				int servicePath_length = 1+4+pathLen+4 + jsonValueLen;
+				String jsonValue    = new String(rxFrame, 1+4+pathLen+4, jsonValueLen);
 				
-				if (servicePath_length < rxFrame.length) {
-					
-					// There must be some parameter in the frame. Delete map/collection entry
-					String jsonValue    = new String(rxFrame, 1+4+pathLen+4, jsonValueLen);
-					providerBackend.processBaSysPatch(path, jsonValue, "remove", output);
-				}
-				else {
-					// There is no parameter in the frame. Delete entity
-					providerBackend.processBaSysDelete(path, output);
-				}
+				// Invoke delete operation
+				providerBackend.processBaSysDelete(path, jsonValue, output);
+				
 				// - Create response frame
 				byte[] frameLength     = new byte[4];
 				CoderTools.setInt32(frameLength, 0, 1);
@@ -230,8 +242,10 @@ public class BaSyxTCPProvider<T extends IModelProvider> extends Thread {
 				int    jsonValueLen = CoderTools.getInt32(rxFrame, 1+4+pathLen);
 				String jsonValue    = new String(rxFrame, 1+4+pathLen+4, jsonValueLen);
 				System.out.println("Invoking:"+path+"---"+jsonValue+"---");
+				
 				// Invoke get operation
 				providerBackend.processBaSysPost(path, jsonValue, output);
+				
 				// - Create response frame
 				byte[] encodedResult       = byteArrayOutput.toByteArray();
 				int    resultFrameSize     = encodedResult.length+1;

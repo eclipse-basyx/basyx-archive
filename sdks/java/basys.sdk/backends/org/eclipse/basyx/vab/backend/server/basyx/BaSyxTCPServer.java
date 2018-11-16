@@ -69,7 +69,7 @@ public class BaSyxTCPServer<T extends IModelProvider> extends Thread {
 
 				// Handle an incoming connection
 				// - Create and connect BaSyx client provider for communication socket
-				BaSyxTCPProvider<T> tcpProvider = new BaSyxTCPProvider<T>(providerBackend, communicationSocket);
+				VABBaSyxTCPInterface<T> tcpProvider = new VABBaSyxTCPInterface<T>(providerBackend, communicationSocket);
 				// - Start TCP provider
 				tcpProvider.start();
 			} catch (IOException e) {

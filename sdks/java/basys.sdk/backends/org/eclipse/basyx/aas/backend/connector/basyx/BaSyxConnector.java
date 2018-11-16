@@ -8,7 +8,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
-import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPProvider;
+import org.eclipse.basyx.vab.backend.server.basyx.VABBaSyxTCPInterface;
 import org.eclipse.basyx.vab.backend.server.basyx.CoderTools;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.json.JSONException;
@@ -83,7 +83,7 @@ public class BaSyxConnector implements IModelProvider {
 		// - Encode size does not include leading four bytes
 		CoderTools.setInt32(call, 0, call.length - 4);
 		// - Encode operation GET
-		CoderTools.setInt8(call, 4, BaSyxTCPProvider.BASYX_GET);
+		CoderTools.setInt8(call, 4, VABBaSyxTCPInterface.BASYX_GET);
 		// - Encode path length and path
 		CoderTools.setInt32(call, 5, address.length());
 		CoderTools.setString(call, 9, address);
@@ -116,7 +116,7 @@ public class BaSyxConnector implements IModelProvider {
 		// - Encode size does not include leading four bytes
 		CoderTools.setInt32(call, 0, call.length - 4);
 		// - Encode operation SET
-		CoderTools.setInt8(call, 4, BaSyxTCPProvider.BASYX_SET);
+		CoderTools.setInt8(call, 4, VABBaSyxTCPInterface.BASYX_SET);
 		// - Encode path
 		CoderTools.setInt32(call, 5, servicePath.length());
 		CoderTools.setString(call, 9, servicePath);
@@ -144,7 +144,7 @@ public class BaSyxConnector implements IModelProvider {
 		// - Encode size does not include leading four bytes
 		CoderTools.setInt32(call, 0, call.length - 4);
 		// - Encode operation SET
-		CoderTools.setInt8(call, 4, BaSyxTCPProvider.BASYX_INVOKE);
+		CoderTools.setInt8(call, 4, VABBaSyxTCPInterface.BASYX_INVOKE);
 		// - Encode path
 		CoderTools.setInt32(call, 5, servicePath.length());
 		CoderTools.setString(call, 9, servicePath);
@@ -216,7 +216,7 @@ public class BaSyxConnector implements IModelProvider {
 		// - Encode size does not include leading four bytes
 		CoderTools.setInt32(call, 0, call.length - 4);
 		// - Encode operation SET
-		CoderTools.setInt8(call, 4, BaSyxTCPProvider.BASYX_DELETE);
+		CoderTools.setInt8(call, 4, VABBaSyxTCPInterface.BASYX_DELETE);
 		// - Encode path
 		CoderTools.setInt32(call, 5, servicePath.length());
 		CoderTools.setString(call, 9, servicePath);

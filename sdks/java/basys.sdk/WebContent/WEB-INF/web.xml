@@ -53,7 +53,7 @@
   
   <servlet>
     <servlet-name>Test_SimpleVABElement</servlet-name>
-    <servlet-class> org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.vab.elements.SimpleVABElementServlet </servlet-class>
+    <servlet-class>org.eclipse.basyx.testsuite.support.vab.stub.servlet.SimpleVABElementServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Test_SimpleVABElement</servlet-name>
