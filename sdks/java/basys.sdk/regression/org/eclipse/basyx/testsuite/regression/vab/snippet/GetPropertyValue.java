@@ -24,23 +24,21 @@ public class GetPropertyValue {
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 
 		// Get property value
-		Object value1 = connVABElement.readElementValue("property1");
-		Object value2 = connVABElement.readElementValue("property1/property1.1");
+		Map<String, Object>   value1 = (Map<String, Object>)  connVABElement.readElementValue("property1");
+		Map<String, Object>   value2 = (Map<String, Object>)  connVABElement.readElementValue("property1/property1.1");
 		
 		// Check test case results
 		assertTrue(value1 instanceof HashMap);
 		assertTrue(value2 instanceof HashMap);
 		
-		// Can use hashmap provider to test deserialized response
-		VABHashmapProvider value1_provider = new VABHashmapProvider((Map<String, Object>) value1);
-		Map<?, ?> containedElements = (Map<?, ?>) value1_provider.getModelPropertyValue("entity");
-		assertEquals(4, containedElements.size());
+		assertEquals(4, value1.size());
 		
-		// Can use hashmap provider to test deserialized response
-		VABHashmapProvider value2_provider = new VABHashmapProvider((Map<String, Object>) value2);
-		int val2 = (int) value2_provider.getModelPropertyValue("entity/value");
+		
+		int val2 	  = (int) value2.get("value");
+		int val2_type = (int) value2.get("type");
+		
 		assertEquals(7, val2);
-
+		System.out.println(val2_type);
 		
 	}
 	
