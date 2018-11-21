@@ -36,7 +36,10 @@ public class TestJSONTools {
 	VABLambdaProvider provider;
 
 	public class TestClass {
-
+		
+		@AASProperty
+		int[] array = new int[5];
+		
 		@AASProperty
 		int a = 5;
 
@@ -72,6 +75,7 @@ public class TestJSONTools {
 		NestedPropertyClass f = new NestedPropertyClass();
 
 		public TestClass() {
+			array[0]=4; array[1]=8; array[4]=3;
 			d.add(1);
 			d.add(2);
 			e.put("one", 1);
@@ -104,8 +108,9 @@ public class TestJSONTools {
 		// Serialize Submodel
 		JSONObject json = JSONTools.Instance.serialize(map);
 
-		//System.out.println("Serialized: " + json.toString(5));
+		System.out.println("Serialized: " + json.toString(5));
 		
+		// TODO decompose test cases so it is transparent which component fails
 		String message 			= json.toString();
 		String expected_message = new JSONObject(TestJSONAcceptors.message).toString();
 		
@@ -124,8 +129,8 @@ public class TestJSONTools {
 		// Can use hashmap provider to test deserialized map
 		VABHashmapProvider provider = new VABHashmapProvider(map);
 		
-		int a = (int) provider.getModelPropertyValue("entity/properties/a/value");
-		int f1 = (int) provider.getModelPropertyValue("entity/properties/f/properties/f1/value");
+		int a = (int) provider.getModelPropertyValue("entity/properties/a/value/value");
+		int f1 = (int) provider.getModelPropertyValue("entity/properties/f/properties/f1/value/value");
 		
 		assertTrue(a == 5);
 		assertTrue(f1 == 42);

@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
+import org.eclipse.basyx.aas.impl.resources.basic.DataTypeMapping;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.AtomicDataProperty;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,30 +37,6 @@ public class JSONTools {
 		// Do nothing
 	}
 
-	/**
-	 * Serialize a null value
-	 */
-	protected Object serializeNull(Object value) {
-		// Only serialize null values
-		if (value != null)
-			return false;
-
-		// Value is a null
-		return null;
-	}
-
-	/**
-	 * Deserialize a null value
-	 */
-	protected boolean deserializeNull(JSONObject serializedValue, Map<Integer, Object> serObjRepo,
-			JSONObject repository) {
-		// Type check
-		if (!serializedValue.get("basystype").equals("null"))
-			return false;
-
-		// Return serialized value
-		return true;
-	}
 
 	/**
 	 * Serialize a map
@@ -267,17 +244,18 @@ public class JSONTools {
 			return placeholder;
 		}
 
-		// Try null
-		if (value == null) {
-			return null;
-		}
-
 		// Other primitive
-		return value;
+		JSONObject typed_value = new JSONObject();
+		typed_value.put("value", value);
+		typed_value.put("type", DataTypeMapping.map(value).getId());
+		
+		return typed_value;  
 	}
 
 	/**
-	 * Serialize a primitive or complex value into JSON object
+	 * Serialize a primitive or complex value into JSON object 
+	 * 
+	 * TODO get success, entityTpye, messageType, code, text parameter
 	 */
 	public JSONObject serialize(Object value) {
 
@@ -320,8 +298,12 @@ public class JSONTools {
 		}
 		
 		// Other primitive value
-		response.put("entity", value);
-
+		JSONObject typed_value = new JSONObject();
+		typed_value.put("value", value);
+		typed_value.put("type", DataTypeMapping.map(value).getId());
+		
+		response.put("entity", typed_value); 
+		
 		return response;
 	}
 
