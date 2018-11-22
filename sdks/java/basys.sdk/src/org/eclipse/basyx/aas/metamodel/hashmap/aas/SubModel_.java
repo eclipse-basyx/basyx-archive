@@ -40,6 +40,7 @@ public class SubModel_ extends HashMap<String, Object> implements VABElementCont
 	 */
 	protected Map<String, IOperation> operations = new HashMap<>();
 
+	
 	/**
 	 * Constructor
 	 */
@@ -60,6 +61,28 @@ public class SubModel_ extends HashMap<String, Object> implements VABElementCont
 		put("operations", operations);
 	}
 
+	
+	/**
+	 * Constructor
+	 */
+	public SubModel_(HasSemantics semantics, Identifiable identifiable, Qualifiable qualifiable, Typable typeable) {
+		// Add qualifiers
+		putAll(semantics);
+		putAll(new HasTemplate());
+		putAll(identifiable);
+		putAll(qualifiable);
+		putAll(typeable);
+
+		// Default values
+		put("id_carrier",            null);
+		put("id_submodelDefinition", null);
+		
+		// Properties
+		put("properties", properties);
+		put("operations", operations);
+	}
+
+	
 	/**
 	 * Get submodel properties
 	 */

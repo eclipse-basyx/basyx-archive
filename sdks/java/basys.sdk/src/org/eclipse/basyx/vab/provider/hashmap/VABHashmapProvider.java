@@ -1,6 +1,7 @@
 package org.eclipse.basyx.vab.provider.hashmap;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -24,12 +25,22 @@ public class VABHashmapProvider implements IModelProvider {
 	 */
 	protected Map<String, Object> elements;
 
+
 	/**
 	 * Default constructor
+	 */
+	public VABHashmapProvider() {
+		this.elements = new HashMap<>();
+	}
+
+	
+	/**
+	 * Constructor that accepts an initial HashMap
 	 */
 	public VABHashmapProvider(Map<String, Object> elements) {
 		this.elements = elements;
 	}
+	
 
 	/**
 	 * Get Elements for AAS or Submodel request

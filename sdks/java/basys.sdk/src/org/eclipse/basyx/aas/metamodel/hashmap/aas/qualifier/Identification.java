@@ -44,4 +44,14 @@ public class Identification extends HashMap<String, Object> {
 		put("idType", IRDI);
 		put("id",     "");
 	}
+	
+	
+	/**
+	 * Constructor that accepts parameter
+	 */
+	public Identification(int idType, String id) {
+		// Load values
+		put("idType", idType);
+		put("id",     id);		
+	}
 }

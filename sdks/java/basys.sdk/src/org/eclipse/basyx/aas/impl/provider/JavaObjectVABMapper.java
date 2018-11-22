@@ -8,7 +8,6 @@ import java.util.function.Supplier;
 import org.eclipse.basyx.aas.api.annotation.AASOperation;
 import org.eclipse.basyx.aas.api.annotation.AASProperty;
 import org.eclipse.basyx.aas.api.resources.IContainerProperty;
-import org.eclipse.basyx.aas.impl.resources.basic.ElementContainer;
 import org.eclipse.basyx.aas.metamodel.builder.ElementBuilder;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
@@ -17,6 +16,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.ComplexDataProperty;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.operation.Operation;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
+
 
 /**
  * Provider class that converts a Java Object to a BaSys according to VWiD

@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 
 
+
 /**
  * HasSemantics class 
  * 
@@ -32,6 +33,19 @@ public class HasSemantics extends HashMap<String, Object> {
 		 * Identificators of the templates used by the element
 		 */
 		put("id_semantics",               null);
+		put("hasFullSemanticDescription", new HashSet<SemanticDescription>());
+	}
+
+
+	/**
+	 * Constructor
+	 */
+	public HasSemantics(Identification idSemantics) {
+		// Default values
+
+		// Identificator of the semantic definition of the element. It is called semantic id of the
+		// element. Its type is "Identification"
+		put("id_semantics",               idSemantics);
 		put("hasFullSemanticDescription", new HashSet<SemanticDescription>());
 	}
 }

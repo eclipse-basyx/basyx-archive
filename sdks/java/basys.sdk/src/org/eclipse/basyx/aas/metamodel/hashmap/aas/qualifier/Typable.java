@@ -31,13 +31,21 @@ public class Typable extends HashMap<String, Object> {
 
 	
 	
+	
+	/**
+	 * Default constructor
+	 */
+	public Typable() {	
+		// Identificators of the templates used by the element
+		put("kind", KIND_INSTANCE);
+	}
+
+
 	/**
 	 * Constructor
 	 */
-	public Typable() {	
-		/**
-		 * Identificators of the templates used by the element
-		 */
-		put("kind", KIND_INSTANCE);
+	public Typable(int kind) {	
+		// Identificators of the templates used by the element
+		put("kind", kind);
 	}
 }

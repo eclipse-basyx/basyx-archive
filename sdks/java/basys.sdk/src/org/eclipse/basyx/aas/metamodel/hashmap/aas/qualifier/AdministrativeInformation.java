@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 
 
+
 /**
  * AdministrativeInformation class 
  * 
@@ -31,5 +32,18 @@ public class AdministrativeInformation extends HashMap<String, Object> {
 		// Default values
 		put("version",  ""); 
 		put("revision", "");
+	}
+
+
+	/**
+	 * Constructor
+	 */
+	public AdministrativeInformation(String version, String revision) {
+		// Add all attributes form HasTemplate
+		putAll(new HasTemplate());
+
+		// Default values
+		put("version",  version); 
+		put("revision", revision);
 	}
 }
