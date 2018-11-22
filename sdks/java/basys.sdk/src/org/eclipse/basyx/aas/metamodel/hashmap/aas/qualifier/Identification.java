@@ -54,4 +54,37 @@ public class Identification extends HashMap<String, Object> {
 		put("idType", idType);
 		put("id",     id);		
 	}
+	
+	
+	
+	
+	/**
+	 * Get value of 'idType' property
+	 */
+	public int getIdType() {
+		return (int) get("idType");
+	}
+
+	/**
+	 * Update value of 'idType' property
+	 */
+	public void setIdType(int newValue) {
+		put("idType", newValue);
+	}
+	
+	
+
+	/**
+	 * Get value of 'id' property
+	 */
+	public String getId() {
+		return (String) get("id");
+	}
+	
+	/**
+	 * Update value of 'id' property
+	 */
+	public void setId(String newValue) {
+		put("id", newValue);
+	}
 }

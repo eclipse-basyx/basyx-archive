@@ -50,4 +50,3 @@ public class Identifiable extends HashMap<String, Object> {
 		put("identification", new Identification(idType, id));
 	}
 }
-

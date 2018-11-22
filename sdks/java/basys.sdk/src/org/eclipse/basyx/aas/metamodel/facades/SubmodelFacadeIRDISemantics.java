@@ -14,7 +14,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Typable;
 
 
 /**
- * Template class that supports the development of sub models using IRDI (International Registration Data Identifier) semantic definitions
+ * Facade class that supports the development and access of sub models using IRDI (International Registration Data Identifier) semantic definitions
  * 
  * @author kuhn
  *
