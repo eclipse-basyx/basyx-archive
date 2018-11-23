@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
 /**
  * Snippet to test get functionality of a IModelProvider
@@ -24,22 +23,14 @@ public class GetPropertyValue {
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 
 		// Get property value
-		Map<String, Object>   value1 = (Map<String, Object>)  connVABElement.readElementValue("property1");
-		Map<String, Object>   value2 = (Map<String, Object>)  connVABElement.readElementValue("property1/property1.1");
-		
+		Object value1 = connVABElement.readElementValue("property1");
+		Object value2 = connVABElement.readElementValue("property1/property1.1");
+
 		// Check test case results
 		assertTrue(value1 instanceof HashMap);
-		assertTrue(value2 instanceof HashMap);
-		
-		assertEquals(4, value1.size());
-		
-		
-		int val2 	  = (int) value2.get("value");
-		int val2_type = (int) value2.get("type");
-		
-		assertEquals(7, val2);
-		System.out.println(val2_type);
-		
+		assertEquals(4, ((Map<?, ?>) value1).size());
+		assertTrue(value2 instanceof Integer);
+		assertEquals(7, value2);
 	}
 	
 }

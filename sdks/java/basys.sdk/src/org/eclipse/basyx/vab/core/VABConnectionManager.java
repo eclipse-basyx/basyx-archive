@@ -1,6 +1,5 @@
 package org.eclipse.basyx.vab.core;
 
-import org.eclipse.basyx.aas.backend.connector.ConnectedHashmapProvider;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
@@ -48,6 +47,6 @@ public class VABConnectionManager {
 		addr = directoryService.lookup(urn);
 
 		// Return a new VABElementProxy
-		return new VABElementProxy(addr, new ConnectedHashmapProvider(providerProvider.getConnector(addr)));
+		return new VABElementProxy(addr, providerProvider.getConnector(addr));
 	}
 }
