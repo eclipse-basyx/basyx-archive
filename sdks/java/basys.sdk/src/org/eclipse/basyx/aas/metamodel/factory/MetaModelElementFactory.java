@@ -17,6 +17,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.P
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.ValueType;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.operation.Operation;
 import org.eclipse.basyx.vab.core.ref.VABElementRef;
+import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
 
 /**
  * Creates meta model entities <br />
@@ -54,9 +55,7 @@ public class MetaModelElementFactory {
 	public PropertySingleValued create(PropertySingleValued prop, Supplier<Object> get, Consumer<Object> set) {
 		PropertySingleValued ret = new PropertySingleValued();
 		ret.putAll(prop);
-		Map<String, Object> value = new HashMap<>();
-		value.put("get", get);
-		value.put("set", set);
+		Map<String, Object> value = VABLambdaProviderHelper.createSimple(get, set);
 		ret.put("value", value);
 		ret.put("valueType", new ValueType(get.get()));
 		return ret;
@@ -83,8 +82,7 @@ public class MetaModelElementFactory {
 	 * @param object
 	 */
 	@SuppressWarnings("unchecked")
-	public ComplexDataProperty createContainer(ComplexDataProperty property, List<Property> properties,
-			List<Operation> operations) {
+	public ComplexDataProperty createContainer(ComplexDataProperty property, List<Property> properties, List<Operation> operations) {
 		ComplexDataProperty ret = new ComplexDataProperty();
 		ret.putAll(property);
 

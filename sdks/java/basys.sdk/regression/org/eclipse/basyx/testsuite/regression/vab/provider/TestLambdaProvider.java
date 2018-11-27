@@ -21,6 +21,7 @@ import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.T
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
+import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
 import org.junit.Test;
 
 public class TestLambdaProvider {
@@ -31,29 +32,23 @@ public class TestLambdaProvider {
 
 	static Collection<Object> propertyCollection_val;
 
-	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(),
-			new ConnectorProvider() {
+	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(), new ConnectorProvider() {
 
-				@Override
-				protected IModelProvider createProvider(String addr) {
-					return buildProvider();
-				}
-			});
+		@Override
+		protected IModelProvider createProvider(String addr) {
+			return buildProvider();
+		}
+	});
 
-	// TODO: Factories for collection/map accessors
 	private static IModelProvider buildProvider() {
 		property11_val = 7;
 		propertyMap_val = new HashMap<>();
 		Map<String, Object> obj = new HashMap<>();
 		Map<String, Object> property1 = new HashMap<>();
 
-		Map<String, Object> property11 = new HashMap<>();
-		property11.put("get", (Supplier<?>) () -> {
+		Map<String, Object> property11 = VABLambdaProviderHelper.createSimple((Supplier<Object>) () -> {
 			return property11_val;
-		});
-		property11.put("set", (Consumer<?>) (i) -> {
-			property11_val = (int) i;
-		});
+		}, null);
 
 		Map<String, Object> operations = new HashMap<>();
 
@@ -63,21 +58,13 @@ public class TestLambdaProvider {
 		propertyCollection_val.add(1);
 		propertyCollection_val.add(2);
 
-		HashMap<String, Object> collectionAccessors = new HashMap<>();
-
-		collectionAccessors.put(VABLambdaProvider.VALUE_GET_SUFFIX, (Supplier<?>) () -> {
+		Map<String, Object> collectionAccessors = VABLambdaProviderHelper.createCollection((Supplier<Object>) () -> {
 			return propertyCollection_val;
-		});
-
-		collectionAccessors.put(VABLambdaProvider.VALUE_SET_SUFFIX, (Consumer<Collection<Object>>) (collection) -> {
+		}, (Consumer<Collection<Object>>) (collection) -> {
 			propertyCollection_val = collection;
-		});
-
-		collectionAccessors.put(VABLambdaProvider.VALUE_INSERT_SUFFIX, (Consumer<Object>) (value) -> {
+		}, (Consumer<Object>) (value) -> {
 			propertyCollection_val.add(value);
-		});
-
-		collectionAccessors.put(VABLambdaProvider.VALUE_REMOVE_SUFFIX, (Consumer<Object>) (o) -> {
+		}, (Consumer<Object>) (o) -> {
 			propertyCollection_val.remove(o);
 		});
 
@@ -85,20 +72,13 @@ public class TestLambdaProvider {
 
 		propertyMap_val.put("test", 123);
 
-		HashMap<String, Object> mapAccessors = new HashMap<>();
-		mapAccessors.put(VABLambdaProvider.VALUE_GET_SUFFIX, (Supplier<?>) () -> {
+		Map<String, Object> mapAccessors = VABLambdaProviderHelper.createMap((Supplier<?>) () -> {
 			return propertyMap_val;
-		});
-
-		mapAccessors.put(VABLambdaProvider.VALUE_SET_SUFFIX, (Consumer<Map<String, Object>>) (map) -> {
+		}, (Consumer<Map<String, Object>>) (map) -> {
 			propertyMap_val = map;
-		});
-
-		mapAccessors.put(VABLambdaProvider.VALUE_INSERT_SUFFIX, (BiConsumer<String, Object>) (key, value) -> {
+		}, (BiConsumer<String, Object>) (key, value) -> {
 			propertyMap_val.put(key, value);
-		});
-
-		mapAccessors.put(VABLambdaProvider.VALUE_REMOVE_SUFFIX, (Consumer<Object>) (o) -> {
+		}, (Consumer<Object>) (o) -> {
 			propertyMap_val.remove(o);
 		});
 
