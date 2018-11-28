@@ -76,7 +76,7 @@ public class XMLXQueryServlet extends VABHTTPInterface<VABMultiSubmodelProvider>
 			cfgProperties.load(input);
 			
 			// Extract sub model provider properties
-			this.submodelID   = cfgProperties.getProperty("basyx_submodelID");
+			this.submodelID   = cfgProperties.getProperty("basyx.submodelID");
 			
 		} catch (IOException e) {
 			// Output exception

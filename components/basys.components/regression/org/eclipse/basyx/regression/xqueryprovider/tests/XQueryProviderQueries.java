@@ -1,5 +1,7 @@
 package org.eclipse.basyx.regression.xqueryprovider.tests;
 
+import static org.junit.Assert.assertTrue;
+
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.vab.VABConnectionManager;
@@ -34,8 +36,15 @@ class XQueryProviderQueries {
 		VABElementProxy connSubModel = this.connManager.connectToVABElement("XMLXQueryFileTestAAS");
 
 		
+		
 		// Get property value
-		Object value1 = connSubModel.readElementValue("/aas/submodels/SQLTestSubmodel/properties/heavySensorNames");
+		//Object version = connSubModel.readElementValue("/aas/submodels/XMLQTestSubmodel/administration/version");
+		//System.out.println("Version:"+version);
+		//assertTrue(version.equals("1.0"));
+
+		
+		// Get property value
+		Object value1 = connSubModel.readElementValue("/aas/submodels/XMLQTestSubmodel/properties/heavySensorNames");
 		System.out.println("Value:"+value1);
 	}
 }

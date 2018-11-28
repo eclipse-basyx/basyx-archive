@@ -37,6 +37,24 @@
     <servlet-name>Example_CFGProvider</servlet-name>
     <url-pattern>/Testsuite/components/BaSys/1.0/provider/cfgsm/*</url-pattern>
   </servlet-mapping>
+
+
+
+  <servlet>
+    <servlet-name>Example_RawCFGProvider</servlet-name>
+    <servlet-class> org.eclipse.basyx.components.servlets.RawCFGSubModelProviderServlet </servlet-class>
+ 
+    <init-param>
+        <param-name>config</param-name>
+        <param-value>/WEB-INF/config/rawcfgprovider/samplecfg.properties</param-value>
+    </init-param>
+    
+    <load-on-startup>5</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Example_RawCFGProvider</servlet-name>
+    <url-pattern>/Testsuite/components/BaSys/1.0/provider/rawcfgsm/*</url-pattern>
+  </servlet-mapping>
   
   
   
