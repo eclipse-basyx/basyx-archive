@@ -55,6 +55,37 @@ public class BaseConfiguredProvider extends VABHashmapProvider {
 	}
 
 	
+	/**
+	 * Output a hash map
+	 */
+	@SuppressWarnings({"rawtypes"})
+	protected void printHashMap(Map map, int indent) {
+		// Process map
+		for (Object key: map.keySet()) {
+			// Process map element
+			if (map.get(key) instanceof Map) {
+				// Output key
+				for (int i=0; i<indent; i++) System.out.print(" "); 
+				System.out.println("  "+key);
+				// Output hash map
+				printHashMap((Map) map.get(key), indent+2);
+			} else { 
+				// Output element
+				for (int i=0; i<indent; i++) System.out.print(" "); 
+				System.out.println("  "+key+" = "+map.get(key));
+			}
+		}
+	}
+	
+	
+	/**
+	 * Split a key based on path '/' separators
+	 */
+	protected String[] splitPath(String path) {
+		return path.split("/");
+	}
+
+	
 	
 	/**
 	 * Create BaSys sub model based on configuration data
@@ -80,6 +111,7 @@ public class BaseConfiguredProvider extends VABHashmapProvider {
 		// Process ID Type - default value is internal
 		int idType = Identification.Internal;
 		// - Compare to known values
+		if (basyx_idType == null) basyx_idType="Identification.Internal";
 		if (basyx_idType.equals("Identification.IRDI"))     idType = Identification.IRDI;
 		if (basyx_idType.equals("Identification.URI"))      idType = Identification.URI;
 		if (basyx_idType.equals("Identification.Internal")) idType = Identification.Internal;
@@ -87,6 +119,7 @@ public class BaseConfiguredProvider extends VABHashmapProvider {
 		
 		// Try to load properties
 		// Check type of sub model template to use
+		if (basyx_submodelSemantics == null) basyx_submodelSemantics = "internal";
 		if (basyx_submodelSemantics.equals("irdi")) {
 			// Create sub model from template
 			SubmodelTemplate template = new SubmodelTemplateIRDISemantics(basyx_semantics, idType, basyx_id, basyx_idShort, basyx_category, basyx_description, basyx_qualifier, basyx_version, basyx_revision);

@@ -24,6 +24,8 @@ public class CFGSubModelProvider extends BaseConfiguredProvider {
 		
 	
 	
+	
+	
 	/**
 	 * Constructor
 	 */
@@ -44,11 +46,8 @@ public class CFGSubModelProvider extends BaseConfiguredProvider {
 			submodelData.getProperties().put(key.toString(), createProperty(key, cfgValues.get(key), cfgValues));
 			
 			// Debug output
-			System.out.println("Adding property: "+key.toString()+" = "+cfgValues.get(key));
+			System.out.println("Adding configured property: "+key.toString()+" = "+cfgValues.get(key));
 		}
-		
-		// Print configuration values
-		System.out.println("CFG exported");
 	}
 }
 

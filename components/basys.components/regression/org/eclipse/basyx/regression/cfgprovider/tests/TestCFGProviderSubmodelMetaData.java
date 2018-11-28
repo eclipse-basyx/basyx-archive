@@ -1,5 +1,7 @@
 package org.eclipse.basyx.regression.cfgprovider.tests;
 
+import static org.junit.Assert.assertTrue;
+
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.vab.VABConnectionManager;
@@ -36,6 +38,10 @@ class TestCFGProviderSubmodelMetaData {
 		
 		// Get property value
 		Object value1 = connSubModel.readElementValue("/aas/submodels/sampleCFG/description");
-		System.out.println("V1:"+value1);
+		assertTrue(value1.equals("BaSys regression test file for CFG file provider"));
+
+		// Get property value
+		Object value2 = connSubModel.readElementValue("/aas/submodels/sampleCFG/administration/version");
+		assertTrue(value2.equals("1.0"));
 	}
 }
