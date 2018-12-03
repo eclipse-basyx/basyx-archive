@@ -28,10 +28,7 @@ public class SubmodelFacadeInternalSemantics extends SubmodelFacade {
 	 */
 	public SubmodelFacadeInternalSemantics() {
 		// Create sub model
-		SubModel_ submodelData = new SubModel_();
-
-		// Load predefined elements from sub model into this provider
-		elements.putAll(submodelData);
+		this.setElements(new SubModel_());
 	}
 
 	
@@ -52,15 +49,12 @@ public class SubmodelFacadeInternalSemantics extends SubmodelFacade {
 	 */
 	public SubmodelFacadeInternalSemantics(String semanticsInternal, int idType, String id, String idShort, String category, String description, String qualifier, String version, String revision) {
 		// Create sub model
-		SubModel_ submodelData = new SubModel_(
+		this.setElements(new SubModel_(
 					new HasSemantics(new Identification(Identification.Internal, semanticsInternal)),
 					new Identifiable(version, revision, idShort, category, description, idType, id),
 					new Qualifiable(qualifier),
 					new Typable(Typable.KIND_INSTANCE)
-				);
-
-		// Load predefined elements from sub model into this provider
-		elements.putAll(submodelData);
+				));
 	}
 
 
@@ -82,15 +76,12 @@ public class SubmodelFacadeInternalSemantics extends SubmodelFacade {
 	 */
 	public SubmodelFacadeInternalSemantics(String semanticsInternal, int idType, String id, String idShort, String category, String description, Collection<String> qualifier, String version, String revision) {
 		// Create sub model
-		SubModel_ submodelData = new SubModel_(
+		this.setElements(new SubModel_(
 					new HasSemantics(new Identification(Identification.Internal, semanticsInternal)),
 					new Identifiable(version, revision, idShort, category, description, idType, id),
 					new Qualifiable(qualifier),
 					new Typable(Typable.KIND_INSTANCE)
-				);
-		
-		// Load predefined elements from sub model into this provider
-		elements.putAll(submodelData);
+				));
 	}
 }
 

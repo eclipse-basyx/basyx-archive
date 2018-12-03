@@ -11,19 +11,23 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Qualifiable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Typable;
 
+
+
 /**
  * Abstract property class
  * 
  * @author kuhn
  *
  */
-public abstract class Property extends HashMap<String, Object> implements IProperty {
+public class Property extends HashMap<String, Object> implements IProperty {
 
+	
 	/**
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
 
+	
 	/**
 	 * Constructor
 	 */
@@ -45,6 +49,20 @@ public abstract class Property extends HashMap<String, Object> implements IPrope
 		// vwid document
 	}
 
+	
+	/**
+	 * Constructor
+	 */
+	public Property(HasSemantics semantics, Referable referable, Qualifiable qualifiable, Typable typeable) {
+		// Add qualifiers
+		//putAll(new HasTemplate());
+		putAll(referable);
+		putAll(qualifiable);
+		putAll(semantics);
+		putAll(typeable);
+	}
+
+	
 	@Override
 	public DataObjectType getDataType() {
 		return null;

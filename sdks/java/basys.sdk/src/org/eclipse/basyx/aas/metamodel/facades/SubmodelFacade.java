@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.metamodel.facades;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel_;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.SemanticDescription;
@@ -17,6 +18,24 @@ import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
  *
  */
 public class SubmodelFacade extends VABHashmapProvider {
+	
+	
+	/**
+	 * Constructor
+	 */
+	public SubmodelFacade() {
+		// Instantiate VAB HashMap provider with sub model instance
+		super(new SubModel_());
+	}
+	
+	
+	/**
+	 * Return reference to sub model structure
+	 */
+	public SubModel_ getSubModel() {
+		// Assume that VAB HashMap provider carries a sub model
+		return (SubModel_) this.getElements();
+	}
 
 	
 	/**

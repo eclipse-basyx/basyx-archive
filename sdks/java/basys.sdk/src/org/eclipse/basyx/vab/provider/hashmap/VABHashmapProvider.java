@@ -48,6 +48,15 @@ public class VABHashmapProvider implements IModelProvider {
 	public Map<String, Object> getElements() {
 		return elements;
 	}
+	
+	
+	/**
+	 * Set elements (only for derived classes, e.g. facades)
+	 */
+	protected void setElements(Map<String, Object> newElements) {
+		elements = newElements;
+	}
+	
 
 	/**
 	 * Get the parent of an element in this provider. The scope is always a map. The
