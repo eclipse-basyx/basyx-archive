@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.backend.connector.basyx;
 import java.io.IOException;
 import java.net.Socket;
 
+import org.eclipse.basyx.aas.backend.connector.JSONConnector;
 import org.eclipse.basyx.aas.backend.connector.ConnectorProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
 
@@ -14,7 +15,9 @@ public class BaSyxConnectorProvider extends ConnectorProvider {
 		int hostPort = new Integer(address.substring(address.indexOf(":") + 1));
 		try {
 			Socket s = new Socket(hostName, hostPort);
-			return new BaSyxConnector(s);
+			
+			// returns BaSysConnector wrapped with ConnectedHashmapProvider that handles message header information
+			return new JSONConnector(new BaSyxConnector(s));
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException();

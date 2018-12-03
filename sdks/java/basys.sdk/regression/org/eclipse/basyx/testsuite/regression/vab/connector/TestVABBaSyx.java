@@ -11,7 +11,8 @@ import org.junit.Test;
 
 /**
  * Test VAB using the BaSyx protocol
- * @author pschorn
+ * 
+ * @author schnicke, pschorn
  *
  */
 public class TestVABBaSyx {

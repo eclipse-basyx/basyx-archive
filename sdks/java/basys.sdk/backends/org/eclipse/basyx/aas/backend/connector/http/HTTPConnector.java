@@ -12,11 +12,10 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
+import org.eclipse.basyx.aas.backend.connector.IBaSyxConnector;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
-import org.eclipse.basyx.vab.core.IModelProvider;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -25,7 +24,7 @@ import org.json.JSONObject;
  * @author kuhn, pschorn, schnicke
  *
  */
-public class HTTPConnector implements IModelProvider {
+public class HTTPConnector implements IBaSyxConnector {
 
 	private static String ADD_ACTION = "add";
 	private static String REMOVE_ACTION = "remove";
@@ -62,11 +61,10 @@ public class HTTPConnector implements IModelProvider {
 	 *            should be an IElement of type Property, Operation or Event
 	 */
 	@Override
-	public void setModelPropertyValue(String servicePath, Object newValue) throws ServerException {
+	public Object setModelPropertyValue(String servicePath, JSONObject newValue) throws ServerException {
 
-		httpPut(servicePath, newValue);
+		return httpPut(servicePath, newValue);
 	}
-
 
 	/**
 	 * Invoke a BaSys Delete operation via HTTP PATCH. Deletes an element from a map
@@ -81,9 +79,9 @@ public class HTTPConnector implements IModelProvider {
 	 * @throws ServerException
 	 */
 	@Override
-	public void deleteValue(String servicePath, Object obj) throws ServerException {
+	public Object deleteValue(String servicePath, JSONObject obj) throws ServerException {
 
-		httpPatch(servicePath, REMOVE_ACTION, obj);
+		return httpPatch(servicePath, REMOVE_ACTION, obj);
 	}
 
 	/**
@@ -92,8 +90,9 @@ public class HTTPConnector implements IModelProvider {
 	 * @throws ServerException
 	 */
 	@Override
-	public void createValue(String servicePath, Object newValue) throws ServerException {
-		httpPost(servicePath, newValue);
+	public Object createValue(String servicePath, JSONObject newValue) throws ServerException {
+
+		return httpPost(servicePath, newValue);
 	}
 
 	/**
@@ -103,9 +102,9 @@ public class HTTPConnector implements IModelProvider {
 	 * @throws ServerException
 	 */
 	@Override
-	public void deleteValue(String servicePath) throws ServerException {
+	public Object deleteValue(String servicePath) throws ServerException {
 
-		httpDelete(servicePath);
+		return httpDelete(servicePath);
 	}
 
 	/**
@@ -166,52 +165,28 @@ public class HTTPConnector implements IModelProvider {
 
 		System.out.println(result);
 
-		// Deserialize and return property value
-		Object res = JSONTools.Instance.deserialize(new JSONObject(result));
-
-		return res;
+		// Return repsonse message (header)
+		return result;
 	}
 
-	private void httpPut(String servicePath, Object newValue) throws ServerException {
+	private Object httpPut(String servicePath, JSONObject newValue) throws ServerException {
 		System.out.println("[HTTP Put] " + address + servicePath + "  " + newValue);
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
 
-		// Create JSON value Object
-		JSONObject jsonObject = JSONTools.Instance.serialize(newValue);
-
 		// Build web service URL
 		Builder request = buildRequest(client, address + servicePath);
 
 		// Perform request
-		Response rsp = request.put(Entity.entity(jsonObject.toString(), MediaType.APPLICATION_JSON));
+		Response rsp = request.put(Entity.entity(newValue.toString(), MediaType.APPLICATION_JSON));
 
-		// Try to extract response if any
-		try {
-			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
+		// Return repsonse message (header)
+		return rsp.readEntity(String.class);
 
-			if (result instanceof ServerException) {
-				// Throw server exception
-				throw (ServerException) result;
-			}
-
-		} catch (JSONException e) {
-			// If there is no return value or deserialization failed
-			return;
-		}
 	}
 
-	/**
-	 * Implements HTTP Patch
-	 * 
-	 * @param address
-	 * @param servicePath
-	 * @param action
-	 * @param newValue
-	 * @throws ServerException
-	 */
-	private void httpPatch(String servicePath, String action, Object... newValue) throws ServerException {
+	private Object httpPatch(String servicePath, String action, Object... newValue) throws ServerException {
 		System.out.println("[HTTP Patch] " + address + servicePath + "  " + newValue);
 
 		// Invoke service call via web services
@@ -225,55 +200,28 @@ public class HTTPConnector implements IModelProvider {
 				.build("PATCH", Entity.text(jsonObject.toString()))
 				.property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
 
-		try {
-			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
-
-			if (result instanceof ServerException) {
-				throw (ServerException) result;
-			}
-		} catch (JSONException e) {
-			// If there is no return value or deserialization failed
-			return;
-		}
+		// Return repsonse message (header)
+		return rsp.readEntity(String.class);
 	}
 
-	private Object httpPost(String servicePath, Object... parameter) throws ServerException {
+	private Object httpPost(String servicePath, Object parameter) throws ServerException {
 
 		System.out.println("[HTTP Post] " + address + servicePath + " " + parameter);
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
 
-		// Create JSON value Object
-		JSONObject jsonObject = JSONTools.Instance.serialize(parameter);
-
 		// Build web service URL
 		Builder request = buildRequest(client, address + servicePath);
 
 		// Perform request
-		Response rsp = request.post(Entity.entity(jsonObject.toString(), MediaType.APPLICATION_JSON));
+		Response rsp = request.post(Entity.entity(parameter.toString(), MediaType.APPLICATION_JSON));
 
-		// Try to extract and return response if any
-		try {
-			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
-
-			if (result instanceof ServerException) {
-
-				// Throw server exception
-				throw (ServerException) result;
-			} else {
-
-				// Return result
-				return result;
-			}
-
-		} catch (JSONException e) {
-			// If there is no return value or deserialization failed
-			return null;
-		}
+		// Return repsonse message (header)
+		return rsp.readEntity(String.class);
 	}
 
-	private void httpDelete(String servicePath) throws ServerException {
+	private Object httpDelete(String servicePath) throws ServerException {
 		System.out.println("[HTTP Delete] " + address + servicePath);
 
 		// Invoke service call via web services
@@ -285,22 +233,8 @@ public class HTTPConnector implements IModelProvider {
 		// Perform request
 		Response rsp = request.delete();
 
-		// Try to extract response if any
-		try {
-			Object result = JSONTools.Instance.deserialize(new JSONObject(rsp.readEntity(String.class)));
-
-			System.out.println("RES:" + result);
-
-			if (result instanceof ServerException) {
-
-				// Throw server exception
-				throw (ServerException) result;
-			}
-
-		} catch (JSONException e) {
-			// If there is no return value or deserialization failed
-			return;
-		}
+		// Return repsonse message (header)
+		return rsp.readEntity(String.class);
 	}
 
 	@Override
@@ -309,7 +243,8 @@ public class HTTPConnector implements IModelProvider {
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object[] parameter) throws Exception {
+	public Object invokeOperation(String path, JSONObject parameter) throws Exception {
+
 		return httpPost(path, parameter);
 	}
 
