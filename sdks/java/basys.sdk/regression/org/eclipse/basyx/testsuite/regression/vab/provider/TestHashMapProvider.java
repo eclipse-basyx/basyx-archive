@@ -14,16 +14,25 @@ import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Test;
 
+/**
+ * Tests the functionality of the VABHashmapProvider according to the test cases
+ * in the snippet package
+ * 
+ * @author schnicke
+ *
+ */
 public class TestHashMapProvider {
 
-	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(),
-			new ConnectorProvider() {
+	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(), new ConnectorProvider() {
 
-				@Override
-				protected IModelProvider createProvider(String addr) {
-					return new VABHashmapProvider(new SimpleVABElement());
-				}
-			});
+		@Override
+		protected IModelProvider createProvider(String addr) {
+
+			// Creates a new VABHashMapProvider which manages a data model
+			// as defined in SimpleVABElement
+			return new VABHashmapProvider(new SimpleVABElement());
+		}
+	});
 
 	@Test
 	public void testCreateDelete() {

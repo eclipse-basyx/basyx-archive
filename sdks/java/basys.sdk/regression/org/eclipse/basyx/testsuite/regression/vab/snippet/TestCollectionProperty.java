@@ -20,31 +20,46 @@ public class TestCollectionProperty {
 
 	@SuppressWarnings("unchecked")
 	public static void testGet(VABConnectionManager connManager) {
+		// Connect to VAB element with ID "urn:fhg:es.iese:vab:1:1:simplevabelement"
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
+
+		// Read values
 		Collection<Object> collection = (Collection<Object>) connVABElement.readElementValue(collectionPath);
+
+		// Check test case results
 		assertEquals(2, collection.size());
 	}
 
 	@SuppressWarnings("unchecked")
 	public static void testUpdateComplete(VABConnectionManager connManager) {
+		// Connect to VAB element with ID "urn:fhg:es.iese:vab:1:1:simplevabelement"
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 
+		// Replace complete value of the collection property
 		Collection<Object> replacement = new ArrayList<>();
 		replacement.add(100);
 		connVABElement.updateElementValue(collectionPath, replacement);
 
+		// Read values back
 		Collection<Object> collection = (Collection<Object>) connVABElement.readElementValue(collectionPath);
+
+		// Check test case results
 		assertEquals(1, collection.size());
 		assertEquals(replacement, collection);
 	}
 
 	@SuppressWarnings("unchecked")
 	public static void testUpdateElement(VABConnectionManager connManager) {
+		// Connect to VAB element with ID "urn:fhg:es.iese:vab:1:1:simplevabelement"
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 
+		// Create a new element in the collection
 		connVABElement.createElement(collectionPath, 3);
 
+		// Read values back
 		Collection<Object> collection = (Collection<Object>) connVABElement.readElementValue(collectionPath);
+
+		// Check test case results
 		assertEquals(3, collection.size());
 		assertTrue(collection.contains(1));
 		assertTrue(collection.contains(2));
@@ -53,10 +68,14 @@ public class TestCollectionProperty {
 
 	@SuppressWarnings("unchecked")
 	public static void testRemoveElement(VABConnectionManager connManager) {
+		// Connect to VAB element with ID "urn:fhg:es.iese:vab:1:1:simplevabelement"
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 		connVABElement.deleteElement(collectionPath, 2);
 
+		// Read values back
 		Collection<Object> collection = (Collection<Object>) connVABElement.readElementValue(collectionPath);
+
+		// Check test case results
 		assertEquals(1, collection.size());
 		assertTrue(collection.contains(1));
 	}

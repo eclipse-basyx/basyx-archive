@@ -14,9 +14,7 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  */
 public class SetPropertyValue {
 	public static void test(VABConnectionManager connManager) {
-
-		// Connect to VAB element with ID "SimpleVABElement"
-		// - Retrieve connected AAS from AAS ID
+		// Connect to VAB element with ID "urn:fhg:es.iese:vab:1:1:simplevabelement"
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 
 		// Set and reread property value

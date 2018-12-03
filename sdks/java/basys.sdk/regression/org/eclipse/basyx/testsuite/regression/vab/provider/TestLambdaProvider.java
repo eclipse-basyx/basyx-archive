@@ -24,12 +24,22 @@ import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
 import org.junit.Test;
 
+/**
+ * Tests the functionality of the VABLambdaProvider according to the test cases
+ * in the snippet package
+ * 
+ * @author schnicke
+ *
+ */
 public class TestLambdaProvider {
 
+	// Representative of the value of property1.1
 	static int property11_val;
 
+	// Representative of the value of property1.2
 	static Map<String, Object> propertyMap_val;
 
+	// Representative of the value of propertyMap
 	static Collection<Object> propertyCollection_val;
 
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(), new ConnectorProvider() {
@@ -41,23 +51,22 @@ public class TestLambdaProvider {
 	});
 
 	private static IModelProvider buildProvider() {
+		// Set initial values for property representatives
 		property11_val = 7;
+
 		propertyMap_val = new HashMap<>();
-		Map<String, Object> obj = new HashMap<>();
-		Map<String, Object> property1 = new HashMap<>();
-
-		Map<String, Object> property11 = VABLambdaProviderHelper.createSimple((Supplier<Object>) () -> {
-			return property11_val;
-		}, null);
-
-		Map<String, Object> operations = new HashMap<>();
-
-		property1.put("property1.1", property11);
+		propertyMap_val.put("test", 123);
 
 		propertyCollection_val = new ArrayList<>();
 		propertyCollection_val.add(1);
 		propertyCollection_val.add(2);
 
+		// Create accessors for simple value property property1.1
+		Map<String, Object> property11 = VABLambdaProviderHelper.createSimple((Supplier<Object>) () -> {
+			return property11_val;
+		}, null);
+
+		// Create accessors for collection property property1.2
 		Map<String, Object> collectionAccessors = VABLambdaProviderHelper.createCollection((Supplier<Object>) () -> {
 			return propertyCollection_val;
 		}, (Consumer<Collection<Object>>) (collection) -> {
@@ -68,10 +77,7 @@ public class TestLambdaProvider {
 			propertyCollection_val.remove(o);
 		});
 
-		property1.put("property1.2", collectionAccessors);
-
-		propertyMap_val.put("test", 123);
-
+		// Create accessors for map property propertyMap
 		Map<String, Object> mapAccessors = VABLambdaProviderHelper.createMap((Supplier<?>) () -> {
 			return propertyMap_val;
 		}, (Consumer<Map<String, Object>>) (map) -> {
@@ -82,39 +88,44 @@ public class TestLambdaProvider {
 			propertyMap_val.remove(o);
 		});
 
-		property1.put("propertyMap", mapAccessors);
-		property1.put("operations", operations);
-		obj.put("property1", property1);
-
+		// Build contained operations
 		Map<String, Object> containedOperations = new HashMap<>();
-		Map<String, Function<?, ?>> rootOperations = new HashMap<>();
 
-		property1.put("operations", containedOperations);
-		obj.put("operations", rootOperations);
-		// - Add operations
-		// - Create contained operation without parameter
+		// Function returning constant
 		HashMap<String, Object> operation11 = new HashMap<>();
 		operation11.put("endpoint", (Function<Object[], Object>) (v) -> {
 			return 10;
 		});
-
-		operation11.put("output", "Integer");
-
 		containedOperations.put("operation1.1", operation11);
 
-		// - Contained function
+		// Build root operations
+		Map<String, Function<?, ?>> rootOperations = new HashMap<>();
+		// Adding function
 		rootOperations.put("operation1", (Function<Object[], Object>) (param) -> {
 			return (int) param[0] + (int) param[1];
 		});
-		// - Contained function that throws native JAVA exception
+		// Function that throws native JAVA exception
 		rootOperations.put("operationEx1", (Function<Object[], Object>) (elId) -> {
 			throw new NullPointerException();
 		});
-		// - Contained function that throws VAB exception
+		// Function that throws VAB exception
 		rootOperations.put("operationEx2", (Function<Object[], Object>) (elId) -> {
 			throw new ServerException("ExType", "Exception description");
 		});
 
+		// Create property1 map
+		Map<String, Object> property1 = new HashMap<>();
+		property1.put("property1.1", property11);
+		property1.put("property1.2", collectionAccessors);
+		property1.put("propertyMap", mapAccessors);
+		property1.put("operations", containedOperations);
+
+		// Create root map
+		Map<String, Object> obj = new HashMap<>();
+		obj.put("property1", property1);
+		obj.put("operations", rootOperations);
+
+		// Build provider
 		VABLambdaProvider provider = new VABLambdaProvider(obj);
 
 		return provider;
