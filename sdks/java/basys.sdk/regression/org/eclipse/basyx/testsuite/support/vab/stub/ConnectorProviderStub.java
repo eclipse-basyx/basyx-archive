@@ -6,6 +6,13 @@ import java.util.Map;
 import org.eclipse.basyx.vab.core.IConnectorProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
 
+/**
+ * A simple ConnectorProvider stub returning connectors based on a String
+ * mapping
+ * 
+ * @author schnicke
+ *
+ */
 public class ConnectorProviderStub implements IConnectorProvider {
 	private Map<String, IModelProvider> providerMap = new HashMap<>();
 

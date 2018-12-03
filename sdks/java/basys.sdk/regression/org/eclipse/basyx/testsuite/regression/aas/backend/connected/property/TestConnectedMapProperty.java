@@ -15,66 +15,139 @@ import org.eclipse.basyx.aas.backend.connected.property.ConnectedMapProperty;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
+import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Tests if a ConnectedMapProperty can be created and used correctly
+ * 
  * @author schnicke
  *
  */
 public class TestConnectedMapProperty {
+	// String constants used in this test case
+	private static final String MAP_1_KEY = "test";
+	private static final int MAP_1_VAL = 123;
+	private static final String MAP_2_KEY = "test2";
+	private static final String MAP_2_VAL = "value";
+
 	IMapProperty prop;
 
 	@Before
 	public void build() {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
+
+		// Create and fill map
 		Map<String, Object> map = new HashMap<>();
-		map.put("test", 123);
-		map.put("test2", "value");
+		map.put(MAP_1_KEY, MAP_1_VAL);
+		map.put(MAP_2_KEY, MAP_2_VAL);
+
+		// Create PropertySingleValued containing the map
 		PropertySingleValued propertyMeta = factory.create(new PropertySingleValued(), map);
-		prop = new ConnectedMapProperty("",
-				new VABConnectionManagerStub(new VABHashmapProvider(propertyMeta)).connectToVABElement(""));
+
+		// Create dummy connection manager containing the
+		// created PropertySingleValued map
+		VABConnectionManager manager = new VABConnectionManagerStub(new VABHashmapProvider(propertyMeta));
+
+		// Create ConnectedMapProperty
+		prop = new ConnectedMapProperty("", manager.connectToVABElement(""));
 	}
 
+	/**
+	 * Tests getting a value of the contained map
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void testGetValue() throws Exception {
-		assertEquals(123, prop.getValue("test"));
-		assertEquals("value", prop.getValue("test2"));
+		// Check contained values
+		assertEquals(MAP_1_VAL, prop.getValue(MAP_1_KEY));
+		assertEquals(MAP_2_VAL, prop.getValue(MAP_2_KEY));
 	}
 
+	/**
+	 * Tests adding a value to the contained map
+	 * 
+	 * @throws ServerException
+	 * @throws TypeMismatchException
+	 */
 	@Test
 	public void testPut() throws ServerException, TypeMismatchException {
+		// Put new value
 		prop.put("test3", 5);
+
+		// Check that new value is contained in map
 		assertEquals(5, prop.getValue("test3"));
 	}
 
+	/**
+	 * Tests overwriting the complete contained map
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void testSet() throws Exception {
+		// Set the contained map to {"success": 10 }
 		prop.set(Collections.singletonMap("success", 10));
+
+		// Check number of elements
 		assertEquals(1, (int) prop.getEntryCount());
+
+		// Check that new value is contained in map
 		assertEquals(10, prop.getValue("success"));
 	}
 
+	/**
+	 * Tests getting keys of the contained map
+	 * 
+	 * @throws ServerException
+	 * @throws TypeMismatchException
+	 */
 	@Test
 	public void testGetKeys() throws ServerException, TypeMismatchException {
+		// Get keys
 		Collection<String> keys = prop.getKeys();
+
+		// Check number of keys
 		assertEquals(2, keys.size());
-		assertTrue(keys.contains("test"));
-		assertTrue(keys.contains("test2"));
+
+		// Check the contained keys
+		assertTrue(keys.contains(MAP_1_KEY));
+		assertTrue(keys.contains(MAP_2_KEY));
 	}
 
+	/**
+	 * Tests retrieving the entry count
+	 * 
+	 * @throws ServerException
+	 * @throws TypeMismatchException
+	 */
 	@Test
 	public void testGetEntryCount() throws ServerException, TypeMismatchException {
 		assertEquals(2, (int) prop.getEntryCount());
 	}
 
+	/**
+	 * Tests removing an element from the contained map
+	 * 
+	 * @throws ServerException
+	 * @throws TypeMismatchException
+	 */
 	@Test
 	public void testRemove() throws ServerException, TypeMismatchException {
-		prop.remove("test");
+		// Remove element
+		prop.remove(MAP_1_KEY);
+
+		// Get keys
 		Collection<String> keys = prop.getKeys();
+
+		// Check number of keys
 		assertEquals(1, keys.size());
-		assertTrue(keys.contains("test2"));
+
+		// Check contained key
+		assertTrue(keys.contains(MAP_2_KEY));
 	}
 
 }

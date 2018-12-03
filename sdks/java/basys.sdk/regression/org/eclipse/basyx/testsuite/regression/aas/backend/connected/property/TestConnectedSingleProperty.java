@@ -12,28 +12,41 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Tests if a ConnectedSingleProperty can be created and used correctly
+ * 
  * @author schnicke
  *
  */
 public class TestConnectedSingleProperty {
 
 	ISingleProperty prop;
+	private static final int VALUE = 10;
 
 	@Before
 	public void build() {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 
-		PropertySingleValued propertyMeta = factory.create(new PropertySingleValued(), 10);
-		prop = new ConnectedSingleProperty("",
-				new VABConnectionManagerStub(new VABHashmapProvider(propertyMeta)).connectToVABElement(""));
+		// Create PropertySingleValued containing the simple value
+		PropertySingleValued propertyMeta = factory.create(new PropertySingleValued(), VALUE);
+		prop = new ConnectedSingleProperty("", new VABConnectionManagerStub(new VABHashmapProvider(propertyMeta)).connectToVABElement(""));
 	}
 
+	/**
+	 * Tests getting the value
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void testGet() throws Exception {
 		int val = (int) prop.get();
-		assertEquals(10, val);
+		assertEquals(VALUE, val);
 	}
 
+	/**
+	 * Tests setting the value
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void testSet() throws Exception {
 		prop.set(123);

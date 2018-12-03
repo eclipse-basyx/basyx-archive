@@ -5,6 +5,12 @@ import java.util.Map;
 
 import org.eclipse.basyx.vab.core.IDirectoryService;
 
+/**
+ * A simple Directory Service stub providing a mapping based on a Map
+ * 
+ * @author schnicke
+ *
+ */
 public class DirectoryServiceStub implements IDirectoryService {
 	private Map<String, String> addressMap = new HashMap<>();
 
