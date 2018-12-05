@@ -37,6 +37,9 @@ public class TestMapProperty {
 		// Connect to VAB element with ID "urn:fhg:es.iese:vab:1:1:simplevabelement"
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 
+		// Save original
+		Map<String, Object> original = (Map<String, Object>) connVABElement.readElementValue(mapPath);
+
 		// Replace entries in map
 		Map<String, Object> replacement = new HashMap<>();
 		replacement.put("a", 1);
@@ -49,6 +52,9 @@ public class TestMapProperty {
 		// Check test case results
 		assertEquals(2, map.size());
 		assertEquals(replacement, map);
+
+		// Roll back map
+		connVABElement.updateElementValue(mapPath, original);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -66,6 +72,9 @@ public class TestMapProperty {
 		assertEquals(2, map.size());
 		assertTrue(map.containsKey("test"));
 		assertTrue(map.containsKey("a"));
+
+		// Remove entry again
+		connVABElement.deleteElement(mapPath, "a");
 	}
 
 	/**
@@ -84,5 +93,8 @@ public class TestMapProperty {
 
 		// Check test case results
 		assertEquals(0, map.size());
+
+		// Put entry back
+		connVABElement.createElement(mapPath + "/test", 123);
 	}
 }

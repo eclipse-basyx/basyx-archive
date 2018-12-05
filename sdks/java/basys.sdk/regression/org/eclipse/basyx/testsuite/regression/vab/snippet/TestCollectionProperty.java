@@ -35,6 +35,9 @@ public class TestCollectionProperty {
 		// Connect to VAB element with ID "urn:fhg:es.iese:vab:1:1:simplevabelement"
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 
+		// Read original collection
+		Collection<Object> original = (Collection<Object>) connVABElement.readElementValue(collectionPath);
+
 		// Replace complete value of the collection property
 		Collection<Object> replacement = new ArrayList<>();
 		replacement.add(100);
@@ -46,6 +49,9 @@ public class TestCollectionProperty {
 		// Check test case results
 		assertEquals(1, collection.size());
 		assertEquals(replacement, collection);
+
+		// Write original back
+		connVABElement.updateElementValue(collectionPath, original);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -64,6 +70,9 @@ public class TestCollectionProperty {
 		assertTrue(collection.contains(1));
 		assertTrue(collection.contains(2));
 		assertTrue(collection.contains(3));
+
+		// Remove newly added value value
+		connVABElement.deleteElement(collectionPath, 3);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -78,5 +87,8 @@ public class TestCollectionProperty {
 		// Check test case results
 		assertEquals(1, collection.size());
 		assertTrue(collection.contains(1));
+
+		// Reinsert value
+		connVABElement.createElement(collectionPath, 2);
 	}
 }
