@@ -2,7 +2,6 @@ package org.eclipse.basyx.vab.backend.server;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
@@ -74,17 +73,20 @@ public class JSONProvider<T extends IModelProvider> {
 	 * @throws ServerException
 	 */
 	private Object extractParameter(String path, String serializedJSONValue, PrintWriter outputStream) {
+
+		System.out.println("Extracting Parameter: " + serializedJSONValue);
+
 		// Return value
 		Object result = null;
 
 		// Deserialize json body
 		try {
 			JSONObject json = new JSONObject(serializedJSONValue.toString());
-			Map<String, Object> message = JSONTools.Instance.deserialize(json);
-			result = message.get("entity");
+			result = JSONTools.Instance.deserialize(json);
 
 		} catch (JSONException e) {
-			sendException(outputStream, new IllegalArgumentException("Invalid PUT paramater"));
+			e.printStackTrace();
+			sendException(outputStream, new IllegalArgumentException("Invalid paramater: " + serializedJSONValue));
 		}
 		return result;
 	}
@@ -94,8 +96,7 @@ public class JSONProvider<T extends IModelProvider> {
 	 */
 	public void processBaSysGet(String path, PrintWriter outputStream) {
 
-		System.out.println("-------------------------- DO GET " + path
-				+ "---------------------------------------------------------");
+		System.out.println("-------------------------- DO GET " + path + "---------------------------------------------------------");
 
 		Object value = providerBackend.getModelPropertyValue(path);
 
@@ -119,8 +120,7 @@ public class JSONProvider<T extends IModelProvider> {
 		if (parameter == null)
 			return;
 
-		System.out.println("-------------------------- DO PUT " + path + " => " + parameter
-				+ " ---------------------------------------------------------");
+		System.out.println("-------------------------- DO PUT " + path + " => " + parameter + " ---------------------------------------------------------");
 
 		// Try to set value of BaSys VAB element
 		try {
@@ -172,9 +172,10 @@ public class JSONProvider<T extends IModelProvider> {
 		Object parameter = extractParameter(path, serializedJSONValue, outputStream);
 
 		JSONObject returnValue = null;
-		System.out.println("Invoking Service: " + path + " with arguments " + Arrays.toString((Object[]) parameter));
 
 		try {
+			System.out.println("Invoking Service: " + path + " with arguments " + Arrays.toString((Object[]) parameter));
+
 			Object result = providerBackend.invokeOperation(path, (Object[]) parameter);
 			System.out.println("Return Value: " + result);
 
@@ -199,10 +200,10 @@ public class JSONProvider<T extends IModelProvider> {
 	 */
 	public void processBaSysPatch(String path, String serializedJSONValue, String action, PrintWriter outputStream) {
 
-		// Deserialize json body. If parameter is null, an exception has been sent
-		Object[] parameter = (Object[]) extractParameter(path, serializedJSONValue, outputStream);
-
 		try {
+			// Deserialize json body. If parameter is null, an exception has been sent
+			Object parameter = extractParameter(path, serializedJSONValue, outputStream);
+
 			switch (action.toLowerCase()) {
 			/**
 			 * Add an element to a collection / key-value pair to a map
@@ -216,7 +217,7 @@ public class JSONProvider<T extends IModelProvider> {
 			 * know parameter must only contain 1 element
 			 */
 			case "remove":
-				providerBackend.deleteValue(path, parameter[0]);
+				providerBackend.deleteValue(path, parameter);
 				break;
 
 			default:
@@ -241,7 +242,10 @@ public class JSONProvider<T extends IModelProvider> {
 	 */
 	public void processBaSysDelete(String path, String serializedValue, PrintWriter outputStream) {
 		// Deserialize json body. If parameter is null, an exception has been sent
-		Object parameter = extractParameter(path, serializedValue, outputStream);
+		Object parameter = null;
+		if (!serializedValue.isEmpty()) {
+			parameter = extractParameter(path, serializedValue, outputStream);
+		}
 
 		System.out.println("Delete1:" + parameter);
 		// Invoke provider backend
@@ -274,10 +278,10 @@ public class JSONProvider<T extends IModelProvider> {
 	 */
 	public void processBaSysCreate(String path, String serializedJSONValue, PrintWriter outputStream) {
 
-		// Deserialize json body. If parameter is null, an exception has been sent
-		Object parameter = extractParameter(path, serializedJSONValue, outputStream);
-
 		try {
+			// Deserialize json body. If parameter is null, an exception has been sent
+			Object parameter = extractParameter(path, serializedJSONValue, outputStream);
+
 			providerBackend.createValue(path, parameter);
 
 			// Send positive JSON response

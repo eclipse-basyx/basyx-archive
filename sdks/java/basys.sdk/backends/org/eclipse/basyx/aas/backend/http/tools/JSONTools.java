@@ -1,29 +1,29 @@
 package org.eclipse.basyx.aas.backend.http.tools;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Function;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
-import org.eclipse.basyx.aas.impl.resources.basic.DataTypeMapping;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.AtomicDataProperty;
-import org.json.JSONArray;
+import org.eclipse.basyx.aas.api.reference.IElementReference;
+import org.eclipse.basyx.aas.api.resources.IElement;
+import org.eclipse.basyx.aas.api.resources.IOperation;
+import org.eclipse.basyx.aas.api.resources.IProperty;
+import org.eclipse.basyx.aas.impl.reference.ElementRef;
+import org.eclipse.basyx.vab.core.IModelProvider;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * JSON Tools for serialization/deserialization from/to JSON
  * 
- * @author kuhn, pschorn
+ * @author kuhn
  *
  */
 public class JSONTools {
-
-	String placeholder;
 
 	/**
 	 * Singleton instance
@@ -37,23 +37,398 @@ public class JSONTools {
 		// Do nothing
 	}
 
+	/**
+	 * Serialize a primitive value
+	 */
+	protected JSONObject serializePrimitive(JSONObject target, Object serializedObject, String type) {
+		System.out.println("SP:" + serializedObject);
+
+		// Serialize values
+		// - Put object value into the JSON object
+		target.put("value", serializedObject);
+		// - Substructure defines a primitive type
+		target.put("basystype", "value");
+		// - Put type id into JSON Object
+		target.put("typeid", type);
+
+		// Return serialized value
+		return target;
+	}
+
+	/**
+	 * Deserialize a primitive value
+	 */
+	protected Object deserializePrimitive(JSONObject serializedValue) {
+		// Type check
+		if (!serializedValue.get("basystype").equals("value"))
+			return null;
+
+		// Return serialized value
+		return serializedValue.get("value");
+	}
+
+	/**
+	 * Serialize a simple type
+	 */
+	protected boolean serializePrimitiveType(JSONObject target, Object value, JSONObject serObjRepo) {
+		// Serialize known primitive types
+		if (value instanceof Integer) {
+			serializePrimitive(target, value, "int");
+			return true;
+		}
+		if (value instanceof Float) {
+			serializePrimitive(target, value, "float");
+			return true;
+		}
+		if (value instanceof Double) {
+			serializePrimitive(target, value, "double");
+			return true;
+		}
+		if (value instanceof String) {
+			serializePrimitive(target, value, "string");
+			return true;
+		}
+		if (value instanceof Boolean) {
+			serializePrimitive(target, value, "boolean");
+			return true;
+		}
+		if (value instanceof Character) {
+			serializePrimitive(target, value, "character");
+			return true;
+		}
+
+		// Value is not a primitive type
+		return false;
+	}
+
+	/**
+	 * Serialize a null value
+	 */
+	protected boolean serializeNull(JSONObject target, Object value, JSONObject serObjRepo) {
+		// Only serialize null values
+		if (value != null)
+			return false;
+
+		// Serialize null value
+		target.put("basystype", "null");
+
+		// Value is a null
+		return true;
+	}
+
+	/**
+	 * Deserialize a null value
+	 */
+	protected boolean deserializeNull(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
+		// Type check
+		if (!serializedValue.get("basystype").equals("null"))
+			return false;
+
+		// Return serialized value
+		return true;
+	}
+
+	/**
+	 * Implement array type serialization
+	 */
+	protected <T> boolean doSerializeArray(JSONObject target, T[] arrayValue, String typeName, JSONObject serObjRepo, String scope) {
+		// Serialize array data
+		target.put("basystype", "array");
+		target.put("size", arrayValue.length);
+		target.put("type", typeName);
+
+		// Serialize array elements
+		for (int i = 0; i < arrayValue.length; i++)
+			target.put("" + i, serialize(arrayValue[i], serObjRepo, scope));
+
+		// Indicate success
+		return true;
+	}
+
+	/**
+	 * Serialize an array type
+	 */
+	protected boolean serializeArrayType(JSONObject target, Object value, JSONObject serObjRepo, String scope) {
+		// Serialize known primitive types
+		if (value instanceof int[])
+			return doSerializeArray(target, Arrays.stream((int[]) value).boxed().toArray(Integer[]::new), "int", serObjRepo, scope);
+		if (value instanceof Integer[])
+			return doSerializeArray(target, (Integer[]) value, "int", serObjRepo, scope);
+		if (value instanceof Float[])
+			return doSerializeArray(target, (Float[]) value, "float", serObjRepo, scope);
+		if (value instanceof double[])
+			return doSerializeArray(target, Arrays.stream((double[]) value).boxed().toArray(Double[]::new), "double", serObjRepo, scope);
+		if (value instanceof Double[])
+			return doSerializeArray(target, (Double[]) value, "double", serObjRepo, scope);
+		if (value instanceof Character[])
+			return doSerializeArray(target, (Character[]) value, "character", serObjRepo, scope);
+		if (value instanceof Boolean[])
+			return doSerializeArray(target, (Boolean[]) value, "boolean", serObjRepo, scope);
+		if (value instanceof String[])
+			return doSerializeArray(target, (String[]) value, "string", serObjRepo, scope);
+		if (value instanceof Object[])
+			return doSerializeArray(target, (Object[]) value, "object", serObjRepo, scope);
+
+		// Value is not a primitive type
+		return false;
+	}
+
+	/**
+	 * Implement array type deserialization
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T> Object doDeserializeArray(JSONObject serializedValue, T[] arrayValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
+		// Deserialize array data
+		for (int i = 0; i < arrayValue.length; i++) {
+			// Get JSON Object with value
+			JSONObject value = serializedValue.getJSONObject("" + i);
+
+			arrayValue[i] = (T) deserialize(value, serObjRepo, repository);
+		}
+
+		// Return value
+		return arrayValue;
+	}
+
+	/**
+	 * Deserialize an array
+	 */
+	protected Object deserializeArrayType(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
+		// Type check
+		if (!serializedValue.get("basystype").equals("array"))
+			return null;
+
+		// Create array
+		switch ((String) serializedValue.get("type")) {
+		case "int": {
+			return doDeserializeArray(serializedValue, new Integer[(int) serializedValue.get("size")], serObjRepo, repository);
+		}
+		case "float": {
+			return doDeserializeArray(serializedValue, new Float[(int) serializedValue.get("size")], serObjRepo, repository);
+		}
+		case "double": {
+			return doDeserializeArray(serializedValue, new Double[(int) serializedValue.get("size")], serObjRepo, repository);
+		}
+		case "character": {
+			return doDeserializeArray(serializedValue, new Character[(int) serializedValue.get("size")], serObjRepo, repository);
+		}
+		case "boolean": {
+			return doDeserializeArray(serializedValue, new Boolean[(int) serializedValue.get("size")], serObjRepo, repository);
+		}
+		case "string": {
+			return doDeserializeArray(serializedValue, new String[(int) serializedValue.get("size")], serObjRepo, repository);
+		}
+		case "object": {
+			return doDeserializeArray(serializedValue, new Object[(int) serializedValue.get("size")], serObjRepo, repository);
+		}
+		}
+
+		// Return serialized value
+		return serializedValue.get("value");
+	}
+
+	/**
+	 * Check is a given JSON object contains a primitive type
+	 */
+	protected boolean isPrimitive(JSONObject serializedValue) {
+		// Property "basystype" defines whether something is a value (primitive) type or
+		// not
+		if (serializedValue.get("basystype").equals("value"))
+			return true;
+
+		// Type is no primitive type
+		return false;
+	}
+
+	/**
+	 * Deserialize a simple type
+	 */
+	protected Object deserializePrimitiveType(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
+
+		// Deserialize known primitive types
+		if (isPrimitive(serializedValue))
+			return deserializePrimitive(serializedValue);
+
+		// Value is not a primitive type
+		return null;
+	}
+
+	/**
+	 * Serialize a property reference
+	 */
+	protected JSONObject serializeElementReference(JSONObject target, IElementReference reference) {
+
+		System.out.println("Serialize " + reference);
+		// Serialize element
+		// - Indicate that it is a reference
+		target.put("basystype", "ref");
+		// - Serialize element type
+		// - FIXME: Use interfaces
+		if (reference instanceof IProperty)
+			target.put("elementType", "property");
+		if (reference instanceof IOperation)
+			target.put("elementType", "operation");
+		// - Serialize address
+		if (reference.isAASReference()) {
+			target.put("aas", reference.getAASID());
+		}
+		if (reference.isSubModelReference()) {
+			target.put("aas", reference.getAASID());
+			target.put("submodel", reference.getSubModelID());
+		}
+		if (reference.isPropertyReference()) {
+			target.put("aas", reference.getAASID());
+			target.put("submodel", reference.getSubModelID());
+			target.put("path", reference.getPathToProperty());
+		}
+
+		// Return serialized element
+		return target;
+	}
+
+	/**
+	 * Deserialize a property reference
+	 */
+	protected Object deserializeElementReference(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
+		// Type check
+		if (!(serializedValue.get("basystype").equals("ref")))
+			return null;
+
+		// Get referenced address
+		String refAAS = "";
+		if (serializedValue.has("aas"))
+			refAAS = (String) serializedValue.get("aas");
+		String refSM = "";
+		if (serializedValue.has("submodel"))
+			refSM = (String) serializedValue.get("submodel");
+		String refPath = "";
+		if (serializedValue.has("path"))
+			refPath = (String) serializedValue.get("path");
+
+		// Create return value
+		ElementRef result = new ElementRef(refAAS, refSM, refPath);
+
+		System.out.println("Deserialized " + serializedValue);
+		try {
+
+			// Deserialize map and collection information
+			String thekind = (String) serializedValue.get("thekind");
+			result.setKind(thekind);
+		} catch (JSONException e) {
+			// Lleave out if it is not map or collection
+		}
+
+		// Return deserialized element
+		return result;
+	}
+
+	/**
+	 * Serialize a property into JSON object TODO make this class independent from
+	 * IModelProvider?
+	 * 
+	 * FIXME: Remove
+	 */
+	public JSONObject serializeProperty(String pathToObject, IModelProvider provider) {
+		// Create return value
+		JSONObject returnValue = new JSONObject();
+
+		// Get value and scope
+		Object value = provider.getModelPropertyValue(pathToObject);
+
+		// Serialize value
+		returnValue = this.serialize(value, "");
+
+		// Return serialized value
+		return returnValue;
+	}
+
+	/**
+	 * Serialize an IElement
+	 */
+	protected boolean serializeIElement(JSONObject target, Object value, JSONObject serObjRepo, String scope) {
+		// Type check
+		if (!(value instanceof IElement))
+			return false;
+
+		// Create reference
+		IElementReference reference = new ElementRef((IElement) value);
+
+		// Serialize IElementReference
+		return serializeIElementRef(target, reference, serObjRepo, scope);
+	}
+
+	/**
+	 * Serialize an IElement reference
+	 */
+	protected boolean serializeIElementRef(JSONObject target, Object value, JSONObject serObjRepo, String scope) {
+		// Type check
+		if (!(value instanceof IElementReference))
+			return false;
+
+		// Create reference
+		IElementReference reference = (IElementReference) value;
+		// Add scope to reference
+		reference.addScope(scope); // FIXME scope is not serialized
+
+		// Serialize element
+		// - Indicate that is is a reference
+		target.put("basystype", "ref");
+		// - Serialize element type
+		// - FIXME: Use interfaces
+		if (value instanceof IProperty)
+			target.put("elementType", "property");
+		if (value instanceof IOperation)
+			target.put("elementType", "operation");
+		// - Serialize address
+		if (reference.isAASReference()) {
+			target.put("aas", reference.getAASID());
+		}
+		if (reference.isSubModelReference()) {
+			target.put("aas", reference.getAASID());
+			target.put("submodel", reference.getSubModelID());
+		}
+		if (reference.isPropertyReference()) {
+			target.put("aas", reference.getAASID());
+			target.put("submodel", reference.getSubModelID());
+			target.put("path", reference.getPathToProperty());
+		}
+
+		if (reference.getAASID().length() == 0) {
+			throw new RuntimeException("aasid empty");
+		}
+
+		// Add map and collection information
+		if (reference.isCollection()) {
+			target.put("thekind", "collection");
+		}
+		if (reference.isMap()) {
+			target.put("thekind", "map");
+		}
+
+		System.out.println("Serialized " + target + " from value " + value);
+
+		// Return serialized element
+		return true;
+	}
 
 	/**
 	 * Serialize a map
 	 */
 	@SuppressWarnings("unchecked")
-	protected boolean serializeMapType(JSONObject target, Object value) {
-
+	protected boolean serializeMapType(JSONObject target, Object value, JSONObject serObjRepo, String scope) {
 		if (value instanceof Map) {
 
-			// Cast to map
+			// Convert to collection
 			Map<String, Object> map = (Map<String, Object>) value;
 
-			// Serialize map elements
-			for (String key : map.keySet()) {
-				target.put(key, serializeInnerValue(new JSONObject(), map.get(key)));
+			// Convert elements
+			// - Substructure defines a collection
+			target.put("basystype", "map");
+			target.put("size", map.size());
 
-			}
+			// Serialize collection elements
+			for (String key : map.keySet())
+				target.put(key, serialize(map.get(key), serObjRepo, scope));
 
 			// Value has been serialized
 			return true;
@@ -64,10 +439,9 @@ public class JSONTools {
 	}
 
 	/**
-	 * TODO change Deserialize a map
-	 *
-	protected Object deserializeMapType(JSONObject serializedValue, Map<Integer, Object> serObjRepo,
-			JSONObject repository) {
+	 * Deserialize a map
+	 */
+	protected Object deserializeMapType(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
 		// Serialize known primitive types
 		if (!(serializedValue.get("basystype").equals("map")))
 			return null;
@@ -89,21 +463,28 @@ public class JSONTools {
 
 		// Return deserialized value
 		return result;
-	}*/
+	}
 
 	/**
 	 * Serialize a collection
 	 */
 	@SuppressWarnings("unchecked")
-	protected boolean serializeCollectionType(JSONArray parent, Object value) {
-
+	protected boolean serializeCollectionType(JSONObject target, Object value, JSONObject serObjRepo, String scope) {
 		if (value instanceof Collection) {
 			// Convert to collection
 			Collection<Object> collection = (Collection<Object>) value;
 
-			// Append collection elements
+			// Convert elements
+			// - Substructure defines a collection
+			target.put("basystype", "collection");
+			target.put("size", collection.size());
+
+			// Serialize collection elements
+			int i = 0;
 			for (Object obj : collection)
-				parent.put(serializeInnerValue(new JSONObject(), obj));
+				target.put("" + i++, serialize(obj, serObjRepo, scope));
+
+			// Value has been serialized
 			return true;
 		} else {
 			return false;
@@ -111,10 +492,9 @@ public class JSONTools {
 	}
 
 	/**
-	 * TODO Change Deserialize a collection
-	 *
-	protected Object deserializeCollectionType(JSONObject serializedValue, Map<Integer, Object> serObjRepo,
-			JSONObject repository) {
+	 * Deserialize a collection
+	 */
+	protected Object deserializeCollectionType(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
 		// Deserialize known types
 		if (!(serializedValue.get("basystype").equals("collection")))
 			return null;
@@ -130,7 +510,7 @@ public class JSONTools {
 
 		// Value has been serialized
 		return result;
-	}*/
+	}
 
 	/**
 	 * Serialize an exception
@@ -139,33 +519,29 @@ public class JSONTools {
 	 * @param value
 	 * @return
 	 */
-	protected boolean serializeException(JSONObject response, JSONObject target, Object value) {
-
+	protected boolean serializeException(JSONObject target, Object value) {
 		// Check if object to be serialized is an exception
 		if (value instanceof Exception) {
 
-			response.put("isException", true);
-
 			Exception e = (Exception) value;
 
+			target.put("basystype", "exception");
 			target.put("type", e.getClass().getName());
 			target.put("message", e.getMessage());
 
 			return true;
 		}
 
-		// Not an Exception
-		response.put("isException", false);
 		return false;
 	}
 
 	/**
-	 * TODO Change Deserialize an exception
+	 * Deserialize an exception
 	 * 
 	 * @param serializedValue
 	 *            Serialized JSON object
 	 * @return Server exception object
-	 *
+	 */
 	protected Object deserializeException(JSONObject serializedValue) {
 
 		// Only deserialize exceptions
@@ -184,163 +560,88 @@ public class JSONTools {
 
 		// Return server exception
 		return new ServerException(type, message);
-	}*/
+	}
 
 	/**
-	 *  Serialize an operation descriptor
+	 * Serialize an operation descriptor
 	 */
-	protected String serializeOperation(Object value) {
+	protected boolean serializeOperation(JSONObject target, Object value) {
 		// Check if object to be serialized is a function
 		if ((value instanceof Function) == false)
-			return null;
-
-		// Indicates non-serializable method
-		return "isMethod";
-	}
-
-	/**
-	 * TODO Change Deserialize an operation
-	 * 
-	 * @param serializedValue
-	 *            Serialized JSON object
-	 * @return VABOperation Reference object
-	 */
-	protected Object deserializeOperation(JSONObject serializedValue) {
-
-		// Only deserialize operations
-		if (!(serializedValue.get("basystype").equals("operation")))
-			return null;
-
-		System.out.println("OPS not supported yet...");
-		// return operation reference
-		return null; // TODO operations deserialization
-	}
-
-	/**
-	 * Serialize a primitive or complex value into JSON object.
-	 * 
-	 * @return primitive value or nested json object
-	 */
-	protected Object serializeInnerValue(JSONObject parent, Object value) {
-
-		// Try single value
-		if (serializeAtomicDataProperty(parent, value)) {
-			return parent;
-		}
-
-		// Try collection
-		JSONArray c = new JSONArray();
-		if (serializeCollectionType(c, value)) {
-			return c;
-		}
-
-		// Try map
-		if (serializeMapType(parent, value)) {
-			return parent;
-		}
-
-		// Try operation
-		if ((placeholder = serializeOperation(value)) != null) {
-			return placeholder;
-		}
-
-		// Other primitive
-		JSONObject typed_value = new JSONObject();
-		typed_value.put("value", value);
-		typed_value.put("type", DataTypeMapping.map(value).getId());
-		
-		return typed_value;  
-	}
-
-	/**
-	 * Serialize a primitive or complex value into JSON object 
-	 * 
-	 * TODO get success, entityTpye, messageType, code, text parameter
-	 */
-	public JSONObject serialize(Object value) {
-
-		JSONObject response = new JSONObject();
-
-		response.put("success", true);
-		response.put("entityType", "string");
-
-		JSONObject messages = new JSONObject();
-		messages.put("messageType", "Unspecified");
-		messages.put("code", "string");
-		messages.put("text", "string");
-		response.put("messages", messages);
-
-		JSONArray entityArray = new JSONArray();
-		JSONObject entityMap = new JSONObject();
-
-		// Try exception
-		if (serializeException(response, entityMap, value)) {
-			response.put("entity", entityMap);
-			return response;
-		}
-
-		// Try single value
-		if (serializeAtomicDataProperty(entityMap, value)) {
-			response.put("entity", entityMap);
-			return response;
-		}
-
-		// Try collection
-		if (serializeCollectionType(entityArray, value)) {
-			response.put("entity", entityArray);
-			return response;
-		}
-
-		// Try map
-		if (serializeMapType(entityMap, value)) {
-			response.put("entity", entityMap);
-			return response;
-		}
-		
-		// Other primitive value
-		JSONObject typed_value = new JSONObject();
-		typed_value.put("value", value);
-		typed_value.put("type", DataTypeMapping.map(value).getId());
-		
-		response.put("entity", typed_value); 
-		
-		return response;
-	}
-
-	protected boolean serializeAtomicDataProperty(JSONObject entityMap, Object value) {
-
-		if (!(value instanceof AtomicDataProperty))
 			return false;
 
-		AtomicDataProperty property = (AtomicDataProperty) value;
+		// Serialize operation kind
+		target.put("basystype", "operation");
 
-		Iterator<Entry<String, Object>> it = property.entrySet().iterator();
-		while (it.hasNext()) {
-			Entry<String, Object> entry = it.next();
-			String key = entry.getKey();
-			Object val = entry.getValue();
-
-			if (val instanceof Map) {
-				JSONObject obj = new JSONObject();
-				serializeMapType(obj, val);
-				entityMap.put(key, obj);
-			} else if (val instanceof Collection) {
-				JSONArray obj = new JSONArray();
-				serializeCollectionType(obj, val);
-				entityMap.put(key, obj);
-
-			} else {
-				entityMap.put(key, val);
-			}
-		}
-
+		// Indicate success
 		return true;
 	}
 
 	/**
-	 * TODO change to new representation <br />
+	 * Deserialize an operation
+	 * 
+	 * @param serializedValue
+	 *            Serialized JSON object
+	 * @return Server exception object
+	 */
+	protected Object deserializeOperation(JSONObject serializedValue) {
+
+		// Only deserialize exceptions
+		if (!(serializedValue.get("basystype").equals("operation")))
+			return null;
+
+		// Return server exception
+		return "OPERATION!!";
+	}
+
+	/**
+	 * Serialize a primitive or complex value into JSON object
+	 */
+	protected JSONObject serialize(Object value, JSONObject serObjRepo, String scope) {
+		// Create return value
+		JSONObject returnValue = new JSONObject();
+
+		// Serialize type
+		if (serializeNull(returnValue, value, serObjRepo))
+			return returnValue;
+		if (serializePrimitiveType(returnValue, value, serObjRepo))
+			return returnValue;
+		if (serializeArrayType(returnValue, value, serObjRepo, scope))
+			return returnValue;
+		if (serializeCollectionType(returnValue, value, serObjRepo, scope))
+			return returnValue;
+		if (serializeMapType(returnValue, value, serObjRepo, scope))
+			return returnValue;
+		if (serializeIElement(returnValue, value, serObjRepo, scope))
+			return returnValue;
+		if (serializeIElementRef(returnValue, value, serObjRepo, scope))
+			return returnValue;
+		if (serializeException(returnValue, value))
+			return returnValue;
+		if (serializeOperation(returnValue, value))
+			return returnValue;
+		// Complex types not supported yet
+
+		return returnValue;
+	}
+
+	/**
+	 * Serialize a primitive or complex value into JSON object
+	 */
+	public JSONObject serialize(Object value, String scope) {
+		return serialize(value, null, scope);
+	}
+
+	/**
+	 * Serialize a primitive or complex value into JSON object
+	 */
+	public JSONObject serialize(Object value) {
+		return serialize(value, null, null);
+	}
+
+	/**
 	 * Deserialize a primitive or complex value from JSON object
-	 *
+	 */
 	protected Object deserialize(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
 		// Create return value
 		Object returnValue = null;
@@ -348,12 +649,16 @@ public class JSONTools {
 		// If object type is primitive or string, serialize right away
 		if (deserializeNull(serializedValue, serObjRepo, repository))
 			return null;
-
+		if ((returnValue = deserializePrimitiveType(serializedValue, serObjRepo, repository)) != null)
+			return returnValue;
+		if ((returnValue = deserializeArrayType(serializedValue, serObjRepo, repository)) != null)
+			return returnValue;
 		if ((returnValue = deserializeCollectionType(serializedValue, serObjRepo, repository)) != null)
 			return returnValue;
 		if ((returnValue = deserializeMapType(serializedValue, serObjRepo, repository)) != null)
 			return returnValue;
-
+		if ((returnValue = deserializeElementReference(serializedValue, serObjRepo, repository)) != null)
+			return returnValue;
 		if ((returnValue = deserializeException(serializedValue)) != null)
 			return returnValue;
 		if ((returnValue = deserializeOperation(serializedValue)) != null)
@@ -361,72 +666,12 @@ public class JSONTools {
 
 		// Complex types not supported yet
 		return returnValue;
-	}*/
+	}
 
 	/**
-	 * Deserialize a JSON message and return element map
+	 * Deserialize a primitive or complex value from JSON object
 	 */
-	public Map<String, Object> deserialize(JSONObject serializedValue) {
-		
-		Map<String, Object> message = serializedValue.toMap(); 
-		
-		Iterator<Entry<String, Object>> it = message.entrySet().iterator();
-		while (it.hasNext()) {
-			Entry<String, Object> entry = it.next();
-			String key = entry.getKey();
-			Object value = entry.getValue();
-			
-			if (value instanceof JSONObject) {
-				message.put(key, deserializeJSONObject((JSONObject) value));
-			}
-			
-			if (value instanceof JSONArray) {
-				message.put(key, deserializeJSONArray((JSONArray) value));
-			}
-		}
-		
-		return message;
+	public Object deserialize(JSONObject serializedValue) {
+		return deserialize(serializedValue, null, null);
 	}
-	
-	public Object deserializeJSONObject(JSONObject serializedValue) {
-		
-		Map<String, Object> map = serializedValue.toMap(); 
-		
-		Iterator<Entry<String, Object>> it = map.entrySet().iterator();
-		while (it.hasNext()) {
-			Entry<String, Object> entry = it.next();
-			String key = entry.getKey();
-			Object value = entry.getValue();
-			
-			if (value instanceof JSONObject) {
-				map.put(key, deserializeJSONObject((JSONObject) value));
-			}
-			
-			if (value instanceof JSONArray) {
-				map.put(key, deserializeJSONArray((JSONArray) value));
-			}
-		}
-		
-		return map;
-	}
-	
-	
-	public Object deserializeJSONArray(JSONArray serializedValue) {
-		
-		List<Object> list = serializedValue.toList();
-		
-		for (Object value : list) {
-		
-			if (value instanceof JSONObject) {
-				list.remove(value); list.add(deserializeJSONObject((JSONObject) value));
-			}
-			
-			if (value instanceof JSONArray) {
-				list.remove(value); list.add(deserializeJSONArray((JSONArray) value));
-			}
-		}
-		
-		return list;
-	}
-
 }

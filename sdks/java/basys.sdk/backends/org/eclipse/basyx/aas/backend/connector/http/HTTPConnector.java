@@ -13,7 +13,6 @@ import javax.ws.rs.core.Response;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.backend.connector.IBaSyxConnector;
-import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.json.JSONObject;
@@ -186,18 +185,18 @@ public class HTTPConnector implements IBaSyxConnector {
 
 	}
 
-	private Object httpPatch(String servicePath, String action, Object... newValue) throws ServerException {
+	private Object httpPatch(String servicePath, String action, Object newValue) throws ServerException {
 		System.out.println("[HTTP Patch] " + address + servicePath + "  " + newValue);
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
 
 		// Create JSON value Object
-		JSONObject jsonObject = JSONTools.Instance.serialize(newValue);
+		// JSONObject jsonObject = JSONTools.Instance.serialize(newValue);
 
 		// Create and invoke HTTP PATCH request
 		Response rsp = client.target(address + servicePath).queryParam("action", action).request()
-				.build("PATCH", Entity.text(jsonObject.toString()))
+				.build("PATCH", Entity.text(newValue.toString()))
 				.property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
 
 		// Return repsonse message (header)
@@ -205,11 +204,13 @@ public class HTTPConnector implements IBaSyxConnector {
 	}
 
 	private Object httpPost(String servicePath, Object parameter) throws ServerException {
-
 		System.out.println("[HTTP Post] " + address + servicePath + " " + parameter);
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
+
+		// Create JSON value Object
+		// JSONObject jsonObject = JSONTools.Instance.serialize(parameter);
 
 		// Build web service URL
 		Builder request = buildRequest(client, address + servicePath);

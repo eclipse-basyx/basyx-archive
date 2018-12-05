@@ -9,13 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.basyx.aas.api.exception.ServerException;
-import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.eclipse.basyx.vab.backend.server.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
-import org.eclipse.basyx.vab.core.tools.VABPathTools;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * VAB provider class that enables access to an IModelProvider via HTTP REST
@@ -64,8 +59,6 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 	public T getModelProvider() {
 		return providerBackend.getBackendReference();
 	}
-	
-	
 
 	/**
 	 * Send JSON encoded response
@@ -87,14 +80,14 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		String uri = req.getRequestURI();
 		String contextPath = req.getContextPath();
 		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
-				
+
 		// Setup HTML response header
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-		
+
 		// Process get request
-	    providerBackend.processBaSysGet(path, resp.getWriter());
-	    
+		providerBackend.processBaSysGet(path, resp.getWriter());
+
 	}
 
 	/**
@@ -105,7 +98,7 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		// Extract path
 		String uri = req.getRequestURI();
 		String contextPath = req.getContextPath();
-		String path = uri.substring(contextPath.length() + req.getServletPath().length());// Note, removed +1
+		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
 
 		// Read request body
 		InputStreamReader reader = new InputStreamReader(req.getInputStream());
@@ -114,14 +107,10 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		while (bufReader.ready())
 			serValue.append(bufReader.readLine());
 
-	
 		// Set value of BaSys VAB element
 		providerBackend.processBaSysSet(path, serValue.toString(), resp.getWriter());
-		
+
 	}
-
-
-
 
 	/**
 	 * <pre>
@@ -134,7 +123,7 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		// Extract path
 		String uri = req.getRequestURI();
 		String contextPath = req.getContextPath();
-		String path = uri.substring(contextPath.length() + req.getServletPath().length());// Note, removed +1
+		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
 
 		// Read posted parameter
 		InputStreamReader reader = new InputStreamReader(req.getInputStream());
@@ -143,13 +132,12 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		while (bufReader.ready()) {
 			serValue.append(bufReader.readLine());
 		}
-		
+
 		// Setup HTML response header
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
 
-
-		providerBackend.processBaSysPost(path, serValue.toString(),  resp.getWriter());
+		providerBackend.processBaSysPost(path, serValue.toString(), resp.getWriter());
 	}
 
 	/**
@@ -162,7 +150,7 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		// Extract path
 		String uri = req.getRequestURI();
 		String contextPath = req.getContextPath();
-		String path = uri.substring(contextPath.length() + req.getServletPath().length());// Note, removed +1
+		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
 
 		// Read request body
 		InputStreamReader reader = new InputStreamReader(req.getInputStream());
@@ -182,7 +170,7 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		// Extract path
 		String uri = req.getRequestURI();
 		String contextPath = req.getContextPath();
-		String path = uri.substring(contextPath.length() + req.getServletPath().length());// Note, removed +1
+		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
 
 		// Read request body
 		InputStreamReader reader = new InputStreamReader(req.getInputStream());

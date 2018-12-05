@@ -2,7 +2,6 @@ package org.eclipse.basyx.aas.backend.connector;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.eclipse.basyx.vab.core.IModelProvider;
@@ -35,18 +34,19 @@ public class JSONConnector implements IModelProvider {
 		// Get element from server
 		Object message = provider.getModelPropertyValue(path);
 
-		// Convert to json
-		JSONObject json = new JSONObject(message.toString());
+		// Deserialize
+		Object result = JSONTools.Instance.deserialize(new JSONObject(message.toString()));
 
-		// Handle meta information and return value
-		// verifyResponse(message);
+		// Handle meta information and exceptions
+		try {
+			verifyResponse(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		// Deserialize response
-		Map<String, Object> messageMap = JSONTools.Instance.deserialize(json);
+		// Return value
+		return result;
 
-		Object containedElement = messageMap.get("entity");
-
-		return containedElement;
 	}
 
 	@Override
@@ -57,7 +57,12 @@ public class JSONConnector implements IModelProvider {
 
 		Object message = provider.setModelPropertyValue(path, jsonObject);
 
-		verifyResponse(message);
+		// Deserialize
+		Object result = JSONTools.Instance.deserialize(new JSONObject(message.toString()));
+
+		// Handle meta information and exceptions
+		verifyResponse(result);
+
 	}
 
 	@Override
@@ -66,9 +71,16 @@ public class JSONConnector implements IModelProvider {
 		// Serialize value Object
 		JSONObject jsonObject = JSONTools.Instance.serialize(newEntity);
 
+		System.out.println("Parameter= " + newEntity + " => Serialized to " + jsonObject);
+
 		Object message = provider.createValue(path, jsonObject);
 
-		verifyResponse(message);
+		// Deserialize (unwanted behavior?: exception is thrown when it is returned by
+		// the deserialisation)
+		Object result = JSONTools.Instance.deserialize(new JSONObject(message.toString()));
+
+		// Handle meta information and exceptions
+		verifyResponse(result);
 	}
 
 	@Override
@@ -76,7 +88,11 @@ public class JSONConnector implements IModelProvider {
 
 		Object message = provider.deleteValue(path);
 
-		verifyResponse(message);
+		// Deserialize
+		Object result = JSONTools.Instance.deserialize(new JSONObject(message.toString()));
+
+		// Handle meta information and exceptions
+		verifyResponse(result);
 	}
 
 	@Override
@@ -87,7 +103,11 @@ public class JSONConnector implements IModelProvider {
 
 		Object message = provider.deleteValue(path, jsonObject);
 
-		verifyResponse(message);
+		// Deserialize
+		Object result = JSONTools.Instance.deserialize(new JSONObject(message.toString()));
+
+		// Handle meta information and exceptions
+		verifyResponse(result);
 	}
 
 	@Override
@@ -98,12 +118,14 @@ public class JSONConnector implements IModelProvider {
 
 		Object message = provider.invokeOperation(path, jsonObject);
 
-		verifyResponse(message);
+		// Deserialize
+		Object result = JSONTools.Instance.deserialize(new JSONObject(message.toString()));
+
+		// Handle meta information and exceptions
+		verifyResponse(result);
 
 		// Deserialize response
-		Map<String, Object> messageMap = JSONTools.Instance.deserialize(new JSONObject(message));
-
-		return messageMap.get("entity");
+		return result;
 	}
 
 	@Override
@@ -115,6 +137,9 @@ public class JSONConnector implements IModelProvider {
 	/**
 	 * Function to extract and verify the response header TODO process other message
 	 * information like "success", "entityType", "messages"
+	 * 
+	 * @param message
+	 *            - provide deserialized message
 	 */
 	private void verifyResponse(Object message) throws Exception {
 
@@ -122,7 +147,8 @@ public class JSONConnector implements IModelProvider {
 		try {
 
 			// Deserialize response
-			Map<String, Object> messageMap = JSONTools.Instance.deserialize(new JSONObject(message));
+			// Map<String, Object> messageMap = JSONTools.Instance.deserialize(new
+			// JSONObject(message));
 
 			// Handle meta information
 			/**
@@ -130,9 +156,13 @@ public class JSONConnector implements IModelProvider {
 			 * "messages"
 			 */
 
-			if ((boolean) messageMap.get("isException")) {
-				// Throw server exception
-				throw (ServerException) messageMap.get("entity");
+			// if ((boolean) messageMap.get("isException")) {
+			// Throw server exception
+			// throw (ServerException) messageMap.get("entity");
+			// }
+
+			if (message instanceof Exception) {
+				throw (Exception) message;
 			}
 
 		} catch (JSONException e) {
