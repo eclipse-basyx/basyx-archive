@@ -6,10 +6,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
-import org.eclipse.basyx.aas.api.reference.IElementReference;
-import org.eclipse.basyx.aas.api.services.IModelProvider;
+import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLQuery;
+import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLRunner;
+import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLUpdate;
+import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
+
 
 
 
@@ -19,7 +21,7 @@ import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLQuery;
  * @author kuhn
  *
  */
-public class SQLSubModelProvider implements IModelProvider {
+public class SQLSubModelProvider extends BaseConfiguredProvider {
 
 	
 	/**
@@ -67,32 +69,32 @@ public class SQLSubModelProvider implements IModelProvider {
 	/**
 	 * Run queries to access properties via 'get' operation
 	 */
-	protected Map<String, DynamicSQLQuery> propertyGetQueries = new HashMap<>();
+	protected Map<String, DynamicSQLRunner> propertyGetQueries = new HashMap<>();
 
 	
 	/**
 	 * Run SQL update to access properties via 'set' operation
 	 */
-	protected Map<String, DynamicSQLQuery> propertySetQueries = new HashMap<>();
+	protected Map<String, DynamicSQLRunner> propertySetQueries = new HashMap<>();
 
 	
 	/**
 	 * Run SQL update to access properties via 'create' operation
 	 */
-	protected Map<String, DynamicSQLQuery> propertyCreateQueries = new HashMap<>();
+	protected Map<String, DynamicSQLRunner> propertyCreateQueries = new HashMap<>();
 
 
 	/**
 	 * Run SQL update to access properties via 'delete' operation
 	 */
-	protected Map<String, DynamicSQLQuery> propertyDeleteQueries = new HashMap<>();
+	protected Map<String, DynamicSQLRunner> propertyDeleteQueries = new HashMap<>();
 
 
 	
 	/**
 	 * SQL operations
 	 */
-	protected Map<String, DynamicSQLQuery> operations = new HashMap<>();
+	protected Map<String, DynamicSQLRunner> operations = new HashMap<>();
 
 	
 	/**
@@ -108,32 +110,57 @@ public class SQLSubModelProvider implements IModelProvider {
 	 */
 	public SQLSubModelProvider(Properties cfgValues) {
 		// Call base constructor
-		//super(AssetKind.INSTANCE, smName, smID, smType, aasName, aasID);
+		super(cfgValues);
+		
+		// Create sub model
+		submodelData = createSubModel(cfgValues);
+
+		// Load predefined elements from sub model
+		elements.putAll(submodelData);
+
 		
 		// Extract SQL properties
-		sqlUser = cfgValues.getProperty("dbuser");
-		sqlPass = cfgValues.getProperty("dbpass");
-		sqlURL  = cfgValues.getProperty("dburl");
+		sqlUser = cfgValues.getProperty("basyx.sql.dbuser");
+		sqlPass = cfgValues.getProperty("basyx.sql.dbpass");
+		sqlURL  = cfgValues.getProperty("basyx.sql.dburl");
 
 		// Extract SQL driver properties
-		sqlDriver = cfgValues.getProperty("sqlDriver");
-		sqlPrefix = cfgValues.getProperty("sqlPrefix");
+		sqlDriver = cfgValues.getProperty("basyx.sql.driver");
+		sqlPrefix = cfgValues.getProperty("basyx.sql.prefix");
 		
 		// Load and parse SQL property and operation connections
-		sqlPropertyConnections.addAll(splitString(cfgValues.getProperty("properties")));
-		sqlOperationConnections.addAll(splitString(cfgValues.getProperty("operations")));
+		sqlPropertyConnections.addAll(splitString(cfgValues.getProperty("basyx.sql.properties")));
+		sqlOperationConnections.addAll(splitString(cfgValues.getProperty("basyx.sql.operations")));
 
+		
+		
 		// Add properties
-		for (String propertyName: sqlPropertyConnections) {
+		for (String propertyName: sqlPropertyConnections) createSQLProperty(propertyName, cfgValues);
+		
+		/*
 			// Try to parse parameter
-			propertyGetQueries.put(propertyName, createSQLOperation(propertyName+"_get", cfgValues));
-			propertySetQueries.put(propertyName, createSQLOperation(propertyName+"_set", cfgValues));
-			propertyCreateQueries.put(propertyName, createSQLOperation(propertyName+"_create", cfgValues));
-			propertyDeleteQueries.put(propertyName, createSQLOperation(propertyName+"_delete", cfgValues));
-		}
+			propertyGetQueries.put(propertyName, createSQLOperation(propertyName+".get", cfgValues));
+			propertySetQueries.put(propertyName, createSQLOperation(propertyName+".set", cfgValues));
+			propertyCreateQueries.put(propertyName, createSQLOperation(propertyName+".create", cfgValues));
+			propertyDeleteQueries.put(propertyName, createSQLOperation(propertyName+".delete", cfgValues));
+			
+			
+			Map<String, Object> mapAccessors = VABLambdaProviderHelper.createMap((Supplier<?>) () -> {
+				return propertyMap_val;
+			}, (Consumer<Map<String, Object>>) (map) -> {
+				propertyMap_val = map;
+			}, (BiConsumer<String, Object>) (key, value) -> {
+				propertyMap_val.put(key, value);
+			}, (Consumer<Object>) (o) -> {
+				propertyMap_val.remove(o);
+			});
+
+		}*/
+		
 		
 		// Add operations
-		for (String operationName: sqlOperationConnections) {
+		//for (String operationName: sqlOperationConnections) createSQLOperation(operationName, cfgValues); 
+		/*{
 			// Create operation
 			operations.put(operationName, createSQLOperation(operationName, cfgValues));
 			// Mark operation as update operation depending on operations/<operationName>_kind property value
@@ -142,33 +169,98 @@ public class SQLSubModelProvider implements IModelProvider {
 					updateOperations.add(operationName);
 				}
 			} catch (Exception e) {}
-		}
+		}*/
 	}
 	
 	
 	
+	/**
+	 * Create an SQL property
+	 */
+	protected void createSQLProperty(String name, Properties cfgValues) {
+		// Create Map with lambdas that hold SQL operations
+		Map<String, Object> value = new HashMap<>();
+		
+		// Get operation
+		{
+			// Get parameter
+			String queryString    = cfgValues.getProperty(name+".get");
+			String resultFilterOp = cfgValues.getProperty(name+".get.result");
+
+			// Trim query string and resultFilterOp (remove '"' at beginning and end)
+			queryString    = queryString.substring(1, queryString.length()-1);
+			try {resultFilterOp = resultFilterOp.substring(1, resultFilterOp.length()-1);} catch (NullPointerException | StringIndexOutOfBoundsException e) {}
+
+			// Create dynamic SQL query
+			value.put(VABLambdaProvider.VALUE_GET_SUFFIX, new DynamicSQLQuery(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, queryString, resultFilterOp));
+		}
+		
+		// Set operation
+		{
+			// Get parameter
+			String updateString   = cfgValues.getProperty(name+".set");
+
+			// Trim query string and resultFilterOp (remove '"' at beginning and end)
+			updateString    = updateString.substring(1, updateString.length()-1);
+
+			// Create dynamic SQL query
+			value.put(VABLambdaProvider.VALUE_SET_SUFFIX, new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, updateString));
+		}
+
+		// Delete operation
+		{
+			// Get parameter
+			String updateString   = cfgValues.getProperty(name+".delete");
+
+			// Trim query string and resultFilterOp (remove '"' at beginning and end)
+			updateString    = updateString.substring(1, updateString.length()-1);
+
+			// Create dynamic SQL query
+			value.put(VABLambdaProvider.VALUE_REMOVE_SUFFIX, new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, updateString));
+		}
+		
+		// Create operation
+		{
+			// Get parameter
+			String updateString   = cfgValues.getProperty(name+".create");
+
+			// Trim query string and resultFilterOp (remove '"' at beginning and end)
+			updateString    = updateString.substring(1, updateString.length()-1);
+
+			// Create dynamic SQL query
+			value.put(VABLambdaProvider.VALUE_INSERT_SUFFIX, new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, updateString));
+		}
+		
+		
+		System.out.println("Putting SQL:"+name);
+		// Add property as map of lambdas
+		submodelData.getProperties().put(name, createProperty(name, value, cfgValues));
+	}
+
 	
 	/**
 	 * Create a dynamic SQL operation
 	 */
-	protected DynamicSQLQuery createSQLOperation(String propertyName, Properties cfgValues) {
+	protected DynamicSQLRunner createSQLOperation(String propertyName, Properties cfgValues) {/*
 		// Check parameter presence
 		if (!cfgValues.containsKey(propertyName)) return null;
 		
 		// Get parameter count and parameter count
-		int    parameterCount = Integer.parseInt(cfgValues.getProperty(propertyName+"_parameter"));
+		int    parameterCount = Integer.parseInt(cfgValues.getProperty(propertyName+".parameter"));
 		String queryString    = cfgValues.getProperty(propertyName);
-		String resultFilterOp = cfgValues.getProperty(propertyName+"_result");
+		String resultFilterOp = cfgValues.getProperty(propertyName+".result");
 		
 		// Trim query string and resultFilterOp (remove '"' at beginning and end)
 		queryString    = queryString.substring(1, queryString.length()-1);
 		try {resultFilterOp = resultFilterOp.substring(1, resultFilterOp.length()-1);} catch (NullPointerException | StringIndexOutOfBoundsException e) {}
 		
 		// Create dynamic SQL query
-		DynamicSQLQuery sqlQuery = new DynamicSQLQuery(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, parameterCount, queryString, resultFilterOp);
+		DynamicSQLRunner sqlQuery = new DynamicSQLRunner(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, parameterCount, queryString, resultFilterOp);
 
 		// Return created query
-		return sqlQuery;
+		return sqlQuery;*/
+		
+		return null;
 	}
 	
 	
@@ -189,7 +281,7 @@ public class SQLSubModelProvider implements IModelProvider {
 	
 	/**
 	 * Create a key list for an SQL statement
-	 */
+	 *//*
 	protected String sqlCreateKeys(Collection<String> keys) {
 		// Return value builder
 		StringBuilder result = new StringBuilder();
@@ -202,12 +294,12 @@ public class SQLSubModelProvider implements IModelProvider {
 		
 		// Return string
 		return result.toString();
-	}
+	}*/
 	
 	
 	/**
 	 * Extract a list of values from a map
-	 */
+	 *//*
 	protected String sqlCreateValues(Collection<Object> values) {
 		// Return value builder
 		StringBuilder result = new StringBuilder();
@@ -220,17 +312,17 @@ public class SQLSubModelProvider implements IModelProvider {
 		
 		// Return string
 		return result.toString();
-	}
+	}*/
 
 
 	
 	/**
 	 * Create (insert) a value into the SQL table
-	 */
+	 *//*
 	@Override @SuppressWarnings("unchecked")
 	public void createValue(String propertyName, Object arg1) throws Exception {
 		// Set query
-		DynamicSQLQuery query = propertyCreateQueries.get(propertyName);
+		DynamicSQLRunner query = propertyCreateQueries.get(propertyName);
 		
 		// Null pointer check
 		if (query == null) return;
@@ -242,27 +334,27 @@ public class SQLSubModelProvider implements IModelProvider {
 		
 		// Execute query and return result
 		query.runUpdate(parameter);
-	}
+	}*/
 
 
 	
 	/**
 	 * Delete a value from the SQL table
-	 */
+	 *//*
 	@Override
 	public void deleteValue(String arg0) throws Exception {
 		// This is not implemented
-	}
+	}*/
 
 
 	
 	/**
 	 * Delete a value from the SQL table
-	 */
+	 *//*
 	@Override @SuppressWarnings("unchecked")
 	public void deleteValue(String propertyName, Object arg1) throws Exception {
 		// Set query
-		DynamicSQLQuery query = propertyDeleteQueries.get(propertyName);
+		DynamicSQLRunner query = propertyDeleteQueries.get(propertyName);
 		
 		// Null pointer check
 		if (query == null) return;
@@ -277,10 +369,10 @@ public class SQLSubModelProvider implements IModelProvider {
 		
 		// Execute query and return result
 		query.runUpdate(parameter);
-	}
+	}*/
 
 	
-
+/*
 	@Override
 	public Map<String, IElementReference> getContainedElements(String arg0) {
 		// TODO Auto-generated method stub
@@ -294,33 +386,33 @@ public class SQLSubModelProvider implements IModelProvider {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+*/
 
 	
 	/**
 	 * Query the SQL database
-	 */
+	 *//*
 	@Override
 	public Object getModelPropertyValue(String propertyName) {
 		// Get query
-		DynamicSQLQuery query = propertyGetQueries.get(propertyName);
+		DynamicSQLRunner query = propertyGetQueries.get(propertyName);
 		
 		// Null pointer check
 		if (query == null) return null;
 		
 		// Execute query and return result
 		return query.runQuery();
-	}
+	}*/
 
 
 	
 	/**
 	 * Invoke operation with given parameter list
-	 */
+	 *//*
 	@Override
 	public Object invokeOperation(String propertyName, Object[] parameter) throws Exception {
 		// Set query
-		DynamicSQLQuery query = operations.get(propertyName);
+		DynamicSQLRunner query = operations.get(propertyName);
 		
 		// Null pointer check
 		if (query == null) return null;
@@ -332,17 +424,17 @@ public class SQLSubModelProvider implements IModelProvider {
 		} else {
 			return query.runQuery(parameter);
 		}
-	}
+	}*/
 
 
 	
 	/**
 	 * Invoke set operation with given parameter
-	 */
+	 *//*
 	@Override @SuppressWarnings("unchecked")
 	public void setModelPropertyValue(String propertyName, Object arg1) throws Exception {
 		// Set query
-		DynamicSQLQuery query = propertySetQueries.get(propertyName);
+		DynamicSQLRunner query = propertySetQueries.get(propertyName);
 		
 		// Null pointer check
 		if (query == null) return;
@@ -368,17 +460,17 @@ public class SQLSubModelProvider implements IModelProvider {
 		
 		// Execute query and return result
 		query.runUpdate(parameter);
-	}
+	}*/
 
 
 	
 	/**
 	 * Invoke set operation with given parameter list
-	 */
+	 *//*
 	@Override
 	public void setModelPropertyValue(String propertyName, Object... parameter) throws Exception {
 		// Set query
-		DynamicSQLQuery query = propertySetQueries.get(propertyName);
+		DynamicSQLRunner query = propertySetQueries.get(propertyName);
 		
 		// Null pointer check
 		if (query == null) return;
@@ -388,5 +480,5 @@ public class SQLSubModelProvider implements IModelProvider {
 
 		// Execute query and return result
 		query.runUpdate(parameter);
-	}
+	}*/
 }

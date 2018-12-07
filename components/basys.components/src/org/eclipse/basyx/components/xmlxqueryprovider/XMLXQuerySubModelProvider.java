@@ -17,7 +17,7 @@ import javax.xml.xquery.XQSequence;
 import javax.xml.xquery.XQStaticContext;
 
 import org.eclipse.basyx.aas.api.reference.IElementReference;
-import org.eclipse.basyx.aas.api.services.IModelProvider;
+import org.eclipse.basyx.vab.core.IModelProvider;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
@@ -295,7 +295,6 @@ public class XMLXQuerySubModelProvider implements IModelProvider {
 
 	
 
-	@Override
 	public String getElementScope(String arg0) {
 		System.out.println("GetScope:"+arg0);
 		// TODO Auto-generated method stub
@@ -340,7 +339,6 @@ public class XMLXQuerySubModelProvider implements IModelProvider {
 	/**
 	 * Invoke set operation with given parameter list
 	 */
-	@Override
 	public void setModelPropertyValue(String propertyName, Object... parameter) throws Exception {
 		// Indicate exception
 		throw new OperationNotImplementedException();

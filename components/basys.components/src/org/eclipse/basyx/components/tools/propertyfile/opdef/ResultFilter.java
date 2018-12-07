@@ -34,7 +34,7 @@ public class ResultFilter {
 		
 		// Process all SQL results
 		try {
-			while (sqlResult.next()) result.add(sqlResult.getString((String) columnName[0]));
+			while (sqlResult.next()) {result.add(sqlResult.getString((String) columnName[0])); System.out.println("Ading: "+sqlResult.getString((String) columnName[0]));}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

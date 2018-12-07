@@ -4,8 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
-import org.eclipse.basyx.vab.VABConnectionManager;
-import org.eclipse.basyx.vab.proxy.VABElementProxy;
+import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.junit.jupiter.api.Test;
 
 
@@ -38,8 +38,17 @@ class TestCFGProvider {
 		
 		// Get property value
 		Object value1 = connSubModel.readElementValue("/aas/submodels/sampleCFG/properties/cfgProperty1/value");
+		System.out.println("Res:"+value1);
+		System.out.println("ResC:"+value1.getClass());
 		assertTrue(value1.equals("exampleStringValue"));
 
+		
+		// Get property value
+		Object value4 = connSubModel.readElementValue("/aas/submodels/sampleCFG/properties/prop4/value");
+		System.out.println("Res4:"+value4);
+		System.out.println("Res4C:"+value4.getClass());
+
+		
 		// Get property value
 		Object value2 = connSubModel.readElementValue("/aas/submodels/sampleCFG/properties/cfgProperty2/value");
 		assertTrue(value2.equals("12"));

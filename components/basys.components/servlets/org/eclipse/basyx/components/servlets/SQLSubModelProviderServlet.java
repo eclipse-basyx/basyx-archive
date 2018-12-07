@@ -6,9 +6,10 @@ import java.io.InputStream;
 import java.util.Properties;
 import javax.servlet.ServletException;
 
-import org.eclipse.basyx.aas.backend.modelprovider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.backend.modelprovider.http.VABHTTPInterface;
+import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.components.sqlprovider.SQLSubModelProvider;
+import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
+import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
 
 
@@ -19,7 +20,7 @@ import org.eclipse.basyx.components.sqlprovider.SQLSubModelProvider;
  * @author kuhn
  *
  */
-public class SQLSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
+public class SQLSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmodelProvider<VABHashmapProvider>> {
 
 	
 	/**
@@ -49,7 +50,7 @@ public class SQLSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 	 */
 	public SQLSubModelProviderServlet() {
 		// Invoke base constructor
-		super(new VABMultiSubmodelProvider());
+		super(new VABMultiSubmodelProvider<VABHashmapProvider>());
 	}
 	
 	
@@ -76,7 +77,7 @@ public class SQLSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 			cfgProperties.load(input);
 			
 			// Extract sub model provider properties
-			this.submodelID   = cfgProperties.getProperty("basyx_submodelID");
+			this.submodelID   = cfgProperties.getProperty("basyx.submodelID");
 			
 		} catch (IOException e) {
 			// Output exception
@@ -86,7 +87,7 @@ public class SQLSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 		// Instantiate and add sub model provider
 		SQLSubModelProvider sqlSMProvider = new SQLSubModelProvider(cfgProperties);
 		// - Add sub model provider
-		this.getModelProvider().addProvider(submodelID, sqlSMProvider);
+		this.getModelProvider().addSubmodel(submodelID, sqlSMProvider);
 	}	
 }
 

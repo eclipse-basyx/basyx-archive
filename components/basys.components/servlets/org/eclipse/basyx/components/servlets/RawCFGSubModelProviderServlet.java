@@ -7,9 +7,10 @@ import java.util.Properties;
 
 import javax.servlet.ServletException;
 
-import org.eclipse.basyx.aas.backend.modelprovider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.backend.modelprovider.http.VABHTTPInterface;
+import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.components.cfgprovider.RawCFGSubModelProvider;
+import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
+import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
 
 
@@ -20,7 +21,7 @@ import org.eclipse.basyx.components.cfgprovider.RawCFGSubModelProvider;
  * @author kuhn
  *
  */
-public class RawCFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
+public class RawCFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmodelProvider<VABHashmapProvider>> {
 
 	
 	/**
@@ -28,7 +29,7 @@ public class RawCFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubm
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
+
 	
 	/**
 	 * Store ID of the sub model provided by this provider
@@ -48,7 +49,7 @@ public class RawCFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubm
 	 */
 	public RawCFGSubModelProviderServlet() {
 		// Invoke base constructor
-		super(new VABMultiSubmodelProvider());
+		super(new VABMultiSubmodelProvider<VABHashmapProvider>());
 	}
 	
 	
@@ -95,7 +96,7 @@ public class RawCFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubm
 		// Create sub model provider
 		RawCFGSubModelProvider submodelProvider = new RawCFGSubModelProvider(properties);
 		// - Add sub model provider
-		this.getModelProvider().addProvider(submodelID, submodelProvider);
+		this.getModelProvider().addSubmodel(submodelID, submodelProvider);
 		
 		System.out.println("CFG file loaded");
 	}

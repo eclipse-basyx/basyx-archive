@@ -1,9 +1,10 @@
 package org.eclipse.basyx.components.cfgprovider;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
-import org.eclipse.basyx.sdk.provider.hashmap.aas.Submodel;
+import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
 
 
 
@@ -16,29 +17,16 @@ import org.eclipse.basyx.sdk.provider.hashmap.aas.Submodel;
 public class CFGSubModelProvider extends BaseConfiguredProvider {
 
 	
-	/**
-	 * This is a sub model
-	 */
-	protected Submodel submodelData = null;
-
-		
 	
 	
-	
+	int abc = 1234;
 	
 	/**
 	 * Constructor
 	 */
 	public CFGSubModelProvider(Map<Object, Object> cfgValues) {
 		// Call base constructor
-		super();
-
-		
-		// Create sub model
-		submodelData = createSubModel(cfgValues);
-
-		// Load predefined elements from sub model
-		elements.putAll(submodelData);
+		super(cfgValues);
 
 		// Add properties
 		for (String key: getConfiguredProperties(cfgValues)) {
@@ -48,6 +36,19 @@ public class CFGSubModelProvider extends BaseConfiguredProvider {
 			// Debug output
 			System.out.println("Adding configured property: "+key.toString()+" = "+cfgValues.get(key));
 		}
+		
+
+		// Add lambda expression
+		Map<String, Object> property4 = VABLambdaProviderHelper.createSimple((Supplier<Object>) () -> {
+			return abc;
+		}, null);
+
+		System.out.println("------------ P4 -------------");
+		printHashMap(property4, 0);
+		
+		cfgValues.put("prop4.type", "PropertySingleValued");
+		
+		submodelData.getProperties().put("prop4", createProperty("prop4", property4, cfgValues));
 	}
 }
 

@@ -2,6 +2,7 @@ package org.eclipse.basyx.components.tools.propertyfile.opdef;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Map;
 
 
 
@@ -88,5 +89,29 @@ public class OperationDefinition {
 		// Return SQL string with resolved parameter
 		return result;
 	}
+
+
+	/**
+	 * Create a SQL string from an input SQL string with place holders in format $x with x being an integer number.
+	 * 
+	 * @param baseString SQL string with place holders
+	 * @param parameter Parameter values that place holders are substituted for
+	 * 
+	 * @return SQL string with parameter instead of place holders
+	 */
+	public static String getSQLString(String baseString, Map<String, Object> parameter) {
+		// Resulting SQL String
+		String result = baseString;
+		
+		// Replace place holders with parameter
+		// - Replace all place holders
+		for (String par: parameter.keySet()) {
+			result = result.replace("$"+par, parameter.get(par).toString());
+		}
+		
+		// Return SQL string with resolved parameter
+		return result;
+	}
+
 }
 

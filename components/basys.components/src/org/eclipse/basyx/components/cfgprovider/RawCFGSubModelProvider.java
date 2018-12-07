@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
-import org.eclipse.basyx.sdk.provider.hashmap.aas.Submodel;
 
 
 
@@ -16,24 +15,14 @@ import org.eclipse.basyx.sdk.provider.hashmap.aas.Submodel;
  */
 public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 
-	
-	/**
-	 * This is a sub model
-	 */
-	protected Submodel submodelData = null;
-
 		
-	
-	
-	
-	
 	/**
 	 * Constructor
 	 */
 	@SuppressWarnings("unchecked")
 	public RawCFGSubModelProvider(Map<Object, Object> cfgValues) {
 		// Call base constructor
-		super();
+		super(cfgValues);
 
 		
 		// Create sub model

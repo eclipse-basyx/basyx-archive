@@ -5,13 +5,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.basyx.sdk.provider.hashmap.VABHashmapProvider;
-import org.eclipse.basyx.sdk.provider.hashmap.aas.Submodel;
-import org.eclipse.basyx.sdk.provider.hashmap.aas.property.PropertySingleValued;
-import org.eclipse.basyx.sdk.provider.hashmap.aas.qualifier.Identification;
-import org.eclipse.basyx.sdk.templates.aas.SubmodelTemplate;
-import org.eclipse.basyx.sdk.templates.aas.SubmodelTemplateIRDISemantics;
-import org.eclipse.basyx.sdk.templates.aas.SubmodelTemplateInternalSemantics;
+import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacade;
+import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacadeIRDISemantics;
+import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacadeInternalSemantics;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel_;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.Property;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identification;
+import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
+
 
 
 
@@ -23,8 +25,32 @@ import org.eclipse.basyx.sdk.templates.aas.SubmodelTemplateInternalSemantics;
  * @author kuhn
  *
  */
-public class BaseConfiguredProvider extends VABHashmapProvider {
 
+public class BaseConfiguredProvider extends VABLambdaProvider {
+
+	
+	/**
+	 * This is a sub model
+	 */
+	protected SubModel_ submodelData = null;
+
+	
+	
+	/**
+	 * Constructor
+	 */
+	public BaseConfiguredProvider(Map<Object, Object> cfgValues) {
+		// Invoke base constructor
+		super(new HashMap<String, Object>());
+
+		
+		// Create sub model
+		submodelData = createSubModel(cfgValues);
+
+		// Load predefined elements from sub model
+		elements.putAll(submodelData);
+	}
+	
 	
 	/**
 	 * Split a comma delimited string
@@ -92,9 +118,9 @@ public class BaseConfiguredProvider extends VABHashmapProvider {
 	 * 
 	 * @param cfgValues    Provider configuration
 	 */
-	protected Submodel createSubModel(Map<Object, Object> cfgValues) {
+	protected SubModel_ createSubModel(Map<Object, Object> cfgValues) {
 		// Create sub model
-		Submodel submodel = null;
+		SubModel_ submodel = null;
 
 		// Try to load and convert configuration values. Keep value null if any error occurs
 		String basyx_submodelSemantics = null; try {basyx_submodelSemantics = (String) cfgValues.get("basyx.submodelSemantics").toString().toLowerCase();} catch (Exception e) {}
@@ -122,21 +148,21 @@ public class BaseConfiguredProvider extends VABHashmapProvider {
 		if (basyx_submodelSemantics == null) basyx_submodelSemantics = "internal";
 		if (basyx_submodelSemantics.equals("irdi")) {
 			// Create sub model from template
-			SubmodelTemplate template = new SubmodelTemplateIRDISemantics(basyx_semantics, idType, basyx_id, basyx_idShort, basyx_category, basyx_description, basyx_qualifier, basyx_version, basyx_revision);
+			SubmodelFacade template = new SubmodelFacadeIRDISemantics(basyx_semantics, idType, basyx_id, basyx_idShort, basyx_category, basyx_description, basyx_qualifier, basyx_version, basyx_revision);
 			
 			// Get sub model data
 			submodel = template.getSubModel();
 		};
 		if (basyx_submodelSemantics.equals("internal")) {
 			// Create sub model from template
-			SubmodelTemplate template = new SubmodelTemplateInternalSemantics(basyx_semantics, idType, basyx_id, basyx_idShort, basyx_category, basyx_description, basyx_qualifier, basyx_version, basyx_revision);			
+			SubmodelFacade template = new SubmodelFacadeInternalSemantics(basyx_semantics, idType, basyx_id, basyx_idShort, basyx_category, basyx_description, basyx_qualifier, basyx_version, basyx_revision);			
 			
 			// Get sub model data
 			submodel = template.getSubModel();
 		}
 		
 		// If no sub model was created, create an empty one
-		if (submodel == null) submodel = new Submodel();
+		if (submodel == null) submodel = new SubModel_();
 		
 		// Return sub model data
 		return submodel;
@@ -151,12 +177,12 @@ public class BaseConfiguredProvider extends VABHashmapProvider {
 	 * @param propertyValue Property value
 	 * @param cfgValues     Provider configuration
 	 */
-	protected HashMap<String, Object> createProperty(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
+	protected Property createProperty(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
 		
 		// Get property type
 		String propertyType = cfgValues.get(propertyName+".type").toString();
 		
-		// Dispatch to create function
+		// Dispatch to requested create function
 		if (propertyType.equals("PropertySingleValued")) return createPropertySingleValues(propertyName, propertyValue, cfgValues);
 
 		// Do not return anything

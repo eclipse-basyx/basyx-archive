@@ -1,11 +1,9 @@
 package org.eclipse.basyx.regression.xqueryprovider.tests;
 
-import static org.junit.Assert.assertTrue;
-
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
-import org.eclipse.basyx.vab.VABConnectionManager;
-import org.eclipse.basyx.vab.proxy.VABElementProxy;
+import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.junit.jupiter.api.Test;
 
 

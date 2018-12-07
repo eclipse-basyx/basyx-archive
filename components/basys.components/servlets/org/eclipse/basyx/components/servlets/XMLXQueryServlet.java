@@ -6,9 +6,10 @@ import java.io.InputStream;
 import java.util.Properties;
 import javax.servlet.ServletException;
 
-import org.eclipse.basyx.aas.backend.modelprovider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.backend.modelprovider.http.VABHTTPInterface;
+import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.components.xmlxqueryprovider.XMLXQuerySubModelProvider;
+import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
+import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
 
 
@@ -19,7 +20,7 @@ import org.eclipse.basyx.components.xmlxqueryprovider.XMLXQuerySubModelProvider;
  * @author kuhn
  *
  */
-public class XMLXQueryServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
+public class XMLXQueryServlet extends VABHTTPInterface<VABMultiSubmodelProvider<VABHashmapProvider>> {
 
 	
 	/**
@@ -89,7 +90,7 @@ public class XMLXQueryServlet extends VABHTTPInterface<VABMultiSubmodelProvider>
 		// Instantiate and add sub model provider
 		XMLXQuerySubModelProvider xmlxqSMProvider = new XMLXQuerySubModelProvider(cfgProperties);
 		// - Add sub model provider
-		this.getModelProvider().addProvider(submodelID, xmlxqSMProvider);
+		this.getModelProvider().addSubmodel(submodelID, xmlxqSMProvider);
 	}	
 }
 
