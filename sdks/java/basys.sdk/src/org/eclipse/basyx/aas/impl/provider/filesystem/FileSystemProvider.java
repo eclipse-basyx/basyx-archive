@@ -19,8 +19,6 @@ import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.eclipse.basyx.aas.impl.provider.filesystem.filesystem.File;
 import org.eclipse.basyx.aas.impl.provider.filesystem.filesystem.FileSystem;
 import org.eclipse.basyx.aas.impl.provider.filesystem.filesystem.FileType;
-import org.eclipse.basyx.aas.impl.reference.ElementRef;
-import org.eclipse.basyx.aas.impl.resources.basic._PropertyContainer;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.json.JSONObject;
@@ -248,8 +246,8 @@ public class FileSystemProvider implements IModelProvider {
 					map.put(key, mapProp.getValue(key));
 				}
 				createValue(newAddress, map);
-			} else if (newEntity instanceof _PropertyContainer) {
-				_PropertyContainer container = (_PropertyContainer) newEntity;
+			} else if (newEntity instanceof IContainerProperty) {
+				IContainerProperty container = (IContainerProperty) newEntity;
 				for (String key : container.getProperties().keySet()) {
 					createValue(newAddress + "/properties", container.getProperties().get(key));
 				}

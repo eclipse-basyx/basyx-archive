@@ -6,12 +6,12 @@ import java.util.Map;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.ICollectionProperty;
+import org.eclipse.basyx.aas.api.resources.IContainerProperty;
 import org.eclipse.basyx.aas.api.resources.IMapProperty;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.impl.provider.filesystem.TimeProvider;
-import org.eclipse.basyx.aas.impl.resources.basic._PropertyContainer;
 import org.eclipse.basyx.vab.core.IModelProvider;
 
 /**
@@ -70,8 +70,8 @@ public class HistoryPreservingProvider implements IModelProvider {
 					map.put(key, mapProp.getValue(key));
 				}
 				saveRecursive(newAddress, map, timeStamp);
-			} else if (newEntity instanceof _PropertyContainer) {
-				_PropertyContainer container = (_PropertyContainer) newEntity;
+			} else if (newEntity instanceof IContainerProperty) {
+				IContainerProperty container = (IContainerProperty) newEntity;
 				for (String key : container.getProperties().keySet()) {
 					saveRecursive(newAddress, container.getProperties().get(key), timeStamp);
 				}

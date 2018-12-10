@@ -8,15 +8,11 @@ import java.util.function.Supplier;
 import org.eclipse.basyx.aas.api.annotation.AASOperation;
 import org.eclipse.basyx.aas.api.annotation.AASProperty;
 import org.eclipse.basyx.aas.api.resources.IContainerProperty;
-import org.eclipse.basyx.aas.metamodel.builder.ElementBuilder;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel_;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.ComplexDataProperty;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.operation.Operation;
-import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
-
 
 /**
  * Provider class that converts a Java Object to a BaSys according to VWiD
@@ -25,30 +21,6 @@ import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
  *
  */
 public class JavaObjectVABMapper {
-
-	public static class TestClass {
-		@AASProperty
-		public int a = 1;
-
-		@AASProperty
-		public int b = 2;
-	}
-
-	public static void main(String[] args) {
-		TestClass test = new TestClass();
-		SubModel_ submodel = (SubModel_) new ElementBuilder(new SubModel_()).set("idShort", "MySubmodel123").build();
-
-		VABElementContainer container = new JavaObjectVABMapper(new MetaModelElementFactory()).map(submodel, test);
-
-		VABLambdaProvider p = new VABLambdaProvider(container.getAsMap());
-
-		System.out.println(p.getModelPropertyValue("properties/a/value"));
-
-		test.a = 3;
-
-		System.out.println(p.getModelPropertyValue("properties/a/value"));
-
-	}
 
 	private MetaModelElementFactory fac;
 
@@ -126,8 +98,8 @@ public class JavaObjectVABMapper {
 					ComplexDataProperty metaProperty = new ComplexDataProperty();
 
 					try {
-						scanProperties(metaProperty,  field.get(submodel));
-						scanOperations(metaProperty,  field.get(submodel));
+						scanProperties(metaProperty, field.get(submodel));
+						scanOperations(metaProperty, field.get(submodel));
 
 					} catch (IllegalAccessException e) {
 						e.printStackTrace();

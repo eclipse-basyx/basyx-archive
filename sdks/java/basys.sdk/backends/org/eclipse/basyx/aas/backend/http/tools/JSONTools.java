@@ -9,12 +9,9 @@ import java.util.function.Function;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
-import org.eclipse.basyx.aas.api.resources.IElement;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
-import org.eclipse.basyx.aas.impl.reference.ElementRef;
 import org.eclipse.basyx.vab.core.IModelProvider;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -119,7 +116,8 @@ public class JSONTools {
 	/**
 	 * Deserialize a null value
 	 */
-	protected boolean deserializeNull(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
+	protected boolean deserializeNull(JSONObject serializedValue, Map<Integer, Object> serObjRepo,
+			JSONObject repository) {
 		// Type check
 		if (!serializedValue.get("basystype").equals("null"))
 			return false;
@@ -131,7 +129,8 @@ public class JSONTools {
 	/**
 	 * Implement array type serialization
 	 */
-	protected <T> boolean doSerializeArray(JSONObject target, T[] arrayValue, String typeName, JSONObject serObjRepo, String scope) {
+	protected <T> boolean doSerializeArray(JSONObject target, T[] arrayValue, String typeName, JSONObject serObjRepo,
+			String scope) {
 		// Serialize array data
 		target.put("basystype", "array");
 		target.put("size", arrayValue.length);
@@ -151,13 +150,15 @@ public class JSONTools {
 	protected boolean serializeArrayType(JSONObject target, Object value, JSONObject serObjRepo, String scope) {
 		// Serialize known primitive types
 		if (value instanceof int[])
-			return doSerializeArray(target, Arrays.stream((int[]) value).boxed().toArray(Integer[]::new), "int", serObjRepo, scope);
+			return doSerializeArray(target, Arrays.stream((int[]) value).boxed().toArray(Integer[]::new), "int",
+					serObjRepo, scope);
 		if (value instanceof Integer[])
 			return doSerializeArray(target, (Integer[]) value, "int", serObjRepo, scope);
 		if (value instanceof Float[])
 			return doSerializeArray(target, (Float[]) value, "float", serObjRepo, scope);
 		if (value instanceof double[])
-			return doSerializeArray(target, Arrays.stream((double[]) value).boxed().toArray(Double[]::new), "double", serObjRepo, scope);
+			return doSerializeArray(target, Arrays.stream((double[]) value).boxed().toArray(Double[]::new), "double",
+					serObjRepo, scope);
 		if (value instanceof Double[])
 			return doSerializeArray(target, (Double[]) value, "double", serObjRepo, scope);
 		if (value instanceof Character[])
@@ -177,7 +178,8 @@ public class JSONTools {
 	 * Implement array type deserialization
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T> Object doDeserializeArray(JSONObject serializedValue, T[] arrayValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
+	protected <T> Object doDeserializeArray(JSONObject serializedValue, T[] arrayValue, Map<Integer, Object> serObjRepo,
+			JSONObject repository) {
 		// Deserialize array data
 		for (int i = 0; i < arrayValue.length; i++) {
 			// Get JSON Object with value
@@ -193,7 +195,8 @@ public class JSONTools {
 	/**
 	 * Deserialize an array
 	 */
-	protected Object deserializeArrayType(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
+	protected Object deserializeArrayType(JSONObject serializedValue, Map<Integer, Object> serObjRepo,
+			JSONObject repository) {
 		// Type check
 		if (!serializedValue.get("basystype").equals("array"))
 			return null;
@@ -201,25 +204,32 @@ public class JSONTools {
 		// Create array
 		switch ((String) serializedValue.get("type")) {
 		case "int": {
-			return doDeserializeArray(serializedValue, new Integer[(int) serializedValue.get("size")], serObjRepo, repository);
+			return doDeserializeArray(serializedValue, new Integer[(int) serializedValue.get("size")], serObjRepo,
+					repository);
 		}
 		case "float": {
-			return doDeserializeArray(serializedValue, new Float[(int) serializedValue.get("size")], serObjRepo, repository);
+			return doDeserializeArray(serializedValue, new Float[(int) serializedValue.get("size")], serObjRepo,
+					repository);
 		}
 		case "double": {
-			return doDeserializeArray(serializedValue, new Double[(int) serializedValue.get("size")], serObjRepo, repository);
+			return doDeserializeArray(serializedValue, new Double[(int) serializedValue.get("size")], serObjRepo,
+					repository);
 		}
 		case "character": {
-			return doDeserializeArray(serializedValue, new Character[(int) serializedValue.get("size")], serObjRepo, repository);
+			return doDeserializeArray(serializedValue, new Character[(int) serializedValue.get("size")], serObjRepo,
+					repository);
 		}
 		case "boolean": {
-			return doDeserializeArray(serializedValue, new Boolean[(int) serializedValue.get("size")], serObjRepo, repository);
+			return doDeserializeArray(serializedValue, new Boolean[(int) serializedValue.get("size")], serObjRepo,
+					repository);
 		}
 		case "string": {
-			return doDeserializeArray(serializedValue, new String[(int) serializedValue.get("size")], serObjRepo, repository);
+			return doDeserializeArray(serializedValue, new String[(int) serializedValue.get("size")], serObjRepo,
+					repository);
 		}
 		case "object": {
-			return doDeserializeArray(serializedValue, new Object[(int) serializedValue.get("size")], serObjRepo, repository);
+			return doDeserializeArray(serializedValue, new Object[(int) serializedValue.get("size")], serObjRepo,
+					repository);
 		}
 		}
 
@@ -243,7 +253,8 @@ public class JSONTools {
 	/**
 	 * Deserialize a simple type
 	 */
-	protected Object deserializePrimitiveType(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
+	protected Object deserializePrimitiveType(JSONObject serializedValue, Map<Integer, Object> serObjRepo,
+			JSONObject repository) {
 
 		// Deserialize known primitive types
 		if (isPrimitive(serializedValue))
@@ -286,41 +297,42 @@ public class JSONTools {
 		return target;
 	}
 
-	/**
-	 * Deserialize a property reference
-	 */
-	protected Object deserializeElementReference(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
-		// Type check
-		if (!(serializedValue.get("basystype").equals("ref")))
-			return null;
-
-		// Get referenced address
-		String refAAS = "";
-		if (serializedValue.has("aas"))
-			refAAS = (String) serializedValue.get("aas");
-		String refSM = "";
-		if (serializedValue.has("submodel"))
-			refSM = (String) serializedValue.get("submodel");
-		String refPath = "";
-		if (serializedValue.has("path"))
-			refPath = (String) serializedValue.get("path");
-
-		// Create return value
-		ElementRef result = new ElementRef(refAAS, refSM, refPath);
-
-		System.out.println("Deserialized " + serializedValue);
-		try {
-
-			// Deserialize map and collection information
-			String thekind = (String) serializedValue.get("thekind");
-			result.setKind(thekind);
-		} catch (JSONException e) {
-			// Lleave out if it is not map or collection
-		}
-
-		// Return deserialized element
-		return result;
-	}
+	// /**
+	// * Deserialize a property reference
+	// */
+	// protected Object deserializeElementReference(JSONObject serializedValue,
+	// Map<Integer, Object> serObjRepo, JSONObject repository) {
+	// // Type check
+	// if (!(serializedValue.get("basystype").equals("ref")))
+	// return null;
+	//
+	// // Get referenced address
+	// String refAAS = "";
+	// if (serializedValue.has("aas"))
+	// refAAS = (String) serializedValue.get("aas");
+	// String refSM = "";
+	// if (serializedValue.has("submodel"))
+	// refSM = (String) serializedValue.get("submodel");
+	// String refPath = "";
+	// if (serializedValue.has("path"))
+	// refPath = (String) serializedValue.get("path");
+	//
+	// // Create return value
+	// ElementRef result = new ElementRef(refAAS, refSM, refPath);
+	//
+	// System.out.println("Deserialized " + serializedValue);
+	// try {
+	//
+	// // Deserialize map and collection information
+	// String thekind = (String) serializedValue.get("thekind");
+	// result.setKind(thekind);
+	// } catch (JSONException e) {
+	// // Lleave out if it is not map or collection
+	// }
+	//
+	// // Return deserialized element
+	// return result;
+	// }
 
 	/**
 	 * Serialize a property into JSON object TODO make this class independent from
@@ -341,21 +353,22 @@ public class JSONTools {
 		// Return serialized value
 		return returnValue;
 	}
-
-	/**
-	 * Serialize an IElement
-	 */
-	protected boolean serializeIElement(JSONObject target, Object value, JSONObject serObjRepo, String scope) {
-		// Type check
-		if (!(value instanceof IElement))
-			return false;
-
-		// Create reference
-		IElementReference reference = new ElementRef((IElement) value);
-
-		// Serialize IElementReference
-		return serializeIElementRef(target, reference, serObjRepo, scope);
-	}
+	//
+	// /**
+	// * Serialize an IElement
+	// */
+	// protected boolean serializeIElement(JSONObject target, Object value,
+	// JSONObject serObjRepo, String scope) {
+	// // Type check
+	// if (!(value instanceof IElement))
+	// return false;
+	//
+	// // Create reference
+	// IElementReference reference = new ElementRef((IElement) value);
+	//
+	// // Serialize IElementReference
+	// return serializeIElementRef(target, reference, serObjRepo, scope);
+	// }
 
 	/**
 	 * Serialize an IElement reference
@@ -441,7 +454,8 @@ public class JSONTools {
 	/**
 	 * Deserialize a map
 	 */
-	protected Object deserializeMapType(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
+	protected Object deserializeMapType(JSONObject serializedValue, Map<Integer, Object> serObjRepo,
+			JSONObject repository) {
 		// Serialize known primitive types
 		if (!(serializedValue.get("basystype").equals("map")))
 			return null;
@@ -494,7 +508,8 @@ public class JSONTools {
 	/**
 	 * Deserialize a collection
 	 */
-	protected Object deserializeCollectionType(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
+	protected Object deserializeCollectionType(JSONObject serializedValue, Map<Integer, Object> serObjRepo,
+			JSONObject repository) {
 		// Deserialize known types
 		if (!(serializedValue.get("basystype").equals("collection")))
 			return null;
@@ -612,8 +627,8 @@ public class JSONTools {
 			return returnValue;
 		if (serializeMapType(returnValue, value, serObjRepo, scope))
 			return returnValue;
-		if (serializeIElement(returnValue, value, serObjRepo, scope))
-			return returnValue;
+		// if (serializeIElement(returnValue, value, serObjRepo, scope))
+		// return returnValue;
 		if (serializeIElementRef(returnValue, value, serObjRepo, scope))
 			return returnValue;
 		if (serializeException(returnValue, value))
@@ -657,8 +672,9 @@ public class JSONTools {
 			return returnValue;
 		if ((returnValue = deserializeMapType(serializedValue, serObjRepo, repository)) != null)
 			return returnValue;
-		if ((returnValue = deserializeElementReference(serializedValue, serObjRepo, repository)) != null)
-			return returnValue;
+		// if ((returnValue = deserializeElementReference(serializedValue, serObjRepo,
+		// repository)) != null)
+		// return returnValue;
 		if ((returnValue = deserializeException(serializedValue)) != null)
 			return returnValue;
 		if ((returnValue = deserializeOperation(serializedValue)) != null)
