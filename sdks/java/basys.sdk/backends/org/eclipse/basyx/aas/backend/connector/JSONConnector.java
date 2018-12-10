@@ -1,8 +1,5 @@
 package org.eclipse.basyx.aas.backend.connector;
 
-import java.util.Map;
-
-import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.json.JSONException;
@@ -126,12 +123,6 @@ public class JSONConnector implements IModelProvider {
 
 		// Deserialize response
 		return result;
-	}
-
-	@Override
-	public Map<String, IElementReference> getContainedElements(String path) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**

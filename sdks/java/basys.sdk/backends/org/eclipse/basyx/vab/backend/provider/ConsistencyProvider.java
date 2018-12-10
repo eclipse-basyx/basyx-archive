@@ -1,9 +1,6 @@
 package org.eclipse.basyx.vab.backend.provider;
 
-import java.util.Map;
-
 import org.eclipse.basyx.aas.api.exception.ReadOnlyException;
-import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.services.ILocalModelProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
 
@@ -162,8 +159,4 @@ public class ConsistencyProvider<T extends IModelProvider> implements ILocalMode
 		return providerBackend.invokeOperation(path, parameter);
 	}
 
-	@Override
-	public Map<String, IElementReference> getContainedElements(String path) {
-		return providerBackend.getContainedElements(path);
-	}
 }

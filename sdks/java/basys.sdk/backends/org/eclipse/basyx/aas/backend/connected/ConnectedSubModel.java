@@ -3,7 +3,6 @@ package org.eclipse.basyx.aas.backend.connected;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.resources.IElement;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
@@ -16,18 +15,6 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 
 	public ConnectedSubModel(String path, VABElementProxy proxy) {
 		super(path, proxy);
-	}
-
-	@Override
-	public IElement getElement(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<String, IElement> getElements() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@SuppressWarnings("unchecked")

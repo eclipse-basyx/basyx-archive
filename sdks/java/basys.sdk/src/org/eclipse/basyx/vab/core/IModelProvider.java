@@ -1,9 +1,5 @@
 package org.eclipse.basyx.vab.core;
 
-import java.util.Map;
-
-import org.eclipse.basyx.aas.api.reference.IElementReference;
-
 /**
  * Basic model provider backend interface
  * 
@@ -69,16 +65,4 @@ public interface IModelProvider {
 	 */
 	public Object invokeOperation(String path, Object[] parameter) throws Exception;
 
-	/**
-	 * Get contained elements
-	 * 
-	 * Contained sub model elements are returned as Map of key/value pairs. Keys are
-	 * Strings, values are either primitive values or ElementRef objects that
-	 * contain a reference to a complex object instance.
-	 * 
-	 * @param path
-	 *            Path to sub model or property
-	 * @return Collection of contained elements
-	 */
-	public Map<String, IElementReference> getContainedElements(String path);
 }

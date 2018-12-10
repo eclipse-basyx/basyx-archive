@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
@@ -223,9 +222,4 @@ public class VABMultiSubmodelProvider<T extends VABHashmapProvider> implements I
 				parameter);
 	}
 
-	@Override
-	public Map<String, IElementReference> getContainedElements(String path) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

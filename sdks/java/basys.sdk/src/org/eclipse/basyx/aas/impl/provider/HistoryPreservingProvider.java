@@ -3,7 +3,6 @@ package org.eclipse.basyx.aas.impl.provider;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.ICollectionProperty;
 import org.eclipse.basyx.aas.api.resources.IContainerProperty;
@@ -120,11 +119,6 @@ public class HistoryPreservingProvider implements IModelProvider {
 	@Override
 	public Object invokeOperation(String path, Object[] parameter) throws Exception {
 		return mainProvider.invokeOperation(path, parameter);
-	}
-
-	@Override
-	public Map<String, IElementReference> getContainedElements(String path) {
-		return mainProvider.getContainedElements(path);
 	}
 
 }

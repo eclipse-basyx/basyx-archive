@@ -292,12 +292,6 @@ public class FileSystemProvider implements IModelProvider {
 		throw new FeatureNotImplementedException();
 	}
 
-	@Override
-	public Map<String, IElementReference> getContainedElements(String path) {
-		// TODO: Implement!
-		throw new FeatureNotImplementedException();
-	}
-
 	private void createDirectory(String path) throws Exception {
 		fileSystem.createDirectory(pathFilter(path));
 	}
