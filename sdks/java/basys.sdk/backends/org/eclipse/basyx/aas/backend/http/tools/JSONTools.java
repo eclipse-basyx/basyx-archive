@@ -61,6 +61,20 @@ public class JSONTools {
 			return null;
 
 		// Return serialized value
+		if (serializedValue.getString("typeid").equals("int"))
+			return serializedValue.getInt("value");
+		if (serializedValue.getString("typeid").equals("float"))
+			return serializedValue.getFloat("value");
+		if (serializedValue.getString("typeid").equals("double"))
+			return serializedValue.getDouble("value");
+		if (serializedValue.getString("typeid").equals("string"))
+			return serializedValue.getString("value");
+		if (serializedValue.getString("typeid").equals("boolean"))
+			return serializedValue.getBoolean("value");
+	//	if (serializedValue.getString("type").equals("character")) 
+	//		return  serializedValue.get("value");
+		
+
 		return serializedValue.get("value");
 	}
 
