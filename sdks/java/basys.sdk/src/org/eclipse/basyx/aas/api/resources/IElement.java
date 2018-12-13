@@ -26,21 +26,6 @@ public interface IElement {
 	public void setId(String id);
 
 	/**
-	 * Get IElement properties
-	 * 
-	 * @return
-	 */
-
-	// public Map<String, IProperty> getProperties();
-
-	/**
-	 * Get IElement operations
-	 * 
-	 * @return IElement operations
-	 */
-	// public Map<String, IOperation> getOperations();
-
-	/**
 	 * Set parent element
 	 */
 	public void setParent(BaseElement parent);

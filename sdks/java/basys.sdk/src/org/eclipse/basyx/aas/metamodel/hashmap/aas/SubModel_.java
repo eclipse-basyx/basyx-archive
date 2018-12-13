@@ -3,7 +3,6 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.resources.IElement;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
@@ -40,7 +39,6 @@ public class SubModel_ extends HashMap<String, Object> implements VABElementCont
 	 */
 	protected Map<String, IOperation> operations = new HashMap<>();
 
-	
 	/**
 	 * Constructor
 	 */
@@ -61,7 +59,6 @@ public class SubModel_ extends HashMap<String, Object> implements VABElementCont
 		put("operations", operations);
 	}
 
-	
 	/**
 	 * Constructor
 	 */
@@ -74,15 +71,14 @@ public class SubModel_ extends HashMap<String, Object> implements VABElementCont
 		putAll(typeable);
 
 		// Default values
-		put("id_carrier",            null);
+		put("id_carrier", null);
 		put("id_submodelDefinition", null);
-		
+
 		// Properties
 		put("properties", properties);
 		put("operations", operations);
 	}
 
-	
 	/**
 	 * Get submodel properties
 	 */
@@ -134,30 +130,6 @@ public class SubModel_ extends HashMap<String, Object> implements VABElementCont
 	@Override
 	public Map<String, Object> getAsMap() {
 		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.basyx.aas.api.resources.IElementContainer#getElement(java.lang.
-	 * String)
-	 */
-	@Override
-	public IElement getElement(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.basyx.aas.api.resources.IElementContainer#getElements()
-	 */
-	@Override
-	public Map<String, IElement> getElements() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/*

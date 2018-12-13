@@ -6,7 +6,6 @@ import java.net.Socket;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.connector.IBaSyxConnector;
-import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.eclipse.basyx.vab.backend.server.basyx.CoderTools;
 import org.eclipse.basyx.vab.backend.server.basyx.VABBaSyxTCPInterface;
 import org.json.JSONObject;
@@ -81,16 +80,9 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 * Invoke a BaSys get operation via HTTP
 	 */
 	@Override
-	public Object getModelPropertyValue(String address) {
-		// Create call
-		byte[] call = new byte[4 + 1 + 4 + address.length()];
-		// - Encode size does not include leading four bytes
-		CoderTools.setInt32(call, 0, call.length - 4);
-		// - Encode operation GET
-		CoderTools.setInt8(call, 4, VABBaSyxTCPInterface.BASYX_GET);
-		// - Encode path length and path
-		CoderTools.setInt32(call, 5, address.length());
-		CoderTools.setString(call, 9, address);
+	public Object getModelPropertyValue(String servicePath) {
+
+		byte[] call = createCall(servicePath, VABBaSyxTCPInterface.BASYX_GET);
 
 		// Invoke BaSyx call and return result
 		return invokeBaSyx(call);
@@ -105,47 +97,32 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 */
 	@Override
 	public Object setModelPropertyValue(String servicePath, JSONObject newValue) {
-		// Serialize value
-		JSONObject jsonObject = JSONTools.Instance.serialize(newValue);
 
-		// Create call
-		byte[] call = new byte[4 + 1 + 4 + servicePath.length() + 4 + jsonObject.toString().length()];
-		// - Encode size does not include leading four bytes
-		CoderTools.setInt32(call, 0, call.length - 4);
-		// - Encode operation SET
-		CoderTools.setInt8(call, 4, VABBaSyxTCPInterface.BASYX_SET);
-		// - Encode path
-		CoderTools.setInt32(call, 5, servicePath.length());
-		CoderTools.setString(call, 9, servicePath);
-		// - Encode value
-		CoderTools.setInt32(call, 9 + servicePath.length(), jsonObject.toString().length());
-		CoderTools.setString(call, 9 + servicePath.length() + 4, jsonObject.toString());
+		byte[] call = createCall(servicePath, newValue, VABBaSyxTCPInterface.BASYX_SET);
 
 		// Invoke BaSyx call and return result
 		return invokeBaSyx(call);
 	}
 
+	/**
+	 * Invoke a BaSys Create operation
+	 */
 	@Override
-	public Object createValue(String servicePath, JSONObject obj) throws ServerException {
-		// TODO
-		throw new RuntimeException("Action is not supported yet");
+	public Object createValue(String servicePath, JSONObject newValue) throws ServerException {
+
+		byte[] call = createCall(servicePath, newValue, VABBaSyxTCPInterface.BASYX_CREATE);
+
+		// Invoke BaSyx call and return result
+		return invokeBaSyx(call);
 	}
 
+	/**
+	 * Invoke a Basys invoke operation.
+	 */
 	@Override
 	public Object invokeOperation(String servicePath, JSONObject parameters) throws ServerException {
 
-		// Create call
-		byte[] call = new byte[4 + 1 + 4 + servicePath.length() + 4 + parameters.toString().length()];
-		// - Encode size does not include leading four bytes
-		CoderTools.setInt32(call, 0, call.length - 4);
-		// - Encode operation SET
-		CoderTools.setInt8(call, 4, VABBaSyxTCPInterface.BASYX_INVOKE);
-		// - Encode path
-		CoderTools.setInt32(call, 5, servicePath.length());
-		CoderTools.setString(call, 9, servicePath);
-		// - Encode value
-		CoderTools.setInt32(call, 9 + servicePath.length(), parameters.toString().length());
-		CoderTools.setString(call, 9 + servicePath.length() + 4, parameters.toString());
+		byte[] call = createCall(servicePath, parameters, VABBaSyxTCPInterface.BASYX_INVOKE);
 
 		// Invoke BaSyx call and return result
 		return invokeBaSyx(call);
@@ -153,15 +130,18 @@ public class BaSyxConnector implements IBaSyxConnector {
 	}
 
 	/**
-	 * Invoke a Basys operation. Deletes any resource under the given path
+	 * Invoke a Basys delete operation. Deletes any resource under the given path
 	 * 
 	 * @throws ServerException
 	 *             that carries the Exceptions thrown on the server
 	 */
 	@Override
 	public Object deleteValue(String servicePath) throws ServerException {
-		// TODO
-		throw new RuntimeException("Not Implemented yet");
+
+		byte[] call = createCall(servicePath, VABBaSyxTCPInterface.BASYX_DELETE);
+
+		// Invoke BaSyx call and return result
+		return invokeBaSyx(call);
 	}
 
 	/**
@@ -174,12 +154,51 @@ public class BaSyxConnector implements IBaSyxConnector {
 	@Override
 	public Object deleteValue(String servicePath, JSONObject jsonObject) throws ServerException {
 
+		byte[] call = createCall(servicePath, jsonObject, VABBaSyxTCPInterface.BASYX_DELETE);
+
+		// Invoke BaSyx call and return result
+		return invokeBaSyx(call);
+	}
+
+	/**
+	 * Create non-parameterized call that can be used as an argument to the
+	 * invokeBaSyx function
+	 * 
+	 * @param servicePath
+	 * @param jsonObject
+	 * @return
+	 */
+	private byte[] createCall(String servicePath, byte callType) {
+		// Create call
+		byte[] call = new byte[4 + 1 + 4 + servicePath.length()];
+		// - Encode size does not include leading four bytes
+		CoderTools.setInt32(call, 0, call.length - 4);
+		// - Encode operation GET
+		CoderTools.setInt8(call, 4, callType);
+		// - Encode path length and path
+		CoderTools.setInt32(call, 5, servicePath.length());
+		CoderTools.setString(call, 9, servicePath);
+
+		return call;
+	}
+
+	/**
+	 * Create parameterized byte call that can be used as an argument to the
+	 * invokeBaSyx function
+	 * 
+	 * @param servicePath
+	 * @param jsonObject
+	 * @param callType
+	 * @return
+	 */
+	private byte[] createCall(String servicePath, JSONObject jsonObject, byte callType) {
+
 		// Create call
 		byte[] call = new byte[4 + 1 + 4 + servicePath.length() + 4 + jsonObject.toString().length()];
 		// - Encode size does not include leading four bytes
 		CoderTools.setInt32(call, 0, call.length - 4);
 		// - Encode operation SET
-		CoderTools.setInt8(call, 4, VABBaSyxTCPInterface.BASYX_DELETE);
+		CoderTools.setInt8(call, 4, callType);
 		// - Encode path
 		CoderTools.setInt32(call, 5, servicePath.length());
 		CoderTools.setString(call, 9, servicePath);
@@ -187,8 +206,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 		CoderTools.setInt32(call, 9 + servicePath.length(), jsonObject.toString().length());
 		CoderTools.setString(call, 9 + servicePath.length() + 4, jsonObject.toString());
 
-		// Invoke BaSyx call and return result
-		return invokeBaSyx(call);
+		return call;
 	}
 
 	@Override

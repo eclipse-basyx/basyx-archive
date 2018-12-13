@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.IElement;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -18,18 +17,6 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	public ConnectedAssetAdministrationShell(String path, VABElementProxy proxy, VABConnectionManager manager) {
 		super(path, proxy);
 		this.manager = manager;
-	}
-
-	@Override
-	public IElement getElement(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<String, IElement> getElements() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
-import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 
@@ -25,7 +24,6 @@ public class VABHashmapProvider implements IModelProvider {
 	 */
 	protected Map<String, Object> elements;
 
-
 	/**
 	 * Default constructor
 	 */
@@ -33,14 +31,12 @@ public class VABHashmapProvider implements IModelProvider {
 		this.elements = new HashMap<>();
 	}
 
-	
 	/**
 	 * Constructor that accepts an initial HashMap
 	 */
 	public VABHashmapProvider(Map<String, Object> elements) {
 		this.elements = elements;
 	}
-	
 
 	/**
 	 * Get Elements for AAS or Submodel request
@@ -48,15 +44,13 @@ public class VABHashmapProvider implements IModelProvider {
 	public Map<String, Object> getElements() {
 		return elements;
 	}
-	
-	
+
 	/**
 	 * Set elements (only for derived classes, e.g. facades)
 	 */
 	protected void setElements(Map<String, Object> newElements) {
 		elements = newElements;
 	}
-	
 
 	/**
 	 * Get the parent of an element in this provider. The scope is always a map. The
@@ -218,14 +212,6 @@ public class VABHashmapProvider implements IModelProvider {
 		} catch (Exception e) {
 			throw new ServerException(e.getClass().toString(), e.getMessage());
 		}
-	}
-
-	@Override
-	public Map<String, IElementReference> getContainedElements(String path) {
-		System.out.println("Get contained elements:" + path);
-
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

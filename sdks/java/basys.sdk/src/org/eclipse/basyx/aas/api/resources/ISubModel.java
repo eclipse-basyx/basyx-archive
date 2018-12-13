@@ -8,7 +8,7 @@ import java.util.Map;
  * @author kuhn
  *
  */
-public interface ISubModel extends IElementContainer {
+public interface ISubModel extends IElement {
 
 	/**
 	 * Clone this sub model. Cloned sub models are no longer frozen

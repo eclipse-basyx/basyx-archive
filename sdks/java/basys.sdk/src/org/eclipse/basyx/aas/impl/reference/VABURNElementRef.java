@@ -4,10 +4,7 @@ import org.eclipse.basyx.aas.api.exception.UnknownElementTypeException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.IElement;
-import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
-import org.eclipse.basyx.aas.impl.resources.basic._Event;
-import org.eclipse.basyx.aas.impl.resources.basic._Operation;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.eclipse.basyx.aas.impl.tools.ElementTools;
 import org.eclipse.basyx.vab.core.ref.VABElementRef;
@@ -86,21 +83,21 @@ public class VABURNElementRef extends VABElementRef implements IElementReference
 		else if (element instanceof ISubModel) {
 			legalBody = ElementTools.getAASID(element);
 			subUnit = element.getId();
-		}
-		// - Sub model property, event or operation
-		// - FIXME: Interface types
-		else if (element instanceof IProperty) {
-			legalBody = ElementTools.getAASID(element);
-			subUnit = ElementTools.getSubmodelID(element);
-			elementPath = ElementTools.getFullPathToProperty(element);
-		} else if (element instanceof _Operation) {
-			legalBody = ElementTools.getAASID(element);
-			subUnit = ElementTools.getSubmodelID(element);
-			elementPath = ElementTools.getFullPathToProperty(element);
-		} else if (element instanceof _Event) {
-			legalBody = ElementTools.getAASID(element);
-			subUnit = ElementTools.getSubmodelID(element);
-			elementPath = ElementTools.getFullPathToProperty(element);
+			// }
+			// // - Sub model property, event or operation
+			// // - FIXME: Interface types
+			// else if (element instanceof IProperty) {
+			// legalBody = ElementTools.getAASID(element);
+			// subUnit = ElementTools.getSubmodelID(element);
+			// elementPath = ElementTools.getFullPathToProperty(element);
+			// } else if (element instanceof _Operation) {
+			// legalBody = ElementTools.getAASID(element);
+			// subUnit = ElementTools.getSubmodelID(element);
+			// elementPath = ElementTools.getFullPathToProperty(element);
+			// } else if (element instanceof _Event) {
+			// legalBody = ElementTools.getAASID(element);
+			// subUnit = ElementTools.getSubmodelID(element);
+			// elementPath = ElementTools.getFullPathToProperty(element);
 		} else {
 			// Element type is not known...
 			throw new UnknownElementTypeException();
