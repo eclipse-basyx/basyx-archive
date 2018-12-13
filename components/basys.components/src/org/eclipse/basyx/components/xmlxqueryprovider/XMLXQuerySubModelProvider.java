@@ -17,7 +17,7 @@ import javax.xml.xquery.XQSequence;
 import javax.xml.xquery.XQStaticContext;
 
 import org.eclipse.basyx.aas.api.reference.IElementReference;
-import org.eclipse.basyx.vab.core.IModelProvider;
+import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
@@ -31,7 +31,7 @@ import com.saxonica.xqj.SaxonXQDataSource;
  * @author kuhn
  *
  */
-public class XMLXQuerySubModelProvider implements IModelProvider {
+public class XMLXQuerySubModelProvider extends BaseConfiguredProvider {
 
 	
 	/**
@@ -72,6 +72,8 @@ public class XMLXQuerySubModelProvider implements IModelProvider {
 	 * Constructor
 	 */
 	public XMLXQuerySubModelProvider(Properties cfgValues) {
+		// Invoke base constructor
+		super(cfgValues);
 
 		// Extract configuration properties
 		workingDir          = cfgValues.getProperty("workingDir");

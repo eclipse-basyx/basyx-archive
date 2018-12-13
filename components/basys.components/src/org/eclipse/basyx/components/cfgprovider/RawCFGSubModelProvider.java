@@ -45,7 +45,11 @@ public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 			}
 			
 			System.out.println("Putting:"+key+" = "+cfgValues.get(key));
-			scope.put(path[path.length-1], cfgValues.get(key));
+			
+			//if (cfgValues.get(key).equals("8"))
+				//scope.put(path[path.length-1], Integer.parseInt((String) cfgValues.get(key)));
+			//else
+				scope.put(path[path.length-1], cfgValues.get(key));
 		}
 
 		

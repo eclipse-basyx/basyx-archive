@@ -50,7 +50,7 @@ public class XMLXQueryServlet extends VABHTTPInterface<VABMultiSubmodelProvider<
 	 */
 	public XMLXQueryServlet() {
 		// Invoke base constructor
-		super(new VABMultiSubmodelProvider());
+		super(new VABMultiSubmodelProvider<VABHashmapProvider>());
 	}
 	
 	
