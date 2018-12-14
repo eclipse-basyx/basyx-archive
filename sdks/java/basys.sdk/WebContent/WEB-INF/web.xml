@@ -129,4 +129,15 @@
     <servlet-name>StubRestAASServlet</servlet-name>
     <url-pattern>/Testsuite/RestAAS/*</url-pattern>
   </servlet-mapping>
+  
+  
+  <servlet>
+    <servlet-name>Test_StubAASServlet</servlet-name>
+    <servlet-class>org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.StubAASServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Test_StubAASServlet</servlet-name>
+    <url-pattern>/Testsuite/StubAAS/*</url-pattern>
+  </servlet-mapping>
+  
 </web-app>
