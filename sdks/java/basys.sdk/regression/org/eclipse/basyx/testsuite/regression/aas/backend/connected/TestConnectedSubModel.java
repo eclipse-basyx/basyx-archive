@@ -52,7 +52,7 @@ public class TestConnectedSubModel {
 
 		// Create the SubModel using the created property and operation
 		SubModel_ sm = factory.create(new SubModel_(), Collections.singletonList(propertyMeta), Collections.singletonList(op));
-		sm.put("idShort", ID);
+		sm.setId(ID);
 
 		// Create a dummy connection manager containing the created SubModel map
 		VABConnectionManager manager = new VABConnectionManagerStub(new VABHashmapProvider(sm));

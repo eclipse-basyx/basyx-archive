@@ -1,14 +1,8 @@
 package org.eclipse.basyx.testsuite.support.backend.basyx.servers;
 
+import org.eclipse.basyx.testsuite.support.vab.stub.elements.SimpleVABElement;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
-import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.aas.Stub1AAS;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.aas.Stub2AAS;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.MainSMSubmodel;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub1Submodel;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.submodel.Stub2Submodel;
-import org.eclipse.basyx.testsuite.support.vab.stub.elements.SimpleVABElement;
 
 
 

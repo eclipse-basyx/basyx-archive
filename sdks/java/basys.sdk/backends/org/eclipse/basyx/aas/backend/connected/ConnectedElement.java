@@ -1,7 +1,6 @@
 package org.eclipse.basyx.aas.backend.connected;
 
 import org.eclipse.basyx.aas.api.resources.IElement;
-import org.eclipse.basyx.aas.impl.resources.basic.BaseElement;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 public class ConnectedElement implements IElement {
@@ -39,18 +38,6 @@ public class ConnectedElement implements IElement {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void setParent(BaseElement parent) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public BaseElement getParent() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

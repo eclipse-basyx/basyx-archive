@@ -1,6 +1,5 @@
 package org.eclipse.basyx.aas.api.resources;
 
-import org.eclipse.basyx.aas.impl.resources.basic.BaseElement;
 
 /**
  * Base interface for all AAS elements
@@ -24,15 +23,5 @@ public interface IElement {
 	 *            New/updated element id
 	 */
 	public void setId(String id);
-
-	/**
-	 * Set parent element
-	 */
-	public void setParent(BaseElement parent);
-
-	/**
-	 * Get parent element
-	 */
-	public BaseElement getParent();
 
 }

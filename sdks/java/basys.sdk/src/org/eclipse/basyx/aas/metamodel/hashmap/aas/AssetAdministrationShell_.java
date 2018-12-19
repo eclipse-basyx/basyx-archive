@@ -1,8 +1,10 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas;
 
 
+import java.util.HashMap;
 import java.util.HashSet;
 
+import org.eclipse.basyx.aas.api.resources.IElement;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.impl.reference.VABURNElementRef;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
@@ -20,10 +22,14 @@ import org.eclipse.basyx.vab.core.ref.VABElementRef;
  * 
  * FIXME: Add dictionary and securityAttributes
  * 
+ * Does not implement IAssetAdministrationShell since there are only references stored in this map
+ * 
  * @author kuhn
  *
  */
-public class AssetAdministrationShell_ extends VABModelMap<Object>  {
+
+public class AssetAdministrationShell_ extends HashMap<String, Object> implements IElement { 
+
 
 	
 	/**
@@ -94,7 +100,9 @@ public class AssetAdministrationShell_ extends VABModelMap<Object>  {
 	}
 	
 
-
+	/**
+	 * Add a submodel as reference
+	 */
 	public void addSubModel(ISubModel subModel) {
 		System.out.println("adding Submodel "+ subModel.getId());
 		
@@ -102,6 +110,24 @@ public class AssetAdministrationShell_ extends VABModelMap<Object>  {
 		
 		System.out.println("added Submodel "+ getSubModels());
 		
+	}
+
+
+	/**
+	 * Get AAS Id
+	 */
+	@Override
+	public String getId() {
+		return (String) get("idShort");
+	}
+
+
+	/**
+	 * Set AAS Id
+	 */
+	@Override
+	public void setId(String id) {
+		put("idShort", id);
 	}
 
 

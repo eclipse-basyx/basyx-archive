@@ -5,7 +5,6 @@ import java.util.Map;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
-import org.eclipse.basyx.aas.impl.resources.basic.BaseElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.Property;
@@ -146,57 +145,23 @@ public class SubModel_ extends VABModelMap<Object> implements VABElementContaine
 		return this;
 	}
 
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.basyx.aas.api.resources.IElement#getId()
+	/**
+	 * Get the Id of the submodel
 	 */
 	@Override
 	public String getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return (String) get("idShort");
 	}
 
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.basyx.aas.api.resources.IElement#setId(java.lang.String)
+
+	/**
+	 * Set the Id of the submodel
 	 */
 	@Override
 	public void setId(String id) {
-		// TODO Auto-generated method stub
-
+		put("idShort", id);
 	}
 
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.basyx.aas.api.resources.IElement#setParent(org.eclipse.basyx.aas.
-	 * impl.resources.basic.BaseElement)
-	 */
-	@Override
-	public void setParent(BaseElement parent) {
-		// TODO Auto-generated method stub
-
-	}
-
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.basyx.aas.api.resources.IElement#getParent()
-	 */
-	@Override
-	public BaseElement getParent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
 	@SuppressWarnings("unchecked")
 	protected void addProperty(Property prop) {
 		((Map<String, Object>) get("properties")).put(prop.getId(), prop);

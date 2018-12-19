@@ -73,5 +73,6 @@ public class TestHTTPAAS {
 		assertEquals(StubAASServlet.smId, sm.getId());
 
 		// TODO: Extend
+		// - retrieve properties and operations
 	}
 }
