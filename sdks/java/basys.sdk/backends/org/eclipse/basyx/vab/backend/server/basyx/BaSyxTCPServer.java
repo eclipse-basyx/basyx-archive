@@ -39,7 +39,7 @@ public class BaSyxTCPServer<T extends IModelProvider> extends Thread {
 		
 		// Create server socket
 		try {
-			tcpServerSocket = new ServerSocket(6998);
+			tcpServerSocket = new ServerSocket(serverPort);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
