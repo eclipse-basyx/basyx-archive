@@ -45,7 +45,7 @@ public class SerializeDeserializeCollection {
 		System.out.println("Serialized JSON:"+serVal1);
 		
 		// Deserialize collections
-		Collection<Integer> integerColl1 = (Collection<Integer>) JSONTools.Instance.deserialize(serVal1); // FIXME HashSet gets deserialized to LinkedList
+		Collection<Integer> integerColl1 = (Collection<Integer>) JSONTools.Instance.deserialize(serVal1); 
 		Collection<Integer> integerColl2 = (Collection<Integer>) JSONTools.Instance.deserialize(serVal2);
 		Collection<Object>  objectColl1  = (Collection<Object>)  JSONTools.Instance.deserialize(serVal3);
 		

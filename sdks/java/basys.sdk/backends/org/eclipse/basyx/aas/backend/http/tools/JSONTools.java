@@ -2,8 +2,10 @@ package org.eclipse.basyx.aas.backend.http.tools;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
@@ -505,10 +507,15 @@ public class JSONTools {
 		if (value instanceof Collection) {
 			// Convert to collection
 			Collection<Object> collection = (Collection<Object>) value;
-
+			
 			// Convert elements
 			// - Substructure defines a collection
-			target.put("basystype", "collection");
+			if (value instanceof Set)  target.put("basystype", "set");
+			else {
+
+				target.put("basystype", "collection");
+			}
+			
 			target.put("size", collection.size());
 
 			// Serialize collection elements
@@ -528,12 +535,20 @@ public class JSONTools {
 	 */
 	protected Object deserializeCollectionType(JSONObject serializedValue, Map<Integer, Object> serObjRepo,
 			JSONObject repository) {
+		
+		String basysType = (String) serializedValue.get("basystype");
+		Boolean isCollection = basysType.equals("set") || basysType.equals("collection");
+		
 		// Deserialize known types
-		if (!(serializedValue.get("basystype").equals("collection")))
+		if (!isCollection)
 			return null;
 
 		// Create collection return value
-		Collection<Object> result = new LinkedList<Object>();
+		Collection<Object> result = null;
+		if (basysType.equals("set"))  result = new HashSet<Object>();
+		else {
+			result = new LinkedList<Object>();
+		}
 
 		// Deserialize collection elements
 		for (int i = 0; i < (int) serializedValue.get("size"); i++) {
