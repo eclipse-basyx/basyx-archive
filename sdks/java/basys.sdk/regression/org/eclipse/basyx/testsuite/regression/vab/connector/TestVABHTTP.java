@@ -14,12 +14,16 @@ import org.junit.Test;
 /**
  * Test VAB using HTTP protocol
  * 
+ * pschorn: This is actually an integration test and should be declared as such. 
+ * TODO (Maven) Requires Tomcat to be startet first. Start Tomcat before this test class runs and tear down after it finished.
+ * 
  * @author schnicke, pschorn
  *
  */
 public class TestVABHTTP {
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(), new HTTPConnectorProvider());
-
+	
+	
 	@Test
 	public void testCreateDelete() {
 		CreateDelete.test(connManager);

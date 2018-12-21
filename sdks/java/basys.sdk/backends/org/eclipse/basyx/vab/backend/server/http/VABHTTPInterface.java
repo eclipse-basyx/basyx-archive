@@ -40,8 +40,6 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 
 	/**
 	 * Reference to IModelProvider backend
-	 * 
-	 * FIXME: Create generic interface class for providers
 	 */
 	protected JSONProvider<T> providerBackend = null;
 
@@ -77,8 +75,8 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		// Process HTTP request parameter
-		String uri         = req.getRequestURI();
+		// Process HTTP request
+		String uri = req.getRequestURI();
 		String contextPath = req.getContextPath();
 		String path        = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
 		
@@ -117,8 +115,8 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		while (bufReader.ready())
 			serValue.append(bufReader.readLine());
 		
-		// System.out.println("Parameters: " + req.getParameterMap().size()); - seems like parameters get consumed after first read => null
-		
+
+		// System.out.println("Parameters: " + req.getParameterMap().size()); - seems like parameters are dropped sometimes or get consumed after first read => null
 
 		// Set value of BaSys VAB element
 		providerBackend.processBaSysSet(path, serValue.toString(), resp.getWriter());
