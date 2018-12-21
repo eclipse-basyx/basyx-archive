@@ -7,12 +7,18 @@ import org.eclipse.basyx.testsuite.regression.vab.snippet.Invoke;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.SetPropertyValue;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.TestCollectionProperty;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.TestMapProperty;
+import org.eclipse.basyx.testsuite.support.backend.basyx.servers.AASServer;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory_BaSyxNative;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * Test VAB using the BaSyx protocol
+ * 
+ * pschorn: This is actually an integration test and should be declared as such. 
+ * TODO: Requires TCP Server to be startet first. Start Server before this test class runs and tear down after it finished.
  * 
  * @author schnicke, pschorn
  *
@@ -20,6 +26,19 @@ import org.junit.Test;
 public class TestVABBaSyx {
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory_BaSyxNative(),
 			new BaSyxConnectorProvider());
+	
+	static AASServer server;
+	
+	@BeforeClass
+	public static void startServer() {
+		server = new AASServer();
+		server.start();
+	}
+	
+	@AfterClass
+	public static void stopServer() {
+	 	server.shutdown();
+	}
 
 	@Test
 	public void testCreateDelete() {
