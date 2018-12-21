@@ -76,6 +76,7 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
 		// Process HTTP request parameter
 		String uri         = req.getRequestURI();
 		String contextPath = req.getContextPath();
@@ -83,11 +84,14 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		
 		// Add leading "/" to path if necessary
 		if (!path.startsWith("/")) path = "/"+path;
+		
+		// Decode URL 
+		path = java.net.URLDecoder.decode(path, "UTF-8");
 
 		// Setup HTML response header
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-
+		
 		// Process get request
 		providerBackend.processBaSysGet(path, resp.getWriter());
 
@@ -102,13 +106,19 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		String uri = req.getRequestURI();
 		String contextPath = req.getContextPath();
 		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
-
+		
+		// Decode URL 
+		path = java.net.URLDecoder.decode(path, "UTF-8");
+				
 		// Read request body
 		InputStreamReader reader = new InputStreamReader(req.getInputStream());
 		BufferedReader bufReader = new BufferedReader(reader);
 		StringBuilder serValue = new StringBuilder();
 		while (bufReader.ready())
 			serValue.append(bufReader.readLine());
+		
+		// System.out.println("Parameters: " + req.getParameterMap().size()); - seems like parameters get consumed after first read => null
+		
 
 		// Set value of BaSys VAB element
 		providerBackend.processBaSysSet(path, serValue.toString(), resp.getWriter());
@@ -127,6 +137,9 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		String uri = req.getRequestURI();
 		String contextPath = req.getContextPath();
 		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
+		
+		// Decode URL 
+		path = java.net.URLDecoder.decode(path, "UTF-8");
 
 		// Read posted parameter
 		InputStreamReader reader = new InputStreamReader(req.getInputStream());
@@ -139,7 +152,7 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		// Setup HTML response header
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-
+		
 		providerBackend.processBaSysPost(path, serValue.toString(), resp.getWriter());
 	}
 
@@ -154,14 +167,17 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		String uri = req.getRequestURI();
 		String contextPath = req.getContextPath();
 		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
-
+		
+		// Decode URL 
+		path = java.net.URLDecoder.decode(path, "UTF-8");
+		
 		// Read request body
 		InputStreamReader reader = new InputStreamReader(req.getInputStream());
 		BufferedReader bufReader = new BufferedReader(reader);
 		StringBuilder serValue = new StringBuilder();
 		while (bufReader.ready())
 			serValue.append(bufReader.readLine());
-
+				
 		providerBackend.processBaSysPatch(path, serValue.toString(), req.getParameter("action"), resp.getWriter());
 	}
 
@@ -174,14 +190,17 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		String uri = req.getRequestURI();
 		String contextPath = req.getContextPath();
 		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
-
+		
+		// Decode URL 
+		path = java.net.URLDecoder.decode(path, "UTF-8");
+		
 		// Read request body
 		InputStreamReader reader = new InputStreamReader(req.getInputStream());
 		BufferedReader bufReader = new BufferedReader(reader);
 		StringBuilder serValue = new StringBuilder();
 		while (bufReader.ready())
 			serValue.append(bufReader.readLine());
-
+		
 		System.out.println("Delete0:" + path);
 
 		providerBackend.processBaSysDelete(path, serValue.toString(), resp.getWriter());
