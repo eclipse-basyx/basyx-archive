@@ -50,7 +50,7 @@ class TestRawCFGProviderSimpleValues {
 
 		// Get property value
 		Object value2 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/properties/cfgProperty2/value");
-		assertTrue(value2.equals("12"));
+		assertTrue(value2.equals(12));
 		// - Check property meta data (description)
 		Object value2a = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/properties/cfgProperty2/description");
 		assertTrue(value2a.equals("Configuration property description on multiple lines"));

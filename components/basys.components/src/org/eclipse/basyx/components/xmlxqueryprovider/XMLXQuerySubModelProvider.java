@@ -16,7 +16,6 @@ import javax.xml.xquery.XQPreparedExpression;
 import javax.xml.xquery.XQSequence;
 import javax.xml.xquery.XQStaticContext;
 
-import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -283,14 +282,6 @@ public class XMLXQuerySubModelProvider extends BaseConfiguredProvider {
 	 */
 	@Override
 	public void deleteValue(String propertyName, Object arg1) throws Exception {
-		// Indicate exception
-		throw new OperationNotImplementedException();
-	}
-
-	
-
-	@Override
-	public Map<String, IElementReference> getContainedElements(String arg0) {
 		// Indicate exception
 		throw new OperationNotImplementedException();
 	}

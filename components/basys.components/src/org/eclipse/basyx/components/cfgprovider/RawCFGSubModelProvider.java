@@ -34,6 +34,9 @@ public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 
 		// Load properties
 		for (Object key: cfgValues.keySet()) {
+			// Do not put meta data keys into map
+			if (((String) key).endsWith("$ftype")) continue;
+
 			// Get path to element
 			String[] path = splitPath((String) key);
 			
@@ -44,12 +47,29 @@ public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 				scope = (Map<String, Object>) scope.get(path[i]);
 			}
 			
-			System.out.println("Putting:"+key+" = "+cfgValues.get(key));
+			// Get and optionally convert value
+			Object value = cfgValues.get(key);
+			// - Cast value if requested by user
+			if (cfgValues.get(key+"$ftype") != null) switch((String) cfgValues.get(key+"$ftype")) {
+				case "int":
+					value = Integer.parseInt((String) value);
+					break;
+				case "boolean":
+					value = Boolean.parseBoolean((String) value);
+					break;
+				case "float":
+					value = Float.parseFloat((String) value);
+					break;
+				
+				default: System.out.println("Unknown type:"+cfgValues.get(key+"$ftype"));
+			}
+			
+			System.out.println("Putting:"+key+" = "+cfgValues.get(key)+" as "+value.getClass().getName());
 			
 			//if (cfgValues.get(key).equals("8"))
 				//scope.put(path[path.length-1], Integer.parseInt((String) cfgValues.get(key)));
 			//else
-				scope.put(path[path.length-1], cfgValues.get(key));
+				scope.put(path[path.length-1], value);
 		}
 
 		

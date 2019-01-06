@@ -19,9 +19,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.basyx.components.directory.AASDirectoryEntry;
+import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
 import org.eclipse.basyx.vab.backend.server.http.BasysHTTPServelet;
+import org.json.JSONObject;
+
+import basys.examples.aasdescriptor.AASDescriptor;
 
 
 
@@ -167,56 +170,6 @@ public class SQLDirectoryServlet extends BasysHTTPServelet {
 		}
 		
 		// Return downlink server mappings
-		return result;
-	}
-	
-	
-	
-	/**
-	 * Extract Asset Administration Shell definitions
-	 */
-	protected Map<String, AASDirectoryEntry> extractAAS(Properties prop) {
-		// Return value
-		Map<String, AASDirectoryEntry> result = new HashMap<>();
-		
-		// Get AAS IDs
-		Collection<String> aasIDs = getProperties(prop, "", ".id");
-		
-		// Create AAS directory entries from properties
-		for (String aasID : aasIDs) {
-			// Create AAS directory entry
-			AASDirectoryEntry entry = new AASDirectoryEntry(prop.getProperty(aasID+".id"), prop.getProperty(aasID+".aas"), prop.getProperty(aasID+".type"), prop.getProperty(aasID+".tags"));
-			
-			// Add AAS directory entry
-			result.put(prop.getProperty(aasID+".id"), entry);
-		}
-		
-		// Return ID to AAS mappings
-		return result;
-	}
-	
-	
-	
-	/**
-	 * Map AAS tags to AAS
-	 */
-	protected Map<String, Collection<AASDirectoryEntry>> mapAASToTags(Map<String, AASDirectoryEntry> aasByID) {
-		// Return value
-		Map<String, Collection<AASDirectoryEntry>> result = new HashMap<>();
-		
-		// Iterate AAS directory entries
-		for (AASDirectoryEntry dirEntry: aasByID.values()) {
-			// Process tags
-			for (String tag: dirEntry.getAASTags()) {
-				// Create tag if necessary
-				if (!result.containsKey(tag)) {result.put(tag, new HashSet<AASDirectoryEntry>());}
-				
-				// Add AAS to tag
-				result.get(tag).add(dirEntry);
-			}
-		}
-		
-		// Return HashTag to AAS mappings
 		return result;
 	}
 	
@@ -422,8 +375,23 @@ public class SQLDirectoryServlet extends BasysHTTPServelet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// Indicate an unsupported operation
-		resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED, "Request not implemented for this service");
+	 	// Read request body
+		InputStreamReader reader    = new InputStreamReader(req.getInputStream());
+		BufferedReader    bufReader = new BufferedReader(reader);
+		StringBuilder     aasValue  = new StringBuilder(); 
+		while (bufReader.ready()) aasValue.append(bufReader.readLine());
+		
+		// Deserialize AAS value into JSONObject
+		JSONObject          json          = new JSONObject(aasValue.toString());
+		@SuppressWarnings("unchecked")
+		Map<String, Object> values        = (Map<String, Object>) JSONTools.Instance.deserialize(json);
+		AASDescriptor       aasDescriptor = new AASDescriptor(values);
+
+		// Extract AAS ID
+		String aasID = aasDescriptor.getId();
+
+		// Update AAS registry
+		sqlDriver.sqlUpdate("INSERT INTO directory.directory (\"ElementRef\", \"ElementID\") VALUES ('"+aasValue.toString()+"', '"+aasID+"');");
 	}
 
 

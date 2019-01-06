@@ -5,8 +5,12 @@ import static org.junit.Assert.fail;
 
 import java.net.URLEncoder;
 
+import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identification;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
 import org.junit.jupiter.api.Test;
+
+import basys.examples.aasdescriptor.AASDescriptor;
 
 
 
@@ -131,7 +135,52 @@ class TestDirectorySQLProvider {
 		} catch (Exception e) {
 			fail("Update AAS test case did throw exception:"+e);
 		}
+	}
 
+	
+	/**
+	 * Execute create/Delete test cases
+	 */
+	@Test
+	void testCreateDeleteCall() {
+		// Invoke BaSyx service calls via web services
+		WebServiceRawClient client = new WebServiceRawClient();
+		
+		// Directory web service URL
+		String wsURL = "http://localhost:8080/basys.components/Testsuite/Directory/SQL";
+
+
+		// Update a specific AAS
+		try {
+			// Get a known AAS by its ID - check if AAS does not exist already
+			String result0 = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
+			// - Check updated registration
+			assertTrue(result0.equals(""));
+			
+			// Create and register AAS descriptor
+			// - Create AAS descriptor
+			AASDescriptor aasDescriptor = new AASDescriptor("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-166", Identification.URI, "www.endpoint.de");
+			// - Create new AAS registration
+			client.post(wsURL+"/api/v1/registry", JSONTools.Instance.serialize(aasDescriptor).toString());
+
+			// Get a known AAS by its ID
+			String result = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
+			// - Check updated registration
+			System.out.println("RESULT:"+result);
+			//assertTrue(result.equals("{content.aas6}"));
+			
+			// Delete AAS registration
+			client.delete(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
+
+			// Get a known AAS by its ID
+			String result2 = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
+			// - Check updated registration
+			assertTrue(result2.equals(""));
+			System.out.println("R2:"+result2);
+
+		} catch (Exception e) {
+			fail("Update AAS test case did throw exception:"+e);
+		}
 	}
 
 	
