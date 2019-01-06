@@ -13,7 +13,6 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell_;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel_;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
-import org.eclipse.basyx.vab.core.ref.VABElementRef;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,8 +48,8 @@ public class TestConnectedAssetAdministrationShell {
 		connectionStub.addProvider(smId, new VABHashmapProvider(sm));
 
 		// Create Set containing reference to the created SubModel
-		Set<VABElementRef> refs = new HashSet<>();
-		refs.add(new VABElementRef(smId));
+		Set<String> refs = new HashSet<>();
+		refs.add(smId);
 
 		// Create an AAS containing a reference to the created SubModel
 		AssetAdministrationShell_ aas = factory.create(new AssetAdministrationShell_(), refs);

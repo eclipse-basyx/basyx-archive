@@ -141,7 +141,7 @@ public class VABMultiSubmodelProvider<T extends VABHashmapProvider> implements I
 
 		if (path.toLowerCase().equals("/aas")) {
 
-			// Retrun aas
+			// Return aas
 			return aas_provider.getElements();
 
 		} else if (path.toLowerCase().equals("/aas/submodels")) {
@@ -151,7 +151,10 @@ public class VABMultiSubmodelProvider<T extends VABHashmapProvider> implements I
 			submodel_providers.values().forEach((T v) -> submodels.add(v.getElements()));
 
 			return submodels;
-		} else {
+		} else if (path.startsWith("/aas") && !path.startsWith("/aas/submodels/")) { // Handle access to AAS
+			String[] pathElements = VABPathTools.splitPath(path);
+			return aas_provider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 2));
+		} else { // Handle access to submodels
 			String[] pathElements = VABPathTools.splitPath(path);
 
 			T hashmapProvider = submodel_providers.get(pathElements[3]);
@@ -177,8 +180,7 @@ public class VABMultiSubmodelProvider<T extends VABHashmapProvider> implements I
 		// - Ignore first 3 elements, as it is "/aas/submodels" --> '', 'aas',
 		// 'submodels'
 		// - Invoke provider and return result
-		submodel_providers.get(pathElements[3]).setModelPropertyValue(VABPathTools.buildPath(pathElements, 4),
-				newValue);
+		submodel_providers.get(pathElements[3]).setModelPropertyValue(VABPathTools.buildPath(pathElements, 4), newValue);
 	}
 
 	@Override
@@ -218,8 +220,7 @@ public class VABMultiSubmodelProvider<T extends VABHashmapProvider> implements I
 		// - Ignore first 3 elements, as it is "/aas/submodels" --> '', 'aas',
 		// 'submodels'
 		// - Invoke provider and return result
-		return submodel_providers.get(pathElements[3]).invokeOperation(VABPathTools.buildPath(pathElements, 4),
-				parameter);
+		return submodel_providers.get(pathElements[3]).invokeOperation(VABPathTools.buildPath(pathElements, 4), parameter);
 	}
 
 }

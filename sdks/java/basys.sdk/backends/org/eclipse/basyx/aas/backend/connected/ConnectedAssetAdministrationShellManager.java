@@ -36,12 +36,12 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	}
 
 	public ISubModel retrieveSM(String id) {
-		return new ConnectedSubModel("", manager.connectToVABElement(id));
+		return new ConnectedSubModel("/aas/submodels/" + id, manager.connectToVABElement(id));
 	}
 
 	@Override
 	public IAssetAdministrationShell retrieveAAS(String id) throws Exception {
-		return new ConnectedAssetAdministrationShell("", manager.connectToVABElement(id), manager);
+		return new ConnectedAssetAdministrationShell("/aas", manager.connectToVABElement(id), manager);
 	}
 
 	@Override

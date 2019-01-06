@@ -16,7 +16,6 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.Property;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.ValueType;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.operation.Operation;
-import org.eclipse.basyx.vab.core.ref.VABElementRef;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
 
 /**
@@ -101,11 +100,11 @@ public class MetaModelElementFactory {
 	}
 
 	@SuppressWarnings("unchecked")
-	public AssetAdministrationShell_ create(AssetAdministrationShell_ shell, Set<VABElementRef> submodels) {
+	public AssetAdministrationShell_ create(AssetAdministrationShell_ shell, Set<String> submodels) {
 		AssetAdministrationShell_ ret = new AssetAdministrationShell_();
 		ret.putAll(shell);
 		Map<String, Object> bodies = (Map<String, Object>) ret.get("body");
-		Set<VABElementRef> refs = (Set<VABElementRef>) bodies.get("submodels");
+		List<String> refs = (List<String>) bodies.get("submodels");
 		refs.addAll(submodels);
 		return ret;
 	}

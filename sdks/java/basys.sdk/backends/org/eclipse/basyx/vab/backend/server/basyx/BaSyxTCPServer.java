@@ -6,8 +6,6 @@ import java.net.Socket;
 
 import org.eclipse.basyx.vab.core.IModelProvider;
 
-
-
 /**
  * BaSyx TCP server thread
  * 
@@ -16,27 +14,23 @@ import org.eclipse.basyx.vab.core.IModelProvider;
  */
 public class BaSyxTCPServer<T extends IModelProvider> extends Thread {
 
-	
 	/**
 	 * Store server socket instance
 	 */
 	protected ServerSocket tcpServerSocket = null;
-	
-	
+
 	/**
 	 * Reference to IModelProvider backend
 	 */
 	protected T providerBackend = null;
 
-	
-	
 	/**
 	 * Constructor
 	 */
 	public BaSyxTCPServer(T modelProviderBackend, int serverPort) {
 		// Store model provider backend reference
 		providerBackend = modelProviderBackend;
-		
+
 		// Create server socket
 		try {
 			tcpServerSocket = new ServerSocket(serverPort);
@@ -45,16 +39,14 @@ public class BaSyxTCPServer<T extends IModelProvider> extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	/**
 	 * Default constructor without port number
 	 */
 	public BaSyxTCPServer(T modelProviderBackend) {
 		this(modelProviderBackend, 6998);
 	}
-	
-	
+
 	/**
 	 * Thread main method
 	 */
@@ -79,4 +71,3 @@ public class BaSyxTCPServer<T extends IModelProvider> extends Thread {
 		}
 	}
 }
-
