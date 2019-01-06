@@ -1,6 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier;
 
 import java.util.HashMap;
+import java.util.Map;
 
 
 
@@ -55,6 +56,13 @@ public class Identification extends HashMap<String, Object> {
 		put("id",     id);		
 	}
 	
+	
+	/**
+	 * Constructor that accepts a map
+	 */
+	public Identification(Map<String, Object> map) {
+		this.putAll(map);
+	}
 	
 	
 	

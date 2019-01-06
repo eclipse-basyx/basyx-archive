@@ -2,7 +2,6 @@ package org.eclipse.basyx.aas.backend.http.tools;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Function;
@@ -11,8 +10,10 @@ import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
+import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.json.JSONObject;
+
 
 /**
  * JSON Tools for serialization/deserialization from/to JSON
@@ -130,8 +131,11 @@ public class JSONTools {
 	/**
 	 * Deserialize a null value
 	 */
-	protected boolean deserializeNull(JSONObject serializedValue, Map<Integer, Object> serObjRepo,
-			JSONObject repository) {
+	protected boolean deserializeNull(JSONObject serializedValue, Map<Integer, Object> serObjRepo, JSONObject repository) {
+		
+		// Assume null type for non existing field. This makes the code more robust.
+		if (!serializedValue.has("basystype")) return true;
+		
 		// Type check
 		if (!serializedValue.get("basystype").equals("null"))
 			return false;
@@ -475,7 +479,7 @@ public class JSONTools {
 			return null;
 
 		// Create hash map return value
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new VABModelMap<>();
 
 		// Deserialize map elements
 		for (String key : serializedValue.keySet()) {

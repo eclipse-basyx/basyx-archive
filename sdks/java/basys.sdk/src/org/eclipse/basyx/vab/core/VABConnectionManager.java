@@ -2,6 +2,8 @@ package org.eclipse.basyx.vab.core;
 
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
+
+
 /**
  * Allows access to elements provided by the VAB
  * 
@@ -10,16 +12,21 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  */
 public class VABConnectionManager {
 
+	
 	/**
 	 * Directory service reference
 	 */
 	protected IDirectoryService directoryService = null;
 
+	
 	/**
 	 * Store connection providers
 	 */
 	protected IConnectorProvider providerProvider;
 
+	
+	
+	
 	/**
 	 * 
 	 * @param networkDirectoryService
@@ -35,8 +42,11 @@ public class VABConnectionManager {
 		this.providerProvider = providerProvider;
 	}
 
+	
 	/**
 	 * Connect to an VAB element
+	 * 
+	 * @param urn the URN that describes the element. 
 	 */
 	public VABElementProxy connectToVABElement(String urn) {
 
@@ -48,5 +58,17 @@ public class VABConnectionManager {
 
 		// Return a new VABElementProxy
 		return new VABElementProxy(addr, providerProvider.getConnector(addr));
+	}
+	
+	
+	/**
+	 * Connect to an VAB element using an URL
+	 * 
+	 * @param url the URL that describes the element location. 
+	 */
+	public VABElementProxy connectToVABElementByURL(String url) {
+
+		// Return a new VABElementProxy
+		return new VABElementProxy(url, providerProvider.getConnector(url));
 	}
 }

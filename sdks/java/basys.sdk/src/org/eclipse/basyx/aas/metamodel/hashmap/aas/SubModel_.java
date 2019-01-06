@@ -1,6 +1,5 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.resources.IOperation;
@@ -8,6 +7,7 @@ import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.impl.resources.basic.BaseElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
+import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.Property;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.operation.Operation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
@@ -16,29 +16,36 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Qualifiable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Typable;
 
+
+
 /**
  * Submodel class
  * 
  * @author kuhn
  *
  */
-public class SubModel_ extends HashMap<String, Object> implements VABElementContainer, ISubModel {
+public class SubModel_ extends VABModelMap<Object> implements VABElementContainer, ISubModel {
 
+	
 	/**
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
 
+	
 	/**
 	 * Submodel properties
 	 */
-	protected Map<String, IProperty> properties = new HashMap<>();
+	protected Map<String, IProperty> properties = new VABModelMap<>();
 
+	
 	/**
 	 * Submodel operations
 	 */
-	protected Map<String, IOperation> operations = new HashMap<>();
+	protected Map<String, IOperation> operations = new VABModelMap<>();
 
+	
+	
 	/**
 	 * Constructor
 	 */
@@ -59,6 +66,7 @@ public class SubModel_ extends HashMap<String, Object> implements VABElementCont
 		put("operations", operations);
 	}
 
+	
 	/**
 	 * Constructor
 	 */
@@ -79,22 +87,25 @@ public class SubModel_ extends HashMap<String, Object> implements VABElementCont
 		put("operations", operations);
 	}
 
+	
 	/**
-	 * Get submodel properties
+	 * Get sub model properties
 	 */
 	@Override
 	public Map<String, IProperty> getProperties() {
 		return properties;
 	}
 
+	
 	/**
-	 * Get submodel operations
+	 * Get sub model operations
 	 */
 	@Override
 	public Map<String, IOperation> getOperations() {
 		return operations;
 	}
 
+	
 	/**
 	 * Add property
 	 */
@@ -109,6 +120,7 @@ public class SubModel_ extends HashMap<String, Object> implements VABElementCont
 
 	}
 
+	
 	/**
 	 * Add operation
 	 */
@@ -121,17 +133,20 @@ public class SubModel_ extends HashMap<String, Object> implements VABElementCont
 		operations.put(id, operation);
 	}
 
+	
 	@Override
 	public void addEvent(String id, Object event) {
 		// TODO Auto-generated method stub
 		System.out.println("addEvent Not yet implemented");
 	}
 
+	
 	@Override
 	public Map<String, Object> getAsMap() {
 		return this;
 	}
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -143,6 +158,7 @@ public class SubModel_ extends HashMap<String, Object> implements VABElementCont
 		return null;
 	}
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -154,6 +170,7 @@ public class SubModel_ extends HashMap<String, Object> implements VABElementCont
 
 	}
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -167,6 +184,7 @@ public class SubModel_ extends HashMap<String, Object> implements VABElementCont
 
 	}
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -178,9 +196,9 @@ public class SubModel_ extends HashMap<String, Object> implements VABElementCont
 		return null;
 	}
 
+	
 	@SuppressWarnings("unchecked")
 	protected void addProperty(Property prop) {
 		((Map<String, Object>) get("properties")).put(prop.getId(), prop);
 	}
-
 }

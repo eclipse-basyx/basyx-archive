@@ -76,10 +76,13 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// Process HTTP request
-		String uri = req.getRequestURI();
+		// Process HTTP request parameter
+		String uri         = req.getRequestURI();
 		String contextPath = req.getContextPath();
-		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
+		String path        = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
+		
+		// Add leading "/" to path if necessary
+		if (!path.startsWith("/")) path = "/"+path;
 
 		// Setup HTML response header
 		resp.setContentType("application/json");

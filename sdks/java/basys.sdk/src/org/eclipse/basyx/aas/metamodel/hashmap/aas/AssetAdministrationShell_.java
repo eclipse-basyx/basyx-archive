@@ -1,11 +1,11 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas;
 
 
-import java.util.HashMap;
 import java.util.HashSet;
 
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.impl.reference.VABURNElementRef;
+import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.Body;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.Header;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasTemplate;
@@ -23,7 +23,7 @@ import org.eclipse.basyx.vab.core.ref.VABElementRef;
  * @author kuhn
  *
  */
-public class AssetAdministrationShell_ extends HashMap<String, Object>  {
+public class AssetAdministrationShell_ extends VABModelMap<Object>  {
 
 	
 	/**
