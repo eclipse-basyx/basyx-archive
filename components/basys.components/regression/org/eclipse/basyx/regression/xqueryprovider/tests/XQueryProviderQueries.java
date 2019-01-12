@@ -30,7 +30,7 @@ class XQueryProviderQueries {
 	@Test
 	void test() throws Exception {
 
-		// Connect to sub model "CfgFileTestAAS"
+		// Connect to sub model "XMLXQueryFileTestAAS"
 		VABElementProxy connSubModel = this.connManager.connectToVABElement("XMLXQueryFileTestAAS");
 
 		
