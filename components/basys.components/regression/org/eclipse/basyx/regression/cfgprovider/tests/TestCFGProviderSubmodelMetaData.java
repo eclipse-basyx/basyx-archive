@@ -43,5 +43,29 @@ class TestCFGProviderSubmodelMetaData {
 		// Get property value
 		Object value2 = connSubModel.readElementValue("/aas/submodels/sampleCFG/administration/version");
 		assertTrue(value2.equals("1.0"));
+
+		// Update property value
+		connSubModel.updateElementValue("/aas/submodels/sampleCFG/administration/version", "2.0");
+		Object value2a = connSubModel.readElementValue("/aas/submodels/sampleCFG/administration/version");
+		assertTrue(value2a.equals("2.0"));
+
+		// Create property value
+		connSubModel.createElement("/aas/submodels/sampleCFG/administration/version2", "3.0");
+		Object value2b = connSubModel.readElementValue("/aas/submodels/sampleCFG/administration/version2");
+		assertTrue(value2b.equals("3.0"));
+
+		// Delete property value
+		connSubModel.deleteElement("/aas/submodels/sampleCFG/administration/version2");
+		Object value2c = connSubModel.readElementValue("/aas/submodels/sampleCFG/administration/version2");
+		assertTrue(value2c == null);
+
+		// Reset property value
+		connSubModel.updateElementValue("/aas/submodels/sampleCFG/administration/version", "1.0");
+		Object value2d = connSubModel.readElementValue("/aas/submodels/sampleCFG/administration/version");
+		assertTrue(value2d.equals("1.0"));
+
+		// Get complete sub model
+		Object value3 = connSubModel.readElementValue("/aas/submodels/sampleCFG");
+		System.out.println(value3.toString());
 	}
 }
