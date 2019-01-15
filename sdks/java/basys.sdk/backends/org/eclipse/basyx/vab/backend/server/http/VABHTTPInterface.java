@@ -105,6 +105,9 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		String contextPath = req.getContextPath();
 		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
 		
+		// Add leading "/" to path if necessary
+		if (!path.startsWith("/")) path = "/"+path;
+		
 		// Decode URL 
 		path = java.net.URLDecoder.decode(path, "UTF-8");
 				
@@ -136,6 +139,9 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		String contextPath = req.getContextPath();
 		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
 		
+		// Add leading "/" to path if necessary
+		if (!path.startsWith("/")) path = "/"+path;
+		
 		// Decode URL 
 		path = java.net.URLDecoder.decode(path, "UTF-8");
 
@@ -166,6 +172,9 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		String contextPath = req.getContextPath();
 		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
 		
+		// Add leading "/" to path if necessary
+		if (!path.startsWith("/")) path = "/"+path;
+		
 		// Decode URL 
 		path = java.net.URLDecoder.decode(path, "UTF-8");
 		
@@ -188,6 +197,9 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		String uri = req.getRequestURI();
 		String contextPath = req.getContextPath();
 		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
+		
+		// Add leading "/" to path if necessary
+		if (!path.startsWith("/")) path = "/"+path;
 		
 		// Decode URL 
 		path = java.net.URLDecoder.decode(path, "UTF-8");

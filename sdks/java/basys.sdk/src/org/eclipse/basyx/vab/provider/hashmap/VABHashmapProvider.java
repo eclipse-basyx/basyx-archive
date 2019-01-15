@@ -1,5 +1,6 @@
 package org.eclipse.basyx.vab.provider.hashmap;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,8 @@ public class VABHashmapProvider implements IModelProvider {
 
 	/**
 	 * Constructor that accepts an initial HashMap
+	 * 
+	 * TODO check if any element key comprises '/' and throw RunTimeException
 	 */
 	public VABHashmapProvider(Map<String, Object> elements) {
 		this.elements = elements;
@@ -68,17 +71,22 @@ public class VABHashmapProvider implements IModelProvider {
 		// - Get element
 		for (int i = 0; i < pathElements.length - 1; i++) {
 			// Get element
-			Object element = currentScope.get(pathElements[i]);
-
-			// Check for null pointer and map type
-			if (element == null)
-				return null;
-			if (!(element instanceof Map))
-				return null;
-
-			// Update scope
-			currentScope = (Map<String, Object>) element;
+			Object element = null;
+			
+			// If there is a leading '/' skip null entry
+;			if (pathElements[0].equals("") && pathElements.length > 0) { pathElements[0] = "None"; continue; }
+			
+			System.out.println("Get Parent Element: "+ pathElements[i] + " -> " + Arrays.toString(currentScope.keySet().toArray()));
+			
+			// Try to find parent despite not knowing if leading "/" must be added 
+			if ((element = currentScope.get(pathElements[i])) != null) 	{	 currentScope = (Map<String, Object>) element; }
+			else if ((element = currentScope.get("/" + pathElements[i])) != null) { currentScope = (Map<String, Object>) element; }
+			
+			if (element == null ) 		   return null;
+			if (!(element instanceof Map)) return null;
 		}
+		
+		System.out.println("Get Parent Element: returned parent of " + Arrays.toString(currentScope.keySet().toArray()));
 
 		// Return scope
 		return currentScope;
@@ -96,10 +104,10 @@ public class VABHashmapProvider implements IModelProvider {
 
 		// Get parent of element
 		Map<String, Object> parentElement = getParentElement(path);
-
+		
 		// Get element from scope
 		Object result = parentElement.get(pathElements[pathElements.length - 1]);
-
+		
 		// Return element
 		return result;
 	}
