@@ -7,7 +7,6 @@ import java.util.HashSet;
 import org.eclipse.basyx.aas.api.resources.IElement;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.impl.reference.VABURNElementRef;
-import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.Body;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.Header;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasTemplate;
