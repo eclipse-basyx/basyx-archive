@@ -8,14 +8,13 @@ import org.eclipse.basyx.testsuite.regression.vab.snippet.SetPropertyValue;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.TestCollectionProperty;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.TestMapProperty;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
+import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
- * Test VAB using HTTP protocol
- * 
- * pschorn: This is actually an integration test and should be declared as such. 
- * TODO (Maven) Requires Tomcat to be startet first. Start Tomcat before this test class runs and tear down after it finished.
+ * Test VAB using HTTP protocol. This is an integration test
  * 
  * @author schnicke, pschorn
  *
@@ -23,6 +22,12 @@ import org.junit.Test;
 public class TestVABHTTP {
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(), new HTTPConnectorProvider());
 	
+	
+	/** 
+	 * Makes sure Tomcat Server is started
+	 */
+	@ClassRule
+	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource();
 	
 	@Test
 	public void testCreateDelete() {

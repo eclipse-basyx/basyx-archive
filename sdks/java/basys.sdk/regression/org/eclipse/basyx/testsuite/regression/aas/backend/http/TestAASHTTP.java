@@ -3,29 +3,45 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.http;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServlet;
+
+import org.apache.catalina.LifecycleException;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.StubAASServlet;
+import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServer;
+import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
 import org.eclipse.basyx.testsuite.support.vab.stub.DirectoryServiceStub;
+import org.eclipse.basyx.testsuite.support.vab.stub.servlet.SimpleVABElementServlet;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
- * Tests access to an AAS provided by a servlet
+ * Tests access to an AAS provided by a servlet. This is an integration test
  * 
  * @author schnicke
  *
  */
-public class TestHTTPAAS {
+public class TestAASHTTP {
 
 	// Manager used to connect to the AAS
 	ConnectedAssetAdministrationShellManager manager;
-
+	
+	/** 
+	 * Makes sure Tomcat Server is started
+	 */
+	@ClassRule
+	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource();
+	
 	/**
 	 * Creates the manager to be used in the test cases
 	 */
