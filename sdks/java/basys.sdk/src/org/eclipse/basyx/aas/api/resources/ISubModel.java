@@ -30,5 +30,4 @@ public interface ISubModel extends IElement {
 	 * @return Sub model operations
 	 */
 	public Map<String, IOperation> getOperations();
-
 }

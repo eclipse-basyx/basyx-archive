@@ -9,13 +9,13 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.eclipse.basyx.aas.api.resources.IElement;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell_;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel_;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.ComplexDataProperty;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.Property;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.ValueType;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.operation.Operation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElement;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
 
 /**
@@ -35,33 +35,32 @@ public class MetaModelElementFactory {
 	 * @param set
 	 * @return
 	 */
-	public PropertySingleValued create(PropertySingleValued prop, Object value) {
-		PropertySingleValued ret = new PropertySingleValued();
+	public Property create(Property prop, Object value) {
+		Property ret = new Property();
 		ret.putAll(prop);
-		ret.put("value", value);
-		ret.put("valueType", new ValueType(value));
+		ret.setValue(value);
 		return ret;
 	}
 
 	/**
-	 * Create VABProperty
+	 * Create Property
 	 * 
 	 * @param prop
 	 * @param get
 	 * @param set
 	 * @return
 	 */
-	public PropertySingleValued create(PropertySingleValued prop, Supplier<Object> get, Consumer<Object> set) {
-		PropertySingleValued ret = new PropertySingleValued();
+	public Property create(Property prop, Supplier<Object> get, Consumer<Object> set) {
+		Property ret = new Property();
 		ret.putAll(prop);
 		Map<String, Object> value = VABLambdaProviderHelper.createSimple(get, set);
 		ret.put("value", value);
-		ret.put("valueType", new ValueType(get.get()));
+		ret.put("valueType", PropertyValueTypeDefHelper.fromObject(get.get()));
 		return ret;
 	}
 
 	/**
-	 * Create VABOperations
+	 * Create Operations
 	 * 
 	 * @param operation
 	 * @param function
@@ -75,31 +74,32 @@ public class MetaModelElementFactory {
 	}
 
 	/**
-	 * Create ComplexDataProperty
-	 * 
+	 * Create SubmodelElementCollection
+	 *
 	 * @param container
 	 * @param object
 	 */
-	@SuppressWarnings("unchecked")
-	public ComplexDataProperty createContainer(ComplexDataProperty property, List<Property> properties, List<Operation> operations) {
-		ComplexDataProperty ret = new ComplexDataProperty();
+	public SubmodelElementCollection createContainer(SubmodelElementCollection property, List<SubmodelElement> properties, List<SubmodelElement> operations) {
+		SubmodelElementCollection ret = new SubmodelElementCollection();
 		ret.putAll(property);
 
-		((Map<String, Object>) ret.get("properties")).putAll(createElemMap(properties));
-		((Map<String, Object>) ret.get("operations")).putAll(createElemMap(operations));
+		properties.stream().forEach(x -> ret.addSubmodelElement(x));
+		operations.stream().forEach(x -> ret.addSubmodelElement(x));
+
 		return ret;
 	}
 
 	/**
-	 * Create SubModel 
+	 * Create SubModel
+	 * 
 	 * @param subModel
 	 * @param properties
 	 * @param operations
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public SubModel_ create(SubModel_ subModel, List<Property> properties, List<Operation> operations) {
-		SubModel_ ret = new SubModel_();
+	public SubModel create(SubModel subModel, List<Property> properties, List<Operation> operations) {
+		SubModel ret = new SubModel();
 		ret.putAll(subModel);
 		((Map<String, Object>) ret.get("properties")).putAll(createElemMap(properties));
 		((Map<String, Object>) ret.get("operations")).putAll(createElemMap(operations));
@@ -108,22 +108,21 @@ public class MetaModelElementFactory {
 
 	/**
 	 * Create AssetAdministrationShell
+	 * 
 	 * @param shell
 	 * @param submodels
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public AssetAdministrationShell_ create(AssetAdministrationShell_ shell, Set<String> submodels) {
-		AssetAdministrationShell_ ret = new AssetAdministrationShell_();
+	public AssetAdministrationShell create(AssetAdministrationShell shell, Set<String> submodels) {
+		AssetAdministrationShell ret = new AssetAdministrationShell();
 		ret.putAll(shell);
-		Map<String, Object> bodies = (Map<String, Object>) ret.get("body");
-		List<String> refs = (List<String>) bodies.get("submodels");
-		refs.addAll(submodels);
+		submodels.stream().forEach(s -> ret.addSubModel(s));
 		return ret;
 	}
 
 	/**
 	 * Creates a HashMap for all data elements in the list
+	 * 
 	 * @param elem
 	 * @return
 	 */

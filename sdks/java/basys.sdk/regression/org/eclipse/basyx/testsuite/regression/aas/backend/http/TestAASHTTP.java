@@ -3,25 +3,20 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.http;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServlet;
-
-import org.apache.catalina.LifecycleException;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.IOperation;
+import org.eclipse.basyx.aas.api.resources.IProperty;
+import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.StubAASServlet;
-import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServer;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
 import org.eclipse.basyx.testsuite.support.vab.stub.DirectoryServiceStub;
-import org.eclipse.basyx.testsuite.support.vab.stub.servlet.SimpleVABElementServlet;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -35,13 +30,13 @@ public class TestAASHTTP {
 
 	// Manager used to connect to the AAS
 	ConnectedAssetAdministrationShellManager manager;
-	
-	/** 
+
+	/**
 	 * Makes sure Tomcat Server is started
 	 */
 	@ClassRule
 	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource();
-	
+
 	/**
 	 * Creates the manager to be used in the test cases
 	 */
@@ -79,9 +74,11 @@ public class TestAASHTTP {
 
 	/**
 	 * Tests accessing a submodel
+	 * 
+	 * @throws Exception
 	 */
 	@Test
-	public void testSubModel() {
+	public void testSubModel() throws Exception {
 		// Retrieve SubModel
 		ISubModel sm = manager.retrieveSM(StubAASServlet.smId);
 
@@ -90,5 +87,17 @@ public class TestAASHTTP {
 
 		// TODO: Extend
 		// - retrieve properties and operations
+
+		Map<String, IProperty> properties = sm.getProperties();
+		assertEquals(1, properties.size());
+		ISingleProperty prop = (ISingleProperty) properties.get("prop1");
+		assertEquals(123, prop.get());
+
+		Map<String, IOperation> operations = sm.getOperations();
+		assertEquals(4, operations.size());
+
+		IOperation op = operations.get("operation1");
+		assertEquals(1, op.invoke(2, 1));
+
 	}
 }

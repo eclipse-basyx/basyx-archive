@@ -2,7 +2,7 @@ package org.eclipse.basyx.aas.api.resources;
 
 import java.util.List;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.enums.DataObjectType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
 
 /**
  * Interface for IElement operations
@@ -17,14 +17,14 @@ public interface IOperation extends IElement {
 	 * 
 	 * @return Parameter types
 	 */
-	public List<ParameterType> getParameterTypes();
+	public List<OperationVariable> getParameterTypes();
 
 	/**
 	 * Get operation return type
 	 * 
 	 * @return Operation return type
 	 */
-	public DataObjectType getReturnDataType();
+	public List<OperationVariable> getReturnTypes();
 
 	/**
 	 * Invoke operation with given parameter

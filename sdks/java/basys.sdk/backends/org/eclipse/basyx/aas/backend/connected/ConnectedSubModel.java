@@ -40,5 +40,4 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 		}
 		return ret;
 	}
-
 }

@@ -13,9 +13,9 @@ import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.backend.connected.property.ConnectedContainerProperty;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.ComplexDataProperty;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.operation.Operation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
@@ -46,7 +46,7 @@ public class TestConnectedContainerProperty {
 		collection.add(2);
 
 		// Create PropertySingleValued containing the collection
-		PropertySingleValued propertyMeta = factory.create(new PropertySingleValued(), collection);
+		Property propertyMeta = factory.create(new Property(), collection);
 		propertyMeta.setId(COLLECTIONPROP);
 
 		// Create operation
@@ -56,7 +56,7 @@ public class TestConnectedContainerProperty {
 		operation.setId(OPERATION);
 
 		// Create ComplexDataProperty containing the created operation and property
-		ComplexDataProperty complex = factory.createContainer(new ComplexDataProperty(), Collections.singletonList(propertyMeta), Collections.singletonList(operation));
+		SubmodelElementCollection complex = factory.createContainer(new SubmodelElementCollection(), Collections.singletonList(propertyMeta), Collections.singletonList(operation));
 
 		// Create a dummy connection manager containing the created
 		// ComplexDataProperty map

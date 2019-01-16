@@ -6,7 +6,7 @@ import org.eclipse.basyx.aas.api.resources.PropertyType;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
- * Connects to a PropertySingleValued as specified by VWiD containing a simple
+ * Connects to a PropertySingleValued as specified by DAAS containing a simple
  * value
  * 
  * @author schnicke

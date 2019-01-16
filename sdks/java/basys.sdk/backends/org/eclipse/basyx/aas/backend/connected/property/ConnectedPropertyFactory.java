@@ -3,10 +3,12 @@ package org.eclipse.basyx.aas.backend.connected.property;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.resources.IProperty;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
- * Creates IProperties based on the attached meta data as specified in VWiD
+ * Creates IProperties based on the attached meta data as specified in DAAS
  * document
  * 
  * @author schnicke
@@ -19,10 +21,10 @@ public class ConnectedPropertyFactory {
 		if (property.containsKey("properties")) {
 			return new ConnectedContainerProperty(path, proxy);
 		} else if (property.containsKey("valueType")) {
-			Map<String, Object> valueType = (Map<String, Object>) property.get("valueType");
-			if ((boolean) valueType.get("isMap")) {
+			PropertyValueTypeDef valueType = PropertyValueTypeDefHelper.fromName((String) property.get("valueType"));
+			if (valueType == PropertyValueTypeDef.Map) {
 				return new ConnectedMapProperty(path, proxy);
-			} else if ((boolean) valueType.get("isCollection")) {
+			} else if (valueType == PropertyValueTypeDef.Collection) {
 				return new ConnectedCollectionProperty(path, proxy);
 			} else {
 				return new ConnectedSingleProperty(path, proxy);

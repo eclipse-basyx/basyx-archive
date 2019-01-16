@@ -2,54 +2,43 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier;
 
 import java.util.HashMap;
 
-
-
-
-
 /**
- * AdministrativeInformation class 
+ * AdministrativeInformation class
  * 
  * @author kuhn
  *
  */
 public class AdministrativeInformation extends HashMap<String, Object> {
-	
-	
+
 	/**
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
-	
 	/**
 	 * Constructor
 	 */
 	public AdministrativeInformation() {
-		// Add all attributes form HasTemplate
-		putAll(new HasTemplate());
+		// Add qualifier
+		putAll(new HasDataSpecification());
 
 		// Default values
-		put("version",  ""); 
+		put("version", "");
 		put("revision", "");
 	}
-
 
 	/**
 	 * Constructor
 	 */
 	public AdministrativeInformation(String version, String revision) {
-		// Add all attributes form HasTemplate
-		putAll(new HasTemplate());
+		// Add qualifier
+		putAll(new HasDataSpecification());
 
 		// Default values
-		put("version",  version); 
+		put("version", version);
 		put("revision", revision);
 	}
-	
-	
-	
-	
+
 	/**
 	 * Get value of 'version' property
 	 */
@@ -63,8 +52,6 @@ public class AdministrativeInformation extends HashMap<String, Object> {
 	public void setVersion(String newValue) {
 		put("version", newValue);
 	}
-	
-	
 
 	/**
 	 * Get value of 'revision' property
@@ -72,7 +59,7 @@ public class AdministrativeInformation extends HashMap<String, Object> {
 	public String getRevision() {
 		return (String) get("revision");
 	}
-	
+
 	/**
 	 * Update value of 'revision' property
 	 */

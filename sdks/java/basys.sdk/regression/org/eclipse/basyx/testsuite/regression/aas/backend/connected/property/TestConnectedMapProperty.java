@@ -13,7 +13,7 @@ import org.eclipse.basyx.aas.api.exception.TypeMismatchException;
 import org.eclipse.basyx.aas.api.resources.IMapProperty;
 import org.eclipse.basyx.aas.backend.connected.property.ConnectedMapProperty;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
@@ -45,7 +45,7 @@ public class TestConnectedMapProperty {
 		map.put(MAP_2_KEY, MAP_2_VAL);
 
 		// Create PropertySingleValued containing the map
-		PropertySingleValued propertyMeta = factory.create(new PropertySingleValued(), map);
+		Property propertyMeta = factory.create(new Property(), map);
 
 		// Create dummy connection manager containing the
 		// created PropertySingleValued map

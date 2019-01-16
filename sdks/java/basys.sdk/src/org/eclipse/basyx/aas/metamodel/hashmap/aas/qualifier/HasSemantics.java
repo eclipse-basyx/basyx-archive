@@ -1,51 +1,34 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
-
-
-
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 
 /**
- * HasSemantics class 
+ * HasSemantics class
  * 
- * @author kuhn
+ * @author kuhn, schnicke
  *
  */
 public class HasSemantics extends HashMap<String, Object> {
-	
-	
+
 	/**
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	
-	
+
 	/**
 	 * Constructor
 	 */
 	public HasSemantics() {
 		// Default values
-		
-		/**
-		 * Identificators of the templates used by the element
-		 */
-		put("id_semantics",               null);
-		put("hasFullSemanticDescription", new HashSet<SemanticDescription>());
+		put("semanticId", null);
 	}
-
 
 	/**
 	 * Constructor
 	 */
-	public HasSemantics(Identification idSemantics) {
-		// Default values
-
-		// Identificator of the semantic definition of the element. It is called semantic id of the
-		// element. Its type is "Identification"
-		put("id_semantics",               idSemantics);
-		put("hasFullSemanticDescription", new HashSet<SemanticDescription>());
+	public HasSemantics(Reference idSemantics) {
+		put("semanticId", idSemantics);
 	}
 }

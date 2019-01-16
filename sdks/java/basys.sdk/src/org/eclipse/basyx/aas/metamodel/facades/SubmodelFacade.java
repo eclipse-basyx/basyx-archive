@@ -1,15 +1,11 @@
 package org.eclipse.basyx.aas.metamodel.facades;
 
 import java.util.Collection;
-import java.util.HashSet;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel_;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identification;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.SemanticDescription;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
-
-
 
 /**
  * Base class for sub model facades
@@ -18,26 +14,23 @@ import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
  *
  */
 public class SubmodelFacade extends VABHashmapProvider {
-	
-	
+
 	/**
 	 * Constructor
 	 */
 	public SubmodelFacade() {
 		// Instantiate VAB HashMap provider with sub model instance
-		super(new SubModel_());
+		super(new SubModel());
 	}
-	
-	
+
 	/**
 	 * Return reference to sub model structure
 	 */
-	public SubModel_ getSubModel() {
+	public SubModel getSubModel() {
 		// Assume that VAB HashMap provider carries a sub model
-		return (SubModel_) this.getElements();
+		return (SubModel) this.getElements();
 	}
 
-	
 	/**
 	 * Get value of 'idShort' property
 	 */
@@ -51,8 +44,6 @@ public class SubmodelFacade extends VABHashmapProvider {
 	public void setIDShort(String newValue) {
 		elements.put("idShort", newValue);
 	}
-	
-	
 
 	/**
 	 * Get value of 'category' property
@@ -60,7 +51,7 @@ public class SubmodelFacade extends VABHashmapProvider {
 	public String getCategory() {
 		return (String) elements.get("category");
 	}
-	
+
 	/**
 	 * Update value of 'category' property
 	 */
@@ -68,15 +59,13 @@ public class SubmodelFacade extends VABHashmapProvider {
 		elements.put("category", newValue);
 	}
 
-	
-	
 	/**
 	 * Get value of 'description' property
 	 */
 	public String getDescription() {
 		return (String) elements.get("description");
 	}
-	
+
 	/**
 	 * Update value of 'description' property
 	 */
@@ -84,88 +73,61 @@ public class SubmodelFacade extends VABHashmapProvider {
 		elements.put("description", newValue);
 	}
 
-	
-	
 	/**
 	 * Get value of 'parent' property
 	 */
 	public String getParent() {
 		return (String) elements.get("parent");
 	}
-	
+
 	/**
 	 * Update value of 'parent' property
 	 */
 	public void setParent(String newValue) {
 		elements.put("parent", newValue);
 	}
-	
-	
-	
+
 	/**
 	 * Get value of 'administration' property
 	 */
 	public AdministrativeInformation getAdministration() {
 		return (AdministrativeInformation) elements.get("administration");
 	}
-	
+
 	/**
 	 * Update value of 'administration' property
 	 */
 	public void setAdministration(AdministrativeInformation newValue) {
 		elements.put("administration", newValue);
 	}
-	
 
-	
 	/**
 	 * Get value of 'identification' property
 	 */
-	public Identification getIdentification() {
-		return (Identification) elements.get("identification");
+	public Identifier getIdentification() {
+		return (Identifier) elements.get("identification");
 	}
-	
+
 	/**
 	 * Update value of 'identification' property
 	 */
-	public void setIdentification(Identification newValue) {
+	public void setIdentification(Identifier newValue) {
 		elements.put("identification", newValue);
 	}
-	
-	
 
 	/**
 	 * Get value of 'id_semantics' property
 	 */
-	public Identification getIdSemantics() {
-		return (Identification) elements.get("id_semantics");
+	public Identifier getIdSemantics() {
+		return (Identifier) elements.get("id_semantics");
 	}
-	
+
 	/**
 	 * Update value of 'id_semantics' property
 	 */
-	public void setIdSemantics(Identification newValue) {
+	public void setIdSemantics(Identifier newValue) {
 		elements.put("id_semantics", newValue);
 	}
-
-	
-	
-	/**
-	 * Get value of 'hasFullSemanticDescription' property
-	 */
-	@SuppressWarnings("unchecked")
-	public HashSet<SemanticDescription> getHasFullSemanticDescription() {
-		return (HashSet<SemanticDescription>) elements.get("hasFullSemanticDescription");
-	}
-	
-	/**
-	 * Update value of 'hasFullSemanticDescription' property
-	 */
-	public void setHasFullSemanticDescription(HashSet<SemanticDescription> newValue) {
-		elements.put("hasFullSemanticDescription", newValue);
-	}
-
-
 
 	/**
 	 * Get value of 'qualifier' property
@@ -174,7 +136,7 @@ public class SubmodelFacade extends VABHashmapProvider {
 	public Collection<String> getQualifier() {
 		return (Collection<String>) elements.get("qualifier");
 	}
-	
+
 	/**
 	 * Update value of 'qualifier' property
 	 */
@@ -182,15 +144,13 @@ public class SubmodelFacade extends VABHashmapProvider {
 		elements.put("qualifier", newValue);
 	}
 
-
-
 	/**
 	 * Get value of 'kind' property
 	 */
-	public int getKind() {
-		return (Integer) elements.get("kind");
+	public String getKind() {
+		return (String) elements.get("kind");
 	}
-	
+
 	/**
 	 * Update value of 'kind' property
 	 */
@@ -198,4 +158,3 @@ public class SubmodelFacade extends VABHashmapProvider {
 		elements.put("kind", newValue);
 	}
 }
-

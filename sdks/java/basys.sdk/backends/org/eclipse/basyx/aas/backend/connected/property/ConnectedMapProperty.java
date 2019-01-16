@@ -10,7 +10,7 @@ import org.eclipse.basyx.aas.api.resources.PropertyType;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
- * Connects to a PropertySingleValued as specified by VWiD containing a map
+ * Connects to a PropertySingleValued as specified by DAAS containing a map
  * 
  * @author schnicke
  *

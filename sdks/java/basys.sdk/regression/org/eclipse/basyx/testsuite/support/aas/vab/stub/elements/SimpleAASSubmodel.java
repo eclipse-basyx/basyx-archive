@@ -4,9 +4,9 @@ import java.util.function.Function;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel_;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.operation.Operation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 
 /**
  * A simple VAB submodel element that explains the development of conforming
@@ -15,7 +15,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.operation.Operation;
  * @author kuhn
  *
  */
-public class SimpleAASSubmodel extends SubModel_ {
+public class SimpleAASSubmodel extends SubModel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,7 +34,7 @@ public class SimpleAASSubmodel extends SubModel_ {
 		// Create example properties
 		MetaModelElementFactory fac = new MetaModelElementFactory();
 
-		getProperties().put("prop1", fac.create(new PropertySingleValued(), 123));
+		getProperties().put("prop1", fac.create(new Property(), 123));
 
 		// Create example operations
 		getOperations().put("operation1", fac.createOperation(new Operation(), (Function<Object[], Object>) (v) -> {
