@@ -8,18 +8,23 @@ import org.eclipse.basyx.testsuite.regression.vab.snippet.SetPropertyValue;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.TestCollectionProperty;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.TestMapProperty;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory_BaSyxNative;
+import org.eclipse.basyx.testsuite.support.backend.servers.AASTCPServerResource;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
- * Test VAB using the BaSyx protocol
+ * Test VAB using the BaSyx protocol. This is an integration test 
  * 
  * @author schnicke, pschorn
  *
  */
-public class TestVABBaSyx {
+public class TestVABBaSyxTCP {
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory_BaSyxNative(),
 			new BaSyxConnectorProvider());
+	
+	@ClassRule
+	public static AASTCPServerResource res = AASTCPServerResource.getTestResource();
 
 	@Test
 	public void testCreateDelete() {

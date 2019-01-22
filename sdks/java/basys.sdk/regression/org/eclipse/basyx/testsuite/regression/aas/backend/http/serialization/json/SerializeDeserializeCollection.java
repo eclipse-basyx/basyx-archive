@@ -45,9 +45,13 @@ public class SerializeDeserializeCollection {
 		System.out.println("Serialized JSON:"+serVal1);
 		
 		// Deserialize collections
-		Collection<Integer> integerColl1 = (Collection<Integer>) JSONTools.Instance.deserialize(serVal1);
+		Collection<Integer> integerColl1 = (Collection<Integer>) JSONTools.Instance.deserialize(serVal1); 
 		Collection<Integer> integerColl2 = (Collection<Integer>) JSONTools.Instance.deserialize(serVal2);
 		Collection<Object>  objectColl1  = (Collection<Object>)  JSONTools.Instance.deserialize(serVal3);
+		
+		assertTrue(integerColl1 instanceof HashSet<?>);
+		assertTrue(integerColl2 instanceof LinkedList<?>);
+		assertTrue(objectColl1  instanceof LinkedList<?>);
 
 		// Check result
 		assertTrue(integerColl1.size() == 5);

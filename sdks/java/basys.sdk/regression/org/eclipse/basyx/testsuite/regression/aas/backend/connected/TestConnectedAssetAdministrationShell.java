@@ -53,7 +53,7 @@ public class TestConnectedAssetAdministrationShell {
 
 		// Create an AAS containing a reference to the created SubModel
 		AssetAdministrationShell_ aas = factory.create(new AssetAdministrationShell_(), refs);
-		aas.put("idShort", aasId);
+		aas.setId(aasId);
 
 		// Add the AAS provider to the ConnectionManagerStub
 		connectionStub.addProvider(aasId, new VABHashmapProvider(aas));

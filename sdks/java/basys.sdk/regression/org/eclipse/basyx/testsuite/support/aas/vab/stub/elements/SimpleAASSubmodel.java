@@ -29,7 +29,7 @@ public class SimpleAASSubmodel extends SubModel_ {
 	public SimpleAASSubmodel(String id) {
 		// Create sub model
 
-		put("idShort", id);
+		setId(id);
 
 		// Create example properties
 		MetaModelElementFactory fac = new MetaModelElementFactory();

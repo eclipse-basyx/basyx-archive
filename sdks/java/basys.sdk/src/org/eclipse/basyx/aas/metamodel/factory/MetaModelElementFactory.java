@@ -90,6 +90,13 @@ public class MetaModelElementFactory {
 		return ret;
 	}
 
+	/**
+	 * Create SubModel 
+	 * @param subModel
+	 * @param properties
+	 * @param operations
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public SubModel_ create(SubModel_ subModel, List<Property> properties, List<Operation> operations) {
 		SubModel_ ret = new SubModel_();
@@ -99,6 +106,12 @@ public class MetaModelElementFactory {
 		return ret;
 	}
 
+	/**
+	 * Create AssetAdministrationShell
+	 * @param shell
+	 * @param submodels
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public AssetAdministrationShell_ create(AssetAdministrationShell_ shell, Set<String> submodels) {
 		AssetAdministrationShell_ ret = new AssetAdministrationShell_();
@@ -109,6 +122,11 @@ public class MetaModelElementFactory {
 		return ret;
 	}
 
+	/**
+	 * Creates a HashMap for all data elements in the list
+	 * @param elem
+	 * @return
+	 */
 	private <T extends IElement> Map<String, T> createElemMap(List<T> elem) {
 		Map<String, T> ret = new HashMap<>();
 		for (T o : elem) {

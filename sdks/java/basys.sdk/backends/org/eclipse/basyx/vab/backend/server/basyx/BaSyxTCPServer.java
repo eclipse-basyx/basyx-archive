@@ -3,6 +3,7 @@ package org.eclipse.basyx.vab.backend.server.basyx;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 import org.eclipse.basyx.vab.core.IModelProvider;
 
@@ -56,8 +57,16 @@ public class BaSyxTCPServer<T extends IModelProvider> extends Thread {
 		while (true) {
 			// Handle communication exceptions
 			try {
+				
+				Socket communicationSocket = null;
+				
 				// Wait for connections
-				Socket communicationSocket = tcpServerSocket.accept();
+				try {
+					communicationSocket = tcpServerSocket.accept();
+				} catch (SocketException e) {
+					// End process; Server socket has been closed by shutdown
+					break;
+				}
 
 				// Handle an incoming connection
 				// - Create and connect BaSyx client provider for communication socket
@@ -69,5 +78,9 @@ public class BaSyxTCPServer<T extends IModelProvider> extends Thread {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void shutdown() throws IOException {
+		this.tcpServerSocket.close();
 	}
 }

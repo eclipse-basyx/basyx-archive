@@ -8,18 +8,27 @@ import org.eclipse.basyx.testsuite.regression.vab.snippet.SetPropertyValue;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.TestCollectionProperty;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.TestMapProperty;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
+import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
- * Test VAB using HTTP protocol
+ * Test VAB using HTTP protocol. This is an integration test
  * 
  * @author schnicke, pschorn
  *
  */
 public class TestVABHTTP {
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(), new HTTPConnectorProvider());
-
+	
+	
+	/** 
+	 * Makes sure Tomcat Server is started
+	 */
+	@ClassRule
+	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource();
+	
 	@Test
 	public void testCreateDelete() {
 		CreateDelete.test(connManager);

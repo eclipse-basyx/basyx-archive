@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.PropertyType;
-import org.eclipse.basyx.aas.impl.resources.basic.BaseElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.enums.DataObjectType;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Qualifiable;
@@ -84,15 +83,4 @@ public class Property extends HashMap<String, Object> implements IProperty {
 		put("idShort", id);
 	}
 
-	@Override
-	public void setParent(BaseElement parent) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public BaseElement getParent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
