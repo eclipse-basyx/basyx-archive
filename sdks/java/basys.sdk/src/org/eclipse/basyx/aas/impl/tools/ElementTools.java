@@ -22,7 +22,7 @@ public class ElementTools {
 		IElement el = element;
 		
 		// Look for AAS in hierarchy
-		// while ((!(el instanceof IAssetAdministrationShell)) && (el != null)) el = el.getParent(); uncomment until new VWiD MetaModel is implemented
+		// while ((!(el instanceof IAssetAdministrationShell)) && (el != null)) el = el.getParent(); uncomment until new DAAS MetaModel is implemented
 		
 		// Get ID
 		if (el != null) return el.getId();
@@ -33,7 +33,7 @@ public class ElementTools {
 
 
 //	/**
-//	 * Get sub model ID of this element - uncomment until new VWiD MetaModel is implemented
+//	 * Get sub model ID of this element - uncomment until new DAAS MetaModel is implemented
 //	 */
 //	public static String getSubmodelID(IElement element) {
 //		// Temporary variables
@@ -51,7 +51,7 @@ public class ElementTools {
 	
 	
 //	/**
-//	 * Get the full path to an property - uncomment until new VWiD MetaModel is implemented
+//	 * Get the full path to an property - uncomment until new DAAS MetaModel is implemented
 //	 */
 //	public static String getFullPathToProperty(IElement element) {
 //		// Return value

@@ -12,7 +12,7 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
  * Connects to a ComplexDataProperty as specified by meta model. <br />
- * Not contained in VWiD meta model
+ * Not contained in DAAS meta model
  * 
  * @author schnicke
  *

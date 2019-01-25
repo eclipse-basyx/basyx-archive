@@ -2,20 +2,23 @@ package org.eclipse.basyx.aas.metamodel.hashmap;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.Property;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.operation.Operation;
+import org.eclipse.basyx.aas.api.resources.IOperation;
+import org.eclipse.basyx.aas.api.resources.IProperty;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.DataElement;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
 
 public interface VABElementContainer {
 
-	public void addProperty(String path, Property property);
+	public void addDataElement(DataElement element);
 
-	public void addOperation(String path, Operation operation);
+	public void addOperation(Operation operation);
 
-	public void addEvent(String id, Object event);
+	public void addEvent(Object event);
 
-	public Map<String, Object> getAsMap();
+	public void addElementCollection(SubmodelElementCollection collection);
 
-	// public Map<String, Property> getProperties();
-	//
-	// public Map<String, Operation> getOperations();
+	public Map<String, IProperty> getProperties();
+
+	public Map<String, IOperation> getOperations();
 }

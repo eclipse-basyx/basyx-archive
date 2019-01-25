@@ -2,12 +2,15 @@ package org.eclipse.basyx.aas.metamodel.facades;
 
 import java.util.Collection;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel_;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.dataspecification.DataSpecification;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identification;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Qualifiable;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Typable;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.HasKind;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Constraint;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Qualifiable;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 
 
 
@@ -28,7 +31,7 @@ public class SubmodelFacadeInternalSemantics extends SubmodelFacade {
 	 */
 	public SubmodelFacadeInternalSemantics() {
 		// Create sub model
-		this.setElements(new SubModel_());
+		this.setElements(new SubModel());
 	}
 
 	
@@ -38,23 +41,22 @@ public class SubmodelFacadeInternalSemantics extends SubmodelFacade {
 	 * Create an instance sub model with all meta properties empty / set to default values
 	 * 
 	 * @param semanticsInternal String that describes the sub model semantics e.g. its type (e.g. basys.semantics.transportsystem)
-	 * @param idType            Type of sub model ID (Identification.IRDI, Identification.URI, Identification.Internal)
 	 * @param id                Sub model ID according to idType
 	 * @param idShort           Short ID of the sub model (e.g. "subsystemTopology")
 	 * @param category          Additional coded meta information regarding the element type that affects expected existence of attributes (e.g. "transportSystemTopology")
 	 * @param description       Descriptive sub model description (e.g. "This is a machine readable description of the transport system topology")
 	 * @param qualifier         The qualifier of this sub model (e.g. "plant.maintransport")
-	 * @param version           Sub model version
+	 * @param version           Sub model version 
 	 * @param revision          Sub model revision
 	 */
-	public SubmodelFacadeInternalSemantics(String semanticsInternal, int idType, String id, String idShort, String category, String description, String qualifier, String version, String revision) {
+	public SubmodelFacadeInternalSemantics(Reference semanticsReference, String id, String idShort, String category, String description, Constraint constraint, DataSpecification dataSpecification, String kind, String version,
+			String revision) {
 		// Create sub model
-		this.setElements(new SubModel_(
-					new HasSemantics(new Identification(Identification.Internal, semanticsInternal)),
-					new Identifiable(version, revision, idShort, category, description, idType, id),
-					new Qualifiable(qualifier),
-					new Typable(Typable.KIND_INSTANCE)
-				));
+		this.setElements(new SubModel(new HasSemantics(semanticsReference), 
+				new Identifiable(version, revision, idShort, category, description, IdentifierType.Custom.toString(), id), 
+				new Qualifiable(constraint), 
+				dataSpecification,
+				new HasKind(kind)));
 	}
 
 
@@ -74,14 +76,15 @@ public class SubmodelFacadeInternalSemantics extends SubmodelFacade {
 	 * @param version           Sub model version
 	 * @param revision          Sub model revision
 	 */
-	public SubmodelFacadeInternalSemantics(String semanticsInternal, int idType, String id, String idShort, String category, String description, Collection<String> qualifier, String version, String revision) {
+	public SubmodelFacadeInternalSemantics(Reference semanticsReference, String semanticsIRDI, int idType, String id, String idShort, String category, String description, Collection<Constraint> qualifier, Constraint constraint,
+			DataSpecification dataSpecification, String kind, String version, String revision) {
 		// Create sub model
-		this.setElements(new SubModel_(
-					new HasSemantics(new Identification(Identification.Internal, semanticsInternal)),
-					new Identifiable(version, revision, idShort, category, description, idType, id),
-					new Qualifiable(qualifier),
-					new Typable(Typable.KIND_INSTANCE)
-				));
+		this.setElements(
+				new SubModel(new HasSemantics(semanticsReference), 
+						new Identifiable(version, revision, idShort, category, description, IdentifierType.Custom.toString(), id), 
+						new Qualifiable(qualifier), 
+						dataSpecification, 
+						new HasKind(kind)));
 	}
 }
 

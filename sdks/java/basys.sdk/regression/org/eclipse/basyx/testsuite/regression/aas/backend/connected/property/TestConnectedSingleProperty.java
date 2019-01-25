@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.backend.connected.property.ConnectedSingleProperty;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Before;
@@ -27,7 +27,7 @@ public class TestConnectedSingleProperty {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 
 		// Create PropertySingleValued containing the simple value
-		PropertySingleValued propertyMeta = factory.create(new PropertySingleValued(), VALUE);
+		Property propertyMeta = factory.create(new Property(), VALUE);
 		prop = new ConnectedSingleProperty("", new VABConnectionManagerStub(new VABHashmapProvider(propertyMeta)).connectToVABElement(""));
 	}
 

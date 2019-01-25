@@ -12,9 +12,9 @@ import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedSubModel;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel_;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.operation.Operation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
@@ -41,7 +41,7 @@ public class TestConnectedSubModel {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 
 		// Create a simple value property
-		PropertySingleValued propertyMeta = factory.create(new PropertySingleValued(), 100);
+		Property propertyMeta = factory.create(new Property(), 100);
 		propertyMeta.setId(PROP);
 
 		// Create an operation
@@ -51,7 +51,7 @@ public class TestConnectedSubModel {
 		op.setId(OP);
 
 		// Create the SubModel using the created property and operation
-		SubModel_ sm = factory.create(new SubModel_(), Collections.singletonList(propertyMeta), Collections.singletonList(op));
+		SubModel sm = factory.create(new SubModel(), Collections.singletonList(propertyMeta), Collections.singletonList(op));
 		sm.setId(ID);
 
 		// Create a dummy connection manager containing the created SubModel map

@@ -10,12 +10,12 @@ import org.eclipse.basyx.aas.api.annotation.AASProperty;
 import org.eclipse.basyx.aas.api.resources.IContainerProperty;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.ComplexDataProperty;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.operation.Operation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 
 /**
- * Provider class that converts a Java Object to a BaSys according to VWiD
+ * Provider class that converts a Java Object to a BaSys according to DAAS
  * 
  * @author pschorn
  *
@@ -54,15 +54,17 @@ public class JavaObjectVABMapper {
 			// Add Operation
 			String id = method.getName();
 
-			target.addOperation(id, fac.createOperation(new Operation(), (param) -> { // write in serialization
-																						// "isMethod"
+			Operation op = fac.createOperation(new Operation(), (param) -> { // write in serialization
+				// "isMethod"
 				try {
 					return method.invoke(submodel, param);
 				} catch (Exception e) {
 					e.printStackTrace();
 					return null;
 				}
-			}));
+			});
+			op.setId(id);
+			target.addOperation(op);
 
 		}
 
@@ -95,8 +97,8 @@ public class JavaObjectVABMapper {
 				if (IContainerProperty.class.isAssignableFrom(type)) {
 
 					// Add complex property or submodel and scan nested properties and operations
-					ComplexDataProperty metaProperty = new ComplexDataProperty();
-
+					SubmodelElementCollection metaProperty = new SubmodelElementCollection();
+					metaProperty.setId(id);
 					try {
 						scanProperties(metaProperty, field.get(submodel));
 						scanOperations(metaProperty, field.get(submodel));
@@ -105,15 +107,14 @@ public class JavaObjectVABMapper {
 						e.printStackTrace();
 					}
 
-					target.addProperty(id, metaProperty);
+					target.addElementCollection(metaProperty);
 
 				} else {
 
 					// Add single property
-					PropertySingleValued prop = fac.create(new PropertySingleValued(), getSupplier(field, submodel),
-							getConsumer(field, submodel));
-
-					target.addProperty(id, prop);
+					Property prop = fac.create(new Property(), getSupplier(field, submodel), getConsumer(field, submodel));
+					prop.setId(id);
+					target.addDataElement(prop);
 				}
 
 			} catch (IllegalArgumentException e) {

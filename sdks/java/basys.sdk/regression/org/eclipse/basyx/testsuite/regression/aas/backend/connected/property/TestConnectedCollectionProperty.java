@@ -12,7 +12,7 @@ import org.eclipse.basyx.aas.api.exception.TypeMismatchException;
 import org.eclipse.basyx.aas.api.resources.ICollectionProperty;
 import org.eclipse.basyx.aas.backend.connected.property.ConnectedCollectionProperty;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
@@ -39,7 +39,7 @@ public class TestConnectedCollectionProperty {
 		collection.add(2);
 
 		// Create PropertySingleValued containing the collection
-		PropertySingleValued propertySingleValued = factory.create(new PropertySingleValued(), collection);
+		Property propertySingleValued = factory.create(new Property(), collection);
 
 		// Create dummy connection manager containing the
 		// created PropertySingleValued map
