@@ -8,7 +8,7 @@ import java.net.URLEncoder;
 import javax.ws.rs.ServerErrorException;
 
 import org.eclipse.basyx.tools.webserviceclient.WebServiceJSONClient;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 
 
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
  * @author kuhn
  *
  */
-class TestStaticDirectoryFileProviderExceptions {
+public class TestStaticDirectoryFileProviderExceptions {
 
 	
 	

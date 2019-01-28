@@ -20,7 +20,7 @@ import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-import com.saxonica.xqj.SaxonXQDataSource;
+//import com.saxonica.xqj.SaxonXQDataSource;
 
 
 
@@ -216,37 +216,37 @@ public class XMLXQuerySubModelProvider extends BaseConfiguredProvider {
 		Object returnValue = null;
 		
 		// Try to execute query
-		try {
+	//	try {
 			// XQuery data source
-			XQDataSource ds  = new SaxonXQDataSource();
-			XQConnection con = ds.getConnection();
-
-			// Build path
-			String xqueryFilePath = buildPath(queryFile);
-
-			// Access file
-			File query = new File(xqueryFilePath);
-
-			// Relative URIs are resolved against the base URI before invoking the entity resolver.
-			// The relative URI used in the query will be resolved against this URI.
-			XQStaticContext ctx = con.getStaticContext();
-			ctx.setBaseURI(query.toURI().toString());
-
-			// Create input stream, prepare and run query
-			FileInputStream      queryInput = new FileInputStream(query);
-			XQPreparedExpression expr       = con.prepareExpression(queryInput, ctx);
-			XQSequence           result     = expr.executeQuery();
-
-			// Process result
-			returnValue = processXQueryResult(result);
-
-			// Close streams
-			result.close();
-			expr.close();
-			con.close();
-		} catch (XQException | FileNotFoundException e) {
-        	e.printStackTrace();
-        }
+//			XQDataSource ds  = new SaxonXQDataSource();
+//			XQConnection con = ds.getConnection();
+//
+//			// Build path
+//			String xqueryFilePath = buildPath(queryFile);
+//
+//			// Access file
+//			File query = new File(xqueryFilePath);
+//
+//			// Relative URIs are resolved against the base URI before invoking the entity resolver.
+//			// The relative URI used in the query will be resolved against this URI.
+//			XQStaticContext ctx = con.getStaticContext();
+//			ctx.setBaseURI(query.toURI().toString());
+//
+//			// Create input stream, prepare and run query
+//			FileInputStream      queryInput = new FileInputStream(query);
+//			XQPreparedExpression expr       = con.prepareExpression(queryInput, ctx);
+//			XQSequence           result     = expr.executeQuery();
+//
+//			// Process result
+//			returnValue = processXQueryResult(result);
+//
+//			// Close streams
+//			result.close();
+//			expr.close();
+//			con.close();
+//		} catch (XQException | FileNotFoundException e) {
+//        	e.printStackTrace();
+//        }
 
 		// Return XQuery result
 		return returnValue;

@@ -6,7 +6,7 @@ import static org.junit.Assert.fail;
 import java.net.URLEncoder;
 
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 
 
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
  * @author kuhn
  *
  */
-class TestStaticDirectoryFileProvider {
+public class TestStaticDirectoryFileProvider {
 
 	
 	

@@ -7,7 +7,7 @@ import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 
 
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
  * @author kuhn
  *
  */
-class SQLQueriesTest {
+public class SQLQueriesTest {
 
 	
 	/**
@@ -30,7 +30,7 @@ class SQLQueriesTest {
 	 * Test basic queries
 	 */
 	@Test
-	void test() throws Exception {
+	public void test() throws Exception {
 
 		// Connect to sub model "CfgFileTestAAS"
 		VABElementProxy connSubModel = this.connManager.connectToVABElement("SQLTestSubmodel");

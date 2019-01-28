@@ -4,7 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.components.directory.AASDirectoryEntry;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 
 
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
  * @author kuhn
  *
  */
-class TestAASDirectoryEntry {
+public class TestAASDirectoryEntry {
 
 	
 	
@@ -22,7 +22,7 @@ class TestAASDirectoryEntry {
 	 * Execute test case that tests parsing of id constructor parameter
 	 */
 	@Test
-	void testConstuctorParameterID() {
+	public void testConstuctorParameterID() {
 		// Test object with minimal ID
 		AASDirectoryEntry aasEntry1 = new AASDirectoryEntry("urn:FHG", "<serializedAAS>", "local", "");
 		// - Validate object
@@ -137,7 +137,7 @@ class TestAASDirectoryEntry {
 	 * Execute test case that tests parsing of content and content type constructor parameter
 	 */
 	@Test
-	void testConstuctorParameterContentAndContentType() {
+	public void testConstuctorParameterContentAndContentType() {
 		// Test object with local content and without tags
 		AASDirectoryEntry aasEntry1 = new AASDirectoryEntry("urn:FHG:iese:aas:0.97:1:#001", "<serializedAAS>", "local", "");
 		// - Validate object
@@ -176,7 +176,7 @@ class TestAASDirectoryEntry {
 	 * Execute test case that tests parsing of tags constructor parameter
 	 */
 	@Test
-	void testConstuctorParameterTags() {
+	public void testConstuctorParameterTags() {
 		// Test object without tags
 		AASDirectoryEntry aasEntry1 = new AASDirectoryEntry("urn:FHG:iese:aas:0.97:1:#001", "<serializedAAS>", "local", "");
 		// - Validate object
@@ -204,7 +204,7 @@ class TestAASDirectoryEntry {
 	 * Execute test case that tests invalid directory entries
 	 */
 	@Test
-	void testInvalidConstuctorParameter() {
+	public void testInvalidConstuctorParameter() {
 		// Test object with minimal ID
 		AASDirectoryEntry aasEntry1 = new AASDirectoryEntry("FHG", "<serializedAAS>", "local", "");
 		// - Validate object

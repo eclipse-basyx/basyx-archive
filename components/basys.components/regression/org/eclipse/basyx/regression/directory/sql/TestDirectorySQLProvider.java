@@ -8,12 +8,9 @@ import java.net.URLEncoder;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identification;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import basys.examples.aasdescriptor.AASDescriptor;
-
-
-
 
 /**
  * Test queries to SQL directory provider
@@ -21,7 +18,7 @@ import basys.examples.aasdescriptor.AASDescriptor;
  * @author kuhn
  *
  */
-class TestDirectorySQLProvider {
+public class TestDirectorySQLProvider {
 
 	
 	
@@ -29,7 +26,7 @@ class TestDirectorySQLProvider {
 	 * Execute test case that test working calls
 	 */
 	@Test
-	void testGetterCalls() {
+	public void testGetterCalls() {
 		// Invoke BaSyx service calls via web services
 		WebServiceRawClient client = new WebServiceRawClient();
 		
@@ -106,7 +103,7 @@ class TestDirectorySQLProvider {
 	 * Execute update test case
 	 */
 	@Test
-	void testUpdateCall() {
+	public void testUpdateCall() {
 		// Invoke BaSyx service calls via web services
 		WebServiceRawClient client = new WebServiceRawClient();
 		
@@ -142,7 +139,7 @@ class TestDirectorySQLProvider {
 	 * Execute create/Delete test cases
 	 */
 	@Test
-	void testCreateDeleteCall() {
+	public void testCreateDeleteCall() {
 		// Invoke BaSyx service calls via web services
 		WebServiceRawClient client = new WebServiceRawClient();
 		
@@ -189,7 +186,7 @@ class TestDirectorySQLProvider {
 	 * Execute test case that test non-working calls
 	 */
 	@Test
-	void testNonWorkingCalls() {
+	public void testNonWorkingCalls() {
 		// Invoke service call via web services
 		WebServiceRawClient client = new WebServiceRawClient();
 		
