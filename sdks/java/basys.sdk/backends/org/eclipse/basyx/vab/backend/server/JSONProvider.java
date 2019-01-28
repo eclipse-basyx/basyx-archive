@@ -198,31 +198,16 @@ public class JSONProvider<T extends IModelProvider> {
 	 * @param action
 	 * @param outputStream
 	 */
-	public void processBaSysPatch(String path, String serializedJSONValue, String action, PrintWriter outputStream) {
+	public void processBaSysPatch(String path, String serializedJSONValue, PrintWriter outputStream) {
 
 		try {
 			// Deserialize json body. If parameter is null, an exception has been sent
 			Object parameter = extractParameter(path, serializedJSONValue, outputStream);
-
-			switch (action.toLowerCase()) {
-			/**
-			 * Add an element to a collection / key-value pair to a map
-			 */
-			case "add":
-				providerBackend.setModelPropertyValue(path, parameter);
-				break;
-
 			/**
 			 * Remove an element from a collection by index / remove from map by key. We
 			 * know parameter must only contain 1 element
 			 */
-			case "remove":
-				providerBackend.deleteValue(path, parameter);
-				break;
-
-			default:
-				sendException(outputStream, new ServerException("Unsupported", "Action not supported."));
-			}
+			providerBackend.deleteValue(path, parameter);
 
 			// Send positive JSON response
 			JSONObject jsonObj = JSONTools.Instance.serialize(true); // TODO provide message meta information here

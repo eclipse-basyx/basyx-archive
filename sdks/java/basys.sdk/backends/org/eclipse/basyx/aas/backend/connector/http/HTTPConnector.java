@@ -24,10 +24,6 @@ import org.json.JSONObject;
  *
  */
 public class HTTPConnector implements IBaSyxConnector {
-
-	private static String ADD_ACTION = "add";
-	private static String REMOVE_ACTION = "remove";
-
 	private String address;
 
 	/**
@@ -80,7 +76,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	@Override
 	public Object deleteValue(String servicePath, JSONObject obj) throws ServerException {
 
-		return httpPatch(servicePath, REMOVE_ACTION, obj);
+		return httpPatch(servicePath, obj);
 	}
 
 	/**
@@ -185,7 +181,7 @@ public class HTTPConnector implements IBaSyxConnector {
 
 	}
 
-	private Object httpPatch(String servicePath, String action, Object newValue) throws ServerException {
+	private Object httpPatch(String servicePath, Object newValue) throws ServerException {
 		System.out.println("[HTTP Patch] " + address + servicePath + "  " + newValue);
 
 		// Invoke service call via web services
@@ -195,9 +191,7 @@ public class HTTPConnector implements IBaSyxConnector {
 		// JSONObject jsonObject = JSONTools.Instance.serialize(newValue);
 
 		// Create and invoke HTTP PATCH request
-		Response rsp = client.target(address + servicePath).queryParam("action", action).request()
-				.build("PATCH", Entity.text(newValue.toString()))
-				.property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
+		Response rsp = client.target(address + servicePath).request().build("PATCH", Entity.text(newValue.toString())).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
 
 		// Return repsonse message (header)
 		return rsp.readEntity(String.class);

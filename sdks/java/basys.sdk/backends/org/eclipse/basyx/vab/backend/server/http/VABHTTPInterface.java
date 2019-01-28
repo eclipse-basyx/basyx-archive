@@ -185,7 +185,7 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		while (bufReader.ready())
 			serValue.append(bufReader.readLine());
 				
-		providerBackend.processBaSysPatch(path, serValue.toString(), req.getParameter("action"), resp.getWriter());
+		providerBackend.processBaSysPatch(path, serValue.toString(), resp.getWriter());
 	}
 
 	/**
