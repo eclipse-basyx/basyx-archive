@@ -97,14 +97,17 @@ public class JSONProvider<T extends IModelProvider> {
 	public void processBaSysGet(String path, PrintWriter outputStream) {
 
 		System.out.println("-------------------------- DO GET " + path + "---------------------------------------------------------");
+		try {
+			Object value = providerBackend.getModelPropertyValue(path);
 
-		Object value = providerBackend.getModelPropertyValue(path);
+			// Initialize JSON object
+			JSONObject jsonObj = JSONTools.Instance.serialize(value);
 
-		// Initialize JSON object
-		JSONObject jsonObj = JSONTools.Instance.serialize(value);
-
-		// Send response
-		sendJSONResponse(outputStream, jsonObj);
+			// Send response
+			sendJSONResponse(outputStream, jsonObj);
+		} catch (Exception e) {
+			sendException(outputStream, e);
+		}
 	}
 
 	/**

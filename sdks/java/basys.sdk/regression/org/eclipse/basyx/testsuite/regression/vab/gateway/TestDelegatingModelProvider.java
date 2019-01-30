@@ -13,7 +13,7 @@ public class TestDelegatingModelProvider {
 	private IModelProviderStub stub = new IModelProviderStub();
 
 	@Test
-	public void test() {
+	public void test() throws Exception {
 		String basyx = "basyx://12.34.56.78:9090";
 		String rest = "http://abc.de";
 

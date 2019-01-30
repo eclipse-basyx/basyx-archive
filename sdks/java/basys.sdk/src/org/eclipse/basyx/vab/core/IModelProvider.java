@@ -16,7 +16,7 @@ public interface IModelProvider {
 	 * @return Property value. Object type is assumed to be [Integer | ... |
 	 *         Collection]
 	 */
-	public Object getModelPropertyValue(String path);
+	public Object getModelPropertyValue(String path) throws Exception;
 
 	/**
 	 * Sets or overrides existing property, operation or event.

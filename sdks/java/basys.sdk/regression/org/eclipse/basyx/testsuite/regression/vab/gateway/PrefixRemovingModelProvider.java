@@ -14,7 +14,7 @@ public class PrefixRemovingModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) {
+	public Object getModelPropertyValue(String path) throws Exception {
 		return provider.getModelPropertyValue(removePathPrefix(path));
 	}
 

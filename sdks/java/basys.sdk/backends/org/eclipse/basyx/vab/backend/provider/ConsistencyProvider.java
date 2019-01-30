@@ -51,7 +51,7 @@ public class ConsistencyProvider<T extends IModelProvider> implements ILocalMode
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) {
+	public Object getModelPropertyValue(String path) throws Exception {
 
 		if (path.endsWith("/frozen")) {
 			return this.frozen;

@@ -26,8 +26,7 @@ public class HistoryPreservingProvider implements IModelProvider {
 	private IModelProvider historyProvider;
 	private TimeProvider timeProvider;
 
-	public HistoryPreservingProvider(IModelProvider mainProvider, IModelProvider historyProvider,
-			TimeProvider timeProvider) {
+	public HistoryPreservingProvider(IModelProvider mainProvider, IModelProvider historyProvider, TimeProvider timeProvider) {
 		super();
 		this.mainProvider = mainProvider;
 		this.historyProvider = historyProvider;
@@ -82,8 +81,7 @@ public class HistoryPreservingProvider implements IModelProvider {
 		} else if (newEntity instanceof ISubModel) {
 			ISubModel submodel = ((ISubModel) newEntity);
 			for (String p : submodel.getProperties().keySet()) {
-				saveRecursive(address + "/" + submodel.getId() + "/properties", submodel.getProperties().get(p),
-						timeStamp);
+				saveRecursive(address + "/" + submodel.getId() + "/properties", submodel.getProperties().get(p), timeStamp);
 			}
 		} else if (newEntity instanceof IAssetAdministrationShell) {
 			IAssetAdministrationShell shell = (IAssetAdministrationShell) newEntity;
@@ -102,7 +100,7 @@ public class HistoryPreservingProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) {
+	public Object getModelPropertyValue(String path) throws Exception {
 		return mainProvider.getModelPropertyValue(path);
 	}
 

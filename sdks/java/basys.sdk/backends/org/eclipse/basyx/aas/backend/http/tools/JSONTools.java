@@ -13,7 +13,6 @@ import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
-import org.eclipse.basyx.vab.core.IModelProvider;
 import org.json.JSONObject;
 
 
@@ -354,25 +353,6 @@ public class JSONTools {
 	// return result;
 	// }
 
-	/**
-	 * Serialize a property into JSON object TODO make this class independent from
-	 * IModelProvider?
-	 * 
-	 * FIXME: Remove
-	 */
-	public JSONObject serializeProperty(String pathToObject, IModelProvider provider) {
-		// Create return value
-		JSONObject returnValue = new JSONObject();
-
-		// Get value and scope
-		Object value = provider.getModelPropertyValue(pathToObject);
-
-		// Serialize value
-		returnValue = this.serialize(value, "");
-
-		// Return serialized value
-		return returnValue;
-	}
 	//
 	// /**
 	// * Serialize an IElement

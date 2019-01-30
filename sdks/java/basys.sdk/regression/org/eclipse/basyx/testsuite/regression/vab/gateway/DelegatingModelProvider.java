@@ -13,7 +13,7 @@ public class DelegatingModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) {
+	public Object getModelPropertyValue(String path) throws Exception {
 		return getProvider(path).getModelPropertyValue(getRest(path));
 	}
 

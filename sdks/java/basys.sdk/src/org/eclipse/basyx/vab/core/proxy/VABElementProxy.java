@@ -3,7 +3,6 @@ package org.eclipse.basyx.vab.core.proxy;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.vab.core.IModelProvider;
 
-
 /**
  * Proxy class for a VAB element
  * 
@@ -12,21 +11,16 @@ import org.eclipse.basyx.vab.core.IModelProvider;
  */
 public class VABElementProxy {
 
-	
 	/**
 	 * Connector specific target address
 	 */
 	protected String addr = null;
 
-	
 	/**
 	 * IModelProvider that connects to the target address
 	 */
 	protected IModelProvider provider = null;
 
-	
-	
-	
 	/**
 	 * Constructor expects address and provider reference
 	 */
@@ -36,19 +30,21 @@ public class VABElementProxy {
 		this.provider = provider;
 	}
 
-	
 	/**
 	 * Read VAB element value
 	 */
-	public Object readElementValue(String elementPath) {
+	public Object readElementValue(String elementPath) throws ServerException {
 		// Get element from server
-		Object result = provider.getModelPropertyValue(elementPath);
-
-		// Return property value
-		return result;
+		try {
+			// Change element on server
+			return provider.getModelPropertyValue(elementPath);
+		} catch (ServerException e) {
+			throw new ServerException(e);
+		} catch (Exception e) {
+			throw new ServerException(e.getClass().getName(), e.getMessage());
+		}
 	}
 
-	
 	/**
 	 * Update VAB element value <br />
 	 * <br />
@@ -66,7 +62,6 @@ public class VABElementProxy {
 		}
 	}
 
-	
 	/**
 	 * Add element on server
 	 */
@@ -83,7 +78,6 @@ public class VABElementProxy {
 		}
 	}
 
-	
 	/**
 	 * Delete element from server
 	 */
@@ -99,7 +93,6 @@ public class VABElementProxy {
 		}
 	}
 
-	
 	/**
 	 * Delete element from server
 	 */
@@ -115,7 +108,6 @@ public class VABElementProxy {
 		}
 	}
 
-	
 	/**
 	 * Invoke element as an operation
 	 */
