@@ -2,9 +2,12 @@ package org.eclipse.basyx.vab.backend.server;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.Optional;
 
+import org.eclipse.basyx.aas.api.exception.LostHTTPRequestParameterException;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.ProtocolWrapper;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 import org.json.JSONException;
@@ -56,7 +59,9 @@ public class JSONProvider<T extends IModelProvider> {
 	 * @param resp
 	 */
 	private void sendException(PrintWriter resp, Exception e) {
-		System.out.println("Sending exception...");
+		System.out.println("Sending " + e.toString() + " ...");
+		
+		
 		JSONObject error = JSONTools.Instance.serialize(e);
 
 		// Send error response
@@ -70,9 +75,10 @@ public class JSONProvider<T extends IModelProvider> {
 	 * @param serializedJSONValue
 	 * @param outputStream
 	 * @return
+	 * @throws LostHTTPRequestParameterException 
 	 * @throws ServerException
 	 */
-	private Object extractParameter(String path, String serializedJSONValue, PrintWriter outputStream) {
+	private Object extractParameter(String path, String serializedJSONValue, PrintWriter outputStream) throws LostHTTPRequestParameterException  {
 
 		System.out.println("Extracting Parameter: " + serializedJSONValue);
 
@@ -81,6 +87,12 @@ public class JSONProvider<T extends IModelProvider> {
 
 		// Deserialize json body
 		try {
+			if (serializedJSONValue.equals("")) {
+				LostHTTPRequestParameterException ex = new LostHTTPRequestParameterException(path);
+				sendException(outputStream, ex);
+				throw ex;
+			}
+			
 			JSONObject json = new JSONObject(serializedJSONValue.toString());
 			result = JSONTools.Instance.deserialize(json);
 
@@ -119,9 +131,12 @@ public class JSONProvider<T extends IModelProvider> {
 	 */
 	public void processBaSysSet(String path, String serializedJSONValue, PrintWriter outputStream) {
 		// Deserialize json body. If parameter is null, an exception has been sent
-		Object parameter = extractParameter(path, serializedJSONValue, outputStream);
-		if (parameter == null)
+		Object parameter;
+		try {
+			parameter = extractParameter(path, serializedJSONValue, outputStream);
+		} catch (LostHTTPRequestParameterException e1) {
 			return;
+		}
 
 		System.out.println("-------------------------- DO PUT " + path + " => " + parameter + " ---------------------------------------------------------");
 
@@ -172,12 +187,25 @@ public class JSONProvider<T extends IModelProvider> {
 	public void processBaSysInvoke(String path, String serializedJSONValue, PrintWriter outputStream) {
 
 		// Deserialize json body. If parameter is null, an exception has been sent
-		Object parameter = extractParameter(path, serializedJSONValue, outputStream);
+		Object parameter;
+		try {
+			parameter = extractParameter(path, serializedJSONValue, outputStream);
+		} catch (LostHTTPRequestParameterException e1) {
+			return;
+		}
 
 		JSONObject returnValue = null;
+		
+		// If only a single parameter has been sent, pack it into an array so it can be casted safely
+		if (!(parameter instanceof Object[])) {
+			Object[] parameterArray = new Object[1];
+			Object tmp = parameter;
+			parameterArray[0] = tmp;
+			parameter = parameterArray;
+		}
 
 		try {
-			System.out.println("Invoking Service: " + path + " with arguments " + Arrays.toString((Object[]) parameter));
+			System.out.println("Invoking Service: " + path + " with arguments " + Arrays.toString((Object[]) parameter)); // casts parameter to collection
 
 			Object result = providerBackend.invokeOperation(path, (Object[]) parameter);
 			System.out.println("Return Value: " + result);
@@ -194,7 +222,7 @@ public class JSONProvider<T extends IModelProvider> {
 	}
 
 	/**
-	 * Process a patch request. Updates a map or collection.
+	 * Process a patch request. Deletes and element from a map or collection.
 	 * 
 	 * @param path
 	 * @param serializedJSONValue
@@ -225,15 +253,19 @@ public class JSONProvider<T extends IModelProvider> {
 	 * Implement "Delete" operation. Deletes any resource under the given path.
 	 * 
 	 * @param path
+	 * @param hasArgument 
 	 * @param serializedJSONValue
 	 * @param outputStream
 	 */
 	public void processBaSysDelete(String path, String serializedValue, PrintWriter outputStream) {
 		// Deserialize json body. If parameter is null, an exception has been sent
-		Object parameter = null;
-		if (!serializedValue.isEmpty()) {
+		Object parameter;
+		try {
 			parameter = extractParameter(path, serializedValue, outputStream);
+		} catch (LostHTTPRequestParameterException e1) {
+			return;
 		}
+		
 
 		System.out.println("Delete1:" + parameter);
 		// Invoke provider backend

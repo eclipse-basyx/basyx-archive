@@ -152,14 +152,14 @@ public class VABBaSyxTCPInterface<T extends IModelProvider> extends Thread {
 			int pathLen = CoderTools.getInt32(rxFrame, 1);
 			String path = new String(rxFrame, 1 + 4, pathLen);
 
-			// Get value string length and value if available
-			String jsonValue = "";
+			// Get value string length and value if available; default is null value  
+			String jsonValue = "{\"basystype\":\"null\"}";
 			try {
 				int jsonValueLen = CoderTools.getInt32(rxFrame, 1 + 4 + pathLen);
 				jsonValue = new String(rxFrame, 1 + 4 + pathLen + 4, jsonValueLen);
 
 			} catch (ArrayIndexOutOfBoundsException e) {
-				// pass, provide empty string argument to processBaSysDelete to indicate that an
+				// pass, provide serialize null argument to processBaSysDelete to indicate that an
 				// entity should be removed
 			}
 

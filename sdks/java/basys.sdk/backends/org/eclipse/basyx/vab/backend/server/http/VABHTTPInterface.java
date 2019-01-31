@@ -204,15 +204,11 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServele
 		// Decode URL 
 		path = java.net.URLDecoder.decode(path, "UTF-8");
 		
-		// Read request body
-		InputStreamReader reader = new InputStreamReader(req.getInputStream());
-		BufferedReader bufReader = new BufferedReader(reader);
-		StringBuilder serValue = new StringBuilder();
-		while (bufReader.ready())
-			serValue.append(bufReader.readLine());
+		// No parameter to read! Provide serialized null
+		String nullParam = "{\"basystype\":\"null\"}";
 		
 		System.out.println("Delete0:" + path);
 
-		providerBackend.processBaSysDelete(path, serValue.toString(), resp.getWriter());
+		providerBackend.processBaSysDelete(path, nullParam, resp.getWriter()); // There will never be a serialized value here as a parameter
 	}
 }
