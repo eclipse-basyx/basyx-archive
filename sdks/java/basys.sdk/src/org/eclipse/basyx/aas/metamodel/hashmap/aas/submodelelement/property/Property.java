@@ -2,6 +2,7 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property;
 
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.PropertyType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.DataElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
@@ -47,6 +48,18 @@ public class Property extends DataElement implements IProperty {
 		put("value", value);
 		put("valueType", PropertyValueTypeDefHelper.fromObject(value).toString());
 
+	}
+
+	public void setSemantics(String value) {
+		put("semanticId", value);
+	}
+
+	public String getSemantics() {
+		return (String) get("semanticId");
+	}
+
+	public void setQualifier(Qualifier qualifier) {
+		put("qualifier", qualifier);
 	}
 
 	@Override

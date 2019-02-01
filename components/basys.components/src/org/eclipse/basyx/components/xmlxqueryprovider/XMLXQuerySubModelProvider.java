@@ -1,20 +1,14 @@
 package org.eclipse.basyx.components.xmlxqueryprovider;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
-import javax.xml.xquery.XQConnection;
-import javax.xml.xquery.XQDataSource;
+
 import javax.xml.xquery.XQException;
-import javax.xml.xquery.XQPreparedExpression;
 import javax.xml.xquery.XQSequence;
-import javax.xml.xquery.XQStaticContext;
 
 import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
 import org.w3c.dom.NamedNodeMap;
@@ -95,6 +89,7 @@ public class XMLXQuerySubModelProvider extends BaseConfiguredProvider {
 	/**
 	 * Split a whitespace delimited string
 	 */
+	@Override
 	protected Collection<String> splitString(String input) {
 		// Return value
 		HashSet<String> result = new HashSet<>();

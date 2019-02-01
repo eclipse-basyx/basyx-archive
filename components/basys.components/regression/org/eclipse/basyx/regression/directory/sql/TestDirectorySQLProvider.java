@@ -6,7 +6,7 @@ import static org.junit.Assert.fail;
 import java.net.URLEncoder;
 
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identification;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
 import org.junit.ClassRule;
@@ -43,7 +43,7 @@ public class TestDirectorySQLProvider {
 		// First test - get all locally registered AAS
 		{
 			// Get all locally registered AAS
-			String result = (String) client.get(wsURL+"/api/v1/registry");
+			String result = client.get(wsURL+"/api/v1/registry");
 			
 			// Check if all AAS are contained in result
 			assertTrue(result.contains("{content.aas1}"));
@@ -56,7 +56,7 @@ public class TestDirectorySQLProvider {
 		// Get a specific AAS (1)
 		try {
 			// Get a known AAS by its ID
-			String result = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-19","UTF-8"));
+			String result = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-19","UTF-8"));
 
 
 			System.out.println("Res:"+result);
@@ -71,7 +71,7 @@ public class TestDirectorySQLProvider {
 		// Get a specific AAS (2)
 		try {
 			// Get a known AAS by its ID
-			String result = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-18","UTF-8"));
+			String result = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-18","UTF-8"));
 
 			// Check if all AAS are contained in result
 			assertTrue(result.equals("{content.aas2}"));
@@ -83,7 +83,7 @@ public class TestDirectorySQLProvider {
 		// Get a specific AAS (3)
 		try {
 			// Get a known AAS by its ID
-			String result = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-17","UTF-8"));
+			String result = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-17","UTF-8"));
 
 			// Check if all AAS are contained in result
 			assertTrue(result.equals("{content.aas3}"));
@@ -95,7 +95,7 @@ public class TestDirectorySQLProvider {
 		// Get a specific AAS (4)
 		try {
 			// Get a known AAS by its ID
-			String result = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-16","UTF-8"));
+			String result = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-16","UTF-8"));
 
 			// Check if all AAS are contained in result
 			assertTrue(result.equals("{content.aas4}"));
@@ -123,7 +123,7 @@ public class TestDirectorySQLProvider {
 			client.put(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-16","UTF-8"), "{content.aas5}");
 
 			// Get a known AAS by its ID
-			String result = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-16","UTF-8"));
+			String result = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-16","UTF-8"));
 			// - Check updated registration
 			assertTrue(result.equals("{content.aas5}"));
 			
@@ -131,7 +131,7 @@ public class TestDirectorySQLProvider {
 			client.put(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-16","UTF-8"), "{content.aas4}");
 
 			// Get a known AAS by its ID
-			String result2 = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-16","UTF-8"));
+			String result2 = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-16","UTF-8"));
 			// - Check updated registration
 			assertTrue(result2.equals("{content.aas4}"));
 
@@ -156,18 +156,18 @@ public class TestDirectorySQLProvider {
 		// Update a specific AAS
 		try {
 			// Get a known AAS by its ID - check if AAS does not exist already
-			String result0 = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
+			String result0 = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
 			// - Check updated registration
 			assertTrue(result0.equals(""));
 			
 			// Create and register AAS descriptor
 			// - Create AAS descriptor
-			AASDescriptor aasDescriptor = new AASDescriptor("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-166", Identification.URI, "www.endpoint.de");
+			AASDescriptor aasDescriptor = new AASDescriptor("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-166", IdentifierType.URI, "www.endpoint.de");
 			// - Create new AAS registration
 			client.post(wsURL+"/api/v1/registry", JSONTools.Instance.serialize(aasDescriptor).toString());
 
 			// Get a known AAS by its ID
-			String result = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
+			String result = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
 			// - Check updated registration
 			System.out.println("RESULT:"+result);
 			//assertTrue(result.equals("{content.aas6}"));
@@ -176,7 +176,7 @@ public class TestDirectorySQLProvider {
 			client.delete(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
 
 			// Get a known AAS by its ID
-			String result2 = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
+			String result2 = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
 			// - Check updated registration
 			assertTrue(result2.equals(""));
 			System.out.println("R2:"+result2);
@@ -203,7 +203,7 @@ public class TestDirectorySQLProvider {
 		// Get unknown AAS ID
 		try {
 			// Get a known AAS by its ID
-			String result = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("unknown","UTF-8"));
+			String result = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("unknown","UTF-8"));
 
 			// Check if all AAS are contained in result
 			assertTrue(result.equals(""));

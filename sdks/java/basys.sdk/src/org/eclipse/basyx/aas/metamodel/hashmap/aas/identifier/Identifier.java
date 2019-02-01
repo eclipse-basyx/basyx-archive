@@ -1,6 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Identification class
@@ -24,6 +25,10 @@ public class Identifier extends HashMap<String, Object> {
 		put("id", "");
 	}
 
+	public Identifier(Map<String, Object> copy) {
+		putAll(copy);
+	}
+
 	/**
 	 * Constructor that accepts parameter
 	 */
@@ -36,14 +41,14 @@ public class Identifier extends HashMap<String, Object> {
 	/**
 	 * Get value of 'idType' property
 	 */
-	public IdentifierType getIdType() {
-		return (IdentifierType) get("idType");
+	public String getIdType() {
+		return (String) get("idType");
 	}
 
 	/**
 	 * Update value of 'idType' property
 	 */
-	public void setIdType(IdentifierType newValue) {
+	public void setIdType(String newValue) {
 		put("idType", newValue);
 	}
 

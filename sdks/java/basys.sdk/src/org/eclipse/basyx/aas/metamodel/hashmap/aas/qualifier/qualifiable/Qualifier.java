@@ -1,10 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable;
 
-import java.util.HashMap;
-
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDef;
 
 /**
  * Qualifier class
@@ -12,7 +9,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valu
  * @author kuhn
  *
  */
-public class Qualifier extends HashMap<String, Object> {
+public class Qualifier extends Constraint {
 
 	/**
 	 * Version of serialized instances
@@ -32,7 +29,7 @@ public class Qualifier extends HashMap<String, Object> {
 		put("qualifierValueId", null);
 	}
 
-	public Qualifier(QualifierType type, PropertyValueTypeDef value, Reference valueId) {
+	public Qualifier(String type, String value, Reference valueId) {
 		// Add all attributes from HasSemantics
 		this.putAll(new HasSemantics());
 

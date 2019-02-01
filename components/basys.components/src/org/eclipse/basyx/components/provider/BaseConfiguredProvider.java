@@ -7,11 +7,12 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacade;
 import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacadeIRDISemantics;
-import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacadeInternalSemantics;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel_;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.Property;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identification;
+import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacadeCustomSemantics;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.Kind;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
 
 
@@ -32,7 +33,7 @@ public class BaseConfiguredProvider extends VABLambdaProvider {
 	/**
 	 * This is a sub model
 	 */
-	protected SubModel_ submodelData = null;
+	protected SubModel submodelData = null;
 
 	
 	
@@ -118,51 +119,58 @@ public class BaseConfiguredProvider extends VABLambdaProvider {
 	 * 
 	 * @param cfgValues    Provider configuration
 	 */
-	protected SubModel_ createSubModel(Map<Object, Object> cfgValues) {
+	protected SubModel createSubModel(Map<Object, Object> cfgValues) {
 		// Create sub model
-		SubModel_ submodel = null;
+		SubModel submodel = null;
 
 		// Try to load and convert configuration values. Keep value null if any error occurs
-		String basyx_submodelSemantics = null; try {basyx_submodelSemantics = (String) cfgValues.get("basyx.submodelSemantics").toString().toLowerCase();} catch (Exception e) {}
-		String basyx_semantics         = null; try {basyx_semantics         = (String) cfgValues.get("basyx.semantics");} catch (Exception e) {}
-		String basyx_idType            = null; try {basyx_idType            = (String) cfgValues.get("basyx.idType").toString().toLowerCase();} catch (Exception e) {}
-		String basyx_id                = null; try {basyx_id                = (String) cfgValues.get("basyx.id").toString();} catch (Exception e) {}
-		String basyx_idShort           = null; try {basyx_idShort           = (String) cfgValues.get("basyx.idShort").toString();} catch (Exception e) {}
-		String basyx_category          = null; try {basyx_category          = (String) cfgValues.get("basyx.category").toString();} catch (Exception e) {}
-		String basyx_description       = null; try {basyx_description       = (String) cfgValues.get("basyx.description").toString();} catch (Exception e) {}
-		String basyx_qualifier         = null; try {basyx_qualifier         = (String) cfgValues.get("basyx.qualifier").toString();} catch (Exception e) {}
-		String basyx_version           = null; try {basyx_version           = (String) cfgValues.get("basyx.version").toString();} catch (Exception e) {}
-		String basyx_revision          = null; try {basyx_revision          = (String) cfgValues.get("basyx.revision").toString();} catch (Exception e) {}
+		String basyx_submodelSemantics = null; try {basyx_submodelSemantics = cfgValues.get("basyx.submodelSemantics").toString().toLowerCase();} catch (Exception e) {}
+		String basyx_idType            = null; try {basyx_idType            = cfgValues.get("basyx.idType").toString().toLowerCase();} catch (Exception e) {}
+		String basyx_id                = null; try {basyx_id                = cfgValues.get("basyx.id").toString();} catch (Exception e) {}
+		String basyx_idShort           = null; try {basyx_idShort           = cfgValues.get("basyx.idShort").toString();} catch (Exception e) {}
+		String basyx_category          = null; try {basyx_category          = cfgValues.get("basyx.category").toString();} catch (Exception e) {}
+		String basyx_description       = null; try {basyx_description       = cfgValues.get("basyx.description").toString();} catch (Exception e) {}
+		String basyx_qualifier         = null; try {basyx_qualifier         = cfgValues.get("basyx.qualifier").toString();} catch (Exception e) {}
+		String basyx_qualifierType     = null; try {basyx_qualifierType     = cfgValues.get("basyx.qualifierType").toString();} catch (Exception e) {}
+		String basyx_version           = null; try {basyx_version           = cfgValues.get("basyx.version").toString();} catch (Exception e) {}
+		String basyx_revision          = null; try {basyx_revision          = cfgValues.get("basyx.revision").toString();} catch (Exception e) {}
 
 		// Process ID Type - default value is internal
-		int idType = Identification.Internal;
+		String idType = IdentifierType.Custom;
 		// - Compare to known values
-		if (basyx_idType == null) basyx_idType="Identification.Internal";
-		if (basyx_idType.equals("Identification.IRDI"))     idType = Identification.IRDI;
-		if (basyx_idType.equals("Identification.URI"))      idType = Identification.URI;
-		if (basyx_idType.equals("Identification.Internal")) idType = Identification.Internal;
+		if (basyx_idType == null)
+			basyx_idType = "IdentifierType.Custom";
+		if (basyx_idType.equals("IdentifierType.IRDI"))
+			idType = IdentifierType.IRDI;
+		if (basyx_idType.equals("IdentifierType.URI"))
+			idType = IdentifierType.URI;
+		if (basyx_idType.equals("IdentifierType.Custom"))
+			idType = IdentifierType.Custom;
 		
 		
 		// Try to load properties
 		// Check type of sub model template to use
-		if (basyx_submodelSemantics == null) basyx_submodelSemantics = "internal";
+		if (basyx_submodelSemantics == null)
+			basyx_submodelSemantics = "custom";
 		if (basyx_submodelSemantics.equals("irdi")) {
 			// Create sub model from template
-			SubmodelFacade template = new SubmodelFacadeIRDISemantics(basyx_semantics, idType, basyx_id, basyx_idShort, basyx_category, basyx_description, basyx_qualifier, basyx_version, basyx_revision);
-			
+			SubmodelFacade template = new SubmodelFacadeIRDISemantics(basyx_submodelSemantics, idType, basyx_id, basyx_idShort, basyx_category,
+					basyx_description, new Qualifier(basyx_qualifierType, basyx_qualifier, null), null, Kind.Instance,
+					basyx_version, basyx_revision);
 			// Get sub model data
 			submodel = template.getSubModel();
 		};
-		if (basyx_submodelSemantics.equals("internal")) {
+		if (basyx_submodelSemantics.equals("custom")) {
 			// Create sub model from template
-			SubmodelFacade template = new SubmodelFacadeInternalSemantics(basyx_semantics, idType, basyx_id, basyx_idShort, basyx_category, basyx_description, basyx_qualifier, basyx_version, basyx_revision);			
-			
-			// Get sub model data
+			SubmodelFacade template = new SubmodelFacadeCustomSemantics(basyx_submodelSemantics, idType, basyx_id, basyx_idShort, basyx_category,
+					basyx_description, new Qualifier(basyx_qualifierType, basyx_qualifier, null), null, Kind.Instance, basyx_version, basyx_revision);
+		 // Get sub model data
 			submodel = template.getSubModel();
 		}
 		
 		// If no sub model was created, create an empty one
-		if (submodel == null) submodel = new SubModel_();
+		if (submodel == null)
+			submodel = new SubModel();
 		
 		// Return sub model data
 		return submodel;
@@ -177,13 +185,14 @@ public class BaseConfiguredProvider extends VABLambdaProvider {
 	 * @param propertyValue Property value
 	 * @param cfgValues     Provider configuration
 	 */
-	protected Property createProperty(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
+	protected Property createSubmodelElement(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
 		
 		// Get property type
 		String propertyType = cfgValues.get(propertyName+".type").toString();
 		
 		// Dispatch to requested create function
-		if (propertyType.equals("PropertySingleValued")) return createPropertySingleValues(propertyName, propertyValue, cfgValues);
+		if (propertyType.equals("Property"))
+			return createProperty(propertyName, propertyValue, cfgValues);
 
 		// Do not return anything
 		return null;
@@ -197,16 +206,19 @@ public class BaseConfiguredProvider extends VABLambdaProvider {
 	 * @param propertyValue Property value
 	 * @param cfgValues     Provider configuration
 	 */
-	protected PropertySingleValued createPropertySingleValues(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
+	protected Property createProperty(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
 		
 		// Try to get property meta data
-		String property_semanticsInternal = null; try {property_semanticsInternal = (String) cfgValues.get(propertyName+".semanticsInternal").toString();} catch (Exception e) {}
-		String property_category          = null; try {property_category          = (String) cfgValues.get(propertyName+".category").toString();} catch (Exception e) {}
-		String property_description       = null; try {property_description       = (String) cfgValues.get(propertyName+".description").toString();} catch (Exception e) {}
-		String property_qualifier         = null; try {property_qualifier         = (String) cfgValues.get(propertyName+".qualifier").toString();} catch (Exception e) {}
+		String property_semanticsInternal = null; try {property_semanticsInternal = cfgValues.get(propertyName+".semanticsInternal").toString();} catch (Exception e) {}
+		String property_qualifier         = null; try {property_qualifier         = cfgValues.get(propertyName+".qualifier").toString();} catch (Exception e) {}
+		String property_qualifierType     = null; try {property_qualifierType  = cfgValues.get(propertyName+".qualifierType").toString();} catch (Exception e) {}
 
 		
 		// Create and return single valued property
-		return new PropertySingleValued(propertyValue, property_semanticsInternal, propertyName, property_category, property_description, property_qualifier);
+		Property prop = new Property(propertyValue);
+		prop.setId(propertyName);
+		prop.setSemantics(property_semanticsInternal);
+		prop.setQualifier(new Qualifier(property_qualifierType, property_qualifier, null));
+		return prop;
 	}
 }

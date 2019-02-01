@@ -1,12 +1,9 @@
 package org.eclipse.basyx.regression.rawcfgprovider.tests;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell_;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
@@ -48,7 +45,7 @@ public class TestRawCFGProviderAASNewModel {
 
 		
 		// Create map with complex type
-		AssetAdministrationShell_ aas = new AssetAdministrationShell_();
+		AssetAdministrationShell aas = new AssetAdministrationShell();
 		// Create AAS structure on server
 		connSubModel.createElement("/aas/submodels/rawSampleCFG/aas", aas);
 

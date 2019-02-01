@@ -16,27 +16,31 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.enums.KeyElements;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.enums.KeyType;
 
+
+
+
+
 /**
- * Facade class that supports the development and access of sub models using
- * IRDI (International Registration Data Identifier) semantic definitions
+ * Facade class that supports the development and access of sub models using IRDI (International Registration Data Identifier) semantic definitions
  * 
  * @author kuhn
  *
  */
-public class SubmodelFacadeIRDISemantics extends SubmodelFacade {
+public class SubmodelFacadeCustomSemantics extends SubmodelFacade {
 
+		
+	
 	/**
-	 * Constructor without arguments - create a sub model with all meta properties
-	 * empty / set to default values
+	 * Constructor without arguments - create a sub model with all meta properties empty / set to default values
 	 */
-	public SubmodelFacadeIRDISemantics() {
+	public SubmodelFacadeCustomSemantics() {
 		// Create sub model
 		this.setElements(new SubModel());
 	}
 
 	/**
 	 * Sub model constructor for sub models that conform to a globally defined
-	 * semantics with IRDI (International Registration Data Identifier)
+	 * semantics with Custom semantics <br/>
 	 * 
 	 * Create an instance sub model with all meta properties empty / set to default
 	 * values
@@ -58,8 +62,7 @@ public class SubmodelFacadeIRDISemantics extends SubmodelFacade {
 	 *            Descriptive sub model description (e.g. "This is a machine
 	 *            readable description of the transport system topology")
 	 * @param constraint
-	 *            The collection of qualifiers of this sub model (e.g.
-	 *            ["plant.maintransport", "maintransport."])
+	 *            The qualifier of this sub model (e.g. "plant.maintransport")
 	 * @param dataSpecification
 	 *            Sub model data specification
 	 * @param kind
@@ -69,11 +72,11 @@ public class SubmodelFacadeIRDISemantics extends SubmodelFacade {
 	 * @param revision
 	 *            Sub model revision
 	 */
-	public SubmodelFacadeIRDISemantics(String semantics, String idType, String id, String idShort, String category, String description, Constraint constraint, DataSpecification dataSpecification, String kind, String version,
+	public SubmodelFacadeCustomSemantics(String semantics, String idType, String id, String idShort, String category, String description, Constraint constraint, DataSpecification dataSpecification, String kind, String version,
 			String revision) {
 		// Create sub model
-		this.setElements(new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.IRDI)))),
-				new Identifiable(version, revision, idShort, category, description, IdentifierType.Custom, id), 
+		this.setElements(new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.Custom)))),
+				new Identifiable(version, revision, idShort, category, description, IdentifierType.Custom, id),
 				new Qualifiable(constraint), 
 				dataSpecification,
 				new HasKind(kind)));
@@ -81,7 +84,8 @@ public class SubmodelFacadeIRDISemantics extends SubmodelFacade {
 
 	/**
 	 * Sub model constructor for sub models that conform to a globally defined
-	 * semantics with IRDI (International Registration Data Identifier) <br />
+	 * semantics with Custom semantics <br/>
+	 * 
 	 * Create an instance sub model with all meta properties empty / set to default
 	 * values
 	 * 
@@ -113,14 +117,15 @@ public class SubmodelFacadeIRDISemantics extends SubmodelFacade {
 	 * @param revision
 	 *            Sub model revision
 	 */
-	public SubmodelFacadeIRDISemantics(String semantics, String idType, String id, String idShort, String category, String description, Collection<Constraint> qualifier, Constraint constraint,
+	public SubmodelFacadeCustomSemantics(String semantics, String idType, String id, String idShort, String category, String description, Collection<Constraint> qualifier, Constraint constraint,
 			DataSpecification dataSpecification, String kind, String version, String revision) {
 		// Create sub model
 		this.setElements(
-				new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.IRDI)))),
+				new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.Custom)))),
 						new Identifiable(version, revision, idShort, category, description, idType, id), 
 						new Qualifiable(qualifier), 
 						dataSpecification, 
 						new HasKind(kind)));
 	}
 }
+

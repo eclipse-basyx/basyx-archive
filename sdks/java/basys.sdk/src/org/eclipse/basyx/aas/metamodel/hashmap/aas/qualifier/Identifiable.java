@@ -33,7 +33,7 @@ public class Identifiable extends Referable {
 	 */
 	public Identifiable(String version, String revision, String idShort, String category, String description, String idType, String id) {
 		// Add qualifier
-		putAll(new Referable());
+		putAll(new Referable(idShort, category, description));
 
 		// Create administrative information of an element. (AdministrativeInformation)
 		put("administration", new AdministrativeInformation(version, revision));

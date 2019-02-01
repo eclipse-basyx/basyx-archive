@@ -5,9 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.enums.Kind;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identification;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.Kind;
+
 
 
 
@@ -32,13 +33,13 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	 */
 	public SubmodelDescriptor() {
 		// Add members
-		put("identification", new Identification());
+		put("identification", new Identifier());
 		put("metaData", new HashMap<String, Object>());
 		put("administration", new AdministrativeInformation());
 		put("idShort", new String(""));
 		put("category", new String(""));
 		put("descriptions", new LinkedList<Description>());		
-		put("semanticId", new Identification());
+		put("semanticId", new Identifier());
 		put("kind", Kind.Instance);
 		put("endpoints", new LinkedList<String>());
 	}
@@ -48,13 +49,13 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	 * Create a new sub model descriptor with minimal information
 	 */
 	@SuppressWarnings("unchecked")
-	public SubmodelDescriptor(String id, int idType, String endpoint) {
+	public SubmodelDescriptor(String id, String idType, String endpoint) {
 		// Invoke default constructor
 		this();
 		
 		// Add identification and end point information
-		((Identification) get("identification")).setIdType(idType);
-		((Identification) get("identification")).setId(id);
+		((Identifier) get("identification")).setIdType(idType);
+		((Identifier) get("identification")).setId(id);
 		((List<String>) get("endpoints")).add(endpoint);
 	}
 	
@@ -73,7 +74,7 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getId() {
-		return new Identification((Map<String, Object>) get("identification")).getId();
+		return new Identifier((Map<String, Object>) get("identification")).getId();
 	}
 	
 	
@@ -81,8 +82,8 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	 * Return sub model ID type
 	 */
 	@SuppressWarnings("unchecked")
-	public int getIdType() {
-		return new Identification((Map<String, Object>) get("identification")).getIdType();
+	public String getIdType() {
+		return new Identifier((Map<String, Object>) get("identification")).getIdType();
 	}
 
 	

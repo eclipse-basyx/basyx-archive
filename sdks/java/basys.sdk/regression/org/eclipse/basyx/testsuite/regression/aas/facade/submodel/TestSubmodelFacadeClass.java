@@ -1,16 +1,10 @@
 package org.eclipse.basyx.testsuite.regression.aas.facade.submodel;
 
 
-import java.util.Collections;
-
-import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacadeInternalSemantics;
+import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacadeCustomSemantics;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.dataspecification.DataSpecification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.Kind;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Formula;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Key;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.enums.KeyElements;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.enums.KeyType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
 import org.junit.Test;
 
 
@@ -30,13 +24,13 @@ public class TestSubmodelFacadeClass {
 	@Test
 	public void testSubmodelFactoryInternalSemantics() {
 		// Create a submodel facade
-		SubmodelFacadeInternalSemantics subModel = new SubmodelFacadeInternalSemantics(
-					new Reference(Collections.singletonList(new Key(KeyElements.Asset, false, "", KeyType.IdShort))),
+		SubmodelFacadeCustomSemantics subModel = new SubmodelFacadeCustomSemantics(
+				"", "valIdType",
 					"valId",
 					"valIdShort",
 					"valCategory",
 					"valDescription",
-					new Formula(),
+				new Qualifier(), 
 					new DataSpecification(),  
 					Kind.Instance,
 					"valVersion",
