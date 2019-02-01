@@ -8,8 +8,10 @@ import java.util.Map;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell_;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
+import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 
@@ -28,7 +30,11 @@ public class TestRawCFGProviderAAS {
 	 */
 	protected VABConnectionManager connManager = new VABConnectionManager(new ComponentsTestsuiteDirectory(), new HTTPConnectorProvider());
 
-	
+	/** 
+	 * Makes sure Tomcat Server is started
+	 */
+	@ClassRule
+	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource();
 	
 	/**
 	 * Test basic queries
