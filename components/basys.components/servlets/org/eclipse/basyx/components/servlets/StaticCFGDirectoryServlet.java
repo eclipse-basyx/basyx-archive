@@ -83,7 +83,16 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
 		super();
 	}
 	
-	
+	/**
+	 * Adds init parameter to servlet
+	 */
+	@Override
+	public String getInitParameter(String name) {
+
+		if (name.equals("config")) return "/WEB-INF/config/directory/cfgdirectory/directory.properties";
+		
+		return null;
+	}
 	
 	/**
 	 * Load a property

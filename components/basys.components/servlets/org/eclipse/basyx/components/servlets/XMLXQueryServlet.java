@@ -53,7 +53,16 @@ public class XMLXQueryServlet extends VABHTTPInterface<VABMultiSubmodelProvider<
 		super(new VABMultiSubmodelProvider<VABHashmapProvider>());
 	}
 	
-	
+	/**
+	 * Adds init parameter to servlet
+	 */
+	@Override
+	public String getInitParameter(String name) {
+
+		if (name.equals("config")) return "/WEB-INF/config/xmlqueryprovider/xmlqueryprovider.properties";
+		
+		return null;
+	}
 	
 	/**
 	 * Initialize servlet

@@ -2,12 +2,10 @@ package org.eclipse.basyx.vab.backend.server;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.Optional;
 
 import org.eclipse.basyx.aas.api.exception.LostHTTPRequestParameterException;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
-import org.eclipse.basyx.aas.backend.http.tools.ProtocolWrapper;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 import org.json.JSONException;

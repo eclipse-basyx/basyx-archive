@@ -43,7 +43,16 @@ public class SQLSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 	protected Properties cfgProperties = null;
 
 	
-	
+	/**
+	 * Adds init parameter to servlet
+	 */
+	@Override
+	public String getInitParameter(String name) {
+
+		if (name.equals("config")) return "/WEB-INF/config/sqlprovider/sampledb.properties";
+		
+		return null;
+	}
 	
 	/**
 	 * Constructor
