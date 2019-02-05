@@ -59,7 +59,7 @@ public class XMLXQueryServlet extends VABHTTPInterface<VABMultiSubmodelProvider<
 	@Override
 	public String getInitParameter(String name) {
 
-		if (name.equals("config")) return "/WEB-INF/config/xmlqueryprovider/xmlqueryprovider.properties";
+		if (name.equals("config")) return "/WebContent/WEB-INF/config/xmlqueryprovider/xmlqueryprovider.properties";
 		
 		return null;
 	}

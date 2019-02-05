@@ -49,7 +49,7 @@ public class SQLSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 	@Override
 	public String getInitParameter(String name) {
 
-		if (name.equals("config")) return "/WEB-INF/config/sqlprovider/sampledb.properties";
+		if (name.equals("config")) return "/WebContent/WEB-INF/config/sqlprovider/sampledb.properties";
 		
 		return null;
 	}

@@ -6,10 +6,12 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacade;
-import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacadeIRDISemantics;
 import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacadeCustomSemantics;
+import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacadeIRDISemantics;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.Kind;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
@@ -163,7 +165,7 @@ public class BaseConfiguredProvider extends VABLambdaProvider {
 		if (basyx_submodelSemantics.equals("custom")) {
 			// Create sub model from template
 			SubmodelFacade template = new SubmodelFacadeCustomSemantics(basyx_submodelSemantics, idType, basyx_id, basyx_idShort, basyx_category,
-					basyx_description, new Qualifier(basyx_qualifierType, basyx_qualifier, null), null, Kind.Instance, basyx_version, basyx_revision);
+					basyx_description, new Qualifier(basyx_qualifierType, basyx_qualifier, null), new HasDataSpecification(), Kind.Instance, basyx_version, basyx_revision);
 		 // Get sub model data
 			submodel = template.getSubModel();
 		}
@@ -212,13 +214,10 @@ public class BaseConfiguredProvider extends VABLambdaProvider {
 		String property_semanticsInternal = null; try {property_semanticsInternal = cfgValues.get(propertyName+".semanticsInternal").toString();} catch (Exception e) {}
 		String property_qualifier         = null; try {property_qualifier         = cfgValues.get(propertyName+".qualifier").toString();} catch (Exception e) {}
 		String property_qualifierType     = null; try {property_qualifierType  = cfgValues.get(propertyName+".qualifierType").toString();} catch (Exception e) {}
-
+		String property_description       = null; try {property_description       = cfgValues.get(propertyName+".description").toString();} catch (Exception e) {}
 		
 		// Create and return single valued property
-		Property prop = new Property(propertyValue);
-		prop.setId(propertyName);
-		prop.setSemantics(property_semanticsInternal);
-		prop.setQualifier(new Qualifier(property_qualifierType, property_qualifier, null));
+		Property prop = new Property(propertyValue, new Referable(propertyName, "", property_description), property_semanticsInternal, new Qualifier(property_qualifierType, property_qualifier, null));
 		return prop;
 	}
 }

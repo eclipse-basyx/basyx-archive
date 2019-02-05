@@ -89,7 +89,7 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServelet {
 	@Override
 	public String getInitParameter(String name) {
 
-		if (name.equals("config")) return "/WEB-INF/config/directory/cfgdirectory/directory.properties";
+		if (name.equals("config")) return "/WebContent/WEB-INF/config/directory/cfgdirectory/directory.properties";
 		
 		return null;
 	}

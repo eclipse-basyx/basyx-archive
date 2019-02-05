@@ -119,7 +119,7 @@ public class SQLDirectoryServlet extends BasysHTTPServelet {
 	@Override
 	public String getInitParameter(String name) {
 
-		if (name.equals("config")) return "/WEB-INF/config/directory/sqldirectory/directory.properties";
+		if (name.equals("config")) return "/WebContent/WEB-INF/config/directory/sqldirectory/directory.properties";
 		
 		return null;
 	}

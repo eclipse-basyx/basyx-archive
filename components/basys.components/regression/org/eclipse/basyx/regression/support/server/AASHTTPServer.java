@@ -32,9 +32,10 @@ public class AASHTTPServer extends Thread {
 		tomcat.setPort(8080);
 		tomcat.setHostname("localhost");
 		tomcat.getHost().setAppBase(".");
-		File docBase = new File(System.getProperty("java.io.tmpdir"));
+		File docBase = new File(""); //System.getProperty("java.io.tmpdir"));
         Context rootCtx = tomcat.addContext("/basys.components", docBase.getAbsolutePath()); 
-        
+        System.out.println("Created Tomcat Server at Root: "+rootCtx.getDocBase());
+       
         Iterator<Entry<String, HttpServlet>> it = mappings.entrySet().iterator();
         while (it.hasNext()) {
         	Entry<String, HttpServlet> entry = it.next();

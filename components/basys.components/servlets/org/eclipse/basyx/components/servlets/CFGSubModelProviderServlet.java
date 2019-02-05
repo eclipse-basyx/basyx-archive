@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
@@ -49,7 +50,7 @@ public class CFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 	@Override
 	public String getInitParameter(String name) {
 
-		if (name.equals("config")) return "/WEB-INF/config/cfgprovider/samplecfg.properties";
+		if (name.equals("config")) return "/WebContent/WEB-INF/config/cfgprovider/samplecfg.properties";
 		
 		return null;
 	}
@@ -71,8 +72,10 @@ public class CFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 		// Read property file
 		try {
 			// Open property file
-			InputStream input = getServletContext().getResourceAsStream(cfgFilePath); 
-
+			ServletContext context = getServletContext();
+			System.out.println("Context Path: " + context.getContextPath() + " - " + context.getRealPath(cfgFilePath) + " + " + cfgFilePath);
+			InputStream input = context.getResourceAsStream(cfgFilePath); 
+			
 			// Instantiate property structure
 			properties = new Properties();
 			properties.load(input);
@@ -84,7 +87,6 @@ public class CFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 			e.printStackTrace();
 		}		
 	}
-
 
 
 	/**
