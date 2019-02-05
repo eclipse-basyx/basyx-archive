@@ -9,7 +9,6 @@ import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.dataspecification.DataSpecification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
@@ -71,7 +70,7 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 	/**
 	 * Constructor
 	 */
-	public SubModel(HasSemantics semantics, Identifiable identifiable, Qualifiable qualifiable, DataSpecification specification, HasKind hasKind) {
+	public SubModel(HasSemantics semantics, Identifiable identifiable, Qualifiable qualifiable, HasDataSpecification specification, HasKind hasKind) {
 		// Add qualifiers
 		putAll(semantics);
 		putAll(identifiable);

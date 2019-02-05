@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.dataspecification.DataSpecification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.HasKind;
@@ -72,7 +72,7 @@ public class SubmodelFacadeCustomSemantics extends SubmodelFacade {
 	 * @param revision
 	 *            Sub model revision
 	 */
-	public SubmodelFacadeCustomSemantics(String semantics, String idType, String id, String idShort, String category, String description, Constraint constraint, DataSpecification dataSpecification, String kind, String version,
+	public SubmodelFacadeCustomSemantics(String semantics, String idType, String id, String idShort, String category, String description, Constraint constraint, HasDataSpecification dataSpecification, String kind, String version,
 			String revision) {
 		// Create sub model
 		this.setElements(new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.Custom)))),
@@ -118,7 +118,7 @@ public class SubmodelFacadeCustomSemantics extends SubmodelFacade {
 	 *            Sub model revision
 	 */
 	public SubmodelFacadeCustomSemantics(String semantics, String idType, String id, String idShort, String category, String description, Collection<Constraint> qualifier, Constraint constraint,
-			DataSpecification dataSpecification, String kind, String version, String revision) {
+			HasDataSpecification dataSpecification, String kind, String version, String revision) {
 		// Create sub model
 		this.setElements(
 				new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.Custom)))),
