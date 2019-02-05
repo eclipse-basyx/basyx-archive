@@ -32,7 +32,7 @@ public class TestStaticDirectoryFileProviderExceptions {
 	 * Execute test case that tests not implemented calls
 	 */
 	@Test
-	void testUnsupportedCalls() {
+	public void testUnsupportedCalls() {
 		// Invoke BaSyx service calls via web services
 		WebServiceJSONClient client = new WebServiceJSONClient();
 		

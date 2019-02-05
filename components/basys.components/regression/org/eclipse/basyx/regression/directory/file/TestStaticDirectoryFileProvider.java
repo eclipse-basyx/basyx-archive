@@ -31,7 +31,7 @@ public class TestStaticDirectoryFileProvider {
 	 * Execute test case that test working calls
 	 */
 	@Test
-	void testWorkingCalls() {
+	public void testWorkingCalls() {
 		// Invoke BaSyx service calls via web services
 		WebServiceRawClient client = new WebServiceRawClient();
 		
@@ -42,7 +42,7 @@ public class TestStaticDirectoryFileProvider {
 		// First test - get all locally registered AAS
 		{
 			// Get all locally registered AAS
-			String result = (String) client.get(wsURL+"/api/v1/registry");
+			String result = client.get(wsURL+"/api/v1/registry");
 
 			// Check if all AAS are contained in result
 			assertTrue(result.contains("{content.aas1}"));
@@ -55,7 +55,7 @@ public class TestStaticDirectoryFileProvider {
 		// Get a specific AAS (1)
 		try {
 			// Get a known AAS by its ID
-			String result = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-19","UTF-8"));
+			String result = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-19","UTF-8"));
 
 			// Check if all AAS are contained in result
 			assertTrue(result.equals("{content.aas1}"));
@@ -67,7 +67,7 @@ public class TestStaticDirectoryFileProvider {
 		// Get a specific AAS (2)
 		try {
 			// Get a known AAS by its ID
-			String result = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-18","UTF-8"));
+			String result = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-18","UTF-8"));
 
 			// Check if all AAS are contained in result
 			assertTrue(result.equals("{content.aas2}"));
@@ -79,7 +79,7 @@ public class TestStaticDirectoryFileProvider {
 		// Get a specific AAS (3)
 		try {
 			// Get a known AAS by its ID
-			String result = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-17","UTF-8"));
+			String result = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-17","UTF-8"));
 
 			// Check if all AAS are contained in result
 			assertTrue(result.equals("{content.aas3}"));
@@ -91,7 +91,7 @@ public class TestStaticDirectoryFileProvider {
 		// Get a specific AAS (4)
 		try {
 			// Get a known AAS by its ID
-			String result = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-16","UTF-8"));
+			String result = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-16","UTF-8"));
 
 			// Check if all AAS are contained in result
 			assertTrue(result.equals("{content.aas4}"));
@@ -106,7 +106,7 @@ public class TestStaticDirectoryFileProvider {
 	 * Execute test case that test non-working calls
 	 */
 	@Test
-	void testNonWorkingCalls() {
+	public void testNonWorkingCalls() {
 		// Invoke service call via web services
 		WebServiceRawClient client = new WebServiceRawClient();
 		
@@ -117,7 +117,7 @@ public class TestStaticDirectoryFileProvider {
 		// Get unknown AAS ID
 		try {
 			// Get a known AAS by its ID
-			String result = (String) client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("unknown","UTF-8"));
+			String result = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("unknown","UTF-8"));
 
 			// Check if all AAS are contained in result
 			assertTrue(result.equals(""));

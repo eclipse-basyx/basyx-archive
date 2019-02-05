@@ -81,7 +81,7 @@ public class TestRawCFGProviderComplexType {
 		Object value6 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/complexProperty/prop4/prop3");
 		assertTrue(value6.equals("def"));
 		Object value7 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/complexProperty/prop4/prop4");
-		assertTrue((double) value7 == 2.1);
+		assertTrue((float) value7 == 2.1f);
 
 		// Read complex property completely
 		Map<String, Object> valueC = (Map<String, Object>) connSubModel.readElementValue("/aas/submodels/rawSampleCFG/complexProperty");
@@ -92,7 +92,7 @@ public class TestRawCFGProviderComplexType {
 		assertTrue((int) ((Map<String, Object>) valueC.get("prop4")).get("prop1") == 21);
 		assertTrue((int) ((Map<String, Object>) valueC.get("prop4")).get("prop2") == 22);
 		assertTrue(((String) ((Map<String, Object>) valueC.get("prop4")).get("prop3")).equals("def"));
-		assertTrue((double) ((Map<String, Object>) valueC.get("prop4")).get("prop4") == 2.1);
+		assertTrue((float) ((Map<String, Object>) valueC.get("prop4")).get("prop4") == 2.1f);
 		// - Check keys
 		assertTrue(valueC.keySet().size() == 4);
 		assertTrue(valueC.keySet().contains("prop1"));
