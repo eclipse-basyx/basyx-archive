@@ -58,6 +58,7 @@ public class JSONProvider<T extends IModelProvider> {
 	 */
 	private void sendException(PrintWriter resp, Exception e) {
 		System.out.println("Sending " + e.toString() + " ...");
+		e.printStackTrace();
 		
 		
 		JSONObject error = JSONTools.Instance.serialize(e);
