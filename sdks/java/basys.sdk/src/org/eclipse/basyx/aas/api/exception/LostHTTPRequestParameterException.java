@@ -10,7 +10,7 @@ public class LostHTTPRequestParameterException extends Exception {
 	private String message;
 
 	public LostHTTPRequestParameterException(String path) {
-		message = "A request on " + path + " has been received without a valid json parameter (unresolved issue)";
+		message = "A request on " + path + "has been received without a valid json parameter (unresolved issue)";
 	}
 	
 	@Override
