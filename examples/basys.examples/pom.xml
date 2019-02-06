@@ -1,11 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>basys.components</groupId>
-  <artifactId>basys.components</artifactId>
+  <groupId>basys.examples</groupId>
+  <artifactId>basys.examples</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
-  <name>BaSys Components</name>
-  
+  <packaging>war</packaging>
   <repositories>
 	  <repository>
 	    <id>data-local</id>
@@ -31,7 +29,13 @@
         </excludes>
       </resource>
       <resource>
-       <directory>regression/org/eclipse/basyx/regression/support</directory>
+       <directory>examples</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+      <resource>
+       <directory>directory</directory>
         <excludes>
           <exclude>**/*.java</exclude>
         </excludes>
@@ -39,7 +43,7 @@
      </resources>
     
     <testSourceDirectory>
-    		${project.basedir}/regression/org/eclipse/basyx/regression
+    		${project.basedir}/examples
     </testSourceDirectory>
     
     <plugins>
@@ -92,20 +96,8 @@
 		      </goals>
 		    </execution>
 		  </executions>
-		</plugin>
-		
-		
-		<!-- Export Jar file to /examples package -->
-		<plugin>
-	      <groupId>org.apache.maven.plugins</groupId>
-	      <artifactId>maven-jar-plugin</artifactId>
-	      <version>2.3.1</version>
-	      <configuration>
-	        <outputDirectory>../../examples/basys.examples/repo/basys/components/basys.components/0.0.1-SNAPSHOT</outputDirectory>
-	      </configuration>
-	    </plugin>
-		   
-    </plugins>    
+		</plugin>   
+    </plugins>
   </build>
   
   <dependencies>
@@ -269,5 +261,13 @@
 			<artifactId>basys.sdk</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		
+		<!-- Add BaSys components from local repository. Maven build of SDK must generate a jar and place it into the repository to update -->
+		<dependency>
+			<groupId>basys.components</groupId>
+			<artifactId>basys.components</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
   </dependencies>
 </project>

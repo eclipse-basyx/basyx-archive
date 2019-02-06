@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-	<wb-module deploy-name="basys.components-0.0.1-SNAPSHOT">
+    <wb-module deploy-name="basys.examples-0.0.1-SNAPSHOT">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/regression"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/examples"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/servlets"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/directory"/>
         <dependent-module archiveName="basys.sdk-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/basys.sdk/basys.sdk">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-		<property name="context-root" value="basys.components"/>
-		<property name="java-output-path" value="/basys.components/build/classes"/>
-	</wb-module>
+        <property name="context-root" value="basys.examples"/>
+        <property name="java-output-path" value="/basys.examples/build/classes"/>
+    </wb-module>
 </project-modules>
