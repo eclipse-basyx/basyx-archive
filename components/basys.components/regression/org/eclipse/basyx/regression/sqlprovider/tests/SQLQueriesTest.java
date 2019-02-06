@@ -33,6 +33,7 @@ public class SQLQueriesTest {
 	@ClassRule
 	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource();
 	
+	
 	/**
 	 * Test basic queries
 	 */
@@ -43,13 +44,23 @@ public class SQLQueriesTest {
 		VABElementProxy connSubModel = this.connManager.connectToVABElement("SQLTestSubmodel");
 
 		
+		// Get sub model
+		Object value0A = connSubModel.readElementValue("/aas/submodels/SQLTestSubmodel");
+		System.out.println("***Value:"+value0A);
+
+		
+		// Get properties
+		Object value0B = connSubModel.readElementValue("/aas/submodels/SQLTestSubmodel/properties");
+		System.out.println("***Value:"+value0B);
+
+		
 		// Get property value
 		Object value1 = connSubModel.readElementValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value");
-		System.out.println("Value:"+value1);
+		System.out.println("***Value:"+value1);
 
 		// Get property value with meta data
 		Object value1a = connSubModel.readElementValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames");
-		System.out.println("Value with meta data:"+value1a);
+		System.out.println("***Value with meta data:"+value1a);
 
 		
 		// Create a new property

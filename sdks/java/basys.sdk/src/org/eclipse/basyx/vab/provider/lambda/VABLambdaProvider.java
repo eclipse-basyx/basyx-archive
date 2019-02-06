@@ -31,8 +31,22 @@ public class VABLambdaProvider extends VABHashmapProvider {
 		super(map);
 	}
 
+
+	/**
+	 * Get Elements for AAS or Submodel request
+	 * 
+	 * - We also need to cover the case that the whole object is requested
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getElements() {
+		return (Map<String, Object>) getModelPropertyValue("");
+	}
+
+	
 	@Override
 	public Object getModelPropertyValue(String path) {
+		System.out.println("Resolving: "+path);
+		
 		return resolve(super.getModelPropertyValue(path));
 	}
 

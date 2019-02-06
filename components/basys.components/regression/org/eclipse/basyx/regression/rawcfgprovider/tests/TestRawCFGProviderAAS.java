@@ -51,7 +51,9 @@ public class TestRawCFGProviderAAS {
 
 		
 		// Read complex property completely
-		Map<String, Object> aasReadBack = (Map<String, Object>) connSubModel
-				.readElementValue("/aas/submodels/rawSampleCFG/aas");
+		Map<String, Object> aasReadBack = (Map<String, Object>) connSubModel.readElementValue("/aas/submodels/rawSampleCFG/aas");
+
+		// Read AAS properties
+		Map<String, Object> aasPropertiesBack = (Map<String, Object>) connSubModel.readElementValue("/aas/submodels/rawSampleCFG/aas/properties");
 	}
 }

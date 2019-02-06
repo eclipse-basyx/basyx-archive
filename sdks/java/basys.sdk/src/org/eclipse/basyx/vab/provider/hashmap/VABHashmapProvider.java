@@ -82,6 +82,9 @@ public class VABHashmapProvider implements IModelProvider {
 			if ((element = currentScope.get(pathElements[i])) != null) 	{	 currentScope = (Map<String, Object>) element; }
 			else if ((element = currentScope.get("/" + pathElements[i])) != null) { currentScope = (Map<String, Object>) element; }
 			
+			System.out.println("  - Element:"+element);
+
+			
 			if (element == null ) 		   return null;
 			if (!(element instanceof Map)) return null;
 		}
@@ -104,6 +107,9 @@ public class VABHashmapProvider implements IModelProvider {
 
 		// Get parent of element
 		Map<String, Object> parentElement = getParentElement(path);
+		
+		// Return parent element if path was empty, in this case the whole map was requested
+		if (path.length() == 0) return parentElement;
 		
 		// Get element from scope
 		Object result = parentElement.get(pathElements[pathElements.length - 1]);
