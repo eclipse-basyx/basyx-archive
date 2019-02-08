@@ -1,9 +1,10 @@
 package org.eclipse.basyx.tools.webserviceclient;
 
+import java.util.Map;
+
 import org.eclipse.basyx.aas.api.exception.ServerException;
-import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
+
 
 
 
@@ -32,8 +33,9 @@ public class WebServiceJSONClient {
 		// Try to deserialize response if any
 		try {
 			// Try to deserialize response
-			Object result = JSONTools.Instance.deserialize(new JSONObject(serializedJSONValue));
-			
+			Object gsonObj =GSONTools.Instance.getObjFromJsonStr(serializedJSONValue);
+			@SuppressWarnings("unchecked")
+			Object result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
 			// Check if a server exception was serialized
 			if (result instanceof ServerException) {
 				// Throw server exception
@@ -44,7 +46,7 @@ public class WebServiceJSONClient {
 			return result;
 			
 		// Catch exceptions that did occur during deserialization, return null in this case
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			// If there is no return value or deserialization failed
 			return null;
@@ -70,11 +72,12 @@ public class WebServiceJSONClient {
 	 * Execute a web service put operation, return JSON string
 	 */
 	public Object put(String wsURL, Object newValue) {
-		// Serialize new value to JSON Object
-		JSONObject jsonObject = JSONTools.Instance.serialize(newValue);
+		// Serialize new value to JSON Object		
+		Map<String, Object> gsonMap = GSONTools.Instance.serialize(newValue);
+		
 
 		// Execute web service call, receive JSON serialized result
-		String jsonResult = client.put(wsURL, jsonObject.toString());
+		String jsonResult = client.put(wsURL, GSONTools.Instance.getJsonString(gsonMap));
 
 		// Return deserialized value
 		return getJSONResult(jsonResult);
@@ -87,10 +90,12 @@ public class WebServiceJSONClient {
 	 */
 	public Object post(String wsURL, String... parameter) {
 		// Serialize new value to JSON Object
-		JSONObject jsonObject = JSONTools.Instance.serialize(parameter);
+        Map<String, Object> gsonMap = GSONTools.Instance.serialize(parameter);
+		
+		
 
 		// Perform request
-		String jsonResult = client.post(wsURL, jsonObject.toString());
+		String jsonResult = client.post(wsURL,  GSONTools.Instance.getJsonString(gsonMap));
 		
 		System.out.println("Result:"+jsonResult);
 
@@ -105,10 +110,10 @@ public class WebServiceJSONClient {
 	 */
 	public Object patch(String wsURL, String action, String... parameter) {
 		// Serialize new value to JSON Object
-		JSONObject jsonObject = JSONTools.Instance.serialize(parameter);
+		Map<String, Object> gsonMap = GSONTools.Instance.serialize(parameter);
 
 		// Perform request
-		String jsonResult = client.patch(wsURL, action, jsonObject.toString());
+		String jsonResult = client.patch(wsURL, action, GSONTools.Instance.getJsonString(gsonMap));
 
 		// Return deserialized value
 		return getJSONResult(jsonResult);

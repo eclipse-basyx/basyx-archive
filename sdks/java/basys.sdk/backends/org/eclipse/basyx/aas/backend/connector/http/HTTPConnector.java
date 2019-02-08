@@ -13,9 +13,9 @@ import javax.ws.rs.core.Response;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.backend.connector.IBaSyxConnector;
+import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
-import org.json.JSONObject;
 
 /**
  * HTTP connector class
@@ -56,7 +56,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	 *            should be an IElement of type Property, Operation or Event
 	 */
 	@Override
-	public Object setModelPropertyValue(String servicePath, JSONObject newValue) throws ServerException {
+	public Object setModelPropertyValue(String servicePath, Object newValue) throws ServerException {
 
 		return httpPut(servicePath, newValue);
 	}
@@ -74,7 +74,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	 * @throws ServerException
 	 */
 	@Override
-	public Object deleteValue(String servicePath, JSONObject obj) throws ServerException {
+	public Object deleteValue(String servicePath, Object obj) throws ServerException {
 
 		return httpPatch(servicePath, obj);
 	}
@@ -85,7 +85,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	 * @throws ServerException
 	 */
 	@Override
-	public Object createValue(String servicePath, JSONObject newValue) throws ServerException {
+	public Object createValue(String servicePath, Object newValue) throws ServerException {
 
 		return httpPost(servicePath, newValue);
 	}
@@ -164,7 +164,7 @@ public class HTTPConnector implements IBaSyxConnector {
 		return result;
 	}
 
-	private Object httpPut(String servicePath, JSONObject newValue) throws ServerException {
+	private Object httpPut(String servicePath, Object newValue) throws ServerException {
 		System.out.println("[HTTP Put] " + address + servicePath + "  " + newValue);
 
 		// Invoke service call via web services
@@ -238,7 +238,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	}
 
 	@Override
-	public Object invokeOperation(String path, JSONObject parameter) throws Exception {
+	public Object invokeOperation(String path, Object parameter) throws Exception {
 
 		return httpPost(path, parameter);
 	}

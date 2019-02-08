@@ -1,7 +1,5 @@
 package org.eclipse.basyx.aas.backend.connector;
 
-import org.json.JSONObject;
-
 /**
  * Connector interface for technology specific communication. Returns the
  * response including meta information
@@ -29,7 +27,7 @@ public interface IBaSyxConnector {
 	 * @param newValue
 	 *            Updated value
 	 */
-	public Object setModelPropertyValue(String path, JSONObject newValue) throws Exception;
+	public Object setModelPropertyValue(String path, Object newValue) throws Exception;
 
 	/**
 	 * Create a new property, operation, event submodel or aas under the given path
@@ -39,7 +37,7 @@ public interface IBaSyxConnector {
 	 * @param newEntity
 	 *            new Element to be created on the server
 	 */
-	public Object createValue(String path, JSONObject newEntity) throws Exception;
+	public Object createValue(String path,  Object newEntity) throws Exception;
 
 	/**
 	 * Delete a property, operation, event, submodel or aas under the given path
@@ -55,7 +53,7 @@ public interface IBaSyxConnector {
 	 * @param path
 	 *            Path to the entity that should be deleted
 	 */
-	public Object deleteValue(String path, JSONObject obj) throws Exception;
+	public Object deleteValue(String path, Object obj) throws Exception;
 
 	/**
 	 * Invoke an operation
@@ -66,7 +64,7 @@ public interface IBaSyxConnector {
 	 *            Operation parameter
 	 * @return Return value
 	 */
-	public Object invokeOperation(String path, JSONObject jsonObject) throws Exception;
+	public Object invokeOperation(String path, Object jsonObject) throws Exception;
 
 	/**
 	 * Get contained elements

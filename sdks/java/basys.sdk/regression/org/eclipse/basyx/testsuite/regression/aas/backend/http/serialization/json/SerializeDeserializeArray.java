@@ -2,8 +2,9 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.http.serialization.js
 
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
-import org.json.JSONObject;
+import java.util.Map;
+
+import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.junit.jupiter.api.Test;
 
 
@@ -30,17 +31,20 @@ public class SerializeDeserializeArray {
 		Object[]  objectArray    = {   2,     4,    6,    8,    9};
 				
 		// Serialize primitives
-		JSONObject serVal1 = JSONTools.Instance.serialize(integerArray); 
-		JSONObject serVal2 = JSONTools.Instance.serialize(stringArray);
-		JSONObject serVal3 = JSONTools.Instance.serialize(floatArray);  
-		JSONObject serVal4 = JSONTools.Instance.serialize(objectArray); 
+		Map<String, Object> serVal1 = GSONTools.Instance.serialize(integerArray); 
+		Map<String, Object> serVal2 = GSONTools.Instance.serialize(stringArray);
+		Map<String, Object> serVal3 = GSONTools.Instance.serialize(floatArray);  
+		Map<String, Object> serVal4 = GSONTools.Instance.serialize(objectArray); 
 		
 		// Deserialize array
-		Integer[] val1 = (Integer[]) JSONTools.Instance.deserialize(serVal1);
-		String[]  val2 = (String[])  JSONTools.Instance.deserialize(serVal2);
-		Float[]   val3 = (Float[])   JSONTools.Instance.deserialize(serVal3);
-		Object[]  val4 = (Object[])  JSONTools.Instance.deserialize(serVal4);
+		Integer[] val1 = (Integer[]) GSONTools.Instance.deserialize(serVal1);
+		String[]  val2 = (String[])  GSONTools.Instance.deserialize(serVal2);
+		Float[]   val3 = (Float[])   GSONTools.Instance.deserialize(serVal3);
+		Object[]  val4 = (Object[])  GSONTools.Instance.deserialize(serVal4);
 				
+	
+		
+		
 		// Check result
 		assertTrue(val1.length == 5);
 		assertTrue(val1[0] == 2);

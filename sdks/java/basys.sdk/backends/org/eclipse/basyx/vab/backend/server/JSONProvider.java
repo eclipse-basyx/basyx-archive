@@ -2,14 +2,13 @@ package org.eclipse.basyx.vab.backend.server;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.LostHTTPRequestParameterException;
 import org.eclipse.basyx.aas.api.exception.ServerException;
-import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Provider class that supports JSON serialized communication
@@ -43,7 +42,7 @@ public class JSONProvider<T extends IModelProvider> {
 	/**
 	 * Send JSON encoded response
 	 */
-	private void sendJSONResponse(PrintWriter outputStream, JSONObject jsonValue) {
+	private void sendJSONResponse(PrintWriter outputStream, Object jsonValue) {
 		// Output result
 		outputStream.write(jsonValue.toString()); // FIXME throws nullpointer exception if jsonValue is null
 		outputStream.flush();
@@ -61,10 +60,12 @@ public class JSONProvider<T extends IModelProvider> {
 		e.printStackTrace();
 		
 		
-		JSONObject error = JSONTools.Instance.serialize(e);
+		//JSONObject error = JSONTools.Instance.serialize(e);
+		Map<String, Object> gsonobj = GSONTools.Instance.serialize(e);
+		String jsonString   = GSONTools.Instance.getJsonString(gsonobj);
 
 		// Send error response
-		sendJSONResponse(resp, error);
+		sendJSONResponse(resp, jsonString);
 	}
 
 	/**
@@ -77,6 +78,7 @@ public class JSONProvider<T extends IModelProvider> {
 	 * @throws LostHTTPRequestParameterException 
 	 * @throws ServerException
 	 */
+	@SuppressWarnings("unchecked")
 	private Object extractParameter(String path, String serializedJSONValue, PrintWriter outputStream) throws LostHTTPRequestParameterException  {
 
 		System.out.println("Extracting Parameter: " + serializedJSONValue);
@@ -92,10 +94,12 @@ public class JSONProvider<T extends IModelProvider> {
 				throw ex;
 			}
 			
-			JSONObject json = new JSONObject(serializedJSONValue.toString());
-			result = JSONTools.Instance.deserialize(json);
+			Object gsonObj =GSONTools.Instance.getObjFromJsonStr(serializedJSONValue.toString());
+			
+			result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
+			
 
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			sendException(outputStream, new IllegalArgumentException("Invalid paramater: " + serializedJSONValue));
 		}
@@ -112,10 +116,10 @@ public class JSONProvider<T extends IModelProvider> {
 			Object value = providerBackend.getModelPropertyValue(path);
 
 			// Initialize JSON object
-			JSONObject jsonObj = JSONTools.Instance.serialize(value);
-
+			Map<String, Object> gsonobj = GSONTools.Instance.serialize(value);
+			String jsonString = GSONTools.Instance.getJsonString(gsonobj);
 			// Send response
-			sendJSONResponse(outputStream, jsonObj);
+			sendJSONResponse(outputStream, jsonString);
 		} catch (Exception e) {
 			sendException(outputStream, e);
 		}
@@ -145,8 +149,9 @@ public class JSONProvider<T extends IModelProvider> {
 			providerBackend.setModelPropertyValue(path, parameter);
 
 			// Send positive JSON response
-			JSONObject jsonObj = JSONTools.Instance.serialize(true); // TODO provide message meta information here
-			sendJSONResponse(outputStream, jsonObj);
+			Map<String, Object> gsonobj = GSONTools.Instance.serialize(true);
+			String jsonString   = GSONTools.Instance.getJsonString(gsonobj);
+			sendJSONResponse(outputStream, jsonString);
 
 		} catch (Exception e) {
 			sendException(outputStream, e);
@@ -193,7 +198,7 @@ public class JSONProvider<T extends IModelProvider> {
 			return;
 		}
 
-		JSONObject returnValue = null;
+		Object returnValue = null;
 		
 		// If only a single parameter has been sent, pack it into an array so it can be casted safely
 		if (!(parameter instanceof Object[])) {
@@ -209,7 +214,9 @@ public class JSONProvider<T extends IModelProvider> {
 			Object result = providerBackend.invokeOperation(path, (Object[]) parameter);
 			System.out.println("Return Value: " + result);
 
-			returnValue = JSONTools.Instance.serialize(result);
+			Map<String, Object> gsonobj = GSONTools.Instance.serialize(result);
+			returnValue = GSONTools.Instance.getJsonString(gsonobj);
+			
 			System.out.println(returnValue);
 
 		} catch (Exception e) {
@@ -240,8 +247,10 @@ public class JSONProvider<T extends IModelProvider> {
 			providerBackend.deleteValue(path, parameter);
 
 			// Send positive JSON response
-			JSONObject jsonObj = JSONTools.Instance.serialize(true); // TODO provide message meta information here
-			sendJSONResponse(outputStream, jsonObj);
+			// TODO provide message meta information here
+			Map<String, Object> gsonobj = GSONTools.Instance.serialize(true);
+			String jsonString   = GSONTools.Instance.getJsonString(gsonobj);
+			sendJSONResponse(outputStream, jsonString);
 
 		} catch (Exception e) {
 			sendException(outputStream, e);
@@ -278,8 +287,10 @@ public class JSONProvider<T extends IModelProvider> {
 			}
 
 			// Send positive JSON response
-			JSONObject jsonObj = JSONTools.Instance.serialize(true); // TODO provide message meta information here
-			sendJSONResponse(outputStream, jsonObj);
+			// TODO provide message meta information here
+			Map<String, Object> gsonobj = GSONTools.Instance.serialize(true);
+			String jsonString = GSONTools.Instance.getJsonString(gsonobj);
+			sendJSONResponse(outputStream, jsonString);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -304,8 +315,10 @@ public class JSONProvider<T extends IModelProvider> {
 			providerBackend.createValue(path, parameter);
 
 			// Send positive JSON response
-			JSONObject jsonObj = JSONTools.Instance.serialize(true); // TODO provide message meta information here
-			sendJSONResponse(outputStream, jsonObj);
+			Map<String, Object> gsonobj = GSONTools.Instance.serialize(true);
+			String jsonString = GSONTools.Instance.getJsonString(gsonobj);
+			// TODO provide message meta information here
+			sendJSONResponse(outputStream, jsonString);
 
 		} catch (Exception e) {
 			sendException(outputStream, e);

@@ -1,9 +1,12 @@
 package org.eclipse.basyx.aas.backend.connector;
 
-import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
+import java.util.Map;
+
+import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.vab.core.IModelProvider;
-import org.json.JSONException;
-import org.json.JSONObject;
+//import org.json.JSONException;
+//import org.json.JSONObject;
+//import org.json.JSONObject;
 
 /**
  * Connector Class that receives a hashmap from its provider containing a
@@ -30,9 +33,13 @@ public class JSONConnector implements IModelProvider {
 
 		// Get element from server
 		Object message = provider.getModelPropertyValue(path);
-
-		// Deserialize
-		Object result = JSONTools.Instance.deserialize(new JSONObject(message.toString()));
+		//First get the GSON object from the JSON string
+		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());
+		
+		@SuppressWarnings("unchecked")
+		Object result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
+		
+		//Object resultGson=GSONTools.Instance.deserialize(message);
 
 		// Handle meta information and exceptions
 		try {
@@ -49,13 +56,18 @@ public class JSONConnector implements IModelProvider {
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws Exception {
 
-		// Serialize value Object
-		JSONObject jsonObject = JSONTools.Instance.serialize(newValue);
+		
+		Map<String, Object> gsonMap = GSONTools.Instance.serialize(newValue);
+		String jsonString = GSONTools.Instance.getJsonString(gsonMap);
 
-		Object message = provider.setModelPropertyValue(path, jsonObject);
+		Object message = provider.setModelPropertyValue(path, jsonString);
 
 		// Deserialize
-		Object result = JSONTools.Instance.deserialize(new JSONObject(message.toString()));
+		//First get the GSON object from the JSON string
+        Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());
+		
+		@SuppressWarnings("unchecked")
+		Object result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
 
 		// Handle meta information and exceptions
 		verifyResponse(result);
@@ -66,15 +78,17 @@ public class JSONConnector implements IModelProvider {
 	public void createValue(String path, Object newEntity) throws Exception {
 
 		// Serialize value Object
-		JSONObject jsonObject = JSONTools.Instance.serialize(newEntity);
+	//	JSONObject jsonObject = JSONTools.Instance.serialize(newEntity);
+		
+		Map<String, Object> gsonMap = GSONTools.Instance.serialize(newEntity);
 
-		System.out.println("Parameter= " + newEntity + " => Serialized to " + jsonObject);
-
-		Object message = provider.createValue(path, jsonObject);
-
-		// Deserialize (unwanted behavior?: exception is thrown when it is returned by
-		// the deserialisation)
-		Object result = JSONTools.Instance.deserialize(new JSONObject(message.toString()));
+		System.out.println("Parameter= " + newEntity + " => Serialized to " + gsonMap);
+        String jsonString = GSONTools.Instance.getJsonString(gsonMap);
+		Object message = provider.createValue(path, jsonString);
+		//First get the GSON object from the JSON string
+		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());	
+		@SuppressWarnings("unchecked")
+		Object result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
 
 		// Handle meta information and exceptions
 		verifyResponse(result);
@@ -86,7 +100,10 @@ public class JSONConnector implements IModelProvider {
 		Object message = provider.deleteValue(path);
 
 		// Deserialize
-		Object result = JSONTools.Instance.deserialize(new JSONObject(message.toString()));
+		//First get the GSON object from the JSON string
+		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());	
+		@SuppressWarnings("unchecked")
+		Object result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
 
 		// Handle meta information and exceptions
 		verifyResponse(result);
@@ -96,12 +113,15 @@ public class JSONConnector implements IModelProvider {
 	public void deleteValue(String path, Object obj) throws Exception {
 
 		// Serialize parameter
-		JSONObject jsonObject = JSONTools.Instance.serialize(obj);
-
-		Object message = provider.deleteValue(path, jsonObject);
+		Map<String, Object> gsonMap = GSONTools.Instance.serialize(obj);
+		String jsonString = GSONTools.Instance.getJsonString(gsonMap);
+		Object message = provider.deleteValue(path, jsonString);
 
 		// Deserialize
-		Object result = JSONTools.Instance.deserialize(new JSONObject(message.toString()));
+		//First get the GSON object from the JSON string
+		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());	
+		@SuppressWarnings("unchecked")
+		Object result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
 
 		// Handle meta information and exceptions
 		verifyResponse(result);
@@ -111,13 +131,17 @@ public class JSONConnector implements IModelProvider {
 	public Object invokeOperation(String path, Object[] parameter) throws Exception {
 
 		// Serialize parameter
-		JSONObject jsonObject = JSONTools.Instance.serialize(parameter);
+		Map<String, Object> gsonMap = GSONTools.Instance.serialize(parameter);
+		
+		String jsonString = GSONTools.Instance.getJsonString(gsonMap);
 
-		Object message = provider.invokeOperation(path, jsonObject);
+		Object message = provider.invokeOperation(path, jsonString);
 
 		// Deserialize
-		Object result = JSONTools.Instance.deserialize(new JSONObject(message.toString()));
-
+		//First get the GSON object from the JSON string
+		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());	
+		@SuppressWarnings("unchecked")
+		Object result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
 		// Handle meta information and exceptions
 		verifyResponse(result);
 
@@ -156,7 +180,7 @@ public class JSONConnector implements IModelProvider {
 				throw (Exception) message;
 			}
 
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			// There is no return value or deserialization failed
 			throw e;
 		}
