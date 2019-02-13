@@ -13,7 +13,6 @@ import javax.ws.rs.core.Response;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.backend.connector.IBaSyxConnector;
-import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 

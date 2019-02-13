@@ -3,11 +3,9 @@ package org.eclipse.basyx.aas.backend.connector.basyx;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.connector.IBaSyxConnector;
-import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.vab.backend.server.basyx.CoderTools;
 import org.eclipse.basyx.vab.backend.server.basyx.VABBaSyxTCPInterface;
 
