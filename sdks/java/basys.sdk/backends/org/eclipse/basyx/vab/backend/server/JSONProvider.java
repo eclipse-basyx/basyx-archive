@@ -100,8 +100,12 @@ public class JSONProvider<T extends IModelProvider> {
 			
 
 		} catch (Exception e) {
+			if (!(e instanceof LostHTTPRequestParameterException)) {
 			e.printStackTrace();
 			sendException(outputStream, new IllegalArgumentException("Invalid paramater: " + serializedJSONValue));
+			} else {
+				throw e;
+			}
 		}
 		return result;
 	}
