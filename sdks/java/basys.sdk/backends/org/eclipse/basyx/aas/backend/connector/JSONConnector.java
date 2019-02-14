@@ -78,8 +78,6 @@ public class JSONConnector implements IModelProvider {
 	public void createValue(String path, Object newEntity) throws Exception {
 
 		// Serialize value Object
-	//	JSONObject jsonObject = JSONTools.Instance.serialize(newEntity);
-		
 		Map<String, Object> gsonMap = GSONTools.Instance.serialize(newEntity);
 
 		System.out.println("Parameter= " + newEntity + " => Serialized to " + gsonMap);

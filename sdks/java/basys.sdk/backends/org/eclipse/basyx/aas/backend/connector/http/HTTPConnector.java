@@ -1,7 +1,5 @@
 package org.eclipse.basyx.aas.backend.connector.http;
 
-import java.util.Map;
-
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -11,7 +9,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
-import org.eclipse.basyx.aas.api.reference.IElementReference;
 import org.eclipse.basyx.aas.backend.connector.IBaSyxConnector;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
@@ -24,6 +21,7 @@ import org.glassfish.jersey.client.HttpUrlConnectorProvider;
  */
 public class HTTPConnector implements IBaSyxConnector {
 	private String address;
+	private String mediaType;
 
 	/**
 	 * Invoke a BaSys get operation via HTTP GET
@@ -35,12 +33,17 @@ public class HTTPConnector implements IBaSyxConnector {
 	 * @return the requested object
 	 */
 	@Override
-	public Object getModelPropertyValue(String servicePath) {
+	public String getModelPropertyValue(String servicePath) {
 		return httpGet(servicePath);
 	}
 
 	public HTTPConnector(String address) {
+		this(address, MediaType.APPLICATION_JSON);
+	}
+
+	public HTTPConnector(String address, String mediaType) {
 		this.address = address;
+		this.mediaType = mediaType;
 	}
 
 	/**
@@ -55,7 +58,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	 *            should be an IElement of type Property, Operation or Event
 	 */
 	@Override
-	public Object setModelPropertyValue(String servicePath, Object newValue) throws ServerException {
+	public String setModelPropertyValue(String servicePath, String newValue) throws ServerException {
 
 		return httpPut(servicePath, newValue);
 	}
@@ -73,7 +76,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	 * @throws ServerException
 	 */
 	@Override
-	public Object deleteValue(String servicePath, Object obj) throws ServerException {
+	public String deleteValue(String servicePath, String obj) throws ServerException {
 
 		return httpPatch(servicePath, obj);
 	}
@@ -84,7 +87,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	 * @throws ServerException
 	 */
 	@Override
-	public Object createValue(String servicePath, Object newValue) throws ServerException {
+	public String createValue(String servicePath, String newValue) throws ServerException {
 
 		return httpPost(servicePath, newValue);
 	}
@@ -96,7 +99,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	 * @throws ServerException
 	 */
 	@Override
-	public Object deleteValue(String servicePath) throws ServerException {
+	public String deleteValue(String servicePath) throws ServerException {
 
 		return httpDelete(servicePath);
 	}
@@ -110,7 +113,7 @@ public class HTTPConnector implements IBaSyxConnector {
 
 		// Build request, set JSON encoding
 		Builder request = resource.request();
-		request.accept(MediaType.APPLICATION_JSON);
+		request.accept(mediaType);
 
 		// Return JSON request
 		return request;
@@ -145,7 +148,7 @@ public class HTTPConnector implements IBaSyxConnector {
 		return BaSysID.instance.buildPath(aasID, aasSubmodelID, path, qualifier);
 	}
 
-	private Object httpGet(String servicePath) {
+	private String httpGet(String servicePath) {
 		System.out.println("[HTTP Get] " + address + servicePath);
 
 		// Invoke service call via web services
@@ -163,7 +166,7 @@ public class HTTPConnector implements IBaSyxConnector {
 		return result;
 	}
 
-	private Object httpPut(String servicePath, Object newValue) throws ServerException {
+	private String httpPut(String servicePath, String newValue) throws ServerException {
 		System.out.println("[HTTP Put] " + address + servicePath + "  " + newValue);
 
 		// Invoke service call via web services
@@ -173,49 +176,43 @@ public class HTTPConnector implements IBaSyxConnector {
 		Builder request = buildRequest(client, address + servicePath);
 
 		// Perform request
-		Response rsp = request.put(Entity.entity(newValue.toString(), MediaType.APPLICATION_JSON));
+		Response rsp = request.put(Entity.entity(newValue, mediaType));
 
 		// Return repsonse message (header)
 		return rsp.readEntity(String.class);
 
 	}
 
-	private Object httpPatch(String servicePath, Object newValue) throws ServerException {
+	private String httpPatch(String servicePath, String newValue) throws ServerException {
 		System.out.println("[HTTP Patch] " + address + servicePath + "  " + newValue);
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
 
-		// Create JSON value Object
-		// JSONObject jsonObject = JSONTools.Instance.serialize(newValue);
-
 		// Create and invoke HTTP PATCH request
-		Response rsp = client.target(address + servicePath).request().build("PATCH", Entity.text(newValue.toString())).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
+		Response rsp = client.target(address + servicePath).request().build("PATCH", Entity.text(newValue)).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
 
 		// Return repsonse message (header)
 		return rsp.readEntity(String.class);
 	}
 
-	private Object httpPost(String servicePath, Object parameter) throws ServerException {
+	private String httpPost(String servicePath, String parameter) throws ServerException {
 		System.out.println("[HTTP Post] " + address + servicePath + " " + parameter);
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
 
-		// Create JSON value Object
-		// JSONObject jsonObject = JSONTools.Instance.serialize(parameter);
-
 		// Build web service URL
 		Builder request = buildRequest(client, address + servicePath);
 
 		// Perform request
-		Response rsp = request.post(Entity.entity(parameter.toString(), MediaType.APPLICATION_JSON));
+		Response rsp = request.post(Entity.entity(parameter, mediaType));
 
 		// Return repsonse message (header)
 		return rsp.readEntity(String.class);
 	}
 
-	private Object httpDelete(String servicePath) throws ServerException {
+	private String httpDelete(String servicePath) throws ServerException {
 		System.out.println("[HTTP Delete] " + address + servicePath);
 
 		// Invoke service call via web services
@@ -232,12 +229,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	}
 
 	@Override
-	public Map<String, IElementReference> getContainedElements(String path) {
-		throw new RuntimeException("Not implemented yet");
-	}
-
-	@Override
-	public Object invokeOperation(String path, Object parameter) throws Exception {
+	public String invokeOperation(String path, String parameter) throws Exception {
 
 		return httpPost(path, parameter);
 	}

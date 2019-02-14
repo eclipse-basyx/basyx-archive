@@ -79,7 +79,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 * Invoke a BaSys get operation via HTTP
 	 */
 	@Override
-	public Object getModelPropertyValue(String servicePath) {
+	public String getModelPropertyValue(String servicePath) {
 
 		byte[] call = createCall(servicePath, VABBaSyxTCPInterface.BASYX_GET);
 
@@ -95,7 +95,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 *             that carries the Exceptions thrown on the server
 	 */
 	@Override
-	public Object setModelPropertyValue(String servicePath, Object newValue) {
+	public String setModelPropertyValue(String servicePath, String newValue) {
 
 		byte[] call = createCall(servicePath, newValue, VABBaSyxTCPInterface.BASYX_SET);
 
@@ -107,7 +107,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 * Invoke a BaSys Create operation
 	 */
 	@Override
-	public Object createValue(String servicePath, Object newValue) throws ServerException {
+	public String createValue(String servicePath, String newValue) throws ServerException {
 
 		byte[] call = createCall(servicePath, newValue, VABBaSyxTCPInterface.BASYX_CREATE);
 
@@ -119,7 +119,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 * Invoke a Basys invoke operation.
 	 */
 	@Override
-	public Object invokeOperation(String servicePath, Object parameters) throws ServerException {
+	public String invokeOperation(String servicePath, String parameters) throws ServerException {
 
 		byte[] call = createCall(servicePath, parameters, VABBaSyxTCPInterface.BASYX_INVOKE);
 
@@ -135,7 +135,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 *             that carries the Exceptions thrown on the server
 	 */
 	@Override
-	public Object deleteValue(String servicePath) throws ServerException {
+	public String deleteValue(String servicePath) throws ServerException {
 
 		byte[] call = createCall(servicePath, VABBaSyxTCPInterface.BASYX_DELETE);
 
@@ -151,7 +151,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 *             that carries the Exceptions thrown on the server
 	 */
 	@Override
-	public Object deleteValue(String servicePath, Object jsonObject) throws ServerException {
+	public String deleteValue(String servicePath, String jsonObject) throws ServerException {
 
 		byte[] call = createCall(servicePath, jsonObject, VABBaSyxTCPInterface.BASYX_DELETE);
 
@@ -190,10 +190,10 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 * @param callType
 	 * @return
 	 */
-	private byte[] createCall(String servicePath, Object newValue, byte callType) {
+	private byte[] createCall(String servicePath, String newValue, byte callType) {
 
 		// Create call
-		byte[] call = new byte[4 + 1 + 4 + servicePath.length() + 4 + newValue.toString().length()];
+		byte[] call = new byte[4 + 1 + 4 + servicePath.length() + 4 + newValue.length()];
 		// - Encode size does not include leading four bytes
 		CoderTools.setInt32(call, 0, call.length - 4);
 		// - Encode operation SET
@@ -202,14 +202,9 @@ public class BaSyxConnector implements IBaSyxConnector {
 		CoderTools.setInt32(call, 5, servicePath.length());
 		CoderTools.setString(call, 9, servicePath);
 		// - Encode value
-		CoderTools.setInt32(call, 9 + servicePath.length(), newValue.toString().length());
-		CoderTools.setString(call, 9 + servicePath.length() + 4, (String)newValue);
+		CoderTools.setInt32(call, 9 + servicePath.length(), newValue.length());
+		CoderTools.setString(call, 9 + servicePath.length() + 4, newValue);
 
 		return call;
-	}
-
-	@Override
-	public Object getContainedElements(String path) {
-		throw new RuntimeException("Not implemented yet");
 	}
 }

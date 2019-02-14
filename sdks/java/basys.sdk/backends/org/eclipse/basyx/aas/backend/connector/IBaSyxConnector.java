@@ -17,7 +17,7 @@ public interface IBaSyxConnector {
 	 * @return Property value. Object type is assumed to be [Integer | ... |
 	 *         Collection]
 	 */
-	public Object getModelPropertyValue(String path);
+	public String getModelPropertyValue(String path);
 
 	/**
 	 * Sets or overrides existing property, operation or event.
@@ -27,7 +27,7 @@ public interface IBaSyxConnector {
 	 * @param newValue
 	 *            Updated value
 	 */
-	public Object setModelPropertyValue(String path, Object newValue) throws Exception;
+	public String setModelPropertyValue(String path, String newValue) throws Exception;
 
 	/**
 	 * Create a new property, operation, event submodel or aas under the given path
@@ -37,7 +37,7 @@ public interface IBaSyxConnector {
 	 * @param newEntity
 	 *            new Element to be created on the server
 	 */
-	public Object createValue(String path,  Object newEntity) throws Exception;
+	public String createValue(String path, String newEntity) throws Exception;
 
 	/**
 	 * Delete a property, operation, event, submodel or aas under the given path
@@ -45,7 +45,7 @@ public interface IBaSyxConnector {
 	 * @param path
 	 *            Path to the entity that should be deleted
 	 */
-	public Object deleteValue(String path) throws Exception;
+	public String deleteValue(String path) throws Exception;
 
 	/**
 	 * Deletes an entry from a map or collection by the given key
@@ -53,7 +53,7 @@ public interface IBaSyxConnector {
 	 * @param path
 	 *            Path to the entity that should be deleted
 	 */
-	public Object deleteValue(String path, Object obj) throws Exception;
+	public String deleteValue(String path, String obj) throws Exception;
 
 	/**
 	 * Invoke an operation
@@ -64,18 +64,5 @@ public interface IBaSyxConnector {
 	 *            Operation parameter
 	 * @return Return value
 	 */
-	public Object invokeOperation(String path, Object jsonObject) throws Exception;
-
-	/**
-	 * Get contained elements
-	 * 
-	 * Contained sub model elements are returned as Map of key/value pairs. Keys are
-	 * Strings, values are either primitive values or ElementRef objects that
-	 * contain a reference to a complex object instance.
-	 * 
-	 * @param path
-	 *            Path to sub model or property
-	 * @return Collection of contained elements
-	 */
-	public Object getContainedElements(String path);
+	public String invokeOperation(String path, String jsonObject) throws Exception;
 }
