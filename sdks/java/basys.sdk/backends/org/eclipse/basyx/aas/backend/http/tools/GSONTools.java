@@ -111,21 +111,110 @@ public class GSONTools {
 		// Type check
 		if (!serializedValue.get("basystype").equals("value"))
 			return null;
+
 		Object result = serializedValue.get("value");
-		//following try/catch block handles the GSON float to int issue
+		String typeId = (String) serializedValue.get("typeid");
+
+		if (typeId.equals("int"))
+			return getInt(result);
+		if (typeId.equals("float"))
+			return getFloat(result);
+		if (typeId.equals("double"))
+			return getDouble(result);
+		if (typeId.equals("string"))
+			return getString(result);
+		if (typeId.equals("boolean"))
+			return getBoolean(result);
+		if (typeId.equals("character")) {
+			return getCharacter(result);
+		}
+		return result;
+	}
+
+	/**
+	 * Deserializes a value to int
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	private int getInt(Object obj) {
 		try {
-			String objType = (String)serializedValue.get("typeid");
-			if (objType.equals("int")&&(result.toString().contains("."))) {
-				Double doubleValue =new Double((double) serializedValue.get("value"));
-				result=doubleValue.intValue();
-			}
+			return obj instanceof Number ? ((Number) obj).intValue() : Integer.parseInt((String) obj);
 		} catch (Exception e) {
-		System.out.println("Something is not right! This should not happen");
-			
+			System.out.println("obj not int but defined as int");
+			return 0;
 		}
 
-		// Return serialized value
-		return result;
+	}
+
+	/**
+	 * Deserializes a value to float
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	private float getFloat(Object obj) {
+		try {
+			return obj instanceof Number ? ((Number) obj).floatValue() : Float.parseFloat(obj.toString());
+		} catch (Exception e) {
+			System.out.println("obj not float but defined as float");
+			return 0.0f;
+		}
+	}
+
+	/**
+	 * Deserializes a value to double
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	private double getDouble(Object obj) {
+		try {
+			return obj instanceof Number ? ((Number) obj).doubleValue() : Double.parseDouble(obj.toString());
+		} catch (Exception e) {
+			System.out.println("obj not double but defined as double");
+			return 0.0f;
+		}
+	}
+
+	/**
+	 * Deserializes a value to string
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	private String getString(Object obj) {
+		if (obj instanceof String) {
+			return (String) obj;
+		}
+		return null;
+	}
+
+	/**
+	 * Deserializes a value to boolean
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	private boolean getBoolean(Object obj) {
+		if (obj.equals(Boolean.FALSE) || (obj instanceof String && ((String) obj).equalsIgnoreCase("false"))) {
+			return false;
+		} else if (obj.equals(Boolean.TRUE) || (obj instanceof String && ((String) obj).equalsIgnoreCase("true"))) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Deserializes a value to character
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	private char getCharacter(Object obj) {
+		// Character can be directly returned since it is deserialized as character by
+		// GSON
+		return (char) obj;
 	}
 
 	/**
@@ -259,16 +348,8 @@ public class GSONTools {
 		if (!serializedValue.get("basystype").equals("array"))
 			return null;
 
-		Object sizeObj = serializedValue.get("size");
-		//No check need whats there after . decimal point because size is always a whole number
-		int sizeVal=0;
-		if(sizeObj instanceof Double&&sizeObj.toString().contains(".")) {
-			Double size = new Double((double) sizeObj);  
-			sizeVal=size.intValue()	;
-		}
-		else {
-			sizeVal=(int) sizeObj;
-		}
+		// GSON deserializes numbers to Double
+		int sizeVal = ((Number) serializedValue.get("size")).intValue();
 		
 		// Create array
 		switch ((String) serializedValue.get("type")) {
@@ -357,57 +438,6 @@ public class GSONTools {
 		// Return serialized element
 		return target;
 	}
-
-//	/**
-//	 * Deserialize a property reference
-//	 */
-//	protected Object deserializeElementReference(Map<String, Object> serializedValue, Map<Integer, Object> serObjRepo, Map<String, Object> repository) {
-//		// Type check
-//		if (!(serializedValue.get("basystype").equals("ref")))
-//			return null;
-//
-//		// Get referenced address
-//		String refAAS = "";
-//		if (serializedValue.containsKey("aas"))
-//			refAAS = (String) serializedValue.get("aas");
-//		String refSM = "";
-//		if (serializedValue.containsKey("submodel"))
-//			refSM = (String) serializedValue.get("submodel");
-//		String refPath = "";
-//		if (serializedValue.containsKey("path"))
-//			refPath = (String) serializedValue.get("path");
-//
-//		// Create return value
-//		ElementRef result = new ElementRef(refAAS, refSM, refPath);
-//
-//		System.out.println("Deserialized " + serializedValue);
-//		try {
-//
-//			// Deserialize map and collection information
-//			String thekind = (String) serializedValue.get("thekind");
-//			result.setKind(thekind);
-//		} catch (Exception e) {
-//			// Lleave out if it is not map or collection
-//		}
-//
-//		// Return deserialized element
-//		return result;
-//	}
-
-//	/**
-//	 * Serialize an IElement
-//	 */
-//	protected boolean serializeIElement(Map<String, Object> target, Object value, Map<String, Object> serObjRepo, String scope) {
-//		// Type check
-//		if (!(value instanceof IElement))
-//			return false;
-//
-//		// Create reference
-//		IElementReference reference = new ElementRef((IElement) value);
-//
-//		// Serialize IElementReference
-//		return serializeIElementRef(target, reference, serObjRepo, scope);
-//	}
 
 	/**
 	 * Serialize an IElement reference
@@ -689,8 +719,6 @@ public class GSONTools {
 			return returnValue;
 		if (serializeMapType(returnValue, value, serObjRepo, scope))
 			return returnValue;
-//		if (serializeIElement(returnValue, value, serObjRepo, scope))
-//			return returnValue;
 		if (serializeIElementRef(returnValue, value, serObjRepo, scope))
 			return returnValue;
 		if (serializeException(returnValue, value))
@@ -734,8 +762,6 @@ public class GSONTools {
 			return returnValue;
 		if ((returnValue = deserializeMapType(serializedValue, serObjRepo, repository)) != null)
 			return returnValue;
-//		if ((returnValue = deserializeElementReference(serializedValue, serObjRepo, repository)) != null)
-//			return returnValue;
 		if ((returnValue = deserializeException(serializedValue)) != null)
 			return returnValue;
 		if ((returnValue = deserializeOperation(serializedValue)) != null)

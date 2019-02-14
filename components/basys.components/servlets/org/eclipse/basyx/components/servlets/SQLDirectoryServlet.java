@@ -19,10 +19,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
 import org.eclipse.basyx.vab.backend.server.http.BasysHTTPServelet;
-import org.json.JSONObject;
 
 import basys.examples.aasdescriptor.AASDescriptor;
 
@@ -223,12 +222,13 @@ public class SQLDirectoryServlet extends BasysHTTPServelet {
 	 * 
 	 * @throws ServletException 
 	 */
+	@Override
 	public void init() throws ServletException {
 		// Call base implementation
 		super.init();
 		
 		// Read configuration values
-		String configFilePath = (String) getInitParameter("config");
+		String configFilePath = getInitParameter("config");
 		// - Read property file
 		loadProperties(configFilePath);
 		
@@ -382,6 +382,7 @@ public class SQLDirectoryServlet extends BasysHTTPServelet {
 	 * <pre>
 	 * Handle HTTP POST operation. Creates a new Property, Operation, Event, Submodel or AAS or invokes an operation.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	 	// Read request body
@@ -391,9 +392,8 @@ public class SQLDirectoryServlet extends BasysHTTPServelet {
 		while (bufReader.ready()) aasValue.append(bufReader.readLine());
 		
 		// Deserialize AAS value into JSONObject
-		JSONObject          json          = new JSONObject(aasValue.toString());
-		@SuppressWarnings("unchecked")
-		Map<String, Object> values        = (Map<String, Object>) JSONTools.Instance.deserialize(json);
+		Map<String, Object> gsonObj = (Map<String, Object>) GSONTools.Instance.getObjFromJsonStr(aasValue.toString());
+		Map<String, Object> values = (Map<String, Object>) GSONTools.Instance.deserialize(gsonObj);
 		AASDescriptor       aasDescriptor = new AASDescriptor(values);
 
 		// Extract AAS ID
