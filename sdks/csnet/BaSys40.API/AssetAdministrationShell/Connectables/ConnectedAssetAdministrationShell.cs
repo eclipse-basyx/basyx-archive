@@ -1,6 +1,11 @@
 ﻿using BaSys40.Models.Core.AssetAdministrationShell.Generics;
 using BaSys40.Utils.ResultHandling;
-using BaSys40.API.Agents;
+using BaSys40.API.Platform.Agents;
+using BaSys40.Models.Core.AssetAdministrationShell.Implementations;
+using BaSys40.API.ServiceProvider;
+using System.Collections.Generic;
+using System.Linq;
+using BaSys40.Models.Connectivity;
 
 namespace BaSys40.API.AssetAdministrationShell.Connectables
 {
@@ -8,12 +13,15 @@ namespace BaSys40.API.AssetAdministrationShell.Connectables
     {
         public IAssetAdministrationShell AssetAdministrationShell { get; private set; }
 
-        private readonly IAssetAdministrationShellAgent serviceImpl;
+        public IServiceDescriptor ServiceDescriptor { get; private set; }
 
-        public ConnectedAssetAdministrationShell(IAssetAdministrationShellAgent service,  IAssetAdministrationShell aas)
+        private readonly IAssetAdministrationShellAgent serviceImpl;
+        private Dictionary<string, ISubmodelServiceProvider> submodelServiceProviders;
+
+        public ConnectedAssetAdministrationShell(IAssetAdministrationShellAgent service)
         {
-            AssetAdministrationShell = aas;
             serviceImpl = service;
+            submodelServiceProviders = new Dictionary<string, ISubmodelServiceProvider>();
         }
         
         public void BindTo(IAssetAdministrationShell element)
@@ -26,26 +34,42 @@ namespace BaSys40.API.AssetAdministrationShell.Connectables
             return AssetAdministrationShell;
         }
         
-        public IResult<ISubModel> CreateSubModel(ISubModel subModel)
+        public IResult<ISubmodel> CreateSubmodel(ISubmodel submodel)
         {
-            return serviceImpl.CreateSubModel(AssetAdministrationShell.Identification.Id, subModel);
+            return serviceImpl.CreateSubmodel(AssetAdministrationShell.IdShort, submodel);
         }
 
-        public IResult DeleteSubModel(string subModelId)
+        public IResult DeleteSubmodel(string submodelId)
         {
-            return serviceImpl.DeleteSubModel(AssetAdministrationShell.Identification.Id, subModelId);
+            return serviceImpl.DeleteSubmodel(AssetAdministrationShell.IdShort, submodelId);
         }
 
-        public IResult<ISubModel> RetrieveSubModel(string subModelId)
+        public IResult<ISubmodel> RetrieveSubmodel(string submodelId)
         {
-            return serviceImpl.RetrieveSubModel(AssetAdministrationShell.Identification.Id, subModelId);
+            return serviceImpl.RetrieveSubmodel(AssetAdministrationShell.IdShort, submodelId);
         }
 
-        public IResult<IElementContainer<ISubModel>> RetrieveSubModels()
+        public IResult<ElementContainer<ISubmodel>> RetrieveSubmodels()
         {
-            return serviceImpl.RetrieveSubModels(AssetAdministrationShell.Identification.Id);
+            return serviceImpl.RetrieveSubmodels(AssetAdministrationShell.IdShort);
         }
 
-        
+        public void RegisterSubmodelServiceProvider(string id, ISubmodelServiceProvider submodelServiceProvider)
+        {
+            submodelServiceProviders.Add(id, submodelServiceProvider);
+        }
+
+        public ISubmodelServiceProvider GetSubmodelServiceProvider(string id)
+        {
+            if (submodelServiceProviders.TryGetValue(id, out ISubmodelServiceProvider submodelServiceProvider))
+                return submodelServiceProvider;
+            else
+                return null;
+        }
+
+        public IEnumerable<ISubmodelServiceProvider> GetSubmodelServiceProviders()
+        {
+            return submodelServiceProviders.Values?.ToList();
+        }
     }
 }

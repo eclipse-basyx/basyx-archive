@@ -5,7 +5,9 @@ namespace BaSys40.API.AssetAdministrationShell
 {
     public interface IConnectableEvent 
     {
-        IEventDescription Event { get; }
+        IAssetAdministrationShell AssetAdministrationShell { get; }
+        ISubmodel Submodel { get; }
+        IEvent Event { get; }
 
         event EventHandler EventHandler;
 

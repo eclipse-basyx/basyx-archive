@@ -9,7 +9,7 @@ namespace oneM2MClient.Client
         public rqp RequestPrimitive { get; set; } = new rqp();
         public string ContentMIME { get; set; } = "application/json";
         public string AcceptMIME { get; set; } =  "application/json";
-        public int MillisecondsTimeout { get; set; } = 1000;
+        public int MillisecondsTimeout { get; set; } = 30000;
         public string EndpointAddress { get; set; } = string.Empty;
         public Uri RequestPath { get; set; }
         public string CSEName { get; set; } = string.Empty;

@@ -40,7 +40,7 @@ namespace BaSys40.Utils.JsonHandling
             {
                 JObject o = (JObject)t;
                 Type type = value.GetType();
-                JObject typeWrapper = new JObject(new JProperty(type.FullName, o));
+                JObject typeWrapper = new JObject(new JProperty(type.Namespace + "." + type.Name, o));
 
                 typeWrapper.WriteTo(writer);
             }

@@ -1,16 +1,20 @@
-﻿using BaSys40.API.Agents;
-using BaSys40.Models.Core.AssetAdministrationShell.Generics;
+﻿using BaSys40.Models.Core.AssetAdministrationShell;
 using BaSys40.Utils.ResultHandling;
 using System.Collections.Generic;
 
 namespace BaSys40.API.Platform
 {
-    public interface IAssetAdministrationShellRegistry : IAssetAdministrationShellAgent
+    public interface IAssetAdministrationShellRegistry
     {
-        IResult<IAssetAdministrationShell> CreateAssetAdministrationShell(IAssetAdministrationShell aas);
-        IResult<IAssetAdministrationShell> RetrieveAssetAdministrationShell(string aasId);
-        IResult<List<IAssetAdministrationShell>> RetrieveAssetAdministrationShells();
+        IResult<AssetAdministrationShellDescriptor> CreateAssetAdministrationShell(AssetAdministrationShellDescriptor aas);
+        IResult<AssetAdministrationShellDescriptor> RetrieveAssetAdministrationShell(string aasId);
+        IResult<List<AssetAdministrationShellDescriptor>> RetrieveAssetAdministrationShells();
         IResult UpdateAssetAdministrationShell(string aasId, Dictionary<string, string> metaData);
-        IResult DeleteAssetAdministrationShell(string aasId);       
+        IResult DeleteAssetAdministrationShell(string aasId);
+
+        IResult<SubmodelDescriptor> CreateSubmodel(string aasId, SubmodelDescriptor submodel);
+        IResult<List<SubmodelDescriptor>> RetrieveSubmodels(string aasId);
+        IResult<SubmodelDescriptor> RetrieveSubmodel(string aasId, string submodelId);
+        IResult DeleteSubmodel(string aasId, string submodelId);
     }
 }

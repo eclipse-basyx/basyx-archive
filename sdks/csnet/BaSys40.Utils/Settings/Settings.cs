@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -13,15 +14,15 @@ namespace BaSys40.Utils.Settings
     [Serializable]
     public abstract class Settings<T> : ISettings where T : ISettings, new()
     {
-        private FileWatcher fileWatcher;
-
-        public string FilePath { get; set; }
-
-        public const string SettingsAppendix = ".xml";
+        public const string FileExtension = ".xml";
         public const string MiscellaneousConfig = "Miscellaneous";
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        public static string FileName => typeof(T).Name + SettingsAppendix;
+        public static string FileName => typeof(T).Name + FileExtension;
+        public static string ExecutingDirectory => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+        public string FilePath { get; set; }
+        private FileWatcher fileWatcher;
 
         public Settings()
         {
@@ -35,6 +36,16 @@ namespace BaSys40.Utils.Settings
         public virtual void ConfigureSettingsWatcher(string settingsFilePath, FileChanged settingsFileChangedHandler)
         {
             fileWatcher = new FileWatcher(settingsFilePath, settingsFileChangedHandler);
+        }
+
+        public static T LoadSettings()
+        {
+            string settingsFilePath = Path.Combine(ExecutingDirectory, FileName);
+
+            if (string.IsNullOrEmpty(settingsFilePath) || !File.Exists(settingsFilePath))
+                return default(T);
+            else
+                return LoadSettings(settingsFilePath);
         }
     
         public static T LoadSettings(string filePath)

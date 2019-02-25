@@ -1,8 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Configurations>Debug;Release</Configurations>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="SmartControlSettings.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="SmartControlSettings.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BaSys40.API\BaSys40.API.csproj" />
@@ -11,10 +27,8 @@
     <ProjectReference Include="..\BaSys40.Utils\BaSys40.Utils.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="SmartControlSettings.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(ProjectDir)bin\Debug\BaSys40.RI.AAS.SmartControl.1.0.0.nupkg&quot; &quot;C:\Development\BaSys40\SDK\packages&quot; /Y" />
+  </Target>
 
 </Project>

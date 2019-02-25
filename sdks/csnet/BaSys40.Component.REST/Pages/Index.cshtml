@@ -1,0 +1,331 @@
+﻿@page "ui"
+@model BaSys40.Component.REST.Pages.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/cerulean/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+        }
+
+        @@media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    @{ var aas = Model.ServiceProvider.AssetAdministrationShell; }
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <img src="~/images/BaSys-Logo-transparent-1080x250.png" width="103" height="25" style="margin-top:15px" />
+                <!-- <a class="navbar-brand" href="#">@aas.IdShort</a>-->
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="#">Main</a></li>
+            </ul>
+            <div class="navbar-right"></div>
+        </div>
+    </nav>
+
+    <main role="main" class="container">
+
+        <div class="starter-template">
+            <h1>@aas.IdShort - Asset Administration Shell UI</h1>
+            <p class="lead">Generic UI to discover the Asset Administration Shell </p>
+        </div>
+    </main>
+
+
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="background:#7ca1ce"><h4 style="color:white">Asset Administration Shell</h4></div>
+            <div class="list-group">
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-sm-2"><b>Identifier</b></div>
+                        <div class="col-sm-10">@aas.Identification.Id</div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-sm-2"><b>IdShort</b></div>
+                        <div class="col-sm-10">@aas.IdShort</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @{ var asset = Model.ServiceProvider.AssetAdministrationShell.Asset; }
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="background:#b90276"><h4 style="color:white">Asset</h4></div>
+            <div class="list-group">
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-sm-2"><b>Identifier</b></div>
+                        <div class="col-sm-10">@asset.Identification.Id</div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-sm-2"><b>IdShort</b></div>
+                        <div class="col-sm-10">@asset.IdShort</div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-sm-2"><b>Semantic-Id</b></div>
+                        <div class="col-sm-10">@asset.SemanticId?.First?.Value</div>
+                    </div>
+                </div>
+
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-sm-2"><b>Kind</b></div>
+                        <div class="col-sm-10">@asset.Kind?.ToString()</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @foreach (var submodel in Model.ServiceProvider.AssetAdministrationShell.Submodels)
+    {
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="background:darkgreen">
+                    <h4>
+                        <a style="color:white" data-toggle="collapse" href="#@submodel.IdShort">@submodel.IdShort</a>
+                    </h4>
+                </div>
+                <div id="@submodel.IdShort" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="panel-group">
+                            @if (submodel.DataElements?.Count > 0)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" style="background:#005691"><h4 style="color:white">DataElements</h4></div>
+                                    <div class="panel-body">
+                                        <div class="panel-group">
+                                            @for (int i = 0; i < submodel.DataElements.Count; i++)
+                                            {
+                                                var dataElement = submodel.DataElements[i];
+                                                <div class="panel panel-warning">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title">
+                                                            <a data-toggle="collapse" href="#@dataElement.IdShort">@dataElement.IdShort</a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="@dataElement.IdShort" class="panel-collapse collapse">
+                                                        <div class="panel-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-2"><b>Data-Type</b></div>
+                                                                <div class="col-sm-10">@dataElement.ValueType?.DataObjectType?.Name?.ToUpper()</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-2"><b>Semantic-Id</b></div>
+                                                                <div class="col-sm-10">@dataElement.SemanticId?.First?.Value</div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="panel-footer">
+                                                            <div class="row">
+                                                                <div class="col-sm-8">
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                                                        <input id="Input_@dataElement.IdShort" type="text" class="form-control" placeholder="Value" value="@dataElement.Value?.ToString()">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-1"><button onclick="@("GetDataElementValue('" + submodel.IdShort + "', '" + dataElement.IdShort + "')")" id="@dataElement.IdShort;Retrieve" type="button" class="btn btn-primary">Retrieve</button></div>
+                                                                <div class="col-sm-1"><button onclick="@("SetDataElementValue('" + submodel.IdShort + "', '" + dataElement.IdShort + "', '" + dataElement.ValueType?.DataObjectType?.Name + "', $('#Input_" + dataElement.IdShort + "').val() )")" id="@dataElement.IdShort;Update" type="button" class="btn btn-success">Update</button></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="panel-group">
+                            @if (submodel.Operations?.Count > 0)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" style="background:#78be20"><h4 style="color:white">Operations</h4></div>
+                                    <div class="panel-body">
+                                        <div class="panel-group">
+
+                                            @for (int i = 0; i < submodel.Operations.Count; i++)
+                                            {
+                                                var operation = submodel.Operations[i];
+                                                <div class="panel panel-warning">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title">
+                                                            <a data-toggle="collapse" href="#@operation.IdShort">@operation.IdShort</a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="@operation.IdShort" class="panel-collapse collapse">
+                                                        @if (operation.In?.Count > 0)
+                                                        {
+                                                            foreach (var argument in operation.In)
+                                                            {
+                                                                <div class="panel-body">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-2 argInName @submodel.IdShort @operation.IdShort"><b>@argument.IdShort (IN)</b></div>
+                                                                        <div class="col-sm-2 argInType @submodel.IdShort @operation.IdShort">@argument.DataType.DataObjectType.Name.ToUpper()</div>
+                                                                        <div class="col-sm-8">
+                                                                            <div class="input-group">
+                                                                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                                                                <input id="msg" type="text" class="form-control argInValue @submodel.IdShort  @operation.IdShort" name="msg" placeholder="Argument Value">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        }
+                                                        @if (operation.Out?.Count > 0)
+                                                        {
+                                                            foreach (var argument in operation.Out)
+                                                            {
+                                                                <div class="panel-body">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-2 argOutName @submodel.IdShort @operation.IdShort"><b>@argument.IdShort (OUT)</b></div>
+                                                                        <div class="col-sm-2 argOutType @submodel.IdShort @operation.IdShort">@argument.DataType.DataObjectType.Name.ToUpper()</div>   
+                                                                        <div class="col-sm-8">
+                                                                            <div class="input-group">
+                                                                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                                                                <input id="argOutValue_@submodel.IdShort@operation.IdShort" type="text" class="form-control argOutValue @submodel.IdShort  @operation.IdShort" name="msg" placeholder="Return Value">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        }
+                                                        <div class="panel-footer"><button onclick="@("ExecuteOperation('" + submodel.IdShort + "', '" + operation.IdShort + "')")" type="button" class="btn btn-success">Execute</button></div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                        <div class="panel-group">
+                            @if (submodel.Events?.Count > 0)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" style="background:#00a8b0"><h4 style="color:white">Events</h4></div>
+                                    <div class="panel-body">
+                                        <div class="panel-group">
+
+                                            @for (int i = 0; i < submodel.Events.Count; i++)
+                                            {
+                                                var eventable = submodel.Events[i];
+                                                <div class="panel panel-warning">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title">
+                                                            <a data-toggle="collapse" href="#@eventable.IdShort">@eventable.IdShort</a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="@eventable.IdShort" class="panel-collapse collapse">
+
+                                                    </div>
+                                                </div>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <script>
+        function ExecuteOperation(submodelId, operationId) {
+            var argNames = document.getElementsByClassName("argInName " + submodelId + " " + operationId);
+            var argTypes = document.getElementsByClassName("argInType " + submodelId + " " + operationId);
+            var argValues = document.getElementsByClassName("argInValue " + submodelId + " " + operationId);
+            var argOutValues = document.getElementsByClassName("argOutValue " + submodelId + " " + operationId);
+
+            var args = [];
+            for (var i = 0; i < argNames.length; i++) {
+                var arg = { index: i, idShort: argNames.item(i).innerText, valueType: { dataObjectType: { name: argTypes.item(i).innerText.toLowerCase() } }, value: argValues.item(i).value };
+                args.push(arg);
+            }
+
+
+            $.ajax({
+                type: 'POST',
+                url: '/aas/submodels/' + submodelId + '/operations/' + operationId,
+                contentType: 'application/json',
+                data: JSON.stringify(args),
+                error: function () {
+                    alert("Failed to exectute with args: " + JSON.stringify(args));
+                },
+                success: function (data) {
+                    $('#argOutValue_' + submodelId + operationId).val(data.entity[0].value);
+                }
+            });
+        }
+    </script>
+    <script>
+        function GetDataElementValue(submodelId, dataElementId) {
+            $.ajax({
+                type: 'GET',
+                url: '/aas/submodels/' + submodelId + '/dataElements/' + dataElementId + '/value',
+                success: function (data) {
+                    $('#Input_' + dataElementId).val(data.entity.value);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function SetDataElementValue(submodelId, dataElementId, dataObjectTypeName, val) {
+            var value = {
+                valueType: { dataObjectType: { name: dataObjectTypeName } }, value: val
+            };
+            $.ajax({
+                type: 'PUT',
+                url: '/aas/submodels/' + submodelId + '/dataElements/' + dataElementId + '/value',
+                contentType: 'application/json',
+                data: JSON.stringify(value),
+                error: function () {
+                    $('#Input_' + dataElementId).val('Error updating Data-Element-Value');
+                },
+                statusCode: {
+                    204: function () {
+                        //alert("Successfully updated '" + dataElementId + "' to new value '" + val + "'");
+                    }
+                },
+                success: function () { }
+            });
+        }
+    </script>
+
+</body>
+</html>

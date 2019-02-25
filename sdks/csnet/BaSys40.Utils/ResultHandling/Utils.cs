@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
@@ -16,7 +17,9 @@ namespace BaSys40.Utils.ResultHandling
             var stopwatch = Stopwatch.StartNew();
             do
             {
-                if (task()) { return true; }
+                if (task())
+                    return true; 
+
                 Thread.Sleep((int)pause.TotalMilliseconds);
             }
             while (stopwatch.Elapsed < timeout);
@@ -47,6 +50,56 @@ namespace BaSys40.Utils.ResultHandling
                 iHttpStatusCode = (int)HttpStatusCode.BadRequest;
                 return false;
             }
+        }
+
+        public static IActionResult EvaluateResult(IResult result, CrudOperation crud)
+        {
+            if (result == null)
+                return new StatusCodeResult(502);
+
+            var objResult = new ObjectResult(result);
+
+            switch (crud)
+            {
+                case CrudOperation.Create:
+                    if (result.Success && result.Entity != null)
+                        objResult.StatusCode = 201;
+                    break;
+                case CrudOperation.Retrieve:
+                    if (result.Success && result.Entity != null)
+                        objResult.StatusCode = 200;
+                    else if (result.Success && result.Entity == null)
+                        objResult.StatusCode = 404;
+                    break;
+                case CrudOperation.Update:
+                    if (result.Success)
+                        objResult.StatusCode = 204;
+                    break;
+                case CrudOperation.Delete:
+                    if (result.Success)
+                        objResult.StatusCode = 204;
+                    break;
+                default:
+                    break;
+            }
+
+            if (!objResult.StatusCode.HasValue)
+            {
+                if (TryParseStatusCode(result, out int httpStatusCode))
+                    objResult.StatusCode = httpStatusCode;
+                else
+                    objResult.StatusCode = 502;
+            }
+
+            return objResult;
+        }
+
+        public enum CrudOperation
+        {
+            Create,
+            Retrieve,
+            Update,
+            Delete
         }
     }
 }

@@ -2,7 +2,7 @@
 using oneM2MClient.Client;
 using oneM2MClient.Resources;
 using oneM2MClient.Protocols;
-using oneM2MClient.Utils;
+
 
 using System;
 using System.Linq;
@@ -14,17 +14,25 @@ using BaSys40.API.Platform;
 using BaSys40.Models.Core;
 using BaSys40.Models.Core.AssetAdministrationShell.Generics;
 using BaSys40.Utils.ResultHandling;
+using BaSys40.Utils.ModelHandling;
 
 using Newtonsoft.Json;
 using BaSys40.Models.Core.AssetAdministrationShell.Implementations;
 using BaSys40.Models.Core.AssetAdministrationShell.Enums;
 using BaSys40.Models.Core.Identification;
 using System.Net;
+using BaSys40.Models.Core.AssetAdministrationShell.Implementations.DataElementSubtypes;
+using BaSys40.Models.Core.AssetAdministrationShell;
+using oneM2MClient.Utils;
+using BaSys40.Models.Core.Extensions.References;
+using BaSys40.Utils.Settings;
+using System.Web;
 
 namespace BaSys40.RI.AAS.SmartControl
 {
-    public partial class SmartControl : IAssetAdministrationShellManager, IAssetAdministrationShellRegistry
+    public partial class SmartControl : IAssetAdministrationShellManager
     {
+
         public static SmartControlSettings Settings { get; private set; }
 
         public static readonly IClient oneM2MClient;
@@ -33,6 +41,13 @@ namespace BaSys40.RI.AAS.SmartControl
         static SmartControl()
         {
             SettingsPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), SmartControlSettings.FileName);
+
+            Assembly sourceAssembly = Assembly.GetExecutingAssembly();
+            string nameSpace = typeof(SmartControl).Namespace.Split('.')[0];
+
+            if (!ResourceChecker.CheckResource(sourceAssembly, nameSpace, "SmartControlSettings.xml", true))
+                throw new FileNotFoundException("SmartControlSettings.xml is missing or has a wrong configuration!");
+
             Settings = SmartControlSettings.LoadSettings(SettingsPath);
             oneM2MClient = ClientFactory.CreateClient(Settings.oneM2MConfig.ProtocolBinding);
         }
@@ -71,9 +86,9 @@ namespace BaSys40.RI.AAS.SmartControl
                 return ConvertResult<IAssetAdministrationShell>(result);
         }
 
-        public IResult UpdateAssetAdministrationShell(string aasId, Dictionary<string, string> metaData)
+        public IResult UpdateAssetAdministrationShell(string aasId, IAssetAdministrationShell aas)
         {
-            var result = UpdateAAS(aasId, metaData);
+            var result = UpdateAAS(aasId, aas);
             return ConvertResult(result);
         }
 
@@ -83,80 +98,80 @@ namespace BaSys40.RI.AAS.SmartControl
             return ConvertResult(result);
         }
 
-        public IResult DeleteSubModel(string aasId, string subModelId)
+        public IResult DeleteSubmodel(string aasId, string submodelId)
         {
-            var components = new string[] { aasId, subModelId };
+            var components = new string[] { aasId, submodelId };
             var result = RemoveComponent(components);
 
             return ConvertResult(result);
         }
-        public IResult InvokeOperation(string aasId, string subModelId, string operationId, List<IArgument> inputArguments, out List<IArgument> outputArguments, int timeout)
+        public IResult InvokeOperation(string aasId, string submodelId, string operationId, List<IArgument> inputArguments, List<IArgument> outputArguments, int timeout)
         {
-            var result = CallOperation(aasId, subModelId, operationId, inputArguments, out outputArguments, timeout);
+            var result = CallOperation(aasId, submodelId, operationId, inputArguments, outputArguments, timeout);
             return ConvertResult(result);
         }
 
 
-        public IResult<ISubModel> CreateSubModel(string aasId, ISubModel subModel)
+        public IResult<ISubmodel> CreateSubmodel(string aasId, ISubmodel submodel)
         {
-            var result = AddSubModel(aasId, subModel);
-            if(subModel.Properties != null && subModel.Properties.Count > 0)
+            var result = AddSubmodel(aasId, submodel);
+            if(submodel.DataElements != null && submodel.DataElements.Count > 0)
             {
-                foreach (var property in subModel.Properties)
+                foreach (var property in submodel.DataElements)
                 {
-                    CreateProperty(aasId, subModel.Identification.Id, property);
+                    CreateDataElement(aasId, submodel.IdShort, property);
                 }
             }
-            if (subModel.Operations != null && subModel.Operations.Count > 0)
+            if (submodel.Operations != null && submodel.Operations.Count > 0)
             {
-                foreach (var operation in subModel.Operations)
+                foreach (var operation in submodel.Operations)
                 {
-                    CreateOperation(aasId, subModel.Identification.Id, operation);
+                    CreateOperation(aasId, submodel.IdShort, operation);
                 }
             }
-            if (subModel.Events != null && subModel.Events.Count > 0)
+            if (submodel.Events != null && submodel.Events.Count > 0)
             {
-                foreach (var eventable in subModel.Events)
+                foreach (var eventable in submodel.Events)
                 {
-                    CreateEvent(aasId, subModel.Identification.Id, eventable);
+                    CreateEvent(aasId, submodel.IdShort, eventable);
                 }
             }
             if (result.Success)
             {
-                return ConvertResult<ISubModel>(subModel, result);
+                return ConvertResult<ISubmodel>(submodel, result);
             }
             else
-                return ConvertResult<ISubModel>(result);
+                return ConvertResult<ISubmodel>(result);
         }
 
-        public IResult<IPropertyDescription> CreateProperty(string aasId, string subModelId, IPropertyDescription property)
+        public IResult<IDataElement> CreateDataElement(string aasId, string submodelId, IDataElement property)
         {
-            var result = AddProperty(aasId, subModelId, property);
+            var result = AddProperty(aasId, submodelId, property);
             if(result.Success)
             {
-                return ConvertResult<IPropertyDescription>(property, result);
+                return ConvertResult<IDataElement>(property, result);
             }
-            return ConvertResult<IPropertyDescription>(result);
+            return ConvertResult<IDataElement>(result);
         }
 
-        public IResult<IOperationDescription> CreateOperation(string aasId, string subModelId, IOperationDescription operation)
+        public IResult<IOperation> CreateOperation(string aasId, string submodelId, IOperation operation)
         {
-            var result = AddOperation(aasId, subModelId, (OperationDescription)operation);
+            var result = AddOperation(aasId, submodelId, operation);
             if (result.Success)
             {
-                return ConvertResult<IOperationDescription>(operation, result);
+                return ConvertResult<IOperation>(operation, result);
             }
-            return ConvertResult<IOperationDescription>(result);
+            return ConvertResult<IOperation>(result);
         }
 
-        public IResult<IEventDescription> CreateEvent(string aasId, string subModelId, IEventDescription eventable)
+        public IResult<IEvent> CreateEvent(string aasId, string submodelId, IEvent eventable)
         {
-            var result = AddEvent(aasId, subModelId, eventable);
+            var result = AddEvent(aasId, submodelId, eventable);
             if (result.Success)
             {
-                return ConvertResult<IEventDescription>(eventable, result);
+                return ConvertResult<IEvent>(eventable, result);
             }
-            return ConvertResult<IEventDescription>(eventable, result);
+            return ConvertResult<IEvent>(eventable, result);
         }
 
         public IResult<IAssetAdministrationShell> RetrieveAssetAdministrationShell(string aasId)
@@ -179,89 +194,98 @@ namespace BaSys40.RI.AAS.SmartControl
             return ConvertResult<List<IAssetAdministrationShell>>(result);
         }
 
-        public IResult<IElementContainer<ISubModel>> RetrieveSubModels(string aasId)
+        public IResult<ElementContainer<ISubmodel>> RetrieveSubmodels(string aasId)
         {
-            var result = ReadSubModels(aasId, out IElementContainer<ISubModel> subModels);
-            if (result.Success && subModels != null)
+            var result = ReadSubmodels(aasId, out ElementContainer<ISubmodel> submodels);
+            if (result.Success && submodels != null)
             {
-                return ConvertResult<IElementContainer<ISubModel>>(subModels, result);
+                return ConvertResult(submodels, result);
             }
-            return ConvertResult<IElementContainer<ISubModel>>(result);
+            return ConvertResult<ElementContainer<ISubmodel>>(result);
 
         }
 
-        public IResult<ISubModel> RetrieveSubModel(string aasId, string subModelId)
+        public IResult<ISubmodel> RetrieveSubmodel(string aasId, string submodelId)
         {
-            var result = ReadSubModel(aasId, subModelId, out SubModel subModel);
-            if (result.Success && subModel != null)
+            var result = ReadSubmodel(aasId, submodelId, out Submodel submodel);
+            if (result.Success && submodel != null)
             {
-                return ConvertResult<ISubModel>(subModel, result);
+                return ConvertResult<ISubmodel>(submodel, result);
             }
-            return ConvertResult<ISubModel>(result);
+            return ConvertResult<ISubmodel>(result);
         }
 
-        public IResult<IPropertyDescription> RetrieveProperty(string aasId, string subModelId, string propertyId)
+        public IResult<IDataElement> RetrieveDataElement(string aasId, string submodelId, string propertyId)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId) && !string.IsNullOrEmpty(propertyId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(propertyId))
             {
-                var result = ReadProperty(aasId, subModelId, propertyId, out PropertyDescription prop);
+                var result = ReadProperty(aasId, submodelId, propertyId, out Property prop);
                 if (result.Success && prop != null)
                 {
-                    var valueResult = ReadPropertyValue(aasId, subModelId, propertyId, out object value);
-                    if (valueResult.Success && value != null)
-                    {
-                        prop.Value = new ElementValue<object>(value, DataObjectType.Object);
-                    }
-                    return ConvertResult<IPropertyDescription>(prop, result);
+                    return ConvertResult<IDataElement>(prop, result);
                 }
                 else
-                    return ConvertResult<IPropertyDescription>(result);
+                    return ConvertResult<IDataElement>(result);
             }
             return null;
         }
 
-        public IResult UpdateProperty(string aasId, string subModelId, string propertyId, IValue value)
+        public IResult UpdateDataElementValue(string aasId, string submodelId, string propertyId, IValue value)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId) && !string.IsNullOrEmpty(propertyId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(propertyId))
             {
-                var result = SetProperty(aasId, subModelId, propertyId, value);
+                var result = UpdatePropertyValue(aasId, submodelId, propertyId, value);
                 return ConvertResult(result);
             }
             return null;
-        }        
-
-        public IResult DeleteProperty(string aasId, string subModelId, string propertyId)
+        }    
+        
+        public IResult<IValue> RetrieveDataElementValue(string aasId, string submodelId, string propertyId)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId) && !string.IsNullOrEmpty(propertyId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(propertyId))
             {
-                var result = RemoveProperty(aasId, subModelId, propertyId);
+                var valueResult = ReadPropertyValue(aasId, submodelId, propertyId, out IValue value);
+                if (valueResult.Success && value != null)
+                    return ConvertResult<IValue>(value, valueResult);
+                else
+                    return ConvertResult<IValue>(valueResult);
+            }
+            return null;
+        }
+
+
+        public IResult DeleteDataElement(string aasId, string submodelId, string propertyId)
+        {
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(propertyId))
+            {
+                var result = RemoveProperty(aasId, submodelId, propertyId);
                 return ConvertResult(result);
             }
             return null;
         }
 
-        public IResult<IOperationDescription> RetrieveOperation(string aasId, string subModelId, string operationId)
+        public IResult<IOperation> RetrieveOperation(string aasId, string submodelId, string operationId)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId) && !string.IsNullOrEmpty(operationId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(operationId))
             {
-                var result = ReadOperation(aasId, subModelId, operationId, out OperationDescription op);
+                var result = ReadOperation(aasId, submodelId, operationId, out Operation op);
                 if (result.Success && op != null)
                 {
-                    return ConvertResult<IOperationDescription>(op, result);
+                    return ConvertResult<IOperation>(op, result);
                 }
                 else
-                    return ConvertResult<IOperationDescription>(result);
+                    return ConvertResult<IOperation>(result);
             }
             return null;
         }
 
 
 
-        public IResult DeleteOperation(string aasId, string subModelId, string operationId)
+        public IResult DeleteOperation(string aasId, string submodelId, string operationId)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId) && !string.IsNullOrEmpty(operationId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(operationId))
             {
-                var result = RemoveOperation(aasId, subModelId, operationId);
+                var result = RemoveOperation(aasId, submodelId, operationId);
                 return ConvertResult(result);
             }
             return null;
@@ -269,130 +293,118 @@ namespace BaSys40.RI.AAS.SmartControl
 
         
 
-        public IResult<IEventDescription> RetrieveEvent(string aasId, string subModelId, string eventId)
+        public IResult<IEvent> RetrieveEvent(string aasId, string submodelId, string eventId)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId) && !string.IsNullOrEmpty(eventId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(eventId))
             {
-                var result = ReadEvent(aasId, subModelId, eventId, out EventDescription ev);
+                var result = ReadEvent(aasId, submodelId, eventId, out Event ev);
                 if (result.Success && ev != null)
                 {
-                    return ConvertResult<IEventDescription>(ev, result);
+                    return ConvertResult<IEvent>(ev, result);
                 }
                 else
-                    return ConvertResult<IEventDescription>(result);
+                    return ConvertResult<IEvent>(result);
             }
             return null;
         }
 
-        public IResult DeleteEvent(string aasId, string subModelId, string eventId)
+        public IResult DeleteEvent(string aasId, string submodelId, string eventId)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId) && !string.IsNullOrEmpty(eventId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(eventId))
             {
-                var result = RemoveEvent(aasId, subModelId, eventId);
+                var result = RemoveEvent(aasId, submodelId, eventId);
                 return ConvertResult(result);
             }
             return null;
         }
 
-        public IResult<IElementContainer<IPropertyDescription>> RetrieveProperties(string aasId, string subModelId)
+        public IResult<ElementContainer<IDataElement>> RetrieveDataElements(string aasId, string submodelId)
         {
-            var result = ReadSubModel(aasId, subModelId, out SubModel subModel);
-            if (result.Success && subModel?.Properties != null)
+            var result = ReadSubmodel(aasId, submodelId, out Submodel submodel);
+            if (result.Success && submodel?.DataElements != null)
             {
-                return ConvertResult<IElementContainer<IPropertyDescription>>(subModel.Properties, result);
+                return ConvertResult(submodel.DataElements, result);
             }
-            return ConvertResult<IElementContainer<IPropertyDescription>>(result);
+            return ConvertResult<ElementContainer<IDataElement>>(result);
         }
 
-        public IResult<IElementContainer<IOperationDescription>> RetrieveOperations(string aasId, string subModelId)
+        public IResult<ElementContainer<IOperation>> RetrieveOperations(string aasId, string submodelId)
         {
-            var result = ReadSubModel(aasId, subModelId, out SubModel subModel);
-            if (result.Success && subModel?.Operations != null)
+            var result = ReadSubmodel(aasId, submodelId, out Submodel submodel);
+            if (result.Success && submodel?.Operations != null)
             {
-                return ConvertResult<IElementContainer<IOperationDescription>>(subModel.Operations, result);
+                return ConvertResult(submodel.Operations, result);
             }
-            return ConvertResult<IElementContainer<IOperationDescription>>(result);
+            return ConvertResult<ElementContainer<IOperation>>(result);
         }
 
-        public IResult<IElementContainer<IEventDescription>> RetrieveEvents(string aasId, string subModelId)
+        public IResult<ElementContainer<IEvent>> RetrieveEvents(string aasId, string submodelId)
         {
-            var result = ReadSubModel(aasId, subModelId, out SubModel subModel);
-            if (result.Success && subModel?.Events != null)
+            var result = ReadSubmodel(aasId, submodelId, out Submodel submodel);
+            if (result.Success && submodel?.Events != null)
             {
-                return ConvertResult<IElementContainer<IEventDescription>>(subModel.Events, result);
+                return ConvertResult(submodel.Events, result);
             }
-            return ConvertResult<IElementContainer<IEventDescription>>(result);
+            return ConvertResult<ElementContainer<IEvent>>(result);
         }
 
         #endregion
 
         #region SmartControl oneM2M-Functions
 
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> CallOperation(string aasId, string subModelId, string operationId, List<IArgument> inputArguments, out List<IArgument> outputArguments, int timeout)
+        public static Result<Response> CallOperation(string aasId, string submodelId, string operationId, List<IArgument> inputArguments, List<IArgument> outputArguments, int timeout = DEFAULT_TIMEOUT)
         {
-            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId, operationId, ContainerStrings.REQUEST);
-            string argContent = string.Empty;
-            if (inputArguments != null && inputArguments.Count > 0)
-            {
-                string arguments = string.Join(ELEMENT_SEPERATOR, inputArguments.Select(a => a.Value.Value).ToList().ConvertAll(d => d.ToString()));
-                argContent = ParameterStrings.PARAM_BRACKET_LEFT + arguments + ParameterStrings.PARAM_BRACKET_RIGHT;
-            }
-            else
-                argContent = ParameterStrings.PARAM_BRACKET_LEFT + ParameterStrings.PARAM_BRACKET_RIGHT;
+            if (timeout == 0)
+                timeout = DEFAULT_TIMEOUT;
 
-            string urlEncoded = WebUtility.UrlEncode(argContent);
-            var result = ContentInstance.Create(oneM2MClient, req, Guid.NewGuid().ToString(), urlEncoded);
+            ReadOperation(aasId, submodelId, operationId, out Operation operation);
 
-            req.SetPath(aasId, subModelId, operationId, ContainerStrings.RESPONSE);
-            List<string> outArgs = new List<string>();
-            Utils.ResultHandling.Utils.RetryUntilSuccessOrTimeout(() => GetResponseFromCall(req, outArgs), TimeSpan.FromMilliseconds(timeout), TimeSpan.FromMilliseconds(100));
-            outputArguments = SmartControlUtils.ConvertStringArguments(outArgs.ToArray());
+            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId, operationId, ContainerStrings.REQUEST);
+            string argumentString = SmartControlUtils.ConvertStringArguments(inputArguments);
+            string resourceName = "cin_"+req.GetHashCode();
+            var result = ContentInstance.Create(oneM2MClient, req, resourceName, argumentString);
+
+            req.SetPath(aasId, submodelId, operationId, ContainerStrings.RESPONSE);
+            List<IArgument> outArgs = new List<IArgument>();
+            bool success = Utils.ResultHandling.Utils.RetryUntilSuccessOrTimeout(
+                () => GetResponseFromCall(req, resourceName, outArgs, operation.Out), TimeSpan.FromMilliseconds(timeout), TimeSpan.FromMilliseconds(100));
+            outputArguments?.AddRange(outArgs);
 
             return result;
         }
 
-        public static bool GetResponseFromCall(Request request, List<string> outputArguments)
+        private static bool GetResponseFromCall(Request request, string resourceName, List<IArgument> outputArguments, List<IOperationVariable> referenceArguments)
         {
             var resp = Helper.ReadLatestAddedResource(oneM2MClient, request, out resource resource);
             if (resource != null && resource is cin cinResource)
             {
-                if (cinResource.Con.Contains(ELEMENT_SEPERATOR))
+                if (cinResource.Rn == resourceName)
                 {
-                    string[] outArgs = cinResource.Con.Split(new char[] { ELEMENT_SEPERATOR[0] }, StringSplitOptions.RemoveEmptyEntries);
-                    for (int i = 0; i < outArgs.Length; i++)
-                    {
-                        outputArguments.Add(outArgs[i]);
-                    }
+                    List<IArgument> outArgs = SmartControlUtils.ConvertStringArguments(cinResource.Con, referenceArguments);
+                    if(outArgs != null)
+                        outputArguments.AddRange(outArgs);
+                    return true;
                 }
-                else
-                    outputArguments.Add(cinResource.Con);
-                return true;
             }
             return false;
         }
 
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> SetProperty(string aasId, string subModelId, string propertyId, object value)
+        public static Result<Response> UpdatePropertyValue(string aasId, string submodelId, string propertyId, IValue value)
         {
-            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId, propertyId, ContainerStrings.DATA);
+            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId, propertyId, ContainerStrings.DATA);
 
-            string content = null;
-            if (Convert.GetTypeCode(value) != TypeCode.Object)
-                content = Convert.ToString(value);
-            else
-                content = JsonConvert.SerializeObject(value);
-
-            var urlEncodedContent = WebUtility.UrlEncode(content);
-            ContentInstance data_cin = new ContentInstance(Guid.NewGuid().ToString(), urlEncodedContent);
+            string content = SmartControlUtils.ConvertPropertyValue(value);
+            ContentInstance data_cin = new ContentInstance(Guid.NewGuid().ToString(), content);
             var result = data_cin.Create(oneM2MClient, req);
             return result;
         }
 
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> UpdateAAS(string aasId, Dictionary<string,string> keyValues)
+        public static Result<Response> UpdateAAS(string aasId, IAssetAdministrationShell aas)
         {
             Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId);
             List<string> labels = null;
-            if (keyValues?.Count > 0)
-                labels = keyValues.Select(kvp => kvp.Key + SEPERATOR + kvp.Value)?.ToList();
+            if (aas.MetaData?.Count > 0)
+                labels = aas.MetaData.Select(kvp => kvp.Key + SEPERATOR + kvp.Value)?.ToList();
             var result = ApplicationEntity.Update(oneM2MClient, req, aasId, null, labels);
             return result;
         }
@@ -400,26 +412,32 @@ namespace BaSys40.RI.AAS.SmartControl
 
         #region Converters
 
-        public static SubModel ReadSubModelFrom(string assetId, ObjectTreeBuilder subModelTree)
+        public static Submodel ReadSubmodelFrom(string assetId, ObjectTreeBuilder submodelTree)
         {
-            var rootCnt = subModelTree?.GetValue<cnt>();
+            var rootCnt = submodelTree?.GetValue<cnt>();
             if (rootCnt != null)
             {
-                SubModel subModel = new SubModel()
+                Submodel submodel = new Submodel()
                 {
-                    DisplayName = rootCnt.Rn,
-                    SemanticReference = new Identifier(GetLabelValue(TYPE_IDENTIFIER, rootCnt.Lbl), Identificator.Internal),
-                    Identification = new Identifier(GetLabelValue(Labels.ID, rootCnt.Lbl), Identificator.Internal),
-                    Description = GetLabelValue(Labels.DESCRIPTION, rootCnt.Lbl),
+                    IdShort = rootCnt.Rn,
+                    SemanticId = new Reference(new GlobalKey(KeyElements.Submodel, KeyType.URI, GetLabelValue(TYPE_IDENTIFIER, rootCnt.Lbl))),
+                    Identification = new Identifier(GetLabelValue(Labels.ID, rootCnt.Lbl), KeyType.Custom),
+                    Descriptions = GetDescriptionsFromLabels(rootCnt.Lbl)
                 };
 
-                if (subModelTree.HasChildren())
-                {
-                    subModel.Operations = new ElementContainer<IOperationDescription>();
-                    subModel.Properties = new ElementContainer<IPropertyDescription>();
-                    subModel.Events = new ElementContainer<IEventDescription>();
+                var typeInstance = GetLabelValue(BASYS_TYPE_IDENTIFIER, rootCnt.Lbl);
+                if (typeInstance == ElementType.SUBMODEL_TYPE)
+                    submodel.Kind = Kind.Type;
+                else if (typeInstance == ElementInstance.SUBMODEL)
+                    submodel.Kind = Kind.Instance;
 
-                    foreach (var subElement in subModelTree.Children)
+                if (submodelTree.HasChildren())
+                {
+                    submodel.Operations = new ElementContainer<IOperation>();
+                    submodel.DataElements = new ElementContainer<IDataElement>();
+                    submodel.Events = new ElementContainer<IEvent>();
+
+                    foreach (var subElement in submodelTree.Children)
                     {
                         var subElementCnt = subElement.GetValue<cnt>();
                         if (subElementCnt != null)
@@ -428,47 +446,47 @@ namespace BaSys40.RI.AAS.SmartControl
                             {
                                 var op = ReadOperationFrom(subElement);
                                 if (op != null)
-                                    subModel.Operations.Add(op);
+                                    submodel.Operations.Add(op);
                             }
                             else if (subElementCnt.Lbl.FirstOrDefault(l => l.Contains(BASYS_TYPE_IDENTIFIER + SEPERATOR + ElementInstance.PROPERTY)) != null)
                             {
                                 var prop = ReadPropertyFrom(subElement);
                                 if (prop != null)
-                                    subModel.Properties.Add(prop);
+                                    submodel.DataElements.Add(prop);
                             }
                             else if (subElementCnt.Lbl.FirstOrDefault(l => l.Contains(BASYS_TYPE_IDENTIFIER + SEPERATOR + ElementInstance.EVENT)) != null)
                             {
                                 var prop = ReadEventFrom(subElement);
                                 if (prop != null)
-                                    subModel.Events.Add(prop);
+                                    submodel.Events.Add(prop);
                             }
                         }
                     }
                 }
-                return subModel;
+                return submodel;
             }
             return null;
         }
 
-        public static OperationDescription ReadOperationFrom(ObjectTreeBuilder operationTree)
+        public static Operation ReadOperationFrom(ObjectTreeBuilder operationTree)
         {
             var operationCnt = operationTree?.GetValue<cnt>();
-            OperationDescription operation = ConvertCntToOperation(operationCnt);
+            Operation operation = ConvertCntToOperation(operationCnt);
             if (operation != null)
             {
-                string listenerUriSubscriptionPath = string.Join(PATH_SEPERATOR, ContainerStrings.REQUEST, DEFAULT_SUBSCRIPTION_NAME);
-                if (operationTree.HasChildPath(listenerUriSubscriptionPath))
-                {
-                    var sub = operationTree.GetChild(listenerUriSubscriptionPath).GetValue<sub>();
-                    var uri = sub?.Nu?.FirstOrDefault();
-                    operation.Endpoint = uri ?? uri;
-                }
+                //string listenerUriSubscriptionPath = string.Join(PATH_SEPERATOR, ContainerStrings.REQUEST, DEFAULT_SUBSCRIPTION_NAME);
+                //if (operationTree.HasChildPath(listenerUriSubscriptionPath))
+                //{
+                //    var sub = operationTree.GetChild(listenerUriSubscriptionPath).GetValue<sub>();
+                //    var uri = sub?.Nu?.FirstOrDefault();
+                //    operation.OperationInformation.Endpoint = uri ?? uri;
+                //}
                 return operation;
             }
             return null;
         }
 
-        public static EventDescription ReadEventFrom(ObjectTreeBuilder eventTree)
+        public static Event ReadEventFrom(ObjectTreeBuilder eventTree)
         {
             var eventCnt = eventTree?.GetValue<cnt>();
             if (eventCnt != null)
@@ -477,41 +495,41 @@ namespace BaSys40.RI.AAS.SmartControl
                 string schemaPath = string.Join(PATH_SEPERATOR, ContainerStrings.SCHEMA, EventIdentifier.SCHEMA_CIN);
                 if (eventTree.HasChildPath(schemaPath))
                     schemaCin = eventTree.GetChild(schemaPath).GetValue<cin>();
-                EventDescription eventable = ConvertCntToEvent(eventCnt, schemaCin);
+                Event eventable = ConvertCntToEvent(eventCnt, schemaCin);
                 return eventable;
             }
             return null;
         }
 
-        public static PropertyDescription ReadPropertyFrom(ObjectTreeBuilder propertyTree)
+        public static Property ReadPropertyFrom(ObjectTreeBuilder propertyTree)
         {
             var propertyCnt = propertyTree?.GetValue<cnt>();
-            PropertyDescription property = ConvertCntToProperty(propertyCnt);
+            Property property = ConvertCntToProperty(propertyCnt);
             if (property != null)
             {
                 //string listenerUriSubscriptionPath = string.Join(PATH_SEPERATOR, ContainerStrings.GET, ContainerStrings.REQUEST, DEFAULT_SUBSCRIPTION_NAME);
-                string listenerUriSubscriptionPath = string.Join(PATH_SEPERATOR, ContainerStrings.DATA, DEFAULT_SUBSCRIPTION_NAME);
-                if (propertyTree.HasChildPath(listenerUriSubscriptionPath))
-                {
-                    var sub = propertyTree.GetChild(listenerUriSubscriptionPath).GetValue<sub>();
-                    var uri = sub?.Nu?.FirstOrDefault();
-                    property.Endpoint = uri ?? uri;
-                }
-                /*
-                string valuePath = string.Join(PATH_SEPERATOR, ContainerStrings.DATA);
-                if (propertyTree.HasChildPath(valuePath) && propertyTree.GetChild(valuePath).HasChildren())
-                {
-                    var latestValue = Helper.GetLatestResource(propertyTree.GetChild(valuePath));
-                    if(latestValue?.Con != null)
-                        property.Value = new ElementValue<string>(latestValue.Con);
-                }
-                */
+                //string listenerUriSubscriptionPath = string.Join(PATH_SEPERATOR, ContainerStrings.DATA, DEFAULT_SUBSCRIPTION_NAME);
+                //if (propertyTree.HasChildPath(listenerUriSubscriptionPath))
+                //{
+                //    var sub = propertyTree.GetChild(listenerUriSubscriptionPath).GetValue<sub>();
+                //    var uri = sub?.Nu?.FirstOrDefault();
+                //    (property.ElementInformation as ElementInformation).Endpoint = uri ?? uri;
+                //}
+               
+                //string valuePath = string.Join(PATH_SEPERATOR, ContainerStrings.DATA);
+                //if (propertyTree.HasChildPath(valuePath) && propertyTree.GetChild(valuePath).HasChildren())
+                //{
+                //    var latestValue = Helper.GetLatestResource(propertyTree.GetChild(valuePath));
+                //    if(latestValue?.Con != null)
+                //        property.Value = new ElementValue<string>(latestValue.Con);
+                //}
+                
                 return property;
             }
             return null;
         }
 
-        public static IResult ConvertResult(oneM2MClient.Utils.ResultHandling.Result<Response> requestResponse)
+        public static IResult ConvertResult(Result<Response> requestResponse)
         {
             IResult result = new Result(requestResponse.Success);
 
@@ -525,7 +543,7 @@ namespace BaSys40.RI.AAS.SmartControl
             return result;
         }
 
-        public static IResult<T> ConvertResult<T>(oneM2MClient.Utils.ResultHandling.Result<Response> requestResponse)
+        public static IResult<T> ConvertResult<T>(Result<Response> requestResponse)
         {
             IResult<T> result = new Result<T>(requestResponse.Success);
 
@@ -539,7 +557,7 @@ namespace BaSys40.RI.AAS.SmartControl
             return result;
         }
 
-        public static IResult<T> ConvertResult<T>(T entity, oneM2MClient.Utils.ResultHandling.Result<Response> requestResponse)
+        public static IResult<T> ConvertResult<T>(T entity, Result<Response> requestResponse)
         {
             IResult<T> result;
             if (entity != null)
@@ -557,76 +575,79 @@ namespace BaSys40.RI.AAS.SmartControl
             return result;
         }
 
-        private static PropertyDescription ConvertCntToProperty(cnt propertyCnt)
+        private static Property ConvertCntToProperty(cnt propertyCnt)
         {
             if (propertyCnt != null)
             {
                 var dataObjectType = GetDataTypeFromString(GetLabelValue(DATATYPE_IDENTIFIER, propertyCnt.Lbl));
-                Identifier dataTypeDefinition = null;
-                if (dataObjectType == DataObjectType.Object)
-                    dataTypeDefinition = new Identifier(GetLabelValue(DATATYPE_IDENTIFIER, propertyCnt.Lbl), Identificator.Internal);
+                Reference dataTypeDefinition = null;
+                if (dataObjectType == DataObjectType.AnyType)
+                    dataTypeDefinition = new Reference(new GlobalKey(KeyElements.GlobalReference, KeyType.URI, GetLabelValue(DATATYPE_IDENTIFIER, propertyCnt.Lbl)));
 
                 bool isCollection = false;
                 if (propertyCnt.Lbl.Contains(Labels.COLLECTION))
                     isCollection = true;
+                               
 
-                PropertyDescription prop = new PropertyDescription()
+                Property property = new Property(new DataType(dataObjectType, isCollection, dataTypeDefinition))
                 {
-                    Identification = new Identifier(GetLabelValue(Labels.ID, propertyCnt.Lbl), Identificator.Internal),
-                    Description = GetLabelValue(Labels.DESCRIPTION, propertyCnt.Lbl),
-                    DisplayName = propertyCnt.Rn,                    
-                    Readable = propertyCnt.Lbl.Contains(Labels.READABLE) ? true : false,
-                    Writable = propertyCnt.Lbl.Contains(Labels.WRITABLE) ? true : false,
-                    Eventable = propertyCnt.Lbl.Contains(Labels.EVENTABLE) ? true : false,
-                    DataType = new DataType(dataObjectType, isCollection, false, dataTypeDefinition)
+                    Descriptions = GetDescriptionsFromLabels(propertyCnt.Lbl),
+                    IdShort = GetLabelValue(Labels.ID, propertyCnt.Lbl)
                 };
 
                 var semanticReference = GetLabelValue(TYPE_IDENTIFIER, propertyCnt.Lbl);
                 if (semanticReference != null)
-                    prop.SemanticReference = new Identifier(semanticReference, Identificator.Internal);
+                    property.SemanticId = new Reference(new GlobalKey(KeyElements.Property, KeyType.URI, semanticReference));
 
-                return prop;
+                return property;
             }
             return null;
         }
 
-        private static OperationDescription ConvertCntToOperation(cnt subElementCnt)
+        public static List<Description> GetDescriptionsFromLabels(List<string> labels)
+        {
+            var descriptionText = GetLabelValue(Labels.DESCRIPTION, labels);
+            if (!string.IsNullOrEmpty(descriptionText))
+                return new List<Description>() { new Description("EN", descriptionText) };
+            return null;
+        }
+
+        private static Operation ConvertCntToOperation(cnt subElementCnt)
         {
             if (subElementCnt != null)
             {
                 var dataObjectType = GetDataTypeFromString(GetLabelValue(RETURN_DATATYPE_IDENTIFIER, subElementCnt.Lbl));
-                Identifier dataTypeDefinition = null;
-                if (dataObjectType == DataObjectType.Object)
-                    dataTypeDefinition = new Identifier(GetLabelValue(RETURN_DATATYPE_IDENTIFIER, subElementCnt.Lbl), Identificator.Internal);
+                Reference dataTypeDefinition = null;
+                if (dataObjectType == DataObjectType.AnyType)
+                    dataTypeDefinition = new Reference(new GlobalKey(KeyElements.GlobalReference, KeyType.URI, GetLabelValue(RETURN_DATATYPE_IDENTIFIER, subElementCnt.Lbl)));
 
-                OperationDescription op = new OperationDescription()
+                Operation op = new Operation()
                 {
-                    Identification = new Identifier(GetLabelValue(Labels.ID, subElementCnt.Lbl), Identificator.Internal),
-                    Description = GetLabelValue(Labels.DESCRIPTION, subElementCnt.Lbl),
-                    DisplayName = subElementCnt.Rn,
+                    Descriptions = GetDescriptionsFromLabels(subElementCnt.Lbl),
+                    IdShort = GetLabelValue(Labels.ID, subElementCnt.Lbl),
                 };
-                
+
                 if (Int32.TryParse(GetLabelValue(ParameterStrings.GetParameterLength(), subElementCnt.Lbl), out int paramLength) && paramLength > 0)
                 {
-                    op.InputParameters = new List<IParameter>(paramLength);
+                    op.In = new List<IOperationVariable>(paramLength);
                     for (int i = 0; i < paramLength; i++)
                     {
-                        Parameter param = new Parameter()
+                        OperationVariable param = new OperationVariable()
                         {
-                            ParameterName = GetLabelValue(ParameterStrings.GetParameterName(i), subElementCnt.Lbl),
-                            DataType = new DataType(GetDataTypeFromString(GetLabelValue(ParameterStrings.GetParameterDataType(i), subElementCnt.Lbl)), false, false),
+                            IdShort = GetLabelValue(ParameterStrings.GetParameterName(i), subElementCnt.Lbl),
+                            DataType = new DataType(GetDataTypeFromString(GetLabelValue(ParameterStrings.GetParameterDataType(i), subElementCnt.Lbl)), false),
                             Index = i
                         };
-                        op.InputParameters.Add(param);
+                        op.In.Add(param);
                     }
                 }
 
-                op.OutputParameters = new List<IParameter>()
+                op.Out = new List<IOperationVariable>()
                 {
-                    new Parameter()
+                    new OperationVariable()
                     {
                         Index = 0,
-                        DataType = new DataType(dataObjectType, false, false, dataTypeDefinition)                        
+                        DataType = new DataType(dataObjectType, false, dataTypeDefinition)                        
                     }
                 };
                 return op;
@@ -634,26 +655,24 @@ namespace BaSys40.RI.AAS.SmartControl
             return null;
         }
 
-        private static EventDescription ConvertCntToEvent(cnt subElementCnt, cin schema)
+        private static Event ConvertCntToEvent(cnt subElementCnt, cin schema)
         {
             if (subElementCnt != null)
             {
-                EventDescription op = new EventDescription()
+                Event ev = new Event()
                 {
-                    Identification = new Identifier(GetLabelValue(Labels.ID, subElementCnt.Lbl), Identificator.Internal),
-                    Description = GetLabelValue(Labels.DESCRIPTION, subElementCnt.Lbl),
-                    DisplayName = subElementCnt.Rn,
-                    EntityType = (EntityType)Enum.Parse(typeof(EntityType), GetLabelValue(EventIdentifier.ENTITY_TYPE, subElementCnt.Lbl)),
-                    EventCategory = GetLabelValue(EventIdentifier.EVENT_CATEGORY, subElementCnt.Lbl),
-                    EventName = GetLabelValue(EventIdentifier.EVENT_NAME, subElementCnt.Lbl),
+                    Descriptions = GetDescriptionsFromLabels(subElementCnt.Lbl),
+                    IdShort = GetLabelValue(Labels.ID, subElementCnt.Lbl),                   
+                    Category = GetLabelValue(EventIdentifier.EVENT_CATEGORY, subElementCnt.Lbl),
                 };
 
                 if(schema != null)
                 {
-                    op.SchemaType = (SchemaType)Enum.Parse(typeof(SchemaType), GetLabelValue(EventIdentifier.SCHEMA_TYPE, schema.Lbl));
-                    op.Schema = schema.Con;
+                    SchemaType schemaType = (SchemaType)Enum.Parse(typeof(SchemaType), GetLabelValue(EventIdentifier.SCHEMA_TYPE, schema.Lbl));
+                    string schemaString = schema.Con;
+                    ev.DataType = new DataType(null, schemaType, schemaString);
                 }
-                return op;
+                return ev;
             }
             return null;
         }
@@ -664,15 +683,18 @@ namespace BaSys40.RI.AAS.SmartControl
             {
                 var aas = new AssetAdministrationShell()
                 {
-                    Identification = new Identifier(GetLabelValue(Labels.ID, aasAe.Lbl), Identificator.Internal),
-                    DisplayName = GetLabelValue(Labels.DISPLAY_NAME, aasAe.Lbl),
-                    SemanticReference = new Identifier(GetLabelValue(AssetLabels.ASSET_TYPE_DEFINITION, aasAe.Lbl), Identificator.Internal),
-                    Assets = new ElementContainer<IAsset>() {
-                        new Asset() {
-                            Identification = new Identifier(GetLabelValue(AssetLabels.ASSET_ID, aasAe.Lbl), Identificator.Internal),
-                            AssetKind = GetLabelValue(AssetLabels.ASSET_KIND, aasAe.Lbl).Contains(((int)Kind.Type).ToString()) ? Kind.Type : Kind.Instance
-                    } },
-                    Description = GetLabelValue(Labels.DESCRIPTION, aasAe.Lbl)
+                    Identification = new Identifier(GetLabelValue(Labels.UUID, aasAe.Lbl), KeyType.Custom),
+                    IdShort = GetLabelValue(Labels.ID, aasAe.Lbl),
+                    Asset =
+                        new Asset()
+                        {
+                            Identification = new Identifier(GetLabelValue(AssetLabels.ASSET_UUID, aasAe.Lbl), KeyType.Custom),
+                            IdShort = GetLabelValue(AssetLabels.ASSET_ID, aasAe.Lbl),
+                            Kind = GetLabelValue(AssetLabels.ASSET_KIND, aasAe.Lbl).Contains(((int)Kind.Type).ToString()) ? Kind.Type : Kind.Instance,
+                            SemanticId = new Reference(new GlobalKey(KeyElements.Asset, KeyType.URI, GetLabelValue(AssetLabels.ASSET_TYPE_DEFINITION, aasAe.Lbl)))
+                        },
+                    Descriptions = GetDescriptionsFromLabels(aasAe.Lbl),
+
                 };
                 return aas;
             }
@@ -681,90 +703,155 @@ namespace BaSys40.RI.AAS.SmartControl
 
         #endregion  
 
-        #region Add-Operations
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> AddAAS(IAssetAdministrationShell aas)
+        public IAssetAdministrationShell ConvertAASDescriptorToAAS(AssetAdministrationShellDescriptor aasDesc)
         {
-            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName);
-            string typeOrInstance = (aas.Assets[0].AssetKind == Kind.Type) ? ElementType.AAS_TYPE : ElementInstance.AAS;
-            var labels = new List<string>
+            if (aasDesc == null)
+                return null;
+
+            var aas = new AssetAdministrationShell()
             {
-                BASYS_TYPE_IDENTIFIER + SEPERATOR + typeOrInstance,                
-                Labels.ID + SEPERATOR + aas.Identification.Id,
-                Labels.DISPLAY_NAME + SEPERATOR + aas.DisplayName,
-                AssetLabels.ASSET_TYPE_DEFINITION + SEPERATOR + aas.SemanticReference.Id,
-                AssetLabels.ASSET_KIND + SEPERATOR + (int)aas.Assets[0].AssetKind.Value,
-                AssetLabels.ASSET_ID + SEPERATOR + aas.Assets[0].Identification.Id
+                Asset = aasDesc.Asset,
+                Identification = aasDesc.Identification,
+                IdShort = aasDesc.IdShort,
+                MetaData = aasDesc.MetaData,
+                Administration = aasDesc.Administration,
+                Category = aasDesc.Category,
+                Descriptions = aasDesc.Descriptions
             };
 
-            if (!string.IsNullOrEmpty(aas.Description))
-                labels.Add(Labels.DESCRIPTION + SEPERATOR + aas.Description);
+            if (aasDesc.Submodels?.Count > 0)
+            {
+                aas.Submodels = new ElementContainer<ISubmodel>();
+                foreach (var submodel in aasDesc.Submodels)
+                {
+                    var convertedSubmodel = ConvertSubmodelDescriptorToSubmodel(submodel);
+                    if (convertedSubmodel != null)
+                        aas.Submodels.Add(convertedSubmodel);
+                }
+            }
+            return aas;
+        }
 
-            ApplicationEntity ae = new ApplicationEntity(aas.DisplayName, aas.Identification.Id, true, aas.Identification.Id, null, labels);
+        public ISubmodel ConvertSubmodelDescriptorToSubmodel(SubmodelDescriptor submodelDesc)
+        {
+            if (submodelDesc == null)
+                return null;
+
+            var submodel = new Submodel()
+            {
+                Identification = submodelDesc.Identification,
+                MetaData = submodelDesc.MetaData,
+                Administration = submodelDesc.Administration,
+                IdShort = submodelDesc.IdShort,
+                Category = submodelDesc.Category,
+                Descriptions = submodelDesc.Descriptions,
+                SemanticId = submodelDesc.SemanticId,
+                Kind = submodelDesc.Kind
+            };
+
+            return submodel;
+        }
+
+        #region Add-Operations
+        public static Result<Response> AddAAS(IAssetAdministrationShell aas)
+        {
+            if (aas == null || aas.Identification == null || aas.IdShort == null || aas.Asset == null || aas.Asset.Identification == null || aas.Asset.IdShort == null)
+                return new Result<Response>(new ArgumentNullException());
+
+            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName);
+
+            List<string> labels = new List<string>();
+
+            if (aas.Asset.Kind.HasValue)
+            {
+                if (aas.Asset.Kind.Value == Kind.Type)
+                {
+                    labels.Add(AssetLabels.ASSET_KIND + SEPERATOR + TYPE);
+                    labels.Add(BASYS_TYPE_IDENTIFIER + SEPERATOR + ElementType.AAS_TYPE);
+                }
+                else
+                {
+                    labels.Add(AssetLabels.ASSET_KIND + SEPERATOR + INSTANCE);
+                    labels.Add(BASYS_TYPE_IDENTIFIER + SEPERATOR + ElementInstance.AAS);
+                }
+            }
+            else
+            {
+                labels.Add(AssetLabels.ASSET_KIND + SEPERATOR + INSTANCE);
+                labels.Add(BASYS_TYPE_IDENTIFIER + SEPERATOR + ElementInstance.AAS);
+            }
+
+            labels.Add(Labels.ID + SEPERATOR + aas.IdShort);
+            labels.Add(Labels.UUID + SEPERATOR + aas.Identification.Id);
+            labels.Add(Labels.DISPLAY_NAME + SEPERATOR + aas.IdShort);
+
+            labels.Add(AssetLabels.ASSET_ID + SEPERATOR + aas.Asset.IdShort);
+            labels.Add(AssetLabels.ASSET_UUID + SEPERATOR + aas.Asset.Identification.Id);
+
+            if (aas.Asset.SemanticId?.Keys?.Count > 0)
+                labels.Add(AssetLabels.ASSET_TYPE_DEFINITION + SEPERATOR + aas.Asset.SemanticId.Keys.First().Value);
+
+            if (aas.Descriptions?.Count > 0)
+                labels.Add(Labels.DESCRIPTION + SEPERATOR + aas.Descriptions.First().Text);
+
+            ApplicationEntity ae = new ApplicationEntity(aas.IdShort, aas.Identification.Id, true, aas.IdShort, null, labels);
             var result = ae.Create(oneM2MClient, req);
             return result;
         }
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> AddProperty(string aasId, string subModelId, IPropertyDescription property)
+        public static Result<Response> AddProperty(string aasId, string submodelId, IDataElement property)
         {
-            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId);
-            string dty = string.Empty;
-            if (property.DataType.DataObjectType.Value == DataObjectType.Object && !string.IsNullOrEmpty(property.DataType.SemanticReference.Id))
-                dty = property.DataType.SemanticReference.Id;
-            else
-                dty = property.DataType.DataObjectType.Value.ToString().ToLower();
-
-
+            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId);
             var labels = new List<string>
             {
                 BASYS_TYPE_IDENTIFIER + SEPERATOR + ElementInstance.PROPERTY,
-                DATATYPE_IDENTIFIER + SEPERATOR + dty,
             };
 
-            if (property.Readable.HasValue && property.Readable.Value)
+            string dty = string.Empty;
+            if (property.ModelType == ModelType.DataElementCollection || property.ModelType == ModelType.SubmodelElementCollection)
+            {
+                labels.Add(Labels.COLLECTION);
+                labels.Add(DATATYPE_IDENTIFIER + SEPERATOR + "string");
+            }
+            else
+            {
+                if (property.ValueType.DataObjectType == DataObjectType.AnyType && property.ValueType.SemanticId?.Keys?.Count > 0)
+                    dty = property.ValueType.SemanticId.Keys.First().Value;
+                else
+                    dty = SmartControlUtils.ConvertDataTypeNames(property.ValueType);
+                labels.Add(DATATYPE_IDENTIFIER + SEPERATOR + dty);
+            }
+
+            //if (property.DataElementInformation.Readable.HasValue && property.DataElementInformation.Readable.Value)
                 labels.Add(Labels.READABLE);
-            if (property.Writable.HasValue && property.Writable.Value)
+            //if (property.DataElementInformation.Writable.HasValue && property.DataElementInformation.Writable.Value)
                 labels.Add(Labels.WRITABLE);
-            if (property.Eventable.HasValue && property.Eventable.Value)
+            //if (property.DataElementInformation.Eventable.HasValue && property.DataElementInformation.Eventable.Value)
                 labels.Add(Labels.EVENTABLE);
 
-            if (property.DataType.IsCollection)
-                labels.Add(Labels.COLLECTION);
+            if (property.SemanticId?.Keys?.Count > 0)
+                labels.Add(TYPE_IDENTIFIER + SEPERATOR + property.SemanticId.Keys.First().Value);
 
-            if (property.SemanticReference != null)
-                labels.Add(TYPE_IDENTIFIER + SEPERATOR + property.SemanticReference.Id);
+            if (!string.IsNullOrEmpty(property.IdShort))
+                labels.Add(Labels.ID + SEPERATOR + property.IdShort);
+            if (property.Descriptions?.Count > 0)
+                labels.Add(Labels.DESCRIPTION + SEPERATOR + property.Descriptions.First().Text);
 
-            if (!string.IsNullOrEmpty(property.Identification.Id))
-                labels.Add(Labels.ID + SEPERATOR + property.Identification.Id);
-            if (!string.IsNullOrEmpty(property.Description))
-                labels.Add(Labels.DESCRIPTION + SEPERATOR + property.Description);
-
-            Container cont = new Container(property.Identification.Id, null, labels, 8);
+            Container cont = new Container(property.IdShort, null, labels, 8);
             cont.Create(oneM2MClient, req);
 
-            req.AddPath(property.Identification.Id);
+            req.AddPath(property.IdShort);
             Container.Create(oneM2MClient, req, ContainerStrings.DATA, null, null, 8);
-            req.AddPath(ContainerStrings.DATA);
-            var result = CreateSubscription(req, property.Endpoint);
 
-            /*
-            if (property.Readable.HasValue && property.Readable.Value)
-            {
-                Container.Create(oneM2MClient, req, ContainerStrings.GET, null, null, 8);
-                CreateRequestConstruct(new string[] { aasId, subModelId, property.Identification.Id, ContainerStrings.GET }, property.Endpoint);
-            }
-            if (property.Writable.HasValue && property.Writable.Value)
-            {
-                Container.Create(oneM2MClient, req, ContainerStrings.SET, null, null, 8);
-                CreateRequestConstruct(new string[] { aasId, subModelId, property.Identification.Id, ContainerStrings.SET }, property.Endpoint);
-            }
-            */
-            /*
-            if (value != null && result.Success)
-                SetProperty(aasId, subModelId, propertyId, value);
-            */
+            if (property.Value != null)
+                UpdatePropertyValue(aasId, submodelId, property.IdShort, new DataElementValue(property.Value, property.ValueType));
+
+            req.AddPath(ContainerStrings.DATA);
+            var result = CreateSubscription(req, Settings.CallbackEndpointUrl);
+
             return result;
         }
 
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> CreateSubscription(Request req, string subscriptionUri)
+        public static Result<Response> CreateSubscription(Request req, string subscriptionUri)
         {
             req.From(subscriptionUri);
             Subscription sub = new Subscription(DEFAULT_SUBSCRIPTION_NAME, new List<string> { subscriptionUri }, new List<notificationEventType> { notificationEventType.CreateofDirectChildResource });
@@ -773,26 +860,26 @@ namespace BaSys40.RI.AAS.SmartControl
             return result;
         }
 
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> AddEvent(string aasId, string subModelId, IEventDescription eventDescription)
+        public static Result<Response> AddEvent(string aasId, string submodelId, IEvent eventDescription)
         {
-            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId);
+            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId);
 
             var labels = new List<string>
             {
                 BASYS_TYPE_IDENTIFIER + SEPERATOR + ElementInstance.EVENT,              
-                EventIdentifier.ENTITY_TYPE + SEPERATOR +  Enum.GetName(typeof(EntityType), eventDescription.EntityType.Value),
-                EventIdentifier.EVENT_NAME + SEPERATOR + eventDescription.EventName,
-                EventIdentifier.EVENT_CATEGORY  + SEPERATOR + eventDescription.EventCategory
+                EventIdentifier.EVENT_CATEGORY  + SEPERATOR + eventDescription.Category,
+                DATATYPE_IDENTIFIER + SEPERATOR + "void"
             };
+            //if (!string.IsNullOrEmpty(eventDescription.Identification.Id))
+               //labels.Add(Labels.UUID + SEPERATOR + eventDescription.Identification.Id);
+            if (!string.IsNullOrEmpty(eventDescription.IdShort))
+                labels.Add(Labels.ID + SEPERATOR + eventDescription.IdShort);
+            if (eventDescription.Descriptions?.Count > 0)
+                labels.Add(Labels.DESCRIPTION + SEPERATOR + eventDescription.Descriptions.First().Text);
 
-            if (!string.IsNullOrEmpty(eventDescription.Identification.Id))
-                labels.Add(Labels.ID + SEPERATOR + eventDescription.Identification.Id);
-            if (!string.IsNullOrEmpty(eventDescription.Description))
-                labels.Add(Labels.DESCRIPTION + SEPERATOR + eventDescription.Description);
+            Container.Create(oneM2MClient, req, eventDescription.IdShort, null, labels, 1);
 
-            Container.Create(oneM2MClient, req, eventDescription.Identification.Id, null, labels, 1);
-
-            req.AddPath(eventDescription.Identification.Id);
+            req.AddPath(eventDescription.IdShort);
 
             var result = Container.Create(oneM2MClient, req, ContainerStrings.DATA, null, null, 8);
 
@@ -803,84 +890,96 @@ namespace BaSys40.RI.AAS.SmartControl
             result = sub.Create(oneM2MClient, req);
             
 
-            if (!string.IsNullOrEmpty(eventDescription.Schema) && eventDescription.SchemaType.HasValue)
+            if (eventDescription.DataType != null && !string.IsNullOrEmpty(eventDescription.DataType.Schema) && eventDescription.DataType.SchemaType.HasValue)
             {
                 req.From(DEFAULT_FROM);
                 Container.Create(oneM2MClient, req, ContainerStrings.SCHEMA, null, null, 1);
-                req.SetPath(aasId, subModelId, eventDescription.Identification.Id, ContainerStrings.SCHEMA);
+                req.SetPath(aasId, submodelId, eventDescription.IdShort, ContainerStrings.SCHEMA);
 
                 var schemaLabels = new List<string>();
-                schemaLabels.Add(EventIdentifier.SCHEMA_TYPE + SEPERATOR + Enum.GetName(typeof(SchemaType), eventDescription.SchemaType.Value));
-                ContentInstance.Create(oneM2MClient, req, EventIdentifier.SCHEMA_CIN, eventDescription.Schema, null, schemaLabels);
+                schemaLabels.Add(EventIdentifier.SCHEMA_TYPE + SEPERATOR + Enum.GetName(typeof(SchemaType), eventDescription.DataType.SchemaType.Value));
+                ContentInstance.Create(oneM2MClient, req, EventIdentifier.SCHEMA_CIN, eventDescription.DataType.Schema, null, schemaLabels);
             }
             
             return result;
         }
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> AddOperation(string aasId, string subModelId, IOperationDescription<IParameter> operation)
+        public static Result<Response> AddOperation(string aasId, string submodelId, IOperation operation)
         {
-            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId);
+            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId);
 
             var labels = new List<string>
             {
-                BASYS_TYPE_IDENTIFIER + SEPERATOR + ElementInstance.OPERATION,
-                RETURN_DATATYPE_IDENTIFIER + SEPERATOR + operation.OutputParameters[0].DataType.DataObjectType.Value.ToString(),
+                BASYS_TYPE_IDENTIFIER + SEPERATOR + ElementInstance.OPERATION
             };
 
-            if (operation.InputParameters != null)
+            if (operation.In != null)
             {
-                labels.Add(ParameterStrings.GetParameterLength() + SEPERATOR + operation.InputParameters.Count);
+                labels.Add(ParameterStrings.GetParameterLength() + SEPERATOR + operation.In.Count);
 
-                for (int i = 0; i < operation.InputParameters.Count; i++)
+                for (int i = 0; i < operation.In.Count; i++)
                 {
-                    labels.Add(ParameterStrings.GetParameterName(i) + SEPERATOR + operation.InputParameters[i].ParameterName);
-                    labels.Add(ParameterStrings.GetParameterDataType(i) + SEPERATOR + operation.InputParameters[i].DataType.DataObjectType.Value.ToString().ToLower());
+                    labels.Add(ParameterStrings.GetParameterName(i) + SEPERATOR + operation.In[i].IdShort);
+                    labels.Add(ParameterStrings.GetParameterDataType(i) + SEPERATOR + SmartControlUtils.ConvertDataTypeNames(operation.In[i].DataType));
                 }
             }
             else
                 labels.Add(ParameterStrings.GetParameterLength() + SEPERATOR + 0);
 
-            if (operation.OutputParameters != null)
-                labels.Add(RETURN_DATATYPE_IDENTIFIER + SEPERATOR + operation.OutputParameters[0].DataType.DataObjectType.Value.ToString().ToLower());
+            if (operation.Out?.Count == 1)
+                labels.Add(RETURN_DATATYPE_IDENTIFIER + SEPERATOR + SmartControlUtils.ConvertDataTypeNames(operation.Out[0].DataType));
             else
                 labels.Add(RETURN_DATATYPE_IDENTIFIER + SEPERATOR + "void");
 
 
-            if (!string.IsNullOrEmpty(operation.Identification.Id))
-                labels.Add(Labels.ID + SEPERATOR + operation.Identification.Id);
-            if (!string.IsNullOrEmpty(operation.Description))
-                labels.Add(Labels.DESCRIPTION + SEPERATOR + operation.Description);
+            if (!string.IsNullOrEmpty(operation.IdShort))
+                labels.Add(Labels.ID + SEPERATOR + operation.IdShort);
+            if (operation.Descriptions?.Count > 0)
+                labels.Add(Labels.DESCRIPTION + SEPERATOR + operation.Descriptions.First().Text);
 
-            Container cont = new Container(operation.Identification.Id, null, labels);
+            Container cont = new Container(operation.IdShort, null, labels);
             var result = cont.Create(oneM2MClient, req);
 
-            CreateRequestConstruct(new string[] { aasId, subModelId, operation.Identification.Id }, operation.Endpoint);
+            CreateRequestConstruct(new string[] { aasId, submodelId, operation.IdShort }, Settings.CallbackEndpointUrl);
 
             return result;
         }
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> AddSubModel(string aasId, ISubModel subModel)
+        public static Result<Response> AddSubmodel(string aasId, ISubmodel submodel)
         {
             Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId);
 
             var labels = new List<string>
             {
-                BASYS_TYPE_IDENTIFIER + SEPERATOR + ElementInstance.SUBMODEL,
-                AssetLabels.ASSET_KIND + SEPERATOR + subModel.SubModelKind.Value,
-                TYPE_IDENTIFIER + SEPERATOR + subModel.SemanticReference.Id
+                BASYS_TYPE_IDENTIFIER + SEPERATOR + ElementInstance.SUBMODEL               
             };
 
-            if (!string.IsNullOrEmpty(subModel.Identification.Id))
-                labels.Add(Labels.ID + SEPERATOR + subModel.Identification.Id);
-            if (!string.IsNullOrEmpty(subModel.Description))
-                labels.Add(Labels.DESCRIPTION + SEPERATOR + subModel.Description);
+            if (submodel.SemanticId?.Keys?.Count > 0)
+                labels.Add(TYPE_IDENTIFIER + SEPERATOR + submodel.SemanticId.Keys.First().Value);
+            else
+                labels.Add(TYPE_IDENTIFIER + SEPERATOR + submodel.IdShort);
 
-            Container cont = new Container(subModel.Identification.Id, null, labels);
+            if (submodel.Kind.HasValue)
+            {
+                if (submodel.Kind.Value == Kind.Instance)
+                    labels.Add(AssetLabels.ASSET_KIND + SEPERATOR + INSTANCE);
+                else
+                    labels.Add(AssetLabels.ASSET_KIND + SEPERATOR + TYPE);
+            }
+
+            if (!string.IsNullOrEmpty(submodel.Identification.Id))
+                labels.Add(Labels.UUID + SEPERATOR + submodel.Identification.Id);
+            if (!string.IsNullOrEmpty(submodel.IdShort))
+                labels.Add(Labels.ID + SEPERATOR + submodel.IdShort);
+            if (submodel.Descriptions?.Count > 0)
+                labels.Add(Labels.DESCRIPTION + SEPERATOR + submodel.Descriptions.First().Text);
+
+            Container cont = new Container(submodel.IdShort, null, labels);
             var result = cont.Create(oneM2MClient, req);
             return result;
         }
         #endregion
 
         #region Read-Operations
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> ReadAllAAS(out List<IAssetAdministrationShell> aasList)
+        public static Result<Response> ReadAllAAS(out List<IAssetAdministrationShell> aasList)
         {
             Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName);
             var response = Helper.ReadResourcesByLabels(oneM2MClient, req, new List<string> { BASYS_TYPE_IDENTIFIER + SEPERATOR + ElementInstance.AAS }, out List<resource> resources);
@@ -894,14 +993,14 @@ namespace BaSys40.RI.AAS.SmartControl
                         var aas = ConvertAeResourceToAAS(aasAe);
                         if (aas != null)
                         {
-                            ReadSubModels(aas.Identification.Id, out IElementContainer<ISubModel> subModels);
-                            if (subModels?.Count > 0)
+                            ReadSubmodels(aas.IdShort, out ElementContainer<ISubmodel> submodels);
+                            if (submodels?.Count > 0)
                             {
-                                aas.SubModels = new ElementContainer<ISubModel>();
-                                foreach (var subModel in subModels)
+                                aas.Submodels = new ElementContainer<ISubmodel>();
+                                foreach (var submodel in submodels)
                                 {
-                                    string serviceUri = string.Join(PATH_SEPERATOR, PATH_SEPERATOR, aas.Identification.Id, ElementInstance.SUBMODELS, subModel.DisplayName).Replace("//", "/");
-                                    aas.SubModels.Add(new SubModel() { Endpoint = serviceUri });
+                                    //string serviceUri = string.Join(PATH_SEPERATOR, PATH_SEPERATOR, aas.IdShort, ElementInstance.SUBMODELS, submodel.IdShort).Replace("//", "/");
+                                    aas.Submodels.Add(submodel);
                                 }
                             }
                             aasList.Add(aas);
@@ -913,7 +1012,7 @@ namespace BaSys40.RI.AAS.SmartControl
             aasList = null;
             return response;
         }
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> ReadAAS(string aasId, out IAssetAdministrationShell aas)
+        public static Result<Response> ReadAAS(string aasId, out IAssetAdministrationShell aas)
         {
             if (!string.IsNullOrEmpty(aasId))
             {
@@ -923,16 +1022,16 @@ namespace BaSys40.RI.AAS.SmartControl
                     && resources.FirstOrDefault(r => r.Ty.Value == (int)resourceType.AE) != null)
                 {
                     aas = ConvertAeResourceToAAS((ae)resources.FirstOrDefault());
-                    ReadSubModels(aasId, out IElementContainer<ISubModel> subModels);
+                    ReadSubmodels(aasId, out ElementContainer<ISubmodel> submodels);
                     if (aas != null)
                     {
-                        if (subModels != null)
+                        if (submodels != null)
                         {
-                            aas.SubModels = new ElementContainer<ISubModel>();
-                            foreach (var subModel in subModels)
+                            aas.Submodels = new ElementContainer<ISubmodel>();
+                            foreach (var submodel in submodels)
                             {
-                                string serviceUri = string.Join(PATH_SEPERATOR, PATH_SEPERATOR, aasId, ElementInstance.SUBMODELS, subModel.DisplayName).Replace("//", "/");
-                                aas.SubModels.Add(new SubModel() { Endpoint = serviceUri });
+                                //string serviceUri = string.Join(PATH_SEPERATOR, PATH_SEPERATOR, aasId, ElementInstance.SUBMODELS, submodel.IdShort).Replace("//", "/");
+                                aas.Submodels.Add(submodel);
                             }
                         }
                         return response;
@@ -944,20 +1043,20 @@ namespace BaSys40.RI.AAS.SmartControl
             aas = null;
             return null;
         }
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> ReadSubModel(string aasId, string subModelId, out SubModel subModel)
+        public static Result<Response> ReadSubmodel(string aasId, string submodelId, out Submodel submodel)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId))
             {
-                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId);
-                var result = Helper.ReadResourceTree(oneM2MClient, req, out ObjectTreeBuilder subModelTree);
-                subModel = ReadSubModelFrom(aasId, subModelTree);
+                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId);
+                var result = Helper.ReadResourceTree(oneM2MClient, req, out ObjectTreeBuilder submodelTree);
+                submodel = ReadSubmodelFrom(aasId, submodelTree);
 
                 return result;
             }
-            subModel = null;
+            submodel = null;
             return null;
         }
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> ReadSubModels(string aasId, out IElementContainer<ISubModel> subModels)
+        public static Result<Response> ReadSubmodels(string aasId, out ElementContainer<ISubmodel> submodels)
         {
             if (!string.IsNullOrEmpty(aasId))
             {
@@ -965,55 +1064,56 @@ namespace BaSys40.RI.AAS.SmartControl
                 var result = Helper.ReadResourceTree(oneM2MClient, req, out ObjectTreeBuilder resTree);
                 if (result.Success && resTree != null && resTree.HasChildren())
                 {
-                    subModels = new ElementContainer<ISubModel>();
+                    submodels = new ElementContainer<ISubmodel>();
                     foreach (ObjectTreeBuilder child in resTree.Children)
                     {
-                        var subModel = ReadSubModelFrom(aasId, child);
-                        subModels.Add(subModel);
+                        var submodel = ReadSubmodelFrom(aasId, child);
+                        submodels.Add(submodel);
                     }
-                    if (subModels.Count == 0)
-                        subModels = null;
+                    if (submodels.Count == 0)
+                        submodels = null;
 
                     return result;
                 }
-                subModels = null;
+                submodels = null;
                 return result;
             }
-            subModels = null;
+            submodels = null;
             return null;
         }
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> ReadProperty(string aasId, string subModelId, string propertyId, out PropertyDescription property)
+        public static Result<Response> ReadProperty(string aasId, string submodelId, string propertyId, out Property property)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId) && !string.IsNullOrEmpty(propertyId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(propertyId))
             {
-                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId, propertyId);
+                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId, propertyId);
                 var result = Container.Retrieve(oneM2MClient, req);
                 property = null;
                 if (result.Success && result.Entity.TryGetResource(out cnt prop))
                 {
                     property = ConvertCntToProperty(prop);
-                    if (property != null)
-                    {
-                        req.AddPath(ContainerStrings.DATA, DEFAULT_SUBSCRIPTION_NAME);
-                        //req.AddPath(ContainerStrings.GET, ContainerStrings.REQUEST, DEFAULT_SUBSCRIPTION_NAME);
-                        var listenerUriReq = Subscription.Retrieve(oneM2MClient, req);
-                        if (listenerUriReq.Success && listenerUriReq.Entity.TryGetResource(out sub subUri))
-                            property.Endpoint = string.Join(ELEMENT_SEPERATOR, subUri.Nu);
-                    }
+                    //if (property != null)
+                    //{
+                    //    req.AddPath(ContainerStrings.DATA, DEFAULT_SUBSCRIPTION_NAME);
+                    //    //req.AddPath(ContainerStrings.GET, ContainerStrings.REQUEST, DEFAULT_SUBSCRIPTION_NAME);
+                    //    var listenerUriReq = Subscription.Retrieve(oneM2MClient, req);
+                    //    if (listenerUriReq.Success && listenerUriReq.Entity.TryGetResource(out sub subUri))
+                    //        (property.ElementInformation as ElementInformation).Endpoint = string.Join(ELEMENT_SEPERATOR, subUri.Nu);
+                    //}
                 }
                 return result;
             }
             property = null;
             return null;
         }
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> ReadPropertyValue(string aasId, string subModelId, string propertyId, out object value)
+        public static Result<Response> ReadPropertyValue(string aasId, string submodelId, string propertyId, out IValue value)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId) && !string.IsNullOrEmpty(propertyId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(propertyId))
             {
-                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId, propertyId, ContainerStrings.DATA);
+                ReadProperty(aasId, submodelId, propertyId, out Property property);
+                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId, propertyId, ContainerStrings.DATA);
                 var resp = Helper.ReadLatestAddedResource(oneM2MClient, req, out resource data);
                 if (resp.Success && data != null && data is cin dataCin)
-                    value = dataCin.Con;
+                    value = SmartControlUtils.ConvertPropertyValue(dataCin.Con, property.ValueType);
                 else
                     value = null;
                 return resp;
@@ -1021,34 +1121,34 @@ namespace BaSys40.RI.AAS.SmartControl
             value = null;
             return null;
         }
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> ReadOperation(string aasId, string subModelId, string operationId, out OperationDescription operation)
+        public static Result<Response> ReadOperation(string aasId, string submodelId, string operationId, out Operation operation)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId) && !string.IsNullOrEmpty(operationId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(operationId))
             {
-                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId, operationId);
+                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId, operationId);
                 var result = Container.Retrieve(oneM2MClient, req);
                 operation = null;
                 if (result.Success && result.Entity.TryGetResource(out cnt op))
                 {
                     operation = ConvertCntToOperation(op);
-                    if (operation != null)
-                    {
-                        req.AddPath(ContainerStrings.REQUEST, DEFAULT_SUBSCRIPTION_NAME);
-                        var listenerUriReq = Subscription.Retrieve(oneM2MClient, req);
-                        if (listenerUriReq.Success && listenerUriReq.Entity.TryGetResource(out sub subUri))
-                            operation.Endpoint = string.Join(ELEMENT_SEPERATOR, subUri.Nu);
-                    }
+                    //if (operation != null)
+                    //{
+                    //    req.AddPath(ContainerStrings.REQUEST, DEFAULT_SUBSCRIPTION_NAME);
+                    //    var listenerUriReq = Subscription.Retrieve(oneM2MClient, req);
+                    //    if (listenerUriReq.Success && listenerUriReq.Entity.TryGetResource(out sub subUri))
+                    //        operation.OperationInformation.Endpoint = string.Join(ELEMENT_SEPERATOR, subUri.Nu);
+                    //}
                 }
                 return result;
             }
             operation = null;
             return null;
         }
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> ReadEvent(string aasId, string subModelId, string eventId, out EventDescription eventable)
+        public static Result<Response> ReadEvent(string aasId, string submodelId, string eventId, out Event eventable)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId) && !string.IsNullOrEmpty(eventId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(eventId))
             {
-                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId, eventId);
+                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId, eventId);
                 var result = Container.Retrieve(oneM2MClient, req);
                 eventable = null;
                 if (result.Success && result.Entity.TryGetResource(out cnt ev))
@@ -1075,37 +1175,37 @@ namespace BaSys40.RI.AAS.SmartControl
         #endregion
 
         #region Remove-Operations
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> RemoveComponent(string[] components)
+        public static Result<Response> RemoveComponent(string[] components)
         {
             Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, components);
             var result = ApplicationEntity.Delete(oneM2MClient, req);
             return result;
         }
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> RemoveOperation(string aasId, string subModelId, string operationId)
+        public static Result<Response> RemoveOperation(string aasId, string submodelId, string operationId)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId) && !string.IsNullOrEmpty(operationId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(operationId))
             {
-                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId, operationId);
+                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId, operationId);
                 var result = Container.Delete(oneM2MClient, req);
                 return result;
             }
             return null;
         }
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> RemoveEvent(string aasId, string subModelId, string eventId)
+        public static Result<Response> RemoveEvent(string aasId, string submodelId, string eventId)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId) && !string.IsNullOrEmpty(eventId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(eventId))
             {
-                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId, eventId);
+                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId, eventId);
                 var result = Container.Delete(oneM2MClient, req);
                 return result;
             }
             return null;
         }
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> RemoveProperty(string aasId, string subModelId, string propertyId)
+        public static Result<Response> RemoveProperty(string aasId, string submodelId, string propertyId)
         {
-            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(subModelId) && !string.IsNullOrEmpty(propertyId))
+            if (!string.IsNullOrEmpty(aasId) && !string.IsNullOrEmpty(submodelId) && !string.IsNullOrEmpty(propertyId))
             {
-                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId, propertyId);
+                Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId, propertyId);
                 var result = Container.Delete(oneM2MClient, req);
                 return result;
             }
@@ -1115,18 +1215,18 @@ namespace BaSys40.RI.AAS.SmartControl
 
         #region Event-Operations
 
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> Publish(string aasId, string subModelId, string eventId, IPublishableEvent publishableEvent)
+        public static Result<Response> Publish(string aasId, string submodelId, string eventId, IPublishableEvent publishableEvent)
         {
-            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId, eventId, ContainerStrings.DATA);
+            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId, eventId, ContainerStrings.DATA);
 
-            var evResult = ContentInstance.Create(oneM2MClient, req, publishableEvent.Identification.Id, JsonConvert.SerializeObject(publishableEvent));
+            var evResult = ContentInstance.Create(oneM2MClient, req, publishableEvent.IdShort, JsonConvert.SerializeObject(publishableEvent));
 
             return evResult;
         }
 
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> Subscribe(string aasId, string subModelId, string eventId, string subscriberId, string subscriberEndpoint)
+        public static Result<Response> Subscribe(string aasId, string submodelId, string eventId, string subscriberId, string subscriberEndpoint)
         {
-            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId, eventId, ContainerStrings.DATA);
+            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId, eventId, ContainerStrings.DATA);
 
             req.From(subscriberEndpoint);
             Subscription sub = new Subscription(EventIdentifier.SUBSCRIBER_SUB + subscriberId, new List<string> { subscriberEndpoint }, new List<notificationEventType> { notificationEventType.CreateofDirectChildResource });
@@ -1136,16 +1236,15 @@ namespace BaSys40.RI.AAS.SmartControl
             return result;
         }
 
-        public static oneM2MClient.Utils.ResultHandling.Result<Response> Unsubscribe(string aasId, string subModelId, string eventId, string subscriberId)
+        public static Result<Response> Unsubscribe(string aasId, string submodelId, string eventId, string subscriberId)
         {
-            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, subModelId, eventId, ContainerStrings.DATA, EventIdentifier.SUBSCRIBER_SUB + subscriberId);
+            Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, aasId, submodelId, eventId, ContainerStrings.DATA, EventIdentifier.SUBSCRIBER_SUB + subscriberId);
             var result = Subscription.Delete(oneM2MClient, req);
             return result;
         }
         #endregion
 
         #endregion
-
         #region Utility-Functions
         public static string GetLabelValue(string label, List<string> labels, string seperator = SEPERATOR)
         {
@@ -1157,7 +1256,7 @@ namespace BaSys40.RI.AAS.SmartControl
             }
             return null;
         }
-        private static oneM2MClient.Utils.ResultHandling.Result<Response> CreateRequestConstruct(string[] path, string subscriptionListenerUri)
+        private static Result<Response> CreateRequestConstruct(string[] path, string subscriptionListenerUri)
         {
             Request req = RequestFactory.CreateRequest(oneM2MClient, Settings.oneM2MConfig.ClientId, Settings.oneM2MConfig.Endpoint, Settings.oneM2MConfig.CSEName, path);
 
@@ -1176,13 +1275,15 @@ namespace BaSys40.RI.AAS.SmartControl
         {
             if (!string.IsNullOrEmpty(dty))
             {
-                if (Enum.TryParse(dty.UppercaseFirst(), out DataObjectType dataType))
+                if (DataObjectType.TryParse(dty, out DataObjectType dataType))
                     return dataType;
                 else
-                    return DataObjectType.Object;
+                    return DataObjectType.AnyType;
             }
             return DataObjectType.None;
         }
+
+      
         #endregion
     }
 }

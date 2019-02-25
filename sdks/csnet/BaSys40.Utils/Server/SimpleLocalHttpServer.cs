@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace BaSys40.Utils.Server
 {
@@ -13,24 +14,38 @@ namespace BaSys40.Utils.Server
     {
         public Uri Endpoint { get; }
 
-        private Thread serverThread;
         private HttpListener listener;
+        private CancellationTokenSource cancellationToken;
         private Action<HttpListenerRequest> messageReception = null;
         private Action<HttpListenerResponse> messageResponse = null;
+        private Action<HttpListenerContext> messageHandler = null;
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public SimpleLocalHttpServer(int port, string hostAddress = "127.0.0.1")
+        public SimpleLocalHttpServer(string endpoint)
         {
-            string uri = "http://" + hostAddress + ":" + port;
-            Endpoint = new Uri(uri);
+            Endpoint = new Uri(endpoint);
         }
 
 
         public void Start()
         {
-            serverThread = new Thread(this.Listen);
-            serverThread.Start();
+            listener = new HttpListener();
+            listener.Prefixes.Add(Endpoint.OriginalString + "/");
+            cancellationToken = new CancellationTokenSource();
+
+            if (!listener.IsListening)
+            {
+                listener.Start();
+
+                Task.Factory.StartNew(async () =>
+                {
+                    while (!cancellationToken.IsCancellationRequested)
+                        await Listen(listener);
+                }, cancellationToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Current);
+
+                logger.Info("Http-Listener started");
+            }
         }
 
         public void Start(Action<HttpListenerRequest> receiveMessageMethod)
@@ -46,42 +61,40 @@ namespace BaSys40.Utils.Server
             Start();
         }
 
-        private void Listen()
+        public void Start(Action<HttpListenerContext> messageHandlerMethod)
+        {
+            messageHandler = messageHandlerMethod;
+            Start();
+        }
+        private async Task Listen(HttpListener listener)
         {
             try
             {
-                listener = new HttpListener();
-                listener.Prefixes.Add(Endpoint.OriginalString + "/");
-                listener.Start();
-            }
-            catch (Exception e)
-            {
-                logger.Error(e, "Http-Listener could not be started: " + e.Message);
-            }
-
-            while (listener.IsListening)
-            {
-                try
+                HttpListenerContext context = await listener.GetContextAsync();
+                if (messageHandler != null)
+                    messageHandler.Invoke(context);
+                else
                 {
-                    HttpListenerContext context = listener.GetContext();
                     if (messageReception != null)
                         messageReception.Invoke(context.Request);
                     if (messageResponse != null)
                         messageResponse.Invoke(context.Response);
                 }
-                catch (Exception e)
-                {
-                    logger.Warn(e, "Http-Listener Exception: " + e.Message);
-                }
             }
-
-
+            catch (Exception e)
+            {
+                logger.Error(e, "Http-Listener Exception: " + e.Message);
+            }
         }
 
         public void Stop()
         {
-            listener.Stop();
-            serverThread.Abort();
+            if (listener.IsListening)
+            {
+                cancellationToken.Cancel();
+                listener.Stop();
+                logger.Info("Http-Listener stopped");
+            }
         }
 
         public static List<string> GetLocalIpAddresses()

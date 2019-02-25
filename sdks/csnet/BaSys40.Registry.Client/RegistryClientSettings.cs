@@ -17,11 +17,7 @@ namespace BaSys40.Registry.Client
         public class RegistryConfiguration 
         {
             [XmlElement]
-            public string RegistryUrl { get; set; }
-            [XmlElement]
-            public string TenantId { get; set; }
-            [XmlElement]
-            public string BasePath { get; set; }      
+            public string RegistryUrl { get; set; } 
         }
         [Serializable]
         public class CatalogConfiguration

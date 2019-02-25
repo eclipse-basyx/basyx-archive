@@ -1,6 +1,6 @@
 ﻿using oneM2MClient.Client;
 using oneM2MClient.Resources;
-using oneM2MClient.Utils.ResultHandling;
+using BaSys40.Utils.ResultHandling;
 
 namespace oneM2MClient.Utils
 {

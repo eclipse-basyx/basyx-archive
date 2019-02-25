@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServerSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Hosting>
+    <Urls>
+      <Url>http://+:5080</Url>
+    </Urls>
+  </Hosting>
+  <Miscellaneous/>
+</ServerSettings>

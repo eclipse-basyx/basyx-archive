@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RegistryClientSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	<RegistryConfig>
-    <RegistryUrl>http://127.0.0.1:5080/</RegistryUrl>
-    <BasePath>registry/</BasePath>
+    <RegistryUrl>http://basysregistry.azurewebsites.net/</RegistryUrl>
   </RegistryConfig>
   <ProxyConfig>
-    <UseProxy>true</UseProxy>
+    <UseProxy>false</UseProxy>
     <ProxyAddress>http://localhost:3128</ProxyAddress>
   </ProxyConfig>
 </RegistryClientSettings>

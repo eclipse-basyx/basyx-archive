@@ -1,7 +1,7 @@
 ﻿using oneM2MClient.Client;
 using oneM2MClient.Protocols;
 using oneM2MClient.Utils;
-using oneM2MClient.Utils.ResultHandling;
+using BaSys40.Utils.ResultHandling;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

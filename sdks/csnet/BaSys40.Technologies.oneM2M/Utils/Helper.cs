@@ -1,7 +1,8 @@
 ﻿using oneM2MClient.Client;
 using oneM2MClient.Resources;
 using oneM2MClient.Protocols;
-using oneM2MClient.Utils.ResultHandling;
+using BaSys40.Utils.ResultHandling;
+using BaSys40.Utils.ModelHandling;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -158,7 +159,8 @@ namespace oneM2MClient.Utils
             if (additionalPath != null && additionalPath.Length > 0)
                 request.AddPath(additionalPath);
 
-            request.AddPath("la");
+            if(!request.RequestPath.Segments.Contains("la"))
+                request.AddPath("la");
 
             var contResp = CSEBase.Retrieve(client, request);
             if (contResp.Success && contResp.Entity != null && contResp.Entity.PrimitiveContent != null)
@@ -516,8 +518,8 @@ namespace oneM2MClient.Utils
                 return new Result<T>(false, default(T), new Message(MessageType.Error, e.Message));
             else
             {
-                result.Messages.Add(new Message(MessageType.Exception, e.Message, e.HResult.ToString()));
-                result.Success = false;
+                var newResult = new Result<T>(e);
+                newResult.Messages.AddRange(result.Messages);
                 return result;
             }
         }

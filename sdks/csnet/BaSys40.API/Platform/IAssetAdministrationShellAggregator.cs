@@ -12,7 +12,7 @@ namespace BaSys40.API.Platform
 
         IResult<List<IAssetAdministrationShell>> RetrieveAssetAdministrationShells();
 
-        IResult UpdateAssetAdministrationShell(string aasId, Dictionary<string, string> metaData);
+        IResult UpdateAssetAdministrationShell(string aasId, IAssetAdministrationShell aas);
 
         IResult DeleteAssetAdministrationShell(string aasId);       
     }

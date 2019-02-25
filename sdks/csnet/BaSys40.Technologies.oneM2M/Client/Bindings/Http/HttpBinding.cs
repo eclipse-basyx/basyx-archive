@@ -1,4 +1,4 @@
-﻿using oneM2MClient.Utils.ResultHandling;
+﻿using BaSys40.Utils.ResultHandling;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -21,7 +21,7 @@ namespace oneM2MClient.Client.Bindings
             httpClient = new HttpClient(
                 new HttpClientHandler
                 {
-                    MaxConnectionsPerServer = 100,
+                    MaxConnectionsPerServer = 100,                    
                     UseProxy = false
                 });
         }

@@ -1,128 +1,181 @@
 ﻿using BaSys40.Models.Core;
 using BaSys40.Models.Core.AssetAdministrationShell.Generics;
 using BaSys40.Models.Core.AssetAdministrationShell.Implementations;
-using BaSys40.Models.Core.Identification;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
+using System.Web;
 
 namespace BaSys40.RI.AAS.SmartControl
 {
     public static class SmartControlUtils
     {
-
-        public static PropertyDescription GetPropertyDescription(PropertyInfo property)
+        public static Operation GetOperationDescription(MethodInfo method)
         {
-            PropertyDescription propertyDescription = new PropertyDescription();
-            propertyDescription.Identification = new Identifier(property.Name, Identificator.Internal);
-            propertyDescription.DisplayName = property.Name;
-            propertyDescription.Writable = property.CanWrite;
-            propertyDescription.Readable = property.CanRead;
-            propertyDescription.DataType = new DataType(GetDataObjectType(property.PropertyType), IsEnumerableType(property.PropertyType), IsCollectionType(property.PropertyType));
-
-            return propertyDescription;
-        }
-        public static OperationDescription GetOperationDescription(MethodInfo method)
-        {
-            OperationDescription operation = new OperationDescription();
-            operation.Identification = new Identifier(method.Name, Identificator.Internal);
-            operation.DisplayName = method.Name;
+            Operation operation = new Operation();
+            //operation.Identification = new Identifier(method.Name, Identificator.Internal);
+            operation.IdShort = method.Name;
             var parameters = method.GetParameters();
-            operation.InputParameters = new List<IParameter>(parameters.Length);
+            operation.In = new List<IOperationVariable>(parameters.Length);
             for (int i = 0; i < parameters.Length; i++)
             {
-                operation.InputParameters.Add(
-                    new Parameter()
+                operation.In.Add(
+                    new OperationVariable()
                     {
-                        DataType = new DataType(GetDataObjectType(parameters[i].ParameterType), IsEnumerableType(parameters[i].ParameterType), IsCollectionType(parameters[i].ParameterType)),
-                        ParameterName = parameters[i].Name
+                        DataType = DataType.GetDataTypeFromSystemTypes(parameters[i].ParameterType),
+                        IdShort = parameters[i].Name
                     }
                 );
             }
 
-            operation.OutputParameters = new List<IParameter>()
+            operation.Out = new List<IOperationVariable>()
             {
-                new Parameter()
+                new OperationVariable()
                 {
                     Index = 0,
-                    DataType = new DataType(GetDataObjectType(method.ReturnType), IsEnumerableType(method.ReturnType), IsCollectionType(method.ReturnType))
+                    DataType = DataType.GetDataTypeFromSystemTypes(method.ReturnType)
                 }
             };
 
             return operation;
         }
-        static bool IsEnumerableType(Type type)
+      
+        public static List<IArgument> ConvertStringArguments(string argumentString, List<IOperationVariable> referenceArguments)
         {
-            return (type.GetInterface(nameof(IList)) != null);
-        }
-
-        static bool IsCollectionType(Type type)
-        {
-            return (type.GetInterface(nameof(IDictionary)) != null);
-        }
-
-        static bool IsSimple(Type type)
-        {
-            var typeInfo = type.GetTypeInfo();
-            if (typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition() == typeof(Nullable<>))
-                return IsSimple(typeInfo.GetGenericArguments()[0]);
-
-            return typeInfo.IsPrimitive
-              || typeInfo.IsEnum
-              || type.Equals(typeof(string))
-              || type.Equals(typeof(decimal));
-        }
-
-        private static DataObjectType GetDataObjectType(Type type)
-        {
-            switch (type.FullName)
+            string urlDecoded = Uri.UnescapeDataString(argumentString);
+            object[] args;
+            try
             {
-                case "System.Void": return DataObjectType.Void;
-                case "System.String": return DataObjectType.String;
-                case "System.SByte": return DataObjectType.Int8;
-                case "System.Int16": return DataObjectType.Int16;
-                case "System.Int32": return DataObjectType.Int32;
-                case "System.Int64": return DataObjectType.Int64;
-                case "System.Byte": return DataObjectType.UInt8;
-                case "System.UInt16": return DataObjectType.UInt16;
-                case "System.UInt32": return DataObjectType.UInt32;
-                case "System.UInt64": return DataObjectType.UInt64;
-                case "System.Boolean": return DataObjectType.Bool;
-                case "System.Single": return DataObjectType.Float;
-                case "System.Double": return DataObjectType.Double;
-                default:
-                    if (!IsSimple(type))
-                        return DataObjectType.Object;
+                JArray ja = JArray.Parse(urlDecoded);
+                args = ja.ToObject<object[]>();
+            }
+            catch
+            {
+                JToken val = JValue.Parse(urlDecoded);
+                object oVal = val.ToObject<object>();
+                args = new object[] {oVal };
+            }
+
+            if (args.Length > 0)
+            {
+                List<IArgument> arguments = new List<IArgument>();
+                for (int i = 0; i < args.Length; i++)
+                {
+                    arguments.Add(
+                        new Argument()
+                        {
+                            Index = i,
+                            IdShort = referenceArguments[i].IdShort,
+                            ValueType = referenceArguments[i].DataType,
+                            Value = args[i]
+                        });
+                }
+                return arguments;
+            }
+            return null;
+        }
+
+        public static string ConvertStringArguments(List<IArgument> arguments)
+        {
+            string argumentString = string.Empty;
+            if (arguments?.Count == 1)
+            {
+                if (arguments[0].ValueType.DataObjectType == DataObjectType.String)
+                    argumentString += '"' + HttpUtility.JavaScriptStringEncode((string)arguments[0].Value) + '"';
+                else if (arguments[0].ValueType.DataObjectType == DataObjectType.Float || arguments[0].ValueType.DataObjectType == DataObjectType.Double)
+                    argumentString += ((float)arguments[0].Value).ToString(System.Globalization.CultureInfo.GetCultureInfo("en-US").NumberFormat);
+                else
+                    argumentString += arguments[0].Value.ToString();
+            }
+            else if (arguments?.Count > 1)
+            {
+                argumentString += SmartControl.ParameterStrings.PARAM_BRACKET_LEFT;
+                for (int i = 0; i < arguments.Count; i++)
+                {
+                    if (arguments[i].ValueType.DataObjectType == DataObjectType.String)
+                        argumentString += '"' + HttpUtility.JavaScriptStringEncode((string)arguments[i].Value) + '"';
+                    else if (arguments[i].ValueType.DataObjectType == DataObjectType.Float || arguments[i].ValueType.DataObjectType == DataObjectType.Double)
+                        argumentString += ((float)arguments[i].Value).ToString(System.Globalization.CultureInfo.GetCultureInfo("en-US").NumberFormat);
                     else
-                        return DataObjectType.None;
+                        argumentString += arguments[i].Value.ToString();
+
+                    if (i != arguments.Count - 1)
+                        argumentString += SmartControl.ELEMENT_SEPERATOR;
+                }
+                argumentString += SmartControl.ParameterStrings.PARAM_BRACKET_RIGHT;
+            }
+            else
+                argumentString = SmartControl.ParameterStrings.PARAM_BRACKET_LEFT + SmartControl.ParameterStrings.PARAM_BRACKET_RIGHT;
+
+            string urlEncoded = Uri.EscapeDataString(argumentString);
+            return urlEncoded;
+        }
+
+        public static string ConvertPropertyValue(IValue value)
+        {
+            string content = string.Empty;
+            if (value?.ValueType?.DataObjectType == DataObjectType.String)
+                content = '"' + HttpUtility.JavaScriptStringEncode((string)value.Value) + '"';
+            else if (value?.ValueType?.DataObjectType == DataObjectType.AnyType)
+                content = '"' + HttpUtility.JavaScriptStringEncode(JsonConvert.SerializeObject(value.Value)) + '"';
+            else if (value?.ValueType?.DataObjectType == DataObjectType.Float || value?.ValueType?.DataObjectType == DataObjectType.Double)
+                content = ((float)value.Value).ToString(System.Globalization.CultureInfo.GetCultureInfo("en-US").NumberFormat);
+            else if (value?.ValueType?.DataObjectType == DataObjectType.Bool)
+                content = value?.Value?.ToString().ToLower();
+            else
+                content = value?.Value?.ToString();
+
+            if(!string.IsNullOrEmpty(content))
+                return Uri.EscapeDataString(content);
+            else
+                return string.Empty;
+        }
+
+        public static IValue ConvertPropertyValue(string propertyValue, DataType dataType)
+        {
+            string urlDecoded = Uri.UnescapeDataString(propertyValue);
+
+            var value = urlDecoded.ToObject(dataType);
+
+            var dataElementValue = new DataElementValue(value, dataType);
+            return dataElementValue;
+        }
+
+        public static object ToObject(this string value, DataType dataType)
+        {
+            try
+            {
+                var jVal = JValue.Parse(value);
+                var convertedVal = jVal.ToObject(DataType.GetSystemTypeFromDataType(dataType));
+                return convertedVal;
+            }
+            catch (Exception e)
+            {
+                throw new InvalidCastException("Cannot convert to " + dataType.DataObjectType + " - Exception: " + e.Message);
             }
         }
 
-        public static List<IArgument> ConvertStringArguments(string[] args)
+        public static string ConvertDataTypeNames(DataType dataType)
         {
-            List<IArgument> inputArguments = new List<IArgument>(args.Length);
-            for (int i = 0; i < args.Length; i++)
+            string dataTypeName = dataType.DataObjectType.Name.ToLower();
+            switch (dataTypeName)
             {
-                inputArguments.Add(
-                    new Argument()
-                    {
-                        Index = i,
-                        DataType = new DataType(DataObjectType.String, false, false),
-                        Value = new ElementValue<string>(args[i])
-                    });
+                case "integer":
+                case "int": return "int";
+                case "bool":
+                case "boolean": return "bool";
+                case "none": return "void";
+                case "decimal":
+                case "double":
+                case "float": return "float";
+                default:
+                    return ("string");
             }
-            return inputArguments;
-        }
-
-        public static string[] ConvertStringArguments(List<IArgument> arguments)
-        {
-            string[] args = new string[arguments.Count];
-            for (int i = 0; i < args.Length; i++)
-            {
-                args[i] = arguments[i].Value.Value.ToString();
-            }
-            return args;
         }
     }
 }
+

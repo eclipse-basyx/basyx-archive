@@ -8,6 +8,8 @@ namespace BaSys40.RI.AAS.SmartControl
     {
         public oneM2MConfiguration oneM2MConfig { get; set; } = new oneM2MConfiguration();
 
+        public string CallbackEndpointUrl { get; set; }
+
         [Serializable]
         public class oneM2MConfiguration
         {

@@ -1,4 +1,4 @@
-﻿using oneM2MClient.Utils.ResultHandling;
+﻿using BaSys40.Utils.ResultHandling;
 
 namespace oneM2MClient.Client
 {

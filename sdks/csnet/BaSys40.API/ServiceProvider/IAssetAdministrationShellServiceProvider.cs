@@ -1,22 +1,29 @@
 ﻿using BaSys40.Models.Core.AssetAdministrationShell.Generics;
+using BaSys40.Models.Core.AssetAdministrationShell.Implementations;
 using BaSys40.Utils.ResultHandling;
+using System.Collections.Generic;
 
 namespace BaSys40.API.ServiceProvider
 {
     public interface IAssetAdministrationShellServiceProvider : IServiceProvider<IAssetAdministrationShell>
     {
-        #region SubModel - CRUD-Operations
+        IAssetAdministrationShell AssetAdministrationShell { get; }
 
-        IResult<ISubModel> CreateSubModel(ISubModel submodel);
 
-        IResult<IElementContainer<ISubModel>> RetrieveSubModels();
+        #region Submodel - CRUD-Operations
 
-        IResult<ISubModel> RetrieveSubModel(string subModelId);
+        IResult<ISubmodel> CreateSubmodel(ISubmodel submodel);
 
-        IResult DeleteSubModel(string subModelId);
+        IResult<ElementContainer<ISubmodel>> RetrieveSubmodels();
+
+        IResult<ISubmodel> RetrieveSubmodel(string submodelId);
+
+        IResult DeleteSubmodel(string submodelId);
 
         #endregion
 
-  
+        void RegisterSubmodelServiceProvider(string id, ISubmodelServiceProvider submodelServiceProvider);
+        ISubmodelServiceProvider GetSubmodelServiceProvider(string id);
+        IEnumerable<ISubmodelServiceProvider> GetSubmodelServiceProviders();
     }
 }

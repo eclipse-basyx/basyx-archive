@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Net;
+using System.Threading;
 
 namespace BaSys40.Utils.ResultHandling
 {
@@ -20,7 +21,32 @@ namespace BaSys40.Utils.ResultHandling
 
         public override string ToString()
         {
-            return string.Format(Thread.CurrentThread.CurrentCulture, "{0} | {1} - {2}", MessageType, Code, Text);
+            if(!string.IsNullOrEmpty(Code))
+                return string.Format(Thread.CurrentThread.CurrentCulture, "{0} | {1} - {2}", MessageType, Code, Text);
+            else
+                return string.Format(Thread.CurrentThread.CurrentCulture, "{0} | {1}", MessageType, Text);
         }
+    }
+
+    public class HttpMessage : Message
+    {
+        public HttpStatusCode HttpStatusCode { get; set; }
+
+        public HttpMessage(MessageType messageType, HttpStatusCode httpStatusCode) : base(messageType, httpStatusCode.ToString(), ((int)httpStatusCode).ToString())
+        {
+            HttpStatusCode = httpStatusCode;
+        }
+    }
+
+    public class NotFoundMessage : Message
+    {
+        public NotFoundMessage() : base(MessageType.Information, "NotFound", "404")
+        { }
+    }
+
+    public class EmptyMessage : Message
+    {
+        public EmptyMessage() : base(MessageType.Information, "Empty")
+        { }
     }
 }

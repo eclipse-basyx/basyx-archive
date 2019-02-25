@@ -9,6 +9,8 @@ namespace BaSys40.Utils.JsonHandling
     public class JsonOptionsSetup : IConfigureOptions<MvcJsonOptions>
     {
         IServiceProvider serviceProvider;
+
+        public MvcJsonOptions Options { get; private set; }
         public JsonOptionsSetup(IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
@@ -17,6 +19,9 @@ namespace BaSys40.Utils.JsonHandling
         {
             options.SerializerSettings.ContractResolver = new DIContractResolver(serviceProvider.GetService<IDIExtension>(), serviceProvider);
             options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+
+            Options = options;
         }
     }
 }

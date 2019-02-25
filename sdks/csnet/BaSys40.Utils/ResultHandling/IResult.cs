@@ -15,12 +15,14 @@ namespace BaSys40.Utils.ResultHandling
         [DataMember(IsRequired = true)]
         bool Success { get; }
         [DataMember(EmitDefaultValue = false, IsRequired = false)]
+        bool? IsException { get; }
+        [DataMember(EmitDefaultValue = false, IsRequired = false)]
         List<IMessage> Messages { get; }
 
         T GetEntity<T>();
     }
 
-    public interface IResult<TEntity> : IResult
+    public interface IResult<out TEntity> : IResult
     {
         [JsonConverter(typeof(CustomTypeSerializer))]
         new TEntity Entity { get; }

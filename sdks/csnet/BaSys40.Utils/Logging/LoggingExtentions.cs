@@ -20,7 +20,7 @@ namespace BaSys40.Utils.Logging
                     logText.Append("Message[" + i + "] = " + result.Messages[i].Text).Append(" || ");
                 }
             }
-            if (result.Entity != null && result is HttpResponseMessage response)
+            if (result.Entity != null && result.Entity is HttpResponseMessage response)
             {
                 logText.Append("StatusCode: " + ((int)response.StatusCode).ToString()).Append(response.ReasonPhrase).Append(" || ");
                 logText.Append("Body: " + response.Content.ReadAsStringAsync().Result).Append(" || ");

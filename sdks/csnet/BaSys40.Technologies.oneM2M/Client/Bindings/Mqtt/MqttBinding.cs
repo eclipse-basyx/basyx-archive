@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using oneM2MClient.Utils.ResultHandling;
+using BaSys40.Utils.ResultHandling;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 using System.Threading;

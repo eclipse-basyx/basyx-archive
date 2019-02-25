@@ -2,24 +2,25 @@
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
-using BaSys40.API.Agents;
+using BaSys40.API.Platform.Agents;
+using BaSys40.Models.Core.AssetAdministrationShell.Enums;
 
 namespace BaSys40.API.AssetAdministrationShell.Connectables
 {
     public class ConnectedEvent : IConnectableEvent
     {
-        public IEventDescription Event { get; }
-        private IAssetAdministrationShell AssetAdministrationShell { get; }
-        private ISubModel SubModel { get; }
+        public IEvent Event { get; }
+        public IAssetAdministrationShell AssetAdministrationShell { get; }
+        public ISubmodel Submodel { get; }
 
         public event EventHandler EventHandler;
 
-        private readonly ISubModelAgent serviceImpl;
+        private readonly ISubmodelAgent serviceImpl;
 
-        public ConnectedEvent(ISubModelAgent service, IAssetAdministrationShell aas, ISubModel subModel, IEventDescription eventDescription)
+        public ConnectedEvent(ISubmodelAgent service, IAssetAdministrationShell aas, ISubmodel submodel, IEvent eventDescription)
         {
             AssetAdministrationShell = aas;
-            SubModel = subModel;
+            Submodel = submodel;
             Event = eventDescription;
             serviceImpl = service;
         }
@@ -47,11 +48,11 @@ namespace BaSys40.API.AssetAdministrationShell.Connectables
 
         public bool Validate(IPublishableEvent eventToValidate)
         {
-            if (!string.IsNullOrEmpty(Event.Schema))
+            if (!string.IsNullOrEmpty(Event.DataType.Schema))
             {
-                if (Event.SchemaType.HasValue && Event.SchemaType.Value == SchemaType.XSD)
+                if (Event.DataType.SchemaType.HasValue && Event.DataType.SchemaType.Value == SchemaType.XSD)
                 {
-                    using (var stream = GenerateStreamFromString(Event.Schema))
+                    using (var stream = GenerateStreamFromString(Event.DataType.Schema))
                     {
                         XmlSchema schema = XmlSchema.Read(stream, SchemaValidationEventHandler);
                         XmlDocument message = new XmlDocument();

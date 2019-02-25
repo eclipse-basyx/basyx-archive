@@ -1,104 +1,206 @@
 ﻿using BaSys40.Models.Core.AssetAdministrationShell.Generics;
 using BaSys40.Utils.ResultHandling;
-using BaSys40.API.Agents;
+using BaSys40.API.Platform.Agents;
 using System.Collections.Generic;
+using BaSys40.Models.Core.AssetAdministrationShell.Implementations;
+using BaSys40.Utils.Client;
+using System;
+using System.Reflection;
+using System.Linq.Expressions;
+using System.Linq;
+using Newtonsoft.Json;
+using BaSys40.Models.Connectivity;
 
 namespace BaSys40.API.AssetAdministrationShell.Connectables
 {
-    public class ConnectedSubModel : IConnectableSubModel
+    public class ConnectedSubmodel : IConnectableSubmodel
     {
-        public ISubModel SubModel { get; private set; }
+        public ISubmodel Submodel { get; private set; }
         private IAssetAdministrationShell AssetAdministrationShell { get; }
+        private IMessageClient messageClient;
 
-        private readonly ISubModelAgent serviceImpl;
+        private readonly ISubmodelAgent submodelServiceImpl;
+        private Dictionary<string, Delegate> methodCalledHandler;
+        private Dictionary<string, DataElementHandler> dataElementHandler;
+        private Dictionary<string, Action<IValue>> updateFunctions;
 
-        public ConnectedSubModel(ISubModelAgent service, IAssetAdministrationShell aas,  ISubModel subModel)
+        public IServiceDescriptor ServiceDescriptor { get; private set; }
+
+        public ConnectedSubmodel(ISubmodelAgent submodelService, IAssetAdministrationShell aas)
         {
-            SubModel = subModel;
             AssetAdministrationShell = aas;
-            serviceImpl = service;
+            submodelServiceImpl = submodelService;
+            methodCalledHandler = new Dictionary<string, Delegate>();
+            dataElementHandler = new Dictionary<string, DataElementHandler>();
+            updateFunctions = new Dictionary<string, Action<IValue>>();
         }
 
-        public void BindTo(ISubModel element)
+        public void BindTo(ISubmodel element)
         {
-            SubModel = element;
+            Submodel = element;
         }
 
-        public ISubModel GetBinding()
+        public ISubmodel GetBinding()
         {
-            return SubModel;
+            return Submodel;
         }
 
-        public IResult<IEventDescription> CreateEvent(IEventDescription eventable)
+        public IResult<IEvent> CreateEvent(IEvent eventable)
         {
-            return serviceImpl.CreateEvent(AssetAdministrationShell.Identification.Id, SubModel.Identification.Id, eventable);
+            return submodelServiceImpl.CreateEvent(AssetAdministrationShell.IdShort, Submodel.IdShort, eventable);
         }
 
-        public IResult<IOperationDescription> CreateOperation(IOperationDescription operation)
+        public IResult<IOperation> CreateOperation(IOperation operation)
         {
-            return serviceImpl.CreateOperation(AssetAdministrationShell.Identification.Id, SubModel.Identification.Id, operation);
+            return submodelServiceImpl.CreateOperation(AssetAdministrationShell.IdShort, Submodel.IdShort, operation);
         }
 
-        public IResult<IPropertyDescription> CreateProperty(IPropertyDescription property)
+        public IResult<IDataElement> CreateDataElement(IDataElement property)
         {
-            return serviceImpl.CreateProperty(AssetAdministrationShell.Identification.Id, SubModel.Identification.Id, property);
+            return submodelServiceImpl.CreateDataElement(AssetAdministrationShell.IdShort, Submodel.IdShort, property);
         }
 
         public IResult DeleteEvent(string eventId)
         {
-            return serviceImpl.DeleteEvent(AssetAdministrationShell.Identification.Id, SubModel.Identification.Id, eventId);
+            return submodelServiceImpl.DeleteEvent(AssetAdministrationShell.IdShort, Submodel.IdShort, eventId);
         }
 
         public IResult DeleteOperation(string operationId)
         {
-            return serviceImpl.DeleteOperation(AssetAdministrationShell.Identification.Id, SubModel.Identification.Id, operationId);
+            return submodelServiceImpl.DeleteOperation(AssetAdministrationShell.IdShort, Submodel.IdShort, operationId);
         }
 
-        public IResult DeleteProperty(string propertyId)
+        public IResult DeleteDataElement(string dataElementId)
         {
-            return serviceImpl.DeleteProperty(AssetAdministrationShell.Identification.Id, SubModel.Identification.Id, propertyId);
+            return submodelServiceImpl.DeleteDataElement(AssetAdministrationShell.IdShort, Submodel.IdShort, dataElementId);
         }
 
-        public IResult<IEventDescription> RetrieveEvent(string eventId)
+        public IResult<IEvent> RetrieveEvent(string eventId)
         {
-            return serviceImpl.RetrieveEvent(AssetAdministrationShell.Identification.Id, SubModel.Identification.Id, eventId);
+            return submodelServiceImpl.RetrieveEvent(AssetAdministrationShell.IdShort, Submodel.IdShort, eventId);
         }
 
-        public IResult<IElementContainer<IEventDescription>> RetrieveEvents()
+        public IResult<ElementContainer<IEvent>> RetrieveEvents()
         {
-            return serviceImpl.RetrieveEvents(AssetAdministrationShell.Identification.Id, SubModel.Identification.Id);
+            return submodelServiceImpl.RetrieveEvents(AssetAdministrationShell.IdShort, Submodel.IdShort);
         }
 
-        public IResult<IOperationDescription> RetrieveOperation(string operationId)
+        public IResult<IOperation> RetrieveOperation(string operationId)
         {
-            return serviceImpl.RetrieveOperation(AssetAdministrationShell.Identification.Id, SubModel.Identification.Id, operationId);
+            return submodelServiceImpl.RetrieveOperation(AssetAdministrationShell.IdShort, Submodel.IdShort, operationId);
         }
 
-        public IResult<IElementContainer<IOperationDescription>> RetrieveOperations()
+        public IResult<ElementContainer<IOperation>> RetrieveOperations()
         {
-            return serviceImpl.RetrieveOperations(AssetAdministrationShell.Identification.Id, SubModel.Identification.Id);   
+            return submodelServiceImpl.RetrieveOperations(AssetAdministrationShell.IdShort, Submodel.IdShort);   
         }
 
-        public IResult<IElementContainer<IPropertyDescription>> RetrieveProperties()
+        public IResult<ElementContainer<IDataElement>> RetrieveDataElements()
         {
-            return serviceImpl.RetrieveProperties(AssetAdministrationShell.Identification.Id, SubModel.Identification.Id);
+            return submodelServiceImpl.RetrieveDataElements(AssetAdministrationShell.IdShort, Submodel.IdShort);
         }
 
-        public IResult<IPropertyDescription> RetrieveProperty(string propertyId)
+        public IResult<IDataElement> RetrieveDataElement(string dataElementId)
         {
-            return serviceImpl.RetrieveProperty(AssetAdministrationShell.Identification.Id, SubModel.Identification.Id, propertyId);
+            return submodelServiceImpl.RetrieveDataElement(AssetAdministrationShell.IdShort, Submodel.IdShort, dataElementId);
         }
 
-        public IResult UpdateProperty(string propertyId, IValue value)
+        public IResult<IValue> RetrieveDataElementValue(string dataElementId)
         {
-            return serviceImpl.UpdateProperty(AssetAdministrationShell.Identification.Id, SubModel.Identification.Id, propertyId, value);
+            return submodelServiceImpl.RetrieveDataElementValue(AssetAdministrationShell.IdShort, Submodel.IdShort, dataElementId);
         }
 
-        public IResult InvokeOperation(string operationId, List<IArgument> inputArguments, out List<IArgument> outputArguments, int timeout)
+        public IResult UpdateDataElementValue(string dataElementId, IValue value)
         {
-            return serviceImpl.InvokeOperation(AssetAdministrationShell.Identification.Id, SubModel.Identification.Id, operationId, inputArguments, out outputArguments, timeout);
+            return submodelServiceImpl.UpdateDataElementValue(AssetAdministrationShell.IdShort, Submodel.IdShort, dataElementId, value);
         }
 
-       
+        public IResult InvokeOperation(string operationId, List<IArgument> inputArguments, List<IArgument> outputArguments, int timeout)
+        {
+            return submodelServiceImpl.InvokeOperation(AssetAdministrationShell.IdShort, Submodel.IdShort, operationId, inputArguments, outputArguments, timeout);
+        }
+        public DataElementHandler RetrieveDataElementHandler(string dataElementId)
+        {
+            if (dataElementHandler.TryGetValue(dataElementId, out DataElementHandler handler))
+                return handler;
+            else
+                return null;
+        }
+
+        public void RegisterDataElementHandler(string dataElementId, DataElementHandler handler)
+        {
+            if (!dataElementHandler.ContainsKey(dataElementId))
+                dataElementHandler.Add(dataElementId, handler);
+            else
+                dataElementHandler[dataElementId] = handler;
+        }
+
+        public void RegisterMethodCalledHandler(string operationId, MethodCalledHandler handler)
+        {
+            if (!methodCalledHandler.ContainsKey(operationId))
+                methodCalledHandler.Add(operationId, handler);
+            else
+                methodCalledHandler[operationId] = handler;
+        }
+        public void RegisterMethodCalledHandler(string operationId, Delegate handler)
+        {
+            if (!methodCalledHandler.ContainsKey(operationId))
+                methodCalledHandler.Add(operationId, handler);
+            else
+                methodCalledHandler[operationId] = handler;
+        }
+
+        public void RegisterMethodCalledHandler(string operationId, MethodInfo methodInfo, object target)
+        {
+            var parameters = from parameter in methodInfo.GetParameters() select parameter.ParameterType;
+            Delegate del = methodInfo.CreateDelegate(Expression.GetDelegateType(parameters.Concat(new[] { methodInfo.ReturnType }).ToArray()), target);
+            RegisterMethodCalledHandler(operationId, del);
+        }
+
+        public IResult ThrowEvent(IPublishableEvent publishableEvent, string topic, Action<IMessagePublishedEventArgs> MessagePublished, byte qosLevel)
+        {
+            var settings = new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore,
+            };
+            settings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+
+            string message = JsonConvert.SerializeObject(publishableEvent, settings);
+            return messageClient.Publish(topic, message, MessagePublished, qosLevel);
+        }
+
+        public void ConfigureEventHandler(IMessageClient messageClient)
+        {
+            this.messageClient = messageClient;
+        }
+        public Delegate RetrieveMethodDelegate(string operationId)
+        {
+            if (methodCalledHandler.TryGetValue(operationId, out Delegate handler))
+                return handler;
+            else
+                return null;
+        }
+        public MethodCalledHandler RetrieveMethodCalledHandler(string operationId)
+        {
+            if (methodCalledHandler.TryGetValue(operationId, out Delegate handler))
+                return (MethodCalledHandler)handler;
+            else
+                return null;
+        }
+        public virtual void SubscribeUpdates(string dataElementId, Action<IValue> updateFunction)
+        {
+            if (!updateFunctions.ContainsKey(dataElementId))
+                updateFunctions.Add(dataElementId, updateFunction);
+            else
+                updateFunctions[dataElementId] = updateFunction;
+        }
+
+        public virtual void PublishUpdate(string dataElementId, IValue value)
+        {
+            if (updateFunctions.TryGetValue(dataElementId, out Action<IValue> updateFunction))
+                updateFunction.Invoke(value);
+
+        }
     }
 }

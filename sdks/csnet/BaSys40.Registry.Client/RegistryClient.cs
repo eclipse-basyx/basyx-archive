@@ -1,53 +1,60 @@
-﻿using BaSys40.API.Platform;
-using BaSys40.Models.Core.AssetAdministrationShell.Generics;
-using BaSys40.Utils.Client;
+﻿
+using BaSys40.API.Platform;
+using BaSys40.Models.Core.AssetAdministrationShell;
+using BaSys40.Models.Extensions;
+using BaSys40.Utils.Client.Http;
 using BaSys40.Utils.ResultHandling;
-using Newtonsoft.Json;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using static BaSys40.Registry.Client.RegistryClientSettings;
 
 namespace BaSys40.Registry.Client
 {
     public class RegistryClient : SimpleHttpClient, IAssetAdministrationShellRegistry
     {
         public static RegistryClientSettings Settings { get; private set; }
-        public static readonly string SettingsPath;
+        public static string SettingsPath { get; private set; }
 
         private static RegistryClient registryClient;
 
-        private RegistryConfiguration registryConfig;
-
-        private const string RegistryPath = "registry";
-        private const string SubModelPath = "subModels";
+        private const string RegistryPath = "api/v1/registry";
+        private const string SubmodelPath = "submodels";
         private const string PathSeperator = "/";
 
         private const int Timeout = 5000;
+
+        private IServiceCollection services;
+        private IServiceProvider serviceProvider;
 
         static RegistryClient()
         {
             SettingsPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), RegistryClientSettings.FileName);
             Settings = RegistryClientSettings.LoadSettings(SettingsPath);
 
-            if (Settings.ProxyConfig.UseProxy.HasValue && Settings.ProxyConfig.UseProxy.Value && !string.IsNullOrEmpty(Settings.ProxyConfig.ProxyAddress))
+            LoadSettings(Settings);
+        }
+
+        public static void LoadSettings(RegistryClientSettings settings)
+        {
+            if (settings.ProxyConfig.UseProxy.HasValue && settings.ProxyConfig.UseProxy.Value && !string.IsNullOrEmpty(settings.ProxyConfig.ProxyAddress))
             {
                 HttpClientHandler.UseProxy = true;
-                if (!string.IsNullOrEmpty(Settings.ProxyConfig.UserName) && !string.IsNullOrEmpty(Settings.ProxyConfig.Password))
+                if (!string.IsNullOrEmpty(settings.ProxyConfig.UserName) && !string.IsNullOrEmpty(settings.ProxyConfig.Password))
                 {
                     NetworkCredential credential;
-                    if (!string.IsNullOrEmpty(Settings.ProxyConfig.Domain))
-                        credential = new NetworkCredential(Settings.ProxyConfig.UserName, Settings.ProxyConfig.Password, Settings.ProxyConfig.Domain);
+                    if (!string.IsNullOrEmpty(settings.ProxyConfig.Domain))
+                        credential = new NetworkCredential(settings.ProxyConfig.UserName, settings.ProxyConfig.Password, settings.ProxyConfig.Domain);
                     else
-                        credential = new NetworkCredential(Settings.ProxyConfig.UserName, Settings.ProxyConfig.Password);
+                        credential = new NetworkCredential(settings.ProxyConfig.UserName, settings.ProxyConfig.Password);
 
-                    HttpClientHandler.Proxy = new WebProxy(Settings.ProxyConfig.ProxyAddress, false, null, credential);
+                    HttpClientHandler.Proxy = new WebProxy(settings.ProxyConfig.ProxyAddress, false, null, credential);
                 }
                 else
-                    HttpClientHandler.Proxy = new WebProxy(Settings.ProxyConfig.ProxyAddress);
+                    HttpClientHandler.Proxy = new WebProxy(settings.ProxyConfig.ProxyAddress);
             }
             else
                 HttpClientHandler.UseProxy = false;
@@ -63,86 +70,100 @@ namespace BaSys40.Registry.Client
             }
         }
 
-        public RegistryClient(RegistryConfiguration registryConfig = null)
+        public RegistryClient(RegistryClientSettings registryClientSettings = null)
         {
-            if (registryConfig != null)
-                this.registryConfig = registryConfig;
-            else
-                this.registryConfig = Settings.RegistryConfig;
+            if (registryClientSettings != null)
+            {
+                Settings = registryClientSettings;
+                LoadSettings(Settings);
+            }
+
+            JsonSerializerSettings = new JsonStandardSettings();
         }
 
         public Uri GetUri(params string[] pathElements)
         {
-            string path = registryConfig.RegistryUrl + registryConfig.BasePath;
+            string path = string.Empty;
+            if (!Settings.RegistryConfig.RegistryUrl.EndsWith("/") && !RegistryPath.StartsWith("/"))
+                path = Settings.RegistryConfig.RegistryUrl + PathSeperator + RegistryPath;
+            else
+                path = Settings.RegistryConfig.RegistryUrl + RegistryPath;
+
             if (pathElements?.Length > 0)
                 foreach (var pathElement in pathElements)
                 {
-                    path += pathElement + PathSeperator;
+                    if (!pathElement.EndsWith("/") && !pathElement.StartsWith("/"))
+                        path = path + PathSeperator + pathElement;
+                    else
+                        path = path + pathElement;
+
+                    //if (!path.EndsWith("/"))
+                    //    path = path + PathSeperator;
                 }
             return new Uri(path);
         }
 
-        public IResult<IAssetAdministrationShell> CreateAssetAdministrationShell(IAssetAdministrationShell aas)
+        public IResult<AssetAdministrationShellDescriptor> CreateAssetAdministrationShell(AssetAdministrationShellDescriptor aas)
         {
-            var request = base.CreateRequest(GetUri(), HttpMethod.Post, aas);
+            var request = base.CreateJsonContentRequest(GetUri(), HttpMethod.Post, aas);
             var response = base.SendRequest(request, Timeout);
-            return base.EvaluateResponse<IAssetAdministrationShell>(response.Entity);
+            return base.EvaluateResponse<AssetAdministrationShellDescriptor>(response, response.Entity);
         }
 
-        public IResult<IAssetAdministrationShell> RetrieveAssetAdministrationShell(string aasId)
+        public IResult<AssetAdministrationShellDescriptor> RetrieveAssetAdministrationShell(string aasId)
         {
             var request = base.CreateRequest(GetUri(aasId), HttpMethod.Get);
             var response = base.SendRequest(request, Timeout);
-            return base.EvaluateResponse<IAssetAdministrationShell>(response.Entity);
+            return base.EvaluateResponse<AssetAdministrationShellDescriptor>(response, response.Entity);
         }
 
-        public IResult<List<IAssetAdministrationShell>> RetrieveAssetAdministrationShells()
+        public IResult<List<AssetAdministrationShellDescriptor>> RetrieveAssetAdministrationShells()
         {
             var request = base.CreateRequest(GetUri(), HttpMethod.Get);
             var response = base.SendRequest(request, Timeout);
-            return base.EvaluateResponse<List<IAssetAdministrationShell>>(response.Entity);
+            return base.EvaluateResponse<List<AssetAdministrationShellDescriptor>>(response, response.Entity);
         }
 
         public IResult UpdateAssetAdministrationShell(string aasId, Dictionary<string, string> metaData)
         {
             var request = base.CreateRequest(GetUri(aasId), HttpMethod.Put);
             var response = base.SendRequest(request, Timeout);
-            return base.EvaluateResponse(response.Entity);
+            return base.EvaluateResponse(response, response.Entity);
         }
 
         public IResult DeleteAssetAdministrationShell(string aasId)
         {
             var request = base.CreateRequest(GetUri(aasId), HttpMethod.Delete);
             var response = base.SendRequest(request, Timeout);
-            return base.EvaluateResponse<List<IAssetAdministrationShell>>(response.Entity);
+            return base.EvaluateResponse(response, response.Entity);
         }
 
-        public IResult<ISubModel> CreateSubModel(string aasId, ISubModel submodel)
+        public IResult<SubmodelDescriptor> CreateSubmodel(string aasId, SubmodelDescriptor submodel)
         {
-            var request = base.CreateRequest(GetUri(aasId, SubModelPath), HttpMethod.Post, submodel);
+            var request = base.CreateJsonContentRequest(GetUri(aasId, SubmodelPath), HttpMethod.Post, submodel);
             var response = base.SendRequest(request, Timeout);
-            return base.EvaluateResponse<ISubModel>(response.Entity);
+            return base.EvaluateResponse<SubmodelDescriptor>(response, response.Entity);
         }
 
-        public IResult<IElementContainer<ISubModel>> RetrieveSubModels(string aasId)
+        public IResult<List<SubmodelDescriptor>> RetrieveSubmodels(string aasId)
         {
-            var request = base.CreateRequest(GetUri(aasId, SubModelPath), HttpMethod.Get);
+            var request = base.CreateRequest(GetUri(aasId, SubmodelPath), HttpMethod.Get);
             var response = base.SendRequest(request, Timeout);
-            return base.EvaluateResponse<IElementContainer<ISubModel>>(response.Entity);
+            return base.EvaluateResponse<List<SubmodelDescriptor>>(response, response.Entity);
         }
 
-        public IResult<ISubModel> RetrieveSubModel(string aasId, string subModelId)
+        public IResult<SubmodelDescriptor> RetrieveSubmodel(string aasId, string submodelId)
         {
-            var request = base.CreateRequest(GetUri(aasId, SubModelPath, subModelId), HttpMethod.Get);
+            var request = base.CreateRequest(GetUri(aasId, SubmodelPath, submodelId), HttpMethod.Get);
             var response = base.SendRequest(request, Timeout);
-            return base.EvaluateResponse<ISubModel>(response.Entity);
+            return base.EvaluateResponse<SubmodelDescriptor>(response, response.Entity);
         }
 
-        public IResult DeleteSubModel(string aasId, string subModelId)
+        public IResult DeleteSubmodel(string aasId, string submodelId)
         {
-            var request = base.CreateRequest(GetUri(aasId, SubModelPath, subModelId), HttpMethod.Delete);
+            var request = base.CreateRequest(GetUri(aasId, SubmodelPath, submodelId), HttpMethod.Delete);
             var response = base.SendRequest(request, Timeout);
-            return base.EvaluateResponse(response.Entity);
+            return base.EvaluateResponse(response, response.Entity);
         }
     }
 }

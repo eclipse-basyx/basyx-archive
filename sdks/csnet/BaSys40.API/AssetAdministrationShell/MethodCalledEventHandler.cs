@@ -5,7 +5,9 @@ using System.Collections.Generic;
 
 namespace BaSys40.API.AssetAdministrationShell
 {
-    public delegate OperationResult MethodCalledEventHandler(IConnectableOperation operation, List<IArgument> inputArguments, out List<IArgument> outputArguments);
+    public delegate OperationResult MethodCalledEventHandler(IConnectableOperation operation, List<IArgument> inputArguments, List<IArgument> outputArguments);
+
+    public delegate OperationResult MethodCalledHandler(IOperation operation, List<IArgument> inputArguments, List<IArgument> outputArguments);
 
     public class OperationResult : Result
     {

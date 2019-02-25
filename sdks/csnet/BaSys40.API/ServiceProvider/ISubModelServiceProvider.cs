@@ -1,44 +1,62 @@
-﻿using BaSys40.Models.Core.AssetAdministrationShell.Generics;
+﻿using BaSys40.Utils.Client;
+using BaSys40.Models.Core.AssetAdministrationShell.Generics;
+using BaSys40.Models.Core.AssetAdministrationShell.Implementations;
 using BaSys40.Utils.ResultHandling;
 using System.Collections.Generic;
+using System;
+using BaSys40.API.AssetAdministrationShell;
 
 namespace BaSys40.API.ServiceProvider
 {
-    public interface ISubModelServiceProvider : IServiceProvider<ISubModel>
+    public interface ISubmodelServiceProvider : IServiceProvider<ISubmodel>
     {
-        
+        ISubmodel Submodel { get; }
+
         #region Operation - CRUD-Operations
-        IResult<IOperationDescription> CreateOperation(IOperationDescription operation);
+        IResult<IOperation> CreateOperation(IOperation operation);
 
-        IResult<IElementContainer<IOperationDescription>> RetrieveOperations();
+        IResult<ElementContainer<IOperation>> RetrieveOperations();
 
-        IResult<IOperationDescription> RetrieveOperation(string operationId);
+        IResult<IOperation> RetrieveOperation(string operationId);
 
         IResult DeleteOperation(string operationId);
-
-        IResult InvokeOperation(string operationId, List<IArgument> inputArguments, out List<IArgument> outputArguments, int timeout);
+    
+        IResult InvokeOperation(string operationId, List<IArgument> inputArguments, List<IArgument> outputArguments, int timeout);
         #endregion
 
-        #region Property - CRUD-Operations
-        IResult<IPropertyDescription> CreateProperty(IPropertyDescription property);
+        #region DataElement - CRUD-Operations
+        IResult<IDataElement> CreateDataElement(IDataElement dataElement);
 
-        IResult<IElementContainer<IPropertyDescription>> RetrieveProperties();
+        IResult<ElementContainer<IDataElement>> RetrieveDataElements();
 
-        IResult<IPropertyDescription> RetrieveProperty(string propertyId);
+        IResult<IDataElement> RetrieveDataElement(string dataElementId);
 
-        IResult UpdateProperty(string propertyId, IValue value);
+        IResult<IValue> RetrieveDataElementValue(string dataElementId);
 
-        IResult DeleteProperty(string propertyId);
+        IResult UpdateDataElementValue(string dataElementId, IValue value);
+
+        IResult DeleteDataElement(string dataElementId);
+
+        void SubscribeUpdates(string dataElementId, Action<IValue> updateFunction);
+        void PublishUpdate(string dataElementId, IValue value);
         #endregion
 
         #region Event - CRUD-Operations
-        IResult<IEventDescription> CreateEvent(IEventDescription eventable);
+        IResult<IEvent> CreateEvent(IEvent eventable);
 
-        IResult<IElementContainer<IEventDescription>> RetrieveEvents();
+        IResult<ElementContainer<IEvent>> RetrieveEvents();
 
-        IResult<IEventDescription> RetrieveEvent(string eventId);
+        IResult<IEvent> RetrieveEvent(string eventId);
+
+        IResult ThrowEvent(IPublishableEvent publishableEvent, string topic, Action<IMessagePublishedEventArgs> MessagePublished, byte qosLevel);
 
         IResult DeleteEvent(string eventId);
         #endregion
+
+        DataElementHandler RetrieveDataElementHandler(string dataElementId);
+        void RegisterDataElementHandler(string dataElementId, DataElementHandler handler);
+        Delegate RetrieveMethodDelegate(string operationId);
+        void RegisterMethodCalledHandler(string operationId, Delegate handler);
+        void ConfigureEventHandler(IMessageClient messageClient);
     }
 }
