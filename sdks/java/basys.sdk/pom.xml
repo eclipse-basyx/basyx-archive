@@ -57,6 +57,8 @@
         </configuration>
       </plugin>
       
+      
+      
      <!-- Run Unit Tests -->
       <plugin>
          <groupId>org.apache.maven.plugins</groupId>
@@ -91,14 +93,30 @@
 		  </executions>
 		</plugin>   
 		
-		<!-- Export Jar file to /components package -->
+		<!-- Export Jar file to /components and /examples package -->
 		<plugin>
 	      <groupId>org.apache.maven.plugins</groupId>
 	      <artifactId>maven-jar-plugin</artifactId>
 	      <version>2.3.1</version>
-	      <configuration>
-	        <outputDirectory>../../../components/basys.components/repo/basys/sdk/basys.sdk/0.0.1-SNAPSHOT</outputDirectory>
-	      </configuration>
+	       <executions>
+          <execution>
+            <id>components</id>
+            <goals><goal>jar</goal></goals>
+            <phase>package</phase>
+            <configuration>
+              <outputDirectory>../../../components/basys.components/repo/basys/sdk/basys.sdk/0.0.1-SNAPSHOT</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>examples</id>
+            <goals><goal>jar</goal></goals>
+            <phase>package</phase>
+            <configuration>
+              <outputDirectory>../../../examples/basys.examples/repo/basys/sdk/basys.sdk/0.0.1-SNAPSHOT</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+	     
 	    </plugin>
     </plugins>
    
