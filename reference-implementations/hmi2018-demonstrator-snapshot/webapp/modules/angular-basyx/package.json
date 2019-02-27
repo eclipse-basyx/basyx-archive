@@ -1,0 +1,46 @@
+{
+  "name": "angular-basyx",
+  "version": "1.0.3",
+  "devDependencies": {
+    "@angular/common": "5.2.9",
+    "@angular/compiler": "5.2.9",
+    "@angular/compiler-cli": "5.2.9",
+    "@angular/core": "5.2.9",
+    "@angular/platform-browser": "5.2.9",
+    "@angular/platform-browser-dynamic": "5.2.9",
+    "@types/chai": "4.0.4",
+    "@types/mocha": "2.2.43",
+    "@types/node": "9.4.6",
+    "chai": "4.1.2",
+    "codelyzer": "4.2.1",
+    "core-js": "2.5.4",
+    "jsdom": "11.3.0",
+    "mocha": "4.0.1",
+    "rimraf": "2.6.1",    
+    "ts-helpers": "1.1.2",
+    "ts-node": "4.1.0",
+    "tslib": "1.8.0",
+    "tslint": "5.9.1",
+    "typescript": "2.6.2"
+  },
+  "author": "Robert Bosch GmbH, CR/APA3",
+  "license": "EPL-1.0",
+  "main": "dist/index.js",
+  "files": ["dist/", "dist/*", "dist/**"],
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@angular/core": "5.2.9",
+    "@angular/common": "5.2.9",
+    "@angular/platform-browser": "5.2.9",
+    "angular-onem2m": "file:../angular-onem2m",
+    "rxjs": "5.5.8",
+    "zone.js": "0.8.25"
+  },
+  "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.esm.json",
+    "lint": "tslint -c tslint.json **/*.ts **/*.ts",
+    "test": "mocha --require mocha-test-shim.js --require ts-node/register src/**/*.spec.ts",
+    "test:watch": "mocha -w --require mocha-test-shim.js --require ts-node/register src/**/*.spec.ts",
+    "fast": "npm uninstall angular-onem2m && cd ../angular-onem2m && npm install && npm run build && cd ../angular-basyx && npm install"   
+  }
+}

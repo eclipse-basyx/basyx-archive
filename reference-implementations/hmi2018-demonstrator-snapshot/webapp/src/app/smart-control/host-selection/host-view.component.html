@@ -1,0 +1,58 @@
+<!-- <ng-template #content let-c="close" let-d="dismiss"> -->
+
+<div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text left" id="key" title="Key for storing internally and displayed for selection ">
+                Name
+            </span>
+        </div>
+        <input required type="text" class="form-control" style="z-index: 5" placeholder="Name the host" [ngModel]="host.key" (ngModelChange)="host.key=$event">
+        <span class="input-group-append">
+            <button type="button" class="btn btn-primary" placement="right" ngbPopover="Key for storing internally and displayed for selection."
+                popoverTitle="Name" container="body">
+                <i class="fa fa-fw fa-info" style="color:rgba(0, 86, 145)"></i>
+            </button>
+        </span>
+    </div>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text left" id="serverurl">ServerURL</span>
+        </div>
+        <input type="text" class="form-control" placeholder="The url of the host" [ngModel]="host.serverUrl" (ngModelChange)="host.serverUrl=$event">
+    </div>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text left" id="port">Port</span>
+        </div>
+        <input type="number" min="0" max="99999" class="form-control" placeholder="The port of the host" [ngModel]="host.port" (ngModelChange)="host.port=$event">
+    </div>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text left" #content.from id="from">From</span>
+        </div>
+        <input type="text" class="form-control" placeholder="e.g. user:user" [ngModel]="host.from" (ngModelChange)="host.from=$event">
+    </div>
+    <!-- <div class="input-group">
+        <span class="input-group-addon" id="path">Path</span>
+        <input type="text" class="form-control" placeholder="optional (e.g. InCSE1)" [ngModel]="host.relativePath" (ngModelChange)="host.relativePath=$event">
+    </div> -->
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text left" id="description">Description</span>
+        </div>
+        <input type="text" class="form-control" placeholder="optional info" [ngModel]="host.description" (ngModelChange)="host.description=$event">
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="activeModal.close(host)"> Save </button>
+    <!-- <button type="button" class="btn btn-secondary" (click)="save()">Save2</button> -->
+</div>
+
+<!-- </ng-template> -->

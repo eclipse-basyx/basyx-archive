@@ -1,0 +1,58 @@
+<div class="card properties mb-1">
+
+    <div class="card-header view-header properties-header" (click)="hideContent = !hideContent">
+        <span style="font-size: 110%"> Properties </span>
+        <button class="btn btn-sm view-header properties-header" style="float: right">
+            <div class="fa fa-fw fa-chevron-down" *ngIf="hideContent"></div>
+            <div class="fa fa-fw fa-chevron-up" *ngIf="!hideContent"></div>
+        </button>
+    </div>
+
+    <div class="card-body view-body properties-body" *ngIf="!hideContent">
+        <ng-container *ngFor="let prop of util_entries('sub-prop-'+subModel[0], subModel[1].properties); let last = last">
+            <div class="row">
+                <div class="col-3">
+                    {{prop[1].name}}
+                </div>
+                <div class="col-2">
+                    ( {{ getDataTypeString(prop[1].datatype) }} )
+                </div>
+                <div class="col-2">
+                    <!-- 3 icons, on true the color of icon is black, white otherwise? -->
+                    <!-- or diable the button on true (disable=true?) -->
+                    <!-- {{prop[1].readable}},{{prop[1].writeable}},{{prop[1].eventable}} -->
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <div class="fa fa-fw fa-eye" *ngIf="prop[1].readable"></div>
+                            <div class="fa fa-fw fa-eye" style="opacity:0.4;" *ngIf="!prop[1].readable"></div>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <div class="fa fa-fw fa-fas fa-pencil" *ngIf="prop[1].writeable"></div>
+                            <div class="fa fa-fw fa-fal fa-pencil" style="opacity:0.4;" *ngIf="!prop[1].writeable"></div>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <div class="fa fa-fw fa-comments" *ngIf="prop[1].eventable"></div>
+                            <div class="fa fa-fw fa-comments" style="opacity:0.4;" *ngIf="!prop[1].eventable"></div>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <div class="input-group input-group-sm">
+                        <input [disabled]="!prop[1].writeable" class="input form-control" type="text" placeholder="Value" [(ngModel)]="this.parameterInputValues[prop[1]._m2m_ri_DATA]">
+                        <div class="input-group-append">
+                            <button [disabled]="!prop[1].writeable" class="btn btn-small btn-outline-secondary btn-1w" (click)="setProperty(prop[1])">
+                                <div class="fa fa-fw fa-upload"></div>
+                            </button>
+                            <button class="btn btn-small btn-outline-secondary btn-1w" (click)="updateProperty(prop[1])">
+                                <div class="fa fa-fw fa-refresh"></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr *ngIf='!last' class="seperator">
+        </ng-container>
+
+
+    </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col">
+        <div class="input-group">
+            <div ngbDropdown class="d-inline-block dropdown input-group-prepend">
+                <button class="btn btn-primary leftside" ngbDropdownToggle>Host </button>
+                <div ngbDropdownMenu>
+                    <button class="dropdown-item" (click)="add()">
+                        <i class="fa fa-fw fa-plus" style="color:green"></i> Add
+                    </button>
+
+                    <button class="dropdown-item " (click)="remove()">
+                        <i class="fa fa-fw fa-minus" style="color:red"></i> Remove
+                    </button>
+                    <button class="dropdown-item" (click)="edit()">
+                        <i class="fa fa-fw fa-pencil" style="color:blue"></i> Edit
+                    </button>
+
+                    <div class="dropdown-divider"></div>
+
+                    <button class="dropdown-item" (click)="setDefaultHosts()">
+                        <i class="fa fa-fw fa-file-text-o" style="color:grey"></i> Reset host list
+                    </button>
+
+                    <div class="dropdown-divider"></div>
+
+                    <button disabled class="dropdown-item" (click)="import()">
+                        <i class="fa fa-fw fa-download"></i> Import
+                    </button>
+                    <button disabled class="dropdown-item" (click)="export()">
+                        <i class="fa fa-fw fa-upload"></i> Export
+                    </button>
+                </div>
+            </div>
+
+            <select class="custom-select form-control" [ngModel]="getHostSelected()" (ngModelChange)="setHostSelected($event)">
+                <option [ngValue]="host" *ngFor="let host of getHosts()">
+                    {{host.key}}
+                </option>
+            </select>
+        </div>
+    </div>
+</div>

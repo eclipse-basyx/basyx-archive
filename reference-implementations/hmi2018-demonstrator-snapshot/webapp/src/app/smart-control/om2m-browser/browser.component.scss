@@ -1,0 +1,110 @@
+.onem2m-component {
+    background: -webkit-linear-gradient(30deg, rgba(0, 86, 145, 1) 0px, rgba(0, 86, 145, 1) 22px, white 35px);
+    background: -moz-linear-gradient(30deg, rgba(0, 86, 145, 1) 0px, rgba(0, 86, 145, 1) 22px, white 35px);
+    background: -o-linear-gradient(30deg, rgba(0, 86, 145, 1) 0px, rgba(0, 86, 145, 1) 22px, white 35px);
+    background: linear-gradient(120deg, rgba(0, 86, 145, 1) 0px, rgba(0, 86, 145, 0.8) 22px, white 35px);
+}
+
+.onem2m-service {
+    background: -webkit-linear-gradient(30deg, rgba(0, 98, 73, 1) 0px, rgba(0, 98, 73, 1) 22px, white 35px);
+    background: -moz-linear-gradient(30deg, rgba(0, 98, 73, 1) 0px, rgba(0, 98, 73, 1) 22px, white 35px);
+    background: -o-linear-gradient(30deg, rgba(0, 98, 73, 1) 0px, rgba(0, 98, 73, 1) 22px, white 35px);
+    background: linear-gradient(120deg, rgba(0, 98, 73, 1) 0px, rgba(0, 98, 73, 1) 22px, white 35px);
+}
+
+.onem2m-property {
+    background: -webkit-linear-gradient(30deg, rgba(185, 2, 118, 1) 0px, rgba(185, 2, 118, 1) 22px, white 35px);
+    background: -moz-linear-gradient(30deg, rgba(185, 2, 118, 1) 0px, rgba(185, 2, 118, 1) 22px, white 35px);
+    background: -o-linear-gradient(30deg, rgba(185, 2, 118, 1) 0px, rgba(185, 2, 118, 1) 22px, white 35px);
+    background: linear-gradient(120deg, rgba(185, 2, 118, 1) 0px, rgba(185, 2, 118, 1) 22px, white 35px);
+}
+
+.onem2m-operation {
+    background: -webkit-linear-gradient(30deg, rgba(120, 190, 32, 1) 0px, rgba(120, 190, 32, 1) 22px, white 35px);
+    background: -moz-linear-gradient(30deg, rgba(120, 190, 32, 1) 0px, rgba(120, 190, 32, 1) 22px, white 35px);
+    background: -o-linear-gradient(30deg, rgba(120, 190, 32, 1) 0px, rgba(120, 190, 32, 1) 22px, white 35px);
+    background: linear-gradient(120deg, rgba(120, 190, 32, 1) 0px, rgba(120, 190, 32, 1) 22px, white 35px);
+}
+
+.icon-color-component,
+.icon-color-service,
+.icon-color-property,
+.icon-color-operation {
+    color: whitesmoke;
+}
+
+.icon-color-none {
+    color: rgba(82, 95, 107, 1);
+}
+
+// Show cross on right side for delete
+.fa-times {
+    font-size: 125%;
+    display: none;
+    z-index: 1;
+    color: darkred;
+}
+
+.deletable:hover .fa-times {
+    display: block;
+}
+
+.refresh {
+    color: rgb(0, 86, 145);
+}
+
+#file-tree {
+    display: flex;
+    height: calc(90vh - 100px);
+    overflow: hidden;
+    margin-top: -100px;
+    padding-top: 100px;
+    position: relative;
+    will-change: overflow;
+}
+
+tree-root {
+    width: 100vw;
+}
+
+#sidebar-browser {
+    height: calc(90vh - 200px);
+    display: flex;
+    overflow-y: scroll;
+}
+
+// #file-tree{
+//     max-height:2000px;
+//     min-height:200px;
+//     // height:700px;
+// }
+// @media (max-height: 2000px) {
+//     #file-tree{
+//         height:1300px;
+//     }
+// }
+// @media (max-height: 1200px) {
+//     #file-tree{
+//         height:700px;
+//     }
+// }
+// @media (max-height: 1000px) {
+//     #file-tree{
+//         height:650px;
+//     }
+// }
+// @media (max-height: 900px) {
+//     #file-tree{
+//         height:400px;
+//     }
+// }
+// @media (max-height: 650px) {
+//     #file-tree{
+//         height:300px;
+//     }
+// }
+// @media (max-height: 500px) {
+//     #file-tree{
+//         height:250px;
+//     }
+// }

@@ -1,0 +1,19 @@
+<div class="card">
+    <div class="card-header header" (click)="getLastValue()">
+
+
+
+        <span>Value
+            <small>({{selectedNode.m2mData.rn}})</small>
+        </span>
+
+        <button class="btn btn-sm header" style="float: right">
+            <div class="fa fa-refresh"></div>
+        </button>
+    </div>
+
+    <div class="card-body">
+        <!--Last Value -->
+        {{lastValue}}
+    </div>
+</div>

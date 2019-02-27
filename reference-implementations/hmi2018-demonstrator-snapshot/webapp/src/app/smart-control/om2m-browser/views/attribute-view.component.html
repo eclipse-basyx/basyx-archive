@@ -1,0 +1,25 @@
+<div class="card">
+    <!--HEADER-->
+    <div class="card-header bg-secondary header" (click)="hideContent = !hideContent">
+        <span>Attributes
+            <!-- <small>({{selectedNode?.m2mData.rn}})</small> -->
+        </span>
+        <button class="btn btn-sm bg-secondary header" style="float: right">
+            <div class="fa fa-chevron-down" *ngIf="hideContent"></div>
+            <div class="fa fa-chevron-up" *ngIf="!hideContent"></div>
+        </button>
+    </div>
+    <!--CONTENT-->
+    <div class="card-body" *ngIf="!hideContent">
+        <div class="table-responsive">
+            <table class="table table-sm table-hover">
+                <tbody>
+                    <tr *ngFor="let key of keys(); let i = index">
+                        <th scope="row">{{key}}</th>
+                        <td>{{stringify(selectedNode?.m2mData[key])}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

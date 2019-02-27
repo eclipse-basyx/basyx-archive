@@ -1,0 +1,37 @@
+
+<!--BROWSER REFRESH RATE-->
+<div class="row">
+    <div class="col">
+        <div class="input-group">
+            <span>
+                <i class="fa fa-fw fa-refresh"></i> Browser refresh rate (in seconds): &nbsp; </span>
+            <input type="number" [(ngModel)]="browserRefreshRate" min="0" step="1" style="text-align: right;">
+            <!--Enable / Disable-->
+            <div *ngIf="browserRefreshRate <=0">&nbsp; [disabled] </div>
+            <div *ngIf="browserRefreshRate >0"> &nbsp; [enabled] &nbsp; (0=disabled)</div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<div class="row">
+    <div class="col-sm-12" style="margin-top:5%">
+        <h6 text-center>
+            <i class="fa fw fa-eye" aria-hidden="true"></i> Elements on the sidebar:</h6>
+    </div>
+</div>
+<div class="container" style="float: left;margin-left:20px">
+    <div class="row">
+        <div class="col-sm-12">
+            <input type="checkbox" id="ComponentExplorer" [checked]="isVisible('ComponentExplorer')" (change)="setVisible($event)">
+            <label for="ComponentExplorer">Component Explorer</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <input type="checkbox" id="BrowserOM2M" [checked]="isVisible('BrowserOM2M')" (change)="setVisible($event)">
+            <label for="BrowserOM2M">BrowserOM2M</label>
+        </div>
+    </div>
+</div>

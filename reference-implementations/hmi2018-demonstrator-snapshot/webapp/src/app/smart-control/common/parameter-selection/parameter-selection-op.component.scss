@@ -1,0 +1,41 @@
+.card {
+    border-color: rgba(120, 190, 32, 1);
+}
+
+.card-header {
+    background: rgba(120, 190, 32, 1);
+    color: white;
+}
+
+.close {
+    color: white;
+}
+
+.name {
+    min-width: 150px;
+    text-align: left;
+}
+
+.type {
+    min-width: 100px;
+}
+
+.input {
+    min-height: 20px;
+}
+
+.save {
+    color: whitesmoke;
+    background: rgba(120, 190, 32, 1);
+}
+
+.item {
+    border-color: rgba(185, 2, 118, 1);
+    color: rgba(185, 2, 118, 1);
+    background: whitesmoke;
+}
+
+.item:hover {
+    color: whitesmoke;
+    background: rgba(185, 2, 118, 1);
+}

@@ -1,0 +1,15 @@
+<!--<ng-container *mobxAutorun>-->
+    <span *ngIf="node.hasChildren"
+        [class.my-toggle-children-wrapper-expanded]="node.isExpanded"
+        [class.my-toggle-children-wrapper-collapsed]="node.isCollapsed"
+        class="my-toggle-children-wrapper"
+        (click)="node.mouseAction('expanderClick', $event)">
+
+        <span class="my-toggle-children ">
+            <i class="fa fa-fw fa-chevron-right icon "></i>
+        </span>
+
+    </span>
+
+    <span *ngIf="!node.hasChildren" class="my-toggle-children-placeholder"></span>
+<!--</ng-container>-->

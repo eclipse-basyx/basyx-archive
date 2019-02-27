@@ -1,0 +1,37 @@
+.my-toggle-children-wrapper-collapsed .my-toggle-children {
+    transform: rotate(0deg);
+    color: #AAA;
+}
+
+.my-toggle-children-wrapper-expanded .my-toggle-children {
+    transform: rotate(90deg);
+    color: #555;
+}
+
+// .my-toggle-children-wrapper {
+    // padding: 2px 3px 5px 1px;
+// }
+
+.my-toggle-children {
+    // background-image: url('/assets/images/play.png');
+    height: 25px;
+    width: 25px; // background-size: contain;
+    display: inline-block; // important for rotation
+    text-align: center; // top: 1px;
+    // background-repeat: no-repeat;
+    // background-position: center;
+}
+
+.my-toggle-children:hover {
+    font-size: 108%;
+    color: black;
+}
+
+.my-toggle-children-placeholder {
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    position: relative;
+    top: 1px;
+    padding-right: 25px;
+}

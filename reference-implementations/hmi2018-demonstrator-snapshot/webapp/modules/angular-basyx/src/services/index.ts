@@ -1,0 +1,1 @@
+export * from './onem2m-aas-manager.service'

@@ -1,0 +1,47 @@
+<div class="card">
+    <div class="card-header header">
+        <button type="button" class="close" aria-label="Close" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4>
+            Parameters
+            <small>({{operation.name}})</small>
+        </h4>
+    </div>
+
+    <div class="card-body">
+        <ng-container *ngFor='let param of getParameters(); let i = index;'>
+
+            <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                    <span class="input-group-text name">{{param.name}}</span>
+                    <span class="input-group-text type">({{getDatatypeString(param.datatype)}})</span>
+                </div>
+
+                <ng-container *ngIf='isParameterBoolean(param)'>
+                    <input id="input-{{i}}" readonly type="text" class="form-control" placeholder="false" [ngModel]="param.value" (click)='param.value = !param.value'>
+                </ng-container>
+                <ng-container *ngIf='isParameterNoStringOrBoolean(param)'>
+                    <input id="input-{{i}}" type="{{getParamInputType(param)}}" class="form-control" placeholder="value" [ngModel]="param.value"
+                        (ngModelChange)="param.value=$event">
+                </ng-container>
+                <ng-container *ngIf='isParameterString(param)'>
+                    <input id="input-{{i}}" type="{{getParamInputType(param)}}" class="form-control" placeholder="value" [ngModel]="param.value"
+                        (ngModelChange)="param.value=$event">
+
+                    <div class="input-group-append">
+                        <button class="btn item" type="button" (click)='selectHtmlPage(param)'>
+                            <i class="fa fa-fw fa-file-text-o fa-lg"></i>
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
+        </ng-container>
+    </div>
+
+    <div class="card-footer text-center">
+        <button class="btn btn-block btn-outline-secondary save" (click)='save()'>
+            <i class="fa fa-fw fa-save fa-lg"></i>
+        </button>
+    </div>
+</div>
