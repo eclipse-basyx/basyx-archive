@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
  * @author vikas
  *
  */
-public class SerializeCollection {
+public class TestSerializeCollection {
 
 
 	/**
