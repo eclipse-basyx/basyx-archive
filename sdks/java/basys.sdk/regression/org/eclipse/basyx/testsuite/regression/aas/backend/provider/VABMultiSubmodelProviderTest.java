@@ -30,7 +30,7 @@ public class VABMultiSubmodelProviderTest {
 		String urn = "urn:fhg:es.iese:aas:1:1:submodel";
 		VABMultiSubmodelProvider<VABHashmapProvider> provider = new VABMultiSubmodelProvider<>();
 		provider.addSubmodel("SimpleAASSubmodel", new VABHashmapProvider(new SimpleAASSubmodel()));
-		stub.addProvider(urn, provider);
+		stub.addProvider(urn, "", provider);
 		proxy = stub.connectToVABElement(urn);
 	}
 

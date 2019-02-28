@@ -14,7 +14,7 @@ public class VABElementProxy {
 	/**
 	 * Connector specific target address
 	 */
-	protected String addr = null;
+	protected String addr = "";
 
 	/**
 	 * IModelProvider that connects to the target address
@@ -37,10 +37,11 @@ public class VABElementProxy {
 		// Get element from server
 		try {
 			// Change element on server
-			return provider.getModelPropertyValue(elementPath);
+			return provider.getModelPropertyValue(constructPath(elementPath));
 		} catch (ServerException e) {
 			throw new ServerException(e);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ServerException(e.getClass().getName(), e.getMessage());
 		}
 	}
@@ -54,8 +55,9 @@ public class VABElementProxy {
 		// Set property value
 		try {
 			// Change element on server
-			provider.setModelPropertyValue(elementPath, newValue);
+			provider.setModelPropertyValue(constructPath(elementPath), newValue);
 		} catch (ServerException e) {
+			e.printStackTrace();
 			throw new ServerException(e);
 		} catch (Exception e) {
 			System.err.println(e);
@@ -69,7 +71,7 @@ public class VABElementProxy {
 		// Set property value
 		try {
 			// Create new element on server
-			provider.createValue(elementPath, newValue);
+			provider.createValue(constructPath(elementPath), newValue);
 		} catch (ServerException e) {
 			e.printStackTrace();
 			throw new ServerException(e);
@@ -85,7 +87,7 @@ public class VABElementProxy {
 		// Delete property from server
 		try {
 			// Delete element from server
-			provider.deleteValue(elementPath);
+			provider.deleteValue(constructPath(elementPath));
 		} catch (ServerException e) {
 			throw new ServerException(e);
 		} catch (Exception e) {
@@ -100,7 +102,7 @@ public class VABElementProxy {
 		// Delete property from server
 		try {
 			// Delete element from server
-			provider.deleteValue(elementPath, value);
+			provider.deleteValue(constructPath(elementPath), value);
 		} catch (ServerException e) {
 			throw new ServerException(e);
 		} catch (Exception e) {
@@ -115,11 +117,19 @@ public class VABElementProxy {
 		// Invoke operation on server
 		try {
 			// Invoke server operation
-			return provider.invokeOperation(elementPath, parameter);
+			return provider.invokeOperation(constructPath(elementPath), parameter);
 		} catch (ServerException e) {
 			throw new ServerException(e);
 		} catch (Exception e) {
 			throw new ServerException(e.getClass().getName(), e.getMessage());
+		}
+	}
+
+	private String constructPath(String path) {
+		if (addr != null && !addr.isEmpty()) {
+		return addr + "//" + path;
+		} else {
+			return path;
 		}
 	}
 }

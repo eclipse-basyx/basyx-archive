@@ -24,8 +24,9 @@ public class VABConnectionManagerStub extends VABConnectionManager {
 	 */
 	public VABConnectionManagerStub(IModelProvider provider) {
 		this();
-		// Add default mapping for "null" id
-		getConnectorProvider().addMapping(null, provider);
+		// Add default mapping for empty id
+		getConnectorProvider().addMapping("", provider);
+		getDirectoryService().addMapping("", "");
 	}
 
 	private DirectoryServiceStub getDirectoryService() {
@@ -40,10 +41,12 @@ public class VABConnectionManagerStub extends VABConnectionManager {
 	 * Add the id to the Directory and also add the mapping to the ConnectorProvider
 	 * 
 	 * @param id
+	 * @param address
+	 *            address to map to
 	 * @param provider
 	 */
-	public void addProvider(String id, IModelProvider provider) {
-		getDirectoryService().addMapping(id, id);
-		getConnectorProvider().addMapping(id, provider);
+	public void addProvider(String id, String address, IModelProvider provider) {
+		getDirectoryService().addMapping(id, address);
+		getConnectorProvider().addMapping(address, provider);
 	}
 }

@@ -62,4 +62,42 @@ public class VABPathTools {
 		// No operation
 		return false;
 	}
+
+	/**
+	 * Gets the address entry of a path <br />
+	 * E.g. basyx://127.0.0.1:6998//https://localhost/test/ will return
+	 * basyx://127.0.0.1:6998
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public static String getAddressEntry(String path) {
+		if (path == null || !path.contains("//")) {
+			return "";
+		} else {
+			String splitted[] = path.split("//");
+			return splitted[0] + "//" + splitted[1];
+		}
+	}
+
+	/**
+	 * Removes from a path the address part <br/>
+	 * E.g. basyx://127.0.0.1:6998//https://localhost/test/ will return
+	 * https://localhost/test/
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public static String removeAddressEntry(String path) {
+		if (!path.contains("//")) {
+			return path;
+		} else {
+			path = path.replaceFirst(getAddressEntry(path), "");
+			if (path.startsWith("//")) {
+				path = path.replaceFirst("//", "");
+			}
+			return path;
+		}
+	}
+
 }
