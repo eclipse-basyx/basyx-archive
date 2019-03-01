@@ -3,6 +3,7 @@ package org.eclipse.basyx.components.sqlprovider.query;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
 import org.eclipse.basyx.components.tools.propertyfile.opdef.OperationDefinition;
 
 
@@ -24,6 +25,17 @@ public class DynamicSQLUpdate extends DynamicSQLRunner implements Consumer<Map<S
 	
 	
 	
+	/**
+	 * Constructor
+	 */
+	public DynamicSQLUpdate(ISQLDriver driver, String query) {
+		// Invoke base constructor
+		super(driver);
+
+		// Store parameter count and SQL query string
+		sqlQueryString         = query;
+	}
+
 	
 	/**
 	 * Constructor

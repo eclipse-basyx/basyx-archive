@@ -105,7 +105,7 @@ public class OperationDefinition {
 		
 		// Replace place holders with parameter
 		// - Replace all place holders
-		for (String par: parameter.keySet()) {
+		if (parameter != null) for (String par: parameter.keySet()) {
 			result = result.replace("$"+par, parameter.get(par).toString());
 		}
 		

@@ -1,7 +1,6 @@
 package org.eclipse.basyx.regression.support.server;
 
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -15,9 +14,9 @@ import org.eclipse.basyx.components.servlets.SQLDirectoryServlet;
 import org.eclipse.basyx.components.servlets.SQLSubModelProviderServlet;
 import org.eclipse.basyx.components.servlets.StaticCFGDirectoryServlet;
 import org.eclipse.basyx.components.servlets.XMLXQueryServlet;
-import org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.StubAASServlet;
-import org.eclipse.basyx.testsuite.support.vab.stub.servlet.SimpleVABElementServlet;
 import org.junit.rules.ExternalResource;
+
+
 
 /**
  * This class initializes Tomcat Server and required servlets for all HTTP test classes in this project. 

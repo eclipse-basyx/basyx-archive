@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.function.Function;
+
+import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
 import org.eclipse.basyx.components.tools.propertyfile.opdef.OperationDefinition;
 import org.eclipse.basyx.components.tools.propertyfile.opdef.Parameter;
 import org.eclipse.basyx.components.tools.propertyfile.opdef.ResultFilter;
@@ -34,6 +36,19 @@ public class DynamicSQLOperation extends DynamicSQLRunner implements Function<Ob
 	
 	
 	
+	
+	/**
+	 * Constructor
+	 */
+	public DynamicSQLOperation(ISQLDriver driver, String query, String sqlResultFilter) {
+		// Invoke base constructor
+		super(driver);
+		
+		// Store parameter count and SQL query string
+		sqlQueryString         = query;
+		resultFilterString     = sqlResultFilter;
+	}
+
 	
 	/**
 	 * Constructor

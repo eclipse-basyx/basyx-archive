@@ -43,6 +43,12 @@ public class SQLDriver implements ISQLDriver {
 	 */
 	protected String qualDriverClass = null;
 	
+	
+	/**
+	 * JDBC connection
+	 */
+	protected Connection connect = null;
+	
 
 	
 	
@@ -69,22 +75,26 @@ public class SQLDriver implements ISQLDriver {
 	 * Execute a SQL query
 	 */
 	public ResultSet sqlQuery(String queryString) {
-		// Store connection, SQL statement, and result
-		Connection connect = null;
-		Statement statement = null;
-		ResultSet resultSet = null;
+		// Store SQL statement, flag that indicates whether the connection was created by this 
+		// operation (and needs to be closed), and result
+		Statement statement              = null;
+		boolean   createdByThisOperation = false;
+		ResultSet resultSet              = null;
 		
 		
 		// Access database
 		try {
 			// Setup the connection with the DB, specify database, user name and password
-			connect = DriverManager.getConnection(queryPrefix+dbPath, userName, password);
+			if (connect == null) {connect = DriverManager.getConnection(queryPrefix+dbPath, userName, password); createdByThisOperation = true;}
 
 			// Statements allow to issue SQL queries to the database
 			statement = connect.createStatement();
 
 			// ResultSet gets the result of the SQL query
-			resultSet = statement.executeQuery(queryString);			
+			resultSet = statement.executeQuery(queryString);	
+
+			// Close database connection
+			if (createdByThisOperation) {connect.close(); connect = null;}
 		} catch (Exception e) {
 			// Print exception to console
 			e.printStackTrace();
@@ -101,28 +111,76 @@ public class SQLDriver implements ISQLDriver {
 	 * Execute a SQL update
 	 */
 	public void sqlUpdate(String updateString) {
-		// Store connection, SQL statement, and result
-		Connection connect = null;
-		Statement statement = null;
-		
+		// Store SQL statement
+		Statement statement              = null;
+		boolean   createdByThisOperation = false;
+
 		
 		// Access database
 		try {
 			// Setup the connection with the DB, specify database, user name and password
-			connect = DriverManager.getConnection(queryPrefix+dbPath, userName, password);
+			if (connect == null) {connect = DriverManager.getConnection(queryPrefix+dbPath, userName, password); createdByThisOperation = true;}
 
 			// Statements allow to issue SQL queries to the database
 			statement = connect.createStatement();
 
 			// ResultSet gets the result of the SQL query
 			statement.executeUpdate(updateString);
-			
+
 			// Close database connection
-			connect.close();
 			statement.close();
+			if (createdByThisOperation) {connect.close(); connect = null;}
 		} catch (Exception e) {
 			// Print exception to console
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	/**
+	 * Open connection
+	 */
+	public void openConnection() {
+		// Access database
+		try {
+			// Open connection
+			connect = DriverManager.getConnection(queryPrefix+dbPath, userName, password);
+		} catch (Exception e) {
+			// Print exception to console
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * Close connection
+	 */
+	public void closeConnection() {
+		// Access database
+		try {
+			// Close connection
+			if (connect != null) {connect.close(); connect = null;}
+		} catch (Exception e) {
+			// Print exception to console
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * Get connection
+	 */
+	public Connection getConnection() {
+		return connect;
+	}
+	
+	
+	/**
+	 * Indicate if driver has open connection
+	 */
+	public boolean hasOpenConnection() {
+		return (connect == null);
+	}
 }
+

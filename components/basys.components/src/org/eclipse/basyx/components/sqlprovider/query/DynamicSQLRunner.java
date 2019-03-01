@@ -29,6 +29,15 @@ public class DynamicSQLRunner {
 	
 	
 	/**
+	 * Constructor that accepts a driver
+	 */
+	public DynamicSQLRunner(ISQLDriver driver) {
+		// Store SQL driver instance
+		sqlDriver = driver;
+	}
+
+	
+	/**
 	 * Constructor
 	 */
 	public DynamicSQLRunner(String path, String user, String pass, String qryPfx, String qDrvCls) {

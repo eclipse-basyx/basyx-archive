@@ -2,9 +2,12 @@ package org.eclipse.basyx.components.sqlprovider.query;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Map;
 import java.util.function.Supplier;
 
+import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
 import org.eclipse.basyx.components.tools.propertyfile.opdef.OperationDefinition;
 import org.eclipse.basyx.components.tools.propertyfile.opdef.Parameter;
 import org.eclipse.basyx.components.tools.propertyfile.opdef.ResultFilter;
@@ -36,6 +39,19 @@ public class DynamicSQLQuery extends DynamicSQLRunner implements Supplier<Object
 	
 	
 	/**
+	 * Constructor that accepts a driver
+	 */
+	public DynamicSQLQuery(ISQLDriver driver, String query, String sqlResultFilter) {
+		// Invoke base constructor
+		super(driver);
+
+		// Store SQL query string and result filter
+		sqlQueryString         = query;
+		resultFilterString     = sqlResultFilter;
+	}
+
+	
+	/**
 	 * Constructor
 	 */
 	public DynamicSQLQuery(String path, String user, String pass, String qryPfx, String qDrvCls, String query, String sqlResultFilter) {
@@ -56,6 +72,52 @@ public class DynamicSQLQuery extends DynamicSQLRunner implements Supplier<Object
 		// Execute SQL query
 		ResultSet sqlResult = sqlDriver.sqlQuery(sqlQueryString);
 
+		// Process result
+		return processResult(sqlResult);
+	}
+	
+	
+	/**
+	 * Execute query without parameter, do not post process result
+	 */
+	public ResultSet getRaw() {
+		// Execute SQL query
+		return sqlDriver.sqlQuery(sqlQueryString);
+	}
+
+	
+	/**
+	 * Execute query without parameter
+	 */
+	public Object get(Map<String,Object> param) {
+		// Apply parameter and create SQL query string
+		String sqlQuery = OperationDefinition.getSQLString(sqlQueryString, param);
+
+		// Execute SQL query
+		ResultSet sqlResult = sqlDriver.sqlQuery(sqlQuery);
+
+		// Process result
+		return processResult(sqlResult);
+	}
+
+	
+	/**
+	 * Execute query without parameter, do not post process result
+	 */
+	public ResultSet getRaw(Map<String,Object> param) {
+		// Apply parameter and create SQL query string
+		String sqlQuery = OperationDefinition.getSQLString(sqlQueryString, param);
+
+		// Execute SQL query
+		return sqlDriver.sqlQuery(sqlQuery);
+	}
+	
+	
+	
+	/**
+	 * Process result parameter
+	 */
+	protected Object processResult(ResultSet sqlResult) {
 		// Extract input parameter definition
 		Collection<Parameter> parameter = OperationDefinition.getParameter(resultFilterString);
 
@@ -71,9 +133,15 @@ public class DynamicSQLQuery extends DynamicSQLRunner implements Supplier<Object
 			callParameter[1] = callParameterInner;
 
 			// Invoke result filter operation using static invocation
-			return ResultFilter.class.getMethod(OperationDefinition.getOperation(resultFilterString), getMethodParameter(parameter)).invoke(null, callParameter);
+			Object result = ResultFilter.class.getMethod(OperationDefinition.getOperation(resultFilterString), getMethodParameter(parameter)).invoke(null, callParameter);
 			
-		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			// Close result set
+			sqlResult.close();
+			
+			// Return result
+			return result;
+			
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SQLException e) {
 			// Print exception to console
 			e.printStackTrace();
 		}
