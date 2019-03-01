@@ -20,7 +20,6 @@ spec:
       steps {
         container('maven') {
           sh 'mvn -f ./sdks/java/basys.sdk/pom.xml clean verify'
-		  sh 'mvn -f ./components/basys.components/pom.xml clean verify'
         }
       }
     }
