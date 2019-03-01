@@ -152,9 +152,11 @@ public class TestDirectorySQLProvider {
 		// Directory web service URL
 		String wsURL = "http://localhost:8080/basys.components/Testsuite/Directory/SQL";
 
-
 		// Update a specific AAS
 		try {
+			// Delete AAS registration (make sure tests work also iff previous test suite did fail)
+			client.delete(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
+			
 			// Get a known AAS by its ID - check if AAS does not exist already
 			String result0 = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
 			// - Check updated registration
@@ -164,13 +166,12 @@ public class TestDirectorySQLProvider {
 			// - Create AAS descriptor
 			AASDescriptor aasDescriptor = new AASDescriptor("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-166", IdentifierType.URI, "www.endpoint.de");
 			// - Create new AAS registration
-			client.post(wsURL + "/api/v1/registry", GSONTools.Instance.serialize(aasDescriptor).toString());
+			client.post(wsURL + "/api/v1/registry", GSONTools.Instance.getJsonString(GSONTools.Instance.serialize(aasDescriptor)));
 
 			// Get a known AAS by its ID
 			String result = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
 			// - Check updated registration
-			System.out.println("RESULT:"+result);
-			//assertTrue(result.equals("{content.aas6}"));
+			assertTrue(result.equals("{\"metaData\":{\"size\":0,\"basystype\":\"map\"},\"endpoints\":{\"0\":{\"typeid\":\"string\",\"value\":\"www.endpoint.de\",\"basystype\":\"value\"},\"size\":1,\"basystype\":\"collection\"},\"identification\":{\"idType\":{\"typeid\":\"string\",\"value\":\"URI\",\"basystype\":\"value\"},\"size\":2,\"id\":{\"typeid\":\"string\",\"value\":\"urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-166\",\"basystype\":\"value\"},\"basystype\":\"map\"},\"size\":9,\"idShort\":{\"typeid\":\"string\",\"value\":\"\",\"basystype\":\"value\"},\"administration\":{\"size\":3,\"hasDataSpecification\":{\"size\":0,\"basystype\":\"set\"},\"version\":{\"typeid\":\"string\",\"value\":\"\",\"basystype\":\"value\"},\"basystype\":\"map\",\"revision\":{\"typeid\":\"string\",\"value\":\"\",\"basystype\":\"value\"}},\"category\":{\"typeid\":\"string\",\"value\":\"\",\"basystype\":\"value\"},\"asset\":{\"parent\":{\"basystype\":\"null\"},\"identification\":{\"idType\":{\"typeid\":\"string\",\"value\":\"IRDI\",\"basystype\":\"value\"},\"size\":2,\"id\":{\"typeid\":\"string\",\"value\":\"\",\"basystype\":\"value\"},\"basystype\":\"map\"},\"size\":9,\"idShort\":{\"typeid\":\"string\",\"value\":\"\",\"basystype\":\"value\"},\"hasDataSpecification\":{\"size\":0,\"basystype\":\"set\"},\"kind\":{\"basystype\":\"null\"},\"administration\":{\"basystype\":\"null\"},\"description\":{\"typeid\":\"string\",\"value\":\"\",\"basystype\":\"value\"},\"category\":{\"typeid\":\"string\",\"value\":\"\",\"basystype\":\"value\"},\"basystype\":\"map\",\"assetIdentificationModel\":{\"basystype\":\"null\"}},\"descriptions\":{\"size\":0,\"basystype\":\"collection\"},\"basystype\":\"map\",\"submodels\":{\"size\":0,\"basystype\":\"collection\"}}"));
 			
 			// Delete AAS registration
 			client.delete(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
@@ -179,7 +180,6 @@ public class TestDirectorySQLProvider {
 			String result2 = client.get(wsURL+"/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"+URLEncoder.encode("microscope#A-166","UTF-8"));
 			// - Check updated registration
 			assertTrue(result2.equals(""));
-			System.out.println("R2:"+result2);
 
 		} catch (Exception e) {
 			fail("Update AAS test case did throw exception:"+e);
