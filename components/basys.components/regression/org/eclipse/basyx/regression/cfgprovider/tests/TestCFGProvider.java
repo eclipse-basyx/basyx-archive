@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
+import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.junit.ClassRule;
@@ -27,10 +28,10 @@ public class TestCFGProvider {
 
 
 	/** 
-	 * Makes sure Tomcat Server is started
+	 * Makes sure Tomcat Server is started with basyx.components regression test case
 	 */
 	@ClassRule
-	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource();
+	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new ComponentsRegressionContext());
 	
 	
 	/**
@@ -38,7 +39,6 @@ public class TestCFGProvider {
 	 */
 	@Test
 	public void test() throws Exception {
-
 		// Connect to sub model "CfgFileTestAAS"
 		VABElementProxy connSubModel = this.connManager.connectToVABElement("CfgFileTestAAS");
 

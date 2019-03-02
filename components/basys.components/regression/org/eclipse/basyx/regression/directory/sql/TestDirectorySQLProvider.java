@@ -8,6 +8,7 @@ import java.net.URLEncoder;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
+import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -26,7 +27,7 @@ public class TestDirectorySQLProvider {
 	 * Makes sure Tomcat Server is started
 	 */
 	@ClassRule
-	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource();
+	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new ComponentsRegressionContext());
 	
 	/**
 	 * Execute test case that test working calls

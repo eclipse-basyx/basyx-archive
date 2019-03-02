@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import java.net.URLEncoder;
 
 import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
+import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -25,7 +26,7 @@ public class TestStaticDirectoryFileProvider {
 	 * Makes sure Tomcat Server is started
 	 */
 	@ClassRule
-	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource();
+	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new ComponentsRegressionContext());
 	
 	/**
 	 * Execute test case that test working calls
