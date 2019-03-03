@@ -7,6 +7,8 @@ import java.net.SocketException;
 
 import org.eclipse.basyx.vab.core.IModelProvider;
 
+
+
 /**
  * BaSyx TCP server thread
  * 
@@ -15,16 +17,26 @@ import org.eclipse.basyx.vab.core.IModelProvider;
  */
 public class BaSyxTCPServer<T extends IModelProvider> extends Thread {
 
+	
 	/**
 	 * Store server socket instance
 	 */
 	protected ServerSocket tcpServerSocket = null;
 
+	
 	/**
 	 * Reference to IModelProvider backend
 	 */
 	protected T providerBackend = null;
 
+	
+	/**
+	 * Exit flag
+	 */
+	protected boolean exit = false;
+	
+	
+	
 	/**
 	 * Constructor
 	 */
@@ -41,6 +53,7 @@ public class BaSyxTCPServer<T extends IModelProvider> extends Thread {
 		}
 	}
 
+	
 	/**
 	 * Default constructor without port number
 	 */
@@ -48,13 +61,14 @@ public class BaSyxTCPServer<T extends IModelProvider> extends Thread {
 		this(modelProviderBackend, 6998);
 	}
 
+	
 	/**
 	 * Thread main method
 	 */
 	@Override
 	public void run() {
 		// Accept connections
-		while (true) {
+		while (!exit) {
 			// Handle communication exceptions
 			try {
 				
@@ -74,13 +88,32 @@ public class BaSyxTCPServer<T extends IModelProvider> extends Thread {
 				// - Start TCP provider
 				tcpProvider.start();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// Indicate exception only iff exit flag is false
+				if (!exit) e.printStackTrace();
+				
+				// Return
+				return;
 			}
 		}
 	}
 	
-	public void shutdown() throws IOException {
-		this.tcpServerSocket.close();
+	
+	/**
+	 * End server
+	 * 
+	 * @throws IOException
+	 */
+	public void shutdown() {
+		// End thread
+		exit = true;
+		
+		// Handle IOException
+		try {
+			// Close stream
+			this.tcpServerSocket.close();
+		} catch (IOException e) {
+			// Indicate exception
+			e.printStackTrace();
+		}			
 	}
 }

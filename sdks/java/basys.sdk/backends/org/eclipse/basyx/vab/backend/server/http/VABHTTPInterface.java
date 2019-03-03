@@ -31,7 +31,7 @@ import org.eclipse.basyx.vab.core.IModelProvider;
  * @author kuhn
  *
  */
-public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServelet {
+public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServlet {
 
 	/**
 	 * Version information to identify the version of serialized instances
