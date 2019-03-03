@@ -44,16 +44,6 @@ public class CFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 	protected Properties properties = null;
 	
 	
-	/**
-	 * Adds init parameter to servlet
-	 */
-	@Override
-	public String getInitParameter(String name) {
-
-		if (name.equals("config")) return "/WebContent/WEB-INF/config/cfgprovider/samplecfg.properties";
-		
-		return null;
-	}
 	
 	/**
 	 * Constructor

@@ -8,6 +8,8 @@ import org.eclipse.basyx.components.servlets.StaticCFGDirectoryServlet;
 import org.eclipse.basyx.components.servlets.XMLXQueryServlet;
 import org.eclipse.basyx.regression.support.server.BaSyxContext;
 
+
+
 /**
  * BaSyx context that contains an Industrie 4.0 Servlet infrastructure for regression testing of basys.components package
  * 
@@ -31,13 +33,13 @@ public class ComponentsRegressionContext extends BaSyxContext {
 		// Invoke base constructor to set up Tomcat server in basys.components context
 		super("/basys.components", "");
 		
-		// Define Servlet infrastucture
-		put("/Testsuite/components/BaSys/1.0/provider/sqlsm/*",     new SQLSubModelProviderServlet());
-		put("/Testsuite/components/BaSys/1.0/provider/cfgsm/*",     new CFGSubModelProviderServlet());
-		put("/Testsuite/components/BaSys/1.0/provider/rawcfgsm/*",  new RawCFGSubModelProviderServlet());
-		put("/Testsuite/Directory/CFGFile/*",                       new StaticCFGDirectoryServlet());
-		put("/Testsuite/Directory/SQL/*",                           new SQLDirectoryServlet());
-		put("/Testsuite/components/BaSys/1.0/provider/xmlxquery/*", new XMLXQueryServlet());
+		// Define Servlet infrastructure
+		addServletMapping("/Testsuite/components/BaSys/1.0/provider/sqlsm/*",     new SQLSubModelProviderServlet().withParameter("config", "/WebContent/WEB-INF/config/sqlprovider/sampledb.properties"));
+		addServletMapping("/Testsuite/components/BaSys/1.0/provider/cfgsm/*",     new CFGSubModelProviderServlet().withParameter("config", "/WebContent/WEB-INF/config/cfgprovider/samplecfg.properties"));
+		addServletMapping("/Testsuite/components/BaSys/1.0/provider/rawcfgsm/*",  new RawCFGSubModelProviderServlet().withParameter("config", "/WebContent/WEB-INF/config/rawcfgprovider/samplecfg.properties"));
+		addServletMapping("/Testsuite/components/BaSys/1.0/provider/xmlxquery/*", new XMLXQueryServlet().withParameter("config", "/WebContent/WEB-INF/config/xmlqueryprovider/xmlqueryprovider.properties"));
+		addServletMapping("/Testsuite/Directory/CFGFile/*",                       new StaticCFGDirectoryServlet().withParameter("config", "/WebContent/WEB-INF/config/directory/cfgdirectory/directory.properties"));
+		addServletMapping("/Testsuite/Directory/SQL/*",                           new SQLDirectoryServlet().withParameter("config", "/WebContent/WEB-INF/config/directory/sqldirectory/directory.properties"));
 	}
 }
 

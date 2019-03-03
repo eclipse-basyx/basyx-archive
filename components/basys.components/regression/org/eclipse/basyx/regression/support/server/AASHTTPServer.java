@@ -41,23 +41,29 @@ public class AASHTTPServer extends Thread {
 		tomcat.setPort(context.port);
 		tomcat.setHostname("localhost");
 		tomcat.getHost().setAppBase(".");
-		File docBase = new File(context.docBasePath); //System.getProperty("java.io.tmpdir"));
-        //Context rootCtx = tomcat.addContext("/basys.components", docBase.getAbsolutePath()); 
+
+		// Create servlet context
+    	// - Base path for resource files
+    	File docBase = new File(context.docBasePath); //System.getProperty("java.io.tmpdir"));
+    	// - Create context for servlets
         Context rootCtx = tomcat.addContext(context.contextPath, docBase.getAbsolutePath()); 
-        System.out.println("Created Tomcat Server at Root: "+rootCtx.getDocBase());
-       
+
+        // Iterate all servlets in context
         Iterator<Entry<String, HttpServlet>> it = context.entrySet().iterator();
         while (it.hasNext()) {
+        	// Servlet entry
         	Entry<String, HttpServlet> entry = it.next();
+
+            // Servlet mapping
         	String mapping = entry.getKey();
         	HttpServlet servlet = entry.getValue();
         	
-        	// Add new Servlet and Mapping
-        	Tomcat.addServlet(rootCtx, servlet.getClass().getSimpleName(), servlet.getClass().getName());
+        	// Add new Servlet and Mapping to tomcat environment
+        	Tomcat.addServlet(rootCtx, servlet.getClass().getSimpleName(), servlet);
             rootCtx.addServletMapping(mapping, servlet.getClass().getSimpleName());
-            //rootCtx.addApplicationParameter(arg0);
         }
 	}
+	
 	
 	/**
 	 * Run Method. Use .start() to start the server in a new thread to avoid blocking the main thread
@@ -78,6 +84,7 @@ public class AASHTTPServer extends Thread {
 		}
 	}
 	
+	
 	/**
 	 * This Method stops and destroys the tomcat instance. This is important since Tomcat would be already 
 	 * bound to port 8080 when new tests are run that require a start of tomcat
@@ -92,7 +99,5 @@ public class AASHTTPServer extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	
+	}	
 }

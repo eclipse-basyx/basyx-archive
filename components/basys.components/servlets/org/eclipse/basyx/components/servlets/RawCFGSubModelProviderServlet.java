@@ -50,19 +50,7 @@ public class RawCFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubm
 	public RawCFGSubModelProviderServlet() {
 		// Invoke base constructor
 		super(new VABMultiSubmodelProvider<VABHashmapProvider>());
-	}
-	
-	/**
-	 * Adds init parameter to servlet
-	 */
-	@Override
-	public String getInitParameter(String name) {
-
-		if (name.equals("config")) return "/WebContent/WEB-INF/config/rawcfgprovider/samplecfg.properties";
-		
-		return null;
-	}
-	
+	}	
 	
 	
 	/**

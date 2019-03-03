@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
-import org.eclipse.basyx.vab.backend.server.http.BasysHTTPServelet;
+import org.eclipse.basyx.vab.backend.server.http.BasysHTTPServlet;
 
 import basys.examples.aasdescriptor.AASDescriptor;
 
@@ -37,7 +37,7 @@ import basys.examples.aasdescriptor.AASDescriptor;
  * @author kuhn
  *
  */
-public class SQLDirectoryServlet extends BasysHTTPServelet {
+public class SQLDirectoryServlet extends BasysHTTPServlet {
 
 	
 	/**
