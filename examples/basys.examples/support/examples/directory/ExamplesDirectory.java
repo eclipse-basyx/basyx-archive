@@ -23,6 +23,7 @@ public class ExamplesDirectory extends TestsuiteDirectory {
 
 		// Define mappings
 		// - AAS server mapping
-		addMapping("AASServer", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/aasserver/");
+		//addMapping("AASServer", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/aasserver/");
+		addMapping("AASServer", "http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer/");
 	}	
 }

@@ -1,19 +1,22 @@
 package examples.productaas;
 
+import java.net.URLEncoder;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
-import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell_;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identification;
+import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
+import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
-import org.json.JSONObject;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 import basys.examples.aasdescriptor.AASDescriptor;
 import basys.examples.urntools.ModelUrn;
+import examples.contexts.DefaultBaSyxExamplesContext;
 import examples.directory.ExamplesDirectory;
 
 
@@ -33,6 +36,13 @@ public class RunExample {
 	protected VABConnectionManager connManager = new VABConnectionManager(new ExamplesDirectory(), new HTTPConnectorProvider());
 
 	
+	/** 
+	 * Makes sure Tomcat Server with basic BaSys topology is started
+	 */
+	@ClassRule
+	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new DefaultBaSyxExamplesContext());
+
+	
 	
 	/**
 	 * Test basic queries
@@ -47,36 +57,40 @@ public class RunExample {
 		// - Invoke BaSyx service calls via web services
 		WebServiceRawClient client = new WebServiceRawClient();
 		// - Directory web service URL
-		String wsURL = "http://localhost:8080/basys.components/Testsuite/Directory/SQL";
+		String wsURL = "http://localhost:8080/basys.examples/Components/Directory/SQL";
 		// - AAS repository server URL
-		String aasSrvURL = "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/aasserver";
-
+		String aasSrvURL = "http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer";
 		
 		
 		// Create product AAS
 		// - Product ID (urn:<legalEntity>:<subUnit>:<subModel>:<version>:<revision>:<elementID>#<elementInstance>)
 		ModelUrn productID = new ModelUrn("de.FHG", "products.es.iese", "aas", "1.0", "3", "product1", null);
 		// - Create map with complex type
-		AssetAdministrationShell_ aas = new AssetAdministrationShell_();
+		AssetAdministrationShell aas = new AssetAdministrationShell();
 		aas.put("idShort", "ProductIDShort");
 		// - AAS URL on server
+		//String aasURLOnServer = "/aas/submodels/rawSampleCFG/"+productID.getEncodedURN();
 		String aasURLOnServer = "/aas/submodels/aasRepository/"+productID.getEncodedURN();
 		// - Create AAS structure on server
 		connSubModel.createElement(aasURLOnServer, aas);
 
+		
+		// Delete AAS registration for a fresh start - ignore if URL was not found. In this case, there was no previous registration and the registry was clean
+		client.delete(wsURL+"/api/v1/registry/"+URLEncoder.encode(productID.getURN()));
+
 
 		// Register AAS in directory (push AAS descriptor to server)
 		// - Create an AAS descriptor
-		AASDescriptor productAASDescriptor = new AASDescriptor(productID.getURN(), Identification.URI, aasSrvURL+aasURLOnServer);
+		AASDescriptor productAASDescriptor = new AASDescriptor(productID.getURN(), IdentifierType.URI, aasSrvURL+aasURLOnServer);
 		// - Push AAS descriptor to server
-		client.post(wsURL+"/api/v1/registry", JSONTools.Instance.serialize(productAASDescriptor).toString());
+		client.post(wsURL+"/api/v1/registry", GSONTools.Instance.getJsonString(GSONTools.Instance.serialize(productAASDescriptor)));
 
 		
 		// Lookup AAS
 		// - Lookup AAS from AAS directory, get AAS descriptor
 		String jsonData = client.get(wsURL+"/api/v1/registry/"+productID.getEncodedURN());
 		// - Read AAS end point from AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) JSONTools.Instance.deserialize(new JSONObject(jsonData)));
+		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) GSONTools.Instance.deserialize(GSONTools.Instance.getMap(GSONTools.Instance.getObjFromJsonStr(jsonData))));
 		System.out.println("Endpoint:"+aasDescriptor.getFirstEndpoint());
 		
 		

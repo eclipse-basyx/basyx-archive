@@ -47,5 +47,16 @@ public class BaSysConnectionManager extends VABConnectionManager {
 		// Return a new ModelServerProxy
 		return new ModelServerProxy(addr, providerProvider.getConnector(addr));
 	}
+
+
+	/**
+	 * Connect to an model provider server through a provided URL
+	 * 
+	 * @param url to model provider server 
+	 */
+	public ModelServerProxy connectToModelServerURL(String url) {
+		// Return a new ModelServerProxy
+		return new ModelServerProxy(url, providerProvider.getConnector(url));
+	}
 }
 

@@ -2,10 +2,8 @@ package basys.examples.frontend.client.proxies;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.backend.http.tools.JSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
-import org.json.JSONObject;
-
 import basys.examples.aasdescriptor.AASDescriptor;
 import basys.examples.urntools.ModelUrn;
 
@@ -53,7 +51,7 @@ public class AASRegistryProxy {
 	 */
 	public void register(AASDescriptor deviceAASDescriptor) {
 		// Perform web service call to registry
-		client.post(aasRegistryURL+"/api/v1/registry", JSONTools.Instance.serialize(deviceAASDescriptor).toString());
+		client.post(aasRegistryURL+"/api/v1/registry", GSONTools.Instance.getJsonString(GSONTools.Instance.serialize(deviceAASDescriptor)));
 	}
 	
 	
@@ -66,7 +64,7 @@ public class AASRegistryProxy {
 		String jsonData = client.get(aasRegistryURL+"/api/v1/registry/"+aasID.getEncodedURN());
 		
 		// Deserialize AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) JSONTools.Instance.deserialize(new JSONObject(jsonData)));
+		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) GSONTools.Instance.deserialize(GSONTools.Instance.getMap(jsonData)));
 		
 		// Return AAS descriptor
 		return aasDescriptor;

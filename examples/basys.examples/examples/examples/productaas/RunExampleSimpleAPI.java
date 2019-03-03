@@ -2,8 +2,8 @@ package examples.productaas;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell_;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identification;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.junit.Test;
 
@@ -52,7 +52,7 @@ public class RunExampleSimpleAPI {
 		// - Product ID (urn:<legalEntity>:<subUnit>:<subModel>:<version>:<revision>:<elementID>#<elementInstance>)
 		ModelUrn productID = new ModelUrn("de.FHG", "products.es.iese", "aas", "1.0", "3", "product1", null);
 		// - Create map with complex type
-		AssetAdministrationShell_ aas = new AssetAdministrationShell_();
+		AssetAdministrationShell aas = new AssetAdministrationShell();
 		aas.put("idShort", "ProductIDShort");
 		// - Push AAS to model repository
 		modelServer.pushToServer(productID, aas);
@@ -60,7 +60,7 @@ public class RunExampleSimpleAPI {
 
 		// Register AAS in directory (push AAS descriptor to server)
 		// - Create an AAS descriptor
-		AASDescriptor productAASDescriptor = new AASDescriptor(productID.getURN(), Identification.URI, modelServer.getURLToModel(productID));
+		AASDescriptor productAASDescriptor = new AASDescriptor(productID.getURN(), IdentifierType.URI, modelServer.getURLToModel(productID));
 		// - Push AAS descriptor to server
 		registry.register(productAASDescriptor);
 

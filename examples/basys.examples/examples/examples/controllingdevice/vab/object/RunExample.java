@@ -1,9 +1,13 @@
 package examples.controllingdevice.vab.object;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
+import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+import org.junit.ClassRule;
 import org.junit.Test;
+
+import examples.contexts.DefaultBaSyxExamplesContext;
 
 
 
@@ -21,6 +25,14 @@ public class RunExample {
 	 */
 	protected VABConnectionManager connManager = new VABConnectionManager(new ExampleDirectory(), new HTTPConnectorProvider());
 
+	
+	/** 
+	 * Makes sure Tomcat Server with basic BaSys topology is started
+	 */
+	@ClassRule
+	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new ControllingDeviceVABObjectContext());
+
+	
 	
 	
 	/**

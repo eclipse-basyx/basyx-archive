@@ -5,9 +5,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
-import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
-import org.junit.ClassRule;
 import org.junit.Test;
 
 import basys.examples.aasdescriptor.AASDescriptor;
@@ -16,7 +14,6 @@ import basys.examples.frontend.client.connmanager.BaSysConnectionManager;
 import basys.examples.frontend.client.connmanager.ModelServerProxy;
 import basys.examples.frontend.client.proxies.AASRegistryProxy;
 import basys.examples.urntools.ModelUrn;
-import examples.contexts.DefaultBaSyxExamplesContext;
 import examples.directory.ExamplesDirectory;
 
 
@@ -27,20 +24,13 @@ import examples.directory.ExamplesDirectory;
  * @author kuhn
  *
  */
-public class RunExampleSimpleAPIManualRegistry {
+public class RunExampleSimpleAPIManualRegistryURL {
 
 	
 	/**
 	 * BaSys connection manager backend
 	 */
 	protected BaSysConnectionManager connManager = new BaSysConnectionManager(new ExamplesDirectory(), new HTTPConnectorProvider());
-
-	
-	/** 
-	 * Makes sure Tomcat Server with basic BaSys topology is started
-	 */
-	@ClassRule
-	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new DefaultBaSyxExamplesContext());
 
 	
 	
@@ -53,7 +43,7 @@ public class RunExampleSimpleAPIManualRegistry {
 		// Server connections
 		// - Connect to AAS server
 		//VABElementProxy connSubModel = this.connManager.connectToVABElement("AASServer");
-		ModelServerProxy modelServer    = this.connManager.connectToModelServer("AASServer");
+		ModelServerProxy modelServer    = this.connManager.connectToModelServerURL("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/aasserver/");
 		// - Invoke BaSyx service calls via web services
 		//WebServiceRawClient client = new WebServiceRawClient();
 		// - Directory web service URL

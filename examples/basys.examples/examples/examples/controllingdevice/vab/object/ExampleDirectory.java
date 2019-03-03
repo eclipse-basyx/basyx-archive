@@ -25,3 +25,4 @@ public class ExampleDirectory extends PreconfiguredDirectory {
 		addMapping("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#004",  "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusSM/");
 	}	
 }
+

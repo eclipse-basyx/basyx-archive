@@ -5,8 +5,11 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/examples"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/servlets"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/directory"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/support"/>
         <dependent-module archiveName="basys.sdk-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/basys.sdk/basys.sdk">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="basys.components-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/basys.components/basys.components">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="basys.examples"/>

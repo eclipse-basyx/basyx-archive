@@ -1,8 +1,12 @@
 package examples.controllingdevice.submodel.object;
 
+import static org.junit.Assert.assertTrue;
+
 import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnectorProvider;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 
@@ -22,6 +26,33 @@ public class RunExample {
 	protected VABConnectionManager connManager = new VABConnectionManager(new ExampleDirectory(), new BaSyxConnectorProvider());
 
 	
+	/**
+	 * Device TCP server for this example
+	 */
+	protected DeviceTCPServer deviceTCPServer = null; 
+	
+	
+	/**
+	 * Creates the manager to be used in the test cases
+	 */
+	@Before
+	public void before() {
+		// Create and start device TCP server
+		deviceTCPServer = new DeviceTCPServer();
+		// - Start server
+		deviceTCPServer.startTCPServer();
+	}
+
+	
+	/**
+	 * Creates the manager to be used in the test cases
+	 */
+	@After
+	public void after() {
+		// Stop TCP server
+		deviceTCPServer.stopTCPServer();
+	}
+
 	
 	/**
 	 * Test basic queries
@@ -36,7 +67,10 @@ public class RunExample {
 		// Device updates status to ready
 		Object devState = connSubModel.readElementValue("properties/deviceStatus/value");
 		
-		// Output device status
+		// Compare and output device status
+		// - Automated result check
+		assertTrue(devState.equals("offline"));
+		// - Output result to console
 		System.out.println("Status:"+devState);
 	}
 }

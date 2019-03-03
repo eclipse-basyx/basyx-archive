@@ -4,8 +4,8 @@ import java.util.Map;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.property.atomicdataproperty.PropertySingleValued;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identification;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 
 
 
@@ -36,13 +36,13 @@ public class DeviceStatusSubmodel extends SubModel {
 
 		// Initialize this sub model
 		((Map<String, Object>) this.get("identification")).put("id", "urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#002");
-		((Map<String, Object>) this.get("identification")).put("idType", Identification.URI);
+		((Map<String, Object>) this.get("identification")).put("idType", IdentifierType.URI);
 
 		
 		// This sub model only defines two property named "device status" and "mode"
-		PropertySingleValued deviceStatusProperty = factory.create(new PropertySingleValued(), "offline");
+		Property deviceStatusProperty = factory.create(new Property(), "offline");
 		deviceStatusProperty.setId("deviceStatus");
-		PropertySingleValued deviceModeProperty = factory.create(new PropertySingleValued(), "idle");
+		Property deviceModeProperty = factory.create(new Property(), "idle");
 		deviceModeProperty.setId("mode");
 
 		// Add properties to sub model properties
