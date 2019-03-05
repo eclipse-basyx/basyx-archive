@@ -124,50 +124,34 @@ public class VABMultiSubmodelProvider<T extends VABHashmapProvider> implements I
 	 * Get the value of an element
 	 */
 	@Override
-	public Object getModelPropertyValue(String path) {
-		// Not (yet) implemented get requests
-		// - Return the AAS - not implemented
-		// if (path.toLowerCase().equals("/aas") || path.toLowerCase().equals("/aas/"))
-		// throw new VABProviderNotImplementedException();
-		// - Return all sub models of this provider
-		// if (path.toLowerCase().equals("/aas/submodels") ||
-		// path.toLowerCase().equals("/aas/submodels/")) throw new
-		// VABProviderNotImplementedException();
-
-		// Split path
-		// - Ignore first 3 elements, as it is "/aas/submodels" --> '', 'aas',
-		// 'submodels'
-		// - Get Provider for the requested submodel or aas
-
-		if (path.toLowerCase().equals("/aas")) {
-
-			// Return aas
-			return aas_provider.getElements();
-
-		} else if (path.toLowerCase().equals("/aas/submodels")) {
-
-			// Make a list and return all submodels
-			HashSet<Map<String, Object>> submodels = new HashSet<Map<String, Object>>();
-			submodel_providers.values().forEach((T v) -> submodels.add(v.getElements()));
-
-			return submodels;
-		} else if (path.startsWith("/aas") && !path.startsWith("/aas/submodels/")) { // Handle access to AAS
-			String[] pathElements = VABPathTools.splitPath(path);
-			return aas_provider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 2));
-		} else { // Handle access to submodels
-			String[] pathElements = VABPathTools.splitPath(path);
-
-			T hashmapProvider = submodel_providers.get(pathElements[3]);
-
-			// Retrieve submodel
-			if (pathElements.length == 4) {
-				return hashmapProvider.getElements();
+	public Object getModelPropertyValue(String path) throws Exception {
+		String[] pathElements = VABPathTools.splitPath(path);
+		if (pathElements.length == 0) { // e.g. "/"
+			return null;
+		} else if (pathElements[0].equals("aas")) {
+			if (pathElements.length == 1) {
+				return aas_provider.getElements();
 			}
+			if (pathElements[1].equals("submodels")) {
+				if (pathElements.length == 2) {
+					// Make a list and return all submodels
+					HashSet<Map<String, Object>> submodels = new HashSet<Map<String, Object>>();
+					submodel_providers.values().forEach((T v) -> submodels.add(v.getElements()));
 
-			// - Retrieve property value
-			return hashmapProvider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 4));
+					return submodels;
+				} else {
+					T hashmapProvider = submodel_providers.get(pathElements[2]);
+
+					// - Retrieve property value
+					return hashmapProvider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 3));
+				}
+			} else {
+				// Handle access to AAS
+				return aas_provider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 1));
+			}
+		} else {
+			return null;
 		}
-
 	}
 
 	/**
@@ -177,50 +161,41 @@ public class VABMultiSubmodelProvider<T extends VABHashmapProvider> implements I
 	public void setModelPropertyValue(String path, Object newValue) throws Exception {
 		// Split path
 		String[] pathElements = VABPathTools.splitPath(path);
-		// - Ignore first 3 elements, as it is "/aas/submodels" --> '', 'aas',
-		// 'submodels'
-		// - Invoke provider and return result
-		submodel_providers.get(pathElements[3]).setModelPropertyValue(VABPathTools.buildPath(pathElements, 4), newValue);
+		String propertyPath = VABPathTools.buildPath(pathElements, 3);
+		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
+		submodel_providers.get(pathElements[2]).setModelPropertyValue(propertyPath, newValue);
 	}
 
 	@Override
 	public void createValue(String path, Object newValue) throws Exception {
-		// Split path
 		String[] pathElements = VABPathTools.splitPath(path);
-		// - Ignore first 3 elements, as it is "/aas/submodels" --> '', 'aas',
-		// 'submodels'
-		// - Invoke provider and return result
-		submodel_providers.get(pathElements[3]).createValue(VABPathTools.buildPath(pathElements, 4), newValue);
+		String propertyPath = VABPathTools.buildPath(pathElements, 3);
+		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
+		submodel_providers.get(pathElements[2]).createValue(propertyPath, newValue);
 	}
 
 	@Override
 	public void deleteValue(String path) throws Exception {
-		// Split path
 		String[] pathElements = VABPathTools.splitPath(path);
-		// - Ignore first 3 elements, as it is "/aas/submodels" --> '', 'aas',
-		// 'submodels'
-		// - Invoke provider and return result
-		submodel_providers.get(pathElements[3]).deleteValue(VABPathTools.buildPath(pathElements, 4));
+		String propertyPath = VABPathTools.buildPath(pathElements, 3);
+		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
+		submodel_providers.get(pathElements[2]).deleteValue(propertyPath);
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws Exception {
-		// Split path
 		String[] pathElements = VABPathTools.splitPath(path);
-		// - Ignore first 3 elements, as it is "/aas/submodels" --> '', 'aas',
-		// 'submodels'
-		// - Invoke provider and return result
-		submodel_providers.get(pathElements[3]).deleteValue(VABPathTools.buildPath(pathElements, 4), obj);
+		String propertyPath = VABPathTools.buildPath(pathElements, 3);
+		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
+		submodel_providers.get(pathElements[2]).deleteValue(propertyPath, obj);
 	}
 
 	@Override
 	public Object invokeOperation(String path, Object[] parameter) throws Exception {
-		// Split path
 		String[] pathElements = VABPathTools.splitPath(path);
-		// - Ignore first 3 elements, as it is "/aas/submodels" --> '', 'aas',
-		// 'submodels'
+		String operationPath = VABPathTools.buildPath(pathElements, 3);
+		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
 		// - Invoke provider and return result
-		return submodel_providers.get(pathElements[3]).invokeOperation(VABPathTools.buildPath(pathElements, 4), parameter);
+		return submodel_providers.get(pathElements[2]).invokeOperation(operationPath, parameter);
 	}
-
 }

@@ -3,39 +3,89 @@ package org.eclipse.basyx.vab.core.tools;
 /**
  * Utility functions to handle a VAB path
  * 
- * @author kuhn
+ * @author kuhn, espen
  * 
  */
 public class VABPathTools {
+	public static final String SEPERATOR = "/";
 
 	/**
-	 * Split a path into path elements
+	 * Split a path into path elements e.g. /a/b/c -> [ a, b, c ]
 	 */
 	public static String[] splitPath(String path) {
-		// Split path
-		String[] result = path.split("/");
+		// Remove leading separator, otherwise /a leads to {"", "a"}
+		String fixedPath = removePrefix(path, SEPERATOR);
 
-		// Return path elements
+		if (fixedPath.equals("")) {
+			// without the check, [""] is returned
+			return new String[] {};
+		}
+
+		String[] result = fixedPath.split(SEPERATOR);
+
 		return result;
+	}
+
+	/**
+	 * Remove the last element from the path
+	 */
+	public static String getParentPath(String path) {
+		int lastIndex = path.lastIndexOf(SEPERATOR);
+		if (lastIndex == path.length() - 1) {
+			lastIndex = path.lastIndexOf(SEPERATOR, path.length() - 2);
+		}
+		if (lastIndex >= 0) {
+			return removePrefix(path.substring(0, lastIndex), SEPERATOR);
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * Get the last element of a path. Return null if there is no element in the
+	 * path
+	 */
+	public static String getLastElement(String path) {
+		String[] elements = splitPath(path);
+		if (elements.length > 0) {
+			return elements[elements.length - 1];
+		}
+		return "";
 	}
 
 	/**
 	 * Remove prefix from beginning of path
 	 */
 	public static String removePrefix(String path, String prefix) {
-		return path.substring(prefix.length());
+		if (path.startsWith(prefix)) {
+			return path.substring(prefix.length());
+		} else {
+			return path;
+		}
+	}
+
+	public static String append(String path, String element) {
+		if (path.lastIndexOf(SEPERATOR) == path.length() - 1) {
+			return path + element;
+		} else {
+			return path + SEPERATOR + element;
+		}
 	}
 
 	/**
-	 * Build and return a path
+	 * Build and return a path with pathElements[startIndex] as the root element
 	 */
 	public static String buildPath(String[] pathElements, int startIndex) {
+		if (startIndex >= pathElements.length) {
+			return "";
+		}
+
 		// This will store the resulting path
 		StringBuilder result = new StringBuilder();
 
 		// Build path
 		for (int i = startIndex; i < pathElements.length; i++)
-			result.append(pathElements[i] + "/");
+			result.append(pathElements[i] + SEPERATOR);
 
 		// Remove last '/'
 		result.deleteCharAt(result.length() - 1);

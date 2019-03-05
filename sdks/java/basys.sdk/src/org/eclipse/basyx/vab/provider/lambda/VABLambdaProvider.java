@@ -6,6 +6,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.eclipse.basyx.vab.core.tools.VABPathTools;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
 /**
@@ -89,16 +90,14 @@ public class VABLambdaProvider extends VABHashmapProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void createValue(String path, Object newValue) throws Exception {
+		String parentPath = VABPathTools.getParentPath(path);
+		Object parent = super.getModelPropertyValue(parentPath);
 		// Check if it is a map to insert into
-		if (path.contains("/")) {
-			String parentPath = path.substring(0, path.lastIndexOf("/"));
-			Object parent = super.getModelPropertyValue(parentPath);
-			if (hasHiddenInserter(parent)) {
-				String childPath = path.substring(path.lastIndexOf("/") + 1);
-				((BiConsumer<String, Object>) ((Map<String, Object>) parent).get(VALUE_INSERT_SUFFIX)).accept(childPath,
-						newValue);
-				return;
-			}
+		if (hasHiddenInserter(parent)) {
+			String childPath = VABPathTools.getLastElement(path);
+			((BiConsumer<String, Object>) ((Map<String, Object>) parent).get(VALUE_INSERT_SUFFIX)).accept(childPath,
+					newValue);
+			return;
 		}
 
 		Object elem = super.getModelPropertyValue(path);

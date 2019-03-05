@@ -70,19 +70,15 @@ public class VABHashmapProvider implements IModelProvider {
 		Map<String, Object> currentScope = elements;
 		// - Get element
 		for (int i = 0; i < pathElements.length - 1; i++) {
+			System.out.println("Get Parent Element: " + pathElements[i] + " -> " + Arrays.toString(currentScope.keySet().toArray()));
+			
 			// Get element
-			Object element = null;
+			Object element = currentScope.get(pathElements[i]);
+			if (element != null) {
+				currentScope = (Map<String, Object>) element;
+			}
 			
-			// If there is a leading '/' skip null entry
-;			if (pathElements[0].equals("") && pathElements.length > 0) { pathElements[0] = "None"; continue; }
-			
-			System.out.println("Get Parent Element: "+ pathElements[i] + " -> " + Arrays.toString(currentScope.keySet().toArray()));
-			
-			// Try to find parent despite not knowing if leading "/" must be added 
-			if ((element = currentScope.get(pathElements[i])) != null) 	{	 currentScope = (Map<String, Object>) element; }
-			else if ((element = currentScope.get("/" + pathElements[i])) != null) { currentScope = (Map<String, Object>) element; }
-			
-			System.out.println("  - Element:"+element);
+			System.out.println("  - Element:" + element);
 
 			
 			if (element == null ) 		   return null;
