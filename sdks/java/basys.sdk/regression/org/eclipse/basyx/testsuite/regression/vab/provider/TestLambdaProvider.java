@@ -36,6 +36,9 @@ public class TestLambdaProvider {
 	// Representative of the value of property1.1
 	static int property11_val;
 
+	// Representative of the value of property1
+	static Map<String, Object> property1_val;
+
 	// Representative of the value of property1.2
 	static Map<String, Object> propertyMap_val;
 
@@ -118,16 +121,27 @@ public class TestLambdaProvider {
 			throw new ServerException("ExType", "Exception description");
 		});
 
-		// Create property1 map
-		Map<String, Object> property1 = new HashMap<>();
-		property1.put("property1.1", property11);
-		property1.put("property1.2", collectionAccessors);
-		property1.put("propertyMap", mapAccessors);
-		property1.put("operations", containedOperations);
+		// Create property1
+		property1_val = new HashMap<>();
+		property1_val.put("property1.1", property11);
+		property1_val.put("property1.2", collectionAccessors);
+		property1_val.put("propertyMap", mapAccessors);
+		property1_val.put("operations", containedOperations);
+
+		// Create accessor for property1 (-> nested lambda properties)
+		Map<String, Object> property1Accessor = VABLambdaProviderHelper.createMap((Supplier<?>) () -> {
+			return property1_val;
+		}, (Consumer<Map<String, Object>>) (map) -> {
+			property1_val = map;
+		}, (BiConsumer<String, Object>) (key, value) -> {
+			property1_val.put(key, value);
+		}, (Consumer<Object>) (o) -> {
+			property1_val.remove(o);
+		});
 
 		// Create root map
 		Map<String, Object> obj = new HashMap<>();
-		obj.put("property1", property1);
+		obj.put("property1", property1Accessor);
 		obj.put("operations", rootOperations);
 
 		// Build provider

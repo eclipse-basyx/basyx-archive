@@ -130,14 +130,15 @@ public class VABMultiSubmodelProvider<T extends VABHashmapProvider> implements I
 			return null;
 		} else if (pathElements[0].equals("aas")) {
 			if (pathElements.length == 1) {
-				return aas_provider.getElements();
+				return aas_provider.getModelPropertyValue("");
 			}
 			if (pathElements[1].equals("submodels")) {
 				if (pathElements.length == 2) {
 					// Make a list and return all submodels
-					HashSet<Map<String, Object>> submodels = new HashSet<Map<String, Object>>();
-					submodel_providers.values().forEach((T v) -> submodels.add(v.getElements()));
-
+					HashSet<Object> submodels = new HashSet<Object>();
+					for (T submodel : submodel_providers.values()) {
+						submodels.add(submodel.getModelPropertyValue(""));
+					}
 					return submodels;
 				} else {
 					T hashmapProvider = submodel_providers.get(pathElements[2]);

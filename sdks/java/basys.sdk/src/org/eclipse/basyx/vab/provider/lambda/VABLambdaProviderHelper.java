@@ -25,8 +25,8 @@ public class VABLambdaProviderHelper {
 	 */
 	public static Map<String, Object> createSimple(Supplier<Object> get, Consumer<Object> set) {
 		Map<String, Object> value = new HashMap<>();
-		value.put(VABLambdaProvider.VALUE_GET_SUFFIX, get);
-		value.put(VABLambdaProvider.VALUE_SET_SUFFIX, set);
+		value.put(VABLambdaMapHandler.VALUE_GET_SUFFIX, get);
+		value.put(VABLambdaMapHandler.VALUE_SET_SUFFIX, set);
 		return value;
 	}
 
@@ -45,10 +45,10 @@ public class VABLambdaProviderHelper {
 	 */
 	public static Map<String, Object> createMap(Supplier<?> get, Consumer<?> set, BiConsumer<String, Object> insert, Consumer<Object> remove) {
 		Map<String, Object> value = new HashMap<>();
-		value.put(VABLambdaProvider.VALUE_GET_SUFFIX, get);
-		value.put(VABLambdaProvider.VALUE_SET_SUFFIX, set);
-		value.put(VABLambdaProvider.VALUE_REMOVE_SUFFIX, remove);
-		value.put(VABLambdaProvider.VALUE_INSERT_SUFFIX, insert);
+		value.put(VABLambdaMapHandler.VALUE_GET_SUFFIX, get);
+		value.put(VABLambdaMapHandler.VALUE_SET_SUFFIX, set);
+		value.put(VABLambdaMapHandler.VALUE_REMOVE_SUFFIX, remove);
+		value.put(VABLambdaMapHandler.VALUE_INSERT_SUFFIX, insert);
 		return value;
 	}
 
@@ -67,10 +67,10 @@ public class VABLambdaProviderHelper {
 	 */
 	public static Map<String, Object> createCollection(Supplier<?> get, Consumer<?> set, Consumer<Object> insert, Consumer<Object> remove) {
 		Map<String, Object> value = new HashMap<>();
-		value.put(VABLambdaProvider.VALUE_GET_SUFFIX, get);
-		value.put(VABLambdaProvider.VALUE_SET_SUFFIX, set);
-		value.put(VABLambdaProvider.VALUE_REMOVE_SUFFIX, remove);
-		value.put(VABLambdaProvider.VALUE_INSERT_SUFFIX, insert);
+		value.put(VABLambdaMapHandler.VALUE_GET_SUFFIX, get);
+		value.put(VABLambdaMapHandler.VALUE_SET_SUFFIX, set);
+		value.put(VABLambdaMapHandler.VALUE_REMOVE_SUFFIX, remove);
+		value.put(VABLambdaMapHandler.VALUE_INSERT_SUFFIX, insert);
 		return value;
 	}
 }

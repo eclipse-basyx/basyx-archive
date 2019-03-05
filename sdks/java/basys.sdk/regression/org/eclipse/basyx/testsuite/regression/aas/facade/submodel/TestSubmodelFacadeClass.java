@@ -20,9 +20,11 @@ public class TestSubmodelFacadeClass {
 	
 	/**
 	 * Test method
+	 * 
+	 * @throws Exception
 	 */
 	@Test
-	public void testSubmodelFactoryInternalSemantics() {
+	public void testSubmodelFactoryInternalSemantics() throws Exception {
 		// Create a submodel facade
 		SubmodelFacadeCustomSemantics subModel = new SubmodelFacadeCustomSemantics(
 				"", "valIdType",

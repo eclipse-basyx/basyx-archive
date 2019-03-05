@@ -35,7 +35,7 @@ public class SubmodelFacadeCustomSemantics extends SubmodelFacade {
 	 */
 	public SubmodelFacadeCustomSemantics() {
 		// Create sub model
-		this.setElements(new SubModel());
+		super();
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class SubmodelFacadeCustomSemantics extends SubmodelFacade {
 	public SubmodelFacadeCustomSemantics(String semantics, String idType, String id, String idShort, String category, String description, Constraint constraint, HasDataSpecification dataSpecification, String kind, String version,
 			String revision) {
 		// Create sub model
-		this.setElements(new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.Custom)))),
+		super(new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.Custom)))),
 				new Identifiable(version, revision, idShort, category, description, IdentifierType.Custom, id),
 				new Qualifiable(constraint), 
 				dataSpecification,
@@ -120,8 +120,7 @@ public class SubmodelFacadeCustomSemantics extends SubmodelFacade {
 	public SubmodelFacadeCustomSemantics(String semantics, String idType, String id, String idShort, String category, String description, Collection<Constraint> qualifier, Constraint constraint,
 			HasDataSpecification dataSpecification, String kind, String version, String revision) {
 		// Create sub model
-		this.setElements(
-				new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.Custom)))),
+		super(new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.Custom)))),
 						new Identifiable(version, revision, idShort, category, description, idType, id), 
 						new Qualifiable(qualifier), 
 						dataSpecification, 

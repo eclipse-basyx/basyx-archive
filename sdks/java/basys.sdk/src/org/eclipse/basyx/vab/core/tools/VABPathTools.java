@@ -114,6 +114,13 @@ public class VABPathTools {
 	}
 
 	/**
+	 * Check, if the path does not contain any elements.
+	 */
+	public static boolean isEmptyPath(String path) {
+		return path.equals("") || path.equals("/");
+	}
+
+	/**
 	 * Gets the address entry of a path <br />
 	 * E.g. basyx://127.0.0.1:6998//https://localhost/test/ will return
 	 * basyx://127.0.0.1:6998

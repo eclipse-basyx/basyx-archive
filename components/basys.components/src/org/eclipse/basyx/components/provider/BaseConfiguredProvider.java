@@ -51,7 +51,7 @@ public class BaseConfiguredProvider extends VABLambdaProvider {
 		submodelData = createSubModel(cfgValues);
 
 		// Load predefined elements from sub model
-		elements.putAll(submodelData);
+		getElements().putAll(submodelData);
 	}
 	
 	

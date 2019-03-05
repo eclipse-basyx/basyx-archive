@@ -31,7 +31,7 @@ public class SubmodelFacadeIRDISemantics extends SubmodelFacade {
 	 */
 	public SubmodelFacadeIRDISemantics() {
 		// Create sub model
-		this.setElements(new SubModel());
+		super(new SubModel());
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class SubmodelFacadeIRDISemantics extends SubmodelFacade {
 	public SubmodelFacadeIRDISemantics(String semantics, String idType, String id, String idShort, String category, String description, Constraint constraint, HasDataSpecification dataSpecification, String kind, String version,
 			String revision) {
 		// Create sub model
-		this.setElements(new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.IRDI)))),
+		super(new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.IRDI)))),
 				new Identifiable(version, revision, idShort, category, description, IdentifierType.Custom, id), 
 				new Qualifiable(constraint), 
 				dataSpecification,
@@ -116,8 +116,7 @@ public class SubmodelFacadeIRDISemantics extends SubmodelFacade {
 	public SubmodelFacadeIRDISemantics(String semantics, String idType, String id, String idShort, String category, String description, Collection<Constraint> qualifier, Constraint constraint,
 			HasDataSpecification dataSpecification, String kind, String version, String revision) {
 		// Create sub model
-		this.setElements(
-				new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.IRDI)))),
+		super(new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.IRDI)))),
 						new Identifiable(version, revision, idShort, category, description, idType, id), 
 						new Qualifiable(qualifier), 
 						dataSpecification, 

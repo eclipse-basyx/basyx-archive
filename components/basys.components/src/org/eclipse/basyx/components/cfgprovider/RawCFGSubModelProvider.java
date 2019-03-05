@@ -28,8 +28,9 @@ public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 		// Create sub model
 		submodelData = createSubModel(cfgValues);
 
+
 		// Load predefined elements from sub model
-		elements.putAll(submodelData);
+		getElements().putAll(submodelData);
 
 
 		// Load properties
@@ -41,7 +42,7 @@ public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 			String[] path = splitPath((String) key);
 			
 			// Create path
-			Map<String, Object> scope = elements;
+			Map<String, Object> scope = getElements();
 			for (int i=0; i<path.length-1; i++) {
 				if (!scope.containsKey(path[i])) scope.put(path[i], new HashMap<String, Object>()); 
 				scope = (Map<String, Object>) scope.get(path[i]);
