@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.basyx.vab.backend.server.utils.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
+import org.eclipse.basyx.vab.core.tools.VABPathTools;
 
 /**
  * VAB provider class that enables access to an IModelProvider via HTTP REST
@@ -74,25 +76,14 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-		// Process HTTP request
-		String uri = req.getRequestURI();
-		String contextPath = req.getContextPath();
-		String path        = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
-		
-		// Add leading "/" to path if necessary
-		if (!path.startsWith("/")) path = "/"+path;
-		
-		// Decode URL 
-		path = java.net.URLDecoder.decode(path, "UTF-8");
+		String path = extractPath(req);
 
 		// Setup HTML response header
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-		
+
 		// Process get request
 		providerBackend.processBaSysGet(path, resp.getWriter());
-
 	}
 
 	/**
@@ -100,27 +91,9 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// Extract path
-		String uri = req.getRequestURI();
-		String contextPath = req.getContextPath();
-		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
-		
-		// Add leading "/" to path if necessary
-		if (!path.startsWith("/")) path = "/"+path;
-		
-		// Decode URL 
-		path = java.net.URLDecoder.decode(path, "UTF-8");
-				
-		// Read request body
-		InputStreamReader reader = new InputStreamReader(req.getInputStream());
-		BufferedReader bufReader = new BufferedReader(reader);
-		StringBuilder serValue = new StringBuilder();
-		while (bufReader.ready())
-			serValue.append(bufReader.readLine());
-		
-		// Set value of BaSys VAB element
+		String path = extractPath(req);
+		String serValue = extractSerializedValue(req);
 		providerBackend.processBaSysSet(path, serValue.toString(), resp.getWriter());
-
 	}
 
 	/**
@@ -130,31 +103,21 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-		// Extract path
-		String uri = req.getRequestURI();
-		String contextPath = req.getContextPath();
-		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
-		
-		// Add leading "/" to path if necessary
-		if (!path.startsWith("/")) path = "/"+path;
-		
-		// Decode URL 
-		path = java.net.URLDecoder.decode(path, "UTF-8");
-
-		// Read posted parameter
-		InputStreamReader reader = new InputStreamReader(req.getInputStream());
-		BufferedReader bufReader = new BufferedReader(reader);
-		StringBuilder serValue = new StringBuilder();
-		while (bufReader.ready()) {
-			serValue.append(bufReader.readLine());
-		}
+		String path = extractPath(req);
+		String serValue = extractSerializedValue(req);
 
 		// Setup HTML response header
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-		
-		providerBackend.processBaSysPost(path, serValue.toString(), resp.getWriter());
+
+		// Check if request is for property creation or operation invoke
+		if (VABPathTools.isOperationPath(path)) {
+			// Invoke BaSys VAB 'invoke' primitive
+			providerBackend.processBaSysInvoke(path, serValue, resp.getWriter());
+		} else {
+			// Invoke the BaSys 'create' primitive
+			providerBackend.processBaSysCreate(path, serValue, resp.getWriter());
+		}
 	}
 
 	/**
@@ -163,25 +126,9 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// Extract path
-		String uri = req.getRequestURI();
-		String contextPath = req.getContextPath();
-		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
-		
-		// Add leading "/" to path if necessary
-		if (!path.startsWith("/")) path = "/"+path;
-		
-		// Decode URL 
-		path = java.net.URLDecoder.decode(path, "UTF-8");
-		
-		// Read request body
-		InputStreamReader reader = new InputStreamReader(req.getInputStream());
-		BufferedReader bufReader = new BufferedReader(reader);
-		StringBuilder serValue = new StringBuilder();
-		while (bufReader.ready())
-			serValue.append(bufReader.readLine());
-				
-		providerBackend.processBaSysDelete(path, serValue.toString(), resp.getWriter());
+		String path = extractPath(req);
+		String serValue = extractSerializedValue(req);
+		providerBackend.processBaSysDelete(path, serValue, resp.getWriter());
 	}
 
 	/**
@@ -189,20 +136,39 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String path = extractPath(req);
+
+		// No parameter to read! Provide serialized null
+		String nullParam = "{\"basystype\":\"null\"}";
+
+		providerBackend.processBaSysDelete(path, nullParam, resp.getWriter());
+	}
+
+	private String extractPath(HttpServletRequest req) throws UnsupportedEncodingException {
 		// Extract path
 		String uri = req.getRequestURI();
 		String contextPath = req.getContextPath();
 		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
-		
+
 		// Add leading "/" to path if necessary
-		if (!path.startsWith("/")) path = "/"+path;
-		
-		// Decode URL 
+		if (!path.startsWith("/")) {
+			path = "/" + path;
+		}
+
+		// Decode URL
 		path = java.net.URLDecoder.decode(path, "UTF-8");
-		
-		// No parameter to read! Provide serialized null
-		String nullParam = "{\"basystype\":\"null\"}";
-		
-		providerBackend.processBaSysDelete(path, nullParam, resp.getWriter()); 
+
+		return path;
+	}
+
+	private String extractSerializedValue(HttpServletRequest req) throws IOException {
+		// Read request body
+		InputStreamReader reader = new InputStreamReader(req.getInputStream());
+		BufferedReader bufReader = new BufferedReader(reader);
+		StringBuilder serValue = new StringBuilder();
+		while (bufReader.ready()) {
+			serValue.append(bufReader.readLine());
+		}
+		return serValue.toString();
 	}
 }

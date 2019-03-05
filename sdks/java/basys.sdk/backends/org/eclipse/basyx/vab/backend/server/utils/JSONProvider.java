@@ -8,7 +8,6 @@ import org.eclipse.basyx.aas.api.exception.LostHTTPRequestParameterException;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.vab.core.IModelProvider;
-import org.eclipse.basyx.vab.core.tools.VABPathTools;
 
 /**
  * Provider class that supports JSON serialized communication <br/>
@@ -187,33 +186,6 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 		} catch (Exception e) {
 			sendException(outputStream, e);
 		}
-	}
-
-	/**
-	 * Process a BaSys invoke or create operation FIXME this is a HTTP specific function
-	 * 
-	 * @param path
-	 * @param serializedJSONValue
-	 * @param outputStream
-	 */
-	public void processBaSysPost(String path, String serializedJSONValue, PrintWriter outputStream) {
-
-		// Invoke provider backend
-		try {
-			// Check if request is for property creation or operation invoke
-			if (VABPathTools.isOperationPath(path)) {
-
-				// Invoke BaSys VAB 'invoke' primitive
-				processBaSysInvoke(path, serializedJSONValue, outputStream);
-
-			} else {
-				// Invoke the BaSys 'create' primitive
-				processBaSysCreate(path, serializedJSONValue, outputStream);
-			}
-		} catch (Exception e) {
-			sendException(outputStream, e);
-		}
-
 	}
 
 	/**

@@ -180,7 +180,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			int jsonValueLen = CoderTools.getInt32(rxFrame, 1 + 4 + pathLen);
 			String jsonValue = new String(rxFrame, 1 + 4 + pathLen + 4, jsonValueLen);
 			// Invoke get operation
-			providerBackend.processBaSysPost(path, jsonValue, output);
+			providerBackend.processBaSysInvoke(path, jsonValue, output);
 
 			// Send response frame
 			sendResponseFrame(byteArrayOutput);
