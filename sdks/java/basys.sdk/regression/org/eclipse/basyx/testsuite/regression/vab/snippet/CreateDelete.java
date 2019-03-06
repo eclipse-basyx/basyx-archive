@@ -39,6 +39,12 @@ public class CreateDelete {
 		connVABElement.createElement("property1/property1.2", 23);
 		// - Check case-sensitivity
 		connVABElement.createElement("Property2", 26);
+		// - Try to overwrite existing property in a Map (should be ignored, already exists)
+		connVABElement.createElement("property2", 24);
+		// - Create a list property
+		connVABElement.createElement("property1/propertyList", new Integer[] { 25 });
+		// - Try to overwrite existing property in a List (should be ignored, already exists)
+		connVABElement.createElement("property1/propertyList/byRef_0", 26);
 
 		// Read values back
 		Object value3 = connVABElement.readElementValue("property2");
@@ -59,10 +65,21 @@ public class CreateDelete {
 		Collection<Object> value5Collection = (Collection<Object>) ((Collection<?>) value5);
 		assertEquals(3, value5Collection.size());
 
+		// Read values back
+		Object valueList = connVABElement.readElementValue("property1/propertyList");
+		Object valueListRef = connVABElement.readElementValue("property1/propertyList/byRef_0");
+		// - Check test case results
+		assertTrue(valueList instanceof Collection);
+		Collection<Object> valueListCollection = (Collection<Object>) ((Collection<?>) valueList);
+		assertEquals(1, valueListCollection.size());
+		assertTrue(valueListRef instanceof Integer);
+		assertEquals(25, valueListRef);
+
 		// Delete properties
 		connVABElement.deleteElement("property2");
 		connVABElement.deleteElement("property1/property1.4");
 		connVABElement.deleteElement("property1/property1.2", 23);
+		connVABElement.deleteElement("property1/propertyList");
 
 		// Read values back
 		Object value6 = connVABElement.readElementValue("property2");
@@ -79,6 +96,11 @@ public class CreateDelete {
 		// - Check test case results
 		assertTrue(value8 instanceof Collection);
 		assertEquals(2, ((Collection<?>) value8).size());
+
+		// Read values back
+		Object value9 = connVABElement.readElementValue("property1/propertyList");
+		// - Check test case results
+		assertEquals(null, value9);
 
 		// Read values back
 		Object value10 = connVABElement.readElementValue("Property2");

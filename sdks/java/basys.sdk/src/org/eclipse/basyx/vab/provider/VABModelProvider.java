@@ -1,6 +1,5 @@
 package org.eclipse.basyx.vab.provider;
 
-import java.util.Collection;
 import java.util.function.Function;
 
 import org.eclipse.basyx.vab.core.IModelProvider;
@@ -37,6 +36,7 @@ public class VABModelProvider implements IModelProvider {
 		String propertyName = VABPathTools.getLastElement(path);
 		if (parentElement != null && propertyName != null) {
 			return handler.postprocessObject(handler.getElementProperty(parentElement, propertyName));
+
 		}
 		return null;
 	}
@@ -58,10 +58,10 @@ public class VABModelProvider implements IModelProvider {
 		if (parentElement != null && propertyName != null) {
 			newValue = handler.preprocessObject(newValue);
 			Object childElement = handler.getElementProperty(parentElement, propertyName);
-			if (handler.postprocessObject(childElement) instanceof Collection) {
-				handler.createValue(childElement, newValue);
-			} else {
+			if (childElement == null) {
 				handler.setModelPropertyValue(parentElement, propertyName, newValue);
+			} else {
+				handler.createValue(childElement, newValue);
 			}
 		}
 	}
