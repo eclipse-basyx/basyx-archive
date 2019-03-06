@@ -74,7 +74,7 @@ public class TestMapProperty {
 		assertTrue(map.containsKey("a"));
 
 		// Remove entry again
-		connVABElement.deleteElement(mapPath, "a");
+		connVABElement.deleteElement(mapPath + "/a");
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class TestMapProperty {
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 
 		// Remove entry from map
-		connVABElement.deleteElement(mapPath, "test");
+		connVABElement.deleteElement(mapPath + "/test");
 
 		// Read values back
 		Map<String, Object> map = (Map<String, Object>) connVABElement.readElementValue(mapPath);
@@ -95,7 +95,7 @@ public class TestMapProperty {
 		assertEquals(1, map.size());
 
 		// Remove entry from map
-		connVABElement.deleteElement(mapPath, "Test");
+		connVABElement.deleteElement(mapPath + "/Test");
 
 		// Read values back
 		map = (Map<String, Object>) connVABElement.readElementValue(mapPath);

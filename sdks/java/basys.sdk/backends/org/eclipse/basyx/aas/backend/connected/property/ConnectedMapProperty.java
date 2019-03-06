@@ -57,7 +57,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	@Override
 	public void remove(String key) throws ServerException, TypeMismatchException {
 		try {
-			getProxy().deleteElement(constructPath("value"), key);
+			getProxy().deleteElement(constructPath("value/" + key));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

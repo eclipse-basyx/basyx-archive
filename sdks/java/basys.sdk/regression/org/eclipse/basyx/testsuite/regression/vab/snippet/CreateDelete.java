@@ -35,6 +35,8 @@ public class CreateDelete {
 		connVABElement.createElement("property2", 21);
 		// - Create property in contained hashmap
 		connVABElement.createElement("property1/property1.4", 22);
+		// - Try to delete key from map (should be ignored)
+		connVABElement.deleteElement("property1", "property1.4");
 		// - Create property in collection in contained hashmap
 		connVABElement.createElement("property1/property1.2", 23);
 		// - Create property in collection in contained hashmap

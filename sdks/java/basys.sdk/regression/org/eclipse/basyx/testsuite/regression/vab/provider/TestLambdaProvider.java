@@ -95,7 +95,6 @@ public class TestLambdaProvider {
 		}, (BiConsumer<String, Object>) (key, value) -> {
 			propertyMap_val.put(key, value);
 		}, (Consumer<Object>) (o) -> {
-			propertyMap_val.remove(o);
 		}, (Consumer<String>) (key) -> {
 			propertyMap_val.remove(key);
 		});
@@ -145,7 +144,6 @@ public class TestLambdaProvider {
 		}, (BiConsumer<String, Object>) (key, value) -> {
 			property1_val.put(key, value);
 		}, (Consumer<Object>) (o) -> {
-			property1_val.remove(o);
 		}, (Consumer<String>) (key) -> {
 			property1_val.remove(key);
 		});

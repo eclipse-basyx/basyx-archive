@@ -50,10 +50,5 @@ public class VABMapHandler implements IVABElementHandler {
 
 	@Override
 	public void deleteValue(Object element, Object property) throws Exception {
-		if (element instanceof Map<?, ?>) {
-			if (property instanceof String) {
-				deleteValue(element, (String) property);
-			}
-		}
 	}
 }

@@ -109,7 +109,7 @@ public class TestRawCFGProviderSimpleValues {
 
 		
 		// Delete element
-		connSubModel.deleteElement("/aas/submodels/rawSampleCFG/cfgProperty4", "newMetaData2");
+		connSubModel.deleteElement("/aas/submodels/rawSampleCFG/cfgProperty4/newMetaData2");
 		// - Read element value back and make sure that element is deleted
 		Object value4h = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/cfgProperty4/newMetaData2");
 		assertTrue(value4h == null);
