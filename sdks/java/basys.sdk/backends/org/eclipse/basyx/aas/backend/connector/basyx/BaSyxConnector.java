@@ -29,7 +29,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 	/**
 	 * Invoke a BaSyx operation in a remote provider
 	 */
-	protected String invokeBaSyx(byte[] call) {
+	protected synchronized String invokeBaSyx(byte[] call) {
 		// Catch exceptions
 		try {
 			// Input and output streams
