@@ -1,6 +1,5 @@
 package org.eclipse.basyx.testsuite.regression.vab.provider;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +13,7 @@ import org.eclipse.basyx.aas.backend.connector.ConnectorProvider;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.CreateDelete;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.GetPropertyValue;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.Invoke;
+import org.eclipse.basyx.testsuite.regression.vab.snippet.ListReferences;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.SetPropertyValue;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.TestCollectionProperty;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.TestMapProperty;
@@ -22,6 +22,7 @@ import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
+import org.eclipse.basyx.vab.provider.list.ReferencedArrayList;
 import org.junit.Test;
 
 /**
@@ -43,7 +44,7 @@ public class TestLambdaProvider {
 	static Map<String, Object> propertyMap_val;
 
 	// Representative of the value of propertyMap
-	static Collection<Object> propertyCollection_val;
+	static ReferencedArrayList<Object> propertyCollection_val;
 
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(), new ConnectorProvider() {
 
@@ -61,7 +62,7 @@ public class TestLambdaProvider {
 		propertyMap_val.put("test", 123);
 		propertyMap_val.put("Test", 321);
 
-		propertyCollection_val = new ArrayList<>();
+		propertyCollection_val = new ReferencedArrayList<>();
 		propertyCollection_val.add(1);
 		propertyCollection_val.add(2);
 
@@ -74,11 +75,16 @@ public class TestLambdaProvider {
 		Map<String, Object> collectionAccessors = VABLambdaProviderHelper.createCollection((Supplier<Object>) () -> {
 			return propertyCollection_val;
 		}, (Consumer<Collection<Object>>) (collection) -> {
-			propertyCollection_val = collection;
+			propertyCollection_val = new ReferencedArrayList<>(collection);
 		}, (Consumer<Object>) (value) -> {
 			propertyCollection_val.add(value);
-		}, (Consumer<Object>) (o) -> {
-			propertyCollection_val.remove(o);
+		}, (Consumer<Object>) (object) -> {
+			propertyCollection_val.remove(object);
+		}, (Consumer<String>) (key) -> {
+			String refName = key.substring("byRef_".length());
+			Integer reference = Integer.valueOf(refName);
+			Object object = propertyCollection_val.getByReference(reference);
+			propertyCollection_val.remove(object);
 		});
 
 		// Create accessors for map property propertyMap
@@ -90,6 +96,8 @@ public class TestLambdaProvider {
 			propertyMap_val.put(key, value);
 		}, (Consumer<Object>) (o) -> {
 			propertyMap_val.remove(o);
+		}, (Consumer<String>) (key) -> {
+			propertyMap_val.remove(key);
 		});
 
 		// Build contained operations
@@ -138,6 +146,8 @@ public class TestLambdaProvider {
 			property1_val.put(key, value);
 		}, (Consumer<Object>) (o) -> {
 			property1_val.remove(o);
+		}, (Consumer<String>) (key) -> {
+			property1_val.remove(key);
 		});
 
 		// Create root map
@@ -169,6 +179,11 @@ public class TestLambdaProvider {
 	@Test
 	public void testSet() {
 		SetPropertyValue.test(connManager);
+	}
+
+	@Test
+	public void testListReferences() {
+		ListReferences.test(connManager);
 	}
 
 	@Test

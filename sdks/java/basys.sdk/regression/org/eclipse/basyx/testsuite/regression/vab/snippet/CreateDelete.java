@@ -12,7 +12,7 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * Snippet to test create and delete functionality of a IModelProvider
  * 
- * @author kuhn, schnicke
+ * @author kuhn, schnicke, espen
  *
  */
 public class CreateDelete {
@@ -37,6 +37,8 @@ public class CreateDelete {
 		connVABElement.createElement("property1/property1.4", 22);
 		// - Create property in collection in contained hashmap
 		connVABElement.createElement("property1/property1.2", 23);
+		// - Create property in collection in contained hashmap
+		connVABElement.createElement("property1/property1.2", 28);
 		// - Check case-sensitivity
 		connVABElement.createElement("Property2", 26);
 		// - Try to overwrite existing property in a Map (should be ignored, already exists)
@@ -63,7 +65,7 @@ public class CreateDelete {
 		// - Check test case results
 		assertTrue(value5 instanceof Collection);
 		Collection<Object> value5Collection = (Collection<Object>) ((Collection<?>) value5);
-		assertEquals(3, value5Collection.size());
+		assertEquals(4, value5Collection.size());
 
 		// Read values back
 		Object valueList = connVABElement.readElementValue("property1/propertyList");
@@ -78,8 +80,14 @@ public class CreateDelete {
 		// Delete properties
 		connVABElement.deleteElement("property2");
 		connVABElement.deleteElement("property1/property1.4");
-		connVABElement.deleteElement("property1/property1.2", 23);
 		connVABElement.deleteElement("property1/propertyList");
+
+		// Remove list elements (by reference and by object)
+		Integer[] references = (Integer[]) connVABElement.readElementValue("property1/property1.2/references");
+		int lastReference = references[references.length - 1];
+		connVABElement.deleteElement("property1/property1.2", 23);
+		connVABElement.deleteElement("property1/property1.2/byRef_" + lastReference);
+
 
 		// Read values back
 		Object value6 = connVABElement.readElementValue("property2");

@@ -3,7 +3,7 @@ package org.eclipse.basyx.vab.provider.lambda;
 import java.util.Map;
 
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
-import org.eclipse.basyx.vab.provider.VABMultiElementHandler;
+import org.eclipse.basyx.vab.provider.hashmap.VABMapHandler;
 import org.eclipse.basyx.vab.provider.list.VABListHandler;
 
 /**
@@ -21,6 +21,6 @@ import org.eclipse.basyx.vab.provider.list.VABListHandler;
  */
 public class VABLambdaProvider extends VABHashmapProvider {
 	public VABLambdaProvider(Map<String, Object> elements) {
-		super((Map<String, Object>) elements, new VABMultiElementHandler(new VABLambdaMapHandler(), new VABListHandler()));
+		super(elements, new VABLambdaHandler(new VABMapHandler(), new VABListHandler()));
 	}
 }

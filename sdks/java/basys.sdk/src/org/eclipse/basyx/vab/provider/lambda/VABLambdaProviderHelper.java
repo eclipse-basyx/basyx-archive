@@ -10,7 +10,7 @@ import java.util.function.Supplier;
  * Helper class which allows to easily create properties as processed by the
  * {@link org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider}
  * 
- * @author schnicke
+ * @author schnicke, espen
  *
  */
 public class VABLambdaProviderHelper {
@@ -25,8 +25,8 @@ public class VABLambdaProviderHelper {
 	 */
 	public static Map<String, Object> createSimple(Supplier<Object> get, Consumer<Object> set) {
 		Map<String, Object> value = new HashMap<>();
-		value.put(VABLambdaMapHandler.VALUE_GET_SUFFIX, get);
-		value.put(VABLambdaMapHandler.VALUE_SET_SUFFIX, set);
+		value.put(VABLambdaHandler.VALUE_GET_SUFFIX, get);
+		value.put(VABLambdaHandler.VALUE_SET_SUFFIX, set);
 		return value;
 	}
 
@@ -39,16 +39,20 @@ public class VABLambdaProviderHelper {
 	 *            Method used to set the map
 	 * @param insert
 	 *            Method used to insert an element into the map
-	 * @param remove
-	 *            Method used to remove an element from the map
+	 * @param removeObject
+	 *            Method used to remove an object from the map
+	 * @param removeKey
+	 *            Method used to remove a key from the map
 	 * @return
 	 */
-	public static Map<String, Object> createMap(Supplier<?> get, Consumer<?> set, BiConsumer<String, Object> insert, Consumer<Object> remove) {
+	public static Map<String, Object> createMap(Supplier<?> get, Consumer<?> set, BiConsumer<String, Object> insert,
+			Consumer<Object> removeObject, Consumer<String> removeKey) {
 		Map<String, Object> value = new HashMap<>();
-		value.put(VABLambdaMapHandler.VALUE_GET_SUFFIX, get);
-		value.put(VABLambdaMapHandler.VALUE_SET_SUFFIX, set);
-		value.put(VABLambdaMapHandler.VALUE_REMOVE_SUFFIX, remove);
-		value.put(VABLambdaMapHandler.VALUE_INSERT_SUFFIX, insert);
+		value.put(VABLambdaHandler.VALUE_GET_SUFFIX, get);
+		value.put(VABLambdaHandler.VALUE_SET_SUFFIX, set);
+		value.put(VABLambdaHandler.VALUE_REMOVEOBJ_SUFFIX, removeObject);
+		value.put(VABLambdaHandler.VALUE_REMOVEKEY_SUFFIX, removeKey);
+		value.put(VABLambdaHandler.VALUE_INSERT_SUFFIX, insert);
 		return value;
 	}
 
@@ -60,17 +64,21 @@ public class VABLambdaProviderHelper {
 	 * @param set
 	 *            Method used to set the collection
 	 * @param insert
-	 *            Method used to insert an element into the collection
-	 * @param remove
-	 *            Method used to remove an element from the collection
+	 *            Method used to insert an element into the map
+	 * @param removeObject
+	 *            Method used to remove an object from the map
+	 * @param removeKey
+	 *            Method used to remove a key from the map
 	 * @return
 	 */
-	public static Map<String, Object> createCollection(Supplier<?> get, Consumer<?> set, Consumer<Object> insert, Consumer<Object> remove) {
+	public static Map<String, Object> createCollection(Supplier<?> get, Consumer<?> set, Consumer<Object> insert,
+			Consumer<Object> removeObject, Consumer<String> removeKey) {
 		Map<String, Object> value = new HashMap<>();
-		value.put(VABLambdaMapHandler.VALUE_GET_SUFFIX, get);
-		value.put(VABLambdaMapHandler.VALUE_SET_SUFFIX, set);
-		value.put(VABLambdaMapHandler.VALUE_REMOVE_SUFFIX, remove);
-		value.put(VABLambdaMapHandler.VALUE_INSERT_SUFFIX, insert);
+		value.put(VABLambdaHandler.VALUE_GET_SUFFIX, get);
+		value.put(VABLambdaHandler.VALUE_SET_SUFFIX, set);
+		value.put(VABLambdaHandler.VALUE_REMOVEOBJ_SUFFIX, removeObject);
+		value.put(VABLambdaHandler.VALUE_REMOVEKEY_SUFFIX, removeKey);
+		value.put(VABLambdaHandler.VALUE_INSERT_SUFFIX, insert);
 		return value;
 	}
 }

@@ -11,7 +11,7 @@ import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLQuery;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLRunner;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLUpdate;
-import org.eclipse.basyx.vab.provider.lambda.VABLambdaMapHandler;
+import org.eclipse.basyx.vab.provider.lambda.VABLambdaHandler;
 
 
 
@@ -193,7 +193,7 @@ public class SQLSubModelProvider extends BaseConfiguredProvider {
 			try {resultFilterOp = resultFilterOp.substring(1, resultFilterOp.length()-1);} catch (NullPointerException | StringIndexOutOfBoundsException e) {}
 
 			// Create dynamic SQL query
-			value.put(VABLambdaMapHandler.VALUE_GET_SUFFIX, new DynamicSQLQuery(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, queryString, resultFilterOp));
+			value.put(VABLambdaHandler.VALUE_GET_SUFFIX, new DynamicSQLQuery(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, queryString, resultFilterOp));
 		}
 		
 		// Set operation
@@ -205,7 +205,7 @@ public class SQLSubModelProvider extends BaseConfiguredProvider {
 			updateString    = updateString.substring(1, updateString.length()-1);
 
 			// Create dynamic SQL query
-			value.put(VABLambdaMapHandler.VALUE_SET_SUFFIX, new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, updateString));
+			value.put(VABLambdaHandler.VALUE_SET_SUFFIX, new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, updateString));
 		}
 
 		// Delete operation
@@ -217,7 +217,8 @@ public class SQLSubModelProvider extends BaseConfiguredProvider {
 			updateString    = updateString.substring(1, updateString.length()-1);
 
 			// Create dynamic SQL query
-			value.put(VABLambdaMapHandler.VALUE_REMOVE_SUFFIX, new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, updateString));
+			value.put(VABLambdaHandler.VALUE_REMOVEKEY_SUFFIX, new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, updateString));
+			value.put(VABLambdaHandler.VALUE_REMOVEOBJ_SUFFIX, new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, updateString));
 		}
 		
 		// Create operation
@@ -229,7 +230,7 @@ public class SQLSubModelProvider extends BaseConfiguredProvider {
 			updateString    = updateString.substring(1, updateString.length()-1);
 
 			// Create dynamic SQL query
-			value.put(VABLambdaMapHandler.VALUE_INSERT_SUFFIX, new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, updateString));
+			value.put(VABLambdaHandler.VALUE_INSERT_SUFFIX, new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, updateString));
 		}
 		
 		

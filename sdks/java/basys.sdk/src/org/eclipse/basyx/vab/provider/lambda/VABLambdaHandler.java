@@ -8,24 +8,30 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.eclipse.basyx.vab.provider.hashmap.VABMapHandler;
+import org.eclipse.basyx.vab.provider.IVABElementHandler;
+import org.eclipse.basyx.vab.provider.VABMultiElementHandler;
 
 /**
- * VABMapHandler that can additionally handle maps with hidden
+ * VABHandler that can additionally handle maps with hidden
  * get/set/delete/invoke properties.
  * 
  * @author schnicke, espen
  *
  */
-public class VABLambdaMapHandler extends VABMapHandler {
+public class VABLambdaHandler extends VABMultiElementHandler {
 	public static final String VALUE_SET_SUFFIX = "set";
 	public static final String VALUE_GET_SUFFIX = "get";
 	public static final String VALUE_INSERT_SUFFIX = "insert";
-	public static final String VALUE_REMOVE_SUFFIX = "remove";
+	public static final String VALUE_REMOVEKEY_SUFFIX = "removeKey";
+	public static final String VALUE_REMOVEOBJ_SUFFIX = "removeObject";
+
+	public VABLambdaHandler(IVABElementHandler... handlers) {
+		super(handlers);
+	}
 
 	@Override
-	public Object postprocessObject(Object object) {
-		return resolveAll(object);
+	public Object postprocessObject(Object element) {
+		return super.postprocessObject(resolveAll(element));
 	}
 
 	@Override
@@ -60,8 +66,8 @@ public class VABLambdaMapHandler extends VABMapHandler {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void deleteValue(Object element, String propertyName) throws Exception {
-		if (hasHiddenRemover(element)) {
-			Consumer<Object> c = (Consumer<Object>) ((Map<Object, Object>) element).get(VALUE_REMOVE_SUFFIX);
+		if (hasHiddenKeyRemover(element)) {
+			Consumer<String> c = (Consumer<String>) ((Map<String, Object>) element).get(VALUE_REMOVEKEY_SUFFIX);
 			c.accept(propertyName);
 		} else {
 			super.deleteValue(element, propertyName);
@@ -71,8 +77,8 @@ public class VABLambdaMapHandler extends VABMapHandler {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void deleteValue(Object element, Object property) throws Exception {
-		if (hasHiddenRemover(element)) {
-			Consumer<Object> c = (Consumer<Object>) ((Map<Object, Object>) element).get(VALUE_REMOVE_SUFFIX);
+		if (hasHiddenObjectRemover(element)) {
+			Consumer<Object> c = (Consumer<Object>) ((Map<String, Object>) element).get(VALUE_REMOVEOBJ_SUFFIX);
 			c.accept(property);
 		} else {
 			super.deleteValue(element, property);
@@ -131,10 +137,20 @@ public class VABLambdaMapHandler extends VABMapHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	private boolean hasHiddenRemover(Object elem) {
+	private boolean hasHiddenObjectRemover(Object elem) {
 		if (elem instanceof Map<?, ?>) {
 			Map<String, Object> map = (Map<String, Object>) elem;
-			Object o = map.get(VALUE_REMOVE_SUFFIX);
+			Object o = map.get(VALUE_REMOVEOBJ_SUFFIX);
+			return o instanceof Consumer<?>;
+		}
+		return false;
+	}
+
+	@SuppressWarnings("unchecked")
+	private boolean hasHiddenKeyRemover(Object elem) {
+		if (elem instanceof Map<?, ?>) {
+			Map<String, Object> map = (Map<String, Object>) elem;
+			Object o = map.get(VALUE_REMOVEKEY_SUFFIX);
 			return o instanceof Consumer<?>;
 		}
 		return false;
