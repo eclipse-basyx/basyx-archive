@@ -1,6 +1,5 @@
 package org.eclipse.basyx.vab.provider.hashmap;
 
-import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.basyx.vab.provider.IVABElementHandler;
@@ -36,12 +35,8 @@ public class VABMapHandler implements IVABElementHandler {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void createValue(Object element, Object newValue) throws Exception {
-		if (element instanceof Collection<?>) {
-			((Collection<Object>) element).add(newValue);
-		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -59,8 +54,6 @@ public class VABMapHandler implements IVABElementHandler {
 			if (property instanceof String) {
 				deleteValue(element, (String) property);
 			}
-		} else if (element instanceof Collection<?>) {
-			((Collection<?>) element).remove(property);
 		}
 	}
 }

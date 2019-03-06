@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,7 +89,9 @@ public class TestConnectedMapProperty {
 	@Test
 	public void testSet() throws Exception {
 		// Set the contained map to {"success": 10 }
-		prop.set(Collections.singletonMap("success", 10));
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("success", 10);
+		prop.set(map);
 
 		// Check number of elements
 		assertEquals(1, (int) prop.getEntryCount());

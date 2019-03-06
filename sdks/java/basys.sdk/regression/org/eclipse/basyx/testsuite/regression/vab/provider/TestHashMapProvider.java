@@ -4,6 +4,7 @@ import org.eclipse.basyx.aas.backend.connector.ConnectorProvider;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.CreateDelete;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.GetPropertyValue;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.Invoke;
+import org.eclipse.basyx.testsuite.regression.vab.snippet.ListReferences;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.SetPropertyValue;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.TestCollectionProperty;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.TestMapProperty;
@@ -52,6 +53,11 @@ public class TestHashMapProvider {
 	@Test
 	public void testSet() {
 		SetPropertyValue.test(connManager);
+	}
+
+	@Test
+	public void testListReferences() {
+		ListReferences.test(connManager);
 	}
 
 	@Test
