@@ -29,7 +29,7 @@ public class TestMapProperty {
 		Map<String, Object> map = (Map<String, Object>) connVABElement.readElementValue(mapPath);
 
 		// Check test case results
-		assertEquals(1, map.size());
+		assertEquals(2, map.size());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -69,7 +69,7 @@ public class TestMapProperty {
 		Map<String, Object> map = (Map<String, Object>) connVABElement.readElementValue(mapPath);
 
 		// Check test case results
-		assertEquals(2, map.size());
+		assertEquals(3, map.size());
 		assertTrue(map.containsKey("test"));
 		assertTrue(map.containsKey("a"));
 
@@ -92,9 +92,19 @@ public class TestMapProperty {
 		Map<String, Object> map = (Map<String, Object>) connVABElement.readElementValue(mapPath);
 
 		// Check test case results
+		assertEquals(1, map.size());
+
+		// Remove entry from map
+		connVABElement.deleteElement(mapPath, "Test");
+
+		// Read values back
+		map = (Map<String, Object>) connVABElement.readElementValue(mapPath);
+
+		// Check test case results
 		assertEquals(0, map.size());
 
 		// Put entry back
 		connVABElement.createElement(mapPath + "/test", 123);
+		connVABElement.createElement(mapPath + "/Test", 321);
 	}
 }

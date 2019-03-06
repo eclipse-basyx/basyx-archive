@@ -59,6 +59,7 @@ public class TestLambdaProvider {
 
 		propertyMap_val = new HashMap<>();
 		propertyMap_val.put("test", 123);
+		propertyMap_val.put("Test", 321);
 
 		propertyCollection_val = new ArrayList<>();
 		propertyCollection_val.add(1);

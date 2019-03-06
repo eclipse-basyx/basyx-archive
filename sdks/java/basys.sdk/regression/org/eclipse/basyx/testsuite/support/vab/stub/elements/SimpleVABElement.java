@@ -34,6 +34,7 @@ public class SimpleVABElement extends HashMap<String, Object> {
 
 		Map<String, Object> prop = new HashMap<>();
 		prop.put("test", 123);
+		prop.put("Test", 321);
 		containedElement.put("propertyMap", prop);
 
 		// Create operation maps

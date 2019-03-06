@@ -29,6 +29,9 @@ public class Invoke {
 
 		assertNull(nullValue);
 
+		// Invoke non-existing operation
+		Object value3 = connVABElement.invoke("operations/Operation1", 1, 2);
+		assertEquals(null, value3);
 		// Invoke operations that throw Exceptions
 		try {
 			connVABElement.invoke("operations/operationEx1");

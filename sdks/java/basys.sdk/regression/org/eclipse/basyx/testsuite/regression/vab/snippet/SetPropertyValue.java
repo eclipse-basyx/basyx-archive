@@ -19,18 +19,25 @@ public class SetPropertyValue {
 
 		// Set and reread property value
 		connVABElement.updateElementValue("property1/property1.1", 12);
+		connVABElement.updateElementValue("property1/Property1.1", 100);
 		Object value3 = connVABElement.readElementValue("property1/property1.1");
+		Object value4 = connVABElement.readElementValue("property1/Property1.1");
 
 		// Check test case results
 		assertTrue(value3 instanceof Integer);
 		assertEquals(12, value3);
+		assertTrue(value4 instanceof Integer);
+		assertEquals(100, value4);
 
-		// Change value back
+		// Change values back
 		connVABElement.updateElementValue("property1/property1.1", 7);
-		Object value4 = connVABElement.readElementValue("property1/property1.1");
+		connVABElement.deleteElement("property1/Property1.1");
+		Object value5 = connVABElement.readElementValue("property1/property1.1");
+		Object value6 = connVABElement.readElementValue("property1/Property1.1");
 
 		// Check test case results
-		assertTrue(value4 instanceof Integer);
-		assertEquals(7, value4);
+		assertTrue(value5 instanceof Integer);
+		assertEquals(7, value5);
+		assertEquals(null, value6);
 	}
 }

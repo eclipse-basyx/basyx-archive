@@ -37,6 +37,8 @@ public class CreateDelete {
 		connVABElement.createElement("property1/property1.4", 22);
 		// - Create property in collection in contained hashmap
 		connVABElement.createElement("property1/property1.2", 23);
+		// - Check case-sensitivity
+		connVABElement.createElement("Property2", 26);
 
 		// Read values back
 		Object value3 = connVABElement.readElementValue("property2");
@@ -77,5 +79,13 @@ public class CreateDelete {
 		// - Check test case results
 		assertTrue(value8 instanceof Collection);
 		assertEquals(2, ((Collection<?>) value8).size());
+
+		// Read values back
+		Object value10 = connVABElement.readElementValue("Property2");
+		// Check test case results
+		assertEquals(26, value10);
+
+		// Delete remaining property
+		connVABElement.deleteElement("Property2");
 	}
 }
