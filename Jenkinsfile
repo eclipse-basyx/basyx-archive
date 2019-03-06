@@ -9,9 +9,17 @@ spec:
   containers:
   - name: maven
     image: maven:alpine
-    command:
+    resources:
+	  requests:
+		memory: "2Gi"
+		cpu: "1"
+	  limits:
+		memory: "2Gi"
+		cpu: "1"
+	command:
     - cat
     tty: true
+	
 """
     }
   }
