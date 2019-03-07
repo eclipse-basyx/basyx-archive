@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
  * @author kuhn
  *
  */
-public class SerializeDeserializeCollection {
+public class TestSerializeDeserializeCollection {
 
 
 	/**

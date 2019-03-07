@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
  * @author kuhn
  *
  */
-public class SerializeMap {
+public class TestSerializeMap {
 
 
 	/**
