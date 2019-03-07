@@ -19,7 +19,6 @@ spec:
     command:
     - cat
     tty: true
-	
 """
     }
   }
