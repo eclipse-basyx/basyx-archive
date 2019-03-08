@@ -55,7 +55,7 @@ public class MetaModelElementFactory {
 		ret.putAll(prop);
 		Map<String, Object> value = VABLambdaProviderHelper.createSimple(get, set);
 		ret.put("value", value);
-		ret.put("valueType", PropertyValueTypeDefHelper.fromObject(get.get()));
+		ret.put("valueType", PropertyValueTypeDefHelper.fromObject(get.get()).toString());
 		return ret;
 	}
 
