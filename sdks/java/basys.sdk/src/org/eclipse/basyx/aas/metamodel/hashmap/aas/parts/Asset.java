@@ -1,7 +1,16 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.parts;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.parts.IAsset;
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
+import org.eclipse.basyx.aas.metamodel.facades.AssetFacade;
+import org.eclipse.basyx.aas.metamodel.facades.HasDataSpecificationFacade;
+import org.eclipse.basyx.aas.metamodel.facades.HasKindFacade;
+import org.eclipse.basyx.aas.metamodel.facades.IdentifiableFacade;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.HasKind;
@@ -17,7 +26,9 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
  * @author kuhn, elsheikh, schnicke
  *
  */
-public class Asset extends HashMap<String, Object> {
+public class Asset extends HashMap<String, Object> implements IAsset {
+	
+	public static String ASSETIDENTIFICATIONMODEL="assetIdentificationModel";
 
 	/**
 	 * Version of serialized instances
@@ -34,18 +45,76 @@ public class Asset extends HashMap<String, Object> {
 		putAll(new Identifiable());
 
 		// Default values
-		put("assetIdentificationModel", null);
+		put(ASSETIDENTIFICATIONMODEL, null);
 	}
 
 	/**
 	 * 
-	 * @param submodel
-	 *            A reference to a Submodel that defines the handling of additional
-	 *            domain specific (proprietary) Identifiers for the asset like e.g.
-	 *            serial number etc.
+	 * @param submodel A reference to a Submodel that defines the handling of
+	 *                 additional domain specific (proprietary) Identifiers for the
+	 *                 asset like e.g. serial number etc.
 	 */
 	public Asset(Reference submodel) {
 		this();
-		put("assetIdentificationModel", submodel);
+		put(ASSETIDENTIFICATIONMODEL, submodel);	
 	}
+	
+
+	@Override
+	public HashSet<IReference> getDataSpecificationReferences() {
+		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
+	}
+	
+	@Override
+	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
+		
+	}
+
+	@Override
+	public String getHasKindReference() {
+		return new HasKindFacade(this).getHasKindReference();
+	}
+	
+	@Override
+	public void setHasKindReference(String kind) {
+		new HasKindFacade(this).setHasKindReference(kind);
+		
+	}
+
+	@Override
+	public AdministrativeInformation getAdministration() {
+	return new IdentifiableFacade(this).getAdministration();
+	}
+
+	@Override
+	public Identifier getIdentification() {
+		return new IdentifiableFacade(this).getIdentification();
+	}
+
+	@Override
+	public void setAdministration(String version, String revision) {
+		new IdentifiableFacade(this).setAdministration(version, revision);
+		
+	}
+
+	@Override
+	public void setIdentification(String idType, String id) {
+		new IdentifiableFacade(this).setIdentification(idType, id);
+		
+	}
+
+	@Override
+	public Reference getAssetIdentificationModel() {
+		 return new AssetFacade(this).getAssetIdentificationModel();
+	}
+
+	@Override
+	public void setAssetIdentificationModel(Reference submodel) {
+		new AssetFacade(this).setAssetIdentificationModel(submodel);
+		
+	}
+
+
+
 }

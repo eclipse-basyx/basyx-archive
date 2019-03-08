@@ -3,6 +3,9 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IHasDataSpecification;
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
+import org.eclipse.basyx.aas.metamodel.facades.HasDataSpecificationFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 
 /**
@@ -11,7 +14,9 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
  * @author elsheikh, schnicke
  *
  */
-public class HasDataSpecification extends HashMap<String, Object> {
+public class HasDataSpecification extends HashMap<String, Object> implements IHasDataSpecification {
+	
+	public  static String HASDATASPECIFICATION="hasDataSpecification";
 
 	/**
 	 * Version of serialized instances
@@ -23,6 +28,17 @@ public class HasDataSpecification extends HashMap<String, Object> {
 	 */
 	public HasDataSpecification() {
 		// Default values
-		put("hasDataSpecification", new HashSet<Reference>());
+		put(HASDATASPECIFICATION, new HashSet<Reference>());
+	}
+
+	@Override
+	public HashSet<IReference> getDataSpecificationReferences() {
+		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
+	}
+
+	@Override
+	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
+		
 	}
 }
