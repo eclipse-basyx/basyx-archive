@@ -64,8 +64,8 @@ public class TestConnectedAssetAdministrationShell {
 
 		// Add the AAS provider to the ConnectionManagerStub
 		VABConnectionManagerStub connectionStub = new VABConnectionManagerStub();
-		connectionStub.addProvider(aasId, provider);
-		connectionStub.addProvider(smId, provider);
+		connectionStub.addProvider(aasId,"",  provider);
+		connectionStub.addProvider(smId, "", provider);
 
 		// Create connection manager using the dummy
 		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(connectionStub);

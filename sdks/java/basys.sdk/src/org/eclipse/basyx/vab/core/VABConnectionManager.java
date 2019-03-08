@@ -1,6 +1,7 @@
 package org.eclipse.basyx.vab.core;
 
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+import org.eclipse.basyx.vab.core.tools.VABPathTools;
 
 
 
@@ -51,13 +52,13 @@ public class VABConnectionManager {
 	public VABElementProxy connectToVABElement(String urn) {
 
 		// Get AAS from directory
-		String addr = null;
+		String addr = "";
 
 		// Lookup address in directory server
 		addr = directoryService.lookup(urn);
 
 		// Return a new VABElementProxy
-		return new VABElementProxy(addr, providerProvider.getConnector(addr));
+		return new VABElementProxy(VABPathTools.removeAddressEntry(addr), providerProvider.getConnector(addr));
 	}
 	
 	

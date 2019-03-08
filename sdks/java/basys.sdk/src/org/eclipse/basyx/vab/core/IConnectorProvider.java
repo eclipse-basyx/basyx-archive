@@ -4,12 +4,16 @@
 package org.eclipse.basyx.vab.core;
 
 /**
+ * Base interface for providers that return IModelProviders that connects to
+ * specific addresses
+ * 
  * @author schnicke
  *
  */
 public interface IConnectorProvider {
+
 	/**
-	 * Selects an appropriate connector based on addr
+	 * Gets an IModelProvider connecting the specific address
 	 * 
 	 * @param addr
 	 * @return
