@@ -12,9 +12,6 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
-import org.eclipse.basyx.aas.api.reference.IElementReference;
-import org.eclipse.basyx.aas.api.resources.IOperation;
-import org.eclipse.basyx.aas.api.resources.IProperty;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -407,93 +404,6 @@ public class GSONTools {
 	}
 
 	/**
-	 * Serialize a property reference
-	 */
-	protected Map<String, Object> serializeElementReference(Map<String, Object> target, IElementReference reference) {
-
-		System.out.println("Serialize " + reference);
-		// Serialize element
-		// - Indicate that it is a reference
-		target.put("basystype", "ref");
-		// - Serialize element type
-		// - FIXME: Use interfaces
-		if (reference instanceof IProperty)
-			target.put("elementType", "property");
-		if (reference instanceof IOperation)
-			target.put("elementType", "operation");
-		// - Serialize address
-		if (reference.isAASReference()) {
-			target.put("aas", reference.getAASID());
-		}
-		if (reference.isSubModelReference()) {
-			target.put("aas", reference.getAASID());
-			target.put("submodel", reference.getSubModelID());
-		}
-		if (reference.isPropertyReference()) {
-			target.put("aas", reference.getAASID());
-			target.put("submodel", reference.getSubModelID());
-			target.put("path", reference.getPathToProperty());
-		}
-
-		// Return serialized element
-		return target;
-	}
-
-	/**
-	 * Serialize an IElement reference
-	 */
-	protected boolean serializeIElementRef(Map<String, Object> target, Object value, Map<String, Object> serObjRepo, String scope) {
-		// Type check
-		if (!(value instanceof IElementReference))
-			return false;
-
-		// Create reference
-		IElementReference reference = (IElementReference) value;
-		// Add scope to reference
-		reference.addScope(scope); // FIXME scope is not serialized
-
-		// Serialize element
-		// - Indicate that is is a reference
-		target.put("basystype", "ref");
-		// - Serialize element type
-		// - FIXME: Use interfaces
-		if (value instanceof IProperty)
-			target.put("elementType", "property");
-		if (value instanceof IOperation)
-			target.put("elementType", "operation");
-		// - Serialize address
-		if (reference.isAASReference()) {
-			target.put("aas", reference.getAASID());
-		}
-		if (reference.isSubModelReference()) {
-			target.put("aas", reference.getAASID());
-			target.put("submodel", reference.getSubModelID());
-		}
-		if (reference.isPropertyReference()) {
-			target.put("aas", reference.getAASID());
-			target.put("submodel", reference.getSubModelID());
-			target.put("path", reference.getPathToProperty());
-		}
-
-		if (reference.getAASID().length() == 0) {
-			throw new RuntimeException("aasid empty");
-		}
-
-		// Add map and collection information
-		if (reference.isCollection()) {
-			target.put("thekind", "collection");
-		}
-		if (reference.isMap()) {
-			target.put("thekind", "map");
-		}
-
-		System.out.println("Serialized " + target + " from value " + value);
-
-		// Return serialized element
-		return true;
-	}
-
-	/**
 	 * Serialize a map
 	 */
 	@SuppressWarnings("unchecked")
@@ -719,14 +629,13 @@ public class GSONTools {
 			return returnValue;
 		if (serializeMapType(returnValue, value, serObjRepo, scope))
 			return returnValue;
-		if (serializeIElementRef(returnValue, value, serObjRepo, scope))
-			return returnValue;
 		if (serializeException(returnValue, value))
 			return returnValue;
 		if (serializeOperation(returnValue, value))
 			return returnValue;
-		// Complex types not supported yet
 
+		// Complex types not supported yet
+		System.err.println("Could not serialize object :" + value);
 		return returnValue;
 	}
 
@@ -767,6 +676,7 @@ public class GSONTools {
 		if ((returnValue = deserializeOperation(serializedValue)) != null)
 			return returnValue;
 
+		System.err.println("Could not deserialize object :" + serializedValue);
 		// Complex types not supported yet
 		return returnValue;
 	}
