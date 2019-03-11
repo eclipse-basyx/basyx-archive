@@ -1,5 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IIdentifiable;
+import org.eclipse.basyx.aas.metamodel.facades.IdentifiableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
 
 /**
@@ -8,12 +10,16 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
  * @author kuhn, schnicke
  *
  */
-public class Identifiable extends Referable {
+public class Identifiable extends Referable implements IIdentifiable  {
 
 	/**
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	public static final String ADMINISTRATION="administration";
+	
+	public static final String IDENTIFICATION="identification";
 
 	/**
 	 * Default constructor
@@ -23,9 +29,9 @@ public class Identifiable extends Referable {
 		putAll(new Referable());
 
 		// Administrative information of an element. (AdministrativeInformation)
-		put("administration", null);
+		put(ADMINISTRATION, new AdministrativeInformation());
 		// The globally unique identification of an element. (Identificator)
-		put("identification", new Identifier());
+		put(IDENTIFICATION, new Identifier());
 	}
 
 	/**
@@ -36,8 +42,32 @@ public class Identifiable extends Referable {
 		putAll(new Referable(idShort, category, description));
 
 		// Create administrative information of an element. (AdministrativeInformation)
-		put("administration", new AdministrativeInformation(version, revision));
+		put(ADMINISTRATION, new AdministrativeInformation(version, revision));
 		// The globally unique identification of an element. (Identificator)
-		put("identification", new Identifier(idType, id));
+		put(IDENTIFICATION, new Identifier(idType, id));
 	}
+
+	@Override
+	public AdministrativeInformation getAdministration() {
+	return new IdentifiableFacade(this).getAdministration();
+	}
+
+	@Override
+	public Identifier getIdentification() {
+		return new IdentifiableFacade(this).getIdentification();
+	}
+
+	@Override
+	public void setAdministration(String version, String revision) {
+		new IdentifiableFacade(this).setAdministration(version, revision);
+		
+	}
+
+	@Override
+	public void setIdentification(String idType, String id) {
+		new IdentifiableFacade(this).setIdentification(idType, id);
+		
+	}
+
+
 }

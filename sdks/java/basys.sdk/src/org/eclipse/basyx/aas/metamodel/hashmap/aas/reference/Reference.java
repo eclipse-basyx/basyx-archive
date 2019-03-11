@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
+import org.eclipse.basyx.aas.metamodel.facades.ReferenceFacade;
+
 /**
  * Reference as described by DAAS document <br/>
  * <br/>
@@ -16,31 +19,38 @@ import java.util.Map;
  * @author schnicke
  *
  */
-public class Reference extends HashMap<String, Object> {
+public class Reference extends HashMap<String, Object> implements IReference {
 	private static final long serialVersionUID = 1L;
+	
+	public static final String KEY="key";
 
 	/**
 	 * Constructor
 	 */
 	public Reference() {
-		put("key", new ArrayList<Key>());
+		put(KEY, new ArrayList<Key>());
 	}
 
 	/**
 	 * 
-	 * @param key
-	 *            Unique reference in its name space.
+	 * @param key Unique reference in its name space.
 	 */
 	public Reference(List<Key> key) {
-		put("key", key);
+		put(KEY, key);
 	}
 
 	public Reference(Map<String, Object> reference) {
 
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override
 	public List<Key> getKeys() {
-		return (List<Key>) get("key");
+		return new ReferenceFacade(this).getKeys();
+	}
+
+	@Override
+	public void setKeys(List<Key> keys) {
+		new ReferenceFacade(this).setKeys(keys);
+		
 	}
 }

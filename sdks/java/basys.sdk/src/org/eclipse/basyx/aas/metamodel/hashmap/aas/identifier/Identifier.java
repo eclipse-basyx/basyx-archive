@@ -3,13 +3,20 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
+import org.eclipse.basyx.aas.metamodel.facades.IdentifierFacade;
+
 /**
  * Identification class
  * 
  * @author kuhn, schnicke
  *
  */
-public class Identifier extends HashMap<String, Object> {
+public class Identifier extends HashMap<String, Object> implements IIdentifier {
+	
+	
+	public static final String IDTYPE="idType";
+	public static final String ID="id";
 
 	/**
 	 * Version of serialized instances
@@ -21,8 +28,8 @@ public class Identifier extends HashMap<String, Object> {
 	 */
 	public Identifier() {
 		// Default values
-		put("idType", IdentifierType.IRDI);
-		put("id", "");
+		put(IDTYPE, IdentifierType.IRDI);
+		put(ID, "");
 	}
 
 	public Identifier(Map<String, Object> copy) {
@@ -34,35 +41,39 @@ public class Identifier extends HashMap<String, Object> {
 	 */
 	public Identifier(String idType, String id) {
 		// Load values
-		put("idType", idType);
-		put("id", id);
+		put(IDTYPE, idType);
+		put(ID, id);
 	}
 
 	/**
 	 * Get value of 'idType' property
 	 */
+	@Override
 	public String getIdType() {
-		return (String) get("idType");
+		return new IdentifierFacade(this).getIdType();
 	}
 
 	/**
 	 * Update value of 'idType' property
 	 */
+	@Override
 	public void setIdType(String newValue) {
-		put("idType", newValue);
+		new IdentifierFacade(this).setIdType(newValue);
 	}
 
 	/**
 	 * Get value of 'id' property
 	 */
+	@Override
 	public String getId() {
-		return (String) get("id");
+		return new IdentifierFacade(this).getId();
 	}
 
 	/**
 	 * Update value of 'id' property
 	 */
+	@Override
 	public void setId(String newValue) {
-		put("id", newValue);
+		new IdentifierFacade(this).setId(newValue);
 	}
 }
