@@ -2,7 +2,11 @@
  * BRef.h - Smart reference class
  *
  *      Author: kuhn
+ *      Updated: psota on 31.01.2019
+ *			Re-implemented old functionality through std::shared_ptr
  */
+
+//#define REF_BREF_H_
 
 #ifndef REF_BREF_H_
 #define REF_BREF_H_
@@ -16,6 +20,8 @@
 #include <types/BString.h>
 //#include <types/BArray.h>
 
+#include <memory>
+
 
 /* ****************************************************************
  * BRef class implements smart pointers
@@ -23,54 +29,49 @@
 template <typename T> class BRef {
 
 	// Internal members
+	private:
+		// Create a custom deleter function that does nothing, thus not freeing the shared_ptr's resource
+		static void deleter_NOP(T*) {};
+	private:
+		// Use a standard library shared pointer for internal holding and reference counting
+		std::shared_ptr<T> ptr;
+
 	public:
-
-		// Indicate if pointer should be freed when access counter reaches one
-		bool freeOnZero;
-
-		// Store reference to element
-		T* containedReference;
-
-		// Base reference counter
-		// - This field is only used if the BRef was created with default constructor, not with copy constructor
-		int *refCounter;
-
-		// Pointer to reference counter used by this instance
-		int *refCounterRef;
-
-
-
-	// Default constructor
-	public:
-		// Default constructor
-		BRef(T *pointer, bool parFreeOnzero = true) {
-			// Store parameter values
-			freeOnZero         = parFreeOnzero;
-			containedReference = pointer;
-			refCounter         = (int *) malloc(sizeof(int));
-			refCounterRef      = refCounter;
-			*refCounterRef     = 1;
-
-			// Null pointer check
-			if (containedReference == 0) freeOnZero=false;
-
-			//printf("Constructing %i!\n", (int) containedReference);
+		// Non-Default constructors
+		BRef(T *pointer, bool parFreeOnzero = true ) : ptr{ nullptr } {
+			// Constructor of std::shared_ptr allows specifying of a custom deleter function to be invoked when ref count reaches zero
+			// Signature of the deleter function must be 'void d(T*)'
+			if (!parFreeOnzero){
+				// Use the NOP deleter function
+				ptr = std::shared_ptr<T>{ pointer, BRef::deleter_NOP };
+			} else {
+				ptr = std::shared_ptr<T>{ pointer };
+			};
 		}
 
+		// Construct BRef from another shared_ptr
+		// FreeOnZero behaviour is already stored inside the shared_ptr's deleter function
+		template<typename U>
+		BRef(std::shared_ptr<U> ptr) : ptr{ std::dynamic_pointer_cast<T>(ptr) } {};
+
+		BRef(const T & val) : ptr{ std::make_shared<T>(val) } {};
 
 	// Supporting constructors
 	public:
 		// Create null reference
-		BRef() : BRef(new BNullObject(), true) {}                                 // @suppress("Class members should be properly initialized")
-		// Create value references
-		BRef(int    value) : BRef(new BValue(value), true) {}                     // @suppress("Class members should be properly initialized")
-		BRef(float  value) : BRef(new BValue(value), true) {}                     // @suppress("Class members should be properly initialized")
-		BRef(double value) : BRef(new BValue(value), true) {}                     // @suppress("Class members should be properly initialized")
-		BRef(bool   value) : BRef(new BValue(value), true) {}                     // @suppress("Class members should be properly initialized")
-		BRef(char   value) : BRef(new BValue(value), true) {}                     // @suppress("Class members should be properly initialized")
+		BRef() : BRef(std::make_shared<BNullObject>()) {}                   // @suppress("Class members should be properly initialized")
+
+		// Create value references 
+		BRef(int    value) : BRef(std::make_shared<BValue>(value)) {}		 // @suppress("Class members should be properly initialized")
+		BRef(float  value) : BRef(std::make_shared<BValue>(value)) {}		 // @suppress("Class members should be properly initialized")
+		BRef(double value) : BRef(std::make_shared<BValue>(value)) {}		 // @suppress("Class members should be properly initialized")
+		BRef(bool   value) : BRef(std::make_shared<BValue>(value)) {}		 // @suppress("Class members should be properly initialized")
+		BRef(char   value) : BRef(std::make_shared<BValue>(value)) {}		 // @suppress("Class members should be properly initialized")
+
 		// Create string references
-		BRef(std::string value) : BRef(new BString(value), true) {}               // @suppress("Class members should be properly initialized")
-		BRef(const char *value) : BRef(new BString(value), true) {}               // @suppress("Class members should be properly initialized")
+		BRef(const std::string & value) : BRef(std::make_shared<BString>(value)) {} // @suppress("Class members should be properly initialized")
+		BRef(const char * value) : BRef(std::make_shared<BString>(value)) {} // @suppress("Class members should be properly initialized")
+
 		// Create array references
 		//BRef(int    *value, int size) : BRef(new BArray(value, size), true) {}    // @suppress("Class members should be properly initialized")
 		//BRef(float  *value, int size) : BRef(new BArray(value, size), true) {}    // @suppress("Class members should be properly initialized")
@@ -78,97 +79,42 @@ template <typename T> class BRef {
 		//BRef(bool   *value, int size) : BRef(new BArray(value, size), true) {}    // @suppress("Class members should be properly initialized")
 		//BRef(char   *value, int size) : BRef(new BArray(value, size), true) {}    // @suppress("Class members should be properly initialized")
 
-
-	// Constructors and operators for reference counting
 	public:
-		// Copy constructor
-		// - C++ standard permits copy elision as optimization. In this case, one pair of
-		//   descturctors/constructors is not called, and thus a copy is not created.
-		//   Instead an already created object is passed. This should not affect the
-		//   reference counting mechanism here, as copy elision never affects the total
-		//   number of created objects.
-		BRef(const BRef<T> &other) {
-			// Update fields
-			freeOnZero         = other.freeOnZero;
-			refCounterRef      = other.refCounterRef;
-			containedReference = other.containedReference;
-			refCounter         = 0;
-
-			// Increase reference counter
-			(*refCounterRef)++;
-
-			//printf("Copying %i %i!\n", (int) containedReference, (int) (*refCounterRef));
-		}
-
-
-		// Assignment operator
-		// - Overriding of this operator tracks value assignments
-		BRef<T>& operator = (const BRef<T> &other) {
-			// Update fields
-			freeOnZero         = other.freeOnZero;
-			refCounterRef      = other.refCounterRef;
-			containedReference = other.containedReference;
-			refCounter         = 0;
-
-			// Increase reference counter
-			(*refCounterRef)++;
-
-			//printf("Assigning %i %i!\n", (int) containedReference, (int) (*refCounterRef));
-
-			// Return assigned value
-			return *this;
-		}
-
-
 	    // Implicit conversion operator for contained pointer type
-	    template <typename U> operator BRef<U>() const {
-			//printf("Casting %i %i!\n", (int) containedReference, (int) (*refCounterRef));
-
-			// This cast is safe, because the template argument is only used as pointer type, and pointer types always have same size
-	    	return *((BRef<U> *) this);
+	    template <typename U> 
+		operator BRef<U>() const 
+		{
+			// Create a new BRef with the new parameter type and coerce the original shared_ptr to it
+			// Original and new BRef still hold the same shared_ptr, so reference counting is shared
+			return BRef<U>( std::static_pointer_cast<U>(ptr) );
 	    }
 
 
-		// Destructor
-		~BRef() {
-			//printf("Destructing %i %i %i!\n", (int) containedReference, (int) *refCounterRef, (int) refCounterRef);
-
-			// Decrement reference counter
-			(*refCounterRef)--;
-
-			//printf("Destructing2 %i %i %i!\n", (int) containedReference, (int) *refCounterRef, (int) refCounterRef);
-			// Error check
-			if (*refCounterRef < 0) printf("BRef semantic error!\n");
-
-			// Delete element if necessary
-			// - Necessary means deleting is requested (freeOnZero) and reference counter reaches zero
-			if (((*refCounterRef) == 0) && (freeOnZero)) {delete containedReference; containedReference=0; /*printf("Deleted!\n");*/}
-			// - Make sure the reference counter pointer is freed, since this is the last instance
-			if ((*refCounterRef) == 0) free(refCounterRef);
-		}
-
+            bool operator==(const BRef & rhs) const
+            {
+                return false;
+            }
 
 	// Public member functions
 	public:
 		// Get element reference
-		T* getRef() {return containedReference;}
+		T* getRef() {return ptr->get();}
 
 		// Get reference counter
-		int getRefCnt() {return *refCounterRef;}
+		int getRefCnt() {return ptr.use_count();}
 
-		// Check if a class should be freed on zero
-		bool getFreeOnZero() {return freeOnZero;}
+		// Check if the contained shared_ptr will free it's resource on destruction
+		bool getFreeOnZero() 
+		{
+			return std::get_deleter<decltype(BRef::deleter_NOP)*>(ptr) == nullptr;
+		}
 
 
 	// Operator overloading for ease of access and for preventing misuse
 	public:
 	    // Member access operator. This class should never be used as pointer.
 		// Therefore, member access points to contained pointer.
-	    T* operator->() const {return containedReference;}
-
-	    // Prevent taking address of BRef objects. Taking addresses will void the
-	    // purpose of this class.
-	    T* operator&() {return 0;}
+	    T* operator->() const {return ptr.get();}
 };
 
 
