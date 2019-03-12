@@ -14,13 +14,13 @@
  * Includes
  * ********************************************************************************************************************************************/
 
-#include "json.hpp"
+#include "json/json.hpp"
 using json = nlohmann::json;
 
 
 #include <ref/BRef.h>
-#include <types/BType.h>
 #include <types/BArray.h>
+#include <types/BType.h>
 #include <types/BObjectCollection.h>
 #include <types/BObjectMap.h>
 

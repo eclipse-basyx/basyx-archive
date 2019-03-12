@@ -11,6 +11,8 @@
 #include <types/BType.h>
 #include <types/BArray.h>
 
+#include <util/util.h>
+
 using namespace std;
 
 #include <iostream>
@@ -88,7 +90,7 @@ bool JSONTools::serializePrimitiveType(json *target, BRef<BType> value, json *se
 			// Indicate failure
 			return false;
 	}
-}
+}	
 
 
 
@@ -120,7 +122,7 @@ bool JSONTools::doSerializeArray(json *target, BRef<BArray> arrayValue, std::str
 	for (int i=0; i<arrayValue->getArraySize(); i++) {
 		// Serialize array member
 		// - Buffer for array member
-		json *arraymember = new json();
+		json * arraymember = new json();
 		// - Array members are primitive types in C++. Therefore, we need to do some type checks here.
 		switch(arrayValue->getType()) {
 			// These are arrays of primitives
@@ -205,9 +207,14 @@ bool JSONTools::serializeMapType(json *target, BRef<BObjectMap> value, json *ser
 	(*target)["size"] = value->size();
 
 	// Serialize map elements  
-    for (std::map< std::string, BRef<BType> >::iterator iterator = value->elements()->begin() ; iterator != value->elements()->end() ; ++iterator) {
-		(*target)[""+iterator->first] = serialize(iterator->second, serObjRepo, scope);
-    }
+	for (const auto & element : *value->elements())
+	{
+		(*target)[element.first] = serialize(element.second, serObjRepo, scope);
+	}
+
+  //  for (BObjectMap::object_map_t::iterator iterator = value->elements()->begin() ; iterator != value->elements()->end() ; ++iterator) {
+		//(*target)[""+iterator->first] = serialize(iterator->second, serObjRepo, scope);
+  //  }
 
 	// Indicate success
 	return true;

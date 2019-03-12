@@ -53,7 +53,6 @@ class IElement : public BObject {
 	 * Reflective data structures to properties, operations, events
 	 * *********************************************************************************/
 	protected:
-
 		// Store class invocation table
 		std::map<std::string, BRef<BType> (IElement::*)(BRef<BType>)> _basyx_rtti_operations;
 
@@ -69,7 +68,7 @@ class IElement : public BObject {
 
 
 		// Check type of parameter list
-		int getParameterCount(BRef<BType> param) {
+		std::size_t getParameterCount(BRef<BType> param) {
 			// Get number of parameter
 			// - Check if parameter type is a collection
 			if (!param->isCollection()) return -1;
@@ -163,7 +162,6 @@ class IElement : public BObject {
 		// BaSyx RTTI table
 		BASYX_RTTI_START(IElement, BObject)
 		BASYX_RTTI_END
-
 };
 
 

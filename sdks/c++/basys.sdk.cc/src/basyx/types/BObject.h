@@ -7,6 +7,7 @@
  *      Author: kuhn
  */
 
+
 #ifndef TYPES_BOBJECT_H_
 #define TYPES_BOBJECT_H_
 

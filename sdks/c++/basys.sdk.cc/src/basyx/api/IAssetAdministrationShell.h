@@ -19,7 +19,7 @@
 // BaSyx includes
 #include "ISubModel.h"
 #include "IElement.h"
-
+#include "types/BObjectMap.h"
 
 
 /* *********************************************************************************
@@ -35,7 +35,7 @@ class IAssetAdministrationShell : public IElement {
 	public:
 
 		// Constructor
-		IAssetAdministrationShell(std::string aasID, std::string aasTypeID, IElement *aasParent = 0) : IElement(aasID, aasTypeID, aasParent) {
+		IAssetAdministrationShell(std::string aasID, std::string aasTypeID, IElement *aasParent = nullptr) : IElement(aasID, aasTypeID, aasParent) {
 			// Do nothing
 		}
 
@@ -48,12 +48,12 @@ class IAssetAdministrationShell : public IElement {
 		/* *******************************************************
 		 * Retrieve list of sub models by type
 		 * *******************************************************/
-		virtual std::map<std::string, BRef<BType>> getSubModelsByType() = 0;
+		virtual BObjectMap::object_map_t * getSubModelsByType() = 0;
 
 		/* *******************************************************
 		 * Retrieve list of sub models by ID
 		 * *******************************************************/
-		virtual std::map<std::string, BRef<BType>> getSubModelsByID() = 0;
+		virtual BObjectMap::object_map_t * getSubModelsByID() = 0;
 };
 
 

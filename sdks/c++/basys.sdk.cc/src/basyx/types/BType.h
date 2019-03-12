@@ -38,7 +38,7 @@ class BType {
 	// Constructor
 	protected:
 		BType() {baSysTypeID = BASYS_NULL;}
-
+		BType(int basysTypeId) : baSysTypeID{ basysTypeId } {};
 
 	// Destructor
 	public:

@@ -5,6 +5,8 @@
  *      Author: kuhn
  */
 
+#define API_IPROPERTY_H_
+
 #ifndef API_IPROPERTY_H_
 #define API_IPROPERTY_H_
 

@@ -16,6 +16,7 @@
 #include <ref/BRef.h>
 #include <types/BObjectCollection.h>
 #include <types/BType.h>
+#include <basyx/types/BAny.h>
 
 // Std C++ includes
 #include <string>
@@ -40,40 +41,39 @@ public:
 	 *
 	 * This is the namespace that is served by this model provider. E.g. iese.fraunhofer.de
 	 */
-	virtual std::string getElementScope(std::string elementPath) = 0;
+	virtual std::string getElementScope(const std::string & elementPath) = 0;
 
 	/**
 	 * Get a sub model property value
 	 */
-	virtual BRef<BType> getModelPropertyValue(std::string path) = 0;
+	virtual BRef<BType> getModelPropertyValue(const std::string & path) = 0;
 
 	/**
 	 * Set a sub model property value
 	 */
-	virtual void setModelPropertyValue(std::string path,
-			BRef<BType> newValue) = 0;
+	virtual void setModelPropertyValue(const std::string & path, basyx::any && newValue) = 0;
 
 	/**
 	 * Create a new property under the given path
 	 */
-	virtual void createValue(std::string path, BRef<BType> addedValue) = 0;
+	virtual void createValue(const std::string & path, basyx::any && addedValue) = 0;
 
 	/**
 	 * Delete a value from a collection
 	 */
-	virtual void deleteValue(std::string path, BRef<BType> deletedValue) = 0;
+	virtual void deleteValue(const std::string & path, basyx::any && deletedValue) = 0;
 
 	/**
 	 * Delete a property, operation, event, submodel or aas under the given path
 	 *
 	 * @param path Path to the entity that should be deleted
 	 */
-	virtual void deleteValue(std::string path) = 0;
+	virtual void deleteValue(const std::string & path) = 0;
 
 	/**
 	 * Invoke an operation
 	 */
-	virtual BRef<BType> invokeOperation(std::string path,
+	virtual BRef<BType> invokeOperation(const std::string & path,
 			BRef<BObjectCollection> parameter) = 0;
 
 	/**

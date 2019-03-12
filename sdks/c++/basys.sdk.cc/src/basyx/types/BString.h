@@ -36,7 +36,10 @@ class BString : public BType {
 
 	// Constructor
 	public:
-		BString(std::string value) : BType() {baSysTypeID = BASYS_STRING;  stringValue = value;}
+		BString(const std::string & value) 
+			: BType(BASYS_STRING)
+			, stringValue{ value }
+		{};
 
 
 	// Public member functions
@@ -45,7 +48,7 @@ class BString : public BType {
 		std::string getString() {return stringValue;}
 
 		// Set string value
-		void setString(std::string newVal) {stringValue = newVal;}
+		void setString(const std::string & newVal) {stringValue = newVal;}
 };
 
 

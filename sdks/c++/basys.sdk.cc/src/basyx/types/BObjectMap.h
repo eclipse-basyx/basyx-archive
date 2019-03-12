@@ -13,7 +13,7 @@
  * *********************************************************************************/
 
 // Stc C++ includes
-#include <map>
+#include <unordered_map>
 
 // BaSyx includes
 #include "BType.h"
@@ -26,26 +26,26 @@
  * *********************************************************************************/
 
 class BObjectMap : public BType {
-
+public:
+	using object_map_t = std::unordered_map<std::string, BRef<BType>>;
 
 	// Carried values
 	protected:
-		std::map<std::string, BRef<BType>> mapElements;
+		object_map_t mapElements;
 
 
 	// Constructor
 	public:
-		BObjectMap() : BType() {baSysTypeID = BASYS_MAP;}
+		BObjectMap() : BType(BASYS_MAP) {}
 
 
 	// Public interface
 	public:
 		// Access members
-		std::map<std::string, BRef<BType>> *elements() {return &mapElements;}
+		object_map_t * elements() {return &mapElements;}
 
 		// Get collection size
-		int size() {return mapElements.size();}
-
+		std::size_t size() {return mapElements.size();}
 };
 
 

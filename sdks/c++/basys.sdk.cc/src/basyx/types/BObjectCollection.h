@@ -47,7 +47,7 @@ class BObjectCollection : public BType {
 		void add(BRef<BType> element) {listElements.push_back(element);}
 
 		// Get collection size
-		int size() {return listElements.size();}
+		std::size_t size() {return listElements.size();}
 
 };
 

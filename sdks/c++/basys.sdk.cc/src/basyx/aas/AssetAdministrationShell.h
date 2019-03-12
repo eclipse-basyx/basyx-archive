@@ -51,15 +51,15 @@ class AssetAdministrationShell : public IAssetAdministrationShell {  // @suppres
 		/* *******************************************************
 		 * Retrieve list of sub models by type
 		 * *******************************************************/
-		virtual std::map<std::string, BRef<BType>> getSubModelsByType() {
-			return *subModelsByType.elements();
+		virtual BObjectMap::object_map_t * getSubModelsByType() override{
+			return subModelsByType.elements();
 		}
 
 		/* *******************************************************
 		 * Retrieve list of sub models by ID
 		 * *******************************************************/
-		virtual std::map<std::string, BRef<BType>> getSubModelsByID() {
-			return *subModelsByID.elements();
+		virtual BObjectMap::object_map_t * getSubModelsByID() override {
+			return subModelsByID.elements();
 		}
 
 		/* *******************************************************

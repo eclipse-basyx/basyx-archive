@@ -35,7 +35,7 @@ class ISubModel : public IElement {
 	 * *********************************************************************************/
 	public:
 		// Constructor
-		ISubModel(std::string aasID, std::string aasTypeID, IElement *aasParent = 0) : IElement(aasID, aasTypeID, aasParent) {
+		ISubModel(std::string aasID, std::string aasTypeID, IElement *aasParent = nullptr) : IElement(aasID, aasTypeID, aasParent) {
 			// Do nothing
 		}
 
