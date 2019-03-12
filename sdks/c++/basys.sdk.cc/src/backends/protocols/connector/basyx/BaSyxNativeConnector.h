@@ -10,17 +10,19 @@
 
 #include "backends/protocols/connector/IBaSysConnector.h"
 #include "backends/protocols/connector/basyx/frame/BaSyxNativeFrameBuilder.h"
-#include "backends/protocols/provider/basyx/winsock_fix.h"
 
+#include "abstraction/Net.h"
 
+#include <memory>
 
 class BaSyxNativeConnector: public IBaSysConnector {
 public:
+	static constexpr std::size_t default_buffer_length = 1024;
+public:
+	BaSyxNativeConnector(std::string const& address, int port, JSONTools* jsonTools);
+
 	virtual ~BaSyxNativeConnector();
-
-	BaSyxNativeConnector(std::string const& address, std::string const& port,
-			BaSyxNativeFrameBuilder* builder, JSONTools* jsonTools);
-
+public:
 	virtual BRef<BType> basysGet(std::string const& path) override;
 
 	virtual nlohmann::json basysGetRaw(std::string const& path) override;
@@ -38,12 +40,17 @@ public:
 	virtual void basysDelete(std::string const& servicePath, BRef<BType> obj) override;
 
 private:
-	SOCKET listenSocket;
-	BaSyxNativeFrameBuilder* builder;
-	char* buffer;
+	basyx::net::tcp::Socket socket;
+	BaSyxNativeFrameBuilder builder;
+//	char* buffer;
+	std::array<char, default_buffer_length> buffer;
+
 	void sendData(char* data, size_t size);
+	
 	size_t receiveData(char* data);
-	JSONTools* jsonTools;
+
+//	std::unique_ptr<JSONTools> jsonTools;
+	JSONTools * jsonTools;
 
 	BRef<BType> decode(char* buffer);
 };
