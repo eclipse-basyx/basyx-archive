@@ -12,15 +12,14 @@
 #include "backends/protocols/provider/basyx/frame/BaSyxNativeFrameHelper.h"
 #include "backends/protocols/basyx/BaSyx.h"
 
-BaSyxNativeFrameProcessor::BaSyxNativeFrameProcessor(IModelProvider* providerBackend,
-		JSONTools* jsonTools) {
-	this->jsonTools = jsonTools;
-	this->jsonProvider = new JSONProvider<IModelProvider>(providerBackend,
-			jsonTools);
+BaSyxNativeFrameProcessor::BaSyxNativeFrameProcessor(IModelProvider* providerBackend, JSONTools* jsonTools) 
+	: jsonProvider{ providerBackend, jsonTools }
+	, jsonTools{ jsonTools }
+{
 }
 
-BaSyxNativeFrameProcessor::~BaSyxNativeFrameProcessor() {
-	delete jsonProvider;
+BaSyxNativeFrameProcessor::~BaSyxNativeFrameProcessor() 
+{
 }
 
 void BaSyxNativeFrameProcessor::processInputFrame(char const* rxFrame,
@@ -60,7 +59,7 @@ void BaSyxNativeFrameProcessor::processGet(char const* rxFrame, char* txFrame,
 	// 1 byte result field
 	// 4 byte string size
 	// N byte return value
-	jsonProvider->processBaSysGet(path, txFrame + 5, txSize);
+	jsonProvider.processBaSysGet(path, txFrame + 5, txSize);
 
 	// Set return string size
 	CoderTools::setInt32(txFrame + 1, 0, *txSize);
@@ -77,7 +76,7 @@ void BaSyxNativeFrameProcessor::processSet(char const* rxFrame, char* txFrame,
 
 	// TODO: Error Handling?
 	std::string serializedValue = BaSyxNativeFrameHelper::getString(rxFrame, 1);
-	jsonProvider->processBaSysSet(path, serializedValue);
+	jsonProvider.processBaSysSet(path, serializedValue);
 
 	// Set result field to 0 to indicate success
 	txFrame[0] = 0;
@@ -90,7 +89,7 @@ void BaSyxNativeFrameProcessor::processCreate(char const* rxFrame, char* txFrame
 
 	// TODO: Error Handling?
 	std::string serializedValue = BaSyxNativeFrameHelper::getString(rxFrame, 1);
-	jsonProvider->processBaSysCreate(path, serializedValue);
+	jsonProvider.processBaSysCreate(path, serializedValue);
 
 	// Set result field to 0 to indicate success
 	txFrame[0] = 0;
@@ -105,9 +104,9 @@ void BaSyxNativeFrameProcessor::processDelete(char const* rxFrame, std::size_t r
 	if (path.size() + BASYX_STRINGSIZE_SIZE < rxSize) {
 		std::string serializedValue = BaSyxNativeFrameHelper::getString(rxFrame,
 				1);
-		jsonProvider->processBaSysDelete(path, serializedValue);
+		jsonProvider.processBaSysDelete(path, serializedValue);
 	} else {
-		jsonProvider->processBaSysDelete(path);
+		jsonProvider.processBaSysDelete(path);
 	}
 
 	// Set result field to 0 to indicate success
@@ -126,7 +125,7 @@ void BaSyxNativeFrameProcessor::processInvoke(char const* rxFrame, char* txFrame
 	// 1 byte result field
 	// 4 byte string size
 	// N byte return value
-	jsonProvider->processBaSysInvoke(path, serializedValue, txFrame + 5,
+	jsonProvider.processBaSysInvoke(path, serializedValue, txFrame + 5,
 			txSize);
 
 	// Set return value size

@@ -34,7 +34,7 @@ public:
 			std::size_t* txSize);
 private:
 	JSONTools* jsonTools;
-	JSONProvider<IModelProvider>* jsonProvider;
+	JSONProvider<IModelProvider> jsonProvider;
 
 
 	void processGet(char const* rxFrame, char* txFrame, std::size_t* txSize);

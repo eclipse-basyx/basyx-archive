@@ -5,34 +5,33 @@
  *      Author: schnicke
  */
 
+#include <atomic>
 #include <memory>
 
+//#include "BaSyxThread.h"
+
+#include "abstraction/Thread.h"
+
 #include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
+//#include "gtest/gtest-all.cc"
 #include "json/JSONTools.h"
 
 #include "backends/protocols/connector/basyx/BaSyxNativeConnector.h"
 #include "backends/protocols/provider/basyx/BaSyxTCPServer.h"
 
-#include "regression/tests/backends/protocols/provider/basyx/frame/MockupModelProvider.h"
+#include "regression/backends/protocols/provider/basyx/frame/MockupModelProvider.h"
 
 
-#include <process.h>
-#include <unistd.h>
 
+std::atomic_flag running = ATOMIC_FLAG_INIT;
 
-bool stopped = false;
-
-
-unsigned int __stdcall startProvider(void* arg) {
-	BaSyxTCPServer<MockupModelProvider>* tcpServer = reinterpret_cast<BaSyxTCPServer<MockupModelProvider>*>(arg);
-	while (!stopped) {
+void serverLoop(std::unique_ptr<BaSyxTCPServer<MockupModelProvider>> & tcpServer)
+{
+	while (running.test_and_set(std::memory_order_acquire))
+	{
 		tcpServer->update();
 	}
-	
-    _endthreadex( 0 );  
-    return 0;  
-}
+};
 
 /**
  * Creates the test environment needed in the following tests:
@@ -41,39 +40,33 @@ unsigned int __stdcall startProvider(void* arg) {
  */
 class BaSyxNativeTest: public ::testing::Test {
 protected:
-	JSONTools* jTools;
-	BaSyxNativeConnector* connector;
-	BaSyxNativeFrameBuilder* builder;
-	BaSyxTCPServer<MockupModelProvider>* tcpServer;
-	MockupModelProvider* mockup;
+	const int port = 6112;
+
+	std::unique_ptr<JSONTools> jTools;
+	std::unique_ptr<BaSyxNativeConnector> connector;
+	std::unique_ptr<BaSyxTCPServer<MockupModelProvider>> tcpServer;
+	std::unique_ptr<MockupModelProvider> mockup;
+	basyx::thread serverThread{};
 
 	virtual void SetUp() {
-		stopped = false;
-		jTools = new JSONTools();
-		builder = new BaSyxNativeFrameBuilder(jTools);
+		running.test_and_set(std::memory_order_acquire);
 
-		mockup = new MockupModelProvider();
-		std::string port = "27015";
-		tcpServer = new BaSyxTCPServer<MockupModelProvider>(mockup, port,
-				jTools);
+		jTools = util::make_unique<JSONTools>();
 
-		unsigned threadID;
+		mockup = util::make_unique<MockupModelProvider>();
+		tcpServer = util::make_unique<BaSyxTCPServer<MockupModelProvider>>(mockup.get(), port, jTools.get());
 
-		_beginthreadex(NULL, 0, &startProvider, tcpServer, 0, &threadID);
+		serverThread = basyx::thread{serverLoop, std::ref(tcpServer)};
 
-		connector = new BaSyxNativeConnector("127.0.0.1", port, builder,
-				jTools);
-
+		connector = util::make_unique<BaSyxNativeConnector>("127.0.0.1", port, jTools.get());
 	}
 
 	virtual void TearDown() {
-		stopped = true;
-		
-		delete connector;
-		delete tcpServer;
-		delete mockup;
-		delete builder;
-		delete jTools;
+		running.clear(std::memory_order_release);
+
+		tcpServer->Close();
+
+		serverThread.join();
 	}
 
 };
@@ -96,6 +89,9 @@ TEST_F(BaSyxNativeTest, setTest) {
 	BRef<BValue> val = BRef<BValue>(new BValue(10));
 	connector->basysSet(path, val);
 	
+	while (mockup->called != MockupModelProvider::CalledFunction::SET)
+		;
+
 	// Check if correct call occured
 	ASSERT_EQ(mockup->called, MockupModelProvider::CalledFunction::SET);
 	ASSERT_EQ(mockup->path, path);
@@ -151,13 +147,13 @@ TEST_F(BaSyxNativeTest, invokeTest) {
 }
 
 
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-// Run all tests
-	return RUN_ALL_TESTS();
-}
+///* ************************************************
+// * Run test suite
+// * ************************************************/
+//int main(int argc, char **argv) {
+//// Init gtest framework
+//	::testing::InitGoogleTest(&argc, argv);
+//
+//// Run all tests
+//	return RUN_ALL_TESTS();
+//}

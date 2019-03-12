@@ -8,7 +8,7 @@
 #include <memory>
 
 #include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
+//#include "gtest/gtest-all.cc"
 
 #include "backends/protocols/connector/basyx/frame/BaSyxNativeFrameBuilder.h"
 #include "backends/protocols/basyx/BaSyx.h"
@@ -116,14 +116,14 @@ TEST(BaSyxNativeFrameBuilder, buildInvokeFrame) {
 	// 1 byte command, 4 byte string size, n byte string
 	ASSERT_EQ(size, 1 + 4 + path.size() + 4 + valSerialize.length());
 }
-
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-// Run all tests
-	return RUN_ALL_TESTS();
-}
+//
+///* ************************************************
+// * Run test suite
+// * ************************************************/
+//int main(int argc, char **argv) {
+//// Init gtest framework
+//	::testing::InitGoogleTest(&argc, argv);
+//
+//// Run all tests
+//	return RUN_ALL_TESTS();
+//}

@@ -11,8 +11,8 @@
 #include "backends/protocols/provider/basyx/frame/BaSyxNativeFrameProcessor.h"
 #include "backends/protocols/basyx/BaSyx.h"
 #include "gtest/gtest.h"
-#include "gtest/gtest-all.cc"
-#include "regression/tests/backends/protocols/provider/basyx/frame/MockupModelProvider.h"
+//#include "gtest/gtest-all.cc"
+#include "regression/backends/protocols/provider/basyx/frame/MockupModelProvider.h"
 #include "backends/protocols/provider/basyx/CoderTools.h"
 #include "backends/protocols/provider/basyx/StringTools.h"
 
@@ -202,14 +202,14 @@ TEST(BaSyxNativeFrameProcessor, invokeTest) {
 	ASSERT_EQ(val->getType(), BASYS_INT);
 	ASSERT_EQ(val->getInt(),3);
 }
-
-/* ************************************************
- * Run test suite
- * ************************************************/
-int main(int argc, char **argv) {
-// Init gtest framework
-	::testing::InitGoogleTest(&argc, argv);
-
-// Run all tests
-	return RUN_ALL_TESTS();
-}
+//
+///* ************************************************
+// * Run test suite
+// * ************************************************/
+//int main(int argc, char **argv) {
+//// Init gtest framework
+//	::testing::InitGoogleTest(&argc, argv);
+//
+//// Run all tests
+//	return RUN_ALL_TESTS();
+//}
