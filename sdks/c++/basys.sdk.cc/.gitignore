@@ -1,2 +1,5 @@
 *.exe
 build/
+.project
+.cproject
+bin/
