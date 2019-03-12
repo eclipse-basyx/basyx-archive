@@ -100,6 +100,11 @@ private:
 	}
 
 	bool isFrozen(std::string const& submodelPath) {
+		auto modelPropertyValue = providerBackend->getModelPropertyValue(submodelPath + "/properties/frozen");
+
+		if (modelPropertyValue->isNull())
+			return false;
+
 		return static_cast<BRef<BValue>>(providerBackend->getModelPropertyValue(
 				submodelPath + "/properties/frozen"))->getBoolean();
 	}
