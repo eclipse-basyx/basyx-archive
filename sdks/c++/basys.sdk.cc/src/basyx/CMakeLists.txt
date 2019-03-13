@@ -41,7 +41,3 @@ target_include_directories(basyx PUBLIC ${PROJECT_SOURCE_DIR} ${CMAKE_SOURCE_DIR
 target_link_libraries(basyx util json)
 
 diagnostics_print(basyx)
-
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/testing.cmake")
-    include("${CMAKE_CURRENT_SOURCE_DIR}/testing.cmake")
-endif()
