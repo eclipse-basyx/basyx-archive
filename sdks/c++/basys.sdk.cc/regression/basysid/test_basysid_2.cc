@@ -10,7 +10,7 @@
  * ************************************************/
 
 // GTest
-#include "regression/support/gtest/gtest.h"
+#include "gtest/gtest.h"
 
 // BaSyx
 #include "basysid/BaSysID.h"

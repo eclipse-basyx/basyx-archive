@@ -15,7 +15,7 @@
 // Includes
 
 // GTest
-#include "regression/support/gtest/gtest.h"
+#include "gtest/gtest.h"
 
 // StdC++ includes
 #include <list>

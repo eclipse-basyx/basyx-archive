@@ -5,7 +5,7 @@
  *      Author: schnicke
  */
 
-#include "regression/support/gtest/gtest.h"
+#include "gtest/gtest.h"
 
 #include <vector>
 

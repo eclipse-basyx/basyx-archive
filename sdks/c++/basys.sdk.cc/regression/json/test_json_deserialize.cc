@@ -12,7 +12,7 @@
 // Includes
 
 // GTest
-#include "regression/support/gtest/gtest.h"
+#include "gtest/gtest.h"
 
 // BaSyx includes
 #include "ref/BRef.h"

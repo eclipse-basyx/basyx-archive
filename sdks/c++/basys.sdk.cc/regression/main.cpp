@@ -9,7 +9,7 @@
  * Run test suite
  * ************************************************/
 
-#include "regression/support/gtest/gtest.h"
+#include "gtest/gtest.h"
 
 int main(int argc, char **argv) {
 	// Init gtest framework
