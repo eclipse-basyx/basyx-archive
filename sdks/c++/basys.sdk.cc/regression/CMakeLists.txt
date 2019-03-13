@@ -22,6 +22,6 @@ add_subdirectory(json)
 add_subdirectory(parameter)
 add_subdirectory(provider)
 add_subdirectory(typertti)
-add_subdirectory(vab/snippet)
+#add_subdirectory(vab/snippet)
 
 diagnostics_print(testmain)

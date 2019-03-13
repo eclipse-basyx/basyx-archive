@@ -28,6 +28,10 @@ target_sources(backends
         provider/cxx/CXXModelProvider.h
         provider/cxxhandler/CXXHandler.h
         provider/json/JSONProvider.h
+        provider/vab/VABPath.cpp
+        provider/vab/VABPath.h
+        provider/vab/VABHashmapProvider.cpp
+        provider/vab/VABHashmapProvider.h
 )
 
 target_include_directories(backends PUBLIC "${BASYX_SOURCE_DIR}" )

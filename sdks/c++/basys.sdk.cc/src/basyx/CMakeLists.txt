@@ -25,7 +25,6 @@ target_sources(basyx
         parameter/BParameter.h
         ref/BRef.h
         types/BArray.h
-        types/BAny.h
         types/BaSysTypes.h
         types/BNullObject.h
         types/BObject.cc

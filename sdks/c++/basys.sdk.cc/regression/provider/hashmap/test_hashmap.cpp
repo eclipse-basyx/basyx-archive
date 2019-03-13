@@ -58,7 +58,7 @@ TEST_F(TestBaSyxHashmapProvider, GetPropertyValue)
 TEST_F(TestBaSyxHashmapProvider, SetPropertyValue)
 {
 	// Set and reread property value
-	hashMapProvider.setModelPropertyValue("property1/property1.1.", 12);
+	hashMapProvider.setModelPropertyValue("property1/property1.1", 12);
 	basyx::any & property1_1 = hashMapProvider.getModelPropertyValue2("property1/property1.1");
 
 	// Check test case results
@@ -66,7 +66,7 @@ TEST_F(TestBaSyxHashmapProvider, SetPropertyValue)
 	ASSERT_EQ(property1_1.Get<int>(), 12);
 
 	// Change value back
-	hashMapProvider.setModelPropertyValue("property1/property1.1.", 7);
+	hashMapProvider.setModelPropertyValue("property1/property1.1", 7);
 	basyx::any & property1_1b = hashMapProvider.getModelPropertyValue2("property1/property1.1");
 
 	// Check test case results

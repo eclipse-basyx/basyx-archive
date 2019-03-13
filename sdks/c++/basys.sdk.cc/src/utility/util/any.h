@@ -199,4 +199,4 @@ namespace basyx {
 
 };
 
-#endif // UTIL_META_H
+#endif
