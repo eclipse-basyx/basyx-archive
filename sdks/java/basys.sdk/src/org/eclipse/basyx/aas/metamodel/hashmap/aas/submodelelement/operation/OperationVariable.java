@@ -1,5 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperationVariable;
+import org.eclipse.basyx.aas.metamodel.facades.OperationVariableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElement;
 
 /**
@@ -9,8 +11,10 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelEleme
  * @author schnicke
  *
  */
-public class OperationVariable extends SubmodelElement {
+public class OperationVariable extends SubmodelElement implements IOperationVariable {
 	private static final long serialVersionUID = 1L;
+	
+	public static final String VALUE="value";
 
 	/**
 	 * 
@@ -19,7 +23,18 @@ public class OperationVariable extends SubmodelElement {
 	 *            element of kind=Type
 	 */
 	public OperationVariable(SubmodelElement value) {
-		put("value", value);
+		put(VALUE, value);
+	}
+
+	@Override
+	public void setValue(SubmodelElement value) {
+		new OperationVariableFacade(this).setValue(value);
+		
+	}
+
+	@Override
+	public SubmodelElement getValue() {
+		return new OperationVariableFacade(this).getValue();
 	}
 
 }

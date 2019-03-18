@@ -1,5 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IRelationshipElement;
+import org.eclipse.basyx.aas.metamodel.facades.RelationshipElementFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 
 /**
@@ -11,15 +13,18 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
  * @author schnicke
  *
  */
-public class RelationshipElement extends SubmodelElement {
+public class RelationshipElement extends SubmodelElement implements IRelationshipElement{
 	private static final long serialVersionUID = 1L;
 
+	public static final String FIRST="first";
+	public static final String SECOND="second";
+	
 	/**
 	 * Constructor
 	 */
 	public RelationshipElement() {
-		put("first", null);
-		put("second", null);
+		put(FIRST, null);
+		put(SECOND, null);
 	}
 
 	/**
@@ -30,7 +35,29 @@ public class RelationshipElement extends SubmodelElement {
 	 *            Second element in the relationship taking the role of the object.
 	 */
 	public RelationshipElement(Reference first, Reference second) {
-		put("first", first);
-		put("second", second);
+		put(FIRST, first);
+		put(SECOND, second);
+	}
+
+	@Override
+	public void setFirst(Reference first) {
+		new RelationshipElementFacade(this).setFirst(first);
+		
+	}
+
+	@Override
+	public Reference getFirst() {
+		return new RelationshipElementFacade(this).getFirst();
+	}
+
+	@Override
+	public void setSecond(Reference second) {
+		new RelationshipElementFacade(this).setSecond(second);
+		
+	}
+
+	@Override
+	public Reference getSecond() {
+		return new RelationshipElementFacade(this).getSecond();
 	}
 }

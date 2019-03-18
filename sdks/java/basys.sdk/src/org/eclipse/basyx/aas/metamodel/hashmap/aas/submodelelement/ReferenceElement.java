@@ -2,6 +2,8 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement;
 
 import java.util.HashMap;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IReferenceElement;
+import org.eclipse.basyx.aas.metamodel.facades.ReferenceElementFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 
 /**
@@ -13,11 +15,13 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
  * @author schnicke
  *
  */
-public class ReferenceElement extends HashMap<String, Object> {
+public class ReferenceElement extends HashMap<String, Object> implements IReferenceElement {
 	private static final long serialVersionUID = 1L;
+	
+	public static final String VALUE="value";
 
 	public ReferenceElement() {
-		put("value", null);
+		put(VALUE, null);
 	}
 
 	/**
@@ -27,6 +31,17 @@ public class ReferenceElement extends HashMap<String, Object> {
 	 *            AAS or a reference to an external object or entity.
 	 */
 	public ReferenceElement(Reference ref) {
-		put("value", ref);
+		put(VALUE, ref);
+	}
+
+	@Override
+	public void setValue(Reference ref) {
+		new ReferenceElementFacade(this).setValue(ref);
+		
+	}
+
+	@Override
+	public Reference getValue() {
+		return new ReferenceElementFacade(this).getValue();
 	}
 }

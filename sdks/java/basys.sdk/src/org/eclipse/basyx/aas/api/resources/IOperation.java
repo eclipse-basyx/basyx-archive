@@ -1,6 +1,7 @@
 package org.eclipse.basyx.aas.api.resources;
 
 import java.util.List;
+import java.util.function.Function;
 
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
 
@@ -35,4 +36,12 @@ public interface IOperation extends IElement {
 	 * @throws Exception
 	 */
 	public Object invoke(Object... params) throws Exception;
+	
+	
+	public void SetParameterTypes(List<OperationVariable> in);
+	public void setReturnTypes(List<OperationVariable> out);
+	
+	public void setInvocable(Function<Object[], Object[]> endpoint);
+	public Function<Object[], Object[]> getInvocable();
+	
 }

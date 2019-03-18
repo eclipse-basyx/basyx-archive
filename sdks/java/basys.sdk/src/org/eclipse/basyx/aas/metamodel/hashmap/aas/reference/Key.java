@@ -2,6 +2,9 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.reference;
 
 import java.util.HashMap;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IKey;
+import org.eclipse.basyx.aas.metamodel.facades.KeyFacade;
+
 /**
  * Key as defined in DAAS document <br/>
  * <br/>
@@ -10,13 +13,13 @@ import java.util.HashMap;
  * @author schnicke
  *
  */
-public class Key extends HashMap<String, Object> {
+public class Key extends HashMap<String, Object> implements IKey {
 	private static final long serialVersionUID = 1L;
 
-	private static final String TYPE = "type";
-	private static final String LOCAL = "local";
-	private static final String VALUE = "value";
-	private static final String IDTYPE = "idType";
+	public static final String TYPE = "type";
+	public static final String LOCAL = "local";
+	public static final String VALUE = "value";
+	public static final String IDTYPE = "idType";
 
 	/**
 	 * 
@@ -42,19 +45,49 @@ public class Key extends HashMap<String, Object> {
 		put(IDTYPE, idType);
 	}
 
+	@Override
 	public String getType() {
-		return (String) get(TYPE);
+	return new KeyFacade(this).getType();
 	}
 
+	@Override
 	public boolean isLocal() {
-		return (boolean) get(LOCAL);
+		return new KeyFacade(this).isLocal();
 	}
 
+	@Override
 	public String getValue() {
-		return (String) get(VALUE);
+		return new KeyFacade(this).getValue();
 	}
 
-	public String idType() {
-		return (String) get(IDTYPE);
+	@Override
+	public String getidType() {
+		return new KeyFacade(this).getidType();
 	}
+
+	@Override
+	public void setType(String type) {
+		new KeyFacade(this).setType(type);
+		
+	}
+
+	@Override
+	public void setLocal(boolean local) {
+		new KeyFacade(this).setLocal(local);
+		
+	}
+
+	@Override
+	public void setValue(String value) {
+		new KeyFacade(this).setValue(value);
+		
+	}
+
+	@Override
+	public void setIdType(String idType) {
+		new KeyFacade(this).setIdType(idType);
+		
+	}
+
+
 }

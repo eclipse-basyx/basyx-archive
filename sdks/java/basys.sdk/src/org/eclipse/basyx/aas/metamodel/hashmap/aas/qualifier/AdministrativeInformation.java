@@ -1,6 +1,12 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier;
 
 import java.util.HashMap;
+import java.util.HashSet;
+
+import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
+import org.eclipse.basyx.aas.metamodel.facades.AdministrativeInformationFacade;
+import org.eclipse.basyx.aas.metamodel.facades.HasDataSpecificationFacade;
 
 /**
  * AdministrativeInformation class
@@ -8,12 +14,16 @@ import java.util.HashMap;
  * @author kuhn
  *
  */
-public class AdministrativeInformation extends HashMap<String, Object> {
+public class AdministrativeInformation extends HashMap<String, Object> implements IAdministrativeInformation {
 
 	/**
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	public static final String VERSION="version";
+	
+	public static final String REVISION="revision";
 
 	/**
 	 * Constructor
@@ -39,31 +49,38 @@ public class AdministrativeInformation extends HashMap<String, Object> {
 		put("revision", revision);
 	}
 
-	/**
-	 * Get value of 'version' property
-	 */
+	@Override
+	public HashSet<IReference> getDataSpecificationReferences() {
+		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
+	}
+
+	@Override
+	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
+		
+	}
+
+	@Override
+	public void setVersion(String version) {
+		new AdministrativeInformationFacade(this).setVersion(version);
+		
+	}
+
+	@Override
 	public String getVersion() {
-		return (String) get("version");
+	return new AdministrativeInformationFacade(this).getVersion();
 	}
 
-	/**
-	 * Update value of 'version' property
-	 */
-	public void setVersion(String newValue) {
-		put("version", newValue);
+	@Override
+	public void setRevision(String revision) {
+		new AdministrativeInformationFacade(this).setRevision(revision);
+		
 	}
 
-	/**
-	 * Get value of 'revision' property
-	 */
+	@Override
 	public String getRevision() {
-		return (String) get("revision");
+		return new AdministrativeInformationFacade(this).getRevision();
 	}
 
-	/**
-	 * Update value of 'revision' property
-	 */
-	public void setRevision(String newValue) {
-		put("revision", newValue);
-	}
+
 }

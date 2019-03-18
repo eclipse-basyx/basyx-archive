@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.eclipse.basyx.aas.api.resources.IOperation;
+import org.eclipse.basyx.aas.metamodel.facades.OperationFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElement;
 
 /**
@@ -18,19 +19,26 @@ public class Operation extends SubmodelElement implements IOperation {
 	private static final long serialVersionUID = -1381491542617026911L;
 
 	private Function<Object[], Object[]> endpoint;
+	
+	public static final String IN="in";
+	public static final String OUT="out";
+	public static final String INVOKABLE="invokable";
+	public static final String IDSHORT="idShort";
+	
+	
 
 	/**
 	 * Constructor
 	 */
 	public Operation() {
 		// Input variables
-		put("in", new ArrayList<OperationVariable>());
+		put(IN, new ArrayList<OperationVariable>());
 
 		// Output variables
-		put("out", new ArrayList<OperationVariable>());
+		put(OUT, new ArrayList<OperationVariable>());
 
 		// Extension of DAAS specification for function storage
-		put("invokable", null);
+		put(INVOKABLE, null);
 	}
 
 	/**
@@ -45,30 +53,53 @@ public class Operation extends SubmodelElement implements IOperation {
 	 */
 	public Operation(List<OperationVariable> in, List<OperationVariable> out, Function<Object[], Object[]> endpoint) {
 		// Input variables
-		put("in", in);
+		put(IN, in);
 
 		// Output variables
-		put("out", out);
+		put(OUT, out);
 
 		// Extension of DAAS specification for function storage
-		put("invokable", endpoint);
+		put(INVOKABLE, endpoint);
 		this.endpoint = endpoint;
 	}
 
 	@Override
 	public Object invoke(Object... params) throws Exception {
-		return endpoint.apply(params);
+		return new OperationFacade(this.endpoint,this).invoke(params);
 	}
 
-	@SuppressWarnings("unchecked")
+
+
 	@Override
 	public List<OperationVariable> getReturnTypes() {
-		return (List<OperationVariable>) get("out");
+		return new OperationFacade(this).getReturnTypes();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<OperationVariable> getParameterTypes() {
-		return (List<OperationVariable>) get("in");
+		return new OperationFacade(this).getParameterTypes();
+	}
+
+	@Override
+	public void SetParameterTypes(List<OperationVariable> in) {
+		new OperationFacade(this).SetParameterTypes(in);
+		
+	}
+
+	@Override
+	public void setReturnTypes(List<OperationVariable> out) {
+		new OperationFacade(this).setReturnTypes(out);
+		
+	}
+
+	@Override
+	public void setInvocable(Function<Object[], Object[]> endpoint) {
+		new OperationFacade(this).setInvocable(endpoint);
+		
+	}
+
+	@Override
+	public Function<Object[], Object[]> getInvocable() {
+	return new OperationFacade(this).getInvocable();
 	}
 }

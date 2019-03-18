@@ -12,6 +12,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Qualifi
 public abstract class SubmodelElement extends HashMap<String, Object> implements IElement {
 	private static final long serialVersionUID = 1L;
 
+	public static final String IDSHORT="idShort";
 	public SubmodelElement() {
 		putAll(new HasDataSpecification());
 		putAll(new Referable());
@@ -27,7 +28,7 @@ public abstract class SubmodelElement extends HashMap<String, Object> implements
 	 */
 	@Override
 	public String getId() {
-		return (String) get("idShort");
+		return (String) get(IDSHORT);
 	}
 
 	/**
@@ -38,7 +39,7 @@ public abstract class SubmodelElement extends HashMap<String, Object> implements
 	 */
 	@Override
 	public void setId(String id) {
-		put("idShort", id);
+		put(IDSHORT, id);
 	}
 
 }
