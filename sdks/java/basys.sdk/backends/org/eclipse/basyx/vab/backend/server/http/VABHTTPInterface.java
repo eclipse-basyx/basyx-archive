@@ -9,8 +9,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.basyx.vab.backend.server.JSONProvider;
+import org.eclipse.basyx.vab.backend.server.utils.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
+import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
 /**
  * VAB provider class that enables access to an IModelProvider via HTTP REST
@@ -31,7 +32,7 @@ import org.eclipse.basyx.vab.core.IModelProvider;
  * @author kuhn
  *
  */
-public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServlet {
+public class VABHTTPInterface<ModelProvider extends IModelProvider> extends BasysHTTPServlet {
 
 	/**
 	 * Version information to identify the version of serialized instances
@@ -41,20 +42,20 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServlet
 	/**
 	 * Reference to IModelProvider backend
 	 */
-	protected JSONProvider<T> providerBackend = null;
+	protected JSONProvider<ModelProvider> providerBackend = null;
 
 	/**
 	 * Constructor
 	 */
-	public VABHTTPInterface(T provider) {
+	public VABHTTPInterface(ModelProvider provider) {
 		// Store provider reference
-		providerBackend = new JSONProvider<T>(provider);
+		providerBackend = new JSONProvider<ModelProvider>(provider);
 	}
 
 	/**
 	 * Access model provider
 	 */
-	public T getModelProvider() {
+	public ModelProvider getModelProvider() {
 		return providerBackend.getBackendReference();
 	}
 
@@ -161,8 +162,7 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServlet
 	}
 
 	/**
-	 * Handle a HTTP PATCH operation. Updates a map or collection respective to
-	 * action string.
+	 * Handle a HTTP PATCH operation. Updates a map or collection
 	 * 
 	 */
 	@Override
@@ -185,7 +185,7 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServlet
 		while (bufReader.ready())
 			serValue.append(bufReader.readLine());
 				
-		providerBackend.processBaSysPatch(path, serValue.toString(), resp.getWriter());
+		providerBackend.processBaSysDelete(path, serValue.toString(), resp.getWriter());
 	}
 
 	/**
@@ -209,6 +209,6 @@ public class VABHTTPInterface<T extends IModelProvider> extends BasysHTTPServlet
 		
 		System.out.println("Delete0:" + path);
 
-		providerBackend.processBaSysDelete(path, nullParam, resp.getWriter()); // There will never be a serialized value here as a parameter
+		providerBackend.processBaSysDelete(path, nullParam, resp.getWriter()); 
 	}
 }

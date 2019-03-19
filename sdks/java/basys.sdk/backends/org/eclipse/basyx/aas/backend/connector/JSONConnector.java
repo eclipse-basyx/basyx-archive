@@ -1,7 +1,10 @@
 package org.eclipse.basyx.aas.backend.connector;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.vab.core.IModelProvider;
 //import org.json.JSONException;
@@ -36,21 +39,15 @@ public class JSONConnector implements IModelProvider {
 		//First get the GSON object from the JSON string
 		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());
 		
-		@SuppressWarnings("unchecked")
-		Object result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
+		Object result = null;
 		
-		//Object resultGson=GSONTools.Instance.deserialize(message);
-
-		// Handle meta information and exceptions
 		try {
-			verifyResponse(result);
+			return verify(gsonObj);
 		} catch (Exception e) {
+			// TODO Auto-generated catch block 
 			e.printStackTrace();
 		}
-
-		// Return value
-		return result;
-
+		return null;
 	}
 
 	@Override
@@ -66,12 +63,7 @@ public class JSONConnector implements IModelProvider {
 		//First get the GSON object from the JSON string
         Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());
 		
-		@SuppressWarnings("unchecked")
-		Object result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
-
-		// Handle meta information and exceptions
-		verifyResponse(result);
-
+        verify(gsonObj);
 	}
 
 	@Override
@@ -85,11 +77,8 @@ public class JSONConnector implements IModelProvider {
 		Object message = provider.createValue(path, jsonString);
 		//First get the GSON object from the JSON string
 		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());	
-		@SuppressWarnings("unchecked")
-		Object result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
 
-		// Handle meta information and exceptions
-		verifyResponse(result);
+		verify(gsonObj);
 	}
 
 	@Override
@@ -100,11 +89,8 @@ public class JSONConnector implements IModelProvider {
 		// Deserialize
 		//First get the GSON object from the JSON string
 		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());	
-		@SuppressWarnings("unchecked")
-		Object result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
 
-		// Handle meta information and exceptions
-		verifyResponse(result);
+        verify(gsonObj);
 	}
 
 	@Override
@@ -118,11 +104,8 @@ public class JSONConnector implements IModelProvider {
 		// Deserialize
 		//First get the GSON object from the JSON string
 		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());	
-		@SuppressWarnings("unchecked")
-		Object result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
 
-		// Handle meta information and exceptions
-		verifyResponse(result);
+        verify(gsonObj);
 	}
 
 	@Override
@@ -138,50 +121,79 @@ public class JSONConnector implements IModelProvider {
 		// Deserialize
 		//First get the GSON object from the JSON string
 		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());	
-		@SuppressWarnings("unchecked")
-		Object result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
-		// Handle meta information and exceptions
-		verifyResponse(result);
-
-		// Deserialize response
-		return result;
+		
+		return verify(gsonObj);
 	}
+	
+	
+	public Object verify(Object gsonObj) throws Exception {
+		
+		Object result = null;
 
+        if (gsonObj instanceof Map) {
+			Object deserializedResult = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj); // TODO: A response message should be de-serialized to IResult! Provides an interface for message verification.
+			
+			if (deserializedResult instanceof Map) {
+				Map<String, Object> responseMap = (Map<String, Object>) deserializedResult;
+				
+				// Handle meta information and exceptions
+				result = verifyResponse(responseMap);
+				
+			}
+		}
+        return result;
+	}
+	
+	
 	/**
-	 * Function to extract and verify the response header TODO process other message
+	 * Verify the response header
 	 * information like "success", "entityType", "messages"
 	 * 
-	 * @param message
+	 * @param responseMap
 	 *            - provide deserialized message
+	 * @return 
 	 */
-	private void verifyResponse(Object message) throws Exception {
+	private Object verifyResponse(Map<String, Object> responseMap) throws Exception {
 
 		// Try to extract response if any
-		try {
-
-			// Deserialize response
-			// Map<String, Object> messageMap = JSONTools.Instance.deserialize(new
-			// JSONObject(message));
-
-			// Handle meta information
-			/**
-			 * TODO process other message information like "success", "entityType",
-			 * "messages"
-			 */
-
-			// if ((boolean) messageMap.get("isException")) {
-			// Throw server exception
-			// throw (ServerException) messageMap.get("entity");
-			// }
-
-			if (message instanceof Exception) {
-				throw (Exception) message;
+		System.out.println("Verify Response ...");
+		
+		// Retrieve messages if any
+		Collection<Map<String, Object>> messages = (Collection<Map<String, Object>>) responseMap.get("messages");
+		if (messages == null) messages = new LinkedList<Map<String, Object>>();
+		
+		boolean success =  (boolean) responseMap.get("success");
+			
+		// Return result if success
+		if (success) {
+			
+			for (Map<String, Object> m : messages) {
+				System.out.println(m.get("messageType")+ ", "+ m.get("code") + ", "+ m.get("text"));
 			}
-
-		} catch (Exception e) {
-			// There is no return value or deserialization failed
-			throw e;
+			
+			Object result =  responseMap.get("entity");	
+			if (result != null) return result;		
 		}
+		
+		// Throw exception if no success
+		else if (!success){
+			if (responseMap.get("isException").equals(true)) {
+				
+				for (Map<String, Object> m : messages) {
+					System.out.println(m.get("code") + ", "+ m.get("text"));
+				}
+			
+				Map<String, Object> first = (Map<String, Object>) messages.iterator().next(); //assumes an Exception always comes with a message
+				String text = (String) first.get("text");
+				throw new Exception("Server threw exception: "+text); 
+			} else {
+				throw new Exception("Format Error: no success but isException not true or not found.");
+			}
+		} else {
+			throw new Exception("Format Error: success not found.");
+		}
+		
+		return null;
 
 	}
 

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import org.eclipse.basyx.vab.backend.server.JSONProvider;
+import org.eclipse.basyx.vab.backend.server.utils.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
 
 /**
@@ -16,7 +16,7 @@ import org.eclipse.basyx.vab.core.IModelProvider;
  * @author kuhn, pschorn
  *
  */
-public class VABBaSyxTCPInterface<T extends IModelProvider> extends Thread {
+public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends Thread {
 
 	/**
 	 * BaSyx get command
@@ -46,7 +46,7 @@ public class VABBaSyxTCPInterface<T extends IModelProvider> extends Thread {
 	/**
 	 * Reference to IModelProvider backend
 	 */
-	protected JSONProvider<T> providerBackend = null;
+	protected JSONProvider<ModelProvider> providerBackend = null;
 
 	/**
 	 * TCP communication socket
@@ -66,9 +66,9 @@ public class VABBaSyxTCPInterface<T extends IModelProvider> extends Thread {
 	/**
 	 * Constructor
 	 */
-	public VABBaSyxTCPInterface(T modelProviderBackend, Socket communicationSocket) {
+	public VABBaSyxTCPInterface(ModelProvider modelProviderBackend, Socket communicationSocket) {
 		// Store reference to socket and backend
-		providerBackend = new JSONProvider<T>(modelProviderBackend);
+		providerBackend = new JSONProvider<ModelProvider>(modelProviderBackend);
 		tcpCommSocket = communicationSocket;
 
 		// Create input and output stream
@@ -84,7 +84,7 @@ public class VABBaSyxTCPInterface<T extends IModelProvider> extends Thread {
 	/**
 	 * Get backend reference
 	 */
-	public T getBackendReference() {
+	public ModelProvider getBackendReference() {
 		return providerBackend.getBackendReference();
 	}
 

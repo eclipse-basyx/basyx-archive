@@ -39,7 +39,7 @@ public class VABElementProxy {
 			// Change element on server
 			return provider.getModelPropertyValue(constructPath(elementPath));
 		} catch (ServerException e) {
-			throw new ServerException(e);
+			throw new ServerException(e);	// FIXME Exception Handling should be done in JSONConnector
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ServerException(e.getClass().getName(), e.getMessage());
