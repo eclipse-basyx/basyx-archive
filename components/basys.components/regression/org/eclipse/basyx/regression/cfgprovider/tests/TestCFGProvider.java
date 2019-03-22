@@ -51,12 +51,6 @@ public class TestCFGProvider {
 
 		
 		// Get property value
-		Object value4 = connSubModel.readElementValue("/aas/submodels/sampleCFG/properties/prop4/value");
-		System.out.println("Res4:"+value4);
-		System.out.println("Res4C:"+value4.getClass());
-
-		
-		// Get property value
 		Object value2 = connSubModel.readElementValue("/aas/submodels/sampleCFG/properties/cfgProperty2/value");
 		assertTrue(value2.equals("12"));
 

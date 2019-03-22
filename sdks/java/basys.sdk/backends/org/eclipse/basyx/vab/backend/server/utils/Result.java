@@ -77,7 +77,19 @@ public class Result  extends HashMap<String, Object> implements IResult {
 			messageList.addAll(getMessageListFromException((Exception) e.getCause())); 
 		}
 		
-		messageList.add(new Message(MessageType.Exception, e.getClass().getName() + " - " + e.getMessage())); // replace with desired debugging output
+		// prepare stacktrace
+		String trace = "\n";
+		for (StackTraceElement s : e.getStackTrace()) {
+
+			trace = trace + " at " + s.toString() + "\n";
+		}
+
+		messageList.add(
+				new Message(MessageType.Exception, e.getClass().getName() + ": " + trace)); // replace
+																															// with
+																															// desired
+																															// debugging
+																															// output
 		
 		return messageList;
 	}

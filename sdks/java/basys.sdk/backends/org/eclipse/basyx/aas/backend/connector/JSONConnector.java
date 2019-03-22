@@ -7,10 +7,11 @@ import java.util.Map;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.vab.core.IModelProvider;
 
+
 /**
- * Connector Class that receives a hashmap from its provider containing a
- * message that was sent from the server. It removes the message header and
- * returns the entity.
+ * Connector Class responsible for serializing parameters and de-serializing
+ * results. It verifies the results, removes the message header and returns the
+ * requested entity.
  * 
  * @author pschorn
  *
@@ -32,14 +33,13 @@ public class JSONConnector implements IModelProvider {
 
 		// Get element from server
 		Object message = provider.getModelPropertyValue(path);
-		//First get the GSON object from the JSON string
-		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());
-		
+
 		try {
-			return verify(gsonObj);
+			// De-serialize and verify
+			return verify(message);
+
 		} catch (Exception e) {
-			// TODO Auto-generated catch block 
-			e.printStackTrace();
+			e.printStackTrace(); // TODO throw exception?
 		}
 		return null;
 	}
@@ -53,11 +53,8 @@ public class JSONConnector implements IModelProvider {
 
 		Object message = provider.setModelPropertyValue(path, jsonString);
 
-		// Deserialize
-		//First get the GSON object from the JSON string
-        Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());
-		
-        verify(gsonObj);
+		// De-serialize and verify
+		verify(message);
 	}
 
 	@Override
@@ -65,13 +62,12 @@ public class JSONConnector implements IModelProvider {
 
 		// Serialize value Object
 		Map<String, Object> gsonMap = GSONTools.Instance.serialize(newEntity);
-
 		String jsonString = GSONTools.Instance.getJsonString(gsonMap);
-		Object message = provider.createValue(path, jsonString);
-		//First get the GSON object from the JSON string
-		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());	
 
-		verify(gsonObj);
+		Object message = provider.createValue(path, jsonString);
+
+		// De-serialize and verify
+		verify(message);
 	}
 
 	@Override
@@ -79,11 +75,8 @@ public class JSONConnector implements IModelProvider {
 
 		Object message = provider.deleteValue(path);
 
-		// Deserialize
-		//First get the GSON object from the JSON string
-		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());	
-
-        verify(gsonObj);
+		// De-serialize and verify
+		verify(message);
 	}
 
 	@Override
@@ -92,13 +85,11 @@ public class JSONConnector implements IModelProvider {
 		// Serialize parameter
 		Map<String, Object> gsonMap = GSONTools.Instance.serialize(obj);
 		String jsonString = GSONTools.Instance.getJsonString(gsonMap);
+
 		Object message = provider.deleteValue(path, jsonString);
 
-		// Deserialize
-		//First get the GSON object from the JSON string
-		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());	
-
-        verify(gsonObj);
+		// De-serialize and verify
+		verify(message);
 	}
 
 	@Override
@@ -106,21 +97,21 @@ public class JSONConnector implements IModelProvider {
 
 		// Serialize parameter
 		Map<String, Object> gsonMap = GSONTools.Instance.serialize(parameter);
-		
 		String jsonString = GSONTools.Instance.getJsonString(gsonMap);
 
 		Object message = provider.invokeOperation(path, jsonString);
 
-		// Deserialize
-		//First get the GSON object from the JSON string
-		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());	
-		
-		return verify(gsonObj);
+		// De-serialize and verify
+		return verify(message);
 	}
 	
 	
+
 	@SuppressWarnings("unchecked")
-	public Object verify(Object gsonObj) throws Exception {
+	public Object verify(Object message) throws Exception {
+
+		// First get the GSON object from the JSON string
+		Object gsonObj = GSONTools.Instance.getObjFromJsonStr(message.toString());
 		
 		Object result = null;
 
@@ -140,15 +131,18 @@ public class JSONConnector implements IModelProvider {
 	
 	
 	/**
-	 * Verify the response header
-	 * information like "success", "entityType", "messages"
+	 * Verify the response header and try to extract response if any. Process
+	 * information of "success", "entityType" and "messages"
 	 * 
 	 * @param responseMap
 	 *            - provide deserialized message
-	 * @return 
+	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	private Object verifyResponse(Map<String, Object> responseMap) throws Exception {
+
+		System.out.println("Verify Response ...");
+		
 		// Retrieve messages if any
 		Collection<Map<String, Object>> messages = (Collection<Map<String, Object>>) responseMap.get("messages");
 		if (messages == null) messages = new LinkedList<Map<String, Object>>();
@@ -157,6 +151,11 @@ public class JSONConnector implements IModelProvider {
 			
 		// Return result if success
 		if (success) {
+			
+			for (Map<String, Object> m : messages) {
+				System.out.println(m.get("messageType")+ ", "+ m.get("code") + ", "+ m.get("text"));
+			}
+			
 			Object result =  responseMap.get("entity");	
 			if (result != null) return result;		
 		}
@@ -165,8 +164,9 @@ public class JSONConnector implements IModelProvider {
 		else if (!success){
 			if (responseMap.get("isException").equals(true)) {
 				Map<String, Object> first = messages.iterator().next(); //assumes an Exception always comes with a message
+				
 				String text = (String) first.get("text");
-				throw new Exception("Server threw exception: "+text); 
+				throw new Exception("Server threw exception: " + text);
 			} else {
 				throw new Exception("Format Error: no success but isException not true or not found.");
 			}

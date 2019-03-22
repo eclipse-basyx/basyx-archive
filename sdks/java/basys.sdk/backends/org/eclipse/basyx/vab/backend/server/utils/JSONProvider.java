@@ -150,7 +150,8 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			Object value = providerBackend.getModelPropertyValue(path);
 
 			// Serialize as json string
-			String jsonString = serialize(true, value, value.getClass(), null); // any messages?
+			String jsonString = serialize(true, value, (value == null ? null : value.getClass()), null); // any
+																											// messages?
 
 			// Send response
 			sendJSONResponse(outputStream, jsonString);
