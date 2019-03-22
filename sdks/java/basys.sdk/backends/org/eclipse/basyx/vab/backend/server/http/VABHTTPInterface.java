@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.basyx.vab.backend.server.utils.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
 /**
  * VAB provider class that enables access to an IModelProvider via HTTP REST

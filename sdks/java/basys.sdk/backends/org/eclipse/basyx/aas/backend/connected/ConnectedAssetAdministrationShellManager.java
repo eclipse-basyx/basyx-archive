@@ -40,7 +40,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	}
 
 	@Override
-	public IAssetAdministrationShell retrieveAAS(String id) throws Exception {
+	public ConnectedAssetAdministrationShell retrieveAAS(String id) throws Exception {
 		return new ConnectedAssetAdministrationShell("/aas", manager.connectToVABElement(id), manager);
 	}
 

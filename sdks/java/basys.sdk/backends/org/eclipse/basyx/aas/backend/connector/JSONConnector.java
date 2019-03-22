@@ -4,12 +4,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.vab.core.IModelProvider;
-//import org.json.JSONException;
-//import org.json.JSONObject;
-//import org.json.JSONObject;
 
 /**
  * Connector Class that receives a hashmap from its provider containing a
@@ -38,8 +34,6 @@ public class JSONConnector implements IModelProvider {
 		Object message = provider.getModelPropertyValue(path);
 		//First get the GSON object from the JSON string
 		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());
-		
-		Object result = null;
 		
 		try {
 			return verify(gsonObj);
@@ -126,6 +120,7 @@ public class JSONConnector implements IModelProvider {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	public Object verify(Object gsonObj) throws Exception {
 		
 		Object result = null;
@@ -153,6 +148,7 @@ public class JSONConnector implements IModelProvider {
 	 *            - provide deserialized message
 	 * @return 
 	 */
+	@SuppressWarnings("unchecked")
 	private Object verifyResponse(Map<String, Object> responseMap) throws Exception {
 
 		// Try to extract response if any
@@ -183,7 +179,7 @@ public class JSONConnector implements IModelProvider {
 					System.out.println(m.get("code") + ", "+ m.get("text"));
 				}
 			
-				Map<String, Object> first = (Map<String, Object>) messages.iterator().next(); //assumes an Exception always comes with a message
+				Map<String, Object> first = messages.iterator().next(); //assumes an Exception always comes with a message
 				String text = (String) first.get("text");
 				throw new Exception("Server threw exception: "+text); 
 			} else {

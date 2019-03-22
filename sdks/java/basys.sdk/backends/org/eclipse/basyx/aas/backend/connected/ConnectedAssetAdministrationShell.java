@@ -10,15 +10,42 @@ import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
+/**
+ * Connected implementation of the AAS <br />
+ * Allows access to a remote AAS
+ * 
+ * @author schnicke
+ *
+ */
 public class ConnectedAssetAdministrationShell extends ConnectedElement implements IAssetAdministrationShell {
 
 	VABConnectionManager manager;
 
+	/**
+	 * Constructor creating a ConnectedAAS pointing to the AAS represented by proxy
+	 * and path
+	 * 
+	 * @param path
+	 * @param proxy
+	 * @param manager
+	 */
 	public ConnectedAssetAdministrationShell(String path, VABElementProxy proxy, VABConnectionManager manager) {
 		super(path, proxy);
 		this.manager = manager;
 	}
 
+	/**
+	 * Copy constructor, allowing to create a ConnectedAAS pointing to the same AAS
+	 * as <i>shell</i>
+	 * 
+	 * @param shell
+	 */
+	public ConnectedAssetAdministrationShell(ConnectedAssetAdministrationShell shell) {
+		super(shell.getPath(), shell.getProxy());
+		this.manager = shell.manager;
+
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, ISubModel> getSubModels() {
@@ -37,6 +64,10 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	@Override
 	public void addSubModel(ISubModel subModel) {
 		// TODO Auto-generated method stub
+	}
+
+	protected VABConnectionManager getManager() {
+		return manager;
 	}
 
 }

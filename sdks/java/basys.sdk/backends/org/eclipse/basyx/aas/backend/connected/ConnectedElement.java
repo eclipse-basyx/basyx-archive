@@ -40,4 +40,8 @@ public class ConnectedElement implements IElement {
 		}
 	}
 
+	protected String getPath() {
+		return path;
+	}
+
 }

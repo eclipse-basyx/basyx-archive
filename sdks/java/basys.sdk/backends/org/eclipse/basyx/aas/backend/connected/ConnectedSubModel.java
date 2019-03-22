@@ -9,12 +9,37 @@ import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.property.ConnectedPropertyFactory;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
+/**
+ * Connected implementation of the SubModel <br />
+ * Allows access to a remote SubModel
+ * 
+ * @author schnicke
+ *
+ */
 public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 
 	ConnectedPropertyFactory factory = new ConnectedPropertyFactory();
 
+	/**
+	 * Constructor creating a ConnectedSM pointing to the SM represented by proxy
+	 * and path
+	 * 
+	 * @param path
+	 * @param proxy
+	 * @param manager
+	 */
 	public ConnectedSubModel(String path, VABElementProxy proxy) {
 		super(path, proxy);
+	}
+
+	/**
+	 * Copy constructor, allowing to create a ConnectedSM pointing to the same SM as
+	 * <i>shell</i>
+	 * 
+	 * @param shell
+	 */
+	public ConnectedSubModel(ConnectedSubModel sm) {
+		super(sm.getPath(), sm.getProxy());
 	}
 
 	@SuppressWarnings("unchecked")

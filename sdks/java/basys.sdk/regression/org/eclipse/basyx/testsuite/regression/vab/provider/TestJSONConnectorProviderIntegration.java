@@ -1,8 +1,5 @@
 package org.eclipse.basyx.testsuite.regression.vab.provider;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.eclipse.basyx.aas.backend.connector.ConnectorProvider;
 import org.eclipse.basyx.aas.backend.connector.JSONConnector;
 import org.eclipse.basyx.testsuite.regression.vab.snippet.CreateDelete;
