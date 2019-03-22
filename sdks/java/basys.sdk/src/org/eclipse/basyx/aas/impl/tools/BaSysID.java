@@ -357,18 +357,7 @@ public class BaSysID {
 	 * TODO check compatible with version 0.2
 	 */
 	public String getAddress(String path) {
-		
-		System.out.println("getAddress " +path);
-		
 		return buildPath(getAASID(path), getSubmodelID(path));
-		
-		/*int    offset = 0;
-
-		// Remove everything but address if a path component is present in string
-		if ((offset = path.indexOf('/')) > -1) return path.substring(0, offset);
-		
-		// Path has no address component
-		return "";*/
 	}
 
 

@@ -179,8 +179,6 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			// Get value string length and value
 			int jsonValueLen = CoderTools.getInt32(rxFrame, 1 + 4 + pathLen);
 			String jsonValue = new String(rxFrame, 1 + 4 + pathLen + 4, jsonValueLen);
-			System.out.println("Invoking:" + path + "---" + jsonValue + "---");
-
 			// Invoke get operation
 			providerBackend.processBaSysPost(path, jsonValue, output);
 
@@ -230,26 +228,20 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 
 			// Process inputs
 			try {
-				System.out.println(">> Wait RX");
 
 				// Wait for incoming TCP frame
 				// - Wait for leading 4 byte header that contains frame length
 				while (inputStream.available() < 4)
 					sleep(1);
 
-				System.out.println(">> RX");
-
 				// Get frame size
 				inputStream.read(lengthBytes, 0, 4);
 				int frameSize = CoderTools.getInt32(lengthBytes, 0);
-
-				System.out.println(">> Wait Frame");
 				// Wait for frame to arrive
 				while (inputStream.available() < frameSize)
 					sleep(1);
 				// - Receive frame
 				byte[] rxFrame = new byte[frameSize];
-				System.out.println(">> RX Frame " + frameSize);
 				inputStream.read(rxFrame, 0, frameSize);
 
 				// Process input frame

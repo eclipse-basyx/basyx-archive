@@ -89,9 +89,6 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	public void addOperation(IOperation operation) {
 		getElements().put(operation.getId(), (SubmodelElement) operation);
 		getOperations().put(operation.getId(), operation);
-		System.out.println(get("operations") == getOperations());
-		System.out.println("A: " + get("operations"));
-		System.out.println("B: " + getOperations());
 	}
 
 	@Override

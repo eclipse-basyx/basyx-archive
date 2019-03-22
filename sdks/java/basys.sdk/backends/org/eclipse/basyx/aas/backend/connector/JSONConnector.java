@@ -66,8 +66,7 @@ public class JSONConnector implements IModelProvider {
 		// Serialize value Object
 		Map<String, Object> gsonMap = GSONTools.Instance.serialize(newEntity);
 
-		System.out.println("Parameter= " + newEntity + " => Serialized to " + gsonMap);
-        String jsonString = GSONTools.Instance.getJsonString(gsonMap);
+		String jsonString = GSONTools.Instance.getJsonString(gsonMap);
 		Object message = provider.createValue(path, jsonString);
 		//First get the GSON object from the JSON string
 		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(message.toString());	
@@ -150,10 +149,6 @@ public class JSONConnector implements IModelProvider {
 	 */
 	@SuppressWarnings("unchecked")
 	private Object verifyResponse(Map<String, Object> responseMap) throws Exception {
-
-		// Try to extract response if any
-		System.out.println("Verify Response ...");
-		
 		// Retrieve messages if any
 		Collection<Map<String, Object>> messages = (Collection<Map<String, Object>>) responseMap.get("messages");
 		if (messages == null) messages = new LinkedList<Map<String, Object>>();
@@ -162,11 +157,6 @@ public class JSONConnector implements IModelProvider {
 			
 		// Return result if success
 		if (success) {
-			
-			for (Map<String, Object> m : messages) {
-				System.out.println(m.get("messageType")+ ", "+ m.get("code") + ", "+ m.get("text"));
-			}
-			
 			Object result =  responseMap.get("entity");	
 			if (result != null) return result;		
 		}
@@ -174,11 +164,6 @@ public class JSONConnector implements IModelProvider {
 		// Throw exception if no success
 		else if (!success){
 			if (responseMap.get("isException").equals(true)) {
-				
-				for (Map<String, Object> m : messages) {
-					System.out.println(m.get("code") + ", "+ m.get("text"));
-				}
-			
 				Map<String, Object> first = messages.iterator().next(); //assumes an Exception always comes with a message
 				String text = (String) first.get("text");
 				throw new Exception("Server threw exception: "+text); 

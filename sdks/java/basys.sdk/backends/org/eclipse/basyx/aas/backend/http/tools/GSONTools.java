@@ -87,8 +87,6 @@ public class GSONTools {
 	 * Serialize a primitive value
 	 */
 	protected Object serializePrimitive(Map<String, Object>  target, Object serializedObject, String type) {
-		System.out.println("SP:" + serializedObject);
-
 		// Serialize values
 		// - Put object value into the JSON object
 		target.put("value", serializedObject);

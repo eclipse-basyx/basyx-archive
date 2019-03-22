@@ -83,7 +83,6 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IEl
 	public void addSubModel(ISubModel subModel) {
 		System.out.println("adding Submodel " + subModel.getId());
 		addSubModel(subModel.getId());
-		System.out.println("added Submodel " + getSubModels());
 	}
 
 	@SuppressWarnings("unchecked")

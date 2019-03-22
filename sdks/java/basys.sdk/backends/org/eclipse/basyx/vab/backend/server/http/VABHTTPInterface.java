@@ -118,9 +118,6 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		while (bufReader.ready())
 			serValue.append(bufReader.readLine());
 		
-
-		// System.out.println("Parameters: " + req.getParameterMap().size()); - seems like parameters are dropped sometimes or get consumed after first read => null
-
 		// Set value of BaSys VAB element
 		providerBackend.processBaSysSet(path, serValue.toString(), resp.getWriter());
 
@@ -206,8 +203,6 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		// No parameter to read! Provide serialized null
 		String nullParam = "{\"basystype\":\"null\"}";
 		
-		System.out.println("Delete0:" + path);
-
 		providerBackend.processBaSysDelete(path, nullParam, resp.getWriter()); 
 	}
 }

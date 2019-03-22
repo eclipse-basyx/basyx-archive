@@ -1,7 +1,6 @@
 package org.eclipse.basyx.vab.backend.server.utils;
 
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -110,7 +109,6 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @param resp
 	 */
 	private void sendException(PrintWriter resp, Exception e) {
-		System.out.println("Sending " + e.toString() + " ...");
 		e.printStackTrace();
 		
 		// Serialize Exception
@@ -131,10 +129,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @throws ServerException
 	 */
 	@SuppressWarnings("unchecked")
-	private Object extractParameter(String path, String serializedJSONValue, PrintWriter outputStream)  {
-
-		System.out.println(serializedJSONValue);
-		
+	private Object extractParameter(String path, String serializedJSONValue, PrintWriter outputStream) {
 		// Return value
 		Object result = null;
 
@@ -151,9 +146,6 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	public void processBaSysGet(String path, PrintWriter outputStream) {
 
 		try {
-			
-			System.out.println(delimiter +" DO GET " + path + " "+ delimiter);
-
 			// Get requested value from provider backend
 			Object value = providerBackend.getModelPropertyValue(path);
 
@@ -182,9 +174,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			
 			// Deserialize json body. If parameter is not ex
 			Object parameter = extractParameter(path, serializedJSONValue, outputStream);
-			
-			System.out.println(delimiter + " DO PUT " + path + " (" + parameter + ") " + delimiter);
-					
+
 			// Set the value of the element
 			providerBackend.setModelPropertyValue(path, parameter);
 
@@ -244,13 +234,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 				parameter = parameterArray;
 			}
 			
-			System.out.println(delimiter + " DO INVOKE " + path + " " + Arrays.toString((Object[]) parameter) + " " + delimiter);
-			
-		
-			System.out.println("Invoking Service: " + path + " with arguments " + Arrays.toString((Object[]) parameter));
-
 			Object result = providerBackend.invokeOperation(path, (Object[]) parameter);
-			System.out.println("Return Value: " + result);
 
 			// Serialize result as json string
 			String jsonString = serialize(true, result, result.getClass(), null); // any messages?
@@ -279,14 +263,10 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			// Deserialize json body. If parameter is not ex
 			Object parameter = extractParameter(path, serializedJSONValue, outputStream);
 			
-			System.out.println(delimiter + " DO DELETE " + path + " (" +parameter +") " + delimiter);
-						
 			// Process delete request with or without argument
 			if (parameter == null) {
-				System.out.println("Delete Resource:" + parameter);
 				this.providerBackend.deleteValue(path);
 			} else {
-				System.out.println("Delete Value:" + parameter);		
 				this.providerBackend.deleteValue(path, parameter);
 			}
 
@@ -314,7 +294,6 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			// Deserialize json body. 
 			Object parameter = extractParameter(path, serializedJSONValue, outputStream);
 						
-			System.out.println(delimiter + " DO CREATE " + path + " ( " +parameter + ") " + delimiter);
 
 			providerBackend.createValue(path, parameter);
 
