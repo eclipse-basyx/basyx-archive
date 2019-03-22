@@ -104,6 +104,11 @@ public class TestLambdaProvider {
 		rootOperations.put("operation1", (Function<Object[], Object>) (param) -> {
 			return (int) param[0] + (int) param[1];
 		});
+
+		rootOperations.put("operation2", (Function<Object[], Object>) (param) -> {
+			return null;
+		});
+
 		// Function that throws native JAVA exception
 		rootOperations.put("operationEx1", (Function<Object[], Object>) (elId) -> {
 			throw new NullPointerException();

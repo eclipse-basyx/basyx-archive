@@ -19,8 +19,7 @@ import org.eclipse.basyx.vab.core.tools.VABPathTools;
  *
  */
 public class JSONProvider<ModelProvider extends IModelProvider> {
-	
-	private static String delimiter = "--------------------";
+
 	
 
 	/**
@@ -238,7 +237,8 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			Object result = providerBackend.invokeOperation(path, (Object[]) parameter);
 
 			// Serialize result as json string
-			String jsonString = serialize(true, result, result.getClass(), null); // any messages?
+			String jsonString = serialize(true, result, (result == null ? null : result.getClass()), null); // any
+																											// messages?
 			
 			// Send response
 			sendJSONResponse(outputStream, jsonString);
