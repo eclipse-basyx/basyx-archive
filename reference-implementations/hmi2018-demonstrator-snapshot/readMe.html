@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ReadMe - Basyx demo</title>
+</head>
+
+<body>
+<hr>
+<hr>
+<h1><center>Basyx HMI2018 Demo - Source Code <u>(outdated, not compatible to current version of Basyx)</u></center></h1>
+<hr>
+<hr>
+<h2>About</h2>
+<p>
+This source code represents the Basyx middleware state that was used to implement the BaSys 4.0 demonstration at the Hannover Fair 2018 (HMI2018). In the meanwhile, <strong>this version has been declared as outdated</strong> and the most recent version can be found at <a href="https://www.basys40.de/">https://www.basys40.de/</a>.<br/>
+Nonetheless, this source code can be still of use as it shows the basic steps on how the HMI2018 demo was built on top of the <a href="http://www.eclipse.org/om2m/">Eclipse oM2M</a> middleware technology.
+</p>
+<hr>
+<h2>Setup</h2>
+<p>
+In this demo, three software components must be set up. 
+<ul>
+<li>Eclipse oM2M (patched)</li>
+<li>Angular2+ webapp</li>
+<li>Java Demo + Basyx/oneM2M SDK</li>
+</ul>
+<h3>Eclipse oM2M</h3>
+The demo is based on Eclipse oM2M which acts as a middleware. In particular, Eclipse oM2M is used to 
+enable the communication between endpoints (via the oneM2M protocol) as well as persist data (integrated persistence with EclipseLink). 
+The demo has been tested with commit "be64aedd704cb86e1a1fa1f08fc87e7a2ae240b3" and is therefore recommended. In addition, small patches have to be applied that fix some bugs (caching) and improve support for webapps (CORS).
+<ol>
+<li>git clone http://git.eclipse.org/gitroot/om2m/org.eclipse.om2m.git</li>
+<li>cd org.eclipse.om2m</li>
+<li>git checkout be64aedd704cb86e1a1fa1f08fc87e7a2ae240b3</li>
+<li>git apply ... # patches can be found in om2m_patches</li>
+<li>Follow instructions on https://wiki.eclipse.org/OM2M/one</li>
+</ol>
+
+<h3>Webapp</h3>
+The graphical user interface is an Angular 2+ webapp. In order to build and run the webapp, NODE.js and NPM are required. The webapp comes with a standalone oneM2M library which is in folder
+"webapp/modules/angular-onem2m". Then, there is a standalone basyx library which can be used without the graphical user interface (folder: "webapp/modules/angular-basyx"). 
+Both libraries have to be build (npm install, npm run build) before building the graphical user interface which can be found in the root folder. When entering "npm start", a development server is started on port 4200. If "localhost:4200" is entered to the browser, one should see our graphical user interface including a oneM2M browser and a component explorer. 
+</p>
+<hr>
+<h3>Java Demo</h3>
+The Java Demo consists of an API (org.eclipse.basyx.aas.api), an implementation (org.eclipse.basyx.aas.impl.onem2m), and a demo (org.eclipse.basyx.aas.impl.onem2m.demo) that shows how to use the 
+API and the implementation. All three parts are maven projects. 
+</p>
+<hr>
+<h2>Extras</h2>
+<p>
+In addition, there is a .NET client (including a full oneM2M client) for communicating with the middleware. The .NET client has not been used in the HMI2018 demo.<br/>
+Moreover, the definition of the BPMN extensions are added to this source code. BPMN was used as exchange format for workflows. Workflows are descriptions of a productions process and were executed during the HMI2018 demo by BPMN Process Engine to control I4.0 components. The file "misc/bpmnFormatMetadata.xsd" contains the definitions. Each workflow has a id, label and descrption. Then, roles are defined. A role is reference to an I4.0 component type and is later assigned to an I4.0 component instance by the Process Engine (or by user input). In the XSD, the roles are on submodel level (both levels, AAS or submodel, can be referenced. The name is an arbitrary role name and the type is the type identifier (e.g. Vorto repository URL). Next, conditions are defined. The conditions are described in JavaScript and are interpreted by the Process Engine when assigning I4.0 component instances to roles. Optimally, all conditions are fulfilled when an assignment has been made. Inputs and Outputs describe what is going into a single workflow and what comes out. On the one hand, this could be data or a (physical) thing, such as a product. Data is described by a name, data type and a JavaScript expression, that binds e.g. a submodel's property to the data input/output. Things have names and also an expression. The expression is typically used to describe the location of a thing. 
+</p>
+<p>
+In workflows, ScriptTask (language = JavaScript) are used to control the I4.0 components. Standard JavaScript was enriched by a single built-in class, that allows to communicate with the basyx middleware. The class/object was also available for the conditions and expression attributes.
+</p>
+<pre>
+class AASManager {
+	getProperty(String aas, String sub, String property) : any;
+	setProperty(String aas, String sub, String property, any value);
+	callOperation(String aas, String sub, String operation, any... parameters) : any;
+	getCollection(String aas, String sub, String property, String key) : any;
+	setCollection(String aas, String sub, String property, String key, any value);
+}
+</pre>
+<hr><hr>
+</body>
+
+</html> 

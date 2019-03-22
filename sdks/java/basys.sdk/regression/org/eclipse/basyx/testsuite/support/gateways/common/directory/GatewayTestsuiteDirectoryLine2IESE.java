@@ -20,31 +20,37 @@ public class GatewayTestsuiteDirectoryLine2IESE extends PreconfiguredDirectory {
 	public GatewayTestsuiteDirectoryLine2IESE() {
 		// Define mappings for line 2 in domain manufacturing.de
 		// - Asset administration shells
-		addMapping("aas.device2.line2.manufacturing.de", "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/Device2/BaSys/1.0/provider");
-		addMapping("aas.device2.line2",                  "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/Device2/BaSys/1.0/provider");
-		addMapping("aas.device2",                        "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/Device2/BaSys/1.0/provider");
-		addMapping("device2",                            "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/Device2/BaSys/1.0/provider");
 		
-		// sample new mappings
-		// addMapping("device2", 						 "http://localhost:8080/line2.manufacturing.de/basys.sdk/Device2/aas");
-		// addMapping("line2.manufacturing.de.device2", "http://localhost:8080/line2.manufacturing.de/basys.sdk/Device2/aas");
-
+		addMapping("line2.manufacturing.de/device2/aas", "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/"); //Device2/BaSys/1.0/provider");
+		addMapping("line2/device2/aas",                  "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/"); //Device2/BaSys/1.0/provider");
+		addMapping("device2/aas",                        "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/"); //Device2/BaSys/1.0/provider");
+		addMapping("device2",                            "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/"); //Device2/BaSys/1.0/provider");
+		
 		
 		
 		// - Sub models of device2 in line 2 in domain manufacturing.de
-		addMapping("description.device2.line2.manufacturing.de", "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/Device2/Submodels/BaSys/1.0/provider");
-		addMapping("status.device2.line2.manufacturing.de",      "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/Device2/Submodels/BaSys/1.0/provider");
-		addMapping("description.device2.line2",                  "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/Device2/Submodels/BaSys/1.0/provider");
-		addMapping("status.device2.line2",                       "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/Device2/Submodels/BaSys/1.0/provider");
-		addMapping("description.device2",                        "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/Device2/Submodels/BaSys/1.0/provider");
-		addMapping("status.device2",                             "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/Device2/Submodels/BaSys/1.0/provider");
+		addMapping("line2.manufacturing.de/device2/aas/submodels/description",  "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/"); //Device2/BaSys/1.0/provider"); ///Submodels/BaSys/1.0/provider");
+		addMapping("line2.manufacturing.de/device2/aas/submodels/status",       "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/"); //Device2/BaSys/1.0/provider"); // Submodels/BaSys/1.0/provider");
+		addMapping("line2/device2/aas/submodels/description",                   "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/"); //Device2/BaSys/1.0/provider"); 
+		addMapping("line2/device2/aas/submodels/status",                        "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/"); //Device2/BaSys/1.0/provider");
+		addMapping("device2/aas/submodels/description",                         "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/"); //Device2/BaSys/1.0/provider");
+		addMapping("device2/aas/submodels/status",                              "http://localhost:8080/basys.sdk/Testsuite/GW/Manufacturing/line2/"); //Device2/BaSys/1.0/provider");
 
 
-		// Define mappings for line 2 internal in domain manufacturing.de
+		// Define mappings for line 2 internal in domain manufacturing.de - do we need this here?
 		// - Asset administration shells
-		addMapping("aas.device10.line2int.line2.manufacturing.de",         "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/gateway_line2int/BaSys/1.0/provider");
+		addMapping("device10",         					 "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/"); //gateway_line2int/BaSys/1.0/provider");
+		addMapping("device10/aas",         					 "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/"); //gateway_line2int/BaSys/1.0/provider");
+		addMapping("device10/aas/submodels/description", "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/"); //gateway_line2int/BaSys/1.0/provider");
+		addMapping("device10/aas/submodels/status",      "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/"); //gateway_line2int/BaSys/1.0/provider");
+		addMapping("line2int/device10",         					 "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/"); //gateway_line2int/BaSys/1.0/provider");
+		addMapping("line2int/device10/aas",         					 "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/"); //gateway_line2int/BaSys/1.0/provider");
+		addMapping("line2int/device10/aas/submodels/description", "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/"); //gateway_line2int/BaSys/1.0/provider");
+		addMapping("line2int/device10/aas/submodels/status",      "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/"); //gateway_line2int/BaSys/1.0/provider");
+		addMapping("line2int.line2.manufacturing.de/device10",         					 "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/"); //gateway_line2int/BaSys/1.0/provider");
+		addMapping("line2int.line2.manufacturing.de/device10/aas",         					 "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/"); //gateway_line2int/BaSys/1.0/provider");
 		// - Sub models of device2 in line 2 in domain manufacturing.de
-		addMapping("description.device10.line2int.line2.manufacturing.de", "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/gateway_line2int/BaSys/1.0/provider");
-		addMapping("status.device10.line2int.line2.manufacturing.de",      "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/gateway_line2int/BaSys/1.0/provider");
+		addMapping("line2int.line2.manufacturing.de/device10/aas/submodels/description", "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/"); //gateway_line2int/BaSys/1.0/provider");
+		addMapping("line2int.line2.manufacturing.de/device10/aas/submodels/status",      "http://localhost:8080/basys.sdk/Testsuite/GW/IESE/line2/"); //gateway_line2int/BaSys/1.0/provider");
 	}
 }

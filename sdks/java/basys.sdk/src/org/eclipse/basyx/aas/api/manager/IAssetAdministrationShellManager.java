@@ -2,8 +2,7 @@ package org.eclipse.basyx.aas.api.manager;
 
 import java.util.Collection;
 
-import org.eclipse.basyx.aas.api.resources.basic.IConnectedAssetAdministrationShell;
-import org.eclipse.basyx.aas.impl.resources.basic.AssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 
 
 
@@ -22,7 +21,7 @@ public interface IAssetAdministrationShellManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public IConnectedAssetAdministrationShell createAAS(AssetAdministrationShell aas) throws Exception;
+	public IAssetAdministrationShell createAAS(IAssetAdministrationShell aas) throws Exception;
 	
 	
 	/**
@@ -32,7 +31,7 @@ public interface IAssetAdministrationShellManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public IConnectedAssetAdministrationShell retrieveAAS(String id) throws Exception;
+	public IAssetAdministrationShell retrieveAAS(String id) throws Exception;
 	
 	
 	/**
@@ -40,7 +39,7 @@ public interface IAssetAdministrationShellManager {
 	 * 
 	 * @return
 	 */
-	public Collection<IConnectedAssetAdministrationShell> retrieveAASAll();
+	public Collection<IAssetAdministrationShell> retrieveAASAll();
 	
 	
 	/**

@@ -1,9 +1,6 @@
 package org.eclipse.basyx.aas.impl.tools;
 
-import org.eclipse.basyx.aas.api.exception.ResourceNotFoundException;
-import org.eclipse.basyx.aas.api.resources.basic.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.basic.IElement;
-import org.eclipse.basyx.aas.api.resources.basic.ISubModel;
+import org.eclipse.basyx.aas.api.resources.IElement;
 
 /**
  * Element utility functions
@@ -22,7 +19,7 @@ public class ElementTools {
 		IElement el = element;
 		
 		// Look for AAS in hierarchy
-		while ((!(el instanceof IAssetAdministrationShell)) && (el != null)) el = el.getParent();
+		// while ((!(el instanceof IAssetAdministrationShell)) && (el != null)) el = el.getParent(); uncomment until new DAAS MetaModel is implemented
 		
 		// Get ID
 		if (el != null) return el.getId();
@@ -32,45 +29,45 @@ public class ElementTools {
 	}
 
 
-	/**
-	 * Get sub model ID of this element
-	 */
-	public static String getSubmodelID(IElement element) {
-		// Temporary variables
-		IElement el = element;
-		
-		// Look for AAS in hierarchy
-		while ((!(el instanceof ISubModel)) && (el != null)) el = el.getParent();
-		
-		// Get ID
-		if (el != null) return el.getId();
-		
-		// Indicate error
-		throw new ResourceNotFoundException(element.getId());
-	}
+//	/**
+//	 * Get sub model ID of this element - uncomment until new DAAS MetaModel is implemented
+//	 */
+//	public static String getSubmodelID(IElement element) {
+//		// Temporary variables
+//		IElement el = element;
+//		
+//		// Look for AAS in hierarchy
+//		while ((!(el instanceof ISubModel)) && (el != null)) el = el.getParent(); 
+//		
+//		// Get ID
+//		if (el != null) return el.getId();
+//		
+//		// Indicate error
+//		throw new ResourceNotFoundException(element.getId());
+//	}
 	
 	
-	/**
-	 * Get the full path to an property
-	 */
-	public static String getFullPathToProperty(IElement element) {
-		// Return value
-		StringBuilder result = new StringBuilder();
-		
-		// Temporary variables
-		IElement el = element;
-		
-		// Create path to property
-		while ((!(el instanceof ISubModel)) && (el != null)) {
-			if (result.length() > 0) result.insert(0, "/");
-			
-			result.insert(0, el.getId());
-			
-			el = el.getParent();
-		}
-		
-		// Return path
-		return result.toString();
-	}
+//	/**
+//	 * Get the full path to an property - uncomment until new DAAS MetaModel is implemented
+//	 */
+//	public static String getFullPathToProperty(IElement element) {
+//		// Return value
+//		StringBuilder result = new StringBuilder();
+//		
+//		// Temporary variables
+//		IElement el = element;
+//		
+//		// Create path to property
+//		while ((!(el instanceof ISubModel)) && (el != null)) {
+//			if (result.length() > 0) result.insert(0, "/");
+//			
+//			result.insert(0, el.getId());
+//			
+//			el = el.getParent();
+//		}
+//		
+//		// Return path
+//		return result.toString();
+//	}
 }
 

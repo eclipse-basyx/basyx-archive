@@ -1,0 +1,36 @@
+From 0490ecc547374d04fcd4ea03b33d549b5bfa97b0 Mon Sep 17 00:00:00 2001
+From: Michael Schoeffler <michael.schoeffler@de.bosch.com>
+Date: Fri, 27 Oct 2017 07:58:46 +0200
+Subject: [PATCH 2/6] Updated CORS
+
+---
+ .../java/org/eclipse/om2m/binding/http/RestHttpServlet.java  | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/org.eclipse.om2m.binding.http/src/main/java/org/eclipse/om2m/binding/http/RestHttpServlet.java b/org.eclipse.om2m.binding.http/src/main/java/org/eclipse/om2m/binding/http/RestHttpServlet.java
+index f793cd9..e5a7113 100644
+--- a/org.eclipse.om2m.binding.http/src/main/java/org/eclipse/om2m/binding/http/RestHttpServlet.java
++++ b/org.eclipse.om2m.binding.http/src/main/java/org/eclipse/om2m/binding/http/RestHttpServlet.java
+@@ -75,8 +75,9 @@ public class RestHttpServlet extends HttpServlet {
+ 		httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+         httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
+         httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-m2m-origin,x-m2m-ri, X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
++        httpServletResponse.setHeader("Access-Control-Expose-Headers", "x-m2m-origin,x-m2m-ri, x-m2m-rsc, X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");        
+         httpServletResponse.setHeader("Access-Control-Max-Age", "600");		
+-		if ("OPTIONS".equals(httpServletRequest.getMethod())) { //&& httpServletRequest.getHeader("Access-Control-Request-Method") != null) {
++		if ("OPTIONS".equals(httpServletRequest.getMethod())) { 
+ 			httpServletResponse.setStatus(200);
+ 			return;			
+ 		}
+@@ -208,7 +209,7 @@ public class RestHttpServlet extends HttpServlet {
+ 		case "DELETE":
+ 			return Operation.DELETE;
+ 		}
+-		switch (httpServletRequest.getHeader("Access-Control-Request-Method")) {
++		switch (httpServletRequest.getHeader("Access-Control-Request-Method")) { // TODO check whether necessary
+ 		case "GET":
+ 			return Operation.RETRIEVE;
+ 		case "POST":
+-- 
+2.17.1.windows.2
+

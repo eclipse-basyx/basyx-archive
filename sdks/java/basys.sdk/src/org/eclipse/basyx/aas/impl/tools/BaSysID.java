@@ -1,20 +1,16 @@
 package org.eclipse.basyx.aas.impl.tools;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.junit.platform.commons.util.StringUtils;
 
 /**
- * Class that supports building IDs of asset administration shell IDs and sub models for the directory server
+ * Class that supports building IDs of asset administration shell IDs and sub models for the directory server <br>
  * 
- * Format:  <submodel>.<aas>/<propertypath>
+ * Format:  {@code <aas>/<qualifier>/<submodel>/<qualifier>/<propertypath> } <br>
  * 
- * Examples: 
- * - status.lsw12.groundfloow.kaiserslautern.iese.fraunhofer.de (globally scoped - can be resolved via DNS)
+ * Examples: <br>
+ * - status.lsw12.groundfloow.kaiserslautern.iese.fraunhofer.de (globally scoped - can be resolved via DNS)<br>
  * - status.lsw12                                               (local scope)
  * 
- * @author kuhn
+ * @author kuhn, pschorn
  *
  */
 public class BaSysID {
@@ -40,71 +36,93 @@ public class BaSysID {
 	
 	/**
 	 * Create an ID string that refers to an Asset Administration Shell for the directory server
+	 * @version 0.2
 	 * 
 	 * @param aasID ID of asset administration shell
+	 * @return Built ID in format {@code <aasID>/aas}
 	 * 
-	 * @return Built ID in format <aasID>
+	 * 
 	 */
 	public String buildAASID(String aasID) {
-		if (aasID.startsWith("aas.")) return aasID; else return "aas."+aasID;
+	
+		return aasID.endsWith("/aas") ? aasID : aasID + "/aas";
+		
 	}
 	
 	
 	/**
 	 * Create an ID string that refers to a single sub model for the directory server
+	 * @version 0.2
 	 * 
 	 * @param smID ID of sub model
 	 * 
-	 * @return Built ID in format <smID>
+	 * @return Built ID in format {@code <smID>/submodel} (mind the "s"!)
 	 */
 	public String buildSMID(String smID) {
-		return smID;
+		
+		return smID.endsWith("/submodel") ? smID : smID + "/submodel";
 	}
 	
 	
 	/**
 	 * Create an ID string for the directory server
+	 * @version 0.2
 	 * 
 	 * @param aasID ID of asset administration shell
 	 * @param subModelID ID of sub model
 	 * 
-	 * @return Built ID in format <subModelID>.<aasID>
+	 * @return Built ID in format {@code <aasID>/aas} or {@code <smID>/submodel} or {@code <aasID>/aas/submodels/<subModelID> }
 	 */
 	public String buildPath(String aasID, String subModelID) {
 		// Only return one id if other is is null or empty
 		if ((aasID == null)      || (aasID.length()==0))      return buildSMID(subModelID);
 		if ((subModelID == null) || (subModelID.length()==0)) return buildAASID(aasID);
 
-		// Build path, remove leading "aas." from AAS because a sub model ID is given
-		if (aasID.startsWith("aas.")) aasID = aasID.substring(4);
-		
 		// Build path
-		return aasID+ "/submodels/" +subModelID;
+		return aasID+ "/aas/submodels/" +subModelID; // return subModelID+"."+aasID;
+	}
+	
+	/**
+	 * Create default service path 
+	 * @param qualifier refers to a qualifier "properties", "operations" or "events"
+	 * @param path can be null if a type qualifier
+	 */
+	public String buildPath(String aasID, String aasSubmodelID, String path, String qualifier) {
+		String servicePath = "";
+		
+		if (aasSubmodelID!=null && aasID != null) { 
+			servicePath = buildAASID(aasID) + "/submodels/"+aasSubmodelID;		
+		
+		} else if (aasSubmodelID != null && aasID == null) {
+			servicePath = aasSubmodelID +"/submodel"; // handles single submodel case
+		}
+		
+		if (qualifier!=null) 	 servicePath = servicePath + "/" + qualifier;
+		if (path!=null)      	 servicePath = servicePath + "/" + path;
+		
+		return servicePath;
 	}
 	
 	
 	/**
 	 * Create a scoped ID string for the directory server. The scope will be reversed so that top level scope comes last.
+	 * @version 0.2
 	 * 
-	 * @param scope sub model scope
+	 * @param scope sub model scope as a string array
 	 * @param aasID ID of asset administration shell
 	 * @param subModelID ID of sub model
 	 * 
-	 * @return Built ID in format <subModelID>.<aasID>/<scope>
+	 * @return Build ID in format {@code <scope1>.<scope2>. ... .<scopeN>/<aasID>/aas/submodels/<subModelID> } where scope1 is the topscope
 	 */
 	public String buildPath(String[] scope, String aasID, String subModelID) {
 		// Support building the result string
 		StringBuilder result = new StringBuilder();
 		
-		// Remove leading "aas." from AAS because a sub model ID is given
-		if (aasID.startsWith("aas.")) aasID = aasID.substring(4);
-
-		// Build sub model and AAS part
-		result.append(subModelID); result.append(".");
-		result.append(aasID);
-		
 		// Append reversed scope
-		for (int i=0; i<scope.length; i++) result.append("/"+scope[i]);
+		for (int i=0; i<scope.length; i++) result.append("."+scope[i]);
+		
+		// Build sub model and AAS part
+		result.append("/" + buildAASID(aasID) + "/submodels/" + subModelID);
 		
 		// Return build ID
 		return result.toString();
@@ -113,21 +131,22 @@ public class BaSysID {
 	
 	/**
 	 * Create a scoped ID string for the directory server. The scope will be reversed so that top level scope comes last.
+	 * @version 0.2
 	 * 
 	 * @param scope sub model scope
 	 * @param subModelID ID of sub model
 	 * 
-	 * @return Built ID in format <subModelID>.<aasID>/<scope>
+	 * @return Built ID in format {@code <scope1>.<scope2>.....<scopeN>/<subModelID>/submodel } where scope1 is the topscope
 	 */
 	public String buildPath(String[] scope, String subModelID) {
 		// Support building the result string
 		StringBuilder result = new StringBuilder();
 		
-		// Build sub model part
-		result.append(subModelID); 
-		
-		// Append reversed scope
+		// Append reversed scope 
 		for (int i=0; i<scope.length; i++) result.append("/"+scope[i]);
+		
+		// Build sub model part
+		result.append("/" + buildSMID(subModelID)); 
 		
 		// Return build ID
 		return result.toString();
@@ -137,170 +156,174 @@ public class BaSysID {
 	
 	
 	/**
-	 * Get unqualified AAS id from a qualified path <aasID>.<qualifier>/<scope> => <aasID> // EDIT <aasID>/<qualifier> => <aasID>
+	 * <pre>
+	 *   Get aas id from a qualified path that may contain scope. Handle the following cases <br> Truncates scope!
+	 *  @version 0.2
+	 *  @return "" or aasID and scope if available
+	 *  @param path has format <br>
+	 *  (1) {@code <aasID>/aas } or <br>
+	 *  (2) {@code <aasID>/aas/submodels } or <br>
+	 *  (3) {@code <aasID>/aas/submodels/<submodelID> } or <br>
+	 *  (4) {@code <aasID>/aas/submodels/<submodelID>/... } or <br>
+	 *  (5) {@code <submodelID>/submodel/... } 			
 	 */
 	public String getAASID(String path) {
 		
-		String[] pathArray = path.split("/", 2);
+		String[] splitted = path.split("/");
 		
-		return pathArray[0];
-				
-				
-		//String result = path;
-		//int    offset = 0;
+		// (1-4) search for aas id
+		for (int i=1;i<splitted.length;i++) {
+			
+			// Search for <aasID>/aas pattern and return preceding id (and scope)
+			if (splitted[i].equals("aas")) return splitted[i-1];
+		}
+		// (5) A submodelID gets processed
+		return "";
 		
-		//System.out.println("Path="+path);
 		
-		// Check if path contains an AAS part // EDIT Path always contains AAS part except for registry and component API
-		//if (path.indexOf(".") == -1) return "";
-		
-		// Remove everything before first '.' // EDIT Parse everything before first '/', handle case that there is no '/' then only return path
-		//result = path.substring(0, path.indexOf('/') != -1? path.indexOf('/') : path.length());
-		//if ((offset = result.indexOf('/')) > -1) result = result.substring(0, offset);
-
-		// Remove scope (everything after first '.') // EDIT not relevant for aasID
-		//if (result.indexOf(".") > -1) result=result.substring(0, result.indexOf("."));
-
-		//System.out.println("AAS ID="+result);
-
-		// Return AAS ID
-		//return result;
 	}
 
 	
 	
 	/**
-	 * Get qualified AAS id from a qualified path <subModelID>.<aasID>.<qualifier>/<scope> => <aasID>
+	 * Takes the possibly scoped address and returns the service path starting from it
+	 * @param path {@code <scope1>...<scopeN>/<aasID>/<qualifiers> or <scope1>...<scopeN>/<submodelID>/<qualifiers>}
+	 * @param address is the scoped aasId or submodel
+ 	 * @return {@code scope/<aasID>/<qualifiers> or scope/<submodelID>/<qualifiers>}
 	 */
-	public String getQualifiedAASID(String path) {
-		String result = path;
-		int    offset = 0;
+	public String getScopedServicePath(String path, String address) {
 		
-		System.out.println("Getting 2:"+path);
+		return path.substring(path.indexOf(address));
+	}
+	
+	
+	
+	/**
+	 * Return un-scoped service path
+	 * @param path
+	 * @return the service path without the scope
+	 */
+	public String getUnScopedServicePath(String path) {
+		String aasID = getAASID(path);
+		String submodelID = getSubmodelID(path);
 		
-		// Check if path contains an AAS part
-		if (path.indexOf(".") == -1) return "";
-		
-		// Remove everything before first '.'
-		result = path.substring(path.indexOf('.')+1);
-		if ((offset = result.indexOf('/')) > -1) result = result.substring(0, offset);
-
-		System.out.println("Getting 3:"+result);
-
-		// Return AAS ID
-		return result;
+		if (aasID != null) return aasID + path.substring(path.indexOf("/aas")); 
+		if (submodelID != null) return aasID + path.substring(path.indexOf("/submodel"));
+		return ""; 
 	}
 
 	
 
 	/**
-	 * Get sub model id from a qualified path. Handle the following cases
-	 * - <aasID> -> Return the AAS
-	 * - <aasID>/submodels -> Return all Submodels of this AAS
-	 * - <aasID>/submodels/<submodelID> -> Return Submodel of the AAS
-	 * - <aasID>/submodels/<submodelID>/properties -> Return all properties of this Submodel
+	 *  <pre>
+	 *   Get sub model id from a qualified path that my contain scope. Handle the following cases <br>
+	 *   @version 0.2
+	 *  @return "" or submodelID if available
+	 *  @param path has format <br>
+	 *  (1) {@code <aasID>/aas } or <br>
+	 *  (2) {@code <aasID>/aas/submodels } or <br>
+	 *  (3) {@code <aasID>/aas/submodels/<submodelID> } or <br>
+	 *  (4) {@code <aasID>/aas/submodels/<submodelID>/... } or <br>
+	 *  (5) {@code <submodelID>/submodel/... } 						 	 
+	 * 
 	 */
 	public String getSubmodelID(String path) {
 		
-		String aasID = this.getAASID(path);
+		String[] splitted = path.split("/");
 		
-		// Remove aas part
-		String withoutAAS = path.substring(aasID.length()); 
+		// Search for submodel ID
+		for (int i=1;i<splitted.length;i++) {
+			
+			// (5) search for submodel identifier and return preceding id
+			if (splitted[i].equals("submodel")) return splitted[i-1];
+			
+			// Case (1-4) search for /aas/submodels/<submodelID> pattern and return <submodelID>
+			else if (splitted[i].equals("aas") && splitted.length>i+2 && splitted[i+1].equals("submodels")) return splitted[i+2];
+			
+		}
+		// Submodel Identifier not found.
+		return "";
 		
-		// If there is no remainder or remainder equals "submodels" returrn empty string
-		if (withoutAAS.equals("/submodels") || withoutAAS.isEmpty()) return "";
-	
-		withoutAAS = withoutAAS.substring("/submodels/".length()); // remove '/submodels/'
-		
-		// Remove path qualifiers. if only submodel is requested, handle case that there is no '/' at the end
-		String result = withoutAAS.substring(0, (withoutAAS.indexOf('/') != -1? withoutAAS.indexOf('/') : withoutAAS.length()));
-		
-		// Path only defines the sub model
-		return result;
 	}
 
 
 	/**
-	 * Get qualified path to an object or qualifier. Handle cases
-	 * - <aasID>/submodels/<submodelID>/properties
-	 * - <aasID>/submodels/<submodelID>/operations
-	 * - <aasID>/submodels/<submodelID>/events
-	 * - <aasID>/submodels/<submodelID>/properties/<propertyID> -> Returns the property
-	 * - <aasID>/submodels/<submodelID>/operations/<operationID> -> Returns the operation
-	 * - <aasID>/submodels/<submodelID>/events/<eventID> -> Returns the event
-	 *
+	 * <pre>
+	 * Get qualified element ID or qualifier from path that my contain scope. Handle the following cases <br>
+	 * @version 0.2
+	 * @return If an AAS or Submodel is requested, return ""; otherwise, return qualifier or element ID
+	 * @param path has format <br>
+	 * (1) {@code <aasID>/aas/submodels } <br> - return "submodels" identifier
+	 * (1.1) {@code <aasID>/aas/children  -> } return "children" identifier
+	 * (2) {@code <aasID>/aas/submodels/<submodelID>/properties} <br>
+	 * (3) {@code <aasID>/aas/submodels/<submodelID>/operations} <br>
+	 * (4) {@code <aasID>/aas/submodels/<submodelID>/events} <br>
+	 * (5) {@code <aasID>/aas/submodels/<submodelID>/properties/<propertyID> -> Returns the property ID }<br>
+	 * (6) {@code <aasID>/aas/submodels/<submodelID>/operations/<operationID> -> Returns the operation ID }<br>
+	 * (7) {@code <aasID>/aas/submodels/<submodelID>/events/<eventID> -> Returns the event ID} <br>
+	 * (X) {@code <submodelID>/submodel
+	 * (8) {@code <submodelID>/submodel/properties }<br>
+	 * (9) {@code <submodelID>/submodel/operations }<br>
+	 * (10) {@code <submodelID>/submodel/events} <br>
+	 * (11) {@code <submodelID>/submodel/properties/<propertyID> }<br>
+	 * (12) {@code <submodelID>/submodel/operations/<operationID> }<br>
+	 * (13) {@code <submodelID>/submodel/events/<eventID>} <br>
+	 * 
+	 * TODO add frozen and clock
+	 * 
 	 */
 	public String getPath(String path) {
 		
-		String aasID = this.getAASID(path);
-		String submodelID = this.getSubmodelID(path);
-		String prefix1 = aasID+"/submodels";
-		String prefix2 = aasID+"/submodels/"+submodelID+"/properties";
-		String prefix3 = aasID+"/submodels/"+submodelID+"/operations";
-		String prefix4 = aasID+"/submodels/"+submodelID+"/events";
-		String prefix5 = aasID+"/submodels/"+submodelID+"/frozen";
-		String prefix6 = aasID+"/submodels/"+submodelID+"/clock";
+		String[] splitted = path.split("/");
 		
-		
-		if (path.equals(prefix1)) {
+		// Search for element ID or qualifier. Start with Index 1 because first identifier is always element ID
+		for (int i = 1; i < splitted.length; i++) {
 			
-			// Returns path qualifier 'submodels'
-			return "submodels";
-		} else if (path.equals(prefix2) || path.equals(prefix3) || path.equals(prefix4) || path.equals(prefix5) || path.equals(prefix6)) {
+			// Handle cases (8 - 13)
+			if (splitted[i].equals("submodel")) {
+				
+				// Handle case (11 - 13)
+				if (splitted.length == i+3 ) return splitted[i+2];
+				
+				// Handle case (8 - 10)
+				if (splitted.length == i+2) return splitted[i+1];
+				
+			}
 			
-			// Returns path qualifiers 'properties' | 'operations' | 'events'
-			return path.substring((aasID+"/submodels/"+submodelID+"/").length());
-	
-		} else if (path.startsWith(prefix2)) {
+			// Handle cases (1 - 7)
+			if (splitted[i].equals("submodels")) {
+				
+				// Handle case (5 - 7)
+				if (splitted.length == i+4) return splitted[i+3];
+				
+				// Handle case (2 - 4) 
+				if (splitted.length == i+3 ) return splitted[i+2];
+					
+				// Handle case (1)
+				if (splitted.length == i+1) return "submodels";
+			}
 			
-			// Returns propertyID
-			return path.substring((prefix2+"/").length());
-		} else if (path.startsWith(prefix3)) {
-			
-			// Returns operationID
-			return path.substring((prefix3+"/").length());
-		} else if (path.startsWith(prefix4)) {
-			
-			// Returns eventID
-			return path.substring((prefix4+"/").length());
-		
-		} else {
-			
-			// Returns empty string if the path does not contain a quantifier or propertyID
-			return "";
+			// Handle case 1.1
+			if (splitted[i].equals("children")) {
+				return "children";
+			}
 		}
 		
-		/*
-		if (path.indexOf('/') > -1) {
-			
-			String withoutAAS = path.substring(aasID.length() + 1);
-			
-			if (withoutAAS.equals("submodels")) {
-				// return 'submodels'
-				return withoutAAS;
-			} else if (withoutAAS.indexOf('/') > -1){
-				// return <qualifier>
-				return withoutAAS.substring(withoutAAS.indexOf('/') + 1); // +1 for '/'
-			}
-			else {
-				return "";
-			}
-		}*/
-		
-		// Path has no object or qualifier component
-		//return "";
+		// If an AAS or Submodel is requested, return "". Also handles Case (X).
+		return "";
 	}
 	
 	
 	/**
-	 * Split a property path
+	 * Split a property path to extract next property id TODO check compatible with version 0.2
 	 */
-	protected String[] splitPropertyPath(String pathString) {
+	private String[] splitPropertyPath(String pathString) {
+		
 		// Return empty array for empty string
 		if (pathString.length() == 0) return new String[0];
 		
 		// Process paths that have no splitting character
-		if ((pathString.indexOf("/") == -1) && (pathString.indexOf(".") == -1)) return new String[] {pathString};
+		if ((pathString.indexOf(".") == -1)) return new String[] {pathString};
 
 		// Split string into path segments
 		return pathString.split("[/\\.]");
@@ -308,9 +331,10 @@ public class BaSysID {
 
 	
 	/**
-	 * Get the last n path entries of a path
+	 * Get the last n path entries of a path. Used for identifying nested operations.
 	 */
 	public String[] getLastPathEntries(String path, int lastEntries) {
+		
 		// Return result
 		String[] result = new String[lastEntries];
 
@@ -325,45 +349,59 @@ public class BaSysID {
 		return result;
 	}
 
-
-	/**
-	 * Get the last element of path that identifies the object or qualifier
-	 * Example: <aasID>/submodels/<submodelID>/properties/<propertyID> => <propertyID>
-	 */
-	public String getIdentifier(String path) {
-		
-		// Try to get property/operation path
-		String   propPath   = BaSysID.instance.getPath(path);
-		String   objectId   = null;
-		
-		// - If a path is given, return last path entry
-		if (propPath.length() > 0) {
-			// Return last path element
-			String[] pathArray  = splitPropertyPath(propPath);
-
-			return pathArray[pathArray.length-1];
-		}
-		
-		// Try to get sub model ID or AAS ID
-		if ((objectId = getSubmodelID(path)).length() > 0) return objectId; // EDIT do these ever match?
-		if ((objectId = getAASID(path)).length() > 0) return objectId;
-		
-		// No identifier given
-		return null;
-	}
 	
 	
 	/**
-	 * Get qualified address (submodel ID and AAS ID)
+	 * Get scoped, qualified address (submodel ID and AAS ID)
+	 * {@code example input: Testsuite/GW/IESE/line1/gateway_line12/device2.line2.manufacturing.de/aas }
+	 * TODO check compatible with version 0.2
 	 */
 	public String getAddress(String path) {
-		int    offset = 0;
+		return buildPath(getAASID(path), getSubmodelID(path));
+	}
 
-		// Remove everything but address if a path component is present in string
-		if ((offset = path.indexOf('/')) > -1) return path.substring(0, offset);
+
+
+
+
+	/**
+	 * Add Scope to an AAS ID
+	 * @param aasID
+	 * @param scope
+	 * @return
+	 */
+	public String addScope(String aasID, String scope) {
 		
-		// Path has no address component
-		return "";
+		// Case that aasID has other scope
+		if (aasID.indexOf("/") != -1 ) return scope +"."+ aasID;
+		
+		// Otherwise
+		return scope + "/" + aasID;
+	}
+
+
+
+
+	/**
+	 * Expects '{aasId}/aas' and return '{aasId}/aas/submodels'
+	 * @param id
+	 * @return
+	 */
+	public String buildSubmodelsQuery(String id) {
+		return id + "/submodels";
+	}
+
+
+
+	
+	/**
+	 *  Expects '{aasId}/aas/submodels/{smId}' and returns '{aasId}/aas/submodels/{smId}/{type}'
+	 * @param id
+	 * @param type
+	 * @return
+	 */
+	public String buildQualifiedQuery(String id, String type) {
+		return id + "/" + type;
 	}	
 }
 

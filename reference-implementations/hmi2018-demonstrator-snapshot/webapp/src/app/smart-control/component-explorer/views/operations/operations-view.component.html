@@ -1,0 +1,43 @@
+<div class="card operations mb-1">
+
+    <div class="card-header view-header operations-header" (click)="hideContent = !hideContent">
+        <span style="font-size: 110%"> Operations </span>
+        <button class="btn btn-sm view-header operations-header" style="float: right">
+            <div class="fa fa-fw fa-chevron-down" *ngIf="hideContent"></div>
+            <div class="fa fa-fw fa-chevron-up" *ngIf="!hideContent"></div>
+        </button>
+    </div>
+
+    <div class="card-body view-body operations-body" *ngIf="!hideContent">
+
+        <ng-container *ngFor="let op of util_entries('sub-op-'+subModel[0], subModel[1].operations); let i = index; let last = last">
+            <div class="row operationline">
+                <div class="col-4">
+                    {{op[1].name}} (
+                    <span *ngFor="let param of op[1].parameters; let first = first">
+                        <span *ngIf="!first">, </span>{{param.name}}
+                    </span>
+                    )
+                </div>
+                <div class="col-2">
+                    ( {{convDataTypeToStr(op[1].returnDataType)}} )
+                </div>
+                <div class="col-1">
+                </div>
+                <div class="col-5">
+                    <div class="input-group input-group-sm">
+                        <input readonly class="input form-control" type="text" (click)='selectParameters(op[1])' placeholder="Parameters" [(ngModel)]='operationParams[op[1].name]'>
+                        <div class="input-group-append">
+                            <button class="btn btn-small btn-outline-secondary btn-2w" (click)="executeOperation(op[1])">
+                                Execute
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr *ngIf='!last' class="seperator">
+        </ng-container>
+
+
+    </div>
+</div>

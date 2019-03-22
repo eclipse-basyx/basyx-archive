@@ -69,16 +69,13 @@ public interface IElementReference {
 	 * Indicates if it is a map
 	 */
 	public boolean isMap();
+
 	
 	/**
-	 * Indicates Read Only
+	 * Indicates if it is a property container
 	 */
-	public boolean isFrozen();
+	public boolean isPropertyContainer();
 	
-	/**
-	 * Set frozen
-	 */
-	public void setFrozen(boolean frozen);
 	
 	/**
 	 * Add scope to aasID of element reference

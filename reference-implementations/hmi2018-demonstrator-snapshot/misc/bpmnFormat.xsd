@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:cppscsp="http://bosch.de/example" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://bosch.de/example" />
+  <xs:import namespace="http://www.omg.org/spec/BPMN/20100524/DI" />
+  <xs:element name="definitions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="process">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="extensionElements">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element ref="cppscsp:metadata" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="startEvent">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="outgoing" type="xs:string" />
+                  </xs:sequence>
+                  <xs:attribute name="id" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="endEvent">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="incoming" type="xs:string" />
+                  </xs:sequence>
+                  <xs:attribute name="id" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="sequenceFlow">
+                <xs:complexType>
+                  <xs:attribute name="id" type="xs:string" use="required" />
+                  <xs:attribute name="sourceRef" type="xs:string" use="required" />
+                  <xs:attribute name="targetRef" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required" />
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="isExecutable" type="xs:boolean" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="bpmndi:BPMNDiagram" />
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string" use="required" />
+      <xs:attribute name="targetNamespace" type="xs:string" use="required" />
+      <xs:attribute name="exporter" type="xs:string" use="required" />
+      <xs:attribute name="exporterVersion" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

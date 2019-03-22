@@ -1,0 +1,187 @@
+<!-- <ng-template #topp></ng-template> -->
+<!-- <headline [heading]="'OneM2M Browser'" [icon]="'fa fw fa-align-left'"></headline> -->
+
+
+<div [@routerTransition]>
+
+    <div class="row mb-3">
+        <!--ADRESS BAR-->
+        <!--NOT YET: #editable, selectable crumbs, favorites-->
+        <div class="col-md-7">
+            <!--Refresh-->
+            <!-- <div class="input-group-prepend">
+                <a data-toggle="tooltip" title="Refresh">
+                    <button (click)="refresh()" type="button" class="btn btn-link">
+                        <i class="fa fa-fw fa-refresh fa-1x" style="font-size:125%"></i>
+                    </button>
+                </a>
+            </div> -->
+
+            <span class="input-group">
+                <!--Reload-->
+                <span class="input-group-prepend">
+                    <button id="refreshB" type="button" class="btn btn-outline-primary" (click)="reload()">
+                        <!-- btn-link -->
+                        <!-- <a data-toggle="tooltip" title="Reload"> -->
+                        <div *ngIf='reloading || updating'>
+                            <i class="fa fa-fw fa-refresh fa-spin" style="font-size:125%;"></i>
+                        </div>
+                        <div *ngIf='!(reloading || updating)'>
+                            <i class="fa fa-fw fa-refresh" style="font-size:125%"></i>
+                        </div>
+                        <!-- </a> -->
+                    </button>
+
+                    <!-- // TEST -->
+                    <!-- <instruction-test></instruction-test> -->
+
+                    <button class="btn btn-outline-secondary" type="button">
+                        <i class="fa fa-fw fa-{{selectedNode?.getIcon()}}" style="color:gray"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary" type="button" (click)="filter('show');clearFilter();">
+                        <i class="fa fa-fw fa-caret-right" style="color:gray"></i>
+                    </button>
+                </span>
+                <input type="text" class="form-control" placeholder="Current path" value="{{selectedNode?.path}}" onClick="this.select();">
+
+            </span>
+        </div>
+
+        <!--SEARCH-->
+        <!-- <div class="col-md-5">
+            <div class="input-group">
+                <input #search type="text" class="form-control form-outline-secondary" placeholder="Search" (keyup.enter)="filter(search.value)">
+                <span class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" (click)="search.value='';clearFilter(search.value)">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary" type="button" (click)="filter(search.value)">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </div> -->
+
+        <div class="col-md-5">
+            <div class="input-group mb-3 search-all">
+                <div class="input-group-prepend">
+                    <button type="button" class="btn btn-link search search-icon" (click)="filter(search.value)">
+                        <i class="fa fa-search" style="font-size:100%"></i>
+                    </button>
+                </div>
+                <input #search type="text" class="form-control search search-input" placeholder="Search" (keyup.enter)="filter(search.value)">
+                <div class="input-group-append">
+                    <button (click)="search.value='';clearFilter()" type="button" class="btn btn-link search search-clear">
+                        <i class="fa fa-fw fa-remove fa-1x" style="font-size:125%"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- File input selection for import -->
+    <input #importJsonInput type="file" (change)="importFileSelected($event)" style="display: none" />
+
+    <!--CSE FAILURE-->
+    <div *ngIf="selectedNode === null">
+        <hr>
+        <div class="row mb-5">
+            <div class="col mb-5">
+                <!-- Spacing with mb, so host dropdown is visible (workaround) -->
+                <div *ngIf="hostChanging"> Connecting..</div>
+                <div *ngIf="!hostChanging">Host unreachable</div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="selectedNode !== null">
+
+        <!--Context-Menu-->
+        <context-menu #itemContextMenu (close)="contextMenuClosed('closed', $event)">
+            <ng-template contextMenuItem let-item [visible]="true" [enabled]="false">
+                {{item?.data.name}}
+            </ng-template>
+            <ng-template contextMenuItem let-item [visible]="isDeletable" [enabled]="true" (execute)="deleteItem('delete', $event.item)">
+                <i class="fa fa-fw fa-trash"></i> Delete
+            </ng-template>
+            <ng-template contextMenuItem let-item [visible]="true" [enabled]="true" (execute)="$event.item.hide()">
+                <i class="fa fa-fw fa-eye-slash"></i> Hide
+            </ng-template>
+
+            <ng-template contextMenuItem let-item [visible]="true" [enabled]="true" (execute)="import($event)">
+                <i class="fa fa-fw fa-download"></i> Import JSON
+            </ng-template>
+            <ng-template contextMenuItem let-item [visible]="true" [enabled]="true" (execute)="export($event)">
+                <i class="fa fa-fw fa-upload"></i> Export JSON
+            </ng-template>
+
+            <ng-template contextMenuItem [divider]="true"></ng-template>
+            <ng-template contextMenuItem let-item [visible]="true" [enabled]="true" (execute)="$event.item.collapseAll()">
+                <i class="fa fa-fw fa-minus-square-o"></i> Collapse all
+            </ng-template>
+            <ng-template contextMenuItem let-item [visible]="true" [enabled]="true" (execute)="$event.item.expandAll()">
+                <i class="fa fa-fw fa-plus-square-o"></i> Expand all
+            </ng-template>
+        </context-menu>
+
+        <!--TreeView-->
+        <div class="row" (contextmenu)="$event.preventDefault()" *ngIf="(this.selectedNode != null)">
+            <div class="col-md-7" id="file-tree">
+
+                <tree-root #tree [nodes]="nodes" [focused]="true" [options]="options" (toggleExpanded)="toggleExpanded($event)" (activeChanged)="event($event)"
+                    (focus)="event($event)" (blur)="event($event)" (event)="event($event)" (activate)="activate($event)" (initialized)="initialized($event)">
+
+                    <!--Node Template Wrapper-->
+                    <ng-template #treeNodeWrapperTemplate let-node let-index="index">
+                        <div class="node-wrapper" [style.padding-left]="node.getNodePadding()" [contextMenu]="itemContextMenu" [contextMenuSubject]="node">
+                            <!--<tree-node-expander [node]="node"></tree-node-expander>-->
+                            <custom-tree-node-expander [node]="node"></custom-tree-node-expander>
+
+                            <div class="node-content-wrapper deletable onem2m-{{node.data.getLabelType()}}" [class.node-content-wrapper-active]="node.isActive"
+                                [class.node-content-wrapper-focused]="node.isFocused" (click)="node.mouseAction('click', $event)"
+                                (dblclick)="node.mouseAction('dblClick', $event)" (contextmenu)="node.mouseAction('contextMenu', $event)"
+                                (treeDrop)="node.onDrop($event)" [treeAllowDrop]="node.allowDrop" [treeDrag]="node" [treeDragEnabled]="node.allowDrag()">
+
+                                <!--(dblclick)="nodeDoubleClick(node, $event)" -->
+
+                                <!--Icon -->
+                                <span>
+                                    <i class="fa fa-fw fa-{{node.data.getIcon()}} icon-color-{{node.data.getLabelType()}}" style=" padding-right: 2px"></i>
+                                </span>
+                                <tree-node-content [node]="node" [index]="index"></tree-node-content>
+                                <i class="fa fw fa-times" [class.fa-times]='isDeletable(node)' aria-hidden="true" style="float:right" (click)="deleteItem('shortcut', node)"></i>
+                            </div>
+                        </div>
+                    </ng-template>
+
+                    <!--Loading Template-->
+                    <ng-template #loadingTemplate>...</ng-template>
+
+                    <!-- Filtering possible.. -->
+                    <!-- Nur Services/Properties anzeigbar.. -->
+                </tree-root>
+            </div>
+
+            <!--Sidebar Service-->
+            <div class="col-md-5" id="sidebar-browser">
+                <!-- Last Value-->
+                <div class="row" style="width: 100%">
+                    <div *ngIf="selectedNode.isProperty()" class="col-12">
+                        <value-view [selectedNode]="selectedNode"> </value-view>
+                        <hr>
+                    </div>
+
+                    <!-- Operations-->
+                    <div *ngIf="selectedNode.isOperation()" class="col-12">
+                        <operation-view [selectedNode]="selectedNode"> </operation-view>
+                        <hr>
+                    </div>
+
+                    <!-- Attributes-->
+                    <attribute-view class="col-12" [selectedNode]="selectedNode"> </attribute-view>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+<nav class="sidebar" [ngClass]="{sidebarPushRight: isActive}">
+    <div class="list-group">
+        <a [hidden]="isHidden('ComponentExplorer')" [routerLink]="['/component-explorer']" [routerLinkActive]="['router-link-active']"
+            class="list-group-item">
+            <i class="fa fa-fw fa-list"></i> &nbsp; Component Explorer
+        </a>
+        <a [hidden]="isHidden('BrowserOM2M')" [routerLink]="['/browser-om2m']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-align-left"></i> &nbsp; OneM2M Browser
+        </a>
+
+        <hr>
+
+
+        <a [hidden]="isHidden('Settings')" [routerLink]="['/settings']" [routerLinkActive]="['router-link-active']" class="sidebar-footer list-group-item">
+            <i class="fa fa-fw fa-gear"></i> &nbsp; Settings
+        </a>
+    </div>
+</nav>

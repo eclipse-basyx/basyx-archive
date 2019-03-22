@@ -1,0 +1,43 @@
+From 15cdbec6afa52e854e7c752678bfd30af341523d Mon Sep 17 00:00:00 2001
+From: Michael Schoeffler <michael.schoeffler@de.bosch.com>
+Date: Wed, 17 Jan 2018 18:19:28 +0100
+Subject: [PATCH 5/6] Removed available (as it is only an estimate). It turned
+ out that it does work with the Basyx C# implementation, although the C#
+ implementation looks correct.
+
+---
+ .../eclipse/om2m/binding/http/RestHttpServlet.java    | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/org.eclipse.om2m.binding.http/src/main/java/org/eclipse/om2m/binding/http/RestHttpServlet.java b/org.eclipse.om2m.binding.http/src/main/java/org/eclipse/om2m/binding/http/RestHttpServlet.java
+index e5a7113..bfb5db0 100644
+--- a/org.eclipse.om2m.binding.http/src/main/java/org/eclipse/om2m/binding/http/RestHttpServlet.java
++++ b/org.eclipse.om2m.binding.http/src/main/java/org/eclipse/om2m/binding/http/RestHttpServlet.java
+@@ -70,7 +70,12 @@ public class RestHttpServlet extends HttpServlet {
+ 	 */
+ 	@Override
+ 	protected void service(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
+-		LOGGER.info("----------------------------------------------------------------------------------------------");		
++		LOGGER.info("----------------------------------------------------------------------------------------------");
++		
++		if ("/favicon.ico".equals(httpServletRequest.getPathInfo())) {
++			return;
++		}
++		
+ 		// Support for CORS preflight requests
+ 		httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+         httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
+@@ -108,9 +113,7 @@ public class RestHttpServlet extends HttpServlet {
+ 		// Get the body of the request
+ 		String content = null;
+ 		try {
+-			if(httpServletRequest.getInputStream().available() > 0){
+-				content = Util.convertStreamToString(httpServletRequest.getInputStream());				
+-			}
++			content = Util.convertStreamToString(httpServletRequest.getInputStream());				
+ 		} catch (IOException e) {
+ 			LOGGER.error("Error reading httpServletRequest InputStream",e);
+ 		}
+-- 
+2.17.1.windows.2
+

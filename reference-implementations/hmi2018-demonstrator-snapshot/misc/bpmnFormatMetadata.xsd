@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://bosch.de/example" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://bosch.de/example" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="metadata">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="id" type="xs:string" />
+        <xs:element name="label" type="xs:string" />
+        <xs:element name="description" type="xs:string" />
+        <xs:element name="roles">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="submodel">
+                <xs:complexType>
+                  <xs:attribute name="name" type="xs:string" use="required" />
+                  <xs:attribute name="type" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="conditions">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="condition">
+                <xs:complexType>
+                  <xs:attribute name="name" type="xs:string" use="required" />
+                  <xs:attribute name="expression" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="inputs">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="data">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="variable">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                        <xs:attribute name="dataType" type="xs:string" use="required" />
+                        <xs:attribute name="expression" type="xs:unsignedByte" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="things">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="thing">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                        <xs:attribute name="expression" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="outputs">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="data">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="variable">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                        <xs:attribute name="dataType" type="xs:string" use="required" />
+                        <xs:attribute name="expression" type="xs:unsignedByte" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="things">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="thing">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                        <xs:attribute name="expression" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
