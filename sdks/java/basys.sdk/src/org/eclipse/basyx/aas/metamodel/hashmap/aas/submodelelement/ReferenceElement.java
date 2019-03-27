@@ -2,6 +2,7 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement;
 
 import java.util.HashMap;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IReferenceElement;
 import org.eclipse.basyx.aas.metamodel.facades.ReferenceElementFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
@@ -35,13 +36,13 @@ public class ReferenceElement extends HashMap<String, Object> implements IRefere
 	}
 
 	@Override
-	public void setValue(Reference ref) {
+	public void setValue(IReference ref) {
 		new ReferenceElementFacade(this).setValue(ref);
 		
 	}
 
 	@Override
-	public Reference getValue() {
+	public IReference getValue() {
 		return new ReferenceElementFacade(this).getValue();
 	}
 }

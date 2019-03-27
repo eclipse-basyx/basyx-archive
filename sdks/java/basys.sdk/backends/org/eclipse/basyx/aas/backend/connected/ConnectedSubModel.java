@@ -1,8 +1,12 @@
 package org.eclipse.basyx.aas.backend.connected;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
+import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
@@ -64,5 +68,87 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 			ret.put(s, new ConnectedOperation(constructPath("operations/" + s), getProxy()));
 		}
 		return ret;
+	}
+//TODO Need to implemented based on the requirement 
+	@Override
+	public void setProperties(Map<String, IProperty> properties) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOperations(Map<String, IOperation> operations) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Map<String, Object> getElements() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public IReference getSemanticId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setSemanticID(IReference ref) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public IAdministrativeInformation getAdministration() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IIdentifier getIdentification() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setAdministration(String version, String revision) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setIdentification(String idType, String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public HashSet<IReference> getDataSpecificationReferences() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getHasKindReference() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setHasKindReference(String kind) {
+		// TODO Auto-generated method stub
+		
 	}
 }

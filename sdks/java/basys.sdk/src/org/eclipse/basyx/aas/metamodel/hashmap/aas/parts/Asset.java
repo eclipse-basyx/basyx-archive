@@ -3,14 +3,14 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.parts;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IAsset;
+import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.metamodel.facades.AssetFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasDataSpecificationFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasKindFacade;
 import org.eclipse.basyx.aas.metamodel.facades.IdentifiableFacade;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.HasKind;
@@ -83,12 +83,12 @@ public class Asset extends HashMap<String, Object> implements IAsset {
 	}
 
 	@Override
-	public AdministrativeInformation getAdministration() {
+	public IAdministrativeInformation getAdministration() {
 	return new IdentifiableFacade(this).getAdministration();
 	}
 
 	@Override
-	public Identifier getIdentification() {
+	public IIdentifier getIdentification() {
 		return new IdentifiableFacade(this).getIdentification();
 	}
 
@@ -105,12 +105,12 @@ public class Asset extends HashMap<String, Object> implements IAsset {
 	}
 
 	@Override
-	public Reference getAssetIdentificationModel() {
+	public IReference getAssetIdentificationModel() {
 		 return new AssetFacade(this).getAssetIdentificationModel();
 	}
 
 	@Override
-	public void setAssetIdentificationModel(Reference submodel) {
+	public void setAssetIdentificationModel(IReference submodel) {
 		new AssetFacade(this).setAssetIdentificationModel(submodel);
 		
 	}

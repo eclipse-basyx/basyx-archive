@@ -1,5 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.file;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.file.IFile;
+import org.eclipse.basyx.aas.metamodel.facades.FileFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.DataElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.MimeType;
 
@@ -9,8 +11,13 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Mime
  * @author pschorn, schnicke
  *
  */
-public class File extends DataElement {
+public class File extends DataElement implements IFile{
 	private static final long serialVersionUID = 1L;
+	
+    public static final String VALUE="value";
+	
+	public static final String MIMETYPE="mimeType";
+
 
 	/**
 	 * Creates a file data element. It has to have a mimeType <br/>
@@ -29,7 +36,30 @@ public class File extends DataElement {
 		super();
 
 		// Save value
-		put("value", value);
-		put("mimeType", mimeType);
+		put(VALUE, value);
+		put(MIMETYPE, mimeType);
+	}
+
+
+	@Override
+	public void setValue(PathType value) {
+		new FileFacade(this).setValue(value);
+		
+	}
+
+	@Override
+	public PathType getValue() {
+		return new FileFacade(this).getValue();
+	}
+
+	@Override
+	public void setMimeType(MimeType mimeType) {
+		new FileFacade(this).setMimeType(mimeType);
+		
+	}
+
+	@Override
+	public MimeType getMimeType() {
+		return new FileFacade(this).getMimeType();
 	}
 }

@@ -1,5 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
+import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IIdentifiable;
 import org.eclipse.basyx.aas.metamodel.facades.IdentifiableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
@@ -48,12 +50,12 @@ public class Identifiable extends Referable implements IIdentifiable  {
 	}
 
 	@Override
-	public AdministrativeInformation getAdministration() {
+	public IAdministrativeInformation getAdministration() {
 	return new IdentifiableFacade(this).getAdministration();
 	}
 
 	@Override
-	public Identifier getIdentification() {
+	public IIdentifier getIdentification() {
 		return new IdentifiableFacade(this).getIdentification();
 	}
 

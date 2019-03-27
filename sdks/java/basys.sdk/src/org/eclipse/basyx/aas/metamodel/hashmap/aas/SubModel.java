@@ -1,12 +1,21 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
+import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
+import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
+import org.eclipse.basyx.aas.metamodel.facades.HasDataSpecificationFacade;
+import org.eclipse.basyx.aas.metamodel.facades.HasKindFacade;
+import org.eclipse.basyx.aas.metamodel.facades.HasSemanticsFacade;
+import org.eclipse.basyx.aas.metamodel.facades.IdentifiableFacade;
+import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
@@ -32,6 +41,11 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	public static final String SUBMODELELEMENT ="submodelElement";
+	public static final String PROPERTIES="properties";
+	public static final String OPERATIONS="operations";
+	public static final String IDSHORT="idShort";
 
 	/**
 	 * Submodel properties
@@ -60,11 +74,11 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 		putAll(new HasKind());
 
 		// Attributes
-		put("submodelElement", elements);
+		put(SUBMODELELEMENT, elements);
 
 		// Helper attributes
-		put("properties", properties);
-		put("operations", operations);
+		put(PROPERTIES, properties);
+		put(OPERATIONS, operations);
 	}
 
 	/**
@@ -79,28 +93,13 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 		putAll(hasKind);
 
 		// Attributes
-		put("submodelElement", elements);
+		put(SUBMODELELEMENT, elements);
 
 		// Helper attributes
-		put("properties", properties);
-		put("operations", operations);
+		put(PROPERTIES, properties);
+		put(OPERATIONS, operations);
 	}
 
-	/**
-	 * Get sub model properties
-	 */
-	@Override
-	public Map<String, IProperty> getProperties() {
-		return properties;
-	}
-
-	/**
-	 * Get sub model operations
-	 */
-	@Override
-	public Map<String, IOperation> getOperations() {
-		return operations;
-	}
 
 	/**
 	 * Add property
@@ -136,21 +135,89 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 			throw new RuntimeException("Tried to add Operation with id " + id + " which is does not implement IOperation");
 		}
 	}
-
-	/**
-	 * Get the Id of the submodel
-	 */
+	
 	@Override
-	public String getId() {
-		return (String) get("idShort");
+	public IReference getSemanticId() {
+		return new HasSemanticsFacade(this).getSemanticId();
 	}
 
-	/**
-	 * Set the Id of the submodel
-	 */
+	@Override
+	public void setSemanticID(IReference ref) {
+		new HasSemanticsFacade(this).setSemanticID(ref);
+		
+	}
+	
+	
+	@Override
+	public IAdministrativeInformation getAdministration() {
+	return new IdentifiableFacade(this).getAdministration();
+	}
+
+	@Override
+	public IIdentifier getIdentification() {
+		return new IdentifiableFacade(this).getIdentification();
+	}
+
+	@Override
+	public void setAdministration(String version, String revision) {
+		new IdentifiableFacade(this).setAdministration(version, revision);
+		
+	}
+
+	@Override
+	public void setIdentification(String idType, String id) {
+		new IdentifiableFacade(this).setIdentification(idType, id);
+		
+	}
+	
+	@Override
+	public HashSet<IReference> getDataSpecificationReferences() {
+		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
+	}
+
+	@Override
+	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
+		
+	}
+	
+	@Override
+	public String getHasKindReference() {
+      return new HasKindFacade(this).getHasKindReference();
+	}
+
+	@Override
+	public void setHasKindReference(String kind) {
+		new HasKindFacade(this).setHasKindReference(kind);
+		
+	}
+
+	@Override
+	public String getId() {
+		return new SubmodelFacade(this).getId();
+	}
+
 	@Override
 	public void setId(String id) {
-		put("idShort", id);
+		new SubmodelFacade(this).setId(id);
+		
+	}
+
+	@Override
+	public void setProperties(Map<String, IProperty> properties) {
+		 new SubmodelFacade(this).setProperties(properties);
+		
+	}
+
+	@Override
+	public void setOperations(Map<String, IOperation> operations) {
+		 new SubmodelFacade(this).setOperations(operations);
+		
+	}
+
+	@Override
+	public Map<String, Object> getElements() {
+		return new SubmodelFacade(this).getElements();
 	}
 
 	@Override
@@ -166,8 +233,18 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public Map<String, SubmodelElement> getElements() {
-		return (Map<String, SubmodelElement>) get("elements");
+	@Override
+	public Map<String, IProperty> getProperties() {
+		return new SubmodelFacade(this).getProperties();
 	}
+
+	@Override
+	public Map<String, IOperation> getOperations() {
+		return new SubmodelFacade(this).getOperations();
+	}
+
+
+
+
+
 }

@@ -2,8 +2,8 @@ package org.eclipse.basyx.aas.metamodel.facades;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IRelationshipElement;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.RelationshipElement;
 /**
  * Facade providing access to a map containing the RelationshipElement structure
@@ -18,25 +18,25 @@ public class RelationshipElementFacade implements IRelationshipElement {
 	}
 
 	@Override
-	public void setFirst(Reference first) {
+	public void setFirst(IReference first) {
 	map.put(RelationshipElement.FIRST, first);
 		
 	}
 
 	@Override
-	public Reference getFirst() {
-	return (Reference)	map.get(RelationshipElement.FIRST);
+	public IReference getFirst() {
+	return (IReference)	map.get(RelationshipElement.FIRST);
 	}
 
 	@Override
-	public void setSecond(Reference second) {
+	public void setSecond(IReference second) {
 		map.put(RelationshipElement.SECOND, second);
 		
 	}
 
 	@Override
-	public Reference getSecond() {
-		return (Reference)	map.get(RelationshipElement.FIRST);
+	public IReference getSecond() {
+		return (IReference)	map.get(RelationshipElement.FIRST);
 	}
 
 }

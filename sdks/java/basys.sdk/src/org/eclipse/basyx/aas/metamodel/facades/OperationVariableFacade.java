@@ -2,8 +2,8 @@ package org.eclipse.basyx.aas.metamodel.facades;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperationVariable;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
 /**
  * Facade providing access to a map containing the OperationVariable structure
@@ -18,14 +18,14 @@ public class OperationVariableFacade implements IOperationVariable {
 	}
 
 	@Override
-	public void setValue(SubmodelElement value) {
+	public void setValue(ISubmodelElement value) {
 	map.put(OperationVariable.VALUE, value);
 		
 	}
 
 	@Override
-	public SubmodelElement getValue() {
-	return (SubmodelElement)map.get(OperationVariable.VALUE);
+	public ISubmodelElement getValue() {
+	return (ISubmodelElement)map.get(OperationVariable.VALUE);
 	}
 
 }

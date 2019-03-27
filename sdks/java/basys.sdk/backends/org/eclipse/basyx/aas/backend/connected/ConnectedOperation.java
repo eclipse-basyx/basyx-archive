@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.backend.connected;
 import java.util.List;
 import java.util.function.Function;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -22,14 +23,14 @@ public class ConnectedOperation extends ConnectedElement implements IOperation {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<OperationVariable> getParameterTypes() {
-		return (List<OperationVariable>) getProxy().readElementValue("in");
+	public List<IOperationVariable> getParameterTypes() {
+		return (List<IOperationVariable>) getProxy().readElementValue("in");
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<OperationVariable> getReturnTypes() {
-		return (List<OperationVariable>) getProxy().readElementValue("out");
+	public List<IOperationVariable> getReturnTypes() {
+		return (List<IOperationVariable>) getProxy().readElementValue("out");
 	}
 
 	// TODO Based on the requirement the following functions need to be implemented later

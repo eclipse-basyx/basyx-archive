@@ -37,4 +37,40 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public void setValue(Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Object getValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setValueId(Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Object getValueId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setSemanticId(Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Object getSemanticId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

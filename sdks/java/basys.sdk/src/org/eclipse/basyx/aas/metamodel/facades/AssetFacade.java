@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IAsset;
+import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.Asset;
@@ -11,7 +12,6 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInfor
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.HasKind;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 
 /**
  * Facade providing access to a map containing the Asset structure
@@ -53,8 +53,8 @@ public class AssetFacade implements IAsset {
 	}
 	
 	@Override
-	public AdministrativeInformation getAdministration() {
-		return (AdministrativeInformation)map.get(Identifiable.ADMINISTRATION);
+	public IAdministrativeInformation getAdministration() {
+		return (IAdministrativeInformation)map.get(Identifiable.ADMINISTRATION);
 	}
 
 	@Override
@@ -75,12 +75,12 @@ public class AssetFacade implements IAsset {
 	}
 
 	@Override
-	public Reference getAssetIdentificationModel() {
-		return (Reference)map.get(Asset.ASSETIDENTIFICATIONMODEL);
+	public IReference getAssetIdentificationModel() {
+		return (IReference)map.get(Asset.ASSETIDENTIFICATIONMODEL);
 	}
 
 	@Override
-	public void setAssetIdentificationModel(Reference submodel) {
+	public void setAssetIdentificationModel(IReference submodel) {
 		map.put(Asset.ASSETIDENTIFICATIONMODEL, submodel);
 		
 	}

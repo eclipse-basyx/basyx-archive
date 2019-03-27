@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.api.resources;
 import java.util.List;
 import java.util.function.Function;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
 
 /**
@@ -18,14 +19,14 @@ public interface IOperation extends IElement {
 	 * 
 	 * @return Parameter types
 	 */
-	public List<OperationVariable> getParameterTypes();
+	public List<IOperationVariable> getParameterTypes();
 
 	/**
 	 * Get operation return type
 	 * 
 	 * @return Operation return type
 	 */
-	public List<OperationVariable> getReturnTypes();
+	public List<IOperationVariable> getReturnTypes();
 
 	/**
 	 * Invoke operation with given parameter

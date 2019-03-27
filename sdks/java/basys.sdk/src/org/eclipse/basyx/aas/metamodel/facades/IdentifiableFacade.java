@@ -2,6 +2,8 @@ package org.eclipse.basyx.aas.metamodel.facades;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
+import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IIdentifiable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
@@ -25,13 +27,13 @@ public class IdentifiableFacade implements IIdentifiable {
 	}
 
 	@Override
-	public AdministrativeInformation getAdministration() {
-		return (AdministrativeInformation)map.get(Identifiable.ADMINISTRATION);
+	public IAdministrativeInformation getAdministration() {
+		return (IAdministrativeInformation)map.get(Identifiable.ADMINISTRATION);
 	}
 
 	@Override
-	public Identifier getIdentification() {
-		return (Identifier)map.get(Identifiable.IDENTIFICATION);
+	public IIdentifier getIdentification() {
+		return (IIdentifier)map.get(Identifiable.IDENTIFICATION);
 	}
 
 	@Override

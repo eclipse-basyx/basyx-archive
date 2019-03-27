@@ -2,8 +2,6 @@ package org.eclipse.basyx.aas.api.metamodel.aas.reference;
 
 import java.util.List;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Key;
-
 /**
  * Interface for Reference
  * 
@@ -21,8 +19,8 @@ public interface IReference {
 	 * 
 	 * @return The complete list of keys
 	 */
-	public List<Key> getKeys();
+	public List<IKey> getKeys();
 	
-	public void setKeys(List<Key> keys);
+	public void setKeys(List<IKey> keys);
 
 }

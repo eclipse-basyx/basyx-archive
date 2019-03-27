@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IKey;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.metamodel.facades.ReferenceFacade;
 
@@ -44,12 +45,12 @@ public class Reference extends HashMap<String, Object> implements IReference {
 	}
 
 	@Override
-	public List<Key> getKeys() {
+	public List<IKey> getKeys() {
 		return new ReferenceFacade(this).getKeys();
 	}
 
 	@Override
-	public void setKeys(List<Key> keys) {
+	public void setKeys(List<IKey> keys) {
 		new ReferenceFacade(this).setKeys(keys);
 		
 	}

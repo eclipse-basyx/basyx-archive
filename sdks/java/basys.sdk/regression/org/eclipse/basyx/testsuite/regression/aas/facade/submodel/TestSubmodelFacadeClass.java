@@ -11,7 +11,7 @@ import org.junit.Test;
 
 /**
  * Test class that tests the SubModel facade classes
- * 
+ * FIXME: Not a real test case
  * @author kuhn
  *
  */
@@ -40,10 +40,8 @@ public class TestSubmodelFacadeClass {
 				);
 		
 		// Access values through provider interface
-		System.out.println("1:"+subModel.getModelPropertyValue("idShort"));
 		System.out.println("2:"+subModel.getIDShort());
 		
-		System.out.println("3:"+subModel.getModelPropertyValue("kind"));
 		System.out.println("4:"+subModel.getKind());
 
 	}

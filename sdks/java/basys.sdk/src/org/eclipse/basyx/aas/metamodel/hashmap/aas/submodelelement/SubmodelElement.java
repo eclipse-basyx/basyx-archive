@@ -2,14 +2,14 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement;
 
 import java.util.HashMap;
 
-import org.eclipse.basyx.aas.api.resources.IElement;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.HasKind;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Qualifiable;
 
-public abstract class SubmodelElement extends HashMap<String, Object> implements IElement {
+public abstract class SubmodelElement extends HashMap<String, Object> implements ISubmodelElement {
 	private static final long serialVersionUID = 1L;
 
 	public static final String IDSHORT="idShort";
@@ -21,25 +21,6 @@ public abstract class SubmodelElement extends HashMap<String, Object> implements
 		putAll(new HasKind());
 	}
 
-	/**
-	 * Return the unique ID that identifies an VAB element
-	 * 
-	 * @return unique ID
-	 */
-	@Override
-	public String getId() {
-		return (String) get(IDSHORT);
-	}
 
-	/**
-	 * Set the ID of an element
-	 * 
-	 * @param id
-	 *            New/updated element id
-	 */
-	@Override
-	public void setId(String id) {
-		put(IDSHORT, id);
-	}
 
 }

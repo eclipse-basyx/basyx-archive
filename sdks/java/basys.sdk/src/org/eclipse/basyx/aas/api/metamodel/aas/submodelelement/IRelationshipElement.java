@@ -1,6 +1,6 @@
 package org.eclipse.basyx.aas.api.metamodel.aas.submodelelement;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 
 /**
  * Interface for DataSpecification
@@ -11,13 +11,13 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 
 public interface IRelationshipElement {
 
-	public void setFirst(Reference first);
+	public void setFirst(IReference first);
 	
-	public Reference getFirst();
+	public IReference getFirst();
 	
-	public void setSecond(Reference second);
+	public void setSecond(IReference second);
 	
-	public Reference getSecond();
+	public IReference getSecond();
 	
 	
 }

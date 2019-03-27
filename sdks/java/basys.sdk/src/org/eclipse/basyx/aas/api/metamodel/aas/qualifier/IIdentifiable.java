@@ -1,7 +1,6 @@
 package org.eclipse.basyx.aas.api.metamodel.aas.qualifier;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
+import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
 
 /**
  * Interface for Identifiable
@@ -12,9 +11,9 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInfor
 
 public interface IIdentifiable {
 	
-	public AdministrativeInformation getAdministration();
+	public IAdministrativeInformation getAdministration();
 	
-	public Identifier getIdentification();
+	public IIdentifier getIdentification();
 	
 	public void setAdministration(String version, String revision);
 	

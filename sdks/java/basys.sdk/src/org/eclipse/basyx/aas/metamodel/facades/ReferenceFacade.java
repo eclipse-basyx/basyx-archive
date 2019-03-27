@@ -3,8 +3,8 @@ package org.eclipse.basyx.aas.metamodel.facades;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IKey;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Key;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 
 /**
@@ -23,12 +23,12 @@ public class ReferenceFacade implements IReference {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Key> getKeys() {
-		return (List<Key>)map.get(Reference.KEY);
+	public List<IKey> getKeys() {
+		return (List<IKey>)map.get(Reference.KEY);
 	}
 
 	@Override
-	public void setKeys(List<Key> keys) {
+	public void setKeys(List<IKey> keys) {
 		map.put(Reference.KEY,keys);
 		
 	}
