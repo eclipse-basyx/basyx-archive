@@ -20,9 +20,5 @@
     <ProjectReference Include="..\BaSys40.Utils\BaSys40.Utils.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy &quot;$(ProjectDir)bin\Debug\BaSys40.Technologies.oneM2M.1.0.0.nupkg&quot; &quot;C:\Development\BaSys40\SDK\packages&quot; /Y" />
-  </Target>
-
 
 </Project>

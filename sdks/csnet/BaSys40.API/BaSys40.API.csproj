@@ -15,8 +15,4 @@
     <ProjectReference Include="..\BaSys40.Models\BaSys40.Models.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy &quot;$(ProjectDir)bin\Debug\BaSys40.API.1.0.0.nupkg&quot; &quot;C:\Development\BaSys40\SDK\packages&quot; /Y" />
-  </Target>
-
 </Project>

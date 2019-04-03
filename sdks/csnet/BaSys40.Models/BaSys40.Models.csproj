@@ -21,9 +21,5 @@
   <ItemGroup>
     <Folder Include="Security\" />
   </ItemGroup>
-  
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy &quot;$(ProjectDir)bin\Debug\BaSys40.Models.1.0.0.nupkg&quot; &quot;C:\Development\BaSys40\SDK\packages&quot; /Y" />
-  </Target>
 
 </Project>
