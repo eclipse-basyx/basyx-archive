@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
@@ -18,8 +19,9 @@ import org.junit.Test;
 
 import basys.examples.aasdescriptor.AASDescriptor;
 import basys.examples.aasdescriptor.SubmodelDescriptor;
+import basys.examples.deployment.BaSyxDeployment;
 import basys.examples.urntools.ModelUrn;
-import examples.contexts.DefaultBaSyxExamplesContext;
+import examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import examples.directory.ExamplesDirectory;
 
 
@@ -30,7 +32,7 @@ import examples.directory.ExamplesDirectory;
  * @author kuhn
  *
  */
-public class RunExample {
+public class RunExample extends BaSyxDeployment {
 
 	
 	/**
@@ -43,8 +45,14 @@ public class RunExample {
 	 * Makes sure Tomcat Server with basic BaSys topology is started
 	 */
 	@ClassRule
-	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new DefaultBaSyxExamplesContext());
+	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory());
 
+	
+	/**
+	 * Start additional devices for this example
+	 */
+	
+	
 	
 	
 	/**
@@ -52,6 +60,10 @@ public class RunExample {
 	 */
 	@Test @SuppressWarnings("unchecked")
 	public void test() throws Exception {
+		// Create GSON serializer
+		GSONTools serializer = new GSONTools(new DefaultTypeFactory());
+
+		
 		// Server connections
 		// - Connect to AAS server
 		VABElementProxy connSubModel = this.connManager.connectToVABElement("AASServer");
@@ -99,7 +111,7 @@ public class RunExample {
 		connSubModel.createElement(controllerSubmodelURLOnServer, controllerSM);
 
 
-		// Delete AAS registration for a fresh start - ignore if URL was not found. In this case, there was no previsous registration and the registry was clean
+		// Delete AAS registration for a fresh start - ignore if URL was not found. In this case, there was no previous registration and the registry was clean
 		client.delete(wsURL+"/api/v1/registry/"+URLEncoder.encode(deviceAASID.getURN()));
 
 			
@@ -112,7 +124,7 @@ public class RunExample {
 		SubmodelDescriptor deviceControllerSubmodelDescriptor = new SubmodelDescriptor(deviceControllerSMID.getURN(), IdentifierType.URI, aasSrvURL+controllerSubmodelURLOnServer);
 		deviceAASDescriptor.addSubmodelDescriptor(deviceControllerSubmodelDescriptor);
 		// - Push AAS descriptor to server
-		client.post(wsURL+"/api/v1/registry", GSONTools.Instance.getJsonString(GSONTools.Instance.serialize(deviceAASDescriptor)));
+		client.post(wsURL+"/api/v1/registry", serializer.getJsonString(serializer.serialize(deviceAASDescriptor)));
 
 		
 		// Device updates status to ready
@@ -123,7 +135,7 @@ public class RunExample {
 		// - Lookup AAS from AAS directory, get AAS descriptor
 		String jsonData = client.get(wsURL+"/api/v1/registry/"+deviceAASID.getEncodedURN());
 		// - Read AAS end point from AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) GSONTools.Instance.deserialize(GSONTools.Instance.getMap(GSONTools.Instance.getObjFromJsonStr(jsonData))));
+		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(serializer.getMap(serializer.getObjFromJsonStr(jsonData))));
 
 
 		// - Get information about status sub model
