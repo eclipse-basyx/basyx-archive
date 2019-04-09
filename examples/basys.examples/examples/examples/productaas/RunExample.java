@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
@@ -16,7 +17,7 @@ import org.junit.Test;
 
 import basys.examples.aasdescriptor.AASDescriptor;
 import basys.examples.urntools.ModelUrn;
-import examples.contexts.DefaultBaSyxExamplesContext;
+import examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import examples.directory.ExamplesDirectory;
 
 
@@ -40,7 +41,7 @@ public class RunExample {
 	 * Makes sure Tomcat Server with basic BaSys topology is started
 	 */
 	@ClassRule
-	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new DefaultBaSyxExamplesContext());
+	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory());
 
 	
 	
@@ -50,7 +51,10 @@ public class RunExample {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test() throws Exception {
+		// Create GSON serializer
+		GSONTools serializer = new GSONTools(new DefaultTypeFactory());
 
+		
 		// Server connections
 		// - Connect to AAS server
 		VABElementProxy connSubModel = this.connManager.connectToVABElement("AASServer");
@@ -83,21 +87,28 @@ public class RunExample {
 		// - Create an AAS descriptor
 		AASDescriptor productAASDescriptor = new AASDescriptor(productID.getURN(), IdentifierType.URI, aasSrvURL+aasURLOnServer);
 		// - Push AAS descriptor to server
-		client.post(wsURL+"/api/v1/registry", GSONTools.Instance.getJsonString(GSONTools.Instance.serialize(productAASDescriptor)));
+		client.post(wsURL+"/api/v1/registry", serializer.getJsonString(serializer.serialize(productAASDescriptor)));
 
 		
 		// Lookup AAS
 		// - Lookup AAS from AAS directory, get AAS descriptor
 		String jsonData = client.get(wsURL+"/api/v1/registry/"+productID.getEncodedURN());
 		// - Read AAS end point from AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) GSONTools.Instance.deserialize(GSONTools.Instance.getMap(GSONTools.Instance.getObjFromJsonStr(jsonData))));
+		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(serializer.getMap(serializer.getObjFromJsonStr(jsonData))));
+		System.out.println("Endpoint1:"+jsonData);
+		System.out.println("Endpoint2:"+serializer.getObjFromJsonStr(jsonData));
+		System.out.println("Endpoint3:"+serializer.getMap(serializer.getObjFromJsonStr(jsonData)));
 		System.out.println("Endpoint:"+aasDescriptor.getFirstEndpoint());
 		
 		
 		// Connect to AAS end point
 		VABElementProxy connSM = connManager.connectToVABElementByURL(aasDescriptor.getFirstEndpoint());
+		System.out.println("XXX");
 		Map<String, Object> productAAS = (Map<String, Object>) connSM.readElementValue("");
 		// - Read product AAS from server
+		System.out.println("ReadBack1:"+connSM);
+		System.out.println("ReadBack2:"+productAAS);
+		
 		System.out.println("ReadBack:"+productAAS.get("idShort"));
 	}
 }

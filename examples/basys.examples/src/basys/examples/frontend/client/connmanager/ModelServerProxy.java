@@ -21,14 +21,24 @@ public class ModelServerProxy extends VABElementProxy {
 
 	
 	/**
+	 * Full address with qualifier.
+	 */
+	protected String fullQualifiedAddr = null;
+	
+	
+	
+	/**
 	 * Constructor
 	 * 
 	 * @param addr Address
 	 * @param provider Provider reference
 	 */
-	public ModelServerProxy(String addr, IModelProvider provider) {
+	public ModelServerProxy(String addr, String fullAddr, IModelProvider provider) {
+		// Invoke base constructor
 		super(addr, provider);
-		// TODO Auto-generated constructor stub
+		
+		// Store qualified address
+		fullQualifiedAddr = fullAddr;
 	}
 	
 	
@@ -51,7 +61,7 @@ public class ModelServerProxy extends VABElementProxy {
 	 */
 	public String getURLToModel(ModelUrn modelID) {
 		// Return address on server
-		return this.addr+"/aas/submodels/aasRepository/"+modelID.getEncodedURN();
+		return this.fullQualifiedAddr+"/aas/submodels/aasRepository/"+modelID.getEncodedURN();
 	}
 
 	

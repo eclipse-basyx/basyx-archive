@@ -1,9 +1,14 @@
-package examples.controllingdevice.vab.object;
+package examples.controllingdevice.vab.dynamic;
+
+import java.io.Serializable;
+import java.util.Map;
+import java.util.function.Supplier;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -45,12 +50,13 @@ public class RunExample {
 		// - Connect to device (VAB object)
 		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
 
-		// Read status from device
+/*		// Read status from device
 		Object devState1 = connSubModel1.readElementValue("properties/deviceStatus");
 		// - Output device status
 		System.out.println("Status1:"+devState1);
-
-		// Read mode from device
+*/
+		
+/*		// Read mode from device
 		Object devMode1a = connSubModel1.readElementValue("properties/mode");
 		// - Output device mode
 		System.out.println("Mode1a:"+devMode1a);
@@ -60,6 +66,22 @@ public class RunExample {
 		Object devMode1b = connSubModel1.readElementValue("properties/mode");
 		// - Output device mode again
 		System.out.println("Mode1b:"+devMode1b);
+*/
+		
+		// Create accessors for simple value property property1.1
+		Map<String, Object> dynamicPropertyVal = VABLambdaProviderHelper.createSimple((Supplier<Object> & Serializable) () -> {
+			System.out.println("ABC:");
+			return "xyz";
+		}, null);
+		// - Update device mode
+		connSubModel1.updateElementValue("properties/mode", dynamicPropertyVal);
+
+		// Read mode from device again
+		Object devMode1c = connSubModel1.readElementValue("properties/mode");
+		// - Output device mode again
+		System.out.println("Mode1c:"+devMode1c);
+		
+/*		
 
 		
 
@@ -82,6 +104,7 @@ public class RunExample {
 		Object devMode2b = connSubModel2.readElementValue("properties/mode/value");
 		// - Output device mode again
 		System.out.println("Mode2b:"+devMode2b);
+*/
 	}
 }
 

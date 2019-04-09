@@ -3,6 +3,7 @@ package basys.examples.frontend.client.connmanager;
 import org.eclipse.basyx.vab.core.IConnectorProvider;
 import org.eclipse.basyx.vab.core.IDirectoryService;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.eclipse.basyx.vab.core.tools.VABPathTools;
 
 
 
@@ -45,7 +46,7 @@ public class BaSysConnectionManager extends VABConnectionManager {
 		addr = directoryService.lookup(urn);
 
 		// Return a new ModelServerProxy
-		return new ModelServerProxy(addr, providerProvider.getConnector(addr));
+		return new ModelServerProxy(VABPathTools.removeAddressEntry(addr), addr, providerProvider.getConnector(addr));
 	}
 
 
@@ -56,7 +57,7 @@ public class BaSysConnectionManager extends VABConnectionManager {
 	 */
 	public ModelServerProxy connectToModelServerURL(String url) {
 		// Return a new ModelServerProxy
-		return new ModelServerProxy(url, providerProvider.getConnector(url));
+		return new ModelServerProxy(VABPathTools.removeAddressEntry(url), url, providerProvider.getConnector(url));
 	}
 }
 

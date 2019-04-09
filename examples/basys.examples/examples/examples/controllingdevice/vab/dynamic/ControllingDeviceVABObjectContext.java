@@ -1,4 +1,4 @@
-package examples.controllingdevice.vab.object;
+package examples.controllingdevice.vab.dynamic;
 
 import org.eclipse.basyx.components.servlets.RawCFGSubModelProviderServlet;
 import org.eclipse.basyx.components.servlets.SQLDirectoryServlet;

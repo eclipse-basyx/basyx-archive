@@ -4,13 +4,16 @@ import org.eclipse.basyx.components.servlets.RawCFGSubModelProviderServlet;
 import org.eclipse.basyx.components.servlets.SQLDirectoryServlet;
 import org.eclipse.basyx.regression.support.server.BaSyxContext;
 
+
 /**
- * BaSyx context that contains an Industrie 4.0 Servlet infrastructure for regression testing of basys.components package
+ * BaSyx context that contains an Industrie 4.0 Servlet infrastructure
+ * - One in-memory only AAS Server that receives and hosts asset administration shells and sub models
+ * - One SQL directory that manages AAS and sub model registrations
  * 
  * @author kuhn
  *
  */
-public class DefaultBaSyxExamplesContext extends BaSyxContext {
+public class BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory extends BaSyxContext {
 
 	
 	/**
@@ -23,7 +26,7 @@ public class DefaultBaSyxExamplesContext extends BaSyxContext {
 	/**
 	 * Constructor
 	 */
-	public DefaultBaSyxExamplesContext() {
+	public BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory() {
 		// Invoke base constructor to set up Tomcat server in basys.components context
 		super("/basys.examples", "");
 		
