@@ -1,5 +1,8 @@
 package org.eclipse.basyx.regression.support.server;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.rules.ExternalResource;
 
 
@@ -17,7 +20,8 @@ public class AASHTTPServerResource extends ExternalResource {
 	/**
 	 * Active server references
 	 */
-    private static int refCount = 0;
+    //private static int refCount = 0;
+    private static Map<Integer, Integer> refCount = new HashMap<>();
 
     
     /**
@@ -60,8 +64,11 @@ public class AASHTTPServerResource extends ExternalResource {
      * @return
      */
     public static AASHTTPServerResource getTestResource(BaSyxContext requestedContext) {
+    	// Check if map contains requested port number
+    	if (!refCount.containsKey(requestedContext.getPort())) refCount.put(requestedContext.getPort(), 0);
+    	
     	// Create server resource if no resource is active at the moment
-        if (refCount == 0) {
+        if (refCount.get(requestedContext.getPort()) == 0) {
             currentInstance = new AASHTTPServerResource(requestedContext);
         }
         
@@ -81,17 +88,17 @@ public class AASHTTPServerResource extends ExternalResource {
      */
     private AASHTTPServerResource(BaSyxContext requestedContext) {
     	// Store context reference
-    	context     = requestedContext;
+    	context = requestedContext;
     }
     
     
     /**
      * Execute before a test case starts
      */
-    protected void before() {
+    public void before() {
     	// Try to instantiate a new Tomcat server if refCounter is 0
         try {
-            if (refCount == 0) {
+            if (refCount.get(context.getPort()) == 0) {
         		// Instantiate and start HTTP server
         		server = new AASHTTPServer(context);
         		server.start();
@@ -101,7 +108,7 @@ public class AASHTTPServerResource extends ExternalResource {
         // Always execute this block
         finally {
         	// Increment reference counter
-            refCount++;
+        	refCount.put(context.getPort(), refCount.get(context.getPort())+1);
         }
     }
 
@@ -109,12 +116,12 @@ public class AASHTTPServerResource extends ExternalResource {
     /**
      * Execute after test case ends
      */
-    protected void after() {
+    public void after() {
         // Decrement reference counter
-        refCount--;
+    	refCount.put(context.getPort(), refCount.get(context.getPort())-1);
         
         // Shutdown server if reference counter reaches zero
-        if (refCount == 0) {
+        if (refCount.get(context.getPort()) == 0) {
             server.shutdown();
         }
     }

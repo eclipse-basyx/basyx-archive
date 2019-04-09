@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
+import org.eclipse.basyx.aas.backend.http.tools.factory.GSONToolsFactory;
 import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
 import org.eclipse.basyx.vab.backend.server.http.BasysHTTPServlet;
 
@@ -99,6 +101,12 @@ public class SQLDirectoryServlet extends BasysHTTPServlet {
 	 * SQL driver instance
 	 */
 	protected SQLDriver sqlDriver = null;
+	
+	
+	/**
+	 * GSON instance
+	 */
+	protected GSONTools serializer = new GSONTools(new DefaultTypeFactory());
 	
 	
 	
@@ -392,8 +400,8 @@ public class SQLDirectoryServlet extends BasysHTTPServlet {
 		while (bufReader.ready()) aasValue.append(bufReader.readLine());
 		
 		// Deserialize AAS value into JSONObject
-		Map<String, Object> gsonObj = (Map<String, Object>) GSONTools.Instance.getObjFromJsonStr(aasValue.toString());
-		Map<String, Object> values = (Map<String, Object>) GSONTools.Instance.deserialize(gsonObj);
+		Map<String, Object> gsonObj = (Map<String, Object>) serializer.getObjFromJsonStr(aasValue.toString());
+		Map<String, Object> values = (Map<String, Object>) serializer.deserialize(gsonObj);
 		AASDescriptor       aasDescriptor = new AASDescriptor(values);
 
 		// Extract AAS ID

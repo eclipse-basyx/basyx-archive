@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import java.net.URLEncoder;
 
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
@@ -14,6 +15,8 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import basys.examples.aasdescriptor.AASDescriptor;
+
+
 
 /**
  * Test queries to SQL directory provider
@@ -28,6 +31,15 @@ public class TestDirectorySQLProvider {
 	 */
 	@ClassRule
 	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new ComponentsRegressionContext());
+	
+	
+	/**
+	 * GSON instance
+	 */
+	protected GSONTools serializer = new GSONTools(new DefaultTypeFactory());
+
+	
+	
 	
 	/**
 	 * Execute test case that test working calls
@@ -167,7 +179,7 @@ public class TestDirectorySQLProvider {
 			// - Create AAS descriptor
 			AASDescriptor aasDescriptor = new AASDescriptor("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-166", IdentifierType.URI, "www.endpoint.de");
 			// - Create new AAS registration
-			String expected = GSONTools.Instance.getJsonString(GSONTools.Instance.serialize(aasDescriptor));
+			String expected = serializer.getJsonString(serializer.serialize(aasDescriptor));
 			client.post(wsURL + "/api/v1/registry", expected);
 
 			// Get a known AAS by its ID

@@ -33,6 +33,7 @@ public class SQLProxyTestMapSimple {
 	@Test
 	public void test() throws Exception {
 		// Create SQL root element
+		// - Every root element needs a unique table ID
 		sqlRootElement = new SQLRootElement("postgres", "admin", "//localhost/basyx-map?", "org.postgresql.Driver", "jdbc:postgresql:", "root_el_01");
 
 		

@@ -45,6 +45,9 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 	 */
 	protected Map<String, Map<String, String>> servletParameter = new HashMap<>();
 
+
+	public Object AASHTTPServerResource;
+
 	
 	
 	
@@ -72,30 +75,39 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 	/**
 	 * Add a servlet mapping
 	 */
-	public void addServletMapping(String key, HttpServlet servlet) {
+	public BaSyxContext addServletMapping(String key, HttpServlet servlet) {
 		// Add servlet mapping
 		put(key, servlet);
+
+		// Return 'this' reference to enable chaining of operations
+		return this;
 	}
 	
 
 	/**
 	 * Add a servlet mapping with parameter
 	 */
-	public void addServletMapping(String key, HttpServlet servlet, Map<String, String> servletParameter) {
+	public BaSyxContext addServletMapping(String key, HttpServlet servlet, Map<String, String> servletParameter) {
 		// Add servlet mapping
 		addServletMapping(key, servlet);
 		
 		// Add Servlet parameter
 		addServletParameter(key, servletParameter);
+
+		// Return 'this' reference to enable chaining of operations
+		return this;
 	}
 
 	
 	/**
 	 * Add servlet parameter
 	 */
-	public void addServletParameter(String key, Map<String, String> parameter) {
+	public BaSyxContext addServletParameter(String key, Map<String, String> parameter) {
 		// Add servlet parameter
 		servletParameter.put(key, parameter);
+		
+		// Return 'this' reference to enable chaining of operations
+		return this;
 	}
 	
 	
@@ -109,6 +121,14 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 		
 		// Return empty map
 		return new HashMap<String, String>();
+	}
+	
+	
+	/**
+	 * Return Tomcat server port
+	 */
+	public int getPort() {
+		return port;
 	}
 }
 

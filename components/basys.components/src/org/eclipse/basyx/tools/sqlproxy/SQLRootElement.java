@@ -26,7 +26,7 @@ public class SQLRootElement extends SQLConnector {
 	 * @param url         SQL server URL
 	 * @param driver      SQL driver
 	 * @param prefix      JDBC SQL driver prefix
-	 * @param tableID     ID of table for this element in database
+	 * @param tableID     ID of table for this element in database. Every element needs a unique ID
 	 */
 	public SQLRootElement(String user, String pass, String url, String driver, String prefix, String tableID) {
 		// Base constructor

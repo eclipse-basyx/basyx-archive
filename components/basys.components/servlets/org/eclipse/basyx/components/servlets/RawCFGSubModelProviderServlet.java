@@ -50,6 +50,9 @@ public class RawCFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubm
 	public RawCFGSubModelProviderServlet() {
 		// Invoke base constructor
 		super(new VABMultiSubmodelProvider<VABHashmapProvider>());
+		
+		// Change factory instance
+		//this.getProviderBackend().getSerializerReference().setFactory(newFactoryInstance);
 	}	
 	
 	
