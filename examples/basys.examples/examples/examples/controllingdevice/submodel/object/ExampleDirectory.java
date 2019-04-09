@@ -19,6 +19,6 @@ public class ExampleDirectory extends PreconfiguredDirectory {
 	 */
 	public ExampleDirectory() {
 		// VAB Element mapping
-		addMapping("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#002", "localhost:6998");
+		addMapping("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#002", "basyx://localhost:6998");
 	}	
 }

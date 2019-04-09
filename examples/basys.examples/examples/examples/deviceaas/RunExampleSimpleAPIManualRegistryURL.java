@@ -1,11 +1,15 @@
 package examples.deviceaas;
 
+import java.util.Map;
+
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
+import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 import basys.examples.aasdescriptor.AASDescriptor;
@@ -14,6 +18,7 @@ import basys.examples.frontend.client.connmanager.BaSysConnectionManager;
 import basys.examples.frontend.client.connmanager.ModelServerProxy;
 import basys.examples.frontend.client.proxies.AASRegistryProxy;
 import basys.examples.urntools.ModelUrn;
+import examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import examples.directory.ExamplesDirectory;
 
 
@@ -33,6 +38,13 @@ public class RunExampleSimpleAPIManualRegistryURL {
 	protected BaSysConnectionManager connManager = new BaSysConnectionManager(new ExamplesDirectory(), new HTTPConnectorProvider());
 
 	
+	/** 
+	 * Makes sure Tomcat Server with basic BaSys topology is started
+	 */
+	@ClassRule
+	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory());
+
+	
 	
 	/**
 	 * Test basic queries
@@ -43,7 +55,8 @@ public class RunExampleSimpleAPIManualRegistryURL {
 		// Server connections
 		// - Connect to AAS server
 		//VABElementProxy connSubModel = this.connManager.connectToVABElement("AASServer");
-		ModelServerProxy modelServer    = this.connManager.connectToModelServerURL("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/aasserver/");
+		ModelServerProxy modelServer    = this.connManager.connectToModelServerURL("http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer/");
+
 		// - Invoke BaSyx service calls via web services
 		//WebServiceRawClient client = new WebServiceRawClient();
 		// - Directory web service URL
@@ -53,7 +66,7 @@ public class RunExampleSimpleAPIManualRegistryURL {
 
 		
 		// Instantiate AAS registry proxy that connects to registry
-		AASRegistryProxy registry = new AASRegistryProxy("http://localhost:8080/basys.components/Testsuite/Directory/SQL");
+		AASRegistryProxy registry = new AASRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL");
 		
 		
 		// Create device AAS
@@ -83,6 +96,10 @@ public class RunExampleSimpleAPIManualRegistryURL {
 		// - Transfer device sub model to server
 		//connSubModel.createElement(statusSubmodelURLOnServer, statusSM);
 		
+		
+		// Delete AAS registration for a fresh start - ignore if URL was not found. In this case, there was no previous registration and the registry was clean
+		registry.delete(deviceAASID);
+
 		
 		// Register AAS and sub models in directory (push AAS descriptor to server)
 		// - Create an AAS descriptor
@@ -118,9 +135,8 @@ public class RunExampleSimpleAPIManualRegistryURL {
 		//Map<String, Object> deviceSM = (Map<String, Object>) connSubModel.readElementValue(statusSubmodelURLOnServer);
 		//Map<String, Object> deviceSM = (Map<String, Object>) connSubModel.readElementValue(smDescriptor.getFirstEndpoint());
 		VABElementProxy connSubModel = connManager.connectToVABElementByURL(smDescriptor.getFirstEndpoint());
-		VABModelMap<Object> deviceSM = (VABModelMap<Object>) connSubModel.readElementValue("/");
+		Map<String, Object> deviceSM = (Map<String, Object>) connSubModel.readElementValue("/");
 		// - Output status information
-		//System.out.println("ReadBack:"+((Map<String, Object>) deviceSM.get("properties")).get("status"));
-		System.out.println("ReadBack:"+deviceSM.getPath("properties/status"));
+		System.out.println("ReadBack:"+((Map<String, Object>) deviceSM.get("properties")).get("status"));
 	}
 }
