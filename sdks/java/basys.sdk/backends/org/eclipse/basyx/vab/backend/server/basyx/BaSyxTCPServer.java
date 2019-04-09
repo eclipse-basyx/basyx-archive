@@ -76,7 +76,7 @@ public class BaSyxTCPServer<T extends IModelProvider> extends Thread {
 				
 				// Wait for connections
 				try {
-					communicationSocket = tcpServerSocket.accept();
+					communicationSocket = tcpServerSocket.accept(); 
 				} catch (SocketException e) {
 					// End process; Server socket has been closed by shutdown
 					break;

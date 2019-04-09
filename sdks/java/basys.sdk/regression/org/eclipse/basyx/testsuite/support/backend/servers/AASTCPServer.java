@@ -28,8 +28,8 @@ public class AASTCPServer extends Thread {
 
 		// Create native BaSyx TCP server using default port
 		tcpServer = new BaSyxTCPServer<VABHashmapProvider>(modelProvider);
-	
 	}
+	
 	
 	public void run() {
 		// Start tcp server

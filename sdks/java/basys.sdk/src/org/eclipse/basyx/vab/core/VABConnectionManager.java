@@ -63,13 +63,14 @@ public class VABConnectionManager {
 	
 	
 	/**
-	 * Connect to an VAB element using an URL
+	 * Connect to an VAB element using a qualified URL
 	 * 
 	 * @param url the URL that describes the element location. 
 	 */
 	public VABElementProxy connectToVABElementByURL(String url) {
 
 		// Return a new VABElementProxy
-		return new VABElementProxy(url, providerProvider.getConnector(url));
+		// - Do not pass URL here to provider as address, as the url parameter is already absolute and contains the address. 
+		return new VABElementProxy(url, providerProvider.getConnector(""));
 	}
 }

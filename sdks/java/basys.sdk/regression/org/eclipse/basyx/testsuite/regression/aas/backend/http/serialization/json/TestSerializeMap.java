@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.junit.jupiter.api.Test;
 
 
@@ -24,8 +25,8 @@ public class TestSerializeMap {
 	 */
 	@Test
 	void test() {
-		
-		GSONTools gsonInstance = GSONTools.Instance;
+		// Create GSONTools instance
+		GSONTools gsonInstance = new GSONTools(new DefaultTypeFactory());
 		
 		// Create collections
 		Map<String, Integer> integers1   = new HashMap<>();

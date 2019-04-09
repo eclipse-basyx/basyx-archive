@@ -2,41 +2,77 @@ package org.eclipse.basyx.aas.backend.http.tools;
 
 import static org.junit.Assert.assertFalse;
 
-import java.util.ArrayList;
+
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
+import org.eclipse.basyx.aas.backend.http.tools.factory.GSONToolsFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
+
 /**
  * 
  * @author rajashek
  *
  */
-public class GSONTools {
+public class GSONTools implements Serializer {
 
 	/**
 	 * Singleton instance
 	 */
-	public static GSONTools Instance = new GSONTools();
-	static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+	//public static GSONTools Instance = new GSONTools();
+	
+	
+	/**
+	 * GSON reference
+	 */
+	protected static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+	
+	
+	/**
+	 * Type factory
+	 */
+	protected GSONToolsFactory toolsFactory = null;
 	
 
 
 	/**
-	 * Static constructor
+	 * Constructor
 	 */
-	private GSONTools() {
-		// Do nothing
+	public GSONTools(GSONToolsFactory factory) {
+		// Store factory reference
+		toolsFactory = factory;
 	}
+	
+	
+	/**
+	 * Set factory instance
+	 */
+	public void setFactory(GSONToolsFactory newFactoryInstance) {
+		// Store factory instance
+		toolsFactory = newFactoryInstance;
+	}
+	
+	
 	
 	/**
 	 * Take Object and returns Map obj
@@ -54,15 +90,15 @@ public class GSONTools {
 		}
 	}
 	
+	
 	/**
 	 * This function accepts the JSOn string and returns the GSON object
 	 * @param str
 	 * @return
 	 */
-	public Object getObjFromJsonStr(String str)
-	{
-		
+	public Object getObjFromJsonStr(String str) {
 		Object fromJson=null;
+		
 		try {
 			fromJson = gson.fromJson(str, new TypeToken<HashMap<String, Object>>() {
 			}.getType());
@@ -72,16 +108,68 @@ public class GSONTools {
 		return fromJson;
 	}
 	
+	
 	/**
 	 * Takes GSON object and returns the JSON string with using JSON 
 	 * @param obj
 	 * @return
 	 */
-	public String getJsonString(Object obj)
-	{
-		
+	public String getJsonString(Object obj) {
 		return gson.toJson(obj);
 	}
+	
+	
+	
+	/** 
+	 * Read an object from Base64 string. 
+	 */
+	protected Object deserializeObjectFromString(String s) {
+		// Return value
+		Object result = null;
+
+		// Decode String
+		byte [] data = Base64.getDecoder().decode(s);
+		
+		// Try to deserialize object
+		try {
+			// Object input stream
+			ObjectInputStream stream = new ObjectInputStream(new ByteArrayInputStream(data));
+			// - Read object
+			result = stream.readObject();
+
+			// Close stream
+			stream.close();
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Return object
+		return result;
+	}
+
+	
+	/** 
+	 * Write the object to a Base64 string. 
+	 */
+	protected String serializeObjectToString(Serializable obj) {
+		// Write object into byte array
+		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+		
+		// Try to serialize object
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(outStream);
+			oos.writeObject(obj);
+			oos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Try to encode to string
+		return Base64.getEncoder().encodeToString(outStream.toByteArray()); 
+	}
+
 
 	/**
 	 * Serialize a primitive value
@@ -417,8 +505,9 @@ public class GSONTools {
 			target.put("size", map.size());
 
 			// Serialize collection elements
-			for (String key : map.keySet())
+			for (String key : map.keySet()) {
 				target.put(key, serialize(map.get(key), serObjRepo, scope));
+			}
 
 			// Value containsKey been serialized
 			return true;
@@ -438,7 +527,7 @@ public class GSONTools {
 			return null;
 
 		// Create hash map return value
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = toolsFactory.createMap();
 
 		// Deserialize map elements
 		for (String key : serializedValue.keySet()) {
@@ -509,11 +598,14 @@ public class GSONTools {
 		else {
 			sizeVal=(int) sizeObj;
 		}
+		
+		
 		// Create collection return value
 		Collection<Object> result = null;
-		if (basysType.equals("set"))  result = new HashSet<Object>();
-		else {
-			result = new ArrayList<Object>();
+		if (basysType.equals("set")) { 
+			result = toolsFactory.createSet();
+		} else {
+			result = toolsFactory.createList();
 		}
 
 
@@ -581,17 +673,24 @@ public class GSONTools {
 	 * Serialize an operation descriptor
 	 */
 	protected boolean serializeOperation(Map<String, Object> target, Object value) {
-		// Check if object to be serialized is a function
-		if ((value instanceof Function) == false)
-			return false;
-
-		// Serialize operation kind
-		target.put("basystype", "operation");
+		// Only process supported function interfaces
+		if (!((value instanceof Supplier<?>) || (value instanceof Function<?,?>) || (value instanceof Consumer<?>) || (value instanceof BiConsumer<?,?>))) return false;
+		
+		// This serialization operation can process several kinds of functions
+		// - Non-Serializable functions are serialized as "operation"
+		if (!(value instanceof Serializable)) {target.put("basystype", "operation"); return true;}
+		
+		// Serializable functions will be serialized.
+		// - Serialize operation kind
+		target.put("basystype", "lambda");
+		// - Add value
+		target.put("value", this.serializeObjectToString((Serializable) value));		
 
 		// Indicate success
 		return true;
 	}
 
+	
 	/**
 	 * Deserialize an operation
 	 * 
@@ -600,15 +699,18 @@ public class GSONTools {
 	 * @return Server exception object
 	 */
 	protected Object deserializeOperation(Map<String, Object> serializedValue) {
+		// Deserialize non-serializable operations
+		if (serializedValue.get("basystype").equals("operation")) return "OPERATION!!";
+		
+		// Deserialize operation type
+		if (!(serializedValue.get("basystype").equals("lambda"))) return null;
 
-		// Only deserialize exceptions
-		if (!(serializedValue.get("basystype").equals("operation")))
-			return null;
-
-		// Return server exception
-		return "OPERATION!!";
+		// Deserialize lambda
+		return this.deserializeObjectFromString((String) serializedValue.get("value"));
 	}
 
+	
+	
 	/**
 	 * Serialize a primitive or complex value into JSON object
 	 */
@@ -636,21 +738,26 @@ public class GSONTools {
 		System.err.println("Could not serialize object :" + value);
 		return returnValue;
 	}
+	
 
 	/**
 	 * Serialize a primitive or complex value into JSON object
 	 */
+	@Override
 	public Map<String, Object> serialize(Object value, String scope) {
 		return serialize(value, null, scope);
 	}
 
+	
 	/**
 	 * Serialize a primitive or complex value into JSON object
 	 */
+	@Override
 	public Map<String, Object> serialize(Object value) {
 		return serialize(value, null, null);
 	}
 
+	
 	/**
 	 * Deserialize a primitive or complex value from JSON object
 	 */
@@ -679,9 +786,11 @@ public class GSONTools {
 		return returnValue;
 	}
 
+	
 	/**
 	 * Deserialize a primitive or complex value from JSON object
 	 */
+	@Override
 	public Object deserialize(Map<String, Object> serializedValue) {
 		return deserialize(serializedValue, null, null);
 	}

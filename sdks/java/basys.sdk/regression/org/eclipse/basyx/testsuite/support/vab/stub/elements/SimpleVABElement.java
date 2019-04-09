@@ -1,5 +1,6 @@
 package org.eclipse.basyx.testsuite.support.vab.stub.elements;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -46,7 +47,7 @@ public class SimpleVABElement extends HashMap<String, Object> {
 		// - Add operations
 		// - Create contained operation without parameter
 		HashMap<String, Object> operation11 = new HashMap<>();
-		operation11.put("endpoint", (Function<Object[], Object>) (v) -> {
+		operation11.put("endpoint", (Function<Object[], Object> & Serializable) (v) -> {
 			return 10;
 		});
 
@@ -55,19 +56,19 @@ public class SimpleVABElement extends HashMap<String, Object> {
 		containedOperations.put("operation1.1", operation11);
 
 		// - Contained function
-		rootOperations.put("operation1", (Function<Object[], Object>) (param) -> {
+		rootOperations.put("operation1", (Function<Object[], Object> & Serializable) (param) -> {
 			return (int) param[0] + (int) param[1];
 		});
 
-		rootOperations.put("operation2", (Function<Object[], Object>) (param) -> {
+		rootOperations.put("operation2", (Function<Object[], Object> & Serializable) (param) -> {
 			return null;
 		});
 		// - Contained function that throws native JAVA exception
-		rootOperations.put("operationEx1", (Function<Object[], Object>) (elId) -> {
+		rootOperations.put("operationEx1", (Function<Object[], Object> & Serializable) (elId) -> {
 			throw new NullPointerException();
 		});
 		// - Contained function that throws VAB exception
-		rootOperations.put("operationEx2", (Function<Object[], Object>) (elId) -> {
+		rootOperations.put("operationEx2", (Function<Object[], Object> & Serializable) (elId) -> {
 			throw new ServerException("ExType", "Exception description");
 		});
 

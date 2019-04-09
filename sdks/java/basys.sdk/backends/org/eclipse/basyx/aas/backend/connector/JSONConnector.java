@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
+import org.eclipse.basyx.aas.backend.http.tools.factory.GSONToolsFactory;
 import org.eclipse.basyx.vab.core.IModelProvider;
 
 
@@ -18,15 +20,49 @@ import org.eclipse.basyx.vab.core.IModelProvider;
  */
 public class JSONConnector implements IModelProvider {
 
+	
 	/**
 	 * Reference to Connector backend
 	 */
 	protected IBaSyxConnector provider = null;
-
+	
+	
+	/**
+	 * Reference to serializer / deserializer
+	 */
+	protected GSONTools serializer = null;
+	
+	
+	
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param provider
+	 */
 	public JSONConnector(IBaSyxConnector provider) {
-
+		// Store provider backend
 		this.provider = provider;
+		
+		// Create GSON serializer
+		serializer = new GSONTools(new DefaultTypeFactory());
 	}
+
+	
+	/**
+	 * Constructor that accepts specific factory for serializer
+	 * 
+	 * @param provider
+	 */
+	public JSONConnector(IBaSyxConnector provider, GSONToolsFactory factory) {
+		// Store provider backend
+		this.provider = provider;
+		
+		// Create GSON serializer
+		serializer = new GSONTools(factory);
+	}
+
+	
 
 	@Override
 	public Object getModelPropertyValue(String path) { // shouldn't GET throw an exception too?
@@ -48,8 +84,8 @@ public class JSONConnector implements IModelProvider {
 	public void setModelPropertyValue(String path, Object newValue) throws Exception {
 
 		
-		Map<String, Object> gsonMap = GSONTools.Instance.serialize(newValue);
-		String jsonString = GSONTools.Instance.getJsonString(gsonMap);
+		Map<String, Object> gsonMap = serializer.serialize(newValue);
+		String jsonString = serializer.getJsonString(gsonMap);
 
 		Object message = provider.setModelPropertyValue(path, jsonString);
 
@@ -61,8 +97,8 @@ public class JSONConnector implements IModelProvider {
 	public void createValue(String path, Object newEntity) throws Exception {
 
 		// Serialize value Object
-		Map<String, Object> gsonMap = GSONTools.Instance.serialize(newEntity);
-		String jsonString = GSONTools.Instance.getJsonString(gsonMap);
+		Map<String, Object> gsonMap = serializer.serialize(newEntity);
+		String jsonString = serializer.getJsonString(gsonMap);
 
 		Object message = provider.createValue(path, jsonString);
 
@@ -83,8 +119,8 @@ public class JSONConnector implements IModelProvider {
 	public void deleteValue(String path, Object obj) throws Exception {
 
 		// Serialize parameter
-		Map<String, Object> gsonMap = GSONTools.Instance.serialize(obj);
-		String jsonString = GSONTools.Instance.getJsonString(gsonMap);
+		Map<String, Object> gsonMap = serializer.serialize(obj);
+		String jsonString = serializer.getJsonString(gsonMap);
 
 		Object message = provider.deleteValue(path, jsonString);
 
@@ -96,8 +132,8 @@ public class JSONConnector implements IModelProvider {
 	public Object invokeOperation(String path, Object[] parameter) throws Exception {
 
 		// Serialize parameter
-		Map<String, Object> gsonMap = GSONTools.Instance.serialize(parameter);
-		String jsonString = GSONTools.Instance.getJsonString(gsonMap);
+		Map<String, Object> gsonMap = serializer.serialize(parameter);
+		String jsonString = serializer.getJsonString(gsonMap);
 
 		Object message = provider.invokeOperation(path, jsonString);
 
@@ -111,12 +147,12 @@ public class JSONConnector implements IModelProvider {
 	public Object verify(Object message) throws Exception {
 
 		// First get the GSON object from the JSON string
-		Object gsonObj = GSONTools.Instance.getObjFromJsonStr(message.toString());
+		Object gsonObj = serializer.getObjFromJsonStr(message.toString());
 		
 		Object result = null;
 
         if (gsonObj instanceof Map) {
-			Object deserializedResult = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj); // TODO: A response message should be de-serialized to IResult! Provides an interface for message verification.
+			Object deserializedResult = serializer.deserialize((Map<String, Object>) gsonObj); // TODO: A response message should be de-serialized to IResult! Provides an interface for message verification.
 			
 			if (deserializedResult instanceof Map) {
 				Map<String, Object> responseMap = (Map<String, Object>) deserializedResult;

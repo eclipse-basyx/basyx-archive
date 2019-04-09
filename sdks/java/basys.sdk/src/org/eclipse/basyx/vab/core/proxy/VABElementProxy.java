@@ -127,7 +127,7 @@ public class VABElementProxy {
 
 	private String constructPath(String path) {
 		if (addr != null && !addr.isEmpty()) {
-		return addr + "//" + path;
+			return addr + "//" + path;
 		} else {
 			return path;
 		}

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.junit.jupiter.api.Test;
 
 
@@ -23,8 +24,10 @@ public class TestSerializeArray {
 	 */
 	@Test
 	void test() {
+		// Create GSONTools instance
+		GSONTools gsonInstance = new GSONTools(new DefaultTypeFactory());
 		
-		GSONTools gsonInstance = GSONTools.Instance;
+		
 		// Create arrays
 		int[]    integerArray   = {2, 4, 6, 8, 9};
 		String[] stringArray    = {"ab", "bc", "cd"};

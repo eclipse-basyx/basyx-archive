@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.junit.jupiter.api.Test;
 
 
@@ -24,6 +25,8 @@ public class TestSerializeDeserializeMap {
 	 */
 	@Test @SuppressWarnings("unchecked")
 	void test() {
+		// Create GSONTools instance
+		GSONTools gsonInstance = new GSONTools(new DefaultTypeFactory());
 		
 		// Create collections
 		Map<String, Integer> integers1   = new HashMap<>();
@@ -34,12 +37,12 @@ public class TestSerializeDeserializeMap {
 		primitives1.put("k1", 12); primitives1.put("k2", 21.3); primitives1.put("k3", 'c'); primitives1.put("k4", false); primitives1.put("k5", "test"); primitives1.put("k6", -7.9f); 
 		
 		// Serialize primitives
-		Map<String, Object> serVal1 = GSONTools.Instance.serialize(integers1); // "int1", 
-		Map<String, Object> serVal3 = GSONTools.Instance.serialize(primitives1); // "pri1", 
+		Map<String, Object> serVal1 = gsonInstance.serialize(integers1); // "int1", 
+		Map<String, Object> serVal3 = gsonInstance.serialize(primitives1); // "pri1", 
 
 		// Deserialize maps
-		Map<String, Integer> intMap = (Map<String, Integer>) GSONTools.Instance.deserialize(serVal1);
-		Map<String, Object>  objMap = (Map<String, Object>)  GSONTools.Instance.deserialize(serVal3);
+		Map<String, Integer> intMap = (Map<String, Integer>) gsonInstance.deserialize(serVal1);
+		Map<String, Object>  objMap = (Map<String, Object>)  gsonInstance.deserialize(serVal3);
 		
 		// Check result
 		assertTrue(intMap.size() == 5);

@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import org.eclipse.basyx.vab.backend.server.BaSysCommunicationInterface;
 import org.eclipse.basyx.vab.backend.server.utils.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
+
 
 /**
  * Provider class that enables access to an IModelProvider via native BaSyx
@@ -16,7 +18,7 @@ import org.eclipse.basyx.vab.core.IModelProvider;
  * @author kuhn, pschorn
  *
  */
-public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends Thread {
+public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends Thread implements BaSysCommunicationInterface<ModelProvider> {
 
 	/**
 	 * BaSyx get command
@@ -80,6 +82,16 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			e.printStackTrace();
 		}
 	}
+
+	
+	/**
+	 * Get JSON Provider from backend
+	 */
+	@Override
+	public JSONProvider<ModelProvider> getProviderBackend() {
+		return providerBackend;
+	}
+	
 
 	/**
 	 * Get backend reference

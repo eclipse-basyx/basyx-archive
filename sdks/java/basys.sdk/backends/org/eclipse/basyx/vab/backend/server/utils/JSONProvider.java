@@ -7,7 +7,12 @@ import java.util.Map;
 import org.eclipse.basyx.aas.api.exception.LostHTTPRequestParameterException;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.Serializer;
+import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
+import org.eclipse.basyx.aas.backend.http.tools.factory.GSONToolsFactory;
 import org.eclipse.basyx.vab.core.IModelProvider;
+
+
 
 /**
  * Provider class that supports JSON serialized communication <br/>
@@ -20,19 +25,50 @@ import org.eclipse.basyx.vab.core.IModelProvider;
 public class JSONProvider<ModelProvider extends IModelProvider> {
 
 	
-
 	/**
 	 * Reference to IModelProvider backend
 	 */
 	protected ModelProvider providerBackend = null;
+	
+	
+	/**
+	 * Reference to serializer / deserializer
+	 */
+	protected GSONTools serializer = null;
+	
 
+	
 	/**
 	 * Constructor
 	 */
 	public JSONProvider(ModelProvider modelProviderBackend) {
 		// Store reference to backend
 		providerBackend = modelProviderBackend;
+		
+		// Create GSON serializer
+		serializer = new GSONTools(new DefaultTypeFactory());
 	}
+
+
+	/**
+	 * Constructor
+	 */
+	public JSONProvider(ModelProvider modelProviderBackend, GSONToolsFactory factory) {
+		// Store reference to backend
+		providerBackend = modelProviderBackend;
+		
+		// Create GSON serializer
+		serializer = new GSONTools(factory);
+	}
+	
+	
+	/**
+	 * Get serializer reference
+	 */
+	public GSONTools getSerializerReference() {
+		return serializer;
+	}
+	
 
 	/**
 	 * Get backend reference
@@ -40,6 +76,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	public ModelProvider getBackendReference() {
 		return providerBackend;
 	}
+	
 	
 	/**
 	 * Wrap object with meta-protocol and return serialized string 
@@ -52,6 +89,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 		// Serialize the whole thing
 		return serialize(result);
 	}
+	
 	
 	/**
 	 * Acknowledges successful operation without entity body
@@ -67,6 +105,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 		return serialize(result);
 	}
 	
+	
 	/**
 	 * Marks success as false and delivers exception cause messages 
 	 * @param e
@@ -80,6 +119,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 		return serialize(result);
 	}
 	
+	
 	/**
 	 * Serialize IResult (HashMap)
 	 * @param string
@@ -87,9 +127,10 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 */
 	private String serialize(IResult string) {
 		// Serialize the whole thing
-		Map<String, Object> gsonObj = GSONTools.Instance.serialize(string);
-		return GSONTools.Instance.getJsonString(gsonObj);
+		Map<String, Object> gsonObj = serializer.serialize(string);
+		return serializer.getJsonString(gsonObj);
 	}
+	
 
 	/**
 	 * Send JSON encoded response
@@ -99,6 +140,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 		outputStream.write(jsonValue); 
 		outputStream.flush();
 	}
+	
 
 	/**
 	 * Send Error
@@ -116,6 +158,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 		sendJSONResponse(resp, jsonString);
 	}
 
+	
 	/**
 	 * Extracts parameter from JSON and handles de-serialization errors
 	 * 
@@ -132,11 +175,12 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 		Object result = null;
 
 		// Deserialize json body
-		Object gsonObj =GSONTools.Instance.getObjFromJsonStr(serializedJSONValue);	
-		result = GSONTools.Instance.deserialize((Map<String, Object>) gsonObj);
+		Object gsonObj = serializer.getObjFromJsonStr(serializedJSONValue);	
+		result = serializer.deserialize((Map<String, Object>) gsonObj);
 			
 		return result;
 	}
+	
 
 	/**
 	 * Process a BaSys get operation, return JSON serialized result
@@ -159,6 +203,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 		}
 	}
 
+	
 	/**
 	 * Process a BaSys set operation
 	 * 
@@ -188,6 +233,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 		}
 	}
 
+	
 	/**
 	 * Process a BaSys invoke operation
 	 */
@@ -218,7 +264,6 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 		} catch (Exception e) {
 			sendException(outputStream, e);
 		}
-
 	}
 
 	
@@ -254,6 +299,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 		}
 	}
 
+	
 	/**
 	 * Creates a resource under the given path
 	 * 
@@ -280,5 +326,4 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			sendException(outputStream, e);
 		}
 	}
-
 }

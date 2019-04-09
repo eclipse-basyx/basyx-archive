@@ -10,9 +10,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.basyx.vab.backend.server.BaSysCommunicationInterface;
 import org.eclipse.basyx.vab.backend.server.utils.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
+
 
 /**
  * VAB provider class that enables access to an IModelProvider via HTTP REST
@@ -33,18 +35,22 @@ import org.eclipse.basyx.vab.core.tools.VABPathTools;
  * @author kuhn
  *
  */
-public class VABHTTPInterface<ModelProvider extends IModelProvider> extends BasysHTTPServlet {
+public class VABHTTPInterface<ModelProvider extends IModelProvider> extends BasysHTTPServlet implements BaSysCommunicationInterface {
 
+	
 	/**
 	 * Version information to identify the version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
 
+	
 	/**
 	 * Reference to IModelProvider backend
 	 */
 	protected JSONProvider<ModelProvider> providerBackend = null;
 
+	
+	
 	/**
 	 * Constructor
 	 */
@@ -53,6 +59,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		providerBackend = new JSONProvider<ModelProvider>(provider);
 	}
 
+	
 	/**
 	 * Access model provider
 	 */
@@ -60,6 +67,16 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		return providerBackend.getBackendReference();
 	}
 
+	
+	/**
+	 * Get JSON Provider from backend
+	 */
+	@Override
+	public JSONProvider<ModelProvider> getProviderBackend() {
+		return providerBackend;
+	}
+
+	
 	/**
 	 * Send JSON encoded response
 	 */
@@ -69,6 +86,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		outputStream.flush();
 	}
 
+	
 	/**
 	 * Implement "Get" operation
 	 * 
@@ -86,6 +104,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		providerBackend.processBaSysGet(path, resp.getWriter());
 	}
 
+	
 	/**
 	 * Implement "Set" operation
 	 */
@@ -96,6 +115,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		providerBackend.processBaSysSet(path, serValue.toString(), resp.getWriter());
 	}
 
+	
 	/**
 	 * <pre>
 	 * Handle HTTP POST operation. Creates a new Property, Operation, Event,
@@ -120,6 +140,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		}
 	}
 
+	
 	/**
 	 * Handle a HTTP PATCH operation. Updates a map or collection
 	 * 
@@ -131,6 +152,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		providerBackend.processBaSysDelete(path, serValue, resp.getWriter());
 	}
 
+	
 	/**
 	 * Implement "Delete" operation. Deletes any resource under the given path.
 	 */
@@ -144,6 +166,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		providerBackend.processBaSysDelete(path, nullParam, resp.getWriter());
 	}
 
+	
 	private String extractPath(HttpServletRequest req) throws UnsupportedEncodingException {
 		// Extract path
 		String uri = req.getRequestURI();
@@ -161,6 +184,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		return path;
 	}
 
+	
 	private String extractSerializedValue(HttpServletRequest req) throws IOException {
 		// Read request body
 		InputStreamReader reader = new InputStreamReader(req.getInputStream());

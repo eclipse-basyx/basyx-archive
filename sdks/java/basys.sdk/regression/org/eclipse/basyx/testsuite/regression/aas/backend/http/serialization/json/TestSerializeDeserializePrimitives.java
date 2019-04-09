@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.junit.jupiter.api.Test;
 
 
@@ -23,6 +24,9 @@ public class TestSerializeDeserializePrimitives {
 	 */
 	@Test
 	void test() {
+		// Create GSONTools instance
+		GSONTools gsonInstance = new GSONTools(new DefaultTypeFactory());
+
 		
 		// Create primitive values
 		int     primVal11 = 1;
@@ -38,28 +42,28 @@ public class TestSerializeDeserializePrimitives {
 		
 		
 		// Serialize primitives
-		Map<String, Object> serVal11 = GSONTools.Instance.serialize(primVal11); // "val11", 
-		Map<String, Object> serVal12 = GSONTools.Instance.serialize(primVal12); // "val12", 
-		Map<String, Object> serVal21 = GSONTools.Instance.serialize(primVal21); // "val21",
-		Map<String, Object> serVal22 = GSONTools.Instance.serialize(primVal22); // "val22", 
-		Map<String, Object> serVal31 = GSONTools.Instance.serialize(primVal31); // "val31", 
-		Map<String, Object> serVal32 = GSONTools.Instance.serialize(primVal32); // "val32",
-		Map<String, Object> serVal41 = GSONTools.Instance.serialize(primVal41); // "val41", 
-		Map<String, Object> serVal51 = GSONTools.Instance.serialize(primVal51); // "val51", 
-		Map<String, Object> serVal52 = GSONTools.Instance.serialize(primVal52); // "val52",
-		Map<String, Object> serVal61 = GSONTools.Instance.serialize(primVal61); // "val61",
+		Map<String, Object> serVal11 = gsonInstance.serialize(primVal11); // "val11", 
+		Map<String, Object> serVal12 = gsonInstance.serialize(primVal12); // "val12", 
+		Map<String, Object> serVal21 = gsonInstance.serialize(primVal21); // "val21",
+		Map<String, Object> serVal22 = gsonInstance.serialize(primVal22); // "val22", 
+		Map<String, Object> serVal31 = gsonInstance.serialize(primVal31); // "val31", 
+		Map<String, Object> serVal32 = gsonInstance.serialize(primVal32); // "val32",
+		Map<String, Object> serVal41 = gsonInstance.serialize(primVal41); // "val41", 
+		Map<String, Object> serVal51 = gsonInstance.serialize(primVal51); // "val51", 
+		Map<String, Object> serVal52 = gsonInstance.serialize(primVal52); // "val52",
+		Map<String, Object> serVal61 = gsonInstance.serialize(primVal61); // "val61",
 
 		// Deserialize values
-		Object resVal11 = GSONTools.Instance.deserialize(serVal11);
-		Object resVal12 = GSONTools.Instance.deserialize(serVal12);
-		Object resVal21 = GSONTools.Instance.deserialize(serVal21);
-		Object resVal22 = GSONTools.Instance.deserialize(serVal22);
-		Object resVal31 = GSONTools.Instance.deserialize(serVal31);
-		Object resVal32 = GSONTools.Instance.deserialize(serVal32);
-		Object resVal41 = GSONTools.Instance.deserialize(serVal41);
-		Object resVal51 = GSONTools.Instance.deserialize(serVal51);
-		Object resVal52 = GSONTools.Instance.deserialize(serVal52);
-		Object resVal61 = GSONTools.Instance.deserialize(serVal61);
+		Object resVal11 = gsonInstance.deserialize(serVal11);
+		Object resVal12 = gsonInstance.deserialize(serVal12);
+		Object resVal21 = gsonInstance.deserialize(serVal21);
+		Object resVal22 = gsonInstance.deserialize(serVal22);
+		Object resVal31 = gsonInstance.deserialize(serVal31);
+		Object resVal32 = gsonInstance.deserialize(serVal32);
+		Object resVal41 = gsonInstance.deserialize(serVal41);
+		Object resVal51 = gsonInstance.deserialize(serVal51);
+		Object resVal52 = gsonInstance.deserialize(serVal52);
+		Object resVal61 = gsonInstance.deserialize(serVal61);
 		
 		// Check results
 		assertTrue((int)     resVal11 == primVal11);

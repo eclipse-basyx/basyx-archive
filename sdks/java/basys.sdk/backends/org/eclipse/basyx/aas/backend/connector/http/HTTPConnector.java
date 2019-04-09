@@ -44,6 +44,8 @@ public class HTTPConnector implements IBaSyxConnector {
 	public HTTPConnector(String address, String mediaType) {
 		this.address = address;
 		this.mediaType = mediaType;
+		
+		System.out.println("Create with addr:"+address);
 	}
 
 	/**
@@ -148,6 +150,13 @@ public class HTTPConnector implements IBaSyxConnector {
 		return BaSysID.instance.buildPath(aasID, aasSubmodelID, path, qualifier);
 	}
 
+	
+	/**
+	 * Perform a HTTP get request
+	 * 
+	 * @param servicePath
+	 * @return
+	 */
 	private String httpGet(String servicePath) {
 		System.out.println("[HTTP Get] " + address + servicePath);
 

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.junit.jupiter.api.Test;
 
 
@@ -23,7 +24,9 @@ public class TestSerializeDeserializeArray {
 	 */
 	@Test
 	void test() {
-		
+		// Create GSONTools instance
+		GSONTools gsonInstance = new GSONTools(new DefaultTypeFactory());
+
 		// Create arrays
 		int[]     integerArray   = {   2,     4,    6,    8,    9};
 		String[]  stringArray    = {"ab",  "bc", "cd"};
@@ -31,16 +34,16 @@ public class TestSerializeDeserializeArray {
 		Object[]  objectArray    = {   2,     4,    6,    8,    9};
 				
 		// Serialize primitives
-		Map<String, Object> serVal1 = GSONTools.Instance.serialize(integerArray); 
-		Map<String, Object> serVal2 = GSONTools.Instance.serialize(stringArray);
-		Map<String, Object> serVal3 = GSONTools.Instance.serialize(floatArray);  
-		Map<String, Object> serVal4 = GSONTools.Instance.serialize(objectArray); 
+		Map<String, Object> serVal1 = gsonInstance.serialize(integerArray); 
+		Map<String, Object> serVal2 = gsonInstance.serialize(stringArray);
+		Map<String, Object> serVal3 = gsonInstance.serialize(floatArray);  
+		Map<String, Object> serVal4 = gsonInstance.serialize(objectArray); 
 		
 		// Deserialize array
-		Integer[] val1 = (Integer[]) GSONTools.Instance.deserialize(serVal1);
-		String[]  val2 = (String[])  GSONTools.Instance.deserialize(serVal2);
-		Float[]   val3 = (Float[])   GSONTools.Instance.deserialize(serVal3);
-		Object[]  val4 = (Object[])  GSONTools.Instance.deserialize(serVal4);
+		Integer[] val1 = (Integer[]) gsonInstance.deserialize(serVal1);
+		String[]  val2 = (String[])  gsonInstance.deserialize(serVal2);
+		Float[]   val3 = (Float[])   gsonInstance.deserialize(serVal3);
+		Object[]  val4 = (Object[])  gsonInstance.deserialize(serVal4);
 				
 	
 		
