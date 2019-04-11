@@ -7,8 +7,13 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
+  - name: postgresql
+	image: postgres:latest
+	command:
+    - cat
+    tty: true
   - name: maven
-    image: maven:alpine
+	image: maven:alpine
     resources:
       requests:
         memory: "2Gi"
@@ -25,12 +30,15 @@ spec:
   stages {
     stage('Run maven') {
       steps {
+		container('postgresql') {
+		}
         container('maven') {
           sh '''
-                JAVA_FILES_CHANGED=$(git diff --name-only origin/development | grep ".*/java/.*" | wc -l)
+                JAVA_FILES_CHANGED=$(/usr/bin/git diff --name-only origin/development | grep ".*/java/.*" | wc -l)
                 if (( JAVA_FILES_CHANGED > 0 ));
                 then
                     mvn -f ./sdks/java/basys.sdk/pom.xml clean verify
+					mvn -f ./sdks/java/basys.components/pom.xml clean verify
                 fi
             '''        }
       }
@@ -39,7 +47,7 @@ spec:
       steps {
        container('jnlp') {
           sh '''
-                CPP_FILES_CHANGED=$(git diff --name-only origin/development | grep ".*/c++/.*" | wc -l)
+                CPP_FILES_CHANGED=$(/usr/bin/git diff --name-only origin/development | grep ".*/c++/.*" | wc -l)
                 if (( CPP_FILES_CHANGED > 0 ));
                 then
                     mkdir build && cd build
