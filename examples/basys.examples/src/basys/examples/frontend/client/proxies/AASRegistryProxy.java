@@ -7,7 +7,7 @@ import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
 import basys.examples.aasdescriptor.AASDescriptor;
-import basys.examples.urntools.ModelUrn;
+import basys.examples.aasdescriptor.ModelUrn;
 
 
 
@@ -71,7 +71,7 @@ public class AASRegistryProxy {
 	 */
 	public void delete(ModelUrn aasID) {
 		// - Instantiate web service client
-		WebServiceRawClient client = new WebServiceRawClient();
+		//WebServiceRawClient client = new WebServiceRawClient();
 		// - Invoke delete operation of AAS registry
 		client.delete(aasRegistryURL+"/api/v1/registry/"+URLEncoder.encode(aasID.getURN()));
 	}

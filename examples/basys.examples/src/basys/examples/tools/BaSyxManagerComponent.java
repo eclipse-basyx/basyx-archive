@@ -29,12 +29,6 @@ public abstract class BaSyxManagerComponent implements BaSyxContextRunnable {
 	
 	
 	/**
-	 * Initialization method. Perform one-time tasks, e.g. initialization and registration. 
-	 */
-	public abstract void initialize();
-	
-	
-	/**
 	 * Indicate change of end execution flag
 	 */
 	protected void onEndExecutionChanged(boolean endExecutionFlag) {
@@ -59,8 +53,7 @@ public abstract class BaSyxManagerComponent implements BaSyxContextRunnable {
 	 */
 	@Override
 	public void start() {
-		// Initialize this BaSyx manager
-		initialize();
+		// Do nothing
 	}
 	
 	

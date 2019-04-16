@@ -5,7 +5,7 @@ import java.util.HashMap;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
-import basys.examples.urntools.ModelUrn;
+import basys.examples.aasdescriptor.ModelUrn;
 
 
 
@@ -54,6 +54,17 @@ public class ModelServerProxy extends VABElementProxy {
 		// Transfer model to server
 		this.createElement(modelURLOnServer, model);	
 	}
+
+	
+	/**
+	 * Push model to model repository
+	 */
+	public void pushToServer(String modelIDRaw, HashMap<String, Object> model) {
+		// Push to server
+		pushToServer(new ModelUrn(modelIDRaw), model);
+	}
+
+	
 	
 	
 	/**
@@ -66,6 +77,17 @@ public class ModelServerProxy extends VABElementProxy {
 
 	
 	/**
+	 * Get URL to model on server
+	 */
+	public String getURLToModel(String modelIDRaw) {
+		// Return address on server
+		return getURLToModel(new ModelUrn(modelIDRaw));
+	}
+
+	
+	
+	
+	/**
 	 * Update model element value on server
 	 */
 	public void updateElementValue(ModelUrn modelID, String elementPath, Object newValue) {
@@ -75,6 +97,16 @@ public class ModelServerProxy extends VABElementProxy {
 		// Invoke base function 
 		updateElementValue(modelURLOnServer+elementPath, newValue);
 	}
+
+	
+	/**
+	 * Update model element value on server
+	 */
+	public void updateElementValue(String modelIDRaw, String elementPath, Object newValue) {
+		updateElementValue(new ModelUrn(modelIDRaw), elementPath, newValue); 
+	}
+
+	
 	
 	
 	/**
@@ -90,6 +122,16 @@ public class ModelServerProxy extends VABElementProxy {
 	
 	
 	/**
+	 * Read model element value
+	 */
+	public Object readElementValue(String modelIDRaw, String elementPath) {
+		return readElementValue(new ModelUrn(modelIDRaw), elementPath); 
+	}
+
+	
+	
+	
+	/**
 	 * Create model element 
 	 */
 	public void createElement(ModelUrn modelID, String elementPath, Object newValue) {
@@ -102,6 +144,16 @@ public class ModelServerProxy extends VABElementProxy {
 	
 	
 	/**
+	 * Create model element 
+	 */
+	public void createElement(String modelIDRaw, String elementPath, Object newValue) {
+		createElement(new ModelUrn(modelIDRaw), elementPath, newValue); 
+	}
+
+
+	
+	
+	/**
 	 * Delete model element based on path
 	 */
 	public void deleteElement(ModelUrn modelID, String elementPath) {
@@ -111,7 +163,17 @@ public class ModelServerProxy extends VABElementProxy {
 		// Invoke base function 
 		deleteElement(modelURLOnServer+elementPath);
 	}
+
 	
+	/**
+	 * Delete model element based on path
+	 */
+	public void deleteElement(String modelIDRaw, String elementPath) {
+		deleteElement(new ModelUrn(modelIDRaw), elementPath);
+	}
+
+				
+		
 	
 	/**
 	 * Delete model element based on path and value
@@ -122,6 +184,14 @@ public class ModelServerProxy extends VABElementProxy {
 		
 		// Invoke base function 
 		deleteElement(modelURLOnServer+elementPath, value);
+	}
+	
+	
+	/**
+	 * Delete model element based on path and value
+	 */
+	public void deleteElement(String modelIDRaw, String elementPath, Object value) {
+		deleteElement(new ModelUrn(modelIDRaw), elementPath, value);
 	}
 }
 
