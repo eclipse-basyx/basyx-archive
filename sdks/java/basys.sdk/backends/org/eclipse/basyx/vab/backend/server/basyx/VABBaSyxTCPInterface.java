@@ -65,6 +65,8 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 	 */
 	protected PrintWriter outputStream = null;
 
+	
+	
 	/**
 	 * Constructor
 	 */

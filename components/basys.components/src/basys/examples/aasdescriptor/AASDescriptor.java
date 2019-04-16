@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.Asset;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
 
@@ -58,6 +59,16 @@ public class AASDescriptor extends HashMap<String, Object> {
 		((Identifier) get("identification")).setId(id);
 		((List<String>) get("endpoints")).add(endpoint);
 	}
+
+	
+	/**
+	 * Create a new AAS descriptor with minimal information
+	 */
+	public AASDescriptor(ModelUrn urn, String aasSrvURL) {
+		// Invoke default constructor
+		this(urn.getURN(), IdentifierType.URI, aasSrvURL+"/aas/submodels/aasRepository/"+urn.getEncodedURN());
+	}
+
 	
 	
 	/**
@@ -109,6 +120,18 @@ public class AASDescriptor extends HashMap<String, Object> {
 		// Add new sub model descriptor to list
 		submodelDescriptors.add(desc);
 	}
+	
+	
+	/**
+	 * Add a sub model descriptor - simplified operation with default fields
+	 * 
+	 * @param urn URN of submodel
+	 */
+	public void addSubmodelDescriptor(ModelUrn urn, String aasSrvURL) {
+		// Add sub model descriptor
+		addSubmodelDescriptor(new SubmodelDescriptor(urn.getURN(), IdentifierType.URI, aasSrvURL+"/aas/submodels/aasRepository/"+urn.getEncodedURN()));
+	}
+	
 	
 	
 	/**

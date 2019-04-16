@@ -176,7 +176,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	}
 
 	private String httpPut(String servicePath, String newValue) throws ServerException {
-		System.out.println("[HTTP Put] " + address + servicePath + "  " + newValue);
+		System.out.println("[HTTP Put] " + address + servicePath + "  [[" + newValue + "]]");
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
