@@ -2,8 +2,9 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IConceptDictionary;
@@ -11,7 +12,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.parts.IView;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.security.ISecurity;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.metamodel.facades.AssetAdministrationShellFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasDataSpecificationFacade;
@@ -26,7 +27,6 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.enums.KeyElements;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.enums.KeyType;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.security.Security;
-import org.eclipse.basyx.vab.core.ref.VABElementRef;
 
 
 
@@ -89,19 +89,9 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	/**
-	 * Get Submodels
-	 */
-	@SuppressWarnings("unchecked")
-	public Set<VABElementRef> getSubModels() {
-		return ((Set<Reference>) get(SUBMODEL)).stream().map(s -> {
-			String id = s.getKeys().get(0).getValue();
-			return new VABElementRef(id);
-		}).collect(Collectors.toSet());
-	}
-
-	/**
 	 * Add a submodel as reference
 	 */
+	@Override
 	public void addSubModel(ISubModel subModel) {
 		System.out.println("adding Submodel " + subModel.getId());
 		addSubModel(subModel.getId());
@@ -220,5 +210,15 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	@Override
 	public Set<IConceptDictionary> getConceptDictionary() {
 		return new AssetAdministrationShellFacade(this).getConceptDictionary();
+	}
+
+	@Override
+	public Map<String, ISubModel> getSubModels() {
+		return new AssetAdministrationShellFacade(this).getSubModels();
+	}
+
+	@Override
+	public List<String> getSubModelIds() {
+		return new AssetAdministrationShellFacade(this).getSubModelIds();
 	}
 }

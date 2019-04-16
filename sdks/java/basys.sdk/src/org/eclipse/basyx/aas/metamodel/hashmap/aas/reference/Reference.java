@@ -41,7 +41,7 @@ public class Reference extends HashMap<String, Object> implements IReference {
 	}
 
 	public Reference(Map<String, Object> reference) {
-
+		putAll(reference);
 	}
 
 	@Override

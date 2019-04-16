@@ -1,19 +1,23 @@
 package org.eclipse.basyx.aas.metamodel.facades;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IView;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.security.ISecurity;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 /**
  * Facade providing access to a map containing the AssetAdministrationShell structure
  * @author rajashek
@@ -140,7 +144,36 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 		map.put(AssetAdministrationShell.IDSHORT, id);
 		
 	}
+
+	@Override
+	public Map<String, ISubModel> getSubModels() {
+		throw new RuntimeException("getSubModels on local copy is not supported");
+	}
+
+	@Override
+	public void addSubModel(ISubModel subModel) {
+		throw new RuntimeException("addSubModel on local copy is not supported");
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getSubModelIds() {
+		Set<Reference> refs = (Set<Reference>) map.get(AssetAdministrationShell.SUBMODEL);
+
+		// Map a list of references to a list of Strings
+		return refs.stream().map(this::getIdFromReference).collect(Collectors.toList());
+	}
 	
-	
+	/**
+	 * Joins a list of keys using / as separator. <br />
+	 * E.g. <i>{ aas, submodels, testId }</i> gets joined to
+	 * <i>aas/submodels/testId</i>
+	 * 
+	 * @param ref
+	 * @return
+	 */
+	private String getIdFromReference(Reference ref) {
+		return ref.getKeys().stream().map(k -> k.getValue()).collect(Collectors.joining("/"));
+	}
 
 }

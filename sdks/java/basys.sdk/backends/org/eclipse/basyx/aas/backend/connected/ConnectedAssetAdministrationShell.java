@@ -1,10 +1,17 @@
 package org.eclipse.basyx.aas.backend.connected;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
+import org.eclipse.basyx.aas.api.metamodel.aas.parts.IConceptDictionary;
+import org.eclipse.basyx.aas.api.metamodel.aas.parts.IView;
+import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
+import org.eclipse.basyx.aas.api.metamodel.aas.security.ISecurity;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
@@ -63,11 +70,106 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 
 	@Override
 	public void addSubModel(ISubModel subModel) {
-		// TODO Auto-generated method stub
+		throw new RuntimeException("Currently not implemented");
 	}
 
 	protected VABConnectionManager getManager() {
 		return manager;
+	}
+
+	@Override
+	public IAdministrativeInformation getAdministration() {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public IIdentifier getIdentification() {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public void setAdministration(String version, String revision) {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public void setIdentification(String idType, String id) {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public HashSet<IReference> getDataSpecificationReferences() {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public List<String> getSubModelIds() {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public void setSecurity(ISecurity security) {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public ISecurity getSecurity() {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public void setDerivedFrom(IReference derivedFrom) {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public IReference getDerivedFrom() {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public void setAsset(IReference asset) {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public IReference getAsset() {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public void setSubModel(Set<IReference> submodels) {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public Set<IReference> getSubModel() {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public void setViews(Set<IView> views) {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public Set<IView> getViews() {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public void setConceptDictionary(Set<IConceptDictionary> dictionaries) {
+		throw new RuntimeException("Currently not implemented");
+	}
+
+	@Override
+	public Set<IConceptDictionary> getConceptDictionary() {
+		throw new RuntimeException("Currently not implemented");
 	}
 
 }
