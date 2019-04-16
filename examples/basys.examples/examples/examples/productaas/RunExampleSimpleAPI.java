@@ -16,10 +16,10 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import basys.examples.aasdescriptor.AASDescriptor;
+import basys.examples.aasdescriptor.ModelUrn;
 import basys.examples.frontend.client.connmanager.BaSysConnectionManager;
 import basys.examples.frontend.client.connmanager.ModelServerProxy;
 import basys.examples.frontend.client.proxies.AASRegistryProxy;
-import basys.examples.urntools.ModelUrn;
 import examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import examples.directory.ExamplesDirectory;
 

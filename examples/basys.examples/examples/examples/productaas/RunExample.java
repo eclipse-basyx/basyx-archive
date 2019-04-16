@@ -16,7 +16,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import basys.examples.aasdescriptor.AASDescriptor;
-import basys.examples.urntools.ModelUrn;
+import basys.examples.aasdescriptor.ModelUrn;
 import examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import examples.directory.ExamplesDirectory;
 
