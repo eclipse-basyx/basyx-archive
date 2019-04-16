@@ -1,4 +1,4 @@
-package basys.examples.urntools;
+package basys.examples.aasdescriptor;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
