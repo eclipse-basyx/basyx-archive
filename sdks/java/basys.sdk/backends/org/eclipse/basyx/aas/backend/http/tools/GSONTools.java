@@ -792,6 +792,8 @@ public class GSONTools implements Serializer {
 	 */
 	@Override
 	public Object deserialize(Map<String, Object> serializedValue) {
+		System.out.println("DES:["+serializedValue+"]");
+		
 		return deserialize(serializedValue, null, null);
 	}
 }

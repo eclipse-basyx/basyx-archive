@@ -28,6 +28,8 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.enums.KeyType;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.security.Security;
 import org.eclipse.basyx.vab.core.ref.VABElementRef;
 
+
+
 /**
  * AssetAdministrationShell class <br/>
  * Does not implement IAssetAdministrationShell since there are only references
@@ -38,6 +40,7 @@ import org.eclipse.basyx.vab.core.ref.VABElementRef;
  */
 
 public class AssetAdministrationShell extends VABModelMap<Object> implements IAssetAdministrationShell  {
+	
 	
 	public static final String SECURITY ="security";
 	public static final String DERIVEDFROM ="derivedFrom";
@@ -53,6 +56,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	 */
 	private static final long serialVersionUID = 1L;
 
+	
 	/**
 	 * Constructor
 	 */
@@ -217,5 +221,4 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public Set<IConceptDictionary> getConceptDictionary() {
 		return new AssetAdministrationShellFacade(this).getConceptDictionary();
 	}
-
 }

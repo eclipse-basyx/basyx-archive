@@ -9,6 +9,8 @@ import org.eclipse.basyx.aas.backend.connector.IBaSyxConnector;
 import org.eclipse.basyx.vab.backend.server.basyx.CoderTools;
 import org.eclipse.basyx.vab.backend.server.basyx.VABBaSyxTCPInterface;
 
+
+
 /**
  * BaSyx connector class
  * 
@@ -17,15 +19,32 @@ import org.eclipse.basyx.vab.backend.server.basyx.VABBaSyxTCPInterface;
  */
 public class BaSyxConnector implements IBaSyxConnector {
 
-	Socket clientSocket;
-	BufferedInputStream inputStream;
+	
+	/**
+	 * Reference to communication socket
+	 */
+	protected Socket clientSocket = null;
+	
+	
+	/**
+	 * Reference to input stream
+	 */
+	protected BufferedInputStream inputStream = null;
 
+	
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param clientSocket Communication socket
+	 */
 	public BaSyxConnector(Socket clientSocket) throws IOException {
 		super();
 		this.clientSocket = clientSocket;
 		inputStream = new BufferedInputStream(clientSocket.getInputStream());
 	}
 
+	
 	/**
 	 * Invoke a BaSyx operation in a remote provider
 	 */
@@ -75,6 +94,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 		return null;
 	}
 
+	
 	/**
 	 * Invoke a BaSys get operation via HTTP
 	 */
@@ -87,6 +107,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 		return invokeBaSyx(call);
 	}
 
+	
 	/**
 	 * Invoke a Basys Set operation. Sets or overrides existing property, operation
 	 * or event.
@@ -103,6 +124,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 		return invokeBaSyx(call);
 	}
 
+	
 	/**
 	 * Invoke a BaSys Create operation
 	 */
@@ -115,6 +137,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 		return invokeBaSyx(call);
 	}
 
+	
 	/**
 	 * Invoke a Basys invoke operation.
 	 */
@@ -128,6 +151,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 
 	}
 
+	
 	/**
 	 * Invoke a Basys delete operation. Deletes any resource under the given path
 	 * 
@@ -143,6 +167,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 		return invokeBaSyx(call);
 	}
 
+	
 	/**
 	 * Invoke a Basys delete operation. Deletes an entry from a map or collection by
 	 * the given key
@@ -159,6 +184,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 		return invokeBaSyx(call);
 	}
 
+	
 	/**
 	 * Create non-parameterized call that can be used as an argument to the
 	 * invokeBaSyx function
@@ -181,6 +207,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 		return call;
 	}
 
+	
 	/**
 	 * Create parameterized byte call that can be used as an argument to the
 	 * invokeBaSyx function

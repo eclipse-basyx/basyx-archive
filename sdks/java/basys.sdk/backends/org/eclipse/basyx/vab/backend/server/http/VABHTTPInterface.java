@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -110,8 +111,12 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		System.out.println("Put:");
+		
 		String path = extractPath(req);
 		String serValue = extractSerializedValue(req);
+		System.out.println("DoPut:"+serValue);
+		
 		providerBackend.processBaSysSet(path, serValue.toString(), resp.getWriter());
 	}
 
@@ -123,9 +128,11 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		System.out.println("Post:");
+		
 		String path = extractPath(req);
 		String serValue = extractSerializedValue(req);
-
+		
 		// Setup HTML response header
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
@@ -147,6 +154,8 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		System.out.println("Patch:");
+		
 		String path = extractPath(req);
 		String serValue = extractSerializedValue(req);
 		providerBackend.processBaSysDelete(path, serValue, resp.getWriter());
@@ -184,14 +193,21 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		return path;
 	}
 
-	
+
+	/**
+	 * Read serialized value 
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
 	private String extractSerializedValue(HttpServletRequest req) throws IOException {
 		// Read request body
-		InputStreamReader reader = new InputStreamReader(req.getInputStream());
-		BufferedReader bufReader = new BufferedReader(reader);
+		ServletInputStream is = req.getInputStream();		
 		StringBuilder serValue = new StringBuilder();
-		while (bufReader.ready()) {
-			serValue.append(bufReader.readLine());
+
+		// This seems kind of slow...
+		while (!is.isFinished()) {
+			serValue.append(String.valueOf((char) (byte) is.read()));
 		}
 		return serValue.toString();
 	}

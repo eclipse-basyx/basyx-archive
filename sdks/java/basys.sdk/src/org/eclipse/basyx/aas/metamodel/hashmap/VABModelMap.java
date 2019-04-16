@@ -32,7 +32,7 @@ public class VABModelMap<V extends Object> extends HashMap<String, V> {
 	 * @param value value to be put
 	 */
 	@SuppressWarnings("unchecked")
-	public void putPath(String path, Object value) {
+	public <T extends VABModelMap<?>> T putPath(String path, Object value) {
 		// Current Map, start with this map and then traverse according to path
 		Map<String, Object> currentMap = (Map<String, Object>) this;
 		
@@ -44,6 +44,9 @@ public class VABModelMap<V extends Object> extends HashMap<String, V> {
 			
 		// Put element
 		currentMap.put(pathArray[pathArray.length-1], value);
+		
+		// Return reference to this class to enable chaining of operation calls
+		return (T) this;
 	}
 	
 	
