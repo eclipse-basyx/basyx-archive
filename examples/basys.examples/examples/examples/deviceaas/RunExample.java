@@ -6,6 +6,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import basys.examples.deployment.BaSyxDeployment;
+import basys.examples.example.BaSyxExample;
 import examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import examples.deviceaas.devices.devicemanager.DeviceMockup;
 import examples.deviceaas.devices.devicemanager.ManufacturingDeviceManager;
@@ -20,7 +21,7 @@ import examples.directory.ExamplesDirectory;
  * @author kuhn
  *
  */
-public class RunExample {
+public class RunExample extends BaSyxExample {
 
 	
 	/**
@@ -28,7 +29,7 @@ public class RunExample {
 	 */
 	protected VABConnectionManager connManager = new VABConnectionManager(new ExamplesDirectory(), new HTTPConnectorProvider());
 
-	
+
 	/**
 	 * Instantiate and start context elements for this example. BaSyxDeployment contexts instantiate all
 	 * components on the IP address of the host. Therefore, all components use the same IP address. 
@@ -47,9 +48,9 @@ public class RunExample {
 				new DeviceMockup(9998).setName("Device"),
 				new ReceiveDeviceStatusApplication().setName("Application")
 			);
-	
-	
-	
+
+
+
 	/**
 	 * Test sequence: 
 	 * - Device status update
@@ -59,9 +60,9 @@ public class RunExample {
 	public void test() throws Exception {
 
 		// Device updates status to ready
-		((DeviceMockup) context.getRunnable("Device")).statusChange("ready\n");
+		((DeviceMockup) context.getRunnable("Device")).statusChange("ready");
 		
 		// Application waits for status change
-		while (!((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("ready")) Thread.yield();	
+		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("ready") );
 	}
 }

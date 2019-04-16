@@ -3,7 +3,6 @@ package examples.deviceaas;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
-import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
@@ -13,11 +12,11 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import basys.examples.aasdescriptor.AASDescriptor;
+import basys.examples.aasdescriptor.ModelUrn;
 import basys.examples.aasdescriptor.SubmodelDescriptor;
 import basys.examples.frontend.client.connmanager.BaSysConnectionManager;
 import basys.examples.frontend.client.connmanager.ModelServerProxy;
 import basys.examples.frontend.client.proxies.AASRegistryProxy;
-import basys.examples.urntools.ModelUrn;
 import examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import examples.directory.ExamplesDirectory;
 
@@ -65,8 +64,8 @@ public class RunExampleSimpleAPIManualRegistry {
 		// - Product ID (urn:<legalEntity>:<subUnit>:<subModel>:<version>:<revision>:<elementID>#<elementInstance>)
 		ModelUrn deviceAASID = new ModelUrn("de.FHG", "devices.es.iese", "aas", "1.0", "3", "x-509", "001");
 		// - Create device AAS
-		AssetAdministrationShell aas = new AssetAdministrationShell();
-		aas.put("idShort", "DeviceIDShort");
+		AssetAdministrationShell aas = new AssetAdministrationShell()
+				.putPath("idShort", "DeviceIDShort");
 		// - Push AAS to model repository
 		modelServer.pushToServer(deviceAASID, aas);
 
@@ -74,8 +73,8 @@ public class RunExampleSimpleAPIManualRegistry {
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
 		ModelUrn deviceStatusSMID = new ModelUrn("de.FHG", "devices.es.iese", "statusSM", "1.0", "3", "x-509", "001");
 		// - Create generic sub model 
-		SubModel statusSM = new SubModel();
-		statusSM.putPath("properties/status", "offline");
+		SubModel statusSM = new SubModel()
+				.putPath("properties/status", "offline");
 		// - Push static sub model to model repository
 		modelServer.pushToServer(deviceStatusSMID, statusSM);
 		
