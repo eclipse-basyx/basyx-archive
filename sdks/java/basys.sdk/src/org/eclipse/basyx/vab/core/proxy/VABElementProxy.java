@@ -22,7 +22,15 @@ public class VABElementProxy {
 	protected IModelProvider provider = null;
 
 	/**
-	 * Constructor expects address and provider reference
+	 * Constructor expects address and provider reference <br />
+	 * E.g, if the element resides on <i>basyx://127.0.0.1</i> in the path
+	 * <i>a/b/c</i>, <i>provider</i> would realize the connection to
+	 * <i>basyx://127.0.0.1</i> and <i>addr</i> would be <i>a/b/c</i>. The
+	 * VABElementProxy then directly points to the element.
+	 * 
+	 * @param addr
+	 *            address "within" the provider
+	 * @param provider
 	 */
 	public VABElementProxy(String addr, IModelProvider provider) {
 		// Store references
