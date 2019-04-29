@@ -69,14 +69,15 @@ public class TestGateway {
 		gateway.start();
 
 		// Create Directory, here it is configured statically, of course a dynamic
-		// request
-		// to e.g. a servlet is also possible
+		// request to e.g. a servlet is also possible
 		DirectoryServiceStub directory = new DirectoryServiceStub();
 		directory.addMapping("Elem", "basyx://127.0.0.1:6999//basyx://127.0.0.1:6998");
 
+		
 		// Create ConnectionProviderMapper for client
 		ConnectorProviderMapper clientMapper = new ConnectorProviderMapper();
 		clientMapper.addConnectorProvider("basyx", new BaSyxConnectorProvider());
+
 
 		// Create VABConnectionManager
 		VABConnectionManager manager = new VABConnectionManager(directory, clientMapper);
@@ -88,3 +89,4 @@ public class TestGateway {
 		assertEquals(10, proxy.readElementValue("propertyA"));
 	}
 }
+

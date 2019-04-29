@@ -130,7 +130,7 @@ public class VABMultiAASProvider implements IModelProvider {
 	 *         the path is invalid or does not contain an AAS id.
 	 */
 	private String getId(String path) {
-		if (path == null || !path.startsWith("path://")) {
+		if (path == null || !path.startsWith("/path://")) {
 			return null;
 		}
 
@@ -154,7 +154,7 @@ public class VABMultiAASProvider implements IModelProvider {
 	 * @return The remaining sub-path, when removing the id from the VAB path
 	 */
 	private String getSubPath(String path, String aasId) {
-		String prefix = "path://" + aasId;
+		String prefix = "/path://" + aasId;
 		return path.substring(prefix.length());
 	}
 }

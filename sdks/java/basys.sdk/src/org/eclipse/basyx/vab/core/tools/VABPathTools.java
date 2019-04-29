@@ -157,4 +157,29 @@ public class VABPathTools {
 		}
 	}
 
+	
+	/**
+	 * Concatenate two paths
+	 */
+	public static String concatenatePaths(String... paths) {
+		// Store result
+		StringBuffer result = new StringBuffer();
+		
+		// Flag that indicates whether processed path segment is first segment
+		boolean isFirst = true;
+		
+		// Process all path segments
+		for (String pathSegment: paths) {
+			// Remove leading and trailing "/" from pathsegment
+			while (pathSegment.endsWith("/"))   pathSegment = pathSegment.substring(0, pathSegment.length()-1);
+			while (pathSegment.startsWith("/")) pathSegment = pathSegment.substring(1);
+			
+			// Add path to result; if its first segment, do not split with "'"
+			if (!isFirst) result.append("/"); else isFirst=false;
+			result.append(pathSegment);
+		}
+		
+		// Return combined path
+		return result.toString();
+	}
 }

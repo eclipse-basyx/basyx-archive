@@ -35,6 +35,7 @@ public abstract class BasysHTTPServlet extends HttpServlet {
 	/**
 	 * Dispatch service call 
 	 */
+	@Override
 	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getMethod().equalsIgnoreCase("PATCH")){
            doPatch(request, response);
@@ -53,6 +54,7 @@ public abstract class BasysHTTPServlet extends HttpServlet {
     /**
      * Add a servlet parameter
      */
+    
     public BasysHTTPServlet withParameter(String parameter, String value) {
     	// Add parameter
     	servletParameter.put(parameter, value);

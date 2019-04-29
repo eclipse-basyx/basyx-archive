@@ -1,8 +1,10 @@
 package org.eclipse.basyx.aas.backend.connector.basyx;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.net.Socket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.connector.IBaSyxConnector;
@@ -21,27 +23,67 @@ public class BaSyxConnector implements IBaSyxConnector {
 
 	
 	/**
-	 * Reference to communication socket
+	 * Socket channel that connects to provider
 	 */
-	protected Socket clientSocket = null;
-	
-	
-	/**
-	 * Reference to input stream
-	 */
-	protected BufferedInputStream inputStream = null;
+	protected SocketChannel channelToProvider = null;
+
 
 	
 	
 	/**
-	 * Constructor
+	 * Constructor that creates a connection. 
 	 * 
-	 * @param clientSocket Communication socket
+	 * This constructor connects to port at name.
 	 */
-	public BaSyxConnector(Socket clientSocket) throws IOException {
+	public BaSyxConnector(String hostName, int port) {
+		// Base constructor
 		super();
-		this.clientSocket = clientSocket;
-		inputStream = new BufferedInputStream(clientSocket.getInputStream());
+		
+		// Exception handling
+		try {
+			// Resolve address
+			InetAddress       serverIPAddress     = InetAddress.getByName(hostName);
+			InetSocketAddress serverSocketAddress = new InetSocketAddress(serverIPAddress, port);
+		
+			// Create selector and socket channel
+			//Selector      selector = Selector.open();
+			// Channel to provider
+			channelToProvider = SocketChannel.open();
+			// - Setup channel: set to blocking and connect to provider
+			channelToProvider.configureBlocking(true);
+			channelToProvider.connect(serverSocketAddress);
+			// - Register operations for this channel that we will select for
+			//channelToProvider.register(selector, SelectionKey.OP_CONNECT | SelectionKey.OP_READ);
+		} catch (IOException e) {
+			// Print stack trace
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * Constructor that attaches to an existing connection
+	 */
+	public BaSyxConnector(SocketChannel channel) {
+		// Base constructor
+		super();
+		
+		// Attach to existing connection
+		channelToProvider = channel;
+	}
+	
+	
+	/**
+	 * Close connection
+	 */
+	public void closeConnection() {
+		// Try to close connection
+		try {
+			channelToProvider.close();
+		} catch (IOException e) {
+			// Print stack trace
+			e.printStackTrace();
+		}
 	}
 
 	
@@ -51,41 +93,41 @@ public class BaSyxConnector implements IBaSyxConnector {
 	protected synchronized String invokeBaSyx(byte[] call) {
 		// Catch exceptions
 		try {
-			// Input and output streams
+			// Send byte array (BaSyx operation) via channel to provider
+			ByteBuffer txBuffer = ByteBuffer.wrap(call);
+			System.out.println("TXREQ_GW");
+			channelToProvider.write(txBuffer);
 
-			// Send BaSyx operation
-			clientSocket.getOutputStream().write(call);
-
-			// Wait for response
+			// Read response
 			// - Wait for leading 4 byte header that contains frame length
-			while (inputStream.available() < 4)
-				Thread.sleep(1);
-
-			// Get frame size
-			byte[] lengthBytes = new byte[4];
-			inputStream.read(lengthBytes, 0, 4);
-			int frameSize = CoderTools.getInt32(lengthBytes, 0);
+			ByteBuffer rxBuffer1 = ByteBuffer.allocate(4);
+			System.out.println("RX1");
+			readBytes(rxBuffer1, 4);
+			System.out.println("RX1-d");
+			int frameSize = CoderTools.getInt32(rxBuffer1.array(), 0);
 
 			// Wait for frame to arrive
-			while (inputStream.available() < frameSize)
-				Thread.sleep(1);
-			// - Receive frame
-			byte[] rxFrame = new byte[frameSize];
-			inputStream.read(rxFrame, 0, frameSize);
+			ByteBuffer rxBuffer2 = ByteBuffer.allocate(frameSize);
+			System.out.println("RX2");
+			readBytes(rxBuffer2, frameSize);
+			System.out.println("RX2-d");
+			byte[] rxFrame = rxBuffer2.array();
 
 			// Return received data
 
 			// Result check
-			if ((rxFrame == null) || (rxFrame.length < 2))
-				return null;
+			if ((rxFrame == null) || (rxFrame.length < 2)) return null;
 
+			// - FIXME: Check result on position 0
+			
 			// Extract response
 			int jsonResultLen = CoderTools.getInt32(rxFrame, 1);
 			String jsonResult = new String(rxFrame, 1 + 4, jsonResultLen);
 
+			System.out.println("RX3-RES");
+			// Return result
 			return jsonResult.toString();
-
-		} catch (IOException | InterruptedException e) {
+		} catch (IOException e) {
 			// Print stack trace
 			e.printStackTrace();
 		}
@@ -93,7 +135,24 @@ public class BaSyxConnector implements IBaSyxConnector {
 		// Indicate error
 		return null;
 	}
-
+	
+	
+	/**
+	 * Read a number of bytes
+	 */
+	protected void readBytes(ByteBuffer bytes, int expectedBytes) {
+		// Exception handling
+		try {
+			System.out.println("-Reading:"+expectedBytes);
+			// Read bytes until buffer is full
+			while (bytes.position() < expectedBytes) {System.out.println("-Pos:"+bytes.position()); channelToProvider.read(bytes);}
+System.out.println("-Read:"+expectedBytes);
+		} catch (IOException e) {
+			// Output exception
+			e.printStackTrace();
+		}
+	}
+	
 	
 	/**
 	 * Invoke a BaSys get operation via HTTP

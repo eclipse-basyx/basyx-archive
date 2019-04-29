@@ -1,10 +1,10 @@
 package org.eclipse.basyx.testsuite.support.backend.servers;
 
-import java.io.IOException;
-
 import org.eclipse.basyx.testsuite.support.vab.stub.elements.SimpleVABElement;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.rules.ExternalResource;
+
+
 
 /**
  * This class initializes a TCP Server and adds a provided element to it. Note that this server can only provide one AAS per 
@@ -50,12 +50,7 @@ public class AASTCPServerResource extends ExternalResource {
         if (refCount == 0) {
             System.out.println("Do actual TestResources destroy");
             
-            try {
-				server.shutdown();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			server.stop();
         }
     }
 }

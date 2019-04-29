@@ -1,11 +1,10 @@
 package org.eclipse.basyx.vab.backend.server.basyx;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.Socket;
-
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 import org.eclipse.basyx.vab.backend.server.BaSysCommunicationInterface;
 import org.eclipse.basyx.vab.backend.server.utils.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
@@ -20,70 +19,99 @@ import org.eclipse.basyx.vab.core.IModelProvider;
  */
 public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends Thread implements BaSysCommunicationInterface<ModelProvider> {
 
+	
 	/**
 	 * BaSyx get command
 	 */
 	public static final byte BASYX_GET = 0x01;
 
+	
 	/**
 	 * BaSyx set command
 	 */
 	public static final byte BASYX_SET = 0x02;
 
+	
 	/**
 	 * BaSyx create command
 	 */
 	public static final byte BASYX_CREATE = 0x03;
 
+	
 	/**
 	 * BaSyx delete command
 	 */
 	public static final byte BASYX_DELETE = 0x04;
 
+	
 	/**
 	 * BaSyx invoke command
 	 */
 	public static final byte BASYX_INVOKE = 0x05;
 
+	
+	
+	/**
+	 * BaSyx result 'OK' : 0x00
+	 */
+	public static final byte BASYX_RESULT_OK = 0x00;
+
+	
+	/**
+	 * BaSyx result 'Element not found' : 0xF0
+	 */
+	public static final byte BASYX_RESULT_NOT_FOUND = (byte) 0xF0;
+
+	
+	/**
+	 * BaSyx result 'Access not permitted' : 0xF1
+	 */
+	public static final byte BASYX_RESULT_ACCESS_NOT_PERMITTED = (byte) 0xF1;
+
+	
+	/**
+	 * BaSyx result 'Invalid type' : 0xF2
+	 */
+	public static final byte BASYX_RESULT_INVALID_TYPE = (byte) 0xF2;
+
+	
+	/**
+	 * BaSyx result 'Exception thrown' : 0xF3
+	 */
+	public static final byte BASYX_RESULT_EXCEPTION_THROWN = (byte) 0xF3;
+
+	
+	/**
+	 * BaSyx result 'Unknown error' : 0xFE
+	 */
+	public static final byte BASYX_RESULT_UNKNOWN_ERROR = (byte) 0xFE;
+
+	
+	
 	/**
 	 * Reference to IModelProvider backend
 	 */
 	protected JSONProvider<ModelProvider> providerBackend = null;
 
+	
 	/**
-	 * TCP communication socket
+	 * Socket communication channel
 	 */
-	protected Socket tcpCommSocket = null;
+	protected SocketChannel commChannel = null;
 
-	/**
-	 * TCP input stream
-	 */
-	protected BufferedInputStream inputStream = null;
-
-	/**
-	 * TCP output stream
-	 */
-	protected PrintWriter outputStream = null;
 
 	
 	
 	/**
-	 * Constructor
+	 * Constructor that accepts an already created server socket channel
 	 */
-	public VABBaSyxTCPInterface(ModelProvider modelProviderBackend, Socket communicationSocket) {
-		// Store reference to socket and backend
-		providerBackend = new JSONProvider<ModelProvider>(modelProviderBackend);
-		tcpCommSocket = communicationSocket;
-
-		// Create input and output stream
-		try {
-			inputStream = new BufferedInputStream(tcpCommSocket.getInputStream());
-			outputStream = new PrintWriter(tcpCommSocket.getOutputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public VABBaSyxTCPInterface(ModelProvider modelProviderBackend, SocketChannel channel) {
+		// Store reference to channel and backend
+		providerBackend   = new JSONProvider<ModelProvider>(modelProviderBackend);
+		commChannel = channel;
 	}
+	
+	
 
 	
 	/**
@@ -102,10 +130,11 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 		return providerBackend.getBackendReference();
 	}
 
+	
 	/**
 	 * Process input frame
 	 */
-	protected void processInputFrame(byte[] rxFrame) throws IOException {
+	public void processInputFrame(byte[] rxFrame) throws IOException {
 		// Create output streams
 		ByteArrayOutputStream byteArrayOutput = new ByteArrayOutputStream();
 		PrintWriter output = new PrintWriter(byteArrayOutput);
@@ -120,6 +149,8 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 
 			// Forward request to provider
 			providerBackend.processBaSysGet(path, output);
+
+			System.out.println("Processed GET:"+path);
 
 			// Send response frame
 			sendResponseFrame(byteArrayOutput);
@@ -207,6 +238,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 		}
 	}
 
+	
 	/**
 	 * Sends a response to the client that carries the JSON response
 	 * 
@@ -214,21 +246,61 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 	 * @throws IOException
 	 */
 	private void sendResponseFrame(ByteArrayOutputStream byteArrayOutput) throws IOException {
-		// - Create response frame
+		// Create response frame with positive response
+		sendResponseFrame(byteArrayOutput, BASYX_RESULT_OK);
+	}
+
+	
+	/**
+	 * Sends a response to the client that carries the JSON response
+	 * 
+	 * @param byteArrayOutput
+	 * @throws IOException
+	 */
+	private void sendResponseFrame(ByteArrayOutputStream byteArrayOutput, int result) throws IOException {
+		// Create response frame
 		byte[] encodedResult = byteArrayOutput.toByteArray();
 		int resultFrameSize = encodedResult.length + 1;
 		byte[] frameLength = new byte[4];
 		byte[] encodedResultLength = new byte[4];
 		CoderTools.setInt32(frameLength, 0, resultFrameSize + 4);
 		CoderTools.setInt32(encodedResultLength, 0, encodedResult.length);
-		// - Transmit response frame
-		tcpCommSocket.getOutputStream().write(frameLength);
-		tcpCommSocket.getOutputStream().write(0x00);
-		tcpCommSocket.getOutputStream().write(encodedResultLength);
-		tcpCommSocket.getOutputStream().write(encodedResult);
+		
+		// Place response frame in buffer
+		ByteBuffer buffer = ByteBuffer.allocate(resultFrameSize + 4 + 4);
+		buffer.put(frameLength);
+		buffer.put((byte) result);
+		buffer.put(encodedResultLength);
+		buffer.put(encodedResult);
+		buffer.flip();
+		
+		// Transmit response frame
+		int cnt = commChannel.write(buffer);
+		
+		System.out.println("TXRESP:"+cnt);
+
+		// Reset output stream
 		byteArrayOutput.reset();
 	}
 
+	
+	/**
+	 * Read a number of bytes
+	 */
+	protected void readBytes(ByteBuffer bytes, int expectedBytes) {
+		// Exception handling
+		try {
+System.out.println("Reading:"+expectedBytes);
+			// Read bytes until buffer is full
+			while (bytes.position() < expectedBytes) {System.out.println("Pos:"+bytes.position()); commChannel.read(bytes);}
+System.out.println("Read:"+expectedBytes);
+		} catch (IOException e) {
+			// Output exception
+			e.printStackTrace();
+		}
+	}
+
+	
 	/**
 	 * Thread main function
 	 */
@@ -236,37 +308,26 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 	public void run() {
 		// Run forever (until socket is closed)
 		while (true) {
-			// Received data
-			// - 4 Bytes containing frame length
-			byte[] lengthBytes = new byte[4];
-
 			// Process inputs
 			try {
-
-				// Wait for incoming TCP frame
+				// Read response
 				// - Wait for leading 4 byte header that contains frame length
-				while (inputStream.available() < 4)
-					sleep(1);
+				ByteBuffer rxBuffer1 = ByteBuffer.allocate(4);
+				readBytes(rxBuffer1, 4);
+				int frameSize = CoderTools.getInt32(rxBuffer1.array(), 0);
 
-				// Get frame size
-				inputStream.read(lengthBytes, 0, 4);
-				int frameSize = CoderTools.getInt32(lengthBytes, 0);
 				// Wait for frame to arrive
-				while (inputStream.available() < frameSize)
-					sleep(1);
-				// - Receive frame
-				byte[] rxFrame = new byte[frameSize];
-				inputStream.read(rxFrame, 0, frameSize);
+				ByteBuffer rxBuffer2 = ByteBuffer.allocate(frameSize);
+				readBytes(rxBuffer2, frameSize);
+				byte[] rxFrame = rxBuffer2.array();
 
 				// Process input frame
 				processInputFrame(rxFrame);
-
-			} catch (IOException | InterruptedException e) {
+			} catch (IOException e) {
 				// End when TCP socket is closed
-				if (tcpCommSocket.isClosed())
-					return;
+				if (!commChannel.isConnected()) return;
 
-				// output error
+				// Output error
 				e.printStackTrace();
 			}
 		}

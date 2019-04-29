@@ -2,6 +2,7 @@ package org.eclipse.basyx.testsuite.support.backend.servers;
 
 import java.io.IOException;
 
+import org.eclipse.basyx.sdk.api.service.BaSyxService;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
@@ -13,10 +14,21 @@ import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
  * @author kuhn
  *
  */
-public class AASTCPServer extends Thread {
+public class AASTCPServer implements BaSyxService {
 	
-	BaSyxTCPServer<VABHashmapProvider> tcpServer;
+	
+	/**
+	 * TCP server reference
+	 */
+	protected BaSyxTCPServer<VABHashmapProvider> tcpServer;
 
+	
+	/**
+	 * Service name
+	 */
+	protected String name = null;
+	
+	
 	
 	/**
 	 * Main method
@@ -31,17 +43,52 @@ public class AASTCPServer extends Thread {
 	}
 	
 	
-	public void run() {
+	/**
+	 * Start the TCP server
+	 */
+	@Override
+	public void start() {
 		// Start tcp server
 		tcpServer.start();
-		
-		System.out.println("BaSyx TCP Server started...");
-
-		// Wait until TCP server completes (which will never happen) or do something else meaningful
-		try {tcpServer.join();} catch (InterruptedException e) {e.printStackTrace();}
 	}
 	
-	public void shutdown() throws IOException {
+	
+	/**
+	 * Shutdown TCP server
+	 * 
+	 * @throws IOException
+	 */
+	@Override
+	public void stop() {
 		tcpServer.shutdown();
 	}
+
+
+	/**
+	 * Change service name
+	 */
+	@Override
+	public BaSyxService setName(String newName) {
+		name = newName;
+		return this;
+	}
+
+
+	/**
+	 * Return service name
+	 */
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	
+	/**
+	 * Wait for end of runnable
+	 */
+	public void waitFor() {
+		// Wait for thread end
+		tcpServer.waitFor();		
+	}
 }
+

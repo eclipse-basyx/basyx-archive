@@ -14,7 +14,7 @@ public class VABElementProxy {
 	/**
 	 * Connector specific target address
 	 */
-	protected String addr = "";
+	private String addr = "";
 
 	/**
 	 * IModelProvider that connects to the target address
@@ -34,7 +34,7 @@ public class VABElementProxy {
 	 */
 	public VABElementProxy(String addr, IModelProvider provider) {
 		// Store references
-		this.addr = addr;
+		this.addr = trimAddress(addr);
 		this.provider = provider;
 	}
 
@@ -44,6 +44,7 @@ public class VABElementProxy {
 	public Object readElementValue(String elementPath) throws ServerException {
 		// Get element from server
 		try {
+			System.out.println("PATH:"+constructPath(elementPath));
 			// Change element on server
 			return provider.getModelPropertyValue(constructPath(elementPath));
 		} catch (ServerException e) {
@@ -133,13 +134,41 @@ public class VABElementProxy {
 		}
 	}
 
+	
+	/**
+	 * Remove trailing slashes from address "/" 
+	 */
+	private String trimAddress(String parAddr) {
+		// Return value
+		String result = parAddr;
+		
+		// Remove trailing "/" from address
+		while (result.endsWith("/")) result = result.substring(0, result.length()-1);
+		
+		// Return trimmed address
+		return result;
+	}
+	
+	
+	/**
+	 * Add path to VAB element address. Make sure that resulting path contains the proper number of slashes ("/")
+	 * 
+	 * @param path Input path
+	 * @return processed path
+	 */
 	private String constructPath(String path) {
+		// Trim input path
+		String trimmedPath = trimAddress(path);
+		// Remove leading slashes from path
+		while (trimmedPath.startsWith("/")) trimmedPath = trimmedPath.substring(1);
+		// Add one slash at beginning of path
+		trimmedPath = "/"+trimmedPath;
+
+		// Now combine both paths
 		if (addr != null && !addr.isEmpty()) {
-			if (addr.endsWith("//"))   return addr + path;
-			if (path.startsWith("//")) return addr + path;
-			return addr + "//" + path;
+			return addr + "//" + trimmedPath;
 		} else {
-			return path;
+			return trimmedPath;
 		}
 	}
 }

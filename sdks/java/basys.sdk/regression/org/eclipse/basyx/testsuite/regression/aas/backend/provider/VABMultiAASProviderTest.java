@@ -66,7 +66,7 @@ public class VABMultiAASProviderTest {
 
 		// retrieving property
 		Object result = proxy.readElementValue("path://a1/aas/submodels/SimpleAASSubmodel/properties/prop1/value");
-		assertEquals(100, result);
+		assertEquals(100, result); 
 	}
 
 	@Test

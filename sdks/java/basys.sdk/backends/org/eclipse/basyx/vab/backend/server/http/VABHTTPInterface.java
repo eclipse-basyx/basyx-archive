@@ -36,7 +36,7 @@ import org.eclipse.basyx.vab.core.tools.VABPathTools;
  * @author kuhn
  *
  */
-public class VABHTTPInterface<ModelProvider extends IModelProvider> extends BasysHTTPServlet implements BaSysCommunicationInterface {
+public class VABHTTPInterface<ModelProvider extends IModelProvider> extends BasysHTTPServlet implements BaSysCommunicationInterface<ModelProvider> {
 
 	
 	/**

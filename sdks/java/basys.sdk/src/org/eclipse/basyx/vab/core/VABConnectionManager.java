@@ -71,6 +71,6 @@ public class VABConnectionManager {
 
 		// Return a new VABElementProxy
 		// - Do not pass URL here to provider as address, as the url parameter is already absolute and contains the address. 
-		return new VABElementProxy(url, providerProvider.getConnector(""));
+		return new VABElementProxy(VABPathTools.removeAddressEntry(url), providerProvider.getConnector(url));
 	}
 }

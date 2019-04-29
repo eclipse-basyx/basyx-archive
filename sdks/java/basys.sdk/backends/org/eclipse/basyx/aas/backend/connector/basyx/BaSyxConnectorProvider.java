@@ -1,29 +1,32 @@
 package org.eclipse.basyx.aas.backend.connector.basyx;
 
-import java.io.IOException;
-import java.net.Socket;
-
 import org.eclipse.basyx.aas.backend.connector.ConnectorProvider;
 import org.eclipse.basyx.aas.backend.connector.JSONConnector;
 import org.eclipse.basyx.vab.core.IModelProvider;
 
+
+/**
+ * A connector provider for TCP/BaSyx protocol
+ * 
+ * @author schnicke, kuhn
+ *
+ */
 public class BaSyxConnectorProvider extends ConnectorProvider {
 
+	
+	/**
+	 * Create the provider
+	 */
 	@Override
 	protected IModelProvider createProvider(String address) {
+		// Create address
 		address = address.replace("basyx://", "");
 		String hostName = address.substring(0, address.indexOf(":"));
-		String[] splitted = address.split("//");
+		String[] splitted = address.split("/");
 		int hostPort = new Integer(splitted[0].substring(address.indexOf(":") + 1));
-		try {
-			Socket s = new Socket(hostName, hostPort);
-			
-			// returns BaSysConnector wrapped with ConnectedHashmapProvider that handles message header information
-			return new JSONConnector(new BaSyxConnector(s));
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
-		}
+		
+		// Create connector, connect, and return connection
+		return new JSONConnector(new BaSyxConnector(hostName, hostPort));
 	}
 
 }

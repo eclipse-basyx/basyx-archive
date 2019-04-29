@@ -73,6 +73,7 @@ public class DelegatingModelProvider implements IModelProvider {
 			return "";
 		} else {
 			String splitted[] = path.split("//");
+			System.out.println("RT3:"+splitted[0] + "//" + splitted[1]);
 			return splitted[0] + "//" + splitted[1];
 		}
 	}
@@ -87,12 +88,14 @@ public class DelegatingModelProvider implements IModelProvider {
 	 */
 	public static String removeAddressEntry(String path) {
 		if (!path.contains("//")) {
+			System.out.println("RT1:"+path);
 			return path;
 		} else {
 			path = path.replaceFirst(getAddressEntry(path), "");
 			if (path.startsWith("//")) {
 				path = path.replaceFirst("//", "");
 			}
+			System.out.println("RT2:"+path);
 			return path;
 		}
 	}
