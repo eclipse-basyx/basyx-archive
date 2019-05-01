@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.connector.IBaSyxConnector;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
+import org.eclipse.basyx.vab.core.tools.VABPathTools;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 
 /**
@@ -158,13 +159,13 @@ public class HTTPConnector implements IBaSyxConnector {
 	 * @return
 	 */
 	private String httpGet(String servicePath) {
-		System.out.println("[HTTP Get] " + address + servicePath);
+		System.out.println("[HTTP Get] " + VABPathTools.concatenatePaths(address, servicePath));
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
 
 		// Build web service URL
-		Builder request = buildRequest(client, address + servicePath);
+		Builder request = buildRequest(client, VABPathTools.concatenatePaths(address, servicePath));
 
 		// Perform request, return response
 		String result = request.get(String.class);
@@ -176,13 +177,13 @@ public class HTTPConnector implements IBaSyxConnector {
 	}
 
 	private String httpPut(String servicePath, String newValue) throws ServerException {
-		System.out.println("[HTTP Put] " + address + servicePath + "  [[" + newValue + "]]");
+		System.out.println("[HTTP Put] " + VABPathTools.concatenatePaths(address, servicePath) + "  [[" + newValue + "]]");
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
 
 		// Build web service URL
-		Builder request = buildRequest(client, address + servicePath);
+		Builder request = buildRequest(client, VABPathTools.concatenatePaths(address, servicePath));
 
 		// Perform request
 		Response rsp = request.put(Entity.entity(newValue, mediaType));
@@ -193,26 +194,26 @@ public class HTTPConnector implements IBaSyxConnector {
 	}
 
 	private String httpPatch(String servicePath, String newValue) throws ServerException {
-		System.out.println("[HTTP Patch] " + address + servicePath + "  " + newValue);
+		System.out.println("[HTTP Patch] " + VABPathTools.concatenatePaths(address, servicePath) + "  " + newValue);
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
 
 		// Create and invoke HTTP PATCH request
-		Response rsp = client.target(address + servicePath).request().build("PATCH", Entity.text(newValue)).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
+		Response rsp = client.target(VABPathTools.concatenatePaths(address, servicePath)).request().build("PATCH", Entity.text(newValue)).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
 
 		// Return repsonse message (header)
 		return rsp.readEntity(String.class);
 	}
 
 	private String httpPost(String servicePath, String parameter) throws ServerException {
-		System.out.println("[HTTP Post] " + address + servicePath + " " + parameter);
+		System.out.println("[HTTP Post] " + VABPathTools.concatenatePaths(address, servicePath) + " " + parameter);
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
 
 		// Build web service URL
-		Builder request = buildRequest(client, address + servicePath);
+		Builder request = buildRequest(client, VABPathTools.concatenatePaths(address, servicePath));
 
 		// Perform request
 		Response rsp = request.post(Entity.entity(parameter, mediaType));
@@ -222,13 +223,13 @@ public class HTTPConnector implements IBaSyxConnector {
 	}
 
 	private String httpDelete(String servicePath) throws ServerException {
-		System.out.println("[HTTP Delete] " + address + servicePath);
+		System.out.println("[HTTP Delete] " + VABPathTools.concatenatePaths(address, servicePath));
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
 
 		// Build web service URL
-		Builder request = buildRequest(client, address + servicePath);
+		Builder request = buildRequest(client, VABPathTools.concatenatePaths(address, servicePath));
 
 		// Perform request
 		Response rsp = request.delete();
