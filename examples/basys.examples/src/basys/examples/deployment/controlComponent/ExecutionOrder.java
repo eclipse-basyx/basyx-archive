@@ -32,7 +32,7 @@ public enum ExecutionOrder {
 		}
 		
 		// Indicate error
-		throw new RuntimeException("Unknown value requested");
+		throw new RuntimeException("Unknown value requested:"+value.toLowerCase());
 	}
 
 	

@@ -103,6 +103,12 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	protected String savedOccupierID = null;
 	
+	
+	/**
+	 * Status map
+	 */
+	protected Map<String, Object> status = null;
+	
 
 
 	
@@ -114,7 +120,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 		// - Order list
 		put("orderList", new LinkedList<String>());
 		// - "status" sub structure
-		Map<String, Object> status = new StatusMap();
+		status = new StatusMap();
 		put("status", status);
 
 		// Input signals
@@ -317,9 +323,12 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Change execution state based on execution order
 	 */
 	private void changeExecutionState(String orderString) {
+		// Do not react on empty values
+		if (orderString.isEmpty()) return;
+
 		// Get execution order based on order string
-		ExecutionOrder order = ExecutionOrder.byValue(orderString);
-		
+		ExecutionOrder order = ExecutionOrder.byValue(orderString);		
+
 		// Check if execution order leads to valid state in current state
 		switch(getExecutionState().toLowerCase()) {
 			case "idle":
@@ -435,11 +444,12 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	/**
 	 * Finish current execution state (execute 'SC' order). This only works in transition states
 	 */
-	protected void finishState() {
+	public void finishState() {
 		// Check if state complete message leads to valid state in current state
 		switch(getExecutionState().toLowerCase()) {
 			// Process state changes
 			case "starting":     this.setExecutionState(ExecutionState.EXECUTE.getValue()); break;
+			case "execute":      this.setExecutionState(ExecutionState.COMPLETING.getValue()); break;
 			case "completing":   this.setExecutionState(ExecutionState.COMPLETE.getValue()); break;
 			case "resetting":    this.setExecutionState(ExecutionState.IDLE.getValue()); break;
 			case "holding":      this.setExecutionState(ExecutionState.HELD.getValue()); break;
@@ -494,7 +504,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public OccupationState getOccupationState() {
 		// Return occupation state
-		return OccupationState.byValue((Integer) get("occupationState"));
+		return OccupationState.byValue((Integer) status.get("occupationState"));
 	}
 	
 	
@@ -503,7 +513,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setOccupationState(OccupationState occSt) {
 		// Update occupation state
-		put("occupationState ", occSt.getValue());
+		status.put("occupationState ", occSt.getValue());
 	}
 	
 	
@@ -511,7 +521,8 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Get occupier ID
 	 */
 	public String getOccupierID() {
-		return get("occupier").toString();
+		// If occupier is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
+		try {return status.get("occupier").toString();} catch (NullPointerException e) {return "";}
 	}
 	
 	
@@ -519,7 +530,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Set occupier ID
 	 */
 	public void setOccupierID(String occId) {
-		put("occupier", occId);
+		status.put("occupier", occId);
 	}
 	
 
@@ -527,7 +538,8 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Get last occupier ID
 	 */
 	public String getLastOccupierID() {
-		return get("lastOccupier").toString();
+		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
+		try {return status.get("lastOccupier").toString();} catch (NullPointerException e) {return "";}
 	}
 	
 	
@@ -535,7 +547,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Set last occupier ID
 	 */
 	public void setLastOccupierID(String occId) {
-		put("lastOccupier", occId);
+		status.put("lastOccupier", occId);
 	}
 	
 	
@@ -544,7 +556,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public ExecutionMode getExecutionMode() {
 		// Return execution mode
-		return ExecutionMode.byValue((Integer) get("exMode"));
+		return ExecutionMode.byValue((Integer) status.get("exMode"));
 	}
 	
 	
@@ -553,7 +565,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setExecutionMode(ExecutionMode exMode) {
 		// Return execution mode
-		put("exMode", exMode.getValue());
+		status.put("exMode", exMode.getValue());
 	}
 	
 
@@ -561,8 +573,8 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Get execution state
 	 */
 	public String getExecutionState() {
-		// Return execution state
-		return get("exState").toString();
+		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
+		try {return status.get("exState").toString();} catch (NullPointerException e) {return "";}
 	}
 	
 	
@@ -571,7 +583,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setExecutionState(String newSt) {
 		// Change execution state
-		put("exState", newSt);		
+		status.put("exState", newSt);		
 	}
 	
 	
@@ -579,8 +591,8 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Get operation mode
 	 */
 	public String getOperationMode() {
-		// Return operation mode
-		return get("opMode").toString();
+		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
+		try {return status.get("opMode").toString();} catch (NullPointerException e) {return "";}
 	}
 	
 	
@@ -589,7 +601,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setOperationMode(String opMode) {
 		// Change operation mode
-		put("opMode", opMode);		
+		status.put("opMode", opMode);		
 	}
 	
 	
@@ -597,8 +609,8 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Get work state
 	 */
 	public String getWorkState() {
-		// Return work state
-		return get("workState").toString();
+		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
+		try {return status.get("workState").toString();} catch (NullPointerException e) {return "";}
 	}
 	
 
@@ -607,7 +619,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setWorkState(String workState) {
 		// Change work state
-		put("workState", workState);		
+		status.put("workState", workState);		
 	}
 	
 
@@ -615,8 +627,8 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Get error state
 	 */
 	public String getErrorState() {
-		// Return error state
-		return get("errorState").toString();
+		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
+		try {return status.get("errorState").toString();} catch (NullPointerException e) {return "";}
 	}
 	
 	
@@ -625,7 +637,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setErrorState(String errorState) {
 		// Change error state
-		put("errorState", errorState);		
+		status.put("errorState", errorState);		
 	}
 	
 	
@@ -633,8 +645,8 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Get last error state
 	 */
 	public String getLastErrorState() {
-		// Return last error state
-		return get("prevError").toString();
+		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
+		try {return status.get("prevError").toString();} catch (NullPointerException e) {return "";}
 	}
 	
 	
@@ -643,7 +655,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setLastErrorState(String lastErrorState) {
 		// Change last error state
-		put("prevError", lastErrorState);		
+		status.put("prevError", lastErrorState);		
 	}
 	
 	
@@ -652,8 +664,8 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Get last command
 	 */
 	public String getCommand() {
-		// Get last command
-		return get("cmd").toString();
+		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
+		try {return get("cmd").toString();} catch (NullPointerException e) {return "";}
 	}
 	
 	
@@ -670,8 +682,8 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Get local overwrite variable
 	 */
 	public String getLocalOverwrite() {
-		// Get local overwrite command
-		return get("localOverwrite").toString();
+		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
+		try {return get("localOverwrite").toString();} catch (NullPointerException e) {return "";}
 	}
 	
 	
@@ -688,8 +700,8 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Get local overwrite free variable
 	 */
 	public String getLocalOverwriteFree() {
-		// Get local overwrite free command
-		return get("localOverwriteFree").toString();
+		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
+		try {return get("localOverwriteFree").toString();} catch (NullPointerException e) {return "";}
 	}
 	
 	
