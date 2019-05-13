@@ -56,10 +56,10 @@ public class TestVABBaSyxTCP {
 		TestMapProperty.testUpdateComplete(connManager);
 	}
 
-	@Test
-	public void testMapUpdateElement() {
-		TestMapProperty.testUpdateElement(connManager);
-	}
+	// @Test
+	// public void testMapUpdateElement() {
+	// TestMapProperty.testUpdateElement(connManager);
+	// }
 
 	@Test
 	public void testMapRemoveElement() {

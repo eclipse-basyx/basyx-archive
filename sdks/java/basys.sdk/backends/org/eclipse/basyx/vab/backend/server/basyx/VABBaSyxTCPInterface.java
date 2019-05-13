@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+
 import org.eclipse.basyx.vab.backend.server.BaSysCommunicationInterface;
 import org.eclipse.basyx.vab.backend.server.utils.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
@@ -198,7 +199,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			String path = new String(rxFrame, 1 + 4, pathLen);
 
 			// Get value string length and value if available; default is null value  
-			String jsonValue = "{\"basystype\":\"null\"}";
+			String jsonValue = "null";
 			try {
 				int jsonValueLen = CoderTools.getInt32(rxFrame, 1 + 4 + pathLen);
 				jsonValue = new String(rxFrame, 1 + 4 + pathLen + 4, jsonValueLen);

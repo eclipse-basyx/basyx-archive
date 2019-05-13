@@ -2,7 +2,6 @@ package org.eclipse.basyx.vab.backend.server.utils;
 
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.LostHTTPRequestParameterException;
 import org.eclipse.basyx.aas.api.exception.ServerException;
@@ -126,8 +125,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 */
 	private String serialize(IResult string) {
 		// Serialize the whole thing
-		Map<String, Object> gsonObj = serializer.serialize(string);
-		return serializer.getJsonString(gsonObj);
+		return serializer.serialize(string);
 	}
 	
 
@@ -168,14 +166,12 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @throws LostHTTPRequestParameterException 
 	 * @throws ServerException
 	 */
-	@SuppressWarnings("unchecked")
 	private Object extractParameter(String path, String serializedJSONValue, PrintWriter outputStream) {
 		// Return value
 		Object result = null;
 
 		// Deserialize json body
-		Object gsonObj = serializer.getObjFromJsonStr(serializedJSONValue);	
-		result = serializer.deserialize((Map<String, Object>) gsonObj);
+		result = serializer.deserialize(serializedJSONValue);
 			
 		return result;
 	}
@@ -189,6 +185,14 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 		try {
 			// Get requested value from provider backend
 			Object value = providerBackend.getModelPropertyValue(path);
+
+			// if (value.getClass().isArray()) {
+			// List<Object> tmp = new ArrayList<>();
+			// for (Object o : (Object[]) value) {
+			// tmp.add(o);
+			// }
+			// value = tmp;
+			// }
 
 			// Serialize as json string
 			String jsonString = serialize(true, value, (value == null ? null : value.getClass()), null); // any
@@ -236,6 +240,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	/**
 	 * Process a BaSys invoke operation
 	 */
+	@SuppressWarnings("unchecked")
 	public void processBaSysInvoke(String path, String serializedJSONValue, PrintWriter outputStream) {
 
 		try {
@@ -244,6 +249,16 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			Object parameter = extractParameter(path, serializedJSONValue, outputStream);
 			
 			// If only a single parameter has been sent, pack it into an array so it can be casted safely ------- FIXME Parameters should actually be a List of Hashmaps (see VWiD json)
+
+			if (parameter instanceof List<?>) {
+				List<Object> list = (List<Object>) parameter;
+				Object[] parameterArray = new Object[list.size()];
+				for (int i = 0; i < list.size(); i++) {
+					parameterArray[i] = list.get(i);
+				}
+				parameter = parameterArray;
+			}
+
 			if (!(parameter instanceof Object[])) {
 				Object[] parameterArray = new Object[1];
 				Object tmp = parameter;

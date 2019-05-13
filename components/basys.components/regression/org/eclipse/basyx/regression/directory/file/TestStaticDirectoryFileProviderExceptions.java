@@ -45,7 +45,7 @@ public class TestStaticDirectoryFileProviderExceptions {
 		// Register a new AAS (using POST)
 		try {
 			// Get a known AAS by its ID
-			client.post(wsURL+"/api/v1/registry", "{Some content}");
+			client.post(wsURL + "/api/v1/registry", "{Some content}");
 
 			// Exception was not thrown
 			fail("Expected exception indicating that feature is not implemented was not thrown");
