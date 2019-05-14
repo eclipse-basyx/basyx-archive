@@ -29,6 +29,8 @@ namespace basyx {
 			unsigned int threadID;
 			unsigned int (__stdcall *threadFn) (void*);
 			void* threadArg;
+		public:
+			static int getCurrentThreadId();
 		};
 	}
 }

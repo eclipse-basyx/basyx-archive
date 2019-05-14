@@ -22,9 +22,7 @@ target_sources(abstraction
 if(${CMAKE_USE_WIN32_THREADS_INIT})
     message(STATUS "Using win32 threads.")
     set(thread_platform "windows")
-endif()
-
-if(${CMAKE_USE_PTHREADS_INIT})
+elseif(${CMAKE_USE_PTHREADS_INIT})
     message(STATUS "Using pthreads.")
     set(thread_platform "unix")
 endif()
@@ -67,6 +65,6 @@ target_sources(abstraction
 )
 
 target_include_directories(abstraction PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(abstraction Threads::Threads util)
+target_link_libraries(abstraction Threads::Threads util logging)
 
 diagnostics_print(abstraction)
