@@ -4,6 +4,16 @@
 
 #include <string>
 
+namespace basyx {
+	namespace json {
+		template<typename T>
+		extern nlohmann::json serialize(const T & t)
+		{
+			return nlohmann::json{};
+		};
+	};
+};
+
 class TestBaSyxAny : public ::testing::Test 
 {
 };

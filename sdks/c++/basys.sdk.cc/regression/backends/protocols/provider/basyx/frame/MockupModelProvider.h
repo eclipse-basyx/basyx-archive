@@ -11,7 +11,6 @@
 #include <string>
 
 #include "api/IModelProvider.h"
-#include "json/JSONTools.h"
 
 class MockupModelProvider: public IModelProvider {
 
@@ -23,71 +22,90 @@ public:
 	CalledFunction called;
 
 	std::string path;
-	BRef<BType> val;
+	basyx::any val;
+	basyx::any clock;
 
-	MockupModelProvider() {
-		called = CalledFunction::NONE;
+	MockupModelProvider()
+		: called{CalledFunction::NONE}
+		, clock{0}
+	{
 	}
 	
-	virtual ~MockupModelProvider() {
+	virtual ~MockupModelProvider() 
+	{
 	}
 
-	virtual std::string getElementScope(std::string elementPath) override {
+	virtual std::string getElementScope(const std::string & elementPath) override 
+	{
 		return BaSysID::getScopeString(elementPath);
 	}
 
-	virtual BRef<BType> getModelPropertyValue(std::string path) override {
-		// Ignore frozen and clock
-		if (path.find("clock") != std::string::npos
-				|| path.find("frozen") != std::string::npos) {
-			return BRef<BNullObject>(new BNullObject());
+	virtual basyx::any & getModelPropertyValue(const std::string & path) override {
+		// Return dummy clock
+		if (path.find("clock") != std::string::npos)
+		{
+			return clock;
 		}
-		called = CalledFunction::GET;
-		this->path = path;
-		return BRef<BValue>(new BValue(2));
+		// Ignore frozen
+		else if ( path.find("frozen") != std::string::npos) 
+		{
+			val = basyx::any{ nullptr };
+		}
+		else
+		{
+			called = CalledFunction::GET;
+			this->path = path;
+			val = basyx::any{ 2 };
+		};
+
+		return val;
 	}
 
-	virtual void setModelPropertyValue(std::string path, BRef<BType> newValue)
-			override {
-		// Ignore frozen and clock
-		if (path.find("clock") == std::string::npos
-				&& path.find("frozen") == std::string::npos) {
+	virtual void setModelPropertyValue(const std::string & path, basyx::any && newValue) override 
+	{
+		// Set dummy clock
+		if (path.find("clock") != std::string::npos)
+		{
+			clock = std::move(newValue);
+		}
+		else // ignore frozen
+		if (path.find("frozen") == std::string::npos) {
 			called = CalledFunction::SET;
 			this->path = path;
-			this->val = newValue;
+			this->val = std::move(newValue);
 		}
 	}
 
 	/**
 	 * Create/insert a value in a collection
 	 */
-	virtual void createValue(std::string path, BRef<BType> addedValue)
-			override {
+	virtual void createValue(const std::string & path, basyx::any && addedValue) override 
+	{
 		called = CalledFunction::CREATE;
 		this->path = path;
-		this->val = addedValue;
+		this->val = std::move(addedValue);
 	}
 
-	virtual void deleteValue(std::string path, BRef<BType> deletedValue)
-			override {
+	virtual void deleteValue(const std::string & path, basyx::any && deletedValue) override 
+	{
 		called = CalledFunction::DELETE_COMPLEX;
 		this->path = path;
-		this->val = deletedValue;
+		this->val = std::move(deletedValue);
 	}
 	
-	virtual void deleteValue(std::string path) {
+	virtual void deleteValue(const std::string & path) 
+	{
 		called = CalledFunction::DELETE_SIMPLE;
 		this->path = path;
 	}
 
-	virtual BRef<BType> invokeOperation(std::string path,
-			BRef<BObjectCollection> parameter) override {
+	virtual basyx::any invokeOperation(const std::string & path, basyx::any & parameter) override
+	{
 		called = CalledFunction::INVOKE;
 		this->path = path;
-		this->val = parameter;
-		return BRef<BValue>(new BValue(3));
-	}
-
+		this->val = std::move(parameter);
+		return basyx::any{ 3 };
+	};
 };
 
 #endif /* REGRESSION_TESTS_BACKENDS_PROTOCOLS_BASYX_MOCKUPMODELPROVIDER_H_ */

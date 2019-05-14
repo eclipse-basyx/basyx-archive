@@ -12,9 +12,8 @@
 #include "backends/protocols/provider/basyx/frame/BaSyxNativeFrameHelper.h"
 #include "backends/protocols/basyx/BaSyx.h"
 
-BaSyxNativeFrameProcessor::BaSyxNativeFrameProcessor(IModelProvider* providerBackend, JSONTools* jsonTools) 
-	: jsonProvider{ providerBackend, jsonTools }
-	, jsonTools{ jsonTools }
+BaSyxNativeFrameProcessor::BaSyxNativeFrameProcessor(IModelProvider* providerBackend) 
+	: jsonProvider{ providerBackend}
 {
 }
 
@@ -22,8 +21,8 @@ BaSyxNativeFrameProcessor::~BaSyxNativeFrameProcessor()
 {
 }
 
-void BaSyxNativeFrameProcessor::processInputFrame(char const* rxFrame,
-		std::size_t rxSize, char* txFrame, std::size_t* txSize) {
+void BaSyxNativeFrameProcessor::processInputFrame(char const* rxFrame, std::size_t rxSize, char* txFrame, std::size_t* txSize) 
+{
 	std::size_t offset;
 	char command = BaSyxNativeFrameHelper::getCommand(rxFrame, &offset);
 	rxFrame += offset;
@@ -47,11 +46,9 @@ void BaSyxNativeFrameProcessor::processInputFrame(char const* rxFrame,
 	}
 }
 
-void BaSyxNativeFrameProcessor::processGet(char const* rxFrame, char* txFrame,
-		std::size_t* txSize) {
-
+void BaSyxNativeFrameProcessor::processGet(char const* rxFrame, char* txFrame, std::size_t* txSize) 
+{
 	// Try to get the requested value
-
 	// TODO: Error Handling?
 
 	std::string path = BaSyxNativeFrameHelper::getString(rxFrame, 0);
@@ -59,7 +56,9 @@ void BaSyxNativeFrameProcessor::processGet(char const* rxFrame, char* txFrame,
 	// 1 byte result field
 	// 4 byte string size
 	// N byte return value
-	jsonProvider.processBaSysGet(path, txFrame + 5, txSize);
+	std::string getResult = jsonProvider.processBaSysGet(path);
+	*txSize += getResult.size();
+	memcpy(txFrame + 5, getResult.c_str(), getResult.size());
 
 	// Set return string size
 	CoderTools::setInt32(txFrame + 1, 0, *txSize);
@@ -70,8 +69,8 @@ void BaSyxNativeFrameProcessor::processGet(char const* rxFrame, char* txFrame,
 	*txSize += 1;
 }
 
-void BaSyxNativeFrameProcessor::processSet(char const* rxFrame, char* txFrame,
-		std::size_t* txSize) {
+void BaSyxNativeFrameProcessor::processSet(char const* rxFrame, char* txFrame, std::size_t* txSize) 
+{
 	std::string path = BaSyxNativeFrameHelper::getString(rxFrame, 0);
 
 	// TODO: Error Handling?
@@ -83,8 +82,8 @@ void BaSyxNativeFrameProcessor::processSet(char const* rxFrame, char* txFrame,
 	*txSize += 1;
 }
 
-void BaSyxNativeFrameProcessor::processCreate(char const* rxFrame, char* txFrame,
-		std::size_t* txSize) {
+void BaSyxNativeFrameProcessor::processCreate(char const* rxFrame, char* txFrame, std::size_t* txSize)
+{
 	std::string path = BaSyxNativeFrameHelper::getString(rxFrame, 0);
 
 	// TODO: Error Handling?
@@ -96,8 +95,8 @@ void BaSyxNativeFrameProcessor::processCreate(char const* rxFrame, char* txFrame
 	*txSize += 1;
 }
 
-void BaSyxNativeFrameProcessor::processDelete(char const* rxFrame, std::size_t rxSize,
-		char* txFrame, std::size_t* txSize) {
+void BaSyxNativeFrameProcessor::processDelete(char const* rxFrame, std::size_t rxSize, char* txFrame, std::size_t* txSize) 
+{
 	std::string path = BaSyxNativeFrameHelper::getString(rxFrame, 0);
 
 	// Check if there is a serialized json after the path to distinguish between map/collection delete and simple delete
@@ -114,8 +113,8 @@ void BaSyxNativeFrameProcessor::processDelete(char const* rxFrame, std::size_t r
 	*txSize += 1;
 }
 
-void BaSyxNativeFrameProcessor::processInvoke(char const* rxFrame, char* txFrame,
-		std::size_t* txSize) {
+void BaSyxNativeFrameProcessor::processInvoke(char const* rxFrame, char* txFrame, std::size_t* txSize)
+{
 	std::string path = BaSyxNativeFrameHelper::getString(rxFrame, 0);
 
 	// TODO: Error Handling?

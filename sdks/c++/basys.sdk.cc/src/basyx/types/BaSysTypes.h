@@ -7,7 +7,18 @@
 #ifndef BASYS_TYPES
 #define BASYS_TYPES
 
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <vector>
 
+#include <util/any.h>					
+
+namespace basyx {
+	using objectCollection_t = std::vector<basyx::any>;
+	using objectMap_t = std::unordered_map<std::string, basyx::any>;
+//	using objectSet_t = std::unordered_set<basyx::any>;
+};
 
 
 /* *****************************************************

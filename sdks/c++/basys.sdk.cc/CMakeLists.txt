@@ -52,7 +52,6 @@ set(CMAKE_CXX_STANDARD 11)
 
 add_compile_definitions(BASYX_MAJOR_REV=${BASYX_MAJOR_REV})
 add_compile_definitions(BASYX_MINOR_REV=${BASYX_MINOR_REV})
-#add_compile_definitions(PRINT_FRAME)
 add_compile_definitions(WIN32_LEAN_AND_MEAN)
 
 ###############################################
@@ -69,6 +68,7 @@ find_package(Threads)
 add_subdirectory(src/abstraction)
 add_subdirectory(src/backends)
 add_subdirectory(src/basyx)
+add_subdirectory(src/logging)
 add_subdirectory(src/utility)
 
 ###############################################
@@ -76,7 +76,6 @@ add_subdirectory(src/utility)
 ###############################################
 
 add_subdirectory(lib/json)
-
 if(${BASYX_BUILD_TESTS})
 	add_subdirectory(lib/gtest)
 	include(GoogleTest)

@@ -1,12 +1,15 @@
 /*
- * BaSyxNativeConnector.cpp
+ * NativeConnector.cpp
  *
  *  Created on: 14.08.2018
  *      Author: schnicke
  */
 
-#include "backends/protocols/connector/basyx/BaSyxNativeConnector.h"
+#include "backends/protocols/connector/basyx/BasyxNativeConnector.h"
 #include "backends/protocols/provider/basyx/frame/BaSyxNativeFrameHelper.h"
+
+#include <json/json.h>
+
 #include <stdio.h>
 
 
@@ -19,58 +22,31 @@
 
 //static const size_t DEFAULT_BUFFER_LENGTH = 1024;
 
-BaSyxNativeConnector::BaSyxNativeConnector(
-	std::string const& address,
-	int port, 
-	JSONTools* jsonTools)
-	: builder{jsonTools}
-//	, buffer(new char[DEFAULT_BUFFER_LENGTH])
-	, jsonTools{jsonTools}
-	, socket{}
+namespace basyx {
+	namespace connector {
+
+NativeConnector::NativeConnector(std::string const& address, int port)
+	: builder{}
+	, socket{basyx::net::tcp::Socket::Connect(address, port)}
+	, log{ "NativeConnector" }
 {
-//	int iRetval;
-
-	this->socket = basyx::net::tcp::Socket::Connect(address, port);
-
-	int x = 2;
-//	this->ConnectorSocket = new basyx::abstraction::TCPSocket();
-//	iRetval = this->ConnectorSocket->connect(address.c_str(), port.c_str());
-
-	//if (!iRetval) {
-	//	std::cout << "BaSyxNativeConnector# Connected!" << std::endl;
-	//}
+	log.trace("Connected to {}:{}",address,port);
 }
 
 
 
-BaSyxNativeConnector::~BaSyxNativeConnector() {
+NativeConnector::~NativeConnector() {
 	this->socket.Close();
-	//int iResult = this->ConnectorSocket->shutdown(basyx::abstraction::SHUTDOWN_RDWR);
-
-	//if (iResult < 0)
-	//{
-	//	std::cout << "BaSyxNativeConnector# shutdown() failed: " << this->ConnectorSocket->getErrorCode()
-	//			<< std::endl;
-	//}
-
-	//iResult = this->ConnectorSocket->close();
-	//if (iResult < 0)
-	//{
-	//	std::cout << "BaSyxNativeConnector# close() failed: " << this->ConnectorSocket->getErrorCode()
-	//			<< std::endl;
-	//	}
-
-	//delete buffer;
 }
 
 
 
-BRef<BType> BaSyxNativeConnector::basysGet(std::string const& path) {
-	return jsonTools->deserialize(basysGetRaw(path), 0,
-			BaSysID::getScopeString(path));
+basyx::any NativeConnector::basysGet(std::string const& path) 
+{
+	return basyx::json::deserialize(basysGetRaw(path));
 }
 
-nlohmann::json BaSyxNativeConnector::basysGetRaw(std::string const& path) {
+nlohmann::json NativeConnector::basysGetRaw(std::string const& path) {
 	size_t size = builder.buildGetFrame(path, buffer.data() + BASYX_FRAMESIZE_SIZE);
 	sendData(buffer.data(), size);
 	size = receiveData(buffer.data());
@@ -81,36 +57,36 @@ nlohmann::json BaSyxNativeConnector::basysGetRaw(std::string const& path) {
 	return nlohmann::json::parse(data);
 }
 
-void BaSyxNativeConnector::basysSet(std::string const& path,
-		BRef<BType> newValue) {
+void NativeConnector::basysSet(std::string const& path, const basyx::any & newValue) 
+{
 	size_t size = builder.buildSetFrame(path, newValue, buffer.data() + BASYX_FRAMESIZE_SIZE);
 	sendData(buffer.data(), size);
 	size = receiveData(buffer.data());
 }
 
-void BaSyxNativeConnector::basysCreate(std::string const& path,
-		BRef<BType> val) {
+void NativeConnector::basysCreate(std::string const& path, const basyx::any & val)
+{
 	size_t size = builder.buildCreateFrame(path, val, buffer.data() + BASYX_FRAMESIZE_SIZE);
 	sendData(buffer.data(), size);
 	size = receiveData(buffer.data());
 }
 
-BRef<BType> BaSyxNativeConnector::basysInvoke(std::string const& path,
-		BRef<BType> param) {
+basyx::any NativeConnector::basysInvoke(std::string const& path, const basyx::any & param)
+{
 	size_t size = builder.buildInvokeFrame(path, param, buffer.data() + BASYX_FRAMESIZE_SIZE);
 	sendData(buffer.data(), size);
 	size = receiveData(buffer.data());
 	return decode(buffer.data() + 5);
 }
 
-void BaSyxNativeConnector::basysDelete(std::string const& path) {
+void NativeConnector::basysDelete(std::string const& path) 
+{
 	size_t size = builder.buildDeleteFrame(path, buffer.data() + BASYX_FRAMESIZE_SIZE);
 	sendData(buffer.data(), size);
 	size = receiveData(buffer.data());
 }
 
-void BaSyxNativeConnector::basysDelete(std::string const& path,
-		BRef<BType> obj) {
+void NativeConnector::basysDelete(std::string const& path, const basyx::any & obj) {
 	size_t size = builder.buildDeleteFrame(path, obj, buffer.data() + BASYX_FRAMESIZE_SIZE);
 	sendData(buffer.data(), size);
 	size = receiveData(buffer.data());
@@ -122,41 +98,41 @@ void BaSyxNativeConnector::basysDelete(std::string const& path,
  * @param msg a frame constructed with the BaSyxNativeFrameBuilder
  */
 
-void BaSyxNativeConnector::sendData(char* msg, size_t size) {
+void NativeConnector::sendData(char* msg, size_t size) {
 	size += BASYX_FRAMESIZE_SIZE;
 	CoderTools::setInt32(msg, 0, size);
 #ifdef PRINT_FRAME
-	BaSyxNativeFrameHelper::printFrame(msg, size);
+	log.debug("Sending:\n{}", BaSyxNativeFrameHelper::printFrame(msg, size));
 #endif
 
 	int iResult = this->socket.Send(basyx::net::make_buffer(msg, size));
 
 	if (iResult < 0) {
-		std::cout << "BaSyxNativeConnector# Send failed: " << this->socket.GetErrorCode()
-				<< std::endl;
+		log.error("Send failed! Error code: {}", this->socket.GetErrorCode());
 	}
 }
 
 // TODO: Error handling
-size_t BaSyxNativeConnector::receiveData(char* data) {
+size_t NativeConnector::receiveData(char* data) {
 	// recv(data, DEFAULT_BUFFER_LENGTH, 0);
 	int iResult = this->socket.Receive(basyx::net::make_buffer(data, default_buffer_length));
 	
 	if (iResult > 0) {
 #ifdef PRINT_FRAME
-		std::cout << "BaSyxNativeConnector# Received: " << std::endl;
-		BaSyxNativeFrameHelper::printFrame(data, iResult);
+		log.debug("Received:\n{}", BaSyxNativeFrameHelper::printFrame(data, iResult));
 #endif
 		return iResult;
 	} else {
-		std::cout << "BaSyxNativeConnector# ReceiveData failed" << std::endl;
+		std::cout << "NativeConnector# ReceiveData failed" << std::endl;
+		log.error("Receive failed! Error code: {}", iResult);
 		return 0;
 	}
 }
 
-BRef<BType> BaSyxNativeConnector::decode(char* buffer) {
+basyx::any NativeConnector::decode(char* buffer) 
+{
 	std::string data = StringTools::fromArray(buffer);
-	BRef<BType> val = jsonTools->deserialize(json::parse(data), 0, ""); // TODO: Scope?
-	return val;
-}
+	return basyx::json::deserialize(data);
+};
 
+}}

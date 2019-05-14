@@ -10,56 +10,54 @@
 #define BACKENDS_PROVIDER_JSON_JSONPROVIDER_H_
 
 #include <string>
-#include "json/JSONTools.h"
-#include "basysid/BaSysID.h"
+
+#include <json/json.h>
+
+#include <basysid/BaSysID.h>
+
+#include <util/any.h>
+
 
 // TODO: Repository?
 // TODO: Implement exception when JSONTools support them
 
-template<typename T>
+template<typename Provider>
 class JSONProvider {
 public:
-
-	JSONProvider(T* providerBackend, JSONTools* jsonTools) {
-		this->providerBackend = providerBackend;
-		this->jsonTools = jsonTools;
+	JSONProvider(Provider * providerBackend)
+		: providerBackend{ providerBackend }
+	{
 	}
 
-	T* getBackend() {
+	Provider * getBackend() {
 		return providerBackend;
 	}
 
-	void processBaSysGet(std::string const& path, char* output, size_t* size) {
-		BRef<BType> res = providerBackend->getModelPropertyValue(path);
-		serializeToJSON(path, res, output, size);
+	std::string processBaSysGet(std::string const& path) {
+		auto & res = providerBackend->getModelPropertyValue(path);
+		return serializeToJSON(path, res);
 	}
 
-	void processBaSysSet(std::string const& path,
-			std::string const& serializedJSONValue) {
+	void processBaSysSet(std::string const& path, std::string const& serializedJSONValue) 
+	{
 		if (!isFrozen(BaSysID::getAddress(path))) {
-			BRef<BType> deserialized = jsonTools->deserialize(
-					json::parse(serializedJSONValue), 0,
-					providerBackend->getElementScope(path));
-			providerBackend->setModelPropertyValue(path, deserialized);
+			auto deserialized = basyx::json::deserialize(serializedJSONValue);
+			providerBackend->setModelPropertyValue(path, std::move(deserialized));
 			incrementClock(BaSysID::getAddress(path));
 		}
 	}
 
-	void processBaSysCreate(std::string const& path,
-			std::string const& serializedJSONValue) {
-		BRef<BType> deserialized = jsonTools->deserialize(
-				json::parse(serializedJSONValue), 0,
-				providerBackend->getElementScope(path));
-		providerBackend->createValue(path, deserialized);
+	void processBaSysCreate(std::string const& path, std::string const& serializedJSONValue) 
+	{
+			auto deserialized = basyx::json::deserialize(serializedJSONValue);
+			providerBackend->createValue(path, std::move(deserialized));
 	}
 
-	void processBaSysDelete(std::string const& path,
-			std::string const& serializedJSONValue) {
+	void processBaSysDelete(std::string const& path, std::string const& serializedJSONValue) 
+	{
 		if (!isFrozen(BaSysID::getAddress(path))) {
-			BRef<BType> deserialized = jsonTools->deserialize(
-					json::parse(serializedJSONValue), 0,
-					providerBackend->getElementScope(path));
-			providerBackend->deleteValue(path, deserialized);
+			auto deserialized = basyx::json::deserialize(serializedJSONValue);
+			providerBackend->deleteValue(path, std::move(deserialized));
 			incrementClock(BaSysID::getAddress(path));
 		}
 	}
@@ -71,42 +69,44 @@ public:
 		}
 	}
 
-	void processBaSysInvoke(std::string const& path,
-			std::string const& serializedJSONValue, char* output,
-			size_t* size) {
-		BRef<BType> deserialized = jsonTools->deserialize(
-				json::parse(serializedJSONValue), 0,
-				providerBackend->getElementScope(path));
-		BRef<BType> res = providerBackend->invokeOperation(path, deserialized);
-		serializeToJSON(path, res, output, size);
+	void processBaSysInvoke(std::string const& path, std::string const& serializedJSONValue, char* output, size_t* size) 
+	{
+		// ToDo: invoke operations
+		//auto deserialized = basyx::json::deserialize(serializedJSONValue);
+		//BRef<BType> res = providerBackend->invokeOperation(path, deserialized);
+		//		serializeToJSON(path, res, output, size);
 	}
 
 private:
-	T* providerBackend;
-	JSONTools* jsonTools;
+	Provider* providerBackend;
 
-	void serializeToJSON(std::string const& path, BRef<BType> const& val,
-			char* output, size_t* size) {
-		std::string serialized = jsonTools->serialize(val, 0,
-				providerBackend->getElementScope(path)).dump();
-		memcpy(output, serialized.c_str(), serialized.length());
-		*size = serialized.length();
+	//void serializeToJSON(std::string const& path, BRef<BType> const& val, char* output, size_t* size) 
+	//{
+	//	//std::string serialized = jsonTools->serialize(val, 0, providerBackend->getElementScope(path)).dump();
+	//	//memcpy(output, serialized.c_str(), serialized.length());
+	//	//*size = serialized.length();
+	//}
+
+	std::string serializeToJSON(const std::string & path, const basyx::any & value)
+	{
+		return basyx::json::serialize(value).dump(4);
 	}
 
-	void incrementClock(std::string const& submodelPath) {
+	void incrementClock(std::string const& submodelPath) 
+	{
 		std::string clockPath = submodelPath + "/properties/clock";
-		BRef<BValue> clock = providerBackend->getModelPropertyValue(clockPath);
-		providerBackend->setModelPropertyValue(clockPath, clock->getInt() + 1);
+		basyx::any & clock = providerBackend->getModelPropertyValue(clockPath);
+		providerBackend->setModelPropertyValue(clockPath, clock.Get<int>() + 1);
 	}
 
-	bool isFrozen(std::string const& submodelPath) {
-		auto modelPropertyValue = providerBackend->getModelPropertyValue(submodelPath + "/properties/frozen");
+	bool isFrozen(std::string const& submodelPath) 
+	{
+		basyx::any & modelPropertyValue = providerBackend->getModelPropertyValue(submodelPath + "/properties/frozen");
 
-		if (modelPropertyValue->isNull())
+		if (modelPropertyValue.IsNull())
 			return false;
 
-		return static_cast<BRef<BValue>>(providerBackend->getModelPropertyValue(
-				submodelPath + "/properties/frozen"))->getBoolean();
+		return providerBackend->getModelPropertyValue(submodelPath + "/properties/frozen").template Get<bool>();
 	}
 };
 

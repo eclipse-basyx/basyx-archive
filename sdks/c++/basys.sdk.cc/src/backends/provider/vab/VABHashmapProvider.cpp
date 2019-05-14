@@ -63,7 +63,7 @@ namespace provider {
 		};
     };
 
-	basyx::any & HashmapProvider::getModelPropertyValue2(const std::string & path)
+	basyx::any & HashmapProvider::getModelPropertyValue(const std::string & path)
 	{
 		std::cout << "GetPropertyValue: " << path << std::endl;
 
@@ -108,6 +108,12 @@ namespace provider {
 				objectCollection.emplace_back(std::move(newValue));
                 return;
             }
+			//else if (element.InstanceOf<basyx::objectSet_t>()) {
+			//	// add new value to set
+			//	auto & objectSet = element.Get<basyx::objectSet_t&>();
+			//	objectSet.emplace(std::move(newValue));
+			//	return;
+			//}
         }
 
         // Target is map, put key and element value into map
@@ -142,7 +148,7 @@ namespace provider {
 		// - Get element
 		basyx::any & element = parentElement->at(elementName);
 
-		// Check if element is a collection
+		// Check if element is a list
 		if (element.InstanceOf<basyx::objectCollection_t>())
 		{
 			auto & collection = element.Get<basyx::objectCollection_t&>();
@@ -150,6 +156,14 @@ namespace provider {
 			if (it != collection.end())
 				collection.erase(it);
 		}
+		// Check if element is a set
+		//else if (element.InstanceOf<basyx::objectSet_t>())
+		//{
+		//	auto & collection = element.Get<basyx::objectSet_t&>();
+		//	auto it = std::find_if(collection.begin(), collection.end(), [&](const basyx::any & any) -> bool { return any == deletedValue; });
+		//	if (it != collection.end())
+		//		collection.erase(it);
+		//}
 		else if (element.InstanceOf<basyx::objectMap_t>())
 		{
 			auto & objectMap = element.Get<basyx::objectMap_t&>();

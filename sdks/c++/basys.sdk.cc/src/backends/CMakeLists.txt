@@ -25,8 +25,6 @@ target_sources(backends
         protocols/provider/basyx/frame/BaSyxNativeFrameProcessor.cpp
         protocols/provider/basyx/frame/BaSyxNativeFrameProcessor.h
         protocols/provider/basyx/StringTools.h
-        provider/cxx/CXXModelProvider.h
-        provider/cxxhandler/CXXHandler.h
         provider/json/JSONProvider.h
         provider/vab/VABPath.cpp
         provider/vab/VABPath.h

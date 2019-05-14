@@ -15,44 +15,46 @@
 
 #include <memory>
 
-class BaSyxNativeConnector: public IBaSysConnector {
-public:
-	static constexpr std::size_t default_buffer_length = 1024;
-public:
-	BaSyxNativeConnector(std::string const& address, int port, JSONTools* jsonTools);
+namespace basyx {
+	namespace connector {
 
-	virtual ~BaSyxNativeConnector();
-public:
-	virtual BRef<BType> basysGet(std::string const& path) override;
+		class NativeConnector : public basyx::connector::IBaSysConnector {
+		public:
+			static constexpr std::size_t default_buffer_length = 1024;
+		public:
+			NativeConnector(std::string const& address, int port);
 
-	virtual nlohmann::json basysGetRaw(std::string const& path) override;
+			virtual ~NativeConnector();
+		public:
+			virtual basyx::any basysGet(std::string const& path) override;
 
-	virtual void basysSet(std::string const& path, BRef<BType> newValue) override;
+			virtual nlohmann::json basysGetRaw(std::string const& path) override;
 
-	virtual void basysCreate(std::string const& servicePath, BRef<BType> val)
-			override;
+			virtual void basysSet(std::string const& path, const basyx::any & newValue) override;
 
-	virtual BRef<BType> basysInvoke(std::string const& servicePath, BRef<BType> param)
-			override;
+			virtual void basysCreate(std::string const& servicePath, const basyx::any & val)
+				override;
 
-	virtual void basysDelete(std::string const& servicePath) override;
+			virtual basyx::any basysInvoke(std::string const& servicePath, const basyx::any & param)
+				override;
 
-	virtual void basysDelete(std::string const& servicePath, BRef<BType> obj) override;
+			virtual void basysDelete(std::string const& servicePath) override;
 
-private:
-	basyx::net::tcp::Socket socket;
-	BaSyxNativeFrameBuilder builder;
-//	char* buffer;
-	std::array<char, default_buffer_length> buffer;
+			virtual void basysDelete(std::string const& servicePath, const basyx::any & obj) override;
 
-	void sendData(char* data, size_t size);
-	
-	size_t receiveData(char* data);
+		private:
+			basyx::net::tcp::Socket socket;
+			BaSyxNativeFrameBuilder builder;
+			std::array<char, default_buffer_length> buffer;
 
-//	std::unique_ptr<JSONTools> jsonTools;
-	JSONTools * jsonTools;
+			void sendData(char* data, size_t size);
 
-	BRef<BType> decode(char* buffer);
+			size_t receiveData(char* data);
+			basyx::any decode(char* buffer);
+			basyx::log log;
+		};
+
+	}
 };
 
 #endif /* BACKENDS_PROTOCOLS_CONNECTOR_BASYX_BASYXNATIVECONNECTOR_H_ */

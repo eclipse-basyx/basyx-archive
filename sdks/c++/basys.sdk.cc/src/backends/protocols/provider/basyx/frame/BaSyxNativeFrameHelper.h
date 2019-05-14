@@ -10,10 +10,12 @@
 
 #include <string>
 #include <iostream>
+#include <sstream>
 #include "backends/protocols/provider/basyx/StringTools.h"
 #include "backends/protocols/basyx/BaSyx.h"
 
-class BaSyxNativeFrameHelper {
+class BaSyxNativeFrameHelper 
+{
 public:
 	/**
 	 * Retrieves a string from an array
@@ -22,7 +24,8 @@ public:
 	 * 		4 byte string size
 	 * 		N byte string data
 	 */
-	static std::string getString(char const* data, std::size_t num) {
+	static std::string getString(char const* data, std::size_t num) 
+	{
 		for (std::size_t i = 0; i < num; i++) {
 			std::size_t stringSize = CoderTools::getInt32(data, 0);
 
@@ -33,26 +36,31 @@ public:
 		return StringTools::fromArray(data);
 	}
 	
-	static void printFrame(char const* data, size_t size) {
-		std::cout << CoderTools::getInt32(data, 0) << " " << (int) data[4];
+	static std::string printFrame(char const* data, size_t size) 
+	{
+		std::stringstream output;
+
+		output << CoderTools::getInt32(data, 0) << " " << (int) data[4];
 		data += 5;
 		size -= 5;
 		
 		// Iterate over the array to find all strings
 		while (size > 0) {
-			std::cout << " ";
+			output << " ";
 			std::string str = StringTools::fromArray(data);
 			data += str.length() + BASYX_STRINGSIZE_SIZE;
 			size -= str.length() + BASYX_STRINGSIZE_SIZE;
-			std::cout << str;
+			output << "\n" << str;
 		}
-		std::cout << std::endl;
+		output << std::endl;
+		return output.str();
 	}
 	
 	/**
 	 * Retrieves the command from a basyx frame and writes the size of the command in commandSize
 	 */
-	static int getCommand(char const* data, std::size_t* commandSize) {
+	static int getCommand(char const* data, std::size_t* commandSize) 
+	{
 		*commandSize = 1;
 		return data[0];
 	}
