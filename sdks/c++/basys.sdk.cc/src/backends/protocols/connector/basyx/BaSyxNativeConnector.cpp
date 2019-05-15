@@ -5,7 +5,7 @@
  *      Author: schnicke
  */
 
-#include "backends/protocols/connector/basyx/BasyxNativeConnector.h"
+#include "backends/protocols/connector/basyx/BaSyxNativeConnector.h"
 #include "backends/protocols/provider/basyx/frame/BaSyxNativeFrameHelper.h"
 
 #include <json/json.h>
