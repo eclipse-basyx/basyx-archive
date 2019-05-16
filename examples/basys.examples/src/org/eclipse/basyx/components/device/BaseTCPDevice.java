@@ -1,0 +1,111 @@
+package org.eclipse.basyx.components.device;
+
+import org.eclipse.basyx.components.netcomm.TCPClient;
+
+
+
+
+/**
+ * Base class for integrating devices with BaSys
+ * 
+ * This base class provides a simple framework for integrating devices with BaSys/BaSyx. It implements a string
+ * based communication and connects to a device manager. The class defines interface methods that need to be
+ * called from sub classes or native code.
+ * 
+ * The device has no control component; the device decides itself when its service is executed. This happens 
+ * e.g. due to sensor inputs or MES system request
+ * 
+ * @author kuhn
+ *
+ */
+public abstract class BaseTCPDevice extends BaseDevice implements BaSysNativeDeviceStatusIF {
+
+	
+	/**
+	 * Communication client
+	 */
+	protected TCPClient communicationClient = null;
+	
+	
+	/**
+	 * Store server port
+	 */
+	protected int serverPort;
+	
+	
+	
+	
+	/**
+	 * Constructor
+	 */
+	public BaseTCPDevice(int port) {
+		// Store server port
+		serverPort = port;
+	}
+	
+	
+	
+	
+	/**
+	 * Indicate device service invocation to device manager
+	 */
+	@Override
+	protected void onServiceInvocation() {
+		// Write bytes to device manager
+		communicationClient.sendMessage("invocation:\n");
+	}
+
+	
+	/**
+	 * Indicate device status change to device manager
+	 */
+	@Override
+	protected void statusChange(String newStatus) {
+		// Write bytes to device manager
+		communicationClient.sendMessage("status:"+newStatus+"\n");
+	}
+	
+	
+	/**
+	 * Close device communication socket
+	 */
+	public void closeSocket() {
+		// Close socket
+		communicationClient.close();
+	}
+
+
+	/**
+	 * Start the device
+	 */
+	@Override
+	public void start() {
+		// Invoke base implementation
+		super.start();
+		
+		// Create connection
+		communicationClient = new TCPClient("localhost", serverPort);
+	}
+
+
+	/**
+	 * Stop the device
+	 */
+	@Override
+	public void stop() {
+		// Invoke base implementation
+		super.stop();
+		
+		// Close communication socket
+		closeSocket();
+	}
+
+
+	/**
+	 * Wait for completion of server
+	 */
+	@Override
+	public void waitFor() {
+		// Do nothing
+	}
+}
