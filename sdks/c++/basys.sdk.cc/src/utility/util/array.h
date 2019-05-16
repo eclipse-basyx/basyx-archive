@@ -61,12 +61,22 @@ namespace basyx {
 		{
 			return _array[n];
 		};
+		
+		inline const T & get(const std::size_t n) const
+		{
+			return _array[n];
+		}
 
 		inline T & operator[](std::size_t n)
 		{
 			return this->get(n);
 		}
 		
+		inline const T & operator[](std::size_t n) const
+		{
+			return this->get(n);
+		}
+
 		inline std::size_t size() const noexcept
 		{
 			return _size;

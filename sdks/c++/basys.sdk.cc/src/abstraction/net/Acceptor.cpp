@@ -1,11 +1,14 @@
 #include "Acceptor.h"
 
+#include <impl/acceptor_impl.h>
+#include <net/Socket.h>
+
+#include <util/util.h>
+
+#include <log/log.h>
+
 #include <string>
 
-#include "util/util.h"
-
-#include "impl/acceptor_impl.h"
-#include "Socket.h"
 
 namespace basyx {
 	namespace net {
@@ -14,9 +17,11 @@ namespace basyx {
 			Acceptor::Acceptor(int port) : Acceptor{ std::to_string(port) } {};
 			Acceptor::Acceptor(const std::string & port)
 				: acceptor{ util::make_unique<basyx::net::impl::acceptor_impl>() }
+				, log{ "Acceptor" }
 			{
 				//ToDo: Error handling
 				acceptor->listen(port);
+				log.trace("Listening on port %d", port);
 			}
 
 			Acceptor::~Acceptor()
@@ -46,11 +51,10 @@ namespace basyx {
 
 			void Acceptor::close()
 			{
+				log.trace("Closing...");
 				this->acceptor->shutdown(SHUTDOWN_RDWR);
 				this->acceptor->close();
-			//	this->acceptor.reset();
 			}
-
 		}
 	}
 }

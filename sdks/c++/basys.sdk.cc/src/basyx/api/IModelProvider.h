@@ -13,9 +13,6 @@
  * ******************************************/
 
 // BaSyx includes
-#include <ref/BRef.h>
-#include <types/BObjectCollection.h>
-#include <types/BType.h>
 #include <util/any.h>
 
 // Std C++ includes
@@ -46,7 +43,7 @@ public:
 	/**
 	 * Get a sub model property value
 	 */
-	virtual BRef<BType> getModelPropertyValue(const std::string & path) = 0;
+	virtual basyx::any & getModelPropertyValue(const std::string & path) = 0;
 
 	/**
 	 * Set a sub model property value
@@ -73,8 +70,7 @@ public:
 	/**
 	 * Invoke an operation
 	 */
-	virtual BRef<BType> invokeOperation(const std::string & path,
-			BRef<BObjectCollection> parameter) = 0;
+	virtual basyx::any invokeOperation(const std::string & path, basyx::any & parameter) = 0;
 
 	/**
 	 * Get contained elements

@@ -9,6 +9,7 @@
 #include "impl/socket_impl.h"
 
 #include "util/util.h"
+#include <log/log.h>
 
 #include <iostream>
 
@@ -29,8 +30,7 @@ namespace basyx {
 				// Initialize Winsock
 				int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 				if (iResult != 0) {
-					std::cout << "Acceptor# WSAStartup failed: " << iResult
-						<< std::endl;
+					log.trace("WSAStartup failed: %d", iResult);
 				}
 
 				struct addrinfo *result = NULL, hints;
@@ -44,8 +44,7 @@ namespace basyx {
 				// Resolve the local address and port to be used by the server
 				iResult = getaddrinfo(NULL, port.c_str(), &hints, &result);
 				if (iResult != 0) {
-					std::cout << "Acceptor# getaddrinfo failed: " << iResult
-						<< std::endl;
+					log.trace("getaddrinfo failed: %d", iResult);
 					WSACleanup();
 					return -1;
 				}
@@ -57,8 +56,7 @@ namespace basyx {
 					result->ai_protocol);
 
 				if (socketDesc == INVALID_SOCKET) {
-					std::cout << "Acceptor# Error at socket(): "
-						<< WSAGetLastError() << std::endl;
+					log.trace("Error at socket(): %d", WSAGetLastError());
 					freeaddrinfo(result);
 					WSACleanup();
 					return -1;
@@ -71,6 +69,7 @@ namespace basyx {
 				if (iResult == SOCKET_ERROR) {
 					std::cout << "Acceptor# bind failed:" << WSAGetLastError()
 						<< std::endl;
+					log.trace("bind() failed: %d", WSAGetLastError());
 					freeaddrinfo(result);
 					closesocket(socketDesc);
 					WSACleanup();
@@ -84,12 +83,14 @@ namespace basyx {
 				if (::listen(socketDesc, SOMAXCONN) == SOCKET_ERROR) {
 					std::cout << "BaSyxTCPServer# listen failed: " << WSAGetLastError()
 						<< std::endl;
+					log.trace("listen() failed: %d", WSAGetLastError());
 					closesocket(socketDesc);
 					WSACleanup();
 					return -1;
 				}
 
 				std::cout << "Acceptor# TCP Server Listening!" << std::endl;
+
 				return 0;
 			}
 
@@ -97,9 +98,7 @@ namespace basyx {
 
 				native_socket_type clientSock = ::accept(this->socketDesc, NULL, NULL);
 				if (clientSock == INVALID_SOCKET) {
-					std::cout << "Acceptor# accept failed: "
-						<< WSAGetLastError() << std::endl;
-
+					log.trace("accept() failed: %d", WSAGetLastError());
 					return nullptr;
 				}
 				else {
@@ -115,7 +114,7 @@ namespace basyx {
 				this->shutdown(SHUTDOWN_RDWR);
 
 				if (::closesocket(this->socketDesc) != 0) {
-					std::cout << "Acceptor# close() failed!" << std::endl;
+					log.warn("close() failed!");
 					return -1;
 				}
 				this->socketDesc = 0;

@@ -8,11 +8,8 @@
 ###
 
 function( enable_cppcheck )
-	file(GLOB_RECURSE SOURCE_FILES *.c *.cpp *.cxx *.cc )
-	file(GLOB_RECURSE HEADER_FILES *.h *.hpp *.hxx *.hh )
-
-	list(FILTER SOURCE_FILES EXCLUDE REGEX ".*/lib/.*")
-	list(FILTER HEADER_FILES EXCLUDE REGEX ".*/lib/.*")
+    file(GLOB_RECURSE SOURCE_FILES src/*.c src/*.cpp src/*.cxx src/*.cc )
+    file(GLOB_RECURSE HEADER_FILES src/*.h src/*.hpp src/*.hxx src/*.hh )
 	
 	find_program(UTIL_CPPCHECK_PATH cppcheck)
 	if(UTIL_CPPCHECK_PATH)

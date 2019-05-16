@@ -18,12 +18,14 @@ namespace basyx {
 namespace net {
     namespace impl {
 
-	    acceptor_impl::~acceptor_impl()
+        acceptor_impl::~acceptor_impl()
         {
-            this->shutdown(SHUTDOWN_RDWR);
-            this->close();
+            if(this->socketDesc != 0) {
+                this->shutdown(SHUTDOWN_RDWR);
+                this->close();
+            };
         }
-	
+
         int acceptor_impl::listen(std::string const& port)
         {
             struct addrinfo *result = NULL, hints;
@@ -39,7 +41,7 @@ namespace net {
             // Resolve the local address and port to be used by the server
             iResult = getaddrinfo(NULL, port.c_str(), &hints, &result);
             if (iResult != 0) {
-                std::cout << "TCPListenSocket# getaddrinfo() failed!" << std::endl;
+                log.error("getaddrinfo() failed! Error code: %d", iResult);
                 return -1;
             }
 
@@ -47,7 +49,7 @@ namespace net {
             socketDesc = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
 
             if (socketDesc < 0) {
-                std::cout << "TCPListenSocket# socket() failed!" << std::endl;
+                log.error("socket() failed! Error code: %d", iResult);
                 freeaddrinfo(result);
                 return -1;
             }
@@ -56,7 +58,7 @@ namespace net {
             iResult = setsockopt(socketDesc, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuse, sizeof(reuse));
 
             if (iResult < 0) {
-                std::cout << "TCPListenSocket# setsockopt() failed!" << std::endl;
+                log.error("setsockopt() failed! Error code: %d", iResult);
                 freeaddrinfo(result);
                 ::close(socketDesc);
                 return -1;
@@ -67,7 +69,7 @@ namespace net {
             iResult = bind(socketDesc, result->ai_addr, (int)result->ai_addrlen);
 
             if (iResult < 0) {
-                std::cout << "TCPListenSocket# bind() failed!" << std::endl;
+                log.error("bind() failed! Error code: %d", iResult);
                 freeaddrinfo(result);
                 ::close(socketDesc);
                 return -1;
@@ -78,7 +80,7 @@ namespace net {
             // To listen on a socket
             // starts listening to allow clients to connect.
             if (::listen(socketDesc, SOMAXCONN) < 0) {
-                std::cout << "TCPListenSocket# listen() failed!" << std::endl;
+                log.error("listen() failed! Error code: %d", iResult);
                 ::close(socketDesc);
                 return -1;
             }
@@ -91,20 +93,17 @@ namespace net {
 
             native_socket_type clientSock = ::accept(this->socketDesc, NULL, NULL);
             if (clientSock < 0) {
-                std::cout << "TCPListenSocket# accept() failed!" << std::endl;
-
-                    return nullptr;
+                log.warn("accept() failed!");
+                return nullptr;
+            } else {
+                return util::make_unique<socket_impl>(clientSock);
             }
-            else {
-                    return util::make_unique<socket_impl>(clientSock);
-            }
-
         }
 
         int acceptor_impl::shutdown(enum SocketShutdownDir how)
         {
             if (::shutdown(this->socketDesc, how) < 0) {
-                std::cout << "TCPListenSocket# shutdown() failed!" << std::endl;
+                log.error("shutdown() failed!");
                 return -1;
             }
             return 0;
@@ -113,9 +112,10 @@ namespace net {
         int acceptor_impl::close()
         {
             if (::close(this->socketDesc) < 0) {
-                std::cout << "TCPListenSocket# close() failed!" << std::endl;
+                log.error("close() failed!");
                 return -1;
             }
+            this->socketDesc = 0;
             return 0;
         }
 

@@ -3,8 +3,7 @@
 
 
 #include "api/IModelProvider.h"
-#include "ref/BRef.h"
-#include "types/BType.h"
+#include "types/BaSysTypes.h"
 
 #include <backends/provider/vab/VABPath.h>
 
@@ -17,8 +16,8 @@
 
 namespace basyx {
 
-	using objectCollection_t = std::vector<basyx::any>;
-	using objectMap_t = std::unordered_map<std::string, basyx::any>;
+	//using objectCollection_t = std::vector<basyx::any>;
+	//using objectMap_t = std::unordered_map<std::string, basyx::any>;
 
 	namespace provider {
 
@@ -57,9 +56,7 @@ namespace basyx {
 			/**
 			 * Get a sub model property value
 			 */
-			virtual BRef<BType> getModelPropertyValue(const std::string & path) override { return{};  };
-
-			basyx::any & getModelPropertyValue2(const std::string & path);
+			basyx::any & getModelPropertyValue(const std::string & path) override;
 
 			/**
 			 * Set a sub model property value
@@ -88,7 +85,7 @@ namespace basyx {
 			/**
 			 * Invoke an operation
 			 */
-			virtual BRef<BType> invokeOperation(const std::string & path, BRef<BObjectCollection> parameter) override { return {}; };
+			virtual basyx::any invokeOperation(const std::string & path, basyx::any & parameter) override { return {}; };
 		};
 	}
 }

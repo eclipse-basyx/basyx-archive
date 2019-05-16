@@ -3,9 +3,6 @@
 ###############################################
 
 project(basyx)
-
-### BaSyx ###
-
 add_library(basyx)
 
 target_sources(basyx
@@ -20,20 +17,13 @@ target_sources(basyx
         api/ISubModel.h
         basysid/BaSysID.cpp
         basysid/BaSysID.h
-        json/JSONTools.cpp
-        json/JSONTools.h
+        json/json.h
+	json/json_deserializer.h
+        json/json_serializer.h
+        json/typeid.cpp
+        json/typeid.h
         parameter/BParameter.h
-        ref/BRef.h
-        types/BArray.h
         types/BaSysTypes.h
-        types/BNullObject.h
-        types/BObject.cc
-        types/BObject.h
-        types/BObjectCollection.h
-        types/BObjectMap.h
-        types/BString.h
-        types/BType.h
-        types/BValue.h
 )
 
 target_include_directories(basyx PUBLIC ${PROJECT_SOURCE_DIR} ${CMAKE_SOURCE_DIR} ) 

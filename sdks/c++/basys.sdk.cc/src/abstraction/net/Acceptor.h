@@ -9,6 +9,7 @@
 #define ABSTRACTION_NET_ACCEPTOR_H_
 
 #include <memory>
+#include <log/log.h>
 
 #include "Socket.h"
 
@@ -26,7 +27,7 @@ namespace basyx {
 			{
 			private:
 				std::unique_ptr<basyx::net::impl::acceptor_impl> acceptor;
-
+				basyx::log log;
 				Acceptor & _move_acceptor(Acceptor && other);
 			public:
 				explicit Acceptor(int port);

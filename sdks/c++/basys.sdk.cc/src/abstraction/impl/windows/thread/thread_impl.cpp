@@ -49,5 +49,9 @@ namespace basyx {
 		int thread_impl::detach() {
 			return CloseHandle(this->threadDesc);
 		}
+
+		int thread_impl::getCurrentThreadId() {
+			return GetCurrentThreadId();
+		}
 	}
 }

@@ -12,14 +12,14 @@
 #include <string>
 
 #include "api/IModelProvider.h"
-#include "json/JSONTools.h"
+#include "json/json.h"
 #include "backends/provider/json/JSONProvider.h"
 #include "backends/protocols/provider/basyx/frame/BaSyxNativeFrameHelper.h"
 
 class BaSyxNativeFrameProcessor {
 
 public:
-	BaSyxNativeFrameProcessor(IModelProvider* providerBackend, JSONTools* jsonTools);
+	BaSyxNativeFrameProcessor(IModelProvider* providerBackend);
 	~BaSyxNativeFrameProcessor();
 
 
@@ -30,12 +30,9 @@ public:
 	 * 1 byte command
 	 * x byte depending on command
 	 */
-	void processInputFrame(char const* rxFrame, std::size_t rxSize, char* txFrame,
-			std::size_t* txSize);
+	void processInputFrame(char const* rxFrame, std::size_t rxSize, char* txFrame, std::size_t* txSize);
 private:
-	JSONTools* jsonTools;
 	JSONProvider<IModelProvider> jsonProvider;
-
 
 	void processGet(char const* rxFrame, char* txFrame, std::size_t* txSize);
 	void processSet(char const* rxFrame, char* txFrame, std::size_t* txSize);

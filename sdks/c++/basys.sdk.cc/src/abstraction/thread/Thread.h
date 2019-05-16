@@ -69,6 +69,12 @@ namespace basyx {
 //			this->thread_impl(join)
 //			return WaitForSingleObject(thread_info->handle, 0) != WAIT_OBJECT_0;
 		};
+	//Static utility functions
+	public:
+		static int currentThreadId()
+		{
+			return detail::thread_impl::getCurrentThreadId();
+		};
 	};
 }
 

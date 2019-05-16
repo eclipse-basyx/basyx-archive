@@ -5,13 +5,25 @@
  *      Author: schnicke
  */
 
-#include "impl/socket_impl.h"
+#include <impl/socket_impl.h>
 
 #include <iostream>
 
 namespace basyx {
 	namespace net {
 		namespace impl {
+
+			socket_impl::socket_impl()
+				: SocketDesc{ 0 }
+				, log{ "SocketImpl" }
+			{
+			}
+
+			socket_impl::socket_impl(native_socket_type socket)
+				: SocketDesc{ socket }
+				, log{ "SocketImpl" }
+			{
+			}
 
 			socket_impl::~socket_impl()
 			{
@@ -24,7 +36,7 @@ namespace basyx {
 				// Initialize Winsock
 				int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 				if (iResult != 0) {
-					std::cout << "socket_impl# WSAStartup failed: " << iResult << std::endl;
+					log.error("WSAStartup() failed: %d", iResult);
 					return -1;
 				}
 
@@ -39,7 +51,7 @@ namespace basyx {
 				// Resolve the server address and port
 				iResult = getaddrinfo(address.c_str(), port.c_str(), &hints, &result);
 				if (iResult != 0) {
-					std::cout << "socket_impl# getaddrinfo failed: " << iResult << std::endl;
+					log.error("getaddrinfo() failed: %d", iResult);
 					WSACleanup();
 					return -1;
 				}
@@ -50,7 +62,7 @@ namespace basyx {
 				SocketDesc = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
 
 				if (SocketDesc == INVALID_SOCKET) {
-					std::cout << "socket_impl# Error at socket(): " << WSAGetLastError() << std::endl;
+					log.error("socket() failed: %d", WSAGetLastError());
 					freeaddrinfo(result);
 					WSACleanup();
 					return -1;
@@ -61,6 +73,7 @@ namespace basyx {
 				iResult = ::connect(SocketDesc, ptr->ai_addr, (int)ptr->ai_addrlen);
 
 				if (iResult == SOCKET_ERROR) {
+					log.error("connect() failed.");
 					closesocket(SocketDesc);
 					SocketDesc = INVALID_SOCKET;
 					return -1;
@@ -69,13 +82,10 @@ namespace basyx {
 				freeaddrinfo(result);
 
 				if (SocketDesc == INVALID_SOCKET) {
-					std::cout << "socket_impl# Unable to connect to server!" << std::endl;
+					log.error("Unable to connect to server!");
 					WSACleanup();
 					return -1;
 				}
-
-				std::cout << "socket_impl# Connected!" << std::endl;
-
 
 				return 0;
 
@@ -104,7 +114,7 @@ namespace basyx {
 
 				if (iResult == SOCKET_ERROR)
 				{
-					std::cout << "socket_impl# shutdown failed: " << WSAGetLastError() << std::endl;
+					log.warn("socket_impl# shutdown failed: %d", WSAGetLastError());
 				}
 
 				closesocket(SocketDesc);
@@ -116,10 +126,6 @@ namespace basyx {
 			int socket_impl::getErrorCode() {
 				return WSAGetLastError();
 			}
-
-			//void socket_impl::setDesc(SOCKET fd) {
-			//	this->SocketDesc = fd;
-			//}
 		}
 	}
 }

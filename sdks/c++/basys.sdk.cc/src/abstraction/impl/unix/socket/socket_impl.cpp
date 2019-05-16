@@ -15,9 +15,20 @@ namespace basyx {
 namespace net {
     namespace impl {
 
+        socket_impl::socket_impl()
+            : SocketDesc { 0 }
+            , log { "SocketImpl" } {};
+
+        socket_impl::socket_impl(native_socket_type socket)
+            : SocketDesc { socket }
+            , log { "SocketImpl" } {};
+
         socket_impl::~socket_impl()
         {
-            this->close();
+            if(this->SocketDesc != 0) {
+                this->shutdown(SHUTDOWN_RDWR);
+                this->close();
+            };
         };
 
         int socket_impl::connect(std::string const& address, std::string const& port)
@@ -33,7 +44,7 @@ namespace net {
             // Resolve the server address and port
             int iResult = getaddrinfo(address.c_str(), port.c_str(), &hints, &result);
             if (iResult != 0) {
-                std::cout << "TCPSocket# getaddrinfo() failed!" << std::endl;
+                log.error("getaddrinfo() failed! Error code: %d", iResult);
                 return -1;
             }
 
@@ -44,7 +55,7 @@ namespace net {
             freeaddrinfo(result);
 
             if (this->SocketDesc < 0) {
-                std::cout << "TCPSocket# socket() failed!" << std::endl;
+                log.error("socket() failed! Error code: %d", iResult);
                 return -1;
             }
 
@@ -52,7 +63,7 @@ namespace net {
             // 1. server socket, 2. socket address information, 3. size of socket address information ( of the second parameter)
             iResult = ::connect(this->SocketDesc, ptr->ai_addr, (int)ptr->ai_addrlen);
             if (iResult < 0) {
-                std::cout << "TCPSocket# connect() failed!" << std::endl;
+                log.error("connect() failed! Error code: %d", iResult);
                 ::close(this->SocketDesc);
                 return -1;
             }
@@ -76,8 +87,11 @@ namespace net {
 
         int socket_impl::shutdown(enum SocketShutdownDir how)
         {
-            if (::shutdown(this->SocketDesc, how) < 0) {
-                std::cout << "TCPSocket# shutdown() failed!" << std::endl;
+            log.trace("Shutting down socket. Code: %d", how);
+            
+            auto iResult = ::shutdown(this->SocketDesc, how);
+            if (iResult < 0) {
+                log.error("shutdown() failed! Error code: %d", iResult);
                 return -1;
             }
             return 0;
@@ -85,10 +99,13 @@ namespace net {
 
         int socket_impl::close()
         {
-            if (::close(this->SocketDesc) < 0) {
-                std::cout << "TCPSocket# close() failed!" << std::endl;
+            log.trace("Closing socket");
+            auto iResult = ::close(this->SocketDesc);
+            if (iResult < 0) {
+                log.error("close() failed! Error code: %d", iResult);
                 return -1;
             }
+            this->SocketDesc = 0;
             return 0;
         }
 

@@ -12,17 +12,19 @@
 
 #include "util/util.h"
 
+#include <log/log.h>
+
 #include <string>
 
 namespace basyx {
 	namespace net {
 		namespace tcp {
 
-
 			template<typename socket_impl>
 			class basic_socket
 			{
 			private:
+				basyx::log log;
 				std::unique_ptr<socket_impl> socket;
 
 				basic_socket<socket_impl> & _move_socket(basic_socket<socket_impl> && other)
@@ -39,15 +41,19 @@ namespace basyx {
 			public:
 				basic_socket()
 					: socket{ nullptr }
+					, log{ "Socket" }
 				{
 				};
 
 				basic_socket(std::unique_ptr<socket_impl> socket)
 					: socket{ std::forward<std::unique_ptr<socket_impl>>(socket) }
+					, log{"Socket"}
 				{
 				};
 
-				~basic_socket() = default;
+				~basic_socket()
+				{
+				};
 
 				// Delete copy-assignment and constructor, there should only ever be one Socket object representing a single connection
 				basic_socket<socket_impl> & operator=(basic_socket<socket_impl> & other) = delete;
@@ -104,6 +110,9 @@ namespace basyx {
 				{
 					if (this->socket != nullptr)
 					{
+						log.trace("Closing socket...");
+
+						this->socket->shutdown(SHUTDOWN_RDWR);
 						this->socket->close();
 						this->socket.reset();
 					}

@@ -15,6 +15,8 @@
 
 #include "impl/system_net_types.h"
 
+#include <log/log.h>
+
 namespace basyx {
 	namespace net {
 		namespace impl {
@@ -22,8 +24,11 @@ namespace basyx {
 			// Forward declarations
 			class socket_impl;
 
-			class acceptor_impl {
+			class acceptor_impl 
+			{
 			public:
+				acceptor_impl()
+					: log{ "AcceptorImpl" } {};
 				~acceptor_impl();
 			public:
 				int listen(const std::string & port);
@@ -35,6 +40,7 @@ namespace basyx {
 				int getErrorCode();
 			private:
 				native_socket_type socketDesc = 0;
+				basyx::log log;
 			};
 
 

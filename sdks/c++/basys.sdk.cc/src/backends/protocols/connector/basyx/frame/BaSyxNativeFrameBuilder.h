@@ -12,36 +12,31 @@
 
 #include "backends/protocols/basyx/BaSyx.h"
 #include "backends/protocols/provider/basyx/frame/BaSyxNativeFrameProcessor.h"
-#include "types/BType.h"
-#include "ref/BRef.h"
 
 /**
  * Provides support methods for building native basyx frames 
  */
 class BaSyxNativeFrameBuilder {
 public:
-	BaSyxNativeFrameBuilder(JSONTools* jsonTools);
+	BaSyxNativeFrameBuilder();
 	
 	size_t buildGetFrame(std::string const& path, char* buffer);
 	
-	size_t buildSetFrame(std::string const& path, BRef<BType> newVal, char* buffer);
+	size_t buildSetFrame(std::string const& path, const basyx::any & newVal, char* buffer);
 	
-	size_t buildCreateFrame(std::string const& path, BRef<BType> newVal, char* buffer);
+	size_t buildCreateFrame(std::string const& path, const basyx::any & newVal, char* buffer);
 	
 	size_t buildDeleteFrame(std::string const& path, char* buffer);
 	
-	size_t buildDeleteFrame(std::string const& path, BRef<BType> deleteVal, char* buffer);
+	size_t buildDeleteFrame(std::string const& path, const basyx::any & deleteVal, char* buffer);
 	
-	size_t buildInvokeFrame(std::string const& path, BRef<BType> param, char* buffer);
-	
+	size_t buildInvokeFrame(std::string const& path, const basyx::any & param, char* buffer);
 private:
-	JSONTools* jsonTools;
-	
 	size_t encodeCommand(BaSyxCommand command, char* buffer);
 	
-	size_t encodeBRef(BRef<BType> val, char* buffer);
-	
 	size_t encodeCommandAndPath(BaSyxCommand command, std::string const& path, char* buffer);
+
+	std::size_t encodeValue(const basyx::any & value, char * buffer);
 };
 
 
