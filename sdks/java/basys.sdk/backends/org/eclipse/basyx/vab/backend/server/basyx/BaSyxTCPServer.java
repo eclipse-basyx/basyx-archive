@@ -181,7 +181,10 @@ public class BaSyxTCPServer<T extends IModelProvider> implements Runnable, BaSyx
 	 */
 	@Override
 	public BaSyxService setName(String newName) {
+		// Store name
 		name = newName;
+		
+		// Return 'this' instance
 		return this;
 	}
 
@@ -191,6 +194,7 @@ public class BaSyxTCPServer<T extends IModelProvider> implements Runnable, BaSyx
 	 */
 	@Override
 	public String getName() {
+		// Return service name
 		return name;
 	}
 	
@@ -201,6 +205,15 @@ public class BaSyxTCPServer<T extends IModelProvider> implements Runnable, BaSyx
 	public void waitFor() {
 		// Wait for thread end
 		try {thread.join();} catch (InterruptedException e) {e.printStackTrace();}		
+	}
+	
+	
+	/**
+	 * Indicate if this service has ended
+	 */
+	public boolean hasEnded() {
+		// Return exit flag that indicates requested end of service execution
+		return exit;
 	}
 }
 

@@ -30,8 +30,10 @@ public class DirectoryServiceStub implements IDirectoryService {
 	}
 
 	@Override
-	public void addMapping(String key, String value) {
+	public IDirectoryService addMapping(String key, String value) {
 		addressMap.put(key, value);
-
+		
+		// Return 'this' referenced
+		return this;
 	}
 }

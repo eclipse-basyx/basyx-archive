@@ -165,12 +165,8 @@ public class VABElementProxy {
 
 		// Now combine both paths
 		if (addr != null && !addr.isEmpty()) {
-			System.out.println("P1:"+addr + "//" + trimmedPath);
-			
 			return addr + "//" + trimmedPath;
 		} else {
-			System.out.println("P2:"+trimmedPath);
-
 			return trimmedPath;
 		}
 	}

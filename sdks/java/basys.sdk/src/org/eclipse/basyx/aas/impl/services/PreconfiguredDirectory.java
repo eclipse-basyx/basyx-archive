@@ -45,8 +45,11 @@ public class PreconfiguredDirectory implements IDirectoryService {
 	 * Add a mapping to directory
 	 */
 	@Override
-	public void addMapping(String key, String value) {
+	public IDirectoryService addMapping(String key, String value) {
 		keyToValue.put(key, value);
+		
+		// Return 'this' instance
+		return this;
 	}
 
 	

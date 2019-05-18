@@ -9,7 +9,7 @@ import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
 
 /**
- * BaSyx TCP provider testsuite server providing a SimpleVABElement vab element
+ * BaSyx TCP provider test suite server providing a SimpleVABElement vab element
  * 
  * @author kuhn
  *
@@ -27,6 +27,13 @@ public class AASTCPServer implements BaSyxService {
 	 * Service name
 	 */
 	protected String name = null;
+	
+	
+	/**
+	 * Service end flag 
+	 */
+	protected boolean hasExecutionEnded = false;
+	
 	
 	
 	
@@ -60,6 +67,10 @@ public class AASTCPServer implements BaSyxService {
 	 */
 	@Override
 	public void stop() {
+		// Indicate end of execution
+		hasExecutionEnded = true;
+		
+		// Shutdown server
 		tcpServer.shutdown();
 	}
 
@@ -69,7 +80,10 @@ public class AASTCPServer implements BaSyxService {
 	 */
 	@Override
 	public BaSyxService setName(String newName) {
+		// Update name
 		name = newName;
+		
+		// Return 'this' reference
 		return this;
 	}
 
@@ -79,6 +93,7 @@ public class AASTCPServer implements BaSyxService {
 	 */
 	@Override
 	public String getName() {
+		// Return service name
 		return name;
 	}
 	
@@ -89,6 +104,15 @@ public class AASTCPServer implements BaSyxService {
 	public void waitFor() {
 		// Wait for thread end
 		tcpServer.waitFor();		
+	}
+	
+	
+	/**
+	 * Indicate if this service has ended
+	 */
+	public boolean hasEnded() {
+		// Return execution ended flag
+		return hasExecutionEnded;
 	}
 }
 

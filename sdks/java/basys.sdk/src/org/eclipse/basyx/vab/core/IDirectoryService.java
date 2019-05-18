@@ -16,7 +16,7 @@ public interface IDirectoryService {
 	/**
 	 * Add a mapping to directory
 	 */
-	public void addMapping(String key, String value);
+	public IDirectoryService addMapping(String key, String value);
 
 	
 	/**

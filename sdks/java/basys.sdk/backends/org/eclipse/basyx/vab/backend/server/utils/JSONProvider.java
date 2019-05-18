@@ -7,7 +7,6 @@ import java.util.Map;
 import org.eclipse.basyx.aas.api.exception.LostHTTPRequestParameterException;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
-import org.eclipse.basyx.aas.backend.http.tools.Serializer;
 import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.aas.backend.http.tools.factory.GSONToolsFactory;
 import org.eclipse.basyx.vab.core.IModelProvider;

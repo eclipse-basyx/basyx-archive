@@ -39,4 +39,10 @@ public interface BaSyxService {
 	 * Get runnable name
 	 */
 	public String getName();
+	
+	
+	/**
+	 * Indicate if this service has ended
+	 */
+	public boolean hasEnded();
 }

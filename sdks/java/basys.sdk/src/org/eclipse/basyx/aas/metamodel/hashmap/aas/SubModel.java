@@ -37,6 +37,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Ope
  */
 public class SubModel extends VABModelMap<Object> implements VABElementContainer, ISubModel {
 
+	
 	/**
 	 * Version of serialized instances
 	 */
@@ -47,21 +48,26 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 	public static final String OPERATIONS="operations";
 	public static final String IDSHORT="idShort";
 
+	
 	/**
 	 * Submodel properties
 	 */
 	protected Map<String, IProperty> properties = new VABModelMap<>();
 
+	
 	/**
 	 * Submodel operations
 	 */
 	protected Map<String, IOperation> operations = new VABModelMap<>();
 
+	
 	/**
 	 * Submodel elements in general. Does also contain operations and properties
 	 */
 	protected Map<String, SubmodelElement> elements = new HashMap<String, SubmodelElement>();
 
+	
+	
 	/**
 	 * Constructor
 	 */
