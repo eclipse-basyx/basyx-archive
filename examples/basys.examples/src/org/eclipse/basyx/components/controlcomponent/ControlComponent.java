@@ -59,7 +59,15 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 		 * @return Added value
 		 */
 		@Override
-		public Object put(String key, Object value) {
+		public Object put(String key, Object parValue) {
+			// Value to be put in map
+			Object value = parValue;
+			// - Eventually we have to change the value to be put into the variable
+			switch(key) {
+				case "exState": value = filterExecutionState(value.toString()); break;
+				case "opMode":  value = filterOperationMode(value.toString()); break;
+			}
+			
 			// Invoke base implementation
 			Object result = super.put(key, value);
 			
@@ -72,7 +80,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 				case "occupier":        for (ControlComponentChangeListener listener: listeners) listener.onNewOccupier(value.toString()); break;
 				case "lastOccupier":    for (ControlComponentChangeListener listener: listeners) listener.onLastOccupier(value.toString()); break;
 				case "exMode":          for (ControlComponentChangeListener listener: listeners) listener.onChangedExecutionMode(ExecutionMode.byValue((int) value)); break;
-				case "exState":         System.out.println("Comp: change to2:"+value.toString()); for (ControlComponentChangeListener listener: listeners) listener.onChangedExecutionState(ExecutionState.byValue(value.toString())); break;
+				case "exState":         for (ControlComponentChangeListener listener: listeners) listener.onChangedExecutionState(ExecutionState.byValue(value.toString())); break;
 				case "opMode":          for (ControlComponentChangeListener listener: listeners) listener.onChangedOperationMode(value.toString()); break;
 				case "workState":       for (ControlComponentChangeListener listener: listeners) listener.onChangedWorkState(value.toString()); break;
 				case "errorState":      for (ControlComponentChangeListener listener: listeners) listener.onChangedErrorState(value.toString()); break;
@@ -163,6 +171,25 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	}
 
 
+	
+	/**
+	 * Optionally filter a set execution state. This function is always invoked when an execution state changes
+	 */
+	protected String filterExecutionState(String exState) {
+		// Do nothing here
+		return exState;
+	}
+
+	
+	/**
+	 * Optionally filter a set operation mode. This function is always invoked when an operation mode changes
+	 */
+	protected String filterOperationMode(String opMode) {
+		// Do nothing here
+		return opMode;
+	}
+
+	
 	
 	/**
 	 * Add ControlComponentChangeListener

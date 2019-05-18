@@ -112,24 +112,27 @@ public class SimpleProxyControlComponent extends SimpleControlComponent implemen
 	 * Indicate an execution state change
 	 */
 	@Override
-	public void onChangedExecutionState(ExecutionState newExecutionState) {
+	protected String filterExecutionState(String newExecutionState) {
 		// Invoke base implementation
-		super.onChangedExecutionState(newExecutionState);
+		super.filterExecutionState(newExecutionState);
 		
 		// Only continue if TCP server exists
 		// - If constructor changes state, this will be invoked before TCP server is ready
-		if (tcpServer == null) return;
+		if (tcpServer == null) return newExecutionState;
 		
 		// Implement a simplified model that only consists of states idle/execute/complete/aborted/stopped
-		switch (newExecutionState.value.toLowerCase()) {
+		switch (newExecutionState.toLowerCase()) {
 			// Only process the following states, ignore all other state transitions
-			case "idle":      tcpServer.sendMessage("state:idle");System.out.println("CHGST4:"+newExecutionState.value);break;
+			case "idle":      tcpServer.sendMessage("state:idle");break;
 			case "execute":   tcpServer.sendMessage("state:execute");break;
 			case "complete":  tcpServer.sendMessage("state:complete");break;
 			case "aborted":   tcpServer.sendMessage("state:aborted");break;
 			case "stopped":   tcpServer.sendMessage("state:stopped");break;
 			case "resetting": tcpServer.sendMessage("state:resetting");break;
 		}
+		
+		// Return the unchanged execution state
+		return newExecutionState;
 	}
 	
 	
@@ -137,13 +140,16 @@ public class SimpleProxyControlComponent extends SimpleControlComponent implemen
 	 * Indicate operation mode change
 	 */
 	@Override
-	public void onChangedOperationMode(String newOperationMode) {
+	public String filterOperationMode(String newOperationMode) {
 		// Only continue if TCP server exists
 		// - If constructor changes operation mode, this will be invoked before TCP server is ready
-		if (tcpServer == null) return;
+		if (tcpServer == null) return newOperationMode;
 
 		// Communicate new operation mode to device
 		tcpServer.sendMessage("opMode:"+newOperationMode);
+		
+		// Return the unchanged operation mode
+		return newOperationMode;
 	}
 
 
