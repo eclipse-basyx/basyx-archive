@@ -81,4 +81,10 @@ public abstract class BaseDevice extends BaseBaSyxService implements BaSysNative
 	 * Indicate device service invocation
 	 */
 	protected abstract void onServiceInvocation();
+
+	
+	/**
+	 * Indicate device service end
+	 */
+	protected abstract void onServiceEnd();
 }

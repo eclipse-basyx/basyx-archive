@@ -54,6 +54,16 @@ public abstract class BaseTCPDevice extends BaseDevice implements BaSysNativeDev
 		// Write bytes to device manager
 		communicationClient.sendMessage("invocation:\n");
 	}
+	
+	
+	/**
+	 * Indicate device service end
+	 */
+	protected void onServiceEnd() {
+		// Write bytes to device manager
+		communicationClient.sendMessage("invocationEnd:\n");
+	}
+
 
 	
 	/**
