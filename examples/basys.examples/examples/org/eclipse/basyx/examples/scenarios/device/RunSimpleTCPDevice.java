@@ -8,7 +8,7 @@ import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.examplescenario.BaSyxExampleScenario;
 import org.eclipse.basyx.examples.mockup.application.ReceiveDeviceStatusApplication;
 import org.eclipse.basyx.examples.mockup.device.SimpleTCPDeviceMockup;
-import org.eclipse.basyx.examples.mockup.devicemanager.BaSyxTCPManufacturingDeviceManager;
+import org.eclipse.basyx.examples.mockup.devicemanager.ManufacturingDeviceManager;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.junit.ClassRule;
@@ -50,7 +50,7 @@ public class RunSimpleTCPDevice extends BaSyxExampleScenario {
 				
 				// Simulated runnables
 				// - Manufacturing device manager, e.g. deployed to additonal device
-				new BaSyxTCPManufacturingDeviceManager(9998).setName("DeviceManager"),
+				new ManufacturingDeviceManager(9998).setName("DeviceManager"),
 				
 				// Simulated mockups
 				new SimpleTCPDeviceMockup(9998).setName("Device"),
@@ -74,48 +74,38 @@ public class RunSimpleTCPDevice extends BaSyxExampleScenario {
 	public void test() throws Exception {
 		// Device updates status to ready
 		((SimpleTCPDeviceMockup) context.getRunnable("Device")).deviceInitialized();
-System.out.println("XXXXXX-1");
 		
 		// Application waits for status change
 		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
 		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
-System.out.println("XXXXXX-2");
 
 		// Application checks invocation counter
 		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceInvocationCounter() == 0 );		
-System.out.println("XXXXXX-3");
 
 		// Device updates status to running
 		// - The device indicates that a process step is running
 		((SimpleTCPDeviceMockup) context.getRunnable("Device")).serviceRunning();
-System.out.println("XXXXXX-4");
 		
 		// Application waits for status change
 		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("EXECUTE") );
 		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("EXECUTE") );
-System.out.println("XXXXXX-5");
 
 		// Device updates status to complete
 		// - The device indicates that process step did finish
 		((SimpleTCPDeviceMockup) context.getRunnable("Device")).serviceCompleted();
-System.out.println("XXXXXX-6");
 		
 		// Application waits for status change
 		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("COMPLETE") );
 		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("COMPLETE") );
-System.out.println("XXXXXX-7");
 
 		// Device updates status to ready again, next process step may be invoked
 		((SimpleTCPDeviceMockup) context.getRunnable("Device")).resetCompleted();
-System.out.println("XXXXXX-8");
 		
 		// Application waits for status change
 		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
 		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
-System.out.println("XXXXXX-9");
 
 		// Application checks invocation counter
 		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceInvocationCounter() == 1 );
-System.out.println("XXXXXX-10");
 	}
 }

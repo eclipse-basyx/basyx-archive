@@ -138,6 +138,9 @@ public abstract class TCPCommunicator {
 	 * Buffer must point to where transmission should start
 	 */
 	public void sendMessage(ByteBuffer messageBuffer) {
+		// Only continue if client is connected
+		if (communicationToClient == null) return;
+
 		// Transmit frame
 		try {communicationToClient.write(messageBuffer);} catch (IOException e) {e.printStackTrace();}
 	}

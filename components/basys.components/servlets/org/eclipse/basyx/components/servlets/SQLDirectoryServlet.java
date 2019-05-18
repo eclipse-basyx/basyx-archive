@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
-import org.eclipse.basyx.aas.backend.http.tools.factory.GSONToolsFactory;
 import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
 import org.eclipse.basyx.vab.backend.server.http.BasysHTTPServlet;
 

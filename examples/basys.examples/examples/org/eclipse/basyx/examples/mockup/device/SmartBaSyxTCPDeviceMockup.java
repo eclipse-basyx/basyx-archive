@@ -84,17 +84,21 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 
 	
 	/**
+	 * Indicate device service end
+	 */
+	@Override
+	protected void onServiceEnd() {
+		// Do nothing
+	}
+
+	
+	/**
 	 * Smart device control component indicates an execution state change
 	 */
 	@Override
 	public void onChangedExecutionState(ExecutionState newExecutionState) {
 		// Invoke base implementation
 		super.onChangedExecutionState(newExecutionState);
-		
-		// Communicate device state change to asset administration shell
-		//statusChange(newExecutionState.getValue());
-		System.out.println("Changing to:"+newExecutionState.getValue());
-		
 		
 		// Update property "properties/status" in external AAS
 		aasServerConnection.updateElementValue(lookupURN("Status").getEncodedURN()+"/properties/status", newExecutionState.getValue());
@@ -144,21 +148,16 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 
 		
 		// Register AAS and sub models in directory (push AAS descriptor to server)
-		// - Delete AAS registration for a fresh start - ignore if URL was not found. In this case, there was
-		//   no previous registration and the registry was clean
-		getRegistry().delete(lookupURN("AAS"));
 		// - AAS repository server URL
 		String aasRepoURL = "http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer";
-		// - Create an AAS descriptor
-		AASDescriptor deviceAASDescriptor = new AASDescriptor(lookupURN("AAS"), aasRepoURL);
-		// - Add sub model descriptors 
-		deviceAASDescriptor.addSubmodelDescriptor(lookupURN("Status"), aasRepoURL);
-		deviceAASDescriptor.addSubmodelDescriptor(lookupURN("Controller"), "basyx://127.0.0.1:"+serverPort);
-		
+		// - Build an AAS descriptor, add sub model descriptors  
+		AASDescriptor deviceAASDescriptor = new AASDescriptor(lookupURN("AAS"), aasRepoURL)
+			.addSubmodelDescriptor(lookupURN("Status"), aasRepoURL)
+			.addSubmodelDescriptor(lookupURN("Controller"), "basyx://127.0.0.1:"+serverPort);
 		// - Push AAS descriptor to server
-		getRegistry().register(deviceAASDescriptor);		
+		getRegistry().register(lookupURN("AAS"), deviceAASDescriptor);		
 	}
-	
+
 
 	/**
 	 * Stop smart device

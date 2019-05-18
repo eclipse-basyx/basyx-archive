@@ -7,7 +7,7 @@ import java.util.Properties;
 import javax.servlet.ServletException;
 
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.components.sqlprovider.SQLSubModelProvider;
+import org.eclipse.basyx.components.sqlprovider.SQLPreconfiguredSubModelProvider;
 import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
@@ -83,7 +83,7 @@ public class SQLSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 		}
 		
 		// Instantiate and add sub model provider
-		SQLSubModelProvider sqlSMProvider = new SQLSubModelProvider(cfgProperties);
+		SQLPreconfiguredSubModelProvider sqlSMProvider = new SQLPreconfiguredSubModelProvider(cfgProperties);
 		// - Add sub model provider
 		this.getModelProvider().addSubmodel(submodelID, sqlSMProvider);
 	}	

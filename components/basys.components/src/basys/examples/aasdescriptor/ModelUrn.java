@@ -72,4 +72,13 @@ public class ModelUrn {
 			e.printStackTrace(); return null;
 		}
 	}
+	
+	
+	/**
+	 * Convert to string
+	 */
+	@Override
+	public String toString() {
+		return getEncodedURN();
+	}
 }

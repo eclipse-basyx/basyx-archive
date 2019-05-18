@@ -58,10 +58,23 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 	
 	
 	/**
+	 * Register AAS descriptor in registry, delete old registration
+	 */
+	@Override
+	public void register(ModelUrn aasID, AASDescriptor deviceAASDescriptor) {
+		// Invoke delete operation of AAS registry
+		try {client.delete(aasRegistryURL+"/api/v1/registry/"+URLEncoder.encode(aasID.getURN(), "UTF-8"));} catch (Exception e) {e.printStackTrace();}
+
+		// Perform web service call to registry
+		client.post(aasRegistryURL+"/api/v1/registry", serializer.getJsonString(serializer.serialize(deviceAASDescriptor)));
+	}
+
+	
+	/**
 	 * Register AAS descriptor in registry
 	 */
 	@Override
-	public void register(AASDescriptor deviceAASDescriptor) {
+	public void registerOnly(AASDescriptor deviceAASDescriptor) {
 		// Perform web service call to registry
 		client.post(aasRegistryURL+"/api/v1/registry", serializer.getJsonString(serializer.serialize(deviceAASDescriptor)));
 	}

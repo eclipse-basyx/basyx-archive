@@ -103,6 +103,13 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 		return aasServerPrefix;
 	}
 
+	
+	
+	/**
+	 * Get AAS descriptor for managed device
+	 */
+	protected abstract AASDescriptor getAASDescriptor();
+	
 
 	
 	

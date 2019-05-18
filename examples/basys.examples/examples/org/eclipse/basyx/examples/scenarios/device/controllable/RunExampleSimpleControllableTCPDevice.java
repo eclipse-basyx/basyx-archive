@@ -10,7 +10,8 @@ import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.examplescenario.BaSyxExampleScenario;
 import org.eclipse.basyx.examples.mockup.application.ReceiveDeviceStatusApplication;
-import org.eclipse.basyx.examples.mockup.device.SmartBaSyxTCPDeviceMockup;
+import org.eclipse.basyx.examples.mockup.device.ControllableTCPDeviceMockup;
+import org.eclipse.basyx.examples.mockup.devicemanager.BaSyxTCPControlManufacturingDeviceManager;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.junit.ClassRule;
@@ -19,12 +20,12 @@ import org.junit.Test;
 
 
 /**
- * Run example for smart device AAS
+ * Run example for controllable device
  * 
  * @author kuhn
  *
  */
-public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
+public class RunExampleSimpleControllableTCPDevice extends BaSyxExampleScenario {
 
 	
 	/**
@@ -57,8 +58,12 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 				// - BaSys topology with one AAS Server and one SQL directory
 				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory(),
 				
+				// Simulated runnables
+				// - Manufacturing device manager, e.g. deployed to additonal device
+				new BaSyxTCPControlManufacturingDeviceManager(9998, 9997).setName("DeviceManager"),
+
 				// Device mockups
-				new SmartBaSyxTCPDeviceMockup(9997).setName("Device"),
+				new ControllableTCPDeviceMockup(9998).setName("Device"),
 				
 				// Application mockups
 				new ReceiveDeviceStatusApplication().setName("Application")
@@ -82,43 +87,55 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 
 		
 		// Device finishes initialization and moves to idle state
-		((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).deviceInitialized();
+		((ControllableTCPDeviceMockup) context.getRunnable("Device")).deviceInitialized();
 		
 		// Application waits for status change
 		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
-		
+		// - Validate device status
+		waitfor( () -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).exState == ExecutionState.IDLE );
+
 		
 		// Change device operation mode
 		toControlComponent.setModelPropertyValue("status/opMode", "RegularMilling");
-		// - Validate device control component operation mode
-		waitfor( () -> ((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).getControlComponent().getOperationMode().equals("RegularMilling") );
+		// - Validate device operation mode
+		waitfor( () -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).opMode.equals("RegularMilling") );
 
 		// Application checks invocation counter
 		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceInvocationCounter() == 0 );		
 
-
+		
 		// Start device service
 		toControlComponent.setModelPropertyValue("cmd", "start");
-		// - Validate control component status
-		waitfor( () -> ((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).getControlComponent().getExecutionState().equals(ExecutionState.EXECUTE.getValue()) );
-		// - Indicate service end
-		((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).serviceCompleted();
-		// - Validate control component status
-		waitfor( () -> ((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).getControlComponent().getExecutionState().equals(ExecutionState.COMPLETE.getValue()) );
+		// - Application waits for status change
+		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("EXECUTE") );
+		// - Validate device status
+		waitfor( () -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).exState == ExecutionState.EXECUTE );
 
 		
+		// Device indicates service end
+		((ControllableTCPDeviceMockup) context.getRunnable("Device")).serviceCompleted();
+		// - Application waits for status change
+		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("COMPLETE") );
+		// - Validate device status
+		waitfor( () -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).exState == ExecutionState.COMPLETE );
+
+
 		// Reset device to enable subsequent service calls
 		toControlComponent.setModelPropertyValue("cmd", "reset");
-		// - Device finishes reset and moves to idle state
-		((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).resetCompleted();
-		
-		
-		// Device indicates idle state
-		waitfor( () -> ((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).getControlComponent().getExecutionState().equals(ExecutionState.IDLE.getValue()) );
-		// - Let application check device state, expect IDLE status
-		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
+		// - Application waits for status change
+		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("RESETTING") );
+		// - Validate device status
+		waitfor( () -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).exState == ExecutionState.RESETTING );
 
+		
+		// Device finishes reset and moves to idle state
+		((ControllableTCPDeviceMockup) context.getRunnable("Device")).resetCompleted();
+		// - Application waits for status change
+		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
+		// - Validate device status
+		waitfor( () -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).exState == ExecutionState.IDLE );
 
+		
 		// Application checks invocation counter
 		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceInvocationCounter() == 1 );
 	}
