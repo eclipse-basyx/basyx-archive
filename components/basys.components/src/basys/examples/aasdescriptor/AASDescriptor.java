@@ -113,25 +113,39 @@ public class AASDescriptor extends HashMap<String, Object> {
 	 * Add a sub model descriptor
 	 */
 	@SuppressWarnings("unchecked")
-	public void addSubmodelDescriptor(SubmodelDescriptor desc) {
+	public AASDescriptor addSubmodelDescriptor(SubmodelDescriptor desc) {
 		// Sub model descriptors are stored in a list
 		Collection<Map<String, Object>> submodelDescriptors = (Collection<Map<String, Object>>) get("submodels");
 		
 		// Add new sub model descriptor to list
 		submodelDescriptors.add(desc);
+		
+		// Return 'this' reference
+		return this;
 	}
 	
 	
 	/**
 	 * Add a sub model descriptor - simplified operation with default fields
 	 * 
-	 * @param urn URN of submodel
+	 * @param urn URN of sub model
 	 */
-	public void addSubmodelDescriptor(ModelUrn urn, String aasSrvURL) {
+	public AASDescriptor addSubmodelDescriptor(ModelUrn urn, String aasSrvURL) {
 		// Add sub model descriptor
 		addSubmodelDescriptor(new SubmodelDescriptor(urn.getURN(), IdentifierType.URI, aasSrvURL+"/aas/submodels/aasRepository/"+urn.getEncodedURN()));
+		
+		// Return 'this' reference
+		return this;
 	}
 	
+	
+	
+	/**
+	 * Get a specific sub model descriptor
+	 */
+	public SubmodelDescriptor getSubModelDescriptor(ModelUrn subModelId) {
+		return getSubModelDescriptor(subModelId.getURN());
+	}
 	
 	
 	/**
