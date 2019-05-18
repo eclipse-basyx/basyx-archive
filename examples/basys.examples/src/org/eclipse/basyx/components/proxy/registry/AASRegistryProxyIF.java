@@ -16,10 +16,16 @@ public interface AASRegistryProxyIF {
 	
 	
 	/**
-	 * Register AAS descriptor in registry
+	 * Register AAS descriptor in registry, delete old registration
 	 */
-	public void register(AASDescriptor deviceAASDescriptor);
+	public void register(ModelUrn aasID, AASDescriptor deviceAASDescriptor);
+
 	
+	/**
+	 * Only register AAS descriptor in registry
+	 */
+	public void registerOnly(AASDescriptor deviceAASDescriptor);
+
 	
 	/**
 	 * Delete AAS descriptor from registry

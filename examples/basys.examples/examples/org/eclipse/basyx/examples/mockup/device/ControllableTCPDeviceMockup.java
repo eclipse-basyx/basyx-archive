@@ -1,9 +1,6 @@
 package org.eclipse.basyx.examples.mockup.device;
 
-import org.eclipse.basyx.components.controlcomponent.ExecutionState;
-import org.eclipse.basyx.components.device.BaseTCPDevice;
-import org.eclipse.basyx.components.netcomm.NetworkReceiver;
-import org.eclipse.basyx.components.netcomm.TCPClient;
+import org.eclipse.basyx.components.device.BaseTCPControllableDevice;
 
 
 
@@ -16,15 +13,8 @@ import org.eclipse.basyx.components.netcomm.TCPClient;
  * @author kuhn
  *
  */
-public class ControllableTCPDeviceMockup extends BaseTCPDevice implements NetworkReceiver {
+public class ControllableTCPDeviceMockup extends BaseTCPControllableDevice {
 
-	
-	/**
-	 * Receive thread
-	 */
-	protected Thread rxThread = null;
-	
-	
 	
 	
 	/**
@@ -35,82 +25,17 @@ public class ControllableTCPDeviceMockup extends BaseTCPDevice implements Networ
 		super(port);
 	}
 	
-	
+
 	
 	/**
-	 * Start the device
+	 * Indicate device status change to device manager
 	 */
 	@Override
-	public void start() {
+	protected void statusChange(String newStatus) {
 		// Invoke base implementation
-		super.start();
+		super.statusChange(newStatus);
 		
-		// Add this component as message listener
-		communicationClient.addTCPMessageListener(this);
-		// - Start receive thread
-		rxThread = new Thread(communicationClient);
-		// - Start receiving
-		rxThread.start();
-	}
-
-
-	/**
-	 * Stop the device
-	 */
-	@Override
-	public void stop() {
-		// Invoke base implementation
-		super.stop();
-		
-		// End communication
-		communicationClient.close();
-	}
-
-	
-	/**
-	 * Wait for end of all threads
-	 */
-	@Override
-	public void waitFor() {
-		// Invoke base implementation
-		super.waitFor();
-		
-		// Wait for end of TCP thread
-		try {rxThread.join();} catch (InterruptedException e) {e.printStackTrace();}
-	}
-
-	
-	
-	
-	/**
-	 * Changed operation mode
-	 */
-	protected void onOperationModeChange(String newOperationMode) {
-		// Do nothing
-	}
-	
-	
-	/**
-	 * State change
-	 */
-	protected void onStateChange(ExecutionState newExState) {
-		// Do nothing
-	}
-
-	
-	/**
-	 * A message has been received
-	 */
-	@Override
-	public void onReceive(byte[] message) {
-		// Convert message to String
-		String rxMessage = TCPClient.toString(message);
-		
-		// Process message
-		if (rxMessage.startsWith("state:"))  {onStateChange(ExecutionState.byValue(rxMessage.substring("state:".length()))); return;}
-		if (rxMessage.startsWith("opMode:")) {onOperationModeChange(rxMessage.substring("opMode:".length())); return;}
-		
-		// Indicate exception
-		throw new RuntimeException("Unexpected message received:"+rxMessage);
+		// Write bytes to device manager
+		communicationClient.sendMessage("status:"+newStatus+"\n");
 	}
 }
