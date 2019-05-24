@@ -33,11 +33,11 @@ public class ListReferences {
 
 		// Read values
 		List<Object> list = (List<Object>) connVABElement.readElementValue(listPath);
-		Integer[] references = (Integer[]) connVABElement.readElementValue(listPath + "/references");
+		List<Integer> references = (List<Integer>) connVABElement.readElementValue(listPath + "/references");
 
 		// Check list properties
 		assertEquals(7, list.size());
-		assertEquals(7, references.length);
+		assertEquals(7, references.size());
 		checkOriginalReferences(connVABElement);
 
 		// Test invalid reference
@@ -83,11 +83,11 @@ public class ListReferences {
 
 		// Read list
 		list = (List<Object>) connVABElement.readElementValue(listPath);
-		references = (Integer[]) connVABElement.readElementValue(listPath + "/references");
+		references = (List<Integer>) connVABElement.readElementValue(listPath + "/references");
 
 		// Check list properties
 		assertEquals(4, list.size());
-		assertEquals(4, references.length);
+		assertEquals(4, references.size());
 
 		// Revert changes
 		connVABElement.deleteElement(listPath);

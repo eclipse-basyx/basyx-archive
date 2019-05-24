@@ -5,13 +5,13 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 /**
- * An ArrayList that additionally holds references to its elements. The
- * references point to the indices of specific objects and are updated when the
- * object's position in the list changes.
+ * An ArrayList that additionally holds references to its elements. The references point to the indices of specific
+ * objects and are updated when the object's position in the list changes.
  * 
  * @author espen
  *
@@ -39,8 +39,7 @@ public class ReferencedArrayList<T> extends ArrayList<T> {
 	}
 
 	/**
-	 * Returns the object that is referenced by the given reference independent of
-	 * its index in the list.
+	 * Returns the object that is referenced by the given reference independent of its index in the list.
 	 * 
 	 * @param reference
 	 *            The reference that points to the requested object
@@ -67,12 +66,17 @@ public class ReferencedArrayList<T> extends ArrayList<T> {
 	}
 
 	/**
-	 * Returns a list of all references used by this list.
+	 * Returns a list of all references used by this list. These references are sorted by their index in the
+	 * corresponding list.
 	 * 
 	 * @return List of references used by this list.
 	 */
-	public Integer[] getReferences() {
-		return (Integer[]) (references.keySet().toArray(new Integer[references.size()]));
+	public List<Integer> getReferences() {
+		List<Integer> refList = new ArrayList<>(references.keySet());
+		refList.sort((ref1, ref2) -> {
+			return getReferencedIndex(ref1) - getReferencedIndex(ref2);
+		});
+		return refList;
 	}
 
 	@Override

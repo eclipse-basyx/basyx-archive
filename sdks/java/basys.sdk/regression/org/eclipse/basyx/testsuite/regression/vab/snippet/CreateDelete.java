@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -85,11 +86,10 @@ public class CreateDelete {
 		connVABElement.deleteElement("property1/propertyList");
 
 		// Remove list elements (by reference and by object)
-		Integer[] references = (Integer[]) connVABElement.readElementValue("property1/property1.2/references");
-		int lastReference = references[references.length - 1];
+		List<Integer> references = (List<Integer>) connVABElement.readElementValue("property1/property1.2/references");
+		int lastReference = references.get(references.size() - 1);
 		connVABElement.deleteElement("property1/property1.2", 23);
 		connVABElement.deleteElement("property1/property1.2/byRef_" + lastReference);
-
 
 		// Read values back
 		Object value6 = connVABElement.readElementValue("property2");

@@ -40,7 +40,7 @@ public class ReferencedArrayListTest {
 
 		addList = new LinkedList<>();
 		addList.add(object1); // 0
-		addList.add(new Integer(5)); // 1
+		addList.add(5); // 1
 		addList.add("Test"); // 2
 		addList.add(2.45f); // 3
 		addList.add(null); // 4
@@ -135,14 +135,26 @@ public class ReferencedArrayListTest {
 	}
 
 	/**
-	 * Tests, if the returned reference list is correct
+	 * Tests, if the returned reference list is correct for initialized lists
 	 */
 	@Test
 	public void getReferencesTest() {
-		assertSame(0, emptyList.getReferences().length);
-		assertSame(8, objList.getReferences().length);
-		assertSame(0, objList.getReferences()[0]);
-		assertSame(5, objList.getReferences()[5]);
+		assertSame(0, emptyList.getReferences().size());
+		assertSame(8, objList.getReferences().size());
+		assertSame(0, objList.getReferences().get(0));
+		assertSame(5, objList.getReferences().get(5));
+	}
+
+	/**
+	 * Tests, if the references stay sorted according to the list entries, when modifying the list
+	 */
+	@Test
+	public void getReferencesSortedTest() {
+		objList.add(0, "First");
+
+		assertSame(9, objList.getReferences().size());
+		assertSame(8, objList.getReferences().get(0));
+		assertSame(0, objList.getReferences().get(1));
 	}
 
 	/**
@@ -178,11 +190,11 @@ public class ReferencedArrayListTest {
 	public void addAllTest() {
 		assertSame(true, objList.addAll(addList));
 		assertSame(16, objList.size());
-		assertSame(16, objList.getReferences().length);
+		assertSame(16, objList.getReferences().size());
 
 		assertSame(false, objList.addAll(emptyList));
 		assertSame(16, objList.size());
-		assertSame(16, objList.getReferences().length);
+		assertSame(16, objList.getReferences().size());
 
 		assertEquals(5, objList.get(1));
 
@@ -198,11 +210,11 @@ public class ReferencedArrayListTest {
 	public void addAllIndexTest() {
 		assertSame(true, objList.addAll(1, addList));
 		assertSame(16, objList.size());
-		assertSame(16, objList.getReferences().length);
+		assertSame(16, objList.getReferences().size());
 
 		assertSame(false, objList.addAll(1, emptyList));
 		assertSame(16, objList.size());
-		assertSame(16, objList.getReferences().length);
+		assertSame(16, objList.getReferences().size());
 
 		assertSame(object1, objList.get(1));
 		assertSame(object2, objList.get(15));
@@ -217,7 +229,7 @@ public class ReferencedArrayListTest {
 	public void clearTest() {
 		objList.clear();
 		assertSame(0, objList.size());
-		assertSame(0, objList.getReferences().length);
+		assertSame(0, objList.getReferences().size());
 	}
 
 	/**
@@ -229,9 +241,9 @@ public class ReferencedArrayListTest {
 		ReferencedArrayList<Object> cloned = (ReferencedArrayList<Object>) objList.clone();
 		cloned.clear();
 		assertSame(0, cloned.size());
-		assertSame(0, cloned.getReferences().length);
+		assertSame(0, cloned.getReferences().size());
 		assertSame(8, objList.size());
-		assertSame(8, objList.getReferences().length);
+		assertSame(8, objList.getReferences().size());
 	}
 
 	/**
@@ -242,14 +254,14 @@ public class ReferencedArrayListTest {
 	public void removeIndexTest() {
 		objList.remove(0);
 		assertSame(7, objList.size());
-		assertSame(7, objList.getReferences().length);
+		assertSame(7, objList.getReferences().size());
 		assertSame(null, objList.getReferencedIndex(0));
 		for (int i = 1; i < 8; i++) {
 			assertSame(i - 1, objList.getReferencedIndex(i));
 		}
 		objList.remove(5);
 		assertSame(6, objList.size());
-		assertSame(6, objList.getReferences().length);
+		assertSame(6, objList.getReferences().size());
 		assertSame(null, objList.getReferencedIndex(0));
 		assertSame(null, objList.getReferencedIndex(6));
 		for (int i = 1; i < 6; i++) {
@@ -259,7 +271,7 @@ public class ReferencedArrayListTest {
 
 		objList.remove(0);
 		assertSame(5, objList.size());
-		assertSame(5, objList.getReferences().length);
+		assertSame(5, objList.getReferences().size());
 		assertSame(null, objList.getReferencedIndex(0));
 		assertSame(null, objList.getReferencedIndex(1));
 		assertSame(null, objList.getReferencedIndex(6));
@@ -276,13 +288,13 @@ public class ReferencedArrayListTest {
 	public void removeObjectTest() {
 		objList.remove(object1);
 		assertSame(7, objList.size());
-		assertSame(7, objList.getReferences().length);
+		assertSame(7, objList.getReferences().size());
 		objList.remove(object1);
 		assertSame(6, objList.size());
-		assertSame(6, objList.getReferences().length);
+		assertSame(6, objList.getReferences().size());
 		objList.remove(object2);
 		assertSame(5, objList.size());
-		assertSame(5, objList.getReferences().length);
+		assertSame(5, objList.getReferences().size());
 	}
 
 	/**
@@ -298,7 +310,7 @@ public class ReferencedArrayListTest {
 		toRemove.add(object2);
 		objList.removeAll(toRemove);
 		assertSame(4, objList.size());
-		assertSame(4, objList.getReferences().length);
+		assertSame(4, objList.getReferences().size());
 	}
 
 	/**
@@ -310,7 +322,7 @@ public class ReferencedArrayListTest {
 			return o != null && (o.equals("Test") || o == object1);
 		});
 		assertSame(4, objList.size());
-		assertSame(4, objList.getReferences().length);
+		assertSame(4, objList.getReferences().size());
 		assertSame(object2, objList.getByReference(7));
 		assertFalse(objList.contains(object1));
 	}
@@ -328,7 +340,7 @@ public class ReferencedArrayListTest {
 			}
 		});
 		assertSame(8, objList.size());
-		assertSame(6, objList.getReferences().length);
+		assertSame(6, objList.getReferences().size());
 		assertSame(object2, objList.getByReference(7));
 		assertFalse(objList.contains(object1));
 	}
@@ -345,7 +357,7 @@ public class ReferencedArrayListTest {
 		toRetain.add(object1);
 		objList.retainAll(toRetain);
 		assertSame(3, objList.size());
-		assertSame(3, objList.getReferences().length);
+		assertSame(3, objList.getReferences().size());
 		assertSame(object1, objList.getByReference(6));
 		assertFalse(objList.contains(object2));
 	}
@@ -359,11 +371,11 @@ public class ReferencedArrayListTest {
 	public void setIndexTest() {
 		objList.set(0, object1);
 		assertSame(8, objList.size());
-		assertSame(8, objList.getReferences().length);
+		assertSame(8, objList.getReferences().size());
 		assertEquals(5, objList.getByReference(1));
 		objList.set(1, object1);
 		assertSame(8, objList.size());
-		assertSame(8, objList.getReferences().length);
+		assertSame(8, objList.getReferences().size());
 		assertEquals(object1, objList.getByReference(1));
 	}
 }
