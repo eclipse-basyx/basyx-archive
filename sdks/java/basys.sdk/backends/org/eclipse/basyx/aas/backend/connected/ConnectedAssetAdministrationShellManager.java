@@ -9,6 +9,8 @@ import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.manager.IAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
+import org.eclipse.basyx.aas.backend.connected.aas.ConnectedAssetAdministrationShell;
+import org.eclipse.basyx.aas.backend.connected.aas.ConnectedSubModel;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 
 /**

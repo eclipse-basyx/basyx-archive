@@ -1,4 +1,4 @@
-package org.eclipse.basyx.aas.backend.connected.property;
+package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
@@ -61,16 +61,6 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 		return null;
 	}
 
-	@Override
-	public void setSemanticId(Object obj) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public Object getSemanticId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

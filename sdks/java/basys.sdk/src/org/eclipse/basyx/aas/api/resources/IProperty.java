@@ -17,6 +17,4 @@ public interface IProperty extends IElement {
 	public Object getValue();
 	public void setValueId(Object obj);
 	public Object getValueId();
-	public void setSemanticId(Object obj);
-	public Object getSemanticId();
 }

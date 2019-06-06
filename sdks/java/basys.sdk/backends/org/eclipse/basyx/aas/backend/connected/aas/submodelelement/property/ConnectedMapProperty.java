@@ -1,4 +1,4 @@
-package org.eclipse.basyx.aas.backend.connected.property;
+package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property;
 
 import java.util.Collection;
 import java.util.Map;
@@ -67,41 +67,4 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	private Map<String, Object> getMap() {
 		return ((Map<String, Object>) getProxy().readElementValue(constructPath("value")));
 	}
-
-	@Override
-	public void setValue(Object obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Object getValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setValueId(Object obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Object getValueId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setSemanticId(Object obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Object getSemanticId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

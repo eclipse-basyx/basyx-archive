@@ -1,4 +1,7 @@
 package org.eclipse.basyx.aas.api.metamodel.aas.qualifier;
+
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
+
 /**
  * Interface for Referable 
  * the function names are self explanatory 
@@ -14,7 +17,7 @@ public interface IReferable {
 	
 	public String getDescription();
 	
-	public Object getParent();
+	public IReference  getParent();
 	
 	public void setIdshort(String idShort);
 	
@@ -22,7 +25,7 @@ public interface IReferable {
 	
 	public void setDescription(String description);
 	
-	public void setParent(Object obj);
+	public void setParent(IReference  obj);
 	
 	
 	

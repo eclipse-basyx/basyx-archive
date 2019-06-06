@@ -1,4 +1,4 @@
-package org.eclipse.basyx.aas.backend.connected.property;
+package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +7,7 @@ import org.eclipse.basyx.aas.api.resources.IContainerProperty;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.PropertyType;
-import org.eclipse.basyx.aas.backend.connected.ConnectedOperation;
+import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.operation.ConnectedOperation;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
@@ -73,16 +73,6 @@ public class ConnectedContainerProperty extends ConnectedProperty implements ICo
 		return null;
 	}
 
-	@Override
-	public void setSemanticId(Object obj) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public Object getSemanticId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

@@ -10,7 +10,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.exception.TypeMismatchException;
 import org.eclipse.basyx.aas.api.resources.IMapProperty;
-import org.eclipse.basyx.aas.backend.connected.property.ConnectedMapProperty;
+import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.ConnectedMapProperty;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;

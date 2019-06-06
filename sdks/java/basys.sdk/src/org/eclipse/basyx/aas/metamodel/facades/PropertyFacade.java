@@ -67,15 +67,6 @@ public class PropertyFacade implements IProperty {
 		return map.get(Property.VALUEID);
 	}
 
-	@Override
-	public void setSemanticId(Object obj) {
-		map.put(Property.SEMANTICID, obj);
-		
-	}
 
-	@Override
-	public Object getSemanticId() {
-		return map.get(Property.SEMANTICID);
-	}
 
 }

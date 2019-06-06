@@ -11,7 +11,7 @@ import org.eclipse.basyx.aas.api.resources.ICollectionProperty;
 import org.eclipse.basyx.aas.api.resources.IContainerProperty;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
-import org.eclipse.basyx.aas.backend.connected.property.ConnectedContainerProperty;
+import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.ConnectedContainerProperty;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;

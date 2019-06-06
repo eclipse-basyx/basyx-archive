@@ -50,13 +50,13 @@ public class Qualifier extends Constraint implements IQualifier {
 	}
 
 	@Override
-	public void setQualifierType(Object obj) {
+	public void setQualifierType(String obj) {
 		new QualifierFacade(this).setQualifierType(obj);
 		
 	}
 
 	@Override
-	public Object getQualifierType() {
+	public String getQualifierType() {
 	return new QualifierFacade(this).getQualifierType();
 	}
 
@@ -72,13 +72,13 @@ public class Qualifier extends Constraint implements IQualifier {
 	}
 
 	@Override
-	public void setQualifierValueId(Object obj) {
+	public void setQualifierValueId(IReference obj) {
 		new QualifierFacade(this).setQualifierValueId(obj);
 		
 	}
 
 	@Override
-	public Object getQualifierValueId() {
+	public IReference getQualifierValueId() {
 		return new QualifierFacade(this).getQualifierValueId();
 	}
 	

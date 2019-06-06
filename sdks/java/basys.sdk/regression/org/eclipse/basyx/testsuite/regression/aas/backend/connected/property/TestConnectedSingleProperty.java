@@ -3,7 +3,7 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.connected.property;
 import static org.junit.Assert.assertEquals;
 
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
-import org.eclipse.basyx.aas.backend.connected.property.ConnectedSingleProperty;
+import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.ConnectedSingleProperty;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;

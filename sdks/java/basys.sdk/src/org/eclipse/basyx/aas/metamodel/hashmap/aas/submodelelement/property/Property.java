@@ -104,9 +104,5 @@ public class Property extends DataElement implements IProperty {
 		return new PropertyFacade(this).getValueId();
 	}
 
-	@Override
-	public void setSemanticId(Object obj) {
-		 new PropertyFacade(this).setSemanticId(obj);
-		
-	}
+
 }

@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.metamodel.facades;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.dataspecification.IDataSpecification;
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.dataspecification.DataSpecification;
 
 
@@ -44,10 +45,10 @@ public class DataSpecificationFacade implements IDataSpecification {
 	}
 
 	@Override
-	public Object getUnitId() {
+	public  IReference getUnitId() {
 		if(map.get(DataSpecification.UNITID)==null)
 			return null;
-		return map.get(DataSpecification.UNITID);
+		return (IReference)map.get(DataSpecification.UNITID);
 	}
 
 	@Override
@@ -117,7 +118,7 @@ public class DataSpecificationFacade implements IDataSpecification {
 	}
 
 	@Override
-	public void setUnitId(Object unitId) {
+	public void setUnitId(IReference unitId) {
 		map.put(DataSpecification.UNITID, unitId);
 		
 	}

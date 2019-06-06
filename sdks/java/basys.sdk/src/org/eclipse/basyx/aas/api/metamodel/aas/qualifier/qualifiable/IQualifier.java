@@ -1,6 +1,7 @@
 package org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IHasSemantics;
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 
 /**
  * Interface for Qualifier
@@ -11,16 +12,16 @@ import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IHasSemantics;
 
 public interface IQualifier extends IHasSemantics {
 	
-	public void setQualifierType(Object obj);
+	public void setQualifierType(String obj);
 	
-	public Object getQualifierType();
+	public String getQualifierType();
 	
 	public void setQualifierValue(Object obj);
 	
 	public Object getQualifierValue();
 	
-	public void setQualifierValueId(Object obj);
+	public void setQualifierValueId(IReference obj);
 	
-	public Object getQualifierValueId();
+	public IReference getQualifierValueId();
 
 }

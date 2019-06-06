@@ -1,6 +1,5 @@
 package org.eclipse.basyx.aas.api.resources;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,21 +16,14 @@ import org.eclipse.basyx.aas.api.metamodel.aas.security.ISecurity;
  * @author kuhn
  *
  */
-public interface IAssetAdministrationShell extends IIdentifiable, IHasDataSpecification, IElement {
 
+public interface IAssetAdministrationShell extends IElement, IIdentifiable,IHasDataSpecification {
 	/**
 	 * Return all registered sub models of this AAS
 	 * 
 	 * @return
 	 */
 	public Map<String, ISubModel> getSubModels();
-
-	/**
-	 * Return the ids of all registered sub models of this AAS
-	 * 
-	 * @return
-	 */
-	public List<String> getSubModelIds();
 
 	/**
 	 * Add a sub model to the AAS

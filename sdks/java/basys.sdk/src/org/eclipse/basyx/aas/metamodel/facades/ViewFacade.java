@@ -77,8 +77,8 @@ public class ViewFacade implements IView {
 	}
 
 	@Override
-	public Object getParent() {
-		return map.get(Referable.PARENT);
+	public IReference  getParent() {
+		return (IReference)map.get(Referable.PARENT);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class ViewFacade implements IView {
 	}
 
 	@Override
-	public void setParent(Object obj) {
+	public void setParent(IReference obj) {
 		map.put(Referable.PARENT, obj);
 		
 	}

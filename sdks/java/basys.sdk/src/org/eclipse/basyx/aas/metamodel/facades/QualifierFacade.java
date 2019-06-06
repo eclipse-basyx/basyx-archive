@@ -20,14 +20,14 @@ public class QualifierFacade implements IQualifier {
 	}
 
 	@Override
-	public void setQualifierType(Object obj) {
+	public void setQualifierType(String obj) {
 		map.put(Qualifier.QUALIFIERTYPE, obj);
 		
 	}
 
 	@Override
-	public Object getQualifierType() {
-		return map.get(Qualifier.QUALIFIERTYPE);
+	public String getQualifierType() {
+		return (String) map.get(Qualifier.QUALIFIERTYPE);
 	}
 
 	@Override
@@ -42,14 +42,14 @@ public class QualifierFacade implements IQualifier {
 	}
 
 	@Override
-	public void setQualifierValueId(Object obj) {
+	public void setQualifierValueId(IReference obj) {
 		map.put(Qualifier.QUALIFIERVALUEID, obj);
 		
 	}
 
 	@Override
-	public Object getQualifierValueId() {
-		return map.get(Qualifier.QUALIFIERVALUEID);
+	public IReference getQualifierValueId() {
+		return (IReference)map.get(Qualifier.QUALIFIERVALUEID);
 	}
 
 	@Override

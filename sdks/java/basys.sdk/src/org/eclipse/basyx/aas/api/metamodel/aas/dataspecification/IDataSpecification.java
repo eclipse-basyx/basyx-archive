@@ -1,4 +1,7 @@
 package org.eclipse.basyx.aas.api.metamodel.aas.dataspecification;
+
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
+
 /**
  * Interface for DataSpecification
  *
@@ -13,7 +16,7 @@ public interface IDataSpecification {
 	public String getPreferredName();
 	public String getShortName();
 	public String getUnit();
-	public Object getUnitId();
+	public  IReference getUnitId();
 	public String getSourceOfDefinition();
 	public String getSymbol();
 	public String getDataType();
@@ -25,7 +28,7 @@ public interface IDataSpecification {
 	public void setPreferredName(String preferredName);
 	public void setShortName(String shortName);
 	public void setUnit( String uni);
-	public void setUnitId(Object unitId);
+	public void setUnitId( IReference unitId);
 	public void setSourceOfDefinition(String sourceOfDefinition);
 	public void setSymbol(String symbol);
 	public void setDataType(String dataType);

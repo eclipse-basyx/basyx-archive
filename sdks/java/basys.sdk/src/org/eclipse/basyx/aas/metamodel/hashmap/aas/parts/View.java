@@ -104,7 +104,7 @@ public class View extends HashMap<String, Object> implements IView {
 	}
 
 	@Override
-	public Object getParent() {
+	public IReference  getParent() {
 		return new ReferableFacade(this).getParent();
 	}
 
@@ -127,7 +127,7 @@ public class View extends HashMap<String, Object> implements IView {
 	}
 
 	@Override
-	public void setParent(Object obj) {
+	public void setParent(IReference  obj) {
 		new ReferableFacade(this).setParent(obj);
 		
 	}

@@ -1,4 +1,4 @@
-package org.eclipse.basyx.aas.backend.connected.property;
+package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property;
 
 import java.util.Map;
 

@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.dataspecification;
 import java.util.HashMap;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.dataspecification.IDataSpecification;
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.metamodel.facades.DataSpecificationFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
@@ -98,7 +99,7 @@ public class DataSpecification extends HashMap<String, Object> implements IDataS
 	}
 
 	@Override
-	public Object getUnitId() {
+	public IReference getUnitId() {
 		return new DataSpecificationFacade(this).getUnitId();
 	}
 
@@ -156,7 +157,7 @@ public class DataSpecification extends HashMap<String, Object> implements IDataS
 	}
 
 	@Override
-	public void setUnitId(Object unitId) {
+	public void setUnitId(IReference unitId) {
 		new DataSpecificationFacade(this).setUnitId(unitId);
 		
 	}

@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier;
 import java.util.HashMap;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IReferable;
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.metamodel.facades.ReferableFacade;
 
 /**
@@ -82,7 +83,7 @@ public class Referable extends HashMap<String, Object> implements IReferable {
 	}
 
 	@Override
-	public Object getParent() {
+	public IReference  getParent() {
 		return new ReferableFacade(this).getParent();
 	}
 
@@ -105,7 +106,7 @@ public class Referable extends HashMap<String, Object> implements IReferable {
 	}
 
 	@Override
-	public void setParent(Object obj) {
+	public void setParent(IReference  obj) {
 		new ReferableFacade(this).setParent(obj);
 		
 	}

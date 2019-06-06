@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IConceptDictionary;
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 
@@ -39,8 +40,8 @@ public class ConceptDictionaryFacade implements IConceptDictionary {
 	}
 
 	@Override
-	public Object getParent() {
-		return map.get(Referable.PARENT);
+	public IReference  getParent() {
+		return (IReference)map.get(Referable.PARENT);
 	}
 
 	@Override
@@ -62,7 +63,7 @@ public class ConceptDictionaryFacade implements IConceptDictionary {
 	}
 
 	@Override
-	public void setParent(Object obj) {
+	public void setParent(IReference  obj) {
 		map.put(Referable.PARENT, obj);
 		
 	}

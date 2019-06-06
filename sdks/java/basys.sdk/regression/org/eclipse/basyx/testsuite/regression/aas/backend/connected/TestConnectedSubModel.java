@@ -10,7 +10,7 @@ import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
-import org.eclipse.basyx.aas.backend.connected.ConnectedSubModel;
+import org.eclipse.basyx.aas.backend.connected.aas.ConnectedSubModel;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
@@ -102,5 +102,4 @@ public class TestConnectedSubModel {
 		IOperation op = ops.get(OP);
 		assertEquals(5, op.invoke(2, 3));
 	}
-
 }

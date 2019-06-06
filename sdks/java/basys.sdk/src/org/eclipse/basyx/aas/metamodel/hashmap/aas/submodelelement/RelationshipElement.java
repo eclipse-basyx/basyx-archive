@@ -101,7 +101,7 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	}
 
 	@Override
-	public Object getParent() {
+	public IReference  getParent() {
 		return new ReferableFacade(this).getParent();
 	}
 
@@ -124,7 +124,7 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	}
 
 	@Override
-	public void setParent(Object obj) {
+	public void setParent(IReference  obj) {
 		new ReferableFacade(this).setParent(obj);
 		
 	}

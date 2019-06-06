@@ -10,7 +10,7 @@ import java.util.Collections;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.exception.TypeMismatchException;
 import org.eclipse.basyx.aas.api.resources.ICollectionProperty;
-import org.eclipse.basyx.aas.backend.connected.property.ConnectedCollectionProperty;
+import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.ConnectedCollectionProperty;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;

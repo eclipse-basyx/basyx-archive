@@ -194,7 +194,7 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	}
 
 	@Override
-	public Object getParent() {
+	public IReference  getParent() {
 		return new ReferableFacade(this).getParent();
 	}
 
@@ -217,7 +217,7 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	}
 
 	@Override
-	public void setParent(Object obj) {
+	public void setParent(IReference  obj) {
 		new ReferableFacade(this).setParent(obj);
 		
 	}
@@ -328,11 +328,7 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 		return new PropertyFacade(this).getValueId();
 	}
 
-	@Override
-	public void setSemanticId(Object obj) {
-		 new PropertyFacade(this).setSemanticId(obj);
-		
-	}
+
 
 
 
