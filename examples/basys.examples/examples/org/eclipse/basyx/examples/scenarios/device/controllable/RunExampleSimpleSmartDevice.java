@@ -9,7 +9,7 @@ import org.eclipse.basyx.components.controlcomponent.ExecutionState;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.examplescenario.BaSyxExampleScenario;
-import org.eclipse.basyx.examples.mockup.application.ReceiveDeviceStatusApplication;
+import org.eclipse.basyx.examples.mockup.application.ReceiveDeviceDashboardStatusApplication;
 import org.eclipse.basyx.examples.mockup.device.SmartBaSyxTCPDeviceMockup;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
@@ -61,7 +61,7 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 				new SmartBaSyxTCPDeviceMockup(9997).setName("Device"),
 				
 				// Application mockups
-				new ReceiveDeviceStatusApplication().setName("Application")
+				new ReceiveDeviceDashboardStatusApplication().setName("Application")
 			);
 
 
@@ -85,7 +85,7 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 		((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).deviceInitialized();
 		
 		// Application waits for status change
-		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
+		waitfor( () -> ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
 		
 		
 		// Change device operation mode
@@ -94,7 +94,7 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 		waitfor( () -> ((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).getControlComponent().getOperationMode().equals("RegularMilling") );
 
 		// Application checks invocation counter
-		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceInvocationCounter() == 0 );		
+		assertTrue( ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceInvocationCounter() == 0 );		
 
 
 		// Start device service
@@ -116,10 +116,10 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 		// Device indicates idle state
 		waitfor( () -> ((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).getControlComponent().getExecutionState().equals(ExecutionState.IDLE.getValue()) );
 		// - Let application check device state, expect IDLE status
-		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
+		assertTrue( ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
 
 
 		// Application checks invocation counter
-		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceInvocationCounter() == 1 );
+		assertTrue( ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceInvocationCounter() == 1 );
 	}
 }

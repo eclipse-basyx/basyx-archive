@@ -6,7 +6,7 @@ import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.examplescenario.BaSyxExampleScenario;
-import org.eclipse.basyx.examples.mockup.application.ReceiveDeviceStatusApplication;
+import org.eclipse.basyx.examples.mockup.application.ReceiveDeviceDashboardStatusApplication;
 import org.eclipse.basyx.examples.mockup.device.SimpleTCPDeviceMockup;
 import org.eclipse.basyx.examples.mockup.devicemanager.ManufacturingDeviceManager;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
@@ -54,7 +54,7 @@ public class RunSimpleTCPDevice extends BaSyxExampleScenario {
 				
 				// Simulated mockups
 				new SimpleTCPDeviceMockup(9998).setName("Device"),
-				new ReceiveDeviceStatusApplication().setName("Application")
+				new ReceiveDeviceDashboardStatusApplication().setName("Application")
 			);
 
 
@@ -76,36 +76,36 @@ public class RunSimpleTCPDevice extends BaSyxExampleScenario {
 		((SimpleTCPDeviceMockup) context.getRunnable("Device")).deviceInitialized();
 		
 		// Application waits for status change
-		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
-		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
+		waitfor( () -> ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
+		assertTrue( ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
 
 		// Application checks invocation counter
-		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceInvocationCounter() == 0 );		
+		assertTrue( ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceInvocationCounter() == 0 );		
 
 		// Device updates status to running
 		// - The device indicates that a process step is running
 		((SimpleTCPDeviceMockup) context.getRunnable("Device")).serviceRunning();
 		
 		// Application waits for status change
-		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("EXECUTE") );
-		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("EXECUTE") );
+		waitfor( () -> ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("EXECUTE") );
+		assertTrue( ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("EXECUTE") );
 
 		// Device updates status to complete
 		// - The device indicates that process step did finish
 		((SimpleTCPDeviceMockup) context.getRunnable("Device")).serviceCompleted();
 		
 		// Application waits for status change
-		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("COMPLETE") );
-		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("COMPLETE") );
+		waitfor( () -> ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("COMPLETE") );
+		assertTrue( ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("COMPLETE") );
 
 		// Device updates status to ready again, next process step may be invoked
 		((SimpleTCPDeviceMockup) context.getRunnable("Device")).resetCompleted();
 		
 		// Application waits for status change
-		waitfor( () -> ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
-		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
+		waitfor( () -> ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
+		assertTrue( ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
 
 		// Application checks invocation counter
-		assertTrue( ((ReceiveDeviceStatusApplication) context.getRunnable("Application")).getDeviceInvocationCounter() == 1 );
+		assertTrue( ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceInvocationCounter() == 1 );
 	}
 }
