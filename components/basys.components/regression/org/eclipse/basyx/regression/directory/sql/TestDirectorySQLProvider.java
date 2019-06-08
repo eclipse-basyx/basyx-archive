@@ -10,11 +10,10 @@ import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
+import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
 import org.junit.ClassRule;
 import org.junit.Test;
-
-import basys.examples.aasdescriptor.AASDescriptor;
 
 
 

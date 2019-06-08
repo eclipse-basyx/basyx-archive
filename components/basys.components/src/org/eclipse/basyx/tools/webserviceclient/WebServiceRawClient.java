@@ -1,5 +1,7 @@
 package org.eclipse.basyx.tools.webserviceclient;
 
+import java.io.Serializable;
+
 import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -19,8 +21,14 @@ import org.glassfish.jersey.client.HttpUrlConnectorProvider;
  * @author kuhn
  *
  */
-public class WebServiceRawClient {
+public class WebServiceRawClient implements Serializable {
 
+	
+	/**
+	 * Version of serialized instances
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	
 	/**
 	 * Web service client instance for invoking service calls via web services

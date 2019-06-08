@@ -1,4 +1,4 @@
-package basys.examples.aasdescriptor;
+package org.eclipse.basyx.tools.aasdescriptor;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,6 +10,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.Asset;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
+import org.eclipse.basyx.tools.modelurn.ModelUrn;
 
 
 

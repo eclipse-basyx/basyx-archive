@@ -1,4 +1,4 @@
-package basys.examples.aasdescriptor;
+package org.eclipse.basyx.tools.aasdescriptor;
 
 import java.util.HashMap;
 import java.util.LinkedList;

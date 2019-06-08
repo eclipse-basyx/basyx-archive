@@ -1,4 +1,4 @@
-package basys.examples.aasdescriptor;
+package org.eclipse.basyx.tools.modelurn;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -81,4 +81,36 @@ public class ModelUrn {
 	public String toString() {
 		return getEncodedURN();
 	}
+	
+	
+	/**
+	 * Create a new ModelUrn by appending a String to the URN string, e.g. to create a new element instance
+	 */
+	public ModelUrn append(String suffix) {
+		// Append suffix
+		return new ModelUrn(urnString + suffix);
+	}
+	
+	
+	/**
+	 * HashCode method - required to be able to use this class as hashmap key
+	 */
+	@Override
+	public int hashCode() {
+		return urnString.hashCode();
+	}
+	
+	
+	/**
+	 * Check equality - required to be able to use this class as hashmap key
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		// Type check
+		if (!(obj instanceof ModelUrn)) return false;
+		
+		// Check values
+		return urnString.equals(((ModelUrn) obj).urnString);
+	}	
 }
+
