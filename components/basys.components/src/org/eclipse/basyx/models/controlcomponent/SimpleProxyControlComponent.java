@@ -1,4 +1,4 @@
-package org.eclipse.basyx.components.controlcomponent;
+package org.eclipse.basyx.models.controlcomponent;
 
 import org.eclipse.basyx.components.netcomm.NetworkReceiver;
 import org.eclipse.basyx.components.netcomm.TCPServer;

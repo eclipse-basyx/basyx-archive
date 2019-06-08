@@ -1,11 +1,11 @@
 package org.eclipse.basyx.components.devicemanager;
 
-import org.eclipse.basyx.components.controlcomponent.ControlComponentChangeListener;
-import org.eclipse.basyx.components.controlcomponent.ExecutionMode;
-import org.eclipse.basyx.components.controlcomponent.ExecutionState;
-import org.eclipse.basyx.components.controlcomponent.OccupationState;
-import org.eclipse.basyx.components.controlcomponent.SimpleControlComponent;
 import org.eclipse.basyx.components.netcomm.NetworkReceiver;
+import org.eclipse.basyx.models.controlcomponent.ControlComponentChangeListener;
+import org.eclipse.basyx.models.controlcomponent.ExecutionMode;
+import org.eclipse.basyx.models.controlcomponent.ExecutionState;
+import org.eclipse.basyx.models.controlcomponent.OccupationState;
+import org.eclipse.basyx.models.controlcomponent.SimpleControlComponent;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 

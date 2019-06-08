@@ -1,8 +1,8 @@
 package org.eclipse.basyx.components.device;
 
-import org.eclipse.basyx.components.controlcomponent.ExecutionState;
 import org.eclipse.basyx.components.netcomm.NetworkReceiver;
 import org.eclipse.basyx.components.netcomm.TCPClient;
+import org.eclipse.basyx.models.controlcomponent.ExecutionState;
 
 
 

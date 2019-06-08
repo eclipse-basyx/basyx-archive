@@ -1,7 +1,7 @@
 package org.eclipse.basyx.components.device;
 
-import org.eclipse.basyx.components.controlcomponent.ExecutionState;
 import org.eclipse.basyx.components.service.BaseBaSyxService;
+import org.eclipse.basyx.models.controlcomponent.ExecutionState;
 
 
 

@@ -1,4 +1,4 @@
-package org.eclipse.basyx.components.controlcomponent;
+package org.eclipse.basyx.models.controlcomponent;
 
 import java.io.Serializable;
 import java.util.Collection;
