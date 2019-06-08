@@ -6,13 +6,14 @@ import java.util.Map;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.components.configuration.CFGBaSyxProtocolType;
 import org.eclipse.basyx.components.devicemanager.TCPDeviceManagerComponent;
 import org.eclipse.basyx.components.proxy.registry.AASHTTPRegistryProxy;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
+import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
+import org.eclipse.basyx.tools.modelurn.ModelUrn;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
-import basys.examples.aasdescriptor.AASDescriptor;
-import basys.examples.aasdescriptor.ModelUrn;
 
 
 
@@ -54,6 +55,27 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		// Invoke base constructor
 		super(port);
 		
+		
+		// Configure this device manager
+		configure()
+			.registryURL("http://localhost:8080/basys.examples/Components/Directory/SQL")
+			.connectionManagerType(CFGBaSyxProtocolType.HTTP)
+			.end();
+		
+		// configure()
+		//   .registryURL()
+		//   .connectionManagerDirectory(new ExamplesPreconfiguredDirectory())
+		//   .connectionManagerProtocol(HTTP)
+		//   .AASServerObjectID(...)
+		//   .addAASAAS()
+		//   	.whateverAASProperty()
+		//   	.addSubmodel()
+		//			.property()
+		//			.endSubModel()
+		//		.end();
+		
+		
+		// configure(Map<>...)
 		
 		// Set registry that will be used by this service
 		setRegistry(new AASHTTPRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL"));
@@ -171,9 +193,16 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		if (hasPrefix(rxStr, "status:")) aasServerConnection.updateElementValue(lookupURN("Status").getEncodedURN()+"/properties/status", removePrefix(rxStr, "status"));
 		// - Device indicates service invocation
 		if (hasPrefix(rxStr, "invocation:")) {
-			// Read and increment invocation counter
-			int invocations = (int) aasServerConnection.readElementValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations");
-			aasServerConnection.updateElementValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations", ++invocations);
+			// Start of process
+			if (hasPrefix(rxStr, "invocation:start")) {
+				// Read and increment invocation counter
+				int invocations = (int) aasServerConnection.readElementValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations");
+				aasServerConnection.updateElementValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations", ++invocations);
+			} 
+			// End of process
+			if (hasPrefix(rxStr, "invocation:end")) {
+				// Do nothing for now
+			}
 		}
 	}
 }

@@ -10,13 +10,12 @@ import org.eclipse.basyx.components.controlcomponent.ControlComponentChangeListe
 import org.eclipse.basyx.components.devicemanager.TCPControllableDeviceManagerComponent;
 import org.eclipse.basyx.components.proxy.registry.AASHTTPRegistryProxy;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
+import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
+import org.eclipse.basyx.tools.modelurn.ModelUrn;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
-
-import basys.examples.aasdescriptor.AASDescriptor;
-import basys.examples.aasdescriptor.ModelUrn;
 
 
 
@@ -170,14 +169,24 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		// - Trim string to remove possibly trailing and leading white spaces
 		rxStr = rxStr.trim();
 		
+		System.out.println("- - --------------- RXMSG:"+rxStr);
+		
 		// Check what was being received. This check is performed based on a prefix that he device has to provide);
 		// - Update of device status
 		if (hasPrefix(rxStr, "status:")) aasServerConnection.updateElementValue(lookupURN("Status").getEncodedURN()+"/properties/status", removePrefix(rxStr, "status"));
 		// - Device indicates service invocation
 		if (hasPrefix(rxStr, "invocation:")) {
-			// Read and increment invocation counter
-			int invocations = (int) aasServerConnection.readElementValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations");
-			aasServerConnection.updateElementValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations", ++invocations);
+			// Start of process
+			if (hasPrefix(rxStr, "invocation:start")) {
+				// Read and increment invocation counter
+				int invocations = (int) aasServerConnection.readElementValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations");
+				aasServerConnection.updateElementValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations", ++invocations);
+			}
+			
+			// End of process
+			if (hasPrefix(rxStr, "invocation:end")) {
+				// Do nothing for now
+			}
 		}
 		
 		// Let base implementation process the message

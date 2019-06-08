@@ -7,13 +7,12 @@ import org.eclipse.basyx.components.controlcomponent.ExecutionState;
 import org.eclipse.basyx.components.device.BaseSmartDevice;
 import org.eclipse.basyx.components.proxy.registry.AASHTTPRegistryProxy;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
+import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
+import org.eclipse.basyx.tools.modelurn.ModelUrn;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
-
-import basys.examples.aasdescriptor.AASDescriptor;
-import basys.examples.aasdescriptor.ModelUrn;
 
 
 
@@ -77,18 +76,12 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 	 */
 	@Override
 	protected void onServiceInvocation() {
+		// Base implementation
+		super.onServiceInvocation();
+		
 		// Implement the device invocation counter - read and increment invocation counter
 		int invocations = (int) aasServerConnection.readElementValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations");
 		aasServerConnection.updateElementValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations", ++invocations);		
-	}
-
-	
-	/**
-	 * Indicate device service end
-	 */
-	@Override
-	protected void onServiceEnd() {
-		// Do nothing
 	}
 
 	

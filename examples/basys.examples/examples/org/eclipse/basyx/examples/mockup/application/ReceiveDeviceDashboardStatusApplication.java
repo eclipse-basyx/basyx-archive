@@ -5,12 +5,11 @@ import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.components.proxy.registry.AASHTTPRegistryProxy;
 import org.eclipse.basyx.components.service.BaseBaSyxService;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
+import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
+import org.eclipse.basyx.tools.aasdescriptor.SubmodelDescriptor;
+import org.eclipse.basyx.tools.modelurn.ModelUrn;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
-
-import basys.examples.aasdescriptor.AASDescriptor;
-import basys.examples.aasdescriptor.ModelUrn;
-import basys.examples.aasdescriptor.SubmodelDescriptor;
 
 
 
@@ -21,7 +20,7 @@ import basys.examples.aasdescriptor.SubmodelDescriptor;
  * @author kuhn
  *
  */
-public class ReceiveDeviceStatusApplication extends BaseBaSyxService {
+public class ReceiveDeviceDashboardStatusApplication extends BaseBaSyxService {
 
 	
 	/**
@@ -34,7 +33,7 @@ public class ReceiveDeviceStatusApplication extends BaseBaSyxService {
 	/**
 	 * Constructor
 	 */
-	public ReceiveDeviceStatusApplication() {
+	public ReceiveDeviceDashboardStatusApplication() {
 		// Create AAS registry for this service
 		setRegistry(new AASHTTPRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL"));
 		

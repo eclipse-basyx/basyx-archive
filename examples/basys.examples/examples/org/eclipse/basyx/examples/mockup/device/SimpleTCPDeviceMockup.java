@@ -1,6 +1,6 @@
 package org.eclipse.basyx.examples.mockup.device;
 
-import org.eclipse.basyx.components.device.BaseTCPDevice;
+import org.eclipse.basyx.components.device.BaseTCPDeviceAdapter;
 
 
 
@@ -14,7 +14,7 @@ import org.eclipse.basyx.components.device.BaseTCPDevice;
  * @author kuhn
  *
  */
-public class SimpleTCPDeviceMockup extends BaseTCPDevice {
+public class SimpleTCPDeviceMockup extends BaseTCPDeviceAdapter {
 
 	
 	/**

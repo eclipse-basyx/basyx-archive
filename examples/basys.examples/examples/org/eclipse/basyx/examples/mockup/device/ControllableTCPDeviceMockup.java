@@ -1,6 +1,6 @@
 package org.eclipse.basyx.examples.mockup.device;
 
-import org.eclipse.basyx.components.device.BaseTCPControllableDevice;
+import org.eclipse.basyx.components.device.BaseTCPControllableDeviceAdapter;
 
 
 
@@ -13,7 +13,7 @@ import org.eclipse.basyx.components.device.BaseTCPControllableDevice;
  * @author kuhn
  *
  */
-public class ControllableTCPDeviceMockup extends BaseTCPControllableDevice {
+public class ControllableTCPDeviceMockup extends BaseTCPControllableDeviceAdapter {
 
 	
 	
