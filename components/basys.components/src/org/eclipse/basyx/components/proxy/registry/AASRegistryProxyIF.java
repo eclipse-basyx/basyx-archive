@@ -1,7 +1,8 @@
 package org.eclipse.basyx.components.proxy.registry;
 
-import basys.examples.aasdescriptor.AASDescriptor;
-import basys.examples.aasdescriptor.ModelUrn;
+import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
+import org.eclipse.basyx.tools.modelurn.ModelUrn;
+import org.eclipse.basyx.vab.core.IDirectoryService;
 
 
 
@@ -12,7 +13,7 @@ import basys.examples.aasdescriptor.ModelUrn;
  * @author kuhn
  *
  */
-public interface AASRegistryProxyIF {
+public interface AASRegistryProxyIF extends IDirectoryService {
 	
 	
 	/**

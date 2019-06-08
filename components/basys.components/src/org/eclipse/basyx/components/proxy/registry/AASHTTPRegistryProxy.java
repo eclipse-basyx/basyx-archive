@@ -5,9 +5,11 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
+import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
+import org.eclipse.basyx.tools.modelurn.ModelUrn;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
-import basys.examples.aasdescriptor.AASDescriptor;
-import basys.examples.aasdescriptor.ModelUrn;
+import org.eclipse.basyx.vab.core.IDirectoryService;
 
 
 
@@ -103,6 +105,61 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 		
 		// Return AAS descriptor
 		return aasDescriptor;
+	}
+	
+	
+	
+	/**
+	 * Add an AAS mapping to a directory
+	 * 
+	 * This function creates an AAS descriptor and registers it in the directory
+	 */
+	@Override
+	public IDirectoryService addMapping(String key, String value) {
+		// Create AAS descriptor and set ID, ID type, and endpoint
+		AASDescriptor aasDescriptor = new AASDescriptor(key, IdentifierType.URI, value);
+
+		// Push AAS descriptor to server
+		client.post(aasRegistryURL+"/api/v1/registry", serializer.getJsonString(serializer.serialize(aasDescriptor)));
+		
+		// Return 'this' reference
+		return this;
+	}
+
+
+	/**
+	 * Delete an AAS mapping
+	 */
+	@Override
+	public void removeMapping(String key) {
+		// Invoke delete operation of AAS registry
+		try {client.delete(aasRegistryURL+"/api/v1/registry/"+key);} catch (Exception e) {e.printStackTrace();}
+	}
+
+
+	/**
+	 * Lookup one AAS mapping
+	 */
+	@Override @SuppressWarnings("unchecked")
+	public String lookup(String id) {
+		// Lookup AAS from AAS directory, get AAS descriptor
+		String jsonData = client.get(aasRegistryURL+"/api/v1/registry/"+id);
+		
+		// Deserialize AAS descriptor
+		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(serializer.getMap(serializer.getObjFromJsonStr(jsonData))));
+
+		// Return endpoint
+		return aasDescriptor.getFirstEndpoint();
+	}
+
+
+	/**
+	 * Return all locally registered mappings
+	 */
+	@Override
+	public Map<String, String> getMappings() {
+		// Currently not implemented
+		return null;
 	}
 }
 

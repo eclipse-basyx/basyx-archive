@@ -15,7 +15,7 @@ import org.eclipse.basyx.components.netcomm.TCPClient;
  * @author kuhn
  *
  */
-public abstract class BaseTCPControllableDevice extends BaseTCPDevice implements BaSysNativeDeviceStatusIF, NetworkReceiver {
+public abstract class BaseTCPControllableDeviceAdapter extends BaseTCPDeviceAdapter implements BaSysNativeDeviceStatusIF, NetworkReceiver {
 
 	
 	/**
@@ -41,7 +41,7 @@ public abstract class BaseTCPControllableDevice extends BaseTCPDevice implements
 	/**
 	 * Constructor
 	 */
-	public BaseTCPControllableDevice(int port) {
+	public BaseTCPControllableDeviceAdapter(int port) {
 		// Invoke base constructor
 		super(port);
 	}
@@ -98,9 +98,8 @@ public abstract class BaseTCPControllableDevice extends BaseTCPDevice implements
 	@Override
 	protected void statusChange(String newStatus) {
 		// React to device status change
-		// - Example - indicate running service in EXECUTE state
+		// - Indicate running service in EXECUTE state
 		if (newStatus.equals("EXECUTE"))  onServiceInvocation();
-		if (newStatus.equals("COMPLETE")) onServiceEnd();
 				
 		// Set requested device execution state
 		exState = ExecutionState.byValue(newStatus);

@@ -74,7 +74,7 @@ public abstract class TCPControllableDeviceManagerComponent extends TCPDeviceMan
 		
 		// Check what was being received. This check is performed based on a prefix that he device has to provide);
 		// - Device indicates completion of service
-		if (hasPrefix(rxStr, "invocationEnd:")) {
+		if (hasPrefix(rxStr, "invocation:end")) {
 			// Update control component with status
 			simpleControlComponent.setExecutionState(ExecutionState.COMPLETE.getValue());
 			

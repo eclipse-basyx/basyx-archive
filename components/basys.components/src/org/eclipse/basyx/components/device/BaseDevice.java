@@ -32,6 +32,9 @@ public abstract class BaseDevice extends BaseBaSyxService implements BaSysNative
 	 */
 	@Override
 	public void deviceInitialized() {
+		// Indicate initialization to device
+		onInitialize();
+		
 		// Change status
 		statusChange(ExecutionState.IDLE.getValue());
 	}
@@ -42,7 +45,7 @@ public abstract class BaseDevice extends BaseBaSyxService implements BaSysNative
 	 */
 	@Override
 	public void serviceRunning() {
-		// Indicate service invocation to device manager
+		// Indicate service invocation to device
 		onServiceInvocation();
 		
 		// Change status
@@ -55,6 +58,9 @@ public abstract class BaseDevice extends BaseBaSyxService implements BaSysNative
 	 */
 	@Override
 	public void serviceCompleted() {
+		// Indicate service invocation to device
+		onServiceEnd();
+		
 		// Change status
 		statusChange(ExecutionState.COMPLETE.getValue());		
 	}
@@ -65,6 +71,9 @@ public abstract class BaseDevice extends BaseBaSyxService implements BaSysNative
 	 */
 	@Override
 	public void resetCompleted() {
+		// Indicate reset to device
+		onReset();
+		
 		// Change status
 		statusChange(ExecutionState.IDLE.getValue());		
 	}
@@ -77,14 +86,41 @@ public abstract class BaseDevice extends BaseBaSyxService implements BaSysNative
 	protected abstract void statusChange(String newStatus);
 	
 	
+
+	
+	/**
+	 * Indicate device initialization
+	 */
+	protected void onInitialize() {
+		// Here: Initialize device
+		System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDevice status change: initialize");		
+	}
+
+	
 	/**
 	 * Indicate device service invocation
 	 */
-	protected abstract void onServiceInvocation();
-
+	protected void onServiceInvocation() {
+		// Here: Invoke device service
+		System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDevice status change: invoke");		
+	}
+	
 	
 	/**
 	 * Indicate device service end
 	 */
-	protected abstract void onServiceEnd();
+	protected void onServiceEnd() {
+		// Here: Perform device operation after device service end (if necessary)
+		System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDevice status change: end");
+	}
+	
+	
+	/**
+	 * Indicate device reset
+	 */
+	protected void onReset() {
+		// Here: Reset device
+		System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDevice status change: reset");
+	}
 }
+

@@ -18,7 +18,7 @@ import org.eclipse.basyx.components.netcomm.TCPClient;
  * @author kuhn
  *
  */
-public abstract class BaseTCPDevice extends BaseDevice implements BaSysNativeDeviceStatusIF {
+public abstract class BaseTCPDeviceAdapter extends BaseDevice implements BaSysNativeDeviceStatusIF {
 
 	
 	/**
@@ -38,7 +38,7 @@ public abstract class BaseTCPDevice extends BaseDevice implements BaSysNativeDev
 	/**
 	 * Constructor
 	 */
-	public BaseTCPDevice(int port) {
+	public BaseTCPDeviceAdapter(int port) {
 		// Store server port
 		serverPort = port;
 	}
@@ -51,8 +51,11 @@ public abstract class BaseTCPDevice extends BaseDevice implements BaSysNativeDev
 	 */
 	@Override
 	protected void onServiceInvocation() {
+		// Invoke base implementation
+		super.onServiceInvocation();
+
 		// Write bytes to device manager
-		communicationClient.sendMessage("invocation:\n");
+		communicationClient.sendMessage("invocation:start\n");
 	}
 	
 	
@@ -60,8 +63,11 @@ public abstract class BaseTCPDevice extends BaseDevice implements BaSysNativeDev
 	 * Indicate device service end
 	 */
 	protected void onServiceEnd() {
+		// Invoke base implementation
+		super.onServiceEnd();
+		
 		// Write bytes to device manager
-		communicationClient.sendMessage("invocationEnd:\n");
+		communicationClient.sendMessage("invocation:end\n");
 	}
 
 

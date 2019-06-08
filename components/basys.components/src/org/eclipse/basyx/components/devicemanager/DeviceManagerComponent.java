@@ -2,11 +2,10 @@ package org.eclipse.basyx.components.devicemanager;
 
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.components.service.BaseBaSyxService;
+import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
+import org.eclipse.basyx.tools.aasdescriptor.SubmodelDescriptor;
+import org.eclipse.basyx.tools.modelurn.ModelUrn;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
-
-import basys.examples.aasdescriptor.AASDescriptor;
-import basys.examples.aasdescriptor.ModelUrn;
-import basys.examples.aasdescriptor.SubmodelDescriptor;
 
 
 

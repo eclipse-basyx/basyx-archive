@@ -3,12 +3,13 @@ package org.eclipse.basyx.components.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.components.configuration.ConfigurableComponent;
+import org.eclipse.basyx.components.configuration.builder.BaSyxServiceConfigurationBuilder;
 import org.eclipse.basyx.components.proxy.registry.AASRegistryProxyIF;
 import org.eclipse.basyx.sdk.api.service.BaSyxService;
+import org.eclipse.basyx.tools.modelurn.ModelUrn;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
-
-import basys.examples.aasdescriptor.ModelUrn;
 
 
 
@@ -18,7 +19,7 @@ import basys.examples.aasdescriptor.ModelUrn;
  * @author kuhn
  *
  */
-public abstract class BaseBaSyxService implements BaSyxService {
+public abstract class BaseBaSyxService implements BaSyxService, ConfigurableComponent<BaSyxServiceConfigurationBuilder<?>> {
 
 	
 	/**
@@ -55,6 +56,29 @@ public abstract class BaseBaSyxService implements BaSyxService {
 	
 	
 	
+	
+	/**
+	 * Configure this BaSyx component
+	 */
+	@Override @SuppressWarnings({ "rawtypes", "unchecked" })
+	public BaSyxServiceConfigurationBuilder configure() {
+		// Create and return BaSyx configuration builder, set configured component to this component
+		return new BaSyxServiceConfigurationBuilder(this);
+	}
+	
+
+	/**
+	 * Configure this component
+	 */
+	@Override
+	public void configureComponent(BaSyxServiceConfigurationBuilder<?> configuration) {
+		// Set registry
+		setRegistry(configuration.getRegistry());
+
+		// Create BaSyx connection manager
+		setConnectionManager(configuration.getConnectionManager());
+	}
+
 
 
 	
