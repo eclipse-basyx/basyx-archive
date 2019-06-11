@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.aas.backend.connector.JSONConnector;
 import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnector;
+import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
@@ -27,7 +28,7 @@ public class BaSyxCreateProvideUseExampleAASSubmodel {
 	public void createExportAndAccessSubModel() {
 				
 		// Create sub model and add properties
-		SubModel statusSM = new SubModel()
+		VABModelMap<Object> statusSM = new SubModel()
 		//   - Property status: indicate device status
 				.putPath("properties/status", "offline")
 		//   - Property statistics: export invocation statistics for every service

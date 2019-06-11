@@ -1,68 +1,30 @@
-package org.eclipse.basyx.examples.snippets.aas.connection;
+package org.eclipse.basyx.examples.snippets.vab.connection;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
+import org.eclipse.basyx.components.servlet.submodel.EmptyVABLambdaElementServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
-import org.eclipse.basyx.examples.support.servlets.EmptyVABLambdaElementServlet;
+import org.eclipse.basyx.tools.webserviceclient.WebServiceJSONClient;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
-import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 
 
 /**
- * Example for a tailored BaSyx supplier
- * 
- * - BaSyx will serialize this class (and all contained references) and transmit it to the AAS server
+ * Illustrate the use of AAS operations using HTTP REST calls
  * 
  * @author kuhn
  *
  */
-class TailoredBaSyxSupplier implements Supplier<Object>, Serializable {
-
-	/**
-	 * Version number of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-
-
-	/**
-	 * Return value
-	 */
-	@Override
-	public Object get() {
-		// Delegate call to tailored BaSyx supplier base class
-		return getInternal();
-	}
-
-	
-	/**
-	 * Example function of tailored BaSyx supplier base class
-	 */
-	protected String getInternal() {
-		return "BaSyxSupplier!";
-	}
-}
-
-
-
-
-/**
- * Illustrate the dynamic deployment of AAS operations with a tailored consumer
- * 
- * @author kuhn
- *
- */
-public class RunTailoredSupplierSnippet {
+public class RunAASManualHTTPOperationsSnippet {
 
 	
 	/**
@@ -88,12 +50,13 @@ public class RunTailoredSupplierSnippet {
 					addServletMapping("/Testsuite/components/BaSys/1.0/devicestatusVAB/*", new EmptyVABLambdaElementServlet())
 			);
 
-		
+	
+	
 	
 	/**
 	 * Test basic queries
 	 */
-	@Test
+	@Test @SuppressWarnings("unchecked")
 	public void snippet() throws Exception {
 
 		// Server connections
@@ -101,16 +64,20 @@ public class RunTailoredSupplierSnippet {
 		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
 
 		
-		// Create dynamic get/set operation as lambda expression
-		Map<String, Object> dynamicPropertyVal = VABLambdaProviderHelper.createSimple(new TailoredBaSyxSupplier(), null);
-		// - Update property properties/dynamicExample with dynamic get/set operation
-		connSubModel1.updateElementValue("dynamicExampleProperty", dynamicPropertyVal);
-
-		// Read dynamicExample property
-		Object devMode1c = connSubModel1.readElementValue("dynamicExampleProperty");
-
-		// - Check value
-		assertTrue(devMode1c.equals("BaSyxSupplier!"));
+		// Create properties on AAS using connection
+		connSubModel1.createElement("properties", new HashMap<String, Object>());
+		connSubModel1.createElement("properties/prop1", 7);
+		connSubModel1.createElement("properties/prop2", "myStr");
+		
+		
+		// Web service client accesses AAS using HTTP REST calls
+		WebServiceJSONClient jsonClient = new WebServiceJSONClient();
+		
+		
+		// Read property values
+		// - Use WebServiceJSONClient class. Returned property contains meta data. The actual value is stored in property "entity"
+		assertTrue((int) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/properties/prop1")).get("entity") == 7);
+		assertTrue(((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/properties/prop2")).get("entity").equals("myStr"));
 	}
 }
 
