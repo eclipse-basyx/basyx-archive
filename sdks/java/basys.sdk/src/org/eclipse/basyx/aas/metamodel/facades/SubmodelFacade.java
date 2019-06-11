@@ -10,6 +10,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
@@ -18,6 +19,8 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.HasKind;
 
+
+
 /**
  * Base class for sub model facades
  * 
@@ -25,9 +28,9 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.HasKind;
  *
  */
 public class SubmodelFacade implements ISubModel {
-	private Map<String, Object> map;
+	private VABModelMap<Object> map;
 
-	public SubmodelFacade(Map<String, Object> map) {
+	public SubmodelFacade(VABModelMap<Object> map) {
 		this.map = map;
 	}
 

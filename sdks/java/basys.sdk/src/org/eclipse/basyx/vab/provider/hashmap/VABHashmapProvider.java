@@ -2,10 +2,13 @@ package org.eclipse.basyx.vab.provider.hashmap;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.vab.provider.IVABElementHandler;
 import org.eclipse.basyx.vab.provider.VABModelProvider;
 import org.eclipse.basyx.vab.provider.VABMultiElementHandler;
 import org.eclipse.basyx.vab.provider.list.VABListHandler;
+
+
 
 /**
  * A simple VAB model provider based on a HashMap.
@@ -16,6 +19,7 @@ import org.eclipse.basyx.vab.provider.list.VABListHandler;
  *
  */
 public class VABHashmapProvider extends VABModelProvider {
+	
 	public VABHashmapProvider(Map<String, Object> elements) {
 		super(elements, new VABMultiElementHandler(new VABMapHandler(), new VABListHandler()));
 		this.elements = elements;

@@ -3,6 +3,8 @@ package org.eclipse.basyx.aas.metamodel.hashmap;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.resources.IElement;
+
 
 /**
  * Base class for all hash maps that contain VAB meta models
@@ -40,13 +42,33 @@ public class VABModelMap<V extends Object> extends HashMap<String, V> {
 
 	
 	/**
+	 * Put a property into the map.
+	 * 
+	 * The property already contains an ID
+	 */
+	public void put(V v) {
+		// Type check
+		if (!(v instanceof IElement)) throw new UndefinedIDException();
+		
+		// Up cast
+		IElement addedElement = (IElement) v;
+		
+		// ID check
+		if (addedElement.getId() == null) throw new UndefinedIDException();
+		
+		// Add element to map
+		this.put(addedElement.getId(), v);
+	}
+	
+	
+	/**
 	 * Put element with qualified path into map. This function assumes that all intermediate elements are maps as well.
 	 * 
 	 * @param path path to element in contained map(s)
 	 * @param value value to be put
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends VABModelMap<?>> T putPath(String path, Object value) {
+	public <T extends VABModelMap<? extends Object>> T putPath(String path, Object value) {
 		// Current Map, start with this map and then traverse according to path
 		Map<String, Object> currentMap = (Map<String, Object>) this;
 		

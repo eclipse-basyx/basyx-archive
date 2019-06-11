@@ -1,6 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.factory;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,6 +43,24 @@ public class MetaModelElementFactory {
 		return ret;
 	}
 
+	
+	/**
+	 * Create Property
+	 * 
+	 * @param prop
+	 * @param get
+	 * @param set
+	 * @return
+	 */
+	public Property create(Property prop, Object value, String id) {
+		Property ret = new Property();
+		ret.putAll(prop);
+		ret.setValue(value);
+		ret.setId(id);
+		return ret;
+	}
+
+	
 	/**
 	 * Create Property
 	 * 
@@ -73,6 +92,7 @@ public class MetaModelElementFactory {
 		return ret;
 	}
 
+	
 	/**
 	 * Create SubmodelElementCollection
 	 *
@@ -89,6 +109,25 @@ public class MetaModelElementFactory {
 		return ret;
 	}
 
+	
+	/**
+	 * Create SubmodelElementCollection
+	 *
+	 * @param container
+	 * @param object
+	 */
+	public SubmodelElementCollection createContainer(SubmodelElementCollection property, List<SubmodelElement> properties, List<SubmodelElement> operations, String id) {
+		SubmodelElementCollection ret = new SubmodelElementCollection();
+		ret.putAll(property);
+		ret.setId(id);
+
+		properties.stream().forEach(x -> ret.addSubmodelElement(x));
+		operations.stream().forEach(x -> ret.addSubmodelElement(x));
+
+		return ret;
+	}
+
+	
 	/**
 	 * Create SubModel
 	 * 
@@ -133,4 +172,28 @@ public class MetaModelElementFactory {
 		}
 		return ret;
 	}
+	
+	
+	/**
+	 * Return an empty list
+	 */
+	public List<SubmodelElement> emptyList() {
+		return new LinkedList<SubmodelElement>();
+	}
+	
+	
+	/**
+	 * Return a list of properties
+	 */
+	public List<SubmodelElement> createList(SubmodelElement... elements) {
+		// Create linked list
+		List<SubmodelElement> result = new LinkedList<SubmodelElement>();
+		
+		// Add elements to list
+		for (SubmodelElement el: elements) result.add(el);
+		
+		// Return list
+		return result;
+	}
+	
 }
