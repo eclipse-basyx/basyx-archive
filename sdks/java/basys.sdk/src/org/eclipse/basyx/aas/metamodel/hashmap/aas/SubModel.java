@@ -240,17 +240,13 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 	}
 
 	@Override
-	public Map<String, IProperty> getProperties() {
-		return new SubmodelFacade(this).getProperties();
+	public VABModelMap<IProperty> getProperties() {
+		return (VABModelMap<IProperty>) new SubmodelFacade(this).getProperties();
 	}
 
 	@Override
 	public Map<String, IOperation> getOperations() {
 		return new SubmodelFacade(this).getOperations();
 	}
-
-
-
-
-
 }
+
