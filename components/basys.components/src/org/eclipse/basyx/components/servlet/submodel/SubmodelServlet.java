@@ -3,7 +3,6 @@ package org.eclipse.basyx.components.servlet.submodel;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.testsuite.support.aas.vab.stub.elements.SimpleAASSubmodel;
 import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
@@ -35,9 +34,12 @@ public class SubmodelServlet extends VABHTTPInterface<VABMultiSubmodelProvider<V
 
 		// Create dummy AAS
 		AssetAdministrationShell aas = new AssetAdministrationShell();
+		aas.setId("---");
 
 		// Add provides sub model
 		getModelProvider().setAssetAdministrationShell(new VABHashmapProvider(aas));
-		getModelProvider().addSubmodel(exportedModel.getId(), new VABHashmapProvider(new SimpleAASSubmodel(exportedModel.getId())));
+		getModelProvider().addSubmodel(exportedModel.getId(), new VABHashmapProvider(exportedModel));
+		
+		System.out.println("********************** SMID:"+exportedModel.getId());
 	}
 }

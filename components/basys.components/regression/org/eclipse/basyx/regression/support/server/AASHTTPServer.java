@@ -59,8 +59,8 @@ public class AASHTTPServer extends Thread {
         	HttpServlet servlet = entry.getValue();
         	
         	// Add new Servlet and Mapping to tomcat environment
-        	Tomcat.addServlet(rootCtx, servlet.getClass().getSimpleName(), servlet);
-            rootCtx.addServletMapping(mapping, servlet.getClass().getSimpleName());
+        	Tomcat.addServlet(rootCtx, ""+servlet.hashCode(), servlet);
+            rootCtx.addServletMapping(mapping, ""+servlet.hashCode());
         }
 	}
 	

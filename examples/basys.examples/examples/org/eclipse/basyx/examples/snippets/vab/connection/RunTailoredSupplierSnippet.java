@@ -1,4 +1,4 @@
-package org.eclipse.basyx.examples.snippets.aas.connection;
+package org.eclipse.basyx.examples.snippets.vab.connection;
 
 import static org.junit.Assert.assertTrue;
 
@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
+import org.eclipse.basyx.components.servlet.submodel.EmptyVABLambdaElementServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
-import org.eclipse.basyx.examples.support.servlets.EmptyVABLambdaElementServlet;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
@@ -20,12 +20,49 @@ import org.junit.Test;
 
 
 /**
- * Illustrate the dynamic deployment of AAS operations
+ * Example for a tailored BaSyx supplier
+ * 
+ * - BaSyx will serialize this class (and all contained references) and transmit it to the AAS server
  * 
  * @author kuhn
  *
  */
-public class RunDynamicOperationSnippet {
+class TailoredBaSyxSupplier implements Supplier<Object>, Serializable {
+
+	/**
+	 * Version number of serialized instances
+	 */
+	private static final long serialVersionUID = 1L;
+
+
+	/**
+	 * Return value
+	 */
+	@Override
+	public Object get() {
+		// Delegate call to tailored BaSyx supplier base class
+		return getInternal();
+	}
+
+	
+	/**
+	 * Example function of tailored BaSyx supplier base class
+	 */
+	protected String getInternal() {
+		return "BaSyxSupplier!";
+	}
+}
+
+
+
+
+/**
+ * Illustrate the dynamic deployment of AAS operations with a tailored consumer
+ * 
+ * @author kuhn
+ *
+ */
+public class RunTailoredSupplierSnippet {
 
 	
 	/**
@@ -51,8 +88,7 @@ public class RunDynamicOperationSnippet {
 					addServletMapping("/Testsuite/components/BaSys/1.0/devicestatusVAB/*", new EmptyVABLambdaElementServlet())
 			);
 
-	
-	
+		
 	
 	/**
 	 * Test basic queries
@@ -66,16 +102,15 @@ public class RunDynamicOperationSnippet {
 
 		
 		// Create dynamic get/set operation as lambda expression
-		Map<String, Object> dynamicPropertyVal = VABLambdaProviderHelper.createSimple((Supplier<Object> & Serializable) () -> {
-			return "dynamicExampleValue";
-		}, null);
+		Map<String, Object> dynamicPropertyVal = VABLambdaProviderHelper.createSimple(new TailoredBaSyxSupplier(), null);
 		// - Update property properties/dynamicExample with dynamic get/set operation
 		connSubModel1.updateElementValue("dynamicExampleProperty", dynamicPropertyVal);
 
 		// Read dynamicExample property
 		Object devMode1c = connSubModel1.readElementValue("dynamicExampleProperty");
+
 		// - Check value
-		assertTrue(devMode1c.equals("dynamicExampleValue"));
+		assertTrue(devMode1c.equals("BaSyxSupplier!"));
 	}
 }
 
