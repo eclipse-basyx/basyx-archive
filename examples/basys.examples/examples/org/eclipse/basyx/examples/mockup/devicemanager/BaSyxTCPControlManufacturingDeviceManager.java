@@ -23,8 +23,7 @@ import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
  * Example manufacturing device manager code
  * 
  * This example code extends the BaSyxTCPManufacturingDeviceManager by adding a control component sub model to control the managed device.
- * 
- * 
+ *  
  * @author kuhn
  *
  */
