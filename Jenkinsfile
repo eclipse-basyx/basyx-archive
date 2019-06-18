@@ -28,7 +28,7 @@ spec:
         container('maven') {
           sh '''
 cd "sdks/java/basys.sdk/"
-mvn clean verify
+mvn --no-transfer-progress clean verify
 		  '''
         }
       }
