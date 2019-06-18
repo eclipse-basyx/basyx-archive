@@ -26,7 +26,10 @@ spec:
     stage('Run maven') {
       steps {
         container('maven') {
-          sh 'mvn -f ./sdks/java/basys.sdk/pom.xml clean verify'
+          sh '''
+find .
+mvn --no-transfer-progress -f ./sdks/java/basys.sdk/pom.xml clean verify
+		  '''
         }
       }
     }
