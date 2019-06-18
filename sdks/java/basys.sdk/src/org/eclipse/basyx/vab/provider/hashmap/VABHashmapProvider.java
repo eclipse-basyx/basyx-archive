@@ -2,7 +2,6 @@ package org.eclipse.basyx.vab.provider.hashmap;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.vab.provider.IVABElementHandler;
 import org.eclipse.basyx.vab.provider.VABModelProvider;
 import org.eclipse.basyx.vab.provider.VABMultiElementHandler;
