@@ -27,8 +27,8 @@ spec:
       steps {
         container('maven') {
           sh '''
-find .
-mvn --no-transfer-progress -f ./sdks/java/basys.sdk/pom.xml clean verify
+cd "sdks/java/basys.sdk/"
+mvn clean verify
 		  '''
         }
       }
