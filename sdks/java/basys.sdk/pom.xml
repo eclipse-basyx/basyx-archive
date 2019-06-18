@@ -7,14 +7,8 @@
   <name>BaSyx SDK</name>
   
   <build>
-    <sourceDirectory></sourceDirectory>
+    <sourceDirectory>src</sourceDirectory>
     <resources>
-      <resource>
-       <directory>regression/org/eclipse/basyx/testsuite/support</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
       <resource>
        <directory>src</directory>
         <excludes>
@@ -27,22 +21,10 @@
           <exclude>**/*.java</exclude>
         </excludes>
       </resource>
-      <resource>
-       <directory>extern</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-      <resource>
-        <directory>compliance</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
     </resources>
     
     <testSourceDirectory>
-    		regression/org/eclipse/basyx/testsuite/regression
+    	regression
     </testSourceDirectory>
     
  
@@ -93,31 +75,6 @@
 		  </executions>
 		</plugin>   
 		
-		<!-- Export Jar file to /components and /examples package -->
-		<plugin>
-	      <groupId>org.apache.maven.plugins</groupId>
-	      <artifactId>maven-jar-plugin</artifactId>
-	      <version>2.3.1</version>
-	       <executions>
-          <execution>
-            <id>components</id>
-            <goals><goal>jar</goal></goals>
-            <phase>package</phase>
-            <configuration>
-              <outputDirectory>../../../components/basys.components/repo/basys/sdk/basys.sdk/0.0.1-SNAPSHOT</outputDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>examples</id>
-            <goals><goal>jar</goal></goals>
-            <phase>package</phase>
-            <configuration>
-              <outputDirectory>../../../examples/basys.examples/repo/basys/sdk/basys.sdk/0.0.1-SNAPSHOT</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-	     
-	    </plugin>
     </plugins>
    
   </build>

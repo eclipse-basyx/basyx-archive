@@ -178,7 +178,7 @@ public class TestDirectorySQLProvider {
 			// - Create AAS descriptor
 			AASDescriptor aasDescriptor = new AASDescriptor("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-166", IdentifierType.URI, "www.endpoint.de");
 			// - Create new AAS registration
-			String expected = serializer.serialize(aasDescriptor);
+			String expected = serializer.getJsonString(serializer.serialize(aasDescriptor));
 			client.post(wsURL + "/api/v1/registry", expected);
 
 			// Get a known AAS by its ID

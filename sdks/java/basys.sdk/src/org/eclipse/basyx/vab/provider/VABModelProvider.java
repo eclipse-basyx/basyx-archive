@@ -2,6 +2,7 @@ package org.eclipse.basyx.vab.provider;
 
 import java.util.function.Function;
 
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 
@@ -53,8 +54,28 @@ public class VABModelProvider implements IModelProvider {
 
 	@Override
 	public void createValue(String path, Object newValue) throws Exception {
+		System.out.println("CRCRCR3:"+path+" -- "+newValue);
+		
+		// Local variables
 		Object parentElement = getParentElement(path);
 		String propertyName = VABPathTools.getLastElement(path);
+		
+		System.out.println("CRCRCR4:"+propertyName+" -- "+parentElement);
+
+		
+		// Do not process "null" paths
+		if (path == null) return;
+		
+		// Corner case - the complete map should be replaced (path "/" or "")
+		if ((path.length() == 0) || (path.equals("/"))) {
+			// Overwrite elements
+			elements = newValue;
+			
+			// End processing
+			return;
+		}
+
+		// All other cases
 		if (parentElement != null && propertyName != null) {
 			newValue = handler.preprocessObject(newValue);
 			Object childElement = handler.getElementProperty(parentElement, propertyName);
@@ -63,7 +84,13 @@ public class VABModelProvider implements IModelProvider {
 			} else {
 				handler.createValue(childElement, newValue);
 			}
+			
+			// End processing
+			return;
 		}
+		
+		// Indicate error
+		throw new RuntimeException("Undefined parent element requested");
 	}
 
 	@Override
@@ -90,15 +117,37 @@ public class VABModelProvider implements IModelProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object invokeOperation(String path, Object[] parameters) throws Exception {
-		Object parentElement = getParentElement(path);
-		String operationName = VABPathTools.getLastElement(path);
-		if (parentElement != null && operationName != null) {
-			Object childElement = handler.getElementProperty(parentElement, operationName);
-			if (childElement != null && childElement instanceof Function<?, ?>) {
-				Function<Object, Object[]> function = (Function<Object, Object[]>) childElement;
-				return function.apply(parameters);
+		System.out.println("OPERATION INVOKE:"+path+" "+elements);
+		
+		// Object to be invoked
+		Object childElement = null;
+		
+		// Corner case, only an operation is provided
+		if (path.length() == 0 || path.equals("/")) {
+			childElement = elements;
+		} else {
+			Object parentElement = getParentElement(path);
+			String operationName = VABPathTools.getLastElement(path);
+			if (parentElement != null && operationName != null) {
+				childElement = handler.getElementProperty(parentElement, operationName);
 			}
 		}
+		
+		// Invoke operation
+		if (childElement != null && childElement instanceof Function<?, ?>) {
+			Function<Object, Object[]> function = (Function<Object, Object[]>) childElement;
+			return function.apply(parameters);
+		} else {
+			if (childElement != null && childElement instanceof Operation) {
+				// Build path
+				if (path.endsWith("/"))
+					return invokeOperation(path+"invokable", parameters);
+				else 
+					return invokeOperation(path+"/invokable", parameters);
+			}
+		}
+
+		// No operation found
 		return null;
 	}
 

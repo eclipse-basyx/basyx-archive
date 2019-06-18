@@ -3,7 +3,6 @@ package org.eclipse.basyx.testsuite.regression.vab.snippet;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +47,7 @@ public class CreateDelete {
 		// - Try to overwrite existing property in a Map (should be ignored, already exists)
 		connVABElement.createElement("property2", 24);
 		// - Create a list property
-		connVABElement.createElement("property1/propertyList", Arrays.asList(25));
+		connVABElement.createElement("property1/propertyList", new Integer[] { 25 });
 		// - Try to overwrite existing property in a List (should be ignored, already exists)
 		connVABElement.createElement("property1/propertyList/byRef_0", 26);
 

@@ -4,7 +4,6 @@
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/regression"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/extern"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/backends"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/compliance"/>
         <property name="java-output-path" value="/basys.sdk/build/classes"/>

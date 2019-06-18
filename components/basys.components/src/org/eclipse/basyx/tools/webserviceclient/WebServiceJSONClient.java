@@ -1,6 +1,6 @@
 package org.eclipse.basyx.tools.webserviceclient;
 
-import java.util.Arrays;
+import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
@@ -41,7 +41,9 @@ public class WebServiceJSONClient {
 		// Try to deserialize response if any
 		try {
 			// Try to deserialize response
-			Object result = serializer.deserialize(serializedJSONValue);
+			Object gsonObj = serializer.getObjFromJsonStr(serializedJSONValue);
+			@SuppressWarnings("unchecked")
+			Object result = serializer.deserialize((Map<String, Object>) gsonObj);
 			// Check if a server exception was serialized
 			if (result instanceof ServerException) {
 				// Throw server exception
@@ -79,11 +81,11 @@ public class WebServiceJSONClient {
 	 */
 	public Object put(String wsURL, Object newValue) {
 		// Serialize new value to JSON Object		
-		String serialized = serializer.serialize(newValue);
+		Map<String, Object> gsonMap = serializer.serialize(newValue);
 		
 
 		// Execute web service call, receive JSON serialized result
-		String jsonResult = client.put(wsURL, serialized);
+		String jsonResult = client.put(wsURL, serializer.getJsonString(gsonMap));
 
 		// Return deserialized value
 		return getJSONResult(jsonResult);
@@ -96,11 +98,12 @@ public class WebServiceJSONClient {
 	 */
 	public Object post(String wsURL, String... parameter) {
 		// Serialize new value to JSON Object
-
-		String serialized = serializer.serialize(Arrays.asList(parameter));
+        Map<String, Object> gsonMap = serializer.serialize(parameter);
+		
+		
 
 		// Perform request
-		String jsonResult = client.post(wsURL, serialized);
+		String jsonResult = client.post(wsURL, serializer.getJsonString(gsonMap));
 		
 		System.out.println("Result:"+jsonResult);
 
@@ -115,10 +118,10 @@ public class WebServiceJSONClient {
 	 */
 	public Object patch(String wsURL, String action, String... parameter) {
 		// Serialize new value to JSON Object
-		String serialized = serializer.serialize(parameter);
+		Map<String, Object> gsonMap = serializer.serialize(parameter);
 
 		// Perform request
-		String jsonResult = client.patch(wsURL, action, serialized);
+		String jsonResult = client.patch(wsURL, action, serializer.getJsonString(gsonMap));
 
 		// Return deserialized value
 		return getJSONResult(jsonResult);

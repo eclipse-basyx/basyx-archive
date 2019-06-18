@@ -1,9 +1,11 @@
 package org.eclipse.basyx.vab.provider.lambda;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -103,8 +105,10 @@ public class VABLambdaHandler extends VABMultiElementHandler {
 		o = resolveSingle(o);
 		if (o instanceof Map<?, ?>) {
 			return resolveMap((Map<String, Object>) o);
-		} else if (o instanceof Collection<?>) {
-			return resolveCollection((Collection<Object>) o);
+		} else if (o instanceof List<?>) {
+			return resolveList((List<Object>) o);
+		} else if (o instanceof Set<?>) {
+			return resolveSet((Set<Object>) o);
 		} else {
 			return o;
 		}
@@ -118,9 +122,17 @@ public class VABLambdaHandler extends VABMultiElementHandler {
 		return ret;
 	}
 
-	private Object resolveCollection(Collection<Object> collection) {
-		Collection<Object> ret = new ArrayList<>(collection.size());
-		for (Object o : collection) {
+	private Object resolveList(List<Object> list) {
+		List<Object> ret = new ArrayList<>(list.size());
+		for (Object o : list) {
+			ret.add(resolveAll(o));
+		}
+		return ret;
+	}
+
+	private Object resolveSet(Set<Object> set) {
+		Set<Object> ret = new HashSet<>(set.size());
+		for (Object o : set) {
 			ret.add(resolveAll(o));
 		}
 		return ret;

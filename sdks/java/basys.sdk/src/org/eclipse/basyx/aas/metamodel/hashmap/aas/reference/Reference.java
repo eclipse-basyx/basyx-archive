@@ -1,7 +1,6 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.reference;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,11 +42,6 @@ public class Reference extends HashMap<String, Object> implements IReference {
 
 	public Reference(Map<String, Object> reference) {
 		putAll(reference);
-	}
-
-	public Reference(Key key) {
-		List<Key> keys = Arrays.asList(key);
-		put(KEY, keys);
 	}
 
 	@Override
