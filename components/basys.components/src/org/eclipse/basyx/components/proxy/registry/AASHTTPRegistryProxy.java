@@ -96,7 +96,7 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 	 * Lookup device AAS
 	 */
 	@Override @SuppressWarnings("unchecked")
-	public AASDescriptor lookup(ModelUrn aasID) {
+	public AASDescriptor lookupAAS(ModelUrn aasID) {
 		// Lookup AAS from AAS directory, get AAS descriptor
 		String jsonData = client.get(aasRegistryURL+"/api/v1/registry/"+aasID.getEncodedURN());
 		
@@ -140,16 +140,16 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 	/**
 	 * Lookup one AAS mapping
 	 */
-	@Override @SuppressWarnings("unchecked")
+	@Override
 	public String lookup(String id) {
 		// Lookup AAS from AAS directory, get AAS descriptor
 		String jsonData = client.get(aasRegistryURL+"/api/v1/registry/"+id);
 		
 		// Deserialize AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(serializer.getMap(serializer.getObjFromJsonStr(jsonData))));
+		//AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(serializer.getMap(serializer.getObjFromJsonStr(jsonData))));
 
 		// Return endpoint
-		return aasDescriptor.getFirstEndpoint();
+		return jsonData;
 	}
 
 

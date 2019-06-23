@@ -7,6 +7,7 @@ import java.util.Map;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
+import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
 
 /**
  * Provider class that implements the AssetAdministrationShellServices <br />
@@ -76,6 +77,7 @@ public class VABMultiSubmodelProvider<T extends VABHashmapProvider> implements I
 	 */
 	protected Map<String, T> submodel_providers = new HashMap<>();
 
+	
 	/**
 	 * Constructor
 	 */
@@ -83,6 +85,26 @@ public class VABMultiSubmodelProvider<T extends VABHashmapProvider> implements I
 		// Do nothing
 	}
 
+	
+	/**
+	 * Constructor that accepts an AAS
+	 */
+	public VABMultiSubmodelProvider(T contentProvider) {
+		// Store content provider
+		setAssetAdministrationShell(contentProvider);
+	}
+
+	
+	/**
+	 * Constructor that accepts an AAS
+	 */
+	public VABMultiSubmodelProvider(String smID, T contentProvider) {
+		// Store content provider
+		addSubmodel(smID, contentProvider);
+	}
+
+	
+	
 	/**
 	 * Set an AAS for this provider
 	 * 
@@ -171,6 +193,18 @@ public class VABMultiSubmodelProvider<T extends VABHashmapProvider> implements I
 	public void createValue(String path, Object newValue) throws Exception {
 		String[] pathElements = VABPathTools.splitPath(path);
 		String propertyPath = VABPathTools.buildPath(pathElements, 3);
+		
+		// Try to get sub model provider
+		T provider = submodel_providers.get(pathElements[2]);
+		
+		// If provider is null here, then the create operation shall create a new sub model. In this case, there is no provider registered yet.
+		if (provider == null) {
+			provider = (T) new VABLambdaProvider(new HashMap<>());
+			
+			addSubmodel(pathElements[2], provider);
+		}
+		System.out.println("GOT:"+pathElements[2]);
+		
 		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
 		submodel_providers.get(pathElements[2]).createValue(propertyPath, newValue);
 	}

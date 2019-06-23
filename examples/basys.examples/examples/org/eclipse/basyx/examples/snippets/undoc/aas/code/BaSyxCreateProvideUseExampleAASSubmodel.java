@@ -1,4 +1,4 @@
-package org.eclipse.basyx.examples.snippets.aas.code;
+package org.eclipse.basyx.examples.snippets.undoc.aas.code;
 
 import static org.junit.Assert.assertTrue;
 

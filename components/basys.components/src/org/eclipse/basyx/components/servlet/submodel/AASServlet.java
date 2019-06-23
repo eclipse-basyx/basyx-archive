@@ -2,19 +2,18 @@ package org.eclipse.basyx.components.servlet.submodel;
 
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
 
 
 /**
- * A sub model servlet class that exports a given sub model 
+ * AAS servlet class that exports a given Asset Administration Shell 
  * 
  * @author kuhn
  *
  */
-public class SubmodelServlet extends VABHTTPInterface<VABMultiSubmodelProvider<VABHashmapProvider>> {
+public class AASServlet extends VABHTTPInterface<VABMultiSubmodelProvider<VABHashmapProvider>> {
 
 	
 	/**
@@ -22,22 +21,15 @@ public class SubmodelServlet extends VABHTTPInterface<VABMultiSubmodelProvider<V
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
-	
 
 	/**
 	 * Constructor
 	 */
-	public SubmodelServlet(SubModel exportedModel) {
+	public AASServlet(AssetAdministrationShell exportedAAS) {
 		// Invoke base constructor
 		super(new VABMultiSubmodelProvider<>());
 
-		// Create dummy AAS
-		AssetAdministrationShell aas = new AssetAdministrationShell();
-		aas.setId("---");
-
 		// Add provides sub model
-		getModelProvider().setAssetAdministrationShell(new VABHashmapProvider(aas));
-		getModelProvider().addSubmodel(exportedModel.getId(), new VABHashmapProvider(exportedModel));
+		getModelProvider().setAssetAdministrationShell(new VABHashmapProvider(exportedAAS));
 	}
 }

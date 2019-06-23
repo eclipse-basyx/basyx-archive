@@ -1,4 +1,4 @@
-package org.eclipse.basyx.examples.snippets.vab.connection;
+package org.eclipse.basyx.examples.snippets.undoc.vab.connection;
 
 import static org.junit.Assert.assertTrue;
 

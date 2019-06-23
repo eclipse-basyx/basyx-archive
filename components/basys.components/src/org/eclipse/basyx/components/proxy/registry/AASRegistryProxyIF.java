@@ -37,6 +37,6 @@ public interface AASRegistryProxyIF extends IDirectoryService {
 	/**
 	 * Lookup device AAS
 	 */
-	public AASDescriptor lookup(ModelUrn aasID);
+	public AASDescriptor lookupAAS(ModelUrn aasID);
 }
 

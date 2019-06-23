@@ -1,9 +1,11 @@
-package org.eclipse.basyx.examples.snippets.vab.connection;
+package org.eclipse.basyx.examples.snippets.undoc.aas.dynamic;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
+import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.components.servlet.submodel.EmptyVABLambdaElementServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
@@ -21,7 +23,7 @@ import org.junit.Test;
  * @author kuhn
  *
  */
-public class RunAASPropertiesSnippet {
+public class RunAASPropertiesCRUDAccessSnippet {
 
 	
 	/**
@@ -62,21 +64,33 @@ public class RunAASPropertiesSnippet {
 
 		
 		// Create properties on AAS
-		connSubModel1.createElement("properties", new HashMap<String, Object>());
-		connSubModel1.createElement("properties/prop1", 7);
-		connSubModel1.createElement("properties/prop2", "myStr");
+		// - This factory creates sub model properties and ensures presence of all meta data
+		MetaModelElementFactory fac = new MetaModelElementFactory();
+		// - Add example properties
+		SubModel submodel = new SubModel();
+		submodel.setId("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
+		submodel.getProperties().put(fac.create(new Property(),       7, "prop1"));
+		submodel.getProperties().put(fac.create(new Property(), "myStr", "prop2"));
+		// - Transfer sub model to server
+		connSubModel1.createElement("/", submodel);
 		
 		// Read property values
-		assertTrue((int) connSubModel1.readElementValue("properties/prop1") == 7);
-		assertTrue(connSubModel1.readElementValue("properties/prop2").equals("myStr"));
+		int    prop1Val = (int)    connSubModel1.readElementValue("properties/prop1/value");
+		String prop2Val = (String) connSubModel1.readElementValue("properties/prop2/value");
+		// - Check property values
+		assertTrue(prop1Val == 7);
+		assertTrue(prop2Val.equals("myStr"));
 		
 		// Update property values
-		connSubModel1.updateElementValue("properties/prop1", 8);
-		connSubModel1.updateElementValue("properties/prop2", "stillMine");
+		connSubModel1.updateElementValue("properties/prop1/value", 8);
+		connSubModel1.updateElementValue("properties/prop2/value", "stillMine");
 		
 		// Read property values again
-		assertTrue((int) connSubModel1.readElementValue("properties/prop1") == 8);
-		assertTrue(connSubModel1.readElementValue("properties/prop2").equals("stillMine"));
+		prop1Val = (int)    connSubModel1.readElementValue("properties/prop1/value");
+		prop2Val = (String) connSubModel1.readElementValue("properties/prop2/value");
+		// - Check property values
+		assertTrue(prop1Val == 8);
+		assertTrue(prop2Val.equals("stillMine"));
 
 		// Delete property values
 		connSubModel1.deleteElement("properties/prop1");

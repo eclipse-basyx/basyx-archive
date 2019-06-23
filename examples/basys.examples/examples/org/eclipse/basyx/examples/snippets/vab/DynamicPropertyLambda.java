@@ -1,4 +1,4 @@
-package org.eclipse.basyx.examples.snippets.vab.connection;
+package org.eclipse.basyx.examples.snippets.vab;
 
 import static org.junit.Assert.assertTrue;
 
@@ -20,16 +20,27 @@ import org.junit.Test;
 
 
 /**
- * Illustrate the dynamic deployment of AAS operations
+ * Code snippet that illustrates the dynamic deployment of VAB object operations with
+ * Lambda expressions
+ * 
+ * The snippet communicates with a VAB element that is deployed to a VABLambdaServlet on a
+ * Apache Tomcat HTTP server instance. The VABLambdaServlet provides an empty container that
+ * is able to host any VAB object. It supports dynamic properties with lambda expressions, 
+ * i.e. all get/set/create/delete operations for every property may be replaced with a 
+ * lambda operation.
+ *
  * 
  * @author kuhn
  *
  */
-public class RunDynamicOperationSnippet {
+public class DynamicPropertyLambda {
 
 	
 	/**
 	 * VAB connection manager backend
+	 * 
+	 * The connection manager uses a preconfigured directory for resolving IDs to 
+	 * network addresses, and a HTTP connector to connect to VAB objects.
 	 */
 	protected VABConnectionManager connManager = new VABConnectionManager(
 			new ExamplesPreconfiguredDirectory()
@@ -39,8 +50,13 @@ public class RunDynamicOperationSnippet {
 
 	
 	/**
-	 * Instantiate and start context elements for this example. BaSyxDeployment contexts instantiate all
-	 * components on the IP address of the host. Therefore, all components use the same IP address. 
+	 * The BaSyx Deployment instantiates and starts context elements for this example. 
+	 * 
+	 * This example instantiates the BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory
+	 * example context that creates one AAS server, and one SQL based AAS registry.
+	 * 
+	 * BaSyxDeployment contexts instantiate all components on the IP address of the host. 
+	 * Therefore, all components use the same IP address. 
 	 */
 	@ClassRule
 	public static BaSyxDeployment context = new BaSyxDeployment(
@@ -55,17 +71,19 @@ public class RunDynamicOperationSnippet {
 	
 	
 	/**
-	 * Test basic queries
+	 * Run code snippet. This code snippet illustrates the creation and uploading 
+	 * of dynamic operations on a EmptyVABLambdaElementServlet servlet. 
 	 */
 	@Test
 	public void snippet() throws Exception {
 
 		// Server connections
-		// - Connect to device (VAB object)
+		// - Connect to VAB object by ID. The connection manager looks up this ID in
+		//   its directory
 		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
 
 		
-		// Create dynamic get/set operation as lambda expression
+		// Create dynamic get/operation as Lambda expression, no set operation (null) is provided.
 		Map<String, Object> dynamicPropertyVal = VABLambdaProviderHelper.createSimple((Supplier<Object> & Serializable) () -> {
 			return "dynamicExampleValue";
 		}, null);
@@ -73,9 +91,12 @@ public class RunDynamicOperationSnippet {
 		connSubModel1.updateElementValue("dynamicExampleProperty", dynamicPropertyVal);
 
 		// Read dynamicExample property
-		Object devMode1c = connSubModel1.readElementValue("dynamicExampleProperty");
-		// - Check value
-		assertTrue(devMode1c.equals("dynamicExampleValue"));
+		// - This will invoke the previously uploaded Lambda expression
+		Object propertyValue = connSubModel1.readElementValue("dynamicExampleProperty");
+		
+		
+		// Compare returned to expected values
+		assertTrue(propertyValue.equals("dynamicExampleValue"));
 	}
 }
 

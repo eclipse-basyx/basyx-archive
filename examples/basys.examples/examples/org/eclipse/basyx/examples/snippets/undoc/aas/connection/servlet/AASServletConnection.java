@@ -1,4 +1,4 @@
-package org.eclipse.basyx.examples.snippets.aas.connection.servlet;
+package org.eclipse.basyx.examples.snippets.undoc.aas.connection.servlet;
 
 import static org.junit.Assert.assertTrue;
 

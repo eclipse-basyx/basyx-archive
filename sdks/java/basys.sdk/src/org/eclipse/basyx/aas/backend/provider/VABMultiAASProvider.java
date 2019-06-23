@@ -17,8 +17,25 @@ public class VABMultiAASProvider implements IModelProvider {
 	protected HashMap<String, VABMultiSubmodelProvider<VABHashmapProvider>> aas_providers;
 
 	public VABMultiAASProvider() {
+		// Create provider map
 		aas_providers = new HashMap<>();
 	}
+	
+
+	/**
+	 * Constructor that accepts an exported AAS
+	 * 
+	 * @param id AAS ID
+	 * @param modelProvider Model provider with AAS
+	 */
+	public VABMultiAASProvider(String id, VABMultiSubmodelProvider<VABHashmapProvider> modelProvider) {
+		// Create provider map
+		aas_providers = new HashMap<>();
+		
+		// Add AAS and model provider
+		setAssetAdministrationShell(id, modelProvider);
+	}
+
 
 	/**
 	 * Adds an Asset Administration Shell to this provider. The AAS will be
@@ -42,6 +59,9 @@ public class VABMultiAASProvider implements IModelProvider {
 
 	@Override
 	public Object getModelPropertyValue(String path) throws Exception {
+		path="aas/aas/idShort";
+		System.out.println("PP:"+path);
+		
 		String aasId = getId(path);
 		if (aasId != null) {
 			VABMultiSubmodelProvider<VABHashmapProvider> provider = aas_providers.get(aasId);

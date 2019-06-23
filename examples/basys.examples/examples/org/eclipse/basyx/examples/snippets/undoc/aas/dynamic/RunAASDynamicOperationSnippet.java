@@ -1,4 +1,4 @@
-package org.eclipse.basyx.examples.snippets.vab.connection;
+package org.eclipse.basyx.examples.snippets.undoc.aas.dynamic;
 
 import static org.junit.Assert.assertTrue;
 
@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
+import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.components.servlet.submodel.EmptyVABLambdaElementServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
@@ -20,49 +23,12 @@ import org.junit.Test;
 
 
 /**
- * Example for a tailored BaSyx supplier
- * 
- * - BaSyx will serialize this class (and all contained references) and transmit it to the AAS server
+ * Illustrate the dynamic deployment of AAS operations
  * 
  * @author kuhn
  *
  */
-class TailoredBaSyxSupplier implements Supplier<Object>, Serializable {
-
-	/**
-	 * Version number of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-
-
-	/**
-	 * Return value
-	 */
-	@Override
-	public Object get() {
-		// Delegate call to tailored BaSyx supplier base class
-		return getInternal();
-	}
-
-	
-	/**
-	 * Example function of tailored BaSyx supplier base class
-	 */
-	protected String getInternal() {
-		return "BaSyxSupplier!";
-	}
-}
-
-
-
-
-/**
- * Illustrate the dynamic deployment of AAS operations with a tailored consumer
- * 
- * @author kuhn
- *
- */
-public class RunTailoredSupplierSnippet {
+public class RunAASDynamicOperationSnippet {
 
 	
 	/**
@@ -88,7 +54,8 @@ public class RunTailoredSupplierSnippet {
 					addServletMapping("/Testsuite/components/BaSys/1.0/devicestatusVAB/*", new EmptyVABLambdaElementServlet())
 			);
 
-		
+	
+	
 	
 	/**
 	 * Test basic queries
@@ -101,16 +68,36 @@ public class RunTailoredSupplierSnippet {
 		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
 
 		
+		// Create properties on AAS
+		// - This factory creates sub model properties and ensures presence of all meta data
+		MetaModelElementFactory fac = new MetaModelElementFactory();
+		// - Add example properties
+		SubModel submodel = new SubModel();
+		submodel.setId("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
+		submodel.getProperties().put(fac.create(new Property(),       7, "prop1"));
+		submodel.getProperties().put(fac.create(new Property(), "myStr", "prop2"));
+		// - Transfer sub model to server
+		connSubModel1.createElement("/", submodel);
+
+		
+		// Read property values
+		String prop2Val = (String) connSubModel1.readElementValue("properties/prop2/value");
+		// - Check property values
+		assertTrue(prop2Val.equals("myStr"));
+
+		
 		// Create dynamic get/set operation as lambda expression
-		Map<String, Object> dynamicPropertyVal = VABLambdaProviderHelper.createSimple(new TailoredBaSyxSupplier(), null);
+		Map<String, Object> dynamicPropertyVal = VABLambdaProviderHelper.createSimple((Supplier<Object> & Serializable) () -> {
+			return "dynamicExampleValue";
+		}, null);
 		// - Update property properties/dynamicExample with dynamic get/set operation
-		connSubModel1.updateElementValue("dynamicExampleProperty", dynamicPropertyVal);
+		connSubModel1.updateElementValue("properties/prop2/value", dynamicPropertyVal);
 
+		
 		// Read dynamicExample property
-		Object devMode1c = connSubModel1.readElementValue("dynamicExampleProperty");
-
-		// - Check value
-		assertTrue(devMode1c.equals("BaSyxSupplier!"));
+		prop2Val = (String) connSubModel1.readElementValue("properties/prop2/value");
+		// - Check property values
+		assertTrue(prop2Val.equals("dynamicExampleValue"));
 	}
 }
 
