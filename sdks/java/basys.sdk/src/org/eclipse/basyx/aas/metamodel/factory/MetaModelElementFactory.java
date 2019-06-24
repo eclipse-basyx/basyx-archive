@@ -1,6 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.factory;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -9,12 +10,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.resources.IElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.Kind;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
@@ -79,14 +83,28 @@ public class MetaModelElementFactory {
 	}
 
 	/**
-	 * Create Operations
+	 * Create Operations w/o endpoint
 	 * 
 	 * @param operation
 	 * @param function
 	 * @return
 	 */
 	public Operation createOperation(Operation operation, Function<Object[], Object> function) {
-		Operation ret = new Operation();
+		Operation ret = new Operation();		
+		ret.putAll(operation);
+		ret.put("invokable", function);
+		return ret;
+	}
+	
+	/**
+	 * Create Operations
+	 * 
+	 * @param operation
+	 * @param function
+	 * @return
+	 */
+	public Operation createOperation(Operation operation, Function<Object[], Object> function, List<OperationVariable> in, List<OperationVariable> out) {
+		Operation ret = new Operation(in, out, function);		
 		ret.putAll(operation);
 		ret.put("invokable", function);
 		return ret;
@@ -140,7 +158,7 @@ public class MetaModelElementFactory {
 	public SubModel create(SubModel subModel, List<Property> properties, List<Operation> operations) {
 		SubModel ret = new SubModel();
 		ret.putAll(subModel);
-		((Map<String, Object>) ret.get("properties")).putAll(createElemMap(properties));
+		((Map<String, Object>) ret.get("dataElements")).putAll(createElemMap(properties));
 		((Map<String, Object>) ret.get("operations")).putAll(createElemMap(operations));
 		return ret;
 	}
@@ -195,5 +213,6 @@ public class MetaModelElementFactory {
 		// Return list
 		return result;
 	}
+	
 	
 }

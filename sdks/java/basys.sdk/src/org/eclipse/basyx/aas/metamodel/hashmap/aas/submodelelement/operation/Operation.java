@@ -28,7 +28,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelEleme
 public class Operation extends SubmodelElement implements IOperation {
 	private static final long serialVersionUID = -1381491542617026911L;
 
-	private Function<Object[], Object[]> endpoint;
+	private Function<Object[], Object> endpoint;
 	
 	public static final String IN="in";
 	public static final String OUT="out";
@@ -57,11 +57,11 @@ public class Operation extends SubmodelElement implements IOperation {
 	 *            Input parameter of the operation.
 	 * @param out
 	 *            Output parameter of the operation.
-	 * @param endpoint
+	 * @param function
 	 *            the concrete function
 	 * 
 	 */
-	public Operation(List<OperationVariable> in, List<OperationVariable> out, Function<Object[], Object[]> endpoint) {
+	public Operation(List<OperationVariable> in, List<OperationVariable> out, Function<Object[], Object> function) {
 		// Input variables
 		put(IN, in);
 
@@ -69,8 +69,8 @@ public class Operation extends SubmodelElement implements IOperation {
 		put(OUT, out);
 
 		// Extension of DAAS specification for function storage
-		put(INVOKABLE, endpoint);
-		this.endpoint = endpoint;
+		put(INVOKABLE, function);
+		this.endpoint = function;
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class Operation extends SubmodelElement implements IOperation {
 	}
 
 	@Override
-	public Function<Object[], Object[]> getInvocable() {
+	public Function<Object[], Object> getInvocable() {
 	return new OperationFacade(this).getInvocable();
 	}
 

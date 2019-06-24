@@ -79,8 +79,8 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Function<Object[], Object[]> getInvocable() {
-		return (Function<Object[], Object[]>) getProxy().readElementValue(constructPath(Operation.INVOKABLE));
+	public Function<Object[], Object> getInvocable() {
+		return (Function<Object[], Object>) getProxy().readElementValue(constructPath(Operation.INVOKABLE));
 	}
 	
 	@Override

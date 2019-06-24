@@ -49,7 +49,7 @@ public class VABMultiAASProviderTest {
 	@Test
 	public void getTest() {
 		// test reading from a valid aas
-		Object result = proxy.readElementValue("path://a1/aas/submodels/SimpleAASSubmodel/properties/prop1/value");
+		Object result = proxy.readElementValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/prop1/value");
 		assertEquals(123, result);
 
 		// test reading from an invalid aas
@@ -59,26 +59,26 @@ public class VABMultiAASProviderTest {
 	@Test
 	public void setTest() {
 		// test setting in a valid aas
-		proxy.updateElementValue("path://a1/aas/submodels/SimpleAASSubmodel/properties/prop1/value", 100);
+		proxy.updateElementValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/prop1/value", 100);
 
 		// test setting in an invalid aas
-		proxy.updateElementValue("path://A1/aas/submodels/SimpleAASSubmodel/properties/prop1/value", 200);
+		proxy.updateElementValue("path://A1/aas/submodels/SimpleAASSubmodel/dataElements/prop1/value", 200);
 
 		// retrieving property
-		Object result = proxy.readElementValue("path://a1/aas/submodels/SimpleAASSubmodel/properties/prop1/value");
+		Object result = proxy.readElementValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/prop1/value");
 		assertEquals(100, result); 
 	}
 
 	@Test
 	public void removeTest() {
 		// test deleting from an invalid aas
-		proxy.deleteElement("path://A1/aas/submodels/SimpleAASSubmodel/properties/prop1/value");
-		Object result = proxy.readElementValue("path://a1/aas/submodels/SimpleAASSubmodel/properties/prop1/value");
+		proxy.deleteElement("path://A1/aas/submodels/SimpleAASSubmodel/dataElements/prop1/value");
+		Object result = proxy.readElementValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/prop1/value");
 		assertEquals(123, result);
 
 		// test deleting from a valid aas
-		proxy.deleteElement("path://a1/aas/submodels/SimpleAASSubmodel/properties/prop1/value");
-		result = proxy.readElementValue("path://a1/aas/submodels/SimpleAASSubmodel/properties/prop1/value");
+		proxy.deleteElement("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/prop1/value");
+		result = proxy.readElementValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/prop1/value");
 		assertNull(result);
 	}
 

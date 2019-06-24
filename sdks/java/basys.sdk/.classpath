@@ -7,7 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="regression"/>
-	<classpathentry kind="src" path="backends"/>
 	<classpathentry excluding="**" kind="src" output="target/classes" path="compliance">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

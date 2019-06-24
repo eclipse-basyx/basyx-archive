@@ -2,15 +2,17 @@ package org.eclipse.basyx.aas.metamodel.facades;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IReferenceElement;
+import org.eclipse.basyx.aas.api.resources.PropertyType;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.ReferenceElement;
 /**
  * Facade providing access to a map containing the ReferenceElement structure
  * @author rajashek
  *
  */
-public class ReferenceElementFacade implements IReferenceElement,org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IReferenceElement{
+public class ReferenceElementFacade implements IReferenceElement {
 	private Map<String, Object> map;
 	public ReferenceElementFacade(Map<String, Object> map) {
 		super();
@@ -28,4 +30,45 @@ public class ReferenceElementFacade implements IReferenceElement,org.eclipse.bas
 		return (IReference)map.get(ReferenceElement.VALUE);
 	}
 
+	@Override
+	public PropertyType getPropertyType() {
+		throw new FeatureNotImplementedException();
+
+	}
+
+	@Override
+	public void setValue(Object obj) {
+		throw new FeatureNotImplementedException();
+
+		
+	}
+
+	@Override
+	public void setValueId(Object obj) {
+		throw new FeatureNotImplementedException();
+
+		
+	}
+
+	@Override
+	public Object getValueId() {
+		throw new FeatureNotImplementedException();
+
+	}
+
+	@Override
+	public String getId() {
+		throw new FeatureNotImplementedException();
+
+	}
+
+	@Override
+	public void setId(String id) {
+		throw new FeatureNotImplementedException();
+
+		
+	}
+
+
+	
 }

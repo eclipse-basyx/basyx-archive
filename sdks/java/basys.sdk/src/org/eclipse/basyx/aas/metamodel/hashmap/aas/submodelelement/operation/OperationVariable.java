@@ -37,6 +37,10 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	public OperationVariable(SubmodelElement value) {
 		put(VALUE, value);
 	}
+	
+	public OperationVariable() {
+		
+	}
 
 	@Override
 	public void setValue(ISubmodelElement value) {

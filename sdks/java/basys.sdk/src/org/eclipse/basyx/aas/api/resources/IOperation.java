@@ -43,6 +43,6 @@ public interface IOperation extends IElement {
 	public void setReturnTypes(List<OperationVariable> out);
 	
 	public void setInvocable(Function<Object[], Object[]> endpoint);
-	public Function<Object[], Object[]> getInvocable();
+	public Function<Object[], Object> getInvocable();
 	
 }

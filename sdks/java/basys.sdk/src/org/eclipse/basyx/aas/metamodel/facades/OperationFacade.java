@@ -15,10 +15,10 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Ope
  *
  */
 public class OperationFacade implements IOperation {
-	private Function<Object[], Object[]> endpoint;
+	private Function<Object[], Object> endpoint;
 	
 	private Map<String, Object> map;
-	public OperationFacade(Function<Object[], Object[]> endpoint, Map<String, Object> map) {
+	public OperationFacade(Function<Object[], Object> endpoint, Map<String, Object> map) {
 		super();
 		this.endpoint = endpoint;
 		this.map = map;
@@ -77,8 +77,8 @@ public class OperationFacade implements IOperation {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Function<Object[], Object[]> getInvocable() {
-		return (Function<Object[], Object[]>) map.get(Operation.INVOKABLE);
+	public Function<Object[], Object> getInvocable() {
+		return (Function<Object[], Object>) map.get(Operation.INVOKABLE);
 	}
 
 }

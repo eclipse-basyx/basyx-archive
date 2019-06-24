@@ -6,6 +6,8 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.provider;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.HashMap;
+
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.testsuite.support.aas.vab.stub.elements.SimpleAASSubmodel;
@@ -29,6 +31,7 @@ public class VABMultiSubmodelProviderTest {
 		VABConnectionManagerStub stub = new VABConnectionManagerStub();
 		String urn = "urn:fhg:es.iese:aas:1:1:submodel";
 		VABMultiSubmodelProvider<VABHashmapProvider> provider = new VABMultiSubmodelProvider<>();
+		provider.setAssetAdministrationShell(new VABHashmapProvider(new HashMap<String, Object>())); // set dummy aas
 		provider.addSubmodel("SimpleAASSubmodel", new VABHashmapProvider(new SimpleAASSubmodel()));
 		stub.addProvider(urn, "", provider);
 		proxy = stub.connectToVABElement(urn);
@@ -63,18 +66,38 @@ public class VABMultiSubmodelProviderTest {
 
 	@Test
 	public void getTest() {
+		getTestRunner("SimpleAASSubmodel");
+	}
+	
+	@Test
+	public void createDeleteTest() {
+		
+		proxy.createElement("/aas/submodels", new SimpleAASSubmodel("TestSM"));
+		
+		getTestRunner("TestSM");
+		
+		proxy.deleteElement("/aas/submodels/TestSM");
+		
+		
+		try {
+			Object o = proxy.readElementValue("/aas/submodels/TestSM");
+			fail();
+		} catch (ServerException e) {
+			System.out.println("VABMultiSubmodelProvider CreateDelete passed");
+		}
+	}
+	
+	void getTestRunner(String smId) {
 		// Get property value
 		// Object value1 =
 		// connVABElement.readElementValue("/aas/submodels/SimpleAASSubmodel");
-		Object value2 = proxy.readElementValue("/aas/submodels/SimpleAASSubmodel/properties");
+		Object value2 = proxy.readElementValue("/aas/submodels/" + smId + "/dataElements");
 		System.out.println("V2:" + value2);
 
-		// System.out.println("V1:"+value1);
-
-		Object value3 = proxy.readElementValue("/aas/submodels/SimpleAASSubmodel/properties/prop1");
+		Object value3 = proxy.readElementValue("/aas/submodels/" + smId + "/dataElements/prop1");
 		System.out.println("V3:" + value3);
 
-		Object value4 = proxy.readElementValue("/aas/submodels/SimpleAASSubmodel/properties/prop1/value");
-		System.out.println("V4:" + value4);
+		Object value4 = proxy.readElementValue("/aas/submodels/" + smId + "/dataElements/prop1/value");
+		assertEquals(value4, 123);
 	}
 }
