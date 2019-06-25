@@ -35,7 +35,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	 */
 	@Override
 	public String getModelPropertyValue(String servicePath) {
-		return httpGet(servicePath);
+		return httpGet(encodeHash(servicePath));
 	}
 
 	public HTTPConnector(String address) {
@@ -63,7 +63,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	@Override
 	public String setModelPropertyValue(String servicePath, String newValue) throws ServerException {
 
-		return httpPut(servicePath, newValue);
+		return httpPut(encodeHash(servicePath), newValue);
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	@Override
 	public String deleteValue(String servicePath, String obj) throws ServerException {
 
-		return httpPatch(servicePath, obj);
+		return httpPatch(encodeHash(servicePath), obj);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	@Override
 	public String createValue(String servicePath, String newValue) throws ServerException {
 
-		return httpPost(servicePath, newValue);
+		return httpPost(encodeHash(servicePath), newValue);
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	@Override
 	public String deleteValue(String servicePath) throws ServerException {
 
-		return httpDelete(servicePath);
+		return httpDelete(encodeHash(servicePath));
 	}
 
 	/**
@@ -242,6 +242,16 @@ public class HTTPConnector implements IBaSyxConnector {
 	public String invokeOperation(String path, String parameter) throws Exception {
 
 		return httpPost(path, parameter);
+	}
+
+	/**
+	 * Replaces # with %23
+	 * 
+	 * @param path
+	 * @return
+	 */
+	private String encodeHash(String path) {
+		return path.replace("#", "%23");
 	}
 
 }

@@ -28,6 +28,7 @@ import org.junit.Test;
  */
 public class DynamicSubModelDeployment {
 
+	private static final String STATUS_SM = "de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003";
 	
 	/**
 	 * Create VAB connection manager backend
@@ -38,7 +39,7 @@ public class DynamicSubModelDeployment {
 	protected VABConnectionManager connManager = new VABConnectionManager(
 			new ExamplesPreconfiguredDirectory()
 				// Add example specific mappings
-			    .addMapping("de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003",  "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository"),
+					.addMapping(STATUS_SM, "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository"),
 			new HTTPConnectorProvider());
 
 	
@@ -76,7 +77,7 @@ public class DynamicSubModelDeployment {
 		//   directly to sub models, the registry needs to support this, and unique identifies (as here)
 		//   must be used. For portability, users should connect to sub models instead via an AAS ID and 
 		//   sub model ID tuple, as illustrated in the registry examples. 
-		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003");
+		VABElementProxy connSubModel1 = this.connManager.connectToVABElement(STATUS_SM);
 
 		// Create factory that helps with property creation
 		// - This factory creates sub model properties and ensures presence of all meta data
@@ -85,12 +86,12 @@ public class DynamicSubModelDeployment {
 		// Instantiate sub model
 		SubModel submodel = new SubModel();
 		// - Add example properties to sub model
-		submodel.setId("de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003");
+		submodel.setId(STATUS_SM);
 		submodel.getProperties().put(fac.create(new Property(),       7, "prop1"));
 		submodel.getProperties().put(fac.create(new Property(), "myStr", "prop2"));
 
 		// Transfer sub model to server
-		connSubModel1.createElement("aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003", submodel);
+		connSubModel1.createElement("aas/submodels/" + STATUS_SM, submodel);
 
 		
 		// Retrieve sub model with SDK connector
@@ -98,7 +99,7 @@ public class DynamicSubModelDeployment {
 			// Create and connect SDK connector
 			ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(connManager);
 			// - Retrieve sub model
-			ISubModel subModel = manager.retrieveSM("de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003");
+			ISubModel subModel = manager.retrieveSM(STATUS_SM);
 
 			// Read sub model properties
 			String smId     = subModel.getId();
@@ -108,7 +109,7 @@ public class DynamicSubModelDeployment {
 			String prop2Val = (String) ((ISingleProperty) subModel.getProperties().get("prop2")).get();
 			
 			// Compare sub model property values
-			assertTrue(smId.equals("de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003"));
+			assertTrue(smId.equals(STATUS_SM));
 			assertTrue(prop1Id.equals("prop1"));
 			assertTrue(prop1Val == 7);
 			assertTrue(prop2Id.equals("prop2"));
