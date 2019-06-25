@@ -62,12 +62,18 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 		this.putAll(map);
 	}
 	
-	
 	/**
 	 * Return sub model ID
 	 */
-	@SuppressWarnings("unchecked")
 	public String getId() {
+		return (String) get("idShort");
+	}
+	
+	/**
+	 * Return sub model identification ID
+	 */
+	@SuppressWarnings("unchecked")
+	public String getIdentificationId() {
 		return new Identifier((Map<String, Object>) get("identification")).getId();
 	}
 	

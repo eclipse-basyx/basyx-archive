@@ -43,7 +43,7 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	public static final String ORDERED="ordered";
 	public static final String ALLOWDUPLICATES= "allowDuplicates";
 	public static final String ELEMENTS="elements";
-	public static final String PROPERTIES="properties";
+	public static final String PROPERTIES="dataElements";
 	public static final String OPERATIONS= "operations";
 
 	/**

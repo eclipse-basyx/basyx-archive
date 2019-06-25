@@ -54,6 +54,27 @@ public class AASDescriptor extends HashMap<String, Object> {
 		put("endpoints", Arrays.asList(endpointWrapper));
 	}
 	
+	/**
+	 * Create a new sub model descriptor with minimal information
+	 */
+	@SuppressWarnings("unchecked")
+	public AASDescriptor(AssetAdministrationShell aas) {
+		// Invoke default constructor
+		
+		
+		put("idShort", aas.getId());
+		put("submodels", new LinkedList<SubmodelDescriptor>());
+		
+		// Add identification and end point information
+		Identifier identifier =  new Identifier();
+		
+		identifier.setIdType(aas.getIdentification().getIdType());
+		identifier.setId(aas.getIdentification().getId());
+		put("identification", identifier);
+		
+		put("endpoints", aas.getEndpoints());
+	}
+	
 	
 	
 	/**
@@ -149,6 +170,12 @@ public class AASDescriptor extends HashMap<String, Object> {
 		
 		// No Descritor found
 		return null;
+	}
+
+
+
+	public String getAASId() {
+		return (String) get("idShort");
 	}
 }
 

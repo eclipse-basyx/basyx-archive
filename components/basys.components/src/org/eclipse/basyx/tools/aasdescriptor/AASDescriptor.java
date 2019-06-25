@@ -91,6 +91,10 @@ public class AASDescriptor extends HashMap<String, Object> {
 		put("endpoints", Arrays.asList(endpointWrapper));
 	}
 	
+	public String getAASId() {
+		return (String) get("idShort");
+	}
+	
 
 	
 	/**

@@ -28,11 +28,11 @@ public class ConnectedContainerProperty extends ConnectedProperty implements ICo
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IProperty> getProperties() {
-		Map<String, Object> props = (Map<String, Object>) getProxy().readElementValue(constructPath("properties"));
+		Map<String, Object> props = (Map<String, Object>) getProxy().readElementValue(constructPath("dataElements"));
 		Map<String, IProperty> ret = new HashMap<>();
 
 		for (String s : props.keySet()) {
-			ret.put(s, factory.createProperty(constructPath("properties/" + s), getProxy()));
+			ret.put(s, factory.createProperty(constructPath("dataElements/" + s), getProxy()));
 		}
 		return ret;
 	}

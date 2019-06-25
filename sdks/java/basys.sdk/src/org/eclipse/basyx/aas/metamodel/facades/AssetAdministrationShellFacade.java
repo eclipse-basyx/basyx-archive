@@ -146,6 +146,11 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 	public Map<String, ISubModel> getSubModels() {
 		throw new RuntimeException("getSubModels on local copy is not supported");
 	}
+	
+	
+	public Set<ISubModel> getSubModelsHack() {
+		return (Set<ISubModel>) map.get("submodels");
+	}
 
 	@Override
 	public void addSubModel(ISubModel subModel) {

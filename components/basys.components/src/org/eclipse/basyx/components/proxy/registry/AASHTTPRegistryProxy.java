@@ -168,5 +168,20 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 		// Currently not implemented
 		return null;
 	}
+
+
+	/**
+	 * Register hacked aas descriptor
+	 */
+	@Override
+	public void register(ModelUrn aasID,
+			org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor deviceAASDescriptor) {
+		// Invoke delete operation of AAS registry
+		try {client.delete(aasRegistryURL+"/api/v1/registry/"+URLEncoder.encode(aasID.getURN(), "UTF-8"));} catch (Exception e) {e.printStackTrace();}
+
+		// Perform web service call to registry
+		client.post(aasRegistryURL+"/api/v1/registry", serializer.serialize(deviceAASDescriptor));
+		
+	}
 }
 

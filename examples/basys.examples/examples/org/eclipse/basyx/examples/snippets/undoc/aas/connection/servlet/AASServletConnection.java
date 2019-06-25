@@ -71,7 +71,7 @@ public class AASServletConnection {
 			getProperties().put(fac.createContainer(new SubmodelElementCollection(), containerProperties, fac.emptyList(), "prop2"));
 
 			// Add another property manually to sub model container "properties"
-			{((Map<String, Object>) this.get("properties")).put("prop3", fac.create(new Property(), 17, "prop3"));}
+			{((Map<String, Object>) this.get("dataElements")).put("prop3", fac.create(new Property(), 17, "prop3"));}
 		}
 	}
 

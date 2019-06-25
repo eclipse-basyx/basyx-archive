@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -100,6 +101,10 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		put("endpoints", Arrays.asList(endpointWrapper));
 	}
 	
+	public List<HashMap<String, String>> getEndpoints(){
+		return (List<HashMap<String, String>>) get("endpoints");
+	}
+	
 	/**
 	 * Add a submodel as reference
 	 */
@@ -112,9 +117,13 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	@SuppressWarnings("unchecked")
 	public void addSubModelHack(SubModel subModel, String endpoint, String endpointType) {
 		System.out.println("adding Submodel " + subModel.getId());
-		SubmodelDescriptor desc = new SubmodelDescriptor(subModel, endpoint, endpointType);
+		SubmodelDescriptor desc = new SubmodelDescriptor(subModel, endpoint + "/aas/submodel", endpointType);
 		((Set<SubmodelDescriptor>) get(SUBMODELS)).add(desc);
 		
+	}
+	
+	public Set<SubmodelDescriptor> getSubmodelDescriptors(){
+		return ((Set<SubmodelDescriptor>) get(SUBMODELS));
 	}
 
 	@SuppressWarnings("unchecked")

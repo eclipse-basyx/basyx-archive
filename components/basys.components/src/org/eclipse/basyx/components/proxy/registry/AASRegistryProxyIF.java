@@ -17,9 +17,15 @@ public interface AASRegistryProxyIF extends IDirectoryService {
 	
 	
 	/**
-	 * Register AAS descriptor in registry, delete old registration
+	 * Register AAS descriptor in registry, delete old registration 
 	 */
 	public void register(ModelUrn aasID, AASDescriptor deviceAASDescriptor);
+
+	/**
+	 * Register AAS descriptor in registry, delete old registration (hacked)
+	 * @param aasId
+	 */
+	public void register(ModelUrn aasId, org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor desc);
 
 	
 	/**

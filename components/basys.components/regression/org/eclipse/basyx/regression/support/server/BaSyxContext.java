@@ -1,9 +1,13 @@
 package org.eclipse.basyx.regression.support.server;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
+
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 
 
 
@@ -49,7 +53,7 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 	public Object AASHTTPServerResource;
 
 	
-	
+	protected List<AssetAdministrationShell> aasList;
 	
 	/**
 	 * Constructor with default port
@@ -57,6 +61,8 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 	public BaSyxContext(String reqContextPath, String reqDocBasePath) {
 		// Invoke constructor
 		this(reqContextPath, reqDocBasePath, 8080);
+		
+		this.aasList = new ArrayList<AssetAdministrationShell>();
 	}
 
 	
@@ -81,6 +87,18 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 
 		// Return 'this' reference to enable chaining of operations
 		return this;
+	}
+	
+	/**
+	 * Store AAS provided in this context
+	 * @param fs01
+	 */
+	public void addAAS(AssetAdministrationShell aas) {
+		this.aasList.add(aas);
+	}
+	
+	public List<AssetAdministrationShell> getAASList() {
+		return this.aasList;
 	}
 	
 
@@ -130,5 +148,9 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 	public int getPort() {
 		return port;
 	}
+
+
+	
+
 }
 
