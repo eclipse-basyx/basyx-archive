@@ -23,7 +23,7 @@ import org.eclipse.basyx.aas.metamodel.facades.ReferenceFacade;
 public class Reference extends HashMap<String, Object> implements IReference {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String KEY="key";
+	public static final String KEY="keys";
 
 	/**
 	 * Constructor

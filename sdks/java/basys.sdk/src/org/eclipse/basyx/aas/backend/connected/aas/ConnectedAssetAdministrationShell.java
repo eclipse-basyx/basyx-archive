@@ -174,7 +174,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 		Set<Map<?, ?>> refs = (Set<Map<?, ?>>) getProxy().readElementValue(constructPath("submodel"));
 		Map<String, ISubModel> ret = new HashMap<>();
 		for (Map<?, ?> key : refs) {
-			String id = (String) ((Map<?, ?>) ((List<?>) key.get("key")).get(0)).get("value");
+			String id = (String) ((Map<?, ?>) ((List<?>) key.get("keys")).get(0)).get("value");
 			VABElementProxy elem = manager.connectToVABElement(id);
 			ISubModel sm = new ConnectedSubModel("/aas/submodels/" + id, elem);
 			ret.put(id, sm);

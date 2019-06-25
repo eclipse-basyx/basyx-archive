@@ -1,6 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IReferable;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
@@ -39,7 +40,11 @@ public class Referable extends HashMap<String, Object> implements IReferable {
 		// (String)
 		put(CATEGORY, "");
 		// Description or comments on the element (String)
-		put(DESCRIPTION, "");
+		
+		HashSet<HashMap<String, Object>> desc = new HashSet<HashMap<String, Object>>();
+		desc.add(new Description());
+			
+		put(DESCRIPTION, desc);
 		// Reference to the parent of this element (Referable)
 		put(PARENT, null);
 	}

@@ -84,6 +84,26 @@ public class VABMultiSubmodelProvider<T extends VABHashmapProvider> implements I
 	public VABMultiSubmodelProvider() {
 		// Do nothing
 	}
+	
+	
+
+	/**
+	 * Constructor that accepts an AAS
+	 */
+	public VABMultiSubmodelProvider(T contentProvider) {
+		// Store content provider
+		setAssetAdministrationShell(contentProvider);
+	}
+
+	
+	/**
+	 * Constructor that accepts Submodel
+	 */
+	public VABMultiSubmodelProvider(String smID, T contentProvider) {
+		// Store content provider
+		addSubmodel(smID, contentProvider);
+	}
+
 
 	/**
 	 * Set an AAS for this provider

@@ -1,4 +1,4 @@
-package org.eclipse.basyx.tools.aasdescriptor;
+package org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -10,19 +10,13 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.Asset;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
-import org.eclipse.basyx.tools.modelurn.ModelUrn;
-
 
 
 /**
  * AAS descriptor class
  * 
- * @author kuhn
+ * @author kuhn, pschorn
  *
  */
 public class AASDescriptor extends HashMap<String, Object> {
@@ -34,37 +28,6 @@ public class AASDescriptor extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
 
 	
-	
-	/**
-	 * Default constructor
-	 */
-	public AASDescriptor() {
-		// Add members
-		put("identification", new Identifier());
-		put("metaData", new HashMap<String, Object>());
-		put("administration", new AdministrativeInformation());
-		put("idShort", new String(""));
-		put("category", new String(""));
-		put("descriptions", new LinkedList<Description>());
-		put("asset", new Asset());
-		put("submodels", new LinkedList<SubmodelDescriptor>());
-		put("endpoints", new LinkedList<String>());
-	}
-	
-	
-	/**
-	 * Create a new AAS descriptor with minimal information
-	 */
-	@SuppressWarnings("unchecked")
-	public AASDescriptor(String id, String idType, String endpoint) {
-		// Invoke default constructor
-		this();
-		
-		// Add identification and end point information
-		((Identifier) get("identification")).setIdType(idType);
-		((Identifier) get("identification")).setId(id);
-		((List<String>) get("endpoints")).add(endpoint);
-	}
 	
 	/**
 	 * Create a new sub model descriptor with minimal information
@@ -91,16 +54,6 @@ public class AASDescriptor extends HashMap<String, Object> {
 		put("endpoints", Arrays.asList(endpointWrapper));
 	}
 	
-
-	
-	/**
-	 * Create a new AAS descriptor with minimal information
-	 */
-	public AASDescriptor(ModelUrn urn, String aasSrvURL) {
-		// Invoke default constructor
-		this(urn.getURN(), IdentifierType.URI, aasSrvURL+"/aas/submodels/aasRepository/"+urn.getEncodedURN());
-	}
-
 	
 	
 	/**
@@ -169,27 +122,6 @@ public class AASDescriptor extends HashMap<String, Object> {
 	}
 	
 	
-	/**
-	 * Add a sub model descriptor - simplified operation with default fields
-	 * 
-	 * @param urn URN of sub model
-	 */
-	public AASDescriptor addSubmodelDescriptor(ModelUrn urn, String aasSrvURL) {
-		// Add sub model descriptor
-		addSubmodelDescriptor(new SubmodelDescriptor(urn.getURN(), IdentifierType.URI, aasSrvURL+"/aas/submodels/aasRepository/"+urn.getEncodedURN()));
-		
-		// Return 'this' reference
-		return this;
-	}
-	
-	
-	
-	/**
-	 * Get a specific sub model descriptor
-	 */
-	public SubmodelDescriptor getSubModelDescriptor(ModelUrn subModelId) {
-		return getSubModelDescriptor(subModelId.getURN());
-	}
 	
 	
 	/**

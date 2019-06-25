@@ -80,7 +80,7 @@ public class WebServiceRawClient implements Serializable {
 		Response rsp = request.put(Entity.entity(jsonParameter.toString(), MediaType.APPLICATION_JSON));
 
 		// Throw exception that indicates an error
-		if (!((rsp.getStatus() == 0) || (rsp.getStatus() == 200))) throw new ServerErrorException(rsp);
+		if (!((rsp.getStatus() == 0) || (rsp.getStatus() == 200)  || (rsp.getStatus() == 201))) throw new ServerErrorException(rsp);
 
 		// Return result
 		return rsp.readEntity(String.class);
@@ -99,7 +99,7 @@ public class WebServiceRawClient implements Serializable {
 		Response rsp = request.post(Entity.entity(jsonParameter.toString(), MediaType.APPLICATION_JSON));
 
 		// Throw exception that indicates an error
-		if (!((rsp.getStatus() == 0) || (rsp.getStatus() == 200))) throw new ServerErrorException(rsp);
+		if (!((rsp.getStatus() == 0) || (rsp.getStatus() == 200) || (rsp.getStatus() == 201))) throw new ServerErrorException(rsp);
 		
 		// Return result
 		return rsp.readEntity(String.class);
@@ -115,7 +115,7 @@ public class WebServiceRawClient implements Serializable {
 		Response rsp = client.target(wsURL).queryParam("action", action).request().build("PATCH", Entity.text(jsonParameter.toString())).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
 
 		// Throw exception that indicates an error
-		if (!((rsp.getStatus() == 0) || (rsp.getStatus() == 200))) throw new ServerErrorException(rsp);
+		if (!((rsp.getStatus() == 0) || (rsp.getStatus() == 200)  || (rsp.getStatus() == 201))) throw new ServerErrorException(rsp);
 
 		// Return result
 		return rsp.readEntity(String.class);

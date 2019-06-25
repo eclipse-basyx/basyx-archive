@@ -22,7 +22,7 @@ public class Qualifiable extends HashMap<String, Object> implements IQualifiable
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public static final String QUALIFIER="qualifier";
+	public static final String QUALIFIER="constraints"; // changed qualifier to constraints xxxxx constantin
 
 	/**
 	 * Constructor

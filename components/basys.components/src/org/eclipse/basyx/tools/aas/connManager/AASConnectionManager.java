@@ -67,7 +67,7 @@ public class AASConnectionManager extends VABConnectionManager {
 		System.out.println("ATTEMPT:"+serializedAASDesc);
 		
 		// Deserialize AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(serializer.getMap(serializer.getObjFromJsonStr(serializedAASDesc))));
+		AASDescriptor aasDescriptor = new AASDescriptor(((Map<String, Object>) (serializer.deserialize(serializedAASDesc))));
 
 		// Get AAD address from AAS descriptor
 		String addr = aasDescriptor.getFirstEndpoint();
@@ -88,7 +88,7 @@ public class AASConnectionManager extends VABConnectionManager {
 		String serializedAASDesc = directoryService.lookup(aasUrn.getEncodedURN());
 		
 		// Deserialize AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(serializer.getMap(serializer.getObjFromJsonStr(serializedAASDesc))));
+		AASDescriptor aasDescriptor = new AASDescriptor(((Map<String, Object>) (serializer.deserialize(serializedAASDesc))));
 
 		// Locate sub model
 		SubmodelDescriptor smdescr = aasDescriptor.getSubModelDescriptor(subModelID);

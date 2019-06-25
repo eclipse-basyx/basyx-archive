@@ -1,6 +1,8 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +19,7 @@ import org.eclipse.basyx.aas.metamodel.facades.AssetAdministrationShellFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasDataSpecificationFacade;
 import org.eclipse.basyx.aas.metamodel.facades.IdentifiableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.View;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
@@ -45,6 +48,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public static final String DERIVEDFROM ="derivedFrom";
 	public static final String ASSET="asset";
 	public static final String SUBMODEL ="submodel";
+	public static final String SUBMODELS ="submodels";
 	public static final String VIEWS="views";
 	public static final String CONCEPTDICTIONARY="conceptDictionary";
 	public static final String IDSHORT="idShort";
@@ -69,6 +73,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		put(DERIVEDFROM, null);
 		put(ASSET, null);
 		put(SUBMODEL, new HashSet<Reference>());
+		put(SUBMODELS, new HashSet<SubmodelDescriptor>());
 		put(VIEWS, new HashSet<View>());
 		put(CONCEPTDICTIONARY, new HashSet<ConceptDictionary>());
 	}
@@ -86,7 +91,15 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		put(VIEWS, views);
 		put(CONCEPTDICTIONARY, dictionaries);
 	}
-
+	
+	public void setEndpoint(String endpoint, String endpointType) {
+		HashMap<String, String> endpointWrapper = new HashMap<String, String>(); 
+		endpointWrapper.put("type", endpointType);
+		endpointWrapper.put("address", endpoint + "/aas");
+		
+		put("endpoints", Arrays.asList(endpointWrapper));
+	}
+	
 	/**
 	 * Add a submodel as reference
 	 */
@@ -94,6 +107,14 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public void addSubModel(ISubModel subModel) {
 		System.out.println("adding Submodel " + subModel.getId());
 		addSubModel(subModel.getId());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void addSubModelHack(SubModel subModel, String endpoint, String endpointType) {
+		System.out.println("adding Submodel " + subModel.getId());
+		SubmodelDescriptor desc = new SubmodelDescriptor(subModel, endpoint, endpointType);
+		((Set<SubmodelDescriptor>) get(SUBMODELS)).add(desc);
+		
 	}
 
 	@SuppressWarnings("unchecked")

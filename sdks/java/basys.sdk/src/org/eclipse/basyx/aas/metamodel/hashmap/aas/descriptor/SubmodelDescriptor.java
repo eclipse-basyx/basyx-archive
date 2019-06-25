@@ -1,4 +1,4 @@
-package org.eclipse.basyx.tools.aasdescriptor;
+package org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,6 +9,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Description;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.Kind;
 
 
@@ -29,37 +30,6 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
 
 	
-	
-	/**
-	 * Default constructor
-	 */
-	public SubmodelDescriptor() {
-		// Add members
-		put("identification", new Identifier());
-		put("metaData", new HashMap<String, Object>());
-		put("administration", new AdministrativeInformation());
-		put("idShort", new String(""));
-		put("category", new String(""));
-		put("descriptions", new LinkedList<Description>());		
-		put("semanticId", new Identifier());
-		put("kind", Kind.Instance);
-		put("endpoints", new LinkedList<String>());
-	}
-	
-	
-	/**
-	 * Create a new sub model descriptor with minimal information
-	 */
-	@SuppressWarnings("unchecked")
-	public SubmodelDescriptor(String id, String idType, String endpoint) {
-		// Invoke default constructor
-		this();
-		
-		// Add identification and end point information
-		((Identifier) get("identification")).setIdType(idType);
-		((Identifier) get("identification")).setId(id);
-		((List<String>) get("endpoints")).add(endpoint);
-	}
 	
 	/**
 	 * Create a new sub model descriptor with minimal information
