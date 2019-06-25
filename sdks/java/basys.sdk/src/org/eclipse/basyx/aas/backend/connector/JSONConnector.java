@@ -1,7 +1,9 @@
 package org.eclipse.basyx.aas.backend.connector;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
@@ -68,7 +70,7 @@ public class JSONConnector implements IModelProvider {
 	public Object getModelPropertyValue(String path) { // shouldn't GET throw an exception too?
 
 		// Get element from server
-		Object message = provider.getModelPropertyValue(path);
+		String message = provider.getModelPropertyValue(path);
 
 		try {
 			// De-serialize and verify
@@ -83,11 +85,10 @@ public class JSONConnector implements IModelProvider {
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws Exception {
 
-		
-		Map<String, Object> gsonMap = serializer.serialize(newValue);
-		String jsonString = serializer.getJsonString(gsonMap);
+		// Serialize value Object
+		String jsonString = serializer.serialize(newValue);
 
-		Object message = provider.setModelPropertyValue(path, jsonString);
+		String message = provider.setModelPropertyValue(path, jsonString);
 
 		// De-serialize and verify
 		verify(message);
@@ -97,10 +98,9 @@ public class JSONConnector implements IModelProvider {
 	public void createValue(String path, Object newEntity) throws Exception {
 
 		// Serialize value Object
-		Map<String, Object> gsonMap = serializer.serialize(newEntity);
-		String jsonString = serializer.getJsonString(gsonMap);
+		String jsonString = serializer.serialize(newEntity);
 
-		Object message = provider.createValue(path, jsonString);
+		String message = provider.createValue(path, jsonString);
 
 		// De-serialize and verify
 		verify(message);
@@ -109,7 +109,7 @@ public class JSONConnector implements IModelProvider {
 	@Override
 	public void deleteValue(String path) throws Exception {
 
-		Object message = provider.deleteValue(path);
+		String message = provider.deleteValue(path);
 
 		// De-serialize and verify
 		verify(message);
@@ -119,10 +119,9 @@ public class JSONConnector implements IModelProvider {
 	public void deleteValue(String path, Object obj) throws Exception {
 
 		// Serialize parameter
-		Map<String, Object> gsonMap = serializer.serialize(obj);
-		String jsonString = serializer.getJsonString(gsonMap);
+		String jsonString = serializer.serialize(obj);
 
-		Object message = provider.deleteValue(path, jsonString);
+		String message = provider.deleteValue(path, jsonString);
 
 		// De-serialize and verify
 		verify(message);
@@ -132,10 +131,14 @@ public class JSONConnector implements IModelProvider {
 	public Object invokeOperation(String path, Object[] parameter) throws Exception {
 
 		// Serialize parameter
-		Map<String, Object> gsonMap = serializer.serialize(parameter);
-		String jsonString = serializer.getJsonString(gsonMap);
+		List<Object> params = new ArrayList<>();
+		for (Object o : parameter) {
+			params.add(o);
+		}
 
-		Object message = provider.invokeOperation(path, jsonString);
+		String jsonString = serializer.serialize(params);
+
+		String message = provider.invokeOperation(path, jsonString);
 
 		// De-serialize and verify
 		return verify(message);
@@ -144,24 +147,20 @@ public class JSONConnector implements IModelProvider {
 	
 
 	@SuppressWarnings("unchecked")
-	public Object verify(Object message) throws Exception {
+	public Object verify(String message) throws Exception {
 
 		// First get the GSON object from the JSON string
-		Object gsonObj = serializer.getObjFromJsonStr(message.toString());
+		Object gsonObj = serializer.deserialize(message.toString());
 		
 		Object result = null;
 
-        if (gsonObj instanceof Map) {
-			Object deserializedResult = serializer.deserialize((Map<String, Object>) gsonObj); // TODO: A response message should be de-serialized to IResult! Provides an interface for message verification.
-			
-			if (deserializedResult instanceof Map) {
-				Map<String, Object> responseMap = (Map<String, Object>) deserializedResult;
+		if (gsonObj instanceof Map) {
+			Map<String, Object> responseMap = (Map<String, Object>) gsonObj;
 				
 				// Handle meta information and exceptions
 				result = verifyResponse(responseMap);
 				
 			}
-		}
         return result;
 	}
 	

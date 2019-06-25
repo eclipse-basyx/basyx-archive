@@ -68,7 +68,7 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 		try {client.delete(aasRegistryURL+"/api/v1/registry/"+URLEncoder.encode(aasID.getURN(), "UTF-8"));} catch (Exception e) {e.printStackTrace();}
 
 		// Perform web service call to registry
-		client.post(aasRegistryURL+"/api/v1/registry", serializer.getJsonString(serializer.serialize(deviceAASDescriptor)));
+		client.post(aasRegistryURL+"/api/v1/registry", serializer.serialize(deviceAASDescriptor));
 	}
 
 	
@@ -78,7 +78,7 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 	@Override
 	public void registerOnly(AASDescriptor deviceAASDescriptor) {
 		// Perform web service call to registry
-		client.post(aasRegistryURL+"/api/v1/registry", serializer.getJsonString(serializer.serialize(deviceAASDescriptor)));
+		client.post(aasRegistryURL+"/api/v1/registry", serializer.serialize(deviceAASDescriptor));
 	}
 	
 	
@@ -101,7 +101,7 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 		String jsonData = client.get(aasRegistryURL+"/api/v1/registry/"+aasID.getEncodedURN());
 		
 		// Deserialize AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(serializer.getMap(serializer.getObjFromJsonStr(jsonData))));
+		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(jsonData));
 		
 		// Return AAS descriptor
 		return aasDescriptor;
@@ -120,7 +120,7 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 		AASDescriptor aasDescriptor = new AASDescriptor(key, IdentifierType.URI, value);
 
 		// Push AAS descriptor to server
-		client.post(aasRegistryURL+"/api/v1/registry", serializer.getJsonString(serializer.serialize(aasDescriptor)));
+		client.post(aasRegistryURL+"/api/v1/registry", serializer.serialize(aasDescriptor));
 		
 		// Return 'this' reference
 		return this;
@@ -146,7 +146,7 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 		String jsonData = client.get(aasRegistryURL+"/api/v1/registry/"+id);
 		
 		// Deserialize AAS descriptor
-		//AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(serializer.getMap(serializer.getObjFromJsonStr(jsonData))));
+		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(jsonData));
 
 		// Return endpoint
 		return jsonData;

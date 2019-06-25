@@ -198,7 +198,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			String path = new String(rxFrame, 1 + 4, pathLen);
 
 			// Get value string length and value if available; default is null value  
-			String jsonValue = "{\"basystype\":\"null\"}";
+			String jsonValue = "";
 			try {
 				int jsonValueLen = CoderTools.getInt32(rxFrame, 1 + 4 + pathLen);
 				jsonValue = new String(rxFrame, 1 + 4 + pathLen + 4, jsonValueLen);

@@ -86,7 +86,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 		try {
 			PrintWriterStub outputstream = new PrintWriterStub("test.txt", "ignore");
 		
-			String nullParam = "{\"basystype\":\"null\"}";
+			String nullParam = "null";
 			provider.processBaSysDelete(path, nullParam, outputstream);
 			
 			return outputstream.getResult();

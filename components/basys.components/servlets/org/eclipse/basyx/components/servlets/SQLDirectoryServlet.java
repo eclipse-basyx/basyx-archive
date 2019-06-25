@@ -397,9 +397,8 @@ public class SQLDirectoryServlet extends BasysHTTPServlet {
 		StringBuilder     aasValue  = new StringBuilder(); 
 		while (bufReader.ready()) aasValue.append(bufReader.readLine());
 		
-		// Deserialize AAS value into JSONObject
-		Map<String, Object> gsonObj = (Map<String, Object>) serializer.getObjFromJsonStr(aasValue.toString());
-		Map<String, Object> values = (Map<String, Object>) serializer.deserialize(gsonObj);
+		// Deserialize AAS value into HashMap
+		Map<String, Object> values = (Map<String, Object>) serializer.deserialize(aasValue.toString());
 		AASDescriptor       aasDescriptor = new AASDescriptor(values);
 
 		// Extract AAS ID

@@ -168,7 +168,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		String path = extractPath(req);
 
 		// No parameter to read! Provide serialized null
-		String nullParam = "{\"basystype\":\"null\"}";
+		String nullParam = "";
 
 		providerBackend.processBaSysDelete(path, nullParam, resp.getWriter());
 	}

@@ -1,19 +1,14 @@
 package org.eclipse.basyx.aas.backend.http.tools;
 
-import static org.junit.Assert.assertFalse;
-
-
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -21,39 +16,49 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.http.tools.factory.GSONToolsFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
 /**
+ * Provides means for (de-)serialization of Primitives (int, double, string,
+ * boolean), Maps, Sets and Lists. <br />
+ * Since JSON is not able to differentiate between Sets and Lists, additional
+ * information is added. When a Collection of objects is serialized, this
+ * information is directly added using an "index" key. <br />
+ * However, collections of primitives do not allow adding an "index" key. To
+ * handle this, a type tag is added on the same level as the collection. For
+ * more details, see <i>TestJson</i>
  * 
- * @author rajashek
+ * @author rajashek, schnicke
  *
  */
 public class GSONTools implements Serializer {
+	// Used string constants
+	public static final String INDEX = "index";
+	public static final String OPERATION = "operation";
+	public static final String LAMBDA = "lambda";
+	public static final String TYPE = "_basystype";
+	public static final String LIST = "list";
+	public static final String SET = "set";
+	public static final String BASYXTYPE = "_basyxTypes";
+	public static final String BASYXVALUE = "_value";
+	public static final String VALUE = "value";
 
 	/**
-	 * Singleton instance
+	 * JsonParser reference
 	 */
-	//public static GSONTools Instance = new GSONTools();
-	
-	
-	/**
-	 * GSON reference
-	 */
-	protected static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-	
-	
+	protected static JsonParser parser = new JsonParser();
+
 	/**
 	 * Type factory
 	 */
 	protected GSONToolsFactory toolsFactory = null;
-	
-
 
 	/**
 	 * Constructor
@@ -62,8 +67,7 @@ public class GSONTools implements Serializer {
 		// Store factory reference
 		toolsFactory = factory;
 	}
-	
-	
+
 	/**
 	 * Set factory instance
 	 */
@@ -71,67 +75,397 @@ public class GSONTools implements Serializer {
 		// Store factory instance
 		toolsFactory = newFactoryInstance;
 	}
-	
-	
-	
-	/**
-	 * Take Object and returns Map obj
-	 * @param mapObj
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public Map<String, Object> getMap(Object mapObj){
-		System.out.println("MAP:"+mapObj);
-		
-		if(mapObj instanceof Map) {
-			return (Map<String, Object>)mapObj;
+
+	@Override
+	public Object deserialize(String str) {
+		JsonElement elem = parser.parse(str);
+
+		// Handle edge case of collection of primitives
+		if (elem.isJsonObject()) {
+			JsonObject obj = elem.getAsJsonObject();
+			if (obj.has(BASYXVALUE)) {
+				JsonArray array = (JsonArray) obj.get(BASYXVALUE);
+				if (obj.get(BASYXTYPE).getAsString().equals(SET)) {
+					return deserializeJsonArrayAsSet(array);
+				} else {
+					return deserializeJsonArrayAsList(array);
+				}
+			}
 		}
-		else {
-			assertFalse("Something is not right! Check the implemntation",true);
-			return null;
-		}
+
+		return deserializeJsonElement(elem);
 	}
-	
-	
-	/**
-	 * This function accepts the JSOn string and returns the GSON object
-	 * @param str
-	 * @return
-	 */
-	public Object getObjFromJsonStr(String str) {
-		Object fromJson=null;
-		
-		try {
-			fromJson = gson.fromJson(str, new TypeToken<HashMap<String, Object>>() {
-			}.getType());
-		} catch (Exception e) {
-			System.out.println("This should not happen! the defected string is :"+str);
+
+	@Override
+	public String serialize(Object obj) {
+		JsonElement elem = serializeToJsonElement(obj);
+
+		// Handle edge case of collection of primitives
+		if (obj instanceof Collection<?>) {
+			Collection<?> col = (Collection<?>) obj;
+			if (col.size() > 0) {
+				Object item = col.iterator().next();
+				if (item.getClass().isPrimitive() || isWrapperType(item.getClass())) {
+					JsonObject jObj = new JsonObject();
+					String type;
+					if (col instanceof List<?>) {
+						type = LIST;
+					} else {
+						type = SET;
+					}
+					jObj.add(BASYXTYPE, new JsonPrimitive(type));
+					jObj.add(BASYXVALUE, elem);
+					elem = jObj;
+				}
+			}
 		}
-		return fromJson;
+
+		return elem.toString();
 	}
-	
-	
+
 	/**
-	 * Takes GSON object and returns the JSON string with using JSON 
+	 * Serialized an arbitrary object to a JsonElement
+	 * 
 	 * @param obj
 	 * @return
 	 */
-	public String getJsonString(Object obj) {
-		return gson.toJson(obj);
+	@SuppressWarnings("unchecked")
+	private JsonElement serializeToJsonElement(Object obj) {
+		if (obj == null) {
+			return JsonNull.INSTANCE;
+		} else if (obj.getClass().isPrimitive() || isWrapperType(obj.getClass()) || obj instanceof String) {
+			return serializePrimitive(obj);
+		} else if (obj instanceof Map<?, ?>) {
+			return serializeMap((Map<String, Object>) obj);
+		} else if (obj instanceof List<?>) {
+			return serializeList((List<?>) obj);
+		} else if (obj instanceof Set<?>) {
+			return serializeSet((Set<?>) obj);
+		} else if (isFunction(obj)) {
+			return serializeFunction(obj);
+		}
+		throw new RuntimeException("Unknown element!");
+	}
+
+	/**
+	 * Deserializes a JsonElement to an object
+	 * 
+	 * @param elem
+	 * @return
+	 */
+	private Object deserializeJsonElement(JsonElement elem) {
+		if (elem.isJsonPrimitive()) {
+			return deserializeJsonPrimitive(elem.getAsJsonPrimitive());
+		} else if (elem.isJsonObject()) {
+			return deserializeJsonObject(elem.getAsJsonObject());
+		} else if (elem.isJsonArray()) {
+			return deserializeJsonArray(elem.getAsJsonArray());
+		}
+		return null;
+	}
+
+	/**
+	 * Indicates if a class is a wrapper type, e.g. <i>Integer</i> for <i>int</i>
+	 * 
+	 * @param clazz
+	 * @return
+	 */
+	private static boolean isWrapperType(Class<?> clazz) {
+		return clazz.equals(Boolean.class) || clazz.equals(Integer.class) || clazz.equals(Character.class) || clazz.equals(Byte.class) || clazz.equals(Short.class) || clazz.equals(Double.class) || clazz.equals(Long.class)
+				|| clazz.equals(Float.class);
+	}
+
+	/**
+	 * Deserializes a JsonPrimitive to either string, int, double or boolean
+	 * 
+	 * @param primitive
+	 * @return
+	 */
+	private Object deserializeJsonPrimitive(JsonPrimitive primitive) {
+		if (primitive.isNumber()) {
+			if (primitive.getAsString().contains(".")) {
+				return primitive.getAsDouble();
+			} else {
+				return primitive.getAsInt();
+			}
+		} else if (primitive.isBoolean()) {
+			return primitive.getAsBoolean();
+		} else {
+			return primitive.getAsString();
+		}
+	}
+
+	/**
+	 * Serializes either string, int, double or boolean to a JsonPrimitive
+	 * 
+	 * @param primitive
+	 * @return
+	 */
+	private JsonPrimitive serializePrimitive(Object primitive) {
+		if (primitive instanceof Number) {
+			return new JsonPrimitive((Number) primitive);
+		} else if (primitive instanceof Boolean) {
+			return new JsonPrimitive((Boolean) primitive);
+		} else {
+			return new JsonPrimitive((String) primitive);
+		}
 	}
 	
-	
-	
-	/** 
-	 * Read an object from Base64 string. 
+	/**
+	 * Deserializes a JsonObject to either a map, an operations or an arbitrary
+	 * serializable object
+	 * 
+	 * @param map
+	 * @return
+	 */
+	private Object deserializeJsonObject(JsonObject map) {
+		if (map.has(TYPE)) {
+			if (map.get(TYPE).getAsString().equals(OPERATION)) {
+				return "OPERATION!!";
+			} else {
+				// Type equals Lambda
+				return deserializeObjectFromString(map.get(VALUE).getAsString());
+			}
+		} else {
+			return deserializeToMap(map);
+		}
+	}
+
+	/**
+	 * Deserializes a JsonObject to a map
+	 * 
+	 * @param map
+	 * @return
+	 */
+	private Map<String, Object> deserializeToMap(JsonObject map) {
+		Map<String, Object> ret = toolsFactory.createMap();
+		JsonObject collectionTypes = (JsonObject) map.get(BASYXTYPE);
+
+		for (String k : map.keySet()) {
+			// Ignore BASYXTYPE since it is only used for type meta data
+			if (k.equals(BASYXTYPE)) {
+				continue;
+			}
+
+			// If there are collections in the map, get their types and deserialize them
+			if (collectionTypes != null && collectionTypes.has(k)) {
+				String type = collectionTypes.get(k).getAsString();
+				if (type.equals(LIST)) {
+					ret.put(k, deserializeJsonArrayAsList((JsonArray) map.get(k)));
+				} else if (type.equals(SET)) {
+					ret.put(k, deserializeJsonArrayAsSet((JsonArray) map.get(k)));
+				}
+			} else {
+				ret.put(k, deserializeJsonElement(map.get(k)));
+			}
+		}
+		return ret;
+	}
+
+	/**
+	 * Serializes a Map to a JsonObject
+	 * 
+	 * @param map
+	 * @return
+	 */
+	private JsonObject serializeMap(Map<String, Object> map) {
+		JsonObject obj = new JsonObject();
+		JsonObject collectionTypes = new JsonObject();
+		for (String k : map.keySet()) {
+			Object o = map.get(k);
+			if (o instanceof List<?>) {
+				collectionTypes.add(k, new JsonPrimitive(LIST));
+			} else if (o instanceof Set<?>) {
+				collectionTypes.add(k, new JsonPrimitive(SET));
+			}
+
+			obj.add(k, serializeToJsonElement(o));
+		}
+
+		// If there are any collections, add collection type meta data
+		if (collectionTypes.size() > 0) {
+			obj.add(BASYXTYPE, collectionTypes);
+		}
+
+		return obj;
+	}
+
+	/**
+	 * Removes INDEX string from ordered lists
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	private JsonObject stripIndex(JsonObject obj) {
+		obj.remove(INDEX);
+		return obj;
+	}
+
+	/**
+	 * Deserializes a JSONArray to either a list or a set, depending on the presence
+	 * of an INDEX value
+	 * 
+	 * @param array
+	 * @return
+	 */
+	private Object deserializeJsonArray(JsonArray array) {
+		if (isOrdered(array)) {
+			return deserializeJsonArrayAsList(array);
+		} else {
+			return deserializeJsonArrayAsSet(array);
+		}
+	}
+
+	/**
+	 * Deserializes a JsonArray to a List<br/>
+	 * <b>Assumption:</b> The order in the json is equals the correct order
+	 * 
+	 * @param array
+	 * @return
+	 */
+	private List<Object> deserializeJsonArrayAsList(JsonArray array) {
+		List<Object> list = toolsFactory.createList();
+		for (int i = 0; i < array.size(); i++) {
+			if (array.get(i) instanceof JsonObject) {
+				// If it is a JsonObject it contains an index --> Strip it
+				JsonObject stripped = stripIndex(array.get(i).getAsJsonObject());
+				list.add(deserializeJsonElement(stripped));
+			} else {
+				list.add(deserializeJsonElement(array.get(i)));
+
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Deserializes a JsonArray to a Set
+	 * 
+	 * @param array
+	 * @return
+	 */
+	private Set<Object> deserializeJsonArrayAsSet(JsonArray array) {
+		Set<Object> set = toolsFactory.createSet();
+		for (int i = 0; i < array.size(); i++) {
+			set.add(deserializeJsonElement(array.get(i)));
+		}
+		return set;
+	}
+
+	/**
+	 * Checks if a JsonArray is an ordered list or a set <br/>
+	 * FIXME: Replace this here with BASYXTYPE checks
+	 * 
+	 * @param array
+	 * @return
+	 */
+	private boolean isOrdered(JsonArray array) {
+		if (array.size() == 0) {
+			return true;
+		}
+
+		JsonElement elem = array.get(0);
+
+		if (!elem.isJsonObject()) {
+			return false;
+		}
+
+		JsonObject obj = elem.getAsJsonObject();
+		if (obj.has(INDEX)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Checks if an object is a lambda function
+	 * 
+	 * @param value
+	 * @return
+	 */
+	private boolean isFunction(Object value) {
+		return (value instanceof Supplier<?>) || (value instanceof Function<?, ?>) || (value instanceof Consumer<?>) || (value instanceof BiConsumer<?, ?>);
+	}
+
+	/**
+	 * Checks if an object implements Serializable
+	 * 
+	 * @param value
+	 * @return
+	 */
+	private boolean isSerializable(Object value) {
+		return value instanceof Serializable;
+	}
+
+	/**
+	 * Serializes a set to a JsonArray
+	 * 
+	 * @param set
+	 * @return
+	 */
+	private JsonArray serializeSet(Set<?> set) {
+		JsonArray array = new JsonArray();
+		for (Object o : set) {
+			array.add(serializeToJsonElement(o));
+		}
+		return array;
+	}
+
+	/**
+	 * Serializes a list to a JsonArray and adds index where appropriate
+	 * 
+	 * @param list
+	 * @return
+	 */
+	private JsonElement serializeList(List<?> list) {
+
+		if (list.size() > 0 && list.get(0) instanceof Map<?, ?>) {
+			// If the list contains maps, attach the index property
+			JsonArray array = new JsonArray();
+
+			for (int i = 0; i < list.size(); i++) {
+				JsonObject elem = (JsonObject) serializeToJsonElement(list.get(i));
+				elem.add(INDEX, new JsonPrimitive(i));
+				array.add(elem);
+			}
+			return array;
+		} else {
+			// If it does not contain maps, it is not possible to attach the index property.
+			// Thus BASYXTYPE has to handle the type conversion
+			JsonArray array = new JsonArray();
+			for (Object o : list) {
+				array.add(serializeToJsonElement(o));
+			}
+			return array;
+		}
+	}
+
+	/**
+	 * Serializes a function if possible
+	 * 
+	 * @param function
+	 * @return
+	 */
+	private JsonObject serializeFunction(Object function) {
+		if (isSerializable(function)) {
+			return serializeSerializableOperation((Serializable) function);
+		} else {
+			return serializeNotSerializableOperation(function);
+		}
+	}
+
+	/**
+	 * Read an object from Base64 string.
 	 */
 	protected Object deserializeObjectFromString(String s) {
 		// Return value
 		Object result = null;
 
 		// Decode String
-		byte [] data = Base64.getDecoder().decode(s);
-		
+		byte[] data = Base64.getDecoder().decode(s);
+
 		// Try to deserialize object
 		try {
 			// Object input stream
@@ -142,660 +476,61 @@ public class GSONTools implements Serializer {
 			// Close stream
 			stream.close();
 		} catch (IOException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		// Return object
 		return result;
 	}
 
-	
-	/** 
-	 * Write the object to a Base64 string. 
+	/**
+	 * Write the object to a Base64 string.
 	 */
 	protected String serializeObjectToString(Serializable obj) {
 		// Write object into byte array
 		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-		
+
 		// Try to serialize object
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(outStream);
 			oos.writeObject(obj);
 			oos.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		// Try to encode to string
-		return Base64.getEncoder().encodeToString(outStream.toByteArray()); 
-	}
-
-
-	/**
-	 * Serialize a primitive value
-	 */
-	protected Object serializePrimitive(Map<String, Object>  target, Object serializedObject, String type) {
-		// Serialize values
-		// - Put object value into the JSON object
-		target.put("value", serializedObject);
-		// - Substructure defines a primitive type
-		target.put("basystype", "value");
-		// - Put type id into JSON Object
-		target.put("typeid", type);
-
-		// Return serialized value
-		return target;
-	}
-
-	/**
-	 * Deserialize a primitive value
-	 */
-	protected Object deserializePrimitive(Map<String, Object> serializedValue) {
-		// Type check
-		if (!serializedValue.get("basystype").equals("value"))
-			return null;
-
-		Object result = serializedValue.get("value");
-		String typeId = (String) serializedValue.get("typeid");
-
-		if (typeId.equals("int"))
-			return getInt(result);
-		if (typeId.equals("float"))
-			return getFloat(result);
-		if (typeId.equals("double"))
-			return getDouble(result);
-		if (typeId.equals("string"))
-			return getString(result);
-		if (typeId.equals("boolean"))
-			return getBoolean(result);
-		if (typeId.equals("character")) {
-			return getCharacter(result);
-		}
-		return result;
-	}
-
-	/**
-	 * Deserializes a value to int
-	 * 
-	 * @param obj
-	 * @return
-	 */
-	private int getInt(Object obj) {
-		try {
-			return obj instanceof Number ? ((Number) obj).intValue() : Integer.parseInt((String) obj);
-		} catch (Exception e) {
-			System.out.println("obj not int but defined as int");
-			return 0;
-		}
-
-	}
-
-	/**
-	 * Deserializes a value to float
-	 * 
-	 * @param obj
-	 * @return
-	 */
-	private float getFloat(Object obj) {
-		try {
-			return obj instanceof Number ? ((Number) obj).floatValue() : Float.parseFloat(obj.toString());
-		} catch (Exception e) {
-			System.out.println("obj not float but defined as float");
-			return 0.0f;
-		}
-	}
-
-	/**
-	 * Deserializes a value to double
-	 * 
-	 * @param obj
-	 * @return
-	 */
-	private double getDouble(Object obj) {
-		try {
-			return obj instanceof Number ? ((Number) obj).doubleValue() : Double.parseDouble(obj.toString());
-		} catch (Exception e) {
-			System.out.println("obj not double but defined as double");
-			return 0.0f;
-		}
-	}
-
-	/**
-	 * Deserializes a value to string
-	 * 
-	 * @param obj
-	 * @return
-	 */
-	private String getString(Object obj) {
-		if (obj instanceof String) {
-			return (String) obj;
-		}
-		return null;
-	}
-
-	/**
-	 * Deserializes a value to boolean
-	 * 
-	 * @param obj
-	 * @return
-	 */
-	private boolean getBoolean(Object obj) {
-		if (obj.equals(Boolean.FALSE) || (obj instanceof String && ((String) obj).equalsIgnoreCase("false"))) {
-			return false;
-		} else if (obj.equals(Boolean.TRUE) || (obj instanceof String && ((String) obj).equalsIgnoreCase("true"))) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Deserializes a value to character
-	 * 
-	 * @param obj
-	 * @return
-	 */
-	private char getCharacter(Object obj) {
-		// Character can be directly returned since it is deserialized as character by
-		// GSON
-		return (char) obj;
-	}
-
-	/**
-	 * Serialize a simple type
-	 */
-	protected boolean serializePrimitiveType(Map<String, Object> target, Object value) {
-		// Serialize known primitive types
-		if (value instanceof Integer) {
-			serializePrimitive(target, value, "int");
-			return true;
-		}
-		if (value instanceof Float) {
-			serializePrimitive(target, value, "float");
-			return true;
-		}
-		if (value instanceof Double) {
-			serializePrimitive(target, value, "double");
-			return true;
-		}
-		if (value instanceof String) {
-			serializePrimitive(target, value, "string");
-			return true;
-		}
-		if (value instanceof Boolean) {
-			serializePrimitive(target, value, "boolean");
-			return true;
-		}
-		if (value instanceof Character) {
-			serializePrimitive(target, value, "character");
-			return true;
-		}
-
-		// Value is not a primitive type
-		return false;
-	}
-
-	/**
-	 * Serialize a null value
-	 */
-	protected boolean serializeNull(Map<String, Object> target, Object value) {
-		// Only serialize null values
-		if (value != null)
-			return false;
-
-		// Serialize null value
-		target.put("basystype", "null");
-
-		// Value is a null
-		return true;
-	}
-
-	/**
-	 * Deserialize a null value
-	 */
-	protected boolean deserializeNull(Map<String, Object> serializedValue, Map<Integer, Object> serObjRepo) {
-		// Type check
-		if (!serializedValue.get("basystype").equals("null"))
-			return false;
-
-		// Return serialized value
-		return true;
-	}
-
-	/**
-	 * Implement array type serialization
-	 */
-	protected <T> boolean doSerializeArray(Map<String, Object> target, T[] arrayValue, String typeName, Map<String, Object> serObjRepo, String scope) {
-		// Serialize array data
-		target.put("basystype", "array");
-		target.put("size", arrayValue.length);
-		target.put("type", typeName);
-
-		// Serialize array elements
-		for (int i = 0; i < arrayValue.length; i++)
-			target.put("" + i, serialize(arrayValue[i], serObjRepo, scope));
-
-		// Indicate success
-		return true;
-	}
-
-	/**
-	 * Serialize an array type
-	 */
-	protected boolean serializeArrayType(Map<String, Object> target, Object value, Map<String, Object> serObjRepo, String scope) {
-		// Serialize known primitive types
-		if (value instanceof int[])
-			return doSerializeArray(target, Arrays.stream((int[]) value).boxed().toArray(Integer[]::new), "int", serObjRepo, scope);
-		if (value instanceof Integer[])
-			return doSerializeArray(target, (Integer[]) value, "int", serObjRepo, scope);
-		if (value instanceof Float[])
-			return doSerializeArray(target, (Float[]) value, "float", serObjRepo, scope);
-		if (value instanceof double[])
-			return doSerializeArray(target, Arrays.stream((double[]) value).boxed().toArray(Double[]::new), "double", serObjRepo, scope);
-		if (value instanceof Double[])
-			return doSerializeArray(target, (Double[]) value, "double", serObjRepo, scope);
-		if (value instanceof Character[])
-			return doSerializeArray(target, (Character[]) value, "character", serObjRepo, scope);
-		if (value instanceof Boolean[])
-			return doSerializeArray(target, (Boolean[]) value, "boolean", serObjRepo, scope);
-		if (value instanceof String[])
-			return doSerializeArray(target, (String[]) value, "string", serObjRepo, scope);
-		if (value instanceof Object[])
-			return doSerializeArray(target, (Object[]) value, "object", serObjRepo, scope);
-
-		// Value is not a primitive type
-		return false;
-	}
-
-	/**
-	 * Implement array type deserialization
-	 */
-	@SuppressWarnings("unchecked")
-	protected <T> Object doDeserializeArray(Map<String, Object> serializedValue, T[] arrayValue, Map<Integer, Object> serObjRepo, Map<String, Object> repository) {
-		// Deserialize array data
-		for (int i = 0; i < arrayValue.length; i++) {
-			// Get JSON Object with value
-			Map<String, Object> value = (Map<String, Object>) serializedValue.get("" + i);
-
-			arrayValue[i] = (T) deserialize(value, serObjRepo, repository);
-		}
-
-		// Return value
-		return arrayValue;
-	}
-
-	/**
-	 * Deserialize an array
-	 */
-	protected Object deserializeArrayType(Map<String, Object> serializedValue, Map<Integer, Object> serObjRepo, Map<String, Object> repository) {
-		// Type check
-		if (!serializedValue.get("basystype").equals("array"))
-			return null;
-
-		// GSON deserializes numbers to Double
-		int sizeVal = ((Number) serializedValue.get("size")).intValue();
-		
-		// Create array
-		switch ((String) serializedValue.get("type")) {
-		case "int": {
-			return doDeserializeArray(serializedValue, new Integer[sizeVal], serObjRepo, repository);
-		}
-		case "float": {
-			return doDeserializeArray(serializedValue, new Float[sizeVal], serObjRepo, repository);
-		}
-		case "double": {
-			return doDeserializeArray(serializedValue, new Double[sizeVal], serObjRepo, repository);
-		}
-		case "character": {
-			return doDeserializeArray(serializedValue, new Character[sizeVal], serObjRepo, repository);
-		}
-		case "boolean": {
-			return doDeserializeArray(serializedValue, new Boolean[sizeVal], serObjRepo, repository);
-		}
-		case "string": {
-			return doDeserializeArray(serializedValue, new String[sizeVal], serObjRepo, repository);
-		}
-		case "object": {
-			return doDeserializeArray(serializedValue, new Object[sizeVal], serObjRepo, repository);
-		}
-		}
-
-		// Return serialized value
-		return serializedValue.get("value");
-	}
-
-	/**
-	 * Check if a given GSON object contains a primitive type
-	 */
-	protected boolean isPrimitive(Map<String, Object> serializedValue) {
-		// Property "basystype" defines whether something is a value (primitive) type or
-		// not
-		if (serializedValue.get("basystype").equals("value"))
-			return true;
-
-		// Type is no primitive type
-		return false;
-	}
-
-	/**
-	 * Deserialize a simple type
-	 */
-	protected Object deserializePrimitiveType(Map<String, Object> serializedValue, Map<Integer, Object> serObjRepo, Map<String, Object> repository) {
-
-		// Deserialize known primitive types
-		if (isPrimitive(serializedValue))
-			return deserializePrimitive(serializedValue);
-
-		// Value is not a primitive type
-		return null;
-	}
-
-	/**
-	 * Serialize a map
-	 */
-	@SuppressWarnings("unchecked")
-	protected boolean serializeMapType(Map<String, Object> target, Object value, Map<String, Object> serObjRepo, String scope) {
-		if (value instanceof Map) {
-
-			// Convert to collection
-			Map<String, Object> map = (Map<String, Object>) value;
-
-			// Convert elements
-			// - Substructure defines a collection
-			target.put("basystype", "map");
-			target.put("size", map.size());
-
-			// Serialize collection elements
-			for (String key : map.keySet()) {
-				target.put(key, serialize(map.get(key), serObjRepo, scope));
-			}
-
-			// Value containsKey been serialized
-			return true;
-
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Deserialize a map
-	 */
-	@SuppressWarnings("unchecked")
-	protected Object deserializeMapType(Map<String, Object> serializedValue, Map<Integer, Object> serObjRepo, Map<String, Object> repository) {
-		// Serialize known primitive types
-		if (!(serializedValue.get("basystype").equals("map")))
-			return null;
-
-		// Create hash map return value
-		Map<String, Object> result = toolsFactory.createMap();
-
-		// Deserialize map elements
-		for (String key : serializedValue.keySet()) {
-			// Skip predefined keys
-			if (key.equals("basystype"))
-				continue; // this caused kind and size information to be lost!
-			if (key.equals("size"))
-				continue;
-
-			// Deserialize element
-			result.put(key, deserialize((Map<String, Object>)serializedValue.get(key), serObjRepo, repository));
-		}
-
-		// Return deserialized value
-		return result;
-	}
-
-	/**
-	 * Serialize a collection
-	 */
-	@SuppressWarnings("unchecked")
-	protected boolean serializeCollectionType(Map<String, Object> target, Object value, Map<String, Object> serObjRepo, String scope) {
-		if (value instanceof Collection) {
-			// Convert to collection
-			Collection<Object> collection = (Collection<Object>) value;
-
-			// Convert elements
-			// - Substructure defines a collection
-			if (value instanceof Set)  target.put("basystype", "set");
-			else {
-
-				target.put("basystype", "collection");
-			}
-			
-			target.put("size", collection.size());
-
-			// Serialize collection elements
-			int i = 0;
-			for (Object obj : collection)
-				target.put("" + i++, serialize(obj, serObjRepo, scope));
-
-			// Value containsKey been serialized
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Deserialize a collection
-	 */
-	@SuppressWarnings("unchecked")
-	protected Object deserializeCollectionType(Map<String, Object> serializedValue, Map<Integer, Object> serObjRepo, Map<String, Object> repository) {
-		// Deserialize known types
-		String basysType = (String) serializedValue.get("basystype");
-		Boolean isCollection = basysType.equals("set") || basysType.equals("collection");
-		
-		// Deserialize known types
-		if (!isCollection)
-			return null;
-		
-		Object sizeObj = serializedValue.get("size");
-		int sizeVal=0;
-		if(sizeObj instanceof Double&&sizeObj.toString().contains(".")) {
-			Double size = new Double((double) sizeObj);  
-			sizeVal=size.intValue()	;
-		}
-		else {
-			sizeVal=(int) sizeObj;
-		}
-		
-		
-		// Create collection return value
-		Collection<Object> result = null;
-		if (basysType.equals("set")) { 
-			result = toolsFactory.createSet();
-		} else {
-			result = toolsFactory.createList();
-		}
-
-
-		// Deserialize collection elements
-		for (int i = 0; i <  sizeVal; i++) {
-
-			result.add(deserialize((Map<String, Object>) serializedValue.get("" + i), serObjRepo, repository));
-		}
-
-		// Value containsKey been serialized
-		return result;
-	}
-
-	/**
-	 * Serialize an exception
-	 * 
-	 * @param target
-	 * @param value
-	 * @return
-	 */
-	protected boolean serializeException(Map<String, Object> target, Object value) {
-		// Check if object to be serialized is an exception
-		if (value instanceof Exception) {
-
-			Exception e = (Exception) value;
-
-			target.put("basystype", "exception");
-			target.put("type", e.getClass().getName());
-			target.put("message", e.getMessage());
-
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Deserialize an exception
-	 * 
-	 * @param serializedValue
-	 *            Serialized JSON object
-	 * @return Server exception object
-	 */
-	protected Object deserializeException(Map<String, Object> serializedValue) {
-
-		// Only deserialize exceptions
-		if (!(serializedValue.get("basystype").equals("exception")))
-			return null;
-
-		// Get exception type and message
-		// - Store exception details
-		String type = null;
-		String message = null;
-		// - Get exception details
-		if (serializedValue.containsKey("type"))
-			type = (String) serializedValue.get("type");
-		if (serializedValue.containsKey("message"))
-			message = (String) serializedValue.get("message");
-
-		// Return server exception
-		return new ServerException(type, message);
+		return Base64.getEncoder().encodeToString(outStream.toByteArray());
 	}
 
 	/**
 	 * Serialize an operation descriptor
 	 */
-	protected boolean serializeOperation(Map<String, Object> target, Object value) {
-		// Only process supported function interfaces
-		if (!((value instanceof Supplier<?>) || (value instanceof Function<?,?>) || (value instanceof Consumer<?>) || (value instanceof BiConsumer<?,?>))) return false;
-		
-		// This serialization operation can process several kinds of functions
-		// - Non-Serializable functions are serialized as "operation"
-		if (!(value instanceof Serializable)) {target.put("basystype", "operation"); return true;}
-		
+	private JsonObject serializeSerializableOperation(Serializable value) {
+		JsonObject target = new JsonObject();
 		// Serializable functions will be serialized.
 		// - Serialize operation kind
-		target.put("basystype", "lambda");
+		target.add(TYPE, new JsonPrimitive(LAMBDA));
+
 		// - Add value
-		target.put("value", this.serializeObjectToString((Serializable) value));		
+		String serialized = serializeObjectToString(value);
+		target.add("value", new JsonPrimitive(serialized));
 
-		// Indicate success
-		return true;
+		return target;
 	}
 
-	
 	/**
-	 * Deserialize an operation
+	 * Serializes a NonSerializableOperation to a String indicating that fact
 	 * 
-	 * @param serializedValue
-	 *            Serialized JSON object
-	 * @return Server exception object
+	 * @param function
+	 * @return
 	 */
-	protected Object deserializeOperation(Map<String, Object> serializedValue) {
-		// Deserialize non-serializable operations
-		if (serializedValue.get("basystype").equals("operation")) return "OPERATION!!";
-		
-		// Deserialize operation type
-		if (!(serializedValue.get("basystype").equals("lambda"))) return null;
+	private JsonObject serializeNotSerializableOperation(Object function) {
+		JsonObject target = new JsonObject();
+		// Not serializable functions will be not be serialized.
+		// - Serialize operation kind
+		target.add(TYPE, new JsonPrimitive(OPERATION));
 
-		// Deserialize lambda
-		return this.deserializeObjectFromString((String) serializedValue.get("value"));
-	}
-
-	
-	
-	/**
-	 * Serialize a primitive or complex value into JSON object
-	 */
-	protected Map<String, Object> serialize(Object value, Map<String, Object> serObjRepo, String scope) {
-		// Create return value
-		Map<String, Object> returnValue = new HashMap<String, Object>();
-
-		// Serialize type
-		if (serializeNull(returnValue, value))
-			return returnValue;
-		if (serializePrimitiveType(returnValue, value))
-			return returnValue;
-		if (serializeArrayType(returnValue, value, serObjRepo, scope))
-			return returnValue;
-		if (serializeCollectionType(returnValue, value, serObjRepo, scope))
-			return returnValue;
-		if (serializeMapType(returnValue, value, serObjRepo, scope))
-			return returnValue;
-		if (serializeException(returnValue, value))
-			return returnValue;
-		if (serializeOperation(returnValue, value))
-			return returnValue;
-
-		// Complex types not supported yet
-		System.err.println("Could not serialize object :" + value);
-		return returnValue;
-	}
-	
-
-	/**
-	 * Serialize a primitive or complex value into JSON object
-	 */
-	@Override
-	public Map<String, Object> serialize(Object value, String scope) {
-		return serialize(value, null, scope);
-	}
-
-	
-	/**
-	 * Serialize a primitive or complex value into JSON object
-	 */
-	@Override
-	public Map<String, Object> serialize(Object value) {
-		return serialize(value, null, null);
-	}
-
-	
-	/**
-	 * Deserialize a primitive or complex value from JSON object
-	 */
-	protected Object deserialize(Map<String, Object> serializedValue, Map<Integer, Object> serObjRepo, Map<String, Object> repository) {
-		// Create return value
-		Object returnValue = null;
-
-		// If object type is primitive or string, serialize right away
-		if (deserializeNull(serializedValue, serObjRepo))
-			return null;
-		if ((returnValue = deserializePrimitiveType(serializedValue, serObjRepo, repository)) != null)
-			return returnValue;
-		if ((returnValue = deserializeArrayType(serializedValue, serObjRepo, repository)) != null)
-			return returnValue;
-		if ((returnValue = deserializeCollectionType(serializedValue, serObjRepo, repository)) != null)
-			return returnValue;
-		if ((returnValue = deserializeMapType(serializedValue, serObjRepo, repository)) != null)
-			return returnValue;
-		if ((returnValue = deserializeException(serializedValue)) != null)
-			return returnValue;
-		if ((returnValue = deserializeOperation(serializedValue)) != null)
-			return returnValue;
-
-		System.err.println("Could not deserialize object :" + serializedValue);
-		// Complex types not supported yet
-		return returnValue;
-	}
-
-	
-	/**
-	 * Deserialize a primitive or complex value from JSON object
-	 */
-	@Override
-	public Object deserialize(Map<String, Object> serializedValue) {
-		System.out.println("DES:["+serializedValue+"]");
-		
-		return deserialize(serializedValue, null, null);
+		return target;
 	}
 }

@@ -41,9 +41,8 @@ public class WebServiceJSONClient {
 		// Try to deserialize response if any
 		try {
 			// Try to deserialize response
-			Object gsonObj = serializer.getObjFromJsonStr(serializedJSONValue);
-			@SuppressWarnings("unchecked")
-			Object result = serializer.deserialize((Map<String, Object>) gsonObj);
+			
+			Object result = serializer.deserialize(serializedJSONValue);
 			// Check if a server exception was serialized
 			if (result instanceof ServerException) {
 				// Throw server exception
@@ -81,11 +80,11 @@ public class WebServiceJSONClient {
 	 */
 	public Object put(String wsURL, Object newValue) {
 		// Serialize new value to JSON Object		
-		Map<String, Object> gsonMap = serializer.serialize(newValue);
+		String json = serializer.serialize(newValue);
 		
 
 		// Execute web service call, receive JSON serialized result
-		String jsonResult = client.put(wsURL, serializer.getJsonString(gsonMap));
+		String jsonResult = client.put(wsURL, json);
 
 		// Return deserialized value
 		return getJSONResult(jsonResult);
@@ -98,12 +97,12 @@ public class WebServiceJSONClient {
 	 */
 	public Object post(String wsURL, String... parameter) {
 		// Serialize new value to JSON Object
-        Map<String, Object> gsonMap = serializer.serialize(parameter);
+		String json = serializer.serialize(parameter);
 		
 		
 
 		// Perform request
-		String jsonResult = client.post(wsURL, serializer.getJsonString(gsonMap));
+		String jsonResult = client.post(wsURL, json);
 		
 		System.out.println("Result:"+jsonResult);
 
@@ -118,10 +117,10 @@ public class WebServiceJSONClient {
 	 */
 	public Object patch(String wsURL, String action, String... parameter) {
 		// Serialize new value to JSON Object
-		Map<String, Object> gsonMap = serializer.serialize(parameter);
+		String json = serializer.serialize(parameter);
 
 		// Perform request
-		String jsonResult = client.patch(wsURL, action, serializer.getJsonString(gsonMap));
+		String jsonResult = client.patch(wsURL, action, json);
 
 		// Return deserialized value
 		return getJSONResult(jsonResult);
