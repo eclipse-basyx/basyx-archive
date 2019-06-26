@@ -39,7 +39,7 @@ public class AASHTTPServer extends Thread {
 		// Instantiate and setup Tomcat server
 		tomcat = new Tomcat();
 		tomcat.setPort(context.port);
-		tomcat.setHostname("localhost");
+		tomcat.setHostname(context.hostname);
 		tomcat.getHost().setAppBase(".");
 
 		// Create servlet context

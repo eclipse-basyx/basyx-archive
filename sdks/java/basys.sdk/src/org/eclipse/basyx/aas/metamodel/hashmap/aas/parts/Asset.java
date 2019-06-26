@@ -115,6 +115,11 @@ public class Asset extends HashMap<String, Object> implements IAsset {
 		
 	}
 
+	public void setId(String string) {
+		new AssetFacade(this).setId(string);
+		
+	}
+
 
 
 }

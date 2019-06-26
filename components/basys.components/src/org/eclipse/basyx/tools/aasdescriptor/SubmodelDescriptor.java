@@ -96,7 +96,6 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	/**
 	 * Return sub model ID
 	 */
-	@SuppressWarnings("unchecked")
 	public String getId() {
 		return new Identifier((Map<String, Object>) get("identification")).getId();
 	}

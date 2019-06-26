@@ -44,22 +44,22 @@ public class TestCFGProviderPropertyMetaData {
 
 		
 		// Get property value
-		Object value1 = connSubModel.readElementValue("/aas/submodels/sampleCFG/properties/cfgProperty1/value");
+		Object value1 = connSubModel.readElementValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1/value");
 		assertTrue(value1.equals("exampleStringValue"));
 		// - Check property meta data (description)
-		Object value1a = connSubModel.readElementValue("/aas/submodels/sampleCFG/properties/cfgProperty1/description");
+		Object value1a = connSubModel.readElementValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1/description");
 		assertTrue(value1a.equals("Configuration property description"));
 
 		// Get property value
-		Object value2 = connSubModel.readElementValue("/aas/submodels/sampleCFG/properties/cfgProperty2/value");
+		Object value2 = connSubModel.readElementValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2/value");
 		assertTrue(value2.equals("12"));
 		// - Check property meta data (description)
-		Object value2a = connSubModel.readElementValue("/aas/submodels/sampleCFG/properties/cfgProperty2/description");
+		Object value2a = connSubModel.readElementValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2/description");
 		assertTrue(value2a.equals("Configuration property description on multiple lines"));
 
 
 		// Get property value
-		Object value3 = connSubModel.readElementValue("/aas/submodels/sampleCFG/properties/cfgProperty3/value");
+		Object value3 = connSubModel.readElementValue("/aas/submodels/sampleCFG/dataElements/cfgProperty3/value");
 		assertTrue(value3.equals("45.8"));
 	}
 }

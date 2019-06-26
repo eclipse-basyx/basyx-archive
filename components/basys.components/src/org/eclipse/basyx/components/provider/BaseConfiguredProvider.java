@@ -80,7 +80,7 @@ public class BaseConfiguredProvider extends VABLambdaProvider {
 	 */
 	protected Collection<String> getConfiguredProperties(Map<Object, Object> cfgValues) {
 		// Split property string
-		return splitString((String) cfgValues.get("properties"));
+		return splitString((String) cfgValues.get("dataElements"));
 	}
 
 	
@@ -212,7 +212,7 @@ public class BaseConfiguredProvider extends VABLambdaProvider {
 		
 		// Try to get property meta data
 		String property_semanticsInternal = null; try {property_semanticsInternal = cfgValues.get(propertyName+".semanticsInternal").toString();} catch (Exception e) {}
-		String property_qualifier         = null; try {property_qualifier         = cfgValues.get(propertyName+".qualifier").toString();} catch (Exception e) {}
+		String property_qualifier         = null; try {property_qualifier         = cfgValues.get(propertyName+".qualifier").toString();} catch (Exception e) {} // might need to rename to constraints
 		String property_qualifierType     = null; try {property_qualifierType  = cfgValues.get(propertyName+".qualifierType").toString();} catch (Exception e) {}
 		String property_description       = null; try {property_description       = cfgValues.get(propertyName+".description").toString();} catch (Exception e) {}
 		

@@ -37,7 +37,11 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 	 */
 	protected String docBasePath;
 	
-	
+	/**
+	 * hostname, e.g. ip or localhost
+	 */
+	protected String hostname;
+
 	/**
 	 * Requested Tomcat apache port
 	 */
@@ -54,13 +58,15 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 
 	
 	protected List<AssetAdministrationShell> aasList;
+
+
 	
 	/**
 	 * Constructor with default port
 	 */
 	public BaSyxContext(String reqContextPath, String reqDocBasePath) {
 		// Invoke constructor
-		this(reqContextPath, reqDocBasePath, 8080);
+		this(reqContextPath, reqDocBasePath, "localhost", 8080);
 		
 		this.aasList = new ArrayList<AssetAdministrationShell>();
 	}
@@ -69,11 +75,15 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 	/**
 	 * Constructor
 	 */
-	public BaSyxContext(String reqContextPath, String reqDocBasePath, int reqPort) {
+	public BaSyxContext(String reqContextPath, String reqDocBasePath, String hostn, int reqPort) {
 		// Store context path and doc base path
 		contextPath = reqContextPath;
 		docBasePath = reqDocBasePath;
+		hostname = hostn;
 		port        = reqPort;
+		
+		this.aasList = new ArrayList<AssetAdministrationShell>();
+
 	}
 	
 	
@@ -88,6 +98,7 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 		// Return 'this' reference to enable chaining of operations
 		return this;
 	}
+	
 	
 	/**
 	 * Store AAS provided in this context

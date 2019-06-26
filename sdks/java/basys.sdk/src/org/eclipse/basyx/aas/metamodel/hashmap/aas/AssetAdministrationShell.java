@@ -117,7 +117,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	@SuppressWarnings("unchecked")
 	public void addSubModelHack(SubModel subModel, String endpoint, String endpointType) {
 		System.out.println("adding Submodel " + subModel.getId());
-		SubmodelDescriptor desc = new SubmodelDescriptor(subModel, endpoint + "/aas/submodel", endpointType);
+		SubmodelDescriptor desc = new SubmodelDescriptor(subModel, endpoint, endpointType);
 		((Set<SubmodelDescriptor>) get(SUBMODELS)).add(desc);
 		
 	}
