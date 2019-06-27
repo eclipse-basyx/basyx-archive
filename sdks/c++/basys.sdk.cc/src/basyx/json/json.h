@@ -28,11 +28,14 @@ namespace basyx
 		{
 			json_t json;
 			serialize_helper(json, t);
+			std::cout << "Serialized: \n" << json.dump(4);
 			return json;
 		}
 
 		inline basyx::any deserialize(const json_t & json)
 		{
+			std::cout << "Deserializing: \n" << json.dump(4);
+
 			return deserialize_helper::deserialize(json);
 		};
 

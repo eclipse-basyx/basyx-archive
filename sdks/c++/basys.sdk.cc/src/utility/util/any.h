@@ -37,13 +37,13 @@ namespace basyx {
 
 		template<typename T>
 		any(const T & t)
-			: content{ util::make_unique< Holder< typename std::remove_cv< typename std::decay<const T>::type>::type>>(t) }
+			: content{ std::make_shared< Holder< typename std::remove_cv< typename std::decay<const T>::type>::type>>(t) }
 		{};
 
-		template<typename T>
-		any(T && t)
-			: content{ util::make_unique< Holder< typename std::remove_cv< typename std::decay<const T>::type>::type>>(std::forward<T>(t)) }
-		{};
+//		template<typename T>
+//		any(T && t)
+//			: content{ std::make_shared< Holder< typename std::remove_cv< typename std::decay<const T>::type>::type>>(std::forward<T>(t)) }
+//		{};
 
 		const std::type_info & type() const {
 			return content->type();
@@ -53,23 +53,31 @@ namespace basyx {
 			return std::string{ content->type().name() };
 		}
 
+		any(const any & other) = default;
+		any & operator=(const any & other) = default;
+
 		any(any && other) = default;
 		any & operator=(any && other) = default;
-
 	public:
 		template<typename T>
 		bool InstanceOf() const noexcept {
 			return this->type() == typeid(T);
 		};
 
-		template<typename T>
+		template <typename T>
 		T Get() {
 			return any_cast<T>(*this);
 		};
 
+		template<typename T>
+		T * GetPtr() {
+//			using non_ptr_t = std::remove_pointer<T>::type;
+			return any_cast_ptr<T>(*this);
+		};
+
 		bool IsNull() const noexcept
 		{
-			return this->content.get() != nullptr;
+			return this->content.get() == nullptr;
 		}
 	private:
 		// PlaceHolder:
@@ -83,7 +91,8 @@ namespace basyx {
 		using Holder = basyx::detail::Holder<T>;
 	private:
 		// The actual object holding the value
-		std::unique_ptr<PlaceHolder> content;
+	//	std::unique_ptr<PlaceHolder> content;
+		std::shared_ptr<PlaceHolder> content;
 	public:
 		// any_cast:
 		// Cast a basyx::any object to the desired type
@@ -104,7 +113,14 @@ namespace basyx {
 			return static_cast<ref_t>(*result);
 		}
 
+		template<typename T>
+		static T * any_cast_ptr(any & operand)
+		{
+			auto ptr = &static_cast<any::Holder<typename std::remove_cv<T>::type> *>(operand.content.get())->stored;
 
+			return ptr;
+		}
+			   
 		template<typename T>
 		static T * any_cast(any * operand) noexcept
 		{
@@ -134,7 +150,8 @@ namespace basyx {
 		}
 
 		bool operator==(const basyx::any & rhs) const {
-			return this->content->compare(rhs.content.get());
+			return false;
+		//	return this->content->compare(rhs.content.get());
 		}
 
 	private:
@@ -145,9 +162,6 @@ namespace basyx {
 
 	inline void to_json(nlohmann::json & json, const basyx::any & any)
 	{
-		//jsonSerializer serializer;
-		//any.content->serialize(&serializer);
-		//json = serializer.Extract();
 		any.content->to_json(json);
 	}
 
@@ -157,4 +171,6 @@ namespace basyx {
 	}
 };
 
+
 #endif
+ 

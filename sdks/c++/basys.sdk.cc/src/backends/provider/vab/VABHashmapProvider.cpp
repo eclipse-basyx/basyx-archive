@@ -1,6 +1,7 @@
 #include "VABHashmapProvider.h"
 
 #include <util/printer.h>
+#include <util/function.h>
 
 #include <algorithm>
 #include <cassert>
@@ -44,7 +45,7 @@ namespace provider {
 	};
 
 
-    void HashmapProvider::setModelPropertyValue(const std::string & path, basyx::any && newValue)
+    void HashmapProvider::setModelPropertyValue(const std::string & path, const basyx::any & newValue)
     {
         std::cout << "SetModelPropertyValue1:" + path << std::endl;
 
@@ -55,11 +56,11 @@ namespace provider {
 
 		if (parentElement->find(lastPathElement) != parentElement->end())
 		{
-			parentElement->at(lastPathElement) = std::move(newValue);
+			parentElement->at(lastPathElement) = newValue;
 		}
 		else
 		{
-			parentElement->emplace(lastPathElement, std::move(newValue));
+			parentElement->emplace(lastPathElement, newValue);
 		};
     };
 
@@ -85,7 +86,7 @@ namespace provider {
 		return result;
 	};
 
-    void HashmapProvider::createValue(const std::string & path, basyx::any && newValue)
+    void HashmapProvider::createValue(const std::string & path, const basyx::any & newValue)
     {
         std::cout << "CreateValue1:" << path << " ("
                   << "newValue"
@@ -135,7 +136,7 @@ namespace provider {
 		parentElement->erase(parentElement->find(elementName));
 	};
 
-	void basyx::provider::HashmapProvider::deleteValue(const std::string & path, basyx::any && deletedValue)
+	void basyx::provider::HashmapProvider::deleteValue(const std::string & path, const basyx::any & deletedValue)
 	{
 		std::cout << "DeleteValue2: " << path;
 
@@ -152,6 +153,7 @@ namespace provider {
 		if (element.InstanceOf<basyx::objectCollection_t>())
 		{
 			auto & collection = element.Get<basyx::objectCollection_t&>();
+			// ToDo: fix
 			auto it = std::find_if(collection.begin(), collection.end(), [&](const basyx::any & any) -> bool { return any == deletedValue; });
 			if (it != collection.end())
 				collection.erase(it);
@@ -179,5 +181,13 @@ namespace provider {
 		}
 	}
 
+	basyx::any basyx::provider::HashmapProvider::invokeOperation(const std::string & path, basyx::objectCollection_t & parameters)
+	{
+		auto element = this->getModelPropertyValue(path);
+
+		auto function = element.GetPtr<function_base>();
+
+		return function->invoke_any(parameters);
+	}
 }
 }

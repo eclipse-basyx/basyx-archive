@@ -13,6 +13,7 @@ target_sources(util
 		util/any/bad_any_cast.h
 		util/any/holder.h
 		util/any/placeholder.h
+		util/function.h
         util/invoke.h
         util/macros.h
         util/meta.h

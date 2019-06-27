@@ -30,22 +30,24 @@ namespace basyx
 		// Fundamental type serializer
 		// int, float, double, char, etc.
 		template<typename T>
-		inline void serialize_helper(json_t & json, const T & value, typename std::enable_if<std::is_fundamental<T>::value, T>::type = 0) {
-			json = json_t{
-				{ basyx::serialization::typeIdSpecifier, basyx::serialization::basysType<T>::string},
-				{ basyx::serialization::typeSpecifier, "value" },
-				{ basyx::serialization::valueSpecifier, value }
-			};
+//		inline void serialize_helper(json_t & json, const T & value, typename std::enable_if<std::is_fundamental<T>::value, T>::type = 0) {
+		inline void serialize_helper(json_t & json, const T & value) {
+			//json = json_t{
+			//	{ basyx::serialization::typeIdSpecifier, basyx::serialization::basysType<T>::string},
+			//	{ basyx::serialization::typeSpecifier, "value" },
+			//	{ basyx::serialization::valueSpecifier, value }
+			//};
+			json = value;
 		};
-
 		// std::string serializer
 		// isn't a fundamental type, so needs own serialization handling
 		inline void serialize_helper(json_t & json, const std::string & string) {
-			json = json_t{
-				{ basyx::serialization::typeIdSpecifier, basyx::serialization::basysType<std::string>::string},
-				{ basyx::serialization::typeSpecifier, "value" },
-				{ basyx::serialization::valueSpecifier, string }
-			};
+			//json = json_t{
+			//	{ basyx::serialization::typeIdSpecifier, basyx::serialization::basysType<std::string>::string},
+			//	{ basyx::serialization::typeSpecifier, "value" },
+			//	{ basyx::serialization::valueSpecifier, string }
+			//};
+			json = string;
 		};
 
 		// basyx::any serializer
@@ -75,13 +77,22 @@ namespace basyx
 		// basyx::objectMap_t serializer
 		inline void serialize_helper(json_t & json, const basyx::objectMap_t & objectMap)
 		{
-			json = json_t{
-				{ basyx::serialization::typeSpecifier, "map"},
-				{ basyx::serialization::sizeSpecifier, objectMap.size() }
-			};
+			//json = json_t{
+			//	{ basyx::serialization::typeSpecifier, "map"},
+			//	{ basyx::serialization::sizeSpecifier, objectMap.size() }
+			//};
+
+			json_t collectionTypes;
 
 			for (const auto & entry : objectMap) {
+				if (entry.second.InstanceOf<basyx::objectCollection_t>())
+				{
+					collectionTypes[entry.first] = "list";
+				};
+
 				json[entry.first] = entry.second;
+				if (collectionTypes.size() > 0)
+					json["_basyxTypes"] = collectionTypes;
 			}
 		}
 
@@ -102,14 +113,9 @@ namespace basyx
 		// basyx::objectCollection_t serializer
 		inline void serialize_helper(json_t & json, const basyx::objectCollection_t & objectCollection)
 		{
-			json = json_t{
-				{ basyx::serialization::typeSpecifier, "collection"},
-				{ basyx::serialization::sizeSpecifier, objectCollection.size() }
-			};
-
-			for (std::size_t i = 0; i < objectCollection.size(); ++i) {
-				json[std::to_string(i)] = objectCollection.at(i);
-			};
+			for (const auto & object : objectCollection) {
+				json.push_back(object);
+			}
 		}
 
 	};

@@ -14,6 +14,7 @@
 
 // BaSyx includes
 #include <util/any.h>
+#include <types/BaSysTypes.h>
 
 // Std C++ includes
 #include <string>
@@ -48,17 +49,17 @@ public:
 	/**
 	 * Set a sub model property value
 	 */
-	virtual void setModelPropertyValue(const std::string & path, basyx::any && newValue) = 0;
+	virtual void setModelPropertyValue(const std::string & path, const basyx::any & newValue) = 0;
 
 	/**
 	 * Create a new property under the given path
 	 */
-	virtual void createValue(const std::string & path, basyx::any && addedValue) = 0;
+	virtual void createValue(const std::string & path, const basyx::any & addedValue) = 0;
 
 	/**
 	 * Delete a value from a collection
 	 */
-	virtual void deleteValue(const std::string & path, basyx::any && deletedValue) = 0;
+	virtual void deleteValue(const std::string & path, const basyx::any & deletedValue) = 0;
 
 	/**
 	 * Delete a property, operation, event, submodel or aas under the given path
@@ -70,7 +71,7 @@ public:
 	/**
 	 * Invoke an operation
 	 */
-	virtual basyx::any invokeOperation(const std::string & path, basyx::any & parameter) = 0;
+	virtual basyx::any invokeOperation(const std::string & path, basyx::objectCollection_t & parameters) = 0;
 
 	/**
 	 * Get contained elements

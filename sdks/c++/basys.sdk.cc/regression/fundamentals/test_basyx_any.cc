@@ -6,7 +6,7 @@
 
 namespace basyx {
 	namespace json {
-		template<typename T>
+ 		template<typename T>
 		extern nlohmann::json serialize(const T & t)
 		{
 			return nlohmann::json{};
@@ -44,4 +44,34 @@ TEST_F(TestBaSyxAny, IntTest)
 	ASSERT_EQ(int_ref2, 15);
 
 	EXPECT_THROW(anyInt.Get<float>(), basyx::bad_any_cast);
+}
+
+TEST_F(TestBaSyxAny, RefTest)
+{
+	basyx::any anyInt = 2;
+	basyx::any anyIntCopy = anyInt;
+
+	// Expect both having the same value
+	EXPECT_EQ(anyInt.Get<int>(), 2);
+	EXPECT_EQ(anyIntCopy.Get<int>(), 2);
+
+	// Expect both pointing to the same object
+	EXPECT_EQ(&anyInt.Get<int&>(), &anyInt.Get<int&>());
+
+	// Expect changes to one any object, to take over to other shared ones
+	anyInt.Get<int&>() = 5;
+	EXPECT_EQ(anyInt.Get<int>(), 5);
+	EXPECT_EQ(anyIntCopy.Get<int>(), 5);
+}
+
+TEST_F(TestBaSyxAny, GCTest)
+{
+	basyx::any anyIntA;
+
+	{
+		basyx::any anyIntB = 2;
+		anyIntA = anyIntB;
+	}
+
+	ASSERT_EQ(anyIntA.Get<int>(), 2);
 }

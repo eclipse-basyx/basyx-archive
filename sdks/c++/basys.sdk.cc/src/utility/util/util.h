@@ -53,6 +53,50 @@ namespace util {
 
 	template<typename T, typename... Args>
 	typename detail::unique_if<T>::bounded_array make_unique(Args && ...) = delete;
+
+	template<class Int, Int... Ints>
+	struct integer_sequence
+	{
+		static_assert(std::is_integral<Int>::value, "util::integer_sequence<Int, Ints...>: 'Int' must be integral type!");
+
+		static constexpr size_t size() noexcept
+		{	
+			return (sizeof...(Ints));
+		}
+	};
+
+	template<class N> 
+	struct next_integer_sequence;
+
+	template<typename Int, Int... Ints> 
+	struct next_integer_sequence<integer_sequence<Int, Ints...>>
+	{
+		using type = integer_sequence<Int, Ints..., sizeof...(Ints)>;
+	};
+	
+	template<class T, T I, T N>
+	struct make_int_seq_impl;
+
+	template<class T, T N>
+	using make_integer_sequence = typename make_int_seq_impl<T, 0, N>::type;
+
+	template<class T, T I, T N> struct make_int_seq_impl
+	{
+		using type = typename next_integer_sequence<
+			typename make_int_seq_impl<T, I + 1, N>::type>::type;
+	};
+
+	template<class T, T N> struct make_int_seq_impl<T, N, N>
+	{
+		using type = integer_sequence<T>;
+	};
+
+
+	template<std::size_t... Ints>
+	using index_sequence = util::integer_sequence<std::size_t, Ints...>;
+
+	template<size_t Size>
+	using make_index_sequence = util::make_integer_sequence<size_t, Size>;
 }
 
 namespace util {
