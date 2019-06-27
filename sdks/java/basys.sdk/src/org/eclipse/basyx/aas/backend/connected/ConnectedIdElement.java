@@ -10,11 +10,22 @@ public class ConnectedIdElement extends ConnectedElement implements IElement {
 
 	@Override
 	public String getId() {
+		
+		// try local get
+		String id = (String) this.getLocal("idShort");
+		if (id != null) {
+			return id;
+		}
 		return (String) getProxy().readElementValue(constructPath("idShort"));
 	}
 
 	@Override
 	public void setId(String id) {
+		
+		// try set local if exists
+		if (this.getLocal("idShort") != null) {
+			this.putLocal("idShort", id);
+		}
 		try {
 			getProxy().updateElementValue(constructPath("idShort"), id);
 		} catch (Exception e) {

@@ -243,7 +243,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 		// Sub model operation list
 		Object smOpList = getProxy().readElementValue(constructPath("operations"));
 
-		// RTTI check
+		// RTTI check (c# specific)
 		if (smOpList instanceof HashSet) {
 			// Read  values
 			Collection<Map<String, Object>> operationNodes = (Collection<Map<String, Object>>) smOpList;
@@ -251,10 +251,14 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 			// Convert to IOperation
 			for (Map<String, Object> opNode: operationNodes) {
 				String id = (String) opNode.get("idShort");
-				ret.put(id, new ConnectedOperation(constructPath("operations/" + id), getProxy()));
+				
+				ConnectedOperation conOp = new ConnectedOperation(constructPath("operations/" + id), getProxy());
+				// Cache operation properties
+				conOp.putAllLocal(opNode);
+				ret.put(id, conOp);
 			}
 		} else {
-			// Operations already arrive as Map
+			// Operations already arrive as Map (java specific)
 			ops = (Map<String, Object>) smOpList;
 
 			for (String s : ops.keySet()) {

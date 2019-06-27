@@ -1,5 +1,7 @@
 package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property;
 
+import java.util.Map;
+
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.PropertyType;
@@ -45,8 +47,17 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 
 	@Override
 	public Object getValue() {
-		// TODO Auto-generated method stub
-		return null;
+		Object value = getProxy().readElementValue(constructPath("value"));
+		
+		// unpack c# value
+		if (value instanceof Map<?,?>) {
+			if (((Map<?,?>) value).get("valueType") != null && ((Map<?,?>) value).get("value") != null) {
+				value = ((Map) value).get("value");
+			}
+		}
+		
+		return value;
+
 	}
 
 	@Override

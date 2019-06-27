@@ -1,5 +1,6 @@
 package org.eclipse.basyx.vab.provider;
 
+import java.util.Map;
 import java.util.function.Function;
 
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
@@ -135,6 +136,21 @@ public class VABModelProvider implements IModelProvider {
 		
 		// Invoke operation
 		if (childElement != null && childElement instanceof Function<?, ?>) {
+			
+			// unwrap parameters
+			int i = 0;
+			for (Object param : parameters) {
+				if (param instanceof Map<?,?>) {
+					Map<String, Object> map = (Map<String, Object>) param;
+					
+					if (map.get("valueType") != null && map.get("value") != null) {
+						parameters[i] = map.get("value");
+					}
+				}
+				i++;
+			}
+			
+			
 			Function<Object, Object[]> function = (Function<Object, Object[]>) childElement;
 			return function.apply(parameters);
 		} else {
@@ -143,7 +159,7 @@ public class VABModelProvider implements IModelProvider {
 				if (path.endsWith("/"))
 					return invokeOperation(path+"invokable", parameters);
 				else 
-					return invokeOperation(path+"/invokable", parameters);
+					return invokeOperation(path+"/invokable", parameters); // needs to be adaptde to c#
 			}
 		}
 

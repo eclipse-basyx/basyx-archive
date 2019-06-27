@@ -1,7 +1,10 @@
 package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.operation;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -17,6 +20,7 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedQualifiableFacad
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedReferableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of IOperation
@@ -30,11 +34,20 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	
 	@Override
 	public String getId() {
-	return (String) getProxy().readElementValue(constructPath(Operation.IDSHORT));
+		// try local get
+		String id = (String) this.getLocal("idShort");
+		if (id != null) {
+			return id;
+		}
+		return (String) getProxy().readElementValue(constructPath(Operation.IDSHORT));
 	}
 
 	@Override
 	public void setId(String id) {
+		// try set local if exists
+		if (this.getLocal("idShort") != null) {
+			this.putLocal("idShort", id);
+		}
 		getProxy().updateElementValue(constructPath(Operation.IDSHORT), id);
 		
 	}
@@ -56,7 +69,39 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		// FIXME: endpoint contains a string and invokable is not explicitly in the
 		// meta model
 		//return getProxy().invoke(constructPath("invokable"), params);
-		return getProxy().invoke(constructPath(""), params);
+		
+		// Wrap parameter with valuetype information
+		int i = 0;
+		for (Object param : params) {
+			HashMap<String, Object> valueWrapper = new HashMap<String, Object>();
+			HashMap<String, Object> valueType = new HashMap<String, Object>();
+			HashMap<String, Object> dataObjectType = new HashMap<String, Object>();
+			dataObjectType.put("name", PropertyValueTypeDefHelper.fromObject(param).toString());
+			valueType.put("dataObjectType", dataObjectType);
+			valueWrapper.put("valueType", valueType);
+			valueWrapper.put("value", param);
+			// left out idShort
+			params[i] = valueWrapper;
+			i++;
+		} 
+		
+		// Invoke operation
+		Object result = getProxy().invoke(super.getPath(), params);
+		
+		// Unwrap result value
+		if (result instanceof List<?>) {
+			Object resultWrapper = ((List<?>) result).get(0);
+			
+			if (resultWrapper instanceof Map<?,?>) {
+				Map<String, Object> map = (Map<String, Object>) resultWrapper;
+				if (map.get("idShort").equals("Response") && map.get("value") != null) {
+					
+					result = map.get("value");
+				}
+			}
+		}
+		
+		return result;
 	}
 
 	@Override

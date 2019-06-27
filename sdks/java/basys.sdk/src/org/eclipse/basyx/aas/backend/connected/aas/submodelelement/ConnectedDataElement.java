@@ -112,11 +112,20 @@ public class ConnectedDataElement extends ConnectedSubmodelElement {
 	
 	@Override
 	public String getId() {
-	return (String) getProxy().readElementValue(constructPath(Operation.IDSHORT));
+		// try local get
+		String id = (String) this.getLocal("idShort");
+		if (id != null) {
+			return id;
+		}
+		return (String) getProxy().readElementValue(constructPath(Operation.IDSHORT));
 	}
 
 	@Override
 	public void setId(String id) {
+		// try set local if exists
+		if (this.getLocal("idShort") != null) {
+			this.putLocal("idShort", id);
+		}
 		getProxy().updateElementValue(constructPath(Operation.IDSHORT), id);
 		
 	}

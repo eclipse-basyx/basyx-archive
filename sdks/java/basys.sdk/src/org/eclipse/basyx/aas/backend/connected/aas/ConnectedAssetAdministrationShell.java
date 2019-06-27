@@ -171,14 +171,31 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, ISubModel> getSubModels() {
-		Set<Map<?, ?>> refs = (Set<Map<?, ?>>) getProxy().readElementValue(constructPath("submodel"));
+		
+		Set<Map<?, ?>> refs = null;
 		Map<String, ISubModel> ret = new HashMap<>();
-		for (Map<?, ?> key : refs) {
-			String id = (String) ((Map<?, ?>) ((List<?>) key.get("keys")).get(0)).get("value");
-			VABElementProxy elem = manager.connectToVABElement(id);
-			ISubModel sm = new ConnectedSubModel("/aas/submodels/" + id, elem);
-			ret.put(id, sm);
+
+		try {
+			// Java getSubmodels
+			refs = (Set<Map<?, ?>>) getProxy().readElementValue(constructPath("submodel"));
+			for (Map<?, ?> key : refs) {
+				String id = (String) ((Map<?, ?>) ((List<?>) key.get("keys")).get(0)).get("value");
+				VABElementProxy elem = manager.connectToVABElement(id);
+				ISubModel sm = new ConnectedSubModel("/aas/submodels/" + id, elem);
+				ret.put(id, sm);
+			}
+		} catch (ClassCastException e) {
+			System.out.println("Cast failed... trying c# get submodels");
+			// c# getSubmodels
+			refs = (Set<Map<?, ?>>) getProxy().readElementValue(constructPath("submodels"));
+			for (Map<?, ?> key : refs) {
+				String id = (String) key.get("idShort");
+				VABElementProxy elem = manager.connectToVABElement(id);
+				ISubModel sm = new ConnectedSubModel("/aas/submodels/" + id, elem);
+				ret.put(id, sm);
+			}
 		}
+		
 
 		return ret;
 	}
