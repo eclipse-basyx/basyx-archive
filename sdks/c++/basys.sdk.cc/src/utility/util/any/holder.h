@@ -55,12 +55,12 @@ namespace basyx {
 				//os << stored;
 			};
 
-			virtual bool compare(PlaceHolder * rhs) const override {
-				if (rhs->type() != this->type())
-					return false;
+			//virtual bool compare(PlaceHolder * rhs) const override {
+			//	if (rhs->type() != this->type())
+			//		return false;
 
-				return this->stored == static_cast<Holder<T>*>(rhs)->stored;
-			}
+			//	return this->stored == static_cast<Holder<T>*>(rhs)->stored;
+			//}
 
 			virtual void to_json(json_t & json) const override
 			{

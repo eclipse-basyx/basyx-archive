@@ -32,52 +32,74 @@ namespace basyx
 			static basyx::any deserialize(const json_t & json)
 			{
 				// Get the basystype
-				auto basysType = json[basyx::serialization::typeSpecifier].get<std::string>();
+				// auto basysType = json[basyx::serialization::typeSpecifier].get<std::string>();
 
 				// deserialize fundamental types (and std::string)
-				if (basysType == basyx::serialization::valueSpecifier)
+//				if (basysType == basyx::serialization::valueSpecifier)
+				if(json.is_primitive())
 				{
 					return deserialize_helper::fundamental(json);
 				}
 				else // deserialize objectMap
-				if (basysType == basyx::serialization::mapSpecifier)
+//				if (basysType == basyx::serialization::mapSpecifier)
+				if(json.is_object())
 				{
 					return basyx::any{ std::forward<basyx::objectMap_t>(deserialize_helper::objectMap(json)) };
 				}
 				else // deserialize typed basyx::array
-				if (basysType == basyx::serialization::arraySpecifier)
+//				if (basysType == basyx::serialization::arraySpecifier)
+				if(json.is_array())
 				{
-					return deserialize_helper::array(json);
+					return deserialize_helper::object_list(json);
 				}
 			}
 		private:
 			// Deserialize a fundamental type (and std::string) from JSON and return a basyx::any object holding the deserialized value
 			static basyx::any fundamental(const json_t & json)
 			{
-				// Get the typeId and value node
-				auto typeId = json[basyx::serialization::typeIdSpecifier].get<std::string>();
-				auto valueJson = json[basyx::serialization::valueSpecifier];
+				if (json.is_number_float())
+					return basyx::any{ json.get<float>() };
+				else if (json.is_number_integer())
+					return basyx::any{ json.get<int>() };
+				else if (json.is_string())
+					return basyx::any{ json.get<std::string>() };
 
-				if (typeId == basyx::serialization::basysType<int>::string) {
-					return basyx::any{ valueJson.get<int>() };
-				} 
-				else if (typeId == basyx::serialization::basysType<bool>::string) {
-					return basyx::any{ valueJson.get<bool>() };
-				}
-				else if (typeId == basyx::serialization::basysType<float>::string) {
-					return basyx::any{ valueJson.get<float>() };
-				}
-				else if (typeId == basyx::serialization::basysType<double>::string) {
-					return basyx::any{ valueJson.get<double>() };
-				}
-				else if (typeId == basyx::serialization::basysType<char>::string) {
-					return basyx::any{ valueJson.get<char>() };
-				}
-				else if (typeId == basyx::serialization::basysType<std::string>::string) {
-					return basyx::any{ valueJson.get<std::string>() };
-				}
+				// Get the typeId and value node
+				//auto typeId = json[basyx::serialization::typeIdSpecifier].get<std::string>();
+				//auto valueJson = json[basyx::serialization::valueSpecifier];
+
+				//if (typeId == basyx::serialization::basysType<int>::string) {
+				//	return basyx::any{ valueJson.get<int>() };
+				//} 
+				//else if (typeId == basyx::serialization::basysType<bool>::string) {
+				//	return basyx::any{ valueJson.get<bool>() };
+				//}
+				//else if (typeId == basyx::serialization::basysType<float>::string) {
+				//	return basyx::any{ valueJson.get<float>() };
+				//}
+				//else if (typeId == basyx::serialization::basysType<double>::string) {
+				//	return basyx::any{ valueJson.get<double>() };
+				//}
+				//else if (typeId == basyx::serialization::basysType<char>::string) {
+				//	return basyx::any{ valueJson.get<char>() };
+				//}
+				//else if (typeId == basyx::serialization::basysType<std::string>::string) {
+				//	return basyx::any{ valueJson.get<std::string>() };
+				//}
 
 				return {nullptr};
+			}
+
+			static basyx::any object_list(const json_t & json)
+			{
+				basyx::objectCollection_t objectList;
+
+				for (const auto & val : json)
+				{
+					objectList.push_back(deserialize(val));
+				}
+
+				return objectList;
 			}
 
 			// Deserialize basyx::array from JSON and return a basyx::any object holding the deserialized array
@@ -85,7 +107,11 @@ namespace basyx
 			{
 				auto arrayType = json[basyx::serialization::arrayTypeSpecifier].get<std::string>();
 
+				
 				if (arrayType == basyx::serialization::basysType<int>::string) {
+					return deserialize_helper::typed_array<int>(json);
+				}
+				else if (arrayType == "object") {
 					return deserialize_helper::typed_array<int>(json);
 				}
 				else if (arrayType == basyx::serialization::basysType<bool>::string) {
@@ -129,7 +155,8 @@ namespace basyx
 			// Deserializes an objectMap from the given JSON
 			static basyx::objectMap_t objectMap(const json_t & json)
 			{
-				auto size = json[basyx::serialization::sizeSpecifier].get<std::size_t>();
+				//auto size = json[basyx::serialization::sizeSpecifier].get<std::size_t>();
+				auto size = json.size();
 
 				std::cout << json.dump(4);
 
@@ -137,15 +164,11 @@ namespace basyx
 				
 				for (const auto & element : json.items())
 				{
-					if (!element.value().is_object())
-						continue;
-
 					objectMap.emplace( element.key(), deserialize(element.value()));
 				};
 
 				return objectMap;
 			}
-
 		};
 	};
 };

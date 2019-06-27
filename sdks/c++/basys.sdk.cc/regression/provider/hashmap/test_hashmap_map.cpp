@@ -28,8 +28,8 @@ public:
     {
         basyx::objectMap_t outerMap, innerMap, propertyMap;
         propertyMap.emplace("test", 123);
-		innerMap.emplace("propertyMap", std::move(propertyMap));
-        outerMap.emplace("property1", std::move(innerMap));
+		innerMap.emplace("propertyMap", propertyMap);
+        outerMap.emplace("property1", innerMap);
 
         hashMapProvider = basyx::provider::HashmapProvider { std::move(outerMap) };
     }
@@ -63,8 +63,8 @@ TEST_F(TestBaSyxHashmapProviderMap, testUpdateComplete)
 	
 	// Check test case results
 	ASSERT_EQ(map.size(), 2);
-	ASSERT_EQ(map["a"], 1);
-	ASSERT_EQ(map["b"], 2);
+	ASSERT_EQ(map["a"].Get<int&>(), 1);
+	ASSERT_EQ(map["b"].Get<int&>(), 2);
 };
 
 
@@ -77,9 +77,9 @@ TEST_F(TestBaSyxHashmapProviderMap, testUpdateElement)
 	auto & map = hashMapProvider.getModelPropertyValue(mapPath).Get<basyx::objectMap_t&>();
 
 	// Check test case results
-	ASSERT_EQ(map.size(), 2);
-	ASSERT_EQ(map["a"], 2);
-	ASSERT_EQ(map["test"], 123);
+	EXPECT_EQ(map.size(), 2);
+	EXPECT_EQ(map["a"].Get<int&>(), 2);
+	EXPECT_EQ(map["test"].Get<int&>(), 123);
 }
 
 TEST_F(TestBaSyxHashmapProviderMap, testRemoveElement)

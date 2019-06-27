@@ -61,17 +61,17 @@ namespace basyx {
 			/**
 			 * Set a sub model property value
 			 */
-			virtual void setModelPropertyValue(const std::string & path, basyx::any && newValue) override;
+			virtual void setModelPropertyValue(const std::string & path, const basyx::any & newValue) override;
 
 			/**
 			 * Create a new property under the given path
 			 */
-			virtual void createValue(const std::string & path, basyx::any && newValue) override;
+			virtual void createValue(const std::string & path, const basyx::any & newValue) override;
 
 			/**
 			 * Delete a value from a collection
 			 */
-			virtual void deleteValue(const std::string & path, basyx::any && deletedValue) override;
+			virtual void deleteValue(const std::string & path, const basyx::any & deletedValue) override;
 
 
 			/**
@@ -85,7 +85,7 @@ namespace basyx {
 			/**
 			 * Invoke an operation
 			 */
-			virtual basyx::any invokeOperation(const std::string & path, basyx::any & parameter) override { return {}; };
+			virtual basyx::any invokeOperation(const std::string & path, basyx::objectCollection_t & parameters) override;
 		};
 	}
 }

@@ -30,7 +30,7 @@ public:
 	}
 
 	Provider * getBackend() {
-		return providerBackend;
+		return providerBackend;	
 	}
 
 	std::string processBaSysGet(std::string const& path) {
@@ -69,12 +69,25 @@ public:
 		}
 	}
 
-	void processBaSysInvoke(std::string const& path, std::string const& serializedJSONValue, char* output, size_t* size) 
+	std::string processBaSysInvoke(std::string const& path, std::string const& serializedJSONValue, char* output, size_t* size) 
 	{
 		// ToDo: invoke operations
-		//auto deserialized = basyx::json::deserialize(serializedJSONValue);
-		//BRef<BType> res = providerBackend->invokeOperation(path, deserialized);
-		//		serializeToJSON(path, res, output, size);
+		auto deserialized = basyx::json::deserialize(serializedJSONValue);
+
+		basyx::any res;
+
+		if (deserialized.InstanceOf<basyx::objectCollection_t>())
+		{
+			auto & parameters = deserialized.Get<basyx::objectCollection_t&>();
+			res = providerBackend->invokeOperation(path, parameters);
+		}
+		else
+		{
+			basyx::objectCollection_t parameters{ deserialized };
+			res = providerBackend->invokeOperation(path, parameters);
+		}
+
+		return serializeToJSON(path, res);
 	}
 
 private:
@@ -89,7 +102,11 @@ private:
 
 	std::string serializeToJSON(const std::string & path, const basyx::any & value)
 	{
-		return basyx::json::serialize(value).dump(4);
+		auto json = basyx::json::serialize(value);
+
+		nlohmann::json retJson{ {"success", true}, {"entity", json} };
+
+		return retJson.dump(4);
 	}
 
 	void incrementClock(std::string const& submodelPath) 
