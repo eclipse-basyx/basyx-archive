@@ -313,7 +313,7 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	@Override
 	public void setValue(Object obj) {
 		put(Property.VALUE, obj);
-		put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(obj).toString());
+		put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(obj));
 		
 	}
 

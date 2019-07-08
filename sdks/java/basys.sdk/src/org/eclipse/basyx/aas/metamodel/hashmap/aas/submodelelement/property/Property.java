@@ -62,7 +62,7 @@ public class Property extends DataElement implements IProperty {
 	@Override
 	public void setValue(Object value) {
 		put(VALUE, value);
-		put(VALUETYPE, PropertyValueTypeDefHelper.fromObject(value).toString());
+		put(VALUETYPE, PropertyValueTypeDefHelper.fromObject(value));
 
 	}
 

@@ -1,6 +1,5 @@
 package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.operation;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -63,24 +62,23 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	public List<IOperationVariable> getReturnTypes() {
 		return (List<IOperationVariable>) getProxy().readElementValue(constructPath(Operation.OUT));
 	}
-
+	
+	/**
+	 * Invoke a remote operation
+	 * TODO C# includes idShort
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object invoke(Object... params) throws Exception {
-		// FIXME: endpoint contains a string and invokable is not explicitly in the
-		// meta model
-		//return getProxy().invoke(constructPath("invokable"), params);
 		
 		// Wrap parameter with valuetype information
 		int i = 0;
 		for (Object param : params) {
 			HashMap<String, Object> valueWrapper = new HashMap<String, Object>();
-			HashMap<String, Object> valueType = new HashMap<String, Object>();
-			HashMap<String, Object> dataObjectType = new HashMap<String, Object>();
-			dataObjectType.put("name", PropertyValueTypeDefHelper.fromObject(param).toString());
-			valueType.put("dataObjectType", dataObjectType);
-			valueWrapper.put("valueType", valueType);
+			
+			valueWrapper.put("valueType", PropertyValueTypeDefHelper.fromObject(param));
 			valueWrapper.put("value", param);
-			// left out idShort
+			
 			params[i] = valueWrapper;
 			i++;
 		} 
@@ -94,7 +92,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 			
 			if (resultWrapper instanceof Map<?,?>) {
 				Map<String, Object> map = (Map<String, Object>) resultWrapper;
-				if (map.get("idShort").equals("Response") && map.get("value") != null) {
+				if (map.get("idShort").equals("Response") && map.get("value") != null) { // TODO C# test access from C# to Java hosted operation
 					
 					result = map.get("value");
 				}

@@ -1,7 +1,6 @@
 package org.eclipse.basyx.aas.metamodel.factory;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -10,11 +9,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.resources.IElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.Kind;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
@@ -78,7 +75,7 @@ public class MetaModelElementFactory {
 		ret.putAll(prop);
 		Map<String, Object> value = VABLambdaProviderHelper.createSimple(get, set);
 		ret.put("value", value);
-		ret.put("valueType", PropertyValueTypeDefHelper.fromObject(get.get()).toString());
+		ret.put("valueType", PropertyValueTypeDefHelper.fromObject(get.get()));
 		return ret;
 	}
 

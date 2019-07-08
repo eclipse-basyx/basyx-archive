@@ -24,6 +24,10 @@ public class PropertyValueTypeDefHelper {
 			typeMap.put(t.toString(), t);
 		}
 	}
+	
+	// Strings required for meta-model conformant valueType format
+	static String name = "name";
+	static String dataObjectType = "dataObjectType";
 
 	/**
 	 * Map the name of a PropertyValueTypeDef to a PropertyValueTypeDef
@@ -45,31 +49,59 @@ public class PropertyValueTypeDefHelper {
 	 * @param obj
 	 * @return
 	 */
-	public static PropertyValueTypeDef fromObject(Object obj) {
-		if (obj == null)
-			return PropertyValueTypeDef.Null;
-
+	public static HashMap<String, Object> fromObject(Object obj) {
+		
+		HashMap<String, Object> valueTypeWrapper = new HashMap<String, Object>();
+		HashMap<String, Object> dataObjectTypeWrapper = new HashMap<String, Object>();
+		valueTypeWrapper.put(dataObjectType, dataObjectTypeWrapper);
+		
+		if (obj == null) {
+			dataObjectTypeWrapper.put(name, PropertyValueTypeDef.Null.toString());
+			return valueTypeWrapper;
+		}
+		
 		Class<?> c = obj.getClass();
 
 		if (c == int.class || c == Integer.class) {
-			return PropertyValueTypeDef.Integer;
+			dataObjectTypeWrapper.put(name, PropertyValueTypeDef.Integer.toString());
+			return valueTypeWrapper;
 		} else if (c == void.class || c == Void.class) {
-			return PropertyValueTypeDef.Void;
+			dataObjectTypeWrapper.put(name, PropertyValueTypeDef.Void.toString());
+			return valueTypeWrapper;
 		} else if (c == boolean.class || c == Boolean.class) {
-			return PropertyValueTypeDef.Boolean;
+			dataObjectTypeWrapper.put(name, PropertyValueTypeDef.Boolean.toString());
+			return valueTypeWrapper;
 		} else if (c == float.class || c == Float.class) {
-			return PropertyValueTypeDef.Float;
+			dataObjectTypeWrapper.put(name, PropertyValueTypeDef.Float.toString()); // TODO C# deprecated due to new serialization
+			return valueTypeWrapper;
 		} else if (c == double.class || c == Double.class) {
-			return PropertyValueTypeDef.Double;
+			dataObjectTypeWrapper.put(name, PropertyValueTypeDef.Double.toString());
+			return valueTypeWrapper;
 		} else if (c == String.class) {
-			return PropertyValueTypeDef.String;
+			dataObjectTypeWrapper.put(name, PropertyValueTypeDef.String.toString());
+			return valueTypeWrapper;
 		} else if (Map.class.isAssignableFrom(c)) {
-			return PropertyValueTypeDef.Map;
+			dataObjectTypeWrapper.put(name, PropertyValueTypeDef.Map.toString());
+			return valueTypeWrapper;
 		} else if (Collection.class.isAssignableFrom(c)) {
-			return PropertyValueTypeDef.Collection;
+			dataObjectTypeWrapper.put(name, PropertyValueTypeDef.Collection.toString());
+			return valueTypeWrapper;
 		} else {
 			throw new RuntimeException("Cannot map object " + obj + " to any PropertyValueTypeDef");
 		}
 		// TODO: Container, Reference
+	}
+
+	@SuppressWarnings("unchecked")
+	public static PropertyValueTypeDef readTypeDef(Object vTypeMap) {
+		
+		if (vTypeMap instanceof Map<?,?>) {
+
+			Map<String, Object> map = (Map<String, Object>) vTypeMap;
+			Map<String, Object> dot = (Map<String, Object>) map.get(dataObjectType);
+			
+			return fromName(dot.get(name).toString());
+		}
+		return null;
 	}
 }
