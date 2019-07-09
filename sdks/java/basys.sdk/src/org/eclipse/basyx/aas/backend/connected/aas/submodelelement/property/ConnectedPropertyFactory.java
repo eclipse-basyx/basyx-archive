@@ -22,18 +22,8 @@ public class ConnectedPropertyFactory {
 			return new ConnectedContainerProperty(path, proxy);
 		} else if (property.containsKey("valueType")) {
 			
-			PropertyValueTypeDef valueType = null;
-			Object vType1 = property.get("valueType");
-			if (vType1 instanceof String) {
-				// try outdated java valuetype
-				valueType = PropertyValueTypeDefHelper.fromName((String) vType1);
-			} else if (vType1 instanceof Map<?,?>) {
-				// extract from hashmap
-				String vType2 = (String) ((Map<String, Object>) ((Map<String, Object>) vType1).get("dataObjectType")).get("name");
-				valueType = PropertyValueTypeDefHelper.fromName(vType2);
-			
-			}
-			
+			PropertyValueTypeDef valueType = PropertyValueTypeDefHelper.readTypeDef(property.get("valueType"));
+						
 			if (valueType == PropertyValueTypeDef.Map) {
 				return new ConnectedMapProperty(path, proxy);
 			} else if (valueType == PropertyValueTypeDef.Collection) {

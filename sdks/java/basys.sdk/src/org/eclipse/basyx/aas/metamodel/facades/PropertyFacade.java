@@ -35,7 +35,7 @@ public class PropertyFacade implements IProperty {
 
 	@Override
 	public PropertyType getPropertyType() {
-		PropertyValueTypeDef type = PropertyValueTypeDefHelper.fromName((String) map.get(Property.VALUETYPE));
+		PropertyValueTypeDef type = PropertyValueTypeDefHelper.readTypeDef(map.get(Property.VALUETYPE));
 		if (type == PropertyValueTypeDef.Collection) {
 			return PropertyType.Collection;
 		} else if (type == PropertyValueTypeDef.Map) {

@@ -159,7 +159,7 @@ public class VABModelProvider implements IModelProvider {
 				if (path.endsWith("/"))
 					return invokeOperation(path+"invokable", parameters);
 				else 
-					return invokeOperation(path+"/invokable", parameters); // needs to be adaptde to c#
+					return invokeOperation(path+"/invokable", parameters); // TODO C# needs to be adapted so C# can invoke operations on java
 			}
 		}
 

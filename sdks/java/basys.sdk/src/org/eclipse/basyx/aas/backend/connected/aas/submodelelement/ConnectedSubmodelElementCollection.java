@@ -241,7 +241,7 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	@Override
 	public void setValue(Object obj) {
 		getProxy().updateElementValue(constructPath(Property.VALUE), obj);
-		getProxy().updateElementValue(constructPath(Property.VALUETYPE), PropertyValueTypeDefHelper.fromObject(obj).toString());
+		getProxy().updateElementValue(constructPath(Property.VALUETYPE), PropertyValueTypeDefHelper.fromObject(obj));
 		
 	}
 	
