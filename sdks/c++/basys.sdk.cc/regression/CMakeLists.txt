@@ -21,5 +21,6 @@ add_subdirectory(fundamentals)
 #add_subdirectory(parameter)
 add_subdirectory(provider)
 add_subdirectory(vab/snippet)
+add_subdirectory(vab)
 
 diagnostics_print(testmain)
