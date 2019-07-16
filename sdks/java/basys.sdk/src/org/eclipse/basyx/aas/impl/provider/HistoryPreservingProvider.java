@@ -10,8 +10,8 @@ import org.eclipse.basyx.aas.api.resources.IMapProperty;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
-import org.eclipse.basyx.aas.impl.provider.filesystem.TimeProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
+import org.eclipse.basyx.vab.provider.filesystem.TimeProvider;
 
 /**
  * Wraps two model providers. The first is used to hold the live data, the
