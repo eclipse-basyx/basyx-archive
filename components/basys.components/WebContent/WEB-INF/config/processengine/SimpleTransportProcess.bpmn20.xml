@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" targetNamespace="http://www.activiti.org/test" exporter="Camunda Modeler" exporterVersion="1.16.2">
+  <process id="smsProcess" name="SMS Coilcar Process" isExecutable="true">
+    <startEvent id="startevent1" name="Start" />
+    <serviceTask id="step5" name="pick up coil" activiti:class="org.activiti.javadelegate.CoilcarServiceDelegate">
+      <extensionElements>
+        <activiti:field name="serviceName">
+          <activiti:string>liftTo</activiti:string>
+        </activiti:field>
+        <activiti:field name="serviceProvider">
+          <activiti:string>coilcar</activiti:string>
+        </activiti:field>
+        <activiti:field name="serviceParameter">
+          <activiti:string>json</activiti:string>
+        </activiti:field>
+        <camunda:executionListener class="" event="end" />
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="step6" name="bring coil before spindle" activiti:class="org.activiti.javadelegate.CoilcarServiceDelegate">
+      <extensionElements>
+        <activiti:field name="serviceName">
+          <activiti:string>driveTo</activiti:string>
+        </activiti:field>
+        <activiti:field name="position">
+          <activiti:string>5</activiti:string>
+        </activiti:field>
+        <camunda:executionListener class="" event="start" />
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow5" sourceRef="step5" targetRef="step6" />
+    <sequenceFlow id="flow6" sourceRef="exclusivegateway1" targetRef="step5">
+      <conditionExpression xsi:type="tFormalExpression">${coilposition == 1}</conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endevent1" name="End" />
+    <serviceTask id="servicetask1" name="Lift coil until inline" activiti:class="org.activiti.javadelegate.CoilcarServiceDelegate">
+      <extensionElements>
+        <activiti:field name="serviceName">
+          <activiti:string>liftTo</activiti:string>
+        </activiti:field>
+        <activiti:field name="position">
+          <activiti:string>4</activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow7" sourceRef="step6" targetRef="servicetask1" />
+    <sequenceFlow id="flow8" sourceRef="servicetask4" targetRef="endevent1" />
+    <serviceTask id="servicetask2" name="put coil onto spindle" activiti:class="org.activiti.javadelegate.CoilcarServiceDelegate">
+      <extensionElements>
+        <activiti:field name="serviceName">
+          <activiti:string>driveTo</activiti:string>
+        </activiti:field>
+        <activiti:field name="position">
+          <activiti:string>6</activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="servicetask3" name="lift down" activiti:class="org.activiti.javadelegate.CoilcarServiceDelegate">
+      <extensionElements>
+        <activiti:field name="serviceName">
+          <activiti:string>liftTo</activiti:string>
+        </activiti:field>
+        <activiti:field name="position">
+          <activiti:string>1</activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow12" sourceRef="servicetask2" targetRef="servicetask3" />
+    <sequenceFlow id="flow13" sourceRef="servicetask1" targetRef="servicetask2" />
+    <serviceTask id="servicetask4" name="move back" activiti:class="org.activiti.javadelegate.CoilcarServiceDelegate">
+      <extensionElements>
+        <activiti:field name="serviceName">
+          <activiti:string>driveTo</activiti:string>
+        </activiti:field>
+        <activiti:field name="position">
+          <activiti:string>1</activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow14" sourceRef="servicetask3" targetRef="servicetask4" />
+    <exclusiveGateway id="exclusivegateway1" name="check start position of coil" />
+    <sequenceFlow id="flow15" sourceRef="startevent1" targetRef="exclusivegateway1" />
+    <serviceTask id="servicetask5" name="move to coil" activiti:class="org.activiti.javadelegate.CoilcarServiceDelegate">
+      <extensionElements>
+        <activiti:field name="serviceName">
+          <activiti:string>driveTo</activiti:string>
+        </activiti:field>
+        <activiti:field name="position">
+          <activiti:string>1</activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow16" sourceRef="exclusivegateway1" targetRef="servicetask5">
+      <conditionExpression xsi:type="tFormalExpression">${coilposition==2}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow17" sourceRef="servicetask5" targetRef="step5" />
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_smsProcess">
+    <bpmndi:BPMNPlane id="BPMNPlane_smsProcess" bpmnElement="smsProcess">
+      <bpmndi:BPMNShape id="BPMNShape_startevent1" bpmnElement="startevent1">
+        <omgdc:Bounds x="12" y="128" width="35" height="35" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_step5" bpmnElement="step5">
+        <omgdc:Bounds x="240" y="109" width="105" height="71" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_step6" bpmnElement="step6">
+        <omgdc:Bounds x="380" y="109" width="105" height="71" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_endevent1" bpmnElement="endevent1">
+        <omgdc:Bounds x="1140" y="127" width="35" height="35" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_servicetask1" bpmnElement="servicetask1">
+        <omgdc:Bounds x="530" y="109" width="105" height="71" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_servicetask2" bpmnElement="servicetask2">
+        <omgdc:Bounds x="690" y="106" width="105" height="71" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_servicetask3" bpmnElement="servicetask3">
+        <omgdc:Bounds x="840" y="107" width="105" height="71" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_servicetask4" bpmnElement="servicetask4">
+        <omgdc:Bounds x="980" y="117" width="105" height="55" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_exclusivegateway1" bpmnElement="exclusivegateway1" isMarkerVisible="true">
+        <omgdc:Bounds x="110" y="125" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_servicetask5" bpmnElement="servicetask5">
+        <omgdc:Bounds x="240" y="237" width="105" height="55" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow5" bpmnElement="flow5">
+        <omgdi:waypoint x="345" y="144" />
+        <omgdi:waypoint x="380" y="144" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow6" bpmnElement="flow6">
+        <omgdi:waypoint x="150" y="145" />
+        <omgdi:waypoint x="240" y="144" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow7" bpmnElement="flow7">
+        <omgdi:waypoint x="485" y="144" />
+        <omgdi:waypoint x="530" y="144" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow8" bpmnElement="flow8">
+        <omgdi:waypoint x="1085" y="144" />
+        <omgdi:waypoint x="1140" y="144" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow12" bpmnElement="flow12">
+        <omgdi:waypoint x="795" y="141" />
+        <omgdi:waypoint x="840" y="142" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow13" bpmnElement="flow13">
+        <omgdi:waypoint x="635" y="144" />
+        <omgdi:waypoint x="690" y="141" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow14" bpmnElement="flow14">
+        <omgdi:waypoint x="945" y="142" />
+        <omgdi:waypoint x="980" y="144" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow15" bpmnElement="flow15">
+        <omgdi:waypoint x="47" y="145" />
+        <omgdi:waypoint x="110" y="145" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow16" bpmnElement="flow16">
+        <omgdi:waypoint x="130" y="165" />
+        <omgdi:waypoint x="129" y="265" />
+        <omgdi:waypoint x="240" y="264" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow17" bpmnElement="flow17">
+        <omgdi:waypoint x="292" y="237" />
+        <omgdi:waypoint x="292" y="180" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
