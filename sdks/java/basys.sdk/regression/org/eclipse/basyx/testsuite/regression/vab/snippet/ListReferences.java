@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class ListReferences {
 		// Create list
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("x", 5);
-		Object[] original = new Object[] { 3, 4, "test", "test", true, false, map };
+		List<Object> original = Arrays.asList(3, 4, "test", "test", true, false, map);
 		connVABElement.createElement(listPath, original);
 
 		// Read values
