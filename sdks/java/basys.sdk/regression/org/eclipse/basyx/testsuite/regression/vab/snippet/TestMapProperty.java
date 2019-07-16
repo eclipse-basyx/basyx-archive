@@ -56,6 +56,24 @@ public class TestMapProperty {
 		// Roll back map
 		connVABElement.updateElementValue(mapPath, original);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static void testUpdateNonexisting(VABConnectionManager connManager) {
+		// Connect to VAB element with ID "urn:fhg:es.iese:vab:1:1:simplevabelement"
+		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
+		
+		// Save original
+		Map<String, Object> original = (Map<String, Object>) connVABElement.readElementValue(mapPath);
+		
+		// Try to update a Map, that does not exist
+		connVABElement.updateElementValue(mapPath + "1", original);
+		
+		// Try to read the result
+		Map<String, Object> map = (Map<String, Object>) connVABElement.readElementValue(mapPath + "1");
+		
+		// Check that the Map was not written by the update routine
+		assertEquals(null, map);
+	}
 
 	@SuppressWarnings("unchecked")
 	public static void testUpdateElement(VABConnectionManager connManager) {

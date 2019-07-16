@@ -76,6 +76,11 @@ public class TestHashMapProvider {
 	}
 
 	@Test
+	public void testMapUpdateNonexisting() {
+		TestMapProperty.testUpdateNonexisting(connManager);
+	}
+
+	@Test
 	public void testMapRemoveElement() {
 		TestMapProperty.testRemoveElement(connManager);
 	}

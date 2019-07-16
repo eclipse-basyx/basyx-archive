@@ -19,7 +19,7 @@ public class SetPropertyValue {
 
 		// Set and reread property value
 		connVABElement.updateElementValue("property1/property1.1", 12);
-		connVABElement.updateElementValue("property1/Property1.1", 100);
+		connVABElement.createElement("property1/Property1.1", 100);
 		Object value3 = connVABElement.readElementValue("property1/property1.1");
 		Object value4 = connVABElement.readElementValue("property1/Property1.1");
 
@@ -39,5 +39,11 @@ public class SetPropertyValue {
 		assertTrue(value5 instanceof Integer);
 		assertEquals(7, value5);
 		assertEquals(null, value6);
+		
+		// Try to update an element, that does not exist
+		connVABElement.updateElementValue("property1/property1.1_1", 10);
+		Object value7 = connVABElement.readElementValue("property1/property1.1_1");
+		
+		assertEquals(null, value7);
 	}
 }
