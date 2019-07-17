@@ -12,7 +12,6 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  */
 public class ConnectedElement {
 
-	private static final long serialVersionUID = 1L;
 	private VABElementProxy proxy;
 	private String path;
 	

@@ -148,6 +148,7 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	public Set<ISubModel> getSubModelsHack() {
 		return (Set<ISubModel>) map.get("submodels");
 	}

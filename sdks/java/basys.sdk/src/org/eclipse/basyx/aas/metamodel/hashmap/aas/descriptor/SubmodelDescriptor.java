@@ -2,15 +2,11 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Description;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.Kind;
 
 
 
@@ -34,7 +30,6 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	/**
 	 * Create a new sub model descriptor with minimal information
 	 */
-	@SuppressWarnings("unchecked")
 	public SubmodelDescriptor(SubModel submodel, String endpoint, String endpointType) {
 		// Invoke default constructor
 		//this();

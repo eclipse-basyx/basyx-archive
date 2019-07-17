@@ -101,6 +101,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		put("endpoints", Arrays.asList(endpointWrapper));
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<HashMap<String, String>> getEndpoints(){
 		return (List<HashMap<String, String>>) get("endpoints");
 	}
@@ -122,6 +123,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Set<SubmodelDescriptor> getSubmodelDescriptors(){
 		return ((Set<SubmodelDescriptor>) get(SUBMODELS));
 	}

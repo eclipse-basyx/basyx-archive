@@ -32,7 +32,6 @@ public class AASDescriptor extends HashMap<String, Object> {
 	/**
 	 * Create a new sub model descriptor with minimal information
 	 */
-	@SuppressWarnings("unchecked")
 	public AASDescriptor(AssetAdministrationShell aas, String endpoint, String endpointType) {
 		// Invoke default constructor
 		
@@ -57,7 +56,6 @@ public class AASDescriptor extends HashMap<String, Object> {
 	/**
 	 * Create a new sub model descriptor with minimal information
 	 */
-	@SuppressWarnings("unchecked")
 	public AASDescriptor(AssetAdministrationShell aas) {
 		// Invoke default constructor
 		
@@ -118,7 +116,7 @@ public class AASDescriptor extends HashMap<String, Object> {
 		if (e instanceof List<?>) {
 			endpoint = ((List<String>) e).get(0);
 		} else if (e instanceof HashSet<?>) {
-			endpoint = (String) ((HashSet<VABModelMap>) e).iterator().next().getPath("address");
+			endpoint = (String) ((HashSet<VABModelMap<Object>>) e).iterator().next().getPath("address");
 		} else {
 			endpoint = "not found";
 		}

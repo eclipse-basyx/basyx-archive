@@ -52,7 +52,7 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 		// unpack c# value
 		if (value instanceof Map<?,?>) {
 			if (((Map<?,?>) value).get("valueType") != null && ((Map<?,?>) value).get("value") != null) {
-				value = ((Map) value).get("value");
+				value = ((Map<?, ?>) value).get("value");
 			}
 		}
 		

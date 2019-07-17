@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
@@ -196,12 +195,13 @@ public class VABMultiSubmodelProvider<T extends VABHashmapProvider> implements I
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void createValue(String path, Object newValue) throws Exception {
 		String[] pathElements = VABPathTools.splitPath(path);
 		String propertyPath = VABPathTools.buildPath(pathElements, 3);
 		if (path.equals("/aas/submodels")) {		
 			// Adds a new submodel to to the registered AAS
-			VABModelMap sm = (VABModelMap) newValue;
+			VABModelMap<Object> sm = (VABModelMap<Object>) newValue;
 			VABHashmapProvider smProvider = new VABHashmapProvider(sm);
 			submodel_providers.put((String) sm.getPath("idShort"), (T) smProvider);
 			aas_provider.createValue("/submodel", sm);

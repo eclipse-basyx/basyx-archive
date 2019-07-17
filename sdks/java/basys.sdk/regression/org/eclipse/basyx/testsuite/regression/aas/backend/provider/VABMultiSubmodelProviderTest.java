@@ -80,7 +80,7 @@ public class VABMultiSubmodelProviderTest {
 		
 		
 		try {
-			Object o = proxy.readElementValue("/aas/submodels/TestSM");
+			proxy.readElementValue("/aas/submodels/TestSM");
 			fail();
 		} catch (ServerException e) {
 			System.out.println("VABMultiSubmodelProvider CreateDelete passed");
