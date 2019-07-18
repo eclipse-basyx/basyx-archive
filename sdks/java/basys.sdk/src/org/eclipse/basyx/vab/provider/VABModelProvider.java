@@ -47,7 +47,11 @@ public class VABModelProvider implements IModelProvider {
 	public void setModelPropertyValue(String path, Object newValue) throws Exception {
 		Object parentElement = getParentElement(path);
 		String propertyName = VABPathTools.getLastElement(path);
-		if (parentElement != null && propertyName != null) {
+		
+		// Only write values, that already exist
+		Object thisElement = handler.getElementProperty(parentElement, propertyName);
+		
+		if (parentElement != null && propertyName != null && thisElement != null) {
 			newValue = handler.preprocessObject(newValue);
 			handler.setModelPropertyValue(parentElement, propertyName, newValue);
 		}

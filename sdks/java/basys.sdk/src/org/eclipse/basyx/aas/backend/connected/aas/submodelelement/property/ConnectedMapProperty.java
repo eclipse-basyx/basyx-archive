@@ -29,7 +29,11 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	@Override
 	public void put(String key, Object value) throws ServerException {
 		try {
-			getProxy().updateElementValue(constructPath("value/" + key), value);
+			// check whether the value already exists and call update or create accordingly
+			if(getValue(key) != null)
+				getProxy().updateElementValue(constructPath("value/" + key), value);
+			else
+				getProxy().createElement(constructPath("value/" + key), value);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
