@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Jul 18 09:15:58 CEST 2019
+basys.components-0.0.1-SNAPSHOT.jar>=
+basys.components-0.0.1-SNAPSHOT.pom>=
+basys.components-0.0.1-SNAPSHOT-sources.jar>=
