@@ -14,7 +14,11 @@ import org.eclipse.basyx.regression.support.processengine.stubs.BPMNEngineStub;
 import org.eclipse.basyx.regression.support.processengine.stubs.DeviceServiceExecutorStub;
 import org.junit.Test;
 
-
+/**
+ * Test functionalities of the JavaDelegate invoked by the process eigne for services calls
+ * 
+ * @author zhangzai
+ * */
 public class TestJavaDelegate {
 	GSONTools gson = new GSONTools(new DefaultTypeFactory());
 	
