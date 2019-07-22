@@ -3,7 +3,7 @@ package org.eclipse.basyx.testsuite.regression.aas.impl.references;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 
 
@@ -22,7 +22,7 @@ public class TestAASPath {
 	 * Run test case
 	 */
 	@Test
-	void test() {
+	public void test() {
 		// First check path format
 		String qualAASID1 = BaSysID.instance.buildAASID("scopepart.scopepart.topscope/Stub1AAS");
 		String aasID1     = BaSysID.instance.buildAASID("Stub1AAS");
