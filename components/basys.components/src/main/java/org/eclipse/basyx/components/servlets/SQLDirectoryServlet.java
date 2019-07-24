@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,8 +18,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
-import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
 import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
 import org.eclipse.basyx.vab.backend.server.http.BasysHTTPServlet;
@@ -99,15 +96,6 @@ public class SQLDirectoryServlet extends BasysHTTPServlet {
 	 * SQL driver instance
 	 */
 	protected SQLDriver sqlDriver = null;
-	
-	
-	/**
-	 * GSON instance
-	 */
-	protected GSONTools serializer = new GSONTools(new DefaultTypeFactory());
-	
-	
-	
 	
 	
 	/**
@@ -243,22 +231,6 @@ public class SQLDirectoryServlet extends BasysHTTPServlet {
 		sqlDriver = new SQLDriver(path, user, pass, qryPfx, qDrvCls);
 	}
 	
-	
-	
-	/**
-	 * Send a response
-	 */
-	protected void sendResponse(String value, PrintWriter outputStream) {
-		// Null pointer check
-		if (value == null) return;
-		
-		// Output result
-		outputStream.write(value);
-		outputStream.flush();
-	}
-	
-	
-	
 	/**
 	 * Get requested tags as collection
 	 */
@@ -343,7 +315,7 @@ public class SQLDirectoryServlet extends BasysHTTPServlet {
 			}
 			
 			// Send result back
-			sendResponse(result.toString(), resp.getWriter());
+			sendResponse(serializer.deserialize(result.toString()), resp.getWriter());
 			
 			// End processing
 			return;

@@ -3,7 +3,6 @@ package org.eclipse.basyx.components.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.HashMap;
@@ -248,30 +247,16 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServlet {
 	 * 
 	 * @throws ServletException 
 	 */
+	@Override
 	public void init() throws ServletException {
 		// Call base implementation
 		super.init();
 		
 		// Read configuration values
-		String configFilePath = (String) getInitParameter("config");
+		String configFilePath = getInitParameter("config");
 		// - Read property file
 		loadProperties(configFilePath);
 	}
-	
-	
-	
-	/**
-	 * Send a response
-	 */
-	protected void sendResponse(String value, PrintWriter outputStream) {
-		// Null pointer check
-		if (value == null) return;
-		
-		// Output result
-		outputStream.write(value);
-		outputStream.flush();
-	}
-	
 	
 	
 	/**
@@ -331,7 +316,8 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServlet {
 		AASDirectoryEntry aas = aasByID.get(aasID);
 		
 		// Null pointer check
-		if (aas == null) return null;
+		if (aas == null)
+			return "";
 		
 		// Return result
 		return getAASContent(aas);
