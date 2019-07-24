@@ -15,20 +15,37 @@ import org.eclipse.basyx.regression.support.processengine.stubs.DeviceServiceExe
 import org.junit.Test;
 
 /**
- * Test functionalities of the JavaDelegate invoked by the process eigne for services calls
+ * Test functionalities of the JavaDelegate invoked by the process engine for services calls
  * 
  * @author zhangzai
+ * 
  * */
 public class TestJavaDelegate {
+	
+	/**
+	 * Create the serializer/deserializer
+	 */
 	GSONTools gson = new GSONTools(new DefaultTypeFactory());
 	
+	
+	/**
+	 * Test the invocation of service "moveTo" through the java-delegate
+	 */
 	@Test
 	public void testMoveToCall() {
-		Object params[] = new Object[]{5}; 
-		BPMNEngineStub bpmnstub = new BPMNEngineStub("moveTo","coilcar",gson.serialize(new ArrayList<Object>(Arrays.asList(params)))); 
+		// service parameter
+		Object params[] = new Object[]{5};
+		
+		// Create stub for BPMN-Engine for test purpose
+		BPMNEngineStub bpmnstub = new BPMNEngineStub("moveTo","coilcar",gson.serialize(new ArrayList<Object>(Arrays.asList(params))));
+		
+		// Set the service executor to the java-delegate
 		DeviceServiceDelegate.setDeviceServiceExecutor(new DeviceServiceExecutorStub());
 		try {
+			// deliver the service information to the java-delegate
 			bpmnstub.callJavaDelegate();
+			
+			// Asset the java-delegate gets the information from the Engine-stub
 			assertEquals("moveTo", DeviceServiceDelegate.getExecutor().getServiceName());
 			assertEquals("coilcar", DeviceServiceDelegate.getExecutor().getServiceProvider());
 			assertArrayEquals(new Object[]{5}, DeviceServiceDelegate.getExecutor().getParams().toArray());
@@ -38,13 +55,25 @@ public class TestJavaDelegate {
 		}
 	}
 	
+	/**
+	 * Test the invocation of service "liftTo" through the java-delegate
+	 */
 	@Test
 	public void testLiftToCall() {
+		// service parameter
 		Object params[] = new Object[]{123}; 
+		
+		// Create stub for BPMN-Engine for test purpose
 		BPMNEngineStub bpmnstub = new BPMNEngineStub("liftTo","coilcar",gson.serialize(new ArrayList<Object>(Arrays.asList(params)))); 
+		
+		// Set the service executor to the java-delegate
 		DeviceServiceDelegate.setDeviceServiceExecutor(new DeviceServiceExecutorStub());
 		try {
+			
+			// deliver the service information to the java-delegate
 			bpmnstub.callJavaDelegate();
+			
+			// Asset the java-delegate gets the information from the Engine-stub
 			assertEquals("liftTo", DeviceServiceDelegate.getExecutor().getServiceName());
 			assertEquals("coilcar", DeviceServiceDelegate.getExecutor().getServiceProvider());
 			assertArrayEquals(new Object[]{123}, DeviceServiceDelegate.getExecutor().getParams().toArray());

@@ -33,9 +33,16 @@ import org.junit.Test;
  * @author Zhang,Zai
  * */
 public class TestTransportProcess_ConfigureEngineProgramically {
-	
+	/**
+	 * Connection aas manager for creating connected aas
+	 * */
 	ConnectedAssetAdministrationShellManager manager;
+	
+	/**
+	 * Required by the connected aas manager
+	 */
 	VABConnectionManager connectionManager;
+	
 	/**
 	 * Makes sure Tomcat Server is started
 	 */
@@ -47,10 +54,11 @@ public class TestTransportProcess_ConfigureEngineProgramically {
 	 */
 	@Before
 	public void build() {
-		// Fill directory stub
+		// Create directory stub
 		DirectoryServiceStub directory = new DirectoryServiceStub();
 		directory.addMapping(SetupAAS.aasid, "http://localhost:8080/basys.sdk/Testsuite/coilcar/");
 		directory.addMapping(SetupAAS.submodelid, "http://localhost:8080/basys.sdk/Testsuite/coilcar/");
+		
 		// Create manager using the directory stub an the HTTPConnectorProvider
 		connectionManager = new VABConnectionManager(directory, new HTTPConnectorProvider());
 		manager = new ConnectedAssetAdministrationShellManager(connectionManager);
@@ -69,6 +77,7 @@ public class TestTransportProcess_ConfigureEngineProgramically {
 		
 		// create the process engien with defined configuration
 		ProcessEngine processEngine = cfg.buildProcessEngine();
+		
 		// get the name of the process-engine and prints it out in the console
 		String pName = processEngine.getName();
 		String ver = ProcessEngine.VERSION;
@@ -78,6 +87,7 @@ public class TestTransportProcess_ConfigureEngineProgramically {
 		RepositoryService repositoryService = processEngine.getRepositoryService();
 
 		try {
+			// Add the XML-file with the BPMN-Model to the repository and deploy it
 			repositoryService.createDeployment().
 			addInputStream("SimpleTransportProcess.bpmn20.xml",new FileInputStream(new File(System.getProperty("user.dir")+"\\WebContent\\WEB-INF\\config\\processengine\\SimpleTransportProcess.bpmn20.xml"))).deploy();
 		} catch (FileNotFoundException e) {
@@ -88,9 +98,7 @@ public class TestTransportProcess_ConfigureEngineProgramically {
 		Map<String, Object> variables = new HashMap<String, Object>();
 		variables.put("coilposition", 2);
 		
-		//create asset administration shells
-		//new SetupAAS();
-		//DeviceServiceDelegate.setDeviceServiceExecutor(new DeviceServiceExecutor(SetupAAS.getConnectionStub()));
+		// Set the service executor to the java-delegate
 		DeviceServiceDelegate.setDeviceServiceExecutor(new CoilcarServiceExecutor(connectionManager));
 		
 		//  Start a process instance

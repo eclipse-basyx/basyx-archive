@@ -99,19 +99,16 @@ public abstract class DeviceServiceExecutor extends BaseBaSyxService implements 
 	
 	@Override
 	public String getServiceName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getServiceProvider() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Object> getParams() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -11,7 +11,12 @@ import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
 
-
+/**
+ * Servlet for device aas
+ * 
+ * @author zhangzai
+ *
+ */
 public class CoilcarAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider<VABHashmapProvider>> {
 	private static final long serialVersionUID = 1L;
 	private String aasid = "coilcar";
@@ -20,9 +25,13 @@ public class CoilcarAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider
 	public CoilcarAASServlet() {
 		super(new VABMultiSubmodelProvider<>());
 		
+		// Create the aas
 		AssetAdministrationShell coilcarAAS = new DeviceAdministrationShellFactory().create(aasid,  submodelid);
-		// Set Id
+		
+		// Set aas Id
 		coilcarAAS.setId(aasid);
+		
+		// Create the sub-model
 		SubModel coilcarSubmodel = new DeviceSubmodelFactory().create(submodelid, new Coilcar());
 		
 		getModelProvider().setAssetAdministrationShell(new VABHashmapProvider(coilcarAAS));
