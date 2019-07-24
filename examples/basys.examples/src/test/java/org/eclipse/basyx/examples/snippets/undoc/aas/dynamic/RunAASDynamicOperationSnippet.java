@@ -81,7 +81,7 @@ public class RunAASDynamicOperationSnippet {
 
 		
 		// Read property values
-		String prop2Val = (String) connSubModel1.readElementValue("properties/prop2/value");
+		String prop2Val = (String) connSubModel1.readElementValue("dataElements/prop2/value");
 		// - Check property values
 		assertTrue(prop2Val.equals("myStr"));
 
@@ -91,11 +91,11 @@ public class RunAASDynamicOperationSnippet {
 			return "dynamicExampleValue";
 		}, null);
 		// - Update property properties/dynamicExample with dynamic get/set operation
-		connSubModel1.updateElementValue("properties/prop2/value", dynamicPropertyVal);
+		connSubModel1.updateElementValue("dataElements/prop2/value", dynamicPropertyVal);
 
 		
 		// Read dynamicExample property
-		prop2Val = (String) connSubModel1.readElementValue("properties/prop2/value");
+		prop2Val = (String) connSubModel1.readElementValue("dataElements/prop2/value");
 		// - Check property values
 		assertTrue(prop2Val.equals("dynamicExampleValue"));
 	}

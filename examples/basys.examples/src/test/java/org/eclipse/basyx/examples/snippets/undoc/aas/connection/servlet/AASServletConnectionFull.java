@@ -97,16 +97,16 @@ public class AASServletConnectionFull {
 
 			// Add example properties
 			// - Add simple property with value and idShort meta elements
-			this.putPath("properties/prop1/value",     234);
-			this.putPath("properties/prop1/valueType", PropertyValueTypeDefHelper.fromObject(234).toString());
-			this.putPath("properties/prop1/idShort",   "prop1");
+			this.putPath("dataElements/prop1/value", 234);
+			this.putPath("dataElements/prop1/valueType", PropertyValueTypeDefHelper.fromObject(234).toString());
+			this.putPath("dataElements/prop1/idShort", "prop1");
 
 			// Add container property that holds other properties
-			this.putPath("properties/prop2/idShort", "prop2");
+			this.putPath("dataElements/prop2/idShort", "prop2");
 			// - Add contained property
-			this.putPath("properties/prop2/properties/prop11/value",     123);
-			this.putPath("properties/prop2/properties/prop11/valueType", PropertyValueTypeDefHelper.fromObject(123).toString());
-			this.putPath("properties/prop2/properties/prop11/idShort", "prop11");
+			this.putPath("dataElements/prop2/dataElements/prop11/value", 123);
+			this.putPath("dataElements/prop2/dataElements/prop11/valueType", PropertyValueTypeDefHelper.fromObject(123).toString());
+			this.putPath("dataElements/prop2/dataElements/prop11/idShort", "prop11");
 			
 			// Add another property manually to sub model container "properties"
 			// - Using the Property class ensures presence of all meta properties
@@ -114,7 +114,9 @@ public class AASServletConnectionFull {
 			addedProperty.setValue(17);
 			addedProperty.setId("prop3");
 			// - Add property to sub model container "properties"
-			{((Map<String, Object>) this.get("properties")).put("prop3", addedProperty);}
+			{
+				((Map<String, Object>) this.get(SubModel.PROPERTIES)).put("prop3", addedProperty);
+			}
 		}
 	}
 
@@ -187,15 +189,15 @@ public class AASServletConnectionFull {
 			// Connect to sub model using lower-level VAB interface
 			VABElementProxy connSubModel1 = this.connManager.connectToVABElement("sm-001VAB");
 			// - Read property values and compare with expected values
-			assertTrue((int) connSubModel1.readElementValue("properties/prop1/value") == 234);
-			assertTrue((int) connSubModel1.readElementValue("properties/prop3/value") == 17);
-			assertTrue(((Map<String, Object>) connSubModel1.readElementValue("properties/prop1")).get("idShort").equals("prop1"));
-			assertTrue(((Map<String, Object>) connSubModel1.readElementValue("properties/prop2")).get("idShort").equals("prop2"));
-			assertTrue((int) connSubModel1.readElementValue("properties/prop2/properties/prop11/value") == 123);
+			assertTrue((int) connSubModel1.readElementValue("dataElements/prop1/value") == 234);
+			assertTrue((int) connSubModel1.readElementValue("dataElements/prop3/value") == 17);
+			assertTrue(((Map<String, Object>) connSubModel1.readElementValue("dataElements/prop1")).get("idShort").equals("prop1"));
+			assertTrue(((Map<String, Object>) connSubModel1.readElementValue("dataElements/prop2")).get("idShort").equals("prop2"));
+			assertTrue((int) connSubModel1.readElementValue("dataElements/prop2/dataElements/prop11/value") == 123);
 			// - Change property value using VAB primitive
-			connSubModel1.updateElementValue("properties/prop1/value", 456);
+			connSubModel1.updateElementValue("dataElements/prop1/value", 456);
 			// - Read value back using VAB primitive
-			assertTrue((int) connSubModel1.readElementValue("properties/prop1/value") == 456);
+			assertTrue((int) connSubModel1.readElementValue("dataElements/prop1/value") == 456);
 
 			// Read changed value back using SDK connector
 			assertTrue((int) ((ISingleProperty) subModel.getProperties().get("prop1")).get() == 456);
@@ -224,15 +226,15 @@ public class AASServletConnectionFull {
 			VABElementProxy connSubModel1 = this.connManager.connectToVABElement("sm-001MVAB");
 			// - Read property values and compare with expected values
 			assertTrue(((Map<String, Object>) connSubModel1.readElementValue("/")).get("idShort").equals("sm-001M"));
-			assertTrue((int) connSubModel1.readElementValue("properties/prop1/value") == 234);
-			assertTrue((int) connSubModel1.readElementValue("properties/prop3/value") == 17);
-			assertTrue(((Map<String, Object>) connSubModel1.readElementValue("properties/prop1")).get("idShort").equals("prop1"));
-			assertTrue(((Map<String, Object>) connSubModel1.readElementValue("properties/prop2")).get("idShort").equals("prop2"));
-			assertTrue((int) connSubModel1.readElementValue("properties/prop2/properties/prop11/value") == 123);
+			assertTrue((int) connSubModel1.readElementValue("dataElements/prop1/value") == 234);
+			assertTrue((int) connSubModel1.readElementValue("dataElements/prop3/value") == 17);
+			assertTrue(((Map<String, Object>) connSubModel1.readElementValue("dataElements/prop1")).get("idShort").equals("prop1"));
+			assertTrue(((Map<String, Object>) connSubModel1.readElementValue("dataElements/prop2")).get("idShort").equals("prop2"));
+			assertTrue((int) connSubModel1.readElementValue("dataElements/prop2/dataElements/prop11/value") == 123);
 			// - Change property value using VAB primitive
-			connSubModel1.updateElementValue("properties/prop1/value", 456);
+			connSubModel1.updateElementValue("dataElements/prop1/value", 456);
 			// - Read value back using VAB primitive
-			assertTrue((int) connSubModel1.readElementValue("properties/prop1/value") == 456);
+			assertTrue((int) connSubModel1.readElementValue("dataElements/prop1/value") == 456);
 
 			// Read changed value back using SDK connector
 			assertTrue((int) ((ISingleProperty) subModel.getProperties().get("prop1")).get() == 456);

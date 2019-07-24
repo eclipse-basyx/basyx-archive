@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.resources.IProperty;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -18,7 +19,7 @@ public class ConnectedPropertyFactory {
 	@SuppressWarnings("unchecked")
 	public IProperty createProperty(String path, VABElementProxy proxy) {
 		Map<String, Object> property = (Map<String, Object>) proxy.readElementValue(path);
-		if (property.containsKey("properties")) {
+		if (property.containsKey(SubModel.PROPERTIES)) {
 			return new ConnectedContainerProperty(path, proxy);
 		} else if (property.containsKey("valueType")) {
 			

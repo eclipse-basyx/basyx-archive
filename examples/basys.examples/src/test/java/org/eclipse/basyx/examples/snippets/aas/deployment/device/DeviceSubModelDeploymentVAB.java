@@ -58,7 +58,7 @@ public class DeviceSubModelDeploymentVAB {
 		// - Create connection to BaSyx server manager
 		JSONConnector toDeviceManager = new JSONConnector(basyxConnector);	
 		// - Access sub model property, check value
-		int propVal = (int) toDeviceManager.getModelPropertyValue("/aas/submodels/dynamicSM/properties/prop1/value");
+		int propVal = (int) toDeviceManager.getModelPropertyValue("/aas/submodels/dynamicSM/dataElements/prop1/value");
 		
 		
 		// Check value

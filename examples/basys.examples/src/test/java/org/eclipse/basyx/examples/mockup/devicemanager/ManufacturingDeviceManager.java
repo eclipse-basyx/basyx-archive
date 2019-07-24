@@ -165,7 +165,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		SubModel controllerSM = new SubModel();
 		//   - Create sub model contents manually
 		Map<String, Object> listOfControllers = new HashMap<>();
-		((Map<String, Object>) controllerSM.get("properties")).put("controllers", listOfControllers);
+		((Map<String, Object>) controllerSM.get(SubModel.PROPERTIES)).put("controllers", listOfControllers);
 		// - Transfer device sub model to server
 		aasServerConnection.createElement(lookupURN("Controller").toString(), controllerSM);
 	}

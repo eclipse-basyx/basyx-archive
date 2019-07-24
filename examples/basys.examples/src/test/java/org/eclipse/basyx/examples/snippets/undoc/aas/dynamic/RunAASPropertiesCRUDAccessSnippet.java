@@ -75,30 +75,30 @@ public class RunAASPropertiesCRUDAccessSnippet {
 		connSubModel1.createElement("/", submodel);
 		
 		// Read property values
-		int    prop1Val = (int)    connSubModel1.readElementValue("properties/prop1/value");
-		String prop2Val = (String) connSubModel1.readElementValue("properties/prop2/value");
+		int prop1Val = (int) connSubModel1.readElementValue("dataElements/prop1/value");
+		String prop2Val = (String) connSubModel1.readElementValue("dataElements/prop2/value");
 		// - Check property values
 		assertTrue(prop1Val == 7);
 		assertTrue(prop2Val.equals("myStr"));
 		
 		// Update property values
-		connSubModel1.updateElementValue("properties/prop1/value", 8);
-		connSubModel1.updateElementValue("properties/prop2/value", "stillMine");
+		connSubModel1.updateElementValue("dataElements/prop1/value", 8);
+		connSubModel1.updateElementValue("dataElements/prop2/value", "stillMine");
 		
 		// Read property values again
-		prop1Val = (int)    connSubModel1.readElementValue("properties/prop1/value");
-		prop2Val = (String) connSubModel1.readElementValue("properties/prop2/value");
+		prop1Val = (int) connSubModel1.readElementValue("dataElements/prop1/value");
+		prop2Val = (String) connSubModel1.readElementValue("dataElements/prop2/value");
 		// - Check property values
 		assertTrue(prop1Val == 8);
 		assertTrue(prop2Val.equals("stillMine"));
 
 		// Delete property values
-		connSubModel1.deleteElement("properties/prop1");
-		connSubModel1.deleteElement("properties/prop2");
+		connSubModel1.deleteElement("dataElements/prop1");
+		connSubModel1.deleteElement("dataElements/prop2");
 		
 		// Read property values again
-		assertTrue(connSubModel1.readElementValue("properties/prop1") == null);
-		assertTrue(connSubModel1.readElementValue("properties/prop2") == null);
+		assertTrue(connSubModel1.readElementValue("dataElements/prop1") == null);
+		assertTrue(connSubModel1.readElementValue("dataElements/prop2") == null);
 	}
 }
 
