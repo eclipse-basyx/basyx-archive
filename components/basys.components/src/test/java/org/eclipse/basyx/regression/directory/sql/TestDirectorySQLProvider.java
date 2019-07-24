@@ -55,10 +55,10 @@ public class TestDirectorySQLProvider {
 			String result = getResult(client.get(wsURL + "/api/v1/registry"));
 
 			// Check if all AAS are contained in result
-			assertTrue(result.contains("{content.aas1}"));
-			assertTrue(result.contains("{content.aas2}"));
-			assertTrue(result.contains("{content.aas3}"));
-			assertTrue(result.contains("{content.aas4}"));
+			assertTrue(result.contains("content.aas1"));
+			assertTrue(result.contains("content.aas2"));
+			assertTrue(result.contains("content.aas3"));
+			assertTrue(result.contains("content.aas4"));
 		}
 
 		// Get a specific AAS (1)
@@ -69,7 +69,7 @@ public class TestDirectorySQLProvider {
 			System.out.println("Res:" + result);
 
 			// Check if all AAS are contained in result
-			assertTrue(result.equals("{content.aas1}"));
+			assertTrue(result.equals("content.aas1"));
 		} catch (Exception e) {
 			fail("Get specific AAS test case did throw exception:" + e);
 		}
@@ -80,7 +80,7 @@ public class TestDirectorySQLProvider {
 			String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-18", "UTF-8")));
 
 			// Check if all AAS are contained in result
-			assertTrue(result.equals("{content.aas2}"));
+			assertTrue(result.equals("content.aas2"));
 		} catch (Exception e) {
 			fail("Get specific AAS test case did throw exception:" + e);
 		}
@@ -91,7 +91,7 @@ public class TestDirectorySQLProvider {
 			String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-17", "UTF-8")));
 
 			// Check if all AAS are contained in result
-			assertTrue(result.equals("{content.aas3}"));
+			assertTrue(result.equals("content.aas3"));
 		} catch (Exception e) {
 			fail("Get specific AAS test case did throw exception:" + e);
 		}
@@ -102,7 +102,7 @@ public class TestDirectorySQLProvider {
 			String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-16", "UTF-8")));
 
 			// Check if all AAS are contained in result
-			assertTrue(result.equals("{content.aas4}"));
+			assertTrue(result.equals("content.aas4"));
 		} catch (Exception e) {
 			fail("Get specific AAS test case did throw exception:" + e);
 		}
@@ -110,9 +110,11 @@ public class TestDirectorySQLProvider {
 
 	/**
 	 * Execute update test case
+	 * 
+	 * @throws UnsupportedEncodingException
 	 */
 	@Test
-	public void testUpdateCall() {
+	public void testUpdateCall() throws UnsupportedEncodingException {
 		// Invoke BaSyx service calls via web services
 		WebServiceRawClient client = new WebServiceRawClient();
 
@@ -120,33 +122,30 @@ public class TestDirectorySQLProvider {
 		String wsURL = "http://localhost:8080/basys.components/Testsuite/Directory/SQL";
 
 		// Update a specific AAS
-		try {
-			// Update AAS registration
-			client.put(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-16", "UTF-8"), "{content.aas5}");
+		// Update AAS registration
+		client.put(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-16", "UTF-8"), "content.aas5");
 
-			// Get a known AAS by its ID
-			String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-16", "UTF-8")));
-			// - Check updated registration
-			assertTrue(result.equals("{content.aas5}"));
+		// Get a known AAS by its ID
+		String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-16", "UTF-8")));
+		// - Check updated registration
+		assertTrue(result.equals("content.aas5"));
 
-			// Update AAS registration
-			client.put(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-16", "UTF-8"), "{content.aas4}");
+		// Update AAS registration
+		client.put(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-16", "UTF-8"), "content.aas4");
 
-			// Get a known AAS by its ID
-			String result2 = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-16", "UTF-8")));
-			// - Check updated registration
-			assertTrue(result2.equals("{content.aas4}"));
-
-		} catch (Exception e) {
-			fail("Update AAS test case did throw exception:" + e);
-		}
+		// Get a known AAS by its ID
+		String result2 = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-16", "UTF-8")));
+		// - Check updated registration
+		assertTrue(result2.equals("content.aas4"));
 	}
 
 	/**
 	 * Execute create/Delete test cases
+	 * 
+	 * @throws UnsupportedEncodingException
 	 */
 	@Test
-	public void testCreateDeleteCall() {
+	public void testCreateDeleteCall() throws UnsupportedEncodingException {
 		// Invoke BaSyx service calls via web services
 		WebServiceRawClient client = new WebServiceRawClient();
 
@@ -154,39 +153,35 @@ public class TestDirectorySQLProvider {
 		String wsURL = "http://localhost:8080/basys.components/Testsuite/Directory/SQL";
 
 		// Update a specific AAS
-		try {
-			// Delete AAS registration (make sure tests work also iff previous test suite
-			// did fail)
-			client.delete(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8"));
 
-			// Get a known AAS by its ID - check if AAS does not exist already
-			String result0 = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8")));
-			// - Check updated registration
-			assertTrue(result0.equals(""));
+		// Delete AAS registration (make sure tests work also iff previous test suite
+		// did fail)
+		client.delete(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8"));
 
-			// Create and register AAS descriptor
-			// - Create AAS descriptor
-			AASDescriptor aasDescriptor = new AASDescriptor("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-166", IdentifierType.URI, "www.endpoint.de");
-			// - Create new AAS registration
-			String expected = serializer.serialize(aasDescriptor);
-			client.post(wsURL + "/api/v1/registry", expected);
+		// Get a known AAS by its ID - check if AAS does not exist already
+		String result0 = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8")));
+		// - Check updated registration
+		assertEquals(null, result0);
 
-			// Get a known AAS by its ID
-			String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8")));
-			// - Check updated registration
-			assertTrue(result.equals(expected));
+		// Create and register AAS descriptor
+		// - Create AAS descriptor
+		AASDescriptor aasDescriptor = new AASDescriptor("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-166", IdentifierType.URI, "www.endpoint.de");
+		// - Create new AAS registration
+		String expected = serializer.serialize(aasDescriptor);
+		client.post(wsURL + "/api/v1/registry", expected);
 
-			// Delete AAS registration
-			client.delete(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8"));
+		// Get a known AAS by its ID
+		Object result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8")));
+		// - Check updated registration
+		assertEquals(aasDescriptor, result);
 
-			// Get a known AAS by its ID
-			String result2 = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8")));
-			// - Check updated registration
-			assertTrue(result2.equals(""));
+		// Delete AAS registration
+		client.delete(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8"));
 
-		} catch (Exception e) {
-			fail("Update AAS test case did throw exception:" + e);
-		}
+		// Get a known AAS by its ID
+		String result2 = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8")));
+		// - Check updated registration
+		assertEquals(null, result2);
 	}
 
 	/**
@@ -209,9 +204,10 @@ public class TestDirectorySQLProvider {
 		assertEquals("", result);
 	}
 
-	private String getResult(String res) {
+	@SuppressWarnings("unchecked")
+	private <T> T getResult(String res) {
 		try {
-			return (String) connector.verify(res);
+			return (T) connector.verify(res);
 		} catch (Exception e) {
 			throw new RuntimeException();
 		}
