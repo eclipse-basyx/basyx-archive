@@ -3,7 +3,6 @@ package org.eclipse.basyx.vab.provider;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 
@@ -158,7 +157,7 @@ public class VABModelProvider implements IModelProvider {
 			Function<Object, Object[]> function = (Function<Object, Object[]>) childElement;
 			return function.apply(parameters);
 		} else {
-			if (childElement != null && childElement instanceof Operation) {
+			if (childElement instanceof Map<?,?> && ((Map<?,?>) childElement).containsKey("invokable")) {
 				// Build path
 				if (path.endsWith("/"))
 					return invokeOperation(path+"invokable", parameters);

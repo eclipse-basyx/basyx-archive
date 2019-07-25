@@ -20,11 +20,9 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasKindFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedIdentifiableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
-import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.DataElement;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -42,22 +40,6 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 		super(path, proxy);
 	}
 
-	/**
-	 * Submodel properties
-	 */
-	protected Map<String, IProperty> properties = new VABModelMap<>();
-
-	/**
-	 * Submodel operations
-	 */
-	protected Map<String, IOperation> operations = new VABModelMap<>();
-
-	/**
-	 * Submodel elements in general. Does also contain operations and properties
-	 */
-	protected Map<String, SubmodelElement> elements = new HashMap<String, SubmodelElement>();
-
-
 	@Override
 	public IReference getSemanticId() {
 		return new ConnectedHasSemanticsFacade(getPath(),getProxy()).getSemanticId();
@@ -66,7 +48,6 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 	@Override
 	public void setSemanticID(IReference ref) {
 		 new ConnectedHasSemanticsFacade(getPath(),getProxy()).setSemanticID(ref);
-
 	}
 
 	@Override
@@ -126,7 +107,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 	@Override
 	public String getId() {
-	return (String)getProxy().readElementValue(constructPath(SubModel.IDSHORT));
+		return (String)getProxy().readElementValue(constructPath(SubModel.IDSHORT));
 	}
 
 	@Override
@@ -167,18 +148,14 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 	@Override
 	public void addDataElement(DataElement value) {
-
-
+	
 		String id = value.getId();
 		if (value instanceof IProperty) {
 			System.out.println("adding Property " + id);
-			properties.put(id, (IProperty) value);
-			elements.put(id, value);
+			getProxy().createElement(constructPath(VABPathTools.concatenatePaths(SubModel.PROPERTIES, id)), value);
 		} else {
 			throw new RuntimeException("Tried to add DataElement with id " + id + " which is does not implement IProperty");
 		}
-
-
 	}
 
 	@Override
@@ -190,8 +167,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 			System.out.println("adding Operation " + id);
 
 			// Add single operation
-			operations.put(id, operation);
-			elements.put(id, operation);
+			getProxy().createElement(constructPath(VABPathTools.concatenatePaths(SubModel.OPERATIONS, id)), operation);
 		} else {
 			throw new RuntimeException("Tried to add Operation with id " + id + " which is does not implement IOperation");
 		}
@@ -216,7 +192,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 			// Convert to IOperation
 			for (Map<String, Object> deNode: dataElemNodes) {
-				String id = (String)  deNode.get("idShort");
+				String id = (String)  deNode.get(SubModel.IDSHORT);
 				ret.put(id, factory.createProperty(constructPath(VABPathTools.concatenatePaths(SubModel.PROPERTIES, id)), getProxy()));
 			}
 		} else {
@@ -242,7 +218,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 		Map<String, IOperation> ret = new HashMap<>();
 
 		// Sub model operation list
-		Object smOpList = getProxy().readElementValue(constructPath("operations"));
+		Object smOpList = getProxy().readElementValue(constructPath(SubModel.OPERATIONS));
 
 		// RTTI check (c# specific)
 		if (smOpList instanceof HashSet) {
@@ -251,9 +227,9 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 			// Convert to IOperation
 			for (Map<String, Object> opNode: operationNodes) {
-				String id = (String) opNode.get("idShort");
+				String id = (String) opNode.get(SubModel.IDSHORT);
 				
-				ConnectedOperation conOp = new ConnectedOperation(constructPath("operations/" + id), getProxy());
+				ConnectedOperation conOp = new ConnectedOperation(constructPath(VABPathTools.concatenatePaths(SubModel.OPERATIONS, id)), getProxy());
 				// Cache operation properties
 				conOp.putAllLocal(opNode);
 				ret.put(id, conOp);
@@ -263,7 +239,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 			ops = (Map<String, Object>) smOpList;
 
 			for (String s : ops.keySet()) {
-				ret.put(s, new ConnectedOperation(constructPath("operations/" + s), getProxy()));
+				ret.put(s, new ConnectedOperation(constructPath(VABPathTools.concatenatePaths(SubModel.OPERATIONS, s)), getProxy()));
 			}
 		}
 
