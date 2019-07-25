@@ -134,6 +134,12 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		server.start();
 	}
 	
+	@Override
+	public void stop() {
+		super.stop();
+		// End server
+		server.stop();
+	}
 	
 	
 	/**
