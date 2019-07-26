@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import org.eclipse.basyx.aas.backend.connector.JSONConnector;
+import org.eclipse.basyx.aas.backend.connector.MetaprotocolHandler;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
@@ -36,7 +36,7 @@ public class TestDirectorySQLProvider {
 	 * GSON instance
 	 */
 	protected GSONTools serializer = new GSONTools(new DefaultTypeFactory());
-	private JSONConnector connector = new JSONConnector(null);
+	private MetaprotocolHandler handler = new MetaprotocolHandler();
 
 	/**
 	 * Execute test case that test working calls
@@ -207,7 +207,7 @@ public class TestDirectorySQLProvider {
 	@SuppressWarnings("unchecked")
 	private <T> T getResult(String res) {
 		try {
-			return (T) connector.verify(res);
+			return (T) handler.verify(res);
 		} catch (Exception e) {
 			throw new RuntimeException();
 		}

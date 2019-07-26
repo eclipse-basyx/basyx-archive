@@ -2,7 +2,7 @@ package org.eclipse.basyx.tools.aas.connManager;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.backend.connector.JSONConnector;
+import org.eclipse.basyx.aas.backend.connector.MetaprotocolHandler;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
@@ -30,7 +30,7 @@ public class AASConnectionManager extends VABConnectionManager {
 	 * JSON serializer
 	 */
 	protected GSONTools serializer = null;
-	private JSONConnector connector = new JSONConnector(null);
+	private MetaprotocolHandler handler = new MetaprotocolHandler();
 	
 	
 	/**
@@ -71,7 +71,7 @@ public class AASConnectionManager extends VABConnectionManager {
 
 		try {
 			// Deserialize AAS descriptor
-			Object obj = connector.verify(serializedAASDesc);
+			Object obj = handler.verify(serializedAASDesc);
 			AASDescriptor aasDescriptor = new AASDescriptor(((Map<String, Object>) obj));
 			// Get AAD address from AAS descriptor
 			String addr = aasDescriptor.getFirstEndpoint();
@@ -99,7 +99,7 @@ public class AASConnectionManager extends VABConnectionManager {
 		// Deserialize AAS descriptor
 
 		try {
-			Object obj = connector.verify(serializedAASDesc);
+			Object obj = handler.verify(serializedAASDesc);
 			AASDescriptor aasDescriptor = new AASDescriptor(((Map<String, Object>) obj));
 
 			// Locate sub model

@@ -3,7 +3,7 @@ package org.eclipse.basyx.components.proxy.registry;
 import java.net.URLEncoder;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.backend.connector.JSONConnector;
+import org.eclipse.basyx.aas.backend.connector.MetaprotocolHandler;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
@@ -104,7 +104,7 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 		// Deserialize AAS descriptor
 		AASDescriptor aasDescriptor = null;
 		try {
-			aasDescriptor = new AASDescriptor((Map<String, Object>) (new JSONConnector(null).verify(jsonResponse)));
+			aasDescriptor = new AASDescriptor((Map<String, Object>) (new MetaprotocolHandler().verify(jsonResponse)));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

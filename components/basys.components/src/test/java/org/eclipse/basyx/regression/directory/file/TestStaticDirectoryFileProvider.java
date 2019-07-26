@@ -5,7 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.net.URLEncoder;
 
-import org.eclipse.basyx.aas.backend.connector.JSONConnector;
+import org.eclipse.basyx.aas.backend.connector.MetaprotocolHandler;
 import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
@@ -28,7 +28,7 @@ public class TestStaticDirectoryFileProvider {
 	 */
 	@ClassRule
 	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new ComponentsRegressionContext());
-	private JSONConnector connector = new JSONConnector(null);
+	private MetaprotocolHandler handler = new MetaprotocolHandler();
 
 	/**
 	 * Execute test case that test working calls
@@ -131,7 +131,7 @@ public class TestStaticDirectoryFileProvider {
 
 	private String getResult(String res) {
 		try {
-			return (String) connector.verify(res);
+			return (String) handler.verify(res);
 		} catch (Exception e) {
 			throw new RuntimeException();
 		}
