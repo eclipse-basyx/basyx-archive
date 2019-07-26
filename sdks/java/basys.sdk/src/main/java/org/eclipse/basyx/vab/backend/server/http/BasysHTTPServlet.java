@@ -1,6 +1,7 @@
 package org.eclipse.basyx.vab.backend.server.http;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
+import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
+import org.eclipse.basyx.vab.backend.server.utils.IResult;
+import org.eclipse.basyx.vab.backend.server.utils.Result;
 
 /**
  * HTTP Servelet superclass to enable HTTP Patch
@@ -29,6 +34,10 @@ public abstract class BasysHTTPServlet extends HttpServlet {
 	 */
 	protected Map<String, String> servletParameter = new HashMap<>();
 
+	/**
+	 * GSON instance
+	 */
+	protected GSONTools serializer = new GSONTools(new DefaultTypeFactory());
 
 	
 	
@@ -75,5 +84,19 @@ public abstract class BasysHTTPServlet extends HttpServlet {
 		// Call base method
 		return super.getInitParameter(name);
 	}
+
+	/**
+	 * Send a response
+	 */
+	protected void sendResponse(Object value, PrintWriter outputStream) {
+
+		// Wrap the entity in the meta-protocol
+		IResult result = new Result(true, value, value != null ? value.getClass() : null, null);
+
+		// Output result
+		outputStream.write(serializer.serialize(result));
+		outputStream.flush();
+	}
+
 }
 

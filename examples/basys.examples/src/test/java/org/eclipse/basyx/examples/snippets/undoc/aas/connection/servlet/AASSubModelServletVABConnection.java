@@ -65,7 +65,9 @@ public class AASSubModelServletVABConnection {
 			getProperties().put(fac.createContainer(new SubmodelElementCollection(), containerProperties, fac.emptyList(), "prop2"));
 
 			// Add another property manually to sub model container "properties"
-			{((Map<String, Object>) this.get("properties")).put("prop3", fac.create(new Property(), 17, "prop3"));}
+			{
+				((Map<String, Object>) this.get(PROPERTIES)).put("prop3", fac.create(new Property(), 17, "prop3"));
+			}
 		}
 	}
 	
@@ -108,15 +110,15 @@ public class AASSubModelServletVABConnection {
 		// Connect to sub model using lower-level VAB interface
 		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("sm-001VAB");
 		// - Read property values and compare with expected values
-		assertTrue((int) connSubModel1.readElementValue("properties/prop1/value") == 234);
-		assertTrue((int) connSubModel1.readElementValue("properties/prop3/value") == 17);
-		assertTrue(((Map<String, Object>) connSubModel1.readElementValue("properties/prop1")).get("idShort").equals("prop1"));
-		assertTrue(((Map<String, Object>) connSubModel1.readElementValue("properties/prop2")).get("idShort").equals("prop2"));
-		assertTrue((int) connSubModel1.readElementValue("properties/prop2/properties/prop11/value") == 123);
+		assertTrue((int) connSubModel1.readElementValue("dataElements/prop1/value") == 234);
+		assertTrue((int) connSubModel1.readElementValue("dataElements/prop3/value") == 17);
+		assertTrue(((Map<String, Object>) connSubModel1.readElementValue("dataElements/prop1")).get("idShort").equals("prop1"));
+		assertTrue(((Map<String, Object>) connSubModel1.readElementValue("dataElements/prop2")).get("idShort").equals("prop2"));
+		assertTrue((int) connSubModel1.readElementValue("dataElements/prop2/dataElements/prop11/value") == 123);
 		// - Change property value using VAB primitive
-		connSubModel1.updateElementValue("properties/prop1/value", 456);
+		connSubModel1.updateElementValue("dataElements/prop1/value", 456);
 		// - Read value back using VAB primitive
-		assertTrue((int) connSubModel1.readElementValue("properties/prop1/value") == 456);
+		assertTrue((int) connSubModel1.readElementValue("dataElements/prop1/value") == 456);
 	}
 }
 

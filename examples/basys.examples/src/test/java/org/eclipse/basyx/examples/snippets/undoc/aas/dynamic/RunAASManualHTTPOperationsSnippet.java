@@ -83,9 +83,9 @@ public class RunAASManualHTTPOperationsSnippet {
 		
 		// Read property values
 		// - Use WebServiceJSONClient class. Returned property contains meta data. The actual property is stored in property "entity", property value is in entity property "value"
-		int    prop1Val = (int)    ((Map<String, Object>) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/properties/prop1")).get("entity")).get("value");
-		String prop1Id  = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/properties/prop1")).get("entity")).get("idShort");
-		String prop2Val = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/properties/prop2")).get("entity")).get("value");
+		int prop1Val = (int) ((Map<String, Object>) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/dataElements/prop1")).get("entity")).get("value");
+		String prop1Id = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/dataElements/prop1")).get("entity")).get("idShort");
+		String prop2Val = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/dataElements/prop2")).get("entity")).get("value");
 		
 		// Check results
 		assertTrue(prop1Val == 7);

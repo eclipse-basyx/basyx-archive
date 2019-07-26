@@ -59,7 +59,9 @@ public class CreateAASSubModelSDK {
 			getProperties().put(fac.createContainer(new SubmodelElementCollection(), containerProperties, fac.emptyList(), "prop2"));
 
 			// Add another property manually to sub model container "properties"
-			{((Map<String, Object>) this.get("properties")).put("prop3", fac.create(new Property(), 17, "prop3"));}
+			{
+				((Map<String, Object>) this.get(PROPERTIES)).put("prop3", fac.create(new Property(), 17, "prop3"));
+			}
 		}
 	}
 
@@ -73,7 +75,7 @@ public class CreateAASSubModelSDK {
 		SampleSubModel sampleSM = new SampleSubModel();
 		
 		// Access sub model property
-		int propertyVal = (int) sampleSM.getPath("properties/prop1/value");
+		int propertyVal = (int) sampleSM.getPath("dataElements/prop1/value");
 		
 		// Check property value
 		assertTrue(propertyVal == 234);

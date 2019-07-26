@@ -98,9 +98,12 @@ public class DynamicSubModelDeploymentHTTP {
 		// Read property values using the WebServiceJSONClient class. 
 		// - Returned property contains meta data. The actual property is stored in property "entity", property value is in entity property "value"
 		String smId     = (String) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003/idShort")).get("entity");
-		int    prop1Val = (int)    ((Map<String, Object>) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003/properties/prop1")).get("entity")).get("value");
-		String prop1Id  = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003/properties/prop1")).get("entity")).get("idShort");
-		String prop2Val = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003/properties/prop2")).get("entity")).get("value");
+		int prop1Val = (int) ((Map<String, Object>) ((Map<String, Object>) jsonClient
+				.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003/dataElements/prop1")).get("entity")).get("value");
+		String prop1Id = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient
+				.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003/dataElements/prop1")).get("entity")).get("idShort");
+		String prop2Val = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient
+				.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003/dataElements/prop2")).get("entity")).get("value");
 
 		
 		// Check results

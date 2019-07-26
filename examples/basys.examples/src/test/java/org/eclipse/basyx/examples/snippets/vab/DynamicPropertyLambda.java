@@ -88,7 +88,7 @@ public class DynamicPropertyLambda {
 			return "dynamicExampleValue";
 		}, null);
 		// - Update property properties/dynamicExample with dynamic get/set operation
-		connSubModel1.updateElementValue("dynamicExampleProperty", dynamicPropertyVal);
+		connSubModel1.createElement("dynamicExampleProperty", dynamicPropertyVal);
 
 		// Read dynamicExample property
 		// - This will invoke the previously uploaded Lambda expression

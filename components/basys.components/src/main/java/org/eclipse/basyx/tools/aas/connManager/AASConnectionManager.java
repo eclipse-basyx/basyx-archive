@@ -2,6 +2,7 @@ package org.eclipse.basyx.tools.aas.connManager;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.backend.connector.JSONConnector;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
@@ -29,6 +30,7 @@ public class AASConnectionManager extends VABConnectionManager {
 	 * JSON serializer
 	 */
 	protected GSONTools serializer = null;
+	private JSONConnector connector = new JSONConnector(null);
 	
 	
 	/**
@@ -66,14 +68,21 @@ public class AASConnectionManager extends VABConnectionManager {
 		
 		System.out.println("ATTEMPT:"+serializedAASDesc);
 		
-		// Deserialize AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor(((Map<String, Object>) (serializer.deserialize(serializedAASDesc))));
 
-		// Get AAD address from AAS descriptor
-		String addr = aasDescriptor.getFirstEndpoint();
+		try {
+			// Deserialize AAS descriptor
+			Object obj = connector.verify(serializedAASDesc);
+			AASDescriptor aasDescriptor = new AASDescriptor(((Map<String, Object>) obj));
+			// Get AAD address from AAS descriptor
+			String addr = aasDescriptor.getFirstEndpoint();
 
-		// Return a new VABElementProxy
-		return new VABElementProxy(VABPathTools.removeAddressEntry(addr), providerProvider.getConnector(addr));
+			// Return a new VABElementProxy
+			return new VABElementProxy(VABPathTools.removeAddressEntry(addr), providerProvider.getConnector(addr));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+
 	}
 
 	
@@ -88,15 +97,22 @@ public class AASConnectionManager extends VABConnectionManager {
 		String serializedAASDesc = directoryService.lookup(aasUrn.getEncodedURN());
 		
 		// Deserialize AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor(((Map<String, Object>) (serializer.deserialize(serializedAASDesc))));
 
-		// Locate sub model
-		SubmodelDescriptor smdescr = aasDescriptor.getSubModelDescriptor(subModelID);
-		// - Get submodel endpoint
-		String addr = smdescr.getFirstEndpoint();
+		try {
+			Object obj = connector.verify(serializedAASDesc);
+			AASDescriptor aasDescriptor = new AASDescriptor(((Map<String, Object>) obj));
 
-		// Return a new VABElementProxy
-		return new VABElementProxy(VABPathTools.removeAddressEntry(addr), providerProvider.getConnector(addr));
+			// Locate sub model
+			SubmodelDescriptor smdescr = aasDescriptor.getSubModelDescriptor(subModelID);
+			// - Get submodel endpoint
+			String addr = smdescr.getFirstEndpoint();
+
+			// Return a new VABElementProxy
+			return new VABElementProxy(VABPathTools.removeAddressEntry(addr), providerProvider.getConnector(addr));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
 	}
 
 	
@@ -106,6 +122,7 @@ public class AASConnectionManager extends VABConnectionManager {
 	 * @param urn the URN that describes the element. 
 	 * @param prefix the prefix will be added to the address
 	 */
+	@Override
 	public VABElementProxy connectToHTTPVABElement(String urn, String prefix) {
 		// Get AAS from directory
 		String addr = "";
@@ -125,6 +142,7 @@ public class AASConnectionManager extends VABConnectionManager {
 	 * 
 	 * @param url the URL that describes the element location. 
 	 */
+	@Override
 	public VABElementProxy connectToVABElementByURL(String url) {
 
 		// Return a new VABElementProxy

@@ -28,6 +28,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelEleme
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+import org.eclipse.basyx.vab.core.tools.VABPathTools;
 /**
  * "Connected" implementation of SubModel
  * @author rajashek
@@ -196,6 +197,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 		}
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public Map<String, IProperty> getProperties() {
 		// Store operations as map
@@ -205,7 +207,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 		Map<String, IProperty> ret = new HashMap<>();
 
 		// Sub model operation list
-		Object smDeList = getProxy().readElementValue(constructPath("dataElements"));
+		Object smDeList = getProxy().readElementValue(constructPath(SubModel.PROPERTIES));
 
 		// RTTI check
 		if (smDeList instanceof HashSet) {
@@ -215,14 +217,14 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 			// Convert to IOperation
 			for (Map<String, Object> deNode: dataElemNodes) {
 				String id = (String)  deNode.get("idShort");
-				ret.put(id, factory.createProperty(constructPath("dataElements/" + id), getProxy()));
+				ret.put(id, factory.createProperty(constructPath(VABPathTools.concatenatePaths(SubModel.PROPERTIES, id)), getProxy()));
 			}
 		} else {
 			// Properties already arrive as Map
 			des = (Map<String, Object>) smDeList;
 
 			for (String s : des.keySet()) {
-				ret.put(s, factory.createProperty(constructPath("dataElements/" + s), getProxy()));
+				ret.put(s, factory.createProperty(constructPath(VABPathTools.concatenatePaths(SubModel.PROPERTIES, s)), getProxy()));
 			}
 		}
 
