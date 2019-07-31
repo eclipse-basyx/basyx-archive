@@ -295,9 +295,8 @@ public class SQLDirectoryServlet extends BasysHTTPServlet {
 			// End processing
 			return;
 		}
-		
 		// Get a specific AAS
-		if (path.startsWith("api/v1/registry/")) {
+		else if (path.startsWith("api/v1/registry/")) {
 			System.out.println("Getting:"+path.substring(new String("api/v1/registry/").length()));
 			
 			// Run query
@@ -318,6 +317,10 @@ public class SQLDirectoryServlet extends BasysHTTPServlet {
 			sendResponse(serializer.deserialize(result.toString()), resp.getWriter());
 			
 			// End processing
+			return;
+		} else {
+			// Send null response for unknown path
+			sendResponse(null, resp.getWriter());
 			return;
 		}
 	}

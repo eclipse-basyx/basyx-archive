@@ -1,8 +1,10 @@
 package org.eclipse.basyx.regression.directory.file;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.eclipse.basyx.aas.backend.connector.MetaprotocolHandler;
@@ -107,9 +109,11 @@ public class TestStaticDirectoryFileProvider {
 	
 	/**
 	 * Execute test case that test non-working calls
+	 * 
+	 * @throws UnsupportedEncodingException
 	 */
 	@Test
-	public void testNonWorkingCalls() {
+	public void testNonWorkingCalls() throws UnsupportedEncodingException {
 		// Invoke service call via web services
 		WebServiceRawClient client = new WebServiceRawClient();
 		
@@ -118,15 +122,12 @@ public class TestStaticDirectoryFileProvider {
 
 		
 		// Get unknown AAS ID
-		try {
-			// Get a known AAS by its ID
-			String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("unknown", "UTF-8")));
+		// Get a known AAS by its ID
+		String result = getResult(client.get(
+				wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("unknown", "UTF-8")));
 
-			// Check if all AAS are contained in result
-			assertTrue(result.equals(""));
-		} catch (Exception e) {
-			fail("Get specific AAS test case did throw exception:"+e);
-		}		
+		// Check if the getting a non existing URL returns a null
+		assertEquals(null, result);
 	}
 
 	private String getResult(String res) {

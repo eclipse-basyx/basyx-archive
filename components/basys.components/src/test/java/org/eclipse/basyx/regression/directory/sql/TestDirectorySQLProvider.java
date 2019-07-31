@@ -200,8 +200,8 @@ public class TestDirectorySQLProvider {
 		// Get unknown AAS ID
 		String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("unknown", "UTF-8")));
 
-		// Check if all AAS are contained in result
-		assertEquals("", result);
+		// Check if the getting a non existing URL returns a null
+		assertEquals(null, result);
 	}
 
 	@SuppressWarnings("unchecked")
