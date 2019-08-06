@@ -1,0 +1,31 @@
+version: '3'
+services:
+      
+  registry:
+    image: basys:0.0.3-SNAPSHOT
+    container_name: aasRegistry
+    ports:
+      - 8081:8080
+    depends_on:
+      - postgres
+    volumes:
+      -  C:\Users\pschorn\Documents\BaSys\workspace_2019_06_Hacktathon\basys.registry\WebContent\WEB-INF\config\directory\sqldirectory\directory.properties:/basys/directory.properties
+    links:
+      - postgres
+
+  postgres:
+    image: postgres:9.4
+    container_name: postgres
+    environment:
+      - POSTGRES_USER:'postgres'
+      - POSTGRES_PASSWORD:'admin'
+      - POSTGRES_DB=basyx-directory
+    volumes:
+      - ./WebContent/WEB-INF/config/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5433:5432
+    expose:
+      - 5432
+            
+
+      
