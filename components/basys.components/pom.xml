@@ -46,6 +46,7 @@
 	                   <configuration>
 	                          <sources>
 	                                 <source>src/test/java/org/eclipse/basyx/regression/support</source>
+	                                 <source>src/test/java/org/eclipse/basyx/regression/directory</source>
 	                          </sources>
 	                   </configuration>
 	            </execution>
