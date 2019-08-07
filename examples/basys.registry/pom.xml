@@ -69,13 +69,13 @@
                          <goal>up</goal>
                      </goals>
                  </execution>
-                 <!-- execution>
+                 <execution>
                      <id>docker-compose-down</id>
                      <phase>post-integration-test</phase>
                      <goals>
                          <goal>down</goal>
                      </goals>
-                 </execution -->
+                 </execution>
              </executions>
          </plugin>
         

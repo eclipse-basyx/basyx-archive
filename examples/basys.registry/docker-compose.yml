@@ -9,7 +9,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      -  C:\Users\pschorn\Documents\BaSys\workspace_2019_06_Hacktathon\basys.registry\WebContent\WEB-INF\config\directory\sqldirectory\directory.properties:/basys/directory.properties
+      -  .\WebContent\WEB-INF\config\directory\sqldirectory\directory.properties:/basys/directory.properties
     links:
       - postgres
 

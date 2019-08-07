@@ -1,0 +1,41 @@
+@author pschorn, 07.08.2019
+
+This project demonstrates how to use Maven to create "parameterized" Docker images and how to start multiple containers interacting with each other in a docker-compose file.
+The most important files you need to look at are:
+- /Dockerfile
+- /pom.xml
+- /docker-compose.yml
+- /WebContent/WEB-INF/config/directory/sqldirectory/directory.properties
+- /WebContent/WEB-INF/config/directory/postgres/init.sql
+- /WebContent/WEB-INF/web.xml
+
+
+In detail, the project will create a self-sustained, containerized version of the Registry with SQL backend. For this, we need a PostgreSQL 
+server and the SQLDirectoryServlet from the basys.components project, that processes and forwards requests to the SQL server.
+
+The build process is automated with Maven, which will do the following steps:
+ 1) After running unit tests a .war file will be created 
+ 2) Maven will build a docker image based on the provided Dockerfile. It will make sure that the .war file of our app is deployed to a TomCat image.
+ 3) Before running the integration tests, Maven will run the docker-compose script. "docker-compose up" is used to start a number of containers in a virtual network that can interact with each other.
+ 	- Due to the "depends_on" command, docker-compose will start the postgres service first
+ 	- The postgres image takes environment variables such as user, password and a database to be created, and we mount a file called init.sql to the postgres' /docker-entrypoint-initdb.d folder that contains the insert 
+ 	  statements required to setup the test suite. On startup, postgres will execute all sql scripts that it can find in this directory.
+ 	- The "ports" - 5433:5432 command defines that the container should be available for the outside world at port 5433 and forward requests to port 5432 of the application running inside it.
+ 	- The "expose" - 5432 commands defines that the other containers started by docker-compose can find the postgres server at this port. Further, together with the "links" - postgres command in
+ 	  the registry service definition, the registry can reach the postgres database at //postgres:5432/basyx-directory.
+ 	- When the postgres service is started, the registry service will start in the same manner, mounting a directory.properties file to the tomcat container. A Java Implementation trying to access the file should 
+ 	  do so by creating an InputStream witht the absolute path to this file.
+4) Now, Maven will start the integration tests, running against the outside-world address of the registry service at http://localhost:8081/registry/
+5) After the tests complete, Maven will tear down the containers with the docker-compose down command.
+
+
+
+# What you should do before production use?
+- make the sql data persistent by mounting a volume to postgres as described here https://stackoverflow.com/questions/41637505/how-to-persist-data-in-a-dockerized-postgres-database-using-volumes
+and be ready to enter the stormy seas of distributed systems.
+ 	  
+ 
+
+
+
+
