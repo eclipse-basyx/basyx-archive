@@ -72,7 +72,7 @@ public class RunAASPropertiesCRUDAccessSnippet {
 		submodel.getProperties().put(fac.create(new Property(),       7, "prop1"));
 		submodel.getProperties().put(fac.create(new Property(), "myStr", "prop2"));
 		// - Transfer sub model to server
-		connSubModel1.createElement("/", submodel);
+		connSubModel1.updateElementValue("/", submodel);
 		
 		// Read property values
 		int prop1Val = (int) connSubModel1.readElementValue("dataElements/prop1/value");

@@ -67,29 +67,20 @@ public class VABModelProvider implements IModelProvider {
 
 	@Override
 	public void createValue(String path, Object newValue) throws Exception {
-		System.out.println("CRCRCR3:"+path+" -- "+newValue);
-		
-		// Local variables
-		Object parentElement = getParentElement(path);
-		String propertyName = VABPathTools.getLastElement(path);
-		
-		System.out.println("CRCRCR4:"+propertyName+" -- "+parentElement);
-
-		
-		// Do not process "null" paths
-		if (path == null) return;
-		
-		// Corner case - the complete map should be replaced (path "/" or "")
-		if ((path.length() == 0) || (path.equals("/"))) {
-			// Overwrite elements
-			elements = newValue;
-			
-			// End processing
+		// Corner case - the complete map should be replaced for empty paths
+		if (VABPathTools.isEmptyPath(path)) {
+			if (elements == null) {
+				elements = handler.preprocessObject(newValue);
+			}
 			return;
 		}
 
-		// All other cases
-		if (parentElement != null && propertyName != null) {
+		// Find parent & name of new element
+		Object parentElement = getParentElement(path);
+		String propertyName = VABPathTools.getLastElement(path);
+
+		// Only create new, never replace existing elements
+		if (parentElement != null) {
 			newValue = handler.preprocessObject(newValue);
 			Object childElement = handler.getElementProperty(parentElement, propertyName);
 			if (childElement == null) {
@@ -97,13 +88,10 @@ public class VABModelProvider implements IModelProvider {
 			} else {
 				handler.createValue(childElement, newValue);
 			}
-			
-			// End processing
 			return;
 		}
-		
-		// Indicate error
-		throw new RuntimeException("Undefined parent element requested");
+
+		System.out.println("Could not create element, parent element does not exist for path '" + path + "'");
 	}
 
 	@Override

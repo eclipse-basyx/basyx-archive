@@ -3,10 +3,10 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.connected;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
-import java.io.Serializable;
 
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
@@ -70,7 +70,7 @@ public class TestConnectedSubModel {
 		VABElementProxy proxy = manager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 		
 		// Put the subModel into the newly created proxy
-		proxy.createElement("", destroyType);
+		proxy.updateElementValue("", sm);
 		
 		// Create the ConnectedSubModel based on the manager
 		submodel = new ConnectedSubModel("", proxy);

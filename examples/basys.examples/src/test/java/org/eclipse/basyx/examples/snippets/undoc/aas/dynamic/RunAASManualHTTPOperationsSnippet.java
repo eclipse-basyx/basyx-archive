@@ -76,7 +76,7 @@ public class RunAASManualHTTPOperationsSnippet {
 		submodel.getProperties().put(fac.create(new Property(), "myStr", "prop2"));
 
 		// Transfer sub model to server
-		connSubModel1.createElement("/", submodel);
+		connSubModel1.updateElementValue("/", submodel);
 		
 		// Web service client accesses AAS using HTTP REST calls
 		WebServiceJSONClient jsonClient = new WebServiceJSONClient();
