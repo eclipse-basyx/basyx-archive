@@ -71,19 +71,13 @@ public class JSONConnector implements IModelProvider {
 	
 
 	@Override
-	public Object getModelPropertyValue(String path) { // shouldn't GET throw an exception too?
+	public Object getModelPropertyValue(String path) throws Exception {
 
 		// Get element from server
 		String message = provider.getModelPropertyValue(path);
 
-		try {
-			// De-serialize and verify
-			return metaProtocolHandler.verify(message);
-
-		} catch (Exception e) {
-			e.printStackTrace(); // TODO throw exception?
-		}
-		return null;
+		// De-serialize and verify
+		return metaProtocolHandler.verify(message);
 	}
 
 	@Override

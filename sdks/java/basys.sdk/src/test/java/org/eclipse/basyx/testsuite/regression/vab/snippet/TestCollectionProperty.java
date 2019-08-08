@@ -3,12 +3,14 @@ package org.eclipse.basyx.testsuite.regression.vab.snippet;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
@@ -142,6 +144,14 @@ public class TestCollectionProperty {
 		connVABElement.deleteElement("/structure/list/byRef_" + referenceSecondLast); // should be [10, 20, 80]
 		toTest = connVABElement.readElementValue("/structure/list/");
 		assertEquals(3, ((List<?>) toTest).size());
+		try {
+			// Reference 3 does not exist anymore
+			connVABElement.readElementValue("/structure/list/byRef_" + referenceSecondLast);
+			fail();
+		} catch (ServerException e) {
+			// Exception types not implemented yet
+			// assertEquals(e.getType(), "org.eclipse.basyx.vab.provider.list.InvalidListReferenceException");
+		}
 
 		// Delete remaining elements
 		connVABElement.deleteElement("/structure/list/byRef_" + references.get(0));

@@ -25,7 +25,7 @@ public class BaSyxCreateProvideUseExampleAASSubmodel {
 	 * Create, export, and access an example AAS sub model
 	 */
 	@Test
-	public void createExportAndAccessSubModel() {
+	public void createExportAndAccessSubModel() throws Exception {
 				
 		// Create sub model and add properties
 		VABModelMap<Object> statusSM = new SubModel()
