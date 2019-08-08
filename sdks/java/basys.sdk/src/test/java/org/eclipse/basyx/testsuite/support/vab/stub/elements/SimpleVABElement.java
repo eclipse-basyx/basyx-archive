@@ -2,78 +2,70 @@ package org.eclipse.basyx.testsuite.support.vab.stub.elements;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 
 /**
- * A simple VAB model that explains the use of the VAB hashmap provider
+ * A simple VAB model that explains the use of the VAB primitives
  * 
- * @author kuhn
+ * @author kuhn, espen
  *
  */
 public class SimpleVABElement extends HashMap<String, Object> {
-	private static final long serialVersionUID = -1339664424451243526L;
+	private static final long serialVersionUID = 3942399852711325850L;
 
 	/**
-	 * Constructor
+	 * Constructor for a simple VAB element that contains all data types
 	 */
 	public SimpleVABElement() {
-		// Create contained map
-		Map<String, Object> containedElement = new HashMap<>();
-		// - Initialize contained map
-		containedElement.put("property1.1", new Integer(7));
-		// - Create contained collection
+		// Add primitive types
+		HashMap<String, Object> primitives = new HashMap<>();
+		primitives.put("integer", 123);
+		primitives.put("double", 3.14d);
+		primitives.put("string", "TestValue");
+		put("primitives", primitives);
 
-		Collection<Integer> collection = new ArrayList<>();
-		collection.add(1);
-		collection.add(2);
-		containedElement.put("property1.2", collection);
-
-		Map<String, Object> prop = new HashMap<>();
-		prop.put("test", 123);
-		prop.put("Test", 321);
-		containedElement.put("propertyMap", prop);
-
-		// Create operation maps
-		Map<String, Object> containedOperations = new HashMap<>();
-		Map<String, Function<?, ?>> rootOperations = new HashMap<>();
-		// - Add operation maps
-		containedElement.put("operations", containedOperations);
-		put("operations", rootOperations);
-		// - Add operations
-		// - Create contained operation without parameter
-		HashMap<String, Object> operation11 = new HashMap<>();
-		operation11.put("endpoint", (Function<Object[], Object> & Serializable) (v) -> {
-			return 10;
+		// Add function types
+		HashMap<String, Object> functions = new HashMap<>();
+		functions.put("supplier", (Supplier<Object>) () -> {
+			return true;
 		});
-
-		operation11.put("output", "Integer");
-
-		containedOperations.put("operation1.1", operation11);
-
-		// - Contained function
-		rootOperations.put("operation1", (Function<Object[], Object> & Serializable) (param) -> {
-			return (int) param[0] + (int) param[1];
+		functions.put("serverException", (Function<Object[], Object>) (param) -> {
+			throw new ServerException("testExceptionType", "Exception description");
 		});
-
-		rootOperations.put("operation2", (Function<Object[], Object> & Serializable) (param) -> {
-			return null;
-		});
-		// - Contained function that throws native JAVA exception
-		rootOperations.put("operationEx1", (Function<Object[], Object> & Serializable) (elId) -> {
+		functions.put("nullException", (Function<Object[], Object>) (param) -> {
 			throw new NullPointerException();
 		});
-		// - Contained function that throws VAB exception
-		rootOperations.put("operationEx2", (Function<Object[], Object> & Serializable) (elId) -> {
-			throw new ServerException("ExType", "Exception description");
+		functions.put("complex", (Function<Object[], Object>) (param) -> {
+			return (int) param[0] + (int) param[1];
 		});
+		functions.put("serializable", (Function<Object[], Object> & Serializable) (param) -> {
+			return (int) param[0] + (int) param[1];
+		});
+		functions.put("invalid", true);
+		put("operations", functions);
 
-		// Put elements into 'elements' map of this provider
-		// - Contained HashMap for 'property1'
-		put("property1", containedElement);
+		// Add structure types
+		HashMap<String, Object> structure = new HashMap<>();
+		structure.put("map", new HashMap<String, Object>());
+		structure.put("set", new HashSet<Object>());
+		structure.put("list", new ArrayList<Object>());
+		put("structure", structure);
+
+		// Add corner cases
+		HashMap<String, Object> special = new HashMap<>();
+		special.put("casesensitivity", true);
+		special.put("caseSensitivity", false);
+		HashMap<String, Object> nestedA = new HashMap<>();
+		HashMap<String, Object> nestedB = new HashMap<>();
+		nestedA.put("nested", nestedB);
+		nestedB.put("value", 100);
+		special.put("nested", nestedA);
+		special.put("null", null);
+		put("special", special);
 	}
 }

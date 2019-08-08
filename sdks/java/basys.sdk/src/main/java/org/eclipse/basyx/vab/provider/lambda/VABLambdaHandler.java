@@ -51,7 +51,7 @@ public class VABLambdaHandler extends VABMultiElementHandler {
 			((BiConsumer<String, Object>) ((Map<String, Object>) element).get(VALUE_INSERT_SUFFIX)).accept(propertyName,
 					newValue);
 		} else {
-			super.setModelPropertyValue(element, propertyName, newValue);
+			super.setModelPropertyValue(resolveSingle(element), propertyName, newValue);
 		}
 	}
 

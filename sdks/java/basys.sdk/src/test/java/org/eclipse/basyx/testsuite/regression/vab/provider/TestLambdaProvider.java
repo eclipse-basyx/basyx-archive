@@ -5,222 +5,122 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.connector.ConnectorProvider;
-import org.eclipse.basyx.testsuite.regression.vab.snippet.CreateDelete;
-import org.eclipse.basyx.testsuite.regression.vab.snippet.GetPropertyValue;
-import org.eclipse.basyx.testsuite.regression.vab.snippet.Invoke;
-import org.eclipse.basyx.testsuite.regression.vab.snippet.ListReferences;
-import org.eclipse.basyx.testsuite.regression.vab.snippet.SetPropertyValue;
-import org.eclipse.basyx.testsuite.regression.vab.snippet.TestCollectionProperty;
-import org.eclipse.basyx.testsuite.regression.vab.snippet.TestMapProperty;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
+import org.eclipse.basyx.testsuite.support.vab.stub.elements.SimpleVABElement;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
 import org.eclipse.basyx.vab.provider.list.ReferencedArrayList;
-import org.junit.Test;
 
 /**
  * Tests the functionality of the VABLambdaProvider according to the test cases
  * in the snippet package
  * 
- * @author schnicke
+ * @author schnicke, espen
  *
  */
-public class TestLambdaProvider {
+public class TestLambdaProvider extends TestProvider {
 
-	// Representative of the value of property1.1
-	static int property11_val;
+	private static double doubleElement = 3.14d;
+	private static ReferencedArrayList<Object> collectionElement = new ReferencedArrayList<>();
+	private static Map<String, Object> rootAccessor;
+	private static HashMap<String, Object> rootElement = new SimpleVABElement();
+	@SuppressWarnings("unchecked")
+	private static HashMap<String, Object> structureElement = (HashMap<String, Object>) rootElement.get("structure");
+	@SuppressWarnings("unchecked")
+	private static HashMap<String, Object> mapElement = (HashMap<String, Object>) structureElement.get("map");
 
-	// Representative of the value of property1
-	static Map<String, Object> property1_val;
+	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(),
+			new ConnectorProvider() {
 
-	// Representative of the value of property1.2
-	static Map<String, Object> propertyMap_val;
+				@Override
+				protected IModelProvider createProvider(String addr) {
+					return buildProvider();
+				}
+			});
 
-	// Representative of the value of propertyMap
-	static ReferencedArrayList<Object> propertyCollection_val;
+	@Override
+	protected VABConnectionManager getConnectionManager() {
+		return connManager;
+	}
 
-	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(), new ConnectorProvider() {
-
-		@Override
-		protected IModelProvider createProvider(String addr) {
-			return buildProvider();
-		}
-	});
-
+	@SuppressWarnings("unchecked")
 	private static IModelProvider buildProvider() {
-		// Set initial values for property representatives
-		property11_val = 7;
+		// Create primitive lambda elements
+		HashMap<String, Object> primitives = (HashMap<String, Object>) rootElement.get("primitives");
+		// Has no hidden setter (==null), so value should be completely replaced when set
+		primitives.put("integer", VABLambdaProviderHelper.createSimple((Supplier<Object>) () -> {
+			return 123;
+		}, null));
+		// Has a hidden setter, so write access to this element changes "doubleElement", which is returned by the getter
+		primitives.put("double", VABLambdaProviderHelper.createSimple((Supplier<Object>) () -> {
+			return doubleElement;
+		}, (Consumer<Object>) (newObject) -> {
+			doubleElement = (double) newObject;
+		}));
 
-		propertyMap_val = new HashMap<>();
-		propertyMap_val.put("test", 123);
-		propertyMap_val.put("Test", 321);
-
-		propertyCollection_val = new ReferencedArrayList<>();
-		propertyCollection_val.add(1);
-		propertyCollection_val.add(2);
-
-		// Create accessors for simple value property property1.1
-		Map<String, Object> property11 = VABLambdaProviderHelper.createSimple((Supplier<Object>) () -> {
-			return property11_val;
-		}, null);
-
-		// Create accessors for collection property property1.2
-		Map<String, Object> collectionAccessors = VABLambdaProviderHelper.createCollection((Supplier<Object>) () -> {
-			return propertyCollection_val;
+		// Create collection lambda element
+		HashMap<String, Object> collections = (HashMap<String, Object>) rootElement.get("structure");
+		Map<String, Object> collectionAccessor = VABLambdaProviderHelper.createCollection((Supplier<Object>) () -> {
+			return collectionElement;
 		}, (Consumer<Collection<Object>>) (collection) -> {
-			propertyCollection_val = new ReferencedArrayList<>(collection);
+			collectionElement = new ReferencedArrayList<>(collection);
 		}, (Consumer<Object>) (value) -> {
-			propertyCollection_val.add(value);
+			collectionElement.add(value);
 		}, (Consumer<Object>) (object) -> {
-			propertyCollection_val.remove(object);
+			collectionElement.remove(object);
 		}, (Consumer<String>) (key) -> {
 			String refName = key.substring("byRef_".length());
 			Integer reference = Integer.valueOf(refName);
-			Object object = propertyCollection_val.getByReference(reference);
-			propertyCollection_val.remove(object);
+			Object object = collectionElement.getByReference(reference);
+			collectionElement.remove(object);
 		});
+		collections.put("list", collectionAccessor);
 
 		// Create accessors for map property propertyMap
-		Map<String, Object> mapAccessors = VABLambdaProviderHelper.createMap((Supplier<?>) () -> {
-			return propertyMap_val;
+		rootAccessor = VABLambdaProviderHelper.createMap((Supplier<?>) () -> {
+			return rootElement;
 		}, (Consumer<Map<String, Object>>) (map) -> {
-			propertyMap_val = map;
+			rootElement = (HashMap<String, Object>) map;
 		}, (BiConsumer<String, Object>) (key, value) -> {
-			propertyMap_val.put(key, value);
+			rootElement.put(key, value);
 		}, (Consumer<Object>) (o) -> {
 		}, (Consumer<String>) (key) -> {
-			propertyMap_val.remove(key);
+			rootElement.remove(key);
 		});
 
-		// Build contained operations
-		Map<String, Object> containedOperations = new HashMap<>();
-
-		// Function returning constant
-		HashMap<String, Object> operation11 = new HashMap<>();
-		operation11.put("endpoint", (Function<Object[], Object>) (v) -> {
-			return 10;
-		});
-		containedOperations.put("operation1.1", operation11);
-
-		// Build root operations
-		Map<String, Function<?, ?>> rootOperations = new HashMap<>();
-		// Adding function
-		rootOperations.put("operation1", (Function<Object[], Object>) (param) -> {
-			return (int) param[0] + (int) param[1];
-		});
-
-		rootOperations.put("operation2", (Function<Object[], Object>) (param) -> {
-			return null;
-		});
-
-		// Function that throws native JAVA exception
-		rootOperations.put("operationEx1", (Function<Object[], Object>) (elId) -> {
-			throw new NullPointerException();
-		});
-		// Function that throws VAB exception
-		rootOperations.put("operationEx2", (Function<Object[], Object>) (elId) -> {
-			throw new ServerException("ExType", "Exception description");
-		});
-
-		// Create property1
-		property1_val = new HashMap<>();
-		property1_val.put("property1.1", property11);
-		property1_val.put("property1.2", collectionAccessors);
-		property1_val.put("propertyMap", mapAccessors);
-		property1_val.put("operations", containedOperations);
-
-		// Create accessor for property1 (-> nested lambda properties)
-		Map<String, Object> property1Accessor = VABLambdaProviderHelper.createMap((Supplier<?>) () -> {
-			return property1_val;
+		// Create first accessor for structure/map element (-> test nested lambda properties)
+		Map<String, Object> structureAccessor = VABLambdaProviderHelper.createMap((Supplier<?>) () -> {
+			return structureElement;
 		}, (Consumer<Map<String, Object>>) (map) -> {
-			property1_val = map;
+			structureElement = (HashMap<String, Object>) map;
 		}, (BiConsumer<String, Object>) (key, value) -> {
-			property1_val.put(key, value);
+			structureElement.put(key, value);
 		}, (Consumer<Object>) (o) -> {
 		}, (Consumer<String>) (key) -> {
-			property1_val.remove(key);
+			structureElement.remove(key);
 		});
+		// Replace actual structure property with lambda accessor
+		rootElement.put("structure", structureAccessor);
+		// Create second accessor for structure/map element (-> nested lambda properties)
+		Map<String, Object> mapAccessor = VABLambdaProviderHelper.createMap((Supplier<?>) () -> {
+			return mapElement;
+		}, (Consumer<Map<String, Object>>) (map) -> {
+			mapElement = (HashMap<String, Object>) map;
+		}, (BiConsumer<String, Object>) (key, value) -> {
+			mapElement.put(key, value);
+		}, (Consumer<Object>) (o) -> {
+		}, (Consumer<String>) (key) -> {
+			mapElement.remove(key);
+		});
+		// Replace actual map property with lambda accessor
+		structureElement.put("map", mapAccessor);
 
-		// Create root map
-		Map<String, Object> obj = new HashMap<>();
-		obj.put("property1", property1Accessor);
-		obj.put("operations", rootOperations);
-
-		// Build provider
-		VABLambdaProvider provider = new VABLambdaProvider(obj);
-
+		VABLambdaProvider provider = new VABLambdaProvider(rootAccessor);
 		return provider;
-	}
-
-	@Test
-	public void testCreateDelete() {
-		CreateDelete.test(connManager);
-	}
-
-	@Test
-	public void testGet() {
-		GetPropertyValue.test(connManager);
-	}
-
-	@Test
-	public void testInvoke() {
-		Invoke.test(connManager);
-	}
-
-	@Test
-	public void testSet() {
-		SetPropertyValue.test(connManager);
-	}
-
-	@Test
-	public void testListReferences() {
-		ListReferences.test(connManager);
-	}
-
-	@Test
-	public void testMapGet() {
-		TestMapProperty.testGet(connManager);
-	}
-
-	@Test
-	public void testMapUpdateComplete() {
-		TestMapProperty.testUpdateComplete(connManager);
-	}
-
-	@Test
-	public void testMapUpdateElement() {
-		TestMapProperty.testUpdateElement(connManager);
-	}
-
-	@Test
-	public void testMapRemoveElement() {
-		TestMapProperty.testRemoveElement(connManager);
-	}
-
-	@Test
-	public void testCollectionGet() {
-		TestCollectionProperty.testGet(connManager);
-	}
-
-	@Test
-	public void testCollectionUpdateComplete() {
-		TestCollectionProperty.testUpdateComplete(connManager);
-	}
-
-	@Test
-	public void testCollectionUpdateElement() {
-		TestCollectionProperty.testUpdateElement(connManager);
-	}
-
-	@Test
-	public void testCollectionRemoveElement() {
-		TestCollectionProperty.testRemoveElement(connManager);
 	}
 }

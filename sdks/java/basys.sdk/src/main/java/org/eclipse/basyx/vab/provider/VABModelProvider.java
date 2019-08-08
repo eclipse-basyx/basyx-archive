@@ -44,6 +44,15 @@ public class VABModelProvider implements IModelProvider {
 
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+		// Corner case, empty path
+		if (VABPathTools.isEmptyPath(path)) {
+			// Empty path => parent element == null => replace root, if it exists
+			if (elements != null) {
+				elements = handler.preprocessObject(newValue);
+			}
+			return;
+		}
+		
 		Object parentElement = getParentElement(path);
 		String propertyName = VABPathTools.getLastElement(path);
 		

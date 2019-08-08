@@ -48,15 +48,13 @@ public class FileSystemProvider implements IModelProvider {
 		fileSystem.createDirectory(rootDir + "/");
 	}
 
-	public FileSystemProvider(FileSystem fileSystem, String rootDir, Map<String, Object> VABelement)
-			throws Exception {
+	public FileSystemProvider(FileSystem fileSystem, String rootDir, Map<String, Object> VABelement) throws Exception {
 		this.fileSystem = fileSystem;
 		this.rootDir = unifyPath(rootDir);
 
 		fileSystem.createDirectory(rootDir + "/");
 		fromMapToDirectory("", VABelement);
 	}
-
 
 	/**
 	 * Same constructor as the above one, only gets an additional boolean argument
@@ -77,15 +75,15 @@ public class FileSystemProvider implements IModelProvider {
 	 * Removes the first and last character from a String if it is a "/"
 	 */
 	private String unifyPath(String path) {
-		if(path.startsWith("/")) {
+		if (path.startsWith("/")) {
 			path = path.substring(1);
 		}
-		if(path.endsWith("/")) {
+		if (path.endsWith("/")) {
 			path = path.substring(0, path.length() - 1);
 		}
 		return path;
 	}
-	
+
 	private String constructCollectionRefPath(String path, int ref) {
 		return path + "/" + collectionElemPrefix + ref;
 	}
@@ -98,7 +96,13 @@ public class FileSystemProvider implements IModelProvider {
 	private HashSet<String> readMetaFile(String path) throws Exception {
 		path = path.equals("") ? rootDir + "/" + metaFileName : rootDir + "/" + path + "/" + metaFileName;
 		if (fileSystem.getType(path) == FileType.DATA) {
-			return loadAndDeserialize(path, HashSet.class);
+			Object deserialized = loadAndDeserialize(path);
+			// Especially for "[]", deserialization can not differentiate between lists and sets
+			if (deserialized instanceof HashSet) {
+				return (HashSet<String>) deserialized;
+			} else if (deserialized instanceof Collection) {
+				return new HashSet<>((List<String>) deserialized);
+			}
 		}
 		return null;
 	}
@@ -116,19 +120,19 @@ public class FileSystemProvider implements IModelProvider {
 			List<File> directoryFiles = fileSystem.readDirectory(fullDirPath);
 			// The directory that contains the file, folder or collection to be read does
 			// not exist, return null
-	
+
 			// Get the list of collections that are present as folders from the _meta file
 			HashSet<String> collections = readMetaFile(directory);
 			if (collections != null && collections.contains(fileName)) {
 				// It's a collection
 				return readCollection(path);
 			} else {
-			
+
 				File file = findFileInList(directoryFiles, fileName);
-				if(file != null) {
-					if(file.getType() == FileType.DATA) {
+				if (file != null) {
+					if (file.getType() == FileType.DATA) {
 						// It's a file
-						return loadAndDeserialize(file.getName(), Object.class);
+						return loadAndDeserialize(file.getName());
 					} else {
 						// It's a folder
 						return readDirectory(path);
@@ -143,15 +147,15 @@ public class FileSystemProvider implements IModelProvider {
 		}
 		return null;
 	}
-	
+
 	private File findFileInList(List<File> files, String fileName) {
-		if(fileName.equals("")) {
+		if (fileName.equals("")) {
 			// The wanted File is the root
 			return new File(rootDir, FileType.DIRECTORY);
 		}
-		for(File file: files) {
+		for (File file : files) {
 			String currentFileName = VABPathTools.getLastElement(file.getName());
-			if(currentFileName.equals(fileName)) {
+			if (currentFileName.equals(fileName)) {
 				return file;
 			}
 		}
@@ -163,13 +167,13 @@ public class FileSystemProvider implements IModelProvider {
 		String fullPath = rootDir + "/" + path;
 		for (int ref : readReferences(fullPath)) {
 			FileType type = fileSystem.getType(constructCollectionRefPath(fullPath, ref));
-			
+
 			if (type == FileType.DATA) {
-				c.add(loadAndDeserialize(constructCollectionRefPath(fullPath, ref), Object.class));
+				c.add(loadAndDeserialize(constructCollectionRefPath(fullPath, ref)));
 			} else if (type == FileType.DIRECTORY) {
 				c.add(readDirectory(constructCollectionRefPath(path, ref)));
 			}
-			
+
 		}
 		return c;
 	}
@@ -184,13 +188,13 @@ public class FileSystemProvider implements IModelProvider {
 
 		List<File> directoryFiles = fileSystem.readDirectory(fullPath);
 		removeMetaFile(directoryFiles);
-		
+
 		for (File file : directoryFiles) {
 			String currentFilePath = file.getName();
 			String fileName = VABPathTools.getLastElement(currentFilePath);
 			if (file.getType() == FileType.DATA) {
 				// It's a file
-				returnData.put(fileName, loadAndDeserialize(currentFilePath, Object.class));
+				returnData.put(fileName, loadAndDeserialize(currentFilePath));
 			} else if (collections != null && collections.contains(fileName)) {
 				// It's a collection
 				returnData.put(fileName, readCollection(stripRootDir(currentFilePath)));
@@ -202,17 +206,17 @@ public class FileSystemProvider implements IModelProvider {
 
 		return returnData;
 	}
-	
+
 	private List<File> removeMetaFile(List<File> list) {
-		for(int i=0; i < list.size(); i++) {
-			if(VABPathTools.getLastElement(list.get(i).getName()).equals(metaFileName)) {
+		for (int i = 0; i < list.size(); i++) {
+			if (VABPathTools.getLastElement(list.get(i).getName()).equals(metaFileName)) {
 				list.remove(i);
 				break;
 			}
 		}
 		return list;
 	}
-	
+
 	private String stripRootDir(String path) {
 		return path.substring(rootDir.length() + 1);
 	}
@@ -229,7 +233,7 @@ public class FileSystemProvider implements IModelProvider {
 		} else {
 			collections = new HashSet<String>(Arrays.asList(new String[] { collectionName }));
 		}
-		
+
 		serializeAndSave(rootDir + "/" + directoryPath + "/" + metaFileName, collections);
 	}
 
@@ -255,8 +259,8 @@ public class FileSystemProvider implements IModelProvider {
 			fileSystem.createDirectory(fullPath);
 			Iterator<?> iterator = collection.iterator();
 			List<Integer> references = new ArrayList<>();
-			
-			for (int counter=0; iterator.hasNext(); counter++) {
+
+			for (int counter = 0; iterator.hasNext(); counter++) {
 				Object item = iterator.next();
 				references.add(counter);
 				if (item instanceof Map) {
@@ -300,12 +304,12 @@ public class FileSystemProvider implements IModelProvider {
 
 	@SuppressWarnings("unchecked")
 	private List<Integer> readReferences(String path) throws Exception {
-		return loadAndDeserialize(path + "/" + referenceFileName, ArrayList.class);
+		return (List<Integer>) loadAndDeserialize(path + "/" + referenceFileName);
 	}
 
-	private <T> T loadAndDeserialize(String path, Class<T> type) throws Exception {
+	private Object loadAndDeserialize(String path) throws Exception {
 		String serialized = fileSystem.readFile(path);
-		return type.cast(tools.deserialize(serialized));
+		return tools.deserialize(serialized);
 	}
 
 	private void serializeAndSave(String path, Object o) throws Exception {
@@ -329,14 +333,14 @@ public class FileSystemProvider implements IModelProvider {
 		String fullPath = rootDir + "/" + path;
 		HashSet<String> collections = readMetaFile(VABPathTools.getParentPath(path));
 		FileType type = fileSystem.getType(fullPath);
-		
+
 		if (type == FileType.DATA) {
 			// File with the same name exists, replace it with newValue >IF< newValue is
 			// neither a folder nor a Map
 			if (!(newValue instanceof Map) && !(newValue instanceof Collection<?>)) {
 				serializeAndSave(fullPath, newValue);
 			}
-		} else if(type == FileType.DIRECTORY) {
+		} else if (type == FileType.DIRECTORY) {
 			if ((collections == null || !collections.contains(fileName)) && newValue instanceof Map) {
 				fileSystem.deleteDirectory(fullPath);
 				fromMapToDirectory(path, (Map<String, Object>) newValue);
@@ -360,24 +364,30 @@ public class FileSystemProvider implements IModelProvider {
 		fileSystem.createDirectory(rootDir + "/" + directory);
 		String fullPath = rootDir + "/" + path;
 		FileType type = fileSystem.getType(fullPath);
-		
+
 		if (type == FileType.DATA) {
 			return; // A file with this name already exists, quit the method
 		} else if (type == FileType.DIRECTORY) {
 			HashSet<String> collections = readMetaFile(directory);
-			
+
 			if (collections != null && collections.contains(fileName)) { // A Collection already exists
-				
+
 				List<Integer> references = readReferences(fullPath);
-				
-				//Based on the assumption, that the last reference is always the biggest
-				int max = references.get(references.size() - 1);
-				
-				if(newEntity instanceof Map) {
-					fromMapToDirectory(constructCollectionRefPath(path, max+1), (Map<String, Object>) newEntity);
-				} else if(!(newEntity instanceof Collection<?>)) {
+
+				// Get maximum reference to be able to add an additional entry
+				int max = 0;
+				for (Integer i : references) {
+					if (i > max) {
+						max = i;
+					}
+				}
+
+				// Add the entry to the collection
+				if (newEntity instanceof Map) {
+					fromMapToDirectory(constructCollectionRefPath(path, max + 1), (Map<String, Object>) newEntity);
+				} else if (!(newEntity instanceof Collection<?>)) {
 					// If the new Object is a Collection, don't add it to the existing one
-					serializeAndSave(constructCollectionRefPath(fullPath, max+1), newEntity);
+					serializeAndSave(constructCollectionRefPath(fullPath, max + 1), newEntity);
 				}
 
 				references.add(max + 1);
@@ -391,7 +401,7 @@ public class FileSystemProvider implements IModelProvider {
 			}
 		}
 	}
-	
+
 	/**
 	 * Deletes the Object, folder or collection at the specified path
 	 * If it is a collection, remove its name from the meta file of
@@ -426,7 +436,7 @@ public class FileSystemProvider implements IModelProvider {
 			}
 			fileSystem.deleteDirectory(fullPath);
 		}
-		
+
 		// If no file, folder or collection exists at the path specified,
 		// the method will effectively do nothing (delete nothing)
 	}
@@ -448,7 +458,7 @@ public class FileSystemProvider implements IModelProvider {
 		FileType type = fileSystem.getType(rootDir + "/" + directory);
 		if (collections != null && type == FileType.DIRECTORY && collections.contains(fileName)) {
 			// Collection in specified path exists
-			
+
 			List<Integer> references = readReferences(fullCollectionPath);
 
 			for (int i = 0; i < references.size(); i++) {
@@ -458,7 +468,7 @@ public class FileSystemProvider implements IModelProvider {
 
 				// If the File exists it's a Java Object, else it's a Map
 				if (type == FileType.DATA) {
-					Object o = loadAndDeserialize(currentPath, Object.class);
+					Object o = loadAndDeserialize(currentPath);
 					if (o.equals(obj)) {
 						fileSystem.deleteFile(currentPath);
 						references.remove(Integer.valueOf(j));
