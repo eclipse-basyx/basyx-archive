@@ -51,5 +51,15 @@ public class MapInvoke {
 			// exception type not implemented, yet
 			// assertEquals(e.getType(), "java.lang.NullPointerException");
 		}
+
+		// Empty paths - should execute, but has no effect
+		connVABElement.invoke("", "");
+
+		// Null path - should throw exception
+		try {
+			connVABElement.invoke(null, "");
+			fail();
+		} catch (ServerException e) {
+		}
 	}
 }

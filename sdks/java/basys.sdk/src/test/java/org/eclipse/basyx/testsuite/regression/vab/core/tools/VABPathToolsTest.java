@@ -2,10 +2,10 @@ package org.eclipse.basyx.testsuite.regression.vab.core.tools;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -15,15 +15,41 @@ import org.junit.Test;
  *
  */
 public class VABPathToolsTest {
-	String[] empty;
-	String[] single;
-	String[] pair;
+	// test all cases of "empty" paths
+	String[] empty = new String[] { "/", "" };
 
-	@Before
-	public void build() {
-		empty = new String[] { "/", "" };
-		single = new String[] { "element", "/element", "element/", "/element/" };
-		pair = new String[] { "parent/child", "/parent/child", "parent/child/", "/parent/child/" };
+	// test all cases of /-placement for single elements
+	String[] single = new String[] { "element", "/element", "element/", "/element/" };
+
+	// test all cases of /-placement for multiple elements
+	String[] pair = new String[] { "parent/child", "/parent/child", "parent/child/", "/parent/child/" };
+
+	// Test strings
+	String pathWithoutAddress = "a/b/c";
+	String pathWithOneAddress = "http://AASServer//a/b/c";
+	String pathWithTwoAddress = "basyx://127.0.0.1:6889//http://AASServer//a/b/c";
+	String onlyAddress = "basyx://127.0.0.1:6889";
+
+	/**
+	 * Tests remove address
+	 */
+	@Test
+	public void testRemoveAddress() {
+		assertEquals(pathWithoutAddress, VABPathTools.removeAddressEntry(pathWithoutAddress));
+		assertEquals(pathWithoutAddress, VABPathTools.removeAddressEntry(pathWithOneAddress));
+		assertEquals("", VABPathTools.removeAddressEntry(onlyAddress));
+		assertNull(VABPathTools.removeAddressEntry(null));
+	}
+
+	/**
+	 * Tests get address
+	 */
+	@Test
+	public void testGetAddress() {
+		assertEquals("", VABPathTools.getAddressEntry(pathWithoutAddress));
+		assertEquals("basyx://127.0.0.1:6889", VABPathTools.getAddressEntry(pathWithTwoAddress));
+		assertEquals(onlyAddress, VABPathTools.getAddressEntry(onlyAddress));
+		assertNull(VABPathTools.getAddressEntry(null));
 	}
 
 	/**
@@ -44,6 +70,24 @@ public class VABPathToolsTest {
 			assertEquals("parent", VABPathTools.splitPath(test)[0]);
 			assertEquals("child", VABPathTools.splitPath(test)[1]);
 		}
+		assertNull(VABPathTools.splitPath(null));
+	}
+
+	/**
+	 * Test concenating multiple paths
+	 */
+	@Test
+	public void concatenatePaths() {
+		for (String a : single) {
+			assertEquals("element", VABPathTools.concatenatePaths(a));
+			for (String b : pair) {
+				assertEquals("element/parent/child", VABPathTools.concatenatePaths(a, b));
+			}
+		}
+		assertEquals("", VABPathTools.concatenatePaths(""));
+		assertNull(VABPathTools.concatenatePaths());
+		assertNull(VABPathTools.concatenatePaths(null, ""));
+		assertNull(VABPathTools.concatenatePaths("", null));
 	}
 
 	@Test
@@ -57,6 +101,7 @@ public class VABPathToolsTest {
 		for (String test : pair) {
 			assertEquals("parent", VABPathTools.getParentPath(test));
 		}
+		assertNull(VABPathTools.getParentPath(null));
 	}
 
 	@Test
@@ -70,6 +115,7 @@ public class VABPathToolsTest {
 		for (String test : pair) {
 			assertEquals("child", VABPathTools.getLastElement(test));
 		}
+		assertNull(VABPathTools.getLastElement(null));
 	}
 
 	@Test
@@ -83,6 +129,7 @@ public class VABPathToolsTest {
 		for (String test : pair) {
 			assertTrue(VABPathTools.removePrefix(test, "/").startsWith("parent"));
 		}
+		assertNull(VABPathTools.removePrefix(null, "/"));
 	}
 
 	@Test
@@ -91,6 +138,7 @@ public class VABPathToolsTest {
 		assertEquals("b", VABPathTools.buildPath(new String[] { "a", "b" }, 1));
 		assertEquals("b/c", VABPathTools.buildPath(new String[] { "a", "b", "c" }, 1));
 		assertEquals("a/b/c", VABPathTools.buildPath(new String[] { "a", "b", "c" }, 0));
+		assertNull(VABPathTools.buildPath(null, 0));
 	}
 
 	@Test
@@ -99,12 +147,14 @@ public class VABPathToolsTest {
 		assertEquals("/parent/child", VABPathTools.append("/parent/", "child"));
 		assertEquals("/parent/x/child", VABPathTools.append("/parent/x", "child"));
 		assertEquals("/parent/x/child", VABPathTools.append("/parent/x/", "child"));
+		assertNull(VABPathTools.append(null, ""));
+		assertNull(VABPathTools.append("", null));
 	}
 
 	@Test
 	public void testIsOperationPath() {
-		String[] positive = { "operations", "operations/", "/operations", "operations/",
-				"operations/test/", "operations/test", "/operations/test", "operations/test/" };
+		String[] positive = { "operations", "operations/", "/operations", "operations/", "operations/test/",
+				"operations/test", "/operations/test", "operations/test/" };
 		String[] negative = { "", "/operationX/", "/myOperation/", "/operationsFake/", "/operationsFake/operationX/" };
 		for (String test : positive) {
 			assertTrue(test, VABPathTools.isOperationPath(test));
@@ -112,5 +162,6 @@ public class VABPathToolsTest {
 		for (String test : negative) {
 			assertFalse(test, VABPathTools.isOperationPath(test));
 		}
+		assertFalse(VABPathTools.isOperationPath(null));
 	}
 }

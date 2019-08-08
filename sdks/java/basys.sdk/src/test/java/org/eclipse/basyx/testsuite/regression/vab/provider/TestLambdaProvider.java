@@ -74,10 +74,12 @@ public class TestLambdaProvider extends TestProvider {
 		}, (Consumer<Object>) (object) -> {
 			collectionElement.remove(object);
 		}, (Consumer<String>) (key) -> {
-			String refName = key.substring("byRef_".length());
-			Integer reference = Integer.valueOf(refName);
-			Object object = collectionElement.getByReference(reference);
-			collectionElement.remove(object);
+			if (key != null && key.length() >= 7) {
+				String refName = key.substring("byRef_".length());
+				Integer reference = Integer.valueOf(refName);
+				Object object = collectionElement.getByReference(reference);
+				collectionElement.remove(object);
+			}
 		});
 		collections.put("list", collectionAccessor);
 

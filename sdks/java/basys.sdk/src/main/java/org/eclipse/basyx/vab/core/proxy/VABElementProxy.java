@@ -47,7 +47,7 @@ public class VABElementProxy {
 			// Change element on server
 			return provider.getModelPropertyValue(constructPath(elementPath));
 		} catch (ServerException e) {
-			throw new ServerException(e);	// FIXME Exception Handling should be done in JSONConnector
+			throw new ServerException(e); // FIXME Exception Handling should be done in JSONConnector
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ServerException(e.getClass().getName(), e.getMessage());
@@ -68,7 +68,8 @@ public class VABElementProxy {
 			e.printStackTrace();
 			throw new ServerException(e);
 		} catch (Exception e) {
-			System.err.println(e);
+			e.printStackTrace();
+			throw new ServerException(e.getClass().getName(), e.getMessage());
 		}
 	}
 
@@ -84,7 +85,8 @@ public class VABElementProxy {
 			e.printStackTrace();
 			throw new ServerException(e);
 		} catch (Exception e) {
-			System.err.println(e);
+			e.printStackTrace();
+			throw new ServerException(e.getClass().getName(), e.getMessage());
 		}
 	}
 
@@ -99,7 +101,8 @@ public class VABElementProxy {
 		} catch (ServerException e) {
 			throw new ServerException(e);
 		} catch (Exception e) {
-			System.err.println(e);
+			e.printStackTrace();
+			throw new ServerException(e.getClass().getName(), e.getMessage());
 		}
 	}
 
@@ -114,7 +117,8 @@ public class VABElementProxy {
 		} catch (ServerException e) {
 			throw new ServerException(e);
 		} catch (Exception e) {
-			System.err.println(e);
+			e.printStackTrace();
+			throw new ServerException(e.getClass().getName(), e.getMessage());
 		}
 	}
 
@@ -129,39 +133,47 @@ public class VABElementProxy {
 		} catch (ServerException e) {
 			throw new ServerException(e);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ServerException(e.getClass().getName(), e.getMessage());
 		}
 	}
 
-	
 	/**
-	 * Remove trailing slashes from address "/" 
+	 * Remove trailing slashes from address "/"
 	 */
 	private String trimAddress(String parAddr) {
 		// Return value
 		String result = parAddr;
-		
+
 		// Remove trailing "/" from address
-		while (result.endsWith("/")) result = result.substring(0, result.length()-1);
-		
+		while (result.endsWith("/")) {
+			result = result.substring(0, result.length() - 1);
+		}
+
 		// Return trimmed address
 		return result;
 	}
-	
-	
+
 	/**
 	 * Add path to VAB element address. Make sure that resulting path contains the proper number of slashes ("/")
 	 * 
-	 * @param path Input path
+	 * @param path
+	 *            Input path
 	 * @return processed path
 	 */
 	private String constructPath(String path) {
+		if (path == null) {
+			return null;
+		}
+
 		// Trim input path
 		String trimmedPath = trimAddress(path);
 		// Remove leading slashes from path
-		while (trimmedPath.startsWith("/")) trimmedPath = trimmedPath.substring(1);
+		while (trimmedPath.startsWith("/")) {
+			trimmedPath = trimmedPath.substring(1);
+		}
 		// Add one slash at beginning of path
-		trimmedPath = "/"+trimmedPath;
+		trimmedPath = "/" + trimmedPath;
 
 		// Now combine both paths
 		if (addr != null && !addr.isEmpty()) {

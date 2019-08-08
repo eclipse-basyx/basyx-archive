@@ -3,11 +3,13 @@ package org.eclipse.basyx.testsuite.regression.vab.snippet;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.function.Function;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
@@ -68,20 +70,39 @@ public class MapUpdate {
 		connVABElement.updateElementValue("newElement", 10);
 		nonExisting = connVABElement.readElementValue("newElement");
 		assertEquals(null, nonExisting);
+
+		// Null path - should throw exception
+		try {
+			connVABElement.updateElementValue(null, "");
+			fail();
+		} catch (ServerException e) {
+		}
 	}
 
 	public static void testPushAll(VABConnectionManager connManager) {
 		// Connect to VAB element with ID "urn:fhg:es.iese:vab:1:1:simplevabelement"
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 
-		// Push whole map via null-Path
+		// Push whole map via null-Path - should throw exception
 		// - create object
 		HashMap<String, Object> newMap = new HashMap<>();
 		newMap.put("testKey", "testValue");
 		// - push
-		connVABElement.updateElementValue("", newMap);
+		try {
+			connVABElement.updateElementValue(null, newMap);
+			fail();
+		} catch (ServerException e) {
+		}
+
+		// Push whole map via ""-Path
+		// - create object
+		HashMap<String, Object> newMap2 = new HashMap<>();
+		newMap2.put("testKey2", "testValue2");
+		// - push
+		connVABElement.updateElementValue("", newMap2);
 		// - test
-		assertEquals("testValue", connVABElement.readElementValue("testKey"));
+		assertEquals("testValue2", connVABElement.readElementValue("testKey2"));
+		assertNull(connVABElement.readElementValue("testKey"));
 		assertNull(connVABElement.readElementValue("primitives/integer"));
 	}
 }

@@ -2,10 +2,12 @@ package org.eclipse.basyx.testsuite.regression.vab.snippet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
@@ -70,5 +72,11 @@ public class MapRead {
 		assertEquals(4, ((Map<?, ?>) rootValueA).size());
 		assertEquals(4, ((Map<?, ?>) rootValueB).size());
 
+		// Null path - should throw exception
+		try {
+			connVABElement.readElementValue(null);
+			fail();
+		} catch (ServerException e) {
+		}
 	}
 }

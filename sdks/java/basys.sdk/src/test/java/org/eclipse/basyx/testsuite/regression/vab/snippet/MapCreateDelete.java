@@ -1,12 +1,15 @@
 package org.eclipse.basyx.testsuite.regression.vab.snippet;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
@@ -63,7 +66,19 @@ public class MapCreateDelete {
 		connVABElement.createElement("unkown/x", 5);
 		toTest = connVABElement.readElementValue("unknown/x");
 		assertNull(toTest);
-}
+
+		// Empty paths - should execute, but has no effect
+		connVABElement.createElement("", "");
+		toTest = connVABElement.readElementValue("");
+		assertNotEquals("", toTest);
+
+		// Null path - should throw exception
+		try {
+			connVABElement.createElement(null, "");
+			fail();
+		} catch (ServerException e) {
+		}
+	}
 
 	private static void testDeleteElements(VABElementProxy connVABElement) {
 		// Delete at Root
@@ -99,8 +114,20 @@ public class MapCreateDelete {
 		assertNull(toTest);
 
 		// Empty paths - should not delete anything
-		connVABElement.deleteElement(null);
-		connVABElement.deleteElement(null, "");
 		connVABElement.deleteElement("", "");
+		toTest = connVABElement.readElementValue("/primitives/integer");
+		assertEquals(123, toTest);
+
+		// Null path - should throw exception
+		try {
+			connVABElement.deleteElement(null, "");
+			fail();
+		} catch (ServerException e) {
+		}
+		try {
+			connVABElement.deleteElement(null);
+			fail();
+		} catch (ServerException e) {
+		}
 	}
 }
