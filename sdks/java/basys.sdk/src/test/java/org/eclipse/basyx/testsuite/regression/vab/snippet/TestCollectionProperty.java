@@ -138,6 +138,11 @@ public class TestCollectionProperty {
 		connVABElement.createElement("/structure/list/", 20);
 		connVABElement.createElement("/structure/list/", 40);
 		connVABElement.createElement("/structure/list/", 80);
+		// - by index - is not possible, as list access is only allowed using references
+		// - in contrast to indices, references always point to the same object in the list
+		connVABElement.deleteElement("/structure/list/3");
+		toTest = connVABElement.readElementValue("/structure/list/");
+		assertEquals(4, ((List<?>) toTest).size());
 		// - by reference - referring to newly created list: [10, 20, 40, 80]
 		references = (List<Integer>) connVABElement.readElementValue("/structure/list/references");
 		int referenceSecondLast = references.get(2); // => list of references reflects list ordering

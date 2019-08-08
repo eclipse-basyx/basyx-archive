@@ -150,7 +150,7 @@ public class VABListHandler implements IVABElementHandler {
 			Integer index = Integer.valueOf(indexName);
 			return list.getReferencedIndex(index);
 		} else {
-			return Integer.valueOf(propertyName);
+			return null;
 		}
 	}
 
