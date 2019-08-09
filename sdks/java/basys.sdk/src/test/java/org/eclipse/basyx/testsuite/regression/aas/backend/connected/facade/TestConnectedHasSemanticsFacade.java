@@ -3,7 +3,9 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.connected.facade;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Map;
 
+import org.eclipse.basyx.aas.backend.connected.TypeDestroyer.TypeDestroyer;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Key;
@@ -28,7 +30,7 @@ public class TestConnectedHasSemanticsFacade {
 	
 		
 		local=new HasSemantics(ref);
-
+		Map<String, Object> destroyType = TypeDestroyer.destroyType(local);
 		
 		// Create a dummy connection manager containing the created SubModel map
 		VABConnectionManager manager = new VABConnectionManagerStub(new VABHashmapProvider(local));

@@ -12,6 +12,7 @@ import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.backend.connected.TypeDestroyer.TypeDestroyer;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
@@ -40,39 +41,37 @@ public class TestConnectedAssetAdministrationShell {
 	IAssetAdministrationShell connectedAAS;
 
 	@Before
-	public void build() throws Exception {
-		MetaModelElementFactory factory = new MetaModelElementFactory();
+	public void build() throws Exception {MetaModelElementFactory factory = new MetaModelElementFactory();
 
-		// Create a SubModel containing no operations and one property
-		Property p = factory.create(new Property(), propVal);
-		p.setId(propId);
+	// Create a SubModel containing no operations and one property
+	Property p = factory.create(new Property(), propVal);
+	p.setId(propId);
 
-		SubModel sm = factory.create(new SubModel(), Collections.singletonList(p), new ArrayList<>());
-		sm.setId(smId);
+	SubModel sm = factory.create(new SubModel(), Collections.singletonList(p), new ArrayList<>());
+	sm.setId(smId);
 
-		// Create Set containing reference to the created SubModel
-		Set<String> refs = new HashSet<>();
-		refs.add(smId);
+	// Create Set containing reference to the created SubModel
+	Set<String> refs = new HashSet<>();
+	refs.add(smId);
 
-		// Create an AAS containing a reference to the created SubModel
-		AssetAdministrationShell aas = factory.create(new AssetAdministrationShell(), refs);
-		aas.setId(aasId);
+	// Create an AAS containing a reference to the created SubModel
+	AssetAdministrationShell aas = factory.create(new AssetAdministrationShell(), refs);
+	aas.setId(aasId);
+	
+	VABMultiSubmodelProvider<VABHashmapProvider> provider = new VABMultiSubmodelProvider<>();
+	provider.addSubmodel(smId, new VABHashmapProvider(TypeDestroyer.destroyType(sm)));
+	provider.setAssetAdministrationShell(new VABHashmapProvider(TypeDestroyer.destroyType(aas)));
+	
+	// Add the AAS provider to the ConnectionManagerStub
+	VABConnectionManagerStub connectionStub = new VABConnectionManagerStub();
+	connectionStub.addProvider(aasId,"",  provider);
+	connectionStub.addProvider(smId, "", provider);
+	
+	// Create connection manager using the dummy
+	ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(connectionStub);
 
-		VABMultiSubmodelProvider<VABHashmapProvider> provider = new VABMultiSubmodelProvider<>();
-		provider.addSubmodel(smId, new VABHashmapProvider(sm));
-		provider.setAssetAdministrationShell(new VABHashmapProvider(aas));
-
-		// Add the AAS provider to the ConnectionManagerStub
-		VABConnectionManagerStub connectionStub = new VABConnectionManagerStub();
-		connectionStub.addProvider(aasId,"",  provider);
-		connectionStub.addProvider(smId, "", provider);
-
-		// Create connection manager using the dummy
-		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(connectionStub);
-
-		// Create ConnectedAssetAdministrationShell
-		connectedAAS = manager.retrieveAAS(aasId);
-	}
+	// Create ConnectedAssetAdministrationShell
+	connectedAAS = manager.retrieveAAS(aasId);}
 
 	/**
 	 * Tests the getId() function

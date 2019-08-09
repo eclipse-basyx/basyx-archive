@@ -2,7 +2,10 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.connected.property;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Map;
+
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
+import org.eclipse.basyx.aas.backend.connected.TypeDestroyer.TypeDestroyer;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.ConnectedSingleProperty;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
@@ -28,7 +31,8 @@ public class TestConnectedSingleProperty {
 
 		// Create PropertySingleValued containing the simple value
 		Property propertyMeta = factory.create(new Property(), VALUE);
-		prop = new ConnectedSingleProperty("", new VABConnectionManagerStub(new VABHashmapProvider(propertyMeta)).connectToVABElement(""));
+		Map<String, Object> destroyType = TypeDestroyer.destroyType(propertyMeta);
+		prop = new ConnectedSingleProperty("", new VABConnectionManagerStub(new VABHashmapProvider(destroyType)).connectToVABElement(""));
 	}
 
 	/**

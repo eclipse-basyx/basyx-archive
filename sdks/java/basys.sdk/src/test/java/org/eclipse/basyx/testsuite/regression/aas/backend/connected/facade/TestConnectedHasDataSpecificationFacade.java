@@ -4,8 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
+import org.eclipse.basyx.aas.backend.connected.TypeDestroyer.TypeDestroyer;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasDataSpecificationFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Key;
@@ -35,8 +37,10 @@ public class TestConnectedHasDataSpecificationFacade {
 		local=new HasDataSpecification();
 		local.setDataSpecificationReferences(refSet);
 		
+		Map<String, Object> destroyType = TypeDestroyer.destroyType(local);
+		
 		// Create a dummy connection manager containing the created SubModel map
-		VABConnectionManager manager = new VABConnectionManagerStub(new VABHashmapProvider(local));
+		VABConnectionManager manager = new VABConnectionManagerStub(new VABHashmapProvider(destroyType));
 		
 		remote = new ConnectedHasDataSpecificationFacade("", manager.connectToVABElement(""));
 	}
