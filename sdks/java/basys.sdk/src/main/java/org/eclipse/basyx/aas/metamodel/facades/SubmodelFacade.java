@@ -17,6 +17,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInfor
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.HasKind;
 
 
@@ -102,8 +103,8 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Get value of 'parent' property
 	 */
-	public String getParent() {
-		return (String) getElements().get("parent");
+	public IReference getParent() {
+		return (IReference) getElements().get("parent");
 	}
 
 	/**
@@ -273,5 +274,26 @@ public class SubmodelFacade implements ISubModel {
 	@Override
 	public Map<String, Object> getElements() {
 		return map;
+	}
+	
+	@Override
+	public String getIdshort() {
+		return (String) map.get(Referable.IDSHORT);
+	}
+
+
+
+	@Override
+	public void setIdshort(String idShort) {
+		map.put(Referable.IDSHORT, idShort);
+		
+	}
+
+
+
+	@Override
+	public void setParent(IReference  obj) {
+		map.put(Referable.PARENT, obj);
+		
 	}
 }

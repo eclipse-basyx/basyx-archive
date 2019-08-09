@@ -22,6 +22,7 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedIdentifiableFaca
 import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.DataElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
@@ -251,6 +252,50 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 	public Map<String, Object> getElements() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getIdshort() {
+		return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
+	}
+
+	@Override
+	public String getCategory() {
+		return (String) getProxy().readElementValue(constructPath(Referable.CATEGORY));
+	}
+
+	@Override
+	public String getDescription() {
+		return (String) getProxy().readElementValue(constructPath(Referable.DESCRIPTION));
+	}
+
+	@Override
+	public IReference  getParent() {
+		return (IReference)getProxy().readElementValue(constructPath(Referable.PARENT));
+	}
+
+	@Override
+	public void setIdshort(String idShort) {
+		getProxy().updateElementValue(constructPath(Referable.IDSHORT), idShort);
+		
+	}
+
+	@Override
+	public void setCategory(String category) {
+		getProxy().updateElementValue(constructPath(Referable.CATEGORY), category);
+		
+	}
+
+	@Override
+	public void setDescription(String description) {
+		getProxy().updateElementValue(constructPath(Referable.DESCRIPTION), description);
+		
+	}
+
+	@Override
+	public void setParent(IReference  obj) {
+		getProxy().updateElementValue(constructPath(Referable.PARENT), obj);
+		
 	}
 
 }

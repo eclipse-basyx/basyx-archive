@@ -19,6 +19,7 @@ import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.metamodel.facades.AssetAdministrationShellFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasDataSpecificationFacade;
 import org.eclipse.basyx.aas.metamodel.facades.IdentifiableFacade;
+import org.eclipse.basyx.aas.metamodel.facades.ReferableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.ConceptDictionary;
@@ -246,5 +247,48 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	@Override
 	public Map<String, ISubModel> getSubModels() {
 		return new AssetAdministrationShellFacade(this).getSubModels();
+	}
+	@Override
+	public String getIdshort() {
+	return new ReferableFacade(this).getIdshort();
+	}
+
+	@Override
+	public String getCategory() {
+		return new ReferableFacade(this).getCategory();
+	}
+
+	@Override
+	public String getDescription() {
+		return new ReferableFacade(this).getDescription();
+	}
+
+	@Override
+	public IReference  getParent() {
+		return new ReferableFacade(this).getParent();
+	}
+
+	@Override
+	public void setIdshort(String idShort) {
+		new ReferableFacade(this).setIdshort(idShort);
+		
+	}
+
+	@Override
+	public void setCategory(String category) {
+		new ReferableFacade(this).setCategory(category);
+		
+	}
+
+	@Override
+	public void setDescription(String description) {
+		new ReferableFacade(this).setDescription(description);
+		
+	}
+
+	@Override
+	public void setParent(IReference  obj) {
+		new ReferableFacade(this).setParent(obj);
+		
 	}
 }
