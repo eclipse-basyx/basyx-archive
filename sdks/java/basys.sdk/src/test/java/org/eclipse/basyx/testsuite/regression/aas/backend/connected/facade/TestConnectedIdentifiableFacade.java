@@ -2,6 +2,9 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.connected.facade;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Map;
+
+import org.eclipse.basyx.aas.backend.connected.TypeDestroyer.TypeDestroyer;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedIdentifiableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
@@ -18,9 +21,9 @@ public class TestConnectedIdentifiableFacade {
 	@Before
 	public void build() {
 		local = new Identifiable("vesrion", "revision", "idshort", "category", "description", "idType", "id");
-		  
+		Map<String, Object> destroyType = TypeDestroyer.destroyType(local);
 		// Create a dummy connection manager containing the created SubModel map
-		VABConnectionManager manager = new VABConnectionManagerStub(new VABHashmapProvider(local));
+		VABConnectionManager manager = new VABConnectionManagerStub(new VABHashmapProvider(destroyType));
 
 		// Create the ConnectedSubModel based on the manager stub
 		remote = new ConnectedIdentifiableFacade("", manager.connectToVABElement(""));

@@ -11,6 +11,7 @@ import java.io.Serializable;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
+import org.eclipse.basyx.aas.backend.connected.TypeDestroyer.TypeDestroyer;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedSubModel;
 import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnectorProvider;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
@@ -60,7 +61,7 @@ public class TestConnectedSubModel {
 		// Create the SubModel using the created property and operation		
 		SubModel sm = factory.create(new SubModel(), Collections.singletonList(propertyMeta), Collections.singletonList(op));
 		sm.setId(ID);
-		
+		Map<String, Object> destroyType = TypeDestroyer.destroyType(sm);
 		// Create a connection manager
 		VABConnectionManager manager = new VABConnectionManager(new TestsuiteDirectory_BaSyxNative(),
 				new BaSyxConnectorProvider());
@@ -69,7 +70,7 @@ public class TestConnectedSubModel {
 		VABElementProxy proxy = manager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 		
 		// Put the subModel into the newly created proxy
-		proxy.createElement("", sm);
+		proxy.createElement("", destroyType);
 		
 		// Create the ConnectedSubModel based on the manager
 		submodel = new ConnectedSubModel("", proxy);

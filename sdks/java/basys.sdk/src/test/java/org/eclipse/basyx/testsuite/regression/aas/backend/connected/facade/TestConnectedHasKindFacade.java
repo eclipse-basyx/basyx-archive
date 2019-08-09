@@ -2,6 +2,9 @@ package org.eclipse.basyx.testsuite.regression.aas.backend.connected.facade;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Map;
+
+import org.eclipse.basyx.aas.backend.connected.TypeDestroyer.TypeDestroyer;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasKindFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.HasKind;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
@@ -18,13 +21,14 @@ public class TestConnectedHasKindFacade {
 	@Before
 	public void build() {
 		local = new HasKind("Kind");
-		  
-		// Create a dummy connection manager containing the created SubModel map
-		VABConnectionManager manager = new VABConnectionManagerStub(new VABHashmapProvider(local));
+	
+	Map<String, Object> destroyType = TypeDestroyer.destroyType(local);
+	  
+	// Create a dummy connection manager containing the created SubModel map
+	VABConnectionManager manager = new VABConnectionManagerStub(new VABHashmapProvider(destroyType));
 
-		// Create the ConnectedSubModel based on the manager stub
-		remote = new ConnectedHasKindFacade("", manager.connectToVABElement(""));
-	}
+	// Create the ConnectedSubModel based on the manager stub
+	remote = new ConnectedHasKindFacade("", manager.connectToVABElement(""));}
 	
 	@Test
 	public void test() {

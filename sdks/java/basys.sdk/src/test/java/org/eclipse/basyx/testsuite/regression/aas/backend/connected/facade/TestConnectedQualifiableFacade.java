@@ -4,8 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.basyx.aas.backend.connected.TypeDestroyer.TypeDestroyer;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedQualifiableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Formula;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Qualifiable;
@@ -36,9 +38,9 @@ public class TestConnectedQualifiableFacade {
 		
 		local=new Qualifiable(formula);
 	
-		
+		Map<String, Object> destroyType = TypeDestroyer.destroyType(local);
 		// Create a dummy connection manager containing the created SubModel map
-		VABConnectionManager manager = new VABConnectionManagerStub(new VABHashmapProvider(local));
+		VABConnectionManager manager = new VABConnectionManagerStub(new VABHashmapProvider(destroyType));
 		
 		remote = new ConnectedQualifiableFacade("", manager.connectToVABElement(""));
 	}
