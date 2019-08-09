@@ -9,7 +9,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
  *
 */
 
-public interface IIdentifiable {
+public interface IIdentifiable  extends IReferable {
 	
 	public IAdministrativeInformation getAdministration();
 	

@@ -11,6 +11,7 @@ import org.eclipse.basyx.aas.metamodel.facades.AssetFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasDataSpecificationFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasKindFacade;
 import org.eclipse.basyx.aas.metamodel.facades.IdentifiableFacade;
+import org.eclipse.basyx.aas.metamodel.facades.ReferableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.HasKind;
@@ -20,7 +21,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
  * Asset class as described in DAAS document<br/>
  * An Asset describes meta data of an asset that is represented by an AAS. <br/>
  * The asset may either represent an asset type or an asset instance.<br/>
- * The asset has a globally unique identifier plus – if needed – additional
+ * The asset has a globally unique identifier plus ï¿½ if needed ï¿½ additional
  * domain specific (proprietary) identifiers.
  * 
  * @author kuhn, elsheikh, schnicke
@@ -117,6 +118,50 @@ public class Asset extends HashMap<String, Object> implements IAsset {
 
 	public void setId(String string) {
 		new AssetFacade(this).setId(string);
+		
+	}
+	
+	@Override
+	public String getIdshort() {
+	return new ReferableFacade(this).getIdshort();
+	}
+
+	@Override
+	public String getCategory() {
+		return new ReferableFacade(this).getCategory();
+	}
+
+	@Override
+	public String getDescription() {
+		return new ReferableFacade(this).getDescription();
+	}
+
+	@Override
+	public IReference  getParent() {
+		return new ReferableFacade(this).getParent();
+	}
+
+	@Override
+	public void setIdshort(String idShort) {
+		new ReferableFacade(this).setIdshort(idShort);
+		
+	}
+
+	@Override
+	public void setCategory(String category) {
+		new ReferableFacade(this).setCategory(category);
+		
+	}
+
+	@Override
+	public void setDescription(String description) {
+		new ReferableFacade(this).setDescription(description);
+		
+	}
+
+	@Override
+	public void setParent(IReference  obj) {
+		new ReferableFacade(this).setParent(obj);
 		
 	}
 

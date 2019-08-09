@@ -4,6 +4,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IHasSemantics;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.backend.connected.ConnectedElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of IHasSemantics
@@ -17,7 +18,7 @@ public class ConnectedHasSemantics extends ConnectedElement implements IHasSeman
 	
 	@Override
 	public IReference getSemanticId() {
-		return (IReference)getProxy().readElementValue(constructPath(HasSemantics.SEMANTICID));
+		return (Reference)getProxy().readElementValue(constructPath(HasSemantics.SEMANTICID));
 	}
 
 	@Override

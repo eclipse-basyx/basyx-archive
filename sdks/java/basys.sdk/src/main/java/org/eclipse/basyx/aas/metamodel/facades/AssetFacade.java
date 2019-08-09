@@ -11,6 +11,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.Asset;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.HasKind;
 
 /**
@@ -87,6 +88,49 @@ public class AssetFacade implements IAsset {
 
 	public void setId(String string) {
 		map.put(Identifiable.IDSHORT, string);
+		
+	}
+	@Override
+	public String getIdshort() {
+		return (String) map.get(Referable.IDSHORT);
+	}
+
+	@Override
+	public String getCategory() {
+		return (String) map.get(Referable.CATEGORY);
+	}
+
+	@Override
+	public String getDescription() {
+		return (String) map.get(Referable.DESCRIPTION);
+	}
+
+	@Override
+	public IReference  getParent() {
+		return (IReference )map.get(Referable.PARENT);
+	}
+
+	@Override
+	public void setIdshort(String idShort) {
+		map.put(Referable.IDSHORT, idShort);
+		
+	}
+
+	@Override
+	public void setCategory(String category) {
+		map.put(Referable.CATEGORY, category);
+		
+	}
+
+	@Override
+	public void setDescription(String description) {
+		map.put(Referable.DESCRIPTION, description);
+		
+	}
+
+	@Override
+	public void setParent(IReference  obj) {
+		map.put(Referable.PARENT, obj);
 		
 	}
 

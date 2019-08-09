@@ -11,6 +11,7 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasDataSpecifica
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasKindFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedIdentifiableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.Asset;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of IAsset
@@ -76,6 +77,49 @@ public class ConnectedAsset extends ConnectedElement implements IAsset {
 	@Override
 	public void setAssetIdentificationModel(IReference submodel) {
 		getProxy().updateElementValue(constructPath(Asset.ASSETIDENTIFICATIONMODEL), submodel);
+		
+	}
+	@Override
+	public String getIdshort() {
+		return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
+	}
+
+	@Override
+	public String getCategory() {
+		return (String) getProxy().readElementValue(constructPath(Referable.CATEGORY));
+	}
+
+	@Override
+	public String getDescription() {
+		return (String) getProxy().readElementValue(constructPath(Referable.DESCRIPTION));
+	}
+
+	@Override
+	public IReference  getParent() {
+		return (IReference)getProxy().readElementValue(constructPath(Referable.PARENT));
+	}
+
+	@Override
+	public void setIdshort(String idShort) {
+		getProxy().updateElementValue(constructPath(Referable.IDSHORT), idShort);
+		
+	}
+
+	@Override
+	public void setCategory(String category) {
+		getProxy().updateElementValue(constructPath(Referable.CATEGORY), category);
+		
+	}
+
+	@Override
+	public void setDescription(String description) {
+		getProxy().updateElementValue(constructPath(Referable.DESCRIPTION), description);
+		
+	}
+
+	@Override
+	public void setParent(IReference  obj) {
+		getProxy().updateElementValue(constructPath(Referable.PARENT), obj);
 		
 	}
 
