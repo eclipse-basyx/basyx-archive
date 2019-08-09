@@ -261,7 +261,7 @@ public class SQLDirectoryProvider implements IModelProvider {
 			String restring = result.toString();
 			System.out.println("Res: " + restring);
 
-			return restring.equals("") ? null : restring;
+			return restring.equals("") ? null : serializer.deserialize(restring);
 		}
 
 		else {
