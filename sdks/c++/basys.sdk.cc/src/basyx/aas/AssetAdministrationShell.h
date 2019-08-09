@@ -83,6 +83,8 @@ class AssetAdministrationShell : public IAssetAdministrationShell {  // @suppres
 		BASYX_RTTI_END
 };
 
+#endif
+
 
 #endif /* AAS_ASSETADMINISTRATIONSHELL_H_ */
 
