@@ -74,5 +74,7 @@ class SubModel : public ISubModel {  // @suppress("Class has a virtual method an
 		BASYX_RTTI_END
 };
 
+#endif
+
 
 #endif /* AAS_SUBMODEL_H_ */
