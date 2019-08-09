@@ -1,5 +1,6 @@
 package org.eclipse.basyx.components.devicemanager;
 
+import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.components.netcomm.NetworkReceiver;
 import org.eclipse.basyx.models.controlcomponent.ControlComponentChangeListener;
 import org.eclipse.basyx.models.controlcomponent.ExecutionMode;
@@ -7,7 +8,6 @@ import org.eclipse.basyx.models.controlcomponent.ExecutionState;
 import org.eclipse.basyx.models.controlcomponent.OccupationState;
 import org.eclipse.basyx.models.controlcomponent.SimpleControlComponent;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
 
 
@@ -30,7 +30,7 @@ public abstract class TCPControllableDeviceManagerComponent extends TCPDeviceMan
 	/**
 	 * BaSyx/TCP Server that exports the control component
 	 */
-	protected BaSyxTCPServer<VABHashmapProvider> server = null;
+	protected BaSyxTCPServer<VirtualPathModelProvider> server = null;
 
 	
 	/**

@@ -11,8 +11,6 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-
-
 /**
  * Test queries to CFG file provider
  * 
@@ -21,18 +19,18 @@ import org.junit.Test;
  */
 public class TestRawCFGProviderSimpleValues {
 
-	
 	/**
 	 * VAB connection manager backend
 	 */
-	protected VABConnectionManager connManager = new VABConnectionManager(new ComponentsTestsuiteDirectory(), new HTTPConnectorProvider());
+	protected VABConnectionManager connManager = new VABConnectionManager(new ComponentsTestsuiteDirectory(),
+			new HTTPConnectorProvider());
 
-	/** 
+	/**
 	 * Makes sure Tomcat Server is started
 	 */
 	@ClassRule
 	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new ComponentsRegressionContext());
-	
+
 	/**
 	 * Test basic queries
 	 */
@@ -42,32 +40,29 @@ public class TestRawCFGProviderSimpleValues {
 		// Connect to sub model "CfgFileTestAAS"
 		VABElementProxy connSubModel = this.connManager.connectToVABElement("RawCfgFileTestAAS");
 
-		
 		// Check sub model meta data
 		Object version = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/administration/version");
 		assertTrue(version.equals("1.0"));
-		
-		
+
 		// Get property value
 		Object value1 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/properties/cfgProperty1/value");
 		assertTrue(value1.equals("exampleStringValueRaw"));
-		Object value1a = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/properties/cfgProperty1/description");
+		Object value1a = connSubModel
+				.readElementValue("/aas/submodels/rawSampleCFG/properties/cfgProperty1/description");
 		assertTrue(value1a.equals("Configuration property description"));
-		
 
 		// Get property value
 		Object value2 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/properties/cfgProperty2/value");
 		assertTrue(value2.equals(12));
 		// - Check property meta data (description)
-		Object value2a = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/properties/cfgProperty2/description");
+		Object value2a = connSubModel
+				.readElementValue("/aas/submodels/rawSampleCFG/properties/cfgProperty2/description");
 		assertTrue(value2a.equals("Configuration property description on multiple lines"));
-
 
 		// Get property value
 		Object value3 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/properties/cfgProperty3/value");
 		assertTrue(value3.equals("45.8"));
 
-		
 		// Get property value
 		Object value4 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/cfgProperty4/value");
 		assertTrue(value4.equals("44.8"));
@@ -76,7 +71,6 @@ public class TestRawCFGProviderSimpleValues {
 		Object value4b = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/cfgProperty4/newMetaData");
 		assertTrue(value4b.equals("8"));
 
-		
 		// Update property value
 		connSubModel.updateElementValue("/aas/submodels/rawSampleCFG/cfgProperty4/newMetaData", "9");
 		// - Read updated value back
@@ -88,7 +82,6 @@ public class TestRawCFGProviderSimpleValues {
 		Object value4d = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/cfgProperty4/newMetaData");
 		assertTrue(value4d.equals("8"));
 
-		
 		// Update property value again, this time we are not using a string type
 		connSubModel.updateElementValue("/aas/submodels/rawSampleCFG/cfgProperty4/newMetaData", 89);
 		// - Read updated value back
@@ -100,14 +93,12 @@ public class TestRawCFGProviderSimpleValues {
 		Object value4f = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/cfgProperty4/newMetaData");
 		assertTrue(value4f.equals("8"));
 
-		
 		// Create new property value
 		connSubModel.createElement("/aas/submodels/rawSampleCFG/cfgProperty4/newMetaData2", "19");
 		// - Read updated value back
 		Object value4g = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/cfgProperty4/newMetaData2");
 		assertTrue(value4g.equals("19"));
 
-		
 		// Delete element
 		connSubModel.deleteElement("/aas/submodels/rawSampleCFG/cfgProperty4/newMetaData2");
 		// - Read element value back and make sure that element is deleted

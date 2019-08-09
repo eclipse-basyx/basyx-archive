@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
+import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.components.devicemanager.TCPControllableDeviceManagerComponent;
@@ -15,7 +16,6 @@ import org.eclipse.basyx.tools.modelurn.ModelUrn;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
 
 
@@ -129,7 +129,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		
 		// Register control component as local sub model
 		// - This sub model will stay with the device
-		server = new BaSyxTCPServer<>(new VABHashmapProvider(simpleControlComponent), controlComponentServerPort);
+		server = new BaSyxTCPServer<>(new VirtualPathModelProvider(simpleControlComponent), controlComponentServerPort);
 		// - Start local BaSyx/TCP server
 		server.start();
 	}

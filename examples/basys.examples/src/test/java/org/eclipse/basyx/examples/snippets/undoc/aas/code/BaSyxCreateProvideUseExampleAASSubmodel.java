@@ -4,12 +4,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.aas.backend.connector.JSONConnector;
 import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnector;
+import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Test;
-
 
 
 /**
@@ -38,7 +37,7 @@ public class BaSyxCreateProvideUseExampleAASSubmodel {
 
 		
 		// Provide sub model via BaSyx server
-		BaSyxTCPServer<VABHashmapProvider> server = new BaSyxTCPServer<>(new VABHashmapProvider(statusSM), 9998);
+		BaSyxTCPServer<VirtualPathModelProvider> server = new BaSyxTCPServer<>(new VirtualPathModelProvider(statusSM), 9998);
 		// - Start local BaSyx/TCP server
 		server.start();
 

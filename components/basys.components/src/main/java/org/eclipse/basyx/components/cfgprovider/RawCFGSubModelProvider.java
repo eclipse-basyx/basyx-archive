@@ -5,8 +5,6 @@ import java.util.Map;
 
 import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
 
-
-
 /**
  * Asset administration shell sub model provider that exports a properties file
  * 
@@ -15,43 +13,44 @@ import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
  */
 public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 
-		
 	/**
 	 * Constructor
 	 */
 	@SuppressWarnings("unchecked")
 	public RawCFGSubModelProvider(Map<Object, Object> cfgValues) {
-		// Call base constructor
+		// Call base constructor -> creates base submodelData from cfgValues
 		super(cfgValues);
 
-		
-		// Create sub model
-		submodelData = createSubModel(cfgValues);
-
-
-		// Load predefined elements from sub model
-		getElements().putAll(submodelData);
-
+		// Push data to provider
+		try {
+			setModelPropertyValue("", submodelData);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		// Load properties
-		for (Object key: cfgValues.keySet()) {
+		for (Object key : cfgValues.keySet()) {
 			// Do not put meta data keys into map
-			if (((String) key).endsWith("$ftype")) continue;
+			if (((String) key).endsWith("$ftype"))
+				continue;
 
 			// Get path to element
 			String[] path = splitPath((String) key);
-			
+
 			// Create path
-			Map<String, Object> scope = getElements();
-			for (int i=0; i<path.length-1; i++) {
-				if (!scope.containsKey(path[i])) scope.put(path[i], new HashMap<String, Object>()); 
+			Map<String, Object> scope = new HashMap<>();
+			scope = submodelData;
+			for (int i = 0; i < path.length - 1; i++) {
+				if (!scope.containsKey(path[i]))
+					scope.put(path[i], new HashMap<String, Object>());
 				scope = (Map<String, Object>) scope.get(path[i]);
 			}
-			
+
 			// Get and optionally convert value
 			Object value = cfgValues.get(key);
 			// - Cast value if requested by user
-			if (cfgValues.get(key+"$ftype") != null) switch((String) cfgValues.get(key+"$ftype")) {
+			if (cfgValues.get(key + "$ftype") != null)
+				switch ((String) cfgValues.get(key + "$ftype")) {
 				case "int":
 					value = Integer.parseInt((String) value);
 					break;
@@ -61,21 +60,17 @@ public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 				case "float":
 					value = Float.parseFloat((String) value);
 					break;
-				
-				default: System.out.println("Unknown type:"+cfgValues.get(key+"$ftype"));
-			}
-			
-			System.out.println("Putting:"+key+" = "+cfgValues.get(key)+" as "+value.getClass().getName());
-			
-			//if (cfgValues.get(key).equals("8"))
-				//scope.put(path[path.length-1], Integer.parseInt((String) cfgValues.get(key)));
-			//else
-				scope.put(path[path.length-1], value);
+
+				default:
+					System.out.println("Unknown type:" + cfgValues.get(key + "$ftype"));
+				}
+
+			System.out.println("Putting:" + key + " = " + cfgValues.get(key) + " as " + value.getClass().getName());
+
+			scope.put(path[path.length - 1], value);
 		}
 
-		
 		// Print configuration values
 		System.out.println("CFG exported");
 	}
 }
-

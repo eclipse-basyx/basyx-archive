@@ -142,6 +142,10 @@ public class VABElementProxy {
 	 * Remove trailing slashes from address "/"
 	 */
 	private String trimAddress(String parAddr) {
+		if (parAddr == null) {
+			return null;
+		}
+
 		// Return value
 		String result = parAddr;
 

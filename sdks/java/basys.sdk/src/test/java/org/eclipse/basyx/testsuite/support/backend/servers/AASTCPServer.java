@@ -4,9 +4,7 @@ import java.io.IOException;
 
 import org.eclipse.basyx.sdk.api.service.BaSyxService;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
-
-
+import org.eclipse.basyx.vab.core.IModelProvider;
 
 /**
  * BaSyx TCP provider test suite server providing a SimpleVABElement vab element
@@ -15,41 +13,34 @@ import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
  *
  */
 public class AASTCPServer implements BaSyxService {
-	
-	
+
 	/**
 	 * TCP server reference
 	 */
-	protected BaSyxTCPServer<VABHashmapProvider> tcpServer;
+	protected BaSyxTCPServer<IModelProvider> tcpServer;
 
-	
 	/**
 	 * Service name
 	 */
 	protected String name = null;
-	
-	
+
 	/**
-	 * Service end flag 
+	 * Service end flag
 	 */
 	protected boolean hasExecutionEnded = false;
-	
-	
-	
-	
+
 	/**
 	 * Main method
 	 */
-	public AASTCPServer(VABHashmapProvider provider) {
-		
+	public AASTCPServer(IModelProvider provider) {
+
 		// Create IModelProvider that provides a VAB element
-		VABHashmapProvider modelProvider = provider;
+		IModelProvider modelProvider = provider;
 
 		// Create native BaSyx TCP server using default port
-		tcpServer = new BaSyxTCPServer<VABHashmapProvider>(modelProvider);
+		tcpServer = new BaSyxTCPServer<IModelProvider>(modelProvider);
 	}
-	
-	
+
 	/**
 	 * Start the TCP server
 	 */
@@ -58,8 +49,7 @@ public class AASTCPServer implements BaSyxService {
 		// Start tcp server
 		tcpServer.start();
 	}
-	
-	
+
 	/**
 	 * Shutdown TCP server
 	 * 
@@ -69,11 +59,10 @@ public class AASTCPServer implements BaSyxService {
 	public void stop() {
 		// Indicate end of execution
 		hasExecutionEnded = true;
-		
+
 		// Shutdown server
 		tcpServer.shutdown();
 	}
-
 
 	/**
 	 * Change service name
@@ -82,11 +71,10 @@ public class AASTCPServer implements BaSyxService {
 	public BaSyxService setName(String newName) {
 		// Update name
 		name = newName;
-		
+
 		// Return 'this' reference
 		return this;
 	}
-
 
 	/**
 	 * Return service name
@@ -96,17 +84,15 @@ public class AASTCPServer implements BaSyxService {
 		// Return service name
 		return name;
 	}
-	
-	
+
 	/**
 	 * Wait for end of runnable
 	 */
 	public void waitFor() {
 		// Wait for thread end
-		tcpServer.waitFor();		
+		tcpServer.waitFor();
 	}
-	
-	
+
 	/**
 	 * Indicate if this service has ended
 	 */
@@ -115,4 +101,3 @@ public class AASTCPServer implements BaSyxService {
 		return hasExecutionEnded;
 	}
 }
-

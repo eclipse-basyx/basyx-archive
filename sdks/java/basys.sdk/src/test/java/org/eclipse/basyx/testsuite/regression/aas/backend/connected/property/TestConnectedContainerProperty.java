@@ -13,13 +13,13 @@ import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.backend.connected.TypeDestroyer.TypeDestroyer;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.ConnectedContainerProperty;
+import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -57,13 +57,13 @@ public class TestConnectedContainerProperty {
 		operation.setId(OPERATION);
 
 		// Create ComplexDataProperty containing the created operation and property
-		SubmodelElementCollection complex = factory.createContainer(new SubmodelElementCollection(), Collections.singletonList(propertyMeta), Collections.singletonList(operation));
+		SubmodelElementCollection complex = factory.createContainer(new SubmodelElementCollection(),
+				Collections.singletonList(propertyMeta), Collections.singletonList(operation));
 
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(complex);
 		// Create a dummy connection manager containing the created
 		// ComplexDataProperty map
-		VABConnectionManager manager = new VABConnectionManagerStub(new VABHashmapProvider(destroyType));
-
+		VABConnectionManager manager = new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType));
 
 		// Retrieve the ConnectedContainerProperty
 		prop = new ConnectedContainerProperty("", manager.connectToVABElement(""));

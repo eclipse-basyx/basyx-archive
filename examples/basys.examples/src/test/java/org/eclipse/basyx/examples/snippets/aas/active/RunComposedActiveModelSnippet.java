@@ -1,13 +1,11 @@
 package org.eclipse.basyx.examples.snippets.aas.active;
 
-import java.util.HashMap;
-
+import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.examples.snippets.aas.active.tasks.AverageTask;
 import org.eclipse.basyx.examples.snippets.aas.active.tasks.IncrementTask;
 import org.eclipse.basyx.tools.aas.active.ActiveModel;
 import org.eclipse.basyx.tools.aas.active.VABModelTaskGroup;
 import org.eclipse.basyx.vab.core.IModelProvider;
-import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
 import org.junit.Test;
 
@@ -18,7 +16,7 @@ public class RunComposedActiveModelSnippet {
 	@Test
 	public void snippet() throws Exception {
 		// Create the model provider for the active model
-		IModelProvider modelProvider = new VABLambdaProvider(new HashMap<String, Object>());
+		IModelProvider modelProvider = new VirtualPathModelProvider();
 		modelProvider.createValue("count", 0);
 		modelProvider.createValue("temperature", VABLambdaProviderHelper.createSimple(() -> {
 			return 30d + (Math.random() * 10d - 5d);
@@ -31,11 +29,11 @@ public class RunComposedActiveModelSnippet {
 		// Add a task group with multiple tasks to the active model
 		// The groups' update interval is set to 20x per second
 		// Then the group is started.
-		activeModel.createTaskGroup()
-			.addTask(new IncrementTask("/count"))
-			.addTask(new AverageTask(0.01f, "/temperature", "/average"))
-			.setUpdateInterval(50).start();
-		
+		activeModel.createTaskGroup().addTask(new IncrementTask("/count"))
+				.addTask(new AverageTask(0.01f, "/temperature", "/average"))
+				.setUpdateInterval(50)
+				.start();
+
 		// Runs a task group with a single task (1x per second)
 		VABModelTaskGroup printerGroup = activeModel.runTask(1000, model -> {
 			System.out.println("Current count: " + model.getModelPropertyValue("/count"));

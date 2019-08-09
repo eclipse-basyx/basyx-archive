@@ -5,9 +5,9 @@ import static org.junit.Assert.assertTrue;
 import org.eclipse.basyx.aas.backend.connector.JSONConnector;
 import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnector;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Test;
 
 
@@ -38,8 +38,9 @@ public class DeviceAASDeploymentVAB {
 
 
 		// Export AAS via BaSyx server
-		//BaSyxTCPServer<VABHashmapProvider> server = new BaSyxTCPServer<>(new VABHashmapProvider(aas), 9998);
-		BaSyxTCPServer<VABMultiSubmodelProvider<?>> server = new BaSyxTCPServer<VABMultiSubmodelProvider<?>>(new VABMultiSubmodelProvider<VABHashmapProvider>(new VABHashmapProvider(aas)), 9998);
+		VirtualPathModelProvider modelProvider = new VirtualPathModelProvider(aas);
+		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider(modelProvider);
+		BaSyxTCPServer<VABMultiSubmodelProvider> server = new BaSyxTCPServer<VABMultiSubmodelProvider>(aasProvider, 9998);
 		// - Start local BaSyx/TCP server
 		server.start();
 		

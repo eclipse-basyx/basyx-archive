@@ -6,14 +6,12 @@ import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnectorProvider;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Test;
-
-
 
 /**
  * Code snippet that illustrates the deployment of an AAS to a device, and connects to that AAS
@@ -25,7 +23,6 @@ import org.junit.Test;
  */
 public class DeviceAASDeployment {
 
-	
 	/**
 	 * Run code snippet. Connect to AAS on server, access AAS properties. 
 	 */
@@ -41,8 +38,9 @@ public class DeviceAASDeployment {
 
 
 		// Export AAS via BaSyx server
-		//BaSyxTCPServer<VABHashmapProvider> server = new BaSyxTCPServer<>(new VABHashmapProvider(aas), 9998);
-		BaSyxTCPServer<VABMultiSubmodelProvider<?>> server = new BaSyxTCPServer<VABMultiSubmodelProvider<?>>(new VABMultiSubmodelProvider<VABHashmapProvider>(new VABHashmapProvider(aas)), 9998);
+		VirtualPathModelProvider modelProvider = new VirtualPathModelProvider(aas);
+		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider(modelProvider);
+		BaSyxTCPServer<VABMultiSubmodelProvider> server = new BaSyxTCPServer<VABMultiSubmodelProvider>(aasProvider, 9998);
 		// - Start local BaSyx/TCP server
 		server.start();
 

@@ -7,13 +7,13 @@ import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnectorProvider;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Test;
 
 
@@ -50,7 +50,9 @@ public class DeviceSubModelDeployment {
 
 		
 		// Export sub model via BaSyx server
-		BaSyxTCPServer<VABMultiSubmodelProvider<?>> server = new BaSyxTCPServer<VABMultiSubmodelProvider<?>>(new VABMultiSubmodelProvider<VABHashmapProvider>("urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003", new VABHashmapProvider(submodel)), 9998);
+		VirtualPathModelProvider modelProvider = new VirtualPathModelProvider(submodel);
+		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider("urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003", modelProvider);
+		BaSyxTCPServer<VABMultiSubmodelProvider> server = new BaSyxTCPServer<VABMultiSubmodelProvider>(aasProvider, 9998);
 		// - Start local BaSyx/TCP server
 		server.start();
 		

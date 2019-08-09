@@ -5,11 +5,11 @@ import static org.junit.Assert.assertTrue;
 import org.eclipse.basyx.aas.backend.connector.JSONConnector;
 import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnector;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Test;
 
 
@@ -47,7 +47,9 @@ public class DeviceSubModelDeploymentVAB {
 
 		
 		// Export sub model via BaSyx server
-		BaSyxTCPServer<VABMultiSubmodelProvider<?>> server = new BaSyxTCPServer<VABMultiSubmodelProvider<?>>(new VABMultiSubmodelProvider<VABHashmapProvider>("dynamicSM", new VABHashmapProvider(submodel)), 9998);
+		VirtualPathModelProvider modelProvider = new VirtualPathModelProvider(submodel);
+		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider("dynamicSM", modelProvider);
+		BaSyxTCPServer<VABMultiSubmodelProvider> server = new BaSyxTCPServer<VABMultiSubmodelProvider>(aasProvider, 9998);
 		// - Start local BaSyx/TCP server
 		server.start();
 				

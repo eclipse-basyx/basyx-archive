@@ -8,13 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnectorProvider;
+import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.testsuite.support.vab.stub.DirectoryServiceStub;
 import org.eclipse.basyx.vab.backend.gateway.ConnectorProviderMapper;
 import org.eclipse.basyx.vab.backend.gateway.DelegatingModelProvider;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Test;
 
 /**
@@ -53,16 +53,18 @@ public class TestGateway {
 		Map<String, Object> vabElem = new HashMap<String, Object>();
 		vabElem.put("propertyA", 10);
 
-		// Provide it using VABHashmapProvider and a tcp server on port 6998
-		BaSyxTCPServer<VABHashmapProvider> server = new BaSyxTCPServer<>(new VABHashmapProvider(vabElem), 6998);
-		
+		// Provide it using VirtualPathModelProvider and a tcp server on port 6998
+		BaSyxTCPServer<VirtualPathModelProvider> server = new BaSyxTCPServer<>(new VirtualPathModelProvider(vabElem),
+				6998);
+
 		// Create ConnectorProviderMapper and add mapping from "basyx" to
 		// BaSyxConnectorProvider for gateway
 		ConnectorProviderMapper gatewayMapper = new ConnectorProviderMapper();
 		gatewayMapper.addConnectorProvider("basyx", new BaSyxConnectorProvider());
-		
+
 		// Create gateway using DelegatingModelProvider
-		BaSyxTCPServer<DelegatingModelProvider> gateway = new BaSyxTCPServer<>(new DelegatingModelProvider(gatewayMapper), 6999);
+		BaSyxTCPServer<DelegatingModelProvider> gateway = new BaSyxTCPServer<>(
+				new DelegatingModelProvider(gatewayMapper), 6999);
 
 		// Start element provider and gateway
 		server.start();
@@ -73,11 +75,9 @@ public class TestGateway {
 		DirectoryServiceStub directory = new DirectoryServiceStub();
 		directory.addMapping("Elem", "basyx://127.0.0.1:6999//basyx://127.0.0.1:6998");
 
-		
 		// Create ConnectionProviderMapper for client
 		ConnectorProviderMapper clientMapper = new ConnectorProviderMapper();
 		clientMapper.addConnectorProvider("basyx", new BaSyxConnectorProvider());
-
 
 		// Create VABConnectionManager
 		VABConnectionManager manager = new VABConnectionManager(directory, clientMapper);
@@ -89,4 +89,3 @@ public class TestGateway {
 		assertEquals(10, proxy.readElementValue("propertyA"));
 	}
 }
-

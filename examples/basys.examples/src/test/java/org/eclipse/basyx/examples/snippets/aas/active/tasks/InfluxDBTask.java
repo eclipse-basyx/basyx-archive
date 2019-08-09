@@ -6,7 +6,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.eclipse.basyx.tools.aas.active.VABModelTask;
-import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
 import org.eclipse.basyx.vab.core.IModelProvider;
 
 /**
@@ -20,7 +19,6 @@ public class InfluxDBTask implements VABModelTask {
 	private String dbUrl;
 	private String dbName;
 	private String valueName;
-	private WebServiceRawClient client = new WebServiceRawClient();
 
 	public InfluxDBTask(String modelPath, String dbUrl, String dbName, String valueName) {
 		this.modelPath = modelPath;

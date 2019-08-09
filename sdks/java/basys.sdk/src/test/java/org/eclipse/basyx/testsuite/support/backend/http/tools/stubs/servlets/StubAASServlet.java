@@ -3,13 +3,13 @@ package org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets;
 import java.util.Collections;
 
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.testsuite.support.aas.vab.stub.elements.SimpleAASSubmodel;
 import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
-public class StubAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider<VABHashmapProvider>> {
+public class StubAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 	private static final long serialVersionUID = 8859337501045845823L;
 
 	// Used ids
@@ -17,14 +17,14 @@ public class StubAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider<VA
 	public static final String smId = "urn:StubAAS:sm";
 
 	public StubAASServlet() {
-		super(new VABMultiSubmodelProvider<>());
+		super(new VABMultiSubmodelProvider());
 
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 		AssetAdministrationShell aas = factory.create(new AssetAdministrationShell(), Collections.singleton(smId));
 		aas.put("idShort", aasId);
 
-		getModelProvider().setAssetAdministrationShell(new VABHashmapProvider(aas));
-		getModelProvider().addSubmodel(smId, new VABHashmapProvider(new SimpleAASSubmodel(smId)));
+		getModelProvider().setAssetAdministrationShell(new VirtualPathModelProvider(aas));
+		getModelProvider().addSubmodel(smId, new VirtualPathModelProvider(new SimpleAASSubmodel(smId)));
 	}
 
 }

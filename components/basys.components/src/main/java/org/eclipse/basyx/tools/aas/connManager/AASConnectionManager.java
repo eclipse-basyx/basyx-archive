@@ -15,8 +15,6 @@ import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 
-
-
 /**
  * Specific connection manager class that connects to AAS and AAS sub models
  * 
@@ -25,49 +23,45 @@ import org.eclipse.basyx.vab.core.tools.VABPathTools;
  */
 public class AASConnectionManager extends VABConnectionManager {
 
-	
 	/**
 	 * JSON serializer
 	 */
 	protected GSONTools serializer = null;
 	private MetaprotocolHandler handler = new MetaprotocolHandler();
-	
-	
+
 	/**
 	 * Invoke BaSyx service calls via web services
 	 */
 	protected WebServiceRawClient client = null;
 
-	
-
-	
 	/**
 	 * Constructor
 	 * 
-	 * @param networkDirectoryService Directory service instance
-	 * @param providerProvider Connection provider instance
+	 * @param networkDirectoryService
+	 *            Directory service instance
+	 * @param providerProvider
+	 *            Connection provider instance
 	 */
 	public AASConnectionManager(IDirectoryService networkDirectoryService, IConnectorProvider providerProvider) {
 		// Invoke base constructor
 		super(networkDirectoryService, providerProvider);
-		
+
 		// Create serializer
 		serializer = new GSONTools(new DefaultTypeFactory());
 	}
-	
-	
+
 	/**
 	 * Connect to an Asset Administration Shell
 	 * 
-	 * @param urn the URN that describes the element. 
+	 * @param urn
+	 *            the URN that describes the element.
 	 */
 	@SuppressWarnings("unchecked")
 	public VABElementProxy connectToAAS(ModelUrn aasUrn) {
 		// Lookup AAS descriptor
 		String serializedAASDesc = directoryService.lookup(aasUrn.getEncodedURN());
-		
-		System.out.println("ATTEMPT:"+serializedAASDesc);
-		
+
+		System.out.println("ATTEMPT:" + serializedAASDesc);
 
 		try {
 			// Deserialize AAS descriptor
@@ -82,20 +76,19 @@ public class AASConnectionManager extends VABConnectionManager {
 			throw new RuntimeException(e);
 		}
 
-
 	}
 
-	
 	/**
 	 * Connect to an Asset Administration Shell
 	 * 
-	 * @param urn the URN that describes the element. 
+	 * @param urn
+	 *            the URN that describes the element.
 	 */
 	@SuppressWarnings("unchecked")
 	public VABElementProxy connectToAASSubModel(ModelUrn aasUrn, String subModelID) {
 		// Lookup AAS descriptor
 		String serializedAASDesc = directoryService.lookup(aasUrn.getEncodedURN());
-		
+
 		// Deserialize AAS descriptor
 
 		try {
@@ -115,12 +108,13 @@ public class AASConnectionManager extends VABConnectionManager {
 
 	}
 
-	
 	/**
 	 * Connect to an VAB element on an HTTP server and add an URL prefix
 	 * 
-	 * @param urn the URN that describes the element. 
-	 * @param prefix the prefix will be added to the address
+	 * @param urn
+	 *            the URN that describes the element.
+	 * @param prefix
+	 *            the prefix will be added to the address
 	 */
 	@Override
 	public VABElementProxy connectToHTTPVABElement(String urn, String prefix) {
@@ -136,17 +130,18 @@ public class AASConnectionManager extends VABConnectionManager {
 		return new VABElementProxy(VABPathTools.removeAddressEntry(addr), providerProvider.getConnector(addr));
 	}
 
-	
 	/**
 	 * Connect to an VAB element on an HTTP server using a qualified URL
 	 * 
-	 * @param url the URL that describes the element location. 
+	 * @param url
+	 *            the URL that describes the element location.
 	 */
 	@Override
 	public VABElementProxy connectToVABElementByURL(String url) {
 
 		// Return a new VABElementProxy
-		// - Do not pass URL here to provider as address, as the url parameter is already absolute and contains the address. 
+		// - Do not pass URL here to provider as address, as the url parameter is already absolute and contains the
+		// address.
 		return new VABElementProxy(VABPathTools.removeAddressEntry(url), providerProvider.getConnector(url));
 	}
 

@@ -89,14 +89,14 @@ public class TestAASHTTP {
 		// - retrieve properties and operations
 
 		Map<String, IProperty> properties = sm.getProperties();
-		assertEquals(1, properties.size());
-		ISingleProperty prop = (ISingleProperty) properties.get("prop1");
+		assertEquals(2, properties.size());
+		ISingleProperty prop = (ISingleProperty) properties.get("integerProperty");
 		assertEquals(123, prop.get());
 
 		Map<String, IOperation> operations = sm.getOperations();
 		assertEquals(4, operations.size());
 
-		IOperation op = operations.get("operation1");
+		IOperation op = operations.get("complex");
 		assertEquals(1, op.invoke(2, 1));
 
 	}

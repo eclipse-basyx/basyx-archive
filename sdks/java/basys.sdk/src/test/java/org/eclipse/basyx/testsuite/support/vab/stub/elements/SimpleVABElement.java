@@ -47,6 +47,9 @@ public class SimpleVABElement extends HashMap<String, Object> {
 			return (int) param[0] + (int) param[1];
 		});
 		functions.put("invalid", true);
+		functions.put("invokable", (Function<Object[], Object>) (param) -> {
+			return true;
+		});
 		put("operations", functions);
 
 		// Add structure types

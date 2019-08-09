@@ -117,7 +117,11 @@ public class SQLSubModelProvider extends BaseConfiguredProvider {
 		submodelData = createSubModel(cfgValues);
 
 		// Load predefined elements from sub model
-		getElements().putAll(submodelData);
+		try {
+			setModelPropertyValue("", submodelData);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		
 		// Extract SQL properties

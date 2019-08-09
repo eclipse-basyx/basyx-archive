@@ -1,6 +1,7 @@
 package org.eclipse.basyx.examples.mockup.device;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
+import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.components.device.BaseSmartDevice;
@@ -12,7 +13,6 @@ import org.eclipse.basyx.tools.modelurn.ModelUrn;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 
 
 
@@ -38,7 +38,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 	/**
 	 * BaSyx/TCP Server that exports the control component
 	 */
-	protected BaSyxTCPServer<VABHashmapProvider> server = null;
+	protected BaSyxTCPServer<VirtualPathModelProvider> server = null;
 	
 	
 	/**
@@ -135,7 +135,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		
 		// Register control component as local sub model
 		// - This sub model will stay with the device
-		server = new BaSyxTCPServer<>(new VABHashmapProvider(simpleControlComponent), serverPort);
+		server = new BaSyxTCPServer<>(new VirtualPathModelProvider(simpleControlComponent), serverPort);
 		// - Start local BaSyx/TCP server
 		server.start();
 

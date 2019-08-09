@@ -1,11 +1,9 @@
 package org.eclipse.basyx.examples.snippets.aas.active;
 
-import java.util.HashMap;
-
+import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.examples.snippets.aas.active.tasks.InfluxDBTask;
 import org.eclipse.basyx.tools.aas.active.ActiveModel;
 import org.eclipse.basyx.vab.core.IModelProvider;
-import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
 
 /**
@@ -27,17 +25,17 @@ public class RunInfluxDBActiveModelSnippet {
 	// @Test
 	public void snippet() throws Exception {
 		// Create the model provider for the active model
-		IModelProvider modelProvider = new VABLambdaProvider(new HashMap<String, Object>());
+		IModelProvider modelProvider = new VirtualPathModelProvider();
 		modelProvider.createValue("temperature", VABLambdaProviderHelper.createSimple(() -> {
 			return 30d + (Math.random() * 10d - 5d);
 		}, null));
-		
-		
+
 		// Create the active model
 		ActiveModel activeModel = new ActiveModel(modelProvider);
-		
+
 		// Add a task to the model that writes the temperature value to a database every 500ms
-		InfluxDBTask writeTemperatureTask = new InfluxDBTask("/temperature", "http://localhost:8086/", "mydb", "temperature");
+		InfluxDBTask writeTemperatureTask = new InfluxDBTask("/temperature", "http://localhost:8086/", "mydb",
+				"temperature");
 		activeModel.runTask(50, writeTemperatureTask);
 
 		// Stop the model and clean it up
