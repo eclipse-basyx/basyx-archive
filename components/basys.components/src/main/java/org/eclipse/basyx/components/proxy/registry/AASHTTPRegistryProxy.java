@@ -153,7 +153,7 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 		String jsonData = client.get(aasRegistryURL+"/api/v1/registry/"+id);
 		
 		// Deserialize AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(jsonData));
+		// AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(jsonData));
 
 		// Return endpoint
 		return jsonData;

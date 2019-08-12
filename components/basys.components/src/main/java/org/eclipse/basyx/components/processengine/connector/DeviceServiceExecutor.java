@@ -3,7 +3,6 @@ package org.eclipse.basyx.components.processengine.connector;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
@@ -41,8 +40,6 @@ public abstract class DeviceServiceExecutor extends BaseBaSyxService implements 
 	 * */
 	public Object executeService( String servicename, String serviceProvider, String submodelid, List<Object> params) {
 		try {
-			// create the connected AAS using the manager
-			IAssetAdministrationShell connectedAAS =  manager.retrieveAAS(serviceProvider);
 			// create the submodel of the corresponding aas
 			ISubModel serviceSubmodel = manager.retrieveSM(submodelid);
 			// navigate to the expected service 

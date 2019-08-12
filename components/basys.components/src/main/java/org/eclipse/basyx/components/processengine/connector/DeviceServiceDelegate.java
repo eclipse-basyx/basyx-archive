@@ -37,6 +37,7 @@ public class DeviceServiceDelegate implements JavaDelegate {
 	// Instance of GSONTools used for JSON-serialisation
 	private GSONTools gson = new GSONTools(new DefaultTypeFactory());
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(DelegateExecution execution) {
 		
@@ -47,10 +48,8 @@ public class DeviceServiceDelegate implements JavaDelegate {
 		String params = (String) serviceParameter.getValue(execution);
 		
 		// deserialize the Json-string to get the parameters in an array
-		@SuppressWarnings("unchecked")
-		
 		List<Object> paramarray = new ArrayList<>();
-		paramarray.addAll((Collection<Object>)gson.deserialize(params));
+		paramarray.addAll((Collection<Object>) gson.deserialize(params));
 		// get name of the current process step in the BPMN-Model
 		String processName = execution.getCurrentFlowElement().getName();
 		String deviceAASId = (String)serviceProvider.getValue(execution);

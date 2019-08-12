@@ -8,9 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.Asset;
@@ -69,7 +67,6 @@ public class AASDescriptor extends HashMap<String, Object> {
 	/**
 	 * Create a new sub model descriptor with minimal information
 	 */
-	@SuppressWarnings("unchecked")
 	public AASDescriptor(AssetAdministrationShell aas, String endpoint, String endpointType) {
 		// Invoke default constructor
 		
@@ -141,16 +138,25 @@ public class AASDescriptor extends HashMap<String, Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getFirstEndpoint() {
-		
 		Object e = get("endpoints");
 		// Extract String from endpoint in set and list representation
 		String endpoint = null;
 		if (e instanceof List<?>) {
-			endpoint = ((List<String>) e).get(0);
+			List<String> list = (List<String>) e;
+			if (list.size() == 0) {
+				return null;
+			} else {
+				return list.get(0);
+			}
 		} else if (e instanceof HashSet<?>) {
-			endpoint = (String) ((HashSet<VABModelMap>) e).iterator().next().getPath("address");
+			HashSet<Map<String, Object>> set = (HashSet<Map<String, Object>>) e;
+			if (set.size() == 0) {
+				return null;
+			} else {
+				return (String) set.iterator().next().get("address");
+			}
 		} else {
-			endpoint = "not found";
+			endpoint = null;
 		}
 		
 		return endpoint;
