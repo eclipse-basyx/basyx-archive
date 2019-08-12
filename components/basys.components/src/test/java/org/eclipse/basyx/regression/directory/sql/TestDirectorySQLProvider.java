@@ -19,9 +19,6 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 /**
  * Test queries to SQL directory provider.
  * 
@@ -177,13 +174,10 @@ public class TestDirectorySQLProvider {
 		client.post(wsURL + "/api/v1/registry", expected);
 
 		// Get a known AAS by its ID
-		String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"
+		Object result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"
 				+ URLEncoder.encode("microscope#A-166", "UTF-8")));
-		// - Check updated registration
-		JsonObject jsonResult = new JsonParser().parse(result).getAsJsonObject();
-		JsonObject jsonExpected = new JsonParser().parse(expected).getAsJsonObject();
 
-		assertTrue(jsonExpected.equals(jsonResult)); // need deep json string compare here
+		assertEquals(aasDescriptor, result); // need deep json string compare here
 
 		// Delete AAS registration
 		client.delete(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8"));

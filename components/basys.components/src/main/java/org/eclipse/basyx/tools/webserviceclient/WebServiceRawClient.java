@@ -6,8 +6,8 @@ import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -96,7 +96,7 @@ public class WebServiceRawClient implements Serializable {
 		Builder request = buildRequest(client, wsURL);
 
 		// Perform request
-		Response rsp = request.post(Entity.entity(jsonParameter.toString(), MediaType.APPLICATION_JSON));
+		Response rsp = request.post(Entity.entity(jsonParameter, MediaType.APPLICATION_JSON));
 
 		// Throw exception that indicates an error
 		if (!((rsp.getStatus() == 0) || (rsp.getStatus() == 200) || (rsp.getStatus() == 201))) throw new ServerErrorException(rsp);
