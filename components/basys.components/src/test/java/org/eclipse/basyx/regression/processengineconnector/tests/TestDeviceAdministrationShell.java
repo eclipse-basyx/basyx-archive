@@ -10,8 +10,9 @@ import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
-import org.eclipse.basyx.regression.support.processengine.SetupHTTResource;
-import org.eclipse.basyx.testsuite.support.vab.stub.DirectoryServiceStub;
+import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
+import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
+import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -25,24 +26,27 @@ import org.junit.Test;
  *
  */
 public class TestDeviceAdministrationShell {
-	private  ConnectedAssetAdministrationShellManager manager;
-	ConnectedAssetAdministrationShell connectedAAS;
+	private ConnectedAssetAdministrationShell connectedAAS;
+
+	/**
+	 * VAB connection manager backend
+	 */
+	protected VABConnectionManager connManager = new VABConnectionManager(new ComponentsTestsuiteDirectory(),
+			new HTTPConnectorProvider());
+	
+	protected ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(
+			connManager);
+	
 	/**
 	 * Makes sure Tomcat Server is started
 	 */
 	@ClassRule
-	public static SetupHTTResource res = new SetupHTTResource();
+	public static AASHTTPServerResource res = new AASHTTPServerResource(new ComponentsRegressionContext());
+
 	@Before
 	public void setupConnection() {
-		
-		
-		//set-up the administration shell manager to create connected aas
-		 manager = new ConnectedAssetAdministrationShellManager(new VABConnectionManager(new DirectoryServiceStub()
-				 																							.addMapping("coilcar", "http://localhost:8080/basys.sdk/Testsuite/coilcar/")
-				 																							.addMapping("submodel1", "http://localhost:8080/basys.sdk/Testsuite/coilcar/"),
-				 																		 new HTTPConnectorProvider()));
-		
 		// create the connected AAS using the manager
+
 		try {
 			 connectedAAS = (ConnectedAssetAdministrationShell) manager.retrieveAAS("coilcar");
 		} catch (Exception e) {

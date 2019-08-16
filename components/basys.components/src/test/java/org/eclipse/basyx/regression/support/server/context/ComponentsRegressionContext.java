@@ -6,7 +6,8 @@ import org.eclipse.basyx.components.servlets.SQLDirectoryServlet;
 import org.eclipse.basyx.components.servlets.SQLSubModelProviderServlet;
 import org.eclipse.basyx.components.servlets.StaticCFGDirectoryServlet;
 import org.eclipse.basyx.components.servlets.XMLXQueryServlet;
-import org.eclipse.basyx.regression.support.server.BaSyxContext;
+import org.eclipse.basyx.regression.support.processengine.servlet.CoilcarAASServlet;
+import org.eclipse.basyx.testsuite.support.backend.servers.BaSyxContext;
 
 
 
@@ -40,6 +41,7 @@ public class ComponentsRegressionContext extends BaSyxContext {
 		addServletMapping("/Testsuite/components/BaSys/1.0/provider/xmlxquery/*", new XMLXQueryServlet().withParameter("config", "/WebContent/WEB-INF/config/xmlqueryprovider/xmlqueryprovider.properties"));
 		addServletMapping("/Testsuite/Directory/CFGFile/*",                       new StaticCFGDirectoryServlet().withParameter("config", "/WebContent/WEB-INF/config/directory/cfgdirectory/directory.properties"));
 		addServletMapping("/Testsuite/Directory/SQL/*",                           new SQLDirectoryServlet().withParameter("config", "/WebContent/WEB-INF/config/directory/sqldirectory/directory.properties"));
+		addServletMapping("/Testsuite/Processengine/coilcar/*",                   new CoilcarAASServlet());
 	}
 }
 

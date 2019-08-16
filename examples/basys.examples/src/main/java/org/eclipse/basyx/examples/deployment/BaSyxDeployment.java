@@ -3,9 +3,9 @@ package org.eclipse.basyx.examples.deployment;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
-import org.eclipse.basyx.regression.support.server.BaSyxContext;
 import org.eclipse.basyx.sdk.api.service.BaSyxService;
+import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServer;
+import org.eclipse.basyx.testsuite.support.backend.servers.BaSyxContext;
 import org.junit.rules.ExternalResource;
 
 
@@ -25,12 +25,15 @@ public class BaSyxDeployment extends ExternalResource {
 	 */
 	protected Object[] contextComponents = null;
 	
-	
 	/**
 	 * Map runnable names to runnables
 	 */
 	protected Map<String, BaSyxService> contectRunnablesByName = new HashMap<>();
 	
+	/**
+	 * Deployment on HTTP server
+	 */
+	private AASHTTPServer server;
 	
 	
 	
@@ -67,9 +70,9 @@ public class BaSyxDeployment extends ExternalResource {
     		// Process BaSyx context objects that run in a tomcat server
     		if (contextComponent instanceof BaSyxContext) {
     			// Get HTTP server resource
-    			AASHTTPServerResource resource = AASHTTPServerResource.getTestResource((BaSyxContext) contextComponent);
-    			// - Invoke 'before' operation that starts the server
-    			resource.before();
+				server = new AASHTTPServer((BaSyxContext) contextComponent);
+				// - Start the server
+				server.start();
     			// - Continue loop
     			continue;
     		}
@@ -98,10 +101,8 @@ public class BaSyxDeployment extends ExternalResource {
     	for (Object contextComponent: contextComponents) {
     		// Process BaSyx context objects that run in a tomcat server
     		if (contextComponent instanceof BaSyxContext) {
-    			// Get HTTP server resource
-    			AASHTTPServerResource resource = AASHTTPServerResource.getTestResource((BaSyxContext) contextComponent);
-    			// - Invoke 'before' operation that starts the server
-    			resource.after();
+				// - Shutdown the server
+				server.shutdown();
     			// - Continue loop
     			continue;
     		}

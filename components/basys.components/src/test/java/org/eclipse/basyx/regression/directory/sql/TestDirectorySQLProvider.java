@@ -11,8 +11,8 @@ import org.eclipse.basyx.aas.backend.connector.MetaprotocolHandler;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
-import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
+import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
 import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
 import org.junit.Before;
@@ -31,7 +31,7 @@ public class TestDirectorySQLProvider {
 	 * Makes sure Tomcat Server is started
 	 */
 	@ClassRule
-	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new ComponentsRegressionContext());
+	public static AASHTTPServerResource res = new AASHTTPServerResource(new ComponentsRegressionContext());
 
 	// Directory web service URL
 	public String wsURL;

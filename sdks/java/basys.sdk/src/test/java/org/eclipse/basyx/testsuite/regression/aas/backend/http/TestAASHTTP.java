@@ -14,6 +14,7 @@ import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShell
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.StubAASServlet;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
+import org.eclipse.basyx.testsuite.support.backend.servers.context.SdkRegressionContext;
 import org.eclipse.basyx.testsuite.support.vab.stub.DirectoryServiceStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.junit.Before;
@@ -35,7 +36,7 @@ public class TestAASHTTP {
 	 * Makes sure Tomcat Server is started
 	 */
 	@ClassRule
-	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource();
+	public static AASHTTPServerResource res = new AASHTTPServerResource(new SdkRegressionContext());
 
 	/**
 	 * Creates the manager to be used in the test cases

@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServer;
+import org.eclipse.basyx.testsuite.support.backend.servers.BaSyxContext;
+
 
 
 
@@ -24,8 +27,8 @@ public class BaSyxStandaloneServer {
     public static void main(String args[]) throws IOException {
     	
     	// Start server and allocate resource
-    	AASHTTPServerResource resource = AASHTTPServerResource.getTestResource(new BaSyxContext("", ""));
-    	resource.before();
+		AASHTTPServer server = new AASHTTPServer(new BaSyxContext("", ""));
+		server.start();
     	
     	// Prompt for user input
     	InputStreamReader in = new InputStreamReader(System.in);
@@ -36,7 +39,7 @@ public class BaSyxStandaloneServer {
         while (true) {
         	String command = keyboard.readLine();
         	if (command.equals("Please stop tomcat")) {
-        		resource.after();
+				server.shutdown();
         		break;
         	} else {
         		System.out.println("Command " + command + " not recognized!");

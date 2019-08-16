@@ -1,4 +1,4 @@
-package org.eclipse.basyx.regression.support.server;
+package org.eclipse.basyx.testsuite.support.backend.servers;
 
 import java.util.ArrayList;
 import java.util.HashMap;

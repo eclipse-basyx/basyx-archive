@@ -15,8 +15,9 @@ import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShell
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceDelegate;
 import org.eclipse.basyx.regression.support.processengine.SetupAAS;
-import org.eclipse.basyx.regression.support.processengine.SetupHTTResource;
 import org.eclipse.basyx.regression.support.processengine.executor.CoilcarServiceExecutor;
+import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
+import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
 import org.eclipse.basyx.testsuite.support.vab.stub.DirectoryServiceStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.junit.Before;
@@ -47,7 +48,7 @@ public class TestTransportProcess_ConfigureEngineProgramically {
 	 * Makes sure Tomcat Server is started
 	 */
 	@ClassRule
-	public static SetupHTTResource res = new SetupHTTResource();
+	public static AASHTTPServerResource res = new AASHTTPServerResource(new ComponentsRegressionContext());
 
 	/**
 	 * Creates the manager to be used in the test cases

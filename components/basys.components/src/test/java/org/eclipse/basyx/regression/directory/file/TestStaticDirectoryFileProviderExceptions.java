@@ -7,8 +7,8 @@ import java.net.URLEncoder;
 
 import javax.ws.rs.ServerErrorException;
 
-import org.eclipse.basyx.regression.support.server.AASHTTPServerResource;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
+import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceJSONClient;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class TestStaticDirectoryFileProviderExceptions {
 	 * Makes sure Tomcat Server is started
 	 */
 	@ClassRule
-	public static AASHTTPServerResource res = AASHTTPServerResource.getTestResource(new ComponentsRegressionContext());
+	public static AASHTTPServerResource res = new AASHTTPServerResource(new ComponentsRegressionContext());
 	
 	/**
 	 * Execute test case that tests not implemented calls

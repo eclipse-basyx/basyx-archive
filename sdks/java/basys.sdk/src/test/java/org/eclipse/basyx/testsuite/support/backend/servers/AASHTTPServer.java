@@ -2,7 +2,6 @@ package org.eclipse.basyx.testsuite.support.backend.servers;
 
 import java.io.File;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServlet;
@@ -13,38 +12,48 @@ import org.apache.catalina.startup.Tomcat;
 
 /**
  * Starter Class for Apache Tomcat 9.0.14 HTTP server that adds the provided servlets and respective mappings on startup.
+ * 
  * @author pschorn
- *
+ * 
  */
 public class AASHTTPServer extends Thread {
-
-	Tomcat tomcat;
+	private Tomcat tomcat;
 	   
 	/**
 	 * Constructor
 	 * 
 	 * Create new Tomcat instance and add the provided servlet mappings
 	 * 
-	 * @param mappings hashmap of url mapping to HTTPServlet
+	 * @param context
+	 *            Basyx context with of url mappings to HTTPServlet
 	 */
-	public AASHTTPServer(Map<String, HttpServlet> mappings) {
+	public AASHTTPServer(BaSyxContext context) {
+		// Instantiate and setup Tomcat server
 		tomcat = new Tomcat();
-		tomcat.setPort(8080);
-		tomcat.setHostname("localhost");
+		tomcat.setPort(context.port);
+		tomcat.setHostname(context.hostname);
 		tomcat.getHost().setAppBase(".");
-		File docBase = new File(System.getProperty("java.io.tmpdir"));
-        Context rootCtx = tomcat.addContext("/basys.sdk", docBase.getAbsolutePath()); 
-        
-        Iterator<Entry<String, HttpServlet>> it = mappings.entrySet().iterator();
-        while (it.hasNext()) {
-        	Entry<String, HttpServlet> entry = it.next();
-        	String mapping = entry.getKey();
-        	HttpServlet servlet = entry.getValue();
-        	
-        	// Add new Servlet and Mapping
-        	Tomcat.addServlet(rootCtx, servlet.getClass().getSimpleName(), servlet.getClass().getName());
-            rootCtx.addServletMapping(mapping, servlet.getClass().getSimpleName());
-        }
+
+		// Create servlet context
+		// - Base path for resource files
+		File docBase = new File(context.docBasePath); // System.getProperty("java.io.tmpdir"));
+		// - Create context for servlets
+		Context rootCtx = tomcat.addContext(context.contextPath, docBase.getAbsolutePath());
+
+		// Iterate all servlets in context
+		Iterator<Entry<String, HttpServlet>> it = context.entrySet().iterator();
+		while (it.hasNext()) {
+			// Servlet entry
+			Entry<String, HttpServlet> entry = it.next();
+
+			// Servlet mapping
+			String mapping = entry.getKey();
+			HttpServlet servlet = entry.getValue();
+
+			// Add new Servlet and Mapping to tomcat environment
+			Tomcat.addServlet(rootCtx, Integer.toString(servlet.hashCode()), servlet);
+			rootCtx.addServletMapping(mapping, Integer.toString(servlet.hashCode()));
+		}
 	}
 	
 	/**
