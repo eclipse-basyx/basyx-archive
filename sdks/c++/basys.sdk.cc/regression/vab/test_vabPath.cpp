@@ -7,7 +7,7 @@
 
 #include "gtest/gtest.h"
 
-#include "src\backends\provider\vab\VABPath.h"
+#include "backends/provider/vab/VABPath.h"
 
 
 TEST(TestBaSyxVABPath, TestConstructionWithSingleSubPath)
