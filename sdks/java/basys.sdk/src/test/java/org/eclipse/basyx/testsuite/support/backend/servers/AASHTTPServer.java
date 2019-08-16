@@ -7,13 +7,16 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.catalina.Context;
+import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleException;
+import org.apache.catalina.LifecycleListener;
+import org.apache.catalina.LifecycleState;
 import org.apache.catalina.startup.Tomcat;
 
 /**
  * Starter Class for Apache Tomcat 9.0.14 HTTP server that adds the provided servlets and respective mappings on startup.
  * 
- * @author pschorn
+ * @author pschorn, espen
  * 
  */
 public class AASHTTPServer extends Thread {
@@ -57,21 +60,43 @@ public class AASHTTPServer extends Thread {
 	}
 	
 	/**
-	 * Run Method. Use .start() to start the server in a new thread to avoid blocking the main thread
+	 * Starts the server in a new thread to avoid blocking the main thread
 	 */
-	public void run() {
+	public void start() {
 		System.out.println("Starting Tomcat.....");
         
-		try {
-			tomcat.stop();
-			tomcat.start();
-			System.out.println("Started BaSyx HTTP Server!");
-			tomcat.getServer().await();
-			
-			
-		} catch (LifecycleException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Thread serverThread = new Thread(() -> {
+			try {
+				tomcat.stop();
+
+				// Adds listener that notifies the tomcat object when the server has started
+				tomcat.getServer().addLifecycleListener(new LifecycleListener() {
+					@Override
+					public void lifecycleEvent(LifecycleEvent event) {
+						if (event.getLifecycle().getState() == LifecycleState.STARTED) {
+							synchronized (tomcat) {
+								tomcat.notifyAll();
+							}
+						}
+					}
+				});
+
+				tomcat.start();
+				
+				// Keeps the server thread alive until the server is shut down
+				tomcat.getServer().await();
+			} catch (LifecycleException e) {
+				e.printStackTrace();
+			}
+		});
+		serverThread.start();
+
+		synchronized (tomcat) {
+			try {
+				tomcat.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
