@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.aas.api.resources.IOperation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
 
@@ -31,12 +32,12 @@ public class OperationFacade implements IOperation {
 
 	@Override
 	public String getId() {
-	return (String) map.get(Operation.IDSHORT);
+	return (String) map.get(Referable.IDSHORT);
 	}
 
 	@Override
 	public void setId(String id) {
-		map.put(Operation.IDSHORT, id);
+		map.put(Referable.IDSHORT, id);
 		
 	}
 

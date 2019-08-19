@@ -7,6 +7,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 
 /**
  * Facade providing access to a map containing the SubmodelElementCollection structure
@@ -24,13 +25,13 @@ public class SubmodelElementCollectionFacade implements ISubmodelElementCollecti
 
 	@Override
 	public void setValue(ArrayList<?> value) {
-	map.put(SubmodelElementCollection.VALUE, value);
+	map.put(Property.VALUE, value);
 		
 	}
 
 	@Override
 	public ArrayList<?> getValue() {
-		return (ArrayList<?>)map.get(SubmodelElementCollection.VALUE);
+		return (ArrayList<?>)map.get(Property.VALUE);
 	}
 
 	@Override

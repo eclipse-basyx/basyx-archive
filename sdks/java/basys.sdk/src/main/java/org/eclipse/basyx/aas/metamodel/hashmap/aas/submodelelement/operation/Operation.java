@@ -33,7 +33,6 @@ public class Operation extends SubmodelElement implements IOperation {
 	public static final String IN="in";
 	public static final String OUT="out";
 	public static final String INVOKABLE="invokable";
-	public static final String IDSHORT="idShort";
 	
 	
 

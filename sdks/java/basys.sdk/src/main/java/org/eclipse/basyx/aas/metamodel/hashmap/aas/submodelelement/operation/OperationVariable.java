@@ -15,6 +15,7 @@ import org.eclipse.basyx.aas.metamodel.facades.OperationVariableFacade;
 import org.eclipse.basyx.aas.metamodel.facades.QualifiableFacade;
 import org.eclipse.basyx.aas.metamodel.facades.ReferableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElement;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 
 /**
  * OperationVariable as described by DAAS document An operation variable is a
@@ -25,8 +26,6 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelEleme
  */
 public class OperationVariable extends SubmodelElement implements IOperationVariable {
 	private static final long serialVersionUID = 1L;
-	
-	public static final String VALUE="value";
 
 	/**
 	 * 
@@ -35,7 +34,7 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	 *            element of kind=Type
 	 */
 	public OperationVariable(SubmodelElement value) {
-		put(VALUE, value);
+		put(Property.VALUE, value);
 	}
 	
 	public OperationVariable() {

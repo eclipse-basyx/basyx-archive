@@ -11,8 +11,8 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasKindFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedQualifiableFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedReferableFacade;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.RelationshipElement;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of RelationshipElement
@@ -135,12 +135,12 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 	
 	@Override
 	public String getId() {
-	return (String) getProxy().readElementValue(constructPath(Operation.IDSHORT));
+	return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
 	public void setId(String id) {
-		getProxy().updateElementValue(constructPath(Operation.IDSHORT), id);
+		getProxy().updateElementValue(constructPath(Referable.IDSHORT), id);
 		
 	}
 

@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 
 
 
@@ -34,19 +37,19 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 		// Invoke default constructor
 		//this();
 		
-		put("idShort", submodel.getId());
+		put(Referable.IDSHORT, submodel.getId());
 		
 		// Add identification and end point information
 		Identifier identifier = new Identifier();
 		identifier.setIdType(submodel.getIdentification().getIdType());
 		identifier.setId(submodel.getIdentification().getId());
-		put("identification", identifier);
+		put(Identifiable.IDENTIFICATION, identifier);
 		
 		HashMap<String, String> endpointWrapper = new HashMap<String, String>(); 
-		endpointWrapper.put("type", endpointType);
-		endpointWrapper.put("address", endpoint);
+		endpointWrapper.put(AssetAdministrationShell.TYPE, endpointType);
+		endpointWrapper.put(AssetAdministrationShell.ADDRESS, endpoint);
 		
-		put("endpoints", Arrays.asList(endpointWrapper));
+		put(AssetAdministrationShell.ENDPOINTS, Arrays.asList(endpointWrapper));
 	}
 	
 	/**
@@ -61,7 +64,7 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	 * Return sub model ID
 	 */
 	public String getId() {
-		return (String) get("idShort");
+		return (String) get(Referable.IDSHORT);
 	}
 	
 	/**
@@ -69,7 +72,7 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getIdentificationId() {
-		return new Identifier((Map<String, Object>) get("identification")).getId();
+		return new Identifier((Map<String, Object>) get(Identifiable.IDENTIFICATION)).getId();
 	}
 	
 	
@@ -78,7 +81,7 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getIdType() {
-		return new Identifier((Map<String, Object>) get("identification")).getIdType();
+		return new Identifier((Map<String, Object>) get(Identifiable.IDENTIFICATION)).getIdType();
 	}
 
 	
@@ -87,7 +90,7 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getFirstEndpoint() {
-		return ((List<String>) get("endpoints")).get(0);
+		return ((List<String>) get(AssetAdministrationShell.ENDPOINTS)).get(0);
 	}
 }
 

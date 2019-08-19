@@ -22,6 +22,7 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedIdentifiableFaca
 import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.DataElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
@@ -63,7 +64,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 	@Override
 	public void setAdministration(String version, String revision) {
-		 new ConnectedIdentifiableFacade(getPath(),getProxy()).setAdministration(version, revision);;
+		 new ConnectedIdentifiableFacade(getPath(),getProxy()).setAdministration(version, revision);
 
 	}
 
@@ -92,7 +93,6 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 	@Override
 	public void setHasKindReference(String kind) {
 		new ConnectedHasKindFacade(getPath(),getProxy()).setHasKindReference(kind);
-
 	}
 
 
@@ -101,20 +101,19 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 	 * Update value of 'administration' property
 	 */
 	public void setAdministration(AdministrativeInformation newValue) {
-		getElements().put("administration", newValue);
+		getElements().put(Identifiable.ADMINISTRATION, newValue);
 	}
 
 
 
 	@Override
 	public String getId() {
-		return (String)getProxy().readElementValue(constructPath(SubModel.IDSHORT));
+		return (String)getProxy().readElementValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
 	public void setId(String id) {
-		getProxy().updateElementValue(constructPath(SubModel.IDSHORT), id);
-
+		getProxy().updateElementValue(constructPath(Referable.IDSHORT), id);
 	}
 
 	@Override
@@ -133,13 +132,11 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 	@Override
 	public void setProperties(Map<String, IProperty> properties) {
 		getProxy().updateElementValue(constructPath(SubModel.PROPERTIES),properties);
-
 	}
 
 	@Override
 	public void setOperations(Map<String, IOperation> operations) {
 		getProxy().updateElementValue(constructPath(SubModel.OPERATIONS),operations);
-
 	}
 
 	public SubModel getSubModel() {
@@ -193,7 +190,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 			// Convert to IOperation
 			for (Map<String, Object> deNode: dataElemNodes) {
-				String id = (String)  deNode.get(SubModel.IDSHORT);
+				String id = (String)  deNode.get(Referable.IDSHORT);
 				ret.put(id, factory.createProperty(constructPath(VABPathTools.concatenatePaths(SubModel.PROPERTIES, id)), getProxy()));
 			}
 		} else {
@@ -228,7 +225,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 			// Convert to IOperation
 			for (Map<String, Object> opNode: operationNodes) {
-				String id = (String) opNode.get(SubModel.IDSHORT);
+				String id = (String) opNode.get(Referable.IDSHORT);
 				
 				ConnectedOperation conOp = new ConnectedOperation(constructPath(VABPathTools.concatenatePaths(SubModel.OPERATIONS, id)), getProxy());
 				// Cache operation properties

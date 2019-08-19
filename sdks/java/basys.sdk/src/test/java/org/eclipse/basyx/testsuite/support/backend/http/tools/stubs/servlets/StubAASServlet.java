@@ -6,6 +6,7 @@ import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.testsuite.support.aas.vab.stub.elements.SimpleAASSubmodel;
 import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
 
@@ -21,7 +22,7 @@ public class StubAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 		AssetAdministrationShell aas = factory.create(new AssetAdministrationShell(), Collections.singleton(smId));
-		aas.put("idShort", aasId);
+		aas.put(Referable.IDSHORT, aasId);
 
 		getModelProvider().setAssetAdministrationShell(new VirtualPathModelProvider(aas));
 		getModelProvider().addSubmodel(smId, new VirtualPathModelProvider(new SimpleAASSubmodel(smId)));

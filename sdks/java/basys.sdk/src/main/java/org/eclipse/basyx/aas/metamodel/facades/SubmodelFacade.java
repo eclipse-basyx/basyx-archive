@@ -11,6 +11,7 @@ import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
@@ -19,6 +20,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.HasKind;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
 
 
 
@@ -62,56 +64,56 @@ public class SubmodelFacade implements ISubModel {
 	 * Get value of 'idShort' property
 	 */
 	public String getIDShort() {
-		return (String) getElements().get("idShort");
+		return (String) getElements().get(Referable.IDSHORT);
 	}
 
 	/**
 	 * Update value of 'idShort' property
 	 */
 	public void setIDShort(String newValue) {
-		getElements().put("idShort", newValue);
+		getElements().put(Referable.IDSHORT, newValue);
 	}
 
 	/**
 	 * Get value of 'category' property
 	 */
 	public String getCategory() {
-		return (String) getElements().get("category");
+		return (String) getElements().get(Referable.CATEGORY);
 	}
 
 	/**
 	 * Update value of 'category' property
 	 */
 	public void setCategory(String newValue) {
-		getElements().put("category", newValue);
+		getElements().put(Referable.CATEGORY, newValue);
 	}
 
 	/**
 	 * Get value of 'description' property
 	 */
 	public String getDescription() {
-		return (String) getElements().get("description");
+		return (String) getElements().get(Referable.DESCRIPTION);
 	}
 
 	/**
 	 * Update value of 'description' property
 	 */
 	public void setDescription(String newValue) {
-		getElements().put("description", newValue);
+		getElements().put(Referable.DESCRIPTION, newValue);
 	}
 
 	/**
 	 * Get value of 'parent' property
 	 */
 	public IReference getParent() {
-		return (IReference) getElements().get("parent");
+		return (IReference) getElements().get(Referable.PARENT);
 	}
 
 	/**
 	 * Update value of 'parent' property
 	 */
 	public void setParent(String newValue) {
-		getElements().put("parent", newValue);
+		getElements().put(Referable.PARENT, newValue);
 	}
 
 	/**
@@ -119,14 +121,14 @@ public class SubmodelFacade implements ISubModel {
 	 */
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return (IAdministrativeInformation) getElements().get("administration");
+		return (IAdministrativeInformation) getElements().get(Identifiable.ADMINISTRATION);
 	}
 
 	/**
 	 * Update value of 'administration' property
 	 */
 	public void setAdministration(AdministrativeInformation newValue) {
-		getElements().put("administration", newValue);
+		getElements().put(Identifiable.ADMINISTRATION, newValue);
 	}
 
 	/**
@@ -134,28 +136,28 @@ public class SubmodelFacade implements ISubModel {
 	 */
 	@Override
 	public IIdentifier getIdentification() {
-		return (IIdentifier) getElements().get("identification");
+		return (IIdentifier) getElements().get(Identifiable.IDENTIFICATION);
 	}
 
 	/**
 	 * Update value of 'identification' property
 	 */
 	public void setIdentification(Identifier newValue) {
-		getElements().put("identification", newValue);
+		getElements().put(Identifiable.IDENTIFICATION, newValue);
 	}
 
 	/**
 	 * Get value of 'id_semantics' property
 	 */
 	public Identifier getIdSemantics() {
-		return (Identifier) getElements().get("id_semantics");
+		return (Identifier) getElements().get(AssetAdministrationShell.IDSEMANTICS);
 	}
 
 	/**
 	 * Update value of 'id_semantics' property
 	 */
 	public void setIdSemantics(Identifier newValue) {
-		getElements().put("id_semantics", newValue);
+		getElements().put(AssetAdministrationShell.IDSEMANTICS, newValue);
 	}
 
 	/**
@@ -163,38 +165,38 @@ public class SubmodelFacade implements ISubModel {
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<String> getQualifier() {
-		return (Collection<String>) getElements().get("qualifier");
+		return (Collection<String>) getElements().get(Qualifier.QUALIFIER);
 	}
 
 	/**
 	 * Update value of 'qualifier' property
 	 */
 	public void setQualifier(Collection<String> newValue) {
-		getElements().put("qualifier", newValue);
+		getElements().put(Qualifier.QUALIFIER, newValue);
 	}
 
 	/**
 	 * Get value of 'kind' property
 	 */
 	public String getKind() {
-		return (String) getElements().get("kind");
+		return (String) getElements().get(HasKind.KIND);
 	}
 
 	/**
 	 * Update value of 'kind' property
 	 */
 	public void setKind(int newValue) {
-		getElements().put("kind", newValue);
+		getElements().put(HasKind.KIND, newValue);
 	}
 
 	@Override
 	public String getId() {
-	return (String)map.get(SubModel.IDSHORT);
+	return (String)map.get(Referable.IDSHORT);
 	}
 
 	@Override
 	public void setId(String id) {
-		map.put(SubModel.IDSHORT, id);
+		map.put(Referable.IDSHORT, id);
 		
 	}
 

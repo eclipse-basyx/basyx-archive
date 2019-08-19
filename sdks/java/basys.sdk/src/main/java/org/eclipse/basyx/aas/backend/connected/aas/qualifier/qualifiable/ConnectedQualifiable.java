@@ -21,13 +21,13 @@ public class ConnectedQualifiable extends ConnectedElement implements IQualifiab
 	
 	@Override
 	public void setQualifier(Set<IConstraint> qualifiers) {
-		getProxy().updateElementValue(constructPath(Qualifiable.QUALIFIER), qualifiers);
+		getProxy().updateElementValue(constructPath(Qualifiable.CONSTRAINTS), qualifiers);
 		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return (Set<IConstraint>)getProxy().readElementValue(constructPath(Qualifiable.QUALIFIER));
+		return (Set<IConstraint>)getProxy().readElementValue(constructPath(Qualifiable.CONSTRAINTS));
 	}
 }

@@ -17,8 +17,10 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasKindFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedQualifiableFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedReferableFacade;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
@@ -36,21 +38,21 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	@Override
 	public String getId() {
 		// try local get
-		String id = (String) this.getLocal("idShort");
+		String id = (String) this.getLocal(Referable.IDSHORT);
 		if (id != null) {
 			return id;
 		}
-		return (String) getProxy().readElementValue(constructPath(Operation.IDSHORT));
+		return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
 	public void setId(String id) {
 		// try set local if exists
-		if (this.getLocal("idShort") != null) {
-			this.putLocal("idShort", id);
+		if (this.getLocal(Referable.IDSHORT) != null) {
+			this.putLocal(Referable.IDSHORT, id);
 		}
-		getProxy().updateElementValue(constructPath(Operation.IDSHORT), id);
 
+		getProxy().updateElementValue(constructPath(Referable.IDSHORT), id);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -77,10 +79,9 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		int i = 0;
 		for (Object param : params) {
 			HashMap<String, Object> valueWrapper = new HashMap<String, Object>();
-
-			valueWrapper.put("valueType", PropertyValueTypeDefHelper.fromObject(param));
-			valueWrapper.put("value", param);
-
+			valueWrapper.put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(param));
+			valueWrapper.put(Property.VALUE, param);
+			
 			params[i] = valueWrapper;
 			i++;
 		}
@@ -94,10 +95,9 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 			if (resultWrapper instanceof Map<?, ?>) {
 				Map<String, Object> map = (Map<String, Object>) resultWrapper;
-				if (map.get("idShort").equals("Response") && map.get("value") != null) { // TODO C# test access from C#
-																							// to Java hosted operation
-
-					result = map.get("value");
+				if (map.get(Referable.IDSHORT).equals("Response") && map.get(Property.VALUE) != null) {
+					// TODO C# test access from C# to Java hosted operation
+					result = map.get(Property.VALUE);
 				}
 			}
 		}

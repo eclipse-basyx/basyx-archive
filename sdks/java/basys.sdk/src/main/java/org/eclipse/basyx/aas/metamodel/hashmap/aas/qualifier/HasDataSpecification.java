@@ -16,7 +16,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
  */
 public class HasDataSpecification extends HashMap<String, Object> implements IHasDataSpecification {
 	
-	public  static String HASDATASPECIFICATION="hasDataSpecification";
+	public static final String HASDATASPECIFICATION="hasDataSpecification";
 
 	/**
 	 * Version of serialized instances

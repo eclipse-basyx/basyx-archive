@@ -8,6 +8,7 @@ import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.PropertyType;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.operation.ConnectedOperation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
@@ -28,11 +29,11 @@ public class ConnectedContainerProperty extends ConnectedProperty implements ICo
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IProperty> getProperties() {
-		Map<String, Object> props = (Map<String, Object>) getProxy().readElementValue(constructPath("dataElements"));
+		Map<String, Object> props = (Map<String, Object>) getProxy().readElementValue(constructPath(SubModel.PROPERTIES));
 		Map<String, IProperty> ret = new HashMap<>();
 
 		for (String s : props.keySet()) {
-			ret.put(s, factory.createProperty(constructPath("dataElements/" + s), getProxy()));
+			ret.put(s, factory.createProperty(constructPath(SubModel.PROPERTIES + "/" + s), getProxy()));
 		}
 		return ret;
 	}
@@ -40,11 +41,11 @@ public class ConnectedContainerProperty extends ConnectedProperty implements ICo
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IOperation> getOperations() {
-		Map<String, Object> ops = (Map<String, Object>) getProxy().readElementValue(constructPath("operations"));
+		Map<String, Object> ops = (Map<String, Object>) getProxy().readElementValue(constructPath(SubModel.OPERATIONS));
 
 		Map<String, IOperation> ret = new HashMap<>();
 		for (String s : ops.keySet()) {
-			ret.put(s, new ConnectedOperation(constructPath("operations/" + s), getProxy()));
+			ret.put(s, new ConnectedOperation(constructPath(SubModel.OPERATIONS + "/" + s), getProxy()));
 		}
 		return ret;
 	}

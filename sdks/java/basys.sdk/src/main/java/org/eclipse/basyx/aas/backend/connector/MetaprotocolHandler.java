@@ -7,6 +7,8 @@ import java.util.Map;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.aas.backend.http.tools.factory.GSONToolsFactory;
+import org.eclipse.basyx.vab.backend.server.utils.Message;
+import org.eclipse.basyx.vab.backend.server.utils.Result;
 
 public class MetaprotocolHandler implements IMetaProtocolHandler {
 
@@ -67,28 +69,29 @@ public class MetaprotocolHandler implements IMetaProtocolHandler {
 		System.out.println("Verify Response ...");
 		
 		// Retrieve messages if any
-		Collection<Map<String, Object>> messages = (Collection<Map<String, Object>>) responseMap.get("messages");
+		Collection<Map<String, Object>> messages = (Collection<Map<String, Object>>) responseMap.get(Result.MESSAGES);
 		if (messages == null) messages = new LinkedList<Map<String, Object>>();
 		
-		boolean success =  (boolean) responseMap.get("success");
+		boolean success = (boolean) responseMap.get(Result.SUCCESS);
 			
 		// Return result if success
 		if (success) {
 			
 			for (Map<String, Object> m : messages) {
-				System.out.println(m.get("messageType")+ ", "+ m.get("code") + ", "+ m.get("text"));
+				System.out
+						.println(m.get(Message.MESSAGETYPE) + ", " + m.get(Message.CODE) + ", " + m.get(Message.TEXT));
 			}
 			
-			Object result =  responseMap.get("entity");	
+			Object result = responseMap.get(Result.ENTITY);
 			if (result != null) return result;		
 		}
 		
 		// Throw exception if no success
 		else if (!success){
-			if (responseMap.get("isException").equals(true)) {
+			if (responseMap.get(Result.ISEXCEPTION).equals(true)) {
 				Map<String, Object> first = messages.iterator().next(); //assumes an Exception always comes with a message
 				
-				String text = (String) first.get("text");
+				String text = (String) first.get(Message.TEXT);
 				throw new Exception("Server threw exception: " + text);
 			} else {
 				throw new Exception("Format Error: no success but isException not true or not found.");

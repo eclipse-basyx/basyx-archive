@@ -87,7 +87,7 @@ public class AssetFacade implements IAsset {
 	}
 
 	public void setId(String string) {
-		map.put(Identifiable.IDSHORT, string);
+		map.put(Referable.IDSHORT, string);
 		
 	}
 	@Override

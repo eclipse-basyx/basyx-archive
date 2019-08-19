@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.blo
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.blob.IBlob;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.ConnectedDataElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.MimeType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.blob.Blob;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.blob.BlobType;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -18,13 +19,13 @@ public class ConnectedBlob extends ConnectedDataElement implements IBlob {
 	
 	@Override
 	public void setValue(BlobType value) {
-		getProxy().updateElementValue(constructPath(Blob.VALUE), value);
+		getProxy().updateElementValue(constructPath(Property.VALUE), value);
 		
 	}
 
 	@Override
 	public BlobType getValue() {
-		return (BlobType)getProxy().readElementValue(constructPath(Blob.VALUE));
+		return (BlobType)getProxy().readElementValue(constructPath(Property.VALUE));
 	}
 
 	@Override

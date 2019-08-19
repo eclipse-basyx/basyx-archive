@@ -4,7 +4,7 @@ import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IReferenceElement;
 import org.eclipse.basyx.aas.api.resources.PropertyType;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.ReferenceElement;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of IReferenceElement
@@ -19,13 +19,13 @@ public class ConnectedReferenceElement extends ConnectedDataElement implements I
 
 	@Override
 	public void setValue(IReference ref) {
-		getProxy().updateElementValue(constructPath(ReferenceElement.VALUE), ref);
+		getProxy().updateElementValue(constructPath(Property.VALUE), ref);
 		
 	}
 
 	@Override
 	public IReference getValue() {
-		return (IReference)getProxy().readElementValue(constructPath(ReferenceElement.VALUE));
+		return (IReference)getProxy().readElementValue(constructPath(Property.VALUE));
 	}
 
 

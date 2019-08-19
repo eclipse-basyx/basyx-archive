@@ -21,6 +21,8 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFaca
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedQualifiableFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedReferableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.DataElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
@@ -121,24 +123,24 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	
 	@Override
 	public String getId() {
-	return (String) getProxy().readElementValue(constructPath(Operation.IDSHORT));
+	return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
 	public void setId(String id) {
-		getProxy().updateElementValue(constructPath(Operation.IDSHORT), id);
+		getProxy().updateElementValue(constructPath(Referable.IDSHORT), id);
 		
 	}
 	
 	@Override
 	public void setValue(ArrayList<?> value) {
-	getProxy().updateElementValue(constructPath(SubmodelElementCollection.VALUE), value);
+	getProxy().updateElementValue(constructPath(Property.VALUE), value);
 		
 	}
 
 	@Override
 	public ArrayList<?> getValue() {
-		return (ArrayList<?>)getProxy().readElementValue(constructPath(SubmodelElementCollection.VALUE));
+		return (ArrayList<?>)getProxy().readElementValue(constructPath(Property.VALUE));
 	}
 
 	@Override
@@ -229,7 +231,7 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IProperty> getProperties() {
-		return (Map<String, IProperty>) getProxy().readElementValue(constructPath(SubmodelElementCollection.PROPERTIES));
+		return (Map<String, IProperty>) getProxy().readElementValue(constructPath(SubModel.PROPERTIES));
 	}
 
 	@Override

@@ -33,8 +33,8 @@ public class AdministrativeInformation extends HashMap<String, Object> implement
 		putAll(new HasDataSpecification());
 
 		// Default values
-		put("version", "");
-		put("revision", "");
+		put(VERSION, "");
+		put(REVISION, "");
 	}
 
 	/**
@@ -45,8 +45,8 @@ public class AdministrativeInformation extends HashMap<String, Object> implement
 		putAll(new HasDataSpecification());
 
 		// Default values
-		put("version", version);
-		put("revision", revision);
+		put(VERSION, version);
+		put(REVISION, revision);
 	}
 
 	@Override

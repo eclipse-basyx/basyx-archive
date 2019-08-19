@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.PropertyType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
@@ -24,12 +25,12 @@ public class PropertyFacade implements IProperty {
 
 	@Override
 	public String getId() {
-	return (String)map.get(Property.IDSHORT);
+	return (String)map.get(Referable.IDSHORT);
 	}
 
 	@Override
 	public void setId(String id) {
-	map.put(Property.IDSHORT, id);
+	map.put(Referable.IDSHORT, id);
 		
 	}
 

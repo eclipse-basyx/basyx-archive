@@ -22,14 +22,14 @@ public class QualifiableFacade implements IQualifiable {
 
 	@Override
 	public void setQualifier(Set<IConstraint> qualifiers) {
-		map.put(Qualifiable.QUALIFIER, qualifiers);
+		map.put(Qualifiable.CONSTRAINTS, qualifiers);
 		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return (Set<IConstraint>)map.get(Qualifiable.QUALIFIER);
+		return (Set<IConstraint>)map.get(Qualifiable.CONSTRAINTS);
 	}
 
 }

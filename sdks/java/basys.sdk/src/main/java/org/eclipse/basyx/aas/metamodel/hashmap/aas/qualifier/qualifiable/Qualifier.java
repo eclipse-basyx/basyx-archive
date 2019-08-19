@@ -20,6 +20,8 @@ public class Qualifier extends Constraint implements IQualifier {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	public static final String QUALIFIER ="qualifier";
+	
 	public static final String QUALIFIERTYPE ="qualifierType";
 	
 	public static final String QUALIFIERVALUE ="qualifierValue";

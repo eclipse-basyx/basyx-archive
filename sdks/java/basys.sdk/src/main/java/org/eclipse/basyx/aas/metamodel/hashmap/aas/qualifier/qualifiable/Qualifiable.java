@@ -22,15 +22,14 @@ public class Qualifiable extends HashMap<String, Object> implements IQualifiable
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public static final String QUALIFIER="constraints"; // changed qualifier to constraints xxxxx constantin
-
+	public static final String CONSTRAINTS="constraints";
 	/**
 	 * Constructor
 	 */
 	public Qualifiable() {
 		// The instance of an element may be further qualified by one or more
 		// qualifiers.
-		put(QUALIFIER, null);
+		put(CONSTRAINTS, null);
 	}
 
 	/**
@@ -44,7 +43,7 @@ public class Qualifiable extends HashMap<String, Object> implements IQualifiable
 
 		// The instance of an element may be further qualified by one or more
 		// qualifiers.
-		put(QUALIFIER, qualifiers);
+		put(CONSTRAINTS, qualifiers);
 	}
 
 	/**
@@ -53,7 +52,7 @@ public class Qualifiable extends HashMap<String, Object> implements IQualifiable
 	public Qualifiable(Collection<Constraint> qualifier) {
 		// The instance of an element may be further qualified by one or more
 		// qualifiers.
-		put(QUALIFIER, qualifier);
+		put(CONSTRAINTS, qualifier);
 	}
 
 	@Override

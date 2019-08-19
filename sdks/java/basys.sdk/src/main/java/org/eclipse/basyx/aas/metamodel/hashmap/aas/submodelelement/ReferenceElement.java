@@ -6,6 +6,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IReferenceElement
 import org.eclipse.basyx.aas.api.resources.PropertyType;
 import org.eclipse.basyx.aas.metamodel.facades.ReferenceElementFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 
 /**
  * A ReferenceElement as defined in DAAS document <br/>
@@ -19,14 +20,12 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 public class ReferenceElement extends DataElement implements IReferenceElement {
 
 	private static final long serialVersionUID = 1L;
-	
-	public static final String VALUE="value";
 
 	/**
 	 * Constructor
 	 */
 	public ReferenceElement() {
-		put(VALUE, null);
+		put(Property.VALUE, null);
 	}
 
 	/**
@@ -35,7 +34,7 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 	 *            AAS or a reference to an external object or entity
 	 */
 	public ReferenceElement(Reference ref) {
-		put(VALUE, ref);
+		put(Property.VALUE, ref);
 	}
 
 	@Override

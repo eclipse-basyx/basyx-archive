@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 
@@ -150,7 +152,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 				if (pathElements.length == 1) {
 					return aas_provider.getModelPropertyValue("");
 				}
-				if (pathElements[1].equals("submodels")) {
+				if (pathElements[1].equals(AssetAdministrationShell.SUBMODELS)) {
 					if (pathElements.length == 2) {
 						// Make a list and return all submodels
 						HashSet<Object> submodels = new HashSet<Object>();
@@ -198,8 +200,8 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 			// Adds a new submodel to to the registered AAS
 			VABModelMap<Object> sm = (VABModelMap<Object>) newValue;
 			VirtualPathModelProvider smProvider = new VirtualPathModelProvider(sm);
-			submodel_providers.put((String) sm.getPath("idShort"), (VirtualPathModelProvider) smProvider);
-			aas_provider.createValue("/submodel", sm);
+			submodel_providers.put((String) sm.getPath(Referable.IDSHORT), (VirtualPathModelProvider) smProvider);
+			aas_provider.createValue("/" + AssetAdministrationShell.SUBMODEL, sm);
 		} else {
 			// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
 			submodel_providers.get(pathElements[2]).createValue(propertyPath, newValue);
@@ -214,7 +216,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 		if (pathElements.length == 3) {
 			// Delete Submodel from registered AAS
 			String smId = pathElements[2];
-			aas_provider.deleteValue("/submodel/" + smId);
+			aas_provider.deleteValue("/" + AssetAdministrationShell.SUBMODEL + "/" + smId);
 			submodel_providers.remove(smId);
 		}
 

@@ -11,8 +11,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Qualifi
 
 public abstract class SubmodelElement extends HashMap<String, Object> implements ISubmodelElement {
 	private static final long serialVersionUID = 1L;
-
-	public static final String IDSHORT="idShort";
+	
 	public SubmodelElement() {
 		putAll(new HasDataSpecification());
 		putAll(new Referable());

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.PropertyType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
@@ -22,13 +23,13 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 
 	@Override
 	public Object get() throws Exception {
-		return getProxy().readElementValue(constructPath("value"));
+		return getProxy().readElementValue(constructPath(Property.VALUE));
 	}
 
 	@Override
 	public void set(Object newValue) throws ServerException {
 		try {
-			getProxy().updateElementValue(constructPath("value"), newValue);
+			getProxy().updateElementValue(constructPath(Property.VALUE), newValue);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -47,12 +48,13 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 
 	@Override
 	public Object getValue() {
-		Object value = getProxy().readElementValue(constructPath("value"));
+		Object value = getProxy().readElementValue(constructPath(Property.VALUE));
 		
 		// unpack c# value
 		if (value instanceof Map<?,?>) {
-			if (((Map<?,?>) value).get("valueType") != null && ((Map<?,?>) value).get("value") != null) {
-				value = ((Map<?, ?>) value).get("value");
+			if (((Map<?, ?>) value).get(Property.VALUETYPE) != null
+					&& ((Map<?, ?>) value).get(Property.VALUE) != null) {
+				value = ((Map<?, ?>) value).get(Property.VALUE);
 			}
 		}
 		

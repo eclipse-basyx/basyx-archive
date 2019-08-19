@@ -10,7 +10,7 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasKindFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedQualifiableFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedReferableFacade;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of DataElement
@@ -113,20 +113,20 @@ public class ConnectedDataElement extends ConnectedSubmodelElement {
 	@Override
 	public String getId() {
 		// try local get
-		String id = (String) this.getLocal("idShort");
+		String id = (String) this.getLocal(Referable.IDSHORT);
 		if (id != null) {
 			return id;
 		}
-		return (String) getProxy().readElementValue(constructPath(Operation.IDSHORT));
+		return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
 	public void setId(String id) {
 		// try set local if exists
-		if (this.getLocal("idShort") != null) {
-			this.putLocal("idShort", id);
+		if (this.getLocal(Referable.IDSHORT) != null) {
+			this.putLocal(Referable.IDSHORT, id);
 		}
-		getProxy().updateElementValue(constructPath(Operation.IDSHORT), id);
+		getProxy().updateElementValue(constructPath(Referable.IDSHORT), id);
 		
 	}
 }

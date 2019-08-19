@@ -15,11 +15,11 @@ import java.util.Map;
 @SuppressWarnings("serial")
 public class Result  extends HashMap<String, Object> implements IResult {
 		
-	private static String SUCCESS = "success";
-	private static String ISEXCEPTION = "isException";
-	private static String MESSAGES = "messages";
-	private static String ENTITY = "entity";
-	private static String ENTITYTYPE = "entityType";
+	public static final String SUCCESS = "success";
+	public static final String ISEXCEPTION = "isException";
+	public static final String MESSAGES = "messages";
+	public static final String ENTITY = "entity";
+	public static final String ENTITYTYPE = "entityType";
 
 	public Result(boolean success) {
 		this(success, null, null, null);

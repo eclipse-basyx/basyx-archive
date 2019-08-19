@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.file.IFile;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.MimeType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.blob.Blob;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.file.PathType;
 /**
@@ -21,13 +22,13 @@ public class FileFacade implements IFile {
 
 	@Override
 	public void setValue(PathType value) {
-		map.put(Blob.VALUE, value);
+		map.put(Property.VALUE, value);
 		
 	}
 
 	@Override
 	public PathType getValue() {
-		return (PathType)map.get(Blob.VALUE);
+		return (PathType)map.get(Property.VALUE);
 	}
 
 	@Override

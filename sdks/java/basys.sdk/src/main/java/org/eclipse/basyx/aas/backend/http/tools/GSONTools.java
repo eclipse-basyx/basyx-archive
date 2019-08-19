@@ -514,7 +514,7 @@ public class GSONTools implements Serializer {
 
 		// - Add value
 		String serialized = serializeObjectToString(value);
-		target.add("value", new JsonPrimitive(serialized));
+		target.add(VALUE, new JsonPrimitive(serialized));
 
 		return target;
 	}

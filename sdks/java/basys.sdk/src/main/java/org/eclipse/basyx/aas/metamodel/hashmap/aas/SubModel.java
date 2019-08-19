@@ -47,7 +47,6 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 	public static final String SUBMODELELEMENT ="submodelElement";
 	public static final String PROPERTIES="dataElements";
 	public static final String OPERATIONS="operations";
-	public static final String IDSHORT="idShort";
 
 	
 	/**

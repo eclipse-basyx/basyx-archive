@@ -74,8 +74,8 @@ public class MetaModelElementFactory {
 		Property ret = new Property();
 		ret.putAll(prop);
 		Map<String, Object> value = VABLambdaProviderHelper.createSimple(get, set);
-		ret.put("value", value);
-		ret.put("valueType", PropertyValueTypeDefHelper.fromObject(get.get()));
+		ret.put(Property.VALUE, value);
+		ret.put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(get.get()));
 		return ret;
 	}
 
@@ -89,7 +89,7 @@ public class MetaModelElementFactory {
 	public Operation createOperation(Operation operation, Function<Object[], Object> function) {
 		Operation ret = new Operation();		
 		ret.putAll(operation);
-		ret.put("invokable", function);
+		ret.put(Operation.INVOKABLE, function);
 		return ret;
 	}
 	
@@ -103,7 +103,7 @@ public class MetaModelElementFactory {
 	public Operation createOperation(Operation operation, Function<Object[], Object> function, List<OperationVariable> in, List<OperationVariable> out) {
 		Operation ret = new Operation(in, out, function);		
 		ret.putAll(operation);
-		ret.put("invokable", function);
+		ret.put(Operation.INVOKABLE, function);
 		return ret;
 	}
 
@@ -155,8 +155,8 @@ public class MetaModelElementFactory {
 	public SubModel create(SubModel subModel, List<Property> properties, List<Operation> operations) {
 		SubModel ret = new SubModel();
 		ret.putAll(subModel);
-		((Map<String, Object>) ret.get("dataElements")).putAll(createElemMap(properties));
-		((Map<String, Object>) ret.get("operations")).putAll(createElemMap(operations));
+		((Map<String, Object>) ret.get(SubModel.PROPERTIES)).putAll(createElemMap(properties));
+		((Map<String, Object>) ret.get(SubModel.OPERATIONS)).putAll(createElemMap(operations));
 		return ret;
 	}
 

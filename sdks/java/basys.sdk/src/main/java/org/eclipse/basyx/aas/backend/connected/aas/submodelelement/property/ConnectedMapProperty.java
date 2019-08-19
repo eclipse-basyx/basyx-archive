@@ -7,6 +7,7 @@ import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.exception.TypeMismatchException;
 import org.eclipse.basyx.aas.api.resources.IMapProperty;
 import org.eclipse.basyx.aas.api.resources.PropertyType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
@@ -31,9 +32,9 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 		try {
 			// check whether the value already exists and call update or create accordingly
 			if(getValue(key) != null)
-				getProxy().updateElementValue(constructPath("value/" + key), value);
+				getProxy().updateElementValue(constructPath(Property.VALUE + "/" + key), value);
 			else
-				getProxy().createElement(constructPath("value/" + key), value);
+				getProxy().createElement(constructPath(Property.VALUE + "/" + key), value);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -42,7 +43,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	@Override
 	public void set(Map<String, Object> map) throws ServerException {
 		try {
-			getProxy().updateElementValue(constructPath("value"), map);
+			getProxy().updateElementValue(constructPath(Property.VALUE), map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -61,7 +62,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	@Override
 	public void remove(String key) throws ServerException, TypeMismatchException {
 		try {
-			getProxy().deleteElement(constructPath("value/" + key));
+			getProxy().deleteElement(constructPath(Property.VALUE + "/" + key));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -69,6 +70,6 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 
 	@SuppressWarnings("unchecked")
 	private Map<String, Object> getMap() {
-		return ((Map<String, Object>) getProxy().readElementValue(constructPath("value")));
+		return ((Map<String, Object>) getProxy().readElementValue(constructPath(Property.VALUE)));
 	}
 }

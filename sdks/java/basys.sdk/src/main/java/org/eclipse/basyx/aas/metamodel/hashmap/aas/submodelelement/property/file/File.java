@@ -4,6 +4,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.file.IFi
 import org.eclipse.basyx.aas.metamodel.facades.FileFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.DataElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.MimeType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 
 /**
  * A blob property as defined in DAAS document <br/>
@@ -13,8 +14,6 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Mime
  */
 public class File extends DataElement implements IFile{
 	private static final long serialVersionUID = 1L;
-	
-    public static final String VALUE="value";
 	
 	public static final String MIMETYPE="mimeType";
 
@@ -36,7 +35,7 @@ public class File extends DataElement implements IFile{
 		super();
 
 		// Save value
-		put(VALUE, value);
+		put(Property.VALUE, value);
 		put(MIMETYPE, mimeType);
 	}
 

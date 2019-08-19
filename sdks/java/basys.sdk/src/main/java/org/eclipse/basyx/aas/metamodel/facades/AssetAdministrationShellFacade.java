@@ -134,12 +134,12 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 
 	@Override
 	public String getId() {
-	return (String)map.get(AssetAdministrationShell.IDSHORT);
+	return (String)map.get(Referable.IDSHORT);
 	}
 
 	@Override
 	public void setId(String id) {
-		map.put(AssetAdministrationShell.IDSHORT, id);
+		map.put(Referable.IDSHORT, id);
 		
 	}
 
@@ -151,7 +151,7 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 	
 	@SuppressWarnings("unchecked")
 	public Set<ISubModel> getSubModelsHack() {
-		return (Set<ISubModel>) map.get("submodels");
+		return (Set<ISubModel>) map.get(AssetAdministrationShell.SUBMODELS);
 	}
 
 	@Override

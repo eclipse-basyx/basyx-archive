@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.PropertyType;
 import org.eclipse.basyx.aas.metamodel.facades.PropertyFacade;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.DataElement;
@@ -21,20 +22,17 @@ public class Property extends DataElement implements IProperty {
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	public static final String VALUE="value";
-	public static final String VALUEID="valueId";
-	public static final String SEMANTICID="semanticId";
-	public static final String VALUETYPE="valueType";
-	public static final String IDSHORT="idShort";
+	public static final String VALUE = "value";
+	public static final String VALUEID = "valueId";
+	public static final String VALUETYPE = "valueType";
 
 	/**
 	 * Constructor
 	 */
 	public Property() {
 		// Put attributes
-		put(VALUE, null);
-		put(VALUEID, null);
+		put(Property.VALUE, null);
+		put(Property.VALUEID, null);
 	}
 
 	/**
@@ -48,27 +46,27 @@ public class Property extends DataElement implements IProperty {
 	 */
 	public Property(Object value) {
 		// Put attributes
-		put(VALUEID, null);
+		put(Property.VALUEID, null);
 		setValue(value);
 	}
 	
 	public Property(Object value, Referable referable, String semanticId, Qualifier qualifier) {
 		this(value);
 		putAll(referable);
-		put(SEMANTICID, value);
+		put(HasSemantics.SEMANTICID, value);
 		putAll(qualifier);
 	}
 
 	@Override
 	public void setValue(Object value) {
-		put(VALUE, value);
-		put(VALUETYPE, PropertyValueTypeDefHelper.fromObject(value));
+		put(Property.VALUE, value);
+		put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(value));
 
 	}
 
 	@Override
 	public PropertyType getPropertyType() {
-		PropertyValueTypeDef type = PropertyValueTypeDefHelper.fromName((String) get(VALUETYPE));
+		PropertyValueTypeDef type = PropertyValueTypeDefHelper.fromName((String) get(Property.VALUETYPE));
 		if (type == PropertyValueTypeDef.Collection) {
 			return PropertyType.Collection;
 		} else if (type == PropertyValueTypeDef.Map) {
@@ -85,7 +83,7 @@ public class Property extends DataElement implements IProperty {
 
 	@Override
 	public void setId(String id) {
-		put(IDSHORT, id);
+		put(Referable.IDSHORT, id);
 	}
 
 	@Override

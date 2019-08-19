@@ -13,8 +13,8 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasKindFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedQualifiableFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedReferableFacade;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of IOperationVariable
@@ -28,13 +28,13 @@ public class ConnectedOperationVariable extends ConnectedSubmodelElement impleme
 	
 	@Override
 	public void setValue(ISubmodelElement value) {
-	getProxy().updateElementValue(constructPath(OperationVariable.VALUE), value);
+	getProxy().updateElementValue(constructPath(Property.VALUE), value);
 		
 	}
 
 	@Override
 	public ISubmodelElement getValue() {
-	return (ISubmodelElement)getProxy().readElementValue(constructPath(OperationVariable.VALUE));
+	return (ISubmodelElement)getProxy().readElementValue(constructPath(Property.VALUE));
 	}
 	
 	@Override
@@ -124,12 +124,12 @@ public class ConnectedOperationVariable extends ConnectedSubmodelElement impleme
 	}
 	@Override
 	public String getId() {
-	return (String) getProxy().readElementValue(constructPath(Operation.IDSHORT));
+	return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
 	public void setId(String id) {
-		getProxy().updateElementValue(constructPath(Operation.IDSHORT), id);
+		getProxy().updateElementValue(constructPath(Referable.IDSHORT), id);
 		
 	}
 

@@ -25,6 +25,7 @@ import org.eclipse.basyx.aas.metamodel.facades.QualifiableFacade;
 import org.eclipse.basyx.aas.metamodel.facades.ReferableFacade;
 import org.eclipse.basyx.aas.metamodel.facades.SubmodelElementCollectionFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
@@ -39,27 +40,24 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valu
 public class SubmodelElementCollection extends SubmodelElement implements IContainerProperty, VABElementContainer,ISubmodelElementCollection {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String VALUE="value";
 	public static final String ORDERED="ordered";
 	public static final String ALLOWDUPLICATES= "allowDuplicates";
 	public static final String ELEMENTS="elements";
-	public static final String PROPERTIES="dataElements";
-	public static final String OPERATIONS= "operations";
 
 	/**
 	 * Constructor
 	 */
 	public SubmodelElementCollection() {
 		// Put attributes
-		put(VALUE, new ArrayList<>());
+		put(Property.VALUE, new ArrayList<>());
 		put(ORDERED, true);
 		put(ALLOWDUPLICATES, true);
 
 		put(ELEMENTS, new HashMap<>());
 
 		// Helper for operations and properties
-		put(PROPERTIES, new HashMap<>());
-		put(OPERATIONS, new HashMap<>());
+		put(SubModel.PROPERTIES, new HashMap<>());
+		put(SubModel.OPERATIONS, new HashMap<>());
 	}
 
 	/**
@@ -76,15 +74,15 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	 */
 	public SubmodelElementCollection(Collection<SubmodelElement> value, boolean ordered, boolean allowDuplicates) {
 		// Put attributes
-		put(VALUE, value);
+		put(Property.VALUE, value);
 		put(ORDERED, ordered);
 		put(ALLOWDUPLICATES, allowDuplicates);
 
 		put(ELEMENTS, new HashMap<>());
 
 		// Helper for operations and properties
-		put(PROPERTIES, new HashMap<>());
-		put(OPERATIONS, new HashMap<>());
+		put(SubModel.PROPERTIES, new HashMap<>());
+		put(SubModel.OPERATIONS, new HashMap<>());
 
 		for (SubmodelElement elem : value) {
 			if (elem instanceof IProperty) {
@@ -122,13 +120,13 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IProperty> getProperties() {
-		return (Map<String, IProperty>) get(PROPERTIES);
+		return (Map<String, IProperty>) get(SubModel.PROPERTIES);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IOperation> getOperations() {
-		return (Map<String, IOperation>) get(OPERATIONS);
+		return (Map<String, IOperation>) get(SubModel.OPERATIONS);
 	}
 
 	@Override

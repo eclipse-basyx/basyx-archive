@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 
 
 /**
@@ -35,19 +37,19 @@ public class AASDescriptor extends HashMap<String, Object> {
 		// Invoke default constructor
 		
 		
-		put("idShort", aas.getId());
-		put("submodels", new LinkedList<SubmodelDescriptor>());
+		put(Referable.IDSHORT, aas.getId());
+		put(AssetAdministrationShell.SUBMODELS, new LinkedList<SubmodelDescriptor>());
 		
 		// Add identification and end point information
 		Identifier identifier =  new Identifier();
 		
 		identifier.setIdType(aas.getIdentification().getIdType());
 		identifier.setId(aas.getIdentification().getId());
-		put("identification", identifier);
+		put(Identifiable.IDENTIFICATION, identifier);
 		
 		HashMap<String, String> endpointWrapper = new HashMap<String, String>(); 
-		endpointWrapper.put("type", endpointType);
-		endpointWrapper.put("address", endpoint + "/aas");
+		endpointWrapper.put(AssetAdministrationShell.TYPE, endpointType);
+		endpointWrapper.put(AssetAdministrationShell.ADDRESS, endpoint + "/aas");
 		
 		put("endpoints", Arrays.asList(endpointWrapper));
 	}
@@ -59,17 +61,17 @@ public class AASDescriptor extends HashMap<String, Object> {
 		// Invoke default constructor
 		
 		
-		put("idShort", aas.getId());
-		put("submodels", new LinkedList<SubmodelDescriptor>());
+		put(Referable.IDSHORT, aas.getId());
+		put(AssetAdministrationShell.SUBMODELS, new LinkedList<SubmodelDescriptor>());
 		
 		// Add identification and end point information
 		Identifier identifier =  new Identifier();
 		
 		identifier.setIdType(aas.getIdentification().getIdType());
 		identifier.setId(aas.getIdentification().getId());
-		put("identification", identifier);
+		put(Identifiable.IDENTIFICATION, identifier);
 		
-		put("endpoints", aas.getEndpoints());
+		put(AssetAdministrationShell.ENDPOINTS, aas.getEndpoints());
 	}
 	
 	
@@ -90,7 +92,7 @@ public class AASDescriptor extends HashMap<String, Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getId() {
-		return new Identifier((Map<String, Object>) get("identification")).getId();
+		return new Identifier((Map<String, Object>) get(Identifiable.IDENTIFICATION)).getId();
 	}
 	
 	
@@ -99,7 +101,7 @@ public class AASDescriptor extends HashMap<String, Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getIdType() {
-		return new Identifier((Map<String, Object>) get("identification")).getIdType();
+		return new Identifier((Map<String, Object>) get(Identifiable.IDENTIFICATION)).getIdType();
 	}
 
 	
@@ -108,7 +110,7 @@ public class AASDescriptor extends HashMap<String, Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getFirstEndpoint() {
-		Object e = get("endpoints");
+		Object e = get(AssetAdministrationShell.ENDPOINTS);
 		// Extract String from endpoint in set and list representation
 		String endpoint = null;
 		if (e instanceof List<?>) {
@@ -123,7 +125,7 @@ public class AASDescriptor extends HashMap<String, Object> {
 			if (set.size() == 0) {
 				return null;
 			} else {
-				return (String) set.iterator().next().get("address");
+				return (String) set.iterator().next().get(AssetAdministrationShell.ADDRESS);
 			}
 		} else {
 			endpoint = null;
@@ -139,7 +141,7 @@ public class AASDescriptor extends HashMap<String, Object> {
 	@SuppressWarnings("unchecked")
 	public AASDescriptor addSubmodelDescriptor(SubmodelDescriptor desc) {
 		// Sub model descriptors are stored in a list
-		Collection<Map<String, Object>> submodelDescriptors = (Collection<Map<String, Object>>) get("submodels");
+		Collection<Map<String, Object>> submodelDescriptors = (Collection<Map<String, Object>>) get(AssetAdministrationShell.SUBMODELS);
 		
 		// Add new sub model descriptor to list
 		submodelDescriptors.add(desc);
@@ -157,7 +159,7 @@ public class AASDescriptor extends HashMap<String, Object> {
 	@SuppressWarnings("unchecked")
 	public SubmodelDescriptor getSubModelDescriptor(String subModelId) {
 		// Sub model descriptors are stored in a list
-		Collection<Map<String, Object>> submodelDescriptorMaps = (Collection<Map<String, Object>>) get("submodels");
+		Collection<Map<String, Object>> submodelDescriptorMaps = (Collection<Map<String, Object>>) get(AssetAdministrationShell.SUBMODELS);
 
 		System.out.println("Checking submodel desc");
 
@@ -181,7 +183,7 @@ public class AASDescriptor extends HashMap<String, Object> {
 
 
 	public String getAASId() {
-		return (String) get("idShort");
+		return (String) get(Referable.IDSHORT);
 	}
 }
 

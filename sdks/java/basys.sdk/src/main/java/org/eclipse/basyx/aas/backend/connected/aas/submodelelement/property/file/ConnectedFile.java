@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.fil
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.file.IFile;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.ConnectedDataElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.MimeType;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.blob.Blob;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.file.PathType;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -18,13 +19,13 @@ public class ConnectedFile extends ConnectedDataElement implements IFile {
 	
 	@Override
 	public void setValue(PathType value) {
-		getProxy().updateElementValue(constructPath(Blob.VALUE), value);
+		getProxy().updateElementValue(constructPath(Property.VALUE), value);
 		
 	}
 
 	@Override
 	public PathType getValue() {
-		return (PathType)getProxy().readElementValue(constructPath(Blob.VALUE));
+		return (PathType)getProxy().readElementValue(constructPath(Property.VALUE));
 	}
 
 	@Override
