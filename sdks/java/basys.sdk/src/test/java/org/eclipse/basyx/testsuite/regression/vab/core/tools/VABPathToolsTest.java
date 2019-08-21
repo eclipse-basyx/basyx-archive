@@ -1,5 +1,6 @@
 package org.eclipse.basyx.testsuite.regression.vab.core.tools;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -29,6 +30,7 @@ public class VABPathToolsTest {
 	String pathWithOneAddress = "http://AASServer//a/b/c";
 	String pathWithTwoAddress = "basyx://127.0.0.1:6889//http://AASServer//a/b/c";
 	String onlyAddress = "basyx://127.0.0.1:6889";
+	String pathWithoutAddressMultislash = "a//b///c";
 
 	/**
 	 * Tests remove address
@@ -71,6 +73,10 @@ public class VABPathToolsTest {
 			assertEquals("child", VABPathTools.splitPath(test)[1]);
 		}
 		assertNull(VABPathTools.splitPath(null));
+
+		// Assert that independent of number of slashs, splitting is always handled the
+		// same
+		assertArrayEquals(VABPathTools.splitPath(pathWithoutAddressMultislash), VABPathTools.splitPath(pathWithoutAddress));
 	}
 
 	/**

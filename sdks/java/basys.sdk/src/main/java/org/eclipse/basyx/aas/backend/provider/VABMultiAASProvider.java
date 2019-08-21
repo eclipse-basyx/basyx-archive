@@ -134,8 +134,8 @@ public class VABMultiAASProvider implements IModelProvider {
 		}
 
 		String[] elements = VABPathTools.splitPath(path);
-		if (elements.length >= 3) {
-			String aasId = elements[2];
+		if (elements.length >= 2) {
+			String aasId = elements[1];
 			return aasId;
 		} else {
 			return null;

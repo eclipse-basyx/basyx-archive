@@ -1,5 +1,8 @@
 package org.eclipse.basyx.vab.core.tools;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Utility functions to handle a VAB path
  * 
@@ -26,7 +29,16 @@ public class VABPathTools {
 		// Remove leading separator, otherwise /a leads to {"", "a"}
 		String fixedPath = removePrefix(path, SEPERATOR);
 
-		return fixedPath.split(SEPERATOR);
+		String[] splitted = fixedPath.split(SEPERATOR);
+		List<String> nonEmptySplitted = new ArrayList<>();
+		
+		// Remove empty entries 
+		for(String s : splitted) {
+			if(!s.isEmpty()) {
+				nonEmptySplitted.add(s);
+			}
+		}
+		return nonEmptySplitted.toArray(new String[nonEmptySplitted.size()]);
 	}
 
 	/**

@@ -181,6 +181,8 @@ public class VABElementProxy {
 
 		// Now combine both paths
 		if (addr != null && !addr.isEmpty()) {
+			// Double slashes are used to separate between address and path to be able to
+			// differentiate later on
 			return addr + "//" + trimmedPath;
 		} else {
 			return trimmedPath;
