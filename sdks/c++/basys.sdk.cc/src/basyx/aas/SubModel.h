@@ -1,7 +1,7 @@
 /*
  * SubModel.h
  *
- *      Author: kuhn
+ *      Author: kuhn, wendel
  */
 
 #ifndef AAS_SUBMODEL_H_
@@ -13,68 +13,32 @@
  * *********************************************************************************/
 
 // BaSyx includes
-#include <api/ISubModel.h>
+#include "api/ISubModel.h"
+#include "qualifier/IHasSemantics.h"
+
+#include <memory>
 
 
 /* *********************************************************************************
  * Sub Model base class
  * *********************************************************************************/
-class SubModel : public ISubModel {  // @suppress("Class has a virtual method and non-virtual destructor")
+class SubModel : public ISubModel
+{ 
+public:
+	SubModel();
 
+	virtual std::unordered_map<std::string, std::shared_ptr<IProperty>> getProperties();
+	virtual void setProperties(std::unordered_map<std::string, std::shared_ptr<IProperty>> properties);
+		
+	virtual std::unordered_map<std::string, std::shared_ptr<IOperation>> getOperations();
+	virtual void setOperations(std::unordered_map<std::string, std::shared_ptr<IOperation>> operations);
+		
+	virtual std::unordered_map<std::string, basyx::any> getElements();
 
-	// Constructor
-	public:
-
-		/**
-		 * Default constructor
-		 */
-		SubModel(std::string aasID, std::string aasTypeID, IElement *aasParent = 0) : ISubModel(aasID, aasTypeID, aasParent) {
-			// Do nothing
-		}
-
-
-
-	// Member functions
-	public:
-
-		/* *******************************************************
-		 * Retrieve list of sub model properties
-		 * *******************************************************/
-		virtual std::map<std::string, BRef<BType>> getProperties() {
-			// Create a new property list
-			std::map<std::string, BRef<BType>> result;
-
-			// Create a map iterator that points to beginning of map
-			std::map<std::string, int>::iterator it = rtti_propertyType.begin();
-
-			// Fill property list from RTTI table
-			while (it != rtti_propertyType.end())
-			{
-				// Accessing KEY from element pointed by it.
-				std::string name = it->first;                        // @suppress("Field cannot be resolved")
-
-				// Add result
-				// - For now, the property itself is not added yet
-				result.insert(std::make_pair(name, BRef<BType>(new BNullObject())));
-			}
-
-			// Return list of properties
-			return result;
-		}
-
-
-
-	// BaSyx RTTI table
-	public:
-
-		/**
-		 * Fill elements of BaSyx RTTI tables with exported members of this class
-		 */
-		BASYX_RTTI_START(SubModel, ISubModel)
-		BASYX_RTTI_END
+private:
+	std::unordered_map<std::string, std::shared_ptr<IProperty>> properties;
+	std::unordered_map<std::string, std::shared_ptr<IOperation>> operations;
+	std::unordered_map<std::string, basyx::any> submodel_elements;
 };
 
 #endif
-
-
-#endif /* AAS_SUBMODEL_H_ */

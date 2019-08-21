@@ -4,11 +4,15 @@
  *      Author: wendel
  */
 
+#ifndef BASYX_METAMODEL_ICONSTRAINT_H_
+#define BASYX_METAMODEL_ICONSTRAINT_H_
+
 class IConstraint
 {
 public:
-	IConstraint();
-	virtual ~IConstraint() = 0;
+	
+
+	virtual ~IConstraint() = default;
 };
 
 #endif

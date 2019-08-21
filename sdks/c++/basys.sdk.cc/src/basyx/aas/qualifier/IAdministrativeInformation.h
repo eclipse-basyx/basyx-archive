@@ -15,8 +15,9 @@
 class IAdministrativeInformation : public IHasDataSpecification
 {
 public:
-	IAdministrativeInformation();
-	virtual ~IAdministrativeInformation() = 0;
+	
+
+	virtual ~IAdministrativeInformation() = default;
 
 	virtual void setVersion(std::string version) = 0;
 	virtual std::string getVersion() = 0;

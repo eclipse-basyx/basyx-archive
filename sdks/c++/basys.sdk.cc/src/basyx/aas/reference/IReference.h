@@ -15,8 +15,9 @@
 class IReference
 {
 public:
-	IReference();
-	virtual ~IReference() = 0;
+	
+
+	virtual ~IReference() = default;
 
 	virtual std::vector<IKey> getKeys() = 0;
 	virtual void setKeys(std::vector<IKey> keys) = 0;

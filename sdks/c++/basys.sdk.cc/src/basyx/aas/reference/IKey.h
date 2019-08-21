@@ -13,8 +13,7 @@
 class IKey
 {
 public:
-	IKey();
-	~IKey();
+	virtual ~IKey() = 0;
 
 	virtual std::string getType() = 0;
 	virtual bool isLocal() = 0;

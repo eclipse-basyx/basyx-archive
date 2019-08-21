@@ -13,8 +13,9 @@
 class IAccessControlPolicyPoints
 {
 public:
-	IAccessControlPolicyPoints();
-	virtual ~IAccessControlPolicyPoints() = 0;
+	
+
+	virtual ~IAccessControlPolicyPoints() = default;
 
 	virtual void setPolicyAdministrationPoint(basyx::any obj) = 0;
 	virtual basyx::any getPolicyAdministrationPoint() = 0;

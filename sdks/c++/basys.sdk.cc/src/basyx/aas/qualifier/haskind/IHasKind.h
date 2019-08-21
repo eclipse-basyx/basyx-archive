@@ -13,8 +13,9 @@
 class IHasKind
 {
 public:
-	IHasKind();
-	virtual ~IHasKind() = 0;
+	
+
+	virtual ~IHasKind() = default;
 
 	virtual std::string getHasKindReference() = 0;
 	virtual void setHasKindReference(std::string kind) = 0;

@@ -9,15 +9,14 @@
 
 
 #include "IHasDataSpecification.h"
-#include "IHasKind.h"
+#include "qualifier/haskind/IHasKind.h"
 #include "IIdentifiable.h"
 #include "IReference.h"
 
 class IAsset : virtual IHasDataSpecification, IHasKind, IIdentifiable
 {
 public:
-	IAsset();
-	virtual ~IAsset() = 0;
+	virtual ~IAsset() = default;
 
 	virtual IReference getAssetIdentificationModel() = 0;
 	virtual void setAssetIdentificationModel(IReference submodel) = 0;

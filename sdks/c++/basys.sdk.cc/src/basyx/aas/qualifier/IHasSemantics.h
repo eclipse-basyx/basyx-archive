@@ -7,17 +7,16 @@
 #ifndef BASYX_METAMODEL_IHasSemantics_H_
 #define BASYX_METAMODEL_IHasSemantics_H_
 
-
-#include "IReference.h"
+#include <memory>
+#include "aas/reference/IReference.h"
 
 class IHasSemantics
 {
 public:
-	IHasSemantics();
-	virtual ~IHasSemantics() = 0;
+	virtual ~IHasSemantics() = default;
 
-	virtual IReference getSemanticId() = 0;
-	virtual void setSemanticID(IReference ref) = 0;
+	virtual std::shared_ptr<std::shared_ptr<IReference>> getSemanticId() = 0;
+	virtual void setSemanticID(std::shared_ptr<std::shared_ptr<IReference>> ref) = 0;
 };
 
 #endif

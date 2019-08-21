@@ -13,8 +13,9 @@
 class IRelationshipElement
 {
 public:
-	IRelationshipElement();
-	virtual ~IRelationshipElement() = 0;
+	
+
+	virtual ~IRelationshipElement() = default;
 
 	virtual void setFirst(IReference first) = 0;
 	virtual IReference getFirst() = 0;

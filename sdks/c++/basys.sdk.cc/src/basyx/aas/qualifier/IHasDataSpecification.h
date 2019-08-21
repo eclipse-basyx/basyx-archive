@@ -8,15 +8,14 @@
 #define BASYX_METAMODEL_IHasDataSpecification_H_
 
 
-#include "IReference.h"
+#include "reference/IReference.h"
 
 #include <vector>
 
 class IHasDataSpecification
 {
 public:
-  IHasDataSpecification();
-  virtual ~IHasDataSpecification() = 0;
+  virtual ~IHasDataSpecification() = default;
   
 	std::vector<IReference> getDataSpecificationReferences();
 	void setDataSpecificationReferences(std::vector<IReference> ref);

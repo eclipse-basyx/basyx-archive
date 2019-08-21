@@ -16,8 +16,7 @@
 class IDataSpecification
 {
 public:
-	IDataSpecification();
-	virtual ~IDataSpecification() = 0;
+	virtual ~IDataSpecification() = default;
 
 	virtual std::string getPreferredName() = 0;
 	virtual std::string getShortName() = 0;

@@ -14,8 +14,7 @@
 class IIdentifier
 {
 public:
-	IIdentifier();
-	~IIdentifier();
+	virtual ~IIdentifier() = default;
 
 	/**
 	 * Get value of 'idType' property

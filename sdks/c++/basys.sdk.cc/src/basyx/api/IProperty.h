@@ -2,25 +2,34 @@
  * IProperty.h
  *
  *  Created on: 29.04.2018
- *      Author: kuhn
+ *      Author: kuhn, wendel
  */
-
-#define API_IPROPERTY_H_
-
 #ifndef API_IPROPERTY_H_
 #define API_IPROPERTY_H_
 
+#include "IElement.h"
+#include "types/BaSysTypes.h"
+
+enum PropertyType
+{
+	Single, Collection, Map, Container
+};
 
 
 /* *********************************************************************************
  * Property interface
  * *********************************************************************************/
+class IProperty : public IElement 
+{
 
-class IProperty {
+public:
+	virtual PropertyType getPropertyType() = 0;
+	
+	virtual void setValue(basyx::any obj) = 0;
+	virtual basyx::any getValue() = 0;
 
-	//////////////////////////////////////////////////////////////
-	// Exported API
-	public:
+	virtual void setValueId(basyx::any obj) = 0;
+	virtual basyx::any getValueId() = 0;
 
 };
 
