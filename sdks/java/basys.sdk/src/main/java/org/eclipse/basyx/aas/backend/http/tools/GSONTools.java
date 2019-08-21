@@ -43,12 +43,13 @@ public class GSONTools implements Serializer {
 	public static final String INDEX = "index";
 	public static final String OPERATION = "operation";
 	public static final String LAMBDA = "lambda";
-	public static final String TYPE = "_basystype";
+	public static final String BASYXFUNCTIONTYPE = "_basyxFunctionType";
+	public static final String BASYXINVOCABLE = "_basyxInvocable";
 	public static final String LIST = "list";
 	public static final String SET = "set";
 	public static final String BASYXTYPE = "_basyxTypes";
 	public static final String BASYXVALUE = "_value";
-	public static final String VALUE = "value";
+	public static final String BASYXFUNCTIONVALUE = "_basyxFunctionValue";
 
 	/**
 	 * JsonParser reference
@@ -219,12 +220,12 @@ public class GSONTools implements Serializer {
 	 * @return
 	 */
 	private Object deserializeJsonObject(JsonObject map) {
-		if (map.has(TYPE)) {
-			if (map.get(TYPE).getAsString().equals(OPERATION)) {
-				return "OPERATION!!";
+		if (map.has(BASYXFUNCTIONTYPE)) {
+			if (map.get(BASYXFUNCTIONTYPE).getAsString().equals(OPERATION)) {
+				return BASYXINVOCABLE;
 			} else {
 				// Type equals Lambda
-				return deserializeObjectFromString(map.get(VALUE).getAsString());
+				return deserializeObjectFromString(map.get(BASYXFUNCTIONVALUE).getAsString());
 			}
 		} else {
 			return deserializeToMap(map);
@@ -510,11 +511,11 @@ public class GSONTools implements Serializer {
 		JsonObject target = new JsonObject();
 		// Serializable functions will be serialized.
 		// - Serialize operation kind
-		target.add(TYPE, new JsonPrimitive(LAMBDA));
+		target.add(BASYXFUNCTIONTYPE, new JsonPrimitive(LAMBDA));
 
 		// - Add value
 		String serialized = serializeObjectToString(value);
-		target.add(VALUE, new JsonPrimitive(serialized));
+		target.add(BASYXFUNCTIONVALUE, new JsonPrimitive(serialized));
 
 		return target;
 	}
@@ -529,7 +530,7 @@ public class GSONTools implements Serializer {
 		JsonObject target = new JsonObject();
 		// Not serializable functions will be not be serialized.
 		// - Serialize operation kind
-		target.add(TYPE, new JsonPrimitive(OPERATION));
+		target.add(BASYXFUNCTIONTYPE, new JsonPrimitive(OPERATION));
 
 		return target;
 	}
