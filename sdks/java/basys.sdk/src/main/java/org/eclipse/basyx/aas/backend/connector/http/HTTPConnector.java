@@ -10,7 +10,6 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.connector.IBaSyxConnector;
-import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 
@@ -138,19 +137,6 @@ public class HTTPConnector implements IBaSyxConnector {
 
 		return part1 + "/" + part2;
 	}
-
-	/**
-	 * Create servicepath depending on server technology
-	 * 
-	 * @param qualifier
-	 *            refers to a qualifier "properties", "operations" or "events"
-	 * @param path
-	 *            can be null if a type qualifier and submodel is specified
-	 */
-	public String buildPath(String aasID, String aasSubmodelID, String path, String qualifier) {
-		return BaSysID.instance.buildPath(aasID, aasSubmodelID, path, qualifier);
-	}
-
 	
 	/**
 	 * Perform a HTTP get request
