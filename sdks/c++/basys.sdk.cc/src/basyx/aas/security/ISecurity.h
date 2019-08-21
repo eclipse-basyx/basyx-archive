@@ -13,8 +13,9 @@
 class ISecurity
 {
 public:
-	ISecurity();
-	virtual ~ISecurity() = 0;
+	
+
+	virtual ~ISecurity() = default;
 
 	virtual basyx::any getAccessControlPolicyPoints() = 0;
 	virtual void setAccessControlPolicyPoints(basyx::any obj) = 0;

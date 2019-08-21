@@ -5,6 +5,9 @@
 project(basyx)
 add_library(basyx)
 
+file(GLOB_RECURSE sources aas/*.cpp)
+file(GLOB_RECURSE headers aas/*.h)
+
 target_sources(basyx
     PRIVATE
         aas/AssetAdministrationShell.h
@@ -24,9 +27,12 @@ target_sources(basyx
         json/typeid.h
         parameter/BParameter.h
         types/BaSysTypes.h
+        ${sources}
+        ${headers}
 )
 
-target_include_directories(basyx PUBLIC ${PROJECT_SOURCE_DIR} ${CMAKE_SOURCE_DIR} ) 
+target_include_directories(basyx PRIVATE ${PROJECT_SOURCE_DIR}/aas)
+target_include_directories(basyx PUBLIC ${PROJECT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
 target_link_libraries(basyx util json)
 
 diagnostics_print(basyx)

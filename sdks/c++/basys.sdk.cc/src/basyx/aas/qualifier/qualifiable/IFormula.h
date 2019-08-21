@@ -15,8 +15,9 @@
 class IFormula
 {
 public:
-	IFormula();
-	virtual ~IFormula() = 0;
+	
+
+	virtual ~IFormula() = default;
 
 	virtual void setDependsOn(std::vector<IReference> dependsOn) = 0;
 	virtual  std::vector<IReference> getDependsOn() = 0;

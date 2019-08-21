@@ -15,8 +15,9 @@
 class IQualifiable
 {
 public:
-	IQualifiable();
-	virtual ~IQualifiable() = 0;
+	
+
+	virtual ~IQualifiable() = default;
 
 	virtual void setQualifier(std::vector<IConstraint> qualifiers) = 0;
 	virtual std::vector<IConstraint> getQualifier() = 0;

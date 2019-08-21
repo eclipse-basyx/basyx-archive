@@ -14,8 +14,9 @@
 class IFile
 {
 public:
-	IFile();
-	virtual ~IFile() = 0;
+	
+
+	virtual ~IFile() = default;
 
 	virtual void setValue(PathType value) = 0;
 	virtual PathType getValue() = 0;

@@ -8,7 +8,7 @@
 #define BASYX_METAMODEL_IView_H_
 
 
-#include "IHasSemantics.h"
+#include "qualifier/IHasSemantics.h"
 #include "IHasDataSpecification.h"
 #include "IReferable.h"
 
@@ -17,8 +17,9 @@
 class IView : virtual IHasSemantics, IHasDataSpecification, IReferable
 {
 public:
-	IView();
-	virtual ~IView() = 0;
+	
+
+	virtual ~IView() = default;
 
 	virtual void setContainedElement(std::vector<IReference> references) = 0;
 	virtual std::vector<IReference> getContainedElement() = 0;

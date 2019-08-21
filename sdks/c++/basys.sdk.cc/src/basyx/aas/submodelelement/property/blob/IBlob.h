@@ -14,8 +14,9 @@
 class IBlob
 {
 public:
-	IBlob();
-	virtual ~IBlob() = 0;
+	
+
+	virtual ~IBlob() = default;
 
 	virtual void setValue(BlobType value) = 0;
 	virtual BlobType getValue() = 0;

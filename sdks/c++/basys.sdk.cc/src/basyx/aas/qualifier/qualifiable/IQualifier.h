@@ -17,8 +17,9 @@
 class IQualifier
 {
 public:
-	IQualifier();
-	virtual ~IQualifier() = 0;
+	
+
+	virtual ~IQualifier() = default;
 
 	virtual void setQualifierType(std::string obj) = 0;
 	virtual std::string getQualifierType() = 0;

@@ -1,7 +1,7 @@
 /*
  * ISubModel.h
  *
- *      Author: kuhn
+ *      Author: kuhn, wendel
  */
 
 #ifndef API_ISUBMODEL_H_
@@ -18,8 +18,14 @@
 
 // BaSyx includes
 #include "IProperty.h"
-#include "IElement.h"
+#include "api/IElement.h"
+#include "aas/qualifier/IHasSemantics.h"
+#include "aas/qualifier/IIdentifiable.h"
+#include "aas/qualifier/IHasDataSpecification.h"
+#include "aas/qualifier/haskind/IHasKind.h"
+#include "IOperation.h"
 #include "parameter/BParameter.h"
+#include "types/BaSysTypes.h"
 
 
 
@@ -27,27 +33,18 @@
  * Sub model interface class
  * *********************************************************************************/
 
-class ISubModel : public IElement {
-
-
-	/* *********************************************************************************
-	 * ISubModel constructor
-	 * *********************************************************************************/
-	public:
-		// Constructor
-		ISubModel(std::string aasID, std::string aasTypeID, IElement *aasParent = nullptr) : IElement(aasID, aasTypeID, aasParent) {
-			// Do nothing
-		}
-
-
-	//////////////////////////////////////////////////////////////
-	// Exported API
-	public:
-
-		/* *******************************************************
-		 * Retrieve list of sub model properties
-		 * *******************************************************/
-		virtual std::map<std::string, BRef<BType>> getProperties() = 0;
+class ISubModel : public IHasSemantics, public IIdentifiable, public IHasDataSpecification, public IHasKind  
+{
+	
+public:
+	virtual ~ISubModel() = default;
+	virtual std::unordered_map<std::string, std::shared_ptr<IProperty>> getProperties() = 0;
+	virtual void setProperties(std::unordered_map<std::string, std::shared_ptr<IProperty>> properties) = 0;
+	
+	virtual std::unordered_map<std::string, std::shared_ptr<IOperation>> getOperations() = 0;
+	virtual void setOperations(std::unordered_map<std::string, std::shared_ptr<IOperation>> operations) = 0;
+	
+	virtual std::unordered_map<std::string, basyx::any> getElements() = 0;
 
 };
 

@@ -16,8 +16,9 @@
 class IConceptDictionary : virtual IReferable
 {
 public:
-	IConceptDictionary();
-	virtual ~IConceptDictionary() = 0;
+	
+
+	virtual ~IConceptDictionary() = default;
 
 	virtual std::vector<std::string> getConceptDescription() = 0;
 	virtual void setConceptDescription(std::vector<std::string> ref) = 0;

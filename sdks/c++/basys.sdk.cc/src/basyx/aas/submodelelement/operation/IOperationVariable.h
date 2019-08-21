@@ -8,16 +8,17 @@
 #define BASYX_METAMODEL_IOperationVariable_H_
 
 
-#include "ISubmodelElement.h"
+#include "submodelelement/ISubmodelElement.h"
+
+#include <memory>
 
 class IOperationVariable
 {
 public:
-	IOperationVariable();
-	virtual ~IOperationVariable() = 0;
+	virtual ~IOperationVariable() = default;
 
-	virtual void setValue(ISubmodelElement value) = 0;
-	virtual ISubmodelElement getValue() = 0;
+	virtual void setValue(std::shared_ptr<ISubmodelElement> value) = 0;
+	virtual std::shared_ptr<ISubmodelElement> getValue() = 0;
 };
 
 #endif

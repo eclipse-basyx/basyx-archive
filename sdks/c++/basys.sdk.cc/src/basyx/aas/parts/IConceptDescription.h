@@ -16,8 +16,9 @@
 class IConceptDescription : virtual IHasDataSpecification, IIdentifiable
 {
 public:
-	IConceptDescription();
-	virtual ~IConceptDescription() = 0;
+	
+
+	virtual ~IConceptDescription() = default;
 
 	virtual std::vector<std::string> getisCaseOf() = 0;
 	virtual void setIscaseOf(std::vector<std::string> ref) = 0;

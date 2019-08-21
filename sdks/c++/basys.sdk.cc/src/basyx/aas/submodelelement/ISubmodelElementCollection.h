@@ -16,8 +16,9 @@
 class ISubmodelElementCollection
 {
 public:
-	ISubmodelElementCollection();
-	virtual ~ISubmodelElementCollection() = 0;
+	
+
+	virtual ~ISubmodelElementCollection() = default;
 
 	virtual void setValue(objectCollection_t value) = 0;
 	virtual objectCollection_t getValue() = 0;

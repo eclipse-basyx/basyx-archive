@@ -14,8 +14,9 @@
 class IReferenceElement : virtual IProperty
 {
 public:
-	IReferenceElement();
-	virtual ~IReferenceElement() = 0;
+	
+
+	virtual ~IReferenceElement() = default;
 
 	virtual void setValue(IReference ref) = 0;
 	virtual IReference getValue() = 0;
