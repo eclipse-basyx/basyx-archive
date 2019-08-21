@@ -25,11 +25,6 @@ public class AASTCPServer implements BaSyxService {
 	protected String name = null;
 
 	/**
-	 * Service end flag
-	 */
-	protected boolean hasExecutionEnded = false;
-
-	/**
 	 * Main method
 	 */
 	public AASTCPServer(IModelProvider provider) {
@@ -51,17 +46,14 @@ public class AASTCPServer implements BaSyxService {
 	}
 
 	/**
-	 * Shutdown TCP server
+	 * Stop the TCP server, blocks until the server has stopped
 	 * 
 	 * @throws IOException
 	 */
 	@Override
 	public void stop() {
-		// Indicate end of execution
-		hasExecutionEnded = true;
-
-		// Shutdown server
-		tcpServer.shutdown();
+		// Stops the server
+		tcpServer.stop();
 	}
 
 	/**
@@ -86,18 +78,16 @@ public class AASTCPServer implements BaSyxService {
 	}
 
 	/**
-	 * Wait for end of runnable
+	 * Wait for end of thread
 	 */
 	public void waitFor() {
-		// Wait for thread end
 		tcpServer.waitFor();
 	}
 
 	/**
-	 * Indicate if this service has ended
+	 * Indicate if the server has ended
 	 */
 	public boolean hasEnded() {
-		// Return execution ended flag
-		return hasExecutionEnded;
+		return tcpServer.hasEnded();
 	}
 }

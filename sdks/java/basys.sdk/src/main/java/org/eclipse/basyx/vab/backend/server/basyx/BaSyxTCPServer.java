@@ -135,7 +135,7 @@ public class BaSyxTCPServer<T extends IModelProvider> implements Runnable, BaSyx
 	 * 
 	 * @throws IOException
 	 */
-	public void shutdown() {
+	protected void shutdown() {
 		// End thread
 		exit = true;
 		
@@ -164,7 +164,7 @@ public class BaSyxTCPServer<T extends IModelProvider> implements Runnable, BaSyx
 
 
 	/**
-	 * Stop the server
+	 * Stop the server and block until the server thread is finished
 	 */
 	@Override
 	public void stop() {
@@ -213,7 +213,7 @@ public class BaSyxTCPServer<T extends IModelProvider> implements Runnable, BaSyx
 	 */
 	public boolean hasEnded() {
 		// Return exit flag that indicates requested end of service execution
-		return exit;
+		return !serverSockChannel.isOpen();
 	}
 }
 
