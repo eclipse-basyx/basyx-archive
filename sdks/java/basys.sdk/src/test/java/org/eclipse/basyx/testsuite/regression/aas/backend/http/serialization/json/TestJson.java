@@ -21,6 +21,7 @@ import java.util.function.Function;
 
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
+import org.eclipse.basyx.testsuite.support.vab.stub.elements.SimpleVABElement;
 import org.junit.Test;
 
 import com.google.gson.JsonArray;
@@ -37,6 +38,12 @@ import jersey.repackaged.com.google.common.collect.Sets;
  */
 public class TestJson {
 	GSONTools tools = new GSONTools(new DefaultTypeFactory());
+
+	public static void main(String[] args) {
+		GSONTools tools = new GSONTools(new DefaultTypeFactory());
+
+		System.out.println(tools.deserialize(tools.serialize(new SimpleVABElement())));
+	}
 
 	/**
 	 * Tests if a double is correctly (de-)serialized
@@ -130,7 +137,7 @@ public class TestJson {
 	 */
 	@Test
 	public void testList() {
-		String strComplexOrdered = "[{\"index\": 0, \"a\": 2}, {\"index\": 1, \"a\": false}]";
+		String strComplexOrdered = "[{\"" + GSONTools.INDEX + "\": 0, \"a\": 2}, {\"" + GSONTools.INDEX + "\": 1, \"a\": false}]";
 		List<Map<String, Object>> orderedCollection = new ArrayList<>();
 		orderedCollection.add(Collections.singletonMap("a", 2));
 		orderedCollection.add(Collections.singletonMap("a", false));
@@ -139,10 +146,10 @@ public class TestJson {
 
 		JsonObject o1 = new JsonObject();
 		o1.add("a", new JsonPrimitive(2));
-		o1.add("index", new JsonPrimitive(0));
+		o1.add(GSONTools.INDEX, new JsonPrimitive(0));
 		JsonObject o2 = new JsonObject();
 		o2.add("a", new JsonPrimitive(false));
-		o2.add("index", new JsonPrimitive(1));
+		o2.add(GSONTools.INDEX, new JsonPrimitive(1));
 
 		JsonArray ordered = new JsonArray();
 		ordered.add(o1);
@@ -188,7 +195,7 @@ public class TestJson {
 	@Test
 	public void testNonSerializableFunction() {
 		JsonObject functionObject = new JsonObject();
-		functionObject.add(GSONTools.TYPE, new JsonPrimitive(GSONTools.OPERATION));
+		functionObject.add(GSONTools.BASYXFUNCTIONTYPE, new JsonPrimitive(GSONTools.OPERATION));
 
 		Consumer<Integer> testConsumer = x -> {
 		};
@@ -196,7 +203,7 @@ public class TestJson {
 		assertEquals(functionObject.toString(), tools.serialize(testConsumer));
 		
 		
-		String operation = "OPERATION!!";
+		String operation = GSONTools.BASYXINVOCABLE;
 		assertEquals(operation, tools.deserialize(functionObject.toString()));
 
 	}
@@ -223,8 +230,8 @@ public class TestJson {
 		String encoded = Base64.getEncoder().encodeToString(outStream.toByteArray());
 
 		JsonObject functionObject = new JsonObject();
-		functionObject.add(GSONTools.TYPE, new JsonPrimitive(GSONTools.LAMBDA));
-		functionObject.add(GSONTools.VALUE, new JsonPrimitive(encoded));
+		functionObject.add(GSONTools.BASYXFUNCTIONTYPE, new JsonPrimitive(GSONTools.LAMBDA));
+		functionObject.add(GSONTools.BASYXFUNCTIONVALUE, new JsonPrimitive(encoded));
 
 		assertEquals(functionObject.toString(), tools.serialize(testFunction));
 
