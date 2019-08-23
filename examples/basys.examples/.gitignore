@@ -1,7 +1,7 @@
 .classpath
 .project
 
-
+regressiontest/
 target/
 pom.xml.tag
 pom.xml.releaseBackup
