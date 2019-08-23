@@ -28,13 +28,13 @@ public:
 	* I.E.: basyx://127.0.0.1:6998/somepath results in a vector looking like:
 	* ["basyx:", "", "127.0.0.1:6998", "somepath"]
 	*/
-	explicit VABPath(const std::string & path);
+	VABPath(const std::string & path);
 
 	/**
 	* Constructs a VABPath object.
-	* Just copies the elements vector. 
+	* Just copies the elements vector.
 	*/
-	explicit VABPath(const std::vector<std::string> & elements);
+	VABPath(const std::vector<std::string> & elements);
 
 	/**
 	* The last element of the path is returned.
@@ -50,7 +50,7 @@ public:
 	* ["basyx:", "", "127.0.0.1:6998", "somepath"]
 	*/
 	const std::vector<std::string> getElements() const;
-	
+
 	/**
 	* Constructs a new VABPath object, with just the parent-path contained.
 	* I.e.: "basyx://127.0.0.1:6998/somepaths"
@@ -69,7 +69,12 @@ public:
 	void append(const std::string & path);
 
 	/**
-	* Constructs a new VABPath object, with just the parent-path contained. 
+	* Appends the given path to the existing path.
+	*/
+	void append(const VABPath & path);
+
+	/**
+	* Constructs a new VABPath object, with just the parent-path contained.
 	* I.e.: "basyx://127.0.0.1:6998/somepath//https://localhost/test/operations"
 	* will result in "basyx://127.0.0.1:6998/somepath"
 	*/
@@ -100,6 +105,16 @@ public:
 	* Returns the path without the address-entry.
 	*/
 	std::string toStringWithoutEntry() const;
+
+	/**
+	* Addition of two pathes, same functionality as append but returns a new path object.
+	*/
+	VABPath operator + (VABPath const & other);
+
+	/**
+	* Operator for implicit cast to std::string.
+	*/
+	operator std::string() const;
 
 	const bool isValidPath() const;
 	const bool isOperationPath() const;

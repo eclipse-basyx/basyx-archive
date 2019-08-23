@@ -5,7 +5,7 @@
 
 const std::string VABPath::emptyElement{ "" };
 const std::string VABPath::operationsString{ "operations" };
-const char VABPath::delimiter{'/'};
+const char VABPath::delimiter{ '/' };
 
 
 VABPath::VABPath(const std::string & path) :
@@ -42,7 +42,7 @@ VABPath::VABPath(const std::string & path) :
 	isValid = true;
 }
 
-VABPath::VABPath(const std::vector<std::string> & elements):
+VABPath::VABPath(const std::vector<std::string> & elements) :
 	elements(elements),
 	isOperation(false),
 	isValid(false)
@@ -99,11 +99,16 @@ void VABPath::removePrefix(const std::string & prefix)
 		elements.erase(this->elements.begin());
 }
 
+void VABPath::append(const VABPath & path)
+{
+	this->append(path.toString());
+}
+
 void VABPath::append(const std::string & path)
 {
 	// construct new path 
 	VABPath appending_path = VABPath(path);
-	
+
 	// if second path is operation, this one is operation
 	this->isOperation = appending_path.isOperationPath();
 	// paths are only valid if both paths are valid
@@ -149,7 +154,7 @@ std::string VABPath::toString() const {
 		return "";
 
 	std::string str;
-	
+
 	//for each element there is a delimiter in string
 	for (const auto & element : elements)
 		str += element + delimiter;
@@ -172,6 +177,18 @@ std::string VABPath::toStringWithoutEntry() const
 	return entryless.toString();
 }
 
+VABPath VABPath::operator+ (VABPath const & other)
+{
+	VABPath new_path(this->toString());
+	new_path.append(other);
+	return new_path;
+}
+
+VABPath::operator std::string() const
+{
+	return this->toString();
+}
+
 const bool VABPath::isValidPath() const
 {
 	return this->isValid;
@@ -184,7 +201,7 @@ const bool VABPath::isOperationPath() const
 
 const bool VABPath::isEmpty() const
 {
-	if(!this->elements.empty()) 
+	if (!this->elements.empty())
 		return this->elements.front().empty();
 	return true;
 }

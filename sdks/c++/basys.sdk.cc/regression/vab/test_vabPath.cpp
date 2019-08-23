@@ -6,15 +6,16 @@
  */
 
 #include "gtest/gtest.h"
-
 #include "backends/provider/vab/VABPath.h"
+
+#include <memory>
 
 
 TEST(TestBaSyxVABPath, TestConstructionWithSingleSubPath)
 {
 	std::string path = "basyx://127.0.0.1:6998/somepath";
 	std::unique_ptr<VABPath> vabpath(new VABPath(path));
-	
+
 	auto elements = vabpath->getElements();
 	ASSERT_EQ(path, vabpath->toString());
 	// should be 4 elements, because the empty element between basyx and ip address
@@ -47,7 +48,7 @@ TEST(TestBaSyxVABPath, TestConstructionWithElementsListOperations)
 	auto elements = vabpath->getElements();
 
 	std::string path = "basyx://127.0.0.1:6998/operations";
-	
+
 	//the construction of a path should not change anything
 	ASSERT_EQ(4, elements.size());
 	ASSERT_EQ(path, vabpath->toString());
@@ -88,7 +89,7 @@ TEST(TestBaSyxVABPath, TestGetLastElement)
 TEST(TestBaSyxVABPath, TestGetParentPath)
 {
 	std::unique_ptr<VABPath> vabpath(new VABPath("basyx://127.0.0.1:6998/test/"));
-	
+
 	ASSERT_EQ("basyx://127.0.0.1:6998", vabpath->getParentPath().toString());
 }
 
@@ -140,7 +141,7 @@ TEST(TestBaSyxVABPath, TestToStringWithoutPrefix)
 
 	auto new_path = vabpath->toStringWithoutPrefix("basyx:");
 	ASSERT_EQ("127.0.0.1:6998/test", new_path);
-	
+
 	// operation should not change anything at the path
 	ASSERT_EQ(path, vabpath->toString());
 }
@@ -251,7 +252,7 @@ TEST(TestBaSyxVABPath, TestRemoveEntry)
 
 	ASSERT_EQ(path_without_entry, vabpath->toString());
 }
- 
+
 TEST(TestBaSyxVABPath, TestRemoveEntryIsPath)
 {
 	std::string path = "http://192.168.0.0/example";
@@ -273,7 +274,7 @@ TEST(TestBaSyxVABPath, TestToStringWithoutEntry)
 
 	std::string path = entry + "//" + second_path + "//" + third_path;
 	std::unique_ptr<VABPath> vabpath(new VABPath(path));
-	
+
 	std::string path_without_entry = second_path + "//" + third_path;
 
 	// string should be without empty
@@ -292,6 +293,34 @@ TEST(TestBaSyxVABPath, TestToStringWithoutEntryIsPath)
 	ASSERT_EQ("", vabpath->toStringWithoutEntry());
 	// but path should be the same anymore
 	ASSERT_EQ(path, vabpath->toString());
+}
+
+TEST(TestBaSyxVABPath, TestAdditionOfPaths)
+{
+	std::string path = "basyx://127.0.0.1:6998/operations";
+	std::string second_path = "http://192.168.0.0/example";
+
+	std::shared_ptr<VABPath> vabpath1(new VABPath(path));
+	std::shared_ptr<VABPath> vabpath2(new VABPath(second_path));
+
+	auto vabpath = *vabpath1.get() + *vabpath2.get();
+
+	// string should be the same
+	ASSERT_EQ(path + "//" + second_path, vabpath.toString());
+	// but path 1 and 2 should be the same anymore
+	ASSERT_EQ(path, vabpath1->toString());
+	ASSERT_EQ(second_path, vabpath2->toString());
+}
+
+TEST(TestBaSyxVABPath, ImplicitConversionToString)
+{
+	std::string path = "basyx://127.0.0.1:6998/operations";
+
+	std::shared_ptr<VABPath> vabpath(new VABPath(path));
+
+	// string should be the same
+	std::string path_string = *vabpath;
+	ASSERT_EQ(path, path_string);
 }
 
 TEST(TestBaSyxVABPath, TestEmptyPath)
