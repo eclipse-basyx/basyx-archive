@@ -86,6 +86,6 @@ public class TestGateway {
 		VABElementProxy proxy = manager.connectToVABElement("Elem");
 
 		// Test if the value is retrieved correctly
-		assertEquals(10, proxy.readElementValue("propertyA"));
+		assertEquals(10, proxy.getModelPropertyValue("propertyA"));
 	}
 }

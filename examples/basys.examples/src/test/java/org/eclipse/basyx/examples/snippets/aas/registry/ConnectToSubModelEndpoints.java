@@ -120,10 +120,10 @@ public class ConnectToSubModelEndpoints {
 		//     end point that will host the AAS sub model.
 		//   - FIXME: This should actually be a urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001 element
 		//            to guarantee a unique AAS end point
-		connSubModel.createElement("", new HashMap<String, Object>());
-		connSubModel.createElement("aas", new HashMap<String, Object>());
-		connSubModel.createElement("aas/submodels", new HashMap<String, Object>());
-		connSubModel.createElement("aas/submodels/exampleSM", submodel);
+		connSubModel.createValue("", new HashMap<String, Object>());
+		connSubModel.createValue("aas", new HashMap<String, Object>());
+		connSubModel.createValue("aas/submodels", new HashMap<String, Object>());
+		connSubModel.createValue("aas/submodels/exampleSM", submodel);
 		
 	
 		// Connect to sub model using BaSyx SDK

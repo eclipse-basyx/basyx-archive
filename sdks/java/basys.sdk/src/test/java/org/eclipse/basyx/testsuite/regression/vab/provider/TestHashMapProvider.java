@@ -44,7 +44,7 @@ public class TestHashMapProvider extends TestProvider {
 		// Test invalid reference
 		VABElementProxy connVABElement = getConnectionManager().connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 		try {
-			connVABElement.readElementValue("structure/list/byRef_23");
+			connVABElement.getModelPropertyValue("structure/list/byRef_23");
 			fail();
 		} catch (ServerException e) {
 			assertTrue(e.getType().contains("InvalidListReferenceException"));

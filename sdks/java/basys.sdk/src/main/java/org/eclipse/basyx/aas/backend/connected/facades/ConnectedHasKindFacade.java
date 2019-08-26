@@ -18,12 +18,12 @@ public class ConnectedHasKindFacade  extends ConnectedElement implements IHasKin
 
 	@Override
 	public String getHasKindReference() {
-		return (String) getProxy().readElementValue(constructPath(HasKind.KIND));
+		return (String) getProxy().getModelPropertyValue(constructPath(HasKind.KIND));
 	}
 
 	@Override
 	public void setHasKindReference(String kind) {
-		getProxy().updateElementValue(constructPath(HasKind.KIND), kind);
+		getProxy().setModelPropertyValue(constructPath(HasKind.KIND), kind);
 		
 	}
 

@@ -44,18 +44,18 @@ public class TestCFGProvider {
 
 		
 		// Get property value
-		Object value1 = connSubModel.readElementValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1/value");
+		Object value1 = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1/value");
 		System.out.println("Res:"+value1);
 		System.out.println("ResC:"+value1.getClass());
 		assertTrue(value1.equals("exampleStringValue"));
 
 		
 		// Get property value
-		Object value2 = connSubModel.readElementValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2/value");
+		Object value2 = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2/value");
 		assertTrue(value2.equals("12"));
 
 		// Get property value
-		Object value3 = connSubModel.readElementValue("/aas/submodels/sampleCFG/dataElements/cfgProperty3/value");
+		Object value3 = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty3/value");
 		assertTrue(value3.equals("45.8"));
 	}
 }

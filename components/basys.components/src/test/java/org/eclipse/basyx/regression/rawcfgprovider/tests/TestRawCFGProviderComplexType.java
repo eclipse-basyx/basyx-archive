@@ -49,7 +49,7 @@ public class TestRawCFGProviderComplexType {
 		
 		// Read element value back and make sure that complex element does not exist yet
 		@SuppressWarnings("unused")
-		Object complexElement1 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/complexProperty");
+		Object complexElement1 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty");
 		//assertTrue(complexElement1 == null);
 
 		
@@ -67,25 +67,25 @@ public class TestRawCFGProviderComplexType {
 
 		
 		// Create new property value
-		connSubModel.createElement("/aas/submodels/rawSampleCFG/complexProperty", complexType);
+		connSubModel.createValue("/aas/submodels/rawSampleCFG/complexProperty", complexType);
 		// - Read values back
-		Object value1 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/complexProperty/prop1");
+		Object value1 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty/prop1");
 		assertTrue((int) value1 == 12);
-		Object value2 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/complexProperty/prop2");
+		Object value2 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty/prop2");
 		assertTrue((int) value2 == 13);
-		Object value3 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/complexProperty/prop3");
+		Object value3 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty/prop3");
 		assertTrue(value3.equals("abc"));
-		Object value4 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/complexProperty/prop4/prop1");
+		Object value4 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty/prop4/prop1");
 		assertTrue((int) value4 == 21);
-		Object value5 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/complexProperty/prop4/prop2");
+		Object value5 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty/prop4/prop2");
 		assertTrue((int) value5 == 22);
-		Object value6 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/complexProperty/prop4/prop3");
+		Object value6 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty/prop4/prop3");
 		assertTrue(value6.equals("def"));
-		Object value7 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/complexProperty/prop4/prop4");
+		Object value7 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty/prop4/prop4");
 		assertTrue((double) value7 == 2.1); // only double supported
 
 		// Read complex property completely
-		Map<String, Object> valueC = (Map<String, Object>) connSubModel.readElementValue("/aas/submodels/rawSampleCFG/complexProperty");
+		Map<String, Object> valueC = (Map<String, Object>) connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty");
 		// - Compare values
 		assertTrue((int) valueC.get("prop1") == 12);
 		assertTrue((int) valueC.get("prop2") == 13);
@@ -106,7 +106,7 @@ public class TestRawCFGProviderComplexType {
 		//connSubModel.deleteElement("/aas/submodels/rawSampleCFG", "complexProperty");
 		// - Read element value back and make sure that element is deleted
 		@SuppressWarnings("unused")
-		Object complexElement2 = connSubModel.readElementValue("/aas/submodels/rawSampleCFG/complexProperty");
+		Object complexElement2 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty");
 		//assertTrue(complexElement2 == null);
 	}
 }

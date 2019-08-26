@@ -9,7 +9,7 @@ import org.eclipse.basyx.vab.core.IModelProvider;
  * @author kuhn
  *
  */
-public class VABElementProxy {
+public class VABElementProxy implements IModelProvider {
 
 	/**
 	 * Connector specific target address
@@ -41,7 +41,8 @@ public class VABElementProxy {
 	/**
 	 * Read VAB element value
 	 */
-	public Object readElementValue(String elementPath) throws ServerException {
+	@Override
+	public Object getModelPropertyValue(String elementPath) throws ServerException {
 		// Get element from server
 		try {
 			// Change element on server
@@ -59,7 +60,8 @@ public class VABElementProxy {
 	 * <br />
 	 * If the element does not exist it will be created<br />
 	 */
-	public void updateElementValue(String elementPath, Object newValue) throws ServerException {
+	@Override
+	public void setModelPropertyValue(String elementPath, Object newValue) throws ServerException {
 		// Set property value
 		try {
 			// Change element on server
@@ -76,7 +78,8 @@ public class VABElementProxy {
 	/**
 	 * Add element on server
 	 */
-	public void createElement(String elementPath, Object newValue) throws ServerException {
+	@Override
+	public void createValue(String elementPath, Object newValue) throws ServerException {
 		// Set property value
 		try {
 			// Create new element on server
@@ -93,7 +96,8 @@ public class VABElementProxy {
 	/**
 	 * Delete element from server
 	 */
-	public void deleteElement(String elementPath) throws ServerException {
+	@Override
+	public void deleteValue(String elementPath) throws ServerException {
 		// Delete property from server
 		try {
 			// Delete element from server
@@ -109,7 +113,8 @@ public class VABElementProxy {
 	/**
 	 * Delete element from server
 	 */
-	public void deleteElement(String elementPath, Object value) throws ServerException {
+	@Override
+	public void deleteValue(String elementPath, Object value) throws ServerException {
 		// Delete property from server
 		try {
 			// Delete element from server
@@ -125,7 +130,8 @@ public class VABElementProxy {
 	/**
 	 * Invoke element as an operation
 	 */
-	public Object invoke(String elementPath, Object... parameter) throws ServerException {
+	@Override
+	public Object invokeOperation(String elementPath, Object... parameter) throws ServerException {
 		// Invoke operation on server
 		try {
 			// Invoke server operation

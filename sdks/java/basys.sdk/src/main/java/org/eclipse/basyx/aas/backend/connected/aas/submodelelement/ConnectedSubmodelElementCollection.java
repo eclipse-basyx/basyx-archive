@@ -123,68 +123,68 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	
 	@Override
 	public String getId() {
-	return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
+	return (String) getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
 	public void setId(String id) {
-		getProxy().updateElementValue(constructPath(Referable.IDSHORT), id);
+		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), id);
 		
 	}
 	
 	@Override
 	public void setValue(ArrayList<?> value) {
-	getProxy().updateElementValue(constructPath(Property.VALUE), value);
+	getProxy().setModelPropertyValue(constructPath(Property.VALUE), value);
 		
 	}
 
 	@Override
 	public ArrayList<?> getValue() {
-		return (ArrayList<?>)getProxy().readElementValue(constructPath(Property.VALUE));
+		return (ArrayList<?>)getProxy().getModelPropertyValue(constructPath(Property.VALUE));
 	}
 
 	@Override
 	public void setOrdered(boolean value) {
-		getProxy().updateElementValue(constructPath(SubmodelElementCollection.ORDERED), value);
+		getProxy().setModelPropertyValue(constructPath(SubmodelElementCollection.ORDERED), value);
 		
 	}
 
 	@Override
 	public boolean isOrdered() {
-	return (boolean)getProxy().readElementValue(constructPath(SubmodelElementCollection.ORDERED));
+	return (boolean)getProxy().getModelPropertyValue(constructPath(SubmodelElementCollection.ORDERED));
 	}
 
 	@Override
 	public void setAllowDuplicates(boolean value) {
-		getProxy().updateElementValue(constructPath(SubmodelElementCollection.ALLOWDUPLICATES), value);
+		getProxy().setModelPropertyValue(constructPath(SubmodelElementCollection.ALLOWDUPLICATES), value);
 		
 	}
 
 	@Override
 	public boolean isAllowDuplicates() {
-		return (boolean)getProxy().readElementValue(constructPath(SubmodelElementCollection.ALLOWDUPLICATES));
+		return (boolean)getProxy().getModelPropertyValue(constructPath(SubmodelElementCollection.ALLOWDUPLICATES));
 	}
 
 	@Override
 	public void setElements(HashMap<String, ISubmodelElement> value) {
-		getProxy().updateElementValue(constructPath(SubmodelElementCollection.ELEMENTS), value);		
+		getProxy().setModelPropertyValue(constructPath(SubmodelElementCollection.ELEMENTS), value);		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap<String, ISubmodelElement> getElements() {
-		return (HashMap<String, ISubmodelElement>)getProxy().readElementValue(constructPath(SubmodelElementCollection.ELEMENTS));
+		return (HashMap<String, ISubmodelElement>)getProxy().getModelPropertyValue(constructPath(SubmodelElementCollection.ELEMENTS));
 	}
 	
 	@Override
 	public void setValueId(Object obj) {
-		getProxy().updateElementValue(constructPath(Property.VALUEID), obj);
+		getProxy().setModelPropertyValue(constructPath(Property.VALUEID), obj);
 		
 	}
 
 	@Override
 	public Object getValueId() {
-		return getProxy().readElementValue(constructPath(Property.VALUEID));
+		return getProxy().getModelPropertyValue(constructPath(Property.VALUEID));
 	}
 
 
@@ -231,7 +231,7 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IProperty> getProperties() {
-		return (Map<String, IProperty>) getProxy().readElementValue(constructPath(SubModel.PROPERTIES));
+		return (Map<String, IProperty>) getProxy().getModelPropertyValue(constructPath(SubModel.PROPERTIES));
 	}
 
 	@Override
@@ -242,8 +242,8 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 
 	@Override
 	public void setValue(Object obj) {
-		getProxy().updateElementValue(constructPath(Property.VALUE), obj);
-		getProxy().updateElementValue(constructPath(Property.VALUETYPE), PropertyValueTypeDefHelper.fromObject(obj));
+		getProxy().setModelPropertyValue(constructPath(Property.VALUE), obj);
+		getProxy().setModelPropertyValue(constructPath(Property.VALUETYPE), PropertyValueTypeDefHelper.fromObject(obj));
 		
 	}
 	

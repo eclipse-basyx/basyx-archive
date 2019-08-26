@@ -23,13 +23,13 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 
 	@Override
 	public Object get() throws Exception {
-		return getProxy().readElementValue(constructPath(Property.VALUE));
+		return getProxy().getModelPropertyValue(constructPath(Property.VALUE));
 	}
 
 	@Override
 	public void set(Object newValue) throws ServerException {
 		try {
-			getProxy().updateElementValue(constructPath(Property.VALUE), newValue);
+			getProxy().setModelPropertyValue(constructPath(Property.VALUE), newValue);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -48,7 +48,7 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 
 	@Override
 	public Object getValue() {
-		Object value = getProxy().readElementValue(constructPath(Property.VALUE));
+		Object value = getProxy().getModelPropertyValue(constructPath(Property.VALUE));
 		
 		// unpack c# value
 		if (value instanceof Map<?,?>) {

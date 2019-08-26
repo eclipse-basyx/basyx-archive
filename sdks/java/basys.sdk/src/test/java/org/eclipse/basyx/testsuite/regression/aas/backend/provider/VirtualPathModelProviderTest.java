@@ -49,10 +49,10 @@ public class VirtualPathModelProviderTest extends TestProvider {
 
 		// Create element
 		Property prop = new MetaModelElementFactory().create(new Property(), 500);
-		submodelElement.createElement("dataElements/newProperty", prop);
+		submodelElement.createValue("dataElements/newProperty", prop);
 
 		// Read back value
-		Object result = submodelElement.readElementValue("dataElements/newProperty/value");
+		Object result = submodelElement.getModelPropertyValue("dataElements/newProperty/value");
 		assertEquals(500, result);
 	}
 
@@ -62,22 +62,22 @@ public class VirtualPathModelProviderTest extends TestProvider {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 
 		// Read list of properties
-		Object result = submodelElement.readElementValue("dataElements");
+		Object result = submodelElement.getModelPropertyValue("dataElements");
 		HashMap<String, Object> propertyMap = (HashMap<String, Object>) result;
 		HashMap<String, Object> property = (HashMap<String, Object>) propertyMap.get("integerProperty");
 		assertEquals(123, property.get("value"));
 
 		// Read whole property
-		result = submodelElement.readElementValue("dataElements/integerProperty");
+		result = submodelElement.getModelPropertyValue("dataElements/integerProperty");
 		property = (HashMap<String, Object>) result;
 		assertEquals(123, property.get("value"));
 
 		// Read idShort
-		result = submodelElement.readElementValue("dataElements/stringProperty/idShort");
+		result = submodelElement.getModelPropertyValue("dataElements/stringProperty/idShort");
 		assertEquals("stringProperty", result);
 
 		// Read single value
-		result = submodelElement.readElementValue("dataElements/stringProperty/value");
+		result = submodelElement.getModelPropertyValue("dataElements/stringProperty/value");
 		assertEquals("Test", result);
 	}
 
@@ -91,10 +91,10 @@ public class VirtualPathModelProviderTest extends TestProvider {
 		updatedElement.put("valueType", PropertyValueTypeDefHelper.fromObject(3));
 
 		// Update element
-		submodelElement.updateElementValue("dataElements/integerProperty", updatedElement);
+		submodelElement.setModelPropertyValue("dataElements/integerProperty", updatedElement);
 
 		// Check result
-		Object result = submodelElement.readElementValue("dataElements/integerProperty");
+		Object result = submodelElement.getModelPropertyValue("dataElements/integerProperty");
 		assertEquals(3, result);
 	}
 
@@ -103,10 +103,10 @@ public class VirtualPathModelProviderTest extends TestProvider {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 
 		// Delete property
-		submodelElement.deleteElement("dataElements/integerProperty");
+		submodelElement.deleteValue("dataElements/integerProperty");
 
 		// Test, if it has been deleted
-		Object result = submodelElement.readElementValue("dataElements/integerProperty");
+		Object result = submodelElement.getModelPropertyValue("dataElements/integerProperty");
 		assertNull(result);
 	}
 
@@ -125,11 +125,11 @@ public class VirtualPathModelProviderTest extends TestProvider {
 		param2.put("valueType", PropertyValueTypeDefHelper.fromObject(2));
 
 		// Invoke operation with wrapped parameters and check result
-		Object result = submodelElement.invoke("operations/complex", param1, param2);
+		Object result = submodelElement.invokeOperation("operations/complex", param1, param2);
 		assertEquals(3, result);
 
 		// Invoke operation on parent element
-		result = submodelElement.invoke("operations/simple");
+		result = submodelElement.invokeOperation("operations/simple");
 		assertTrue((boolean) result);
 	}
 }

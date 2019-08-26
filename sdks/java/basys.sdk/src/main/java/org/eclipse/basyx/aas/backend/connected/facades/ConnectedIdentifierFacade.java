@@ -17,21 +17,21 @@ public class ConnectedIdentifierFacade extends ConnectedElement implements IIden
 
 	@Override
 	public String getIdType() {
-		return (String) getProxy().readElementValue(constructPath(Identifier.IDTYPE));
+		return (String) getProxy().getModelPropertyValue(constructPath(Identifier.IDTYPE));
 	}
 
 	@Override
 	public void setIdType(String newValue) {
-		getProxy().updateElementValue(constructPath(Identifier.IDTYPE), newValue);
+		getProxy().setModelPropertyValue(constructPath(Identifier.IDTYPE), newValue);
 	}
 
 	@Override
 	public String getId() {
-		return (String) getProxy().readElementValue(constructPath(Identifier.ID));
+		return (String) getProxy().getModelPropertyValue(constructPath(Identifier.ID));
 	}
 	
 	@Override
 	public void setId(String id) {
-		getProxy().updateElementValue(constructPath(Identifier.ID), id);
+		getProxy().setModelPropertyValue(constructPath(Identifier.ID), id);
 	}
 }

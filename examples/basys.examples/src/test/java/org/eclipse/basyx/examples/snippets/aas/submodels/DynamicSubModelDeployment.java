@@ -97,7 +97,7 @@ public class DynamicSubModelDeployment {
 		submodel.getProperties().put(fac.create(new Property(), "myStr", "prop2"));
 
 		// Transfer sub model to server
-		connSubModel1.createElement("aas/submodels/" + STATUS_SM, submodel);
+		connSubModel1.createValue("aas/submodels/" + STATUS_SM, submodel);
 
 		
 		// Retrieve sub model with SDK connector

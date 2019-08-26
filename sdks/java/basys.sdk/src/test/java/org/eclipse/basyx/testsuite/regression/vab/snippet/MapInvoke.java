@@ -20,24 +20,24 @@ public class MapInvoke {
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 
 		// Invoke complex function
-		Object complex = connVABElement.invoke("operations/complex", 12, 34);
+		Object complex = connVABElement.invokeOperation("operations/complex", 12, 34);
 		assertEquals(46, complex);
 
 		// Invoke unsupported functional interface
-		Object supplier = connVABElement.invoke("operations/supplier");
+		Object supplier = connVABElement.invokeOperation("operations/supplier");
 		assertNull(supplier);
 
 		// Invoke non-existing operation
-		Object nonExisting = connVABElement.invoke("operations/unknown");
+		Object nonExisting = connVABElement.invokeOperation("operations/unknown");
 		assertNull(nonExisting);
 
 		// Invoke invalid operation -> not a function, but a primitive data type
-		Object invalid = connVABElement.invoke("operations/invalid");
+		Object invalid = connVABElement.invokeOperation("operations/invalid");
 		assertNull(invalid);
 
 		// Invoke operations that throw Exceptions
 		try {
-			connVABElement.invoke("operations/serverException");
+			connVABElement.invokeOperation("operations/serverException");
 			fail();
 		} catch (ServerException e) {
 			// exception type not implemented, yet
@@ -45,7 +45,7 @@ public class MapInvoke {
 		}
 
 		try {
-			connVABElement.invoke("operations/nullException");
+			connVABElement.invokeOperation("operations/nullException");
 			fail();
 		} catch (ServerException e) {
 			// exception type not implemented, yet
@@ -53,11 +53,11 @@ public class MapInvoke {
 		}
 
 		// Empty paths - should execute, but has no effect
-		connVABElement.invoke("", "");
+		connVABElement.invokeOperation("", "");
 
 		// Null path - should throw exception
 		try {
-			connVABElement.invoke(null, "");
+			connVABElement.invokeOperation(null, "");
 			fail();
 		} catch (ServerException e) {
 		}

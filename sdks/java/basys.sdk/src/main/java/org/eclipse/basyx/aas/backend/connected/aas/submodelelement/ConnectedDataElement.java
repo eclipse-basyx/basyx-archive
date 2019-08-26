@@ -117,7 +117,7 @@ public class ConnectedDataElement extends ConnectedSubmodelElement {
 		if (id != null) {
 			return id;
 		}
-		return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
+		return (String) getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class ConnectedDataElement extends ConnectedSubmodelElement {
 		if (this.getLocal(Referable.IDSHORT) != null) {
 			this.putLocal(Referable.IDSHORT, id);
 		}
-		getProxy().updateElementValue(constructPath(Referable.IDSHORT), id);
+		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), id);
 		
 	}
 }

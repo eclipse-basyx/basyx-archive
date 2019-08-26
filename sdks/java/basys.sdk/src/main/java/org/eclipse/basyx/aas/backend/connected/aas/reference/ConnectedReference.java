@@ -20,12 +20,12 @@ public class ConnectedReference extends ConnectedElement implements IReference {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IKey> getKeys() {
-		return (List<IKey>)getProxy().readElementValue(constructPath(Reference.KEY));
+		return (List<IKey>)getProxy().getModelPropertyValue(constructPath(Reference.KEY));
 	}
 
 	@Override
 	public void setKeys(List<IKey> keys) {
-		getProxy().updateElementValue(constructPath(Reference.KEY),keys);
+		getProxy().setModelPropertyValue(constructPath(Reference.KEY),keys);
 		
 	}
 }

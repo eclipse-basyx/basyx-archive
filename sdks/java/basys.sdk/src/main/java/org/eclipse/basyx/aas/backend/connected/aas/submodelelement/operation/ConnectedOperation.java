@@ -42,7 +42,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		if (id != null) {
 			return id;
 		}
-		return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
+		return (String) getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
@@ -52,19 +52,19 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 			this.putLocal(Referable.IDSHORT, id);
 		}
 
-		getProxy().updateElementValue(constructPath(Referable.IDSHORT), id);
+		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), id);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IOperationVariable> getParameterTypes() {
-		return (List<IOperationVariable>) getProxy().readElementValue(constructPath(Operation.IN));
+		return (List<IOperationVariable>) getProxy().getModelPropertyValue(constructPath(Operation.IN));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IOperationVariable> getReturnTypes() {
-		return (List<IOperationVariable>) getProxy().readElementValue(constructPath(Operation.OUT));
+		return (List<IOperationVariable>) getProxy().getModelPropertyValue(constructPath(Operation.OUT));
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		}
 
 		// Invoke operation
-		Object result = getProxy().invoke(super.getPath(), params);
+		Object result = getProxy().invokeOperation(super.getPath(), params);
 
 		// Unwrap result value
 		if (result instanceof List<?>) {
@@ -107,26 +107,26 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 	@Override
 	public void SetParameterTypes(List<OperationVariable> in) {
-		getProxy().updateElementValue(constructPath(Operation.IN), in);
+		getProxy().setModelPropertyValue(constructPath(Operation.IN), in);
 
 	}
 
 	@Override
 	public void setReturnTypes(List<OperationVariable> out) {
-		getProxy().updateElementValue(constructPath(Operation.OUT), out);
+		getProxy().setModelPropertyValue(constructPath(Operation.OUT), out);
 
 	}
 
 	@Override
 	public void setInvocable(Function<Object[], Object[]> endpoint) {
-		getProxy().updateElementValue(constructPath(Operation.INVOKABLE), endpoint);
+		getProxy().setModelPropertyValue(constructPath(Operation.INVOKABLE), endpoint);
 
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Function<Object[], Object> getInvocable() {
-		return (Function<Object[], Object>) getProxy().readElementValue(constructPath(Operation.INVOKABLE));
+		return (Function<Object[], Object>) getProxy().getModelPropertyValue(constructPath(Operation.INVOKABLE));
 	}
 
 	@Override

@@ -26,26 +26,26 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 
 	@Override
 	public void setValue(Object value) {
-		getProxy().updateElementValue(constructPath(Property.VALUE), value);
-		getProxy().updateElementValue(constructPath(Property.VALUETYPE), PropertyValueTypeDefHelper.fromObject(value));
+		getProxy().setModelPropertyValue(constructPath(Property.VALUE), value);
+		getProxy().setModelPropertyValue(constructPath(Property.VALUETYPE), PropertyValueTypeDefHelper.fromObject(value));
 
 		
 	}
 
 	@Override
 	public Object getValue() {
-		return	getProxy().readElementValue(constructPath(Property.VALUE));
+		return	getProxy().getModelPropertyValue(constructPath(Property.VALUE));
 	}
 
 	@Override
 	public void setValueId(Object obj) {
-		getProxy().updateElementValue(constructPath(Property.VALUEID), obj);
+		getProxy().setModelPropertyValue(constructPath(Property.VALUEID), obj);
 		
 	}
 
 	@Override
 	public Object getValueId() {
-		return getProxy().readElementValue(constructPath(Property.VALUEID));
+		return getProxy().getModelPropertyValue(constructPath(Property.VALUEID));
 	}
 
 

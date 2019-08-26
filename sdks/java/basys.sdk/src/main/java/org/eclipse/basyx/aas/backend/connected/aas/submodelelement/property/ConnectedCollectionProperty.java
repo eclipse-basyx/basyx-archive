@@ -25,7 +25,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	@Override
 	public void set(Collection<Object> collection) throws ServerException {
 		try {
-			getProxy().updateElementValue(constructPath(Property.VALUE), collection);
+			getProxy().setModelPropertyValue(constructPath(Property.VALUE), collection);
 		} catch (Exception e) {
 			throw new ServerException(e.getClass().toString(), e.getMessage());
 		}
@@ -34,7 +34,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	@Override
 	public void add(Object newValue) throws ServerException, TypeMismatchException {
 		try {
-			getProxy().createElement(constructPath(Property.VALUE), newValue);
+			getProxy().createValue(constructPath(Property.VALUE), newValue);
 		} catch (Exception e) {
 			throw new ServerException(e.getClass().toString(), e.getMessage());
 		}
@@ -43,7 +43,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	@Override
 	public void remove(Object objectRef) throws ServerException {
 		try {
-			getProxy().deleteElement(constructPath(Property.VALUE), objectRef);
+			getProxy().deleteValue(constructPath(Property.VALUE), objectRef);
 		} catch (Exception e) {
 			throw new ServerException(e.getClass().toString(), e.getMessage());
 		}
@@ -61,7 +61,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 
 	@SuppressWarnings("unchecked")
 	private Collection<Object> getCollection() {
-		return (Collection<Object>) getProxy().readElementValue(constructPath(Property.VALUE));
+		return (Collection<Object>) getProxy().getModelPropertyValue(constructPath(Property.VALUE));
 	}
 
 	@Override

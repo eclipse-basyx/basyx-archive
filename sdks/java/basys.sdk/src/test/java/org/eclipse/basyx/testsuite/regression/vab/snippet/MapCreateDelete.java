@@ -31,50 +31,50 @@ public class MapCreateDelete {
 	@SuppressWarnings("unchecked")
 	private static void testCreateElements(VABElementProxy connVABElement) {
 		// Create property directly in root element
-		connVABElement.createElement("inRoot", 1.2);
-		Object toTest = connVABElement.readElementValue("inRoot");
+		connVABElement.createValue("inRoot", 1.2);
+		Object toTest = connVABElement.getModelPropertyValue("inRoot");
 		assertEquals(1.2, toTest);
 
 		// Create element in Map (with new key contained in the path)
-		connVABElement.createElement("/structure/map/inMap", "34");
-		toTest = connVABElement.readElementValue("/structure/map/inMap");
+		connVABElement.createValue("/structure/map/inMap", "34");
+		toTest = connVABElement.getModelPropertyValue("/structure/map/inMap");
 		assertEquals("34", toTest);
 
 		// Create map element
 		HashMap<String, Object> newMap = new HashMap<>();
 		newMap.put("entryA", 3);
 		newMap.put("entryB", 4);
-		connVABElement.createElement("mapInRoot", newMap);
-		toTest = connVABElement.readElementValue("mapInRoot");
+		connVABElement.createValue("mapInRoot", newMap);
+		toTest = connVABElement.getModelPropertyValue("mapInRoot");
 		assertTrue(toTest instanceof Map<?, ?>);
 		assertEquals(2, ((Map<String, Object>) toTest).size());
 		assertEquals(3, ((Map<String, Object>) toTest).get("entryA"));
 
 		// Try to overwrite existing element (should be ignored, already exists)
-		connVABElement.createElement("inRoot", 0);
-		toTest = connVABElement.readElementValue("inRoot");
+		connVABElement.createValue("inRoot", 0);
+		toTest = connVABElement.getModelPropertyValue("inRoot");
 		assertEquals(1.2, toTest);
 
 		// Check case-sensitivity
-		connVABElement.createElement("inroot", 78);
-		toTest = connVABElement.readElementValue("inRoot");
+		connVABElement.createValue("inroot", 78);
+		toTest = connVABElement.getModelPropertyValue("inRoot");
 		assertEquals(1.2, toTest);
-		toTest = connVABElement.readElementValue("inroot");
+		toTest = connVABElement.getModelPropertyValue("inroot");
 		assertEquals(78, toTest);
 
 		// Non-existing parent element
-		connVABElement.createElement("unkown/x", 5);
-		toTest = connVABElement.readElementValue("unknown/x");
+		connVABElement.createValue("unkown/x", 5);
+		toTest = connVABElement.getModelPropertyValue("unknown/x");
 		assertNull(toTest);
 
 		// Empty paths - should execute, but has no effect
-		connVABElement.createElement("", "");
-		toTest = connVABElement.readElementValue("");
+		connVABElement.createValue("", "");
+		toTest = connVABElement.getModelPropertyValue("");
 		assertNotEquals("", toTest);
 
 		// Null path - should throw exception
 		try {
-			connVABElement.createElement(null, "");
+			connVABElement.createValue(null, "");
 			fail();
 		} catch (ServerException e) {
 		}
@@ -83,49 +83,49 @@ public class MapCreateDelete {
 	private static void testDeleteElements(VABElementProxy connVABElement) {
 		// Delete at Root
 		// - by object - should not work, root is a map
-		connVABElement.deleteElement("inRoot", 1.2);
-		Object toTest = connVABElement.readElementValue("inRoot");
+		connVABElement.deleteValue("inRoot", 1.2);
+		Object toTest = connVABElement.getModelPropertyValue("inRoot");
 		assertEquals(1.2, toTest);
 		// - by index
-		connVABElement.deleteElement("inRoot");
-		toTest = connVABElement.readElementValue("inRoot");
+		connVABElement.deleteValue("inRoot");
+		toTest = connVABElement.getModelPropertyValue("inRoot");
 		assertNull(toTest);
 
 		// Check case-sensitivity
-		toTest = connVABElement.readElementValue("inroot");
+		toTest = connVABElement.getModelPropertyValue("inroot");
 		assertEquals(78, toTest);
-		connVABElement.deleteElement("inroot");
-		toTest = connVABElement.readElementValue("inroot");
+		connVABElement.deleteValue("inroot");
+		toTest = connVABElement.getModelPropertyValue("inroot");
 		assertNull(toTest);
 
 		// Delete at Map
 		// - by object - should not work in maps, because object refers to a contained object, not the index
-		connVABElement.deleteElement("/structure/map/", "inMap");
-		toTest = connVABElement.readElementValue("/structure/map/inMap");
+		connVABElement.deleteValue("/structure/map/", "inMap");
+		toTest = connVABElement.getModelPropertyValue("/structure/map/inMap");
 		assertEquals("34", toTest);
 		// - by index
-		connVABElement.deleteElement("/structure/map/inMap");
-		toTest = connVABElement.readElementValue("/structure/map");
+		connVABElement.deleteValue("/structure/map/inMap");
+		toTest = connVABElement.getModelPropertyValue("/structure/map");
 		assertEquals(0, ((Map<?, ?>) toTest).size());
 
 		// Delete remaining complete Map
-		connVABElement.deleteElement("mapInRoot");
-		toTest = connVABElement.readElementValue("mapInRoot");
+		connVABElement.deleteValue("mapInRoot");
+		toTest = connVABElement.getModelPropertyValue("mapInRoot");
 		assertNull(toTest);
 
 		// Empty paths - should not delete anything
-		connVABElement.deleteElement("", "");
-		toTest = connVABElement.readElementValue("/primitives/integer");
+		connVABElement.deleteValue("", "");
+		toTest = connVABElement.getModelPropertyValue("/primitives/integer");
 		assertEquals(123, toTest);
 
 		// Null path - should throw exception
 		try {
-			connVABElement.deleteElement(null, "");
+			connVABElement.deleteValue(null, "");
 			fail();
 		} catch (ServerException e) {
 		}
 		try {
-			connVABElement.deleteElement(null);
+			connVABElement.deleteValue(null);
 			fail();
 		} catch (ServerException e) {
 		}

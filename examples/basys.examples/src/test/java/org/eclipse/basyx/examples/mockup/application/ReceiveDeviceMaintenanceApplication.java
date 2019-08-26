@@ -69,7 +69,7 @@ public class ReceiveDeviceMaintenanceApplication extends BaseBaSyxService {
 	@SuppressWarnings("unchecked")
 	public int getDevicePartSupplyStatus() {
 		// Read complete sub model ("/")
-		VABModelMap<Object> deviceSM = (VABModelMap<Object>) aasServerConnection.readElementValue("/");
+		VABModelMap<Object> deviceSM = (VABModelMap<Object>) aasServerConnection.getModelPropertyValue("/");
 		
 		// Return status property
 		return Integer.parseInt(deviceSM.getPath("properties/parts/availability").toString());

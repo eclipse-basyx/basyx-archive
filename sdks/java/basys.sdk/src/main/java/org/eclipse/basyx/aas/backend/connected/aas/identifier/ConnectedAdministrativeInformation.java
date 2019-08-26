@@ -33,24 +33,24 @@ public class ConnectedAdministrativeInformation extends ConnectedElement impleme
 
 	@Override
 	public void setVersion(String version) {
-		getProxy().updateElementValue(constructPath(AdministrativeInformation.VERSION), version);
+		getProxy().setModelPropertyValue(constructPath(AdministrativeInformation.VERSION), version);
 		
 	}
 
 	@Override
 	public String getVersion() {
-		return (String) getProxy().readElementValue(constructPath(AdministrativeInformation.VERSION));
+		return (String) getProxy().getModelPropertyValue(constructPath(AdministrativeInformation.VERSION));
 	}
 
 	@Override
 	public void setRevision(String revision) {
-		getProxy().updateElementValue(constructPath(AdministrativeInformation.REVISION), revision);
+		getProxy().setModelPropertyValue(constructPath(AdministrativeInformation.REVISION), revision);
 		
 	}
 
 	@Override
 	public String getRevision() {
-		return (String) getProxy().readElementValue(constructPath(AdministrativeInformation.REVISION));
+		return (String) getProxy().getModelPropertyValue(constructPath(AdministrativeInformation.REVISION));
 	}
 
 }

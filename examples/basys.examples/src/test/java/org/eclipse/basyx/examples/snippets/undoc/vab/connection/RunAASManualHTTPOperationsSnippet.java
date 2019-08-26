@@ -65,9 +65,9 @@ public class RunAASManualHTTPOperationsSnippet {
 
 		
 		// Create properties on AAS using connection
-		connSubModel1.createElement("properties", new HashMap<String, Object>());
-		connSubModel1.createElement("properties/prop1", 7);
-		connSubModel1.createElement("properties/prop2", "myStr");
+		connSubModel1.createValue("properties", new HashMap<String, Object>());
+		connSubModel1.createValue("properties/prop1", 7);
+		connSubModel1.createValue("properties/prop2", "myStr");
 		
 		
 		// Web service client accesses AAS using HTTP REST calls

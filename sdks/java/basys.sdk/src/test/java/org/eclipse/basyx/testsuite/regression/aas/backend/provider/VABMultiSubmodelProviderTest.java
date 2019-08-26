@@ -45,13 +45,13 @@ public class VABMultiSubmodelProviderTest {
 	public void invokeExceptionTest() {
 		// Invoke operationEx1
 		try {
-			proxy.invoke("/aas/submodels/SimpleAASSubmodel/operations/exception1/invokable");
+			proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/exception1/invokable");
 			fail();
 		} catch (ServerException e) {
 		}
 		// Invoke operationEx2
 		try {
-			proxy.invoke("/aas/submodels/SimpleAASSubmodel/operations/exception2/invokable", "prop1");
+			proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/exception2/invokable", "prop1");
 			fail();
 		} catch (ServerException e) {
 
@@ -61,8 +61,8 @@ public class VABMultiSubmodelProviderTest {
 	@Test
 	public void invokeTest() {
 		// Invoke operation
-		assertEquals(7, proxy.invoke("/aas/submodels/SimpleAASSubmodel/operations/complex/invokable", 10, 3));
-		assertEquals(true, proxy.invoke("/aas/submodels/SimpleAASSubmodel/operations/simple/invokable"));
+		assertEquals(7, proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/complex/invokable", 10, 3));
+		assertEquals(true, proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/simple/invokable"));
 	}
 
 	@Test
@@ -73,14 +73,14 @@ public class VABMultiSubmodelProviderTest {
 	@Test
 	public void createDeleteTest() {
 
-		proxy.createElement("/aas/submodels", new SimpleAASSubmodel("TestSM"));
+		proxy.createValue("/aas/submodels", new SimpleAASSubmodel("TestSM"));
 
 		getTestRunner("TestSM");
 
-		proxy.deleteElement("/aas/submodels/TestSM");
+		proxy.deleteValue("/aas/submodels/TestSM");
 
 		try {
-			proxy.readElementValue("/aas/submodels/TestSM");
+			proxy.getModelPropertyValue("/aas/submodels/TestSM");
 			fail();
 		} catch (ServerException e) {
 			System.out.println("VABMultiSubmodelProvider CreateDelete passed");
@@ -91,13 +91,13 @@ public class VABMultiSubmodelProviderTest {
 		// Get property value
 		// Object value1 =
 		// connVABElement.readElementValue("/aas/submodels/SimpleAASSubmodel");
-		Object value2 = proxy.readElementValue("/aas/submodels/" + smId + "/dataElements");
+		Object value2 = proxy.getModelPropertyValue("/aas/submodels/" + smId + "/dataElements");
 		System.out.println("V2:" + value2);
 
-		Object value3 = proxy.readElementValue("/aas/submodels/" + smId + "/dataElements/integerProperty");
+		Object value3 = proxy.getModelPropertyValue("/aas/submodels/" + smId + "/dataElements/integerProperty");
 		System.out.println("V3:" + value3);
 
-		Object value4 = proxy.readElementValue("/aas/submodels/" + smId + "/dataElements/integerProperty/value");
+		Object value4 = proxy.getModelPropertyValue("/aas/submodels/" + smId + "/dataElements/integerProperty/value");
 		assertEquals(value4, 123);
 	}
 }

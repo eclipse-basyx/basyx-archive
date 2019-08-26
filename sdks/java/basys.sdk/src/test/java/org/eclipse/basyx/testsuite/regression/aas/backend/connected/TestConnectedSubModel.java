@@ -68,7 +68,7 @@ public class TestConnectedSubModel {
 		VABElementProxy proxy = manager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 		
 		// Put the subModel into the newly created proxy
-		proxy.updateElementValue("", sm);
+		proxy.setModelPropertyValue("", sm);
 		
 		// Create the ConnectedSubModel based on the manager
 		submodel = new ConnectedSubModel("", proxy);

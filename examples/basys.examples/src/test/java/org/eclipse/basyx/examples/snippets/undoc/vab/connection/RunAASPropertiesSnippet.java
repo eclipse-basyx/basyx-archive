@@ -62,29 +62,29 @@ public class RunAASPropertiesSnippet {
 
 		
 		// Create properties on AAS
-		connSubModel1.createElement("properties", new HashMap<String, Object>());
-		connSubModel1.createElement("properties/prop1", 7);
-		connSubModel1.createElement("properties/prop2", "myStr");
+		connSubModel1.createValue("properties", new HashMap<String, Object>());
+		connSubModel1.createValue("properties/prop1", 7);
+		connSubModel1.createValue("properties/prop2", "myStr");
 		
 		// Read property values
-		assertTrue((int) connSubModel1.readElementValue("properties/prop1") == 7);
-		assertTrue(connSubModel1.readElementValue("properties/prop2").equals("myStr"));
+		assertTrue((int) connSubModel1.getModelPropertyValue("properties/prop1") == 7);
+		assertTrue(connSubModel1.getModelPropertyValue("properties/prop2").equals("myStr"));
 		
 		// Update property values
-		connSubModel1.updateElementValue("properties/prop1", 8);
-		connSubModel1.updateElementValue("properties/prop2", "stillMine");
+		connSubModel1.setModelPropertyValue("properties/prop1", 8);
+		connSubModel1.setModelPropertyValue("properties/prop2", "stillMine");
 		
 		// Read property values again
-		assertTrue((int) connSubModel1.readElementValue("properties/prop1") == 8);
-		assertTrue(connSubModel1.readElementValue("properties/prop2").equals("stillMine"));
+		assertTrue((int) connSubModel1.getModelPropertyValue("properties/prop1") == 8);
+		assertTrue(connSubModel1.getModelPropertyValue("properties/prop2").equals("stillMine"));
 
 		// Delete property values
-		connSubModel1.deleteElement("properties/prop1");
-		connSubModel1.deleteElement("properties/prop2");
+		connSubModel1.deleteValue("properties/prop1");
+		connSubModel1.deleteValue("properties/prop2");
 		
 		// Read property values again
-		assertTrue(connSubModel1.readElementValue("properties/prop1") == null);
-		assertTrue(connSubModel1.readElementValue("properties/prop2") == null);
+		assertTrue(connSubModel1.getModelPropertyValue("properties/prop1") == null);
+		assertTrue(connSubModel1.getModelPropertyValue("properties/prop2") == null);
 	}
 }
 

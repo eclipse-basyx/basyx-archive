@@ -65,12 +65,12 @@ public class ConnectedConceptDictionary extends ConnectedElement implements ICon
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashSet<String> getConceptDescription() {
-		return (HashSet<String>)getProxy().readElementValue(constructPath(ConceptDictionary.CONCEPTDESCRIPTION));
+		return (HashSet<String>)getProxy().getModelPropertyValue(constructPath(ConceptDictionary.CONCEPTDESCRIPTION));
 	}
 
 	@Override
 	public void setConceptDescription(HashSet<String> ref) {
-		getProxy().updateElementValue(constructPath(ConceptDictionary.CONCEPTDESCRIPTION), ref);
+		getProxy().setModelPropertyValue(constructPath(ConceptDictionary.CONCEPTDESCRIPTION), ref);
 		
 	}
 }

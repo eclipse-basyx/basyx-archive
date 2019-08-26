@@ -23,14 +23,14 @@ public class ConnectedView extends ConnectedElement implements IView {
 	
 	@Override
 	public void setContainedElement(Set<IReference> references) {
-		getProxy().updateElementValue(constructPath(View.CONTAINEDELEMENT), references);
+		getProxy().setModelPropertyValue(constructPath(View.CONTAINEDELEMENT), references);
 		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IReference> getContainedElement() {
-		return (Set<IReference>)getProxy().readElementValue(constructPath(View.CONTAINEDELEMENT));
+		return (Set<IReference>)getProxy().getModelPropertyValue(constructPath(View.CONTAINEDELEMENT));
 	}
 
 	@Override

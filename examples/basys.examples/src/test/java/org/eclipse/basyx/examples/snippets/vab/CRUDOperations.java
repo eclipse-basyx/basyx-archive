@@ -78,29 +78,29 @@ public class CRUDOperations {
 		//   properties "prop1" and "prop2". Container and properties lack the 
 		//   required properties for AAS and AAS sub models. They are therefore
 		//   not compliant to Asset Administration Shells.
-		connSubModel1.createElement("properties", new HashMap<String, Object>());
-		connSubModel1.createElement("properties/prop1", 7);
-		connSubModel1.createElement("properties/prop2", "myStr");
+		connSubModel1.createValue("properties", new HashMap<String, Object>());
+		connSubModel1.createValue("properties/prop1", 7);
+		connSubModel1.createValue("properties/prop2", "myStr");
 		
 		// Read property values
-		int    prop1Val = (int)    connSubModel1.readElementValue("properties/prop1");
-		String prop2Val = (String) connSubModel1.readElementValue("properties/prop2");
+		int    prop1Val = (int)    connSubModel1.getModelPropertyValue("properties/prop1");
+		String prop2Val = (String) connSubModel1.getModelPropertyValue("properties/prop2");
 		
 		// Update property values
-		connSubModel1.updateElementValue("properties/prop1", 8);
-		connSubModel1.updateElementValue("properties/prop2", "stillMine");
+		connSubModel1.setModelPropertyValue("properties/prop1", 8);
+		connSubModel1.setModelPropertyValue("properties/prop2", "stillMine");
 		
 		// Read property values again
-		int    prop1Val_2 = (int)    connSubModel1.readElementValue("properties/prop1");
-		String prop2Val_2 = (String) connSubModel1.readElementValue("properties/prop2");
+		int    prop1Val_2 = (int)    connSubModel1.getModelPropertyValue("properties/prop1");
+		String prop2Val_2 = (String) connSubModel1.getModelPropertyValue("properties/prop2");
 
 		// Delete property values
-		connSubModel1.deleteElement("properties/prop1");
-		connSubModel1.deleteElement("properties/prop2");
+		connSubModel1.deleteValue("properties/prop1");
+		connSubModel1.deleteValue("properties/prop2");
 		
 		// Read property values again
-		Object prop1Val_3 = connSubModel1.readElementValue("properties/prop1");
-		Object prop2Val_3 = connSubModel1.readElementValue("properties/prop2");
+		Object prop1Val_3 = connSubModel1.getModelPropertyValue("properties/prop1");
+		Object prop2Val_3 = connSubModel1.getModelPropertyValue("properties/prop2");
 
 		
 		// Check expected values from CRUD operations

@@ -89,7 +89,7 @@ public class DynamicSubModelDeploymentHTTP {
 		submodel.getProperties().put(fac.create(new Property(), "myStr", "prop2"));
 
 		// Transfer sub model to server
-		connSubModel1.createElement("aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003", submodel);
+		connSubModel1.createValue("aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003", submodel);
 
 		
 		// Web service client accesses AAS using HTTP REST calls

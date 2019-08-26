@@ -105,9 +105,9 @@ public class ConnectToAASEndpoints {
 		// - Transfer AAS to server
 		//   - This creates the "urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001" element on the server, which is the server
 		//     end point that will host the AAS.
-		connSubModel1.createElement("", new HashMap<String, Object>());
+		connSubModel1.createValue("", new HashMap<String, Object>());
 		//   - This call transfers the AAS to urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001/aas on server
-		connSubModel1.createElement("aas", aas);
+		connSubModel1.createValue("aas", aas);
 
 		
 

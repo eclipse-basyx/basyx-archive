@@ -20,12 +20,12 @@ public class ConnectedHasDataSpecification extends ConnectedElement implements I
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
-		return (HashSet<IReference>) getProxy().readElementValue(constructPath(HasDataSpecification.HASDATASPECIFICATION));
+		return (HashSet<IReference>) getProxy().getModelPropertyValue(constructPath(HasDataSpecification.HASDATASPECIFICATION));
 	}
 
 	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
-		getProxy().updateElementValue(constructPath(HasDataSpecification.HASDATASPECIFICATION), ref);
+		getProxy().setModelPropertyValue(constructPath(HasDataSpecification.HASDATASPECIFICATION), ref);
 		
 	}
 

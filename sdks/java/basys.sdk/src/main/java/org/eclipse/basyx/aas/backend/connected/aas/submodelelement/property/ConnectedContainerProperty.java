@@ -29,7 +29,7 @@ public class ConnectedContainerProperty extends ConnectedProperty implements ICo
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IProperty> getProperties() {
-		Map<String, Object> props = (Map<String, Object>) getProxy().readElementValue(constructPath(SubModel.PROPERTIES));
+		Map<String, Object> props = (Map<String, Object>) getProxy().getModelPropertyValue(constructPath(SubModel.PROPERTIES));
 		Map<String, IProperty> ret = new HashMap<>();
 
 		for (String s : props.keySet()) {
@@ -41,7 +41,7 @@ public class ConnectedContainerProperty extends ConnectedProperty implements ICo
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IOperation> getOperations() {
-		Map<String, Object> ops = (Map<String, Object>) getProxy().readElementValue(constructPath(SubModel.OPERATIONS));
+		Map<String, Object> ops = (Map<String, Object>) getProxy().getModelPropertyValue(constructPath(SubModel.OPERATIONS));
 
 		Map<String, IOperation> ret = new HashMap<>();
 		for (String s : ops.keySet()) {

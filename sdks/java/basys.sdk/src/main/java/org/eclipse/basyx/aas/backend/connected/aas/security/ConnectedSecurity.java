@@ -16,23 +16,23 @@ public class ConnectedSecurity extends ConnectedElement implements ISecurity {
 	
 	@Override
 	public Object getAccessControlPolicyPoints() {
-		return getProxy().readElementValue(constructPath(Security.ACCESSCONTROLPOLICYPOINTS));
+		return getProxy().getModelPropertyValue(constructPath(Security.ACCESSCONTROLPOLICYPOINTS));
 	}
 
 	@Override
 	public void setAccessControlPolicyPoints(Object obj) {
-		getProxy().updateElementValue(constructPath(Security.ACCESSCONTROLPOLICYPOINTS), obj);
+		getProxy().setModelPropertyValue(constructPath(Security.ACCESSCONTROLPOLICYPOINTS), obj);
 		
 	}
 
 	@Override
 	public Object getTrustAnchor() {
-		return getProxy().readElementValue(constructPath(Security.TRUSTANCHOR));
+		return getProxy().getModelPropertyValue(constructPath(Security.TRUSTANCHOR));
 	}
 
 	@Override
 	public void setTrustAnchor(Object obj) {
-		getProxy().updateElementValue(constructPath(Security.TRUSTANCHOR), obj);
+		getProxy().setModelPropertyValue(constructPath(Security.TRUSTANCHOR), obj);
 		
 	}
 }

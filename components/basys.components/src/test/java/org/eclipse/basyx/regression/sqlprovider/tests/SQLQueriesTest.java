@@ -46,21 +46,21 @@ public class SQLQueriesTest {
 
 		
 		// Get sub model
-		Object value0A = connSubModel.readElementValue("/aas/submodels/SQLTestSubmodel");
+		Object value0A = connSubModel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel");
 		System.out.println("***Value:"+value0A);
 
 		
 		// Get properties
-		Object value0B = connSubModel.readElementValue("/aas/submodels/SQLTestSubmodel/properties");
+		Object value0B = connSubModel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/properties");
 		System.out.println("***Value:"+value0B);
 
 		
 		// Get property value
-		Object value1 = connSubModel.readElementValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value");
+		Object value1 = connSubModel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value");
 		System.out.println("***Value:"+value1);
 
 		// Get property value with meta data
-		Object value1a = connSubModel.readElementValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames");
+		Object value1a = connSubModel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames");
 		System.out.println("***Value with meta data:"+value1a);
 
 		
@@ -70,13 +70,13 @@ public class SQLQueriesTest {
 			newTableLine.put("sensorname", "VS_0003");
 			newTableLine.put("sensorid",   "033542");
 		// - Insert line into table
-		connSubModel.createElement("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value", newTableLine);
+		connSubModel.createValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value", newTableLine);
 		
 		// Get property value again
-		Object value2 = connSubModel.readElementValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value");
+		Object value2 = connSubModel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value");
 		System.out.println("Value2:"+value2);
 
-		Object value2a = connSubModel.readElementValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames");
+		Object value2a = connSubModel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames");
 		System.out.println("Value2a:"+value2a);
 
 		
@@ -87,10 +87,10 @@ public class SQLQueriesTest {
 			updatedTableLine.put("sensorname", "VS_0004");
 			updatedTableLine.put("sensorid", "033542");
 		// - Update table line
-		connSubModel.updateElementValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value", updatedTableLine);
+		connSubModel.setModelPropertyValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value", updatedTableLine);
 
 		// Get property value again
-		Object value3 = connSubModel.readElementValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value");
+		Object value3 = connSubModel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value");
 		System.out.println("Value3:"+value3);
 
 		
@@ -99,16 +99,16 @@ public class SQLQueriesTest {
 		Map<String, Object> removedTableLine = new HashMap<>();
 			removedTableLine.put("sensorid", "033542");
 		// - Delete sensor from table
-		connSubModel.deleteElement("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value", removedTableLine);
+		connSubModel.deleteValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value", removedTableLine);
 		
 		// Get property value again
-		Object value4 = connSubModel.readElementValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value");
+		Object value4 = connSubModel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/value");
 		System.out.println("Value4:"+value4);
 
 		
 		
 		// Get property meta data value
-		Object value5 = connSubModel.readElementValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/category");
+		Object value5 = connSubModel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/properties/sensorNames/category");
 		System.out.println("Value5:"+value5);
 	}
 }

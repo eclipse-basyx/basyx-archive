@@ -83,9 +83,9 @@ public class ManualHTTPCalls {
 		//   properties "prop1" and "prop2". Container and properties lack the 
 		//   required properties for AAS and AAS sub models. They are therefore
 		//   not compliant to Asset Administration Shells.
-		connSubModel1.createElement("properties", new HashMap<String, Object>());
-		connSubModel1.createElement("properties/prop1", 7);
-		connSubModel1.createElement("properties/prop2", "myStr");
+		connSubModel1.createValue("properties", new HashMap<String, Object>());
+		connSubModel1.createValue("properties/prop1", 7);
+		connSubModel1.createValue("properties/prop2", "myStr");
 		
 		
 		// Web service client 

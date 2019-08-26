@@ -69,7 +69,7 @@ public class ReceiveDeviceDashboardStatusApplication extends BaseBaSyxService {
 	@SuppressWarnings("unchecked")
 	public String getDeviceStatus() {
 		// Read complete sub model ("/")
-		VABModelMap<Object> deviceSM = (VABModelMap<Object>) aasServerConnection.readElementValue("/");
+		VABModelMap<Object> deviceSM = (VABModelMap<Object>) aasServerConnection.getModelPropertyValue("/");
 		
 		// Return status property
 		return deviceSM.getPath("properties/status").toString();
@@ -82,7 +82,7 @@ public class ReceiveDeviceDashboardStatusApplication extends BaseBaSyxService {
 	@SuppressWarnings("unchecked")
 	public int getDeviceInvocationCounter() {
 		// Read complete sub model ("/")
-		VABModelMap<Object> deviceSM = (VABModelMap<Object>) aasServerConnection.readElementValue("/");
+		VABModelMap<Object> deviceSM = (VABModelMap<Object>) aasServerConnection.getModelPropertyValue("/");
 		
 		// Get and return invocation counter for device default service
 		return (int) deviceSM.getPath("properties/statistics/default/invocations");

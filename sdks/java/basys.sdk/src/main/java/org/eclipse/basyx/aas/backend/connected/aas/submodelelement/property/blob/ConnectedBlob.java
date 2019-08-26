@@ -19,24 +19,24 @@ public class ConnectedBlob extends ConnectedDataElement implements IBlob {
 	
 	@Override
 	public void setValue(BlobType value) {
-		getProxy().updateElementValue(constructPath(Property.VALUE), value);
+		getProxy().setModelPropertyValue(constructPath(Property.VALUE), value);
 		
 	}
 
 	@Override
 	public BlobType getValue() {
-		return (BlobType)getProxy().readElementValue(constructPath(Property.VALUE));
+		return (BlobType)getProxy().getModelPropertyValue(constructPath(Property.VALUE));
 	}
 
 	@Override
 	public void setMimeType(MimeType mimeType) {
-		getProxy().updateElementValue(constructPath(Blob.MIMETYPE), mimeType);
+		getProxy().setModelPropertyValue(constructPath(Blob.MIMETYPE), mimeType);
 		
 	}
 
 	@Override
 	public MimeType getMimeType() {
-		return (MimeType)getProxy().readElementValue(constructPath(Blob.MIMETYPE));
+		return (MimeType)getProxy().getModelPropertyValue(constructPath(Blob.MIMETYPE));
 	}
 }
 

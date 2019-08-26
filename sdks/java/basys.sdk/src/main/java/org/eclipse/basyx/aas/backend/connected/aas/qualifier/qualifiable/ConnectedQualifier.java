@@ -18,35 +18,35 @@ public class ConnectedQualifier extends ConnectedElement implements IQualifier {
 	
 	@Override
 	public void setQualifierType(String obj) {
-		getProxy().updateElementValue(constructPath(Qualifier.QUALIFIERTYPE), obj);
+		getProxy().setModelPropertyValue(constructPath(Qualifier.QUALIFIERTYPE), obj);
 		
 	}
 
 	@Override
 	public String getQualifierType() {
-		return (String)getProxy().readElementValue(constructPath(Qualifier.QUALIFIERTYPE));
+		return (String)getProxy().getModelPropertyValue(constructPath(Qualifier.QUALIFIERTYPE));
 	}
 
 	@Override
 	public void setQualifierValue(Object obj) {
-		getProxy().updateElementValue(constructPath(Qualifier.QUALIFIERVALUE), obj);
+		getProxy().setModelPropertyValue(constructPath(Qualifier.QUALIFIERVALUE), obj);
 		
 	}
 
 	@Override
 	public Object getQualifierValue() {
-		return getProxy().readElementValue(constructPath(Qualifier.QUALIFIERVALUE));
+		return getProxy().getModelPropertyValue(constructPath(Qualifier.QUALIFIERVALUE));
 	}
 
 	@Override
 	public void setQualifierValueId(IReference obj) {
-		getProxy().updateElementValue(constructPath(Qualifier.QUALIFIERVALUEID), obj);
+		getProxy().setModelPropertyValue(constructPath(Qualifier.QUALIFIERVALUEID), obj);
 		
 	}
 
 	@Override
 	public IReference getQualifierValueId() {
-		return (IReference)getProxy().readElementValue(constructPath(Qualifier.QUALIFIERVALUEID));
+		return (IReference)getProxy().getModelPropertyValue(constructPath(Qualifier.QUALIFIERVALUEID));
 	}
 
 	@Override

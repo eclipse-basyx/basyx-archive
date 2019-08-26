@@ -25,6 +25,6 @@ public class ConnectedHasSemantics extends ConnectedElement implements IHasSeman
 
 	@Override
 	public void setSemanticID(IReference ref) {
-		getProxy().updateElementValue(constructPath(HasSemantics.SEMANTICID), ref);
+		getProxy().setModelPropertyValue(constructPath(HasSemantics.SEMANTICID), ref);
 	}
 }

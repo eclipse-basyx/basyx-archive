@@ -49,7 +49,7 @@ public class XQueryProviderQueries {
 
 		
 		// Get property value
-		Object value1 = connSubModel.readElementValue("/aas/submodels/XMLQTestSubmodel/properties/heavySensorNames");
+		Object value1 = connSubModel.getModelPropertyValue("/aas/submodels/XMLQTestSubmodel/properties/heavySensorNames");
 		System.out.println("Value:"+value1);
 	}
 }

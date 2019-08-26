@@ -15,36 +15,36 @@ public class ConnectedKey extends ConnectedElement implements IKey {
 	}
 	@Override
 	public String getType() {
-	return (String)getProxy().readElementValue(constructPath(Key.TYPE));
+	return (String)getProxy().getModelPropertyValue(constructPath(Key.TYPE));
 	}
 	@Override
 	public boolean isLocal() {
-		return (boolean)getProxy().readElementValue(constructPath(Key.LOCAL));
+		return (boolean)getProxy().getModelPropertyValue(constructPath(Key.LOCAL));
 	}
 	@Override
 	public String getValue() {
-		return (String)getProxy().readElementValue(constructPath(Key.VALUE));
+		return (String)getProxy().getModelPropertyValue(constructPath(Key.VALUE));
 	}
 	@Override
 	public String getidType() {
-		return (String)getProxy().readElementValue(constructPath(Key.IDTYPE));
+		return (String)getProxy().getModelPropertyValue(constructPath(Key.IDTYPE));
 	}
 	@Override
 	public void setType(String type) {
-		getProxy().updateElementValue(constructPath(Key.TYPE),type);
+		getProxy().setModelPropertyValue(constructPath(Key.TYPE),type);
 	}
 	@Override
 	public void setLocal(boolean local) {
-		getProxy().updateElementValue(constructPath(Key.LOCAL), local);
+		getProxy().setModelPropertyValue(constructPath(Key.LOCAL), local);
 		
 	}
 	@Override
 	public void setValue(String value) {
-		getProxy().updateElementValue(constructPath(Key.VALUE),value );
+		getProxy().setModelPropertyValue(constructPath(Key.VALUE),value );
 	}
 	@Override
 	public void setIdType(String idType) {
-		getProxy().updateElementValue(constructPath(Key.IDTYPE), idType);
+		getProxy().setModelPropertyValue(constructPath(Key.IDTYPE), idType);
 	}
 
 }

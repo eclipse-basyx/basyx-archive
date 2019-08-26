@@ -55,7 +55,7 @@ public class ManufacturingDeviceActiveAASManager extends ManufacturingDeviceMana
 				.putPath("properties/parts/availability", dynamicProperty);
 
 		// Transfer device sub model to server
-		aasServerConnection.createElement(lookupURN("Supply").toString(), supplySM);
+		aasServerConnection.createValue(lookupURN("Supply").toString(), supplySM);
 	}
 
 

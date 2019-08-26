@@ -60,55 +60,55 @@ public class ConnectedConceptDescription extends ConnectedElement implements ICo
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashSet<String> getisCaseOf() {
-		return (HashSet<String>)getProxy().readElementValue(constructPath(ConceptDescription.ISCASEOF));
+		return (HashSet<String>)getProxy().getModelPropertyValue(constructPath(ConceptDescription.ISCASEOF));
 	}
 
 	@Override
 	public void setIscaseOf(HashSet<String> ref) {
-		getProxy().updateElementValue(constructPath(ConceptDescription.ISCASEOF), ref);
+		getProxy().setModelPropertyValue(constructPath(ConceptDescription.ISCASEOF), ref);
 		
 	}
 	@Override
 	public String getIdshort() {
-		return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
+		return (String) getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
 	public String getCategory() {
-		return (String) getProxy().readElementValue(constructPath(Referable.CATEGORY));
+		return (String) getProxy().getModelPropertyValue(constructPath(Referable.CATEGORY));
 	}
 
 	@Override
 	public String getDescription() {
-		return (String) getProxy().readElementValue(constructPath(Referable.DESCRIPTION));
+		return (String) getProxy().getModelPropertyValue(constructPath(Referable.DESCRIPTION));
 	}
 
 	@Override
 	public IReference  getParent() {
-		return (IReference)getProxy().readElementValue(constructPath(Referable.PARENT));
+		return (IReference)getProxy().getModelPropertyValue(constructPath(Referable.PARENT));
 	}
 
 	@Override
 	public void setIdshort(String idShort) {
-		getProxy().updateElementValue(constructPath(Referable.IDSHORT), idShort);
+		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), idShort);
 		
 	}
 
 	@Override
 	public void setCategory(String category) {
-		getProxy().updateElementValue(constructPath(Referable.CATEGORY), category);
+		getProxy().setModelPropertyValue(constructPath(Referable.CATEGORY), category);
 		
 	}
 
 	@Override
 	public void setDescription(String description) {
-		getProxy().updateElementValue(constructPath(Referable.DESCRIPTION), description);
+		getProxy().setModelPropertyValue(constructPath(Referable.DESCRIPTION), description);
 		
 	}
 
 	@Override
 	public void setParent(IReference  obj) {
-		getProxy().updateElementValue(constructPath(Referable.PARENT), obj);
+		getProxy().setModelPropertyValue(constructPath(Referable.PARENT), obj);
 		
 	}
 

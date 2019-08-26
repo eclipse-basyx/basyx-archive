@@ -80,8 +80,8 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		super.onServiceInvocation();
 		
 		// Implement the device invocation counter - read and increment invocation counter
-		int invocations = (int) aasServerConnection.readElementValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations");
-		aasServerConnection.updateElementValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations", ++invocations);		
+		int invocations = (int) aasServerConnection.getModelPropertyValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations");
+		aasServerConnection.setModelPropertyValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations", ++invocations);		
 	}
 
 	
@@ -94,7 +94,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		super.onChangedExecutionState(newExecutionState);
 		
 		// Update property "properties/status" in external AAS
-		aasServerConnection.updateElementValue(lookupURN("Status").getEncodedURN()+"/properties/status", newExecutionState.getValue());
+		aasServerConnection.setModelPropertyValue(lookupURN("Status").getEncodedURN()+"/properties/status", newExecutionState.getValue());
 	}
 
 
@@ -117,7 +117,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		// - Create device AAS
 		AssetAdministrationShell aas = new AssetAdministrationShell().putPath("idShort", "DeviceIDShort");
 		// - Transfer device AAS to server
-		aasServerConnection.createElement(lookupURN("AAS").toString(), aas);		
+		aasServerConnection.createValue(lookupURN("AAS").toString(), aas);		
 
 		
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
@@ -130,7 +130,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		//                    therefore we start counting always at 0.
 				.putPath("properties/statistics/default/invocations", 0);
 		// - Transfer device sub model to server
-		aasServerConnection.createElement(lookupURN("Status").toString(), statusSM);
+		aasServerConnection.createValue(lookupURN("Status").toString(), statusSM);
 
 		
 		// Register control component as local sub model

@@ -108,12 +108,12 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 	@Override
 	public String getId() {
-		return (String)getProxy().readElementValue(constructPath(Referable.IDSHORT));
+		return (String)getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
 	public void setId(String id) {
-		getProxy().updateElementValue(constructPath(Referable.IDSHORT), id);
+		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), id);
 	}
 
 	@Override
@@ -131,12 +131,12 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 	@Override
 	public void setProperties(Map<String, IProperty> properties) {
-		getProxy().updateElementValue(constructPath(SubModel.PROPERTIES),properties);
+		getProxy().setModelPropertyValue(constructPath(SubModel.PROPERTIES),properties);
 	}
 
 	@Override
 	public void setOperations(Map<String, IOperation> operations) {
-		getProxy().updateElementValue(constructPath(SubModel.OPERATIONS),operations);
+		getProxy().setModelPropertyValue(constructPath(SubModel.OPERATIONS),operations);
 	}
 
 	public SubModel getSubModel() {
@@ -150,7 +150,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 		String id = value.getId();
 		if (value instanceof IProperty) {
 			System.out.println("adding Property " + id);
-			getProxy().createElement(constructPath(VABPathTools.concatenatePaths(SubModel.PROPERTIES, id)), value);
+			getProxy().createValue(constructPath(VABPathTools.concatenatePaths(SubModel.PROPERTIES, id)), value);
 		} else {
 			throw new RuntimeException("Tried to add DataElement with id " + id + " which is does not implement IProperty");
 		}
@@ -165,7 +165,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 			System.out.println("adding Operation " + id);
 
 			// Add single operation
-			getProxy().createElement(constructPath(VABPathTools.concatenatePaths(SubModel.OPERATIONS, id)), operation);
+			getProxy().createValue(constructPath(VABPathTools.concatenatePaths(SubModel.OPERATIONS, id)), operation);
 		} else {
 			throw new RuntimeException("Tried to add Operation with id " + id + " which is does not implement IOperation");
 		}
@@ -181,7 +181,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 		Map<String, IProperty> ret = new HashMap<>();
 
 		// Sub model operation list
-		Object smDeList = getProxy().readElementValue(constructPath(SubModel.PROPERTIES));
+		Object smDeList = getProxy().getModelPropertyValue(constructPath(SubModel.PROPERTIES));
 
 		// RTTI check
 		if (smDeList instanceof HashSet) {
@@ -216,7 +216,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 		Map<String, IOperation> ret = new HashMap<>();
 
 		// Sub model operation list
-		Object smOpList = getProxy().readElementValue(constructPath(SubModel.OPERATIONS));
+		Object smOpList = getProxy().getModelPropertyValue(constructPath(SubModel.OPERATIONS));
 
 		// RTTI check (c# specific)
 		if (smOpList instanceof HashSet) {
@@ -253,45 +253,45 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 	@Override
 	public String getIdshort() {
-		return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
+		return (String) getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
 	public String getCategory() {
-		return (String) getProxy().readElementValue(constructPath(Referable.CATEGORY));
+		return (String) getProxy().getModelPropertyValue(constructPath(Referable.CATEGORY));
 	}
 
 	@Override
 	public String getDescription() {
-		return (String) getProxy().readElementValue(constructPath(Referable.DESCRIPTION));
+		return (String) getProxy().getModelPropertyValue(constructPath(Referable.DESCRIPTION));
 	}
 
 	@Override
 	public IReference  getParent() {
-		return (IReference)getProxy().readElementValue(constructPath(Referable.PARENT));
+		return (IReference)getProxy().getModelPropertyValue(constructPath(Referable.PARENT));
 	}
 
 	@Override
 	public void setIdshort(String idShort) {
-		getProxy().updateElementValue(constructPath(Referable.IDSHORT), idShort);
+		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), idShort);
 		
 	}
 
 	@Override
 	public void setCategory(String category) {
-		getProxy().updateElementValue(constructPath(Referable.CATEGORY), category);
+		getProxy().setModelPropertyValue(constructPath(Referable.CATEGORY), category);
 		
 	}
 
 	@Override
 	public void setDescription(String description) {
-		getProxy().updateElementValue(constructPath(Referable.DESCRIPTION), description);
+		getProxy().setModelPropertyValue(constructPath(Referable.DESCRIPTION), description);
 		
 	}
 
 	@Override
 	public void setParent(IReference  obj) {
-		getProxy().updateElementValue(constructPath(Referable.PARENT), obj);
+		getProxy().setModelPropertyValue(constructPath(Referable.PARENT), obj);
 		
 	}
 

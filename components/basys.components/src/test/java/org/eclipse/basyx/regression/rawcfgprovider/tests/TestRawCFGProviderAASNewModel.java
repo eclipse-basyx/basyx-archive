@@ -48,10 +48,10 @@ public class TestRawCFGProviderAASNewModel {
 		// Create map with complex type
 		AssetAdministrationShell aas = new AssetAdministrationShell();
 		// Create AAS structure on server
-		connSubModel.createElement("/aas/submodels/rawSampleCFG/aas", aas);
+		connSubModel.createValue("/aas/submodels/rawSampleCFG/aas", aas);
 
 		
 		// Read complex property completely
-		Map<String, Object> aasReadBack = (Map<String, Object>) connSubModel.readElementValue("/aas/submodels/rawSampleCFG/aas");
+		Map<String, Object> aasReadBack = (Map<String, Object>) connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/aas");
 	}
 }

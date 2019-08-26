@@ -123,10 +123,10 @@ public class DynamicPropertyClass {
 		// no setter (null) is provided.
 		Map<String, Object> dynamicPropertyVal = VABLambdaProviderHelper.createSimple(new TailoredBaSyxSupplier(), null);
 		// - Update property properties/dynamicExample with dynamic get/set operation
-		connSubModel1.createElement("dynamicExampleProperty", dynamicPropertyVal);
+		connSubModel1.createValue("dynamicExampleProperty", dynamicPropertyVal);
 
 		// Read dynamicExample property
-		Object propertyValue = connSubModel1.readElementValue("dynamicExampleProperty");
+		Object propertyValue = connSubModel1.getModelPropertyValue("dynamicExampleProperty");
 
 		
 		// Compare returned to expected values

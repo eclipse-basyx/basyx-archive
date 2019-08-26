@@ -53,45 +53,45 @@ public class ConnectedIdentifiableFacade extends ConnectedElement implements IId
 	
 	@Override
 	public String getIdshort() {
-		return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
+		return (String) getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
 	public String getCategory() {
-		return (String) getProxy().readElementValue(constructPath(Referable.CATEGORY));
+		return (String) getProxy().getModelPropertyValue(constructPath(Referable.CATEGORY));
 	}
 
 	@Override
 	public String getDescription() {
-		return (String) getProxy().readElementValue(constructPath(Referable.DESCRIPTION));
+		return (String) getProxy().getModelPropertyValue(constructPath(Referable.DESCRIPTION));
 	}
 
 	@Override
 	public IReference  getParent() {
-		return (IReference )getProxy().readElementValue(constructPath(Referable.PARENT));
+		return (IReference )getProxy().getModelPropertyValue(constructPath(Referable.PARENT));
 	}
 
 	@Override
 	public void setIdshort(String idShort) {
-		getProxy().updateElementValue(constructPath(Referable.IDSHORT), idShort);
+		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), idShort);
 		
 	}
 
 	@Override
 	public void setCategory(String category) {
-		getProxy().updateElementValue(constructPath(Referable.CATEGORY), category);
+		getProxy().setModelPropertyValue(constructPath(Referable.CATEGORY), category);
 		
 	}
 
 	@Override
 	public void setDescription(String description) {
-		getProxy().updateElementValue(constructPath(Referable.DESCRIPTION), description);
+		getProxy().setModelPropertyValue(constructPath(Referable.DESCRIPTION), description);
 		
 	}
 
 	@Override
 	public void setParent(IReference  obj) {
-		getProxy().updateElementValue(constructPath(Referable.PARENT), obj);
+		getProxy().setModelPropertyValue(constructPath(Referable.PARENT), obj);
 		
 	}
 

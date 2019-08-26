@@ -20,7 +20,7 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 public class ConnectedPropertyFactory {
 	@SuppressWarnings("unchecked")
 	public IProperty createProperty(String path, VABElementProxy proxy) {
-		Map<String, Object> property = (Map<String, Object>) proxy.readElementValue(path);
+		Map<String, Object> property = (Map<String, Object>) proxy.getModelPropertyValue(path);
 		if (property.containsKey(SubModel.PROPERTIES)) {
 			return new ConnectedContainerProperty(path, proxy);
 		} else if (property.containsKey(Property.VALUETYPE)) {

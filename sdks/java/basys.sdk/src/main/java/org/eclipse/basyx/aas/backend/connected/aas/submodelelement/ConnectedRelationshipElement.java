@@ -26,24 +26,24 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 	
 	@Override
 	public void setFirst(IReference first) {
-	getProxy().updateElementValue(constructPath(RelationshipElement.FIRST), first);
+	getProxy().setModelPropertyValue(constructPath(RelationshipElement.FIRST), first);
 		
 	}
 
 	@Override
 	public IReference getFirst() {
-	return (IReference)	getProxy().readElementValue(constructPath(RelationshipElement.FIRST));
+	return (IReference)	getProxy().getModelPropertyValue(constructPath(RelationshipElement.FIRST));
 	}
 
 	@Override
 	public void setSecond(IReference second) {
-		getProxy().updateElementValue(constructPath(RelationshipElement.SECOND), second);
+		getProxy().setModelPropertyValue(constructPath(RelationshipElement.SECOND), second);
 		
 	}
 
 	@Override
 	public IReference getSecond() {
-		return (IReference)	getProxy().readElementValue(constructPath(RelationshipElement.FIRST));
+		return (IReference)	getProxy().getModelPropertyValue(constructPath(RelationshipElement.FIRST));
 	}
 
 	@Override
@@ -135,12 +135,12 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 	
 	@Override
 	public String getId() {
-	return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
+	return (String) getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
 	public void setId(String id) {
-		getProxy().updateElementValue(constructPath(Referable.IDSHORT), id);
+		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), id);
 		
 	}
 

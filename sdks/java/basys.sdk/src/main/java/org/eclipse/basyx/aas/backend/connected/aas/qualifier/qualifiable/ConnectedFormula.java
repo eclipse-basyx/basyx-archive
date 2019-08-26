@@ -19,14 +19,14 @@ public class ConnectedFormula extends ConnectedConstraint implements IFormula {
 	
 	@Override
 	public void setDependsOn(Set<IReference> dependsOn) {
-		getProxy().updateElementValue(constructPath(Formula.DEPENDSON), dependsOn);
+		getProxy().setModelPropertyValue(constructPath(Formula.DEPENDSON), dependsOn);
 		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IReference> getDependsOn() {
-		return (Set<IReference>)getProxy().readElementValue(constructPath(Formula.DEPENDSON));
+		return (Set<IReference>)getProxy().getModelPropertyValue(constructPath(Formula.DEPENDSON));
 	}
 
 }

@@ -131,35 +131,37 @@ public class ConnectToAASSubModelVAB {
 	@Test @SuppressWarnings("unchecked")
 	public void accessSubModel() throws Exception {
 		// Retrieve sub model (created by factory) with SDK connector
-		// Connect to sub model using lower-level VAB interface
-		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("sm-001VAB");
+		{
+			// Connect to sub model using lower-level VAB interface
+			VABElementProxy connSubModel1 = this.connManager.connectToVABElement("sm-001VAB");
 
-		// - Read properties
-		String prop1Id = (String) ((Map<String, Object>) connSubModel1.readElementValue("dataElements/prop1"))
-				.get("idShort");
-		int prop1Val = (int) connSubModel1.readElementValue("dataElements/prop1/value");
-		int prop3Val = (int) connSubModel1.readElementValue("dataElements/prop3/value");
-		String prop2Id = (String) ((Map<String, Object>) connSubModel1.readElementValue("dataElements/prop2"))
-				.get("idShort");
-		int prop211 = (int) connSubModel1.readElementValue("dataElements/prop2/dataElements/prop11/value");
-		// - Change property value using VAB primitive
-		connSubModel1.updateElementValue("dataElements/prop1/value", 456);
-		// - Read value back using VAB primitive
-		int changedProp = (int) connSubModel1.readElementValue("dataElements/prop1/value");
+			// - Read properties
+			String prop1Id = (String) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("idShort");
+			int prop1Val = (int) connSubModel1.getModelPropertyValue("dataElements/prop1/value");
+			int prop3Val = (int) connSubModel1.getModelPropertyValue("dataElements/prop3/value");
+			String prop2Id = (String) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2")).get("idShort");
+			int prop211 = (int) connSubModel1.getModelPropertyValue("dataElements/prop2/dataElements/prop11/value");
+			// - Change property value using VAB primitive
+			connSubModel1.setModelPropertyValue("dataElements/prop1/value", 456);
+			// - Read value back using VAB primitive
+			int changedProp = (int) connSubModel1.getModelPropertyValue("dataElements/prop1/value");
 
-		// Create and connect SDK connector
-		ISubModel subModel = manager.retrieveSM("sm-001", new ModelUrn("aas-001"));
-		// - Retrieve sub model values and compare to expected values
-		String smID = subModel.getId();
+			
+			// Create and connect SDK connector
+			ISubModel subModel = manager.retrieveSM("sm-001", new ModelUrn("aas-001"));
+			// - Retrieve sub model values and compare to expected values
+			String smID     = subModel.getId();
 
-		// Check results
-		assertTrue(smID.equals("sm-001"));
-		assertTrue(prop1Id.equals("prop1"));
-		assertTrue(prop1Val == 234);
-		assertTrue(prop3Val == 17);
-		assertTrue(prop2Id.equals("prop2"));
-		assertTrue(prop211 == 123);
-		assertTrue(changedProp == 456);
+			
+			// Check results
+			assertTrue(smID.equals("sm-001"));
+			assertTrue(prop1Id.equals("prop1"));
+			assertTrue(prop1Val == 234);
+			assertTrue(prop3Val == 17);
+			assertTrue(prop2Id.equals("prop2"));
+			assertTrue(prop211 == 123);
+			assertTrue(changedProp == 456);
+		}
 	}
 }
 

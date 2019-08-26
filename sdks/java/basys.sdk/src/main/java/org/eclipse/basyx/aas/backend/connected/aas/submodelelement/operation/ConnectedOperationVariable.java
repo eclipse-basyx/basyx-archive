@@ -28,13 +28,13 @@ public class ConnectedOperationVariable extends ConnectedSubmodelElement impleme
 	
 	@Override
 	public void setValue(ISubmodelElement value) {
-	getProxy().updateElementValue(constructPath(Property.VALUE), value);
+	getProxy().setModelPropertyValue(constructPath(Property.VALUE), value);
 		
 	}
 
 	@Override
 	public ISubmodelElement getValue() {
-	return (ISubmodelElement)getProxy().readElementValue(constructPath(Property.VALUE));
+	return (ISubmodelElement)getProxy().getModelPropertyValue(constructPath(Property.VALUE));
 	}
 	
 	@Override
@@ -124,12 +124,12 @@ public class ConnectedOperationVariable extends ConnectedSubmodelElement impleme
 	}
 	@Override
 	public String getId() {
-	return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
+	return (String) getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
 	public void setId(String id) {
-		getProxy().updateElementValue(constructPath(Referable.IDSHORT), id);
+		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), id);
 		
 	}
 

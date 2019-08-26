@@ -145,7 +145,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		// - Populate AAS
 		aas.setId("DeviceIDShort");
 		// - Transfer device AAS to server
-		aasServerConnection.createElement(lookupURN("AAS").toString(), aas);
+		aasServerConnection.createValue(lookupURN("AAS").toString(), aas);
 
 	
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
@@ -158,7 +158,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		//                    therefore we start counting always at 0.
 				.putPath("properties/statistics/default/invocations", 0);
 		// - Transfer device sub model to server
-		aasServerConnection.createElement(lookupURN("Status").toString(), statusSM);
+		aasServerConnection.createValue(lookupURN("Status").toString(), statusSM);
 
 		
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
@@ -168,7 +168,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		Map<String, Object> listOfControllers = new HashMap<>();
 		((Map<String, Object>) controllerSM.get(SubModel.PROPERTIES)).put("controllers", listOfControllers);
 		// - Transfer device sub model to server
-		aasServerConnection.createElement(lookupURN("Controller").toString(), controllerSM);
+		aasServerConnection.createValue(lookupURN("Controller").toString(), controllerSM);
 	}
 
 
@@ -191,14 +191,14 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		
 		// Check what was being received. This check is performed based on a prefix that he device has to provide);
 		// - Update of device status
-		if (hasPrefix(rxStr, "status:")) aasServerConnection.updateElementValue(lookupURN("Status").getEncodedURN()+"/properties/status", removePrefix(rxStr, "status"));
+		if (hasPrefix(rxStr, "status:")) aasServerConnection.setModelPropertyValue(lookupURN("Status").getEncodedURN()+"/properties/status", removePrefix(rxStr, "status"));
 		// - Device indicates service invocation
 		if (hasPrefix(rxStr, "invocation:")) {
 			// Start of process
 			if (hasPrefix(rxStr, "invocation:start")) {
 				// Read and increment invocation counter
-				int invocations = (int) aasServerConnection.readElementValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations");
-				aasServerConnection.updateElementValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations", ++invocations);
+				int invocations = (int) aasServerConnection.getModelPropertyValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations");
+				aasServerConnection.setModelPropertyValue(lookupURN("Status").getEncodedURN()+"/properties/statistics/default/invocations", ++invocations);
 			} 
 			// End of process
 			if (hasPrefix(rxStr, "invocation:end")) {

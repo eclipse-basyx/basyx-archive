@@ -18,13 +18,13 @@ public class ConnectedReferenceElement extends ConnectedDataElement implements I
 
 	@Override
 	public void setValue(IReference ref) {
-		getProxy().updateElementValue(constructPath(Property.VALUE), ref);
+		getProxy().setModelPropertyValue(constructPath(Property.VALUE), ref);
 		
 	}
 
 	@Override
 	public IReference getValue() {
-		return (IReference)getProxy().readElementValue(constructPath(Property.VALUE));
+		return (IReference)getProxy().getModelPropertyValue(constructPath(Property.VALUE));
 	}
 
 }
