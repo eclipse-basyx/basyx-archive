@@ -344,7 +344,7 @@ public class SQLDirectoryProvider implements IModelProvider {
 	 * Registry does not support invoke
 	 */
 	@Override
-	public Object invokeOperation(String path, Object[] parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws Exception {
 		throw new RuntimeException("Not implemented");
 	}
 

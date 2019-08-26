@@ -78,7 +78,7 @@ public class OpcUaConnector implements IModelProvider {
     }
 
     @Override
-    public Object invokeOperation(String servicePath, Object[] parameters) throws Exception {
+	public Object invokeOperation(String servicePath, Object... parameters) throws Exception {
         try {
             clientRunner = new BaSyxOpcUaClientRunner(address);
             clientRunner.run();

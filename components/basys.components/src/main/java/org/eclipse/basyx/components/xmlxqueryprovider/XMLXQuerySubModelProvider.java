@@ -306,7 +306,7 @@ public class XMLXQuerySubModelProvider extends BaseConfiguredProvider {
 	 * Invoke operation with given parameter list
 	 */
 	@Override
-	public Object invokeOperation(String propertyName, Object[] parameter) throws Exception {
+	public Object invokeOperation(String propertyName, Object... parameter) throws Exception {
 		// Indicate exception
 		throw new OperationNotImplementedException();
 	}

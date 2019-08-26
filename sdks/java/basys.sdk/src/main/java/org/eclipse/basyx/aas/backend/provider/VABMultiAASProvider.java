@@ -106,7 +106,7 @@ public class VABMultiAASProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object[] parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws Exception {
 		String aasId = getId(path);
 		if (aasId != null) {
 			VABMultiSubmodelProvider provider = aas_providers.get(aasId);

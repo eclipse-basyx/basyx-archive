@@ -63,6 +63,6 @@ public interface IModelProvider {
 	 *            Operation parameter
 	 * @return Return value
 	 */
-	public Object invokeOperation(String path, Object[] parameter) throws Exception;
+	public Object invokeOperation(String path, Object... parameter) throws Exception;
 
 }

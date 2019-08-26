@@ -126,7 +126,7 @@ public class JSONConnector implements IModelProvider {
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object[] parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws Exception {
 
 		// Serialize parameter
 		List<Object> params = new ArrayList<>();

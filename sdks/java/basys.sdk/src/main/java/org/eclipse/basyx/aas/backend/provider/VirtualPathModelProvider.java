@@ -73,7 +73,7 @@ public class VirtualPathModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object[] parameters) throws Exception {
+	public Object invokeOperation(String path, Object... parameters) throws Exception {
 		// Unwrap parameters, if they are wrapped
 		for (int i = 0; i < parameters.length; i++) {
 			parameters[i] = unwrapParameter(parameters[i]);

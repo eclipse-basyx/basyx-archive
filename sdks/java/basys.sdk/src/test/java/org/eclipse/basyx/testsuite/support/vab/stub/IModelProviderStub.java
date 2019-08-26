@@ -39,7 +39,7 @@ public class IModelProviderStub implements IModelProvider {
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object[] parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws Exception {
 		value = parameter;
 		this.path = path;
 		return null;

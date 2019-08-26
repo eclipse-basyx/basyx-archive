@@ -200,7 +200,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 			// Adds a new submodel to to the registered AAS
 			VABModelMap<Object> sm = (VABModelMap<Object>) newValue;
 			VirtualPathModelProvider smProvider = new VirtualPathModelProvider(sm);
-			submodel_providers.put((String) sm.getPath(Referable.IDSHORT), (VirtualPathModelProvider) smProvider);
+			submodel_providers.put((String) sm.getPath(Referable.IDSHORT), smProvider);
 			aas_provider.createValue("/" + AssetAdministrationShell.SUBMODEL, sm);
 		} else {
 			// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
@@ -234,7 +234,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object[] parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws Exception {
 		String[] pathElements = VABPathTools.splitPath(path);
 		String operationPath = VABPathTools.buildPath(pathElements, 3);
 		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+
 import org.eclipse.basyx.vab.backend.server.BaSysCommunicationInterface;
 import org.eclipse.basyx.vab.backend.server.utils.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
@@ -50,43 +51,11 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 	public static final byte BASYX_INVOKE = 0x05;
 
 	
-	
 	/**
 	 * BaSyx result 'OK' : 0x00
 	 */
 	public static final byte BASYX_RESULT_OK = 0x00;
 
-	
-	/**
-	 * BaSyx result 'Element not found' : 0xF0
-	 */
-	public static final byte BASYX_RESULT_NOT_FOUND = (byte) 0xF0;
-
-	
-	/**
-	 * BaSyx result 'Access not permitted' : 0xF1
-	 */
-	public static final byte BASYX_RESULT_ACCESS_NOT_PERMITTED = (byte) 0xF1;
-
-	
-	/**
-	 * BaSyx result 'Invalid type' : 0xF2
-	 */
-	public static final byte BASYX_RESULT_INVALID_TYPE = (byte) 0xF2;
-
-	
-	/**
-	 * BaSyx result 'Exception thrown' : 0xF3
-	 */
-	public static final byte BASYX_RESULT_EXCEPTION_THROWN = (byte) 0xF3;
-
-	
-	/**
-	 * BaSyx result 'Unknown error' : 0xFE
-	 */
-	public static final byte BASYX_RESULT_UNKNOWN_ERROR = (byte) 0xFE;
-
-	
 	
 	/**
 	 * Reference to IModelProvider backend

@@ -488,7 +488,7 @@ public class FileSystemProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object[] parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

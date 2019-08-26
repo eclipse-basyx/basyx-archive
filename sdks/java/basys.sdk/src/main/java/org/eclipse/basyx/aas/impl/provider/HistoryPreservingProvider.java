@@ -115,7 +115,7 @@ public class HistoryPreservingProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object[] parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws Exception {
 		return mainProvider.invokeOperation(path, parameter);
 	}
 

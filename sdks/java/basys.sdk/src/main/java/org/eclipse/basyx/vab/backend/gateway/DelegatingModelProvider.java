@@ -46,7 +46,7 @@ public class DelegatingModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object[] parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws Exception {
 		return getProvider(path).invokeOperation(removeAddressEntry(path), parameter);
 	}
 

@@ -155,7 +155,7 @@ public class ConsistencyProvider<T extends IModelProvider> implements ILocalMode
 	 * @throws Exception
 	 */
 	@Override
-	public Object invokeOperation(String path, Object[] parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws Exception {
 		return providerBackend.invokeOperation(path, parameter);
 	}
 
