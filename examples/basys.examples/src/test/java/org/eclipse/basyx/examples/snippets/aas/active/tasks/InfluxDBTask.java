@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.eclipse.basyx.aas.api.webserviceclient.WebServiceRawClient;
 import org.eclipse.basyx.tools.aas.active.VABModelTask;
 import org.eclipse.basyx.vab.core.IModelProvider;
 

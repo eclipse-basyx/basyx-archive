@@ -7,11 +7,16 @@ import java.util.Collection;
 
 import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.manager.IAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedSubModel;
-import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.vab.core.IConnectorProvider;
+import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+import org.eclipse.basyx.vab.core.tools.VABPathTools;
 
 /**
  * Implement a AAS manager backend that communicates via HTTP/REST<br />
@@ -22,14 +27,18 @@ import org.eclipse.basyx.vab.core.VABConnectionManager;
  */
 public class ConnectedAssetAdministrationShellManager implements IAssetAdministrationShellManager {
 
-	private VABConnectionManager manager;
+	protected IAASRegistryService aasDirectory;
+
+	protected IConnectorProvider providerProvider;
 
 	/**
 	 * @param networkDirectoryService
 	 * @param providerProvider
 	 */
-	public ConnectedAssetAdministrationShellManager(VABConnectionManager manager) {
-		this.manager = manager;
+	public ConnectedAssetAdministrationShellManager(IAASRegistryService directory,
+			IConnectorProvider provider) {
+		this.aasDirectory = directory;
+		this.providerProvider = provider;
 	}
 
 	@Override
@@ -37,13 +46,34 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		throw new FeatureNotImplementedException();
 	}
 
-	public ISubModel retrieveSM(String id) {
-		return new ConnectedSubModel("/aas/submodels/" + id, manager.connectToVABElement(id));
+	public ConnectedSubModel retrieveSM(String smid, ModelUrn aasUrn) {
+		// look up AAS descriptor in the registry
+		AASDescriptor aasDescriptor = aasDirectory.lookupAAS(aasUrn);
+
+		// Get submodel descriptor from the aas descriptor
+		SubmodelDescriptor smDescriptor = aasDescriptor.getSubModelDescriptor(smid);
+
+		// get address of the submodel descriptor
+		String addr = smDescriptor.getFirstEndpoint();
+
+		// Return a new VABElementProxy
+		VABElementProxy proxy = new VABElementProxy(VABPathTools.removeAddressEntry(addr),
+				providerProvider.getConnector(addr));
+		return new ConnectedSubModel("/aas/submodels/" + smid, proxy);
 	}
 
 	@Override
-	public ConnectedAssetAdministrationShell retrieveAAS(String id) throws Exception {
-		return new ConnectedAssetAdministrationShell("/aas", manager.connectToVABElement(id), manager);
+	public ConnectedAssetAdministrationShell retrieveAAS(ModelUrn aasUrn) throws Exception {
+		// Lookup AAS descriptor
+		AASDescriptor aasDescriptor = aasDirectory.lookupAAS(aasUrn);
+
+		// Get AAD address from AAS descriptor
+		String addr = aasDescriptor.getFirstEndpoint();
+
+		// Return a new VABElementProxy
+		VABElementProxy proxy = new VABElementProxy(VABPathTools.removeAddressEntry(addr),
+				providerProvider.getConnector(addr));
+		return new ConnectedAssetAdministrationShell("/aas", proxy, this);
 	}
 
 	@Override

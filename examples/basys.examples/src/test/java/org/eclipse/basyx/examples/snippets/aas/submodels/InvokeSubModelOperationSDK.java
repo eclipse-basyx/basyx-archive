@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
@@ -15,8 +16,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Ope
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_Empty;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
-import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
-import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -90,14 +90,14 @@ public class InvokeSubModelOperationSDK {
 	 * The connection manager uses a preconfigured directory for resolving IDs to 
 	 * network addresses, and a HTTP connector to connect to VAB objects.
 	 */
-	protected VABConnectionManager connManager = new VABConnectionManager(
+	protected ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(
 			// Add example specific mappings
-			new ExamplesPreconfiguredDirectory()
-			    // - SDK connectors encapsulate relative path to sub model (/aas/submodels/sm-001)
-			    .addMapping("sm-001",     "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel"),
+			new ExampleAASRegistry()
+					// - SDK connectors encapsulate relative path to sub model
+					// (/aas/submodels/sm-001)
+					.addSubmodelMapping("", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel"),
 			// We connect via HTTP
 			new HTTPConnectorProvider());
-
 	
 	
 	/**
@@ -123,14 +123,10 @@ public class InvokeSubModelOperationSDK {
 	 */
 	@Test
 	public void accessSubModel() throws Exception {
-		// Create manager using the directory stub and the HTTPConnectorProvider
-		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(connManager);
-		
-		
 		// Retrieve sub model (created by factory) with SDK connector
 		{
 			// Create and connect SDK connector
-			ISubModel subModel = manager.retrieveSM("sm-001");
+			ISubModel subModel = manager.retrieveSM("sm-001", new ModelUrn(""));
 			
 			// Sub model operations
 			Map<String, IOperation> operations = subModel.getOperations();

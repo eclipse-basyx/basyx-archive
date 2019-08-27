@@ -3,14 +3,16 @@ package org.eclipse.basyx.components.processengine.connector;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
+import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedSubModel;
-import org.eclipse.basyx.components.service.BaseBaSyxService;
-import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.eclipse.basyx.vab.core.IConnectorProvider;
 
 
 /**
@@ -20,7 +22,7 @@ import org.eclipse.basyx.vab.core.VABConnectionManager;
  * 
  * @author Zhang, Zai
  * */
-public abstract class DeviceServiceExecutor extends BaseBaSyxService implements IDeviceServiceExecutor {
+public abstract class DeviceServiceExecutor implements IDeviceServiceExecutor {
 	
 	protected  ConnectedAssetAdministrationShellManager manager;
 	
@@ -29,19 +31,33 @@ public abstract class DeviceServiceExecutor extends BaseBaSyxService implements 
 	 * private constructor
 	 * create the connected administration shell for data exchange
 	 * */
-	public DeviceServiceExecutor(VABConnectionManager connectionmanager) {
-		setConnectionManager(connectionmanager);
+	public DeviceServiceExecutor(IAASRegistryService registry, IConnectorProvider provider) {
+
 		//set-up the administration shell manager to create connected aas
-		manager = new ConnectedAssetAdministrationShellManager(connectionmanager);
+		manager = new ConnectedAssetAdministrationShellManager(registry, provider);
 	};
 	
+	public DeviceServiceExecutor(ConnectedAssetAdministrationShellManager manager) {
+
+		// set-up the administration shell manager to create connected aas
+		this.manager = manager;
+	};
+
 	/**
 	 * Synchronous invocation the expected service specified by the BPMN-model
 	 * */
+	@Override
 	public Object executeService( String servicename, String serviceProvider, String submodelid, List<Object> params) {
 		try {
+			// create Model urn
+			ModelUrn aasUrn = new ModelUrn(serviceProvider);
+
+			// create the connected AAS using the manager
+			IAssetAdministrationShell connectedAAS = manager.retrieveAAS(aasUrn);
+
 			// create the submodel of the corresponding aas
-			ISubModel serviceSubmodel = manager.retrieveSM(submodelid);
+			ISubModel serviceSubmodel = manager.retrieveSM(submodelid, aasUrn);
+
 			// navigate to the expected service 
 			Map<String, IOperation> operations = serviceSubmodel.getOperations();
 			IOperation op = operations.get(servicename);
@@ -62,9 +78,12 @@ public abstract class DeviceServiceExecutor extends BaseBaSyxService implements 
 	/**
 	 * Get value of a property from a submodel
 	 * */
-	protected Object getProperty(String submodelid, String propertyName) throws Exception {
+	protected Object getProperty(String rawUrn, String submodelid, String propertyName) throws Exception {
+		// create Model urn
+		ModelUrn aasUrn = new ModelUrn(rawUrn);
+
 		// retrieve submodel with id
-		ISubModel statusSubmodel = manager.retrieveSM(submodelid);
+		ISubModel statusSubmodel = manager.retrieveSM(submodelid, aasUrn);
 		
 		// get properties of the submodel
 		Map<String, IProperty> properties = ((ConnectedSubModel) statusSubmodel).getProperties();
@@ -114,7 +133,5 @@ public abstract class DeviceServiceExecutor extends BaseBaSyxService implements 
 	 * */
 	@Override
 	public abstract Object executeService(String serviceName, String deviceid, List<Object> params) throws Exception ;
-	
-
 	
 }

@@ -1,8 +1,6 @@
 package org.eclipse.basyx.models.manufacturing.process.model.device;
 
-import org.eclipse.basyx.tools.modelurn.ModelUrn;
-
-
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 
 /**
  * A sequential device model

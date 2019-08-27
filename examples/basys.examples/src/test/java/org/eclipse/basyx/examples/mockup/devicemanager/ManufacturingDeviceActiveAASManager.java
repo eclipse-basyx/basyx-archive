@@ -2,10 +2,10 @@ package org.eclipse.basyx.examples.mockup.devicemanager;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.tools.aas.active.HTTPGetter;
-import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
-import org.eclipse.basyx.tools.modelurn.ModelUrn;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
 
 
@@ -35,6 +35,7 @@ public class ManufacturingDeviceActiveAASManager extends ManufacturingDeviceMana
 	/**
 	 * Create the device AAS and sub model structure
 	 */
+	@Override
 	protected void createDeviceAASAndSubModels() {
 		// Invoke base implementation
 		super.createDeviceAASAndSubModels();

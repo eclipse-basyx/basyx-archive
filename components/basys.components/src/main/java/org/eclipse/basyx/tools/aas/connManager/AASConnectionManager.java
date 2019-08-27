@@ -2,15 +2,15 @@ package org.eclipse.basyx.tools.aas.connManager;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.api.webserviceclient.WebServiceRawClient;
 import org.eclipse.basyx.aas.backend.connector.MetaprotocolHandler;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
-import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
-import org.eclipse.basyx.tools.aasdescriptor.SubmodelDescriptor;
-import org.eclipse.basyx.tools.modelurn.ModelUrn;
-import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.vab.core.IConnectorProvider;
-import org.eclipse.basyx.vab.core.IDirectoryService;
+import org.eclipse.basyx.vab.core.IVABDirectoryService;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
@@ -42,7 +42,7 @@ public class AASConnectionManager extends VABConnectionManager {
 	 * @param providerProvider
 	 *            Connection provider instance
 	 */
-	public AASConnectionManager(IDirectoryService networkDirectoryService, IConnectorProvider providerProvider) {
+	public AASConnectionManager(IVABDirectoryService networkDirectoryService, IConnectorProvider providerProvider) {
 		// Invoke base constructor
 		super(networkDirectoryService, providerProvider);
 

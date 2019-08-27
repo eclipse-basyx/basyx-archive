@@ -5,15 +5,18 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
-import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
-import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -26,17 +29,8 @@ import org.junit.Test;
  *
  */
 public class TestDeviceAdministrationShell {
-	private ConnectedAssetAdministrationShell connectedAAS;
-
-	/**
-	 * VAB connection manager backend
-	 */
-	protected VABConnectionManager connManager = new VABConnectionManager(new ComponentsTestsuiteDirectory(),
-			new HTTPConnectorProvider());
-	
-	protected ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(
-			connManager);
-	
+	private  ConnectedAssetAdministrationShellManager manager;
+	ConnectedAssetAdministrationShell connectedAAS;
 	/**
 	 * Makes sure Tomcat Server is started
 	 */
@@ -45,10 +39,21 @@ public class TestDeviceAdministrationShell {
 
 	@Before
 	public void setupConnection() {
+		AASRegistryStub registry = new AASRegistryStub();
+		ModelUrn coilcarUrn = new ModelUrn("coilcar");
+		AASDescriptor ccDescriptor = new AASDescriptor("coilcar", IdentifierType.URI,
+				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/");
+		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", IdentifierType.URI,
+				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/");
+		ccDescriptor.addSubmodelDescriptor(smDescriptor);
+		registry.register(coilcarUrn, ccDescriptor);
+		
+		//set-up the administration shell manager to create connected aas
+		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorProvider());
+		
 		// create the connected AAS using the manager
-
 		try {
-			 connectedAAS = (ConnectedAssetAdministrationShell) manager.retrieveAAS("coilcar");
+			connectedAAS = manager.retrieveAAS(coilcarUrn);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

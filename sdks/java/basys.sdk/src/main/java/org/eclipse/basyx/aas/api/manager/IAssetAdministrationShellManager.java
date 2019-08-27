@@ -2,6 +2,7 @@ package org.eclipse.basyx.aas.api.manager;
 
 import java.util.Collection;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 
 
@@ -31,7 +32,7 @@ public interface IAssetAdministrationShellManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public IAssetAdministrationShell retrieveAAS(String id) throws Exception;
+	public IAssetAdministrationShell retrieveAAS(ModelUrn aasUrn) throws Exception;
 	
 	
 	/**

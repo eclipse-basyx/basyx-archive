@@ -2,7 +2,8 @@ package org.eclipse.basyx.models.manufacturing.process.model.device;
 
 import java.util.Collection;
 
-import org.eclipse.basyx.tools.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+
 
 
 

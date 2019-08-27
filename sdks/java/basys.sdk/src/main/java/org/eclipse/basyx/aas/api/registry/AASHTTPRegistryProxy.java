@@ -1,16 +1,16 @@
-package org.eclipse.basyx.components.proxy.registry;
+package org.eclipse.basyx.aas.api.registry;
 
 import java.net.URLEncoder;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.api.webserviceclient.WebServiceRawClient;
 import org.eclipse.basyx.aas.backend.connector.MetaprotocolHandler;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
 import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
-import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
-import org.eclipse.basyx.tools.modelurn.ModelUrn;
-import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
-import org.eclipse.basyx.vab.core.IDirectoryService;
+import org.eclipse.basyx.vab.core.IVABDirectoryService;
 
 
 
@@ -21,7 +21,7 @@ import org.eclipse.basyx.vab.core.IDirectoryService;
  * @author kuhn
  *
  */
-public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
+public class AASHTTPRegistryProxy implements IAASRegistryService, IVABDirectoryService {
 
 	
 	/**
@@ -71,6 +71,7 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 		// Perform web service call to registry
 		client.post(aasRegistryURL+"/api/v1/registry", serializer.serialize(deviceAASDescriptor));
 	}
+
 
 	
 	/**
@@ -122,7 +123,7 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 	 * This function creates an AAS descriptor and registers it in the directory
 	 */
 	@Override
-	public IDirectoryService addMapping(String key, String value) {
+	public IAASRegistryService addAASMapping(String key, String value) {
 		// Create AAS descriptor and set ID, ID type, and endpoint
 		AASDescriptor aasDescriptor = new AASDescriptor(key, IdentifierType.URI, value);
 
@@ -153,7 +154,7 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 		String jsonData = client.get(aasRegistryURL+"/api/v1/registry/"+id);
 		
 		// Deserialize AAS descriptor
-		// AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(jsonData));
+		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(jsonData));
 
 		// Return endpoint
 		return jsonData;
@@ -170,18 +171,11 @@ public class AASHTTPRegistryProxy implements AASRegistryProxyIF {
 	}
 
 
-	/**
-	 * Register hacked aas descriptor
-	 */
 	@Override
-	public void register(ModelUrn aasID,
-			org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor deviceAASDescriptor) {
-		// Invoke delete operation of AAS registry
-		try {client.delete(aasRegistryURL+"/api/v1/registry/"+URLEncoder.encode(aasID.getURN(), "UTF-8"));} catch (Exception e) {e.printStackTrace();}
-
-		// Perform web service call to registry
-		client.post(aasRegistryURL+"/api/v1/registry", serializer.serialize(deviceAASDescriptor));
-		
+	public IVABDirectoryService addMapping(String key, String value) {
+		// Currently not implemented
+		return null;
 	}
+
 }
 

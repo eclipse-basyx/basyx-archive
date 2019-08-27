@@ -17,7 +17,7 @@ public class VABConnectionManager {
 	/**
 	 * Directory service reference
 	 */
-	protected IDirectoryService directoryService = null;
+	protected IVABDirectoryService directoryService = null;
 
 	
 	/**
@@ -35,7 +35,7 @@ public class VABConnectionManager {
 	 * @param providerProvider
 	 *            used to get the appropriate connector for the selected address
 	 */
-	public VABConnectionManager(IDirectoryService networkDirectoryService, IConnectorProvider providerProvider) {
+	public VABConnectionManager(IVABDirectoryService networkDirectoryService, IConnectorProvider providerProvider) {
 		// Set directory service reference
 		directoryService = networkDirectoryService;
 

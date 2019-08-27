@@ -3,7 +3,7 @@ package org.eclipse.basyx.tools.aas.active;
 import java.io.Serializable;
 import java.util.function.Supplier;
 
-import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
+import org.eclipse.basyx.aas.api.webserviceclient.WebServiceRawClient;
 
 
 

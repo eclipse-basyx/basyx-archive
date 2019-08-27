@@ -3,9 +3,9 @@ package org.eclipse.basyx.models.manufacturing.process.model;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.models.manufacturing.process.model.device.DeviceIF;
-import org.eclipse.basyx.tools.modelurn.ModelUrn;
 
 
 
@@ -111,6 +111,7 @@ public abstract class BaSysProcessModel extends SubModel implements DeviceIF {
 	 * 
 	 * @return Product ID
 	 */
+	@Override
 	public ModelUrn endProcessing() {
 		// Get finished product
 		ModelUrn productID = getFinishedProducts().iterator().next();
@@ -126,6 +127,7 @@ public abstract class BaSysProcessModel extends SubModel implements DeviceIF {
 	/**
 	 * Get products on device. This returns an unsorted collection of products.
 	 */
+	@Override
 	public Collection<ModelUrn> getProductsOnDevice() {
 		// Products collection
 		LinkedList<ModelUrn> productsOnDevice = new LinkedList<>();
@@ -143,6 +145,7 @@ public abstract class BaSysProcessModel extends SubModel implements DeviceIF {
 	/**
 	 * Get device ID. This is the process ID in this case.
 	 */
+	@Override
 	public ModelUrn getDeviceID() {
 		// Return process ID
 		return processID;

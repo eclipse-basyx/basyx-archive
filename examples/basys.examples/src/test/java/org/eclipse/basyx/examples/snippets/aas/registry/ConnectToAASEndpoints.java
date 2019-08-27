@@ -4,18 +4,18 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.api.registry.AASHTTPRegistryProxy;
+import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
+import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
-import org.eclipse.basyx.components.proxy.registry.AASHTTPRegistryProxy;
-import org.eclipse.basyx.components.proxy.registry.AASRegistryProxyIF;
 import org.eclipse.basyx.components.servlet.submodel.DynamicModelProviderServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
-import org.eclipse.basyx.tools.aas.connManager.AASConnectionManager;
-import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
-import org.eclipse.basyx.tools.modelurn.ModelUrn;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 import org.junit.ClassRule;
@@ -42,7 +42,7 @@ public class ConnectToAASEndpoints {
 	 * The connection manager uses a preconfigured directory for resolving IDs to 
 	 * network addresses, and a HTTP connector to connect to VAB objects.
 	 */
-	protected AASConnectionManager connManager = new AASConnectionManager(
+	protected ConnectedAssetAdministrationShellManager connManager = new ConnectedAssetAdministrationShellManager(
 			new AASHTTPRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL"),
 			new HTTPConnectorProvider());
 
@@ -84,14 +84,18 @@ public class ConnectToAASEndpoints {
 
 		// Register AAS and sub model descriptors in directory (push AAS descriptor to server)
 		// - Connect to AAS registry
-		AASRegistryProxyIF regProxy = new AASHTTPRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL");
+		IAASRegistryService regProxy = new AASHTTPRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL");
 		// - Register AAS descriptor with AAS and sub model endpoints in registry
 		regProxy.register(aasURN, aasDescriptor);
 
+		// Connect to AAS using BaSyx connector
+		// - Connect to VAB object by ID. The connection manager looks up this ID in
+		// its directory
+		ConnectedAssetAdministrationShell shell = this.connManager.retrieveAAS(aasURN);
 
 		// Server connections
 		// - Connect AAS
-		VABElementProxy connSubModel1 = this.connManager.connectToAAS(aasURN);
+		VABElementProxy connSubModel1 = shell.getProxy();
 
 		
 		// Create AAS
@@ -105,11 +109,8 @@ public class ConnectToAASEndpoints {
 		//   - This call transfers the AAS to urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001/aas on server
 		connSubModel1.createElement("aas", aas);
 
-		// Connect to AAS using BaSyx connector
-		// - Connect to VAB object by ID. The connection manager looks up this ID in
-		//   its directory
-		ConnectedAssetAdministrationShell shell = new ConnectedAssetAdministrationShell("aas", connSubModel1, connManager);
 		
+
 		// Retrieve the AAS from the AAS server with SDK connector
 		// - IAssetAdministrationShell is the interface for the local AAS proxy
 		// - Retrieve AAS values and compare to expected values

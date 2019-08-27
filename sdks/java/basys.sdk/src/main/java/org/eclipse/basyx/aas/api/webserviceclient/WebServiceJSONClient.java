@@ -1,4 +1,6 @@
-package org.eclipse.basyx.tools.webserviceclient;
+package org.eclipse.basyx.aas.api.webserviceclient;
+
+import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.http.tools.GSONTools;

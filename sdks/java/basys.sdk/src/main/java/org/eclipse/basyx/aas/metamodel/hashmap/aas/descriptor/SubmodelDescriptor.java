@@ -2,14 +2,14 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.Kind;
 
 
 
@@ -31,25 +31,56 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	
 	
 	/**
+	 * Default constructor
+	 */
+	public SubmodelDescriptor() {
+		// Add members
+		put("identification", new Identifier());
+		put("metaData", new HashMap<String, Object>());
+		put("administration", new AdministrativeInformation());
+		put("idShort", new String(""));
+		put("category", new String(""));
+		put("descriptions", new LinkedList<Description>());		
+		put("semanticId", new Identifier());
+		put("kind", Kind.Instance);
+		put("endpoints", new LinkedList<String>());
+	}
+	
+	
+	/**
+	 * Create a new sub model descriptor with minimal information
+	 */
+	@SuppressWarnings("unchecked")
+	public SubmodelDescriptor(String id, String idType, String endpoint) {
+		// Invoke default constructor
+		this();
+		
+		// Add identification and end point information
+		((Identifier) get("identification")).setIdType(idType);
+		((Identifier) get("identification")).setId(id);
+		((List<String>) get("endpoints")).add(endpoint);
+	}
+	
+	/**
 	 * Create a new sub model descriptor with minimal information
 	 */
 	public SubmodelDescriptor(SubModel submodel, String endpoint, String endpointType) {
 		// Invoke default constructor
 		//this();
 		
-		put(Referable.IDSHORT, submodel.getId());
+		put("idShort", submodel.getId());
 		
 		// Add identification and end point information
 		Identifier identifier = new Identifier();
 		identifier.setIdType(submodel.getIdentification().getIdType());
 		identifier.setId(submodel.getIdentification().getId());
-		put(Identifiable.IDENTIFICATION, identifier);
+		put("identification", identifier);
 		
 		HashMap<String, String> endpointWrapper = new HashMap<String, String>(); 
-		endpointWrapper.put(AssetAdministrationShell.TYPE, endpointType);
-		endpointWrapper.put(AssetAdministrationShell.ADDRESS, endpoint);
+		endpointWrapper.put("type", endpointType);
+		endpointWrapper.put("address", endpoint);
 		
-		put(AssetAdministrationShell.ENDPOINTS, Arrays.asList(endpointWrapper));
+		put("endpoints", Arrays.asList(endpointWrapper));
 	}
 	
 	/**
@@ -64,15 +95,7 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	 * Return sub model ID
 	 */
 	public String getId() {
-		return (String) get(Referable.IDSHORT);
-	}
-	
-	/**
-	 * Return sub model identification ID
-	 */
-	@SuppressWarnings("unchecked")
-	public String getIdentificationId() {
-		return new Identifier((Map<String, Object>) get(Identifiable.IDENTIFICATION)).getId();
+		return new Identifier((Map<String, Object>) get("identification")).getId();
 	}
 	
 	
@@ -81,7 +104,7 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getIdType() {
-		return new Identifier((Map<String, Object>) get(Identifiable.IDENTIFICATION)).getIdType();
+		return new Identifier((Map<String, Object>) get("identification")).getIdType();
 	}
 
 	
@@ -90,7 +113,7 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getFirstEndpoint() {
-		return ((List<String>) get(AssetAdministrationShell.ENDPOINTS)).get(0);
+		return ((List<String>) get("endpoints")).get(0);
 	}
 }
 

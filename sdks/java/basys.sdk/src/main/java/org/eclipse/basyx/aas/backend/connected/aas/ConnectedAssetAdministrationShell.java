@@ -13,25 +13,26 @@ import org.eclipse.basyx.aas.api.metamodel.aas.parts.IView;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.security.ISecurity;
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
+import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connected.ConnectedVABModelMap;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasDataSpecificationFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedIdentifiableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
-import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+
 /**
  * "Connected" implementation of IAssetAdministrationShell
- * @author rajashek
+ * 
+ * @author rajashek, Zai Zhang
  *
  */
 public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Object> implements IAssetAdministrationShell {
 	
-	VABConnectionManager manager;
+	ConnectedAssetAdministrationShellManager manager;
 	
 	/**
 	 * Constructor creating a ConnectedAAS pointing to the AAS represented by proxy
@@ -41,7 +42,8 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	 * @param proxy
 	 * @param manager
 	 */
-	public ConnectedAssetAdministrationShell(String path, VABElementProxy proxy, VABConnectionManager manager) {
+	public ConnectedAssetAdministrationShell(String path, VABElementProxy proxy,
+			ConnectedAssetAdministrationShellManager manager) {
 		super(path, proxy);		
 		this.manager = manager;
 	}
@@ -54,8 +56,6 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	 */
 	public ConnectedAssetAdministrationShell(ConnectedAssetAdministrationShell shell) {
 		super(shell.getPath(), shell.getProxy());
-		this.manager = shell.manager;
-
 	}
 	
 	@Override
@@ -162,7 +162,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	
 	@Override
 	public String getId() {
-	return (String)getProxy().readElementValue(constructPath(Referable.IDSHORT));
+		return (String) getProxy().readElementValue(constructPath(Referable.IDSHORT));
 	}
 
 	@Override
@@ -180,21 +180,19 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 
 		try {
 			// Java getSubmodels
-			refs = (Set<Map<?, ?>>) getProxy().readElementValue(constructPath(AssetAdministrationShell.SUBMODEL));
+			refs = (Set<Map<?, ?>>) getProxy().readElementValue(constructPath("submodel"));
 			for (Map<?, ?> key : refs) {
-				String id = (String) ((Map<?, ?>) ((List<?>) key.get(Reference.KEY)).get(0)).get(Property.VALUE);
-				VABElementProxy elem = manager.connectToVABElement(id);
-				ISubModel sm = new ConnectedSubModel("/aas/submodels/" + id, elem);
+				String id = (String) ((Map<?, ?>) ((List<?>) key.get("keys")).get(0)).get("value");
+				ISubModel sm = manager.retrieveSM(id, new ModelUrn(getId()));
 				ret.put(id, sm);
 			}
 		} catch (ClassCastException e) {
 			System.out.println("Cast failed... trying c# get submodels");
 			// c# getSubmodels
-			refs = (Set<Map<?, ?>>) getProxy().readElementValue(constructPath(AssetAdministrationShell.SUBMODELS));
+			refs = (Set<Map<?, ?>>) getProxy().readElementValue(constructPath("submodels"));
 			for (Map<?, ?> key : refs) {
-				String id = (String) key.get(Referable.IDSHORT);
-				VABElementProxy elem = manager.connectToVABElement(id);
-				ISubModel sm = new ConnectedSubModel("/aas/submodels/" + id, elem);
+				String id = (String) key.get("idShort");
+				ISubModel sm = manager.retrieveSM(id, new ModelUrn(getId()));
 				ret.put(id, sm);
 			}
 		}

@@ -3,7 +3,7 @@ package org.eclipse.basyx.aas.impl.services;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.vab.core.IDirectoryService;
+import org.eclipse.basyx.vab.core.IVABDirectoryService;
 
 
 
@@ -13,7 +13,7 @@ import org.eclipse.basyx.vab.core.IDirectoryService;
  * @author kuhn
  *
  */
-public class PreconfiguredDirectory implements IDirectoryService {
+public class PreconfiguredDirectory implements IVABDirectoryService {
 
 	
 	/**
@@ -45,7 +45,7 @@ public class PreconfiguredDirectory implements IDirectoryService {
 	 * Add a mapping to directory
 	 */
 	@Override
-	public IDirectoryService addMapping(String key, String value) {
+	public IVABDirectoryService addMapping(String key, String value) {
 		keyToValue.put(key, value);
 		
 		// Return 'this' instance

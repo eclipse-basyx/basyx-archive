@@ -3,7 +3,7 @@ package org.eclipse.basyx.testsuite.support.vab.stub;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.vab.core.IDirectoryService;
+import org.eclipse.basyx.vab.core.IVABDirectoryService;
 
 /**
  * A simple Directory Service stub providing a mapping based on a Map
@@ -11,7 +11,7 @@ import org.eclipse.basyx.vab.core.IDirectoryService;
  * @author schnicke
  *
  */
-public class DirectoryServiceStub implements IDirectoryService {
+public class DirectoryServiceStub implements IVABDirectoryService {
 	private Map<String, String> addressMap = new HashMap<>();
 
 	@Override
@@ -30,7 +30,7 @@ public class DirectoryServiceStub implements IDirectoryService {
 	}
 
 	@Override
-	public IDirectoryService addMapping(String key, String value) {
+	public IVABDirectoryService addMapping(String key, String value) {
 		addressMap.put(key, value);
 		
 		// Return 'this' referenced

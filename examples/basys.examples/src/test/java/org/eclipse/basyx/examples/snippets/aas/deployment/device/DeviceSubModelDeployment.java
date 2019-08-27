@@ -2,6 +2,7 @@ package org.eclipse.basyx.examples.snippets.aas.deployment.device;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
@@ -11,9 +12,8 @@ import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
-import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
+import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
-import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.junit.Test;
 
 
@@ -57,26 +57,19 @@ public class DeviceSubModelDeployment {
 		server.start();
 		
 		
-		// Create connection manager to connect with the dynamic server
-		// - We pre-register the connection endpoint to the dynamic BaSyx server
-		VABConnectionManager connManager = new VABConnectionManager(
-				// Add example specific mappings
-				new ExamplesPreconfiguredDirectory()
-				    // - SDK connectors encapsulate relative path Asset Administration Shell
-				    // - The dynamic deployed sub model receives a unique URN, as it needs to be locatable
-				    // - In most cases, the discovery server will provide the endpoint of the sub model
-					.addMapping("urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003",    "basyx://localhost:9998"),
-				// We connect via BaSyx TCP protocol
-				new BaSyxConnectorProvider());
-
+		// Create connected aas manager to connect with the dynamic server
+		// We pre-register the aas endpoints to the dynamic BaSyx server
+		ExampleAASRegistry registry = new ExampleAASRegistry();
+		registry.addSubmodelMapping("", "urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003", "basyx://localhost:9998");
 		
 		// Create manager using the directory stub an the HTTPConnectorProvider
-		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(connManager);
-		
+		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(registry,
+				// We connect via BaSyx TCP protocol
+				new BaSyxConnectorProvider());
 		
 		// Create and connect SDK connector
 		// - Retrieve sub model
-		ISubModel subModel = manager.retrieveSM("urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003");
+		ISubModel subModel = manager.retrieveSM("urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003", new ModelUrn(""));
 		
 		// Retrieve sub model values and compare to expected values
 		String submodelId = subModel.getId();

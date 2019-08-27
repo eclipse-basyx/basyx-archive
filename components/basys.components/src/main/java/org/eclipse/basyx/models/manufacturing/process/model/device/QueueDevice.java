@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.models.manufacturing.process.model.queue.BoundedQueue;
-import org.eclipse.basyx.tools.modelurn.ModelUrn;
 
 
 

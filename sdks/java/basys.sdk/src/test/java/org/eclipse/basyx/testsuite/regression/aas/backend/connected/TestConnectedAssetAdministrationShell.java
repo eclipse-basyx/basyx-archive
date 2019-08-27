@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
@@ -18,8 +20,12 @@ import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
-import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
+import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
+import org.eclipse.basyx.testsuite.support.vab.stub.ConnectorProviderStub;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -63,16 +69,28 @@ public class TestConnectedAssetAdministrationShell {
 		provider.addSubmodel(smId, new VirtualPathModelProvider(TypeDestroyer.destroyType(sm)));
 		provider.setAssetAdministrationShell(new VirtualPathModelProvider(TypeDestroyer.destroyType(aas)));
 	
-		// Add the AAS provider to the ConnectionManagerStub
-		VABConnectionManagerStub connectionStub = new VABConnectionManagerStub();
-		connectionStub.addProvider(aasId,"",  provider);
-		connectionStub.addProvider(smId, "", provider);
-	
-		// Create connection manager using the dummy
-		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(connectionStub);
+		// Create AAS registry
+		IAASRegistryService registry = new AASRegistryStub();
+		// Create AAS Descriptor
+		AASDescriptor aasDescriptor = new AASDescriptor(aasId, IdentifierType.URI, "");
+		// Create Submodel Descriptor
+		SubmodelDescriptor smDescriptor = new SubmodelDescriptor(smId, IdentifierType.URI, "");
+		// Add Submodel descriptor to aas descriptor
+		aasDescriptor.addSubmodelDescriptor(smDescriptor);
 
-		// Create ConnectedAssetAdministrationShell
-		connectedAAS = manager.retrieveAAS(aasId);
+		registry.register(new ModelUrn(aasId), aasDescriptor);
+
+		// Create connector provider stub, map address to provider
+		ConnectorProviderStub connectorProvider = new ConnectorProviderStub();
+		connectorProvider.addMapping(aasDescriptor.getFirstEndpoint(), provider);
+		connectorProvider.addMapping(smDescriptor.getFirstEndpoint(), provider);
+
+	// Create connection manager using the dummy
+		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(registry,
+				connectorProvider);
+
+	// Create ConnectedAssetAdministrationShell
+		connectedAAS = manager.retrieveAAS(new ModelUrn(aasId));
 	}
 
 	/**

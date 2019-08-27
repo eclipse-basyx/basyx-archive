@@ -2,6 +2,7 @@ package org.eclipse.basyx.examples.snippets.aas.submodels;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
@@ -12,8 +13,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Prop
 import org.eclipse.basyx.components.servlet.submodel.DynamicModelProviderServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
-import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
-import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -36,13 +36,19 @@ public class DynamicSubModelDeployment {
 	 * The connection manager uses a preconfigured directory for resolving IDs to 
 	 * network addresses, and a HTTP connector to connect to VAB objects.
 	 */
-	protected VABConnectionManager connManager = new VABConnectionManager(
-			new ExamplesPreconfiguredDirectory()
-				// Add example specific mappings
-					.addMapping(STATUS_SM, "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository"),
-			new HTTPConnectorProvider());
+//	protected VABConnectionManager connManager = new VABConnectionManager(
+//			new ExamplesPreconfiguredDirectory()
+//				// Add example specific mappings
+//					.addMapping(STATUS_SM, "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository"),
+//			new HTTPConnectorProvider());
 
 	
+	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(
+			new ExampleAASRegistry()
+			// Ass Example specific mappings
+					.addSubmodelMapping("", STATUS_SM, "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository"),
+			new HTTPConnectorProvider());
+
 	/**
 	 * The BaSyx Deployment instantiates and starts context elements for this example. 
 	 * 
@@ -77,7 +83,7 @@ public class DynamicSubModelDeployment {
 		//   directly to sub models, the registry needs to support this, and unique identifies (as here)
 		//   must be used. For portability, users should connect to sub models instead via an AAS ID and 
 		//   sub model ID tuple, as illustrated in the registry examples. 
-		VABElementProxy connSubModel1 = this.connManager.connectToVABElement(STATUS_SM);
+		VABElementProxy connSubModel1 = this.aasManager.retrieveSM(STATUS_SM, new ModelUrn("")).getProxy();
 
 		// Create factory that helps with property creation
 		// - This factory creates sub model properties and ensures presence of all meta data
@@ -96,10 +102,9 @@ public class DynamicSubModelDeployment {
 		
 		// Retrieve sub model with SDK connector
 		{
-			// Create and connect SDK connector
-			ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(connManager);
+
 			// - Retrieve sub model
-			ISubModel subModel = manager.retrieveSM(STATUS_SM);
+			ISubModel subModel = aasManager.retrieveSM(STATUS_SM, new ModelUrn(""));
 
 			// Read sub model properties
 			String smId     = subModel.getId();

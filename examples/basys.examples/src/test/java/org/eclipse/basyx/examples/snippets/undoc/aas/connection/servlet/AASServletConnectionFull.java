@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.IContainerProperty;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
@@ -20,6 +21,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valu
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_Empty;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
+import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -120,26 +122,36 @@ public class AASServletConnectionFull {
 		}
 	}
 
-	
-	
-	
-	
 	/**
 	 * VAB connection manager backend
 	 */
 	protected VABConnectionManager connManager = new VABConnectionManager(
 			// Add example specific mappings
 			new ExamplesPreconfiguredDirectory()
+					// - VAB needs to know the relative path of the sub model that is defined by AAS
+					// meta model
+					.addMapping("sm-001VAB", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas/submodels/sm-001")
+					// - VAB needs to know the relative path of the sub model that is defined by AAS
+					// meta model
+					.addMapping("sm-001MVAB", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual/aas/submodels/sm-001M"),
+			// We connect via HTTP
+			new HTTPConnectorProvider());
+	
+	
+	
+	/**
+	 * VAB connection manager backend
+	 */
+	protected ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(
+			// Add example specific mappings
+			new ExampleAASRegistry()
 			    // - SDK connectors encapsulate relative path to sub model (/aas/submodels/sm-001)
-				.addMapping("aas-001",    "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
-			    .addMapping("sm-001",     "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
-			    // - VAB needs to know the relative path of the sub model that is defined by AAS meta model
-			    .addMapping("sm-001VAB",  "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas/submodels/sm-001")
+					.addAASMapping("aas-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
+					.addSubmodelMapping("aas-001", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
+			    
 			    // - SDK connectors encapsulate relative path to sub model (/aas/submodels/sm-001)
-				.addMapping("aas-001M",   "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual")
-			    .addMapping("sm-001M",    "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual")
-			    // - VAB needs to know the relative path of the sub model that is defined by AAS meta model
-			    .addMapping("sm-001MVAB", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual/aas/submodels/sm-001M"),
+					.addAASMapping("aas-001M", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual")
+					.addSubmodelMapping("aas-001M", "sm-001M", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual"),
 			// We connect via HTTP
 			new HTTPConnectorProvider());
 
@@ -164,14 +176,11 @@ public class AASServletConnectionFull {
 	 */
 	@Test @SuppressWarnings("unchecked")
 	public void accessSubModel() throws Exception {
-		// Create manager using the directory stub an the HTTPConnectorProvider
-		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(connManager);
-		
-		
 		// First example - Retrieve sub model (created by factory) with SDK connector
 		{
 			// Create and connect SDK connector
-			ISubModel subModel = manager.retrieveSM("sm-001");
+			ISubModel subModel = manager
+					.retrieveSM("sm-001", new ModelUrn("aas-001"));
 			// - Retrieve sub model values and compare to expected values
 			assertTrue(subModel.getId().equals("sm-001"));
 			assertTrue(subModel.getProperties().get("prop1").getId().equals("prop1"));
@@ -181,7 +190,7 @@ public class AASServletConnectionFull {
 			assertTrue((int) ((ISingleProperty) ((IContainerProperty) subModel.getProperties().get("prop2")).getProperties().get("prop11")).get() == 123);
 
 			// Retrieve dummy AAS (created by factory) with SDK connector
-			IAssetAdministrationShell shell = manager.retrieveAAS("aas-001");
+			IAssetAdministrationShell shell = manager.retrieveAAS(new ModelUrn("aas-001"));
 			// - Retrieve AAS values and compare to expected values
 			assertTrue(shell.getId().equals("---"));
 
@@ -207,7 +216,8 @@ public class AASServletConnectionFull {
 		// Second example - Retrieve sub model (created manually) with SDK connector
 		{
 			// Create and connect SDK connector
-			ISubModel subModel = manager.retrieveSM("sm-001M");
+			ISubModel subModel = manager
+					.retrieveSM("sm-001M", new ModelUrn("aas-001M"));
 			// - Retrieve sub model values and compare to expected values
 			assertTrue(subModel.getId().equals("sm-001M"));
 			assertTrue(subModel.getProperties().get("prop1").getId().equals("prop1"));
@@ -217,7 +227,7 @@ public class AASServletConnectionFull {
 			assertTrue((int) ((ISingleProperty) ((IContainerProperty) subModel.getProperties().get("prop2")).getProperties().get("prop11")).get() == 123);
 
 			// Retrieve dummy AAS (created by factory) with SDK connector
-			IAssetAdministrationShell shell = manager.retrieveAAS("aas-001");
+			IAssetAdministrationShell shell = manager.retrieveAAS(new ModelUrn("aas-001"));
 			// - Retrieve AAS values and compare to expected values
 			assertTrue(shell.getId().equals("---"));
 			

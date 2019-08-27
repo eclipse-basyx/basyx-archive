@@ -3,15 +3,15 @@ package org.eclipse.basyx.examples.mockup.devicemanager;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.api.registry.AASHTTPRegistryProxy;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.components.configuration.CFGBaSyxProtocolType;
 import org.eclipse.basyx.components.devicemanager.TCPDeviceManagerComponent;
-import org.eclipse.basyx.components.proxy.registry.AASHTTPRegistryProxy;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
-import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
-import org.eclipse.basyx.tools.modelurn.ModelUrn;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
@@ -60,6 +60,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		configure()
 			.registryURL("http://localhost:8080/basys.examples/Components/Directory/SQL")
 			.connectionManagerType(CFGBaSyxProtocolType.HTTP)
+				.directoryService(new ExamplesPreconfiguredDirectory())
 			.end();
 		
 		// configure()

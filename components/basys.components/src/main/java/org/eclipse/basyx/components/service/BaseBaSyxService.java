@@ -3,11 +3,12 @@ package org.eclipse.basyx.components.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
+import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.components.configuration.ConfigurableComponent;
 import org.eclipse.basyx.components.configuration.builder.BaSyxServiceConfigurationBuilder;
-import org.eclipse.basyx.components.proxy.registry.AASRegistryProxyIF;
 import org.eclipse.basyx.sdk.api.service.BaSyxService;
-import org.eclipse.basyx.tools.modelurn.ModelUrn;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
@@ -45,11 +46,16 @@ public abstract class BaseBaSyxService implements BaSyxService, ConfigurableComp
 	 */
 	protected VABConnectionManager connectionManager = null;
 	
+	/**
+	 * AAS connected manager for this service
+	 */
+	protected ConnectedAssetAdministrationShellManager connectedAASManager = null;
 	
+
 	/**
 	 * Registry proxy reference that will be used for registering sub models
 	 */
-	protected AASRegistryProxyIF registryProxy = null;
+	protected IAASRegistryService registryProxy = null;
 
 
 	
@@ -77,6 +83,9 @@ public abstract class BaseBaSyxService implements BaSyxService, ConfigurableComp
 
 		// Create BaSyx connection manager
 		setConnectionManager(configuration.getConnectionManager());
+
+		// Createm BaSyx AAS connected manger
+		setConnectedAASManager(configuration.getConnetedAASManager());
 	}
 
 
@@ -205,7 +214,13 @@ public abstract class BaseBaSyxService implements BaSyxService, ConfigurableComp
 		connectionManager = connMngr;
 	}
 	
-	
+	/**
+	 * Set connected AAS manager for this service
+	 */
+	public void setConnectedAASManager(ConnectedAssetAdministrationShellManager connectedAASManager) {
+		this.connectedAASManager = connectedAASManager;
+	}
+
 	/**
 	 * Get connection manager for this service
 	 */
@@ -228,7 +243,7 @@ public abstract class BaseBaSyxService implements BaSyxService, ConfigurableComp
 	/**
 	 * Set AAS registry proxy
 	 */
-	protected void setRegistry(AASRegistryProxyIF regProxy) {
+	protected void setRegistry(IAASRegistryService regProxy) {
 		registryProxy = regProxy;
 	}
 
@@ -236,7 +251,7 @@ public abstract class BaseBaSyxService implements BaSyxService, ConfigurableComp
 	/**
 	 * Get AAS registry proxy reference
 	 */
-	protected AASRegistryProxyIF getRegistry() {
+	protected IAASRegistryService getRegistry() {
 		return registryProxy;
 	}
 }

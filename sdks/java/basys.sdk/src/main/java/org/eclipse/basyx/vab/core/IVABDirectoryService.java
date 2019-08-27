@@ -10,13 +10,13 @@ import java.util.Map;
  * @author kuhn
  *
  */
-public interface IDirectoryService {
+public interface IVABDirectoryService {
 
 	
 	/**
 	 * Add a mapping to directory
 	 */
-	public IDirectoryService addMapping(String key, String value);
+	public IVABDirectoryService addMapping(String key, String value);
 
 	
 	/**

@@ -11,15 +11,17 @@ import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceDelegate;
-import org.eclipse.basyx.regression.support.processengine.SetupAAS;
 import org.eclipse.basyx.regression.support.processengine.executor.CoilcarServiceExecutor;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
-import org.eclipse.basyx.testsuite.support.vab.stub.DirectoryServiceStub;
-import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -39,11 +41,7 @@ public class TestTransportProcess_ConfigureEngineProgramically {
 	 * */
 	ConnectedAssetAdministrationShellManager manager;
 	
-	/**
-	 * Required by the connected aas manager
-	 */
-	VABConnectionManager connectionManager;
-	
+	AASRegistryStub registry;
 	/**
 	 * Makes sure Tomcat Server is started
 	 */
@@ -55,14 +53,20 @@ public class TestTransportProcess_ConfigureEngineProgramically {
 	 */
 	@Before
 	public void build() {
-		// Create directory stub
-		DirectoryServiceStub directory = new DirectoryServiceStub();
-		directory.addMapping(SetupAAS.aasid, "http://localhost:8080/basys.sdk/Testsuite/coilcar/");
-		directory.addMapping(SetupAAS.submodelid, "http://localhost:8080/basys.sdk/Testsuite/coilcar/");
-		
-		// Create manager using the directory stub an the HTTPConnectorProvider
-		connectionManager = new VABConnectionManager(directory, new HTTPConnectorProvider());
-		manager = new ConnectedAssetAdministrationShellManager(connectionManager);
+		// Create registry for aas
+		registry = new AASRegistryStub();
+
+		// Create aas descriptor with meta-information of the aas
+		ModelUrn coilcarUrn = new ModelUrn("coilcar");
+		AASDescriptor ccDescriptor = new AASDescriptor("coilcar", IdentifierType.URI,
+				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/");
+		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", IdentifierType.URI,
+				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/");
+		ccDescriptor.addSubmodelDescriptor(smDescriptor);
+
+		// registra the aas
+		registry.register(coilcarUrn, ccDescriptor);
+		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorProvider());
 		
 		
 	}
@@ -100,7 +104,8 @@ public class TestTransportProcess_ConfigureEngineProgramically {
 		variables.put("coilposition", 2);
 		
 		// Set the service executor to the java-delegate
-		DeviceServiceDelegate.setDeviceServiceExecutor(new CoilcarServiceExecutor(connectionManager));
+		DeviceServiceDelegate
+				.setDeviceServiceExecutor(new CoilcarServiceExecutor(manager));
 		
 		//  Start a process instance
 		@SuppressWarnings("unused")

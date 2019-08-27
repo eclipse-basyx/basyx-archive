@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
@@ -16,6 +17,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Prop
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_Empty;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
+import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -97,6 +99,12 @@ public class ConnectToAASSubModelVAB {
 			// We connect via HTTP
 			new HTTPConnectorProvider());
 
+	protected ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(
+			new ExampleAASRegistry()
+					.addAASMapping("aas-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
+					.addSubmodelMapping("aas-001", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel"),
+			// We connect via HTTP
+			new HTTPConnectorProvider());
 	
 	
 	/**
@@ -122,42 +130,36 @@ public class ConnectToAASSubModelVAB {
 	 */
 	@Test @SuppressWarnings("unchecked")
 	public void accessSubModel() throws Exception {
-		// Create manager using the directory stub and the HTTPConnectorProvider
-		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(connManager);
-		
-		
 		// Retrieve sub model (created by factory) with SDK connector
-		{
-			// Connect to sub model using lower-level VAB interface
-			VABElementProxy connSubModel1 = this.connManager.connectToVABElement("sm-001VAB");
+		// Connect to sub model using lower-level VAB interface
+		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("sm-001VAB");
 
-			// - Read properties
-			String prop1Id = (String) ((Map<String, Object>) connSubModel1.readElementValue("dataElements/prop1")).get("idShort");
-			int prop1Val = (int) connSubModel1.readElementValue("dataElements/prop1/value");
-			int prop3Val = (int) connSubModel1.readElementValue("dataElements/prop3/value");
-			String prop2Id = (String) ((Map<String, Object>) connSubModel1.readElementValue("dataElements/prop2")).get("idShort");
-			int prop211 = (int) connSubModel1.readElementValue("dataElements/prop2/dataElements/prop11/value");
-			// - Change property value using VAB primitive
-			connSubModel1.updateElementValue("dataElements/prop1/value", 456);
-			// - Read value back using VAB primitive
-			int changedProp = (int) connSubModel1.readElementValue("dataElements/prop1/value");
+		// - Read properties
+		String prop1Id = (String) ((Map<String, Object>) connSubModel1.readElementValue("dataElements/prop1"))
+				.get("idShort");
+		int prop1Val = (int) connSubModel1.readElementValue("dataElements/prop1/value");
+		int prop3Val = (int) connSubModel1.readElementValue("dataElements/prop3/value");
+		String prop2Id = (String) ((Map<String, Object>) connSubModel1.readElementValue("dataElements/prop2"))
+				.get("idShort");
+		int prop211 = (int) connSubModel1.readElementValue("dataElements/prop2/dataElements/prop11/value");
+		// - Change property value using VAB primitive
+		connSubModel1.updateElementValue("dataElements/prop1/value", 456);
+		// - Read value back using VAB primitive
+		int changedProp = (int) connSubModel1.readElementValue("dataElements/prop1/value");
 
-			
-			// Create and connect SDK connector
-			ISubModel subModel = manager.retrieveSM("sm-001");
-			// - Retrieve sub model values and compare to expected values
-			String smID     = subModel.getId();
+		// Create and connect SDK connector
+		ISubModel subModel = manager.retrieveSM("sm-001", new ModelUrn("aas-001"));
+		// - Retrieve sub model values and compare to expected values
+		String smID = subModel.getId();
 
-			
-			// Check results
-			assertTrue(smID.equals("sm-001"));
-			assertTrue(prop1Id.equals("prop1"));
-			assertTrue(prop1Val == 234);
-			assertTrue(prop3Val == 17);
-			assertTrue(prop2Id.equals("prop2"));
-			assertTrue(prop211 == 123);
-			assertTrue(changedProp == 456);
-		}
+		// Check results
+		assertTrue(smID.equals("sm-001"));
+		assertTrue(prop1Id.equals("prop1"));
+		assertTrue(prop1Val == 234);
+		assertTrue(prop3Val == 17);
+		assertTrue(prop2Id.equals("prop2"));
+		assertTrue(prop211 == 123);
+		assertTrue(changedProp == 456);
 	}
 }
 

@@ -7,9 +7,9 @@ import java.net.URLEncoder;
 
 import javax.ws.rs.ServerErrorException;
 
+import org.eclipse.basyx.aas.api.webserviceclient.WebServiceJSONClient;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
-import org.eclipse.basyx.tools.webserviceclient.WebServiceJSONClient;
 import org.junit.ClassRule;
 import org.junit.Test;
 

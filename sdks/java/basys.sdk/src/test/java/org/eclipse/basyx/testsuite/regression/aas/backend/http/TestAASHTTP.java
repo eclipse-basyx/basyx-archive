@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
@@ -12,11 +13,14 @@ import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets.StubAASServlet;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
 import org.eclipse.basyx.testsuite.support.backend.servers.context.SdkRegressionContext;
+import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
 import org.eclipse.basyx.testsuite.support.vab.stub.DirectoryServiceStub;
-import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -48,8 +52,24 @@ public class TestAASHTTP {
 		directory.addMapping(StubAASServlet.aasId, "http://localhost:8080/basys.sdk/Testsuite/StubAAS/");
 		directory.addMapping(StubAASServlet.smId, "http://localhost:8080/basys.sdk/Testsuite/StubAAS/");
 
+		AASRegistryStub registry = new AASRegistryStub();
+
+		// Create aas descriptor for the aas registry
+		AASDescriptor aasDesriptor = new AASDescriptor(StubAASServlet.aasId, IdentifierType.URI,
+				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/");
+
+		// Create the submodel descriptor
+		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(StubAASServlet.smId, IdentifierType.URI,
+				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/");
+
+		// add submodel descriptor to the aas descriptor
+		aasDesriptor.addSubmodelDescriptor(submodelDescriptor);
+
+		// register the aas in the registry
+		registry.register(new ModelUrn(StubAASServlet.aasId), aasDesriptor);
+		
 		// Create manager using the directory stub an the HTTPConnectorProvider
-		manager = new ConnectedAssetAdministrationShellManager(new VABConnectionManager(directory, new HTTPConnectorProvider()));
+		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorProvider());
 	}
 
 	/**
@@ -60,7 +80,7 @@ public class TestAASHTTP {
 	@Test
 	public void testAAS() throws Exception {
 		// Retrieve AAS
-		IAssetAdministrationShell shell = manager.retrieveAAS(StubAASServlet.aasId);
+		IAssetAdministrationShell shell = manager.retrieveAAS(new ModelUrn(StubAASServlet.aasId));
 
 		// Check id
 		assertEquals(StubAASServlet.aasId, shell.getId());
@@ -81,7 +101,7 @@ public class TestAASHTTP {
 	@Test
 	public void testSubModel() throws Exception {
 		// Retrieve SubModel
-		ISubModel sm = manager.retrieveSM(StubAASServlet.smId);
+		ISubModel sm = manager.retrieveSM(StubAASServlet.smId, new ModelUrn(StubAASServlet.aasId));
 
 		// Check id
 		assertEquals(StubAASServlet.smId, sm.getId());

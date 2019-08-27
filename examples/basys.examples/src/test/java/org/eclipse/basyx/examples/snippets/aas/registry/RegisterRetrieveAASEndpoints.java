@@ -2,16 +2,16 @@ package org.eclipse.basyx.examples.snippets.aas.registry;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.api.registry.AASHTTPRegistryProxy;
+import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
-import org.eclipse.basyx.components.proxy.registry.AASHTTPRegistryProxy;
-import org.eclipse.basyx.components.proxy.registry.AASRegistryProxyIF;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
-import org.eclipse.basyx.tools.aasdescriptor.AASDescriptor;
-import org.eclipse.basyx.tools.aasdescriptor.SubmodelDescriptor;
-import org.eclipse.basyx.tools.modelurn.ModelUrn;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 import org.junit.ClassRule;
@@ -38,9 +38,7 @@ public class RegisterRetrieveAASEndpoints {
 	 * The connection manager uses a preconfigured directory for resolving IDs to 
 	 * network addresses, and a HTTP connector to connect to VAB objects.
 	 */
-	protected VABConnectionManager connManager = new VABConnectionManager(
-			new ExamplesPreconfiguredDirectory(),
-			new HTTPConnectorProvider());
+	protected VABConnectionManager connManager = new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorProvider());
 
 	
 	/**
@@ -83,7 +81,7 @@ public class RegisterRetrieveAASEndpoints {
 
 		// Register AAS and sub model descriptors in directory (push AAS descriptor to server)
 		// - Connect to AAS registry
-		AASRegistryProxyIF regProxy = new AASHTTPRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL");
+		IAASRegistryService regProxy = new AASHTTPRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL");
 		// - Register AAS descriptor with AAS and sub model endpoints in registry
 		regProxy.register(aasURN, aasDescriptor);
 

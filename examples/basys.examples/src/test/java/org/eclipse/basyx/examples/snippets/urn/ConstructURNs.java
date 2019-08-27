@@ -2,7 +2,7 @@ package org.eclipse.basyx.examples.snippets.urn;
 
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.basyx.tools.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.junit.Test;
 
 
