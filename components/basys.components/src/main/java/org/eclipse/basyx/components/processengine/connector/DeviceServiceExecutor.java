@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
-import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
@@ -51,9 +50,6 @@ public abstract class DeviceServiceExecutor implements IDeviceServiceExecutor {
 		try {
 			// create Model urn
 			ModelUrn aasUrn = new ModelUrn(serviceProvider);
-
-			// create the connected AAS using the manager
-			IAssetAdministrationShell connectedAAS = manager.retrieveAAS(aasUrn);
 
 			// create the submodel of the corresponding aas
 			ISubModel serviceSubmodel = manager.retrieveSM(submodelid, aasUrn);

@@ -22,7 +22,6 @@ import org.eclipse.basyx.regression.support.processengine.stubs.CoilcarStub;
 import org.eclipse.basyx.regression.support.processengine.submodel.DeviceSubmodelFactory;
 import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
 import org.eclipse.basyx.testsuite.support.vab.stub.ConnectorProviderStub;
-import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,11 +36,6 @@ public class TestAASServicecall {
 	 * Service Executor to be tested, used by the process engine
 	 */
 	private DeviceServiceExecutor serviceExecutor;
-	
-	/**
-	 * VAB connection stub needed for setting up service invocation
-	 */
-	private VABConnectionManagerStub connectionStub;
 	
 	/**
 	 * A stub for the service sub-model 

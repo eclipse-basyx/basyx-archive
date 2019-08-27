@@ -24,8 +24,8 @@ public class ExampleAASRegistry extends AASRegistryStub {
 		ModelUrn aasUrn = new ModelUrn(rawurn);
 		SubmodelDescriptor smDes = new SubmodelDescriptor(submodelid, IdentifierType.URI, endpoint);
 
-		if (descriptorMap.keySet().contains(aasUrn)) {
-			aasDescriptor = descriptorMap.get(aasUrn);
+		if (descriptorMap.keySet().contains(aasUrn.getEncodedURN())) {
+			aasDescriptor = descriptorMap.get(aasUrn.getEncodedURN());
 		} else {
 			aasDescriptor = new AASDescriptor(rawurn, IdentifierType.URI, endpoint);
 		}

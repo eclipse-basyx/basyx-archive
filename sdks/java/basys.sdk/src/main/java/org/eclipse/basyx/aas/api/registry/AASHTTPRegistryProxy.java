@@ -152,9 +152,6 @@ public class AASHTTPRegistryProxy implements IAASRegistryService, IVABDirectoryS
 	public String lookup(String id) {
 		// Lookup AAS from AAS directory, get AAS descriptor
 		String jsonData = client.get(aasRegistryURL+"/api/v1/registry/"+id);
-		
-		// Deserialize AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) serializer.deserialize(jsonData));
 
 		// Return endpoint
 		return jsonData;
