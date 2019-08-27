@@ -82,46 +82,63 @@ public class GSONTools implements Serializer {
 		JsonElement elem = parser.parse(str);
 
 		// Handle edge case of collection of primitives
-		if (elem.isJsonObject()) {
-			JsonObject obj = elem.getAsJsonObject();
-			if (obj.has(BASYXVALUE)) {
-				JsonArray array = (JsonArray) obj.get(BASYXVALUE);
-				if (obj.get(BASYXTYPE).getAsString().equals(SET)) {
-					return deserializeJsonArrayAsSet(array);
-				} else {
-					return deserializeJsonArrayAsList(array);
-				}
-			}
+		if (isWrappedCollection(elem)) {
+			return handleWrappedCollection(elem);
+		} else {
+			return deserializeJsonElement(elem);
 		}
 
-		return deserializeJsonElement(elem);
+	}
+
+	private Object handleWrappedCollection(JsonElement elem) {
+		JsonObject obj = elem.getAsJsonObject();
+		JsonArray array = (JsonArray) obj.get(BASYXVALUE);
+		if (obj.get(BASYXTYPE).getAsString().equals(SET)) {
+			return deserializeJsonArrayAsSet(array);
+		} else {
+			return deserializeJsonArrayAsList(array);
+		}
+	}
+
+	private boolean isWrappedCollection(JsonElement elem) {
+		if (elem.isJsonObject()) {
+			JsonObject obj = elem.getAsJsonObject();
+			return obj.has(BASYXVALUE);
+		}
+		return false;
 	}
 
 	@Override
 	public String serialize(Object obj) {
 		JsonElement elem = serializeToJsonElement(obj);
 
-		// Handle edge case of collection of primitives
+		// Handle edge case of collection of primitives and empty collections
+		// Has to be handled here since complete knowledge about element structure is
+		// needed
 		if (obj instanceof Collection<?>) {
 			Collection<?> col = (Collection<?>) obj;
+
 			if (col.size() > 0) {
 				Object item = col.iterator().next();
+
+				// Only handle primitive types. Complex types are already handled
 				if (item.getClass().isPrimitive() || isWrapperType(item.getClass())) {
-					JsonObject jObj = new JsonObject();
-					String type;
-					if (col instanceof List<?>) {
-						type = LIST;
-					} else {
-						type = SET;
-					}
-					jObj.add(BASYXTYPE, new JsonPrimitive(type));
-					jObj.add(BASYXVALUE, elem);
-					elem = jObj;
+					elem = buildCollectionWrapper(col instanceof List<?> ? LIST : SET, elem);
 				}
+			} else {
+				// Empty collections need also to be handled, regardless of intended type
+				elem = buildCollectionWrapper(col instanceof List<?> ? LIST : SET, new JsonArray());
 			}
 		}
 
 		return elem.toString();
+	}
+
+	private JsonObject buildCollectionWrapper(String type, JsonElement elem) {
+		JsonObject jObj = new JsonObject();
+		jObj.add(BASYXTYPE, new JsonPrimitive(type));
+		jObj.add(BASYXVALUE, elem);
+		return jObj;
 	}
 
 	/**
@@ -138,10 +155,12 @@ public class GSONTools implements Serializer {
 			return serializePrimitive(obj);
 		} else if (obj instanceof Map<?, ?>) {
 			return serializeMap((Map<String, Object>) obj);
-		} else if (obj instanceof List<?>) {
-			return serializeList((List<?>) obj);
-		} else if (obj instanceof Set<?>) {
-			return serializeSet((Set<?>) obj);
+		} else if (obj instanceof Collection<?>) {
+			if (obj instanceof List<?>) {
+				return serializeList((List<?>) obj);
+			} else {
+				return serializeSet((Set<?>) obj);
+			}
 		} else if (isFunction(obj)) {
 			return serializeFunction(obj);
 		}
@@ -211,7 +230,7 @@ public class GSONTools implements Serializer {
 			return new JsonPrimitive((String) primitive);
 		}
 	}
-	
+
 	/**
 	 * Deserializes a JsonObject to either a map, an operations or an arbitrary
 	 * serializable object
@@ -251,10 +270,19 @@ public class GSONTools implements Serializer {
 			// If there are collections in the map, get their types and deserialize them
 			if (collectionTypes != null && collectionTypes.has(k)) {
 				String type = collectionTypes.get(k).getAsString();
+				JsonElement el = map.get(k);
 				if (type.equals(LIST)) {
-					ret.put(k, deserializeJsonArrayAsList((JsonArray) map.get(k)));
+					if (el.isJsonArray()) {
+						ret.put(k, deserializeJsonArrayAsList((JsonArray) el));
+					} else {
+						ret.put(k, handleWrappedCollection(el));
+					}
 				} else if (type.equals(SET)) {
-					ret.put(k, deserializeJsonArrayAsSet((JsonArray) map.get(k)));
+					if (el.isJsonArray()) {
+						ret.put(k, deserializeJsonArrayAsSet((JsonArray) el));
+					} else {
+						ret.put(k, handleWrappedCollection(el));
+					}
 				}
 			} else {
 				ret.put(k, deserializeJsonElement(map.get(k)));
@@ -406,12 +434,20 @@ public class GSONTools implements Serializer {
 	 * @param set
 	 * @return
 	 */
-	private JsonArray serializeSet(Set<?> set) {
+	private JsonElement serializeSet(Set<?> set) {
 		JsonArray array = new JsonArray();
-		for (Object o : set) {
-			array.add(serializeToJsonElement(o));
+		if (set.size() > 0) {
+			for (Object o : set) {
+				array.add(serializeToJsonElement(o));
+			}
+			return array;
+		} else {
+			// If it is an empty list,
+			JsonObject jObj = new JsonObject();
+			jObj.add(BASYXTYPE, new JsonPrimitive(SET));
+			jObj.add(BASYXVALUE, new JsonArray());
+			return jObj;
 		}
-		return array;
 	}
 
 	/**
@@ -432,7 +468,7 @@ public class GSONTools implements Serializer {
 				array.add(elem);
 			}
 			return array;
-		} else {
+		} else if (list.size() > 0) {
 			// If it does not contain maps, it is not possible to attach the index property.
 			// Thus BASYXTYPE has to handle the type conversion
 			JsonArray array = new JsonArray();
@@ -440,6 +476,12 @@ public class GSONTools implements Serializer {
 				array.add(serializeToJsonElement(o));
 			}
 			return array;
+		} else {
+			// If it is an empty list,
+			JsonObject jObj = new JsonObject();
+			jObj.add(BASYXTYPE, new JsonPrimitive(LIST));
+			jObj.add(BASYXVALUE, new JsonArray());
+			return jObj;
 		}
 	}
 

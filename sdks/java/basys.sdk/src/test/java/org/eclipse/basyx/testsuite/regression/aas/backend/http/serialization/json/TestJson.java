@@ -164,6 +164,28 @@ public class TestJson {
 	}
 
 	/**
+	 * Tests if an empty list is correctly (de-)serialized
+	 */
+	@Test
+	public void testEmptyList() {
+		List<String> set = new ArrayList<>();
+
+		assertEquals(set, tools.deserialize(tools.serialize(set)));
+	}
+
+	/**
+	 * Tests edge case of a map containing an empty list
+	 */
+	@Test
+	public void testEmptyListInMap() {
+		Map<String, Object> map = new HashMap<>();
+
+		map.put("a", new ArrayList<>());
+
+		assertEquals(map, tools.deserialize(tools.serialize(map)));
+	}
+
+	/**
 	 * Tests if a set is correctly (de-)serialized
 	 */
 	@Test
@@ -187,6 +209,28 @@ public class TestJson {
 		primitiveSet.add(1);
 
 		assertEquals(primitiveSet, tools.deserialize(tools.serialize(primitiveSet)));
+	}
+
+	/**
+	 * Tests if an empty set is correctly (de-)serialized
+	 */
+	@Test
+	public void testEmptySet() {
+		Set<String> set = new HashSet<>();
+		String serialized = tools.serialize(set);
+		assertEquals(set, tools.deserialize(serialized));
+	}
+
+	/**
+	 * Tests edge case of a map containing an empty set
+	 */
+	@Test
+	public void testEmptySetInMap() {
+		Map<String, Object> map = new HashMap<>();
+
+		map.put("a", new HashSet<>());
+
+		assertEquals(map, tools.deserialize(tools.serialize(map)));
 	}
 
 	/**
