@@ -24,11 +24,10 @@ import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.testsuite.support.vab.stub.elements.SimpleVABElement;
 import org.junit.Test;
 
+import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-
-import jersey.repackaged.com.google.common.collect.Sets;
 
 /**
  * Tests if the json serialization is behaving as expected

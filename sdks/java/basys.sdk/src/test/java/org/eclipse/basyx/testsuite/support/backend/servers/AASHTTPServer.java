@@ -14,12 +14,12 @@ import org.apache.catalina.LifecycleState;
 import org.apache.catalina.startup.Tomcat;
 
 /**
- * Starter Class for Apache Tomcat 9.0.14 HTTP server that adds the provided servlets and respective mappings on startup.
+ * Starter Class for Apache Tomcat 8.0.53 HTTP server that adds the provided servlets and respective mappings on startup.
  * 
  * @author pschorn, espen
  * 
  */
-public class AASHTTPServer extends Thread {
+public class AASHTTPServer {
 	private Tomcat tomcat;
 	   
 	/**
@@ -55,7 +55,7 @@ public class AASHTTPServer extends Thread {
 
 			// Add new Servlet and Mapping to tomcat environment
 			Tomcat.addServlet(rootCtx, Integer.toString(servlet.hashCode()), servlet);
-			rootCtx.addServletMapping(mapping, Integer.toString(servlet.hashCode()));
+			rootCtx.addServletMappingDecoded(mapping, Integer.toString(servlet.hashCode()));
 		}
 	}
 	
