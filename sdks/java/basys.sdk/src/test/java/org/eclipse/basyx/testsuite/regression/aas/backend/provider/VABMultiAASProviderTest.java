@@ -4,8 +4,8 @@
 package org.eclipse.basyx.testsuite.regression.aas.backend.provider;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.backend.provider.VABMultiAASProvider;

@@ -7,13 +7,13 @@ import java.util.Map;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.eclipse.basyx.vab.provider.list.ReferencedArrayList;
 import org.eclipse.basyx.vab.provider.xml.VABXmlProviderFactory;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-class TestVABXmlProviderFactory {
+public class TestVABXmlProviderFactory {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	void testResources() throws Exception {
+	public void testResources() throws Exception {
 
 		VABXmlProviderFactory factory = new VABXmlProviderFactory();
 		VABHashmapProvider provider = factory.createVABElements(TestXmlParser.xmlTestContent);

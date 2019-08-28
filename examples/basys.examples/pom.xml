@@ -91,7 +91,6 @@
   </build>
   
   <dependencies>
-		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
 		<!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
 		<!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
 		<!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
