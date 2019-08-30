@@ -53,7 +53,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		// Set service connection manager and create AAS server connection
 		setConnectionManager(new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorProvider()));
 		// - Create AAS server connection
-		aasServerConnection = getConnectionManager().connectToHTTPVABElement("AASServer", "/aas/submodels/aasRepository/");
+		aasServerConnection = getConnectionManager().connectToVABElement("AASServer").getDeepProxy("/aas/submodels/aasRepository/");
 		
 		
 		// Set AAS server VAB object ID, AAS server URL, and AAS server path prefix

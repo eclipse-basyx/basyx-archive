@@ -110,7 +110,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		
 		
 		// Connect to AAS server
-		aasServerConnection = this.getConnectionManager().connectToHTTPVABElement("AASServer", "/aas/submodels/aasRepository/");
+		aasServerConnection = this.getConnectionManager().connectToVABElement("AASServer").getDeepProxy("/aas/submodels/aasRepository/");
 
 		
 		// Create device AAS
