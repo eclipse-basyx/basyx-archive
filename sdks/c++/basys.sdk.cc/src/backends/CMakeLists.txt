@@ -34,7 +34,7 @@ target_sources(backends
         provider/vab/VABElementProxy.h
 )
 
-target_include_directories(backends PUBLIC "${BASYX_SOURCE_DIR}" )
+target_include_directories(backends PUBLIC ${BASYX_SOURCE_DIR})
 target_link_libraries(backends basyx abstraction)
 
 diagnostics_print(backends)

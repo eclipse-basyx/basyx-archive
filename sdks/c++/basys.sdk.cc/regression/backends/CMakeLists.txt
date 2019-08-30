@@ -15,7 +15,7 @@ target_sources(tests_backends
 		protocols/provider/basyx/frame/test_BaSyxNativeFrameProcessor.cpp
 )
 
-target_include_directories(tests_backends PRIVATE ${PROJECT_SOURCE_DIR})
+target_include_directories(tests_backends PRIVATE ${PROJECT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
 target_link_libraries(tests_backends basyx backends gtest testmain abstraction)
 gtest_discover_tests(tests_backends)
 

@@ -13,7 +13,7 @@ target_sources(${PROJECT_NAME}
         test_vab_elementproxy.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR} ${BASYX_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
 target_link_libraries(${PROJECT_NAME} backends basyx gtest testmain)
 
 gtest_discover_tests(${PROJECT_NAME})
