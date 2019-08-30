@@ -17,8 +17,8 @@ class IHasDataSpecification
 public:
   virtual ~IHasDataSpecification() = default;
   
-	std::vector<IReference> getDataSpecificationReferences();
-	void setDataSpecificationReferences(std::vector<IReference> ref);
+	virtual std::vector<IReference> getDataSpecificationReferences() const = 0;
+	virtual void setDataSpecificationReferences(const std::vector<IReference> & ref) = 0;
 };
 
 #endif

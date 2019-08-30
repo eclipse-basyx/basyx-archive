@@ -8,7 +8,7 @@
 #define BASYX_METAMODEL_IQualifier_H_
 
 
-#include "IReference.h"
+#include "reference/IReference.h"
 
 #include "types/BaSysTypes.h"
 
@@ -17,18 +17,16 @@
 class IQualifier
 {
 public:
-	
-
 	virtual ~IQualifier() = default;
 
-	virtual void setQualifierType(std::string obj) = 0;
-	virtual std::string getQualifierType() = 0;
+	virtual void setQualifierType(const std::string & obj) = 0;
+	virtual std::string getQualifierType() const = 0;
 
-	virtual void setQualifierValue(basyx::any obj) = 0;
-	virtual basyx::any getQualifierValue() = 0;
+	virtual void setQualifierValue(const basyx::any & obj) = 0;
+	virtual basyx::any getQualifierValue() const = 0;
 
-	virtual void setQualifierValueId(IReference obj) = 0;
-	virtual IReference getQualifierValueId() = 0;
+	virtual void setQualifierValueId(const IReference & obj) = 0;
+	virtual IReference getQualifierValueId() const = 0;
 };
 
 #endif

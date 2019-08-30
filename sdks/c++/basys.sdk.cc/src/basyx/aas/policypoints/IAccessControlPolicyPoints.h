@@ -13,21 +13,19 @@
 class IAccessControlPolicyPoints
 {
 public:
-	
-
 	virtual ~IAccessControlPolicyPoints() = default;
 
-	virtual void setPolicyAdministrationPoint(basyx::any obj) = 0;
-	virtual basyx::any getPolicyAdministrationPoint() = 0;
+	virtual void setPolicyAdministrationPoint(const basyx::any & obj) = 0;
+	virtual basyx::any getPolicyAdministrationPoint() const = 0;
 
-	virtual void setPolicyDecisionPoint(basyx::any obj) = 0;
-	virtual basyx::any getPolicyDecisionPoint() = 0;
+	virtual void setPolicyDecisionPoint(const basyx::any & obj) = 0;
+	virtual basyx::any getPolicyDecisionPoint() const = 0;
 
-	virtual void setPolicyEnforcementPoint(basyx::any obj) = 0;
-	virtual basyx::any getPolicyEnforcementPoint() = 0;
+	virtual void setPolicyEnforcementPoint(const basyx::any & obj) = 0;
+	virtual basyx::any getPolicyEnforcementPoint() const = 0;
 
-	virtual void setPolicyInformationPoints(basyx::any obj) = 0;
-	virtual basyx::any getPolicyInformationPoints() = 0;
+	virtual void setPolicyInformationPoints(const basyx::any & obj) = 0;
+	virtual basyx::any getPolicyInformationPoints() const = 0;
 
 };
 

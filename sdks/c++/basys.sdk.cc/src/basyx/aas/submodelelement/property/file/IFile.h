@@ -14,15 +14,13 @@
 class IFile
 {
 public:
-	
-
 	virtual ~IFile() = default;
 
-	virtual void setValue(PathType value) = 0;
-	virtual PathType getValue() = 0;
+	virtual void setValue(const PathType & value) = 0;
+	virtual PathType getValue() const = 0;
 
-	virtual void setMimeType(MimeType mimeType) = 0;
-	virtual MimeType getMimeType() = 0;
+	virtual void setMimeType(const MimeType & mimeType) = 0;
+	virtual MimeType getMimeType() const = 0;
 };
 
 #endif

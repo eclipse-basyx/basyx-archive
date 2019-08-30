@@ -15,12 +15,10 @@
 class IReference
 {
 public:
-	
-
 	virtual ~IReference() = default;
 
-	virtual std::vector<IKey> getKeys() = 0;
-	virtual void setKeys(std::vector<IKey> keys) = 0;
+	virtual std::vector<IKey> getKeys() const = 0;
+	virtual void setKeys(const std::vector<IKey> & keys) = 0;
 };
 
 #endif

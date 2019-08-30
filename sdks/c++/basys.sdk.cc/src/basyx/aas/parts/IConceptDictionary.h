@@ -8,7 +8,7 @@
 #define BASYX_METAMODEL_IConceptDictionary_H_
 
 
-#include "IReferable.h"
+#include "qualifier/IReferable.h"
 
 #include <string>
 #include <vector>
@@ -20,8 +20,8 @@ public:
 
 	virtual ~IConceptDictionary() = default;
 
-	virtual std::vector<std::string> getConceptDescription() = 0;
-	virtual void setConceptDescription(std::vector<std::string> ref) = 0;
+	virtual std::vector<std::string> getConceptDescription() const = 0;
+	virtual void setConceptDescription(const std::vector<std::string> & ref) = 0;
 };
 
 #endif

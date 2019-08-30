@@ -27,13 +27,13 @@ class SubModel : public ISubModel
 public:
 	SubModel();
 
-	virtual std::unordered_map<std::string, std::shared_ptr<IProperty>> getProperties();
-	virtual void setProperties(std::unordered_map<std::string, std::shared_ptr<IProperty>> properties);
+	virtual std::unordered_map<std::string, std::shared_ptr<IProperty>> getProperties() const override;
+	virtual void setProperties(const std::unordered_map<std::string, std::shared_ptr<IProperty>> & properties) override;
 		
-	virtual std::unordered_map<std::string, std::shared_ptr<IOperation>> getOperations();
-	virtual void setOperations(std::unordered_map<std::string, std::shared_ptr<IOperation>> operations);
+	virtual std::unordered_map<std::string, std::shared_ptr<IOperation>> getOperations() const override;
+	virtual void setOperations(const std::unordered_map<std::string, std::shared_ptr<IOperation>> & operations) override;
 		
-	virtual std::unordered_map<std::string, basyx::any> getElements();
+	virtual std::unordered_map<std::string, basyx::any> getElements() const override;
 
 private:
 	std::unordered_map<std::string, std::shared_ptr<IProperty>> properties;

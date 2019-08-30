@@ -8,20 +8,18 @@
 #define BASYX_METAMODEL_IRelationshipElement_H_
 
 
-#include "IReference.h"
+#include "reference/IReference.h"
 
 class IRelationshipElement
 {
 public:
-	
-
 	virtual ~IRelationshipElement() = default;
 
-	virtual void setFirst(IReference first) = 0;
-	virtual IReference getFirst() = 0;
+	virtual void setFirst(const IReference & first) = 0;
+	virtual IReference getFirst() const = 0;
 
-	virtual void setSecond(IReference second) = 0;
-	virtual IReference getSecond() = 0;
+	virtual void setSecond(const IReference & second)= 0;
+	virtual IReference getSecond() const = 0;
 };
 
 #endif

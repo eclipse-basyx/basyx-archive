@@ -10,8 +10,6 @@
 class IConstraint
 {
 public:
-	
-
 	virtual ~IConstraint() = default;
 };
 

@@ -18,8 +18,6 @@
 class ISubmodelElement : public IElement, IHasDataSpecification, IReferable, IQualifiable, IHasSemantics, IHasKind
 {
 public:
-	
-
 	virtual ~ISubmodelElement() = default;
 };
 

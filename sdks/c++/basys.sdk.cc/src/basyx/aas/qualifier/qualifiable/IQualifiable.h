@@ -15,12 +15,10 @@
 class IQualifiable
 {
 public:
-	
-
 	virtual ~IQualifiable() = default;
 
-	virtual void setQualifier(std::vector<IConstraint> qualifiers) = 0;
-	virtual std::vector<IConstraint> getQualifier() = 0;
+	virtual void setQualifier(const std::vector<IConstraint> & qualifiers) = 0;
+	virtual std::vector<IConstraint> getQualifier() const = 0;
 };
 
 #endif
