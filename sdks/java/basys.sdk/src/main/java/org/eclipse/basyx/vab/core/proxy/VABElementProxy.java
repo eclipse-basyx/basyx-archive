@@ -172,6 +172,20 @@ public class VABElementProxy implements IModelProvider {
 	 * @return processed path
 	 */
 	private String constructPath(String path) {
+		return constructPathWithSeparator(path, "//");
+	}
+
+	/**
+	 * Add path to VAB element address. Make sure that resulting path contains the
+	 * proper number of slashes ("/")
+	 * 
+	 * @param path
+	 *            Input path
+	 * @param separator
+	 *            Allows passing different separators (/ vs. //)
+	 * @return processed path
+	 */
+	private String constructPathWithSeparator(String path, String separator) {
 		if (path == null) {
 			return null;
 		}
@@ -189,9 +203,20 @@ public class VABElementProxy implements IModelProvider {
 		if (addr != null && !addr.isEmpty()) {
 			// Double slashes are used to separate between address and path to be able to
 			// differentiate later on
-			return addr + "//" + trimmedPath;
+			return addr + separator + trimmedPath;
 		} else {
 			return trimmedPath;
 		}
+	}
+
+	/**
+	 * Creates a proxy object pointing to an object deeper within the element the
+	 * current proxy is pointing to
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public VABElementProxy getDeepProxy(String path) {
+		return new VABElementProxy(constructPathWithSeparator(path, "/"), provider);
 	}
 }
