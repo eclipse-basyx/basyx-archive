@@ -76,6 +76,9 @@
 						<exclude>**/*HTTP*</exclude>
 						<exclude>**/*TCP*</exclude>
 					</excludes>
+					<includes>
+						<include>**/**</include>
+					</includes>
 				</configuration>
 			</plugin>
 
