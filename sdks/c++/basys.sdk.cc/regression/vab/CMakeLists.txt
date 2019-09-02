@@ -10,6 +10,7 @@ add_executable(${PROJECT_NAME})
 target_sources(${PROJECT_NAME}
     PRIVATE
         test_vabPath.cpp
+        test_vab_elementproxy.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR} ${BASYX_SOURCE_DIR})

@@ -15,15 +15,13 @@
 class IAdministrativeInformation : public IHasDataSpecification
 {
 public:
-	
-
 	virtual ~IAdministrativeInformation() = default;
 
-	virtual void setVersion(std::string version) = 0;
-	virtual std::string getVersion() = 0;
+	virtual void setVersion(const std::string & version) = 0;
+	virtual std::string getVersion() const = 0;
 
-	virtual void setRevision(std::string revision) = 0;
-	virtual std::string getRevision() = 0;
+	virtual void setRevision(const std::string & revision) = 0;
+	virtual std::string getRevision() const = 0;
 };
 
 #endif

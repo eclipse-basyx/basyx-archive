@@ -11,6 +11,7 @@
 #include <string>
 
 #include "api/IModelProvider.h"
+#include "basysid/BaSysID.h"
 
 class MockupModelProvider: public IModelProvider {
 

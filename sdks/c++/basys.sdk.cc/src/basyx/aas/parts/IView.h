@@ -9,8 +9,8 @@
 
 
 #include "qualifier/IHasSemantics.h"
-#include "IHasDataSpecification.h"
-#include "IReferable.h"
+#include "qualifier/IHasDataSpecification.h"
+#include "qualifier/IReferable.h"
 
 #include <vector>
 
@@ -22,7 +22,7 @@ public:
 	virtual ~IView() = default;
 
 	virtual void setContainedElement(std::vector<IReference> references) = 0;
-	virtual std::vector<IReference> getContainedElement() = 0;
+	virtual std::vector<IReference> getContainedElement() const = 0;
 };
 
 #endif

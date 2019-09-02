@@ -38,13 +38,13 @@ class ISubModel : public IHasSemantics, public IIdentifiable, public IHasDataSpe
 	
 public:
 	virtual ~ISubModel() = default;
-	virtual std::unordered_map<std::string, std::shared_ptr<IProperty>> getProperties() = 0;
-	virtual void setProperties(std::unordered_map<std::string, std::shared_ptr<IProperty>> properties) = 0;
+	virtual std::unordered_map<std::string, std::shared_ptr<IProperty>> getProperties() const = 0;
+	virtual void setProperties(const std::unordered_map<std::string, std::shared_ptr<IProperty>> & properties) = 0;
 	
-	virtual std::unordered_map<std::string, std::shared_ptr<IOperation>> getOperations() = 0;
-	virtual void setOperations(std::unordered_map<std::string, std::shared_ptr<IOperation>> operations) = 0;
+	virtual std::unordered_map<std::string, std::shared_ptr<IOperation>> getOperations() const = 0;
+	virtual void setOperations(const std::unordered_map<std::string, std::shared_ptr<IOperation>> & operations) = 0;
 	
-	virtual std::unordered_map<std::string, basyx::any> getElements() = 0;
+	virtual std::unordered_map<std::string, basyx::any> getElements() const = 0;
 
 };
 

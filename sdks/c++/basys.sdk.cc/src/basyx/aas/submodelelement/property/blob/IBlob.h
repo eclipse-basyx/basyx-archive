@@ -14,15 +14,13 @@
 class IBlob
 {
 public:
-	
-
 	virtual ~IBlob() = default;
 
-	virtual void setValue(BlobType value) = 0;
-	virtual BlobType getValue() = 0;
+	virtual void setValue(const BlobType & value) = 0;
+	virtual BlobType getValue() const = 0;
 
-	virtual void setMimeType(MimeType mimeType) = 0;
-	virtual MimeType getMimeType() = 0;
+	virtual void setMimeType(const MimeType & mimeType) = 0;
+	virtual MimeType getMimeType() const = 0;
 };
 
 #endif

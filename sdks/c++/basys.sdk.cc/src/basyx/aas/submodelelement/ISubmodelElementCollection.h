@@ -16,21 +16,19 @@
 class ISubmodelElementCollection
 {
 public:
-	
-
 	virtual ~ISubmodelElementCollection() = default;
 
-	virtual void setValue(objectCollection_t value) = 0;
-	virtual objectCollection_t getValue() = 0;
+	virtual void setValue(const basyx::objectCollection_t & value) = 0;
+	virtual basyx::objectCollection_t getValue() const = 0;
 
-	virtual void setOrdered(bool value) = 0;
-	virtual bool isOrdered() = 0;
+	virtual void setOrdered(const bool & value) = 0;
+	virtual bool isOrdered() const = 0;
 
-	virtual void setAllowDuplicates(bool value) = 0;
-	virtual bool isAllowDuplicates() = 0;
+	virtual void setAllowDuplicates(const bool & value)= 0;
+	virtual bool isAllowDuplicates() const = 0;
 
-	virtual void setElements(std::hash_map<std::string, ISubmodelElement> value) = 0;
-	virtual std::hash_map<std::string, ISubmodelElement> getElements() = 0;
+	virtual void setElements(const std::hash_map<std::string, ISubmodelElement> & value) = 0;
+	virtual std::hash_map<std::string, ISubmodelElement> getElements() const = 0;
 };
 
 #endif

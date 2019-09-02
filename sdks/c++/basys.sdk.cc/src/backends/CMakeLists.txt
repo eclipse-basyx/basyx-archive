@@ -30,6 +30,8 @@ target_sources(backends
         provider/vab/VABPath.h
         provider/vab/VABHashmapProvider.cpp
         provider/vab/VABHashmapProvider.h
+		    provider/vab/VABElementProxy.cpp
+        provider/vab/VABElementProxy.h
 )
 
 target_include_directories(backends PUBLIC "${BASYX_SOURCE_DIR}" )

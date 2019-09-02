@@ -15,8 +15,8 @@ class IHasSemantics
 public:
 	virtual ~IHasSemantics() = default;
 
-	virtual std::shared_ptr<std::shared_ptr<IReference>> getSemanticId() = 0;
-	virtual void setSemanticID(std::shared_ptr<std::shared_ptr<IReference>> ref) = 0;
+	virtual std::shared_ptr<std::shared_ptr<IReference>> getSemanticId() const = 0;
+	virtual void setSemanticID(const std::shared_ptr<std::shared_ptr<IReference>> & ref) = 0;
 };
 
 #endif

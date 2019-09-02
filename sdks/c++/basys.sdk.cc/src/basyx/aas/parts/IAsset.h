@@ -8,18 +8,18 @@
 #define BASYX_METAMODEL_IAsset_H_
 
 
-#include "IHasDataSpecification.h"
+#include "qualifier/IHasDataSpecification.h"
 #include "qualifier/haskind/IHasKind.h"
-#include "IIdentifiable.h"
-#include "IReference.h"
+#include "qualifier/IIdentifiable.h"
+#include "reference/IReference.h"
 
 class IAsset : virtual IHasDataSpecification, IHasKind, IIdentifiable
 {
 public:
 	virtual ~IAsset() = default;
 
-	virtual IReference getAssetIdentificationModel() = 0;
-	virtual void setAssetIdentificationModel(IReference submodel) = 0;
+	virtual IReference getAssetIdentificationModel() const = 0;
+	virtual void setAssetIdentificationModel(const IReference & submodel) = 0;
 };
 
 #endif
