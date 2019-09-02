@@ -2,7 +2,6 @@ package org.eclipse.basyx.examples.scenarios.device.aas;
 
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.examplescenario.BaSyxExampleScenario;
@@ -11,6 +10,7 @@ import org.eclipse.basyx.examples.mockup.device.SimpleTCPDeviceMockup;
 import org.eclipse.basyx.examples.mockup.devicemanager.ManufacturingDeviceActiveAASManager;
 import org.eclipse.basyx.examples.mockup.servers.SupplierStatusServlet;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
+import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.junit.ClassRule;
 import org.junit.Test;

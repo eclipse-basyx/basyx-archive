@@ -1,12 +1,12 @@
-package org.eclipse.basyx.aas.backend.connector;
+package org.eclipse.basyx.vab.backend.connector;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
-import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
-import org.eclipse.basyx.aas.backend.http.tools.factory.GSONToolsFactory;
+import org.eclipse.basyx.vab.backend.http.tools.GSONTools;
+import org.eclipse.basyx.vab.backend.http.tools.factory.DefaultTypeFactory;
+import org.eclipse.basyx.vab.backend.http.tools.factory.GSONToolsFactory;
 import org.eclipse.basyx.vab.backend.server.utils.Message;
 import org.eclipse.basyx.vab.backend.server.utils.Result;
 

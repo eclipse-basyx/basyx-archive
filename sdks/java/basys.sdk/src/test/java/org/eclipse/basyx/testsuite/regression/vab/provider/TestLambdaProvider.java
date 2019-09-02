@@ -7,9 +7,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.eclipse.basyx.aas.backend.connector.ConnectorProvider;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
 import org.eclipse.basyx.testsuite.support.vab.stub.elements.SimpleVABElement;
+import org.eclipse.basyx.vab.backend.connector.ConnectorProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;

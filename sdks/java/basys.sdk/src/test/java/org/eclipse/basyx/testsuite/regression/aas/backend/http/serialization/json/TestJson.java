@@ -19,9 +19,9 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
-import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.testsuite.support.vab.stub.elements.SimpleVABElement;
+import org.eclipse.basyx.vab.backend.http.tools.GSONTools;
+import org.eclipse.basyx.vab.backend.http.tools.factory.DefaultTypeFactory;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;

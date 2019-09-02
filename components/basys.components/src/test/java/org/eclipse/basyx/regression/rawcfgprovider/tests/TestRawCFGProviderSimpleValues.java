@@ -2,10 +2,10 @@ package org.eclipse.basyx.regression.rawcfgprovider.tests;
 
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
+import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.junit.ClassRule;

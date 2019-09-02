@@ -9,7 +9,6 @@ import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
@@ -17,6 +16,7 @@ import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_Empty;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
+import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
 import org.junit.ClassRule;
 import org.junit.Test;
 

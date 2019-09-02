@@ -5,10 +5,11 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.backend.connector.MetaprotocolHandler;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
+import org.eclipse.basyx.vab.backend.connector.MetaprotocolHandler;
 import org.eclipse.basyx.vab.core.directory.VABHTTPDirectoryProxy;
+
 
 
 /**

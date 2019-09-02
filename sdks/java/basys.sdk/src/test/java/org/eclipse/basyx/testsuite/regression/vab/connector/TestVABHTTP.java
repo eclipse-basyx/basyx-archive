@@ -1,10 +1,10 @@
 package org.eclipse.basyx.testsuite.regression.vab.connector;
 
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.testsuite.regression.vab.provider.TestProvider;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
 import org.eclipse.basyx.testsuite.support.backend.servers.context.SdkRegressionContext;
+import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.junit.Rule;
 

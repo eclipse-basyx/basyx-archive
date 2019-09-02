@@ -1,6 +1,6 @@
 package org.eclipse.basyx.testsuite.regression.vab.connector;
 
-import org.eclipse.basyx.aas.backend.connector.opcua.OpcUaConnectorProvider;
+import org.eclipse.basyx.vab.backend.connector.opcua.OpcUaConnectorProvider;
 import org.eclipse.basyx.vab.backend.gateway.ConnectorProviderMapper;
 import org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.UByte;
 import org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.UInteger;

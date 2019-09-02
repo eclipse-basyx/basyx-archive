@@ -2,12 +2,12 @@ package org.eclipse.basyx.examples.snippets.aas.deployment.device;
 
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.basyx.aas.backend.connector.JSONConnector;
-import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnector;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.vab.backend.connector.JSONConnector;
+import org.eclipse.basyx.vab.backend.connector.basyx.BaSyxConnector;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.junit.Test;
 

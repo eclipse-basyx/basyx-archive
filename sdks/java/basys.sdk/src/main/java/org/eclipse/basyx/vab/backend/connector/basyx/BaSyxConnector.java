@@ -1,4 +1,4 @@
-package org.eclipse.basyx.aas.backend.connector.basyx;
+package org.eclipse.basyx.vab.backend.connector.basyx;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
-import org.eclipse.basyx.aas.backend.connector.IBaSyxConnector;
+import org.eclipse.basyx.vab.backend.connector.IBaSyxConnector;
 import org.eclipse.basyx.vab.backend.server.basyx.CoderTools;
 import org.eclipse.basyx.vab.backend.server.basyx.VABBaSyxTCPInterface;
 

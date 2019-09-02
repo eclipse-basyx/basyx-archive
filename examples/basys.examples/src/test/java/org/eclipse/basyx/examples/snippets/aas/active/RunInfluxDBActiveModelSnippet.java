@@ -5,6 +5,8 @@ import org.eclipse.basyx.examples.snippets.aas.active.tasks.InfluxDBTask;
 import org.eclipse.basyx.tools.aas.active.ActiveModel;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * FIXME: This should also run on the postgres backend. Until then, this test is
@@ -22,7 +24,8 @@ public class RunInfluxDBActiveModelSnippet {
 	/**
 	 * Test active model writing value to an influxDB database
 	 */
-	// @Test
+	@Ignore
+	@Test
 	public void snippet() throws Exception {
 		// Create the model provider for the active model
 		IModelProvider modelProvider = new VirtualPathModelProvider();

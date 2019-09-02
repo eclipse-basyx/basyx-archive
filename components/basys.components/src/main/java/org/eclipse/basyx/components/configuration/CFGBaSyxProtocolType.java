@@ -1,7 +1,7 @@
 package org.eclipse.basyx.components.configuration;
 
-import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnectorProvider;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.backend.connector.basyx.BaSyxConnectorProvider;
+import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.vab.core.IConnectorProvider;
 
 

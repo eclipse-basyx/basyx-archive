@@ -1,8 +1,8 @@
 package org.eclipse.basyx.vab.core.directory;
 
 import org.eclipse.basyx.aas.api.webserviceclient.WebServiceRawClient;
-import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
-import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
+import org.eclipse.basyx.vab.backend.http.tools.GSONTools;
+import org.eclipse.basyx.vab.backend.http.tools.factory.DefaultTypeFactory;
 
 public class VABHTTPDirectoryProxy implements IVABDirectoryService {
 	/**

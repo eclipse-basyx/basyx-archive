@@ -2,7 +2,7 @@ package org.eclipse.basyx.testsuite.support.vab.stub;
 
 import java.io.FileNotFoundException;
 
-import org.eclipse.basyx.aas.backend.connector.IBaSyxConnector;
+import org.eclipse.basyx.vab.backend.connector.IBaSyxConnector;
 import org.eclipse.basyx.vab.backend.server.utils.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
 

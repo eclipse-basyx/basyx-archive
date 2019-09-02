@@ -3,9 +3,9 @@ package org.eclipse.basyx.components.configuration.builder;
 import org.eclipse.basyx.aas.api.registry.AASHTTPRegistryProxy;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.components.configuration.CFGBaSyxProtocolType;
 import org.eclipse.basyx.components.configuration.ConfigurableComponent;
+import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.directory.IVABDirectoryService;
 

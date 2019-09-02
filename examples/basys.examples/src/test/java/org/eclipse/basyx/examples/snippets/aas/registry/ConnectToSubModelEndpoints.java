@@ -8,7 +8,6 @@ import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
@@ -17,6 +16,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Prop
 import org.eclipse.basyx.components.servlet.submodel.DynamicModelProviderServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
+import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 import org.junit.ClassRule;
 import org.junit.Test;

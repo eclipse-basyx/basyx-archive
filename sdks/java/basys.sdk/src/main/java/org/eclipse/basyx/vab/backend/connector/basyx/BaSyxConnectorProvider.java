@@ -1,7 +1,7 @@
-package org.eclipse.basyx.aas.backend.connector.basyx;
+package org.eclipse.basyx.vab.backend.connector.basyx;
 
-import org.eclipse.basyx.aas.backend.connector.ConnectorProvider;
-import org.eclipse.basyx.aas.backend.connector.JSONConnector;
+import org.eclipse.basyx.vab.backend.connector.ConnectorProvider;
+import org.eclipse.basyx.vab.backend.connector.JSONConnector;
 import org.eclipse.basyx.vab.core.IModelProvider;
 
 

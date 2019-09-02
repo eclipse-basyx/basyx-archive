@@ -1,4 +1,4 @@
-package org.eclipse.basyx.aas.backend.connector;
+package org.eclipse.basyx.vab.backend.connector;
 
 /**
  * Connector interface for technology specific communication. Returns the

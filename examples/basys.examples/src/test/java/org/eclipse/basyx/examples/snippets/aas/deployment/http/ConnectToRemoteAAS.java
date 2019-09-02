@@ -5,12 +5,12 @@ import static org.junit.Assert.assertTrue;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.components.servlet.submodel.AASServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_Empty;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
+import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
 import org.junit.ClassRule;
 import org.junit.Test;
 

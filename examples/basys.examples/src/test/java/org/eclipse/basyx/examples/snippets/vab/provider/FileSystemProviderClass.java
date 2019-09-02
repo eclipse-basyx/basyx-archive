@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 
-import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
-import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
+import org.eclipse.basyx.vab.backend.http.tools.GSONTools;
+import org.eclipse.basyx.vab.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.provider.filesystem.FileSystemProvider;
 import org.eclipse.basyx.vab.provider.filesystem.filesystem.FileSystem;

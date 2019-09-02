@@ -6,12 +6,12 @@ import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnectorProvider;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
+import org.eclipse.basyx.vab.backend.connector.basyx.BaSyxConnectorProvider;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.junit.Test;
 

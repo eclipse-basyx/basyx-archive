@@ -6,11 +6,11 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.components.servlet.submodel.EmptyVABLambdaElementServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
+import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;

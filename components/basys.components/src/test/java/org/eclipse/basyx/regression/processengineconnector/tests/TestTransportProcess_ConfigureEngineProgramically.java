@@ -13,7 +13,6 @@ import org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
@@ -22,6 +21,7 @@ import org.eclipse.basyx.regression.support.processengine.executor.CoilcarServic
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
 import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
+import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
