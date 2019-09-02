@@ -99,8 +99,8 @@ void NativeConnector::basysDelete(std::string const& path, const basyx::any & ob
  */
 
 void NativeConnector::sendData(char* msg, size_t size) {
-	size += BASYX_FRAMESIZE_SIZE;
 	CoderTools::setInt32(msg, 0, size);
+	size += BASYX_FRAMESIZE_SIZE;
 #ifdef PRINT_FRAME
 	log.debug("Sending:\n{}", BaSyxNativeFrameHelper::printFrame(msg, size));
 #endif
