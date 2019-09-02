@@ -59,7 +59,7 @@ public class ReceiveDeviceDashboardStatusApplication extends BaseBaSyxService {
 		AASDescriptor      aasDescriptor = getRegistry().lookupAAS(lookupURN("AAS"));
 		SubmodelDescriptor smDescriptor  = aasDescriptor.getSubModelDescriptor(lookupURN("Status"));
 		// - Connect to status sub model end point
-		aasServerConnection = getConnectionManager().connectToVABElementByURL(smDescriptor.getFirstEndpoint());		
+		aasServerConnection = getConnectionManager().connectToVABElementByPath(smDescriptor.getFirstEndpoint());		
 	}
 	
 

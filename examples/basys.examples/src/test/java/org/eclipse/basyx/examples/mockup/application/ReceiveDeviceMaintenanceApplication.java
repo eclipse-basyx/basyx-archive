@@ -59,7 +59,7 @@ public class ReceiveDeviceMaintenanceApplication extends BaseBaSyxService {
 		AASDescriptor      aasDescriptor = getRegistry().lookupAAS(lookupURN("AAS"));
 		SubmodelDescriptor smDescriptor  = aasDescriptor.getSubModelDescriptor(lookupURN("Supply"));
 		// - Connect to status sub model end point
-		aasServerConnection = getConnectionManager().connectToVABElementByURL(smDescriptor.getFirstEndpoint());		
+		aasServerConnection = getConnectionManager().connectToVABElementByPath(smDescriptor.getFirstEndpoint());		
 	}
 	
 
