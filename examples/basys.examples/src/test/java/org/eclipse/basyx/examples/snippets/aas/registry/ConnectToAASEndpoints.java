@@ -2,8 +2,6 @@ package org.eclipse.basyx.examples.snippets.aas.registry;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
-
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.AASHTTPRegistryProxy;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
@@ -16,7 +14,6 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.components.servlet.submodel.DynamicModelProviderServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
-import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -88,28 +85,20 @@ public class ConnectToAASEndpoints {
 		// - Register AAS descriptor with AAS and sub model endpoints in registry
 		regProxy.register(aasURN, aasDescriptor);
 
-		// Connect to AAS using BaSyx connector
-		// - Connect to VAB object by ID. The connection manager looks up this ID in
-		// its directory
-		ConnectedAssetAdministrationShell shell = this.connManager.retrieveAAS(aasURN);
-
-		// Server connections
-		// - Connect AAS
-		VABElementProxy connSubModel1 = shell.getProxy();
-
-		
 		// Create AAS
 		AssetAdministrationShell aas = new AssetAdministrationShell();
+
 		// - Set AAS ID
 		aas.setId(aasURN.toString());
+
 		// - Transfer AAS to server
 		//   - This creates the "urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001" element on the server, which is the server
 		//     end point that will host the AAS.
-		connSubModel1.createValue("", new HashMap<String, Object>());
-		//   - This call transfers the AAS to urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001/aas on server
-		connSubModel1.createValue("aas", aas);
+		connManager.createAAS(aas, aasURN);
 
-		
+		// Server connections
+		// - Connect AAS
+		ConnectedAssetAdministrationShell shell = connManager.retrieveAAS(aasURN);
 
 		// Retrieve the AAS from the AAS server with SDK connector
 		// - IAssetAdministrationShell is the interface for the local AAS proxy

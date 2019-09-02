@@ -4,14 +4,18 @@
 package org.eclipse.basyx.aas.backend.connected;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.manager.IAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedSubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.vab.core.IConnectorProvider;
@@ -23,7 +27,7 @@ import org.eclipse.basyx.vab.core.tools.VABPathTools;
  * <br />
  * 
  * @author kuhn, schnicke
- *
+ * 
  */
 public class ConnectedAssetAdministrationShellManager implements IAssetAdministrationShellManager {
 
@@ -42,11 +46,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	}
 
 	@Override
-	public IAssetAdministrationShell createAAS(IAssetAdministrationShell aas) throws Exception {
-		throw new FeatureNotImplementedException();
-	}
-
-	public ConnectedSubModel retrieveSM(String smid, ModelUrn aasUrn) {
+	public ISubModel retrieveSubModel(ModelUrn aasUrn, String smid) {
 		// look up AAS descriptor in the registry
 		AASDescriptor aasDescriptor = aasDirectory.lookupAAS(aasUrn);
 
@@ -64,6 +64,21 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 
 	@Override
 	public ConnectedAssetAdministrationShell retrieveAAS(ModelUrn aasUrn) throws Exception {
+		VABElementProxy proxy = getAASProxyFromURN(aasUrn);
+		return new ConnectedAssetAdministrationShell("/aas", proxy, this);
+	}
+
+	@Override
+	public void createAAS(AssetAdministrationShell aas, ModelUrn urn) {
+		VABElementProxy proxy = getAASProxyFromURN(urn);
+		
+		// Create setup if necessary
+		initDefaultIfNotExists(proxy, "");
+
+		proxy.createValue("/aas", aas);
+	}
+
+	private VABElementProxy getAASProxyFromURN(ModelUrn aasUrn) {
 		// Lookup AAS descriptor
 		AASDescriptor aasDescriptor = aasDirectory.lookupAAS(aasUrn);
 
@@ -71,9 +86,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		String addr = aasDescriptor.getFirstEndpoint();
 
 		// Return a new VABElementProxy
-		VABElementProxy proxy = new VABElementProxy(VABPathTools.removeAddressEntry(addr),
-				providerProvider.getConnector(addr));
-		return new ConnectedAssetAdministrationShell("/aas", proxy, this);
+		return new VABElementProxy(VABPathTools.removeAddressEntry(addr), providerProvider.getConnector(addr));
 	}
 
 	@Override
@@ -84,6 +97,39 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	@Override
 	public void deleteAAS(String id) throws Exception {
 		throw new FeatureNotImplementedException();
+	}
+
+	@Override
+	public void createSubModel(ModelUrn aasUrn, String subModelId, SubModel submodel) {
+		VABElementProxy proxy = getSMProxyFromURN(aasUrn, subModelId);
+
+		// Create setup if necessary
+		initDefaultIfNotExists(proxy, "");
+		initDefaultIfNotExists(proxy, "aas");
+		initDefaultIfNotExists(proxy, "aas/submodels");
+
+		// Create sm
+		proxy.createValue("aas/submodels/" + subModelId, submodel);
+	}
+
+	private void initDefaultIfNotExists(VABElementProxy proxy, String path) {
+		if (proxy.getModelPropertyValue(path) == null) {
+			proxy.createValue(path, new HashMap<>());
+		}
+	}
+
+	private VABElementProxy getSMProxyFromURN(ModelUrn aasUrn, String subModelId) {
+		// Lookup AAS descriptor
+		AASDescriptor aasDescriptor = aasDirectory.lookupAAS(aasUrn);
+
+		// Locate sub model
+		SubmodelDescriptor smdescr = aasDescriptor.getSubModelDescriptor(subModelId);
+
+		// - Get submodel endpoint
+		String addr = smdescr.getFirstEndpoint();
+
+		// Return a new VABElementProxy
+		return new VABElementProxy(VABPathTools.removeAddressEntry(addr), providerProvider.getConnector(addr));
 	}
 
 }

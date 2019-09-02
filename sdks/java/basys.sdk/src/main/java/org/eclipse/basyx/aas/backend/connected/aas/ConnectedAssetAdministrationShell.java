@@ -183,7 +183,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 			refs = (Set<Map<?, ?>>) getProxy().getModelPropertyValue(constructPath(AssetAdministrationShell.SUBMODEL));
 			for (Map<?, ?> key : refs) {
 				String id = (String) ((Map<?, ?>) ((List<?>) key.get("keys")).get(0)).get("value");
-				ISubModel sm = manager.retrieveSM(id, new ModelUrn(getId()));
+				ISubModel sm = manager.retrieveSubModel(new ModelUrn(getId()), id);
 				ret.put(id, sm);
 			}
 		} catch (ClassCastException e) {
@@ -192,7 +192,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 			refs = (Set<Map<?, ?>>) getProxy().getModelPropertyValue(constructPath(AssetAdministrationShell.SUBMODELS));
 			for (Map<?, ?> key : refs) {
 				String id = (String) key.get("idShort");
-				ISubModel sm = manager.retrieveSM(id, new ModelUrn(getId()));
+				ISubModel sm = manager.retrieveSubModel(new ModelUrn(getId()), id);
 				ret.put(id, sm);
 			}
 		}

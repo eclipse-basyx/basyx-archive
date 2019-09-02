@@ -4,6 +4,9 @@ import java.util.Collection;
 
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.resources.ISubModel;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 
 
 
@@ -14,17 +17,6 @@ import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
  *
  */
 public interface IAssetAdministrationShellManager {
-	
-	/**
-	 * Create and register an asset administration shell with the technology layer
-	 * 
-	 * @param aas
-	 * @return
-	 * @throws Exception
-	 */
-	public IAssetAdministrationShell createAAS(IAssetAdministrationShell aas) throws Exception;
-	
-	
 	/**
 	 * Retrieve an AAS based on its ID
 	 * 
@@ -42,6 +34,13 @@ public interface IAssetAdministrationShellManager {
 	 */
 	public Collection<IAssetAdministrationShell> retrieveAASAll();
 	
+	/**
+	 * Creates an AAS on a remote server. Assumes that the urn is already registered
+	 * in the directory
+	 * 
+	 * @param urn
+	 */
+	void createAAS(AssetAdministrationShell aas, ModelUrn urn);
 	
 	/**
 	 * Unlink an AAS from the system
@@ -50,4 +49,21 @@ public interface IAssetAdministrationShellManager {
 	 * @throws Exception
 	 */
 	void deleteAAS(String id) throws Exception;
+
+	/**
+	 * Retrieves a submodel
+	 * 
+	 * @param aasUrn
+	 * @param subModelID
+	 * @return
+	 */
+	ISubModel retrieveSubModel(ModelUrn aasUrn, String subModelId);
+
+	/**
+	 * Creates a submodel on a remote server. Assumes that the urn is already
+	 * registered in the directory
+	 * 
+	 * @param urn
+	 */
+	void createSubModel(ModelUrn aasUrn, String subModelId, SubModel submodel);
 }

@@ -2,13 +2,12 @@ package org.eclipse.basyx.examples.snippets.aas.registry;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
-
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.AASHTTPRegistryProxy;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
-import org.eclipse.basyx.aas.backend.connected.aas.ConnectedSubModel;
+import org.eclipse.basyx.aas.api.resources.ISubModel;
+import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
@@ -19,8 +18,6 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Prop
 import org.eclipse.basyx.components.servlet.submodel.DynamicModelProviderServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
-import org.eclipse.basyx.tools.aas.connManager.AASConnectionManager;
-import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -47,7 +44,7 @@ public class ConnectToSubModelEndpoints {
 	 * The connection manager uses a preconfigured directory for resolving IDs to 
 	 * network addresses, and a HTTP connector to connect to VAB objects.
 	 */
-	protected AASConnectionManager connManager = new AASConnectionManager(
+	protected ConnectedAssetAdministrationShellManager connManager = new ConnectedAssetAdministrationShellManager(
 			new AASHTTPRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL"),
 			new HTTPConnectorProvider());
 
@@ -99,12 +96,6 @@ public class ConnectToSubModelEndpoints {
 		// - Register AAS descriptor with AAS and sub model endpoints in registry
 		regProxy.register(aasURN, aasDescriptor);
 		
-
-		// Server connections
-		// - Connect to sub model
-		VABElementProxy connSubModel = this.connManager.connectToAASSubModel(aasURN, subModelId);
-
-		
 		// Create sub model
 		// - This factory creates sub model properties and ensures presence of all meta data
 		MetaModelElementFactory fac = new MetaModelElementFactory();
@@ -120,14 +111,11 @@ public class ConnectToSubModelEndpoints {
 		//     end point that will host the AAS sub model.
 		//   - FIXME: This should actually be a urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001 element
 		//            to guarantee a unique AAS end point
-		connSubModel.createValue("", new HashMap<String, Object>());
-		connSubModel.createValue("aas", new HashMap<String, Object>());
-		connSubModel.createValue("aas/submodels", new HashMap<String, Object>());
-		connSubModel.createValue("aas/submodels/exampleSM", submodel);
-		
+		connManager.createSubModel(aasURN, subModelId, submodel);
+
 	
 		// Connect to sub model using BaSyx SDK
-		ConnectedSubModel connSM = new ConnectedSubModel("aas/submodels/exampleSM", connSubModel);
+		ISubModel connSM = connManager.retrieveSubModel(aasURN, subModelId);
 
 		
 		// Read property values from sub model

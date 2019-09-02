@@ -118,7 +118,7 @@ public class ConnectToAASSubModelSDK {
 		// Retrieve sub model (created by factory) with SDK connector
 		{
 			// Create and connect SDK connector
-			ISubModel subModel = manager.retrieveSM("sm-001", new ModelUrn(""));
+			ISubModel subModel = manager.retrieveSubModel(new ModelUrn(""), "sm-001");
 			// - Retrieve sub model values and compare to expected values
 			String smID     = subModel.getId();
 			String prop1Id  = subModel.getProperties().get("prop1").getId();

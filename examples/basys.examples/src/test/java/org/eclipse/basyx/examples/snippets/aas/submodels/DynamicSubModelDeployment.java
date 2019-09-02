@@ -14,7 +14,6 @@ import org.eclipse.basyx.components.servlet.submodel.DynamicModelProviderServlet
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
-import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -29,20 +28,7 @@ import org.junit.Test;
 public class DynamicSubModelDeployment {
 
 	private static final String STATUS_SM = "de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003";
-	
-	/**
-	 * Create VAB connection manager backend
-	 * 
-	 * The connection manager uses a preconfigured directory for resolving IDs to 
-	 * network addresses, and a HTTP connector to connect to VAB objects.
-	 */
-//	protected VABConnectionManager connManager = new VABConnectionManager(
-//			new ExamplesPreconfiguredDirectory()
-//				// Add example specific mappings
-//					.addMapping(STATUS_SM, "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository"),
-//			new HTTPConnectorProvider());
 
-	
 	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(
 			new ExampleAASRegistry()
 			// Ass Example specific mappings
@@ -76,15 +62,6 @@ public class DynamicSubModelDeployment {
 	 */
 	@Test
 	public void snippet() throws Exception {
-
-		// Server connections
-		// - Connect to sub model. Connecting to a sub model by its ID is discouraged, because a sub 
-		//   model ID is not necessarily unique outside the scope of its AAS. If users want to connect
-		//   directly to sub models, the registry needs to support this, and unique identifies (as here)
-		//   must be used. For portability, users should connect to sub models instead via an AAS ID and 
-		//   sub model ID tuple, as illustrated in the registry examples. 
-		VABElementProxy connSubModel1 = this.aasManager.retrieveSM(STATUS_SM, new ModelUrn("")).getProxy();
-
 		// Create factory that helps with property creation
 		// - This factory creates sub model properties and ensures presence of all meta data
 		MetaModelElementFactory fac = new MetaModelElementFactory();
@@ -96,15 +73,22 @@ public class DynamicSubModelDeployment {
 		submodel.getProperties().put(fac.create(new Property(),       7, "prop1"));
 		submodel.getProperties().put(fac.create(new Property(), "myStr", "prop2"));
 
+		
+		
 		// Transfer sub model to server
-		connSubModel1.createValue("aas/submodels/" + STATUS_SM, submodel);
+		aasManager.createSubModel(new ModelUrn(""), STATUS_SM, submodel);
 
 		
 		// Retrieve sub model with SDK connector
 		{
 
-			// - Retrieve sub model
-			ISubModel subModel = aasManager.retrieveSM(STATUS_SM, new ModelUrn(""));
+			// Server connections
+			// - Connect to sub model. Connecting to a sub model by its ID is discouraged, because a sub 
+			//   model ID is not necessarily unique outside the scope of its AAS. If users want to connect
+			//   directly to sub models, the registry needs to support this, and unique identifies (as here)
+			//   must be used. For portability, users should connect to sub models instead via an AAS ID and 
+			//   sub model ID tuple, as illustrated in the registry examples. 
+			ISubModel subModel = aasManager.retrieveSubModel(new ModelUrn(""), STATUS_SM);
 
 			// Read sub model properties
 			String smId     = subModel.getId();

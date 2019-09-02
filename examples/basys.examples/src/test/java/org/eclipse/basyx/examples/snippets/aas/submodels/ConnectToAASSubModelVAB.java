@@ -148,7 +148,7 @@ public class ConnectToAASSubModelVAB {
 
 			
 			// Create and connect SDK connector
-			ISubModel subModel = manager.retrieveSM("sm-001", new ModelUrn("aas-001"));
+			ISubModel subModel = manager.retrieveSubModel(new ModelUrn("aas-001"), "sm-001");
 			// - Retrieve sub model values and compare to expected values
 			String smID     = subModel.getId();
 

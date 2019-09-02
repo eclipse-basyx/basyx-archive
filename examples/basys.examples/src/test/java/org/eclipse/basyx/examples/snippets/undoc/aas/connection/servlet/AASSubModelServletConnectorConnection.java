@@ -122,7 +122,7 @@ public class AASSubModelServletConnectorConnection {
 	public void accessSubModel() throws Exception {
 		
 		// Create and connect SDK connector
-		ISubModel subModel = manager.retrieveSM("sm-001", new ModelUrn("aas-001"));
+		ISubModel subModel = manager.retrieveSubModel(new ModelUrn("aas-001"), "sm-001");
 		
 		// - Retrieve sub model values and compare to expected values
 		assertTrue(subModel.getId().equals("sm-001"));

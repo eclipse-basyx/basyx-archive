@@ -101,7 +101,7 @@ public class TestAASHTTP {
 	@Test
 	public void testSubModel() throws Exception {
 		// Retrieve SubModel
-		ISubModel sm = manager.retrieveSM(StubAASServlet.smId, new ModelUrn(StubAASServlet.aasId));
+		ISubModel sm = manager.retrieveSubModel(new ModelUrn(StubAASServlet.aasId), StubAASServlet.smId);
 
 		// Check id
 		assertEquals(StubAASServlet.smId, sm.getId());
