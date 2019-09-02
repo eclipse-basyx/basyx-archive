@@ -51,7 +51,7 @@ public class TestConnectedMapProperty {
 		// created PropertySingleValued map
 		VABConnectionManager manager = new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType));
 		// Create ConnectedMapProperty
-		prop = new ConnectedMapProperty("", manager.connectToVABElement(""));
+		prop = new ConnectedMapProperty(manager.connectToVABElement(""));
 	}
 
 	/**

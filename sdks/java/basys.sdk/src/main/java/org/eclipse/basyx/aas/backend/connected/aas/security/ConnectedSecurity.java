@@ -10,29 +10,29 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedSecurity extends ConnectedElement implements ISecurity {
-	public ConnectedSecurity(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedSecurity(VABElementProxy proxy) {
+		super(proxy);		
 	}
 	
 	@Override
 	public Object getAccessControlPolicyPoints() {
-		return getProxy().getModelPropertyValue(constructPath(Security.ACCESSCONTROLPOLICYPOINTS));
+		return getProxy().getModelPropertyValue(Security.ACCESSCONTROLPOLICYPOINTS);
 	}
 
 	@Override
 	public void setAccessControlPolicyPoints(Object obj) {
-		getProxy().setModelPropertyValue(constructPath(Security.ACCESSCONTROLPOLICYPOINTS), obj);
+		getProxy().setModelPropertyValue(Security.ACCESSCONTROLPOLICYPOINTS, obj);
 		
 	}
 
 	@Override
 	public Object getTrustAnchor() {
-		return getProxy().getModelPropertyValue(constructPath(Security.TRUSTANCHOR));
+		return getProxy().getModelPropertyValue(Security.TRUSTANCHOR);
 	}
 
 	@Override
 	public void setTrustAnchor(Object obj) {
-		getProxy().setModelPropertyValue(constructPath(Security.TRUSTANCHOR), obj);
+		getProxy().setModelPropertyValue(Security.TRUSTANCHOR, obj);
 		
 	}
 }

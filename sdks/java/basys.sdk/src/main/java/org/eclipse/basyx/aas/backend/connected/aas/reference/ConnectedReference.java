@@ -14,18 +14,18 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  */
 public class ConnectedReference extends ConnectedElement implements IReference {
 	
-	public ConnectedReference(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedReference(VABElementProxy proxy) {
+		super(proxy);		
 	}
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IKey> getKeys() {
-		return (List<IKey>)getProxy().getModelPropertyValue(constructPath(Reference.KEY));
+		return (List<IKey>)getProxy().getModelPropertyValue(Reference.KEY);
 	}
 
 	@Override
 	public void setKeys(List<IKey> keys) {
-		getProxy().setModelPropertyValue(constructPath(Reference.KEY),keys);
+		getProxy().setModelPropertyValue(Reference.KEY,keys);
 		
 	}
 }

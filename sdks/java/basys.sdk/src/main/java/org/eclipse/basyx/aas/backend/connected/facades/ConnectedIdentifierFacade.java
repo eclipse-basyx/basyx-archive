@@ -11,27 +11,27 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  */
 public class ConnectedIdentifierFacade extends ConnectedElement implements IIdentifier{
 
-	public ConnectedIdentifierFacade(String path, VABElementProxy proxy) {
-		super(path, proxy);
+	public ConnectedIdentifierFacade(VABElementProxy proxy) {
+		super(proxy);
 	}
 
 	@Override
 	public String getIdType() {
-		return (String) getProxy().getModelPropertyValue(constructPath(Identifier.IDTYPE));
+		return (String) getProxy().getModelPropertyValue(Identifier.IDTYPE);
 	}
 
 	@Override
 	public void setIdType(String newValue) {
-		getProxy().setModelPropertyValue(constructPath(Identifier.IDTYPE), newValue);
+		getProxy().setModelPropertyValue(Identifier.IDTYPE, newValue);
 	}
 
 	@Override
 	public String getId() {
-		return (String) getProxy().getModelPropertyValue(constructPath(Identifier.ID));
+		return (String) getProxy().getModelPropertyValue(Identifier.ID);
 	}
 	
 	@Override
 	public void setId(String id) {
-		getProxy().setModelPropertyValue(constructPath(Identifier.ID), id);
+		getProxy().setModelPropertyValue(Identifier.ID, id);
 	}
 }

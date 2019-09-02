@@ -15,19 +15,19 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 public class ConnectedQualifiable extends ConnectedElement implements IQualifiable {
 
 	
-	public ConnectedQualifiable(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedQualifiable(VABElementProxy proxy) {
+		super(proxy);		
 	}
 	
 	@Override
 	public void setQualifier(Set<IConstraint> qualifiers) {
-		getProxy().setModelPropertyValue(constructPath(Qualifiable.CONSTRAINTS), qualifiers);
+		getProxy().setModelPropertyValue(Qualifiable.CONSTRAINTS, qualifiers);
 		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return (Set<IConstraint>)getProxy().getModelPropertyValue(constructPath(Qualifiable.CONSTRAINTS));
+		return (Set<IConstraint>)getProxy().getModelPropertyValue(Qualifiable.CONSTRAINTS);
 	}
 }

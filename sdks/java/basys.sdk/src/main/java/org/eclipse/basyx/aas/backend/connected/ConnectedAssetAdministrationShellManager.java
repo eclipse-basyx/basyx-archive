@@ -59,13 +59,13 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		// Return a new VABElementProxy
 		VABElementProxy proxy = new VABElementProxy(VABPathTools.removeAddressEntry(addr),
 				providerProvider.getConnector(addr));
-		return new ConnectedSubModel("/aas/submodels/" + smid, proxy);
+		return new ConnectedSubModel(proxy.getDeepProxy("/aas/submodels/" + smid));
 	}
 
 	@Override
 	public ConnectedAssetAdministrationShell retrieveAAS(ModelUrn aasUrn) throws Exception {
 		VABElementProxy proxy = getAASProxyFromURN(aasUrn);
-		return new ConnectedAssetAdministrationShell("/aas", proxy, this);
+		return new ConnectedAssetAdministrationShell(proxy.getDeepProxy("/aas"), this);
 	}
 
 	@Override

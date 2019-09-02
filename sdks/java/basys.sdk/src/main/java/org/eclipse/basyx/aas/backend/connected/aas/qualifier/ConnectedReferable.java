@@ -11,51 +11,51 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedReferable extends ConnectedElement implements IReferable {
-	public ConnectedReferable(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedReferable(VABElementProxy proxy) {
+		super(proxy);		
 	}
 	
 	@Override
 	public String getIdshort() {
-		return (String) getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
+		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
 	}
 
 	@Override
 	public String getCategory() {
-		return (String) getProxy().getModelPropertyValue(constructPath(Referable.CATEGORY));
+		return (String) getProxy().getModelPropertyValue(Referable.CATEGORY);
 	}
 
 	@Override
 	public String getDescription() {
-		return (String) getProxy().getModelPropertyValue(constructPath(Referable.DESCRIPTION));
+		return (String) getProxy().getModelPropertyValue(Referable.DESCRIPTION);
 	}
 
 	@Override
 	public IReference  getParent() {
-		return (IReference)getProxy().getModelPropertyValue(constructPath(Referable.PARENT));
+		return (IReference)getProxy().getModelPropertyValue(Referable.PARENT);
 	}
 
 	@Override
 	public void setIdshort(String idShort) {
-		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), idShort);
+		getProxy().setModelPropertyValue(Referable.IDSHORT, idShort);
 		
 	}
 
 	@Override
 	public void setCategory(String category) {
-		getProxy().setModelPropertyValue(constructPath(Referable.CATEGORY), category);
+		getProxy().setModelPropertyValue(Referable.CATEGORY, category);
 		
 	}
 
 	@Override
 	public void setDescription(String description) {
-		getProxy().setModelPropertyValue(constructPath(Referable.DESCRIPTION), description);
+		getProxy().setModelPropertyValue(Referable.DESCRIPTION, description);
 		
 	}
 
 	@Override
 	public void setParent(IReference  obj) {
-		getProxy().setModelPropertyValue(constructPath(Referable.PARENT), obj);
+		getProxy().setModelPropertyValue(Referable.PARENT, obj);
 		
 	}
 

@@ -42,9 +42,9 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	 * @param proxy
 	 * @param manager
 	 */
-	public ConnectedAssetAdministrationShell(String path, VABElementProxy proxy,
+	public ConnectedAssetAdministrationShell(VABElementProxy proxy,
 			ConnectedAssetAdministrationShellManager manager) {
-		super(path, proxy);		
+		super(proxy);
 		this.manager = manager;
 	}
 	
@@ -55,119 +55,119 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	 * @param shell
 	 */
 	public ConnectedAssetAdministrationShell(ConnectedAssetAdministrationShell shell) {
-		super(shell.getPath(), shell.getProxy());
+		super(shell.getProxy());
 	}
 	
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return new ConnectedIdentifiableFacade(getPath(),getProxy()).getAdministration();
+		return new ConnectedIdentifiableFacade(getProxy()).getAdministration();
 	}
 
 	@Override
 	public IIdentifier getIdentification() {
-		return new ConnectedIdentifiableFacade(getPath(),getProxy()).getIdentification();
+		return new ConnectedIdentifiableFacade(getProxy()).getIdentification();
 	}
 
 	@Override
 	public void setAdministration(String version, String revision) {
-		 new ConnectedIdentifiableFacade(getPath(),getProxy()).setAdministration(version, revision);
+		new ConnectedIdentifiableFacade(getProxy()).setAdministration(version, revision);
 		
 	}
 
 	@Override
 	public void setIdentification(String idType, String id) {
-		 new ConnectedIdentifiableFacade(getPath(),getProxy()).setIdentification(idType, id);
+		new ConnectedIdentifiableFacade(getProxy()).setIdentification(idType, id);
 		
 	}
 	
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
-		return new ConnectedHasDataSpecificationFacade(getPath(),getProxy()).getDataSpecificationReferences();
+		return new ConnectedHasDataSpecificationFacade(getProxy()).getDataSpecificationReferences();
 	}
 
 	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
-		new ConnectedHasDataSpecificationFacade(getPath(),getProxy()).setDataSpecificationReferences(ref);
+		new ConnectedHasDataSpecificationFacade(getProxy()).setDataSpecificationReferences(ref);
 		
 	}
 	
 	@Override
 	public void setSecurity(ISecurity security) {
-		getProxy().setModelPropertyValue(constructPath(AssetAdministrationShell.SECURITY),security );
+		getProxy().setModelPropertyValue(AssetAdministrationShell.SECURITY, security);
 		
 	}
 
 	@Override
 	public ISecurity getSecurity() {
-		return (ISecurity)getProxy().getModelPropertyValue(constructPath(AssetAdministrationShell.SECURITY));
+		return (ISecurity) getProxy().getModelPropertyValue(AssetAdministrationShell.SECURITY);
 	}
 
 	@Override
 	public void setDerivedFrom(IReference derivedFrom) {
-		getProxy().setModelPropertyValue(constructPath(AssetAdministrationShell.DERIVEDFROM),derivedFrom) ;
+		getProxy().setModelPropertyValue(AssetAdministrationShell.DERIVEDFROM, derivedFrom);
 		
 	}
 
 	@Override
 	public IReference getDerivedFrom() {
-		return (IReference)getProxy().getModelPropertyValue(constructPath(AssetAdministrationShell.DERIVEDFROM));
+		return (IReference) getProxy().getModelPropertyValue(AssetAdministrationShell.DERIVEDFROM);
 	}
 
 	@Override
 	public void setAsset(IReference asset) {
-		getProxy().setModelPropertyValue(constructPath(AssetAdministrationShell.ASSET),asset );
+		getProxy().setModelPropertyValue(AssetAdministrationShell.ASSET, asset);
 		
 	}
 
 	@Override
 	public IReference getAsset() {
-		return (IReference)getProxy().getModelPropertyValue(constructPath(AssetAdministrationShell.ASSET));
+		return (IReference) getProxy().getModelPropertyValue(AssetAdministrationShell.ASSET);
 	}
 
 	@Override
 	public void setSubModel(Set<IReference> submodels) {
-		getProxy().setModelPropertyValue(constructPath(AssetAdministrationShell.SUBMODEL),submodels );
+		getProxy().setModelPropertyValue(AssetAdministrationShell.SUBMODEL, submodels);
 		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IReference> getSubModel() {
-		return (Set<IReference>)getProxy().getModelPropertyValue(constructPath(AssetAdministrationShell.SUBMODEL));
+		return (Set<IReference>) getProxy().getModelPropertyValue(AssetAdministrationShell.SUBMODEL);
 	}
 
 	@Override
 	public void setViews(Set<IView> views) {
-		getProxy().setModelPropertyValue(constructPath(AssetAdministrationShell.VIEWS),views);
+		getProxy().setModelPropertyValue(AssetAdministrationShell.VIEWS, views);
 		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IView> getViews() {
-		return (Set<IView>)getProxy().getModelPropertyValue(constructPath(AssetAdministrationShell.VIEWS));
+		return (Set<IView>) getProxy().getModelPropertyValue(AssetAdministrationShell.VIEWS);
 	}
 
 	@Override
 	public void setConceptDictionary(Set<IConceptDictionary> dictionaries) {
-		getProxy().setModelPropertyValue(constructPath(AssetAdministrationShell.CONCEPTDICTIONARY), dictionaries);
+		getProxy().setModelPropertyValue(AssetAdministrationShell.CONCEPTDICTIONARY, dictionaries);
 		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IConceptDictionary> getConceptDictionary() {
-		return (Set<IConceptDictionary>)getProxy().getModelPropertyValue(constructPath(AssetAdministrationShell.CONCEPTDICTIONARY));
+		return (Set<IConceptDictionary>) getProxy().getModelPropertyValue(AssetAdministrationShell.CONCEPTDICTIONARY);
 	}
 	
 	@Override
 	public String getId() {
-		return (String)getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
+		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
 	}
 
 	@Override
 	public void setId(String id) {
-		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), id);
+		getProxy().setModelPropertyValue(Referable.IDSHORT, id);
 		
 	}
 
@@ -180,7 +180,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 
 		try {
 			// Java getSubmodels
-			refs = (Set<Map<?, ?>>) getProxy().getModelPropertyValue(constructPath(AssetAdministrationShell.SUBMODEL));
+			refs = (Set<Map<?, ?>>) getProxy().getModelPropertyValue(AssetAdministrationShell.SUBMODEL);
 			for (Map<?, ?> key : refs) {
 				String id = (String) ((Map<?, ?>) ((List<?>) key.get("keys")).get(0)).get("value");
 				ISubModel sm = manager.retrieveSubModel(new ModelUrn(getId()), id);
@@ -189,7 +189,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 		} catch (ClassCastException e) {
 			System.out.println("Cast failed... trying c# get submodels");
 			// c# getSubmodels
-			refs = (Set<Map<?, ?>>) getProxy().getModelPropertyValue(constructPath(AssetAdministrationShell.SUBMODELS));
+			refs = (Set<Map<?, ?>>) getProxy().getModelPropertyValue(AssetAdministrationShell.SUBMODELS);
 			for (Map<?, ?> key : refs) {
 				String id = (String) key.get("idShort");
 				ISubModel sm = manager.retrieveSubModel(new ModelUrn(getId()), id);
@@ -209,45 +209,45 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	}
 	@Override
 	public String getIdshort() {
-		return (String) getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
+		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
 	}
 
 	@Override
 	public String getCategory() {
-		return (String) getProxy().getModelPropertyValue(constructPath(Referable.CATEGORY));
+		return (String) getProxy().getModelPropertyValue(Referable.CATEGORY);
 	}
 
 	@Override
 	public String getDescription() {
-		return (String) getProxy().getModelPropertyValue(constructPath(Referable.DESCRIPTION));
+		return (String) getProxy().getModelPropertyValue(Referable.DESCRIPTION);
 	}
 
 	@Override
 	public IReference  getParent() {
-		return (IReference)getProxy().getModelPropertyValue(constructPath(Referable.PARENT));
+		return (IReference) getProxy().getModelPropertyValue(Referable.PARENT);
 	}
 
 	@Override
 	public void setIdshort(String idShort) {
-		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), idShort);
+		getProxy().setModelPropertyValue(Referable.IDSHORT, idShort);
 		
 	}
 
 	@Override
 	public void setCategory(String category) {
-		getProxy().setModelPropertyValue(constructPath(Referable.CATEGORY), category);
+		getProxy().setModelPropertyValue(Referable.CATEGORY, category);
 		
 	}
 
 	@Override
 	public void setDescription(String description) {
-		getProxy().setModelPropertyValue(constructPath(Referable.DESCRIPTION), description);
+		getProxy().setModelPropertyValue(Referable.DESCRIPTION, description);
 		
 	}
 
 	@Override
 	public void setParent(IReference  obj) {
-		getProxy().setModelPropertyValue(constructPath(Referable.PARENT), obj);
+		getProxy().setModelPropertyValue(Referable.PARENT, obj);
 		
 	}
 }

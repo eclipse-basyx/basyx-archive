@@ -71,7 +71,7 @@ public class TestConnectedSubModel {
 		proxy.setModelPropertyValue("", sm);
 		
 		// Create the ConnectedSubModel based on the manager
-		submodel = new ConnectedSubModel("", proxy);
+		submodel = new ConnectedSubModel(proxy);
 	}
 
 	/**

@@ -9,7 +9,7 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public abstract class ConnectedSubmodelElement extends ConnectedElement implements ISubmodelElement {
-	public ConnectedSubmodelElement(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedSubmodelElement(VABElementProxy proxy) {
+		super(proxy);		
 	}
 }

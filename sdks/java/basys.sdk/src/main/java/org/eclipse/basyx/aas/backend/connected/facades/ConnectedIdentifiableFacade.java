@@ -17,25 +17,23 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  */
 public class ConnectedIdentifiableFacade extends ConnectedElement implements IIdentifiable {
 
-	public ConnectedIdentifiableFacade(String path, VABElementProxy proxy) {
-		super(path, proxy);
-		
+	public ConnectedIdentifiableFacade(VABElementProxy proxy) {
+		super(proxy);
 	}
 
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		//return (IAdministrativeInformation)getProxy().readElementValue(constructPath(Identifiable.ADMINISTRATION));
-		return new ConnectedAdministrativeInformation(constructPath(Identifiable.ADMINISTRATION),getProxy());
+		return new ConnectedAdministrativeInformation(getProxy().getDeepProxy(Identifiable.ADMINISTRATION));
 	}
 
 	@Override
 	public IIdentifier getIdentification() {
-		return new ConnectedIdentifier(constructPath(Identifiable.IDENTIFICATION), getProxy());
+		return new ConnectedIdentifier(getProxy().getDeepProxy(Identifiable.IDENTIFICATION));
 	}
 
 	@Override
 	public void setAdministration(String version, String revision) {
-		 ConnectedAdministrativeInformation connectedAdministrativeInformation = new ConnectedAdministrativeInformation(constructPath(Identifiable.ADMINISTRATION),getProxy());
+		ConnectedAdministrativeInformation connectedAdministrativeInformation = new ConnectedAdministrativeInformation(getProxy().getDeepProxy(Identifiable.ADMINISTRATION));
 		 connectedAdministrativeInformation.setRevision(revision);
 		 connectedAdministrativeInformation.setVersion(version);;
 		 
@@ -44,7 +42,7 @@ public class ConnectedIdentifiableFacade extends ConnectedElement implements IId
 
 	@Override
 	public void setIdentification(String idType, String id) {
-		ConnectedIdentifier connectedIdentifier = new ConnectedIdentifier(constructPath(Identifiable.IDENTIFICATION), getProxy());
+		ConnectedIdentifier connectedIdentifier = new ConnectedIdentifier(getProxy().getDeepProxy(Identifiable.IDENTIFICATION));
 		connectedIdentifier.setId(id);
 		connectedIdentifier.setIdType(idType);
 		
@@ -53,45 +51,45 @@ public class ConnectedIdentifiableFacade extends ConnectedElement implements IId
 	
 	@Override
 	public String getIdshort() {
-		return (String) getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
+		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
 	}
 
 	@Override
 	public String getCategory() {
-		return (String) getProxy().getModelPropertyValue(constructPath(Referable.CATEGORY));
+		return (String) getProxy().getModelPropertyValue(Referable.CATEGORY);
 	}
 
 	@Override
 	public String getDescription() {
-		return (String) getProxy().getModelPropertyValue(constructPath(Referable.DESCRIPTION));
+		return (String) getProxy().getModelPropertyValue(Referable.DESCRIPTION);
 	}
 
 	@Override
 	public IReference  getParent() {
-		return (IReference )getProxy().getModelPropertyValue(constructPath(Referable.PARENT));
+		return (IReference )getProxy().getModelPropertyValue(Referable.PARENT);
 	}
 
 	@Override
 	public void setIdshort(String idShort) {
-		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), idShort);
+		getProxy().setModelPropertyValue(Referable.IDSHORT, idShort);
 		
 	}
 
 	@Override
 	public void setCategory(String category) {
-		getProxy().setModelPropertyValue(constructPath(Referable.CATEGORY), category);
+		getProxy().setModelPropertyValue(Referable.CATEGORY, category);
 		
 	}
 
 	@Override
 	public void setDescription(String description) {
-		getProxy().setModelPropertyValue(constructPath(Referable.DESCRIPTION), description);
+		getProxy().setModelPropertyValue(Referable.DESCRIPTION, description);
 		
 	}
 
 	@Override
 	public void setParent(IReference  obj) {
-		getProxy().setModelPropertyValue(constructPath(Referable.PARENT), obj);
+		getProxy().setModelPropertyValue(Referable.PARENT, obj);
 		
 	}
 

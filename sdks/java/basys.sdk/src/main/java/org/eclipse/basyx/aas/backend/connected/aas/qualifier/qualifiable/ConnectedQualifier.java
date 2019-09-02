@@ -12,51 +12,51 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedQualifier extends ConnectedElement implements IQualifier {
-	public ConnectedQualifier(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedQualifier(VABElementProxy proxy) {
+		super(proxy);		
 	}
 	
 	@Override
 	public void setQualifierType(String obj) {
-		getProxy().setModelPropertyValue(constructPath(Qualifier.QUALIFIERTYPE), obj);
+		getProxy().setModelPropertyValue(Qualifier.QUALIFIERTYPE, obj);
 		
 	}
 
 	@Override
 	public String getQualifierType() {
-		return (String)getProxy().getModelPropertyValue(constructPath(Qualifier.QUALIFIERTYPE));
+		return (String)getProxy().getModelPropertyValue(Qualifier.QUALIFIERTYPE);
 	}
 
 	@Override
 	public void setQualifierValue(Object obj) {
-		getProxy().setModelPropertyValue(constructPath(Qualifier.QUALIFIERVALUE), obj);
+		getProxy().setModelPropertyValue(Qualifier.QUALIFIERVALUE, obj);
 		
 	}
 
 	@Override
 	public Object getQualifierValue() {
-		return getProxy().getModelPropertyValue(constructPath(Qualifier.QUALIFIERVALUE));
+		return getProxy().getModelPropertyValue(Qualifier.QUALIFIERVALUE);
 	}
 
 	@Override
 	public void setQualifierValueId(IReference obj) {
-		getProxy().setModelPropertyValue(constructPath(Qualifier.QUALIFIERVALUEID), obj);
+		getProxy().setModelPropertyValue(Qualifier.QUALIFIERVALUEID, obj);
 		
 	}
 
 	@Override
 	public IReference getQualifierValueId() {
-		return (IReference)getProxy().getModelPropertyValue(constructPath(Qualifier.QUALIFIERVALUEID));
+		return (IReference)getProxy().getModelPropertyValue(Qualifier.QUALIFIERVALUEID);
 	}
 
 	@Override
 	public IReference getSemanticId() {
-		return new ConnectedHasSemanticsFacade(getPath(),getProxy()).getSemanticId();
+		return new ConnectedHasSemanticsFacade(getProxy()).getSemanticId();
 	}
 
 	@Override
 	public void setSemanticID(IReference ref) {
-		 new ConnectedHasSemanticsFacade(getPath(),getProxy()).setSemanticID(ref);
+		 new ConnectedHasSemanticsFacade(getProxy()).setSemanticID(ref);
 		
 	}
 

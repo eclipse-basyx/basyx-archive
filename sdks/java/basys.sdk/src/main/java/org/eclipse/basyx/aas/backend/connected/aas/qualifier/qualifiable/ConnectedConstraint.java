@@ -9,7 +9,7 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedConstraint extends ConnectedElement implements IConstraint{
-	public ConnectedConstraint(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedConstraint(VABElementProxy proxy) {
+		super(proxy);		
 	}
 }

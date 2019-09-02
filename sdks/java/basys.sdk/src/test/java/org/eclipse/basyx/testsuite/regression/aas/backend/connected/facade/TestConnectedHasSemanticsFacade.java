@@ -32,7 +32,7 @@ public class TestConnectedHasSemanticsFacade {
 
 		// Create a dummy connection manager containing the created SubModel map
 		VABConnectionManager manager = new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType));
-		remote = new ConnectedHasSemanticsFacade("", manager.connectToVABElement(""));
+		remote = new ConnectedHasSemanticsFacade(manager.connectToVABElement(""));
 	}
 
 	@Test

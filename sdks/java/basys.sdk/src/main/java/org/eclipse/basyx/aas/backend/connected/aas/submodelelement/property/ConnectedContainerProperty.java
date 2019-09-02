@@ -10,6 +10,7 @@ import org.eclipse.basyx.aas.api.resources.PropertyType;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.operation.ConnectedOperation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+import org.eclipse.basyx.vab.core.tools.VABPathTools;
 
 /**
  * Connects to a ComplexDataProperty as specified by meta model. <br />
@@ -22,18 +23,18 @@ public class ConnectedContainerProperty extends ConnectedProperty implements ICo
 
 	ConnectedPropertyFactory factory = new ConnectedPropertyFactory();
 
-	public ConnectedContainerProperty(String path, VABElementProxy proxy) {
-		super(PropertyType.Container, path, proxy);
+	public ConnectedContainerProperty(VABElementProxy proxy) {
+		super(PropertyType.Container, proxy);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IProperty> getProperties() {
-		Map<String, Object> props = (Map<String, Object>) getProxy().getModelPropertyValue(constructPath(SubModel.PROPERTIES));
+		Map<String, Object> props = (Map<String, Object>) getProxy().getModelPropertyValue(SubModel.PROPERTIES);
 		Map<String, IProperty> ret = new HashMap<>();
 
 		for (String s : props.keySet()) {
-			ret.put(s, factory.createProperty(constructPath(SubModel.PROPERTIES + "/" + s), getProxy()));
+			ret.put(s, factory.createProperty(getProxy().getDeepProxy(VABPathTools.concatenatePaths(SubModel.PROPERTIES, s))));
 		}
 		return ret;
 	}
@@ -41,11 +42,11 @@ public class ConnectedContainerProperty extends ConnectedProperty implements ICo
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IOperation> getOperations() {
-		Map<String, Object> ops = (Map<String, Object>) getProxy().getModelPropertyValue(constructPath(SubModel.OPERATIONS));
+		Map<String, Object> ops = (Map<String, Object>) getProxy().getModelPropertyValue(SubModel.OPERATIONS);
 
 		Map<String, IOperation> ret = new HashMap<>();
 		for (String s : ops.keySet()) {
-			ret.put(s, new ConnectedOperation(constructPath(SubModel.OPERATIONS + "/" + s), getProxy()));
+			ret.put(s, new ConnectedOperation(getProxy().getDeepProxy(VABPathTools.concatenatePaths(SubModel.OPERATIONS, s))));
 		}
 		return ret;
 	}

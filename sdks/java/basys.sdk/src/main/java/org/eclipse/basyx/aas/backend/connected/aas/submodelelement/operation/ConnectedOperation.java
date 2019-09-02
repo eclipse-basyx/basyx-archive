@@ -31,8 +31,8 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedOperation extends ConnectedSubmodelElement implements IOperation {
-	public ConnectedOperation(String path, VABElementProxy proxy) {
-		super(path, proxy);
+	public ConnectedOperation(VABElementProxy proxy) {
+		super(proxy);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		if (id != null) {
 			return id;
 		}
-		return (String) getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
+		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
 	}
 
 	@Override
@@ -52,19 +52,19 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 			this.putLocal(Referable.IDSHORT, id);
 		}
 
-		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), id);
+		getProxy().setModelPropertyValue(Referable.IDSHORT, id);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IOperationVariable> getParameterTypes() {
-		return (List<IOperationVariable>) getProxy().getModelPropertyValue(constructPath(Operation.IN));
+		return (List<IOperationVariable>) getProxy().getModelPropertyValue(Operation.IN);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IOperationVariable> getReturnTypes() {
-		return (List<IOperationVariable>) getProxy().getModelPropertyValue(constructPath(Operation.OUT));
+		return (List<IOperationVariable>) getProxy().getModelPropertyValue(Operation.OUT);
 	}
 
 	/**
@@ -86,8 +86,9 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 			i++;
 		}
 
-		// Invoke operation
-		Object result = getProxy().invokeOperation(super.getPath(), params);
+		// Invoke operation passing an empty string, since the used proxy already points
+		// to the operation
+		Object result = getProxy().invokeOperation("", params);
 
 		// Unwrap result value
 		if (result instanceof List<?>) {
@@ -107,113 +108,113 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 	@Override
 	public void SetParameterTypes(List<OperationVariable> in) {
-		getProxy().setModelPropertyValue(constructPath(Operation.IN), in);
+		getProxy().setModelPropertyValue(Operation.IN, in);
 
 	}
 
 	@Override
 	public void setReturnTypes(List<OperationVariable> out) {
-		getProxy().setModelPropertyValue(constructPath(Operation.OUT), out);
+		getProxy().setModelPropertyValue(Operation.OUT, out);
 
 	}
 
 	@Override
 	public void setInvocable(Function<Object[], Object[]> endpoint) {
-		getProxy().setModelPropertyValue(constructPath(Operation.INVOKABLE), endpoint);
+		getProxy().setModelPropertyValue(Operation.INVOKABLE, endpoint);
 
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Function<Object[], Object> getInvocable() {
-		return (Function<Object[], Object>) getProxy().getModelPropertyValue(constructPath(Operation.INVOKABLE));
+		return (Function<Object[], Object>) getProxy().getModelPropertyValue(Operation.INVOKABLE);
 	}
 
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
-		return new ConnectedHasDataSpecificationFacade(getPath(), getProxy()).getDataSpecificationReferences();
+		return new ConnectedHasDataSpecificationFacade( getProxy()).getDataSpecificationReferences();
 	}
 
 	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
-		new ConnectedHasDataSpecificationFacade(getPath(), getProxy()).setDataSpecificationReferences(ref);
+		new ConnectedHasDataSpecificationFacade( getProxy()).setDataSpecificationReferences(ref);
 
 	}
 
 	@Override
 	public String getIdshort() {
-		return new ConnectedReferableFacade(getPath(), getProxy()).getIdshort();
+		return new ConnectedReferableFacade( getProxy()).getIdshort();
 	}
 
 	@Override
 	public String getCategory() {
-		return new ConnectedReferableFacade(getPath(), getProxy()).getCategory();
+		return new ConnectedReferableFacade( getProxy()).getCategory();
 	}
 
 	@Override
 	public String getDescription() {
-		return new ConnectedReferableFacade(getPath(), getProxy()).getDescription();
+		return new ConnectedReferableFacade( getProxy()).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return new ConnectedReferableFacade(getPath(), getProxy()).getParent();
+		return new ConnectedReferableFacade( getProxy()).getParent();
 	}
 
 	@Override
 	public void setIdshort(String idShort) {
-		new ConnectedReferableFacade(getPath(), getProxy()).setIdshort(idShort);
+		new ConnectedReferableFacade( getProxy()).setIdshort(idShort);
 
 	}
 
 	@Override
 	public void setCategory(String category) {
-		new ConnectedReferableFacade(getPath(), getProxy()).setCategory(category);
+		new ConnectedReferableFacade( getProxy()).setCategory(category);
 
 	}
 
 	@Override
 	public void setDescription(String description) {
-		new ConnectedReferableFacade(getPath(), getProxy()).setDescription(description);
+		new ConnectedReferableFacade( getProxy()).setDescription(description);
 
 	}
 
 	@Override
 	public void setParent(IReference obj) {
-		new ConnectedReferableFacade(getPath(), getProxy()).setParent(obj);
+		new ConnectedReferableFacade( getProxy()).setParent(obj);
 
 	}
 
 	@Override
 	public IReference getSemanticId() {
-		return new ConnectedHasSemanticsFacade(getPath(), getProxy()).getSemanticId();
+		return new ConnectedHasSemanticsFacade( getProxy()).getSemanticId();
 	}
 
 	@Override
 	public void setSemanticID(IReference ref) {
-		new ConnectedHasSemanticsFacade(getPath(), getProxy()).setSemanticID(ref);
+		new ConnectedHasSemanticsFacade( getProxy()).setSemanticID(ref);
 
 	}
 
 	@Override
 	public void setQualifier(Set<IConstraint> qualifiers) {
-		new ConnectedQualifiableFacade(getPath(), getProxy()).setQualifier(qualifiers);
+		new ConnectedQualifiableFacade( getProxy()).setQualifier(qualifiers);
 
 	}
 
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return new ConnectedQualifiableFacade(getPath(), getProxy()).getQualifier();
+		return new ConnectedQualifiableFacade( getProxy()).getQualifier();
 	}
 
 	@Override
 	public String getHasKindReference() {
-		return new ConnectedHasKindFacade(getPath(), getProxy()).getHasKindReference();
+		return new ConnectedHasKindFacade( getProxy()).getHasKindReference();
 	}
 
 	@Override
 	public void setHasKindReference(String kind) {
-		new ConnectedHasKindFacade(getPath(), getProxy()).setHasKindReference(kind);
+		new ConnectedHasKindFacade( getProxy()).setHasKindReference(kind);
 
 	}
 }

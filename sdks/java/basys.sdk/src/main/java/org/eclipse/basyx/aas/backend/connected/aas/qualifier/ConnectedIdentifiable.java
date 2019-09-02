@@ -17,72 +17,72 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  */
 public class ConnectedIdentifiable extends ConnectedElement implements IIdentifiable {
 
-	public ConnectedIdentifiable(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedIdentifiable(VABElementProxy proxy) {
+		super(proxy);		
 	}
 	
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return (IAdministrativeInformation)getProxy().getModelPropertyValue(constructPath(Identifiable.ADMINISTRATION));
+		return (IAdministrativeInformation)getProxy().getModelPropertyValue(Identifiable.ADMINISTRATION);
 	}
 
 	@Override
 	public IIdentifier getIdentification() {
-		return (IIdentifier)getProxy().getModelPropertyValue(constructPath(Identifiable.IDENTIFICATION));
+		return (IIdentifier)getProxy().getModelPropertyValue(Identifiable.IDENTIFICATION);
 	}
 
 	@Override
 	public void setAdministration(String version, String revision) {
-		getProxy().setModelPropertyValue(constructPath(Identifiable.ADMINISTRATION), new AdministrativeInformation(version, revision));
+		getProxy().setModelPropertyValue(Identifiable.ADMINISTRATION, new AdministrativeInformation(version, revision));
 		
 	}
 
 	@Override
 	public void setIdentification(String idType, String id) {
-		getProxy().setModelPropertyValue(constructPath(Identifiable.IDENTIFICATION), new Identifier(idType, id));
+		getProxy().setModelPropertyValue(Identifiable.IDENTIFICATION, new Identifier(idType, id));
 		
 	}
 	@Override
 	public String getIdshort() {
-		return (String) getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
+		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
 	}
 
 	@Override
 	public String getCategory() {
-		return (String) getProxy().getModelPropertyValue(constructPath(Referable.CATEGORY));
+		return (String) getProxy().getModelPropertyValue(Referable.CATEGORY);
 	}
 
 	@Override
 	public String getDescription() {
-		return (String) getProxy().getModelPropertyValue(constructPath(Referable.DESCRIPTION));
+		return (String) getProxy().getModelPropertyValue(Referable.DESCRIPTION);
 	}
 
 	@Override
 	public IReference  getParent() {
-		return (IReference)getProxy().getModelPropertyValue(constructPath(Referable.PARENT));
+		return (IReference)getProxy().getModelPropertyValue(Referable.PARENT);
 	}
 
 	@Override
 	public void setIdshort(String idShort) {
-		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), idShort);
+		getProxy().setModelPropertyValue(Referable.IDSHORT, idShort);
 		
 	}
 
 	@Override
 	public void setCategory(String category) {
-		getProxy().setModelPropertyValue(constructPath(Referable.CATEGORY), category);
+		getProxy().setModelPropertyValue(Referable.CATEGORY, category);
 		
 	}
 
 	@Override
 	public void setDescription(String description) {
-		getProxy().setModelPropertyValue(constructPath(Referable.DESCRIPTION), description);
+		getProxy().setModelPropertyValue(Referable.DESCRIPTION, description);
 		
 	}
 
 	@Override
 	public void setParent(IReference  obj) {
-		getProxy().setModelPropertyValue(constructPath(Referable.PARENT), obj);
+		getProxy().setModelPropertyValue(Referable.PARENT, obj);
 		
 	}
 

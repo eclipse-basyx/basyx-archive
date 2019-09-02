@@ -13,19 +13,19 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedHasDataSpecification extends ConnectedElement implements IHasDataSpecification {
-	public ConnectedHasDataSpecification(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedHasDataSpecification(VABElementProxy proxy) {
+		super(proxy);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
-		return (HashSet<IReference>) getProxy().getModelPropertyValue(constructPath(HasDataSpecification.HASDATASPECIFICATION));
+		return (HashSet<IReference>) getProxy().getModelPropertyValue(HasDataSpecification.HASDATASPECIFICATION);
 	}
 
 	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
-		getProxy().setModelPropertyValue(constructPath(HasDataSpecification.HASDATASPECIFICATION), ref);
+		getProxy().setModelPropertyValue(HasDataSpecification.HASDATASPECIFICATION, ref);
 		
 	}
 

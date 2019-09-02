@@ -14,8 +14,8 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 public class ConnectedProperty extends ConnectedDataElement implements IProperty {
 	private PropertyType type;
 
-	public ConnectedProperty(PropertyType type, String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedProperty(PropertyType type, VABElementProxy proxy) {
+		super(proxy);		
 		this.type = type;
 	}
 
@@ -26,26 +26,26 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 
 	@Override
 	public void setValue(Object value) {
-		getProxy().setModelPropertyValue(constructPath(Property.VALUE), value);
-		getProxy().setModelPropertyValue(constructPath(Property.VALUETYPE), PropertyValueTypeDefHelper.fromObject(value));
+		getProxy().setModelPropertyValue(Property.VALUE, value);
+		getProxy().setModelPropertyValue(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(value));
 
 		
 	}
 
 	@Override
 	public Object getValue() {
-		return	getProxy().getModelPropertyValue(constructPath(Property.VALUE));
+		return	getProxy().getModelPropertyValue(Property.VALUE);
 	}
 
 	@Override
 	public void setValueId(Object obj) {
-		getProxy().setModelPropertyValue(constructPath(Property.VALUEID), obj);
+		getProxy().setModelPropertyValue(Property.VALUEID, obj);
 		
 	}
 
 	@Override
 	public Object getValueId() {
-		return getProxy().getModelPropertyValue(constructPath(Property.VALUEID));
+		return getProxy().getModelPropertyValue(Property.VALUEID);
 	}
 
 

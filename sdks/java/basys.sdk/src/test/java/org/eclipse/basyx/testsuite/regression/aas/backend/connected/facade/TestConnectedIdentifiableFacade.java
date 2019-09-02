@@ -28,7 +28,7 @@ public class TestConnectedIdentifiableFacade {
 		VABConnectionManager manager = new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType));
 
 		// Create the ConnectedSubModel based on the manager stub
-		remote = new ConnectedIdentifiableFacade("", manager.connectToVABElement(""));
+		remote = new ConnectedIdentifiableFacade(manager.connectToVABElement(""));
 	}
 	
 	@Test

@@ -49,7 +49,7 @@ public class TestConnectedCollectionProperty {
 		VABConnectionManager manager = new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType));
 
 		// Create ConnectedCollectionProperty
-		prop = new ConnectedCollectionProperty("", manager.connectToVABElement(""));
+		prop = new ConnectedCollectionProperty(manager.connectToVABElement(""));
 	}
 
 	/**

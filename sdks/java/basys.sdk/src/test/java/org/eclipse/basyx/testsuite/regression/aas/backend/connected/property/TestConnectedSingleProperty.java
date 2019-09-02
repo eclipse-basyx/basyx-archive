@@ -32,8 +32,7 @@ public class TestConnectedSingleProperty {
 		// Create PropertySingleValued containing the simple value
 		Property propertyMeta = factory.create(new Property(), VALUE);
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(propertyMeta);
-		prop = new ConnectedSingleProperty("",
-				new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType)).connectToVABElement(""));
+		prop = new ConnectedSingleProperty(new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType)).connectToVABElement(""));
 	}
 
 	/**

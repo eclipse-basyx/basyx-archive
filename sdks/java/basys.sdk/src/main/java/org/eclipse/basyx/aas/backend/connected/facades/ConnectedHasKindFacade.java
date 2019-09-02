@@ -11,19 +11,19 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  */
 public class ConnectedHasKindFacade  extends ConnectedElement implements IHasKind {
 
-	public ConnectedHasKindFacade(String path, VABElementProxy proxy) {
-		super(path, proxy);
+	public ConnectedHasKindFacade(VABElementProxy proxy) {
+		super(proxy);
 		
 	}
 
 	@Override
 	public String getHasKindReference() {
-		return (String) getProxy().getModelPropertyValue(constructPath(HasKind.KIND));
+		return (String) getProxy().getModelPropertyValue(HasKind.KIND);
 	}
 
 	@Override
 	public void setHasKindReference(String kind) {
-		getProxy().setModelPropertyValue(constructPath(HasKind.KIND), kind);
+		getProxy().setModelPropertyValue(HasKind.KIND, kind);
 		
 	}
 
