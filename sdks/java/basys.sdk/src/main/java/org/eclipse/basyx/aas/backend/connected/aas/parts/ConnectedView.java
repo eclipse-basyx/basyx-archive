@@ -17,85 +17,85 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedView extends ConnectedElement implements IView {
-	public ConnectedView(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedView(VABElementProxy proxy) {
+		super(proxy);		
 	}
 	
 	@Override
 	public void setContainedElement(Set<IReference> references) {
-		getProxy().setModelPropertyValue(constructPath(View.CONTAINEDELEMENT), references);
+		getProxy().setModelPropertyValue(View.CONTAINEDELEMENT, references);
 		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IReference> getContainedElement() {
-		return (Set<IReference>)getProxy().getModelPropertyValue(constructPath(View.CONTAINEDELEMENT));
+		return (Set<IReference>)getProxy().getModelPropertyValue(View.CONTAINEDELEMENT);
 	}
 
 	@Override
 	public IReference getSemanticId() {
-		return new ConnectedHasSemanticsFacade(getPath(),getProxy()).getSemanticId();
+		return new ConnectedHasSemanticsFacade(getProxy()).getSemanticId();
 	}
 
 	@Override
 	public void setSemanticID(IReference ref) {
-		 new ConnectedHasSemanticsFacade(getPath(),getProxy()).setSemanticID(ref);
+		 new ConnectedHasSemanticsFacade(getProxy()).setSemanticID(ref);
 		
 	}
 	
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
-		return new ConnectedHasDataSpecificationFacade(getPath(),getProxy()).getDataSpecificationReferences();
+		return new ConnectedHasDataSpecificationFacade(getProxy()).getDataSpecificationReferences();
 	}
 
 	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
-		new ConnectedHasDataSpecificationFacade(getPath(),getProxy()).setDataSpecificationReferences(ref);
+		new ConnectedHasDataSpecificationFacade(getProxy()).setDataSpecificationReferences(ref);
 		
 	}
 	
 	@Override
 	public String getIdshort() {
-		return new ConnectedReferableFacade(getPath(),getProxy()).getIdshort();
+		return new ConnectedReferableFacade(getProxy()).getIdshort();
 	}
 
 	@Override
 	public String getCategory() {
-		return new ConnectedReferableFacade(getPath(),getProxy()).getCategory();
+		return new ConnectedReferableFacade(getProxy()).getCategory();
 	}
 
 	@Override
 	public String getDescription() {
-		return new ConnectedReferableFacade(getPath(),getProxy()).getDescription();
+		return new ConnectedReferableFacade(getProxy()).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return new ConnectedReferableFacade(getPath(),getProxy()).getParent();
+		return new ConnectedReferableFacade(getProxy()).getParent();
 	}
 
 	@Override
 	public void setIdshort(String idShort) {
-		 new ConnectedReferableFacade(getPath(),getProxy()).setIdshort(idShort);
+		 new ConnectedReferableFacade(getProxy()).setIdshort(idShort);
 		
 	}
 
 	@Override
 	public void setCategory(String category) {
-		 new ConnectedReferableFacade(getPath(),getProxy()).setCategory(category);
+		 new ConnectedReferableFacade(getProxy()).setCategory(category);
 		
 	}
 
 	@Override
 	public void setDescription(String description) {
-		 new ConnectedReferableFacade(getPath(),getProxy()).setDescription(description);
+		 new ConnectedReferableFacade(getProxy()).setDescription(description);
 		
 	}
 
 	@Override
 	public void setParent(IReference obj) {
-		 new ConnectedReferableFacade(getPath(),getProxy()).setParent(obj);
+		 new ConnectedReferableFacade(getProxy()).setParent(obj);
 		
 	}
 }

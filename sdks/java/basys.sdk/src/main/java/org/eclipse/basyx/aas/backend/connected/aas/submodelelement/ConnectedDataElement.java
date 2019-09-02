@@ -18,95 +18,95 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedDataElement extends ConnectedSubmodelElement {
-	public ConnectedDataElement(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedDataElement(VABElementProxy proxy) {
+		super(proxy);		
 	}
 	
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
-		return new ConnectedHasDataSpecificationFacade(getPath(),getProxy()).getDataSpecificationReferences();
+		return new ConnectedHasDataSpecificationFacade(getProxy()).getDataSpecificationReferences();
 	}
 
 	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
-		new ConnectedHasDataSpecificationFacade(getPath(),getProxy()).setDataSpecificationReferences(ref);
+		new ConnectedHasDataSpecificationFacade(getProxy()).setDataSpecificationReferences(ref);
 		
 	}
 	
 	@Override
 	public String getIdshort() {
-		return new ConnectedReferableFacade(getPath(),getProxy()).getIdshort();
+		return new ConnectedReferableFacade(getProxy()).getIdshort();
 	}
 
 	@Override
 	public String getCategory() {
-		return new ConnectedReferableFacade(getPath(),getProxy()).getCategory();
+		return new ConnectedReferableFacade(getProxy()).getCategory();
 	}
 
 	@Override
 	public String getDescription() {
-		return new ConnectedReferableFacade(getPath(),getProxy()).getDescription();
+		return new ConnectedReferableFacade(getProxy()).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return new ConnectedReferableFacade(getPath(),getProxy()).getParent();
+		return new ConnectedReferableFacade(getProxy()).getParent();
 	}
 
 	@Override
 	public void setIdshort(String idShort) {
-		 new ConnectedReferableFacade(getPath(),getProxy()).setIdshort(idShort);
+		 new ConnectedReferableFacade(getProxy()).setIdshort(idShort);
 		
 	}
 
 	@Override
 	public void setCategory(String category) {
-		 new ConnectedReferableFacade(getPath(),getProxy()).setCategory(category);
+		 new ConnectedReferableFacade(getProxy()).setCategory(category);
 		
 	}
 
 	@Override
 	public void setDescription(String description) {
-		 new ConnectedReferableFacade(getPath(),getProxy()).setDescription(description);
+		 new ConnectedReferableFacade(getProxy()).setDescription(description);
 		
 	}
 
 	@Override
 	public void setParent(IReference obj) {
-		 new ConnectedReferableFacade(getPath(),getProxy()).setParent(obj);
+		 new ConnectedReferableFacade(getProxy()).setParent(obj);
 		
 	}
 	
 	@Override
 	public void setQualifier(Set<IConstraint> qualifiers) {
-		new ConnectedQualifiableFacade(getPath(),getProxy()).setQualifier(qualifiers);
+		new ConnectedQualifiableFacade(getProxy()).setQualifier(qualifiers);
 		
 	}
 
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return new ConnectedQualifiableFacade(getPath(),getProxy()).getQualifier();
+		return new ConnectedQualifiableFacade(getProxy()).getQualifier();
 	}
 	
 	@Override
 	public IReference getSemanticId() {
-		return new ConnectedHasSemanticsFacade(getPath(),getProxy()).getSemanticId();
+		return new ConnectedHasSemanticsFacade(getProxy()).getSemanticId();
 	}
 
 	@Override
 	public void setSemanticID(IReference ref) {
-		 new ConnectedHasSemanticsFacade(getPath(),getProxy()).setSemanticID(ref);
+		 new ConnectedHasSemanticsFacade(getProxy()).setSemanticID(ref);
 		
 	}
 	
 	@Override
 	public String getHasKindReference() {
-		return  new ConnectedHasKindFacade(getPath(),getProxy()).getHasKindReference();
+		return  new ConnectedHasKindFacade(getProxy()).getHasKindReference();
 	}
 
 	@Override
 	public void setHasKindReference(String kind) {
-		new ConnectedHasKindFacade(getPath(),getProxy()).setHasKindReference(kind);
+		new ConnectedHasKindFacade(getProxy()).setHasKindReference(kind);
 		
 	}
 	
@@ -117,7 +117,7 @@ public class ConnectedDataElement extends ConnectedSubmodelElement {
 		if (id != null) {
 			return id;
 		}
-		return (String) getProxy().getModelPropertyValue(constructPath(Referable.IDSHORT));
+		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class ConnectedDataElement extends ConnectedSubmodelElement {
 		if (this.getLocal(Referable.IDSHORT) != null) {
 			this.putLocal(Referable.IDSHORT, id);
 		}
-		getProxy().setModelPropertyValue(constructPath(Referable.IDSHORT), id);
+		getProxy().setModelPropertyValue(Referable.IDSHORT, id);
 		
 	}
 }

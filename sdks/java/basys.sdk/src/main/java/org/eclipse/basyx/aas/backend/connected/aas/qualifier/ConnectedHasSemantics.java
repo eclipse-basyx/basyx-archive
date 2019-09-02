@@ -14,17 +14,17 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedHasSemantics extends ConnectedElement implements IHasSemantics {
-	public ConnectedHasSemantics(String path, VABElementProxy proxy) {
-		super(path, proxy);
+	public ConnectedHasSemantics(VABElementProxy proxy) {
+		super(proxy);
 	}
 
 	@Override
 	public IReference getSemanticId() {
-		return new ConnectedReference(constructPath(HasSemantics.SEMANTICID), getProxy());
+		return new ConnectedReference(getProxy().getDeepProxy(HasSemantics.SEMANTICID));
 	}
 
 	@Override
 	public void setSemanticID(IReference ref) {
-		getProxy().setModelPropertyValue(constructPath(HasSemantics.SEMANTICID), ref);
+		getProxy().setModelPropertyValue(HasSemantics.SEMANTICID, ref);
 	}
 }

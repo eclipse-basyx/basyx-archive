@@ -45,7 +45,7 @@ public class TestConnectedQualifiableFacade {
 	
 		VABConnectionManager manager = new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType));
 
-		remote = new ConnectedQualifiableFacade("", manager.connectToVABElement(""));
+		remote = new ConnectedQualifiableFacade(manager.connectToVABElement(""));
 	}
 	
 	@Test

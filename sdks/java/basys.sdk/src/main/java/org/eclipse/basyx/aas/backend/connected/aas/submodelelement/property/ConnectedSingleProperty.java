@@ -17,19 +17,19 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  */
 public class ConnectedSingleProperty extends ConnectedProperty implements ISingleProperty {
 
-	public ConnectedSingleProperty(String path, VABElementProxy proxy) {
-		super(PropertyType.Single, path, proxy);
+	public ConnectedSingleProperty(VABElementProxy proxy) {
+		super(PropertyType.Single, proxy);
 	}
 
 	@Override
 	public Object get() throws Exception {
-		return getProxy().getModelPropertyValue(constructPath(Property.VALUE));
+		return getProxy().getModelPropertyValue(Property.VALUE);
 	}
 
 	@Override
 	public void set(Object newValue) throws ServerException {
 		try {
-			getProxy().setModelPropertyValue(constructPath(Property.VALUE), newValue);
+			getProxy().setModelPropertyValue(Property.VALUE, newValue);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -48,7 +48,7 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 
 	@Override
 	public Object getValue() {
-		Object value = getProxy().getModelPropertyValue(constructPath(Property.VALUE));
+		Object value = getProxy().getModelPropertyValue(Property.VALUE);
 		
 		// unpack c# value
 		if (value instanceof Map<?,?>) {

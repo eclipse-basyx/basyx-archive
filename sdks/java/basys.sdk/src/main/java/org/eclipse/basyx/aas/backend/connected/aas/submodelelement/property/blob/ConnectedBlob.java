@@ -13,30 +13,30 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedBlob extends ConnectedDataElement implements IBlob {
-	public ConnectedBlob(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedBlob(VABElementProxy proxy) {
+		super(proxy);		
 	}
 	
 	@Override
 	public void setValue(BlobType value) {
-		getProxy().setModelPropertyValue(constructPath(Property.VALUE), value);
+		getProxy().setModelPropertyValue(Property.VALUE, value);
 		
 	}
 
 	@Override
 	public BlobType getValue() {
-		return (BlobType)getProxy().getModelPropertyValue(constructPath(Property.VALUE));
+		return (BlobType)getProxy().getModelPropertyValue(Property.VALUE);
 	}
 
 	@Override
 	public void setMimeType(MimeType mimeType) {
-		getProxy().setModelPropertyValue(constructPath(Blob.MIMETYPE), mimeType);
+		getProxy().setModelPropertyValue(Blob.MIMETYPE, mimeType);
 		
 	}
 
 	@Override
 	public MimeType getMimeType() {
-		return (MimeType)getProxy().getModelPropertyValue(constructPath(Blob.MIMETYPE));
+		return (MimeType)getProxy().getModelPropertyValue(Blob.MIMETYPE);
 	}
 }
 

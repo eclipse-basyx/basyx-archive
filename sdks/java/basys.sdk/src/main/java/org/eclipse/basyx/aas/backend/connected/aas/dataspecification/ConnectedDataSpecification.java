@@ -12,129 +12,129 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  */
 public class ConnectedDataSpecification extends ConnectedElement implements IDataSpecification  {
 	
-	public ConnectedDataSpecification(String path, VABElementProxy proxy) {
-		super(path, proxy);
+	public ConnectedDataSpecification(VABElementProxy proxy) {
+		super(proxy);
 		
 	}
 
 	@Override
 	public String getPreferredName() {
-		return  (String) getProxy().getModelPropertyValue(constructPath(DataSpecification.PREFERREDNAME));
+		return (String) getProxy().getModelPropertyValue(DataSpecification.PREFERREDNAME);
 	}
 
 	@Override
 	public String getShortName() {
-		return (String) getProxy().getModelPropertyValue(constructPath(DataSpecification.SHORTNAME));
+		return (String) getProxy().getModelPropertyValue(DataSpecification.SHORTNAME);
 	}
 
 	@Override
 	public String getUnit() {
-		return (String) getProxy().getModelPropertyValue(constructPath(DataSpecification.UNIT));
+		return (String) getProxy().getModelPropertyValue(DataSpecification.UNIT);
 	}
 
 	@Override
 	public IReference getUnitId() {
-		return (IReference) getProxy().getModelPropertyValue(constructPath(DataSpecification.UNITID));
+		return (IReference) getProxy().getModelPropertyValue(DataSpecification.UNITID);
 	}
 
 	@Override
 	public String getSourceOfDefinition() {
-		return (String) getProxy().getModelPropertyValue(constructPath(DataSpecification.SOURCEOFDEFINITION));
+		return (String) getProxy().getModelPropertyValue(DataSpecification.SOURCEOFDEFINITION);
 	}
 
 	@Override
 	public String getSymbol() {
-		return (String) getProxy().getModelPropertyValue(constructPath(DataSpecification.SYMBOL));
+		return (String) getProxy().getModelPropertyValue(DataSpecification.SYMBOL);
 	}
 
 	@Override
 	public String getDataType() {
-		return (String) getProxy().getModelPropertyValue(constructPath(DataSpecification.DATATYPE));
+		return (String) getProxy().getModelPropertyValue(DataSpecification.DATATYPE);
 	}
 
 	@Override
 	public String getDefinition() {
-		return (String) getProxy().getModelPropertyValue(constructPath(DataSpecification.DEFINITION));
+		return (String) getProxy().getModelPropertyValue(DataSpecification.DEFINITION);
 	}
 
 	@Override
 	public String getValueFormat() {
-		return (String) getProxy().getModelPropertyValue(constructPath(DataSpecification.VALUEFORMAT));
+		return (String) getProxy().getModelPropertyValue(DataSpecification.VALUEFORMAT);
 	}
 
 	@Override
 	public String getValueList() {
-		return (String) getProxy().getModelPropertyValue(constructPath(DataSpecification.VALUELIST));
+		return (String) getProxy().getModelPropertyValue(DataSpecification.VALUELIST);
 	}
 
 	@Override
 	public String getCode() {
-		return (String) getProxy().getModelPropertyValue(constructPath(DataSpecification.CODE));
+		return (String) getProxy().getModelPropertyValue(DataSpecification.CODE);
 	}
 
 	@Override
 	public void setPreferredName(String preferredName) {
-		getProxy().setModelPropertyValue(constructPath(DataSpecification.PREFERREDNAME), preferredName);
+		getProxy().setModelPropertyValue(DataSpecification.PREFERREDNAME, preferredName);
 		
 	}
 
 	@Override
 	public void setShortName(String shortName) {
-		getProxy().setModelPropertyValue(constructPath(DataSpecification.SHORTNAME), shortName);
+		getProxy().setModelPropertyValue(DataSpecification.SHORTNAME, shortName);
 		
 	}
 
 	@Override
 	public void setUnit(String uni) {
-		getProxy().setModelPropertyValue(constructPath(DataSpecification.UNIT), uni);
+		getProxy().setModelPropertyValue(DataSpecification.UNIT, uni);
 		
 	}
 
 	@Override
 	public void setUnitId(IReference unitId) {
-		getProxy().setModelPropertyValue(constructPath(DataSpecification.UNITID), unitId);
+		getProxy().setModelPropertyValue(DataSpecification.UNITID, unitId);
 		
 	}
 
 	@Override
 	public void setSourceOfDefinition(String sourceOfDefinition) {
-		getProxy().setModelPropertyValue(constructPath(DataSpecification.SOURCEOFDEFINITION), sourceOfDefinition);
+		getProxy().setModelPropertyValue(DataSpecification.SOURCEOFDEFINITION, sourceOfDefinition);
 		
 	}
 
 	@Override
 	public void setSymbol(String symbol) {
-		getProxy().setModelPropertyValue(constructPath(DataSpecification.SYMBOL), symbol);
+		getProxy().setModelPropertyValue(DataSpecification.SYMBOL, symbol);
 		
 	}
 
 	@Override
 	public void setDataType(String dataType) {
-		getProxy().setModelPropertyValue(constructPath(DataSpecification.DATATYPE), dataType);
+		getProxy().setModelPropertyValue(DataSpecification.DATATYPE, dataType);
 		
 	}
 
 	@Override
 	public void setDefinition(String definition) {
-		getProxy().setModelPropertyValue(constructPath(DataSpecification.DEFINITION), definition);
+		getProxy().setModelPropertyValue(DataSpecification.DEFINITION, definition);
 		
 	}
 
 	@Override
 	public void setValueFormat(String valueFormat) {
-		getProxy().setModelPropertyValue(constructPath(DataSpecification.VALUEFORMAT), valueFormat);
+		getProxy().setModelPropertyValue(DataSpecification.VALUEFORMAT, valueFormat);
 		
 	}
 
 	@Override
 	public void setValueList(Object obj) {
-		getProxy().setModelPropertyValue(constructPath(DataSpecification.VALUELIST), obj);
+		getProxy().setModelPropertyValue(DataSpecification.VALUELIST, obj);
 		
 	}
 
 	@Override
 	public void setCode(Object obj) {
-		getProxy().setModelPropertyValue(constructPath(DataSpecification.CODE), obj);
+		getProxy().setModelPropertyValue(DataSpecification.CODE, obj);
 		
 	}
 

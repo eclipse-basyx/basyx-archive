@@ -66,7 +66,7 @@ public class TestConnectedContainerProperty {
 		VABConnectionManager manager = new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType));
 
 		// Retrieve the ConnectedContainerProperty
-		prop = new ConnectedContainerProperty("", manager.connectToVABElement(""));
+		prop = new ConnectedContainerProperty(manager.connectToVABElement(""));
 	}
 
 	/**

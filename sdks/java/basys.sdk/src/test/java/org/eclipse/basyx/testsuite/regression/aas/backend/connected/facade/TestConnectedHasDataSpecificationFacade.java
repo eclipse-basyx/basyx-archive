@@ -42,7 +42,7 @@ public class TestConnectedHasDataSpecificationFacade {
 		// Create a dummy connection manager containing the created SubModel map
 		VABConnectionManager manager = new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType));
 
-		remote = new ConnectedHasDataSpecificationFacade("", manager.connectToVABElement(""));
+		remote = new ConnectedHasDataSpecificationFacade(manager.connectToVABElement(""));
 	}
 
 	@Test

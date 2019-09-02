@@ -10,41 +10,41 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedKey extends ConnectedElement implements IKey {
-	public ConnectedKey(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedKey(VABElementProxy proxy) {
+		super(proxy);		
 	}
 	@Override
 	public String getType() {
-	return (String)getProxy().getModelPropertyValue(constructPath(Key.TYPE));
+	return (String)getProxy().getModelPropertyValue(Key.TYPE);
 	}
 	@Override
 	public boolean isLocal() {
-		return (boolean)getProxy().getModelPropertyValue(constructPath(Key.LOCAL));
+		return (boolean)getProxy().getModelPropertyValue(Key.LOCAL);
 	}
 	@Override
 	public String getValue() {
-		return (String)getProxy().getModelPropertyValue(constructPath(Key.VALUE));
+		return (String)getProxy().getModelPropertyValue(Key.VALUE);
 	}
 	@Override
 	public String getidType() {
-		return (String)getProxy().getModelPropertyValue(constructPath(Key.IDTYPE));
+		return (String)getProxy().getModelPropertyValue(Key.IDTYPE);
 	}
 	@Override
 	public void setType(String type) {
-		getProxy().setModelPropertyValue(constructPath(Key.TYPE),type);
+		getProxy().setModelPropertyValue(Key.TYPE,type);
 	}
 	@Override
 	public void setLocal(boolean local) {
-		getProxy().setModelPropertyValue(constructPath(Key.LOCAL), local);
+		getProxy().setModelPropertyValue(Key.LOCAL, local);
 		
 	}
 	@Override
 	public void setValue(String value) {
-		getProxy().setModelPropertyValue(constructPath(Key.VALUE),value );
+		getProxy().setModelPropertyValue(Key.VALUE,value );
 	}
 	@Override
 	public void setIdType(String idType) {
-		getProxy().setModelPropertyValue(constructPath(Key.IDTYPE), idType);
+		getProxy().setModelPropertyValue(Key.IDTYPE, idType);
 	}
 
 }

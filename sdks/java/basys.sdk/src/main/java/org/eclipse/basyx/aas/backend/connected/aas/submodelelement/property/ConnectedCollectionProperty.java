@@ -18,14 +18,14 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  */
 public class ConnectedCollectionProperty extends ConnectedProperty implements ICollectionProperty {
 
-	public ConnectedCollectionProperty(String path, VABElementProxy proxy) {
-		super(PropertyType.Collection, path, proxy);
+	public ConnectedCollectionProperty(VABElementProxy proxy) {
+		super(PropertyType.Collection, proxy);
 	}
 
 	@Override
 	public void set(Collection<Object> collection) throws ServerException {
 		try {
-			getProxy().setModelPropertyValue(constructPath(Property.VALUE), collection);
+			getProxy().setModelPropertyValue(Property.VALUE, collection);
 		} catch (Exception e) {
 			throw new ServerException(e.getClass().toString(), e.getMessage());
 		}
@@ -34,7 +34,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	@Override
 	public void add(Object newValue) throws ServerException, TypeMismatchException {
 		try {
-			getProxy().createValue(constructPath(Property.VALUE), newValue);
+			getProxy().createValue(Property.VALUE, newValue);
 		} catch (Exception e) {
 			throw new ServerException(e.getClass().toString(), e.getMessage());
 		}
@@ -43,7 +43,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	@Override
 	public void remove(Object objectRef) throws ServerException {
 		try {
-			getProxy().deleteValue(constructPath(Property.VALUE), objectRef);
+			getProxy().deleteValue(Property.VALUE, objectRef);
 		} catch (Exception e) {
 			throw new ServerException(e.getClass().toString(), e.getMessage());
 		}
@@ -61,7 +61,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 
 	@SuppressWarnings("unchecked")
 	private Collection<Object> getCollection() {
-		return (Collection<Object>) getProxy().getModelPropertyValue(constructPath(Property.VALUE));
+		return (Collection<Object>) getProxy().getModelPropertyValue(Property.VALUE);
 	}
 
 	@Override

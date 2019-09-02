@@ -13,19 +13,19 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedQualifiableFacade extends ConnectedElement implements IQualifiable {
-	public ConnectedQualifiableFacade(String path, VABElementProxy proxy) {
-		super(path, proxy);
+	public ConnectedQualifiableFacade(VABElementProxy proxy) {
+		super(proxy);
 	}
 
 	@Override
 	public void setQualifier(Set<IConstraint> qualifiers) {
-		new ConnectedQualifiable(getPath(), getProxy()).setQualifier(qualifiers);
+		new ConnectedQualifiable( getProxy()).setQualifier(qualifiers);
 		
 	}
 
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return new ConnectedQualifiable(getPath(), getProxy()).getQualifier();
+		return new ConnectedQualifiable( getProxy()).getQualifier();
 	}
 
 }

@@ -44,7 +44,7 @@ public class TestConnectedOperation {
 		VABConnectionManager manager = new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType));
 
 		// Create the ConnectedOperation based on the manager stub
-		operation = new ConnectedOperation("", manager.connectToVABElement(""));
+		operation = new ConnectedOperation(manager.connectToVABElement(""));
 	}
 
 	/**

@@ -26,7 +26,7 @@ public class TestConnectedReferableFacade {
 		VABConnectionManager manager = new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType));
 
 		// Create the ConnectedSubModel based on the manager stub
-		remote = new ConnectedReferableFacade("", manager.connectToVABElement(""));
+		remote = new ConnectedReferableFacade(manager.connectToVABElement(""));
 	}
 
 	@Test

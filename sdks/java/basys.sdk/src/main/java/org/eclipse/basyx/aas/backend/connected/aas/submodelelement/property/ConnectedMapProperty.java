@@ -18,8 +18,8 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  */
 public class ConnectedMapProperty extends ConnectedProperty implements IMapProperty {
 
-	public ConnectedMapProperty(String path, VABElementProxy proxy) {
-		super(PropertyType.Map, path, proxy);
+	public ConnectedMapProperty(VABElementProxy proxy) {
+		super(PropertyType.Map, proxy);
 	}
 
 	@Override
@@ -32,9 +32,9 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 		try {
 			// check whether the value already exists and call update or create accordingly
 			if(getValue(key) != null)
-				getProxy().setModelPropertyValue(constructPath(Property.VALUE + "/" + key), value);
+				getProxy().setModelPropertyValue(Property.VALUE + "/" + key, value);
 			else
-				getProxy().createValue(constructPath(Property.VALUE + "/" + key), value);
+				getProxy().createValue(Property.VALUE + "/" + key, value);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -43,7 +43,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	@Override
 	public void set(Map<String, Object> map) throws ServerException {
 		try {
-			getProxy().setModelPropertyValue(constructPath(Property.VALUE), map);
+			getProxy().setModelPropertyValue(Property.VALUE, map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -62,7 +62,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	@Override
 	public void remove(String key) throws ServerException, TypeMismatchException {
 		try {
-			getProxy().deleteValue(constructPath(Property.VALUE + "/" + key));
+			getProxy().deleteValue(Property.VALUE + "/" + key);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -70,6 +70,6 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 
 	@SuppressWarnings("unchecked")
 	private Map<String, Object> getMap() {
-		return ((Map<String, Object>) getProxy().getModelPropertyValue(constructPath(Property.VALUE)));
+		return ((Map<String, Object>) getProxy().getModelPropertyValue(Property.VALUE));
 	}
 }

@@ -8,7 +8,7 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  */
 public class ConnectedVABModelMap<V extends Object> extends ConnectedElement {
 
-	public ConnectedVABModelMap(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedVABModelMap(VABElementProxy proxy) {
+		super(proxy);
 	}
 }

@@ -11,20 +11,20 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedReferenceElement extends ConnectedDataElement implements IReferenceElement {
-	public ConnectedReferenceElement(String path, VABElementProxy proxy) {
-		super(path, proxy);		
+	public ConnectedReferenceElement(VABElementProxy proxy) {
+		super(proxy);		
 	}
 	
 
 	@Override
 	public void setValue(IReference ref) {
-		getProxy().setModelPropertyValue(constructPath(Property.VALUE), ref);
+		getProxy().setModelPropertyValue(Property.VALUE, ref);
 		
 	}
 
 	@Override
 	public IReference getValue() {
-		return (IReference)getProxy().getModelPropertyValue(constructPath(Property.VALUE));
+		return (IReference)getProxy().getModelPropertyValue(Property.VALUE);
 	}
 
 }
