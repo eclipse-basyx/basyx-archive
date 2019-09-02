@@ -180,7 +180,7 @@ public class AASServletConnectionFull {
 		{
 			// Create and connect SDK connector
 			ISubModel subModel = manager
-					.retrieveSM("sm-001", new ModelUrn("aas-001"));
+					.retrieveSubModel(new ModelUrn("aas-001"), "sm-001");
 			// - Retrieve sub model values and compare to expected values
 			assertTrue(subModel.getId().equals("sm-001"));
 			assertTrue(subModel.getProperties().get("prop1").getId().equals("prop1"));
@@ -217,7 +217,7 @@ public class AASServletConnectionFull {
 		{
 			// Create and connect SDK connector
 			ISubModel subModel = manager
-					.retrieveSM("sm-001M", new ModelUrn("aas-001M"));
+					.retrieveSubModel(new ModelUrn("aas-001M"), "sm-001M");
 			// - Retrieve sub model values and compare to expected values
 			assertTrue(subModel.getId().equals("sm-001M"));
 			assertTrue(subModel.getProperties().get("prop1").getId().equals("prop1"));

@@ -69,7 +69,7 @@ public class DeviceSubModelDeployment {
 		
 		// Create and connect SDK connector
 		// - Retrieve sub model
-		ISubModel subModel = manager.retrieveSM("urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003", new ModelUrn(""));
+		ISubModel subModel = manager.retrieveSubModel(new ModelUrn(""), "urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003");
 		
 		// Retrieve sub model values and compare to expected values
 		String submodelId = subModel.getId();

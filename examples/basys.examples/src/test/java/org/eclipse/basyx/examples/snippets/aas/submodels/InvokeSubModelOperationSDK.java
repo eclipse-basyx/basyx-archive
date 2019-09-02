@@ -126,7 +126,7 @@ public class InvokeSubModelOperationSDK {
 		// Retrieve sub model (created by factory) with SDK connector
 		{
 			// Create and connect SDK connector
-			ISubModel subModel = manager.retrieveSM("sm-001", new ModelUrn(""));
+			ISubModel subModel = manager.retrieveSubModel(new ModelUrn(""), "sm-001");
 			
 			// Sub model operations
 			Map<String, IOperation> operations = subModel.getOperations();

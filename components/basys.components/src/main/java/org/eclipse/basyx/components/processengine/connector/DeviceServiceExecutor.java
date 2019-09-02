@@ -52,7 +52,7 @@ public abstract class DeviceServiceExecutor implements IDeviceServiceExecutor {
 			ModelUrn aasUrn = new ModelUrn(serviceProvider);
 
 			// create the submodel of the corresponding aas
-			ISubModel serviceSubmodel = manager.retrieveSM(submodelid, aasUrn);
+			ISubModel serviceSubmodel = manager.retrieveSubModel(aasUrn, submodelid);
 
 			// navigate to the expected service 
 			Map<String, IOperation> operations = serviceSubmodel.getOperations();
@@ -79,7 +79,7 @@ public abstract class DeviceServiceExecutor implements IDeviceServiceExecutor {
 		ModelUrn aasUrn = new ModelUrn(rawUrn);
 
 		// retrieve submodel with id
-		ISubModel statusSubmodel = manager.retrieveSM(submodelid, aasUrn);
+		ISubModel statusSubmodel = manager.retrieveSubModel(aasUrn, submodelid);
 		
 		// get properties of the submodel
 		Map<String, IProperty> properties = ((ConnectedSubModel) statusSubmodel).getProperties();
