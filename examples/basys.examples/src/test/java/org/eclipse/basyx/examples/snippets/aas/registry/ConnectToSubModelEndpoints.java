@@ -9,7 +9,6 @@ import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
-import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
@@ -97,15 +96,17 @@ public class ConnectToSubModelEndpoints {
 		regProxy.register(aasURN, aasDescriptor);
 		
 		// Create sub model
-		// - This factory creates sub model properties and ensures presence of all meta data
-		MetaModelElementFactory fac = new MetaModelElementFactory();
-
-		// Create sub model
 		SubModel submodel = new SubModel();
-		// - Add example properties to sub model
 		submodel.setId(subModelId);
-		submodel.getProperties().put(fac.create(new Property(),       7, "prop1"));
-		submodel.getProperties().put(fac.create(new Property(), "myStr", "prop2"));
+
+		// - Add example properties to sub model
+		Property prop1 = new Property(7);
+		prop1.setId("prop1");
+		submodel.getProperties().put(prop1);
+
+		Property prop2 = new Property("myStr");
+		prop2.setId("prop2");
+		submodel.getProperties().put(prop2);
 		// - Transfer sub model to server
 		//   - This creates the "exampleSM" element on the server, which is the server
 		//     end point that will host the AAS sub model.

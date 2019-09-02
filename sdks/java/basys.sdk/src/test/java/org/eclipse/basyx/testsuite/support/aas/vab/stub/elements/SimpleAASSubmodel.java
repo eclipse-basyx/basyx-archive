@@ -34,11 +34,11 @@ public class SimpleAASSubmodel extends SubModel {
 		// Create example properties
 		MetaModelElementFactory fac = new MetaModelElementFactory();
 
-		Property intProp = fac.create(new Property(), 123);
+		Property intProp = new Property(123);
 		intProp.setId("integerProperty");
 		addDataElement(intProp);
 
-		Property stringProp = fac.create(new Property(), "Test");
+		Property stringProp = new Property("Test");
 		stringProp.setId("stringProperty");
 		addDataElement(stringProp);
 

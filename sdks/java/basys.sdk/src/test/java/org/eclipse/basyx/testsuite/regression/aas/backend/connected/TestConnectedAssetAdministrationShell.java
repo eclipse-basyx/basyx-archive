@@ -51,7 +51,7 @@ public class TestConnectedAssetAdministrationShell {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 
 		// Create a SubModel containing no operations and one property
-		Property p = factory.create(new Property(), propVal);
+		Property p = new Property(propVal);
 		p.setId(propId);
 
 		SubModel sm = factory.create(new SubModel(), Collections.singletonList(p), new ArrayList<>());

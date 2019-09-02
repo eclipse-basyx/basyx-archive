@@ -44,23 +44,28 @@ public class CreateAASSubModelSDK {
 			setId("sm-001");
 
 			// Create factory that helps with property creation
-			// - This factory creates sub model properties and ensures presence of all meta data
+			// - This factory creates sub model properties and ensures presence of all meta
+			// data
 			MetaModelElementFactory fac = new MetaModelElementFactory();
 
 			// Add example properties
 			// - Add simple property
-			getProperties().put(fac.create(new Property(), 234, "prop1"));
+			Property prop1 = new Property(234);
+			prop1.setId("prop1");
+			getProperties().put(prop1);
 
+			Property prop11 = new Property(123);
+			prop11.setId("prop11");
 			// - Add container property that holds other properties
-			List<SubmodelElement> containerProperties = fac.createList(
-					fac.create(new Property(), 123, "prop11")
-				);
+			List<SubmodelElement> containerProperties = fac.createList(prop11);
 			// - Add container to property map
 			getProperties().put(fac.createContainer(new SubmodelElementCollection(), containerProperties, fac.emptyList(), "prop2"));
 
 			// Add another property manually to sub model container "properties"
+			Property prop3 = new Property(17);
+			prop3.setId("prop3");
 			{
-				((Map<String, Object>) this.get(PROPERTIES)).put("prop3", fac.create(new Property(), 17, "prop3"));
+				((Map<String, Object>) this.get("dataElements")).put("prop3", prop3);
 			}
 		}
 	}

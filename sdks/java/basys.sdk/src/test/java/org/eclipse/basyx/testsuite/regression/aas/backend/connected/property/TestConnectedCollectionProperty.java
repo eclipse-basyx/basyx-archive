@@ -14,7 +14,6 @@ import org.eclipse.basyx.aas.api.resources.ICollectionProperty;
 import org.eclipse.basyx.aas.backend.connected.TypeDestroyer.TypeDestroyer;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.ConnectedCollectionProperty;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
-import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
@@ -33,15 +32,13 @@ public class TestConnectedCollectionProperty {
 
 	@Before
 	public void build() {
-		MetaModelElementFactory factory = new MetaModelElementFactory();
-
 		// Create collection
 		collection = new ArrayList<>();
 		collection.add(1);
 		collection.add(2);
 
 		// Create PropertySingleValued containing the collection
-		Property propertySingleValued = factory.create(new Property(), collection);
+		Property propertySingleValued = new Property(collection);
 
 		// Create dummy connection manager containing the
 		// created PropertySingleValued map

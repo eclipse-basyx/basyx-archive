@@ -5,9 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import org.eclipse.basyx.aas.api.resources.IElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
@@ -17,8 +15,6 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelEleme
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
-import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
 
 /**
  * Creates meta model entities <br />
@@ -28,56 +24,6 @@ import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
  *
  */
 public class MetaModelElementFactory {
-
-	/**
-	 * Create Property
-	 * 
-	 * @param prop
-	 * @param get
-	 * @param set
-	 * @return
-	 */
-	public Property create(Property prop, Object value) {
-		Property ret = new Property();
-		ret.putAll(prop);
-		ret.setValue(value);
-		return ret;
-	}
-
-	
-	/**
-	 * Create Property
-	 * 
-	 * @param prop
-	 * @param get
-	 * @param set
-	 * @return
-	 */
-	public Property create(Property prop, Object value, String id) {
-		Property ret = new Property();
-		ret.putAll(prop);
-		ret.setValue(value);
-		ret.setId(id);
-		return ret;
-	}
-
-	
-	/**
-	 * Create Property
-	 * 
-	 * @param prop
-	 * @param get
-	 * @param set
-	 * @return
-	 */
-	public Property create(Property prop, Supplier<Object> get, Consumer<Object> set) {
-		Property ret = new Property();
-		ret.putAll(prop);
-		Map<String, Object> value = VABLambdaProviderHelper.createSimple(get, set);
-		ret.put(Property.VALUE, value);
-		ret.put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(get.get()));
-		return ret;
-	}
 
 	/**
 	 * Create Operations w/o endpoint
