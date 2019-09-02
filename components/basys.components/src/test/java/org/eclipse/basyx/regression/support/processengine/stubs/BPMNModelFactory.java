@@ -12,8 +12,8 @@ import org.activiti.bpmn.model.Gateway;
 import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.bpmn.model.ServiceTask;
 import org.activiti.bpmn.model.StartEvent;
-import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
-import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
+import org.eclipse.basyx.vab.backend.http.tools.GSONTools;
+import org.eclipse.basyx.vab.backend.http.tools.factory.DefaultTypeFactory;
 import org.activiti.bpmn.model.Process;
 
 /**

@@ -4,9 +4,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
-import org.eclipse.basyx.aas.backend.connector.ConnectorProvider;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
 import org.eclipse.basyx.testsuite.support.vab.stub.elements.SimpleVABElement;
+import org.eclipse.basyx.vab.backend.connector.ConnectorProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;

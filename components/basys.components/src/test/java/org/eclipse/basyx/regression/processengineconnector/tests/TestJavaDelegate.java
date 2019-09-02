@@ -7,11 +7,11 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
-import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceDelegate;
 import org.eclipse.basyx.regression.support.processengine.stubs.BPMNEngineStub;
 import org.eclipse.basyx.regression.support.processengine.stubs.DeviceServiceExecutorStub;
+import org.eclipse.basyx.vab.backend.http.tools.GSONTools;
+import org.eclipse.basyx.vab.backend.http.tools.factory.DefaultTypeFactory;
 import org.junit.Test;
 
 /**

@@ -12,7 +12,6 @@ import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
@@ -21,6 +20,7 @@ import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource
 import org.eclipse.basyx.testsuite.support.backend.servers.context.SdkRegressionContext;
 import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
 import org.eclipse.basyx.testsuite.support.vab.stub.DirectoryServiceStub;
+import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;

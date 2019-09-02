@@ -62,9 +62,20 @@
          <version>2.4.2</version>
           <configuration>
     		<excludes>
-      			<exclude>**/*HTTP*</exclude>
-      			<exclude>**/*TCP*</exclude>
+      			<exclude>**/*contexts*</exclude>
+      			<!--  Ignore all inner subclasses -->
+      			<exclude>**/*$*</exclude>
+      			<exclude>**/*Manager*</exclude>
+      			<exclude>**/*Mockup*</exclude>
+      			<exclude>**/*Task*</exclude>
+      			<exclude>**/*TailoredBaSyxSupplier*</exclude>
+      			<exclude>**/*Context*</exclude>
+      			<exclude>**/*Application*</exclude>
+      			<exclude>**/*mockup*/**</exclude>
     		</excludes>
+    		<includes>
+				<include>**/**</include>
+			</includes>
   		 </configuration>
        </plugin>
        

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.AASHTTPRegistryProxy;
-import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
@@ -13,6 +12,7 @@ import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.components.devicemanager.TCPControllableDeviceManagerComponent;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.models.controlcomponent.ControlComponentChangeListener;
+import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;

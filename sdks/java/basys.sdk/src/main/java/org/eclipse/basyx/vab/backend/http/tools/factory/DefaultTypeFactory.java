@@ -1,4 +1,4 @@
-package org.eclipse.basyx.aas.backend.http.tools.factory;
+package org.eclipse.basyx.vab.backend.http.tools.factory;
 
 import java.util.ArrayList;
 import java.util.HashSet;

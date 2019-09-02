@@ -7,9 +7,9 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.backend.connector.basyx.BaSyxConnectorProvider;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.testsuite.support.vab.stub.DirectoryServiceStub;
+import org.eclipse.basyx.vab.backend.connector.basyx.BaSyxConnectorProvider;
 import org.eclipse.basyx.vab.backend.gateway.ConnectorProviderMapper;
 import org.eclipse.basyx.vab.backend.gateway.DelegatingModelProvider;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;

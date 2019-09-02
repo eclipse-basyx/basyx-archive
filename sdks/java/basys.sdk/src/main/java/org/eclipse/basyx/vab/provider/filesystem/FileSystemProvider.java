@@ -9,8 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
-import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
+import org.eclipse.basyx.vab.backend.http.tools.GSONTools;
+import org.eclipse.basyx.vab.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 import org.eclipse.basyx.vab.provider.filesystem.filesystem.File;
