@@ -63,17 +63,25 @@ public class AASServletConnectionFull {
 
 			// Add example properties
 			// - Add simple property
-			getProperties().put(fac.create(new Property(), 234, "prop1"));
+			Property prop1 = new Property(234);
+			prop1.setId("prop1");
+			getProperties().put(prop1);
 
+			Property prop11 = new Property(123);
+			prop11.setId("prop11");
 			// - Add container property that holds other properties
 			List<SubmodelElement> containerProperties = fac.createList(
-					fac.create(new Property(), 123, "prop11")
+					prop11
 				);
 			// - Add container to property map
 			getProperties().put(fac.createContainer(new SubmodelElementCollection(), containerProperties, fac.emptyList(), "prop2"));
 
 			// Add another property manually to sub model container "properties"
-			{((Map<String, Object>) this.get("dataElements")).put("prop3", fac.create(new Property(), 17, "prop3"));}
+			Property prop3 = new Property(17);
+			prop3.setId("prop3");
+			{
+				((Map<String, Object>) this.get("dataElements")).put("prop3", prop3);
+			}
 		}
 	}
 

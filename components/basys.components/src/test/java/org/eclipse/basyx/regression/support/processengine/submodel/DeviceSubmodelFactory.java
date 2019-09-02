@@ -15,13 +15,13 @@ public class DeviceSubmodelFactory {
 	public SubModel create(String id, ICoilcar coilcar) {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 		// create a single value property
-		Property property1 = factory.create(new Property(), 0);
+		Property property1 = new Property(0);
 		property1.setId("currentPosition");
 		
-		Property property2 = factory.create(new Property(), 0);
+		Property property2 = new Property(0);
 		property2.setId("lifterPosition");
 		
-		Property property3 = factory.create(new Property(), false);
+		Property property3 = new Property(false);
 		property3.setId("physicalSpeed");
 		
 		// create 2 opertations

@@ -7,7 +7,6 @@ import org.eclipse.basyx.aas.api.resources.ISingleProperty;
 import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
-import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.components.servlet.submodel.DynamicModelProviderServlet;
@@ -62,16 +61,17 @@ public class DynamicSubModelDeployment {
 	 */
 	@Test
 	public void snippet() throws Exception {
-		// Create factory that helps with property creation
-		// - This factory creates sub model properties and ensures presence of all meta data
-		MetaModelElementFactory fac = new MetaModelElementFactory();
-
 		// Instantiate sub model
 		SubModel submodel = new SubModel();
 		// - Add example properties to sub model
 		submodel.setId(STATUS_SM);
-		submodel.getProperties().put(fac.create(new Property(),       7, "prop1"));
-		submodel.getProperties().put(fac.create(new Property(), "myStr", "prop2"));
+		Property prop1 = new Property(7);
+		prop1.setId("prop1");
+		submodel.getProperties().put(prop1);
+
+		Property prop2 = new Property("myStr");
+		prop2.setId("prop2");
+		submodel.getProperties().put(prop2);
 
 		
 		

@@ -8,7 +8,6 @@ import java.util.HashMap;
 
 import org.eclipse.basyx.aas.backend.connector.ConnectorProvider;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
-import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.testsuite.regression.vab.provider.TestProvider;
@@ -48,7 +47,7 @@ public class VirtualPathModelProviderTest extends TestProvider {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 
 		// Create element
-		Property prop = new MetaModelElementFactory().create(new Property(), 500);
+		Property prop = new Property(500);
 		submodelElement.createValue("dataElements/newProperty", prop);
 
 		// Read back value

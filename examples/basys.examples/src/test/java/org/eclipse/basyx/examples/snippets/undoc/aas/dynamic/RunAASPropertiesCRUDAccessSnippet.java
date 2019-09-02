@@ -3,7 +3,6 @@ package org.eclipse.basyx.examples.snippets.undoc.aas.dynamic;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
-import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.components.servlet.submodel.EmptyVABLambdaElementServlet;
@@ -64,13 +63,16 @@ public class RunAASPropertiesCRUDAccessSnippet {
 
 		
 		// Create properties on AAS
-		// - This factory creates sub model properties and ensures presence of all meta data
-		MetaModelElementFactory fac = new MetaModelElementFactory();
 		// - Add example properties
 		SubModel submodel = new SubModel();
 		submodel.setId("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
-		submodel.getProperties().put(fac.create(new Property(),       7, "prop1"));
-		submodel.getProperties().put(fac.create(new Property(), "myStr", "prop2"));
+		Property prop1 = new Property(7);
+		prop1.setId("prop1");
+		submodel.getProperties().put(prop1);
+
+		Property prop2 = new Property("myStr");
+		prop2.setId("prop2");
+		submodel.getProperties().put(prop2);
 		// - Transfer sub model to server
 		connSubModel1.setModelPropertyValue("/", submodel);
 		

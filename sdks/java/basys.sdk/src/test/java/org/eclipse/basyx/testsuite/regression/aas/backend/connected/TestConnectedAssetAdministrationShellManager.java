@@ -85,17 +85,17 @@ public class TestConnectedAssetAdministrationShellManager {
 		connectorProvider.addMapping("", new VABHashmapProvider(new HashMap<>()));
 
 		// Create sub model
-		// - This factory creates sub model properties and ensures presence of all meta
-		// data
-		MetaModelElementFactory fac = new MetaModelElementFactory();
-
-		// Create sub model
 		SubModel submodel = new SubModel();
 
 		// - Add example properties to sub model
 		submodel.setId(smId);
-		submodel.getProperties().put(fac.create(new Property(), 7, "prop1"));
-		submodel.getProperties().put(fac.create(new Property(), "myStr", "prop2"));
+		Property prop1 = new Property(7);
+		prop1.setId("prop1");
+		submodel.getProperties().put(prop1);
+
+		Property prop2 = new Property("myStr");
+		prop1.setId("prop2");
+		submodel.getProperties().put(prop2);
 
 		manager.createSubModel(urn, smId, submodel);
 

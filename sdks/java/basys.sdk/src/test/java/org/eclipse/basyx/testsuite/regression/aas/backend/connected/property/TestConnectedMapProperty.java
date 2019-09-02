@@ -13,7 +13,6 @@ import org.eclipse.basyx.aas.api.resources.IMapProperty;
 import org.eclipse.basyx.aas.backend.connected.TypeDestroyer.TypeDestroyer;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.ConnectedMapProperty;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
-import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
@@ -37,15 +36,13 @@ public class TestConnectedMapProperty {
 
 	@Before
 	public void build() {
-		MetaModelElementFactory factory = new MetaModelElementFactory();
-
 		// Create and fill map
 		Map<String, Object> map = new HashMap<>();
 		map.put(MAP_1_KEY, MAP_1_VAL);
 		map.put(MAP_2_KEY, MAP_2_VAL);
 
 		// Create PropertySingleValued containing the map
-		Property propertyMeta = factory.create(new Property(), map);
+		Property propertyMeta = new Property(map);
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(propertyMeta);
 		// Create dummy connection manager containing the
 		// created PropertySingleValued map

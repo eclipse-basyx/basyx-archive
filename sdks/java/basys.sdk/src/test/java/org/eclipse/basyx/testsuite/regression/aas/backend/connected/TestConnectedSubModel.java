@@ -48,7 +48,7 @@ public class TestConnectedSubModel {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 
 		// Create a simple value property
-		Property propertyMeta = factory.create(new Property(), 100);
+		Property propertyMeta = new Property(100);
 		propertyMeta.setId(PROP);
 
 		// Create an operation

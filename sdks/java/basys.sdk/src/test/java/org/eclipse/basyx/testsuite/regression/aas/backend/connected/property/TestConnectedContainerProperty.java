@@ -47,7 +47,7 @@ public class TestConnectedContainerProperty {
 		collection.add(2);
 
 		// Create PropertySingleValued containing the collection
-		Property propertyMeta = factory.create(new Property(), collection);
+		Property propertyMeta = new Property(collection);
 		propertyMeta.setId(COLLECTIONPROP);
 
 		// Create operation
