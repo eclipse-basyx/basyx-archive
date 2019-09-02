@@ -3,7 +3,7 @@ package org.eclipse.basyx.aas.impl.services;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.vab.core.IVABDirectoryService;
+import org.eclipse.basyx.vab.core.directory.IVABDirectoryService;
 
 
 
@@ -19,7 +19,7 @@ public class PreconfiguredDirectory implements IVABDirectoryService {
 	/**
 	 * Map that stores key/value mappings
 	 */
-	protected Map<String, String> keyToValue = new HashMap<>();
+	protected Map<String, Object> keyToValue = new HashMap<>();
 	
 	
 		
@@ -69,23 +69,11 @@ public class PreconfiguredDirectory implements IVABDirectoryService {
 		keyToValue.remove(key);
 	}
 	
-	
-	/**
-	 * Get mappings
-	 */
-	@Override
-	public Map<String, String> getMappings() {
-		return keyToValue;
-	}
-	
-	
-	
 	/**
 	 * Lookup method
 	 */
 	@Override
 	public String lookup(String id) {
-		//System.out.println("RET:"+id);
-		return keyToValue.get(id);
+		return (String) keyToValue.get(id);
 	}
 }

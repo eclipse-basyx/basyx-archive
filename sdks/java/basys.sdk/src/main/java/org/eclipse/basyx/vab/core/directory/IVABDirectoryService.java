@@ -1,8 +1,4 @@
-package org.eclipse.basyx.vab.core;
-
-import java.util.Map;
-
-
+package org.eclipse.basyx.vab.core.directory;
 
 /**
  * Directory service SDK interface.
@@ -24,12 +20,6 @@ public interface IVABDirectoryService {
 	 */
 	public void removeMapping(String key);
 	
-	
-	/**
-	 * Get mappings
-	 */
-	public Map<String, String> getMappings();
-
 
 	/**
 	 * Lookup method maps key "id" to value

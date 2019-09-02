@@ -1,5 +1,6 @@
 package org.eclipse.basyx.vab.core;
 
+import org.eclipse.basyx.vab.core.directory.IVABDirectoryService;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 

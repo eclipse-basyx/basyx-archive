@@ -1,18 +1,14 @@
 package org.eclipse.basyx.aas.api.registry;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.api.webserviceclient.WebServiceRawClient;
 import org.eclipse.basyx.aas.backend.connector.MetaprotocolHandler;
-import org.eclipse.basyx.aas.backend.http.tools.GSONTools;
-import org.eclipse.basyx.aas.backend.http.tools.factory.DefaultTypeFactory;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
-import org.eclipse.basyx.vab.core.IVABDirectoryService;
-
-
+import org.eclipse.basyx.vab.core.directory.VABHTTPDirectoryProxy;
 
 
 /**
@@ -21,86 +17,52 @@ import org.eclipse.basyx.vab.core.IVABDirectoryService;
  * @author kuhn
  *
  */
-public class AASHTTPRegistryProxy implements IAASRegistryService, IVABDirectoryService {
-
-	
+public class AASHTTPRegistryProxy extends VABHTTPDirectoryProxy implements IAASRegistryService {
 	/**
-	 * Store AAS registry URL
+	 * Constructor - instantiate a VABDirectoryProxy with the same endpoint
 	 */
-	protected String aasRegistryURL = null;
-
-	
-	/**
-	 * Invoke BaSyx service calls via web services
-	 */
-	protected WebServiceRawClient client = null;
-	
-	
-	/**
-	 * JSON serializer
-	 */
-	protected GSONTools serializer = null;
-
-	
-	
-	
-	
-	/**
-	 * Constructor
-	 */
-	public AASHTTPRegistryProxy(String aasRegURL) {
-		// Store URL
-		aasRegistryURL = aasRegURL;
-		
-		// Create web service client
-		client = new WebServiceRawClient();
-		
-		// Create serializer
-		serializer = new GSONTools(new DefaultTypeFactory());
+	public AASHTTPRegistryProxy(String directoryUrl) {
+		super(directoryUrl);
 	}
-	
-	
+
 	/**
 	 * Register AAS descriptor in registry, delete old registration
 	 */
 	@Override
 	public void register(ModelUrn aasID, AASDescriptor deviceAASDescriptor) {
-		// Invoke delete operation of AAS registry
-		try {client.delete(aasRegistryURL+"/api/v1/registry/"+URLEncoder.encode(aasID.getURN(), "UTF-8"));} catch (Exception e) {e.printStackTrace();}
-
-		// Perform web service call to registry
-		client.post(aasRegistryURL+"/api/v1/registry", serializer.serialize(deviceAASDescriptor));
+		delete(aasID);
+		registerOnly(deviceAASDescriptor);
 	}
 
-
-	
 	/**
 	 * Register AAS descriptor in registry
 	 */
 	@Override
 	public void registerOnly(AASDescriptor deviceAASDescriptor) {
-		// Perform web service call to registry
-		client.post(aasRegistryURL+"/api/v1/registry", serializer.serialize(deviceAASDescriptor));
+		// Add a mapping from the AAS id to the serialized descriptor
+		this.addMapping(deviceAASDescriptor.getId(), serializer.serialize(deviceAASDescriptor));
 	}
-	
 	
 	/**
 	 * Delete AAS descriptor from registry
 	 */
 	@Override
 	public void delete(ModelUrn aasID) {
-		// Invoke delete operation of AAS registry
-		try {client.delete(aasRegistryURL+"/api/v1/registry/"+URLEncoder.encode(aasID.getURN(), "UTF-8"));} catch (Exception e) {e.printStackTrace();}
+		try {
+			this.removeMapping(URLEncoder.encode(aasID.getURN(), "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
-	
 	
 	/**
 	 * Lookup device AAS
 	 */
 	@Override @SuppressWarnings("unchecked")
 	public AASDescriptor lookupAAS(ModelUrn aasID) {
+
 		// Lookup AAS from AAS directory, get AAS descriptor
-		String jsonResponse = client.get(aasRegistryURL+"/api/v1/registry/"+aasID.getEncodedURN());
+		String jsonResponse = this.lookup(aasID.getEncodedURN());
 		
 		// Deserialize AAS descriptor
 		AASDescriptor aasDescriptor = null;
@@ -114,9 +76,7 @@ public class AASHTTPRegistryProxy implements IAASRegistryService, IVABDirectoryS
 		// Return AAS descriptor
 		return aasDescriptor;
 	}
-	
-	
-	
+
 	/**
 	 * Add an AAS mapping to a directory
 	 * 
@@ -128,51 +88,9 @@ public class AASHTTPRegistryProxy implements IAASRegistryService, IVABDirectoryS
 		AASDescriptor aasDescriptor = new AASDescriptor(key, IdentifierType.URI, value);
 
 		// Push AAS descriptor to server
-		client.post(aasRegistryURL+"/api/v1/registry", serializer.serialize(aasDescriptor));
-		
-		// Return 'this' reference
+		this.addMapping(key, serializer.serialize(aasDescriptor));
+
 		return this;
 	}
-
-
-	/**
-	 * Delete an AAS mapping
-	 */
-	@Override
-	public void removeMapping(String key) {
-		// Invoke delete operation of AAS registry
-		try {client.delete(aasRegistryURL+"/api/v1/registry/"+key);} catch (Exception e) {e.printStackTrace();}
-	}
-
-
-	/**
-	 * Lookup one AAS mapping
-	 */
-	@Override
-	public String lookup(String id) {
-		// Lookup AAS from AAS directory, get AAS descriptor
-		String jsonData = client.get(aasRegistryURL+"/api/v1/registry/"+id);
-
-		// Return endpoint
-		return jsonData;
-	}
-
-
-	/**
-	 * Return all locally registered mappings
-	 */
-	@Override
-	public Map<String, String> getMappings() {
-		// Currently not implemented
-		return null;
-	}
-
-
-	@Override
-	public IVABDirectoryService addMapping(String key, String value) {
-		// Currently not implemented
-		return null;
-	}
-
 }
 

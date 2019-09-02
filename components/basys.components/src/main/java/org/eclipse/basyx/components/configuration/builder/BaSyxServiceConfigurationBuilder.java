@@ -6,8 +6,8 @@ import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShell
 import org.eclipse.basyx.aas.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.components.configuration.CFGBaSyxProtocolType;
 import org.eclipse.basyx.components.configuration.ConfigurableComponent;
-import org.eclipse.basyx.vab.core.IVABDirectoryService;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.eclipse.basyx.vab.core.directory.IVABDirectoryService;
 
 
 
