@@ -62,14 +62,16 @@ public class VABConnectionManager {
 	}
 
 	/**
-	 * Connect to an VAB element on an HTTP server using a qualified URL
+	 * Connect to an VAB element on an VAB server using a qualified path
 	 * 
-	 * @param url the URL that describes the element location. 
+	 * @param path
+	 *            the path that describes the element location.
 	 */
-	public VABElementProxy connectToVABElementByURL(String url) {
+	public VABElementProxy connectToVABElementByPath(String path) {
 
 		// Return a new VABElementProxy
-		// - Do not pass URL here to provider as address, as the url parameter is already absolute and contains the address. 
-		return new VABElementProxy(VABPathTools.removeAddressEntry(url), providerProvider.getConnector(url));
+		// - Do not pass path here to provider as address, as the path parameter is
+		// already absolute and contains the address.
+		return new VABElementProxy(VABPathTools.removeAddressEntry(path), providerProvider.getConnector(path));
 	}
 }
