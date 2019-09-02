@@ -61,28 +61,6 @@ public class VABConnectionManager {
 		return new VABElementProxy(VABPathTools.removeAddressEntry(addr), providerProvider.getConnector(addr));
 	}
 
-	
-	/**
-	 * Connect to an VAB element on an HTTP server and add an URL prefix
-	 * 
-	 * @param urn the URN that describes the element. 
-	 * @param prefix the prefix will be added to the address
-	 */
-	public VABElementProxy connectToHTTPVABElement(String urn, String prefix) {
-
-		// Get AAS from directory
-		String addr = "";
-
-		// Lookup address in directory server
-		addr = directoryService.lookup(urn);
-		// - Add prefix to addr
-		addr = VABPathTools.concatenatePaths(addr, prefix);
-
-		// Return a new VABElementProxy
-		return new VABElementProxy(VABPathTools.removeAddressEntry(addr), providerProvider.getConnector(addr));
-	}
-
-	
 	/**
 	 * Connect to an VAB element on an HTTP server using a qualified URL
 	 * 
