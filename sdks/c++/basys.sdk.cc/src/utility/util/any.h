@@ -77,7 +77,7 @@ namespace basyx {
 
 		bool IsNull() const noexcept
 		{
-			return this->content.get() == nullptr;
+			return this->InstanceOf<nullptr_t>() || this->content.get() == nullptr;
 		}
 	private:
 		// PlaceHolder:
