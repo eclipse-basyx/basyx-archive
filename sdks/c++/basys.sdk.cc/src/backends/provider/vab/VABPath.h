@@ -49,7 +49,7 @@ public:
 	* will be returned:
 	* ["basyx:", "", "127.0.0.1:6998", "somepath"]
 	*/
-	const std::vector<std::string> getElements() const;
+	const std::vector<std::string> & getElements() const;
 
 	/**
 	* Constructs a new VABPath object, with just the parent-path contained.

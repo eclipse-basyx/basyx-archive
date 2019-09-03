@@ -61,7 +61,7 @@ const std::string VABPath::getLastElement() const {
 	return VABPath::emptyElement;
 }
 
-const std::vector<std::string> VABPath::getElements() const
+const std::vector<std::string> & VABPath::getElements() const
 {
 	return this->elements;
 }
