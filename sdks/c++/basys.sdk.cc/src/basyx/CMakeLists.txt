@@ -31,8 +31,8 @@ target_sources(basyx
         ${headers}
 )
 
-target_include_directories(basyx PRIVATE ${PROJECT_SOURCE_DIR}/aas)
-target_include_directories(basyx PUBLIC ${PROJECT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
+target_include_directories(basyx PRIVATE ${PROJECT_SOURCE_DIR}/aas ${CMAKE_SOURCE_DIR}/src)
+target_include_directories(basyx PUBLIC ${PROJECT_SOURCE_DIR})
 target_link_libraries(basyx util json)
 
 diagnostics_print(basyx)
