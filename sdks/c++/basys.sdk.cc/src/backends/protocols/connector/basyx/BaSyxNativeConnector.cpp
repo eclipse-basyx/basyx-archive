@@ -43,7 +43,9 @@ NativeConnector::~NativeConnector() {
 
 basyx::any NativeConnector::basysGet(std::string const& path) 
 {
-	return basyx::json::deserialize(basysGetRaw(path));
+	auto entityWrapper = basysGetRaw(path);
+	auto value = basyx::json::deserialize(entityWrapper["entity"]);
+	return value;
 }
 
 nlohmann::json NativeConnector::basysGetRaw(std::string const& path) {

@@ -18,6 +18,8 @@
 
 #include <regression/backends/protocols/provider/basyx/frame/MockupModelProvider.h>
 
+#include <basyx/types/BaSysTypes.h>
+
 TEST(BaSyxNativeFrameProcessor, getTest) {
 	auto mockup = util::make_unique<MockupModelProvider>();
 	BaSyxNativeFrameProcessor provider(mockup.get());
@@ -35,7 +37,13 @@ TEST(BaSyxNativeFrameProcessor, getTest) {
 	ASSERT_EQ(receive.get()[0], (char ) 0);
 
 	std::string serialized = StringTools::fromArray(receive.get() + 1);
-	basyx::any val = basyx::json::deserialize(serialized);
+	basyx::any deserialzed = basyx::json::deserialize(serialized);
+
+	ASSERT_TRUE(deserialzed.InstanceOf<basyx::objectMap_t>());
+	auto & entityWrapper = deserialzed.Get<basyx::objectMap_t&>();
+
+	ASSERT_TRUE(entityWrapper.count("entity") == 1);
+	auto val = entityWrapper["entity"];
 
 	ASSERT_TRUE(val.InstanceOf<int>());
 	ASSERT_EQ(val.Get<int>(), 2);
