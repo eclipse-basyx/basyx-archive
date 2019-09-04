@@ -1,6 +1,7 @@
 package org.eclipse.basyx.vab.backend.server.utils;
 
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.basyx.aas.api.exception.LostHTTPRequestParameterException;
@@ -250,22 +251,24 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			
 			// If only a single parameter has been sent, pack it into an array so it can be casted safely ------- FIXME Parameters should actually be a List of Hashmaps (see VWiD json)
 
-			if (parameter instanceof List<?>) {
-				List<Object> list = (List<Object>) parameter;
+			if (parameter instanceof Collection<?>) {
+				Collection<Object> list = (Collection<Object>) parameter;
 				Object[] parameterArray = new Object[list.size()];
-				for (int i = 0; i < list.size(); i++) {
-					parameterArray[i] = list.get(i);
+				int i = 0;
+				for (Object o : list) {
+					parameterArray[i] = o;
+					i++;
 				}
 				parameter = parameterArray;
 			}
-
+			
 			if (!(parameter instanceof Object[])) {
 				Object[] parameterArray = new Object[1];
 				Object tmp = parameter;
 				parameterArray[0] = tmp;
 				parameter = parameterArray;
 			}
-			
+
 			Object result = providerBackend.invokeOperation(path, (Object[]) parameter);
 
 			// Serialize result as json string
