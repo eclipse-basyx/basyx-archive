@@ -7,7 +7,6 @@ import java.util.Map;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
-import org.eclipse.basyx.vab.backend.connector.MetaprotocolHandler;
 import org.eclipse.basyx.vab.core.directory.VABHTTPDirectoryProxy;
 
 
@@ -41,7 +40,8 @@ public class AASHTTPRegistryProxy extends VABHTTPDirectoryProxy implements IAASR
 	@Override
 	public void registerOnly(AASDescriptor deviceAASDescriptor) {
 		// Add a mapping from the AAS id to the serialized descriptor
-		this.addMapping(deviceAASDescriptor.getId(), serializer.serialize(deviceAASDescriptor));
+		System.out.println("Registering at path " + deviceAASDescriptor.getId());
+		proxy.createValue("", deviceAASDescriptor);
 	}
 	
 	/**
@@ -61,21 +61,12 @@ public class AASHTTPRegistryProxy extends VABHTTPDirectoryProxy implements IAASR
 	 */
 	@Override @SuppressWarnings("unchecked")
 	public AASDescriptor lookupAAS(ModelUrn aasID) {
-
-		// Lookup AAS from AAS directory, get AAS descriptor
-		String jsonResponse = this.lookup(aasID.getEncodedURN());
-		
-		// Deserialize AAS descriptor
-		AASDescriptor aasDescriptor = null;
-		try {
-			aasDescriptor = new AASDescriptor((Map<String, Object>) (new MetaprotocolHandler().verify(jsonResponse)));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Object result = proxy.getModelPropertyValue(aasID.getEncodedURN());
+		if (result instanceof Map<?, ?>) {
+			return new AASDescriptor((Map<String, Object>) result);
+		} else {
+			return null;
 		}
-		
-		// Return AAS descriptor
-		return aasDescriptor;
 	}
 
 	/**
@@ -88,8 +79,8 @@ public class AASHTTPRegistryProxy extends VABHTTPDirectoryProxy implements IAASR
 		// Create AAS descriptor and set ID, ID type, and endpoint
 		AASDescriptor aasDescriptor = new AASDescriptor(key, IdentifierType.URI, value);
 
-		// Push AAS descriptor to server
-		this.addMapping(key, serializer.serialize(aasDescriptor));
+		// Push the descriptor to the server
+		proxy.createValue(key, aasDescriptor);
 
 		return this;
 	}

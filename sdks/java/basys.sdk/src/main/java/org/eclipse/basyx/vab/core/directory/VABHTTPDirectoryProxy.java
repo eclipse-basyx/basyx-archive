@@ -1,24 +1,15 @@
 package org.eclipse.basyx.vab.core.directory;
 
-import org.eclipse.basyx.aas.api.webserviceclient.WebServiceRawClient;
-import org.eclipse.basyx.vab.backend.http.tools.GSONTools;
-import org.eclipse.basyx.vab.backend.http.tools.factory.DefaultTypeFactory;
+import org.eclipse.basyx.vab.backend.connector.JSONConnector;
+import org.eclipse.basyx.vab.backend.connector.http.HTTPConnector;
+import org.eclipse.basyx.vab.core.IModelProvider;
+import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 public class VABHTTPDirectoryProxy implements IVABDirectoryService {
 	/**
-	 * JSON serializer for serializing and deserializing registry entries
-	 */
-	protected GSONTools serializer = new GSONTools(new DefaultTypeFactory());
-
-	/**
-	 * Invoke BaSyx service calls via web services
-	 */
-	protected WebServiceRawClient client = new WebServiceRawClient();
-
-	/**
 	 * Store the URL of the registry of this proxy
 	 */
-	protected String directoryUrl;
+	protected VABElementProxy proxy;
 
 	/**
 	 * Constructor for a generic VAB directory
@@ -27,7 +18,9 @@ public class VABHTTPDirectoryProxy implements IVABDirectoryService {
 	 *            The endpoint of the registry with a HTTP-REST interface
 	 */
 	public VABHTTPDirectoryProxy(String directoryUrl) {
-		this.directoryUrl = directoryUrl;
+		IModelProvider provider = new JSONConnector(new HTTPConnector(directoryUrl));
+		this.proxy = new VABElementProxy(null, provider);
+		this.proxy = proxy.getDeepProxy("/api/v1/registry");
 	}
 
 	/**
@@ -35,7 +28,7 @@ public class VABHTTPDirectoryProxy implements IVABDirectoryService {
 	 */
 	@Override
 	public IVABDirectoryService addMapping(String key, String value) {
-		client.post(directoryUrl + "/api/v1/registry", value);
+		proxy.createValue(key, value);
 		return this;
 	}
 
@@ -44,7 +37,7 @@ public class VABHTTPDirectoryProxy implements IVABDirectoryService {
 	 */
 	@Override
 	public void removeMapping(String key) {
-		client.delete(directoryUrl + "/api/v1/registry/" + key);
+		proxy.deleteValue(key);
 	}
 
 	/**
@@ -52,6 +45,11 @@ public class VABHTTPDirectoryProxy implements IVABDirectoryService {
 	 */
 	@Override
 	public String lookup(String id) {
-		return client.get(directoryUrl + "/api/v1/registry/" + id);
+		Object response = proxy.getModelPropertyValue(id);
+		if (response instanceof String) {
+			return (String) response;
+		} else {
+			return null;
+		}
 	}
 }
