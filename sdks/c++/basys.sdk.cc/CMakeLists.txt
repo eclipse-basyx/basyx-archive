@@ -3,7 +3,7 @@
 ###############################################
 
 cmake_minimum_required(VERSION 3.13.0)
-project(BASYX)
+project("BaSyx C++ SDK")
 
 set(BASYX_MAJOR_REV "0")
 set(BASYX_MINOR_REV "1")
@@ -66,10 +66,10 @@ find_package(Threads)
 ###############################################
 
 add_subdirectory(src/abstraction)
-add_subdirectory(src/backends)
-add_subdirectory(src/basyx)
 add_subdirectory(src/logging)
+add_subdirectory(src/shared)
 add_subdirectory(src/utility)
+add_subdirectory(src/vab)
 
 ###############################################
 ###           Library Directory             ###
@@ -77,8 +77,8 @@ add_subdirectory(src/utility)
 
 add_subdirectory(lib/json)
 if(${BASYX_BUILD_TESTS})
-	add_subdirectory(lib/gtest)
-	include(GoogleTest)
+    add_subdirectory(lib/gtest)
+    include(GoogleTest)
 endif()
 
 ###############################################
@@ -87,7 +87,7 @@ endif()
 
 if(${BASYX_BUILD_TESTS})
     include( CTest )
-    add_subdirectory(regression)
+    add_subdirectory(tests)
 endif()
 
 ###############################################
@@ -98,5 +98,5 @@ if(${BASYX_UTILITY_PROJECTS})
     enable_clang_format()
     enable_clang_tidy()
     enable_cppcheck()
-	enable_playground()
+    enable_playground()
 endif()

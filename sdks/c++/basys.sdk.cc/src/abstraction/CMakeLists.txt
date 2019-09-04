@@ -1,8 +1,8 @@
 ###############################################
-###              abstraction                ###
+###              BaSyx::abstraction         ###
 ###############################################
 
-project(abstraction)
+project(basyx)
 
 message(STATUS "${PROJECT_NAME} settings:")
 message(STATUS "==============")
@@ -13,10 +13,10 @@ add_library(abstraction)
 
 target_sources(abstraction 
     PRIVATE 
-        Thread.h
-        thread/Thread.h 
-        impl/thread_launcher.h
-        impl/thread_impl.h
+        abstraction/Thread.h
+        abstraction/thread/Thread.h 
+        abstraction/impl/thread_launcher.h
+        abstraction/impl/thread_impl.h
 )
 
 if(${CMAKE_USE_WIN32_THREADS_INIT})
@@ -29,22 +29,22 @@ endif()
 
 target_sources(abstraction
     PRIVATE
-        impl/${thread_platform}/thread/thread_impl.cpp
-        impl/${thread_platform}/thread/thread_impl.h
+        abstraction/impl/${thread_platform}/thread/thread_impl.cpp
+        abstraction/impl/${thread_platform}/thread/thread_impl.h
 	)
 
 ## basyx::net sources ##
 
 target_sources(abstraction
     PRIVATE
-        Net.h
-        net/Socket.h
-        net/Acceptor.h
-        net/Acceptor.cpp
-        net/Buffer.h
-        impl/acceptor_impl.h
-        impl/socket_impl.h
-        impl/system_net_types.h
+        abstraction/Net.h
+        abstraction/net/Socket.h
+        abstraction/net/Acceptor.h
+        abstraction/net/Acceptor.cpp
+        abstraction/net/Buffer.h
+        abstraction/impl/acceptor_impl.h
+        abstraction/impl/socket_impl.h
+        abstraction/impl/system_net_types.h
 )
 
 if(WIN32)
@@ -60,11 +60,12 @@ endif()
 
 target_sources(abstraction
     PRIVATE
-        impl/${socket_platform}/socket/socket_impl.cpp
-        impl/${socket_platform}/socket/acceptor_impl.cpp
+        abstraction/impl/${socket_platform}/socket/socket_impl.cpp
+        abstraction/impl/${socket_platform}/socket/acceptor_impl.cpp
 )
 
 target_include_directories(abstraction PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(abstraction Threads::Threads util logging)
+target_link_libraries(abstraction Threads::Threads basyx::util basyx::logging)
+add_library(basyx::abstraction ALIAS abstraction)
 
 diagnostics_print(abstraction)

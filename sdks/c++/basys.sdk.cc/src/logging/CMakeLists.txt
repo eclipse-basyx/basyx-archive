@@ -1,8 +1,8 @@
 ###############################################
-###              Logging                    ###
+###              BaSyx::Logging             ###
 ###############################################
 
-project(logging)
+project(basyx)
 
 add_library(logging)
 
@@ -13,6 +13,8 @@ target_sources(logging
 )
 
 target_include_directories(logging PUBLIC ${PROJECT_SOURCE_DIR}) 
-target_link_libraries(logging abstraction util)
+target_link_libraries(logging basyx::abstraction basyx::util)
+add_library(basyx::logging ALIAS logging)
+
 
 diagnostics_print(logging)

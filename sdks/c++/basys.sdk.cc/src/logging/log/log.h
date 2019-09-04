@@ -1,7 +1,7 @@
 #ifndef LOGGING_LOG_H_
 #define LOGGING_LOG_H_
 
-#include <Thread.h>
+#include <abstraction/Thread.h>
 
 namespace basyx {
 	class log {
