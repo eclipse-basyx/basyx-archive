@@ -104,7 +104,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	/**
 	 * Operations map
 	 */
-	protected Map<String, Function<?, ?>> operations = new HashMap<String, Function<?, ?>>();
+	protected Map<String, Object> operations = new HashMap<String, Object>();
 	
 	
 	/**
@@ -150,24 +150,26 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 		// - Service operations
 		Map<String, Function<?, ?>> serviceOperations = new HashMap<>();
 		// - Populate service operations
-		serviceOperations.put("free",       (Function<String, Void> & Serializable) (v) -> {freeControlComponent(v); return null;});
-		serviceOperations.put("occupy",     (Function<String, Void> & Serializable) (v) -> {occupyControlComponent(v); return null;});
-		serviceOperations.put("priority",   (Function<String, Void> & Serializable) (v) -> {priorityOccupation(v); return null;});
-		serviceOperations.put("auto",       (Function<String, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.AUTO); return null;});
-		serviceOperations.put("semiauto",   (Function<String, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.SEMIAUTO); return null;});
-		serviceOperations.put("manual",     (Function<String, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.MANUAL); return null;});
-		serviceOperations.put("simulation", (Function<String, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.SIMULATION); return null;});
-		serviceOperations.put("start",      (Function<String, Void> & Serializable) (v) -> {this.changeExecutionState("START"); return null;});
-		serviceOperations.put("reset",      (Function<String, Void> & Serializable) (v) -> {this.changeExecutionState("RESET"); return null;});
-		serviceOperations.put("hold",       (Function<String, Void> & Serializable) (v) -> {this.changeExecutionState("HOLD"); return null;});
-		serviceOperations.put("unhold",     (Function<String, Void> & Serializable) (v) -> {this.changeExecutionState("UNHOLD"); return null;});
-		serviceOperations.put("suspend",    (Function<String, Void> & Serializable) (v) -> {this.changeExecutionState("SUSPEND"); return null;});
-		serviceOperations.put("unsuspend",  (Function<String, Void> & Serializable) (v) -> {this.changeExecutionState("UNSUSPEND"); return null;});
-		serviceOperations.put("abort",      (Function<String, Void> & Serializable) (v) -> {this.changeExecutionState("ABORT"); return null;});
-		serviceOperations.put("stop",       (Function<String, Void> & Serializable) (v) -> {this.changeExecutionState("STOP"); return null;});
-		serviceOperations.put("clear",      (Function<String, Void> & Serializable) (v) -> {this.changeExecutionState("CLEAR"); return null;});
-		serviceOperations.put("reset",      (Function<String, Void> & Serializable) (v) -> {this.changeExecutionState("RESET"); return null;});
-		serviceOperations.put("bstate",     (Function<String, Void> & Serializable) (v) -> {this.setOperationMode("BSTATE"); return null;});
+		serviceOperations.put("free",       (Function<Object[], Void> & Serializable) (v) -> {freeControlComponent((String) v[0]); return null;});
+		serviceOperations.put("occupy", (Function<Object[], Void> & Serializable) (v) -> {occupyControlComponent((String) v[0]); return null;});
+		serviceOperations.put("priority",   (Function<Object[], Void> & Serializable) (v) -> {priorityOccupation((String) v[0]); return null;});
+		serviceOperations.put("auto",       (Function<Object, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.AUTO); return null;});
+		serviceOperations.put("semiauto",   (Function<Object, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.SEMIAUTO); return null;});
+		serviceOperations.put("manual",     (Function<Object, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.MANUAL); return null;});
+		serviceOperations.put("simulation", (Function<Object, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.SIMULATION); return null;});
+		serviceOperations.put("start",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("START"); return null;});
+		serviceOperations.put("reset",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("RESET"); return null;});
+		serviceOperations.put("hold",       (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("HOLD"); return null;});
+		serviceOperations.put("unhold",     (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("UNHOLD"); return null;});
+		serviceOperations.put("suspend",    (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("SUSPEND"); return null;});
+		serviceOperations.put("unsuspend",  (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("UNSUSPEND"); return null;});
+		serviceOperations.put("abort",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("ABORT"); return null;});
+		serviceOperations.put("stop",       (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("STOP"); return null;});
+		serviceOperations.put("clear",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("CLEAR"); return null;});
+		serviceOperations.put("reset",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("RESET"); return null;});
+		serviceOperations.put("bstate",     (Function<Object, Void> & Serializable) (v) -> {this.setOperationMode("BSTATE"); return null;});
+		// - Add service operations to sub structure
+		operations.put("service", serviceOperations);
 	}
 
 
@@ -210,8 +212,9 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	/**
 	 * Get "operations" map
 	 */
-	protected Map<String, Function<?, ?>> getOperationsMap() {
-		return operations;
+	@SuppressWarnings("unchecked")
+	protected Map<String, Function<?, ?>> getServiceOperationMap() {
+		return (Map<String, Function<?, ?>>) operations.get("service");
 	}
 	
 	
@@ -568,7 +571,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Set execution state
 	 */
 	public void setExecutionState(String newSt) {
-		System.out.println("Comp: change to:"+newSt);
+		// System.out.println("Comp: change to:"+newSt);
 		// Change execution state
 		status.put("exState", newSt);		
 	}
