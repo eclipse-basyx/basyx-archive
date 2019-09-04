@@ -119,7 +119,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			// Forward request to provider
 			providerBackend.processBaSysGet(path, output);
 
-			System.out.println("Processed GET:"+path);
+			// System.out.println("Processed GET:"+path);
 
 			// Send response frame
 			sendResponseFrame(byteArrayOutput);
@@ -244,9 +244,9 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 		buffer.flip();
 		
 		// Transmit response frame
-		int cnt = commChannel.write(buffer);
+		commChannel.write(buffer);
 		
-		System.out.println("TXRESP:"+cnt);
+		// System.out.println("TXRESP:"+cnt); // result of commChannel.write(buffer)
 
 		// Reset output stream
 		byteArrayOutput.reset();
@@ -259,10 +259,13 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 	protected void readBytes(ByteBuffer bytes, int expectedBytes) {
 		// Exception handling
 		try {
-System.out.println("Reading:"+expectedBytes);
+			// System.out.println("Reading:"+expectedBytes);
 			// Read bytes until buffer is full
-			while (bytes.position() < expectedBytes) {System.out.println("Pos:"+bytes.position()); commChannel.read(bytes);}
-System.out.println("Read:"+expectedBytes);
+			while (bytes.position() < expectedBytes) {
+				// System.out.println("Pos:" + bytes.position());
+				commChannel.read(bytes);
+			}
+			// System.out.println("Read:"+expectedBytes);
 		} catch (IOException e) {
 			// Output exception
 			e.printStackTrace();

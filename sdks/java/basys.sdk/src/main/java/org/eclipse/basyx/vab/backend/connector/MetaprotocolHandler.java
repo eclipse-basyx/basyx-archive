@@ -36,6 +36,7 @@ public class MetaprotocolHandler implements IMetaProtocolHandler {
 	}
 	
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public Object verify(String message) throws Exception {
 
@@ -65,9 +66,6 @@ public class MetaprotocolHandler implements IMetaProtocolHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	private Object verifyResponse(Map<String, Object> responseMap) throws Exception {
-
-		System.out.println("Verify Response ...");
-		
 		// Retrieve messages if any
 		Collection<Map<String, Object>> messages = (Collection<Map<String, Object>>) responseMap.get(Result.MESSAGES);
 		if (messages == null) messages = new LinkedList<Map<String, Object>>();

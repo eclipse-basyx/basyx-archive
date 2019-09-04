@@ -95,22 +95,22 @@ public class BaSyxConnector implements IBaSyxConnector {
 		try {
 			// Send byte array (BaSyx operation) via channel to provider
 			ByteBuffer txBuffer = ByteBuffer.wrap(call);
-			System.out.println("TXREQ_GW");
+			// System.out.println("TXREQ_GW");
 			channelToProvider.write(txBuffer);
 
 			// Read response
 			// - Wait for leading 4 byte header that contains frame length
 			ByteBuffer rxBuffer1 = ByteBuffer.allocate(4);
-			System.out.println("RX1");
+			// System.out.println("RX1");
 			readBytes(rxBuffer1, 4);
-			System.out.println("RX1-d");
+			// System.out.println("RX1-d");
 			int frameSize = CoderTools.getInt32(rxBuffer1.array(), 0);
 
 			// Wait for frame to arrive
 			ByteBuffer rxBuffer2 = ByteBuffer.allocate(frameSize);
-			System.out.println("RX2");
+			// System.out.println("RX2");
 			readBytes(rxBuffer2, frameSize);
-			System.out.println("RX2-d");
+			// System.out.println("RX2-d");
 			byte[] rxFrame = rxBuffer2.array();
 
 			// Return received data
@@ -124,7 +124,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 			int jsonResultLen = CoderTools.getInt32(rxFrame, 1);
 			String jsonResult = new String(rxFrame, 1 + 4, jsonResultLen);
 
-			System.out.println("RX3-RES");
+			// System.out.println("RX3-RES");
 			// Return result
 			return jsonResult.toString();
 		} catch (IOException e) {
@@ -143,10 +143,13 @@ public class BaSyxConnector implements IBaSyxConnector {
 	protected void readBytes(ByteBuffer bytes, int expectedBytes) {
 		// Exception handling
 		try {
-			System.out.println("-Reading:"+expectedBytes);
+			// System.out.println("-Reading:"+expectedBytes);
 			// Read bytes until buffer is full
-			while (bytes.position() < expectedBytes) {System.out.println("-Pos:"+bytes.position()); channelToProvider.read(bytes);}
-System.out.println("-Read:"+expectedBytes);
+			while (bytes.position() < expectedBytes) {
+				// System.out.println("-Pos:"+bytes.position());
+				channelToProvider.read(bytes);
+			}
+			// System.out.println("-Read:"+expectedBytes);
 		} catch (IOException e) {
 			// Output exception
 			e.printStackTrace();
