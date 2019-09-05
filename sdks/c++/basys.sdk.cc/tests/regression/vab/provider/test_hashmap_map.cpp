@@ -39,7 +39,7 @@ public:
 
 TEST_F(TestBaSyxHashmapProviderMap, testGet)
 {
-	basyx::any & anyMap = hashMapProvider.getModelPropertyValue(mapPath);
+	basyx::any anyMap = hashMapProvider.getModelPropertyValue(mapPath);
 	ASSERT_TRUE(anyMap.InstanceOf<basyx::objectMap_t>());
 
 	auto & objectMap = anyMap.Get<basyx::objectMap_t&>();

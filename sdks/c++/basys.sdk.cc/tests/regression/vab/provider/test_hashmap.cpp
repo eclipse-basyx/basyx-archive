@@ -57,15 +57,15 @@ public:
 TEST_F(TestBaSyxHashmapProvider, GetPropertyValue)
 {
 	// Get property value
-	basyx::any & property1 = hashMapProvider.getModelPropertyValue("property1");
+	basyx::any  property1 = hashMapProvider.getModelPropertyValue("property1");
 
-	basyx::any & value1 = hashMapProvider.getModelPropertyValue("property1/property1.1");
-	basyx::any & value2 = hashMapProvider.getModelPropertyValue("/property1/property1.1");
-	basyx::any & value3 = hashMapProvider.getModelPropertyValue("property1/property1.1/");
-	basyx::any & value4 = hashMapProvider.getModelPropertyValue("/property1/property1.1/");
+	basyx::any  value1 = hashMapProvider.getModelPropertyValue("property1/property1.1");
+	basyx::any  value2 = hashMapProvider.getModelPropertyValue("/property1/property1.1");
+	basyx::any  value3 = hashMapProvider.getModelPropertyValue("property1/property1.1/");
+	basyx::any  value4 = hashMapProvider.getModelPropertyValue("/property1/property1.1/");
 
-	basyx::any & mapTest1 = hashMapProvider.getModelPropertyValue("property1/propertyMap/Test");
-	basyx::any & mapTest2 = hashMapProvider.getModelPropertyValue("property1/propertyMap/test");
+	basyx::any  mapTest1 = hashMapProvider.getModelPropertyValue("property1/propertyMap/Test");
+	basyx::any  mapTest2 = hashMapProvider.getModelPropertyValue("property1/propertyMap/test");
 
 	// Check test case results
 	ASSERT_TRUE(property1.InstanceOf<basyx::objectMap_t>());
@@ -90,7 +90,7 @@ TEST_F(TestBaSyxHashmapProvider, SetPropertyValue)
 {
 	// Set and reread property value
 	hashMapProvider.setModelPropertyValue("property1/property1.1", 12);
-	basyx::any & property1_1 = hashMapProvider.getModelPropertyValue("property1/property1.1");
+	basyx::any  property1_1 = hashMapProvider.getModelPropertyValue("property1/property1.1");
 
 	// Check test case results
 	ASSERT_TRUE(property1_1.InstanceOf<int>());
@@ -98,7 +98,7 @@ TEST_F(TestBaSyxHashmapProvider, SetPropertyValue)
 
 	// Change value back
 	hashMapProvider.setModelPropertyValue("property1/property1.1", 7);
-	basyx::any & property1_1b = hashMapProvider.getModelPropertyValue("property1/property1.1");
+	basyx::any  property1_1b = hashMapProvider.getModelPropertyValue("property1/property1.1");
 
 	// Check test case results
 	ASSERT_TRUE(property1_1b.InstanceOf<int>());
@@ -107,8 +107,8 @@ TEST_F(TestBaSyxHashmapProvider, SetPropertyValue)
 
 TEST_F(TestBaSyxHashmapProvider, CreateDelete)
 {
-    basyx::any & property1 = hashMapProvider.getModelPropertyValue("property1");
-    basyx::any & property1_1 = hashMapProvider.getModelPropertyValue("property1/property1.1");
+    basyx::any  property1 = hashMapProvider.getModelPropertyValue("property1");
+    basyx::any  property1_1 = hashMapProvider.getModelPropertyValue("property1/property1.1");
 
     ASSERT_TRUE(property1.InstanceOf<basyx::objectMap_t>());
     ASSERT_TRUE(property1_1.InstanceOf<int>());
@@ -122,19 +122,19 @@ TEST_F(TestBaSyxHashmapProvider, CreateDelete)
     hashMapProvider.createValue("property1/property1.2", 23);
 
     // Read values back
-    basyx::any & property2 = hashMapProvider.getModelPropertyValue("property2");
+    basyx::any  property2 = hashMapProvider.getModelPropertyValue("property2");
     // - Check test case results
     ASSERT_TRUE(property2.InstanceOf<int>());
     ASSERT_EQ(property2.Get<int>(), 21);
 
     // Read values back
-    basyx::any & property1_4 = hashMapProvider.getModelPropertyValue("property1/property1.4");
+    basyx::any  property1_4 = hashMapProvider.getModelPropertyValue("property1/property1.4");
     // - Check test case results
     ASSERT_TRUE(property1_4.InstanceOf<int>());
     ASSERT_EQ(property1_4.Get<int>(), 22);
 
     // Read values back
-    basyx::any & property1_2 = hashMapProvider.getModelPropertyValue("property1/property1.2");
+    basyx::any  property1_2 = hashMapProvider.getModelPropertyValue("property1/property1.2");
     // - Check test case results
     ASSERT_TRUE(property1_2.InstanceOf<basyx::objectCollection_t>());
     ASSERT_EQ(property1_2.Get<basyx::objectCollection_t&>().size(), 3);
@@ -145,16 +145,16 @@ TEST_F(TestBaSyxHashmapProvider, CreateDelete)
 //   	hashMapProvider.deleteValue("property1/property1.2", 23);
 
     // Read values back
-    //basyx::any & property2_del = hashMapProvider.getModelPropertyValue("property2");	// - Check test case results
+    //basyx::any  property2_del = hashMapProvider.getModelPropertyValue("property2");	// - Check test case results
     //assertEquals(null, value6);
 
     // Read values back
-    //basyx::any & property1_4del = hashMapProvider.getModelPropertyValue("property1/property1.4");	// - Check test case results
+    //basyx::any  property1_4del = hashMapProvider.getModelPropertyValue("property1/property1.4");	// - Check test case results
     // - Check test case results
     //assertEquals(null, value7);
 
     // Read values back
-    basyx::any & property1_2b = hashMapProvider.getModelPropertyValue("property1/property1.2");
+    basyx::any  property1_2b = hashMapProvider.getModelPropertyValue("property1/property1.2");
     // - Check test case results
     ASSERT_TRUE(property1_2b.InstanceOf<basyx::objectCollection_t>());
 	ASSERT_EQ(property1_2b.Get<basyx::objectCollection_t&>().size(), 3);
@@ -166,7 +166,5 @@ TEST_F(TestBaSyxHashmapProvider, MapRead)
 {
 	vab::provider::HashmapProvider hashMapProvider{ tests::support::make_simple_vab_element() };
 
-	tests::regression::vab::snippet::MapRead<vab::provider::HashmapProvider>::test(hashMapProvider);
-
-	int j = 2;
+	tests::regression::vab::snippet::MapRead::test(&hashMapProvider);
 }

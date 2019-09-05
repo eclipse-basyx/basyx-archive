@@ -8,6 +8,7 @@
 #ifndef BASYX_ANY_ANY_H
 #define BASYX_ANY_ANY_H
 
+#include <cstddef>
 #include <memory>
 #include <string>
 #include <typeinfo>
@@ -82,7 +83,7 @@ namespace basyx {
 
         bool IsNull() const noexcept
         {
-            return this->InstanceOf<nullptr_t>() || this->content.get() == nullptr;
+            return this->InstanceOf<std::nullptr_t>() || this->content.get() == nullptr;
         }
 
     private:

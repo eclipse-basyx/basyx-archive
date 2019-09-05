@@ -39,11 +39,23 @@ namespace basyx {
 		std::string timestamp();
 		std::string buildMessage(const std::string & format, Level level);
 
+		template<typename T>
+		inline T && normalize(T && t)
+		{
+			return std::forward<T>(t);
+		}
+
+		inline const char * normalize(const std::string & s)
+		{
+			return s.c_str();
+		}
+
+
 		template<typename... Args>
 		inline void log_message(Level level, const std::string & msg, Args && ... args)
 		{
 			if (level >= logLevel)
-				printf(buildMessage(msg, level).c_str(), args...);
+				printf(buildMessage(msg, level).c_str(), normalize(args)...);
 		};
 
 	public:

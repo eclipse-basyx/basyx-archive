@@ -33,7 +33,7 @@ public:
 
     std::string processBaSysGet(std::string const& path)
     {
-        auto& res = providerBackend->getModelPropertyValue(path);
+        auto res = providerBackend->getModelPropertyValue(path);
         return serializeToJSON(path, res);
     }
 
@@ -109,13 +109,13 @@ private:
     void incrementClock(std::string const& submodelPath)
     {
         std::string clockPath = submodelPath + "/properties/clock";
-        basyx::any& clock = providerBackend->getModelPropertyValue(clockPath);
+        basyx::any clock = providerBackend->getModelPropertyValue(clockPath);
         providerBackend->setModelPropertyValue(clockPath, clock.Get<int>() + 1);
     }
 
     bool isFrozen(std::string const& submodelPath)
     {
-        basyx::any& modelPropertyValue = providerBackend->getModelPropertyValue(submodelPath + "/properties/frozen");
+        basyx::any modelPropertyValue = providerBackend->getModelPropertyValue(submodelPath + "/properties/frozen");
 
         if (modelPropertyValue.IsNull())
             return false;
