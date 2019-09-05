@@ -42,47 +42,48 @@ namespace provider {
         objectMap_t* getParentElement(const std::string& path);
 
         /**
-                            * Get scope of a provided element.
-                            *
-                            * This is the namespace that is served by this model provider. E.g. iese.fraunhofer.de
-                            */
+         * Get scope of a provided element.
+         *
+         * This is the namespace that is served by this model provider. E.g. iese.fraunhofer.de
+         */
         virtual std::string getElementScope(const std::string& elementPath) override
         {
             return "";
         };
 
         /**
-                             * Get a sub model property value
-                             */
-        basyx::any& getModelPropertyValue(const std::string& path) override;
+         * Get a sub model property value
+         */
+        basyx::any getModelPropertyValue(const std::string& path) override;
 
         /**
-                             * Set a sub model property value
-                             */
-        virtual void setModelPropertyValue(const std::string& path, const basyx::any& newValue) override;
+ 		 * Set a sub model property value
+ 		 */
+		virtual void setModelPropertyValue(const std::string& path, const basyx::any& newValue) override;
 
         /**
-                             * Create a new property under the given path
-                             */
+         * Create a new property under the given path
+         */
         virtual void createValue(const std::string& path, const basyx::any& newValue) override;
 
         /**
-                             * Delete a value from a collection
-                             */
+         * Delete a value from a collection
+         */
         virtual void deleteValue(const std::string& path, const basyx::any& deletedValue) override;
 
         /**
-                             * Delete a property, operation, event, submodel or aas under the given path
-                             *
-                             * @param path Path to the entity that should be deleted
-                             */
+         * Delete a property, operation, event, submodel or aas under the given path
+         *
+         * @param path Path to the entity that should be deleted
+         */
         virtual void deleteValue(const std::string& path) override;
 
         /**
-                             * Invoke an operation
-                             */
+         * Invoke an operation
+         */
         virtual basyx::any invokeOperation(const std::string& path, basyx::objectCollection_t& parameters) override;
     };
+
 }
 }
 }

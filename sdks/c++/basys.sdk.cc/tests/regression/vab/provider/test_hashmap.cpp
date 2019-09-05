@@ -12,6 +12,10 @@
 
 #include "vab/provider/hashmap/VABHashmapProvider.h"
 
+#include "vab/stub/elements/SimpleVABElement.h"
+
+#include "snippet/MapRead.h"
+
 #include "basyx/any.h"
 #include "basyx/serialization/json.h"
 
@@ -154,4 +158,15 @@ TEST_F(TestBaSyxHashmapProvider, CreateDelete)
     // - Check test case results
     ASSERT_TRUE(property1_2b.InstanceOf<basyx::objectCollection_t>());
 	ASSERT_EQ(property1_2b.Get<basyx::objectCollection_t&>().size(), 3);
+}
+
+
+
+TEST_F(TestBaSyxHashmapProvider, MapRead)
+{
+	vab::provider::HashmapProvider hashMapProvider{ tests::support::make_simple_vab_element() };
+
+	tests::regression::vab::snippet::MapRead<vab::provider::HashmapProvider>::test(hashMapProvider);
+
+	int j = 2;
 }

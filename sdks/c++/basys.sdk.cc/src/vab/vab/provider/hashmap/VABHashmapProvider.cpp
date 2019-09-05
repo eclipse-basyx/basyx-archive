@@ -14,7 +14,10 @@ namespace provider {
     HashmapProvider::objectMap_t * HashmapProvider::getParentElement(const std::string & path)
     {
         core::VABPath vabPath { path };
-		 
+		
+		if (vabPath.getElements().size() == 0)
+			return nullptr;
+
         objectMap_t * currentScope = &elements;
 
 		for(std::size_t i = 0; i < vabPath.getElements().size() - 1; ++i)
@@ -65,7 +68,7 @@ namespace provider {
 		};
     };
 
-	basyx::any & HashmapProvider::getModelPropertyValue(const std::string & path)
+	basyx::any HashmapProvider::getModelPropertyValue(const std::string & path)
 	{
 		std::cout << "GetPropertyValue: " << path << std::endl;
 
@@ -77,14 +80,21 @@ namespace provider {
 
 		// Return parent element if path was empty, in this case the whole map was requested
 		// TODO: Resolve return type mismatch here
-		//if (path.empty()) 
-		//	return parentElement;
+		if (pathElements.getElements().size() == 0)
+		{
+			return elements;
+		}
 
-		// Get element from scope
-		auto & result = parentElement->at(pathElements.getLastElement());
+		// if path not found, return null
+		if (parentElement == nullptr)
+			return basyx::any{ nullptr };
 
-		// Return element
-		return result;
+		// Return element, if in map
+		if(parentElement->find(pathElements.getLastElement()) != parentElement->end())
+			return parentElement->at(pathElements.getLastElement());
+
+		// Return null
+		return basyx::any{ nullptr };
 	};
 
     void HashmapProvider::createValue(const std::string & path, const basyx::any & newValue)

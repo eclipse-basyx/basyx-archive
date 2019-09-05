@@ -44,7 +44,7 @@ public:
 		return BaSysID::getScopeString(elementPath);
 	}
 
-	virtual basyx::any & getModelPropertyValue(const std::string & path) override {
+	virtual basyx::any getModelPropertyValue(const std::string & path) override {
 		// Return dummy clock
 		if (path.find("clock") != std::string::npos)
 		{

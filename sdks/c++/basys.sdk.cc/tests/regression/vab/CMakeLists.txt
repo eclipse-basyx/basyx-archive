@@ -16,13 +16,14 @@ target_sources(tests_vab
         provider/test_hashmap.cpp
         provider/test_hashmap_collection.cpp
         provider/test_hashmap_map.cpp
-		support/MockupModelProvider.h
         snippet/CreateDelete.h
         snippet/GetPropertyValue.h
+        snippet/MapRead.h
+        support/MockupModelProvider.h
 )
 
 target_include_directories(tests_vab PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(tests_vab basyx::util basyx::vab basyx::shared lib::gtest tests::main)
+target_link_libraries(tests_vab basyx::util basyx::vab basyx::shared lib::gtest tests::support tests::main)
 gtest_discover_tests(tests_vab)
 
 diagnostics_print(tests_vab)

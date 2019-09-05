@@ -49,7 +49,7 @@ namespace core {
         /**
      * Get a sub model property value
      */
-        virtual basyx::any& getModelPropertyValue(const std::string& path) = 0;
+        virtual basyx::any getModelPropertyValue(const std::string& path) = 0;
 
         /**
      * Set a sub model property value
