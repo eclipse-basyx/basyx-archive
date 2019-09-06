@@ -222,18 +222,13 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 	}
 
 	@Override
-	public Map<String, Object> getElements() {
-		return new SubmodelFacade(this).getElements();
-	}
-
-	@Override
 	public void addEvent(Object event) {
 		throw new FeatureNotImplementedException();
 	}
 
 	@Override
 	public void addElementCollection(SubmodelElementCollection collection) {
-		getElements().put(collection.getId(), collection);
+		put(collection.getId(), collection);
 		if (collection instanceof IProperty) {
 			getProperties().put(collection.getId(), collection);
 		}

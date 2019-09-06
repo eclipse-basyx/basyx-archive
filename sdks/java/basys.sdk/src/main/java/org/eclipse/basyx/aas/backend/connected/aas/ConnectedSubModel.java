@@ -22,7 +22,6 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedIdentifiableFaca
 import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.DataElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
@@ -101,7 +100,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 	 * Update value of 'administration' property
 	 */
 	public void setAdministration(AdministrativeInformation newValue) {
-		getElements().put(Identifiable.ADMINISTRATION, newValue);
+		new ConnectedIdentifiableFacade(getProxy()).setAdministration(newValue.getVersion(), newValue.getRevision());
 	}
 
 
@@ -123,7 +122,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 	@Override
 	public void addElementCollection(SubmodelElementCollection collection) {
-		getElements().put(collection.getId(), collection);
+		getProxy().createValue(SubModel.SUBMODELELEMENT, collection);
 		if (collection instanceof IProperty) {
 			getProperties().put(collection.getId(), collection);
 		}
@@ -137,11 +136,6 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 	@Override
 	public void setOperations(Map<String, IOperation> operations) {
 		getProxy().setModelPropertyValue(SubModel.OPERATIONS, operations);
-	}
-
-	public SubModel getSubModel() {
-		// Assume that VAB HashMap provider carries a sub model
-		return (SubModel) getElements();
 	}
 
 	@Override
@@ -243,12 +237,6 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 		// Return result
 		return ret;
-	}
-
-	@Override
-	public Map<String, Object> getElements() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

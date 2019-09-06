@@ -77,6 +77,7 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Get value of 'category' property
 	 */
+	@Override
 	public String getCategory() {
 		return (String) getElements().get(Referable.CATEGORY);
 	}
@@ -84,6 +85,7 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Update value of 'category' property
 	 */
+	@Override
 	public void setCategory(String newValue) {
 		getElements().put(Referable.CATEGORY, newValue);
 	}
@@ -91,6 +93,7 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Get value of 'description' property
 	 */
+	@Override
 	public String getDescription() {
 		return (String) getElements().get(Referable.DESCRIPTION);
 	}
@@ -98,6 +101,7 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Update value of 'description' property
 	 */
+	@Override
 	public void setDescription(String newValue) {
 		getElements().put(Referable.DESCRIPTION, newValue);
 	}
@@ -105,6 +109,7 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Get value of 'parent' property
 	 */
+	@Override
 	public IReference getParent() {
 		return (IReference) getElements().get(Referable.PARENT);
 	}
@@ -273,8 +278,7 @@ public class SubmodelFacade implements ISubModel {
 		
 	}
 
-	@Override
-	public Map<String, Object> getElements() {
+	private Map<String, Object> getElements() {
 		return map;
 	}
 	

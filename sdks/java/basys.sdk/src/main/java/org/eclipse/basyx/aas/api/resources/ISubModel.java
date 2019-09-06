@@ -40,10 +40,4 @@ public interface ISubModel extends IElement,IHasSemantics,IIdentifiable,/*IQuali
 	public void setProperties(Map<String, IProperty> properties);
 	
 	public void setOperations(Map<String, IOperation> operations);
-	
-	public Map<String, Object> getElements();
-	
-	//public void setElements(Map<String, SubmodelElement> elements);
-	
-	
 }
