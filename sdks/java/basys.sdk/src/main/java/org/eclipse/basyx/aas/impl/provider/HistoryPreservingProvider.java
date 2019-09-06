@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ICollectionProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IContainerProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IMapProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.provider.filesystem.TimeProvider;
 

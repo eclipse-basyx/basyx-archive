@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
+import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;

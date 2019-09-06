@@ -2,8 +2,8 @@ package org.eclipse.basyx.examples.snippets.aas.deployment.device;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;

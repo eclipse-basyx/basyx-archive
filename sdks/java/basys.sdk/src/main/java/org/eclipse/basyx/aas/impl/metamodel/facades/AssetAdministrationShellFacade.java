@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IView;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.security.ISecurity;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.Identifier;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.AdministrativeInformation;

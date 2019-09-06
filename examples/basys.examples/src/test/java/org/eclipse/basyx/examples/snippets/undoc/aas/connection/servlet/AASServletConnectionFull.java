@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IContainerProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;

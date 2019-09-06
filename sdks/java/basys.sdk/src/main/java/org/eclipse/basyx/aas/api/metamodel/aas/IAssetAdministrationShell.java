@@ -9,7 +9,6 @@ import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IHasDataSpecification;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IIdentifiable;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.security.ISecurity;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
 import org.eclipse.basyx.vab.IElement;
 
 /**

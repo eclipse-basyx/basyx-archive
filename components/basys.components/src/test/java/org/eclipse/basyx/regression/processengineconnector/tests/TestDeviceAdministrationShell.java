@@ -5,8 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedAssetAdministrationShell;

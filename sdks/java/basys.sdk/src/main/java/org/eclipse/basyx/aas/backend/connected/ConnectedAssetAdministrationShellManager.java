@@ -9,7 +9,7 @@ import java.util.HashMap;
 import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.manager.IAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.api.metamodel.aas.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
+import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedAssetAdministrationShell;

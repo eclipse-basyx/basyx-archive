@@ -2,8 +2,8 @@ package org.eclipse.basyx.examples.snippets.aas.registry;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.AASHTTPRegistryProxy;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
