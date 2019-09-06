@@ -125,17 +125,24 @@ public class SQLSubModelProvider extends BaseConfiguredProvider {
 
 		
 		// Extract SQL properties
-		sqlUser = cfgValues.getProperty("basyx.sql.dbuser");
-		sqlPass = cfgValues.getProperty("basyx.sql.dbpass");
-		sqlURL  = cfgValues.getProperty("basyx.sql.dburl");
+		sqlUser = cfgValues.getProperty(
+				SQLPreconfiguredSubModelProvider.buildSqlCfgName(SQLPreconfiguredSubModelProvider.DBUSER));
+		sqlPass = cfgValues.getProperty(
+				SQLPreconfiguredSubModelProvider.buildSqlCfgName(SQLPreconfiguredSubModelProvider.DBPASS));
+		sqlURL  = cfgValues.getProperty(
+				SQLPreconfiguredSubModelProvider.buildSqlCfgName(SQLPreconfiguredSubModelProvider.DBURL));
 
 		// Extract SQL driver properties
-		sqlDriver = cfgValues.getProperty("basyx.sql.driver");
-		sqlPrefix = cfgValues.getProperty("basyx.sql.prefix");
+		sqlDriver = cfgValues.getProperty(
+				SQLPreconfiguredSubModelProvider.buildSqlCfgName(SQLPreconfiguredSubModelProvider.DRIVER));
+		sqlPrefix = cfgValues.getProperty(
+				SQLPreconfiguredSubModelProvider.buildSqlCfgName(SQLPreconfiguredSubModelProvider.PREFIX));
 		
 		// Load and parse SQL property and operation connections
-		sqlPropertyConnections.addAll(splitString(cfgValues.getProperty("basyx.sql.properties")));
-		sqlOperationConnections.addAll(splitString(cfgValues.getProperty("basyx.sql.operations")));
+		sqlPropertyConnections.addAll(splitString(cfgValues.getProperty(
+				SQLPreconfiguredSubModelProvider.buildSqlCfgName(SQLPreconfiguredSubModelProvider.PROPERTIES))));
+		sqlOperationConnections.addAll(splitString(cfgValues.getProperty(
+				SQLPreconfiguredSubModelProvider.buildSqlCfgName(SQLPreconfiguredSubModelProvider.OPERATIONS))));
 
 		
 		

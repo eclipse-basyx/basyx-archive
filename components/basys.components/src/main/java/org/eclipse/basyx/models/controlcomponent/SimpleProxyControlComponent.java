@@ -77,18 +77,24 @@ public class SimpleProxyControlComponent extends SimpleControlComponent implemen
 		String rxMessage = TCPServer.toString(message);
 		
 		// For now, support "abort", "idle", and "complete" messages
-		if (rxMessage.equalsIgnoreCase("state:idle")) {this.setExecutionState(ExecutionState.IDLE.getValue()); return;}
-		if (rxMessage.equalsIgnoreCase("state:abort")) {this.setCommand("abort"); return;}
-		if (rxMessage.equalsIgnoreCase("state:complete")) {
+		if (rxMessage.equalsIgnoreCase(buildMessage(ExecutionState.IDLE))) {this.setExecutionState(ExecutionState.IDLE.getValue()); return;}
+		if (rxMessage.equalsIgnoreCase(buildMessage(ExecutionOrder.ABORT))) {this.setCommand(ExecutionOrder.ABORT.getValue().toLowerCase()); return;}
+		if (rxMessage.equalsIgnoreCase(buildMessage(ExecutionState.COMPLETE))) {
 			// Process message based on state
-			if (this.getExecutionState().equalsIgnoreCase("execute")) this.finishState(); else throw new RuntimeException("Semantic error detected");
+			if (this.getExecutionState().equalsIgnoreCase(ExecutionState.EXECUTE.getValue()))
+				this.finishState();
+			else
+				throw new RuntimeException("Semantic error detected");
 
 			// Return
 			return;
 		}
-		if (rxMessage.equalsIgnoreCase("state:reset")) {
+		if (rxMessage.equalsIgnoreCase(buildMessage(ExecutionOrder.RESET))) {
 			// Process message based on state
-			if (this.getExecutionState().equalsIgnoreCase("complete")) this.put("cmd", "reset"); else throw new RuntimeException("Semantic error detected");
+			if (this.getExecutionState().equalsIgnoreCase(ExecutionOrder.COMPLETE.getValue()))
+				this.put("cmd", ExecutionOrder.RESET.getValue().toLowerCase());
+			else
+				throw new RuntimeException("Semantic error detected");
 
 			// Return
 			return;
@@ -121,14 +127,15 @@ public class SimpleProxyControlComponent extends SimpleControlComponent implemen
 		if (tcpServer == null) return newExecutionState;
 		
 		// Implement a simplified model that only consists of states idle/execute/complete/aborted/stopped
-		switch (newExecutionState.toLowerCase()) {
+		switch (ExecutionState.byValue(newExecutionState)) {
 			// Only process the following states, ignore all other state transitions
-			case "idle":      tcpServer.sendMessage("state:idle");break;
-			case "execute":   tcpServer.sendMessage("state:execute");break;
-			case "complete":  tcpServer.sendMessage("state:complete");break;
-			case "aborted":   tcpServer.sendMessage("state:aborted");break;
-			case "stopped":   tcpServer.sendMessage("state:stopped");break;
-			case "resetting": tcpServer.sendMessage("state:resetting");break;
+			case IDLE:      tcpServer.sendMessage(buildMessage(ExecutionState.IDLE));break;
+			case EXECUTE:   tcpServer.sendMessage(buildMessage(ExecutionState.EXECUTE));break;
+			case COMPLETE:  tcpServer.sendMessage(buildMessage(ExecutionState.COMPLETE));break;
+			case ABORTED:   tcpServer.sendMessage(buildMessage(ExecutionState.ABORTED));break;
+			case STOPPED:   tcpServer.sendMessage(buildMessage(ExecutionState.STOPPED));break;
+			case RESETTING: tcpServer.sendMessage(buildMessage(ExecutionState.RESETTING));break;
+			default: break;
 		}
 		
 		// Return the unchanged execution state
@@ -221,6 +228,15 @@ public class SimpleProxyControlComponent extends SimpleControlComponent implemen
 		// Return end execution flag
 		return endExecution;
 	}
+	
+	private String buildMessage(ExecutionState state) {
+		return "state:" + state.getValue().toLowerCase();
+	}
+	
+	private String buildMessage(ExecutionOrder state) {
+		return "state:" + state.getValue().toLowerCase();
+	}
+	
 }
 
 

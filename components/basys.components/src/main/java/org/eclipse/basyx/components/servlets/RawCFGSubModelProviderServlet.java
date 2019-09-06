@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.components.cfgprovider.RawCFGSubModelProvider;
+import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
 import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
 
 /**
@@ -58,7 +59,7 @@ public class RawCFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubm
 			properties.load(input);
 
 			// Extract AAS properties
-			this.submodelID = properties.getProperty("basyx.submodelID");
+			this.submodelID = properties.getProperty(BaseConfiguredProvider.buildBasyxCfgName(BaseConfiguredProvider.SUBMODELID));
 		} catch (IOException e) {
 			// Output exception
 			e.printStackTrace();

@@ -7,6 +7,7 @@ import java.util.Properties;
 import javax.servlet.ServletException;
 
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
+import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
 import org.eclipse.basyx.components.sqlprovider.SQLPreconfiguredSubModelProvider;
 import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
 
@@ -63,7 +64,7 @@ public class SQLSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 			cfgProperties.load(input);
 
 			// Extract sub model provider properties
-			this.submodelID = cfgProperties.getProperty("basyx.submodelID");
+			this.submodelID = cfgProperties.getProperty(BaseConfiguredProvider.buildBasyxCfgName(BaseConfiguredProvider.SUBMODELID));
 
 		} catch (IOException e) {
 			// Output exception

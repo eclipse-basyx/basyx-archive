@@ -99,7 +99,7 @@ public abstract class BaseTCPControllableDeviceAdapter extends BaseTCPDeviceAdap
 	protected void statusChange(String newStatus) {
 		// React to device status change
 		// - Indicate running service in EXECUTE state
-		if (newStatus.equals("EXECUTE"))  onServiceInvocation();
+		if (newStatus.equals(ExecutionState.EXECUTE.getValue()))  onServiceInvocation();
 				
 		// Set requested device execution state
 		exState = ExecutionState.byValue(newStatus);

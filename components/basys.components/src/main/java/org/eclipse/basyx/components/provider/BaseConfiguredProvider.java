@@ -29,6 +29,23 @@ public class BaseConfiguredProvider extends VirtualPathModelProvider {
 	 * This is a sub model
 	 */
 	protected SubModel submodelData = null;
+	
+	public static final String DATAELEMENTS = "dataElements";
+	public static final String SUBMODELSEMANTICS = "submodelSemantics";
+	public static final String IDTYPE = "idType";
+	public static final String ID = "id";
+	public static final String IDSHORT = "idShort";
+	public static final String CATEGORY = "category";
+	public static final String DESCRIPTION = "description";
+	public static final String QUALIFIER = "qualifier";
+	public static final String QUALIFIERTYPE = "qualifierType";
+	public static final String VERSION = "version";
+	public static final String REVISION = "revision";
+	public static final String TYPE = "type";
+	public static final String SEMANTICSINTERNAL = "semanticsInternal";
+	
+	public static final String SUBMODELID = "submodelID";
+	
 
 	/**
 	 * Constructor
@@ -75,7 +92,7 @@ public class BaseConfiguredProvider extends VirtualPathModelProvider {
 	 */
 	protected Collection<String> getConfiguredProperties(Map<Object, Object> cfgValues) {
 		// Split property string
-		return splitString((String) cfgValues.get("dataElements"));
+		return splitString((String) cfgValues.get(DATAELEMENTS));
 	}
 
 	/**
@@ -122,52 +139,52 @@ public class BaseConfiguredProvider extends VirtualPathModelProvider {
 		// Try to load and convert configuration values. Keep value null if any error occurs
 		String basyx_submodelSemantics = null;
 		try {
-			basyx_submodelSemantics = cfgValues.get("basyx.submodelSemantics").toString().toLowerCase();
+			basyx_submodelSemantics = cfgValues.get(buildBasyxCfgName(SUBMODELSEMANTICS)).toString().toLowerCase();
 		} catch (Exception e) {
 		}
 		String basyx_idType = null;
 		try {
-			basyx_idType = cfgValues.get("basyx.idType").toString().toLowerCase();
+			basyx_idType = cfgValues.get(buildBasyxCfgName(IDTYPE)).toString().toLowerCase();
 		} catch (Exception e) {
 		}
 		String basyx_id = null;
 		try {
-			basyx_id = cfgValues.get("basyx.id").toString();
+			basyx_id = cfgValues.get(buildBasyxCfgName(ID)).toString();
 		} catch (Exception e) {
 		}
 		String basyx_idShort = null;
 		try {
-			basyx_idShort = cfgValues.get("basyx.idShort").toString();
+			basyx_idShort = cfgValues.get(buildBasyxCfgName(IDSHORT)).toString();
 		} catch (Exception e) {
 		}
 		String basyx_category = null;
 		try {
-			basyx_category = cfgValues.get("basyx.category").toString();
+			basyx_category = cfgValues.get(buildBasyxCfgName(CATEGORY)).toString();
 		} catch (Exception e) {
 		}
 		String basyx_description = null;
 		try {
-			basyx_description = cfgValues.get("basyx.description").toString();
+			basyx_description = cfgValues.get(buildBasyxCfgName(DESCRIPTION)).toString();
 		} catch (Exception e) {
 		}
 		String basyx_qualifier = null;
 		try {
-			basyx_qualifier = cfgValues.get("basyx.qualifier").toString();
+			basyx_qualifier = cfgValues.get(buildBasyxCfgName(QUALIFIER)).toString();
 		} catch (Exception e) {
 		}
 		String basyx_qualifierType = null;
 		try {
-			basyx_qualifierType = cfgValues.get("basyx.qualifierType").toString();
+			basyx_qualifierType = cfgValues.get(buildBasyxCfgName(QUALIFIERTYPE)).toString();
 		} catch (Exception e) {
 		}
 		String basyx_version = null;
 		try {
-			basyx_version = cfgValues.get("basyx.version").toString();
+			basyx_version = cfgValues.get(buildBasyxCfgName(VERSION)).toString();
 		} catch (Exception e) {
 		}
 		String basyx_revision = null;
 		try {
-			basyx_revision = cfgValues.get("basyx.revision").toString();
+			basyx_revision = cfgValues.get(buildBasyxCfgName(REVISION)).toString();
 		} catch (Exception e) {
 		}
 
@@ -186,8 +203,8 @@ public class BaseConfiguredProvider extends VirtualPathModelProvider {
 		// Try to load properties
 		// Check type of sub model template to use
 		if (basyx_submodelSemantics == null)
-			basyx_submodelSemantics = "custom";
-		if (basyx_submodelSemantics.equals("irdi")) {
+			basyx_submodelSemantics = IdentifierType.Custom.toLowerCase();
+		if (basyx_submodelSemantics.equals(IdentifierType.IRDI.toLowerCase())) {
 			// Create sub model from template
 			SubmodelFacade template = new SubmodelFacadeIRDISemantics(basyx_submodelSemantics, idType, basyx_id,
 					basyx_idShort, basyx_category, basyx_description,
@@ -196,8 +213,7 @@ public class BaseConfiguredProvider extends VirtualPathModelProvider {
 			// Get sub model data
 			submodel = template.getSubModel();
 		}
-		;
-		if (basyx_submodelSemantics.equals("custom")) {
+		if (basyx_submodelSemantics.equals(IdentifierType.Custom.toLowerCase())) {
 			// Create sub model from template
 			SubmodelFacade template = new SubmodelFacadeCustomSemantics(basyx_submodelSemantics, idType, basyx_id,
 					basyx_idShort, basyx_category, basyx_description,
@@ -228,7 +244,7 @@ public class BaseConfiguredProvider extends VirtualPathModelProvider {
 	protected Property createSubmodelElement(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
 
 		// Get property type
-		String propertyType = cfgValues.get(propertyName + ".type").toString();
+		String propertyType = cfgValues.get(buildCfgName(propertyName, TYPE)).toString();
 
 		// Dispatch to requested create function
 		if (propertyType.equals("Property"))
@@ -253,22 +269,22 @@ public class BaseConfiguredProvider extends VirtualPathModelProvider {
 		// Try to get property meta data
 		String property_semanticsInternal = null;
 		try {
-			property_semanticsInternal = cfgValues.get(propertyName + ".semanticsInternal").toString();
+			property_semanticsInternal = cfgValues.get(buildCfgName(propertyName, SEMANTICSINTERNAL)).toString();
 		} catch (Exception e) {
 		}
 		String property_qualifier = null;
 		try {
-			property_qualifier = cfgValues.get(propertyName + ".qualifier").toString();
+			property_qualifier = cfgValues.get(buildCfgName(propertyName, QUALIFIER)).toString();
 		} catch (Exception e) {
 		} // might need to rename to constraints
 		String property_qualifierType = null;
 		try {
-			property_qualifierType = cfgValues.get(propertyName + ".qualifierType").toString();
+			property_qualifierType = cfgValues.get(buildCfgName(propertyName, QUALIFIERTYPE)).toString();
 		} catch (Exception e) {
 		}
 		String property_description = null;
 		try {
-			property_description = cfgValues.get(propertyName + ".description").toString();
+			property_description = cfgValues.get(buildCfgName(propertyName, DESCRIPTION)).toString();
 		} catch (Exception e) {
 		}
 
@@ -277,4 +293,13 @@ public class BaseConfiguredProvider extends VirtualPathModelProvider {
 				property_semanticsInternal, new Qualifier(property_qualifierType, property_qualifier, null));
 		return prop;
 	}
+	
+	public static String buildBasyxCfgName(String valueName) {
+		return buildCfgName("basyx", valueName);
+	}
+	
+	public static String buildCfgName(String propertyName, String valueName) {
+		return propertyName + "." + valueName;
+	}
+	
 }

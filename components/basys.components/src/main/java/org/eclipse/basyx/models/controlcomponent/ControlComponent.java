@@ -157,21 +157,20 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 		serviceOperations.put("semiauto",   (Function<Object, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.SEMIAUTO); return null;});
 		serviceOperations.put("manual",     (Function<Object, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.MANUAL); return null;});
 		serviceOperations.put("simulation", (Function<Object, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.SIMULATION); return null;});
-		serviceOperations.put("start",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("START"); return null;});
-		serviceOperations.put("reset",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("RESET"); return null;});
-		serviceOperations.put("hold",       (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("HOLD"); return null;});
-		serviceOperations.put("unhold",     (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("UNHOLD"); return null;});
-		serviceOperations.put("suspend",    (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("SUSPEND"); return null;});
-		serviceOperations.put("unsuspend",  (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("UNSUSPEND"); return null;});
-		serviceOperations.put("abort",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("ABORT"); return null;});
-		serviceOperations.put("stop",       (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("STOP"); return null;});
-		serviceOperations.put("clear",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("CLEAR"); return null;});
-		serviceOperations.put("reset",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState("RESET"); return null;});
+		serviceOperations.put("start",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.START.getValue()); return null;});    
+		serviceOperations.put("reset",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.RESET.getValue()); return null;});    
+		serviceOperations.put("hold",       (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.HOLD.getValue()); return null;});     
+		serviceOperations.put("unhold",     (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.UNHOLD.getValue()); return null;});   
+		serviceOperations.put("suspend",    (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.SUSPEND.getValue()); return null;});  
+		serviceOperations.put("unsuspend",  (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.UNSUSPEND.getValue()); return null;});
+		serviceOperations.put("abort",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.ABORT.getValue()); return null;});    
+		serviceOperations.put("stop",       (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.STOP.getValue()); return null;});     
+		serviceOperations.put("clear",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.CLEAR.getValue()); return null;});    
+		serviceOperations.put("reset",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.RESET.getValue()); return null;});    
 		serviceOperations.put("bstate",     (Function<Object, Void> & Serializable) (v) -> {this.setOperationMode("BSTATE"); return null;});
 		// - Add service operations to sub structure
 		operations.put("service", serviceOperations);
 	}
-
 
 	
 	/**
@@ -319,8 +318,8 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 		ExecutionOrder order = ExecutionOrder.byValue(orderString);		
 
 		// Check if execution order leads to valid state in current state
-		switch(getExecutionState().toLowerCase()) {
-			case "idle":
+		switch(ExecutionState.byValue(getExecutionState())) {
+			case IDLE:
 				// Process expected orders
 				if (order.equals(ExecutionOrder.START)) {this.setExecutionState(ExecutionState.STARTING.getValue()); break;}
 				if (order.equals(ExecutionOrder.STOP))  {this.setExecutionState(ExecutionState.STOPPING.getValue()); break;}
@@ -328,13 +327,13 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 
-			case "starting":
+			case STARTING:
 				if (order.equals(ExecutionOrder.STOP))  {this.setExecutionState(ExecutionState.STOPPING.getValue()); break;}
 				if (order.equals(ExecutionOrder.ABORT)) {this.setExecutionState(ExecutionState.ABORTING.getValue()); break;}
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 
-			case "execute":
+			case EXECUTE:
 				// Process expected orders
 				if (order.equals(ExecutionOrder.COMPLETE)) {this.setExecutionState(ExecutionState.COMPLETING.getValue()); break;}
 				if (order.equals(ExecutionOrder.HOLD))     {this.setExecutionState(ExecutionState.HOLDING.getValue()); break;}
@@ -344,80 +343,80 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 
-			case "completing":
+			case COMPLETING:
 				if (order.equals(ExecutionOrder.STOP))     {this.setExecutionState(ExecutionState.STOPPING.getValue()); break;}
 				if (order.equals(ExecutionOrder.ABORT))    {this.setExecutionState(ExecutionState.ABORTING.getValue()); break;}
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 
-			case "complete":
+			case COMPLETE:
 				if (order.equals(ExecutionOrder.RESET)) {this.setExecutionState(ExecutionState.RESETTING.getValue()); break;}
 				if (order.equals(ExecutionOrder.STOP))  {this.setExecutionState(ExecutionState.STOPPING.getValue()); break;}
 				if (order.equals(ExecutionOrder.ABORT)) {this.setExecutionState(ExecutionState.ABORTING.getValue()); break;}
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 
-			case "resetting":
+			case RESETTING:
 				if (order.equals(ExecutionOrder.STOP))     {this.setExecutionState(ExecutionState.STOPPING.getValue()); break;}
 				if (order.equals(ExecutionOrder.ABORT))    {this.setExecutionState(ExecutionState.ABORTING.getValue()); break;}
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 
-			case "holding":
+			case HOLDING:
 				if (order.equals(ExecutionOrder.STOP))     {this.setExecutionState(ExecutionState.STOPPING.getValue()); break;}
 				if (order.equals(ExecutionOrder.ABORT))    {this.setExecutionState(ExecutionState.ABORTING.getValue()); break;}
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 
-			case "held":
+			case HELD:
 				if (order.equals(ExecutionOrder.UNHOLD)) {this.setExecutionState(ExecutionState.UNHOLDING.getValue()); break;}
 				if (order.equals(ExecutionOrder.STOP))   {this.setExecutionState(ExecutionState.STOPPING.getValue()); break;}
 				if (order.equals(ExecutionOrder.ABORT))  {this.setExecutionState(ExecutionState.ABORTING.getValue()); break;}
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 				
-			case "unholding":
+			case UNHOLDING:
 				if (order.equals(ExecutionOrder.STOP))     {this.setExecutionState(ExecutionState.STOPPING.getValue()); break;}
 				if (order.equals(ExecutionOrder.ABORT))    {this.setExecutionState(ExecutionState.ABORTING.getValue()); break;}
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 
-			case "suspending":
+			case SUSPENDING:
 				if (order.equals(ExecutionOrder.STOP))     {this.setExecutionState(ExecutionState.STOPPING.getValue()); break;}
 				if (order.equals(ExecutionOrder.ABORT))    {this.setExecutionState(ExecutionState.ABORTING.getValue()); break;}
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 
-			case "suspended":
+			case SUSPENDED:
 				if (order.equals(ExecutionOrder.UNSUSPEND)) {this.setExecutionState(ExecutionState.UNSUSPENDING.getValue()); break;}
 				if (order.equals(ExecutionOrder.STOP))      {this.setExecutionState(ExecutionState.STOPPING.getValue()); break;}
 				if (order.equals(ExecutionOrder.ABORT))     {this.setExecutionState(ExecutionState.ABORTING.getValue()); break;}
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 
-			case "unsuspending":
+			case UNSUSPENDING:
 				if (order.equals(ExecutionOrder.STOP))     {this.setExecutionState(ExecutionState.STOPPING.getValue()); break;}
 				if (order.equals(ExecutionOrder.ABORT))    {this.setExecutionState(ExecutionState.ABORTING.getValue()); break;}
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 
-			case "stopping":
+			case STOPPING:
 				if (order.equals(ExecutionOrder.ABORT))    {this.setExecutionState(ExecutionState.ABORTING.getValue()); break;}
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 
-			case "stopped":
+			case STOPPED:
 				if (order.equals(ExecutionOrder.RESET)) {this.setExecutionState(ExecutionState.RESETTING.getValue()); break;}
 				if (order.equals(ExecutionOrder.ABORT)) {this.setExecutionState(ExecutionState.ABORTING.getValue()); break;}
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 
-			case "aborted":
+			case ABORTED:
 				if (order.equals(ExecutionOrder.CLEAR)) {this.setExecutionState(ExecutionState.CLEARING.getValue()); break;}
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
 
-			case "clearing":
+			case CLEARING:
 				if (order.equals(ExecutionOrder.ABORT))    {this.setExecutionState(ExecutionState.ABORTING.getValue()); break;}
 				// Unexpected order in this state
 				throw new RuntimeException("Unexpected command "+orderString+" in state "+getExecutionState());
@@ -435,20 +434,20 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void finishState() {
 		// Check if state complete message leads to valid state in current state
-		switch(getExecutionState().toLowerCase()) {
+		switch(ExecutionState.byValue(getExecutionState())) {
 			// Process state changes
-			case "starting":     this.setExecutionState(ExecutionState.EXECUTE.getValue()); break;
-			case "execute":      this.setExecutionState(ExecutionState.COMPLETING.getValue()); break;
-			case "completing":   this.setExecutionState(ExecutionState.COMPLETE.getValue()); break;
-			case "resetting":    this.setExecutionState(ExecutionState.IDLE.getValue()); break;
-			case "holding":      this.setExecutionState(ExecutionState.HELD.getValue()); break;
-			case "unholding":    this.setExecutionState(ExecutionState.EXECUTE.getValue()); break;
-			case "suspending":   this.setExecutionState(ExecutionState.SUSPENDED.getValue()); break;
-			case "unsuspending": this.setExecutionState(ExecutionState.EXECUTE.getValue()); break;
-			case "stopping":     this.setExecutionState(ExecutionState.STOPPED.getValue()); break;
-			case "stopped":      this.setExecutionState(ExecutionState.IDLE.getValue()); break;
-			case "aborting":     this.setExecutionState(ExecutionState.ABORTED.getValue()); break;
-			case "clearing":     this.setExecutionState(ExecutionState.STOPPED.getValue()); break;
+			case STARTING:     this.setExecutionState(ExecutionState.EXECUTE.getValue()); break;
+			case EXECUTE:      this.setExecutionState(ExecutionState.COMPLETING.getValue()); break;
+			case COMPLETING:   this.setExecutionState(ExecutionState.COMPLETE.getValue()); break;
+			case RESETTING:    this.setExecutionState(ExecutionState.IDLE.getValue()); break;
+			case HOLDING:      this.setExecutionState(ExecutionState.HELD.getValue()); break;
+			case UNHOLDING:    this.setExecutionState(ExecutionState.EXECUTE.getValue()); break;
+			case SUSPENDING:   this.setExecutionState(ExecutionState.SUSPENDED.getValue()); break;
+			case UNSUSPENDING: this.setExecutionState(ExecutionState.EXECUTE.getValue()); break;
+			case STOPPING:     this.setExecutionState(ExecutionState.STOPPED.getValue()); break;
+			case STOPPED:      this.setExecutionState(ExecutionState.IDLE.getValue()); break;
+			case ABORTING:     this.setExecutionState(ExecutionState.ABORTED.getValue()); break;
+			case CLEARING:     this.setExecutionState(ExecutionState.STOPPED.getValue()); break;
 
 			// Received order in unexpected state
 			default:
