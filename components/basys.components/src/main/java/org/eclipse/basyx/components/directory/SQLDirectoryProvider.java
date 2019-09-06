@@ -241,11 +241,15 @@ public class SQLDirectoryProvider implements IModelProvider {
 
 		// Get a specific AAS
 		else if (path.startsWith(registryPath + "/")) {
-			System.out.println("Getting:" + path.substring(new String(registryPath + "/").length()));
+			String id = path.substring(new String(registryPath + "/").length());
+			id = stripLeadingSlashes(id);
+			
+			
+			System.out.println("Getting:" + id);
 
 			// Run query
 			ResultSet resultSet = sqlDriver.sqlQuery("SELECT * FROM directory.directory WHERE \"ElementID\" = '"
-					+ path.substring(new String(registryPath + "/").length()) + "'");
+					+ id + "'");
 
 			// Write result
 			StringBuilder result = new StringBuilder();
@@ -284,6 +288,7 @@ public class SQLDirectoryProvider implements IModelProvider {
 
 		// Extract AAS ID
 		String aasID = path.substring(new String(registryPath + "/").length());
+		aasID = stripLeadingSlashes(aasID);
 
 		// Update AAS registry
 		sqlDriver.sqlUpdate("UPDATE directory.directory SET \"ElementRef\" = '"+aasValue.toString()+"' WHERE \"ElementID\"='"+aasID+"';");
@@ -324,6 +329,8 @@ public class SQLDirectoryProvider implements IModelProvider {
 
 		// Extract AAS ID
 		String aasID = path.substring(new String(registryPath + "/").length());
+		aasID = stripLeadingSlashes(aasID);
+
 
 		// Delete element
 		// - Delete element from table "directory"
@@ -346,6 +353,14 @@ public class SQLDirectoryProvider implements IModelProvider {
 	@Override
 	public Object invokeOperation(String path, Object... parameter) throws Exception {
 		throw new RuntimeException("Not implemented");
+	}
+
+	private String stripLeadingSlashes(String str) {
+		// Strip leading slashes
+		while (str.startsWith("/")) {
+			str = str.substring(1);
+		}
+		return str;
 	}
 
 }
