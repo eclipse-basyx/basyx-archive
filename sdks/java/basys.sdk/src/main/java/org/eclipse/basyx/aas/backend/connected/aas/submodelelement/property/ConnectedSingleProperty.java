@@ -36,11 +36,6 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 	}
 
 	@Override
-	public void moveTo(ISingleProperty propertyName) throws ServerException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public void setValue(Object obj) {
 		// TODO Auto-generated method stub
 		
