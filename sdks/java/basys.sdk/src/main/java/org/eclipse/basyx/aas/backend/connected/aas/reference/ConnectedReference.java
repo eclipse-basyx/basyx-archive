@@ -5,7 +5,7 @@ import java.util.List;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IKey;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.backend.connected.ConnectedElement;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.reference.Reference;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of IReference

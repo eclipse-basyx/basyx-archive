@@ -5,13 +5,13 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.api.resources.IOperation;
-import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
+import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_Empty;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;

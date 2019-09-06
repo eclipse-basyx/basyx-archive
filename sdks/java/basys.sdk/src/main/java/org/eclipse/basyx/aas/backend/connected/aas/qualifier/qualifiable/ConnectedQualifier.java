@@ -4,7 +4,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IQualifier;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.backend.connected.ConnectedElement;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of IQualifier

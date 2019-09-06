@@ -9,19 +9,19 @@ import java.util.function.Function;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperationVariable;
-import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.ConnectedSubmodelElement;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasDataSpecificationFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasKindFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedQualifiableFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedReferableFacade;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
@@ -120,14 +120,12 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 	@Override
 	public void setInvocable(Function<Object[], Object[]> endpoint) {
-		getProxy().setModelPropertyValue(Operation.INVOKABLE, endpoint);
-
+		throw new RuntimeException("Not possible on remote side");
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Function<Object[], Object> getInvocable() {
-		return (Function<Object[], Object>) getProxy().getModelPropertyValue(Operation.INVOKABLE);
+		throw new RuntimeException("Not possible on remote side");
 	}
 
 	@Override

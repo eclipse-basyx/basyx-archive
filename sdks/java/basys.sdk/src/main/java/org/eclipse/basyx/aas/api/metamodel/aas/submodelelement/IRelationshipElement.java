@@ -9,7 +9,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 */
 
 
-public interface IRelationshipElement {
+public interface IRelationshipElement extends ISubmodelElement {
 
 	public void setFirst(IReference first);
 	

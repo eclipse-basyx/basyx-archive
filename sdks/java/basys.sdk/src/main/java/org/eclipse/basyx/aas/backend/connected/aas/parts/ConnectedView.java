@@ -9,7 +9,7 @@ import org.eclipse.basyx.aas.backend.connected.ConnectedElement;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasDataSpecificationFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedReferableFacade;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.parts.View;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.parts.View;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of IView

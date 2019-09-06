@@ -1,10 +1,10 @@
 package org.eclipse.basyx.testsuite.regression.aas.facade.submodel;
 
 
-import org.eclipse.basyx.aas.metamodel.facades.SubmodelFacadeCustomSemantics;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.haskind.Kind;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
+import org.eclipse.basyx.aas.impl.metamodel.facades.SubmodelFacadeCustomSemantics;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasDataSpecification;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.haskind.Kind;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
 import org.junit.Test;
 
 

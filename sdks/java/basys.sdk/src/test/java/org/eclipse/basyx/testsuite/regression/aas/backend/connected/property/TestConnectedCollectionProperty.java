@@ -10,11 +10,11 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.exception.TypeMismatchException;
-import org.eclipse.basyx.aas.api.resources.ICollectionProperty;
-import org.eclipse.basyx.aas.backend.connected.TypeDestroyer.TypeDestroyer;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ICollectionProperty;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.ConnectedCollectionProperty;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.testsuite.support.vab.TypeDestroyer;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.junit.Before;

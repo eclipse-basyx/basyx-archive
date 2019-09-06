@@ -3,12 +3,12 @@ package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.resources.IContainerProperty;
-import org.eclipse.basyx.aas.api.resources.IOperation;
-import org.eclipse.basyx.aas.api.resources.IProperty;
-import org.eclipse.basyx.aas.api.resources.PropertyType;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IContainerProperty;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.PropertyType;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.operation.ConnectedOperation;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 

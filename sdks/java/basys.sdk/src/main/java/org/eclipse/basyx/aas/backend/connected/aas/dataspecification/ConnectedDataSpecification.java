@@ -3,7 +3,7 @@ package org.eclipse.basyx.aas.backend.connected.aas.dataspecification;
 import org.eclipse.basyx.aas.api.metamodel.aas.dataspecification.IDataSpecification;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.backend.connected.ConnectedElement;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.dataspecification.DataSpecification;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.dataspecification.DataSpecification;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of IDataSpecification

@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.backend.connected.TypeDestroyer.TypeDestroyer;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedIdentifierFacade;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.Identifier;
+import org.eclipse.basyx.testsuite.support.vab.TypeDestroyer;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.junit.Before;

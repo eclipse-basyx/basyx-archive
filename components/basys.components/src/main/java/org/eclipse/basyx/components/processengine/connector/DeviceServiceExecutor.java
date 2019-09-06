@@ -3,12 +3,12 @@ package org.eclipse.basyx.components.processengine.connector;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
-import org.eclipse.basyx.aas.api.resources.IOperation;
-import org.eclipse.basyx.aas.api.resources.IProperty;
-import org.eclipse.basyx.aas.api.resources.ISingleProperty;
-import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedSubModel;
 import org.eclipse.basyx.vab.core.IConnectorProvider;

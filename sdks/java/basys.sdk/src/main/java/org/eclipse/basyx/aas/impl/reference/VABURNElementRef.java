@@ -1,12 +1,12 @@
 package org.eclipse.basyx.aas.impl.reference;
 
 import org.eclipse.basyx.aas.api.exception.UnknownElementTypeException;
+import org.eclipse.basyx.aas.api.metamodel.aas.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
 import org.eclipse.basyx.aas.api.reference.IElementReference;
-import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.IElement;
-import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.impl.tools.BaSysID;
 import org.eclipse.basyx.aas.impl.tools.ElementTools;
+import org.eclipse.basyx.vab.IElement;
 import org.eclipse.basyx.vab.core.ref.VABElementRef;
 
 /**

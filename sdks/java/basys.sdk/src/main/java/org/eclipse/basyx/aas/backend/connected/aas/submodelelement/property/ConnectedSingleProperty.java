@@ -3,9 +3,9 @@ package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
-import org.eclipse.basyx.aas.api.resources.ISingleProperty;
-import org.eclipse.basyx.aas.api.resources.PropertyType;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.PropertyType;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
@@ -33,11 +33,6 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void moveTo(ISingleProperty propertyName) throws ServerException {
-		// TODO Auto-generated method stub
 	}
 
 	@Override

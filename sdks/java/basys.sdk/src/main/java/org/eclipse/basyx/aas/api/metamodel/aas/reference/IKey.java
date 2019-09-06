@@ -11,7 +11,7 @@ public interface IKey {
 	/**
 	 * 
 	 * @return See
-	 *         {@link org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.enums.KeyElements
+	 *         {@link org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.reference.enums.KeyElements
 	 *         KeyElements} and its children for possible values
 	 */
 	public String getType();

@@ -4,9 +4,9 @@ import java.util.Collections;
 
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
-import org.eclipse.basyx.aas.metamodel.factory.MetaModelElementFactory;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
+import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.testsuite.support.aas.vab.stub.elements.SimpleAASSubmodel;
 import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
 

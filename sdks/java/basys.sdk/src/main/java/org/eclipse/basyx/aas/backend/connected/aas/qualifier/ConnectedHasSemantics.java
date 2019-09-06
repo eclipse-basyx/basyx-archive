@@ -4,7 +4,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IHasSemantics;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.backend.connected.ConnectedElement;
 import org.eclipse.basyx.aas.backend.connected.aas.reference.ConnectedReference;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**

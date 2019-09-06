@@ -2,11 +2,11 @@ package org.eclipse.basyx.aas.api.manager;
 
 import java.util.Collection;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.ISubModel;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 
 
 

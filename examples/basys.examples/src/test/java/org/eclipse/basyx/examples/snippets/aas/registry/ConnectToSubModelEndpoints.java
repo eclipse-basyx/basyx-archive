@@ -2,17 +2,17 @@ package org.eclipse.basyx.examples.snippets.aas.registry;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.AASHTTPRegistryProxy;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
-import org.eclipse.basyx.aas.api.resources.ISingleProperty;
-import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.IdentifierType;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.components.servlet.submodel.DynamicModelProviderServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;

@@ -9,24 +9,24 @@ import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
-import org.eclipse.basyx.aas.api.resources.IOperation;
-import org.eclipse.basyx.aas.api.resources.IProperty;
-import org.eclipse.basyx.aas.api.resources.ISubModel;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedVABModelMap;
+import org.eclipse.basyx.aas.backend.connected.aas.reference.ConnectedReference;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.operation.ConnectedOperation;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.ConnectedPropertyFactory;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasDataSpecificationFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasKindFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedIdentifiableFacade;
-import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.DataElement;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABElementContainer;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.DataElement;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
 /**
@@ -101,7 +101,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 	 * Update value of 'administration' property
 	 */
 	public void setAdministration(AdministrativeInformation newValue) {
-		getElements().put(Identifiable.ADMINISTRATION, newValue);
+		new ConnectedIdentifiableFacade(getProxy()).setAdministration(newValue.getVersion(), newValue.getRevision());
 	}
 
 
@@ -123,7 +123,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 	@Override
 	public void addElementCollection(SubmodelElementCollection collection) {
-		getElements().put(collection.getId(), collection);
+		getProxy().createValue(SubModel.SUBMODELELEMENT, collection);
 		if (collection instanceof IProperty) {
 			getProperties().put(collection.getId(), collection);
 		}
@@ -137,11 +137,6 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 	@Override
 	public void setOperations(Map<String, IOperation> operations) {
 		getProxy().setModelPropertyValue(SubModel.OPERATIONS, operations);
-	}
-
-	public SubModel getSubModel() {
-		// Assume that VAB HashMap provider carries a sub model
-		return (SubModel) getElements();
 	}
 
 	@Override
@@ -246,12 +241,6 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 	}
 
 	@Override
-	public Map<String, Object> getElements() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String getIdshort() {
 		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
 	}
@@ -268,7 +257,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 	@Override
 	public IReference  getParent() {
-		return (IReference) getProxy().getModelPropertyValue(Referable.PARENT);
+		return new ConnectedReference(getProxy().getDeepProxy(Referable.PARENT));
 	}
 
 	@Override

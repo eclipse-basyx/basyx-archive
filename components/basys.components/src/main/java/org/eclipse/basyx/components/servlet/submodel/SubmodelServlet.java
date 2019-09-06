@@ -2,8 +2,8 @@ package org.eclipse.basyx.components.servlet.submodel;
 
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
 
 /**

@@ -2,12 +2,12 @@ package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.resources.IProperty;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**

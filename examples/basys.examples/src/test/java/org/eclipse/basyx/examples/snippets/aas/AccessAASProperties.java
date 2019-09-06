@@ -2,7 +2,7 @@ package org.eclipse.basyx.examples.snippets.aas;
 
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.junit.Test;
 
 

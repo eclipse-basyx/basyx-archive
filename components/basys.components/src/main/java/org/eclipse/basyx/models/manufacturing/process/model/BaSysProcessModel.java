@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.models.manufacturing.process.model.device.DeviceIF;
 
 

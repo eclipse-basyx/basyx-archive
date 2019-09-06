@@ -2,7 +2,7 @@ package org.eclipse.basyx.regression.rawcfgprovider.tests;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;

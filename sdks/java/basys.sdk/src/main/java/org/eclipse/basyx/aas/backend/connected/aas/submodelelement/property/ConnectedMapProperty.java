@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.exception.TypeMismatchException;
-import org.eclipse.basyx.aas.api.resources.IMapProperty;
-import org.eclipse.basyx.aas.api.resources.PropertyType;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IMapProperty;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.PropertyType;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
