@@ -14,7 +14,6 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor
  */
 public interface IAASRegistryService {
 	
-	public IAASRegistryService addAASMapping(String key, String value);
 	/**
 	 * Register AAS descriptor in registry, delete old registration 
 	 */
