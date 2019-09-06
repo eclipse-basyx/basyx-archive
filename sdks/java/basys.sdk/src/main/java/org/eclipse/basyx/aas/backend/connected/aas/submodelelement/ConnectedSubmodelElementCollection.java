@@ -11,24 +11,24 @@ import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElementCollection;
-import org.eclipse.basyx.aas.api.resources.IContainerProperty;
-import org.eclipse.basyx.aas.api.resources.IOperation;
-import org.eclipse.basyx.aas.api.resources.IProperty;
-import org.eclipse.basyx.aas.api.resources.PropertyType;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IContainerProperty;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.PropertyType;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasDataSpecificationFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasKindFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedQualifiableFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedReferableFacade;
-import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.DataElement;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElement;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABElementContainer;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.DataElement;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElement;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of SubmodelElementCollection

@@ -1,6 +1,6 @@
 package org.eclipse.basyx.aas.impl.tools;
 
-import org.eclipse.basyx.aas.api.resources.IElement;
+import org.eclipse.basyx.vab.IElement;
 
 /**
  * Element utility functions

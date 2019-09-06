@@ -1,8 +1,8 @@
 package org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.file;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.MimeType;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.file.PathType;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.MimeType;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.file.PathType;
 
 
 /**

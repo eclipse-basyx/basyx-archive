@@ -2,7 +2,7 @@ package org.eclipse.basyx.testsuite.regression.vab.core.proxy;
 
 import static org.junit.Assert.assertEquals;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;

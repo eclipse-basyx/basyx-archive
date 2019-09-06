@@ -7,23 +7,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IView;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.security.ISecurity;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISubModel;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.api.resources.ISubModel;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connected.ConnectedVABModelMap;
 import org.eclipse.basyx.aas.backend.connected.aas.reference.ConnectedReference;
 import org.eclipse.basyx.aas.backend.connected.aas.security.ConnectedSecurity;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasDataSpecificationFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedIdentifiableFacade;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**

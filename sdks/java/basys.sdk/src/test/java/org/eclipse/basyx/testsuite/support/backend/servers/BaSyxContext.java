@@ -7,7 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 
 
 

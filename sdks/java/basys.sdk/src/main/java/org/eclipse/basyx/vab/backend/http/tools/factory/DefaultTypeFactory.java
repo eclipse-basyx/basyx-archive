@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.basyx.aas.metamodel.hashmap.VABModelMap;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABModelMap;
 
 
 

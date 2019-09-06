@@ -1,8 +1,8 @@
 package org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.blob;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.MimeType;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.blob.BlobType;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.MimeType;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.blob.BlobType;
 
 /**
  * Interface for Blob

@@ -2,8 +2,8 @@ package org.eclipse.basyx.regression.support.processengine.servlet;
 
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.regression.support.processengine.aas.DeviceAdministrationShellFactory;
 import org.eclipse.basyx.regression.support.processengine.stubs.Coilcar;
 import org.eclipse.basyx.regression.support.processengine.submodel.DeviceSubmodelFactory;

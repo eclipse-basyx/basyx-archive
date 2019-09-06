@@ -2,12 +2,12 @@ package org.eclipse.basyx.examples.snippets.aas.deployment.device;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.api.resources.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.vab.backend.connector.basyx.BaSyxConnectorProvider;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
 
 public class AASRegistryStub implements IAASRegistryService {
 	protected Map<String, AASDescriptor> descriptorMap = new HashMap<>();

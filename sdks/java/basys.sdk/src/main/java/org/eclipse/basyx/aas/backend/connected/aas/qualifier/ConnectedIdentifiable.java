@@ -5,10 +5,10 @@ import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformat
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IIdentifiable;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.backend.connected.ConnectedElement;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.Identifier;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.Identifier;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Identifiable;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of IIdentifiable

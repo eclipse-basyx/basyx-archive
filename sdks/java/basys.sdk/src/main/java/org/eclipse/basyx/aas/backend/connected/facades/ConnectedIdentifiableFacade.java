@@ -7,8 +7,8 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.backend.connected.ConnectedElement;
 import org.eclipse.basyx.aas.backend.connected.aas.identifier.ConnectedAdministrativeInformation;
 import org.eclipse.basyx.aas.backend.connected.aas.identifier.ConnectedIdentifier;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Identifiable;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Identifiable;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * Facade providing access to a map containing the ConnectedIdentifiableFacade structure

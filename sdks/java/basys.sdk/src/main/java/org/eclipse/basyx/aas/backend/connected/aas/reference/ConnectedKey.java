@@ -2,7 +2,7 @@ package org.eclipse.basyx.aas.backend.connected.aas.reference;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IKey;
 import org.eclipse.basyx.aas.backend.connected.ConnectedElement;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Key;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.reference.Key;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of IKey

@@ -8,8 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.eclipse.basyx.aas.api.webserviceclient.WebServiceRawClient;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.identifier.IdentifierType;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
 import org.eclipse.basyx.vab.backend.connector.MetaprotocolHandler;

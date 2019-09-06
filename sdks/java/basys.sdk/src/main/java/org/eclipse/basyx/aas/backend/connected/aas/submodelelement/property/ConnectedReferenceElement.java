@@ -4,7 +4,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IReferenceElement;
 import org.eclipse.basyx.aas.backend.connected.aas.reference.ConnectedReference;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.ConnectedDataElement;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of IReferenceElement

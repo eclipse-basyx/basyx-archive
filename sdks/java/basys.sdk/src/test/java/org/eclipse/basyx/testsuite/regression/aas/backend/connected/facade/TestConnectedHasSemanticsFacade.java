@@ -7,9 +7,9 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Key;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasSemantics;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.reference.Key;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.reference.Reference;
 import org.eclipse.basyx.testsuite.support.vab.TypeDestroyer;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
