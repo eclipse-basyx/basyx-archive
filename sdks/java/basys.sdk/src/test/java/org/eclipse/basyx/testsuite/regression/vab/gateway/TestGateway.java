@@ -7,7 +7,6 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.testsuite.support.vab.stub.DirectoryServiceStub;
 import org.eclipse.basyx.vab.backend.connector.basyx.BaSyxConnectorProvider;
 import org.eclipse.basyx.vab.backend.gateway.ConnectorProviderMapper;
@@ -15,6 +14,7 @@ import org.eclipse.basyx.vab.backend.gateway.DelegatingModelProvider;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Test;
 
 /**
@@ -48,13 +48,12 @@ public class TestGateway {
 	 */
 	@Test
 	public void test() throws UnknownHostException, IOException {
-
 		// Create VAB element
 		Map<String, Object> vabElem = new HashMap<String, Object>();
 		vabElem.put("propertyA", 10);
 
-		// Provide it using VirtualPathModelProvider and a tcp server on port 6998
-		BaSyxTCPServer<VirtualPathModelProvider> server = new BaSyxTCPServer<>(new VirtualPathModelProvider(vabElem),
+		// Provide it using VABHashMapProvider and a tcp server on port 6998
+		BaSyxTCPServer<VABHashmapProvider> server = new BaSyxTCPServer<>(new VABHashmapProvider(vabElem),
 				6998);
 
 		// Create ConnectorProviderMapper and add mapping from "basyx" to
