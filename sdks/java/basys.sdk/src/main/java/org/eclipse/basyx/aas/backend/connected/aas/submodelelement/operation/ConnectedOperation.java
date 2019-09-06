@@ -120,14 +120,12 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 	@Override
 	public void setInvocable(Function<Object[], Object[]> endpoint) {
-		getProxy().setModelPropertyValue(Operation.INVOKABLE, endpoint);
-
+		throw new RuntimeException("Not possible on remote side");
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Function<Object[], Object> getInvocable() {
-		return (Function<Object[], Object>) getProxy().getModelPropertyValue(Operation.INVOKABLE);
+		throw new RuntimeException("Not possible on remote side");
 	}
 
 	@Override

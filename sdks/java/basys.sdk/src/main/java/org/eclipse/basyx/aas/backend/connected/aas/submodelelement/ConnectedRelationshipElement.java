@@ -6,6 +6,7 @@ import java.util.Set;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IRelationshipElement;
+import org.eclipse.basyx.aas.backend.connected.aas.reference.ConnectedReference;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasDataSpecificationFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasKindFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
@@ -32,7 +33,7 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 
 	@Override
 	public IReference getFirst() {
-	return (IReference)	getProxy().getModelPropertyValue(RelationshipElement.FIRST);
+		return new ConnectedReference(getProxy().getDeepProxy(RelationshipElement.FIRST));
 	}
 
 	@Override

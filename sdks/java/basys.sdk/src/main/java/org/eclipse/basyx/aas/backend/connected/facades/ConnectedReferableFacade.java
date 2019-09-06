@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.backend.connected.facades;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IReferable;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.backend.connected.ConnectedElement;
+import org.eclipse.basyx.aas.backend.connected.aas.reference.ConnectedReference;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
@@ -33,7 +34,7 @@ public class ConnectedReferableFacade extends ConnectedElement implements IRefer
 
 	@Override
 	public IReference  getParent() {
-		return (IReference )getProxy().getModelPropertyValue(Referable.PARENT);
+		return new ConnectedReference(getProxy().getDeepProxy(Referable.PARENT));
 	}
 
 	@Override
