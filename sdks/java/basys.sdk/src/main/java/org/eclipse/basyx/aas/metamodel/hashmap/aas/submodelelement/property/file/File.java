@@ -1,10 +1,10 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.file;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.file.IFile;
-import org.eclipse.basyx.aas.metamodel.facades.FileFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.DataElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.MimeType;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.blob.Blob;
 
 /**
  * A blob property as defined in DAAS document <br/>
@@ -42,23 +42,23 @@ public class File extends DataElement implements IFile{
 
 	@Override
 	public void setValue(PathType value) {
-		new FileFacade(this).setValue(value);
+		put(Property.VALUE, value);
 		
 	}
 
 	@Override
 	public PathType getValue() {
-		return new FileFacade(this).getValue();
+		return (PathType) get(Property.VALUE);
 	}
 
 	@Override
 	public void setMimeType(MimeType mimeType) {
-		new FileFacade(this).setMimeType(mimeType);
+		put(Blob.MIMETYPE, mimeType);
 		
 	}
 
 	@Override
 	public MimeType getMimeType() {
-		return new FileFacade(this).getMimeType();
+		return (MimeType) get(Blob.MIMETYPE);
 	}
 }

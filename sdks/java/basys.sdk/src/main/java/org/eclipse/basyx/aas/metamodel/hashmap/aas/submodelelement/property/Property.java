@@ -2,7 +2,6 @@ package org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property;
 
 import org.eclipse.basyx.aas.api.resources.IProperty;
 import org.eclipse.basyx.aas.api.resources.PropertyType;
-import org.eclipse.basyx.aas.metamodel.facades.PropertyFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
@@ -78,7 +77,7 @@ public class Property extends DataElement implements IProperty {
 
 	@Override
 	public String getId() {
-	return new PropertyFacade(this).getId();
+		return (String) get(Referable.IDSHORT);
 	}
 
 	@Override
@@ -86,21 +85,21 @@ public class Property extends DataElement implements IProperty {
 		put(Referable.IDSHORT, id);
 	}
 
+
 	@Override
 	public Object getValue() {
-		return new PropertyFacade(this).getValue();
+		return get(Property.VALUE);
 	}
 
 	@Override
 	public void setValueId(Object obj) {
-		 new PropertyFacade(this).setValueId(obj);
+		put(Property.VALUEID, obj);
 		
 	}
 
 	@Override
 	public Object getValueId() {
-		return new PropertyFacade(this).getValueId();
+		return get(Property.VALUEID);
 	}
-
 
 }

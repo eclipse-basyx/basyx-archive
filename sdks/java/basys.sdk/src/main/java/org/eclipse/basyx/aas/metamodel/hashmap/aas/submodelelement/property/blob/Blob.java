@@ -1,7 +1,6 @@
 package org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.blob;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.blob.IBlob;
-import org.eclipse.basyx.aas.metamodel.facades.BlobFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.DataElement;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.MimeType;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.property.Property;
@@ -35,23 +34,23 @@ public class Blob extends DataElement implements IBlob{
 
 	@Override
 	public void setValue(BlobType value) {
-		new BlobFacade(this).setValue(value);
+		put(Property.VALUE, value);
 		
 	}
 
 	@Override
 	public BlobType getValue() {
-		return new BlobFacade(this).getValue();
+		return (BlobType) get(Property.VALUE);
 	}
 
 	@Override
 	public void setMimeType(MimeType mimeType) {
-		new BlobFacade(this).setMimeType(mimeType);
+		put(Blob.MIMETYPE, mimeType);
 		
 	}
 
 	@Override
 	public MimeType getMimeType() {
-		return new BlobFacade(this).getMimeType();
+		return (MimeType)get(Blob.MIMETYPE);
 	}
 }

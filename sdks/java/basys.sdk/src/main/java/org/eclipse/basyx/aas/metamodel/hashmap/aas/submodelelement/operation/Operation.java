@@ -13,9 +13,9 @@ import org.eclipse.basyx.aas.api.resources.IOperation;
 import org.eclipse.basyx.aas.metamodel.facades.HasDataSpecificationFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasKindFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasSemanticsFacade;
-import org.eclipse.basyx.aas.metamodel.facades.OperationFacade;
 import org.eclipse.basyx.aas.metamodel.facades.QualifiableFacade;
 import org.eclipse.basyx.aas.metamodel.facades.ReferableFacade;
+import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElement;
 
 /**
@@ -73,45 +73,56 @@ public class Operation extends SubmodelElement implements IOperation {
 	}
 
 	@Override
-	public Object invoke(Object... params) throws Exception {
-		return new OperationFacade(this.endpoint,this).invoke(params);
+	public String getId() {
+		return (String) get(Referable.IDSHORT);
 	}
-
-
 
 	@Override
-	public List<IOperationVariable> getReturnTypes() {
-		return new OperationFacade(this).getReturnTypes();
+	public void setId(String id) {
+		put(Referable.IDSHORT, id);
+
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<IOperationVariable> getParameterTypes() {
-		return new OperationFacade(this).getParameterTypes();
+		return (List<IOperationVariable>) get(Operation.IN);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<IOperationVariable> getReturnTypes() {
+		return (List<IOperationVariable>) get(Operation.OUT);
+	}
+
+	@Override
+	public Object invoke(Object... params) throws Exception {
+		return this.endpoint.apply(params);
 	}
 
 	@Override
 	public void SetParameterTypes(List<OperationVariable> in) {
-		new OperationFacade(this).SetParameterTypes(in);
+		put(Operation.IN, in);
 		
 	}
 
 	@Override
 	public void setReturnTypes(List<OperationVariable> out) {
-		new OperationFacade(this).setReturnTypes(out);
+		put(Operation.OUT, out);
 		
 	}
 
 	@Override
 	public void setInvocable(Function<Object[], Object[]> endpoint) {
-		new OperationFacade(this).setInvocable(endpoint);
+		put(Operation.INVOKABLE, endpoint);
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Function<Object[], Object> getInvocable() {
-	return new OperationFacade(this).getInvocable();
+		return (Function<Object[], Object>) get(Operation.INVOKABLE);
 	}
-
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
@@ -197,17 +208,6 @@ public class Operation extends SubmodelElement implements IOperation {
 	@Override
 	public void setHasKindReference(String kind) {
 		new HasKindFacade(this).setHasKindReference(kind);
-		
-	}
-
-	@Override
-	public String getId() {
-	return new OperationFacade(this).getId();
-	}
-
-	@Override
-	public void setId(String id) {
-		new OperationFacade(this).setId(id);
 		
 	}
 

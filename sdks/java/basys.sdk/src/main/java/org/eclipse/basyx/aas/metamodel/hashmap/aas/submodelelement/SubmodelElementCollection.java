@@ -19,11 +19,8 @@ import org.eclipse.basyx.aas.api.resources.PropertyType;
 import org.eclipse.basyx.aas.metamodel.facades.HasDataSpecificationFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasKindFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasSemanticsFacade;
-import org.eclipse.basyx.aas.metamodel.facades.OperationFacade;
-import org.eclipse.basyx.aas.metamodel.facades.PropertyFacade;
 import org.eclipse.basyx.aas.metamodel.facades.QualifiableFacade;
 import org.eclipse.basyx.aas.metamodel.facades.ReferableFacade;
-import org.eclipse.basyx.aas.metamodel.facades.SubmodelElementCollectionFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.VABElementContainer;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.operation.Operation;
@@ -103,12 +100,12 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	}
 
 	public void addProperty(IProperty property) {
-		getElements().put(property.getId(), (SubmodelElement) property);
+		getElements().put(property.getId(), property);
 		getProperties().put(property.getId(), property);
 	}
 
 	public void addOperation(IOperation operation) {
-		getElements().put(operation.getId(), (SubmodelElement) operation);
+		getElements().put(operation.getId(), operation);
 		getOperations().put(operation.getId(), operation);
 	}
 
@@ -254,59 +251,49 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	}
 
 	@Override
-	public String getId() {
-	return new OperationFacade(this).getId();
-	}
-
-	@Override
-	public void setId(String id) {
-		new OperationFacade(this).setId(id);
-		
-	}
-
-	@Override
 	public void setValue(ArrayList<?> value) {
-		new SubmodelElementCollectionFacade(this).setValue(value);
+		put(Property.VALUE, value);
 		
 	}
 
 	@Override
 	public ArrayList<?> getValue() {
-		return new SubmodelElementCollectionFacade(this).getValue();
+		return (ArrayList<?>) get(Property.VALUE);
 	}
 
 	@Override
 	public void setOrdered(boolean value) {
-		new SubmodelElementCollectionFacade(this).setOrdered(value);
+		put(SubmodelElementCollection.ORDERED, value);
 		
 	}
 
 	@Override
 	public boolean isOrdered() {
-		return new SubmodelElementCollectionFacade(this).isOrdered();
+		return (boolean) get(SubmodelElementCollection.ORDERED);
 	}
 
 	@Override
 	public void setAllowDuplicates(boolean value) {
-		new SubmodelElementCollectionFacade(this).setAllowDuplicates(value);
+		put(SubmodelElementCollection.ALLOWDUPLICATES, value);
 		
 	}
 
 	@Override
 	public boolean isAllowDuplicates() {
-	return new SubmodelElementCollectionFacade(this).isAllowDuplicates();
+		return (boolean) get(SubmodelElementCollection.ALLOWDUPLICATES);
 	}
 
 	@Override
 	public void setElements(HashMap<String, ISubmodelElement> value) {
-		new SubmodelElementCollectionFacade(this).setElements(value);
-		
+		put(SubmodelElementCollection.ELEMENTS, value);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap<String, ISubmodelElement> getElements() {
-		return new SubmodelElementCollectionFacade(this).getElements();
+		return (HashMap<String, ISubmodelElement>) get(SubmodelElementCollection.ELEMENTS);
 	}
+
 
 	@Override
 	public void setValue(Object obj) {
@@ -317,17 +304,12 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 
 	@Override
 	public void setValueId(Object obj) {
-		 new PropertyFacade(this).setValueId(obj);
+		put(Property.VALUEID, obj);
 		
 	}
 
 	@Override
 	public Object getValueId() {
-		return new PropertyFacade(this).getValueId();
+		return get(Property.VALUEID);
 	}
-
-
-
-
-
 }

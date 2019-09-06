@@ -9,10 +9,8 @@ import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IRelationshipElem
 import org.eclipse.basyx.aas.metamodel.facades.HasDataSpecificationFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasKindFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasSemanticsFacade;
-import org.eclipse.basyx.aas.metamodel.facades.OperationFacade;
 import org.eclipse.basyx.aas.metamodel.facades.QualifiableFacade;
 import org.eclipse.basyx.aas.metamodel.facades.ReferableFacade;
-import org.eclipse.basyx.aas.metamodel.facades.RelationshipElementFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.reference.Reference;
 
 /**
@@ -52,26 +50,25 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 
 	@Override
 	public void setFirst(IReference first) {
-		new RelationshipElementFacade(this).setFirst(first);
+		put(RelationshipElement.FIRST, first);
 		
 	}
 
 	@Override
 	public IReference getFirst() {
-		return new RelationshipElementFacade(this).getFirst();
+		return (IReference) get(RelationshipElement.FIRST);
 	}
 
 	@Override
 	public void setSecond(IReference second) {
-		new RelationshipElementFacade(this).setSecond(second);
+		put(RelationshipElement.SECOND, second);
 		
 	}
 
 	@Override
 	public IReference getSecond() {
-		return new RelationshipElementFacade(this).getSecond();
+		return (IReference) get(RelationshipElement.FIRST);
 	}
-	
 
 
 	@Override
@@ -159,17 +156,5 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	@Override
 	public void setHasKindReference(String kind) {
 		new HasKindFacade(this).setHasKindReference(kind);
-		
-	}
-
-	@Override
-	public String getId() {
-	return new OperationFacade(this).getId();
-	}
-
-	@Override
-	public void setId(String id) {
-		new OperationFacade(this).setId(id);
-		
 	}
 }

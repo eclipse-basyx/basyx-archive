@@ -10,8 +10,6 @@ import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperat
 import org.eclipse.basyx.aas.metamodel.facades.HasDataSpecificationFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasKindFacade;
 import org.eclipse.basyx.aas.metamodel.facades.HasSemanticsFacade;
-import org.eclipse.basyx.aas.metamodel.facades.OperationFacade;
-import org.eclipse.basyx.aas.metamodel.facades.OperationVariableFacade;
 import org.eclipse.basyx.aas.metamodel.facades.QualifiableFacade;
 import org.eclipse.basyx.aas.metamodel.facades.ReferableFacade;
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.submodelelement.SubmodelElement;
@@ -43,13 +41,13 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 
 	@Override
 	public void setValue(ISubmodelElement value) {
-		new OperationVariableFacade(this).setValue(value);
+		put(Property.VALUE, value);
 		
 	}
 
 	@Override
 	public ISubmodelElement getValue() {
-		return new OperationVariableFacade(this).getValue();
+		return (ISubmodelElement) get(Property.VALUE);
 	}
 
 
@@ -138,17 +136,6 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	@Override
 	public void setHasKindReference(String kind) {
 		new HasKindFacade(this).setHasKindReference(kind);
-		
-	}
-
-	@Override
-	public String getId() {
-	return new OperationFacade(this).getId();
-	}
-
-	@Override
-	public void setId(String id) {
-		new OperationFacade(this).setId(id);
 		
 	}
 

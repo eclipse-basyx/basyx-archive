@@ -6,7 +6,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElement;
  * @author rajashek
  *
 */
-public interface IOperationVariable {
+public interface IOperationVariable extends ISubmodelElement {
 	
 	public void setValue(ISubmodelElement value);
 	

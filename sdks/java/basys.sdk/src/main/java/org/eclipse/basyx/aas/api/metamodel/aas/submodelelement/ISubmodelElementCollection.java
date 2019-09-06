@@ -8,7 +8,7 @@ import java.util.HashMap;
  * @author rajashek
  *
 */
-public interface ISubmodelElementCollection {
+public interface ISubmodelElementCollection extends ISubmodelElement {
 
 	
 	public void setValue(ArrayList<?> value);
