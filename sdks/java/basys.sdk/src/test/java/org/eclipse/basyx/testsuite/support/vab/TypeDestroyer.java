@@ -1,4 +1,4 @@
-package org.eclipse.basyx.aas.backend.connected.TypeDestroyer;
+package org.eclipse.basyx.testsuite.support.vab;
 
 import static org.junit.Assert.assertFalse;
 
@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 import org.junit.Test;
 
 /**
@@ -16,6 +15,13 @@ import org.junit.Test;
  */
 public class TypeDestroyer {
 	@SuppressWarnings("unchecked")
+	/**
+	 * Removes type information of all objects within the map, i.e. every subclass
+	 * of HashMap is reduced to HashMap
+	 * 
+	 * @param map
+	 * @return
+	 */
 	public static Map<String, Object> destroyType(Map<String, Object> map){
 		return (Map<String, Object>) handle(map);
 	}
@@ -41,10 +47,5 @@ public class TypeDestroyer {
 	public void testTypeDestroyer() {
 		SubModel sm = new SubModel();
 		assertFalse(destroyType(sm) instanceof SubModel);
-	}
-	@Test
-	public void testTypeDestroyer2() {
-		HasDataSpecification sm =new HasDataSpecification();
-		assertFalse(destroyType(sm) instanceof HasDataSpecification);
 	}
 }
