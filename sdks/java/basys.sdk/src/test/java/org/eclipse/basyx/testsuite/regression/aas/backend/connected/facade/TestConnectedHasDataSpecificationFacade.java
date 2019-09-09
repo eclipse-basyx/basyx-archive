@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IKey;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasDataSpecificationFacade;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
@@ -27,7 +28,7 @@ public class TestConnectedHasDataSpecificationFacade {
 	@Before
 	public void build() {
 		Key keyobj = new Key("Type1", false, "Value1", "TypeID1");
-		ArrayList<Key> keyArray = new ArrayList<Key>();
+		ArrayList<IKey> keyArray = new ArrayList<IKey>();
 		keyArray.add(keyobj);
 
 		Reference ref = new Reference(keyArray);

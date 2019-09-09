@@ -50,7 +50,7 @@ public class View extends HashMap<String, Object> implements IView {
 	 * @param references
 	 *            Referable elements that are contained in the view.
 	 */
-	public View(Set<Reference> references) {
+	public View(Set<IReference> references) {
 		this();
 		put(CONTAINEDELEMENT, references);
 	}

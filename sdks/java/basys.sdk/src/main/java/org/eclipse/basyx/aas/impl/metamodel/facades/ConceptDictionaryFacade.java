@@ -7,7 +7,6 @@ import org.eclipse.basyx.aas.api.metamodel.aas.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
-
 /**
  * Facade providing access to a map containing the ConceptDictionary structure
  *  
@@ -70,8 +69,8 @@ public class ConceptDictionaryFacade implements IConceptDictionary {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public HashSet<String> getConceptDescription() {
-		return (HashSet<String>)map.get(ConceptDictionary.CONCEPTDESCRIPTION);
+	public HashSet<IReference> getConceptDescription() {
+		return (HashSet<IReference>) map.get(ConceptDictionary.CONCEPTDESCRIPTION);
 	}
 
 	@Override

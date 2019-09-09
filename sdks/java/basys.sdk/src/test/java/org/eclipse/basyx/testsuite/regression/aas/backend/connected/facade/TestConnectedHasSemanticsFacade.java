@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.reference.IKey;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasSemantics;
@@ -23,7 +24,7 @@ public class TestConnectedHasSemanticsFacade {
 	@Before
 	public void build() {
 		Key keyobj = new Key("Type1", false, "Value1", "TypeID1");
-		ArrayList<Key> keyArray = new ArrayList<Key>();
+		ArrayList<IKey> keyArray = new ArrayList<IKey>();
 		keyArray.add(keyobj);
 		Reference ref = new Reference(keyArray);
 

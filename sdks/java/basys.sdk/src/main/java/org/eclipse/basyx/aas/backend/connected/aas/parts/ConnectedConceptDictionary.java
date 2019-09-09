@@ -17,7 +17,7 @@ public class ConnectedConceptDictionary extends ConnectedElement implements ICon
 	public ConnectedConceptDictionary(VABElementProxy proxy) {
 		super(proxy);		
 	}
-	
+
 	@Override
 	public String getIdshort() {
 		return new ConnectedReferableFacade(getProxy()).getIdshort();
@@ -64,8 +64,9 @@ public class ConnectedConceptDictionary extends ConnectedElement implements ICon
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public HashSet<String> getConceptDescription() {
-		return (HashSet<String>)getProxy().getModelPropertyValue(ConceptDictionary.CONCEPTDESCRIPTION);
+
+	public HashSet<IReference> getConceptDescription() {
+		return (HashSet<IReference>)getProxy().getModelPropertyValue(ConceptDictionary.CONCEPTDESCRIPTION);
 	}
 
 	@Override

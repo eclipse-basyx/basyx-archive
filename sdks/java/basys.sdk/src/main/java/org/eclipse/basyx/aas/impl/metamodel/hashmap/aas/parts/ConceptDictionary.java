@@ -2,13 +2,13 @@ package org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.parts;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.impl.metamodel.facades.ConceptDictionaryFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.ReferableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
-
 /**
  * ConceptDictionary class as described in DAAS document
  * 
@@ -33,6 +33,11 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 		put(CONCEPTDESCRIPTION, new HashSet<String>());
 	}
 
+	public ConceptDictionary(Set<IReference> ref) {
+		// Add qualifier (Referable)
+		putAll(new Referable());
+		put(CONCEPTDESCRIPTION, ref);
+	}
 	@Override
 	public String getIdshort() {
 	return new ReferableFacade(this).getIdshort();
@@ -78,7 +83,7 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 	}
 
 	@Override
-	public HashSet<String> getConceptDescription() {
+	public HashSet<IReference> getConceptDescription() {
 		return new ConceptDictionaryFacade(this).getConceptDescription();
 	}
 

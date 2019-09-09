@@ -36,7 +36,7 @@ public class Reference extends HashMap<String, Object> implements IReference {
 	 * 
 	 * @param key Unique reference in its name space.
 	 */
-	public Reference(List<Key> key) {
+	public Reference(List<IKey> key) {
 		put(KEY, key);
 	}
 

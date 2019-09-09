@@ -28,4 +28,10 @@ public class Description extends HashMap<String, Object> {
 		put("language", "");
 		put("text",     "");
 	}
+	
+	public Description(String lang,String text) {
+		// Add qualifiers
+		put("language",lang);
+		put("text", text);
+	}
 }

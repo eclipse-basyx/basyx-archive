@@ -30,6 +30,11 @@ public class HasDataSpecification extends HashMap<String, Object> implements IHa
 		// Default values
 		put(HASDATASPECIFICATION, new HashSet<Reference>());
 	}
+	
+	public HasDataSpecification(HashSet<IReference> ref) {
+		// Default values
+		put(HASDATASPECIFICATION, ref);
+	}
 
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {

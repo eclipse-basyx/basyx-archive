@@ -6,6 +6,7 @@ import java.util.HashSet;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IReferable;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.impl.metamodel.facades.ReferableFacade;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.Description;
 
 /**
  * Referable class

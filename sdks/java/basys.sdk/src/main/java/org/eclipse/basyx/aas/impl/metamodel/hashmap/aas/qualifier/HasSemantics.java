@@ -5,7 +5,6 @@ import java.util.HashMap;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IHasSemantics;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasSemanticsFacade;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.reference.Reference;
 
 /**
  * HasSemantics class
@@ -33,7 +32,7 @@ public class HasSemantics extends HashMap<String, Object> implements IHasSemanti
 	/**
 	 * Constructor
 	 */
-	public HasSemantics(Reference idSemantics) {
+	public HasSemantics(IReference idSemantics) {
 		put(SEMANTICID, idSemantics);
 	}
 
