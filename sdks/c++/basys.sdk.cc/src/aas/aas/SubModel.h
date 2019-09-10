@@ -13,7 +13,7 @@
  * *********************************************************************************/
 
 // BaSyx includes
-#include "api/ISubModel.h"
+#include "aas/ISubModel.h"
 #include "qualifier/IHasSemantics.h"
 
 #include <memory>

@@ -8,7 +8,7 @@
 #define BASYX_METAMODEL_IOperationVariable_H_
 
 
-#include "submodelelement/ISubmodelElement.h"
+#include "aas/submodelelement/ISubmodelElement.h"
 
 #include <memory>
 

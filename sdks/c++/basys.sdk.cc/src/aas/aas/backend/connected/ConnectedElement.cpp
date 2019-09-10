@@ -6,15 +6,24 @@
 
 #include "ConnectedElement.h"
 
-ConnectedElement::ConnectedElement(const std::string & path, const std::shared_ptr<VABElementProxy> & proxy) :
+namespace basyx {
+namespace aas {
+namespace backend {
+
+using namespace vab::core;
+
+ConnectedElement::ConnectedElement(const std::string & path, const std::shared_ptr<proxy::VABElementProxy> & proxy) :
   proxy(proxy),
   path(path)
 {
 
 }
 
-std::shared_ptr<VABElementProxy> ConnectedElement::getProxy() const
+std::shared_ptr<proxy::VABElementProxy> ConnectedElement::getProxy() const
 {
   return this->proxy;
 }
 
+}
+}
+}
