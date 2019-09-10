@@ -132,8 +132,11 @@ void BaSyxNativeFrameProcessor::processInvoke(char const* rxFrame, char* txFrame
 	// 1 byte result field
 	// 4 byte string size
 	// N byte return value
-	jsonProvider.processBaSysInvoke(path, serializedValue, txFrame + 5,
+	auto result = jsonProvider.processBaSysInvoke(path, serializedValue, txFrame + 5,
 			txSize);
+
+	*txSize = result.size();
+	memcpy(txFrame + 5, result.c_str(), result.size());
 
 	// Set return value size
 	CoderTools::setInt32(txFrame + 1, 0, *txSize);

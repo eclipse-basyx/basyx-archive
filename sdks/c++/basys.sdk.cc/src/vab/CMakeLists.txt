@@ -16,7 +16,6 @@ target_sources(vab
         vab/backend/connector/JSONProvider.h
         vab/backend/connector/native/BaSyxConnector.cpp
         vab/backend/connector/native/BaSyxConnector.h
-        vab/backend/connector/native/frame/BaSyx.h
         vab/backend/connector/native/frame/BaSyxNativeFrameBuilder.cpp
         vab/backend/connector/native/frame/BaSyxNativeFrameBuilder.h
         vab/core/IModelProvider.h

@@ -57,6 +57,13 @@ size_t BaSyxNativeFrameBuilder::buildInvokeFrame(std::string const& path, const 
 	return size;
 }
 
+size_t BaSyxNativeFrameBuilder::buildInvokeFrame(std::string const& path, const basyx::objectCollection_t & params, char * buffer)
+{
+	size_t size = encodeCommandAndPath(BaSyxCommand::INVOKE, path, buffer);
+	size += encodeValue(params, buffer + size);
+	return size;
+}
+
 size_t BaSyxNativeFrameBuilder::encodeCommand(BaSyxCommand command, char* buffer)
 {
 	buffer[0] = command;

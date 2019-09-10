@@ -12,7 +12,6 @@
 
 
 
-//#include "vab/backend/protocols/basyx/BaSyx.h"
 #include <basyx/types.h>
 #include <basyx/any.h>
 
@@ -43,7 +42,7 @@ namespace frame {
         size_t buildDeleteFrame(std::string const& path, const basyx::any& deleteVal, char* buffer);
 
         size_t buildInvokeFrame(std::string const& path, const basyx::any& param, char* buffer);
-
+		size_t buildInvokeFrame(std::string const& path, const basyx::objectCollection_t & params, char * buffer);
     private:
         size_t encodeCommand(BaSyxCommand command, char* buffer);
 

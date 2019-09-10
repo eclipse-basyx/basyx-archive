@@ -178,41 +178,45 @@ TEST(BaSyxNativeFrameProcessor, deleteSimpleTest) {
 	ASSERT_EQ(mockup->path, path);
 }
 
-//TODO: invokeTest
-//TEST(BaSyxNativeFrameProcessor, invokeTest) {
-//	auto mockup = util::make_unique<MockupModelProvider>();
-//	BaSyxNativeFrameProcessor provider(mockup.get());
-//
-//	std::unique_ptr<char> frame(new char[1000]);
-//
-//	// Build test frame
-//	frame.get()[0] = BaSyxCommand::INVOKE;
-//
-//	std::string path = "TestPath";
-//	StringTools::toArray(path, frame.get() + 1);
-//
-//	std::string newVal = jsonTools.get()->serialize(
-//			BRef<BValue>(new BValue(10)), 0, "").dump();
-//
-//	// write serialized data after path
-//	StringTools::toArray(newVal, frame.get() + 1 + 4 + path.length());
-//
-//	std::unique_ptr<char> receive(new char[1000]);
-//	size_t txSize;
-//	provider.processInputFrame(frame.get(),
-//			1 + 4 + path.length() + 4 + newVal.length(), receive.get(),
-//			&txSize);
-//
-//	ASSERT_EQ(mockup->called, MockupModelProvider::CalledFunction::INVOKE);
-//	ASSERT_EQ(mockup->path, path);
-//	ASSERT_EQ(mockup->val->getType(), BASYS_INT);
-//	ASSERT_EQ(static_cast<BRef<BValue>>(mockup->val)->getInt(), 10);
-//
-//	ASSERT_EQ(receive.get()[0], (char ) 0);
-//
-//	// Deserialize return value of operation
-//	std::string serialized = StringTools::fromArray(receive.get() + 1);
-//	BRef<BValue> val = jsonTools->deserialize(json::parse(serialized), 0, "");
-//	ASSERT_EQ(val->getType(), BASYS_INT);
-//	ASSERT_EQ(val->getInt(),3);
-//}
+TEST(BaSyxNativeFrameProcessor, invokeTest) {
+	auto mockup = util::make_unique<MockupModelProvider>();
+	vab::provider::native::frame::BaSyxNativeFrameProcessor provider{ mockup.get() };
+
+	std::unique_ptr<char> frame(new char[1000]);
+
+	// Build test frame
+	frame.get()[0] = BaSyxCommand::INVOKE;
+
+	std::string path = "TestPath";
+	StringTools::toArray(path, frame.get() + 1);
+
+
+	std::string newVal = basyx::serialization::json::serialize(10).dump();
+
+	// write serialized data after path
+	StringTools::toArray(newVal, frame.get() + 1 + 4 + path.length());
+
+	std::unique_ptr<char> receive(new char[1000]);
+	size_t txSize;
+	provider.processInputFrame(frame.get(),
+			1 + 4 + path.length() + 4 + newVal.length(), receive.get(),
+			&txSize);
+
+	ASSERT_EQ(mockup->called, MockupModelProvider::CalledFunction::INVOKE);
+	ASSERT_EQ(mockup->path, path);
+	ASSERT_TRUE(mockup->val.InstanceOf<basyx::objectCollection_t>());
+	ASSERT_EQ(mockup->val.Get<basyx::objectCollection_t&>().size(), 1);
+
+	auto & calledArgs = mockup->val.Get<basyx::objectCollection_t&>();
+
+	ASSERT_TRUE(calledArgs.front().InstanceOf<int>());
+	ASSERT_EQ(calledArgs.front().Get<int>(), 10);
+
+	ASSERT_EQ(receive.get()[0], (char ) 0);
+
+	// Deserialize return value of operation
+	std::string serialized = StringTools::fromArray(receive.get() + 1);
+	auto val = basyx::serialization::json::deserialize(nlohmann::json::parse(serialized)["entity"]);
+	ASSERT_TRUE(val.InstanceOf<int>());
+	ASSERT_EQ(val.Get<int>(),3);
+}

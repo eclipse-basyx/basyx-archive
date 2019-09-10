@@ -139,7 +139,7 @@ size_t NativeConnector::receiveData(char* data) {
 basyx::any NativeConnector::decode(char* buffer)
 {
 	std::string data = StringTools::fromArray(buffer);
-	return basyx::serialization::json::deserialize(data);
+	return basyx::serialization::json::deserialize(data).Get<basyx::objectMap_t&>()["entity"];
 };
 
 }

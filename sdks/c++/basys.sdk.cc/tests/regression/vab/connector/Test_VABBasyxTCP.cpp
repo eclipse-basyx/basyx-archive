@@ -12,10 +12,9 @@
 
 #include <gtest/gtest.h>
 
-#include "vab/backend/connector/native/BaSyxConnector.h"
+#include "util/function.h"
 
-//#include "backends/protocols/connector/basyx/BaSyxNativeConnector.h"
-//#include "backends/protocols/provider/basyx/BaSyxTCPServer.h"
+#include "vab/backend/connector/native/BaSyxConnector.h"
 #include "vab/provider/native/BaSyxTCPServer.h"
 
 #include "support/MockupModelProvider.h"
@@ -127,19 +126,30 @@ TEST_F(BaSyxNativeTest, deleteComplexTest) {
 	ASSERT_EQ(mockup->val.Get<int>(), 10);
 }
 
+int invokeTestFunc(int a, int b)
+{
+	return a + b;
+}
+
+
 // TODO: invokeTest
-//TEST_F(BaSyxNativeTest, invokeTest) {
-//	std::string path = "TestPath";
-//	basyx::any val = 10;
-//	basyx::any retVal = connector->basysInvoke(path, val);
-//
-//	// Check if correct call occured
-//	ASSERT_EQ(mockup->called, MockupModelProvider::CalledFunction::INVOKE);
-//	ASSERT_EQ(mockup->path, path);
-//	ASSERT_EQ(mockup->val->getType(), BASYS_INT);
-//	ASSERT_EQ(static_cast<BRef<BValue>>(mockup->val)->getInt(), 10);
-//	
-//	// Check return value
-//	ASSERT_EQ(retVal->getType(), BASYS_INT);
-//	ASSERT_EQ(retVal->getInt(), 3);
-//}
+TEST_F(BaSyxNativeTest, invokeTest) {
+	std::string path = "TestPath";
+	basyx::any val = 10;
+	basyx::any retVal = connector->basysInvoke(path, val);
+
+	// Check if correct call occured
+	ASSERT_EQ(mockup->called, MockupModelProvider::CalledFunction::INVOKE);
+	ASSERT_EQ(mockup->path, path);
+	ASSERT_TRUE(mockup->val.InstanceOf<basyx::objectCollection_t>());
+	ASSERT_EQ(mockup->val.Get<basyx::objectCollection_t&>().size(), 1);
+
+	auto & calledArgs = mockup->val.Get<basyx::objectCollection_t&>();
+
+	ASSERT_TRUE(calledArgs.front().InstanceOf<int>());
+	ASSERT_EQ(calledArgs.front().Get<int>(), 10);
+
+	//// Check return value
+	ASSERT_TRUE(retVal.InstanceOf<int>());
+	ASSERT_EQ(retVal.Get<int>(), 3);
+}
