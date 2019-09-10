@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.vab.core.directory.VABHTTPDirectoryProxy;
 
 
@@ -67,22 +66,6 @@ public class AASHTTPRegistryProxy extends VABHTTPDirectoryProxy implements IAASR
 		} else {
 			return null;
 		}
-	}
-
-	/**
-	 * Add an AAS mapping to a directory
-	 * 
-	 * This function creates an AAS descriptor and registers it in the directory
-	 */
-	@Override
-	public IAASRegistryService addAASMapping(String key, String value) {
-		// Create AAS descriptor and set ID, ID type, and endpoint
-		AASDescriptor aasDescriptor = new AASDescriptor(key, IdentifierType.URI, value);
-
-		// Push the descriptor to the server
-		proxy.createValue(key, aasDescriptor);
-
-		return this;
 	}
 }
 

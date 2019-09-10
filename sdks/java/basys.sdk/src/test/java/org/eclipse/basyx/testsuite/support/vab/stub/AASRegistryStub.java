@@ -11,12 +11,6 @@ public class AASRegistryStub implements IAASRegistryService {
 	protected Map<String, AASDescriptor> descriptorMap = new HashMap<>();
 
 	@Override
-	public IAASRegistryService addAASMapping(String key, String value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void register(ModelUrn aasID, AASDescriptor deviceAASDescriptor) {
 		if (descriptorMap.containsKey(aasID.getEncodedURN())) {
 			descriptorMap.remove(aasID.getEncodedURN());
