@@ -10,11 +10,24 @@
 #include "aas/submodelelement/IElement.h"
 #include "basyx/types.h"
 
+
+namespace basyx {
+namespace aas {
+namespace submodelelement {
+namespace property {
+
 enum PropertyType
 {
   Single, Collection, Map, Container
 };
 
+namespace PropertyPaths
+{
+  static constexpr long serialVersionUID = 1L;
+  static constexpr char VALUE[] = "value";
+  static constexpr char VALUEID[] = "valueId";
+  static constexpr char VALUETYPE[] = "valueType";
+}
 
 /* *********************************************************************************
  * Property interface
@@ -23,15 +36,19 @@ class IProperty : public IElement
 {
 
 public:
-  virtual PropertyType getPropertyType() = 0;
+  virtual PropertyType getPropertyType() const = 0;
 
-  virtual void setValue(basyx::any obj) = 0;
-  virtual basyx::any getValue() = 0;
+  virtual void setValue(const basyx::any & obj) = 0;
+  virtual basyx::any getValue() const = 0;
 
-  virtual void setValueId(basyx::any obj) = 0;
-  virtual basyx::any getValueId() = 0;
+  virtual void setValueId(const basyx::any & obj) = 0;
+  virtual basyx::any getValueId() const = 0;
 
 };
 
+}
+}
+}
+}
 
 #endif /* API_IPROPERTY_H_ */

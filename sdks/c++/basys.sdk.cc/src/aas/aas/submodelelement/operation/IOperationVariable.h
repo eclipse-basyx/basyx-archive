@@ -17,8 +17,8 @@ class IOperationVariable
 public:
 	virtual ~IOperationVariable() = default;
 
-	virtual void setValue(const std::shared_ptr<ISubmodelElement> & value) = 0;
-	virtual std::shared_ptr<ISubmodelElement> getValue() const = 0;
+	virtual void setValue(const std::shared_ptr<basyx::aas::submodelelement::ISubmodelElement> & value) = 0;
+	virtual std::shared_ptr<basyx::aas::submodelelement::ISubmodelElement> getValue() const = 0;
 };
 
 #endif

@@ -8,9 +8,9 @@
 #define BASYX_METAMODEL_IQualifier_H_
 
 
-#include "reference/IReference.h"
+#include "aas/reference/IReference.h"
 
-#include "types/BaSysTypes.h"
+#include "basyx/types.h"
 
 #include <string>
 

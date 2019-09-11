@@ -8,7 +8,7 @@
 #define BASYX_METAMODEL_IRelationshipElement_H_
 
 
-#include "reference/IReference.h"
+#include "aas/reference/IReference.h"
 
 class IRelationshipElement
 {
