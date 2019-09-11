@@ -16,6 +16,7 @@ target_sources(tests_vab
         provider/test_hashmap.cpp
         provider/test_hashmap_collection.cpp
         provider/test_hashmap_map.cpp
+		path/test_VABPath.cpp
         snippet/CreateDelete.h
         snippet/GetPropertyValue.h
         snippet/MapRead.h

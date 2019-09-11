@@ -9,123 +9,128 @@ namespace basyx {
 namespace vab {
 namespace core {
 
-    class VABPath {
-    private:
-        static const char delimiter;
-        static const std::string emptyElement;
-        static const std::string operationsString;
+class VABPath {
+private:
+  static const char delimiter;
+  static const std::string emptyElement;
+  static const std::string operationsString;
 
-        std::vector<std::string> elements;
+  std::vector<std::string> elements;
 
-        bool isValid;
-        bool isOperation;
+  bool isValid;
+  bool isOperation;
 
-        std::unique_ptr<VABPath> entry;
-        std::unique_ptr<VABPath> tail;
+  std::unique_ptr<VABPath> entry;
+  std::unique_ptr<VABPath> tail;
 
-    public:
-        /**
-            * Constructs a VABPath object.
-            * Each element in the path is appended to the elements vector.
-            * If path is separated by "//", an empty element is added to elements.
-            * I.E.: basyx://127.0.0.1:6998/somepath results in a vector looking like:
-            * ["basyx:", "", "127.0.0.1:6998", "somepath"]
-            */
-        VABPath(const std::string& path);
+public:
+  /**
+      * Constructs a VABPath object.
+      * Each element in the path is appended to the elements vector.
+      * If path is separated by "//", an empty element is added to elements.
+      * I.E.: basyx://127.0.0.1:6998/somepath results in a vector looking like:
+      * ["basyx:", "", "127.0.0.1:6998", "somepath"]
+      */
+  VABPath(const std::string& path);
 
-        /**
-            * Constructs a VABPath object.
-            * Just copies the elements vector.
-            */
-        VABPath(const std::vector<std::string>& elements);
+  /**
+  * Constructor for character array. Same functionality as String constructor.
+  */
+  VABPath(const char path[]);
 
-        /**
-            * The last element of the path is returned.
-            * I.e.: For "basyx://127.0.0.1:6998/somepath", the result will be
-            * "somepath"
-            */
-        const std::string getLastElement() const;
+  /**
+      * Constructs a VABPath object.
+      * Just copies the elements vector.
+      */
+  VABPath(const std::vector<std::string>& elements);
 
-        /**
-            * Get a vector of the path-elements.
-            * I.e.: For the path "basyx://127.0.0.1:6998/somepath" the following vector
-            * will be returned:
-            * ["basyx:", "", "127.0.0.1:6998", "somepath"]
-            */
-        const std::vector<std::string>& getElements() const;
+  /**
+      * The last element of the path is returned.
+      * I.e.: For "basyx://127.0.0.1:6998/somepath", the result will be
+      * "somepath"
+      */
+  const std::string getLastElement() const;
 
-        /**
-            * Constructs a new VABPath object, with just the parent-path contained.
-            * I.e.: "basyx://127.0.0.1:6998/somepaths"
-            * will result in "basyx://127.0.0.1:6998"
-            */
-        const VABPath getParentPath() const;
+  /**
+      * Get a vector of the path-elements.
+      * I.e.: For the path "basyx://127.0.0.1:6998/somepath" the following vector
+      * will be returned:
+      * ["basyx:", "", "127.0.0.1:6998", "somepath"]
+      */
+  const std::vector<std::string>& getElements() const;
 
-        /**
-            * Removes the given prefix from the path, if existing.
-            */
-        void removePrefix(const std::string& prefix);
+  /**
+      * Constructs a new VABPath object, with just the parent-path contained.
+      * I.e.: "basyx://127.0.0.1:6998/somepaths"
+      * will result in "basyx://127.0.0.1:6998"
+      */
+  const VABPath getParentPath() const;
 
-        /**
-            * Appends the given path to the existing path.
-            */
-        void append(const std::string& path);
+  /**
+      * Removes the given prefix from the path, if existing.
+      */
+  void removePrefix(const std::string& prefix);
 
-        /**
-            * Appends the given path to the existing path.
-            */
-        void append(const VABPath& path);
+  /**
+      * Appends the given path to the existing path.
+      */
+  void append(const std::string& path);
 
-        /**
-            * Constructs a new VABPath object, with just the parent-path contained.
-            * I.e.: "basyx://127.0.0.1:6998/somepath//https://localhost/test/operations"
-            * will result in "basyx://127.0.0.1:6998/somepath"
-            */
-        VABPath getAddressEntryPath();
+  /**
+      * Appends the given path to the existing path.
+      */
+  void append(const VABPath& path);
 
-        /**
-            * As the getAddressEntryPath() method, but returns the appropriate String.
-            */
-        std::string getAddressEntry();
+  /**
+      * Constructs a new VABPath object, with just the parent-path contained.
+      * I.e.: "basyx://127.0.0.1:6998/somepath//https://localhost/test/operations"
+      * will result in "basyx://127.0.0.1:6998/somepath"
+      */
+  VABPath getAddressEntryPath();
 
-        /**
-            * Removes the address entry if present.
-            */
-        void removeEntry();
+  /**
+      * As the getAddressEntryPath() method, but returns the appropriate String.
+      */
+  std::string getAddressEntry();
 
-        /**
-            * This method generates the path as string.
-            */
-        std::string toString() const;
+  /**
+      * Removes the address entry if present.
+      */
+  void removeEntry();
 
-        /**
-            * Returns the path as string without the given prefix.
-            * Does not affect the path itself.
-            */
-        std::string toStringWithoutPrefix(const std::string& prefix) const;
+  /**
+      * This method generates the path as string.
+      */
+  std::string toString() const;
 
-        /**
-            * Returns the path without the address-entry.
-            */
-        std::string toStringWithoutEntry() const;
+  /**
+      * Returns the path as string without the given prefix.
+      * Does not affect the path itself.
+      */
+  std::string toStringWithoutPrefix(const std::string& prefix) const;
 
-        /**
-            * Addition of two pathes, same functionality as append but returns a new path object.
-            */
-        VABPath operator+(VABPath const& other);
+  /**
+      * Returns the path without the address-entry.
+      */
+  std::string toStringWithoutEntry() const;
 
-        /**
-            * Operator for implicit cast to std::string.
-            */
-        operator std::string() const;
+  /**
+      * Addition of two pathes, same functionality as append but returns a new path object.
+      */
+  VABPath operator+(VABPath const& other);
 
-        const bool isValidPath() const;
-        const bool isOperationPath() const;
-        const bool isEmpty() const;
+  /**
+      * Operator for implicit cast to std::string.
+      */
+  operator std::string() const;
 
-    private:
-        std::vector<std::string>::iterator getEntryEndIterator();
-    };
+  const bool isValidPath() const;
+  const bool isOperationPath() const;
+  const bool isEmpty() const;
+
+private:
+  std::vector<std::string>::iterator getEntryEndIterator();
+};
 
 
 }
