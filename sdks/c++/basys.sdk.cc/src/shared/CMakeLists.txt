@@ -21,6 +21,7 @@ target_sources(shared
         basyx/serialization/json/typeid.h
         basyx/serialization/json.h
         basyx/types.h
+		basyx/anyTypeChecker.h
 )
 
 target_include_directories(shared PUBLIC ${PROJECT_SOURCE_DIR})

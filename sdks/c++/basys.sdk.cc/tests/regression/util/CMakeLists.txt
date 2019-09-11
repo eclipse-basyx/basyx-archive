@@ -11,6 +11,7 @@ target_sources(tests_util
     PRIVATE
         fundamentals/test_basyx_any.cc
         fundamentals/test_basyx_array.cc
+		    test_AnyTypeChecker.cpp
 )
 
 target_link_libraries(tests_util basyx::util basyx::shared lib::gtest tests::main)
