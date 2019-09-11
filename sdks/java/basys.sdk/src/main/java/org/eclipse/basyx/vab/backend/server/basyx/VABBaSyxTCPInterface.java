@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-import org.eclipse.basyx.vab.backend.server.BaSysCommunicationInterface;
 import org.eclipse.basyx.vab.backend.server.utils.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
 
@@ -18,7 +17,7 @@ import org.eclipse.basyx.vab.core.IModelProvider;
  * @author kuhn, pschorn
  *
  */
-public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends Thread implements BaSysCommunicationInterface<ModelProvider> {
+public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends Thread {
 
 	
 	/**
@@ -79,26 +78,6 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 		providerBackend   = new JSONProvider<ModelProvider>(modelProviderBackend);
 		commChannel = channel;
 	}
-	
-	
-
-	
-	/**
-	 * Get JSON Provider from backend
-	 */
-	@Override
-	public JSONProvider<ModelProvider> getProviderBackend() {
-		return providerBackend;
-	}
-	
-
-	/**
-	 * Get backend reference
-	 */
-	public ModelProvider getBackendReference() {
-		return providerBackend.getBackendReference();
-	}
-
 	
 	/**
 	 * Process input frame

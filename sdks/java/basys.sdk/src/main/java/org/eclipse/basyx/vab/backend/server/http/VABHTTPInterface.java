@@ -9,7 +9,6 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.basyx.vab.backend.server.BaSysCommunicationInterface;
 import org.eclipse.basyx.vab.backend.server.utils.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
@@ -34,7 +33,7 @@ import org.eclipse.basyx.vab.core.tools.VABPathTools;
  * @author kuhn
  *
  */
-public class VABHTTPInterface<ModelProvider extends IModelProvider> extends BasysHTTPServlet implements BaSysCommunicationInterface<ModelProvider> {
+public class VABHTTPInterface<ModelProvider extends IModelProvider> extends BasysHTTPServlet {
 
 	
 	/**
@@ -66,16 +65,6 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		return providerBackend.getBackendReference();
 	}
 
-	
-	/**
-	 * Get JSON Provider from backend
-	 */
-	@Override
-	public JSONProvider<ModelProvider> getProviderBackend() {
-		return providerBackend;
-	}
-
-	
 	/**
 	 * Send JSON encoded response
 	 */
