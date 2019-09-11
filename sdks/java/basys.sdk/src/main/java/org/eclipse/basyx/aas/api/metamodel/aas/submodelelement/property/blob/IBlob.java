@@ -1,8 +1,6 @@
 package org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.blob;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.MimeType;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.blob.BlobType;
 
 /**
  * Interface for Blob
@@ -11,13 +9,13 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property
 */
 public interface IBlob extends IDataElement {
 	
-	public void setValue(BlobType value);
+	public void setValue(byte[] value);
 	
-	public BlobType getValue();
+	public byte[] getValue();
 	
-	public void setMimeType(MimeType mimeType);
+	public void setMimeType(String mimeType);
 	
-	public MimeType getMimeType();
+	public String getMimeType();
 	
 	
 }

@@ -2,7 +2,6 @@ package org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.propert
 
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.blob.IBlob;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.DataElement;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.MimeType;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
 
 /**
@@ -25,7 +24,7 @@ public class Blob extends DataElement implements IBlob{
 	 *            states which file extension the file has; Valid values are defined
 	 *            in <i>RFC2046</i>, e.g. <i>image/jpg</i>
 	 */
-	public Blob(BlobType value, MimeType mimeType) {
+	public Blob(byte[] value, String mimeType) {
 		super();
 
 		put(Property.VALUE, value);
@@ -33,24 +32,24 @@ public class Blob extends DataElement implements IBlob{
 	}
 
 	@Override
-	public void setValue(BlobType value) {
+	public void setValue(byte[] value) {
 		put(Property.VALUE, value);
 		
 	}
 
 	@Override
-	public BlobType getValue() {
-		return (BlobType) get(Property.VALUE);
+	public byte[] getValue() {
+		return (byte[]) get(Property.VALUE);
 	}
 
 	@Override
-	public void setMimeType(MimeType mimeType) {
+	public void setMimeType(String mimeType) {
 		put(Blob.MIMETYPE, mimeType);
 		
 	}
 
 	@Override
-	public MimeType getMimeType() {
-		return (MimeType)get(Blob.MIMETYPE);
+	public String getMimeType() {
+		return (String) get(Blob.MIMETYPE);
 	}
 }
