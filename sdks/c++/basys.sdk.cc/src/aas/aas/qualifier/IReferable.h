@@ -8,7 +8,7 @@
 #define BASYX_METAMODEL_IReferable_H_
 
 
-#include "reference/IReference.h"
+#include "aas/reference/IReference.h"
 
 #include <string>
 #include <memory>

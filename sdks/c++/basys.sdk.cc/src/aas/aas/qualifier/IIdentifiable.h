@@ -8,7 +8,7 @@
 #define BASYX_METAMODEL_IIdentifiable_H_
 
 
-#include "identifier/IIdentifier.h"
+#include "aas/identifier/IIdentifier.h"
 #include "IAdministrativeInformation.h"
 
 #include <string>

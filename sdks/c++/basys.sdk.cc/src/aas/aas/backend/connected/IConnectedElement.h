@@ -4,12 +4,19 @@
  *      Author: wendel
  */
 
-#include "backends/provider/vab/VABElementProxy.h"
+#include "vab/core/proxy/VABElementProxy.h"
 
+namespace basyx {
+namespace aas {
+namespace backend {
 class IConnectedElement
 {
 public:
   virtual ~IConnectedElement() = default;
 
-  virtual std::shared_ptr<VABElementProxy> getProxy() const = 0;
+  virtual std::shared_ptr<vab::core::proxy::VABElementProxy> getProxy() const = 0;
 };
+
+}
+}
+}

@@ -65,6 +65,7 @@ find_package(Threads)
 ###           Source Directory              ###
 ###############################################
 
+add_subdirectory(src/aas)
 add_subdirectory(src/abstraction)
 add_subdirectory(src/logging)
 add_subdirectory(src/shared)
