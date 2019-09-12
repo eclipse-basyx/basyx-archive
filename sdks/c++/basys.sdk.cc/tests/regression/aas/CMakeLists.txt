@@ -15,9 +15,7 @@ target_sources(tests_aas
 )
 
 target_include_directories(tests_aas PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(tests_aas lib::gtest basyx::aas)
+target_link_libraries(tests_aas lib::gtest basyx::aas tests::main)
 gtest_discover_tests(tests_aas)
 
 diagnostics_print(tests_aas)
-
-
