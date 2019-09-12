@@ -10,18 +10,33 @@ namespace basyx {
 namespace aas {
 namespace backend {
 
-using namespace vab::core;
-
-ConnectedElement::ConnectedElement(const std::string & path, const std::shared_ptr<proxy::VABElementProxy> & proxy) :
-  proxy(proxy),
-  path(path)
+ConnectedElement::ConnectedElement(const std::shared_ptr<vab::core::proxy::VABElementProxy> & proxy) :
+  proxy(std::move(proxy))
 {
 
 }
 
-std::shared_ptr<proxy::VABElementProxy> ConnectedElement::getProxy() const
+std::shared_ptr<vab::core::proxy::VABElementProxy> ConnectedElement::getProxy() const
 {
   return this->proxy;
+}
+
+basyx::any ConnectedElement::getLocalValue(const std::string & path) const 
+{
+  auto element_ptr = this->local_map.find(path);
+  if ( element_ptr != this->local_map.end() )
+    return *element_ptr;
+  return nullptr;
+}
+
+void ConnectedElement::setLocalValue(const std::string & path, const basyx::any value)
+{
+  this->local_map.emplace(path, value);
+}
+
+void ConnectedElement::updateLocalValue(const std::string & path, const basyx::any value)
+{
+  this->local_map.emplace(path, value);
 }
 
 }

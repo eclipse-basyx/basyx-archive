@@ -9,7 +9,7 @@
 
 
 #include "ISubmodelElement.h"
-#include "types\BaSysTypes.h"
+#include "basyx/types.h"
 
 #include <hash_map>
 

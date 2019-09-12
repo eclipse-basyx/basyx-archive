@@ -26,18 +26,19 @@
 #include "basyx/types.h"
 
 
+namespace basyx {
+namespace aas {
 
 /* *********************************************************************************
  * Sub model interface class
  * *********************************************************************************/
-
-class ISubModel : public IHasSemantics, public IIdentifiable, public IHasDataSpecification, public IHasKind
+class ISubModel : public IHasSemantics, public IIdentifiable, public IHasDataSpecification, public qualifier::haskind::IHasKind
 {
 
 public:
   virtual ~ISubModel() = default;
-  virtual std::unordered_map<std::string, std::shared_ptr<IProperty>> getProperties() const = 0;
-  virtual void setProperties(const std::unordered_map<std::string, std::shared_ptr<IProperty>> & properties) = 0;
+  virtual std::unordered_map<std::string, std::shared_ptr<submodelelement::property::IProperty>> getProperties() const = 0;
+  virtual void setProperties(const std::unordered_map<std::string, std::shared_ptr<submodelelement::property::IProperty>> & properties) = 0;
 
   virtual std::unordered_map<std::string, std::shared_ptr<IOperation>> getOperations() const = 0;
   virtual void setOperations(const std::unordered_map<std::string, std::shared_ptr<IOperation>> & operations) = 0;
@@ -45,6 +46,9 @@ public:
   virtual std::unordered_map<std::string, basyx::any> getElements() const = 0;
 
 };
+
+}
+}
 
 
 

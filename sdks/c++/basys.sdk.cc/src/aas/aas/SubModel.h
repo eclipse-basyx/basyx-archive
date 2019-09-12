@@ -4,8 +4,8 @@
  *      Author: kuhn, wendel
  */
 
-#ifndef AAS_SUBMODEL_H_
-#define AAS_SUBMODEL_H_
+#ifndef BASYX_AAS_SUBMODEL_H_
+#define BASYX_AAS_SUBMODEL_H_
 
 
 /* *********************************************************************************
@@ -19,26 +19,34 @@
 #include <memory>
 
 
+namespace basyx {
+namespace aas {
+
+
 /* *********************************************************************************
  * Sub Model base class
  * *********************************************************************************/
 class SubModel : public ISubModel
-{ 
+{
 public:
-	SubModel();
+  SubModel();
 
-	virtual std::unordered_map<std::string, std::shared_ptr<IProperty>> getProperties() const override;
-	virtual void setProperties(const std::unordered_map<std::string, std::shared_ptr<IProperty>> & properties) override;
-		
-	virtual std::unordered_map<std::string, std::shared_ptr<IOperation>> getOperations() const override;
-	virtual void setOperations(const std::unordered_map<std::string, std::shared_ptr<IOperation>> & operations) override;
-		
-	virtual std::unordered_map<std::string, basyx::any> getElements() const override;
+  virtual std::unordered_map<std::string, std::shared_ptr<submodelelement::property::IProperty>> getProperties() const override;
+  virtual void setProperties(const std::unordered_map<std::string, std::shared_ptr<submodelelement::property::IProperty>> & properties) override;
+
+  virtual std::unordered_map<std::string, std::shared_ptr<IOperation>> getOperations() const override;
+  virtual void setOperations(const std::unordered_map<std::string, std::shared_ptr<IOperation>> & operations) override;
+
+  virtual std::unordered_map<std::string, basyx::any> getElements() const override;
 
 private:
-	std::unordered_map<std::string, std::shared_ptr<IProperty>> properties;
-	std::unordered_map<std::string, std::shared_ptr<IOperation>> operations;
-	std::unordered_map<std::string, basyx::any> submodel_elements;
+  std::unordered_map<std::string, std::shared_ptr<submodelelement::property::IProperty>> properties;
+  std::unordered_map<std::string, std::shared_ptr<IOperation>> operations;
+  std::unordered_map<std::string, basyx::any> submodel_elements;
 };
+
+
+}
+}
 
 #endif

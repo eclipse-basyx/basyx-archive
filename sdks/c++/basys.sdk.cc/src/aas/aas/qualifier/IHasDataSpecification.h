@@ -10,6 +10,7 @@
 
 #include "aas/reference/IReference.h"
 
+#include <memory>
 #include <vector>
 
 class IHasDataSpecification
@@ -17,8 +18,8 @@ class IHasDataSpecification
 public:
   virtual ~IHasDataSpecification() = default;
   
-	virtual std::vector<IReference> getDataSpecificationReferences() const = 0;
-	virtual void setDataSpecificationReferences(const std::vector<IReference> & ref) = 0;
+	virtual std::vector<std::shared_ptr<IReference>> getDataSpecificationReferences() const = 0;
+	virtual void setDataSpecificationReferences(const std::vector< std::shared_ptr<IReference>> & ref) = 0;
 };
 
 #endif
