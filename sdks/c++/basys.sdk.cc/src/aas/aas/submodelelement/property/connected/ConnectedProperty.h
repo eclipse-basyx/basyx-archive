@@ -20,7 +20,7 @@ class ConnectedProperty : public IProperty, public backend::ConnectedDataElement
 {
 
 public:
-  ConnectedProperty(PropertyType type, std::unique_ptr<vab::core::proxy::VABElementProxy> proxy);
+  ConnectedProperty(PropertyType type, std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
 
   // Inherited via IProperty
   virtual PropertyType getPropertyType() const override;
@@ -31,8 +31,13 @@ public:
   virtual void setValueId(const basyx::any & valueId) override;
   virtual basyx::any getValueId() const override;
 
+  // Inherited via IProperty : IElement
+  virtual void setId(const std::string & id) override;
+  virtual std::string getId() const override;
+
 private:
   PropertyType type;
+
 };
 
 }

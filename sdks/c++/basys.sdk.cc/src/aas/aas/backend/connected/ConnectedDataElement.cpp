@@ -12,7 +12,7 @@
 namespace basyx {
 namespace aas {
 
-backend::ConnectedDataElement::ConnectedDataElement(std::shared_ptr<vab::core::proxy::VABElementProxy> proxy) :
+backend::ConnectedDataElement::ConnectedDataElement(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy) :
   ConnectedSubmodelElement(proxy)
 {}
 
@@ -123,7 +123,8 @@ void backend::ConnectedDataElement::setValue(const std::string & path, const bas
 
 std::string backend::ConnectedDataElement::getValue(const std::string & path) const
 {
-  return getProxy()->readElementValue<std::string>(path);
+  auto value = getProxy()->readElementValue(path);
+  return value.Get<std::string>();
 }
 
 }

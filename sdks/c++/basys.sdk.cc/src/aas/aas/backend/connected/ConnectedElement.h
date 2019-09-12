@@ -22,16 +22,16 @@ namespace backend {
 class ConnectedElement
 {
 public:
-  ConnectedElement(const std::shared_ptr<vab::core::proxy::VABElementProxy> & proxy);
+  ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy> & proxy);
 
-  virtual std::shared_ptr<vab::core::proxy::VABElementProxy> getProxy() const;
+  virtual std::shared_ptr<vab::core::proxy::IVABElementProxy> getProxy() const;
 
   basyx::any getLocalValue(const std::string & path) const;
   void setLocalValue(const std::string & path, const basyx::any value);
   void updateLocalValue(const std::string & path, const basyx::any value);
 
 private:
-  std::shared_ptr<vab::core::proxy::VABElementProxy> proxy;
+  std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy;
   basyx::objectMap_t local_map;
 };
 

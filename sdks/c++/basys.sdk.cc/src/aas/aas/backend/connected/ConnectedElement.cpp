@@ -10,13 +10,13 @@ namespace basyx {
 namespace aas {
 namespace backend {
 
-ConnectedElement::ConnectedElement(const std::shared_ptr<vab::core::proxy::VABElementProxy> & proxy) :
+ConnectedElement::ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy> & proxy) :
   proxy(std::move(proxy))
 {
 
 }
 
-std::shared_ptr<vab::core::proxy::VABElementProxy> ConnectedElement::getProxy() const
+std::shared_ptr<vab::core::proxy::IVABElementProxy> ConnectedElement::getProxy() const
 {
   return this->proxy;
 }

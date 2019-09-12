@@ -7,6 +7,7 @@
 #include <gtest/gtest.h>
 
 #include "vab/core/proxy/VABElementProxy.h"
+#include "vab/core/proxy/IVABElementProxy.h"
 
 #include "support/MockupModelProvider.h"
 
@@ -29,12 +30,12 @@ protected:
 
 TEST_F(BasyxVABElementProxy, TestReadElementValueTest)
 {
-  vab::core::proxy::VABElementProxy proxy(proxy_address, provider_mockup);
+  std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy(new vab::core::proxy::VABElementProxy(proxy_address, provider_mockup));
 
   // Initially no method should have been called
   ASSERT_EQ(MockupModelProvider::CalledFunction::NONE, provider_mockup->called);
 
-  auto value = proxy.readElementValue(std::string("/some/path/"));
+  auto value = proxy->readElementValue(std::string("/some/path/"));
 
   //get function of model provider should have been called
   ASSERT_EQ(MockupModelProvider::CalledFunction::GET, provider_mockup->called);
@@ -44,26 +45,12 @@ TEST_F(BasyxVABElementProxy, TestReadElementValueTest)
   ASSERT_EQ(proxy_address + "//some/path", provider_mockup->path);
 }
 
-TEST_F(BasyxVABElementProxy, TestReadElementValueTemplateTest)
-{
-  vab::core::proxy::VABElementProxy proxy(proxy_address, provider_mockup);
-
-  auto value = proxy.readElementValue<int>(std::string("/some/path/"));
-
-  //get function of model provider should have been called
-  ASSERT_EQ(MockupModelProvider::CalledFunction::GET, provider_mockup->called);
-  //Mockup returns value 2
-  ASSERT_EQ(2, value);
-  //mockup should have been called with combined address
-  ASSERT_EQ(proxy_address + "//some/path", provider_mockup->path);
-}
-
 TEST_F(BasyxVABElementProxy, TestUpdateElementValue)
 {
-  vab::core::proxy::VABElementProxy proxy(proxy_address, provider_mockup);
+  std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy(new vab::core::proxy::VABElementProxy(proxy_address, provider_mockup));
   
   basyx::any new_value(1);
-  proxy.updateElementValue(std::string("some/path/clock"), new_value);
+  proxy->updateElementValue(std::string("some/path/clock"), new_value);
 
   // Function marker should not be set
   ASSERT_EQ(MockupModelProvider::CalledFunction::NONE, provider_mockup->called);
@@ -73,10 +60,10 @@ TEST_F(BasyxVABElementProxy, TestUpdateElementValue)
 
 TEST_F(BasyxVABElementProxy, TestUpdateElementValueOnUnvalidPath)
 {
-  vab::core::proxy::VABElementProxy proxy(proxy_address, provider_mockup);
+  std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy(new vab::core::proxy::VABElementProxy(proxy_address, provider_mockup));
 
   basyx::any new_value(3);
-  proxy.updateElementValue(std::string("/frozen/path"), new_value);
+  proxy->updateElementValue(std::string("/frozen/path"), new_value);
 
   // Function marker should not be set
   ASSERT_EQ(MockupModelProvider::CalledFunction::NONE, provider_mockup->called);
@@ -84,10 +71,10 @@ TEST_F(BasyxVABElementProxy, TestUpdateElementValueOnUnvalidPath)
 
 TEST_F(BasyxVABElementProxy, TestUpdateElementValueOnValidPath)
 {
-  vab::core::proxy::VABElementProxy proxy(proxy_address, provider_mockup);
+  std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy(new vab::core::proxy::VABElementProxy(proxy_address, provider_mockup));
 
   basyx::any new_value(12);
-  proxy.updateElementValue(std::string("/some/valid/path"), new_value);
+  proxy->updateElementValue(std::string("/some/valid/path"), new_value);
 
   // Function marker should not be set
   ASSERT_EQ(MockupModelProvider::CalledFunction::SET, provider_mockup->called);
@@ -99,10 +86,10 @@ TEST_F(BasyxVABElementProxy, TestUpdateElementValueOnValidPath)
 
 TEST_F(BasyxVABElementProxy, TestCreateElement)
 {
-  vab::core::proxy::VABElementProxy proxy(proxy_address, provider_mockup);
+  std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy(new vab::core::proxy::VABElementProxy(proxy_address, provider_mockup));
 
   basyx::any new_value(18);
-  proxy.createElement(std::string("/some/path"), new_value);
+  proxy->createElement(std::string("/some/path"), new_value);
 
   // Function marker should not be set
   ASSERT_EQ(MockupModelProvider::CalledFunction::CREATE, provider_mockup->called);
@@ -114,10 +101,10 @@ TEST_F(BasyxVABElementProxy, TestCreateElement)
 
 TEST_F(BasyxVABElementProxy, TestDeleteElement)
 {
-  vab::core::proxy::VABElementProxy proxy(proxy_address, provider_mockup);
+  std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy(new vab::core::proxy::VABElementProxy(proxy_address, provider_mockup));
 
   basyx::any deleted_value(18);
-  proxy.deleteElement(std::string("some/path"), deleted_value);
+  proxy->deleteElement(std::string("some/path"), deleted_value);
 
   // Function marker should be set
   ASSERT_EQ(MockupModelProvider::CalledFunction::DELETE_COMPLEX, provider_mockup->called);
@@ -129,9 +116,9 @@ TEST_F(BasyxVABElementProxy, TestDeleteElement)
 
 TEST_F(BasyxVABElementProxy, TestDeleteElementSimple)
 {
-  vab::core::proxy::VABElementProxy proxy(proxy_address, provider_mockup);
+  std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy(new vab::core::proxy::VABElementProxy(proxy_address, provider_mockup));
 
-  proxy.deleteElement(std::string("some/other/path"));
+  proxy->deleteElement(std::string("some/other/path"));
 
   // Function marker should be set
   ASSERT_EQ(MockupModelProvider::CalledFunction::DELETE_SIMPLE, provider_mockup->called);
@@ -141,33 +128,14 @@ TEST_F(BasyxVABElementProxy, TestDeleteElementSimple)
 
 TEST_F(BasyxVABElementProxy, TestInvokeOperation)
 {
-  vab::core::proxy::VABElementProxy proxy(proxy_address, provider_mockup);
+  std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy(new vab::core::proxy::VABElementProxy(proxy_address, provider_mockup));
 
   basyx::objectCollection_t collection;
   collection.push_back(basyx::any(2));
-  auto return_value = proxy.invoke(std::string("//some/path/to/invoke"), collection);
+  auto return_value = proxy->invoke(std::string("//some/path/to/invoke"), collection);
 
   // Since mockup returns always value three, this should be returned here as well
   ASSERT_EQ(3, return_value.Get<int>());
-  // Function marker should be set
-  ASSERT_EQ(MockupModelProvider::CalledFunction::INVOKE, provider_mockup->called);
-  // Set path should be same as called one
-  ASSERT_EQ(proxy_address + "//some/path/to/invoke", provider_mockup->path);
-  // and the function should have been called with the collection
-  ASSERT_EQ(collection.size(), provider_mockup->val.Get<basyx::objectCollection_t>().size());
-  ASSERT_EQ(2, provider_mockup->val.Get<basyx::objectCollection_t>().at(0).Get<int>());
-}
-
-TEST_F(BasyxVABElementProxy, TestInvokeOperationTemplate)
-{
-  vab::core::proxy::VABElementProxy proxy(proxy_address, provider_mockup);
-
-  basyx::objectCollection_t collection;
-  collection.push_back(basyx::any(2));
-  auto return_value = proxy.invoke<int>(std::string("//some/path/to/invoke"), collection);
-
-  // Since mockup returns always value three, this should be returned here as well
-  ASSERT_EQ(3, return_value);
   // Function marker should be set
   ASSERT_EQ(MockupModelProvider::CalledFunction::INVOKE, provider_mockup->called);
   // Set path should be same as called one

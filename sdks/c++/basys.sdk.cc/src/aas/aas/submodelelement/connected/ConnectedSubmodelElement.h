@@ -6,7 +6,7 @@
 
 #include "aas/submodelelement/ISubmodelElement.h"
 #include "aas/backend/connected/ConnectedElement.h"
-#include "vab/core/proxy/VABElementProxy.h"
+#include "vab/core/proxy/IVABElementProxy.h"
 
 namespace basyx {
 namespace aas {
@@ -16,7 +16,7 @@ namespace connected {
 class ConnectedSubmodelElement : public backend::ConnectedElement, public ISubmodelElement
 {
 public:
-  ConnectedSubmodelElement(std::shared_ptr<vab::core::proxy::VABElementProxy> proxy);
+  ConnectedSubmodelElement(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
 };
 
 }

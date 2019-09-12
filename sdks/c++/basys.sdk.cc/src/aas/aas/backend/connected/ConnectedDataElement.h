@@ -8,7 +8,7 @@
 #ifndef BASYX_METAMODEL_CONNECTEDDATAELEMENT_H_
 #define BASYX_METAMODEL_CONNECTEDDATAELEMENT_H_
 
-#include "vab/core/proxy/VABElementProxy.h"
+#include "vab/core/proxy/IVABElementProxy.h"
 #include "aas/reference/IReference.h"
 #include "aas/qualifier/qualifiable/IConstraint.h"
 #include "aas/submodelelement/connected/ConnectedSubmodelElement.h"
@@ -20,7 +20,7 @@ namespace backend {
 class ConnectedDataElement : public submodelelement::connected::ConnectedSubmodelElement
 {
 public:
-  ConnectedDataElement(std::shared_ptr<vab::core::proxy::VABElementProxy> proxy);
+  ConnectedDataElement(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
   ~ConnectedDataElement() = default;
 
   std::vector<std::shared_ptr<IReference>> getDataSpecificationReferences() const;

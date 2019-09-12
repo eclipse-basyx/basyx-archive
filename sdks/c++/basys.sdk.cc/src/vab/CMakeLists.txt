@@ -21,6 +21,7 @@ target_sources(vab
         vab/core/IModelProvider.h
         vab/core/proxy/VABElementProxy.cpp
         vab/core/proxy/VABElementProxy.h
+        vab/core/proxy/IVABElementProxy.h
         vab/core/util/VABPath.cpp
         vab/core/util/VABPath.h
         vab/core/VABConnectionManager.cpp

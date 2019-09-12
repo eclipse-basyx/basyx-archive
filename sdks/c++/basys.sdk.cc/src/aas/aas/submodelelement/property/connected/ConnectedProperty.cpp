@@ -11,12 +11,12 @@ namespace aas {
 namespace submodelelement {
 namespace property {
 
-ConnectedProperty::ConnectedProperty(PropertyType type, std::unique_ptr<vab::core::proxy::VABElementProxy> proxy) :
+ConnectedProperty::ConnectedProperty(PropertyType type, std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy) :
   backend::ConnectedDataElement(std::move(proxy)),
   type(type)
 {}
 
-property::PropertyType ConnectedProperty::getPropertyType() const
+PropertyType ConnectedProperty::getPropertyType() const
 {
   return this->type;
 }
@@ -40,6 +40,16 @@ void ConnectedProperty::setValueId(const basyx::any & valueId)
 basyx::any ConnectedProperty::getValueId() const
 {
   return this->getProxy()->readElementValue(PropertyPaths::VALUEID);
+}
+
+void ConnectedProperty::setId(const std::string & id)
+{
+  ConnectedDataElement::setId(id);
+}
+
+std::string ConnectedProperty::getId() const
+{
+  return ConnectedDataElement::getId();
 }
 
 }
