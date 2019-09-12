@@ -20,7 +20,7 @@ target_sources(util
         util/util.h
 )
 
-target_include_directories(util PUBLIC ${PROJECT_SOURCE_DIR}) 
+target_include_directories(util PUBLIC ${PROJECT_SOURCE_DIR})
 target_link_libraries(util lib::json)
 add_library(basyx::util ALIAS util)
 

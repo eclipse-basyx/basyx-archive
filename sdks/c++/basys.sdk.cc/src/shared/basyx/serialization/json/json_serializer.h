@@ -57,9 +57,9 @@ namespace json {
         json = any;
     };
 
-    // basyx::array serializer
+    // util::array serializer
     template <typename T>
-    inline void serialize_helper(json_t& json, const basyx::array<T>& array)
+    inline void serialize_helper(json_t& json, const util::array<T>& array)
     {
         // serialize header
         json = json_t {
