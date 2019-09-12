@@ -48,6 +48,11 @@ VABPath::VABPath(const std::string & path) :
 	isValid = true;
 }
 
+VABPath::VABPath(const char path[]) : 
+  VABPath(std::string(path))
+{
+}
+
 VABPath::VABPath(const std::vector<std::string> & elements) :
 	elements(elements),
 	isOperation(false),
