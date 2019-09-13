@@ -6,8 +6,10 @@ import java.util.Set;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IQualifiable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.qualifiable.Qualifiable;
+
 /**
  * Facade providing access to a map containing the Qualifiable structure
+ * 
  * @author rajashek
  *
  */
@@ -20,16 +22,14 @@ public class QualifiableFacade implements IQualifiable {
 		this.map = map;
 	}
 
-	@Override
 	public void setQualifier(Set<IConstraint> qualifiers) {
 		map.put(Qualifiable.CONSTRAINTS, qualifiers);
-		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return (Set<IConstraint>)map.get(Qualifiable.CONSTRAINTS);
+		return (Set<IConstraint>) map.get(Qualifiable.CONSTRAINTS);
 	}
 
 }

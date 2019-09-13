@@ -22,8 +22,6 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.haskind.HasKind;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
 
-
-
 /**
  * Base class for sub model facades
  * 
@@ -85,7 +83,6 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Update value of 'category' property
 	 */
-	@Override
 	public void setCategory(String newValue) {
 		getElements().put(Referable.CATEGORY, newValue);
 	}
@@ -101,7 +98,6 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Update value of 'description' property
 	 */
-	@Override
 	public void setDescription(String newValue) {
 		getElements().put(Referable.DESCRIPTION, newValue);
 	}
@@ -196,38 +192,29 @@ public class SubmodelFacade implements ISubModel {
 
 	@Override
 	public String getId() {
-	return (String)map.get(Referable.IDSHORT);
+		return (String) map.get(Referable.IDSHORT);
 	}
 
 	@Override
 	public void setId(String id) {
 		map.put(Referable.IDSHORT, id);
-		
 	}
 
 	@Override
 	public IReference getSemanticId() {
-		return (IReference)map.get(HasSemantics.SEMANTICID);
+		return (IReference) map.get(HasSemantics.SEMANTICID);
 	}
 
-	@Override
 	public void setSemanticID(IReference ref) {
 		map.put(HasSemantics.SEMANTICID, ref);
-		
 	}
-	
 
-
-	@Override
 	public void setAdministration(String version, String revision) {
 		map.put(Identifiable.ADMINISTRATION, new AdministrativeInformation(version, revision));
-		
 	}
 
-	@Override
 	public void setIdentification(String idType, String id) {
 		map.put(Identifiable.IDENTIFICATION, new Identifier(idType, id));
-		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -236,10 +223,8 @@ public class SubmodelFacade implements ISubModel {
 		return (HashSet<IReference>) map.get(HasDataSpecification.HASDATASPECIFICATION);
 	}
 
-	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
 		map.put(HasDataSpecification.HASDATASPECIFICATION, ref);
-		
 	}
 
 	@Override
@@ -247,59 +232,61 @@ public class SubmodelFacade implements ISubModel {
 		return (String) map.get(HasKind.KIND);
 	}
 
-	@Override
 	public void setHasKindReference(String kind) {
 		map.put(HasKind.KIND, kind);
-		
 	}
-
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IProperty> getProperties() {
-		return (Map<String, IProperty>)map.get(SubModel.PROPERTIES);
+		return (Map<String, IProperty>) map.get(SubModel.PROPERTIES);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IOperation> getOperations() {
-		return (Map<String, IOperation>)map.get(SubModel.OPERATIONS);
+		return (Map<String, IOperation>) map.get(SubModel.OPERATIONS);
 	}
 
 	@Override
 	public void setProperties(Map<String, IProperty> properties) {
-		map.put(SubModel.PROPERTIES,properties);
-		
+		map.put(SubModel.PROPERTIES, properties);
+
 	}
 
 	@Override
 	public void setOperations(Map<String, IOperation> operations) {
-		map.put(SubModel.OPERATIONS,operations);
-		
+		map.put(SubModel.OPERATIONS, operations);
+
 	}
 
 	private Map<String, Object> getElements() {
 		return map;
 	}
-	
+
 	@Override
 	public String getIdshort() {
 		return (String) map.get(Referable.IDSHORT);
 	}
 
-
-
-	@Override
 	public void setIdshort(String idShort) {
 		map.put(Referable.IDSHORT, idShort);
-		
 	}
 
-
-
-	@Override
-	public void setParent(IReference  obj) {
+	public void setParent(IReference obj) {
 		map.put(Referable.PARENT, obj);
-		
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void addProperty(IProperty property) {
+		((Map<String, Object>) map.get(SubModel.PROPERTIES)).put(property.getIdshort(), property);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void addOperation(IOperation operation) {
+		((Map<String, Object>) map.get(SubModel.OPERATIONS)).put(operation.getIdshort(), operation);
 	}
 }

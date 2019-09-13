@@ -20,10 +20,10 @@ public class AdministrativeInformation extends HashMap<String, Object> implement
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	public static final String VERSION="version";
-	
-	public static final String REVISION="revision";
+
+	public static final String VERSION = "version";
+
+	public static final String REVISION = "revision";
 
 	/**
 	 * Constructor
@@ -54,33 +54,26 @@ public class AdministrativeInformation extends HashMap<String, Object> implement
 		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
 	}
 
-	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
-		
 	}
 
-	@Override
 	public void setVersion(String version) {
 		new AdministrativeInformationFacade(this).setVersion(version);
-		
 	}
 
 	@Override
 	public String getVersion() {
-	return new AdministrativeInformationFacade(this).getVersion();
+		return new AdministrativeInformationFacade(this).getVersion();
 	}
 
-	@Override
 	public void setRevision(String revision) {
 		new AdministrativeInformationFacade(this).setRevision(revision);
-		
 	}
 
 	@Override
 	public String getRevision() {
 		return new AdministrativeInformationFacade(this).getRevision();
 	}
-
 
 }

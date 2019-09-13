@@ -15,8 +15,8 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.reference.Reference;
  *
  */
 public class HasDataSpecification extends HashMap<String, Object> implements IHasDataSpecification {
-	
-	public static final String HASDATASPECIFICATION="hasDataSpecification";
+
+	public static final String HASDATASPECIFICATION = "hasDataSpecification";
 
 	/**
 	 * Version of serialized instances
@@ -30,7 +30,7 @@ public class HasDataSpecification extends HashMap<String, Object> implements IHa
 		// Default values
 		put(HASDATASPECIFICATION, new HashSet<Reference>());
 	}
-	
+
 	public HasDataSpecification(HashSet<IReference> ref) {
 		// Default values
 		put(HASDATASPECIFICATION, ref);
@@ -41,9 +41,7 @@ public class HasDataSpecification extends HashMap<String, Object> implements IHa
 		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
 	}
 
-	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
-		
 	}
 }

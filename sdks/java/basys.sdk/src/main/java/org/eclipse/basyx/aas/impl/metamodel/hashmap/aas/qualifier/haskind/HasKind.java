@@ -17,8 +17,8 @@ public class HasKind extends HashMap<String, Object> implements IHasKind {
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	public static final String KIND="kind";
+
+	public static final String KIND = "kind";
 
 	/**
 	 * Constructor
@@ -42,12 +42,11 @@ public class HasKind extends HashMap<String, Object> implements IHasKind {
 
 	@Override
 	public String getHasKindReference() {
-      return new HasKindFacade(this).getHasKindReference();
+		return new HasKindFacade(this).getHasKindReference();
 	}
 
-	@Override
 	public void setHasKindReference(String kind) {
 		new HasKindFacade(this).setHasKindReference(kind);
-		
+
 	}
 }

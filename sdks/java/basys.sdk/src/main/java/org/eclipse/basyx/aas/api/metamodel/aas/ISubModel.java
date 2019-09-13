@@ -17,14 +17,6 @@ import org.eclipse.basyx.vab.IElement;
  *
  */
 public interface ISubModel extends IElement,IHasSemantics,IIdentifiable,/*IQualifiable*/IHasDataSpecification,IHasKind {
-
-	/**
-	 * Clone this sub model. Cloned sub models are no longer frozen
-	 * 
-	 * @return New sub model instance
-	 */
-	// public ISubModel cloneSubModel();
-
 	/**
 	 * Get sub model properties
 	 * 
@@ -43,4 +35,8 @@ public interface ISubModel extends IElement,IHasSemantics,IIdentifiable,/*IQuali
 	public void setProperties(Map<String, IProperty> properties);
 	
 	public void setOperations(Map<String, IOperation> operations);
+
+	public void addProperty(IProperty property);
+
+	public void addOperation(IOperation operation);
 }

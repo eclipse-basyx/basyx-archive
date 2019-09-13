@@ -17,8 +17,8 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.reference.Reference;
 public class Formula extends Constraint implements IFormula {
 
 	private static final long serialVersionUID = 1L;
-	
-	public static final String DEPENDSON="dependsOn";
+
+	public static final String DEPENDSON = "dependsOn";
 
 	/**
 	 * Constructor
@@ -36,10 +36,9 @@ public class Formula extends Constraint implements IFormula {
 		put(DEPENDSON, dependsOn);
 	}
 
-	@Override
 	public void setDependsOn(Set<IReference> dependsOn) {
 		new FormulaFacade(this).setDependsOn(dependsOn);
-		
+
 	}
 
 	@Override

@@ -6,7 +6,6 @@ import org.eclipse.basyx.aas.api.metamodel.aas.dataspecification.IDataSpecificat
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.dataspecification.DataSpecification;
 
-
 /**
  * Facade providing access to a map containing the DataSpecification structure
  * 
@@ -14,7 +13,7 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.dataspecification.DataSp
  *
  */
 public class DataSpecificationFacade implements IDataSpecification {
-	
+
 	private Map<String, Object> map;
 
 	public DataSpecificationFacade(Map<String, Object> map) {
@@ -24,146 +23,124 @@ public class DataSpecificationFacade implements IDataSpecification {
 
 	@Override
 	public String getPreferredName() {
-		if(map.get(DataSpecification.PREFERREDNAME)==null)
+		if (map.get(DataSpecification.PREFERREDNAME) == null)
 			return null;
-		
-		return (String)map.get(DataSpecification.PREFERREDNAME);
+
+		return (String) map.get(DataSpecification.PREFERREDNAME);
 	}
 
 	@Override
 	public String getShortName() {
-		if(map.get(DataSpecification.SHORTNAME)==null)
+		if (map.get(DataSpecification.SHORTNAME) == null)
 			return null;
-		return (String)map.get(DataSpecification.SHORTNAME);
+		return (String) map.get(DataSpecification.SHORTNAME);
 	}
 
 	@Override
 	public String getUnit() {
-		if(map.get(DataSpecification.UNIT)==null)
+		if (map.get(DataSpecification.UNIT) == null)
 			return null;
-		return (String)map.get(DataSpecification.UNIT);
+		return (String) map.get(DataSpecification.UNIT);
 	}
 
 	@Override
-	public  IReference getUnitId() {
-		if(map.get(DataSpecification.UNITID)==null)
+	public IReference getUnitId() {
+		if (map.get(DataSpecification.UNITID) == null)
 			return null;
-		return (IReference)map.get(DataSpecification.UNITID);
+		return (IReference) map.get(DataSpecification.UNITID);
 	}
 
 	@Override
 	public String getSourceOfDefinition() {
-		if(map.get(DataSpecification.SOURCEOFDEFINITION)==null)
+		if (map.get(DataSpecification.SOURCEOFDEFINITION) == null)
 			return null;
-		return (String)map.get(DataSpecification.SOURCEOFDEFINITION);
+		return (String) map.get(DataSpecification.SOURCEOFDEFINITION);
 	}
 
 	@Override
 	public String getSymbol() {
-		if(map.get(DataSpecification.SYMBOL)==null)
+		if (map.get(DataSpecification.SYMBOL) == null)
 			return null;
-		return (String)map.get(DataSpecification.SYMBOL);
+		return (String) map.get(DataSpecification.SYMBOL);
 	}
 
 	@Override
 	public String getDataType() {
-		if(map.get(DataSpecification.DATATYPE)==null)
+		if (map.get(DataSpecification.DATATYPE) == null)
 			return null;
-		return (String)map.get(DataSpecification.DATATYPE);
+		return (String) map.get(DataSpecification.DATATYPE);
 	}
 
 	@Override
 	public String getDefinition() {
-		if(map.get(DataSpecification.DEFINITION)==null)
+		if (map.get(DataSpecification.DEFINITION) == null)
 			return null;
-		return (String)map.get(DataSpecification.DEFINITION);
+		return (String) map.get(DataSpecification.DEFINITION);
 	}
 
 	@Override
 	public String getValueFormat() {
-		if(map.get(DataSpecification.VALUEFORMAT)==null)
+		if (map.get(DataSpecification.VALUEFORMAT) == null)
 			return null;
-		return (String)map.get(DataSpecification.VALUEFORMAT);
+		return (String) map.get(DataSpecification.VALUEFORMAT);
 	}
 
 	@Override
 	public String getValueList() {
-		if(map.get(DataSpecification.VALUELIST)==null)
+		if (map.get(DataSpecification.VALUELIST) == null)
 			return null;
-		return (String)map.get(DataSpecification.VALUELIST);
+		return (String) map.get(DataSpecification.VALUELIST);
 	}
 
 	@Override
 	public String getCode() {
-		if(map.get(DataSpecification.CODE)==null)
+		if (map.get(DataSpecification.CODE) == null)
 			return null;
-		return (String)map.get(DataSpecification.CODE);
+		return (String) map.get(DataSpecification.CODE);
 	}
 
-	@Override
 	public void setPreferredName(String preferredName) {
 		map.put(DataSpecification.PREFERREDNAME, preferredName);
-		
 	}
 
-	@Override
 	public void setShortName(String shortName) {
 		map.put(DataSpecification.SHORTNAME, shortName);
 	}
 
-	@Override
 	public void setUnit(String uni) {
 		map.put(DataSpecification.UNIT, uni);
-		
 	}
 
-	@Override
 	public void setUnitId(IReference unitId) {
 		map.put(DataSpecification.UNITID, unitId);
-		
 	}
 
-	@Override
 	public void setSourceOfDefinition(String sourceOfDefinition) {
 		map.put(DataSpecification.SOURCEOFDEFINITION, sourceOfDefinition);
-		
 	}
 
-	@Override
 	public void setSymbol(String symbol) {
 		map.put(DataSpecification.SYMBOL, symbol);
-		
 	}
 
-	@Override
 	public void setDataType(String dataType) {
 		map.put(DataSpecification.DATATYPE, dataType);
-		
 	}
 
-	@Override
 	public void setDefinition(String definition) {
 		map.put(DataSpecification.DEFINITION, definition);
-		
 	}
 
-	@Override
 	public void setValueFormat(String valueFormat) {
 		map.put(DataSpecification.VALUEFORMAT, valueFormat);
-		
 	}
 
-	@Override
 	public void setValueList(Object obj) {
 		map.put(DataSpecification.VALUELIST, obj);
-		
 	}
 
-	@Override
 	public void setCode(Object obj) {
 		map.put(DataSpecification.CODE, obj);
-		
 	}
-
 
 }

@@ -13,10 +13,10 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasSemantics;
  *
  */
 
-
 public class HasSemanticsFacade implements IHasSemantics {
 
 	private Map<String, Object> map;
+
 	public HasSemanticsFacade(Map<String, Object> map) {
 		super();
 		this.map = map;
@@ -24,13 +24,11 @@ public class HasSemanticsFacade implements IHasSemantics {
 
 	@Override
 	public IReference getSemanticId() {
-		return (IReference)map.get(HasSemantics.SEMANTICID);
+		return (IReference) map.get(HasSemantics.SEMANTICID);
 	}
 
-	@Override
 	public void setSemanticID(IReference ref) {
 		map.put(HasSemantics.SEMANTICID, ref);
-		
 	}
 
 }

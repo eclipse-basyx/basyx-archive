@@ -12,55 +12,50 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 
 /**
- * Facade providing access to a map containing the View  structure
+ * Facade providing access to a map containing the View structure
+ * 
  * @author rajashek
  *
  */
 
 public class ViewFacade implements IView {
 
-	
 	private Map<String, Object> map;
+
 	public ViewFacade(Map<String, Object> map) {
 		super();
 		this.map = map;
 	}
 
-	@Override
 	public void setContainedElement(Set<IReference> references) {
 		map.put(View.CONTAINEDELEMENT, references);
-		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IReference> getContainedElement() {
-		return (Set<IReference>)map.get(View.CONTAINEDELEMENT);
+		return (Set<IReference>) map.get(View.CONTAINEDELEMENT);
 	}
 
 	@Override
 	public IReference getSemanticId() {
-		return (IReference)map.get(HasSemantics.SEMANTICID);
+		return (IReference) map.get(HasSemantics.SEMANTICID);
 	}
 
-	@Override
 	public void setSemanticID(IReference ref) {
 		map.put(HasSemantics.SEMANTICID, ref);
-		
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
 		return (HashSet<IReference>) map.get(HasDataSpecification.HASDATASPECIFICATION);
 	}
 
-	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
 		map.put(HasDataSpecification.HASDATASPECIFICATION, ref);
-		
 	}
-	
+
 	@Override
 	public String getIdshort() {
 		return (String) map.get(Referable.IDSHORT);
@@ -77,32 +72,24 @@ public class ViewFacade implements IView {
 	}
 
 	@Override
-	public IReference  getParent() {
-		return (IReference)map.get(Referable.PARENT);
+	public IReference getParent() {
+		return (IReference) map.get(Referable.PARENT);
 	}
 
-	@Override
 	public void setIdshort(String idShort) {
 		map.put(Referable.IDSHORT, idShort);
-		
 	}
 
-	@Override
 	public void setCategory(String category) {
 		map.put(Referable.CATEGORY, category);
-		
 	}
 
-	@Override
 	public void setDescription(String description) {
 		map.put(Referable.DESCRIPTION, description);
-		
 	}
 
-	@Override
 	public void setParent(IReference obj) {
 		map.put(Referable.PARENT, obj);
-		
 	}
 
 }

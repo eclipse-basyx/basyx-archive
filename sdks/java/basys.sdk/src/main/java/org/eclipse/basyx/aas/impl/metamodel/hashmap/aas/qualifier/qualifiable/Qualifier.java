@@ -19,14 +19,14 @@ public class Qualifier extends Constraint implements IQualifier {
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	public static final String QUALIFIER ="qualifier";
-	
-	public static final String QUALIFIERTYPE ="qualifierType";
-	
-	public static final String QUALIFIERVALUE ="qualifierValue";
-	
-	public static final String QUALIFIERVALUEID="qualifierValueId";
+
+	public static final String QUALIFIER = "qualifier";
+
+	public static final String QUALIFIERTYPE = "qualifierType";
+
+	public static final String QUALIFIERVALUE = "qualifierValue";
+
+	public static final String QUALIFIERVALUEID = "qualifierValueId";
 
 	/**
 	 * Constructor
@@ -51,21 +51,18 @@ public class Qualifier extends Constraint implements IQualifier {
 		put(QUALIFIERVALUEID, null);
 	}
 
-	@Override
 	public void setQualifierType(String obj) {
 		new QualifierFacade(this).setQualifierType(obj);
-		
+
 	}
 
 	@Override
 	public String getQualifierType() {
-	return new QualifierFacade(this).getQualifierType();
+		return new QualifierFacade(this).getQualifierType();
 	}
 
-	@Override
 	public void setQualifierValue(Object obj) {
 		new QualifierFacade(this).setQualifierValue(obj);
-		
 	}
 
 	@Override
@@ -73,25 +70,21 @@ public class Qualifier extends Constraint implements IQualifier {
 		return new QualifierFacade(this).getQualifierValue();
 	}
 
-	@Override
 	public void setQualifierValueId(IReference obj) {
 		new QualifierFacade(this).setQualifierValueId(obj);
-		
 	}
 
 	@Override
 	public IReference getQualifierValueId() {
 		return new QualifierFacade(this).getQualifierValueId();
 	}
-	
+
 	@Override
 	public IReference getSemanticId() {
 		return new HasSemanticsFacade(this).getSemanticId();
 	}
 
-	@Override
 	public void setSemanticID(IReference ref) {
 		new HasSemanticsFacade(this).setSemanticID(ref);
-		
 	}
 }

@@ -7,8 +7,11 @@ import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformat
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasDataSpecification;
+
 /**
- * Facade providing access to a map containing the AdministrativeInformation structure
+ * Facade providing access to a map containing the AdministrativeInformation
+ * structure
+ * 
  * @author rajashek
  *
  */
@@ -20,38 +23,33 @@ public class AdministrativeInformationFacade implements IAdministrativeInformati
 		this.map = map;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
+
 	public HashSet<IReference> getDataSpecificationReferences() {
 		return (HashSet<IReference>) map.get(HasDataSpecification.HASDATASPECIFICATION);
 	}
 
-	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
 		map.put(HasDataSpecification.HASDATASPECIFICATION, ref);
-		
 	}
 
-	@Override
 	public void setVersion(String version) {
 		map.put(AdministrativeInformation.VERSION, version);
-		
 	}
 
 	@Override
 	public String getVersion() {
-		return (String)map.get(AdministrativeInformation.VERSION);
+		return (String) map.get(AdministrativeInformation.VERSION);
 	}
 
-	@Override
 	public void setRevision(String revision) {
 		map.put(AdministrativeInformation.REVISION, revision);
-		
 	}
 
 	@Override
 	public String getRevision() {
-		return (String)map.get(AdministrativeInformation.REVISION);
+		return (String) map.get(AdministrativeInformation.REVISION);
 	}
 
 }

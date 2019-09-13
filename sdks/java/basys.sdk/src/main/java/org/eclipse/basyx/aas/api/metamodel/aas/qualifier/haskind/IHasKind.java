@@ -7,10 +7,5 @@ package org.eclipse.basyx.aas.api.metamodel.aas.qualifier.haskind;
  *
 */
 public interface IHasKind {
-	
-	
 	public String getHasKindReference();
-	
-	public void setHasKindReference(String kind);
-
 }

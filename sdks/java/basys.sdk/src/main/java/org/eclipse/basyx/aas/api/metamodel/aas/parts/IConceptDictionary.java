@@ -14,6 +14,4 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 
 public interface IConceptDictionary extends IReferable {
 	public HashSet<IReference> getConceptDescription();
-	
-	public void setConceptDescription(HashSet<String> ref);
 }

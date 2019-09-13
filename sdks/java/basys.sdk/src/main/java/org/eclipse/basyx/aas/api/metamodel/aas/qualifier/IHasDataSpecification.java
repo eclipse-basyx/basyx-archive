@@ -13,8 +13,4 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 
 public interface IHasDataSpecification {
 	public HashSet<IReference> getDataSpecificationReferences();
-	
-	public void setDataSpecificationReferences( HashSet<IReference> ref);
-	
-	
 }

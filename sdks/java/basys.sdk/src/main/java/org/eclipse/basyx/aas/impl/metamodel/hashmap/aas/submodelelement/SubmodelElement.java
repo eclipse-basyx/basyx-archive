@@ -20,7 +20,7 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.qualifiable.Qu
 
 public abstract class SubmodelElement extends HashMap<String, Object> implements ISubmodelElement {
 	private static final long serialVersionUID = 1L;
-	
+
 	public SubmodelElement() {
 		putAll(new HasDataSpecification());
 		putAll(new Referable());
@@ -29,16 +29,13 @@ public abstract class SubmodelElement extends HashMap<String, Object> implements
 		putAll(new HasKind());
 	}
 
-
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
 	}
 
-	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
-
 	}
 
 	@Override
@@ -61,34 +58,24 @@ public abstract class SubmodelElement extends HashMap<String, Object> implements
 		return new ReferableFacade(this).getParent();
 	}
 
-	@Override
 	public void setIdshort(String idShort) {
 		new ReferableFacade(this).setIdshort(idShort);
-
 	}
 
-	@Override
 	public void setCategory(String category) {
 		new ReferableFacade(this).setCategory(category);
-
 	}
 
-	@Override
 	public void setDescription(String description) {
 		new ReferableFacade(this).setDescription(description);
-
 	}
 
-	@Override
 	public void setParent(IReference obj) {
 		new ReferableFacade(this).setParent(obj);
-
 	}
 
-	@Override
 	public void setQualifier(Set<IConstraint> qualifiers) {
 		new QualifiableFacade(this).setQualifier(qualifiers);
-
 	}
 
 	@Override
@@ -101,10 +88,8 @@ public abstract class SubmodelElement extends HashMap<String, Object> implements
 		return new HasSemanticsFacade(this).getSemanticId();
 	}
 
-	@Override
 	public void setSemanticID(IReference ref) {
 		new HasSemanticsFacade(this).setSemanticID(ref);
-
 	}
 
 	@Override
@@ -112,10 +97,8 @@ public abstract class SubmodelElement extends HashMap<String, Object> implements
 		return new HasKindFacade(this).getHasKindReference();
 	}
 
-	@Override
 	public void setHasKindReference(String kind) {
 		new HasKindFacade(this).setHasKindReference(kind);
-
 	}
 
 	@Override

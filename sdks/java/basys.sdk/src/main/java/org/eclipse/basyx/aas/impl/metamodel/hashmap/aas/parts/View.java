@@ -29,8 +29,8 @@ public class View extends HashMap<String, Object> implements IView {
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	public static final String CONTAINEDELEMENT="containedElement";
+
+	public static final String CONTAINEDELEMENT = "containedElement";
 
 	/**
 	 * Constructor
@@ -55,42 +55,39 @@ public class View extends HashMap<String, Object> implements IView {
 		put(CONTAINEDELEMENT, references);
 	}
 
-	@Override
 	public void setContainedElement(Set<IReference> references) {
 		new ViewFacade(this).setContainedElement(references);
-		
+
 	}
 
 	@Override
 	public Set<IReference> getContainedElement() {
 		return new ViewFacade(this).getContainedElement();
 	}
-	
+
 	@Override
 	public IReference getSemanticId() {
 		return new HasSemanticsFacade(this).getSemanticId();
 	}
 
-	@Override
 	public void setSemanticID(IReference ref) {
 		new HasSemanticsFacade(this).setSemanticID(ref);
-		
+
 	}
-	
+
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
 	}
 
-	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
-		
+
 	}
-	
+
 	@Override
 	public String getIdshort() {
-	return new ReferableFacade(this).getIdshort();
+		return new ReferableFacade(this).getIdshort();
 	}
 
 	@Override
@@ -104,32 +101,24 @@ public class View extends HashMap<String, Object> implements IView {
 	}
 
 	@Override
-	public IReference  getParent() {
+	public IReference getParent() {
 		return new ReferableFacade(this).getParent();
 	}
 
-	@Override
 	public void setIdshort(String idShort) {
 		new ReferableFacade(this).setIdshort(idShort);
-		
 	}
 
-	@Override
 	public void setCategory(String category) {
 		new ReferableFacade(this).setCategory(category);
-		
 	}
 
-	@Override
 	public void setDescription(String description) {
 		new ReferableFacade(this).setDescription(description);
-		
 	}
 
-	@Override
-	public void setParent(IReference  obj) {
+	public void setParent(IReference obj) {
 		new ReferableFacade(this).setParent(obj);
-		
 	}
 
 }

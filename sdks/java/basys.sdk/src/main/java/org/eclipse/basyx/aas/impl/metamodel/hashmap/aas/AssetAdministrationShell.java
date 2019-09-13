@@ -32,8 +32,6 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.reference.enums.KeyEleme
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.reference.enums.KeyType;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.security.Security;
 
-
-
 /**
  * AssetAdministrationShell class <br/>
  * Does not implement IAssetAdministrationShell since there are only references
@@ -43,9 +41,8 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.security.Security;
  *
  */
 
-public class AssetAdministrationShell extends VABModelMap<Object> implements IAssetAdministrationShell  {
-	
-	
+public class AssetAdministrationShell extends VABModelMap<Object> implements IAssetAdministrationShell {
+
 	public static final String SECURITY = "security";
 	public static final String DERIVEDFROM = "derivedFrom";
 	public static final String ASSET = "asset";
@@ -56,15 +53,13 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public static final String TYPE = "type";
 	public static final String ADDRESS = "address";
 	public static final String ENDPOINTS = "endpoints";
-	public static final String IDSEMANTICS="id_semantics";
-	
+	public static final String IDSEMANTICS = "id_semantics";
 
 	/**
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
 	/**
 	 * Constructor
 	 */
@@ -96,20 +91,20 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		put(VIEWS, views);
 		put(CONCEPTDICTIONARY, dictionaries);
 	}
-	
+
 	public void setEndpoint(String endpoint, String endpointType) {
-		HashMap<String, String> endpointWrapper = new HashMap<String, String>(); 
+		HashMap<String, String> endpointWrapper = new HashMap<String, String>();
 		endpointWrapper.put(TYPE, endpointType);
 		endpointWrapper.put(ADDRESS, endpoint + "/aas");
-		
+
 		put(ENDPOINTS, Arrays.asList(endpointWrapper));
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<HashMap<String, String>> getEndpoints(){
+	public List<HashMap<String, String>> getEndpoints() {
 		return (List<HashMap<String, String>>) get(ENDPOINTS);
 	}
-	
+
 	/**
 	 * Add a submodel as reference
 	 */
@@ -118,17 +113,17 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		System.out.println("adding Submodel " + subModel.getId());
 		addSubModel(subModel.getId());
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void addSubModelHack(SubModel subModel, String endpoint, String endpointType) {
 		System.out.println("adding Submodel " + subModel.getId());
 		SubmodelDescriptor desc = new SubmodelDescriptor(subModel, endpoint, endpointType);
 		((Set<SubmodelDescriptor>) get(SUBMODELS)).add(desc);
-		
+
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public Set<SubmodelDescriptor> getSubmodelDescriptors(){
+	public Set<SubmodelDescriptor> getSubmodelDescriptors() {
 		return ((Set<SubmodelDescriptor>) get(SUBMODELS));
 	}
 
@@ -139,7 +134,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 
 	@Override
 	public IAdministrativeInformation getAdministration() {
-	return new IdentifiableFacade(this).getAdministration();
+		return new IdentifiableFacade(this).getAdministration();
 	}
 
 	@Override
@@ -147,16 +142,12 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		return new IdentifiableFacade(this).getIdentification();
 	}
 
-	@Override
 	public void setAdministration(String version, String revision) {
 		new IdentifiableFacade(this).setAdministration(version, revision);
-		
 	}
 
-	@Override
 	public void setIdentification(String idType, String id) {
 		new IdentifiableFacade(this).setIdentification(idType, id);
-		
 	}
 
 	@Override
@@ -164,27 +155,22 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
 	}
 
-	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
-		
 	}
 
 	@Override
 	public String getId() {
-		return new AssetAdministrationShellFacade(this).getId(); 
+		return new AssetAdministrationShellFacade(this).getId();
 	}
 
 	@Override
 	public void setId(String id) {
 		new AssetAdministrationShellFacade(this).setId(id);
-		
 	}
 
-	@Override
 	public void setSecurity(ISecurity security) {
 		new AssetAdministrationShellFacade(this).setSecurity(security);
-		
 	}
 
 	@Override
@@ -192,10 +178,8 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		return new AssetAdministrationShellFacade(this).getSecurity();
 	}
 
-	@Override
 	public void setDerivedFrom(IReference derivedFrom) {
 		new AssetAdministrationShellFacade(this).setDerivedFrom(derivedFrom);
-		
 	}
 
 	@Override
@@ -203,10 +187,8 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		return new AssetAdministrationShellFacade(this).getDerivedFrom();
 	}
 
-	@Override
 	public void setAsset(IReference asset) {
 		new AssetAdministrationShellFacade(this).setAsset(asset);
-		
 	}
 
 	@Override
@@ -217,7 +199,6 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	@Override
 	public void setSubModel(Set<IReference> submodels) {
 		new AssetAdministrationShellFacade(this).setSubModel(submodels);
-		
 	}
 
 	@Override
@@ -225,10 +206,8 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		return new AssetAdministrationShellFacade(this).getSubModel();
 	}
 
-	@Override
 	public void setViews(Set<IView> views) {
 		new AssetAdministrationShellFacade(this).setViews(views);
-		
 	}
 
 	@Override
@@ -236,10 +215,8 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		return new AssetAdministrationShellFacade(this).getViews();
 	}
 
-	@Override
 	public void setConceptDictionary(Set<IConceptDictionary> dictionaries) {
 		new AssetAdministrationShellFacade(this).setConceptDictionary(dictionaries);
-		
 	}
 
 	@Override
@@ -251,9 +228,10 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public Map<String, ISubModel> getSubModels() {
 		return new AssetAdministrationShellFacade(this).getSubModels();
 	}
+
 	@Override
 	public String getIdshort() {
-	return new ReferableFacade(this).getIdshort();
+		return new ReferableFacade(this).getIdshort();
 	}
 
 	@Override
@@ -267,31 +245,24 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@Override
-	public IReference  getParent() {
+	public IReference getParent() {
 		return new ReferableFacade(this).getParent();
 	}
 
-	@Override
 	public void setIdshort(String idShort) {
 		new ReferableFacade(this).setIdshort(idShort);
-		
 	}
 
-	@Override
 	public void setCategory(String category) {
 		new ReferableFacade(this).setCategory(category);
-		
+
 	}
 
-	@Override
 	public void setDescription(String description) {
 		new ReferableFacade(this).setDescription(description);
-		
 	}
 
-	@Override
-	public void setParent(IReference  obj) {
+	public void setParent(IReference obj) {
 		new ReferableFacade(this).setParent(obj);
-		
 	}
 }

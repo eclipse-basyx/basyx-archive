@@ -10,12 +10,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
 */
 
 public interface IIdentifiable  extends IReferable {
-	
 	public IAdministrativeInformation getAdministration();
 	
 	public IIdentifier getIdentification();
-	
-	public void setAdministration(String version, String revision);
-	
-	public void setIdentification(String idType, String id);
 }

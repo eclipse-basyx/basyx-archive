@@ -19,7 +19,6 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedQualifiableFacad
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedReferableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -68,8 +67,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	}
 
 	/**
-	 * Invoke a remote operation
-	 * TODO C# includes idShort
+	 * Invoke a remote operation TODO C# includes idShort
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -81,7 +79,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 			HashMap<String, Object> valueWrapper = new HashMap<String, Object>();
 			valueWrapper.put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(param));
 			valueWrapper.put(Property.VALUE, param);
-			
+
 			params[i] = valueWrapper;
 			i++;
 		}
@@ -104,22 +102,6 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		return result;
 	}
 
-	@Override
-	public void SetParameterTypes(List<OperationVariable> in) {
-		getProxy().setModelPropertyValue(Operation.IN, in);
-
-	}
-
-	@Override
-	public void setReturnTypes(List<OperationVariable> out) {
-		getProxy().setModelPropertyValue(Operation.OUT, out);
-
-	}
-
-	@Override
-	public void setInvocable(Function<Object[], Object> endpoint) {
-		throw new RuntimeException("Not possible on remote side");
-	}
 
 	@Override
 	public Function<Object[], Object> getInvocable() {
@@ -128,89 +110,41 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
-		return new ConnectedHasDataSpecificationFacade( getProxy()).getDataSpecificationReferences();
-	}
-
-	@Override
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
-		new ConnectedHasDataSpecificationFacade( getProxy()).setDataSpecificationReferences(ref);
-
+		return new ConnectedHasDataSpecificationFacade(getProxy()).getDataSpecificationReferences();
 	}
 
 	@Override
 	public String getIdshort() {
-		return new ConnectedReferableFacade( getProxy()).getIdshort();
+		return new ConnectedReferableFacade(getProxy()).getIdshort();
 	}
 
 	@Override
 	public String getCategory() {
-		return new ConnectedReferableFacade( getProxy()).getCategory();
+		return new ConnectedReferableFacade(getProxy()).getCategory();
 	}
 
 	@Override
 	public String getDescription() {
-		return new ConnectedReferableFacade( getProxy()).getDescription();
+		return new ConnectedReferableFacade(getProxy()).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return new ConnectedReferableFacade( getProxy()).getParent();
-	}
-
-	@Override
-	public void setIdshort(String idShort) {
-		new ConnectedReferableFacade( getProxy()).setIdshort(idShort);
-
-	}
-
-	@Override
-	public void setCategory(String category) {
-		new ConnectedReferableFacade( getProxy()).setCategory(category);
-
-	}
-
-	@Override
-	public void setDescription(String description) {
-		new ConnectedReferableFacade( getProxy()).setDescription(description);
-
-	}
-
-	@Override
-	public void setParent(IReference obj) {
-		new ConnectedReferableFacade( getProxy()).setParent(obj);
-
+		return new ConnectedReferableFacade(getProxy()).getParent();
 	}
 
 	@Override
 	public IReference getSemanticId() {
-		return new ConnectedHasSemanticsFacade( getProxy()).getSemanticId();
-	}
-
-	@Override
-	public void setSemanticID(IReference ref) {
-		new ConnectedHasSemanticsFacade( getProxy()).setSemanticID(ref);
-
-	}
-
-	@Override
-	public void setQualifier(Set<IConstraint> qualifiers) {
-		new ConnectedQualifiableFacade( getProxy()).setQualifier(qualifiers);
-
+		return new ConnectedHasSemanticsFacade(getProxy()).getSemanticId();
 	}
 
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return new ConnectedQualifiableFacade( getProxy()).getQualifier();
+		return new ConnectedQualifiableFacade(getProxy()).getQualifier();
 	}
 
 	@Override
 	public String getHasKindReference() {
-		return new ConnectedHasKindFacade( getProxy()).getHasKindReference();
-	}
-
-	@Override
-	public void setHasKindReference(String kind) {
-		new ConnectedHasKindFacade( getProxy()).setHasKindReference(kind);
-
+		return new ConnectedHasKindFacade(getProxy()).getHasKindReference();
 	}
 }

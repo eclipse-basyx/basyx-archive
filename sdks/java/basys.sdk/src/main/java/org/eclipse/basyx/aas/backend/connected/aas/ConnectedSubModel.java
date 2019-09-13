@@ -22,15 +22,16 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFaca
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedIdentifiableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABElementContainer;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.DataElement;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
+
 /**
  * "Connected" implementation of SubModel
+ * 
  * @author rajashek
  *
  */
@@ -48,11 +49,6 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 	}
 
 	@Override
-	public void setSemanticID(IReference ref) {
-		new ConnectedHasSemanticsFacade(getProxy()).setSemanticID(ref);
-	}
-
-	@Override
 	public IAdministrativeInformation getAdministration() {
 		return new ConnectedIdentifiableFacade(getProxy()).getAdministration();
 	}
@@ -63,48 +59,14 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 	}
 
 	@Override
-	public void setAdministration(String version, String revision) {
-		new ConnectedIdentifiableFacade(getProxy()).setAdministration(version, revision);
-
-	}
-
-	@Override
-	public void setIdentification(String idType, String id) {
-		new ConnectedIdentifiableFacade(getProxy()).setIdentification(idType, id);
-
-	}
-
-	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
 		return new ConnectedHasDataSpecificationFacade(getProxy()).getDataSpecificationReferences();
-	}
-
-	@Override
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
-		new ConnectedHasDataSpecificationFacade(getProxy()).setDataSpecificationReferences(ref);
-
 	}
 
 	@Override
 	public String getHasKindReference() {
 		return new ConnectedHasKindFacade(getProxy()).getHasKindReference();
 	}
-
-	@Override
-	public void setHasKindReference(String kind) {
-		new ConnectedHasKindFacade(getProxy()).setHasKindReference(kind);
-	}
-
-
-
-	/**
-	 * Update value of 'administration' property
-	 */
-	public void setAdministration(AdministrativeInformation newValue) {
-		new ConnectedIdentifiableFacade(getProxy()).setAdministration(newValue.getVersion(), newValue.getRevision());
-	}
-
-
 
 	@Override
 	public String getId() {
@@ -141,7 +103,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 	@Override
 	public void addDataElement(DataElement value) {
-	
+
 		String id = value.getId();
 		if (value instanceof IProperty) {
 			System.out.println("adding Property " + id);
@@ -180,12 +142,12 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 		// RTTI check
 		if (smDeList instanceof HashSet) {
-			// Read  values
+			// Read values
 			Collection<Map<String, Object>> dataElemNodes = (Collection<Map<String, Object>>) smDeList;
 
 			// Convert to IOperation
-			for (Map<String, Object> deNode: dataElemNodes) {
-				String id = (String)  deNode.get(Referable.IDSHORT);
+			for (Map<String, Object> deNode : dataElemNodes) {
+				String id = (String) deNode.get(Referable.IDSHORT);
 				ret.put(id, factory.createProperty(getProxy().getDeepProxy(VABPathTools.concatenatePaths(SubModel.PROPERTIES, id))));
 			}
 		} else {
@@ -215,13 +177,13 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 
 		// RTTI check (c# specific)
 		if (smOpList instanceof HashSet) {
-			// Read  values
+			// Read values
 			Collection<Map<String, Object>> operationNodes = (Collection<Map<String, Object>>) smOpList;
 
 			// Convert to IOperation
-			for (Map<String, Object> opNode: operationNodes) {
+			for (Map<String, Object> opNode : operationNodes) {
 				String id = (String) opNode.get(Referable.IDSHORT);
-				
+
 				ConnectedOperation conOp = new ConnectedOperation(getProxy().getDeepProxy(VABPathTools.concatenatePaths(SubModel.OPERATIONS, id)));
 				// Cache operation properties
 				conOp.putAllLocal(opNode);
@@ -256,32 +218,17 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements V
 	}
 
 	@Override
-	public IReference  getParent() {
+	public IReference getParent() {
 		return new ConnectedReference(getProxy().getDeepProxy(Referable.PARENT));
 	}
 
 	@Override
-	public void setIdshort(String idShort) {
-		getProxy().setModelPropertyValue(Referable.IDSHORT, idShort);
-		
+	public void addProperty(IProperty property) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void setCategory(String category) {
-		getProxy().setModelPropertyValue(Referable.CATEGORY, category);
-		
+	public void addOperation(IOperation operation) {
+		// TODO Auto-generated method stub
 	}
-
-	@Override
-	public void setDescription(String description) {
-		getProxy().setModelPropertyValue(Referable.DESCRIPTION, description);
-		
-	}
-
-	@Override
-	public void setParent(IReference  obj) {
-		getProxy().setModelPropertyValue(Referable.PARENT, obj);
-		
-	}
-
 }

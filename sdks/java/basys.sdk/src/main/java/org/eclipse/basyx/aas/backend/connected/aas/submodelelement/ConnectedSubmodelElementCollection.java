@@ -24,33 +24,28 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABElementContainer;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.DataElement;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElement;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+
 /**
  * "Connected" implementation of SubmodelElementCollection
+ * 
  * @author rajashek
  *
  */
-public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement implements IContainerProperty, VABElementContainer,ISubmodelElementCollection {
+public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement implements IContainerProperty, VABElementContainer, ISubmodelElementCollection {
 	public ConnectedSubmodelElementCollection(VABElementProxy proxy) {
-		super(proxy);		
+		super(proxy);
 	}
-	
+
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
 		return new ConnectedHasDataSpecificationFacade(getProxy()).getDataSpecificationReferences();
 	}
 
-	@Override
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
-		new ConnectedHasDataSpecificationFacade(getProxy()).setDataSpecificationReferences(ref);
-		
-	}
-	
 	@Override
 	public String getIdshort() {
 		return new ConnectedReferableFacade(getProxy()).getIdshort();
@@ -72,114 +67,79 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	}
 
 	@Override
-	public void setIdshort(String idShort) {
-		 new ConnectedReferableFacade(getProxy()).setIdshort(idShort);
-		
-	}
-
-	@Override
-	public void setCategory(String category) {
-		 new ConnectedReferableFacade(getProxy()).setCategory(category);
-		
-	}
-
-	@Override
-	public void setDescription(String description) {
-		 new ConnectedReferableFacade(getProxy()).setDescription(description);
-		
-	}
-
-	@Override
-	public void setParent(IReference obj) {
-		 new ConnectedReferableFacade(getProxy()).setParent(obj);
-		
-	}
-	@Override
 	public Set<IConstraint> getQualifier() {
 		return new ConnectedQualifiableFacade(getProxy()).getQualifier();
 	}
-	
+
 	@Override
 	public IReference getSemanticId() {
 		return new ConnectedHasSemanticsFacade(getProxy()).getSemanticId();
 	}
 
 	@Override
-	public void setSemanticID(IReference ref) {
-		 new ConnectedHasSemanticsFacade(getProxy()).setSemanticID(ref);
-		
-	}
-	
-	@Override
 	public String getHasKindReference() {
-		return  new ConnectedHasKindFacade(getProxy()).getHasKindReference();
+		return new ConnectedHasKindFacade(getProxy()).getHasKindReference();
 	}
 
 	@Override
-	public void setHasKindReference(String kind) {
-		new ConnectedHasKindFacade(getProxy()).setHasKindReference(kind);
-		
-	}
-	
-	@Override
 	public String getId() {
-	return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
+		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
 	}
 
 	@Override
 	public void setId(String id) {
 		getProxy().setModelPropertyValue(Referable.IDSHORT, id);
-		
+
 	}
-	
+
 	@Override
 	public void setValue(ArrayList<?> value) {
-	getProxy().setModelPropertyValue(Property.VALUE, value);
-		
+		getProxy().setModelPropertyValue(Property.VALUE, value);
+
 	}
 
 	@Override
 	public ArrayList<?> getValue() {
-		return (ArrayList<?>)getProxy().getModelPropertyValue(Property.VALUE);
+		return (ArrayList<?>) getProxy().getModelPropertyValue(Property.VALUE);
 	}
 
 	@Override
 	public void setOrdered(boolean value) {
 		getProxy().setModelPropertyValue(SubmodelElementCollection.ORDERED, value);
-		
+
 	}
 
 	@Override
 	public boolean isOrdered() {
-	return (boolean)getProxy().getModelPropertyValue(SubmodelElementCollection.ORDERED);
+		return (boolean) getProxy().getModelPropertyValue(SubmodelElementCollection.ORDERED);
 	}
 
 	@Override
 	public void setAllowDuplicates(boolean value) {
 		getProxy().setModelPropertyValue(SubmodelElementCollection.ALLOWDUPLICATES, value);
-		
+
 	}
 
 	@Override
 	public boolean isAllowDuplicates() {
-		return (boolean)getProxy().getModelPropertyValue(SubmodelElementCollection.ALLOWDUPLICATES);
+		return (boolean) getProxy().getModelPropertyValue(SubmodelElementCollection.ALLOWDUPLICATES);
 	}
 
 	@Override
 	public void setElements(HashMap<String, ISubmodelElement> value) {
-		getProxy().setModelPropertyValue(SubmodelElementCollection.ELEMENTS, value);		
+		getProxy().setModelPropertyValue(SubmodelElementCollection.ELEMENTS, value);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap<String, ISubmodelElement> getElements() {
-		return (HashMap<String, ISubmodelElement>)getProxy().getModelPropertyValue(SubmodelElementCollection.ELEMENTS);
+		return (HashMap<String, ISubmodelElement>) getProxy().getModelPropertyValue(SubmodelElementCollection.ELEMENTS);
 	}
-	
+
 	@Override
 	public void setValueId(Object obj) {
 		getProxy().setModelPropertyValue(Property.VALUEID, obj);
-		
+
 	}
 
 	@Override
@@ -187,13 +147,10 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 		return getProxy().getModelPropertyValue(Property.VALUEID);
 	}
 
-
-
 	@Override
 	public PropertyType getPropertyType() {
 		return PropertyType.Container;
 	}
-
 
 	@Override
 	public void addDataElement(DataElement element) {
@@ -217,7 +174,7 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	public void addEvent(Object event) {
 		// TODO Auto-generated method stub
 		throw new FeatureNotImplementedException();
-		
+
 	}
 
 	@Override
@@ -244,22 +201,16 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	public void setValue(Object obj) {
 		getProxy().setModelPropertyValue(Property.VALUE, obj);
 		getProxy().setModelPropertyValue(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(obj));
-		
-	}
-	
-	public void addProperty(IProperty property) {
-		getElements().put(property.getId(), (SubmodelElement) property);
-		getProperties().put(property.getId(), property);
-	}
-	public void addOperation(IOperation operation) {
-		getElements().put(operation.getId(), (SubmodelElement) operation);
-		getOperations().put(operation.getId(), operation);
+
 	}
 
-	@Override
-	public void setQualifier(Set<IConstraint> qualifiers) {
-		new ConnectedQualifiableFacade(getProxy()).setQualifier(qualifiers);
-		
+	public void addProperty(IProperty property) {
+		getElements().put(property.getId(), property);
+		getProperties().put(property.getId(), property);
 	}
-	
+
+	public void addOperation(IOperation operation) {
+		getElements().put(operation.getId(), operation);
+		getOperations().put(operation.getId(), operation);
+	}
 }

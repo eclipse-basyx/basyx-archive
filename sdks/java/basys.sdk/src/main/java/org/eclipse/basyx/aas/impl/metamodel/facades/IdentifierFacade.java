@@ -7,11 +7,12 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.Identifier;
 
 /**
  * Facade providing access to a map containing the Identifier structure
+ * 
  * @author rajashek
  *
  */
 public class IdentifierFacade implements IIdentifier {
-	
+
 	private Map<String, Object> map;
 
 	public IdentifierFacade(Map<String, Object> map) {
@@ -24,10 +25,8 @@ public class IdentifierFacade implements IIdentifier {
 		return (String) map.get(Identifier.IDTYPE);
 	}
 
-	@Override
 	public void setIdType(String newValue) {
-	map.put(Identifier.IDTYPE, newValue);
-		
+		map.put(Identifier.IDTYPE, newValue);
 	}
 
 	@Override
@@ -35,10 +34,8 @@ public class IdentifierFacade implements IIdentifier {
 		return (String) map.get(Identifier.ID);
 	}
 
-	@Override
 	public void setId(String newValue) {
 		map.put(Identifier.ID, newValue);
-		
 	}
 
 }

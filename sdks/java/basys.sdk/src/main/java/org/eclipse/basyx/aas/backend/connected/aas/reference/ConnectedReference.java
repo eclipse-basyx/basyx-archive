@@ -7,25 +7,22 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.backend.connected.ConnectedElement;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.reference.Reference;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+
 /**
  * "Connected" implementation of IReference
+ * 
  * @author rajashek
  *
  */
 public class ConnectedReference extends ConnectedElement implements IReference {
-	
+
 	public ConnectedReference(VABElementProxy proxy) {
-		super(proxy);		
+		super(proxy);
 	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IKey> getKeys() {
-		return (List<IKey>)getProxy().getModelPropertyValue(Reference.KEY);
-	}
-
-	@Override
-	public void setKeys(List<IKey> keys) {
-		getProxy().setModelPropertyValue(Reference.KEY,keys);
-		
+		return (List<IKey>) getProxy().getModelPropertyValue(Reference.KEY);
 	}
 }
