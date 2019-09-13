@@ -132,7 +132,7 @@ public class TestStaticDirectoryFileProvider {
 
 	private String getResult(String res) {
 		try {
-			return (String) handler.verify(res);
+			return (String) handler.deserialize(res);
 		} catch (Exception e) {
 			throw new RuntimeException();
 		}
