@@ -93,11 +93,9 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		// Unwrap result value
 		if (result instanceof List<?>) {
 			Object resultWrapper = ((List<?>) result).get(0);
-
 			if (resultWrapper instanceof Map<?, ?>) {
 				Map<String, Object> map = (Map<String, Object>) resultWrapper;
 				if (map.get(Referable.IDSHORT).equals("Response") && map.get(Property.VALUE) != null) {
-					// TODO C# test access from C# to Java hosted operation
 					result = map.get(Property.VALUE);
 				}
 			}
@@ -119,7 +117,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	}
 
 	@Override
-	public void setInvocable(Function<Object[], Object[]> endpoint) {
+	public void setInvocable(Function<Object[], Object> endpoint) {
 		throw new RuntimeException("Not possible on remote side");
 	}
 

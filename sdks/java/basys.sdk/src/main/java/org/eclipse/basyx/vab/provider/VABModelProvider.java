@@ -132,8 +132,8 @@ public class VABModelProvider implements IModelProvider {
 		Object childElement = getModelPropertyValue(path);
 
 		// Invoke operation for function interfaces
-		if (childElement != null && childElement instanceof Function<?, ?>) {
-			Function<Object, Object[]> function = (Function<Object, Object[]>) childElement;
+		if (childElement instanceof Function<?, ?>) {
+			Function<Object[], Object> function = (Function<Object[], Object>) childElement;
 			return function.apply(parameters);
 		}
 
