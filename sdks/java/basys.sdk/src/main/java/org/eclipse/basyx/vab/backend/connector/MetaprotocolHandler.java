@@ -38,26 +38,25 @@ public class MetaprotocolHandler implements IMetaProtocolHandler {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public Object verify(String message) throws Exception {
+	public Object deserialize(String message) throws Exception {
 
 		// First get the GSON object from the JSON string
 		Object gsonObj = serializer.deserialize(message.toString());
 		
+		// Then interpret and verify the result object
 		Object result = null;
-
 		if (gsonObj instanceof Map) {
 			Map<String, Object> responseMap = (Map<String, Object>) gsonObj;
 				
-				// Handle meta information and exceptions
-				result = verifyResponse(responseMap);
-				
-			}
+			// Handle meta information and exceptions
+			result = handleResult(responseMap);
+		}
         return result;
 	}
 	
 	
 	/**
-	 * Verify the response header and try to extract response if any. Process
+	 * Verify the Result and try to extract the entity if available. Process
 	 * information of "success", "entityType" and "messages"
 	 * 
 	 * @param responseMap
@@ -65,40 +64,30 @@ public class MetaprotocolHandler implements IMetaProtocolHandler {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private Object verifyResponse(Map<String, Object> responseMap) throws Exception {
+	private Object handleResult(Map<String, Object> responseMap) throws Exception {
 		// Retrieve messages if any
 		Collection<Map<String, Object>> messages = (Collection<Map<String, Object>>) responseMap.get(Result.MESSAGES);
 		if (messages == null) messages = new LinkedList<Map<String, Object>>();
 		
-		boolean success = (boolean) responseMap.get(Result.SUCCESS);
-			
-		// Return result if success
-		if (success) {
-			
+		Object success = responseMap.get(Result.SUCCESS);
+		Object isException = responseMap.get(Result.ISEXCEPTION);
+		Object result = null;
+
+		if (success instanceof Boolean && (boolean) success) {
 			for (Map<String, Object> m : messages) {
 				System.out
 						.println(m.get(Message.MESSAGETYPE) + ", " + m.get(Message.CODE) + ", " + m.get(Message.TEXT));
 			}
-			
-			Object result = responseMap.get(Result.ENTITY);
-			if (result != null) return result;		
-		}
-		
-		// Throw exception if no success
-		else if (!success){
-			if (responseMap.get(Result.ISEXCEPTION).equals(true)) {
-				Map<String, Object> first = messages.iterator().next(); //assumes an Exception always comes with a message
+			result = responseMap.get(Result.ENTITY);
+		} else if (isException instanceof Boolean && (boolean) isException) {
+			Map<String, Object> first = messages.iterator().next(); // assumes an Exception always comes with a message
 				
-				String text = (String) first.get(Message.TEXT);
-				throw new Exception("Server threw exception: " + text);
-			} else {
-				throw new Exception("Format Error: no success but isException not true or not found.");
-			}
+			String text = (String) first.get(Message.TEXT);
+			throw new Exception("Server threw exception: " + text);
 		} else {
-			throw new Exception("Format Error: success not found.");
+			throw new Exception("Format Error: no success but isException not true or not found.");
 		}
-		
-		return null;
 
+		return result;
 	}
 }

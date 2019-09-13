@@ -17,6 +17,6 @@ public interface IMetaProtocolHandler {
 	 * @return
 	 * 				response object with handled meta-information
 	 */
-	public Object verify(String message) throws Exception;
+	public Object deserialize(String message) throws Exception;
 
 }
