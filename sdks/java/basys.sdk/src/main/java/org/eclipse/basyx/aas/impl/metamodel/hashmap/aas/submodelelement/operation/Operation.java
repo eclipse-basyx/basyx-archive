@@ -113,7 +113,7 @@ public class Operation extends SubmodelElement implements IOperation {
 	}
 
 	@Override
-	public void setInvocable(Function<Object[], Object[]> endpoint) {
+	public void setInvocable(Function<Object[], Object> endpoint) {
 		put(Operation.INVOKABLE, endpoint);
 		
 	}

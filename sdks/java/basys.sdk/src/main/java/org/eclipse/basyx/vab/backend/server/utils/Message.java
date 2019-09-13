@@ -15,10 +15,8 @@ public class Message extends HashMap<String, Object> implements IMessage {
 	public static final String TEXT = "text";
 
 	public Message(MessageType messageType, String text) {
-		
 		this(messageType, null, text);
-	} 
-	
+	}
 	
 	public Message(MessageType messageType, String code, String text) {
 		put(MESSAGETYPE, messageType.getId());
@@ -26,21 +24,25 @@ public class Message extends HashMap<String, Object> implements IMessage {
 		put(TEXT, text);
 	}
 
+	@Override
 	public String getText() {
 		return (String) get(TEXT);
 	}
 
+	@Override
 	public String getCode() {
 		return (String) get(CODE);
 	}
 
+	@Override
 	public MessageType getMessageType() {
 		return MessageType.getById((int) get(MESSAGETYPE));
 	}
 	
+	@Override
 	public String toString() {
-
-		if (getCode()==null | getCode().isEmpty()){
+		String code = getCode();
+		if (code == null || code.isEmpty()) {
 			return getMessageType().getId() + " | " + getText();
 		} else {
 			return getMessageType().getId() + " | " + getCode() + " - " + getText();

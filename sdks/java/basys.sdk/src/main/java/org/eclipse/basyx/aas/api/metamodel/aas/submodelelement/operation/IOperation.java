@@ -43,7 +43,7 @@ public interface IOperation extends IElement, ISubmodelElement {
 	public void SetParameterTypes(List<OperationVariable> in);
 	public void setReturnTypes(List<OperationVariable> out);
 	
-	public void setInvocable(Function<Object[], Object[]> endpoint);
+	public void setInvocable(Function<Object[], Object> endpoint);
 	public Function<Object[], Object> getInvocable();
 	
 }

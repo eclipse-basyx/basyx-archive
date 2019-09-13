@@ -77,7 +77,7 @@ public class JSONConnector implements IModelProvider {
 		String message = provider.getModelPropertyValue(path);
 
 		// De-serialize and verify
-		return metaProtocolHandler.verify(message);
+		return metaProtocolHandler.deserialize(message);
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class JSONConnector implements IModelProvider {
 		String message = provider.setModelPropertyValue(path, jsonString);
 
 		// De-serialize and verify
-		metaProtocolHandler.verify(message);
+		metaProtocolHandler.deserialize(message);
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class JSONConnector implements IModelProvider {
 		String message = provider.createValue(path, jsonString);
 
 		// De-serialize and verify
-		metaProtocolHandler.verify(message);
+		metaProtocolHandler.deserialize(message);
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class JSONConnector implements IModelProvider {
 		String message = provider.deleteValue(path);
 
 		// De-serialize and verify
-		metaProtocolHandler.verify(message);
+		metaProtocolHandler.deserialize(message);
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class JSONConnector implements IModelProvider {
 		String message = provider.deleteValue(path, jsonString);
 
 		// De-serialize and verify
-		metaProtocolHandler.verify(message);
+		metaProtocolHandler.deserialize(message);
 	}
 
 	@Override
@@ -139,6 +139,6 @@ public class JSONConnector implements IModelProvider {
 		String message = provider.invokeOperation(path, jsonString);
 
 		// De-serialize and verify
-		return metaProtocolHandler.verify(message);
+		return metaProtocolHandler.deserialize(message);
 	}
 }

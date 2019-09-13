@@ -91,7 +91,7 @@ public abstract class BasysHTTPServlet extends HttpServlet {
 	protected void sendResponse(Object value, PrintWriter outputStream) {
 
 		// Wrap the entity in the meta-protocol
-		IResult result = new Result(true, value, value != null ? value.getClass() : null, null);
+		IResult result = new Result(true, value, null);
 
 		// Output result
 		outputStream.write(serializer.serialize(result));

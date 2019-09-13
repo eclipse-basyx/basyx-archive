@@ -80,10 +80,10 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	/**
 	 * Wrap object with meta-protocol and return serialized string 
 	 */
-	private String serialize(boolean success, Object entity,  Class<?> entityType, List<IMessage> messages) {
+	private String serialize(boolean success, Object entity, List<IMessage> messages) {
 		
 		// Wrap the entity in the meta-protocol
-		IResult result = new Result(success, entity, entityType, messages);
+		IResult result = new Result(success, entity, messages);
 		
 		// Serialize the whole thing
 		return serialize(result);
@@ -195,13 +195,11 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			// value = tmp;
 			// }
 
-			// Serialize as json string
-			String jsonString = serialize(true, value, (value == null ? null : value.getClass()), null); // any
-																											// messages?
+			// Serialize as json string - any messages?
+			String jsonString = serialize(true, value, null);
 
 			// Send response
 			sendJSONResponse(outputStream, jsonString);
-			
 		} catch (Exception e) {
 			sendException(outputStream, e);		// FIXME: There is no exception thrown for GET requests on the client!!
 		}
@@ -250,7 +248,6 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			Object parameter = extractParameter(path, serializedJSONValue, outputStream);
 			
 			// If only a single parameter has been sent, pack it into an array so it can be casted safely ------- FIXME Parameters should actually be a List of Hashmaps (see VWiD json)
-
 			if (parameter instanceof Collection<?>) {
 				Collection<Object> list = (Collection<Object>) parameter;
 				Object[] parameterArray = new Object[list.size()];
@@ -271,9 +268,8 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 
 			Object result = providerBackend.invokeOperation(path, (Object[]) parameter);
 
-			// Serialize result as json string
-			String jsonString = serialize(true, result, (result == null ? null : result.getClass()), null); // any
-																											// messages?
+			// Serialize result as json string - are there any messages?
+			String jsonString = serialize(true, result, null);
 			
 			// Send response
 			sendJSONResponse(outputStream, jsonString);
