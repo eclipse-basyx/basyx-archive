@@ -143,39 +143,33 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 */
 	@Override
 	public Object getModelPropertyValue(String path) throws Exception {
-
-		try {
-			String[] pathElements = VABPathTools.splitPath(path);
-			if (pathElements.length == 0) { // e.g. "/"
-				return null;
-			} else if (pathElements[0].equals("aas")) {
-				if (pathElements.length == 1) {
-					return aas_provider.getModelPropertyValue("");
-				}
-				if (pathElements[1].equals(AssetAdministrationShell.SUBMODELS)) {
-					if (pathElements.length == 2) {
-						// Make a list and return all submodels
-						HashSet<Object> submodels = new HashSet<Object>();
-						for (VirtualPathModelProvider submodel : submodel_providers.values()) {
-							submodels.add(submodel.getModelPropertyValue(""));
-						}
-						return submodels;
-					} else {
-						VirtualPathModelProvider hashmapProvider = submodel_providers.get(pathElements[2]);
-
-						// - Retrieve submodel or property value
-						return hashmapProvider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 3));
+		String[] pathElements = VABPathTools.splitPath(path);
+		if (pathElements.length == 0) { // e.g. "/"
+			return null;
+		} else if (pathElements[0].equals("aas")) {
+			if (pathElements.length == 1) {
+				return aas_provider.getModelPropertyValue("");
+			}
+			if (pathElements[1].equals(AssetAdministrationShell.SUBMODELS)) {
+				if (pathElements.length == 2) {
+					// Make a list and return all submodels
+					HashSet<Object> submodels = new HashSet<Object>();
+					for (VirtualPathModelProvider submodel : submodel_providers.values()) {
+						submodels.add(submodel.getModelPropertyValue(""));
 					}
+					return submodels;
 				} else {
-					// Handle access to AAS
-					return aas_provider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 1));
+					VirtualPathModelProvider hashmapProvider = submodel_providers.get(pathElements[2]);
+
+					// - Retrieve submodel or property value
+					return hashmapProvider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 3));
 				}
 			} else {
-				return null;
+				// Handle access to AAS
+				return aas_provider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 1));
 			}
-		} catch (NullPointerException e) {
-			throw e;
-
+		} else {
+			return null;
 		}
 	}
 
@@ -218,11 +212,9 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 			String smId = pathElements[2];
 			aas_provider.deleteValue("/" + AssetAdministrationShell.SUBMODEL + "/" + smId);
 			submodel_providers.remove(smId);
-		}
-
-		else if (propertyPath != "")
+		} else if (propertyPath.length() > 0) {
 			submodel_providers.get(pathElements[2]).deleteValue(propertyPath);
-
+		}
 	}
 
 	@Override
