@@ -15,6 +15,8 @@ import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -25,6 +27,31 @@ import org.junit.Test;
  *
  */
 public class TestGateway {
+
+	BaSyxTCPServer<VABHashmapProvider> server;
+	BaSyxTCPServer<DelegatingModelProvider> gateway;
+
+	@Before
+	public void build() { // Create VAB element
+		Map<String, Object> vabElem = new HashMap<String, Object>();
+		vabElem.put("propertyA", 10);
+
+		// Provide it using VABHashMapProvider and a tcp server on port 6998
+		server = new BaSyxTCPServer<>(new VABHashmapProvider(vabElem), 6998);
+
+		// Create ConnectorProviderMapper and add mapping from "basyx" to
+		// BaSyxConnectorProvider for gateway
+		ConnectorProviderMapper gatewayMapper = new ConnectorProviderMapper();
+		gatewayMapper.addConnectorProvider("basyx", new BaSyxConnectorProvider());
+
+		// Create gateway using DelegatingModelProvider
+		gateway = new BaSyxTCPServer<>(new DelegatingModelProvider(gatewayMapper), 6999);
+
+		// Start element provider and gateway
+		server.start();
+		gateway.start();
+	}
+
 	/**
 	 * Tests the following gateway scenario: <br />
 	 * Creates VABElementProxy using gateway; gateway forwards call to serverA
@@ -48,27 +75,6 @@ public class TestGateway {
 	 */
 	@Test
 	public void test() throws UnknownHostException, IOException {
-		// Create VAB element
-		Map<String, Object> vabElem = new HashMap<String, Object>();
-		vabElem.put("propertyA", 10);
-
-		// Provide it using VABHashMapProvider and a tcp server on port 6998
-		BaSyxTCPServer<VABHashmapProvider> server = new BaSyxTCPServer<>(new VABHashmapProvider(vabElem),
-				6998);
-
-		// Create ConnectorProviderMapper and add mapping from "basyx" to
-		// BaSyxConnectorProvider for gateway
-		ConnectorProviderMapper gatewayMapper = new ConnectorProviderMapper();
-		gatewayMapper.addConnectorProvider("basyx", new BaSyxConnectorProvider());
-
-		// Create gateway using DelegatingModelProvider
-		BaSyxTCPServer<DelegatingModelProvider> gateway = new BaSyxTCPServer<>(
-				new DelegatingModelProvider(gatewayMapper), 6999);
-
-		// Start element provider and gateway
-		server.start();
-		gateway.start();
-
 		// Create Directory, here it is configured statically, of course a dynamic
 		// request to e.g. a servlet is also possible
 		DirectoryServiceStub directory = new DirectoryServiceStub();
@@ -86,5 +92,16 @@ public class TestGateway {
 
 		// Test if the value is retrieved correctly
 		assertEquals(10, proxy.getModelPropertyValue("propertyA"));
+	}
+
+	@After
+	public void breakdown() {
+		if (server != null) {
+			server.stop();
+		}
+
+		if (gateway != null) {
+			gateway.stop();
+		}
 	}
 }
