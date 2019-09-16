@@ -99,12 +99,18 @@ public class VABModelMap<V extends Object> extends HashMap<String, V> {
 	
 	
 	/**
-	 * Get element from qualified path
+	 * Get element from qualified path <br />
+	 * To retrieve the root element, use "" as path
 	 * 
-	 * @param path path to element in contained map(s)
+	 * @param path
+	 *            path to element in contained map(s)
 	 */
 	@SuppressWarnings("unchecked")
 	public Object getPath(String path) {
+		if (path.isEmpty()) {
+			return this;
+		}
+
 		// Current Map, start with this map and then traverse according to path
 		Map<String, Object> currentMap = (Map<String, Object>) this;
 		
