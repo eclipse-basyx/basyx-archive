@@ -56,7 +56,6 @@ public class Identifier extends HashMap<String, Object> implements IIdentifier {
 	/**
 	 * Update value of 'idType' property
 	 */
-	@Override
 	public void setIdType(String newValue) {
 		new IdentifierFacade(this).setIdType(newValue);
 	}
@@ -72,7 +71,6 @@ public class Identifier extends HashMap<String, Object> implements IIdentifier {
 	/**
 	 * Update value of 'id' property
 	 */
-	@Override
 	public void setId(String newValue) {
 		new IdentifierFacade(this).setId(newValue);
 	}

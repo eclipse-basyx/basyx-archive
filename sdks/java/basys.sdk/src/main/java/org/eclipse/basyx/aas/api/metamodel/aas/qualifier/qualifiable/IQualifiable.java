@@ -9,9 +9,5 @@ import java.util.Set;
 */
 
 public interface IQualifiable {
-	
-	public void setQualifier(Set<IConstraint> qualifiers);
-	
 	public Set<IConstraint> getQualifier();
-
 }

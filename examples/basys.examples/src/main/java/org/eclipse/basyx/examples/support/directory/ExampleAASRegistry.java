@@ -8,7 +8,6 @@ import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
 
 public class ExampleAASRegistry extends AASRegistryStub {
 
-	@Override
 	public ExampleAASRegistry addAASMapping(String rawUrn, String endpoint) {
 		AASDescriptor aasDescriptor = new AASDescriptor(rawUrn, IdentifierType.URI, endpoint);
 		ModelUrn aasUrn = new ModelUrn(rawUrn);

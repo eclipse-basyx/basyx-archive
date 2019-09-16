@@ -1,6 +1,5 @@
 package org.eclipse.basyx.aas.backend.connected.aas;
 
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,9 +32,9 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Object> implements IAssetAdministrationShell {
-	
+
 	ConnectedAssetAdministrationShellManager manager;
-	
+
 	/**
 	 * Constructor creating a ConnectedAAS pointing to the AAS represented by proxy
 	 * and path
@@ -44,12 +43,11 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	 * @param proxy
 	 * @param manager
 	 */
-	public ConnectedAssetAdministrationShell(VABElementProxy proxy,
-			ConnectedAssetAdministrationShellManager manager) {
+	public ConnectedAssetAdministrationShell(VABElementProxy proxy, ConnectedAssetAdministrationShellManager manager) {
 		super(proxy);
 		this.manager = manager;
 	}
-	
+
 	/**
 	 * Copy constructor, allowing to create a ConnectedAAS pointing to the same AAS
 	 * as <i>shell</i>
@@ -59,7 +57,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	public ConnectedAssetAdministrationShell(ConnectedAssetAdministrationShell shell) {
 		super(shell.getProxy());
 	}
-	
+
 	@Override
 	public IAdministrativeInformation getAdministration() {
 		return new ConnectedIdentifiableFacade(getProxy()).getAdministration();
@@ -71,32 +69,8 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	}
 
 	@Override
-	public void setAdministration(String version, String revision) {
-		new ConnectedIdentifiableFacade(getProxy()).setAdministration(version, revision);
-		
-	}
-
-	@Override
-	public void setIdentification(String idType, String id) {
-		new ConnectedIdentifiableFacade(getProxy()).setIdentification(idType, id);
-		
-	}
-	
-	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
 		return new ConnectedHasDataSpecificationFacade(getProxy()).getDataSpecificationReferences();
-	}
-
-	@Override
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
-		new ConnectedHasDataSpecificationFacade(getProxy()).setDataSpecificationReferences(ref);
-		
-	}
-	
-	@Override
-	public void setSecurity(ISecurity security) {
-		getProxy().setModelPropertyValue(AssetAdministrationShell.SECURITY, security);
-		
 	}
 
 	@Override
@@ -105,20 +79,8 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	}
 
 	@Override
-	public void setDerivedFrom(IReference derivedFrom) {
-		getProxy().setModelPropertyValue(AssetAdministrationShell.DERIVEDFROM, derivedFrom);
-		
-	}
-
-	@Override
 	public IReference getDerivedFrom() {
 		return new ConnectedReference(getProxy().getDeepProxy(AssetAdministrationShell.DERIVEDFROM));
-	}
-
-	@Override
-	public void setAsset(IReference asset) {
-		getProxy().setModelPropertyValue(AssetAdministrationShell.ASSET, asset);
-		
 	}
 
 	@Override
@@ -129,7 +91,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	@Override
 	public void setSubModel(Set<IReference> submodels) {
 		getProxy().setModelPropertyValue(AssetAdministrationShell.SUBMODEL, submodels);
-		
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -138,22 +100,10 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 		return (Set<IReference>) getProxy().getModelPropertyValue(AssetAdministrationShell.SUBMODEL);
 	}
 
-	@Override
-	public void setViews(Set<IView> views) {
-		getProxy().setModelPropertyValue(AssetAdministrationShell.VIEWS, views);
-		
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IView> getViews() {
 		return (Set<IView>) getProxy().getModelPropertyValue(AssetAdministrationShell.VIEWS);
-	}
-
-	@Override
-	public void setConceptDictionary(Set<IConceptDictionary> dictionaries) {
-		getProxy().setModelPropertyValue(AssetAdministrationShell.CONCEPTDICTIONARY, dictionaries);
-		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -161,7 +111,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	public Set<IConceptDictionary> getConceptDictionary() {
 		return (Set<IConceptDictionary>) getProxy().getModelPropertyValue(AssetAdministrationShell.CONCEPTDICTIONARY);
 	}
-	
+
 	@Override
 	public String getId() {
 		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
@@ -170,13 +120,13 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	@Override
 	public void setId(String id) {
 		getProxy().setModelPropertyValue(Referable.IDSHORT, id);
-		
+
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, ISubModel> getSubModels() {
-		
+
 		Set<Map<?, ?>> refs = null;
 		Map<String, ISubModel> ret = new HashMap<>();
 
@@ -198,17 +148,15 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 				ret.put(id, sm);
 			}
 		}
-		
 
 		return ret;
 	}
 
-
 	@Override
 	public void addSubModel(ISubModel subModel) {
 		// TODO Auto-generated method stub
-		
 	}
+
 	@Override
 	public String getIdshort() {
 		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
@@ -225,31 +173,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	}
 
 	@Override
-	public IReference  getParent() {
+	public IReference getParent() {
 		return new ConnectedReference(getProxy().getDeepProxy(Referable.PARENT));
-	}
-
-	@Override
-	public void setIdshort(String idShort) {
-		getProxy().setModelPropertyValue(Referable.IDSHORT, idShort);
-		
-	}
-
-	@Override
-	public void setCategory(String category) {
-		getProxy().setModelPropertyValue(Referable.CATEGORY, category);
-		
-	}
-
-	@Override
-	public void setDescription(String description) {
-		getProxy().setModelPropertyValue(Referable.DESCRIPTION, description);
-		
-	}
-
-	@Override
-	public void setParent(IReference  obj) {
-		getProxy().setModelPropertyValue(Referable.PARENT, obj);
-		
 	}
 }

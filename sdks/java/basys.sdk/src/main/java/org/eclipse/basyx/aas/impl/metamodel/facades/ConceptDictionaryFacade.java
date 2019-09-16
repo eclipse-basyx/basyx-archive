@@ -7,15 +7,16 @@ import org.eclipse.basyx.aas.api.metamodel.aas.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
+
 /**
  * Facade providing access to a map containing the ConceptDictionary structure
- *  
+ * 
  * @author rajashek
  *
  */
 
 public class ConceptDictionaryFacade implements IConceptDictionary {
-	
+
 	private Map<String, Object> map;
 
 	public ConceptDictionaryFacade(Map<String, Object> map) {
@@ -39,44 +40,34 @@ public class ConceptDictionaryFacade implements IConceptDictionary {
 	}
 
 	@Override
-	public IReference  getParent() {
-		return (IReference)map.get(Referable.PARENT);
+	public IReference getParent() {
+		return (IReference) map.get(Referable.PARENT);
 	}
 
-	@Override
 	public void setIdshort(String idShort) {
 		map.put(Referable.IDSHORT, idShort);
-		
 	}
 
-	@Override
 	public void setCategory(String category) {
 		map.put(Referable.CATEGORY, category);
-		
 	}
 
-	@Override
 	public void setDescription(String description) {
 		map.put(Referable.DESCRIPTION, description);
-		
 	}
 
-	@Override
-	public void setParent(IReference  obj) {
+	public void setParent(IReference obj) {
 		map.put(Referable.PARENT, obj);
-		
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public HashSet<IReference> getConceptDescription() {
 		return (HashSet<IReference>) map.get(ConceptDictionary.CONCEPTDESCRIPTION);
 	}
 
-	@Override
 	public void setConceptDescription(HashSet<String> ref) {
 		map.put(ConceptDictionary.CONCEPTDESCRIPTION, ref);
-		
 	}
 
 }

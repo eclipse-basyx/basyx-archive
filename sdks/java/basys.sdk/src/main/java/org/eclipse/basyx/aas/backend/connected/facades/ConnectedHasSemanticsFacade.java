@@ -23,10 +23,4 @@ public class ConnectedHasSemanticsFacade extends ConnectedElement implements IHa
 	public IReference getSemanticId() {
 		return new ConnectedHasSemantics( getProxy()).getSemanticId();
 	}
-
-	@Override
-	public void setSemanticID(IReference ref) {
-		new ConnectedHasSemantics( getProxy()).setSemanticID(ref);
-
-	}
 }

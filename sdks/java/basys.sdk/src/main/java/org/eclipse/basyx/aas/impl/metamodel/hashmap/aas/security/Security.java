@@ -13,9 +13,9 @@ import org.eclipse.basyx.aas.impl.metamodel.facades.SecurityFacade;
  */
 public class Security extends HashMap<String, Object> implements ISecurity {
 	private static final long serialVersionUID = 1L;
-	
-	public static final String ACCESSCONTROLPOLICYPOINTS ="accessControlPolicyPoints";
-	public static final String TRUSTANCHOR ="trustAnchor";
+
+	public static final String ACCESSCONTROLPOLICYPOINTS = "accessControlPolicyPoints";
+	public static final String TRUSTANCHOR = "trustAnchor";
 
 	/**
 	 * Constructor
@@ -31,10 +31,8 @@ public class Security extends HashMap<String, Object> implements ISecurity {
 		return new SecurityFacade(this).getAccessControlPolicyPoints();
 	}
 
-	@Override
 	public void setAccessControlPolicyPoints(Object obj) {
 		new SecurityFacade(this).setAccessControlPolicyPoints(obj);
-		
 	}
 
 	@Override
@@ -42,9 +40,7 @@ public class Security extends HashMap<String, Object> implements ISecurity {
 		return new SecurityFacade(this).getTrustAnchor();
 	}
 
-	@Override
 	public void setTrustAnchor(Object obj) {
 		new SecurityFacade(this).setTrustAnchor(obj);
-		
 	}
 }

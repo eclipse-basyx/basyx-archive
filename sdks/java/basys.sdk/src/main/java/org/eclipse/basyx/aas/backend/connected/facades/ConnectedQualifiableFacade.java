@@ -18,14 +18,7 @@ public class ConnectedQualifiableFacade extends ConnectedElement implements IQua
 	}
 
 	@Override
-	public void setQualifier(Set<IConstraint> qualifiers) {
-		new ConnectedQualifiable( getProxy()).setQualifier(qualifiers);
-		
-	}
-
-	@Override
 	public Set<IConstraint> getQualifier() {
 		return new ConnectedQualifiable( getProxy()).getQualifier();
 	}
-
 }

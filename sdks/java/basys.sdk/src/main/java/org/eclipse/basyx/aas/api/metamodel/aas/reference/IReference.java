@@ -20,7 +20,4 @@ public interface IReference {
 	 * @return The complete list of keys
 	 */
 	public List<IKey> getKeys();
-	
-	public void setKeys(List<IKey> keys);
-
 }

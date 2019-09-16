@@ -18,7 +18,7 @@ import org.eclipse.basyx.vab.IElement;
  *
  */
 
-public interface IAssetAdministrationShell extends IElement, IIdentifiable,IHasDataSpecification {
+public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHasDataSpecification {
 	/**
 	 * Return all registered sub models of this AAS
 	 * 
@@ -34,15 +34,9 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable,IHasD
 	 */
 	public void addSubModel(ISubModel subModel);
 
-	public void setSecurity(ISecurity security);
-
 	public ISecurity getSecurity();
 
-	public void setDerivedFrom(IReference derivedFrom);
-
 	public IReference getDerivedFrom();
-
-	public void setAsset(IReference asset);
 
 	public IReference getAsset();
 
@@ -50,11 +44,7 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable,IHasD
 
 	public Set<IReference> getSubModel();
 
-	public void setViews(Set<IView> views);
-
 	public Set<IView> getViews();
-
-	public void setConceptDictionary(Set<IConceptDictionary> dictionaries);
 
 	public Set<IConceptDictionary> getConceptDictionary();
 }

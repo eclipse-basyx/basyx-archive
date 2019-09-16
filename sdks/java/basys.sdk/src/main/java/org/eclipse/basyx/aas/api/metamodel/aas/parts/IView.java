@@ -13,9 +13,5 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 */
 
 public interface IView extends IHasSemantics,IHasDataSpecification,IReferable {
-	
-	public void setContainedElement(Set<IReference> references);
-	
 	public Set<IReference> getContainedElement();
-
 }

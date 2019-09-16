@@ -7,8 +7,10 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.backend.connected.ConnectedElement;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+
 /**
  * "Connected" implementation of IHasDataSpecification
+ * 
  * @author rajashek
  *
  */
@@ -16,17 +18,10 @@ public class ConnectedHasDataSpecification extends ConnectedElement implements I
 	public ConnectedHasDataSpecification(VABElementProxy proxy) {
 		super(proxy);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
 		return (HashSet<IReference>) getProxy().getModelPropertyValue(HasDataSpecification.HASDATASPECIFICATION);
 	}
-
-	@Override
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
-		getProxy().setModelPropertyValue(HasDataSpecification.HASDATASPECIFICATION, ref);
-		
-	}
-
 }

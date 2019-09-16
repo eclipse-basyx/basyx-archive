@@ -13,17 +13,5 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
  */
 
 public interface IAsset extends IHasDataSpecification,IHasKind,IIdentifiable {
-	
-	/**
-	 * Interface for Asset
-	 * the function names are self explanatory 
-	 * @author rajashek
-	 *
-*/
-
 	public IReference getAssetIdentificationModel();
-	
-	public void setAssetIdentificationModel(IReference submodel);
-	
-
 }

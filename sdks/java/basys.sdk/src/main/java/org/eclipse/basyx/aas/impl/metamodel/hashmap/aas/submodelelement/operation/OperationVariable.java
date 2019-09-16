@@ -34,22 +34,19 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	public OperationVariable(SubmodelElement value) {
 		put(Property.VALUE, value);
 	}
-	
+
 	public OperationVariable() {
-		
+
 	}
 
-	@Override
 	public void setValue(ISubmodelElement value) {
 		put(Property.VALUE, value);
-		
 	}
 
 	@Override
 	public ISubmodelElement getValue() {
 		return (ISubmodelElement) get(Property.VALUE);
 	}
-
 
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
@@ -59,12 +56,11 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
-		
 	}
 
 	@Override
 	public String getIdshort() {
-	return new ReferableFacade(this).getIdshort();
+		return new ReferableFacade(this).getIdshort();
 	}
 
 	@Override
@@ -78,43 +74,38 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	}
 
 	@Override
-	public IReference  getParent() {
+	public IReference getParent() {
 		return new ReferableFacade(this).getParent();
 	}
 
 	@Override
 	public void setIdshort(String idShort) {
 		new ReferableFacade(this).setIdshort(idShort);
-		
 	}
 
 	@Override
 	public void setCategory(String category) {
 		new ReferableFacade(this).setCategory(category);
-		
 	}
 
 	@Override
 	public void setDescription(String description) {
 		new ReferableFacade(this).setDescription(description);
-		
 	}
 
 	@Override
-	public void setParent(IReference  obj) {
+	public void setParent(IReference obj) {
 		new ReferableFacade(this).setParent(obj);
-		
 	}
 
 	@Override
 	public void setQualifier(Set<IConstraint> qualifiers) {
 		new QualifiableFacade(this).setQualifier(qualifiers);
-		
 	}
 
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return new  QualifiableFacade(this).getQualifier();
+		return new QualifiableFacade(this).getQualifier();
 	}
 
 	@Override
@@ -125,18 +116,16 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	@Override
 	public void setSemanticID(IReference ref) {
 		new HasSemanticsFacade(this).setSemanticID(ref);
-		
 	}
 
 	@Override
 	public String getHasKindReference() {
-      return new HasKindFacade(this).getHasKindReference();
+		return new HasKindFacade(this).getHasKindReference();
 	}
 
 	@Override
 	public void setHasKindReference(String kind) {
 		new HasKindFacade(this).setHasKindReference(kind);
-		
 	}
 
 }

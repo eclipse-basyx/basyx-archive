@@ -15,20 +15,22 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedReferableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.RelationshipElement;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+
 /**
  * "Connected" implementation of RelationshipElement
+ * 
  * @author rajashek
  *
  */
-public class ConnectedRelationshipElement extends ConnectedSubmodelElement implements IRelationshipElement{
+public class ConnectedRelationshipElement extends ConnectedSubmodelElement implements IRelationshipElement {
 	public ConnectedRelationshipElement(VABElementProxy proxy) {
-		super(proxy);		
+		super(proxy);
 	}
-	
+
 	@Override
 	public void setFirst(IReference first) {
-	getProxy().setModelPropertyValue(RelationshipElement.FIRST, first);
-		
+		getProxy().setModelPropertyValue(RelationshipElement.FIRST, first);
+
 	}
 
 	@Override
@@ -39,12 +41,12 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 	@Override
 	public void setSecond(IReference second) {
 		getProxy().setModelPropertyValue(RelationshipElement.SECOND, second);
-		
+
 	}
 
 	@Override
 	public IReference getSecond() {
-		return (IReference)	getProxy().getModelPropertyValue(RelationshipElement.FIRST);
+		return (IReference) getProxy().getModelPropertyValue(RelationshipElement.FIRST);
 	}
 
 	@Override
@@ -52,12 +54,6 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 		return new ConnectedHasDataSpecificationFacade(getProxy()).getDataSpecificationReferences();
 	}
 
-	@Override
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
-		new ConnectedHasDataSpecificationFacade(getProxy()).setDataSpecificationReferences(ref);
-		
-	}
-	
 	@Override
 	public String getIdshort() {
 		return new ConnectedReferableFacade(getProxy()).getIdshort();
@@ -79,70 +75,28 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 	}
 
 	@Override
-	public void setIdshort(String idShort) {
-		 new ConnectedReferableFacade(getProxy()).setIdshort(idShort);
-		
-	}
-
-	@Override
-	public void setCategory(String category) {
-		 new ConnectedReferableFacade(getProxy()).setCategory(category);
-		
-	}
-
-	@Override
-	public void setDescription(String description) {
-		 new ConnectedReferableFacade(getProxy()).setDescription(description);
-		
-	}
-
-	@Override
-	public void setParent(IReference obj) {
-		 new ConnectedReferableFacade(getProxy()).setParent(obj);
-		
-	}
-	
-	@Override
-	public void setQualifier(Set<IConstraint> qualifiers) {
-		new ConnectedQualifiableFacade(getProxy()).setQualifier(qualifiers);
-		
-	}
-
-	@Override
 	public Set<IConstraint> getQualifier() {
 		return new ConnectedQualifiableFacade(getProxy()).getQualifier();
 	}
+
 	@Override
 	public IReference getSemanticId() {
 		return new ConnectedHasSemanticsFacade(getProxy()).getSemanticId();
 	}
 
 	@Override
-	public void setSemanticID(IReference ref) {
-		 new ConnectedHasSemanticsFacade(getProxy()).setSemanticID(ref);
-		
-	}
-	
-	@Override
 	public String getHasKindReference() {
-		return  new ConnectedHasKindFacade(getProxy()).getHasKindReference();
+		return new ConnectedHasKindFacade(getProxy()).getHasKindReference();
 	}
 
 	@Override
-	public void setHasKindReference(String kind) {
-		new ConnectedHasKindFacade(getProxy()).setHasKindReference(kind);
-		
-	}
-	
-	@Override
 	public String getId() {
-	return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
+		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
 	}
 
 	@Override
 	public void setId(String id) {
 		getProxy().setModelPropertyValue(Referable.IDSHORT, id);
-		
 	}
 
 }

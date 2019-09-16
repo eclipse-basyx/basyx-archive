@@ -9,6 +9,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.impl.metamodel.facades.ConceptDictionaryFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.ReferableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
+
 /**
  * ConceptDictionary class as described in DAAS document
  * 
@@ -21,8 +22,8 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	public static final String CONCEPTDESCRIPTION="conceptDescription";
+
+	public static final String CONCEPTDESCRIPTION = "conceptDescription";
 
 	/**
 	 * Constructor
@@ -38,9 +39,10 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 		putAll(new Referable());
 		put(CONCEPTDESCRIPTION, ref);
 	}
+
 	@Override
 	public String getIdshort() {
-	return new ReferableFacade(this).getIdshort();
+		return new ReferableFacade(this).getIdshort();
 	}
 
 	@Override
@@ -54,32 +56,28 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 	}
 
 	@Override
-	public IReference  getParent() {
+	public IReference getParent() {
 		return new ReferableFacade(this).getParent();
 	}
 
-	@Override
 	public void setIdshort(String idShort) {
 		new ReferableFacade(this).setIdshort(idShort);
-		
+
 	}
 
-	@Override
 	public void setCategory(String category) {
 		new ReferableFacade(this).setCategory(category);
-		
+
 	}
 
-	@Override
 	public void setDescription(String description) {
 		new ReferableFacade(this).setDescription(description);
-		
+
 	}
 
-	@Override
-	public void setParent(IReference  obj) {
+	public void setParent(IReference obj) {
 		new ReferableFacade(this).setParent(obj);
-		
+
 	}
 
 	@Override
@@ -87,9 +85,8 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 		return new ConceptDictionaryFacade(this).getConceptDescription();
 	}
 
-	@Override
 	public void setConceptDescription(HashSet<String> ref) {
 		new ConceptDictionaryFacade(this).setConceptDescription(ref);
-		
+
 	}
 }

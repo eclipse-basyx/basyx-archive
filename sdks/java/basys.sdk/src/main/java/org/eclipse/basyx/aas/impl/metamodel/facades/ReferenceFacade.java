@@ -16,6 +16,7 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.reference.Reference;
 
 public class ReferenceFacade implements IReference {
 	private Map<String, Object> map;
+
 	public ReferenceFacade(Map<String, Object> map) {
 		super();
 		this.map = map;
@@ -24,13 +25,11 @@ public class ReferenceFacade implements IReference {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IKey> getKeys() {
-		return (List<IKey>)map.get(Reference.KEY);
+		return (List<IKey>) map.get(Reference.KEY);
 	}
 
-	@Override
 	public void setKeys(List<IKey> keys) {
-		map.put(Reference.KEY,keys);
-		
+		map.put(Reference.KEY, keys);
 	}
 
 }

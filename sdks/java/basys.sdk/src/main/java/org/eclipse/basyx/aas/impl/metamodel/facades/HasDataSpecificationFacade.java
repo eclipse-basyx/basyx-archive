@@ -7,7 +7,6 @@ import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IHasDataSpecification;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 
-
 /**
  * Facade providing access to a map containing the DataSpecification structure
  *
@@ -16,8 +15,6 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasDataSpecifi
  */
 
 public class HasDataSpecificationFacade implements IHasDataSpecification {
-	
-	
 
 	private Map<String, Object> map;
 
@@ -31,10 +28,8 @@ public class HasDataSpecificationFacade implements IHasDataSpecification {
 		return (HashSet<IReference>) map.get(HasDataSpecification.HASDATASPECIFICATION);
 	}
 
-	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
 		map.put(HasDataSpecification.HASDATASPECIFICATION, ref);
-		
 	}
 
 }

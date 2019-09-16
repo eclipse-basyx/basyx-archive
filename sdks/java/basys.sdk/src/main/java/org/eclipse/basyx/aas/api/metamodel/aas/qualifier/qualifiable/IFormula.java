@@ -9,9 +9,5 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
  *
 */
 public interface IFormula {
-	
-	public void setDependsOn(Set<IReference> dependsOn);
-	
 	public  Set<IReference> getDependsOn();
-
 }

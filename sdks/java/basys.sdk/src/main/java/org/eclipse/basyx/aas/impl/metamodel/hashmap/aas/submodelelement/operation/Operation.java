@@ -29,12 +29,10 @@ public class Operation extends SubmodelElement implements IOperation {
 	private static final long serialVersionUID = -1381491542617026911L;
 
 	private Function<Object[], Object> endpoint;
-	
-	public static final String IN="in";
-	public static final String OUT="out";
-	public static final String INVOKABLE="invokable";
-	
-	
+
+	public static final String IN = "in";
+	public static final String OUT = "out";
+	public static final String INVOKABLE = "invokable";
 
 	/**
 	 * Constructor
@@ -100,22 +98,16 @@ public class Operation extends SubmodelElement implements IOperation {
 		return this.endpoint.apply(params);
 	}
 
-	@Override
 	public void SetParameterTypes(List<OperationVariable> in) {
 		put(Operation.IN, in);
-		
 	}
 
-	@Override
 	public void setReturnTypes(List<OperationVariable> out) {
 		put(Operation.OUT, out);
-		
 	}
 
-	@Override
 	public void setInvocable(Function<Object[], Object> endpoint) {
 		put(Operation.INVOKABLE, endpoint);
-		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -123,6 +115,7 @@ public class Operation extends SubmodelElement implements IOperation {
 	public Function<Object[], Object> getInvocable() {
 		return (Function<Object[], Object>) get(Operation.INVOKABLE);
 	}
+
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
@@ -131,12 +124,11 @@ public class Operation extends SubmodelElement implements IOperation {
 	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
-		
 	}
 
 	@Override
 	public String getIdshort() {
-	return new ReferableFacade(this).getIdshort();
+		return new ReferableFacade(this).getIdshort();
 	}
 
 	@Override
@@ -150,43 +142,39 @@ public class Operation extends SubmodelElement implements IOperation {
 	}
 
 	@Override
-	public IReference  getParent() {
+	public IReference getParent() {
 		return new ReferableFacade(this).getParent();
 	}
 
 	@Override
 	public void setIdshort(String idShort) {
 		new ReferableFacade(this).setIdshort(idShort);
-		
 	}
 
 	@Override
 	public void setCategory(String category) {
 		new ReferableFacade(this).setCategory(category);
-		
 	}
 
 	@Override
 	public void setDescription(String description) {
 		new ReferableFacade(this).setDescription(description);
-		
 	}
 
 	@Override
-	public void setParent(IReference  obj) {
+	public void setParent(IReference obj) {
 		new ReferableFacade(this).setParent(obj);
-		
+
 	}
 
 	@Override
 	public void setQualifier(Set<IConstraint> qualifiers) {
 		new QualifiableFacade(this).setQualifier(qualifiers);
-		
 	}
 
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return new  QualifiableFacade(this).getQualifier();
+		return new QualifiableFacade(this).getQualifier();
 	}
 
 	@Override
@@ -197,19 +185,16 @@ public class Operation extends SubmodelElement implements IOperation {
 	@Override
 	public void setSemanticID(IReference ref) {
 		new HasSemanticsFacade(this).setSemanticID(ref);
-		
 	}
 
 	@Override
 	public String getHasKindReference() {
-      return new HasKindFacade(this).getHasKindReference();
+		return new HasKindFacade(this).getHasKindReference();
 	}
 
 	@Override
 	public void setHasKindReference(String kind) {
 		new HasKindFacade(this).setHasKindReference(kind);
-		
 	}
-
 
 }

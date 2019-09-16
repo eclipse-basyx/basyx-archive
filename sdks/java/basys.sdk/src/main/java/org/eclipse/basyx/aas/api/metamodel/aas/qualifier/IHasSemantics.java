@@ -8,10 +8,5 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
  *
 */
 public interface IHasSemantics  {
-	
-	
 	public IReference getSemanticId();
-	
-	public void setSemanticID(IReference ref);
-
 }

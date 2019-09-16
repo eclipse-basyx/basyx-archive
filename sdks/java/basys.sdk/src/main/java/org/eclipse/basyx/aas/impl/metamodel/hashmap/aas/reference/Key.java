@@ -47,7 +47,7 @@ public class Key extends HashMap<String, Object> implements IKey {
 
 	@Override
 	public String getType() {
-	return new KeyFacade(this).getType();
+		return new KeyFacade(this).getType();
 	}
 
 	@Override
@@ -65,29 +65,24 @@ public class Key extends HashMap<String, Object> implements IKey {
 		return new KeyFacade(this).getidType();
 	}
 
-	@Override
 	public void setType(String type) {
 		new KeyFacade(this).setType(type);
-		
+
 	}
 
-	@Override
 	public void setLocal(boolean local) {
 		new KeyFacade(this).setLocal(local);
-		
+
 	}
 
-	@Override
 	public void setValue(String value) {
 		new KeyFacade(this).setValue(value);
-		
+
 	}
 
-	@Override
 	public void setIdType(String idType) {
 		new KeyFacade(this).setIdType(idType);
-		
-	}
 
+	}
 
 }

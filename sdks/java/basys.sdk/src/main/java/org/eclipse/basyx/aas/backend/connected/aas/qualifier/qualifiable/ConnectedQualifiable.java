@@ -7,27 +7,22 @@ import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IQualifiabl
 import org.eclipse.basyx.aas.backend.connected.ConnectedElement;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+
 /**
  * "Connected" implementation of IQualifiable
+ * 
  * @author rajashek
  *
  */
 public class ConnectedQualifiable extends ConnectedElement implements IQualifiable {
 
-	
 	public ConnectedQualifiable(VABElementProxy proxy) {
-		super(proxy);		
-	}
-	
-	@Override
-	public void setQualifier(Set<IConstraint> qualifiers) {
-		getProxy().setModelPropertyValue(Qualifiable.CONSTRAINTS, qualifiers);
-		
+		super(proxy);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return (Set<IConstraint>)getProxy().getModelPropertyValue(Qualifiable.CONSTRAINTS);
+		return (Set<IConstraint>) getProxy().getModelPropertyValue(Qualifiable.CONSTRAINTS);
 	}
 }

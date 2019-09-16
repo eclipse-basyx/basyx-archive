@@ -12,16 +12,16 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.Identifier;
  * @author kuhn, schnicke
  *
  */
-public class Identifiable extends Referable implements IIdentifiable  {
+public class Identifiable extends Referable implements IIdentifiable {
 
 	/**
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	public static final String ADMINISTRATION="administration";
-	
-	public static final String IDENTIFICATION="identification";
+
+	public static final String ADMINISTRATION = "administration";
+
+	public static final String IDENTIFICATION = "identification";
 
 	/**
 	 * Default constructor
@@ -51,7 +51,7 @@ public class Identifiable extends Referable implements IIdentifiable  {
 
 	@Override
 	public IAdministrativeInformation getAdministration() {
-	return new IdentifiableFacade(this).getAdministration();
+		return new IdentifiableFacade(this).getAdministration();
 	}
 
 	@Override
@@ -59,17 +59,12 @@ public class Identifiable extends Referable implements IIdentifiable  {
 		return new IdentifiableFacade(this).getIdentification();
 	}
 
-	@Override
 	public void setAdministration(String version, String revision) {
 		new IdentifiableFacade(this).setAdministration(version, revision);
-		
 	}
 
-	@Override
 	public void setIdentification(String idType, String id) {
 		new IdentifiableFacade(this).setIdentification(idType, id);
-		
 	}
-
 
 }

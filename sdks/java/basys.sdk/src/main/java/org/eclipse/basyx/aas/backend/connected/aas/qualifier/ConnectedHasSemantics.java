@@ -22,9 +22,4 @@ public class ConnectedHasSemantics extends ConnectedElement implements IHasSeman
 	public IReference getSemanticId() {
 		return new ConnectedReference(getProxy().getDeepProxy(HasSemantics.SEMANTICID));
 	}
-
-	@Override
-	public void setSemanticID(IReference ref) {
-		getProxy().setModelPropertyValue(HasSemantics.SEMANTICID, ref);
-	}
 }

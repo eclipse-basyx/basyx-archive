@@ -18,8 +18,8 @@ public class HasSemantics extends HashMap<String, Object> implements IHasSemanti
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	public static final String SEMANTICID="semanticId";
+
+	public static final String SEMANTICID = "semanticId";
 
 	/**
 	 * Constructor
@@ -41,9 +41,7 @@ public class HasSemantics extends HashMap<String, Object> implements IHasSemanti
 		return new HasSemanticsFacade(this).getSemanticId();
 	}
 
-	@Override
 	public void setSemanticID(IReference ref) {
 		new HasSemanticsFacade(this).setSemanticID(ref);
-		
 	}
 }

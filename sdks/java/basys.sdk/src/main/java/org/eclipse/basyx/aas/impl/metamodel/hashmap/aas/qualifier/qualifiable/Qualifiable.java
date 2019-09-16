@@ -15,14 +15,15 @@ import org.eclipse.basyx.aas.impl.metamodel.facades.QualifiableFacade;
  * @author kuhn
  *
  */
-public class Qualifiable extends HashMap<String, Object> implements IQualifiable{
+public class Qualifiable extends HashMap<String, Object> implements IQualifiable {
 
 	/**
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	public static final String CONSTRAINTS="constraints";
+
+	public static final String CONSTRAINTS = "constraints";
+
 	/**
 	 * Constructor
 	 */
@@ -55,14 +56,13 @@ public class Qualifiable extends HashMap<String, Object> implements IQualifiable
 		put(CONSTRAINTS, qualifier);
 	}
 
-	@Override
 	public void setQualifier(Set<IConstraint> qualifiers) {
 		new QualifiableFacade(this).setQualifier(qualifiers);
-		
+
 	}
 
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return new  QualifiableFacade(this).getQualifier();
+		return new QualifiableFacade(this).getQualifier();
 	}
 }

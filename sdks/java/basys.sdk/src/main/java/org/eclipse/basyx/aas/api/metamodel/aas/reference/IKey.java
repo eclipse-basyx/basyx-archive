@@ -21,12 +21,4 @@ public interface IKey {
 	public String getValue();
 
 	public String getidType();
-	
-	public void setType(String type);
-
-	public void setLocal( boolean local);
-
-	public void setValue(String value);
-
-	public void setIdType( String idType);
 }

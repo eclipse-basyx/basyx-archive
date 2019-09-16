@@ -11,10 +11,5 @@ import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IIdentifiable;
  *
 */
 public interface IConceptDescription extends IHasDataSpecification,IIdentifiable {
-
-		
 	public HashSet<String> getisCaseOf();
-	
-	public void setIscaseOf(HashSet<String> ref);
-
 }

@@ -208,7 +208,7 @@ public class TestDirectorySQLProvider {
 	@SuppressWarnings("unchecked")
 	private <T> T getResult(String res) {
 		try {
-			return (T) handler.verify(res);
+			return (T) handler.deserialize(res);
 		} catch (Exception e) {
 			throw new RuntimeException();
 		}
