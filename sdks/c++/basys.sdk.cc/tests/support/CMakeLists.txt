@@ -1,5 +1,5 @@
 ###############################################
-###              tests_support                  ###
+###              tests_support              ###
 ###############################################
 
 cmake_minimum_required(VERSION 3.1.0)
@@ -9,6 +9,7 @@ add_library(tests_support)
 
 target_sources(tests_support
     PRIVATE
+        macros.h
         vab/stub/elements/SimpleVABElement.cpp
         vab/stub/elements/SimpleVABElement.h
 )
