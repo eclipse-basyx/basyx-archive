@@ -78,8 +78,13 @@ namespace basyx {
         T* GetPtr()
         {
             //			using non_ptr_t = std::remove_pointer<T>::type;
-            return any_cast_ptr<T>(*this);
+            return any_cast_ptr<T>(this);
         };
+
+		bool IsInvokable() const noexcept
+		{
+			return this->content->is_invokable();
+		};
 
         bool IsNull() const noexcept
         {
@@ -123,9 +128,28 @@ namespace basyx {
         }
 
         template <typename T>
-        static T* any_cast_ptr(any& operand)
+        static T* any_cast_ptr(any * operand)
         {
-            auto ptr = &static_cast<any::Holder<typename std::remove_cv<T>::type>*>(operand.content.get())->stored;
+			auto content = operand->content.get();
+
+			auto holder = (Holder<T>*)content;
+
+			auto huh = &(*((basyx::detail::Holder<T>*)content)).stored;
+			auto heh = &(*((basyx::detail::Holder<T>*)holder)).stored;
+
+			auto x = operand->content->get_address();
+
+			auto ptr = static_cast<T*>(x);
+
+			//auto ptr_s = static_cast<any::Holder<typename std::remove_cv<T>::type>*>(content);
+			//auto ptr_d = dynamic_cast<any::Holder<typename std::remove_cv<T>::type>*>(content);
+			//auto ptr_r = reinterpret_cast<any::Holder<typename std::remove_cv<T>::type>*>(content);
+
+			//T* ret_s = &ptr_s->stored;
+			//T* ret_d = &ptr_d->stored;
+			//T* ret_r = &ptr_r->stored;
+
+			//auto ptr = &static_cast<any::Holder<typename std::remove_cv<T>::type>*>(operand.content.get())->stored;
 
             return ptr;
         }

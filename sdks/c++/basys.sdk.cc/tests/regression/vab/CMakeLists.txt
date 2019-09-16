@@ -16,10 +16,10 @@ target_sources(tests_vab
         provider/test_hashmap.cpp
         provider/test_hashmap_collection.cpp
         provider/test_hashmap_map.cpp
-		    path/test_VABPath.cpp
-        snippet/CreateDelete.h
-        snippet/GetPropertyValue.h
+        snippet/MapCreateDelete.h
+        snippet/MapInvoke.h
         snippet/MapRead.h
+		path/test_VABPath.cpp
         support/MockupModelProvider.h
 )
 

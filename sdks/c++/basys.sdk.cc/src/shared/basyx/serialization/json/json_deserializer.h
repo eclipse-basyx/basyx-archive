@@ -44,6 +44,8 @@ namespace json {
                 if (json.is_array()) {
                 return deserialize_helper::object_list(json);
             }
+
+			return basyx::any{ nullptr };
         }
 
     private:
@@ -80,7 +82,7 @@ namespace json {
             //	return basyx::any{ valueJson.get<std::string>() };
             //}
 
-            return { nullptr };
+            return basyx::any{ nullptr };
         }
 
         static basyx::any object_list(const json_t& json)

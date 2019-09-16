@@ -103,7 +103,7 @@ public:
 		this->path = path;
 	}
 
-	virtual basyx::any invokeOperation(const std::string & path, basyx::objectCollection_t & parameter) override
+	virtual basyx::any invokeOperationImpl(const std::string & path, basyx::objectCollection_t & parameter) override
 	{
 		called = CalledFunction::INVOKE;
 		this->path = path;

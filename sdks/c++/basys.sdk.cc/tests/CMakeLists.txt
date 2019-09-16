@@ -7,10 +7,10 @@ project(tests)
 
 ### tests::main ###
 
-add_library(testmain support/main.cpp)
-target_link_libraries(testmain gtest)
-add_library(tests::main ALIAS testmain)
-diagnostics_print(testmain)
+add_library(tests_main support/main.cpp)
+target_link_libraries(tests_main gtest)
+add_library(tests::main ALIAS tests_main)
+diagnostics_print(tests_main)
 
 ### UnitTests ###
 

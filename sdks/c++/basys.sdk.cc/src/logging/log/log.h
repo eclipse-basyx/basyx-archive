@@ -3,6 +3,10 @@
 
 #include <abstraction/Thread.h>
 
+#include <iostream>
+
+#include <fmt/format.h>
+
 namespace basyx {
 	class log {
 	public:
@@ -17,7 +21,7 @@ namespace basyx {
 		};
 	public:
 		explicit log(const std::string& sourceName)
-			: sourceName{ "[" + sourceName + "] " }
+			: sourceName{ sourceName }
 		{
 		}
 
@@ -37,63 +41,76 @@ namespace basyx {
 		std::string sourceName;
 
 		std::string timestamp();
-		std::string buildMessage(const std::string & format, Level level);
 
-		template<typename T>
-		inline T && normalize(T && t)
+		template<typename... Args>
+		std::string buildMessage(const std::string & format, Level level, Args && ... args)
 		{
-			return std::forward<T>(t);
-		}
+			auto message = fmt::format("[{}] [{}] [{}] {}", timestamp(), printLevel(level), sourceName, format);
+			return fmt::format(message, std::forward<Args>(args)...);
+		};
 
-		inline const char * normalize(const std::string & s)
-		{
-			return s.c_str();
-		}
+		//template<typename T>
+		//inline T && normalize(T && t)
+		//{
+		//	return std::forward<T>(t);
+		//}
+
+		//inline const char * normalize(const std::string & s)
+		//{
+		//	return s.c_str();
+		//}
 
 
 		template<typename... Args>
 		inline void log_message(Level level, const std::string & msg, Args && ... args)
 		{
 			if (level >= logLevel)
-				printf(buildMessage(msg, level).c_str(), normalize(args)...);
+				std::cout << buildMessage(msg, level, std::forward<Args>(args)...) << std::endl;
 		};
 
 	public:
 		template <typename... Args>
 		inline void trace(const std::string& msg, Args&&... args)
 		{
-			log_message(Level::Trace, msg, args...);
+			log_message(Level::Trace, msg, std::forward<Args>(args)...);
 		}
 
 		template <typename... Args>
 		inline void debug(const std::string& msg, Args&&... args)
 		{
-			log_message(Level::Debug, msg, args...);
+			log_message(Level::Debug, msg, std::forward<Args>(args)...);
 		}
 
 		template <typename... Args>
 		inline void info(const std::string& msg, Args&&... args)
 		{
-			log_message(Level::Info, msg, args...);
+			log_message(Level::Info, msg, std::forward<Args>(args)...);
 		}
 
 		template <typename... Args>
 		inline void warn(const std::string& msg, Args&&... args)
 		{
-			log_message(Level::Warn, msg, args...);
+			log_message(Level::Warn, msg, std::forward<Args>(args)...);
 		}
 
 		template <typename... Args>
 		inline void error(const std::string& msg, Args&&... args)
 		{
-			log_message(Level::Error, msg, args...);
+			log_message(Level::Error, msg, std::forward<Args>(args)...);
 		}
 
 		template <typename... Args>
 		inline void crit(const std::string& msg, Args&&... args)
 		{
-			log_message(Level::Critical, msg, args...);
+			log_message(Level::Critical, msg, std::forward<Args>(args)...);
 		}
+
+	// static logging functions
+	public:
+		inline static log topic(const std::string & topic)
+		{
+			return log(topic);
+		};
 	};
 };
 
