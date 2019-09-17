@@ -14,6 +14,10 @@
 
 #include <json/json.hpp>
 
+//#include "basyx/function/invokable.h"
+
+//#include "basyx/function/function_base.h"
+
 #include "util/printer.h"
 #include "util/util.h"
 
@@ -29,6 +33,8 @@ namespace basyx {
 			nlohmann::json serialize(const T& t);
 		}
 	}
+
+class function_base;
 
 namespace detail {
 
@@ -69,10 +75,22 @@ namespace detail {
             json = basyx::serialization::json::serialize(stored);
         };
 
+		virtual bool is_invokable() const noexcept override
+		{
+//			return false;
+			return std::is_base_of<basyx::function_base, T>::value;
+//			return std::is_convertible<T*, basyx::detail::invokable*>::value;
+		};
+
         // Actual stored value
         T stored;
 
-    private:
+		virtual void * get_address() const noexcept override
+		{
+			return (void*)&this->stored;
+		};
+
+	private:
         Holder& operator=(const Holder&) = delete;
     };
 }

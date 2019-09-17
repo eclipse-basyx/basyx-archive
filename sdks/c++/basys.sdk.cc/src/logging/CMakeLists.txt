@@ -4,17 +4,17 @@
 
 project(basyx)
 
-add_library(logging)
+add_library(basyx_log)
 
-target_sources(logging
+target_sources(basyx_log
     PRIVATE
 		log/log.cpp
 		log/log.h
 )
 
-target_include_directories(logging PUBLIC ${PROJECT_SOURCE_DIR}) 
-target_link_libraries(logging basyx::abstraction basyx::util)
-add_library(basyx::logging ALIAS logging)
+target_include_directories(basyx_log PUBLIC ${PROJECT_SOURCE_DIR}) 
+target_link_libraries(basyx_log basyx::abstraction basyx::util lib::fmt)
+add_library(basyx::log ALIAS basyx_log)
 
 
-diagnostics_print(logging)
+diagnostics_print(basyx_log)

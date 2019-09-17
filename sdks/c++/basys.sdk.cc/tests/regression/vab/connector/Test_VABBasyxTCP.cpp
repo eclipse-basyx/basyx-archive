@@ -12,7 +12,7 @@
 
 #include <gtest/gtest.h>
 
-#include "util/function.h"
+#include "basyx/function.h"
 
 #include "vab/backend/connector/native/BaSyxConnector.h"
 #include "vab/provider/native/BaSyxTCPServer.h"
@@ -39,7 +39,7 @@ void serverLoop(std::unique_ptr<vab::provider::native::TCPServer<MockupModelProv
  */
 class BaSyxNativeTest: public ::testing::Test {
 protected:
-	const int port = 6112;
+	const int port = 6114;
 
 	std::unique_ptr<vab::connector::native::NativeConnector> connector;
 	std::unique_ptr<vab::provider::native::TCPServer<MockupModelProvider>> tcpServer;

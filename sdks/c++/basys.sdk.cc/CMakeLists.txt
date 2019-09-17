@@ -53,6 +53,7 @@ set(CMAKE_CXX_STANDARD 11)
 add_compile_definitions(BASYX_MAJOR_REV=${BASYX_MAJOR_REV})
 add_compile_definitions(BASYX_MINOR_REV=${BASYX_MINOR_REV})
 add_compile_definitions(WIN32_LEAN_AND_MEAN)
+##add_compile_definitions(__USE_MINGW_ANSI_STDIO=0)
 
 ###############################################
 ###           Library Settings              ###
@@ -76,7 +77,12 @@ add_subdirectory(src/vab)
 ###           Library Directory             ###
 ###############################################
 
+add_subdirectory(lib/fmt)
+add_library(lib::fmt ALIAS fmt)
+add_library(lib::fmt-header-only ALIAS fmt-header-only)
+
 add_subdirectory(lib/json)
+
 if(${BASYX_BUILD_TESTS})
     add_subdirectory(lib/gtest)
     include(GoogleTest)

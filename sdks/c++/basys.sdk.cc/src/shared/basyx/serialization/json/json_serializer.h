@@ -10,6 +10,7 @@
 
 #include <json/json.hpp>
 
+#include <basyx/function.h>
 #include <basyx/types.h>
 
 #include <util/array.h>
@@ -57,7 +58,6 @@ namespace json {
         json = any;
     };
 
-    // util::array serializer
     template <typename T>
     inline void serialize_helper(json_t& json, const util::array<T>& array)
     {

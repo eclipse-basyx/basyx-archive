@@ -7,11 +7,11 @@ project(basyx)
 message(STATUS "${PROJECT_NAME} settings:")
 message(STATUS "==============")
 
-add_library(abstraction)
+add_library(basyx_abstraction)
 
 ## basyx::thread sources ##
 
-target_sources(abstraction 
+target_sources(basyx_abstraction 
     PRIVATE 
         abstraction/Thread.h
         abstraction/thread/Thread.h 
@@ -27,7 +27,7 @@ elseif(${CMAKE_USE_PTHREADS_INIT})
     set(thread_platform "unix")
 endif()
 
-target_sources(abstraction
+target_sources(basyx_abstraction
     PRIVATE
         abstraction/impl/${thread_platform}/thread/thread_impl.cpp
         abstraction/impl/${thread_platform}/thread/thread_impl.h
@@ -35,7 +35,7 @@ target_sources(abstraction
 
 ## basyx::net sources ##
 
-target_sources(abstraction
+target_sources(basyx_abstraction
     PRIVATE
         abstraction/Net.h
         abstraction/net/Socket.h
@@ -49,7 +49,7 @@ target_sources(abstraction
 
 if(WIN32)
     message(STATUS "Using winsock2.")
-    target_link_libraries(abstraction ws2_32)
+    target_link_libraries(basyx_abstraction ws2_32)
     set(socket_platform "windows")
 endif()
 
@@ -58,14 +58,14 @@ if(UNIX)
     set(socket_platform "unix")
 endif()
 
-target_sources(abstraction
+target_sources(basyx_abstraction
     PRIVATE
         abstraction/impl/${socket_platform}/socket/socket_impl.cpp
         abstraction/impl/${socket_platform}/socket/acceptor_impl.cpp
 )
 
-target_include_directories(abstraction PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(abstraction Threads::Threads basyx::util basyx::logging)
-add_library(basyx::abstraction ALIAS abstraction)
+target_include_directories(basyx_abstraction PUBLIC ${PROJECT_SOURCE_DIR})
+target_link_libraries(basyx_abstraction Threads::Threads basyx::util basyx::log)
+add_library(basyx::abstraction ALIAS basyx_abstraction)
 
-diagnostics_print(abstraction)
+diagnostics_print(basyx_abstraction)

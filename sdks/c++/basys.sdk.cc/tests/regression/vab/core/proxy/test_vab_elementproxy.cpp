@@ -141,6 +141,6 @@ TEST_F(BasyxVABElementProxy, TestInvokeOperation)
   // Set path should be same as called one
   ASSERT_EQ(proxy_address + "//some/path/to/invoke", provider_mockup->path);
   // and the function should have been called with the collection
-  ASSERT_EQ(collection.size(), provider_mockup->val.Get<basyx::objectCollection_t>().size());
-  ASSERT_EQ(2, provider_mockup->val.Get<basyx::objectCollection_t>().at(0).Get<int>());
+  ASSERT_EQ(collection.size(), provider_mockup->val.Get<basyx::objectCollection_t&>().size());
+  ASSERT_EQ(2, provider_mockup->val.Get<basyx::objectCollection_t&>().at(0).Get<int>());
 }

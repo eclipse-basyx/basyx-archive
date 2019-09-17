@@ -4,12 +4,11 @@
 
 project(basyx)
 
-add_library(util)
+add_library(basyx_util)
 
-target_sources(util
+target_sources(basyx_util
     PRIVATE
         util/array.h
-        util/function.h
         util/invoke.h
         util/macros.h
         util/meta.h
@@ -20,8 +19,8 @@ target_sources(util
         util/util.h
 )
 
-target_include_directories(util PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(util lib::json)
-add_library(basyx::util ALIAS util)
+target_include_directories(basyx_util PUBLIC ${PROJECT_SOURCE_DIR}) 
+target_link_libraries(basyx_util lib::json)
+add_library(basyx::util ALIAS basyx_util)
 
-diagnostics_print(util)
+diagnostics_print(basyx_util)

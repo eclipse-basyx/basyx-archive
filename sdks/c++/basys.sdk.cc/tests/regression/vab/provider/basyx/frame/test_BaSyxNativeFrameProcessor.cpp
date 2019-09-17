@@ -209,7 +209,7 @@ TEST(BaSyxNativeFrameProcessor, invokeTest) {
 
 	auto & calledArgs = mockup->val.Get<basyx::objectCollection_t&>();
 
-	ASSERT_TRUE(calledArgs.front().InstanceOf<int>());
+	ASSERT_TRUE(calledArgs[0].InstanceOf<int>());
 	ASSERT_EQ(calledArgs.front().Get<int>(), 10);
 
 	ASSERT_EQ(receive.get()[0], (char ) 0);

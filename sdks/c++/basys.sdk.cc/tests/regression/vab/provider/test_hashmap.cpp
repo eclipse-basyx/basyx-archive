@@ -5,9 +5,6 @@
  *      Author: psota
  */
 
-/////////////////////////////////////////////////////////////////
-// Includes
-// GTest
 #include <gtest/gtest.h>
 
 #include "vab/provider/hashmap/VABHashmapProvider.h"
@@ -15,9 +12,13 @@
 #include "vab/stub/elements/SimpleVABElement.h"
 
 #include "snippet/MapRead.h"
+#include "snippet/MapCreateDelete.h"
+#include "snippet/MapInvoke.h"
 
 #include "basyx/any.h"
 #include "basyx/serialization/json.h"
+
+#include "basyx/function.h"
 
 #include <memory>
 #include <unordered_map>
@@ -84,6 +85,22 @@ TEST_F(TestBaSyxHashmapProvider, GetPropertyValue)
 	ASSERT_EQ(value4.Get<int>(), 7);
 	ASSERT_EQ(mapTest1.Get<int>(), 321);
 	ASSERT_EQ(mapTest2.Get<int>(), 123);
+}
+
+int testFunc(int a, int b)
+{
+	return a + b;
+}
+
+TEST_F(TestBaSyxHashmapProvider, TestInvoke)
+{
+	hashMapProvider.createValue("function", basyx::make_function(testFunc));
+
+	basyx::objectCollection_t args{ 1,2 };
+
+	auto val = hashMapProvider.invokeOperationImpl("function", args);
+
+	ASSERT_ANY_EQ(val, 3);
 }
 
 TEST_F(TestBaSyxHashmapProvider, SetPropertyValue)
@@ -160,11 +177,23 @@ TEST_F(TestBaSyxHashmapProvider, CreateDelete)
 	ASSERT_EQ(property1_2b.Get<basyx::objectCollection_t&>().size(), 3);
 }
 
-
-
 TEST_F(TestBaSyxHashmapProvider, MapRead)
 {
 	vab::provider::HashmapProvider hashMapProvider{ tests::support::make_simple_vab_element() };
 
 	tests::regression::vab::snippet::MapRead::test(&hashMapProvider);
+}
+
+TEST_F(TestBaSyxHashmapProvider, MapCreateDelete)
+{
+	vab::provider::HashmapProvider hashMapProvider{ tests::support::make_simple_vab_element() };
+
+	tests::regression::vab::snippet::MapCreateDelete::test(&hashMapProvider);
+}
+
+TEST_F(TestBaSyxHashmapProvider, MapInvoke)
+{
+	vab::provider::HashmapProvider hashMapProvider{ tests::support::make_simple_vab_element() };
+
+	tests::regression::vab::snippet::MapInvoke::test(&hashMapProvider);
 }
