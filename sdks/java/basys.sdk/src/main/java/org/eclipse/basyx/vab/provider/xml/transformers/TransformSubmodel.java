@@ -32,7 +32,7 @@ public class TransformSubmodel {
 		submodelobj.putAll(hasKindObj);
 		submodelobj.putAll(transformHasSemanticsObj);
 		for (Property property : transformPropertySet) {
-			submodelobj.addDataElement(property);
+			submodelobj.addSubModelElement(property);
 		}
 		System.out.println();
 

@@ -8,6 +8,8 @@ import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABModelMap;
@@ -30,9 +32,11 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.qualifiable.Qu
  */
 public class SubmodelFacade implements ISubModel {
 	private VABModelMap<Object> map;
+	private VABElementContainerFacade containerFacade;
 
 	public SubmodelFacade(VABModelMap<Object> map) {
 		this.map = map;
+		containerFacade = new VABElementContainerFacade(map);
 	}
 
 	/**
@@ -40,14 +44,14 @@ public class SubmodelFacade implements ISubModel {
 	 */
 	public SubmodelFacade() {
 		// Instantiate VAB HashMap provider with sub model instance
-		map = new SubModel();
+		this(new SubModel());
 	}
 
 	/**
 	 * Constructor with an initial submodel
 	 */
 	public SubmodelFacade(SubModel submodel) {
-		map = submodel;
+		this((VABModelMap<Object>) submodel);
 	}
 
 	/**
@@ -236,18 +240,6 @@ public class SubmodelFacade implements ISubModel {
 		map.put(HasKind.KIND, kind);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Map<String, IProperty> getProperties() {
-		return (Map<String, IProperty>) map.get(SubModel.PROPERTIES);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public Map<String, IOperation> getOperations() {
-		return (Map<String, IOperation>) map.get(SubModel.OPERATIONS);
-	}
-
 	@Override
 	public void setProperties(Map<String, IProperty> properties) {
 		map.put(SubModel.PROPERTIES, properties);
@@ -278,15 +270,19 @@ public class SubmodelFacade implements ISubModel {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void addProperty(IProperty property) {
-		((Map<String, Object>) map.get(SubModel.PROPERTIES)).put(property.getIdshort(), property);
+	public void addSubModelElement(ISubmodelElement element) {
+		containerFacade.addSubModelElement(element);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void addOperation(IOperation operation) {
-		((Map<String, Object>) map.get(SubModel.OPERATIONS)).put(operation.getIdshort(), operation);
+	public Map<String, IDataElement> getDataElements() {
+		return containerFacade.getDataElements();
 	}
+
+	@Override
+	public Map<String, IOperation> getOperations() {
+		return containerFacade.getOperations();
+	}
+
 }

@@ -57,7 +57,7 @@ public class AASSubModelServletVABConnection {
 			// - Add simple property
 			Property prop1 = new Property(234);
 			prop1.setId("prop1");
-			getProperties().put(prop1);
+			addSubModelElement(prop1);
 
 			Property prop11 = new Property(123);
 			prop11.setId("prop11");
@@ -66,7 +66,7 @@ public class AASSubModelServletVABConnection {
 					prop11
 				);
 			// - Add container to property map
-			getProperties().put(fac.createContainer(new SubmodelElementCollection(), containerProperties, fac.emptyList(), "prop2"));
+			addSubModelElement(fac.createContainer(new SubmodelElementCollection(), containerProperties, fac.emptyList(), "prop2"));
 
 			// Add another property manually to sub model container "properties"
 			Property prop3 = new Property(17);

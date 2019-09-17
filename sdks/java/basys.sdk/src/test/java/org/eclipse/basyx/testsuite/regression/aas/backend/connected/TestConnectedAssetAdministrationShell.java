@@ -116,7 +116,7 @@ public class TestConnectedAssetAdministrationShell {
 
 		// Check if the submodel has been retrieved correctly
 		ISubModel sm = connectedAAS.getSubModels().get(smId);
-		ISingleProperty prop = (ISingleProperty) sm.getProperties().get(propId);
+		ISingleProperty prop = (ISingleProperty) sm.getDataElements().get(propId);
 		assertEquals(propVal, prop.get());
 	}
 }

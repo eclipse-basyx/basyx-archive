@@ -248,7 +248,7 @@ public class SQLPreconfiguredSubModelProvider extends BaseConfiguredProvider {
 		
 		System.out.println("Putting SQL:"+name);
 		// Add property as map of lambdas
-		submodelData.getProperties().put(name, createSubmodelElement(name, value, cfgValues));
+		submodelData.getDataElements().put(name, createSubmodelElement(name, value, cfgValues));
 	}
 
 	

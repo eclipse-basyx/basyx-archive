@@ -7,8 +7,8 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
@@ -109,7 +109,7 @@ public class TestAASHTTP {
 		// TODO: Extend
 		// - retrieve properties and operations
 
-		Map<String, IProperty> properties = sm.getProperties();
+		Map<String, IDataElement> properties = sm.getDataElements();
 		assertEquals(2, properties.size());
 		ISingleProperty prop = (ISingleProperty) properties.get("integerProperty");
 		assertEquals(123, prop.get());

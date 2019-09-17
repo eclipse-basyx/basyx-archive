@@ -6,9 +6,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
@@ -20,12 +20,11 @@ import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasKindFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedQualifiableFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedReferableFacade;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABElementContainer;
+import org.eclipse.basyx.aas.backend.connected.facades.ConnectedVABElementContainerFacade;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.IVABElementContainer;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.DataElement;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -36,9 +35,12 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  * @author rajashek
  *
  */
-public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement implements IContainerProperty, VABElementContainer, ISubmodelElementCollection {
+public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement implements IContainerProperty, IVABElementContainer, ISubmodelElementCollection {
+	ConnectedVABElementContainerFacade facade;
+
 	public ConnectedSubmodelElementCollection(VABElementProxy proxy) {
 		super(proxy);
+		facade = new ConnectedVABElementContainerFacade(proxy);
 	}
 
 	@Override
@@ -127,13 +129,13 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 
 	@Override
 	public void setElements(HashMap<String, ISubmodelElement> value) {
-		getProxy().setModelPropertyValue(SubmodelElementCollection.ELEMENTS, value);
+		getProxy().setModelPropertyValue(SubModel.SUBMODELELEMENT, value);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap<String, ISubmodelElement> getElements() {
-		return (HashMap<String, ISubmodelElement>) getProxy().getModelPropertyValue(SubmodelElementCollection.ELEMENTS);
+		return (HashMap<String, ISubmodelElement>) getProxy().getModelPropertyValue(SubModel.SUBMODELELEMENT);
 	}
 
 	@Override
@@ -153,51 +155,6 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	}
 
 	@Override
-	public void addDataElement(DataElement element) {
-		if (element instanceof IProperty) {
-			addProperty((IProperty) element);
-		} else {
-			throw new RuntimeException("Tried to add DataElement with id " + element.getId() + " which is does not implement IProperty");
-		}
-	}
-
-	@Override
-	public void addOperation(Operation operation) {
-		if (operation instanceof IOperation) {
-			addOperation((IOperation) operation);
-		} else {
-			throw new RuntimeException("Tried to add Operation with id " + operation.getId() + " which is does not implement IOperation");
-		}
-	}
-
-	@Override
-	public void addEvent(Object event) {
-		// TODO Auto-generated method stub
-		throw new FeatureNotImplementedException();
-
-	}
-
-	@Override
-	public void addElementCollection(SubmodelElementCollection collection) {
-		getElements().put(collection.getId(), collection);
-		if (collection instanceof IProperty) {
-			getProperties().put(collection.getId(), collection);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public Map<String, IProperty> getProperties() {
-		return (Map<String, IProperty>) getProxy().getModelPropertyValue(SubModel.PROPERTIES);
-	}
-
-	@Override
-	public Map<String, IOperation> getOperations() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void setValue(Object obj) {
 		getProxy().setModelPropertyValue(Property.VALUE, obj);
 		getProxy().setModelPropertyValue(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(obj));
@@ -206,11 +163,26 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 
 	public void addProperty(IProperty property) {
 		getElements().put(property.getId(), property);
-		getProperties().put(property.getId(), property);
+		getDataElements().put(property.getId(), property);
 	}
 
 	public void addOperation(IOperation operation) {
 		getElements().put(operation.getId(), operation);
 		getOperations().put(operation.getId(), operation);
+	}
+
+	@Override
+	public void addSubModelElement(ISubmodelElement element) {
+		facade.addSubModelElement(element);
+	}
+
+	@Override
+	public Map<String, IDataElement> getDataElements() {
+		return facade.getDataElements();
+	}
+
+	@Override
+	public Map<String, IOperation> getOperations() {
+		return facade.getOperations();
 	}
 }

@@ -50,7 +50,7 @@ public class ProductQualitySubmodel extends SubModel {
 		MetaModelElementFactory fac = new MetaModelElementFactory();
 		
 		// Add quality data property
-		getProperties().put("qualityData", new Property(qualityData));
+		getDataElements().put("qualityData", new Property(qualityData));
 		
 		// Add access operations for quality data
 		// - Add a quality data entry

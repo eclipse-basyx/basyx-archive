@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasDataSpecificationFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasKindFacade;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
@@ -19,7 +20,7 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  * @author rajashek
  *
  */
-public class ConnectedDataElement extends ConnectedSubmodelElement {
+public class ConnectedDataElement extends ConnectedSubmodelElement implements IDataElement {
 	public ConnectedDataElement(VABElementProxy proxy) {
 		super(proxy);
 	}

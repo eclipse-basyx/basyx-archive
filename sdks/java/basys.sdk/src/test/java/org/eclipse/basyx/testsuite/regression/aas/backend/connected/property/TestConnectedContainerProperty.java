@@ -7,10 +7,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ICollectionProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IContainerProperty;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.ConnectedContainerProperty;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
@@ -37,7 +37,7 @@ public class TestConnectedContainerProperty {
 	IContainerProperty prop;
 	Collection<Integer> collection;
 
-	@Before
+	@Before 
 	public void build() {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 
@@ -75,7 +75,7 @@ public class TestConnectedContainerProperty {
 	@Test
 	public void testProperty() {
 		// Get contained properties
-		Map<String, IProperty> props = prop.getProperties();
+		Map<String, IDataElement> props = prop.getDataElements();
 
 		// Check number of properties
 		assertEquals(1, props.size());

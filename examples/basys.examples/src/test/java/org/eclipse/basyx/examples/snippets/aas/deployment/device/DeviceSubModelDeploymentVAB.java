@@ -40,11 +40,11 @@ public class DeviceSubModelDeploymentVAB {
 		// - Add example properties
 		Property prop1 = new Property(7);
 		prop1.setId("prop1");
-		submodel.getProperties().put(prop1);
+		submodel.addSubModelElement(prop1);
 
 		Property prop2 = new Property("myStr");
 		prop2.setId("prop2");
-		submodel.getProperties().put(prop2);
+		submodel.addSubModelElement(prop2);
 
 		
 		// Export sub model via BaSyx server

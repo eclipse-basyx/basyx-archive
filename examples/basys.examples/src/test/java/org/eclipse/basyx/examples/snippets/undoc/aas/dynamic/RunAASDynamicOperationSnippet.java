@@ -74,11 +74,11 @@ public class RunAASDynamicOperationSnippet {
 		submodel.setId("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
 		Property prop1 = new Property(7);
 		prop1.setId("prop1");
-		submodel.getProperties().put(prop1);
+		submodel.addSubModelElement(prop1);
 
 		Property prop2 = new Property("myStr");
 		prop2.setId("prop2");
-		submodel.getProperties().put(prop2);
+		submodel.addSubModelElement(prop2);
 		// - Transfer sub model to server
 		connSubModel1.setModelPropertyValue("/", submodel);
 

@@ -102,11 +102,11 @@ public class ConnectToSubModelEndpoints {
 		// - Add example properties to sub model
 		Property prop1 = new Property(7);
 		prop1.setId("prop1");
-		submodel.getProperties().put(prop1);
+		submodel.addSubModelElement(prop1);
 
 		Property prop2 = new Property("myStr");
 		prop2.setId("prop2");
-		submodel.getProperties().put(prop2);
+		submodel.addSubModelElement(prop2);
 		// - Transfer sub model to server
 		//   - This creates the "exampleSM" element on the server, which is the server
 		//     end point that will host the AAS sub model.
@@ -121,10 +121,10 @@ public class ConnectToSubModelEndpoints {
 		
 		// Read property values from sub model
 		String smID     = connSM.getId();
-		String prop1Id  = connSM.getProperties().get("prop1").getId();
-		int    prop1Val = (int)    ((ISingleProperty) connSM.getProperties().get("prop1")).get();
-		String prop2Id  = connSM.getProperties().get("prop2").getId();
-		String prop2Val = (String) ((ISingleProperty) connSM.getProperties().get("prop2")).get();
+		String prop1Id = connSM.getDataElements().get("prop1").getId();
+		int    prop1Val = (int)    ((ISingleProperty) connSM.getDataElements().get("prop1")).get();
+		String prop2Id  = connSM.getDataElements().get("prop2").getId();
+		String prop2Val = (String) ((ISingleProperty) connSM.getDataElements().get("prop2")).get();
 
 		
 		// Check property values

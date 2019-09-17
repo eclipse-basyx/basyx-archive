@@ -7,23 +7,22 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IContainerProperty;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.PropertyType;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasDataSpecificationFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasKindFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasSemanticsFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.QualifiableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.ReferableFacade;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABElementContainer;
+import org.eclipse.basyx.aas.impl.metamodel.facades.VABElementContainerFacade;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.IVABElementContainer;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 
@@ -34,12 +33,13 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property
  * @author schnicke
  *
  */
-public class SubmodelElementCollection extends SubmodelElement implements IContainerProperty, VABElementContainer,ISubmodelElementCollection {
+public class SubmodelElementCollection extends SubmodelElement implements IContainerProperty, IVABElementContainer, ISubmodelElementCollection {
 	private static final long serialVersionUID = 1L;
-	
-	public static final String ORDERED="ordered";
-	public static final String ALLOWDUPLICATES= "allowDuplicates";
-	public static final String ELEMENTS="elements";
+
+	public static final String ORDERED = "ordered";
+	public static final String ALLOWDUPLICATES = "allowDuplicates";
+
+	private VABElementContainerFacade containerFacade;
 
 	/**
 	 * Constructor
@@ -50,11 +50,12 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 		put(ORDERED, true);
 		put(ALLOWDUPLICATES, true);
 
-		put(ELEMENTS, new HashMap<>());
+		put(SubModel.SUBMODELELEMENT, new HashMap<>());
 
 		// Helper for operations and properties
 		put(SubModel.PROPERTIES, new HashMap<>());
 		put(SubModel.OPERATIONS, new HashMap<>());
+		containerFacade = new VABElementContainerFacade(this);
 	}
 
 	/**
@@ -75,92 +76,21 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 		put(ORDERED, ordered);
 		put(ALLOWDUPLICATES, allowDuplicates);
 
-		put(ELEMENTS, new HashMap<>());
+		put(SubModel.SUBMODELELEMENT, new HashMap<>());
 
 		// Helper for operations and properties
 		put(SubModel.PROPERTIES, new HashMap<>());
 		put(SubModel.OPERATIONS, new HashMap<>());
 
 		for (SubmodelElement elem : value) {
-			if (elem instanceof IProperty) {
-				getProperties().put(elem.getId(), (IProperty) elem);
-			} else if (elem instanceof IOperation) {
-				getOperations().put(elem.getId(), (IOperation) elem);
-			}
+			containerFacade.addSubModelElement(elem);
 		}
-	}
-
-	public void addSubmodelElement(SubmodelElement elem) {
-		if (elem instanceof IProperty) {
-			addProperty((IProperty) elem);
-		} else if (elem instanceof IOperation) {
-			addOperation((IOperation) elem);
-		}
-		getElements().put(elem.getId(), elem);
-	}
-
-	public void addProperty(IProperty property) {
-		getElements().put(property.getId(), property);
-		getProperties().put(property.getId(), property);
-	}
-
-	public void addOperation(IOperation operation) {
-		getElements().put(operation.getId(), operation);
-		getOperations().put(operation.getId(), operation);
 	}
 
 	@Override
 	public PropertyType getPropertyType() {
 		return PropertyType.Container;
 	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public Map<String, IProperty> getProperties() {
-		return (Map<String, IProperty>) get(SubModel.PROPERTIES);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public Map<String, IOperation> getOperations() {
-		return (Map<String, IOperation>) get(SubModel.OPERATIONS);
-	}
-
-	@Override
-	public void addDataElement(DataElement element) {
-		if (element instanceof IProperty) {
-			addProperty((IProperty) element);
-		} else {
-			throw new RuntimeException("Tried to add DataElement with id " + element.getId() + " which is does not implement IProperty");
-		}
-	}
-
-	@Override
-	public void addOperation(Operation operation) {
-		if (operation instanceof IOperation) {
-			addOperation((IOperation) operation);
-		} else {
-			throw new RuntimeException("Tried to add Operation with id " + operation.getId() + " which is does not implement IOperation");
-		}
-	}
-
-	@Override
-	public void addEvent(Object event) {
-		// TODO Auto-generated method stub
-		throw new FeatureNotImplementedException();
-	}
-
-	@Override
-	public void addElementCollection(SubmodelElementCollection collection) {
-		getElements().put(collection.getId(), collection);
-		if (collection instanceof IProperty) {
-			getProperties().put(collection.getId(), collection);
-		}
-	}
-
-
-	
-
 
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
@@ -170,12 +100,12 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	@Override
 	public void setDataSpecificationReferences(HashSet<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
-		
+
 	}
 
 	@Override
 	public String getIdshort() {
-	return new ReferableFacade(this).getIdshort();
+		return new ReferableFacade(this).getIdshort();
 	}
 
 	@Override
@@ -189,43 +119,43 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	}
 
 	@Override
-	public IReference  getParent() {
+	public IReference getParent() {
 		return new ReferableFacade(this).getParent();
 	}
 
 	@Override
 	public void setIdshort(String idShort) {
 		new ReferableFacade(this).setIdshort(idShort);
-		
+
 	}
 
 	@Override
 	public void setCategory(String category) {
 		new ReferableFacade(this).setCategory(category);
-		
+
 	}
 
 	@Override
 	public void setDescription(String description) {
 		new ReferableFacade(this).setDescription(description);
-		
+
 	}
 
 	@Override
-	public void setParent(IReference  obj) {
+	public void setParent(IReference obj) {
 		new ReferableFacade(this).setParent(obj);
-		
+
 	}
 
 	@Override
 	public void setQualifier(Set<IConstraint> qualifiers) {
 		new QualifiableFacade(this).setQualifier(qualifiers);
-		
+
 	}
 
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return new  QualifiableFacade(this).getQualifier();
+		return new QualifiableFacade(this).getQualifier();
 	}
 
 	@Override
@@ -236,24 +166,24 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	@Override
 	public void setSemanticID(IReference ref) {
 		new HasSemanticsFacade(this).setSemanticID(ref);
-		
+
 	}
 
 	@Override
 	public String getHasKindReference() {
-      return new HasKindFacade(this).getHasKindReference();
+		return new HasKindFacade(this).getHasKindReference();
 	}
 
 	@Override
 	public void setHasKindReference(String kind) {
 		new HasKindFacade(this).setHasKindReference(kind);
-		
+
 	}
 
 	@Override
 	public void setValue(ArrayList<?> value) {
 		put(Property.VALUE, value);
-		
+
 	}
 
 	@Override
@@ -264,7 +194,7 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	@Override
 	public void setOrdered(boolean value) {
 		put(SubmodelElementCollection.ORDERED, value);
-		
+
 	}
 
 	@Override
@@ -275,7 +205,7 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	@Override
 	public void setAllowDuplicates(boolean value) {
 		put(SubmodelElementCollection.ALLOWDUPLICATES, value);
-		
+
 	}
 
 	@Override
@@ -285,31 +215,43 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 
 	@Override
 	public void setElements(HashMap<String, ISubmodelElement> value) {
-		put(SubmodelElementCollection.ELEMENTS, value);
+		put(SubModel.SUBMODELELEMENT, value);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap<String, ISubmodelElement> getElements() {
-		return (HashMap<String, ISubmodelElement>) get(SubmodelElementCollection.ELEMENTS);
+		return (HashMap<String, ISubmodelElement>) get(SubModel.SUBMODELELEMENT);
 	}
-
 
 	@Override
 	public void setValue(Object obj) {
 		put(Property.VALUE, obj);
 		put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(obj));
-		
 	}
 
 	@Override
 	public void setValueId(Object obj) {
 		put(Property.VALUEID, obj);
-		
 	}
 
 	@Override
 	public Object getValueId() {
 		return get(Property.VALUEID);
+	}
+
+	@Override
+	public void addSubModelElement(ISubmodelElement element) {
+		containerFacade.addSubModelElement(element);
+	}
+
+	@Override
+	public Map<String, IDataElement> getDataElements() {
+		return containerFacade.getDataElements();
+	}
+
+	@Override
+	public Map<String, IOperation> getOperations() {
+		return containerFacade.getOperations();
 	}
 }

@@ -65,7 +65,7 @@ public class AASServletConnectionFull {
 			// - Add simple property
 			Property prop1 = new Property(234);
 			prop1.setId("prop1");
-			getProperties().put(prop1);
+			addSubModelElement(prop1);
 
 			Property prop11 = new Property(123);
 			prop11.setId("prop11");
@@ -74,7 +74,7 @@ public class AASServletConnectionFull {
 					prop11
 				);
 			// - Add container to property map
-			getProperties().put(fac.createContainer(new SubmodelElementCollection(), containerProperties, fac.emptyList(), "prop2"));
+			addSubModelElement(fac.createContainer(new SubmodelElementCollection(), containerProperties, fac.emptyList(), "prop2"));
 
 			// Add another property manually to sub model container "properties"
 			Property prop3 = new Property(17);
@@ -191,11 +191,11 @@ public class AASServletConnectionFull {
 					.retrieveSubModel(new ModelUrn("aas-001"), "sm-001");
 			// - Retrieve sub model values and compare to expected values
 			assertTrue(subModel.getId().equals("sm-001"));
-			assertTrue(subModel.getProperties().get("prop1").getId().equals("prop1"));
-			assertTrue((int) ((ISingleProperty) subModel.getProperties().get("prop1")).get() == 234);
-			assertTrue((int) ((ISingleProperty) subModel.getProperties().get("prop3")).get() == 17);
-			assertTrue(subModel.getProperties().get("prop2").getId().equals("prop2"));
-			assertTrue((int) ((ISingleProperty) ((IContainerProperty) subModel.getProperties().get("prop2")).getProperties().get("prop11")).get() == 123);
+			assertTrue(subModel.getDataElements().get("prop1").getId().equals("prop1"));
+			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get() == 234);
+			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop3")).get() == 17);
+			assertTrue(subModel.getDataElements().get("prop2").getId().equals("prop2"));
+			assertTrue((int) ((ISingleProperty) ((IContainerProperty) subModel.getDataElements().get("prop2")).getDataElements().get("prop11")).get() == 123);
 
 			// Retrieve dummy AAS (created by factory) with SDK connector
 			IAssetAdministrationShell shell = manager.retrieveAAS(new ModelUrn("aas-001"));
@@ -217,7 +217,7 @@ public class AASServletConnectionFull {
 			assertTrue((int) connSubModel1.getModelPropertyValue("dataElements/prop1/value") == 456);
 
 			// Read changed value back using SDK connector
-			assertTrue((int) ((ISingleProperty) subModel.getProperties().get("prop1")).get() == 456);
+			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get() == 456);
 		}
 
 		
@@ -228,11 +228,11 @@ public class AASServletConnectionFull {
 					.retrieveSubModel(new ModelUrn("aas-001M"), "sm-001M");
 			// - Retrieve sub model values and compare to expected values
 			assertTrue(subModel.getId().equals("sm-001M"));
-			assertTrue(subModel.getProperties().get("prop1").getId().equals("prop1"));
-			assertTrue((int) ((ISingleProperty) subModel.getProperties().get("prop1")).get() == 234);
-			assertTrue((int) ((ISingleProperty) subModel.getProperties().get("prop3")).get() == 17);
-			assertTrue(subModel.getProperties().get("prop2").getId().equals("prop2"));
-			assertTrue((int) ((ISingleProperty) ((IContainerProperty) subModel.getProperties().get("prop2")).getProperties().get("prop11")).get() == 123);
+			assertTrue(subModel.getDataElements().get("prop1").getId().equals("prop1"));
+			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get() == 234);
+			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop3")).get() == 17);
+			assertTrue(subModel.getDataElements().get("prop2").getId().equals("prop2"));
+			assertTrue((int) ((ISingleProperty) ((IContainerProperty) subModel.getDataElements().get("prop2")).getDataElements().get("prop11")).get() == 123);
 
 			// Retrieve dummy AAS (created by factory) with SDK connector
 			IAssetAdministrationShell shell = manager.retrieveAAS(new ModelUrn("aas-001"));
@@ -255,7 +255,7 @@ public class AASServletConnectionFull {
 			assertTrue((int) connSubModel1.getModelPropertyValue("dataElements/prop1/value") == 456);
 
 			// Read changed value back using SDK connector
-			assertTrue((int) ((ISingleProperty) subModel.getProperties().get("prop1")).get() == 456);
+			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get() == 456);
 		}
 	}
 }

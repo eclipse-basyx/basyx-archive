@@ -66,14 +66,14 @@ public class ConnectToAASSubModelSDK {
 			// - Add simple property
 			Property prop1 = new Property(234);
 			prop1.setId("prop1");
-			getProperties().put(prop1);
+			addSubModelElement(prop1);
 
 			Property prop11 = new Property(123);
 			prop11.setId("prop11");
 			// - Add container property that holds other properties
 			List<SubmodelElement> containerProperties = fac.createList(prop11);
 			// - Add container to property map
-			getProperties().put(fac.createContainer(new SubmodelElementCollection(), containerProperties, fac.emptyList(), "prop2"));
+			addSubModelElement(fac.createContainer(new SubmodelElementCollection(), containerProperties, fac.emptyList(), "prop2"));
 
 			// Add another property manually to sub model container "properties"
 			Property prop3 = new Property(17);
@@ -125,11 +125,11 @@ public class ConnectToAASSubModelSDK {
 			ISubModel subModel = manager.retrieveSubModel(new ModelUrn(""), "sm-001");
 			// - Retrieve sub model values and compare to expected values
 			String smID     = subModel.getId();
-			String prop1Id  = subModel.getProperties().get("prop1").getId();
-			int    prop1Val = (int) ((ISingleProperty) subModel.getProperties().get("prop1")).get();
-			int    prop3Val = (int) ((ISingleProperty) subModel.getProperties().get("prop3")).get();
-			String prop2Id  = subModel.getProperties().get("prop2").getId();
-			int    prop211  = (int) ((ISingleProperty) ((IContainerProperty) subModel.getProperties().get("prop2")).getProperties().get("prop11")).get();
+			String prop1Id  = subModel.getDataElements().get("prop1").getId();
+			int    prop1Val = (int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get();
+			int    prop3Val = (int) ((ISingleProperty) subModel.getDataElements().get("prop3")).get();
+			String prop2Id  = subModel.getDataElements().get("prop2").getId();
+			int    prop211  = (int) ((ISingleProperty) ((IContainerProperty) subModel.getDataElements().get("prop2")).getDataElements().get("prop11")).get();
 
 			
 			// Check results

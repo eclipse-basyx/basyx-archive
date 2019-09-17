@@ -36,29 +36,39 @@ public class SimpleAASSubmodel extends SubModel {
 
 		Property intProp = new Property(123);
 		intProp.setId("integerProperty");
-		addDataElement(intProp);
+		addSubModelElement(intProp);
 
 		Property stringProp = new Property("Test");
 		stringProp.setId("stringProperty");
-		addDataElement(stringProp);
+		addSubModelElement(stringProp);
 
 		// Create example operations
-		getOperations().put("complex", fac.createOperation(new Operation(), (Function<Object[], Object>) (v) -> {
+		Operation complex = fac.createOperation(new Operation(), (Function<Object[], Object>) (v) -> {
 			return (int) v[0] - (int) v[1];
-		}));
-		getOperations().put("simple", fac.createOperation(new Operation(), (Function<Object[], Object>) (v) -> {
+		});
+		complex.setId("complex");
+		addSubModelElement(complex);
+
+		Operation simple = fac.createOperation(new Operation(), (Function<Object[], Object>) (v) -> {
 			return true;
-		}));
+		});
+		simple.setId("simple");
+		addSubModelElement(simple);
 
 		// Create example operations
 		// - Contained operation that throws native JAVA exception
-		getOperations().put("exception1", fac.createOperation(new Operation(), (Function<Object[], Object>) (elId) -> {
+		Operation exception1 = fac.createOperation(new Operation(), (Function<Object[], Object>) (elId) -> {
 			throw new NullPointerException();
-		}));
+		});
+		exception1.setId("exception1");
+		addSubModelElement(exception1);
+
 		// - Contained operation that throws VAB exception
-		getOperations().put("exception2", fac.createOperation(new Operation(), (Function<Object[], Object>) (elId) -> {
+		Operation exception2 = fac.createOperation(new Operation(), (Function<Object[], Object>) (elId) -> {
 			throw new ServerException("ExType", "Exception description");
-		}));
+		});
+		exception2.setId("exception2");
+		addSubModelElement(exception2);
 
 	}
 }

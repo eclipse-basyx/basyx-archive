@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
@@ -88,7 +89,7 @@ public class TestConnectedSubModel {
 	@Test
 	public void propertiesTest() throws Exception {
 		// Retrieve all properties
-		Map<String, IProperty> props = submodel.getProperties();
+		Map<String, IDataElement> props = submodel.getDataElements();
 
 		// Check if number of properties is as expected
 		assertEquals(1, props.size());
@@ -125,14 +126,14 @@ public class TestConnectedSubModel {
 		property.setValue("test2");
 		
 		// Save it
-		submodel.addDataElement(property);
+		submodel.addSubModelElement(property);
 		
 		// Load it
-		Map<String, IProperty> map = submodel.getProperties();
+		Map<String, IDataElement> map = submodel.getDataElements();
 		
 		// Check if it loaded correctly
 		assertNotNull(map);
-		IProperty loadedProp = map.get(property.getId());
+		IProperty loadedProp = (IProperty) map.get(property.getId());
 		assertNotNull(loadedProp);
 		assertEquals(property.getValue(), loadedProp.getValue());
 	}
@@ -145,7 +146,7 @@ public class TestConnectedSubModel {
 		operation.setId("test1");
 		
 		// Save it
-		submodel.addOperation(operation);
+		submodel.addSubModelElement(operation);
 		
 		// Load it
 		Map<String, IOperation> map = submodel.getOperations();

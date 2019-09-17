@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasDataSpecificationFacade;
@@ -17,17 +18,13 @@ import org.eclipse.basyx.aas.impl.metamodel.facades.HasSemanticsFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.IdentifiableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.ReferableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.SubmodelFacade;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABElementContainer;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.IVABElementContainer;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasDataSpecification;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.haskind.HasKind;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.qualifiable.Qualifiable;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.DataElement;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElement;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
 
 /**
  * Submodel class
@@ -36,7 +33,7 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operatio
  *
  *
  */
-public class SubModel extends VABModelMap<Object> implements VABElementContainer, ISubModel {
+public class SubModel extends VABModelMap<Object> implements IVABElementContainer, ISubModel {
 
 	/**
 	 * Version of serialized instances
@@ -50,17 +47,17 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 	/**
 	 * Submodel properties
 	 */
-	protected Map<String, IProperty> properties = new VABModelMap<>();
+	protected Map<String, IDataElement> dataElements = new HashMap<>();
 
 	/**
 	 * Submodel operations
 	 */
-	protected Map<String, IOperation> operations = new VABModelMap<>();
+	protected Map<String, IOperation> operations = new HashMap<>();
 
 	/**
 	 * Submodel elements in general. Does also contain operations and properties
 	 */
-	protected Map<String, SubmodelElement> elements = new HashMap<String, SubmodelElement>();
+	protected Map<String, ISubmodelElement> elements = new HashMap<>();
 
 	/**
 	 * Constructor
@@ -77,7 +74,7 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 		put(SUBMODELELEMENT, elements);
 
 		// Helper attributes
-		put(PROPERTIES, properties);
+		put(PROPERTIES, dataElements);
 		put(OPERATIONS, operations);
 	}
 
@@ -96,43 +93,8 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 		put(SUBMODELELEMENT, elements);
 
 		// Helper attributes
-		put(PROPERTIES, properties);
+		put(PROPERTIES, dataElements);
 		put(OPERATIONS, operations);
-	}
-
-	/**
-	 * Add property
-	 */
-	@Override
-	public void addDataElement(DataElement value) {
-
-		String id = value.getId();
-		if (value instanceof IProperty) {
-			System.out.println("adding Property " + id);
-			properties.put(id, (IProperty) value);
-			elements.put(id, value);
-		} else {
-			throw new RuntimeException("Tried to add DataElement with id " + id + " which is does not implement IProperty");
-		}
-	}
-
-	/**
-	 * Add operation
-	 */
-	@Override
-	public void addOperation(Operation operation) {
-
-		String id = operation.getId();
-		if (operation instanceof IOperation) {
-
-			System.out.println("adding Operation " + id);
-
-			// Add single operation
-			operations.put(id, operation);
-			elements.put(id, operation);
-		} else {
-			throw new RuntimeException("Tried to add Operation with id " + id + " which is does not implement IOperation");
-		}
 	}
 
 	@Override
@@ -188,42 +150,16 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 	@Override
 	public void setId(String id) {
 		new SubmodelFacade(this).setId(id);
-
 	}
 
 	@Override
 	public void setProperties(Map<String, IProperty> properties) {
 		new SubmodelFacade(this).setProperties(properties);
-
 	}
 
 	@Override
 	public void setOperations(Map<String, IOperation> operations) {
 		new SubmodelFacade(this).setOperations(operations);
-
-	}
-
-	@Override
-	public void addEvent(Object event) {
-		throw new FeatureNotImplementedException();
-	}
-
-	@Override
-	public void addElementCollection(SubmodelElementCollection collection) {
-		put(collection.getId(), collection);
-		if (collection instanceof IProperty) {
-			getProperties().put(collection.getId(), collection);
-		}
-	}
-
-	@Override
-	public VABModelMap<IProperty> getProperties() {
-		return (VABModelMap<IProperty>) new SubmodelFacade(this).getProperties();
-	}
-
-	@Override
-	public Map<String, IOperation> getOperations() {
-		return new SubmodelFacade(this).getOperations();
 	}
 
 	@Override
@@ -263,12 +199,17 @@ public class SubModel extends VABModelMap<Object> implements VABElementContainer
 	}
 
 	@Override
-	public void addProperty(IProperty property) {
-		new SubmodelFacade(this).addProperty(property);
+	public Map<String, IDataElement> getDataElements() {
+		return new SubmodelFacade(this).getDataElements();
 	}
 
 	@Override
-	public void addOperation(IOperation operation) {
-		new SubmodelFacade(this).addOperation(operation);
+	public Map<String, IOperation> getOperations() {
+		return new SubmodelFacade(this).getOperations();
+	}
+
+	@Override
+	public void addSubModelElement(ISubmodelElement element) {
+		new SubmodelFacade(this).addSubModelElement(element);
 	}
 }

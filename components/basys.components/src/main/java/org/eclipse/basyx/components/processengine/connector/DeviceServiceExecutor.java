@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
@@ -82,7 +82,7 @@ public abstract class DeviceServiceExecutor implements IDeviceServiceExecutor {
 		ISubModel statusSubmodel = manager.retrieveSubModel(aasUrn, submodelid);
 		
 		// get properties of the submodel
-		Map<String, IProperty> properties = ((ConnectedSubModel) statusSubmodel).getProperties();
+		Map<String, IDataElement> properties = ((ConnectedSubModel) statusSubmodel).getDataElements();
 		
 		// get specific property
 		ISingleProperty pro_EXST = (ISingleProperty)properties.get(propertyName);

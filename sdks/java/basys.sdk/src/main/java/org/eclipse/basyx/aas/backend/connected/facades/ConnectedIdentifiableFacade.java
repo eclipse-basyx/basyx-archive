@@ -1,12 +1,14 @@
 package org.eclipse.basyx.aas.backend.connected.facades;
 
+import java.util.Map;
+
 import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IIdentifiable;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.backend.connected.ConnectedElement;
-import org.eclipse.basyx.aas.backend.connected.aas.identifier.ConnectedAdministrativeInformation;
 import org.eclipse.basyx.aas.backend.connected.aas.identifier.ConnectedIdentifier;
+import org.eclipse.basyx.aas.impl.metamodel.facades.AdministrativeInformationFacade;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -24,9 +26,10 @@ public class ConnectedIdentifiableFacade extends ConnectedElement implements IId
 		super(proxy);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return new ConnectedAdministrativeInformation(getProxy().getDeepProxy(Identifiable.ADMINISTRATION));
+		return new AdministrativeInformationFacade((Map<String, Object>) ((Map<String, Object>) getProxy().getModelPropertyValue("")).get(Identifiable.ADMINISTRATION));
 	}
 
 	@Override

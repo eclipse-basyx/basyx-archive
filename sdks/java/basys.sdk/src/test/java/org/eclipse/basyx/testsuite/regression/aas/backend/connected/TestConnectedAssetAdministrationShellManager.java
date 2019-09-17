@@ -91,11 +91,11 @@ public class TestConnectedAssetAdministrationShellManager {
 		submodel.setId(smId);
 		Property prop1 = new Property(7);
 		prop1.setId("prop1");
-		submodel.getProperties().put(prop1);
+		submodel.addSubModelElement(prop1);
 
 		Property prop2 = new Property("myStr");
 		prop1.setId("prop2");
-		submodel.getProperties().put(prop2);
+		submodel.addSubModelElement(prop2);
 
 		manager.createSubModel(urn, smId, submodel);
 
