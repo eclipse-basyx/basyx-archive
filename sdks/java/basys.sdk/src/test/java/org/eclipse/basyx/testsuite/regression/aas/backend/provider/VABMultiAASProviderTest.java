@@ -89,12 +89,14 @@ public class VABMultiAASProviderTest {
 			proxy.invokeOperation("path://a1/aas/submodels/SimpleAASSubmodel/operations/exception1/invokable");
 			fail();
 		} catch (ServerException e) {
+			assertEquals(NullPointerException.class.getCanonicalName(), e.getType());
 		}
 		// Invoke exception2
 		try {
 			proxy.invokeOperation("path://a1/aas/submodels/SimpleAASSubmodel/operations/exception2/invokable", "prop1");
 			fail();
 		} catch (ServerException e) {
+			assertEquals("ExType", e.getType());
 		}
 	}
 
