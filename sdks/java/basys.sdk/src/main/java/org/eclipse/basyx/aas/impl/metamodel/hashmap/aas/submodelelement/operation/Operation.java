@@ -28,8 +28,6 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.Submodel
 public class Operation extends SubmodelElement implements IOperation {
 	private static final long serialVersionUID = -1381491542617026911L;
 
-	private Function<Object[], Object> endpoint;
-
 	public static final String IN = "in";
 	public static final String OUT = "out";
 	public static final String INVOKABLE = "invokable";
@@ -67,7 +65,6 @@ public class Operation extends SubmodelElement implements IOperation {
 
 		// Extension of DAAS specification for function storage
 		put(INVOKABLE, function);
-		this.endpoint = function;
 	}
 
 	@Override
@@ -93,9 +90,10 @@ public class Operation extends SubmodelElement implements IOperation {
 		return (List<IOperationVariable>) get(Operation.OUT);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object invoke(Object... params) throws Exception {
-		return this.endpoint.apply(params);
+		return ((Function<Object[], Object>) get(INVOKABLE)).apply(params);
 	}
 
 	public void SetParameterTypes(List<OperationVariable> in) {
