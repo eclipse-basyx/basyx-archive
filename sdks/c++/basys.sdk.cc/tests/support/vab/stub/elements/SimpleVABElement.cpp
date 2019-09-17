@@ -3,11 +3,25 @@
 #include <basyx/any.h>
 #include <basyx/types.h>
 
+#include <basyx/function.h>
+
 #include <set>
 
 namespace basyx {
 namespace tests {
 namespace support {
+
+	class testFuncs {
+	public:
+		static bool True() {
+			return true;
+		};
+
+		static int add(int a, int b) {
+			return a + b;
+		}
+	};
+
 
 	objectMap_t make_simple_vab_element()
 	{
@@ -21,28 +35,13 @@ namespace support {
 
 		// Add function types
 		objectMap_t functions;
-/*		functions.emplace("supplier", []() { return true;});
+		functions.emplace("supplier", basyx::make_function(testFuncs::True));
 
-		functions.emplace("serverException", [](){
-			throw "ServerException";
-		});
-
-		functions.emplace("nullException", [](){
-			throw "NullPointerException";
-		});
-
-		functions.emplace("nullException", [](){
-			throw "NullPointerException";
-		});
-
-		functions.emplace("serializable", [](any a, any b) {
-			return a.Get<int>() + b.Get<int>();
-		});
+		functions.emplace("complex", basyx::make_function(testFuncs::add));
+		functions.emplace("serializable", basyx::make_function(testFuncs::add));
 
 		functions.emplace("invalid", true);
-		functions.emplace("invokable", [](){
-			return true;
-		});*/
+		functions.emplace("invokable", basyx::make_function(testFuncs::True));
 		simpleVABElement.emplace("operations", functions);
 
 		// Add structure types
