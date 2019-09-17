@@ -12,11 +12,11 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.ConnectedSubmodelElement;
-import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasDataSpecificationFacade;
-import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasKindFacade;
-import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasSemanticsFacade;
-import org.eclipse.basyx.aas.backend.connected.facades.ConnectedQualifiableFacade;
-import org.eclipse.basyx.aas.backend.connected.facades.ConnectedReferableFacade;
+import org.eclipse.basyx.aas.impl.metamodel.facades.HasDataSpecificationFacade;
+import org.eclipse.basyx.aas.impl.metamodel.facades.HasKindFacade;
+import org.eclipse.basyx.aas.impl.metamodel.facades.HasSemanticsFacade;
+import org.eclipse.basyx.aas.impl.metamodel.facades.QualifiableFacade;
+import org.eclipse.basyx.aas.impl.metamodel.facades.ReferableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
@@ -110,41 +110,41 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
-		return new ConnectedHasDataSpecificationFacade(getProxy()).getDataSpecificationReferences();
+		return new HasDataSpecificationFacade(getElem()).getDataSpecificationReferences();
 	}
 
 	@Override
 	public String getIdshort() {
-		return new ConnectedReferableFacade(getProxy()).getIdshort();
+		return new ReferableFacade(getElem()).getIdshort();
 	}
 
 	@Override
 	public String getCategory() {
-		return new ConnectedReferableFacade(getProxy()).getCategory();
+		return new ReferableFacade(getElem()).getCategory();
 	}
 
 	@Override
 	public String getDescription() {
-		return new ConnectedReferableFacade(getProxy()).getDescription();
+		return new ReferableFacade(getElem()).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return new ConnectedReferableFacade(getProxy()).getParent();
+		return new ReferableFacade(getElem()).getParent();
 	}
 
 	@Override
 	public IReference getSemanticId() {
-		return new ConnectedHasSemanticsFacade(getProxy()).getSemanticId();
+		return new HasSemanticsFacade(getElem()).getSemanticId();
 	}
 
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return new ConnectedQualifiableFacade(getProxy()).getQualifier();
+		return new QualifiableFacade(getElem()).getQualifier();
 	}
 
 	@Override
 	public String getHasKindReference() {
-		return new ConnectedHasKindFacade(getProxy()).getHasKindReference();
+		return new HasKindFacade(getElem()).getHasKindReference();
 	}
 }

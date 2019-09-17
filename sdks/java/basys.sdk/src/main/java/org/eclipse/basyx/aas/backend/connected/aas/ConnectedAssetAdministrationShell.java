@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
@@ -17,10 +18,12 @@ import org.eclipse.basyx.aas.api.metamodel.aas.security.ISecurity;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connected.ConnectedVABModelMap;
-import org.eclipse.basyx.aas.backend.connected.aas.reference.ConnectedReference;
-import org.eclipse.basyx.aas.backend.connected.aas.security.ConnectedSecurity;
-import org.eclipse.basyx.aas.backend.connected.facades.ConnectedHasDataSpecificationFacade;
-import org.eclipse.basyx.aas.backend.connected.facades.ConnectedIdentifiableFacade;
+import org.eclipse.basyx.aas.impl.metamodel.facades.ConceptDictionaryFacade;
+import org.eclipse.basyx.aas.impl.metamodel.facades.HasDataSpecificationFacade;
+import org.eclipse.basyx.aas.impl.metamodel.facades.IdentifiableFacade;
+import org.eclipse.basyx.aas.impl.metamodel.facades.ReferenceFacade;
+import org.eclipse.basyx.aas.impl.metamodel.facades.SecurityFacade;
+import org.eclipse.basyx.aas.impl.metamodel.facades.ViewFacade;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -60,67 +63,61 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return new ConnectedIdentifiableFacade(getProxy()).getAdministration();
+		return new IdentifiableFacade(getElem()).getAdministration();
 	}
 
 	@Override
 	public IIdentifier getIdentification() {
-		return new ConnectedIdentifiableFacade(getProxy()).getIdentification();
+		return new IdentifiableFacade(getElem()).getIdentification();
 	}
 
 	@Override
 	public HashSet<IReference> getDataSpecificationReferences() {
-		return new ConnectedHasDataSpecificationFacade(getProxy()).getDataSpecificationReferences();
+		return new HasDataSpecificationFacade(getElem()).getDataSpecificationReferences();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ISecurity getSecurity() {
-		return new ConnectedSecurity(getProxy().getDeepProxy(AssetAdministrationShell.SECURITY));
+		return new SecurityFacade((Map<String, Object>) getElem().getPath(AssetAdministrationShell.SECURITY));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getDerivedFrom() {
-		return new ConnectedReference(getProxy().getDeepProxy(AssetAdministrationShell.DERIVEDFROM));
+		return new ReferenceFacade((Map<String, Object>) getElem().getPath(AssetAdministrationShell.DERIVEDFROM));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getAsset() {
-		return new ConnectedReference(getProxy().getDeepProxy(AssetAdministrationShell.ASSET));
+		return new ReferenceFacade((Map<String, Object>) getElem().getPath(AssetAdministrationShell.ASSET));
 	}
 
 	@Override
 	public void setSubModel(Set<IReference> submodels) {
-		getProxy().setModelPropertyValue(AssetAdministrationShell.SUBMODEL, submodels);
-
+		throwNotSupportedException();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IReference> getSubModel() {
-		return (Set<IReference>) getProxy().getModelPropertyValue(AssetAdministrationShell.SUBMODEL);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.SUBMODEL);
+		return set.stream().map(x -> new ReferenceFacade(x)).collect(Collectors.toSet());
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IView> getViews() {
-		return (Set<IView>) getProxy().getModelPropertyValue(AssetAdministrationShell.VIEWS);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.VIEWS);
+		return set.stream().map(x -> new ViewFacade(x)).collect(Collectors.toSet());
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IConceptDictionary> getConceptDictionary() {
-		return (Set<IConceptDictionary>) getProxy().getModelPropertyValue(AssetAdministrationShell.CONCEPTDICTIONARY);
-	}
-
-	@Override
-	public String getId() {
-		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
-	}
-
-	@Override
-	public void setId(String id) {
-		getProxy().setModelPropertyValue(Referable.IDSHORT, id);
-
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.CONCEPTDICTIONARY);
+		return set.stream().map(x -> new ConceptDictionaryFacade(x)).collect(Collectors.toSet());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -154,26 +151,27 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 
 	@Override
 	public void addSubModel(ISubModel subModel) {
-		// TODO Auto-generated method stub
+		throwNotSupportedException();
 	}
 
 	@Override
 	public String getIdshort() {
-		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
+		return (String) getElem().get(Referable.IDSHORT);
 	}
 
 	@Override
 	public String getCategory() {
-		return (String) getProxy().getModelPropertyValue(Referable.CATEGORY);
+		return (String) getElem().get(Referable.CATEGORY);
 	}
 
 	@Override
 	public String getDescription() {
-		return (String) getProxy().getModelPropertyValue(Referable.DESCRIPTION);
+		return (String) getElem().get(Referable.DESCRIPTION);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getParent() {
-		return new ConnectedReference(getProxy().getDeepProxy(Referable.PARENT));
+		return new ReferenceFacade((Map<String, Object>) getElem().getPath(Referable.PARENT));
 	}
 }

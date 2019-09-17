@@ -1,9 +1,11 @@
 package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property;
 
+import java.util.Map;
+
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IReferenceElement;
-import org.eclipse.basyx.aas.backend.connected.aas.reference.ConnectedReference;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.ConnectedDataElement;
+import org.eclipse.basyx.aas.impl.metamodel.facades.ReferenceFacade;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
@@ -23,9 +25,10 @@ public class ConnectedReferenceElement extends ConnectedDataElement implements I
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getValue() {
-		return new ConnectedReference(getProxy().getDeepProxy(Property.VALUE));
+		return new ReferenceFacade((Map<String, Object>) getElem().getPath(Property.VALUE));
 	}
 
 }

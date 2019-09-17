@@ -3,6 +3,9 @@ package org.eclipse.basyx.aas.backend.connected;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABModelMap;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
+import org.eclipse.basyx.vab.IElement;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
@@ -10,7 +13,7 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  * @author pschorn
  *
  */
-public class ConnectedElement {
+public class ConnectedElement implements IElement {
 
 	private VABElementProxy proxy;
 	
@@ -39,5 +42,24 @@ public class ConnectedElement {
 	
 	protected Object getLocal(String key) {
 		return this.localInformation.get(key);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected VABModelMap<Object> getElem() {
+		return new VABModelMap<Object>((Map<String, Object>) getProxy().getModelPropertyValue(""));
+	}
+
+	protected void throwNotSupportedException() {
+		throw new RuntimeException("Not supported on remote object");
+	}
+
+	@Override
+	public String getId() {
+		return (String) getElem().getPath(Referable.IDSHORT);
+	}
+
+	@Override
+	public void setId(String id) {
+		throwNotSupportedException();
 	}
 }
