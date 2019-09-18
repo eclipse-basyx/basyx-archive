@@ -29,7 +29,7 @@ target_sources(basyx_shared
 )
 
 target_include_directories(basyx_shared PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(basyx_shared basyx::util lib::json)
+target_link_libraries(basyx_shared basyx::util basyx::log lib::json)
 add_library(basyx::shared ALIAS basyx_shared)
 
 diagnostics_print(basyx_shared)

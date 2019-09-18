@@ -71,7 +71,6 @@ public:
 
     std::string processBaSysInvoke(std::string const& path, std::string const& serializedJSONValue, char* output, size_t* size)
     {
-        // ToDo: invoke operations
 		auto deserialized = basyx::serialization::json::deserialize(serializedJSONValue);
 
         basyx::any res;
@@ -80,7 +79,6 @@ public:
             auto& parameters = deserialized.Get<basyx::objectCollection_t&>();
             res = providerBackend->invokeOperationImpl(path, parameters);
         } else {
-       //     basyx::objectCollection_t parameters { deserialized };
             res = providerBackend->invokeOperation(path, deserialized);
         }
 
@@ -89,13 +87,6 @@ public:
 
 private:
     Provider* providerBackend;
-
-    //void serializeToJSON(std::string const& path, BRef<BType> const& val, char* output, size_t* size)
-    //{
-    //	//std::string serialized = jsonTools->serialize(val, 0, providerBackend->getElementScope(path)).dump();
-    //	//memcpy(output, serialized.c_str(), serialized.length());
-    //	//*size = serialized.length();
-    //}
 
     std::string serializeToJSON(const std::string& path, const basyx::any& value)
     {
@@ -110,7 +101,13 @@ private:
     {
         std::string clockPath = submodelPath + "/properties/clock";
         basyx::any clock = providerBackend->getModelPropertyValue(clockPath);
-        providerBackend->setModelPropertyValue(clockPath, clock.Get<int>() + 1);
+
+		if (clock.IsNull()) {
+			providerBackend->createValue(clockPath, 1);
+		}
+		else {
+			providerBackend->setModelPropertyValue(clockPath, clock.Get<int>() + 1);
+		}
     }
 
     bool isFrozen(std::string const& submodelPath)

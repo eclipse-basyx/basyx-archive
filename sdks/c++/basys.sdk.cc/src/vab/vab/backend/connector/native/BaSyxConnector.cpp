@@ -7,6 +7,7 @@
 
 #include "vab/backend/connector/native/BaSyxConnector.h"
 #include "vab/backend/connector/native/frame/BaSyxNativeFrameBuilder.h"
+#include "vab/provider/native/frame/BaSyxNativeFrameHelper.h"
 
 #include <basyx/serialization/json.h>
 
@@ -38,6 +39,9 @@ NativeConnector::~NativeConnector() {
 
 basyx::any NativeConnector::basysGet(std::string const& path)
 {
+	log.trace("basysGet() called:");
+	log.trace("    path: {}", path);
+
 	auto entityWrapper = basysGetRaw(path);
 	auto value = basyx::serialization::json::deserialize(entityWrapper["entity"]);
 	return value;
@@ -56,6 +60,9 @@ nlohmann::json NativeConnector::basysGetRaw(std::string const& path) {
 
 void NativeConnector::basysSet(std::string const& path, const basyx::any & newValue)
 {
+	log.trace("basysSet() called:");
+	log.trace("    path: {}", path);
+
 	size_t size = builder.buildSetFrame(path, newValue, buffer.data() + BASYX_FRAMESIZE_SIZE);
 	sendData(buffer.data(), size);
 	size = receiveData(buffer.data());
@@ -95,34 +102,47 @@ void NativeConnector::basysDelete(std::string const& path, const basyx::any & ob
 	* @param msg a frame constructed with the BaSyxNativeFrameBuilder
 	*/
 
-void NativeConnector::sendData(char* msg, size_t size) {
+void NativeConnector::sendData(char* msg, size_t size) 
+{
+	log.trace("sendData() called");
+	log.trace("    msg: 0x{0:x}", (std::size_t)msg);
+	log.trace("    size: {}", size);
+
 	CoderTools::setInt32(msg, 0, size);
 	size += BASYX_FRAMESIZE_SIZE;
 #ifdef PRINT_FRAME
-	log.debug("Sending:\n{}", BaSyxNativeFrameHelper::printFrame(msg, size));
+	log.debug("Sending:");
+	vab::provider::native::frame::BaSyxNativeFrameHelper::printFrame(msg, size);
 #endif
 
-	int iResult = this->socket.Send(basyx::net::make_buffer(msg, size));
+	log.debug("Sending {} bytes.", size);
+	int sent_bytes = this->socket.Send(basyx::net::make_buffer(msg, size));
+	log.debug("Sent {} bytes.", sent_bytes);
 
-	if (iResult < 0) {
+	if (sent_bytes < 0) {
 		log.error("Send failed! Error code: {}", this->socket.GetErrorCode());
 	}
 }
 
 // TODO: Error handling
 size_t NativeConnector::receiveData(char* data) {
-	// recv(data, DEFAULT_BUFFER_LENGTH, 0);
-	int iResult = this->socket.Receive(basyx::net::make_buffer(data, default_buffer_length));
+	log.trace("receiveData() called");
+	log.trace("    data: 0x{0:x}", (std::size_t)data);
 
-	if (iResult > 0) {
+	// recv(data, DEFAULT_BUFFER_LENGTH, 0);
+	int recv_bytes = this->socket.Receive(basyx::net::make_buffer(data, default_buffer_length));
+
+	log.debug("Received {} bytes.", recv_bytes);
+
+	if (recv_bytes > 0) {
 #ifdef PRINT_FRAME
-		log.debug("Received:\n{}", BaSyxNativeFrameHelper::printFrame(data, iResult));
+		log.debug("Received:");
+		vab::provider::native::frame::BaSyxNativeFrameHelper::printFrame(data, recv_bytes);
 #endif
-		return iResult;
+		return recv_bytes;
 	}
 	else {
-		std::cout << "NativeConnector# ReceiveData failed" << std::endl;
-		log.error("Receive failed! Error code: {}", iResult);
+		log.error("Receive failed! Error code: {}", recv_bytes);
 		return 0;
 	}
 }

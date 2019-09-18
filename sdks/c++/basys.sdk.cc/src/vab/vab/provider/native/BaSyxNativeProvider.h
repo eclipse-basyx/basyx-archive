@@ -68,18 +68,20 @@ namespace native {
 			{
 				log.trace("Waiting for incoming message");
 				std::size_t bytes_read = this->clientSocket.Receive(recv_buffer);
+				log.debug("Received {} bytes.", bytes_read);
 				if (bytes_read == 0 || !this->clientSocket.Healthy()) {
 					log.info("Connection closed");
 					closed = true;
 				}
 				else if (bytes_read < 0) {
-					log.info("Receive failed");
+					log.error("Receive failed!");
 					closed = true;
 				}
 				else {
-					log.trace("Received frame");
+					log.trace("Received frame.");
 #ifdef PRINT_FRAME
-					log.debug("Received:\n{}", BaSyxNativeFrameHelper::printFrame(recv_buffer.data(), bytes_read));
+					log.debug("Received:");
+					vab::provider::native::frame::BaSyxNativeFrameHelper::printFrame(recv_buffer.data(), bytes_read);
 #endif
 					std::size_t txSize = 0;
 
@@ -93,8 +95,14 @@ namespace native {
 					txSize += BASYX_FRAMESIZE_SIZE;
 					CoderTools::setInt32(ret.data(), 0, txSize);
 
-					log.info("Sending reply");
+					log.info("Sending reply.");
+#ifdef PRINT_FRAME
+					log.debug("Sending:");
+					vab::provider::native::frame::BaSyxNativeFrameHelper::printFrame(ret.data(), txSize);
+#endif
+					log.debug("Sending {} bytes.", txSize);
 					std::size_t bytes_sent = this->clientSocket.Send(basyx::net::make_buffer(ret.data(), txSize));
+					log.debug("Sent {} bytes.", bytes_sent);
 
 					if (bytes_sent < 0) {
 						log.error("Sending failed: {}", this->clientSocket.GetErrorCode());

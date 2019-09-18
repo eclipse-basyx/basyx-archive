@@ -144,8 +144,6 @@ namespace json {
             //auto size = json[basyx::serialization::sizeSpecifier].get<std::size_t>();
             auto size = json.size();
 
-            std::cout << json.dump(4);
-
             basyx::objectMap_t objectMap { size };
 
             for (const auto& element : json.items()) {

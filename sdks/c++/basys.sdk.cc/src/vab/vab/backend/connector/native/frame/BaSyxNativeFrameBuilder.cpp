@@ -17,6 +17,7 @@ namespace connector {
 namespace native {
 namespace frame {
 
+	
 BaSyxNativeFrameBuilder::BaSyxNativeFrameBuilder() { };
 
 size_t BaSyxNativeFrameBuilder::buildGetFrame(std::string const& path, char * buffer)

@@ -21,7 +21,7 @@ namespace basyx {
 			{
 				//ToDo: Error handling
 				acceptor->listen(port);
-				log.trace("Listening on port %d", port.c_str());
+				log.trace("Listening on port {}", port.c_str());
 			}
 
 			Acceptor::~Acceptor()

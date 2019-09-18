@@ -6,7 +6,7 @@
 
 namespace basyx
 {
-	log::Level log::logLevel = log::Level::Trace;
+	log::Level log::logLevel = log::Level::Debug;
 
 	const char * log::printLevel(log::Level level)
 	{

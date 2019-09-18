@@ -36,7 +36,7 @@ namespace basyx {
 				// Initialize Winsock
 				int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 				if (iResult != 0) {
-					log.error("WSAStartup() failed: %d", iResult);
+					log.error("WSAStartup() failed: {}", iResult);
 					return -1;
 				}
 
@@ -51,7 +51,7 @@ namespace basyx {
 				// Resolve the server address and port
 				iResult = getaddrinfo(address.c_str(), port.c_str(), &hints, &result);
 				if (iResult != 0) {
-					log.error("getaddrinfo() failed: %d", iResult);
+					log.error("getaddrinfo() failed: {}", iResult);
 					WSACleanup();
 					return -1;
 				}
@@ -62,7 +62,7 @@ namespace basyx {
 				SocketDesc = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
 
 				if (SocketDesc == INVALID_SOCKET) {
-					log.error("socket() failed: %d", WSAGetLastError());
+					log.error("socket() failed: {}", WSAGetLastError());
 					freeaddrinfo(result);
 					WSACleanup();
 					return -1;
@@ -114,7 +114,7 @@ namespace basyx {
 
 				if (iResult == SOCKET_ERROR)
 				{
-					log.warn("socket_impl# shutdown failed: %d", WSAGetLastError());
+					log.warn("socket_impl# shutdown failed: {}", WSAGetLastError());
 				}
 
 				closesocket(SocketDesc);

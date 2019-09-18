@@ -10,6 +10,8 @@
 
 #include <json/json.hpp>
 
+#include <log/log.h>
+
 #include <basyx/any.h>
 
 #include <basyx/serialization/json/json_deserializer.h>
@@ -26,15 +28,15 @@ namespace json {
     {
         json_t json;
         serialize_helper(json, t);
-        std::cout << "Serialized: \n"
-                  << json.dump(4);
+
+        basyx::log::topic("Serializer").debug("Serialized: \n{}", json.dump(4));
+
         return json;
     }
 
     inline basyx::any deserialize(const json_t& json)
     {
-        std::cout << "Deserializing: \n"
-                  << json.dump(4);
+        basyx::log::topic("Serializer").debug("Deserializing: \n{}", json.dump(4));
 
         return deserialize_helper::deserialize(json);
     };

@@ -46,25 +46,26 @@ namespace frame {
         return StringTools::fromArray(data);
     }
 
-    static std::string printFrame(char const* data, size_t size)
+    static void printFrame(char const* data, size_t size)
     {
-        std::stringstream output;
+		basyx::log::topic("Frame").debug("+-----------+");
+		basyx::log::topic("Frame").debug("| Size: {}", (int)data[0]);
+		basyx::log::topic("Frame").debug("+-----------+");
+		basyx::log::topic("Frame").debug("| Command: 0x{0:x}", data[4]);
+		basyx::log::topic("Frame").debug("+-----------+");
 
-        output << CoderTools::getInt32(data, 0) << " " << (int)data[4];
         data += 5;
         size -= 5;
 
         // Iterate over the array to find all strings
-        while (size > 0) {
-            output << " ";
-            std::string str = StringTools::fromArray(data);
-            data += str.length() + BASYX_STRINGSIZE_SIZE;
-            size -= str.length() + BASYX_STRINGSIZE_SIZE;
-            output << "\n"
-                   << str;
-        }
-        output << std::endl;
-        return output.str();
+		while (size > 0) {
+			std::string str = StringTools::fromArray(data);
+			basyx::log::topic("Frame").debug("| Len: {}", (int)data[0]);
+			basyx::log::topic("Frame").debug("| Data: {}", str);
+			basyx::log::topic("Frame").debug("+-----------+");
+			data += str.length() + BASYX_STRINGSIZE_SIZE;
+			size -= str.length() + BASYX_STRINGSIZE_SIZE;
+		}
     }
 
     /**
