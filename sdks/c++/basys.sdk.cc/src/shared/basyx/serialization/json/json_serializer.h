@@ -58,8 +58,15 @@ namespace json {
         json = any;
     };
 
+	// basyx::function serializer
+	//inline void serialize_helper(json_t & json, const basyx::detail::invokable & function)
+	//{
+	//	json = "unserializable function";
+	//}
+
+    // basyx::array serializer
     template <typename T>
-    inline void serialize_helper(json_t& json, const util::array<T>& array)
+    inline void serialize_helper(json_t& json, const basyx::array<T>& array)
     {
         // serialize header
         json = json_t {

@@ -43,7 +43,7 @@ static std::string getPropertyTypeInfo(const basyx::any & object)
     return PropertyTypeInfo::DOUBLE;
   if ( object.InstanceOf<float>() )
     return PropertyTypeInfo::FLOAT;
-  if ( object.InstanceOf<nullptr_t>() )
+  if ( object.InstanceOf<std::nullptr_t>() )
     return PropertyTypeInfo::PROPNULL;
   return PropertyTypeInfo::NONETYPE;
 }

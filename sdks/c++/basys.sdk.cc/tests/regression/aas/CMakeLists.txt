@@ -10,7 +10,7 @@ add_executable(tests_aas)
 
 target_sources(tests_aas
   PRIVATE
-    submodelelement/property/connected/test_connectedProperty.cpp
+    submodelelement/property/connected/test_ConnectedProperty.cpp
 	  support/VABProxyMock.cpp
 )
 

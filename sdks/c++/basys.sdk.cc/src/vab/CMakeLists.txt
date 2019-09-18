@@ -4,13 +4,13 @@
 
 project(basyx)
 
-add_library(vab)
+add_library(basyx_vab)
 
 if(${BASYX_DEBUG_PRINT_FRAMES})
-    target_compile_definitions(vab PUBLIC PRINT_FRAME)
+    target_compile_definitions(basyx_vab PUBLIC PRINT_FRAME)
 endif()
 
-target_sources(vab
+target_sources(basyx_vab
     PRIVATE
         vab/backend/connector/IBaSyxConnector.h
         vab/backend/connector/JSONProvider.h
@@ -35,8 +35,8 @@ target_sources(vab
         vab/provider/native/frame/BaSyxNativeFrameProcessor.h
 )
 
-target_include_directories(vab PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(vab basyx::shared basyx::abstraction)
-add_library(basyx::vab ALIAS vab)
+target_include_directories(basyx_vab PUBLIC ${PROJECT_SOURCE_DIR})
+target_link_libraries(basyx_vab basyx::shared basyx::abstraction)
+add_library(basyx::vab ALIAS basyx_vab)
 
-diagnostics_print(vab)
+diagnostics_print(basyx_vab)

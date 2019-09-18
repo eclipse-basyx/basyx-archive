@@ -48,7 +48,7 @@ void VABElementProxy::deleteElement(const VABPath & elementPath, const basyx::an
 
 basyx::any VABElementProxy::invoke(const VABPath & elementPath, basyx::objectCollection_t & parameter)
 {
-  return this->provider->invokeOperation(this->get_ablsolute_path(elementPath), parameter);
+  return this->provider->invokeOperationImpl(this->get_ablsolute_path(elementPath), parameter);
 }
 
 VABPath VABElementProxy::get_ablsolute_path(const VABPath & elementPath)

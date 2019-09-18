@@ -13,7 +13,7 @@
 
 #include <algorithm>
 
-namespace util {
+namespace basyx {
 	template<typename T>
 	class array
 	{
@@ -82,7 +82,7 @@ namespace util {
 			return _size;
 		}
 
-		inline bool operator==(const util::array<T> & rhs) const noexcept
+		inline bool operator==(const basyx::array<T> & rhs) const noexcept
 		{
 			return false;
 		}

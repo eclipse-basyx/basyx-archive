@@ -13,16 +13,16 @@ class TestBaSyxArray : public ::testing::Test
 TEST_F(TestBaSyxArray, Init)
 {
 	std::size_t arraySize = 20;
-	util::array<int> arr(arraySize);
+	basyx::array<int> arr(arraySize);
 	ASSERT_EQ(arraySize, arr.size());
 
-        auto arr2 = util::make_array<int>(42);
+        auto arr2 = basyx::make_array<int>(42);
         ASSERT_EQ(42, arr2.size());
 }
 
 TEST_F(TestBaSyxArray, Assignment)
 {
-        auto arr = util::make_array<int>(20);
+        auto arr = basyx::make_array<int>(20);
         
         for(std::size_t i = 0; i < 20; ++i)
         {
@@ -45,7 +45,7 @@ TEST_F(TestBaSyxArray, Assignment)
 
 TEST_F(TestBaSyxArray, CopyAssignment)
 {
-    auto arr = util::make_array<int>(20);
+    auto arr = basyx::make_array<int>(20);
 
     for(std::size_t i = 0; i < 20; ++i)
     {

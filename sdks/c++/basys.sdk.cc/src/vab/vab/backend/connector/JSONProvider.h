@@ -78,10 +78,10 @@ public:
 
         if (deserialized.InstanceOf<basyx::objectCollection_t>()) {
             auto& parameters = deserialized.Get<basyx::objectCollection_t&>();
-            res = providerBackend->invokeOperation(path, parameters);
+            res = providerBackend->invokeOperationImpl(path, parameters);
         } else {
-            basyx::objectCollection_t parameters { deserialized };
-            res = providerBackend->invokeOperation(path, parameters);
+       //     basyx::objectCollection_t parameters { deserialized };
+            res = providerBackend->invokeOperation(path, deserialized);
         }
 
         return serializeToJSON(path, res);

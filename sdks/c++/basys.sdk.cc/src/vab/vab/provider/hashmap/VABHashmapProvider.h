@@ -81,7 +81,7 @@ namespace provider {
         /**
          * Invoke an operation
          */
-        virtual basyx::any invokeOperation(const std::string& path, basyx::objectCollection_t& parameters) override;
+        virtual basyx::any invokeOperationImpl(const std::string& path, basyx::objectCollection_t& parameters) override;
     };
 
 }

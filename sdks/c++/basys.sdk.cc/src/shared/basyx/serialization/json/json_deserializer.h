@@ -39,7 +39,7 @@ namespace json {
                 //				if (basysType == basyx::serialization::mapSpecifier)
                 if (json.is_object()) {
                 return basyx::any { std::forward<basyx::objectMap_t>(deserialize_helper::objectMap(json)) };
-            } else // deserialize typed util::array
+            } else // deserialize typed basyx::array
                 //				if (basysType == basyx::serialization::arraySpecifier)
                 if (json.is_array()) {
                 return deserialize_helper::object_list(json);
@@ -96,7 +96,7 @@ namespace json {
             return objectList;
         }
 
-        // Deserialize util::array from JSON and return a basyx::any object holding the deserialized array
+        // Deserialize basyx::array from JSON and return a basyx::any object holding the deserialized array
         static basyx::any array(const json_t& json)
         {
             auto arrayType = json[basyx::serialization::arrayTypeSpecifier].get<std::string>();
@@ -118,14 +118,14 @@ namespace json {
             }
         }
 
-        // This function creates a typed util::array of type T from JSON
+        // This function creates a typed basyx::array of type T from JSON
         // Assumes that every serialized array value in the json is of the same type
         template <typename T>
-        static util::array<T> typed_array(const json_t& json)
+        static basyx::array<T> typed_array(const json_t& json)
         {
             auto size = json[basyx::serialization::sizeSpecifier].get<std::size_t>();
 
-            auto array = util::make_array<T>(size);
+            auto array = basyx::make_array<T>(size);
 
             for (const auto& element : json.items()) {
                 if (!element.value().is_object())

@@ -76,7 +76,14 @@ namespace core {
         /**
      * Invoke an operation
      */
-        virtual basyx::any invokeOperation(const std::string& path, basyx::objectCollection_t& parameters) = 0;
+        virtual basyx::any invokeOperationImpl(const std::string& path, basyx::objectCollection_t& parameters) = 0;
+
+		template<typename... Args>
+		basyx::any invokeOperation(const std::string& path, const Args&... args)
+		{
+			auto argList = basyx::objectCollection_t{ args... };
+			return this->invokeOperationImpl(path, argList);
+		}
 
         /**
      * Get contained elements

@@ -15,15 +15,6 @@
 #include <util/tools/StringTools.h>
 
 
-// #include <WS2tcpip.h>
-
-// Uncomment the following line to print receiving and sending frames
-//#define PRINT_FRAME
-
-// TODO: In all basys_X methods: Error Handling!
-
-//static const size_t DEFAULT_BUFFER_LENGTH = 1024;
-
 namespace basyx {
 namespace vab {
 namespace connector {

@@ -1,7 +1,10 @@
 #include "VABHashmapProvider.h"
 
 #include <util/printer.h>
-#include <util/function.h>
+
+#include <basyx/function.h>
+
+#include <log/log.h>
 
 #include <algorithm>
 #include <cassert>
@@ -25,10 +28,6 @@ namespace provider {
 			auto & pathElement = vabPath.getElements().at(i);
             basyx::any * element = nullptr;
 
-            // TODO: skip null entry?
-
-          //  std::cout << "Get Parent Element: " << pathElement << " -> " << *currentScope << std::endl;
-
             // Try to find parent, despite not knowing if leading "/" must be added
             if (currentScope->find(pathElement) != currentScope->end()) {
                 element = &currentScope->at(pathElement);
@@ -51,7 +50,7 @@ namespace provider {
 
     void HashmapProvider::setModelPropertyValue(const std::string & path, const basyx::any & newValue)
     {
-        std::cout << "SetModelPropertyValue1:" + path << std::endl;
+        //std::cout << "SetModelPropertyValue1:" + path << std::endl;
 
         core::VABPath vabPath { path };
 		auto & lastPathElement = vabPath.getLastElement();
@@ -70,7 +69,7 @@ namespace provider {
 
 	basyx::any HashmapProvider::getModelPropertyValue(const std::string & path)
 	{
-		std::cout << "GetPropertyValue: " << path << std::endl;
+		//std::cout << "GetPropertyValue: " << path << std::endl;
 
 		// Split path into its elements, separated by '/'
 		core::VABPath pathElements{ path };
@@ -99,9 +98,9 @@ namespace provider {
 
     void HashmapProvider::createValue(const std::string & path, const basyx::any & newValue)
     {
-        std::cout << "CreateValue1:" << path << " ("
-                  << "newValue"
-                  << ")" << std::endl;
+        //std::cout << "CreateValue1:" << path << " ("
+        //          << "newValue"
+        //          << ")" << std::endl;
 
         core::VABPath vabPath { path };
         auto elementName = vabPath.getLastElement();
@@ -128,13 +127,17 @@ namespace provider {
 			//}
         }
 
+		//// if target not known, do nothing
+		if (parentElement == nullptr)
+			return;
+
         // Target is map, put key and element value into map
-        parentElement->emplace(vabPath.getLastElement(), std::move(newValue));
+		parentElement->emplace(vabPath.getLastElement(), std::move(newValue));
     };
 
 	void HashmapProvider::deleteValue(const std::string & path)
 	{
-		std::cout << "DeleteValue1:" << path;
+		//std::cout << "DeleteValue1:" << path;
 
 		// Split path into its elements, separated by '/'
 		core::VABPath vabPath{ path };
@@ -149,7 +152,7 @@ namespace provider {
 
 	void basyx::vab::provider::HashmapProvider::deleteValue(const std::string & path, const basyx::any & deletedValue)
 	{
-		std::cout << "DeleteValue2: " << path;
+		//std::cout << "DeleteValue2: " << path;
 
 		// Split path into its elements, separated by '/'
 		core::VABPath vabPath{ path };
@@ -157,6 +160,10 @@ namespace provider {
 
 		// Get parent of element
 		auto parentElement = getParentElement(path);
+
+		if(parentElement == nullptr)
+			return;
+
 		// - Get element
 		basyx::any & element = parentElement->at(elementName);
 
@@ -192,11 +199,33 @@ namespace provider {
 		}
 	}
 
-	basyx::any basyx::vab::provider::HashmapProvider::invokeOperation(const std::string & path, basyx::objectCollection_t & parameters)
+	basyx::any basyx::vab::provider::HashmapProvider::invokeOperationImpl(const std::string & path, basyx::objectCollection_t & parameters)
 	{
+		basyx::log::topic("VABHashMap").trace("invokeOperationImpl called");
+		basyx::log::topic("VABHashMap").trace("    path: \"{}\"", path);
+		basyx::log::topic("VABHashMap").trace("    parameters: <not impl>");
+
 		auto element = this->getModelPropertyValue(path);
 
+		if (element.IsNull())
+		{
+			basyx::log::topic("VABHashMap").error("Function not found!");
+			basyx::log::topic("VABHashMap").trace("Returning basyx::any::null");
+
+			return basyx::any{ nullptr };
+		}
+
+		if (!element.IsInvokable())
+		{
+			basyx::log::topic("VABHashMap").error("Found object not invokable!");
+			basyx::log::topic("VABHashMap").trace("Returning basyx::any::null");
+
+			return basyx::any{ nullptr };
+		};
+
 		auto function = element.GetPtr<function_base>();
+
+		basyx::log::topic("VABHashMap").trace("Function found. Invoking...");
 
 		return function->invoke_any(parameters);
 	}

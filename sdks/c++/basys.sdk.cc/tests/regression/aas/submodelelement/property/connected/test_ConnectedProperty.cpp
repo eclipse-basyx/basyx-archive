@@ -125,15 +125,3 @@ TEST_F(ConnectedPropertyTest, TestSetID)
   ASSERT_EQ(1, mock->readElementValue_calls);
   ASSERT_EQ(2, mock->overallMockCalls());
 }
-
-TEST_F(ConnectedPropertyTest, TestSetID)
-{
-  std::shared_ptr<IProperty> property(new ConnectedProperty(PropertyType::Collection, proxy));
-
-  property->setId("ID");
-
-  ASSERT_EQ(property->getId(), "called with " + std::string(basyx::aas::qualifier::ReferablePaths::IDSHORT));
-  ASSERT_EQ(1, mock->updateElementValue_calls);
-  ASSERT_EQ(1, mock->readElementValue_calls);
-  ASSERT_EQ(2, mock->overallMockCalls());
-}
