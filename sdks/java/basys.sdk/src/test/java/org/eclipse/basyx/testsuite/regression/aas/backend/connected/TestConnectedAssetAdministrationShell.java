@@ -22,7 +22,7 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.IdentifierType;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.testsuite.support.vab.TypeDestroyer;
 import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
 import org.eclipse.basyx.testsuite.support.vab.stub.ConnectorProviderStub;
@@ -51,7 +51,7 @@ public class TestConnectedAssetAdministrationShell {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 
 		// Create a SubModel containing no operations and one property
-		Property p = new Property(propVal);
+		SingleProperty p = new SingleProperty(propVal);
 		p.setId(propId);
 
 		SubModel sm = factory.create(new SubModel(), Collections.singletonList(p), new ArrayList<>());

@@ -15,7 +15,7 @@ import org.eclipse.basyx.aas.backend.connected.aas.ConnectedSubModel;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory_BaSyxNative;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASTCPServerResource;
 import org.eclipse.basyx.vab.backend.connector.basyx.BaSyxConnectorProvider;
@@ -48,7 +48,7 @@ public class TestConnectedSubModel {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 
 		// Create a simple value property
-		Property propertyMeta = new Property(100);
+		SingleProperty propertyMeta = new SingleProperty(100);
 		propertyMeta.setId(PROP);
 
 		// Create an operation
@@ -120,7 +120,7 @@ public class TestConnectedSubModel {
 	public void saveAndLoadPropertyTest() throws Exception {
 		
 		// Construct test data
-		Property property = new Property();
+		SingleProperty property = new SingleProperty();
 		property.setId("test1");
 		property.set("test2");
 		

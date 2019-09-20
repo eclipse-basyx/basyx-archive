@@ -7,7 +7,7 @@ import java.util.function.Function;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 
 
 
@@ -50,7 +50,7 @@ public class ProductQualitySubmodel extends SubModel {
 		MetaModelElementFactory fac = new MetaModelElementFactory();
 		
 		// Add quality data property
-		getDataElements().put("qualityData", new Property(qualityData));
+		getDataElements().put("qualityData", new SingleProperty(qualityData));
 		
 		// Add access operations for quality data
 		// - Add a quality data entry

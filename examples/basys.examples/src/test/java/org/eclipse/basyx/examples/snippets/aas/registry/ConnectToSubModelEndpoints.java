@@ -12,7 +12,7 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.IdentifierType;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.components.servlet.submodel.DynamicModelProviderServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
@@ -100,11 +100,11 @@ public class ConnectToSubModelEndpoints {
 		submodel.setId(subModelId);
 
 		// - Add example properties to sub model
-		Property prop1 = new Property(7);
+		SingleProperty prop1 = new SingleProperty(7);
 		prop1.setId("prop1");
 		submodel.addSubModelElement(prop1);
 
-		Property prop2 = new Property("myStr");
+		SingleProperty prop2 = new SingleProperty("myStr");
 		prop2.setId("prop2");
 		submodel.addSubModelElement(prop2);
 		// - Transfer sub model to server

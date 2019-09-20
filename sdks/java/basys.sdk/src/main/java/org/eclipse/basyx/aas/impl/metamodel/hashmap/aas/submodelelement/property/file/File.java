@@ -2,7 +2,7 @@ package org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.propert
 
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.file.IFile;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.DataElement;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.blob.Blob;
 
 /**
@@ -34,20 +34,20 @@ public class File extends DataElement implements IFile{
 		super();
 
 		// Save value
-		put(Property.VALUE, value);
+		put(SingleProperty.VALUE, value);
 		put(MIMETYPE, mimeType);
 	}
 
 
 	@Override
 	public void setValue(String value) {
-		put(Property.VALUE, value);
+		put(SingleProperty.VALUE, value);
 		
 	}
 
 	@Override
 	public String getValue() {
-		return (String) get(Property.VALUE);
+		return (String) get(SingleProperty.VALUE);
 	}
 
 	@Override

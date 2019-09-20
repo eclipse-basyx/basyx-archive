@@ -5,7 +5,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.PropertyType;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
@@ -23,13 +23,13 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 
 	@Override
 	public Object get() throws Exception {
-		Object value = getProxy().getModelPropertyValue(Property.VALUE);
+		Object value = getProxy().getModelPropertyValue(SingleProperty.VALUE);
 		
 		// unpack c# value
 		if (value instanceof Map<?,?>) {
-			if (((Map<?, ?>) value).get(Property.VALUETYPE) != null
-					&& ((Map<?, ?>) value).get(Property.VALUE) != null) {
-				value = ((Map<?, ?>) value).get(Property.VALUE);
+			if (((Map<?, ?>) value).get(SingleProperty.VALUETYPE) != null
+					&& ((Map<?, ?>) value).get(SingleProperty.VALUE) != null) {
+				value = ((Map<?, ?>) value).get(SingleProperty.VALUE);
 			}
 		}
 		
@@ -39,7 +39,7 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 	@Override
 	public void set(Object newValue) throws ServerException {
 		try {
-			getProxy().setModelPropertyValue(Property.VALUE, newValue);
+			getProxy().setModelPropertyValue(SingleProperty.VALUE, newValue);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

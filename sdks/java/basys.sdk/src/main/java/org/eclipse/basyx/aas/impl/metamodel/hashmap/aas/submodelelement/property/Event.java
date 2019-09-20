@@ -6,7 +6,7 @@ package org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.propert
  * @author pschorn
  *
  */
-public class Event extends Property {
+public class Event extends SingleProperty {
 
 	/**
 	 * 

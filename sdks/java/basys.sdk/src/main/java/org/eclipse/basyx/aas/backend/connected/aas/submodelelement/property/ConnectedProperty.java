@@ -3,7 +3,7 @@ package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.PropertyType;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.ConnectedDataElement;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of IProperty
@@ -25,12 +25,12 @@ public abstract class ConnectedProperty extends ConnectedDataElement implements 
 
 	@Override
 	public void setValueId(String obj) {
-		getProxy().setModelPropertyValue(Property.VALUEID, obj);
+		getProxy().setModelPropertyValue(SingleProperty.VALUEID, obj);
 		
 	}
 
 	@Override
 	public String getValueId() {
-		return (String) getProxy().getModelPropertyValue(Property.VALUEID);
+		return (String) getProxy().getModelPropertyValue(SingleProperty.VALUEID);
 	}
 }

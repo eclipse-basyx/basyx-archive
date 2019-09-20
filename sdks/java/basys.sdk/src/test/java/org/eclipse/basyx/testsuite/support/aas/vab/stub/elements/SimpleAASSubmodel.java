@@ -6,7 +6,7 @@ import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 
 /**
  * A simple VAB submodel element that explains the development of conforming
@@ -34,11 +34,11 @@ public class SimpleAASSubmodel extends SubModel {
 		// Create example properties
 		MetaModelElementFactory fac = new MetaModelElementFactory();
 
-		Property intProp = new Property(123);
+		SingleProperty intProp = new SingleProperty(123);
 		intProp.setId("integerProperty");
 		addSubModelElement(intProp);
 
-		Property stringProp = new Property("Test");
+		SingleProperty stringProp = new SingleProperty("Test");
 		stringProp.setId("stringProperty");
 		addSubModelElement(stringProp);
 

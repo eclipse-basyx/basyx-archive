@@ -2,7 +2,7 @@ package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.fil
 
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.file.IFile;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.ConnectedDataElement;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.blob.Blob;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
@@ -17,13 +17,13 @@ public class ConnectedFile extends ConnectedDataElement implements IFile {
 	
 	@Override
 	public void setValue(String value) {
-		getProxy().setModelPropertyValue(Property.VALUE, value);
+		getProxy().setModelPropertyValue(SingleProperty.VALUE, value);
 		
 	}
 
 	@Override
 	public String getValue() {
-		return (String) getProxy().getModelPropertyValue(Property.VALUE);
+		return (String) getProxy().getModelPropertyValue(SingleProperty.VALUE);
 	}
 
 	@Override

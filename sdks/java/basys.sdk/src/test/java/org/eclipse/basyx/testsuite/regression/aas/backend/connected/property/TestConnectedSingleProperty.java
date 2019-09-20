@@ -7,7 +7,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.ConnectedSingleProperty;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.testsuite.support.vab.TypeDestroyer;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.junit.Before;
@@ -27,7 +27,7 @@ public class TestConnectedSingleProperty {
 	@Before
 	public void build() {
 		// Create PropertySingleValued containing the simple value
-		Property propertyMeta = new Property(VALUE);
+		SingleProperty propertyMeta = new SingleProperty(VALUE);
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(propertyMeta);
 		prop = new ConnectedSingleProperty(new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType)).connectToVABElement(""));
 	}

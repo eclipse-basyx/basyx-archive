@@ -11,7 +11,8 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.Submodel
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.OperationVariable;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.ContainerProperty;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 
 /**
  * Creates meta model entities <br />
@@ -56,8 +57,8 @@ public class MetaModelElementFactory {
 	 * @param container
 	 * @param object
 	 */
-	public SubmodelElementCollection createContainer(SubmodelElementCollection property, List<SubmodelElement> properties, List<SubmodelElement> operations) {
-		SubmodelElementCollection ret = new SubmodelElementCollection();
+	public ContainerProperty createContainer(SubmodelElementCollection property, List<SubmodelElement> properties, List<SubmodelElement> operations) {
+		ContainerProperty ret = new ContainerProperty();
 		ret.putAll(property);
 
 		properties.stream().forEach(x -> ret.addSubModelElement(x));
@@ -72,8 +73,8 @@ public class MetaModelElementFactory {
 	 * @param container
 	 * @param object
 	 */
-	public SubmodelElementCollection createContainer(SubmodelElementCollection property, List<SubmodelElement> properties, List<SubmodelElement> operations, String id) {
-		SubmodelElementCollection ret = new SubmodelElementCollection();
+	public ContainerProperty createContainer(SubmodelElementCollection property, List<SubmodelElement> properties, List<SubmodelElement> operations, String id) {
+		ContainerProperty ret = new ContainerProperty();
 		ret.putAll(property);
 		ret.setId(id);
 
@@ -91,7 +92,7 @@ public class MetaModelElementFactory {
 	 * @param operations
 	 * @return
 	 */
-	public SubModel create(SubModel subModel, List<Property> properties, List<Operation> operations) {
+	public SubModel create(SubModel subModel, List<SingleProperty> properties, List<Operation> operations) {
 		SubModel ret = new SubModel();
 		ret.putAll(subModel);
 		properties.stream().forEach(e -> ret.addSubModelElement(e));

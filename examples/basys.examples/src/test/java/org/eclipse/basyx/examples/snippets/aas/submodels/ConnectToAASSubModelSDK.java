@@ -14,7 +14,7 @@ import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElement;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_Empty;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
@@ -64,11 +64,11 @@ public class ConnectToAASSubModelSDK {
 
 			// Add example properties
 			// - Add simple property
-			Property prop1 = new Property(234);
+			SingleProperty prop1 = new SingleProperty(234);
 			prop1.setId("prop1");
 			addSubModelElement(prop1);
 
-			Property prop11 = new Property(123);
+			SingleProperty prop11 = new SingleProperty(123);
 			prop11.setId("prop11");
 			// - Add container property that holds other properties
 			List<SubmodelElement> containerProperties = fac.createList(prop11);
@@ -76,7 +76,7 @@ public class ConnectToAASSubModelSDK {
 			addSubModelElement(fac.createContainer(new SubmodelElementCollection(), containerProperties, fac.emptyList(), "prop2"));
 
 			// Add another property manually to sub model container "properties"
-			Property prop3 = new Property(17);
+			SingleProperty prop3 = new SingleProperty(17);
 			prop3.setId("prop3");
 			{
 				((Map<String, Object>) this.get("dataElements")).put("prop3", prop3);

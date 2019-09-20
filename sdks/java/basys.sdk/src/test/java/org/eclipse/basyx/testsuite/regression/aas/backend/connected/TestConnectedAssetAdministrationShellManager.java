@@ -15,7 +15,7 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.IdentifierType;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
 import org.eclipse.basyx.testsuite.support.vab.stub.ConnectorProviderStub;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
@@ -89,11 +89,11 @@ public class TestConnectedAssetAdministrationShellManager {
 
 		// - Add example properties to sub model
 		submodel.setId(smId);
-		Property prop1 = new Property(7);
+		SingleProperty prop1 = new SingleProperty(7);
 		prop1.setId("prop1");
 		submodel.addSubModelElement(prop1);
 
-		Property prop2 = new Property("myStr");
+		SingleProperty prop2 = new SingleProperty("myStr");
 		prop1.setId("prop2");
 		submodel.addSubModelElement(prop2);
 
