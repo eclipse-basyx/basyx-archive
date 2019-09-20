@@ -4,14 +4,13 @@ import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IPropert
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.PropertyType;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.ConnectedDataElement;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 /**
  * "Connected" implementation of IProperty
  * @author rajashek
  *
  */
-public class ConnectedProperty extends ConnectedDataElement implements IProperty {
+public abstract class ConnectedProperty extends ConnectedDataElement implements IProperty {
 	private PropertyType type;
 
 	public ConnectedProperty(PropertyType type, VABElementProxy proxy) {
@@ -25,31 +24,13 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 	}
 
 	@Override
-	public void setValue(Object value) {
-		getProxy().setModelPropertyValue(Property.VALUE, value);
-		getProxy().setModelPropertyValue(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(value));
-
-		
-	}
-
-	@Override
-	public Object getValue() {
-		return	getProxy().getModelPropertyValue(Property.VALUE);
-	}
-
-	@Override
-	public void setValueId(Object obj) {
+	public void setValueId(String obj) {
 		getProxy().setModelPropertyValue(Property.VALUEID, obj);
 		
 	}
 
 	@Override
-	public Object getValueId() {
-		return getProxy().getModelPropertyValue(Property.VALUEID);
+	public String getValueId() {
+		return (String) getProxy().getModelPropertyValue(Property.VALUEID);
 	}
-
-
-
-
-
 }

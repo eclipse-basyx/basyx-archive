@@ -23,26 +23,6 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 
 	@Override
 	public Object get() throws Exception {
-		return getProxy().getModelPropertyValue(Property.VALUE);
-	}
-
-	@Override
-	public void set(Object newValue) throws ServerException {
-		try {
-			getProxy().setModelPropertyValue(Property.VALUE, newValue);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void setValue(Object obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Object getValue() {
 		Object value = getProxy().getModelPropertyValue(Property.VALUE);
 		
 		// unpack c# value
@@ -54,21 +34,15 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 		}
 		
 		return value;
-
 	}
 
 	@Override
-	public void setValueId(Object obj) {
-		// TODO Auto-generated method stub
-		
+	public void set(Object newValue) throws ServerException {
+		try {
+			getProxy().setModelPropertyValue(Property.VALUE, newValue);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-
-	@Override
-	public Object getValueId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 
 }

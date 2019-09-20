@@ -24,7 +24,6 @@ import org.eclipse.basyx.aas.impl.metamodel.facades.VABElementContainerFacade;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.IVABElementContainer;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 
 /**
  * SubmodelElementCollection as defined by DAAS document <br/>
@@ -225,19 +224,13 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	}
 
 	@Override
-	public void setValue(Object obj) {
-		put(Property.VALUE, obj);
-		put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(obj));
-	}
-
-	@Override
-	public void setValueId(Object obj) {
+	public void setValueId(String obj) {
 		put(Property.VALUEID, obj);
 	}
 
 	@Override
-	public Object getValueId() {
-		return get(Property.VALUEID);
+	public String getValueId() {
+		return (String) get(Property.VALUEID);
 	}
 
 	@Override
