@@ -24,25 +24,26 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 	@Override
 	public Object get() throws Exception {
 		Object value = getProxy().getModelPropertyValue(SingleProperty.VALUE);
-		
+
 		// unpack c# value
-		if (value instanceof Map<?,?>) {
-			if (((Map<?, ?>) value).get(SingleProperty.VALUETYPE) != null
-					&& ((Map<?, ?>) value).get(SingleProperty.VALUE) != null) {
+		if (value instanceof Map<?, ?>) {
+			if (((Map<?, ?>) value).get(SingleProperty.VALUETYPE) != null && ((Map<?, ?>) value).get(SingleProperty.VALUE) != null) {
 				value = ((Map<?, ?>) value).get(SingleProperty.VALUE);
 			}
 		}
-		
+
 		return value;
 	}
 
 	@Override
 	public void set(Object newValue) throws ServerException {
-		try {
-			getProxy().setModelPropertyValue(SingleProperty.VALUE, newValue);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		getProxy().setModelPropertyValue(SingleProperty.VALUE, newValue);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	@Override
+	public String getValueType() {
+		return (String) ((Map<String, Object>) getProxy().getModelPropertyValue("")).get(SingleProperty.VALUETYPE);
 	}
 
 }

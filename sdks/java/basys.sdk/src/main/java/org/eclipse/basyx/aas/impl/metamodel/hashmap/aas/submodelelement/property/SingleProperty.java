@@ -74,4 +74,9 @@ public class SingleProperty extends AbstractProperty implements ISingleProperty 
 	public Object get() {
 		return get(SingleProperty.VALUE);
 	}
+
+	@Override
+	public String getValueType() {
+		return (String) get(SingleProperty.VALUETYPE);
+	}
 }

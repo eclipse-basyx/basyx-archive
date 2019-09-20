@@ -25,4 +25,6 @@ public interface ISingleProperty extends IProperty {
 	 * @throws ServerException 
 	 */
 	public void set(Object newValue) throws ServerException;
+
+	public String getValueType();
 }
