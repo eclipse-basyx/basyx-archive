@@ -13,6 +13,23 @@ public class VABPathTools {
 	public static final String SEPERATOR = "/";
 
 	/**
+	 * Removes leading and trailing slashes
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public static String stripSlashes(String path) {
+		while (path.startsWith("/")) {
+			path = path.substring(1);
+		}
+
+		while (path.endsWith("/")) {
+			path = path.substring(0, path.length() - 1);
+		}
+		return path;
+	}
+
+	/**
 	 * Split a path into path elements e.g. /a/b/c -> [ a, b, c ]
 	 */
 	public static String[] splitPath(String path) {
@@ -31,10 +48,10 @@ public class VABPathTools {
 
 		String[] splitted = fixedPath.split(SEPERATOR);
 		List<String> nonEmptySplitted = new ArrayList<>();
-		
-		// Remove empty entries 
-		for(String s : splitted) {
-			if(!s.isEmpty()) {
+
+		// Remove empty entries
+		for (String s : splitted) {
+			if (!s.isEmpty()) {
 				nonEmptySplitted.add(s);
 			}
 		}
