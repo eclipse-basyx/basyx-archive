@@ -92,8 +92,8 @@ namespace native {
 						&txSize);
 
 					// Encode txSize
-					txSize += BASYX_FRAMESIZE_SIZE;
 					CoderTools::setInt32(ret.data(), 0, txSize);
+					txSize += BASYX_FRAMESIZE_SIZE;
 
 					log.info("Sending reply.");
 #ifdef PRINT_FRAME
