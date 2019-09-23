@@ -16,7 +16,8 @@ import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.ContainerProperty;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.testsuite.support.vab.TypeDestroyer;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
@@ -47,7 +48,7 @@ public class TestConnectedContainerProperty {
 		collection.add(2);
 
 		// Create PropertySingleValued containing the collection
-		Property propertyMeta = new Property(collection);
+		SingleProperty propertyMeta = new SingleProperty(collection);
 		propertyMeta.setId(COLLECTIONPROP);
 
 		// Create operation
@@ -57,7 +58,7 @@ public class TestConnectedContainerProperty {
 		operation.setId(OPERATION);
 
 		// Create ComplexDataProperty containing the created operation and property
-		SubmodelElementCollection complex = factory.createContainer(new SubmodelElementCollection(),
+		ContainerProperty complex = factory.createContainer(new SubmodelElementCollection(),
 				Collections.singletonList(propertyMeta), Collections.singletonList(operation));
 
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(complex);

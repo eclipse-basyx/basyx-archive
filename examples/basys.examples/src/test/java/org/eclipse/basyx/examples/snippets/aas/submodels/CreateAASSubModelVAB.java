@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.junit.Test;
 
@@ -55,7 +55,7 @@ public class CreateAASSubModelVAB {
 			
 			// Add another property manually to sub model container "properties"
 			// - Using the Property class ensures presence of all meta properties
-			Property addedProperty = new Property(); 
+			SingleProperty addedProperty = new SingleProperty(); 
 			addedProperty.set(17);
 			addedProperty.setId("prop3");
 			// - Add property to sub model container "properties"

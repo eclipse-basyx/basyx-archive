@@ -13,7 +13,7 @@ import org.eclipse.basyx.aas.impl.metamodel.facades.HasSemanticsFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.QualifiableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.ReferableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElement;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 
 /**
  * OperationVariable as described by DAAS document An operation variable is a
@@ -32,7 +32,7 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	 *            element of kind=Type
 	 */
 	public OperationVariable(SubmodelElement value) {
-		put(Property.VALUE, value);
+		put(SingleProperty.VALUE, value);
 	}
 
 	public OperationVariable() {
@@ -40,12 +40,12 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	}
 
 	public void setValue(ISubmodelElement value) {
-		put(Property.VALUE, value);
+		put(SingleProperty.VALUE, value);
 	}
 
 	@Override
 	public ISubmodelElement getValue() {
-		return (ISubmodelElement) get(Property.VALUE);
+		return (ISubmodelElement) get(SingleProperty.VALUE);
 	}
 
 	@Override

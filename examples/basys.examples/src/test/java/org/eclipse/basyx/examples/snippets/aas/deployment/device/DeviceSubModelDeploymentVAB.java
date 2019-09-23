@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.vab.backend.connector.JSONConnector;
 import org.eclipse.basyx.vab.backend.connector.basyx.BaSyxConnector;
 import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
@@ -38,11 +38,11 @@ public class DeviceSubModelDeploymentVAB {
 		// - Set sub model ID
 		submodel.setId("dynamicSM");
 		// - Add example properties
-		Property prop1 = new Property(7);
+		SingleProperty prop1 = new SingleProperty(7);
 		prop1.setId("prop1");
 		submodel.addSubModelElement(prop1);
 
-		Property prop2 = new Property("myStr");
+		SingleProperty prop2 = new SingleProperty("myStr");
 		prop2.setId("prop2");
 		submodel.addSubModelElement(prop2);
 

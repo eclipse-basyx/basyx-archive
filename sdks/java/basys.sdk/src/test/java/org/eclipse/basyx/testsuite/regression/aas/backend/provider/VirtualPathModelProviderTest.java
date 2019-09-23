@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashMap;
 
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.testsuite.regression.vab.provider.TestProvider;
 import org.eclipse.basyx.testsuite.support.aas.vab.stub.elements.SimpleAASSubmodel;
@@ -47,7 +47,7 @@ public class VirtualPathModelProviderTest extends TestProvider {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 
 		// Create element
-		Property prop = new Property(500);
+		SingleProperty prop = new SingleProperty(500);
 		submodelElement.createValue("dataElements/newProperty", prop);
 
 		// Read back value

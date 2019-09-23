@@ -14,7 +14,7 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasDataSpecifi
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.haskind.Kind;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 
 /**
  * Base class for providers that receiver their configuration through a configuration properties object
@@ -241,7 +241,7 @@ public class BaseConfiguredProvider extends VirtualPathModelProvider {
 	 * @param cfgValues
 	 *            Provider configuration
 	 */
-	protected Property createSubmodelElement(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
+	protected SingleProperty createSubmodelElement(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
 
 		// Get property type
 		String propertyType = cfgValues.get(buildCfgName(propertyName, TYPE)).toString();
@@ -264,7 +264,7 @@ public class BaseConfiguredProvider extends VirtualPathModelProvider {
 	 * @param cfgValues
 	 *            Provider configuration
 	 */
-	protected Property createProperty(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
+	protected SingleProperty createProperty(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
 
 		// Try to get property meta data
 		String property_semanticsInternal = null;
@@ -289,7 +289,7 @@ public class BaseConfiguredProvider extends VirtualPathModelProvider {
 		}
 
 		// Create and return single valued property
-		Property prop = new Property(propertyValue, new Referable(propertyName, "", property_description),
+		SingleProperty prop = new SingleProperty(propertyValue, new Referable(propertyName, "", property_description),
 				property_semanticsInternal, new Qualifier(property_qualifierType, property_qualifier, null));
 		return prop;
 	}

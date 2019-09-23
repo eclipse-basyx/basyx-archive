@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.components.servlet.submodel.EmptyVABLambdaElementServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
@@ -72,11 +72,11 @@ public class RunAASDynamicOperationSnippet {
 		// - Add example properties
 		SubModel submodel = new SubModel();
 		submodel.setId("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
-		Property prop1 = new Property(7);
+		SingleProperty prop1 = new SingleProperty(7);
 		prop1.setId("prop1");
 		submodel.addSubModelElement(prop1);
 
-		Property prop2 = new Property("myStr");
+		SingleProperty prop2 = new SingleProperty("myStr");
 		prop2.setId("prop2");
 		submodel.addSubModelElement(prop2);
 		// - Transfer sub model to server

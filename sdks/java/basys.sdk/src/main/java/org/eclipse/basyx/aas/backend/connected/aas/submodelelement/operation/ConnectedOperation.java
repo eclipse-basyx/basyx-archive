@@ -19,7 +19,7 @@ import org.eclipse.basyx.aas.impl.metamodel.facades.QualifiableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.ReferableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
@@ -77,8 +77,8 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		int i = 0;
 		for (Object param : params) {
 			HashMap<String, Object> valueWrapper = new HashMap<String, Object>();
-			valueWrapper.put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(param));
-			valueWrapper.put(Property.VALUE, param);
+			valueWrapper.put(SingleProperty.VALUETYPE, PropertyValueTypeDefHelper.fromObject(param));
+			valueWrapper.put(SingleProperty.VALUE, param);
 
 			params[i] = valueWrapper;
 			i++;
@@ -93,8 +93,8 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 			Object resultWrapper = ((List<?>) result).get(0);
 			if (resultWrapper instanceof Map<?, ?>) {
 				Map<String, Object> map = (Map<String, Object>) resultWrapper;
-				if (map.get(Referable.IDSHORT).equals("Response") && map.get(Property.VALUE) != null) {
-					result = map.get(Property.VALUE);
+				if (map.get(Referable.IDSHORT).equals("Response") && map.get(SingleProperty.VALUE) != null) {
+					result = map.get(SingleProperty.VALUE);
 				}
 			}
 		}

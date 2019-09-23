@@ -4,26 +4,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElementCollection;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IContainerProperty;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.PropertyType;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasDataSpecificationFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasKindFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasSemanticsFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.QualifiableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.ReferableFacade;
-import org.eclipse.basyx.aas.impl.metamodel.facades.VABElementContainerFacade;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.IVABElementContainer;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 
 /**
  * SubmodelElementCollection as defined by DAAS document <br/>
@@ -32,29 +25,21 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property
  * @author schnicke
  *
  */
-public class SubmodelElementCollection extends SubmodelElement implements IContainerProperty, IVABElementContainer, ISubmodelElementCollection {
+public class SubmodelElementCollection extends SubmodelElement implements ISubmodelElementCollection {
 	private static final long serialVersionUID = 1L;
 
 	public static final String ORDERED = "ordered";
 	public static final String ALLOWDUPLICATES = "allowDuplicates";
 
-	private VABElementContainerFacade containerFacade;
 
 	/**
 	 * Constructor
 	 */
 	public SubmodelElementCollection() {
 		// Put attributes
-		put(Property.VALUE, new ArrayList<>());
+		put(SingleProperty.VALUE, new ArrayList<>());
 		put(ORDERED, true);
 		put(ALLOWDUPLICATES, true);
-
-		put(SubModel.SUBMODELELEMENT, new HashMap<>());
-
-		// Helper for operations and properties
-		put(SubModel.PROPERTIES, new HashMap<>());
-		put(SubModel.OPERATIONS, new HashMap<>());
-		containerFacade = new VABElementContainerFacade(this);
 	}
 
 	/**
@@ -71,24 +56,9 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	 */
 	public SubmodelElementCollection(Collection<SubmodelElement> value, boolean ordered, boolean allowDuplicates) {
 		// Put attributes
-		put(Property.VALUE, value);
+		put(SingleProperty.VALUE, value);
 		put(ORDERED, ordered);
 		put(ALLOWDUPLICATES, allowDuplicates);
-
-		put(SubModel.SUBMODELELEMENT, new HashMap<>());
-
-		// Helper for operations and properties
-		put(SubModel.PROPERTIES, new HashMap<>());
-		put(SubModel.OPERATIONS, new HashMap<>());
-
-		for (SubmodelElement elem : value) {
-			containerFacade.addSubModelElement(elem);
-		}
-	}
-
-	@Override
-	public PropertyType getPropertyType() {
-		return PropertyType.Container;
 	}
 
 	@Override
@@ -181,13 +151,13 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 
 	@Override
 	public void setValue(ArrayList<?> value) {
-		put(Property.VALUE, value);
+		put(SingleProperty.VALUE, value);
 
 	}
 
 	@Override
 	public ArrayList<?> getValue() {
-		return (ArrayList<?>) get(Property.VALUE);
+		return (ArrayList<?>) get(SingleProperty.VALUE);
 	}
 
 	@Override
@@ -221,30 +191,5 @@ public class SubmodelElementCollection extends SubmodelElement implements IConta
 	@Override
 	public HashMap<String, ISubmodelElement> getElements() {
 		return (HashMap<String, ISubmodelElement>) get(SubModel.SUBMODELELEMENT);
-	}
-
-	@Override
-	public void setValueId(String obj) {
-		put(Property.VALUEID, obj);
-	}
-
-	@Override
-	public String getValueId() {
-		return (String) get(Property.VALUEID);
-	}
-
-	@Override
-	public void addSubModelElement(ISubmodelElement element) {
-		containerFacade.addSubModelElement(element);
-	}
-
-	@Override
-	public Map<String, IDataElement> getDataElements() {
-		return containerFacade.getDataElements();
-	}
-
-	@Override
-	public Map<String, IOperation> getOperations() {
-		return containerFacade.getOperations();
 	}
 }

@@ -1,12 +1,9 @@
 package org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.PropertyType;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.DataElement;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 
 /**
@@ -15,7 +12,7 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property
  * @author kuhn, schnicke
  *
  */
-public class Property extends DataElement implements ISingleProperty {
+public class SingleProperty extends AbstractProperty implements ISingleProperty {
 
 	/**
 	 * Version of serialized instances
@@ -28,10 +25,10 @@ public class Property extends DataElement implements ISingleProperty {
 	/**
 	 * Constructor
 	 */
-	public Property() {
+	public SingleProperty() {
 		// Put attributes
-		put(Property.VALUE, null);
-		put(Property.VALUEID, null);
+		put(SingleProperty.VALUE, null);
+		put(SingleProperty.VALUEID, null);
 	}
 
 	/**
@@ -43,13 +40,13 @@ public class Property extends DataElement implements ISingleProperty {
 	 * @param valueType
 	 *            type of the value TODO: Macht String sinn?
 	 */
-	public Property(Object value) {
+	public SingleProperty(Object value) {
 		// Put attributes
-		put(Property.VALUEID, null);
+		put(SingleProperty.VALUEID, null);
 		set(value);
 	}
 
-	public Property(Object value, Referable referable, String semanticId, Qualifier qualifier) {
+	public SingleProperty(Object value, Referable referable, String semanticId, Qualifier qualifier) {
 		this(value);
 		putAll(referable);
 		put(HasSemantics.SEMANTICID, value);
@@ -58,21 +55,9 @@ public class Property extends DataElement implements ISingleProperty {
 
 	@Override
 	public void set(Object value) {
-		put(Property.VALUE, value);
-		put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(value));
+		put(SingleProperty.VALUE, value);
+		put(SingleProperty.VALUETYPE, PropertyValueTypeDefHelper.fromObject(value));
 
-	}
-
-	@Override
-	public PropertyType getPropertyType() {
-		PropertyValueTypeDef type = PropertyValueTypeDefHelper.fromName((String) get(Property.VALUETYPE));
-		if (type == PropertyValueTypeDef.Collection) {
-			return PropertyType.Collection;
-		} else if (type == PropertyValueTypeDef.Map) {
-			return PropertyType.Map;
-		} else {
-			return PropertyType.Single;
-		}
 	}
 
 	@Override
@@ -87,18 +72,11 @@ public class Property extends DataElement implements ISingleProperty {
 
 	@Override
 	public Object get() {
-		return get(Property.VALUE);
+		return get(SingleProperty.VALUE);
 	}
 
 	@Override
-	public void setValueId(String obj) {
-		put(Property.VALUEID, obj);
-
+	public String getValueType() {
+		return (String) get(SingleProperty.VALUETYPE);
 	}
-
-	@Override
-	public String getValueId() {
-		return (String) get(Property.VALUEID);
-	}
-
 }

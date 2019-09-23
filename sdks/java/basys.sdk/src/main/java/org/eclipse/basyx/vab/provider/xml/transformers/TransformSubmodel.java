@@ -7,7 +7,7 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.haskind.HasKind;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 
 /**
  * Returns SubModel Object for the Map with <aas:submodels>
@@ -26,12 +26,12 @@ public class TransformSubmodel {
 		Identifiable transformIdentifier = TransformIdentifiable.transformIdentifier(object);
 		HasKind hasKindObj = TransformHasKind.transformHasKind(object);
 		HasSemantics transformHasSemanticsObj = TransformHasSemantics.transformHasSemantics(object);
-		HashSet<Property> transformPropertySet = TransformProperty.transformProperty(object);
+		HashSet<SingleProperty> transformPropertySet = TransformProperty.transformProperty(object);
 		SubModel submodelobj = new SubModel();
 		submodelobj.putAll(transformIdentifier);
 		submodelobj.putAll(hasKindObj);
 		submodelobj.putAll(transformHasSemanticsObj);
-		for (Property property : transformPropertySet) {
+		for (SingleProperty property : transformPropertySet) {
 			submodelobj.addSubModelElement(property);
 		}
 		System.out.println();

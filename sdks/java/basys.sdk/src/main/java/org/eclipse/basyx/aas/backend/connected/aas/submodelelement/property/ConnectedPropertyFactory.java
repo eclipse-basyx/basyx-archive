@@ -5,7 +5,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -25,9 +25,9 @@ public class ConnectedPropertyFactory {
 		Map<String, Object> property = (Map<String, Object>) proxy.getModelPropertyValue("");
 		if (property.containsKey(SubModel.PROPERTIES)) {
 			return new ConnectedContainerProperty(proxy);
-		} else if (property.containsKey(Property.VALUETYPE)) {
+		} else if (property.containsKey(SingleProperty.VALUETYPE)) {
 			
-			PropertyValueTypeDef valueType = PropertyValueTypeDefHelper.readTypeDef(property.get(Property.VALUETYPE));
+			PropertyValueTypeDef valueType = PropertyValueTypeDefHelper.readTypeDef(property.get(SingleProperty.VALUETYPE));
 						
 			if (valueType == PropertyValueTypeDef.Map) {
 				return new ConnectedMapProperty(proxy);
@@ -39,7 +39,7 @@ public class ConnectedPropertyFactory {
 				return conProp;
 			} 
 			
-		} else if ((property.get(Property.VALUE) != null) && (property.get(Referable.IDSHORT) != null)){
+		} else if ((property.get(SingleProperty.VALUE) != null) && (property.get(Referable.IDSHORT) != null)){
 			// handle  property without valueType
 			ConnectedSingleProperty conProp = new ConnectedSingleProperty(proxy);
 			conProp.putAllLocal(property);

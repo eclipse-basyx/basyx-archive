@@ -7,7 +7,7 @@ import java.util.function.Function;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.regression.support.processengine.stubs.ICoilcar;
 
 
@@ -15,13 +15,13 @@ public class DeviceSubmodelFactory {
 	public SubModel create(String id, ICoilcar coilcar) {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 		// create a single value property
-		Property property1 = new Property(0);
+		SingleProperty property1 = new SingleProperty(0);
 		property1.setId("currentPosition");
 		
-		Property property2 = new Property(0);
+		SingleProperty property2 = new SingleProperty(0);
 		property2.setId("lifterPosition");
 		
-		Property property3 = new Property(false);
+		SingleProperty property3 = new SingleProperty(false);
 		property3.setId("physicalSpeed");
 		
 		// create 2 opertations
@@ -41,7 +41,7 @@ public class DeviceSubmodelFactory {
 		oplist.add(op1);
 		oplist.add(op2);
 		// create a list for defined properties
-		List<Property> propList = new ArrayList<>();
+		List<SingleProperty> propList = new ArrayList<>();
 		propList.add(property1);
 		propList.add(property2);
 		propList.add(property3);

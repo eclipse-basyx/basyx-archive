@@ -32,6 +32,16 @@ public class VABPathToolsTest {
 	String onlyAddress = "basyx://127.0.0.1:6889";
 	String pathWithoutAddressMultislash = "a//b///c";
 
+	@Test
+	public void testStripSlashes() {
+		assertEquals("test", VABPathTools.stripSlashes("/test"));
+		assertEquals("test", VABPathTools.stripSlashes("//test"));
+		assertEquals("test", VABPathTools.stripSlashes("test/"));
+		assertEquals("test", VABPathTools.stripSlashes("/test//"));
+		assertEquals("test", VABPathTools.stripSlashes("/test/"));
+		assertEquals("test", VABPathTools.stripSlashes("//test//"));
+	}
+
 	/**
 	 * Tests remove address
 	 */

@@ -3,26 +3,21 @@ package org.eclipse.basyx.aas.backend.connected.aas.submodelelement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElementCollection;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedVABElementContainerFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasDataSpecificationFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasKindFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasSemanticsFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.QualifiableFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.ReferableFacade;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.IVABElementContainer;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
@@ -31,7 +26,7 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  * @author rajashek
  *
  */
-public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement implements IVABElementContainer, ISubmodelElementCollection {
+public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement implements ISubmodelElementCollection {
 	ConnectedVABElementContainerFacade facade;
 
 	public ConnectedSubmodelElementCollection(VABElementProxy proxy) {
@@ -81,13 +76,13 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 
 	@Override
 	public void setValue(ArrayList<?> value) {
-		getProxy().setModelPropertyValue(Property.VALUE, value);
+		getProxy().setModelPropertyValue(SingleProperty.VALUE, value);
 
 	}
 
 	@Override
 	public ArrayList<?> getValue() {
-		return (ArrayList<?>) getProxy().getModelPropertyValue(Property.VALUE);
+		return (ArrayList<?>) getProxy().getModelPropertyValue(SingleProperty.VALUE);
 	}
 
 	@Override
@@ -120,30 +115,5 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	@Override
 	public HashMap<String, ISubmodelElement> getElements() {
 		return (HashMap<String, ISubmodelElement>) getProxy().getModelPropertyValue(SubModel.SUBMODELELEMENT);
-	}
-
-	public void addProperty(IProperty property) {
-		getElements().put(property.getId(), property);
-		getDataElements().put(property.getId(), property);
-	}
-
-	public void addOperation(IOperation operation) {
-		getElements().put(operation.getId(), operation);
-		getOperations().put(operation.getId(), operation);
-	}
-
-	@Override
-	public void addSubModelElement(ISubmodelElement element) {
-		facade.addSubModelElement(element);
-	}
-
-	@Override
-	public Map<String, IDataElement> getDataElements() {
-		return facade.getDataElements();
-	}
-
-	@Override
-	public Map<String, IOperation> getOperations() {
-		return facade.getOperations();
 	}
 }
