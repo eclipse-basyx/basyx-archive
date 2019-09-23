@@ -55,6 +55,10 @@ private:
   void setProxyValue(const std::string & path, const basyx::any value) const;
 
   basyx::objectCollection_t getProxyCollection(const std::string & path) const;
+
+protected:
+  std::string getIdWithLocalCheck() const;
+  void setIdWithLocalCheck(const std::string & id);
 };
 
 }

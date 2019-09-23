@@ -23,7 +23,7 @@ class ConnectedElement
 {
 public:
   ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy> & proxy);
-  ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy> & proxy, basyx::objectMap_t & local_values);
+  ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy> & proxy, std::shared_ptr<basyx::objectMap_t> & local_values);
 
   virtual std::shared_ptr<vab::core::proxy::IVABElementProxy> getProxy() const;
 
@@ -33,7 +33,7 @@ public:
 
 private:
   std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy;
-  basyx::objectMap_t local_map;
+  std::shared_ptr<basyx::objectMap_t> local_map;
 };
 
 }

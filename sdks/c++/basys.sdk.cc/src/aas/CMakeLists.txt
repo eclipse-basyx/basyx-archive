@@ -4,13 +4,13 @@
 
 project(basyx)
 
-add_library(aas)
+add_library(basyx_aas)
 
 if(${BASYX_DEBUG_PRINT_FRAMES})
-    target_compile_definitions(aas PUBLIC PRINT_FRAME)
+    target_compile_definitions(basyx_aas PUBLIC PRINT_FRAME)
 endif()
 
-target_sources(aas
+target_sources(basyx_aas
     PRIVATE
 		aas/AssetAdministrationShell.h
 		aas/backend/connected/ConnectedElement.cpp
@@ -59,8 +59,8 @@ target_sources(aas
     aas/submodelelement/connected/ConnectedSubmodelElement.cpp
 )
 
-target_include_directories(aas PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(aas basyx::shared basyx::abstraction basyx::vab)
-add_library(basyx::aas ALIAS aas)
+target_include_directories(basyx_aas PUBLIC ${PROJECT_SOURCE_DIR})
+target_link_libraries(basyx_aas basyx::shared basyx::abstraction basyx::vab)
+add_library(basyx::aas ALIAS basyx_aas)
 
-diagnostics_print(aas)
+diagnostics_print(basyx_aas)
