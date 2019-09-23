@@ -56,7 +56,7 @@ public class CreateAASSubModelVAB {
 			// Add another property manually to sub model container "properties"
 			// - Using the Property class ensures presence of all meta properties
 			Property addedProperty = new Property(); 
-			addedProperty.setValue(17);
+			addedProperty.set(17);
 			addedProperty.setId("prop3");
 			// - Add property to sub model container "properties"
 			{((Map<String, Object>) this.get("properties")).put("prop3", addedProperty);}

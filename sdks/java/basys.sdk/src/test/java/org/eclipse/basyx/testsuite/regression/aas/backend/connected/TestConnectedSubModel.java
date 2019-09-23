@@ -10,7 +10,6 @@ import java.util.function.Function;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedSubModel;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
@@ -123,7 +122,7 @@ public class TestConnectedSubModel {
 		// Construct test data
 		Property property = new Property();
 		property.setId("test1");
-		property.setValue("test2");
+		property.set("test2");
 		
 		// Save it
 		submodel.addSubModelElement(property);
@@ -133,9 +132,9 @@ public class TestConnectedSubModel {
 		
 		// Check if it loaded correctly
 		assertNotNull(map);
-		IProperty loadedProp = (IProperty) map.get(property.getId());
+		ISingleProperty loadedProp = (ISingleProperty) map.get(property.getId());
 		assertNotNull(loadedProp);
-		assertEquals(property.getValue(), loadedProp.getValue());
+		assertEquals(property.get(), loadedProp.get());
 	}
 	
 	@Test

@@ -1,6 +1,6 @@
 package org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property;
 
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
+import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.PropertyType;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
@@ -15,7 +15,7 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property
  * @author kuhn, schnicke
  *
  */
-public class Property extends DataElement implements IProperty {
+public class Property extends DataElement implements ISingleProperty {
 
 	/**
 	 * Version of serialized instances
@@ -46,9 +46,9 @@ public class Property extends DataElement implements IProperty {
 	public Property(Object value) {
 		// Put attributes
 		put(Property.VALUEID, null);
-		setValue(value);
+		set(value);
 	}
-	
+
 	public Property(Object value, Referable referable, String semanticId, Qualifier qualifier) {
 		this(value);
 		putAll(referable);
@@ -57,7 +57,7 @@ public class Property extends DataElement implements IProperty {
 	}
 
 	@Override
-	public void setValue(Object value) {
+	public void set(Object value) {
 		put(Property.VALUE, value);
 		put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(value));
 
@@ -85,21 +85,20 @@ public class Property extends DataElement implements IProperty {
 		put(Referable.IDSHORT, id);
 	}
 
-
 	@Override
-	public Object getValue() {
+	public Object get() {
 		return get(Property.VALUE);
 	}
 
 	@Override
-	public void setValueId(Object obj) {
+	public void setValueId(String obj) {
 		put(Property.VALUEID, obj);
-		
+
 	}
 
 	@Override
-	public Object getValueId() {
-		return get(Property.VALUEID);
+	public String getValueId() {
+		return (String) get(Property.VALUEID);
 	}
 
 }

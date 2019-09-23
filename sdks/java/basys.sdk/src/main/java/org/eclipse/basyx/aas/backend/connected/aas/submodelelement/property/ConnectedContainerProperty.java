@@ -7,8 +7,8 @@ import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IContainerProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.PropertyType;
-import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedVABElementContainerFacade;
+import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
  * Connects to a ComplexDataProperty as specified by meta model. <br />
@@ -25,30 +25,6 @@ public class ConnectedContainerProperty extends ConnectedProperty implements ICo
 	public ConnectedContainerProperty(VABElementProxy proxy) {
 		super(PropertyType.Container, proxy);
 		facade = new ConnectedVABElementContainerFacade(proxy);
-	}
-
-	@Override
-	public void setValue(Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Object getValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setValueId(Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Object getValueId() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

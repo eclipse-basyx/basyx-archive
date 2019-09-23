@@ -63,31 +63,4 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	private Collection<Object> getCollection() {
 		return (Collection<Object>) getProxy().getModelPropertyValue(Property.VALUE);
 	}
-
-	@Override
-	public void setValue(Object obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Object getValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setValueId(Object obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Object getValueId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
 }

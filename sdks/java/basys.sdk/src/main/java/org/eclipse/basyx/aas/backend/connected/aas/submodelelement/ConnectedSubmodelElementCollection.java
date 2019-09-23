@@ -12,9 +12,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IContainerProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.PropertyType;
 import org.eclipse.basyx.aas.backend.connected.facades.ConnectedVABElementContainerFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasDataSpecificationFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasKindFacade;
@@ -25,7 +23,6 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.IVABElementContainer;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.Property;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 
 /**
@@ -34,7 +31,7 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  * @author rajashek
  *
  */
-public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement implements IContainerProperty, IVABElementContainer, ISubmodelElementCollection {
+public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement implements IVABElementContainer, ISubmodelElementCollection {
 	ConnectedVABElementContainerFacade facade;
 
 	public ConnectedSubmodelElementCollection(VABElementProxy proxy) {
@@ -123,28 +120,6 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	@Override
 	public HashMap<String, ISubmodelElement> getElements() {
 		return (HashMap<String, ISubmodelElement>) getProxy().getModelPropertyValue(SubModel.SUBMODELELEMENT);
-	}
-
-	@Override
-	public void setValueId(Object obj) {
-		getProxy().setModelPropertyValue(Property.VALUEID, obj);
-	}
-
-	@Override
-	public Object getValueId() {
-		return getElem().getPath(Property.VALUEID);
-	}
-
-	@Override
-	public PropertyType getPropertyType() {
-		return PropertyType.Container;
-	}
-
-	@Override
-	public void setValue(Object obj) {
-		getProxy().setModelPropertyValue(Property.VALUE, obj);
-		getProxy().setModelPropertyValue(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(obj));
-
 	}
 
 	public void addProperty(IProperty property) {

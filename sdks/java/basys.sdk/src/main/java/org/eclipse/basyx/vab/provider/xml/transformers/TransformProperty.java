@@ -74,7 +74,7 @@ public class TransformProperty {
 		prop.put("semanticId", transformHasSemanticsObj);
 		prop.setIdshort(idShort);
 		prop.setCategory(category);
-		prop.setValue(value);
+		prop.set(value);
 		propertySet.add(prop);
 	}
 }
