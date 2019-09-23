@@ -13,18 +13,25 @@
 
 #include <string>
 
+namespace basyx {
+namespace aas {
+namespace qualifier {
+
 class IIdentifiable
 {
 public:
-	virtual ~IIdentifiable() = default;
+  virtual ~IIdentifiable() = default;
 
-	virtual void setAdministration(const std::string & version, const std::string & revision) = 0;
-	virtual std::shared_ptr<IAdministrativeInformation> getAdministration() const = 0;
+  virtual void setAdministration(const std::string & version, const std::string & revision) = 0;
+  virtual std::shared_ptr<IAdministrativeInformation> getAdministration() const = 0;
 
-	virtual void setIdentification(const std::string & idType, const std::string & id) = 0;
-	virtual std::shared_ptr<IIdentifier> getIdentification() const = 0;
-	
+  virtual void setIdentification(const std::string & idType, const std::string & id) = 0;
+  virtual std::shared_ptr<IIdentifier> getIdentification() const = 0;
+
 };
 
-#endif
+}
+}
+}
 
+#endif

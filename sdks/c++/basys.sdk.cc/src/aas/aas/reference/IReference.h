@@ -12,14 +12,30 @@
 
 #include <vector>
 
+namespace basyx {
+namespace aas {
+namespace reference {
+
+namespace paths {
+  static constexpr char DATASPECIFICATIONS[] = "dataSpecificationReferences";
+  static constexpr char PARENTS[] = "parentReferences";
+  static constexpr char SEMANTICIDS[] = "semanticIdReferences";
+  static constexpr char QUALIFIERS[] = "qualifierReferences";
+}
+
+
 class IReference
 {
 public:
-	virtual ~IReference() = default;
+  virtual ~IReference() = default;
 
-	virtual std::vector<IKey> getKeys() const = 0;
-	virtual void setKeys(const std::vector<IKey> & keys) = 0;
+  virtual std::vector<IKey> getKeys() const = 0;
+  virtual void setKeys(const std::vector<IKey> & keys) = 0;
 };
+
+}
+}
+}
 
 #endif
 

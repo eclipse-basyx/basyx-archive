@@ -23,36 +23,38 @@ public:
   ConnectedDataElement(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
   ~ConnectedDataElement() = default;
 
-  std::vector<std::shared_ptr<IReference>> getDataSpecificationReferences() const;
-  void setDataSpecificationReferences(const std::vector<std::shared_ptr<IReference>> & ref);
+  basyx::objectCollection_t getDataSpecificationReferences() const override;
+  void setDataSpecificationReferences(const basyx::objectCollection_t & data_specification_references) override;
 
-  std::string getIdshort() const;
-  void setIdshort(const std::string & idShort);
+  std::string getIdShort() const override;
+  void setIdShort(const std::string & idShort) override;
 
-  std::string getCategory() const;
-  void setCategory(const std::string & category);
+  std::string getCategory() const override;
+  void setCategory(const std::string & category) override;
 
-  std::string getDescription() const;
-  void setDescription(const std::string & description);
+  std::string getDescription() const override;
+  void setDescription(const std::string & description) override;
 
-  std::shared_ptr<IReference> getParent() const;
-  void setParent(const std::shared_ptr<IReference> & obj);
+  basyx::any getParent() const override;
+  void setParent(const basyx::any & parent) override;
 
-  std::string getId() const;
-  void setId(const std::string & id);
+  std::string getId() const override;
+  void setId(const std::string & id) override;
 
-  std::vector<std::shared_ptr<IConstraint>> getQualifier() const;
-  void setQualifier(const std::vector<std::shared_ptr<IConstraint>> & qualifiers);
+  basyx::objectCollection_t getQualifier() const override;
+  void setQualifier(const basyx::objectCollection_t & qualifiers) override;
 
-  std::shared_ptr<std::shared_ptr<IReference>> getSemanticId() const;
-  void setSemanticID(const std::shared_ptr<std::shared_ptr<IReference>> & ref);
+  basyx::any getSemanticId() const override;
+  void setSemanticID(const basyx::any & semanticId) override;
 
-  std::string getHasKindReference() const;
-  void setHasKindReference(const std::string & kind);
+  std::string getHasKindReference() const override;
+  void setHasKindReference(const std::string & kind) override;
 
 private:
-  std::string getValue(const std::string & path) const;
-  void setValue(const std::string & path, const basyx::any value) const;
+  std::string getProxyValue(const std::string & path) const;
+  void setProxyValue(const std::string & path, const basyx::any value) const;
+
+  basyx::objectCollection_t getProxyCollection(const std::string & path) const;
 };
 
 }

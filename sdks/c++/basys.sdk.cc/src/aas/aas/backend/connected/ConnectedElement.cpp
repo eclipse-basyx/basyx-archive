@@ -16,6 +16,11 @@ ConnectedElement::ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABE
 
 }
 
+ConnectedElement::ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy>& proxy, basyx::objectMap_t & local_values) :
+  proxy(proxy),
+  local_map(local_values)
+{}
+
 std::shared_ptr<vab::core::proxy::IVABElementProxy> ConnectedElement::getProxy() const
 {
   return this->proxy;

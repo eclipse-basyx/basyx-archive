@@ -9,123 +9,132 @@
 
 #include <memory>
 
+
 namespace basyx {
 namespace aas {
+namespace backend {
 
-backend::ConnectedDataElement::ConnectedDataElement(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy) :
+ConnectedDataElement::ConnectedDataElement(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy) :
   ConnectedSubmodelElement(proxy)
 {}
 
-std::vector< std::shared_ptr<IReference>> backend::ConnectedDataElement::getDataSpecificationReferences() const
+basyx::objectCollection_t ConnectedDataElement::getDataSpecificationReferences() const
 {
-  return std::vector< std::shared_ptr<IReference>>();
+  return this->getProxyCollection(reference::paths::DATASPECIFICATIONS);
 }
 
-void backend::ConnectedDataElement::setDataSpecificationReferences(const std::vector< std::shared_ptr<IReference>>& ref)
-{}
-
-std::string backend::ConnectedDataElement::getIdshort() const
+void ConnectedDataElement::setDataSpecificationReferences(const basyx::objectCollection_t & data_specification_references)
 {
-  return this->getValue(qualifier::ReferablePaths::IDSHORT);
+  this->setProxyValue(reference::paths::DATASPECIFICATIONS, data_specification_references);
 }
 
-void backend::ConnectedDataElement::setIdshort(const std::string & idShort)
+std::string ConnectedDataElement::getIdShort() const
 {
-  this->setValue(qualifier::ReferablePaths::IDSHORT, idShort);
+  return this->getProxyValue(qualifier::ReferablePaths::IDSHORT);
 }
 
-std::string backend::ConnectedDataElement::getCategory() const
+void ConnectedDataElement::setIdShort(const std::string & idShort)
 {
-  return this->getValue(qualifier::ReferablePaths::CATEGORY);
+  this->setProxyValue(qualifier::ReferablePaths::IDSHORT, idShort);
 }
 
-void backend::ConnectedDataElement::setCategory(const std::string & category)
+std::string ConnectedDataElement::getCategory() const
 {
-  this->setValue(qualifier::ReferablePaths::CATEGORY, category);
+  return this->getProxyValue(qualifier::ReferablePaths::CATEGORY);
 }
 
-std::string backend::ConnectedDataElement::getDescription() const
+void ConnectedDataElement::setCategory(const std::string & category)
 {
-  return this->getValue(qualifier::ReferablePaths::DESCRIPTION);
+  this->setProxyValue(qualifier::ReferablePaths::CATEGORY, category);
 }
 
-void backend::ConnectedDataElement::setDescription(const std::string & description)
+std::string ConnectedDataElement::getDescription() const
 {
-  this->setValue(qualifier::ReferablePaths::DESCRIPTION, description);
+  return this->getProxyValue(qualifier::ReferablePaths::DESCRIPTION);
 }
 
-std::shared_ptr<IReference> backend::ConnectedDataElement::getParent() const
+void ConnectedDataElement::setDescription(const std::string & description)
 {
-  //TODO
-  //return this->getValue(qualifier::ReferablePaths::PARENT);
-  return nullptr;
+  this->setProxyValue(qualifier::ReferablePaths::DESCRIPTION, description);
 }
 
-void backend::ConnectedDataElement::setParent(const std::shared_ptr<IReference>& obj)
-{}
+basyx::any ConnectedDataElement::getParent() const
+{
+  return this->getProxyCollection(reference::paths::PARENTS);
+}
 
-std::string backend::ConnectedDataElement::getId() const
+void ConnectedDataElement::setParent(const basyx::any & parent_reference)
+{
+  this->setProxyValue(reference::paths::PARENTS, parent_reference);
+}
+
+std::string ConnectedDataElement::getId() const
 {
   auto localId = this->getLocalValue(qualifier::ReferablePaths::IDSHORT);
   if ( not localId.IsNull() )
   {
     return localId.Get<std::string>();
   }
-  return this->getIdshort();
+  return this->getIdShort();
 }
 
-void backend::ConnectedDataElement::setId(const std::string & id)
+void ConnectedDataElement::setId(const std::string & id)
 {
   auto localId = this->getLocalValue(qualifier::ReferablePaths::IDSHORT);
   if ( not localId.IsNull() )
   {
     this->setLocalValue(qualifier::ReferablePaths::IDSHORT, id);
   }
-  this->setValue(qualifier::ReferablePaths::IDSHORT, id);
+  this->setProxyValue(qualifier::ReferablePaths::IDSHORT, id);
 }
 
-std::vector< std::shared_ptr<IConstraint>> backend::ConnectedDataElement::getQualifier() const
+basyx::objectCollection_t ConnectedDataElement::getQualifier() const
 {
-  //TODO
-  return std::vector< std::shared_ptr<IConstraint>>();
+  return this->getProxyCollection(reference::paths::QUALIFIERS);
 }
 
-void backend::ConnectedDataElement::setQualifier(const std::vector< std::shared_ptr<IConstraint>>& qualifiers)
+void ConnectedDataElement::setQualifier(const basyx::objectCollection_t & qualifiers)
 {
-//TODO
+  this->setProxyValue(reference::paths::QUALIFIERS, qualifiers);
 }
 
-std::shared_ptr<std::shared_ptr<IReference>> backend::ConnectedDataElement::getSemanticId() const
+basyx::any ConnectedDataElement::getSemanticId() const
 {
-  //TODO
-  return std::shared_ptr<std::shared_ptr<IReference>>();
+  return this->getProxyValue(reference::paths::SEMANTICIDS);
 }
 
-void backend::ConnectedDataElement::setSemanticID(const std::shared_ptr<std::shared_ptr<IReference>>& ref)
+void ConnectedDataElement::setSemanticID(const basyx::any & semantic_identifier)
 {
-  //TODO
+  this->setProxyValue(reference::paths::SEMANTICIDS, semantic_identifier);
 }
 
-std::string backend::ConnectedDataElement::getHasKindReference() const
+std::string ConnectedDataElement::getHasKindReference() const
 {
-  return this->getValue(qualifier::haskind::Paths::KIND);
+  return this->getProxyValue(qualifier::haskind::Paths::KIND);
 }
 
-void backend::ConnectedDataElement::setHasKindReference(const std::string & kind)
+void ConnectedDataElement::setHasKindReference(const std::string & kind)
 {
-  this->setValue(qualifier::haskind::Paths::KIND, kind);
+  this->setProxyValue(qualifier::haskind::Paths::KIND, kind);
 }
 
-void backend::ConnectedDataElement::setValue(const std::string & path, const basyx::any value) const
+void ConnectedDataElement::setProxyValue(const std::string & path, const basyx::any value) const
 {
   this->getProxy()->updateElementValue(path, value);
 }
 
-std::string backend::ConnectedDataElement::getValue(const std::string & path) const
+std::string ConnectedDataElement::getProxyValue(const std::string & path) const
 {
   auto value = getProxy()->readElementValue(path);
   return value.Get<std::string>();
 }
 
+basyx::objectCollection_t ConnectedDataElement::getProxyCollection(const std::string & path) const
+{
+  auto value = this->getProxy()->readElementValue(path);
+  return value.Get<basyx::objectCollection_t>();
+}
+
+}
 }
 }

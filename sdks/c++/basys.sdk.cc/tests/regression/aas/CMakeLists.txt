@@ -12,6 +12,8 @@ target_sources(tests_aas
   PRIVATE
     submodelelement/property/connected/test_ConnectedProperty.cpp
 	  support/VABProxyMock.cpp
+    backend/connected/test_ConnectedDataElement.cpp
+    backend/connected/test_ConnectedElement.cpp
 )
 
 target_include_directories(tests_aas PUBLIC ${PROJECT_SOURCE_DIR})

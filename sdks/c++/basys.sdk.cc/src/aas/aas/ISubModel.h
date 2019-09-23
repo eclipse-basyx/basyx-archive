@@ -32,7 +32,7 @@ namespace aas {
 /* *********************************************************************************
  * Sub model interface class
  * *********************************************************************************/
-class ISubModel : public IHasSemantics, public IIdentifiable, public IHasDataSpecification, public qualifier::haskind::IHasKind
+class ISubModel : public qualifier::IHasSemantics, qualifier::IIdentifiable, qualifier::IHasDataSpecification, qualifier::haskind::IHasKind
 {
 
 public:

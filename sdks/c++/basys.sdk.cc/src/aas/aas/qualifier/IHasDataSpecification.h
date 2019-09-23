@@ -9,17 +9,26 @@
 
 
 #include "aas/reference/IReference.h"
+#include "basyx/types.h"
 
 #include <memory>
 #include <vector>
+
+namespace basyx {
+namespace aas {
+namespace qualifier {
 
 class IHasDataSpecification
 {
 public:
   virtual ~IHasDataSpecification() = default;
-  
-	virtual std::vector<std::shared_ptr<IReference>> getDataSpecificationReferences() const = 0;
-	virtual void setDataSpecificationReferences(const std::vector< std::shared_ptr<IReference>> & ref) = 0;
+
+  virtual basyx::objectCollection_t getDataSpecificationReferences() const = 0;
+  virtual void setDataSpecificationReferences(const basyx::objectCollection_t & references) = 0;
 };
+
+}
+}
+}
 
 #endif
