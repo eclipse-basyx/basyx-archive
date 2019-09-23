@@ -114,10 +114,9 @@ TEST_F(ConnectedDataElementTest, TestSetIdNotLocal)
 
 TEST_F(ConnectedDataElementTest, TestGetIdIsLocal)
 {
-  //TODO
   auto data_element = ConnectedDataElement(proxy);
 
-  data_element.setLocalValue(ReferablePaths::IDSHORT, "the id");
+  data_element.setLocalValue(ReferablePaths::IDSHORT, std::string("the id"));
 
   auto id = data_element.getId();
 
@@ -128,7 +127,6 @@ TEST_F(ConnectedDataElementTest, TestGetIdIsLocal)
 TEST_F(ConnectedDataElementTest, TestSetIdIsLocal)
 {
   auto data_element = ConnectedDataElement(proxy);
-
 
   data_element.setLocalValue(ReferablePaths::IDSHORT, "the id");
 
@@ -152,7 +150,7 @@ TEST_F(ConnectedDataElementTest, TestSetHasKindreference)
 {
   auto data_element = ConnectedDataElement(proxy);
 
-  data_element.setId("new kind");
+  data_element.setHasKindReference("new kind");
 
   ASSERT_EQ(std::string(haskind::Paths::KIND), mock->updateElementCallValues.at(0).first);
   ASSERT_EQ("new kind", mock->updateElementCallValues.at(0).second.Get<std::string>());

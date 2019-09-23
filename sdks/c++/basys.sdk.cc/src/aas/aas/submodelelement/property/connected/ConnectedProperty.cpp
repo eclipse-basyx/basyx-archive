@@ -12,7 +12,7 @@ namespace submodelelement {
 namespace property {
 
 ConnectedProperty::ConnectedProperty(PropertyType type, std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy) :
-  backend::ConnectedDataElement(std::move(proxy)),
+  backend::ConnectedDataElement(proxy),
   type(type)
 {}
 
@@ -44,12 +44,12 @@ basyx::any ConnectedProperty::getValueId() const
 
 void ConnectedProperty::setId(const std::string & id)
 {
-  ConnectedDataElement::setId(id);
+  setIdWithLocalCheck(id);
 }
 
 std::string ConnectedProperty::getId() const
 {
-  return ConnectedDataElement::getId();
+  return getIdWithLocalCheck();
 }
 
 }

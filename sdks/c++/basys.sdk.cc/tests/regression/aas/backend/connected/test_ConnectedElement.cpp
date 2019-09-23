@@ -28,75 +28,76 @@ protected:
 
 TEST_F(ConnectedElementTest, TestConstructor)
 {
-  basyx::objectMap_t map;
-  map.emplace("object", basyx::any("object"));
+  std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
+  map->emplace("object", basyx::any(std::string("object")));
 
   ConnectedElement connected_element(proxy, map);
   
-  ASSERT_EQ(1, map.size());
-  ASSERT_EQ("object", map.at("object").Get<std::string>());
+  ASSERT_EQ(1, map->size());
+  ASSERT_EQ("object", map->at("object").Get<std::string>());
   ASSERT_EQ(0, mock->overallMockCalls());
 }
 
 TEST_F(ConnectedElementTest, TestSetLocalValueNotPresent)
 {
-  basyx::objectMap_t map;
-  map.emplace("object", basyx::any("object"));
+   std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
+   map->emplace("object", basyx::any(std::string("object")));
 
   ConnectedElement connected_element(proxy, map);
 
   connected_element.setLocalValue("another object", 3);
 
-  ASSERT_EQ(2, map.size());
-  ASSERT_EQ(3, map.at("another object").Get<int>());
+  ASSERT_EQ(2, map->size());
+  ASSERT_EQ(3, map->at("another object").Get<int>());
   ASSERT_EQ(0, mock->overallMockCalls());
 }
 
 TEST_F(ConnectedElementTest, TestSetLocalValueAllreadyPresent)
 {
-  basyx::objectMap_t map;
-  map.emplace("object", basyx::any("object"));
+   std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
+   map->emplace("object", basyx::any(std::string("object")));
 
   ConnectedElement connected_element(proxy, map);
 
   connected_element.setLocalValue("object", 3);
 
-  ASSERT_EQ(1, map.size());
-  ASSERT_EQ(3, map.at("object").Get<int>());
+  ASSERT_EQ(1, map->size());
+  //With set the already set value should remain
+  ASSERT_EQ("object", map->at("object").Get<std::string>());
   ASSERT_EQ(0, mock->overallMockCalls());
 }
 
 TEST_F(ConnectedElementTest, TestGetLocalValuePresent)
 {
-  basyx::objectMap_t map;
-  map.emplace("object", basyx::any("object"));
+   std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
+   map->emplace("object", basyx::any(std::string("object")));
 
   ConnectedElement connected_element(proxy, map);
 
   auto object = connected_element.getLocalValue("object");
 
-  ASSERT_EQ(1, map.size());
-  ASSERT_EQ(object, map.at("object"));
+  ASSERT_EQ(1, map->size());
+  ASSERT_EQ(object.Get<std::string>(), map->at("object").Get<std::string>());
   ASSERT_EQ("object", object.Get<std::string>());
   ASSERT_EQ(0, mock->overallMockCalls());
 }
 
 TEST_F(ConnectedElementTest, TestGetLocalValueNotPresent)
 {
-  basyx::objectMap_t map;
+   std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
 
   ConnectedElement connected_element(proxy, map);
 
   auto object = connected_element.getLocalValue("object");
 
-  ASSERT_EQ(0, map.size());
-  ASSERT_EQ(object, nullptr);
+  ASSERT_EQ(0, map->size());
+  ASSERT_TRUE(object.IsNull());
   ASSERT_EQ(0, mock->overallMockCalls());
 }
 
 TEST_F(ConnectedElementTest, TestUpdateLocalValueNotPresent)
 {
-  basyx::objectMap_t map;
+  std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
 
   ConnectedElement connected_element(proxy, map);
 
@@ -104,26 +105,26 @@ TEST_F(ConnectedElementTest, TestUpdateLocalValueNotPresent)
 
   connected_element.updateLocalValue("object", any);
 
-  ASSERT_EQ(1, map.size());
-  ASSERT_EQ(3, map.at(0).Get<int>());
+  ASSERT_EQ(1, map->size());
+  ASSERT_EQ(3, map->at("object").Get<int>());
   ASSERT_EQ(0, mock->overallMockCalls());
 }
 
 TEST_F(ConnectedElementTest, TestUpdateLocalValue)
 {
   basyx::any any(3);
-
-  basyx::objectMap_t map;
-  map.emplace("object", any);
+  
+  std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
+  map->emplace("object", any);
 
   ConnectedElement connected_element(proxy, map);
 
-  basyx::any other("new any");
+  basyx::any other(std::string("new any"));
 
   connected_element.updateLocalValue("object", other);
 
-  ASSERT_EQ(1, map.size());
-  ASSERT_EQ("new any", map.at(0).Get<std::string>());
+  ASSERT_EQ(1, map->size());
+  ASSERT_EQ("new any", map->at("object").Get<std::string>());
   ASSERT_EQ(0, mock->overallMockCalls());
 }
 

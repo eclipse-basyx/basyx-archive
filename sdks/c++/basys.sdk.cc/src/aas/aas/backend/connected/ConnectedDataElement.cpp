@@ -70,22 +70,12 @@ void ConnectedDataElement::setParent(const basyx::any & parent_reference)
 
 std::string ConnectedDataElement::getId() const
 {
-  auto localId = this->getLocalValue(qualifier::ReferablePaths::IDSHORT);
-  if ( not localId.IsNull() )
-  {
-    return localId.Get<std::string>();
-  }
-  return this->getIdShort();
+  return this->getIdWithLocalCheck();
 }
 
 void ConnectedDataElement::setId(const std::string & id)
 {
-  auto localId = this->getLocalValue(qualifier::ReferablePaths::IDSHORT);
-  if ( not localId.IsNull() )
-  {
-    this->setLocalValue(qualifier::ReferablePaths::IDSHORT, id);
-  }
-  this->setProxyValue(qualifier::ReferablePaths::IDSHORT, id);
+  this->setIdWithLocalCheck(id);
 }
 
 basyx::objectCollection_t ConnectedDataElement::getQualifier() const
@@ -133,6 +123,27 @@ basyx::objectCollection_t ConnectedDataElement::getProxyCollection(const std::st
 {
   auto value = this->getProxy()->readElementValue(path);
   return value.Get<basyx::objectCollection_t>();
+}
+
+std::string ConnectedDataElement::getIdWithLocalCheck() const
+{
+  basyx::any localId = this->getLocalValue(qualifier::ReferablePaths::IDSHORT);
+  if ( not localId.IsNull() )
+  {
+    return localId.Get<std::string>();
+  }
+  return this->getIdShort();
+}
+
+void ConnectedDataElement::setIdWithLocalCheck(const std::string & id)
+{
+  auto localId = this->getLocalValue(qualifier::ReferablePaths::IDSHORT);
+  if ( not localId.IsNull() )
+  {
+    this->updateLocalValue(qualifier::ReferablePaths::IDSHORT, id);
+    return;
+  }
+  this->setProxyValue(qualifier::ReferablePaths::IDSHORT, id);
 }
 
 }
