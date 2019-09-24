@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "aas/submodelelement/property/connected/ConnectedProperty.h"
+#include "aas/backend/connected/submodelelement/property/ConnectedProperty.h"
 #include "vab/core/proxy/IVABElementProxy.h"
 #include "support/VABProxyMock.cpp" 
 #include "basyx/anyTypeChecker.h"

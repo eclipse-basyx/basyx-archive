@@ -11,7 +11,7 @@
 #include "vab/core/proxy/IVABElementProxy.h"
 #include "aas/reference/IReference.h"
 #include "aas/qualifier/qualifiable/IConstraint.h"
-#include "aas/submodelelement/connected/ConnectedSubmodelElement.h"
+#include "aas/backend/connected/submodelelement/ConnectedSubmodelElement.h"
 
 namespace basyx {
 namespace aas {
