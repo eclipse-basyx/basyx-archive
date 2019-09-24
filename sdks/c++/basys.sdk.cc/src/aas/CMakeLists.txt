@@ -18,6 +18,7 @@ target_sources(basyx_aas
 		aas/backend/connected/ConnectedDataElement.cpp
 		aas/backend/connected/ConnectedDataElement.h
 		aas/backend/connected/dataspecification/IDataSpecification.h
+		aas/backend/vab/IVABElementContainer.h
 		aas/BlobType.h
 		aas/identifier/IIdentifier.h
 		aas/MimeType.h
@@ -51,12 +52,17 @@ target_sources(basyx_aas
 		aas/submodelelement/operation/IOperation.h
 		aas/submodelelement/property/blob/IBlob.h
 		aas/submodelelement/property/file/IFile.h
-		aas/submodelelement/property/IReferenceElement.h
+		aas/submodelelement/IDataElement.h
+		aas/submodelelement/IReferenceElement.h
 		aas/submodelelement/property/IProperty.h
+		aas/submodelelement/property/ICollectionProperty.h
+		aas/submodelelement/property/IContainerProperty.h
+		aas/submodelelement/property/ISingleProperty.h
+		aas/submodelelement/property/IMapProperty.h
 		aas/submodelelement/property/connected/ConnectedProperty.h
 		aas/submodelelement/property/connected/ConnectedProperty.cpp
-    aas/submodelelement/connected/ConnectedSubmodelElement.h
-    aas/submodelelement/connected/ConnectedSubmodelElement.cpp
+		aas/submodelelement/connected/ConnectedSubmodelElement.h
+		aas/submodelelement/connected/ConnectedSubmodelElement.cpp
 )
 
 target_include_directories(basyx_aas PUBLIC ${PROJECT_SOURCE_DIR})
