@@ -7,7 +7,7 @@
 #ifndef AAS_BACKEND_CONNECTEDPROPERTY_H_
 #define AAS_BACKEND_CONNECTEDPROPERTY_H_
 
-#include "aas/backend/connected/ConnectedDataElement.h"
+#include "aas/backend/connected/submodelelement/ConnectedDataElement.h"
 #include "aas/submodelelement/property/IProperty.h"
 #include "basyx/types.h"
 

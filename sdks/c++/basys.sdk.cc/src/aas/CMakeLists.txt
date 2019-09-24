@@ -15,8 +15,32 @@ target_sources(basyx_aas
 		aas/AssetAdministrationShell.h
 		aas/backend/connected/ConnectedElement.cpp
 		aas/backend/connected/ConnectedElement.h
-		aas/backend/connected/ConnectedDataElement.cpp
-		aas/backend/connected/ConnectedDataElement.h
+		aas/backend/connected/submodelelement/ConnectedDataElement.cpp
+		aas/backend/connected/submodelelement/ConnectedDataElement.h
+		aas/backend/connected/submodelelement/ConnectedRelationshipElement.h
+		aas/backend/connected/submodelelement/ConnectedRelationshipElement.cpp
+		aas/backend/connected/submodelelement/ConnectedSubmodelElement.h
+		aas/backend/connected/submodelelement/ConnectedSubmodelElement.cpp
+		aas/backend/connected/submodelelement/ConnectedSubmodelElementCollection.h
+		aas/backend/connected/submodelelement/ConnectedSubmodelElementCollection.cpp
+		aas/backend/connected/submodelelement/operation/ConnectedOperation.h
+		aas/backend/connected/submodelelement/operation/ConnectedOperation.cpp
+		aas/backend/connected/submodelelement/property/ConnectedProperty.h
+		aas/backend/connected/submodelelement/property/ConnectedProperty.cpp
+		aas/backend/connected/submodelelement/property/ConnectedCollectionProperty.h
+		aas/backend/connected/submodelelement/property/ConnectedCollectionProperty.cpp
+    aas/backend/connected/submodelelement/property/ConnectedContainerProperty.cpp
+    aas/backend/connected/submodelelement/property/ConnectedContainerProperty.h
+    aas/backend/connected/submodelelement/property/ConnectedMapProperty.cpp
+    aas/backend/connected/submodelelement/property/ConnectedMapProperty.h
+    aas/backend/connected/submodelelement/property/ConnectedReferenceElement.cpp
+    aas/backend/connected/submodelelement/property/ConnectedReferenceElement.h
+    aas/backend/connected/submodelelement/property/ConnectedSingleProperty.cpp
+    aas/backend/connected/submodelelement/property/ConnectedSingleProperty.h
+    aas/backend/connected/submodelelement/property/blob/ConnectedBlob.cpp
+    aas/backend/connected/submodelelement/property/blob/ConnectedBlob.h
+    aas/backend/connected/submodelelement/property/file/ConnectedFile.cpp
+    aas/backend/connected/submodelelement/property/file/ConnectedFile.h
 		aas/backend/connected/dataspecification/IDataSpecification.h
 		aas/backend/vab/IVABElementContainer.h
 		aas/BlobType.h
@@ -59,10 +83,6 @@ target_sources(basyx_aas
 		aas/submodelelement/property/IContainerProperty.h
 		aas/submodelelement/property/ISingleProperty.h
 		aas/submodelelement/property/IMapProperty.h
-		aas/submodelelement/property/connected/ConnectedProperty.h
-		aas/submodelelement/property/connected/ConnectedProperty.cpp
-		aas/submodelelement/connected/ConnectedSubmodelElement.h
-		aas/submodelelement/connected/ConnectedSubmodelElement.cpp
 )
 
 target_include_directories(basyx_aas PUBLIC ${PROJECT_SOURCE_DIR})
