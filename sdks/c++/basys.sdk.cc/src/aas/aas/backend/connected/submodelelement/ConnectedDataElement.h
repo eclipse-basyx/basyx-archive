@@ -17,7 +17,7 @@ namespace basyx {
 namespace aas {
 namespace backend {
 
-class ConnectedDataElement : public submodelelement::connected::ConnectedSubmodelElement
+class ConnectedDataElement : public connected::ConnectedSubmodelElement
 {
 public:
   ConnectedDataElement(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
@@ -51,9 +51,6 @@ public:
   void setHasKindReference(const std::string & kind) override;
 
 private:
-  std::string getProxyValue(const std::string & path) const;
-  void setProxyValue(const std::string & path, const basyx::any value) const;
-
   basyx::objectCollection_t getProxyCollection(const std::string & path) const;
 
 protected:

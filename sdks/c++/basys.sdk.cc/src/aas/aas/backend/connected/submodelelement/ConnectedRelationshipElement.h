@@ -7,18 +7,32 @@
 #ifndef AAS_BACKEND_SUBMODELELEMENT_CONNECTEDRELATIONSHIPELEMENT_H_
 #define AAS_BACKEND_SUBMODELELEMENT_CONNECTEDRELATIONSHIPELEMENT_H_
 
-namespace basyx { 
+#include "basyx/types.h"
+#include "vab/core/proxy/IVABElementProxy.h"
+#include "aas/submodelelement/IRelationshipElement.h"
+#include "aas/backend/connected/submodelelement/ConnectedSubmodelElement.h"
+
+#include <string>
+
+namespace basyx {
 namespace aas {
 namespace backend {
-namespace connected { 
+namespace connected {
 
 
-class ConnectedRelationshipElement
+class ConnectedRelationshipElement : public ConnectedSubmodelElement, submodelelement::IRelationshipElement
 {
 public:
-	~ConnectedRelationshipElement();
+  ConnectedRelationshipElement(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
+  ~ConnectedRelationshipElement() = default;
+  
+  // Inherited via IRelationshipElement
+  virtual void setFirst(const basyx::any & first) override;
+  virtual basyx::any getFirst() const override;
+  virtual void setSecond(const basyx::any & second) override;
+  virtual basyx::any getSecond() const override;
 };
- 
+
 
 }
 }

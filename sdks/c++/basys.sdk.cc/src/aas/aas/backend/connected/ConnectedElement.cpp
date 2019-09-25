@@ -5,6 +5,7 @@
  */
 
 #include "ConnectedElement.h"
+#include "aas/qualifier/IReferable.h"
 
 namespace basyx {
 namespace aas {
@@ -41,6 +42,29 @@ void ConnectedElement::setLocalValue(const std::string & path, const basyx::any 
 void ConnectedElement::updateLocalValue(const std::string & path, const basyx::any value)
 {
   this->local_map->operator[](path) = value;
+}
+
+
+void ConnectedElement::setId(const std::string & id)
+{
+  this->setProxyValue(qualifier::ReferablePaths::IDSHORT, id);
+}
+
+std::string ConnectedElement::getId() const
+{
+  return this->getProxyValue(qualifier::ReferablePaths::IDSHORT);
+}
+
+
+void ConnectedElement::setProxyValue(const std::string & path, const basyx::any value) const
+{
+  this->getProxy()->updateElementValue(path, value);
+}
+
+std::string ConnectedElement::getProxyValue(const std::string & path) const
+{
+  auto value = getProxy()->readElementValue(path);
+  return value.Get<std::string>();
 }
 
 }

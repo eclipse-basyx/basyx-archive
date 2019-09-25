@@ -8,8 +8,10 @@
 
 namespace basyx {
 namespace aas {
-namespace submodelelement {
-namespace property {
+namespace backend {
+namespace connected {
+
+using namespace submodelelement::property; 
 
 ConnectedProperty::ConnectedProperty(PropertyType type, std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy) :
   backend::ConnectedDataElement(proxy),
@@ -44,12 +46,12 @@ basyx::any ConnectedProperty::getValueId() const
 
 void ConnectedProperty::setId(const std::string & id)
 {
-  setIdWithLocalCheck(id);
+  this->setId(id);
 }
 
 std::string ConnectedProperty::getId() const
 {
-  return getIdWithLocalCheck();
+  return this->getId();
 }
 
 }

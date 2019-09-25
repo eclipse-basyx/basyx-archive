@@ -5,6 +5,7 @@
  */
 
 #include "vab/core/proxy/IVABElementProxy.h"
+#include <string>
 
 namespace basyx {
 namespace vab {
@@ -12,15 +13,29 @@ namespace core {
 namespace proxy {
 namespace mockups {
 
-class VABProxyMock : public IVABElementProxy
+enum ProxyType
+{
+  Map,
+  Default
+};
+
+template<ProxyType t>
+class VABProxyMockUp : public IVABElementProxy
 {
 public:
+
   virtual basyx::any readElementValue(const VABPath & elementPath) override
   {
     this->readElementValue_calls++;
 
-    return basyx::any("called with " + elementPath.toString());
+    this->getElementCallValues.push_back(elementPath);
+
+    if ( t == ProxyType::Default )
+      return basyx::any("called with " + elementPath.toString());
+    if ( t == ProxyType::Map )
+      return basyx::any(this->map);
   }
+
 
   virtual void updateElementValue(const VABPath & elementPath, const basyx::any & newValue) override
   {
@@ -37,6 +52,8 @@ public:
   virtual void deleteElement(const VABPath & elementPath) override
   {
     this->deleteElement_calls++;
+
+    this->removeElementCallValues.push_back(elementPath.toString());
   }
 
   virtual void deleteElement(const VABPath & elementPath, const basyx::any & value) override
@@ -63,7 +80,12 @@ public:
   int invoke_calls = 0;
 
   std::vector<std::pair<std::string, basyx::any>> updateElementCallValues;
+  std::vector<std::string> getElementCallValues;
+  std::vector<std::string> removeElementCallValues;
+  basyx::objectMap_t map;
 };
+
+using VABProxyMock = VABProxyMockUp<ProxyType::Default>;
 
 }
 }

@@ -7,7 +7,6 @@
 #ifndef BASYX_METAMODEL_IREFERABLE_H_
 #define BASYX_METAMODEL_IREFERABLE_H_
 
-
 #include "aas/reference/IReference.h"
 
 #include <string>

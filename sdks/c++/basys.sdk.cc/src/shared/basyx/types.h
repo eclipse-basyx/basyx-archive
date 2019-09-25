@@ -11,13 +11,16 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <bitset>
 
 #include <basyx/any/any.h>
 
 namespace basyx {
     using objectCollection_t = std::vector<basyx::any>;
     using objectMap_t = std::unordered_map<std::string, basyx::any>;
-//  using objectSet_t = std::unordered_set<basyx::any>;
+  //using objectSet_t = std::unordered_set<basyx::any>;
+    using byte = uint8_t;
+    using byte_array = std::vector<byte>;
 };
 
 enum BaSyxCommand {

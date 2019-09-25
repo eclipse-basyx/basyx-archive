@@ -7,7 +7,7 @@
 #ifndef API_IPROPERTY_H_
 #define API_IPROPERTY_H_
 
-#include "aas/submodelelement/IElement.h"
+#include "aas/submodelelement/IDataElement.h"
 #include "basyx/types.h"
 
 
@@ -32,7 +32,7 @@ namespace PropertyPaths
 /* *********************************************************************************
  * Property interface
  * *********************************************************************************/
-class IProperty : public IElement
+class IProperty
 {
 
 public:

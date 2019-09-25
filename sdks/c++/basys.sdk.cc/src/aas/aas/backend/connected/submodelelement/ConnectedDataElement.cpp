@@ -108,17 +108,6 @@ void ConnectedDataElement::setHasKindReference(const std::string & kind)
   this->setProxyValue(qualifier::haskind::Paths::KIND, kind);
 }
 
-void ConnectedDataElement::setProxyValue(const std::string & path, const basyx::any value) const
-{
-  this->getProxy()->updateElementValue(path, value);
-}
-
-std::string ConnectedDataElement::getProxyValue(const std::string & path) const
-{
-  auto value = getProxy()->readElementValue(path);
-  return value.Get<std::string>();
-}
-
 basyx::objectCollection_t ConnectedDataElement::getProxyCollection(const std::string & path) const
 {
   auto value = this->getProxy()->readElementValue(path);

@@ -13,6 +13,7 @@
 
 using namespace basyx::aas::submodelelement::property;
 using namespace basyx::vab::core::proxy;
+using namespace basyx::aas::backend::connected;
 
 class ConnectedPropertyTest : public ::testing::Test
 {
@@ -103,25 +104,25 @@ TEST_F(ConnectedPropertyTest, TestGetValueID)
   ASSERT_EQ(1, mock->overallMockCalls());
 }
 
-TEST_F(ConnectedPropertyTest, TestGetID)
-{
-  std::shared_ptr<IProperty> property(new ConnectedProperty(PropertyType::Collection, proxy));
-
-  auto id = property->getId();
-
-  //Further tests can be found in ConnectedDataElementTests
-  ASSERT_EQ(id, "called with " + std::string(basyx::aas::qualifier::ReferablePaths::IDSHORT));
-  ASSERT_EQ(1, mock->overallMockCalls());
-}
-
-TEST_F(ConnectedPropertyTest, TestSetID)
-{
-  std::shared_ptr<IProperty> property(new ConnectedProperty(PropertyType::Collection, proxy));
-
-  property->setId("ID");
-
-  ASSERT_EQ(property->getId(), "called with " + std::string(basyx::aas::qualifier::ReferablePaths::IDSHORT));
-  ASSERT_EQ(1, mock->updateElementValue_calls);
-  ASSERT_EQ(1, mock->readElementValue_calls);
-  ASSERT_EQ(2, mock->overallMockCalls());
-}
+//TEST_F(ConnectedPropertyTest, TestGetID)
+//{
+//  std::shared_ptr<IProperty> property(new ConnectedProperty(PropertyType::Collection, proxy));
+//
+//  auto id = property->getId();
+//
+//  //Further tests can be found in ConnectedDataElementTests
+//  ASSERT_EQ(id, "called with " + std::string(basyx::aas::qualifier::ReferablePaths::IDSHORT));
+//  ASSERT_EQ(1, mock->overallMockCalls());
+//}
+//
+//TEST_F(ConnectedPropertyTest, TestSetID)
+//{
+//  std::shared_ptr<IProperty> property(new ConnectedProperty(PropertyType::Collection, proxy));
+//
+//  property->setId("ID");
+//
+//  ASSERT_EQ(property->getId(), "called with " + std::string(basyx::aas::qualifier::ReferablePaths::IDSHORT));
+//  ASSERT_EQ(1, mock->updateElementValue_calls);
+//  ASSERT_EQ(1, mock->readElementValue_calls);
+//  ASSERT_EQ(2, mock->overallMockCalls());
+//}

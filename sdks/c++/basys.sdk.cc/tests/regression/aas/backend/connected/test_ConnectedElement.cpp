@@ -9,6 +9,7 @@
 #include "aas/backend/connected/ConnectedElement.h"
 #include "vab/core/proxy/IVABElementProxy.h"
 #include "support/VABProxyMock.cpp"
+#include "aas/qualifier/IReferable.h"
 
 using namespace basyx::aas::backend;
 using namespace basyx::vab::core::proxy;
@@ -126,5 +127,30 @@ TEST_F(ConnectedElementTest, TestUpdateLocalValue)
   ASSERT_EQ(1, map->size());
   ASSERT_EQ("new any", map->at("object").Get<std::string>());
   ASSERT_EQ(0, mock->overallMockCalls());
+}
+
+TEST_F(ConnectedElementTest, TestGetID)
+{
+  std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
+
+  ConnectedElement connected_element(proxy, map);
+
+  auto id = connected_element.getId();
+
+  ASSERT_EQ(std::string("called with ") + basyx::aas::qualifier::ReferablePaths::IDSHORT, id);
+  ASSERT_EQ(1, mock->overallMockCalls());
+}
+
+TEST_F(ConnectedElementTest, TestSetID)
+{
+  std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
+
+  ConnectedElement connected_element(proxy, map);
+
+  connected_element.setId("identifier");
+
+  ASSERT_EQ(1, mock->overallMockCalls());
+  ASSERT_EQ(basyx::aas::qualifier::ReferablePaths::IDSHORT, mock->updateElementCallValues.at(0).first);
+  ASSERT_EQ(std::string("identifier"), mock->updateElementCallValues.at(0).second.Get<std::string>());
 }
 

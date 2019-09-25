@@ -18,6 +18,10 @@ namespace basyx {
 namespace aas {
 namespace qualifier {
 
+namespace HasDataSpecificationPaths {
+  static constexpr char HASDATASPECIFICATION[] = "hasDataSpecification";
+}
+
 class IHasDataSpecification
 {
 public:
