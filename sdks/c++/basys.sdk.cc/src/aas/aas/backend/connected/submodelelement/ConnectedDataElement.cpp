@@ -23,50 +23,50 @@ basyx::objectCollection_t ConnectedDataElement::getDataSpecificationReferences()
   return this->getProxyCollection(reference::paths::DATASPECIFICATIONS);
 }
 
-void ConnectedDataElement::setDataSpecificationReferences(const basyx::objectCollection_t & data_specification_references)
-{
-  this->setProxyValue(reference::paths::DATASPECIFICATIONS, data_specification_references);
-}
+//void ConnectedDataElement::setDataSpecificationReferences(const basyx::objectCollection_t & data_specification_references)
+//{
+//  this->setProxyValue(reference::paths::DATASPECIFICATIONS, data_specification_references);
+//}
 
 std::string ConnectedDataElement::getIdShort() const
 {
   return this->getProxyValue(qualifier::ReferablePaths::IDSHORT);
 }
 
-void ConnectedDataElement::setIdShort(const std::string & idShort)
-{
-  this->setProxyValue(qualifier::ReferablePaths::IDSHORT, idShort);
-}
+//void ConnectedDataElement::setIdShort(const std::string & idShort)
+//{
+//  this->setProxyValue(qualifier::ReferablePaths::IDSHORT, idShort);
+//}
 
 std::string ConnectedDataElement::getCategory() const
 {
   return this->getProxyValue(qualifier::ReferablePaths::CATEGORY);
 }
 
-void ConnectedDataElement::setCategory(const std::string & category)
-{
-  this->setProxyValue(qualifier::ReferablePaths::CATEGORY, category);
-}
+//void ConnectedDataElement::setCategory(const std::string & category)
+//{
+//  this->setProxyValue(qualifier::ReferablePaths::CATEGORY, category);
+//}
 
 std::string ConnectedDataElement::getDescription() const
 {
   return this->getProxyValue(qualifier::ReferablePaths::DESCRIPTION);
 }
 
-void ConnectedDataElement::setDescription(const std::string & description)
-{
-  this->setProxyValue(qualifier::ReferablePaths::DESCRIPTION, description);
-}
+//void ConnectedDataElement::setDescription(const std::string & description)
+//{
+//  this->setProxyValue(qualifier::ReferablePaths::DESCRIPTION, description);
+//}
 
 basyx::any ConnectedDataElement::getParent() const
 {
   return this->getProxyCollection(reference::paths::PARENTS);
 }
 
-void ConnectedDataElement::setParent(const basyx::any & parent_reference)
-{
-  this->setProxyValue(reference::paths::PARENTS, parent_reference);
-}
+//void ConnectedDataElement::setParent(const basyx::any & parent_reference)
+//{
+//  this->setProxyValue(reference::paths::PARENTS, parent_reference);
+//}
 
 std::string ConnectedDataElement::getId() const
 {
@@ -83,10 +83,10 @@ basyx::objectCollection_t ConnectedDataElement::getQualifier() const
   return this->getProxyCollection(reference::paths::QUALIFIERS);
 }
 
-void ConnectedDataElement::setQualifier(const basyx::objectCollection_t & qualifiers)
-{
-  this->setProxyValue(reference::paths::QUALIFIERS, qualifiers);
-}
+//void ConnectedDataElement::setQualifier(const basyx::objectCollection_t & qualifiers)
+//{
+//  this->setProxyValue(reference::paths::QUALIFIERS, qualifiers);
+//}
 
 basyx::any ConnectedDataElement::getSemanticId() const
 {
@@ -103,10 +103,10 @@ std::string ConnectedDataElement::getHasKindReference() const
   return this->getProxyValue(qualifier::haskind::Paths::KIND);
 }
 
-void ConnectedDataElement::setHasKindReference(const std::string & kind)
-{
-  this->setProxyValue(qualifier::haskind::Paths::KIND, kind);
-}
+//void ConnectedDataElement::setHasKindReference(const std::string & kind)
+//{
+//  this->setProxyValue(qualifier::haskind::Paths::KIND, kind);
+//}
 
 basyx::objectCollection_t ConnectedDataElement::getProxyCollection(const std::string & path) const
 {

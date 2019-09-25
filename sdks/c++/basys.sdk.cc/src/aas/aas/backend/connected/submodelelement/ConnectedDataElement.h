@@ -24,31 +24,31 @@ public:
   ~ConnectedDataElement() = default;
 
   basyx::objectCollection_t getDataSpecificationReferences() const override;
-  void setDataSpecificationReferences(const basyx::objectCollection_t & data_specification_references) override;
+  //void setDataSpecificationReferences(const basyx::objectCollection_t & data_specification_references) override;
 
   std::string getIdShort() const override;
-  void setIdShort(const std::string & idShort) override;
+  //void setIdShort(const std::string & idShort) override;
 
   std::string getCategory() const override;
-  void setCategory(const std::string & category) override;
+  //void setCategory(const std::string & category) override;
 
   std::string getDescription() const override;
-  void setDescription(const std::string & description) override;
+  //void setDescription(const std::string & description) override;
 
   basyx::any getParent() const override;
-  void setParent(const basyx::any & parent) override;
+  //void setParent(const basyx::any & parent) override;
 
   std::string getId() const override;
   void setId(const std::string & id) override;
 
   basyx::objectCollection_t getQualifier() const override;
-  void setQualifier(const basyx::objectCollection_t & qualifiers) override;
+  //void setQualifier(const basyx::objectCollection_t & qualifiers) override;
 
   basyx::any getSemanticId() const override;
   void setSemanticID(const basyx::any & semanticId) override;
 
   std::string getHasKindReference() const override;
-  void setHasKindReference(const std::string & kind) override;
+  //void setHasKindReference(const std::string & kind) override;
 
 private:
   basyx::objectCollection_t getProxyCollection(const std::string & path) const;

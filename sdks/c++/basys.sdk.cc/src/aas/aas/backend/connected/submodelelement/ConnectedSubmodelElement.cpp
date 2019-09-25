@@ -30,45 +30,33 @@ basyx::objectCollection_t ConnectedSubmodelElement::getDataSpecificationReferenc
   return collection.Get<basyx::objectCollection_t>();
 }
 
-void ConnectedSubmodelElement::setDataSpecificationReferences(const basyx::objectCollection_t & references)
-{
-  //Check if all subclasses do the same
-}
+//void ConnectedSubmodelElement::setDataSpecificationReferences(const basyx::objectCollection_t & references)
+//{
+//  //Check if all subclasses do the same
+//}
 
 std::string ConnectedSubmodelElement::getIdShort() const
 {
   return std::string();
 }
 
-void ConnectedSubmodelElement::setIdShort(const std::string & idShort)
-{}
-
 std::string ConnectedSubmodelElement::getCategory() const
 {
   return std::string();
 }
-
-void ConnectedSubmodelElement::setCategory(const std::string & category)
-{}
 
 std::string ConnectedSubmodelElement::getDescription() const
 {
   return std::string();
 }
 
-void ConnectedSubmodelElement::setDescription(const std::string & description)
-{}
-
 basyx::any ConnectedSubmodelElement::getParent() const
 {
   return basyx::any();
 }
 
-void ConnectedSubmodelElement::setParent(const basyx::any & parent)
-{}
-
-void ConnectedSubmodelElement::setQualifier(const basyx::objectCollection_t & qualifiers)
-{}
+//void ConnectedSubmodelElement::setQualifier(const basyx::objectCollection_t & qualifiers)
+//{}
 
 basyx::objectCollection_t ConnectedSubmodelElement::getQualifier() const
 {
@@ -88,8 +76,8 @@ std::string ConnectedSubmodelElement::getHasKindReference() const
   return std::string();
 }
 
-void ConnectedSubmodelElement::setHasKindReference(const std::string & kind)
-{}
+//void ConnectedSubmodelElement::setHasKindReference(const std::string & kind)
+//{}
 
 }
 }

@@ -19,7 +19,7 @@ class IQualifiable
 public:
 	virtual ~IQualifiable() = default;
 
-	virtual void setQualifier(const basyx::objectCollection_t & qualifiers) = 0;
+	//virtual void setQualifier(const basyx::objectCollection_t & qualifiers) = 0;
 	virtual basyx::objectCollection_t getQualifier() const = 0;
 };
 
