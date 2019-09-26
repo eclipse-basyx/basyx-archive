@@ -36,6 +36,9 @@ namespace basyx {
         any()
             : content { nullptr } {};
 
+        any(const char str[]) 
+            : content { std::make_shared<Holder<typename std::remove_cv<typename std::decay<const std::string>::type>::type>>(str) } {};
+
         template <typename T>
         any(const T& t)
             : content { std::make_shared<Holder<typename std::remove_cv<typename std::decay<const T>::type>::type>>(t) } {};

@@ -18,13 +18,17 @@ namespace basyx {
 namespace aas {
 namespace qualifier {
 
+namespace HasDataSpecificationPaths {
+  static constexpr char HASDATASPECIFICATION[] = "hasDataSpecification";
+}
+
 class IHasDataSpecification
 {
 public:
   virtual ~IHasDataSpecification() = default;
 
   virtual basyx::objectCollection_t getDataSpecificationReferences() const = 0;
-  virtual void setDataSpecificationReferences(const basyx::objectCollection_t & references) = 0;
+  //virtual void setDataSpecificationReferences(const basyx::objectCollection_t & references) = 0;
 };
 
 }

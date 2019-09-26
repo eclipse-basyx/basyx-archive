@@ -84,7 +84,9 @@ namespace json {
     }
 
     // basyx::objectCollection_t serializer
-    inline void serialize_helper(json_t& json, const basyx::objectCollection_t& objectCollection)
+    template<typename T>
+    inline void serialize_helper(json_t& json, const std::vector<T> & objectCollection)
+//    inline void serialize_helper(json_t& json, const basyx::objectCollection_t& objectCollection)
     {
         for (const auto& object : objectCollection) {
             json.push_back(object);

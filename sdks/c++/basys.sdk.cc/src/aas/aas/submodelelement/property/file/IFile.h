@@ -7,21 +7,29 @@
 #ifndef BASYX_METAMODEL_IFile_H_
 #define BASYX_METAMODEL_IFile_H_
 
+#include <string>
 
-#include "PathType.h"
-#include "MimeType.h"
+namespace basyx {
+namespace aas {
+namespace submodelelement {
+namespace property {
 
 class IFile
 {
 public:
-	virtual ~IFile() = default;
+  virtual ~IFile() = default;
 
-	virtual void setValue(const PathType & value) = 0;
-	virtual PathType getValue() const = 0;
+  virtual void setValue(const std::string & value) = 0;
+  virtual std::string getValue() const = 0;
 
-	virtual void setMimeType(const MimeType & mimeType) = 0;
-	virtual MimeType getMimeType() const = 0;
+  virtual void setMimeType(const std::string & mimeType) = 0;
+  virtual std::string getMimeType() const = 0;
 };
+
+}
+}
+}
+}
 
 #endif
 

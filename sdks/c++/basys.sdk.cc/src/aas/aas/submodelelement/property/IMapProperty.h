@@ -17,7 +17,7 @@ namespace aas {
 namespace submodelelement {
 namespace property {
 
-class IMapProperty : IProperty
+class IMapProperty
 {
 
 public:
