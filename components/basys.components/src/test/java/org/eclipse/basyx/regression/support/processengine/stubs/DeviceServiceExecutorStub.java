@@ -20,21 +20,15 @@ public class DeviceServiceExecutorStub implements IDeviceServiceExecutor{
 		this.serviceProvider = serviceProvider;
 		this.serviceSubmodelid = "SERVICES";
 		this.params = params;
-		try {
-			System.out.printf("service: %s, executed by device: %s , parameters: ", servicename, serviceProvider);
-			if(params.size() == 0) {
-				System.out.println("[]");
-			}else {
-				for(Object p : params) {
-					System.out.printf("%s, ", p);
-				}
-				System.out.println("");
-				
+		System.out.printf("service: %s, executed by device: %s , parameters: ", servicename, serviceProvider);
+		if (params.size() == 0) {
+			System.out.println("[]");
+		} else {
+			for (Object p : params) {
+				System.out.printf("%s, ", p);
 			}
-			Thread.sleep((int)(Math.random()*3000));
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("");
+
 		}
 		
 		return 1;

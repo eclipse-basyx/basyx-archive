@@ -3,15 +3,13 @@ package org.eclipse.basyx.components.processengine.connector;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.api.manager.IAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
-import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedSubModel;
-import org.eclipse.basyx.vab.core.IConnectorProvider;
 
 
 /**
@@ -23,21 +21,10 @@ import org.eclipse.basyx.vab.core.IConnectorProvider;
  * */
 public abstract class DeviceServiceExecutor implements IDeviceServiceExecutor {
 	
-	protected  ConnectedAssetAdministrationShellManager manager;
+	protected IAssetAdministrationShellManager manager;
 	
 	
-	/**
-	 * private constructor
-	 * create the connected administration shell for data exchange
-	 * */
-	public DeviceServiceExecutor(IAASRegistryService registry, IConnectorProvider provider) {
-
-		//set-up the administration shell manager to create connected aas
-		manager = new ConnectedAssetAdministrationShellManager(registry, provider);
-	};
-	
-	public DeviceServiceExecutor(ConnectedAssetAdministrationShellManager manager) {
-
+	public DeviceServiceExecutor(IAssetAdministrationShellManager manager) {
 		// set-up the administration shell manager to create connected aas
 		this.manager = manager;
 	};

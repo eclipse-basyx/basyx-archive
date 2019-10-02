@@ -21,7 +21,6 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.test.ActivitiRule;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceDelegate;
-import org.eclipse.basyx.regression.support.processengine.executor.ExecutionSequence;
 import org.eclipse.basyx.regression.support.processengine.stubs.BPMNModelFactory;
 import org.eclipse.basyx.regression.support.processengine.stubs.DeviceServiceExecutorStub;
 import org.junit.After;
@@ -81,52 +80,45 @@ public class DynamicActivitiProcessTest {
    * 	  
    * @throws Exception
    */
-  @Test
-  public void testDynamicDeployPath1() throws Exception {
-	  
-	  // 4. Start a process instance
-      Map<String, Object> variables = new HashMap<String, Object>();
-	  variables.put("coilposition", 1);
-      processInstance = activitiRule.getRuntimeService()
-        .startProcessInstanceByKey("my-process", variables);
-      
-      // 5. Check if task is available
-      HistoryService history = activitiRule.getHistoryService();
-	  List<HistoricActivityInstance> activitiInstances = history.createHistoricActivityInstanceQuery().list();
-	
-	assertEquals(ExecutionSequence.expectedSequence1[0], activitiInstances.get(0).getActivityId());
-	assertEquals(ExecutionSequence.expectedSequence1[1], activitiInstances.get(1).getActivityId());
-	assertEquals(ExecutionSequence.expectedSequence1[2], activitiInstances.get(2).getActivityId());
-	assertEquals(ExecutionSequence.expectedSequence1[3], activitiInstances.get(3).getActivityId());
-	assertEquals(ExecutionSequence.expectedSequence1[4], activitiInstances.get(4).getActivityId());
-	assertEquals(ExecutionSequence.expectedSequence1[5], activitiInstances.get(5).getActivityId());
-	assertEquals(ExecutionSequence.expectedSequence1[6], activitiInstances.get(6).getActivityId());
-	
-  }
-    
-    	
-  
-  @Test
-  public void testDynamicDeployPath2() throws Exception {
+	@Test
+	public void testDynamicDeployPath1() throws Exception {
+
 		// 4. Start a process instance
 		Map<String, Object> variables = new HashMap<String, Object>();
-		variables.put("coilposition", 2);
-		processInstance = activitiRule.getRuntimeService()
-		    .startProcessInstanceByKey("my-process", variables);
+		variables.put("coilposition", 1);
+		processInstance = activitiRule.getRuntimeService().startProcessInstanceByKey("my-process", variables);
+
 		// 5. Check if task is available
 		HistoryService history = activitiRule.getHistoryService();
 		List<HistoricActivityInstance> activitiInstances = history.createHistoricActivityInstanceQuery().list();
-		
-		assertEquals(ExecutionSequence.expectedSequence2[0], activitiInstances.get(9).getActivityId());
-		assertEquals(ExecutionSequence.expectedSequence2[1], activitiInstances.get(10).getActivityId());
-		assertEquals(ExecutionSequence.expectedSequence2[2], activitiInstances.get(11).getActivityId());
-		assertEquals(ExecutionSequence.expectedSequence2[3], activitiInstances.get(12).getActivityId());
-		assertEquals(ExecutionSequence.expectedSequence2[4], activitiInstances.get(13).getActivityId());
-		assertEquals(ExecutionSequence.expectedSequence2[5], activitiInstances.get(14).getActivityId());
-		assertEquals(ExecutionSequence.expectedSequence2[6], activitiInstances.get(15).getActivityId());
-		assertEquals(ExecutionSequence.expectedSequence2[7], activitiInstances.get(16).getActivityId());
-	
-  }
+
+		// Check, if the last executed activities are correct
+		String[] expectedSequence = new String[] { "t1", "t3", "t4", "t5", "t6", "t7", "end" };
+		for (int i = 0; i < expectedSequence.length; i++) {
+			// -2: # of gateway activities
+			int actualIndex = activitiInstances.size() - expectedSequence.length + i - 2;
+			assertEquals(expectedSequence[i], activitiInstances.get(actualIndex).getActivityId());
+		}
+	}
+	  
+	@Test
+	public void testDynamicDeployPath2() throws Exception {
+		// 4. Start a process instance
+		Map<String, Object> variables = new HashMap<String, Object>();
+		variables.put("coilposition", 2);
+		processInstance = activitiRule.getRuntimeService().startProcessInstanceByKey("my-process", variables);
+		// 5. Check if task is available
+		HistoryService history = activitiRule.getHistoryService();
+		List<HistoricActivityInstance> activitiInstances = history.createHistoricActivityInstanceQuery().list();
+
+		// Check, if the last executed activities are correct
+		String[] expectedSequence = new String[] { "t2", "t1", "t3", "t4", "t5", "t6", "t7", "end" };
+		for (int i = 0; i < expectedSequence.length; i++) {
+			// -2: # of gateway activities
+			int actualIndex = activitiInstances.size() - expectedSequence.length + i - 2;
+			assertEquals(expectedSequence[i], activitiInstances.get(actualIndex).getActivityId());
+		}
+	}
   
 
     

@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
+import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
 import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
@@ -79,7 +80,9 @@ public class TestAASServicecall {
 		connectorProvider.addMapping("", provider);
 		
 		// create the service executor that calls the services using aas
-		serviceExecutor = new CoilcarServiceExecutor(registry, connectorProvider);
+		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(registry,
+				connectorProvider);
+		serviceExecutor = new CoilcarServiceExecutor(manager);
 		
 	}
 	
