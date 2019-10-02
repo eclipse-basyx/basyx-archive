@@ -1,15 +1,13 @@
 package org.eclipse.basyx.aas.backend.connected.aas.submodelelement;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.ISubmodelElementCollection;
-import org.eclipse.basyx.aas.backend.connected.facades.ConnectedVABElementContainerFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasDataSpecificationFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasKindFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.HasSemanticsFacade;
@@ -27,15 +25,12 @@ import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
  *
  */
 public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement implements ISubmodelElementCollection {
-	ConnectedVABElementContainerFacade facade;
-
 	public ConnectedSubmodelElementCollection(VABElementProxy proxy) {
 		super(proxy);
-		facade = new ConnectedVABElementContainerFacade(proxy);
 	}
 
 	@Override
-	public HashSet<IReference> getDataSpecificationReferences() {
+	public Set<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(getElem()).getDataSpecificationReferences();
 	}
 
@@ -75,14 +70,15 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	}
 
 	@Override
-	public void setValue(ArrayList<?> value) {
+	public void setValue(List<Object> value) {
 		getProxy().setModelPropertyValue(SingleProperty.VALUE, value);
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public ArrayList<?> getValue() {
-		return (ArrayList<?>) getProxy().getModelPropertyValue(SingleProperty.VALUE);
+	public List<Object> getValue() {
+		return (List<Object>) getProxy().getModelPropertyValue(SingleProperty.VALUE);
 	}
 
 	@Override
@@ -107,13 +103,13 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	}
 
 	@Override
-	public void setElements(HashMap<String, ISubmodelElement> value) {
+	public void setElements(Map<String, ISubmodelElement> value) {
 		getProxy().setModelPropertyValue(SubModel.SUBMODELELEMENT, value);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public HashMap<String, ISubmodelElement> getElements() {
-		return (HashMap<String, ISubmodelElement>) getProxy().getModelPropertyValue(SubModel.SUBMODELELEMENT);
+	public Map<String, ISubmodelElement> getElements() {
+		return (Map<String, ISubmodelElement>) getProxy().getModelPropertyValue(SubModel.SUBMODELELEMENT);
 	}
 }

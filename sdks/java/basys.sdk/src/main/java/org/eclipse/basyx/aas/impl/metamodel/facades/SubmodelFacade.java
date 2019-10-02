@@ -1,8 +1,8 @@
 package org.eclipse.basyx.aas.impl.metamodel.facades;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
@@ -223,11 +223,11 @@ public class SubmodelFacade implements ISubModel {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public HashSet<IReference> getDataSpecificationReferences() {
-		return (HashSet<IReference>) map.get(HasDataSpecification.HASDATASPECIFICATION);
+	public Set<IReference> getDataSpecificationReferences() {
+		return (Set<IReference>) map.get(HasDataSpecification.HASDATASPECIFICATION);
 	}
 
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+	public void setDataSpecificationReferences(Set<IReference> ref) {
 		map.put(HasDataSpecification.HASDATASPECIFICATION, ref);
 	}
 

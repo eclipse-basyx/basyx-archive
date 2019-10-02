@@ -151,11 +151,11 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@Override
-	public HashSet<IReference> getDataSpecificationReferences() {
+	public Set<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
 	}
 
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+	public void setDataSpecificationReferences(Set<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
 	}
 

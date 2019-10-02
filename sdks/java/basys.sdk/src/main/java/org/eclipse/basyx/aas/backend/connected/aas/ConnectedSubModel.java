@@ -1,7 +1,7 @@
 package org.eclipse.basyx.aas.backend.connected.aas;
 
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
@@ -55,8 +55,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 	}
 
 	@Override
-	public HashSet<IReference> getDataSpecificationReferences() {
-
+	public Set<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(getElem()).getDataSpecificationReferences();
 	}
 

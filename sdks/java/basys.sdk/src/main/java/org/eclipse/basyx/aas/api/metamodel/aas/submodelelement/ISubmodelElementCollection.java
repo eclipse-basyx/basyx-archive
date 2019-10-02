@@ -1,7 +1,7 @@
 package org.eclipse.basyx.aas.api.metamodel.aas.submodelelement;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for SubmodelElementCollection
@@ -10,10 +10,9 @@ import java.util.HashMap;
 */
 public interface ISubmodelElementCollection extends ISubmodelElement {
 
+	public void setValue(List<Object> value);
 	
-	public void setValue(ArrayList<?> value);
-	
-	public ArrayList<?> getValue();
+	public List<Object> getValue();
 	
 	public void setOrdered(boolean value);
 	
@@ -23,7 +22,7 @@ public interface ISubmodelElementCollection extends ISubmodelElement {
 	
 	public boolean isAllowDuplicates();
 	
-	public void setElements(HashMap<String, ISubmodelElement> value);
+	public void setElements(Map<String, ISubmodelElement> value);
 	
-	public HashMap<String, ISubmodelElement> getElements();
+	public Map<String, ISubmodelElement> getElements();
 }

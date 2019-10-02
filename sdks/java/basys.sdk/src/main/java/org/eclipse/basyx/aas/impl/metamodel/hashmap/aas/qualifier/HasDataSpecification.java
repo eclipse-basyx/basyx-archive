@@ -2,6 +2,7 @@ package org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IHasDataSpecification;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
@@ -31,17 +32,17 @@ public class HasDataSpecification extends HashMap<String, Object> implements IHa
 		put(HASDATASPECIFICATION, new HashSet<Reference>());
 	}
 
-	public HasDataSpecification(HashSet<IReference> ref) {
+	public HasDataSpecification(Set<IReference> ref) {
 		// Default values
 		put(HASDATASPECIFICATION, ref);
 	}
 
 	@Override
-	public HashSet<IReference> getDataSpecificationReferences() {
+	public Set<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
 	}
 
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+	public void setDataSpecificationReferences(Set<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
 	}
 }

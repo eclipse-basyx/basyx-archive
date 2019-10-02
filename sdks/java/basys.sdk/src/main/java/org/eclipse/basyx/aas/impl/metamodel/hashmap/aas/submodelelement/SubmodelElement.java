@@ -1,7 +1,6 @@
 package org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint;
@@ -30,11 +29,11 @@ public abstract class SubmodelElement extends HashMap<String, Object> implements
 	}
 
 	@Override
-	public HashSet<IReference> getDataSpecificationReferences() {
+	public Set<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
 	}
 
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+	public void setDataSpecificationReferences(Set<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
 	}
 

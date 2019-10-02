@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IKey;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
@@ -40,7 +41,7 @@ public class TransformHasDataSpecification {
 			Keyset.add(TransformKey.transformKey((Map<String, Object>) keyObject));
 		}
 		IReference ref = new Reference(Keyset);
-		HashSet<IReference> refSet = new HashSet<IReference>();
+		Set<IReference> refSet = new HashSet<>();
 		refSet.add(ref);
 		return new HasDataSpecification(refSet);
 	}

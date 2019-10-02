@@ -1,6 +1,6 @@
 package org.eclipse.basyx.aas.api.metamodel.aas.parts;
 
-import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IReferable;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
@@ -13,5 +13,5 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 */
 
 public interface IConceptDictionary extends IReferable {
-	public HashSet<IReference> getConceptDescription();
+	public Set<IReference> getConceptDescription();
 }

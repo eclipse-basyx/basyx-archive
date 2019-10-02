@@ -1,6 +1,5 @@
 package org.eclipse.basyx.aas.backend.connected.aas.submodelelement;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,7 +50,7 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 	}
 
 	@Override
-	public HashSet<IReference> getDataSpecificationReferences() {
+	public Set<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(getElem()).getDataSpecificationReferences();
 	}
 

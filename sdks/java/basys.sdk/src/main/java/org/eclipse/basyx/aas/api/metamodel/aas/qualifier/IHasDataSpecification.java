@@ -1,6 +1,6 @@
 package org.eclipse.basyx.aas.api.metamodel.aas.qualifier;
 
-import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 
@@ -12,5 +12,5 @@ import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 */
 
 public interface IHasDataSpecification {
-	public HashSet<IReference> getDataSpecificationReferences();
+	public Set<IReference> getDataSpecificationReferences();
 }

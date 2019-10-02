@@ -1,7 +1,7 @@
 package org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.parts;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IAsset;
@@ -62,11 +62,11 @@ public class Asset extends HashMap<String, Object> implements IAsset {
 	
 
 	@Override
-	public HashSet<IReference> getDataSpecificationReferences() {
+	public Set<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
 	}
 	
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+	public void setDataSpecificationReferences(Set<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
 		
 	}

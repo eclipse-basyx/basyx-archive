@@ -1,6 +1,5 @@
 package org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint;
@@ -49,12 +48,12 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	}
 
 	@Override
-	public HashSet<IReference> getDataSpecificationReferences() {
+	public Set<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
 	}
 
 	@Override
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+	public void setDataSpecificationReferences(Set<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
 	}
 

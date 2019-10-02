@@ -2,6 +2,7 @@ package org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.parts;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IConceptDescription;
@@ -35,13 +36,12 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 	}
 
 	@Override
-	public HashSet<IReference> getDataSpecificationReferences() {
+	public Set<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
 	}
 
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+	public void setDataSpecificationReferences(Set<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
-
 	}
 
 	@Override
@@ -56,7 +56,6 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 
 	public void setAdministration(String version, String revision) {
 		new IdentifiableFacade(this).setAdministration(version, revision);
-
 	}
 
 	public void setIdentification(String idType, String id) {
@@ -69,9 +68,8 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 		return new ConceptDescriptionFacade(this).getisCaseOf();
 	}
 
-	public void setIscaseOf(HashSet<String> ref) {
+	public void setIscaseOf(Set<String> ref) {
 		new ConceptDescriptionFacade(this).setIscaseOf(ref);
-
 	}
 
 	@Override
@@ -106,12 +104,10 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 
 	public void setDescription(String description) {
 		new ReferableFacade(this).setDescription(description);
-
 	}
 
 	public void setParent(IReference obj) {
 		new ReferableFacade(this).setParent(obj);
-
 	}
 
 }

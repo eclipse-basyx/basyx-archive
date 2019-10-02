@@ -2,6 +2,7 @@ package org.eclipse.basyx.aas.impl.metamodel.facades;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
@@ -62,8 +63,8 @@ public class ConceptDictionaryFacade implements IConceptDictionary {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public HashSet<IReference> getConceptDescription() {
-		return (HashSet<IReference>) map.get(ConceptDictionary.CONCEPTDESCRIPTION);
+	public Set<IReference> getConceptDescription() {
+		return (Set<IReference>) map.get(ConceptDictionary.CONCEPTDESCRIPTION);
 	}
 
 	public void setConceptDescription(HashSet<String> ref) {

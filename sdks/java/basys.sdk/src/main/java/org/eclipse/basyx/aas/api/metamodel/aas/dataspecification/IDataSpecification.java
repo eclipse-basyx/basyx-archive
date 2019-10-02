@@ -12,7 +12,7 @@ public interface IDataSpecification {
 	public String getPreferredName();
 	public String getShortName();
 	public String getUnit();
-	public  IReference getUnitId();
+	public IReference getUnitId();
 	public String getSourceOfDefinition();
 	public String getSymbol();
 	public String getDataType();

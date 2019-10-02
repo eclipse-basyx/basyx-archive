@@ -81,7 +81,7 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 	}
 
 	@Override
-	public HashSet<IReference> getConceptDescription() {
+	public Set<IReference> getConceptDescription() {
 		return new ConceptDictionaryFacade(this).getConceptDescription();
 	}
 

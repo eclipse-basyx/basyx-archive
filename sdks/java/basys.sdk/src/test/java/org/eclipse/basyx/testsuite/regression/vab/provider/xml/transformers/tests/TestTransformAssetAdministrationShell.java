@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -114,7 +113,7 @@ public class TestTransformAssetAdministrationShell {
 		Set<IConceptDictionary> conceptDictionary = assetSet.get(0).getConceptDictionary();
 		for (IConceptDictionary iConceptDictionary : conceptDictionary) {
 			assertEquals(iConceptDictionary.getIdshort(), "SampleDic");
-			HashSet<IReference> conceptDescription = iConceptDictionary.getConceptDescription();
+			Set<IReference> conceptDescription = iConceptDictionary.getConceptDescription();
 			for (IReference iConceptDictionary2 : conceptDescription) {
 				assertEquals(iConceptDictionary2.toString(),"{keys=[{idType=URI, type=ConceptDescription, value=www.festo.com/dic/08111234, local=true}]}");
 				break;

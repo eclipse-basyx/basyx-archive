@@ -2,6 +2,7 @@ package org.eclipse.basyx.aas.impl.metamodel.facades;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.identifier.IIdentifier;
 import org.eclipse.basyx.aas.api.metamodel.aas.parts.IConceptDescription;
@@ -33,13 +34,12 @@ public class ConceptDescriptionFacade implements IConceptDescription {
 	@Override
 	@SuppressWarnings("unchecked")
 
-	public HashSet<IReference> getDataSpecificationReferences() {
-		return (HashSet<IReference>) map.get(HasDataSpecification.HASDATASPECIFICATION);
+	public Set<IReference> getDataSpecificationReferences() {
+		return (Set<IReference>) map.get(HasDataSpecification.HASDATASPECIFICATION);
 	}
 
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+	public void setDataSpecificationReferences(Set<IReference> ref) {
 		map.put(HasDataSpecification.HASDATASPECIFICATION, ref);
-
 	}
 
 	@Override
@@ -64,12 +64,11 @@ public class ConceptDescriptionFacade implements IConceptDescription {
 
 	@Override
 	@SuppressWarnings("unchecked")
-
 	public HashSet<String> getisCaseOf() {
 		return (HashSet<String>) map.get(ConceptDescription.ISCASEOF);
 	}
 
-	public void setIscaseOf(HashSet<String> ref) {
+	public void setIscaseOf(Set<String> ref) {
 		map.put(ConceptDescription.ISCASEOF, ref);
 
 	}

@@ -1,7 +1,6 @@
 package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.operation;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -109,7 +108,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	}
 
 	@Override
-	public HashSet<IReference> getDataSpecificationReferences() {
+	public Set<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(getElem()).getDataSpecificationReferences();
 	}
 

@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -93,7 +93,7 @@ public class TestTransformConceptDescription {
 		assertEquals(conceptDescriptionArrayList.size(), 2);
 		ConceptDescription transformConceptDescription = TransformConceptDescription.transformConceptDescription((Map<String, Object>) conceptDescriptionArrayList.get(0));
 		assertEquals(transformConceptDescription.getIdentification().getIdType(),"URI");
-		HashSet<IReference> dataSpecificationReferences = transformConceptDescription.getDataSpecificationReferences();
+		Set<IReference> dataSpecificationReferences = transformConceptDescription.getDataSpecificationReferences();
 		for (IReference iReference : dataSpecificationReferences) {
 			Map<String, Object> map=(Map<String, Object>)iReference;
 			assertTrue(map.get("keys")!=null);

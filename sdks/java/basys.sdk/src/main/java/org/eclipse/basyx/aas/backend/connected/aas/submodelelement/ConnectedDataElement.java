@@ -1,6 +1,5 @@
 package org.eclipse.basyx.aas.backend.connected.aas.submodelelement;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint;
@@ -25,7 +24,7 @@ public class ConnectedDataElement extends ConnectedSubmodelElement implements ID
 	}
 
 	@Override
-	public HashSet<IReference> getDataSpecificationReferences() {
+	public Set<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(getElem()).getDataSpecificationReferences();
 	}
 

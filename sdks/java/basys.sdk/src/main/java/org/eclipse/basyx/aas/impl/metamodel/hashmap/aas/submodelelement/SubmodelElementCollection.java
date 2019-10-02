@@ -2,8 +2,8 @@ package org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint;
@@ -62,12 +62,12 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	}
 
 	@Override
-	public HashSet<IReference> getDataSpecificationReferences() {
+	public Set<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
 	}
 
 	@Override
-	public void setDataSpecificationReferences(HashSet<IReference> ref) {
+	public void setDataSpecificationReferences(Set<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
 
 	}
@@ -150,14 +150,15 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	}
 
 	@Override
-	public void setValue(ArrayList<?> value) {
+	public void setValue(List<Object> value) {
 		put(SingleProperty.VALUE, value);
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public ArrayList<?> getValue() {
-		return (ArrayList<?>) get(SingleProperty.VALUE);
+	public List<Object> getValue() {
+		return (List<Object>) get(SingleProperty.VALUE);
 	}
 
 	@Override
@@ -183,13 +184,13 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	}
 
 	@Override
-	public void setElements(HashMap<String, ISubmodelElement> value) {
+	public void setElements(Map<String, ISubmodelElement> value) {
 		put(SubModel.SUBMODELELEMENT, value);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public HashMap<String, ISubmodelElement> getElements() {
-		return (HashMap<String, ISubmodelElement>) get(SubModel.SUBMODELELEMENT);
+	public Map<String, ISubmodelElement> getElements() {
+		return (Map<String, ISubmodelElement>) get(SubModel.SUBMODELELEMENT);
 	}
 }
