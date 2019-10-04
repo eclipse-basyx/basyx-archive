@@ -1,7 +1,9 @@
 package org.eclipse.basyx.components.servlet.submodel;
 
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
+import java.util.HashMap;
+
 import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
+import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
 
 /**
  * Empty VAB provider servlet. It realizes a VAB lambda provider on its endpoint.
@@ -9,7 +11,7 @@ import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
  * @author kuhn
  *
  */
-public class EmptyVABLambdaElementServlet extends VABHTTPInterface<VirtualPathModelProvider> {
+public class VABLambdaServlet extends VABHTTPInterface<VABLambdaProvider> {
 
 	/**
 	 * Version information to identify the version of serialized instances
@@ -19,9 +21,9 @@ public class EmptyVABLambdaElementServlet extends VABHTTPInterface<VirtualPathMo
 	/**
 	 * Constructor
 	 */
-	public EmptyVABLambdaElementServlet() {
+	public VABLambdaServlet() {
 		// Invoke base constructor, instantiate a VAB object
 		// - This object initially is empty, it is therefore described by an empty map
-		super(new VirtualPathModelProvider());
+		super(new VABLambdaProvider(new HashMap<String, Object>()));
 	}
 }

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
-import org.eclipse.basyx.components.servlet.submodel.EmptyVABLambdaElementServlet;
+import org.eclipse.basyx.components.servlet.submodel.VABLambdaServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
@@ -45,7 +45,7 @@ public class RunAASPropertiesCRUDAccessSnippet {
 				// - BaSys topology with one AAS Server and one SQL directory
 				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory().
 					// Deploy example specific servlets to Tomcat server in this context
-					addServletMapping("/Testsuite/components/BaSys/1.0/devicestatusVAB/*", new EmptyVABLambdaElementServlet())
+					addServletMapping("/Testsuite/components/BaSys/1.0/devicestatusVAB/*", new VABLambdaServlet())
 			);
 
 	

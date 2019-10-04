@@ -76,7 +76,8 @@ public class ConnectToRemoteAAS {
 		// Create AAS Registry to store meta-infomation using aas descriptor
 		// This is a pre-configured aas registry that resolves urn to aas-descriptor
 		ExampleAASRegistry registry = new ExampleAASRegistry();
-		registry.addAASMapping("aas-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleAAS");
+		registry.addAASMapping("aas-001",
+				"http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleAAS/aas");
 
 		// Create manager using the directory stub an the HTTPConnectorProvider
 		// - Connect to VAB object by ID. The connection manager looks up this ID in

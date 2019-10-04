@@ -1,6 +1,6 @@
 package org.eclipse.basyx.examples.snippets.aas.submodels;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 import java.util.Map;
@@ -97,17 +97,16 @@ public class ConnectToAASSubModelVAB {
 	protected VABConnectionManager connManager = new VABConnectionManager(
 			// Add example specific mappings
 			new ExamplesPreconfiguredDirectory()
-			    // - SDK connectors encapsulate relative path to sub model (/aas/submodels/sm-001)
-				.addMapping("aas-001",    "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
-			    .addMapping("sm-001",     "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
+				.addMapping("aas-001",    "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas")
+			    .addMapping("sm-001",     "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas/submodels/sm-001")
 			    .addMapping("sm-001VAB",  "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas/submodels/sm-001"),
 			// We connect via HTTP
 			new HTTPConnectorProvider());
 
 	protected ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(
 			new ExampleAASRegistry()
-					.addAASMapping("aas-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
-					.addSubmodelMapping("aas-001", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel"),
+					.addAASMapping("aas-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas")
+					.addSubmodelMapping("aas-001", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas/submodels/sm-001"),
 			// We connect via HTTP
 			new HTTPConnectorProvider());
 	
@@ -159,13 +158,13 @@ public class ConnectToAASSubModelVAB {
 
 			
 			// Check results
-			assertTrue(smID.equals("sm-001"));
-			assertTrue(prop1Id.equals("prop1"));
-			assertTrue(prop1Val == 234);
-			assertTrue(prop3Val == 17);
-			assertTrue(prop2Id.equals("prop2"));
-			assertTrue(prop211 == 123);
-			assertTrue(changedProp == 456);
+			assertEquals("sm-001", smID);
+			assertEquals("prop1", prop1Id);
+			assertEquals(234, prop1Val);
+			assertEquals(17, prop3Val);
+			assertEquals("prop2", prop2Id);
+			assertEquals(123, prop211);
+			assertEquals(456, changedProp);
 		}
 	}
 }

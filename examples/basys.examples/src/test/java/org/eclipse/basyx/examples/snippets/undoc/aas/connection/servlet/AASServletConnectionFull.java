@@ -153,13 +153,10 @@ public class AASServletConnectionFull {
 	protected ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(
 			// Add example specific mappings
 			new ExampleAASRegistry()
-			    // - SDK connectors encapsulate relative path to sub model (/aas/submodels/sm-001)
-					.addAASMapping("aas-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
-					.addSubmodelMapping("aas-001", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
-			    
-			    // - SDK connectors encapsulate relative path to sub model (/aas/submodels/sm-001)
-					.addAASMapping("aas-001M", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual")
-					.addSubmodelMapping("aas-001M", "sm-001M", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual"),
+					.addAASMapping("aas-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas")
+					.addSubmodelMapping("aas-001", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas/submodels/sm-001")
+					.addAASMapping("aas-001M", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual/aas")
+					.addSubmodelMapping("aas-001M", "sm-001M", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual/aas/submodels/sm-001M"),
 			// We connect via HTTP
 			new HTTPConnectorProvider());
 

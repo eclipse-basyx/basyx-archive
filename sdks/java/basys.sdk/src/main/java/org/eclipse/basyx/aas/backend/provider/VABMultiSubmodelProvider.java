@@ -190,7 +190,11 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	public void createValue(String path, Object newValue) throws Exception {
 		String[] pathElements = VABPathTools.splitPath(path);
 		String propertyPath = VABPathTools.buildPath(pathElements, 3);
-		if (path.equals("/aas/submodels")) {
+		if (pathElements.length == 1 && pathElements[0].equals("aas") ) {
+			// Creates a new AAS
+			Map<String, Object> aas = (HashMap<String, Object>) newValue;
+			aas_provider = new VirtualPathModelProvider(aas);
+		} else if (pathElements.length == 2 && pathElements[0].equals("aas") && pathElements[1].equals("submodels")) {
 			// Adds a new submodel to to the registered AAS
 			VABModelMap<Object> sm = (VABModelMap<Object>) newValue;
 			VirtualPathModelProvider smProvider = new VirtualPathModelProvider(sm);

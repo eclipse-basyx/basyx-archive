@@ -5,9 +5,10 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.api.webserviceclient.WebServiceJSONClient;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
-import org.eclipse.basyx.components.servlet.submodel.DynamicModelProviderServlet;
+import org.eclipse.basyx.components.servlet.submodel.AASServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
@@ -37,7 +38,7 @@ public class DynamicSubModelDeploymentHTTP {
 	protected VABConnectionManager connManager = new VABConnectionManager(
 			new ExamplesPreconfiguredDirectory()
 				// Add example specific mappings
-			    .addMapping("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003",  "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/"),
+			    .addMapping("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003",  "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository"),
 			new HTTPConnectorProvider());
 
 	
@@ -56,7 +57,8 @@ public class DynamicSubModelDeploymentHTTP {
 				// - BaSys topology with one AAS Server and one SQL directory
 				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory().
 					// Deploy example specific servlets to Apache Tomcat server in this context
-					addServletMapping("/Testsuite/components/BaSys/1.0/dynamicModelRepository/*", new DynamicModelProviderServlet())
+					addServletMapping("/Testsuite/components/BaSys/1.0/dynamicModelRepository/*",
+							new AASServlet(new AssetAdministrationShell()))
 			);
 
 	
@@ -89,7 +91,7 @@ public class DynamicSubModelDeploymentHTTP {
 		submodel.addSubModelElement(prop2);
 
 		// Transfer sub model to server
-		connSubModel1.createValue("aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003", submodel);
+		connSubModel1.createValue("/aas/submodels", submodel);
 
 		
 		// Web service client accesses AAS using HTTP REST calls
@@ -97,13 +99,14 @@ public class DynamicSubModelDeploymentHTTP {
 		
 		// Read property values using the WebServiceJSONClient class. 
 		// - Returned property contains meta data. The actual property is stored in property "entity", property value is in entity property "value"
-		String smId     = (String) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003/idShort")).get("entity");
+		String smEndpoint = "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003";
+		String smId = (String) ((Map<String, Object>) jsonClient.get(smEndpoint + "/idShort")).get("entity");
 		int prop1Val = (int) ((Map<String, Object>) ((Map<String, Object>) jsonClient
-				.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003/dataElements/prop1")).get("entity")).get("value");
+				.get(smEndpoint + "/dataElements/prop1")).get("entity")).get("value");
 		String prop1Id = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient
-				.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003/dataElements/prop1")).get("entity")).get("idShort");
+				.get(smEndpoint + "/dataElements/prop1")).get("entity")).get("idShort");
 		String prop2Val = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient
-				.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003/dataElements/prop2")).get("entity")).get("value");
+				.get(smEndpoint + "/dataElements/prop2")).get("entity")).get("value");
 
 		
 		// Check results

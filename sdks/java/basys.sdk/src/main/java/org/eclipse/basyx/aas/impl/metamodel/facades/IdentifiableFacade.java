@@ -32,9 +32,10 @@ public class IdentifiableFacade implements IIdentifiable {
 		return (IAdministrativeInformation) map.get(Identifiable.ADMINISTRATION);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IIdentifier getIdentification() {
-		return (IIdentifier) map.get(Identifiable.IDENTIFICATION);
+		return new IdentifierFacade((Map<String, Object>) map.get(Identifiable.IDENTIFICATION));
 	}
 
 	public void setAdministration(String version, String revision) {

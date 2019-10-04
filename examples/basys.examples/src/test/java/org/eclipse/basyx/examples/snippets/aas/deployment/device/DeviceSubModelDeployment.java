@@ -54,7 +54,7 @@ public class DeviceSubModelDeployment {
 		// Export sub model via BaSyx server
 		VirtualPathModelProvider modelProvider = new VirtualPathModelProvider(submodel);
 		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider("urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003", modelProvider);
-		BaSyxTCPServer<VABMultiSubmodelProvider> server = new BaSyxTCPServer<VABMultiSubmodelProvider>(aasProvider, 9998);
+		BaSyxTCPServer<VABMultiSubmodelProvider> server = new BaSyxTCPServer<>(aasProvider, 9998);
 		// - Start local BaSyx/TCP server
 		server.start();
 		
@@ -62,7 +62,10 @@ public class DeviceSubModelDeployment {
 		// Create connected aas manager to connect with the dynamic server
 		// We pre-register the aas endpoints to the dynamic BaSyx server
 		ExampleAASRegistry registry = new ExampleAASRegistry();
-		registry.addSubmodelMapping("", "urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003", "basyx://localhost:9998");
+		String smRawUrn = "urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003";
+		String aasRawUrn = "urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#003";
+		registry.addAASMapping(aasRawUrn, "basyx://localhost:9998/aas/");
+		registry.addSubmodelMapping(aasRawUrn, smRawUrn, "basyx://localhost:9998/aas/submodels/" + smRawUrn);
 		
 		// Create manager using the directory stub an the HTTPConnectorProvider
 		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(registry,
@@ -71,7 +74,7 @@ public class DeviceSubModelDeployment {
 		
 		// Create and connect SDK connector
 		// - Retrieve sub model
-		ISubModel subModel = manager.retrieveSubModel(new ModelUrn(""), "urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003");
+		ISubModel subModel = manager.retrieveSubModel(new ModelUrn(aasRawUrn), smRawUrn);
 		
 		// Retrieve sub model values and compare to expected values
 		String submodelId = subModel.getId();

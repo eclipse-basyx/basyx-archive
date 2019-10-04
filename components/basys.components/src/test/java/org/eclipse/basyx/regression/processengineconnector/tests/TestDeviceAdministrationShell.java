@@ -42,9 +42,9 @@ public class TestDeviceAdministrationShell {
 		AASRegistryStub registry = new AASRegistryStub();
 		ModelUrn coilcarUrn = new ModelUrn("coilcar");
 		AASDescriptor ccDescriptor = new AASDescriptor("coilcar", IdentifierType.URI,
-				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/");
+				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas");
 		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", IdentifierType.URI,
-				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/");
+				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas/submodels/submodel1");
 		ccDescriptor.addSubmodelDescriptor(smDescriptor);
 		registry.register(coilcarUrn, ccDescriptor);
 		

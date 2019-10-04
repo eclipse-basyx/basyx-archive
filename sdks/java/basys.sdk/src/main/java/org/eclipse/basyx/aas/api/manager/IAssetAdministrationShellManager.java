@@ -65,5 +65,5 @@ public interface IAssetAdministrationShellManager {
 	 * 
 	 * @param urn
 	 */
-	void createSubModel(ModelUrn aasUrn, String subModelId, SubModel submodel);
+	void createSubModel(ModelUrn aasUrn, SubModel submodel);
 }

@@ -9,6 +9,8 @@ import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
@@ -18,6 +20,7 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.IdentifierTyp
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
 import org.eclipse.basyx.testsuite.support.vab.stub.ConnectorProviderStub;
+import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,8 +59,8 @@ public class TestConnectedAssetAdministrationShellManager {
 		ModelUrn urn = new ModelUrn(aasId);
 
 		// Register AAS at directory
-		registry.register(urn, new AASDescriptor(aasId, IdentifierType.URI, ""));
-		connectorProvider.addMapping("", new VABHashmapProvider(new HashMap<>()));
+		registry.register(urn, new AASDescriptor(aasId, IdentifierType.URI, "/aas"));
+		connectorProvider.addMapping("/aas", new VABHashmapProvider(new HashMap<>()));
 
 		// Create an AAS containing a reference to the created SubModel
 		createAAS(urn, aasId);
@@ -79,10 +82,13 @@ public class TestConnectedAssetAdministrationShellManager {
 		ModelUrn urn = new ModelUrn(aasId);
 
 		// Register AAS at directory
-		AASDescriptor desc = new AASDescriptor(aasId, IdentifierType.URI, "");
-		desc.addSubmodelDescriptor(new SubmodelDescriptor(smId, IdentifierType.URI, ""));
+		AASDescriptor desc = new AASDescriptor(aasId, IdentifierType.URI, "/aas");
+		desc.addSubmodelDescriptor(new SubmodelDescriptor(smId, IdentifierType.URI, "/aas/submodels/" + smId));
 		registry.register(urn, desc);
-		connectorProvider.addMapping("", new VABHashmapProvider(new HashMap<>()));
+		IModelProvider provider = new VABMultiSubmodelProvider(
+				new VirtualPathModelProvider(new AssetAdministrationShell()));
+		connectorProvider.addMapping("/aas", provider);
+		connectorProvider.addMapping("/aas/submodels/" + smId, provider);
 
 		// Create sub model
 		SubModel submodel = new SubModel();
@@ -97,7 +103,7 @@ public class TestConnectedAssetAdministrationShellManager {
 		prop1.setId("prop2");
 		submodel.addSubModelElement(prop2);
 
-		manager.createSubModel(urn, smId, submodel);
+		manager.createSubModel(urn, submodel);
 
 		ISubModel sm = manager.retrieveSubModel(urn, smId);
 		assertEquals(smId, sm.getId());

@@ -18,15 +18,15 @@ public class ExampleAASRegistry extends AASRegistryStub {
 
 
 
-	public ExampleAASRegistry addSubmodelMapping(String rawurn, String submodelid, String endpoint) {
+	public ExampleAASRegistry addSubmodelMapping(String rawAASUrn, String submodelid, String endpoint) {
 		AASDescriptor aasDescriptor;
-		ModelUrn aasUrn = new ModelUrn(rawurn);
+		ModelUrn aasUrn = new ModelUrn(rawAASUrn);
 		SubmodelDescriptor smDes = new SubmodelDescriptor(submodelid, IdentifierType.URI, endpoint);
 
 		if (descriptorMap.keySet().contains(aasUrn.getEncodedURN())) {
 			aasDescriptor = descriptorMap.get(aasUrn.getEncodedURN());
 		} else {
-			aasDescriptor = new AASDescriptor(rawurn, IdentifierType.URI, endpoint);
+			throw new RuntimeException("AASDescriptor for " + rawAASUrn + " missing");
 		}
 		aasDescriptor.addSubmodelDescriptor(smDes);
 

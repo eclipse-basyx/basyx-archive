@@ -72,9 +72,9 @@ public class TestConnectedAssetAdministrationShell {
 		// Create AAS registry
 		IAASRegistryService registry = new AASRegistryStub();
 		// Create AAS Descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor(aasId, IdentifierType.URI, "");
+		AASDescriptor aasDescriptor = new AASDescriptor(aasId, IdentifierType.URI, "/aas");
 		// Create Submodel Descriptor
-		SubmodelDescriptor smDescriptor = new SubmodelDescriptor(smId, IdentifierType.URI, "");
+		SubmodelDescriptor smDescriptor = new SubmodelDescriptor(smId, IdentifierType.URI, "/aas/submodels/" + smId);
 		// Add Submodel descriptor to aas descriptor
 		aasDescriptor.addSubmodelDescriptor(smDescriptor);
 

@@ -1,7 +1,6 @@
 package org.eclipse.basyx.aas.backend.connected.aas;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,7 +13,6 @@ import org.eclipse.basyx.aas.api.metamodel.aas.parts.IView;
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.aas.api.metamodel.aas.reference.IReference;
 import org.eclipse.basyx.aas.api.metamodel.aas.security.ISecurity;
-import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.backend.connected.ConnectedVABModelMap;
 import org.eclipse.basyx.aas.impl.metamodel.facades.ConceptDictionaryFacade;
@@ -123,28 +121,14 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	@Override
 	public Map<String, ISubModel> getSubModels() {
 
-		Set<Map<?, ?>> refs = null;
+		Set<Map<?, ?>> submodels = null;
 		Map<String, ISubModel> ret = new HashMap<>();
 
-		try {
-			// Java getSubmodels
-			refs = (Set<Map<?, ?>>) getProxy().getModelPropertyValue(AssetAdministrationShell.SUBMODEL);
-			for (Map<?, ?> key : refs) {
-				String id = (String) ((Map<?, ?>) ((List<?>) key.get("keys")).get(0)).get("value");
-				ISubModel sm = manager.retrieveSubModel(new ModelUrn(getId()), id);
-				ret.put(id, sm);
-			}
-		} catch (ClassCastException e) {
-			System.out.println("Cast failed... trying c# get submodels");
-			// c# getSubmodels
-			refs = (Set<Map<?, ?>>) getProxy().getModelPropertyValue(AssetAdministrationShell.SUBMODELS);
-			for (Map<?, ?> key : refs) {
-				String id = (String) key.get("idShort");
-				ISubModel sm = manager.retrieveSubModel(new ModelUrn(getId()), id);
-				ret.put(id, sm);
-			}
+		submodels = (Set<Map<?, ?>>) getProxy().getModelPropertyValue(AssetAdministrationShell.SUBMODELS);
+		for (Map<?, ?> submodelMap : submodels) {
+			String id = (String) submodelMap.get("idShort");
+			ret.put(id, new ConnectedSubModel(getProxy().getDeepProxy(AssetAdministrationShell.SUBMODELS + "/" + id)));
 		}
-
 		return ret;
 	}
 

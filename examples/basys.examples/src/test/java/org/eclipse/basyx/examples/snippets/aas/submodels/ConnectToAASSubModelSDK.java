@@ -111,8 +111,9 @@ public class ConnectToAASSubModelSDK {
 	public void accessSubModel() throws Exception {
 		// Create the AAS registry
 		ExampleAASRegistry registry = new ExampleAASRegistry();
-		registry.addSubmodelMapping("", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel").addAASMapping("aas-001",
-				"http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel");
+		registry.addAASMapping("aas-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas")
+			.addSubmodelMapping("aas-001", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas/submodels/sm-001");
+		
 		// Create manager using the directory stub and the HTTPConnectorProvider
 		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(registry,
 				// We connect via HTTP
@@ -122,7 +123,7 @@ public class ConnectToAASSubModelSDK {
 		// Retrieve sub model (created by factory) with SDK connector
 		{
 			// Create and connect SDK connector
-			ISubModel subModel = manager.retrieveSubModel(new ModelUrn(""), "sm-001");
+			ISubModel subModel = manager.retrieveSubModel(new ModelUrn("aas-001"), "sm-001");
 			// - Retrieve sub model values and compare to expected values
 			String smID     = subModel.getId();
 			String prop1Id  = subModel.getDataElements().get("prop1").getId();

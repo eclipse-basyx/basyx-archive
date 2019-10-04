@@ -4,7 +4,6 @@
 package org.eclipse.basyx.aas.backend.connected;
 
 import java.util.Collection;
-import java.util.HashMap;
 
 import org.eclipse.basyx.aas.api.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.aas.api.manager.IAssetAdministrationShellManager;
@@ -59,23 +58,20 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		// Return a new VABElementProxy
 		VABElementProxy proxy = new VABElementProxy(VABPathTools.removeAddressEntry(addr),
 				providerProvider.getConnector(addr));
-		return new ConnectedSubModel(proxy.getDeepProxy("/aas/submodels/" + smid));
+		return new ConnectedSubModel(proxy);
 	}
 
 	@Override
 	public ConnectedAssetAdministrationShell retrieveAAS(ModelUrn aasUrn) throws Exception {
 		VABElementProxy proxy = getAASProxyFromURN(aasUrn);
-		return new ConnectedAssetAdministrationShell(proxy.getDeepProxy("/aas"), this);
+		return new ConnectedAssetAdministrationShell(proxy, this);
 	}
 
 	@Override
 	public void createAAS(AssetAdministrationShell aas, ModelUrn urn) {
 		VABElementProxy proxy = getAASProxyFromURN(urn);
-		
-		// Create setup if necessary
-		initDefaultIfNotExists(proxy, "");
 
-		proxy.createValue("/aas", aas);
+		proxy.createValue("/", aas);
 	}
 
 	private VABElementProxy getAASProxyFromURN(ModelUrn aasUrn) {
@@ -100,36 +96,18 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	}
 
 	@Override
-	public void createSubModel(ModelUrn aasUrn, String subModelId, SubModel submodel) {
-		VABElementProxy proxy = getSMProxyFromURN(aasUrn, subModelId);
-
-		// Create setup if necessary
-		initDefaultIfNotExists(proxy, "");
-		initDefaultIfNotExists(proxy, "aas");
-		initDefaultIfNotExists(proxy, "aas/submodels");
-
-		// Create sm
-		proxy.createValue("aas/submodels/" + subModelId, submodel);
-	}
-
-	private void initDefaultIfNotExists(VABElementProxy proxy, String path) {
-		if (proxy.getModelPropertyValue(path) == null) {
-			proxy.createValue(path, new HashMap<>());
-		}
-	}
-
-	private VABElementProxy getSMProxyFromURN(ModelUrn aasUrn, String subModelId) {
+	public void createSubModel(ModelUrn aasUrn, SubModel submodel) {
 		// Lookup AAS descriptor
 		AASDescriptor aasDescriptor = aasDirectory.lookupAAS(aasUrn);
 
-		// Locate sub model
-		SubmodelDescriptor smdescr = aasDescriptor.getSubModelDescriptor(subModelId);
-
-		// - Get submodel endpoint
-		String addr = smdescr.getFirstEndpoint();
+		// Get aas endpoint
+		String addr = aasDescriptor.getFirstEndpoint();
 
 		// Return a new VABElementProxy
-		return new VABElementProxy(VABPathTools.removeAddressEntry(addr), providerProvider.getConnector(addr));
-	}
+		VABElementProxy proxy = new VABElementProxy(VABPathTools.removeAddressEntry(addr),
+				providerProvider.getConnector(addr));
 
+		// Create sm
+		proxy.createValue(AssetAdministrationShell.SUBMODELS, submodel);
+	}
 }

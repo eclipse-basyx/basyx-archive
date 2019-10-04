@@ -19,13 +19,18 @@ public class AASServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Constructor
+	 * Default constructor - based on a VABMultiSubmodelProvider
+	 */
+	public AASServlet() {
+		super(new VABMultiSubmodelProvider());
+	}
+
+	/**
+	 * Constructor for directly creating the AAS in the provider
 	 */
 	public AASServlet(AssetAdministrationShell exportedAAS) {
-		// Invoke base constructor
-		super(new VABMultiSubmodelProvider());
+		this();
 
-		// Add provides sub model
 		getModelProvider().setAssetAdministrationShell(new VirtualPathModelProvider(exportedAAS));
 	}
 }

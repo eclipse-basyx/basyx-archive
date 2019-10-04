@@ -6,9 +6,10 @@ import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
-import org.eclipse.basyx.components.servlet.submodel.DynamicModelProviderServlet;
+import org.eclipse.basyx.components.servlet.submodel.AASServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
@@ -26,12 +27,16 @@ import org.junit.Test;
  */
 public class DynamicSubModelDeployment {
 
+	private static final String AAS = "de.FHG:devices.es.iese:aas:1.0:3:x-509#003";
 	private static final String STATUS_SM = "de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003";
 
 	protected ConnectedAssetAdministrationShellManager aasManager = new ConnectedAssetAdministrationShellManager(
 			new ExampleAASRegistry()
-			// Ass Example specific mappings
-					.addSubmodelMapping("", STATUS_SM, "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository"),
+					.addAASMapping(AAS,
+							"http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/")
+					// Ass Example specific mappings
+					.addSubmodelMapping(AAS, STATUS_SM,
+							"http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/Status"),
 			new HTTPConnectorProvider());
 
 	/**
@@ -49,7 +54,8 @@ public class DynamicSubModelDeployment {
 				// - BaSys topology with one AAS Server and one SQL directory
 				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory().
 					// Deploy example specific servlets to Apache Tomcat server in this context
-					addServletMapping("/Testsuite/components/BaSys/1.0/dynamicModelRepository/*", new DynamicModelProviderServlet())
+					addServletMapping("/Testsuite/components/BaSys/1.0/dynamicModelRepository/*",
+							new AASServlet(new AssetAdministrationShell()))
 			);
 
 	
@@ -64,7 +70,7 @@ public class DynamicSubModelDeployment {
 		// Instantiate sub model
 		SubModel submodel = new SubModel();
 		// - Add example properties to sub model
-		submodel.setId(STATUS_SM);
+		submodel.setId("Status");
 		SingleProperty prop1 = new SingleProperty(7);
 		prop1.setId("prop1");
 		submodel.addSubModelElement(prop1);
@@ -76,7 +82,7 @@ public class DynamicSubModelDeployment {
 		
 		
 		// Transfer sub model to server
-		aasManager.createSubModel(new ModelUrn(""), STATUS_SM, submodel);
+		aasManager.createSubModel(new ModelUrn(AAS), submodel);
 
 		
 		// Retrieve sub model with SDK connector
@@ -88,7 +94,7 @@ public class DynamicSubModelDeployment {
 			//   directly to sub models, the registry needs to support this, and unique identifies (as here)
 			//   must be used. For portability, users should connect to sub models instead via an AAS ID and 
 			//   sub model ID tuple, as illustrated in the registry examples. 
-			ISubModel subModel = aasManager.retrieveSubModel(new ModelUrn(""), STATUS_SM);
+			ISubModel subModel = aasManager.retrieveSubModel(new ModelUrn(AAS), STATUS_SM);
 
 			// Read sub model properties
 			String smId     = subModel.getId();
@@ -98,7 +104,7 @@ public class DynamicSubModelDeployment {
 			String prop2Val = (String) ((ISingleProperty) subModel.getDataElements().get("prop2")).get();
 			
 			// Compare sub model property values
-			assertTrue(smId.equals(STATUS_SM));
+			assertTrue(smId.equals("Status"));
 			assertTrue(prop1Id.equals("prop1"));
 			assertTrue(prop1Val == 7);
 			assertTrue(prop2Id.equals("prop2"));

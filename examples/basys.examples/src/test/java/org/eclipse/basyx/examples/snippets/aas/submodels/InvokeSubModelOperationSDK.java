@@ -93,9 +93,8 @@ public class InvokeSubModelOperationSDK {
 	protected ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(
 			// Add example specific mappings
 			new ExampleAASRegistry()
-					// - SDK connectors encapsulate relative path to sub model
-					// (/aas/submodels/sm-001)
-					.addSubmodelMapping("", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel"),
+					.addAASMapping("aas-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas")
+					.addSubmodelMapping("aas-001", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas/submodels/sm-001"),
 			// We connect via HTTP
 			new HTTPConnectorProvider());
 	
@@ -126,7 +125,7 @@ public class InvokeSubModelOperationSDK {
 		// Retrieve sub model (created by factory) with SDK connector
 		{
 			// Create and connect SDK connector
-			ISubModel subModel = manager.retrieveSubModel(new ModelUrn(""), "sm-001");
+			ISubModel subModel = manager.retrieveSubModel(new ModelUrn("aas-001"), "sm-001");
 			
 			// Sub model operations
 			Map<String, IOperation> operations = subModel.getOperations();
