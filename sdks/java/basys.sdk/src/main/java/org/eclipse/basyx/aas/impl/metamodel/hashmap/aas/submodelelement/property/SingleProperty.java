@@ -1,5 +1,7 @@
 package org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property;
 
+import java.util.Map;
+
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
@@ -29,6 +31,12 @@ public class SingleProperty extends AbstractProperty implements ISingleProperty 
 		// Put attributes
 		put(SingleProperty.VALUE, null);
 		put(SingleProperty.VALUEID, null);
+	}
+
+	public static SingleProperty createAsFacade(Map<String, Object> obj) {
+		SingleProperty facade = new SingleProperty();
+		facade.putAll(obj);
+		return facade;
 	}
 
 	/**

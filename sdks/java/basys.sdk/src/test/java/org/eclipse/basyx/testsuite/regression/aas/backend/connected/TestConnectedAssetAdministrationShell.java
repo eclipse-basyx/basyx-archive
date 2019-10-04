@@ -14,8 +14,9 @@ import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleP
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.backend.provider.AASModelProvider;
+import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
@@ -66,8 +67,8 @@ public class TestConnectedAssetAdministrationShell {
 		aas.setId(aasId);
 	
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
-		provider.addSubmodel(smId, new VirtualPathModelProvider(TypeDestroyer.destroyType(sm)));
-		provider.setAssetAdministrationShell(new VirtualPathModelProvider(TypeDestroyer.destroyType(aas)));
+		provider.addSubmodel(smId, new SubModelProvider(TypeDestroyer.destroyType(sm)));
+		provider.setAssetAdministrationShell(new AASModelProvider(TypeDestroyer.destroyType(aas)));
 	
 		// Create AAS registry
 		IAASRegistryService registry = new AASRegistryStub();

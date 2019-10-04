@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
+import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.facades.SubmodelFacade;
 import org.eclipse.basyx.aas.impl.metamodel.facades.SubmodelFacadeCustomSemantics;
 import org.eclipse.basyx.aas.impl.metamodel.facades.SubmodelFacadeIRDISemantics;
@@ -23,7 +23,7 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property
  *
  */
 
-public class BaseConfiguredProvider extends VirtualPathModelProvider {
+public class BaseConfiguredProvider extends SubModelProvider {
 
 	/**
 	 * This is a sub model

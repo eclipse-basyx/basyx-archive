@@ -38,7 +38,8 @@ public class DynamicSubModelDeploymentHTTP {
 	protected VABConnectionManager connManager = new VABConnectionManager(
 			new ExamplesPreconfiguredDirectory()
 				// Add example specific mappings
-			    .addMapping("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003",  "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository"),
+					.addMapping("urn:de.FHG:devices.es.iese:aas:1.0:3:x-509:003",
+							"http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas"),
 			new HTTPConnectorProvider());
 
 	
@@ -77,11 +78,11 @@ public class DynamicSubModelDeploymentHTTP {
 		//   directly to sub models, the registry needs to support this, and unique identifies (as here)
 		//   must be used. For portability, users should connect to sub models instead via an AAS ID and 
 		//   sub model ID tuple, as illustrated in the registry examples. 
-		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003");
+		VABElementProxy connSubModels = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:aas:1.0:3:x-509:003");
 
 		// Add example properties
 		SubModel submodel = new SubModel();
-		submodel.setId("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003");
+		submodel.setId("Status");
 		SingleProperty prop1 = new SingleProperty(7);
 		prop1.setId("prop1");
 		submodel.addSubModelElement(prop1);
@@ -91,7 +92,7 @@ public class DynamicSubModelDeploymentHTTP {
 		submodel.addSubModelElement(prop2);
 
 		// Transfer sub model to server
-		connSubModel1.createValue("/aas/submodels", submodel);
+		connSubModels.createValue("/submodels", submodel);
 
 		
 		// Web service client accesses AAS using HTTP REST calls
@@ -99,8 +100,9 @@ public class DynamicSubModelDeploymentHTTP {
 		
 		// Read property values using the WebServiceJSONClient class. 
 		// - Returned property contains meta data. The actual property is stored in property "entity", property value is in entity property "value"
-		String smEndpoint = "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003";
-		String smId = (String) ((Map<String, Object>) jsonClient.get(smEndpoint + "/idShort")).get("entity");
+		String smEndpoint = "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/Status";
+		Map<String, Object> sm = (Map<String, Object>) ((Map<String, Object>) jsonClient.get(smEndpoint)).get("entity");
+		String smId = (String) sm.get("idShort");
 		int prop1Val = (int) ((Map<String, Object>) ((Map<String, Object>) jsonClient
 				.get(smEndpoint + "/dataElements/prop1")).get("entity")).get("value");
 		String prop1Id = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient
@@ -110,7 +112,7 @@ public class DynamicSubModelDeploymentHTTP {
 
 		
 		// Check results
-		assertTrue(smId.equals("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509:003"));
+		assertTrue(smId.equals("Status"));
 		assertTrue(prop1Val == 7);
 		assertTrue(prop1Id.equals("prop1"));
 		assertTrue(prop2Val.equals("myStr"));

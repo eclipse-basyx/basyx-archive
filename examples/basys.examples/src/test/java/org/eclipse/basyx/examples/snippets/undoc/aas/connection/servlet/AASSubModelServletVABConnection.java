@@ -8,7 +8,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElement;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.ContainerProperty;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_Empty;
@@ -66,7 +66,7 @@ public class AASSubModelServletVABConnection {
 					prop11
 				);
 			// - Add container to property map
-			addSubModelElement(fac.createContainer(new SubmodelElementCollection(), containerProperties, fac.emptyList(), "prop2"));
+			addSubModelElement(fac.createContainer(new ContainerProperty(), containerProperties, fac.emptyList(), "prop2"));
 
 			// Add another property manually to sub model container "properties"
 			SingleProperty prop3 = new SingleProperty(17);
@@ -85,11 +85,10 @@ public class AASSubModelServletVABConnection {
 	protected VABConnectionManager connManager = new VABConnectionManager(
 			// Add example specific mappings
 			new ExamplesPreconfiguredDirectory()
-			    // - SDK connectors encapsulate relative path to sub model (/aas/submodels/sm-001)
+					// Entries map directly at the SubmodelServlet
 				.addMapping("aas-001",    "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
 			    .addMapping("sm-001",     "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
-			    // - VAB needs to know the relative path of the sub model that is defined by AAS meta model
-			    .addMapping("sm-001VAB",  "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas/submodels/sm-001"),
+			    .addMapping("sm-001VAB",  "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel"),
 			// We connect via HTTP
 			new HTTPConnectorProvider());
 
@@ -116,15 +115,15 @@ public class AASSubModelServletVABConnection {
 		// Connect to sub model using lower-level VAB interface
 		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("sm-001VAB");
 		// - Read property values and compare with expected values
-		assertTrue((int) connSubModel1.getModelPropertyValue("dataElements/prop1/value") == 234);
-		assertTrue((int) connSubModel1.getModelPropertyValue("dataElements/prop3/value") == 17);
+		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("value") == 234);
+		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop3")).get("value") == 17);
 		assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("idShort").equals("prop1"));
 		assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2")).get("idShort").equals("prop2"));
-		assertTrue((int) connSubModel1.getModelPropertyValue("dataElements/prop2/dataElements/prop11/value") == 123);
+		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2/dataElements/prop11/value")).get("value") == 123);
 		// - Change property value using VAB primitive
 		connSubModel1.setModelPropertyValue("dataElements/prop1/value", 456);
 		// - Read value back using VAB primitive
-		assertTrue((int) connSubModel1.getModelPropertyValue("dataElements/prop1/value") == 456);
+		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1/value")).get("value") == 456);
 	}
 }
 

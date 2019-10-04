@@ -12,15 +12,14 @@ import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperat
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ICollectionProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IContainerProperty;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.ConnectedContainerProperty;
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
+import org.eclipse.basyx.aas.backend.provider.ContainerPropertyProvider;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.ContainerProperty;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.testsuite.support.vab.TypeDestroyer;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
-import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -58,13 +57,14 @@ public class TestConnectedContainerProperty {
 		operation.setId(OPERATION);
 
 		// Create ComplexDataProperty containing the created operation and property
-		ContainerProperty complex = factory.createContainer(new SubmodelElementCollection(),
+		ContainerProperty complex = factory.createContainer(new ContainerProperty(),
 				Collections.singletonList(propertyMeta), Collections.singletonList(operation));
 
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(complex);
-		// Create a dummy connection manager containing the created
-		// ComplexDataProperty map
-		VABConnectionManager manager = new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType));
+		// Create a dummy connection manager containing the created ContainerProperty map
+		// The model is wrapped in the corresponding ModelProvider that implements the API access
+		VABConnectionManagerStub manager = new VABConnectionManagerStub(
+				new ContainerPropertyProvider(new VABLambdaProvider(destroyType)));
 
 		// Retrieve the ConnectedContainerProperty
 		prop = new ConnectedContainerProperty(manager.connectToVABElement(""));

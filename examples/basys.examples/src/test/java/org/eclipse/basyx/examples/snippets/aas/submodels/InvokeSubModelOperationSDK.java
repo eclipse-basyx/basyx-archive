@@ -58,10 +58,14 @@ public class InvokeSubModelOperationSDK {
 			MetaModelElementFactory fac = new MetaModelElementFactory();
 
 			// Define operations
-			getOperations().put("operation1", fac.createOperation(new Operation(), (Function<Object[], Object>) (v) -> {
+			Operation op1 = new Operation();
+			op1.setId("operation1");
+			getOperations().put("operation1", fac.createOperation(op1, (Function<Object[], Object>) (v) -> {
 				return operation1();
 			}));
-			getOperations().put("operation2", fac.createOperation(new Operation(), (Function<Object[], Object>) (v) -> {
+			Operation op2 = new Operation();
+			op2.setId("operation2");
+			getOperations().put("operation2", fac.createOperation(op2, (Function<Object[], Object>) (v) -> {
 				return operation2((int) v[0], (int) v[1]);
 			}));
 
@@ -93,8 +97,8 @@ public class InvokeSubModelOperationSDK {
 	protected ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(
 			// Add example specific mappings
 			new ExampleAASRegistry()
-					.addAASMapping("aas-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas")
-					.addSubmodelMapping("aas-001", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas/submodels/sm-001"),
+					.addAASMapping("aas-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/")
+					.addSubmodelMapping("aas-001", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/"),
 			// We connect via HTTP
 			new HTTPConnectorProvider());
 	
@@ -113,7 +117,7 @@ public class InvokeSubModelOperationSDK {
 				// Servlets for example snippet
 				new BaSyxExamplesContext_Empty().
 					// Deploy example specific servlets to Tomcat server in this context
-					addServletMapping("/Testsuite/components/BaSys/1.0/SampleModel/*",       new SubmodelServlet(new SampleSubModel()))
+					addServletMapping("/Testsuite/components/BaSys/1.0/SampleModel/*",  new SubmodelServlet(new SampleSubModel()))
 			);
 
 	

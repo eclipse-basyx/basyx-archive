@@ -10,6 +10,7 @@ import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -38,6 +39,7 @@ public class TestRawCFGProviderAASNewModel {
 	 * Test basic queries
 	 */
 	@SuppressWarnings({ "unchecked", "unused" })
+	@Ignore
 	@Test
 	public void test() throws Exception {
 

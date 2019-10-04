@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABModelMap;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.vab.core.IModelProvider;
@@ -71,12 +70,12 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	/**
 	 * Store aas providers
 	 */
-	protected VirtualPathModelProvider aas_provider = null;
+	protected AASModelProvider aas_provider = null;
 
 	/**
 	 * Store submodel providers
 	 */
-	protected Map<String, VirtualPathModelProvider> submodel_providers = new HashMap<>();
+	protected Map<String, SubModelProvider> submodel_providers = new HashMap<>();
 
 	/**
 	 * Constructor
@@ -88,7 +87,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	/**
 	 * Constructor that accepts an AAS
 	 */
-	public VABMultiSubmodelProvider(VirtualPathModelProvider contentProvider) {
+	public VABMultiSubmodelProvider(AASModelProvider contentProvider) {
 		// Store content provider
 		setAssetAdministrationShell(contentProvider);
 	}
@@ -96,7 +95,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	/**
 	 * Constructor that accepts Submodel
 	 */
-	public VABMultiSubmodelProvider(String smID, VirtualPathModelProvider contentProvider) {
+	public VABMultiSubmodelProvider(String smID, SubModelProvider contentProvider) {
 		// Store content provider
 		addSubmodel(smID, contentProvider);
 	}
@@ -109,7 +108,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * @param modelContentProvider
 	 *            Model content provider
 	 */
-	public void setAssetAdministrationShell(VirtualPathModelProvider modelContentProvider) {
+	public void setAssetAdministrationShell(AASModelProvider modelContentProvider) {
 		// Add model provider
 		aas_provider = modelContentProvider;
 	}
@@ -122,7 +121,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * @param modelContentProvider
 	 *            Model content provider
 	 */
-	public void addSubmodel(String elementId, VirtualPathModelProvider modelContentProvider) {
+	public void addSubmodel(String elementId, SubModelProvider modelContentProvider) {
 		// Add model provider
 		submodel_providers.put(elementId, modelContentProvider);
 	}
@@ -154,12 +153,12 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 				if (pathElements.length == 2) {
 					// Make a list and return all submodels
 					HashSet<Object> submodels = new HashSet<Object>();
-					for (VirtualPathModelProvider submodel : submodel_providers.values()) {
+					for (IModelProvider submodel : submodel_providers.values()) {
 						submodels.add(submodel.getModelPropertyValue(""));
 					}
 					return submodels;
 				} else {
-					VirtualPathModelProvider hashmapProvider = submodel_providers.get(pathElements[2]);
+					IModelProvider hashmapProvider = submodel_providers.get(pathElements[2]);
 
 					// - Retrieve submodel or property value
 					return hashmapProvider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 3));
@@ -186,25 +185,42 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public void createValue(String path, Object newValue) throws Exception {
 		String[] pathElements = VABPathTools.splitPath(path);
-		String propertyPath = VABPathTools.buildPath(pathElements, 3);
-		if (pathElements.length == 1 && pathElements[0].equals("aas") ) {
-			// Creates a new AAS
-			Map<String, Object> aas = (HashMap<String, Object>) newValue;
-			aas_provider = new VirtualPathModelProvider(aas);
-		} else if (pathElements.length == 2 && pathElements[0].equals("aas") && pathElements[1].equals("submodels")) {
-			// Adds a new submodel to to the registered AAS
-			VABModelMap<Object> sm = (VABModelMap<Object>) newValue;
-			VirtualPathModelProvider smProvider = new VirtualPathModelProvider(sm);
-			submodel_providers.put((String) sm.getPath(Referable.IDSHORT), smProvider);
-			aas_provider.createValue("/" + AssetAdministrationShell.SUBMODEL, sm);
-		} else {
-			// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
-			submodel_providers.get(pathElements[2]).createValue(propertyPath, newValue);
+		if (pathElements.length >= 1 && pathElements[0].equals("aas")) {
+			if (pathElements.length == 1) {
+				createAssetAdministrationShell(newValue);
+			} else if (pathElements[1].equals(AssetAdministrationShell.SUBMODELS)) {
+				if (pathElements.length == 2) {
+					createSubModel(newValue);
+				} else {
+					String propertyPath = VABPathTools.buildPath(pathElements, 3);
+					createSubModelProperty(pathElements[2], propertyPath, newValue);
+				}
+			}
 		}
 	}
+
+	private void createSubModelProperty(String smId, String propertyPath, Object newProperty) throws Exception {
+		SubModelProvider subModelProvider = submodel_providers.get(smId);
+		subModelProvider.createValue(propertyPath, newProperty);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void createAssetAdministrationShell(Object newAAS) {
+		Map<String, Object> aas = (Map<String, Object>) newAAS;
+		aas_provider = new AASModelProvider(aas);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void createSubModel(Object newSM) throws Exception {
+		// Adds a new submodel to to the registered AAS
+		Map<String, Object> sm = (Map<String, Object>) newSM;
+		SubModelProvider smProvider = new SubModelProvider(sm);
+		submodel_providers.put((String) sm.get(Referable.IDSHORT), smProvider);
+		aas_provider.createValue(AssetAdministrationShell.SUBMODEL, sm);
+	}
+
 
 	@Override
 	public void deleteValue(String path) throws Exception {

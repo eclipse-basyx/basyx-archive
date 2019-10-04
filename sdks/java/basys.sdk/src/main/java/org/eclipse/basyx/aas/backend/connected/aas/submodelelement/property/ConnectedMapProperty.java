@@ -68,8 +68,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private Map<String, Object> getMap() {
-		return ((Map<String, Object>) getProxy().getModelPropertyValue(SingleProperty.VALUE));
+		return retrieveObject();
 	}
 }

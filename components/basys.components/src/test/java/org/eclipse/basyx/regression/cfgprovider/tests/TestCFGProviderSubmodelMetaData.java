@@ -1,7 +1,11 @@
 package org.eclipse.basyx.regression.cfgprovider.tests;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
+import java.util.Map;
+
+import org.eclipse.basyx.aas.impl.metamodel.facades.AdministrativeInformationFacade;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Identifiable;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
@@ -36,6 +40,7 @@ public class TestCFGProviderSubmodelMetaData {
 	/**
 	 * Test basic queries
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test() throws Exception {
 
@@ -44,32 +49,14 @@ public class TestCFGProviderSubmodelMetaData {
 
 		
 		// Get property value
-		Object value1 = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG/description");
-		assertTrue(value1.equals("BaSys regression test file for CFG file provider"));
+		Map<String, Object> sampleCFG = (Map<String, Object>) connSubModel
+				.getModelPropertyValue("/aas/submodels/sampleCFG");
+		assertEquals("BaSys regression test file for CFG file provider", sampleCFG.get("description"));
 
 		// Get property value
-		Object value2 = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG/administration/version");
-		assertTrue(value2.equals("1.0"));
-
-		// Update property value
-		connSubModel.setModelPropertyValue("/aas/submodels/sampleCFG/administration/version", "2.0");
-		Object value2a = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG/administration/version");
-		assertTrue(value2a.equals("2.0"));
-
-		// Create property value
-		connSubModel.createValue("/aas/submodels/sampleCFG/administration/version2", "3.0");
-		Object value2b = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG/administration/version2");
-		assertTrue(value2b.equals("3.0"));
-
-		// Delete property value
-		connSubModel.deleteValue("/aas/submodels/sampleCFG/administration/version2");
-		Object value2c = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG/administration/version2");
-		assertTrue(value2c == null);
-
-		// Reset property value
-		connSubModel.setModelPropertyValue("/aas/submodels/sampleCFG/administration/version", "1.0");
-		Object value2d = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG/administration/version");
-		assertTrue(value2d.equals("1.0"));
+		assertEquals("1.0",
+				new AdministrativeInformationFacade((Map<String, Object>) sampleCFG.get(Identifiable.ADMINISTRATION))
+				.getVersion());
 
 		// Get complete sub model
 		Object value3 = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG");

@@ -35,14 +35,6 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 	 * Store HTTP URL of AAS server
 	 */
 	protected String aasServerURL = null;
-	
-	
-	/**
-	 * Path prefix on AAS server
-	 */
-	protected String aasServerPrefix = null;
-
-
 
 
 	/**
@@ -88,23 +80,6 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 
 	
 	/**
-	 * Set AAS server URL
-	 */
-	protected void setAASServerPathPrefix(String srvPathPfx) {
-		aasServerPrefix = srvPathPfx;
-	}
-	
-	
-	/**
-	 * Get AAS server URL
-	 */
-	protected String getAASServerPathPrefix() {
-		return aasServerPrefix;
-	}
-
-	
-	
-	/**
 	 * Get AAS descriptor for managed device
 	 */
 	protected abstract AASDescriptor getAASDescriptor();
@@ -121,7 +96,7 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 	 */
 	protected AASDescriptor createAASDescriptorURI(ModelUrn aasURN) {
 		// Create and return AAS descriptor
-		return new AASDescriptor(aasURN.getURN(), IdentifierType.URI, VABPathTools.concatenatePaths(getAASServerURL(), getAASServerPathPrefix(), aasURN.getEncodedURN()));
+		return new AASDescriptor(aasURN.getURN(), IdentifierType.URI, VABPathTools.concatenatePaths(getAASServerURL(), "/aas", aasURN.getEncodedURN()));
 	}
 
 	
@@ -147,30 +122,10 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 	 * 
 	 * @return Sub model descriptor endpoint points to default AAS server location and contains default prefix path
 	 */
-	protected SubmodelDescriptor addSubModelDescriptorURI(AASDescriptor aasDescriptor, ModelUrn subModelURN) {
+	protected SubmodelDescriptor addSubModelDescriptorURI(AASDescriptor aasDescriptor, ModelUrn subModelURN, String subModelId) {
 		// Create sub model descriptor
-		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelURN.getURN(), IdentifierType.URI, VABPathTools.concatenatePaths(getAASServerURL(), getAASServerPathPrefix(), subModelURN.getEncodedURN()));
-		
-		// Add sub model descriptor to AAS descriptor
-		aasDescriptor.addSubmodelDescriptor(submodelDescriptor);
-
-		// Return sub model descriptor
-		return submodelDescriptor;
-	}
-
-
-	/**
-	 * Add sub model descriptor to AAS descriptor
-	 * 
-	 * @param aasDescriptor AAS descriptor of AAS that sub model belongs to
-	 * @param subModelURN   URN of sub model that will be described by descriptor
-	 * @param path          Path that the sub model descriptor endpoint should point to
-	 * 
-	 * @return Sub model descriptor endpoint points to default AAS server location and contains default prefix path
-	 */
-	protected SubmodelDescriptor addSubModelDescriptorURI(AASDescriptor aasDescriptor, ModelUrn subModelURN, String path) {
-		// Create sub model descriptor
-		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelURN.getURN(), IdentifierType.URI, path);
+		String submodelEndpoint = VABPathTools.concatenatePaths(getAASServerURL(), "/aas/submodels", subModelId);
+		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelURN.getURN(), IdentifierType.URI, submodelEndpoint);
 		
 		// Add sub model descriptor to AAS descriptor
 		aasDescriptor.addSubmodelDescriptor(submodelDescriptor);

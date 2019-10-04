@@ -1,6 +1,7 @@
 package org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.qualifier.qualifiable.IConstraint;
@@ -17,7 +18,7 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.haskind.HasKind;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.qualifiable.Qualifiable;
 
-public abstract class SubmodelElement extends HashMap<String, Object> implements ISubmodelElement {
+public class SubmodelElement extends HashMap<String, Object> implements ISubmodelElement {
 	private static final long serialVersionUID = 1L;
 
 	public SubmodelElement() {
@@ -26,6 +27,12 @@ public abstract class SubmodelElement extends HashMap<String, Object> implements
 		putAll(new Qualifiable());
 		putAll(new HasSemantics());
 		putAll(new HasKind());
+	}
+
+	public static SubmodelElement createAsFacade(Map<String, Object> obj) {
+		SubmodelElement elem = new SubmodelElement();
+		elem.putAll(obj);
+		return elem;
 	}
 
 	@Override

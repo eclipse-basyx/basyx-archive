@@ -1,7 +1,8 @@
 package org.eclipse.basyx.regression.support.processengine;
 
+import org.eclipse.basyx.aas.backend.provider.AASModelProvider;
+import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.regression.support.processengine.aas.DeviceAdministrationShellFactory;
@@ -25,8 +26,8 @@ public class SetupAAS {
 		SubModel sm = new DeviceSubmodelFactory().create(submodelid, coilcar);
 
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
-		provider.addSubmodel(submodelid, new VirtualPathModelProvider(sm));
-		provider.setAssetAdministrationShell(new VirtualPathModelProvider(aas));
+		provider.addSubmodel(submodelid, new SubModelProvider(sm));
+		provider.setAssetAdministrationShell(new AASModelProvider(aas));
 
 		// setup the connection-manager with the model-provider
 		connectionStub = new VABConnectionManagerStub();

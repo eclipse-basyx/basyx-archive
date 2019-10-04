@@ -110,7 +110,7 @@ public class TestAASHTTP {
 		// - retrieve properties and operations
 
 		Map<String, IDataElement> properties = sm.getDataElements();
-		assertEquals(2, properties.size());
+		assertEquals(3, properties.size());
 		ISingleProperty prop = (ISingleProperty) properties.get("integerProperty");
 		assertEquals(123, prop.get());
 

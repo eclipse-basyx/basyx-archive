@@ -1,7 +1,8 @@
 package org.eclipse.basyx.regression.support.processengine.servlet;
 
+import org.eclipse.basyx.aas.backend.provider.AASModelProvider;
+import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.regression.support.processengine.aas.DeviceAdministrationShellFactory;
@@ -32,8 +33,8 @@ public class CoilcarAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider
 		// Create the sub-model
 		SubModel coilcarSubmodel = new DeviceSubmodelFactory().create(submodelid, new Coilcar());
 
-		getModelProvider().setAssetAdministrationShell(new VirtualPathModelProvider(coilcarAAS));
-		getModelProvider().addSubmodel(submodelid, new VirtualPathModelProvider(coilcarSubmodel));
+		getModelProvider().setAssetAdministrationShell(new AASModelProvider(coilcarAAS));
+		getModelProvider().addSubmodel(submodelid, new SubModelProvider(coilcarSubmodel));
 	}
 
 }

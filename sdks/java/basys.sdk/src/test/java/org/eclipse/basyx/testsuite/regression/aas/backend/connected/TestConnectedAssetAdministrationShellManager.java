@@ -9,8 +9,8 @@ import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.backend.provider.AASModelProvider;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
@@ -21,7 +21,6 @@ import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property
 import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
 import org.eclipse.basyx.testsuite.support.vab.stub.ConnectorProviderStub;
 import org.eclipse.basyx.vab.core.IModelProvider;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,7 +59,7 @@ public class TestConnectedAssetAdministrationShellManager {
 
 		// Register AAS at directory
 		registry.register(urn, new AASDescriptor(aasId, IdentifierType.URI, "/aas"));
-		connectorProvider.addMapping("/aas", new VABHashmapProvider(new HashMap<>()));
+		connectorProvider.addMapping("/aas", new VABMultiSubmodelProvider());
 
 		// Create an AAS containing a reference to the created SubModel
 		createAAS(urn, aasId);
@@ -85,8 +84,7 @@ public class TestConnectedAssetAdministrationShellManager {
 		AASDescriptor desc = new AASDescriptor(aasId, IdentifierType.URI, "/aas");
 		desc.addSubmodelDescriptor(new SubmodelDescriptor(smId, IdentifierType.URI, "/aas/submodels/" + smId));
 		registry.register(urn, desc);
-		IModelProvider provider = new VABMultiSubmodelProvider(
-				new VirtualPathModelProvider(new AssetAdministrationShell()));
+		IModelProvider provider = new VABMultiSubmodelProvider(new AASModelProvider(new HashMap<>()));
 		connectorProvider.addMapping("/aas", provider);
 		connectorProvider.addMapping("/aas/submodels/" + smId, provider);
 

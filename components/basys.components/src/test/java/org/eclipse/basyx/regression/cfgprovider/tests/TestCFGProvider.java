@@ -1,7 +1,10 @@
 package org.eclipse.basyx.regression.cfgprovider.tests;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
+import java.util.Map;
+
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
@@ -37,6 +40,7 @@ public class TestCFGProvider {
 	/**
 	 * Test basic queries
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test() throws Exception {
 		// Connect to sub model "CfgFileTestAAS"
@@ -44,18 +48,20 @@ public class TestCFGProvider {
 
 		
 		// Get property value
-		Object value1 = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1/value");
-		System.out.println("Res:"+value1);
-		System.out.println("ResC:"+value1.getClass());
-		assertTrue(value1.equals("exampleStringValue"));
+		Map<String, Object> value1 = (Map<String, Object>) connSubModel
+				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1/value");
+
+		assertEquals("exampleStringValue", value1.get(SingleProperty.VALUE));
 
 		
 		// Get property value
-		Object value2 = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2/value");
-		assertTrue(value2.equals("12"));
+		Map<String, Object> value2 = (Map<String, Object>) connSubModel
+				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2/value");
+		assertEquals("12", value2.get(SingleProperty.VALUE));
 
 		// Get property value
-		Object value3 = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty3/value");
-		assertTrue(value3.equals("45.8"));
+		Map<String, Object> value3 = (Map<String, Object>) connSubModel
+				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty3/value");
+		assertEquals("45.8", value3.get(SingleProperty.VALUE));
 	}
 }

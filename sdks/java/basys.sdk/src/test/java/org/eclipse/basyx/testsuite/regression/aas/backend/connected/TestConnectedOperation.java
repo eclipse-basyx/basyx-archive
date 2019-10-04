@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.eclipse.basyx.testsuite.regression.aas.backend.connected;
 
@@ -10,19 +10,20 @@ import java.util.function.Function;
 
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.operation.ConnectedOperation;
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
+import org.eclipse.basyx.aas.backend.provider.OperationProvider;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.testsuite.support.vab.TypeDestroyer;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Tests if a ConnectedOperation can be created and used correctly
- * 
- * 
+ *
+ *
  * @author schnicke
  *
  */
@@ -38,10 +39,11 @@ public class TestConnectedOperation {
 		Operation op = factory.createOperation(new Operation(), (Function<Object[], Object>) (obj) -> {
 			return (int) obj[0] + (int) obj[1];
 		});
-		
+
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(op);
 		// Create a dummy connection manager containing the created Operation map
-		VABConnectionManager manager = new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType));
+		VABConnectionManager manager = new VABConnectionManagerStub(
+				new OperationProvider(new VABHashmapProvider(destroyType)));
 
 		// Create the ConnectedOperation based on the manager stub
 		operation = new ConnectedOperation(manager.connectToVABElement(""));
@@ -49,7 +51,7 @@ public class TestConnectedOperation {
 
 	/**
 	 * Tests if a operation invocation is handled correctly
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test

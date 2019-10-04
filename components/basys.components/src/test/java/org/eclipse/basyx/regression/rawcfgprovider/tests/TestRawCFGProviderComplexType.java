@@ -1,10 +1,12 @@
 package org.eclipse.basyx.regression.rawcfgprovider.tests;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
@@ -48,9 +50,9 @@ public class TestRawCFGProviderComplexType {
 
 		
 		// Read element value back and make sure that complex element does not exist yet
-		@SuppressWarnings("unused")
-		Object complexElement1 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty");
-		//assertTrue(complexElement1 == null);
+		Object complexElement1 = connSubModel
+				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/complexProperty");
+		assertNull(complexElement1);
 
 		
 		// Create map with complex type
@@ -65,48 +67,31 @@ public class TestRawCFGProviderComplexType {
 		containedType.put("prop4", 2.1f);
 		complexType.put("prop4", containedType);
 
-		
+		SingleProperty prop = new SingleProperty(complexType);
+		prop.setIdshort("complexProperty");
 		// Create new property value
-		connSubModel.createValue("/aas/submodels/rawSampleCFG/complexProperty", complexType);
-		// - Read values back
-		Object value1 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty/prop1");
-		assertTrue((int) value1 == 12);
-		Object value2 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty/prop2");
-		assertTrue((int) value2 == 13);
-		Object value3 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty/prop3");
-		assertTrue(value3.equals("abc"));
-		Object value4 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty/prop4/prop1");
-		assertTrue((int) value4 == 21);
-		Object value5 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty/prop4/prop2");
-		assertTrue((int) value5 == 22);
-		Object value6 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty/prop4/prop3");
-		assertTrue(value6.equals("def"));
-		Object value7 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty/prop4/prop4");
-		assertTrue((double) value7 == 2.1); // only double supported
 
-		// Read complex property completely
-		Map<String, Object> valueC = (Map<String, Object>) connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty");
-		// - Compare values
-		assertTrue((int) valueC.get("prop1") == 12);
-		assertTrue((int) valueC.get("prop2") == 13);
-		assertTrue(((String) valueC.get("prop3")).equals("abc"));
-		assertTrue((int) ((Map<String, Object>) valueC.get("prop4")).get("prop1") == 21);
-		assertTrue((int) ((Map<String, Object>) valueC.get("prop4")).get("prop2") == 22);
-		assertTrue(((String) ((Map<String, Object>) valueC.get("prop4")).get("prop3")).equals("def"));
-		assertTrue((double) ((Map<String, Object>) valueC.get("prop4")).get("prop4") == 2.1);
-		// - Check keys
-		assertTrue(valueC.keySet().size() == 4);
-		assertTrue(valueC.keySet().contains("prop1"));
-		assertTrue(valueC.keySet().contains("prop2"));
-		assertTrue(valueC.keySet().contains("prop3"));
-		assertTrue(valueC.keySet().contains("prop4"));
+		connSubModel.createValue("/aas/submodels/rawSampleCFG/dataElements", prop);
+		// - Read values back
+		Map<String, Object> value = (Map<String, Object>) connSubModel
+				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/complexProperty/value");
+		value = (Map<String, Object>) value.get(SingleProperty.VALUE);
+		assertEquals(12, value.get("prop1"));
+		assertEquals(13, value.get("prop2"));
+		assertEquals("abc", value.get("prop3"));
+
+		Map<String, Object> contained = (Map<String, Object>) value.get("prop4");
+		assertEquals(21, contained.get("prop1"));
+		assertEquals(22, contained.get("prop2"));
+		assertEquals("def", contained.get("prop3"));
+		assertEquals(2.1, contained.get("prop4")); // only double supported
 		
 		
 		// Delete element
-		//connSubModel.deleteElement("/aas/submodels/rawSampleCFG", "complexProperty");
+		connSubModel.deleteValue("/aas/submodels/rawSampleCFG/dataElements/complexProperty");
 		// - Read element value back and make sure that element is deleted
-		@SuppressWarnings("unused")
-		Object complexElement2 = connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/complexProperty");
-		//assertTrue(complexElement2 == null);
+		Object complexElement2 = connSubModel
+				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/complexProperty");
+		assertNull(complexElement2);
 	}
 }

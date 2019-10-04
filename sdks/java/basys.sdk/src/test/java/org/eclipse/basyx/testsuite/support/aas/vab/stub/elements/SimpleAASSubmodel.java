@@ -6,6 +6,7 @@ import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.ContainerProperty;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 
 /**
@@ -70,5 +71,13 @@ public class SimpleAASSubmodel extends SubModel {
 		exception2.setId("exception2");
 		addSubModelElement(exception2);
 
+		ContainerProperty containerProp = new ContainerProperty();
+		containerProp.setId("container");
+		containerProp.addSubModelElement(intProp);
+
+		ContainerProperty containerPropRoot = new ContainerProperty();
+		containerPropRoot.setId("containerRoot");
+		containerPropRoot.addSubModelElement(containerProp);
+		addSubModelElement(containerPropRoot);
 	}
 }

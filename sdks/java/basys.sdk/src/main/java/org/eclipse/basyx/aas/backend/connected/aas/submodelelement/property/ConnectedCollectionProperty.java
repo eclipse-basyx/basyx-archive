@@ -59,8 +59,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 		return getCollection().size();
 	}
 
-	@SuppressWarnings("unchecked")
 	private Collection<Object> getCollection() {
-		return (Collection<Object>) getProxy().getModelPropertyValue(SingleProperty.VALUE);
+		return retrieveObject();
 	}
 }

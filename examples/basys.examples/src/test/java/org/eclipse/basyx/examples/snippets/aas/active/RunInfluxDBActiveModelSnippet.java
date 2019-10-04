@@ -1,6 +1,6 @@
 package org.eclipse.basyx.examples.snippets.aas.active;
 
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
+import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
 import org.eclipse.basyx.examples.snippets.aas.active.tasks.InfluxDBTask;
 import org.eclipse.basyx.tools.aas.active.ActiveModel;
 import org.eclipse.basyx.vab.core.IModelProvider;
@@ -28,7 +28,7 @@ public class RunInfluxDBActiveModelSnippet {
 	@Test
 	public void snippet() throws Exception {
 		// Create the model provider for the active model
-		IModelProvider modelProvider = new VirtualPathModelProvider();
+		IModelProvider modelProvider = new SubModelProvider();
 		modelProvider.createValue("temperature", VABLambdaProviderHelper.createSimple(() -> {
 			return 30d + (Math.random() * 10d - 5d);
 		}, null));

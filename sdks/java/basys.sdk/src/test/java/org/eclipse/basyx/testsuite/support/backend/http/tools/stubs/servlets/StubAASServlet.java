@@ -3,8 +3,9 @@ package org.eclipse.basyx.testsuite.support.backend.http.tools.stubs.servlets;
 import java.util.Collections;
 
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.backend.provider.AASModelProvider;
+import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
@@ -28,8 +29,8 @@ public class StubAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 		AssetAdministrationShell aas = factory.create(new AssetAdministrationShell(), Collections.singleton(SMID));
 		aas.put(Referable.IDSHORT, AASID);
 
-		getModelProvider().setAssetAdministrationShell(new VirtualPathModelProvider(aas));
-		getModelProvider().addSubmodel(SMID, new VirtualPathModelProvider(new SimpleAASSubmodel(SMID)));
+		getModelProvider().setAssetAdministrationShell(new AASModelProvider(aas));
+		getModelProvider().addSubmodel(SMID, new SubModelProvider(new SimpleAASSubmodel(SMID)));
 	}
 
 }

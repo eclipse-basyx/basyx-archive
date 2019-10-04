@@ -6,9 +6,10 @@ import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.IdentifierType;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.vab.backend.connector.basyx.BaSyxConnectorProvider;
@@ -40,7 +41,8 @@ public class DeviceSubModelDeployment {
 		// - Create sub model
 		SubModel submodel = new SubModel();
 		// - Set sub model ID "SampleSM" to full qualified ID urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003
-		submodel.setId("urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003");
+		submodel.setId("SampleSM");
+		submodel.setIdentification(IdentifierType.URI, "urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003");
 		// - Add example properties
 		SingleProperty prop1 = new SingleProperty(7);
 		prop1.setId("prop1");
@@ -52,8 +54,8 @@ public class DeviceSubModelDeployment {
 
 		
 		// Export sub model via BaSyx server
-		VirtualPathModelProvider modelProvider = new VirtualPathModelProvider(submodel);
-		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider("urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003", modelProvider);
+		SubModelProvider modelProvider = new SubModelProvider(submodel);
+		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider("SampleSM", modelProvider);
 		BaSyxTCPServer<VABMultiSubmodelProvider> server = new BaSyxTCPServer<>(aasProvider, 9998);
 		// - Start local BaSyx/TCP server
 		server.start();
@@ -62,10 +64,9 @@ public class DeviceSubModelDeployment {
 		// Create connected aas manager to connect with the dynamic server
 		// We pre-register the aas endpoints to the dynamic BaSyx server
 		ExampleAASRegistry registry = new ExampleAASRegistry();
-		String smRawUrn = "urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003";
-		String aasRawUrn = "urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#003";
-		registry.addAASMapping(aasRawUrn, "basyx://localhost:9998/aas/");
-		registry.addSubmodelMapping(aasRawUrn, smRawUrn, "basyx://localhost:9998/aas/submodels/" + smRawUrn);
+		registry.addAASMapping("", ""); // No AAS is provided in this example
+		registry.addSubmodelMapping("", "urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003",
+				"basyx://localhost:9998/aas/submodels/SampleSM");
 		
 		// Create manager using the directory stub an the HTTPConnectorProvider
 		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(registry,
@@ -74,7 +75,7 @@ public class DeviceSubModelDeployment {
 		
 		// Create and connect SDK connector
 		// - Retrieve sub model
-		ISubModel subModel = manager.retrieveSubModel(new ModelUrn(aasRawUrn), smRawUrn);
+		ISubModel subModel = manager.retrieveSubModel(new ModelUrn(""), "urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003");
 		
 		// Retrieve sub model values and compare to expected values
 		String submodelId = subModel.getId();
@@ -85,7 +86,7 @@ public class DeviceSubModelDeployment {
 
 		
 		// Compare received property values to expected values
-		assertTrue(submodelId.equals("urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003"));
+		assertTrue(submodelId.equals("SampleSM"));
 		assertTrue(prop1Id.equals("prop1"));
 		assertTrue(prop1Val == 7);
 		assertTrue(prop2Id.equals("prop2"));

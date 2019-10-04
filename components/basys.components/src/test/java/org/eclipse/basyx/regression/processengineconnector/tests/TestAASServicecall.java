@@ -6,12 +6,12 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.eclipse.basyx.aas.api.manager.IAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
 import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.backend.provider.AASModelProvider;
+import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
@@ -64,15 +64,14 @@ public class TestAASServicecall {
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
 		
 		// Add sub-model to the provider
-		provider.addSubmodel("submodel1", new VirtualPathModelProvider(sm));
+		provider.addSubmodel("submodel1", new SubModelProvider(sm));
 		
 		// Add aas to the provider
-		provider.setAssetAdministrationShell(new VirtualPathModelProvider(aas));
+		provider.setAssetAdministrationShell(new AASModelProvider(aas));
 		
 		IAASRegistryService registry = new AASRegistryStub();
 		AASDescriptor aasDescriptor = new AASDescriptor("coilcar", IdentifierType.URI, "/aas");
-		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", IdentifierType.URI,
-				"/aas/submodels/submodel1");
+		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", IdentifierType.URI, "/aas/submodels/submodel1");
 		aasDescriptor.addSubmodelDescriptor(smDescriptor);
 
 		registry.register(new ModelUrn("coilcar"), aasDescriptor);
@@ -82,7 +81,7 @@ public class TestAASServicecall {
 		connectorProvider.addMapping("/aas/submodels/submodel1", provider);
 		
 		// create the service executor that calls the services using aas
-		IAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(registry,
+		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(registry,
 				connectorProvider);
 		serviceExecutor = new CoilcarServiceExecutor(manager);
 		

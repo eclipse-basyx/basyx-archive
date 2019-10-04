@@ -7,10 +7,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.basyx.aas.api.exception.ServerException;
+import org.eclipse.basyx.aas.backend.provider.AASModelProvider;
+import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.testsuite.support.aas.vab.stub.elements.SimpleAASSubmodel;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
@@ -32,8 +35,8 @@ public class VABMultiSubmodelProviderTest {
 		String urn = "urn:fhg:es.iese:aas:1:1:submodel";
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
 		// set dummy aas
-		provider.setAssetAdministrationShell(new VirtualPathModelProvider(new HashMap<String, Object>()));
-		provider.addSubmodel("SimpleAASSubmodel", new VirtualPathModelProvider(new SimpleAASSubmodel()));
+		provider.setAssetAdministrationShell(new AASModelProvider(new HashMap<String, Object>()));
+		provider.addSubmodel("SimpleAASSubmodel", new SubModelProvider(new SimpleAASSubmodel()));
 		stub.addProvider(urn, "", provider);
 		proxy = stub.connectToVABElement(urn);
 	}
@@ -87,17 +90,11 @@ public class VABMultiSubmodelProviderTest {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	void getTestRunner(String smId) {
 		// Get property value
-		// Object value1 =
-		// connVABElement.readElementValue("/aas/submodels/SimpleAASSubmodel");
-		Object value2 = proxy.getModelPropertyValue("/aas/submodels/" + smId + "/dataElements");
-		System.out.println("V2:" + value2);
-
-		Object value3 = proxy.getModelPropertyValue("/aas/submodels/" + smId + "/dataElements/integerProperty");
-		System.out.println("V3:" + value3);
-
-		Object value4 = proxy.getModelPropertyValue("/aas/submodels/" + smId + "/dataElements/integerProperty/value");
-		assertEquals(value4, 123);
+		Map<String, Object> value = (Map<String, Object>) proxy
+				.getModelPropertyValue("/aas/submodels/" + smId + "/dataElements/integerProperty/value");
+		assertEquals(123, value.get(SingleProperty.VALUE));
 	}
 }

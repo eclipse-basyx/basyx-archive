@@ -1,8 +1,10 @@
 package org.eclipse.basyx.examples.mockup.application;
 
+import java.util.Map;
+
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.AASHTTPRegistryProxy;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABModelMap;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.components.service.BaseBaSyxService;
@@ -68,11 +70,10 @@ public class ReceiveDeviceMaintenanceApplication extends BaseBaSyxService {
 	 */
 	@SuppressWarnings("unchecked")
 	public int getDevicePartSupplyStatus() {
-		// Read complete sub model ("/")
-		VABModelMap<Object> deviceSM = (VABModelMap<Object>) aasServerConnection.getModelPropertyValue("/");
-		
-		// Return status property
-		return Integer.parseInt(deviceSM.getPath("properties/parts/availability").toString());
+		// Read the status property
+		Map<String, Object> property = (Map<String, Object>) aasServerConnection.getModelPropertyValue(SubModel.PROPERTIES + "/partAvailability");
+		// Return the value of the property
+		return Integer.parseInt(property.get("value").toString());
 	}
 }
 

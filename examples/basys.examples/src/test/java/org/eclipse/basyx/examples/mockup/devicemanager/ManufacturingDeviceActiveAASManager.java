@@ -5,6 +5,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.tools.aas.active.HTTPGetter;
 import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
 
@@ -50,12 +51,17 @@ public class ManufacturingDeviceActiveAASManager extends ManufacturingDeviceMana
 		Map<String, Object> dynamicProperty = VABLambdaProviderHelper.createSimple(new HTTPGetter("http://localhost:8080/basys.examples/Mockup/Supplier"), null);
 
 		// Create sub model
-		SubModel supplySM = new SubModel()
+		SubModel supplySM = new SubModel();
+		// - Set submodel ID
+		supplySM.setId("Supply");
 		//   - Property status: indicate device status
-				.putPath("properties/parts/availability", dynamicProperty);
+		SingleProperty availabililtyProp = new SingleProperty(dynamicProperty);
+		availabililtyProp.setId("partAvailability");
+		supplySM.addSubModelElement(availabililtyProp);
+
 
 		// Transfer device sub model to server
-		aasServerConnection.createValue(lookupURN("Supply").toString(), supplySM);
+		aasServerConnection.createValue("/aas/submodels", supplySM);
 	}
 
 
@@ -66,9 +72,9 @@ public class ManufacturingDeviceActiveAASManager extends ManufacturingDeviceMana
 	protected AASDescriptor getAASDescriptor() {
 		// Create AAS and sub model descriptors
 		AASDescriptor aasDescriptor = createAASDescriptorURI(lookupURN("AAS"));
-		addSubModelDescriptorURI(aasDescriptor, lookupURN("Status"));
-		addSubModelDescriptorURI(aasDescriptor, lookupURN("Supply"));
-		addSubModelDescriptorURI(aasDescriptor, lookupURN("Controller"));
+		addSubModelDescriptorURI(aasDescriptor, lookupURN("Status"), "Status");
+		addSubModelDescriptorURI(aasDescriptor, lookupURN("Supply"), "Supply");
+		addSubModelDescriptorURI(aasDescriptor, lookupURN("Controller"), "Controller");
 		
 		// Return AAS and sub model descriptors
 		return aasDescriptor;

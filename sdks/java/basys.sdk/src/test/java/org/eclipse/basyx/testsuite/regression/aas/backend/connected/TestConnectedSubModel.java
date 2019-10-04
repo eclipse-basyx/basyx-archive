@@ -12,22 +12,19 @@ import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.IDataElement;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.aas.backend.connected.aas.ConnectedSubModel;
+import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.operation.Operation;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory_BaSyxNative;
-import org.eclipse.basyx.testsuite.support.backend.servers.AASTCPServerResource;
-import org.eclipse.basyx.vab.backend.connector.basyx.BaSyxConnectorProvider;
-import org.eclipse.basyx.vab.core.VABConnectionManager;
-import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
+import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * Tests if a SubModel can be created and used correctly
- * 
+ *
  * @author schnicke
  *
  */
@@ -39,9 +36,6 @@ public class TestConnectedSubModel {
 	private final static String ID = "TestId";
 
 	ConnectedSubModel submodel;
-	
-	@ClassRule
-	public static AASTCPServerResource res = AASTCPServerResource.getTestResource();
 
 	@Before
 	public void build() {
@@ -57,21 +51,14 @@ public class TestConnectedSubModel {
 		});
 		op.setId(OP);
 
-		// Create the SubModel using the created property and operation		
+		// Create the SubModel using the created property and operation
 		SubModel sm = factory.create(new SubModel(), Collections.singletonList(propertyMeta), Collections.singletonList(op));
 		sm.setId(ID);
-		// Create a connection manager
-		VABConnectionManager manager = new VABConnectionManager(new TestsuiteDirectory_BaSyxNative(),
-				new BaSyxConnectorProvider());
-		
-		// Connect to the new VABElement
-		VABElementProxy proxy = manager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
-		
-		// Put the subModel into the newly created proxy
-		proxy.setModelPropertyValue("", sm);
-		
+
+		SubModelProvider provider = new SubModelProvider(new VABLambdaProvider(sm));
+
 		// Create the ConnectedSubModel based on the manager
-		submodel = new ConnectedSubModel(proxy);
+		submodel = new ConnectedSubModel(new VABConnectionManagerStub(provider).connectToVABElement(""));
 	}
 
 	/**

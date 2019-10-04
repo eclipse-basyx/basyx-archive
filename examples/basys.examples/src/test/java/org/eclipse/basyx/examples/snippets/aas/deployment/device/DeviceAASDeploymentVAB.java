@@ -2,8 +2,8 @@ package org.eclipse.basyx.examples.snippets.aas.deployment.device;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.basyx.aas.backend.provider.AASModelProvider;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
 import org.eclipse.basyx.vab.backend.connector.JSONConnector;
 import org.eclipse.basyx.vab.backend.connector.basyx.BaSyxConnector;
@@ -38,7 +38,7 @@ public class DeviceAASDeploymentVAB {
 
 
 		// Export AAS via BaSyx server
-		VirtualPathModelProvider modelProvider = new VirtualPathModelProvider(aas);
+		AASModelProvider modelProvider = new AASModelProvider(aas);
 		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider(modelProvider);
 		BaSyxTCPServer<VABMultiSubmodelProvider> server = new BaSyxTCPServer<VABMultiSubmodelProvider>(aasProvider, 9998);
 		// - Start local BaSyx/TCP server

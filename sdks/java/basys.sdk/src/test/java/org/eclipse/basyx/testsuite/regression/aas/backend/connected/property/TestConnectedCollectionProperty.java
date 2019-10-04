@@ -12,11 +12,12 @@ import org.eclipse.basyx.aas.api.exception.ServerException;
 import org.eclipse.basyx.aas.api.exception.TypeMismatchException;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ICollectionProperty;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property.ConnectedCollectionProperty;
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
+import org.eclipse.basyx.aas.backend.provider.SinglePropertyProvider;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.testsuite.support.vab.TypeDestroyer;
 import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.core.VABConnectionManager;
+import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,7 +44,8 @@ public class TestConnectedCollectionProperty {
 		// Create dummy connection manager containing the
 		// created PropertySingleValued map
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(propertySingleValued);
-		VABConnectionManager manager = new VABConnectionManagerStub(new VirtualPathModelProvider(destroyType));
+		VABConnectionManager manager = new VABConnectionManagerStub(
+				new SinglePropertyProvider(new VABHashmapProvider(destroyType)));
 
 		// Create ConnectedCollectionProperty
 		prop = new ConnectedCollectionProperty(manager.connectToVABElement(""));

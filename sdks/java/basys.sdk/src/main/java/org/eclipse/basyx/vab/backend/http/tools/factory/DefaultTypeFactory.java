@@ -1,18 +1,17 @@
 package org.eclipse.basyx.vab.backend.http.tools.factory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABModelMap;
-
 
 
 /**
  * Default type factory
- * 
+ *
  * @author kuhn
  *
  */
@@ -23,25 +22,24 @@ public class DefaultTypeFactory implements GSONToolsFactory {
 	 */
 	@Override
 	public Map<String, Object> createMap() {
-		return new VABModelMap<Object>();
+		return new HashMap<>();
 	}
-	
+
 
 	/**
 	 * Create a set
 	 */
 	@Override
 	public Set<Object> createSet() {
-		return new HashSet<Object>();
+		return new HashSet<>();
 	}
 
-	
+
 	/**
 	 * Create an ArrayList
 	 */
 	@Override
 	public List<Object> createList() {
-		return new ArrayList<Object>();
+		return new ArrayList<>();
 	}
-
 }

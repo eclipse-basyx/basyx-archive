@@ -191,21 +191,6 @@ public class AASDescriptor extends HashMap<String, Object> {
 		// Return 'this' reference
 		return this;
 	}
-	
-	/**
-	 * Add a sub model descriptor - simplified operation with default fields
-	 * 
-	 * @param urn
-	 *            URN of sub model
-	 */
-	public AASDescriptor addSubmodelDescriptor(ModelUrn urn, String aasSrvURL) {
-		// Add sub model descriptor
-		addSubmodelDescriptor(new SubmodelDescriptor(urn.getURN(), IdentifierType.URI,
-				aasSrvURL + "/aas/submodels/aasRepository/" + urn.getEncodedURN()));
-
-		// Return 'this' reference
-		return this;
-	}
 
 	/**
 	 * Get a specific sub model descriptor

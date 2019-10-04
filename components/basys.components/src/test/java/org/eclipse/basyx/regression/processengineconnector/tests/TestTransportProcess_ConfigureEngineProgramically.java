@@ -59,12 +59,12 @@ public class TestTransportProcess_ConfigureEngineProgramically {
 		// Create aas descriptor with meta-information of the aas
 		ModelUrn coilcarUrn = new ModelUrn("coilcar");
 		AASDescriptor ccDescriptor = new AASDescriptor("coilcar", IdentifierType.URI,
-				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/");
+				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas");
 		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", IdentifierType.URI,
-				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/");
+				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas/submodels/submodel1");
 		ccDescriptor.addSubmodelDescriptor(smDescriptor);
 
-		// registra the aas
+		// register the aas
 		registry.register(coilcarUrn, ccDescriptor);
 		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorProvider());
 		
@@ -90,7 +90,7 @@ public class TestTransportProcess_ConfigureEngineProgramically {
 		
 		// deploy the BPMN-model defined in the xml file on the process engine
 		RepositoryService repositoryService = processEngine.getRepositoryService();
-
+		
 		try {
 			// Add the XML-file with the BPMN-Model to the repository and deploy it
 			repositoryService.createDeployment().
@@ -104,12 +104,12 @@ public class TestTransportProcess_ConfigureEngineProgramically {
 		variables.put("coilposition", 2);
 		
 		// Set the service executor to the java-delegate
-		DeviceServiceDelegate
-				.setDeviceServiceExecutor(new CoilcarServiceExecutor(manager));
+		DeviceServiceDelegate.setDeviceServiceExecutor(new CoilcarServiceExecutor(manager));
 		
 		//  Start a process instance
 		@SuppressWarnings("unused")
-		ProcessInstance processInstance1 = processEngine.getRuntimeService().startProcessInstanceByKey("SimpleTransportProcess", variables);
+		ProcessInstance processInstance1 = processEngine.getRuntimeService()
+				.startProcessInstanceByKey("SimpleTransportProcess", variables);
 		
 		// close the engine after the process execution
 		processEngine.close();

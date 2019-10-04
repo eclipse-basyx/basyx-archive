@@ -2,8 +2,10 @@ package org.eclipse.basyx.examples.snippets.aas.deployment.device;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
+
+import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
 import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.backend.provider.VirtualPathModelProvider;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.vab.backend.connector.JSONConnector;
@@ -28,6 +30,7 @@ public class DeviceSubModelDeploymentVAB {
 	/**
 	 * Run code snippet. Connect to AAS sub model on server, access sub model properties using VAB properties. 
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void createExportAndAccessSubModel() throws Exception {
 
@@ -48,7 +51,7 @@ public class DeviceSubModelDeploymentVAB {
 
 		
 		// Export sub model via BaSyx server
-		VirtualPathModelProvider modelProvider = new VirtualPathModelProvider(submodel);
+		SubModelProvider modelProvider = new SubModelProvider(submodel);
 		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider("dynamicSM", modelProvider);
 		BaSyxTCPServer<VABMultiSubmodelProvider> server = new BaSyxTCPServer<VABMultiSubmodelProvider>(aasProvider, 9998);
 		// - Start local BaSyx/TCP server
@@ -61,7 +64,8 @@ public class DeviceSubModelDeploymentVAB {
 		// - Create connection to BaSyx server manager
 		JSONConnector toDeviceManager = new JSONConnector(basyxConnector);	
 		// - Access sub model property, check value
-		int propVal = (int) toDeviceManager.getModelPropertyValue("/aas/submodels/dynamicSM/dataElements/prop1/value");
+		int propVal = (int) ((HashMap<String, Object>) toDeviceManager
+				.getModelPropertyValue("/aas/submodels/dynamicSM/dataElements/prop1/value")).get("value");
 		
 		
 		// Check value

@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.metamodel.aas.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IContainerProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleProperty;
@@ -14,7 +13,7 @@ import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShell
 import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElement;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.ContainerProperty;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
@@ -74,7 +73,7 @@ public class AASServletConnectionFull {
 					prop11
 				);
 			// - Add container to property map
-			addSubModelElement(fac.createContainer(new SubmodelElementCollection(), containerProperties, fac.emptyList(), "prop2"));
+			addSubModelElement(fac.createContainer(new ContainerProperty(), containerProperties, fac.emptyList(), "prop2"));
 
 			// Add another property manually to sub model container "properties"
 			SingleProperty prop3 = new SingleProperty(17);
@@ -138,10 +137,10 @@ public class AASServletConnectionFull {
 			new ExamplesPreconfiguredDirectory()
 					// - VAB needs to know the relative path of the sub model that is defined by AAS
 					// meta model
-					.addMapping("sm-001VAB", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas/submodels/sm-001")
+					.addMapping("sm-001VAB", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/")
 					// - VAB needs to know the relative path of the sub model that is defined by AAS
 					// meta model
-					.addMapping("sm-001MVAB", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual/aas/submodels/sm-001M"),
+					.addMapping("sm-001MVAB", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual/"),
 			// We connect via HTTP
 			new HTTPConnectorProvider());
 	
@@ -153,10 +152,10 @@ public class AASServletConnectionFull {
 	protected ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(
 			// Add example specific mappings
 			new ExampleAASRegistry()
-					.addAASMapping("aas-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas")
-					.addSubmodelMapping("aas-001", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/aas/submodels/sm-001")
-					.addAASMapping("aas-001M", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual/aas")
-					.addSubmodelMapping("aas-001M", "sm-001M", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual/aas/submodels/sm-001M"),
+					.addAASMapping("aas-001", "") // no AAS is provided in this example
+					.addSubmodelMapping("aas-001", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/")
+					.addAASMapping("aas-001M", "") // no AAS is provided in this example
+					.addSubmodelMapping("aas-001M", "sm-001M", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual/"),
 			// We connect via HTTP
 			new HTTPConnectorProvider());
 
@@ -194,24 +193,19 @@ public class AASServletConnectionFull {
 			assertTrue(subModel.getDataElements().get("prop2").getId().equals("prop2"));
 			assertTrue((int) ((ISingleProperty) ((IContainerProperty) subModel.getDataElements().get("prop2")).getDataElements().get("prop11")).get() == 123);
 
-			// Retrieve dummy AAS (created by factory) with SDK connector
-			IAssetAdministrationShell shell = manager.retrieveAAS(new ModelUrn("aas-001"));
-			// - Retrieve AAS values and compare to expected values
-			assertTrue(shell.getId().equals("---"));
-
 
 			// Connect to sub model using lower-level VAB interface
 			VABElementProxy connSubModel1 = this.connManager.connectToVABElement("sm-001VAB");
 			// - Read property values and compare with expected values
-			assertTrue((int) connSubModel1.getModelPropertyValue("dataElements/prop1/value") == 234);
-			assertTrue((int) connSubModel1.getModelPropertyValue("dataElements/prop3/value") == 17);
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("value") == 234);
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop3")).get("value") == 17);
 			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("idShort").equals("prop1"));
 			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2")).get("idShort").equals("prop2"));
-			assertTrue((int) connSubModel1.getModelPropertyValue("dataElements/prop2/dataElements/prop11/value") == 123);
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2/dataElements/prop11")).get("value") == 123);
 			// - Change property value using VAB primitive
 			connSubModel1.setModelPropertyValue("dataElements/prop1/value", 456);
 			// - Read value back using VAB primitive
-			assertTrue((int) connSubModel1.getModelPropertyValue("dataElements/prop1/value") == 456);
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("value") == 456);
 
 			// Read changed value back using SDK connector
 			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get() == 456);
@@ -231,25 +225,19 @@ public class AASServletConnectionFull {
 			assertTrue(subModel.getDataElements().get("prop2").getId().equals("prop2"));
 			assertTrue((int) ((ISingleProperty) ((IContainerProperty) subModel.getDataElements().get("prop2")).getDataElements().get("prop11")).get() == 123);
 
-			// Retrieve dummy AAS (created by factory) with SDK connector
-			IAssetAdministrationShell shell = manager.retrieveAAS(new ModelUrn("aas-001"));
-			// - Retrieve AAS values and compare to expected values
-			assertTrue(shell.getId().equals("---"));
-			
-			
 			// Connect to sub model using lower-level VAB interface
 			VABElementProxy connSubModel1 = this.connManager.connectToVABElement("sm-001MVAB");
 			// - Read property values and compare with expected values
 			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("/")).get("idShort").equals("sm-001M"));
-			assertTrue((int) connSubModel1.getModelPropertyValue("dataElements/prop1/value") == 234);
-			assertTrue((int) connSubModel1.getModelPropertyValue("dataElements/prop3/value") == 17);
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("value") == 234);
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop3")).get("value") == 17);
 			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("idShort").equals("prop1"));
 			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2")).get("idShort").equals("prop2"));
-			assertTrue((int) connSubModel1.getModelPropertyValue("dataElements/prop2/dataElements/prop11/value") == 123);
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2/dataElements/prop11")).get("value") == 123);
 			// - Change property value using VAB primitive
 			connSubModel1.setModelPropertyValue("dataElements/prop1/value", 456);
 			// - Read value back using VAB primitive
-			assertTrue((int) connSubModel1.getModelPropertyValue("dataElements/prop1/value") == 456);
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("value") == 456);
 
 			// Read changed value back using SDK connector
 			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get() == 456);

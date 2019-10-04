@@ -1,5 +1,7 @@
 package org.eclipse.basyx.aas.backend.connected.aas.submodelelement.property;
 
+import java.util.Map;
+
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.IProperty;
 import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.PropertyType;
 import org.eclipse.basyx.aas.backend.connected.aas.submodelelement.ConnectedDataElement;
@@ -32,5 +34,11 @@ public abstract class ConnectedProperty extends ConnectedDataElement implements 
 	@Override
 	public String getValueId() {
 		return (String) getProxy().getModelPropertyValue(SingleProperty.VALUEID);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T> T retrieveObject() {
+		return (T) ((Map<String, Object>) getProxy().getModelPropertyValue(SingleProperty.VALUE))
+				.get(SingleProperty.VALUE);
 	}
 }

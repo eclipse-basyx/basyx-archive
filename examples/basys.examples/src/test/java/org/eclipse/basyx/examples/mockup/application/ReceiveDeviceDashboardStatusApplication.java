@@ -1,8 +1,10 @@
 package org.eclipse.basyx.examples.mockup.application;
 
+import java.util.Map;
+
 import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
 import org.eclipse.basyx.aas.api.registry.AASHTTPRegistryProxy;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.VABModelMap;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.components.service.BaseBaSyxService;
@@ -68,11 +70,10 @@ public class ReceiveDeviceDashboardStatusApplication extends BaseBaSyxService {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getDeviceStatus() {
-		// Read complete sub model ("/")
-		VABModelMap<Object> deviceSM = (VABModelMap<Object>) aasServerConnection.getModelPropertyValue("/");
-		
-		// Return status property
-		return deviceSM.getPath("properties/status").toString();
+		// Read the status property
+		Map<String, Object> property = (Map<String, Object>) aasServerConnection.getModelPropertyValue(SubModel.PROPERTIES + "/status");
+		// Return the value of the property
+		return property.get("value").toString();
 	}
 
 
@@ -81,11 +82,10 @@ public class ReceiveDeviceDashboardStatusApplication extends BaseBaSyxService {
 	 */
 	@SuppressWarnings("unchecked")
 	public int getDeviceInvocationCounter() {
-		// Read complete sub model ("/")
-		VABModelMap<Object> deviceSM = (VABModelMap<Object>) aasServerConnection.getModelPropertyValue("/");
-		
-		// Get and return invocation counter for device default service
-		return (int) deviceSM.getPath("properties/statistics/default/invocations");
+		// Read the invocation counter for device default service
+		Map<String, Object> property = (Map<String, Object>) aasServerConnection.getModelPropertyValue(SubModel.PROPERTIES + "/invocations");
+		// Return the value of the property
+		return (int) property.get("value");
 	}
 }
 
