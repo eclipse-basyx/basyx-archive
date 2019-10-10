@@ -6,6 +6,7 @@ import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.property.ISingleP
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasSemantics;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
+import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 
 /**
@@ -45,8 +46,6 @@ public class SingleProperty extends AbstractProperty implements ISingleProperty 
 	 * @param value
 	 *            the value of the property instance <b>!! Is defined in standard as
 	 *            String, but does not make sense in this context !!</b>
-	 * @param valueType
-	 *            type of the value TODO: Macht String sinn?
 	 */
 	public SingleProperty(Object value) {
 		// Put attributes
@@ -59,6 +58,17 @@ public class SingleProperty extends AbstractProperty implements ISingleProperty 
 		putAll(referable);
 		put(HasSemantics.SEMANTICID, value);
 		putAll(qualifier);
+	}
+
+	/**
+	 * Overrides the orignal value type that has been determined by inspecting the given value.
+	 * You can use PropertyValueTypeDefHelper
+	 * 
+	 * @param type
+	 *            manually determined type of the value
+	 */
+	public void setValueType(PropertyValueTypeDef type) {
+		put(SingleProperty.VALUETYPE, PropertyValueTypeDefHelper.getWrapper(type));
 	}
 
 	@Override
