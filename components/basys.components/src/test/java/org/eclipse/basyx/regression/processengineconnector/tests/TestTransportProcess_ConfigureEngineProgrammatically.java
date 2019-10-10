@@ -35,7 +35,7 @@ import org.junit.Test;
  * 
  * @author Zhang,Zai
  * */
-public class TestTransportProcess_ConfigureEngineProgramically {
+public class TestTransportProcess_ConfigureEngineProgrammatically {
 	/**
 	 * Connection aas manager for creating connected aas
 	 * */
@@ -93,8 +93,11 @@ public class TestTransportProcess_ConfigureEngineProgramically {
 		
 		try {
 			// Add the XML-file with the BPMN-Model to the repository and deploy it
-			repositoryService.createDeployment().
-			addInputStream("SimpleTransportProcess.bpmn20.xml",new FileInputStream(new File(System.getProperty("user.dir")+"\\WebContent\\WEB-INF\\config\\processengine\\SimpleTransportProcess.bpmn20.xml"))).deploy();
+			String relativeConfigPath = "/WebContent/WEB-INF/config/processengine/SimpleTransportProcess.bpmn20.xml";
+			File configFile = new File(System.getProperty("user.dir") + relativeConfigPath);
+			repositoryService.createDeployment()
+					.addInputStream("SimpleTransportProcess.bpmn20.xml", new FileInputStream(configFile))
+					.deploy();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
