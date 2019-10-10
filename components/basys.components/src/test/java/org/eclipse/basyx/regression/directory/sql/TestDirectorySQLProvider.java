@@ -210,7 +210,9 @@ public class TestDirectorySQLProvider {
 		try {
 			return (T) handler.deserialize(res);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException();
 		}
 	}
+
 }
