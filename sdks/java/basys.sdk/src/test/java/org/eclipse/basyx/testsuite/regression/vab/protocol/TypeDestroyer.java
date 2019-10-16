@@ -1,11 +1,14 @@
 package org.eclipse.basyx.testsuite.regression.vab.protocol;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.testsuite.regression.vab.modelprovider.SimpleVABElement;
 import org.junit.Test;
 
 /**
@@ -36,16 +39,20 @@ public class TypeDestroyer {
 	}
 
 	private static Map<String, Object> handleMap(Map<String, Object> map) {
-		Map<String, Object> ret = new HashMap<String, Object>();
-		for(String k : map.keySet()) {
-			ret.put(k, handle(map.get(k)));
+		Map<String, Object> ret = new HashMap<>();
+		for (Entry<String, Object> entry : map.entrySet()) {
+			ret.put(entry.getKey(), handle(entry.getValue()));
 		}
 		return ret;
 	}
 	
 	@Test
 	public void testTypeDestroyer() {
-		SubModel sm = new SubModel();
-		assertFalse(destroyType(sm) instanceof SubModel);
+		SimpleVABElement sm = new SimpleVABElement();
+		Map<String, Object> generic = destroyType(sm);
+		assertTrue(sm instanceof SimpleVABElement);
+		assertFalse(generic instanceof SimpleVABElement);
+		assertEquals(generic, sm);
+
 	}
 }
