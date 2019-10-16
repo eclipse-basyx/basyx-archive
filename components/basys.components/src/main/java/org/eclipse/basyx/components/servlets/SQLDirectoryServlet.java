@@ -2,7 +2,7 @@ package org.eclipse.basyx.components.servlets;
 
 
 import org.eclipse.basyx.components.directory.SQLDirectoryProvider;
-import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
+import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
 
 /**

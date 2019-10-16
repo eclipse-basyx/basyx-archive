@@ -2,8 +2,8 @@ package org.eclipse.basyx.components.servlet.submodel;
 
 import java.util.HashMap;
 
-import org.eclipse.basyx.vab.backend.server.http.VABHTTPInterface;
-import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
+import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
+import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
 /**
  * Empty VAB provider servlet. It realizes a VAB lambda provider on its endpoint.

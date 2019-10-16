@@ -4,14 +4,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
-import org.eclipse.basyx.vab.backend.connector.JSONConnector;
-import org.eclipse.basyx.vab.backend.connector.basyx.BaSyxConnector;
-import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
+import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnector;
+import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
 import org.junit.Test;
-
 
 /**
  * Illustrate manual creation and providing of AAS sub model

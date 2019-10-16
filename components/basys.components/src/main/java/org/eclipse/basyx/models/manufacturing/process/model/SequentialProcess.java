@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.models.manufacturing.process.model.device.Device;
 import org.eclipse.basyx.models.manufacturing.process.model.device.QueueDevice;
 import org.eclipse.basyx.models.manufacturing.process.model.device.SequentialDevice;

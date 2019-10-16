@@ -1,6 +1,6 @@
 package org.eclipse.basyx.regression.support.directory;
 
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
+import org.eclipse.basyx.vab.directory.preconfigured.PreconfiguredDirectory;
 
 
 
@@ -11,7 +11,7 @@ import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.T
  * @author kuhn
  *
  */
-public class ComponentsTestsuiteDirectory extends TestsuiteDirectory {
+public class ComponentsTestsuiteDirectory extends PreconfiguredDirectory {
 
 	
 	/**

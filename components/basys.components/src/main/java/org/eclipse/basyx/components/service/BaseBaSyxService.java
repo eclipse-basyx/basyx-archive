@@ -3,14 +3,14 @@ package org.eclipse.basyx.components.service;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
-import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.components.configuration.ConfigurableComponent;
 import org.eclipse.basyx.components.configuration.builder.BaSyxServiceConfigurationBuilder;
-import org.eclipse.basyx.sdk.api.service.BaSyxService;
-import org.eclipse.basyx.vab.core.VABConnectionManager;
-import org.eclipse.basyx.vab.core.proxy.VABElementProxy;
+import org.eclipse.basyx.vab.manager.VABConnectionManager;
+import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.service.api.BaSyxService;
 
 
 

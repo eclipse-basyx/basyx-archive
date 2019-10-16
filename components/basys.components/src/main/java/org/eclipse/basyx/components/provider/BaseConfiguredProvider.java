@@ -4,17 +4,17 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
-import org.eclipse.basyx.aas.impl.metamodel.facades.SubmodelFacade;
-import org.eclipse.basyx.aas.impl.metamodel.facades.SubmodelFacadeCustomSemantics;
-import org.eclipse.basyx.aas.impl.metamodel.facades.SubmodelFacadeIRDISemantics;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.IdentifierType;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.HasDataSpecification;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.Referable;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.haskind.Kind;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.qualifier.qualifiable.Qualifier;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacadeCustomSemantics;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacadeIRDISemantics;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.Kind;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 
 /**
  * Base class for providers that receiver their configuration through a configuration properties object

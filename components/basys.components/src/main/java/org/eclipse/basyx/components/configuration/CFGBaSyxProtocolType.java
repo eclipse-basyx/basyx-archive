@@ -1,8 +1,8 @@
 package org.eclipse.basyx.components.configuration;
 
-import org.eclipse.basyx.vab.backend.connector.basyx.BaSyxConnectorProvider;
-import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
-import org.eclipse.basyx.vab.core.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 
 
 

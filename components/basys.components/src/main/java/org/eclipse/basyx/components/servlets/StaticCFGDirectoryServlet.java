@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.basyx.components.directory.AASDirectoryEntry;
 import org.eclipse.basyx.components.directory.exception.AASDirectoryProviderException;
-import org.eclipse.basyx.vab.backend.server.http.BasysHTTPServlet;
+import org.eclipse.basyx.vab.protocol.http.server.BasysHTTPServlet;
 
 
 

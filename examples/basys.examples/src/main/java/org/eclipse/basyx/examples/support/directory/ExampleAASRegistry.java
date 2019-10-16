@@ -1,12 +1,12 @@
 package org.eclipse.basyx.examples.support.directory;
 
-import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.IdentifierType;
-import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 
-public class ExampleAASRegistry extends AASRegistryStub {
+public class ExampleAASRegistry extends PreconfiguredRegistry {
 
 	public ExampleAASRegistry addAASMapping(String rawUrn, String endpoint) {
 		AASDescriptor aasDescriptor = new AASDescriptor(rawUrn, IdentifierType.URI, endpoint);

@@ -11,7 +11,7 @@ import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLQuery;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLRunner;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLUpdate;
-import org.eclipse.basyx.vab.provider.lambda.VABLambdaHandler;
+import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaHandler;
 
 
 

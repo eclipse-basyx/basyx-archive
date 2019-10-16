@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 import java.util.function.Function;
 
-import org.eclipse.basyx.vab.core.IModelProvider;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
 import org.junit.Test;
 
 /**

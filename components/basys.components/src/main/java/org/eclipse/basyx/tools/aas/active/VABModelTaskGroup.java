@@ -7,7 +7,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.basyx.vab.core.IModelProvider;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
 public class VABModelTaskGroup {
 	private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();

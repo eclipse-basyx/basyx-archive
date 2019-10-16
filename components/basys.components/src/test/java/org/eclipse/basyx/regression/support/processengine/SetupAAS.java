@@ -1,14 +1,14 @@
 package org.eclipse.basyx.regression.support.processengine;
 
-import org.eclipse.basyx.aas.backend.provider.AASModelProvider;
-import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
-import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.restapi.AASModelProvider;
+import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.regression.support.processengine.aas.DeviceAdministrationShellFactory;
 import org.eclipse.basyx.regression.support.processengine.stubs.Coilcar;
 import org.eclipse.basyx.regression.support.processengine.submodel.DeviceSubmodelFactory;
-import org.eclipse.basyx.testsuite.support.vab.stub.VABConnectionManagerStub;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.testsuite.support.VABConnectionManagerStub;
 
 /**
  * Create AAS and VAB connection stub (without communication protocol for test purpose)

@@ -2,10 +2,10 @@ package org.eclipse.basyx.testsuite.regression.vab.gateway;
 
 import static org.junit.Assert.assertEquals;
 
-import org.eclipse.basyx.testsuite.support.vab.stub.IModelProviderStub;
-import org.eclipse.basyx.vab.backend.gateway.DelegatingModelProvider;
-import org.eclipse.basyx.vab.core.IConnectorProvider;
-import org.eclipse.basyx.vab.core.IModelProvider;
+import org.eclipse.basyx.testsuite.regression.vab.modelprovider.IModelProviderStub;
+import org.eclipse.basyx.vab.gateway.DelegatingModelProvider;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 import org.junit.Test;
 
 /**

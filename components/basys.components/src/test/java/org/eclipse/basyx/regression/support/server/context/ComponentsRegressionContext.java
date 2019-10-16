@@ -7,7 +7,7 @@ import org.eclipse.basyx.components.servlets.SQLSubModelProviderServlet;
 import org.eclipse.basyx.components.servlets.StaticCFGDirectoryServlet;
 import org.eclipse.basyx.components.servlets.XMLXQueryServlet;
 import org.eclipse.basyx.regression.support.processengine.servlet.CoilcarAASServlet;
-import org.eclipse.basyx.testsuite.support.backend.servers.BaSyxContext;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 
 
 

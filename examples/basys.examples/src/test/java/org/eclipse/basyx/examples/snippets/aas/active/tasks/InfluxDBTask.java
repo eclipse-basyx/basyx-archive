@@ -6,7 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.eclipse.basyx.tools.aas.active.VABModelTask;
-import org.eclipse.basyx.vab.core.IModelProvider;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
 /**
  * Task for writing a value to an influxDB

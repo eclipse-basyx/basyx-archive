@@ -2,7 +2,7 @@ package org.eclipse.basyx.models.controlcomponent;
 
 import org.eclipse.basyx.components.netcomm.NetworkReceiver;
 import org.eclipse.basyx.components.netcomm.TCPServer;
-import org.eclipse.basyx.sdk.api.service.BaSyxService;
+import org.eclipse.basyx.vab.service.api.BaSyxService;
 
 
 

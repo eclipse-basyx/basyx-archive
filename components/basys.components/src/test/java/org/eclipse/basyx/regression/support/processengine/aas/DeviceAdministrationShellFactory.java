@@ -3,8 +3,8 @@ package org.eclipse.basyx.regression.support.processengine.aas;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.basyx.aas.impl.metamodel.factory.MetaModelElementFactory;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.factory.java.MetaModelElementFactory;
+import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 
 public class DeviceAdministrationShellFactory {
 	

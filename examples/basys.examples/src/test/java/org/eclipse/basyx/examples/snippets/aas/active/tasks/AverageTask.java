@@ -1,7 +1,7 @@
 package org.eclipse.basyx.examples.snippets.aas.active.tasks;
 
 import org.eclipse.basyx.tools.aas.active.VABModelTask;
-import org.eclipse.basyx.vab.core.IModelProvider;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
 /**
  * Task for computing the average value from a source property

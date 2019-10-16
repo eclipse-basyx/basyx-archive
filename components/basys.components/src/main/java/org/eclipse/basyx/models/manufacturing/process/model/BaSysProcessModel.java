@@ -3,9 +3,9 @@ package org.eclipse.basyx.models.manufacturing.process.model;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.models.manufacturing.process.model.device.DeviceIF;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 
 
 

@@ -2,8 +2,7 @@ package org.eclipse.basyx.examples.contexts;
 
 import org.eclipse.basyx.components.servlets.RawCFGSubModelProviderServlet;
 import org.eclipse.basyx.components.servlets.SQLDirectoryServlet;
-import org.eclipse.basyx.testsuite.support.backend.servers.BaSyxContext;
-
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 
 /**
  * BaSyx context that contains an Industrie 4.0 Servlet infrastructure

@@ -9,7 +9,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.eclipse.basyx.vab.backend.server.basyx.CoderTools;
+import org.eclipse.basyx.vab.protocol.basyx.CoderTools;
 
 
 

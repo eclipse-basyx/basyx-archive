@@ -1,9 +1,6 @@
 package org.eclipse.basyx.examples.support.directory;
 
-import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.TestsuiteDirectory;
-
-
-
+import org.eclipse.basyx.vab.directory.preconfigured.PreconfiguredDirectory;
 
 /**
  * Implement the examples directory service with pre-configured directory entries
@@ -11,7 +8,7 @@ import org.eclipse.basyx.testsuite.support.backend.common.stubs.java.directory.T
  * @author kuhn
  *
  */
-public class ExamplesPreconfiguredDirectory extends TestsuiteDirectory {
+public class ExamplesPreconfiguredDirectory extends PreconfiguredDirectory {
 
 	
 	/**

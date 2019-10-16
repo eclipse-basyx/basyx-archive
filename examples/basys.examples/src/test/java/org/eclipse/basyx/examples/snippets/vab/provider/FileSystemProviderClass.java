@@ -4,12 +4,12 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 
-import org.eclipse.basyx.vab.backend.http.tools.GSONTools;
-import org.eclipse.basyx.vab.backend.http.tools.factory.DefaultTypeFactory;
-import org.eclipse.basyx.vab.core.IModelProvider;
-import org.eclipse.basyx.vab.provider.filesystem.FileSystemProvider;
-import org.eclipse.basyx.vab.provider.filesystem.filesystem.FileSystem;
-import org.eclipse.basyx.vab.provider.filesystem.filesystem.impl.GenericFileSystem;
+import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
+import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.modelprovider.filesystem.FileSystemProvider;
+import org.eclipse.basyx.vab.modelprovider.filesystem.filesystem.FileSystem;
+import org.eclipse.basyx.vab.modelprovider.filesystem.filesystem.GenericFileSystem;
 import org.junit.Test;
 
 /**

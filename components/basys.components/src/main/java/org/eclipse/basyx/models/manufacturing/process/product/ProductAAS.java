@@ -1,6 +1,6 @@
 package org.eclipse.basyx.models.manufacturing.process.product;
 
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 
 
 

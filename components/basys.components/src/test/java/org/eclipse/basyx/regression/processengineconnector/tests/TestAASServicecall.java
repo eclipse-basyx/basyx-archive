@@ -6,24 +6,24 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.api.registry.IAASRegistryService;
-import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.provider.AASModelProvider;
-import org.eclipse.basyx.aas.backend.provider.SubModelProvider;
-import org.eclipse.basyx.aas.backend.provider.VABMultiSubmodelProvider;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.IdentifierType;
+import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
+import org.eclipse.basyx.aas.restapi.AASModelProvider;
+import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceExecutor;
 import org.eclipse.basyx.regression.support.processengine.aas.DeviceAdministrationShellFactory;
 import org.eclipse.basyx.regression.support.processengine.executor.CoilcarServiceExecutor;
 import org.eclipse.basyx.regression.support.processengine.stubs.CoilcarStub;
 import org.eclipse.basyx.regression.support.processengine.submodel.DeviceSubmodelFactory;
-import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
-import org.eclipse.basyx.testsuite.support.vab.stub.ConnectorProviderStub;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.testsuite.support.ConnectorProviderStub;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -69,7 +69,7 @@ public class TestAASServicecall {
 		// Add aas to the provider
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
 		
-		IAASRegistryService registry = new AASRegistryStub();
+		IAASRegistryService registry = new PreconfiguredRegistry();
 		AASDescriptor aasDescriptor = new AASDescriptor("coilcar", IdentifierType.URI, "/aas");
 		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", IdentifierType.URI, "/aas/submodels/submodel1");
 		aasDescriptor.addSubmodelDescriptor(smDescriptor);

@@ -2,7 +2,7 @@ package org.eclipse.basyx.models.manufacturing.process.model.device;
 
 import java.util.Collection;
 
-import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 
 
 

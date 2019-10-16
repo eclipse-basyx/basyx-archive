@@ -11,17 +11,17 @@ import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.IdentifierType;
+import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceDelegate;
 import org.eclipse.basyx.regression.support.processengine.executor.CoilcarServiceExecutor;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
-import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
-import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
-import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
+import org.eclipse.basyx.testsuite.support.AASHTTPServerResource;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 	 * */
 	ConnectedAssetAdministrationShellManager manager;
 	
-	AASRegistryStub registry;
+	PreconfiguredRegistry registry;
 	/**
 	 * Makes sure Tomcat Server is started
 	 */
@@ -54,7 +54,7 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 	@Before
 	public void build() {
 		// Create registry for aas
-		registry = new AASRegistryStub();
+		registry = new PreconfiguredRegistry();
 
 		// Create aas descriptor with meta-information of the aas
 		ModelUrn coilcarUrn = new ModelUrn("coilcar");

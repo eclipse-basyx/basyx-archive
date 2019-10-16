@@ -2,7 +2,7 @@ package org.eclipse.basyx.regression.support.processengine.executor;
 
 import java.util.List;
 
-import org.eclipse.basyx.aas.api.manager.IAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.manager.api.IAssetAdministrationShellManager;
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceExecutor;
 import org.eclipse.basyx.regression.support.processengine.SetupAAS;
 

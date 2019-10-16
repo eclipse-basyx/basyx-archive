@@ -3,7 +3,7 @@ package org.eclipse.basyx.tools.aas.active;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.basyx.vab.core.IModelProvider;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
 public class ActiveModel {
 	private Set<VABModelTaskGroup> groups = new HashSet<>();

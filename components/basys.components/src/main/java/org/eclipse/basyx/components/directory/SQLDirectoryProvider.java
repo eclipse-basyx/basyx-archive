@@ -13,11 +13,11 @@ import java.util.Properties;
 
 import javax.servlet.ServletException;
 
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
-import org.eclipse.basyx.vab.backend.http.tools.GSONTools;
-import org.eclipse.basyx.vab.backend.http.tools.factory.DefaultTypeFactory;
-import org.eclipse.basyx.vab.core.IModelProvider;
+import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
+import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
 /**
  * Model Provider handling SQL Directory Services.

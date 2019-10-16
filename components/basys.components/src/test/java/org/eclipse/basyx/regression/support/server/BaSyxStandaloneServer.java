@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServer;
-import org.eclipse.basyx.testsuite.support.backend.servers.BaSyxContext;
+import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 
 
 

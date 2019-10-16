@@ -2,10 +2,8 @@ package org.eclipse.basyx.examples.snippets.aas;
 
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.junit.Test;
-
-
 
 /**
  * This code snippet illustrates the creation of an Asset Administration Shell (AAS) data structure 

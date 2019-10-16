@@ -5,18 +5,18 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.metamodel.aas.ISubModel;
-import org.eclipse.basyx.aas.api.metamodel.aas.submodelelement.operation.IOperation;
-import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.backend.connected.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.backend.connected.aas.ConnectedAssetAdministrationShell;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.identifier.IdentifierType;
+import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
-import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServerResource;
-import org.eclipse.basyx.testsuite.support.vab.stub.AASRegistryStub;
-import org.eclipse.basyx.vab.backend.connector.http.HTTPConnectorProvider;
+import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
+import org.eclipse.basyx.testsuite.support.AASHTTPServerResource;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -39,7 +39,7 @@ public class TestDeviceAdministrationShell {
 
 	@Before
 	public void setupConnection() {
-		AASRegistryStub registry = new AASRegistryStub();
+		PreconfiguredRegistry registry = new PreconfiguredRegistry();
 		ModelUrn coilcarUrn = new ModelUrn("coilcar");
 		AASDescriptor ccDescriptor = new AASDescriptor("coilcar", IdentifierType.URI,
 				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas");

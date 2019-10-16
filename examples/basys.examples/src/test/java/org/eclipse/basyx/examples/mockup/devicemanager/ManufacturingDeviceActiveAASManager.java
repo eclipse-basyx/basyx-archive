@@ -2,14 +2,12 @@ package org.eclipse.basyx.examples.mockup.devicemanager;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.SubModel;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.impl.metamodel.hashmap.aas.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.tools.aas.active.HTTPGetter;
-import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
-
-
+import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
 
 /**
  * Example manufacturing device manager code

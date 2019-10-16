@@ -3,7 +3,7 @@ package org.eclipse.basyx.models.manufacturing.process.model;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
-import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.junit.Test;
 
 

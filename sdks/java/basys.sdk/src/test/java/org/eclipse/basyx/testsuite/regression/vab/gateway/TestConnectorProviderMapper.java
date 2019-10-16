@@ -3,9 +3,9 @@ package org.eclipse.basyx.testsuite.regression.vab.gateway;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.basyx.vab.backend.gateway.ConnectorProviderMapper;
-import org.eclipse.basyx.vab.core.IConnectorProvider;
-import org.eclipse.basyx.vab.core.IModelProvider;
+import org.eclipse.basyx.vab.gateway.ConnectorProviderMapper;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 import org.junit.Test;
 
 /**

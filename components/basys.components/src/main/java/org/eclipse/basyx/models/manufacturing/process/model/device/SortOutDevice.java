@@ -1,6 +1,6 @@
 package org.eclipse.basyx.models.manufacturing.process.model.device;
 
-import org.eclipse.basyx.aas.api.modelurn.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 
 /**
  * A device model that sorts products out

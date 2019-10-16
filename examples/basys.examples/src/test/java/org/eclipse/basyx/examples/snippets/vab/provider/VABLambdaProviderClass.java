@@ -5,9 +5,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.vab.core.IModelProvider;
-import org.eclipse.basyx.vab.provider.lambda.VABLambdaProvider;
-import org.eclipse.basyx.vab.provider.lambda.VABLambdaProviderHelper;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
+import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
 import org.junit.Test;
 
 /**

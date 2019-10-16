@@ -3,9 +3,9 @@ package org.eclipse.basyx.examples.deployment;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.sdk.api.service.BaSyxService;
-import org.eclipse.basyx.testsuite.support.backend.servers.AASHTTPServer;
-import org.eclipse.basyx.testsuite.support.backend.servers.BaSyxContext;
+import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
+import org.eclipse.basyx.vab.service.api.BaSyxService;
 import org.junit.rules.ExternalResource;
 
 
@@ -64,7 +64,8 @@ public class BaSyxDeployment extends ExternalResource {
     /**
      * Execute before a test case starts
      */
-    protected void before() {
+    @Override
+	protected void before() {
     	// Iterate context components
     	for (Object contextComponent: contextComponents) {
     		// Process BaSyx context objects that run in a tomcat server
@@ -96,7 +97,8 @@ public class BaSyxDeployment extends ExternalResource {
     /**
      * Execute after test case ends
      */
-    protected void after() {
+    @Override
+	protected void after() {
     	// Iterate context components
     	for (Object contextComponent: contextComponents) {
     		// Process BaSyx context objects that run in a tomcat server

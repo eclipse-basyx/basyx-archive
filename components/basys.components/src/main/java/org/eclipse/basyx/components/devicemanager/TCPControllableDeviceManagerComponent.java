@@ -6,8 +6,8 @@ import org.eclipse.basyx.models.controlcomponent.ExecutionMode;
 import org.eclipse.basyx.models.controlcomponent.ExecutionState;
 import org.eclipse.basyx.models.controlcomponent.OccupationState;
 import org.eclipse.basyx.models.controlcomponent.SimpleControlComponent;
-import org.eclipse.basyx.vab.backend.server.basyx.BaSyxTCPServer;
-import org.eclipse.basyx.vab.provider.hashmap.VABHashmapProvider;
+import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
+import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
 
 
 

@@ -2,8 +2,6 @@ package org.eclipse.basyx.components.configuration.builder;
 
 import org.eclipse.basyx.components.configuration.ConfigurableComponent;
 
-
-
 /**
  * Configuration builder for BaSyx device managers
  * 
