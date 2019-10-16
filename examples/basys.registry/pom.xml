@@ -5,7 +5,6 @@
   <version>0.0.3-SNAPSHOT</version>
   <packaging>war</packaging>
   <build>
-    <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -127,10 +126,18 @@
 		<artifactId>basyx.components</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</dependency>
-	 <dependency>
+	<dependency>
 		<groupId>org.eclipse.basyx</groupId>
-		<artifactId>basyx.sdk</artifactId>
+		<artifactId>basyx.components</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	<!-- Adds additional classes of the BaSys Components for tests -->
+	<dependency>
+		<groupId>org.eclipse.basyx</groupId>
+		<artifactId>basyx.components</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<classifier>tests</classifier>
+		<scope>test</scope>
 	</dependency>
   </dependencies>
   <name>BaSys Registry Server</name>

@@ -1,4 +1,4 @@
-package org.eclipse.basyx.testsuite.support;
+package org.eclipse.basyx.testsuite.regression.vab.protocol.basyx;
 
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.AASTCPServer;

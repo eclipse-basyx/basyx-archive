@@ -2,11 +2,11 @@
     <wb-module deploy-name="registry-0.0.3-SNAPSHOT">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <dependent-module archiveName="basyx.components-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/basys.components/basys.components">
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <dependent-module archiveName="basyx.components-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/basyx.components/basyx.components">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="basyx.sdk-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/basys.sdk/basys.sdk">
+        <dependent-module archiveName="basyx.sdk-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/basyx.sdk/basyx.sdk">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/basys.registry/target/classes"/>

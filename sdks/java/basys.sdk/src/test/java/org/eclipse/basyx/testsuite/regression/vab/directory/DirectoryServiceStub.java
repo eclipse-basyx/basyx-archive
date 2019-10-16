@@ -1,4 +1,4 @@
-package org.eclipse.basyx.testsuite.support;
+package org.eclipse.basyx.testsuite.regression.vab.directory;
 
 import java.util.HashMap;
 import java.util.Map;

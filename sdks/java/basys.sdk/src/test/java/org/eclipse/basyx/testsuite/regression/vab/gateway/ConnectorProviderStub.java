@@ -1,4 +1,4 @@
-package org.eclipse.basyx.testsuite.support;
+package org.eclipse.basyx.testsuite.regression.vab.gateway;
 
 import java.util.HashMap;
 import java.util.Map;

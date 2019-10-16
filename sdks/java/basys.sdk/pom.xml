@@ -45,23 +45,16 @@
 				</executions>
 			</plugin>
 
-			<!-- Add sources for regression-support to sourceDirectory -->
+			<!-- Generate separate jar for tests -->
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>3.0.0</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.1.1</version>
 				<executions>
 					<execution>
-						<id>attachSupport</id>
-						<phase>generate-sources</phase>
 						<goals>
-							<goal>add-source</goal>
+							<goal>test-jar</goal>
 						</goals>
-						<configuration>
-							<sources>
-								<source>src/test/java/org/eclipse/basyx/testsuite/support</source>
-							</sources>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>

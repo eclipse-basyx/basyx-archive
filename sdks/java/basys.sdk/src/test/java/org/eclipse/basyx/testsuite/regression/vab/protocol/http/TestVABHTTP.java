@@ -1,7 +1,6 @@
 package org.eclipse.basyx.testsuite.regression.vab.protocol.http;
 
 import org.eclipse.basyx.testsuite.regression.vab.modelprovider.TestProvider;
-import org.eclipse.basyx.testsuite.support.AASHTTPServerResource;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;

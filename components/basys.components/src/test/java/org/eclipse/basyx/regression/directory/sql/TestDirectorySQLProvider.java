@@ -10,7 +10,7 @@ import java.net.URLEncoder;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
-import org.eclipse.basyx.testsuite.support.AASHTTPServerResource;
+import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
 import org.eclipse.basyx.vab.coder.json.metaprotocol.MetaprotocolHandler;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;

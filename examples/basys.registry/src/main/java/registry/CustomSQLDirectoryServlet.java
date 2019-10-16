@@ -1,4 +1,4 @@
-package main.java.registry;
+package registry;
 
 
 import org.eclipse.basyx.components.servlets.SQLDirectoryServlet;

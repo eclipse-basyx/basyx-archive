@@ -2,7 +2,7 @@ package org.eclipse.basyx.testsuite.regression.vab.modelprovider;
 
 import static org.junit.Assert.assertEquals;
 
-import org.eclipse.basyx.testsuite.support.VABConnectionManagerStub;
+import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.model.VABModelMap;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;

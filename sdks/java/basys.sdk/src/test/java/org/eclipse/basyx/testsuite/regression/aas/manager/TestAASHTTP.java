@@ -16,8 +16,8 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOpera
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.testsuite.regression.aas.restapi.StubAASServlet;
-import org.eclipse.basyx.testsuite.support.AASHTTPServerResource;
-import org.eclipse.basyx.testsuite.support.DirectoryServiceStub;
+import org.eclipse.basyx.testsuite.regression.vab.directory.DirectoryServiceStub;
+import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.junit.Before;

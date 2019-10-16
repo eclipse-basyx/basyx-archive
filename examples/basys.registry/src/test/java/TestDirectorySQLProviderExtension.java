@@ -1,5 +1,3 @@
-package test.java;
-
 import org.eclipse.basyx.regression.directory.sql.TestDirectorySQLProvider;
 
 /**

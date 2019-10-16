@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.testsuite.support.DirectoryServiceStub;
+import org.eclipse.basyx.testsuite.regression.vab.directory.DirectoryServiceStub;
 import org.eclipse.basyx.vab.gateway.ConnectorProviderMapper;
 import org.eclipse.basyx.vab.gateway.DelegatingModelProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;

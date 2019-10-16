@@ -1,4 +1,4 @@
-package org.eclipse.basyx.testsuite.support;
+package org.eclipse.basyx.testsuite.regression.vab.protocol.http;
 
 import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;

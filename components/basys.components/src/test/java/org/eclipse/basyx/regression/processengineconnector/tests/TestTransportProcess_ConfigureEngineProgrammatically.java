@@ -20,7 +20,7 @@ import org.eclipse.basyx.components.processengine.connector.DeviceServiceDelegat
 import org.eclipse.basyx.regression.support.processengine.executor.CoilcarServiceExecutor;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
-import org.eclipse.basyx.testsuite.support.AASHTTPServerResource;
+import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.Before;
 import org.junit.ClassRule;

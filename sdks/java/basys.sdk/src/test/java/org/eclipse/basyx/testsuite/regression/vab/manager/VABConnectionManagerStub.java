@@ -1,5 +1,7 @@
-package org.eclipse.basyx.testsuite.support;
+package org.eclipse.basyx.testsuite.regression.vab.manager;
 
+import org.eclipse.basyx.testsuite.regression.vab.directory.DirectoryServiceStub;
+import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 

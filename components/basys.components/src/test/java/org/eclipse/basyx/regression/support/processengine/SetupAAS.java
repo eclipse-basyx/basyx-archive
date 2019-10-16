@@ -8,7 +8,7 @@ import org.eclipse.basyx.regression.support.processengine.stubs.Coilcar;
 import org.eclipse.basyx.regression.support.processengine.submodel.DeviceSubmodelFactory;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
-import org.eclipse.basyx.testsuite.support.VABConnectionManagerStub;
+import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 
 /**
  * Create AAS and VAB connection stub (without communication protocol for test purpose)
