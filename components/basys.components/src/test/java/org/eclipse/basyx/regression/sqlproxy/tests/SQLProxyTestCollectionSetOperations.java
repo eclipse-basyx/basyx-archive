@@ -1,11 +1,12 @@
 package org.eclipse.basyx.regression.sqlproxy.tests;
 
-import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collection;
+
 import org.eclipse.basyx.tools.sqlproxy.SQLRootElement;
+import org.junit.Test;
 
 
 
@@ -73,12 +74,13 @@ public class SQLProxyTestCollectionSetOperations {
 		
 		
 		// Now add some array types
-		sqlColl.addAll(Arrays.asList(new int[] {1,2,3}, new float[] {1.2f, 4.5f}));
+		sqlColl.addAll(Arrays.asList((Object) new int[] { 1, 2, 3 }, new float[] { 1.2f, 4.5f }));
 		// - Size check
 		assertTrue(sqlColl.size() == 6);
 		// - Check contained elements
-		assertTrue(sqlColl.containsAll(Arrays.asList(new int[] {1,2,3}, new float[] {1.2f, 4.5f})));
-		assertTrue(!sqlColl.containsAll(Arrays.asList(new int[] {1,2,3}, new float[] {1.2f, 4.5f}, new int[] {8,0})));
+		assertTrue(sqlColl.containsAll(Arrays.asList((Object) new int[] { 1, 2, 3 }, new float[] { 1.2f, 4.5f })));
+		assertTrue(!sqlColl.containsAll(
+				Arrays.asList((Object) new int[] { 1, 2, 3 }, new float[] { 1.2f, 4.5f }, new int[] { 8, 0 })));
 		// - Check element presence
 		assertTrue(sqlColl.contains(new int[] {1,2,3}) == true);
 		assertTrue(sqlColl.contains(new float[] {1.2f, 4.5f}) == true);
