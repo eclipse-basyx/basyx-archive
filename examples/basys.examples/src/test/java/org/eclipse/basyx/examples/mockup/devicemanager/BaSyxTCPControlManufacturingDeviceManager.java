@@ -6,7 +6,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
-import org.eclipse.basyx.aas.registration.httpproxy.AASHTTPRegistryProxy;
+import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.devicemanager.TCPControllableDeviceManagerComponent;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.models.controlcomponent.ControlComponentChangeListener;
@@ -46,7 +46,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		
 		
 		// Set registry that will be used by this service
-		setRegistry(new AASHTTPRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL"));
+		setRegistry(new AASRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL"));
 		
 		
 		// Set service connection manager and create AAS server connection

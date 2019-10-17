@@ -1,4 +1,4 @@
-package org.eclipse.basyx.aas.registration.httpproxy;
+package org.eclipse.basyx.aas.registration.proxy;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -7,7 +7,11 @@ import java.util.Map;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
-import org.eclipse.basyx.vab.directory.http.VABHTTPDirectoryProxy;
+import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
+import org.eclipse.basyx.vab.directory.proxy.VABDirectoryProxy;
+import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnector;
 
 
 
@@ -17,12 +21,26 @@ import org.eclipse.basyx.vab.directory.http.VABHTTPDirectoryProxy;
  * @author kuhn
  *
  */
-public class AASHTTPRegistryProxy extends VABHTTPDirectoryProxy implements IAASRegistryService {
+public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryService {
+
 	/**
-	 * Constructor - instantiate a VABDirectoryProxy with the same endpoint
+	 * Constructor for an AAS registry proxy based on a HTTP connection
+	 * 
+	 * @param registryUrl
+	 *            The endpoint of the registry with a HTTP-REST interface
 	 */
-	public AASHTTPRegistryProxy(String directoryUrl) {
-		super(directoryUrl);
+	public AASRegistryProxy(String registryUrl) {
+		this(new VABElementProxy("/api/v1/registry", new JSONConnector(new HTTPConnector(registryUrl))));
+	}
+
+	/**
+	 * Constructor for an AAS registry proxy based on its model provider
+	 * 
+	 * @param provider
+	 *            A model provider for the actual registry
+	 */
+	public AASRegistryProxy(IModelProvider provider) {
+		super(provider);
 	}
 
 	/**
@@ -41,7 +59,11 @@ public class AASHTTPRegistryProxy extends VABHTTPDirectoryProxy implements IAASR
 	public void registerOnly(AASDescriptor deviceAASDescriptor) {
 		// Add a mapping from the AAS id to the serialized descriptor
 		System.out.println("Registering at path " + deviceAASDescriptor.getId());
-		proxy.createValue("", deviceAASDescriptor);
+		try {
+			provider.createValue("", deviceAASDescriptor);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -61,7 +83,12 @@ public class AASHTTPRegistryProxy extends VABHTTPDirectoryProxy implements IAASR
 	 */
 	@Override @SuppressWarnings("unchecked")
 	public AASDescriptor lookupAAS(ModelUrn aasID) {
-		Object result = proxy.getModelPropertyValue(aasID.getEncodedURN());
+		Object result = null;
+		try {
+			result = provider.getModelPropertyValue(aasID.getEncodedURN());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		if (result instanceof Map<?, ?>) {
 			return new AASDescriptor((Map<String, Object>) result);
 		} else {
