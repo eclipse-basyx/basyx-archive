@@ -73,7 +73,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		createDeviceAASAndSubModels();
 		
 		// Register AAS and sub model descriptors in directory (push AAS descriptor to server)
-		getRegistry().register(lookupURN("AAS"), getAASDescriptor());
+		getRegistry().register(getAASDescriptor());
 	}
 
 	

@@ -83,25 +83,9 @@ public class AASDescriptor extends HashMap<String, Object> {
 	 * Return AAS ID
 	 */
 	@SuppressWarnings("unchecked")
-	public String getId() {
+	public IIdentifier getIdentifier() {
 		Map<String, Object> identifierModel = (Map<String, Object>) get(Identifiable.IDENTIFICATION);
-		return new IdentifierFacade(identifierModel).getId();
-	}
-	
-	/**
-	 * Return AAS short ID
-	 */
-	public String getShortId() {
-		return (String) get(Referable.IDSHORT);
-	}
-	
-	/**
-	 * Return AAS ID type
-	 */
-	@SuppressWarnings("unchecked")
-	public String getIdType() {
-		Map<String, Object> identifierModel = (Map<String, Object>) get(Identifiable.IDENTIFICATION);
-		return new IdentifierFacade(identifierModel).getIdType();
+		return new IdentifierFacade(identifierModel);
 	}
 	
 	/**

@@ -68,7 +68,7 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 		ccDescriptor.addSubmodelDescriptor(smDescriptor);
 
 		// register the aas
-		registry.register(coilcarUrn, ccDescriptor);
+		registry.register(ccDescriptor);
 		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorProvider());
 		
 		

@@ -165,7 +165,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		deviceAASDescriptor.addSubmodelDescriptor(statusSMDescriptor);
 		deviceAASDescriptor.addSubmodelDescriptor(controllerSMDescriptor);
 		// - Push AAS descriptor to server
-		getRegistry().register(lookupURN("AAS"), deviceAASDescriptor);		
+		getRegistry().register(deviceAASDescriptor);
 	}
 
 

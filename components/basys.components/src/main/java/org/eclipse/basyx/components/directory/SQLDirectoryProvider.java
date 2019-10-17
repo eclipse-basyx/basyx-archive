@@ -308,7 +308,7 @@ public class SQLDirectoryProvider implements IModelProvider {
 			AASDescriptor aasDescriptor = new AASDescriptor((Map<String, Object>) values);
 
 			// Extract AAS ID
-			String aasID = aasDescriptor.getId();
+			String aasID = aasDescriptor.getIdentifier().getId();
 	
 			// Update AAS registry
 			sqlDriver.sqlUpdate("INSERT INTO directory.directory (\"ElementRef\", \"ElementID\") VALUES ('"

@@ -1,7 +1,7 @@
 package org.eclipse.basyx.aas.registration.api;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 
 
 
@@ -17,7 +17,7 @@ public interface IAASRegistryService {
 	/**
 	 * Register AAS descriptor in registry, delete old registration 
 	 */
-	public void register(ModelUrn aasID, AASDescriptor deviceAASDescriptor);
+	public void register(AASDescriptor deviceAASDescriptor);
 	
 	/**
 	 * Only register AAS descriptor in registry
@@ -28,12 +28,12 @@ public interface IAASRegistryService {
 	/**
 	 * Delete AAS descriptor from registry
 	 */
-	public void delete(ModelUrn aasID);
+	public void delete(IIdentifier aasID);
 	
 	
 	/**
 	 * Lookup device AAS
 	 */
-	public AASDescriptor lookupAAS(ModelUrn aasID);
+	public AASDescriptor lookupAAS(IIdentifier aasID);
 }
 

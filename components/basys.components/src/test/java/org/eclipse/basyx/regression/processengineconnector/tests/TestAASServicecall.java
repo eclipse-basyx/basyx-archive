@@ -9,7 +9,6 @@ import java.util.Arrays;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
@@ -76,8 +75,7 @@ public class TestAASServicecall {
 		AASDescriptor aasDescriptor = new AASDescriptor(id, "/aas");
 		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", IdentifierType.URI, "/aas/submodels/submodel1");
 		aasDescriptor.addSubmodelDescriptor(smDescriptor);
-
-		registry.register(new ModelUrn("coilcar"), aasDescriptor);
+		registry.register(aasDescriptor);
 
 		// setup the connection-manager with the model-provider
 		ConnectorProviderStub connectorProvider = new ConnectorProviderStub();

@@ -5,8 +5,8 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.directory.proxy.VABDirectoryProxy;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -47,8 +47,8 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 	 * Register AAS descriptor in registry, delete old registration
 	 */
 	@Override
-	public void register(ModelUrn aasID, AASDescriptor deviceAASDescriptor) {
-		delete(aasID);
+	public void register(AASDescriptor deviceAASDescriptor) {
+		delete(deviceAASDescriptor.getIdentifier());
 		registerOnly(deviceAASDescriptor);
 	}
 
@@ -58,7 +58,6 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 	@Override
 	public void registerOnly(AASDescriptor deviceAASDescriptor) {
 		// Add a mapping from the AAS id to the serialized descriptor
-		System.out.println("Registering at path " + deviceAASDescriptor.getId());
 		try {
 			provider.createValue("", deviceAASDescriptor);
 		} catch (Exception e) {
@@ -70,9 +69,9 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 	 * Delete AAS descriptor from registry
 	 */
 	@Override
-	public void delete(ModelUrn aasID) {
+	public void delete(IIdentifier aasIdentifier) {
 		try {
-			this.removeMapping(URLEncoder.encode(aasID.getURN(), "UTF-8"));
+			this.removeMapping(URLEncoder.encode(aasIdentifier.getId(), "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -82,10 +81,10 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 	 * Lookup device AAS
 	 */
 	@Override @SuppressWarnings("unchecked")
-	public AASDescriptor lookupAAS(ModelUrn aasID) {
+	public AASDescriptor lookupAAS(IIdentifier aasIdentifier) {
 		Object result = null;
 		try {
-			result = provider.getModelPropertyValue(aasID.getEncodedURN());
+			result = provider.getModelPropertyValue(URLEncoder.encode(aasIdentifier.getId(), "UTF-8"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -80,7 +80,7 @@ public class ConnectToAASEndpoints {
 		IAASRegistryService regProxy = new AASRegistryProxy(
 				"http://localhost:8080/basys.examples/Components/Directory/SQL");
 		// - Register AAS descriptor with AAS and sub model endpoints in registry
-		regProxy.register(aasURN, aasDescriptor);
+		regProxy.register(aasDescriptor);
 
 		// Create AAS
 		AssetAdministrationShell aas = new AssetAdministrationShell();

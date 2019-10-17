@@ -49,7 +49,7 @@ public class TestDeviceAdministrationShell {
 		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", IdentifierType.URI,
 				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas/submodels/submodel1");
 		ccDescriptor.addSubmodelDescriptor(smDescriptor);
-		registry.register(coilcarUrn, ccDescriptor);
+		registry.register(ccDescriptor);
 		
 		//set-up the administration shell manager to create connected aas
 		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorProvider());

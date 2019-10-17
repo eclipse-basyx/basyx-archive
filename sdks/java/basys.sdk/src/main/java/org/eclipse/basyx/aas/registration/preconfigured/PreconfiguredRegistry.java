@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 
 /**
  * Implements a preconfigured local registry
@@ -14,29 +14,30 @@ public class PreconfiguredRegistry implements IAASRegistryService {
 	protected Map<String, AASDescriptor> descriptorMap = new HashMap<>();
 
 	@Override
-	public void register(ModelUrn aasID, AASDescriptor deviceAASDescriptor) {
-		if (descriptorMap.containsKey(aasID.getEncodedURN())) {
-			descriptorMap.remove(aasID.getEncodedURN());
+	public void register(AASDescriptor aasDescriptor) {
+		String aasId = aasDescriptor.getIdentifier().getId();
+		if (descriptorMap.containsKey(aasId)) {
+			descriptorMap.remove(aasId);
 		}
 
-		descriptorMap.put(aasID.getEncodedURN(), deviceAASDescriptor);
+		descriptorMap.put(aasId, aasDescriptor);
 	}
 
 	@Override
-	public void registerOnly(AASDescriptor deviceAASDescriptor) {
-		descriptorMap.put(deviceAASDescriptor.getId(), deviceAASDescriptor);
+	public void registerOnly(AASDescriptor aasDescriptor) {
+		String aasId = aasDescriptor.getIdentifier().getId();
+		descriptorMap.put(aasId, aasDescriptor);
 	}
 
 	@Override
-	public void delete(ModelUrn aasID) {
-		descriptorMap.remove(aasID.getEncodedURN());
+	public void delete(IIdentifier aasIdentifier) {
+		descriptorMap.remove(aasIdentifier.getId());
 
 	}
 
 	@Override
-	public AASDescriptor lookupAAS(ModelUrn aasID) {
-
-		return descriptorMap.get(aasID.getEncodedURN());
+	public AASDescriptor lookupAAS(IIdentifier aasIdentifier) {
+		return descriptorMap.get(aasIdentifier.getId());
 	}
 
 }

@@ -61,7 +61,7 @@ public class TestAASHTTP {
 
 		// Create aas descriptor for the aas registry
 		IIdentifier id = new Identifier(IdentifierType.URI, StubAASServlet.AASURN.getURN());
-		AASDescriptor aasDesriptor = new AASDescriptor(id,
+		AASDescriptor aasDescriptor = new AASDescriptor(id,
 				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas");
 
 		// Create the submodel descriptor
@@ -69,10 +69,10 @@ public class TestAASHTTP {
 				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMID);
 
 		// add submodel descriptor to the aas descriptor
-		aasDesriptor.addSubmodelDescriptor(submodelDescriptor);
+		aasDescriptor.addSubmodelDescriptor(submodelDescriptor);
 
 		// register the aas in the registry
-		registry.register(StubAASServlet.AASURN, aasDesriptor);
+		registry.register(aasDescriptor);
 		
 		// Create manager using the directory stub an the HTTPConnectorProvider
 		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorProvider());

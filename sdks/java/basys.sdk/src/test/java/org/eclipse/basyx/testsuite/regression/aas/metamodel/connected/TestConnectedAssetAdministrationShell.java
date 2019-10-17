@@ -82,7 +82,7 @@ public class TestConnectedAssetAdministrationShell {
 		// Add Submodel descriptor to aas descriptor
 		aasDescriptor.addSubmodelDescriptor(smDescriptor);
 
-		registry.register(new ModelUrn(aasId), aasDescriptor);
+		registry.register(aasDescriptor);
 
 		// Create connector provider stub, map address to provider
 		ConnectorProviderStub connectorProvider = new ConnectorProviderStub();
