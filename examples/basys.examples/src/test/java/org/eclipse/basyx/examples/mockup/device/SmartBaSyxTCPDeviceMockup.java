@@ -154,7 +154,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		// Register AAS and sub models in directory (push AAS descriptor to server)
 		// - AAS repository server URL
 		String aasRepoURL = "http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer/aas";
-		// - Build an AAS descriptor, add sub model descriptors  
+		// - Build an AAS descriptor, add sub model descriptors
 		AASDescriptor deviceAASDescriptor = new AASDescriptor(lookupURN("AAS"), aasRepoURL);
 		// Create sub model descriptors
 		SubmodelDescriptor statusSMDescriptor = new SubmodelDescriptor(lookupURN("Status").getURN(), IdentifierType.URI,

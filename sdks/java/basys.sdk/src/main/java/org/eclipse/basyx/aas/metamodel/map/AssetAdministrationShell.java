@@ -147,6 +147,10 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		new IdentifiableFacade(this).setAdministration(version, revision);
 	}
 
+	public void setIdentification(IIdentifier id) {
+		setIdentification(id.getIdType(), id.getId());
+	}
+
 	public void setIdentification(String idType, String id) {
 		new IdentifiableFacade(this).setIdentification(idType, id);
 	}

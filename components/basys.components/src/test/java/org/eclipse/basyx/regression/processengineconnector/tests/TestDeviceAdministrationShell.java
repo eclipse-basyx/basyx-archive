@@ -13,7 +13,9 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -41,7 +43,8 @@ public class TestDeviceAdministrationShell {
 	public void setupConnection() {
 		PreconfiguredRegistry registry = new PreconfiguredRegistry();
 		ModelUrn coilcarUrn = new ModelUrn("coilcar");
-		AASDescriptor ccDescriptor = new AASDescriptor("coilcar", IdentifierType.URI,
+		IIdentifier id = new Identifier(IdentifierType.URI, "coilcar");
+		AASDescriptor ccDescriptor = new AASDescriptor(id,
 				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas");
 		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", IdentifierType.URI,
 				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas/submodels/submodel1");

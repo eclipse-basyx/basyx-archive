@@ -82,7 +82,7 @@ public class ConnectToSubModelEndpoints {
 		// - Sub model ID
 		String        subModelId    = "exampleSM";
 		// - Create AAS descriptor and sub model descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor(aasURN.getURN(), IdentifierType.URI, aasSrvURL);
+		AASDescriptor aasDescriptor = new AASDescriptor(aasURN, aasSrvURL);
 		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelId, IdentifierType.URI,
 				VABPathTools.concatenatePaths(aasSrvURL, "submodels", subModelId));
 		// - Add sub model descriptor to AAS descriptor

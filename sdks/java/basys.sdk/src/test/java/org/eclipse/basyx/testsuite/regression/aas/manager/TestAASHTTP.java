@@ -11,9 +11,11 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.testsuite.regression.aas.restapi.StubAASServlet;
 import org.eclipse.basyx.testsuite.regression.vab.directory.DirectoryServiceStub;
@@ -58,7 +60,8 @@ public class TestAASHTTP {
 		PreconfiguredRegistry registry = new PreconfiguredRegistry();
 
 		// Create aas descriptor for the aas registry
-		AASDescriptor aasDesriptor = new AASDescriptor(StubAASServlet.AASID, IdentifierType.URI,
+		IIdentifier id = new Identifier(IdentifierType.URI, StubAASServlet.AASURN.getURN());
+		AASDescriptor aasDesriptor = new AASDescriptor(id,
 				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas");
 
 		// Create the submodel descriptor

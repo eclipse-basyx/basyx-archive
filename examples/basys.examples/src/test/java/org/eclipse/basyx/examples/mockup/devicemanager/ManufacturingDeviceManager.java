@@ -116,7 +116,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 	@Override 
 	protected AASDescriptor getAASDescriptor() {
 		// Create AAS and sub model descriptors
-		AASDescriptor aasDescriptor = createAASDescriptorURI(lookupURN("AAS"));
+		AASDescriptor aasDescriptor = new AASDescriptor(lookupURN("AAS"), getAASEndpoint(lookupURN("AAS")));
 		addSubModelDescriptorURI(aasDescriptor, lookupURN("Status"), "Status");
 		addSubModelDescriptorURI(aasDescriptor, lookupURN("Controller"), "Controller");
 		

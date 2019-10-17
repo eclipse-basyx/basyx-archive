@@ -83,36 +83,13 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 	 * Get AAS descriptor for managed device
 	 */
 	protected abstract AASDescriptor getAASDescriptor();
-	
 
-	
-	
 	/**
-	 * Create an AAS descriptor for the AAS with given URI. 
-	 * 
-	 * @param aasURN URN of asset administration shell that will be described by descriptor
-	 * 
-	 * @return AAS descriptor endpoint points to default AAS server location and contains default prefix path
+	 * Returns the actual endpoint of the AAS managed by this component
 	 */
-	protected AASDescriptor createAASDescriptorURI(ModelUrn aasURN) {
-		// Create and return AAS descriptor
-		return new AASDescriptor(aasURN.getURN(), IdentifierType.URI, VABPathTools.concatenatePaths(getAASServerURL(), "/aas", aasURN.getEncodedURN()));
+	protected String getAASEndpoint(ModelUrn aasURN) {
+		return VABPathTools.concatenatePaths(getAASServerURL(), "/aas", aasURN.getEncodedURN());
 	}
-
-	
-	/**
-	 * Create an AAS descriptor for the AAS with given URI and path
-	 * 
-	 * @param aasURN URN of asset administration shell that will be described by descriptor
-	 * @param path   Path that the AAS descriptor endpoint should point to
-	 * 
-	 * @return AAS descriptor endpoint points to given path
-	 */
-	protected AASDescriptor createAASDescriptorURI(ModelUrn aasURN, String path) {
-		// Create and return AAS descriptor
-		return new AASDescriptor(aasURN.getURN(), IdentifierType.URI, path);
-	}
-
 	
 	/**
 	 * Add sub model descriptor to AAS descriptor

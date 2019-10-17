@@ -20,8 +20,10 @@ import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
@@ -73,7 +75,8 @@ public class TestConnectedAssetAdministrationShell {
 		// Create AAS registry
 		IAASRegistryService registry = new PreconfiguredRegistry();
 		// Create AAS Descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor(aasId, IdentifierType.URI, "/aas");
+		IIdentifier id = new Identifier(IdentifierType.URI, aasId);
+		AASDescriptor aasDescriptor = new AASDescriptor(id, "/aas");
 		// Create Submodel Descriptor
 		SubmodelDescriptor smDescriptor = new SubmodelDescriptor(smId, IdentifierType.URI, "/aas/submodels/" + smId);
 		// Add Submodel descriptor to aas descriptor

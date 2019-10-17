@@ -1,6 +1,6 @@
 package org.eclipse.basyx.examples.snippets.aas.registry;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
@@ -12,7 +12,6 @@ import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.servlet.submodel.AASServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -73,7 +72,7 @@ public class ConnectToAASEndpoints {
 		ModelUrn      aasURN         = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001");
 		String        aasSrvURL      = "http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer/aas";
 		// - Create AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor(aasURN.getURN(), IdentifierType.URI, aasSrvURL);
+		AASDescriptor aasDescriptor = new AASDescriptor(aasURN, aasSrvURL);
 
 
 		// Register AAS and sub model descriptors in directory (push AAS descriptor to server)
@@ -87,7 +86,7 @@ public class ConnectToAASEndpoints {
 		AssetAdministrationShell aas = new AssetAdministrationShell();
 
 		// - Set AAS ID
-		aas.setId(aasURN.toString());
+		aas.setIdentification(aasURN);
 
 		// - Transfer AAS to server
 		//   - This creates the "urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001" element on the server, which is the server
@@ -101,10 +100,10 @@ public class ConnectToAASEndpoints {
 		// Retrieve the AAS from the AAS server with SDK connector
 		// - IAssetAdministrationShell is the interface for the local AAS proxy
 		// - Retrieve AAS values and compare to expected values
-		Object aasIDProperty = shell.getId();
+		Object aasIDProperty = shell.getIdentification().getId();
 		
 		// Check property value
-		assertTrue(aasIDProperty.equals(aasURN.toString()));
+		assertEquals(aasURN.getURN(), aasIDProperty);
 	}
 }
 

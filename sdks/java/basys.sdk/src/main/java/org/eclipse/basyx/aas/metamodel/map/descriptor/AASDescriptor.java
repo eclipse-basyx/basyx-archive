@@ -4,16 +4,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 
@@ -21,103 +19,15 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 /**
  * AAS descriptor class
  * 
- * @author kuhn, pschorn
+ * @author kuhn, pschorn, espen
  *
  */
 public class AASDescriptor extends HashMap<String, Object> {
-
-		
 	/**
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Default constructor
-	 */
-	public AASDescriptor() {
-		// Add members
-		put("identification", new Identifier());
-		put("metaData", new HashMap<String, Object>());
-		put("administration", new AdministrativeInformation());
-		put("idShort", new String(""));
-		put("category", new String(""));
-		put("descriptions", new LinkedList<Description>());
-		put("asset", new Asset());
-		put("submodels", new LinkedList<SubmodelDescriptor>());
-		put("endpoints", new LinkedList<String>());
-	}
-	
-	/**
-	 * Create a new sub model descriptor with minimal information
-	 */
-	public AASDescriptor(AssetAdministrationShell aas, String endpoint, String endpointType) {
-		// Invoke default constructor
-		
-		
-		put(Referable.IDSHORT, aas.getId());
-		put(AssetAdministrationShell.SUBMODELS, new LinkedList<SubmodelDescriptor>());
-		
-		// Add identification and end point information
-		Identifier identifier =  new Identifier();
-		
-		identifier.setIdType(aas.getIdentification().getIdType());
-		identifier.setId(aas.getIdentification().getId());
-		put(Identifiable.IDENTIFICATION, identifier);
-		
-		HashMap<String, String> endpointWrapper = new HashMap<String, String>(); 
-		endpointWrapper.put(AssetAdministrationShell.TYPE, endpointType);
-		endpointWrapper.put(AssetAdministrationShell.ADDRESS, endpoint);
-		put("endpoints", Arrays.asList(endpointWrapper));
-	}
-	
-	/**
-	 * Create a new AAS descriptor with minimal information
-	 */
-	public AASDescriptor(String id, String idType, String endpoint) {
-		// Invoke default constructor
-		this();
-
-		// Add identification and end point information
-		((Identifier) get(Identifiable.IDENTIFICATION)).setIdType(idType);
-		((Identifier) get(Identifiable.IDENTIFICATION)).setId(id);
-
-		HashMap<String, String> endpointWrapper = new HashMap<String, String>();
-		endpointWrapper.put(AssetAdministrationShell.TYPE, "URI");
-		endpointWrapper.put(AssetAdministrationShell.ADDRESS, endpoint);
-		put("endpoints", Arrays.asList(endpointWrapper));
-	}
-
-	/**
-	 * Create a new AAS descriptor with minimal information
-	 */
-	public AASDescriptor(ModelUrn urn, String aasSrvURL) {
-		// Invoke default constructor
-		this(urn.getURN(), IdentifierType.URI, aasSrvURL + "/aas/submodels/aasRepository/" + urn.getEncodedURN());
-	}
-
-	/**
-	 * Create a new sub model descriptor with minimal information
-	 */
-	public AASDescriptor(AssetAdministrationShell aas) {
-		// Invoke default constructor
-		
-		
-		put(Referable.IDSHORT, aas.getId());
-		put(AssetAdministrationShell.SUBMODELS, new LinkedList<SubmodelDescriptor>());
-		
-		// Add identification and end point information
-		Identifier identifier =  new Identifier();
-		
-		identifier.setIdType(aas.getIdentification().getIdType());
-		identifier.setId(aas.getIdentification().getId());
-		put(Identifiable.IDENTIFICATION, identifier);
-		
-		put(AssetAdministrationShell.ENDPOINTS, aas.getEndpoints());
-	}
-	
-	
-	
 	/**
 	 * Create AAS descriptor from existing hash map
 	 */
@@ -125,27 +35,74 @@ public class AASDescriptor extends HashMap<String, Object> {
 		// Put all elements from map into this descriptor
 		this.putAll(map);
 	}
-	
-	
-	
+
+	/**
+	 * Create a new aas descriptor with minimal information
+	 */
+	public AASDescriptor(String idShort, IIdentifier id, String httpEndpoint) {
+		// Set idShort
+		put(Referable.IDSHORT, idShort);
+
+		// Set Identifier, make sure the stored data structure is a map
+		Identifier identifierMap = new Identifier(id.getIdType(), id.getId());
+		put(Identifiable.IDENTIFICATION, identifierMap);
+
+		// Set Endpoints
+		HashMap<String, String> endpointWrapper = new HashMap<String, String>();
+		endpointWrapper.put(AssetAdministrationShell.TYPE, "http");
+		endpointWrapper.put(AssetAdministrationShell.ADDRESS, httpEndpoint);
+		put(AssetAdministrationShell.ENDPOINTS, Arrays.asList(endpointWrapper));
+
+		// Set Submodels
+		put(AssetAdministrationShell.SUBMODELS, new HashSet<SubmodelDescriptor>());
+	}
+
+	/**
+	 * Create a new aas descriptor with minimal information (idShort is assumed to be set to "")
+	 */
+	public AASDescriptor(IIdentifier id, String httpEndpoint) {
+		this("", id, httpEndpoint);
+	}
+
+	/**
+	 * Create a new aas descriptor with minimal information based on an existing AAS
+	 */
+	public AASDescriptor(AssetAdministrationShell aas) {
+		// Create descriptor with minimal information (id and idShort)
+		this(aas.getId(), aas.getIdentification(), "");
+		
+		// Overwrite endpoints
+		put(AssetAdministrationShell.ENDPOINTS, aas.getEndpoints());
+
+		// Overwrite submodel descriptors
+		Set<SubmodelDescriptor> smDescriptors = aas.getSubmodelDescriptors();
+		put(AssetAdministrationShell.SUBMODELS, smDescriptors);
+	}
 	
 	/**
 	 * Return AAS ID
 	 */
 	@SuppressWarnings("unchecked")
 	public String getId() {
-		return new Identifier((Map<String, Object>) get(Identifiable.IDENTIFICATION)).getId();
+		Map<String, Object> identifierModel = (Map<String, Object>) get(Identifiable.IDENTIFICATION);
+		return new IdentifierFacade(identifierModel).getId();
 	}
 	
+	/**
+	 * Return AAS short ID
+	 */
+	public String getShortId() {
+		return (String) get(Referable.IDSHORT);
+	}
 	
 	/**
 	 * Return AAS ID type
 	 */
 	@SuppressWarnings("unchecked")
 	public String getIdType() {
-		return new Identifier((Map<String, Object>) get(Identifiable.IDENTIFICATION)).getIdType();
+		Map<String, Object> identifierModel = (Map<String, Object>) get(Identifiable.IDENTIFICATION);
+		return new IdentifierFacade(identifierModel).getIdType();
 	}
-
 	
 	/**
 	 * Return first AAS end point
@@ -153,29 +110,20 @@ public class AASDescriptor extends HashMap<String, Object> {
 	@SuppressWarnings("unchecked")
 	public String getFirstEndpoint() {
 		Object e = get(AssetAdministrationShell.ENDPOINTS);
-		// Extract String from endpoint in set and list representation
+		// Extract String from endpoint for set or list representations of the endpoint wrappers
 		String endpoint = null;
-		if (e instanceof List<?>) {
-			List<Map<?, ?>> list = (List<Map<?, ?>>) e;
-			if (list.size() == 0) {
+		if (e instanceof Collection<?>) {
+			Collection<Map<?, ?>> endpoints = (Collection<Map<?, ?>>) e;
+			if (endpoints.isEmpty()) {
 				return null;
 			} else {
-				return (String) list.get(0).get(AssetAdministrationShell.ADDRESS);
+				// assume the endpoint is wrapped in a map with address and address type
+				// return the first endpoint address
+				return (String) endpoints.iterator().next().get(AssetAdministrationShell.ADDRESS);
 			}
-		} else if (e instanceof HashSet<?>) {
-			HashSet<Map<String, Object>> set = (HashSet<Map<String, Object>>) e;
-			if (set.size() == 0) {
-				return null;
-			} else {
-				return (String) set.iterator().next().get(AssetAdministrationShell.ADDRESS);
-			}
-		} else {
-			endpoint = null;
 		}
-		
 		return endpoint;
 	}
-	
 	
 	/**
 	 * Add a sub model descriptor
@@ -187,49 +135,38 @@ public class AASDescriptor extends HashMap<String, Object> {
 		
 		// Add new sub model descriptor to list
 		submodelDescriptors.add(desc);
-		
-		// Return 'this' reference
+
+		// Enable method chaining
 		return this;
 	}
 
 	/**
 	 * Get a specific sub model descriptor
 	 */
-	public SubmodelDescriptor getSubModelDescriptor(ModelUrn subModelId) {
-		return getSubModelDescriptor(subModelId.getURN());
-	}
-	
-	/**
-	 * Get a specific sub model descriptor
-	 */
 	@SuppressWarnings("unchecked")
 	public SubmodelDescriptor getSubModelDescriptor(String subModelId) {
 		// Sub model descriptors are stored in a list
-		Collection<Map<String, Object>> submodelDescriptorMaps = (Collection<Map<String, Object>>) get(AssetAdministrationShell.SUBMODELS);
+		Collection<Map<String, Object>> smDescriptorMaps = (Collection<Map<String, Object>>) get(
+				AssetAdministrationShell.SUBMODELS);
 
-		System.out.println("Checking submodel desc");
-
-		// Create sub model descriptors from contained maps
-		// - We cannot guarantee here that these are really SubmodelDescriptors already and therefore need to default to maps
-		Collection<SubmodelDescriptor>  submodelDescriptors    = new LinkedList<>();
-		// - Fill sub model descriptors
-		for (Map<String, Object> currentMap: submodelDescriptorMaps) submodelDescriptors.add(new SubmodelDescriptor(currentMap)); 
-		
-		// Look for descriptor
-		for (SubmodelDescriptor desc: submodelDescriptors) {
-			System.out.println("Checking: "+desc.getId());		
-			
-			if (desc.getId().equals(subModelId)) return desc;
+		// Go through all descriptors (as maps) and find the one with the subModelId
+		for (Map<String, Object> smDescriptorMap : smDescriptorMaps) {
+			// Use a facade to access the identifier
+			IIdentifier id = new IdentifiableFacade(smDescriptorMap).getIdentification();
+			if (id.getId().equals(subModelId)) {
+				return new SubmodelDescriptor(smDescriptorMap);
+			}
 		}
 		
-		// No Descritor found
+		// No descriptor found
 		return null;
 	}
 
-
-
-	public String getAASId() {
-		return (String) get(Referable.IDSHORT);
+	/**
+	 * Get a specific sub model descriptor from a ModelUrn
+	 */
+	public SubmodelDescriptor getSubModelDescriptor(ModelUrn submodelUrn) {
+		return getSubModelDescriptor(submodelUrn.getURN());
 	}
 }
 

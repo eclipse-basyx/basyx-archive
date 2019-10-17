@@ -71,7 +71,8 @@ public class RegisterRetrieveAASEndpoints {
 		String        aasSrvURL      = "http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer";
 		String        aasSrvPrefix   = "/aas/submodels/aasRepository/sampleAAS";
 		// - Create AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor(aasURN.getURN(), IdentifierType.URI, VABPathTools.concatenatePaths(aasSrvURL, aasSrvPrefix, aasURN.getEncodedURN()));
+		AASDescriptor aasDescriptor = new AASDescriptor(aasURN,
+				VABPathTools.concatenatePaths(aasSrvURL, aasSrvPrefix, aasURN.getEncodedURN()));
 		// - Add sub model descriptor URI
 		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelURN.getURN(), IdentifierType.URI, VABPathTools.concatenatePaths(aasSrvURL, aasSrvPrefix, subModelURN.getEncodedURN()));
 		aasDescriptor.addSubmodelDescriptor(submodelDescriptor);

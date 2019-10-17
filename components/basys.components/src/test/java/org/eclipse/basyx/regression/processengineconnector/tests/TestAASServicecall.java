@@ -20,7 +20,9 @@ import org.eclipse.basyx.regression.support.processengine.aas.DeviceAdministrati
 import org.eclipse.basyx.regression.support.processengine.executor.CoilcarServiceExecutor;
 import org.eclipse.basyx.regression.support.processengine.stubs.CoilcarStub;
 import org.eclipse.basyx.regression.support.processengine.submodel.DeviceSubmodelFactory;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
@@ -70,7 +72,8 @@ public class TestAASServicecall {
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
 		
 		IAASRegistryService registry = new PreconfiguredRegistry();
-		AASDescriptor aasDescriptor = new AASDescriptor("coilcar", IdentifierType.URI, "/aas");
+		IIdentifier id = new Identifier(IdentifierType.URI, "coilcar");
+		AASDescriptor aasDescriptor = new AASDescriptor(id, "/aas");
 		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", IdentifierType.URI, "/aas/submodels/submodel1");
 		aasDescriptor.addSubmodelDescriptor(smDescriptor);
 

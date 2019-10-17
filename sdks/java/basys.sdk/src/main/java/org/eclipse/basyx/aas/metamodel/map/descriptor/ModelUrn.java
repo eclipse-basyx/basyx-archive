@@ -3,13 +3,16 @@ package org.eclipse.basyx.aas.metamodel.map.descriptor;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
+
 /**
  * Create URNs with the format urn:<legalEntity>:<subUnit>:<subModel>:<version>:<revision>:<elementID>#<elementInstance>
  * 
  * @author kuhn
  *
  */
-public class ModelUrn {
+public class ModelUrn implements IIdentifier {
 
 	
 	/**
@@ -91,6 +94,21 @@ public class ModelUrn {
 		return new ModelUrn(urnString + suffix);
 	}
 	
+	/**
+	 * A ModelUrn is a unique identifier and is a specialization of an URI
+	 */
+	@Override
+	public String getIdType() {
+		return IdentifierType.URI;
+	}
+
+	/**
+	 * A ModelUrn is a unique identifier => the urn is the id
+	 */
+	@Override
+	public String getId() {
+		return getURN();
+	}
 	
 	/**
 	 * HashCode method - required to be able to use this class as hashmap key
@@ -111,6 +129,6 @@ public class ModelUrn {
 		
 		// Check values
 		return urnString.equals(((ModelUrn) obj).urnString);
-	}	
+	}
 }
 
