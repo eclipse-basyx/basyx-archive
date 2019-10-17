@@ -54,7 +54,7 @@ public class AASSubModelServletConnectorConnection {
 		@SuppressWarnings("unchecked")
 		public SampleSubModel() {
 			// Set sub model ID
-			setId("sm-001");
+			setIdShort("sm-001");
 
 			// Create factory that helps with property creation
 			// - This factory creates sub model properties and ensures presence of all meta data
@@ -63,11 +63,11 @@ public class AASSubModelServletConnectorConnection {
 			// Add example properties
 			// - Add simple property
 			SingleProperty prop1 = new SingleProperty(234);
-			prop1.setId("prop1");
+			prop1.setIdShort("prop1");
 			addSubModelElement(prop1);
 
 			SingleProperty prop11 = new SingleProperty(123);
-			prop11.setId("prop11");
+			prop11.setIdShort("prop11");
 			// - Add container property that holds other properties
 			List<SubmodelElement> containerProperties = fac.createList(
 					prop11
@@ -80,7 +80,7 @@ public class AASSubModelServletConnectorConnection {
 
 			// Add another property manually to sub model container "properties"
 			SingleProperty prop3 = new SingleProperty(17);
-			prop3.setId("prop3");
+			prop3.setIdShort("prop3");
 			{
 				((Map<String, Object>) this.get("dataElements")).put("prop3", prop3);
 			}
@@ -135,13 +135,13 @@ public class AASSubModelServletConnectorConnection {
 		ISubModel subModel = manager.retrieveSubModel(new ModelUrn("aas-001"), "sm-001");
 		
 		// - Retrieve sub model values and compare to expected values
-		assertTrue(subModel.getId().equals("sm-001"));
-		assertTrue(subModel.getDataElements().get("prop1").getId().equals("prop1"));
+		assertTrue(subModel.getIdShort().equals("sm-001"));
+		assertTrue(subModel.getDataElements().get("prop1").getIdShort().equals("prop1"));
 		assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get() == 234);
 		assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop3")).get() == 17);
 
 		IContainerProperty prop2 = (IContainerProperty) subModel.getDataElements().get("prop2");
-		assertEquals("prop2", prop2.getId());
+		assertEquals("prop2", prop2.getIdShort());
 		Map<String, IDataElement> dataElements = prop2.getDataElements();
 		assertEquals(123, ((ISingleProperty) dataElements.get("prop11")).get());
 	}

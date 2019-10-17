@@ -89,7 +89,7 @@ public class TestAASHTTP {
 		IAssetAdministrationShell shell = manager.retrieveAAS(StubAASServlet.AASURN);
 
 		// Check id
-		assertEquals(StubAASServlet.AASID, shell.getId());
+		assertEquals(StubAASServlet.AASID, shell.getIdShort());
 
 		// Retrieve submodels
 		Map<String, ISubModel> submodels = shell.getSubModels();
@@ -110,7 +110,7 @@ public class TestAASHTTP {
 		ISubModel sm = manager.retrieveSubModel(StubAASServlet.AASURN, StubAASServlet.SMID);
 
 		// Check id
-		assertEquals(StubAASServlet.SMID, sm.getId());
+		assertEquals(StubAASServlet.SMID, sm.getIdShort());
 
 		// TODO: Extend
 		// - retrieve properties and operations

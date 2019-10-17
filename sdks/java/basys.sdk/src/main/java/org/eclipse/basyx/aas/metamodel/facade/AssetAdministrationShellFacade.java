@@ -121,13 +121,8 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 	}
 
 	@Override
-	public String getId() {
+	public String getIdShort() {
 		return (String) map.get(Referable.IDSHORT);
-	}
-
-	@Override
-	public void setId(String id) {
-		map.put(Referable.IDSHORT, id);
 	}
 
 	@Override
@@ -146,11 +141,6 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 	}
 
 	@Override
-	public String getIdshort() {
-		return (String) map.get(Referable.IDSHORT);
-	}
-
-	@Override
 	public String getCategory() {
 		return (String) map.get(Referable.CATEGORY);
 	}
@@ -165,7 +155,8 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 		return (IReference) map.get(Referable.PARENT);
 	}
 
-	public void setIdshort(String idShort) {
+	@Override
+	public void setIdShort(String idShort) {
 		map.put(Referable.IDSHORT, idShort);
 	}
 

@@ -91,22 +91,22 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		// Create device AAS
 		AssetAdministrationShell aas = new AssetAdministrationShell();
 		// - Populate AAS
-		aas.setId("DeviceIDShort");
+		aas.setIdShort("DeviceIDShort");
 	
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
 		// - Create generic sub model and add properties
 		SubModel statusSM = new SubModel();
 		// - Set submodel ID
-		statusSM.setId("Status");
+		statusSM.setIdShort("Status");
 		//   - Property status: indicate device status
 		SingleProperty statusProp = new SingleProperty("offline");
-		statusProp.setId("status");
+		statusProp.setIdShort("status");
 		statusSM.addSubModelElement(statusProp);
 		//   - Property statistics: export invocation statistics for every service
 		//     - invocations: indicate total service invocations. Properties are not persisted in this example,
 		//                    therefore we start counting always at 0.
 		SingleProperty invocationsProp = new SingleProperty(0);
-		invocationsProp.setId("invocations");
+		invocationsProp.setIdShort("invocations");
 		statusSM.addSubModelElement(invocationsProp);
 		// - Add the submodel to the AAS
 		aas.addSubModel(statusSM);
@@ -117,7 +117,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		//   - Create sub model contents manually
 		Map<String, Object> listOfControllers = new HashMap<>();
 		((Map<String, Object>) controllerSM.get(SubModel.PROPERTIES)).put("controllers", listOfControllers);
-		controllerSM.setId("Controller");
+		controllerSM.setIdShort("Controller");
 		// - Add the submodel to the AAS
 		aas.addSubModel(controllerSM);
 

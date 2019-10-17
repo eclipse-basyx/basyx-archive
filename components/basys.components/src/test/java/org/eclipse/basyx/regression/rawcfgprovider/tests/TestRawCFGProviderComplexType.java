@@ -68,7 +68,7 @@ public class TestRawCFGProviderComplexType {
 		complexType.put("prop4", containedType);
 
 		SingleProperty prop = new SingleProperty(complexType);
-		prop.setIdshort("complexProperty");
+		prop.setIdShort("complexProperty");
 		// Create new property value
 
 		connSubModel.createValue("/aas/submodels/rawSampleCFG/dataElements", prop);

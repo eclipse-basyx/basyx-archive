@@ -69,7 +69,7 @@ public class AASDescriptor extends HashMap<String, Object> {
 	 */
 	public AASDescriptor(AssetAdministrationShell aas) {
 		// Create descriptor with minimal information (id and idShort)
-		this(aas.getId(), aas.getIdentification(), "");
+		this(aas.getIdShort(), aas.getIdentification(), "");
 		
 		// Overwrite endpoints
 		put(AssetAdministrationShell.ENDPOINTS, aas.getEndpoints());

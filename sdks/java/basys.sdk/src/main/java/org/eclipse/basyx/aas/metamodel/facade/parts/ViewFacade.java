@@ -56,7 +56,7 @@ public class ViewFacade implements IView {
 	}
 
 	@Override
-	public String getIdshort() {
+	public String getIdShort() {
 		return (String) map.get(Referable.IDSHORT);
 	}
 
@@ -75,7 +75,7 @@ public class ViewFacade implements IView {
 		return (IReference) map.get(Referable.PARENT);
 	}
 
-	public void setIdshort(String idShort) {
+	public void setIdShort(String idShort) {
 		map.put(Referable.IDSHORT, idShort);
 	}
 

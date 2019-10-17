@@ -112,7 +112,7 @@ public class TestTransformAssetAdministrationShell {
 		assertEquals(assetSet.get(0).getIdentification().getIdType(), "URI");
 		Set<IConceptDictionary> conceptDictionary = assetSet.get(0).getConceptDictionary();
 		for (IConceptDictionary iConceptDictionary : conceptDictionary) {
-			assertEquals(iConceptDictionary.getIdshort(), "SampleDic");
+			assertEquals(iConceptDictionary.getIdShort(), "SampleDic");
 			Set<IReference> conceptDescription = iConceptDictionary.getConceptDescription();
 			for (IReference iConceptDictionary2 : conceptDescription) {
 				assertEquals(iConceptDictionary2.toString(),"{keys=[{idType=URI, type=ConceptDescription, value=www.festo.com/dic/08111234, local=true}]}");
@@ -122,7 +122,7 @@ public class TestTransformAssetAdministrationShell {
 		
 		 Set<IView> views = assetSet.get(0).getViews();
 		 for (IView iView : views) {
-			 assertEquals( iView.getIdshort(),"SampleView");
+			 assertEquals( iView.getIdShort(),"SampleView");
 			 Set<IReference> containedElement = iView.getContainedElement();
 			 for (IReference ref : containedElement) {
 				assertEquals(ref.toString(), "{keys=[{idType=URI, type=Submodel, value=\"http://www.zvei.de/demo/submodel/12345679\", local=true}, {idType=idShort, type=Property, value=rotationSpeed, local=true}]}");

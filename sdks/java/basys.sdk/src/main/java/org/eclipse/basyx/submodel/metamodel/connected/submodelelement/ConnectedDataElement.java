@@ -29,8 +29,8 @@ public class ConnectedDataElement extends ConnectedSubmodelElement implements ID
 	}
 
 	@Override
-	public String getIdshort() {
-		return new ReferableFacade(getElem()).getIdshort();
+	public String getIdShort() {
+		return new ReferableFacade(getElem()).getIdShort();
 	}
 
 	@Override

@@ -68,7 +68,7 @@ public class TransformConceptDictionary {
 		}
 
 		ConceptDictionary obj = new ConceptDictionary(referenceset);
-		obj.setIdshort((String) conceptDictionaryMapObject.get("aas:idShort"));
+		obj.setIdShort((String) conceptDictionaryMapObject.get("aas:idShort"));
 		ConceptDictionarySet.add(obj);
 	}
 

@@ -58,8 +58,8 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	}
 
 	@Override
-	public String getIdshort() {
-		return new ReferableFacade(this).getIdshort();
+	public String getIdShort() {
+		return new ReferableFacade(this).getIdShort();
 	}
 
 	@Override
@@ -78,8 +78,8 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	}
 
 	@Override
-	public void setIdshort(String idShort) {
-		new ReferableFacade(this).setIdshort(idShort);
+	public void setIdShort(String idShort) {
+		new ReferableFacade(this).setIdShort(idShort);
 	}
 
 	@Override

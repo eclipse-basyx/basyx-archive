@@ -32,13 +32,13 @@ public class BaSyxCreateProvideUseExampleAASSubmodel {
 		SubModel statusSM = new SubModel();
 		//   - Property status: indicate device status
 		SingleProperty statusProp = new SingleProperty("offline");
-		statusProp.setId("status");
+		statusProp.setIdShort("status");
 		statusSM.addSubModelElement(statusProp);
 		//   - Property statistics: export invocation statistics for every service
 		//     - invocations: indicate total service invocations. Properties are not persisted in this example,
 		//                    therefore we start counting always at 0.
 		SingleProperty invocationsProp = new SingleProperty(0);
-		invocationsProp.setId("invocations");
+		invocationsProp.setIdShort("invocations");
 		statusSM.addSubModelElement(invocationsProp);
 
 		

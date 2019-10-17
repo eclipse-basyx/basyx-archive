@@ -30,30 +30,30 @@ public class SimpleAASSubmodel extends SubModel {
 	public SimpleAASSubmodel(String id) {
 		// Create sub model
 
-		setId(id);
+		setIdShort(id);
 
 		// Create example properties
 		MetaModelElementFactory fac = new MetaModelElementFactory();
 
 		SingleProperty intProp = new SingleProperty(123);
-		intProp.setId("integerProperty");
+		intProp.setIdShort("integerProperty");
 		addSubModelElement(intProp);
 
 		SingleProperty stringProp = new SingleProperty("Test");
-		stringProp.setId("stringProperty");
+		stringProp.setIdShort("stringProperty");
 		addSubModelElement(stringProp);
 
 		// Create example operations
 		Operation complex = fac.createOperation(new Operation(), (Function<Object[], Object>) (v) -> {
 			return (int) v[0] - (int) v[1];
 		});
-		complex.setId("complex");
+		complex.setIdShort("complex");
 		addSubModelElement(complex);
 
 		Operation simple = fac.createOperation(new Operation(), (Function<Object[], Object>) (v) -> {
 			return true;
 		});
-		simple.setId("simple");
+		simple.setIdShort("simple");
 		addSubModelElement(simple);
 
 		// Create example operations
@@ -61,22 +61,22 @@ public class SimpleAASSubmodel extends SubModel {
 		Operation exception1 = fac.createOperation(new Operation(), (Function<Object[], Object>) (elId) -> {
 			throw new NullPointerException();
 		});
-		exception1.setId("exception1");
+		exception1.setIdShort("exception1");
 		addSubModelElement(exception1);
 
 		// - Contained operation that throws VAB exception
 		Operation exception2 = fac.createOperation(new Operation(), (Function<Object[], Object>) (elId) -> {
 			throw new ServerException("ExType", "Exception description");
 		});
-		exception2.setId("exception2");
+		exception2.setIdShort("exception2");
 		addSubModelElement(exception2);
 
 		ContainerProperty containerProp = new ContainerProperty();
-		containerProp.setId("container");
+		containerProp.setIdShort("container");
 		containerProp.addSubModelElement(intProp);
 
 		ContainerProperty containerPropRoot = new ContainerProperty();
-		containerPropRoot.setId("containerRoot");
+		containerPropRoot.setIdShort("containerRoot");
 		containerPropRoot.addSubModelElement(containerProp);
 		addSubModelElement(containerPropRoot);
 	}

@@ -69,7 +69,7 @@ public class SubmodelDescriptor extends HashMap<String, Object> {
 		// Invoke default constructor
 		//this();
 		
-		put("idShort", submodel.getId());
+		put("idShort", submodel.getIdShort());
 		
 		// Add identification and end point information
 		Identifier identifier = new Identifier();

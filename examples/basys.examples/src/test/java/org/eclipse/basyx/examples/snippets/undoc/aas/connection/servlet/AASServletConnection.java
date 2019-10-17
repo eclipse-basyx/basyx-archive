@@ -52,7 +52,7 @@ public class AASServletConnection {
 		@SuppressWarnings("unchecked")
 		public SampleSubModelFactory() {
 			// Set sub model ID
-			setId("sm-001");
+			setIdShort("sm-001");
 
 			// Create factory that helps with property creation
 			// - This factory creates sub model properties and ensures presence of all meta data
@@ -61,11 +61,11 @@ public class AASServletConnection {
 			// Add example properties
 			// - Add simple property
 			SingleProperty prop1 = new SingleProperty(234);
-			prop1.setId("prop1");
+			prop1.setIdShort("prop1");
 			addSubModelElement(prop1);
 
 			SingleProperty prop11 = new SingleProperty(123);
-			prop11.setId("prop11");
+			prop11.setIdShort("prop11");
 			// - Add container property that holds other properties
 			List<SubmodelElement> containerProperties = fac.createList(
 					prop11
@@ -75,7 +75,7 @@ public class AASServletConnection {
 
 			// Add another property manually to sub model container "properties"
 			SingleProperty prop3 = new SingleProperty(17);
-			prop3.setId("prop3");
+			prop3.setIdShort("prop3");
 			{
 				((Map<String, Object>) this.get("dataElements")).put("prop3", prop3);
 			}
@@ -100,7 +100,7 @@ public class AASServletConnection {
 		@SuppressWarnings("unchecked")
 		public SampleSubModelManual() {
 			// Set sub model ID
-			setId("sm-001M");
+			setIdShort("sm-001M");
 
 			// Add example properties
 			// - Add simple property with value and idShort meta elements
@@ -119,7 +119,7 @@ public class AASServletConnection {
 			// - Using the Property class ensures presence of all meta properties
 			SingleProperty addedProperty = new SingleProperty(); 
 			addedProperty.set(17);
-			addedProperty.setId("prop3");
+			addedProperty.setIdShort("prop3");
 			// - Add property to sub model container "properties"
 			{
 				((Map<String, Object>) this.get(SubModel.PROPERTIES)).put("prop3", addedProperty);
@@ -184,11 +184,11 @@ public class AASServletConnection {
 			// Create and connect SDK connector
 			ISubModel subModel = manager.retrieveSubModel(new ModelUrn("aas-001"), "sm-001");
 			// - Retrieve sub model values and compare to expected values
-			assertTrue(subModel.getId().equals("sm-001"));
-			assertTrue(subModel.getDataElements().get("prop1").getId().equals("prop1"));
+			assertTrue(subModel.getIdShort().equals("sm-001"));
+			assertTrue(subModel.getDataElements().get("prop1").getIdShort().equals("prop1"));
 			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get() == 234);
 			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop3")).get() == 17);
-			assertTrue(subModel.getDataElements().get("prop2").getId().equals("prop2"));
+			assertTrue(subModel.getDataElements().get("prop2").getIdShort().equals("prop2"));
 			assertTrue((int) ((ISingleProperty) ((IContainerProperty) subModel.getDataElements().get("prop2")).getDataElements().get("prop11")).get() == 123);
 
 			// Connect to sub model using lower-level VAB interface
@@ -214,11 +214,11 @@ public class AASServletConnection {
 			// Create and connect SDK connector
 			ISubModel subModel = manager.retrieveSubModel(new ModelUrn("aas-001M"), "sm-001M");
 			// - Retrieve sub model values and compare to expected values
-			assertTrue(subModel.getId().equals("sm-001M"));
-			assertTrue(subModel.getDataElements().get("prop1").getId().equals("prop1"));
+			assertTrue(subModel.getIdShort().equals("sm-001M"));
+			assertTrue(subModel.getDataElements().get("prop1").getIdShort().equals("prop1"));
 			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get() == 234);
 			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop3")).get() == 17);
-			assertTrue(subModel.getDataElements().get("prop2").getId().equals("prop2"));
+			assertTrue(subModel.getDataElements().get("prop2").getIdShort().equals("prop2"));
 			assertTrue((int) ((ISingleProperty) ((IContainerProperty) subModel.getDataElements().get("prop2")).getDataElements().get("prop11")).get() == 123);
 			
 			

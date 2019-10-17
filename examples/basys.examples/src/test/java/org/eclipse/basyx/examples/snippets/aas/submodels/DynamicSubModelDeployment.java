@@ -68,13 +68,13 @@ public class DynamicSubModelDeployment {
 		// Instantiate sub model
 		SubModel submodel = new SubModel();
 		// - Add example properties to sub model
-		submodel.setId("Status");
+		submodel.setIdShort("Status");
 		SingleProperty prop1 = new SingleProperty(7);
-		prop1.setId("prop1");
+		prop1.setIdShort("prop1");
 		submodel.addSubModelElement(prop1);
 
 		SingleProperty prop2 = new SingleProperty("myStr");
-		prop2.setId("prop2");
+		prop2.setIdShort("prop2");
 		submodel.addSubModelElement(prop2);
 
 		
@@ -95,10 +95,10 @@ public class DynamicSubModelDeployment {
 			ISubModel subModel = aasManager.retrieveSubModel(new ModelUrn(AAS), STATUS_SM);
 
 			// Read sub model properties
-			String smId     = subModel.getId();
-			String prop1Id  = subModel.getDataElements().get("prop1").getId();
+			String smId     = subModel.getIdShort();
+			String prop1Id  = subModel.getDataElements().get("prop1").getIdShort();
 			int    prop1Val = (int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get();
-			String prop2Id  = subModel.getDataElements().get("prop2").getId();
+			String prop2Id  = subModel.getDataElements().get("prop2").getIdShort();
 			String prop2Val = (String) ((ISingleProperty) subModel.getDataElements().get("prop2")).get();
 			
 			// Compare sub model property values

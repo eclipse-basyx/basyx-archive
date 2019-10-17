@@ -74,7 +74,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 	}
 
 	@Override
-	public String getIdshort() {
+	public String getIdShort() {
 		return (String) getElem().get(Referable.IDSHORT);
 	}
 

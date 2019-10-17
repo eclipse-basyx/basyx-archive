@@ -33,7 +33,7 @@ public class AccessAASProperties {
 		// - Access AAS property via the specific access operation. This is the preferred
 		//   approach for accessing Asset Administration Shell and sub model properties,
 		//   as well as meta data.
-		Object deviceIDValue = aas.getId();
+		Object deviceIDValue = aas.getIdShort();
 		
 		
 		// Compared received value to expected value

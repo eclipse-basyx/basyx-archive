@@ -28,7 +28,7 @@ public class CoilcarAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider
 		AssetAdministrationShell coilcarAAS = new DeviceAdministrationShellFactory().create(aasid, submodelid);
 
 		// Set aas Id
-		coilcarAAS.setId(aasid);
+		coilcarAAS.setIdShort(aasid);
 
 		// Create the sub-model
 		SubModel coilcarSubmodel = new DeviceSubmodelFactory().create(submodelid, new Coilcar());

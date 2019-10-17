@@ -14,7 +14,6 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 
 /**
@@ -66,17 +65,6 @@ public class Operation extends SubmodelElement implements IOperation {
 		put(INVOKABLE, function);
 	}
 
-	@Override
-	public String getId() {
-		return (String) get(Referable.IDSHORT);
-	}
-
-	@Override
-	public void setId(String id) {
-		put(Referable.IDSHORT, id);
-
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IOperationVariable> getParameterTypes() {
@@ -124,8 +112,8 @@ public class Operation extends SubmodelElement implements IOperation {
 	}
 
 	@Override
-	public String getIdshort() {
-		return new ReferableFacade(this).getIdshort();
+	public String getIdShort() {
+		return new ReferableFacade(this).getIdShort();
 	}
 
 	@Override
@@ -144,8 +132,8 @@ public class Operation extends SubmodelElement implements IOperation {
 	}
 
 	@Override
-	public void setIdshort(String idShort) {
-		new ReferableFacade(this).setIdshort(idShort);
+	public void setIdShort(String idShort) {
+		new ReferableFacade(this).setIdShort(idShort);
 	}
 
 	@Override

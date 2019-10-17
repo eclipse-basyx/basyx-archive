@@ -43,17 +43,17 @@ public class TestConnectedSubModel {
 
 		// Create a simple value property
 		SingleProperty propertyMeta = new SingleProperty(100);
-		propertyMeta.setId(PROP);
+		propertyMeta.setIdShort(PROP);
 
 		// Create an operation
 		Operation op = factory.createOperation(new Operation(), (Function<Object[], Object> & Serializable) (obj) -> {
 			return (int) obj[0] + (int) obj[1];
 		});
-		op.setId(OP);
+		op.setIdShort(OP);
 
 		// Create the SubModel using the created property and operation
 		SubModel sm = factory.create(new SubModel(), Collections.singletonList(propertyMeta), Collections.singletonList(op));
-		sm.setId(ID);
+		sm.setIdShort(ID);
 
 		SubModelProvider provider = new SubModelProvider(new VABLambdaProvider(sm));
 
@@ -66,7 +66,7 @@ public class TestConnectedSubModel {
 	 */
 	@Test
 	public void getIdTest() {
-		assertEquals(ID, submodel.getId());
+		assertEquals(ID, submodel.getIdShort());
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class TestConnectedSubModel {
 		
 		// Construct test data
 		SingleProperty property = new SingleProperty();
-		property.setId("test1");
+		property.setIdShort("test1");
 		property.set("test2");
 		
 		// Save it
@@ -119,7 +119,7 @@ public class TestConnectedSubModel {
 		
 		// Check if it loaded correctly
 		assertNotNull(map);
-		ISingleProperty loadedProp = (ISingleProperty) map.get(property.getId());
+		ISingleProperty loadedProp = (ISingleProperty) map.get(property.getIdShort());
 		assertNotNull(loadedProp);
 		assertEquals(property.get(), loadedProp.get());
 	}
@@ -129,7 +129,7 @@ public class TestConnectedSubModel {
 		
 		// Construct test data
 		Operation operation = new Operation();
-		operation.setId("test1");
+		operation.setIdShort("test1");
 		
 		// Save it
 		submodel.addSubModelElement(operation);
@@ -139,8 +139,8 @@ public class TestConnectedSubModel {
 		
 		// Check if it loaded correctly
 		assertNotNull(map);
-		IOperation loadedOp = map.get(operation.getId());
+		IOperation loadedOp = map.get(operation.getIdShort());
 		assertNotNull(loadedOp);
-		assertEquals(operation.getId(), loadedOp.getId());
+		assertEquals(operation.getIdShort(), loadedOp.getIdShort());
 	}
 }

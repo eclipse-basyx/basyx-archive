@@ -129,16 +129,16 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
 		// - Create generic sub model and add properties
 		SubModel statusSM = new SubModel();
-		statusSM.setId("Status");
+		statusSM.setIdShort("Status");
 		//   - Property status: indicate device status
 		SingleProperty statusProp = new SingleProperty("offline");
-		statusProp.setId("status");
+		statusProp.setIdShort("status");
 		statusSM.addSubModelElement(statusProp);
 		//   - Property statistics: export invocation statistics for every service
 		//     - invocations: indicate total service invocations. Properties are not persisted in this example,
 		//                    therefore we start counting always at 0.
 		SingleProperty invocationsProp = new SingleProperty(0);
-		invocationsProp.setId("invocations");
+		invocationsProp.setIdShort("invocations");
 		statusSM.addSubModelElement(invocationsProp);
 		// - Transfer device sub model to server
 		aasServerConnection.createValue("/aas/submodels", statusSM);

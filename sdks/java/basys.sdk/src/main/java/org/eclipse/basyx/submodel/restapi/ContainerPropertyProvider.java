@@ -113,12 +113,12 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 			modelProvider.setModelPropertyValue("", newEntity);
 		} else if (path.equals(SubModel.PROPERTIES) || path.equals(SubModel.OPERATIONS)) {
 			// Create Operation or Property
-			String id = SubmodelElement.createAsFacade((Map<String, Object>) newEntity).getIdshort();
+			String id = SubmodelElement.createAsFacade((Map<String, Object>) newEntity).getIdShort();
 			modelProvider.createValue(VABPathTools.concatenatePaths(path, id), newEntity);
 			modelProvider.createValue(VABPathTools.concatenatePaths(SubModel.SUBMODELELEMENT, id), newEntity);
 		} else if (path.equals(SubModel.SUBMODELELEMENT)) {
 			// Create SubmodelElement
-			String id = SubmodelElement.createAsFacade((Map<String, Object>) newEntity).getIdshort();
+			String id = SubmodelElement.createAsFacade((Map<String, Object>) newEntity).getIdShort();
 			modelProvider.createValue(VABPathTools.concatenatePaths(SubModel.SUBMODELELEMENT, id), newEntity);
 		} else {
 			// Can not newly create any other elements in a property container

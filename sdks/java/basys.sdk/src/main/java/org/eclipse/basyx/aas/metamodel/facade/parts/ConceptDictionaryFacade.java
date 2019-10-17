@@ -26,7 +26,7 @@ public class ConceptDictionaryFacade implements IConceptDictionary {
 	}
 
 	@Override
-	public String getIdshort() {
+	public String getIdShort() {
 		return (String) map.get(Referable.IDSHORT);
 	}
 
@@ -45,7 +45,7 @@ public class ConceptDictionaryFacade implements IConceptDictionary {
 		return (IReference) map.get(Referable.PARENT);
 	}
 
-	public void setIdshort(String idShort) {
+	public void setIdShort(String idShort) {
 		map.put(Referable.IDSHORT, idShort);
 	}
 

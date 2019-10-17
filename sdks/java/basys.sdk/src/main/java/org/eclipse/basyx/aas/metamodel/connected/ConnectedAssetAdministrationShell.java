@@ -127,7 +127,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 
 		submodels = (Set<Map<?, ?>>) getProxy().getModelPropertyValue(AssetAdministrationShell.SUBMODELS);
 		for (Map<?, ?> submodelMap : submodels) {
-			String id = (String) submodelMap.get("idShort");
+			String id = (String) submodelMap.get(Referable.IDSHORT);
 			ret.put(id, new ConnectedSubModel(getProxy().getDeepProxy(AssetAdministrationShell.SUBMODELS + "/" + id)));
 		}
 		return ret;
@@ -139,7 +139,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	}
 
 	@Override
-	public String getIdshort() {
+	public String getIdShort() {
 		return (String) getElem().get(Referable.IDSHORT);
 	}
 

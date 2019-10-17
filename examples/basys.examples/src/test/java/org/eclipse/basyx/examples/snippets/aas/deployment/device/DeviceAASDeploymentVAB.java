@@ -32,7 +32,7 @@ public class DeviceAASDeploymentVAB {
 		// - Create AAS
 		AssetAdministrationShell aas = new AssetAdministrationShell();
 		// - Set sub model ID
-		aas.setId("urn:de.FHG:devices.es.iese:AAS:1.0:3:x-509#003");
+		aas.setIdShort("urn:de.FHG:devices.es.iese:AAS:1.0:3:x-509#003");
 
 
 		// Export AAS via BaSyx server

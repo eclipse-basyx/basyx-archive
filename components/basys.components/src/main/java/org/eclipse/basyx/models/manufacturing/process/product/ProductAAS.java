@@ -35,7 +35,7 @@ public class ProductAAS extends AssetAdministrationShell {
 	 */
 	public ProductAAS(String id) {
 		// Store unique product id
-		this.setId(id);
+		this.setIdShort(id);
 		
 		// Create sub model instances
 		qualitySubModelInstance = new ProductQualitySubmodel(""+id+"-Quality"); 

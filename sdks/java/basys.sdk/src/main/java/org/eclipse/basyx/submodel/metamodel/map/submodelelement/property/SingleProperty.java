@@ -79,12 +79,12 @@ public class SingleProperty extends AbstractProperty implements ISingleProperty 
 	}
 
 	@Override
-	public String getId() {
+	public String getIdShort() {
 		return (String) get(Referable.IDSHORT);
 	}
 
 	@Override
-	public void setId(String id) {
+	public void setIdShort(String id) {
 		put(Referable.IDSHORT, id);
 	}
 

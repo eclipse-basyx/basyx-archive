@@ -80,13 +80,13 @@ public class DynamicSubModelDeploymentHTTP {
 
 		// Add example properties
 		SubModel submodel = new SubModel();
-		submodel.setId("Status");
+		submodel.setIdShort("Status");
 		SingleProperty prop1 = new SingleProperty(7);
-		prop1.setId("prop1");
+		prop1.setIdShort("prop1");
 		submodel.addSubModelElement(prop1);
 
 		SingleProperty prop2 = new SingleProperty("myStr");
-		prop2.setId("prop2");
+		prop2.setIdShort("prop2");
 		submodel.addSubModelElement(prop2);
 
 		// Transfer sub model to server

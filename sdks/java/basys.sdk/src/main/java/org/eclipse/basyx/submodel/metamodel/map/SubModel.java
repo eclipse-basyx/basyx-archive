@@ -142,13 +142,13 @@ public class SubModel extends VABModelMap<Object> implements IVABElementContaine
 	}
 
 	@Override
-	public String getId() {
-		return new SubmodelFacade(this).getId();
+	public String getIdShort() {
+		return new SubmodelFacade(this).getIdShort();
 	}
 
 	@Override
-	public void setId(String id) {
-		new SubmodelFacade(this).setId(id);
+	public void setIdShort(String id) {
+		new SubmodelFacade(this).setIdShort(id);
 	}
 
 	@Override
@@ -159,11 +159,6 @@ public class SubModel extends VABModelMap<Object> implements IVABElementContaine
 	@Override
 	public void setOperations(Map<String, IOperation> operations) {
 		new SubmodelFacade(this).setOperations(operations);
-	}
-
-	@Override
-	public String getIdshort() {
-		return new ReferableFacade(this).getIdshort();
 	}
 
 	@Override
@@ -179,10 +174,6 @@ public class SubModel extends VABModelMap<Object> implements IVABElementContaine
 	@Override
 	public IReference getParent() {
 		return new ReferableFacade(this).getParent();
-	}
-
-	public void setIdshort(String idShort) {
-		new ReferableFacade(this).setIdshort(idShort);
 	}
 
 	public void setCategory(String category) {

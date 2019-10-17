@@ -9,7 +9,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
  *
  */
 public interface IReferable {
-	public String getIdshort();
+	public String getIdShort();
 
 	public String getCategory();
 

@@ -68,7 +68,6 @@ public class Asset extends HashMap<String, Object> implements IAsset {
 	
 	public void setDataSpecificationReferences(Set<IReference> ref) {
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
-		
 	}
 
 	@Override
@@ -78,7 +77,6 @@ public class Asset extends HashMap<String, Object> implements IAsset {
 	
 	public void setHasKindReference(String kind) {
 		new HasKindFacade(this).setHasKindReference(kind);
-		
 	}
 
 	@Override
@@ -93,12 +91,10 @@ public class Asset extends HashMap<String, Object> implements IAsset {
 
 	public void setAdministration(String version, String revision) {
 		new IdentifiableFacade(this).setAdministration(version, revision);
-		
 	}
 
 	public void setIdentification(String idType, String id) {
 		new IdentifiableFacade(this).setIdentification(idType, id);
-		
 	}
 
 	@Override
@@ -108,17 +104,15 @@ public class Asset extends HashMap<String, Object> implements IAsset {
 
 	public void setAssetIdentificationModel(IReference submodel) {
 		new AssetFacade(this).setAssetIdentificationModel(submodel);
-		
 	}
 
 	public void setId(String string) {
 		new AssetFacade(this).setId(string);
-		
 	}
 	
 	@Override
-	public String getIdshort() {
-	return new ReferableFacade(this).getIdshort();
+	public String getIdShort() {
+		return new ReferableFacade(this).getIdShort();
 	}
 
 	@Override
@@ -132,12 +126,12 @@ public class Asset extends HashMap<String, Object> implements IAsset {
 	}
 
 	@Override
-	public IReference  getParent() {
+	public IReference getParent() {
 		return new ReferableFacade(this).getParent();
 	}
 
-	public void setIdshort(String idShort) {
-		new ReferableFacade(this).setIdshort(idShort);
+	public void setIdShort(String idShort) {
+		new ReferableFacade(this).setIdShort(idShort);
 		
 	}
 
@@ -151,11 +145,8 @@ public class Asset extends HashMap<String, Object> implements IAsset {
 		
 	}
 
-	public void setParent(IReference  obj) {
+	public void setParent(IReference obj) {
 		new ReferableFacade(this).setParent(obj);
 		
 	}
-
-
-
 }

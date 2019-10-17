@@ -35,8 +35,8 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	}
 
 	@Override
-	public String getIdshort() {
-		return new ReferableFacade(getElem()).getIdshort();
+	public String getIdShort() {
+		return new ReferableFacade(getElem()).getIdShort();
 	}
 
 	@Override

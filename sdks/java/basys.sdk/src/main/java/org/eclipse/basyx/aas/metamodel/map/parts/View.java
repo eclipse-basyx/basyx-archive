@@ -86,8 +86,8 @@ public class View extends HashMap<String, Object> implements IView {
 	}
 
 	@Override
-	public String getIdshort() {
-		return new ReferableFacade(this).getIdshort();
+	public String getIdShort() {
+		return new ReferableFacade(this).getIdShort();
 	}
 
 	@Override
@@ -105,8 +105,8 @@ public class View extends HashMap<String, Object> implements IView {
 		return new ReferableFacade(this).getParent();
 	}
 
-	public void setIdshort(String idShort) {
-		new ReferableFacade(this).setIdshort(idShort);
+	public void setIdShort(String idShort) {
+		new ReferableFacade(this).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {

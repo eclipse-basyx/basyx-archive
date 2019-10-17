@@ -41,7 +41,7 @@ public class ConnectToRemoteAAS {
 		 */
 		public ExampleAssetAdministrationShell() {
 			// Set Asset Administration Shell ID
-			setId("aas-001");
+			setIdShort("aas-001");
 		}
 	}
 
@@ -89,7 +89,7 @@ public class ConnectToRemoteAAS {
 		IAssetAdministrationShell shell = manager
 				.retrieveAAS(new ModelUrn("aas-001"));
 		// - Retrieve AAS values and compare to expected values
-		Object propertyId = shell.getId();
+		Object propertyId = shell.getIdShort();
 		
 		
 		// Check result

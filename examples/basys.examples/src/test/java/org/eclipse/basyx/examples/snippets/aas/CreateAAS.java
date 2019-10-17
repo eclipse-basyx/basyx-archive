@@ -29,7 +29,7 @@ public class CreateAAS {
 		 */
 		public ExampleAssetAdministrationShell() {
 			// Set Asset Administration Shell ID
-			setId("aas-001");
+			setIdShort("aas-001");
 		}
 	}
 	
@@ -42,7 +42,7 @@ public class CreateAAS {
 		ExampleAssetAdministrationShell aas = new ExampleAssetAdministrationShell();
 		
 		// Retrieve AAS ID value
-		Object propertyId = aas.getId();
+		Object propertyId = aas.getIdShort();
 		
 		
 		// Check result

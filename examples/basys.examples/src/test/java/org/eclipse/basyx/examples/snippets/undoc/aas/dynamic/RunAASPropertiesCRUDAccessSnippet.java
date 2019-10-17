@@ -65,13 +65,13 @@ public class RunAASPropertiesCRUDAccessSnippet {
 		// Create properties on AAS
 		// - Add example properties
 		SubModel submodel = new SubModel();
-		submodel.setId("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
+		submodel.setIdShort("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
 		SingleProperty prop1 = new SingleProperty(7);
-		prop1.setId("prop1");
+		prop1.setIdShort("prop1");
 		submodel.addSubModelElement(prop1);
 
 		SingleProperty prop2 = new SingleProperty("myStr");
-		prop2.setId("prop2");
+		prop2.setIdShort("prop2");
 		submodel.addSubModelElement(prop2);
 		// - Transfer sub model to server
 		connSubModel1.setModelPropertyValue("/", submodel);

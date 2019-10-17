@@ -74,7 +74,7 @@ public class SQLQueriesTest {
 			newTableLine.put("sensorname", "VS_0003");
 			newTableLine.put("sensorid",   "033542");
 		SingleProperty p = new SingleProperty(newTableLine);
-		p.setId("sensorNames");
+		p.setIdShort("sensorNames");
 		// - Insert line into table
 		connSubModel.createValue("/aas/submodels/SQLTestSubmodel/dataElements", p);
 		

@@ -98,15 +98,15 @@ public class ConnectToSubModelEndpoints {
 		
 		// Create sub model
 		SubModel submodel = new SubModel();
-		submodel.setId(subModelId);
+		submodel.setIdShort(subModelId);
 
 		// - Add example properties to sub model
 		SingleProperty prop1 = new SingleProperty(7);
-		prop1.setId("prop1");
+		prop1.setIdShort("prop1");
 		submodel.addSubModelElement(prop1);
 
 		SingleProperty prop2 = new SingleProperty("myStr");
-		prop2.setId("prop2");
+		prop2.setIdShort("prop2");
 		submodel.addSubModelElement(prop2);
 		// - Transfer sub model to server
 		//   - This creates the "exampleSM" element on the server, which is the server
@@ -119,10 +119,10 @@ public class ConnectToSubModelEndpoints {
 
 		
 		// Read property values from sub model
-		String smID     = connSM.getId();
-		String prop1Id = connSM.getDataElements().get("prop1").getId();
+		String smID     = connSM.getIdShort();
+		String prop1Id = connSM.getDataElements().get("prop1").getIdShort();
 		int    prop1Val = (int)    ((ISingleProperty) connSM.getDataElements().get("prop1")).get();
-		String prop2Id  = connSM.getDataElements().get("prop2").getId();
+		String prop2Id  = connSM.getDataElements().get("prop2").getIdShort();
 		String prop2Val = (String) ((ISingleProperty) connSM.getDataElements().get("prop2")).get();
 
 		

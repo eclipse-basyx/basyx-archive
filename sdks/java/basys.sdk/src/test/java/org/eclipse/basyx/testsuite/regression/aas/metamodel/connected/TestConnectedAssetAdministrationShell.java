@@ -55,10 +55,10 @@ public class TestConnectedAssetAdministrationShell {
 
 		// Create a SubModel containing no operations and one property
 		SingleProperty p = new SingleProperty(propVal);
-		p.setId(propId);
+		p.setIdShort(propId);
 
 		SubModel sm = factory.create(new SubModel(), Collections.singletonList(p), new ArrayList<>());
-		sm.setId(smId);
+		sm.setIdShort(smId);
 
 		// Create Set containing reference to the created SubModel
 		Set<String> refs = new HashSet<>();
@@ -66,7 +66,7 @@ public class TestConnectedAssetAdministrationShell {
 
 		// Create an AAS containing a reference to the created SubModel
 		AssetAdministrationShell aas = factory.create(new AssetAdministrationShell(), refs);
-		aas.setId(aasId);
+		aas.setIdShort(aasId);
 	
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
 		provider.addSubmodel(smId, new SubModelProvider(TypeDestroyer.destroyType(sm)));
@@ -102,7 +102,7 @@ public class TestConnectedAssetAdministrationShell {
 	 */
 	@Test
 	public void testGetId() {
-		assertEquals(aasId, connectedAAS.getId());
+		assertEquals(aasId, connectedAAS.getIdShort());
 	}
 
 	/**

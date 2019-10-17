@@ -54,12 +54,12 @@ public class ConnectedElement implements IElement {
 	}
 
 	@Override
-	public String getId() {
+	public String getIdShort() {
 		return (String) getElem().getPath(Referable.IDSHORT);
 	}
 
 	@Override
-	public void setId(String id) {
+	public void setIdShort(String id) {
 		throwNotSupportedException();
 	}
 }

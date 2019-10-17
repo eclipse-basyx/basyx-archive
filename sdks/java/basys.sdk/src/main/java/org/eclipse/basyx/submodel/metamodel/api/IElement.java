@@ -14,7 +14,7 @@ public interface IElement {
 	 * 
 	 * @return unique ID
 	 */
-	public String getId();
+	public String getIdShort();
 
 	/**
 	 * Set the ID of an element
@@ -22,6 +22,6 @@ public interface IElement {
 	 * @param id
 	 *            New/updated element id
 	 */
-	public void setId(String id);
+	public void setIdShort(String id);
 
 }

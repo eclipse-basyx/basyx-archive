@@ -37,14 +37,14 @@ public class DeviceSubModelDeploymentVAB {
 		// - Create sub model
 		SubModel submodel = new SubModel();
 		// - Set sub model ID
-		submodel.setId("dynamicSM");
+		submodel.setIdShort("dynamicSM");
 		// - Add example properties
 		SingleProperty prop1 = new SingleProperty(7);
-		prop1.setId("prop1");
+		prop1.setIdShort("prop1");
 		submodel.addSubModelElement(prop1);
 
 		SingleProperty prop2 = new SingleProperty("myStr");
-		prop2.setId("prop2");
+		prop2.setIdShort("prop2");
 		submodel.addSubModelElement(prop2);
 
 		

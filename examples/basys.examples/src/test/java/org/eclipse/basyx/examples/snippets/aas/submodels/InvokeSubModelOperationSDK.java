@@ -50,19 +50,19 @@ public class InvokeSubModelOperationSDK {
 		 */
 		public SampleSubModel() {
 			// Set sub model ID
-			setId("sm-001");
+			setIdShort("sm-001");
 
 			// Support creation of properties and operations
 			MetaModelElementFactory fac = new MetaModelElementFactory();
 
 			// Define operations
 			Operation op1 = new Operation();
-			op1.setId("operation1");
+			op1.setIdShort("operation1");
 			getOperations().put("operation1", fac.createOperation(op1, (Function<Object[], Object>) (v) -> {
 				return operation1();
 			}));
 			Operation op2 = new Operation();
-			op2.setId("operation2");
+			op2.setIdShort("operation2");
 			getOperations().put("operation2", fac.createOperation(op2, (Function<Object[], Object>) (v) -> {
 				return operation2((int) v[0], (int) v[1]);
 			}));

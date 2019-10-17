@@ -33,26 +33,6 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		super(proxy);
 	}
 
-	@Override
-	public String getId() {
-		// try local get
-		String id = (String) this.getLocal(Referable.IDSHORT);
-		if (id != null) {
-			return id;
-		}
-		return (String) getProxy().getModelPropertyValue(Referable.IDSHORT);
-	}
-
-	@Override
-	public void setId(String id) {
-		// try set local if exists
-		if (this.getLocal(Referable.IDSHORT) != null) {
-			this.putLocal(Referable.IDSHORT, id);
-		}
-
-		getProxy().setModelPropertyValue(Referable.IDSHORT, id);
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IOperationVariable> getParameterTypes() {
@@ -113,8 +93,8 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	}
 
 	@Override
-	public String getIdshort() {
-		return new ReferableFacade(getElem()).getIdshort();
+	public String getIdShort() {
+		return new ReferableFacade(getElem()).getIdShort();
 	}
 
 	@Override

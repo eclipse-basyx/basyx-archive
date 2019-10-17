@@ -55,8 +55,8 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 	}
 
 	@Override
-	public String getIdshort() {
-		return new ReferableFacade(getElem()).getIdshort();
+	public String getIdShort() {
+		return new ReferableFacade(getElem()).getIdShort();
 	}
 
 	@Override

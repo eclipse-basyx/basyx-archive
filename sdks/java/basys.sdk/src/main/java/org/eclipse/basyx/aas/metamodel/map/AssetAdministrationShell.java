@@ -111,13 +111,13 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	 */
 	@Override
 	public void addSubModel(ISubModel subModel) {
-		System.out.println("adding Submodel " + subModel.getId());
-		addSubModel(subModel.getId());
+		System.out.println("adding Submodel " + subModel.getIdShort());
+		addSubModel(subModel.getIdShort());
 	}
 
 	@SuppressWarnings("unchecked")
 	public void addSubModelHack(SubModel subModel, String endpoint, String endpointType) {
-		System.out.println("adding Submodel " + subModel.getId());
+		System.out.println("adding Submodel " + subModel.getIdShort());
 		SubmodelDescriptor desc = new SubmodelDescriptor(subModel, endpoint, endpointType);
 		((Set<SubmodelDescriptor>) get(SUBMODELS)).add(desc);
 
@@ -165,13 +165,8 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@Override
-	public String getId() {
-		return new AssetAdministrationShellFacade(this).getId();
-	}
-
-	@Override
-	public void setId(String id) {
-		new AssetAdministrationShellFacade(this).setId(id);
+	public void setIdShort(String id) {
+		new AssetAdministrationShellFacade(this).setIdShort(id);
 	}
 
 	public void setSecurity(ISecurity security) {
@@ -235,8 +230,8 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@Override
-	public String getIdshort() {
-		return new ReferableFacade(this).getIdshort();
+	public String getIdShort() {
+		return new ReferableFacade(this).getIdShort();
 	}
 
 	@Override
@@ -254,13 +249,8 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		return new ReferableFacade(this).getParent();
 	}
 
-	public void setIdshort(String idShort) {
-		new ReferableFacade(this).setIdshort(idShort);
-	}
-
 	public void setCategory(String category) {
 		new ReferableFacade(this).setCategory(category);
-
 	}
 
 	public void setDescription(String description) {

@@ -74,7 +74,7 @@ public class TransformView {
 		Reference ref = new Reference(Keyset);
 		referenceset.add(ref);
 		View view = new View(referenceset);
-		view.setIdshort((String) viewMapObject.get("aas:idShort"));
+		view.setIdShort((String) viewMapObject.get("aas:idShort"));
 		viewSet.add(view);
 	}
 

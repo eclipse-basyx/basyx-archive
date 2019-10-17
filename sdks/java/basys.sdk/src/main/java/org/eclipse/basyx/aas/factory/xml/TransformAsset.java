@@ -32,7 +32,7 @@ public class TransformAsset {
 		asset.putAll(transformIdentifier);
 		asset.putAll(descriptionObj);
 		asset.setDescription(desc);
-		asset.setIdshort(idShort);
+		asset.setIdShort(idShort);
 
 		return asset;
 	}

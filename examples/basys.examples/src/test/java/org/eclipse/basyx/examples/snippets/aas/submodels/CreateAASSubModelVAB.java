@@ -38,7 +38,7 @@ public class CreateAASSubModelVAB {
 		@SuppressWarnings("unchecked")
 		public SampleSubModel() {
 			// Set sub model ID
-			setId("sm-001M");
+			setIdShort("sm-001M");
 
 			// Add example properties
 			// - Add simple property with value and idShort meta elements
@@ -57,7 +57,7 @@ public class CreateAASSubModelVAB {
 			// - Using the Property class ensures presence of all meta properties
 			SingleProperty addedProperty = new SingleProperty(); 
 			addedProperty.set(17);
-			addedProperty.setId("prop3");
+			addedProperty.setIdShort("prop3");
 			// - Add property to sub model container "properties"
 			{((Map<String, Object>) this.get("properties")).put("prop3", addedProperty);}
 		}

@@ -47,7 +47,7 @@ public class SubModelProviderTest {
 
 		// Create element
 		SingleProperty prop = new SingleProperty(500);
-		prop.setId("newProperty");
+		prop.setIdShort("newProperty");
 		submodelElement.createValue("/submodel/dataElements", prop);
 
 		// Read back value

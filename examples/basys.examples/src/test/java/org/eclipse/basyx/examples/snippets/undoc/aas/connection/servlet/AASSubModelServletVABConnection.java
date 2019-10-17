@@ -47,7 +47,7 @@ public class AASSubModelServletVABConnection {
 		@SuppressWarnings("unchecked")
 		public SampleSubModel() {
 			// Set sub model ID
-			setId("sm-001");
+			setIdShort("sm-001");
 
 			// Create factory that helps with property creation
 			// - This factory creates sub model properties and ensures presence of all meta data
@@ -56,11 +56,11 @@ public class AASSubModelServletVABConnection {
 			// Add example properties
 			// - Add simple property
 			SingleProperty prop1 = new SingleProperty(234);
-			prop1.setId("prop1");
+			prop1.setIdShort("prop1");
 			addSubModelElement(prop1);
 
 			SingleProperty prop11 = new SingleProperty(123);
-			prop11.setId("prop11");
+			prop11.setIdShort("prop11");
 			// - Add container property that holds other properties
 			List<SubmodelElement> containerProperties = fac.createList(
 					prop11
@@ -70,7 +70,7 @@ public class AASSubModelServletVABConnection {
 
 			// Add another property manually to sub model container "properties"
 			SingleProperty prop3 = new SingleProperty(17);
-			prop3.setId("prop3");
+			prop3.setIdShort("prop3");
 			{
 				((Map<String, Object>) this.get("dataElements")).put("prop3", prop3);
 			}

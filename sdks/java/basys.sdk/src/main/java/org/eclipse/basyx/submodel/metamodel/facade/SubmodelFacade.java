@@ -65,14 +65,16 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Get value of 'idShort' property
 	 */
-	public String getIDShort() {
+	@Override
+	public String getIdShort() {
 		return (String) getElements().get(Referable.IDSHORT);
 	}
 
 	/**
 	 * Update value of 'idShort' property
 	 */
-	public void setIDShort(String newValue) {
+	@Override
+	public void setIdShort(String newValue) {
 		getElements().put(Referable.IDSHORT, newValue);
 	}
 
@@ -195,16 +197,6 @@ public class SubmodelFacade implements ISubModel {
 	}
 
 	@Override
-	public String getId() {
-		return (String) map.get(Referable.IDSHORT);
-	}
-
-	@Override
-	public void setId(String id) {
-		map.put(Referable.IDSHORT, id);
-	}
-
-	@Override
 	public IReference getSemanticId() {
 		return (IReference) map.get(HasSemantics.SEMANTICID);
 	}
@@ -254,15 +246,6 @@ public class SubmodelFacade implements ISubModel {
 
 	private Map<String, Object> getElements() {
 		return map;
-	}
-
-	@Override
-	public String getIdshort() {
-		return (String) map.get(Referable.IDSHORT);
-	}
-
-	public void setIdshort(String idShort) {
-		map.put(Referable.IDSHORT, idShort);
 	}
 
 	public void setParent(IReference obj) {

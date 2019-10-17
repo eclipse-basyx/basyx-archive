@@ -74,7 +74,7 @@ public class MetaModelElementFactory {
 	public ContainerProperty createContainer(ContainerProperty property,
 			List<SubmodelElement> properties, List<SubmodelElement> operations, String id) {
 		ContainerProperty ret = createContainer(property, properties, operations);
-		ret.setId(id);
+		ret.setIdShort(id);
 		return ret;
 	}
 

@@ -51,10 +51,10 @@ public class ManufacturingDeviceActiveAASManager extends ManufacturingDeviceMana
 		// Create sub model
 		SubModel supplySM = new SubModel();
 		// - Set submodel ID
-		supplySM.setId("Supply");
+		supplySM.setIdShort("Supply");
 		//   - Property status: indicate device status
 		SingleProperty availabililtyProp = new SingleProperty(dynamicProperty);
-		availabililtyProp.setId("partAvailability");
+		availabililtyProp.setIdShort("partAvailability");
 		supplySM.addSubModelElement(availabililtyProp);
 
 

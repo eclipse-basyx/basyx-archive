@@ -39,15 +39,15 @@ public class DeviceSubModelDeployment {
 		// - Create sub model
 		SubModel submodel = new SubModel();
 		// - Set sub model ID "SampleSM" to full qualified ID urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003
-		submodel.setId("SampleSM");
+		submodel.setIdShort("SampleSM");
 		submodel.setIdentification(IdentifierType.URI, "urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003");
 		// - Add example properties
 		SingleProperty prop1 = new SingleProperty(7);
-		prop1.setId("prop1");
+		prop1.setIdShort("prop1");
 		submodel.addSubModelElement(prop1);
 
 		SingleProperty prop2 = new SingleProperty("myStr");
-		prop2.setId("prop2");
+		prop2.setIdShort("prop2");
 		submodel.addSubModelElement(prop2);
 
 		
@@ -76,10 +76,10 @@ public class DeviceSubModelDeployment {
 		ISubModel subModel = manager.retrieveSubModel(new ModelUrn(""), "urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003");
 		
 		// Retrieve sub model values and compare to expected values
-		String submodelId = subModel.getId();
-		String prop1Id    = subModel.getDataElements().get("prop1").getId();
+		String submodelId = subModel.getIdShort();
+		String prop1Id    = subModel.getDataElements().get("prop1").getIdShort();
 		int    prop1Val   = (int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get();
-		String prop2Id    = subModel.getDataElements().get("prop2").getId();
+		String prop2Id    = subModel.getDataElements().get("prop2").getIdShort();
 		String prop2Val   = (String) ((ISingleProperty) subModel.getDataElements().get("prop2")).get();
 
 		

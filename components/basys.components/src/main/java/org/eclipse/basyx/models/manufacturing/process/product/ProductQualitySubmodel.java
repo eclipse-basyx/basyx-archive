@@ -43,7 +43,7 @@ public class ProductQualitySubmodel extends SubModel {
 	 */
 	public ProductQualitySubmodel(String id) {
 		// Store unique product id
-		this.setId(id);
+		this.setIdShort(id);
 		
 		
 		// Create example properties

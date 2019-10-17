@@ -22,7 +22,7 @@ public class ReferableFacade implements IReferable {
 	}
 
 	@Override
-	public String getIdshort() {
+	public String getIdShort() {
 		return (String) map.get(Referable.IDSHORT);
 	}
 
@@ -41,7 +41,7 @@ public class ReferableFacade implements IReferable {
 		return (IReference) map.get(Referable.PARENT);
 	}
 
-	public void setIdshort(String idShort) {
+	public void setIdShort(String idShort) {
 		map.put(Referable.IDSHORT, idShort);
 	}
 

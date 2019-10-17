@@ -68,12 +68,12 @@ public class TestConnectedAssetAdministrationShellManager {
 		createAAS(urn, aasId);
 
 		// Retrieve it
-		assertEquals(aasId, manager.retrieveAAS(urn).getId());
+		assertEquals(aasId, manager.retrieveAAS(urn).getIdShort());
 	}
 
 	private void createAAS(ModelUrn urn, String id) {
 		AssetAdministrationShell aas = new MetaModelElementFactory().create(new AssetAdministrationShell(), new HashSet<>());
-		aas.setId(id);
+		aas.setIdShort(id);
 		manager.createAAS(aas, urn);
 	}
 
@@ -96,19 +96,19 @@ public class TestConnectedAssetAdministrationShellManager {
 		SubModel submodel = new SubModel();
 
 		// - Add example properties to sub model
-		submodel.setId(smId);
+		submodel.setIdShort(smId);
 		SingleProperty prop1 = new SingleProperty(7);
-		prop1.setId("prop1");
+		prop1.setIdShort("prop1");
 		submodel.addSubModelElement(prop1);
 
 		SingleProperty prop2 = new SingleProperty("myStr");
-		prop1.setId("prop2");
+		prop1.setIdShort("prop2");
 		submodel.addSubModelElement(prop2);
 
 		manager.createSubModel(urn, submodel);
 
 		ISubModel sm = manager.retrieveSubModel(urn, smId);
-		assertEquals(smId, sm.getId());
+		assertEquals(smId, sm.getIdShort());
 	}
 
 }

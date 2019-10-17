@@ -41,8 +41,8 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 	}
 
 	@Override
-	public String getIdshort() {
-		return new ReferableFacade(this).getIdshort();
+	public String getIdShort() {
+		return new ReferableFacade(this).getIdShort();
 	}
 
 	@Override
@@ -60,8 +60,8 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 		return new ReferableFacade(this).getParent();
 	}
 
-	public void setIdshort(String idShort) {
-		new ReferableFacade(this).setIdshort(idShort);
+	public void setIdShort(String idShort) {
+		new ReferableFacade(this).setIdShort(idShort);
 
 	}
 

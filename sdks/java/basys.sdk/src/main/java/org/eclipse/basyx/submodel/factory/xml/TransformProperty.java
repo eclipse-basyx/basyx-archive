@@ -72,7 +72,7 @@ public class TransformProperty {
 		String value = (String) PropertyObj.get("aas:value");
 		SingleProperty prop = new SingleProperty();
 		prop.put("semanticId", transformHasSemanticsObj);
-		prop.setIdshort(idShort);
+		prop.setIdShort(idShort);
 		prop.setCategory(category);
 		prop.set(value);
 		propertySet.add(prop);

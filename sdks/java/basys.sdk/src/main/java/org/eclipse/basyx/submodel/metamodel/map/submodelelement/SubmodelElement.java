@@ -45,8 +45,8 @@ public class SubmodelElement extends HashMap<String, Object> implements ISubmode
 	}
 
 	@Override
-	public String getIdshort() {
-		return new ReferableFacade(this).getIdshort();
+	public String getIdShort() {
+		return new ReferableFacade(this).getIdShort();
 	}
 
 	@Override
@@ -64,8 +64,9 @@ public class SubmodelElement extends HashMap<String, Object> implements ISubmode
 		return new ReferableFacade(this).getParent();
 	}
 
-	public void setIdshort(String idShort) {
-		new ReferableFacade(this).setIdshort(idShort);
+	@Override
+	public void setIdShort(String idShort) {
+		new ReferableFacade(this).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {
@@ -106,15 +107,4 @@ public class SubmodelElement extends HashMap<String, Object> implements ISubmode
 	public void setHasKindReference(String kind) {
 		new HasKindFacade(this).setHasKindReference(kind);
 	}
-
-	@Override
-	public String getId() {
-		return (String) get(Referable.IDSHORT);
-	}
-
-	@Override
-	public void setId(String id) {
-		put(Referable.IDSHORT, id);
-	}
-
 }

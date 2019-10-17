@@ -48,13 +48,13 @@ public class TestConnectedContainerProperty {
 
 		// Create PropertySingleValued containing the collection
 		SingleProperty propertyMeta = new SingleProperty(collection);
-		propertyMeta.setId(COLLECTIONPROP);
+		propertyMeta.setIdShort(COLLECTIONPROP);
 
 		// Create operation
 		Operation operation = factory.createOperation(new Operation(), (arr) -> {
 			return (int) arr[0] + (int) arr[1];
 		});
-		operation.setId(OPERATION);
+		operation.setIdShort(OPERATION);
 
 		// Create ComplexDataProperty containing the created operation and property
 		ContainerProperty complex = factory.createContainer(new ContainerProperty(),

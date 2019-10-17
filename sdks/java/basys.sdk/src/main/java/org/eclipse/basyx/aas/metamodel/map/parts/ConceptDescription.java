@@ -73,8 +73,8 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 	}
 
 	@Override
-	public String getIdshort() {
-		return new ReferableFacade(this).getIdshort();
+	public String getIdShort() {
+		return new ReferableFacade(this).getIdShort();
 	}
 
 	@Override
@@ -92,8 +92,8 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 		return new ReferableFacade(this).getParent();
 	}
 
-	public void setIdshort(String idShort) {
-		new ReferableFacade(this).setIdshort(idShort);
+	public void setIdShort(String idShort) {
+		new ReferableFacade(this).setIdShort(idShort);
 
 	}
 
