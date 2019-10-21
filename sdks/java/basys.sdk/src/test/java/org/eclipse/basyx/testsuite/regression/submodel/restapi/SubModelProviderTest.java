@@ -144,6 +144,17 @@ public class SubModelProviderTest {
 	}
 
 	/**
+	 * Test reading a single operation
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testReadSingleOperation() {
+		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
+		Map<String, Object> operation = (Map<String, Object>) submodel.getModelPropertyValue("/submodel/operations/simple");
+		assertEquals("simple", operation.get(Identifiable.IDSHORT));
+	}
+
+	/**
 	 * Test reading all submodel elements of the submodel
 	 */
 	@SuppressWarnings("unchecked")
@@ -166,6 +177,21 @@ public class SubModelProviderTest {
 
 		// Test, if it has been deleted
 		Object result = submodelElement.getModelPropertyValue("/submodel/dataElements/integerProperty");
+		assertNull(result);
+	}
+
+	/**
+	 * Test deleting a single operation
+	 */
+	@Test
+	public void testDeleteOperation() {
+		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
+
+		// Delete operation
+		submodelElement.deleteValue("/submodel/operations/simple");
+
+		// Test, if it has been deleted
+		Object result = submodelElement.getModelPropertyValue("/submodel/operations/simple");
 		assertNull(result);
 	}
 
