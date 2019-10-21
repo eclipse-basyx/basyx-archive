@@ -14,6 +14,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 
 /**
@@ -29,11 +30,15 @@ public class Operation extends SubmodelElement implements IOperation {
 	public static final String IN = "in";
 	public static final String OUT = "out";
 	public static final String INVOKABLE = "invokable";
+	public static final String MODELTYPE = "Operation";
 
 	/**
 	 * Constructor
 	 */
 	public Operation() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
 		// Input variables
 		put(IN, new ArrayList<OperationVariable>());
 

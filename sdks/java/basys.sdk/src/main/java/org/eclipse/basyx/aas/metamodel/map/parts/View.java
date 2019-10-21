@@ -10,6 +10,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -31,11 +32,15 @@ public class View extends HashMap<String, Object> implements IView {
 	private static final long serialVersionUID = 1L;
 
 	public static final String CONTAINEDELEMENT = "containedElement";
+	public static final String MODELTYPE = "View";
 
 	/**
 	 * Constructor
 	 */
 	public View() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
 		// Add qualifiers
 		putAll(new HasSemantics());
 		putAll(new HasDataSpecification());

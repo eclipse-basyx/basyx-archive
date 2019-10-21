@@ -11,6 +11,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
 
@@ -23,6 +24,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleP
  */
 public class OperationVariable extends SubmodelElement implements IOperationVariable {
 	private static final long serialVersionUID = 1L;
+	public static final String MODELTYPE = "OperationVariable";
 
 	/**
 	 * 
@@ -35,7 +37,8 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	}
 
 	public OperationVariable() {
-
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
 	}
 
 	public void setValue(ISubmodelElement value) {

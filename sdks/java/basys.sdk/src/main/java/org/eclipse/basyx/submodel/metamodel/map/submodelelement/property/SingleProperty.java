@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.property;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
@@ -24,11 +25,15 @@ public class SingleProperty extends AbstractProperty implements ISingleProperty 
 	public static final String VALUE = "value";
 	public static final String VALUEID = "valueId";
 	public static final String VALUETYPE = "valueType";
+	public static final String MODELTYPE = "Property";
 
 	/**
 	 * Constructor
 	 */
 	public SingleProperty() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
 		// Put attributes
 		put(SingleProperty.VALUE, null);
 		put(SingleProperty.VALUEID, null);

@@ -10,6 +10,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 
 /**
@@ -26,11 +27,15 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 
 	public static final String FIRST="first";
 	public static final String SECOND="second";
+	public static final String MODELTYPE = "RelationshipElement";
 	
 	/**
 	 * Constructor
 	 */
 	public RelationshipElement() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
 		put(FIRST, null);
 		put(SECOND, null);
 	}

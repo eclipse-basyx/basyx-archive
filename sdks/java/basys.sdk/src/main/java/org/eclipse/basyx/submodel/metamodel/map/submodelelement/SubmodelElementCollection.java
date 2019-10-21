@@ -16,6 +16,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
 
 /**
@@ -30,12 +31,16 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 
 	public static final String ORDERED = "ordered";
 	public static final String ALLOWDUPLICATES = "allowDuplicates";
+	public static final String MODELTYPE = "SubmodelElementCollection";
 
 
 	/**
 	 * Constructor
 	 */
 	public SubmodelElementCollection() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
 		// Put attributes
 		put(SingleProperty.VALUE, new ArrayList<>());
 		put(ORDERED, true);

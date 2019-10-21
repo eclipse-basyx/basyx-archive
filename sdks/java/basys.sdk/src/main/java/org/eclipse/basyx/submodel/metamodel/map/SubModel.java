@@ -18,6 +18,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
@@ -42,6 +43,7 @@ public class SubModel extends VABModelMap<Object> implements IVABElementContaine
 	public static final String SUBMODELELEMENT = "submodelElement";
 	public static final String PROPERTIES = "dataElements";
 	public static final String OPERATIONS = "operations";
+	public static final String MODELTYPE = "Submodel";
 
 	/**
 	 * Submodel properties
@@ -62,6 +64,9 @@ public class SubModel extends VABModelMap<Object> implements IVABElementContaine
 	 * Constructor
 	 */
 	public SubModel() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
 		// Add qualifiers
 		putAll(new HasSemantics());
 		putAll(new Identifiable());

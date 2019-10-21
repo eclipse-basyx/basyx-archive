@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IReferenceElement;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
 
@@ -17,11 +18,15 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleP
 public class ReferenceElement extends DataElement implements IReferenceElement {
 
 	private static final long serialVersionUID = 1L;
+	public static final String MODELTYPE = "ReferenceElement";
 
 	/**
 	 * Constructor
 	 */
 	public ReferenceElement() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
 		put(SingleProperty.VALUE, null);
 	}
 

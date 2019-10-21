@@ -6,6 +6,7 @@ import java.util.Set;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IFormula;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.FormulaFacade;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 
 /**
@@ -20,10 +21,15 @@ public class Formula extends Constraint implements IFormula {
 
 	public static final String DEPENDSON = "dependsOn";
 
+	public static final String MODELTYPE = "Formula";
+
 	/**
 	 * Constructor
 	 */
 	public Formula() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
 		put(DEPENDSON, new HashSet<Reference>());
 	}
 

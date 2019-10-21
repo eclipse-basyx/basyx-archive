@@ -1,6 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.file;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.file.IFile;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.DataElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.blob.Blob;
@@ -15,6 +16,7 @@ public class File extends DataElement implements IFile{
 	private static final long serialVersionUID = 1L;
 	
 	public static final String MIMETYPE="mimeType";
+	public static final String MODELTYPE = "File";
 
 
 	/**
@@ -31,7 +33,8 @@ public class File extends DataElement implements IFile{
 	 *            in <i>RFC2046</i>, e.g. <i>image/jpg</i>
 	 */
 	public File(String value, String mimeType) {
-		super();
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
 
 		// Save value
 		put(SingleProperty.VALUE, value);

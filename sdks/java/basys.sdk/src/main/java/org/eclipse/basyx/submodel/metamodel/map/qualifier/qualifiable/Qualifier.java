@@ -4,6 +4,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifier
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifierFacade;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 
@@ -28,10 +29,15 @@ public class Qualifier extends Constraint implements IQualifier {
 
 	public static final String QUALIFIERVALUEID = "qualifierValueId";
 
+	public static final String MODELTYPE = "Qualifier";
+
 	/**
 	 * Constructor
 	 */
 	public Qualifier() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
 		// Add all attributes from HasSemantics
 		this.putAll(new HasSemantics());
 

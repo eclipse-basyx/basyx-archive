@@ -12,6 +12,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 
@@ -25,8 +26,12 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 	private static final long serialVersionUID = 1L;
 
 	public static final String ISCASEOF = "isCaseOf";
+	public static final String MODELTYPE = "ConceptDescription";
 
 	public ConceptDescription() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
 		// Add qualifiers
 		putAll(new HasDataSpecification());
 		putAll(new Identifiable());

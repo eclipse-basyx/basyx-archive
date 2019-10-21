@@ -12,16 +12,27 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 
+/**
+ * SubmodelElement as defined in "Details of the Asset Administration Shell"
+ * 
+ * @author schnicke
+ *
+ */
 public class SubmodelElement extends HashMap<String, Object> implements ISubmodelElement {
 	private static final long serialVersionUID = 1L;
+	public static final String MODELTYPE = "SubmodelElement";
 
 	public SubmodelElement() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
 		putAll(new HasDataSpecification());
 		putAll(new Referable());
 		putAll(new Qualifiable());
@@ -29,6 +40,12 @@ public class SubmodelElement extends HashMap<String, Object> implements ISubmode
 		putAll(new HasKind());
 	}
 
+	/**
+	 * Wraps a map representing a SubmodelElement into the SubmodelElement interface
+	 * 
+	 * @param obj
+	 * @return
+	 */
 	public static SubmodelElement createAsFacade(Map<String, Object> obj) {
 		SubmodelElement elem = new SubmodelElement();
 		elem.putAll(obj);

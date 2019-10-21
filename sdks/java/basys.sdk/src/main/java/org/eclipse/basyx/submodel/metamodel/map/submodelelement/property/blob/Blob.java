@@ -1,6 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.blob;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.blob.IBlob;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.DataElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
 
@@ -14,6 +15,7 @@ public class Blob extends DataElement implements IBlob{
 	private static final long serialVersionUID = 1L;
 	
 	public static final String MIMETYPE="mimeType";
+	public static final String MODELTYPE = "blob";
 
 	/**
 	 * Has to have a MimeType
@@ -25,7 +27,8 @@ public class Blob extends DataElement implements IBlob{
 	 *            in <i>RFC2046</i>, e.g. <i>image/jpg</i>
 	 */
 	public Blob(byte[] value, String mimeType) {
-		super();
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
 
 		put(SingleProperty.VALUE, value);
 		put(MIMETYPE, mimeType);

@@ -25,6 +25,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificatio
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
@@ -60,6 +61,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public static final String ADDRESS = "address";
 	public static final String ENDPOINTS = "endpoints";
 	public static final String IDSEMANTICS = "id_semantics";
+	public static final String MODELTYPE = "AssetAdministationShell";
 
 	/**
 	 * Version of serialized instances
@@ -70,6 +72,9 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	 * Constructor
 	 */
 	public AssetAdministrationShell() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
 		// Add qualifiers
 		putAll(new Identifiable());
 		putAll(new HasDataSpecification());

@@ -12,6 +12,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificatio
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
@@ -30,6 +31,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 public class Asset extends HashMap<String, Object> implements IAsset {
 	
 	public static String ASSETIDENTIFICATIONMODEL="assetIdentificationModel";
+	public static String MODELTYPE = "Asset";
 
 	/**
 	 * Version of serialized instances
@@ -40,6 +42,9 @@ public class Asset extends HashMap<String, Object> implements IAsset {
 	 * Constructor
 	 */
 	public Asset() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
 		// Add qualifiers
 		putAll(new HasDataSpecification());
 		putAll(new HasKind());
