@@ -22,6 +22,7 @@ public class OperationProvider extends MetaModelProvider {
 
 	@Override
 	public Object getModelPropertyValue(String path) throws Exception {
+		// Getting of operation is handled by parent provider
 		throw new RuntimeException();
 	}
 
@@ -37,6 +38,7 @@ public class OperationProvider extends MetaModelProvider {
 
 	@Override
 	public void deleteValue(String path) throws Exception {
+		// Deletion of operation is handled by parent provider
 		throw new RuntimeException();
 	}
 

@@ -27,50 +27,66 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 		this.modelProvider = provider;
 	}
 
+	private Object getSubModel() throws Exception {
+		// For access on the container property root, return the whole model
+		Map<String, Object> map = getModel();
+
+		// Change internal maps to sets for submodelElements, properties and operations
+		setMapToSet(map, SubModel.PROPERTIES);
+		setMapToSet(map, SubModel.OPERATIONS);
+		setMapToSet(map, SubModel.SUBMODELELEMENT);
+
+		return map;
+	}
+
+	private Object handleQualifierGet(String path, String qualifier) throws Exception {
+		if (qualifier.equals(SubModel.SUBMODELELEMENT) || qualifier.equals(SubModel.PROPERTIES) || qualifier.equals(SubModel.OPERATIONS)) {
+			// if all submodel elements, data elements or operations are accessed (e.g.
+			// "/operations")
+			// Convert contained element map to set and return result (see API)
+			Map<String, Object> map = getModel();
+			setMapToSet(map, qualifier);
+			return map.get(qualifier);
+		} else {
+			// No other property in a container property can be directly accessed
+			throw getUnknownPathException(path);
+		}
+	}
+
+	private Object handleDetailGet(String qualifier, String[] pathElements) throws Exception {
+		// Build new proxy pointing at sub-property of a submodelelement and forward the
+		// remaininig part of the path
+		// to an appropriate provider
+		String elementAccess = pathElements[1];
+		String subPath = VABPathTools.buildPath(pathElements, 2);
+		VABElementProxy propertyProxy = new VABElementProxy("", this.modelProvider).getDeepProxy(VABPathTools.append(qualifier, elementAccess));
+		if (propertyProxy.getModelPropertyValue(SubModel.PROPERTIES) != null) {
+			// Assume container property, if it has "dataElements"
+			return new ContainerPropertyProvider(propertyProxy).getModelPropertyValue(subPath);
+		} else {
+			// Assume single property otherwise
+			return new SinglePropertyProvider(propertyProxy).getModelPropertyValue(subPath);
+		}
+	}
+
 	@Override
 	public Object getModelPropertyValue(String path) throws Exception {
 		path = VABPathTools.stripSlashes(path);
 		String[] pathElements = VABPathTools.splitPath(path);
+
 		if (path.isEmpty()) {
-			// For access on the container property root, return the whole model
-			Map<String, Object> map = getModel();
-
-			// Change internal maps to sets for submodelElements, properties and operations
-			setMapToSet(map, SubModel.PROPERTIES);
-			setMapToSet(map, SubModel.OPERATIONS);
-			setMapToSet(map, SubModel.SUBMODELELEMENT);
-
-			return map;
-		} else if (pathElements.length == 1) {
-			if (pathElements[0].equals(SubModel.SUBMODELELEMENT) || pathElements[0].equals(SubModel.PROPERTIES)
-					|| pathElements[0].equals(SubModel.OPERATIONS)) {
-				// if all submodel elements, data elements or operations are accessed (e.g. "/operations")
-				// Convert contained element map to set and return result (see API)
-				Map<String, Object> map = getModel();
-				setMapToSet(map, pathElements[0]);
-				return map.get(pathElements[0]);
+			return getSubModel();
+		} else {
+			String qualifier = pathElements[0];
+			if (pathElements.length == 1) {
+				return handleQualifierGet(path, qualifier);
+			} else if (qualifier.equals(SubModel.SUBMODELELEMENT) || qualifier.equals(SubModel.PROPERTIES) || qualifier.equals(SubModel.OPERATIONS)) {
+				return handleDetailGet(qualifier, pathElements);
 			} else {
-				// No other property in a container property can be directly accessed
+				// Can not access a path with more than one path element that does not point to
+				// a submodelelement
 				throw getUnknownPathException(path);
 			}
-		} else if (pathElements[0].equals(SubModel.SUBMODELELEMENT) || pathElements[0].equals(SubModel.PROPERTIES)
-				|| pathElements[0].equals(SubModel.OPERATIONS)) {
-			// Build new proxy pointing at sub-property of a submodelelement and forward the remaininig part of the path
-			// to an appropriate provider
-			String elementAccess = pathElements[1];
-			String subPath = VABPathTools.buildPath(pathElements, 2);
-			VABElementProxy propertyProxy = new VABElementProxy("", this.modelProvider)
-					.getDeepProxy(VABPathTools.append(pathElements[0], elementAccess));
-			if (propertyProxy.getModelPropertyValue(SubModel.PROPERTIES) != null) {
-				// Assume container property, if it has "dataElements"
-				return new ContainerPropertyProvider(propertyProxy).getModelPropertyValue(subPath);
-			} else {
-				// Assume single property otherwise
-				return new SinglePropertyProvider(propertyProxy).getModelPropertyValue(subPath);
-			}
-		} else {
-			// Can not access a path with more than one path element that does not point to a submodelelement
-			throw getUnknownPathException(path);
 		}
 	}
 
@@ -94,7 +110,7 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 		Object mapEntry = map.get(key);
 		if (mapEntry instanceof Map<?, ?>) {
 			Map<String, Object> dataElements = (Map<String, Object>) mapEntry;
-			map.put(key, new HashSet<Object>(dataElements.values()));			
+			map.put(key, new HashSet<Object>(dataElements.values()));
 		}
 	}
 
