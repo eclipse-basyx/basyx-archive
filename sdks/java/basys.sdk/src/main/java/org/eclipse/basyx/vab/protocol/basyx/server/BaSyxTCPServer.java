@@ -10,6 +10,9 @@ import java.nio.channels.SocketChannel;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.service.api.BaSyxService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 
 /**
@@ -19,6 +22,8 @@ import org.eclipse.basyx.vab.service.api.BaSyxService;
  *
  */
 public class BaSyxTCPServer<T extends IModelProvider> implements Runnable, BaSyxService {
+	
+	private static Logger logger = LoggerFactory.getLogger(BaSyxTCPServer.class);
 
 	
 	/**
@@ -70,7 +75,7 @@ public class BaSyxTCPServer<T extends IModelProvider> implements Runnable, BaSyx
 			serverSockChannel.socket().bind(new InetSocketAddress(hostIPAddress, serverPort));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception in BaSyxTCPServer", e);
 		}
 	}
 
@@ -110,7 +115,7 @@ public class BaSyxTCPServer<T extends IModelProvider> implements Runnable, BaSyx
 			try {
 				communicationSocket = serverSockChannel.accept(); 
 			} catch (SocketException e) {
-				e.printStackTrace();
+				logger.error("Exception in acceptIncomingConnection", e);
 				// End process; Server socket has been closed by shutdown
 				exit = true; return;
 			}
@@ -122,7 +127,7 @@ public class BaSyxTCPServer<T extends IModelProvider> implements Runnable, BaSyx
 			tcpProvider.start();
 		} catch (IOException e) {
 			// Indicate exception only iff exit flag is false
-			if (!exit) e.printStackTrace();
+			if (!exit) logger.error("Exception in acceptIncomingConnection", e);
 
 			// Return
 			return;
@@ -145,7 +150,7 @@ public class BaSyxTCPServer<T extends IModelProvider> implements Runnable, BaSyx
 			serverSockChannel.close();
 		} catch (IOException e) {
 			// Indicate exception
-			e.printStackTrace();
+			logger.error("Exception in shutdown", e);
 		}			
 	}
 
@@ -172,7 +177,7 @@ public class BaSyxTCPServer<T extends IModelProvider> implements Runnable, BaSyx
 		shutdown();
 		
 		// Wait for thread end
-		try {thread.join();} catch (InterruptedException e) {e.printStackTrace();}
+		try {thread.join();} catch (InterruptedException e) {logger.error("Exception in stop", e);}
 	}
 
 
@@ -204,7 +209,7 @@ public class BaSyxTCPServer<T extends IModelProvider> implements Runnable, BaSyx
 	 */
 	public void waitFor() {
 		// Wait for thread end
-		try {thread.join();} catch (InterruptedException e) {e.printStackTrace();}		
+		try {thread.join();} catch (InterruptedException e) {logger.error("Exception in waitFor", e);}		
 	}
 	
 	

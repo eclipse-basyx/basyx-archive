@@ -10,6 +10,9 @@ import org.eclipse.basyx.vab.coder.json.provider.JSONProvider;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.basyx.CoderTools;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Provider class that enables access to an IModelProvider via native BaSyx
@@ -19,6 +22,8 @@ import org.eclipse.basyx.vab.protocol.basyx.CoderTools;
  *
  */
 public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends Thread {
+	
+	private static Logger logger = LoggerFactory.getLogger(VABBaSyxTCPInterface.class);
 
 	
 	/**
@@ -248,7 +253,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			// System.out.println("Read:"+expectedBytes);
 		} catch (IOException e) {
 			// Output exception
-			e.printStackTrace();
+			logger.error("Exception in readBytes", e);
 		}
 	}
 
@@ -280,7 +285,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 				if (!commChannel.isConnected()) return;
 
 				// Output error
-				e.printStackTrace();
+				logger.error("Exception in run", e);
 			}
 		}
 	}

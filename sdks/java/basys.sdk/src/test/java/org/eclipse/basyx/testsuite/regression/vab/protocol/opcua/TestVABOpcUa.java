@@ -8,6 +8,9 @@ import org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.ULong;
 import org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.UShort;
 import org.junit.Assert;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Test VAB using OpcUa protocol. This is an integration test
  * 
@@ -15,6 +18,9 @@ import org.junit.Assert;
  *
  */
 public class TestVABOpcUa {
+	
+	private static Logger logger = LoggerFactory.getLogger(TestVABOpcUa.class); 
+	
     protected ConnectorProviderMapper clientMapper = new ConnectorProviderMapper();
 
 //    @Test
@@ -30,7 +36,7 @@ public class TestVABOpcUa {
             Assert.assertEquals("true 1 2 3 5 8 13 21 34 55.0 89.0 ", methodCallRes);
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("[TEST] Exception in testOpcUaMethodCall", e);
         }
     }
     
@@ -46,7 +52,7 @@ public class TestVABOpcUa {
             Assert.assertEquals("42", ret);
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("[TEST] Exception in testOpcUaReadAndWrite", e);
         }
     }
 }

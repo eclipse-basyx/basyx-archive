@@ -24,6 +24,9 @@ import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
 import org.junit.Test;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -36,12 +39,15 @@ import com.google.gson.JsonPrimitive;
  *
  */
 public class TestJson {
+	
+	private static Logger logger = LoggerFactory.getLogger(TestJson.class);
+	
 	GSONTools tools = new GSONTools(new DefaultTypeFactory());
 
 	public static void main(String[] args) {
 		GSONTools tools = new GSONTools(new DefaultTypeFactory());
 
-		System.out.println(tools.deserialize(tools.serialize(new SimpleVABElement())));
+		logger.trace("[TEST] {}", tools.deserialize(tools.serialize(new SimpleVABElement())));
 	}
 
 	/**
@@ -266,7 +272,7 @@ public class TestJson {
 			oos.writeObject(testFunction);
 			oos.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("[TEST] Exception in testSerializableFunction", e);
 		}
 
 		// Try to encode to string

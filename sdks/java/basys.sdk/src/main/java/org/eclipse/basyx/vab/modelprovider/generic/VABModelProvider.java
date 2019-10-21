@@ -5,12 +5,17 @@ import java.util.function.Function;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * A generic VAB model provider.
  * 
  * @author espen
  */
 public class VABModelProvider implements IModelProvider {
+
+	private static final Logger logger = LoggerFactory.getLogger(VABModelProvider.class);
 	/**
 	 * Handler, which handles single element objects
 	 */
@@ -91,8 +96,7 @@ public class VABModelProvider implements IModelProvider {
 			}
 			return;
 		}
-
-		System.out.println("Could not create element, parent element does not exist for path '" + path + "'");
+		logger.warn("Could not create element, parent element does not exist for path '{}'", path);
 	}
 
 	@Override

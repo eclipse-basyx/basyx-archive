@@ -22,6 +22,10 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.vab.factory.xml.XmlParser;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.xml.sax.SAXException;
 
 /**
@@ -32,6 +36,8 @@ import org.xml.sax.SAXException;
  *
  */
 public class TranformXMLtags {
+	
+	private static Logger logger = LoggerFactory.getLogger(TranformXMLtags.class);
 	
 	private Map<String, Object> rootObj = new HashMap<>();
 	String xmlTestContent;
@@ -46,7 +52,7 @@ public class TranformXMLtags {
 	        }
 	        catch (IOException e)
 	        {
-	            e.printStackTrace();
+	            logger.error("[TEST] Exception in TestBuildXmlMap", e);
 	        }
 		
 	}
@@ -121,12 +127,10 @@ public class TranformXMLtags {
 			ArrayList<Object> conceptDescriptionArrayList=(ArrayList<Object>)conceptDescriptionObj;
 			for (Object object : conceptDescriptionArrayList) {
 				ConceptDescriptionSet.add(TransformConceptDescription.transformConceptDescription((Map<String, Object>) object));
-				System.out.println();
 			}
 		}else {
 			Map<String, Object>  conceptDescriptionMapObj = (Map<String, Object>) conceptDescriptionObj;
 			ConceptDescriptionSet.add(TransformConceptDescription.transformConceptDescription(conceptDescriptionMapObj));
-			System.out.println();
 		}
 		
 		

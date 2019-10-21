@@ -8,7 +8,12 @@ import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONToolsFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class MetaprotocolHandler implements IMetaProtocolHandler {
+	
+	private static Logger logger = LoggerFactory.getLogger(MetaprotocolHandler.class);
 
 	/**
 	 * Reference to serializer / deserializer
@@ -73,8 +78,7 @@ public class MetaprotocolHandler implements IMetaProtocolHandler {
 
 		if (success instanceof Boolean && (boolean) success) {
 			for (Map<String, Object> m : messages) {
-				System.out
-						.println(m.get(Message.MESSAGETYPE) + ", " + m.get(Message.CODE) + ", " + m.get(Message.TEXT));
+				logger.trace("{}, {}, {}", m.get(Message.MESSAGETYPE), m.get(Message.CODE), m.get(Message.TEXT));
 			}
 			result = responseMap.get(Result.ENTITY);
 		} else if (isException instanceof Boolean && (boolean) isException) {

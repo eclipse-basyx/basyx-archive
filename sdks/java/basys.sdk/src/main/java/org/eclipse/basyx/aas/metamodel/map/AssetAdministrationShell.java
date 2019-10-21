@@ -33,6 +33,9 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.reference.enums.KeyType;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+
 /**
  * AssetAdministrationShell class <br/>
  * Does not implement IAssetAdministrationShell since there are only references
@@ -43,6 +46,8 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  */
 
 public class AssetAdministrationShell extends VABModelMap<Object> implements IAssetAdministrationShell {
+	
+	private static Logger logger = LoggerFactory.getLogger(AssetAdministrationShell.class);
 
 	public static final String SECURITY = "security";
 	public static final String DERIVEDFROM = "derivedFrom";
@@ -111,13 +116,13 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	 */
 	@Override
 	public void addSubModel(ISubModel subModel) {
-		System.out.println("adding Submodel " + subModel.getIdShort());
+		logger.trace("adding Submodel {}", subModel.getIdShort());
 		addSubModel(subModel.getIdShort());
 	}
 
 	@SuppressWarnings("unchecked")
 	public void addSubModelHack(SubModel subModel, String endpoint, String endpointType) {
-		System.out.println("adding Submodel " + subModel.getIdShort());
+		logger.trace("adding Submodel {}", subModel.getIdShort());
 		SubmodelDescriptor desc = new SubmodelDescriptor(subModel, endpoint, endpointType);
 		((Set<SubmodelDescriptor>) get(SUBMODELS)).add(desc);
 

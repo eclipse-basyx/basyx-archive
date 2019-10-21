@@ -9,6 +9,9 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Returns SubModel Object for the Map with <aas:submodels>
  * 
@@ -16,6 +19,8 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleP
  *
  */
 public class TransformSubmodel {
+	
+	private static Logger logger = LoggerFactory.getLogger(TransformSubmodel.class);
 
 	/**
 	 * The function accepts the Map object of submodel tag and returns the object of
@@ -34,7 +39,6 @@ public class TransformSubmodel {
 		for (SingleProperty property : transformPropertySet) {
 			submodelobj.addSubModelElement(property);
 		}
-		System.out.println();
 
 		return submodelobj;
 
@@ -49,7 +53,7 @@ public class TransformSubmodel {
 		try {
 			return (Map<String, Object>) ((Map<String, Object>) rootObj.get("aas:aasenv")).get("aas:submodels");
 		} catch (Exception e) {
-			System.out.println("Error with Maps");
+			logger.error("Exception in getSubmodelFromRootObj", e);
 		}
 		return null;
 	}

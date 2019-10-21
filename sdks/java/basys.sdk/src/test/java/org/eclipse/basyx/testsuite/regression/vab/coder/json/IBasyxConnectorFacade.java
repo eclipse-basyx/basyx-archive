@@ -6,6 +6,9 @@ import org.eclipse.basyx.vab.coder.json.provider.JSONProvider;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class is required for Meta-protocol integration testing. It makes
  * JSONProvider directly usable for the JSONConnector.
@@ -16,6 +19,8 @@ import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
  *            should be VABHashmapProvider or stub
  */
 public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxConnector {
+	
+	private static Logger logger = LoggerFactory.getLogger(IBasyxConnectorFacade.class);
 	
 	JSONProvider<T> provider;
 	
@@ -36,7 +41,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 			
 			return outputstream.getResult();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("[TEST] Exception in getModelPropertyValue", e);
 		}
 		return null;		
 	}
@@ -54,7 +59,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 			
 			return outputstream.getResult();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("[TEST] Exception in setModelPropertyValue", e);
 		}
 		return null;		
 	}
@@ -72,7 +77,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 			
 			return outputstream.getResult();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("[TEST] Exception in createValue", e);
 		}
 		return null;		
 	}
@@ -91,7 +96,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 			
 			return outputstream.getResult();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("[TEST] Exception in deleteValue", e);
 		}
 		return null;
 	}
@@ -109,7 +114,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 			
 			return outputstream.getResult();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("[TEST] Exception in deleteValue", e);
 		}
 		return null;
 	}
@@ -127,7 +132,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 			
 			return outputstream.getResult();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("[TEST] Exception in invokeOperation", e);
 		}
 		return null;
 	}

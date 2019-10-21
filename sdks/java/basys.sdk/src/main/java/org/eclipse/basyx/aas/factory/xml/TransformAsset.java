@@ -10,6 +10,9 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Returns Asset Object for the Map with <aas:asset>
  * 
@@ -17,6 +20,9 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
  *
  */
 public class TransformAsset {
+	
+	private static Logger logger = LoggerFactory.getLogger(TransformAsset.class);
+	
 	/**
 	 * The function accepts the Map object of asset tag and returns the object of
 	 * class Asset
@@ -46,7 +52,7 @@ public class TransformAsset {
 		try {
 			return (Map<String, Object>) ((Map<String, Object>) rootObj.get("aas:aasenv")).get("aas:assets");
 		} catch (Exception e) {
-			System.out.println("Error with Maps");
+			logger.error("Exception in getAssetFromRootObj", e);
 		}
 		return null;
 	}

@@ -14,6 +14,9 @@ import org.eclipse.basyx.vab.exception.LostHTTPRequestParameterException;
 import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 
 /**
@@ -25,6 +28,8 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  *
  */
 public class JSONProvider<ModelProvider extends IModelProvider> {
+	
+	private static Logger logger = LoggerFactory.getLogger(JSONProvider.class);
 
 	
 	/**
@@ -150,7 +155,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @param resp
 	 */
 	private void sendException(PrintWriter resp, Exception e) {
-		e.printStackTrace();
+		logger.error("Exception in sendException", e);
 		
 		// Serialize Exception
 		String jsonString = serialize(e);

@@ -13,6 +13,9 @@ import org.eclipse.basyx.vab.coder.json.provider.JSONProvider;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * VAB provider class that enables access to an IModelProvider via HTTP REST
@@ -34,7 +37,8 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  *
  */
 public class VABHTTPInterface<ModelProvider extends IModelProvider> extends BasysHTTPServlet {
-
+	
+	private static Logger logger = LoggerFactory.getLogger(VABHTTPInterface.class);
 	
 	/**
 	 * Version information to identify the version of serialized instances
@@ -98,11 +102,9 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("Put:");
-		
 		String path = extractPath(req);
 		String serValue = extractSerializedValue(req);
-		System.out.println("DoPut:"+serValue);
+		logger.trace("DoPut: {}", serValue);
 		
 		providerBackend.processBaSysSet(path, serValue.toString(), resp.getWriter());
 	}
@@ -115,10 +117,10 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("Post:");
-		
 		String path = extractPath(req);
 		String serValue = extractSerializedValue(req);
+		
+		logger.trace("DoPost: {}", serValue);
 		
 		// Setup HTML response header
 		resp.setContentType("application/json");
@@ -141,10 +143,10 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("Patch:");
-		
 		String path = extractPath(req);
 		String serValue = extractSerializedValue(req);
+		logger.trace("DoPatch: {}", serValue);
+		
 		providerBackend.processBaSysDelete(path, serValue, resp.getWriter());
 	}
 

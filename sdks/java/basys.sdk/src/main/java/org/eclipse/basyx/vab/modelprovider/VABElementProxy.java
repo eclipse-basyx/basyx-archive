@@ -3,6 +3,9 @@ package org.eclipse.basyx.vab.modelprovider;
 import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Proxy class for a VAB element
  * 
@@ -10,6 +13,8 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  *
  */
 public class VABElementProxy implements IModelProvider {
+
+	private static Logger logger = LoggerFactory.getLogger(VABElementProxy.class);
 
 	/**
 	 * Connector specific target address
@@ -50,7 +55,7 @@ public class VABElementProxy implements IModelProvider {
 		} catch (ServerException e) {
 			throw new ServerException(e); // FIXME Exception Handling should be done in JSONConnector
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.debug("Exception in getModelPropertyValue", e);
 			throw new ServerException(e.getClass().getName(), e.getMessage());
 		}
 	}
@@ -67,10 +72,10 @@ public class VABElementProxy implements IModelProvider {
 			// Change element on server
 			provider.setModelPropertyValue(constructPath(elementPath), newValue);
 		} catch (ServerException e) {
-			e.printStackTrace();
+			logger.debug("Exception in setModelPropertyValue", e);
 			throw new ServerException(e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.debug("Exception in setModelPropertyValue", e);
 			throw new ServerException(e.getClass().getName(), e.getMessage());
 		}
 	}
@@ -85,10 +90,10 @@ public class VABElementProxy implements IModelProvider {
 			// Create new element on server
 			provider.createValue(constructPath(elementPath), newValue);
 		} catch (ServerException e) {
-			e.printStackTrace();
+			logger.debug("Exception in createValue", e);
 			throw new ServerException(e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.debug("Exception in createValue", e);
 			throw new ServerException(e.getClass().getName(), e.getMessage());
 		}
 	}
@@ -105,7 +110,7 @@ public class VABElementProxy implements IModelProvider {
 		} catch (ServerException e) {
 			throw new ServerException(e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.debug("Exception in deleteValue", e);
 			throw new ServerException(e.getClass().getName(), e.getMessage());
 		}
 	}
@@ -122,7 +127,7 @@ public class VABElementProxy implements IModelProvider {
 		} catch (ServerException e) {
 			throw new ServerException(e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.debug("Exception in deleteValue", e);
 			throw new ServerException(e.getClass().getName(), e.getMessage());
 		}
 	}
@@ -139,7 +144,7 @@ public class VABElementProxy implements IModelProvider {
 		} catch (ServerException e) {
 			throw new ServerException(e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.debug("Exception in invokeOperation", e);
 			throw new ServerException(e.getClass().getName(), e.getMessage());
 		}
 	}

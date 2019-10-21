@@ -11,6 +11,9 @@ import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
 import org.eclipse.basyx.vab.protocol.basyx.CoderTools;
 import org.eclipse.basyx.vab.protocol.basyx.server.VABBaSyxTCPInterface;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 
 /**
@@ -20,7 +23,8 @@ import org.eclipse.basyx.vab.protocol.basyx.server.VABBaSyxTCPInterface;
  *
  */
 public class BaSyxConnector implements IBaSyxConnector {
-
+	
+	private Logger logger = LoggerFactory.getLogger(BaSyxConnector.class);
 	
 	/**
 	 * Socket channel that connects to provider
@@ -56,7 +60,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 			//channelToProvider.register(selector, SelectionKey.OP_CONNECT | SelectionKey.OP_READ);
 		} catch (IOException e) {
 			// Print stack trace
-			e.printStackTrace();
+			logger.error("Exception in BaSyxConnector", e);
 		}
 	}
 	
@@ -82,7 +86,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 			channelToProvider.close();
 		} catch (IOException e) {
 			// Print stack trace
-			e.printStackTrace();
+			logger.error("Exception in closeConnection", e);
 		}
 	}
 
@@ -129,7 +133,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 			return jsonResult.toString();
 		} catch (IOException e) {
 			// Print stack trace
-			e.printStackTrace();
+			logger.error("Exception in invokeBaSyx", e);
 		}
 
 		// Indicate error
@@ -152,7 +156,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 			// System.out.println("-Read:"+expectedBytes);
 		} catch (IOException e) {
 			// Output exception
-			e.printStackTrace();
+			logger.error("Exception in readBytes", e);
 		}
 	}
 	

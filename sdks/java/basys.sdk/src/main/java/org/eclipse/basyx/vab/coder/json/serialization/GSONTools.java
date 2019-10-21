@@ -16,6 +16,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -37,6 +40,9 @@ import com.google.gson.JsonPrimitive;
  *
  */
 public class GSONTools implements Serializer {
+	
+	private static Logger logger = LoggerFactory.getLogger(GSONTools.class);
+	
 	// Used string constants
 	public static final String INDEX = "index";
 	public static final String OPERATION = "operation";
@@ -517,7 +523,7 @@ public class GSONTools implements Serializer {
 			// Close stream
 			stream.close();
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			logger.error("Exception in deserializeObjectFromString", e);
 		}
 
 		// Return object
@@ -537,7 +543,7 @@ public class GSONTools implements Serializer {
 			oos.writeObject(obj);
 			oos.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Exception in serializeObjectToString", e);
 		}
 
 		// Try to encode to string

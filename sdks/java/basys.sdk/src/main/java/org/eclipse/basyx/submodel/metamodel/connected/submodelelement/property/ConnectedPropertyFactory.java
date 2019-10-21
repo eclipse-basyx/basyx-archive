@@ -10,6 +10,9 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.valuety
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Creates IProperties based on the attached meta data as specified in DAAS
  * document
@@ -18,6 +21,9 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  *
  */
 public class ConnectedPropertyFactory {
+
+	private static Logger logger = LoggerFactory.getLogger(ConnectedPropertyFactory.class);
+
 	@SuppressWarnings("unchecked")
 	public IProperty createProperty(VABElementProxy proxy) {
 		// Since the VABElementProxy is already pointing to the property, get empty
@@ -47,7 +53,7 @@ public class ConnectedPropertyFactory {
 		}
 			
 		
-		System.err.println("Unknown property type");
+		logger.warn("Unknown property type");
 		return null;
 	}
 }

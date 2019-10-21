@@ -99,7 +99,6 @@ public class TestTransformConceptDescription {
 			assertTrue(map.get("keys")!=null);
 			//assertEquals(map.get("keys"),"[{idType=URI, type=GlobalReference, value=www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360, local=false}]");
 		}
-		System.out.println();
 	}
 
 }

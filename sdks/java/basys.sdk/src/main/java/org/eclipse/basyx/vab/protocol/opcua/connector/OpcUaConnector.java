@@ -21,6 +21,9 @@ import org.eclipse.milo.opcua.stack.core.types.structured.RelativePath;
 import org.eclipse.milo.opcua.stack.core.types.structured.RelativePathElement;
 import org.eclipse.milo.opcua.stack.core.types.structured.TranslateBrowsePathsToNodeIdsResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * OPC UA connector class
  * 
@@ -28,6 +31,9 @@ import org.eclipse.milo.opcua.stack.core.types.structured.TranslateBrowsePathsTo
  *
  */
 public class OpcUaConnector implements IModelProvider {
+	
+	private Logger logger = LoggerFactory.getLogger(OpcUaConnector.class);
+	
     private String address;
     private BaSyxOpcUaClientRunner clientRunner;
 
@@ -45,7 +51,7 @@ public class OpcUaConnector implements IModelProvider {
             clientRunner = new BaSyxOpcUaClientRunner(address);
             clientRunner.run();
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error("Exception in getModelPropertyValue", e);
         }
         return opcUaRead(translateBrowsePathToNodeId(servicePath)[1]);
     }
@@ -57,7 +63,7 @@ public class OpcUaConnector implements IModelProvider {
             clientRunner.run();
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+        	logger.error("Exception in setModelPropertyValue", e);
         }
         opcUaWrite(translateBrowsePathToNodeId(servicePath)[1], newValue);
     }
@@ -83,7 +89,7 @@ public class OpcUaConnector implements IModelProvider {
             clientRunner = new BaSyxOpcUaClientRunner(address);
             clientRunner.run();
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error("Exception in invokeOperation", e);
         }
         return opcUaMethodCall(translateBrowsePathToNodeId(servicePath), parameters);
     }
@@ -107,7 +113,7 @@ public class OpcUaConnector implements IModelProvider {
             return result.get().get(0).getValue().getValue().toString();
 
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error("Exception in opcUaRead", e);
         }
         return null;
     }
@@ -126,7 +132,7 @@ public class OpcUaConnector implements IModelProvider {
             }
             return ret;
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error("Exception in opcUaMethodCall", e);
         }
         return null;
     }
@@ -141,7 +147,7 @@ public class OpcUaConnector implements IModelProvider {
 
             return result.get().get(0).toString();
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error("Exception in opcUaWrite", e);
         }
         return null;
     }
@@ -151,7 +157,7 @@ public class OpcUaConnector implements IModelProvider {
         List<RelativePathElement> rpe_list = new ArrayList<RelativePathElement>();
         for (String node : nodes) {
             if (node.split(":").length != 2) {
-                System.err.println("[OpcUaConnector] OpcUaName should be in form namespaceIdx:identifier");
+            	logger.warn("OpcUaName should be in form namespaceIdx:identifier");
             }
             int nsIdx = Integer.valueOf(node.split(":")[0]);
             String name = node.split(":")[1];
@@ -177,22 +183,18 @@ public class OpcUaConnector implements IModelProvider {
             CompletableFuture<TranslateBrowsePathsToNodeIdsResponse> result_parent = clientRunner
                     .translate(bp_parent_list);
             if (result_node.get().getResults().length == 0) {
-                System.out.println(
-                        "[OpcUaConnector] WARNING: TranslateBrowsePathsToNodeIdsResponse result size = 0, checkthe browse path!");
+                logger.warn("TranslateBrowsePathsToNodeIdsResponse result size = 0, checkthe browse path!");
                 return null;
             }
             if (result_node.get().getResults().length > 1) {
-                System.out.println(
-                        "[OpcUaConnector] WARNING: TranslateBrowsePathsToNodeIdsResponse result size > 1, the method returns only the first one!");
+            	logger.warn("TranslateBrowsePathsToNodeIdsResponse result size > 1, the method returns only the first one!");
             }
             if (result_node.get().getResults()[0].getTargets().length > 1) {
-                System.out.println(
-                        "[OpcUaConnector] WARNING: TranslateBrowsePathsToNodeIdsResponse targets size > 1, the method returns only the first one!");
+            	logger.warn("TranslateBrowsePathsToNodeIdsResponse targets size > 1, the method returns only the first one!");
             }
             if (result_node.get().getResults()[0].getTargets().length == 0) {
-                System.out.println(
-                        "[OpcUaConnector] WARNING: TranslateBrowsePathsToNodeIdsResponse targets size = 0, check the browse path!");
-                System.out.println(result_node.get().getResults()[0].getStatusCode().toString());
+            	logger.warn("TranslateBrowsePathsToNodeIdsResponse targets size = 0, check the browse path!");
+                logger.trace(result_node.get().getResults()[0].getStatusCode().toString());
                 return null;
             }
             Object nodeIdentifier = result_node.get().getResults()[0].getTargets()[0].getTargetId().getIdentifier();
@@ -215,11 +217,11 @@ public class OpcUaConnector implements IModelProvider {
                 return new NodeId[] { new NodeId(parentNsIdx, (UInteger) parentIdentifier),
                         new NodeId(nodeNsIdx, (String) nodeIdentifier) };
             } else {
-                System.err.println("[OpcUaConnector] Error: NodeId identifier is not neither String, nor int");
+            	logger.error("NodeId identifier is not neither String, nor int");
                 return null;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error("Exception in translateBrowsePathToNodeId", e);
         }
         return null;
     }

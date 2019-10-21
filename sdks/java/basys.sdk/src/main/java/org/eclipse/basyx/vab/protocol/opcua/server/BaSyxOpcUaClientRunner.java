@@ -29,17 +29,18 @@ import org.eclipse.milo.opcua.stack.core.types.structured.CallMethodRequest;
 import org.eclipse.milo.opcua.stack.core.types.structured.CallResponse;
 import org.eclipse.milo.opcua.stack.core.types.structured.EndpointDescription;
 import org.eclipse.milo.opcua.stack.core.types.structured.TranslateBrowsePathsToNodeIdsResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class BaSyxOpcUaClientRunner {
 
+    private static Logger logger = LoggerFactory.getLogger(BaSyxOpcUaClientRunner.class);
+
     static {
         // Required for SecurityPolicy.Aes256_Sha256_RsaPss
         Security.addProvider(new BouncyCastleProvider());
     }
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final CompletableFuture<OpcUaClient> future = new CompletableFuture<>();
 
@@ -57,7 +58,7 @@ public class BaSyxOpcUaClientRunner {
         if (!Files.exists(securityTempDir)) {
             throw new Exception("unable to create security dir: " + securityTempDir);
         }
-        LoggerFactory.getLogger(getClass()).info("security temp dir: {}", securityTempDir.toAbsolutePath());
+        logger.trace("security temp dir: {}", securityTempDir.toAbsolutePath());
 
         KeyStoreLoaderClient loader = new KeyStoreLoaderClient().load(securityTempDir);
 
@@ -76,7 +77,7 @@ public class BaSyxOpcUaClientRunner {
             }
             discoveryUrl += "discovery";
 
-            logger.info("Trying explicit discovery URL: {}", discoveryUrl);
+            logger.trace("Trying explicit discovery URL: {}", discoveryUrl);
             endpoints = DiscoveryClient.getEndpoints(discoveryUrl).get();
         }
 
@@ -84,7 +85,7 @@ public class BaSyxOpcUaClientRunner {
                 .filter(e -> e.getSecurityPolicyUri().equals(securityPolicy.getUri())).filter(e -> true).findFirst()
                 .orElseThrow(() -> new Exception("no desired endpoints returned"));
 
-        logger.info("Using endpoint: {} [{}/{}]", endpoint.getEndpointUrl(), securityPolicy,
+        logger.trace("Using endpoint: {} [{}/{}]", endpoint.getEndpointUrl(), securityPolicy,
                 endpoint.getSecurityMode());
 
         OpcUaClientConfig config = OpcUaClientConfig.builder()
@@ -116,7 +117,7 @@ public class BaSyxOpcUaClientRunner {
                     Thread.sleep(1000);
                     System.exit(0);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                	logger.error("Exception in run", e);
                 }
             });
             client.connect().get();
@@ -129,7 +130,7 @@ public class BaSyxOpcUaClientRunner {
                 Thread.sleep(1000);
                 System.exit(0);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+            	logger.error("Exception in run", e);
             }
         }
     }

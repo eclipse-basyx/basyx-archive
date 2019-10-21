@@ -13,6 +13,9 @@ import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.startup.Tomcat;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Starter Class for Apache Tomcat 8.0.53 HTTP server that adds the provided servlets and respective mappings on startup.
  * 
@@ -20,6 +23,9 @@ import org.apache.catalina.startup.Tomcat;
  * 
  */
 public class AASHTTPServer {
+	
+	private static Logger logger = LoggerFactory.getLogger(AASHTTPServer.class);
+	
 	private Tomcat tomcat;
 	   
 	/**
@@ -63,7 +69,7 @@ public class AASHTTPServer {
 	 * Starts the server in a new thread to avoid blocking the main thread
 	 */
 	public void start() {
-		System.out.println("Starting Tomcat.....");
+		logger.trace("Starting Tomcat.....");
         
 		Thread serverThread = new Thread(() -> {
 			try {
@@ -86,7 +92,7 @@ public class AASHTTPServer {
 				// Keeps the server thread alive until the server is shut down
 				tomcat.getServer().await();
 			} catch (LifecycleException e) {
-				e.printStackTrace();
+				logger.error("Exception in start", e);
 			}
 		});
 		serverThread.start();
@@ -95,7 +101,7 @@ public class AASHTTPServer {
 			try {
 				tomcat.wait();
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				logger.error("Exception in start", e);
 			}
 		}
 	}
@@ -105,14 +111,14 @@ public class AASHTTPServer {
 	 * bound to port 8080 when new tests are run that require a start of tomcat
 	 */
 	public void shutdown() {
-		System.out.println("Shutting down BaSyx HTTP Server...");
+		logger.trace("Shutting down BaSyx HTTP Server...");
 		
 		try {
 			tomcat.stop();
 			tomcat.destroy();
 		} catch (LifecycleException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception in shutdown", e);
 		}
 	}
 	

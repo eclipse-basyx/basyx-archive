@@ -6,6 +6,9 @@ import java.net.URLEncoder;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Create URNs with the format urn:<legalEntity>:<subUnit>:<subModel>:<version>:<revision>:<elementID>#<elementInstance>
  * 
@@ -13,6 +16,8 @@ import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
  *
  */
 public class ModelUrn implements IIdentifier {
+
+	private static Logger logger = LoggerFactory.getLogger(ModelUrn.class);
 
 	
 	/**
@@ -72,7 +77,8 @@ public class ModelUrn implements IIdentifier {
 			return URLEncoder.encode(urnString, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			// Catch block
-			e.printStackTrace(); return null;
+			logger.error("Exception in getEncodedURN", e);
+			return null;
 		}
 	}
 	

@@ -20,6 +20,9 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Tests the capability to multiplex of a VABMultiSubmodelProvider
  * 
@@ -27,6 +30,9 @@ import org.junit.Test;
  *
  */
 public class VABMultiSubmodelProviderTest {
+	
+	private static Logger logger = LoggerFactory.getLogger(VABMultiSubmodelProviderTest.class);
+	
 	VABElementProxy proxy;
 
 	@Before
@@ -86,7 +92,7 @@ public class VABMultiSubmodelProviderTest {
 			proxy.getModelPropertyValue("/aas/submodels/TestSM");
 			fail();
 		} catch (ServerException e) {
-			System.out.println("VABMultiSubmodelProvider CreateDelete passed");
+			logger.trace("[TEST] VABMultiSubmodelProvider CreateDelete passed");
 		}
 	}
 

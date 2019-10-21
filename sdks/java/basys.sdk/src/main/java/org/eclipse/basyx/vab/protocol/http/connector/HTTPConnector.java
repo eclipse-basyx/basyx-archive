@@ -13,6 +13,9 @@ import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+
 /**
  * HTTP connector class
  * 
@@ -20,6 +23,9 @@ import org.glassfish.jersey.client.HttpUrlConnectorProvider;
  *
  */
 public class HTTPConnector implements IBaSyxConnector {
+	
+	private static Logger logger = LoggerFactory.getLogger(HTTPConnector.class);
+	
 	private String address;
 	private String mediaType;
 
@@ -45,7 +51,7 @@ public class HTTPConnector implements IBaSyxConnector {
 		this.address = address;
 		this.mediaType = mediaType;
 		
-		System.out.println("Create with addr:"+address);
+		logger.trace("Create with addr: {}", address);
 	}
 
 	/**
@@ -145,7 +151,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	 * @return
 	 */
 	private String httpGet(String servicePath) {
-		System.out.println("[HTTP Get] " + VABPathTools.concatenatePaths(address, servicePath));
+		logger.trace("[HTTP Get] {}", VABPathTools.concatenatePaths(address, servicePath));
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
@@ -156,14 +162,14 @@ public class HTTPConnector implements IBaSyxConnector {
 		// Perform request, return response
 		String result = request.get(String.class);
 
-		System.out.println(result);
+		logger.trace("[HTTP Get_Result] {}", result);
 
 		// Return repsonse message (header)
 		return result;
 	}
 
 	private String httpPut(String servicePath, String newValue) throws ServerException {
-		System.out.println("[HTTP Put] " + VABPathTools.concatenatePaths(address, servicePath) + "  [[" + newValue + "]]");
+		logger.trace("[HTTP Put] {} [[ {} ]]", VABPathTools.concatenatePaths(address, servicePath), newValue);
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
@@ -180,7 +186,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	}
 
 	private String httpPatch(String servicePath, String newValue) throws ServerException {
-		System.out.println("[HTTP Patch] " + VABPathTools.concatenatePaths(address, servicePath) + "  " + newValue);
+		logger.trace("[HTTP Patch] {} {}", VABPathTools.concatenatePaths(address, servicePath), newValue);
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
@@ -193,7 +199,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	}
 
 	private String httpPost(String servicePath, String parameter) throws ServerException {
-		System.out.println("[HTTP Post] " + VABPathTools.concatenatePaths(address, servicePath) + " " + parameter);
+		logger.trace("[HTTP Post] {} {}", VABPathTools.concatenatePaths(address, servicePath), parameter);
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();
@@ -209,7 +215,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	}
 
 	private String httpDelete(String servicePath) throws ServerException {
-		System.out.println("[HTTP Delete] " + VABPathTools.concatenatePaths(address, servicePath));
+		logger.trace("[HTTP Delete] {}", VABPathTools.concatenatePaths(address, servicePath));
 
 		// Invoke service call via web services
 		Client client = ClientBuilder.newClient();

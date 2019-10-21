@@ -9,6 +9,9 @@ import org.eclipse.basyx.submodel.factory.xml.TransformHasDataSpecification;
 import org.eclipse.basyx.submodel.factory.xml.TransformIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Returns ConceptDescription Object for the Map with <aas:conceptDescription>
  * 
@@ -16,6 +19,8 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
  *
  */
 public class TransformConceptDescription {
+	
+	private static Logger logger = LoggerFactory.getLogger(TransformConceptDescription.class);
 
 	/**
 	 * The function accepts the Map of conceptDescription and returns object of
@@ -53,7 +58,7 @@ public class TransformConceptDescription {
 			return (Map<String, Object>) ((Map<String, Object>) rootObj.get("aas:aasenv"))
 					.get("aas:conceptDescriptions");
 		} catch (Exception e) {
-			System.out.println("Error with Maps");
+			logger.error("Exception in getconceptDescriptionFromRootObj", e);
 		}
 		return null;
 	}

@@ -10,6 +10,9 @@ import org.eclipse.basyx.vab.modelprovider.filesystem.filesystem.FileSystem;
 import org.eclipse.basyx.vab.modelprovider.filesystem.filesystem.GenericFileSystem;
 import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Tests the functionality of the VABHashmapProvider according to the test cases
  * in the snippet package
@@ -18,6 +21,9 @@ import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
  *
  */
 public class TestFileSystemProvider extends TestProvider {
+	
+	private static Logger logger = LoggerFactory.getLogger(TestFileSystemProvider.class);
+	
 	private VABConnectionManager connManager;
 
 	@Override
@@ -33,7 +39,7 @@ public class TestFileSystemProvider extends TestProvider {
 						FileSystemProvider provider = new FileSystemProvider(fs, root, new SimpleVABElement(), true);
 						return provider;
 					} catch (Exception e) {
-						e.printStackTrace();
+						logger.error("[TEST] Exception in getConnectionManager", e);
 						throw new RuntimeException();
 					}
 				}

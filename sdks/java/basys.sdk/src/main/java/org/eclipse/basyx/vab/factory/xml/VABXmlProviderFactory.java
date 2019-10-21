@@ -2,6 +2,9 @@ package org.eclipse.basyx.vab.factory.xml;
 
 import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Provides the VAB elements from given xml string.
  * 
@@ -9,6 +12,8 @@ import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
  *
  */
 public class VABXmlProviderFactory {
+	
+	private static Logger logger = LoggerFactory.getLogger(VABXmlProviderFactory.class);
 
 	public VABXmlProviderFactory() {
 		// Empty Constructor
@@ -18,7 +23,7 @@ public class VABXmlProviderFactory {
 		try {
 			return (new VABHashmapProvider(XmlParser.buildXmlMap(aasXml)));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Exception in createVABElements", e);
 		}
 		return null;
 	}

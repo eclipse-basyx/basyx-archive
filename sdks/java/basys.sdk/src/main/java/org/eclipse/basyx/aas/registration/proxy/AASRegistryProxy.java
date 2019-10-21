@@ -13,6 +13,9 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 
 /**
@@ -22,6 +25,8 @@ import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnector;
  *
  */
 public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryService {
+	
+	private static Logger logger = LoggerFactory.getLogger(AASRegistryProxy.class);
 
 	/**
 	 * Constructor for an AAS registry proxy based on a HTTP connection
@@ -61,7 +66,7 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 		try {
 			provider.createValue("", deviceAASDescriptor);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Exception in registerOnly", e);
 		}
 	}
 	
@@ -73,7 +78,7 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 		try {
 			this.removeMapping(URLEncoder.encode(aasIdentifier.getId(), "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			logger.error("Exception in delete", e);
 		}
 	}
 	
@@ -86,7 +91,7 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 		try {
 			result = provider.getModelPropertyValue(URLEncoder.encode(aasIdentifier.getId(), "UTF-8"));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Exception in lookupAAS", e);
 		}
 		if (result instanceof Map<?, ?>) {
 			return new AASDescriptor((Map<String, Object>) result);

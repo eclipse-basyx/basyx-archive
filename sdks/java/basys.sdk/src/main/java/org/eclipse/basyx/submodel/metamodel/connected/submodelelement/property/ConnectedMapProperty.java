@@ -10,6 +10,9 @@ import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.exception.TypeMismatchException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Connects to a PropertySingleValued as specified by DAAS containing a map
  * 
@@ -17,6 +20,8 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  *
  */
 public class ConnectedMapProperty extends ConnectedProperty implements IMapProperty {
+
+	private static Logger logger = LoggerFactory.getLogger(ConnectedMapProperty.class);
 
 	public ConnectedMapProperty(VABElementProxy proxy) {
 		super(PropertyType.Map, proxy);
@@ -36,7 +41,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 			else
 				getProxy().createValue(SingleProperty.VALUE + "/" + key, value);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Exception in put", e);
 		}
 	}
 
@@ -45,7 +50,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 		try {
 			getProxy().setModelPropertyValue(SingleProperty.VALUE, map);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Exception in set", e);
 		}
 	}
 
@@ -64,7 +69,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 		try {
 			getProxy().deleteValue(SingleProperty.VALUE + "/" + key);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Exception in remove", e);
 		}
 	}
 

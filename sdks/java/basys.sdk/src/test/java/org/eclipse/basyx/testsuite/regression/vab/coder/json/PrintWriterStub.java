@@ -5,6 +5,9 @@ import static org.junit.Assert.assertTrue;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * PrintWriter stub that simulates response stream
  * @author pschorn
@@ -12,6 +15,7 @@ import java.io.PrintWriter;
  */
 public class PrintWriterStub extends PrintWriter {
 	
+	private static Logger logger = LoggerFactory.getLogger(PrintWriterStub.class);
 	
 	private String acceptor;
 	private String result;
@@ -27,7 +31,7 @@ public class PrintWriterStub extends PrintWriter {
 	@Override
 	public void write(String stream) {
 		// check for
-		System.out.println("Writing to output: "+stream);
+		logger.trace("[TEST] Writing to output: {}", stream);
 		
 		if (!acceptor.equals("ignore")) {
 			assertTrue(acceptor.equals(stream));
@@ -39,7 +43,7 @@ public class PrintWriterStub extends PrintWriter {
 	@Override
 	public void flush() {
 		// do nothing
-		System.out.println("Flushing..");
+		logger.trace("[TEST] Flushing..");
 	}
 	
 	public String getResult() {
