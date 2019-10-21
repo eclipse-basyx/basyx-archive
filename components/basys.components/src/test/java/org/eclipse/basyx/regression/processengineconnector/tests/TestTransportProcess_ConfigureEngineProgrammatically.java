@@ -13,7 +13,6 @@ import org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceDelegate;
@@ -59,7 +58,6 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 		registry = new PreconfiguredRegistry();
 
 		// Create aas descriptor with meta-information of the aas
-		ModelUrn coilcarUrn = new ModelUrn("coilcar");
 		IIdentifier id = new Identifier(IdentifierType.URI, "coilcar");
 		AASDescriptor ccDescriptor = new AASDescriptor(id,
 				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas");
