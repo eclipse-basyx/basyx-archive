@@ -83,7 +83,7 @@ public class Referable extends HashMap<String, Object> implements IReferable {
 	}
 
 	@Override
-	public String getDescription() {
+	public Description getDescription() {
 		return new ReferableFacade(this).getDescription();
 	}
 
@@ -101,7 +101,7 @@ public class Referable extends HashMap<String, Object> implements IReferable {
 		
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(Description description) {
 		new ReferableFacade(this).setDescription(description);
 		
 	}

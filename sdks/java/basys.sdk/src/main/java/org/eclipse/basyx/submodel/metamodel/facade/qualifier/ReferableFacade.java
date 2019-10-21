@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 
 /**
@@ -31,9 +32,12 @@ public class ReferableFacade implements IReferable {
 		return (String) map.get(Referable.CATEGORY);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public String getDescription() {
-		return (String) map.get(Referable.DESCRIPTION);
+	public Description getDescription() {
+		Description desc = new Description();
+		desc.putAll((Map<String, Object>) map.get(Referable.DESCRIPTION));
+		return desc;
 	}
 
 	@Override
@@ -49,7 +53,7 @@ public class ReferableFacade implements IReferable {
 		map.put(Referable.CATEGORY, category);
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(Description description) {
 		map.put(Referable.DESCRIPTION, description);
 	}
 

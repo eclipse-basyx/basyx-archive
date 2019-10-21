@@ -7,8 +7,10 @@ import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -96,8 +98,8 @@ public class AssetFacade implements IAsset {
 	}
 
 	@Override
-	public String getDescription() {
-		return (String) map.get(Referable.DESCRIPTION);
+	public Description getDescription() {
+		return new ReferableFacade(map).getDescription();
 	}
 
 	@Override

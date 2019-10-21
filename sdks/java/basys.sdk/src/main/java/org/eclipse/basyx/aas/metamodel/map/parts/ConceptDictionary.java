@@ -8,6 +8,7 @@ import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.facade.parts.ConceptDictionaryFacade;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 
 /**
@@ -51,7 +52,7 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 	}
 
 	@Override
-	public String getDescription() {
+	public Description getDescription() {
 		return new ReferableFacade(this).getDescription();
 	}
 
@@ -70,7 +71,7 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(Description description) {
 		new ReferableFacade(this).setDescription(description);
 
 	}

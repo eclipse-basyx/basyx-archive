@@ -7,6 +7,8 @@ import java.util.Set;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 
 /**
@@ -36,8 +38,8 @@ public class ConceptDictionaryFacade implements IConceptDictionary {
 	}
 
 	@Override
-	public String getDescription() {
-		return (String) map.get(Referable.DESCRIPTION);
+	public Description getDescription() {
+		return new ReferableFacade(map).getDescription();
 	}
 
 	@Override

@@ -10,8 +10,10 @@ import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -146,8 +148,8 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 	}
 
 	@Override
-	public String getDescription() {
-		return (String) map.get(Referable.DESCRIPTION);
+	public Description getDescription() {
+		return new ReferableFacade(map).getDescription();
 	}
 
 	@Override
@@ -164,7 +166,7 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 		map.put(Referable.CATEGORY, category);
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(Description description) {
 		map.put(Referable.DESCRIPTION, description);
 	}
 

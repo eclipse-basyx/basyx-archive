@@ -6,6 +6,8 @@ import java.util.Set;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.map.parts.View;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -66,8 +68,8 @@ public class ViewFacade implements IView {
 	}
 
 	@Override
-	public String getDescription() {
-		return (String) map.get(Referable.DESCRIPTION);
+	public Description getDescription() {
+		return new ReferableFacade(map).getDescription();
 	}
 
 	@Override

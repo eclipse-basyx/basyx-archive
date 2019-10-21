@@ -42,9 +42,9 @@ public class TestTransformAsset {
 	public void testAssetSingleObject() throws ParserConfigurationException, SAXException, IOException {
 		Asset transformAsset = TransformAsset.transformAsset((Map<String, Object>) rootObj.get("aas:asset"));
 		assertEquals(transformAsset.getIdShort(),"3s7plfdrs35");
-		assertEquals(transformAsset.getDescription(),"Festo Controller");
+		assertEquals(transformAsset.getDescription().getText(), "Festo Controller");
 		assertEquals(transformAsset.getIdentification().getIdType(),"URI");
-		assertEquals((String)transformAsset.get("kind"),"Instance");
+		assertEquals(transformAsset.get("kind"),"Instance");
 	}
 
 }

@@ -18,20 +18,30 @@ public class Description extends HashMap<String, Object> {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	public static final String LANGUAGE = "language";
+	public static final String TEXT = "text";
 	
-	
+
 	/**
 	 * Constructor
 	 */
 	public Description() {
 		// Add qualifiers
-		put("language", "");
-		put("text",     "");
+		put(LANGUAGE, "");
+		put(TEXT, "");
 	}
 	
 	public Description(String lang,String text) {
 		// Add qualifiers
-		put("language",lang);
-		put("text", text);
+		put(LANGUAGE, lang);
+		put(TEXT, text);
+	}
+
+	public String getLanguage() {
+		return (String) get(LANGUAGE);
+	}
+
+	public String getText() {
+		return (String) get(TEXT);
 	}
 }

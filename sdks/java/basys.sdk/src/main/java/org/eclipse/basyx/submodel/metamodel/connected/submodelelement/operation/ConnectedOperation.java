@@ -3,19 +3,11 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 
-import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
-import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
@@ -85,45 +77,5 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	@Override
 	public Function<Object[], Object> getInvocable() {
 		throw new RuntimeException("Not possible on remote side");
-	}
-
-	@Override
-	public Set<IReference> getDataSpecificationReferences() {
-		return new HasDataSpecificationFacade(getElem()).getDataSpecificationReferences();
-	}
-
-	@Override
-	public String getIdShort() {
-		return new ReferableFacade(getElem()).getIdShort();
-	}
-
-	@Override
-	public String getCategory() {
-		return new ReferableFacade(getElem()).getCategory();
-	}
-
-	@Override
-	public String getDescription() {
-		return new ReferableFacade(getElem()).getDescription();
-	}
-
-	@Override
-	public IReference getParent() {
-		return new ReferableFacade(getElem()).getParent();
-	}
-
-	@Override
-	public IReference getSemanticId() {
-		return new HasSemanticsFacade(getElem()).getSemanticId();
-	}
-
-	@Override
-	public Set<IConstraint> getQualifier() {
-		return new QualifiableFacade(getElem()).getQualifier();
-	}
-
-	@Override
-	public String getHasKindReference() {
-		return new HasKindFacade(getElem()).getHasKindReference();
 	}
 }

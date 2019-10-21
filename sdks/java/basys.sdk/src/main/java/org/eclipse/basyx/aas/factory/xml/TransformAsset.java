@@ -8,6 +8,7 @@ import org.eclipse.basyx.submodel.factory.xml.TransformHasKind;
 import org.eclipse.basyx.submodel.factory.xml.TransformIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 
 import org.slf4j.Logger;
@@ -32,12 +33,11 @@ public class TransformAsset {
 		String idShort = (String) object.get("aas:idShort");
 		HasKind hasKindObj = TransformHasKind.transformHasKind(object);
 		Description descriptionObj = TransformDescription.transformDescription(object);
-		String desc = (String) descriptionObj.get("text");
+
 		Asset asset = new Asset();
 		asset.putAll(hasKindObj);
 		asset.putAll(transformIdentifier);
-		asset.putAll(descriptionObj);
-		asset.setDescription(desc);
+		asset.put(Referable.DESCRIPTION, descriptionObj);
 		asset.setIdShort(idShort);
 
 		return asset;

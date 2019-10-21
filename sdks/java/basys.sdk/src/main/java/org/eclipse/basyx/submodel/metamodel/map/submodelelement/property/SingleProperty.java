@@ -84,16 +84,6 @@ public class SingleProperty extends AbstractProperty implements ISingleProperty 
 	}
 
 	@Override
-	public String getIdShort() {
-		return (String) get(Referable.IDSHORT);
-	}
-
-	@Override
-	public void setIdShort(String id) {
-		put(Referable.IDSHORT, id);
-	}
-
-	@Override
 	public Object get() {
 		return get(SingleProperty.VALUE);
 	}

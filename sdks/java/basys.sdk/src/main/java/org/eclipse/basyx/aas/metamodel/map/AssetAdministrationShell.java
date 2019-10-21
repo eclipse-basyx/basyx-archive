@@ -26,6 +26,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
@@ -250,7 +251,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@Override
-	public String getDescription() {
+	public Description getDescription() {
 		return new ReferableFacade(this).getDescription();
 	}
 
@@ -263,7 +264,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		new ReferableFacade(this).setCategory(category);
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(Description description) {
 		new ReferableFacade(this).setDescription(description);
 	}
 

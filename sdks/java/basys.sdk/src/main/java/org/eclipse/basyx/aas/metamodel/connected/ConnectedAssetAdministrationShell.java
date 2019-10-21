@@ -22,7 +22,9 @@ import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedVABModelMap;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -149,8 +151,8 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	}
 
 	@Override
-	public String getDescription() {
-		return (String) getElem().get(Referable.DESCRIPTION);
+	public Description getDescription() {
+		return new ReferableFacade(getElem()).getDescription();
 	}
 
 	@SuppressWarnings("unchecked")

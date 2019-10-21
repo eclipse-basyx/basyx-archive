@@ -13,6 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -72,7 +73,7 @@ public class SubmodelElement extends HashMap<String, Object> implements ISubmode
 	}
 
 	@Override
-	public String getDescription() {
+	public Description getDescription() {
 		return new ReferableFacade(this).getDescription();
 	}
 
@@ -90,7 +91,7 @@ public class SubmodelElement extends HashMap<String, Object> implements ISubmode
 		new ReferableFacade(this).setCategory(category);
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(Description description) {
 		new ReferableFacade(this).setDescription(description);
 	}
 

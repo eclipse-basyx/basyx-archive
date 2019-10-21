@@ -19,6 +19,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
@@ -172,7 +173,7 @@ public class SubModel extends VABModelMap<Object> implements IVABElementContaine
 	}
 
 	@Override
-	public String getDescription() {
+	public Description getDescription() {
 		return new ReferableFacade(this).getDescription();
 	}
 
@@ -185,7 +186,7 @@ public class SubModel extends VABModelMap<Object> implements IVABElementContaine
 		new ReferableFacade(this).setCategory(category);
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(Description description) {
 		new ReferableFacade(this).setDescription(description);
 	}
 
