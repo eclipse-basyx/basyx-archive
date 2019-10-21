@@ -13,7 +13,6 @@ import org.eclipse.basyx.vab.coder.json.serialization.GSONToolsFactory;
 import org.eclipse.basyx.vab.exception.LostHTTPRequestParameterException;
 import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -195,21 +194,13 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			// Get requested value from provider backend
 			Object value = providerBackend.getModelPropertyValue(path);
 
-			// if (value.getClass().isArray()) {
-			// List<Object> tmp = new ArrayList<>();
-			// for (Object o : (Object[]) value) {
-			// tmp.add(o);
-			// }
-			// value = tmp;
-			// }
-
 			// Serialize as json string - any messages?
 			String jsonString = serialize(true, value, null);
 
 			// Send response
 			sendJSONResponse(outputStream, jsonString);
 		} catch (Exception e) {
-			sendException(outputStream, e);		// FIXME: There is no exception thrown for GET requests on the client!!
+			sendException(outputStream, e);
 		}
 	}
 
@@ -255,7 +246,8 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			// Deserialize json body. 
 			Object parameter = extractParameter(path, serializedJSONValue, outputStream);
 			
-			// If only a single parameter has been sent, pack it into an array so it can be casted safely ------- FIXME Parameters should actually be a List of Hashmaps (see VWiD json)
+			// If only a single parameter has been sent, pack it into an array so it can be
+			// casted safely
 			if (parameter instanceof Collection<?>) {
 				Collection<Object> list = (Collection<Object>) parameter;
 				Object[] parameterArray = new Object[list.size()];
