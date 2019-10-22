@@ -86,8 +86,7 @@ public class TestConnectedAssetAdministrationShell {
 
 		// Create connector provider stub, map address to provider
 		ConnectorProviderStub connectorProvider = new ConnectorProviderStub();
-		connectorProvider.addMapping(aasDescriptor.getFirstEndpoint(), provider);
-		connectorProvider.addMapping(smDescriptor.getFirstEndpoint(), provider);
+		connectorProvider.addMapping("", provider);
 
 	// Create connection manager using the dummy
 		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(registry,

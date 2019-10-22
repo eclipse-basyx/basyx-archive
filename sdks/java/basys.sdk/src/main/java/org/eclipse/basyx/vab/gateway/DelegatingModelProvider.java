@@ -1,6 +1,6 @@
 package org.eclipse.basyx.vab.gateway;
 
-import org.eclipse.basyx.vab.modelprovider.VABPathTools;
+import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 
@@ -14,41 +14,41 @@ import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 public class DelegatingModelProvider implements IModelProvider {
 
 	// Provider that provides the connectors
-	private IConnectorProvider connectorProvider;
+	private ModelProxyFactory proxyFactory;
 
 	public DelegatingModelProvider(IConnectorProvider connectorProvider) {
 		super();
-		this.connectorProvider = connectorProvider;
+		this.proxyFactory = new ModelProxyFactory(connectorProvider);
 	}
 
 	@Override
 	public Object getModelPropertyValue(String path) throws Exception {
-		return getProvider(path).getModelPropertyValue(VABPathTools.removeAddressEntry(path));
+		return getProvider(path).getModelPropertyValue("");
 	}
 
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws Exception {
-		getProvider(path).setModelPropertyValue(VABPathTools.removeAddressEntry(path), newValue);
+		getProvider(path).setModelPropertyValue("", newValue);
 	}
 
 	@Override
 	public void createValue(String path, Object newEntity) throws Exception {
-		getProvider(path).createValue(VABPathTools.removeAddressEntry(path), newEntity);
+		getProvider(path).createValue("", newEntity);
 	}
 
 	@Override
 	public void deleteValue(String path) throws Exception {
-		getProvider(path).deleteValue(VABPathTools.removeAddressEntry(path));
+		getProvider(path).deleteValue("");
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws Exception {
-		getProvider(path).deleteValue(VABPathTools.removeAddressEntry(path), obj);
+		getProvider(path).deleteValue("", obj);
 	}
 
 	@Override
 	public Object invokeOperation(String path, Object... parameter) throws Exception {
-		return getProvider(path).invokeOperation(VABPathTools.removeAddressEntry(path), parameter);
+		return getProvider(path).invokeOperation("", parameter);
 	}
 
 	/**
@@ -58,6 +58,6 @@ public class DelegatingModelProvider implements IModelProvider {
 	 * @return
 	 */
 	private IModelProvider getProvider(String path) {
-		return connectorProvider.getConnector(VABPathTools.getAddressEntry(path));
+		return proxyFactory.createProxy(path);
 	}
 }

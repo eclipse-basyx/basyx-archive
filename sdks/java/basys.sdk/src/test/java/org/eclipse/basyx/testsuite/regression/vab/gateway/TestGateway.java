@@ -15,6 +15,10 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
+import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,9 +31,9 @@ import org.junit.Test;
  *
  */
 public class TestGateway {
-
-	BaSyxTCPServer<VABHashmapProvider> server;
-	BaSyxTCPServer<DelegatingModelProvider> gateway;
+	private BaSyxTCPServer<VABHashmapProvider> server;
+	private BaSyxTCPServer<DelegatingModelProvider> basyxGateway;
+	private AASHTTPServer httpGateway;
 
 	@Before
 	public void build() { // Create VAB element
@@ -43,13 +47,21 @@ public class TestGateway {
 		// BaSyxConnectorProvider for gateway
 		ConnectorProviderMapper gatewayMapper = new ConnectorProviderMapper();
 		gatewayMapper.addConnectorProvider("basyx", new BaSyxConnectorProvider());
+		gatewayMapper.addConnectorProvider("http", new HTTPConnectorProvider());
 
-		// Create gateway using DelegatingModelProvider
-		gateway = new BaSyxTCPServer<>(new DelegatingModelProvider(gatewayMapper), 6999);
+		// Create tcp gateway using DelegatingModelProvider
+		basyxGateway = new BaSyxTCPServer<>(new DelegatingModelProvider(gatewayMapper), 6999);
+		
+		// Create a http gateway using DelegatingModelProvider
+		DelegatingModelProvider httpGWProvider = new DelegatingModelProvider(gatewayMapper);
+		BaSyxContext context = new BaSyxContext("", "", "localhost", 5123);
+		context.addServletMapping("/path/to/gateway/*", new VABHTTPInterface<DelegatingModelProvider>(httpGWProvider));
+		httpGateway = new AASHTTPServer(context);
 
 		// Start element provider and gateway
 		server.start();
-		gateway.start();
+		basyxGateway.start();
+		httpGateway.start();
 	}
 
 	/**
@@ -78,11 +90,11 @@ public class TestGateway {
 		// Create Directory, here it is configured statically, of course a dynamic
 		// request to e.g. a servlet is also possible
 		DirectoryServiceStub directory = new DirectoryServiceStub();
-		directory.addMapping("Elem", "basyx://127.0.0.1:6999//basyx://127.0.0.1:6998");
+		directory.addMapping("Elem", "http://localhost:5123/path/to/gateway//basyx://127.0.0.1:6999//basyx://127.0.0.1:6998");
 
 		// Create ConnectionProviderMapper for client
 		ConnectorProviderMapper clientMapper = new ConnectorProviderMapper();
-		clientMapper.addConnectorProvider("basyx", new BaSyxConnectorProvider());
+		clientMapper.addConnectorProvider("http", new HTTPConnectorProvider());
 
 		// Create VABConnectionManager
 		VABConnectionManager manager = new VABConnectionManager(directory, clientMapper);
@@ -100,8 +112,12 @@ public class TestGateway {
 			server.stop();
 		}
 
-		if (gateway != null) {
-			gateway.stop();
+		if (basyxGateway != null) {
+			basyxGateway.stop();
+		}
+
+		if (httpGateway != null) {
+			httpGateway.shutdown();
 		}
 	}
 }

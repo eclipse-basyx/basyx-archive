@@ -36,7 +36,7 @@ public class VABConnectionManagerStub extends VABConnectionManager {
 	}
 
 	private ConnectorProviderStub getConnectorProvider() {
-		return (ConnectorProviderStub) providerProvider;
+		return (ConnectorProviderStub) connectorProvider;
 	}
 
 	/**

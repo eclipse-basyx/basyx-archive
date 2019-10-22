@@ -62,7 +62,7 @@ public class TestConnectedAssetAdministrationShellManager {
 		// Register AAS at directory
 		IIdentifier id = new Identifier(IdentifierType.URI, aasId);
 		registry.register(new AASDescriptor(id, "/aas"));
-		connectorProvider.addMapping("/aas", new VABMultiSubmodelProvider());
+		connectorProvider.addMapping("", new VABMultiSubmodelProvider());
 
 		// Create an AAS containing a reference to the created SubModel
 		createAAS(urn, aasId);
@@ -89,8 +89,7 @@ public class TestConnectedAssetAdministrationShellManager {
 		desc.addSubmodelDescriptor(new SubmodelDescriptor(smId, IdentifierType.URI, "/aas/submodels/" + smId));
 		registry.register(desc);
 		IModelProvider provider = new VABMultiSubmodelProvider(new AASModelProvider(new HashMap<>()));
-		connectorProvider.addMapping("/aas", provider);
-		connectorProvider.addMapping("/aas/submodels/" + smId, provider);
+		connectorProvider.addMapping("", provider);
 
 		// Create sub model
 		SubModel submodel = new SubModel();

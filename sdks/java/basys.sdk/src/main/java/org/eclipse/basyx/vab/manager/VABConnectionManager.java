@@ -1,8 +1,8 @@
 package org.eclipse.basyx.vab.manager;
 
 import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
+import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
-import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 
 
@@ -15,7 +15,6 @@ import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
  */
 public class VABConnectionManager {
 
-	
 	/**
 	 * Directory service reference
 	 */
@@ -25,11 +24,13 @@ public class VABConnectionManager {
 	/**
 	 * Store connection providers
 	 */
-	protected IConnectorProvider providerProvider;
+	protected IConnectorProvider connectorProvider = null;
+	
+	/**
+	 * Factory for creating proxies for addresses with multiple endpoints
+	 */
+	private ModelProxyFactory proxyFactory = null;
 
-	
-	
-	
 	/**
 	 * 
 	 * @param networkDirectoryService
@@ -42,9 +43,11 @@ public class VABConnectionManager {
 		directoryService = networkDirectoryService;
 
 		// Set connector reference
-		this.providerProvider = providerProvider;
+		this.connectorProvider = providerProvider;
+		
+		// Set proxy factory
+		this.proxyFactory = new ModelProxyFactory(providerProvider);
 	}
-
 	
 	/**
 	 * Connect to an VAB element
@@ -58,9 +61,8 @@ public class VABConnectionManager {
 
 		// Lookup address in directory server
 		addr = directoryService.lookup(urn);
-
-		// Return a new VABElementProxy
-		return new VABElementProxy(VABPathTools.removeAddressEntry(addr), providerProvider.getConnector(addr));
+		
+		return connectToVABElementByPath(addr);
 	}
 
 	/**
@@ -70,10 +72,6 @@ public class VABConnectionManager {
 	 *            the path that describes the element location.
 	 */
 	public VABElementProxy connectToVABElementByPath(String path) {
-
-		// Return a new VABElementProxy
-		// - Do not pass path here to provider as address, as the path parameter is
-		// already absolute and contains the address.
-		return new VABElementProxy(VABPathTools.removeAddressEntry(path), providerProvider.getConnector(path));
+		return proxyFactory.createProxy(path);	
 	}
 }

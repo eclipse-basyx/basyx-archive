@@ -27,22 +27,23 @@ public class VABElementProxy implements IModelProvider {
 	protected IModelProvider provider = null;
 
 	/**
-	 * Constructor expects address and provider reference <br />
+	 * Creates the proxy based on a specific model provider.
 	 * E.g, if the element resides on <i>basyx://127.0.0.1</i> in the path
 	 * <i>a/b/c</i>, <i>provider</i> would realize the connection to
 	 * <i>basyx://127.0.0.1</i> and <i>addr</i> would be <i>a/b/c</i>. The
 	 * VABElementProxy then directly points to the element.
 	 * 
 	 * @param addr
-	 *            address "within" the provider
-	 * @param provider
+	 *            Address "within" the provider
+	 * @param provider The provider this proxy is based on
+	 * 	
 	 */
 	public VABElementProxy(String addr, IModelProvider provider) {
 		// Store references
-		this.addr = trimAddress(addr);
+		this.addr = VABPathTools.stripSlashes(addr);
 		this.provider = provider;
 	}
-
+	
 	/**
 	 * Read VAB element value
 	 */
@@ -149,36 +150,7 @@ public class VABElementProxy implements IModelProvider {
 		}
 	}
 
-	/**
-	 * Remove trailing slashes from address "/"
-	 */
-	private String trimAddress(String parAddr) {
-		if (parAddr == null) {
-			return null;
-		}
 
-		// Return value
-		String result = parAddr;
-
-		// Remove trailing "/" from address
-		while (result.endsWith("/")) {
-			result = result.substring(0, result.length() - 1);
-		}
-
-		// Return trimmed address
-		return result;
-	}
-
-	/**
-	 * Add path to VAB element address. Make sure that resulting path contains the proper number of slashes ("/")
-	 * 
-	 * @param path
-	 *            Input path
-	 * @return processed path
-	 */
-	private String constructPath(String path) {
-		return constructPathWithSeparator(path, "//");
-	}
 
 	/**
 	 * Add path to VAB element address. Make sure that resulting path contains the
@@ -186,31 +158,25 @@ public class VABElementProxy implements IModelProvider {
 	 * 
 	 * @param path
 	 *            Input path
-	 * @param separator
-	 *            Allows passing different separators (/ vs. //)
 	 * @return processed path
 	 */
-	private String constructPathWithSeparator(String path, String separator) {
+	private String constructPath(String path) {
 		if (path == null) {
 			return null;
 		}
 
 		// Trim input path
-		String trimmedPath = trimAddress(path);
-		// Remove leading slashes from path
-		while (trimmedPath.startsWith("/")) {
-			trimmedPath = trimmedPath.substring(1);
-		}
-		// Add one slash at beginning of path
-		trimmedPath = "/" + trimmedPath;
+		path = VABPathTools.stripSlashes(path);
 
 		// Now combine both paths
-		if (addr != null && !addr.isEmpty()) {
+		if ( path.isEmpty() ) {
+			return addr;
+		} else if (addr != null && !addr.isEmpty()) {
 			// Double slashes are used to separate between address and path to be able to
 			// differentiate later on
-			return addr + separator + trimmedPath;
+			return addr + "/" + path;
 		} else {
-			return trimmedPath;
+			return path;
 		}
 	}
 
@@ -222,6 +188,6 @@ public class VABElementProxy implements IModelProvider {
 	 * @return
 	 */
 	public VABElementProxy getDeepProxy(String path) {
-		return new VABElementProxy(constructPathWithSeparator(path, "/"), provider);
+		return new VABElementProxy(constructPath(path), provider);
 	}
 }

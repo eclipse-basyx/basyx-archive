@@ -171,11 +171,6 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		String contextPath = req.getContextPath();
 		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
 
-		// Add leading "/" to path if necessary
-		if (!path.startsWith("/")) {
-			path = "/" + path;
-		}
-
 		// Decode URL
 		path = java.net.URLDecoder.decode(path, "UTF-8");
 

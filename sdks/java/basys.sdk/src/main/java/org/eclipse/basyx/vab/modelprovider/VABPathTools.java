@@ -190,45 +190,54 @@ public class VABPathTools {
 	}
 
 	/**
-	 * Gets the address entry of a path <br />
-	 * E.g. basyx://127.0.0.1:6998//https://localhost/test/ will return
-	 * basyx://127.0.0.1:6998
+	 * Gets the first endpoint of a path.
+	 * @path 
+	 * 		A path that can contain 0..* endpoints.
+	 * @return
+	 * 		The first address entry of a path. The address entry is the first endpoint combined with a protocol.
+	 * 		If there is no protocol defined, the address entry is empty ("").
+	 * 		E.g. basyx://127.0.0.1:6998//https://localhost/test/ will return basyx://127.0.0.1:6998, 
+	 * 		https://localhost/test//basyx://127.0.0.1:6998/ will return https://localhost/test
+	 * 		and http://localhost/test/ will return "". 
 	 */
-	public static String getAddressEntry(String path) {
+	public static String getFirstEndpoint(String fullPath) {
 		// Return null result for null argument
-		if (path == null) {
+		if (fullPath == null) {
 			return null;
 		}
 
-		if (isEmptyPath(path) || !path.contains("//")) {
+		if (isEmptyPath(fullPath) || !fullPath.contains("//")) {
 			return "";
 		} else {
-			String splitted[] = path.split("//");
+			String[] splitted = fullPath.split("//");
 			return splitted[0] + "//" + splitted[1];
 		}
 	}
 
 	/**
-	 * Removes from a path the address part <br/>
-	 * E.g. basyx://127.0.0.1:6998//https://localhost/test/ will return
-	 * https://localhost/test/
+	 * Removes the first endpoint from a path. See {@link #getAddressEntry}<br/>
+	 * @path
+	 * @return 
+	 * 		The first endpoint. E.g. basyx://127.0.0.1:6998//https://localhost/test/ will return
+	 * 		https://localhost/test/.
+	 * 
 	 */
-	public static String removeAddressEntry(String path) {
+	public static String removeFirstEndpoint(String fullPath) {
 		// Return null result for null argument
-		if (path == null) {
+		if (fullPath == null) {
 			return null;
 		}
 
-		if (isEmptyPath(path)) {
+		if (isEmptyPath(fullPath)) {
 			return "";
-		} else if (!path.contains("//")) {
-			return path;
+		} else if (!fullPath.contains("//")) {
+			return fullPath;
 		} else {
-			path = path.replaceFirst(getAddressEntry(path), "");
-			if (path.startsWith("//")) {
-				path = path.replaceFirst("//", "");
+			String firstEndpoint = fullPath.replaceFirst(getFirstEndpoint(fullPath), "");
+			if (firstEndpoint.startsWith("//")) {
+				firstEndpoint = firstEndpoint.replaceFirst("//", "");
 			}
-			return path;
+			return firstEndpoint;
 		}
 	}
 

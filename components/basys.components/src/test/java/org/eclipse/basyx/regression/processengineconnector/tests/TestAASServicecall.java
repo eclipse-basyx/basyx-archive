@@ -79,7 +79,7 @@ public class TestAASServicecall {
 
 		// setup the connection-manager with the model-provider
 		ConnectorProviderStub connectorProvider = new ConnectorProviderStub();
-		connectorProvider.addMapping("/aas/submodels/submodel1", provider);
+		connectorProvider.addMapping("", provider);
 		
 		// create the service executor that calls the services using aas
 		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(registry,

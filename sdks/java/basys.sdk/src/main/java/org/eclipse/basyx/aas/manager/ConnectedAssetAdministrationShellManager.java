@@ -17,8 +17,8 @@ import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.vab.exception.FeatureNotImplementedException;
+import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
-import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 
 /**
@@ -31,8 +31,8 @@ import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 public class ConnectedAssetAdministrationShellManager implements IAssetAdministrationShellManager {
 
 	protected IAASRegistryService aasDirectory;
-
-	protected IConnectorProvider providerProvider;
+	protected IConnectorProvider connectorProvider;
+	protected ModelProxyFactory proxyFactory;
 
 	/**
 	 * @param networkDirectoryService
@@ -41,7 +41,8 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	public ConnectedAssetAdministrationShellManager(IAASRegistryService directory,
 			IConnectorProvider provider) {
 		this.aasDirectory = directory;
-		this.providerProvider = provider;
+		this.connectorProvider = provider;
+		this.proxyFactory = new ModelProxyFactory(provider);
 	}
 
 	@Override
@@ -56,9 +57,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		String addr = smDescriptor.getFirstEndpoint();
 
 		// Return a new VABElementProxy
-		VABElementProxy proxy = new VABElementProxy(VABPathTools.removeAddressEntry(addr),
-				providerProvider.getConnector(addr));
-		return new ConnectedSubModel(proxy);
+		return new ConnectedSubModel(proxyFactory.createProxy(addr));
 	}
 
 	@Override
@@ -70,7 +69,6 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	@Override
 	public void createAAS(AssetAdministrationShell aas, ModelUrn urn) {
 		VABElementProxy proxy = getAASProxyFromURN(urn);
-
 		proxy.createValue("/", aas);
 	}
 
@@ -82,7 +80,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		String addr = aasDescriptor.getFirstEndpoint();
 
 		// Return a new VABElementProxy
-		return new VABElementProxy(VABPathTools.removeAddressEntry(addr), providerProvider.getConnector(addr));
+		return proxyFactory.createProxy(addr);
 	}
 
 	@Override
@@ -104,8 +102,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		String addr = aasDescriptor.getFirstEndpoint();
 
 		// Return a new VABElementProxy
-		VABElementProxy proxy = new VABElementProxy(VABPathTools.removeAddressEntry(addr),
-				providerProvider.getConnector(addr));
+		VABElementProxy proxy = proxyFactory.createProxy(addr);
 
 		// Create sm
 		proxy.createValue(AssetAdministrationShell.SUBMODELS, submodel);

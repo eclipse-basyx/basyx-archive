@@ -17,6 +17,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
 /**
@@ -27,7 +28,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  */
 public class SQLDirectoryProvider implements IModelProvider {
 
-	private static String registryPath = "/api/v1/registry";
+	private static String registryPath = "api/v1/registry";
 
 
 	/**
@@ -213,7 +214,8 @@ public class SQLDirectoryProvider implements IModelProvider {
 	 */
 	@Override
 	public Object getModelPropertyValue(String path) throws Exception {
-
+		path = VABPathTools.stripSlashes(path);
+		
 		// Process get request
 		// - Get all (local) AAS
 		if (path.equals(registryPath)) {

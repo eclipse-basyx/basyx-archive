@@ -47,10 +47,10 @@ public class VABPathToolsTest {
 	 */
 	@Test
 	public void testRemoveAddress() {
-		assertEquals(pathWithoutAddress, VABPathTools.removeAddressEntry(pathWithoutAddress));
-		assertEquals(pathWithoutAddress, VABPathTools.removeAddressEntry(pathWithOneAddress));
-		assertEquals("", VABPathTools.removeAddressEntry(onlyAddress));
-		assertNull(VABPathTools.removeAddressEntry(null));
+		assertEquals(pathWithoutAddress, VABPathTools.removeFirstEndpoint(pathWithoutAddress));
+		assertEquals(pathWithoutAddress, VABPathTools.removeFirstEndpoint(pathWithOneAddress));
+		assertEquals("", VABPathTools.removeFirstEndpoint(onlyAddress));
+		assertNull(VABPathTools.removeFirstEndpoint(null));
 	}
 
 	/**
@@ -58,10 +58,10 @@ public class VABPathToolsTest {
 	 */
 	@Test
 	public void testGetAddress() {
-		assertEquals("", VABPathTools.getAddressEntry(pathWithoutAddress));
-		assertEquals("basyx://127.0.0.1:6889", VABPathTools.getAddressEntry(pathWithTwoAddress));
-		assertEquals(onlyAddress, VABPathTools.getAddressEntry(onlyAddress));
-		assertNull(VABPathTools.getAddressEntry(null));
+		assertEquals("", VABPathTools.getFirstEndpoint(pathWithoutAddress));
+		assertEquals("basyx://127.0.0.1:6889", VABPathTools.getFirstEndpoint(pathWithTwoAddress));
+		assertEquals(onlyAddress, VABPathTools.getFirstEndpoint(onlyAddress));
+		assertNull(VABPathTools.getFirstEndpoint(null));
 	}
 
 	/**
