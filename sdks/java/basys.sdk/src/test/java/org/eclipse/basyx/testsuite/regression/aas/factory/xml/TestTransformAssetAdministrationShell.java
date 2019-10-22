@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import org.eclipse.basyx.aas.factory.xml.TransformAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.vab.factory.xml.XmlParser;
 import org.junit.Before;
@@ -86,25 +88,24 @@ public class TestTransformAssetAdministrationShell {
 	public void TestBuildXmlMap() throws Exception {
 		rootObj.putAll(XmlParser.buildXmlMap(xmlTestContent));
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testAssetAdminshellObject() throws ParserConfigurationException, SAXException, IOException {
-		ArrayList<AssetAdministrationShell> assetSet=new ArrayList<AssetAdministrationShell>();
-		//get the Asset admin shell info from root and start processing it one by one 
-		Object administrationShellObj = ((Map<String, Object>)rootObj.get("aas:assetAdministrationShells")).get("aas:assetAdministrationShell");
-		
-		if (administrationShellObj instanceof Collection<?>){
-			ArrayList<Object> administrationShellArrayList=(ArrayList<Object>)administrationShellObj;
+		ArrayList<AssetAdministrationShell> assetSet = new ArrayList<AssetAdministrationShell>();
+		// get the Asset admin shell info from root and start processing it one by one
+		Object administrationShellObj = ((Map<String, Object>) rootObj.get("aas:assetAdministrationShells")).get("aas:assetAdministrationShell");
+
+		if (administrationShellObj instanceof Collection<?>) {
+			ArrayList<Object> administrationShellArrayList = (ArrayList<Object>) administrationShellObj;
 			for (Object object : administrationShellArrayList) {
 				assetSet.add(TransformAssetAdministrationShell.transformAssetAdministrationShell((Map<String, Object>) object));
 			}
-		}
-		else{
-			Map<String, Object>  administrationShellMapObj = (Map<String, Object>) administrationShellObj;	
+		} else {
+			Map<String, Object> administrationShellMapObj = (Map<String, Object>) administrationShellObj;
 			assetSet.add(TransformAssetAdministrationShell.transformAssetAdministrationShell(administrationShellMapObj));
 		}
-		
+
 		assertEquals(assetSet.size(), 1);
 		assertEquals(assetSet.get(0).getAdministration().getVersion(), "1");
 		assertEquals(assetSet.get(0).getAdministration().getRevision(), "0");
@@ -114,25 +115,35 @@ public class TestTransformAssetAdministrationShell {
 		for (IConceptDictionary iConceptDictionary : conceptDictionary) {
 			assertEquals(iConceptDictionary.getIdShort(), "SampleDic");
 			Set<IReference> conceptDescription = iConceptDictionary.getConceptDescription();
-			for (IReference iConceptDictionary2 : conceptDescription) {
-				assertEquals(iConceptDictionary2.toString(),"{keys=[{idType=URI, type=ConceptDescription, value=www.festo.com/dic/08111234, local=true}]}");
-				break;
-			}
+			List<IKey> keys = conceptDescription.iterator().next().getKeys();
+			assertEquals(1, keys.size());
+
+			// Test key
+			IKey key = keys.get(0);
+			assertEquals("ConceptDescription", key.getType());
+			assertEquals("IRDI", key.getidType());
+			assertEquals("0173-1#02-BAA120#007", key.getValue());
+			assertEquals(true, key.isLocal());
 		}
-		
-		 Set<IView> views = assetSet.get(0).getViews();
-		 for (IView iView : views) {
-			 assertEquals( iView.getIdShort(),"SampleView");
-			 Set<IReference> containedElement = iView.getContainedElement();
-			 for (IReference ref : containedElement) {
-				assertEquals(ref.toString(), "{keys=[{idType=URI, type=Submodel, value=\"http://www.zvei.de/demo/submodel/12345679\", local=true}, {idType=idShort, type=Property, value=rotationSpeed, local=true}]}");
-				break;
-			}
-		}
-	
-		
+
+		// Test view retrieval
+		Set<IView> views = assetSet.get(0).getViews();
+		IView iView = views.iterator().next();
+		assertEquals(iView.getIdShort(), "SampleView");
+		Set<IReference> containedElement = iView.getContainedElement();
+		IReference ref = containedElement.iterator().next();
+
+		// Text keys
+		IKey key0 = ref.getKeys().get(0);
+		assertEquals("Submodel", key0.getType());
+		assertEquals("URI", key0.getidType());
+		assertEquals("\"http://www.zvei.de/demo/submodel/12345679\"", key0.getValue());
+		assertEquals(true, key0.isLocal());
+
+		IKey key1 = ref.getKeys().get(1);
+		assertEquals("Property", key1.getType());
+		assertEquals("idShort", key1.getidType());
+		assertEquals("rotationSpeed", key1.getValue());
+		assertEquals(true, key1.isLocal());
 	}
-
-
-
 }

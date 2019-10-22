@@ -2,15 +2,25 @@ package org.eclipse.basyx.aas.metamodel.facade;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
+import org.eclipse.basyx.aas.metamodel.facade.parts.ConceptDictionaryFacade;
+import org.eclipse.basyx.aas.metamodel.facade.parts.ViewFacade;
+import org.eclipse.basyx.aas.metamodel.facade.security.SecurityFacade;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
@@ -38,27 +48,30 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 		map.put(AssetAdministrationShell.SECURITY, security);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ISecurity getSecurity() {
-		return (ISecurity) map.get(AssetAdministrationShell.SECURITY);
+		return new SecurityFacade((Map<String, Object>) map.get(AssetAdministrationShell.SECURITY));
 	}
 
 	public void setDerivedFrom(IReference derivedFrom) {
 		map.put(AssetAdministrationShell.DERIVEDFROM, derivedFrom);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getDerivedFrom() {
-		return (IReference) map.get(AssetAdministrationShell.DERIVEDFROM);
+		return new ReferenceFacade((Map<String, Object>) map.get(AssetAdministrationShell.DERIVEDFROM));
 	}
 
 	public void setAsset(IReference asset) {
 		map.put(AssetAdministrationShell.ASSET, asset);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getAsset() {
-		return (IReference) map.get(AssetAdministrationShell.ASSET);
+		return new ReferenceFacade((Map<String, Object>) map.get(AssetAdministrationShell.ASSET));
 	}
 
 	@Override
@@ -70,18 +83,20 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 	@Override
 	@SuppressWarnings("unchecked")
 	public Set<IReference> getSubModel() {
-		return (Set<IReference>) map.get(AssetAdministrationShell.SUBMODEL);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(AssetAdministrationShell.SUBMODEL);
+		return ReferenceHelper.transform(set);
 	}
 
 	public void setViews(Set<IView> views) {
 		map.put(AssetAdministrationShell.VIEWS, views);
-
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public Set<IView> getViews() {
-		return (Set<IView>) map.get(AssetAdministrationShell.VIEWS);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(AssetAdministrationShell.VIEWS);
+
+		return set.stream().map(m -> new ViewFacade(m)).collect(Collectors.toSet());
 	}
 
 	public void setConceptDictionary(Set<IConceptDictionary> dictionaries) {
@@ -91,17 +106,21 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 	@Override
 	@SuppressWarnings("unchecked")
 	public Set<IConceptDictionary> getConceptDictionary() {
-		return (Set<IConceptDictionary>) map.get(AssetAdministrationShell.CONCEPTDICTIONARY);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(AssetAdministrationShell.CONCEPTDICTIONARY);
+
+		return set.stream().map(m -> new ConceptDictionaryFacade(m)).collect(Collectors.toSet());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public AdministrativeInformation getAdministration() {
-		return (AdministrativeInformation) map.get(Identifiable.ADMINISTRATION);
+	public IAdministrativeInformation getAdministration() {
+		return new AdministrativeInformationFacade((Map<String, Object>) map.get(Identifiable.ADMINISTRATION));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Identifier getIdentification() {
-		return (Identifier) map.get(Identifiable.IDENTIFICATION);
+	public IIdentifier getIdentification() {
+		return new IdentifierFacade((Map<String, Object>) map.get(Identifiable.IDENTIFICATION));
 	}
 
 	public void setAdministration(String version, String revision) {
@@ -115,7 +134,8 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 	@Override
 	@SuppressWarnings("unchecked")
 	public Set<IReference> getDataSpecificationReferences() {
-		return (Set<IReference>) map.get(HasDataSpecification.HASDATASPECIFICATION);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(HasDataSpecification.HASDATASPECIFICATION);
+		return ReferenceHelper.transform(set);
 	}
 
 	public void setDataSpecificationReferences(Set<IReference> ref) {
@@ -134,6 +154,7 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 
 	@SuppressWarnings("unchecked")
 	public Set<ISubModel> getSubModelsHack() {
+		// FIXME: Replace this with correct implementation
 		return (Set<ISubModel>) map.get(AssetAdministrationShell.SUBMODELS);
 	}
 
@@ -152,9 +173,10 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 		return new ReferableFacade(map).getDescription();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getParent() {
-		return (IReference) map.get(Referable.PARENT);
+		return new ReferenceFacade((Map<String, Object>) map.get(Referable.PARENT));
 	}
 
 	@Override

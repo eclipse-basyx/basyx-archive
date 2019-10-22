@@ -8,6 +8,8 @@ import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 
@@ -42,9 +44,10 @@ public class ConceptDictionaryFacade implements IConceptDictionary {
 		return new ReferableFacade(map).getDescription();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getParent() {
-		return (IReference) map.get(Referable.PARENT);
+		return new ReferenceFacade((Map<String, Object>) map.get(Referable.PARENT));
 	}
 
 	public void setIdShort(String idShort) {
@@ -66,7 +69,8 @@ public class ConceptDictionaryFacade implements IConceptDictionary {
 	@Override
 	@SuppressWarnings("unchecked")
 	public Set<IReference> getConceptDescription() {
-		return (Set<IReference>) map.get(ConceptDictionary.CONCEPTDESCRIPTION);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(ConceptDictionary.CONCEPTDESCRIPTION);
+		return ReferenceHelper.transform(set);
 	}
 
 	public void setConceptDescription(HashSet<String> ref) {

@@ -1,7 +1,7 @@
 package org.eclipse.basyx.testsuite.regression.aas.factory.xml;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -95,9 +95,7 @@ public class TestTransformConceptDescription {
 		assertEquals(transformConceptDescription.getIdentification().getIdType(),"URI");
 		Set<IReference> dataSpecificationReferences = transformConceptDescription.getDataSpecificationReferences();
 		for (IReference iReference : dataSpecificationReferences) {
-			Map<String, Object> map=(Map<String, Object>)iReference;
-			assertTrue(map.get("keys")!=null);
-			//assertEquals(map.get("keys"),"[{idType=URI, type=GlobalReference, value=www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360, local=false}]");
+			assertNotNull(iReference.getKeys());
 		}
 	}
 

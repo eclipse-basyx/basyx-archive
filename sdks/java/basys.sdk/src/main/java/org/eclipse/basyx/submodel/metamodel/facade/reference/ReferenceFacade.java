@@ -1,5 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.facade.reference;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,15 @@ public class ReferenceFacade implements IReference {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IKey> getKeys() {
-		return (List<IKey>) map.get(Reference.KEY);
+		// Transform list of maps to set of IKey
+		List<Map<String, Object>> list = (List<Map<String, Object>>) map.get(Reference.KEY);
+
+		List<IKey> ret = new ArrayList<>();
+		for (Map<String, Object> m : list) {
+			ret.add(new KeyFacade(m));
+		}
+
+		return ret;
 	}
 
 	public void setKeys(List<IKey> keys) {

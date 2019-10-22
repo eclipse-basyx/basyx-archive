@@ -7,6 +7,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInforma
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
@@ -29,9 +30,10 @@ public class IdentifiableFacade implements IIdentifiable {
 		this.map = map;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return (IAdministrativeInformation) map.get(Identifiable.ADMINISTRATION);
+		return new AdministrativeInformationFacade((Map<String, Object>) map.get(Identifiable.ADMINISTRATION));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -63,9 +65,10 @@ public class IdentifiableFacade implements IIdentifiable {
 		return new ReferableFacade(map).getDescription();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getParent() {
-		return (IReference) map.get(Referable.PARENT);
+		return new ReferenceFacade((Map<String, Object>) map.get(Referable.PARENT));
 	}
 
 	public void setIdShort(String idShort) {

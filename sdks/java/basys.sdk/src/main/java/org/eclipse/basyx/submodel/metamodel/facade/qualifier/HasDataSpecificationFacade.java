@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 
 /**
@@ -25,7 +26,8 @@ public class HasDataSpecificationFacade implements IHasDataSpecification {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IReference> getDataSpecificationReferences() {
-		return (Set<IReference>) map.get(HasDataSpecification.HASDATASPECIFICATION);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(HasDataSpecification.HASDATASPECIFICATION);
+		return ReferenceHelper.transform(set);
 	}
 
 	public void setDataSpecificationReferences(Set<IReference> ref) {

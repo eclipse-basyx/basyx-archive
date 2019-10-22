@@ -8,6 +8,6 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
  * @author rajashek
  *
 */
-public interface IFormula {
+public interface IFormula extends IConstraint {
 	public  Set<IReference> getDependsOn();
 }

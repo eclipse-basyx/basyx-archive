@@ -9,7 +9,11 @@ import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
@@ -37,21 +41,24 @@ public class ConceptDescriptionFacade implements IConceptDescription {
 	@SuppressWarnings("unchecked")
 
 	public Set<IReference> getDataSpecificationReferences() {
-		return (Set<IReference>) map.get(HasDataSpecification.HASDATASPECIFICATION);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(HasDataSpecification.HASDATASPECIFICATION);
+		return ReferenceHelper.transform(set);
 	}
 
 	public void setDataSpecificationReferences(Set<IReference> ref) {
 		map.put(HasDataSpecification.HASDATASPECIFICATION, ref);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return (IAdministrativeInformation) map.get(Identifiable.ADMINISTRATION);
+		return new AdministrativeInformationFacade((Map<String, Object>) map.get(Identifiable.ADMINISTRATION));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IIdentifier getIdentification() {
-		return (IIdentifier) map.get(Identifiable.IDENTIFICATION);
+		return new IdentifierFacade((Map<String, Object>) map.get(Identifiable.IDENTIFICATION));
 	}
 
 	public void setAdministration(String version, String revision) {
@@ -90,9 +97,10 @@ public class ConceptDescriptionFacade implements IConceptDescription {
 		return new ReferableFacade(map).getDescription();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getParent() {
-		return (IReference) map.get(Referable.PARENT);
+		return new ReferenceFacade((Map<String, Object>) map.get(Referable.PARENT));
 	}
 
 	public void setIdShort(String idShort) {

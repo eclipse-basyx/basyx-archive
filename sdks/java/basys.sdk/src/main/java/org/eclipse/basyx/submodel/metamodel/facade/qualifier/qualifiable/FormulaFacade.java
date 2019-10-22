@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IFormula;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Formula;
 
 /**
@@ -28,7 +29,9 @@ public class FormulaFacade implements IFormula {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IReference> getDependsOn() {
-		return (Set<IReference>)map.get(Formula.DEPENDSON);
+		// Transform set of maps to set of IReference
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(Formula.DEPENDSON);
+		return ReferenceHelper.transform(set);
 	}
 	
 

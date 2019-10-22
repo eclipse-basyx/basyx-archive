@@ -14,9 +14,12 @@ import java.util.Map;
 public class ModelType extends HashMap<String, Object> {
 	private static final long serialVersionUID = 6097142020732632569L;
 
+	public static final String MODELTYPE = "modelType";
+	public static final String NAME = "name";
+
 	public ModelType(String type) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("name", type);
-		put("modelType", map);
+		map.put(NAME, type);
+		put(MODELTYPE, map);
 	}
 }

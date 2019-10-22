@@ -13,7 +13,11 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IProperty;
+import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
@@ -57,7 +61,7 @@ public class SubmodelFacade implements ISubModel {
 	}
 
 	/**
-	 * Return reference to sub model structure
+	 * Return reference to sub model structure FIXME: Why does this method exist?
 	 */
 	public SubModel getSubModel() {
 		// Assume that VAB HashMap provider carries a sub model
@@ -113,9 +117,10 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Get value of 'parent' property
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getParent() {
-		return (IReference) getElements().get(Referable.PARENT);
+		return new ReferenceFacade((Map<String, Object>) getElements().get(Referable.PARENT));
 	}
 
 	/**
@@ -128,9 +133,10 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Get value of 'administration' property
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return (IAdministrativeInformation) getElements().get(Identifiable.ADMINISTRATION);
+		return new AdministrativeInformationFacade((Map<String, Object>) getElements().get(Identifiable.ADMINISTRATION));
 	}
 
 	/**
@@ -143,9 +149,10 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Get value of 'identification' property
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public IIdentifier getIdentification() {
-		return (IIdentifier) getElements().get(Identifiable.IDENTIFICATION);
+		return new IdentifierFacade((Map<String, Object>) getElements().get(Identifiable.IDENTIFICATION));
 	}
 
 	/**
@@ -158,8 +165,9 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Get value of 'id_semantics' property
 	 */
-	public Identifier getIdSemantics() {
-		return (Identifier) getElements().get(AssetAdministrationShell.IDSEMANTICS);
+	@SuppressWarnings("unchecked")
+	public IIdentifier getIdSemantics() {
+		return new IdentifierFacade((Map<String, Object>) getElements().get(AssetAdministrationShell.IDSEMANTICS));
 	}
 
 	/**
@@ -198,9 +206,10 @@ public class SubmodelFacade implements ISubModel {
 		getElements().put(HasKind.KIND, newValue);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getSemanticId() {
-		return (IReference) map.get(HasSemantics.SEMANTICID);
+		return new ReferenceFacade((Map<String, Object>) map.get(HasSemantics.SEMANTICID));
 	}
 
 	public void setSemanticID(IReference ref) {
@@ -218,7 +227,8 @@ public class SubmodelFacade implements ISubModel {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IReference> getDataSpecificationReferences() {
-		return (Set<IReference>) map.get(HasDataSpecification.HASDATASPECIFICATION);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(HasDataSpecification.HASDATASPECIFICATION);
+		return ReferenceHelper.transform(set);
 	}
 
 	public void setDataSpecificationReferences(Set<IReference> ref) {

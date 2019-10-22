@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasSemantics;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 
 /**
@@ -22,9 +23,10 @@ public class HasSemanticsFacade implements IHasSemantics {
 		this.map = map;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getSemanticId() {
-		return (IReference) map.get(HasSemantics.SEMANTICID);
+		return new ReferenceFacade((Map<String, Object>) map.get(HasSemantics.SEMANTICID));
 	}
 
 	public void setSemanticID(IReference ref) {

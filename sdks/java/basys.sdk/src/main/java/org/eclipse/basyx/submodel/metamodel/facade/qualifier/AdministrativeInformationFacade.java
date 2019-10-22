@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 
@@ -26,7 +27,9 @@ public class AdministrativeInformationFacade implements IAdministrativeInformati
 	@Override
 	@SuppressWarnings("unchecked")
 	public Set<IReference> getDataSpecificationReferences() {
-		return (Set<IReference>) map.get(HasDataSpecification.HASDATASPECIFICATION);
+		// Transform set of maps to set of IReference
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(HasDataSpecification.HASDATASPECIFICATION);
+		return ReferenceHelper.transform(set);
 	}
 
 	public void setDataSpecificationReferences(Set<IReference> ref) {

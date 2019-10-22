@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifier;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
 
@@ -44,14 +45,16 @@ public class QualifierFacade implements IQualifier {
 		map.put(Qualifier.QUALIFIERVALUEID, obj);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getQualifierValueId() {
-		return (IReference) map.get(Qualifier.QUALIFIERVALUEID);
+		return new ReferenceFacade((Map<String, Object>) map.get(Qualifier.QUALIFIERVALUEID));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getSemanticId() {
-		return (IReference) map.get(HasSemantics.SEMANTICID);
+		return new ReferenceFacade((Map<String, Object>) map.get(HasSemantics.SEMANTICID));
 	}
 
 	public void setSemanticID(IReference ref) {

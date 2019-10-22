@@ -7,6 +7,8 @@ import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.map.parts.View;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
@@ -35,12 +37,14 @@ public class ViewFacade implements IView {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IReference> getContainedElement() {
-		return (Set<IReference>) map.get(View.CONTAINEDELEMENT);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(View.CONTAINEDELEMENT);
+		return ReferenceHelper.transform(set);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getSemanticId() {
-		return (IReference) map.get(HasSemantics.SEMANTICID);
+		return new ReferenceFacade((Map<String, Object>) map.get(HasSemantics.SEMANTICID));
 	}
 
 	public void setSemanticID(IReference ref) {
@@ -50,7 +54,8 @@ public class ViewFacade implements IView {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IReference> getDataSpecificationReferences() {
-		return (Set<IReference>) map.get(HasDataSpecification.HASDATASPECIFICATION);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(HasDataSpecification.HASDATASPECIFICATION);
+		return ReferenceHelper.transform(set);
 	}
 
 	public void setDataSpecificationReferences(Set<IReference> ref) {
@@ -72,9 +77,10 @@ public class ViewFacade implements IView {
 		return new ReferableFacade(map).getDescription();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getParent() {
-		return (IReference) map.get(Referable.PARENT);
+		return new ReferenceFacade((Map<String, Object>) map.get(Referable.PARENT));
 	}
 
 	public void setIdShort(String idShort) {
