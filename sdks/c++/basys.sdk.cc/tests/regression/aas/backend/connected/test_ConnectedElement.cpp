@@ -1,12 +1,12 @@
 /*
- * test_ConnectedDataElement  .cpp
+ * test_ConnectedElement  .cpp
  *
  *      Author: wendel
  */
 
 #include <gtest/gtest.h>
 
-#include "aas/backend/connected/ConnectedElement.h"
+#include "backend/connected/aas/ConnectedElement.h"
 #include "vab/core/proxy/IVABElementProxy.h"
 #include "support/VABProxyMock.cpp"
 #include "aas/qualifier/IReferable.h"

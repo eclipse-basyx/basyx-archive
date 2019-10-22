@@ -29,6 +29,13 @@
 namespace basyx {
 namespace aas {
 
+namespace SubmodelPaths {
+  static constexpr char  SUBMODELELEMENT[] = "submodelElement";
+  static constexpr char  PROPERTIES[] = "dataElements";
+  static constexpr char  OPERATIONS[] = "operations";
+}
+
+
 /* *********************************************************************************
  * Sub model interface class
  * *********************************************************************************/
@@ -40,8 +47,8 @@ public:
   virtual std::unordered_map<std::string, std::shared_ptr<submodelelement::property::IProperty>> getProperties() const = 0;
   virtual void setProperties(const std::unordered_map<std::string, std::shared_ptr<submodelelement::property::IProperty>> & properties) = 0;
 
-  virtual std::unordered_map<std::string, std::shared_ptr<IOperation>> getOperations() const = 0;
-  virtual void setOperations(const std::unordered_map<std::string, std::shared_ptr<IOperation>> & operations) = 0;
+  virtual std::unordered_map<std::string, std::shared_ptr<submodelelement::operation::IOperation>> getOperations() const = 0;
+  virtual void setOperations(const std::unordered_map<std::string, std::shared_ptr<submodelelement::operation::IOperation>> & operations) = 0;
 
   virtual std::unordered_map<std::string, basyx::any> getElements() const = 0;
 

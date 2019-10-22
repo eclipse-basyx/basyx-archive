@@ -14,13 +14,18 @@
 namespace basyx {
 namespace aas {
 namespace submodelelement {
+namespace property {
 
-class IReferenceElement : public property::IProperty
+class IReferenceElement
 {
 public:
   virtual ~IReferenceElement() = default;
+
+  virtual void setValue(const basyx::any & ref) = 0;
+  virtual basyx::any getValue() const = 0;
 };
 
+}
 }
 }
 }

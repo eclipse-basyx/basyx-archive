@@ -24,12 +24,12 @@ void SubModel::setProperties(const std::unordered_map<std::string, std::shared_p
   this->properties = properties;
 }
 
-std::unordered_map<std::string, std::shared_ptr<IOperation>> SubModel::getOperations() const
+std::unordered_map<std::string, std::shared_ptr<submodelelement::operation::IOperation>> SubModel::getOperations() const
 {
   return this->operations;
 }
 
-void SubModel::setOperations(const std::unordered_map<std::string, std::shared_ptr<IOperation>> & operations)
+void SubModel::setOperations(const std::unordered_map<std::string, std::shared_ptr<submodelelement::operation::IOperation>> & operations)
 {
   this->properties = properties;
 }

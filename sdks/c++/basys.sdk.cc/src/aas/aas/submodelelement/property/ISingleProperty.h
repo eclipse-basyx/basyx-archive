@@ -17,14 +17,15 @@ namespace aas {
 namespace submodelelement {
 namespace property {
 
-class ISingleProperty : public IProperty
+class ISingleProperty
 {
 
 public:
   virtual ~ISingleProperty() = default;
 
-  virtual basyx::any get() = 0;
-  virtual void set(basyx::any newValue) = 0;
+  virtual basyx::any get() const = 0;
+  virtual void set(const basyx::any & newValue) = 0;
+  virtual std::string getValueType() const = 0;
 
 };
 

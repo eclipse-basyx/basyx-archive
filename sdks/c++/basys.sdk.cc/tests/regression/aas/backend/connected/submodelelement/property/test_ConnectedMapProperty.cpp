@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "aas/backend/connected/submodelelement/property/ConnectedMapProperty.h"
+#include "backend/connected/aas/submodelelement/property/ConnectedMapProperty.h"
 #include "vab/core/proxy/IVABElementProxy.h"
 #include "support/VABProxyMock.cpp"
 

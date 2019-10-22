@@ -15,7 +15,15 @@ target_sources(tests_aas
     backend/connected/test_ConnectedElement.cpp
     backend/connected/submodelelement/property/test_ConnectedMapProperty.cpp
     backend/connected/submodelelement/property/test_ConnectedProperty.cpp
+    backend/connected/submodelelement/property/test_ConnectedReferenceElement.cpp
+    backend/connected/submodelelement/property/test_ConnectedSingleProperty.cpp
+    backend/connected/submodelelement/property/test_ConnectedCollectionProperty.cpp
+    backend/connected/submodelelement/property/file/test_ConnectedFile.cpp
+    backend/connected/submodelelement/property/blob/test_ConnectedBlob.cpp
+    backend/connected/submodelelement/operation/test_ConnectedOperation.cpp
     backend/connected/submodelelement/test_ConnectedRelationshipElement.cpp
+    backend/connected/submodelelement/test_ConnectedSubmodelElement.cpp
+    backend/connected/submodelelement/test_ConnectedSubmodelElementCollection.cpp
 )
 
 target_include_directories(tests_aas PUBLIC ${PROJECT_SOURCE_DIR})

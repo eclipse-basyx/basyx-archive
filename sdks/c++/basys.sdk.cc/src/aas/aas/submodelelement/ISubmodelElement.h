@@ -19,7 +19,7 @@ namespace basyx {
 namespace aas {
 namespace submodelelement {
 
-class ISubmodelElement : public IElement, qualifier::IHasDataSpecification, qualifier::IReferable, IQualifiable, qualifier::IHasSemantics, qualifier::haskind::IHasKind
+class ISubmodelElement : public qualifier::IHasDataSpecification, qualifier::IReferable, IQualifiable, qualifier::IHasSemantics, qualifier::haskind::IHasKind
 {
 public:
   virtual ~ISubmodelElement() = default;

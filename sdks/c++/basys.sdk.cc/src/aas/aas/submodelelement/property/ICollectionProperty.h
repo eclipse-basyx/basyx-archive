@@ -16,17 +16,17 @@ namespace aas {
 namespace submodelelement {
 namespace property {
 
-class ICollectionProperty : public IProperty
+class ICollectionProperty
 {
 
 public:
   virtual ~ICollectionProperty() = default;
 
-  virtual void set(basyx::objectCollection_t collection) = 0;
-  virtual void add(basyx::any newValue) = 0;
-  virtual void remove(basyx::any objectRef) = 0;
-  virtual basyx::objectCollection_t getElements() = 0;
-  virtual int getElementCount() = 0;
+  virtual void set(const basyx::objectCollection_t & collection) const = 0;
+  virtual void add(const basyx::any & newValue) = 0;
+  virtual void remove(const basyx::any & objectRef) = 0;
+  virtual basyx::objectCollection_t getElements() const = 0;
+  virtual int getElementCount() const = 0;
 };
 
 }

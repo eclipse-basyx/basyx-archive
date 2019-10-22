@@ -23,12 +23,12 @@ class IMapProperty
 public:
   virtual ~IMapProperty() = default;
 
-  virtual basyx::any getValue(std::string key) = 0;
-  virtual void put(std::string key, basyx::any value) = 0;
-  virtual void set(basyx::objectMap_t map) = 0;
-  virtual basyx::objectCollection_t getKeys() = 0;
-  virtual int getEntryCount() = 0;
-  virtual void remove(std::string key) = 0;
+  virtual basyx::any getValue(const std::string & key) const = 0;
+  virtual void put(const std::string & key, const basyx::any & value) const = 0;
+  virtual void set(const basyx::objectMap_t & map) const = 0;
+  virtual basyx::objectCollection_t getKeys() const = 0;
+  virtual int getEntryCount() const = 0;
+  virtual void remove(const std::string & key) const = 0;
 
 };
 

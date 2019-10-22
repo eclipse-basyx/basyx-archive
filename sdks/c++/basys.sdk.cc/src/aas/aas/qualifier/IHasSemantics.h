@@ -21,7 +21,6 @@ public:
   virtual ~IHasSemantics() = default;
 
   virtual basyx::any getSemanticId() const = 0;
-  virtual void setSemanticID(const basyx::any & semantic_identifier) = 0;
 };
 
 }

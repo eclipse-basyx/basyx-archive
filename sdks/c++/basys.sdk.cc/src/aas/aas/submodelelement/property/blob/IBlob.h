@@ -22,8 +22,8 @@ class IBlob
 public:
   virtual ~IBlob() = default;
 
-  virtual void setValue(const basyx::any & value) = 0;
-  virtual basyx::any getValue() const = 0;
+  virtual void setValue(const basyx::byte_array & bytes) = 0;
+  virtual basyx::byte_array getValue() const = 0;
 
   virtual void setMimeType(const std::string & mimeType) = 0;
   virtual std::string getMimeType() const = 0;

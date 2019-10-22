@@ -16,7 +16,10 @@ namespace mockups {
 enum ProxyType
 {
   Map,
-  Default
+  Default,
+  Collection,
+  ByteArray,
+  Bool
 };
 
 template<ProxyType t>
@@ -34,6 +37,12 @@ public:
       return basyx::any("called with " + elementPath.toString());
     if ( t == ProxyType::Map )
       return basyx::any(this->map);
+    if ( t == ProxyType::Collection )
+      return basyx::any(this->collection);
+    if ( t == ProxyType::ByteArray )
+      return basyx::byte_array();
+    if ( t == ProxyType::Bool )
+      return basyx::any(true);
   }
 
 
@@ -47,6 +56,8 @@ public:
   virtual void createElement(const VABPath & elementPath, const basyx::any & newValue) override
   {
     this->createElement_calls++;
+
+    this->createElementCallValues.push_back(std::make_pair(elementPath.toString(), newValue));
   }
 
   virtual void deleteElement(const VABPath & elementPath) override
@@ -59,6 +70,8 @@ public:
   virtual void deleteElement(const VABPath & elementPath, const basyx::any & value) override
   {
     this->deleteElement2_calls++;
+
+    this->deleteElementCallValues.push_back(std::make_pair(elementPath.toString(), value));
   }
 
   virtual basyx::any invoke(const VABPath & elementPath, basyx::objectCollection_t & parameter) override
@@ -80,12 +93,19 @@ public:
   int invoke_calls = 0;
 
   std::vector<std::pair<std::string, basyx::any>> updateElementCallValues;
+  std::vector<std::pair<std::string, basyx::any>> createElementCallValues;
+  std::vector<std::pair<std::string, basyx::any>> deleteElementCallValues;
   std::vector<std::string> getElementCallValues;
   std::vector<std::string> removeElementCallValues;
   basyx::objectMap_t map;
+  basyx::objectCollection_t collection;
 };
 
 using VABProxyMock = VABProxyMockUp<ProxyType::Default>;
+using VABProxyMockCollection = VABProxyMockUp<ProxyType::Collection>;
+using VABProxyMockByteArray = VABProxyMockUp<ProxyType::ByteArray>;
+using VABProxyMockMap = VABProxyMockUp<ProxyType::Map>;
+using VABProxyMockBool = VABProxyMockUp<ProxyType::Bool>;
 
 }
 }
