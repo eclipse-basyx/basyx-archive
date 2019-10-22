@@ -21,6 +21,7 @@ namespace paths {
   static constexpr char PARENTS[] = "parentReferences";
   static constexpr char SEMANTICIDS[] = "semanticIdReferences";
   static constexpr char QUALIFIERS[] = "qualifierReferences";
+  static constexpr char REFERENCEPATH[] = "semanticIdentifier";
 }
 
 

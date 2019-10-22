@@ -32,13 +32,11 @@ class SubModel : public ISubModel
 public:
   SubModel();
 
-  virtual void setProperties(const std::unordered_map<std::string, std::shared_ptr<submodelelement::property::IProperty>> & properties) override;
-  virtual void setOperations(const std::unordered_map<std::string, std::shared_ptr<submodelelement::operation::IOperation>> & operations) override;
+  virtual void setProperties(const basyx::objectMap_t & properties) override;
+  virtual void setOperations(const basyx::objectMap_t & operations) override;
 
 private:
-  std::unordered_map<std::string, std::shared_ptr<submodelelement::property::IProperty>> properties;
-  std::unordered_map<std::string, std::shared_ptr<submodelelement::operation::IOperation>> operations;
-  std::unordered_map<std::string, basyx::any> submodel_elements;
+  basyx::objectMap_t properties, operations, submodel_elements;
 };
 
 

@@ -28,7 +28,6 @@ public:
   virtual ~IHasDataSpecification() = default;
 
   virtual basyx::objectCollection_t getDataSpecificationReferences() const = 0;
-  //virtual void setDataSpecificationReferences(const basyx::objectCollection_t & references) = 0;
 };
 
 }

@@ -7,9 +7,11 @@
 #ifndef BASYX_METAMODEL_IIdentifiable_H_
 #define BASYX_METAMODEL_IIdentifiable_H_
 
-
 #include "aas/identifier/IIdentifier.h"
 #include "IAdministrativeInformation.h"
+#include "basyx/types.h"
+
+#include "aas/qualifier/IReferable.h"
 
 #include <string>
 
@@ -17,16 +19,13 @@ namespace basyx {
 namespace aas {
 namespace qualifier {
 
-class IIdentifiable
+class IIdentifiable : public IReferable
 {
 public:
   virtual ~IIdentifiable() = default;
 
-  virtual void setAdministration(const std::string & version, const std::string & revision) = 0;
-  virtual std::shared_ptr<IAdministrativeInformation> getAdministration() const = 0;
-
-  virtual void setIdentification(const std::string & idType, const std::string & id) = 0;
-  virtual std::shared_ptr<IIdentifier> getIdentification() const = 0;
+  virtual basyx::any getAdministration() const = 0;
+  virtual basyx::any getIdentification() const = 0;
 
 };
 
