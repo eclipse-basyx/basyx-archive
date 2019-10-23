@@ -86,7 +86,7 @@ namespace basyx {
 
         std::string GetStringContent()
         {
-          return any_cast<std::string>(*this);
+          return this->Get<std::string>();
         };
 
 		bool IsInvokable() const noexcept
