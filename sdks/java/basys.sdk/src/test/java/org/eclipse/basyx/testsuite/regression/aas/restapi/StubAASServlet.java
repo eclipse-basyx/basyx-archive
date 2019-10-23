@@ -5,8 +5,10 @@ import java.util.Collections;
 import org.eclipse.basyx.aas.factory.java.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
@@ -26,7 +28,7 @@ public class StubAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 		super(new VABMultiSubmodelProvider());
 
 		MetaModelElementFactory factory = new MetaModelElementFactory();
-		AssetAdministrationShell aas = factory.create(new AssetAdministrationShell(), Collections.singleton(SMID));
+		AssetAdministrationShell aas = factory.create(new AssetAdministrationShell(), Collections.singleton(new SubmodelDescriptor(SMID, IdentifierType.Custom, "")));
 		aas.put(Referable.IDSHORT, AASID);
 
 		getModelProvider().setAssetAdministrationShell(new AASModelProvider(aas));

@@ -219,7 +219,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 		Map<String, Object> sm = (Map<String, Object>) newSM;
 		SubModelProvider smProvider = new SubModelProvider(sm);
 		submodel_providers.put((String) sm.get(Referable.IDSHORT), smProvider);
-		aas_provider.createValue(AssetAdministrationShell.SUBMODEL, sm);
+		aas_provider.createValue(AssetAdministrationShell.SUBMODELS, sm);
 	}
 
 
@@ -231,7 +231,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 		if (pathElements.length == 3) {
 			// Delete Submodel from registered AAS
 			String smId = pathElements[2];
-			aas_provider.deleteValue("/" + AssetAdministrationShell.SUBMODEL + "/" + smId);
+			aas_provider.deleteValue("/" + AssetAdministrationShell.SUBMODELS + "/" + smId);
 			submodel_providers.remove(smId);
 		} else if (propertyPath.length() > 0) {
 			submodel_providers.get(pathElements[2]).deleteValue(propertyPath);

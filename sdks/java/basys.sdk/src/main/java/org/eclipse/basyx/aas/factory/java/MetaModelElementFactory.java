@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
@@ -101,7 +102,7 @@ public class MetaModelElementFactory {
 	 * @param submodels
 	 * @return
 	 */
-	public AssetAdministrationShell create(AssetAdministrationShell shell, Set<String> submodels) {
+	public AssetAdministrationShell create(AssetAdministrationShell shell, Set<SubmodelDescriptor> submodels) {
 		AssetAdministrationShell ret = new AssetAdministrationShell();
 		ret.putAll(shell);
 		submodels.stream().forEach(s -> ret.addSubModel(s));

@@ -14,6 +14,7 @@ import org.eclipse.basyx.aas.metamodel.facade.parts.ConceptDictionaryFacade;
 import org.eclipse.basyx.aas.metamodel.facade.parts.ViewFacade;
 import org.eclipse.basyx.aas.metamodel.facade.security.SecurityFacade;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
@@ -29,6 +30,8 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Facade providing access to a map containing the AssetAdministrationShell
@@ -39,7 +42,10 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
  */
 public class AssetAdministrationShellFacade implements IAssetAdministrationShell {
 
+	private static Logger logger = LoggerFactory.getLogger(AssetAdministrationShellFacade.class);
+
 	private Map<String, Object> map;
+
 
 	public AssetAdministrationShellFacade(Map<String, Object> map) {
 		super();
@@ -77,16 +83,16 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 	}
 
 	@Override
-	public void setSubModel(Set<IReference> submodels) {
-		map.put(AssetAdministrationShell.SUBMODEL, submodels);
+	public void setSubModels(Set<SubmodelDescriptor> submodels) {
+		map.put(AssetAdministrationShell.SUBMODELS, submodels);
 
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Set<IReference> getSubModel() {
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(AssetAdministrationShell.SUBMODEL);
-		return ReferenceHelper.transform(set);
+	public Set<SubmodelDescriptor> getSubModelDescriptors() {
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(AssetAdministrationShell.SUBMODELS);
+		return set.stream().map(m -> new SubmodelDescriptor(m)).collect(Collectors.toSet());
 	}
 
 	public void setViews(Set<IView> views) {
@@ -161,11 +167,6 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 	}
 
 	@Override
-	public void addSubModel(ISubModel subModel) {
-		throw new RuntimeException("addSubModel on local copy is not supported");
-	}
-
-	@Override
 	public String getCategory() {
 		return (String) map.get(Referable.CATEGORY);
 	}
@@ -196,6 +197,13 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 
 	public void setParent(IReference obj) {
 		map.put(Referable.PARENT, obj);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void addSubModel(SubmodelDescriptor descriptor) {
+		logger.trace("adding Submodel", descriptor.getId());
+		((Set<SubmodelDescriptor>) map.get(AssetAdministrationShell.SUBMODELS)).add(descriptor);
 	}
 
 }

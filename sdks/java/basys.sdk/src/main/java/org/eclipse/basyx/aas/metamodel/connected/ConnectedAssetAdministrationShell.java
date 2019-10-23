@@ -16,6 +16,7 @@ import org.eclipse.basyx.aas.metamodel.facade.parts.ConceptDictionaryFacade;
 import org.eclipse.basyx.aas.metamodel.facade.parts.ViewFacade;
 import org.eclipse.basyx.aas.metamodel.facade.security.SecurityFacade;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
@@ -97,15 +98,15 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	}
 
 	@Override
-	public void setSubModel(Set<IReference> submodels) {
+	public void setSubModels(Set<SubmodelDescriptor> submodels) {
 		throwNotSupportedException();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Set<IReference> getSubModel() {
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.SUBMODEL);
-		return set.stream().map(x -> new ReferenceFacade(x)).collect(Collectors.toSet());
+	public Set<SubmodelDescriptor> getSubModelDescriptors() {
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.SUBMODELS);
+		return set.stream().map(x -> new SubmodelDescriptor(x)).collect(Collectors.toSet());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -138,8 +139,8 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	}
 
 	@Override
-	public void addSubModel(ISubModel subModel) {
-		throwNotSupportedException();
+	public void addSubModel(SubmodelDescriptor subModel) {
+		getProxy().createValue("/aas/submodels", subModel);
 	}
 
 	@Override

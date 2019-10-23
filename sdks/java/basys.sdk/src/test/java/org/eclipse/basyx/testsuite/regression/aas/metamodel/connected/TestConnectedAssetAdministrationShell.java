@@ -61,8 +61,8 @@ public class TestConnectedAssetAdministrationShell {
 		sm.setIdShort(smId);
 
 		// Create Set containing reference to the created SubModel
-		Set<String> refs = new HashSet<>();
-		refs.add(smId);
+		Set<SubmodelDescriptor> refs = new HashSet<>();
+		refs.add(new SubmodelDescriptor(smId, IdentifierType.Custom, ""));
 
 		// Create an AAS containing a reference to the created SubModel
 		AssetAdministrationShell aas = factory.create(new AssetAdministrationShell(), refs);

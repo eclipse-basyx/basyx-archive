@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.eclipse.basyx.aas.factory.java.MetaModelElementFactory;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 
 public class DeviceAdministrationShellFactory {
 	
@@ -12,8 +14,8 @@ public class DeviceAdministrationShellFactory {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 		
 		//create the aas, add submodel to aas using VABMultiSubmodelProvider 
-		Set<String> refs = new HashSet<>();
-		refs.add(submodelid);
+		Set<SubmodelDescriptor> refs = new HashSet<>();
+		refs.add(new SubmodelDescriptor(submodelid, IdentifierType.Custom, ""));
 		AssetAdministrationShell aas = factory.create(new AssetAdministrationShell(), refs);
 		aas.put("idshort", aasid);
 

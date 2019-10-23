@@ -1,7 +1,6 @@
 package org.eclipse.basyx.aas.metamodel.map;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -26,18 +25,12 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
-import org.eclipse.basyx.submodel.metamodel.map.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.map.reference.enums.KeyType;
 import org.eclipse.basyx.vab.model.VABModelMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * AssetAdministrationShell class <br/>
@@ -49,13 +42,9 @@ import org.slf4j.LoggerFactory;
  */
 
 public class AssetAdministrationShell extends VABModelMap<Object> implements IAssetAdministrationShell {
-	
-	private static Logger logger = LoggerFactory.getLogger(AssetAdministrationShell.class);
-
 	public static final String SECURITY = "security";
 	public static final String DERIVEDFROM = "derivedFrom";
 	public static final String ASSET = "asset";
-	public static final String SUBMODEL = "submodel";
 	public static final String SUBMODELS = "submodels";
 	public static final String VIEWS = "views";
 	public static final String CONCEPTDICTIONARY = "conceptDictionary";
@@ -85,13 +74,12 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		put(SECURITY, null);
 		put(DERIVEDFROM, null);
 		put(ASSET, new Asset());
-		put(SUBMODEL, new HashSet<Reference>());
 		put(SUBMODELS, new HashSet<SubmodelDescriptor>());
 		put(VIEWS, new HashSet<View>());
 		put(CONCEPTDICTIONARY, new HashSet<ConceptDictionary>());
 	}
 
-	public AssetAdministrationShell(Reference derivedFrom, Security security, Asset asset, Set<Reference> submodels, Set<ConceptDictionary> dictionaries, Set<View> views) {
+	public AssetAdministrationShell(Reference derivedFrom, Security security, Asset asset, Set<SubmodelDescriptor> submodels, Set<ConceptDictionary> dictionaries, Set<View> views) {
 		// Add qualifiers
 		putAll(new Identifiable());
 		putAll(new HasDataSpecification());
@@ -100,7 +88,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		put(SECURITY, security);
 		put(DERIVEDFROM, derivedFrom);
 		put(ASSET, asset);
-		put(SUBMODEL, submodels);
+		put(SUBMODELS, submodels);
 		put(VIEWS, views);
 		put(CONCEPTDICTIONARY, dictionaries);
 	}
@@ -118,31 +106,9 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		return (List<HashMap<String, String>>) get(ENDPOINTS);
 	}
 
-	/**
-	 * Add a submodel as reference
-	 */
-	@Override
-	public void addSubModel(ISubModel subModel) {
-		logger.trace("adding Submodel {}", subModel.getIdShort());
-		addSubModel(subModel.getIdShort());
-	}
-
-	@SuppressWarnings("unchecked")
-	public void addSubModelHack(SubModel subModel, String endpoint, String endpointType) {
-		logger.trace("adding Submodel {}", subModel.getIdShort());
-		SubmodelDescriptor desc = new SubmodelDescriptor(subModel, endpoint, endpointType);
-		((Set<SubmodelDescriptor>) get(SUBMODELS)).add(desc);
-
-	}
-
 	@SuppressWarnings("unchecked")
 	public Set<SubmodelDescriptor> getSubmodelDescriptors() {
 		return ((Set<SubmodelDescriptor>) get(SUBMODELS));
-	}
-
-	@SuppressWarnings("unchecked")
-	public void addSubModel(String id) {
-		((Set<Reference>) get(SUBMODEL)).add(new Reference(Collections.singletonList(new Key(KeyElements.Submodel, false, id, KeyType.Custom))));
 	}
 
 	@Override
@@ -209,13 +175,8 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@Override
-	public void setSubModel(Set<IReference> submodels) {
-		new AssetAdministrationShellFacade(this).setSubModel(submodels);
-	}
-
-	@Override
-	public Set<IReference> getSubModel() {
-		return new AssetAdministrationShellFacade(this).getSubModel();
+	public void setSubModels(Set<SubmodelDescriptor> submodels) {
+		new AssetAdministrationShellFacade(this).setSubModels(submodels);
 	}
 
 	public void setViews(Set<IView> views) {
@@ -271,5 +232,16 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 
 	public void setParent(IReference obj) {
 		new ReferableFacade(this).setParent(obj);
+	}
+
+	@Override
+	public void addSubModel(SubmodelDescriptor descriptor) {
+		new AssetAdministrationShellFacade(this).addSubModel(descriptor);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Set<SubmodelDescriptor> getSubModelDescriptors() {
+		return (Set<SubmodelDescriptor>) get(SUBMODELS);
 	}
 }

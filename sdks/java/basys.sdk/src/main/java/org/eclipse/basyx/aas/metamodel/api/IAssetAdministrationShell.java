@@ -7,6 +7,7 @@ import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.submodel.metamodel.api.IElement;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasDataSpecification;
@@ -34,7 +35,7 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	 * @param subModel
 	 *            The added sub model
 	 */
-	public void addSubModel(ISubModel subModel);
+	public void addSubModel(SubmodelDescriptor subModel);
 
 	public ISecurity getSecurity();
 
@@ -42,9 +43,9 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 
 	public IAsset getAsset();
 
-	public void setSubModel(Set<IReference> submodels);
+	public void setSubModels(Set<SubmodelDescriptor> submodels);
 
-	public Set<IReference> getSubModel();
+	public Set<SubmodelDescriptor> getSubModelDescriptors();
 
 	public Set<IView> getViews();
 
