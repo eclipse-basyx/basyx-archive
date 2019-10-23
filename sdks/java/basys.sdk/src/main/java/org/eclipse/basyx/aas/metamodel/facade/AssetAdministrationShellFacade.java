@@ -5,9 +5,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
+import org.eclipse.basyx.aas.metamodel.facade.parts.AssetFacade;
 import org.eclipse.basyx.aas.metamodel.facade.parts.ConceptDictionaryFacade;
 import org.eclipse.basyx.aas.metamodel.facade.parts.ViewFacade;
 import org.eclipse.basyx.aas.metamodel.facade.security.SecurityFacade;
@@ -70,8 +72,8 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public IReference getAsset() {
-		return new ReferenceFacade((Map<String, Object>) map.get(AssetAdministrationShell.ASSET));
+	public IAsset getAsset() {
+		return new AssetFacade((Map<String, Object>) map.get(AssetAdministrationShell.ASSET));
 	}
 
 	@Override

@@ -7,9 +7,11 @@ import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
+import org.eclipse.basyx.aas.metamodel.facade.parts.AssetFacade;
 import org.eclipse.basyx.aas.metamodel.facade.parts.ConceptDictionaryFacade;
 import org.eclipse.basyx.aas.metamodel.facade.parts.ViewFacade;
 import org.eclipse.basyx.aas.metamodel.facade.security.SecurityFacade;
@@ -90,8 +92,8 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public IReference getAsset() {
-		return new ReferenceFacade((Map<String, Object>) getElem().getPath(AssetAdministrationShell.ASSET));
+	public IAsset getAsset() {
+		return new AssetFacade((Map<String, Object>) getElem().getPath(AssetAdministrationShell.ASSET));
 	}
 
 	@Override

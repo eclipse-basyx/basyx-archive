@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.metamodel.api;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
@@ -39,7 +40,7 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 
 	public IReference getDerivedFrom();
 
-	public IReference getAsset();
+	public IAsset getAsset();
 
 	public void setSubModel(Set<IReference> submodels);
 

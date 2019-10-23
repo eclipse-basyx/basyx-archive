@@ -9,11 +9,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
 import org.eclipse.basyx.aas.metamodel.facade.AssetAdministrationShellFacade;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.parts.View;
 import org.eclipse.basyx.aas.metamodel.map.security.Security;
@@ -34,9 +36,8 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.reference.enums.KeyType;
 import org.eclipse.basyx.vab.model.VABModelMap;
-
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * AssetAdministrationShell class <br/>
@@ -83,14 +84,14 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		// Add attributes
 		put(SECURITY, null);
 		put(DERIVEDFROM, null);
-		put(ASSET, null);
+		put(ASSET, new Asset());
 		put(SUBMODEL, new HashSet<Reference>());
 		put(SUBMODELS, new HashSet<SubmodelDescriptor>());
 		put(VIEWS, new HashSet<View>());
 		put(CONCEPTDICTIONARY, new HashSet<ConceptDictionary>());
 	}
 
-	public AssetAdministrationShell(Reference derivedFrom, Security security, Reference asset, Set<Reference> submodels, Set<ConceptDictionary> dictionaries, Set<View> views) {
+	public AssetAdministrationShell(Reference derivedFrom, Security security, Asset asset, Set<Reference> submodels, Set<ConceptDictionary> dictionaries, Set<View> views) {
 		// Add qualifiers
 		putAll(new Identifiable());
 		putAll(new HasDataSpecification());
@@ -203,7 +204,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@Override
-	public IReference getAsset() {
+	public IAsset getAsset() {
 		return new AssetAdministrationShellFacade(this).getAsset();
 	}
 
