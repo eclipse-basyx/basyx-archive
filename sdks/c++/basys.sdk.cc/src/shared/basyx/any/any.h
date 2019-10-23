@@ -84,6 +84,11 @@ namespace basyx {
             return any_cast_ptr<T>(this);
         };
 
+        std::string GetStringContent()
+        {
+          return any_cast<std::string>(*this);
+        };
+
 		bool IsInvokable() const noexcept
 		{
 			return this->content->is_invokable();
