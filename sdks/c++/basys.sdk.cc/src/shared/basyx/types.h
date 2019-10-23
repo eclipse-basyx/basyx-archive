@@ -20,10 +20,10 @@ namespace basyx {
     using objectMap_t = std::unordered_map<std::string, basyx::any>;
 
     template<class T>
-    using specificCollection_t = std::vector<T>;
+    using specificCollection_t = std::vector<std::shared_ptr<T>>;
 
     template<class T>
-    using specificMap_t = std::unordered_map<std::string, T>;
+    using specificMap_t = std::unordered_map<std::string, std::shared_ptr<T>>;
 
   //using objectSet_t = std::unordered_set<basyx::any>;
     using byte = uint8_t;
