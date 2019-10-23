@@ -27,9 +27,7 @@ public:
   basyx::objectCollection_t getQualifier() const override;
   basyx::any getSemanticId() const override;
   std::string getHasKindReference() const override;
-
-
-
+   
 protected:
   std::string getIdWithLocalCheck() const;
   void setIdWithLocalCheck(const std::string & id);

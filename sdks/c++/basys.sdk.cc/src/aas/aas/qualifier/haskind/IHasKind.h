@@ -25,7 +25,6 @@ public:
   virtual ~IHasKind() = default;
 
   virtual std::string getHasKindReference() const = 0;
-  //virtual void setHasKindReference(const std::string & kind) = 0;
 };
 
 

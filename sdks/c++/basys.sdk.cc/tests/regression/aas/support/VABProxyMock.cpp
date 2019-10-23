@@ -77,7 +77,8 @@ public:
   virtual basyx::any invoke(const VABPath & elementPath, basyx::objectCollection_t & parameter) override
   {
     this->invoke_calls++;
-    return basyx::any();
+    this->invokeCallParameter = parameter;
+    return basyx::any("called with " + elementPath.toString());
   }
 
   int overallMockCalls()
@@ -98,7 +99,7 @@ public:
   std::vector<std::string> getElementCallValues;
   std::vector<std::string> removeElementCallValues;
   basyx::objectMap_t map;
-  basyx::objectCollection_t collection;
+  basyx::objectCollection_t collection, invokeCallParameter;
 };
 
 using VABProxyMock = VABProxyMockUp<ProxyType::Default>;

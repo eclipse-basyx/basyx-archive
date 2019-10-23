@@ -4,8 +4,8 @@
  *      Author: wendel
  */
 
-#ifndef AAS_BACKEND_SUBMODELELEMENT_PROPERTY_CONNECTEDOPERATION_H_
-#define AAS_BACKEND_SUBMODELELEMENT_PROPERTY_CONNECTEDOPERATION_H_
+#ifndef AAS_BACKEND_SUBMODELELEMENT_OPERATION_CONNECTEDOPERATION_H_
+#define AAS_BACKEND_SUBMODELELEMENT_OPERATION_CONNECTEDOPERATION_H_
 
 #include "aas/submodelelement/operation/IOperation.h"
 #include "vab/core/proxy/IVABElementProxy.h"
@@ -28,10 +28,8 @@ public:
 
   virtual basyx::objectCollection_t getParameterTypes() const override;
   virtual basyx::objectCollection_t getReturnTypes() const override;
-
-  //todo do be implemented
   virtual basyx::objectMap_t getInvocable() const override;
-  virtual basyx::any invoke(const basyx::objectCollection_t & parameters) const override;
+  virtual basyx::any invoke(basyx::objectCollection_t & parameters) const override;
 };
  
 }

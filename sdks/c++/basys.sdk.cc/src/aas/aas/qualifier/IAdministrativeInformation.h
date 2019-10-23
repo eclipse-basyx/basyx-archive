@@ -16,15 +16,16 @@ namespace basyx {
 namespace aas {
 namespace qualifier {
 
+namespace administrationPaths {
+  static constexpr char administrationPath[] = "administrationPath";
+}
+
 class IAdministrativeInformation : public IHasDataSpecification
 {
 public:
   virtual ~IAdministrativeInformation() = default;
 
-  virtual void setVersion(const std::string & version) = 0;
   virtual std::string getVersion() const = 0;
-
-  virtual void setRevision(const std::string & revision) = 0;
   virtual std::string getRevision() const = 0;
 };
 

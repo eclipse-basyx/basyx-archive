@@ -23,6 +23,7 @@
 #include "aas/qualifier/IHasDataSpecification.h"
 #include "aas/qualifier/haskind/IHasKind.h"
 #include "aas/submodelelement/operation/IOperation.h"
+#include "impl/hashmap/IVABElementContainer.h"
 #include "basyx/types.h"
 
 
@@ -39,18 +40,13 @@ namespace SubmodelPaths {
 /* *********************************************************************************
  * Sub model interface class
  * *********************************************************************************/
-class ISubModel : public qualifier::IHasSemantics, qualifier::IIdentifiable, qualifier::IHasDataSpecification, qualifier::haskind::IHasKind
+class ISubModel : public qualifier::IHasSemantics, qualifier::IIdentifiable, qualifier::IHasDataSpecification, qualifier::haskind::IHasKind, impl::IVABElementContainer
 {
 
 public:
   virtual ~ISubModel() = default;
-  virtual std::unordered_map<std::string, std::shared_ptr<submodelelement::property::IProperty>> getProperties() const = 0;
-  virtual void setProperties(const std::unordered_map<std::string, std::shared_ptr<submodelelement::property::IProperty>> & properties) = 0;
-
-  virtual std::unordered_map<std::string, std::shared_ptr<submodelelement::operation::IOperation>> getOperations() const = 0;
-  virtual void setOperations(const std::unordered_map<std::string, std::shared_ptr<submodelelement::operation::IOperation>> & operations) = 0;
-
-  virtual std::unordered_map<std::string, basyx::any> getElements() const = 0;
+  virtual void setProperties(const basyx::objectMap_t & properties) = 0;
+  virtual void setOperations(const basyx::objectMap_t & operations) = 0;
 
 };
 

@@ -27,12 +27,12 @@ std::string ConnectedOperation::getId() const
 
 basyx::objectCollection_t ConnectedOperation::getParameterTypes() const
 {
-  return this->getProxyCollection(std::string(submodelelement::operation::OperationPaths::IN));
+  return this->getProxyCollection(std::string(submodelelement::operation::OperationPaths::INPUT));
 }
 
 basyx::objectCollection_t ConnectedOperation::getReturnTypes() const
 {
-  return this->getProxyCollection(std::string(submodelelement::operation::OperationPaths::OUT));
+  return this->getProxyCollection(std::string(submodelelement::operation::OperationPaths::OUTPUT));
 }
 
 basyx::objectMap_t ConnectedOperation::getInvocable() const
@@ -40,9 +40,10 @@ basyx::objectMap_t ConnectedOperation::getInvocable() const
   return basyx::objectMap_t();
 }
 
-basyx::any ConnectedOperation::invoke(const basyx::objectCollection_t & parameters) const
+basyx::any ConnectedOperation::invoke(basyx::objectCollection_t & parameters) const
 {
-  return basyx::any();
+  return this->getProxy()->invoke("", parameters);
+
 }
 
 }
