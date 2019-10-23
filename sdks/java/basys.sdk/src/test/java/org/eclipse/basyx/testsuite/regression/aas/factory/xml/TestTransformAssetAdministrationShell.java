@@ -71,11 +71,6 @@ public class TestTransformAssetAdministrationShell {
 			"                    <aas:conceptDescriptionRefs>\r\n" + 
 			"                        <aas:conceptDescriptionRef>\r\n" + 
 			"                            <aas:keys>\r\n" + 
-			"                                <aas:key type=\"ConceptDescription\" local=\"true\" idType=\"URI\">www.festo.com/dic/08111234</aas:key>\r\n" + 
-			"                            </aas:keys>\r\n" + 
-			"                        </aas:conceptDescriptionRef>\r\n" + 
-			"                        <aas:conceptDescriptionRef>\r\n" + 
-			"                            <aas:keys>\r\n" + 
 			"                                <aas:key type=\"ConceptDescription\" local=\"true\" idType=\"IRDI\">0173-1#02-BAA120#007</aas:key>\r\n" + 
 			"                            </aas:keys>\r\n" + 
 			"                        </aas:conceptDescriptionRef>\r\n" + 
