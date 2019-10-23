@@ -18,6 +18,13 @@
 namespace basyx {
     using objectCollection_t = std::vector<basyx::any>;
     using objectMap_t = std::unordered_map<std::string, basyx::any>;
+
+    template<class T>
+    using specificCollection_t = std::vector<T>;
+
+    template<class T>
+    using specificMap_t = std::unordered_map<std::string, T>;
+
   //using objectSet_t = std::unordered_set<basyx::any>;
     using byte = uint8_t;
     using byte_array = std::vector<byte>;
