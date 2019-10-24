@@ -13,8 +13,10 @@ import org.eclipse.basyx.components.servlet.submodel.AASServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -80,11 +82,13 @@ public class ConnectToSubModelEndpoints {
 		ModelUrn      aasURN         = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001");
 		String        aasSrvURL      = "http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer/aas";
 		// - Sub model ID
-		String        subModelId    = "exampleSM";
+		String smIdShort = "exampleSM";
+		IIdentifier smId = new Identifier(IdentifierType.Custom, "exampleSMId");
 		// - Create AAS descriptor and sub model descriptor
 		AASDescriptor aasDescriptor = new AASDescriptor(aasURN, aasSrvURL);
-		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelId, IdentifierType.URI,
-				VABPathTools.concatenatePaths(aasSrvURL, "submodels", subModelId));
+		String smEndpoint = VABPathTools.concatenatePaths(aasSrvURL, "submodels", smIdShort);
+		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(smId.getId(), smId.getIdType(),
+				smEndpoint);
 		// - Add sub model descriptor to AAS descriptor
 		aasDescriptor.addSubmodelDescriptor(submodelDescriptor);
 		
@@ -98,7 +102,8 @@ public class ConnectToSubModelEndpoints {
 		
 		// Create sub model
 		SubModel submodel = new SubModel();
-		submodel.setIdShort(subModelId);
+		submodel.setIdShort(smIdShort);
+		submodel.setIdentification(smId.getIdType(), smId.getId());
 
 		// - Add example properties to sub model
 		SingleProperty prop1 = new SingleProperty(7);
@@ -115,7 +120,7 @@ public class ConnectToSubModelEndpoints {
 
 	
 		// Connect to sub model using BaSyx SDK
-		ISubModel connSM = connManager.retrieveSubModel(aasURN, subModelId);
+		ISubModel connSM = connManager.retrieveSubModel(aasURN, smId);
 
 		
 		// Read property values from sub model
@@ -127,7 +132,7 @@ public class ConnectToSubModelEndpoints {
 
 		
 		// Check property values
-		assertTrue(smID.equals(subModelId));
+		assertTrue(smID.equals(smIdShort));
 		assertTrue(prop1Id.equals("prop1"));
 		assertTrue(prop1Val == 7);
 		assertTrue(prop2Id.equals("prop2"));

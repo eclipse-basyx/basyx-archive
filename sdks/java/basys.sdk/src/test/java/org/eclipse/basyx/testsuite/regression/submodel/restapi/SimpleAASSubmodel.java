@@ -27,10 +27,10 @@ public class SimpleAASSubmodel extends SubModel {
 	/**
 	 * Constructor
 	 */
-	public SimpleAASSubmodel(String id) {
+	public SimpleAASSubmodel(String idShort) {
 		// Create sub model
 
-		setIdShort(id);
+		setIdShort(idShort);
 
 		// Create example properties
 		MetaModelElementFactory fac = new MetaModelElementFactory();

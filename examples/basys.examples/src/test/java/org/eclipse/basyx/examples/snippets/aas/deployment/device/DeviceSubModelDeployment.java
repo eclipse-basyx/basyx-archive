@@ -7,9 +7,9 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
@@ -39,8 +39,9 @@ public class DeviceSubModelDeployment {
 		// - Create sub model
 		SubModel submodel = new SubModel();
 		// - Set sub model ID "SampleSM" to full qualified ID urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003
+		IIdentifier smId = new ModelUrn("urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003");
 		submodel.setIdShort("SampleSM");
-		submodel.setIdentification(IdentifierType.URI, "urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003");
+		submodel.setIdentification(smId.getIdType(), smId.getId());
 		// - Add example properties
 		SingleProperty prop1 = new SingleProperty(7);
 		prop1.setIdShort("prop1");
@@ -63,8 +64,7 @@ public class DeviceSubModelDeployment {
 		// We pre-register the aas endpoints to the dynamic BaSyx server
 		ExampleAASRegistry registry = new ExampleAASRegistry();
 		registry.addAASMapping("", ""); // No AAS is provided in this example
-		registry.addSubmodelMapping("", "urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003",
-				"basyx://localhost:9998/aas/submodels/SampleSM");
+		registry.addSubmodelMapping("", smId.getId(), "basyx://localhost:9998/aas/submodels/SampleSM");
 		
 		// Create manager using the directory stub an the HTTPConnectorProvider
 		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(registry,
@@ -73,7 +73,7 @@ public class DeviceSubModelDeployment {
 		
 		// Create and connect SDK connector
 		// - Retrieve sub model
-		ISubModel subModel = manager.retrieveSubModel(new ModelUrn(""), "urn:de.FHG:devices.es.iese:SampleSM:1.0:3:x-509#003");
+		ISubModel subModel = manager.retrieveSubModel(new ModelUrn(""), smId);
 		
 		// Retrieve sub model values and compare to expected values
 		String submodelId = subModel.getIdShort();

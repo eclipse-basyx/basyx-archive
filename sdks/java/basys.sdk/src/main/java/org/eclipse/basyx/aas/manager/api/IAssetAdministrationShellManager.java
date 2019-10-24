@@ -4,8 +4,8 @@ import java.util.Collection;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 
 
@@ -19,51 +19,33 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 public interface IAssetAdministrationShellManager {
 	/**
 	 * Retrieve an AAS based on its ID
-	 * 
-	 * @param id
-	 * @return
-	 * @throws Exception
 	 */
-	public IAssetAdministrationShell retrieveAAS(ModelUrn aasUrn) throws Exception;
-	
+	public IAssetAdministrationShell retrieveAAS(IIdentifier aasId) throws Exception;
 	
 	/**
 	 * Retrieve all local AAS from the technology layer
-	 * 
-	 * @return
 	 */
 	public Collection<IAssetAdministrationShell> retrieveAASAll();
 	
 	/**
-	 * Creates an AAS on a remote server. Assumes that the urn is already registered
+	 * Creates an AAS on a remote server. Assumes that the AAS is already registered
 	 * in the directory
-	 * 
-	 * @param urn
 	 */
-	void createAAS(AssetAdministrationShell aas, ModelUrn urn);
+	void createAAS(AssetAdministrationShell aas, IIdentifier aasId);
 	
 	/**
 	 * Unlink an AAS from the system
-	 * 
-	 * @param id
-	 * @throws Exception
 	 */
 	void deleteAAS(String id) throws Exception;
 
 	/**
 	 * Retrieves a submodel
-	 * 
-	 * @param aasUrn
-	 * @param subModelID
-	 * @return
 	 */
-	ISubModel retrieveSubModel(ModelUrn aasUrn, String subModelId);
+	ISubModel retrieveSubModel(IIdentifier aasId, IIdentifier subModelId);
 
 	/**
-	 * Creates a submodel on a remote server. Assumes that the urn is already
+	 * Creates a submodel on a remote server. Assumes that the AAS is already
 	 * registered in the directory
-	 * 
-	 * @param urn
 	 */
-	void createSubModel(ModelUrn aasUrn, SubModel submodel);
+	void createSubModel(IIdentifier aasId, SubModel submodel);
 }

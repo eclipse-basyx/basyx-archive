@@ -11,12 +11,9 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
-import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.testsuite.regression.aas.restapi.StubAASServlet;
 import org.eclipse.basyx.testsuite.regression.vab.directory.DirectoryServiceStub;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
@@ -53,20 +50,20 @@ public class TestAASHTTP {
 	public void build() {
 		// Fill directory stub
 		DirectoryServiceStub directory = new DirectoryServiceStub();
-		directory.addMapping(StubAASServlet.AASID, "http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas");
-		directory.addMapping(StubAASServlet.SMID,
-				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMID);
+		directory.addMapping(StubAASServlet.AASURN.getId(), "http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas");
+		directory.addMapping(StubAASServlet.SMURN.getId(),
+				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMIDSHORT);
 
 		PreconfiguredRegistry registry = new PreconfiguredRegistry();
 
 		// Create aas descriptor for the aas registry
-		IIdentifier id = new Identifier(IdentifierType.URI, StubAASServlet.AASURN.getURN());
-		AASDescriptor aasDescriptor = new AASDescriptor(id,
+		AASDescriptor aasDescriptor = new AASDescriptor(StubAASServlet.AASURN,
 				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas");
 
 		// Create the submodel descriptor
-		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(StubAASServlet.SMID, IdentifierType.URI,
-				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMID);
+		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(StubAASServlet.SMURN.getId(),
+				StubAASServlet.SMURN.getIdType(),
+				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMIDSHORT);
 
 		// add submodel descriptor to the aas descriptor
 		aasDescriptor.addSubmodelDescriptor(submodelDescriptor);
@@ -89,14 +86,14 @@ public class TestAASHTTP {
 		IAssetAdministrationShell shell = manager.retrieveAAS(StubAASServlet.AASURN);
 
 		// Check id
-		assertEquals(StubAASServlet.AASID, shell.getIdShort());
+		assertEquals(StubAASServlet.AASIDSHORT, shell.getIdShort());
 
 		// Retrieve submodels
 		Map<String, ISubModel> submodels = shell.getSubModels();
 
 		// Check content of submodels
 		assertEquals(1, submodels.size());
-		assertTrue(submodels.containsKey(StubAASServlet.SMID));
+		assertTrue(submodels.containsKey(StubAASServlet.SMIDSHORT));
 	}
 
 	/**
@@ -107,10 +104,10 @@ public class TestAASHTTP {
 	@Test
 	public void testSubModel() throws Exception {
 		// Retrieve SubModel
-		ISubModel sm = manager.retrieveSubModel(StubAASServlet.AASURN, StubAASServlet.SMID);
+		ISubModel sm = manager.retrieveSubModel(StubAASServlet.AASURN, StubAASServlet.SMURN);
 
 		// Check id
-		assertEquals(StubAASServlet.SMID, sm.getIdShort());
+		assertEquals(StubAASServlet.SMIDSHORT, sm.getIdShort());
 
 		// TODO: Extend
 		// - retrieve properties and operations

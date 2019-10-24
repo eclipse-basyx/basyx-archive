@@ -92,7 +92,7 @@ public class DynamicSubModelDeployment {
 			//   directly to sub models, the registry needs to support this, and unique identifies (as here)
 			//   must be used. For portability, users should connect to sub models instead via an AAS ID and 
 			//   sub model ID tuple, as illustrated in the registry examples. 
-			ISubModel subModel = aasManager.retrieveSubModel(new ModelUrn(AAS), STATUS_SM);
+			ISubModel subModel = aasManager.retrieveSubModel(new ModelUrn(AAS), new ModelUrn(STATUS_SM));
 
 			// Read sub model properties
 			String smId     = subModel.getIdShort();

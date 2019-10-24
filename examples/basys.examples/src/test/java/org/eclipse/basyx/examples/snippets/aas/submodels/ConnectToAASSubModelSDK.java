@@ -1,21 +1,24 @@
 package org.eclipse.basyx.examples.snippets.aas.submodels;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.factory.java.MetaModelElementFactory;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_Empty;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IContainerProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.ContainerProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
@@ -53,8 +56,9 @@ public class ConnectToAASSubModelSDK {
 		 */
 		@SuppressWarnings("unchecked")
 		public SampleSubModel() {
-			// Set sub model ID
-			setIdShort("sm-001");
+			// Set sub model id and name
+			setIdShort("smName");
+			setIdentification(IdentifierType.Custom, "sm-001");
 
 			// Create factory that helps with property creation
 			// - This factory creates sub model properties and ensures presence of all meta data
@@ -76,9 +80,7 @@ public class ConnectToAASSubModelSDK {
 			// Add another property manually to sub model container "properties"
 			SingleProperty prop3 = new SingleProperty(17);
 			prop3.setIdShort("prop3");
-			{
-				((Map<String, Object>) this.get("dataElements")).put("prop3", prop3);
-			}
+			((Map<String, Object>) this.get("dataElements")).put("prop3", prop3);
 		}
 	}
 
@@ -119,26 +121,27 @@ public class ConnectToAASSubModelSDK {
 		
 		
 		// Retrieve sub model (created by factory) with SDK connector
-		{
-			// Create and connect SDK connector
-			ISubModel subModel = manager.retrieveSubModel(new ModelUrn("aas-001"), "sm-001");
-			// - Retrieve sub model values and compare to expected values
-			String smID     = subModel.getIdShort();
-			String prop1Id  = subModel.getDataElements().get("prop1").getIdShort();
-			int    prop1Val = (int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get();
-			int    prop3Val = (int) ((ISingleProperty) subModel.getDataElements().get("prop3")).get();
-			String prop2Id  = subModel.getDataElements().get("prop2").getIdShort();
-			int    prop211  = (int) ((ISingleProperty) ((IContainerProperty) subModel.getDataElements().get("prop2")).getDataElements().get("prop11")).get();
+		// - Create and connect SDK connector
+		IIdentifier aasId = new Identifier(IdentifierType.Custom, "aas-001");
+		IIdentifier smId = new Identifier(IdentifierType.Custom, "sm-001");
+		ISubModel subModel = manager.retrieveSubModel(aasId, smId);
 
-			
-			// Check results
-			assertTrue(smID.equals("sm-001"));
-			assertTrue(prop1Id.equals("prop1"));
-			assertTrue(prop1Val == 234);
-			assertTrue(prop3Val == 17);
-			assertTrue(prop2Id.equals("prop2"));
-			assertTrue(prop211 == 123);
-		}
+		// - Retrieve sub model values and compare to expected values
+		Map<String, IDataElement> dataElements = subModel.getDataElements();
+		ISingleProperty prop1 = (ISingleProperty) dataElements.get("prop1");
+		IContainerProperty prop2 = (IContainerProperty) dataElements.get("prop2");
+		ISingleProperty prop11 = (ISingleProperty) prop2.getDataElements().get("prop11");
+		ISingleProperty prop3 = (ISingleProperty) dataElements.get("prop3");
+
+		assertEquals(smId.getId(), subModel.getIdentification().getId());
+		assertEquals("smName", subModel.getIdShort());
+		assertEquals("prop1", prop1.getIdShort());
+		assertEquals(234, prop1.get());
+		assertEquals("prop2", prop2.getIdShort());
+		assertEquals("prop11", prop11.getIdShort());
+		assertEquals(123, prop11.get());
+		assertEquals("prop3", prop3.getIdShort());
+		assertEquals(17, prop3.get());
 	}
 }
 

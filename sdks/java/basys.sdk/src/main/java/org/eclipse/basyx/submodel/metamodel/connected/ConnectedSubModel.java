@@ -13,9 +13,9 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOpera
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IProperty;
 import org.eclipse.basyx.submodel.metamodel.connected.facades.ConnectedVABElementContainerFacade;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.property.ConnectedPropertyFactory;
-import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
@@ -52,7 +52,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 
 	@Override
 	public IIdentifier getIdentification() {
-		return new IdentifierFacade(getElem());
+		return new IdentifiableFacade(getElem()).getIdentification();
 	}
 
 	@Override

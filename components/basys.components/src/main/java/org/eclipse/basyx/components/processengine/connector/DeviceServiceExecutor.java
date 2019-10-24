@@ -6,10 +6,13 @@ import java.util.Map;
 import org.eclipse.basyx.aas.manager.api.IAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 
 
 /**
@@ -35,11 +38,12 @@ public abstract class DeviceServiceExecutor implements IDeviceServiceExecutor {
 	@Override
 	public Object executeService( String servicename, String serviceProvider, String submodelid, List<Object> params) {
 		try {
-			// create Model urn
-			ModelUrn aasUrn = new ModelUrn(serviceProvider);
+			// create ids
+			IIdentifier aasId = new Identifier(IdentifierType.Custom, serviceProvider);
+			IIdentifier smId = new Identifier(IdentifierType.Custom, submodelid);
 
 			// create the submodel of the corresponding aas
-			ISubModel serviceSubmodel = manager.retrieveSubModel(aasUrn, submodelid);
+			ISubModel serviceSubmodel = manager.retrieveSubModel(aasId, smId);
 
 			// navigate to the expected service 
 			Map<String, IOperation> operations = serviceSubmodel.getOperations();
@@ -63,10 +67,11 @@ public abstract class DeviceServiceExecutor implements IDeviceServiceExecutor {
 	 * */
 	protected Object getProperty(String rawUrn, String submodelid, String propertyName) throws Exception {
 		// create Model urn
-		ModelUrn aasUrn = new ModelUrn(rawUrn);
+		IIdentifier aasUrn = new ModelUrn(rawUrn);
+		IIdentifier smId = new Identifier(IdentifierType.Custom, submodelid);
 
 		// retrieve submodel with id
-		ISubModel statusSubmodel = manager.retrieveSubModel(aasUrn, submodelid);
+		ISubModel statusSubmodel = manager.retrieveSubModel(aasUrn, smId);
 		
 		// get properties of the submodel
 		Map<String, IDataElement> properties = ((ConnectedSubModel) statusSubmodel).getDataElements();

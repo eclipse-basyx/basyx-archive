@@ -8,10 +8,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
 import org.eclipse.basyx.vab.coder.json.metaprotocol.MetaprotocolHandler;
@@ -170,7 +169,7 @@ public class TestDirectorySQLProvider {
 
 		// Create and register AAS descriptor
 		// - Create AAS descriptor
-		IIdentifier id = new Identifier(IdentifierType.URI, "urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-166");
+		IIdentifier id = new ModelUrn("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-166");
 		AASDescriptor aasDescriptor = new AASDescriptor(id, "www.endpoint.de");
 		// - Create new AAS registration
 		String expected = serializer.serialize(aasDescriptor);
