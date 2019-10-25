@@ -82,9 +82,7 @@ public class TestConnectedAssetAdministrationShellManager {
 
 		// Register AAS at directory
 		AASDescriptor desc = new AASDescriptor(aasId, "/aas");
-		SubmodelDescriptor smDesc = new SubmodelDescriptor(smId.getId(), IdentifierType.URI,
-				"/aas/submodels/" + smIdShort);
-		desc.addSubmodelDescriptor(smDesc);
+		desc.addSubmodelDescriptor(new SubmodelDescriptor(smIdShort, smId, "/aas/submodels/" + smIdShort));
 		registry.register(desc);
 		IModelProvider provider = new VABMultiSubmodelProvider(new AASModelProvider(new HashMap<>()));
 		connectorProvider.addMapping("", provider);

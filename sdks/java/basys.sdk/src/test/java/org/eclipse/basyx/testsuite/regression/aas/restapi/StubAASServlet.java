@@ -23,7 +23,7 @@ public class StubAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 	public StubAASServlet() {
 		super(new VABMultiSubmodelProvider());
 
-		SubmodelDescriptor smDesc = new SubmodelDescriptor(SMURN.getId(), SMURN.getIdType(), "");
+		SubmodelDescriptor smDesc = new SubmodelDescriptor(SMIDSHORT, SMURN, "");
 		AssetAdministrationShell aas = new AssetAdministrationShell();
 		aas.addSubModel(smDesc);
 		aas.setIdShort(AASIDSHORT);

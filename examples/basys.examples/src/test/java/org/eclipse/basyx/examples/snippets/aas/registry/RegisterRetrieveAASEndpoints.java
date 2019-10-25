@@ -10,7 +10,6 @@ import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -74,7 +73,7 @@ public class RegisterRetrieveAASEndpoints {
 		AASDescriptor aasDescriptor = new AASDescriptor(aasURN,
 				VABPathTools.concatenatePaths(aasSrvURL, aasSrvPrefix, aasURN.getEncodedURN()));
 		// - Add sub model descriptor URI
-		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelURN.getURN(), IdentifierType.URI, VABPathTools.concatenatePaths(aasSrvURL, aasSrvPrefix, subModelURN.getEncodedURN()));
+		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelURN.getEncodedURN(), subModelURN, VABPathTools.concatenatePaths(aasSrvURL, aasSrvPrefix, subModelURN.getEncodedURN()));
 		aasDescriptor.addSubmodelDescriptor(submodelDescriptor);
 
 

@@ -25,7 +25,7 @@ import org.junit.Test;
  */
 public class RunExampleSimpleControllableTCPDevice extends BaSyxExampleScenario {
 
-	
+
 	/**
 	 * VAB connection manager backend
 	 */

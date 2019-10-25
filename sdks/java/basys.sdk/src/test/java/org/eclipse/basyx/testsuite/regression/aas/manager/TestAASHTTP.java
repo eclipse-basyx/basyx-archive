@@ -61,8 +61,7 @@ public class TestAASHTTP {
 				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas");
 
 		// Create the submodel descriptor
-		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(StubAASServlet.SMURN.getId(),
-				StubAASServlet.SMURN.getIdType(),
+		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(StubAASServlet.SMIDSHORT, StubAASServlet.SMURN,
 				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMIDSHORT);
 
 		// add submodel descriptor to the aas descriptor

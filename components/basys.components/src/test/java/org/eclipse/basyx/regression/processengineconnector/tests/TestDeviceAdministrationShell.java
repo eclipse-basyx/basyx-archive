@@ -43,10 +43,11 @@ public class TestDeviceAdministrationShell {
 	public void setupConnection() {
 		PreconfiguredRegistry registry = new PreconfiguredRegistry();
 		ModelUrn coilcarUrn = new ModelUrn("coilcar");
-		IIdentifier id = new Identifier(IdentifierType.URI, "coilcar");
+		IIdentifier id = new Identifier(IdentifierType.Custom, "coilcar");
 		AASDescriptor ccDescriptor = new AASDescriptor(id,
 				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas");
-		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", IdentifierType.URI,
+		IIdentifier smId = new Identifier(IdentifierType.Custom, "submodel1");
+		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1Name", smId,
 				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas/submodels/submodel1");
 		ccDescriptor.addSubmodelDescriptor(smDescriptor);
 		registry.register(ccDescriptor);

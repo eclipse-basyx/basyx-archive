@@ -36,8 +36,6 @@ import org.junit.Test;
  *
  */
 public class ConnectToSubModelEndpoints {
-
-	
 	/**
 	 * Create VAB connection manager backend
 	 * 
@@ -87,8 +85,7 @@ public class ConnectToSubModelEndpoints {
 		// - Create AAS descriptor and sub model descriptor
 		AASDescriptor aasDescriptor = new AASDescriptor(aasURN, aasSrvURL);
 		String smEndpoint = VABPathTools.concatenatePaths(aasSrvURL, "submodels", smIdShort);
-		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(smId.getId(), smId.getIdType(),
-				smEndpoint);
+		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(smIdShort, smId, smEndpoint);
 		// - Add sub model descriptor to AAS descriptor
 		aasDescriptor.addSubmodelDescriptor(submodelDescriptor);
 		

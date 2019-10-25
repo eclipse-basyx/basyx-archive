@@ -23,21 +23,21 @@ import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
 public class Reference extends HashMap<String, Object> implements IReference {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String KEY="keys";
+	public static final String KEY = "keys";
 
 	/**
 	 * Constructor
 	 */
 	public Reference() {
-		put(KEY, new ArrayList<Key>());
+		setKeys(new ArrayList<IKey>());
 	}
 
 	/**
 	 * 
 	 * @param key Unique reference in its name space.
 	 */
-	public Reference(List<IKey> key) {
-		put(KEY, key);
+	public Reference(List<IKey> keys) {
+		setKeys(keys);
 	}
 
 	public Reference(Map<String, Object> reference) {
@@ -50,7 +50,11 @@ public class Reference extends HashMap<String, Object> implements IReference {
 	}
 
 	public void setKeys(List<IKey> keys) {
-		new ReferenceFacade(this).setKeys(keys);
-		
+		// Copy the key list to make sure an actual hashmap is put inside this map
+		List<IKey> copy = new ArrayList<>();
+		for (IKey key : keys) {
+			copy.add(new Key(key.getType(), key.isLocal(), key.getValue(), key.getidType()));
+		}
+		new ReferenceFacade(this).setKeys(copy);
 	}
 }

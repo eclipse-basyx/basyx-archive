@@ -13,7 +13,6 @@ import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
@@ -42,8 +41,10 @@ import org.junit.Test;
 public class TestConnectedAssetAdministrationShell {
 
 	// String constants used in this test case
-	private static final String smId = "smId";
-	private static final String aasId = "aasId";
+	private static final IIdentifier smId = new Identifier(IdentifierType.Custom, "smId");
+	private static final IIdentifier aasId = new Identifier(IdentifierType.Custom, "aasId");
+	private static final String smIdShort = "smName";
+	private static final String aasIdShort = "aasName";
 	private static final String propId = "propId";
 	private static final int propVal = 11;
 
@@ -58,27 +59,26 @@ public class TestConnectedAssetAdministrationShell {
 		p.setIdShort(propId);
 
 		SubModel sm = factory.create(new SubModel(), Collections.singletonList(p), new ArrayList<>());
-		sm.setIdShort(smId);
+		sm.setIdShort(smIdShort);
 
 		// Create Set containing reference to the created SubModel
 		Set<SubmodelDescriptor> refs = new HashSet<>();
-		refs.add(new SubmodelDescriptor(smId, IdentifierType.Custom, ""));
+		refs.add(new SubmodelDescriptor(smIdShort, smId, ""));
 
 		// Create an AAS containing a reference to the created SubModel
 		AssetAdministrationShell aas = factory.create(new AssetAdministrationShell(), refs);
-		aas.setIdShort(aasId);
+		aas.setIdShort(aasIdShort);
 	
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
-		provider.addSubmodel(smId, new SubModelProvider(TypeDestroyer.destroyType(sm)));
+		provider.addSubmodel(smIdShort, new SubModelProvider(TypeDestroyer.destroyType(sm)));
 		provider.setAssetAdministrationShell(new AASModelProvider(TypeDestroyer.destroyType(aas)));
 	
 		// Create AAS registry
 		IAASRegistryService registry = new PreconfiguredRegistry();
 		// Create AAS Descriptor
-		IIdentifier id = new Identifier(IdentifierType.URI, aasId);
-		AASDescriptor aasDescriptor = new AASDescriptor(id, "/aas");
+		AASDescriptor aasDescriptor = new AASDescriptor(aasId, "/aas");
 		// Create Submodel Descriptor
-		SubmodelDescriptor smDescriptor = new SubmodelDescriptor(smId, IdentifierType.URI, "/aas/submodels/" + smId);
+		SubmodelDescriptor smDescriptor = new SubmodelDescriptor(smIdShort, smId, "/aas/submodels/" + smIdShort);
 		// Add Submodel descriptor to aas descriptor
 		aasDescriptor.addSubmodelDescriptor(smDescriptor);
 
@@ -88,12 +88,12 @@ public class TestConnectedAssetAdministrationShell {
 		ConnectorProviderStub connectorProvider = new ConnectorProviderStub();
 		connectorProvider.addMapping("", provider);
 
-	// Create connection manager using the dummy
+		// Create connection manager using the dummy
 		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(registry,
 				connectorProvider);
 
-	// Create ConnectedAssetAdministrationShell
-		connectedAAS = manager.retrieveAAS(new ModelUrn(aasId));
+		// Create ConnectedAssetAdministrationShell
+		connectedAAS = manager.retrieveAAS(aasId);
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class TestConnectedAssetAdministrationShell {
 	 */
 	@Test
 	public void testGetId() {
-		assertEquals(aasId, connectedAAS.getIdShort());
+		assertEquals(aasIdShort, connectedAAS.getIdShort());
 	}
 
 	/**
@@ -115,10 +115,10 @@ public class TestConnectedAssetAdministrationShell {
 		assertEquals(1, connectedAAS.getSubModels().size());
 
 		// Check if the contained SubModel id is as expected
-		assertTrue(connectedAAS.getSubModels().containsKey(smId));
+		assertTrue(connectedAAS.getSubModels().containsKey(smIdShort));
 
 		// Check if the submodel has been retrieved correctly
-		ISubModel sm = connectedAAS.getSubModels().get(smId);
+		ISubModel sm = connectedAAS.getSubModels().get(smIdShort);
 		ISingleProperty prop = (ISingleProperty) sm.getDataElements().get(propId);
 		assertEquals(propVal, prop.get());
 	}

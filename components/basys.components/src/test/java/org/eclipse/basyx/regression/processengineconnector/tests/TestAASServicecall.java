@@ -71,9 +71,10 @@ public class TestAASServicecall {
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
 		
 		IAASRegistryService registry = new PreconfiguredRegistry();
-		IIdentifier id = new Identifier(IdentifierType.URI, "coilcar");
+		IIdentifier id = new Identifier(IdentifierType.Custom, "coilcar");
 		AASDescriptor aasDescriptor = new AASDescriptor(id, "/aas");
-		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", IdentifierType.URI, "/aas/submodels/submodel1");
+		IIdentifier smId = new Identifier(IdentifierType.Custom, "submodel1");
+		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1Name", smId, "/aas/submodels/submodel1");
 		aasDescriptor.addSubmodelDescriptor(smDescriptor);
 		registry.register(aasDescriptor);
 

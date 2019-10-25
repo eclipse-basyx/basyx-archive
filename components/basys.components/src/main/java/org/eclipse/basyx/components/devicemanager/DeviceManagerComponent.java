@@ -4,7 +4,6 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.components.service.BaseBaSyxService;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 
 
@@ -102,7 +101,7 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 	protected SubmodelDescriptor addSubModelDescriptorURI(AASDescriptor aasDescriptor, ModelUrn subModelURN, String subModelId) {
 		// Create sub model descriptor
 		String submodelEndpoint = VABPathTools.concatenatePaths(getAASServerURL(), "/aas/submodels", subModelId);
-		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelURN.getURN(), IdentifierType.URI, submodelEndpoint);
+		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelId, subModelURN, submodelEndpoint);
 		
 		// Add sub model descriptor to AAS descriptor
 		aasDescriptor.addSubmodelDescriptor(submodelDescriptor);

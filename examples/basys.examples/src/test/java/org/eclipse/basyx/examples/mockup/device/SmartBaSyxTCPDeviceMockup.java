@@ -11,7 +11,6 @@ import org.eclipse.basyx.components.device.BaseSmartDevice;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.models.controlcomponent.ExecutionState;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -157,10 +156,10 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		// - Build an AAS descriptor, add sub model descriptors
 		AASDescriptor deviceAASDescriptor = new AASDescriptor(lookupURN("AAS"), aasRepoURL);
 		// Create sub model descriptors
-		SubmodelDescriptor statusSMDescriptor = new SubmodelDescriptor(lookupURN("Status").getURN(), IdentifierType.URI,
+		SubmodelDescriptor statusSMDescriptor = new SubmodelDescriptor("Status", lookupURN("Status"),
 				aasRepoURL + "/submodels/Status");
-		SubmodelDescriptor controllerSMDescriptor = new SubmodelDescriptor(lookupURN("Controller").getURN(),
-				IdentifierType.URI, "basyx://127.0.0.1:" + serverPort + "/submodels/Controller");
+		SubmodelDescriptor controllerSMDescriptor = new SubmodelDescriptor("Controller", lookupURN("Controller"),
+				"basyx://127.0.0.1:" + serverPort + "/submodels/Controller");
 		// Add sub model descriptor to AAS descriptor
 		deviceAASDescriptor.addSubmodelDescriptor(statusSMDescriptor);
 		deviceAASDescriptor.addSubmodelDescriptor(controllerSMDescriptor);

@@ -20,7 +20,8 @@ public class ExampleAASRegistry extends PreconfiguredRegistry {
 	public ExampleAASRegistry addSubmodelMapping(String rawAASUrn, String submodelid, String endpoint) {
 		AASDescriptor aasDescriptor;
 		ModelUrn aasUrn = new ModelUrn(rawAASUrn);
-		SubmodelDescriptor smDes = new SubmodelDescriptor(submodelid, IdentifierType.URI, endpoint);
+		IIdentifier smId = new Identifier(IdentifierType.URI, submodelid);
+		SubmodelDescriptor smDes = new SubmodelDescriptor(submodelid, smId, endpoint);
 
 		if (descriptorMap.keySet().contains(aasUrn.getURN())) {
 			aasDescriptor = descriptorMap.get(aasUrn.getURN());

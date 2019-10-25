@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasSemantics;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 
 /**
  * HasSemantics class
@@ -26,14 +27,14 @@ public class HasSemantics extends HashMap<String, Object> implements IHasSemanti
 	 */
 	public HasSemantics() {
 		// Default values
-		put(SEMANTICID, null);
+		put(SEMANTICID, new Reference());
 	}
 
 	/**
 	 * Constructor
 	 */
-	public HasSemantics(IReference idSemantics) {
-		put(SEMANTICID, idSemantics);
+	public HasSemantics(IReference ref) {
+		this.setSemanticID(ref);
 	}
 
 	@Override
@@ -42,6 +43,7 @@ public class HasSemantics extends HashMap<String, Object> implements IHasSemanti
 	}
 
 	public void setSemanticID(IReference ref) {
-		new HasSemanticsFacade(this).setSemanticID(ref);
+		// Copy the reference to make sure an actual hashmap is put inside this map
+		new HasSemanticsFacade(this).setSemanticID(new Reference(ref.getKeys()));
 	}
 }

@@ -12,7 +12,6 @@ import org.eclipse.basyx.components.devicemanager.TCPControllableDeviceManagerCo
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.models.controlcomponent.ControlComponentChangeListener;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -111,7 +110,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		invocationsProp.setIdShort("invocations");
 		statusSM.addSubModelElement(invocationsProp);
 		// - Add the submodel to the AAS
-		aas.addSubModel(new SubmodelDescriptor(statusSM.getIdShort(), IdentifierType.Custom, ""));
+		aas.addSubModel(new SubmodelDescriptor(statusSM, ""));
 		
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
 		// - Create generic sub model 
@@ -121,7 +120,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		((Map<String, Object>) controllerSM.get(SubModel.PROPERTIES)).put("controllers", listOfControllers);
 		controllerSM.setIdShort("Controller");
 		// - Add the submodel to the AAS
-		aas.addSubModel(new SubmodelDescriptor(controllerSM.getIdShort(), IdentifierType.Custom, ""));
+		aas.addSubModel(new SubmodelDescriptor(controllerSM, ""));
 
 		// Push the AAS and submodels to the server
 		// - Transfer device AAS to server

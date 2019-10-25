@@ -202,7 +202,7 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 	@SuppressWarnings("unchecked")
 	@Override
 	public void addSubModel(SubmodelDescriptor descriptor) {
-		logger.trace("adding Submodel", descriptor.getId());
+		logger.trace("adding Submodel", descriptor.getIdentifier().getId());
 		((Set<SubmodelDescriptor>) map.get(AssetAdministrationShell.SUBMODELS)).add(descriptor);
 	}
 
