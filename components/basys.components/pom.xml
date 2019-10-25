@@ -47,11 +47,16 @@
             </executions>
       </plugin> 
       
-	   	<!-- Generate separate jar for tests -->
+		<!-- Generate separate jar for tests and exclude logback.xml from generated jars -->
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-jar-plugin</artifactId>
 			<version>3.1.1</version>
+			<configuration>
+				<excludes>
+					<exclude>**/logback.xml</exclude>
+				</excludes>
+			</configuration>
 			<executions>
 				<execution>
 					<goals>
@@ -244,11 +249,6 @@
 		    <version>1.4.197</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.5</version>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/javax.xml.xquery/xqj-api (Add from 
 			local repository because jar cannot be found on maven central -->
 		<dependency>
