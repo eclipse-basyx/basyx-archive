@@ -93,10 +93,17 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		put(CONCEPTDICTIONARY, dictionaries);
 	}
 
+	/**
+	 * Sets the endpoint of the AAS
+	 * 
+	 * @param endpoint
+	 *            is expected to end with "/aas"
+	 * @param endpointType
+	 */
 	public void setEndpoint(String endpoint, String endpointType) {
 		HashMap<String, String> endpointWrapper = new HashMap<String, String>();
 		endpointWrapper.put(TYPE, endpointType);
-		endpointWrapper.put(ADDRESS, endpoint + "/aas");
+		endpointWrapper.put(ADDRESS, endpoint);
 
 		put(ENDPOINTS, Arrays.asList(endpointWrapper));
 	}
