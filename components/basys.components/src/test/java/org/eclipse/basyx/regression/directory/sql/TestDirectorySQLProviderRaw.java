@@ -21,12 +21,12 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
- * Test queries to SQL directory provider.
+ * Test raw http queries to SQL directory provider.
  * 
  * @author kuhn, ps
  *
  */
-public class TestDirectorySQLProvider {
+public class TestDirectorySQLProviderRaw {
 
 	/**
 	 * Makes sure Tomcat Server is started
