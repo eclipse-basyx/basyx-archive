@@ -45,11 +45,16 @@
 				</executions>
 			</plugin>
 
-			<!-- Generate separate jar for tests -->
+			<!-- Generate separate jar for tests and exclude logback.xml from generated jars -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.1.1</version>
+				<configuration>
+					<excludes>
+						<exclude>**/logback.xml</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
