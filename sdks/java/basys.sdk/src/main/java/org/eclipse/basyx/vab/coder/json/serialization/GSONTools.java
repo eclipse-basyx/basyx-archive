@@ -482,10 +482,7 @@ public class GSONTools implements Serializer {
 			return array;
 		} else {
 			// If it is an empty list,
-			JsonObject jObj = new JsonObject();
-			jObj.add(BASYXTYPE, new JsonPrimitive(LIST));
-			jObj.add(BASYXVALUE, new JsonArray());
-			return jObj;
+			return new JsonArray();
 		}
 	}
 

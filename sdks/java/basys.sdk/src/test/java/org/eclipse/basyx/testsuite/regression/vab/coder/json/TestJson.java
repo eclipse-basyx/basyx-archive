@@ -19,13 +19,9 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.eclipse.basyx.testsuite.regression.vab.modelprovider.SimpleVABElement;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
 import org.junit.Test;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
@@ -39,16 +35,8 @@ import com.google.gson.JsonPrimitive;
  *
  */
 public class TestJson {
-	
-	private static Logger logger = LoggerFactory.getLogger(TestJson.class);
-	
+
 	GSONTools tools = new GSONTools(new DefaultTypeFactory());
-
-	public static void main(String[] args) {
-		GSONTools tools = new GSONTools(new DefaultTypeFactory());
-
-		logger.trace("[TEST] {}", tools.deserialize(tools.serialize(new SimpleVABElement())));
-	}
 
 	/**
 	 * Tests if a double is correctly (de-)serialized
@@ -173,9 +161,9 @@ public class TestJson {
 	 */
 	@Test
 	public void testEmptyList() {
-		List<String> set = new ArrayList<>();
+		List<String> list = new ArrayList<>();
 
-		assertEquals(set, tools.deserialize(tools.serialize(set)));
+		assertEquals(list, tools.deserialize(tools.serialize(list)));
 	}
 
 	/**
@@ -232,8 +220,10 @@ public class TestJson {
 	@Test
 	public void testEmptySetInMap() {
 		Map<String, Object> map = new HashMap<>();
+		map.put("test", new ArrayList<>());
 
-		map.put("a", new HashSet<>());
+		String result = tools.serialize(map);
+		assertEquals("{\"test\":[],\"" + GSONTools.BASYXTYPE + "\":{\"test\":\"" + GSONTools.LIST + "\"}}", result);
 
 		assertEquals(map, tools.deserialize(tools.serialize(map)));
 	}
@@ -259,21 +249,19 @@ public class TestJson {
 
 	/**
 	 * Tests if a serializable function is correctly (de-)serialized.
+	 * 
+	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testSerializableFunction() {
+	public void testSerializableFunction() throws IOException {
 		Function<Integer, Integer> testFunction = (Function<Integer, Integer> & Serializable) (x -> x * x);
 		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
 		// Try to serialize object
-		try {
-			ObjectOutputStream oos = new ObjectOutputStream(outStream);
-			oos.writeObject(testFunction);
-			oos.close();
-		} catch (IOException e) {
-			logger.error("[TEST] Exception in testSerializableFunction", e);
-		}
+		ObjectOutputStream oos = new ObjectOutputStream(outStream);
+		oos.writeObject(testFunction);
+		oos.close();
 
 		// Try to encode to string
 		String encoded = Base64.getEncoder().encodeToString(outStream.toByteArray());
