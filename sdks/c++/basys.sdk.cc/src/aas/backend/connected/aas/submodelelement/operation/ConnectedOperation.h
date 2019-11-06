@@ -16,7 +16,7 @@ namespace aas {
 namespace backend {
 namespace connected { 
 
-class ConnectedOperation : ConnectedSubmodelElement, submodelelement::operation::IOperation
+class ConnectedOperation : public ConnectedSubmodelElement, public submodelelement::operation::IOperation
 {
 public:
   ConnectedOperation(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
@@ -28,8 +28,8 @@ public:
 
   virtual basyx::objectCollection_t getParameterTypes() const override;
   virtual basyx::objectCollection_t getReturnTypes() const override;
-  virtual basyx::objectMap_t getInvocable() const override;
   virtual basyx::any invoke(basyx::objectCollection_t & parameters) const override;
+  virtual std::shared_ptr<basyx::function_base> getInvocable() const override;
 };
  
 }

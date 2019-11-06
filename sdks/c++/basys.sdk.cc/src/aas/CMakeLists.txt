@@ -21,6 +21,8 @@ target_sources(basyx_aas
 		backend/connected/aas/ConnectedVABModelMap.h
 		backend/connected/aas/ConnectedAssetAdministrationShell.cpp
 		backend/connected/aas/ConnectedAssetAdministrationShell.h
+		backend/connected/aas/ConnectedAssetAdministrationShellManager.cpp
+		backend/connected/aas/ConnectedAssetAdministrationShellManager.h
 		backend/connected/aas/submodelelement/ConnectedDataElement.cpp
 		backend/connected/aas/submodelelement/ConnectedDataElement.h
 		backend/connected/aas/submodelelement/ConnectedRelationshipElement.h
@@ -47,6 +49,7 @@ target_sources(basyx_aas
     backend/connected/aas/submodelelement/property/file/ConnectedFile.cpp
     backend/connected/aas/submodelelement/property/file/ConnectedFile.h
 		backend/connected/aas/dataspecification/IDataSpecification.h
+		backend/support/submodelelement/property/ConnectedPropertyFactory.h
 		backend/vab/IVABElementContainer.h
 		aas/BlobType.h
 		aas/identifier/IIdentifier.h
@@ -73,7 +76,6 @@ target_sources(basyx_aas
 		aas/SubModel.cpp
 		aas/SubModel.h
 		aas/ISubModel.h
-    aas/IAssetAdministrationShell.h
 		aas/submodelelement/IRelationshipElement.h
 		aas/submodelelement/IElement.h
 		aas/submodelelement/ISubmodelElement.h
@@ -89,6 +91,24 @@ target_sources(basyx_aas
 		aas/submodelelement/property/IContainerProperty.h
 		aas/submodelelement/property/ISingleProperty.h
 		aas/submodelelement/property/IMapProperty.h
+
+		impl/metamodel/hashmap/IVABElementContainer.h
+    impl/metamodel/hashmap/aas/submodelelement/property/valuetypedef/PropertyValueTypeDef.h  
+    impl/metamodel/hashmap/aas/submodelelement/property/valuetypedef/PropertyValueTypeDefHelper.h
+    impl/metamodel/hashmap/aas/reference/Reference.h
+    impl/metamodel/hashmap/aas/reference/Reference.cpp
+    impl/metamodel/hashmap/aas/identifier/IdentifierType.h
+    impl/metamodel/hashmap/aas/identifier/Identifier.h
+    impl/metamodel/hashmap/aas/identifier/Identifier.cpp
+    impl/metamodel/hashmap/aas/qualifier/AdministrativeInformation.h
+    impl/metamodel/hashmap/aas/qualifier/AdministrativeInformation.cpp
+    impl/metamodel/hashmap/aas/qualifier/Description.h
+    impl/metamodel/hashmap/aas/qualifier/Description.cpp
+    
+    api/metamodel/aas/IAssetAdministrationShell.h
+    api/manager/IAssetAdministrationShellManager.h
+    api/modelurn/ModelUrn.h
+    api/modelurn/ModelUrn.cpp
 )
 
 target_include_directories(basyx_aas PUBLIC ${PROJECT_SOURCE_DIR})

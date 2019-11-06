@@ -20,7 +20,7 @@ class IHasSemantics
 public:
   virtual ~IHasSemantics() = default;
 
-  virtual basyx::any getSemanticId() const = 0;
+  virtual std::shared_ptr<reference::IReference> getSemanticId() const = 0;
 };
 
 }

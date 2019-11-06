@@ -15,7 +15,7 @@ namespace aas {
 namespace backend {
 namespace connected { 
 
-class ConnectedSingleProperty : public ConnectedProperty, submodelelement::property::ISingleProperty
+class ConnectedSingleProperty : public ConnectedProperty, public submodelelement::property::ISingleProperty
 {
 public:
   ConnectedSingleProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);

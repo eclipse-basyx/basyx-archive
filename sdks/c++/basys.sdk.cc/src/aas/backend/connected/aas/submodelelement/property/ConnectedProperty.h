@@ -16,7 +16,7 @@ namespace aas {
 namespace backend {
 namespace connected {
 
-class ConnectedProperty : public submodelelement::property::IProperty, public backend::ConnectedDataElement
+class ConnectedProperty : public backend::ConnectedDataElement, public submodelelement::property::IProperty
 {
 
 public:

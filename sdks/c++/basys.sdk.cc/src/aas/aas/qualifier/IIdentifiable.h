@@ -14,6 +14,7 @@
 #include "aas/qualifier/IReferable.h"
 
 #include <string>
+#include <memory>
 
 namespace basyx {
 namespace aas {
@@ -24,8 +25,8 @@ class IIdentifiable : public IReferable
 public:
   virtual ~IIdentifiable() = default;
 
-  virtual basyx::any getAdministration() const = 0;
-  virtual basyx::any getIdentification() const = 0;
+  virtual std::shared_ptr<IAdministrativeInformation> getAdministration() const = 0;
+  virtual std::shared_ptr<identifier::IIdentifier> getIdentification() const = 0;
 
 };
 

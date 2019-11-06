@@ -24,6 +24,8 @@ target_sources(tests_aas
     backend/connected/submodelelement/test_ConnectedRelationshipElement.cpp
     backend/connected/submodelelement/test_ConnectedSubmodelElement.cpp
     backend/connected/submodelelement/test_ConnectedSubmodelElementCollection.cpp
+
+    backend/support/submodelelement/property/test_ConnectedPropertyFactory.cpp
 )
 
 target_include_directories(tests_aas PUBLIC ${PROJECT_SOURCE_DIR})

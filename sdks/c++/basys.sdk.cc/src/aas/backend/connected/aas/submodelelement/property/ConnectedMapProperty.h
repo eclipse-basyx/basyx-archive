@@ -15,7 +15,7 @@ namespace aas {
 namespace backend {
 namespace connected { 
 
-class ConnectedMapProperty : public submodelelement::property::IMapProperty, ConnectedProperty
+class ConnectedMapProperty : public submodelelement::property::IMapProperty, public ConnectedProperty
 {
 public:
   ConnectedMapProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);

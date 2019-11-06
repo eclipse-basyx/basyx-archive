@@ -10,7 +10,6 @@
 #include "aas/submodelelement/IDataElement.h"
 #include "basyx/types.h"
 
-
 namespace basyx {
 namespace aas {
 namespace submodelelement {
