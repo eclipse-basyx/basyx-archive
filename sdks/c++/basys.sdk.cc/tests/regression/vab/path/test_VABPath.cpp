@@ -314,6 +314,36 @@ TEST(TestBaSyxVABPath, TestAdditionOfPaths)
 	ASSERT_EQ(second_path, vabpath2->toString());
 }
 
+TEST(TestBaSyxVABPath, TestAddSubpath)
+{
+  std::string path = "basyx://127.0.0.1:6998/operations";
+  std::string second_path = "example";
+
+  std::shared_ptr<VABPath> vabpath1(new VABPath(path));
+
+  auto vabpath = *vabpath1.get() + second_path;
+
+  // string should be the combination with slash
+  ASSERT_EQ("basyx://127.0.0.1:6998/operations/example", vabpath.toString());
+  // but path 1 should be the same
+  ASSERT_EQ(path, vabpath1->toString());
+}
+
+TEST(TestBaSyxVABPath, TestAddSubpathWithLeadingSlash)
+{
+  std::string path = "basyx://127.0.0.1:6998/operations";
+  std::string second_path = "///example/";
+
+  std::shared_ptr<VABPath> vabpath1(new VABPath(path));
+
+  auto vabpath = *vabpath1.get() + second_path;
+
+  // string should be the combination with slash
+  ASSERT_EQ("basyx://127.0.0.1:6998/operations/example", vabpath.toString());
+  // but path 1 should be the same
+  ASSERT_EQ(path, vabpath1->toString());
+}
+
 TEST(TestBaSyxVABPath, ImplicitConversionToString)
 {
 	std::string path = "basyx://127.0.0.1:6998/operations";

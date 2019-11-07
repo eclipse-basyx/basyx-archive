@@ -21,6 +21,8 @@ namespace submodelelement {
 
 class ISubmodelElement : public qualifier::IHasDataSpecification, qualifier::IReferable, IQualifiable, qualifier::IHasSemantics, qualifier::haskind::IHasKind
 {
+private:
+  basyx::objectMap_t hashMap;
 public:
   virtual ~ISubmodelElement() = default;
 };

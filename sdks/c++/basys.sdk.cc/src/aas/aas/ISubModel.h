@@ -23,7 +23,7 @@
 #include "aas/qualifier/IHasDataSpecification.h"
 #include "aas/qualifier/haskind/IHasKind.h"
 #include "aas/submodelelement/operation/IOperation.h"
-#include "impl/hashmap/IVABElementContainer.h"
+#include "impl/metamodel/hashmap/IVABElementContainer.h"
 #include "basyx/types.h"
 
 

@@ -81,9 +81,22 @@ public:
     return basyx::any("called with " + elementPath.toString());
   }
 
+  virtual std::shared_ptr<IVABElementProxy> getDeepProxy(const VABPath & elementPath) override
+  {
+    getDeepProxyCalls++;
+    return std::shared_ptr<IVABElementProxy>();
+  }
+
+  virtual VABPath getAddressPath() const override
+  {
+    VABProxyMockUp* ptr = const_cast<VABProxyMockUp*> (this);
+    ptr->getAddressPathCalls++;
+    return VABPath("");
+  }
+
   int overallMockCalls()
   {
-    return readElementValue_calls + updateElementValue_calls + createElement_calls + deleteElement_calls + deleteElement2_calls + invoke_calls;
+    return readElementValue_calls + updateElementValue_calls + createElement_calls + deleteElement_calls + deleteElement2_calls + invoke_calls + getDeepProxyCalls + getAddressPathCalls;
   }
 
   int readElementValue_calls = 0;
@@ -92,6 +105,8 @@ public:
   int deleteElement_calls = 0;
   int deleteElement2_calls = 0;
   int invoke_calls = 0;
+  int getDeepProxyCalls = 0;
+  int getAddressPathCalls = 0;
 
   std::vector<std::pair<std::string, basyx::any>> updateElementCallValues;
   std::vector<std::pair<std::string, basyx::any>> createElementCallValues;
@@ -100,6 +115,7 @@ public:
   std::vector<std::string> removeElementCallValues;
   basyx::objectMap_t map;
   basyx::objectCollection_t collection, invokeCallParameter;
+
 };
 
 using VABProxyMock = VABProxyMockUp<ProxyType::Default>;

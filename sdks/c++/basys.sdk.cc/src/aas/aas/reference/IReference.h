@@ -9,8 +9,7 @@
 
 
 #include "IKey.h"
-
-#include <vector>
+#include "basyx/types.h"
 
 namespace basyx {
 namespace aas {
@@ -24,14 +23,18 @@ namespace paths {
   static constexpr char REFERENCEPATH[] = "semanticIdentifier";
 }
 
+namespace internalReferencePaths {
+
+  static constexpr char KEY[] = "keys";
+}
 
 class IReference
 {
 public:
   virtual ~IReference() = default;
 
-  virtual std::vector<IKey> getKeys() const = 0;
-  virtual void setKeys(const std::vector<IKey> & keys) = 0;
+  virtual basyx::specificCollection_t<IKey> getKeys() const = 0;
+  virtual void setKeys(const basyx::specificCollection_t<IKey> & keys) = 0;
 };
 
 }

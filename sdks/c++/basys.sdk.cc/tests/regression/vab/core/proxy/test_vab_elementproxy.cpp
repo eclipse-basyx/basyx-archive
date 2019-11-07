@@ -144,3 +144,16 @@ TEST_F(BasyxVABElementProxy, TestInvokeOperation)
   ASSERT_EQ(collection.size(), provider_mockup->val.Get<basyx::objectCollection_t&>().size());
   ASSERT_EQ(2, provider_mockup->val.Get<basyx::objectCollection_t&>().at(0).Get<int>());
 }
+
+TEST_F(BasyxVABElementProxy, TestGetDeepProxy)
+{
+  std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy(new vab::core::proxy::VABElementProxy(proxy_address, provider_mockup));
+
+  auto deep_proxy = proxy->getDeepProxy("another/path");
+
+  // The initial path should be combined with the new path
+  ASSERT_EQ("basyx://127.0.0.1//another/path", deep_proxy->getAddressPath().toString());
+  // No Mockup function should have been called
+  ASSERT_EQ(MockupModelProvider::CalledFunction::NONE, provider_mockup->called);
+}
+

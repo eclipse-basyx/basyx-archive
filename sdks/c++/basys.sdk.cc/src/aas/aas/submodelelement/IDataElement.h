@@ -14,7 +14,7 @@ namespace basyx {
 namespace aas {
 namespace submodelelement {
 
-class IDataElement : public ISubmodelElement
+class IDataElement// : public ISubmodelElement
 {
 public:
   virtual ~IDataElement() = default;

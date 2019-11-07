@@ -20,7 +20,7 @@ namespace basyx {
 namespace aas {
 namespace backend {
 
-class ConnectedElement : IElement
+class ConnectedElement : public IElement
 {
 public:
   ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy> & proxy);
@@ -29,7 +29,8 @@ public:
   virtual std::shared_ptr<vab::core::proxy::IVABElementProxy> getProxy() const;
 
   basyx::any getLocalValue(const std::string & path) const;
-  void setLocalValue(const std::string & path, const basyx::any value);
+  void setLocalValue(const std::string & path, const basyx::any & value);
+  void setLocalValues(const basyx::objectMap_t & map);
   void updateLocalValue(const std::string & path, const basyx::any value);
 
   // Inherited via IElement
@@ -43,6 +44,7 @@ private:
 
 protected:
   std::string getProxyValue(const std::string & path) const;
+  std::shared_ptr<basyx::objectMap_t> getProxyMap(const std::string & path) const;
   void setProxyValue(const std::string & path, const basyx::any value) const;
 
 };

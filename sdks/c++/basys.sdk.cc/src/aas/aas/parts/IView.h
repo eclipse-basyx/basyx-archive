@@ -8,22 +8,29 @@
 #define BASYX_METAMODEL_IView_H_
 
 
-#include "qualifier/IHasSemantics.h"
-#include "qualifier/IHasDataSpecification.h"
-#include "qualifier/IReferable.h"
+#include "aas/qualifier/IHasSemantics.h"
+#include "aas/qualifier/IHasDataSpecification.h"
+#include "aas/qualifier/IReferable.h"
+#include "aas/reference/IReference.h"
 
 #include <vector>
 
-class IView : virtual IHasSemantics, IHasDataSpecification, IReferable
+namespace basyx {
+namespace aas {
+
+class IView : virtual qualifier::IHasSemantics, qualifier::IHasDataSpecification, qualifier::IReferable
 {
 public:
 	
 
 	virtual ~IView() = default;
 
-	virtual void setContainedElement(std::vector<IReference> references) = 0;
-	virtual std::vector<IReference> getContainedElement() const = 0;
+	virtual void setContainedElement(std::vector<reference::IReference> references) = 0;
+	virtual std::vector<reference::IReference> getContainedElement() const = 0;
 };
+
+}
+}
 
 #endif
 

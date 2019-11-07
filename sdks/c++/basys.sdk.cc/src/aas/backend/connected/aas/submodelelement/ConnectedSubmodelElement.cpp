@@ -6,6 +6,8 @@
 
 #include "ConnectedSubmodelElement.h"
 #include "backend/connected/aas/ConnectedElement.h"
+#include "impl/metamodel/hashmap/aas/reference/Reference.h"
+#include "basyx/types.h"
 
 namespace basyx {
 namespace aas {
@@ -16,9 +18,18 @@ ConnectedSubmodelElement::ConnectedSubmodelElement(std::shared_ptr<vab::core::pr
   backend::ConnectedElement(proxy)
 {}
 
-basyx::objectCollection_t ConnectedSubmodelElement::getDataSpecificationReferences() const
+basyx::specificCollection_t<reference::IReference> ConnectedSubmodelElement::getDataSpecificationReferences() const
 {
-  return this->getProxyCollection(reference::paths::DATASPECIFICATIONS);
+  auto data_specs = this->getProxyCollection(reference::paths::DATASPECIFICATIONS);
+
+  basyx::specificCollection_t<reference::IReference> specific_data_specs;
+  for ( auto & spec : data_specs )
+  {
+    reference::impl::Reference data_ref(spec.Get<basyx::objectMap_t>());
+    specific_data_specs.push_back(std::make_shared<reference::impl::Reference>(data_ref));
+  }
+
+  return specific_data_specs;
 }
 
 std::string ConnectedSubmodelElement::getIdShort() const
@@ -31,14 +42,14 @@ std::string ConnectedSubmodelElement::getCategory() const
   return this->getProxyValue(qualifier::ReferablePaths::CATEGORY);
 }
 
-std::string ConnectedSubmodelElement::getDescription() const
+qualifier::impl::Description ConnectedSubmodelElement::getDescription() const
 {
-  return this->getProxyValue(qualifier::ReferablePaths::DESCRIPTION);
+  return qualifier::impl::Description(*this->getProxyMap(qualifier::ReferablePaths::DESCRIPTION));
 }
 
-basyx::any ConnectedSubmodelElement::getParent() const
+std::shared_ptr<reference::IReference> ConnectedSubmodelElement::getParent() const
 {
-  return this->getProxyCollection(reference::paths::PARENTS);
+  return std::make_shared<reference::impl::Reference>(*this->getProxyMap(reference::paths::PARENTS));
 }
 
 basyx::objectCollection_t ConnectedSubmodelElement::getQualifier() const
@@ -46,9 +57,9 @@ basyx::objectCollection_t ConnectedSubmodelElement::getQualifier() const
   return this->getProxyCollection(reference::paths::QUALIFIERS);
 }
 
-basyx::any ConnectedSubmodelElement::getSemanticId() const
+std::shared_ptr<reference::IReference> ConnectedSubmodelElement::getSemanticId() const
 {
-  return this->getProxyValue(reference::paths::SEMANTICIDS);
+  return std::make_shared<reference::impl::Reference>(*this->getProxyMap(reference::paths::SEMANTICIDS));
 }
 
 std::string ConnectedSubmodelElement::getHasKindReference() const
@@ -62,8 +73,6 @@ basyx::objectCollection_t ConnectedSubmodelElement::getProxyCollection(const std
   auto value = this->getProxy()->readElementValue(path);
   return value.Get<basyx::objectCollection_t>();
 }
-
-
 
 std::string ConnectedSubmodelElement::getIdWithLocalCheck() const
 {

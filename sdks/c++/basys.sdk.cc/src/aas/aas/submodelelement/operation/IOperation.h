@@ -31,7 +31,7 @@ class IOperation : public IElement
 public:
   virtual basyx::objectCollection_t getParameterTypes() const = 0;
   virtual basyx::objectCollection_t getReturnTypes() const = 0;
-  virtual basyx::objectMap_t getInvocable() const = 0;
+  virtual std::shared_ptr<basyx::function_base> getInvocable() const = 0;
   virtual basyx::any invoke(basyx::objectCollection_t & parameters) const = 0;
 };
 

@@ -20,6 +20,11 @@ namespace administrationPaths {
   static constexpr char administrationPath[] = "administrationPath";
 }
 
+namespace internalAdministrationPaths {
+  static constexpr char VERSION[] = "version";
+  static constexpr char REVISION[] = "revision";
+}
+
 class IAdministrativeInformation : public IHasDataSpecification
 {
 public:

@@ -8,7 +8,7 @@
 #define BASYX_METAMODEL_ISecurity_H_
 
 
-#include "types/BaSysTypes.h"
+#include "basyx/types.h"
 
 class ISecurity
 {

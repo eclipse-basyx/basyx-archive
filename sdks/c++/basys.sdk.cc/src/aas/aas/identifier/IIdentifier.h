@@ -17,6 +17,11 @@ namespace identifierPaths {
   static constexpr char identifierPath[] = "identifierPath";
 }
 
+namespace internalIdentifierPaths {
+  static constexpr char IDTYPE[] = "idType";
+  static constexpr char ID[] = "id";
+}
+
 class IIdentifier
 {
 public:

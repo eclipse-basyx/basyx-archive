@@ -34,9 +34,17 @@ basyx::any ConnectedElement::getLocalValue(const std::string & path) const
   return basyx::any(nullptr);
 }
 
-void ConnectedElement::setLocalValue(const std::string & path, const basyx::any value)
+void ConnectedElement::setLocalValue(const std::string & path, const basyx::any & value)
 {
   this->local_map->emplace(path, value);
+}
+
+void ConnectedElement::setLocalValues(const basyx::objectMap_t & values)
+{
+  for ( auto & val : values )
+  {
+    this->local_map->emplace(val.first, val.second);
+  }
 }
 
 void ConnectedElement::updateLocalValue(const std::string & path, const basyx::any value)
@@ -65,6 +73,12 @@ std::string ConnectedElement::getProxyValue(const std::string & path) const
 {
   auto value = getProxy()->readElementValue(path);
   return value.Get<std::string>();
+}
+
+std::shared_ptr<basyx::objectMap_t> ConnectedElement::getProxyMap(const std::string & path) const
+{
+  auto value = getProxy()->readElementValue(path);
+  return std::make_shared<basyx::objectMap_t>(value.Get<basyx::objectMap_t>());
 }
 
 }
