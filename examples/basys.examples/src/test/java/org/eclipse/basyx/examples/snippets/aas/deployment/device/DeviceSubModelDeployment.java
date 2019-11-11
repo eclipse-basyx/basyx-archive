@@ -10,7 +10,7 @@ import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
@@ -43,11 +43,11 @@ public class DeviceSubModelDeployment {
 		submodel.setIdShort("SampleSM");
 		submodel.setIdentification(smId.getIdType(), smId.getId());
 		// - Add example properties
-		SingleProperty prop1 = new SingleProperty(7);
+		Property prop1 = new Property(7);
 		prop1.setIdShort("prop1");
 		submodel.addSubModelElement(prop1);
 
-		SingleProperty prop2 = new SingleProperty("myStr");
+		Property prop2 = new Property("myStr");
 		prop2.setIdShort("prop2");
 		submodel.addSubModelElement(prop2);
 

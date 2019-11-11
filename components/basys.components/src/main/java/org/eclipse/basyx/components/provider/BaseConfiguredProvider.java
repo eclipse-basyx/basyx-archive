@@ -14,7 +14,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.Kind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 
 /**
@@ -242,7 +242,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 	 * @param cfgValues
 	 *            Provider configuration
 	 */
-	protected SingleProperty createSubmodelElement(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
+	protected Property createSubmodelElement(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
 
 		// Get property type
 		String propertyType = cfgValues.get(buildCfgName(propertyName, TYPE)).toString();
@@ -265,7 +265,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 	 * @param cfgValues
 	 *            Provider configuration
 	 */
-	protected SingleProperty createProperty(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
+	protected Property createProperty(String propertyName, Object propertyValue, Map<Object, Object> cfgValues) {
 
 		// Try to get property meta data
 		String property_semanticsInternal = null;
@@ -290,7 +290,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 		}
 
 		// Create and return single valued property
-		SingleProperty prop = new SingleProperty(propertyValue, new Referable(propertyName, "", new Description("", property_description)),
+		Property prop = new Property(propertyValue, new Referable(propertyName, "", new Description("", property_description)),
 				property_semanticsInternal, new Qualifier(property_qualifierType, property_qualifier, null));
 		return prop;
 	}

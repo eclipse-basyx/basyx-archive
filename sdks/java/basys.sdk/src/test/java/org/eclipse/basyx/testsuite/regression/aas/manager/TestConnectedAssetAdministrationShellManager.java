@@ -19,7 +19,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingle
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.junit.Before;
@@ -93,11 +93,11 @@ public class TestConnectedAssetAdministrationShellManager {
 		submodel.setIdentification(smId.getIdType(), smId.getId());
 
 		// - Add example properties to sub model
-		SingleProperty prop1 = new SingleProperty(7);
+		Property prop1 = new Property(7);
 		prop1.setIdShort("prop1");
 		submodel.addSubModelElement(prop1);
 
-		SingleProperty prop2 = new SingleProperty("myStr");
+		Property prop2 = new Property("myStr");
 		prop2.setIdShort("prop2");
 		submodel.addSubModelElement(prop2);
 

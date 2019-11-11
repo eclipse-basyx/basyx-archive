@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 
 /**
  * Returns HashSet<Property> Object for the Map with <aas:submodelElements>
@@ -21,8 +21,8 @@ public class TransformProperty {
 	 * HashSet of property class
 	 */
 	@SuppressWarnings("unchecked")
-	public static HashSet<SingleProperty> transformProperty(Map<String, Object> object) {
-		HashSet<SingleProperty> propertySet = new HashSet<SingleProperty>();
+	public static HashSet<Property> transformProperty(Map<String, Object> object) {
+		HashSet<Property> propertySet = new HashSet<Property>();
 		Map<String, Object> submodelElementsObj = (Map<String, Object>) object.get("aas:submodelElements");
 		Object submodelElementObj = submodelElementsObj.get("aas:submodelElement");
 		// We need to check if submodelElementObj is instance of MAP object or
@@ -43,7 +43,7 @@ public class TransformProperty {
 	 * The function accepts each SubmodelementObject and populates the propertyset
 	 */
 	@SuppressWarnings("unchecked")
-	private static void handlesubModelelementObject(HashSet<SingleProperty> propertySet, Object object2) {
+	private static void handlesubModelelementObject(HashSet<Property> propertySet, Object object2) {
 		Map<String, Object> subModelElemObj = (Map<String, Object>) object2;
 		Object propertObj = subModelElemObj.get("aas:property");
 		// We need to check if propertObj is instance of MAP object or Collection and
@@ -63,14 +63,14 @@ public class TransformProperty {
 	 * The function accepts each property Map object and populates the propertyset
 	 */
 	@SuppressWarnings("unchecked")
-	private static void populatePropertySet(HashSet<SingleProperty> propertySet, Object object3) {
+	private static void populatePropertySet(HashSet<Property> propertySet, Object object3) {
 		Map<String, Object> PropertyObj = (Map<String, Object>) object3;
 		// read corresponding tags and populate the Property object
 		String idShort = (String) PropertyObj.get("aas:idShort");
 		String category = (String) PropertyObj.get("aas:category");
 		HasSemantics transformHasSemanticsObj = TransformHasSemantics.transformHasSemantics(PropertyObj);
 		String value = (String) PropertyObj.get("aas:value");
-		SingleProperty prop = new SingleProperty();
+		Property prop = new Property();
 		prop.put("semanticId", transformHasSemanticsObj);
 		prop.setIdShort(idShort);
 		prop.setCategory(category);

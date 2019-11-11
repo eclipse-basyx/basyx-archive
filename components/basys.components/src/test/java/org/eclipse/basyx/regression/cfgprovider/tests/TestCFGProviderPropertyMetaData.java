@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -47,7 +47,7 @@ public class TestCFGProviderPropertyMetaData {
 		// Get property value
 		Map<String, Object> value1 = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1");
-		assertEquals("exampleStringValue", value1.get(SingleProperty.VALUE));
+		assertEquals("exampleStringValue", value1.get(Property.VALUE));
 		// - Check property meta data (description)
 		Map<String, Object> value1a = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1");
@@ -56,7 +56,7 @@ public class TestCFGProviderPropertyMetaData {
 		// Get property value
 		Map<String, Object> value2 = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2");
-		assertEquals("12", value2.get(SingleProperty.VALUE));
+		assertEquals("12", value2.get(Property.VALUE));
 		// - Check property meta data (description)
 		Map<String, Object> value2a = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2");
@@ -65,6 +65,6 @@ public class TestCFGProviderPropertyMetaData {
 		// Get property value
 		Map<String, Object> value3 = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty3");
-		assertEquals("45.8", value3.get(SingleProperty.VALUE));
+		assertEquals("45.8", value3.get(Property.VALUE));
 	}
 }

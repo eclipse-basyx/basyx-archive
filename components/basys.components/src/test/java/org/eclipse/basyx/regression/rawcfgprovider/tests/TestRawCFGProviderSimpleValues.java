@@ -8,7 +8,7 @@ import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirecto
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -56,7 +56,7 @@ public class TestRawCFGProviderSimpleValues {
 		// Get property value
 		Map<String, Object> value1 = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/cfgProperty1/value");
-		assertEquals("exampleStringValueRaw", value1.get(SingleProperty.VALUE));
+		assertEquals("exampleStringValueRaw", value1.get(Property.VALUE));
 		Map<String, Object> cfgProperty1 = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/cfgProperty1");
 		assertEquals("Configuration property description", cfgProperty1.get("description"));
@@ -64,7 +64,7 @@ public class TestRawCFGProviderSimpleValues {
 		// Get property value
 		Map<String, Object> value2 = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/cfgProperty2/value");
-		assertEquals(12, value2.get(SingleProperty.VALUE));
+		assertEquals(12, value2.get(Property.VALUE));
 		// - Check property meta data (description)
 		Map<String, Object> cfgProperty2 = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/cfgProperty2");
@@ -73,12 +73,12 @@ public class TestRawCFGProviderSimpleValues {
 		// Get property value
 		Map<String, Object> value3 = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/cfgProperty3/value");
-		assertEquals("45.8", value3.get(SingleProperty.VALUE));
+		assertEquals("45.8", value3.get(Property.VALUE));
 
 		// Get property value
 		Map<String, Object> value4 = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/cfgProperty4/value");
-		assertEquals("44.8", value4.get(SingleProperty.VALUE));
+		assertEquals("44.8", value4.get(Property.VALUE));
 		Map<String, Object> cfgProperty4 = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/cfgProperty4");
 		assertEquals("Another configuration property description", cfgProperty4.get("description"));

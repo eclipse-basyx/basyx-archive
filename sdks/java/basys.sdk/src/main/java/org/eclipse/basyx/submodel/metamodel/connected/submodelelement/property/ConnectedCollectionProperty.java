@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ICollectionProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.PropertyType;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.exception.TypeMismatchException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -25,7 +25,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	@Override
 	public void set(Collection<Object> collection) throws ServerException {
 		try {
-			getProxy().setModelPropertyValue(SingleProperty.VALUE, collection);
+			getProxy().setModelPropertyValue(Property.VALUE, collection);
 		} catch (Exception e) {
 			throw new ServerException(e.getClass().toString(), e.getMessage());
 		}
@@ -34,7 +34,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	@Override
 	public void add(Object newValue) throws ServerException, TypeMismatchException {
 		try {
-			getProxy().createValue(SingleProperty.VALUE, newValue);
+			getProxy().createValue(Property.VALUE, newValue);
 		} catch (Exception e) {
 			throw new ServerException(e.getClass().toString(), e.getMessage());
 		}
@@ -43,7 +43,7 @@ public class ConnectedCollectionProperty extends ConnectedProperty implements IC
 	@Override
 	public void remove(Object objectRef) throws ServerException {
 		try {
-			getProxy().deleteValue(SingleProperty.VALUE, objectRef);
+			getProxy().deleteValue(Property.VALUE, objectRef);
 		} catch (Exception e) {
 			throw new ServerException(e.getClass().toString(), e.getMessage());
 		}

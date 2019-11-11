@@ -10,7 +10,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ICollectionProperty;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.property.ConnectedCollectionProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SinglePropertyProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;
@@ -39,7 +39,7 @@ public class TestConnectedCollectionProperty {
 		collection.add(2);
 
 		// Create PropertySingleValued containing the collection
-		SingleProperty propertySingleValued = new SingleProperty(collection);
+		Property propertySingleValued = new Property(collection);
 
 		// Create dummy connection manager containing the
 		// created PropertySingleValued map

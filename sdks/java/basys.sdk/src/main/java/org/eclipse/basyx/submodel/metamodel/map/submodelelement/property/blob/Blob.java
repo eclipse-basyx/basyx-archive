@@ -3,7 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.blob;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.blob.IBlob;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.DataElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 
 /**
  * A blob element as defined in DAAS document <br/>
@@ -30,19 +30,19 @@ public class Blob extends DataElement implements IBlob{
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 
-		put(SingleProperty.VALUE, value);
+		put(Property.VALUE, value);
 		put(MIMETYPE, mimeType);
 	}
 
 	@Override
 	public void setValue(byte[] value) {
-		put(SingleProperty.VALUE, value);
+		put(Property.VALUE, value);
 		
 	}
 
 	@Override
 	public byte[] getValue() {
-		return (byte[]) get(SingleProperty.VALUE);
+		return (byte[]) get(Property.VALUE);
 	}
 
 	@Override

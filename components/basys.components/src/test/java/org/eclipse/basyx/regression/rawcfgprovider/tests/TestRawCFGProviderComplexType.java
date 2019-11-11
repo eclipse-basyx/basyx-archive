@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -67,7 +67,7 @@ public class TestRawCFGProviderComplexType {
 		containedType.put("prop4", 2.1f);
 		complexType.put("prop4", containedType);
 
-		SingleProperty prop = new SingleProperty(complexType);
+		Property prop = new Property(complexType);
 		prop.setIdShort("complexProperty");
 		// Create new property value
 
@@ -75,7 +75,7 @@ public class TestRawCFGProviderComplexType {
 		// - Read values back
 		Map<String, Object> value = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/complexProperty/value");
-		value = (Map<String, Object>) value.get(SingleProperty.VALUE);
+		value = (Map<String, Object>) value.get(Property.VALUE);
 		assertEquals(12, value.get("prop1"));
 		assertEquals(13, value.get("prop2"));
 		assertEquals("abc", value.get("prop3"));

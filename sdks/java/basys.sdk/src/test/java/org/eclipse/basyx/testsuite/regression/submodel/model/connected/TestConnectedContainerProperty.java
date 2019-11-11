@@ -15,7 +15,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IContai
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.property.ConnectedContainerProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.ContainerProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.ContainerPropertyProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;
@@ -47,7 +47,7 @@ public class TestConnectedContainerProperty {
 		collection.add(2);
 
 		// Create PropertySingleValued containing the collection
-		SingleProperty propertyMeta = new SingleProperty(collection);
+		Property propertyMeta = new Property(collection);
 		propertyMeta.setIdShort(COLLECTIONPROP);
 
 		// Create operation

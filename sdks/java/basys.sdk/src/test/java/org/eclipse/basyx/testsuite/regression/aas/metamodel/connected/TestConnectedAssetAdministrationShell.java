@@ -24,7 +24,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingle
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;
@@ -55,7 +55,7 @@ public class TestConnectedAssetAdministrationShell {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 
 		// Create a SubModel containing no operations and one property
-		SingleProperty p = new SingleProperty(propVal);
+		Property p = new Property(propVal);
 		p.setIdShort(propId);
 
 		SubModel sm = factory.create(new SubModel(), Collections.singletonList(p), new ArrayList<>());

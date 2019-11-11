@@ -9,7 +9,7 @@ import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceJSONClient;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -67,11 +67,11 @@ public class RunAASManualHTTPOperationsSnippet {
 		// Add example properties
 		SubModel submodel = new SubModel();
 		submodel.setIdShort("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
-		SingleProperty prop1 = new SingleProperty(7);
+		Property prop1 = new Property(7);
 		prop1.setIdShort("prop1");
 		submodel.addSubModelElement(prop1);
 
-		SingleProperty prop2 = new SingleProperty("myStr");
+		Property prop2 = new Property("myStr");
 		prop2.setIdShort("prop2");
 		submodel.addSubModelElement(prop2);
 

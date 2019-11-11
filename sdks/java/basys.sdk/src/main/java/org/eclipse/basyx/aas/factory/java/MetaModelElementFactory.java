@@ -12,7 +12,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.ContainerProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 
 /**
  * Creates meta model entities <br />
@@ -87,7 +87,7 @@ public class MetaModelElementFactory {
 	 * @param operations
 	 * @return
 	 */
-	public SubModel create(SubModel subModel, List<SingleProperty> properties, List<Operation> operations) {
+	public SubModel create(SubModel subModel, List<Property> properties, List<Operation> operations) {
 		SubModel ret = new SubModel();
 		ret.putAll(subModel);
 		properties.stream().forEach(e -> ret.addSubModelElement(e));

@@ -21,7 +21,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingle
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.ContainerProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.ClassRule;
@@ -62,11 +62,11 @@ public class AASSubModelServletConnectorConnection {
 
 			// Add example properties
 			// - Add simple property
-			SingleProperty prop1 = new SingleProperty(234);
+			Property prop1 = new Property(234);
 			prop1.setIdShort("prop1");
 			addSubModelElement(prop1);
 
-			SingleProperty prop11 = new SingleProperty(123);
+			Property prop11 = new Property(123);
 			prop11.setIdShort("prop11");
 			// - Add container property that holds other properties
 			List<SubmodelElement> containerProperties = fac.createList(
@@ -79,7 +79,7 @@ public class AASSubModelServletConnectorConnection {
 			addSubModelElement(container);
 
 			// Add another property manually to sub model container "properties"
-			SingleProperty prop3 = new SingleProperty(17);
+			Property prop3 = new Property(17);
 			prop3.setIdShort("prop3");
 			{
 				((Map<String, Object>) this.get("dataElements")).put("prop3", prop3);

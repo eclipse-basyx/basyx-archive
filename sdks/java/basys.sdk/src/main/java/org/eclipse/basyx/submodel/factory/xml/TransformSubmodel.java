@@ -7,7 +7,7 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +31,12 @@ public class TransformSubmodel {
 		Identifiable transformIdentifier = TransformIdentifiable.transformIdentifier(object);
 		HasKind hasKindObj = TransformHasKind.transformHasKind(object);
 		HasSemantics transformHasSemanticsObj = TransformHasSemantics.transformHasSemantics(object);
-		HashSet<SingleProperty> transformPropertySet = TransformProperty.transformProperty(object);
+		HashSet<Property> transformPropertySet = TransformProperty.transformProperty(object);
 		SubModel submodelobj = new SubModel();
 		submodelobj.putAll(transformIdentifier);
 		submodelobj.putAll(hasKindObj);
 		submodelobj.putAll(transformHasSemanticsObj);
-		for (SingleProperty property : transformPropertySet) {
+		for (Property property : transformPropertySet) {
 			submodelobj.addSubModelElement(property);
 		}
 

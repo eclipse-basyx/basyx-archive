@@ -15,7 +15,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingle
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
@@ -42,7 +42,7 @@ public class TestConnectedSubModel {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 
 		// Create a simple value property
-		SingleProperty propertyMeta = new SingleProperty(100);
+		Property propertyMeta = new Property(100);
 		propertyMeta.setIdShort(PROP);
 
 		// Create an operation
@@ -107,7 +107,7 @@ public class TestConnectedSubModel {
 	public void saveAndLoadPropertyTest() throws Exception {
 		
 		// Construct test data
-		SingleProperty property = new SingleProperty();
+		Property property = new Property();
 		property.setIdShort("test1");
 		property.set("test2");
 		

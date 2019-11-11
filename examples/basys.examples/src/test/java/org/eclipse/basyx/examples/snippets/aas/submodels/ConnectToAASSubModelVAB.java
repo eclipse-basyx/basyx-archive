@@ -19,7 +19,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.ContainerProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -69,11 +69,11 @@ public class ConnectToAASSubModelVAB {
 
 			// Add example properties
 			// - Add simple property
-			SingleProperty prop1 = new SingleProperty(234);
+			Property prop1 = new Property(234);
 			prop1.setIdShort("prop1");
 			addSubModelElement(prop1);
 
-			SingleProperty prop11 = new SingleProperty(123);
+			Property prop11 = new Property(123);
 			prop11.setIdShort("prop11");
 			// - Add container property that holds other properties
 			List<SubmodelElement> containerProperties = fac.createList(prop11);
@@ -81,7 +81,7 @@ public class ConnectToAASSubModelVAB {
 			addSubModelElement(fac.createContainer(new ContainerProperty(), containerProperties, fac.emptyList(), "prop2"));
 
 			// Add another property manually to sub model container "properties"
-			SingleProperty prop3 = new SingleProperty(17);
+			Property prop3 = new Property(17);
 			prop3.setIdShort("prop3");
 			((Map<String, Object>) this.get("dataElements")).put("prop3", prop3);
 		}
@@ -159,13 +159,13 @@ public class ConnectToAASSubModelVAB {
 		assertEquals("sm-001", smId.get(Identifier.ID));
 		assertEquals("smName", submodel.get(Referable.IDSHORT));
 		assertEquals("prop1", prop1.get(Referable.IDSHORT));
-		assertEquals(234, prop1.get(SingleProperty.VALUE)); // old value of prop1 has been stored locally
-		assertEquals(456, changedProp1.get(SingleProperty.VALUE)); // new value is 456
+		assertEquals(234, prop1.get(Property.VALUE)); // old value of prop1 has been stored locally
+		assertEquals(456, changedProp1.get(Property.VALUE)); // new value is 456
 		assertEquals("prop2", prop2.get(Referable.IDSHORT));
 		assertEquals("prop11", prop11.get(Referable.IDSHORT));
-		assertEquals(123, prop11.get(SingleProperty.VALUE));
+		assertEquals(123, prop11.get(Property.VALUE));
 		assertEquals("prop3", prop3.get(Referable.IDSHORT));
-		assertEquals(17, prop3.get(SingleProperty.VALUE));
+		assertEquals(17, prop3.get(Property.VALUE));
 
 	}
 }

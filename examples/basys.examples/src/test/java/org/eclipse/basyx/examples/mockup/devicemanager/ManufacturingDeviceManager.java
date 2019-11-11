@@ -11,7 +11,7 @@ import org.eclipse.basyx.components.configuration.CFGBaSyxProtocolType;
 import org.eclipse.basyx.components.devicemanager.TCPDeviceManagerComponent;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -152,13 +152,13 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		// - Set submodel ID
 		statusSM.setIdShort("Status");
 		//   - Property status: indicate device status
-		SingleProperty statusProp = new SingleProperty("offline");
+		Property statusProp = new Property("offline");
 		statusProp.setIdShort("status");
 		statusSM.addSubModelElement(statusProp);
 		//   - Property statistics: export invocation statistics for every service
 		//     - invocations: indicate total service invocations. Properties are not persisted in this example,
 		//                    therefore we start counting always at 0.
-		SingleProperty invocationsProp = new SingleProperty(0);
+		Property invocationsProp = new Property(0);
 		invocationsProp.setIdShort("invocations");
 		statusSM.addSubModelElement(invocationsProp);
 		// - Transfer device sub model to server

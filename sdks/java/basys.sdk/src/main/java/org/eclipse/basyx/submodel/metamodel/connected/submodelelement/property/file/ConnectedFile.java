@@ -2,7 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.property.
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.file.IFile;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedDataElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.blob.Blob;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 /**
@@ -17,13 +17,13 @@ public class ConnectedFile extends ConnectedDataElement implements IFile {
 	
 	@Override
 	public void setValue(String value) {
-		getProxy().setModelPropertyValue(SingleProperty.VALUE, value);
+		getProxy().setModelPropertyValue(Property.VALUE, value);
 		
 	}
 
 	@Override
 	public String getValue() {
-		return (String) getProxy().getModelPropertyValue(SingleProperty.VALUE);
+		return (String) getProxy().getModelPropertyValue(Property.VALUE);
 	}
 
 	@Override

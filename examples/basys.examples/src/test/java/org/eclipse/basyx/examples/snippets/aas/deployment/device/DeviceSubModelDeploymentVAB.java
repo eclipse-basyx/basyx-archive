@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnector;
@@ -39,11 +39,11 @@ public class DeviceSubModelDeploymentVAB {
 		// - Set sub model ID
 		submodel.setIdShort("dynamicSM");
 		// - Add example properties
-		SingleProperty prop1 = new SingleProperty(7);
+		Property prop1 = new Property(7);
 		prop1.setIdShort("prop1");
 		submodel.addSubModelElement(prop1);
 
-		SingleProperty prop2 = new SingleProperty("myStr");
+		Property prop2 = new Property("myStr");
 		prop2.setIdShort("prop2");
 		submodel.addSubModelElement(prop2);
 

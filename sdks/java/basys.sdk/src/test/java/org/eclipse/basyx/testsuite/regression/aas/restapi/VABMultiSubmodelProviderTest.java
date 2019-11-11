@@ -11,7 +11,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
@@ -101,6 +101,6 @@ public class VABMultiSubmodelProviderTest {
 		// Get property value
 		Map<String, Object> value = (Map<String, Object>) proxy
 				.getModelPropertyValue("/aas/submodels/" + smId + "/dataElements/integerProperty/value");
-		assertEquals(123, value.get(SingleProperty.VALUE));
+		assertEquals(123, value.get(Property.VALUE));
 	}
 }
