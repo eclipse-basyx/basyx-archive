@@ -9,6 +9,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacadeCustomSemantics
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacadeIRDISemantics;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.Kind;
@@ -207,7 +208,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 		if (basyx_submodelSemantics.equals(IdentifierType.IRDI.toLowerCase())) {
 			// Create sub model from template
 			SubmodelFacade template = new SubmodelFacadeIRDISemantics(basyx_submodelSemantics, idType, basyx_id,
-					basyx_idShort, basyx_category, basyx_description,
+					basyx_idShort, basyx_category, new Description("", basyx_description),
 					new Qualifier(basyx_qualifierType, basyx_qualifier, null), null, Kind.Instance, basyx_version,
 					basyx_revision);
 			// Get sub model data
@@ -216,7 +217,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 		if (basyx_submodelSemantics.equals(IdentifierType.Custom.toLowerCase())) {
 			// Create sub model from template
 			SubmodelFacade template = new SubmodelFacadeCustomSemantics(basyx_submodelSemantics, idType, basyx_id,
-					basyx_idShort, basyx_category, basyx_description,
+					basyx_idShort, basyx_category, new Description("", basyx_description),
 					new Qualifier(basyx_qualifierType, basyx_qualifier, null), new HasDataSpecification(),
 					Kind.Instance, basyx_version, basyx_revision);
 			// Get sub model data
@@ -289,7 +290,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 		}
 
 		// Create and return single valued property
-		SingleProperty prop = new SingleProperty(propertyValue, new Referable(propertyName, "", property_description),
+		SingleProperty prop = new SingleProperty(propertyValue, new Referable(propertyName, "", new Description("", property_description)),
 				property_semanticsInternal, new Qualifier(property_qualifierType, property_qualifier, null));
 		return prop;
 	}

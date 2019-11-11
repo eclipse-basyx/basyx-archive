@@ -39,7 +39,7 @@ public class Identifiable extends Referable implements IIdentifiable {
 	/**
 	 * Constructor that accepts values for most relevant properties
 	 */
-	public Identifiable(String version, String revision, String idShort, String category, String description, String idType, String id) {
+	public Identifiable(String version, String revision, String idShort, String category, Description description, String idType, String id) {
 		// Add qualifier
 		putAll(new Referable(idShort, category, description));
 

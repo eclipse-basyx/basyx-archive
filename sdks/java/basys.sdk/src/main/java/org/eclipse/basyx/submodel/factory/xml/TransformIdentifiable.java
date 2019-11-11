@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.factory.xml;
 
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 
 /**
@@ -32,9 +33,9 @@ public class TransformIdentifiable {
 
 			// TODO: The file needs to be updated for further extension of constructor
 			// arguments
-			return new Identifiable(version, revision, "", "", "", idType, id);
+			return new Identifiable(version, revision, "", "", new Description("", ""), idType, id);
 		} else {
-			return new Identifiable("", "", "", "", "", idType, id);
+			return new Identifiable("", "", "", "", new Description("", ""), idType, id);
 		}
 	}
 

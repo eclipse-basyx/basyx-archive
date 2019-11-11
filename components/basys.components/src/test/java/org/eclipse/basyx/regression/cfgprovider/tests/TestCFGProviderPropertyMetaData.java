@@ -51,7 +51,7 @@ public class TestCFGProviderPropertyMetaData {
 		// - Check property meta data (description)
 		Map<String, Object> value1a = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1");
-		assertEquals("Configuration property description", value1a.get("description"));
+		assertEquals("Configuration property description", ((Map<String, String>) value1a.get("description")).get("text"));
 
 		// Get property value
 		Map<String, Object> value2 = (Map<String, Object>) connSubModel
@@ -60,7 +60,7 @@ public class TestCFGProviderPropertyMetaData {
 		// - Check property meta data (description)
 		Map<String, Object> value2a = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2");
-		assertEquals("Configuration property description on multiple lines", value2a.get("description"));
+		assertEquals("Configuration property description on multiple lines", ((Map<String, String>) value2a.get("description")).get("text"));
 
 		// Get property value
 		Map<String, Object> value3 = (Map<String, Object>) connSubModel

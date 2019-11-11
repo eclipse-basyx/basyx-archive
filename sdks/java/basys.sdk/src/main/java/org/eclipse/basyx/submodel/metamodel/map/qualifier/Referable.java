@@ -58,7 +58,7 @@ public class Referable extends HashMap<String, Object> implements IReferable {
 	 * @param category
 	 * @param description
 	 */
-	public Referable(String idShort, String category, String description) {
+	public Referable(String idShort, String category, Description description) {
 		// Identifies an element within its name space (String)
 		put(IDSHORT, idShort);
 		// Coded value that gives further meta information w.r.t. to the type of the
@@ -66,7 +66,7 @@ public class Referable extends HashMap<String, Object> implements IReferable {
 		// expected existence of attributes and the applicability of constraints.
 		// (String)
 		put(CATEGORY, category);
-		// Description or comments on the element (String)
+		// Description or comments on the element
 		put(DESCRIPTION, description);
 		// Reference to the parent of this element (Referable)
 		put(PARENT, null);
@@ -74,7 +74,7 @@ public class Referable extends HashMap<String, Object> implements IReferable {
 
 	@Override
 	public String getIdShort() {
-	return new ReferableFacade(this).getIdShort();
+		return new ReferableFacade(this).getIdShort();
 	}
 
 	@Override
