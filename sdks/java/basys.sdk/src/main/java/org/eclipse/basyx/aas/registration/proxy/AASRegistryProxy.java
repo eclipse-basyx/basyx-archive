@@ -2,7 +2,10 @@ package org.eclipse.basyx.aas.registration.proxy;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
@@ -12,7 +15,6 @@ import org.eclipse.basyx.vab.directory.proxy.VABDirectoryProxy;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnector;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,6 +97,23 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 		}
 		if (result instanceof Map<?, ?>) {
 			return new AASDescriptor((Map<String, Object>) result);
+		} else {
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<AASDescriptor> lookupAll() {
+		Object result = null;
+		try {
+			result = provider.getModelPropertyValue("");
+		} catch (Exception e) {
+			logger.error("Exception in lookupAAS", e);
+		}
+		if (result instanceof Collection<?>) {
+			Collection<?> descriptors = (Collection<?>) result;
+			return descriptors.stream().map(x -> new AASDescriptor((Map<String, Object>) x)).collect(Collectors.toList());
 		} else {
 			return null;
 		}
