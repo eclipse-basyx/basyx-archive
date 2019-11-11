@@ -11,7 +11,7 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
-import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
+import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceExecutor;
@@ -70,7 +70,7 @@ public class TestAASServicecall {
 		// Add aas to the provider
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
 		
-		IAASRegistryService registry = new PreconfiguredRegistry();
+		IAASRegistryService registry = new InMemoryRegistry();
 		IIdentifier id = new Identifier(IdentifierType.Custom, "coilcar");
 		AASDescriptor aasDescriptor = new AASDescriptor(id, "/aas");
 		IIdentifier smId = new Identifier(IdentifierType.Custom, "submodel1");

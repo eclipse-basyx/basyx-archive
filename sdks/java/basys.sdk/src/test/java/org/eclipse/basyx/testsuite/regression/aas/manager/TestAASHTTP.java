@@ -9,7 +9,7 @@ import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
+import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
@@ -54,7 +54,7 @@ public class TestAASHTTP {
 		directory.addMapping(StubAASServlet.SMURN.getId(),
 				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMIDSHORT);
 
-		PreconfiguredRegistry registry = new PreconfiguredRegistry();
+		InMemoryRegistry registry = new InMemoryRegistry();
 
 		// Create aas descriptor for the aas registry
 		AASDescriptor aasDescriptor = new AASDescriptor(StubAASServlet.AASURN,

@@ -14,7 +14,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
+import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceDelegate;
 import org.eclipse.basyx.regression.support.processengine.executor.CoilcarServiceExecutor;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
@@ -42,7 +42,7 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 	 * */
 	ConnectedAssetAdministrationShellManager manager;
 	
-	PreconfiguredRegistry registry;
+	InMemoryRegistry registry;
 	/**
 	 * Makes sure Tomcat Server is started
 	 */
@@ -55,7 +55,7 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 	@Before
 	public void build() {
 		// Create registry for aas
-		registry = new PreconfiguredRegistry();
+		registry = new InMemoryRegistry();
 
 		// Create aas descriptor with meta-information of the aas
 		IIdentifier id = new Identifier(IdentifierType.Custom, "coilcar");
