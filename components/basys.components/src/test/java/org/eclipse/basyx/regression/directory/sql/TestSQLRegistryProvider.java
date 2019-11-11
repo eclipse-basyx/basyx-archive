@@ -1,7 +1,7 @@
 package org.eclipse.basyx.regression.directory.sql;
 
 import org.eclipse.basyx.components.servlets.SQLDirectoryServlet;
-import org.eclipse.basyx.regression.directory.TestRegistryProvider;
+import org.eclipse.basyx.testsuite.regression.aas.registration.proxy.TestRegistryProvider;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;

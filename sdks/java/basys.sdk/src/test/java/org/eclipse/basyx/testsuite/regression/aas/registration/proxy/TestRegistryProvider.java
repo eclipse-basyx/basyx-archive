@@ -1,4 +1,4 @@
-package org.eclipse.basyx.regression.directory;
+package org.eclipse.basyx.testsuite.regression.aas.registration.proxy;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
