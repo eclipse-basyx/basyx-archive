@@ -53,7 +53,6 @@ public class BaseConfiguredProvider extends SubModelProvider {
 	 */
 	public BaseConfiguredProvider(Map<Object, Object> cfgValues) {
 		// Invoke base constructor
-		// super(new VABHashmapProvider(new HashMap<String, Object>()));
 		super();
 
 		// Create sub model

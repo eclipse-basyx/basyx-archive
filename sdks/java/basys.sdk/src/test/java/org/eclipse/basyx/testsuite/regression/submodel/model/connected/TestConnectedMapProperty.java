@@ -16,7 +16,7 @@ import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;
 import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.exception.TypeMismatchException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
-import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
+import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,7 +48,7 @@ public class TestConnectedMapProperty {
 		// Create dummy connection manager containing the
 		// created PropertySingleValued map
 		VABConnectionManager manager = new VABConnectionManagerStub(
-				new SinglePropertyProvider(new VABHashmapProvider(destroyType)));
+				new SinglePropertyProvider(new VABMapProvider(destroyType)));
 		// Create ConnectedMapProperty
 		prop = new ConnectedMapProperty(manager.connectToVABElement(""));
 	}

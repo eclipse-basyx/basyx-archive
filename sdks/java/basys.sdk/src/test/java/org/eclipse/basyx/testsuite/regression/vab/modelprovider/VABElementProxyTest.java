@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.model.VABModelMap;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
-import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
+import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.junit.Test;
 
 /**
@@ -27,7 +27,7 @@ public class VABElementProxyTest {
 		map.putPath("a/b/c", 0);
 
 		// Setup provider and connection manager
-		VABHashmapProvider provider = new VABHashmapProvider(map);
+		VABMapProvider provider = new VABMapProvider(map);
 		VABConnectionManagerStub stub = new VABConnectionManagerStub(provider);
 
 		// Connect to element

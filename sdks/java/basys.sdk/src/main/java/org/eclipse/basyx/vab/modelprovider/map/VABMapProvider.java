@@ -17,14 +17,14 @@ import org.eclipse.basyx.vab.modelprovider.list.VABListHandler;
  * @author kuhn, schnicke, espen
  *
  */
-public class VABHashmapProvider extends VABModelProvider {
+public class VABMapProvider extends VABModelProvider {
 	
-	public VABHashmapProvider(Map<String, Object> elements) {
+	public VABMapProvider(Map<String, Object> elements) {
 		super(elements, new VABMultiElementHandler(new VABMapHandler(), new VABListHandler()));
 		this.elements = elements;
 	}
 
-	protected VABHashmapProvider(Map<String, Object> elements, IVABElementHandler handler) {
+	protected VABMapProvider(Map<String, Object> elements, IVABElementHandler handler) {
 		super(elements, handler);
 	}
 

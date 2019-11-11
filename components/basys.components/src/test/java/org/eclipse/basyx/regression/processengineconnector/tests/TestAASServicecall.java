@@ -13,7 +13,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceExecutor;
 import org.eclipse.basyx.regression.support.processengine.aas.DeviceAdministrationShellFactory;
 import org.eclipse.basyx.regression.support.processengine.executor.CoilcarServiceExecutor;
@@ -62,7 +62,7 @@ public class TestAASServicecall {
 		SubModel sm = new DeviceSubmodelFactory().create("submodel1", coilcar);
 		
 		// Create VAB multi-submodel provider for holding the sub-models
-		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
+		MultiSubmodelProvider provider = new MultiSubmodelProvider();
 		
 		// Add sub-model to the provider
 		provider.addSubmodel("submodel1", new SubModelProvider(sm));

@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.function.Function;
 
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
+import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.junit.Test;
 
 /**
- * Code snippet showing the use of the VABHashMapProvider. It can be used as a basic low level model provider for
+ * Code snippet showing the use of the VABMapProvider. It can be used as a basic low level model provider for
  * arbitrary models based on HashMaps. The provider encapsulates the actual data and implements the abstract interface
  * IModelProvider so that the contained model can be accessed via the five VAB primitives create, retrieve, update,
  * delete and invoke.
@@ -18,7 +18,7 @@ import org.junit.Test;
  * @author espen
  *
  */
-public class VABHashMapProviderClass {
+public class VABMapProviderClass {
 
 	/**
 	 * Snippet showing the programmatic approach for creating arbitrary local, static models using HashMaps
@@ -45,7 +45,7 @@ public class VABHashMapProviderClass {
 		rootElement.put("data", childMap);
 
 		// The provider then encapsulates the data and realizes the abstract IModelProvider interface
-		IModelProvider provider = new VABHashmapProvider(rootElement);
+		IModelProvider provider = new VABMapProvider(rootElement);
 
 		// Child elements can now be accessed with a path that is mapped to actual data structure
 		assertEquals("myElement", provider.getModelPropertyValue("/name"));

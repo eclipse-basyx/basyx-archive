@@ -15,7 +15,7 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
-import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
+import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 
@@ -135,7 +135,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		
 		// Register control component as local sub model
 		// - This sub model will stay with the device
-		server = new BaSyxTCPServer<>(new VABHashmapProvider(simpleControlComponent), controlComponentServerPort);
+		server = new BaSyxTCPServer<>(new VABMapProvider(simpleControlComponent), controlComponentServerPort);
 		// - Start local BaSyx/TCP server
 		server.start();
 	}

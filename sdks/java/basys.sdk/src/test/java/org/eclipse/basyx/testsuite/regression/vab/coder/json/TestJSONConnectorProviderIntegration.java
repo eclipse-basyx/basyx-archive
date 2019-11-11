@@ -6,7 +6,7 @@ import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.coder.json.provider.JSONProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
+import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
 
 /**
@@ -24,17 +24,18 @@ public class TestJSONConnectorProviderIntegration {
 				protected IModelProvider createProvider(String addr) {
 
 					// BACKEND
-					// Creates a new VABHashMapProvider which manages a data model as defined in SimpleVABElement.
-					VABHashmapProvider modelprovider = new VABHashmapProvider(new SimpleVABElement());
+					// Creates a new VABMapProvider which manages a data model as defined in
+					// SimpleVABElement.
+					VABMapProvider modelprovider = new VABMapProvider(new SimpleVABElement());
 
 					// We stack the JSONProvider on top of the model to handle serialization and exceptions
-					JSONProvider<VABHashmapProvider> provider = new JSONProvider<VABHashmapProvider>(modelprovider);
+					JSONProvider<VABMapProvider> provider = new JSONProvider<VABMapProvider>(modelprovider);
 
 					// FRONTEND
 					// We stack the JSONConnector on top of the JSONProvider to handle de-serialization and response
 					// verification
 					JSONConnector connector = new JSONConnector(
-							new IBasyxConnectorFacade<VABHashmapProvider>(provider));
+							new IBasyxConnectorFacade<VABMapProvider>(provider));
 
 					return connector;
 				}

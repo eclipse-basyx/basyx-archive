@@ -1,6 +1,6 @@
 package org.eclipse.basyx.vab.factory.xml;
 
-import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
+import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +19,9 @@ public class VABXmlProviderFactory {
 		// Empty Constructor
 	}
 
-	public VABHashmapProvider createVABElements(String aasXml) {
+	public VABMapProvider createVABElements(String aasXml) {
 		try {
-			return (new VABHashmapProvider(XmlParser.buildXmlMap(aasXml)));
+			return (new VABMapProvider(XmlParser.buildXmlMap(aasXml)));
 		} catch (Exception e) {
 			logger.error("Exception in createVABElements", e);
 		}

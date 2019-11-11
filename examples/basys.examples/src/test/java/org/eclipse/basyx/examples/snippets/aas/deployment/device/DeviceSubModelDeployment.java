@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
@@ -54,8 +54,8 @@ public class DeviceSubModelDeployment {
 		
 		// Export sub model via BaSyx server
 		SubModelProvider modelProvider = new SubModelProvider(submodel);
-		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider("SampleSM", modelProvider);
-		BaSyxTCPServer<VABMultiSubmodelProvider> server = new BaSyxTCPServer<>(aasProvider, 9998);
+		MultiSubmodelProvider aasProvider = new MultiSubmodelProvider("SampleSM", modelProvider);
+		BaSyxTCPServer<MultiSubmodelProvider> server = new BaSyxTCPServer<>(aasProvider, 9998);
 		// - Start local BaSyx/TCP server
 		server.start();
 		

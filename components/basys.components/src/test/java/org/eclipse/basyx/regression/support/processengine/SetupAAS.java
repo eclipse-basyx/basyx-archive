@@ -2,7 +2,7 @@ package org.eclipse.basyx.regression.support.processengine;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.regression.support.processengine.aas.DeviceAdministrationShellFactory;
 import org.eclipse.basyx.regression.support.processengine.stubs.Coilcar;
 import org.eclipse.basyx.regression.support.processengine.submodel.DeviceSubmodelFactory;
@@ -25,7 +25,7 @@ public class SetupAAS {
 		AssetAdministrationShell aas = new DeviceAdministrationShellFactory().create(aasid, submodelid);
 		SubModel sm = new DeviceSubmodelFactory().create(submodelid, coilcar);
 
-		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
+		MultiSubmodelProvider provider = new MultiSubmodelProvider();
 		provider.addSubmodel(submodelid, new SubModelProvider(sm));
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
 
