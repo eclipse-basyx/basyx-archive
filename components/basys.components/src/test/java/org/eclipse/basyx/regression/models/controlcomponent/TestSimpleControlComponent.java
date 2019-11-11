@@ -1,7 +1,11 @@
-package org.eclipse.basyx.models.controlcomponent;
+package org.eclipse.basyx.regression.models.controlcomponent;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.basyx.models.controlcomponent.ExecutionMode;
+import org.eclipse.basyx.models.controlcomponent.ExecutionState;
+import org.eclipse.basyx.models.controlcomponent.OccupationState;
+import org.eclipse.basyx.models.controlcomponent.SimpleControlComponent;
 import org.junit.Test;
 
 
