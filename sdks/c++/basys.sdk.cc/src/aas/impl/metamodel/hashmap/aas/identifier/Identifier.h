@@ -21,6 +21,7 @@ public:
   ~Identifier() = default;
 
   Identifier();
+  Identifier(const std::string & id, const std::string & idType);
   Identifier(const basyx::objectMap_t & map);
 
   // Inherited via IIdentifier

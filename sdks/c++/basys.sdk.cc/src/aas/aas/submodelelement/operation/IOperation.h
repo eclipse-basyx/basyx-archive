@@ -14,6 +14,8 @@
 
 #include <vector>
 
+using operation_var_list = basyx::specificCollection_t<basyx::aas::submodelelement::operation::IOperationVariable>;
+
 namespace basyx {
 namespace aas {
 namespace submodelelement {
@@ -25,12 +27,11 @@ namespace OperationPaths {
   static constexpr char INVOKABLE[] = "invokable";
 }
 
-
-class IOperation : public IElement
+class IOperation
 {
 public:
-  virtual basyx::objectCollection_t getParameterTypes() const = 0;
-  virtual basyx::objectCollection_t getReturnTypes() const = 0;
+  virtual operation_var_list getParameterTypes() const = 0;
+  virtual operation_var_list getReturnTypes() const = 0;
   virtual std::shared_ptr<basyx::function_base> getInvocable() const = 0;
   virtual basyx::any invoke(basyx::objectCollection_t & parameters) const = 0;
 };

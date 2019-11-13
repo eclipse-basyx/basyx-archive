@@ -7,8 +7,8 @@
 #ifndef BASYX_METAMODEL_IHASKIND_H_
 #define BASYX_METAMODEL_IHASKIND_H_
 
-
 #include <string>
+#include "impl/metamodel/hashmap/aas/qualifier/haskind/Kind.h"
 
 namespace basyx {
 namespace aas {
@@ -24,7 +24,7 @@ class IHasKind
 public:
   virtual ~IHasKind() = default;
 
-  virtual std::string getHasKindReference() const = 0;
+  virtual submodel::metamodel::map::qualifier::haskind::Kind getHasKindReference() const = 0;
 };
 
 

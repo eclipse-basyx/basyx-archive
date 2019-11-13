@@ -16,24 +16,28 @@ ConnectedRelationshipElement::ConnectedRelationshipElement(std::shared_ptr<vab::
   ConnectedSubmodelElement(proxy)
 {}
 
-void ConnectedRelationshipElement::setFirst(const basyx::any & first)
+void ConnectedRelationshipElement::setFirst(const std::shared_ptr<aas::reference::IReference> & first)
 {
-  this->setProxyValue(submodelelement::RelationshipElementPath::FIRST, first);
+  //todo
+  //this->setProxyValue(submodelelement::RelationshipElementPath::FIRST, first);
 }
 
-basyx::any ConnectedRelationshipElement::getFirst() const
+std::shared_ptr<aas::reference::IReference> ConnectedRelationshipElement::getFirst() const
 {
-  return this->getProxyValue(submodelelement::RelationshipElementPath::FIRST);
+  //todo
+  return nullptr;// this->getProxyValue(submodelelement::RelationshipElementPath::FIRST);
 }
 
-void ConnectedRelationshipElement::setSecond(const basyx::any & second)
+void ConnectedRelationshipElement::setSecond(const std::shared_ptr<aas::reference::IReference> & second)
 {
-  this->setProxyValue(submodelelement::RelationshipElementPath::SECOND, second);
+  //todo
+  //this->setProxyValue(submodelelement::RelationshipElementPath::SECOND, second);
 }
 
-basyx::any ConnectedRelationshipElement::getSecond() const
+std::shared_ptr<aas::reference::IReference> ConnectedRelationshipElement::getSecond() const
 {
-  return this->getProxyValue(submodelelement::RelationshipElementPath::SECOND);
+  //todo
+  return nullptr;// this->getProxyValue(submodelelement::RelationshipElementPath::SECOND);
 }
 
 }

@@ -19,7 +19,7 @@ namespace basyx {
 namespace aas {
 namespace submodelelement {
 
-class ISubmodelElement : public qualifier::IHasDataSpecification, qualifier::IReferable, IQualifiable, qualifier::IHasSemantics, qualifier::haskind::IHasKind
+class ISubmodelElement : public qualifier::IHasDataSpecification, qualifier::IReferable, qualifier::qualifiable::IQualifiable, qualifier::IHasSemantics, qualifier::haskind::IHasKind
 {
 private:
   basyx::objectMap_t hashMap;

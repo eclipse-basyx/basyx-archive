@@ -9,25 +9,30 @@
 
 
 #include "aas/reference/IReference.h"
-
+#include "aas/qualifier/IHasSemantics.h"
 #include "basyx/types.h"
 
 #include <string>
 
-class IQualifier
+namespace basyx {
+namespace aas {
+namespace qualifier {
+namespace qualifiable {
+
+class IQualifier : public IHasSemantics
 {
 public:
-	virtual ~IQualifier() = default;
+  virtual ~IQualifier() = default;
 
-	virtual void setQualifierType(const std::string & obj) = 0;
-	virtual std::string getQualifierType() const = 0;
-
-	virtual void setQualifierValue(const basyx::any & obj) = 0;
-	virtual basyx::any getQualifierValue() const = 0;
-
-	virtual void setQualifierValueId(const IReference & obj) = 0;
-	virtual IReference getQualifierValueId() const = 0;
+  virtual std::string getQualifierType() const = 0;
+  virtual basyx::any getQualifierValue() const = 0;
+  virtual std::shared_ptr<reference::IReference> getQualifierValueId() const = 0;
 };
+
+}
+}
+}
+}
 
 #endif
 

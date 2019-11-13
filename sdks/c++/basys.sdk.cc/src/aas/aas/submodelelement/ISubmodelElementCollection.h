@@ -26,8 +26,8 @@ class ISubmodelElementCollection
 public:
   virtual ~ISubmodelElementCollection() = default;
 
-  virtual void setValue(const basyx::objectCollection_t & value) = 0;
-  virtual basyx::objectCollection_t getValue() const = 0;
+  virtual void setValue(const basyx::specificCollection_t<aas::submodelelement::ISubmodelElement> & value) = 0;
+  virtual basyx::specificCollection_t<aas::submodelelement::ISubmodelElement> getValue() const = 0;
 
   virtual void setOrdered(const bool & value) = 0;
   virtual bool isOrdered() const = 0;
@@ -35,8 +35,8 @@ public:
   virtual void setAllowDuplicates(const bool & value) = 0;
   virtual bool isAllowDuplicates() const = 0;
 
-  virtual void setElements(const basyx::objectMap_t & elements) = 0;
-  virtual basyx::objectMap_t getElements() const = 0;
+  virtual void setElements(const basyx::specificMap_t<aas::submodelelement::ISubmodelElement> & value) = 0;
+  virtual basyx::specificMap_t<aas::submodelelement::ISubmodelElement> getElements() const = 0;
 };
 
 }

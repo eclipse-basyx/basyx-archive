@@ -42,9 +42,10 @@ basyx::specificCollection_t<reference::IReference> ConnectedSubmodel::getDataSpe
   return administrative_information.getDataSpecificationReferences();
 }
 
-std::string ConnectedSubmodel::getHasKindReference() const
+submodel::metamodel::map::qualifier::haskind::Kind ConnectedSubmodel::getHasKindReference() const
 {
-  return this->getProxyValue(qualifier::haskind::Paths::KIND);
+  //todo
+  return submodel::metamodel::map::qualifier::haskind::Kind::NOTSPECIFIED;
 }
 
 void ConnectedSubmodel::setProperties(const basyx::objectMap_t & properties)

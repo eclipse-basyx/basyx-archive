@@ -10,6 +10,7 @@
 #include "aas/ISubModel.h"
 
 #include "impl/metamodel/hashmap/IVABElementContainer.h"
+#include "impl/metamodel/hashmap/aas/qualifier/haskind/Kind.h"
 #include "backend/connected/aas/ConnectedElement.h"
 #include "aas/reference/IReference.h"
 
@@ -27,7 +28,7 @@ public:
   virtual std::shared_ptr<qualifier::IAdministrativeInformation> getAdministration() const override;
   virtual std::shared_ptr<identifier::IIdentifier> getIdentification() const override;
   virtual basyx::specificCollection_t<reference::IReference> getDataSpecificationReferences() const override;
-  virtual std::string getHasKindReference() const override;
+  virtual submodel::metamodel::map::qualifier::haskind::Kind getHasKindReference() const override;
   virtual void setProperties(const basyx::objectMap_t & properties) override;
   virtual void setOperations(const basyx::objectMap_t & operations) override;
   virtual std::string getIdShort() const override;

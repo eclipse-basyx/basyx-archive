@@ -9,7 +9,6 @@
 
 #include "aas/reference/IReference.h"
 
-
 namespace basyx {
 namespace aas {
 namespace submodelelement {
@@ -25,11 +24,11 @@ class IRelationshipElement
 public:
   virtual ~IRelationshipElement() = default;
 
-  virtual void setFirst(const basyx::any & first) = 0;
-  virtual basyx::any getFirst() const = 0;
+  virtual void setFirst(const std::shared_ptr<reference::IReference> & first) = 0;
+  virtual std::shared_ptr<reference::IReference> getFirst() const = 0;
 
-  virtual void setSecond(const basyx::any & second) = 0;
-  virtual basyx::any getSecond() const = 0;
+  virtual void setSecond(const std::shared_ptr<reference::IReference> & second) = 0;
+  virtual std::shared_ptr<reference::IReference> getSecond() const = 0;
 };
 
 }

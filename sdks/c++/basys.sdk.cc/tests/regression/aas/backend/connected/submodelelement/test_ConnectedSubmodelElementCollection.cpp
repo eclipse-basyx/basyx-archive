@@ -37,7 +37,8 @@ TEST_F(ConnectedSubmodelElementCollectionTest, TestSetValue)
   basyx::objectCollection_t value;
   value.push_back('a');
 
-  elements.setValue(value);
+  //todo 
+  //elements.setValue(value);
 
   ASSERT_EQ(property::PropertyPaths::VALUE, mock->updateElementCallValues.at(0).first);
   ASSERT_EQ(1, mock->updateElementCallValues.at(0).second.Get<basyx::objectCollection_t>().size());
@@ -120,7 +121,8 @@ TEST_F(ConnectedSubmodelElementCollectionTest, TestSetElements)
 
   basyx::objectMap_t map;
 
-  elements.setElements(map);
+  //todo
+  //elements.setElements(map);
 
   ASSERT_EQ(SubmodelPaths::SUBMODELELEMENT, mock->updateElementCallValues.at(0).first);
   ASSERT_EQ(map, mock->updateElementCallValues.at(0).second.Get<basyx::objectMap_t>());

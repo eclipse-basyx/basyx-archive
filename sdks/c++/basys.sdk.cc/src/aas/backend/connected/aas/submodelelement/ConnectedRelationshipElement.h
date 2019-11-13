@@ -27,10 +27,10 @@ public:
   ~ConnectedRelationshipElement() = default;
   
   // Inherited via IRelationshipElement
-  virtual void setFirst(const basyx::any & first) override;
-  virtual basyx::any getFirst() const override;
-  virtual void setSecond(const basyx::any & second) override;
-  virtual basyx::any getSecond() const override;
+  virtual void setFirst(const std::shared_ptr<aas::reference::IReference> & first) override;
+  virtual std::shared_ptr<aas::reference::IReference> getFirst() const override;
+  virtual void setSecond(const std::shared_ptr<aas::reference::IReference> & second) override;
+  virtual std::shared_ptr<aas::reference::IReference> getSecond() const override;
 };
 
 

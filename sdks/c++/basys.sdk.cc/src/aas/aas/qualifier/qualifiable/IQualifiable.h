@@ -14,14 +14,23 @@
 #include <vector>
 #include <memory>
 
+namespace basyx {
+namespace aas {
+namespace qualifier {
+namespace qualifiable {
+
 class IQualifiable
 {
 public:
-	virtual ~IQualifiable() = default;
+  virtual ~IQualifiable() = default;
 
-	//virtual void setQualifier(const basyx::objectCollection_t & qualifiers) = 0;
-	virtual basyx::objectCollection_t getQualifier() const = 0;
+  virtual basyx::specificCollection_t<IConstraint> getQualifier() const = 0;
 };
+
+}
+}
+}
+}
 
 #endif
 
