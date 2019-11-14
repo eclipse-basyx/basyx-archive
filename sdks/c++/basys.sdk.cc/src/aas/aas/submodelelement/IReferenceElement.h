@@ -10,22 +10,19 @@
 #include "aas/reference/IReference.h"
 #include "aas/submodelelement/property/IProperty.h"
 
-
 namespace basyx {
 namespace aas {
 namespace submodelelement {
-namespace property {
 
 class IReferenceElement
 {
 public:
   virtual ~IReferenceElement() = default;
 
-  virtual void setValue(const basyx::any & ref) = 0;
-  virtual basyx::any getValue() const = 0;
+  virtual void setValue(const std::shared_ptr<reference::IReference> & ref) = 0;
+  virtual std::shared_ptr<reference::IReference> getValue() const = 0;
 };
 
-}
 }
 }
 }

@@ -7,19 +7,29 @@
 #ifndef BASYX_METAMODEL_IFormula_H_
 #define BASYX_METAMODEL_IFormula_H_
 
-
-#include "reference/IReference.h"
+#include "aas/reference/IReference.h"
+#include "basyx/types.h"
 
 #include <vector>
+
+
+namespace basyx {
+namespace aas {
+namespace qualifier {
+namespace qualifiable {
 
 class IFormula
 {
 public:
-	virtual ~IFormula() = default;
+  virtual ~IFormula() = default;
 
-	virtual void setDependsOn(const std::vector<IReference> & dependsOn) = 0;
-	virtual  std::vector<IReference> getDependsOn() const = 0;
+  virtual basyx::specificCollection_t<reference::IReference> getDependsOn() const = 0;
 };
+
+}
+}
+}
+}
 
 #endif
 

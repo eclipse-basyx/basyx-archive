@@ -93,18 +93,54 @@ target_sources(basyx_aas
 		aas/submodelelement/property/IMapProperty.h
 
 		impl/metamodel/hashmap/IVABElementContainer.h
-    impl/metamodel/hashmap/aas/submodelelement/property/valuetypedef/PropertyValueTypeDef.h  
-    impl/metamodel/hashmap/aas/submodelelement/property/valuetypedef/PropertyValueTypeDefHelper.h
+    impl/metamodel/hashmap/aas/identifier/Identifier.cpp  
+    impl/metamodel/hashmap/aas/identifier/Identifier.h  
+    impl/metamodel/hashmap/aas/identifier/IdentifierType.h
+    impl/metamodel/hashmap/aas/qualifier/AdministrativeInformation.cpp  
+    impl/metamodel/hashmap/aas/qualifier/AdministrativeInformation.h
+    impl/metamodel/hashmap/aas/qualifier/Description.cpp  
+    impl/metamodel/hashmap/aas/qualifier/Description.h
+    impl/metamodel/hashmap/aas/qualifier/HasDataSpecification.cpp  
+    impl/metamodel/hashmap/aas/qualifier/HasDataSpecification.h
+    impl/metamodel/hashmap/aas/qualifier/HasSemantics.cpp  
+    impl/metamodel/hashmap/aas/qualifier/HasSemantics.h
+    impl/metamodel/hashmap/aas/qualifier/Identifiable.cpp
+    impl/metamodel/hashmap/aas/qualifier/Identifiable.h  
+    impl/metamodel/hashmap/aas/qualifier/Referable.cpp
+    impl/metamodel/hashmap/aas/qualifier/Referable.h
+    impl/metamodel/hashmap/aas/qualifier/haskind/HasKind.cpp  
+    impl/metamodel/hashmap/aas/qualifier/haskind/HasKind.h
+    impl/metamodel/hashmap/aas/qualifier/haskind/Kind.h
+    impl/metamodel/hashmap/aas/qualifier/qualifiable/Constraint.cpp  
+    impl/metamodel/hashmap/aas/qualifier/qualifiable/Constraint.h  
+    impl/metamodel/hashmap/aas/qualifier/qualifiable/Formula.cpp  
+    impl/metamodel/hashmap/aas/qualifier/qualifiable/Formula.h  
+    impl/metamodel/hashmap/aas/qualifier/qualifiable/Qualifiable.cpp  
+    impl/metamodel/hashmap/aas/qualifier/qualifiable/Qualifiable.h  
+    impl/metamodel/hashmap/aas/qualifier/qualifiable/Qualifier.cpp  
+    impl/metamodel/hashmap/aas/qualifier/qualifiable/Qualifier.h  
+    impl/metamodel/hashmap/aas/qualifier/qualifiable/QualifierType.cpp  
+    impl/metamodel/hashmap/aas/qualifier/qualifiable/QualifierType.h
+    impl/metamodel/hashmap/aas/reference/Key.h
+    impl/metamodel/hashmap/aas/reference/Key.cpp
     impl/metamodel/hashmap/aas/reference/Reference.h
     impl/metamodel/hashmap/aas/reference/Reference.cpp
-    impl/metamodel/hashmap/aas/identifier/IdentifierType.h
-    impl/metamodel/hashmap/aas/identifier/Identifier.h
-    impl/metamodel/hashmap/aas/identifier/Identifier.cpp
-    impl/metamodel/hashmap/aas/qualifier/AdministrativeInformation.h
-    impl/metamodel/hashmap/aas/qualifier/AdministrativeInformation.cpp
-    impl/metamodel/hashmap/aas/qualifier/Description.h
-    impl/metamodel/hashmap/aas/qualifier/Description.cpp
-    
+    impl/metamodel/hashmap/aas/submodelelement/DataElement.cpp  
+    impl/metamodel/hashmap/aas/submodelelement/DataElement.h  
+    impl/metamodel/hashmap/aas/submodelelement/ReferenceElement.cpp
+    impl/metamodel/hashmap/aas/submodelelement/ReferenceElement.h
+    impl/metamodel/hashmap/aas/submodelelement/RelationshipElement.cpp 
+    impl/metamodel/hashmap/aas/submodelelement/RelationshipElement.h
+    impl/metamodel/hashmap/aas/submodelelement/SubmodelElement.cpp  
+    impl/metamodel/hashmap/aas/submodelelement/SubmodelElement.h
+    impl/metamodel/hashmap/aas/submodelelement/SubmodelElementCollection.cpp
+    impl/metamodel/hashmap/aas/submodelelement/SubmodelElementCollection.h
+    impl/metamodel/hashmap/aas/submodelelement/property/valuetypedef/PropertyValueTypeDef.h  
+    impl/metamodel/hashmap/aas/submodelelement/property/valuetypedef/PropertyValueTypeDefHelper.h
+    impl/metamodel/hashmap/aas/submodelelement/operation/Operation.cpp
+    impl/metamodel/hashmap/aas/submodelelement/operation/Operation.h
+    impl/metamodel/hashmap/aas/submodelelement/operation/OperationVariable.cpp
+    impl/metamodel/hashmap/aas/submodelelement/operation/OperationVariable.h
     api/metamodel/aas/IAssetAdministrationShell.h
     api/manager/IAssetAdministrationShellManager.h
     api/modelurn/ModelUrn.h

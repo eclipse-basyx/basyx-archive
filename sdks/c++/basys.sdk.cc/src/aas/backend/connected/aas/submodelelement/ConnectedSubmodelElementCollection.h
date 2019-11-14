@@ -23,14 +23,14 @@ public:
 	~ConnectedSubmodelElementCollection() = default;
 
   // Inherited via ISubmodelElementCollection
-  virtual void setValue(const basyx::objectCollection_t & value) override;
-  virtual basyx::objectCollection_t getValue() const override;
+  virtual void setValue(const basyx::specificCollection_t<aas::submodelelement::ISubmodelElement> & value) override;
+  virtual basyx::specificCollection_t<aas::submodelelement::ISubmodelElement> getValue() const override;
   virtual void setOrdered(const bool & value) override;
   virtual bool isOrdered() const override;
   virtual void setAllowDuplicates(const bool & value) override;
   virtual bool isAllowDuplicates() const override;
-  virtual void setElements(const basyx::objectMap_t & elements) override;
-  virtual basyx::objectMap_t getElements() const override;
+  virtual void setElements(const basyx::specificMap_t<aas::submodelelement::ISubmodelElement> & elements) override;
+  virtual basyx::specificMap_t<aas::submodelelement::ISubmodelElement> getElements() const override;
 };
  
 

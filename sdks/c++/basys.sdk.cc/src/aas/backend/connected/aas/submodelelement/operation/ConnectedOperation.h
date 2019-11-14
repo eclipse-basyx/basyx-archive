@@ -26,8 +26,8 @@ public:
   virtual void setId(const std::string & id) override;
   virtual std::string getId() const override;
 
-  virtual basyx::objectCollection_t getParameterTypes() const override;
-  virtual basyx::objectCollection_t getReturnTypes() const override;
+  virtual operation_var_list getParameterTypes() const override;
+  virtual operation_var_list getReturnTypes() const override;
   virtual basyx::any invoke(basyx::objectCollection_t & parameters) const override;
   virtual std::shared_ptr<basyx::function_base> getInvocable() const override;
 };

@@ -14,14 +14,16 @@ ConnectedReferenceElement::ConnectedReferenceElement(std::shared_ptr<vab::core::
   ConnectedDataElement(proxy)
 {}
 
-void ConnectedReferenceElement::setValue(const basyx::any & ref)
+void ConnectedReferenceElement::setValue(const std::shared_ptr<aas::reference::IReference> & ref)
 {
-  this->setProxyValue(submodelelement::property::PropertyPaths::VALUE, ref);
+  //todo
+  //this->setProxyValue(submodelelement::property::PropertyPaths::VALUE, ref);
 }
 
-basyx::any ConnectedReferenceElement::getValue() const
+std::shared_ptr<aas::reference::IReference> ConnectedReferenceElement::getValue() const
 {
-  return this->getProxyValue(submodelelement::property::PropertyPaths::VALUE);
+  //todo 
+  return nullptr;// this->getProxyValue(submodelelement::property::PropertyPaths::VALUE);
 }
 
 }

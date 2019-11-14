@@ -44,7 +44,8 @@ TEST_F(ConnectedReferenceElementTest, TestSetPropertyType)
 
   basyx::any value("value");
 
-  element.setValue(value);
+  //todo
+  //element.setValue(value);
 
   ASSERT_EQ(std::string(PropertyPaths::VALUE), mock->updateElementCallValues.at(0).first);
   ASSERT_EQ("value", mock->updateElementCallValues.at(0).second.Get<std::string>());

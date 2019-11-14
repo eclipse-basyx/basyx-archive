@@ -52,9 +52,10 @@ std::shared_ptr<reference::IReference> ConnectedSubmodelElement::getParent() con
   return std::make_shared<reference::impl::Reference>(*this->getProxyMap(reference::paths::PARENTS));
 }
 
-basyx::objectCollection_t ConnectedSubmodelElement::getQualifier() const
+basyx::specificCollection_t<qualifier::qualifiable::IConstraint> ConnectedSubmodelElement::getQualifier() const
 {
-  return this->getProxyCollection(reference::paths::QUALIFIERS);
+  //TODO not implemented
+  return basyx::specificCollection_t<qualifier::qualifiable::IConstraint>(); 
 }
 
 std::shared_ptr<reference::IReference> ConnectedSubmodelElement::getSemanticId() const
@@ -62,9 +63,10 @@ std::shared_ptr<reference::IReference> ConnectedSubmodelElement::getSemanticId()
   return std::make_shared<reference::impl::Reference>(*this->getProxyMap(reference::paths::SEMANTICIDS));
 }
 
-std::string ConnectedSubmodelElement::getHasKindReference() const
+submodel::metamodel::map::qualifier::haskind::Kind ConnectedSubmodelElement::getHasKindReference() const
 {
-  return this->getProxyValue(qualifier::haskind::Paths::KIND);
+  //todo
+  return submodel::metamodel::map::qualifier::haskind::Kind::NOTSPECIFIED;
 }
 
 

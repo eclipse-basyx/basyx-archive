@@ -27,9 +27,9 @@ public:
   std::string getCategory() const override;
   qualifier::impl::Description getDescription() const override;
   std::shared_ptr<reference::IReference> getParent() const override;
-  basyx::objectCollection_t getQualifier() const override;
+  basyx::specificCollection_t<qualifier::qualifiable::IConstraint> getQualifier() const override;
   std::shared_ptr<reference::IReference> getSemanticId() const override;
-  std::string getHasKindReference() const override;
+  submodel::metamodel::map::qualifier::haskind::Kind getHasKindReference() const override;
    
 protected:
   std::string getIdWithLocalCheck() const;

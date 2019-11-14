@@ -25,14 +25,16 @@ std::string ConnectedOperation::getId() const
   return this->getIdWithLocalCheck();
 }
 
-basyx::objectCollection_t ConnectedOperation::getParameterTypes() const
+operation_var_list ConnectedOperation::getParameterTypes() const
 {
-  return this->getProxyCollection(std::string(submodelelement::operation::OperationPaths::INPUT));
+  // todo
+  return operation_var_list(); // this->getProxyCollection(std::string(submodelelement::operation::OperationPaths::INPUT));
 }
 
-basyx::objectCollection_t ConnectedOperation::getReturnTypes() const
+operation_var_list ConnectedOperation::getReturnTypes() const
 {
-  return this->getProxyCollection(std::string(submodelelement::operation::OperationPaths::OUTPUT));
+  // todo
+  return operation_var_list(); // this->getProxyCollection(std::string(submodelelement::operation::OperationPaths::INPUT));
 }
 
 basyx::any ConnectedOperation::invoke(basyx::objectCollection_t & parameters) const

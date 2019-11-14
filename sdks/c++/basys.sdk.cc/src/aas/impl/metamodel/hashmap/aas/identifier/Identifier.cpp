@@ -12,6 +12,11 @@ basyx::aas::identifier::impl::Identifier::Identifier() :
   idType {identifierType::IRDI}
 {}
 
+basyx::aas::identifier::impl::Identifier::Identifier(const std::string & id, const std::string & idType) :
+  id {id},
+  idType {idType}
+{}
+
 basyx::aas::identifier::impl::Identifier::Identifier(const basyx::objectMap_t & map)
 {
   auto id_any = map.at(internalIdentifierPaths::ID);

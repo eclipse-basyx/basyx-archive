@@ -4,6 +4,8 @@
  *      Author: wendel
  */
 
+#ifndef AAS_IMPL_METAMODEL_IDENTIFIERTYPE_H_
+#define AAS_IMPL_METAMODEL_IDENTIFIERTYPE_H_
 
 namespace basyx {
 namespace aas {
@@ -20,3 +22,5 @@ namespace identifierType {
 }
 }
 }
+
+#endif

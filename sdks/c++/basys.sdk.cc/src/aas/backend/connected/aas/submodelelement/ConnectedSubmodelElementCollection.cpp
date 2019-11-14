@@ -19,14 +19,16 @@ ConnectedSubmodelElementCollection::ConnectedSubmodelElementCollection(std::shar
   ConnectedSubmodelElement(proxy)
 {}
 
-void ConnectedSubmodelElementCollection::setValue(const basyx::objectCollection_t & value)
+void ConnectedSubmodelElementCollection::setValue(const basyx::specificCollection_t<aas::submodelelement::ISubmodelElement> & value)
 {
-  this->setProxyValue(property::PropertyPaths::VALUE, value);
+  //todo
+  //this->setProxyValue(property::PropertyPaths::VALUE, value);
 }
 
-basyx::objectCollection_t ConnectedSubmodelElementCollection::getValue() const
+basyx::specificCollection_t<aas::submodelelement::ISubmodelElement> ConnectedSubmodelElementCollection::getValue() const
 {
-  return this->getProxyCollection(property::PropertyPaths::VALUE);
+  //todo 
+  return basyx::specificCollection_t<aas::submodelelement::ISubmodelElement>(); // this->getProxyCollection(property::PropertyPaths::VALUE);
 }
 
 void ConnectedSubmodelElementCollection::setOrdered(const bool & value)
@@ -51,15 +53,18 @@ bool ConnectedSubmodelElementCollection::isAllowDuplicates() const
   return element.Get<bool>();
 }
 
-void ConnectedSubmodelElementCollection::setElements(const basyx::objectMap_t & elements)
+void ConnectedSubmodelElementCollection::setElements(const basyx::specificMap_t<aas::submodelelement::ISubmodelElement> & elements)
 {
-  this->setProxyValue(SubmodelPaths::SUBMODELELEMENT, elements);
+  //todo 
+  //this->setProxyValue(SubmodelPaths::SUBMODELELEMENT, elements);
 }
 
-basyx::objectMap_t ConnectedSubmodelElementCollection::getElements() const
+basyx::specificMap_t<aas::submodelelement::ISubmodelElement> ConnectedSubmodelElementCollection::getElements() const
 {
-  auto elements = this->getProxy()->readElementValue(SubmodelPaths::SUBMODELELEMENT);
-  return elements.Get<basyx::objectMap_t>();
+  //todo 
+  
+  //auto elements = this->getProxy()->readElementValue(SubmodelPaths::SUBMODELELEMENT);
+  return basyx::specificMap_t<aas::submodelelement::ISubmodelElement>();
 }
 
 
