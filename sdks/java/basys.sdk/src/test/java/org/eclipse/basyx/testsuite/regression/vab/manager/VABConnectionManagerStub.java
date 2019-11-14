@@ -1,7 +1,7 @@
 package org.eclipse.basyx.testsuite.regression.vab.manager;
 
-import org.eclipse.basyx.testsuite.regression.vab.directory.DirectoryServiceStub;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
+import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -16,7 +16,7 @@ public class VABConnectionManagerStub extends VABConnectionManager {
 
 	public VABConnectionManagerStub() {
 		// Create Stub with default DirectoryStub/ConnectorProviderStub
-		super(new DirectoryServiceStub(), new ConnectorProviderStub());
+		super(new InMemoryDirectory(), new ConnectorProviderStub());
 	}
 
 	/**
@@ -31,8 +31,8 @@ public class VABConnectionManagerStub extends VABConnectionManager {
 		getDirectoryService().addMapping("", "");
 	}
 
-	private DirectoryServiceStub getDirectoryService() {
-		return (DirectoryServiceStub) directoryService;
+	private InMemoryDirectory getDirectoryService() {
+		return (InMemoryDirectory) directoryService;
 	}
 
 	private ConnectorProviderStub getConnectorProvider() {

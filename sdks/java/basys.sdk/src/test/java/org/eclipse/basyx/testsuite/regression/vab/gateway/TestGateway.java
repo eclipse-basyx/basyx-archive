@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.testsuite.regression.vab.directory.DirectoryServiceStub;
+import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
 import org.eclipse.basyx.vab.gateway.ConnectorProviderMapper;
 import org.eclipse.basyx.vab.gateway.DelegatingModelProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
@@ -89,7 +89,7 @@ public class TestGateway {
 	public void test() throws UnknownHostException, IOException {
 		// Create Directory, here it is configured statically, of course a dynamic
 		// request to e.g. a servlet is also possible
-		DirectoryServiceStub directory = new DirectoryServiceStub();
+		InMemoryDirectory directory = new InMemoryDirectory();
 		directory.addMapping("Elem", "http://localhost:5123/path/to/gateway//basyx://127.0.0.1:6999//basyx://127.0.0.1:6998");
 
 		// Create ConnectionProviderMapper for client
