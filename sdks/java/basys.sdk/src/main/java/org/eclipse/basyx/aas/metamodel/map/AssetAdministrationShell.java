@@ -113,11 +113,6 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		return (List<HashMap<String, String>>) get(ENDPOINTS);
 	}
 
-	@SuppressWarnings("unchecked")
-	public Set<SubmodelDescriptor> getSubmodelDescriptors() {
-		return ((Set<SubmodelDescriptor>) get(SUBMODELS));
-	}
-
 	@Override
 	public IAdministrativeInformation getAdministration() {
 		return new IdentifiableFacade(this).getAdministration();

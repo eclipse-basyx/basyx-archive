@@ -40,7 +40,7 @@ public class AASDescriptor extends ModelDescriptor {
 		put(AssetAdministrationShell.ENDPOINTS, aas.getEndpoints());
 
 		// Overwrite submodel descriptors
-		Set<SubmodelDescriptor> smDescriptors = aas.getSubmodelDescriptors();
+		Set<SubmodelDescriptor> smDescriptors = aas.getSubModelDescriptors();
 		put(AssetAdministrationShell.SUBMODELS, smDescriptors);
 	}
 	
