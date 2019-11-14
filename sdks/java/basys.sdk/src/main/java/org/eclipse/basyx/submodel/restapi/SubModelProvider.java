@@ -47,7 +47,7 @@ public class SubModelProvider extends ContainerPropertyProvider {
 
 	/**
 	 * Creates a SubModelProvider based on a given IModelProvider. Should be a
-	 * low-level VAB model provider, for example a VABHashmapProvider.
+	 * low-level VAB model provider, for example a VABMapProvider.
 	 */
 	public SubModelProvider(IModelProvider modelProvider) {
 		super(modelProvider);

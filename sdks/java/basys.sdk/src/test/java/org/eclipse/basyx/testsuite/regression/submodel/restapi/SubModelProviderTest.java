@@ -10,7 +10,7 @@ import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.TestsuiteDirectory;
@@ -46,14 +46,14 @@ public class SubModelProviderTest {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 
 		// Create element
-		SingleProperty prop = new SingleProperty(500);
+		Property prop = new Property(500);
 		prop.setIdShort("newProperty");
 		submodelElement.createValue("/submodel/dataElements", prop);
 
 		// Read back value
 		Map<String, Object> result = (Map<String, Object>) submodelElement
 				.getModelPropertyValue("/submodel/dataElements/newProperty/value");
-		assertEquals(500, result.get(SingleProperty.VALUE));
+		assertEquals(500, result.get(Property.VALUE));
 	}
 
 	/**
@@ -68,12 +68,12 @@ public class SubModelProviderTest {
 		Object result = submodelElement.getModelPropertyValue("/submodel/dataElements");
 		Set<Map<String, Object>> propertySet = (Set<Map<String, Object>>) result;
 		HashMap<String, Object> property = (HashMap<String, Object>) propertySet.stream().filter(elem -> elem.get(Identifiable.IDSHORT).equals("integerProperty")).findFirst().get();
-		assertEquals(123, property.get(SingleProperty.VALUE));
+		assertEquals(123, property.get(Property.VALUE));
 
 		// Read whole property
 		result = submodelElement.getModelPropertyValue("/submodel/dataElements/integerProperty");
 		property = (HashMap<String, Object>) result;
-		assertEquals(123, property.get(SingleProperty.VALUE));
+		assertEquals(123, property.get(Property.VALUE));
 
 		// Read idShort
 		result = submodelElement.getModelPropertyValue("/submodel/dataElements/stringProperty");
@@ -83,7 +83,7 @@ public class SubModelProviderTest {
 		// Read single value
 		Map<String, Object> resMap = (Map<String, Object>) submodelElement
 				.getModelPropertyValue("/submodel/dataElements/stringProperty/value");
-		assertEquals("Test", resMap.get(SingleProperty.VALUE));
+		assertEquals("Test", resMap.get(Property.VALUE));
 
 		// Read container property
 		Set<Object> resSet = (Set<Object>) submodelElement
@@ -96,7 +96,7 @@ public class SubModelProviderTest {
 		String pathToNestedProperty = pathToNestedContainer + "/dataElements/integerProperty/";
 		result = submodelElement.getModelPropertyValue(pathToNestedProperty);
 		property = (HashMap<String, Object>) result;
-		assertEquals(123, property.get(SingleProperty.VALUE));
+		assertEquals(123, property.get(Property.VALUE));
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class SubModelProviderTest {
 
 		// Wrap object before updating element
 		HashMap<String, Object> updatedElement = new HashMap<>();
-		updatedElement.put(SingleProperty.VALUE, 3);
+		updatedElement.put(Property.VALUE, 3);
 		updatedElement.put("valueType", PropertyValueTypeDefHelper.fromObject(3));
 
 		// Update element
@@ -118,7 +118,7 @@ public class SubModelProviderTest {
 		// Check result
 		Map<String, Object> result = (Map<String, Object>) submodelElement
 				.getModelPropertyValue("/submodel/dataElements/integerProperty");
-		assertEquals(3, result.get(SingleProperty.VALUE));
+		assertEquals(3, result.get(Property.VALUE));
 	}
 
 	/**
@@ -205,11 +205,11 @@ public class SubModelProviderTest {
 		// Wrap parameters before invoking add-operation
 		HashMap<String, Object> param1 = new HashMap<>();
 		param1.put("idShort", "SecondNumber");
-		param1.put(SingleProperty.VALUE, 5);
+		param1.put(Property.VALUE, 5);
 		param1.put("valueType", PropertyValueTypeDefHelper.fromObject(5));
 		HashMap<String, Object> param2 = new HashMap<>();
 		param2.put("idShort", "FirstNumber");
-		param2.put(SingleProperty.VALUE, 2);
+		param2.put(Property.VALUE, 2);
 		param2.put("valueType", PropertyValueTypeDefHelper.fromObject(2));
 
 		// Invoke operation with wrapped parameters and check result

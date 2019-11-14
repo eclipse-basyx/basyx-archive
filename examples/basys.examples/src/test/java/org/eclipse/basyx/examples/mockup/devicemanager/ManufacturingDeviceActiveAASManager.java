@@ -5,7 +5,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.tools.aas.active.HTTPGetter;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
 
@@ -53,7 +53,7 @@ public class ManufacturingDeviceActiveAASManager extends ManufacturingDeviceMana
 		// - Set submodel ID
 		supplySM.setIdShort("Supply");
 		//   - Property status: indicate device status
-		SingleProperty availabililtyProp = new SingleProperty(dynamicProperty);
+		Property availabililtyProp = new Property(dynamicProperty);
 		availabililtyProp.setIdShort("partAvailability");
 		supplySM.addSubModelElement(availabililtyProp);
 

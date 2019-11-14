@@ -16,7 +16,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.valuety
  * @author kuhn, schnicke
  *
  */
-public class SingleProperty extends AbstractProperty implements ISingleProperty {
+public class Property extends AbstractProperty implements ISingleProperty {
 
 	/**
 	 * Version of serialized instances
@@ -30,17 +30,17 @@ public class SingleProperty extends AbstractProperty implements ISingleProperty 
 	/**
 	 * Constructor
 	 */
-	public SingleProperty() {
+	public Property() {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 
 		// Put attributes
-		put(SingleProperty.VALUE, null);
-		put(SingleProperty.VALUEID, null);
+		put(Property.VALUE, null);
+		put(Property.VALUEID, null);
 	}
 
-	public static SingleProperty createAsFacade(Map<String, Object> obj) {
-		SingleProperty facade = new SingleProperty();
+	public static Property createAsFacade(Map<String, Object> obj) {
+		Property facade = new Property();
 		facade.putAll(obj);
 		return facade;
 	}
@@ -52,13 +52,13 @@ public class SingleProperty extends AbstractProperty implements ISingleProperty 
 	 *            the value of the property instance <b>!! Is defined in standard as
 	 *            String, but does not make sense in this context !!</b>
 	 */
-	public SingleProperty(Object value) {
+	public Property(Object value) {
 		// Put attributes
-		put(SingleProperty.VALUEID, null);
+		put(Property.VALUEID, null);
 		set(value);
 	}
 
-	public SingleProperty(Object value, Referable referable, String semanticId, Qualifier qualifier) {
+	public Property(Object value, Referable referable, String semanticId, Qualifier qualifier) {
 		this(value);
 		putAll(referable);
 		put(HasSemantics.SEMANTICID, value);
@@ -73,23 +73,23 @@ public class SingleProperty extends AbstractProperty implements ISingleProperty 
 	 *            manually determined type of the value
 	 */
 	public void setValueType(PropertyValueTypeDef type) {
-		put(SingleProperty.VALUETYPE, PropertyValueTypeDefHelper.getWrapper(type));
+		put(Property.VALUETYPE, PropertyValueTypeDefHelper.getWrapper(type));
 	}
 
 	@Override
 	public void set(Object value) {
-		put(SingleProperty.VALUE, value);
-		put(SingleProperty.VALUETYPE, PropertyValueTypeDefHelper.fromObject(value));
+		put(Property.VALUE, value);
+		put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(value));
 
 	}
 
 	@Override
 	public Object get() {
-		return get(SingleProperty.VALUE);
+		return get(Property.VALUE);
 	}
 
 	@Override
 	public String getValueType() {
-		return (String) get(SingleProperty.VALUETYPE);
+		return (String) get(Property.VALUETYPE);
 	}
 }

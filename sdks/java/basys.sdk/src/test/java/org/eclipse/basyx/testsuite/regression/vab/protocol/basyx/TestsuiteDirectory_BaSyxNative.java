@@ -1,6 +1,6 @@
 package org.eclipse.basyx.testsuite.regression.vab.protocol.basyx;
 
-import org.eclipse.basyx.vab.directory.preconfigured.PreconfiguredDirectory;
+import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
 
 
 
@@ -11,7 +11,7 @@ import org.eclipse.basyx.vab.directory.preconfigured.PreconfiguredDirectory;
  * @author kuhn
  *
  */
-public class TestsuiteDirectory_BaSyxNative extends PreconfiguredDirectory {
+public class TestsuiteDirectory_BaSyxNative extends InMemoryDirectory {
 
 	
 	/**

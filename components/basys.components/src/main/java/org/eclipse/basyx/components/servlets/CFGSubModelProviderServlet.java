@@ -7,7 +7,7 @@ import java.util.Properties;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.components.cfgprovider.CFGSubModelProvider;
 import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
@@ -18,7 +18,7 @@ import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
  * @author kuhn
  *
  */
-public class CFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
+public class CFGSubModelProviderServlet extends VABHTTPInterface<MultiSubmodelProvider> {
 
 	/**
 	 * Version information to identify the version of serialized instances
@@ -40,7 +40,7 @@ public class CFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 	 */
 	public CFGSubModelProviderServlet() {
 		// Invoke base constructor
-		super(new VABMultiSubmodelProvider());
+		super(new MultiSubmodelProvider());
 	}
 
 	/**

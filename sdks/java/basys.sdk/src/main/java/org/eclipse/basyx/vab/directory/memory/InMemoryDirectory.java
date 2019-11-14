@@ -1,4 +1,4 @@
-package org.eclipse.basyx.vab.directory.preconfigured;
+package org.eclipse.basyx.vab.directory.memory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,12 +8,12 @@ import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
 
 
 /**
- * Implement a preconfigured directory that is compiled into the BaSys SDK
+ * Implement a in memory directory
  * 
  * @author kuhn
  *
  */
-public class PreconfiguredDirectory implements IVABDirectoryService {
+public class InMemoryDirectory implements IVABDirectoryService {
 
 	
 	/**
@@ -27,7 +27,7 @@ public class PreconfiguredDirectory implements IVABDirectoryService {
 	/**
 	 * Default constructor
 	 */
-	public PreconfiguredDirectory() {
+	public InMemoryDirectory() {
 		// Do nothing
 	}
 	
@@ -35,7 +35,7 @@ public class PreconfiguredDirectory implements IVABDirectoryService {
 	/**
 	 * Constructor that accepts initial entries
 	 */
-	public PreconfiguredDirectory(Map<String, String> addedValues) {
+	public InMemoryDirectory(Map<String, String> addedValues) {
 		keyToValue.putAll(addedValues);
 	}
 	

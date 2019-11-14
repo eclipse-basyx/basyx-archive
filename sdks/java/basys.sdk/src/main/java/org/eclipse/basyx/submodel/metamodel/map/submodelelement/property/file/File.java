@@ -3,7 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.file;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.file.IFile;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.DataElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.blob.Blob;
 
 /**
@@ -37,20 +37,20 @@ public class File extends DataElement implements IFile{
 		putAll(new ModelType(MODELTYPE));
 
 		// Save value
-		put(SingleProperty.VALUE, value);
+		put(Property.VALUE, value);
 		put(MIMETYPE, mimeType);
 	}
 
 
 	@Override
 	public void setValue(String value) {
-		put(SingleProperty.VALUE, value);
+		put(Property.VALUE, value);
 		
 	}
 
 	@Override
 	public String getValue() {
-		return (String) get(SingleProperty.VALUE);
+		return (String) get(Property.VALUE);
 	}
 
 	@Override

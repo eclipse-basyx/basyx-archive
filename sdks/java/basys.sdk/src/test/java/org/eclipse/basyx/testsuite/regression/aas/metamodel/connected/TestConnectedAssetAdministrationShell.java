@@ -15,16 +15,16 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
-import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
+import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;
@@ -55,7 +55,7 @@ public class TestConnectedAssetAdministrationShell {
 		MetaModelElementFactory factory = new MetaModelElementFactory();
 
 		// Create a SubModel containing no operations and one property
-		SingleProperty p = new SingleProperty(propVal);
+		Property p = new Property(propVal);
 		p.setIdShort(propId);
 
 		SubModel sm = factory.create(new SubModel(), Collections.singletonList(p), new ArrayList<>());
@@ -69,12 +69,12 @@ public class TestConnectedAssetAdministrationShell {
 		AssetAdministrationShell aas = factory.create(new AssetAdministrationShell(), refs);
 		aas.setIdShort(aasIdShort);
 	
-		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
+		MultiSubmodelProvider provider = new MultiSubmodelProvider();
 		provider.addSubmodel(smIdShort, new SubModelProvider(TypeDestroyer.destroyType(sm)));
 		provider.setAssetAdministrationShell(new AASModelProvider(TypeDestroyer.destroyType(aas)));
 	
 		// Create AAS registry
-		IAASRegistryService registry = new PreconfiguredRegistry();
+		IAASRegistryService registry = new InMemoryRegistry();
 		// Create AAS Descriptor
 		AASDescriptor aasDescriptor = new AASDescriptor(aasId, "/aas");
 		// Create Submodel Descriptor

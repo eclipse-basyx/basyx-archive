@@ -1,6 +1,8 @@
-package org.eclipse.basyx.aas.registration.preconfigured;
+package org.eclipse.basyx.aas.registration.memory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
@@ -10,7 +12,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 /**
  * Implements a preconfigured local registry
  */
-public class PreconfiguredRegistry implements IAASRegistryService {
+public class InMemoryRegistry implements IAASRegistryService {
 	protected Map<String, AASDescriptor> descriptorMap = new HashMap<>();
 
 	@Override
@@ -38,6 +40,11 @@ public class PreconfiguredRegistry implements IAASRegistryService {
 	@Override
 	public AASDescriptor lookupAAS(IIdentifier aasIdentifier) {
 		return descriptorMap.get(aasIdentifier.getId());
+	}
+
+	@Override
+	public List<AASDescriptor> lookupAll() {
+		return new ArrayList<>(descriptorMap.values());
 	}
 
 }

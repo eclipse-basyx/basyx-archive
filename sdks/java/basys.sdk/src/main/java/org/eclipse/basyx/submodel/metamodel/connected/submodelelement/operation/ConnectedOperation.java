@@ -10,7 +10,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOpera
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -48,8 +48,8 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		int i = 0;
 		for (Object param : params) {
 			HashMap<String, Object> valueWrapper = new HashMap<String, Object>();
-			valueWrapper.put(SingleProperty.VALUETYPE, PropertyValueTypeDefHelper.fromObject(param));
-			valueWrapper.put(SingleProperty.VALUE, param);
+			valueWrapper.put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(param));
+			valueWrapper.put(Property.VALUE, param);
 
 			params[i] = valueWrapper;
 			i++;
@@ -64,8 +64,8 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 			Object resultWrapper = ((List<?>) result).get(0);
 			if (resultWrapper instanceof Map<?, ?>) {
 				Map<String, Object> map = (Map<String, Object>) resultWrapper;
-				if (map.get(Referable.IDSHORT).equals("Response") && map.get(SingleProperty.VALUE) != null) {
-					result = map.get(SingleProperty.VALUE);
+				if (map.get(Referable.IDSHORT).equals("Response") && map.get(Property.VALUE) != null) {
+					result = map.get(Property.VALUE);
 				}
 			}
 		}

@@ -6,7 +6,7 @@ import java.util.Properties;
 
 import javax.servlet.ServletException;
 
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
 import org.eclipse.basyx.components.xmlxqueryprovider.XMLXQuerySubModelProvider;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
@@ -17,7 +17,7 @@ import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
  * @author kuhn
  *
  */
-public class XMLXQueryServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
+public class XMLXQueryServlet extends VABHTTPInterface<MultiSubmodelProvider> {
 
 	/**
 	 * Version information to identify the version of serialized instances
@@ -39,7 +39,7 @@ public class XMLXQueryServlet extends VABHTTPInterface<VABMultiSubmodelProvider>
 	 */
 	public XMLXQueryServlet() {
 		// Invoke base constructor
-		super(new VABMultiSubmodelProvider());
+		super(new MultiSubmodelProvider());
 	}
 
 	/**

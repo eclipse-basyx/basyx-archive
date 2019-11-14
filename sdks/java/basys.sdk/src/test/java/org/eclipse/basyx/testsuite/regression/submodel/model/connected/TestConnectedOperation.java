@@ -16,7 +16,7 @@ import org.eclipse.basyx.submodel.restapi.OperationProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
-import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
+import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,7 +43,7 @@ public class TestConnectedOperation {
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(op);
 		// Create a dummy connection manager containing the created Operation map
 		VABConnectionManager manager = new VABConnectionManagerStub(
-				new OperationProvider(new VABHashmapProvider(destroyType)));
+				new OperationProvider(new VABMapProvider(destroyType)));
 
 		// Create the ConnectedOperation based on the manager stub
 		operation = new ConnectedOperation(manager.connectToVABElement(""));

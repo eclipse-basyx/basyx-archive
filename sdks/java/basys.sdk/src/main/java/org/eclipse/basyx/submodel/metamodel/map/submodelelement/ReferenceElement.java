@@ -4,7 +4,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 
 /**
  * A ReferenceElement as defined in DAAS document <br/>
@@ -27,7 +27,7 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 
-		put(SingleProperty.VALUE, null);
+		put(Property.VALUE, null);
 	}
 
 	/**
@@ -36,18 +36,18 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 	 *            AAS or a reference to an external object or entity
 	 */
 	public ReferenceElement(Reference ref) {
-		put(SingleProperty.VALUE, ref);
+		put(Property.VALUE, ref);
 	}
 
 	@Override
 	public void setValue(IReference ref) {
-		put(SingleProperty.VALUE, ref);
+		put(Property.VALUE, ref);
 		
 	}
 
 	@Override
 	public IReference getValue() {
-		return (IReference) get(SingleProperty.VALUE);
+		return (IReference) get(Property.VALUE);
 	}
 
 }

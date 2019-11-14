@@ -9,12 +9,11 @@ import org.eclipse.basyx.vab.modelprovider.filesystem.FileSystemProvider;
 import org.eclipse.basyx.vab.modelprovider.filesystem.filesystem.FileSystem;
 import org.eclipse.basyx.vab.modelprovider.filesystem.filesystem.GenericFileSystem;
 import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Tests the functionality of the VABHashmapProvider according to the test cases
+ * Tests the functionality of the FileSystemProvider according to the test cases
  * in the snippet package
  * 
  * @author schnicke

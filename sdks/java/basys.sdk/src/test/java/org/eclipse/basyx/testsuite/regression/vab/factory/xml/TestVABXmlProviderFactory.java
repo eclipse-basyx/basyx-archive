@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.vab.factory.xml.VABXmlProviderFactory;
 import org.eclipse.basyx.vab.modelprovider.list.ReferencedArrayList;
-import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
+import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.junit.Test;
 
 public class TestVABXmlProviderFactory {
@@ -16,7 +16,7 @@ public class TestVABXmlProviderFactory {
 	public void testResources() throws Exception {
 
 		VABXmlProviderFactory factory = new VABXmlProviderFactory();
-		VABHashmapProvider provider = factory.createVABElements(TestXmlParser.xmlTestContent);
+		VABMapProvider provider = factory.createVABElements(TestXmlParser.xmlTestContent);
 
 		Map<String, String> map;
 

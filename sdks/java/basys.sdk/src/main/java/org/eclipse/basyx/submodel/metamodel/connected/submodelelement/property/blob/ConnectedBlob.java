@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.blob.IBlob;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedDataElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.blob.Blob;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 /**
@@ -19,14 +19,14 @@ public class ConnectedBlob extends ConnectedDataElement implements IBlob {
 	
 	@Override
 	public void setValue(byte[] value) {
-		getProxy().setModelPropertyValue(SingleProperty.VALUE, value);
+		getProxy().setModelPropertyValue(Property.VALUE, value);
 		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public byte[] getValue() {
-		return convert((List<Integer>) getProxy().getModelPropertyValue(SingleProperty.VALUE));
+		return convert((List<Integer>) getProxy().getModelPropertyValue(Property.VALUE));
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package org.eclipse.basyx.aas.registration.api;
 
+import java.util.List;
+
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 
@@ -32,8 +34,15 @@ public interface IAASRegistryService {
 	
 	
 	/**
-	 * Lookup device AAS
+	 * Lookup AAS
 	 */
 	public AASDescriptor lookupAAS(IIdentifier aasID);
+
+	/**
+	 * Retrieve all registered AAS
+	 * 
+	 * @return
+	 */
+	public List<AASDescriptor> lookupAll();
 }
 

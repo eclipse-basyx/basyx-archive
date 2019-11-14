@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IMapProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.PropertyType;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.exception.TypeMismatchException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -37,9 +37,9 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 		try {
 			// check whether the value already exists and call update or create accordingly
 			if(getValue(key) != null)
-				getProxy().setModelPropertyValue(SingleProperty.VALUE + "/" + key, value);
+				getProxy().setModelPropertyValue(Property.VALUE + "/" + key, value);
 			else
-				getProxy().createValue(SingleProperty.VALUE + "/" + key, value);
+				getProxy().createValue(Property.VALUE + "/" + key, value);
 		} catch (Exception e) {
 			logger.error("Exception in put", e);
 		}
@@ -48,7 +48,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	@Override
 	public void set(Map<String, Object> map) throws ServerException {
 		try {
-			getProxy().setModelPropertyValue(SingleProperty.VALUE, map);
+			getProxy().setModelPropertyValue(Property.VALUE, map);
 		} catch (Exception e) {
 			logger.error("Exception in set", e);
 		}
@@ -67,7 +67,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	@Override
 	public void remove(String key) throws ServerException, TypeMismatchException {
 		try {
-			getProxy().deleteValue(SingleProperty.VALUE + "/" + key);
+			getProxy().deleteValue(Property.VALUE + "/" + key);
 		} catch (Exception e) {
 			logger.error("Exception in remove", e);
 		}

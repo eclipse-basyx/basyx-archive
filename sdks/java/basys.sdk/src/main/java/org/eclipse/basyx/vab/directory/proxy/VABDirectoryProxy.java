@@ -19,7 +19,7 @@ public class VABDirectoryProxy implements IVABDirectoryService {
 	 *            The endpoint of the registry with a HTTP-REST interface
 	 */
 	public VABDirectoryProxy(String directoryUrl) {
-		this(new VABElementProxy("/api/v1/registry", new JSONConnector(new HTTPConnector(directoryUrl))));
+		this(new VABElementProxy("", new JSONConnector(new HTTPConnector(directoryUrl))));
 	}
 	
 	/**

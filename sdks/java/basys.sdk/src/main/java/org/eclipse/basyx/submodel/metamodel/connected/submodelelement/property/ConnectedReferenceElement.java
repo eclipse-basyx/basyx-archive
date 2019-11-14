@@ -6,7 +6,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedDataElement;
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 /**
  * "Connected" implementation of IReferenceElement
@@ -21,14 +21,14 @@ public class ConnectedReferenceElement extends ConnectedDataElement implements I
 
 	@Override
 	public void setValue(IReference ref) {
-		getProxy().setModelPropertyValue(SingleProperty.VALUE, ref);
+		getProxy().setModelPropertyValue(Property.VALUE, ref);
 		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getValue() {
-		return new ReferenceFacade((Map<String, Object>) getElem().getPath(SingleProperty.VALUE));
+		return new ReferenceFacade((Map<String, Object>) getElem().getPath(Property.VALUE));
 	}
 
 }

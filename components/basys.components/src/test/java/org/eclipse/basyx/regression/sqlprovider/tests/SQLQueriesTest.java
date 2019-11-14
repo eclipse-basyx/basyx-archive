@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -73,7 +73,7 @@ public class SQLQueriesTest {
 		Map<String, Object> newTableLine = new HashMap<>();
 			newTableLine.put("sensorname", "VS_0003");
 			newTableLine.put("sensorid",   "033542");
-		SingleProperty p = new SingleProperty(newTableLine);
+		Property p = new Property(newTableLine);
 		p.setIdShort("sensorNames");
 		// - Insert line into table
 		connSubModel.createValue("/aas/submodels/SQLTestSubmodel/dataElements", p);

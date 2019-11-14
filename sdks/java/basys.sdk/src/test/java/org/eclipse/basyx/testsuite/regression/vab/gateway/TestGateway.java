@@ -7,12 +7,12 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.testsuite.regression.vab.directory.DirectoryServiceStub;
+import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
 import org.eclipse.basyx.vab.gateway.ConnectorProviderMapper;
 import org.eclipse.basyx.vab.gateway.DelegatingModelProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
-import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
+import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -31,7 +31,7 @@ import org.junit.Test;
  *
  */
 public class TestGateway {
-	private BaSyxTCPServer<VABHashmapProvider> server;
+	private BaSyxTCPServer<VABMapProvider> server;
 	private BaSyxTCPServer<DelegatingModelProvider> basyxGateway;
 	private AASHTTPServer httpGateway;
 
@@ -40,8 +40,8 @@ public class TestGateway {
 		Map<String, Object> vabElem = new HashMap<String, Object>();
 		vabElem.put("propertyA", 10);
 
-		// Provide it using VABHashMapProvider and a tcp server on port 6998
-		server = new BaSyxTCPServer<>(new VABHashmapProvider(vabElem), 6998);
+		// Provide it using VABMapProvider and a tcp server on port 6998
+		server = new BaSyxTCPServer<>(new VABMapProvider(vabElem), 6998);
 
 		// Create ConnectorProviderMapper and add mapping from "basyx" to
 		// BaSyxConnectorProvider for gateway
@@ -89,7 +89,7 @@ public class TestGateway {
 	public void test() throws UnknownHostException, IOException {
 		// Create Directory, here it is configured statically, of course a dynamic
 		// request to e.g. a servlet is also possible
-		DirectoryServiceStub directory = new DirectoryServiceStub();
+		InMemoryDirectory directory = new InMemoryDirectory();
 		directory.addMapping("Elem", "http://localhost:5123/path/to/gateway//basyx://127.0.0.1:6999//basyx://127.0.0.1:6998");
 
 		// Create ConnectionProviderMapper for client

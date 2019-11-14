@@ -8,7 +8,7 @@ import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
  * @author pschorn
  *
  */
-public class Event extends SingleProperty {
+public class Event extends Property {
 
 	/**
 	 * 

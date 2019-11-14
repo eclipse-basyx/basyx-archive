@@ -4,7 +4,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 
 /**
  * OperationVariable as described by DAAS document An operation variable is a
@@ -24,7 +24,7 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	 *            element of kind=Type
 	 */
 	public OperationVariable(SubmodelElement value) {
-		put(SingleProperty.VALUE, value);
+		put(Property.VALUE, value);
 	}
 
 	public OperationVariable() {
@@ -33,11 +33,11 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	}
 
 	public void setValue(ISubmodelElement value) {
-		put(SingleProperty.VALUE, value);
+		put(Property.VALUE, value);
 	}
 
 	@Override
 	public ISubmodelElement getValue() {
-		return (ISubmodelElement) get(SingleProperty.VALUE);
+		return (ISubmodelElement) get(Property.VALUE);
 	}
 }

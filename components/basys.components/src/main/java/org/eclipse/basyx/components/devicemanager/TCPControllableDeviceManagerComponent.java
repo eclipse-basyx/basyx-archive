@@ -6,7 +6,7 @@ import org.eclipse.basyx.models.controlcomponent.ExecutionMode;
 import org.eclipse.basyx.models.controlcomponent.ExecutionState;
 import org.eclipse.basyx.models.controlcomponent.OccupationState;
 import org.eclipse.basyx.models.controlcomponent.SimpleControlComponent;
-import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
+import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
 
 
@@ -30,7 +30,7 @@ public abstract class TCPControllableDeviceManagerComponent extends TCPDeviceMan
 	/**
 	 * BaSyx/TCP Server that exports the control component
 	 */
-	protected BaSyxTCPServer<VABHashmapProvider> server = null;
+	protected BaSyxTCPServer<VABMapProvider> server = null;
 
 	
 	/**

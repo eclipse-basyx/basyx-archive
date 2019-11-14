@@ -6,7 +6,7 @@ import org.eclipse.basyx.aas.factory.java.MetaModelElementFactory;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.ContainerProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.vab.exception.ServerException;
 
 /**
@@ -35,11 +35,11 @@ public class SimpleAASSubmodel extends SubModel {
 		// Create example properties
 		MetaModelElementFactory fac = new MetaModelElementFactory();
 
-		SingleProperty intProp = new SingleProperty(123);
+		Property intProp = new Property(123);
 		intProp.setIdShort("integerProperty");
 		addSubModelElement(intProp);
 
-		SingleProperty stringProp = new SingleProperty("Test");
+		Property stringProp = new Property("Test");
 		stringProp.setIdShort("stringProperty");
 		addSubModelElement(stringProp);
 

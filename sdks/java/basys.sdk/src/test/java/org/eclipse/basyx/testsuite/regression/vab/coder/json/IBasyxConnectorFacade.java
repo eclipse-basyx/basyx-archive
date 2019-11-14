@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import org.eclipse.basyx.vab.coder.json.provider.JSONProvider;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * @author pschorn
  *
  * @param <T>
- *            should be VABHashmapProvider or stub
+ *            should be VABMapProvider or stub
  */
 public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxConnector {
 	

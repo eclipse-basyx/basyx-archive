@@ -10,18 +10,18 @@ import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.modelprovider.map.VABHashmapProvider;
+import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
 import org.junit.Test;
 
 /**
- * Tests the functionality of the VABHashmapProvider according to the test cases
- * in the snippet package
+ * Tests the functionality of the VABMapProvider according to the test cases in
+ * the snippet package
  * 
  * @author schnicke
  *
  */
-public class TestHashMapProvider extends TestProvider {
+public class TestMapProvider extends TestProvider {
 	private VABConnectionManager connManager;
 
 	@Override
@@ -33,7 +33,7 @@ public class TestHashMapProvider extends TestProvider {
 
 					// Creates a new VABHashMapProvider which manages a data model
 					// as defined in SimpleVABElement
-					return new VABHashmapProvider(new SimpleVABElement());
+					return new VABMapProvider(new SimpleVABElement());
 				}
 			});
 		}

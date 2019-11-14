@@ -9,9 +9,9 @@ import static org.junit.Assert.fail;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.restapi.VABMultiAASProvider;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.aas.restapi.MultiAASProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
@@ -26,17 +26,17 @@ import org.junit.Test;
  * @author espen
  *
  */
-public class VABMultiAASProviderTest {
+public class MultiAASProviderTest {
 	VABElementProxy proxy;
-	VABMultiAASProvider provider;
+	MultiAASProvider provider;
 
 	@Before
 	public void build() {
 		VABConnectionManagerStub stub = new VABConnectionManagerStub();
 		String urn = "urn:fhg:es.iese:aas:1:1:submodel";
-		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider();
+		MultiSubmodelProvider aasProvider = new MultiSubmodelProvider();
 		aasProvider.addSubmodel("SimpleAASSubmodel", new SubModelProvider(new SimpleAASSubmodel()));
-		provider = new VABMultiAASProvider();
+		provider = new MultiAASProvider();
 		provider.setAssetAdministrationShell("a1", aasProvider);
 		stub.addProvider(urn, "", provider);
 		proxy = stub.connectToVABElement(urn);
@@ -55,7 +55,7 @@ public class VABMultiAASProviderTest {
 		// test reading from a valid aas
 		Map<String, Object> result = (Map<String, Object>) proxy
 				.getModelPropertyValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
-		assertEquals(123, result.get(SingleProperty.VALUE));
+		assertEquals(123, result.get(Property.VALUE));
 
 		// test reading from an invalid aas
 		assertNull(proxy.getModelPropertyValue("path://A1/aas/submodels/SimpleAASSubmodel/"));
@@ -73,7 +73,7 @@ public class VABMultiAASProviderTest {
 		// retrieving property
 		Map<String, Object> result = (Map<String, Object>) proxy
 				.getModelPropertyValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
-		assertEquals(100, result.get(SingleProperty.VALUE));
+		assertEquals(100, result.get(Property.VALUE));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -83,7 +83,7 @@ public class VABMultiAASProviderTest {
 		proxy.deleteValue("path://A1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
 		Map<String, Object> result = (Map<String, Object>) proxy
 				.getModelPropertyValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
-		assertEquals(123, result.get(SingleProperty.VALUE));
+		assertEquals(123, result.get(Property.VALUE));
 
 		// test deleting from a valid aas
 		proxy.deleteValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");

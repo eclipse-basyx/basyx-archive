@@ -10,7 +10,7 @@ import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShe
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
+import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
@@ -41,7 +41,7 @@ public class TestDeviceAdministrationShell {
 
 	@Before
 	public void setupConnection() {
-		PreconfiguredRegistry registry = new PreconfiguredRegistry();
+		InMemoryRegistry registry = new InMemoryRegistry();
 		ModelUrn coilcarUrn = new ModelUrn("coilcar");
 		IIdentifier id = new Identifier(IdentifierType.Custom, "coilcar");
 		AASDescriptor ccDescriptor = new AASDescriptor(id,

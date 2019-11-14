@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnector;
@@ -31,13 +31,13 @@ public class BaSyxCreateProvideUseExampleAASSubmodel {
 		// Create sub model and add properties
 		SubModel statusSM = new SubModel();
 		//   - Property status: indicate device status
-		SingleProperty statusProp = new SingleProperty("offline");
+		Property statusProp = new Property("offline");
 		statusProp.setIdShort("status");
 		statusSM.addSubModelElement(statusProp);
 		//   - Property statistics: export invocation statistics for every service
 		//     - invocations: indicate total service invocations. Properties are not persisted in this example,
 		//                    therefore we start counting always at 0.
-		SingleProperty invocationsProp = new SingleProperty(0);
+		Property invocationsProp = new Property(0);
 		invocationsProp.setIdShort("invocations");
 		statusSM.addSubModelElement(invocationsProp);
 

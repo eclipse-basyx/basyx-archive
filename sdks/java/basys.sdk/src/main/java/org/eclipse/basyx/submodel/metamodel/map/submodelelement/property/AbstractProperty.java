@@ -11,7 +11,7 @@ public abstract class AbstractProperty extends DataElement implements IProperty 
 
 	@Override
 	public PropertyType getPropertyType() {
-		PropertyValueTypeDef type = PropertyValueTypeDefHelper.fromName((String) get(SingleProperty.VALUETYPE));
+		PropertyValueTypeDef type = PropertyValueTypeDefHelper.fromName((String) get(Property.VALUETYPE));
 		if (type == PropertyValueTypeDef.Collection) {
 			return PropertyType.Collection;
 		} else if (type == PropertyValueTypeDef.Map) {
@@ -23,13 +23,13 @@ public abstract class AbstractProperty extends DataElement implements IProperty 
 
 	@Override
 	public void setValueId(String obj) {
-		put(SingleProperty.VALUEID, obj);
+		put(Property.VALUEID, obj);
 
 	}
 
 	@Override
 	public String getValueId() {
-		return (String) get(SingleProperty.VALUEID);
+		return (String) get(Property.VALUEID);
 	}
 
 }

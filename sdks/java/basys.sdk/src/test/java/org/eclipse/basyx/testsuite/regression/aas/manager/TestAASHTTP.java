@@ -9,14 +9,14 @@ import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.preconfigured.PreconfiguredRegistry;
+import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.testsuite.regression.aas.restapi.StubAASServlet;
-import org.eclipse.basyx.testsuite.regression.vab.directory.DirectoryServiceStub;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
+import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.junit.Before;
@@ -49,12 +49,12 @@ public class TestAASHTTP {
 	@Before
 	public void build() {
 		// Fill directory stub
-		DirectoryServiceStub directory = new DirectoryServiceStub();
+		InMemoryDirectory directory = new InMemoryDirectory();
 		directory.addMapping(StubAASServlet.AASURN.getId(), "http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas");
 		directory.addMapping(StubAASServlet.SMURN.getId(),
 				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMIDSHORT);
 
-		PreconfiguredRegistry registry = new PreconfiguredRegistry();
+		InMemoryRegistry registry = new InMemoryRegistry();
 
 		// Create aas descriptor for the aas registry
 		AASDescriptor aasDescriptor = new AASDescriptor(StubAASServlet.AASURN,

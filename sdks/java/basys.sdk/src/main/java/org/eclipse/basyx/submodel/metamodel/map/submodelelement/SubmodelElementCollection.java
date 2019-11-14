@@ -14,7 +14,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.SingleProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 
 /**
  * SubmodelElementCollection as defined by DAAS document <br/>
@@ -39,7 +39,7 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		putAll(new ModelType(MODELTYPE));
 
 		// Put attributes
-		put(SingleProperty.VALUE, new ArrayList<>());
+		put(Property.VALUE, new ArrayList<>());
 		put(ORDERED, true);
 		put(ALLOWDUPLICATES, true);
 	}
@@ -58,7 +58,7 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	 */
 	public SubmodelElementCollection(Collection<SubmodelElement> value, boolean ordered, boolean allowDuplicates) {
 		// Put attributes
-		put(SingleProperty.VALUE, value);
+		put(Property.VALUE, value);
 		put(ORDERED, ordered);
 		put(ALLOWDUPLICATES, allowDuplicates);
 	}
@@ -91,14 +91,14 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 
 	@Override
 	public void setValue(List<Object> value) {
-		put(SingleProperty.VALUE, value);
+		put(Property.VALUE, value);
 
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object> getValue() {
-		return (List<Object>) get(SingleProperty.VALUE);
+		return (List<Object>) get(Property.VALUE);
 	}
 
 	@Override
