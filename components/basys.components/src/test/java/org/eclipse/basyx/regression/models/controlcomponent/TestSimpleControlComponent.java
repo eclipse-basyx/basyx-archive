@@ -2,6 +2,7 @@ package org.eclipse.basyx.regression.models.controlcomponent;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.basyx.models.controlcomponent.ControlComponent;
 import org.eclipse.basyx.models.controlcomponent.ExecutionMode;
 import org.eclipse.basyx.models.controlcomponent.ExecutionState;
 import org.eclipse.basyx.models.controlcomponent.OccupationState;
@@ -72,7 +73,7 @@ public class TestSimpleControlComponent {
 		assertTrue(ctrlComponent.getOperationMode().equals("DefaultService"));
 
 		// Issue start command
-		ctrlComponent.setCommand("start");
+		ctrlComponent.setCommand(ControlComponent.OPERATION_START);
 		// - Check execution state
 		assertTrue(ctrlComponent.getExecutionState().equals(ExecutionState.EXECUTE.getValue()));
 		
@@ -82,7 +83,7 @@ public class TestSimpleControlComponent {
 		assertTrue(ctrlComponent.getExecutionState().equals(ExecutionState.COMPLETE.getValue()));
 		
 		// Reset device
-		ctrlComponent.setCommand("reset");
+		ctrlComponent.setCommand(ControlComponent.OPERATION_RESET);
 		// - Check execution state
 		assertTrue(ctrlComponent.getExecutionState().equals(ExecutionState.RESETTING.getValue()));
 		// - Indicate end of reset
@@ -109,22 +110,22 @@ public class TestSimpleControlComponent {
 		assertTrue(ctrlComponent.getOperationMode().equals("DefaultService"));
 
 		// Issue start command
-		ctrlComponent.setCommand("start");
+		ctrlComponent.setCommand(ControlComponent.OPERATION_START);
 		// - Check execution state
 		assertTrue(ctrlComponent.getExecutionState().equals(ExecutionState.EXECUTE.getValue()));
 		
 		// Machine aborts service
-		ctrlComponent.setCommand("abort");
+		ctrlComponent.setCommand(ControlComponent.OPERATION_ABORT);
 		// - Check execution state
 		assertTrue(ctrlComponent.getExecutionState().equals(ExecutionState.ABORTED.getValue()));
 		
 		// Operator clears machine state
-		ctrlComponent.setCommand("clear");
+		ctrlComponent.setCommand(ControlComponent.OPERATION_CLEAR);
 		// - Check execution state
 		assertTrue(ctrlComponent.getExecutionState().equals(ExecutionState.STOPPED.getValue()));
 
 		// Operator restarts machine
-		ctrlComponent.setCommand("reset");
+		ctrlComponent.setCommand(ControlComponent.OPERATION_RESET);
 		// - Check execution state
 		assertTrue(ctrlComponent.getExecutionState().equals(ExecutionState.RESETTING.getValue()));
 		// - Indicate end of reset

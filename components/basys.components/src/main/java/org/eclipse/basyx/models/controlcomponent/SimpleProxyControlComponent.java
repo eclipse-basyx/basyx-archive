@@ -92,7 +92,7 @@ public class SimpleProxyControlComponent extends SimpleControlComponent implemen
 		if (rxMessage.equalsIgnoreCase(buildMessage(ExecutionOrder.RESET))) {
 			// Process message based on state
 			if (this.getExecutionState().equalsIgnoreCase(ExecutionOrder.COMPLETE.getValue()))
-				this.put("cmd", ExecutionOrder.RESET.getValue().toLowerCase());
+				this.put(ControlComponent.CMD, ExecutionOrder.RESET.getValue().toLowerCase());
 			else
 				throw new RuntimeException("Semantic error detected");
 

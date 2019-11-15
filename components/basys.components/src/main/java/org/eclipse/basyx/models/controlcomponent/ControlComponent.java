@@ -18,7 +18,50 @@ import java.util.function.Function;
  */
 public abstract class ControlComponent extends HashMap<String, Object> {
 
-	
+	// Miscellaneous String constants
+	private static final String STATUS = "status";
+	private static final String ORDER_LIST = "orderList";
+	private static final String OCCUPIERID_LOCAL = "LOCAL";
+	private static final String OPERATIONS = "operations";
+	private static final String SERVICE = "service";
+
+	// String constants for operations
+	public static final String OPERATION_CLEAR = "clear";
+	public static final String OPERATION_STOP = "stop";
+	public static final String OPERATION_ABORT = "abort";
+	public static final String OPERATION_UNSUSPEND = "unsuspend";
+	public static final String OPERATION_SUSPEND = "suspend";
+	public static final String OPERATION_UNHOLD = "unhold";
+	public static final String OPERATION_HOLD = "hold";
+	public static final String OPERATION_RESET = "reset";
+	public static final String OPERATION_START = "start";
+	public static final String OPERATION_SIMULATION = "simulation";
+	public static final String OPERATION_MANUAL = "manual";
+	public static final String OPERATION_AUTO = "auto";
+	public static final String OPERATION_SEMIAUTO = "semiauto";
+	public static final String OPERATION_PRIORITY = "priority";
+	public static final String OPERATION_OCCUPY = "occupy";
+	public static final String OPERATION_FREE = "free";
+	public static final String OPERATION_BSTATE = "bstate";
+
+	// String constants for setting execution state
+	public static final String CMD = "cmd";
+
+	// String constants for overwrite
+	private static final String LOCAL_OVERWRITE_FREE = "localOverwriteFree";
+	private static final String LOCAL_OVERWRITE = "localOverwrite";
+
+	// String constants for status
+	private static final String PREV_ERROR = "prevError";
+	private static final String ERROR_STATE = "errorState";
+	private static final String WORK_STATE = "workState";
+	private static final String OP_MODE = "opMode";
+	private static final String EX_STATE = "exState";
+	private static final String EX_MODE = "exMode";
+	private static final String LAST_OCCUPIER = "lastOccupier";
+	private static final String OCCUPIER = "occupier";
+	private static final String OCCUPATION_STATE = "occupationState";
+
 	/**
 	 * The status map implements the service/ substructure of the control component structure. It also 
 	 * indicates variable changes via callbacks of the outer class.
@@ -27,8 +70,6 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 *
 	 */
 	class StatusMap extends HashMap<String, Object> {
-
-		
 		/**
 		 * Version number of serialized instances
 		 */
@@ -41,15 +82,15 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 		 */
 		public StatusMap() {
 			// Populate control component "status" sub structure 
-			put("occupationState ", 0);               // Occupation state: FREE
-			put("occupier", "");                      // Occupier: none
-			put("lastOccupier", "");                  // Last occupier: none
-			put("exMode", 1);                         // Execution mode: AUTO
-			put("exState", "IDLE");                   // Execution state: IDLE
-			put("opMode", "");                        // Component specific operation mode (e.g. active service)
-			put("workState", "");                     // Component specific work state
-			put("errorState", "");                    // Component error state
-			put("prevError", "");                     // Component previous error
+			put(OCCUPATION_STATE, OccupationState.FREE.getValue()); // Occupation state: FREE
+			put(OCCUPIER, "");                      		// Occupier: none
+			put(LAST_OCCUPIER, "");                  		// Last occupier: none
+			put(EX_MODE, ExecutionMode.AUTO.getValue()); // Execution mode: AUTO
+			put(EX_STATE, ExecutionState.IDLE.getValue()); // Execution state: IDLE
+			put(OP_MODE, "");                        		// Component specific operation mode (e.g. active service)
+			put(WORK_STATE, "");                     		// Component specific work state
+			put(ERROR_STATE, "");                    		// Component error state
+			put(PREV_ERROR, "");                     		// Component previous error
 		}
 		
 		
@@ -64,8 +105,8 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 			Object value = parValue;
 			// - Eventually we have to change the value to be put into the variable
 			switch(key) {
-				case "exState": value = filterExecutionState(value.toString()); break;
-				case "opMode":  value = filterOperationMode(value.toString()); break;
+				case EX_STATE: value = filterExecutionState(value.toString()); break;
+				case OP_MODE:  value = filterOperationMode(value.toString()); break;
 			}
 			
 			// Invoke base implementation
@@ -76,15 +117,15 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 			
 			// Indicate specific changes to callback operations of control component
 			switch(key) {
-				case "occupationState": for (ControlComponentChangeListener listener: listeners) listener.onNewOccupationState(OccupationState.byValue((int) value)); break;
-				case "occupier":        for (ControlComponentChangeListener listener: listeners) listener.onNewOccupier(value.toString()); break;
-				case "lastOccupier":    for (ControlComponentChangeListener listener: listeners) listener.onLastOccupier(value.toString()); break;
-				case "exMode":          for (ControlComponentChangeListener listener: listeners) listener.onChangedExecutionMode(ExecutionMode.byValue((int) value)); break;
-				case "exState":         for (ControlComponentChangeListener listener: listeners) listener.onChangedExecutionState(ExecutionState.byValue(value.toString())); break;
-				case "opMode":          for (ControlComponentChangeListener listener: listeners) listener.onChangedOperationMode(value.toString()); break;
-				case "workState":       for (ControlComponentChangeListener listener: listeners) listener.onChangedWorkState(value.toString()); break;
-				case "errorState":      for (ControlComponentChangeListener listener: listeners) listener.onChangedErrorState(value.toString()); break;
-				case "prevError":       for (ControlComponentChangeListener listener: listeners) listener.onChangedPrevError(value.toString()); break;
+				case OCCUPATION_STATE: for (ControlComponentChangeListener listener: listeners) listener.onNewOccupationState(OccupationState.byValue((int) value)); break;
+				case OCCUPIER:         for (ControlComponentChangeListener listener: listeners) listener.onNewOccupier(value.toString()); break;
+				case LAST_OCCUPIER:    for (ControlComponentChangeListener listener: listeners) listener.onLastOccupier(value.toString()); break;
+				case EX_MODE:          for (ControlComponentChangeListener listener: listeners) listener.onChangedExecutionMode(ExecutionMode.byValue((int) value)); break;
+				case EX_STATE:         for (ControlComponentChangeListener listener: listeners) listener.onChangedExecutionState(ExecutionState.byValue(value.toString())); break;
+				case OP_MODE:          for (ControlComponentChangeListener listener: listeners) listener.onChangedOperationMode(value.toString()); break;
+				case WORK_STATE:       for (ControlComponentChangeListener listener: listeners) listener.onChangedWorkState(value.toString()); break;
+				case ERROR_STATE:      for (ControlComponentChangeListener listener: listeners) listener.onChangedErrorState(value.toString()); break;
+				case PREV_ERROR:       for (ControlComponentChangeListener listener: listeners) listener.onChangedPrevError(value.toString()); break;
 			}
 						
 			// Return result
@@ -133,43 +174,93 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	public ControlComponent() {
 		// Add control component output signals to map
 		// - Order list
-		put("orderList", new LinkedList<String>());
+		put(ORDER_LIST, new LinkedList<String>());
 		// - "status" sub structure
 		status = new StatusMap();
-		put("status", status);
+		put(STATUS, status);
 
 		// Input signals
 		// - Command / stores last command
-		put("cmd", "");                           // No command
-		put("localOverwrite", "");                // Local override signal
-		put("localOverwriteFree", "");            // Local override release signal
+		put(CMD, "");                           // No command
+		put(LOCAL_OVERWRITE, "");                // Local override signal
+		put(LOCAL_OVERWRITE_FREE, "");            // Local override release signal
 		
 		// Operations
 		// - Add "operations" sub structure
-		put("operations", operations);
+		put(OPERATIONS, operations);
 		// - Service operations
 		Map<String, Function<?, ?>> serviceOperations = new HashMap<>();
 		// - Populate service operations
-		serviceOperations.put("free",       (Function<Object[], Void> & Serializable) (v) -> {freeControlComponent((String) v[0]); return null;});
-		serviceOperations.put("occupy", (Function<Object[], Void> & Serializable) (v) -> {occupyControlComponent((String) v[0]); return null;});
-		serviceOperations.put("priority",   (Function<Object[], Void> & Serializable) (v) -> {priorityOccupation((String) v[0]); return null;});
-		serviceOperations.put("auto",       (Function<Object, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.AUTO); return null;});
-		serviceOperations.put("semiauto",   (Function<Object, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.SEMIAUTO); return null;});
-		serviceOperations.put("manual",     (Function<Object, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.MANUAL); return null;});
-		serviceOperations.put("simulation", (Function<Object, Void> & Serializable) (v) -> {this.setExecutionMode(ExecutionMode.SIMULATION); return null;});
-		serviceOperations.put("start",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.START.getValue()); return null;});    
-		serviceOperations.put("reset",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.RESET.getValue()); return null;});    
-		serviceOperations.put("hold",       (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.HOLD.getValue()); return null;});     
-		serviceOperations.put("unhold",     (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.UNHOLD.getValue()); return null;});   
-		serviceOperations.put("suspend",    (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.SUSPEND.getValue()); return null;});  
-		serviceOperations.put("unsuspend",  (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.UNSUSPEND.getValue()); return null;});
-		serviceOperations.put("abort",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.ABORT.getValue()); return null;});    
-		serviceOperations.put("stop",       (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.STOP.getValue()); return null;});     
-		serviceOperations.put("clear",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.CLEAR.getValue()); return null;});    
-		serviceOperations.put("reset",      (Function<Object, Void> & Serializable) (v) -> {this.changeExecutionState(ExecutionOrder.RESET.getValue()); return null;});    
-		serviceOperations.put("bstate",     (Function<Object, Void> & Serializable) (v) -> {this.setOperationMode("BSTATE"); return null;});
+		serviceOperations.put(OPERATION_FREE, (Function<Object[], Void> & Serializable) (v) -> {
+			freeControlComponent((String) v[0]);
+			return null;
+		});
+		serviceOperations.put(OPERATION_OCCUPY, (Function<Object[], Void> & Serializable) (v) -> {
+			occupyControlComponent((String) v[0]);
+			return null;
+		});
+		serviceOperations.put(OPERATION_PRIORITY, (Function<Object[], Void> & Serializable) (v) -> {
+			priorityOccupation((String) v[0]);
+			return null;
+		});
+		serviceOperations.put(OPERATION_AUTO, (Function<Object, Void> & Serializable) (v) -> {
+			this.setExecutionMode(ExecutionMode.AUTO);
+			return null;
+		});
+		serviceOperations.put(OPERATION_SEMIAUTO, (Function<Object, Void> & Serializable) (v) -> {
+			this.setExecutionMode(ExecutionMode.SEMIAUTO);
+			return null;
+		});
+		serviceOperations.put(OPERATION_MANUAL, (Function<Object, Void> & Serializable) (v) -> {
+			this.setExecutionMode(ExecutionMode.MANUAL);
+			return null;
+		});
+		serviceOperations.put(OPERATION_SIMULATION, (Function<Object, Void> & Serializable) (v) -> {
+			this.setExecutionMode(ExecutionMode.SIMULATION);
+			return null;
+		});
+		serviceOperations.put(OPERATION_START, (Function<Object, Void> & Serializable) (v) -> {
+			this.changeExecutionState(ExecutionOrder.START.getValue());
+			return null;
+		});
+		serviceOperations.put(OPERATION_RESET, (Function<Object, Void> & Serializable) (v) -> {
+			this.changeExecutionState(ExecutionOrder.RESET.getValue());
+			return null;
+		});
+		serviceOperations.put(OPERATION_HOLD, (Function<Object, Void> & Serializable) (v) -> {
+			this.changeExecutionState(ExecutionOrder.HOLD.getValue());
+			return null;
+		});
+		serviceOperations.put(OPERATION_UNHOLD, (Function<Object, Void> & Serializable) (v) -> {
+			this.changeExecutionState(ExecutionOrder.UNHOLD.getValue());
+			return null;
+		});
+		serviceOperations.put(OPERATION_SUSPEND, (Function<Object, Void> & Serializable) (v) -> {
+			this.changeExecutionState(ExecutionOrder.SUSPEND.getValue());
+			return null;
+		});
+		serviceOperations.put(OPERATION_UNSUSPEND, (Function<Object, Void> & Serializable) (v) -> {
+			this.changeExecutionState(ExecutionOrder.UNSUSPEND.getValue());
+			return null;
+		});
+		serviceOperations.put(OPERATION_ABORT, (Function<Object, Void> & Serializable) (v) -> {
+			this.changeExecutionState(ExecutionOrder.ABORT.getValue());
+			return null;
+		});
+		serviceOperations.put(OPERATION_STOP, (Function<Object, Void> & Serializable) (v) -> {
+			this.changeExecutionState(ExecutionOrder.STOP.getValue());
+			return null;
+		});
+		serviceOperations.put(OPERATION_CLEAR, (Function<Object, Void> & Serializable) (v) -> {
+			this.changeExecutionState(ExecutionOrder.CLEAR.getValue());
+			return null;
+		});
+		serviceOperations.put(OPERATION_BSTATE, (Function<Object, Void> & Serializable) (v) -> {
+			this.setOperationMode("BSTATE");
+			return null;
+		});
 		// - Add service operations to sub structure
-		operations.put("service", serviceOperations);
+		operations.put(SERVICE, serviceOperations);
 	}
 
 	
@@ -213,7 +304,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected Map<String, Function<?, ?>> getServiceOperationMap() {
-		return (Map<String, Function<?, ?>>) operations.get("service");
+		return (Map<String, Function<?, ?>>) operations.get(SERVICE);
 	}
 	
 	
@@ -233,9 +324,9 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 		
 		// Process variable changes
 		switch(key) {
-			case "cmd": 			   changeExecutionState(value.toString()); break;
-			case "localOverwrite": 	   invokeLocalOverwrite(); break;
-			case "localOverwriteFree": clearLocalOverwrite(); break;
+			case CMD: 			   changeExecutionState(value.toString()); break;
+			case LOCAL_OVERWRITE: 	   invokeLocalOverwrite(); break;
+			case LOCAL_OVERWRITE_FREE: clearLocalOverwrite(); break;
 		}
 					
 		// Return result
@@ -289,7 +380,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 		
 		// Enter local overwrite state
 		this.setOccupationState(OccupationState.LOCAL);
-		this.setOccupierID("LOCAL");
+		this.setOccupierID(OCCUPIERID_LOCAL);
 	}
 	
 	
@@ -463,7 +554,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	@SuppressWarnings("unchecked")
 	public List<String> getOrderList() {
 		// Get map entry
-		return (List<String>) get("orderList");
+		return (List<String>) get(ORDER_LIST);
 	}
 	
 	
@@ -473,7 +564,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	@SuppressWarnings("unchecked")
 	public void addOrder(String newOrder) {
 		// Get map entry
-		((List<String>) get("orderList")).add(newOrder);		
+		((List<String>) get(ORDER_LIST)).add(newOrder);		
 	}
 	
 	
@@ -483,7 +574,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	@SuppressWarnings("unchecked")
 	public void clearOrder() {
 		// Get map entry
-		((List<String>) get("orderList")).clear();		
+		((List<String>) get(ORDER_LIST)).clear();		
 	}
 	
 	
@@ -492,7 +583,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public OccupationState getOccupationState() {
 		// Return occupation state
-		return OccupationState.byValue((Integer) status.get("occupationState"));
+		return OccupationState.byValue((Integer) status.get(OCCUPATION_STATE));
 	}
 	
 	
@@ -501,7 +592,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setOccupationState(OccupationState occSt) {
 		// Update occupation state
-		status.put("occupationState", occSt.getValue());
+		status.put(OCCUPATION_STATE, occSt.getValue());
 	}
 	
 	
@@ -510,7 +601,11 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public String getOccupierID() {
 		// If occupier is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
-		try {return status.get("occupier").toString();} catch (NullPointerException e) {return "";}
+		try {
+			return status.get(OCCUPIER).toString();
+		} catch (NullPointerException e) {
+			return "";
+		}
 	}
 	
 	
@@ -518,7 +613,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Set occupier ID
 	 */
 	public void setOccupierID(String occId) {
-		status.put("occupier", occId);
+		status.put(OCCUPIER, occId);
 	}
 	
 
@@ -527,7 +622,11 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public String getLastOccupierID() {
 		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
-		try {return status.get("lastOccupier").toString();} catch (NullPointerException e) {return "";}
+		try {
+			return status.get(LAST_OCCUPIER).toString();
+		} catch (NullPointerException e) {
+			return "";
+		}
 	}
 	
 	
@@ -535,7 +634,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 * Set last occupier ID
 	 */
 	public void setLastOccupierID(String occId) {
-		status.put("lastOccupier", occId);
+		status.put(LAST_OCCUPIER, occId);
 	}
 	
 	
@@ -544,7 +643,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public ExecutionMode getExecutionMode() {
 		// Return execution mode
-		return ExecutionMode.byValue((Integer) status.get("exMode"));
+		return ExecutionMode.byValue((Integer) status.get(EX_MODE));
 	}
 	
 	
@@ -553,7 +652,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setExecutionMode(ExecutionMode exMode) {
 		// Return execution mode
-		status.put("exMode", exMode.getValue());
+		status.put(EX_MODE, exMode.getValue());
 	}
 	
 
@@ -562,7 +661,11 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public String getExecutionState() {
 		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
-		try {return status.get("exState").toString();} catch (NullPointerException e) {return "";}
+		try {
+			return status.get(EX_STATE).toString();
+		} catch (NullPointerException e) {
+			return "";
+		}
 	}
 	
 	
@@ -572,7 +675,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	public void setExecutionState(String newSt) {
 		// System.out.println("Comp: change to:"+newSt);
 		// Change execution state
-		status.put("exState", newSt);		
+		status.put(EX_STATE, newSt);
 	}
 	
 	
@@ -581,7 +684,11 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public String getOperationMode() {
 		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
-		try {return status.get("opMode").toString();} catch (NullPointerException e) {return "";}
+		try {
+			return status.get(OP_MODE).toString();
+		} catch (NullPointerException e) {
+			return "";
+		}
 	}
 	
 	
@@ -590,7 +697,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setOperationMode(String opMode) {
 		// Change operation mode
-		status.put("opMode", opMode);		
+		status.put(OP_MODE, opMode);
 	}
 	
 	
@@ -599,7 +706,11 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public String getWorkState() {
 		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
-		try {return status.get("workState").toString();} catch (NullPointerException e) {return "";}
+		try {
+			return status.get(WORK_STATE).toString();
+		} catch (NullPointerException e) {
+			return "";
+		}
 	}
 	
 
@@ -608,7 +719,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setWorkState(String workState) {
 		// Change work state
-		status.put("workState", workState);		
+		status.put(WORK_STATE, workState);
 	}
 	
 
@@ -617,7 +728,11 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public String getErrorState() {
 		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
-		try {return status.get("errorState").toString();} catch (NullPointerException e) {return "";}
+		try {
+			return status.get(ERROR_STATE).toString();
+		} catch (NullPointerException e) {
+			return "";
+		}
 	}
 	
 	
@@ -626,7 +741,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setErrorState(String errorState) {
 		// Change error state
-		status.put("errorState", errorState);		
+		status.put(ERROR_STATE, errorState);
 	}
 	
 	
@@ -635,7 +750,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public String getLastErrorState() {
 		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
-		try {return status.get("prevError").toString();} catch (NullPointerException e) {return "";}
+		try {return status.get(PREV_ERROR).toString();} catch (NullPointerException e) {return "";}
 	}
 	
 	
@@ -644,7 +759,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setLastErrorState(String lastErrorState) {
 		// Change last error state
-		status.put("prevError", lastErrorState);		
+		status.put(PREV_ERROR, lastErrorState);
 	}
 	
 	
@@ -654,7 +769,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public String getCommand() {
 		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
-		try {return get("cmd").toString();} catch (NullPointerException e) {return "";}
+		try {return get(CMD).toString();} catch (NullPointerException e) {return "";}
 	}
 	
 	
@@ -663,7 +778,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setCommand(String cmd) {
 		// Change last command
-		put("cmd", cmd);		
+		put(CMD, cmd);		
 	}
 	
 	
@@ -672,7 +787,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public String getLocalOverwrite() {
 		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
-		try {return get("localOverwrite").toString();} catch (NullPointerException e) {return "";}
+		try {return get(LOCAL_OVERWRITE).toString();} catch (NullPointerException e) {return "";}
 	}
 	
 	
@@ -681,7 +796,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setLocalOverwrite(String cmd) {
 		// Change local overwrite command
-		put("localOverwrite", cmd);		
+		put(LOCAL_OVERWRITE, cmd);		
 	}
 
 
@@ -690,7 +805,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public String getLocalOverwriteFree() {
 		// If member is not set, a null pointer Exception will be thrown when invoking toString(). Return an empty string in this case (=no occupier)
-		try {return get("localOverwriteFree").toString();} catch (NullPointerException e) {return "";}
+		try {return get(LOCAL_OVERWRITE_FREE).toString();} catch (NullPointerException e) {return "";}
 	}
 	
 	
@@ -699,7 +814,7 @@ public abstract class ControlComponent extends HashMap<String, Object> {
 	 */
 	public void setLocalOverwriteFree(String cmd) {
 		// Change local overwrite free command
-		put("localOverwriteFree", cmd);		
+		put(LOCAL_OVERWRITE_FREE, cmd);		
 	}
 }
 
