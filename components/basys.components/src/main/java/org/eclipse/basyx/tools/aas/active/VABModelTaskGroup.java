@@ -9,6 +9,12 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
+/**
+ * Provides management for execution of multiple {@link VABModelTask}s.
+ * 
+ * @author espen, schnicke
+ *
+ */
 public class VABModelTaskGroup {
 	private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 	private ScheduledFuture<?> currentSchedule;

@@ -66,7 +66,7 @@ public class SequentialProcess extends BaSysProcessModel {
 	/**
 	 * Process nodes for process output devices
 	 */
-	protected SequentialProcessNode lastProcessNode  = new SequentialProcessNode(outputQueueDevice);
+	protected SequentialProcessNode lastProcessNode = new SequentialProcessNode(outputQueueDevice);
 
 	
 	
@@ -79,11 +79,6 @@ public class SequentialProcess extends BaSysProcessModel {
 	public SequentialProcess(ModelUrn id) {
 		// Invoke base constructor
 		super(id);
-		
-		
-		// Create process nodes for process input and output devices
-		firstProcessNode = new SequentialProcessNode(inputQueueDevice);
-		lastProcessNode  = new SequentialProcessNode(outputQueueDevice);
 		
 		// Add device nodes
 		urnToDevice.put(firstProcessNode.getDevice().getDeviceID(), firstProcessNode);

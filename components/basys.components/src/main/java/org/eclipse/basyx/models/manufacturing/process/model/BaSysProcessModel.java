@@ -100,6 +100,7 @@ public abstract class BaSysProcessModel extends SubModel implements DeviceIF {
 	/**
 	 * Process starts processing product with given ID
 	 */
+	@Override
 	public void startProcessing(ModelUrn productAASID) {
 		// Add the given product to manufacturing queue
 		addProductToManufacturingQueue(productAASID);
@@ -135,7 +136,6 @@ public abstract class BaSysProcessModel extends SubModel implements DeviceIF {
 		// Add waiting and finished products, as well as all products that are being processed
 		productsOnDevice.addAll(getFinishedProducts());
 		productsOnDevice.addAll(getWaitingProducts());
-		//productsOnDevice.addAll(getWaitingProducts());
 		
 		// Return product collection
 		return productsOnDevice;

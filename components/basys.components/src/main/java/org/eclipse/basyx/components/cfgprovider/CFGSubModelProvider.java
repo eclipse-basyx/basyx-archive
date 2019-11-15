@@ -14,11 +14,6 @@ import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
  */
 public class CFGSubModelProvider extends BaseConfiguredProvider {
 
-	
-	
-	
-	int abc = 1234;
-	
 	/**
 	 * Constructor
 	 */

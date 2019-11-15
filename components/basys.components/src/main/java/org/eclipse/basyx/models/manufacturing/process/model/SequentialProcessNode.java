@@ -88,14 +88,6 @@ public class SequentialProcessNode {
 	
 	
 	/**
-	 * Set device instance
-	 */
-	public void setDevice(Device dev) {
-		device = dev;
-	}
-
-	
-	/**
 	 * Get device instance
 	 */
 	public Device getDevice() {
