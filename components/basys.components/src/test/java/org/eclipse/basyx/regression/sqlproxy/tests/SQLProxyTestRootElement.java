@@ -30,7 +30,7 @@ public class SQLProxyTestRootElement {
 	@Test
 	public void test() throws Exception {
 		// Create SQL root element
-		sqlRootElement = new SQLRootElement("postgres", "admin", "//localhost/basyx-map?", "org.postgresql.Driver", "jdbc:postgresql:", "root_el_01");
+		sqlRootElement = new SQLRootElement(SQLConfig.SQLUSER, SQLConfig.SQLPW,  "//localhost/basyx-map?", "org.postgresql.Driver", "jdbc:postgresql:", "root_el_01");
 		// - Create new table in database for root element
 		sqlRootElement.createRootTable();
 		

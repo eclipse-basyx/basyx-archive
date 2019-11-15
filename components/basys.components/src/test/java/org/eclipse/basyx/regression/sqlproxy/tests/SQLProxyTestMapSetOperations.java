@@ -38,7 +38,7 @@ public class SQLProxyTestMapSetOperations {
 	@Test @SuppressWarnings({ "unchecked", "rawtypes" })
 	public void test() throws Exception {
 		// Create SQL root element
-		sqlRootElement = new SQLRootElement("postgres", "admin", "//localhost/basyx-map?", "org.postgresql.Driver", "jdbc:postgresql:", "root_el_01");
+		sqlRootElement = new SQLRootElement(SQLConfig.SQLUSER, SQLConfig.SQLPW,  "//localhost/basyx-map?", "org.postgresql.Driver", "jdbc:postgresql:", "root_el_01");
 
 		
 		// Drop tables to make sure we start with a fresh database
