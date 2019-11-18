@@ -19,7 +19,6 @@ import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,6 +100,10 @@ public class MultiSubmodelProviderTest {
 		// Get property value
 		Map<String, Object> value = (Map<String, Object>) proxy
 				.getModelPropertyValue("/aas/submodels/" + smId + "/dataElements/integerProperty/value");
+		assertEquals(123, value.get(Property.VALUE));
+
+		// Get property value with /submodel suffix
+		value = (Map<String, Object>) proxy.getModelPropertyValue("/aas/submodels/" + smId + "/submodel/dataElements/integerProperty/value");
 		assertEquals(123, value.get(Property.VALUE));
 	}
 }
