@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
+import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
@@ -245,5 +246,19 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	@Override
 	public Set<SubmodelDescriptor> getSubModelDescriptors() {
 		return (Set<SubmodelDescriptor>) get(SUBMODELS);
+	}
+
+	/**
+	 * Allows addition of a concept description to the concept dictionary
+	 * 
+	 * @param description
+	 */
+	public void addConceptDescription(IConceptDescription description) {
+		Set<IConceptDictionary> dictionaries = getConceptDictionary();
+		if (dictionaries.isEmpty()) {
+			dictionaries.add(new ConceptDictionary());
+		}
+		ConceptDictionary dictionary = (ConceptDictionary) dictionaries.iterator().next();
+		dictionary.addConceptDescription(description);
 	}
 }

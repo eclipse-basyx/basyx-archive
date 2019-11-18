@@ -62,6 +62,10 @@ public class SubmodelElement extends HashMap<String, Object> implements ISubmode
 		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
 	}
 
+	public void addDataSpecificationReference(IReference ref) {
+		getDataSpecificationReferences().add(ref);
+	}
+
 	@Override
 	public String getIdShort() {
 		return new ReferableFacade(this).getIdShort();

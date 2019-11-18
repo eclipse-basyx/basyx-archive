@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.facade.parts.ConceptDictionaryFacade;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -26,6 +27,9 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 
 	public static final String CONCEPTDESCRIPTION = "conceptDescription";
 
+	// Extension of meta model
+	public static final String CONCEPTDESCRIPTIONS = "conceptDescriptions";
+
 	/**
 	 * Constructor
 	 */
@@ -33,6 +37,7 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 		// Add qualifier (Referable)
 		putAll(new Referable());
 		put(CONCEPTDESCRIPTION, new HashSet<String>());
+		put(CONCEPTDESCRIPTIONS, new HashSet<IConceptDescription>());
 	}
 
 	public ConceptDictionary(Set<IReference> ref) {
@@ -89,5 +94,10 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 	public void setConceptDescription(HashSet<String> ref) {
 		new ConceptDictionaryFacade(this).setConceptDescription(ref);
 
+	}
+
+	@SuppressWarnings("unchecked")
+	public void addConceptDescription(IConceptDescription description) {
+		((Set<IConceptDescription>) get(CONCEPTDESCRIPTIONS)).add(description);
 	}
 }
