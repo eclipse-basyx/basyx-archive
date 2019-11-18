@@ -1,6 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.map.descriptor;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -8,7 +9,6 @@ import java.util.Set;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
-
 
 /**
  * AAS descriptor class
@@ -44,6 +44,20 @@ public class AASDescriptor extends ModelDescriptor {
 		put(AssetAdministrationShell.SUBMODELS, smDescriptors);
 	}
 	
+	/**
+	 * Create a new aas descriptor that retrieves the necessary information from a
+	 * passend AssetAdministrationShell
+	 * 
+	 * @param aas
+	 * @param endpoint
+	 */
+	public AASDescriptor(AssetAdministrationShell aas, String endpoint) {
+		this(aas);
+
+		// Add endpoint
+		put(AssetAdministrationShell.ENDPOINTS, Collections.singleton(endpoint));
+	}
+
 	/**
 	 * Create a new descriptor with minimal information
 	 */
