@@ -16,6 +16,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Propert
 public class OperationVariable extends SubmodelElement implements IOperationVariable {
 	private static final long serialVersionUID = 1L;
 	public static final String MODELTYPE = "OperationVariable";
+	private static final String TYPE = "type";
 
 	/**
 	 * 
@@ -40,4 +41,18 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	public ISubmodelElement getValue() {
 		return (ISubmodelElement) get(Property.VALUE);
 	}
+
+	@Override
+	public String getType() {
+		return (String) get(TYPE);
+	}
+
+	/**
+	 * Allows to set the type of the operation variable
+	 * @param type
+	 */
+	public void setType(String type) {
+		put(TYPE, type);
+	}
+
 }
