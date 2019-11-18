@@ -54,8 +54,8 @@ public abstract class ConnectedSubmodelElement extends ConnectedElement implemen
 	}
 
 	@Override
-	public String getHasKindReference() {
-		return new HasKindFacade(getElem()).getHasKindReference();
+	public String getKind() {
+		return new HasKindFacade(getElem()).getKind();
 	}
 
 	@Override

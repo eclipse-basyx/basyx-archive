@@ -16,6 +16,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IProper
 import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -26,7 +27,6 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
@@ -195,15 +195,16 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Get value of 'kind' property
 	 */
+	@Override
 	public String getKind() {
-		return (String) getElements().get(HasKind.KIND);
+		return new HasKindFacade(getElements()).getKind();
 	}
 
 	/**
 	 * Update value of 'kind' property
 	 */
-	public void setKind(int newValue) {
-		getElements().put(HasKind.KIND, newValue);
+	public void setKind(String newValue) {
+		new HasKindFacade(getElements()).setKind(newValue);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -233,15 +234,6 @@ public class SubmodelFacade implements ISubModel {
 
 	public void setDataSpecificationReferences(Set<IReference> ref) {
 		map.put(HasDataSpecification.HASDATASPECIFICATION, ref);
-	}
-
-	@Override
-	public String getHasKindReference() {
-		return (String) map.get(HasKind.KIND);
-	}
-
-	public void setHasKindReference(String kind) {
-		map.put(HasKind.KIND, kind);
 	}
 
 	@Override

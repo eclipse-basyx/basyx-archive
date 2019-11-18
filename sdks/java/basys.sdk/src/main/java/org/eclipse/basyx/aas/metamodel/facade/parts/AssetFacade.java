@@ -11,6 +11,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
@@ -48,13 +49,12 @@ public class AssetFacade implements IAsset {
 	}
 
 	@Override
-	public String getHasKindReference() {
+	public String getKind() {
 		return (String) map.get(HasKind.KIND);
 	}
 
-	public void setHasKindReference(String kind) {
-		map.put(HasKind.KIND, kind);
-
+	public void setKind(String kind) {
+		new HasKindFacade(map).setKind(kind);
 	}
 
 	@SuppressWarnings("unchecked")

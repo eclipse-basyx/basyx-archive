@@ -21,11 +21,11 @@ public class HasKindFacade implements IHasKind {
 	}
 
 	@Override
-	public String getHasKindReference() {
+	public String getKind() {
 		return (String) map.get(HasKind.KIND);
 	}
 
-	public void setHasKindReference(String kind) {
+	public void setKind(String kind) {
 		map.put(HasKind.KIND, kind);
 	}
 

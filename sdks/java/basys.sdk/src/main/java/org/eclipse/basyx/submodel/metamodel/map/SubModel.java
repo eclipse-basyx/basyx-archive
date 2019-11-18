@@ -139,12 +139,12 @@ public class SubModel extends VABModelMap<Object> implements IVABElementContaine
 	}
 
 	@Override
-	public String getHasKindReference() {
-		return new HasKindFacade(this).getHasKindReference();
+	public String getKind() {
+		return new HasKindFacade(this).getKind();
 	}
 
-	public void setHasKindReference(String kind) {
-		new HasKindFacade(this).setHasKindReference(kind);
+	public void setKind(String kind) {
+		new HasKindFacade(this).setKind(kind);
 	}
 
 	@Override

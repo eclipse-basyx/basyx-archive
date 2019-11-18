@@ -118,11 +118,11 @@ public class SubmodelElement extends HashMap<String, Object> implements ISubmode
 	}
 
 	@Override
-	public String getHasKindReference() {
-		return new HasKindFacade(this).getHasKindReference();
+	public String getKind() {
+		return new HasKindFacade(this).getKind();
 	}
 
-	public void setHasKindReference(String kind) {
-		new HasKindFacade(this).setHasKindReference(kind);
+	public void setKind(String kind) {
+		new HasKindFacade(this).setKind(kind);
 	}
 }

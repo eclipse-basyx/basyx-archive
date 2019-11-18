@@ -61,8 +61,8 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 	}
 
 	@Override
-	public String getHasKindReference() {
-		return new HasKindFacade(getElem()).getHasKindReference();
+	public String getKind() {
+		return new HasKindFacade(getElem()).getKind();
 	}
 
 	@Override
