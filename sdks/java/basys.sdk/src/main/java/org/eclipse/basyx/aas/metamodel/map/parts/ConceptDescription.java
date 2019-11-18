@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecification;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.aas.metamodel.facade.parts.ConceptDescriptionFacade;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
@@ -29,6 +30,9 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 	public static final String ISCASEOF = "isCaseOf";
 	public static final String MODELTYPE = "ConceptDescription";
 
+	// Addition to meta model
+	public static final String DATASPECIFICATIONS = "dataSpecifications";
+
 	public ConceptDescription() {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
@@ -39,6 +43,7 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 
 		// Add attributes
 		put(ISCASEOF, new HashSet<String>());
+		put(DATASPECIFICATIONS, new HashSet<IDataSpecification>());
 	}
 
 	@Override
@@ -114,5 +119,15 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 	public void setParent(IReference obj) {
 		new ReferableFacade(this).setParent(obj);
 	}
+
+	@SuppressWarnings("unchecked")
+	public Set<IDataSpecification> getDataSpecifications() {
+		return (Set<IDataSpecification>) get(DATASPECIFICATIONS);
+	}
+
+	public void addDataSpecification(IDataSpecification spec) {
+		getDataSpecifications().add(spec);
+	}
+
 
 }
