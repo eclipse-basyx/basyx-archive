@@ -13,7 +13,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  *
  */
 public class MultiAASProvider implements IModelProvider {
-	protected HashMap<String, MultiSubmodelProvider> aas_providers;
+	protected HashMap<String, VABMultiSubmodelProvider> aas_providers;
 
 	public MultiAASProvider() {
 		aas_providers = new HashMap<>();
@@ -28,7 +28,7 @@ public class MultiAASProvider implements IModelProvider {
 	 * @param modelProvider
 	 *            The provider that contains the Asset Administration Shell.
 	 */
-	public void setAssetAdministrationShell(String id, MultiSubmodelProvider modelProvider) {
+	public void setAssetAdministrationShell(String id, VABMultiSubmodelProvider modelProvider) {
 		aas_providers.put(id, modelProvider);
 	}
 
@@ -43,7 +43,7 @@ public class MultiAASProvider implements IModelProvider {
 	public Object getModelPropertyValue(String path) throws Exception {
 		String aasId = getId(path);
 		if (aasId != null) {
-			MultiSubmodelProvider provider = aas_providers.get(aasId);
+			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
 			if (provider == null) {
 				return null;
 			}
@@ -57,7 +57,7 @@ public class MultiAASProvider implements IModelProvider {
 	public void setModelPropertyValue(String path, Object newValue) throws Exception {
 		String aasId = getId(path);
 		if (aasId != null) {
-			MultiSubmodelProvider provider = aas_providers.get(aasId);
+			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
 			if (provider == null) {
 				return;
 			}
@@ -70,7 +70,7 @@ public class MultiAASProvider implements IModelProvider {
 	public void createValue(String path, Object newEntity) throws Exception {
 		String aasId = getId(path);
 		if (aasId != null) {
-			MultiSubmodelProvider provider = aas_providers.get(aasId);
+			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
 			if (provider == null) {
 				return;
 			}
@@ -83,7 +83,7 @@ public class MultiAASProvider implements IModelProvider {
 	public void deleteValue(String path) throws Exception {
 		String aasId = getId(path);
 		if (aasId != null) {
-			MultiSubmodelProvider provider = aas_providers.get(aasId);
+			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
 			if (provider == null) {
 				return;
 			}
@@ -96,7 +96,7 @@ public class MultiAASProvider implements IModelProvider {
 	public void deleteValue(String path, Object obj) throws Exception {
 		String aasId = getId(path);
 		if (aasId != null) {
-			MultiSubmodelProvider provider = aas_providers.get(aasId);
+			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
 			if (provider == null) {
 				return;
 			}
@@ -109,7 +109,7 @@ public class MultiAASProvider implements IModelProvider {
 	public Object invokeOperation(String path, Object... parameter) throws Exception {
 		String aasId = getId(path);
 		if (aasId != null) {
-			MultiSubmodelProvider provider = aas_providers.get(aasId);
+			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
 			if (provider == null) {
 				return null;
 			}

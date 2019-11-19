@@ -6,7 +6,7 @@ import java.util.Properties;
 
 import javax.servlet.ServletException;
 
-import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.components.cfgprovider.RawCFGSubModelProvider;
 import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
@@ -17,7 +17,7 @@ import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
  * @author kuhn
  *
  */
-public class RawCFGSubModelProviderServlet extends VABHTTPInterface<MultiSubmodelProvider> {
+public class RawCFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 
 	/**
 	 * Version information to identify the version of serialized instances
@@ -39,7 +39,7 @@ public class RawCFGSubModelProviderServlet extends VABHTTPInterface<MultiSubmode
 	 */
 	public RawCFGSubModelProviderServlet() {
 		// Invoke base constructor
-		super(new MultiSubmodelProvider());
+		super(new VABMultiSubmodelProvider());
 
 		// Change factory instance
 		// this.getProviderBackend().getSerializerReference().setFactory(newFactoryInstance);

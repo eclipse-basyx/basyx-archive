@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
-import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
@@ -38,7 +38,7 @@ public class MultiSubmodelProviderTest {
 	public void build() {
 		VABConnectionManagerStub stub = new VABConnectionManagerStub();
 		String urn = "urn:fhg:es.iese:aas:1:1:submodel";
-		MultiSubmodelProvider provider = new MultiSubmodelProvider();
+		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
 		// set dummy aas
 		provider.setAssetAdministrationShell(new AASModelProvider(new HashMap<String, Object>()));
 		provider.addSubmodel("SimpleAASSubmodel", new SubModelProvider(new SimpleAASSubmodel()));

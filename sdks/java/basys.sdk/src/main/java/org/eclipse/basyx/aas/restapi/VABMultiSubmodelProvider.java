@@ -66,7 +66,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  * @author kuhn, pschorn
  *
  */
-public class MultiSubmodelProvider implements IModelProvider {
+public class VABMultiSubmodelProvider implements IModelProvider {
 
 	/**
 	 * Store aas providers
@@ -81,14 +81,14 @@ public class MultiSubmodelProvider implements IModelProvider {
 	/**
 	 * Constructor
 	 */
-	public MultiSubmodelProvider() {
+	public VABMultiSubmodelProvider() {
 		// Do nothing
 	}
 
 	/**
 	 * Constructor that accepts an AAS
 	 */
-	public MultiSubmodelProvider(AASModelProvider contentProvider) {
+	public VABMultiSubmodelProvider(AASModelProvider contentProvider) {
 		// Store content provider
 		setAssetAdministrationShell(contentProvider);
 	}
@@ -96,7 +96,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 	/**
 	 * Constructor that accepts Submodel
 	 */
-	public MultiSubmodelProvider(String smID, SubModelProvider contentProvider) {
+	public VABMultiSubmodelProvider(String smID, SubModelProvider contentProvider) {
 		// Store content provider
 		addSubmodel(smID, contentProvider);
 	}

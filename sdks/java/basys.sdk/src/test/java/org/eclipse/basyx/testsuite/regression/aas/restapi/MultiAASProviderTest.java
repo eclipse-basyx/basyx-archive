@@ -10,7 +10,7 @@ import static org.junit.Assert.fail;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.restapi.MultiAASProvider;
-import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
@@ -34,7 +34,7 @@ public class MultiAASProviderTest {
 	public void build() {
 		VABConnectionManagerStub stub = new VABConnectionManagerStub();
 		String urn = "urn:fhg:es.iese:aas:1:1:submodel";
-		MultiSubmodelProvider aasProvider = new MultiSubmodelProvider();
+		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider();
 		aasProvider.addSubmodel("SimpleAASSubmodel", new SubModelProvider(new SimpleAASSubmodel()));
 		provider = new MultiAASProvider();
 		provider.setAssetAdministrationShell("a1", aasProvider);

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 
-import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
@@ -50,8 +50,8 @@ public class DeviceSubModelDeploymentVAB {
 		
 		// Export sub model via BaSyx server
 		SubModelProvider modelProvider = new SubModelProvider(submodel);
-		MultiSubmodelProvider aasProvider = new MultiSubmodelProvider("dynamicSM", modelProvider);
-		BaSyxTCPServer<MultiSubmodelProvider> server = new BaSyxTCPServer<MultiSubmodelProvider>(aasProvider, 9998);
+		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider("dynamicSM", modelProvider);
+		BaSyxTCPServer<VABMultiSubmodelProvider> server = new BaSyxTCPServer<VABMultiSubmodelProvider>(aasProvider, 9998);
 		// - Start local BaSyx/TCP server
 		server.start();
 				

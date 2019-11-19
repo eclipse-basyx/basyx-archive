@@ -7,7 +7,7 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
-import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
@@ -40,8 +40,8 @@ public class DeviceAASDeployment {
 
 		// Export AAS via BaSyx server
 		AASModelProvider modelProvider = new AASModelProvider(aas);
-		MultiSubmodelProvider aasProvider = new MultiSubmodelProvider(modelProvider);
-		BaSyxTCPServer<MultiSubmodelProvider> server = new BaSyxTCPServer<MultiSubmodelProvider>(aasProvider, 9998);
+		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider(modelProvider);
+		BaSyxTCPServer<VABMultiSubmodelProvider> server = new BaSyxTCPServer<VABMultiSubmodelProvider>(aasProvider, 9998);
 		// - Start local BaSyx/TCP server
 		server.start();
 
