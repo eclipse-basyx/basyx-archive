@@ -15,6 +15,7 @@ import org.eclipse.basyx.aas.metamodel.facade.parts.ViewFacade;
 import org.eclipse.basyx.aas.metamodel.facade.security.SecurityFacade;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
@@ -72,7 +73,7 @@ public class AssetAdministrationShellFacade implements IAssetAdministrationShell
 		return new ReferenceFacade((Map<String, Object>) map.get(AssetAdministrationShell.DERIVEDFROM));
 	}
 
-	public void setAsset(IReference asset) {
+	public void setAsset(Asset asset) {
 		map.put(AssetAdministrationShell.ASSET, asset);
 	}
 

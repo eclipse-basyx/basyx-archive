@@ -168,7 +168,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		return new AssetAdministrationShellFacade(this).getDerivedFrom();
 	}
 
-	public void setAsset(IReference asset) {
+	public void setAsset(Asset asset) {
 		new AssetAdministrationShellFacade(this).setAsset(asset);
 	}
 

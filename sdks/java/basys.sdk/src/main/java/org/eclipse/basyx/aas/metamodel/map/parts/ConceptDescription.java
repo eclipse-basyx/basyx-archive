@@ -5,8 +5,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecification;
+import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecificationIEC61630;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.aas.metamodel.facade.parts.ConceptDescriptionFacade;
+import org.eclipse.basyx.aas.metamodel.map.dataspecification.DataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -43,7 +45,7 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 
 		// Add attributes
 		put(ISCASEOF, new HashSet<String>());
-		put(DATASPECIFICATIONS, new HashSet<IDataSpecification>());
+		put(DATASPECIFICATIONS, new HashSet<IDataSpecificationIEC61630>());
 	}
 
 	@Override
@@ -125,8 +127,8 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 		return (Set<IDataSpecification>) get(DATASPECIFICATIONS);
 	}
 
-	public void addDataSpecification(IDataSpecification spec) {
-		getDataSpecifications().add(spec);
+	public void addDataSpecification(IDataSpecificationIEC61630 spec) {
+		getDataSpecifications().add(new DataSpecification(spec));
 	}
 
 
