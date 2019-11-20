@@ -13,7 +13,7 @@ import java.util.Map;
  *
  */
 @SuppressWarnings("serial")
-public class Result extends HashMap<String, Object> implements IResult {
+public class Result extends HashMap<String, Object> {
 
 	public static final String SUCCESS = "success";
 	public static final String ISEXCEPTION = "isException";
@@ -25,21 +25,21 @@ public class Result extends HashMap<String, Object> implements IResult {
 		this(success, null, null);
 	}
 
-	public Result(boolean success, IMessage message) {
-		this(success, null, new LinkedList<IMessage>(Arrays.asList(message)));
+	public Result(boolean success, Message message) {
+		this(success, null, new LinkedList<Message>(Arrays.asList(message)));
 	}
 
-	public Result(boolean success, List<IMessage> messages) {
+	public Result(boolean success, List<Message> messages) {
 		this(success, null, messages);
 	}
 
-	public Result(boolean success, Object entity, List<IMessage> messages) {
+	public Result(boolean success, Object entity, List<Message> messages) {
 		put(SUCCESS, success);
 
 		if (messages != null) {
 
 			List<Map<String, Object>> messageslist = new LinkedList<Map<String, Object>>();
-			for (IMessage msg : messages) {
+			for (Message msg : messages) {
 
 				MessageType type = msg.getMessageType();
 
@@ -47,7 +47,7 @@ public class Result extends HashMap<String, Object> implements IResult {
 					put(ISEXCEPTION, true); // make sure isException is set!
 				}
 
-				messageslist.add((Message) msg);
+				messageslist.add(msg);
 			}
 
 			put(MESSAGES, messageslist);
@@ -59,7 +59,7 @@ public class Result extends HashMap<String, Object> implements IResult {
 		}
 	}
 
-	public Result(IResult result) {
+	public Result(Result result) {
 		this(result.success(), result.getEntity(), result.getMessages());
 	}
 
@@ -67,9 +67,9 @@ public class Result extends HashMap<String, Object> implements IResult {
 		this(false, getMessageListFromException(e));
 	}
 
-	private static List<IMessage> getMessageListFromException(Exception e) {
+	private static List<Message> getMessageListFromException(Exception e) {
 
-		List<IMessage> messageList = new LinkedList<IMessage>();
+		List<Message> messageList = new LinkedList<Message>();
 
 		if (e.getCause() != null) {
 			messageList.addAll(getMessageListFromException((Exception) e.getCause()));
@@ -87,7 +87,6 @@ public class Result extends HashMap<String, Object> implements IResult {
 		return messageList;
 	}
 
-	@Override
 	public Class<?> getEntityType() {
 		Object entityType = get(ENTITYTYPE);
 		if (entityType instanceof String) {
@@ -102,25 +101,21 @@ public class Result extends HashMap<String, Object> implements IResult {
 		}
 	}
 
-	@Override
 	public Object getEntity() {
 		return get(ENTITY);
 	}
 
-	@Override
 	public boolean success() {
 		return (boolean) get(SUCCESS);
 	}
 
-	@Override
 	public boolean isException() {
 		return (boolean) get(ISEXCEPTION);
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<IMessage> getMessages() {
-		return (List<IMessage>) get(MESSAGES);
+	public List<Message> getMessages() {
+		return (List<Message>) get(MESSAGES);
 	}
 
 }

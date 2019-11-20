@@ -4,8 +4,7 @@ import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.basyx.vab.coder.json.metaprotocol.IMessage;
-import org.eclipse.basyx.vab.coder.json.metaprotocol.IResult;
+import org.eclipse.basyx.vab.coder.json.metaprotocol.Message;
 import org.eclipse.basyx.vab.coder.json.metaprotocol.Result;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
@@ -87,10 +86,10 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	/**
 	 * Wrap object with meta-protocol and return serialized string 
 	 */
-	private String serialize(boolean success, Object entity, List<IMessage> messages) {
+	private String serialize(boolean success, Object entity, List<Message> messages) {
 		
 		// Wrap the entity in the meta-protocol
-		IResult result = new Result(success, entity, messages);
+		Result result = new Result(success, entity, messages);
 		
 		// Serialize the whole thing
 		return serialize(result);
@@ -105,7 +104,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	private String serialize(boolean success) {
 		
 		// Create Ack
-		IResult result = new Result(success);
+		Result result = new Result(success);
 		
 		// Serialize the whole thing
 		return serialize(result);
@@ -119,7 +118,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 */
 	private String serialize(Exception e) {
 		// Create Ack
-		IResult result = new Result(e);
+		Result result = new Result(e);
 		
 		// Serialize the whole thing
 		return serialize(result);
@@ -131,7 +130,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @param string
 	 * @return
 	 */
-	private String serialize(IResult string) {
+	private String serialize(Result string) {
 		// Serialize the whole thing
 		return serializer.serialize(string);
 	}

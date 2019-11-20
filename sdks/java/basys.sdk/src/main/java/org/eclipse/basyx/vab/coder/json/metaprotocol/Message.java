@@ -8,7 +8,7 @@ import java.util.HashMap;
  *
  */
 @SuppressWarnings("serial")
-public class Message extends HashMap<String, Object> implements IMessage {
+public class Message extends HashMap<String, Object> {
 	
 	public static final String MESSAGETYPE = "messageType";
 	public static final String CODE = "code";
@@ -24,17 +24,13 @@ public class Message extends HashMap<String, Object> implements IMessage {
 		put(TEXT, text);
 	}
 
-	@Override
 	public String getText() {
 		return (String) get(TEXT);
 	}
-
-	@Override
 	public String getCode() {
 		return (String) get(CODE);
 	}
 
-	@Override
 	public MessageType getMessageType() {
 		return MessageType.getById((int) get(MESSAGETYPE));
 	}

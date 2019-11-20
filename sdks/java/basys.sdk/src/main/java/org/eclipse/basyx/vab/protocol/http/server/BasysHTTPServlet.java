@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.basyx.vab.coder.json.metaprotocol.IResult;
 import org.eclipse.basyx.vab.coder.json.metaprotocol.Result;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
@@ -91,7 +90,7 @@ public abstract class BasysHTTPServlet extends HttpServlet {
 	protected void sendResponse(Object value, PrintWriter outputStream) {
 
 		// Wrap the entity in the meta-protocol
-		IResult result = new Result(true, value, null);
+		Result result = new Result(true, value, null);
 
 		// Output result
 		outputStream.write(serializer.serialize(result));
