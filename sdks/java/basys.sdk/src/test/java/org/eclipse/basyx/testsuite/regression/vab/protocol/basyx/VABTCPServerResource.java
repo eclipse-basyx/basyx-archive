@@ -1,7 +1,7 @@
 package org.eclipse.basyx.testsuite.regression.vab.protocol.basyx;
 
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.basyx.server.AASTCPServer;
+import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
 import org.junit.rules.ExternalResource;
 
 /**
@@ -13,7 +13,7 @@ import org.junit.rules.ExternalResource;
  */
 public class VABTCPServerResource extends ExternalResource {
 	private IModelProvider provider;
-	private AASTCPServer server;
+	private BaSyxTCPServer<IModelProvider> server;
 
 	/**
 	 * Constructor taking the provider of the requested server resource
@@ -24,7 +24,7 @@ public class VABTCPServerResource extends ExternalResource {
 
 	@Override
 	protected void before() {
-		server = new AASTCPServer(provider);
+		server = new BaSyxTCPServer<IModelProvider>(provider);
 		server.start();
 	}
 
