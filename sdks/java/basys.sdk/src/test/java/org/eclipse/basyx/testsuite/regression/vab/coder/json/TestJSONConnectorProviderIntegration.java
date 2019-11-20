@@ -1,6 +1,7 @@
 package org.eclipse.basyx.testsuite.regression.vab.coder.json;
 
 import org.eclipse.basyx.testsuite.regression.vab.modelprovider.SimpleVABElement;
+import org.eclipse.basyx.testsuite.regression.vab.modelprovider.TestProvider;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.TestsuiteDirectory;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.coder.json.provider.JSONProvider;
@@ -15,7 +16,7 @@ import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
  * @author pschorn
  *
  */
-public class TestJSONConnectorProviderIntegration {
+public class TestJSONConnectorProviderIntegration extends TestProvider {
 
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(),
 			new ConnectorProvider() {
@@ -40,4 +41,9 @@ public class TestJSONConnectorProviderIntegration {
 					return connector;
 				}
 			});
+
+	@Override
+	protected VABConnectionManager getConnectionManager() {
+		return connManager;
+	}
 }
