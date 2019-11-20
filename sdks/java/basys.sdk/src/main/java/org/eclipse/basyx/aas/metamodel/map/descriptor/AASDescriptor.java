@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
@@ -117,6 +118,17 @@ public class AASDescriptor extends ModelDescriptor {
 	 */
 	public SubmodelDescriptor getSubModelDescriptor(ModelUrn submodelUrn) {
 		return getSubModelDescriptor(submodelUrn.getURN());
+	}
+
+	/**
+	 * Retrieves all submodel descriptors of the aas described by this descriptor
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Set<SubmodelDescriptor> getSubModelDescriptors() {
+		Collection<Map<String, Object>> descriptors = (Collection<Map<String, Object>>) get(AssetAdministrationShell.SUBMODELS);
+		return descriptors.stream().map(m -> new SubmodelDescriptor(m)).collect(Collectors.toSet());
 	}
 }
 
