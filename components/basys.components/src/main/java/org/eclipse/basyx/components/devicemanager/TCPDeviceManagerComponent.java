@@ -60,7 +60,8 @@ public abstract class TCPDeviceManagerComponent extends DeviceManagerComponent i
 		tcpServer.addTCPMessageListener(this);
 		
 		// Start TCP server
-		new Thread(tcpServer).start();
+		tcpServerThread = new Thread(tcpServer);
+		tcpServerThread.start();
 	}
 	
 	

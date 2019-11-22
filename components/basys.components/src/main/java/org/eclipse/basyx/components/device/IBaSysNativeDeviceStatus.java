@@ -18,7 +18,7 @@ package org.eclipse.basyx.components.device;
  * @author kuhn
  *
  */
-public interface BaSysNativeDeviceStatusIF {
+public interface IBaSysNativeDeviceStatus {
 
 	
 	/**

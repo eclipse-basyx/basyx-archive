@@ -7,7 +7,7 @@ package org.eclipse.basyx.components.configuration.exception;
  * @author kuhn
  *
  */
-public class InsufficientConfigurationDateException extends RuntimeException {
+public class InsufficientConfigurationDataException extends RuntimeException {
 
 	
 	/**
@@ -21,7 +21,7 @@ public class InsufficientConfigurationDateException extends RuntimeException {
 	/**
 	 * Default constructor
 	 */
-	public InsufficientConfigurationDateException() {
+	public InsufficientConfigurationDataException() {
 		// Invoke base constructor
 		super();
 	}
@@ -30,7 +30,7 @@ public class InsufficientConfigurationDateException extends RuntimeException {
 	/**
 	 * Constructor with additional message
 	 */
-	public InsufficientConfigurationDateException(String message) {
+	public InsufficientConfigurationDataException(String message) {
 		// Invoke base constructor
 		super(message);
 	}

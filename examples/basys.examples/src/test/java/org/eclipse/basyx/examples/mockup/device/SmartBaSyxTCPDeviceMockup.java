@@ -145,7 +145,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		
 		// Register control component as local sub model
 		// - This sub model will stay with the device
-		server = new BaSyxTCPServer<>(new VABMapProvider(simpleControlComponent), serverPort);
+		server = new BaSyxTCPServer<>(new VABMapProvider(controlComponent), serverPort);
 		// - Start local BaSyx/TCP server
 		server.start();
 

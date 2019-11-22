@@ -34,18 +34,8 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 	 * Store HTTP URL of AAS server
 	 */
 	protected String aasServerURL = null;
+	
 
-
-	/**
-	 * Constructor
-	 */
-	public DeviceManagerComponent() {
-		// Do nothing
-	}
-	
-	
-	
-	
 	/**
 	 * Set AAS server VAB object ID
 	 */

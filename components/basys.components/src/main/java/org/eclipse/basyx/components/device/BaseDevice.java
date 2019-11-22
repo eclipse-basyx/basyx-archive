@@ -15,20 +15,11 @@ import org.eclipse.basyx.models.controlcomponent.ExecutionState;
  * @author kuhn
  *
  */
-public abstract class BaseDevice extends BaseBaSyxService implements BaSysNativeDeviceStatusIF {
-
-	
+public abstract class BaseDevice extends BaseBaSyxService implements IBaSysNativeDeviceStatus {
 	
 	/**
-	 * Constructor
-	 */
-	public BaseDevice() {
-		// Do nothing
-	}
-	
-	
-	/**
-	 * Device interface function: (usually native code) indicates that device has been initialized
+	 * Device interface function: (usually native code) indicates that device has
+	 * been initialized
 	 */
 	@Override
 	public void deviceInitialized() {
@@ -41,7 +32,8 @@ public abstract class BaseDevice extends BaseBaSyxService implements BaSysNative
 	
 	
 	/**
-	 * Device interface function: (usually native code) indicates that device service is running
+	 * Device interface function: (usually native code) indicates that device
+	 * service is running
 	 */
 	@Override
 	public void serviceRunning() {
@@ -54,7 +46,8 @@ public abstract class BaseDevice extends BaseBaSyxService implements BaSysNative
 	
 	
 	/**
-	 * Device interface function: (usually native code) indicates that device service execution has completed
+	 * Device interface function: (usually native code) indicates that device
+	 * service execution has completed
 	 */
 	@Override
 	public void serviceCompleted() {
@@ -67,7 +60,8 @@ public abstract class BaseDevice extends BaseBaSyxService implements BaSysNative
 
 	
 	/**
-	 * Device interface function: (usually native code) indicates that device is ready again
+	 * Device interface function: (usually native code) indicates that device is
+	 * ready again
 	 */
 	@Override
 	public void resetCompleted() {
@@ -93,7 +87,7 @@ public abstract class BaseDevice extends BaseBaSyxService implements BaSysNative
 	 */
 	protected void onInitialize() {
 		// Here: Initialize device
-		System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDevice status change: initialize");		
+		System.out.println("Device " + name + " status change: initialize");
 	}
 
 	
@@ -102,7 +96,7 @@ public abstract class BaseDevice extends BaseBaSyxService implements BaSysNative
 	 */
 	protected void onServiceInvocation() {
 		// Here: Invoke device service
-		System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDevice status change: invoke");		
+		System.out.println("Device " + name + " status change: invoke");
 	}
 	
 	
@@ -111,7 +105,7 @@ public abstract class BaseDevice extends BaseBaSyxService implements BaSysNative
 	 */
 	protected void onServiceEnd() {
 		// Here: Perform device operation after device service end (if necessary)
-		System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDevice status change: end");
+		System.out.println("Device " + name + " status change: end");
 	}
 	
 	
@@ -120,7 +114,7 @@ public abstract class BaseDevice extends BaseBaSyxService implements BaSysNative
 	 */
 	protected void onReset() {
 		// Here: Reset device
-		System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDevice status change: reset");
+		System.out.println("Device " + name + " status change: reset");
 	}
 }
 

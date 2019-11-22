@@ -90,13 +90,13 @@ public class RunExampleSimpleControllableTCPDevice extends BaSyxExampleScenario 
 		// Application waits for status change
 		waitfor( () -> ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
 		// - Validate device status
-		waitfor( () -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).exState == ExecutionState.IDLE );
+		waitfor(() -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).getExState() == ExecutionState.IDLE);
 
 		
 		// Change device operation mode
 		toControlComponent.setModelPropertyValue("status/opMode", "RegularMilling");
 		// - Validate device operation mode
-		waitfor( () -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).opMode.equals("RegularMilling") );
+		waitfor(() -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).getOpMode().equals("RegularMilling"));
 
 		// Application checks invocation counter
 		assertTrue( ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceInvocationCounter() == 0 );		
@@ -107,7 +107,7 @@ public class RunExampleSimpleControllableTCPDevice extends BaSyxExampleScenario 
 		// - Application waits for status change
 		waitfor( () -> ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("EXECUTE") );
 		// - Validate device status
-		waitfor( () -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).exState == ExecutionState.EXECUTE );
+		waitfor(() -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).getExState() == ExecutionState.EXECUTE);
 
 		
 		// Device indicates service end
@@ -115,7 +115,7 @@ public class RunExampleSimpleControllableTCPDevice extends BaSyxExampleScenario 
 		// - Application waits for status change
 		waitfor( () -> ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("COMPLETE") );
 		// - Validate device status
-		waitfor( () -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).exState == ExecutionState.COMPLETE );
+		waitfor(() -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).getExState() == ExecutionState.COMPLETE);
 
 
 		// Reset device to enable subsequent service calls
@@ -123,7 +123,7 @@ public class RunExampleSimpleControllableTCPDevice extends BaSyxExampleScenario 
 		// - Application waits for status change
 		waitfor( () -> ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("RESETTING") );
 		// - Validate device status
-		waitfor( () -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).exState == ExecutionState.RESETTING );
+		waitfor(() -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).getExState() == ExecutionState.RESETTING);
 
 		
 		// Device finishes reset and moves to idle state
@@ -131,7 +131,7 @@ public class RunExampleSimpleControllableTCPDevice extends BaSyxExampleScenario 
 		// - Application waits for status change
 		waitfor( () -> ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("IDLE") );
 		// - Validate device status
-		waitfor( () -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).exState == ExecutionState.IDLE );
+		waitfor(() -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).getExState() == ExecutionState.IDLE);
 
 		
 		// Application checks invocation counter

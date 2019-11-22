@@ -15,7 +15,7 @@ import org.eclipse.basyx.models.controlcomponent.ExecutionState;
  * @author kuhn
  *
  */
-public abstract class BaseTCPControllableDeviceAdapter extends BaseTCPDeviceAdapter implements BaSysNativeDeviceStatusIF, NetworkReceiver {
+public abstract class BaseTCPControllableDeviceAdapter extends BaseTCPDeviceAdapter implements IBaSysNativeDeviceStatus, NetworkReceiver {
 
 	
 	/**
@@ -27,17 +27,15 @@ public abstract class BaseTCPControllableDeviceAdapter extends BaseTCPDeviceAdap
 	/**
 	 * Selected device operation mode
 	 */
-	public String opMode = "";
+	protected String opMode = "";
 	
 	
 	/**
 	 * Device execution state
 	 */
-	public ExecutionState exState = null;
+	protected ExecutionState exState = null;
 
-	
-	
-	
+
 	/**
 	 * Constructor
 	 */
@@ -130,4 +128,13 @@ public abstract class BaseTCPControllableDeviceAdapter extends BaseTCPDeviceAdap
 		// Indicate exception
 		throw new RuntimeException("Unexpected message received:"+rxMessage);
 	}
+
+	public String getOpMode() {
+		return opMode;
+	}
+
+	public ExecutionState getExState() {
+		return exState;
+	}
+
 }

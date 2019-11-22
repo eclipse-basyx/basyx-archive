@@ -73,7 +73,7 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 		
 	}
 	@Test
-	public void deploy() {
+	public void deploy() throws FileNotFoundException {
 		/* create a configuration for the process engine with associated database configuration
 	 		For activating timer function, asynchronous executor must be set to true */
 		ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration()
@@ -92,18 +92,12 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 		
 		// deploy the BPMN-model defined in the xml file on the process engine
 		RepositoryService repositoryService = processEngine.getRepositoryService();
-		
-		try {
-			// Add the XML-file with the BPMN-Model to the repository and deploy it
-			String relativeConfigPath = "/WebContent/WEB-INF/config/processengine/SimpleTransportProcess.bpmn20.xml";
-			File configFile = new File(System.getProperty("user.dir") + relativeConfigPath);
-			repositoryService.createDeployment()
-					.addInputStream("SimpleTransportProcess.bpmn20.xml", new FileInputStream(configFile))
-					.deploy();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-				
+
+		// Add the XML-file with the BPMN-Model to the repository and deploy it
+		String relativeConfigPath = "/WebContent/WEB-INF/config/processengine/SimpleTransportProcess.bpmn20.xml";
+		File configFile = new File(System.getProperty("user.dir") + relativeConfigPath);
+		repositoryService.createDeployment().addInputStream("SimpleTransportProcess.bpmn20.xml", new FileInputStream(configFile)).deploy();
+
 		// define the variables in a list which are shared through the execution of the BPMN-process
 		Map<String, Object> variables = new HashMap<String, Object>();
 		variables.put("coilposition", 2);

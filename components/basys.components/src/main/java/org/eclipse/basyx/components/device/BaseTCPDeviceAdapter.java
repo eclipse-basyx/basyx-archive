@@ -18,7 +18,7 @@ import org.eclipse.basyx.components.netcomm.TCPClient;
  * @author kuhn
  *
  */
-public abstract class BaseTCPDeviceAdapter extends BaseDevice implements BaSysNativeDeviceStatusIF {
+public abstract class BaseTCPDeviceAdapter extends BaseDevice implements IBaSysNativeDeviceStatus {
 
 	
 	/**

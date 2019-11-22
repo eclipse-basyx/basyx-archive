@@ -30,9 +30,11 @@ public class TestJavaDelegate {
 	
 	/**
 	 * Test the invocation of service "moveTo" through the java-delegate
+	 * 
+	 * @throws Exception
 	 */
 	@Test
-	public void testMoveToCall() {
+	public void testMoveToCall() throws Exception {
 		// service parameter
 		Object params[] = new Object[]{5};
 		
@@ -41,25 +43,22 @@ public class TestJavaDelegate {
 		
 		// Set the service executor to the java-delegate
 		DeviceServiceDelegate.setDeviceServiceExecutor(new DeviceServiceExecutorStub());
-		try {
-			// deliver the service information to the java-delegate
-			bpmnstub.callJavaDelegate();
-			
-			// Asset the java-delegate gets the information from the Engine-stub
-			assertEquals("moveTo", DeviceServiceDelegate.getExecutor().getServiceName());
-			assertEquals("coilcar", DeviceServiceDelegate.getExecutor().getServiceProvider());
-			assertArrayEquals(new Object[]{5}, DeviceServiceDelegate.getExecutor().getParams().toArray());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// deliver the service information to the java-delegate
+		bpmnstub.callJavaDelegate();
+
+		// Asset the java-delegate gets the information from the Engine-stub
+		assertEquals("moveTo", DeviceServiceDelegate.getExecutor().getServiceName());
+		assertEquals("coilcar", DeviceServiceDelegate.getExecutor().getServiceProvider());
+		assertArrayEquals(new Object[] { 5 }, DeviceServiceDelegate.getExecutor().getParams().toArray());
 	}
 	
 	/**
 	 * Test the invocation of service "liftTo" through the java-delegate
+	 * 
+	 * @throws Exception
 	 */
 	@Test
-	public void testLiftToCall() {
+	public void testLiftToCall() throws Exception {
 		// service parameter
 		Object params[] = new Object[]{123}; 
 		
@@ -68,19 +67,15 @@ public class TestJavaDelegate {
 		
 		// Set the service executor to the java-delegate
 		DeviceServiceDelegate.setDeviceServiceExecutor(new DeviceServiceExecutorStub());
-		try {
 			
-			// deliver the service information to the java-delegate
-			bpmnstub.callJavaDelegate();
+		// deliver the service information to the java-delegate
+		bpmnstub.callJavaDelegate();
+
+		// Asset the java-delegate gets the information from the Engine-stub
+		assertEquals("liftTo", DeviceServiceDelegate.getExecutor().getServiceName());
+		assertEquals("coilcar", DeviceServiceDelegate.getExecutor().getServiceProvider());
+		assertArrayEquals(new Object[] { 123 }, DeviceServiceDelegate.getExecutor().getParams().toArray());
 			
-			// Asset the java-delegate gets the information from the Engine-stub
-			assertEquals("liftTo", DeviceServiceDelegate.getExecutor().getServiceName());
-			assertEquals("coilcar", DeviceServiceDelegate.getExecutor().getServiceProvider());
-			assertArrayEquals(new Object[]{123}, DeviceServiceDelegate.getExecutor().getParams().toArray());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 }

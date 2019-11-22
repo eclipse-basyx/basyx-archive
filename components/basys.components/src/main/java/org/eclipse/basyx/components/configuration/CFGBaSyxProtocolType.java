@@ -41,17 +41,6 @@ public enum CFGBaSyxProtocolType {
 		}
 	}
 	
-	
-	
-	/**
-	 * Constructor
-	 */
-	private CFGBaSyxProtocolType() {
-		// Do nothing
-	}
-	
-	
-	
 	/**
 	 * Create protocol instance
 	 */

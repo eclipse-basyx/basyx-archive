@@ -1,5 +1,6 @@
 package org.eclipse.basyx.components.device;
 
+import org.eclipse.basyx.models.controlcomponent.ControlComponent;
 import org.eclipse.basyx.models.controlcomponent.ControlComponentChangeListener;
 import org.eclipse.basyx.models.controlcomponent.ExecutionMode;
 import org.eclipse.basyx.models.controlcomponent.ExecutionState;
@@ -17,43 +18,48 @@ import org.eclipse.basyx.models.controlcomponent.SimpleControlComponent;
  * @author kuhn
  *
  */
-public abstract class BaseSmartDevice extends BaseDevice implements ControlComponentChangeListener, BaSysNativeDeviceStatusIF {
+public abstract class BaseSmartDevice extends BaseDevice implements ControlComponentChangeListener, IBaSysNativeDeviceStatus {
 
 	
 	/**
 	 * Device control component
 	 */
-	protected SimpleControlComponent simpleControlComponent = null;
-	
-	
+	protected ControlComponent controlComponent = null;
 
-	
 	/**
-	 * Constructor
+	 * Initializes BaseSmartDevice with a SimpleControlComponent
 	 */
 	public BaseSmartDevice() {
-		// Do nothing
+		// Create control component
+		controlComponent = new SimpleControlComponent();
+		// - Register this component as event listener
+		controlComponent.addControlComponentChangeListener(this);
 	}
 
+	/**
+	 * Initializes BaseSmartDevice with an arbitary {@link ControlComponent}
+	 * 
+	 * @param component
+	 */
+	public BaseSmartDevice(ControlComponent component) {
+		controlComponent = component;
+		component.addControlComponentChangeListener(this);
+	}
 
 	/**
 	 * Start smart device
 	 */
 	@Override
 	public void start() {
-		// Create control component
-		simpleControlComponent = new SimpleControlComponent();
-		// - Register this component as event listener
-		simpleControlComponent.addControlComponentChangeListener(this);
 	}
 	
 	
 	/**
 	 * Get control component instance
 	 */
-	public SimpleControlComponent getControlComponent() {
+	public ControlComponent getControlComponent() {
 		// Return control component instance
-		return simpleControlComponent;
+		return controlComponent;
 	}
 	
 	
@@ -63,7 +69,7 @@ public abstract class BaseSmartDevice extends BaseDevice implements ControlCompo
 	@Override
 	public void statusChange(String newStatus) {
 		// Change control component execution status
-		simpleControlComponent.setExecutionState(newStatus);
+		controlComponent.setExecutionState(newStatus);
 	}
 
 	
@@ -74,8 +80,6 @@ public abstract class BaseSmartDevice extends BaseDevice implements ControlCompo
 	 */
 	@Override
 	public void onVariableChange(String varName, Object newValue) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
@@ -84,8 +88,6 @@ public abstract class BaseSmartDevice extends BaseDevice implements ControlCompo
 	 */
 	@Override
 	public void onNewOccupier(String occupierId) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
@@ -94,8 +96,6 @@ public abstract class BaseSmartDevice extends BaseDevice implements ControlCompo
 	 */
 	@Override
 	public void onNewOccupationState(OccupationState state) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
@@ -104,8 +104,6 @@ public abstract class BaseSmartDevice extends BaseDevice implements ControlCompo
 	 */
 	@Override
 	public void onChangedExecutionMode(ExecutionMode newExecutionMode) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
@@ -124,8 +122,6 @@ public abstract class BaseSmartDevice extends BaseDevice implements ControlCompo
 	 */
 	@Override
 	public void onChangedOperationMode(String newOperationMode) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
@@ -134,8 +130,6 @@ public abstract class BaseSmartDevice extends BaseDevice implements ControlCompo
 	 */
 	@Override
 	public void onChangedWorkState(String newWorkState) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
@@ -144,8 +138,6 @@ public abstract class BaseSmartDevice extends BaseDevice implements ControlCompo
 	 */
 	@Override
 	public void onChangedErrorState(String newWorkState) {
-		// TODO Auto-generated method stub
-		
 	}
 }
 

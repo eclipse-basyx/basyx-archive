@@ -40,7 +40,7 @@ public class TestDeviceAdministrationShell {
 	public static AASHTTPServerResource res = new AASHTTPServerResource(new ComponentsRegressionContext());
 
 	@Before
-	public void setupConnection() {
+	public void setupConnection() throws Exception {
 		InMemoryRegistry registry = new InMemoryRegistry();
 		ModelUrn coilcarUrn = new ModelUrn("coilcar");
 		IIdentifier id = new Identifier(IdentifierType.Custom, "coilcar");
@@ -56,11 +56,8 @@ public class TestDeviceAdministrationShell {
 		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorProvider());
 		
 		// create the connected AAS using the manager
-		try {
-			connectedAAS = manager.retrieveAAS(coilcarUrn);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		connectedAAS = manager.retrieveAAS(coilcarUrn);
+
 	}
 	
 	@Test

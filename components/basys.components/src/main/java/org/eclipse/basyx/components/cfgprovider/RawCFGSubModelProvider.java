@@ -13,6 +13,8 @@ import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
  */
 public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 
+	private static final String FTYPE = "$ftype";
+
 	/**
 	 * Constructor
 	 */
@@ -31,7 +33,7 @@ public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 		// Load properties
 		for (Object key : cfgValues.keySet()) {
 			// Do not put meta data keys into map
-			if (((String) key).endsWith("$ftype"))
+			if (((String) key).endsWith(FTYPE))
 				continue;
 
 			// Get path to element
@@ -49,8 +51,8 @@ public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 			// Get and optionally convert value
 			Object value = cfgValues.get(key);
 			// - Cast value if requested by user
-			if (cfgValues.get(key + "$ftype") != null)
-				switch ((String) cfgValues.get(key + "$ftype")) {
+			if (cfgValues.get(key + FTYPE) != null)
+				switch ((String) cfgValues.get(key + FTYPE)) {
 				case "int":
 					value = Integer.parseInt((String) value);
 					break;
@@ -62,7 +64,7 @@ public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 					break;
 
 				default:
-					System.out.println("Unknown type:" + cfgValues.get(key + "$ftype"));
+					System.out.println("Unknown type:" + cfgValues.get(key + FTYPE));
 				}
 
 			System.out.println("Putting:" + key + " = " + cfgValues.get(key) + " as " + value.getClass().getName());
