@@ -1,4 +1,4 @@
-package org.eclipse.basyx.regression.sqlproxy.tests;
+package org.eclipse.basyx.regression.sqlproxy;
 
 /**
  * Externalizes the access data to the SQL database for the SQL test cases

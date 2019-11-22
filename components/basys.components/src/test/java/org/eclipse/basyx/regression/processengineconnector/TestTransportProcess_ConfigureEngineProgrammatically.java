@@ -1,4 +1,4 @@
-package org.eclipse.basyx.regression.processengineconnector.tests;
+package org.eclipse.basyx.regression.processengineconnector;
 
 import java.io.File;
 import java.io.FileInputStream;

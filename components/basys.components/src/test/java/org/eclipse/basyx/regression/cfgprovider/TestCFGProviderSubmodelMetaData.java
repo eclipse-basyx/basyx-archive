@@ -1,14 +1,13 @@
-package org.eclipse.basyx.regression.rawcfgprovider.tests;
+package org.eclipse.basyx.regression.cfgprovider;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.facade.AssetAdministrationShellFacade;
-import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -24,7 +23,7 @@ import org.junit.Test;
  * @author kuhn
  *
  */
-public class TestRawCFGProviderAAS {
+public class TestCFGProviderSubmodelMetaData {
 
 	
 	/**
@@ -41,32 +40,26 @@ public class TestRawCFGProviderAAS {
 	/**
 	 * Test basic queries
 	 */
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test() throws Exception {
 
 		// Connect to sub model "CfgFileTestAAS"
-		VABElementProxy connSubModel = this.connManager.connectToVABElement("AASProvider");
+		VABElementProxy connSubModel = this.connManager.connectToVABElement("CfgFileTestAAS");
 
 		
-		// Create map with complex type
-		AssetAdministrationShell aas = new AssetAdministrationShell();
-		aas.setIdShort("testAAS");
-		
-		// Create AAS structure on server
-		connSubModel.createValue("/aas", aas);
+		// Get property value
+		Map<String, Object> sampleCFG = (Map<String, Object>) connSubModel
+				.getModelPropertyValue("/aas/submodels/sampleCFG");
+		assertEquals("BaSys regression test file for CFG file provider", ((Map<String, String>) sampleCFG.get("description")).get("text"));
 
-		
-		// Read complex property completely
-		Map<String, Object> aasReadBack = (Map<String, Object>) connSubModel.getModelPropertyValue("/aas");
+		// Get property value
+		assertEquals("1.0",
+				new AdministrativeInformationFacade((Map<String, Object>) sampleCFG.get(Identifiable.ADMINISTRATION))
+				.getVersion());
 
-		assertEquals(aas.getIdShort(), new AssetAdministrationShellFacade(aasReadBack).getIdShort());
-		
-		// Read AAS SubModel
-		Map<String, Object> smReadBack = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/rawSampleCFG");
-		
-		assertEquals("rawSampleCFG", SubModel.createAsFacade(smReadBack).getIdShort());
-		
+		// Get complete sub model
+		Object value3 = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG");
+		System.out.println(value3.toString());
 	}
 }

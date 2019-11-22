@@ -1,4 +1,4 @@
-package org.eclipse.basyx.regression.rawcfgprovider.tests;
+package org.eclipse.basyx.regression.rawcfgprovider;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
