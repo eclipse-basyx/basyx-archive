@@ -1,16 +1,17 @@
 package org.eclipse.basyx.regression.rawcfgprovider.tests;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -39,7 +40,6 @@ public class TestRawCFGProviderAASNewModel {
 	 * Test basic queries
 	 */
 	@SuppressWarnings({ "unchecked", "unused" })
-	@Ignore
 	@Test
 	public void test() throws Exception {
 
@@ -48,12 +48,14 @@ public class TestRawCFGProviderAASNewModel {
 
 		
 		// Create map with complex type
-		AssetAdministrationShell aas = new AssetAdministrationShell();
+		Property prop = new Property ();
+		prop.setIdShort("prop");
 		// Create AAS structure on server
-		connSubModel.createValue("/aas/submodels/rawSampleCFG/aas", aas);
+		connSubModel.createValue("/aas/submodels/rawSampleCFG/dataElements", prop);
 
 		
 		// Read complex property completely
-		Map<String, Object> aasReadBack = (Map<String, Object>) connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/aas");
+		Map<String, Object> aasReadBack = (Map<String, Object>) connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/prop");
+		assertEquals(prop.getIdShort(), Property.createAsFacade(prop).getIdShort());
 	}
 }
