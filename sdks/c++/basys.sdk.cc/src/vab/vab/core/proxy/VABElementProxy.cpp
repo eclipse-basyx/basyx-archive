@@ -51,9 +51,20 @@ basyx::object VABElementProxy::invoke(const VABPath & elementPath, basyx::object
 	return this->provider->invokeOperation(this->get_ablsolute_path(elementPath), parameter);
 }
 
+VABPath VABElementProxy::getAddressPath() const
+{
+  return this->address.toString();
+}
+
 VABPath VABElementProxy::get_ablsolute_path(const VABPath & elementPath)
 {
 	return this->address + elementPath;
+}
+
+std::shared_ptr<IVABElementProxy> VABElementProxy::getDeepProxy(const VABPath & path)
+{
+  auto new_path = this->address + path;
+  return std::make_shared<VABElementProxy>(new_path, this->provider);
 }
 
 }

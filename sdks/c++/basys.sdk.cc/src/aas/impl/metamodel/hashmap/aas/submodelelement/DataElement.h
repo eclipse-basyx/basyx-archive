@@ -29,7 +29,7 @@ public:
    *
    * @param map the map containig all elements.
    */
-  DataElement(const basyx::objectMap_t & map);
+  DataElement(const basyx::object::object_map_t & map);
 };
 
 }

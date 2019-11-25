@@ -10,6 +10,7 @@
 #include "aas/submodelelement/IElement.h"
 #include "aas/submodelelement/operation/IOperationVariable.h"
 
+#include "basyx/object.h"
 #include "basyx/types.h"
 
 #include <vector>
@@ -32,8 +33,8 @@ class IOperation
 public:
   virtual operation_var_list getParameterTypes() const = 0;
   virtual operation_var_list getReturnTypes() const = 0;
-  virtual std::shared_ptr<basyx::function_base> getInvocable() const = 0;
-  virtual basyx::any invoke(basyx::objectCollection_t & parameters) const = 0;
+  virtual basyx::detail::functionWrapper getInvocable() const = 0;
+  virtual basyx::object invoke(basyx::object & parameters) const = 0;
 };
 
 

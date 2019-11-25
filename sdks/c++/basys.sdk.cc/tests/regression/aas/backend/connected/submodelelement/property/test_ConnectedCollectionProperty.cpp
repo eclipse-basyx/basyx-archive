@@ -34,13 +34,13 @@ TEST_F(ConnectedCollectionPropertyTest, TestSet)
 {
   ConnectedCollectionProperty property(proxy);
 
-  basyx::objectCollection_t collection;
+  basyx::object::object_list_t collection;
   collection.push_back(123);
 
   property.set(collection);
   
   ASSERT_EQ(PropertyPaths::VALUE, mock->updateElementCallValues.at(0).first);
-  ASSERT_EQ(123, mock->updateElementCallValues.at(0).second.Get<basyx::objectCollection_t>().at(0).Get<int>());
+  ASSERT_EQ(123, mock->updateElementCallValues.at(0).second.Get<basyx::object::object_list_t>().at(0).Get<int>());
   ASSERT_EQ(1, mock->overallMockCalls());
 }
 
@@ -48,7 +48,7 @@ TEST_F(ConnectedCollectionPropertyTest, TestAdd)
 {
   ConnectedCollectionProperty property(proxy);
 
-  basyx::any value(2);
+  basyx::object value(2);
 
   property.add(value);
 
@@ -61,7 +61,7 @@ TEST_F(ConnectedCollectionPropertyTest, TestRemove)
 {
   ConnectedCollectionProperty property(proxy);
 
-  basyx::any value(2);
+  basyx::object value(2);
 
   property.remove(value);
 
@@ -74,7 +74,7 @@ TEST_F(ConnectedCollectionPropertyTest, TestGetElementsAndCount)
 {
   ConnectedCollectionProperty property(proxy);
 
-  basyx::objectCollection_t collection;
+  basyx::object::object_list_t collection;
   collection.push_back(2);
   collection.push_back("str");
 

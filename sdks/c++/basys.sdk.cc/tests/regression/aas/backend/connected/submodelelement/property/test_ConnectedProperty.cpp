@@ -40,7 +40,7 @@ TEST_F(ConnectedPropertyTest, TestSetValueString)
 {
   std::shared_ptr<IProperty> property(new ConnectedProperty(PropertyType::Collection, proxy));
 
-  basyx::any any = std::string("this is a string");
+  basyx::object any = std::string("this is a string");
 
   property->setValue(any);
 
@@ -57,7 +57,7 @@ TEST_F(ConnectedPropertyTest, TestSetValueInt)
 {
   std::shared_ptr<IProperty> property(new ConnectedProperty(PropertyType::Collection, proxy));
 
-  basyx::any any = 235;
+  basyx::object any = 235;
 
   property->setValue(any);
 
@@ -84,7 +84,7 @@ TEST_F(ConnectedPropertyTest, TestSetValueID)
 {
   std::shared_ptr<IProperty> property(new ConnectedProperty(PropertyType::Collection, proxy));
 
-  basyx::any any = std::string("ID");
+  basyx::object any = std::string("ID");
   property->setValueId(any);
 
   auto calling_parameters = mock->updateElementCallValues;

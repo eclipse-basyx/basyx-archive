@@ -8,6 +8,7 @@
 #define UTIL_ANYTYPECHECKER_H_
 
 #include "basyx/types.h"
+#include "basyx/object.h"
 
 #include <string>
 
@@ -27,15 +28,15 @@ namespace PropertyTypeInfo
 }
 
 
-static std::string getPropertyTypeInfo(const basyx::any & object)
+static std::string getPropertyTypeInfo(const basyx::object & object)
 {
   if ( object.InstanceOf<std::string>() )
     return PropertyTypeInfo::STRING;
   if ( object.InstanceOf<int>() )
     return PropertyTypeInfo::INT;
-  if ( object.InstanceOf<basyx::objectCollection_t>() )
+  if ( object.InstanceOf<basyx::object::object_list_t>() )
     return PropertyTypeInfo::COLLECTION;
-  if ( object.InstanceOf<objectMap_t>() )
+  if ( object.InstanceOf<basyx::object::object_map_t>() )
     return PropertyTypeInfo::MAP;
   if ( object.InstanceOf<bool>() )
     return PropertyTypeInfo::BOOL;

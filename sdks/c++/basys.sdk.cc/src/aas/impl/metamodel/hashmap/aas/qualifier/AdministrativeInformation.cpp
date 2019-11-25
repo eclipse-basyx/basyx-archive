@@ -21,7 +21,7 @@ AdministrativeInformation::AdministrativeInformation(const std::string & version
   revision {revision}
 {}
 
-AdministrativeInformation::AdministrativeInformation(basyx::objectMap_t & map)
+AdministrativeInformation::AdministrativeInformation(basyx::object::object_map_t & map)
 {
   this->revision = map.at(qualifier::internalAdministrationPaths::REVISION).GetStringContent();
   this->version = map.at(qualifier::internalAdministrationPaths::VERSION).GetStringContent();

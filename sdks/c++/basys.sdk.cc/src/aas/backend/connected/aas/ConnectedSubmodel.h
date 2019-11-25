@@ -29,8 +29,8 @@ public:
   virtual std::shared_ptr<identifier::IIdentifier> getIdentification() const override;
   virtual basyx::specificCollection_t<reference::IReference> getDataSpecificationReferences() const override;
   virtual submodel::metamodel::map::qualifier::haskind::Kind getHasKindReference() const override;
-  virtual void setProperties(const basyx::objectMap_t & properties) override;
-  virtual void setOperations(const basyx::objectMap_t & operations) override;
+  virtual void setProperties(const basyx::object::object_map_t & properties) override;
+  virtual void setOperations(const basyx::object::object_map_t & operations) override;
   virtual std::string getIdShort() const override;
   virtual std::string getCategory() const override;
   virtual qualifier::impl::Description getDescription() const override;
@@ -40,7 +40,7 @@ public:
   virtual basyx::specificMap_t<submodelelement::operation::IOperation> getOperations() const override;
 
 private:
-  basyx::objectMap_t local_map;
+  basyx::object::object_map_t local_map;
 };
 
 }

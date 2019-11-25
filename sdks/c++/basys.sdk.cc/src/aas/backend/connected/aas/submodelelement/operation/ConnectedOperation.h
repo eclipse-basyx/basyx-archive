@@ -28,8 +28,8 @@ public:
 
   virtual operation_var_list getParameterTypes() const override;
   virtual operation_var_list getReturnTypes() const override;
-  virtual basyx::any invoke(basyx::objectCollection_t & parameters) const override;
-  virtual std::shared_ptr<basyx::function_base> getInvocable() const override;
+  virtual basyx::object invoke(basyx::object & parameters) const override;
+  virtual basyx::detail::functionWrapper getInvocable() const override;
 };
  
 }

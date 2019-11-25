@@ -16,7 +16,7 @@ namespace qualifiable {
 Qualifier::Qualifier()
 {}
 
-Qualifier::Qualifier(const std::string & qualifierType, const basyx::any & qualifierValue, const std::shared_ptr<aas::reference::IReference> & valueId) :
+Qualifier::Qualifier(const std::string & qualifierType, const basyx::object & qualifierValue, const std::shared_ptr<aas::reference::IReference> & valueId) :
   qualifierType {qualifierType},
   qualifierValue {qualifierValue},
   qualifierValueId {valueId}
@@ -27,7 +27,7 @@ std::string Qualifier::getQualifierType() const
   return this->qualifierType;
 }
 
-basyx::any Qualifier::getQualifierValue() const
+basyx::object Qualifier::getQualifierValue() const
 {
   return this->qualifierValue;
 }
@@ -47,7 +47,7 @@ void Qualifier::setQualifierType(const std::string & qualifierType)
   this->qualifierType = qualifierType;
 }
 
-void Qualifier::setQualifierValue(const basyx::any & qualifierValue)
+void Qualifier::setQualifierValue(const basyx::object & qualifierValue)
 {
   this->qualifierValue = qualifierValue;
 }

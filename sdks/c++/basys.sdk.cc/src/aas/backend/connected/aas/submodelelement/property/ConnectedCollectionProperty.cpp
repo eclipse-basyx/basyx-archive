@@ -18,29 +18,29 @@ ConnectedCollectionProperty::ConnectedCollectionProperty(std::shared_ptr<vab::co
   ConnectedProperty(PropertyType::Collection, proxy)
 {}
 
-void ConnectedCollectionProperty::set(const basyx::objectCollection_t & collection) const
+void ConnectedCollectionProperty::set(const basyx::object::object_list_t & collection) const
 {
   this->getProxy()->updateElementValue(PropertyPaths::VALUE, collection);
 }
 
-void ConnectedCollectionProperty::add(const basyx::any & newValue)
+void ConnectedCollectionProperty::add(const basyx::object & newValue)
 {
   this->getProxy()->createElement(PropertyPaths::VALUE, newValue);
 }
 
-void ConnectedCollectionProperty::remove(const basyx::any & objectRef)
+void ConnectedCollectionProperty::remove(basyx::object & objectRef)
 {
   this->getProxy()->deleteElement(PropertyPaths::VALUE, objectRef);
 }
 
-basyx::objectCollection_t ConnectedCollectionProperty::getElements() const
+basyx::object::object_list_t ConnectedCollectionProperty::getElements() const
 {
-  return this->retrieveObject().Get<basyx::objectCollection_t>();
+  return this->retrieveObject().Get<basyx::object::object_list_t>();
 }
 
 int ConnectedCollectionProperty::getElementCount() const
 {
-  return this->retrieveObject().Get<basyx::objectCollection_t>().size();
+  return this->retrieveObject().Get<basyx::object::object_list_t>().size();
 }
 
 }

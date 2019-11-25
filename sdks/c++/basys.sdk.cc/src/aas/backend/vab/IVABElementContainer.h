@@ -24,9 +24,9 @@ public:
 
   virtual void addSubModelElement(submodelelement::ISubmodelElement element) = 0;
 
-  virtual basyx::objectMap_t getDataElements() = 0;
+  virtual basyx::object::object_map_t getDataElements() = 0;
 
-  virtual basyx::objectMap_t getOperations() = 0;
+  virtual basyx::object::object_map_t getOperations() = 0;
 
 };
 

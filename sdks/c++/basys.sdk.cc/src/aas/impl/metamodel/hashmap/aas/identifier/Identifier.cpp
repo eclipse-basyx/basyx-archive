@@ -17,7 +17,7 @@ basyx::aas::identifier::impl::Identifier::Identifier(const std::string & id, con
   idType {idType}
 {}
 
-basyx::aas::identifier::impl::Identifier::Identifier(const basyx::objectMap_t & map)
+basyx::aas::identifier::impl::Identifier::Identifier(const basyx::object::object_map_t & map)
 {
   auto id_any = map.at(internalIdentifierPaths::ID);
   this->id = id_any.GetStringContent();

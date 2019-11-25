@@ -8,6 +8,7 @@
 #define BASYX_SUBMODEL_METAMODEL_MAP_QUALIFIER_REFERABLE_H_
 
 #include "aas/qualifier/IReferable.h"
+#include "basyx/object.h"
 
 namespace basyx {
 namespace submodel {

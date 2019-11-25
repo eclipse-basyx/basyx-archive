@@ -15,11 +15,11 @@ class ISecurity
 public:
 	virtual ~ISecurity() = default;
 
-	virtual basyx::any getAccessControlPolicyPoints() const = 0;
-	virtual void setAccessControlPolicyPoints(const basyx::any & obj) = 0;
+	virtual basyx::object getAccessControlPolicyPoints() const = 0;
+	virtual void setAccessControlPolicyPoints(const basyx::object & obj) = 0;
 
-	virtual basyx::any getTrustAnchor() const = 0;
-	virtual void setTrustAnchor(const basyx::any & obj) = 0;
+	virtual basyx::object getTrustAnchor() const = 0;
+	virtual void setTrustAnchor(const basyx::object & obj) = 0;
 };
 
 #endif

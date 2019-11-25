@@ -37,16 +37,16 @@ operation_var_list ConnectedOperation::getReturnTypes() const
   return operation_var_list(); // this->getProxyCollection(std::string(submodelelement::operation::OperationPaths::INPUT));
 }
 
-basyx::any ConnectedOperation::invoke(basyx::objectCollection_t & parameters) const
+basyx::object ConnectedOperation::invoke(basyx::object & parameters) const
 {
   return this->getProxy()->invoke("", parameters);
 
 }
 
-std::shared_ptr<basyx::function_base> ConnectedOperation::getInvocable() const
+basyx::detail::functionWrapper ConnectedOperation::getInvocable() const
 {
   // Not supported on remote side.
-  return nullptr;
+  return basyx::detail::functionWrapper();
 }
 
 }

@@ -34,15 +34,15 @@ TEST_F(ConnectedSubmodelElementCollectionTest, TestSetValue)
 {
   ConnectedSubmodelElementCollection elements(proxy);
 
-  basyx::objectCollection_t value;
+  basyx::object::object_list_t value;
   value.push_back('a');
 
   //todo 
   //elements.setValue(value);
 
   ASSERT_EQ(property::PropertyPaths::VALUE, mock->updateElementCallValues.at(0).first);
-  ASSERT_EQ(1, mock->updateElementCallValues.at(0).second.Get<basyx::objectCollection_t>().size());
-  ASSERT_EQ('a', mock->updateElementCallValues.at(0).second.Get<basyx::objectCollection_t>().at(0).Get<char>());
+  ASSERT_EQ(1, mock->updateElementCallValues.at(0).second.Get<basyx::object::object_list_t>().size());
+  ASSERT_EQ('a', mock->updateElementCallValues.at(0).second.Get<basyx::object::object_list_t>().at(0).Get<char>());
   ASSERT_EQ(1, mock->overallMockCalls());
 }
 
@@ -119,13 +119,13 @@ TEST_F(ConnectedSubmodelElementCollectionTest, TestSetElements)
 {
   ConnectedSubmodelElementCollection elements(proxy);
 
-  basyx::objectMap_t map;
+  basyx::object::object_map_t map;
 
   //todo
   //elements.setElements(map);
 
   ASSERT_EQ(SubmodelPaths::SUBMODELELEMENT, mock->updateElementCallValues.at(0).first);
-  ASSERT_EQ(map, mock->updateElementCallValues.at(0).second.Get<basyx::objectMap_t>());
+  ASSERT_EQ(map, mock->updateElementCallValues.at(0).second.Get<basyx::object::object_map_t>());
   ASSERT_EQ(1, mock->overallMockCalls());
 }
 
@@ -134,7 +134,7 @@ TEST_F(ConnectedSubmodelElementCollectionTest, TestGetElements)
   auto mock_map = std::make_shared<mockups::VABProxyMockMap>();
   std::shared_ptr<IVABElementProxy> proxy_map = mock_map;
 
-  mock_map->map["pos"] = basyx::any();
+  mock_map->map["pos"] = basyx::object();
 
   ConnectedSubmodelElementCollection elements(proxy_map);
 

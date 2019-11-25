@@ -18,19 +18,19 @@ ConnectedSingleProperty::ConnectedSingleProperty(std::shared_ptr<vab::core::prox
   ConnectedProperty(PropertyType::Single, proxy)
 {}
 
-basyx::any ConnectedSingleProperty::get() const
+basyx::object ConnectedSingleProperty::get() const
 {
   return this->retrieveObject();
 }
 
-void ConnectedSingleProperty::set(const basyx::any & value)
+void ConnectedSingleProperty::set(const basyx::object & value)
 {
   this->setProxyValue(PropertyPaths::VALUE, value);
 }
 
 std::string ConnectedSingleProperty::getValueType() const
 {
-  auto map = this->getProxy()->readElementValue("").Get<basyx::objectMap_t>();
+  auto map = this->getProxy()->readElementValue("").Get<basyx::object::object_map_t>();
   return map.at(PropertyPaths::VALUETYPE).Get<std::string>();
 }
 

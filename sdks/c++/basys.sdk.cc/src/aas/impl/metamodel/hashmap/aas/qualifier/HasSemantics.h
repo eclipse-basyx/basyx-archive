@@ -9,6 +9,7 @@
 
 #include "aas/qualifier/IHasSemantics.h"
 #include "aas/reference/IReference.h"
+#include "basyx/object.h"
 
 namespace basyx {
 namespace submodel {

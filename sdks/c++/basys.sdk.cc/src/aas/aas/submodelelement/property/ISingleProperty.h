@@ -23,8 +23,8 @@ class ISingleProperty
 public:
   virtual ~ISingleProperty() = default;
 
-  virtual basyx::any get() const = 0;
-  virtual void set(const basyx::any & newValue) = 0;
+  virtual basyx::object get() const = 0;
+  virtual void set(const basyx::object & newValue) = 0;
   virtual std::string getValueType() const = 0;
 
 };

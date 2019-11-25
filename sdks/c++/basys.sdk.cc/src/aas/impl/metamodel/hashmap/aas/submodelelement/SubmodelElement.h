@@ -28,7 +28,7 @@ public:
    * 
    * @param submodelElementMap the map representig the submodel.
    */
-  SubmodelElement(const basyx::objectMap_t & submodelElementMap);
+  SubmodelElement(const basyx::object::object_map_t & submodelElementMap);
 
   // Inherited via ISubmodelElement
   virtual basyx::specificCollection_t<aas::reference::IReference> getDataSpecificationReferences() const override;

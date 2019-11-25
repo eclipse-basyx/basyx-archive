@@ -32,6 +32,7 @@ public:
   virtual void deleteElement(const VABPath& elementPath) override;
   virtual void deleteElement(const VABPath& elementPath, basyx::object& value) override;
   virtual basyx::object invoke(const VABPath& elementPath, basyx::object & parameter) override;
+  virtual VABPath getAddressPath() const override;
 
 private:
   VABPath get_ablsolute_path(const VABPath& elementPath);
@@ -39,6 +40,9 @@ private:
 private:
   VABPath address;
   std::shared_ptr<IModelProvider> provider;
+
+  // Inherited via IVABElementProxy
+  virtual std::shared_ptr<IVABElementProxy> getDeepProxy(const VABPath & path) override;
 };
 
 }

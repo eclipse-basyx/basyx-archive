@@ -24,9 +24,9 @@ public:
   ~ConnectedBlob() = default;
 
   // Inherited via IBlob
-  virtual void setValue(const basyx::byte_array & value) override;
+  virtual void setValue(const std::string & value) override;
 
-  virtual basyx::byte_array getValue() const override;
+  virtual std::string getValue() const override;
 
   virtual void setMimeType(const std::string & mimeType) override;
 

@@ -16,15 +16,15 @@ ConnectedBlob::ConnectedBlob(std::shared_ptr<vab::core::proxy::IVABElementProxy>
  ConnectedDataElement(proxy)
 {}
 
-void ConnectedBlob::setValue(const basyx::byte_array & bytes)
+void ConnectedBlob::setValue(const std::string & bytes)
 {
   this->setProxyValue(submodelelement::property::PropertyPaths::VALUE, bytes);
 }
 
-basyx::byte_array ConnectedBlob::getValue() const
+std::string ConnectedBlob::getValue() const
 {
   auto value = getProxy()->readElementValue(submodelelement::property::PropertyPaths::VALUE);
-  return value.Get<basyx::byte_array>();
+  return value.Get<std::string>();
 }
 
 void ConnectedBlob::setMimeType(const std::string & mimeType)

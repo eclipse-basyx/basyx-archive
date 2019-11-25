@@ -42,7 +42,7 @@ TEST_F(ConnectedReferenceElementTest, TestSetPropertyType)
 {
   auto element = ConnectedReferenceElement(proxy);
 
-  basyx::any value("value");
+  basyx::object value("value");
 
   //todo
   //element.setValue(value);

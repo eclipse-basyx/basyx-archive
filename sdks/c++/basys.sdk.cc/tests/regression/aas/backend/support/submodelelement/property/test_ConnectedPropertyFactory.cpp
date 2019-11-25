@@ -35,8 +35,8 @@ using basyx::aas::backend::connected::support::ConnectedPropertyFactory::createP
 //
 //TEST_F(ConnectedPropertyFactory, TestConstructor)
 //{
-//  std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
-//  map->emplace("object", basyx::any(std::string("object")));
+//  std::shared_ptr<basyx::object::object_map_t> map(new basyx::object::object_map_t);
+//  map->emplace("object", basyx::object(std::string("object")));
 //
 //  createProperty();
 //

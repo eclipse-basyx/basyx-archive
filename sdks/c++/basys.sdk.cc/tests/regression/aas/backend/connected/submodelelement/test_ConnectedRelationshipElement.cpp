@@ -29,7 +29,7 @@ protected:
 
 TEST_F(ConnectedRelationshipElementTest, TestGetFirst)
 {
-  std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
+  std::shared_ptr<basyx::object::object_map_t> map(new basyx::object::object_map_t);
 
   ConnectedRelationshipElement connected_element(proxy);
 
@@ -41,11 +41,11 @@ TEST_F(ConnectedRelationshipElementTest, TestGetFirst)
 
 TEST_F(ConnectedRelationshipElementTest, TestSetFirst)
 {
-  std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
+  std::shared_ptr<basyx::object::object_map_t> map(new basyx::object::object_map_t);
 
   ConnectedRelationshipElement connected_element(proxy);
 
-  basyx::any first("first");
+  basyx::object first("first");
 
   //todo
   //connected_element.setFirst(first);
@@ -57,7 +57,7 @@ TEST_F(ConnectedRelationshipElementTest, TestSetFirst)
 
 TEST_F(ConnectedRelationshipElementTest, TestGetSecond)
 {
-  std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
+  std::shared_ptr<basyx::object::object_map_t> map(new basyx::object::object_map_t);
 
   ConnectedRelationshipElement connected_element(proxy);
 
@@ -69,11 +69,11 @@ TEST_F(ConnectedRelationshipElementTest, TestGetSecond)
 
 TEST_F(ConnectedRelationshipElementTest, TestSetSecond)
 {
-  std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
+  std::shared_ptr<basyx::object::object_map_t> map(new basyx::object::object_map_t);
 
   ConnectedRelationshipElement connected_element(proxy);
 
-  basyx::any second("second");
+  basyx::object second("second");
 
 
   //todo

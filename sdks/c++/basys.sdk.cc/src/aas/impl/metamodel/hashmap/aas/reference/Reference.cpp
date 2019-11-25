@@ -19,7 +19,7 @@ Reference::Reference(const basyx::specificCollection_t<IKey> & keys) :
   keys {keys}
 {}
 
-Reference::Reference(const basyx::objectMap_t & reference_map)
+Reference::Reference(const basyx::object::object_map_t & reference_map)
 {
   auto keys = reference_map.at(internalReferencePaths::KEY);
   this->keys = keys.Get<basyx::specificCollection_t<IKey>>();

@@ -92,6 +92,11 @@ namespace basyx {
 			return object_cast<T>(*this);
 		};
 
+    std::string & GetStringContent()
+    {
+      return this->Get<std::string&>();
+    }
+
 		template <typename T>
 		T* GetPtr()
 		{

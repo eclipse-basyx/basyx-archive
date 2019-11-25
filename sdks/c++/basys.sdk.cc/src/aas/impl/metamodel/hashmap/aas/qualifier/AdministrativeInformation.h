@@ -8,6 +8,7 @@
 #define AAS_IMPL_METAMODEL_ADMINISTRATIVEINFORMATION_H_
 
 #include "aas/qualifier/IAdministrativeInformation.h"
+#include "basyx/object.h"
 
 namespace basyx {
 namespace aas {
@@ -21,7 +22,7 @@ public:
 
   AdministrativeInformation();
   AdministrativeInformation(const std::string & version, const std::string & revision);
-  AdministrativeInformation(basyx::objectMap_t & map);
+  AdministrativeInformation(basyx::object::object_map_t & map);
 
   void setDataSpecificationReferences(const basyx::specificCollection_t<reference::IReference> & data_specification_references);
   void setVersion(const std::string & version);

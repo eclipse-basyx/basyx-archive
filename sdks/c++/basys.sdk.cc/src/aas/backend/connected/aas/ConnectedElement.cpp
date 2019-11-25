@@ -13,10 +13,10 @@ namespace backend {
 
 ConnectedElement::ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy> & proxy) :
   proxy(proxy),
-  local_map(new basyx::objectMap_t)
+  local_map(new basyx::object::object_map_t)
 {}
 
-ConnectedElement::ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy>& proxy, std::shared_ptr<basyx::objectMap_t> & local_values) :
+ConnectedElement::ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy>& proxy, std::shared_ptr<basyx::object::object_map_t> & local_values) :
   proxy(proxy),
   local_map(local_values)
 {}
@@ -26,20 +26,20 @@ std::shared_ptr<vab::core::proxy::IVABElementProxy> ConnectedElement::getProxy()
   return this->proxy;
 }
 
-basyx::any ConnectedElement::getLocalValue(const std::string & path) const 
+basyx::object ConnectedElement::getLocalValue(const std::string & path) const 
 {
   auto element_ptr = this->local_map->find(path);
   if ( element_ptr != this->local_map->end() )
     return element_ptr->second;
-  return basyx::any(nullptr);
+  return basyx::object(nullptr);
 }
 
-void ConnectedElement::setLocalValue(const std::string & path, const basyx::any & value)
+void ConnectedElement::setLocalValue(const std::string & path, const basyx::object & value)
 {
   this->local_map->emplace(path, value);
 }
 
-void ConnectedElement::setLocalValues(const basyx::objectMap_t & values)
+void ConnectedElement::setLocalValues(const basyx::object::object_map_t & values)
 {
   for ( auto & val : values )
   {
@@ -47,7 +47,7 @@ void ConnectedElement::setLocalValues(const basyx::objectMap_t & values)
   }
 }
 
-void ConnectedElement::updateLocalValue(const std::string & path, const basyx::any value)
+void ConnectedElement::updateLocalValue(const std::string & path, const basyx::object value)
 {
   this->local_map->operator[](path) = value;
 }
@@ -64,7 +64,7 @@ std::string ConnectedElement::getId() const
 }
 
 
-void ConnectedElement::setProxyValue(const std::string & path, const basyx::any value) const
+void ConnectedElement::setProxyValue(const std::string & path, const basyx::object value) const
 {
   this->getProxy()->updateElementValue(path, value);
 }
@@ -75,10 +75,10 @@ std::string ConnectedElement::getProxyValue(const std::string & path) const
   return value.Get<std::string>();
 }
 
-std::shared_ptr<basyx::objectMap_t> ConnectedElement::getProxyMap(const std::string & path) const
+std::shared_ptr<basyx::object::object_map_t> ConnectedElement::getProxyMap(const std::string & path) const
 {
   auto value = getProxy()->readElementValue(path);
-  return std::make_shared<basyx::objectMap_t>(value.Get<basyx::objectMap_t>());
+  return std::make_shared<basyx::object::object_map_t>(value.Get<basyx::object::object_map_t>());
 }
 
 }

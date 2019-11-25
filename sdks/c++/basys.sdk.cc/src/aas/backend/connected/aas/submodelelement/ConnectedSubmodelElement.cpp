@@ -25,7 +25,7 @@ basyx::specificCollection_t<reference::IReference> ConnectedSubmodelElement::get
   basyx::specificCollection_t<reference::IReference> specific_data_specs;
   for ( auto & spec : data_specs )
   {
-    reference::impl::Reference data_ref(spec.Get<basyx::objectMap_t>());
+    reference::impl::Reference data_ref(spec.Get<basyx::object::object_map_t>());
     specific_data_specs.push_back(std::make_shared<reference::impl::Reference>(data_ref));
   }
 
@@ -70,15 +70,15 @@ submodel::metamodel::map::qualifier::haskind::Kind ConnectedSubmodelElement::get
 }
 
 
-basyx::objectCollection_t ConnectedSubmodelElement::getProxyCollection(const std::string & path) const
+basyx::object::object_list_t ConnectedSubmodelElement::getProxyCollection(const std::string & path) const
 {
   auto value = this->getProxy()->readElementValue(path);
-  return value.Get<basyx::objectCollection_t>();
+  return value.Get<basyx::object::object_list_t>();
 }
 
 std::string ConnectedSubmodelElement::getIdWithLocalCheck() const
 {
-  basyx::any localId = this->getLocalValue(qualifier::ReferablePaths::IDSHORT);
+  basyx::object localId = this->getLocalValue(qualifier::ReferablePaths::IDSHORT);
   if ( not localId.IsNull() ) {
     return localId.Get<std::string>();
   }

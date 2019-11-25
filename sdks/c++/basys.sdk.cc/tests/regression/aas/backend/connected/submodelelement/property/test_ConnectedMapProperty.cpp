@@ -41,7 +41,7 @@ TEST_F(ConnectedMapPropertyTest, TestGetValue)
 {
   ConnectedMapProperty connected_map_property(proxy);
 
-  mock->map["asdf"] = basyx::any("value");
+  mock->map["asdf"] = basyx::object("value");
 
   auto value = connected_map_property.getValue("asdf");
 
@@ -53,7 +53,7 @@ TEST_F(ConnectedMapPropertyTest, TestPutNotPresent)
 {
   ConnectedMapProperty connected_map_property(proxy);
 
-  basyx::any value("value");
+  basyx::object value("value");
 
   connected_map_property.put("path", value);
 
@@ -66,21 +66,21 @@ TEST_F(ConnectedMapPropertyTest, TestSetMap)
 {
   ConnectedMapProperty connected_map_property(proxy);
 
-  basyx::objectMap_t map;
+  basyx::object::object_map_t map;
 
   connected_map_property.set(map);
 
   ASSERT_EQ(1, mock->overallMockCalls());
   ASSERT_EQ(std::string(basyx::aas::submodelelement::property::PropertyPaths::VALUE), mock->updateElementCallValues.at(0).first);
-  ASSERT_EQ(map, mock->updateElementCallValues.at(0).second.Get<basyx::objectMap_t>());
+  ASSERT_EQ(map, mock->updateElementCallValues.at(0).second.Get<basyx::object::object_map_t>());
 }
 
 TEST_F(ConnectedMapPropertyTest, TestGetKeys)
 {
   ConnectedMapProperty connected_map_property(proxy);
 
-  basyx::any value1(std::string("value"));
-  basyx::any value2(std::string("value"));
+  basyx::object value1(std::string("value"));
+  basyx::object value2(std::string("value"));
 
   mock->map.emplace("path1", value1);
   mock->map.emplace("path2", value2);
@@ -98,8 +98,8 @@ TEST_F(ConnectedMapPropertyTest, TestGetEntryCount)
 {
   ConnectedMapProperty connected_map_property(proxy);
 
-  basyx::any value1(std::string("value"));
-  basyx::any value2(std::string("value"));
+  basyx::object value1(std::string("value"));
+  basyx::object value2(std::string("value"));
 
   mock->map.emplace("path1", value1);
   mock->map.emplace("path2", value2);

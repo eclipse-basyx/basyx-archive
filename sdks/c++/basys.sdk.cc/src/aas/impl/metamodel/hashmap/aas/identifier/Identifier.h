@@ -9,6 +9,7 @@
 
 #include "aas/identifier/IIdentifier.h"
 #include "basyx/types.h"
+#include "basyx/object.h"
 
 namespace basyx {
 namespace aas {
@@ -22,7 +23,7 @@ public:
 
   Identifier();
   Identifier(const std::string & id, const std::string & idType);
-  Identifier(const basyx::objectMap_t & map);
+  Identifier(const basyx::object::object_map_t & map);
 
   // Inherited via IIdentifier
   virtual std::string getIdType() const override;

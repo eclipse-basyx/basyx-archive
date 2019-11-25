@@ -32,11 +32,11 @@ class SubModel : public ISubModel
 public:
   SubModel();
 
-  virtual void setProperties(const basyx::objectMap_t & properties) override;
-  virtual void setOperations(const basyx::objectMap_t & operations) override;
+  virtual void setProperties(const basyx::object::object_map_t & properties) override;
+  virtual void setOperations(const basyx::object::object_map_t & operations) override;
 
 private:
-  basyx::objectMap_t properties, operations, submodel_elements;
+  basyx::object::object_map_t properties, operations, submodel_elements;
 };
 
 

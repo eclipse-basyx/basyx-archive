@@ -30,7 +30,7 @@ protected:
 
 TEST_F(ConnectedOperationTest, TestGetParameterTypes)
 {
-  std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
+  std::shared_ptr<basyx::object::object_map_t> map(new basyx::object::object_map_t);
 
   ConnectedOperation connected_operation(proxy);
 
@@ -42,7 +42,7 @@ TEST_F(ConnectedOperationTest, TestGetParameterTypes)
 
 TEST_F(ConnectedOperationTest, TestGetReturnTypes)
 {
-  std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
+  std::shared_ptr<basyx::object::object_map_t> map(new basyx::object::object_map_t);
 
   ConnectedOperation connected_operation(proxy);
 
@@ -54,18 +54,17 @@ TEST_F(ConnectedOperationTest, TestGetReturnTypes)
 
 TEST_F(ConnectedOperationTest, TestInvoke)
 {
-  std::shared_ptr<basyx::objectMap_t> map(new basyx::objectMap_t);
+  std::shared_ptr<basyx::object::object_map_t> map(new basyx::object::object_map_t);
 
   ConnectedOperation connected_operation(proxy);
 
-  basyx::objectCollection_t collection;
-  collection.push_back(basyx::any(2));
-
-  auto invoked = connected_operation.invoke(collection);
+  basyx::object param{2};
+  auto invoked = connected_operation.invoke(param);
 
   ASSERT_EQ("called with ", invoked.Get<std::string>());
-  ASSERT_EQ(1, mock->invokeCallParameter.size());
-  ASSERT_EQ(2, mock->invokeCallParameter.at(0).Get<int>());
+  ASSERT_FALSE(mock->invokeCallParameter.IsNull());
+  ASSERT_TRUE(mock->invokeCallParameter.InstanceOf<int>());
+  ASSERT_EQ(mock->invokeCallParameter.Get<int>(), 2);
   ASSERT_EQ(1, mock->overallMockCalls());
 }
 

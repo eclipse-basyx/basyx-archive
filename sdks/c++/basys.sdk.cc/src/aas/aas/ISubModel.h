@@ -45,8 +45,8 @@ class ISubModel : public qualifier::IHasSemantics, qualifier::IIdentifiable, qua
 
 public:
   virtual ~ISubModel() = default;
-  virtual void setProperties(const basyx::objectMap_t & properties) = 0;
-  virtual void setOperations(const basyx::objectMap_t & operations) = 0;
+  virtual void setProperties(const basyx::object::object_map_t & properties) = 0;
+  virtual void setOperations(const basyx::object::object_map_t & operations) = 0;
 
 };
 

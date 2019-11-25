@@ -47,7 +47,7 @@ namespace json {
         }
 
     private:
-        // Deserialize a fundamental type (and std::string) from JSON and return a basyx::any object holding the deserialized value
+        // Deserialize a fundamental type (and std::string) from JSON and return a basyx::object object holding the deserialized value
         static basyx::object fundamental(const json_t& json)
         {
             if (json.is_number_float())
@@ -62,22 +62,22 @@ namespace json {
             //auto valueJson = json[basyx::serialization::valueSpecifier];
 
             //if (typeId == basyx::serialization::basysType<int>::string) {
-            //	return basyx::any{ valueJson.get<int>() };
+            //	return basyx::object{ valueJson.get<int>() };
             //}
             //else if (typeId == basyx::serialization::basysType<bool>::string) {
-            //	return basyx::any{ valueJson.get<bool>() };
+            //	return basyx::object{ valueJson.get<bool>() };
             //}
             //else if (typeId == basyx::serialization::basysType<float>::string) {
-            //	return basyx::any{ valueJson.get<float>() };
+            //	return basyx::object{ valueJson.get<float>() };
             //}
             //else if (typeId == basyx::serialization::basysType<double>::string) {
-            //	return basyx::any{ valueJson.get<double>() };
+            //	return basyx::object{ valueJson.get<double>() };
             //}
             //else if (typeId == basyx::serialization::basysType<char>::string) {
-            //	return basyx::any{ valueJson.get<char>() };
+            //	return basyx::object{ valueJson.get<char>() };
             //}
             //else if (typeId == basyx::serialization::basysType<std::string>::string) {
-            //	return basyx::any{ valueJson.get<std::string>() };
+            //	return basyx::object{ valueJson.get<std::string>() };
             //}
 
             return basyx::object::make_null();

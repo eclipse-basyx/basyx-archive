@@ -21,8 +21,8 @@ public:
   ConnectedSingleProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
   ~ConnectedSingleProperty() = default;
 
-  virtual basyx::any get() const override;
-  virtual void set(const basyx::any & value) override;
+  virtual basyx::object get() const override;
+  virtual void set(const basyx::object & value) override;
   virtual std::string getValueType() const override;
 
 };

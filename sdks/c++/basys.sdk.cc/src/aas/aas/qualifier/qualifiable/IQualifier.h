@@ -11,6 +11,7 @@
 #include "aas/reference/IReference.h"
 #include "aas/qualifier/IHasSemantics.h"
 #include "basyx/types.h"
+#include "basyx/object.h"
 
 #include <string>
 
@@ -25,7 +26,7 @@ public:
   virtual ~IQualifier() = default;
 
   virtual std::string getQualifierType() const = 0;
-  virtual basyx::any getQualifierValue() const = 0;
+  virtual basyx::object getQualifierValue() const = 0;
   virtual std::shared_ptr<reference::IReference> getQualifierValueId() const = 0;
 };
 

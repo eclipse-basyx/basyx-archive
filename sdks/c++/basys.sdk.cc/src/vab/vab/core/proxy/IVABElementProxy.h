@@ -29,6 +29,9 @@ public:
   virtual void deleteElement(const VABPath& elementPath) = 0;
   virtual void deleteElement(const VABPath& elementPath, basyx::object& value) = 0;
   virtual basyx::object invoke(const VABPath& elementPath, basyx::object & parameter) = 0;
+
+  virtual std::shared_ptr<IVABElementProxy> getDeepProxy(const VABPath & path) = 0;
+  virtual VABPath getAddressPath() const = 0;
 };
 
 }

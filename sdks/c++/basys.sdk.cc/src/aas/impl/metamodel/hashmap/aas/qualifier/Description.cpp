@@ -17,7 +17,7 @@ Description::Description(const std::string & language, const std::string & text)
   text(text)
 {}
 
-Description::Description(basyx::objectMap_t & map)
+Description::Description(basyx::object::object_map_t & map)
 {
   this->language = map.at(descriptionPaths::LANGUAGE).GetStringContent();
   this->text = map.at(descriptionPaths::TEXT).GetStringContent();

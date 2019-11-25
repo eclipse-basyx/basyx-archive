@@ -48,10 +48,10 @@ submodel::metamodel::map::qualifier::haskind::Kind ConnectedSubmodel::getHasKind
   return submodel::metamodel::map::qualifier::haskind::Kind::NOTSPECIFIED;
 }
 
-void ConnectedSubmodel::setProperties(const basyx::objectMap_t & properties)
+void ConnectedSubmodel::setProperties(const basyx::object::object_map_t & properties)
 {}
 
-void ConnectedSubmodel::setOperations(const basyx::objectMap_t & operations)
+void ConnectedSubmodel::setOperations(const basyx::object::object_map_t & operations)
 {}
 
 std::string ConnectedSubmodel::getIdShort() const
@@ -92,11 +92,11 @@ void ConnectedSubmodel::addSubModelElement(const std::shared_ptr<submodelelement
 basyx::specificMap_t<submodelelement::IDataElement> ConnectedSubmodel::getDataElements() const
 {
   basyx::specificMap_t<submodelelement::IDataElement> map;
-  auto operations = this->getProxy()->readElementValue(SubmodelPaths::PROPERTIES).Get<basyx::objectCollection_t>();
+  auto operations = this->getProxy()->readElementValue(SubmodelPaths::PROPERTIES).Get<basyx::object::object_list_t>();
 
   for ( auto & operation : operations )
   {
-    auto data_element_map = operation.Get<basyx::objectMap_t>();
+    auto data_element_map = operation.Get<basyx::object::object_map_t>();
     auto id = data_element_map.at(qualifier::ReferablePaths::IDSHORT).GetStringContent();
 
     vab::core::VABPath path(SubmodelPaths::OPERATIONS);
@@ -113,11 +113,11 @@ basyx::specificMap_t<submodelelement::IDataElement> ConnectedSubmodel::getDataEl
 basyx::specificMap_t<IOperation> ConnectedSubmodel::getOperations() const
 {
   basyx::specificMap_t<IOperation> map;
-  auto operations = this->getProxy()->readElementValue(SubmodelPaths::OPERATIONS).Get<basyx::objectCollection_t>();
+  auto operations = this->getProxy()->readElementValue(SubmodelPaths::OPERATIONS).Get<basyx::object::object_list_t>();
 
   for ( auto & operation : operations )
   {
-    auto operation_map = operation.Get<basyx::objectMap_t>();
+    auto operation_map = operation.Get<basyx::object::object_map_t>();
     auto id = operation_map.at(qualifier::ReferablePaths::IDSHORT).GetStringContent();
 
     vab::core::VABPath path(SubmodelPaths::OPERATIONS);

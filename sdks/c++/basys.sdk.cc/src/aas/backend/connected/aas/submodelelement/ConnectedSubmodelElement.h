@@ -34,7 +34,7 @@ public:
 protected:
   std::string getIdWithLocalCheck() const;
   void setIdWithLocalCheck(const std::string & id);
-  basyx::objectCollection_t getProxyCollection(const std::string & path) const;
+  basyx::object::object_list_t getProxyCollection(const std::string & path) const;
 };
 
 }

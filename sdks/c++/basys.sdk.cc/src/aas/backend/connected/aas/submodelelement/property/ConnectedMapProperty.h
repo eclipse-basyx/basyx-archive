@@ -22,15 +22,15 @@ public:
 	~ConnectedMapProperty() = default;
 
   // Inherited via IMapProperty
-  virtual basyx::any getValue(const std::string & key) const override;
-  virtual void put(const std::string & key, const basyx::any & value) const override;
-  virtual void set(const basyx::objectMap_t & map) const override;
-  virtual basyx::objectCollection_t getKeys() const override;
+  virtual basyx::object getValue(const std::string & key) const override;
+  virtual void put(const std::string & key, const basyx::object & value) const override;
+  virtual void set(const basyx::object::object_map_t & map) const override;
+  virtual basyx::object::object_list_t getKeys() const override;
   virtual int getEntryCount() const override;
   virtual void remove(const std::string & key) const override;
 
 private:
-  basyx::objectMap_t getMap() const;
+  basyx::object::object_map_t getMap() const;
 };
  
 }

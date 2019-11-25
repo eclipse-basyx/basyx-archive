@@ -35,11 +35,11 @@ TEST_F(ConnectedBlobTest, TestSetValue)
 {
   ConnectedBlob blob(proxy);
 
-  basyx::byte_array value = {'a','b','c'};
+  std::string value = {'a','b','c'};
 
   blob.setValue(value);
 
-  ASSERT_EQ(value, mock->updateElementCallValues.at(0).second.Get<basyx::byte_array>());
+  ASSERT_EQ(value, mock->updateElementCallValues.at(0).second.Get<std::string>());
   ASSERT_EQ(PropertyPaths::VALUE, mock->updateElementCallValues.at(0).first);
   ASSERT_EQ(1, mock->overallMockCalls());
 }
@@ -56,7 +56,7 @@ TEST_F(ConnectedBlobTest, TestGetValue)
 
   auto val = blob.getValue();
 
-  ASSERT_EQ(basyx::byte_array(), val);
+  ASSERT_EQ(std::string(""), val);
   ASSERT_EQ(1, mock_byte_array->overallMockCalls());
 }
 

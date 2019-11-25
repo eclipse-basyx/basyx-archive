@@ -5,7 +5,7 @@
  */
 
 #include "Operation.h"
-#include "basyx/function.h"
+#include "basyx/object/obj_function.h"
 
 namespace basyx {
 namespace submodel {
@@ -17,7 +17,7 @@ namespace operation {
 Operation::Operation()
 {}
 
-Operation::Operation(operation_var_list in, operation_var_list out, std::shared_ptr<basyx::function_base> invocable) :
+Operation::Operation(operation_var_list in, operation_var_list out, basyx::detail::functionWrapper invocable) :
   in_variables {in},
   out_variables {out},
   invocable {invocable}
@@ -33,14 +33,14 @@ operation_var_list Operation::getReturnTypes() const
   return this->out_variables;
 }
 
-std::shared_ptr<basyx::function_base> Operation::getInvocable() const
+basyx::detail::functionWrapper Operation::getInvocable() const
 {
   return this->invocable;
 }
 
-basyx::any Operation::invoke(basyx::objectCollection_t & parameters) const
+basyx::object Operation::invoke(basyx::object & parameters) const
 {
-  return this->invocable->invoke_any(parameters);
+  return invocable.invoke(parameters); 
 }
 
 void Operation::setParameterTypes(const operation_var_list & parameterTypes)
@@ -53,7 +53,7 @@ void Operation::setReturnTypes(const operation_var_list & returnTypes)
   this->out_variables = returnTypes;
 }
 
-void Operation::setInvocable(const std::shared_ptr<basyx::function_base>& invocable)
+void Operation::setInvocable(basyx::detail::functionWrapper invocable)
 {
   this->invocable = invocable;
 }

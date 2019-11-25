@@ -18,27 +18,27 @@ ConnectedMapProperty::ConnectedMapProperty(std::shared_ptr<vab::core::proxy::IVA
   ConnectedProperty(PropertyType::Map, proxy)
 {}
 
-basyx::any ConnectedMapProperty::getValue(const std::string & key) const
+basyx::object ConnectedMapProperty::getValue(const std::string & key) const
 {
   return this->getMap().at(key);
 }
 
-void ConnectedMapProperty::put(const std::string & key, const basyx::any & value) const
+void ConnectedMapProperty::put(const std::string & key, const basyx::object & value) const
 {
   basyx::vab::core::VABPath path(PropertyPaths::VALUE);
   path.append(key);
   this->setProxyValue(path, value);
 }
 
-void ConnectedMapProperty::set( const basyx::objectMap_t & map ) const
+void ConnectedMapProperty::set( const basyx::object::object_map_t & map ) const
 {
   this->setProxyValue(PropertyPaths::VALUE, map);
 }
 
-basyx::objectCollection_t ConnectedMapProperty::getKeys() const
+basyx::object::object_list_t ConnectedMapProperty::getKeys() const
 {
   auto map = this->getMap();
-  basyx::objectCollection_t keys;
+  basyx::object::object_list_t keys;
   keys.reserve(map.size());
 
   for ( auto entry : map ) {
@@ -60,9 +60,9 @@ void ConnectedMapProperty::remove(const std::string & key) const
   this->getProxy()->deleteElement(path);
 }
 
-basyx::objectMap_t ConnectedMapProperty::getMap() const
+basyx::object::object_map_t ConnectedMapProperty::getMap() const
 {
-  auto map = this->getProxy()->readElementValue(PropertyPaths::VALUE).Get<basyx::objectMap_t>();
+  auto map = this->getProxy()->readElementValue(PropertyPaths::VALUE).Get<basyx::object::object_map_t>();
   return map;
 }
 

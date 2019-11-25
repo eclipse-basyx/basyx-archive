@@ -23,23 +23,23 @@ PropertyType ConnectedProperty::getPropertyType() const
   return this->type;
 }
 
-void ConnectedProperty::setValue(const basyx::any & value)
+void ConnectedProperty::setValue(const basyx::object & value)
 {
   this->getProxy()->updateElementValue(PropertyPaths::VALUE, value);
   this->getProxy()->updateElementValue(PropertyPaths::VALUETYPE, basyx::getPropertyTypeInfo(value));
 }
 
-basyx::any ConnectedProperty::getValue() const
+basyx::object ConnectedProperty::getValue() const
 {
   return this->getProxy()->readElementValue(PropertyPaths::VALUE);
 }
 
-void ConnectedProperty::setValueId(const basyx::any & valueId)
+void ConnectedProperty::setValueId(const basyx::object & valueId)
 {
   this->getProxy()->updateElementValue(PropertyPaths::VALUEID, valueId);
 }
 
-basyx::any ConnectedProperty::getValueId() const
+basyx::object ConnectedProperty::getValueId() const
 {
   return this->getProxy()->readElementValue(PropertyPaths::VALUEID);
 }
@@ -54,9 +54,9 @@ std::string ConnectedProperty::getId() const
   return this->getId();
 }
 
-basyx::any ConnectedProperty::retrieveObject() const
+basyx::object ConnectedProperty::retrieveObject() const
 {
-  return this->getProxy()->readElementValue(PropertyPaths::VALUE).Get<basyx::objectMap_t>().at(PropertyPaths::VALUE);
+  return this->getProxy()->readElementValue(PropertyPaths::VALUE).Get<basyx::object::object_map_t>().at(PropertyPaths::VALUE);
 }
 
 }

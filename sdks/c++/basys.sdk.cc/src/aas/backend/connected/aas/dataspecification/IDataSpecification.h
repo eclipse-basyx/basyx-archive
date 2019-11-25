@@ -60,8 +60,8 @@ public:
   virtual void setDataType(const std::string & dataType) = 0;
   virtual void setDefinition(const std::string & definition) = 0;
   virtual void setValueFormat(const std::string & valueFormat) = 0;
-  virtual void setValueList(const basyx::any & obj) = 0;
-  virtual void setCode(const basyx::any & obj) = 0;
+  virtual void setValueList(const basyx::object & obj) = 0;
+  virtual void setCode(const basyx::object & obj) = 0;
 };
 
 #endif

@@ -10,6 +10,7 @@
 #include "aas/submodelelement/property/IProperty.h"
 #include "backend/connected/aas/submodelelement/ConnectedDataElement.h"
 #include "basyx/types.h"
+#include "basyx/object.h"
 
 namespace basyx {
 namespace aas {
@@ -25,18 +26,18 @@ public:
   // Inherited via IProperty
   virtual submodelelement::property::PropertyType getPropertyType() const override;
 
-  virtual void setValue(const basyx::any & value) override;
-  virtual basyx::any getValue() const override;
+  virtual void setValue(const basyx::object & value) override;
+  virtual basyx::object getValue() const override;
 
-  virtual void setValueId(const basyx::any & valueId) override;
-  virtual basyx::any getValueId() const override;
+  virtual void setValueId(const basyx::object & valueId) override;
+  virtual basyx::object getValueId() const override;
 
   //Inherited via IProperty : IElement
   virtual void setId(const std::string & id) override;
   virtual std::string getId() const override;
 
 protected:
-  basyx::any retrieveObject() const;
+  basyx::object retrieveObject() const;
 
 private:
   submodelelement::property::PropertyType type;

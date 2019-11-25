@@ -26,8 +26,8 @@ protected:
     mock = std::make_shared<mockups::VABProxyMockMap>();
     proxy = mock;
 
-    mock->map[PropertyPaths::VALUETYPE] = basyx::any("str");
-    mock->map[PropertyPaths::VALUE] = basyx::any("another str");
+    mock->map[PropertyPaths::VALUETYPE] = basyx::object("str");
+    mock->map[PropertyPaths::VALUE] = basyx::object("another str");
   }
 };
 
@@ -46,7 +46,7 @@ TEST_F(ConnectedSinglePropertyTest, TestSet)
 {
   ConnectedSingleProperty property(proxy);
 
-  basyx::any val(2);
+  basyx::object val(2);
 
   property.set(val);
 

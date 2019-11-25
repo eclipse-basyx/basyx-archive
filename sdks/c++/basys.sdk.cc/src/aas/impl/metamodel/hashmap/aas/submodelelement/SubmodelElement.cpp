@@ -18,7 +18,7 @@ SubmodelElement::SubmodelElement() :
   description {"", ""}
 {}
 
-//SubmodelElement::SubmodelElement(const basyx::objectMap_t & submodelElementMap)
+//SubmodelElement::SubmodelElement(const basyx::object::object_map_t & submodelElementMap)
 //{
 //
 //}

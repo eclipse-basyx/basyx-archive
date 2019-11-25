@@ -27,11 +27,11 @@ using namespace submodelelement::property;
 
 namespace ConnectedPropertyFactory {
 // Forward declaration
-static std::shared_ptr<ConnectedProperty> createSuitableProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy, basyx::objectMap_t & originalPropertyMap, basyx::objectMap_t & valueTypeMap);
-static std::shared_ptr<ConnectedProperty> createSingleProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy, basyx::objectMap_t & originalPropertyMap);
+static std::shared_ptr<ConnectedProperty> createSuitableProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy, basyx::object::object_map_t & originalPropertyMap, basyx::object::object_map_t & valueTypeMap);
+static std::shared_ptr<ConnectedProperty> createSingleProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy, basyx::object::object_map_t & originalPropertyMap);
 static std::shared_ptr<ConnectedProperty> createProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy)
 {
-  auto property = proxy->readElementValue("").Get<basyx::objectMap_t>();
+  auto property = proxy->readElementValue("").Get<basyx::object::object_map_t>();
 
   if ( property.find(SubmodelPaths::PROPERTIES) != property.end() )
   {
@@ -42,7 +42,7 @@ static std::shared_ptr<ConnectedProperty> createProperty(std::shared_ptr<vab::co
   // Check if valueType is set
   if ( valueTypePtr != property.end() )
   {
-    auto valueType = valueTypePtr->second.Get<basyx::objectMap_t>();
+    auto valueType = valueTypePtr->second.Get<basyx::object::object_map_t>();
     return createSuitableProperty(proxy, property, valueType);
   }
 
@@ -56,9 +56,9 @@ static std::shared_ptr<ConnectedProperty> createProperty(std::shared_ptr<vab::co
   return nullptr;
 }
 
-static std::shared_ptr<ConnectedProperty> createSuitableProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy, basyx::objectMap_t & originalPropertyMap, basyx::objectMap_t & valueTypeMap)
+static std::shared_ptr<ConnectedProperty> createSuitableProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy, basyx::object::object_map_t & originalPropertyMap, basyx::object::object_map_t & valueTypeMap)
 {
-  auto valueType_typeObject = valueTypeMap.at(impl::metamodel::PropertyValueTypeIdentifier::TYPE_OBJECT).Get<basyx::objectMap_t>();
+  auto valueType_typeObject = valueTypeMap.at(impl::metamodel::PropertyValueTypeIdentifier::TYPE_OBJECT).Get<basyx::object::object_map_t>();
   auto propertyValueTypeName = valueType_typeObject.at(impl::metamodel::PropertyValueTypeIdentifier::TYPE_NAME).GetStringContent();
 
   // if map -> create map
@@ -80,7 +80,7 @@ static std::shared_ptr<ConnectedProperty> createSuitableProperty(std::shared_ptr
   }
 }
 
-static std::shared_ptr<ConnectedProperty> createSingleProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy, basyx::objectMap_t & originalPropertyMap)
+static std::shared_ptr<ConnectedProperty> createSingleProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy, basyx::object::object_map_t & originalPropertyMap)
 {
   ConnectedSingleProperty singleProperty(proxy);
   for ( auto & element : originalPropertyMap )

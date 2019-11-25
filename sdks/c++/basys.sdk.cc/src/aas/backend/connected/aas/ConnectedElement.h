@@ -24,14 +24,14 @@ class ConnectedElement : public IElement
 {
 public:
   ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy> & proxy);
-  ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy> & proxy, std::shared_ptr<basyx::objectMap_t> & local_values);
+  ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy> & proxy, std::shared_ptr<basyx::object::object_map_t> & local_values);
 
   virtual std::shared_ptr<vab::core::proxy::IVABElementProxy> getProxy() const;
 
-  basyx::any getLocalValue(const std::string & path) const;
-  void setLocalValue(const std::string & path, const basyx::any & value);
-  void setLocalValues(const basyx::objectMap_t & map);
-  void updateLocalValue(const std::string & path, const basyx::any value);
+  basyx::object getLocalValue(const std::string & path) const;
+  void setLocalValue(const std::string & path, const basyx::object & value);
+  void setLocalValues(const basyx::object::object_map_t & map);
+  void updateLocalValue(const std::string & path, const basyx::object value);
 
   // Inherited via IElement
   virtual void setId(const std::string & id) override;
@@ -40,12 +40,12 @@ public:
 
 private:
   std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy;
-  std::shared_ptr<basyx::objectMap_t> local_map;
+  std::shared_ptr<basyx::object::object_map_t> local_map;
 
 protected:
   std::string getProxyValue(const std::string & path) const;
-  std::shared_ptr<basyx::objectMap_t> getProxyMap(const std::string & path) const;
-  void setProxyValue(const std::string & path, const basyx::any value) const;
+  std::shared_ptr<basyx::object::object_map_t> getProxyMap(const std::string & path) const;
+  void setProxyValue(const std::string & path, const basyx::object value) const;
 
 };
 

@@ -37,11 +37,11 @@ class IProperty
 public:
   virtual PropertyType getPropertyType() const = 0;
 
-  virtual void setValue(const basyx::any & obj) = 0;
-  virtual basyx::any getValue() const = 0;
+  virtual void setValue(const basyx::object & obj) = 0;
+  virtual basyx::object getValue() const = 0;
 
-  virtual void setValueId(const basyx::any & obj) = 0;
-  virtual basyx::any getValueId() const = 0;
+  virtual void setValueId(const basyx::object & obj) = 0;
+  virtual basyx::object getValueId() const = 0;
 
 };
 

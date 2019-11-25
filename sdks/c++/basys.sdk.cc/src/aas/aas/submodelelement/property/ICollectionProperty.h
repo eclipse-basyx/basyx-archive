@@ -22,10 +22,10 @@ class ICollectionProperty
 public:
   virtual ~ICollectionProperty() = default;
 
-  virtual void set(const basyx::objectCollection_t & collection) const = 0;
-  virtual void add(const basyx::any & newValue) = 0;
-  virtual void remove(const basyx::any & objectRef) = 0;
-  virtual basyx::objectCollection_t getElements() const = 0;
+  virtual void set(const basyx::object::object_list_t & collection) const = 0;
+  virtual void add(const basyx::object & newValue) = 0;
+  virtual void remove(basyx::object & objectRef) = 0;
+  virtual basyx::object::object_list_t getElements() const = 0;
   virtual int getElementCount() const = 0;
 };
 

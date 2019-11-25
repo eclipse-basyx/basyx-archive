@@ -9,6 +9,8 @@
 
 #include "basyx/types.h"
 
+#include "basyx/object.h"
+
 #include <string>
 
 namespace basyx {
@@ -28,7 +30,7 @@ public:
   ~Description() = default;
 
   Description(const std::string & language, const std::string & text);
-  Description(basyx::objectMap_t & map);
+  Description(basyx::object::object_map_t & map);
 
   std::string getLanguage() const;
   std::string getText() const;

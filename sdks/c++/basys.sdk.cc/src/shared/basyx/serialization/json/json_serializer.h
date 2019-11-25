@@ -41,7 +41,7 @@ namespace json {
         json = string;
     };
 
-    // basyx::any serializer
+    // basyx::object serializer
 	inline void serialize_helper(json_t& json, const basyx::object& object)
 	{
         json = object;
@@ -53,7 +53,7 @@ namespace json {
 		json = list;
 	};
 
-    // basyx::objectMap_t serializer
+    // basyx::object::object_map_t serializer
     inline void serialize_helper(json_t& json, const basyx::object::object_map_t & objectMap)
     {
         json_t collectionTypes;
@@ -69,7 +69,7 @@ namespace json {
         }
     }
 
-    // basyx::objectCollection_t serializer
+    // basyx::object::object_list_t serializer
     inline void serialize_helper(json_t& json, const basyx::object::object_list_t& objectCollection)
     {
         for (const auto& object : objectCollection) {

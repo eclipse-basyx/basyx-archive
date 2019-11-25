@@ -22,14 +22,14 @@ private:
 	};
 public:
 	// Invoke wrapped function with no arguments
-	basyx::object invoke()
+	basyx::object invoke() const
 	{
 		return func(nullptr);
 	};
 
 	// Invoke wrapped function with argument
 	// Has to be primitive object or object list
-	basyx::object invoke(basyx::object & obj)
+	basyx::object invoke(basyx::object & obj) const
 	{
 		return func(&obj);
 	};

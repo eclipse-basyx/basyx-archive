@@ -14,12 +14,12 @@ SubModel::SubModel()
 
 }
 
-void SubModel::setProperties(const basyx::objectMap_t & properties)
+void SubModel::setProperties(const basyx::object::object_map_t & properties)
 {
   this->properties = properties;
 }
 
-void SubModel::setOperations(const basyx::objectMap_t & operations)
+void SubModel::setOperations(const basyx::object::object_map_t & operations)
 {
   this->properties = properties;
 }

@@ -12,6 +12,7 @@
 #include "aas/submodelelement/operation/IOperationVariable.h"
 #include "impl/metamodel/hashmap/aas/submodelelement/SubmodelElement.h"
 #include "aas/submodelelement/operation/IOperation.h"
+#include "basyx/object.h"
 
 namespace basyx {
 namespace submodel {
@@ -27,22 +28,22 @@ public:
 
   // constructors
   Operation();
-  Operation(operation_var_list in, operation_var_list out, std::shared_ptr<basyx::function_base> invocable);
+  Operation(operation_var_list in, operation_var_list out, basyx::detail::functionWrapper invocable);
 
   // Inherited via IOperation
   virtual operation_var_list getParameterTypes() const override;
   virtual operation_var_list getReturnTypes() const override;
-  virtual std::shared_ptr<basyx::function_base> getInvocable() const override;
-  virtual basyx::any invoke(basyx::objectCollection_t & parameters) const override;
+  virtual basyx::detail::functionWrapper getInvocable() const override;
+  virtual basyx::object invoke(basyx::object & parameters) const override;
 
   // not inherited
   void setParameterTypes(const operation_var_list & parameterTypes);
   void setReturnTypes(const operation_var_list & returnTypes);
-  void setInvocable(const std::shared_ptr<basyx::function_base> & invocable);
+  void setInvocable(basyx::detail::functionWrapper invocable);
   
 private:
   operation_var_list in_variables, out_variables;
-  std::shared_ptr<basyx::function_base> invocable;
+  basyx::detail::functionWrapper invocable;
 };
 
 }

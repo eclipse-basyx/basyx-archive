@@ -11,9 +11,7 @@
 namespace basyx {
 
 // Forward declarations
-
 class object;
-class function_base;
 
 namespace detail {
 	class functionWrapper;

@@ -9,6 +9,7 @@
 
 #include "aas/qualifier/IIdentifiable.h"
 #include "Referable.h"
+#include "basyx/object.h"
 
 namespace basyx {
 namespace submodel {

@@ -21,10 +21,10 @@ public:
   ConnectedCollectionProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
 	~ConnectedCollectionProperty() = default;
 
-  virtual void set(const basyx::objectCollection_t & collection) const override;
-  virtual void add(const basyx::any & newValue) override;
-  virtual void remove(const basyx::any & objectRef) override;
-  virtual basyx::objectCollection_t getElements() const override;
+  virtual void set(const basyx::object::object_list_t & collection) const override;
+  virtual void add(const basyx::object & newValue) override;
+  virtual void remove(basyx::object & objectRef) override;
+  virtual basyx::object::object_list_t getElements() const override;
   virtual int getElementCount() const override;
 
 };
