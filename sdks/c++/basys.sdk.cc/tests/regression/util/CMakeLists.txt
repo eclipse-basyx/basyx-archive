@@ -9,9 +9,9 @@ add_executable(tests_util)
 
 target_sources(tests_util
     PRIVATE
-        fundamentals/test_basyx_any.cc
-        fundamentals/test_basyx_array.cc
-		    test_AnyTypeChecker.cpp
+        fundamentals/test_basyx_object.cc
+		fundamentals/test_basyx_make_function.cc
+		serialization/test_basyx_object_serializer_json.cc
 )
 
 target_link_libraries(tests_util basyx::util basyx::shared lib::gtest tests::main)

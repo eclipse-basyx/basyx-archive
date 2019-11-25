@@ -8,15 +8,16 @@ add_library(basyx_util)
 
 target_sources(basyx_util
     PRIVATE
-        util/array.h
-        util/invoke.h
-        util/macros.h
-        util/meta.h
-        util/printer.h
-        util/tools/CoderTools.h
-        util/tools/StringTools.h
-        util/util.cpp
-        util/util.h
+		util/function_traits.h
+		util/invoke.h
+		util/macros.h
+		util/make_function.h
+		util/meta.h
+		util/printer.h
+		util/tools/CoderTools.h
+		util/tools/StringTools.h
+		util/util.cpp
+		util/util.h
 )
 
 target_include_directories(basyx_util PUBLIC ${PROJECT_SOURCE_DIR}) 

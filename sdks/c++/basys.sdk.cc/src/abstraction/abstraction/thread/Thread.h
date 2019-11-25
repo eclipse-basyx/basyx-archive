@@ -66,8 +66,7 @@ namespace basyx {
 
 		inline bool joinable()
 		{
-//			this->thread_impl(join)
-//			return WaitForSingleObject(thread_info->handle, 0) != WAIT_OBJECT_0;
+                    return false;
 		};
 	//Static utility functions
 	public:

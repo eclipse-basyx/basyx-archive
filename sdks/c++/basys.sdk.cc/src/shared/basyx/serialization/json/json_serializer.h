@@ -10,10 +10,9 @@
 
 #include <json/json.hpp>
 
-#include <basyx/function.h>
+#include <basyx/object/object_header.h>
 #include <basyx/types.h>
 
-#include <util/array.h>
 
 namespace basyx {
 namespace serialization {
@@ -35,45 +34,32 @@ namespace json {
     {
         json = value;
     };
+
     // std::string serializer
-    // isn't a fundamental type, so needs own serialization handling
     inline void serialize_helper(json_t& json, const std::string& string)
     {
         json = string;
     };
 
     // basyx::any serializer
-    inline void serialize_helper(json_t& json, const basyx::any& any)
-    {
-        json = any;
+	inline void serialize_helper(json_t& json, const basyx::object& object)
+	{
+        json = object;
     };
 
-    // basyx::array serializer
-    template <typename T>
-    inline void serialize_helper(json_t& json, const basyx::array<T>& array)
-    {
-        // serialize header
-        json = json_t {
-            { basyx::serialization::typeSpecifier, basyx::serialization::arraySpecifier },
-            { basyx::serialization::sizeSpecifier, array.size() },
-            { basyx::serialization::arrayTypeSpecifier, basyx::serialization::basysType<T>::string }
-        };
-
-        // serialize items
-        for (std::size_t i = 0; i < array.size(); ++i) {
-            json_t value;
-            serialize_helper(value, array.get(i));
-            json[std::to_string(i)] = value;
-        }
-    }
+	template<typename T>
+	inline void serialize_helper(json_t & json, const basyx::object::list_t<T> & list)
+	{
+		json = list;
+	};
 
     // basyx::objectMap_t serializer
-    inline void serialize_helper(json_t& json, const basyx::objectMap_t& objectMap)
+    inline void serialize_helper(json_t& json, const basyx::object::object_map_t & objectMap)
     {
         json_t collectionTypes;
 
         for (const auto& entry : objectMap) {
-            if (entry.second.InstanceOf<basyx::objectCollection_t>()) {
+            if (entry.second.InstanceOf<basyx::object::object_list_t>()) {
                 collectionTypes[entry.first] = "list";
             };
 
@@ -84,15 +70,12 @@ namespace json {
     }
 
     // basyx::objectCollection_t serializer
-    template<typename T>
-    inline void serialize_helper(json_t& json, const std::vector<T> & objectCollection)
-//    inline void serialize_helper(json_t& json, const basyx::objectCollection_t& objectCollection)
+    inline void serialize_helper(json_t& json, const basyx::object::object_list_t& objectCollection)
     {
         for (const auto& object : objectCollection) {
             json.push_back(object);
         }
     }
-
 };
 };
 };

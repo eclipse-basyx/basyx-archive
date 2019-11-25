@@ -14,11 +14,9 @@
 #include "snippet/MapRead.h"
 #include "snippet/MapCreateDelete.h"
 #include "snippet/MapInvoke.h"
+#include "snippet/TestCollectionProperty.h"
 
-#include "basyx/any.h"
 #include "basyx/serialization/json.h"
-
-#include "basyx/function.h"
 
 #include <memory>
 #include <unordered_map>
@@ -28,15 +26,15 @@ using namespace basyx;
 
 class TestBaSyxHashmapProvider : public ::testing::Test {
 public:
-    vab::provider::HashmapProvider hashMapProvider;
+    vab::provider::VABModelProvider hashMapProvider;
 
     virtual void SetUp()
     {
-        basyx::objectCollection_t collection;
+        basyx::object::list_t<int> collection;
         collection.emplace_back(1);
         collection.emplace_back(2);
 
-        basyx::objectMap_t outerMap, innerMap, propertyMap;
+        basyx::object::object_map_t outerMap, innerMap, propertyMap;
 
 		propertyMap.emplace("Test", 321);
 		propertyMap.emplace("test", 123);
@@ -47,7 +45,7 @@ public:
 			   		 	  
 		outerMap.emplace("property1", std::move(innerMap));
 
-        hashMapProvider = vab::provider::HashmapProvider{ std::move(outerMap) };
+        hashMapProvider = vab::provider::VABModelProvider{ std::move(outerMap) };
     }
 
     virtual void TearDown()
@@ -58,19 +56,19 @@ public:
 TEST_F(TestBaSyxHashmapProvider, GetPropertyValue)
 {
 	// Get property value
-	basyx::any  property1 = hashMapProvider.getModelPropertyValue("property1");
+	basyx::object  property1 = hashMapProvider.getModelPropertyValue("property1");
 
-	basyx::any  value1 = hashMapProvider.getModelPropertyValue("property1/property1.1");
-	basyx::any  value2 = hashMapProvider.getModelPropertyValue("/property1/property1.1");
-	basyx::any  value3 = hashMapProvider.getModelPropertyValue("property1/property1.1/");
-	basyx::any  value4 = hashMapProvider.getModelPropertyValue("/property1/property1.1/");
+	basyx::object  value1 = hashMapProvider.getModelPropertyValue("property1/property1.1");
+	basyx::object  value2 = hashMapProvider.getModelPropertyValue("/property1/property1.1");
+	basyx::object  value3 = hashMapProvider.getModelPropertyValue("property1/property1.1/");
+	basyx::object  value4 = hashMapProvider.getModelPropertyValue("/property1/property1.1/");
 
-	basyx::any  mapTest1 = hashMapProvider.getModelPropertyValue("property1/propertyMap/Test");
-	basyx::any  mapTest2 = hashMapProvider.getModelPropertyValue("property1/propertyMap/test");
+	basyx::object  mapTest1 = hashMapProvider.getModelPropertyValue("property1/propertyMap/Test");
+	basyx::object  mapTest2 = hashMapProvider.getModelPropertyValue("property1/propertyMap/test");
 
 	// Check test case results
-	ASSERT_TRUE(property1.InstanceOf<basyx::objectMap_t>());
-	ASSERT_EQ(property1.Get<basyx::objectMap_t&>().size(), 3);
+	ASSERT_TRUE(property1.InstanceOf<basyx::object::object_map_t>());
+	ASSERT_EQ(property1.Get<basyx::object::object_map_t&>().size(), 3);
 
 	ASSERT_TRUE(value1.InstanceOf<int>());
 	ASSERT_TRUE(value2.InstanceOf<int>());
@@ -94,11 +92,11 @@ int testFunc(int a, int b)
 
 TEST_F(TestBaSyxHashmapProvider, TestInvoke)
 {
-	hashMapProvider.createValue("function", basyx::make_function(testFunc));
+	hashMapProvider.createValue("function", basyx::object::make_function(testFunc));
 
-	basyx::objectCollection_t args{ 1,2 };
+	auto args = basyx::object::make_list<basyx::object>({ 1,2 });
 
-	auto val = hashMapProvider.invokeOperationImpl("function", args);
+	auto val = hashMapProvider.invokeOperation("function", args);
 
 	ASSERT_ANY_EQ(val, 3);
 }
@@ -107,7 +105,7 @@ TEST_F(TestBaSyxHashmapProvider, SetPropertyValue)
 {
 	// Set and reread property value
 	hashMapProvider.setModelPropertyValue("property1/property1.1", 12);
-	basyx::any  property1_1 = hashMapProvider.getModelPropertyValue("property1/property1.1");
+	basyx::object  property1_1 = hashMapProvider.getModelPropertyValue("property1/property1.1");
 
 	// Check test case results
 	ASSERT_TRUE(property1_1.InstanceOf<int>());
@@ -115,7 +113,7 @@ TEST_F(TestBaSyxHashmapProvider, SetPropertyValue)
 
 	// Change value back
 	hashMapProvider.setModelPropertyValue("property1/property1.1", 7);
-	basyx::any  property1_1b = hashMapProvider.getModelPropertyValue("property1/property1.1");
+	basyx::object  property1_1b = hashMapProvider.getModelPropertyValue("property1/property1.1");
 
 	// Check test case results
 	ASSERT_TRUE(property1_1b.InstanceOf<int>());
@@ -124,10 +122,10 @@ TEST_F(TestBaSyxHashmapProvider, SetPropertyValue)
 
 TEST_F(TestBaSyxHashmapProvider, CreateDelete)
 {
-    basyx::any  property1 = hashMapProvider.getModelPropertyValue("property1");
-    basyx::any  property1_1 = hashMapProvider.getModelPropertyValue("property1/property1.1");
+    basyx::object  property1 = hashMapProvider.getModelPropertyValue("property1");
+    basyx::object  property1_1 = hashMapProvider.getModelPropertyValue("property1/property1.1");
 
-    ASSERT_TRUE(property1.InstanceOf<basyx::objectMap_t>());
+    ASSERT_TRUE(property1.InstanceOf<basyx::object::object_map_t>());
     ASSERT_TRUE(property1_1.InstanceOf<int>());
     ASSERT_EQ(property1_1.Get<int>(), 7);
 
@@ -139,22 +137,22 @@ TEST_F(TestBaSyxHashmapProvider, CreateDelete)
     hashMapProvider.createValue("property1/property1.2", 23);
 
     // Read values back
-    basyx::any  property2 = hashMapProvider.getModelPropertyValue("property2");
+    basyx::object  property2 = hashMapProvider.getModelPropertyValue("property2");
     // - Check test case results
     ASSERT_TRUE(property2.InstanceOf<int>());
     ASSERT_EQ(property2.Get<int>(), 21);
 
     // Read values back
-    basyx::any  property1_4 = hashMapProvider.getModelPropertyValue("property1/property1.4");
+    basyx::object  property1_4 = hashMapProvider.getModelPropertyValue("property1/property1.4");
     // - Check test case results
     ASSERT_TRUE(property1_4.InstanceOf<int>());
     ASSERT_EQ(property1_4.Get<int>(), 22);
 
     // Read values back
-    basyx::any  property1_2 = hashMapProvider.getModelPropertyValue("property1/property1.2");
+    basyx::object  property1_2 = hashMapProvider.getModelPropertyValue("property1/property1.2");
     // - Check test case results
-    ASSERT_TRUE(property1_2.InstanceOf<basyx::objectCollection_t>());
-    ASSERT_EQ(property1_2.Get<basyx::objectCollection_t&>().size(), 3);
+    ASSERT_TRUE(property1_2.InstanceOf<basyx::object::list_t<int>>());
+    ASSERT_EQ(property1_2.Get<basyx::object::list_t<int>&>().size(), 3);
 
     // Delete properties
     hashMapProvider.deleteValue("property2");
@@ -162,38 +160,45 @@ TEST_F(TestBaSyxHashmapProvider, CreateDelete)
 //   	hashMapProvider.deleteValue("property1/property1.2", 23);
 
     // Read values back
-    //basyx::any  property2_del = hashMapProvider.getModelPropertyValue("property2");	// - Check test case results
+    //basyx::object  property2_del = hashMapProvider.getModelPropertyValue("property2");	// - Check test case results
     //assertEquals(null, value6);
 
     // Read values back
-    //basyx::any  property1_4del = hashMapProvider.getModelPropertyValue("property1/property1.4");	// - Check test case results
+    //basyx::object  property1_4del = hashMapProvider.getModelPropertyValue("property1/property1.4");	// - Check test case results
     // - Check test case results
     //assertEquals(null, value7);
 
     // Read values back
-    basyx::any  property1_2b = hashMapProvider.getModelPropertyValue("property1/property1.2");
+    basyx::object  property1_2b = hashMapProvider.getModelPropertyValue("property1/property1.2");
     // - Check test case results
-    ASSERT_TRUE(property1_2b.InstanceOf<basyx::objectCollection_t>());
-	ASSERT_EQ(property1_2b.Get<basyx::objectCollection_t&>().size(), 3);
+    ASSERT_TRUE(property1_2b.InstanceOf<basyx::object::list_t<int>>());
+	ASSERT_EQ(property1_2b.Get<basyx::object::list_t<int>&>().size(), 3);
 }
 
 TEST_F(TestBaSyxHashmapProvider, MapRead)
 {
-	vab::provider::HashmapProvider hashMapProvider{ tests::support::make_simple_vab_element() };
+	vab::provider::VABModelProvider hashMapProvider{ tests::support::make_simple_vab_element() };
 
 	tests::regression::vab::snippet::MapRead::test(&hashMapProvider);
 }
 
 TEST_F(TestBaSyxHashmapProvider, MapCreateDelete)
 {
-	vab::provider::HashmapProvider hashMapProvider{ tests::support::make_simple_vab_element() };
+	vab::provider::VABModelProvider hashMapProvider{ tests::support::make_simple_vab_element() };
 
 	tests::regression::vab::snippet::MapCreateDelete::test(&hashMapProvider);
 }
 
 TEST_F(TestBaSyxHashmapProvider, MapInvoke)
 {
-	vab::provider::HashmapProvider hashMapProvider{ tests::support::make_simple_vab_element() };
+	vab::provider::VABModelProvider hashMapProvider{ tests::support::make_simple_vab_element() };
 
 	tests::regression::vab::snippet::MapInvoke::test(&hashMapProvider);
+}
+
+TEST_F(TestBaSyxHashmapProvider, TestCollectionProperty)
+{
+	vab::provider::VABModelProvider hashMapProvider{ tests::support::make_simple_vab_element() };
+
+	tests::regression::vab::snippet::TestCollectionProperty::test(&hashMapProvider);
 }

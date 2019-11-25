@@ -1,9 +1,7 @@
 #include "SimpleVABElement.h"
 
-#include <basyx/any.h>
+#include <basyx/object.h>
 #include <basyx/types.h>
-
-#include <basyx/function.h>
 
 #include <set>
 
@@ -13,60 +11,47 @@ namespace support {
 
 	class testFuncs {
 	public:
-		static bool True() {
-			return true;
-		};
-
 		static int add(int a, int b) {
 			return a + b;
 		}
 	};
 
 
-	objectMap_t make_simple_vab_element()
+	basyx::object make_simple_vab_element()
 	{
-		objectMap_t simpleVABElement;
+		basyx::object vabElement = basyx::object::make_map();
 
-		objectMap_t primitives;
-		primitives.emplace("integer", 123);
-		primitives.emplace("double", 3.14);
-		primitives.emplace("string", std::string("TestValue"));
-		simpleVABElement.emplace("primitives", primitives);
+		// Add primivites
+		vabElement.insertKey("primitives", basyx::object::make_map());
+		vabElement.getProperty("primitives").insertKey("integer", 123);
+		vabElement.getProperty("primitives").insertKey("double", 3.14);
+		vabElement.getProperty("primitives").insertKey("string", std::string("TestValue"));
 
 		// Add function types
-		objectMap_t functions;
-		functions.emplace("supplier", basyx::make_function(testFuncs::True));
+		vabElement.insertKey("operations", basyx::object::make_map());
+		vabElement.getProperty("operations").insertKey("supplier", basyx::object::make_function([]() {return true; }));
+		vabElement.getProperty("operations").insertKey("complex", basyx::object::make_function(testFuncs::add));
+		vabElement.getProperty("operations").insertKey("serializable", basyx::object::make_function(testFuncs::add));
 
-		functions.emplace("complex", basyx::make_function(testFuncs::add));
-		functions.emplace("serializable", basyx::make_function(testFuncs::add));
-
-		functions.emplace("invalid", true);
-		functions.emplace("invokable", basyx::make_function(testFuncs::True));
-		simpleVABElement.emplace("operations", functions);
+		vabElement.getProperty("operations").insertKey("invalid", true);
+		vabElement.getProperty("operations").insertKey("invokable", basyx::object::make_function([]() {return true; }));
 
 		// Add structure types
-		objectMap_t structure;
-		objectMap_t emptyMap;
-		structure.emplace("map", emptyMap);
-		std::set<any> emptySet;
-		structure.emplace("set", emptySet);
-		std::vector<any> emptyVector;
-		structure.emplace("list", emptyVector);
-		simpleVABElement.emplace("structure", structure);
+		vabElement.insertKey("structure", basyx::object::make_map());
+		vabElement.getProperty("structure").insertKey("map", basyx::object::make_map());
+		vabElement.getProperty("structure").insertKey("set", basyx::object::make_set<bool>());
+		vabElement.getProperty("structure").insertKey("list", basyx::object::make_list<int>());
 
 		// Add corner cases
-		objectMap_t special;
-		special.emplace("casesensitivity", true);
-		special.emplace("caseSensitivity", false);
-		objectMap_t nestedA;
-		objectMap_t nestedB;
-		nestedB.emplace("value", 100);
-		nestedA.emplace("nested", nestedB);
-		special.emplace("nested", nestedA);
-		special.emplace("null", nullptr);
-		simpleVABElement.emplace("special", special);
-
-		return simpleVABElement;
+		vabElement.insertKey("special", basyx::object::make_map());
+		vabElement.getProperty("special").insertKey("casesensitivity", true);
+		vabElement.getProperty("special").insertKey("caseSensitivity", false);
+		vabElement.getProperty("special").insertKey("nested", basyx::object::make_map());
+		vabElement.getProperty("special").getProperty("nested").insertKey("nested", basyx::object::make_map());
+		vabElement.getProperty("special").getProperty("nested").getProperty("nested").insertKey("value", 100);
+		vabElement.getProperty("special").insertKey("null", basyx::object::make_null());
+		
+		return vabElement;
 	}
 
 }

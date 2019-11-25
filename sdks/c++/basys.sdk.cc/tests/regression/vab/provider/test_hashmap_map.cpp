@@ -9,7 +9,7 @@
 
 #include "vab/provider/hashmap/VABHashmapProvider.h"
 
-#include "basyx/any.h"
+#include "basyx/object.h"
 
 #include <memory>
 #include <unordered_map>
@@ -17,18 +17,18 @@
 
 class TestBaSyxHashmapProviderMap : public ::testing::Test {
 public:
-    basyx::vab::provider::HashmapProvider hashMapProvider;
+    basyx::vab::provider::VABModelProvider hashMapProvider;
 
 	const std::string mapPath{"property1/propertyMap"};
 
     virtual void SetUp()
     {
-        basyx::objectMap_t outerMap, innerMap, propertyMap;
+        basyx::object::object_map_t outerMap, innerMap, propertyMap;
         propertyMap.emplace("test", 123);
 		innerMap.emplace("propertyMap", propertyMap);
         outerMap.emplace("property1", innerMap);
 
-        hashMapProvider = basyx::vab::provider::HashmapProvider { std::move(outerMap) };
+        hashMapProvider = basyx::vab::provider::VABModelProvider{ std::move(outerMap) };
     }
 
     virtual void TearDown()
@@ -39,24 +39,24 @@ public:
 
 TEST_F(TestBaSyxHashmapProviderMap, testGet)
 {
-	basyx::any anyMap = hashMapProvider.getModelPropertyValue(mapPath);
-	ASSERT_TRUE(anyMap.InstanceOf<basyx::objectMap_t>());
+	basyx::object anyMap = hashMapProvider.getModelPropertyValue(mapPath);
+	ASSERT_TRUE(anyMap.InstanceOf<basyx::object::object_map_t>());
 
-	auto & objectMap = anyMap.Get<basyx::objectMap_t&>();
+	auto & objectMap = anyMap.Get<basyx::object::object_map_t&>();
 	ASSERT_EQ(objectMap.size(), 1);
 };
 
 TEST_F(TestBaSyxHashmapProviderMap, testUpdateComplete)
 {
 	// Replace entries in map
-	basyx::objectMap_t replacement;
+	basyx::object::object_map_t replacement;
 	replacement.emplace("a", 1);
 	replacement.emplace("b", 2);
 
 	hashMapProvider.setModelPropertyValue(mapPath, std::move(replacement));
 
 	// Read values back
-	auto & map = hashMapProvider.getModelPropertyValue(mapPath).Get<basyx::objectMap_t&>();
+	auto & map = hashMapProvider.getModelPropertyValue(mapPath).Get<basyx::object::object_map_t&>();
 	
 	// Check test case results
 	ASSERT_EQ(map.size(), 2);
@@ -71,7 +71,7 @@ TEST_F(TestBaSyxHashmapProviderMap, testUpdateElement)
 	hashMapProvider.createValue(mapPath + "/a", 2);
 
 	// Read values back
-	auto & map = hashMapProvider.getModelPropertyValue(mapPath).Get<basyx::objectMap_t&>();
+	auto & map = hashMapProvider.getModelPropertyValue(mapPath).Get<basyx::object::object_map_t&>();
 
 	// Check test case results
 //	EXPECT_EQ(map.size(), 2);
@@ -85,7 +85,7 @@ TEST_F(TestBaSyxHashmapProviderMap, testRemoveElement)
 	hashMapProvider.deleteValue(mapPath + "/test");
 
 	// Read values back
-	auto & map = hashMapProvider.getModelPropertyValue(mapPath).Get<basyx::objectMap_t&>();
+	auto & map = hashMapProvider.getModelPropertyValue(mapPath).Get<basyx::object::object_map_t&>();
 
 	// Check test case results
 	ASSERT_EQ(map.size(), 0);

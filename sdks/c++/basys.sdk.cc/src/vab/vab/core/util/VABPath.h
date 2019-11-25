@@ -120,13 +120,6 @@ public:
   VABPath operator+(VABPath const& other);
 
   /**
-    * Adds subpath to path. 
-    * I.e. VABPath("basyx://127.0.0.1:6998") + "subpath" will result in 
-    * VABPath with "basyx://127.0.0.1:6998/subpath".
-    */
-  VABPath operator+(std::string const & subpath);
-
-  /**
       * Operator for implicit cast to std::string.
       */
   operator std::string() const;

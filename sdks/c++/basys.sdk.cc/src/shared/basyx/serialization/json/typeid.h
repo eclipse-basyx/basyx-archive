@@ -1,8 +1,6 @@
 #ifndef BASYX_JSON_TYPEID_H
 #define BASYX_JSON_TYPEID_H
 
-//#include "basyx/types.h"
-
 #include <string>
 
 namespace basyx {

@@ -112,7 +112,7 @@ namespace basyx {
 					{
 						log.trace("Closing socket...");
 
-						this->socket->shutdown(SHUTDOWN_RDWR);
+						//this->socket->shutdown(SHUTDOWN_RDWR);
 						this->socket->close();
 						this->socket.reset();
 					}

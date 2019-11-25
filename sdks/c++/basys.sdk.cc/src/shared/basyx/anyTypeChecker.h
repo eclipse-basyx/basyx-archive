@@ -15,15 +15,15 @@ namespace basyx {
 
 namespace PropertyTypeInfo
 {
-  static constexpr char STRING[] = "string";
-  static constexpr char INT[] = "int";
-  static constexpr char COLLECTION[] = "collection";
-  static constexpr char MAP[] = "map";
-  static constexpr char BOOL[] = "boolean";
-  static constexpr char DOUBLE[] = "double";
-  static constexpr char FLOAT[] = "long";
-  static constexpr char PROPNULL[] = "null";
-  static constexpr char NONETYPE[] = "Type not specified";
+	static constexpr char STRING[] = "string";
+	static constexpr char INT[] = "int";
+	static constexpr char COLLECTION[] = "collection";
+	static constexpr char MAP[] = "map";
+	static constexpr char BOOL[] = "boolean";
+	static constexpr char DOUBLE[] = "double";
+	static constexpr char FLOAT[] = "long";
+	static constexpr char PROPNULL[] = "null";
+	static constexpr char NONETYPE[] = "Type not specified";
 }
 
 

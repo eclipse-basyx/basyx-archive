@@ -38,10 +38,10 @@ TEST(BaSyxNativeFrameProcessor, getTest) {
 	ASSERT_EQ(receive.get()[0], (char ) 0);
 
 	std::string serialized = StringTools::fromArray(receive.get() + 1);
-	basyx::any deserialzed = basyx::serialization::json::deserialize(serialized);
+	basyx::object deserialzed = basyx::serialization::json::deserialize(serialized);
 
-	ASSERT_TRUE(deserialzed.InstanceOf<basyx::objectMap_t>());
-	auto & entityWrapper = deserialzed.Get<basyx::objectMap_t&>();
+	ASSERT_TRUE(deserialzed.InstanceOf<basyx::object::object_map_t>());
+	auto & entityWrapper = deserialzed.Get<basyx::object::object_map_t&>();
 
 	ASSERT_TRUE(entityWrapper.count("entity") == 1);
 	auto val = entityWrapper["entity"];
@@ -204,13 +204,8 @@ TEST(BaSyxNativeFrameProcessor, invokeTest) {
 
 	ASSERT_EQ(mockup->called, MockupModelProvider::CalledFunction::INVOKE);
 	ASSERT_EQ(mockup->path, path);
-	ASSERT_TRUE(mockup->val.InstanceOf<basyx::objectCollection_t>());
-	ASSERT_EQ(mockup->val.Get<basyx::objectCollection_t&>().size(), 1);
-
-	auto & calledArgs = mockup->val.Get<basyx::objectCollection_t&>();
-
-	ASSERT_TRUE(calledArgs[0].InstanceOf<int>());
-	ASSERT_EQ(calledArgs.front().Get<int>(), 10);
+	ASSERT_TRUE(mockup->val.InstanceOf<int>());
+	ASSERT_EQ(mockup->val.Get<int>(), 10);
 
 	ASSERT_EQ(receive.get()[0], (char ) 0);
 

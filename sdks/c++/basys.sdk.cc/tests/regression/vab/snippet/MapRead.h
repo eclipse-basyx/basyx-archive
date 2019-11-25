@@ -22,7 +22,7 @@ class MapRead {
 public:
 
 	//template<typename T>
-	//static void ASSERT_ANY_EQ(basyx::any & a, const T & val)
+	//static void ASSERT_ANY_EQ(basyx::object & a, const T & val)
 	//{
 	//	ASSERT_TRUE(a.InstanceOf<T>());
 	//	ASSERT_EQ(val, a.Get<T&>());
@@ -31,8 +31,8 @@ public:
 
     static void test(basyx::vab::core::IModelProvider * modelProvider) {
 		// Test path access
-		auto slashA = modelProvider->getModelPropertyValue("/primitives/integer");
 		auto slashB = modelProvider->getModelPropertyValue("primitives/integer/");
+		auto slashA = modelProvider->getModelPropertyValue("/primitives/integer");
 		auto slashC = modelProvider->getModelPropertyValue("/primitives/integer/");
 		auto slashD = modelProvider->getModelPropertyValue("/primitives/integer/");
 
@@ -46,12 +46,12 @@ public:
 		auto doubleValue = modelProvider->getModelPropertyValue("primitives/double");
 		auto string = modelProvider->getModelPropertyValue("primitives/string");
 
-		ASSERT_TRUE(map.InstanceOf<objectMap_t>());
+		ASSERT_TRUE(map.InstanceOf<basyx::object::object_map_t>());
 		ASSERT_TRUE(doubleValue.InstanceOf<double>());
 		ASSERT_TRUE(string.InstanceOf<std::string>());
 
 
-		ASSERT_EQ(3, map.Get<objectMap_t>().size());
+		ASSERT_EQ(3, map.Get<basyx::object::object_map_t&>().size());
 
 		ASSERT_EQ(3.14, doubleValue.Get<double>());
 //		ASSERT_EQ("TestValue", string);
@@ -88,11 +88,11 @@ public:
 		auto rootValueA = modelProvider->getModelPropertyValue("");
 		auto rootValueB = modelProvider->getModelPropertyValue("/");
 
-		ASSERT_TRUE(rootValueA.InstanceOf<objectMap_t>());
-		ASSERT_TRUE(rootValueB.InstanceOf<objectMap_t>());
+		ASSERT_TRUE(rootValueA.InstanceOf<basyx::object::object_map_t>());
+		ASSERT_TRUE(rootValueB.InstanceOf<basyx::object::object_map_t>());
 
-		ASSERT_EQ(4, rootValueA.Get<objectMap_t>().size());
-		ASSERT_EQ(4, rootValueB.Get<objectMap_t>().size());
+		ASSERT_EQ(4, rootValueA.Get<basyx::object::object_map_t&>().size());
+		ASSERT_EQ(4, rootValueB.Get<basyx::object::object_map_t&>().size());
 	}
 };
 

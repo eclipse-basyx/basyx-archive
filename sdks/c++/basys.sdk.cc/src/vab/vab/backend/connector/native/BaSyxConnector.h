@@ -30,21 +30,21 @@ namespace native {
         virtual ~NativeConnector();
 
     public:
-        virtual ::basyx::any basysGet(std::string const& path) override;
+        virtual ::basyx::object basysGet(std::string const& path) override;
 
         virtual nlohmann::json basysGetRaw(std::string const& path) override;
 
-        virtual void basysSet(std::string const& path, const ::basyx::any& newValue) override;
+        virtual void basysSet(std::string const& path, const ::basyx::object& newValue) override;
 
-        virtual void basysCreate(std::string const& servicePath, const ::basyx::any& val)
+        virtual void basysCreate(std::string const& servicePath, const ::basyx::object& val)
             override;
 
-        virtual ::basyx::any basysInvoke(std::string const& servicePath, const ::basyx::any& param)
+        virtual ::basyx::object basysInvoke(std::string const& servicePath, const ::basyx::object& param)
             override;
 
         virtual void basysDelete(std::string const& servicePath) override;
 
-        virtual void basysDelete(std::string const& servicePath, const ::basyx::any& obj) override;
+        virtual void basysDelete(std::string const& servicePath, const ::basyx::object& obj) override;
 
     private:
         basyx::net::tcp::Socket socket;
@@ -54,7 +54,7 @@ namespace native {
         void sendData(char* data, size_t size);
 
         size_t receiveData(char* data);
-        basyx::any decode(char* buffer);
+        basyx::object decode(char* buffer);
         basyx::log log;
     };
 

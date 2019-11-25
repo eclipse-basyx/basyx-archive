@@ -11,7 +11,7 @@
 
 #include <string>
 
-#include <basyx/any.h>
+#include <basyx/object.h>
 #include <basyx/basysid/BaSysID.h>
 #include <basyx/serialization/json.h>
 
@@ -73,22 +73,24 @@ public:
     {
 		auto deserialized = basyx::serialization::json::deserialize(serializedJSONValue);
 
-        basyx::any res;
+		auto res = providerBackend->invokeOperation(path, deserialized);
 
-        if (deserialized.InstanceOf<basyx::objectCollection_t>()) {
-            auto& parameters = deserialized.Get<basyx::objectCollection_t&>();
-            res = providerBackend->invokeOperationImpl(path, parameters);
-        } else {
-            res = providerBackend->invokeOperation(path, deserialized);
-        }
+		return serializeToJSON(path, res);
 
-        return serializeToJSON(path, res);
+//        if (deserialized.InstanceOf<basyx::object::object_list_t>()) {
+//            //auto& parameters = deserialized.Get<basyx::object::object_list_t&>();
+//			
+//            //TODO: res = providerBackend->invokeOperationImpl(path, parameters);
+//        } else {
+////TODO:            res = providerBackend->invokeOperation(path, deserialized);
+//        }
+
     }
 
 private:
     Provider* providerBackend;
 
-    std::string serializeToJSON(const std::string& path, const basyx::any& value)
+    std::string serializeToJSON(const std::string& path, const basyx::object& value)
     {
         auto json = basyx::serialization::json::serialize(value);
 
@@ -100,7 +102,7 @@ private:
     void incrementClock(std::string const& submodelPath)
     {
         std::string clockPath = submodelPath + "/properties/clock";
-        basyx::any clock = providerBackend->getModelPropertyValue(clockPath);
+        basyx::object clock = providerBackend->getModelPropertyValue(clockPath);
 
 		if (clock.IsNull()) {
 			providerBackend->createValue(clockPath, 1);
@@ -112,7 +114,7 @@ private:
 
     bool isFrozen(std::string const& submodelPath)
     {
-        basyx::any modelPropertyValue = providerBackend->getModelPropertyValue(submodelPath + "/properties/frozen");
+        basyx::object modelPropertyValue = providerBackend->getModelPropertyValue(submodelPath + "/properties/frozen");
 
         if (modelPropertyValue.IsNull())
             return false;

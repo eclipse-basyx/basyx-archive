@@ -1,0 +1,58 @@
+#ifndef SHARED_BASYX_OBJECT_IMPL_OBJECT_FACTORIES_IMPL_H
+#define SHARED_BASYX_OBJECT_IMPL_OBJECT_FACTORIES_IMPL_H
+
+#include <util/printer.h>
+#include <util/util.h>
+#include <util/make_function.h>
+
+#include <basyx/object/obj_function.h>
+#include <basyx/object/obj_holder.h>
+#include <basyx/object/obj_ref_holder.h>
+
+template <typename T>
+basyx::object::object(const T& t)
+: content{ std::make_shared<basyx::detail::objHolder<typename std::remove_cv<typename std::decay<const T>::type>::type>>(t) } {};
+
+
+
+template<typename T>
+basyx::object basyx::object::make_object_ref(T* t)
+{
+	basyx::object obj;
+	obj.content = std::make_shared<detail::objRefHolder<
+		typename std::remove_cv<typename std::decay<const T>::type>::type>>(t);
+	return obj;
+};
+
+template<typename T, typename... Args>
+basyx::object basyx::object::make_list(Args && ... args)
+{
+	return basyx::object{ object::list_t<T>(std::forward<Args>(args)...) };
+};
+
+template<typename T>
+basyx::object basyx::object::make_list(std::initializer_list<T> l)
+{
+	return basyx::object{ object::list_t<T>(std::forward<std::initializer_list<T>>(l)) };
+};
+
+template<typename T, typename... Args>
+basyx::object basyx::object::make_set(Args && ... args)
+{
+	return basyx::object{ object::set_t<T>(std::forward<Args>(args)...) };
+};
+
+template<typename... Args>
+basyx::object basyx::object::make_map(Args && ... args)
+{
+	return basyx::object{ object::object_map_t(std::forward<Args>(args)...) };
+};
+
+template<typename... Args>
+basyx::object basyx::object::make_function(Args && ... args)
+{
+	return basyx::detail::functionWrapper::wrap_func(util::make_function(std::forward<Args>(args)...));
+	//			return basyx::object::make_null();
+};
+
+#endif /* SHARED_BASYX_OBJECT_IMPL_OBJECT_FACTORIES_IMPL_H */

@@ -9,7 +9,7 @@
 
 #include "vab/provider/hashmap/VABHashmapProvider.h"
 
-#include "basyx/any.h"
+#include "basyx/object.h"
 
 #include <memory>
 #include <unordered_map>
@@ -17,20 +17,16 @@
 
 class TestBaSyxHashmapProviderCollection : public ::testing::Test {
 public:
-    basyx::vab::provider::HashmapProvider hashMapProvider;
+    basyx::vab::provider::VABModelProvider hashMapProvider;
 
     virtual void SetUp()
     {
-        basyx::objectCollection_t collection;
-        collection.emplace_back(1);
-        collection.emplace_back(2);
+		auto outerMap = basyx::object::make_map();
+		outerMap.insertKey("property1", basyx::object::make_map());
+		outerMap.getProperty("property1").insertKey("property1.1", 7);
+		outerMap.getProperty("property1").insertKey("property1.2", basyx::object::make_list<int>({ 1,2 }));
 
-        basyx::objectMap_t outerMap, propertyMap;
-        propertyMap.emplace("property1.1", 7);
-        propertyMap.emplace("property1.2", std::move(collection));
-        outerMap.emplace("property1", std::move(propertyMap));
-
-        hashMapProvider = basyx::vab::provider::HashmapProvider{ std::move(outerMap) };
+        hashMapProvider = basyx::vab::provider::VABModelProvider{ std::move(outerMap) };
     }
 
     virtual void TearDown()

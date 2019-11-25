@@ -25,14 +25,14 @@ size_t BaSyxNativeFrameBuilder::buildGetFrame(std::string const& path, char * bu
 	return encodeCommandAndPath(BaSyxCommand::GET, path, buffer);
 }
 
-size_t BaSyxNativeFrameBuilder::buildSetFrame(std::string const& path, const basyx::any & newVal, char * buffer)
+size_t BaSyxNativeFrameBuilder::buildSetFrame(std::string const& path, const basyx::object & newVal, char * buffer)
 {
 	size_t size = encodeCommandAndPath(BaSyxCommand::SET, path, buffer);
 	size += encodeValue(newVal, buffer + size);
 	return size;
 }
 
-size_t BaSyxNativeFrameBuilder::buildCreateFrame(std::string const& path, const basyx::any & newVal, char * buffer)
+size_t BaSyxNativeFrameBuilder::buildCreateFrame(std::string const& path, const basyx::object & newVal, char * buffer)
 {
 	size_t size = encodeCommandAndPath(BaSyxCommand::CREATE, path, buffer);
 	size += encodeValue(newVal, buffer + size);
@@ -44,21 +44,21 @@ size_t BaSyxNativeFrameBuilder::buildDeleteFrame(std::string const& path, char *
 	return encodeCommandAndPath(BaSyxCommand::DEL, path, buffer);
 }
 
-size_t BaSyxNativeFrameBuilder::buildDeleteFrame(std::string const& path, const basyx::any & deleteVal, char * buffer)
+size_t BaSyxNativeFrameBuilder::buildDeleteFrame(std::string const& path, const basyx::object & deleteVal, char * buffer)
 {
 	size_t size = encodeCommandAndPath(BaSyxCommand::DEL, path, buffer);
 	size += encodeValue(deleteVal, buffer + size);
 	return size;
 }
 
-size_t BaSyxNativeFrameBuilder::buildInvokeFrame(std::string const& path, const basyx::any & param, char * buffer)
+size_t BaSyxNativeFrameBuilder::buildInvokeFrame(std::string const& path, const basyx::object & param, char * buffer)
 {
 	size_t size = encodeCommandAndPath(BaSyxCommand::INVOKE, path, buffer);
 	size += encodeValue(param, buffer + size);
 	return size;
 }
 
-size_t BaSyxNativeFrameBuilder::buildInvokeFrame(std::string const& path, const basyx::objectCollection_t & params, char * buffer)
+size_t BaSyxNativeFrameBuilder::buildInvokeFrame(std::string const& path, const basyx::object::object_list_t & params, char * buffer)
 {
 	size_t size = encodeCommandAndPath(BaSyxCommand::INVOKE, path, buffer);
 	size += encodeValue(params, buffer + size);
@@ -71,7 +71,7 @@ size_t BaSyxNativeFrameBuilder::encodeCommand(BaSyxCommand command, char* buffer
 	return 1;
 }
 
-std::size_t BaSyxNativeFrameBuilder::encodeValue(const basyx::any & value, char * buffer)
+std::size_t BaSyxNativeFrameBuilder::encodeValue(const basyx::object & value, char * buffer)
 {
 	std::string dumped = basyx::serialization::json::serialize(value).dump(4);
 	return StringTools::toArray(dumped, buffer);

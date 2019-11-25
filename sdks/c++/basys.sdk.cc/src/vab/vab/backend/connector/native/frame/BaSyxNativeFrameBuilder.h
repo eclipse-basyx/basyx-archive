@@ -13,7 +13,7 @@
 
 
 #include <basyx/types.h>
-#include <basyx/any.h>
+#include "basyx/object.h"
 
 //#include <vab/provider/basyx/frame/BaSyxNativeFrameProcessor.h>
 
@@ -33,22 +33,22 @@ namespace frame {
 
         size_t buildGetFrame(std::string const& path, char* buffer);
 
-        size_t buildSetFrame(std::string const& path, const basyx::any& newVal, char* buffer);
+        size_t buildSetFrame(std::string const& path, const basyx::object& newVal, char* buffer);
 
-        size_t buildCreateFrame(std::string const& path, const basyx::any& newVal, char* buffer);
+        size_t buildCreateFrame(std::string const& path, const basyx::object& newVal, char* buffer);
 
         size_t buildDeleteFrame(std::string const& path, char* buffer);
 
-        size_t buildDeleteFrame(std::string const& path, const basyx::any& deleteVal, char* buffer);
+        size_t buildDeleteFrame(std::string const& path, const basyx::object& deleteVal, char* buffer);
 
-        size_t buildInvokeFrame(std::string const& path, const basyx::any& param, char* buffer);
-		size_t buildInvokeFrame(std::string const& path, const basyx::objectCollection_t & params, char * buffer);
+        size_t buildInvokeFrame(std::string const& path, const basyx::object& param, char* buffer);
+		size_t buildInvokeFrame(std::string const& path, const basyx::object::object_list_t & params, char * buffer);
     private:
         size_t encodeCommand(BaSyxCommand command, char* buffer);
 
         size_t encodeCommandAndPath(BaSyxCommand command, std::string const& path, char* buffer);
 
-        std::size_t encodeValue(const ::basyx::any& value, char* buffer);
+        std::size_t encodeValue(const ::basyx::object& value, char* buffer);
     };
 
 

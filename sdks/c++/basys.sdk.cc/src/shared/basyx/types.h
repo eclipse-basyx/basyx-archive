@@ -11,23 +11,24 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <bitset>
-
-#include <basyx/any/any.h>
 
 namespace basyx {
-    using objectCollection_t = std::vector<basyx::any>;
-    using objectMap_t = std::unordered_map<std::string, basyx::any>;
 
-    template<class T>
-    using specificCollection_t = std::vector<std::shared_ptr<T>>;
+	enum class BaseType
+	{
+		Primitive,
+		HashMap,
+		Set,
+		List
+	};
 
-    template<class T>
-    using specificMap_t = std::unordered_map<std::string, std::shared_ptr<T>>;
-
-  //using objectSet_t = std::unordered_set<basyx::any>;
-    using byte = uint8_t;
-    using byte_array = std::vector<byte>;
+	enum class ValueType
+	{
+		Bool,
+		Int,
+		Float,
+		String
+	};
 };
 
 enum BaSyxCommand {

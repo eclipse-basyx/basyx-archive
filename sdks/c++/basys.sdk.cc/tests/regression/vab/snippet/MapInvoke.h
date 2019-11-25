@@ -22,19 +22,18 @@ class MapInvoke {
 public:
 
     static void test(basyx::vab::core::IModelProvider * modelProvider) {
-		auto complex = modelProvider->invokeOperation("operations/complex", 12, 34);
+		auto complex = modelProvider->invokeOperation("operations/complex", basyx::object::make_list<object>({ 12 , 34 }));
 		ASSERT_ANY_EQ(complex, 46);
 
 		// Invoke unsupported functional interface
-		auto supplier = modelProvider->invokeOperation("operations/supplier");
-//		assertNull(supplier);
+		auto supplier = modelProvider->invokeOperation("operations/supplier", basyx::object::make_null());
 
 		// Invoke non-existing operation
-		auto nonExisting = modelProvider->invokeOperation("operations/unknown");
+		auto nonExisting = modelProvider->invokeOperation("operations/unknown", basyx::object::make_null());
 		ASSERT_TRUE(nonExisting.IsNull());
 
 		// Invoke invalid operation -> not a function, but a primitive data type
-		auto invalid = modelProvider->invokeOperation("operations/invalid");
+		auto invalid = modelProvider->invokeOperation("operations/invalid", basyx::object::make_null());
 		ASSERT_TRUE(invalid.IsNull());
 
 		/*
@@ -58,7 +57,7 @@ public:
 		}*/
 
 		// Empty paths - should execute, but has no effect
-		auto empty = modelProvider->invokeOperation("", "" );
+		auto empty = modelProvider->invokeOperation("", basyx::object::make_null());
 		ASSERT_TRUE(empty.IsNull());
 	}
 };

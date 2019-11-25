@@ -10,7 +10,7 @@
 
 #include <basyx/serialization/json/json.h>
 
-#include <basyx/any.h>
+#include "basyx/object.h"
 
 #include <string>
 
@@ -26,7 +26,7 @@ public:
 	 * Invoke a BaSys get operation. Retrieves the AAS, Submodel, Property, Operation or value at the given path.
 	 * @return the de-serialized ElementRef
 	 */
-	virtual basyx::any basysGet(std::string const& path) = 0;
+	virtual basyx::object basysGet(std::string const& path) = 0;
 
 	/**
 	 * Invoke a BaSys get operation without de-serialization
@@ -37,17 +37,17 @@ public:
 	/**
 	 * Invoke a Basys Set operation. Sets or overrides existing property, operation or event.
 	 */
-	virtual void basysSet(std::string const& path, const basyx::any &  newValue) = 0;
+	virtual void basysSet(std::string const& path, const basyx::object &  newValue) = 0;
 
 	/**
 	 * Creates a new Property, Operation, Event, Submodel or AAS
 	 */
-	virtual void basysCreate(std::string const& servicePath, const basyx::any & value) = 0;
+	virtual void basysCreate(std::string const& servicePath, const basyx::object & value) = 0;
 
 	/**
 	 * Invoke a Basys Invoke operation. Invokes an operation on the server.
 	 */
-	virtual basyx::any basysInvoke(std::string const& servicePath, const basyx::any & param) = 0;
+	virtual basyx::object basysInvoke(std::string const& servicePath, const basyx::object & param) = 0;
 
 	/**
 	 * Invoke a Basys operation. Deletes any resource under the given path.
@@ -58,7 +58,7 @@ public:
 	/**
 	 * Invoke a Basys oxperation. Deletes an entry from a map or collection by the given key
 	 */
-	virtual void basysDelete(std::string const& servicePath, const basyx::any & obj) = 0;
+	virtual void basysDelete(std::string const& servicePath, const basyx::object & obj) = 0;
 };
 
 }

@@ -37,7 +37,7 @@ NativeConnector::~NativeConnector() {
 
 
 
-basyx::any NativeConnector::basysGet(std::string const& path)
+basyx::object NativeConnector::basysGet(std::string const& path)
 {
 	log.trace("basysGet() called:");
 	log.trace("    path: {}", path);
@@ -58,7 +58,7 @@ nlohmann::json NativeConnector::basysGetRaw(std::string const& path) {
 	return nlohmann::json::parse(data);
 }
 
-void NativeConnector::basysSet(std::string const& path, const basyx::any & newValue)
+void NativeConnector::basysSet(std::string const& path, const basyx::object & newValue)
 {
 	log.trace("basysSet() called:");
 	log.trace("    path: {}", path);
@@ -68,14 +68,14 @@ void NativeConnector::basysSet(std::string const& path, const basyx::any & newVa
 	size = receiveData(buffer.data());
 }
 
-void NativeConnector::basysCreate(std::string const& path, const basyx::any & val)
+void NativeConnector::basysCreate(std::string const& path, const basyx::object & val)
 {
 	size_t size = builder.buildCreateFrame(path, val, buffer.data() + BASYX_FRAMESIZE_SIZE);
 	sendData(buffer.data(), size);
 	size = receiveData(buffer.data());
 }
 
-basyx::any NativeConnector::basysInvoke(std::string const& path, const basyx::any & param)
+basyx::object NativeConnector::basysInvoke(std::string const& path, const basyx::object & param)
 {
 	size_t size = builder.buildInvokeFrame(path, param, buffer.data() + BASYX_FRAMESIZE_SIZE);
 	sendData(buffer.data(), size);
@@ -90,7 +90,7 @@ void NativeConnector::basysDelete(std::string const& path)
 	size = receiveData(buffer.data());
 }
 
-void NativeConnector::basysDelete(std::string const& path, const basyx::any & obj) {
+void NativeConnector::basysDelete(std::string const& path, const basyx::object & obj) {
 	size_t size = builder.buildDeleteFrame(path, obj, buffer.data() + BASYX_FRAMESIZE_SIZE);
 	sendData(buffer.data(), size);
 	size = receiveData(buffer.data());
@@ -147,10 +147,10 @@ size_t NativeConnector::receiveData(char* data) {
 	}
 }
 
-basyx::any NativeConnector::decode(char* buffer)
+basyx::object NativeConnector::decode(char* buffer)
 {
 	std::string data = StringTools::fromArray(buffer);
-	return basyx::serialization::json::deserialize(data).Get<basyx::objectMap_t&>()["entity"];
+	return basyx::serialization::json::deserialize(data).Get<basyx::object::object_map_t&>()["entity"];
 };
 
 }

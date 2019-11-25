@@ -12,6 +12,7 @@
 #include "vab/backend/connector/native/frame/BaSyxNativeFrameBuilder.h"
 
 #include "basyx/types.h"
+#include <basyx/object.h>
 
 #include "util/util.h"
 #include "util/tools/StringTools.h"
@@ -36,7 +37,7 @@ TEST(BaSyxNativeFrameBuilder, buildSetFrame) {
 
 	std::unique_ptr<char> buffer(new char[1000]);
 	std::string path = "TestPath";
-	basyx::any val = 10;
+	basyx::object val = 10;
 	std::string valSerialize = basyx::serialization::json::serialize(val).dump(4);
 
 	size_t size = builder->buildSetFrame(path, val, buffer.get());
@@ -53,7 +54,7 @@ TEST(BaSyxNativeFrameBuilder, buildCreateFrame) {
 
 	std::unique_ptr<char> buffer(new char[1000]);
 	std::string path = "TestPath";
-	basyx::any val = 10;
+	basyx::object val = 10;
 	std::string valSerialize = basyx::serialization::json::serialize(val).dump(4);
 
 	size_t size = builder->buildCreateFrame(path, val, buffer.get());
@@ -84,7 +85,7 @@ TEST(BaSyxNativeFrameBuilder, buildComplexDeleteFrame) {
 
 	std::unique_ptr<char> buffer(new char[1000]);
 	std::string path = "TestPath";
-	basyx::any val = 10;
+	basyx::object val = 10;
 	std::string valSerialize = basyx::serialization::json::serialize(val).dump(4);
 
 	size_t size = builder->buildDeleteFrame(path, val, buffer.get());
@@ -101,7 +102,7 @@ TEST(BaSyxNativeFrameBuilder, buildInvokeFrame) {
 
 	std::unique_ptr<char> buffer(new char[1000]);
 	std::string path = "TestPath";
-	basyx::any val = 10;
+	basyx::object val = 10;
 	std::string valSerialize = basyx::serialization::json::serialize(val).dump(4);
 
 	size_t size = builder->buildInvokeFrame(path, val, buffer.get());

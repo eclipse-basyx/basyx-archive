@@ -16,7 +16,7 @@ include(diagnostics_print)
 include(enable_clang_format)
 include(enable_clang_tidy)
 include(enable_cppcheck)
-include(enable_playground)
+include(enable_testbed)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -45,7 +45,7 @@ set(BASYX_UTILITY_PROJECTS ON CACHE BOOL "Create utility targets")
 set(BASYX_DEBUG_PRINT_FRAMES OFF CACHE BOOL "Print BaSyx frames")
 
 option(BASYX_BUILD_LIBFMT "Wether to build external, yet included library libfmt" ON)
-
+option(BASYX_USE_SYSTEM_ASIO "Use system supplied ASIO library." OFF)
 ### Compiler settings ###
 
 set(CMAKE_CXX_STANDARD 11)
@@ -76,6 +76,13 @@ else()
    find_package(fmt REQUIRED)
 endif()
 
+if(${BASYX_USE_SYSTEM_ASIO})
+    find_package(asio REQUIRED)
+else()
+    #add_compile_definitions(ASIO_STANDALONE)
+    add_subdirectory(lib/asio)
+endif()
+
 add_subdirectory(lib/json)
 
 if(${BASYX_BUILD_TESTS})
@@ -93,6 +100,7 @@ add_subdirectory(src/logging)
 add_subdirectory(src/shared)
 add_subdirectory(src/utility)
 add_subdirectory(src/vab)
+add_subdirectory(src/server)
 
 ###############################################
 ###           Test Directory                ###
@@ -111,5 +119,5 @@ if(${BASYX_UTILITY_PROJECTS})
     enable_clang_format()
     enable_clang_tidy()
     enable_cppcheck()
-    enable_playground()
+    enable_testbed()
 endif()

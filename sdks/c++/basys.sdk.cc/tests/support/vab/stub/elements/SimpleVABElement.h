@@ -8,7 +8,7 @@
   *      Author: schnicke
   */
 
-#include <basyx/any.h>
+#include <basyx/object.h>
 #include <basyx/types.h>
 
 #include <set>
@@ -17,7 +17,7 @@ namespace basyx {
 namespace tests {
 namespace support {
 
-	objectMap_t make_simple_vab_element();
+	basyx::object make_simple_vab_element();
 
 }
 }

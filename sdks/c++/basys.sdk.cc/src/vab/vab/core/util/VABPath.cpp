@@ -18,6 +18,7 @@ VABPath::VABPath(const std::string & path) :
 	isValid(false),
 	isOperation(false)
 {
+
 	auto start = path.begin();
 	auto end = path.begin();
 
@@ -192,18 +193,6 @@ VABPath VABPath::operator+ (VABPath const & other)
 	VABPath new_path(this->toString());
 	new_path.append(other);
 	return new_path;
-}
-
-VABPath VABPath::operator+ (std::string const & subpath)
-{
-  size_t counter = 0;
-
-  while ( subpath.at(counter) == this->delimiter )
-  {
-    counter++;
-  }
-
-  return VABPath(this->toString() + this->delimiter + subpath.substr(counter, subpath.size()));
 }
 
 VABPath::operator std::string() const

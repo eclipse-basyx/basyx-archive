@@ -26,8 +26,8 @@ public:
 	CalledFunction called;
 
 	std::string path;
-	basyx::any val;
-	basyx::any clock;
+	basyx::object val;
+	basyx::object clock;
 
 	MockupModelProvider()
 		: called{CalledFunction::NONE}
@@ -39,12 +39,12 @@ public:
 	{
 	}
 
-	virtual std::string getElementScope(const std::string & elementPath) override 
+	virtual std::string getElementScope(const std::string & elementPath) 
 	{
 		return BaSysID::getScopeString(elementPath);
 	}
 
-	virtual basyx::any getModelPropertyValue(const std::string & path) override {
+	virtual basyx::object getModelPropertyValue(const std::string & path) override {
 		// Return dummy clock
 		if (path.find("clock") != std::string::npos)
 		{
@@ -53,19 +53,19 @@ public:
 		// Ignore frozen
 		else if ( path.find("frozen") != std::string::npos) 
 		{
-			val = basyx::any{ nullptr };
+			val = basyx::object{ nullptr };
 		}
 		else
 		{
 			called = CalledFunction::GET;
 			this->path = path;
-			val = basyx::any{ 2 };
+			val = basyx::object{ 2 };
 		};
 
 		return val;
 	}
 
-	virtual void setModelPropertyValue(const std::string & path, const basyx::any & newValue) override 
+	virtual void setModelPropertyValue(const std::string & path, const basyx::object newValue) override 
 	{
 		// Set dummy clock
 		if (path.find("clock") != std::string::npos)
@@ -83,14 +83,14 @@ public:
 	/**
 	 * Create/insert a value in a collection
 	 */
-	virtual void createValue(const std::string & path, const basyx::any & addedValue) override 
+	virtual void createValue(const std::string & path, const basyx::object addedValue) override 
 	{
 		called = CalledFunction::CREATE;
 		this->path = path;
 		this->val = std::move(addedValue);
 	}
 
-	virtual void deleteValue(const std::string & path, const basyx::any & deletedValue) override 
+	virtual void deleteValue(const std::string & path, const basyx::object deletedValue) override 
 	{
 		called = CalledFunction::DELETE_COMPLEX;
 		this->path = path;
@@ -103,12 +103,12 @@ public:
 		this->path = path;
 	}
 
-	virtual basyx::any invokeOperationImpl(const std::string & path, basyx::objectCollection_t & parameter) override
+	virtual basyx::object invokeOperation(const std::string & path, basyx::object parameter) override
 	{
 		called = CalledFunction::INVOKE;
 		this->path = path;
 		this->val = std::move(parameter);
-		return basyx::any{ 3 };
+		return basyx::object{ 3 };
 	};
 };
 

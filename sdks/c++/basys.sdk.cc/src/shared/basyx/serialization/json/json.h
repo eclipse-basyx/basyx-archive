@@ -1,5 +1,5 @@
 /*
- * JSONTools2.h
+ * basyx::serialization::json::json
  *
  *  Created on: Mar 17, 2019
  *      Author: psota
@@ -12,7 +12,7 @@
 
 #include <log/log.h>
 
-#include <basyx/any.h>
+#include <basyx/object/object_header.h>
 
 #include <basyx/serialization/json/json_deserializer.h>
 #include <basyx/serialization/json/json_serializer.h>
@@ -34,14 +34,14 @@ namespace json {
         return json;
     }
 
-    inline basyx::any deserialize(const json_t& json)
+    inline basyx::object deserialize(const json_t& json)
     {
         basyx::log::topic("Serializer").debug("Deserializing: \n{}", json.dump(4));
 
         return deserialize_helper::deserialize(json);
     };
 
-    inline basyx::any deserialize(const std::string& jsonString)
+    inline basyx::object deserialize(const std::string& jsonString)
     {
         return deserialize(json_t::parse(jsonString));
     }
