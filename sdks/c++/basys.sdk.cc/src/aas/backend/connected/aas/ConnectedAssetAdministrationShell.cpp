@@ -56,7 +56,7 @@ basyx::specificMap_t<ISubModel> ConnectedAssetAdministrationShell::getSubModels(
   return basyx::specificMap_t<ISubModel>();
 }
 
-void ConnectedAssetAdministrationShell::addSubModel(const std::shared_ptr<ISubModel> subModel)
+void ConnectedAssetAdministrationShell::addSubModel(const descriptor::SubModelDescriptor subModelDescriptor)
 {}
 
 std::shared_ptr<ISecurity> ConnectedAssetAdministrationShell::getSecurity() const
@@ -74,12 +74,12 @@ std::shared_ptr<reference::IReference> ConnectedAssetAdministrationShell::getAss
   return std::shared_ptr<reference::IReference>();
 }
 
-void ConnectedAssetAdministrationShell::setSubModel(const basyx::specificCollection_t<reference::IReference> submodels) const
+void ConnectedAssetAdministrationShell::setSubModel(const basyx::specificCollection_t<descriptor::SubModelDescriptor> submodels) const
 {}
 
-basyx::specificCollection_t<reference::IReference> ConnectedAssetAdministrationShell::getSubModel() const
+basyx::specificCollection_t<descriptor::SubModelDescriptor> ConnectedAssetAdministrationShell::getSubModelDescriptors() const
 {
-  return basyx::specificCollection_t<reference::IReference>();
+  return basyx::specificCollection_t<descriptor::SubModelDescriptor>();
 }
 
 basyx::specificCollection_t<IView> ConnectedAssetAdministrationShell::getViews() const

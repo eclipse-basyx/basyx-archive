@@ -1,30 +1,34 @@
 /*
- * ConnectedAssetAdministrationShell.h
+ * AssetAdministrationShell.h
  *
  *      Author: wendel
  */
 
-#ifndef AAS_BACKEND_CONNECTED_CONNECTEDASSETADMINISTRATIONSHELL_H_
-#define AAS_BACKEND_CONNECTED_CONNECTEDASSETADMINISTRATIONSHELL_H_
+#ifndef AAS_IMPL_METAMODEL_HASHMAP_ASSETADMINISTRATIONSHELL_H_
+#define AAS_IMPL_METAMODEL_HASHMAP_ASSETADMINISTRATIONSHELL_H_
 
 #include "api/metamodel/aas/IAssetAdministrationShell.h"
-#include "backend/connected/aas/ConnectedVABModelMap.h"
-#include "api/manager/IAssetAdministrationShellManager.h"
+#include "impl/metamodel/hashmap/aas/reference/Reference.h"
+#include "impl/metamodel/hashmap/security/Security.h"
+#include "impl/metamodel/hashmap/parts/Asset.h"
+#include "impl/metamodel/hashmap/parts/ConceptDictionary.h"
+#include "impl/metamodel/hashmap/parts/View.h"
 
 namespace basyx {
 namespace aas {
-namespace backend {
 
-class ConnectedAssetAdministrationShell : public api::IAssetAdministrationShell, public ConnectedVABModelMap
+class AssetAdministrationShell : public api::IAssetAdministrationShell
 {
 public:
-  ConnectedAssetAdministrationShell(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy, std::shared_ptr<api::manager::IAssetAdministrationShellManager> manager);
-	~ConnectedAssetAdministrationShell() = default;
+  // destructor
+  ~AssetAdministrationShell() = default;
 
+  // constructors
+  AssetAdministrationShell();
+  AssetAdministrationShell(reference::impl::Reference derivedFrom, security::Security security, parts::Asset asset,
+    basyx::object::set_t<std::shared_ptr<descriptor::SubModelDescriptor>> submodels, basyx::object::set_t<std::shared_ptr<parts::ConceptDictionary>> dictionaries,
+    basyx::object::set_t<std::shared_ptr<parts::View>> views);
 
-
-private:
-  std::shared_ptr<api::manager::IAssetAdministrationShellManager> manager;
 
   // Inherited via IAssetAdministrationShell
   virtual basyx::specificCollection_t<reference::IReference> getDataSpecificationReferences() const override;
@@ -45,7 +49,6 @@ private:
   virtual basyx::specificCollection_t<IConceptDictionary> getConceptDictionary() const override;
 };
 
-}
 }
 }
 

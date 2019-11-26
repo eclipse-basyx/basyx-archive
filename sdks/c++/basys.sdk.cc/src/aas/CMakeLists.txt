@@ -141,6 +141,20 @@ target_sources(basyx_aas
     impl/metamodel/hashmap/aas/submodelelement/operation/Operation.h
     impl/metamodel/hashmap/aas/submodelelement/operation/OperationVariable.cpp
     impl/metamodel/hashmap/aas/submodelelement/operation/OperationVariable.h
+    impl/metamodel/AssetAdministrationShell.h
+    impl/metamodel/AssetAdministrationShell.cpp
+    impl/metamodel/hashmap/descriptor/ModelDescriptor.h
+    impl/metamodel/hashmap/descriptor/ModelDescriptor.cpp
+    impl/metamodel/hashmap/descriptor/SubModelDescriptor.h
+    impl/metamodel/hashmap/descriptor/SubModelDescriptor.cpp
+    impl/metamodel/hashmap/security/Security.h
+    impl/metamodel/hashmap/security/Security.cpp
+    impl/metamodel/hashmap/parts/Asset.h
+    impl/metamodel/hashmap/parts/Asset.cpp
+    impl/metamodel/hashmap/parts/ConceptDictionary.h
+    impl/metamodel/hashmap/parts/ConceptDictionary.cpp
+    impl/metamodel/hashmap/parts/View.h
+    impl/metamodel/hashmap/parts/View.cpp
     api/metamodel/aas/IAssetAdministrationShell.h
     api/manager/IAssetAdministrationShellManager.h
     api/modelurn/ModelUrn.h

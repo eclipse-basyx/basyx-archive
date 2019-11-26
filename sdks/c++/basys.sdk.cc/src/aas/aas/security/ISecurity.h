@@ -7,8 +7,7 @@
 #ifndef BASYX_METAMODEL_ISecurity_H_
 #define BASYX_METAMODEL_ISecurity_H_
 
-
-#include "basyx/types.h"
+#include "basyx/object.h"
 
 class ISecurity
 {
