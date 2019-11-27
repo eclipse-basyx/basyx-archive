@@ -8,6 +8,7 @@
 #define AAS_IMPL_METAMODEL_HASHMAP_PARTS_CONCEPTDICTIONARY_H_
 
 #include "aas/parts/IConceptDictionary.h"
+#include "aas/parts/IConceptDescription.h"
 
 namespace basyx {
 namespace aas {
@@ -25,6 +26,7 @@ public:
   virtual std::shared_ptr<reference::IReference> getParent() const override;
   virtual std::vector<std::string> getConceptDescription() const override;
   virtual void setConceptDescription(const std::vector<std::string>& ref) override;
+  void addConceptDescription(const std::shared_ptr<IConceptDescription> & description);
 };
 
 }

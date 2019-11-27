@@ -56,12 +56,12 @@ basyx::specificMap_t<ISubModel> ConnectedAssetAdministrationShell::getSubModels(
   return basyx::specificMap_t<ISubModel>();
 }
 
-void ConnectedAssetAdministrationShell::addSubModel(const descriptor::SubModelDescriptor subModelDescriptor)
+void ConnectedAssetAdministrationShell::addSubModel(const descriptor::SubModelDescriptor & subModelDescriptor)
 {}
 
-std::shared_ptr<ISecurity> ConnectedAssetAdministrationShell::getSecurity() const
+std::shared_ptr<security::ISecurity> ConnectedAssetAdministrationShell::getSecurity() const
 {
-  return std::shared_ptr<ISecurity>();
+  return std::shared_ptr<security::ISecurity>();
 }
 
 std::shared_ptr<reference::IReference> ConnectedAssetAdministrationShell::getDerivedFrom() const
@@ -69,12 +69,12 @@ std::shared_ptr<reference::IReference> ConnectedAssetAdministrationShell::getDer
   return std::shared_ptr<reference::IReference>();
 }
 
-std::shared_ptr<reference::IReference> ConnectedAssetAdministrationShell::getAsset() const
+std::shared_ptr<parts::IAsset> ConnectedAssetAdministrationShell::getAsset() const
 {
-  return std::shared_ptr<reference::IReference>();
+  return std::shared_ptr<parts::IAsset>();
 }
 
-void ConnectedAssetAdministrationShell::setSubModel(const basyx::specificCollection_t<descriptor::SubModelDescriptor> submodels) const
+void ConnectedAssetAdministrationShell::setSubmodels(const basyx::specificCollection_t<descriptor::SubModelDescriptor> & submodels)
 {}
 
 basyx::specificCollection_t<descriptor::SubModelDescriptor> ConnectedAssetAdministrationShell::getSubModelDescriptors() const

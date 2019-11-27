@@ -9,17 +9,25 @@
 
 #include "basyx/object.h"
 
+namespace basyx {
+namespace aas {
+namespace security {
+
+
 class ISecurity
 {
 public:
-	virtual ~ISecurity() = default;
+  virtual ~ISecurity() = default;
 
-	virtual basyx::object getAccessControlPolicyPoints() const = 0;
-	virtual void setAccessControlPolicyPoints(const basyx::object & obj) = 0;
+  virtual basyx::object getAccessControlPolicyPoints() const = 0;
+  virtual void setAccessControlPolicyPoints(const basyx::object & obj) = 0;
 
-	virtual basyx::object getTrustAnchor() const = 0;
-	virtual void setTrustAnchor(const basyx::object & obj) = 0;
+  virtual basyx::object getTrustAnchor() const = 0;
+  virtual void setTrustAnchor(const basyx::object & obj) = 0;
 };
 
-#endif
+}
+}
+}
 
+#endif

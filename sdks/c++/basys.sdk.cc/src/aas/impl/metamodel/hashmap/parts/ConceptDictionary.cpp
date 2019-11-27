@@ -38,6 +38,9 @@ std::vector<std::string> ConceptDictionary::getConceptDescription() const
 void ConceptDictionary::setConceptDescription(const std::vector<std::string>& ref)
 {}
 
+void ConceptDictionary::addConceptDescription(const std::shared_ptr<IConceptDescription> & description)
+{}
+
 }
 }
 }
