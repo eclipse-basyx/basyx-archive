@@ -77,7 +77,7 @@ private:
   basyx::specificCollection_t<descriptor::SubModelDescriptor> submodels;
   basyx::specificCollection_t<IConceptDictionary> dictionaries;
   basyx::specificCollection_t<IView> views;
-  std::string endpoint, endpointType, idShort, category;;
+  std::string endpoint, endpointType, idShort, category;
   basyx::specificCollection_t<reference::IReference> dataSpecificationReferences;
   qualifier::impl::Description description;
   std::shared_ptr<reference::IReference> parent;

@@ -13,7 +13,8 @@ namespace parts {
 Asset::Asset()
 {}
 
-Asset::Asset(std::shared_ptr<reference::IReference> submodel)
+Asset::Asset(std::shared_ptr<reference::IReference> submodel) :
+  submodel{submodel}
 {}
 
 basyx::specificCollection_t<reference::IReference> Asset::getDataSpecificationReferences() const

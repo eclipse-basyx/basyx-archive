@@ -32,6 +32,8 @@ target_sources(basyx_aas
 		aas/backend/connected/aas/ConnectedAssetAdministrationShellManager.cpp
 		aas/backend/connected/aas/ConnectedAssetAdministrationShellManager.h
 		aas/backend/connected/aas/dataspecification/IDataSpecification.h
+		impl/map/ElementMap.cpp
+		impl/map/ElementMap.h
 		impl/metamodel/AssetAdministrationShell.cpp
 		impl/metamodel/AssetAdministrationShell.h
 		impl/metamodel/hashmap/descriptor/ModelDescriptor.cpp

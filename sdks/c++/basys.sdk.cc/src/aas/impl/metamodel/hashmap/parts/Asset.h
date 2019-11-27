@@ -40,19 +40,18 @@ public:
   virtual qualifier::impl::Description getDescription() const override;
   void setDescription(const qualifier::impl::Description & description);
   virtual std::shared_ptr<reference::IReference> getParent() const override;
+  void setParent(const std::shared_ptr<reference::IReference> & parentReference);
   virtual std::shared_ptr<qualifier::IAdministrativeInformation> getAdministration() const override;
   void setAdministration(const std::shared_ptr<qualifier::IAdministrativeInformation> & administration);
   virtual std::shared_ptr<identifier::IIdentifier> getIdentification() const override;
   void setIdentification(const std::shared_ptr<identifier::IIdentifier> & identification);
   virtual std::shared_ptr<reference::IReference> getAssetIdentificationModel() const override;
-  void setAssetIdentificationModel(const std::shared_ptr<reference::IReference> & identificationModel);
   virtual void setAssetIdentificationModel(const std::shared_ptr<reference::IReference>& submodel) override;
   void setId(const std::string & id);
-  virtual std::shared_ptr<reference::IReference> getParent() const override;
-  void setParent(const std::shared_ptr<reference::IReference> & parentReference);
 
 private:
   std::shared_ptr<reference::IReference> submodel;
+  basyx::specificCollection_t<reference::IReference> dataSpecificationReferences;
 };
 
 }
