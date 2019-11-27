@@ -11,8 +11,7 @@
 #include <string>
 
 namespace basyx {
-namespace aas {
-namespace reference {
+namespace submodel {
 
 class IKey
 {
@@ -27,7 +26,6 @@ public:
 
 inline IKey::~IKey() = default;
 
-}
 }
 }
 

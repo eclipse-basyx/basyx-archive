@@ -12,7 +12,7 @@
 
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 namespace submodelelement {
 namespace property {
 

@@ -11,7 +11,7 @@
 #include "submodel/api/submodelelement/ISubmodelElementCollection.h"
 
 namespace basyx { 
-namespace aas {
+namespace submodel {
 namespace backend {
 namespace connected { 
 

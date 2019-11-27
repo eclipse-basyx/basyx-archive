@@ -12,34 +12,26 @@
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace qualifier {
-namespace qualifiable {
 
-class Formula : public Constraint, public aas::qualifier::qualifiable::IFormula
+class Formula : public Constraint, public IFormula
 {
 public:
   ~Formula() = default;
 
   // constructors
   Formula();
-  Formula(const basyx::specificCollection_t<aas::reference::IReference> & dependsOn);
+  Formula(const basyx::specificCollection_t<IReference> & dependsOn);
 
   // Inherited via IFormula
-  virtual basyx::specificCollection_t<aas::reference::IReference> getDependsOn() const override;
+  virtual basyx::specificCollection_t<IReference> getDependsOn() const override;
 
   // not inherited
-  void setDependsOn(const basyx::specificCollection_t<aas::reference::IReference> & dependsOn);
+  void setDependsOn(const basyx::specificCollection_t<IReference> & dependsOn);
 
 private:
-  basyx::specificCollection_t<aas::reference::IReference> dependsOn;
+  basyx::specificCollection_t<IReference> dependsOn;
 };
 
-}
-}
-}
-}
 }
 }
 

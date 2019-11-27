@@ -16,7 +16,7 @@
 #include "submodel/api/submodelelement/IDataElement.h"
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 namespace backend {
 
 class ConnectedDataElement : public connected::ConnectedSubmodelElement, public submodelelement::IDataElement

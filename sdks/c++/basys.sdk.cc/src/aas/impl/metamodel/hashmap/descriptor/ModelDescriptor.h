@@ -16,7 +16,6 @@
 
 namespace basyx {
 namespace aas {
-namespace descriptor {
 
 class ModelDescriptor
 {
@@ -27,12 +26,12 @@ public:
   /**
    * Create a new descriptor with minimal information
    */
-  ModelDescriptor(std::string idShort, std::shared_ptr<identifier::IIdentifier> id, std::string httpEndpoint);
+  ModelDescriptor(std::string idShort, std::shared_ptr<submodel::IIdentifier> id, std::string httpEndpoint);
 
   /**
    * Return AAS ID
    */
-  std::shared_ptr<identifier::IIdentifier> getIdentifier();
+  std::shared_ptr<submodel::IIdentifier> getIdentifier();
 
   /**
    * Return first AAS endpoint
@@ -46,7 +45,6 @@ public:
 
 };
 
-}
 }
 }
 

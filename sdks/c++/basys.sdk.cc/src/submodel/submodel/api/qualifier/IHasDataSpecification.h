@@ -13,22 +13,20 @@
 #include "basyx/types.h"
 
 namespace basyx {
-namespace aas {
-namespace qualifier {
-
-namespace HasDataSpecificationPaths {
-static constexpr char HASDATASPECIFICATION[] = "hasDataSpecification";
-}
+namespace submodel {
 
 class IHasDataSpecification
 {
 public:
+	struct Path {
+		static constexpr char HasDataSpecification[] = "hasDataSpecification";
+	};
+public:
   virtual ~IHasDataSpecification() = default;
 
-  virtual basyx::specificCollection_t<reference::IReference> getDataSpecificationReferences() const = 0;
+  virtual basyx::specificCollection_t<IReference> getDataSpecificationReferences() const = 0;
 };
 
-}
 }
 }
 

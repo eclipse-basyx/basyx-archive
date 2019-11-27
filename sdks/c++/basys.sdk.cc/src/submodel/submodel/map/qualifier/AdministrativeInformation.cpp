@@ -1,3 +1,4 @@
+#include "AdministrativeInformation.h"
 /*
  * AdministrativeInformation.cpp
  *
@@ -7,58 +8,51 @@
 #include "AdministrativeInformation.h"
 
 namespace basyx {
-namespace aas {
-namespace qualifier {
-namespace impl {
+namespace submodel {
 
-AdministrativeInformation::AdministrativeInformation() :
-  data_specification_references()
-{}
-
-AdministrativeInformation::AdministrativeInformation(const std::string & version, const std::string & revision) :
-  data_specification_references(),
-  version {version},
-  revision {revision}
-{}
-
-AdministrativeInformation::AdministrativeInformation(basyx::object::object_map_t & map)
+AdministrativeInformation::AdministrativeInformation()
+	: HasDataSpecification{}
 {
-  this->revision = map.at(qualifier::internalAdministrationPaths::REVISION).GetStringContent();
-  this->version = map.at(qualifier::internalAdministrationPaths::VERSION).GetStringContent();
-//  this->data_specification_references = map.at(HasDataSpecificationPaths::HASDATASPECIFICATION).Get<basyx::specificCollection_t<reference::IReference>&>();
+	this->map.insertKey(IAdministrativeInformation::Path::Version, "");
+	this->map.insertKey(IAdministrativeInformation::Path::Revision, "");
 }
 
-void AdministrativeInformation::setDataSpecificationReferences(const basyx::specificCollection_t<reference::IReference>& data_specification_references)
+AdministrativeInformation::AdministrativeInformation(const std::string & version, const std::string & revision)
+	: HasDataSpecification{}
 {
-  this->data_specification_references = data_specification_references;
+	this->map.insertKey(IAdministrativeInformation::Path::Version, version);
+	this->map.insertKey(IAdministrativeInformation::Path::Revision, revision);
+}
+
+AdministrativeInformation::AdministrativeInformation(basyx::object obj)
+	: HasDataSpecification{ obj }
+{
 }
 
 void AdministrativeInformation::setVersion(const std::string & version)
 {
-  this->version = version;
+	this->map.insertKey(IAdministrativeInformation::Path::Version, version, true);
 }
 
 void AdministrativeInformation::setRevision(const std::string & revision)
 {
-  this->revision = revision;
-}
-
-basyx::specificCollection_t<reference::IReference> AdministrativeInformation::getDataSpecificationReferences() const
-{
-  return this->data_specification_references;
+	this->map.insertKey(IAdministrativeInformation::Path::Revision, revision, true);
 }
 
 std::string AdministrativeInformation::getVersion() const
 {
-  return this->version;
+	return this->map.getProperty(IAdministrativeInformation::Path::Version).GetStringContent();
 }
 
 std::string AdministrativeInformation::getRevision() const
 {
-  return this->revision;
+	return this->map.getProperty(IAdministrativeInformation::Path::Revision).GetStringContent();
 }
 
+basyx::specificCollection_t<IReference> AdministrativeInformation::getDataSpecificationReferences() const
+{
+	return HasDataSpecification::getDataSpecificationReferences();
 }
-}
+
 }
 }

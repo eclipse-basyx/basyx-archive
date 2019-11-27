@@ -7,30 +7,32 @@
 #include "Identifier.h"
 #include "IdentifierType.h"
 
-basyx::aas::identifier::impl::Identifier::Identifier() :
-  id{""},
-  idType {identifierType::IRDI}
-{}
+using namespace basyx::submodel;
 
-basyx::aas::identifier::impl::Identifier::Identifier(const std::string & id, const std::string & idType) :
-  id {id},
-  idType {idType}
-{}
-
-basyx::aas::identifier::impl::Identifier::Identifier(const basyx::object::object_map_t & map)
+Identifier::Identifier()
 {
-  auto id_any = map.at(internalIdentifierPaths::ID);
-  this->id = id_any.GetStringContent();
-  auto id_type_any = map.at(internalIdentifierPaths::IDTYPE);
-  this->idType = id_type_any.GetStringContent();
+	this->map.insertKey(Path::Id, "");
+	this->map.insertKey(Path::IdType, "");
 }
 
-std::string basyx::aas::identifier::impl::Identifier::getIdType() const
+Identifier::Identifier(const std::string & id, const std::string & idType)
+	: vab::ElementMap{}
 {
-  return this->idType;
+	this->map.insertKey(Path::Id, id);
+	this->map.insertKey(Path::IdType, idType);
 }
 
-std::string basyx::aas::identifier::impl::Identifier::getId() const
+Identifier::Identifier(basyx::object object)
+	:vab::ElementMap(map)
 {
-  return this->id;
+}
+
+std::string Identifier::getIdType() const
+{
+	return this->map.getProperty(Path::IdType).GetStringContent();
+}
+
+std::string Identifier::getId() const
+{
+	return this->map.getProperty(Path::Id).GetStringContent();
 }

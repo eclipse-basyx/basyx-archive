@@ -9,18 +9,18 @@
 
 
 namespace basyx {
-namespace aas {
-namespace qualifier {
-namespace qualifiable {
+namespace submodel {
 
 class IConstraint
 {
 public:
+	struct Path {
+		static constexpr char ModelType[] = "Constraint";
+	};
+public:
   virtual ~IConstraint() = default;
 };
 
-}
-}
 }
 }
 

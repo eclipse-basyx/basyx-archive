@@ -13,20 +13,17 @@
 #include <string>
 
 namespace basyx {
-namespace aas {
-namespace qualifier {
+namespace submodel {
 
-namespace administrationPaths {
-  static constexpr char administrationPath[] = "administrationPath";
-}
-
-namespace internalAdministrationPaths {
-  static constexpr char VERSION[] = "version";
-  static constexpr char REVISION[] = "revision";
-}
 
 class IAdministrativeInformation : public IHasDataSpecification
 {
+public:
+struct Path {
+	static constexpr char AdministrationPath[] = "administrationPath";
+	static constexpr char Version[] = "version";
+	static constexpr char Revision[] = "revision";
+};
 public:
   virtual ~IAdministrativeInformation() = default;
 
@@ -34,7 +31,6 @@ public:
   virtual std::string getRevision() const = 0;
 };
 
-}
 }
 }
 

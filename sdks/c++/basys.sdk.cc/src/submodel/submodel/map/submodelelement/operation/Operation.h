@@ -11,46 +11,58 @@
 #include "basyx/types.h"
 
 #include "submodel/api/submodelelement/operation/IOperationVariable.h"
-#include "submodel/api/submodelelement/operation/IOperationVariable.h"
-#include "submodel/map/submodelelement/SubmodelElement.h"
 #include "submodel/api/submodelelement/operation/IOperation.h"
+#include "submodel/map/submodelelement/SubmodelElement.h"
+#include "submodel/map/submodelelement/operation/OperationVariable.h"
+
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace submodelelement {
-namespace operation {
 
-class Operation : public SubmodelElement, public aas::submodelelement::operation::IOperation
+class Operation : 
+	public virtual SubmodelElement, 
+	public virtual IOperation
 {
 public:
-  ~Operation() = default;
+	using Path = IOperation::Path;
+public:
+	~Operation() = default;
 
-  // constructors
-  Operation();
-  Operation(operation_var_list in, operation_var_list out, basyx::detail::functionWrapper invocable);
+	// constructors
+	Operation();
+	
+	// Inherited via IOperation
+	virtual basyx::specificCollection_t<IOperationVariable> getParameterTypes() const override;
+	virtual std::shared_ptr<IOperationVariable> getReturnType() const override;
+	virtual basyx::object getInvocable() const override;
 
-  // Inherited via IOperation
-  virtual operation_var_list getParameterTypes() const override;
-  virtual operation_var_list getReturnTypes() const override;
-  virtual basyx::detail::functionWrapper getInvocable() const override;
-  virtual basyx::object invoke(basyx::object & parameters) const override;
+	// not inherited
+	void setParameterTypes(const basyx::specificCollection_t<IOperationVariable> & parameterTypes);
+	void setReturnTypes(const std::shared_ptr<IOperationVariable> & returnTypes);
+	void setInvocable(basyx::object invocable);
 
-  // not inherited
-  void setParameterTypes(const operation_var_list & parameterTypes);
-  void setReturnTypes(const operation_var_list & returnTypes);
-  void setInvocable(basyx::detail::functionWrapper invocable);
-  
-private:
-  operation_var_list in_variables, out_variables;
-  basyx::detail::functionWrapper invocable;
+	// helper methods
+	template<typename T>
+	void addParameter(const std::string & name)
+	{
+		OperationVariable op_var;
+		op_var.setIdShort(name);
+		op_var.setType(util::to_string<basyx::type::basyx_type<T>::value_type>());
+		this->map.getProperty(Path::Input).insert(op_var.getMap());
+	};
+
+	template<typename T>
+	void setReturnType(const std::string & name)
+	{
+		OperationVariable ret_var;
+		ret_var.setIdShort(name);
+		ret_var.setType(util::to_string<basyx::type::basyx_type<T>::value_type>());
+		this->map.insertKey(Path::Output, ret_var.getMap(), true);
+	};
+
+	virtual basyx::object invoke(basyx::object & parameters) const override;
 };
 
-}
-}
-}
-}
 }
 }
 

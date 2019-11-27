@@ -10,35 +10,33 @@
 #include "submodel/api/submodelelement/operation/IOperationVariable.h"
 #include "submodel/map/submodelelement/SubmodelElement.h"
 
+#include "basyx/object.h"
+
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace submodelelement {
-namespace operation {
 
-class OperationVariable : public SubmodelElement, public aas::submodelelement::operation::IOperationVariable
+class OperationVariable : 
+	public virtual SubmodelElement, 
+	public virtual IOperationVariable
 {
 public:
-  ~OperationVariable() = default;
-  // constructors
-  OperationVariable();
-  OperationVariable(const std::shared_ptr<aas::submodelelement::ISubmodelElement> & value);
+	using Path = IOperationVariable::Path;
+public:
+	~OperationVariable() = default;
+	
+	// constructors
+	OperationVariable();
+	OperationVariable(basyx::object object);
 
-  // Inherited via IOperationVariable
-  virtual std::shared_ptr<aas::submodelelement::ISubmodelElement> getValue() const override;
-
-  // not inherited
-  void setValue(const std::shared_ptr<aas::submodelelement::ISubmodelElement> & value);
-
-private:
-  std::shared_ptr<aas::submodelelement::ISubmodelElement> value;
+	// Inherited via IOperationVariable
+	virtual basyx::object getValue() const override;
+	virtual std::string getType() const override;
+	                                                                        
+	// not inherited
+	void setValue(const std::shared_ptr<ISubmodelElement> & value);
+	void setType(const std::string & string);
 };
 
-}
-}
-}
-}
 }
 }
 

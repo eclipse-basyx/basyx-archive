@@ -11,7 +11,7 @@
 
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 namespace backend {
 
 ConnectedDataElement::ConnectedDataElement(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy) :

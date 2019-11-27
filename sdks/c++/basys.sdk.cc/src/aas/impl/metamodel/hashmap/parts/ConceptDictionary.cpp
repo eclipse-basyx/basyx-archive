@@ -6,9 +6,10 @@
 
 #include "ConceptDictionary.h"
 
+using namespace basyx::submodel;
+
 namespace basyx {
 namespace aas {
-namespace parts {
 
 std::string ConceptDictionary::getIdShort() const
 {
@@ -20,14 +21,14 @@ std::string ConceptDictionary::getCategory() const
   return std::string();
 }
 
-qualifier::impl::Description ConceptDictionary::getDescription() const
+basyx::submodel::Description ConceptDictionary::getDescription() const
 {
-  return qualifier::impl::Description("","");
+	return { "","" };
 }
 
-std::shared_ptr<reference::IReference> ConceptDictionary::getParent() const
+std::shared_ptr<IReference> ConceptDictionary::getParent() const
 {
-  return std::shared_ptr<reference::IReference>();
+  return std::shared_ptr<IReference>();
 }
 
 std::vector<std::string> ConceptDictionary::getConceptDescription() const
@@ -41,7 +42,6 @@ void ConceptDictionary::setConceptDescription(const std::vector<std::string>& re
 void ConceptDictionary::addConceptDescription(const std::shared_ptr<IConceptDescription> & description)
 {}
 
-}
 }
 }
 

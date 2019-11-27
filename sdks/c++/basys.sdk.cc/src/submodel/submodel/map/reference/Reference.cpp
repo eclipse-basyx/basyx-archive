@@ -1,3 +1,4 @@
+#include "Reference.h"
 /*
  * Reference.cpp
  *
@@ -9,38 +10,36 @@
 #include "submodel/map/reference/Key.h"
 
 namespace basyx {
-namespace aas {
-namespace reference {
-namespace impl {
+namespace submodel {
 
 Reference::Reference() 
-	: map{ basyx::object::make_map() }
+	: vab::ElementMap{}
 {
 	map.insertKey("keys", basyx::object::make_list<basyx::object>());
 }
 
 Reference::Reference(const basyx::specificCollection_t<IKey> & keys)
-	: map{ basyx::object::make_map() }
+	: vab::ElementMap{}
 {
-	map.insertKey("keys", basyx::object::make_list<basyx::object>());
+	this->setKeys(keys);
+}
+
+Reference::Reference(std::initializer_list<Key> keys)
+	: vab::ElementMap{}
+{
+	auto list = basyx::object::make_list<basyx::object>();
 
 	for (auto & key : keys)
 	{
-		basyx::submodel::metamodel::map::reference::Key mapKey{
-			key->getType(),
-			key->isLocal(),
-			key->getValue(),
-			key->getidType()
-		};
-
-		map.getProperty("keys").insert(mapKey.getMap());
+		list.insert(key.getMap());
 	}
+
+	map.insertKey("keys", list);
 }
 
-Reference::Reference(const basyx::object::object_map_t & reference_map)
+Reference::Reference(basyx::object object)
+	: vab::ElementMap{ object }
 {
-  auto keys = reference_map.at(internalReferencePaths::KEY);
- // this->keys = keys.Get<basyx::specificCollection_t<IKey>>();
 }
 
 const basyx::specificCollection_t<IKey> Reference::getKeys() const
@@ -50,7 +49,7 @@ const basyx::specificCollection_t<IKey> Reference::getKeys() const
 
 	for (auto & obj : obj_list)
 	{
-		keys.emplace_back(std::make_shared<basyx::submodel::metamodel::map::reference::Key>(obj));
+		keys.emplace_back(std::make_shared<Key>(obj));
 	};
 
 	return keys;
@@ -58,9 +57,27 @@ const basyx::specificCollection_t<IKey> Reference::getKeys() const
 
 void Reference::setKeys(const basyx::specificCollection_t<IKey>& keys)
 {
+	auto list = basyx::object::make_list<basyx::object>();
+
+	for (auto & key : keys)
+	{
+		Key newKey{
+			key->getType(),
+			key->isLocal(),
+			key->getValue(),
+			key->getidType()
+		};
+
+		list.insert(newKey.getMap());
+	}
+	map.insertKey("keys", list);
 }
 
+Reference Reference::FromIdentifiable(const std::string & keyElementType, bool local, IIdentifiable & identifiable)
+{
+	Key key{ keyElementType, local, identifiable.getIdentification()->getId(), identifiable.getIdentification()->getIdType() };
+	return Reference{ key };
 }
-}
+
 }
 }

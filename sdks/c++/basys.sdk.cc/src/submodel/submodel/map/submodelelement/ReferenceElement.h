@@ -12,30 +12,24 @@
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace submodelelement {
 
-class ReferenceElement : public DataElement, public aas::submodelelement::IReferenceElement
+class ReferenceElement : public DataElement, public IReferenceElement
 {
 public:
   ~ReferenceElement() = default;
 
   // construtors
   ReferenceElement();
-  ReferenceElement(const std::shared_ptr<aas::reference::IReference> & reference);
+  ReferenceElement(const std::shared_ptr<IReference> & reference);
 
   // Inherited via IReferenceElement
-  virtual void setValue(const std::shared_ptr<aas::reference::IReference> & ref) override;
-  virtual std::shared_ptr<aas::reference::IReference> getValue() const override;
+  virtual void setValue(const std::shared_ptr<IReference> & ref) override;
+  virtual std::shared_ptr<IReference> getValue() const override;
 
 private:
-  std::shared_ptr<aas::reference::IReference> reference;
+  std::shared_ptr<IReference> reference;
 };
 
-}
-}
-}
 }
 }
 

@@ -11,19 +11,17 @@
 #include "submodel/api/submodelelement/property/IProperty.h"
 
 namespace basyx {
-namespace aas {
-namespace submodelelement {
+namespace submodel {
 
 class IReferenceElement
 {
 public:
   virtual ~IReferenceElement() = default;
 
-  virtual void setValue(const std::shared_ptr<reference::IReference> & ref) = 0;
-  virtual std::shared_ptr<reference::IReference> getValue() const = 0;
+  virtual void setValue(const std::shared_ptr<IReference> & ref) = 0;
+  virtual std::shared_ptr<IReference> getValue() const = 0;
 };
 
-}
 }
 }
 

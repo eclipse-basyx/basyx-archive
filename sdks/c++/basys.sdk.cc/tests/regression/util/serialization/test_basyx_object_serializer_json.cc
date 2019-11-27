@@ -22,9 +22,8 @@ TEST_F(TestBaSyxObjectSerializerJson, PrimitiveTest)
 	json_t jsonList = basyx::serialization::json::serialize(objList);
 	auto dumped = jsonList.dump(4);
 	
-	int j = 2;
+	auto deserialized = basyx::serialization::json::deserialize(dumped);
 
-	auto whot = basyx::serialization::json::deserialize(dumped);
-	
-	j = 2;
+	ASSERT_TRUE(deserialized.InstanceOf<basyx::object::object_list_t>());
+	ASSERT_EQ(deserialized.Get<basyx::object::object_list_t&>().size(), 2);
 }

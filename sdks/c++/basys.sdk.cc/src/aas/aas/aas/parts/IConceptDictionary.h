@@ -17,7 +17,7 @@ namespace basyx {
 namespace aas {
 
 
-class IConceptDictionary : virtual qualifier::IReferable
+class IConceptDictionary : public submodel::IReferable
 {
 public:
 

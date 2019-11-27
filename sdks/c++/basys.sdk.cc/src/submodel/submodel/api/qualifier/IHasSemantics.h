@@ -7,23 +7,27 @@
 #ifndef BASYX_METAMODEL_IHasSemantics_H_
 #define BASYX_METAMODEL_IHasSemantics_H_
 
-#include <memory>
 #include "submodel/api/reference/IReference.h"
-#include "basyx/types.h"
+
+
+#include <memory>
+
 
 namespace basyx {
-namespace aas {
-namespace qualifier {
+namespace submodel {
 
 class IHasSemantics
 {
 public:
+	struct Path {
+		static constexpr char SemanticId[] = "semanticId";
+	};
+public:
   virtual ~IHasSemantics() = default;
 
-  virtual std::shared_ptr<reference::IReference> getSemanticId() const = 0;
+  virtual std::shared_ptr<IReference> getSemanticId() const = 0;
 };
 
-}
 }
 }
 

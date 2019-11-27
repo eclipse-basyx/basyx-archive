@@ -13,20 +13,20 @@
 #include <memory>
 
 namespace basyx {
-namespace aas {
-namespace submodelelement {
-namespace operation {
+namespace submodel {
 
-class IOperationVariable
+class IOperationVariable : public virtual ISubmodelElement
 {
 public:
-  virtual ~IOperationVariable() = default;
-
-  virtual std::shared_ptr<ISubmodelElement> getValue() const = 0;
+	struct Path {
+		static constexpr char Type[] = "type";
+	};
+public:
+	virtual ~IOperationVariable() = default;
+	virtual basyx::object getValue() const = 0;
+	virtual std::string getType() const = 0;
 };
 
-}
-}
 }
 }
 

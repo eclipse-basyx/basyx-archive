@@ -8,31 +8,39 @@
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace submodelelement {
-namespace operation {
 
 OperationVariable::OperationVariable()
-{}
-
-OperationVariable::OperationVariable(const std::shared_ptr<aas::submodelelement::ISubmodelElement> & value) :
-  value {value}
-{}
-
-std::shared_ptr<aas::submodelelement::ISubmodelElement> OperationVariable::getValue() const
+	: ModelType("OperationVariable")
 {
-  return this->value;
 }
 
-void OperationVariable::setValue(const std::shared_ptr<aas::submodelelement::ISubmodelElement> & value)
+OperationVariable::OperationVariable(basyx::object object)
+	: vab::ElementMap{object}
 {
-  this->value = value;
 }
 
+
+
+basyx::object OperationVariable::getValue() const
+{
+//  return this->value;
+	return nullptr;
 }
+
+std::string OperationVariable::getType() const
+{
+	return this->map.getProperty(Path::Type).GetStringContent();
 }
+
+void OperationVariable::setValue(const std::shared_ptr<ISubmodelElement> & value)
+{
+//  this->value = value;
 }
+
+void OperationVariable::setType(const std::string & string)
+{
+	this->map.insertKey(Path::Type, string, true);
 }
+
 }
 }

@@ -12,11 +12,11 @@
 #include "vab/core/proxy/IVABElementProxy.h"
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 namespace backend {
 namespace connected {
 
-class ConnectedSubmodelElement : public backend::ConnectedElement, public submodelelement::ISubmodelElement
+class ConnectedSubmodelElement : public backend::ConnectedElement, public api::submodelelement::ISubmodelElement
 {
 public:
   ConnectedSubmodelElement(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
@@ -25,11 +25,11 @@ public:
   basyx::specificCollection_t<reference::IReference> getDataSpecificationReferences() const override;
   std::string getIdShort() const override;
   std::string getCategory() const override;
-  qualifier::impl::Description getDescription() const override;
+  map::qualifier::Description getDescription() const override;
   std::shared_ptr<reference::IReference> getParent() const override;
-  basyx::specificCollection_t<qualifier::qualifiable::IConstraint> getQualifier() const override;
+  basyx::specificCollection_t<api::qualifier::IConstraint> getQualifier() const override;
   std::shared_ptr<reference::IReference> getSemanticId() const override;
-  submodel::metamodel::map::qualifier::haskind::Kind getHasKindReference() const override;
+  api::qualifier::Kind getHasKindReference() const override;
    
 protected:
   std::string getIdWithLocalCheck() const;

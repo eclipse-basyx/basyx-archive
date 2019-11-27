@@ -8,31 +8,28 @@
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace submodelelement {
 
 SubmodelElementCollection::SubmodelElementCollection() :
   ordered {false},
   allowDuplicates {false}
 {}
 
-SubmodelElementCollection::SubmodelElementCollection(const basyx::specificCollection_t<aas::submodelelement::ISubmodelElement>& value, const bool ordered, const bool allowDuplicates) :
+SubmodelElementCollection::SubmodelElementCollection(const basyx::specificCollection_t<ISubmodelElement>& value, const bool ordered, const bool allowDuplicates) :
   //todo if ordered -> order
   value {value},
   ordered {ordered},
   allowDuplicates {allowDuplicates}
 {}
 
-void SubmodelElementCollection::setValue(const basyx::specificCollection_t<aas::submodelelement::ISubmodelElement> & value)
+void SubmodelElementCollection::setValue(const basyx::specificCollection_t<ISubmodelElement> & value)
 {
   //todo if ordered -> order
   this->value = value;
 }
 
-basyx::specificCollection_t<aas::submodelelement::ISubmodelElement> SubmodelElementCollection::getValue() const
+basyx::specificCollection_t<ISubmodelElement> SubmodelElementCollection::getValue() const
 {
-  return basyx::specificCollection_t<aas::submodelelement::ISubmodelElement>();
+  return basyx::specificCollection_t<ISubmodelElement>();
 }
 
 void SubmodelElementCollection::setOrdered(const bool & value)
@@ -57,12 +54,12 @@ bool SubmodelElementCollection::isAllowDuplicates() const
   return this->allowDuplicates;
 }
 
-void SubmodelElementCollection::setElements(const basyx::specificMap_t<aas::submodelelement::ISubmodelElement> & value)
+void SubmodelElementCollection::setElements(const basyx::specificMap_t<ISubmodelElement> & value)
 {
   this->elements = elements;
 }
 
-basyx::specificMap_t<aas::submodelelement::ISubmodelElement> SubmodelElementCollection::getElements() const
+basyx::specificMap_t<ISubmodelElement> SubmodelElementCollection::getElements() const
 {
   return this->elements;
 }
@@ -73,8 +70,5 @@ void SubmodelElementCollection::orderElements()
   //order the list of elements
 }
 
-}
-}
-}
 }
 }

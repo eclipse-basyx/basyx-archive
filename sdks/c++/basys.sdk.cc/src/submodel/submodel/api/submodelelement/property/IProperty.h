@@ -8,46 +8,36 @@
 #define API_IPROPERTY_H_
 
 #include "submodel/api/submodelelement/IDataElement.h"
-#include "submodel/api/submodelelement/IDataElement.h"
+
 #include "basyx/types.h"
 
 namespace basyx {
-namespace aas {
-namespace submodelelement {
-namespace property {
+namespace submodel {
 
-enum PropertyType
-{
-  Single, Collection, Map, Container
-};
-
-namespace PropertyPaths
-{
-  static constexpr long serialVersionUID = 1L;
-  static constexpr char VALUE[] = "value";
-  static constexpr char VALUEID[] = "valueId";
-  static constexpr char VALUETYPE[] = "valueType";
-}
 
 /* *********************************************************************************
  * Property interface
  * *********************************************************************************/
-class IProperty
+class IProperty : public virtual IDataElement
 {
-
 public:
-  virtual PropertyType getPropertyType() const = 0;
+	enum class PropertyType
+	{
+		Single, Collection, Map, Container
+	};
+public:
+	struct Path {
+		static constexpr char Value[] = "value";
+		static constexpr char ValueId[] = "valueId";
+		static constexpr char ValueType[] = "valueType";
+	};
+public:
+	virtual PropertyType getPropertyType() const = 0;
 
-  virtual void setValue(const basyx::object & obj) = 0;
-  virtual basyx::object getValue() const = 0;
-
-  virtual void setValueId(const basyx::object & obj) = 0;
-  virtual basyx::object getValueId() const = 0;
-
+	virtual void setValueId(const std::string & valueId) = 0;
+	virtual std::string getValueId() const = 0;
 };
 
-}
-}
 }
 }
 

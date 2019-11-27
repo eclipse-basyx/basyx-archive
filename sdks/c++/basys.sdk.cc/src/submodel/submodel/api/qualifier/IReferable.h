@@ -14,28 +14,28 @@
 #include <memory>
 
 namespace basyx {
-namespace aas {
-namespace qualifier {
+namespace submodel {
 
-namespace ReferablePaths {
-static constexpr char IDSHORT[] = "idShort";
-static constexpr char CATEGORY[] = "category";
-static constexpr char DESCRIPTION[] = "description";
-static constexpr char PARENT[] = "parent";
-}
 
 class IReferable
 {
 public:
-  virtual ~IReferable() = default;
+	struct Path {
+		static constexpr char IdShort[] = "idShort";
+		static constexpr char Category[] = "category";
+		static constexpr char Description[] = "description";
+		static constexpr char Parent[] = "parent";
+	};
+public:
+	virtual ~IReferable() = default;
 
-  virtual std::string getIdShort() const = 0;
-  virtual std::string getCategory() const = 0;
-  virtual qualifier::impl::Description getDescription() const = 0;
-  virtual std::shared_ptr<reference::IReference> getParent() const = 0;
-
+	virtual std::string getIdShort() const = 0;
+	virtual std::string getCategory() const = 0;
+	virtual Description getDescription() const = 0;
+	virtual std::shared_ptr<IReference> getParent() const = 0;
 };
-}
+
+
 }
 }
 

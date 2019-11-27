@@ -9,23 +9,24 @@
 
 #include "submodel/api/qualifier/qualifiable/IConstraint.h"
 
+#include "vab/ElementMap.h"
+
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace qualifier {
-namespace qualifiable {
 
-class Constraint : public aas::qualifier::qualifiable::IConstraint
+class Constraint : 
+	public IConstraint,
+	public vab::ElementMap
 {
 public:
-  ~Constraint() = default;
+	Constraint();
+	Constraint(basyx::object object);
+	Constraint(const IConstraint & constraint);
+
+
+	~Constraint() = default;
 };
 
-}
-}
-}
-}
 }
 }
 

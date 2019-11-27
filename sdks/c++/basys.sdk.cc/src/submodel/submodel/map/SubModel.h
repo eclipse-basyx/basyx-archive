@@ -21,13 +21,13 @@
 
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 
 
 /* *********************************************************************************
  * Sub Model base class
  * *********************************************************************************/
-class SubModel : public ISubModel
+class SubModel : public api::ISubModel
 {
 public:
   SubModel();

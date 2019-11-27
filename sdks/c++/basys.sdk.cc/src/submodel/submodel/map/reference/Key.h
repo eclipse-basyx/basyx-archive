@@ -14,12 +14,17 @@
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace reference {
 
-class Key : public aas::reference::IKey
+class Key : public IKey
 {
+public:
+	struct KeyType {
+		static constexpr char IRDI[] = "IRDI";
+	};
+
+	struct KeyElements {
+		static constexpr char ConceptDictionary[] = "ConceptDictionary";
+	};
 private:
 	mutable basyx::object map;
 public:
@@ -36,7 +41,7 @@ public:
 	virtual std::string getValue() const override;
 	virtual std::string getidType() const override;
   
-	basyx::object getMap() { return map; };
+	basyx::object getMap() const { return map; };
 
 	// not inherited
 	void setType(const std::string & type);
@@ -44,9 +49,8 @@ public:
 	void setValue(const std::string & value);
 	void setIdType(const std::string & idType);
 };
+
 }
 }
-}
-}
-}
+
 #endif

@@ -8,64 +8,68 @@
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace qualifier {
 
-using namespace aas;
+Referable::Referable()
+{
+}
 
-Referable::Referable() :
-  description { "", "" }
-{}
+basyx::submodel::Referable::Referable(basyx::object & obj)
+	: vab::ElementMap{ obj }
+{
+	this->map.insertKey(Path::IdShort, "");
+	this->map.insertKey(Path::Category, "");
+	this->map.insertKey(Path::Description, Description{}.getMap());
+	this->map.insertKey(Path::Parent, basyx::object::make_null());
+}
 
-Referable::Referable(const std::string & idShort, const std::string & category, const aas::qualifier::impl::Description & description) :
-  idShort { idShort },
-  category { category },
-  description { description }
-{}
+Referable::Referable(const std::string & idShort, const std::string & category, const Description & description)
+{
+	this->map.insertKey(Path::IdShort, idShort);
+	this->map.insertKey(Path::Category, category);
+	this->map.insertKey(Path::Description, description.getMap());
+	this->map.insertKey(Path::Parent, basyx::object::make_null());
+}
 
 std::string Referable::getIdShort() const
 {
-  return this->idShort;
+	return this->map.getProperty(Path::IdShort).GetStringContent();
 }
 
 std::string Referable::getCategory() const
 {
-  return this->category;
+	return this->map.getProperty(Path::Category).GetStringContent();
 }
 
-aas::qualifier::impl::Description Referable::getDescription() const
+Description Referable::getDescription() const
 {
-  return this->description;
+	return Description{ this->map.getProperty(Path::Description) };
 }
 
-std::shared_ptr<reference::IReference> Referable::getParent() const
+std::shared_ptr<IReference> Referable::getParent() const
 {
-  return this->parentReference;
+	// TODO
+	return nullptr;
 }
 
 void Referable::setIdShort(const std::string & shortID)
 {
-  this->idShort = shortID;
+	this->map.insertKey(Path::IdShort, shortID, true);
 }
 
 void Referable::setCategory(const std::string & category)
 {
-  this->category = category;
+	this->map.insertKey(Path::Category, category, true);
 }
 
-void Referable::setDescription(const aas::qualifier::impl::Description & description)
+void Referable::setDescription(const Description & description)
 {
-  this->description = description;
+	this->map.insertKey(Path::Description, description.getMap(), true);
 }
 
-void Referable::setParent(const std::shared_ptr<aas::reference::IReference>& parentReference)
+void Referable::setParent(const std::shared_ptr<IReference> & parentReference)
 {
-  this->parentReference = parentReference;
+	// TODO:
 }
 
-}
-}
-}
 }
 }

@@ -10,20 +10,16 @@
 #include <string>
 
 namespace basyx {
-namespace aas {
-namespace identifier {
-
-namespace identifierPaths {
-  static constexpr char identifierPath[] = "identifierPath";
-}
-
-namespace internalIdentifierPaths {
-  static constexpr char IDTYPE[] = "idType";
-  static constexpr char ID[] = "id";
-}
+namespace submodel {
 
 class IIdentifier
 {
+public:
+	struct Path {
+		static constexpr char IdentifierPath[] = "identifierPath";
+		static constexpr char IdType[] = "idType";
+		static constexpr char Id[] = "id";
+	};
 public:
   virtual ~IIdentifier() = default;
 
@@ -40,6 +36,6 @@ public:
 
 }
 }
-}
+
 
 #endif

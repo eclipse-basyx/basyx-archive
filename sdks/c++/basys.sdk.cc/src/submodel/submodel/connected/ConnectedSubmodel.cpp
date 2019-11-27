@@ -16,7 +16,7 @@
 #include "submodelelement/property/ConnectedProperty.h"
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 namespace backend {
 
 using namespace submodelelement::operation;

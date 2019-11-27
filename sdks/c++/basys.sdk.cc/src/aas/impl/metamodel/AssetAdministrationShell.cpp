@@ -6,183 +6,155 @@
 
 #include "AssetAdministrationShell.h"
 
+using namespace basyx::submodel;
+
 namespace basyx {
 namespace aas {
 
-AssetAdministrationShell::AssetAdministrationShell() :
-  description{"",""}
+AssetAdministrationShell::AssetAdministrationShell()
 {}
 
-AssetAdministrationShell::AssetAdministrationShell(std::shared_ptr<reference::impl::Reference> derivedFrom, std::shared_ptr<security::Security> security, 
-      std::shared_ptr<parts::Asset> asset, basyx::specificCollection_t<descriptor::SubModelDescriptor> submodels, 
-      basyx::specificCollection_t<IConceptDictionary> dictionaries, basyx::specificCollection_t<IView> views) :
-  derivedFrom{derivedFrom},
-  security{security},
-  asset{asset},
-  submodels{submodels},
-  dictionaries{dictionaries},
-  views{views},
-  description{"",""}
+AssetAdministrationShell::AssetAdministrationShell(
+	std::shared_ptr<Reference> derivedFrom, 
+	std::shared_ptr<security::Security> security, 
+	std::shared_ptr<Asset> asset, 
+	basyx::specificCollection_t<descriptor::SubModelDescriptor> submodels, 
+	basyx::specificCollection_t<IConceptDictionary> dictionaries, basyx::specificCollection_t<IView> views)
 {}
 
 void AssetAdministrationShell::setEndpoint(const std::string & endpoint, const std::string & endpointType)
 {
-  this->endpoint = endpoint;
-  this->endpointType = endpointType;
 }
 
 basyx::object::list_t<basyx::object::hash_map_t<std::string>> AssetAdministrationShell::getEndpoints()
 {
-  basyx::object::hash_map_t<std::string> map {{"type", endpointType}, {"address", endpoint}};
-  basyx::object::list_t<basyx::object::hash_map_t<std::string>> list;
-  list.push_back(map);
-
-  return list;
+	return basyx::object::list_t<basyx::object::hash_map_t<std::string>>();
 }
 
-basyx::specificCollection_t<reference::IReference> AssetAdministrationShell::getDataSpecificationReferences() const
+basyx::specificCollection_t<submodel::IReference> AssetAdministrationShell::getDataSpecificationReferences() const
 {
-  return this->dataSpecificationReferences;
+	return basyx::specificCollection_t<submodel::IReference>();
 }
 
-void AssetAdministrationShell::setDataSpecificationReferences(const basyx::specificCollection_t<reference::IReference>& references)
+void AssetAdministrationShell::setDataSpecificationReferences(const basyx::specificCollection_t<submodel::IReference>& references)
 {
-  this->dataSpecificationReferences = references;
 }
 
 std::string AssetAdministrationShell::getIdShort() const
 {
-  return this->idShort;
+	return std::string();
 }
 
 std::string AssetAdministrationShell::getCategory() const
 {
-  return this->category;
+	return std::string();
 }
 
 void AssetAdministrationShell::setCategory(const std::string & category)
 {
-  this->category = category;
 }
 
-qualifier::impl::Description AssetAdministrationShell::getDescription() const
+submodel::Description AssetAdministrationShell::getDescription() const
 {
-  return this->description;
+	return submodel::Description("","");
 }
 
-void AssetAdministrationShell::setDescription(const qualifier::impl::Description & description)
+void AssetAdministrationShell::setDescription(const submodel::Description & description)
 {
-  this->description = description;
 }
 
-std::shared_ptr<reference::IReference> AssetAdministrationShell::getParent() const
+std::shared_ptr<submodel::IReference> AssetAdministrationShell::getParent() const
 {
-  return this->parent;
+	return std::shared_ptr<submodel::IReference>();
 }
 
-void AssetAdministrationShell::setParent(const std::shared_ptr<reference::IReference>& parent)
+void AssetAdministrationShell::setParent(const std::shared_ptr<submodel::IReference>& parent)
 {
-  this->parent = parent;
 }
 
-std::shared_ptr<qualifier::IAdministrativeInformation> AssetAdministrationShell::getAdministration() const
+std::shared_ptr<submodel::IAdministrativeInformation> AssetAdministrationShell::getAdministration() const
 {
-  return this->administration;
+	return std::shared_ptr<submodel::IAdministrativeInformation>();
 }
 
-void AssetAdministrationShell::setAdministration(const std::shared_ptr<qualifier::IAdministrativeInformation>& administrativeInformation)
+void AssetAdministrationShell::setAdministration(const std::shared_ptr<submodel::IAdministrativeInformation>& administrativeInformation)
 {
-  this->administration = administrativeInformation;
 }
 
-std::shared_ptr<identifier::IIdentifier> AssetAdministrationShell::getIdentification() const
+std::shared_ptr<submodel::IIdentifier> AssetAdministrationShell::getIdentification() const
 {
-  return this->identification;
+	return std::shared_ptr<submodel::IIdentifier>();
 }
 
-void AssetAdministrationShell::setIdentification(const std::shared_ptr<identifier::IIdentifier>& identification)
+void AssetAdministrationShell::setIdentification(const std::shared_ptr<submodel::IIdentifier>& identification)
 {
-  this->identification = identification;
 }
 
-basyx::specificMap_t<ISubModel> AssetAdministrationShell::getSubModels() const
+basyx::specificMap_t<submodel::api::ISubModel> AssetAdministrationShell::getSubModels() const
 {
-  // not allowed on local copies
+	return basyx::specificMap_t<submodel::api::ISubModel>();
 }
 
 void AssetAdministrationShell::addSubModel(const descriptor::SubModelDescriptor & subModelDescriptor)
 {
-  this->submodels.push_back(std::make_shared<descriptor::SubModelDescriptor>(subModelDescriptor));
 }
 
 std::shared_ptr<security::ISecurity> AssetAdministrationShell::getSecurity() const
 {
-  return this->security;
+	return std::shared_ptr<security::ISecurity>();
 }
 
 void AssetAdministrationShell::setSecurity(const std::shared_ptr<security::ISecurity>& security)
 {
-  this->security = security;
 }
 
-std::shared_ptr<reference::IReference> AssetAdministrationShell::getDerivedFrom() const
+std::shared_ptr<submodel::IReference> AssetAdministrationShell::getDerivedFrom() const
 {
-  return this->derivedFrom;
+	return std::shared_ptr<submodel::IReference>();
 }
 
-void AssetAdministrationShell::setDerivedFrom(const std::shared_ptr<reference::IReference>& derivedFrom)
+void AssetAdministrationShell::setDerivedFrom(const std::shared_ptr<submodel::IReference>& derivedFrom)
 {
-  this->derivedFrom = derivedFrom;
 }
 
-std::shared_ptr<parts::IAsset> AssetAdministrationShell::getAsset() const
+std::shared_ptr<IAsset> AssetAdministrationShell::getAsset() const
 {
-  return this->asset;
+	return std::shared_ptr<IAsset>();
 }
 
-void AssetAdministrationShell::setAsset(const std::shared_ptr<parts::IAsset> & asset)
+void AssetAdministrationShell::setAsset(const std::shared_ptr<IAsset>& asset)
 {
-  this->asset = asset;
 }
 
-void AssetAdministrationShell::setSubmodels(const basyx::specificCollection_t<descriptor::SubModelDescriptor> & submodels)
+void AssetAdministrationShell::setSubmodels(const basyx::specificCollection_t<descriptor::SubModelDescriptor>& submodels)
 {
-  this->submodels = submodels;
 }
 
 basyx::specificCollection_t<descriptor::SubModelDescriptor> AssetAdministrationShell::getSubModelDescriptors() const
 {
-  return this->submodels;
+	return basyx::specificCollection_t<descriptor::SubModelDescriptor>();
 }
 
 basyx::specificCollection_t<IView> AssetAdministrationShell::getViews() const
 {
-  return this->views;
+	return basyx::specificCollection_t<IView>();
 }
 
 void AssetAdministrationShell::setViews(const basyx::specificCollection_t<IView>& views)
 {
-  this->views = views;
 }
 
 basyx::specificCollection_t<IConceptDictionary> AssetAdministrationShell::getConceptDictionary() const
 {
-  return dictionaries;
+	return basyx::specificCollection_t<IConceptDictionary>();
 }
 
 void AssetAdministrationShell::setConceptDictionary(const basyx::specificCollection_t<IConceptDictionary>& dictionaries)
 {
-  this->dictionaries = dictionaries;
 }
 
-void AssetAdministrationShell::addConceptDescription(const std::shared_ptr<parts::IConceptDescription> & description)
+void AssetAdministrationShell::addConceptDescription(const std::shared_ptr<IConceptDescription>& description)
 {
-  if ( dictionaries.empty() )
-  {
-    dictionaries.push_back(std::make_shared<parts::ConceptDictionary>());
-  }
-  auto back = std::dynamic_pointer_cast<parts::ConceptDictionary>(dictionaries.back());
-  back->addConceptDescription(description);
 }
 
 }

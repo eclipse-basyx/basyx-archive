@@ -13,24 +13,18 @@
 
 
 namespace basyx {
-namespace aas {
-namespace submodelelement {
-namespace property {
+namespace submodel {
 
-class ISingleProperty
+class ISingleProperty : public virtual IProperty
 {
-
 public:
-  virtual ~ISingleProperty() = default;
+	virtual ~ISingleProperty() = default;
 
-  virtual basyx::object get() const = 0;
-  virtual void set(const basyx::object & newValue) = 0;
-  virtual std::string getValueType() const = 0;
-
+	virtual basyx::object get() const = 0;
+	virtual void set(const basyx::object & newValue) = 0;
+	virtual std::string getValueType() const = 0;
 };
 
-}
-}
 }
 }
 

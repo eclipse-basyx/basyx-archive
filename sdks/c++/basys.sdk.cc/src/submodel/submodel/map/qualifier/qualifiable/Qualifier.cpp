@@ -8,18 +8,18 @@
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace qualifier {
-namespace qualifiable {
 
 Qualifier::Qualifier()
 {}
 
-Qualifier::Qualifier(const std::string & qualifierType, const basyx::object & qualifierValue, const std::shared_ptr<aas::reference::IReference> & valueId) :
-  qualifierType {qualifierType},
-  qualifierValue {qualifierValue},
-  qualifierValueId {valueId}
+Qualifier::Qualifier(
+	const std::string & qualifierType, 
+	const basyx::object & qualifierValue, 
+	const std::shared_ptr<IReference> & valueId) 
+	
+  : qualifierType {qualifierType}
+  , qualifierValue {qualifierValue}
+  , qualifierValueId {valueId}
 {}
 
 std::string Qualifier::getQualifierType() const
@@ -32,12 +32,12 @@ basyx::object Qualifier::getQualifierValue() const
   return this->qualifierValue;
 }
 
-std::shared_ptr<aas::reference::IReference> Qualifier::getQualifierValueId() const
+std::shared_ptr<IReference> Qualifier::getQualifierValueId() const
 {
   return this->qualifierValueId;
 }
 
-std::shared_ptr<aas::reference::IReference> Qualifier::getSemanticId() const
+std::shared_ptr<IReference> Qualifier::getSemanticId() const
 {
   return this->semanticId;
 }
@@ -52,20 +52,16 @@ void Qualifier::setQualifierValue(const basyx::object & qualifierValue)
   this->qualifierValue = qualifierValue;
 }
 
-void Qualifier::setQualifierValueId(const std::shared_ptr<aas::reference::IReference> & valueId)
+void Qualifier::setQualifierValueId(const std::shared_ptr<IReference> & valueId)
 {
   this->qualifierValueId = valueId;
 }
 
-void Qualifier::setSemanticId(const std::shared_ptr<aas::reference::IReference>& semanticId)
+void Qualifier::setSemanticId(const std::shared_ptr<IReference>& semanticId)
 {
   this->semanticId = semanticId;
 }
 
 
-}
-}
-}
-}
 }
 }

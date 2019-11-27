@@ -9,32 +9,41 @@
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace qualifier {
 
-using namespace aas::reference;
 
-HasSemantics::HasSemantics() :
-  reference(new aas::reference::impl::Reference)
-{}
+HasSemantics::HasSemantics()
+	: vab::ElementMap{}
+{
+	this->map.insertKey(Path::SemanticId, Reference{}.getMap());
+}
 
-HasSemantics::HasSemantics(const std::shared_ptr<aas::reference::IReference>& reference) :
-  reference(reference)
-{}
+HasSemantics::HasSemantics(basyx::object object)
+	: vab::ElementMap{object}
+{
+}
+
+HasSemantics::HasSemantics(const std::shared_ptr<IReference>& reference) 
+	: vab::ElementMap{}
+{
+	this->setSemanticId(reference);
+}
 
 std::shared_ptr<IReference> HasSemantics::getSemanticId() const
 {
-  return this->reference;
+	return std::make_shared<Reference>(this->map.getProperty(Path::SemanticId));
 }
 
-void HasSemantics::setSemanticId(const std::shared_ptr<aas::reference::IReference>& reference)
+void HasSemantics::setSemanticId(const std::shared_ptr<IReference>& reference)
 {
-  this->reference = reference;
+	Reference ref{ reference->getKeys() };
+	this->map.insertKey(Path::SemanticId, ref.getMap());
 }
 
+void HasSemantics::setSemanticId(const IReference & reference)
+{
+	Reference ref{ reference.getKeys() };
+	this->map.insertKey(Path::SemanticId, ref.getMap());
 }
-}
-}
+
 }
 }

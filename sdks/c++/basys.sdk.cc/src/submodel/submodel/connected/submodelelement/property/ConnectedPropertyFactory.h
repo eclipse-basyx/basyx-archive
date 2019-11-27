@@ -18,7 +18,7 @@
 
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 namespace backend {
 namespace connected {
 namespace support {

@@ -11,16 +11,16 @@
 #include "submodel/api/submodelelement/ISubmodelElement.h"
 
 namespace basyx {
-namespace aas {
-namespace submodelelement {
+namespace submodel {
 
-class IDataElement// : public ISubmodelElement
+class IDataElement : public virtual ISubmodelElement
 {
 public:
-  virtual ~IDataElement() = default;
+  virtual ~IDataElement() = 0;
 };
 
-}
+inline IDataElement::~IDataElement() = default;
+
 }
 }
 

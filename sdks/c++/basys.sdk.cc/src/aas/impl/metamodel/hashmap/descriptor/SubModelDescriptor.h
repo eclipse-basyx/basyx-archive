@@ -25,12 +25,12 @@ public:
    * Create a new aas descriptor with minimal information based on an existing
    * submodel.
   */
-  SubModelDescriptor(std::shared_ptr<ISubModel> subModel, std::string httpEndpoint);
+  SubModelDescriptor(std::shared_ptr<submodel::api::ISubModel> subModel, std::string httpEndpoint);
 
   /**
    * Create a new descriptor with minimal information
    */
-  SubModelDescriptor(std::string idShort, std::shared_ptr<identifier::IIdentifier> identifier, std::string httpEndpoint);
+  SubModelDescriptor(std::string idShort, std::shared_ptr<submodel::IIdentifier> identifier, std::string httpEndpoint);
 };
 
 }

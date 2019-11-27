@@ -12,17 +12,17 @@
 #include "submodel/api/submodelelement/operation/IOperation.h"
 
 namespace basyx {
-namespace aas {
-namespace impl {
+namespace submodel {
+namespace map {
 
 class IVABElementContainer
 {
 public:
-  ~IVABElementContainer() = default;
+	~IVABElementContainer() = default;
 
-  virtual void addSubModelElement(const std::shared_ptr<submodelelement::ISubmodelElement> & element) = 0;
-  virtual basyx::specificMap_t<submodelelement::IDataElement> getDataElements() const = 0;
-  virtual basyx::specificMap_t<submodelelement::operation::IOperation> getOperations() const = 0;
+	virtual void addSubModelElement(const std::shared_ptr<ISubmodelElement> & element) = 0;
+	virtual basyx::specificMap_t<IDataElement> getDataElements() const = 0;
+	virtual basyx::specificMap_t<IOperation> getOperations() const = 0;
 };
 
 }

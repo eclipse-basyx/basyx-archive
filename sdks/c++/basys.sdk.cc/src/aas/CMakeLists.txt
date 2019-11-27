@@ -15,6 +15,8 @@ target_sources(basyx_aas
 		aas/aas/AssetAdministrationShell.h
 		aas/aas/BlobType.h
 		aas/aas/dataspecification/IDataSpecification.h
+		aas/aas/dataspecification/IDataSpecificationContent.h
+		aas/aas/dataspecification/IDataSpecificationIEC61630.h
 		aas/aas/MimeType.h
 		aas/aas/parts/IAsset.h
 		aas/aas/parts/IConceptDescription.h
@@ -27,13 +29,11 @@ target_sources(basyx_aas
 		aas/api/metamodel/aas/IAssetAdministrationShell.h
 		aas/api/modelurn/ModelUrn.cpp
 		aas/api/modelurn/ModelUrn.h
-		aas/backend/connected/aas/ConnectedAssetAdministrationShell.cpp
-		aas/backend/connected/aas/ConnectedAssetAdministrationShell.h
-		aas/backend/connected/aas/ConnectedAssetAdministrationShellManager.cpp
-		aas/backend/connected/aas/ConnectedAssetAdministrationShellManager.h
-		aas/backend/connected/aas/dataspecification/IDataSpecification.h
-		impl/map/ElementMap.cpp
-		impl/map/ElementMap.h
+		#aas/backend/connected/aas/ConnectedAssetAdministrationShell.cpp
+		#aas/backend/connected/aas/ConnectedAssetAdministrationShell.h
+		#aas/backend/connected/aas/ConnectedAssetAdministrationShellManager.cpp
+		#aas/backend/connected/aas/ConnectedAssetAdministrationShellManager.h
+		#aas/backend/connected/aas/dataspecification/IDataSpecification.h
 		impl/metamodel/AssetAdministrationShell.cpp
 		impl/metamodel/AssetAdministrationShell.h
 		impl/metamodel/hashmap/descriptor/ModelDescriptor.cpp
@@ -42,6 +42,8 @@ target_sources(basyx_aas
 		impl/metamodel/hashmap/descriptor/SubModelDescriptor.h
 		impl/metamodel/hashmap/parts/Asset.cpp
 		impl/metamodel/hashmap/parts/Asset.h
+		impl/metamodel/hashmap/parts/ConceptDescription.cpp
+		impl/metamodel/hashmap/parts/ConceptDescription.h
 		impl/metamodel/hashmap/parts/ConceptDictionary.cpp
 		impl/metamodel/hashmap/parts/ConceptDictionary.h
 		impl/metamodel/hashmap/parts/View.cpp

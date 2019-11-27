@@ -9,58 +9,49 @@
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace submodelelement {
-namespace operation {
 
 Operation::Operation()
-{}
-
-Operation::Operation(operation_var_list in, operation_var_list out, basyx::detail::functionWrapper invocable) :
-  in_variables {in},
-  out_variables {out},
-  invocable {invocable}
-{}
-
-operation_var_list Operation::getParameterTypes() const
+	: ModelType(Path::ModelType)
 {
-  return this->in_variables;
+	this->map.insertKey(Path::Input, basyx::object::make_list<basyx::object>());
+	this->map.insertKey(Path::Invokable, basyx::object::make_null());
+	this->map.insertKey(Path::Output, basyx::object::make_null());
 }
 
-operation_var_list Operation::getReturnTypes() const
+basyx::specificCollection_t<IOperationVariable> Operation::getParameterTypes() const
 {
-  return this->out_variables;
+	return basyx::specificCollection_t<IOperationVariable>();
 }
 
-basyx::detail::functionWrapper Operation::getInvocable() const
+std::shared_ptr<IOperationVariable> Operation::getReturnType() const
 {
-  return this->invocable;
+	return std::shared_ptr<IOperationVariable>();
+}
+
+basyx::object Operation::getInvocable() const
+{
+	return this->map.getProperty(Path::Invokable);
+}
+
+void Operation::setParameterTypes(const basyx::specificCollection_t<IOperationVariable>& parameterTypes)
+{
+}
+
+void Operation::setReturnTypes(const std::shared_ptr<IOperationVariable>& returnTypes)
+{
+}
+
+void Operation::setInvocable(basyx::object invocable)
+{
+	this->map.insertKey(Path::Invokable, invocable, true);
 }
 
 basyx::object Operation::invoke(basyx::object & parameters) const
 {
-  return invocable.invoke(parameters); 
+	return basyx::object();
 }
 
-void Operation::setParameterTypes(const operation_var_list & parameterTypes)
-{
-  this->in_variables = parameterTypes;
-}
 
-void Operation::setReturnTypes(const operation_var_list & returnTypes)
-{
-  this->out_variables = returnTypes;
-}
 
-void Operation::setInvocable(basyx::detail::functionWrapper invocable)
-{
-  this->invocable = invocable;
-}
-
-}
-}
-}
-}
 }
 }

@@ -9,34 +9,33 @@
 
 #include "submodel/api/qualifier/IHasSemantics.h"
 #include "submodel/api/reference/IReference.h"
+
 #include "basyx/object.h"
+
+#include "vab/ElementMap.h"
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace qualifier {
 
-class HasSemantics : public aas::qualifier::IHasSemantics
+
+class HasSemantics : 
+	public virtual IHasSemantics,
+	public virtual vab::ElementMap
 {
 public:
-  ~HasSemantics() = default;
+	~HasSemantics() = default;
 
-  HasSemantics();
-  HasSemantics(const std::shared_ptr<aas::reference::IReference> & reference);
+	HasSemantics();
+	HasSemantics(basyx::object object);
+	HasSemantics(const std::shared_ptr<IReference> & reference);
 
-  void setSemanticId(const std::shared_ptr<aas::reference::IReference> & reference);
+	void setSemanticId(const std::shared_ptr<IReference> & reference);
+	void setSemanticId(const IReference & reference);
 
-  // Inherited via IHasSemantics
-  virtual std::shared_ptr<aas::reference::IReference> getSemanticId() const override;
-
-private:
-  std::shared_ptr<aas::reference::IReference> reference;
+	// Inherited via IHasSemantics
+	virtual std::shared_ptr<IReference> getSemanticId() const override;
 };
 
-}
-}
-}
 }
 }
 

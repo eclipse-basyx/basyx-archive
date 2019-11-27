@@ -9,32 +9,31 @@
 
 #include "submodel/api/qualifier/IHasDataSpecification.h"
 #include "submodel/api/reference/IReference.h"
+
 #include "basyx/object.h"
+
+#include "vab/ElementMap.h"
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace qualifier {
 
-class HasDataSpecification : public aas::qualifier::IHasDataSpecification
+class HasDataSpecification : 
+	public virtual IHasDataSpecification,
+	public virtual vab::ElementMap
 {
 public:
-  ~HasDataSpecification() = default;
+	HasDataSpecification();
+	HasDataSpecification(basyx::object & obj);
+	HasDataSpecification(const basyx::specificCollection_t<IReference> & refs);
 
-  // Inherited via IHasDataSpecification
-  virtual basyx::specificCollection_t<aas::reference::IReference> getDataSpecificationReferences() const override;
+	~HasDataSpecification() = default;
 
-  void setDataSpecificationReferences(const basyx::specificCollection_t<aas::reference::IReference> & references);
+	// Inherited via IHasDataSpecification
+	virtual basyx::specificCollection_t<IReference> getDataSpecificationReferences() const override;
 
-private:
-  basyx::specificCollection_t<aas::reference::IReference> references;
-
+	void setDataSpecificationReferences(const basyx::specificCollection_t<IReference> & references);
 };
 
-}
-}
-}
 }
 }
 

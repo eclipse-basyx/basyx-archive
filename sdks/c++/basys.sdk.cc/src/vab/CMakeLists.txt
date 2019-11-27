@@ -26,6 +26,8 @@ target_sources(basyx_vab
 		vab/core/util/VABPath.h
 		vab/core/VABConnectionManager.cpp
 		vab/core/VABConnectionManager.h
+		vab/ElementMap.cpp
+		vab/ElementMap.h
 		vab/provider/hashmap/VABHashmapProvider.h
 		vab/provider/IVABElementHandler.h
 		vab/provider/native/frame/BaSyxNativeFrameHelper.h

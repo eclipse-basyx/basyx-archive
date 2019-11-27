@@ -12,29 +12,25 @@
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace submodelelement {
 
-class DataElement : public SubmodelElement, public aas::submodelelement::IDataElement
+class DataElement : 
+	public SubmodelElement, 
+	public virtual IDataElement
 {
 public:
-  ~DataElement() = default;
+	~DataElement() = default;
 
-  // constructors
-  DataElement();
+	// constructors
+	DataElement();
 
-  /**
-   * Constructs a DataElement from a given list, provided that all needed elements present in list.
-   *
-   * @param map the map containig all elements.
-   */
-  DataElement(const basyx::object::object_map_t & map);
+	/**
+	* Constructs a DataElement from a given list, provided that all needed elements present in list.
+	*
+	* @param map the map containig all elements.
+	*/
+	DataElement(basyx::object object);
 };
 
-}
-}
-}
 }
 }
 

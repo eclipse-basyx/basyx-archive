@@ -7,7 +7,7 @@
 #include "ConnectedVABModelMap.h"
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 namespace backend {
 
 ConnectedVABModelMap::ConnectedVABModelMap(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy) :

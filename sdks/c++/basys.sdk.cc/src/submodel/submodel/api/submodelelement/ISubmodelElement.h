@@ -13,21 +13,26 @@
 #include "submodel/api/qualifier/IReferable.h"
 #include "submodel/api/qualifier/qualifiable/IQualifiable.h"
 #include "submodel/api/qualifier/IHasSemantics.h"
-#include "submodel/api/qualifier/haskind/IHasKind.h"
+#include "submodel/api/qualifier/IHasKind.h"
 
 namespace basyx {
-namespace aas {
-namespace submodelelement {
+namespace submodel {
 
-class ISubmodelElement : public qualifier::IHasDataSpecification, qualifier::IReferable, qualifier::qualifiable::IQualifiable, qualifier::IHasSemantics, qualifier::haskind::IHasKind
+class ISubmodelElement : 
+	public virtual IHasDataSpecification, 
+	public virtual IReferable,
+	public virtual IQualifiable,
+	public virtual IHasSemantics,
+	public virtual IHasKind
 {
-private:
-  basyx::object::object_map_t hashMap;
+public:
+	struct Path {
+		static constexpr char ModelType[] = "SubmodelElement";
+	};
 public:
   virtual ~ISubmodelElement() = default;
 };
 
-}
 }
 }
 

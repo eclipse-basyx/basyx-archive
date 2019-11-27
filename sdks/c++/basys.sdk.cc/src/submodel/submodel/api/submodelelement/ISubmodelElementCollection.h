@@ -12,7 +12,7 @@
 #include "basyx/types.h"
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 namespace submodelelement {
 
 namespace SubmodelElementCollectionPaths {
@@ -26,8 +26,8 @@ class ISubmodelElementCollection
 public:
   virtual ~ISubmodelElementCollection() = default;
 
-  virtual void setValue(const basyx::specificCollection_t<aas::submodelelement::ISubmodelElement> & value) = 0;
-  virtual basyx::specificCollection_t<aas::submodelelement::ISubmodelElement> getValue() const = 0;
+  virtual void setValue(const basyx::specificCollection_t<ISubmodelElement> & value) = 0;
+  virtual basyx::specificCollection_t<ISubmodelElement> getValue() const = 0;
 
   virtual void setOrdered(const bool & value) = 0;
   virtual bool isOrdered() const = 0;
@@ -35,8 +35,8 @@ public:
   virtual void setAllowDuplicates(const bool & value) = 0;
   virtual bool isAllowDuplicates() const = 0;
 
-  virtual void setElements(const basyx::specificMap_t<aas::submodelelement::ISubmodelElement> & value) = 0;
-  virtual basyx::specificMap_t<aas::submodelelement::ISubmodelElement> getElements() const = 0;
+  virtual void setElements(const basyx::specificMap_t<ISubmodelElement> & value) = 0;
+  virtual basyx::specificMap_t<ISubmodelElement> getElements() const = 0;
 };
 
 }

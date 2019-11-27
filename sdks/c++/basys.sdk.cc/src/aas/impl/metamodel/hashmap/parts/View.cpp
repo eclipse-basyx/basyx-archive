@@ -6,18 +6,19 @@
 
 #include "View.h"
 
+using namespace basyx::submodel;
+
 namespace basyx {
 namespace aas {
-namespace parts {
 
-std::shared_ptr<reference::IReference> View::getSemanticId() const
+std::shared_ptr<IReference> View::getSemanticId() const
 {
-  return std::shared_ptr<reference::IReference>();
+  return std::shared_ptr<IReference>();
 }
 
-basyx::specificCollection_t<reference::IReference> View::getDataSpecificationReferences() const
+basyx::specificCollection_t<IReference> View::getDataSpecificationReferences() const
 {
-  return basyx::specificCollection_t<reference::IReference>();
+  return basyx::specificCollection_t<IReference>();
 }
 
 std::string View::getIdShort() const
@@ -30,24 +31,23 @@ std::string View::getCategory() const
   return std::string();
 }
 
-qualifier::impl::Description View::getDescription() const
+basyx::submodel::Description View::getDescription() const
 {
-  return qualifier::impl::Description("","");
+	return {"",""};
 }
 
-std::shared_ptr<reference::IReference> View::getParent() const
+std::shared_ptr<IReference> View::getParent() const
 {
-  return std::shared_ptr<reference::IReference>();
+  return std::shared_ptr<IReference>();
 }
 
-void View::setContainedElement(std::vector<reference::IReference> references)
+void View::setContainedElement(std::vector<IReference> references)
 {}
 
-std::vector<reference::IReference> View::getContainedElement() const
+std::vector<IReference> View::getContainedElement() const
 {
-  return std::vector<reference::IReference>();
+  return std::vector<IReference>();
 }
 
-}
 }
 }

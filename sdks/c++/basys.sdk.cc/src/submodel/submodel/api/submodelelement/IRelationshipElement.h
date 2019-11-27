@@ -10,7 +10,7 @@
 #include "submodel/api/reference/IReference.h"
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 namespace submodelelement {
 
 namespace RelationshipElementPath
@@ -24,11 +24,11 @@ class IRelationshipElement
 public:
   virtual ~IRelationshipElement() = default;
 
-  virtual void setFirst(const std::shared_ptr<reference::IReference> & first) = 0;
-  virtual std::shared_ptr<reference::IReference> getFirst() const = 0;
+  virtual void setFirst(const std::shared_ptr<IReference> & first) = 0;
+  virtual std::shared_ptr<IReference> getFirst() const = 0;
 
-  virtual void setSecond(const std::shared_ptr<reference::IReference> & second) = 0;
-  virtual std::shared_ptr<reference::IReference> getSecond() const = 0;
+  virtual void setSecond(const std::shared_ptr<IReference> & second) = 0;
+  virtual std::shared_ptr<IReference> getSecond() const = 0;
 };
 
 }

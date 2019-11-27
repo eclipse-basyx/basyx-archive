@@ -14,20 +14,16 @@
 
 
 namespace basyx {
-namespace aas {
-namespace qualifier {
-namespace qualifiable {
+namespace submodel {
 
 class IFormula
 {
 public:
   virtual ~IFormula() = default;
 
-  virtual basyx::specificCollection_t<reference::IReference> getDependsOn() const = 0;
+  virtual basyx::specificCollection_t<IReference> getDependsOn() const = 0;
 };
 
-}
-}
 }
 }
 

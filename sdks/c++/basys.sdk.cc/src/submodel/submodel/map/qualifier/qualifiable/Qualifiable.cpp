@@ -6,37 +6,48 @@
 
 #include "Qualifiable.h"
 
+#include "submodel/map/qualifier/qualifiable/Constraint.h"
+
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace qualifier {
-namespace qualifiable {
 
 Qualifiable::Qualifiable()
-{}
-
-Qualifiable::Qualifiable(const std::shared_ptr<aas::qualifier::qualifiable::IConstraint>& constraint) :
-  constraints {constraint}
-{}
-
-Qualifiable::Qualifiable(const basyx::specificCollection_t<aas::qualifier::qualifiable::IConstraint> constraints) :
-  constraints {constraints}
-{}
-
-basyx::specificCollection_t<aas::qualifier::qualifiable::IConstraint> Qualifiable::getQualifier() const
+	: vab::ElementMap{}
 {
-  return this->constraints;
+	this->map.insertKey(Path::Constraints, basyx::object::make_null());
 }
 
-void Qualifiable::setQualifier(const basyx::specificCollection_t<aas::qualifier::qualifiable::IConstraint>& qualifiers)
+Qualifiable::Qualifiable(basyx::object object)
+	: vab::ElementMap{object}
 {
-  this->constraints = constraints;
 }
 
+Qualifiable::Qualifiable(const std::shared_ptr<IConstraint>& constraint)
+	: vab::ElementMap{}
+{
+	Constraint con{ *constraint };
+	auto list = basyx::object::make_list<basyx::object>();
+	list.insert(con.getMap());
+	this->map.insertKey(Path::Constraints, list);
 }
+
+Qualifiable::Qualifiable(const basyx::specificCollection_t<IConstraint> constraints)
+	: vab::ElementMap{}
+{
+	this->setQualifier(constraints);
 }
+
+basyx::specificCollection_t<IConstraint> Qualifiable::getQualifier() const
+{
+	auto & list = this->map.getProperty(Path::Constraints).Get<basyx::object::object_list_t&>();
+	return vab::ElementMap::make_specific_collection<IConstraint, Constraint>(list);
 }
+
+void Qualifiable::setQualifier(const basyx::specificCollection_t<IConstraint>& qualifiers)
+{
+	auto list = vab::ElementMap::make_object_list<IConstraint, Constraint>(qualifiers);
+	map.insertKey("keys", list);
 }
+
 }
 }

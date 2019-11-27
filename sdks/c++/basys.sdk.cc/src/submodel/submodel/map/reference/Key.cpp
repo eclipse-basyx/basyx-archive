@@ -10,9 +10,6 @@
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace reference {
 
 Key::Key(const std::string & type, const bool & local, const std::string & value, const std::string & idType)
 	:map(basyx::object::make_map())
@@ -63,8 +60,5 @@ void Key::setIdType(const std::string & idType)
 	map.insertKey("idType", idType, true);
 }
 
-}
-}
-}
 }
 }

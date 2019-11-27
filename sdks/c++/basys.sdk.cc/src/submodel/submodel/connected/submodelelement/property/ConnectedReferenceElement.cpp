@@ -7,7 +7,7 @@
 #include "ConnectedReferenceElement.h"
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 namespace backend {
 namespace connected {
 ConnectedReferenceElement::ConnectedReferenceElement(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy) :

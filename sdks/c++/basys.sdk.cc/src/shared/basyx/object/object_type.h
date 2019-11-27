@@ -163,4 +163,17 @@ namespace type {
 };
 };
 
+namespace util {
+	// to_string function for basyx::type::valueType
+	template<basyx::type::valueType ValueType>
+	std::string to_string();
+
+	template<> inline std::string to_string<basyx::type::valueType::Null>()   { return "Null"; };
+	template<> inline std::string to_string<basyx::type::valueType::Bool>()   { return "Boolean"; };
+	template<> inline std::string to_string<basyx::type::valueType::Int>()    { return "Integer"; };
+	template<> inline std::string to_string<basyx::type::valueType::Float>()  { return "Float"; };
+	template<> inline std::string to_string<basyx::type::valueType::String>() { return "String"; };
+	template<> inline std::string to_string<basyx::type::valueType::Object>() { return "Object"; };
+}
+
 #endif

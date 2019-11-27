@@ -1,0 +1,53 @@
+/*
+ * ElementMap.h
+ *
+ *      Author: wendel
+ */
+
+#ifndef BASYX_AAS_METAMODEL_ELEMENTMAP_H_
+#define BASYX_AAS_METAMODEL_ELEMENTMAP_H_
+
+#include "basyx/object.h"
+
+namespace basyx {
+namespace vab {
+
+
+class ElementMap
+{
+protected:
+	mutable basyx::object map;
+public:
+	ElementMap();
+	ElementMap(basyx::object object);
+	virtual ~ElementMap() = default;
+
+	basyx::object getMap() const;
+public:
+	template<typename AbstractType, typename SpecificType>
+	static basyx::specificCollection_t<AbstractType> make_specific_collection(basyx::object::object_list_t & obj_list)
+	{
+		basyx::specificCollection_t<AbstractType> list;
+
+		for (auto & obj : obj_list)
+			list.emplace_back(std::make_shared<SpecificType>(obj));
+
+		return list;
+	};
+
+	template<typename AbstractType, typename SpecificType>
+	static basyx::object make_object_list(const basyx::specificCollection_t<AbstractType> & abst_list)
+	{
+		auto list = basyx::object::make_list<basyx::object>();
+
+		for (auto & abstract : abst_list)
+			list.insert(SpecificType{ *abstract }.getMap());
+
+		return list;
+	};
+};
+
+}
+}
+
+#endif

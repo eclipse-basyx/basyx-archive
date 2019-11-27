@@ -14,7 +14,6 @@ target_sources(tests_vab
         core/proxy/test_vab_elementproxy.cpp
         provider/basyx/frame/test_BaSyxNativeFrameProcessor.cpp
         provider/test_hashmap.cpp
-        provider/test_obj_hashmap.cpp
         provider/test_hashmap_collection.cpp
         provider/test_hashmap_map.cpp
         snippet/MapCreateDelete.h

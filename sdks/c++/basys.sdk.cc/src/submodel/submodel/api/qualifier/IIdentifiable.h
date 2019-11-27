@@ -17,20 +17,17 @@
 #include <memory>
 
 namespace basyx {
-namespace aas {
-namespace qualifier {
+namespace submodel {
 
-class IIdentifiable : public IReferable
+class IIdentifiable : public virtual IReferable
 {
 public:
   virtual ~IIdentifiable() = default;
 
   virtual std::shared_ptr<IAdministrativeInformation> getAdministration() const = 0;
-  virtual std::shared_ptr<identifier::IIdentifier> getIdentification() const = 0;
-
+  virtual std::shared_ptr<IIdentifier> getIdentification() const = 0;
 };
 
-}
 }
 }
 

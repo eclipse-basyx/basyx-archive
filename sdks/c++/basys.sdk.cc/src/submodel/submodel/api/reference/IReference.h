@@ -12,24 +12,19 @@
 #include "basyx/types.h"
 
 namespace basyx {
-namespace aas {
-namespace reference {
-
-namespace paths {
-  static constexpr char DATASPECIFICATIONS[] = "dataSpecificationReferences";
-  static constexpr char PARENTS[] = "parentReferences";
-  static constexpr char SEMANTICIDS[] = "semanticIdReferences";
-  static constexpr char QUALIFIERS[] = "qualifierReferences";
-  static constexpr char REFERENCEPATH[] = "semanticIdentifier";
-}
-
-namespace internalReferencePaths {
-
-  static constexpr char KEY[] = "keys";
-}
+namespace submodel {
 
 class IReference
 {
+public:
+	struct Paths {
+		static constexpr char DataSpecifications[] = "dataSpecificationReferences";
+		static constexpr char Parents[] = "parentReferences";
+		static constexpr char SemanticIds[] = "semanticIdReferences";
+		static constexpr char Qualifiers[] = "qualifierReferences";
+		static constexpr char ReferencePath[] = "semanticIdentifier";
+		static constexpr char Key[] = "keys";
+	};
 public:
   virtual ~IReference() = default;
 
@@ -37,7 +32,6 @@ public:
   virtual void setKeys(const basyx::specificCollection_t<IKey> & keys) = 0;
 };
 
-}
 }
 }
 

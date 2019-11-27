@@ -14,8 +14,10 @@
 #include <memory>
 
 namespace basyx {
+
   template<typename T>
     using specificCollection_t = std::vector<std::shared_ptr<T>>;
+
   template<typename T>
    using specificMap_t = std::unordered_map<std::string, std::shared_ptr<T >> ;
 

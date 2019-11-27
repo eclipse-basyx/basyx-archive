@@ -7,7 +7,7 @@
 #include "SubModel.h"
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 
 SubModel::SubModel()
 {

@@ -8,7 +8,7 @@
 #define AAS_IMPL_SUBMODELELEMENT_PROPERTY_VALUETYPEDEF_PROPERTYVALUETYPEDEF_H_
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 namespace impl {
 namespace metamodel {
 

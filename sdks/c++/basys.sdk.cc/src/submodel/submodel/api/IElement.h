@@ -15,11 +15,10 @@
  * *********************************************************************************/
 class IElement {
 public:
-  virtual ~IElement() = default;
+	virtual ~IElement() = default;
 
-  virtual void setId(const std::string & id) = 0;
-  virtual std::string getId() const = 0;
-
+	virtual void setId(const std::string & id) = 0;
+	virtual std::string getId() const = 0;
 };
 
 

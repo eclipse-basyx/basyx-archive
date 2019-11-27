@@ -8,33 +8,35 @@
 #define AAS_IMPL_METAMODEL_IDENTIFIER_H_
 
 #include "submodel/api/identifier/IIdentifier.h"
+
 #include "basyx/types.h"
 #include "basyx/object.h"
 
-namespace basyx {
-namespace aas {
-namespace identifier {
-namespace impl {
+#include "vab/ElementMap.h"
 
-class Identifier : public IIdentifier
+namespace basyx {
+namespace submodel {
+
+class Identifier : 
+	public IIdentifier,
+	public vab::ElementMap
 {
 public:
-  ~Identifier() = default;
+	struct IdentifierType {
+		static constexpr char IRDI[] = "IRDI";
+	};
+public:
+	~Identifier() = default;
 
-  Identifier();
-  Identifier(const std::string & id, const std::string & idType);
-  Identifier(const basyx::object::object_map_t & map);
+	Identifier();
+	Identifier(const std::string & id, const std::string & idType);
+	Identifier(basyx::object object);
 
-  // Inherited via IIdentifier
-  virtual std::string getIdType() const override;
-  virtual std::string getId() const override;
-
-private:
-  std::string id, idType;
+	// Inherited via IIdentifier
+	virtual std::string getIdType() const override;
+	virtual std::string getId() const override;
 };
 
-}
-}
 }
 }
 

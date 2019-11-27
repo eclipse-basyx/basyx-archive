@@ -8,10 +8,11 @@ add_library(basyx_submodel)
 
 target_sources(basyx_submodel
     PRIVATE
+		submodel/api/constant_definitions.cpp
 		submodel/api/identifier/IIdentifier.h
 		submodel/api/IElement.h
 		submodel/api/ISubModel.h
-		submodel/api/qualifier/haskind/IHasKind.h
+		submodel/api/qualifier/IHasKind.h
 		submodel/api/qualifier/IAdministrativeInformation.h
 		submodel/api/qualifier/IHasDataSpecification.h
 		submodel/api/qualifier/IHasSemantics.h
@@ -37,40 +38,42 @@ target_sources(basyx_submodel
 		submodel/api/submodelelement/property/IMapProperty.h
 		submodel/api/submodelelement/property/IProperty.h
 		submodel/api/submodelelement/property/ISingleProperty.h
-		submodel/connected/ConnectedElement.cpp
-		submodel/connected/ConnectedElement.h
-		submodel/connected/ConnectedSubmodel.cpp
-		submodel/connected/ConnectedSubmodel.h
-		submodel/connected/ConnectedVABModelMap.cpp
-		submodel/connected/ConnectedVABModelMap.h
-		submodel/connected/submodelelement/ConnectedDataElement.cpp
-		submodel/connected/submodelelement/ConnectedDataElement.h
-		submodel/connected/submodelelement/ConnectedRelationshipElement.cpp
-		submodel/connected/submodelelement/ConnectedRelationshipElement.h
-		submodel/connected/submodelelement/ConnectedSubmodelElement.cpp
-		submodel/connected/submodelelement/ConnectedSubmodelElement.h
-		submodel/connected/submodelelement/ConnectedSubmodelElementCollection.cpp
-		submodel/connected/submodelelement/ConnectedSubmodelElementCollection.h
-		submodel/connected/submodelelement/operation/ConnectedOperation.cpp
-		submodel/connected/submodelelement/operation/ConnectedOperation.h
-		submodel/connected/submodelelement/property/blob/ConnectedBlob.cpp
-		submodel/connected/submodelelement/property/blob/ConnectedBlob.h
-		submodel/connected/submodelelement/property/ConnectedCollectionProperty.cpp
-		submodel/connected/submodelelement/property/ConnectedCollectionProperty.h
-		submodel/connected/submodelelement/property/ConnectedContainerProperty.h
-		submodel/connected/submodelelement/property/ConnectedMapProperty.cpp
-		submodel/connected/submodelelement/property/ConnectedMapProperty.h
-		submodel/connected/submodelelement/property/ConnectedProperty.cpp
-		submodel/connected/submodelelement/property/ConnectedProperty.h
-		submodel/connected/submodelelement/property/ConnectedPropertyFactory.h
-		submodel/connected/submodelelement/property/ConnectedReferenceElement.cpp
-		submodel/connected/submodelelement/property/ConnectedReferenceElement.h
-		submodel/connected/submodelelement/property/ConnectedSingleProperty.cpp
-		submodel/connected/submodelelement/property/ConnectedSingleProperty.h
-		submodel/connected/submodelelement/property/file/ConnectedFile.cpp
-		submodel/connected/submodelelement/property/file/ConnectedFile.h
+		#submodel/connected/ConnectedElement.cpp
+		#submodel/connected/ConnectedElement.h
+		#submodel/connected/ConnectedSubmodel.cpp
+		#submodel/connected/ConnectedSubmodel.h
+		#submodel/connected/ConnectedVABModelMap.cpp
+		#submodel/connected/ConnectedVABModelMap.h
+		#submodel/connected/submodelelement/ConnectedDataElement.cpp
+		#submodel/connected/submodelelement/ConnectedDataElement.h
+		#submodel/connected/submodelelement/ConnectedRelationshipElement.cpp
+		#submodel/connected/submodelelement/ConnectedRelationshipElement.h
+		#submodel/connected/submodelelement/ConnectedSubmodelElement.cpp
+		#submodel/connected/submodelelement/ConnectedSubmodelElement.h
+		#submodel/connected/submodelelement/ConnectedSubmodelElementCollection.cpp
+		#submodel/connected/submodelelement/ConnectedSubmodelElementCollection.h
+		#submodel/connected/submodelelement/operation/ConnectedOperation.cpp
+		#submodel/connected/submodelelement/operation/ConnectedOperation.h
+		#submodel/connected/submodelelement/property/blob/ConnectedBlob.cpp
+		#submodel/connected/submodelelement/property/blob/ConnectedBlob.h
+		#submodel/connected/submodelelement/property/ConnectedCollectionProperty.cpp
+		#submodel/connected/submodelelement/property/ConnectedCollectionProperty.h
+		#submodel/connected/submodelelement/property/ConnectedContainerProperty.h
+		#submodel/connected/submodelelement/property/ConnectedMapProperty.cpp
+		#submodel/connected/submodelelement/property/ConnectedMapProperty.h
+		#submodel/connected/submodelelement/property/ConnectedProperty.cpp
+		#submodel/connected/submodelelement/property/ConnectedProperty.h
+		#submodel/connected/submodelelement/property/ConnectedPropertyFactory.h
+		#submodel/connected/submodelelement/property/ConnectedReferenceElement.cpp
+		#submodel/connected/submodelelement/property/ConnectedReferenceElement.h
+		#submodel/connected/submodelelement/property/ConnectedSingleProperty.cpp
+		#submodel/connected/submodelelement/property/ConnectedSingleProperty.h
+		#submodel/connected/submodelelement/property/file/ConnectedFile.cpp
+		#submodel/connected/submodelelement/property/file/ConnectedFile.h
 		submodel/map/identifier/Identifier.cpp
 		submodel/map/identifier/Identifier.h
+		submodel/map/modeltype/ModelType.cpp
+		submodel/map/modeltype/ModelType.h
 		submodel/map/identifier/IdentifierType.h
 		submodel/map/IVABElementContainer.h
 		submodel/map/qualifier/AdministrativeInformation.cpp
@@ -79,9 +82,8 @@ target_sources(basyx_submodel
 		submodel/map/qualifier/Description.h
 		submodel/map/qualifier/HasDataSpecification.cpp
 		submodel/map/qualifier/HasDataSpecification.h
-		submodel/map/qualifier/haskind/HasKind.cpp
-		submodel/map/qualifier/haskind/HasKind.h
-		submodel/map/qualifier/haskind/Kind.h
+		submodel/map/qualifier/HasKind.cpp
+		submodel/map/qualifier/HasKind.h
 		submodel/map/qualifier/HasSemantics.cpp
 		submodel/map/qualifier/HasSemantics.h
 		submodel/map/qualifier/Identifiable.cpp
@@ -110,6 +112,8 @@ target_sources(basyx_submodel
 		submodel/map/submodelelement/operation/Operation.h
 		submodel/map/submodelelement/operation/OperationVariable.cpp
 		submodel/map/submodelelement/operation/OperationVariable.h
+		submodel/map/submodelelement/property/Property.cpp
+		submodel/map/submodelelement/property/Property.h
 		submodel/map/submodelelement/property/valuetypedef/PropertyValueTypeDef.h
 		submodel/map/submodelelement/property/valuetypedef/PropertyValueTypeDefHelper.h
 		submodel/map/submodelelement/ReferenceElement.cpp
@@ -120,13 +124,10 @@ target_sources(basyx_submodel
 		submodel/map/submodelelement/SubmodelElement.h
 		submodel/map/submodelelement/SubmodelElementCollection.cpp
 		submodel/map/submodelelement/SubmodelElementCollection.h
-
-		submodel/support/ElementMap.cpp
-		submodel/support/ElementMap.h
 )
 
 target_include_directories(basyx_submodel PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(basyx_submodel basyx::shared basyx::abstraction basyx::vab)
+target_link_libraries(basyx_submodel basyx::shared basyx::vab)
 add_library(basyx::submodel ALIAS basyx_submodel)
 
 diagnostics_print(basyx_submodel)

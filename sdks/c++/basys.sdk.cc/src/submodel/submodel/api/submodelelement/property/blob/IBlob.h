@@ -10,7 +10,7 @@
 #include "basyx/types.h"
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 namespace submodelelement {
 
 namespace BlobPath {

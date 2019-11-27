@@ -8,7 +8,7 @@
 #include "submodel/api/qualifier/IReferable.h"
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 namespace backend {
 
 ConnectedElement::ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy> & proxy) :
@@ -55,12 +55,12 @@ void ConnectedElement::updateLocalValue(const std::string & path, const basyx::o
 
 void ConnectedElement::setId(const std::string & id)
 {
-  this->setProxyValue(qualifier::ReferablePaths::IDSHORT, id);
+  this->setProxyValue(api::qualifier::ReferablePaths::IDSHORT, id);
 }
 
 std::string ConnectedElement::getId() const
 {
-  return this->getProxyValue(qualifier::ReferablePaths::IDSHORT);
+  return this->getProxyValue(api::qualifier::ReferablePaths::IDSHORT);
 }
 
 

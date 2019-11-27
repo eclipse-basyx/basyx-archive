@@ -9,7 +9,7 @@
 #include "submodel/api/submodelelement/property/blob/IBlob.h"
 
 namespace basyx {
-namespace aas {
+namespace submodel {
 namespace backend {
 namespace connected {
 

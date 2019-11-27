@@ -7,41 +7,35 @@
 #ifndef IMPL_METAMODEL_QUALIFIER_DESCRIPTION_H_
 #define IMPL_METAMODEL_QUALIFIER_DESCRIPTION_H_
 
-#include "basyx/types.h"
+#include "vab/ElementMap.h"
 
+#include "basyx/types.h"
 #include "basyx/object.h"
 
 #include <string>
 
 namespace basyx {
-namespace aas {
-namespace qualifier {
+namespace submodel {
 
-namespace descriptionPaths {
-  static constexpr char LANGUAGE[] = "language";
-  static constexpr char TEXT[] = "text";
-}
 
-namespace impl {
-
-class Description
+class Description : public vab::ElementMap
 {
+public:
+	struct Path {
+		static constexpr char Language[] = "language";
+		static constexpr char Text[] = "text";
+	};
 public:
   ~Description() = default;
 
+  Description();
   Description(const std::string & language, const std::string & text);
-  Description(basyx::object::object_map_t & map);
+  Description(basyx::object object);
 
   std::string getLanguage() const;
   std::string getText() const;
-
-
-private:
-  std::string language, text;
 };
 
-}
-}
 }
 }
 

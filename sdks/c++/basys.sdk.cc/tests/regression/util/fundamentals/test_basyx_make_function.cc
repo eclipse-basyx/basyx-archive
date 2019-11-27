@@ -31,6 +31,7 @@ namespace
 		testClass(int _a, int _b) : a(_a), b(_b) {};
 
 		int process() { return a + b; };
+		int add(int c) { return a + b + c; };
 		static int inc(int a) { return a + 1; };
 	};
 }
@@ -139,4 +140,17 @@ TEST_F(TestBaSyxMakeFunction, MemberFunctionTest)
 
 	// call func
 	ASSERT_EQ(func(), 5);
+}
+
+TEST_F(TestBaSyxMakeFunction, MemberFunctionTest2)
+{
+	testClass obj(2, 3);
+
+	auto func = util::make_function(&testClass::add, &obj);
+
+	static_assert(util::function_traits<decltype(func)>::args_n == 1, "Parameter count differs");
+	static_assert(std::is_same<util::function_traits<decltype(func)>::result_type, int>::value, "Return types differ:");
+
+	// call func
+	ASSERT_EQ(func(4), 9 );
 }

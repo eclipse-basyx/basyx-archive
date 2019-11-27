@@ -16,9 +16,7 @@
 #include <string>
 
 namespace basyx {
-namespace aas {
-namespace qualifier {
-namespace qualifiable {
+namespace submodel {
 
 class IQualifier : public IHasSemantics
 {
@@ -27,11 +25,9 @@ public:
 
   virtual std::string getQualifierType() const = 0;
   virtual basyx::object getQualifierValue() const = 0;
-  virtual std::shared_ptr<reference::IReference> getQualifierValueId() const = 0;
+  virtual std::shared_ptr<IReference> getQualifierValueId() const = 0;
 };
 
-}
-}
 }
 }
 

@@ -15,20 +15,20 @@
 #include <memory>
 
 namespace basyx {
-namespace aas {
-namespace qualifier {
-namespace qualifiable {
+namespace submodel {
 
 class IQualifiable
 {
 public:
-  virtual ~IQualifiable() = default;
+	struct Path {
+		static constexpr char Constraints[] = "constraints";
+	};
+public:
+	virtual ~IQualifiable() = default;
 
-  virtual basyx::specificCollection_t<IConstraint> getQualifier() const = 0;
+	virtual basyx::specificCollection_t<IConstraint> getQualifier() const = 0;
 };
 
-}
-}
 }
 }
 

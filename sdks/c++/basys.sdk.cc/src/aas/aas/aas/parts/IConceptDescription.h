@@ -15,20 +15,18 @@
 
 namespace basyx {
 namespace aas {
-namespace parts {
 
-class IConceptDescription : virtual qualifier::IHasDataSpecification, qualifier::IIdentifiable
+class IConceptDescription : 
+	public virtual submodel::IHasDataSpecification,
+	public virtual submodel::IIdentifiable
 {
 public:
+	virtual ~IConceptDescription() = default;
 
-
-  virtual ~IConceptDescription() = default;
-
-  virtual std::vector<std::string> getisCaseOf() const = 0;
-  virtual void setIscaseOf(const std::vector<std::string> & ref) = 0;
+	virtual std::vector<std::string> getIsCaseOf() const = 0;
+	virtual void setIsCaseOf(const std::vector<std::string> & ref) = 0;
 };
 
-}
 }
 }
 

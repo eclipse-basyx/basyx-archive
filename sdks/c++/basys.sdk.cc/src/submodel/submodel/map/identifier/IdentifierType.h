@@ -8,9 +8,7 @@
 #define AAS_IMPL_METAMODEL_IDENTIFIERTYPE_H_
 
 namespace basyx {
-namespace aas {
-namespace identifier {
-namespace impl {
+namespace submodel {
 
 namespace identifierType {
   static constexpr char IRDI[] = "IRDI";
@@ -18,8 +16,6 @@ namespace identifierType {
   static constexpr char Custom[] = "Custom";
 }
 
-}
-}
 }
 }
 

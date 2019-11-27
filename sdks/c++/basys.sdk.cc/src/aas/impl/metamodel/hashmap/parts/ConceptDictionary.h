@@ -12,7 +12,6 @@
 
 namespace basyx {
 namespace aas {
-namespace parts {
 
 class ConceptDictionary : public IConceptDictionary
 {
@@ -22,14 +21,13 @@ public:
   // Inherited via IConceptDictionary
   virtual std::string getIdShort() const override;
   virtual std::string getCategory() const override;
-  virtual qualifier::impl::Description getDescription() const override;
-  virtual std::shared_ptr<reference::IReference> getParent() const override;
+  virtual submodel::Description getDescription() const override;
+  virtual std::shared_ptr<submodel::IReference> getParent() const override;
   virtual std::vector<std::string> getConceptDescription() const override;
   virtual void setConceptDescription(const std::vector<std::string>& ref) override;
   void addConceptDescription(const std::shared_ptr<IConceptDescription> & description);
 };
 
-}
 }
 }
 

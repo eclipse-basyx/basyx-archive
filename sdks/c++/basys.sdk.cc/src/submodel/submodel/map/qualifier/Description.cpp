@@ -8,32 +8,41 @@
 
 
 namespace basyx {
-namespace aas {
-namespace qualifier {
-namespace impl {
+namespace submodel {
 
-Description::Description(const std::string & language, const std::string & text) :
-  language(language),
-  text(text)
-{}
-
-Description::Description(basyx::object::object_map_t & map)
+Description::Description()
+	: vab::ElementMap{}
 {
-  this->language = map.at(descriptionPaths::LANGUAGE).GetStringContent();
-  this->text = map.at(descriptionPaths::TEXT).GetStringContent();
+	this->map.insertKey(Path::Language, "");
+	this->map.insertKey(Path::Text, "");
+};
+
+Description::Description(const std::string & language, const std::string & text)
+	: vab::ElementMap{}
+{
+	this->map.insertKey(Path::Language, language);
+	this->map.insertKey(Path::Text, text);
+}
+
+Description::Description(basyx::object object)
+	: vab::ElementMap{ object }
+{
 }
 
 std::string Description::getLanguage() const
 {
-  return this->language;
+  return this->map.getProperty(Path::Language).GetStringContent();
 }
 
 std::string Description::getText() const
 {
-  return this->text;
+	return this->map.getProperty(Path::Text).GetStringContent();
 }
 
-}
-}
+
+constexpr char Description::Path::Language[];
+constexpr char Description::Path::Text[];
+
+
 }
 }

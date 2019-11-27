@@ -12,6 +12,13 @@ class TestBaSyxObject : public ::testing::Test
 
 namespace objectTest
 {
+	class TestClass {
+	public:
+		bool testFunc() {
+			return true;
+		};
+	};
+
 	int FuncAdd(int a, int b) { return a + b; };
 	int FuncInc(int a) { return a + 1; };
 	int FuncConst() { return 42; };
@@ -369,4 +376,13 @@ TEST_F(TestBaSyxObject, ObjectFunctionTest)
 	ASSERT_FALSE(ret2.IsNull());
 	ASSERT_TRUE(ret2.InstanceOf<int>());
 	ASSERT_EQ(ret2.Get<int>(), 5);
+
+	// Test with bound member function
+	objectTest::TestClass testClass;
+	auto func3 = basyx::object::make_function(&objectTest::TestClass::testFunc, &testClass);
+	
+	auto ret3 = func3.invoke(argList1);
+	ASSERT_FALSE(ret3.IsNull());
+	ASSERT_TRUE(ret3.InstanceOf<bool>());
+	ASSERT_EQ(ret3.Get<bool>(), true);
 }

@@ -9,37 +9,31 @@
 
 #include "submodel/api/qualifier/qualifiable/IQualifiable.h"
 
+#include "vab/ElementMap.h"
+
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace qualifier {
-namespace qualifiable {
 
-class Qualifiable : public aas::qualifier::qualifiable::IQualifiable
+class Qualifiable : 
+	public virtual IQualifiable,
+	public virtual vab::ElementMap
 {
 public:
-  ~Qualifiable() = default;
+	~Qualifiable() = default;
 
-  // constructors
-  Qualifiable();
-  Qualifiable(const std::shared_ptr<aas::qualifier::qualifiable::IConstraint> & constraint);
-  Qualifiable(const basyx::specificCollection_t<aas::qualifier::qualifiable::IConstraint> constraints);
+	// constructors
+	Qualifiable();
+	Qualifiable(basyx::object object);
+	Qualifiable(const std::shared_ptr<IConstraint> & constraint);
+	Qualifiable(const basyx::specificCollection_t<IConstraint> constraints);
 
-  // Inherited via IQualifiable
-  virtual basyx::specificCollection_t<aas::qualifier::qualifiable::IConstraint> getQualifier() const override;
+	// Inherited via IQualifiable
+	virtual basyx::specificCollection_t<IConstraint> getQualifier() const override;
 
-  // not inherited
-  void setQualifier(const basyx::specificCollection_t<aas::qualifier::qualifiable::IConstraint> & qualifiers);
-
-private:
-  basyx::specificCollection_t<aas::qualifier::qualifiable::IConstraint> constraints;
+	// not inherited
+	void setQualifier(const basyx::specificCollection_t<IConstraint> & qualifiers);
 };
 
-}
-}
-}
-}
 }
 }
 

@@ -18,15 +18,18 @@
 namespace basyx {
 namespace aas {
 
-class IView : virtual qualifier::IHasSemantics, qualifier::IHasDataSpecification, qualifier::IReferable
+class IView : 
+	public submodel::IHasDataSpecification,
+	public submodel::IHasSemantics, 
+	public submodel::IReferable
 {
 public:
 	
 
 	virtual ~IView() = default;
 
-	virtual void setContainedElement(std::vector<reference::IReference> references) = 0;
-	virtual std::vector<reference::IReference> getContainedElement() const = 0;
+	virtual void setContainedElement(std::vector<submodel::IReference> references) = 0;
+	virtual std::vector<submodel::IReference> getContainedElement() const = 0;
 };
 
 }
