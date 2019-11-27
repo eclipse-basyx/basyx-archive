@@ -32,15 +32,17 @@ namespace native {
 
 	class NativeProvider {
 	private:
-		static constexpr std::size_t default_buffer_size = 1024;
+		// Connection socket
 		asio::ip::tcp::socket & clientSocket;
+
+		// Frame processor
+		frame::BaSyxNativeFrameProcessor * frameProcessor;
+
+		// Buffers
+		static constexpr std::size_t default_buffer_size = 4096;
 		std::array<char, default_buffer_size> recv_buffer;
 		std::array<char, default_buffer_size> ret;
-		//    char recvbuf[DEFAULT_BUF_SIZE];
-	//    char ret[DEFAULT_BUF_SIZE];
-		// ToDo: Ownership?
 
-		frame::BaSyxNativeFrameProcessor * frameProcessor;
 		bool closed;
 		basyx::log log;
 	public:
@@ -59,9 +61,7 @@ namespace native {
 			this->clientSocket.close();
 		}
 
-		/**
-			* Has to be called periodically
-			*/
+		// Has to be called repeatedly
 		void update()
 		{
 			log.trace("Updating...");

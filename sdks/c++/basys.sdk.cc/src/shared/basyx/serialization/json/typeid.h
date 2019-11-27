@@ -5,10 +5,10 @@
 
 namespace basyx {
 namespace serialization {
-    static constexpr char typeSpecifier[] = "basystype";
+    static constexpr char typeSpecifier[] = "_basyxTypes";
     static constexpr char typeIdSpecifier[] = "typeid";
     static constexpr char arrayTypeSpecifier[] = "type";
-    static constexpr char valueSpecifier[] = "value";
+    static constexpr char valueSpecifier[] = "_value";
     static constexpr char sizeSpecifier[] = "size";
     static constexpr char mapSpecifier[] = "map";
     static constexpr char collectionSpecifier[] = "collection";

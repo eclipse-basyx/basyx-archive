@@ -86,6 +86,7 @@ bool basyx::object::remove(const T & t)
 	case basyx::type::objectType::List:
 		auto & list = this->Get<object::list_t<T>&>();
 		list.erase(std::remove(list.begin(), list.end(), t), list.end());
+		return true;
 		break;
 	};
 	return false;

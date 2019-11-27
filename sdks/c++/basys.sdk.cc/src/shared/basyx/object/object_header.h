@@ -127,23 +127,24 @@ namespace basyx {
 	public:
 		bool insert(basyx::object obj);
 
-		basyx::object getProperty(const std::string & propertyName);
-
 		template<typename T>
 		bool insert(const T & t);
 
 		template<typename T>
 		bool insertKey(const std::string & key, const T & t, bool override = false);
 
-		bool removeProperty(const std::string & propertyName);
 
 		template<typename T>
 		bool remove(const T & t);
-
 		bool remove(basyx::object & obj);
+		bool removeProperty(const std::string & propertyName);
+
+		basyx::object getProperty(const std::string & propertyName);
 
 		basyx::object invoke();
 		basyx::object invoke(basyx::object & object);
+
+		bool empty();
 	public: // Object casting functions
 		// object_cast:
 		// Cast a basyx::object object to the desired type

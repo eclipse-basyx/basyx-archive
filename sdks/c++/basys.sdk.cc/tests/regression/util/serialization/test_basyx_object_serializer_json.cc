@@ -17,10 +17,14 @@ public:
 TEST_F(TestBaSyxObjectSerializerJson, PrimitiveTest)
 {
 	json_t jsonInt = basyx::object{ 1 };
-	auto objList = basyx::object::make_list<int>();
-	objList.insert(2);
-	objList.insert(3);
+	auto objList = basyx::object::make_list<basyx::object>({ 1,"22" });
 
-	json_t jsonList = objList;
+	json_t jsonList = basyx::serialization::json::serialize(objList);
 	auto dumped = jsonList.dump(4);
+	
+	int j = 2;
+
+	auto whot = basyx::serialization::json::deserialize(dumped);
+	
+	j = 2;
 }

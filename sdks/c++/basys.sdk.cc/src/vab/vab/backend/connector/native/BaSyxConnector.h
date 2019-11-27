@@ -22,7 +22,7 @@ namespace native {
 
     class NativeConnector : public IBaSyxConnector {
     public:
-        static constexpr std::size_t default_buffer_length = 1024;
+        static constexpr std::size_t default_buffer_length = 4096;
 
     public:
         NativeConnector(std::string const& address, int port);
