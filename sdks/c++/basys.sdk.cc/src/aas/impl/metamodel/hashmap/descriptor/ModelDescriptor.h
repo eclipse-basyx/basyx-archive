@@ -12,7 +12,7 @@
 #include "basyx/types.h"
 #include "basyx/object.h"
 
-#include "aas/identifier/IIdentifier.h"
+#include "submodel/api/identifier/IIdentifier.h"
 
 namespace basyx {
 namespace aas {

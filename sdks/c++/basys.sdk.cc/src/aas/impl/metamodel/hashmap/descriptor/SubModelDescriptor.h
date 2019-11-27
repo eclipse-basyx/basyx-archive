@@ -8,7 +8,7 @@
 #define AAS_IMPL_METAMODEL_HASHMAP_DESCRIPTOR_SUBMODELDESCRIPTOR_H_
 
 #include "ModelDescriptor.h"
-#include "aas/ISubModel.h"
+#include "submodel/api/ISubModel.h"
 
 namespace basyx {
 namespace aas {

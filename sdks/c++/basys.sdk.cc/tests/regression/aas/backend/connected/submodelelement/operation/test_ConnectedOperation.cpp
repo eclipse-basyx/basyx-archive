@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "aas/submodelelement/operation/IOperation.h"
+#include "submodel/api/operation/IOperation.h"
 #include "backend/connected/aas/submodelelement/operation/ConnectedOperation.h"
 #include "vab/core/proxy/IVABElementProxy.h"
 #include "support/VABProxyMock.cpp"

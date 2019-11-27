@@ -8,9 +8,9 @@
 #define IASSETADMINISTRATIONSHELLMANAGER_H_
 
 #include <string>
-#include "api/metamodel/aas/IAssetAdministrationShell.h"
-#include "api/modelurn/ModelUrn.h"
-#include "aas/ISubModel.h"
+#include "aas/api/metamodel/aas/IAssetAdministrationShell.h"
+#include "aas/api/modelurn/ModelUrn.h"
+#include "submodel/api/ISubModel.h"
 
 namespace basyx {
 namespace aas {

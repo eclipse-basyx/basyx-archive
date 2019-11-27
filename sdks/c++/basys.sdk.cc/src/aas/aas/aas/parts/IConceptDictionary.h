@@ -8,7 +8,7 @@
 #define BASYX_METAMODEL_IConceptDictionary_H_
 
 
-#include "aas/qualifier/IReferable.h"
+#include "submodel/api/qualifier/IReferable.h"
 
 #include <string>
 #include <vector>

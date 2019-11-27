@@ -7,7 +7,7 @@
 #ifndef AAS_IMPL_METAMODEL_HASHMAP_PARTS_VIEW_H_
 #define AAS_IMPL_METAMODEL_HASHMAP_PARTS_VIEW_H_
 
-#include "aas/parts/IView.h"
+#include "aas/aas/parts/IView.h"
 
 namespace basyx {
 namespace aas {

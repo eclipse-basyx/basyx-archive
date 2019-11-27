@@ -7,14 +7,14 @@
 #ifndef AAS_IASSETADMINISTRATIONSHELL_H_
 #define AAS_IASSETADMINISTRATIONSHELL_H_
 
-#include "aas/qualifier/IHasDataSpecification.h"
-#include "aas/qualifier/IIdentifiable.h"
-#include "aas/ISubModel.h"
-#include "aas/security/ISecurity.h"
-#include "aas/reference/IReference.h"
-#include "aas/parts/IAsset.h"
-#include "aas/parts/IView.h"
-#include "aas/parts/IConceptDictionary.h"
+#include "submodel/api/qualifier/IHasDataSpecification.h"
+#include "submodel/api/qualifier/IIdentifiable.h"
+#include "submodel/api/ISubModel.h"
+#include "aas/aas/security/ISecurity.h"
+#include "submodel/api/reference/IReference.h"
+#include "aas/aas/parts/IAsset.h"
+#include "aas/aas/parts/IView.h"
+#include "aas/aas/parts/IConceptDictionary.h"
 #include "basyx/types.h"
 #include "impl/metamodel/hashmap/descriptor/SubModelDescriptor.h"
 

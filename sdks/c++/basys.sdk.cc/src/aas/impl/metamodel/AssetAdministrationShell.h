@@ -7,10 +7,10 @@
 #ifndef AAS_IMPL_METAMODEL_HASHMAP_ASSETADMINISTRATIONSHELL_H_
 #define AAS_IMPL_METAMODEL_HASHMAP_ASSETADMINISTRATIONSHELL_H_
 
-#include "api/metamodel/aas/IAssetAdministrationShell.h"
-#include "aas/parts/IConceptDescription.h"
-#include "aas/security/ISecurity.h"
-#include "impl/metamodel/hashmap/aas/reference/Reference.h"
+#include "aas/api/metamodel/aas/IAssetAdministrationShell.h"
+#include "aas/aas/parts/IConceptDescription.h"
+#include "aas/aas/security/ISecurity.h"
+#include "submodel/map/reference/Reference.h"
 #include "impl/metamodel/hashmap/security/Security.h"
 #include "impl/metamodel/hashmap/parts/Asset.h"
 #include "impl/metamodel/hashmap/parts/ConceptDictionary.h"

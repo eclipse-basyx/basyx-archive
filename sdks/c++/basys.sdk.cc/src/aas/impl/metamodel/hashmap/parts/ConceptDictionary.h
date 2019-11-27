@@ -7,8 +7,8 @@
 #ifndef AAS_IMPL_METAMODEL_HASHMAP_PARTS_CONCEPTDICTIONARY_H_
 #define AAS_IMPL_METAMODEL_HASHMAP_PARTS_CONCEPTDICTIONARY_H_
 
-#include "aas/parts/IConceptDictionary.h"
-#include "aas/parts/IConceptDescription.h"
+#include "aas/aas/parts/IConceptDictionary.h"
+#include "aas/aas/parts/IConceptDescription.h"
 
 namespace basyx {
 namespace aas {

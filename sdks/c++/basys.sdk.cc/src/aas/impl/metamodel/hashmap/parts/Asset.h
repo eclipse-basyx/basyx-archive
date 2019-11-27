@@ -7,7 +7,7 @@
 #ifndef AAS_IMPL_METAMODEL_HASHMAP_PARTS_ASSET_H_
 #define AAS_IMPL_METAMODEL_HASHMAP_PARTS_ASSET_H_
 
-#include "aas/parts/IAsset.h"
+#include "aas/aas/parts/IAsset.h"
 
 namespace basyx {
 namespace aas {

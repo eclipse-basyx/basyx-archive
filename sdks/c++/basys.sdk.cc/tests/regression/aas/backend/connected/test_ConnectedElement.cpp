@@ -6,10 +6,10 @@
 
 #include <gtest/gtest.h>
 
-#include "backend/connected/aas/ConnectedElement.h"
+#include "submodel/connected/ConnectedElement.h"
 #include "vab/core/proxy/IVABElementProxy.h"
 #include "support/VABProxyMock.cpp"
-#include "aas/qualifier/IReferable.h"
+#include "submodel/api/qualifier/IReferable.h"
 
 using namespace basyx::aas::backend;
 using namespace basyx::vab::core::proxy;

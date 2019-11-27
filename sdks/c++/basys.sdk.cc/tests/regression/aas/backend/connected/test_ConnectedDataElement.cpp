@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "backend/connected/aas/submodelelement/ConnectedDataElement.h"
+#include "submodel/connected/submodelelement/ConnectedDataElement.h"
 #include "vab/core/proxy/IVABElementProxy.h"
 #include "support/VABProxyMock.cpp"
 

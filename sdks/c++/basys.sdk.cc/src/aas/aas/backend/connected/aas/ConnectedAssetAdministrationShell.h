@@ -7,9 +7,9 @@
 #ifndef AAS_BACKEND_CONNECTED_CONNECTEDASSETADMINISTRATIONSHELL_H_
 #define AAS_BACKEND_CONNECTED_CONNECTEDASSETADMINISTRATIONSHELL_H_
 
-#include "api/metamodel/aas/IAssetAdministrationShell.h"
-#include "backend/connected/aas/ConnectedVABModelMap.h"
-#include "api/manager/IAssetAdministrationShellManager.h"
+#include "aas/api/metamodel/aas/IAssetAdministrationShell.h"
+#include "submodel/connected/ConnectedVABModelMap.h"
+#include "aas/api/manager/IAssetAdministrationShellManager.h"
 
 namespace basyx {
 namespace aas {
