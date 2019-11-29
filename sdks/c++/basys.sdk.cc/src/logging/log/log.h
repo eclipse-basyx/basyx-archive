@@ -1,8 +1,6 @@
 #ifndef LOGGING_LOG_H_
 #define LOGGING_LOG_H_
 
-#include <abstraction/Thread.h>
-
 #include <iostream>
 
 #include <fmt/format.h>
