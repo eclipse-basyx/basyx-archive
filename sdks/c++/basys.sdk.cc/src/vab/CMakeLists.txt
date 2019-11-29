@@ -36,7 +36,7 @@ target_sources(basyx_vab
 )
 
 target_include_directories(basyx_vab PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(basyx_vab basyx::shared)
+target_link_libraries(basyx_vab basyx::shared basyx::abstraction)
 add_library(basyx::vab ALIAS basyx_vab)
 
 diagnostics_print(basyx_vab)
