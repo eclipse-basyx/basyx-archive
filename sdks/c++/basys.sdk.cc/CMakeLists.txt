@@ -44,6 +44,8 @@ set(BASYX_BUILD_API ON CACHE BOOL "Build BaSyx API")
 set(BASYX_UTILITY_PROJECTS ON CACHE BOOL "Create utility targets")
 set(BASYX_DEBUG_PRINT_FRAMES OFF CACHE BOOL "Print BaSyx frames")
 
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Shared (.so / .dll) instead of static libraries")
+
 option(BASYX_BUILD_LIBFMT "Wether to build external, yet included library libfmt" ON)
 option(BASYX_USE_SYSTEM_ASIO "Use system supplied ASIO library." OFF)
 ### Compiler settings ###
