@@ -3,6 +3,7 @@ package org.eclipse.basyx.testsuite.regression.submodel.restapi;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +36,24 @@ public class SubModelProviderTest {
 			});
 		}
 		return connManager;
+	}
+
+	/**
+	 * Tests accessing different paths that should be supported
+	 * @throws Exception 
+	 */
+	@Test
+	public void testPathsRaw() throws Exception {
+		SubModelProvider provider = new SubModelProvider(new SimpleAASSubmodel("mySubmodelId"));
+		provider.getModelPropertyValue("/submodel");
+		provider.getModelPropertyValue("/submodel/");
+
+		try {
+			provider.getModelPropertyValue("invalid");
+			fail();
+		} catch (Exception e) {
+			
+		}
 	}
 
 	/**

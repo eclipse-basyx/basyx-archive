@@ -63,6 +63,8 @@ public class SubModelProvider extends ContainerPropertyProvider {
 		path = VABPathTools.stripSlashes(path);
 		if (path.startsWith("submodel/")) {
 			path = path.replaceFirst("submodel/", "");
+		} else if (path.startsWith("submodel")) {
+			path = path.replaceFirst("submodel", "");
 		}
 		path = VABPathTools.stripSlashes(path);
 		return path;
