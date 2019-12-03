@@ -1,4 +1,4 @@
-package org.eclipse.basyx.regression.cfgprovider.tests;
+package org.eclipse.basyx.regression.rawcfgprovider;
 
 import static org.junit.Assert.assertEquals;
 
@@ -15,13 +15,14 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 
+
 /**
  * Test queries to CFG file provider
  * 
  * @author kuhn
  *
  */
-public class TestCFGProvider {
+public class TestRawCFGProviderAASNewModel {
 
 	
 	/**
@@ -29,39 +30,32 @@ public class TestCFGProvider {
 	 */
 	protected VABConnectionManager connManager = new VABConnectionManager(new ComponentsTestsuiteDirectory(), new HTTPConnectorProvider());
 
-
 	/** 
-	 * Makes sure Tomcat Server is started with basyx.components regression test case
+	 * Makes sure Tomcat Server is started
 	 */
 	@ClassRule
 	public static AASHTTPServerResource res = new AASHTTPServerResource(new ComponentsRegressionContext());
 	
-	
 	/**
 	 * Test basic queries
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "unused" })
 	@Test
 	public void test() throws Exception {
+
 		// Connect to sub model "CfgFileTestAAS"
-		VABElementProxy connSubModel = this.connManager.connectToVABElement("CfgFileTestAAS");
+		VABElementProxy connSubModel = this.connManager.connectToVABElement("RawCfgFileTestAAS");
 
 		
-		// Get property value
-		Map<String, Object> value1 = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1/value");
-
-		assertEquals("exampleStringValue", value1.get(Property.VALUE));
+		// Create map with complex type
+		Property prop = new Property ();
+		prop.setIdShort("prop");
+		// Create AAS structure on server
+		connSubModel.createValue("/aas/submodels/rawSampleCFG/dataElements", prop);
 
 		
-		// Get property value
-		Map<String, Object> value2 = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2/value");
-		assertEquals("12", value2.get(Property.VALUE));
-
-		// Get property value
-		Map<String, Object> value3 = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty3/value");
-		assertEquals("45.8", value3.get(Property.VALUE));
+		// Read complex property completely
+		Map<String, Object> aasReadBack = (Map<String, Object>) connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/prop");
+		assertEquals(prop.getIdShort(), Property.createAsFacade(prop).getIdShort());
 	}
 }

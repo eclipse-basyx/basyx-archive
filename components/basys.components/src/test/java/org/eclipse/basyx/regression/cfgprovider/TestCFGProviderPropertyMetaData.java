@@ -1,4 +1,4 @@
-package org.eclipse.basyx.regression.cfgprovider.tests;
+package org.eclipse.basyx.regression.cfgprovider;
 
 import static org.junit.Assert.assertEquals;
 

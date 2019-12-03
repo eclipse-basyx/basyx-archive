@@ -1,4 +1,4 @@
-package org.eclipse.basyx.regression.sqlproxy.tests;
+package org.eclipse.basyx.regression.sqlproxy;
 
 import org.eclipse.basyx.tools.sqlproxy.SQLRootElement;
 import org.junit.Test;

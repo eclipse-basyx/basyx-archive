@@ -1,4 +1,4 @@
-package org.eclipse.basyx.regression.sqlprovider.tests;
+package org.eclipse.basyx.regression.sqlprovider;
 
 import java.util.Collection;
 import java.util.LinkedList;

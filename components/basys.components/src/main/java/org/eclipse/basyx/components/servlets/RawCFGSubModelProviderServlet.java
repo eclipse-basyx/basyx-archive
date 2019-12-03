@@ -8,7 +8,7 @@ import javax.servlet.ServletException;
 
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.components.cfgprovider.RawCFGSubModelProvider;
-import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
 /**
@@ -59,7 +59,7 @@ public class RawCFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubm
 			properties.load(input);
 
 			// Extract AAS properties
-			this.submodelID = properties.getProperty(BaseConfiguredProvider.buildBasyxCfgName(BaseConfiguredProvider.SUBMODELID));
+			this.submodelID = properties.getProperty(Referable.IDSHORT);
 		} catch (IOException e) {
 			// Output exception
 			e.printStackTrace();
@@ -71,12 +71,13 @@ public class RawCFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubm
 	 * 
 	 * @throws ServletException
 	 */
+	@Override
 	public void init() throws ServletException {
 		// Call base implementation
 		super.init();
 
 		// Read configuration values
-		String configFilePath = (String) getInitParameter("config");
+		String configFilePath = getInitParameter("config");
 		// - Read property file
 		loadProperties(configFilePath);
 

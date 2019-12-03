@@ -83,6 +83,12 @@ public class SubModel extends VABModelMap<Object> implements IVABElementContaine
 		put(OPERATIONS, operations);
 	}
 
+	public static SubModel createAsFacade(Map<String, Object> map) {
+		SubModel sm = new SubModel();
+		sm.putAll(map);
+		return sm;
+	}
+
 	/**
 	 * Constructor
 	 */

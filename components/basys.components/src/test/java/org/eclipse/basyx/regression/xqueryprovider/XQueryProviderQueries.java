@@ -1,4 +1,4 @@
-package org.eclipse.basyx.regression.xqueryprovider.tests;
+package org.eclipse.basyx.regression.xqueryprovider;
 
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
