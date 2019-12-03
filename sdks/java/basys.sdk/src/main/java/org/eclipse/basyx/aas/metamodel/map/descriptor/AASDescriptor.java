@@ -1,7 +1,6 @@
 package org.eclipse.basyx.aas.metamodel.map.descriptor;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -53,10 +52,11 @@ public class AASDescriptor extends ModelDescriptor {
 	 * @param endpoint
 	 */
 	public AASDescriptor(AssetAdministrationShell aas, String endpoint) {
-		this(aas);
+		this(aas.getIdShort(), aas.getIdentification(), endpoint);
 
-		// Add endpoint
-		put(AssetAdministrationShell.ENDPOINTS, Collections.singleton(endpoint));
+		// Overwrite submodel descriptors
+		Set<SubmodelDescriptor> smDescriptors = aas.getSubModelDescriptors();
+		put(AssetAdministrationShell.SUBMODELS, smDescriptors);
 	}
 
 	/**
