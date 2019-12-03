@@ -8,7 +8,7 @@
 
 #include "vab/core/proxy/IVABElementProxy.h"
 #include "support/VABProxyMock.cpp"
-#include "backend/support/submodelelement/property/ConnectedPropertyFactory.h"
+#include "submodel/connected/submodelelement/property/ConnectedPropertyFactory.h"
 
 using namespace basyx::vab::core::proxy;
 using basyx::aas::backend::connected::support::ConnectedPropertyFactory::createProperty;
