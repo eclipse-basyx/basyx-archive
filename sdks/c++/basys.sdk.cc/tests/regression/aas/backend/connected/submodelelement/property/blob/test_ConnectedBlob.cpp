@@ -6,10 +6,10 @@
 
 #include <gtest/gtest.h>
 
-#include "backend/connected/aas/submodelelement/property/blob/ConnectedBlob.h"
+#include "submodel/connected/submodelelement/property/blob/ConnectedBlob.h"
 #include "vab/core/proxy/IVABElementProxy.h"
-#include "aas/submodelelement/property/IProperty.h"
-#include "aas/submodelelement/property/blob/IBlob.h"
+#include "submodel/api/ISubModel.h"
+#include "submodel/api/submodelelement/property/blob/IBlob.h"
 #include "support/VABProxyMock.cpp" 
 #include "basyx/anyTypeChecker.h"
 

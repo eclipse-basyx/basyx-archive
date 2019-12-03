@@ -120,6 +120,9 @@ target_sources(basyx_submodel
 		submodel/map/submodelelement/SubmodelElement.h
 		submodel/map/submodelelement/SubmodelElementCollection.cpp
 		submodel/map/submodelelement/SubmodelElementCollection.h
+
+		submodel/support/ElementMap.cpp
+		submodel/support/ElementMap.h
 )
 
 target_include_directories(basyx_submodel PUBLIC ${PROJECT_SOURCE_DIR})
