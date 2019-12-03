@@ -14,8 +14,6 @@
 
 namespace basyx {
 namespace submodel {
-namespace backend {
-namespace connected {
 
 class ConnectedBlob : public submodelelement::IBlob, ConnectedDataElement
 {
@@ -34,8 +32,6 @@ public:
 
 };
 
-}
-}
 }
 }
 

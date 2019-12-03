@@ -13,10 +13,8 @@
 
 namespace basyx { 
 namespace submodel {
-namespace backend {
-namespace connected { 
 
-class ConnectedOperation : public ConnectedSubmodelElement, public submodelelement::operation::IOperation
+class ConnectedOperation : public ConnectedSubmodelElement, public IOperation
 {
 public:
   ConnectedOperation(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
@@ -26,14 +24,12 @@ public:
   virtual void setId(const std::string & id) override;
   virtual std::string getId() const override;
 
-  virtual operation_var_list getParameterTypes() const override;
-  virtual operation_var_list getReturnTypes() const override;
+  virtual basyx::specificCollection_t<IOperationVariable> getParameterTypes() const override;
+  virtual std::shared_ptr<IOperationVariable> getReturnType() const override;
   virtual basyx::object invoke(basyx::object & parameters) const override;
-  virtual basyx::detail::functionWrapper getInvocable() const override;
+  virtual basyx::object getInvocable() const override;
 };
  
-}
-}
 }
 }
 

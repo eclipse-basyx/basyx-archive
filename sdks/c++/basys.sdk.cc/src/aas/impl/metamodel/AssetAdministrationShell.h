@@ -48,7 +48,7 @@ public:
   void setAdministration(const std::shared_ptr<submodel::IAdministrativeInformation> & administrativeInformation);
   virtual std::shared_ptr<submodel::IIdentifier> getIdentification() const override;
   void setIdentification(const std::shared_ptr<submodel::IIdentifier> & identification);
-  virtual basyx::specificMap_t<submodel::api::ISubModel> getSubModels() const override;
+  virtual basyx::specificMap_t<submodel::ISubModel> getSubModels() const override;
   virtual void addSubModel(const descriptor::SubModelDescriptor & subModelDescriptor) override;
   virtual std::shared_ptr<security::ISecurity> getSecurity() const override;
   void setSecurity(const std::shared_ptr<security::ISecurity> & security);

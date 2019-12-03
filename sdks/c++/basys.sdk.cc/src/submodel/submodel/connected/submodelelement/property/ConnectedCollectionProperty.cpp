@@ -9,8 +9,6 @@
 
 namespace basyx {
 namespace submodel {
-namespace backend {
-namespace connected {
 
 using namespace submodelelement::property;
 
@@ -20,17 +18,17 @@ ConnectedCollectionProperty::ConnectedCollectionProperty(std::shared_ptr<vab::co
 
 void ConnectedCollectionProperty::set(const basyx::object::object_list_t & collection) const
 {
-  this->getProxy()->updateElementValue(PropertyPaths::VALUE, collection);
+  this->getProxy()->updateElementValue(IProperty::Path::Value, collection);
 }
 
 void ConnectedCollectionProperty::add(const basyx::object & newValue)
 {
-  this->getProxy()->createElement(PropertyPaths::VALUE, newValue);
+  this->getProxy()->createElement(IProperty::Path::Value, newValue);
 }
 
 void ConnectedCollectionProperty::remove(basyx::object & objectRef)
 {
-  this->getProxy()->deleteElement(PropertyPaths::VALUE, objectRef);
+  this->getProxy()->deleteElement(IProperty::Path::Value, objectRef);
 }
 
 basyx::object::object_list_t ConnectedCollectionProperty::getElements() const
@@ -43,7 +41,5 @@ int ConnectedCollectionProperty::getElementCount() const
   return this->retrieveObject().Get<basyx::object::object_list_t>().size();
 }
 
-}
-}
 }
 }

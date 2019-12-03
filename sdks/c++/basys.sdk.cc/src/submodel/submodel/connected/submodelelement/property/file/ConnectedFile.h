@@ -12,8 +12,6 @@
 
 namespace basyx { 
 namespace submodel {
-namespace backend {
-namespace connected { 
 
 class ConnectedFile : public submodelelement::property::IFile, ConnectedDataElement
 {
@@ -28,9 +26,7 @@ public:
   virtual std::string getMimeType() const override;
 
 };
- 
-}
-}
+
 }
 }
 

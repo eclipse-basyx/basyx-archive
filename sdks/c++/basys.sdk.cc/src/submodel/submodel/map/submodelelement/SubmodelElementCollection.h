@@ -15,7 +15,7 @@ namespace submodel {
 
 class SubmodelElementCollection : 
 	public SubmodelElement, 
-	public submodelelement::ISubmodelElementCollection
+	public ISubmodelElementCollection
 {
 public:
 	~SubmodelElementCollection() = default;

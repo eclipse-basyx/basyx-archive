@@ -12,10 +12,8 @@
 
 namespace basyx {
 namespace submodel {
-namespace backend {
-namespace connected { 
 
-class ConnectedSingleProperty : public ConnectedProperty, public submodelelement::property::ISingleProperty
+class ConnectedSingleProperty : public ConnectedProperty, public ISingleProperty
 {
 public:
   ConnectedSingleProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
@@ -25,10 +23,14 @@ public:
   virtual void set(const basyx::object & value) override;
   virtual std::string getValueType() const override;
 
+
+  // Inherited via ConnectedProperty
+  virtual void setValueId(const std::string & valueId) override;
+  virtual std::string getValueId() const override;
+  virtual PropertyType getPropertyType() const override;
+
 };
 
-}
-}
 }
 }
 

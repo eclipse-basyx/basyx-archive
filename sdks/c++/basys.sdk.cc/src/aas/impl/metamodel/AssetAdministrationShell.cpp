@@ -90,9 +90,9 @@ void AssetAdministrationShell::setIdentification(const std::shared_ptr<submodel:
 {
 }
 
-basyx::specificMap_t<submodel::api::ISubModel> AssetAdministrationShell::getSubModels() const
+basyx::specificMap_t<submodel::ISubModel> AssetAdministrationShell::getSubModels() const
 {
-	return basyx::specificMap_t<submodel::api::ISubModel>();
+	return basyx::specificMap_t<submodel::ISubModel>();
 }
 
 void AssetAdministrationShell::addSubModel(const descriptor::SubModelDescriptor & subModelDescriptor)

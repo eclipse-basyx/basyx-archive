@@ -11,9 +11,9 @@
 #include "support/VABProxyMock.cpp" 
 #include "basyx/anyTypeChecker.h"
 
-using namespace basyx::aas::submodelelement::property;
 using namespace basyx::vab::core::proxy;
-using namespace basyx::aas::backend::connected;
+using namespace basyx::submodel;
+using namespace basyx;
 
 class ConnectedSinglePropertyTest : public ::testing::Test
 {
@@ -26,8 +26,8 @@ protected:
     mock = std::make_shared<mockups::VABProxyMockMap>();
     proxy = mock;
 
-    mock->map[PropertyPaths::VALUETYPE] = basyx::object("str");
-    mock->map[PropertyPaths::VALUE] = basyx::object("another str");
+    mock->map[IProperty::Path::ValueType] = basyx::object("str");
+    mock->map[IProperty::Path::Value] = basyx::object("another str");
   }
 };
 
@@ -38,7 +38,7 @@ TEST_F(ConnectedSinglePropertyTest, TestGet)
   auto val = property.get();
   
   ASSERT_EQ(std::string("another str"), val.Get<std::string>());
-  ASSERT_EQ(PropertyPaths::VALUE, mock->getElementCallValues.at(0));
+  ASSERT_EQ(IProperty::Path::Value, mock->getElementCallValues.at(0));
   ASSERT_EQ(1, mock->overallMockCalls());
 }
 
@@ -50,7 +50,7 @@ TEST_F(ConnectedSinglePropertyTest, TestSet)
 
   property.set(val);
 
-  ASSERT_EQ(PropertyPaths::VALUE, mock->updateElementCallValues.at(0).first);
+  ASSERT_EQ(IProperty::Path::Value, mock->updateElementCallValues.at(0).first);
   ASSERT_EQ(2, mock->updateElementCallValues.at(0).second.Get<int>());
   ASSERT_EQ(1, mock->overallMockCalls());
 }

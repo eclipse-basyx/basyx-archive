@@ -9,7 +9,6 @@
 
 namespace basyx {
 namespace submodel {
-namespace backend {
 
 ConnectedElement::ConnectedElement(const std::shared_ptr<vab::core::proxy::IVABElementProxy> & proxy) :
   proxy(proxy),
@@ -55,12 +54,12 @@ void ConnectedElement::updateLocalValue(const std::string & path, const basyx::o
 
 void ConnectedElement::setId(const std::string & id)
 {
-  this->setProxyValue(api::qualifier::ReferablePaths::IDSHORT, id);
+  this->setProxyValue(IReferable::Path::IdShort, id);
 }
 
 std::string ConnectedElement::getId() const
 {
-  return this->getProxyValue(api::qualifier::ReferablePaths::IDSHORT);
+  return this->getProxyValue(IReferable::Path::IdShort);
 }
 
 
@@ -81,6 +80,5 @@ std::shared_ptr<basyx::object::object_map_t> ConnectedElement::getProxyMap(const
   return std::make_shared<basyx::object::object_map_t>(value.Get<basyx::object::object_map_t>());
 }
 
-}
 }
 }

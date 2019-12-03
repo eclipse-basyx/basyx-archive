@@ -29,7 +29,7 @@ class IAssetAdministrationShell :
 	public submodel::IIdentifiable
 {
 public:
-  virtual basyx::specificMap_t<submodel::api::ISubModel> getSubModels() const = 0;
+  virtual basyx::specificMap_t<submodel::ISubModel> getSubModels() const = 0;
   virtual void addSubModel(const descriptor::SubModelDescriptor & subModelDescriptor) = 0;
   virtual std::shared_ptr<security::ISecurity> getSecurity() const = 0;
   virtual std::shared_ptr<submodel::IReference> getDerivedFrom() const = 0;

@@ -10,10 +10,9 @@
 #include "vab/core/proxy/IVABElementProxy.h"
 #include "support/VABProxyMock.cpp"
 
-using namespace basyx::aas::backend::connected;
+using namespace basyx::submodel;
+using namespace basyx;
 using namespace basyx::vab::core::proxy;
-using namespace basyx::aas::qualifier;
-using namespace basyx::aas;
 
 class ConnectedSubmodelElementTest : public ::testing::Test
 {
@@ -37,7 +36,7 @@ TEST_F(ConnectedSubmodelElementTest, TestGetDataSpecificationReferences)
 
   auto category = data_element.getDataSpecificationReferences();
 
-  ASSERT_EQ(std::string(reference::paths::DATASPECIFICATIONS), mock_collection->getElementCallValues.at(0));
+  ASSERT_EQ(std::string(IReference::Path::DataSpecifications), mock_collection->getElementCallValues.at(0));
   ASSERT_EQ(1, mock_collection->overallMockCalls());
 }
 
@@ -47,7 +46,7 @@ TEST_F(ConnectedSubmodelElementTest, TestIDShort)
 
   auto category = data_element.getIdShort();
 
-  ASSERT_EQ(std::string(qualifier::ReferablePaths::IDSHORT), mock->getElementCallValues.at(0));
+  ASSERT_EQ(std::string(IReferable::Path::IdShort), mock->getElementCallValues.at(0));
   ASSERT_EQ(1, mock->overallMockCalls());
 }
 
@@ -57,7 +56,7 @@ TEST_F(ConnectedSubmodelElementTest, TestGetCategory)
 
   auto category = data_element.getCategory();
 
-  ASSERT_EQ(std::string(ReferablePaths::CATEGORY), mock->getElementCallValues.at(0));
+  ASSERT_EQ(std::string(IReferable::Path::Category), mock->getElementCallValues.at(0));
   ASSERT_EQ(1, mock->overallMockCalls());
 }
 
@@ -95,7 +94,7 @@ TEST_F(ConnectedSubmodelElementTest, TestGetQualifier)
 
   auto desc = data_element.getQualifier();
 
-  ASSERT_EQ(std::string(reference::paths::QUALIFIERS), mock_collection->getElementCallValues.at(0));
+  ASSERT_EQ(std::string(IReference::Path::Qualifiers), mock_collection->getElementCallValues.at(0));
   ASSERT_EQ(1, mock_collection->overallMockCalls());
 }
 
@@ -116,7 +115,7 @@ TEST_F(ConnectedSubmodelElementTest, TestGetHasKindRefernce)
 
   auto desc = data_element.getHasKindReference();
 
-  ASSERT_EQ(std::string(qualifier::haskind::Paths::KIND), mock->getElementCallValues.at(0));
+  ASSERT_EQ(std::string(IHasKind::Path::Kind), mock->getElementCallValues.at(0));
   ASSERT_EQ(1, mock->overallMockCalls());
 }
 

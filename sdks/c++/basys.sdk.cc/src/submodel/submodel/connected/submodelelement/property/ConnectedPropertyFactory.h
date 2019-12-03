@@ -33,12 +33,14 @@ static std::shared_ptr<ConnectedProperty> createProperty(std::shared_ptr<vab::co
 {
   auto property = proxy->readElementValue("").Get<basyx::object::object_map_t>();
 
-  if ( property.find(SubmodelPaths::PROPERTIES) != property.end() )
-  {
-    return std::make_shared<ConnectedContainerProperty>(proxy);
-  }
 
-  auto valueTypePtr = property.find(PropertyPaths::VALUETYPE);
+  // todo
+  //if ( property.find(api::ISubModel::SubmodelPaths::PROPERTIES) != property.end() )
+  //{
+  //  return std::make_shared<ConnectedContainerProperty>(proxy);
+  //}
+
+  auto valueTypePtr = property.find(IProperty::Path::ValueType);
   // Check if valueType is set
   if ( valueTypePtr != property.end() )
   {
@@ -47,7 +49,7 @@ static std::shared_ptr<ConnectedProperty> createProperty(std::shared_ptr<vab::co
   }
 
   // Property with no value type set
-  if ( property.find(submodelelement::property::PropertyPaths::VALUE) != property.end() and property.find(qualifier::ReferablePaths::IDSHORT) != property.end() )
+  if ( property.find(IProperty::Path::Value) != property.end() and property.find(IReferable::Path::IdShort) != property.end() )
   {
     return createSingleProperty(proxy, property);
   }
@@ -61,23 +63,24 @@ static std::shared_ptr<ConnectedProperty> createSuitableProperty(std::shared_ptr
   auto valueType_typeObject = valueTypeMap.at(impl::metamodel::PropertyValueTypeIdentifier::TYPE_OBJECT).Get<basyx::object::object_map_t>();
   auto propertyValueTypeName = valueType_typeObject.at(impl::metamodel::PropertyValueTypeIdentifier::TYPE_NAME).GetStringContent();
 
-  // if map -> create map
-  if ( propertyValueTypeName.compare(impl::metamodel::PropertyValueTypeDef::Map) == 0 )
-  {
-    return std::make_shared<ConnectedMapProperty>(proxy);
-  }
+  // if map -> create map todo
+  //if ( propertyValueTypeName.compare(impl::metamodel::PropertyValueTypeDef::Map) == 0 )
+  //{
+  //  return std::make_shared<ConnectedMapProperty>(proxy);
+  //}
 
-  // if collection -> create collection
-  if ( propertyValueTypeName.compare(impl::metamodel::PropertyValueTypeDef::Collection) == 0 )
-  {
-    return std::make_shared<ConnectedCollectionProperty>(proxy);
-  }
+  // if collection -> create collection todo
+  //if ( propertyValueTypeName.compare(impl::metamodel::PropertyValueTypeDef::Collection) == 0 )
+  //{
+  //  return std::make_shared<ConnectedCollectionProperty>(proxy);
+  //}
 
   // if no map and no collection -> must be single property
-  else
-  {
-    return createSingleProperty(proxy, originalPropertyMap);
-  }
+  //else
+  //{
+  //  return createSingleProperty(proxy, originalPropertyMap);
+  //}
+  return nullptr;
 }
 
 static std::shared_ptr<ConnectedProperty> createSingleProperty(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy, basyx::object::object_map_t & originalPropertyMap)

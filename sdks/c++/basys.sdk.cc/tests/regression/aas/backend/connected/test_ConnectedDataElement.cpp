@@ -10,9 +10,9 @@
 #include "vab/core/proxy/IVABElementProxy.h"
 #include "support/VABProxyMock.cpp"
 
-using namespace basyx::aas::backend;
+using namespace basyx::submodel;
+using namespace basyx;
 using namespace basyx::vab::core::proxy;
-using namespace basyx::aas::qualifier;
 
 class ConnectedDataElementTest : public ::testing::Test
 {

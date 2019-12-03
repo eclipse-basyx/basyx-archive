@@ -9,8 +9,6 @@
 
 namespace basyx {
 namespace submodel {
-namespace backend {
-namespace connected {
 
 ConnectedBlob::ConnectedBlob(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy) :
  ConnectedDataElement(proxy)
@@ -18,12 +16,12 @@ ConnectedBlob::ConnectedBlob(std::shared_ptr<vab::core::proxy::IVABElementProxy>
 
 void ConnectedBlob::setValue(const std::string & bytes)
 {
-  this->setProxyValue(submodelelement::property::PropertyPaths::VALUE, bytes);
+  this->setProxyValue(IProperty::Path::Value, bytes);
 }
 
 std::string ConnectedBlob::getValue() const
 {
-  auto value = getProxy()->readElementValue(submodelelement::property::PropertyPaths::VALUE);
+  auto value = getProxy()->readElementValue(IProperty::Path::Value);
   return value.Get<std::string>();
 }
 
@@ -37,7 +35,5 @@ std::string ConnectedBlob::getMimeType() const
   return this->getProxyValue(submodelelement::BlobPath::MIMETYPE);
 }
 
-}
-}
 }
 }

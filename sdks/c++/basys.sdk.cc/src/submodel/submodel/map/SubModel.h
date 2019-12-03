@@ -27,7 +27,7 @@ namespace submodel {
 /* *********************************************************************************
  * Sub Model base class
  * *********************************************************************************/
-class SubModel : public api::ISubModel
+class SubModel : public ISubModel
 {
 public:
   SubModel();
