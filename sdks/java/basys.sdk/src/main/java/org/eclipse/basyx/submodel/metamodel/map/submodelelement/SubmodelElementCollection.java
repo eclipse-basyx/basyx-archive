@@ -45,6 +45,15 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	}
 
 	/**
+	 * Adds an element to the SubmodelElementCollection
+	 * 
+	 * @param elem
+	 */
+	public void addElement(ISubmodelElement elem) {
+		getValue().add(elem);
+	}
+
+	/**
 	 * 
 	 * @param value
 	 *            Submodel element contained in the collection
