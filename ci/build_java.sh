@@ -17,7 +17,7 @@ echo "Remote branches:"
 /usr/bin/git branch -r
 
 
-JAVA_SDK_CHANGED=$(echo $GIT_DIFF | grep ".*/sdks/java/.*" | wc -l)
+JAVA_SDK_CHANGED=$(echo $GIT_DIFF | grep ".*sdks/java/.*" | wc -l)
 
 echo $GIT_DIFF
 echo $JAVA_SDK_CHANGED
