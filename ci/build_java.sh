@@ -10,10 +10,17 @@ echo "CWD: $CWD"
 
 GIT_DIFF=$(/usr/bin/git diff --name-only origin/master)
 
+/usr/bin/git log -n 1
+echo "Local branches:"
+/usr/bin/git branch
+echo "Remote branches:"
+/usr/bin/git branch -r
+
+
 JAVA_SDK_CHANGED=$(echo $GIT_DIFF | grep ".*/sdks/java/.*" | wc -l)
 
-#echo $GIT_DIFF
-#echo $JAVA_SDK_CHANGED
+echo $GIT_DIFF
+echo $JAVA_SDK_CHANGED
 
 if ((JAVA_SDK_CHANGED > 0));
 then
