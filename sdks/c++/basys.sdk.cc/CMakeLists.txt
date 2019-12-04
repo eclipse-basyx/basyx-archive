@@ -1,15 +1,9 @@
 ###############################################
 ###              BaSyx C++ SDK              ###
 ###############################################
-
 cmake_minimum_required(VERSION 3.13.0)
-project("BaSyx C++ SDK")
-
-set(BASYX_MAJOR_REV "0")
-set(BASYX_MINOR_REV "1")
 
 ### CMake settings ###
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(build_source_group)
 include(diagnostics_print)
@@ -17,6 +11,20 @@ include(enable_clang_format)
 include(enable_clang_tidy)
 include(enable_cppcheck)
 include(enable_testbed)
+include(GNUInstallDirs)
+
+set (BASYX_PACKAGE_VERSION_MAJOR "0")
+set (BASYX_PACKAGE_VERSION_MINOR "1")
+set (BASYX_PACKAGE_VERSION_PATCH "0")
+
+set (PROJECT_NAME "BaSyx C++ SDK")
+set (PROJECT_SHORTNAME "BaSyx")
+set (PROJECT_DESCRIPTION "fill me!")
+
+project (${PROJECT_NAME} 
+        VERSION ${BASYX_PACKAGE_VERSION_MAJOR}.${BASYX_PACKAGE_VERSION_MINOR}.${BASYX_PACKAGE_VERSION_PATCH}
+        DESCRIPTION ${PROJECT_DESCRIPTION}
+        )
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -54,8 +62,9 @@ set(CMAKE_CXX_STANDARD 11)
 
 ### Compile Step Definitions ###
 
-add_compile_definitions(BASYX_MAJOR_REV=${BASYX_MAJOR_REV})
-add_compile_definitions(BASYX_MINOR_REV=${BASYX_MINOR_REV})
+add_compile_definitions(BASYX_MAJOR_REV=${BASYX_PACKAGE_VERSION_MAJOR})
+add_compile_definitions(BASYX_MINOR_REV=${BASYX_PACKAGE_VERSION_MINOR})
+add_compile_definitions(BASYX_PATCH_REV=${BASYX_PACKAGE_VERSION_PATCH})
 add_compile_definitions(WIN32_LEAN_AND_MEAN)
 ##add_compile_definitions(__USE_MINGW_ANSI_STDIO=0)
 
@@ -95,6 +104,14 @@ endif()
 ###############################################
 ###           Source Directory              ###
 ###############################################
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/aas)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/abstraction)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/logging)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/shared)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/utility)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/vab)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/server)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/submodel)
 
 add_subdirectory(src/aas)
 add_subdirectory(src/abstraction)
@@ -124,3 +141,14 @@ if(${BASYX_UTILITY_PROJECTS})
     enable_cppcheck()
     enable_testbed()
 endif()
+
+message("")
+message("--------------------")
+message("Configuration:")
+message("   Library name and version:   " "${PROJECT_NAME}, ${PROJECT_VERSION}" )
+message("   Library destination folder: " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} )
+message("   Includes folder:            " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME} )
+#message("   Pkgconfig folder:           " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/pkgconfig )
+message("   CMake folder:               " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_SHORTNAME} )
+message("---------------------")
+message("")
