@@ -10,10 +10,9 @@
 #include "vab/core/proxy/IVABElementProxy.h"
 #include "support/VABProxyMock.cpp"
 
-using namespace basyx::aas::backend::connected;
 using namespace basyx::vab::core::proxy;
-using namespace basyx::aas::qualifier;
-
+using namespace basyx;
+using namespace basyx::submodel;
 
 class ConnectedMapPropertyTest : public ::testing::Test
 {
@@ -58,7 +57,7 @@ TEST_F(ConnectedMapPropertyTest, TestPutNotPresent)
   connected_map_property.put("path", value);
 
   ASSERT_EQ(1, mock->overallMockCalls());
-  ASSERT_EQ(std::string(basyx::aas::submodelelement::property::PropertyPaths::VALUE) + "//path", mock->updateElementCallValues.at(0).first);
+  ASSERT_EQ(std::string(IProperty::Path::Value) + "//path", mock->updateElementCallValues.at(0).first);
   ASSERT_EQ("value", mock->updateElementCallValues.at(0).second.Get<std::string>());
 }
 
@@ -71,7 +70,7 @@ TEST_F(ConnectedMapPropertyTest, TestSetMap)
   connected_map_property.set(map);
 
   ASSERT_EQ(1, mock->overallMockCalls());
-  ASSERT_EQ(std::string(basyx::aas::submodelelement::property::PropertyPaths::VALUE), mock->updateElementCallValues.at(0).first);
+  ASSERT_EQ(std::string(IProperty::Path::Value), mock->updateElementCallValues.at(0).first);
   ASSERT_EQ(map, mock->updateElementCallValues.at(0).second.Get<basyx::object::object_map_t>());
 }
 
@@ -88,7 +87,7 @@ TEST_F(ConnectedMapPropertyTest, TestGetKeys)
   auto keys = connected_map_property.getKeys();
 
   ASSERT_EQ(1, mock->overallMockCalls());
-  ASSERT_EQ(std::string(basyx::aas::submodelelement::property::PropertyPaths::VALUE), mock->getElementCallValues.at(0));
+  ASSERT_EQ(std::string(IProperty::Path::Value), mock->getElementCallValues.at(0));
 
   ASSERT_TRUE(keys.at(0).Get<std::string>() == "path1" or keys.at(0).Get<std::string>() == "path2");
   ASSERT_TRUE(keys.at(1).Get<std::string>() == "path1" or keys.at(1).Get<std::string>() == "path2");
@@ -107,7 +106,7 @@ TEST_F(ConnectedMapPropertyTest, TestGetEntryCount)
   auto key_count = connected_map_property.getEntryCount();
 
   ASSERT_EQ(1, mock->overallMockCalls());
-  ASSERT_EQ(std::string(basyx::aas::submodelelement::property::PropertyPaths::VALUE), mock->getElementCallValues.at(0));
+  ASSERT_EQ(std::string(IProperty::Path::Value), mock->getElementCallValues.at(0));
   ASSERT_EQ(2, key_count);
 }
 
@@ -118,6 +117,6 @@ TEST_F(ConnectedMapPropertyTest, TestRemove)
   connected_map_property.remove("path");
 
   ASSERT_EQ(1, mock->overallMockCalls());
-  ASSERT_EQ(std::string(basyx::aas::submodelelement::property::PropertyPaths::VALUE) + "//path", mock->removeElementCallValues.at(0));
+  ASSERT_EQ(std::string(IProperty::Path::Value) + "//path", mock->removeElementCallValues.at(0));
 }
 

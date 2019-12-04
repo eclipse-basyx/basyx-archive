@@ -9,8 +9,6 @@
 
 namespace basyx {
 namespace submodel {
-namespace backend {
-namespace connected {
 
 using namespace submodelelement::property;
 
@@ -25,14 +23,14 @@ basyx::object ConnectedMapProperty::getValue(const std::string & key) const
 
 void ConnectedMapProperty::put(const std::string & key, const basyx::object & value) const
 {
-  basyx::vab::core::VABPath path(PropertyPaths::VALUE);
+  basyx::vab::core::VABPath path(IProperty::Path::Value);
   path.append(key);
   this->setProxyValue(path, value);
 }
 
 void ConnectedMapProperty::set( const basyx::object::object_map_t & map ) const
 {
-  this->setProxyValue(PropertyPaths::VALUE, map);
+  this->setProxyValue(IProperty::Path::Value, map);
 }
 
 basyx::object::object_list_t ConnectedMapProperty::getKeys() const
@@ -55,18 +53,16 @@ int ConnectedMapProperty::getEntryCount() const
 
 void ConnectedMapProperty::remove(const std::string & key) const
 {
-  basyx::vab::core::VABPath path(PropertyPaths::VALUE);
+  basyx::vab::core::VABPath path(IProperty::Path::Value);
   path.append(key);
   this->getProxy()->deleteElement(path);
 }
 
 basyx::object::object_map_t ConnectedMapProperty::getMap() const
 {
-  auto map = this->getProxy()->readElementValue(PropertyPaths::VALUE).Get<basyx::object::object_map_t>();
+  auto map = this->getProxy()->readElementValue(IProperty::Path::Value).Get<basyx::object::object_map_t>();
   return map;
 }
 
-}
-}
 }
 }

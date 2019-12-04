@@ -13,7 +13,6 @@
 
 namespace basyx {
 namespace submodel {
-namespace submodelelement {
 
 namespace SubmodelElementCollectionPaths {
   static constexpr long serialVersionUID = 1L;
@@ -39,7 +38,6 @@ public:
   virtual basyx::specificMap_t<ISubmodelElement> getElements() const = 0;
 };
 
-}
 }
 }
 

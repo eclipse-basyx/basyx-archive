@@ -17,9 +17,8 @@
 
 namespace basyx {
 namespace submodel {
-namespace backend {
 
-class ConnectedDataElement : public connected::ConnectedSubmodelElement, public submodelelement::IDataElement
+class ConnectedDataElement : public ConnectedSubmodelElement, public IDataElement
 {
 
 public:
@@ -28,7 +27,6 @@ public:
 
 };
 
-}
 }
 }
 

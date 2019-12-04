@@ -11,8 +11,9 @@
 #include "support/VABProxyMock.cpp"
 #include "submodel/api/qualifier/IReferable.h"
 
-using namespace basyx::aas::backend;
 using namespace basyx::vab::core::proxy;
+using namespace basyx;
+using namespace basyx::submodel;
 
 class ConnectedElementTest : public ::testing::Test
 {
@@ -137,7 +138,7 @@ TEST_F(ConnectedElementTest, TestGetID)
 
   auto id = connected_element.getId();
 
-  ASSERT_EQ(std::string("called with ") + basyx::aas::qualifier::ReferablePaths::IDSHORT, id);
+  ASSERT_EQ(std::string("called with ") + IReferable::Path::IdShort, id);
   ASSERT_EQ(1, mock->overallMockCalls());
 }
 
@@ -150,7 +151,7 @@ TEST_F(ConnectedElementTest, TestSetID)
   connected_element.setId("identifier");
 
   ASSERT_EQ(1, mock->overallMockCalls());
-  ASSERT_EQ(basyx::aas::qualifier::ReferablePaths::IDSHORT, mock->updateElementCallValues.at(0).first);
+  ASSERT_EQ(IReferable::Path::IdShort, mock->updateElementCallValues.at(0).first);
   ASSERT_EQ(std::string("identifier"), mock->updateElementCallValues.at(0).second.Get<std::string>());
 }
 

@@ -8,39 +8,34 @@
 
 namespace basyx {
 namespace submodel {
-namespace backend {
-namespace connected {
-
 
 ConnectedRelationshipElement::ConnectedRelationshipElement(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy) :
   ConnectedSubmodelElement(proxy)
 {}
 
-void ConnectedRelationshipElement::setFirst(const std::shared_ptr<aas::reference::IReference> & first)
+void ConnectedRelationshipElement::setFirst(const std::shared_ptr<IReference> & first)
 {
   //todo
   //this->setProxyValue(submodelelement::RelationshipElementPath::FIRST, first);
 }
 
-std::shared_ptr<aas::reference::IReference> ConnectedRelationshipElement::getFirst() const
+std::shared_ptr<IReference> ConnectedRelationshipElement::getFirst() const
 {
   //todo
   return nullptr;// this->getProxyValue(submodelelement::RelationshipElementPath::FIRST);
 }
 
-void ConnectedRelationshipElement::setSecond(const std::shared_ptr<aas::reference::IReference> & second)
+void ConnectedRelationshipElement::setSecond(const std::shared_ptr<IReference> & second)
 {
   //todo
   //this->setProxyValue(submodelelement::RelationshipElementPath::SECOND, second);
 }
 
-std::shared_ptr<aas::reference::IReference> ConnectedRelationshipElement::getSecond() const
+std::shared_ptr<IReference> ConnectedRelationshipElement::getSecond() const
 {
   //todo
   return nullptr;// this->getProxyValue(submodelelement::RelationshipElementPath::SECOND);
 }
 
-}
-}
 }
 }

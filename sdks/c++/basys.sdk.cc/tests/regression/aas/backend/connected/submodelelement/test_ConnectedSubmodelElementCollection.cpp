@@ -12,10 +12,9 @@
 #include "submodel/api/submodelelement/property/IProperty.h"
 #include "submodel/api/ISubModel.h"
 
-using namespace basyx::aas::backend::connected;
 using namespace basyx::vab::core::proxy;
-using namespace basyx::aas::submodelelement;
-using namespace basyx::aas;
+using namespace basyx;
+using namespace basyx::submodel;
 
 class ConnectedSubmodelElementCollectionTest : public ::testing::Test
 {
@@ -40,7 +39,7 @@ TEST_F(ConnectedSubmodelElementCollectionTest, TestSetValue)
   //todo 
   //elements.setValue(value);
 
-  ASSERT_EQ(property::PropertyPaths::VALUE, mock->updateElementCallValues.at(0).first);
+  ASSERT_EQ(IProperty::Path::Value, mock->updateElementCallValues.at(0).first);
   ASSERT_EQ(1, mock->updateElementCallValues.at(0).second.Get<basyx::object::object_list_t>().size());
   ASSERT_EQ('a', mock->updateElementCallValues.at(0).second.Get<basyx::object::object_list_t>().at(0).Get<char>());
   ASSERT_EQ(1, mock->overallMockCalls());
@@ -54,7 +53,7 @@ TEST_F(ConnectedSubmodelElementCollectionTest, TestGetValue)
 
   auto value = elements.getValue();
 
-  ASSERT_EQ(property::PropertyPaths::VALUE, mock->getElementCallValues.at(0));
+  ASSERT_EQ(IProperty::Path::Value, mock->getElementCallValues.at(0));
   ASSERT_EQ(1, value.size());
   ASSERT_EQ(1, mock->overallMockCalls());
 }
@@ -124,7 +123,7 @@ TEST_F(ConnectedSubmodelElementCollectionTest, TestSetElements)
   //todo
   //elements.setElements(map);
 
-  ASSERT_EQ(SubmodelPaths::SUBMODELELEMENT, mock->updateElementCallValues.at(0).first);
+  ASSERT_EQ(ISubModel::Path::Submodelelement, mock->updateElementCallValues.at(0).first);
   ASSERT_EQ(map, mock->updateElementCallValues.at(0).second.Get<basyx::object::object_map_t>());
   ASSERT_EQ(1, mock->overallMockCalls());
 }
@@ -140,7 +139,7 @@ TEST_F(ConnectedSubmodelElementCollectionTest, TestGetElements)
 
   auto value = elements.getElements();
 
-  ASSERT_EQ(SubmodelPaths::SUBMODELELEMENT, mock_map->getElementCallValues.at(0));
+  ASSERT_EQ(ISubModel::Path::Submodelelement, mock_map->getElementCallValues.at(0));
   ASSERT_EQ(1, value.size());
   ASSERT_EQ(1, mock_map->overallMockCalls());
 }

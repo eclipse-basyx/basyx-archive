@@ -12,8 +12,6 @@
 
 namespace basyx { 
 namespace submodel {
-namespace backend {
-namespace connected { 
 
 class ConnectedMapProperty : public submodelelement::property::IMapProperty, public ConnectedProperty
 {
@@ -33,8 +31,6 @@ private:
   basyx::object::object_map_t getMap() const;
 };
  
-}
-}
 }
 }
 

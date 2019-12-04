@@ -16,7 +16,8 @@ namespace basyx {
 namespace submodel {
 
 
-class IAdministrativeInformation : public IHasDataSpecification
+class IAdministrativeInformation : 
+  public virtual IHasDataSpecification
 {
 public:
 struct Path {

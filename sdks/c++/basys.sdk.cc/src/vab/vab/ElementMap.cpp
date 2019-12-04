@@ -6,22 +6,35 @@
 
 #include "ElementMap.h"
 
+namespace basyx {
+namespace vab {
 
-basyx::vab::ElementMap::ElementMap()
-	: map(basyx::object::make_map())
+ElementMap::ElementMap()
+  : map(basyx::object::make_map())
+{}
+
+ElementMap::ElementMap(basyx::object object)
+  : map(basyx::object::make_null())
 {
+  if ( object.InstanceOf<basyx::object::object_map_t>() )
+  {
+    map = object;
+  };
+}
+
+ElementMap::ElementMap(const ElementMap & other) :
+  map{other.getMap()}
+{}
+
+basyx::object ElementMap::getMap() const
+{
+  return map;
 };
 
-basyx::vab::ElementMap::ElementMap(basyx::object object)
-	: map(basyx::object::make_null())
+void ElementMap::insertMapElement(const std::string & key, const ElementMap & element)
 {
-	if (object.InstanceOf<basyx::object::object_map_t>())
-	{
-		map = object;
-	};
-};
+  this->map.insertKey(key, element.getMap(), true);
+}
 
-basyx::object basyx::vab::ElementMap::getMap() const
-{
-	return map;
-};
+}
+}

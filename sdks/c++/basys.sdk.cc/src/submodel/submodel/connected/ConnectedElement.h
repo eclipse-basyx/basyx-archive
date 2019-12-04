@@ -18,7 +18,6 @@
 
 namespace basyx {
 namespace submodel {
-namespace backend {
 
 class ConnectedElement : public IElement
 {
@@ -49,7 +48,6 @@ protected:
 
 };
 
-}
 }
 }
 

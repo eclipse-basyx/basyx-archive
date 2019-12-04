@@ -17,7 +17,7 @@ namespace submodel {
 class IReference
 {
 public:
-	struct Paths {
+	struct Path {
 		static constexpr char DataSpecifications[] = "dataSpecificationReferences";
 		static constexpr char Parents[] = "parentReferences";
 		static constexpr char SemanticIds[] = "semanticIdReferences";

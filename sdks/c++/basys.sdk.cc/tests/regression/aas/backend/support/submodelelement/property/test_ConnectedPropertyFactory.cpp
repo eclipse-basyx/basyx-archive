@@ -11,7 +11,6 @@
 #include "submodel/connected/submodelelement/property/ConnectedPropertyFactory.h"
 
 using namespace basyx::vab::core::proxy;
-using basyx::aas::backend::connected::support::ConnectedPropertyFactory::createProperty;
 //
 //class ConnectedPropertyFactory : public ::testing::Test
 //{

@@ -29,7 +29,6 @@
 
 namespace basyx {
 namespace submodel {
-namespace api {
 
 
 /* *********************************************************************************
@@ -43,10 +42,10 @@ class ISubModel :
 	public map::IVABElementContainer
 {
 public:
-	struct SubmodelPaths {
-		static constexpr char  SUBMODELELEMENT[] = "submodelElement";
-		static constexpr char  PROPERTIES[] = "dataElements";
-		static constexpr char  OPERATIONS[] = "operations";
+	struct Path {
+		static constexpr char Submodelelement[] = "submodelElement";
+		static constexpr char Properties[] = "dataElements";
+		static constexpr char Operations[] = "operations";
 	};
 public:
 	virtual ~ISubModel() = default;
@@ -54,7 +53,6 @@ public:
 	virtual void setOperations(const basyx::object::object_map_t & operations) = 0;
 };
 
-}
 }
 }
 

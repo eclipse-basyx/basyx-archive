@@ -9,23 +9,22 @@
 
 #include "aas/aas/parts/IConceptDictionary.h"
 #include "aas/aas/parts/IConceptDescription.h"
+#include "submodel/map/qualifier/Referable.h"
 
 namespace basyx {
 namespace aas {
 
-class ConceptDictionary : public IConceptDictionary
+class ConceptDictionary : 
+  public virtual IConceptDictionary,
+  public submodel::Referable,
+  public virtual basyx::vab::ElementMap
 {
 public:
   ~ConceptDictionary() = default;
 
   // Inherited via IConceptDictionary
-  virtual std::string getIdShort() const override;
-  virtual std::string getCategory() const override;
-  virtual submodel::Description getDescription() const override;
-  virtual std::shared_ptr<submodel::IReference> getParent() const override;
   virtual std::vector<std::string> getConceptDescription() const override;
   virtual void setConceptDescription(const std::vector<std::string>& ref) override;
-  void addConceptDescription(const std::shared_ptr<IConceptDescription> & description);
 };
 
 }

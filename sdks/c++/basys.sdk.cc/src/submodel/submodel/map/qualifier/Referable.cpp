@@ -5,11 +5,13 @@
  */
 
 #include "Referable.h"
+#include "submodel/map/reference/Reference.h"
 
 namespace basyx {
 namespace submodel {
 
 Referable::Referable()
+  : vab::ElementMap{}
 {
 }
 
@@ -22,12 +24,31 @@ basyx::submodel::Referable::Referable(basyx::object & obj)
 	this->map.insertKey(Path::Parent, basyx::object::make_null());
 }
 
-Referable::Referable(const std::string & idShort, const std::string & category, const Description & description)
+Referable::Referable(const std::string & idShort, const std::string & category, const Description & description) :
+  vab::ElementMap{}
 {
 	this->map.insertKey(Path::IdShort, idShort);
 	this->map.insertKey(Path::Category, category);
 	this->map.insertKey(Path::Description, description.getMap());
 	this->map.insertKey(Path::Parent, basyx::object::make_null());
+}
+
+Referable::Referable(const IReferable & other) :
+  vab::ElementMap{}
+{
+  this->setIdShort(other.getIdShort());
+  this->setCategory(other.getCategory());
+  this->setDescription(other.getDescription());
+  this->setParent(other.getParent());
+}
+
+Referable::Referable(const std::shared_ptr<IReferable>& other)
+
+{
+  this->setIdShort(other->getIdShort());
+  this->setCategory(other->getCategory());
+  this->setDescription(other->getDescription());
+  this->setParent(other->getParent());
 }
 
 std::string Referable::getIdShort() const
@@ -47,8 +68,7 @@ Description Referable::getDescription() const
 
 std::shared_ptr<IReference> Referable::getParent() const
 {
-	// TODO
-	return nullptr;
+	return std::make_shared<Reference>(this->map.getProperty(Path::Parent));
 }
 
 void Referable::setIdShort(const std::string & shortID)
@@ -68,7 +88,7 @@ void Referable::setDescription(const Description & description)
 
 void Referable::setParent(const std::shared_ptr<IReference> & parentReference)
 {
-	// TODO:
+  this->insertMapElement(Path::Parent, Reference{parentReference});
 }
 
 }

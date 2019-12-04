@@ -15,14 +15,13 @@ namespace basyx {
 namespace submodel {
 
 class Constraint : 
-	public IConstraint,
-	public vab::ElementMap
+	public virtual IConstraint,
+	public virtual vab::ElementMap
 {
 public:
 	Constraint();
 	Constraint(basyx::object object);
 	Constraint(const IConstraint & constraint);
-
 
 	~Constraint() = default;
 };

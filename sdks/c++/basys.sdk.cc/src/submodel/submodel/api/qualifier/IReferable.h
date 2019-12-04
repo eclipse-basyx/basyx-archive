@@ -16,7 +16,6 @@
 namespace basyx {
 namespace submodel {
 
-
 class IReferable
 {
 public:

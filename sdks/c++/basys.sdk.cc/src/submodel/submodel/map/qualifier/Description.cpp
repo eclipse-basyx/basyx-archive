@@ -39,10 +39,5 @@ std::string Description::getText() const
 	return this->map.getProperty(Path::Text).GetStringContent();
 }
 
-
-constexpr char Description::Path::Language[];
-constexpr char Description::Path::Text[];
-
-
 }
 }

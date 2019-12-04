@@ -19,18 +19,16 @@ namespace submodel {
 
 class Identifier : 
 	public IIdentifier,
-	public vab::ElementMap
+	public virtual vab::ElementMap
 {
-public:
-	struct IdentifierType {
-		static constexpr char IRDI[] = "IRDI";
-	};
 public:
 	~Identifier() = default;
 
 	Identifier();
 	Identifier(const std::string & id, const std::string & idType);
 	Identifier(basyx::object object);
+  Identifier(const std::shared_ptr<IIdentifier> & other);
+  Identifier(const IIdentifier & other);
 
 	// Inherited via IIdentifier
 	virtual std::string getIdType() const override;

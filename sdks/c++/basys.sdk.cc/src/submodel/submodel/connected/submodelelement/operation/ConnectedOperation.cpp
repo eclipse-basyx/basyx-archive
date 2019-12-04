@@ -8,8 +8,6 @@
 
 namespace basyx {
 namespace submodel {
-namespace backend {
-namespace connected {
 
 ConnectedOperation::ConnectedOperation(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy) :
   ConnectedSubmodelElement(proxy)
@@ -25,16 +23,16 @@ std::string ConnectedOperation::getId() const
   return this->getIdWithLocalCheck();
 }
 
-operation_var_list ConnectedOperation::getParameterTypes() const
+basyx::specificCollection_t<IOperationVariable> ConnectedOperation::getParameterTypes() const
 {
   // todo
-  return operation_var_list(); // this->getProxyCollection(std::string(submodelelement::operation::OperationPaths::INPUT));
+  return basyx::specificCollection_t<IOperationVariable>(); // this->getProxyCollection(std::string(submodelelement::operation::OperationPaths::INPUT));
 }
 
-operation_var_list ConnectedOperation::getReturnTypes() const
+std::shared_ptr<IOperationVariable>ConnectedOperation::getReturnType() const
 {
   // todo
-  return operation_var_list(); // this->getProxyCollection(std::string(submodelelement::operation::OperationPaths::INPUT));
+  return std::shared_ptr<IOperationVariable>(); // this->getProxyCollection(std::string(submodelelement::operation::OperationPaths::INPUT));
 }
 
 basyx::object ConnectedOperation::invoke(basyx::object & parameters) const
@@ -43,7 +41,7 @@ basyx::object ConnectedOperation::invoke(basyx::object & parameters) const
 
 }
 
-basyx::detail::functionWrapper ConnectedOperation::getInvocable() const
+basyx::object ConnectedOperation::getInvocable() const
 {
   // Not supported on remote side.
   return basyx::detail::functionWrapper();
@@ -51,6 +49,3 @@ basyx::detail::functionWrapper ConnectedOperation::getInvocable() const
 
 }
 }
-}
-}
-

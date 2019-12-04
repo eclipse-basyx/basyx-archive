@@ -14,9 +14,8 @@
 #include "basyx/anyTypeChecker.h"
 
 using namespace basyx::vab::core::proxy;
-using namespace basyx::aas::backend::connected;
-using namespace basyx::aas::submodelelement::property;
-using namespace basyx::aas;
+using namespace basyx;
+using namespace basyx::submodel;
 
 class ConnectedFileTest : public ::testing::Test
 {
@@ -38,7 +37,7 @@ TEST_F(ConnectedFileTest, TestSetValue)
   file.setValue("value");
 
   ASSERT_EQ("value", mock->updateElementCallValues.at(0).second.Get<std::string>());
-  ASSERT_EQ(PropertyPaths::VALUE, mock->updateElementCallValues.at(0).first);
+  ASSERT_EQ(IProperty::Path::Value, mock->updateElementCallValues.at(0).first);
   ASSERT_EQ(1, mock->overallMockCalls());
 }
 
@@ -48,7 +47,7 @@ TEST_F(ConnectedFileTest, TestGetValue)
 
   auto val = file.getValue();
 
-  ASSERT_EQ(std::string("called with ") + PropertyPaths::VALUE, val);
+  ASSERT_EQ(std::string("called with ") + IProperty::Path::Value, val);
   ASSERT_EQ(1, mock->overallMockCalls());
 }
 

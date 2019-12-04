@@ -12,6 +12,7 @@ namespace submodel {
 
 AdministrativeInformation::AdministrativeInformation()
 	: HasDataSpecification{}
+  , vab::ElementMap {}
 {
 	this->map.insertKey(IAdministrativeInformation::Path::Version, "");
 	this->map.insertKey(IAdministrativeInformation::Path::Revision, "");
@@ -19,6 +20,7 @@ AdministrativeInformation::AdministrativeInformation()
 
 AdministrativeInformation::AdministrativeInformation(const std::string & version, const std::string & revision)
 	: HasDataSpecification{}
+  , vab::ElementMap{}
 {
 	this->map.insertKey(IAdministrativeInformation::Path::Version, version);
 	this->map.insertKey(IAdministrativeInformation::Path::Revision, revision);
@@ -26,7 +28,24 @@ AdministrativeInformation::AdministrativeInformation(const std::string & version
 
 AdministrativeInformation::AdministrativeInformation(basyx::object obj)
 	: HasDataSpecification{ obj }
+  , vab::ElementMap{}
 {
+}
+
+AdministrativeInformation::AdministrativeInformation(const std::shared_ptr<IAdministrativeInformation>& other)
+  : vab::ElementMap{}
+{
+  this->setDataSpecificationReferences(other->getDataSpecificationReferences());
+  this->setRevision(other->getRevision());
+  this->setVersion(other->getVersion());
+}
+
+AdministrativeInformation::AdministrativeInformation(const IAdministrativeInformation & other)
+  : vab::ElementMap {}
+{
+  this->setDataSpecificationReferences(other.getDataSpecificationReferences());
+  this->setRevision(other.getRevision());
+  this->setVersion(other.getVersion());
 }
 
 void AdministrativeInformation::setVersion(const std::string & version)
@@ -47,11 +66,6 @@ std::string AdministrativeInformation::getVersion() const
 std::string AdministrativeInformation::getRevision() const
 {
 	return this->map.getProperty(IAdministrativeInformation::Path::Revision).GetStringContent();
-}
-
-basyx::specificCollection_t<IReference> AdministrativeInformation::getDataSpecificationReferences() const
-{
-	return HasDataSpecification::getDataSpecificationReferences();
 }
 
 }

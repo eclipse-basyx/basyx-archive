@@ -19,9 +19,6 @@
 
 namespace basyx {
 namespace submodel {
-namespace backend {
-namespace connected {
-
 
 class ConnectedRelationshipElement : public ConnectedSubmodelElement, submodelelement::IRelationshipElement
 {
@@ -30,15 +27,13 @@ public:
   ~ConnectedRelationshipElement() = default;
   
   // Inherited via IRelationshipElement
-  virtual void setFirst(const std::shared_ptr<aas::reference::IReference> & first) override;
-  virtual std::shared_ptr<aas::reference::IReference> getFirst() const override;
-  virtual void setSecond(const std::shared_ptr<aas::reference::IReference> & second) override;
-  virtual std::shared_ptr<aas::reference::IReference> getSecond() const override;
+  virtual void setFirst(const std::shared_ptr<IReference> & first) override;
+  virtual std::shared_ptr<IReference> getFirst() const override;
+  virtual void setSecond(const std::shared_ptr<IReference> & second) override;
+  virtual std::shared_ptr<IReference> getSecond() const override;
 };
 
 
-}
-}
 }
 }
 

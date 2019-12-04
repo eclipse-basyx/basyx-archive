@@ -10,25 +10,22 @@
 
 namespace basyx {
 namespace submodel {
-namespace backend {
-namespace connected {
 
-using namespace basyx::aas::submodelelement;
 
 ConnectedSubmodelElementCollection::ConnectedSubmodelElementCollection(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy):
   ConnectedSubmodelElement(proxy)
 {}
 
-void ConnectedSubmodelElementCollection::setValue(const basyx::specificCollection_t<aas::submodelelement::ISubmodelElement> & value)
+void ConnectedSubmodelElementCollection::setValue(const basyx::specificCollection_t<ISubmodelElement> & value)
 {
   //todo
   //this->setProxyValue(property::PropertyPaths::VALUE, value);
 }
 
-basyx::specificCollection_t<aas::submodelelement::ISubmodelElement> ConnectedSubmodelElementCollection::getValue() const
+basyx::specificCollection_t<ISubmodelElement> ConnectedSubmodelElementCollection::getValue() const
 {
   //todo 
-  return basyx::specificCollection_t<aas::submodelelement::ISubmodelElement>(); // this->getProxyCollection(property::PropertyPaths::VALUE);
+  return basyx::specificCollection_t<ISubmodelElement>(); // this->getProxyCollection(property::PropertyPaths::VALUE);
 }
 
 void ConnectedSubmodelElementCollection::setOrdered(const bool & value)
@@ -53,22 +50,19 @@ bool ConnectedSubmodelElementCollection::isAllowDuplicates() const
   return element.Get<bool>();
 }
 
-void ConnectedSubmodelElementCollection::setElements(const basyx::specificMap_t<aas::submodelelement::ISubmodelElement> & elements)
+void ConnectedSubmodelElementCollection::setElements(const basyx::specificMap_t<ISubmodelElement> & elements)
 {
   //todo 
   //this->setProxyValue(SubmodelPaths::SUBMODELELEMENT, elements);
 }
 
-basyx::specificMap_t<aas::submodelelement::ISubmodelElement> ConnectedSubmodelElementCollection::getElements() const
+basyx::specificMap_t<ISubmodelElement> ConnectedSubmodelElementCollection::getElements() const
 {
   //todo 
   
   //auto elements = this->getProxy()->readElementValue(SubmodelPaths::SUBMODELELEMENT);
-  return basyx::specificMap_t<aas::submodelelement::ISubmodelElement>();
+  return basyx::specificMap_t<ISubmodelElement>();
 }
 
-
-}
-}
 }
 }

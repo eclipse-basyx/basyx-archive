@@ -12,8 +12,6 @@
 
 namespace basyx { 
 namespace submodel {
-namespace backend {
-namespace connected { 
 
 class ConnectedCollectionProperty : public ConnectedProperty, submodelelement::property::ICollectionProperty
 {
@@ -29,8 +27,6 @@ public:
 
 };
  
-}
-}
 }
 }
 

@@ -12,30 +12,25 @@
 
 namespace basyx { 
 namespace submodel {
-namespace backend {
-namespace connected { 
 
 
-class ConnectedSubmodelElementCollection : public ConnectedSubmodelElement, submodelelement::ISubmodelElementCollection
+class ConnectedSubmodelElementCollection : public ConnectedSubmodelElement, ISubmodelElementCollection
 {
 public:
   ConnectedSubmodelElementCollection(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
-	~ConnectedSubmodelElementCollection() = default;
+  ~ConnectedSubmodelElementCollection() = default;
 
   // Inherited via ISubmodelElementCollection
-  virtual void setValue(const basyx::specificCollection_t<aas::submodelelement::ISubmodelElement> & value) override;
-  virtual basyx::specificCollection_t<aas::submodelelement::ISubmodelElement> getValue() const override;
+  virtual void setValue(const basyx::specificCollection_t<ISubmodelElement> & value) override;
+  virtual basyx::specificCollection_t<ISubmodelElement> getValue() const override;
   virtual void setOrdered(const bool & value) override;
   virtual bool isOrdered() const override;
   virtual void setAllowDuplicates(const bool & value) override;
   virtual bool isAllowDuplicates() const override;
-  virtual void setElements(const basyx::specificMap_t<aas::submodelelement::ISubmodelElement> & elements) override;
-  virtual basyx::specificMap_t<aas::submodelelement::ISubmodelElement> getElements() const override;
+  virtual void setElements(const basyx::specificMap_t<ISubmodelElement> & elements) override;
+  virtual basyx::specificMap_t<ISubmodelElement> getElements() const override;
 };
- 
 
-}
-}
 }
 } 
 

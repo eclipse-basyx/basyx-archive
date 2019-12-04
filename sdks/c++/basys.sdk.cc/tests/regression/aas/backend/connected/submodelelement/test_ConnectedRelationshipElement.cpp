@@ -10,8 +10,8 @@
 #include "vab/core/proxy/IVABElementProxy.h"
 #include "support/VABProxyMock.cpp"
 
-using namespace basyx::aas::backend::connected;
-using namespace basyx::aas;
+using namespace basyx::submodel;
+using namespace basyx;
 using namespace basyx::vab::core::proxy;
 
 class ConnectedRelationshipElementTest : public ::testing::Test

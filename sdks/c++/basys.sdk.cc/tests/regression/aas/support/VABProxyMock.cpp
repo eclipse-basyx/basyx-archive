@@ -8,9 +8,6 @@
 #include <string>
 
 namespace basyx {
-namespace vab {
-namespace core {
-namespace proxy {
 namespace mockups {
 
 enum ProxyType
@@ -23,11 +20,11 @@ enum ProxyType
 };
 
 template<ProxyType t>
-class VABProxyMockUp : public IVABElementProxy
+class VABProxyMockUp : public vab::core::proxy::IVABElementProxy
 {
 public:
 
-  virtual basyx::object readElementValue(const VABPath & elementPath) override
+  virtual basyx::object readElementValue(const vab::core::VABPath & elementPath) override
   {
     this->readElementValue_calls++;
 
@@ -46,52 +43,52 @@ public:
   }
 
 
-  virtual void updateElementValue(const VABPath & elementPath, const basyx::object & newValue) override
+  virtual void updateElementValue(const vab::core::VABPath & elementPath, const basyx::object & newValue) override
   {
     this->updateElementValue_calls++;
 
     this->updateElementCallValues.push_back(std::make_pair(elementPath.toString(), newValue));
   }
 
-  virtual void createElement(const VABPath & elementPath, const basyx::object & newValue) override
+  virtual void createElement(const vab::core::VABPath & elementPath, const basyx::object & newValue) override
   {
     this->createElement_calls++;
 
     this->createElementCallValues.push_back(std::make_pair(elementPath.toString(), newValue));
   }
 
-  virtual void deleteElement(const VABPath & elementPath) override
+  virtual void deleteElement(const vab::core::VABPath & elementPath) override
   {
     this->deleteElement_calls++;
 
     this->removeElementCallValues.push_back(elementPath.toString());
   }
 
-  virtual void deleteElement(const VABPath & elementPath, basyx::object & value) override
+  virtual void deleteElement(const vab::core::VABPath & elementPath, basyx::object & value) override
   {
     this->deleteElement2_calls++;
 
     this->deleteElementCallValues.push_back(std::make_pair(elementPath.toString(), value));
   }
 
-  virtual basyx::object invoke(const VABPath & elementPath, basyx::object & parameter) override
+  virtual basyx::object invoke(const vab::core::VABPath & elementPath, basyx::object & parameter) override
   {
     this->invoke_calls++;
     this->invokeCallParameter = parameter;
     return basyx::object("called with " + elementPath.toString());
   }
 
-  virtual std::shared_ptr<IVABElementProxy> getDeepProxy(const VABPath & elementPath) override
+  virtual std::shared_ptr<IVABElementProxy> getDeepProxy(const vab::core::VABPath & elementPath) override
   {
     getDeepProxyCalls++;
     return std::shared_ptr<IVABElementProxy>();
   }
 
-  virtual VABPath getAddressPath() const override
+  virtual vab::core::VABPath getAddressPath() const override
   {
     VABProxyMockUp* ptr = const_cast<VABProxyMockUp*> (this);
     ptr->getAddressPathCalls++;
-    return VABPath("");
+    return vab::core::VABPath("");
   }
 
   int overallMockCalls()
@@ -125,8 +122,5 @@ using VABProxyMockByteArray = VABProxyMockUp<ProxyType::ByteArray>;
 using VABProxyMockMap = VABProxyMockUp<ProxyType::Map>;
 using VABProxyMockBool = VABProxyMockUp<ProxyType::Bool>;
 
-}
-}
-}
 }
 }

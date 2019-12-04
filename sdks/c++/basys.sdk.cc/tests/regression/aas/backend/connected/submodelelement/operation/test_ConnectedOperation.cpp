@@ -11,8 +11,8 @@
 #include "vab/core/proxy/IVABElementProxy.h"
 #include "support/VABProxyMock.cpp"
 
-using namespace basyx::aas::backend::connected;
-using namespace basyx::aas;
+using namespace basyx::submodel;
+using namespace basyx;
 using namespace basyx::vab::core::proxy;
 
 class ConnectedOperationTest : public ::testing::Test
@@ -36,7 +36,7 @@ TEST_F(ConnectedOperationTest, TestGetParameterTypes)
 
   auto types = connected_operation.getParameterTypes();
 
-  ASSERT_EQ(submodelelement::operation::OperationPaths::INPUT, mock->getElementCallValues.at(0));
+  ASSERT_EQ(IOperation::Path::Input, mock->getElementCallValues.at(0));
   ASSERT_EQ(1, mock->overallMockCalls());
 }
 
@@ -46,9 +46,9 @@ TEST_F(ConnectedOperationTest, TestGetReturnTypes)
 
   ConnectedOperation connected_operation(proxy);
 
-  auto types = connected_operation.getReturnTypes();
+  auto types = connected_operation.getReturnType();
 
-  ASSERT_EQ(submodelelement::operation::OperationPaths::OUTPUT, mock->getElementCallValues.at(0));
+  ASSERT_EQ(IOperation::Path::Output, mock->getElementCallValues.at(0));
   ASSERT_EQ(1, mock->overallMockCalls());
 }
 

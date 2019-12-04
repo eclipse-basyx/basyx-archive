@@ -16,36 +16,34 @@
 
 namespace basyx {
 namespace submodel {
-namespace backend {
 
 class ConnectedSubmodel : 
-	public api::ISubModel, 
-	public backend::ConnectedElement
+	public ISubModel, 
+	public ConnectedElement
 {
 public:
   ~ConnectedSubmodel() = default;
 
   // Inherited via ISubModel
-  virtual std::shared_ptr<reference::IReference> getSemanticId() const override;
-  virtual std::shared_ptr<api::qualifier::IAdministrativeInformation> getAdministration() const override;
-  virtual std::shared_ptr<identifier::IIdentifier> getIdentification() const override;
-  virtual basyx::specificCollection_t<reference::IReference> getDataSpecificationReferences() const override;
-  virtual api::qualifier::Kind getHasKindReference() const override;
+  virtual std::shared_ptr<IReference> getSemanticId() const override;
+  virtual std::shared_ptr<IAdministrativeInformation> getAdministration() const override;
+  virtual std::shared_ptr<IIdentifier> getIdentification() const override;
+  virtual basyx::specificCollection_t<IReference> getDataSpecificationReferences() const override;
+  virtual Kind getHasKindReference() const override;
   virtual void setProperties(const basyx::object::object_map_t & properties) override;
   virtual void setOperations(const basyx::object::object_map_t & operations) override;
   virtual std::string getIdShort() const override;
   virtual std::string getCategory() const override;
-  virtual map::qualifier::Description getDescription() const override;
-  virtual std::shared_ptr<reference::IReference> getParent() const override;
-  virtual void addSubModelElement(const std::shared_ptr<api::submodelelement::ISubmodelElement> & element) override;
-  virtual basyx::specificMap_t<submodelelement::IDataElement> getDataElements() const override;
-  virtual basyx::specificMap_t<submodelelement::operation::IOperation> getOperations() const override;
+  virtual Description getDescription() const override;
+  virtual std::shared_ptr<IReference> getParent() const override;
+  virtual void addSubModelElement(const std::shared_ptr<ISubmodelElement> & element) override;
+  virtual basyx::specificMap_t<IDataElement> getDataElements() const override;
+  virtual basyx::specificMap_t<IOperation> getOperations() const override;
 
 private:
   basyx::object::object_map_t local_map;
 };
 
-}
 }
 }
 
