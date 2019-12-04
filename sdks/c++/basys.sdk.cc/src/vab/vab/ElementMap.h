@@ -17,12 +17,18 @@ class ElementMap
 {
 protected:
 	mutable basyx::object map;
+
+protected:
+  void insertMapElement(const std::string & key, const ElementMap & element);
+
 public:
 	ElementMap();
 	ElementMap(basyx::object object);
+  ElementMap(const ElementMap & other);
 	virtual ~ElementMap() = default;
 
 	basyx::object getMap() const;
+
 public:
 	template<typename AbstractType, typename SpecificType>
 	static basyx::specificCollection_t<AbstractType> make_specific_collection(basyx::object::object_list_t & obj_list)

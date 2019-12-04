@@ -24,7 +24,7 @@ Reference::Reference(const basyx::specificCollection_t<IKey> & keys)
 	this->setKeys(keys);
 }
 
-Reference::Reference(std::initializer_list<Key> keys)
+Reference::Reference(const std::initializer_list<Key> keys)
 	: vab::ElementMap{}
 {
 	auto list = basyx::object::make_list<basyx::object>();
@@ -35,6 +35,18 @@ Reference::Reference(std::initializer_list<Key> keys)
 	}
 
 	map.insertKey("keys", list);
+}
+
+Reference::Reference(const std::shared_ptr<IReference> reference)
+  : vab::ElementMap{}
+{
+  this->setKeys(reference->getKeys());
+}
+
+Reference::Reference(const IReference & reference) :
+  vab::ElementMap{}
+{
+  this->setKeys(reference.getKeys());
 }
 
 Reference::Reference(basyx::object object)

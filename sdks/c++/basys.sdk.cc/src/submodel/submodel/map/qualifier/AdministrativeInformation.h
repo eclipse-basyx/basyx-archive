@@ -19,7 +19,8 @@ namespace submodel {
 
 class AdministrativeInformation :
 	public IAdministrativeInformation,
-	public HasDataSpecification
+	public HasDataSpecification,
+  public virtual vab::ElementMap
 {
 public:
   ~AdministrativeInformation() = default;
@@ -27,15 +28,14 @@ public:
   AdministrativeInformation();
   AdministrativeInformation(const std::string & version, const std::string & revision);
   AdministrativeInformation(basyx::object object);
+  AdministrativeInformation(const std::shared_ptr<IAdministrativeInformation> & other);
+  AdministrativeInformation(const IAdministrativeInformation & other);
 
   void setVersion(const std::string & version);
   void setRevision(const std::string & revision);
 
   virtual std::string getVersion() const override;
   virtual std::string getRevision() const override;
-
-  // Inherited via IAdministrativeInformation
-  virtual basyx::specificCollection_t<IReference> getDataSpecificationReferences() const override;
 };
 
 }

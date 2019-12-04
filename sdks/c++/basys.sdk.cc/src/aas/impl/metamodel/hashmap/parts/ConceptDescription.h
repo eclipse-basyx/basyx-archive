@@ -26,7 +26,6 @@ public:
 	// Inherited via IConceptDescription
 	virtual std::vector<std::string> getIsCaseOf() const override { return {}; };
 	virtual void setIsCaseOf(const std::vector<std::string>& ref) override {};
-	void addDataSpecification(const IDataSpecificationContent & dataSpec) {};
 };
 
 }

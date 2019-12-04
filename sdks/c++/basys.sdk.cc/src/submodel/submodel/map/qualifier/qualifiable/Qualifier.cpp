@@ -5,6 +5,7 @@
  */
 
 #include "Qualifier.h"
+#include "submodel/map/reference/Reference.h"
 
 namespace basyx {
 namespace submodel {
@@ -15,53 +16,44 @@ Qualifier::Qualifier()
 Qualifier::Qualifier(
 	const std::string & qualifierType, 
 	const basyx::object & qualifierValue, 
-	const std::shared_ptr<IReference> & valueId) 
-	
-  : qualifierType {qualifierType}
-  , qualifierValue {qualifierValue}
-  , qualifierValueId {valueId}
-{}
+	const std::shared_ptr<IReference> & valueId) : 
+    vab::ElementMap{}
+{
+  this->setQualifierType(qualifierType);
+  this->setQualifierValue(qualifierValue);
+  this->setQualifierValueId(valueId);
+}
 
 std::string Qualifier::getQualifierType() const
 {
-  return this->qualifierType;
+  return this->map.getProperty(IQualifier::Path::QualifierType).GetStringContent();
 }
 
 basyx::object Qualifier::getQualifierValue() const
 {
-  return this->qualifierValue;
+  return this->map.getProperty(IQualifier::Path::QualifierValue);
 }
 
 std::shared_ptr<IReference> Qualifier::getQualifierValueId() const
 {
-  return this->qualifierValueId;
-}
-
-std::shared_ptr<IReference> Qualifier::getSemanticId() const
-{
-  return this->semanticId;
+  return std::make_shared<Reference>(this->map.getProperty(IQualifier::Path::QualifierValueID));
 }
 
 void Qualifier::setQualifierType(const std::string & qualifierType)
 {
-  this->qualifierType = qualifierType;
+  this->map.insertKey(IQualifier::Path::QualifierType, qualifierType);
 }
 
 void Qualifier::setQualifierValue(const basyx::object & qualifierValue)
 {
-  this->qualifierValue = qualifierValue;
+  this->map.insertKey(IQualifier::Path::QualifierValue, qualifierValue);
 }
 
 void Qualifier::setQualifierValueId(const std::shared_ptr<IReference> & valueId)
 {
-  this->qualifierValueId = valueId;
+  Reference reference{valueId};
+  this->insertMapElement(IQualifier::Path::QualifierValueID, reference);
 }
-
-void Qualifier::setSemanticId(const std::shared_ptr<IReference>& semanticId)
-{
-  this->semanticId = semanticId;
-}
-
 
 }
 }

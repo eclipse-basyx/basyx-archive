@@ -50,6 +50,7 @@ target_sources(basyx_aas
 		impl/metamodel/hashmap/parts/View.h
 		impl/metamodel/hashmap/security/Security.cpp
 		impl/metamodel/hashmap/security/Security.h
+    aas/api/constant_definitions.h
 )
 
 target_include_directories(basyx_aas PUBLIC ${PROJECT_SOURCE_DIR})

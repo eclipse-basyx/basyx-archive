@@ -22,6 +22,12 @@ namespace submodel {
 class IIdentifiable : public virtual IReferable
 {
 public:
+  struct Path
+  {
+    static constexpr char Administration[] = "administration";
+    static constexpr char Identification[] = "identification";
+  };
+public:
   virtual ~IIdentifiable() = default;
 
   virtual std::shared_ptr<IAdministrativeInformation> getAdministration() const = 0;

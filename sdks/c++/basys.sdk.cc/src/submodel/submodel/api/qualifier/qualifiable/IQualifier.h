@@ -7,19 +7,30 @@
 #ifndef BASYX_METAMODEL_IQualifier_H_
 #define BASYX_METAMODEL_IQualifier_H_
 
-
 #include "submodel/api/reference/IReference.h"
 #include "submodel/api/qualifier/IHasSemantics.h"
 #include "basyx/types.h"
 #include "basyx/object.h"
+#include "submodel/api/qualifier/qualifiable/IConstraint.h"
 
 #include <string>
 
 namespace basyx {
 namespace submodel {
 
-class IQualifier : public IHasSemantics
+class IQualifier 
+  : public IHasSemantics
+  , public virtual IConstraint
 {
+public:
+  struct Path {
+    static constexpr char Qualifier[] = "qualifier";
+    static constexpr char QualifierType[] = "qualifierType";
+    static constexpr char QualifierValue[] = "qualifierValue";
+    static constexpr char QualifierValueID[] = "qualifierValueId";
+    static constexpr char Modeltype[] = "Qualifier";
+  };
+
 public:
   virtual ~IQualifier() = default;
 

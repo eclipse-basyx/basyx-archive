@@ -29,7 +29,9 @@ public:
 	Reference();
 	Reference(basyx::object obj);
 	Reference(const basyx::specificCollection_t<IKey> & keys);
-	Reference(std::initializer_list<Key> keys);
+	Reference(const std::initializer_list<Key> keys);
+  Reference(const std::shared_ptr<IReference> reference);
+  Reference(const IReference &  reference);
 
 	// Inherited via IReference
 	virtual const basyx::specificCollection_t<IKey> getKeys() const override;

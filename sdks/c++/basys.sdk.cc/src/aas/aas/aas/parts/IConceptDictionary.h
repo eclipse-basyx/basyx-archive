@@ -20,6 +20,10 @@ namespace aas {
 class IConceptDictionary : public submodel::IReferable
 {
 public:
+  struct Path {
+    static constexpr char ConceptDescription[] = "conceptDescription";
+    static constexpr char ConceptDescriptions[] = "conceptDescriptions";
+  };
 
   virtual ~IConceptDictionary() = default;
 

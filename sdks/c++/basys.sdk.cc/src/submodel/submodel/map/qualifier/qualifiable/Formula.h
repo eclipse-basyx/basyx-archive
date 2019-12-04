@@ -13,7 +13,10 @@
 namespace basyx {
 namespace submodel {
 
-class Formula : public Constraint, public IFormula
+class Formula 
+  : public virtual Constraint
+  , public IFormula
+  , public virtual vab::ElementMap
 {
 public:
   ~Formula() = default;
@@ -28,8 +31,6 @@ public:
   // not inherited
   void setDependsOn(const basyx::specificCollection_t<IReference> & dependsOn);
 
-private:
-  basyx::specificCollection_t<IReference> dependsOn;
 };
 
 }
