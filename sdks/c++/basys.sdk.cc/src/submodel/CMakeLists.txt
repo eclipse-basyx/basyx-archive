@@ -127,7 +127,7 @@ target_sources(basyx_submodel
 )
 
 target_include_directories(basyx_submodel PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(basyx_submodel basyx::shared basyx::vab basyx::aas)
+target_link_libraries(basyx_submodel basyx::shared basyx::vab)
 add_library(basyx::submodel ALIAS basyx_submodel)
 
 diagnostics_print(basyx_submodel)
