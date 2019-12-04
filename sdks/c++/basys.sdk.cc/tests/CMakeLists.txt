@@ -14,7 +14,7 @@ diagnostics_print(tests_main)
 
 ### UnitTests ###
 
-add_subdirectory(regression/aas)
+#add_subdirectory(regression/aas)
 add_subdirectory(regression/util)
 add_subdirectory(regression/vab)
 

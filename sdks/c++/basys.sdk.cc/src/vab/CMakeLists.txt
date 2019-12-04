@@ -42,3 +42,4 @@ target_link_libraries(basyx_vab basyx::shared basyx::abstraction)
 add_library(basyx::vab ALIAS basyx_vab)
 
 diagnostics_print(basyx_vab)
+

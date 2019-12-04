@@ -9,6 +9,13 @@ spec:
   containers:
   - name: postgresql
     image: postgres:latest
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "0.5"
+      limits:
+        memory: "2Gi"
+        cpu: "0.5"
     command: 
     - cat
     tty: true
@@ -21,17 +28,29 @@ spec:
     image: maven:latest
     resources:
       requests:
-        memory: "2Gi"
-        cpu: "1"
+        memory: "3Gi"
+        cpu: "0.75"
       limits:
-        memory: "2Gi"
-        cpu: "1"
+        memory: "3Gi"
+        cpu: "0.75"
     command:
     - cat
     tty: true
     env:
     - name: MAVEN_CONFIG
       value: /home/jenkins/agent/.m2
+  - name: cpp
+    image: iesetps/basyx-ci-cpp:latest
+    resources:
+      requests:
+        memory: "3Gi"
+        cpu: "0.75"
+      limits:
+        memory: "3Gi"
+        cpu: "0.75"
+    command:
+    - cat
+    tty: true
 """
     }
   }
@@ -54,6 +73,16 @@ spec:
                      mkdir /home/jenkins/agent/.m2
                      chmod +x ./ci/build_java.sh
                      ./ci/build_java.sh
+                     '''
+              }
+          }
+      }
+      stage('C++ SDK Tests') {
+          steps {
+              container('cpp') {
+                  sh '''
+                     chmod +x ./ci/build_cpp.sh
+                     ./ci/build_cpp.sh
                      '''
               }
           }

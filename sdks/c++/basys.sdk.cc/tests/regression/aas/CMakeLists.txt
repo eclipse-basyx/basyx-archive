@@ -10,7 +10,7 @@ add_executable(tests_aas)
 
 target_sources(tests_aas
   PRIVATE
-	  support/VABProxyMock.cpp
+    support/VABProxyMock.cpp
     backend/connected/test_ConnectedDataElement.cpp
     backend/connected/test_ConnectedElement.cpp
     backend/connected/submodelelement/property/test_ConnectedMapProperty.cpp
@@ -24,7 +24,6 @@ target_sources(tests_aas
     backend/connected/submodelelement/test_ConnectedRelationshipElement.cpp
     backend/connected/submodelelement/test_ConnectedSubmodelElement.cpp
     backend/connected/submodelelement/test_ConnectedSubmodelElementCollection.cpp
-
     backend/support/submodelelement/property/test_ConnectedPropertyFactory.cpp
 )
 
