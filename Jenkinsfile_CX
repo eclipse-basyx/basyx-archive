@@ -11,11 +11,11 @@ spec:
     image: postgres:latest
     resources:
       requests:
-        memory: "2Gi"
-        cpu: "0.5"
+        memory: "1Gi"
+        cpu: "0.25"
       limits:
-        memory: "2Gi"
-        cpu: "0.5"
+        memory: "1Gi"
+        cpu: "0.25"
     command: 
     - cat
     tty: true
@@ -28,11 +28,11 @@ spec:
     image: maven:latest
     resources:
       requests:
-        memory: "3Gi"
+        memory: "2Gi"
         cpu: "0.75"
       limits:
-        memory: "3Gi"
-        cpu: "0.75"
+        memory: "4Gi"
+        cpu: "2.00"
     command:
     - cat
     tty: true
@@ -43,11 +43,11 @@ spec:
     image: iesetps/basyx-ci-cpp:latest
     resources:
       requests:
-        memory: "3Gi"
+        memory: "2Gi"
         cpu: "0.75"
       limits:
-        memory: "3Gi"
-        cpu: "0.75"
+        memory: "4Gi"
+        cpu: "2.00"
     command:
     - cat
     tty: true
