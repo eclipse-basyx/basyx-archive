@@ -2,11 +2,16 @@
 ###              BaSyx::Submodel            ###
 ###############################################
 
-project(basyx)
+set (BASYX_SUBMODEL_LIB_SUFFIX "Submodel")
 
-add_library(basyx_submodel)
+set (BASYX_SUBMODEL_LIBRARY_NAME "${PROJECT_SHORTNAME}${BASYX_SUBMODEL_LIB_SUFFIX}")
 
-target_sources(basyx_submodel
+add_library(${BASYX_SUBMODEL_LIBRARY_NAME})
+
+set_target_properties(${BASYX_SUBMODEL_LIBRARY_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
+set_target_properties(${BASYX_SUBMODEL_LIBRARY_NAME} PROPERTIES SOVERSION ${BASYX_PACKAGE_VERSION_MAJOR})
+
+target_sources(${BASYX_SUBMODEL_LIBRARY_NAME}
     PRIVATE
 		submodel/api/constant_definitions.cpp
 		submodel/api/identifier/IIdentifier.h
@@ -126,8 +131,24 @@ target_sources(basyx_submodel
 		submodel/map/submodelelement/SubmodelElementCollection.h
 )
 
-target_include_directories(basyx_submodel PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(basyx_submodel basyx::shared basyx::vab)
-add_library(basyx::submodel ALIAS basyx_submodel)
+target_include_directories(${BASYX_SUBMODEL_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
+target_link_libraries(${BASYX_SUBMODEL_LIBRARY_NAME} BaSyx::Shared BaSyx::VAB)
+add_library(${PROJECT_SHORTNAME}::${BASYX_SUBMODEL_LIB_SUFFIX} ALIAS ${BASYX_SUBMODEL_LIBRARY_NAME})
+add_library(basyx::submodel ALIAS ${BASYX_SUBMODEL_LIBRARY_NAME})
 
-diagnostics_print(basyx_submodel)
+###############################################
+###           Install section               ###
+###############################################
+
+configure_file("${BASYX_SUBMODEL_LIBRARY_NAME}Config.cmake.in" "${BASYX_SUBMODEL_LIBRARY_NAME}Config.cmake" @ONLY)
+
+install(TARGETS ${BASYX_SUBMODEL_LIBRARY_NAME}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/submodel"
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME}"
+        FILES_MATCHING PATTERN "*.h")
+
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${BASYX_SUBMODEL_LIBRARY_NAME}Config.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_SHORTNAME})
+
+diagnostics_print(${BASYX_SUBMODEL_LIBRARY_NAME})
