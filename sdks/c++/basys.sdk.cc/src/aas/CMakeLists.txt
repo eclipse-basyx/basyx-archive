@@ -2,15 +2,20 @@
 ###              BaSyx::AAS                 ###
 ###############################################
 
-project(basyx)
+set (BASYX_AAS_LIB_SUFFIX "AAS")
 
-add_library(basyx_aas)
+set (BASYX_AAS_LIBRARY_NAME "${PROJECT_SHORTNAME}${BASYX_AAS_LIB_SUFFIX}")
+
+add_library(${BASYX_AAS_LIBRARY_NAME})
+
+set_target_properties(${BASYX_AAS_LIBRARY_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
+set_target_properties(${BASYX_AAS_LIBRARY_NAME} PROPERTIES SOVERSION ${BASYX_PACKAGE_VERSION_MAJOR})
 
 if(${BASYX_DEBUG_PRINT_FRAMES})
-    target_compile_definitions(basyx_aas PUBLIC PRINT_FRAME)
+    target_compile_definitions(${BASYX_AAS_LIBRARY_NAME} PUBLIC PRINT_FRAME)
 endif()
 
-target_sources(basyx_aas
+target_sources(${BASYX_AAS_LIBRARY_NAME}
     PRIVATE
 		aas/aas/AssetAdministrationShell.h
 		aas/aas/BlobType.h
@@ -53,8 +58,25 @@ target_sources(basyx_aas
     aas/api/constant_definitions.h
 )
 
-target_include_directories(basyx_aas PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(basyx_aas basyx::shared basyx::abstraction basyx::vab basyx::submodel)
-add_library(basyx::aas ALIAS basyx_aas)
+target_include_directories(${BASYX_AAS_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
+target_link_libraries(${BASYX_AAS_LIBRARY_NAME} BaSyx::Shared BaSyx::Abstraction BaSyx::VAB BaSyx::Submodel)
+add_library(${PROJECT_SHORTNAME}::${BASYX_AAS_LIB_SUFFIX} ALIAS ${BASYX_AAS_LIBRARY_NAME})
+add_library(basyx::aas ALIAS ${BASYX_AAS_LIBRARY_NAME})
 
-diagnostics_print(basyx_aas)
+
+###############################################
+###           Install section               ###
+###############################################
+
+configure_file("${BASYX_AAS_LIBRARY_NAME}Config.cmake.in" "${BASYX_AAS_LIBRARY_NAME}Config.cmake" @ONLY)
+
+install(TARGETS ${BASYX_AAS_LIBRARY_NAME}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/aas"
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME}"
+        FILES_MATCHING PATTERN "*.h")
+        
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${BASYX_AAS_LIBRARY_NAME}Config.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_SHORTNAME})
+
+diagnostics_print(${BASYX_AAS_LIBRARY_NAME})
