@@ -2,15 +2,20 @@
 ###              BaSyx::VAB                 ###
 ###############################################
 
-project(basyx)
+set (BASYX_VAB_LIB_SUFFIX "VAB")
 
-add_library(basyx_vab)
+set (BASYX_VAB_LIBRARY_NAME "${PROJECT_SHORTNAME}${BASYX_VAB_LIB_SUFFIX}")
+
+add_library(${BASYX_VAB_LIBRARY_NAME})
+
+set_target_properties(${BASYX_VAB_LIBRARY_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
+set_target_properties(${BASYX_VAB_LIBRARY_NAME} PROPERTIES SOVERSION ${BASYX_PACKAGE_VERSION_MAJOR})
 
 if(${BASYX_DEBUG_PRINT_FRAMES})
-    target_compile_definitions(basyx_vab PUBLIC PRINT_FRAME)
+    target_compile_definitions(${BASYX_VAB_LIBRARY_NAME} PUBLIC PRINT_FRAME)
 endif()
 
-target_sources(basyx_vab
+target_sources(${BASYX_VAB_LIBRARY_NAME}
     PRIVATE
 		vab/backend/connector/IBaSyxConnector.h
 		vab/backend/connector/JSONProvider.h
@@ -37,9 +42,25 @@ target_sources(basyx_vab
 		vab/provider/VABMultiElementHandler.h
 )
 
-target_include_directories(basyx_vab PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(basyx_vab basyx::shared basyx::abstraction)
-add_library(basyx::vab ALIAS basyx_vab)
+target_include_directories(${BASYX_VAB_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
+target_link_libraries(${BASYX_VAB_LIBRARY_NAME} BaSyx::Shared BaSyx::Abstraction)
+add_library(${PROJECT_SHORTNAME}::${BASYX_VAB_LIB_SUFFIX} ALIAS ${BASYX_VAB_LIBRARY_NAME})
+add_library(basyx::vab ALIAS ${BASYX_VAB_LIBRARY_NAME})
 
-diagnostics_print(basyx_vab)
+###############################################
+###           Install section               ###
+###############################################
+
+configure_file("${BASYX_VAB_LIBRARY_NAME}Config.cmake.in" "${BASYX_VAB_LIBRARY_NAME}Config.cmake" @ONLY)
+
+install(TARGETS ${BASYX_VAB_LIBRARY_NAME}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vab"
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME}"
+        FILES_MATCHING PATTERN "*.h")
+
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${BASYX_VAB_LIBRARY_NAME}Config.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_SHORTNAME})
+
+diagnostics_print(${BASYX_VAB_LIBRARY_NAME})
 
