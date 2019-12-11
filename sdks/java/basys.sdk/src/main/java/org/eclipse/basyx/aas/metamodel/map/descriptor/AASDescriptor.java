@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.metamodel.map.descriptor;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -91,11 +92,26 @@ public class AASDescriptor extends ModelDescriptor {
 		return this;
 	}
 
+	@SuppressWarnings("unchecked")
+	public void removeSubmodelDescriptor(String idShort) {
+		Optional<SubmodelDescriptor> toRemove = getSubModelDescriptors().stream().filter(x -> x.getIdShort().equals(idShort)).findAny();
+
+		// TODO: Exception in else case
+		if (toRemove.isPresent()) {
+			// Don't use getSubmodelDescriptors here since it returns a copy
+			((Set<Object>) get(AssetAdministrationShell.SUBMODELS)).remove(toRemove.get());
+		}
+	}
+
 	/**
-	 * Get a specific sub model descriptor
+	 * Retrieves a submodel descriptor based on the globally unique id of the
+	 * submodel
+	 * 
+	 * @param subModelId
+	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public SubmodelDescriptor getSubModelDescriptor(String subModelId) {
+	public SubmodelDescriptor getSubModelDescriptorFromIdentifierId(String subModelId) {
 		// Sub model descriptors are stored in a list
 		Collection<Map<String, Object>> smDescriptorMaps = (Collection<Map<String, Object>>) get(
 				AssetAdministrationShell.SUBMODELS);
@@ -114,10 +130,20 @@ public class AASDescriptor extends ModelDescriptor {
 	}
 
 	/**
+	 * Retrieves a submodel descriptor based on the idShort of the submodel
+	 * 
+	 * @param idShort
+	 * @return
+	 */
+	public SubmodelDescriptor getSubmodelDescriptorFromIdShort(String idShort) {
+		return getSubModelDescriptors().stream().filter(x -> x.getIdShort().equals(idShort)).findAny().orElse(null); // TODO: Exception
+	}
+
+	/**
 	 * Get a specific sub model descriptor from a ModelUrn
 	 */
 	public SubmodelDescriptor getSubModelDescriptor(ModelUrn submodelUrn) {
-		return getSubModelDescriptor(submodelUrn.getURN());
+		return getSubModelDescriptorFromIdentifierId(submodelUrn.getURN());
 	}
 
 	/**

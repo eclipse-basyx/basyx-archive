@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -62,6 +64,10 @@ public abstract class ModelDescriptor extends HashMap<String, Object> {
 		return new IdentifierFacade(identifierModel);
 	}
 	
+	public String getIdShort() {
+		return new ReferableFacade(this).getIdShort();
+	}
+
 	/**
 	 * Return first AAS endpoint
 	 */

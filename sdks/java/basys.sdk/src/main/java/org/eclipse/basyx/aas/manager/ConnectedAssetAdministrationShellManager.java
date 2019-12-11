@@ -51,7 +51,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		AASDescriptor aasDescriptor = aasDirectory.lookupAAS(aasId);
 
 		// Get submodel descriptor from the aas descriptor
-		SubmodelDescriptor smDescriptor = aasDescriptor.getSubModelDescriptor(smId.getId());
+		SubmodelDescriptor smDescriptor = aasDescriptor.getSubModelDescriptorFromIdentifierId(smId.getId());
 
 		// get address of the submodel descriptor
 		String addr = smDescriptor.getFirstEndpoint();

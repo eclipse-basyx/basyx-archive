@@ -9,6 +9,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -25,19 +26,22 @@ import org.junit.Test;
  */
 public abstract class TestRegistryProvider {
 	// The registry proxy that is used to access the sql servlet
-	protected final AASRegistryProxy proxy = new AASRegistryProxy(getProxyProvider());
+	protected final IAASRegistryService proxy = new AASRegistryProxy(getProxyProvider());
 
 	// Ids, shortIds and endpoints for registered AAS and submodel
 	protected IIdentifier aasId1 = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:1:registryAAS#001");
 	protected IIdentifier aasId2 = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:1:registryAAS#002");
-	protected IIdentifier smId = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:1:statusSM#001");
+	protected IIdentifier smId1 = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:1:statusSM#001");
+	protected IIdentifier smId2 = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:1:testSM#001");
 	protected String aasIdShort1 = "aasIdShort1";
 	protected String aasIdShort2 = "aasIdShort2";
-	protected String smIdShort = "smIdShort";
+	protected String smIdShort1 = "smIdShort1";
+	protected String smIdShort2 = "smIdShort2";
 	protected String aasEndpoint1 = "http://www.registrytest.de/aas01/aas";
 	protected String aasEndpoint2 = "http://www.registrytest.de/aas02/aas";
-	protected String smEndpoint = "http://www.registrytest.de/aas01/aas/submodels/" + smIdShort;
-
+	protected String smEndpoint1 = "http://www.registrytest.de/aas01/aas/submodels/" + smIdShort1;
+	protected String smEndpoint2 = "http://www.registrytest.de/aas01/aas/submodels/" + smIdShort2;
+	
 	/**
 	 * Getter for the tested registry provider. Tests for actual registry provider
 	 * have to realize this method.
@@ -51,7 +55,7 @@ public abstract class TestRegistryProvider {
 	public void setUp() {
 		// Create descriptors for AAS and submodels
 		AASDescriptor aasDesc1 = new AASDescriptor(aasIdShort1, aasId1, aasEndpoint1);
-		aasDesc1.addSubmodelDescriptor(new SubmodelDescriptor(smIdShort, smId, smEndpoint));
+		aasDesc1.addSubmodelDescriptor(new SubmodelDescriptor(smIdShort1, smId1, smEndpoint1));
 		AASDescriptor aasDesc2 = new AASDescriptor(aasIdShort2, aasId2, aasEndpoint2);
 		
 		// Register Asset Administration Shells
@@ -83,11 +87,11 @@ public abstract class TestRegistryProvider {
 		assertEquals(aasEndpoint1, descriptor.getFirstEndpoint());
 		
 		// Check, if the SM descriptor in the AASDescriptor is correct 
-		SubmodelDescriptor smDescriptor = descriptor.getSubModelDescriptor(smId.getId());
-		assertEquals(smId.getId(), smDescriptor.getIdentifier().getId());
-		assertEquals(smId.getIdType(), smDescriptor.getIdentifier().getIdType());
-		assertEquals(smIdShort, smDescriptor.get(Referable.IDSHORT));
-		assertEquals(smEndpoint, smDescriptor.getFirstEndpoint());
+		SubmodelDescriptor smDescriptor = descriptor.getSubModelDescriptorFromIdentifierId(smId1.getId());
+		assertEquals(smId1.getId(), smDescriptor.getIdentifier().getId());
+		assertEquals(smId1.getIdType(), smDescriptor.getIdentifier().getIdType());
+		assertEquals(smIdShort1, smDescriptor.get(Referable.IDSHORT));
+		assertEquals(smEndpoint1, smDescriptor.getFirstEndpoint());
 		
 		// Retrieve and check the second AAS
 		result = proxy.lookupAAS(aasId2);
@@ -118,5 +122,28 @@ public abstract class TestRegistryProvider {
 		// After aas2 has been deleted, only aas1 should be registered
 		assertNull(proxy.lookupAAS(aasId1));
 		assertNull(proxy.lookupAAS(aasId2));
+	}
+
+	/**
+	 * Tests additiona, retrieval and removal of submodels
+	 */
+	@Test
+	public void testSubmodelCalls() {
+		// Add descriptor
+		SubmodelDescriptor smDesc = new SubmodelDescriptor(smIdShort2, smId2, smEndpoint2);
+		proxy.register(aasId1, smDesc);
+
+		// Ensure that the submodel is correctly stored in the aas descriptor
+		AASDescriptor aasDesc = proxy.lookupAAS(aasId1);
+		assertEquals(smDesc.getEndpoints(), aasDesc.getSubmodelDescriptorFromIdShort(smIdShort2).getEndpoints());
+		assertNotNull(aasDesc.getSubmodelDescriptorFromIdShort(smIdShort1));
+
+		// Remove Submodel
+		proxy.delete(aasId1, smIdShort2);
+
+		// Ensure that the submodel was correctly removed
+		aasDesc = proxy.lookupAAS(aasId1);
+		assertNotNull(aasDesc.getSubmodelDescriptorFromIdShort(smIdShort1));
+		assertNull(aasDesc.getSubmodelDescriptorFromIdShort(smIdShort2));
 	}
 }

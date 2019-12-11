@@ -5,6 +5,13 @@ import org.eclipse.basyx.testsuite.regression.aas.registration.proxy.TestRegistr
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
+/**
+ * Tests correct behaviour of the DirectoryModelProvider using an InMemory
+ * database
+ * 
+ * @author schnicke
+ *
+ */
 public class TestDirectoryModelProvider extends TestRegistryProvider {
 
 	@Override
