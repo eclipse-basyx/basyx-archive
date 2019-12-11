@@ -8,11 +8,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.restapi.DirectoryModelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.directory.proxy.VABDirectoryProxy;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnector;
 import org.slf4j.Logger;
@@ -117,6 +120,29 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public void register(IIdentifier aas, SubmodelDescriptor smDescriptor) {
+		delete(aas, smDescriptor.getIdShort());
+		try {
+			provider.createValue(buildSubmodelPath(aas), smDescriptor);
+		} catch (Exception e) {
+			logger.error("Exception in registering a Submodel", e);
+		}
+	}
+
+	@Override
+	public void delete(IIdentifier aasId, String smIdShort) {
+		try {
+			provider.deleteValue(VABPathTools.concatenatePaths(buildSubmodelPath(aasId), smIdShort));
+		} catch (Exception e) {
+			logger.error("Exception in deleting a Submodel", e);
+		}
+	}
+
+	private String buildSubmodelPath(IIdentifier aas) {
+		return VABPathTools.concatenatePaths(aas.getId(), DirectoryModelProvider.SUBMODELS);
 	}
 }
 

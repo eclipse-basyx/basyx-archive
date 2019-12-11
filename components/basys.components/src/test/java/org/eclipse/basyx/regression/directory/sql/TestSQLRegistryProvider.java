@@ -58,4 +58,10 @@ public class TestSQLRegistryProvider extends TestRegistryProvider {
 		IModelProvider apiProxy = new VABElementProxy("/api/v1/registry", provider);
 		return apiProxy;
 	}
+
+	@Override
+	public void testSubmodelCalls() {
+		// FIXME: This test case is currently overwritten since the SQLProvider does not
+		// support the submodel api.
+	}
 }

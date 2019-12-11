@@ -4,6 +4,7 @@ import java.net.URLDecoder;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -18,8 +19,9 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 public class DirectoryModelProvider implements IModelProvider {
 
 	IAASRegistryService registry;
-	
+
 	private static final String PREFIX = "api/v1/registry";
+	public static final String SUBMODELS = "submodels";
 
 	public DirectoryModelProvider(IAASRegistryService registry) {
 		this.registry = registry;
@@ -83,8 +85,10 @@ public class DirectoryModelProvider implements IModelProvider {
 
 		if (path.isEmpty()) { // Creating new entry
 			registry.register((AASDescriptor) newEntity);
+		} else if (path.endsWith(SUBMODELS)) {
+			registry.register(new ModelUrn(path.replace("/" + SUBMODELS, "")), (SubmodelDescriptor) newEntity);
 		} else {
-			throw new RuntimeException("Create with non-empty path is not supported by registry");
+			throw new RuntimeException("Create was called with an unsupported path: " + path);
 		}
 	}
 
@@ -93,9 +97,17 @@ public class DirectoryModelProvider implements IModelProvider {
 		path = stripPrefix(path);
 
 		if (!path.isEmpty()) { // Deleting an entry
-			// Decode encoded path
-			path = URLDecoder.decode(path, "UTF-8");
-			registry.delete(new ModelUrn(path));
+			if (path.contains(SUBMODELS)) {
+				// Delete submodel from AAS
+				String[] splitted = path.split("/" + SUBMODELS + "/");
+				String aasId = URLDecoder.decode(splitted[0], "UTF-8");
+				String smIdShort = splitted[1];
+				registry.delete(new ModelUrn(aasId), smIdShort);
+			} else {
+				// Decode encoded path
+				path = URLDecoder.decode(path, "UTF-8");
+				registry.delete(new ModelUrn(path));
+			}
 		} else {
 			throw new RuntimeException("Delete with empty path is not supported by registry");
 		}

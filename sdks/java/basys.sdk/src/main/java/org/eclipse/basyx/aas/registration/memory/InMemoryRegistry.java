@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 
@@ -45,6 +46,18 @@ public class InMemoryRegistry implements IAASRegistryService {
 	@Override
 	public List<AASDescriptor> lookupAll() {
 		return new ArrayList<>(descriptorMap.values());
+	}
+
+	@Override
+	public void register(IIdentifier aas, SubmodelDescriptor smDescriptor) {
+		descriptorMap.get(aas.getId()).addSubmodelDescriptor(smDescriptor);
+		// TODO: Add data to remote AAS
+	}
+
+	@Override
+	public void delete(IIdentifier aasId, String smIdShort) {
+		AASDescriptor desc = descriptorMap.get(aasId.getId());
+		desc.removeSubmodelDescriptor(smIdShort);
 	}
 
 }
