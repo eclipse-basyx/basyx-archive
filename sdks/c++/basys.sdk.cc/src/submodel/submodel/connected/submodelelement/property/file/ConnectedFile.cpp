@@ -4,9 +4,9 @@
  *      Author: wendel
  */
 
-#include "ConnectedFile.h"
-#include "submodel/api/submodelelement/property/IProperty.h"
-#include "submodel/api/submodelelement/property/blob/IBlob.h"
+#include <BaSyx/submodel/connected/submodelelement/property/file/ConnectedFile.h>
+#include <BaSyx/submodel/api/submodelelement/property/IProperty.h>
+#include <BaSyx/submodel/api/submodelelement/property/blob/IBlob.h>
 
 namespace basyx {
 namespace submodel {

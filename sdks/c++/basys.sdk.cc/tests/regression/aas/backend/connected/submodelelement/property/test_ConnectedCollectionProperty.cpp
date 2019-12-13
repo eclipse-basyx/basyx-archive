@@ -6,10 +6,10 @@
 
 #include <gtest/gtest.h>
 
-#include "submodel/connected/submodelelement/property/ConnectedCollectionProperty.h"
-#include "vab/core/proxy/IVABElementProxy.h"
+#include <BaSyx/submodel/connected/submodelelement/property/ConnectedCollectionProperty.h>
+#include <BaSyx/vab/core/proxy/IVABElementProxy.h>
 #include "support/VABProxyMock.cpp"
-#include "submodel/api/submodelelement/property/IProperty.h"
+#include <BaSyx/submodel/api/submodelelement/property/IProperty.h>
 
 using namespace basyx;
 using namespace basyx::submodel;

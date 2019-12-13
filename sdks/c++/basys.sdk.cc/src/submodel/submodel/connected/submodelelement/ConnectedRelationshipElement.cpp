@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "ConnectedRelationshipElement.h"
+#include <BaSyx/submodel/connected/submodelelement/ConnectedRelationshipElement.h>
 
 namespace basyx {
 namespace submodel {

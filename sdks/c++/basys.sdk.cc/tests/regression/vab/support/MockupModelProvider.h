@@ -10,9 +10,9 @@
 
 #include <string>
 
-#include "basyx/basysid/BaSysID.h"
+#include <BaSyx/shared/basysid/BaSysID.h>
 
-#include "vab/core/IModelProvider.h"
+#include <BaSyx/vab/core/IModelProvider.h>
 
 using namespace basyx;
 

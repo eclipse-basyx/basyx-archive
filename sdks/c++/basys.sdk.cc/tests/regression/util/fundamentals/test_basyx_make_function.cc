@@ -3,8 +3,8 @@
 #include <string>
 #include <cstdint>
 
-#include <util/function_traits.h>
-#include <util/make_function.h>
+#include <BaSyx/util/function_traits.h>
+#include <BaSyx/util/make_function.h>
 
 // anonymous namespace for local test function definitions
 namespace

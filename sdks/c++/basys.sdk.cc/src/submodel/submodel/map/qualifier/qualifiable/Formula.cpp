@@ -4,8 +4,8 @@
  *      Author: wendel
  */
 
-#include "Formula.h"
-#include "submodel/map/reference/Reference.h"
+#include <BaSyx/submodel/map/qualifier/qualifiable/Formula.h>
+#include <BaSyx/submodel/map/reference/Reference.h>
 
 namespace basyx {
 namespace submodel {

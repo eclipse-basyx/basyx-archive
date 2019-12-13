@@ -8,8 +8,8 @@
   *      Author: schnicke
   */
 
-#include <basyx/object.h>
-#include <basyx/types.h>
+#include <BaSyx/shared/object.h>
+#include <BaSyx/shared/types.h>
 
 #include <set>
 

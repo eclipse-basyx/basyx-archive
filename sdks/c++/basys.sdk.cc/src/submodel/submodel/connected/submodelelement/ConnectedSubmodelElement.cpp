@@ -4,10 +4,10 @@
  *      Author: wendel
  */
 
-#include "ConnectedSubmodelElement.h"
-#include "submodel/connected/ConnectedElement.h"
-#include "submodel/map/reference/Reference.h"
-#include "basyx/types.h"
+#include <BaSyx/submodel/connected/submodelelement/ConnectedSubmodelElement.h>
+#include <BaSyx/submodel/connected/ConnectedElement.h>
+#include <BaSyx/submodel/map/reference/Reference.h>
+#include <BaSyx/shared/types.h>
 
 namespace basyx {
 namespace submodel {

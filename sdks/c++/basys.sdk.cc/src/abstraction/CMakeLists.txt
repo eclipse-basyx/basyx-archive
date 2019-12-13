@@ -15,10 +15,6 @@ set_target_properties(${BASYX_ABSTRACTION_LIBRARY_NAME} PROPERTIES SOVERSION ${B
 
 target_sources(${BASYX_ABSTRACTION_LIBRARY_NAME} 
     PRIVATE 
-        abstraction/Thread.h
-        abstraction/thread/Thread.h 
-        abstraction/impl/thread_launcher.h
-        abstraction/impl/thread_impl.h
 )
 
 if(${CMAKE_USE_WIN32_THREADS_INIT})
@@ -31,22 +27,14 @@ endif()
 
 target_sources(${BASYX_ABSTRACTION_LIBRARY_NAME}
     PRIVATE
-        abstraction/impl/${thread_platform}/thread/thread_impl.cpp
-        abstraction/impl/${thread_platform}/thread/thread_impl.h
-	)
+    ${CMAKE_CURRENT_SOURCE_DIR}/abstraction/impl/${thread_platform}/thread/thread_impl.cpp
+)
 
 ## basyx::net sources ##
 
 target_sources(${BASYX_ABSTRACTION_LIBRARY_NAME}
     PRIVATE
-        abstraction/Net.h
-        abstraction/net/Socket.h
-        abstraction/net/Acceptor.h
-        abstraction/net/Acceptor.cpp
-        abstraction/net/Buffer.h
-        abstraction/impl/acceptor_impl.h
-        abstraction/impl/socket_impl.h
-        abstraction/impl/system_net_types.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/abstraction/net/Acceptor.cpp
 )
 
 if(WIN32)
@@ -81,7 +69,7 @@ install(TARGETS ${BASYX_ABSTRACTION_LIBRARY_NAME}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/abstraction"
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../include/BaSyx/abstraction"
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME}"
         FILES_MATCHING PATTERN "*.h")
         

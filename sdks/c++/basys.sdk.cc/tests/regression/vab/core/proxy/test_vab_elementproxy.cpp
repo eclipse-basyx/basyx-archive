@@ -6,8 +6,8 @@
 
 #include <gtest/gtest.h>
 
-#include "vab/core/proxy/VABElementProxy.h"
-#include "vab/core/proxy/IVABElementProxy.h"
+#include <BaSyx/vab/core/proxy/VABElementProxy.h>
+#include <BaSyx/vab/core/proxy/IVABElementProxy.h>
 
 #include "support/MockupModelProvider.h"
 

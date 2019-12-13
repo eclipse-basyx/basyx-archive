@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "ConnectedVABModelMap.h"
+#include <BaSyx/submodel/connected/ConnectedVABModelMap.h>
 
 namespace basyx {
 namespace submodel {

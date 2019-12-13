@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "Security.h"
+#include <BaSyx/aas/impl/metamodel/hashmap/security/Security.h>
 
    basyx::object basyx::aas::security::Security::getAccessControlPolicyPoints() const
  {

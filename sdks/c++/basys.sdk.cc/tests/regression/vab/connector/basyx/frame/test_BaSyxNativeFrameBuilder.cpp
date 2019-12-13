@@ -9,13 +9,13 @@
 
 #include <gtest/gtest.h>
 
-#include "vab/backend/connector/native/frame/BaSyxNativeFrameBuilder.h"
+#include <BaSyx/vab/backend/connector/native/frame/BaSyxNativeFrameBuilder.h>
 
-#include "basyx/types.h"
-#include <basyx/object.h>
+#include <BaSyx/shared/types.h>
+#include <BaSyx/shared/object.h>
 
-#include "util/util.h"
-#include "util/tools/StringTools.h"
+#include <BaSyx/util/util.h>
+#include <BaSyx/util/tools/StringTools.h>
 
 
 TEST(BaSyxNativeFrameBuilder, buildGetFrame) {

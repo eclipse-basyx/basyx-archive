@@ -1,6 +1,6 @@
-#include <basyx/object.h>
+#include <BaSyx/shared/object.h>
 
-#include <basyx/object/obj_function.h>
+#include <BaSyx/shared/object/obj_function.h>
 
 basyx::object::object()
 	: content{ nullptr } {};

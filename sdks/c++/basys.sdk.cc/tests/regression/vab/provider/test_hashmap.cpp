@@ -7,16 +7,16 @@
 
 #include <gtest/gtest.h>
 
-#include "vab/provider/hashmap/VABHashmapProvider.h"
+#include <BaSyx/vab/provider/hashmap/VABHashmapProvider.h>
 
-#include "vab/stub/elements/SimpleVABElement.h"
+#include <vab/stub/elements/SimpleVABElement.h>
 
 #include "snippet/MapRead.h"
 #include "snippet/MapCreateDelete.h"
 #include "snippet/MapInvoke.h"
 #include "snippet/TestCollectionProperty.h"
 
-#include "basyx/serialization/json.h"
+#include <BaSyx/shared/serialization/json.h>
 
 #include <memory>
 #include <unordered_map>

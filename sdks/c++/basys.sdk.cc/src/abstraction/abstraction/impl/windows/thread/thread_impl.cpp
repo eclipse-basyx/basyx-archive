@@ -7,7 +7,7 @@
 
 #include <windows.h>
 
-#include "thread_impl.h"
+#include <BaSyx/abstraction/impl/windows/thread/thread_impl.h>
 
 namespace basyx {
 	namespace detail {

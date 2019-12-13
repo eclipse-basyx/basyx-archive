@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "ReferenceElement.h"
+#include <BaSyx/submodel/map/submodelelement/ReferenceElement.h>
 
 namespace basyx {
 namespace submodel {

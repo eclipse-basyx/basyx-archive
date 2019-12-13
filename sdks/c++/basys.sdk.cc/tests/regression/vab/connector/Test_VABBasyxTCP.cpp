@@ -11,14 +11,14 @@
 #include <atomic>
 #include <memory>
 
-#include <abstraction/Thread.h>
+#include <BaSyx/abstraction/Thread.h>
 
 #include <gtest/gtest.h>
 
-#include "basyx/function.h"
+#include <BaSyx/shared/basyx/function.h>
 
-#include "vab/backend/connector/native/BaSyxConnector.h"
-#include "vab/provider/native/BaSyxTCPServer.h"
+#include <BaSyx/vab/backend/connector/native/BaSyxConnector.h>
+#include <BaSyx/vab/provider/native/BaSyxTCPServer.h>
 
 #include "support/MockupModelProvider.h"
 

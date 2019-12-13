@@ -6,8 +6,8 @@
 
 #include <gtest/gtest.h>
 
-#include "submodel/connected/submodelelement/property/ConnectedMapProperty.h"
-#include "vab/core/proxy/IVABElementProxy.h"
+#include <BaSyx/submodel/connected/submodelelement/property/ConnectedMapProperty.h>
+#include <BaSyx/vab/core/proxy/IVABElementProxy.h>
 #include "support/VABProxyMock.cpp"
 
 using namespace basyx::vab::core::proxy;

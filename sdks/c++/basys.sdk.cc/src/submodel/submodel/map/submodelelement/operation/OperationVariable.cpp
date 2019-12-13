@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "OperationVariable.h"
+#include <BaSyx/submodel/map/submodelelement/operation/OperationVariable.h>
 
 namespace basyx {
 namespace submodel {

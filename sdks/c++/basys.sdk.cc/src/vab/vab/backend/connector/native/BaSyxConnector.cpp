@@ -5,15 +5,15 @@
 *      Author: schnicke
 */
 
-#include "vab/backend/connector/native/BaSyxConnector.h"
-#include "vab/backend/connector/native/frame/BaSyxNativeFrameBuilder.h"
-#include "vab/provider/native/frame/BaSyxNativeFrameHelper.h"
+#include <BaSyx/vab/backend/connector/native/BaSyxConnector.h>
+#include <BaSyx/vab/backend/connector/native/frame/BaSyxNativeFrameBuilder.h>
+#include <BaSyx/vab/provider/native/frame/BaSyxNativeFrameHelper.h>
 
-#include <basyx/serialization/json.h>
+#include <BaSyx/shared/serialization/json.h>
 
 #include <stdio.h>
 
-#include <util/tools/StringTools.h>
+#include <BaSyx/util/tools/StringTools.h>
 
 
 namespace basyx {

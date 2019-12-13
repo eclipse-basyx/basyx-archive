@@ -5,7 +5,7 @@
  *      Author: gri
  */
 
-#include "thread_impl.h"
+#include <BaSyx/abstraction/impl/unix/thread/thread_impl.h>
 
 namespace basyx {
 namespace detail {

@@ -4,9 +4,9 @@
  *      Author: wendel
  */
 
-#include "Key.h"
+#include <BaSyx/submodel/map/reference/Key.h>
 
-#include "basyx/object.h"
+#include <BaSyx/shared/object.h>
 
 namespace basyx {
 namespace submodel {

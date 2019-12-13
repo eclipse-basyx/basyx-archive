@@ -4,8 +4,8 @@
  *      Author: wendel
  */
 
-#include "ConnectedElement.h"
-#include "submodel/api/qualifier/IReferable.h"
+#include <BaSyx/submodel/connected/ConnectedElement.h>
+#include <BaSyx/submodel/api/qualifier/IReferable.h>
 
 namespace basyx {
 namespace submodel {

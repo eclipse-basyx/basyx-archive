@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "ElementMap.h"
+#include <BaSyx/vab/ElementMap.h>
 
 namespace basyx {
 namespace vab {

@@ -1,11 +1,10 @@
-#include "HasKind.h"
 /*
  * HasKind.cpp
  *
  *      Author: wendel
  */
 
-#include "HasKind.h"
+#include <BaSyx/submodel/map/qualifier/HasKind.h>
 
 using namespace basyx::submodel;
 

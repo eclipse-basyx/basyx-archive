@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "Asset.h"
+#include <BaSyx/aas/impl/metamodel/hashmap/parts/Asset.h>
 
 using namespace basyx::submodel;
 

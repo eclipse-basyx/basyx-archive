@@ -4,4 +4,4 @@
  *      Author: wendel
  */
 
-#include "ModelUrn.h"
+#include <BaSyx/aas/api/modelurn/ModelUrn.h>

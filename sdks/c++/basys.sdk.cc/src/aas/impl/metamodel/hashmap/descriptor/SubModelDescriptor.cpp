@@ -4,4 +4,4 @@
  *      Author: wendel
  */
 
-#include "SubModelDescriptor.h"
+#include <BaSyx/aas/impl/metamodel/hashmap/descriptor/SubModelDescriptor.h>

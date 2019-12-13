@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "vab/core/proxy/IVABElementProxy.h"
+#include <BaSyx/vab/core/proxy/IVABElementProxy.h>
 #include <string>
 
 namespace basyx {

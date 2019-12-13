@@ -4,8 +4,8 @@
  *      Author: wendel
  */
 
-#include "Referable.h"
-#include "submodel/map/reference/Reference.h"
+#include <BaSyx/submodel/map/qualifier/Referable.h>
+#include <BaSyx/submodel/map/reference/Reference.h>
 
 namespace basyx {
 namespace submodel {

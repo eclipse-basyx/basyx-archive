@@ -4,8 +4,8 @@
  *      Author: wendel
  */
 
-#include "ConnectedSingleProperty.h"
-#include "submodel/api/submodelelement/property/IProperty.h"
+#include <BaSyx/submodel/connected/submodelelement/property/ConnectedSingleProperty.h>
+#include <BaSyx/submodel/api/submodelelement/property/IProperty.h>
 
 namespace basyx {
 namespace submodel {

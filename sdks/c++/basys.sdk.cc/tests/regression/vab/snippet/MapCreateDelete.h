@@ -3,9 +3,9 @@
 
 #include <gtest/gtest.h>
 
-#include "basyx/types.h"
+#include <BaSyx/shared/types.h>
 
-#include "vab/core/IModelProvider.h"
+#include <BaSyx/vab/core/IModelProvider.h>
 
 #include "macros.h"
 

@@ -7,9 +7,9 @@
 
 #include <gtest/gtest.h>
 
-#include "vab/provider/hashmap/VABHashmapProvider.h"
+#include <BaSyx/vab/provider/hashmap/VABHashmapProvider.h>
 
-#include "basyx/object.h"
+#include <BaSyx/shared/object.h>
 
 #include <memory>
 #include <unordered_map>

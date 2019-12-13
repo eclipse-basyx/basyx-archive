@@ -106,15 +106,6 @@ endif()
 ###############################################
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/include)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/aas)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/abstraction)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/logging)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/shared)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/utility)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/vab)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/server)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/submodel)
-
 add_subdirectory(src/aas)
 add_subdirectory(src/abstraction)
 add_subdirectory(src/logging)

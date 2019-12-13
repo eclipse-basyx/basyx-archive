@@ -4,10 +4,10 @@
  *      Author: wendel
  */
 
-#include "Identifiable.h"
+#include <BaSyx/submodel/map/qualifier/Identifiable.h>
 
-#include "AdministrativeInformation.h"
-#include "submodel/map/identifier/Identifier.h"
+#include <BaSyx/submodel/map/qualifier/AdministrativeInformation.h>
+#include <BaSyx/submodel/map/identifier/Identifier.h>
 
 namespace basyx {
 namespace submodel {

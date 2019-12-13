@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "VABElementProxy.h"
+#include <BaSyx/vab/core/proxy/VABElementProxy.h>
 
 namespace basyx {
 namespace vab {

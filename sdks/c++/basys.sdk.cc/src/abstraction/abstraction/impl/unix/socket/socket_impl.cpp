@@ -5,7 +5,7 @@
  *      Author: schnicke
  */
 
-#include "abstraction/impl/socket_impl.h"
+#include <BaSyx/abstraction/impl/socket_impl.h>
 
 #include <cstring>
 #include <iostream>

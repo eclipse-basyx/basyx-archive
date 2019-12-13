@@ -4,9 +4,9 @@
  *      Author: wendel
  */
 
-#include "HasDataSpecification.h"
+#include <BaSyx/submodel/map/qualifier/HasDataSpecification.h>
 
-#include "submodel/map/reference/Reference.h"
+#include <BaSyx/submodel/map/reference/Reference.h>
 
 namespace basyx {
 namespace submodel {

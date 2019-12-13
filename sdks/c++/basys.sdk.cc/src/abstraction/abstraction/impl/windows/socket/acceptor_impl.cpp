@@ -5,11 +5,11 @@
  *      Author: schnicke
  */
 
-#include "abstraction/impl/acceptor_impl.h"
-#include "abstraction/impl/socket_impl.h"
+#include <BaSyx/abstraction/impl/acceptor_impl.h>
+#include <BaSyx/abstraction/impl/socket_impl.h>
 
-#include "util/util.h"
-#include <log/log.h>
+#include <BaSyx/util/util.h>
+#include <BaSyx/log/log.h>
 
 #include <iostream>
 

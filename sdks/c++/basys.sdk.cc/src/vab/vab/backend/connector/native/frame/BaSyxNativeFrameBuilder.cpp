@@ -5,11 +5,11 @@
  *      Author: schnicke
  */
 
-#include "BaSyxNativeFrameBuilder.h"
+#include <BaSyx/vab/backend/connector/native/frame/BaSyxNativeFrameBuilder.h>
 
-#include <basyx/serialization/json.h>
+#include <BaSyx/shared/serialization/json.h>
 
-#include <util/tools/StringTools.h>
+#include <BaSyx/util/tools/StringTools.h>
 
 namespace basyx {
 namespace vab {

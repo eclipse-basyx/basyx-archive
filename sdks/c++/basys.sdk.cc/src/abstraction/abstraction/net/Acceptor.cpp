@@ -1,11 +1,11 @@
-#include "Acceptor.h"
+#include <BaSyx/abstraction/net/Acceptor.h>
 
-#include <abstraction/impl/acceptor_impl.h>
-#include <abstraction/net/Socket.h>
+#include <BaSyx/abstraction/impl/acceptor_impl.h>
+#include <BaSyx/abstraction/net/Socket.h>
 
-#include <util/util.h>
+#include <BaSyx/util/util.h>
 
-#include <log/log.h>
+#include <BaSyx/log/log.h>
 
 #include <string>
 

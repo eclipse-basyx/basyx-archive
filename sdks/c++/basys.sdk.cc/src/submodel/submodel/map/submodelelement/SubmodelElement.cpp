@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "SubmodelElement.h"
+#include <BaSyx/submodel/map/submodelelement/SubmodelElement.h>
 
 namespace basyx {
 namespace submodel {

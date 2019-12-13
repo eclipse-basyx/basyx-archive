@@ -4,8 +4,8 @@
  *      Author: wendel
  */
 
-#include "Operation.h"
-#include "basyx/object/obj_function.h"
+#include <BaSyx/submodel/map/submodelelement/operation/Operation.h>
+#include <BaSyx/shared/object/obj_function.h>
 
 namespace basyx {
 namespace submodel {

@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "ConnectedOperation.h"
+#include <BaSyx/submodel/connected/submodelelement/operation/ConnectedOperation.h>
 
 namespace basyx {
 namespace submodel {

@@ -6,9 +6,9 @@
 
 #include <gtest/gtest.h>
 
-#include "vab/core/proxy/IVABElementProxy.h"
+#include <BaSyx/vab/core/proxy/IVABElementProxy.h>
 #include "support/VABProxyMock.cpp"
-#include "submodel/connected/submodelelement/property/ConnectedPropertyFactory.h"
+#include <BaSyx/submodel/connected/submodelelement/property/ConnectedPropertyFactory.h>
 
 using namespace basyx::vab::core::proxy;
 //

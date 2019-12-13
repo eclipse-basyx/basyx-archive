@@ -3,8 +3,8 @@
  *
  *      Author: wendel
  */
-#include "ConnectedProperty.h"
-#include "basyx/anyTypeChecker.h"
+#include <BaSyx/submodel/connected/submodelelement/property/ConnectedProperty.h>
+#include <BaSyx/shared/anyTypeChecker.h>
 
 namespace basyx {
 namespace submodel {

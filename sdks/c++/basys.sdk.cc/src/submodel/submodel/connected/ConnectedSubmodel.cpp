@@ -4,16 +4,16 @@
  *      Author: wendel
  */
 
-#include "ConnectedSubmodel.h"
+#include <BaSyx/submodel/connected/ConnectedSubmodel.h>
 
-#include "submodelelement/operation/ConnectedOperation.h"
-#include "submodelelement/property/ConnectedSingleProperty.h"
-#include "submodel/connected/submodelelement/property/ConnectedPropertyFactory.h"
-#include "vab/core/util/VABPath.h"
-#include "submodel/map/qualifier/AdministrativeInformation.h"
-#include "submodel/map/identifier/Identifier.h"
-#include "submodel/map/reference/Reference.h"
-#include "submodelelement/property/ConnectedProperty.h"
+#include <BaSyx/submodel/connected/submodelelement/operation/ConnectedOperation.h>
+#include <BaSyx/submodel/connected/submodelelement/property/ConnectedSingleProperty.h>
+#include <BaSyx/submodel/connected/submodelelement/property/ConnectedPropertyFactory.h>
+#include <BaSyx/vab/core/util/VABPath.h>
+#include <BaSyx/submodel/map/qualifier/AdministrativeInformation.h>
+#include <BaSyx/submodel/map/identifier/Identifier.h>
+#include <BaSyx/submodel/map/reference/Reference.h>
+#include <BaSyx/submodel/connected/submodelelement/property/ConnectedProperty.h>
 
 namespace basyx {
 namespace submodel {

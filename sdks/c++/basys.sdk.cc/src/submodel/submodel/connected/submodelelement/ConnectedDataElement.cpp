@@ -4,8 +4,8 @@
  *      Author: wendel
  */
 
-#include "ConnectedDataElement.h"
-#include "basyx/types.h"
+#include <BaSyx/submodel/connected/submodelelement/ConnectedDataElement.h>
+#include <BaSyx/shared/types.h>
 
 #include <memory>
 

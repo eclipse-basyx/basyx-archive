@@ -4,9 +4,9 @@
  *      Author: wendel
  */
 
-#include "Constraint.h"
+#include <BaSyx/submodel/map/qualifier/qualifiable/Constraint.h>
 
-#include "submodel/map/modeltype/ModelType.h"
+#include <BaSyx/submodel/map/modeltype/ModelType.h>
 
 namespace basyx {
 namespace submodel {

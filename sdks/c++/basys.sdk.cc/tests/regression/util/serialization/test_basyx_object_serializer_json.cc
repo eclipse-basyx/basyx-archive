@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 
-#include <basyx/serialization/json.h>
+#include <BaSyx/shared/serialization/json.h>
 
-#include <basyx/object.h>
+#include <BaSyx/shared/object.h>
 
 #include <string>
 #include <cstdint>

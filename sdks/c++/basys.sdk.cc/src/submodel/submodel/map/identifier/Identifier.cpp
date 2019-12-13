@@ -4,8 +4,8 @@
  *      Author: wendel
  */
 
-#include "Identifier.h"
-#include "IdentifierType.h"
+#include <BaSyx/submodel/map/identifier/Identifier.h>
+#include <BaSyx/submodel/map/identifier/IdentifierType.h>
 
 namespace basyx {
 namespace submodel {

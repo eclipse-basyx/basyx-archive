@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "RelationshipElement.h"
+#include <BaSyx/submodel/map/submodelelement/RelationshipElement.h>
 
 namespace basyx {
 namespace submodel {

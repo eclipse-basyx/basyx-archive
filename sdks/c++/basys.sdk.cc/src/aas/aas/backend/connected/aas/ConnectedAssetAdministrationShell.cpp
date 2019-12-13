@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "ConnectedAssetAdministrationShell.h"
+#include <BaSyx/aas/aas/backend/connected/aas/ConnectedAssetAdministrationShell.h>
 
 
 namespace basyx {

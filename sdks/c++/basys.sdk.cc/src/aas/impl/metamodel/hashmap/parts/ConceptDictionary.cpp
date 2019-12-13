@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "ConceptDictionary.h"
+#include <BaSyx/aas/impl/metamodel/hashmap/parts/ConceptDictionary.h>
 
 using namespace basyx::submodel;
 

@@ -10,12 +10,12 @@
 
 #include <gtest/gtest.h>
 
-#include "basyx/types.h"
+#include <BaSyx/shared/types.h>
 
-#include "vab/provider/native/frame/BaSyxNativeFrameProcessor.h"
+#include <BaSyx/vab/provider/native/frame/BaSyxNativeFrameProcessor.h>
 
-#include "util/tools/CoderTools.h"
-#include "util/tools/StringTools.h"
+#include <BaSyx/util/tools/CoderTools.h>
+#include <BaSyx/util/tools/StringTools.h>
 
 #include "support/MockupModelProvider.h"
 

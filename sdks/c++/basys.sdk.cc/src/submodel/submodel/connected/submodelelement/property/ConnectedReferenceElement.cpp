@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "ConnectedReferenceElement.h"
+#include <BaSyx/submodel/connected/submodelelement/property/ConnectedReferenceElement.h>
 
 namespace basyx {
 namespace submodel {

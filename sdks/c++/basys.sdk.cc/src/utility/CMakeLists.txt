@@ -11,22 +11,9 @@ add_library(${BASYX_UTIL_LIBRARY_NAME})
 set_target_properties(${BASYX_UTIL_LIBRARY_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(${BASYX_UTIL_LIBRARY_NAME} PROPERTIES SOVERSION ${BASYX_PACKAGE_VERSION_MAJOR})
 
-set(UTIL_PUBLIC_HEADER
-		util/function_traits.h
-		util/invoke.h
-		util/macros.h
-		util/make_function.h
-		util/meta.h
-		util/printer.h
-		util/tools/CoderTools.h
-		util/tools/StringTools.h
-		util/util.h
-)
-
 target_sources(${BASYX_UTIL_LIBRARY_NAME}
-		PRIVATE
-		util/util.cpp
-		${UTIL_PUBLIC_HEADER}
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/util.cpp
 )
 
 target_include_directories(${BASYX_UTIL_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}) 
@@ -44,7 +31,7 @@ install(TARGETS ${BASYX_UTIL_LIBRARY_NAME}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/util"
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../include/BaSyx/util"
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME}"
         FILES_MATCHING PATTERN "*.h")
 

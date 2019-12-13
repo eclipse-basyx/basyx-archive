@@ -17,10 +17,7 @@ endif()
 
 target_sources(${BASYX_SERVER_LIBRARY_NAME}
     PRIVATE
-		./server/BaSyxNativeProvider.h
-		./server/BaSyxTCPServer.h
-		./server/server.cpp
-		./server/server.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/server/server.cpp
 )
 
 target_include_directories(${BASYX_SERVER_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
@@ -38,7 +35,7 @@ install(TARGETS ${BASYX_SERVER_LIBRARY_NAME}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/server"
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../include/BaSyx/server"
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME}"
         FILES_MATCHING PATTERN "*.h")
 

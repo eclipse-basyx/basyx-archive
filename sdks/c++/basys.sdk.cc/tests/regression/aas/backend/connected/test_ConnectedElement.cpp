@@ -6,10 +6,10 @@
 
 #include <gtest/gtest.h>
 
-#include "submodel/connected/ConnectedElement.h"
-#include "vab/core/proxy/IVABElementProxy.h"
+#include <BaSyx/submodel/connected/ConnectedElement.h>
+#include <BaSyx/vab/core/proxy/IVABElementProxy.h>
 #include "support/VABProxyMock.cpp"
-#include "submodel/api/qualifier/IReferable.h"
+#include <BaSyx/submodel/api/qualifier/IReferable.h>
 
 using namespace basyx::vab::core::proxy;
 using namespace basyx;

@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "Description.h"
+#include <BaSyx/submodel/map/qualifier/Description.h>
 
 
 namespace basyx {

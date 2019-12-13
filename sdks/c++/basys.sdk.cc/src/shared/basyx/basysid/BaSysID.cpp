@@ -5,7 +5,7 @@
  *      Author: schnicke
  */
 
-#include "basyx/basysid/BaSysID.h"
+#include <BaSyx/shared/basysid/BaSysID.h>
 
 const std::string BaSysID::AASQualifier = "aas";
 const std::string BaSysID::SubmodelQualifier = "submodel";

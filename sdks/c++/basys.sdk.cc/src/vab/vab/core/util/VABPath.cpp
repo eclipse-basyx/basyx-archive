@@ -1,4 +1,4 @@
-#include "VABPath.h"
+#include <BaSyx/vab/core/util/VABPath.h>
 
 #include <algorithm>
 #include <sstream>

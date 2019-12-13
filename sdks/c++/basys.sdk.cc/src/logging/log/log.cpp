@@ -1,4 +1,4 @@
-#include "log.h"
+#include <BaSyx/log/log.h>
 
 #include <string>
 #include <chrono>

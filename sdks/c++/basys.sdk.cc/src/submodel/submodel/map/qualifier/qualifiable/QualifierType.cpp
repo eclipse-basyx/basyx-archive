@@ -4,4 +4,4 @@
  *      Author: wendel
  */
 
-#include "QualifierType.h"
+#include <BaSyx/submodel/map/qualifier/qualifiable/QualifierType.h>

@@ -5,14 +5,14 @@
  *      Author: schnicke
  */
 
-#include "BaSyxNativeFrameProcessor.h"
+#include <BaSyx/vab/provider/native/frame/BaSyxNativeFrameProcessor.h>
 
-#include "vab/provider/native/frame/BaSyxNativeFrameHelper.h"
+#include <BaSyx/vab/provider/native/frame/BaSyxNativeFrameHelper.h>
 
-#include "util/tools/CoderTools.h"
-#include "util/tools/StringTools.h"
+#include <BaSyx/util/tools/CoderTools.h>
+#include <BaSyx/util/tools/StringTools.h>
 
-#include "basyx/types.h"
+#include <BaSyx/shared/types.h>
  
 namespace basyx {
 namespace vab {

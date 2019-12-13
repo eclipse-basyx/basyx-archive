@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "View.h"
+#include <BaSyx/aas/impl/metamodel/hashmap/parts/View.h>
 
 using namespace basyx::submodel;
 

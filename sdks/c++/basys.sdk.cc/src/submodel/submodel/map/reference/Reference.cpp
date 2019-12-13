@@ -1,13 +1,12 @@
-#include "Reference.h"
 /*
  * Reference.cpp
  *
  *      Author: wendel
  */
 
-#include "Reference.h"
+#include <BaSyx/submodel/map/reference/Reference.h>
 
-#include "submodel/map/reference/Key.h"
+#include <BaSyx/submodel/map/reference/Key.h>
 
 namespace basyx {
 namespace submodel {

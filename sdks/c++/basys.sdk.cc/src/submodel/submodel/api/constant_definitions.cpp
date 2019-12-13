@@ -1,20 +1,20 @@
-#include <submodel/map/modeltype/ModelType.h>
-#include <submodel/api/identifier/IIdentifier.h>
-#include <submodel/api/qualifier/IReferable.h>
-#include <submodel/api/qualifier/IHasSemantics.h>
-#include <submodel/api/qualifier/IHasKind.h>
-#include <submodel/api/qualifier/IHasDataSpecification.h>
-#include <submodel/api/qualifier/IAdministrativeInformation.h>
-#include <submodel/api/qualifier/qualifiable/IQualifiable.h>
-#include <submodel/api/qualifier/qualifiable/IConstraint.h>
-#include <submodel/api/submodelelement/ISubmodelElement.h>
-#include <submodel/api/submodelelement/operation/IOperation.h>
-#include <submodel/api/submodelelement/operation/IOperationVariable.h>
-#include <submodel/api/submodelelement/property/IProperty.h>
-#include <submodel/api/reference/IReference.h>
-#include <submodel/api/ISubModel.h>
-#include <submodel/api/qualifier/qualifiable/IFormula.h>
-#include <submodel/api/qualifier/IIdentifiable.h>
+#include <BaSyx/submodel/map/modeltype/ModelType.h>
+#include <BaSyx/submodel/api/identifier/IIdentifier.h>
+#include <BaSyx/submodel/api/qualifier/IReferable.h>
+#include <BaSyx/submodel/api/qualifier/IHasSemantics.h>
+#include <BaSyx/submodel/api/qualifier/IHasKind.h>
+#include <BaSyx/submodel/api/qualifier/IHasDataSpecification.h>
+#include <BaSyx/submodel/api/qualifier/IAdministrativeInformation.h>
+#include <BaSyx/submodel/api/qualifier/qualifiable/IQualifiable.h>
+#include <BaSyx/submodel/api/qualifier/qualifiable/IConstraint.h>
+#include <BaSyx/submodel/api/submodelelement/ISubmodelElement.h>
+#include <BaSyx/submodel/api/submodelelement/operation/IOperation.h>
+#include <BaSyx/submodel/api/submodelelement/operation/IOperationVariable.h>
+#include <BaSyx/submodel/api/submodelelement/property/IProperty.h>
+#include <BaSyx/submodel/api/reference/IReference.h>
+#include <BaSyx/submodel/api/ISubModel.h>
+#include <BaSyx/submodel/api/qualifier/qualifiable/IFormula.h>
+#include <BaSyx/submodel/api/qualifier/IIdentifiable.h>
 
 namespace basyx {
 namespace submodel {

@@ -6,7 +6,7 @@
  */
 
 #include "gtest/gtest.h"
-#include "vab/core/util/VABPath.h"
+#include <BaSyx/vab/core/util/VABPath.h>
 
 #include <memory>
 

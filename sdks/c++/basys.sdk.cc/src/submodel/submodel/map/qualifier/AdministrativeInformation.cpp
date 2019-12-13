@@ -1,11 +1,10 @@
-#include "AdministrativeInformation.h"
 /*
  * AdministrativeInformation.cpp
  *
  *      Author: wendel
  */
 
-#include "AdministrativeInformation.h"
+#include <BaSyx/submodel/map/qualifier/AdministrativeInformation.h>
 
 namespace basyx {
 namespace submodel {

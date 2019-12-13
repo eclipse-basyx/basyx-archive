@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "AssetAdministrationShell.h"
+#include <BaSyx/aas/impl/metamodel/AssetAdministrationShell.h>
 
 using namespace basyx::submodel;
 

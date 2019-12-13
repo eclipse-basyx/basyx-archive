@@ -1,4 +1,4 @@
-#include "ModelType.h"
+#include <BaSyx/submodel/map/modeltype/ModelType.h>
 
 basyx::submodel::ModelType::ModelType()
 	: vab::ElementMap{}

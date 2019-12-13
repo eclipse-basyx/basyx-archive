@@ -4,8 +4,8 @@
  *      Author: wendel
  */
 
-#include "ConnectedMapProperty.h"
-#include "vab/core/util/VABPath.h"
+#include <BaSyx/submodel/connected/submodelelement/property/ConnectedMapProperty.h>
+#include <BaSyx/vab/core/util/VABPath.h>
 
 namespace basyx {
 namespace submodel {

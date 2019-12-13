@@ -3,9 +3,9 @@
 
 #include <gtest/gtest.h>
 
-#include "basyx/types.h"
+#include <BaSyx/shared/types.h>
 
-#include "vab/core/IModelProvider.h"
+#include <BaSyx/vab/core/IModelProvider.h>
 
 #define ASSERT_ANY_EQ(a,t) 	ASSERT_TRUE(a.template InstanceOf<decltype(t)>());		ASSERT_EQ(t, a.template Get<decltype(t)&>());
 
