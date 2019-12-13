@@ -1,16 +1,13 @@
 package org.eclipse.basyx.components.processengine.connector;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.manager.api.IAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
-import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 
@@ -22,9 +19,13 @@ import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
  * 
  * @author Zhang, Zai
  * */
-public abstract class DeviceServiceExecutor implements IDeviceServiceExecutor {
+public class DeviceServiceExecutor implements IDeviceServiceExecutor {
 	
 	protected IAssetAdministrationShellManager manager;
+	protected String  serviceName;
+	protected String serviceProvider;
+	protected String serviceSubmodelId;
+	protected List<Object> parameters = new ArrayList<>();
 	
 	
 	public DeviceServiceExecutor(IAssetAdministrationShellManager manager) {
@@ -59,67 +60,9 @@ public abstract class DeviceServiceExecutor implements IDeviceServiceExecutor {
 		}
 		return 1;
 	}
-	
 
-
-	/**
-	 * Get value of a property from a submodel
-	 * */
-	protected Object getProperty(String rawUrn, String submodelid, String propertyName) throws Exception {
-		// create Model urn
-		IIdentifier aasUrn = new ModelUrn(rawUrn);
-		IIdentifier smId = new Identifier(IdentifierType.Custom, submodelid);
-
-		// retrieve submodel with id
-		ISubModel statusSubmodel = manager.retrieveSubModel(aasUrn, smId);
-		
-		// get properties of the submodel
-		Map<String, IDataElement> properties = ((ConnectedSubModel) statusSubmodel).getDataElements();
-		
-		// get specific property
-		ISingleProperty pro_EXST = (ISingleProperty)properties.get(propertyName);
-		
-		//get value-information of property in map
-		Object obj = pro_EXST.get();
-		
-		//type-check
-		if(obj instanceof Map) {
-			//convert to map
-			@SuppressWarnings("unchecked")
-			Map<String, Object> valuemap = (Map<String, Object>)pro_EXST.get();
-			
-			// get value of the property
-			Object val = valuemap.get("value");
-			System.out.println("value of " + propertyName+ " is "+val);
-			return val;
-		}else if(obj instanceof String) {
-			String value = (String) obj;
-			System.out.println("value of " + propertyName+ " is "+value);
-			return value;
-		}
-		return null;
+	public String getServiceSubmodelId() {
+		return serviceSubmodelId;
 	}
-	
-	
-	@Override
-	public String getServiceName() {
-		return null;
-	}
-
-	@Override
-	public String getServiceProvider() {
-		return null;
-	}
-
-	@Override
-	public List<Object> getParams() {
-		return null;
-	}
-
-	/**
-	 * For the case that the executor knows which submodel to call
-	 * */
-	@Override
-	public abstract Object executeService(String serviceName, String deviceid, List<Object> params) throws Exception ;
 	
 }

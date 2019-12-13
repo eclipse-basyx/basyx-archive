@@ -30,10 +30,11 @@ public class BPMNEngineStub {
 	 * parameters are value of the injected fields in String
 	 * @param serviceParameter all requested parameters in a serialized Json-String
 	 * */
-	public BPMNEngineStub(String serviceName, String serviceProvider, String serviceParameter) {
+	public BPMNEngineStub(String serviceName, String serviceProvider, String serviceParameter, String submodelid) {
 		fieldInjections.put("serviceName", serviceName);
 		fieldInjections.put("serviceProvider", serviceProvider);
 		fieldInjections.put("serviceParameter", serviceParameter);
+		fieldInjections.put("submodelId", submodelid);
 	}
 	
 	public void callJavaDelegate() throws Exception {

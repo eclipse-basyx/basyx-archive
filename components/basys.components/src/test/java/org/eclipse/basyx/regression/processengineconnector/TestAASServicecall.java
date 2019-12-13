@@ -16,7 +16,6 @@ import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceExecutor;
 import org.eclipse.basyx.regression.support.processengine.aas.DeviceAdministrationShellFactory;
-import org.eclipse.basyx.regression.support.processengine.executor.CoilcarServiceExecutor;
 import org.eclipse.basyx.regression.support.processengine.stubs.CoilcarStub;
 import org.eclipse.basyx.regression.support.processengine.submodel.DeviceSubmodelFactory;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
@@ -45,7 +44,25 @@ public class TestAASServicecall {
 	 */
 	private CoilcarStub coilcar;
 	
-
+	/**
+	 * Id of the device (coilcar) aas
+	 */
+	private static final String AAS_ID = "coilcar";
+	
+	/**
+	 * Id of the service submodel
+	 */
+	private static final String SUBMODEL_ID = "submodel1";
+	
+	/**
+	 * Name of the service "liftTo"
+	 */
+	private static final String SERVICE_LIFTTO = "liftTo";
+	
+	/**
+	 * Name of the service "moveTo"
+	 */
+	private static final String SERVICE_MOVETO = "moveTo";
 	
 	/**
 	 * Setup the test environment, create aas and submodels, setup VAB connection
@@ -53,29 +70,38 @@ public class TestAASServicecall {
 	@Before
 	public void setupDeviceServiceExecutor() {
 		// Create a device-aas for coilcar device with id "coilcar" and submodelid "submodel1"
-		AssetAdministrationShell aas = new DeviceAdministrationShellFactory().create( "coilcar", "submodel1");
+		AssetAdministrationShell aas = new DeviceAdministrationShellFactory().create( AAS_ID, SUBMODEL_ID);
 		
 		// Create service stub instead of real coilcar services
 		coilcar = new CoilcarStub();
 		
 		// Create the submodel of services provided by the coilcar with id "submodel1"
-		SubModel sm = new DeviceSubmodelFactory().create("submodel1", coilcar);
+		SubModel sm = new DeviceSubmodelFactory().create(SUBMODEL_ID, coilcar);
 		
 		// Create VAB multi-submodel provider for holding the sub-models
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
 		
 		// Add sub-model to the provider
-		provider.addSubmodel("submodel1", new SubModelProvider(sm));
+		provider.addSubmodel(SUBMODEL_ID, new SubModelProvider(sm));
 		
 		// Add aas to the provider
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
 		
+		// Create registry for aas
 		IAASRegistryService registry = new InMemoryRegistry();
-		IIdentifier id = new Identifier(IdentifierType.Custom, "coilcar");
+		
+		// Create aas descriptor
+		IIdentifier id = new Identifier(IdentifierType.Custom, AAS_ID);
 		AASDescriptor aasDescriptor = new AASDescriptor(id, "/aas");
-		IIdentifier smId = new Identifier(IdentifierType.Custom, "submodel1");
-		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1Name", smId, "/aas/submodels/submodel1");
+		
+		// create submodel descriptor
+		IIdentifier smId = new Identifier(IdentifierType.Custom, SUBMODEL_ID);
+		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1Name", smId, "/aas/submodels/"+SUBMODEL_ID);
+		
+		// Add submodel descriptor to aas descriptor
 		aasDescriptor.addSubmodelDescriptor(smDescriptor);
+		
+		// register this aas
 		registry.register(aasDescriptor);
 
 		// setup the connection-manager with the model-provider
@@ -85,7 +111,7 @@ public class TestAASServicecall {
 		// create the service executor that calls the services using aas
 		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(registry,
 				connectorProvider);
-		serviceExecutor = new CoilcarServiceExecutor(manager);
+		serviceExecutor = new DeviceServiceExecutor(manager);
 		
 	}
 	
@@ -98,28 +124,28 @@ public class TestAASServicecall {
 		/* Execute the service "moveTo" on the device "coilcar", 
 		 * the service is located in sub-model "submodel1" 
 		 * and has a parameter 123*/
-		serviceExecutor.executeService("moveTo", "coilcar", "submodel1", new ArrayList<>(Arrays.asList( new Object[] {123})));
+		serviceExecutor.executeService(SERVICE_MOVETO, AAS_ID, SUBMODEL_ID, new ArrayList<>(Arrays.asList( new Object[] {123})));
 		
 		// Validate the parameter and service name is delivered successfully to the device stub
 		assertEquals(123, coilcar.getParameter());
-		assertTrue(coilcar.getServiceCalled().equals("moveTo"));
+		assertTrue(coilcar.getServiceCalled().equals(SERVICE_MOVETO));
 		
 		/* Execute the service "liftTo" on the device "coilcar", 
 		 * the service is located in sub-model "submodel1" 
 		 * and has a parameter 456*/
-		serviceExecutor.executeService("liftTo", "coilcar", "submodel1", new ArrayList<>(Arrays.asList( new Object[] {456})));
+		serviceExecutor.executeService(SERVICE_LIFTTO, AAS_ID, SUBMODEL_ID, new ArrayList<>(Arrays.asList( new Object[] {456})));
 		
 		// Validate the parameter and service name is delivered successfully to the device stub
 		assertEquals(456, coilcar.getParameter());
-		assertTrue(coilcar.getServiceCalled().equals("liftTo"));
+		assertTrue(coilcar.getServiceCalled().equals(SERVICE_LIFTTO));
 		
 		/* Execute the service "moveTo" on the device "coilcar", 
 		 * the service is located in sub-model "submodel1" 
 		 * and has a parameter 789*/
-		serviceExecutor.executeService("moveTo", "coilcar", "submodel1", new ArrayList<>(Arrays.asList( new Object[] {789})));
+		serviceExecutor.executeService(SERVICE_MOVETO,  AAS_ID, SUBMODEL_ID, new ArrayList<>(Arrays.asList( new Object[] {789})));
 		
 		// Validate the parameter and service name is delivered successfully to the device stub
 		assertEquals(789, coilcar.getParameter());
-		assertTrue(coilcar.getServiceCalled().equals("moveTo"));
+		assertTrue(coilcar.getServiceCalled().equals(SERVICE_MOVETO));
 	}
 }

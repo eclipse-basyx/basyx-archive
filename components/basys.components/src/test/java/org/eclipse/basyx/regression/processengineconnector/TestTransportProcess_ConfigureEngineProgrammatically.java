@@ -16,7 +16,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceDelegate;
-import org.eclipse.basyx.regression.support.processengine.executor.CoilcarServiceExecutor;
+import org.eclipse.basyx.components.processengine.connector.DeviceServiceExecutor;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
@@ -43,6 +43,22 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 	ConnectedAssetAdministrationShellManager manager;
 	
 	InMemoryRegistry registry;
+	
+	/**
+	 * Id of the device (coilcar) aas
+	 */
+	private static final String AAS_ID = "coilcar";
+	
+	/**
+	 * Id of the service submodel
+	 */
+	private static final String SUBMODEL_ID = "submodel1";
+	
+	/**
+	 * path to the bpmn-file
+	 */
+	private static String relativeConfigPath = "/WebContent/WEB-INF/config/processengine/SimpleTransportProcess.bpmn20.xml";
+	
 	/**
 	 * Makes sure Tomcat Server is started
 	 */
@@ -58,14 +74,14 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 		registry = new InMemoryRegistry();
 
 		// Create aas descriptor with meta-information of the aas
-		IIdentifier id = new Identifier(IdentifierType.Custom, "coilcar");
+		IIdentifier id = new Identifier(IdentifierType.Custom, AAS_ID);
 		AASDescriptor ccDescriptor = new AASDescriptor(id,
 				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas");
-		IIdentifier smId = new Identifier(IdentifierType.Custom, "submodel1");
+		IIdentifier smId = new Identifier(IdentifierType.Custom, SUBMODEL_ID);
 		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", smId,
-				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas/submodels/submodel1");
+				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas/submodels/"+SUBMODEL_ID);
 		ccDescriptor.addSubmodelDescriptor(smDescriptor);
-
+		
 		// register the aas
 		registry.register(ccDescriptor);
 		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorProvider());
@@ -94,7 +110,7 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 		RepositoryService repositoryService = processEngine.getRepositoryService();
 
 		// Add the XML-file with the BPMN-Model to the repository and deploy it
-		String relativeConfigPath = "/WebContent/WEB-INF/config/processengine/SimpleTransportProcess.bpmn20.xml";
+		
 		File configFile = new File(System.getProperty("user.dir") + relativeConfigPath);
 		repositoryService.createDeployment().addInputStream("SimpleTransportProcess.bpmn20.xml", new FileInputStream(configFile)).deploy();
 
@@ -103,7 +119,7 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 		variables.put("coilposition", 2);
 		
 		// Set the service executor to the java-delegate
-		DeviceServiceDelegate.setDeviceServiceExecutor(new CoilcarServiceExecutor(manager));
+		DeviceServiceDelegate.setDeviceServiceExecutor(new DeviceServiceExecutor(manager));
 		
 		//  Start a process instance
 		@SuppressWarnings("unused")

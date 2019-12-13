@@ -11,6 +11,8 @@
         	<activiti:string><![CDATA[coilcar]]></activiti:string></activiti:field>
         <activiti:field name="serviceParameter">
         	<activiti:string><![CDATA[{"_basyxTypes":"list","_value":[0]}]]></activiti:string></activiti:field>
+        <activiti:field name="submodelId">
+        	<activiti:string><![CDATA[submodel1]]></activiti:string></activiti:field>
       </extensionElements>
     </serviceTask>
     <serviceTask id="step6" name="bring coil before spindle" activiti:class="org.eclipse.basyx.components.processengine.connector.DeviceServiceDelegate">
@@ -22,6 +24,8 @@
         	<activiti:string><![CDATA[coilcar]]></activiti:string></activiti:field>
         <activiti:field name="serviceParameter">
         	<activiti:string><![CDATA[{"_basyxTypes":"list","_value":[5]}]]></activiti:string></activiti:field>
+        <activiti:field name="submodelId">
+        	<activiti:string><![CDATA[submodel1]]></activiti:string></activiti:field>
       </extensionElements>
     </serviceTask>
     <sequenceFlow id="flow5" sourceRef="step5" targetRef="step6"></sequenceFlow>
@@ -38,6 +42,8 @@
         	<activiti:string><![CDATA[coilcar]]></activiti:string></activiti:field>
         <activiti:field name="serviceParameter">
         	<activiti:string><![CDATA[ {"_basyxTypes":"list","_value":[5]}]]></activiti:string></activiti:field>
+        <activiti:field name="submodelId">
+        	<activiti:string><![CDATA[submodel1]]></activiti:string></activiti:field>
       </extensionElements>
     </serviceTask>
     <sequenceFlow id="flow7" sourceRef="step6" targetRef="servicetask1"></sequenceFlow>
@@ -51,6 +57,8 @@
         	<activiti:string><![CDATA[coilcar]]></activiti:string></activiti:field>
         <activiti:field name="serviceParameter">
         	<activiti:string><![CDATA[ {"_basyxTypes":"list","_value":[6]}]]></activiti:string></activiti:field>
+        <activiti:field name="submodelId">
+        	<activiti:string><![CDATA[submodel1]]></activiti:string></activiti:field>
       </extensionElements>
     </serviceTask>
     <serviceTask id="servicetask3" name="lift down" activiti:class="org.eclipse.basyx.components.processengine.connector.DeviceServiceDelegate">
@@ -62,6 +70,8 @@
         	<activiti:string><![CDATA[coilcar]]></activiti:string></activiti:field>
         <activiti:field name="serviceParameter">
         	<activiti:string><![CDATA[ {"_basyxTypes":"list","_value":[0]}]]></activiti:string></activiti:field>
+        <activiti:field name="submodelId">
+        	<activiti:string><![CDATA[submodel1]]></activiti:string></activiti:field>
       </extensionElements>
     </serviceTask>
     <sequenceFlow id="flow12" sourceRef="servicetask2" targetRef="servicetask3"></sequenceFlow>
@@ -75,6 +85,8 @@
         	<activiti:string><![CDATA[coilcar]]></activiti:string></activiti:field>
         <activiti:field name="serviceParameter">
         	<activiti:string><![CDATA[ {"_basyxTypes":"list","_value":[0]}]]></activiti:string></activiti:field>
+        <activiti:field name="submodelId">
+        	<activiti:string><![CDATA[submodel1]]></activiti:string></activiti:field>
       </extensionElements>
     </serviceTask>
     <sequenceFlow id="flow14" sourceRef="servicetask3" targetRef="servicetask4"></sequenceFlow>
@@ -89,6 +101,8 @@
         	<activiti:string><![CDATA[coilcar]]></activiti:string></activiti:field>
         <activiti:field name="serviceParameter">
         	<activiti:string><![CDATA[{"_basyxTypes":"list","_value":[0]}]]></activiti:string></activiti:field>
+        <activiti:field name="submodelId">
+        	<activiti:string><![CDATA[submodel1]]></activiti:string></activiti:field>
       </extensionElements>
     </serviceTask>
     <sequenceFlow id="flow16" sourceRef="exclusivegateway1" targetRef="servicetask5">

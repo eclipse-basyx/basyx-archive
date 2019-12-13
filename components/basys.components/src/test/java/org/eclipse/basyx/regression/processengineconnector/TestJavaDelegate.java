@@ -27,6 +27,20 @@ public class TestJavaDelegate {
 	 */
 	GSONTools gson = new GSONTools(new DefaultTypeFactory());
 	
+	/**
+	 * Name of the service "liftTo"
+	 */
+	private static final String SERVICE_LIFTTO = "liftTo";
+	
+	/**
+	 * Name of the service "moveTo"
+	 */
+	private static final String SERVICE_MOVETO = "moveTo";
+	
+	/**
+	 * Service provider 
+	 */
+	private static final String SERVICE_PROVIDER = "coilcar";
 	
 	/**
 	 * Test the invocation of service "moveTo" through the java-delegate
@@ -39,17 +53,18 @@ public class TestJavaDelegate {
 		Object params[] = new Object[]{5};
 		
 		// Create stub for BPMN-Engine for test purpose
-		BPMNEngineStub bpmnstub = new BPMNEngineStub("moveTo","coilcar",gson.serialize(new ArrayList<Object>(Arrays.asList(params))));
+		BPMNEngineStub bpmnstub = new BPMNEngineStub(SERVICE_MOVETO,SERVICE_PROVIDER,gson.serialize(new ArrayList<Object>(Arrays.asList(params))), "submodel1");
 		
 		// Set the service executor to the java-delegate
-		DeviceServiceDelegate.setDeviceServiceExecutor(new DeviceServiceExecutorStub());
+		DeviceServiceExecutorStub stub = new DeviceServiceExecutorStub();
+		DeviceServiceDelegate.setDeviceServiceExecutor(stub);
 		// deliver the service information to the java-delegate
 		bpmnstub.callJavaDelegate();
 
 		// Asset the java-delegate gets the information from the Engine-stub
-		assertEquals("moveTo", DeviceServiceDelegate.getExecutor().getServiceName());
-		assertEquals("coilcar", DeviceServiceDelegate.getExecutor().getServiceProvider());
-		assertArrayEquals(new Object[] { 5 }, DeviceServiceDelegate.getExecutor().getParams().toArray());
+		assertEquals(SERVICE_MOVETO, stub.getServiceName());
+		assertEquals(SERVICE_PROVIDER, stub.getServiceProvider());
+		assertArrayEquals(new Object[] { 5 }, stub.getParams().toArray());
 	}
 	
 	/**
@@ -63,18 +78,19 @@ public class TestJavaDelegate {
 		Object params[] = new Object[]{123}; 
 		
 		// Create stub for BPMN-Engine for test purpose
-		BPMNEngineStub bpmnstub = new BPMNEngineStub("liftTo","coilcar",gson.serialize(new ArrayList<Object>(Arrays.asList(params)))); 
+		BPMNEngineStub bpmnstub = new BPMNEngineStub(SERVICE_LIFTTO,SERVICE_PROVIDER,gson.serialize(new ArrayList<Object>(Arrays.asList(params))), "submodel1"); 
 		
 		// Set the service executor to the java-delegate
-		DeviceServiceDelegate.setDeviceServiceExecutor(new DeviceServiceExecutorStub());
+		DeviceServiceExecutorStub stub = new DeviceServiceExecutorStub();
+		DeviceServiceDelegate.setDeviceServiceExecutor(stub);
 			
 		// deliver the service information to the java-delegate
 		bpmnstub.callJavaDelegate();
 
 		// Asset the java-delegate gets the information from the Engine-stub
-		assertEquals("liftTo", DeviceServiceDelegate.getExecutor().getServiceName());
-		assertEquals("coilcar", DeviceServiceDelegate.getExecutor().getServiceProvider());
-		assertArrayEquals(new Object[] { 123 }, DeviceServiceDelegate.getExecutor().getParams().toArray());
+		assertEquals(SERVICE_LIFTTO, stub.getServiceName());
+		assertEquals(SERVICE_PROVIDER, stub.getServiceProvider());
+		assertArrayEquals(new Object[] { 123 }, stub.getParams().toArray());
 			
 	}
 

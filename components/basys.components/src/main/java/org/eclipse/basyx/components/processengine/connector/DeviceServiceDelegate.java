@@ -19,6 +19,9 @@ import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
  * */
 public class DeviceServiceDelegate implements JavaDelegate {
 	
+	// id of the submodel which provides the service
+	private Expression submodelId;
+	
 	// name of the service that is used to navigate the service in the aas
 	private Expression serviceName;
 	
@@ -44,21 +47,26 @@ public class DeviceServiceDelegate implements JavaDelegate {
 		// get name of the service
 		String servicename = (String)serviceName.getValue(execution);
 		
+		// get the id of the submodel
+		String id = (String)submodelId.getValue(execution);
+		
 		// get the Json string of service parameters
 		String params = (String) serviceParameter.getValue(execution);
 		
 		// deserialize the Json-string to get the parameters in an array
 		List<Object> paramarray = new ArrayList<>();
 		paramarray.addAll((Collection<Object>) gson.deserialize(params));
+		
 		// get name of the current process step in the BPMN-Model
 		String processName = execution.getCurrentFlowElement().getName();
 		String deviceAASId = (String)serviceProvider.getValue(execution);
+		
 		System.out.println("#######process instance: "+ execution.getProcessInstanceId()+" current activity: " + processName +" is executed by "+ deviceAASId);
 		
 		
 		try {
 			// invoke the specified service using service-executor
-			executor.executeService(servicename, deviceAASId, paramarray);
+			executor.executeService(servicename, deviceAASId,id,  paramarray);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

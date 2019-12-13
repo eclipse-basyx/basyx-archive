@@ -15,10 +15,10 @@ public class DeviceServiceExecutorStub implements IDeviceServiceExecutor{
 	
 	// whether the right service is invoked
 	@Override
-	public Object executeService(String servicename, String serviceProvider,  List<Object> params){
+	public Object executeService(String servicename, String serviceProvider, String submodelid,  List<Object> params){
 		this.serviceName = servicename;
 		this.serviceProvider = serviceProvider;
-		this.serviceSubmodelid = "SERVICES";
+		this.serviceSubmodelid = submodelid;
 		this.params = params;
 		System.out.printf("service: %s, executed by device: %s , parameters: ", servicename, serviceProvider);
 		if (params.size() == 0) {
@@ -34,28 +34,16 @@ public class DeviceServiceExecutorStub implements IDeviceServiceExecutor{
 		return 1;
 	}
 
-	@Override
 	public String getServiceName() {
 		return serviceName;
 	}
 
-	@Override
 	public String getServiceProvider() {
 		return serviceProvider;
 	}
 
-	@Override
 	public List<Object> getParams() {
 		return params;
 	}
-
-	@Override
-	public Object executeService(String servicename, String serviceProvider, String submodelid, List<Object> params)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
 
 }

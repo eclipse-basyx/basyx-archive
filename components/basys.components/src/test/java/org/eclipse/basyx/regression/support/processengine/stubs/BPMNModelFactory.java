@@ -26,6 +26,9 @@ public class BPMNModelFactory {
 	// Path to the java class invoked by the process engine
 	private static final String TASKI_MPL = "org.eclipse.basyx.components.processengine.connector.DeviceServiceDelegate";
 	
+	// id of the submodel
+	private static final String SUBMODEL_ID = "submodel1";
+	
 	// All service tasks executed by the process-engine
 	private List<ServiceTask> services = new ArrayList<>();
 	
@@ -63,31 +66,31 @@ public class BPMNModelFactory {
 	    process.addFlowElement(createStartEvent());
 	    
 	    // Create task 
-	    ServiceTask task1 = createServiceTask("t1", "pickup the coil", impl, "liftTo", "coilcar", new Object[]{1});
+	    ServiceTask task1 = createServiceTask("t1", "pickup the coil", impl, "liftTo", "coilcar", new Object[]{1}, SUBMODEL_ID);
 	    services.add(task1);
 	    
 	    // Create task 
-	    ServiceTask task2 =createServiceTask("t2", "move to the coil", impl, "moveTo", "coilcar", new Object[]{1});
+	    ServiceTask task2 =createServiceTask("t2", "move to the coil", impl, "moveTo", "coilcar", new Object[]{1}, SUBMODEL_ID);
 	    services.add(task2);
 	    
 	    // Create task 
-	    ServiceTask task3 = createServiceTask("t3", "drive the coil to the milling machine", impl, "moveTo", "coilcar", new Object[]{5});
+	    ServiceTask task3 = createServiceTask("t3", "drive the coil to the milling machine", impl, "moveTo", "coilcar", new Object[]{5}, SUBMODEL_ID);
 	    services.add(task3);
 	    
 	    // Create task
-	    ServiceTask task4 = createServiceTask("t4", "lift the coil to the expected position", impl, "liftTo", "coilcar", new Object[]{6});
+	    ServiceTask task4 = createServiceTask("t4", "lift the coil to the expected position", impl, "liftTo", "coilcar", new Object[]{6}, SUBMODEL_ID);
 	    services.add(task4);
 	    
 	    // Create task
-	    ServiceTask task5 =createServiceTask("t5", "put the coil on the mandrel", impl, "moveTo", "coilcar", new Object[]{6});
+	    ServiceTask task5 =createServiceTask("t5", "put the coil on the mandrel", impl, "moveTo", "coilcar", new Object[]{6}, SUBMODEL_ID);
 	    services.add(task5);
 	    
 	    // Create task
-	    ServiceTask task6 = createServiceTask("t6", "set the lifter to the start position", impl, "liftTo", "coilcar", new Object[]{0});
+	    ServiceTask task6 = createServiceTask("t6", "set the lifter to the start position", impl, "liftTo", "coilcar", new Object[]{0}, SUBMODEL_ID);
 	    services.add(task6);
 	    
 	    // Create task
-	    ServiceTask task7 =createServiceTask("t7", "drive the coilcar back to the start position", impl, "moveTo", "coilcar", new Object[]{0});
+	    ServiceTask task7 =createServiceTask("t7", "drive the coilcar back to the start position", impl, "moveTo", "coilcar", new Object[]{0}, SUBMODEL_ID);
 	    services.add(task7);
 	    
 	   // Add tasks to the process
@@ -197,7 +200,7 @@ public class BPMNModelFactory {
      * @param params	-- parameters required by the service
      * @return
      */
-    public ServiceTask createServiceTask(String taskid, String taskName, String impl, String serviceName, String serviceProvider, Object[]  params) {
+    public ServiceTask createServiceTask(String taskid, String taskName, String impl, String serviceName, String serviceProvider, Object[]  params, String submodelid) {
 		// Create the service task
     	ServiceTask serviceTask = new ServiceTask();
     	
@@ -215,6 +218,7 @@ public class BPMNModelFactory {
 	    fes.add(createFieldExtension("serviceName", serviceName));
 	    fes.add(createFieldExtension("serviceProvider", serviceProvider));
 	    fes.add(createFieldExtension("serviceParameter", generateJsonString(params)));
+	    fes.add(createFieldExtension("submodelId", submodelid));
 	    
 	    // Set field extension to this task
 	    serviceTask.setFieldExtensions(fes);
