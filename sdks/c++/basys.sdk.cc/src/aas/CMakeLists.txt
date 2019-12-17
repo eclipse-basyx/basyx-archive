@@ -20,14 +20,14 @@ target_sources(${BASYX_AAS_LIBRARY_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/aas/api/modelurn/ModelUrn.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/aas/backend/connected/aas/ConnectedAssetAdministrationShell.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/aas/backend/connected/aas/ConnectedAssetAdministrationShellManager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/impl/metamodel/AssetAdministrationShell.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/impl/metamodel/hashmap/descriptor/ModelDescriptor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/impl/metamodel/hashmap/descriptor/SubModelDescriptor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/impl/metamodel/hashmap/parts/Asset.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/impl/metamodel/hashmap/parts/ConceptDescription.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/impl/metamodel/hashmap/parts/ConceptDictionary.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/impl/metamodel/hashmap/parts/View.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/impl/metamodel/hashmap/security/Security.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/aas/impl/metamodel/AssetAdministrationShell.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/aas/impl/metamodel/hashmap/descriptor/ModelDescriptor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/aas/impl/metamodel/hashmap/descriptor/SubModelDescriptor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/aas/impl/metamodel/hashmap/parts/Asset.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/aas/impl/metamodel/hashmap/parts/ConceptDescription.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/aas/impl/metamodel/hashmap/parts/ConceptDictionary.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/aas/impl/metamodel/hashmap/parts/View.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/aas/impl/metamodel/hashmap/security/Security.cpp
 )
 
 target_include_directories(${BASYX_AAS_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
