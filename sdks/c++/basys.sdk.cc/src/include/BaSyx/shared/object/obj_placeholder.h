@@ -13,7 +13,7 @@
 #include <BaSyx/util/printer.h>
 #include <BaSyx/util/util.h>
 
-#include <json/json.hpp>
+#include <nlohmann/json.hpp>
 
 namespace basyx {
 namespace detail {

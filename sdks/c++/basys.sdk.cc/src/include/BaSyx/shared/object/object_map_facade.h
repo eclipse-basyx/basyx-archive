@@ -13,7 +13,7 @@
 #include <string>
 #include <typeinfo>
 
-#include <json/json.hpp>
+#include <nlohmann/json.hpp>
 
 #include <BaSyx/util/printer.h>
 #include <BaSyx/util/util.h>

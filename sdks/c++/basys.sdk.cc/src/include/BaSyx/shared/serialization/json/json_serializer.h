@@ -8,7 +8,7 @@
 #ifndef BASYX_SERIALIZATION_JSON_JSON_SERIALIZER_H
 #define BASYX_SERIALIZATION_JSON_JSON_SERIALIZER_H
 
-#include <json/json.hpp>
+#include <nlohmann/json.hpp>
 
 #include <BaSyx/shared/object/object_header.h>
 #include <BaSyx/shared/types.h>

@@ -5,7 +5,7 @@
 
 #include <BaSyx/shared/object/object_header.h>
 
-#include <json/json.hpp>
+#include <nlohmann/json.hpp>
 
 namespace basyx {
 namespace detail {

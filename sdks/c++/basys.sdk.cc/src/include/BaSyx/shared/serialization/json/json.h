@@ -8,7 +8,7 @@
 #ifndef BASYX_SERIALIZATION_JSON_JSON_H
 #define BASYX_SERIALIZATION_JSON_JSON_H
 
-#include <json/json.hpp>
+#include <nlohmann/json.hpp>
 
 #include <BaSyx/log/log.h>
 
