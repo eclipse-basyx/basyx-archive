@@ -13,10 +13,10 @@ set_target_properties(${BASYX_SHARED_LIBRARY_NAME} PROPERTIES SOVERSION ${BASYX_
 
 target_sources(${BASYX_SHARED_LIBRARY_NAME}
     PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/basyx/basysid/BaSysID.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/basyx/object/impl/object_impl.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/basyx/object/object_type.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/basyx/serialization/json/typeid.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/shared/basysid/BaSysID.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/shared/object/impl/object_impl.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/shared/object/object_type.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/shared/serialization/json/typeid.cpp
 )
 
 target_include_directories(${BASYX_SHARED_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
