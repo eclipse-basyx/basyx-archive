@@ -35,11 +35,11 @@ namespace submodel {
  * Sub model interface class
  * *********************************************************************************/
 class ISubModel : 
-	public IHasSemantics, 
-	public IIdentifiable, 
-	public IHasDataSpecification,
-	public IHasKind,
-	public map::IVABElementContainer
+    public virtual IHasSemantics,
+    public virtual IIdentifiable,
+    public virtual IHasDataSpecification,
+    public virtual IHasKind,
+    public virtual map::IVABElementContainer
 {
 public:
 	struct Path {
