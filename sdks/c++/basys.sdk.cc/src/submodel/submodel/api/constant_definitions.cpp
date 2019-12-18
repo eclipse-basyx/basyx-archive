@@ -5,6 +5,7 @@
 #include <BaSyx/submodel/api/qualifier/IHasKind.h>
 #include <BaSyx/submodel/api/qualifier/IHasDataSpecification.h>
 #include <BaSyx/submodel/api/qualifier/IAdministrativeInformation.h>
+#include <BaSyx/submodel/api/qualifier/qualifiable/IQualifier.h>
 #include <BaSyx/submodel/api/qualifier/qualifiable/IQualifiable.h>
 #include <BaSyx/submodel/api/qualifier/qualifiable/IConstraint.h>
 #include <BaSyx/submodel/api/submodelelement/ISubmodelElement.h>
@@ -52,6 +53,12 @@ constexpr char IReferable::Path::Parent[];
 constexpr char IHasSemantics::Path::SemanticId[];
 
 constexpr char IHasKind::Path::Kind[];
+
+constexpr char IQualifier::Path::Qualifier[];
+constexpr char IQualifier::Path::QualifierType[];
+constexpr char IQualifier::Path::QualifierValue[];
+constexpr char IQualifier::Path::QualifierValueID[];
+constexpr char IQualifier::Path::Modeltype[];
 
 constexpr char IQualifiable::Path::Constraints[];
 
