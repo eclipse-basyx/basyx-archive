@@ -20,7 +20,7 @@ target_sources(${BASYX_SHARED_LIBRARY_NAME}
 )
 
 target_include_directories(${BASYX_SHARED_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(${BASYX_SHARED_LIBRARY_NAME} BaSyx::Util BaSyx::Log lib::json)
+target_link_libraries(${BASYX_SHARED_LIBRARY_NAME} BaSyx::Util BaSyx::Log nlohmann_json::nlohmann_json)
 add_library(${PROJECT_SHORTNAME}::${BASYX_SHARED_LIB_SUFFIX} ALIAS ${BASYX_SHARED_LIBRARY_NAME})
 add_library(basyx::shared ALIAS ${BASYX_SHARED_LIBRARY_NAME})
 

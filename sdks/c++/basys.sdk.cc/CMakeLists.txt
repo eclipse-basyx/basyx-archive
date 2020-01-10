@@ -56,6 +56,7 @@ set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Shared (.so / .dll) instead of stati
 
 option(BASYX_BUILD_LIBFMT "Wether to build external, yet included library libfmt" ON)
 option(BASYX_USE_SYSTEM_ASIO "Use system supplied ASIO library." OFF)
+option(BASYX_USE_SYSTEM_JSON "Use system supplied nlohmann json library" OFF)
 ### Compiler settings ###
 
 set(CMAKE_CXX_STANDARD 11)
@@ -94,7 +95,11 @@ else()
     add_subdirectory(lib/asio)
 endif()
 
-add_subdirectory(lib/json)
+if(${BASYX_USE_SYSTEM_JSON})
+    find_package(nlohmann_json REQUIRED)
+else()
+    add_subdirectory(lib/json)
+endif()
 
 if(${BASYX_BUILD_TESTS})
     add_subdirectory(lib/gtest)
