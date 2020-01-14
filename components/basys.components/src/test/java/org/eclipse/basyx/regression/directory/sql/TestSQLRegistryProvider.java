@@ -24,7 +24,7 @@ public class TestSQLRegistryProvider extends TestRegistryProvider {
 	private AASHTTPServer sqlServer;
 
 	/**
-	 * Setting up SQL directory servlet
+	 * Sets up the SQL directory servlet for the sql tests
 	 */
 	@Override
 	@Before
@@ -63,5 +63,11 @@ public class TestSQLRegistryProvider extends TestRegistryProvider {
 	public void testSubmodelCalls() {
 		// FIXME: This test case is currently overwritten since the SQLProvider does not
 		// support the submodel api.
+	}
+
+	@Override
+	public void testGetMultiAAS() {
+		// FIXME: This test case is currently overwritten since the SQLProvider does not
+		// support getting all aas at once, yet
 	}
 }

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.util.Map;
+import java.util.List;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
@@ -49,7 +49,7 @@ public abstract class TestRegistryProvider {
 	protected abstract IModelProvider getProxyProvider();
 
 	/**
-	 * During setup of the tests, new entries are created in the registry using a proxy
+	 * Before each test, clean entries are created in the registry using a proxy
 	 */
 	@Before
 	public void setUp() {
@@ -75,27 +75,54 @@ public abstract class TestRegistryProvider {
 	/**
 	 * Tests getting single entries from the registry and validates the result.
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetSingleAAS() {
 		// Retrieve and check the first AAS
-		Object result = proxy.lookupAAS(aasId1);
-		AASDescriptor descriptor = new AASDescriptor((Map<String, Object>) result);
+		AASDescriptor descriptor = proxy.lookupAAS(aasId1);
+		validateDescriptor1(descriptor);
+	}
+
+	/**
+	 * Tests getting all entries from the registry and validates the result.
+	 */
+	@Test
+	public void testGetMultiAAS() {
+		// Get all registered AAS
+		List<AASDescriptor> result = proxy.lookupAll();
+		// Check, if both AAS are registered. Ordering does not matter
+		assertEquals(2, result.size());
+		if (result.get(0).getIdShort().equals(aasIdShort1)) {
+			validateDescriptor1(result.get(0));
+			validateDescriptor2(result.get(1));
+		} else {
+			validateDescriptor2(result.get(0));
+			validateDescriptor1(result.get(1));
+		}
+	}
+
+	/**
+	 * Checks, if the given descriptor is valid. Should contain the values of the first descriptor
+	 * as given by the test setup
+	 */
+	private void validateDescriptor1(AASDescriptor descriptor) {
 		assertEquals(aasId1.getId(), descriptor.getIdentifier().getId());
 		assertEquals(aasId1.getIdType(), descriptor.getIdentifier().getIdType());
 		assertEquals(aasId1.getIdType(), descriptor.getIdentifier().getIdType());
 		assertEquals(aasEndpoint1, descriptor.getFirstEndpoint());
-		
-		// Check, if the SM descriptor in the AASDescriptor is correct 
+
+		// Check, if the SM descriptor in the AASDescriptor is correct
 		SubmodelDescriptor smDescriptor = descriptor.getSubModelDescriptorFromIdentifierId(smId1.getId());
 		assertEquals(smId1.getId(), smDescriptor.getIdentifier().getId());
 		assertEquals(smId1.getIdType(), smDescriptor.getIdentifier().getIdType());
 		assertEquals(smIdShort1, smDescriptor.get(Referable.IDSHORT));
 		assertEquals(smEndpoint1, smDescriptor.getFirstEndpoint());
-		
-		// Retrieve and check the second AAS
-		result = proxy.lookupAAS(aasId2);
-		descriptor = new AASDescriptor((Map<String, Object>) result);
+	}
+
+	/**
+	 * Checks, if the given descriptor is valid. Should contain the values of the second descriptor
+	 * as given by the test setup
+	 */
+	private void validateDescriptor2(AASDescriptor descriptor) {
 		assertEquals(aasId2.getId(), descriptor.getIdentifier().getId());
 		assertEquals(aasId2.getIdType(), descriptor.getIdentifier().getIdType());
 		assertEquals(aasId2.getIdType(), descriptor.getIdentifier().getIdType());
@@ -125,7 +152,7 @@ public abstract class TestRegistryProvider {
 	}
 
 	/**
-	 * Tests additiona, retrieval and removal of submodels
+	 * Tests addition, retrieval and removal of submodels
 	 */
 	@Test
 	public void testSubmodelCalls() {
