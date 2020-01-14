@@ -1,6 +1,7 @@
 package org.eclipse.basyx.aas.registration.restapi;
 
 import java.net.URLDecoder;
+import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
@@ -61,6 +62,7 @@ public class DirectoryModelProvider implements IModelProvider {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws Exception {
 		path = stripPrefix(path);
@@ -71,22 +73,24 @@ public class DirectoryModelProvider implements IModelProvider {
 			ModelUrn identifier = new ModelUrn(path);
 
 			// Make sure that the old value is overwritten
-			// TODO: Exception in case of non existance
+			// TODO: Exception in case of non existance or invalid value (no AASDescriptor)
 			registry.delete(identifier);
-			registry.register((AASDescriptor) newValue);
+			registry.register(new AASDescriptor((Map<String, Object>) newValue));
 		} else {
 			throw new RuntimeException("Set with empty path is not supported by registry");
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void createValue(String path, Object newEntity) throws Exception {
 		path = stripPrefix(path);
 
 		if (path.isEmpty()) { // Creating new entry
-			registry.register((AASDescriptor) newEntity);
+			registry.register(new AASDescriptor((Map<String, Object>) newEntity));
 		} else if (path.endsWith(SUBMODELS)) {
-			registry.register(new ModelUrn(path.replace("/" + SUBMODELS, "")), (SubmodelDescriptor) newEntity);
+			registry.register(new ModelUrn(path.replace("/" + SUBMODELS, "")),
+					new SubmodelDescriptor((Map<String, Object>) newEntity));
 		} else {
 			throw new RuntimeException("Create was called with an unsupported path: " + path);
 		}
