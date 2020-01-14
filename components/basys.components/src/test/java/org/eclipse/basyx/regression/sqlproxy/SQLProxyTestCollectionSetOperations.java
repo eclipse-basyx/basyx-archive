@@ -37,11 +37,10 @@ public class SQLProxyTestCollectionSetOperations {
 		
 		// Drop tables to make sure we start with a fresh database
 		sqlRootElement.dropTable(1);
-		sqlRootElement.dropRootTable();
+		sqlRootElement.drop();
 
-		
 		// Create new table in database for root element
-		sqlRootElement.createRootTable();
+		sqlRootElement.create();
 
 		// Create collection
 		Collection<Object> sqlColl = sqlRootElement.createCollection(1);
@@ -111,6 +110,6 @@ public class SQLProxyTestCollectionSetOperations {
 		sqlRootElement.dropTable(1);
 
 		// Drop table for root element (= delete it)
-		sqlRootElement.dropRootTable();
+		sqlRootElement.drop();
 	}
 }

@@ -1,9 +1,9 @@
 package org.eclipse.basyx.regression.sqlproxy;
 
-import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.tools.sqlproxy.SQLRootElement;
+import org.junit.Test;
 
 
 
@@ -32,7 +32,7 @@ public class SQLProxyTestRootElement {
 		// Create SQL root element
 		sqlRootElement = new SQLRootElement(SQLConfig.SQLUSER, SQLConfig.SQLPW,  "//localhost/basyx-map?", "org.postgresql.Driver", "jdbc:postgresql:", "root_el_01");
 		// - Create new table in database for root element
-		sqlRootElement.createRootTable();
+		sqlRootElement.create();
 		
 		// Get element IDs
 		assertTrue(sqlRootElement.getNextIdentifier() == 1);
@@ -50,6 +50,6 @@ public class SQLProxyTestRootElement {
 		sqlRootElement.dropTable(1);
 
 		// Drop table for root element (= delete it)
-		sqlRootElement.dropRootTable();
+		sqlRootElement.drop();
 	}
 }

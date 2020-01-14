@@ -1,7 +1,5 @@
 package org.eclipse.basyx.regression.sqlproxy;
 
-import org.eclipse.basyx.tools.sqlproxy.SQLRootElement;
-import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 import java.util.AbstractMap;
@@ -10,8 +8,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import org.eclipse.basyx.tools.sqlproxy.SQLRootElement;
+import org.junit.Test;
 
 
 
@@ -40,14 +41,12 @@ public class SQLProxyTestMapSetOperations {
 		// Create SQL root element
 		sqlRootElement = new SQLRootElement(SQLConfig.SQLUSER, SQLConfig.SQLPW,  "//localhost/basyx-map?", "org.postgresql.Driver", "jdbc:postgresql:", "root_el_01");
 
-		
 		// Drop tables to make sure we start with a fresh database
 		sqlRootElement.dropTable(1);
-		sqlRootElement.dropRootTable();
+		sqlRootElement.drop();
 
-		
 		// Create new table in database for root element
-		sqlRootElement.createRootTable();
+		sqlRootElement.create();
 
 		// Create new SQL map
 		Map<String, Object> sqlMap = sqlRootElement.createMap(1);
@@ -147,5 +146,11 @@ public class SQLProxyTestMapSetOperations {
 		
 		// Test if map is empty
 		assertTrue(sqlMap.isEmpty());
+
+		// Drop tables
+		sqlRootElement.dropTable(1);
+
+		// Drop table for root element (= delete it)
+		sqlRootElement.drop();
 	}
 }

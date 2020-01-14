@@ -1,8 +1,12 @@
 package org.eclipse.basyx.tools.sqlproxy;
 
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLQuery;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLUpdate;
@@ -33,6 +37,21 @@ public class SQLRootElement extends SQLConnector {
 		super(user, pass, url, driver, prefix, tableID);
 	}
 	
+	/**
+	 * Creates the root table if it does not exist (including a possibly missing schema)
+	 */
+	public void create() {
+		createSchema();
+		createRootTable();
+	}
+
+	/**
+	 * Removes the root table if it exists (including its schema if it is empty afterwards)
+	 */
+	public void drop() {
+		dropRootTable();
+		dropSchema();
+	}
 
 	/**
 	 * Get next free identifier for another element
@@ -94,13 +113,45 @@ public class SQLRootElement extends SQLConnector {
 		return elementID;
 	}
 	
+	/**
+	 * Creates a schema for the root element
+	 */
+	protected void createSchema() {
+		// SQL command
+		String sqlCommandString = "CREATE SCHEMA IF NOT EXISTS elements;";
+		DynamicSQLUpdate dynCmd = new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver,
+				sqlCommandString);
+
+		// Parameter for SQL command statement
+		Map<String, Object> parameter = new HashMap<>();
+
+		// Execute SQL statement
+		dynCmd.accept(parameter);
+	}
 	
+	/**
+	 * Removes the schema of the root element if it is empty
+	 */
+	protected void dropSchema() {
+		// SQL command
+		String sqlCommandString = "DROP SCHEMA IF EXISTS elements RESTRICT;";
+		DynamicSQLUpdate dynCmd = new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver,
+				sqlCommandString);
+
+		// Parameter for SQL command statement
+		Map<String, Object> parameter = new HashMap<>();
+
+		// Execute SQL statement
+		dynCmd.accept(parameter);
+	}
+
 	/**
 	 * Create a new root table in SQL database
 	 */
-	public void createRootTable() {
+	protected void createRootTable() {
 		// SQL command
-		String sqlCommandString = "CREATE TABLE elements."+sqlTableID+" (NextElementID int, ElementPrefix varchar(255));";
+		String sqlCommandString = "CREATE TABLE IF NOT EXISTS elements." + sqlTableID
+				+ " (NextElementID int, ElementPrefix varchar(255));";
 		DynamicSQLUpdate dynCmd = new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, sqlCommandString);
 		
 		// Parameter for SQL command statement
@@ -128,7 +179,8 @@ public class SQLRootElement extends SQLConnector {
 	 */
 	public SQLMap createMap(int elementID) {
 		// SQL command
-		String sqlCommandString = "CREATE TABLE elements."+sqlTableID+"__"+elementID+" (name text, type int, value text);";
+		String sqlCommandString = "CREATE TABLE IF NOT EXISTS elements." + sqlTableID + "__" + elementID
+				+ " (name text, type int, value text);";
 		DynamicSQLUpdate dynCmd = new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, sqlCommandString);
 		
 		// Parameter for SQL command statement
@@ -147,7 +199,8 @@ public class SQLRootElement extends SQLConnector {
 	 */
 	public SQLCollection createCollection(int elementID) {
 		// SQL command
-		String sqlCommandString = "CREATE TABLE elements."+sqlTableID+"__"+elementID+" (type int, value text);";
+		String sqlCommandString = "CREATE TABLE IF NOT EXISTS elements." + sqlTableID + "__" + elementID
+				+ " (type int, value text);";
 		DynamicSQLUpdate dynCmd = new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, sqlCommandString);
 		
 		// Parameter for SQL command statement
@@ -160,20 +213,37 @@ public class SQLRootElement extends SQLConnector {
 		return new SQLCollection(this, elementID);
 	}
 
+	/**
+	 * Gets all table names contained in this root element
+	 */
+	@SuppressWarnings("unchecked")
+	private Set<String> getContainedTables() {
+		// SQL query string
+		String queryString = "SELECT table_name FROM information_schema.tables "
+				+ "WHERE table_type = 'BASE TABLE' AND table_schema = 'elements' "
+				+ "AND table_name LIKE '" + sqlTableID + "__%';";
+		DynamicSQLQuery dynQuery = new DynamicSQLQuery(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, queryString,
+				"stringArray(table_name:String)");
+		
+		// Get table row using no parameters
+		Collection<String> tableNames = (Collection<String>) dynQuery.get(new HashMap<>());
+		return tableNames.stream().map(name -> "elements." + name).collect(Collectors.toSet());
+	}
 	
 	/**
-	 * Drop a root table
+	 * Drop the root table and remove all contained elements
 	 */
-	public void dropRootTable() {
-		// SQL command
-		String sqlCommandString = "DROP TABLE elements."+sqlTableID+";";
-		DynamicSQLUpdate dynCmd = new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, sqlCommandString);
-		
-		// Parameter for SQL command statement
-		Map<String, Object> parameter = new HashMap<>();
+	protected void dropRootTable() {
+		// Get all tables that belong to this root element
+		Set<String> containedTables = getContainedTables();
+		containedTables.add("elements." + sqlTableID);
 
-		// Execute SQL statement
-		dynCmd.accept(parameter);		
+		// SQL command
+		String sqlCommandString = "DROP TABLE IF EXISTS " + String.join(",", containedTables) + ";";
+		DynamicSQLUpdate dynCmd = new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver,
+				sqlCommandString);
+		// Execute SQL statement without parameters
+		dynCmd.accept(new HashMap<>());
 	}
 	
 	
@@ -182,7 +252,7 @@ public class SQLRootElement extends SQLConnector {
 	 */
 	public void dropTable(int elementID) {
 		// SQL command
-		String sqlCommandString = "DROP TABLE elements."+sqlTableID+"__"+elementID+";";
+		String sqlCommandString = "DROP TABLE IF EXISTS elements." + sqlTableID + "__" + elementID + ";";
 		DynamicSQLUpdate dynCmd = new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, sqlCommandString);
 		
 		// Parameter for SQL command statement

@@ -1,6 +1,5 @@
 package org.eclipse.basyx.regression.sqlproxy;
 
-import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
@@ -8,6 +7,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.tools.sqlproxy.SQLMap;
 import org.eclipse.basyx.tools.sqlproxy.SQLRootElement;
+import org.junit.Test;
 
 
 
@@ -36,8 +36,8 @@ public class SQLProxyTestRootElementSQLElements {
 		// Create SQL root element
 		sqlRootElement = new SQLRootElement(SQLConfig.SQLUSER, SQLConfig.SQLPW,  "//localhost/basyx-map?", "org.postgresql.Driver", "jdbc:postgresql:", "root_el_01");
 		// - Create new table in database for root element
-		sqlRootElement.createRootTable();
-
+		sqlRootElement.drop();
+		sqlRootElement.create();
 		
 		// Create map
 		Map<String, Object> rootMap = sqlRootElement.createMap(0);
@@ -61,30 +61,34 @@ public class SQLProxyTestRootElementSQLElements {
 		assertTrue((int) rootMap.get("a") == 13);
 		assertTrue(rootMap.get("b") instanceof Collection);
 		assertTrue(rootMap.get("c") instanceof Map);
+		Collection<Object> contCol1 = (Collection<Object>) rootMap.get("b");
+		Map<String, Object> contMap1 = (Map<String, Object>) rootMap.get("c");
+		assertTrue(contCol1.size() == 3);
+		assertTrue(contMap1.size() == 2);
 		
 		
 		// Access root map via new reference
 		Map<String, Object> rootMap2 = new SQLMap(sqlRootElement, 0);
 		// - Access contained elements
-		Collection<Object>  contCol1 = (Collection<Object>)  rootMap2.get("b");
-		Map<String, Object> contMap1 = (Map<String, Object>) rootMap2.get("c");
+		Collection<Object> contCol2 = (Collection<Object>) rootMap2.get("b");
+		Map<String, Object> contMap2 = (Map<String, Object>) rootMap2.get("c");
 		// Check sizes
-		assertTrue(contCol1.size() == 3);
-		assertTrue(contMap1.size() == 2);
+		assertTrue(contCol2.size() == 3);
+		assertTrue(contMap2.size() == 2);
 		
 		
 		// Add another contained collection
 		contMap.put("3", sqlRootElement.createCollection(sqlRootElement.getNextIdentifier()));
 		// - Get contained elements
-		Collection<Object> contCol2 = (Collection<Object>) contMap.get("3");
+		Collection<Object> contCol3 = (Collection<Object>) contMap.get("3");
 		// - Add elements
-		contCol2.add("x");
+		contCol3.add("x");
 
 		
 		// Access contained elements
-		Collection<Object> contCol3 = (Collection<Object>) contMap.get("3");
+		Collection<Object> contCol4 = (Collection<Object>) contMap.get("3");
 		// Check sizes
-		assertTrue(contCol3.size() == 1);
+		assertTrue(contCol4.size() == 1);
 
 
 		// Drop tables
@@ -94,6 +98,6 @@ public class SQLProxyTestRootElementSQLElements {
 		sqlRootElement.dropTable(3);
 
 		// Drop table for root element (= delete it)
-		sqlRootElement.dropRootTable();
+		sqlRootElement.drop();
 	}
 }

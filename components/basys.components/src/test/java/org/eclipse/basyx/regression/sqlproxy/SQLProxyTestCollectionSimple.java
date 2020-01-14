@@ -1,12 +1,13 @@
 package org.eclipse.basyx.regression.sqlproxy;
 
-import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.Iterator;
+
 import org.eclipse.basyx.tools.sqlproxy.SQLCollection;
 import org.eclipse.basyx.tools.sqlproxy.SQLRootElement;
+import org.junit.Test;
 
 
 
@@ -37,11 +38,10 @@ public class SQLProxyTestCollectionSimple {
 		
 		// Drop tables to make sure we start with a fresh database
 		sqlRootElement.dropTable(1);
-		sqlRootElement.dropRootTable();
+		sqlRootElement.drop();
 
-		
 		// Create new table in database for root element
-		sqlRootElement.createRootTable();
+		sqlRootElement.create();
 
 		// Create collection
 		Collection<Object> sqlColl = sqlRootElement.createCollection(1);
@@ -129,6 +129,6 @@ public class SQLProxyTestCollectionSimple {
 		sqlRootElement.dropTable(1);
 
 		// Drop table for root element (= delete it)
-		sqlRootElement.dropRootTable();
+		sqlRootElement.drop();
 	}
 }

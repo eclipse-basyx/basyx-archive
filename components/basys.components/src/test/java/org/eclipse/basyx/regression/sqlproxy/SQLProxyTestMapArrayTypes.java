@@ -1,11 +1,12 @@
 package org.eclipse.basyx.regression.sqlproxy;
 
-import org.eclipse.basyx.tools.sqlproxy.SQLRootElement;
-import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Map;
+
+import org.eclipse.basyx.tools.sqlproxy.SQLRootElement;
+import org.junit.Test;
 
 
 
@@ -34,14 +35,12 @@ public class SQLProxyTestMapArrayTypes {
 		// Create SQL root element
 		sqlRootElement = new SQLRootElement(SQLConfig.SQLUSER, SQLConfig.SQLPW,  "//localhost/basyx-map?", "org.postgresql.Driver", "jdbc:postgresql:", "root_el_01");
 
-		
 		// Drop tables to make sure we start with a fresh database
 		sqlRootElement.dropTable(1);
-		sqlRootElement.dropRootTable();
+		sqlRootElement.drop();
 
-		
 		// Create new table in database for root element
-		sqlRootElement.createRootTable();
+		sqlRootElement.create();
 
 		// Create new SQL map
 		Map<String, Object> sqlMap = sqlRootElement.createMap(1);
@@ -74,5 +73,11 @@ public class SQLProxyTestMapArrayTypes {
 		// Clear map, check size
 		sqlMap.clear();
 		assertTrue(sqlMap.size() == 0);
+
+		// Drop tables
+		sqlRootElement.dropTable(1);
+
+		// Drop table for root element (= delete it)
+		sqlRootElement.drop();
 	}
 }
