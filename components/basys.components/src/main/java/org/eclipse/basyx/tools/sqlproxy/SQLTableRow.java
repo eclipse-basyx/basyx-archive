@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.basyx.tools.sqlproxy.exception.UnknownElementTypeException;
+import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
+import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
 
 
 
@@ -21,6 +23,10 @@ import org.eclipse.basyx.tools.sqlproxy.exception.UnknownElementTypeException;
  */
 public class SQLTableRow {
 
+	/**
+	 * Type constant: Unknown
+	 */
+	public static final int TYPE_UNKNOWN = -1;
 	
 	/**
 	 * Type constant: Null
@@ -101,15 +107,15 @@ public class SQLTableRow {
 
 	
 	/**
-	 * Type constant: Collection
+	 * Type constant: Collection as a reference to a SQLCollection
 	 */
-	public static final int TYPE_COLLECTION = 20;
+	public static final int TYPE_SQLCOLLECTION = 20;
 
 	
 	/**
-	 * Type constant: Map
+	 * Type constant: Map as a reference to a SQLMap
 	 */
-	public static final int TYPE_MAP = 21;
+	public static final int TYPE_SQLMAP = 21;
 
 	
 	/**
@@ -117,34 +123,47 @@ public class SQLTableRow {
 	 */
 	public static final int TYPE_EXCEPTION = 22;
 
+
+	/**
+	 * Type constant: Collection as a json string
+	 */
+	public static final int TYPE_GENERICCOLLECTION = 23;
+
+
+	/**
+	 * Type constant: Map as a json string
+	 */
+	public static final int TYPE_GENERICMAP = 24;
+
 	
-	
-	
+	/**
+	 * Reference to default json serializer for string based sql storage
+	 */
+	protected static GSONTools serializer = new GSONTools(new DefaultTypeFactory());
+
 	
 	/**
 	 * Store name
 	 */
-	String entryName = null;
+	private String entryName;
 
 	
 	/**
 	 * Store value
 	 */
-	Object entryValue = null;
+	private Object entryValue;
 
 	
 	/**
 	 * Store value as String
 	 */
-	String entryValueAsString = null;
+	private String entryValueAsString;
 	
 	
 	/**
 	 * Store type
 	 */
-	int entryType = -1;
-	
-	
+	private int entryType = TYPE_UNKNOWN;
 	
 	
 	/**
@@ -224,7 +243,7 @@ public class SQLTableRow {
 	 * Serialize SQL Map to String
 	 */
 	protected static String serializeSQLMapToString(SQLMap value) {
-		return ""+value.sqlTableID;
+		return value.sqlTableID;
 	}
 
 	
@@ -233,7 +252,25 @@ public class SQLTableRow {
 	 * Serialize SQL Collection to String
 	 */
 	protected static String serializeSQLCollectionToString(SQLCollection value) {
-		return ""+value.sqlTableID;
+		return value.sqlTableID;
+	}
+	
+	
+	
+	/**
+	 * Serialize SQL Map to String
+	 */
+	protected static String serializeGenericMapToString(Map<?, ?> value) {
+		return serializer.serialize(value);
+	}
+
+	
+	
+	/**
+	 * Serialize SQL Collection to String
+	 */
+	protected static String serializeGenericCollectionToString(Collection<?> value) {
+		return serializer.serialize(value);
 	}
 
 	
@@ -267,7 +304,7 @@ public class SQLTableRow {
 	
 	
 	/**
-	 * Serialize SQL Map to String
+	 * Deserialize SQL Map from String
 	 */
 	protected static SQLMap deserializeSQLMapFromString(SQLRootElement rootElement, String serializedObject) {
 		return new SQLMap(rootElement, serializedObject);
@@ -276,48 +313,74 @@ public class SQLTableRow {
 	
 	
 	/**
-	 * Serialize SQL Collection to String
+	 * Deserialize SQL Collection from String
 	 */
 	protected static SQLCollection deserializeSQLCollectionFromString(SQLRootElement rootElement, String serializedObject) {
 		return new SQLCollection(rootElement, serializedObject);
 	}
 
 	
+	/**
+	 * Deserialize Collection from JSON
+	 */
+	@SuppressWarnings("unchecked")
+	protected static Collection<Object> deserializeGenericCollectionFromString(String serializedObject) {
+		return (Collection<Object>) serializer.deserialize(serializedObject);
+	}
 	
+	/**
+	 * Deserialize Map from JSON
+	 */
+	@SuppressWarnings("unchecked")
+	protected static Map<String, Object> deserializeGenericMapFromString(String serializedObject) {
+		return (Map<String, Object>) serializer.deserialize(serializedObject);
+	}
+
 	/**
 	 * Get value as string
 	 */
 	public static String getValueAsString(Object value) {
-		// Null values
-		if (value == null) return "(null)";
+		int typeId = getTypeID(value);
+		
+		switch(typeId) {
+		// Null
+		case(TYPE_NULL):
+			return "(null)";
 		
 		// Primitive types
-		if (value instanceof Integer) return value.toString();
-		if (value instanceof Float) return value.toString();
-		if (value instanceof Double) return value.toString();
-		if (value instanceof String) return value.toString();
-		if (value instanceof Boolean) return value.toString();
-		if (value instanceof Character) return value.toString();
+		case(TYPE_INT):
+		case(TYPE_FLOAT):
+		case(TYPE_DOUBLE):
+		case(TYPE_STRING):
+		case(TYPE_BOOLEAN):
+		case(TYPE_CHARACTER):
+			return value.toString();
 		
 		// Array types
-		if (value instanceof int[]) return serializeToString(value);
-		if (value instanceof Integer[]) return serializeToString(value);
-		if (value instanceof float[]) return serializeToString(value);
-		if (value instanceof Float[]) return serializeToString(value);
-		if (value instanceof double[]) return serializeToString(value);
-		if (value instanceof Double[]) return serializeToString(value);
-		if (value instanceof char[]) return serializeToString(value);
-		if (value instanceof Character[]) return serializeToString(value);
-		if (value instanceof boolean[]) return serializeToString(value);
-		if (value instanceof Boolean[]) return serializeToString(value);
-		if (value instanceof String[]) return serializeToString(value);
+		case(TYPE_INTARRAY):
+		case(TYPE_FLOATARRAY):
+		case(TYPE_DOUBLEARRAY):
+		case(TYPE_STRINGARRAY):
+		case(TYPE_BOOLEANARRAY):
+		case(TYPE_CHARACTERARRAY):
+			return serializeToString(value);
 		
 		// Collection and Map types - first check for SQL types, then check for generic types
-		if (value instanceof SQLMap) return serializeSQLMapToString((SQLMap) value);
-		if (value instanceof SQLCollection) return serializeSQLCollectionToString((SQLCollection) value);
+		case (TYPE_SQLCOLLECTION):
+			return serializeSQLCollectionToString((SQLCollection) value);
+		case (TYPE_SQLMAP):
+			return serializeSQLMapToString((SQLMap) value);
+		case (TYPE_GENERICCOLLECTION):
+			return serializeGenericCollectionToString((Collection<?>) value);
+		case (TYPE_GENERICMAP):
+			return serializeGenericMapToString((Map<?, ?>) value);
 
 		// Unknown or unsupported type
-		throw new UnknownElementTypeException("");
+		case (TYPE_EXCEPTION):
+			// not supported yet
+		default:
+			throw new UnknownElementTypeException("");
+		}
 	}
 	
 	
@@ -325,38 +388,57 @@ public class SQLTableRow {
 	 * Get value from string
 	 */
 	public static Object getValueFromString(SQLRootElement rootElement, int typeId, String valAsString) {
-		// Null values
-		if (typeId == TYPE_NULL) return null;
+		switch (typeId) {
+		// Null
+		case (TYPE_NULL):
+			return null;
 		
 		// Primitive types
-		if (typeId == TYPE_INT)       return Integer.parseInt(valAsString);
-		if (typeId == TYPE_FLOAT)     return Float.parseFloat(valAsString);
-		if (typeId == TYPE_DOUBLE)    return Double.parseDouble(valAsString);
-		if (typeId == TYPE_STRING)    return valAsString;
-		if (typeId == TYPE_BOOLEAN)   return Boolean.parseBoolean(valAsString);
-		if (typeId == TYPE_CHARACTER) return valAsString.charAt(0);
+		case (TYPE_INT):
+			return Integer.parseInt(valAsString);
+		case (TYPE_FLOAT):
+			return Float.parseFloat(valAsString);
+		case (TYPE_DOUBLE):
+			return Double.parseDouble(valAsString);
+		case (TYPE_STRING):
+			return valAsString;
+		case (TYPE_BOOLEAN):
+			return Boolean.parseBoolean(valAsString);
+		case (TYPE_CHARACTER):
+			return valAsString.charAt(0);
 		
 		// Array types
-		if (typeId == TYPE_INTARRAY)       return deserializeFromString(valAsString);
-		if (typeId == TYPE_FLOATARRAY)     return deserializeFromString(valAsString);
-		if (typeId == TYPE_DOUBLEARRAY)    return deserializeFromString(valAsString);
-		if (typeId == TYPE_STRINGARRAY)    return deserializeFromString(valAsString);
-		if (typeId == TYPE_BOOLEANARRAY)   return deserializeFromString(valAsString);
-		if (typeId == TYPE_CHARACTERARRAY) return deserializeFromString(valAsString);
+		case (TYPE_INTARRAY):
+		case (TYPE_FLOATARRAY):
+		case (TYPE_DOUBLEARRAY):
+		case (TYPE_STRINGARRAY):
+		case (TYPE_BOOLEANARRAY):
+		case (TYPE_CHARACTERARRAY):
+			return deserializeFromString(valAsString);
 		
 		// Collection and Map types - first check for SQL types, then check for generic types
-		if (typeId == TYPE_COLLECTION)     return deserializeSQLCollectionFromString(rootElement, valAsString);
-		if (typeId == TYPE_MAP)            return deserializeSQLMapFromString(rootElement, valAsString);
-		
+		case (TYPE_SQLCOLLECTION):
+			return deserializeSQLCollectionFromString(rootElement, valAsString);
+		case (TYPE_SQLMAP):
+			return deserializeSQLMapFromString(rootElement, valAsString);
+		case (TYPE_GENERICCOLLECTION):
+			return deserializeGenericCollectionFromString(valAsString);
+		case (TYPE_GENERICMAP):
+			return deserializeGenericMapFromString(valAsString);
+
 		// Unknown or unsupported type
-		return null;
+		case (TYPE_EXCEPTION):
+			// not supported yet
+		default:
+			return null;
+		}
 	}
 	
 	
 	/**
 	 * Get numeric type ID that represents the type
 	 */
-	protected int getTypeID(Object value) {
+	protected static int getTypeID(Object value) {
 		// Null pointer check
 		if (value == null) return TYPE_NULL;
 		
@@ -382,14 +464,16 @@ public class SQLTableRow {
 		if (value instanceof String[]) return TYPE_STRINGARRAY;
 
 		// Complex types
-		if (value instanceof Map) return TYPE_MAP;
-		if (value instanceof Collection) return TYPE_COLLECTION;
+		if (value instanceof SQLMap) return TYPE_SQLMAP;
+		if (value instanceof SQLCollection) return TYPE_SQLCOLLECTION;
+		if (value instanceof Map) return TYPE_GENERICMAP;
+		if (value instanceof Collection) return TYPE_GENERICCOLLECTION;
 		if (value instanceof Exception) return TYPE_EXCEPTION;
 
 		// Function is not supported at the moment
 		
 		// Unknown type
-		return -1;
+		return TYPE_UNKNOWN;
 	}
 	
 	

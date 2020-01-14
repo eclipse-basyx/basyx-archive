@@ -1,7 +1,8 @@
 package org.eclipse.basyx.components.servlets;
 
 
-import org.eclipse.basyx.components.directory.SQLDirectoryProvider;
+import org.eclipse.basyx.aas.registration.restapi.DirectoryModelProvider;
+import org.eclipse.basyx.components.directory.SQLRegistry;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
 
@@ -15,7 +16,7 @@ import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
  * @author kuhn, pschorn
  *
  */
-public class SQLDirectoryServlet extends VABHTTPInterface<SQLDirectoryProvider> {
+public class SQLDirectoryServlet extends VABHTTPInterface<DirectoryModelProvider> {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -31,12 +32,12 @@ public class SQLDirectoryServlet extends VABHTTPInterface<SQLDirectoryProvider> 
 	 * SQLDirectoryProvider as backend
 	 */
 	public SQLDirectoryServlet() {
-		super(new SQLDirectoryProvider(configFilePath));
+		super(new DirectoryModelProvider(new SQLRegistry(configFilePath)));
 
 	}
 
 	public SQLDirectoryServlet(String customConfigFilePath) {
-		super(new SQLDirectoryProvider(customConfigFilePath));
+		super(new DirectoryModelProvider(new SQLRegistry(customConfigFilePath)));
 	}
 
 	

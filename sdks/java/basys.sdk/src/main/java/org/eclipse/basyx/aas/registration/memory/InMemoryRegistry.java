@@ -1,56 +1,31 @@
 package org.eclipse.basyx.aas.registration.memory;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 
 /**
- * Implements a preconfigured local registry
+ * An implementation of the IAASRegistryService interface.
+ * This registry can not store its entries permanently, because it is completely based on HashMaps.
+ * 
+ * @author espen
+ *
  */
-public class InMemoryRegistry implements IAASRegistryService {
-	protected Map<String, AASDescriptor> descriptorMap = new HashMap<>();
+public class InMemoryRegistry extends MapRegistry {
 
-	@Override
-	public void register(AASDescriptor aasDescriptor) {
-		String aasId = aasDescriptor.getIdentifier().getId();
-		if (descriptorMap.containsKey(aasId)) {
-			descriptorMap.remove(aasId);
-		}
-
-		descriptorMap.put(aasId, aasDescriptor);
-	}
-
-	@Override
-	public void registerOnly(AASDescriptor aasDescriptor) {
-		String aasId = aasDescriptor.getIdentifier().getId();
-		descriptorMap.put(aasId, aasDescriptor);
-	}
-
-	@Override
-	public void delete(IIdentifier aasIdentifier) {
-		descriptorMap.remove(aasIdentifier.getId());
-
-	}
-
-	@Override
-	public AASDescriptor lookupAAS(IIdentifier aasIdentifier) {
-		return descriptorMap.get(aasIdentifier.getId());
-	}
-
-	@Override
-	public List<AASDescriptor> lookupAll() {
-		return new ArrayList<>(descriptorMap.values());
+	/**
+	 * Default constructor based on HashMaps
+	 */
+	public InMemoryRegistry() {
+		super(new HashMap<>());
 	}
 
 	@Override
 	public void register(IIdentifier aas, SubmodelDescriptor smDescriptor) {
-		descriptorMap.get(aas.getId()).addSubmodelDescriptor(smDescriptor);
+		AASDescriptor descriptor = descriptorMap.get(aas.getId());
+		descriptor.addSubmodelDescriptor(smDescriptor);
 		// TODO: Add data to remote AAS
 	}
 
@@ -59,5 +34,4 @@ public class InMemoryRegistry implements IAASRegistryService {
 		AASDescriptor desc = descriptorMap.get(aasId.getId());
 		desc.removeSubmodelDescriptor(smIdShort);
 	}
-
 }

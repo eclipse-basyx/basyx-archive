@@ -56,8 +56,28 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 		super(rootElement.sqlUser, rootElement.sqlPass, rootElement.sqlURL, rootElement.sqlDriver, rootElement.sqlPrefix, tableIdWithprefix, rootElement);	
 	}
 
+	/**
+	 * Constructor for creating a new SQLMap from another Map
+	 */
+	public SQLMap(SQLRootElement rootElement, Map<String, Object> other) {
+		this(rootElement, createMapTable(rootElement));
+
+		for (Entry<String, Object> entry : other.entrySet()) {
+			put(entry.getKey(), entry.getValue());
+		}
+	}
 	
-	
+	/**
+	 * Create a new table for a map and return its generated id (relative to the root element)
+	 * 
+	 * @return The table id in the root element scope
+	 */
+	private static int createMapTable(SQLRootElement rootElement) {
+		int tableId = rootElement.getNextIdentifier();
+		rootElement.createMap(tableId);
+		return tableId;
+	}
+
 	/**
 	 * Get number of map elements
 	 */
@@ -186,11 +206,7 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 			// - Switch off auto commit
 			sqlDrv.getConnection().setAutoCommit(false);
 		
-			// Check if key is in map, then update SQL database
-			if (containsKey(sqlDrv, key)) {updateInMapSimple(sqlDrv, sqlTableID, new SQLTableRow(key, value)); return value;}
-		
-			// Put object
-			addToMapSimple(sqlDrv, sqlTableID, new SQLTableRow(key, value));
+			putValue(sqlDrv, key, value);
 		
 			// Commit and close transaction
 			sqlDrv.getConnection().commit();
@@ -206,8 +222,43 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 		// Return inserted object
 		return value;
 	}
-	
-	
+
+	/**
+	 * Puts arbitrary values in the map (even if they already exist). Does not commit the changes
+	 * using the SQLDriver.
+	 */
+	protected void putValue(SQLDriver sqlDrv, String key, Object value) {
+		value = convertToSimpleValue(value);
+		putSimpleValue(sqlDrv, key, value);
+	}
+
+	/**
+	 * Puts simple values to the map (those, that can be directly converted to a table row). Does not commit the
+	 * changes using the SQLDriver.
+	 */
+	private void putSimpleValue(SQLDriver sqlDrv, String key, Object value) {
+		if (containsKey(sqlDrv, key)) {
+			updateInMapSimple(sqlDrv, sqlTableID, new SQLTableRow(key, value));
+		} else {
+			addToMapSimple(sqlDrv, sqlTableID, new SQLTableRow(key, value));
+		}
+	}
+
+	/**
+	 * Converts arbitrary values to simple ones that can be directly added to the map's table as a single row.
+	 * Currently, maps are supported. For arbitrary maps, a new table will be created that can then be referenced in
+	 * this map.
+	 */
+	@SuppressWarnings("unchecked")
+	private Object convertToSimpleValue(Object value) {
+		// If the value is a map that can not be directly referenced by this root element
+		if (value instanceof Map && (!(value instanceof SQLMap)
+				|| !(((SQLMap) value).sqlRootElement.sqlTableID.equals(sqlRootElement.sqlTableID)))) {
+			// Create a new referable SQLMap out of the value in the scope of this root element
+			return new SQLMap(sqlRootElement, (Map<String, Object>) value);
+		}
+		return value;
+	}
 
 	/**
 	 * Remove element with key from map

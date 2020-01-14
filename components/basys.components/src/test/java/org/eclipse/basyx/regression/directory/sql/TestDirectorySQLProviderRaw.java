@@ -1,11 +1,13 @@
 package org.eclipse.basyx.regression.directory.sql;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Collection;
+import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
@@ -16,14 +18,16 @@ import org.eclipse.basyx.tools.webserviceclient.WebServiceRawClient;
 import org.eclipse.basyx.vab.coder.json.metaprotocol.MetaprotocolHandler;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * Test raw http queries to SQL directory provider.
  * 
- * @author kuhn, ps
+ * @author kuhn, ps, espen
  *
  */
 public class TestDirectorySQLProviderRaw {
@@ -34,51 +38,83 @@ public class TestDirectorySQLProviderRaw {
 	@ClassRule
 	public static AASHTTPServerResource res = new AASHTTPServerResource(new ComponentsRegressionContext());
 
-	// Directory web service URL
-	public String wsURL;
+	/**
+	 * Directory web service URL
+	 */
+	public static final String wsURL = "http://localhost:8080/basys.components/Testsuite/Directory/SQL";
 
 	/**
-	 * GSON instance
+	 * Serialization
 	 */
-	protected GSONTools serializer = new GSONTools(new DefaultTypeFactory());
-	private MetaprotocolHandler handler = new MetaprotocolHandler();
+	private static final GSONTools serializer = new GSONTools(new DefaultTypeFactory());
+	private static final MetaprotocolHandler handler = new MetaprotocolHandler();
+
+	/**
+	 * Invoke BaSyx service calls via web services
+	 */
+	private static final WebServiceRawClient client = new WebServiceRawClient();
+	private static final String registryUrl = wsURL + "/api/v1/registry/";
+
+	/**
+	 * AASDescriptor to test
+	 */
+	private static final IIdentifier id1 = new ModelUrn("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-166");
+	private static final String endpoint1 = "www.endpoint.de";
+	private static final AASDescriptor aasDescriptor1 = new AASDescriptor(id1, endpoint1);
+	private static final String serializedDescriptor1 = serializer.serialize(aasDescriptor1);
+	private static final IIdentifier id2 = new ModelUrn("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-167");
+	private static final String endpoint2 = "www.endpoint2.de";
+	private static final String endpoint2b = "www.endpoint2.de";
+	private static final AASDescriptor aasDescriptor2 = new AASDescriptor(id2, endpoint2);
+	private static final AASDescriptor aasDescriptor2b = new AASDescriptor(id2, endpoint2b);
+	private static final String serializedDescriptor2 = serializer.serialize(aasDescriptor2);
+	private static final String serializedDescriptor2b = serializer.serialize(aasDescriptor2b);
+	private static final IIdentifier idUnknown = new ModelUrn("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-168");
+	private static String aasUrl1, aasUrl2, aasUrlUnknown;
+
+	@BeforeClass
+	public static void setUpClass() throws UnsupportedEncodingException {
+		aasUrl1 = registryUrl + URLEncoder.encode(id1.toString(), "UTF-8");
+		aasUrl2 = registryUrl + URLEncoder.encode(id2.toString(), "UTF-8");
+		aasUrlUnknown = registryUrl + URLEncoder.encode(idUnknown.toString(), "UTF-8");
+	}
 
 	@Before
 	public void setUp() {
-		this.wsURL = "http://localhost:8080/basys.components/Testsuite/Directory/SQL";
+		// Post serialized descriptor to register it
+		client.post(registryUrl, serializedDescriptor1);
+		client.post(registryUrl, serializedDescriptor2);
+	}
+
+	@After
+	public void tearDown() throws UnsupportedEncodingException {
+		// Delete AAS registration
+		client.delete(aasUrl1);
+		client.delete(aasUrl2);
 	}
 
 	/**
 	 * Execute test case that test working calls
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetterCalls() {
-		System.out.println("ws url " + wsURL);
-		// Invoke BaSyx service calls via web services
-		WebServiceRawClient client = new WebServiceRawClient();
-
-
 		// First test - get all locally registered AAS
 		{
 			// Get all locally registered AAS
-			String result = getResult(client.get(wsURL + "/api/v1/registry"));
+			Collection<AASDescriptor> result = getResult(client.get(registryUrl));
 
 			// Check if all AAS are contained in result
-			assertTrue(result.contains("content.aas1"));
-			assertTrue(result.contains("content.aas2"));
-			assertTrue(result.contains("content.aas3"));
-			assertTrue(result.contains("content.aas4"));
+			assertEquals(2, result.size());
 		}
 
 		// Get a specific AAS (1)
 		try {
 			// Get a known AAS by its ID
-			String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-19", "UTF-8")));
-
-			System.out.println("Res:" + result);
+			AASDescriptor result = new AASDescriptor((Map<String, Object>) getResult(client.get(aasUrl1)));
 
 			// Check if all AAS are contained in result
-			assertTrue(result.equals("content.aas1"));
+			assertEquals(id1.getId(), result.getIdentifier().getId());
 		} catch (Exception e) {
 			fail("Get specific AAS test case did throw exception:" + e);
 		}
@@ -86,32 +122,10 @@ public class TestDirectorySQLProviderRaw {
 		// Get a specific AAS (2)
 		try {
 			// Get a known AAS by its ID
-			String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-18", "UTF-8")));
+			AASDescriptor result = new AASDescriptor((Map<String, Object>) getResult(client.get(aasUrl2)));
 
 			// Check if all AAS are contained in result
-			assertTrue(result.equals("content.aas2"));
-		} catch (Exception e) {
-			fail("Get specific AAS test case did throw exception:" + e);
-		}
-
-		// Get a specific AAS (3)
-		try {
-			// Get a known AAS by its ID
-			String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-17", "UTF-8")));
-
-			// Check if all AAS are contained in result
-			assertTrue(result.equals("content.aas3"));
-		} catch (Exception e) {
-			fail("Get specific AAS test case did throw exception:" + e);
-		}
-
-		// Get a specific AAS (4)
-		try {
-			// Get a known AAS by its ID
-			String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-16", "UTF-8")));
-
-			// Check if all AAS are contained in result
-			assertTrue(result.equals("content.aas4"));
+			assertEquals(id2.getId(), result.getIdentifier().getId());
 		} catch (Exception e) {
 			fail("Get specific AAS test case did throw exception:" + e);
 		}
@@ -122,27 +136,17 @@ public class TestDirectorySQLProviderRaw {
 	 * 
 	 * @throws UnsupportedEncodingException
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testUpdateCall() throws UnsupportedEncodingException {
-		// Invoke BaSyx service calls via web services
-		WebServiceRawClient client = new WebServiceRawClient();
-
 		// Update a specific AAS
 		// Update AAS registration
-		client.put(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-16", "UTF-8"), "content.aas5");
+		client.put(aasUrl2, serializedDescriptor2b);
 
 		// Get a known AAS by its ID
-		String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-16", "UTF-8")));
+		AASDescriptor result = new AASDescriptor((Map<String, Object>) getResult(client.get(aasUrl2)));
 		// - Check updated registration
-		assertTrue(result.equals("content.aas5"));
-
-		// Update AAS registration
-		client.put(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-16", "UTF-8"), "content.aas4");
-
-		// Get a known AAS by its ID
-		String result2 = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-16", "UTF-8")));
-		// - Check updated registration
-		assertTrue(result2.equals("content.aas4"));
+		assertEquals(endpoint2b, result.getFirstEndpoint());
 	}
 
 	/**
@@ -150,44 +154,34 @@ public class TestDirectorySQLProviderRaw {
 	 * 
 	 * @throws UnsupportedEncodingException
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testCreateDeleteCall() throws UnsupportedEncodingException {
-		// Invoke BaSyx service calls via web services
-		WebServiceRawClient client = new WebServiceRawClient();
-
-
 		// Update a specific AAS
-
 		// Delete AAS registration (make sure tests work also iff previous test suite
 		// did fail)
-		client.delete(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8"));
+		client.delete(aasUrl2);
 
 		// Get a known AAS by its ID - check if AAS does not exist already
-		String result0 = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8")));
+		Object result = getResult(client.get(aasUrl2));
 		// - Check updated registration
-		assertEquals(null, result0);
+		assertNull(result);
 
-		// Create and register AAS descriptor
-		// - Create AAS descriptor
-		IIdentifier id = new ModelUrn("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-166");
-		AASDescriptor aasDescriptor = new AASDescriptor(id, "www.endpoint.de");
-		// - Create new AAS registration
-		String expected = serializer.serialize(aasDescriptor);
-		client.post(wsURL + "/api/v1/registry", expected);
+		// Create new AAS registration
+		client.post(registryUrl, serializedDescriptor2);
 
 		// Get a known AAS by its ID
-		Object result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/"
-				+ URLEncoder.encode("microscope#A-166", "UTF-8")));
+		AASDescriptor result2 = new AASDescriptor((Map<String, Object>) getResult(client.get(aasUrl2)));
 
-		assertEquals(aasDescriptor, result); // need deep json string compare here
+		assertEquals(endpoint2, result2.getFirstEndpoint()); // need deep json string compare here
 
 		// Delete AAS registration
-		client.delete(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8"));
+		client.delete(aasUrl2);
 
 		// Check if it is really deleted
-		String result2 = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("microscope#A-166", "UTF-8")));
+		result = getResult(client.get(aasUrl2));
 		// - Check updated registration
-		assertEquals(null, result2);
+		assertNull(result);
 	}
 
 	/**
@@ -197,14 +191,11 @@ public class TestDirectorySQLProviderRaw {
 	 */
 	@Test
 	public void testNonWorkingCalls() throws UnsupportedEncodingException {
-		// Invoke service call via web services
-		WebServiceRawClient client = new WebServiceRawClient();
-
 		// Get unknown AAS ID
-		String result = getResult(client.get(wsURL + "/api/v1/registry/urn:de.FHG:es.iese:aas:0.98:5:lab/" + URLEncoder.encode("unknown", "UTF-8")));
+		Object result = getResult(client.get(aasUrlUnknown));
 
 		// Check if no AAS are contained in result
-		assertEquals(null, result);
+		assertNull(result);
 	}
 
 	@SuppressWarnings("unchecked")
