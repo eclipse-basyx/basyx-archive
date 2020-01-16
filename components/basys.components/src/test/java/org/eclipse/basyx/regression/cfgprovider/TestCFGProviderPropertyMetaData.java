@@ -2,10 +2,13 @@ package org.eclipse.basyx.regression.cfgprovider;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
@@ -51,7 +54,8 @@ public class TestCFGProviderPropertyMetaData {
 		// - Check property meta data (description)
 		Map<String, Object> value1a = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1");
-		assertEquals("Configuration property description", ((Map<String, String>) value1a.get("description")).get("text"));
+		LangStrings description = new LangStrings((HashSet<HashMap<String, Object>>) value1a.get("description"));
+		assertEquals("Configuration property description", description.get(""));
 
 		// Get property value
 		Map<String, Object> value2 = (Map<String, Object>) connSubModel
@@ -60,7 +64,8 @@ public class TestCFGProviderPropertyMetaData {
 		// - Check property meta data (description)
 		Map<String, Object> value2a = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2");
-		assertEquals("Configuration property description on multiple lines", ((Map<String, String>) value2a.get("description")).get("text"));
+		description = new LangStrings((HashSet<HashMap<String, Object>>) value2a.get("description"));
+		assertEquals("Configuration property description on multiple lines", description.get(""));
 
 		// Get property value
 		Map<String, Object> value3 = (Map<String, Object>) connSubModel

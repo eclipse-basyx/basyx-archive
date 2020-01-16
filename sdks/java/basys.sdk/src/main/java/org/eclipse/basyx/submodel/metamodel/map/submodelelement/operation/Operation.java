@@ -11,7 +11,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOpera
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 
 /**
@@ -124,7 +124,7 @@ public class Operation extends SubmodelElement implements IOperation {
 	}
 
 	@Override
-	public Description getDescription() {
+	public LangStrings getDescription() {
 		return new ReferableFacade(this).getDescription();
 	}
 }

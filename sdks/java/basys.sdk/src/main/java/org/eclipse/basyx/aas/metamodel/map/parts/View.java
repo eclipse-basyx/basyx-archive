@@ -11,9 +11,9 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificatio
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 
@@ -102,7 +102,7 @@ public class View extends HashMap<String, Object> implements IView {
 	}
 
 	@Override
-	public Description getDescription() {
+	public LangStrings getDescription() {
 		return new ReferableFacade(this).getDescription();
 	}
 
@@ -119,7 +119,7 @@ public class View extends HashMap<String, Object> implements IView {
 		new ReferableFacade(this).setCategory(category);
 	}
 
-	public void setDescription(Description description) {
+	public void setDescription(LangStrings description) {
 		new ReferableFacade(this).setDescription(description);
 	}
 

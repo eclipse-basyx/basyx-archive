@@ -20,7 +20,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
 import org.eclipse.basyx.submodel.metamodel.map.IVABElementContainer;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -86,7 +86,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 	}
 
 	@Override
-	public Description getDescription() {
+	public LangStrings getDescription() {
 		return new ReferableFacade(getElem()).getDescription();
 	}
 

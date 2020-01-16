@@ -16,9 +16,9 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificatio
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 
 /**
  * ConceptDescription class as described in DAAS document
@@ -96,7 +96,7 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 	}
 
 	@Override
-	public Description getDescription() {
+	public LangStrings getDescription() {
 		return new ReferableFacade(this).getDescription();
 	}
 	@Override
@@ -114,7 +114,7 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 
 	}
 
-	public void setDescription(Description description) {
+	public void setDescription(LangStrings description) {
 		new ReferableFacade(this).setDescription(description);
 	}
 

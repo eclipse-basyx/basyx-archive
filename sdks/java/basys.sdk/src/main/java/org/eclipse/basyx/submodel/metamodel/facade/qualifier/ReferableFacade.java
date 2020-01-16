@@ -1,10 +1,12 @@
 package org.eclipse.basyx.submodel.metamodel.facade.qualifier;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 
 /**
@@ -32,11 +34,10 @@ public class ReferableFacade implements IReferable {
 		return (String) map.get(Referable.CATEGORY);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Description getDescription() {
-		Description desc = new Description();
-		desc.putAll((Map<String, Object>) map.get(Referable.DESCRIPTION));
+	@SuppressWarnings("unchecked")
+	public LangStrings getDescription() {
+		LangStrings desc = new LangStrings((HashSet<HashMap<String, Object>>) map.get(Referable.DESCRIPTION));
 		return desc;
 	}
 
@@ -53,7 +54,7 @@ public class ReferableFacade implements IReferable {
 		map.put(Referable.CATEGORY, category);
 	}
 
-	public void setDescription(Description description) {
+	public void setDescription(LangStrings description) {
 		map.put(Referable.DESCRIPTION, description);
 	}
 

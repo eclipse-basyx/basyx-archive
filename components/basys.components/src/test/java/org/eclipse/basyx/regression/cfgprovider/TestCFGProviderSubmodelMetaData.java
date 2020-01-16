@@ -2,12 +2,15 @@ package org.eclipse.basyx.regression.cfgprovider;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -51,7 +54,9 @@ public class TestCFGProviderSubmodelMetaData {
 		// Get property value
 		Map<String, Object> sampleCFG = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/sampleCFG");
-		assertEquals("BaSys regression test file for CFG file provider", ((Map<String, String>) sampleCFG.get("description")).get("text"));
+		
+		LangStrings description = new LangStrings((HashSet<HashMap<String, Object>>) sampleCFG.get("description"));
+		assertEquals("BaSys regression test file for CFG file provider", description.get(""));
 
 		// Get property value
 		assertEquals("1.0",

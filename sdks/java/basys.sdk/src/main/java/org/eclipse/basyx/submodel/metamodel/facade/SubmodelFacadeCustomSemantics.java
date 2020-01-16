@@ -5,10 +5,10 @@ import java.util.Collections;
 
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Constraint;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
@@ -73,7 +73,7 @@ public class SubmodelFacadeCustomSemantics extends SubmodelFacade {
 	 * @param revision
 	 *            Sub model revision
 	 */
-	public SubmodelFacadeCustomSemantics(String semantics, String idType, String id, String idShort, String category, Description description, Constraint constraint, HasDataSpecification dataSpecification, String kind, String version,
+	public SubmodelFacadeCustomSemantics(String semantics, String idType, String id, String idShort, String category, LangStrings description, Constraint constraint, HasDataSpecification dataSpecification, String kind, String version,
 			String revision) {
 		// Create sub model
 		super(new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.Custom)))),
@@ -118,7 +118,7 @@ public class SubmodelFacadeCustomSemantics extends SubmodelFacade {
 	 * @param revision
 	 *            Sub model revision
 	 */
-	public SubmodelFacadeCustomSemantics(String semantics, String idType, String id, String idShort, String category, Description description, Collection<Constraint> qualifier, Constraint constraint,
+	public SubmodelFacadeCustomSemantics(String semantics, String idType, String id, String idShort, String category, LangStrings description, Collection<Constraint> qualifier, Constraint constraint,
 			HasDataSpecification dataSpecification, String kind, String version, String revision) {
 		// Create sub model
 		super(new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.Custom)))),

@@ -1,7 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -41,10 +40,7 @@ public class Referable extends HashMap<String, Object> implements IReferable {
 		put(CATEGORY, "");
 		// Description or comments on the element (String)
 		
-		HashSet<HashMap<String, Object>> desc = new HashSet<HashMap<String, Object>>();
-		desc.add(new Description());
-			
-		put(DESCRIPTION, desc);
+		put(DESCRIPTION, new LangStrings());
 		// Reference to the parent of this element (Referable)
 		put(PARENT, null);
 	}
@@ -58,7 +54,7 @@ public class Referable extends HashMap<String, Object> implements IReferable {
 	 * @param category
 	 * @param description
 	 */
-	public Referable(String idShort, String category, Description description) {
+	public Referable(String idShort, String category, LangStrings description) {
 		// Identifies an element within its name space (String)
 		put(IDSHORT, idShort);
 		// Coded value that gives further meta information w.r.t. to the type of the
@@ -83,7 +79,7 @@ public class Referable extends HashMap<String, Object> implements IReferable {
 	}
 
 	@Override
-	public Description getDescription() {
+	public LangStrings getDescription() {
 		return new ReferableFacade(this).getDescription();
 	}
 
@@ -101,7 +97,7 @@ public class Referable extends HashMap<String, Object> implements IReferable {
 		
 	}
 
-	public void setDescription(Description description) {
+	public void setDescription(LangStrings description) {
 		new ReferableFacade(this).setDescription(description);
 		
 	}

@@ -15,9 +15,9 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFaca
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Description;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 
@@ -105,7 +105,7 @@ public class AssetFacade implements IAsset {
 	}
 
 	@Override
-	public Description getDescription() {
+	public LangStrings getDescription() {
 		return new ReferableFacade(map).getDescription();
 	}
 
@@ -124,7 +124,7 @@ public class AssetFacade implements IAsset {
 
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(LangStrings description) {
 		map.put(Referable.DESCRIPTION, description);
 
 	}
