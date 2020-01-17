@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -21,7 +23,7 @@ import java.util.Set;
  *
  */
 public class ResultFilter {
-
+	private static Logger logger = LoggerFactory.getLogger(ResultFilter.class);
 	
 	/**
 	 * Extract a column from a SQL result set and return this column as set
@@ -37,8 +39,7 @@ public class ResultFilter {
 		try {
 			while (sqlResult.next()) {result.add(sqlResult.getString((String) columnName[0]));}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Could not get string set from sqlResult", e);
 		}
 		
 		// Return result
@@ -60,8 +61,7 @@ public class ResultFilter {
 		try {
 			while (sqlResult.next()) {result.add(sqlResult.getString((String) columnName[0]));}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Could not get string collection from sqlResult", e);
 		}
 		
 		// Return result
@@ -88,8 +88,7 @@ public class ResultFilter {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Could not get map from sqlResult", e);
 		}
 		
 		// Return result
@@ -122,8 +121,7 @@ public class ResultFilter {
 				result.add(listElement);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Could not get list from sqlResult", e);
 		}
 		
 		// Return result

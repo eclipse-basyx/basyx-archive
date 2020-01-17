@@ -5,6 +5,8 @@ import java.util.function.Consumer;
 
 import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
 import org.eclipse.basyx.components.tools.propertyfile.opdef.OperationDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -15,7 +17,7 @@ import org.eclipse.basyx.components.tools.propertyfile.opdef.OperationDefinition
  *
  */
 public class DynamicSQLUpdate extends DynamicSQLRunner implements Consumer<Map<String,Object>> {
-
+	private static Logger logger = LoggerFactory.getLogger(DynamicSQLUpdate.class);
 
 	/**
 	 * Store SQL query string with place holders ($x)
@@ -55,12 +57,12 @@ public class DynamicSQLUpdate extends DynamicSQLRunner implements Consumer<Map<S
 	 */
 	@Override
 	public void accept(Map<String,Object> parameter) {
-		System.out.println("************************* Running SQL update:"+parameter);
+		logger.debug("(Parameters) Running SQL update: " + parameter);
 
 		// Apply parameter and create SQL query string
 		String sqlQuery = OperationDefinition.getSQLString(sqlQueryString, parameter);
 		
-		System.out.println("Running SQL update:"+sqlQuery);
+		logger.debug("(Query) Running SQL update:" + sqlQuery);
 
 		// Execute SQL query
 		sqlDriver.sqlUpdate(sqlQuery);
