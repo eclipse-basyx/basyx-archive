@@ -5,7 +5,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.eclipse.basyx.testsuite.regression.vab.modelprovider.SimpleVABElement;
@@ -17,7 +19,7 @@ import org.junit.Test;
  *
  */
 public class TypeDestroyer {
-	@SuppressWarnings("unchecked")
+	
 	/**
 	 * Removes type information of all objects within the map, i.e. every subclass
 	 * of HashMap is reduced to HashMap
@@ -25,6 +27,7 @@ public class TypeDestroyer {
 	 * @param map
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static Map<String, Object> destroyType(Map<String, Object> map){
 		return (Map<String, Object>) handle(map);
 	}
@@ -33,9 +36,19 @@ public class TypeDestroyer {
 	private static Object handle(Object o) {
 		if(o instanceof Map) {
 			return handleMap((Map<String, Object>) o);
+		} else if(o instanceof Set) {
+			return handleSet((Set<Object>) o);
 		} else {
 			return o;
 		}
+	}
+	
+	private static Set<Object> handleSet(Set<Object> set) {
+		Set<Object> ret = new HashSet<>();
+		for (Object o : set) {
+			ret.add(handle(o));
+		}
+		return ret;
 	}
 
 	private static Map<String, Object> handleMap(Map<String, Object> map) {
@@ -53,6 +66,5 @@ public class TypeDestroyer {
 		assertTrue(sm instanceof SimpleVABElement);
 		assertFalse(generic instanceof SimpleVABElement);
 		assertEquals(generic, sm);
-
 	}
 }
