@@ -44,6 +44,12 @@ public class Property extends AbstractProperty implements ISingleProperty {
 		put(Property.VALUEID, null);
 	}
 
+	/**
+	 * Creates a Property object from a map
+	 * 
+	 * @param obj a Property object as raw map
+	 * @return a Property object, that behaves like a facade for the given map
+	 */
 	public static Property createAsFacade(Map<String, Object> obj) {
 		Property facade = new Property();
 		facade.putAll(obj);
@@ -95,7 +101,8 @@ public class Property extends AbstractProperty implements ISingleProperty {
 
 	@Override
 	public String getValueType() {
-		return (String) get(Property.VALUETYPE);
+		PropertyValueTypeDef def = PropertyValueTypeDefHelper.readTypeDef(get(Property.VALUETYPE));
+		return def!=null ? def.toString() : "";
 	}
 
 	/**

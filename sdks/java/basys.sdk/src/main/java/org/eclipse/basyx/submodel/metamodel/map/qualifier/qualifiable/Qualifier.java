@@ -52,9 +52,9 @@ public class Qualifier extends Constraint implements IQualifier {
 		this.putAll(new HasSemantics());
 
 		// Default values
-		put(QUALIFIERTYPE, "");
-		put(QUALIFIERVALUE, null);
-		put(QUALIFIERVALUEID, null);
+		put(QUALIFIERTYPE,type);
+		put(QUALIFIERVALUE, value);
+		put(QUALIFIERVALUEID, valueId);
 	}
 
 	public void setQualifierType(String obj) {
@@ -67,12 +67,12 @@ public class Qualifier extends Constraint implements IQualifier {
 		return new QualifierFacade(this).getQualifierType();
 	}
 
-	public void setQualifierValue(Object obj) {
+	public void setQualifierValue(String obj) {
 		new QualifierFacade(this).setQualifierValue(obj);
 	}
 
 	@Override
-	public Object getQualifierValue() {
+	public String getQualifierValue() {
 		return new QualifierFacade(this).getQualifierValue();
 	}
 

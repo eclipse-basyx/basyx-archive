@@ -1,10 +1,11 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.file;
 
+import java.util.Map;
+
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.file.IFile;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.DataElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.blob.Blob;
 
 /**
  * A blob property as defined in DAAS document <br/>
@@ -18,7 +19,14 @@ public class File extends DataElement implements IFile{
 	public static final String MIMETYPE="mimeType";
 	public static final String MODELTYPE = "File";
 
-
+	/**
+	 * Creates an empty File object
+	 */
+	public File() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+	}
+	
 	/**
 	 * Creates a file data element. It has to have a mimeType <br/>
 	 * An absolute path is used in the case that the file exists independently of
@@ -40,7 +48,18 @@ public class File extends DataElement implements IFile{
 		put(Property.VALUE, value);
 		put(MIMETYPE, mimeType);
 	}
-
+	
+	/**
+	 * Creates a File object from a map
+	 * 
+	 * @param obj a File object as raw map
+	 * @return a File object, that behaves like a facade for the given map
+	 */
+	public static File createAsFacade(Map<String, Object> obj) {
+		File facade = new File();
+		facade.putAll(obj);
+		return facade;
+	}
 
 	@Override
 	public void setValue(String value) {
@@ -55,12 +74,12 @@ public class File extends DataElement implements IFile{
 
 	@Override
 	public void setMimeType(String mimeType) {
-		put(Blob.MIMETYPE, mimeType);
+		put(File.MIMETYPE, mimeType);
 		
 	}
 
 	@Override
 	public String getMimeType() {
-		return (String) get(Blob.MIMETYPE);
+		return (String) get(File.MIMETYPE);
 	}
 }

@@ -1,7 +1,10 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation;
 
+import java.util.Map;
+
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
+import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
@@ -25,6 +28,9 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	 *            element of kind=Type
 	 */
 	public OperationVariable(SubmodelElement value) {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+		
 		put(Property.VALUE, value);
 	}
 
@@ -32,14 +38,27 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 	}
+	
+	/**
+	 * Creates an OperationVariable object from a map
+	 * 
+	 * @param obj an OperationVariable object as raw map
+	 * @return an OperationVariable object, that behaves like a facade for the given map
+	 */
+	public static OperationVariable createAsFacade(Map<String, Object> obj) {
+		OperationVariable facade = new OperationVariable();
+		facade.putAll(obj);
+		return facade;
+	}
 
 	public void setValue(ISubmodelElement value) {
 		put(Property.VALUE, value);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ISubmodelElement getValue() {
-		return (ISubmodelElement) get(Property.VALUE);
+		return SubmodelElementFacadeFactory.createSubmodelElement((Map<String, Object>) get(Property.VALUE));
 	}
 
 	@Override

@@ -1,7 +1,10 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement;
 
+import java.util.Map;
+
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IReferenceElement;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
@@ -36,7 +39,21 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 	 *            AAS or a reference to an external object or entity
 	 */
 	public ReferenceElement(Reference ref) {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
 		put(Property.VALUE, ref);
+	}
+	
+	/**
+	 * Creates a ReferenceElement object from a map
+	 * 
+	 * @param obj a ReferenceElement object as raw map
+	 * @return a ReferenceElement object, that behaves like a facade for the given map
+	 */
+	public static ReferenceElement createAsFacade(Map<String, Object> obj) {
+		ReferenceElement facade = new ReferenceElement();
+		facade.putAll(obj);
+		return facade;
 	}
 
 	@Override
@@ -46,8 +63,9 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public IReference getValue() {
-		return (IReference) get(Property.VALUE);
+		return new ReferenceFacade((Map<String, Object>) get(Property.VALUE));
 	}
 
 }

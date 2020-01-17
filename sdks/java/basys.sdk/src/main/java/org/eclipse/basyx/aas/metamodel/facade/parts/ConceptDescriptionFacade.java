@@ -1,6 +1,5 @@
 package org.eclipse.basyx.aas.metamodel.facade.parts;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,6 +19,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 
 /**
  * Facade providing access to a map containing the ConceptDescription structure
@@ -73,13 +73,13 @@ public class ConceptDescriptionFacade implements IConceptDescription {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public HashSet<String> getisCaseOf() {
-		return (HashSet<String>) map.get(ConceptDescription.ISCASEOF);
+	public Set<IReference> getIsCaseOf() {
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(ConceptDescription.ISCASEOF);
+		return ReferenceHelper.transform(set);
 	}
 
-	public void setIscaseOf(Set<String> ref) {
+	public void setIscaseOf(Set<Reference> ref) {
 		map.put(ConceptDescription.ISCASEOF, ref);
-
 	}
 
 	@Override

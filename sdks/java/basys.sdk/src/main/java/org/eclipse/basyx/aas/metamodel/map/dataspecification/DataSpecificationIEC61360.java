@@ -1,9 +1,10 @@
 package org.eclipse.basyx.aas.metamodel.map.dataspecification;
 
-import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecificationIEC61630;
+import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecificationIEC61360;
 import org.eclipse.basyx.aas.metamodel.facade.dataspecification.DataSpecificationIEC61360Facade;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 
 /**
@@ -12,7 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
  * @author elsheikh
  *
  */
-public class DataSpecificationIEC61360 extends DataSpecificationContent implements IDataSpecificationIEC61630 {
+public class DataSpecificationIEC61360 extends DataSpecificationContent implements IDataSpecificationIEC61360 {
 
 	/**
 	 * Version of serialized instances
@@ -63,7 +64,7 @@ public class DataSpecificationIEC61360 extends DataSpecificationContent implemen
 		put(CODE, null);
 	}
 
-	public DataSpecificationIEC61360(String preferredName, String shortName, String uni, Reference unitId, String sourceOfDefinition, String symbol, String dataType, String definition, String valueFormat/* , Valuelist valueList, Code code */) {
+	public DataSpecificationIEC61360(LangStrings preferredName, String shortName, String uni, Reference unitId, LangStrings sourceOfDefinition, String symbol, String dataType, LangStrings definition, String valueFormat/* , Valuelist valueList, Code code */) {
 		// Add Identifiable class
 		putAll(new Identifiable());
 
@@ -82,7 +83,7 @@ public class DataSpecificationIEC61360 extends DataSpecificationContent implemen
 	}
 
 	@Override
-	public String getPreferredName() {
+	public LangStrings getPreferredName() {
 	return new DataSpecificationIEC61360Facade(this).getPreferredName();
 	}
 
@@ -102,7 +103,7 @@ public class DataSpecificationIEC61360 extends DataSpecificationContent implemen
 	}
 
 	@Override
-	public String getSourceOfDefinition() {
+	public LangStrings getSourceOfDefinition() {
 		return new DataSpecificationIEC61360Facade(this).getSourceOfDefinition();
 	}
 
@@ -117,7 +118,7 @@ public class DataSpecificationIEC61360 extends DataSpecificationContent implemen
 	}
 
 	@Override
-	public String getDefinition() {
+	public LangStrings getDefinition() {
 		return new DataSpecificationIEC61360Facade(this).getDefinition();
 	}
 
@@ -127,17 +128,17 @@ public class DataSpecificationIEC61360 extends DataSpecificationContent implemen
 	}
 
 	@Override
-	public String getValueList() {
+	public Object getValueList() {
 		return new DataSpecificationIEC61360Facade(this).getValueList();
 	}
 
 	@Override
-	public String getCode() {
+	public Object getCode() {
 		return new DataSpecificationIEC61360Facade(this).getCode();
 	}
 
 
-	public void setPreferredName(String preferredName) {
+	public void setPreferredName(LangStrings preferredName) {
 		new DataSpecificationIEC61360Facade(this).setPreferredName(preferredName);
 		
 	}
@@ -161,7 +162,7 @@ public class DataSpecificationIEC61360 extends DataSpecificationContent implemen
 	}
 
 
-	public void setSourceOfDefinition(String sourceOfDefinition) {
+	public void setSourceOfDefinition(LangStrings sourceOfDefinition) {
 		new DataSpecificationIEC61360Facade(this).setSourceOfDefinition(sourceOfDefinition);
 		
 	}
@@ -179,7 +180,7 @@ public class DataSpecificationIEC61360 extends DataSpecificationContent implemen
 	}
 
 
-	public void setDefinition(String definition) {
+	public void setDefinition(LangStrings definition) {
 		new DataSpecificationIEC61360Facade(this).setDefinition(definition);
 		
 	}

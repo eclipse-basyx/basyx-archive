@@ -1,6 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.api.submodelelement;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -10,9 +10,9 @@ import java.util.Map;
 */
 public interface ISubmodelElementCollection extends ISubmodelElement {
 
-	public void setValue(List<Object> value);
+	public void setValue(Collection<ISubmodelElement> value);
 	
-	public List<Object> getValue();
+	public Collection<ISubmodelElement> getValue();
 	
 	public void setOrdered(boolean value);
 	

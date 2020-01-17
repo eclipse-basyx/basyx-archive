@@ -26,10 +26,12 @@ public class ReferenceFacade implements IReference {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IKey> getKeys() {
+		List<IKey> ret = new ArrayList<>();
+		if(map == null) return ret;
+		
 		// Transform list of maps to set of IKey
 		List<Map<String, Object>> list = (List<Map<String, Object>>) map.get(Reference.KEY);
 
-		List<IKey> ret = new ArrayList<>();
 		for (Map<String, Object> m : list) {
 			ret.add(new KeyFacade(m));
 		}

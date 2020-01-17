@@ -1,6 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
@@ -22,15 +22,15 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	}
 
 	@Override
-	public void setValue(List<Object> value) {
+	public void setValue(Collection<ISubmodelElement> value) {
 		getProxy().setModelPropertyValue(Property.VALUE, value);
 
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Object> getValue() {
-		return (List<Object>) getProxy().getModelPropertyValue(Property.VALUE);
+	public Collection<ISubmodelElement> getValue() {
+		return (Collection<ISubmodelElement>) getProxy().getModelPropertyValue(Property.VALUE);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
@@ -11,6 +12,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -62,5 +64,11 @@ public abstract class ConnectedSubmodelElement extends ConnectedElement implemen
 	@Override
 	public Set<IReference> getDataSpecificationReferences() {
 		return new HasDataSpecificationFacade(getElem()).getDataSpecificationReferences();
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public String getModelType() {
+		return (String) ((Map<String, Object>) getElem().get(ModelType.MODELTYPE)).get(ModelType.NAME);
 	}
 }

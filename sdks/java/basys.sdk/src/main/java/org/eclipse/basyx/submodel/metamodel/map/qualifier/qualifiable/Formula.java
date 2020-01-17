@@ -38,7 +38,8 @@ public class Formula extends Constraint implements IFormula {
 	 * @param dependsOn
 	 *            set of References the formula depends on
 	 */
-	public Formula(Set<Reference> dependsOn) {
+	public Formula(Set<IReference> dependsOn) {
+		putAll(new ModelType(MODELTYPE));
 		put(DEPENDSON, dependsOn);
 	}
 

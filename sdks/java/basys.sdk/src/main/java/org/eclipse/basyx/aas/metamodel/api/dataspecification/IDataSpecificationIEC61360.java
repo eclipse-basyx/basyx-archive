@@ -1,6 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.api.dataspecification;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 
 /**
  * Interface for DataSpecification
@@ -8,16 +9,16 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
  * @author rajashek
  *
  */
-public interface IDataSpecificationIEC61630 extends IDataSpecificationContent {
-	public String getPreferredName();
+public interface IDataSpecificationIEC61360 extends IDataSpecificationContent {
+	public LangStrings getPreferredName();
 	public String getShortName();
 	public String getUnit();
 	public IReference getUnitId();
-	public String getSourceOfDefinition();
+	public LangStrings getSourceOfDefinition();
 	public String getSymbol();
 	public String getDataType();
-	public String getDefinition();
+	public LangStrings getDefinition();
 	public String getValueFormat();
-	public String getValueList();
-	public String getCode();
+	public Object getValueList();
+	public Object getCode();
 }

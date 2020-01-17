@@ -12,6 +12,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
@@ -80,8 +81,9 @@ public class AssetFacade implements IAsset {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public IReference getAssetIdentificationModel() {
-		return (IReference) map.get(Asset.ASSETIDENTIFICATIONMODEL);
+		return new ReferenceFacade((Map<String, Object>) map.get(Asset.ASSETIDENTIFICATIONMODEL));
 	}
 
 	public void setAssetIdentificationModel(IReference submodel) {
@@ -110,8 +112,9 @@ public class AssetFacade implements IAsset {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public IReference getParent() {
-		return (IReference) map.get(Referable.PARENT);
+		return new ReferenceFacade((Map<String, Object>) map.get(Referable.PARENT));
 	}
 
 	public void setIdShort(String idShort) {

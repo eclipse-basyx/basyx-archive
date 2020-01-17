@@ -79,7 +79,7 @@ public class IdentifiableFacade implements IIdentifiable {
 		map.put(Referable.CATEGORY, category);
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(LangStrings description) {
 		map.put(Referable.DESCRIPTION, description);
 	}
 

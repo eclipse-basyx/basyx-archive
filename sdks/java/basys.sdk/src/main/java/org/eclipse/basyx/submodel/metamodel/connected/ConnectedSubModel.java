@@ -6,6 +6,7 @@ import java.util.Set;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
@@ -18,6 +19,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificatio
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
 import org.eclipse.basyx.submodel.metamodel.map.IVABElementContainer;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -114,5 +116,10 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 	@Override
 	public Map<String, ISubmodelElement> getSubmodelElements() {
 		return facade.getSubmodelElements();
+	}
+	
+	@Override
+	public Set<IConstraint> getQualifier() {
+		return new QualifiableFacade(getElem()).getQualifier();
 	}
 }

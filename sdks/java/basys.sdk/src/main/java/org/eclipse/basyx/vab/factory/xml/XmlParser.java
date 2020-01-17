@@ -81,6 +81,7 @@ public class XmlParser {
 		// Parse the xml content
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		dbFactory.setIgnoringElementContentWhitespace(true);
+		dbFactory.setIgnoringComments(true);
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		InputSource iSrc = new InputSource(new StringReader(xmlContent));
 		Document doc = dBuilder.parse(iSrc);

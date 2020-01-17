@@ -32,13 +32,13 @@ public class QualifierFacade implements IQualifier {
 		return (String) map.get(Qualifier.QUALIFIERTYPE);
 	}
 
-	public void setQualifierValue(Object obj) {
+	public void setQualifierValue(String obj) {
 		map.put(Qualifier.QUALIFIERVALUE, obj);
 	}
 
 	@Override
-	public Object getQualifierValue() {
-		return map.get(Qualifier.QUALIFIERVALUE);
+	public String getQualifierValue() {
+		return (String) map.get(Qualifier.QUALIFIERVALUE);
 	}
 
 	public void setQualifierValueId(IReference obj) {

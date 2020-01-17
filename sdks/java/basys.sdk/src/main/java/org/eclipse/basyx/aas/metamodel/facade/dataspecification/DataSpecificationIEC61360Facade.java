@@ -2,9 +2,10 @@ package org.eclipse.basyx.aas.metamodel.facade.dataspecification;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecificationIEC61630;
+import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecificationIEC61360;
 import org.eclipse.basyx.aas.metamodel.map.dataspecification.DataSpecificationIEC61360;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 
 /**
  * Facade providing access to a map containing the DataSpecification structure
@@ -12,7 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
  * @author rajashek
  *
  */
-public class DataSpecificationIEC61360Facade implements IDataSpecificationIEC61630 {
+public class DataSpecificationIEC61360Facade implements IDataSpecificationIEC61360 {
 
 	private Map<String, Object> map;
 
@@ -22,11 +23,11 @@ public class DataSpecificationIEC61360Facade implements IDataSpecificationIEC616
 	}
 
 	@Override
-	public String getPreferredName() {
+	public LangStrings getPreferredName() {
 		if (map.get(DataSpecificationIEC61360.PREFERREDNAME) == null)
 			return null;
 
-		return (String) map.get(DataSpecificationIEC61360.PREFERREDNAME);
+		return (LangStrings) map.get(DataSpecificationIEC61360.PREFERREDNAME);
 	}
 
 	@Override
@@ -51,10 +52,10 @@ public class DataSpecificationIEC61360Facade implements IDataSpecificationIEC616
 	}
 
 	@Override
-	public String getSourceOfDefinition() {
+	public LangStrings getSourceOfDefinition() {
 		if (map.get(DataSpecificationIEC61360.SOURCEOFDEFINITION) == null)
 			return null;
-		return (String) map.get(DataSpecificationIEC61360.SOURCEOFDEFINITION);
+		return (LangStrings) map.get(DataSpecificationIEC61360.SOURCEOFDEFINITION);
 	}
 
 	@Override
@@ -72,10 +73,10 @@ public class DataSpecificationIEC61360Facade implements IDataSpecificationIEC616
 	}
 
 	@Override
-	public String getDefinition() {
+	public LangStrings getDefinition() {
 		if (map.get(DataSpecificationIEC61360.DEFINITION) == null)
 			return null;
-		return (String) map.get(DataSpecificationIEC61360.DEFINITION);
+		return (LangStrings) map.get(DataSpecificationIEC61360.DEFINITION);
 	}
 
 	@Override
@@ -99,7 +100,7 @@ public class DataSpecificationIEC61360Facade implements IDataSpecificationIEC616
 		return (String) map.get(DataSpecificationIEC61360.CODE);
 	}
 
-	public void setPreferredName(String preferredName) {
+	public void setPreferredName(LangStrings preferredName) {
 		map.put(DataSpecificationIEC61360.PREFERREDNAME, preferredName);
 	}
 
@@ -115,7 +116,7 @@ public class DataSpecificationIEC61360Facade implements IDataSpecificationIEC616
 		map.put(DataSpecificationIEC61360.UNITID, unitId);
 	}
 
-	public void setSourceOfDefinition(String sourceOfDefinition) {
+	public void setSourceOfDefinition(LangStrings sourceOfDefinition) {
 		map.put(DataSpecificationIEC61360.SOURCEOFDEFINITION, sourceOfDefinition);
 	}
 
@@ -127,7 +128,7 @@ public class DataSpecificationIEC61360Facade implements IDataSpecificationIEC616
 		map.put(DataSpecificationIEC61360.DATATYPE, dataType);
 	}
 
-	public void setDefinition(String definition) {
+	public void setDefinition(LangStrings definition) {
 		map.put(DataSpecificationIEC61360.DEFINITION, definition);
 	}
 

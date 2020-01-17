@@ -40,17 +40,17 @@ public class SubmodelElement extends HashMap<String, Object> implements ISubmode
 		putAll(new HasSemantics());
 		putAll(new HasKind());
 	}
-
+	
 	/**
-	 * Wraps a map representing a SubmodelElement into the SubmodelElement interface
+	 * Creates a SubmodelElement object from a map
 	 * 
-	 * @param obj
-	 * @return
+	 * @param obj a SubmodelElement object as raw map
+	 * @return a SubmodelElement object, that behaves like a facade for the given map
 	 */
 	public static SubmodelElement createAsFacade(Map<String, Object> obj) {
-		SubmodelElement elem = new SubmodelElement();
-		elem.putAll(obj);
-		return elem;
+		SubmodelElement facade = new SubmodelElement();
+		facade.putAll(obj);
+		return facade;
 	}
 
 	@Override
@@ -128,5 +128,11 @@ public class SubmodelElement extends HashMap<String, Object> implements ISubmode
 
 	public void setKind(String kind) {
 		new HasKindFacade(this).setKind(kind);
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public String getModelType() {
+		return (String) ((Map<String, Object>) get(ModelType.MODELTYPE)).get(ModelType.NAME);
 	}
 }

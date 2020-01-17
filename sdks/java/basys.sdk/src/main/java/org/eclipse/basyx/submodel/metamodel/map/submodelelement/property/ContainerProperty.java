@@ -27,6 +27,18 @@ public class ContainerProperty extends AbstractProperty implements IContainerPro
 		put(SubModel.PROPERTIES, new HashMap<>());
 		put(SubModel.OPERATIONS, new HashMap<>());
 	}
+	
+	/**
+	 * Creates a ContainerProperty object from a map
+	 * 
+	 * @param obj a ContainerProperty object as raw map
+	 * @return a ContainerProperty object, that behaves like a facade for the given map
+	 */
+	public static ContainerProperty createAsFacade(Map<String, Object> obj) {
+		ContainerProperty facade = new ContainerProperty();
+		facade.putAll(obj);
+		return facade;
+	}
 
 	@Override
 	public PropertyType getPropertyType() {

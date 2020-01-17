@@ -2,7 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -11,9 +11,11 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 
 /**
@@ -45,15 +47,6 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	}
 
 	/**
-	 * Adds an element to the SubmodelElementCollection
-	 * 
-	 * @param elem
-	 */
-	public void addElement(ISubmodelElement elem) {
-		getValue().add(elem);
-	}
-
-	/**
 	 * 
 	 * @param value
 	 *            Submodel element contained in the collection
@@ -65,11 +58,35 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	 *            If allowDuplicates=true then it is allowed that the collection
 	 *            contains the same element several times
 	 */
-	public SubmodelElementCollection(Collection<SubmodelElement> value, boolean ordered, boolean allowDuplicates) {
+	public SubmodelElementCollection(Collection<ISubmodelElement> value, boolean ordered, boolean allowDuplicates) {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+		
 		// Put attributes
 		put(Property.VALUE, value);
 		put(ORDERED, ordered);
 		put(ALLOWDUPLICATES, allowDuplicates);
+	}
+	
+	/**
+	 * Creates a SubmodelElementCollection object from a map
+	 * 
+	 * @param obj a SubmodelElementCollection object as raw map
+	 * @return a SubmodelElementCollection object, that behaves like a facade for the given map
+	 */
+	public static SubmodelElementCollection createAsFacade(Map<String, Object> obj) {
+		SubmodelElementCollection facade = new SubmodelElementCollection();
+		facade.putAll(obj);
+		return facade;
+	}
+	
+	/**
+	 * Adds an element to the SubmodelElementCollection
+	 * 
+	 * @param elem
+	 */
+	public void addElement(ISubmodelElement elem) {
+		getValue().add(elem);
 	}
 
 	@Override
@@ -99,15 +116,21 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	}
 
 	@Override
-	public void setValue(List<Object> value) {
+	public void setValue(Collection<ISubmodelElement> value) {
 		put(Property.VALUE, value);
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<Object> getValue() {
-		return (List<Object>) get(Property.VALUE);
+	@SuppressWarnings("unchecked")
+	public Collection<ISubmodelElement> getValue() {
+		Collection<ISubmodelElement> ret = new ArrayList<>();
+		Collection<Object> smElems = (ArrayList<Object>) get(Property.VALUE);
+		for(Object smElemO: smElems) {
+			Map<String, Object> smElem = (Map<String, Object>) smElemO;
+			ret.add(SubmodelElementFacadeFactory.createSubmodelElement(smElem));
+		}
+		return ret;
 	}
 
 	@Override
@@ -137,9 +160,15 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		put(SubModel.SUBMODELELEMENT, value);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public Map<String, ISubmodelElement> getElements() {
-		return (Map<String, ISubmodelElement>) get(SubModel.SUBMODELELEMENT);
+		Map<String, ISubmodelElement> ret = new HashMap<>();
+		Collection<Object> smElems = ((Map<String, Object>) get(SubModel.SUBMODELELEMENT)).values();
+		for(Object smElemO: smElems) {
+			Map<String, Object> smElem = (Map<String, Object>) smElemO;
+			ret.put((String) smElem.get(Referable.IDSHORT), SubmodelElementFacadeFactory.createSubmodelElement(smElem));
+		}
+		return ret;
 	}
 }

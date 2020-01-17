@@ -73,7 +73,7 @@ public class ConceptDictionaryFacade implements IConceptDictionary {
 		return ReferenceHelper.transform(set);
 	}
 
-	public void setConceptDescription(HashSet<String> ref) {
+	public void setConceptDescription(HashSet<IReference> ref) {
 		map.put(ConceptDictionary.CONCEPTDESCRIPTION, ref);
 	}
 

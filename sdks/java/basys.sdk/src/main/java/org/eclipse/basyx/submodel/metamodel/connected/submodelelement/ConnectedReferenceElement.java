@@ -1,13 +1,13 @@
-package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.property;
+package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IReferenceElement;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+
 /**
  * "Connected" implementation of IReferenceElement
  * @author rajashek

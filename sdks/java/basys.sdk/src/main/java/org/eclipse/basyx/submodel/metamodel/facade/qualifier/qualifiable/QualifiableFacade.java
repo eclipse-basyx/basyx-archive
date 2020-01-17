@@ -35,11 +35,13 @@ public class QualifiableFacade implements IQualifiable {
 		// Transform set of maps to set of IConstraints
 		Set<Map<String, Object>> set = (Set<Map<String, Object>>) map.get(Qualifiable.CONSTRAINTS);
 		Set<IConstraint> ret = new HashSet<>();
-		for (Map<String, Object> m : set) {
-			if (ModelTypeFacade.getModelTypeName(m).equals(Formula.MODELTYPE)) {
-				ret.add(new FormulaFacade(m));
-			} else {
-				ret.add(new QualifierFacade(m));
+		if(set != null) {
+			for (Map<String, Object> m : set) {
+				if (ModelTypeFacade.getModelTypeName(m).equals(Formula.MODELTYPE)) {
+					ret.add(new FormulaFacade(m));
+				} else {
+					ret.add(new QualifierFacade(m));
+				}
 			}
 		}
 

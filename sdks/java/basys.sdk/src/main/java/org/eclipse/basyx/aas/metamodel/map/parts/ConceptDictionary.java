@@ -91,7 +91,7 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 		return new ConceptDictionaryFacade(this).getConceptDescription();
 	}
 
-	public void setConceptDescription(HashSet<String> ref) {
+	public void setConceptDescription(HashSet<IReference> ref) {
 		new ConceptDictionaryFacade(this).setConceptDescription(ref);
 
 	}

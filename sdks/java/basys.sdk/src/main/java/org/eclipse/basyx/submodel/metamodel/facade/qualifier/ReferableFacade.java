@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 
@@ -42,8 +43,9 @@ public class ReferableFacade implements IReferable {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public IReference getParent() {
-		return (IReference) map.get(Referable.PARENT);
+		return new ReferenceFacade((Map<String, Object>) map.get(Referable.PARENT));
 	}
 
 	public void setIdShort(String idShort) {

@@ -8,6 +8,7 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
@@ -17,6 +18,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -27,7 +29,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
@@ -110,7 +112,7 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Update value of 'description' property
 	 */
-	public void setDescription(String newValue) {
+	public void setDescription(LangStrings newValue) {
 		getElements().put(Referable.DESCRIPTION, newValue);
 	}
 
@@ -180,16 +182,15 @@ public class SubmodelFacade implements ISubModel {
 	/**
 	 * Get value of 'qualifier' property
 	 */
-	@SuppressWarnings("unchecked")
-	public Collection<String> getQualifier() {
-		return (Collection<String>) getElements().get(Qualifier.QUALIFIER);
+	public Set<IConstraint> getQualifier() {
+		return new QualifiableFacade(map).getQualifier();
 	}
 
 	/**
 	 * Update value of 'qualifier' property
 	 */
-	public void setQualifier(Collection<String> newValue) {
-		getElements().put(Qualifier.QUALIFIER, newValue);
+	public void setQualifier(Collection<IConstraint> newValue) {
+		getElements().put(Qualifiable.CONSTRAINTS, newValue);
 	}
 
 	/**

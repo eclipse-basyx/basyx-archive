@@ -1,5 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.blob;
 
+import java.util.Map;
+
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.blob.IBlob;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.DataElement;
@@ -16,6 +18,14 @@ public class Blob extends DataElement implements IBlob{
 	
 	public static final String MIMETYPE="mimeType";
 	public static final String MODELTYPE = "blob";
+	
+	/**
+	 * Creates an empty Blob object
+	 */
+	public Blob() {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+	}
 
 	/**
 	 * Has to have a MimeType
@@ -33,7 +43,19 @@ public class Blob extends DataElement implements IBlob{
 		put(Property.VALUE, value);
 		put(MIMETYPE, mimeType);
 	}
-
+	
+	/**
+	 * Creates a Blob object from a map
+	 * 
+	 * @param obj a Blob object as raw map
+	 * @return a Blob object, that behaves like a facade for the given map
+	 */
+	public static Blob createAsFacade(Map<String, Object> obj) {
+		Blob facade = new Blob();
+		facade.putAll(obj);
+		return facade;
+	}
+	
 	@Override
 	public void setValue(byte[] value) {
 		put(Property.VALUE, value);

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecification;
-import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecificationIEC61630;
+import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecificationIEC61360;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.aas.metamodel.facade.parts.ConceptDescriptionFacade;
 import org.eclipse.basyx.aas.metamodel.map.dataspecification.DataSpecification;
@@ -19,6 +19,7 @@ import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 
 /**
  * ConceptDescription class as described in DAAS document
@@ -44,8 +45,8 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 		putAll(new Identifiable());
 
 		// Add attributes
-		put(ISCASEOF, new HashSet<String>());
-		put(DATASPECIFICATIONS, new HashSet<IDataSpecificationIEC61630>());
+		put(ISCASEOF, new HashSet<Reference>());
+		put(DATASPECIFICATIONS, new HashSet<IDataSpecificationIEC61360>());
 	}
 
 	@Override
@@ -77,11 +78,11 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 	}
 
 	@Override
-	public HashSet<String> getisCaseOf() {
-		return new ConceptDescriptionFacade(this).getisCaseOf();
+	public Set<IReference> getIsCaseOf() {
+		return (Set<IReference>) new ConceptDescriptionFacade(this).getIsCaseOf();
 	}
 
-	public void setIscaseOf(Set<String> ref) {
+	public void setIsCaseOf(Set<Reference> ref) {
 		new ConceptDescriptionFacade(this).setIscaseOf(ref);
 	}
 
@@ -127,7 +128,7 @@ public class ConceptDescription extends HashMap<String, Object> implements IConc
 		return (Set<IDataSpecification>) get(DATASPECIFICATIONS);
 	}
 
-	public void addDataSpecification(IDataSpecificationIEC61630 spec) {
+	public void addDataSpecification(IDataSpecificationIEC61360 spec) {
 		getDataSpecifications().add(new DataSpecification(spec));
 	}
 

@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -57,6 +58,9 @@ public class Operation extends SubmodelElement implements IOperation {
 	 * 
 	 */
 	public Operation(List<OperationVariable> in, List<OperationVariable> out, Function<Object[], Object> function) {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+		
 		// Input variables
 		put(IN, in);
 
@@ -65,6 +69,18 @@ public class Operation extends SubmodelElement implements IOperation {
 
 		// Extension of DAAS specification for function storage
 		put(INVOKABLE, function);
+	}
+	
+	/**
+	 * Creates an Operation object from a map
+	 * 
+	 * @param obj an Operation object as raw map
+	 * @return an Operation object, that behaves like a facade for the given map
+	 */
+	public static Operation createAsFacade(Map<String, Object> obj) {
+		Operation facade = new Operation();
+		facade.putAll(obj);
+		return facade;
 	}
 
 	@SuppressWarnings("unchecked")
