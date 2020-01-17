@@ -41,5 +41,9 @@ public class ConnectedContainerProperty extends ConnectedProperty implements ICo
 	public Map<String, IOperation> getOperations() {
 		return facade.getOperations();
 	}
-
+	
+	@Override
+	public Map<String, ISubmodelElement> getSubmodelElements() {
+		return facade.getSubmodelElements();
+	}
 }

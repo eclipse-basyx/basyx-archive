@@ -47,4 +47,9 @@ public class ContainerProperty extends AbstractProperty implements IContainerPro
 	public Map<String, IOperation> getOperations() {
 		return containerFacade.getOperations();
 	}
+	
+	@Override
+	public Map<String, ISubmodelElement> getSubmodelElements() {
+		return containerFacade.getSubmodelElements();
+	}
 }

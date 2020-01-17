@@ -214,4 +214,9 @@ public class SubModel extends VABModelMap<Object> implements IVABElementContaine
 	public void addSubModelElement(ISubmodelElement element) {
 		new SubmodelFacade(this).addSubModelElement(element);
 	}
+	
+	@Override
+	public Map<String, ISubmodelElement> getSubmodelElements() {
+		return new SubmodelFacade(this).getSubmodelElements();
+	}
 }

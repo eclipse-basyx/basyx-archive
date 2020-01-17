@@ -12,4 +12,6 @@ public interface IVABElementContainer {
 	public Map<String, IDataElement> getDataElements();
 
 	public Map<String, IOperation> getOperations();
+	
+	public Map<String, ISubmodelElement> getSubmodelElements();
 }

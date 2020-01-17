@@ -271,5 +271,9 @@ public class SubmodelFacade implements ISubModel {
 	public Map<String, IOperation> getOperations() {
 		return containerFacade.getOperations();
 	}
-
+	
+	@Override
+	public Map<String, ISubmodelElement> getSubmodelElements() {
+		return containerFacade.getSubmodelElements();
+	}
 }

@@ -1,12 +1,16 @@
 package org.eclipse.basyx.submodel.metamodel.facade;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
+import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
 import org.eclipse.basyx.submodel.metamodel.map.IVABElementContainer;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 
 /**
  * Facade providing access to attributes of entities implementing
@@ -55,5 +59,17 @@ public class VABElementContainerFacade implements IVABElementContainer {
 	@Override
 	public Map<String, IOperation> getOperations() {
 		return (Map<String, IOperation>) map.get(SubModel.OPERATIONS);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, ISubmodelElement> getSubmodelElements() {
+		Map<String, ISubmodelElement> ret = new HashMap<>();
+		Collection<Object> smElems = ((Map<String, Object>) map.get(SubModel.SUBMODELELEMENT)).values();
+		for(Object smElemO: smElems) {
+			Map<String, Object> smElem = (Map<String, Object>) smElemO;
+			ret.put((String) smElem.get(Referable.IDSHORT), SubmodelElementFacadeFactory.createSubmodelElement(smElem));
+		}
+		return ret;
 	}
 }

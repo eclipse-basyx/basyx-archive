@@ -110,4 +110,9 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 	public Map<String, IOperation> getOperations() {
 		return facade.getOperations();
 	}
+	
+	@Override
+	public Map<String, ISubmodelElement> getSubmodelElements() {
+		return facade.getSubmodelElements();
+	}
 }
