@@ -129,7 +129,7 @@ public class SubmodelElement extends HashMap<String, Object> implements ISubmode
 	public void setKind(String kind) {
 		new HasKindFacade(this).setKind(kind);
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public String getModelType() {

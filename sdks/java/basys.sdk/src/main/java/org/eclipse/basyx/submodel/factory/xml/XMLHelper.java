@@ -11,10 +11,6 @@ import java.util.Map;
  *
  */
 public class XMLHelper {
-
-	public static final String AASENV = "aas:aasenv";
-	
-	public static final String ID_TYPE = "idType";
 	public static final String TEXT = "#text";
 	
 	

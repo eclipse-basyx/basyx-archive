@@ -1,11 +1,11 @@
-package org.eclipse.basyx.aas.factory.xml.api.dataspecification;
+package org.eclipse.basyx.submodel.factory.xml.api.dataspecification;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.map.dataspecification.DataSpecificationIEC61360;
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.LangStringsXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.reference.ReferenceXMLConverter;
+import org.eclipse.basyx.submodel.metamodel.map.dataspecification.DataSpecificationIEC61360;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

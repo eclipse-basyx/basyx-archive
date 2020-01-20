@@ -1,4 +1,4 @@
-package org.eclipse.basyx.aas.metamodel.api.dataspecification;
+package org.eclipse.basyx.submodel.metamodel.api.dataspecification;
 
 /**
  * DataSpecification containing a DataSpecificationContent

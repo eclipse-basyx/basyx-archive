@@ -1,4 +1,4 @@
-package org.eclipse.basyx.submodel.factory.xml;
+package org.eclipse.basyx.aas.factory.xml;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -8,13 +8,13 @@ import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.basyx.aas.factory.xml.api.parts.AssetXMLConverter;
-import org.eclipse.basyx.aas.factory.xml.api.parts.ConceptDescriptionXMLConverter;
 import org.eclipse.basyx.aas.factory.xml.converters.AssetAdministrationShellXMLConverter;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
-import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDescription;
+import org.eclipse.basyx.submodel.factory.xml.api.parts.ConceptDescriptionXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.SubmodelXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.vab.factory.xml.XmlParser;
 import org.xml.sax.SAXException;
 
@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
  *
  */
 public class XMLToMetamodelConverter {
-	
+
 	private Map<String, Object> root = new HashMap<>();
 	
 	/**
@@ -38,7 +38,8 @@ public class XMLToMetamodelConverter {
 	 */
 	@SuppressWarnings("unchecked")
 	public XMLToMetamodelConverter(String xml) throws ParserConfigurationException, SAXException, IOException {		
-		root.putAll((Map<? extends String, ? extends Object>) XmlParser.buildXmlMap(xml).get(XMLHelper.AASENV));
+		root.putAll((Map<? extends String, ? extends Object>) XmlParser.buildXmlMap(xml)
+				.get(MetamodelToXMLConverter.AASENV));
 	}
 
 	

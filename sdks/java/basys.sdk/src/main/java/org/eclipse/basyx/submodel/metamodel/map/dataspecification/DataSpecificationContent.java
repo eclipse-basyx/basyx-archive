@@ -1,4 +1,4 @@
-package org.eclipse.basyx.aas.metamodel.map.dataspecification;
+package org.eclipse.basyx.submodel.metamodel.map.dataspecification;
 
 import java.util.HashMap;
 

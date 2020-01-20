@@ -1,4 +1,4 @@
-package org.eclipse.basyx.aas.factory.xml.api.parts;
+package org.eclipse.basyx.submodel.factory.xml.api.parts;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDescription;
-import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.HasDataSpecificationXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.IdentifiableXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.reference.ReferenceXMLConverter;
+import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

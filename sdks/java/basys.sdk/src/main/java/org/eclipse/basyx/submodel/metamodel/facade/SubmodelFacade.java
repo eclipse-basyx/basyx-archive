@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
@@ -162,21 +161,6 @@ public class SubmodelFacade implements ISubModel {
 	 */
 	public void setIdentification(Identifier newValue) {
 		getElements().put(Identifiable.IDENTIFICATION, newValue);
-	}
-
-	/**
-	 * Get value of 'id_semantics' property
-	 */
-	@SuppressWarnings("unchecked")
-	public IIdentifier getIdSemantics() {
-		return new IdentifierFacade((Map<String, Object>) getElements().get(AssetAdministrationShell.IDSEMANTICS));
-	}
-
-	/**
-	 * Update value of 'id_semantics' property
-	 */
-	public void setIdSemantics(Identifier newValue) {
-		getElements().put(AssetAdministrationShell.IDSEMANTICS, newValue);
 	}
 
 	/**

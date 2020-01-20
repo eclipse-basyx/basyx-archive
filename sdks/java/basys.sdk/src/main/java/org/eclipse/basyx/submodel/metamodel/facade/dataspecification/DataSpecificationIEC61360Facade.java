@@ -1,10 +1,10 @@
-package org.eclipse.basyx.aas.metamodel.facade.dataspecification;
+package org.eclipse.basyx.submodel.metamodel.facade.dataspecification;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecificationIEC61360;
-import org.eclipse.basyx.aas.metamodel.map.dataspecification.DataSpecificationIEC61360;
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecificationIEC61360;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.map.dataspecification.DataSpecificationIEC61360;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 
 /**

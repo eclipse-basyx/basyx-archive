@@ -1,11 +1,11 @@
-package org.eclipse.basyx.aas.metamodel.map.dataspecification;
+package org.eclipse.basyx.submodel.metamodel.map.dataspecification;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecification;
-import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecificationContent;
-import org.eclipse.basyx.aas.metamodel.facade.dataspecification.DataSpecificationIEC61360Facade;
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecificationContent;
+import org.eclipse.basyx.submodel.metamodel.facade.dataspecification.DataSpecificationIEC61360Facade;
 
 /**
  * DataSpecification as defined in DAAS document <br />

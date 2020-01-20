@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.facade.parts.ConceptDictionaryFacade;
+import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;

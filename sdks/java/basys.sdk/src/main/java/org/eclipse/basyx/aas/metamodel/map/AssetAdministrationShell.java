@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
-import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
@@ -21,6 +20,7 @@ import org.eclipse.basyx.aas.metamodel.map.parts.View;
 import org.eclipse.basyx.aas.metamodel.map.security.Security;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
@@ -52,7 +52,6 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public static final String TYPE = "type";
 	public static final String ADDRESS = "address";
 	public static final String ENDPOINTS = "endpoints";
-	public static final String IDSEMANTICS = "id_semantics";
 	public static final String MODELTYPE = "AssetAdministationShell";
 
 	/**

@@ -1,11 +1,10 @@
-package org.eclipse.basyx.aas.metamodel.facade.parts;
+package org.eclipse.basyx.submodel.metamodel.facade.parts;
 
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDescription;
-import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
@@ -14,6 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
+import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;

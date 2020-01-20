@@ -1,4 +1,4 @@
-package org.eclipse.basyx.aas.metamodel.api.dataspecification;
+package org.eclipse.basyx.submodel.metamodel.api.dataspecification;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;

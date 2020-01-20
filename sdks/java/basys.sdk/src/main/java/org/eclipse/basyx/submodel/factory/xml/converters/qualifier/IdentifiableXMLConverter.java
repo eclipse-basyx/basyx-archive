@@ -18,11 +18,12 @@ import org.w3c.dom.Element;
  *
  */
 public class IdentifiableXMLConverter {
-	
+
 	public static final String ADMINISTRATION = "aas:administration";
 	public static final String VERSION = "aas:version";
 	public static final String REVISION = "aas:revision";
 	public static final String IDENTIFICATION = "aas:identification";
+	public static final String IDTYPE = "idType";
 	
 	
 	/**
@@ -45,7 +46,7 @@ public class IdentifiableXMLConverter {
 		Map<String, Object> identierFromXML = (Map<String, Object>) xmlObject.get(IDENTIFICATION);
 		if(identierFromXML != null) {
 			id = XMLHelper.getString(identierFromXML.get(XMLHelper.TEXT));
-			idType = XMLHelper.getString(identierFromXML.get(XMLHelper.ID_TYPE));
+			idType = XMLHelper.getString(identierFromXML.get(IDTYPE));
 		}
 
 		if(xmlObject.containsKey(ADMINISTRATION)) {
@@ -95,7 +96,7 @@ public class IdentifiableXMLConverter {
 			identificationRoot.appendChild(document.createTextNode(id));
 			if(identifiable.getIdentification().getIdType() != null) {
 				String idType = identifiable.getIdentification().getIdType();				
-				identificationRoot.setAttribute(XMLHelper.ID_TYPE, idType);				
+				identificationRoot.setAttribute(IDTYPE, idType);
 			}
 			root.appendChild(identificationRoot);
 		}

@@ -2,8 +2,8 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.property;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
