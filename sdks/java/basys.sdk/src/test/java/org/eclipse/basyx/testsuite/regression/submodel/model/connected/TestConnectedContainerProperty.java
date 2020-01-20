@@ -4,10 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.factory.java.MetaModelElementFactory;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ICollectionProperty;
@@ -39,8 +37,6 @@ public class TestConnectedContainerProperty {
 
 	@Before 
 	public void build() {
-		MetaModelElementFactory factory = new MetaModelElementFactory();
-
 		// Create collection for the collection property
 		collection = new ArrayList<>();
 		collection.add(1);
@@ -51,14 +47,15 @@ public class TestConnectedContainerProperty {
 		propertyMeta.setIdShort(COLLECTIONPROP);
 
 		// Create operation
-		Operation operation = factory.createOperation(new Operation(), (arr) -> {
+		Operation operation = new Operation(arr -> {
 			return (int) arr[0] + (int) arr[1];
 		});
 		operation.setIdShort(OPERATION);
 
 		// Create ComplexDataProperty containing the created operation and property
-		ContainerProperty complex = factory.createContainer(new ContainerProperty(),
-				Collections.singletonList(propertyMeta), Collections.singletonList(operation));
+		ContainerProperty complex = new ContainerProperty();
+		complex.addSubModelElement(propertyMeta);
+		complex.addSubModelElement(operation);
 
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(complex);
 		// Create a dummy connection manager containing the created ContainerProperty map

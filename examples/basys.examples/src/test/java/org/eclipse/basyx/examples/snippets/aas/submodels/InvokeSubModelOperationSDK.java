@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.eclipse.basyx.aas.factory.java.MetaModelElementFactory;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
@@ -52,20 +51,18 @@ public class InvokeSubModelOperationSDK {
 			// Set sub model ID
 			setIdShort("sm-001");
 
-			// Support creation of properties and operations
-			MetaModelElementFactory fac = new MetaModelElementFactory();
-
 			// Define operations
-			Operation op1 = new Operation();
-			op1.setIdShort("operation1");
-			getOperations().put("operation1", fac.createOperation(op1, (Function<Object[], Object>) (v) -> {
+			Operation op1 = new Operation((Function<Object[], Object>) v -> {
 				return operation1();
-			}));
-			Operation op2 = new Operation();
-			op2.setIdShort("operation2");
-			getOperations().put("operation2", fac.createOperation(op2, (Function<Object[], Object>) (v) -> {
+			});
+			op1.setIdShort("operation1");
+			addSubModelElement(op1);
+
+			Operation op2 = new Operation((Function<Object[], Object>) v -> {
 				return operation2((int) v[0], (int) v[1]);
-			}));
+			});
+			op2.setIdShort("operation2");
+			addSubModelElement(op2);
 
 		}
 		

@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
-import org.eclipse.basyx.aas.factory.java.MetaModelElementFactory;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
@@ -45,16 +44,12 @@ public class ProductQualitySubmodel extends SubModel {
 		// Store unique product id
 		this.setIdShort(id);
 		
-		
-		// Create example properties
-		MetaModelElementFactory fac = new MetaModelElementFactory();
-		
 		// Add quality data property
 		getDataElements().put("qualityData", new Property(qualityData));
 		
 		// Add access operations for quality data
 		// - Add a quality data entry
-		getOperations().put("addQualityData", fac.createOperation(new Operation(), (Function<Object[], Object>) (v) -> {
+		getOperations().put("addQualityData", new Operation((Function<Object[], Object>) v -> {
 			// Add quality data line to quality data list
 			qualityData.add((String) v[0]);
 			

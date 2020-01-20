@@ -1,6 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.map;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,6 +28,8 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
@@ -85,16 +88,11 @@ public class SubModel extends VABModelMap<Object> implements IVABElementContaine
 		put(OPERATIONS, operations);
 	}
 
-	public static SubModel createAsFacade(Map<String, Object> map) {
-		SubModel sm = new SubModel();
-		sm.putAll(map);
-		return sm;
-	}
-
 	/**
 	 * Constructor
 	 */
-	public SubModel(HasSemantics semantics, Identifiable identifiable, Qualifiable qualifiable, HasDataSpecification specification, HasKind hasKind) {
+	public SubModel(HasSemantics semantics, Identifiable identifiable, Qualifiable qualifiable,
+			HasDataSpecification specification, HasKind hasKind) {
 		// Add qualifiers
 		putAll(semantics);
 		putAll(identifiable);
@@ -108,6 +106,22 @@ public class SubModel extends VABModelMap<Object> implements IVABElementContaine
 		// Helper attributes
 		put(PROPERTIES, dataElements);
 		put(OPERATIONS, operations);
+	}
+
+	/**
+	 * Constructor
+	 */
+	public SubModel(List<Property> properties, List<Operation> operations) {
+		this();
+		properties.forEach(this::addSubModelElement);
+		operations.forEach(this::addSubModelElement);
+	}
+
+
+	public static SubModel createAsFacade(Map<String, Object> map) {
+		SubModel sm = new SubModel();
+		sm.putAll(map);
+		return sm;
 	}
 
 	@Override

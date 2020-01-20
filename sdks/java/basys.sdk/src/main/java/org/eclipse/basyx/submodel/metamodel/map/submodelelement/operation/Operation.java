@@ -72,6 +72,18 @@ public class Operation extends SubmodelElement implements IOperation {
 	}
 	
 	/**
+	 * Create Operations w/o endpoint
+	 * 
+	 * @param operation
+	 * @param function
+	 * @return
+	 */
+	public Operation(Function<Object[], Object> function) {
+		this();
+		setInvocable(function);
+	}
+
+	/**
 	 * Creates an Operation object from a map
 	 * 
 	 * @param obj an Operation object as raw map

@@ -1,6 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.property;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
@@ -11,6 +12,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.Propert
 import org.eclipse.basyx.submodel.metamodel.facade.VABElementContainerFacade;
 import org.eclipse.basyx.submodel.metamodel.map.IVABElementContainer;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 
 public class ContainerProperty extends AbstractProperty implements IContainerProperty, IVABElementContainer {
 	private static final long serialVersionUID = -8066834863070042378L;
@@ -28,6 +30,31 @@ public class ContainerProperty extends AbstractProperty implements IContainerPro
 		put(SubModel.OPERATIONS, new HashMap<>());
 	}
 	
+	/**
+	 * Create SubmodelElementCollection
+	 *
+	 * @param container
+	 * @param object
+	 */
+	public ContainerProperty(ContainerProperty property, List<SubmodelElement> properties,
+			List<SubmodelElement> operations) {
+		putAll(property);
+		properties.stream().forEach(this::addSubModelElement);
+		operations.stream().forEach(this::addSubModelElement);
+	}
+
+	/**
+	 * Create SubmodelElementCollection
+	 *
+	 * @param container
+	 * @param object
+	 */
+	public ContainerProperty(ContainerProperty property, List<SubmodelElement> properties,
+			List<SubmodelElement> operations, String id) {
+		this(property, properties, operations);
+		setIdShort(id);
+	}
+
 	/**
 	 * Creates a ContainerProperty object from a map
 	 * 
