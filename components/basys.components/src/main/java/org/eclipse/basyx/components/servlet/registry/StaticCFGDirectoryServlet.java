@@ -1,4 +1,4 @@
-package org.eclipse.basyx.components.servlets;
+package org.eclipse.basyx.components.servlet.registry;
 
 
 import java.io.IOException;

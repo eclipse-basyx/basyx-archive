@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 
-import org.eclipse.basyx.components.servlet.submodel.VABLambdaServlet;
+import org.eclipse.basyx.components.servlet.vab.VABLambdaServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;

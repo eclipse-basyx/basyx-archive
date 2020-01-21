@@ -1,4 +1,4 @@
-package org.eclipse.basyx.components.servlets;
+package org.eclipse.basyx.components.servlet.submodel;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,16 +8,16 @@ import javax.servlet.ServletException;
 
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
-import org.eclipse.basyx.components.sqlprovider.SQLPreconfiguredSubModelProvider;
+import org.eclipse.basyx.components.xmlxqueryprovider.XMLXQuerySubModelProvider;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
 /**
- * Servlet interface for SQL sub model provider
+ * Servlet interface for XML XQuery sub model provider
  * 
  * @author kuhn
  *
  */
-public class SQLSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
+public class XMLXQueryServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 
 	/**
 	 * Version information to identify the version of serialized instances
@@ -37,9 +37,21 @@ public class SQLSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 	/**
 	 * Constructor
 	 */
-	public SQLSubModelProviderServlet() {
+	public XMLXQueryServlet() {
 		// Invoke base constructor
 		super(new VABMultiSubmodelProvider());
+	}
+
+	/**
+	 * Adds init parameter to servlet
+	 */
+	@Override
+	public String getInitParameter(String name) {
+
+		if (name.equals("config"))
+			return "/WebContent/WEB-INF/config/xmlqueryprovider/xmlqueryprovider.properties";
+
+		return null;
 	}
 
 	/**
@@ -71,9 +83,12 @@ public class SQLSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 			e.printStackTrace();
 		}
 
+		// Add working path to configuration
+		cfgProperties.put("workingDir", getServletContext().getRealPath("."));
+
 		// Instantiate and add sub model provider
-		SQLPreconfiguredSubModelProvider sqlSMProvider = new SQLPreconfiguredSubModelProvider(cfgProperties);
+		XMLXQuerySubModelProvider xmlxqSMProvider = new XMLXQuerySubModelProvider(cfgProperties);
 		// - Add sub model provider
-		this.getModelProvider().addSubmodel(submodelID, sqlSMProvider);
+		this.getModelProvider().addSubmodel(submodelID, xmlxqSMProvider);
 	}
 }

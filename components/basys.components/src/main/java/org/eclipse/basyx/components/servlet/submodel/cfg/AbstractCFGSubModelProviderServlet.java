@@ -1,25 +1,22 @@
-package org.eclipse.basyx.components.servlets;
+package org.eclipse.basyx.components.servlet.submodel.cfg;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
-import org.eclipse.basyx.components.cfgprovider.CFGSubModelProvider;
-import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
+import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
 /**
- * Servlet interface for configuration file sub model provider
+ * Abstract super class for all config file using submodel provider servlets
  * 
- * @author kuhn
+ * @author schnicke
  *
  */
-public class CFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
-
+public abstract class AbstractCFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 	/**
 	 * Version information to identify the version of serialized instances
 	 */
@@ -35,11 +32,12 @@ public class CFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 	 */
 	protected Properties properties = null;
 
+
 	/**
-	 * Constructor
+	 * Standard constructor creating a servlet containing a new
+	 * VABMultiSubmodelProvider()
 	 */
-	public CFGSubModelProviderServlet() {
-		// Invoke base constructor
+	public AbstractCFGSubModelProviderServlet() {
 		super(new VABMultiSubmodelProvider());
 	}
 
@@ -50,17 +48,14 @@ public class CFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 		// Read property file
 		try {
 			// Open property file
-			ServletContext context = getServletContext();
-			System.out.println("Context Path: " + context.getContextPath() + " - " + context.getRealPath(cfgFilePath)
-					+ " + " + cfgFilePath);
-			InputStream input = context.getResourceAsStream(cfgFilePath);
+			InputStream input = getServletContext().getResourceAsStream(cfgFilePath);
 
 			// Instantiate property structure
 			properties = new Properties();
 			properties.load(input);
 
 			// Extract AAS properties
-			this.submodelID = properties.getProperty(BaseConfiguredProvider.buildBasyxCfgName(BaseConfiguredProvider.SUBMODELID));
+			this.submodelID = properties.getProperty(getSubmodelId());
 		} catch (IOException e) {
 			// Output exception
 			e.printStackTrace();
@@ -72,22 +67,39 @@ public class CFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmode
 	 * 
 	 * @throws ServletException
 	 */
+	@Override
 	public void init() throws ServletException {
 		// Call base implementation
 		super.init();
 
 		// Read configuration values
-		String configFilePath = (String) getInitParameter("config");
+		String configFilePath = getInitParameter("config");
 		// - Read property file
 		loadProperties(configFilePath);
 
 		System.out.println("1:" + submodelID);
 
 		// Create sub model provider
-		CFGSubModelProvider submodelProvider = new CFGSubModelProvider(properties);
+		SubModelProvider submodelProvider = createProvider(properties);
 		// - Add sub model provider
 		this.getModelProvider().addSubmodel(submodelID, submodelProvider);
 
 		System.out.println("CFG file loaded");
 	}
+
+	/**
+	 * Retrieves the submodel id
+	 * 
+	 * @return
+	 */
+	protected abstract String getSubmodelId();
+
+	/**
+	 * Creates the appropriate provider based on the passed properties
+	 * 
+	 * @param properties
+	 * @return
+	 */
+	protected abstract SubModelProvider createProvider(Properties properties);
+
 }

@@ -1,11 +1,11 @@
 package org.eclipse.basyx.regression.support.server.context;
 
-import org.eclipse.basyx.components.servlets.CFGSubModelProviderServlet;
-import org.eclipse.basyx.components.servlets.RawCFGSubModelProviderServlet;
-import org.eclipse.basyx.components.servlets.SQLDirectoryServlet;
-import org.eclipse.basyx.components.servlets.SQLSubModelProviderServlet;
-import org.eclipse.basyx.components.servlets.StaticCFGDirectoryServlet;
-import org.eclipse.basyx.components.servlets.XMLXQueryServlet;
+import org.eclipse.basyx.components.servlet.registry.SQLRegistryServlet;
+import org.eclipse.basyx.components.servlet.registry.StaticCFGDirectoryServlet;
+import org.eclipse.basyx.components.servlet.submodel.SQLSubModelProviderServlet;
+import org.eclipse.basyx.components.servlet.submodel.XMLXQueryServlet;
+import org.eclipse.basyx.components.servlet.submodel.cfg.CFGSubModelProviderServlet;
+import org.eclipse.basyx.components.servlet.submodel.cfg.RawCFGSubModelProviderServlet;
 import org.eclipse.basyx.regression.support.processengine.servlet.CoilcarAASServlet;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 
@@ -40,7 +40,7 @@ public class ComponentsRegressionContext extends BaSyxContext {
 		addServletMapping("/Testsuite/components/BaSys/1.0/provider/rawcfgsm/*",  new RawCFGSubModelProviderServlet().withParameter("config", "/WebContent/WEB-INF/config/rawcfgprovider/samplecfg.properties"));
 		addServletMapping("/Testsuite/components/BaSys/1.0/provider/xmlxquery/*", new XMLXQueryServlet().withParameter("config", "/WebContent/WEB-INF/config/xmlqueryprovider/xmlqueryprovider.properties"));
 		addServletMapping("/Testsuite/Directory/CFGFile/*",                       new StaticCFGDirectoryServlet().withParameter("config", "/WebContent/WEB-INF/config/directory/cfgdirectory/directory.properties"));
-		addServletMapping("/Testsuite/Directory/SQL/*",                           new SQLDirectoryServlet().withParameter("config", "/WebContent/WEB-INF/config/directory/sqldirectory/directory.properties"));
+		addServletMapping("/Testsuite/Directory/SQL/*",                           new SQLRegistryServlet().withParameter("config", "/WebContent/WEB-INF/config/directory/sqldirectory/directory.properties"));
 		addServletMapping("/Testsuite/Processengine/coilcar/*",                   new CoilcarAASServlet());
 	}
 }

@@ -1,4 +1,4 @@
-package org.eclipse.basyx.components.servlets;
+package org.eclipse.basyx.components.servlet.registry;
 
 
 import org.eclipse.basyx.aas.registration.restapi.DirectoryModelProvider;
@@ -16,7 +16,7 @@ import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
  * @author kuhn, pschorn
  *
  */
-public class SQLDirectoryServlet extends VABHTTPInterface<DirectoryModelProvider> {
+public class SQLRegistryServlet extends VABHTTPInterface<DirectoryModelProvider> {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -31,12 +31,12 @@ public class SQLDirectoryServlet extends VABHTTPInterface<DirectoryModelProvider
 	 * Provide HTTP interface with JSONProvider to handle serialization and
 	 * SQLDirectoryProvider as backend
 	 */
-	public SQLDirectoryServlet() {
+	public SQLRegistryServlet() {
 		super(new DirectoryModelProvider(new SQLRegistry(configFilePath)));
 
 	}
 
-	public SQLDirectoryServlet(String customConfigFilePath) {
+	public SQLRegistryServlet(String customConfigFilePath) {
 		super(new DirectoryModelProvider(new SQLRegistry(customConfigFilePath)));
 	}
 

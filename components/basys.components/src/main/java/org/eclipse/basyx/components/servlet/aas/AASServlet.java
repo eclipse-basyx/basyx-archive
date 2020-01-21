@@ -1,4 +1,4 @@
-package org.eclipse.basyx.components.servlet.submodel;
+package org.eclipse.basyx.components.servlet.aas;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;

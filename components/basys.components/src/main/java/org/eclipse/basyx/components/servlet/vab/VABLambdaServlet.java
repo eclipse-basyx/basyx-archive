@@ -1,4 +1,4 @@
-package org.eclipse.basyx.components.servlet.submodel;
+package org.eclipse.basyx.components.servlet.vab;
 
 import java.util.HashMap;
 
