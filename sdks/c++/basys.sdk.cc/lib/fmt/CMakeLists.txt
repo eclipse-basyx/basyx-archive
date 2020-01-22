@@ -9,7 +9,10 @@ endif()
 
 # Determine if fmt is built as a subproject (using add_subdirectory)
 # or if it is the master project.
-set(MASTER_PROJECT OFF)
+
+# Changed for BaSyx
+set(MASTER_PROJECT ON)
+#
 if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   set(MASTER_PROJECT ON)
   message(STATUS "CMake version: ${CMAKE_VERSION}")
@@ -37,9 +40,14 @@ option(FMT_PEDANTIC "Enable extra warnings and expensive tests." OFF)
 option(FMT_WERROR "Halt the compilation with an error on compiler warnings." OFF)
 
 # Options that control generation of various targets.
-option(FMT_DOC "Generate the doc target." ${MASTER_PROJECT})
+
+# Changed for BaSyx
+option(FMT_DOC "Generate the doc target." OFF)
+#
 option(FMT_INSTALL "Generate the install target." ${MASTER_PROJECT})
-option(FMT_TEST "Generate the test target." ${MASTER_PROJECT})
+# Changed for BaSyx
+option(FMT_TEST "Generate the test target." OFF)
+#
 
 project(FMT)
 
