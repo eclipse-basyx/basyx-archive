@@ -54,7 +54,7 @@ set(BASYX_DEBUG_PRINT_FRAMES OFF CACHE BOOL "Print BaSyx frames")
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Shared (.so / .dll) instead of static libraries")
 
-option(BASYX_BUILD_LIBFMT "Wether to build external, yet included library libfmt" ON)
+option(BASYX_USE_SYSTEM_LIBFMT "Wether to build external, yet included library libfmt" OFF)
 option(BASYX_USE_SYSTEM_ASIO "Use system supplied ASIO library." OFF)
 option(BASYX_USE_SYSTEM_JSON "Use system supplied nlohmann json library" OFF)
 ### Compiler settings ###
@@ -80,12 +80,12 @@ find_package(Threads)
 ###           Library Directory             ###
 ###############################################
 
-if(${BASYX_BUILD_LIBFMT})
+if(${BASYX_USE_SYSTEM_LIBFMT})
+   find_package(fmt REQUIRED)
+else()
    add_subdirectory(lib/fmt)
    add_library(lib::fmt ALIAS fmt)
    add_library(lib::fmt-header-only ALIAS fmt-header-only)
-else()
-   find_package(fmt REQUIRED)
 endif()
 
 if(${BASYX_USE_SYSTEM_ASIO})
