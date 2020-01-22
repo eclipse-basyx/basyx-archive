@@ -3,7 +3,15 @@
 ###############################################
 
 cmake_minimum_required(VERSION 2.8.4)
-project(tests)
+
+# Allow versioning the subproject
+if(POLICY CMP0048)
+    cmake_policy(SET CMP0048 NEW)
+endif(POLICY CMP0048)
+
+project(tests
+        VERSION ${BASYX_PACKAGE_VERSION_MAJOR}.${BASYX_PACKAGE_VERSION_MINOR}.${BASYX_PACKAGE_VERSION_PATCH}
+)
 
 ### tests::main ###
 
