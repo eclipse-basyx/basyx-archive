@@ -22,10 +22,7 @@ target_sources(${BASYX_UTIL_LIB_SUFFIX}
 )
 
 target_include_directories(${BASYX_UTIL_LIB_SUFFIX} PRIVATE ${PROJECT_SOURCE_DIR})
-target_link_libraries(${BASYX_UTIL_LIB_SUFFIX}
-    PUBLIC
-    nlohmann_json::nlohmann_json
-)
+
 add_library(basyx::util ALIAS ${BASYX_UTIL_LIB_SUFFIX})
 add_library(${PROJECT_SHORTNAME}::${BASYX_UTIL_LIB_SUFFIX} ALIAS ${BASYX_UTIL_LIB_SUFFIX})
 
