@@ -3,7 +3,20 @@
 ###############################################
 
 cmake_minimum_required(VERSION 2.8.4)
-project(gtest)
+
+# Allow versioning the subproject
+if(POLICY CMP0048)
+    cmake_policy(SET CMP0048 NEW)
+endif(POLICY CMP0048)
+
+# Version from gtest Release page: https://github.com/google/googletest/releases
+set(GTEST_VERSION_MAJOR 1)
+set(GTEST_VERSION_MINOR 8)
+set(GTEST_VERSION_PATCH 1)
+
+project(gtest
+        VERSION ${GTEST_VERSION_MAJOR}.${GTEST_VERSION_MINOR}.${GTEST_VERSION_PATCH}
+)
 
 ###''' SOURCE AND HEADER FILES '''###
 
