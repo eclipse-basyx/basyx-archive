@@ -140,6 +140,17 @@ if(${BASYX_UTILITY_PROJECTS})
     enable_testbed()
 endif()
 
+###############################################
+###           Install section               ###
+###############################################
+
+# Let the projects using our server infrastucure find asio (interally /
+# externally provided)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/Findasio.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/BaSyxAsio
+)
+
 message("")
 message("--------------------")
 message("Configuration:")
