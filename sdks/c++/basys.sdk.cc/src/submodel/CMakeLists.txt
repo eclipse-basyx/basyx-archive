@@ -1,17 +1,22 @@
 ###############################################
 ###              BaSyx::Submodel            ###
 ###############################################
+include(CMakePackageConfigHelpers)
 
 set (BASYX_SUBMODEL_LIB_SUFFIX "Submodel")
 
 set (BASYX_SUBMODEL_LIBRARY_NAME "${PROJECT_SHORTNAME}${BASYX_SUBMODEL_LIB_SUFFIX}")
 
-add_library(${BASYX_SUBMODEL_LIBRARY_NAME})
+add_library(${BASYX_SUBMODEL_LIB_SUFFIX})
 
-set_target_properties(${BASYX_SUBMODEL_LIBRARY_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(${BASYX_SUBMODEL_LIBRARY_NAME} PROPERTIES SOVERSION ${BASYX_PACKAGE_VERSION_MAJOR})
+set_target_properties(${BASYX_SUBMODEL_LIB_SUFFIX} PROPERTIES VERSION ${PROJECT_VERSION})
+set_target_properties(${BASYX_SUBMODEL_LIB_SUFFIX} PROPERTIES SOVERSION ${BASYX_PACKAGE_VERSION_MAJOR})
+set_target_properties(${BASYX_SUBMODEL_LIB_SUFFIX} PROPERTIES PREFIX "lib${PROJECT_SHORTNAME}")
+target_include_directories(${BASYX_SUBMODEL_LIB_SUFFIX}
+INTERFACE ${CMAKE_INSTALL_PREFIX}/include
+       ${CMAKE_INSTALL_PREFIX}/include/${PROJECT_SHORTNAME})
 
-target_sources(${BASYX_SUBMODEL_LIBRARY_NAME}
+target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/submodel/api/constant_definitions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/submodel/connected/ConnectedElement.cpp
@@ -56,25 +61,46 @@ target_sources(${BASYX_SUBMODEL_LIBRARY_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map/submodelelement/SubmodelElementCollection.cpp
 )
 
-target_include_directories(${BASYX_SUBMODEL_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(${BASYX_SUBMODEL_LIBRARY_NAME} BaSyx::Shared BaSyx::VAB)
-add_library(${PROJECT_SHORTNAME}::${BASYX_SUBMODEL_LIB_SUFFIX} ALIAS ${BASYX_SUBMODEL_LIBRARY_NAME})
-add_library(basyx::submodel ALIAS ${BASYX_SUBMODEL_LIBRARY_NAME})
+target_include_directories(${BASYX_SUBMODEL_LIB_SUFFIX} PRIVATE ${PROJECT_SOURCE_DIR})
+target_link_libraries(${BASYX_SUBMODEL_LIB_SUFFIX}
+    PUBLIC
+    BaSyx::Shared
+    BaSyx::VAB
+)
+
+add_library(basyx::submodel ALIAS ${BASYX_SUBMODEL_LIB_SUFFIX})
+add_library(${PROJECT_SHORTNAME}::${BASYX_SUBMODEL_LIB_SUFFIX} ALIAS ${BASYX_SUBMODEL_LIB_SUFFIX})
 
 ###############################################
 ###           Install section               ###
 ###############################################
+configure_package_config_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/${BASYX_SUBMODEL_LIBRARY_NAME}Config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${BASYX_SUBMODEL_LIBRARY_NAME}Config.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${BASYX_SUBMODEL_LIBRARY_NAME}
+    PATH_VARS
+    CMAKE_INSTALL_PREFIX
+)
 
-configure_file("${BASYX_SUBMODEL_LIBRARY_NAME}Config.cmake.in" "${BASYX_SUBMODEL_LIBRARY_NAME}Config.cmake" @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${BASYX_SUBMODEL_LIBRARY_NAME}Config.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${BASYX_SUBMODEL_LIBRARY_NAME}
+)
 
-install(TARGETS ${BASYX_SUBMODEL_LIBRARY_NAME}
+install(EXPORT ${BASYX_SUBMODEL_LIB_SUFFIX}Targets
+        NAMESPACE ${PROJECT_SHORTNAME}::
+        FILE ${BASYX_SUBMODEL_LIBRARY_NAME}Targets.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${BASYX_SUBMODEL_LIBRARY_NAME}
+)
+
+install(TARGETS ${BASYX_SUBMODEL_LIB_SUFFIX}
+        EXPORT ${BASYX_SUBMODEL_LIB_SUFFIX}Targets
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
 
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../include/BaSyx/submodel"
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../include/${PROJECT_SHORTNAME}/submodel"
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME}"
-        FILES_MATCHING PATTERN "*.h")
+        FILES_MATCHING PATTERN "*.h"
+)
 
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${BASYX_SUBMODEL_LIBRARY_NAME}Config.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${BASYX_SUBMODEL_LIBRARY_NAME})
-
-diagnostics_print(${BASYX_SUBMODEL_LIBRARY_NAME})
+diagnostics_print(${BASYX_SUBMODEL_LIB_SUFFIX})
