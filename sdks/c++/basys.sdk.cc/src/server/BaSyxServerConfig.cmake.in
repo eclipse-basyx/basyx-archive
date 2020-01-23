@@ -1,19 +1,16 @@
-if (CMAKE_VERSION VERSION_LESS 3.13.0)
-    message(FATAL_ERROR "@BASYX_SERVER_LIBRARY_NAME@ needs at least CMake version 3.13.0")
-endif()
+include(CMakeFindDependencyMacro)
 
-get_filename_component(_basyx_server_rootdir ${CMAKE_CURRENT_LIST_DIR}/../../../ ABSOLUTE)
+# We rely on a selfmade find_package(asio) Findasio.cmake, thus add it to the
+# module path
+list(APPEND CMAKE_MODULE_PATH "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/cmake/BaSyxAsio")
 
 set(BASYX_SERVER_VERSION_STRING "@PROJECT_VERSION@")
 
-set(BASYX_SERVER_INSTALL_PREFIX @CMAKE_INSTALL_PREFIX@)
-set(BASYX_SERVER_INSTALL_LIBDIR ${BASYX_SERVER_INSTALL_PREFIX}/@CMAKE_INSTALL_LIBDIR@)
-set(BASYX_SERVER_INSTALL_INCLUDE_DIR ${BASYX_SERVER_INSTALL_PREFIX}/include)
-set(BASYX_SERVER_INSTALL_INCLUDE_DIR_BASYX_SERVER ${BASYX_SERVER_INSTALL_PREFIX}/include/@PROJECT_SHORTNAME@)
-set(BASYX_SERVER_INCLUDE_DIRS   ${_basyx_server_rootdir}${BASYX_SERVER_INSTALL_INCLUDE_DIR} ${_basyx_server_rootdir}${BASYX_SERVER_INSTALL_INCLUDE_DIR_BASYX_SERVER})
-set(BASYX_SERVER_LIBRARY_DIR    ${_basyx_server_rootdir}${BASYX_SERVER_INSTALL_LIBDIR})
-set(BASYX_SERVER_LIBRARIES      -L${BASYX_SERVER_LIBRARY_DIR} -l@BASYX_SERVER_LIBRARY_NAME@)
+find_dependency(BaSyxShared)
+find_dependency(BaSyxVAB)
+# We rely on our own Findasio.cmake, thus find_dependency is not usable
+find_package(asio)
 
-list(APPEND BASYX_SERVER_LIBRARIES)
+include("${CMAKE_CURRENT_LIST_DIR}/@BASYX_SERVER_LIBRARY_NAME@Targets.cmake")
 
-mark_as_advanced( BASYX_SERVER_INCLUDE_DIRS BASYX_SERVER_LIBRARIES )
+@PACKAGE_INIT@
