@@ -1,20 +1,20 @@
-package org.eclipse.basyx.aas.metamodel.map.parts;
+package org.eclipse.basyx.submodel.metamodel.map.parts;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecification;
-import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecificationIEC61360;
-import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDescription;
-import org.eclipse.basyx.aas.metamodel.facade.parts.ConceptDescriptionFacade;
-import org.eclipse.basyx.aas.metamodel.map.dataspecification.DataSpecification;
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecificationIEC61360;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.facade.parts.ConceptDescriptionFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.map.dataspecification.DataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;

@@ -18,23 +18,23 @@ import java.util.Set;
 
 import javax.xml.transform.stream.StreamResult;
 
+import org.eclipse.basyx.aas.factory.xml.MetamodelToXMLConverter;
+import org.eclipse.basyx.aas.factory.xml.XMLToMetamodelConverter;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
-import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.facade.AssetAdministrationShellFacade;
 import org.eclipse.basyx.aas.metamodel.facade.parts.AssetFacade;
-import org.eclipse.basyx.aas.metamodel.facade.parts.ConceptDescriptionFacade;
-import org.eclipse.basyx.submodel.factory.xml.MetamodelToXMLConverter;
-import org.eclipse.basyx.submodel.factory.xml.XMLToMetamodelConverter;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacade;
+import org.eclipse.basyx.submodel.metamodel.facade.parts.ConceptDescriptionFacade;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.RelationshipElement;

@@ -1,4 +1,4 @@
-package org.eclipse.basyx.submodel.factory.xml;
+package org.eclipse.basyx.aas.factory.xml;
 
 import java.util.Collection;
 
@@ -13,13 +13,13 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 
 import org.eclipse.basyx.aas.factory.xml.api.parts.AssetXMLConverter;
-import org.eclipse.basyx.aas.factory.xml.api.parts.ConceptDescriptionXMLConverter;
 import org.eclipse.basyx.aas.factory.xml.converters.AssetAdministrationShellXMLConverter;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
-import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDescription;
+import org.eclipse.basyx.submodel.factory.xml.api.parts.ConceptDescriptionXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.SubmodelXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -30,6 +30,7 @@ import org.w3c.dom.Element;
  *
  */
 public class MetamodelToXMLConverter {
+	public static final String AASENV = "aas:aasenv";
 	
 	/**
 	 * Builds the XML for the given metamodel Objects
@@ -51,7 +52,7 @@ public class MetamodelToXMLConverter {
 		Document document = documentBuilder.newDocument();
 		
 		//creating the root tag <aas:aasenv>
-		Element root = document.createElement(XMLHelper.AASENV);
+		Element root = document.createElement(AASENV);
 		
 		//creating the Header information
 		root.setAttribute("xmlns:aas", "http://www.admin-shell.io/aas/1/0");

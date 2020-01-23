@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -23,6 +24,7 @@ public class ReferenceXMLConverter {
 	
 	public static final String LOCAL = "local";
 	public static final String TYPE = "type";
+	public static final String IDTYPE = "idType";
 	public static final String KEYS = "aas:keys";
 	public static final String KEY = "aas:key";
 	
@@ -72,7 +74,7 @@ public class ReferenceXMLConverter {
 	 */
 	private static Key parseKey(Map<String, Object> xmlObject) {
 		String text = XMLHelper.getString(xmlObject.get(XMLHelper.TEXT));
-		String idType = XMLHelper.getString(xmlObject.get(XMLHelper.ID_TYPE));
+		String idType = XMLHelper.getString(xmlObject.get(IDTYPE));
 		String type = XMLHelper.getString(xmlObject.get(TYPE));
 		boolean local = Boolean.parseBoolean(XMLHelper.getString(xmlObject.get(LOCAL)));
 	
@@ -128,7 +130,7 @@ public class ReferenceXMLConverter {
 	private static Element buildKey(Document document, IKey key) {
 		Element xmlKey = document.createElement(KEY);	
 		xmlKey.appendChild(document.createTextNode(key.getValue()));
-		xmlKey.setAttribute(XMLHelper.ID_TYPE, key.getidType());
+		xmlKey.setAttribute(IDTYPE, key.getidType());
 		xmlKey.setAttribute(LOCAL, String.valueOf(key.isLocal()));
 		xmlKey.setAttribute(TYPE, key.getType());
 		

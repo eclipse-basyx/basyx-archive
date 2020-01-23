@@ -1,8 +1,8 @@
-package org.eclipse.basyx.aas.metamodel.map.dataspecification;
+package org.eclipse.basyx.submodel.metamodel.map.dataspecification;
 
-import org.eclipse.basyx.aas.metamodel.api.dataspecification.IDataSpecificationIEC61360;
-import org.eclipse.basyx.aas.metamodel.facade.dataspecification.DataSpecificationIEC61360Facade;
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecificationIEC61360;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.facade.dataspecification.DataSpecificationIEC61360Facade;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
