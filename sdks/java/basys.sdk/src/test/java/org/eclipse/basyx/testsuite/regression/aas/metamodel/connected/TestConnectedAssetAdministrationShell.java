@@ -3,12 +3,6 @@ package org.eclipse.basyx.testsuite.regression.aas.metamodel.connected;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.eclipse.basyx.aas.factory.java.MetaModelElementFactory;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
@@ -52,21 +46,20 @@ public class TestConnectedAssetAdministrationShell {
 
 	@Before
 	public void build() throws Exception {
-		MetaModelElementFactory factory = new MetaModelElementFactory();
-
 		// Create a SubModel containing no operations and one property
 		Property p = new Property(propVal);
 		p.setIdShort(propId);
 
-		SubModel sm = factory.create(new SubModel(), Collections.singletonList(p), new ArrayList<>());
+		SubModel sm = new SubModel();
+		sm.addSubModelElement(p);
 		sm.setIdShort(smIdShort);
 
-		// Create Set containing reference to the created SubModel
-		Set<SubmodelDescriptor> refs = new HashSet<>();
-		refs.add(new SubmodelDescriptor(smIdShort, smId, ""));
+		// Create descriptor for the SubModel
+		SubmodelDescriptor smDescriptor = new SubmodelDescriptor(sm, "");
 
 		// Create an AAS containing a reference to the created SubModel
-		AssetAdministrationShell aas = factory.create(new AssetAdministrationShell(), refs);
+		AssetAdministrationShell aas = new AssetAdministrationShell();
+		aas.addSubModel(smDescriptor);
 		aas.setIdShort(aasIdShort);
 	
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
@@ -78,9 +71,9 @@ public class TestConnectedAssetAdministrationShell {
 		// Create AAS Descriptor
 		AASDescriptor aasDescriptor = new AASDescriptor(aasId, "/aas");
 		// Create Submodel Descriptor
-		SubmodelDescriptor smDescriptor = new SubmodelDescriptor(smIdShort, smId, "/aas/submodels/" + smIdShort);
+		SubmodelDescriptor smDescriptor2 = new SubmodelDescriptor(smIdShort, smId, "/aas/submodels/" + smIdShort);
 		// Add Submodel descriptor to aas descriptor
-		aasDescriptor.addSubmodelDescriptor(smDescriptor);
+		aasDescriptor.addSubmodelDescriptor(smDescriptor2);
 
 		registry.register(aasDescriptor);
 

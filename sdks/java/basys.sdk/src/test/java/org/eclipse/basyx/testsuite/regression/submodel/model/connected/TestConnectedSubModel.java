@@ -4,11 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.eclipse.basyx.aas.factory.java.MetaModelElementFactory;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
@@ -37,22 +35,23 @@ public class TestConnectedSubModel {
 
 	ConnectedSubModel submodel;
 
+	@SuppressWarnings("unchecked")
 	@Before
 	public void build() {
-		MetaModelElementFactory factory = new MetaModelElementFactory();
-
 		// Create a simple value property
 		Property propertyMeta = new Property(100);
 		propertyMeta.setIdShort(PROP);
 
 		// Create an operation
-		Operation op = factory.createOperation(new Operation(), (Function<Object[], Object> & Serializable) (obj) -> {
+		Operation op = new Operation((Function<Object[], Object> & Serializable) obj -> {
 			return (int) obj[0] + (int) obj[1];
 		});
 		op.setIdShort(OP);
 
 		// Create the SubModel using the created property and operation
-		SubModel sm = factory.create(new SubModel(), Collections.singletonList(propertyMeta), Collections.singletonList(op));
+		SubModel sm = new SubModel();
+		sm.addSubModelElement(propertyMeta);
+		sm.addSubModelElement(op);
 		sm.setIdShort(ID);
 
 		SubModelProvider provider = new SubModelProvider(new VABLambdaProvider(sm));

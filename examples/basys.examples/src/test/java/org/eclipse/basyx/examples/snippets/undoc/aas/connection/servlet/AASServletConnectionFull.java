@@ -2,10 +2,8 @@ package org.eclipse.basyx.examples.snippets.undoc.aas.connection.servlet;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.factory.java.MetaModelElementFactory;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
@@ -17,7 +15,6 @@ import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IContainerProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.ContainerProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
@@ -56,10 +53,6 @@ public class AASServletConnectionFull {
 			// Set sub model ID
 			setIdShort("sm-001");
 
-			// Create factory that helps with property creation
-			// - This factory creates sub model properties and ensures presence of all meta data
-			MetaModelElementFactory fac = new MetaModelElementFactory();
-
 			// Add example properties
 			// - Add simple property
 			Property prop1 = new Property(234);
@@ -69,11 +62,11 @@ public class AASServletConnectionFull {
 			Property prop11 = new Property(123);
 			prop11.setIdShort("prop11");
 			// - Add container property that holds other properties
-			List<SubmodelElement> containerProperties = fac.createList(
-					prop11
-				);
+			ContainerProperty container = new ContainerProperty();
+			container.setIdShort("prop2");
+			container.addSubModelElement(prop11);
 			// - Add container to property map
-			addSubModelElement(fac.createContainer(new ContainerProperty(), containerProperties, fac.emptyList(), "prop2"));
+			addSubModelElement(container);
 
 			// Add another property manually to sub model container "properties"
 			Property prop3 = new Property(17);

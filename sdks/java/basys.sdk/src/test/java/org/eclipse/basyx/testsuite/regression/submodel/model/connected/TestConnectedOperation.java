@@ -8,7 +8,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.eclipse.basyx.aas.factory.java.MetaModelElementFactory;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation.ConnectedOperation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
@@ -33,10 +32,8 @@ public class TestConnectedOperation {
 
 	@Before
 	public void build() {
-		MetaModelElementFactory factory = new MetaModelElementFactory();
-
 		// Create the operation map using the MetaModelElementFactory
-		Operation op = factory.createOperation(new Operation(), (Function<Object[], Object>) (obj) -> {
+		Operation op = new Operation((Function<Object[], Object>) obj -> {
 			return (int) obj[0] + (int) obj[1];
 		});
 
