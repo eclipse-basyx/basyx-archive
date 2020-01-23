@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -15,7 +17,7 @@ import java.util.Map;
  *
  */
 public class OperationDefinition {
-	
+	private static Logger logger = LoggerFactory.getLogger(OperationDefinition.class);
 	
 	/**
 	 * Get operation name of operation definition 
@@ -42,7 +44,7 @@ public class OperationDefinition {
 		// Return type
 		LinkedList<Parameter> result = new LinkedList<>();
 
-		System.out.println("**"+opDef);
+		logger.debug("Parameters for: " + opDef);
 		
 		// Extract parameter sequence
 		String   callParameterStr  = opDef.substring(opDef.indexOf("(")+1, opDef.length()-1).trim();
@@ -50,7 +52,7 @@ public class OperationDefinition {
 		
 		// Iterate all parameter. If no parameter is given, the loop will execute once with an empty String (length = 0)
 		for (String parameterDef: callParameterList) {
-			System.out.println("[["+parameterDef+"]]"+opDef);
+			logger.debug("[[" + parameterDef + "]]" + opDef);
 			
 			// Only process strings with a length > 0
 			if (parameterDef.length() == 0) continue;

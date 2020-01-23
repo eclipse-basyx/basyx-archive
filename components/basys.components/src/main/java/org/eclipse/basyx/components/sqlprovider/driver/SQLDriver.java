@@ -3,7 +3,11 @@ package org.eclipse.basyx.components.sqlprovider.driver;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -14,6 +18,7 @@ import java.sql.Statement;
  *
  */
 public class SQLDriver implements ISQLDriver {
+	private static Logger logger = LoggerFactory.getLogger(SQLDriver.class);
 
 	
 	/**
@@ -65,8 +70,11 @@ public class SQLDriver implements ISQLDriver {
 		qualDriverClass = qDrvCls;
 		
 		// This will load the MySQL driver, each DB has its own driver
-		//try {Class.forName("com.mysql.cj.jdbc.Driver");} catch (ClassNotFoundException e) {e.printStackTrace();}
-		try {Class.forName(qualDriverClass);} catch (ClassNotFoundException e) {e.printStackTrace();}
+		try {
+			Class.forName(qualDriverClass);
+		} catch (ClassNotFoundException e) {
+			logger.error("Could not init SQLDriver", e);
+		}
 	}
 	
 	
@@ -94,12 +102,13 @@ public class SQLDriver implements ISQLDriver {
 			resultSet = statement.executeQuery(queryString);	
 
 			// Close database connection
-			if (createdByThisOperation) {connect.close(); connect = null;}
-		} catch (Exception e) {
-			// Print exception to console
-			e.printStackTrace();
+			if (createdByThisOperation) {
+				connect.close();
+				connect = null;
+			}
+		} catch (SQLException e) {
+			logger.error("sqlQuery failed", e);
 		}
-
 		
 		// Return result of query
 		return resultSet;
@@ -119,7 +128,10 @@ public class SQLDriver implements ISQLDriver {
 		// Access database
 		try {
 			// Setup the connection with the DB, specify database, user name and password
-			if (connect == null) {connect = DriverManager.getConnection(queryPrefix+dbPath, userName, password); createdByThisOperation = true;}
+			if (connect == null) {
+				connect = DriverManager.getConnection(queryPrefix + dbPath, userName, password);
+				createdByThisOperation = true;
+			}
 
 			// Statements allow to issue SQL queries to the database
 			statement = connect.createStatement();
@@ -127,12 +139,12 @@ public class SQLDriver implements ISQLDriver {
 			// ResultSet gets the result of the SQL query
 			statement.executeUpdate(updateString);
 
-			// Close database connection
-			statement.close();
-			if (createdByThisOperation) {connect.close(); connect = null;}
-		} catch (Exception e) {
-			// Print exception to console
-			e.printStackTrace();
+			if (createdByThisOperation) {
+				connect.close();
+				connect = null;
+			}
+		} catch (SQLException e) {
+			logger.error("sqlUpdate failed", e);
 		}
 	}
 	
@@ -146,9 +158,8 @@ public class SQLDriver implements ISQLDriver {
 		try {
 			// Open connection
 			connect = DriverManager.getConnection(queryPrefix+dbPath, userName, password);
-		} catch (Exception e) {
-			// Print exception to console
-			e.printStackTrace();
+		} catch (SQLException e) {
+			logger.error("Failed to open sql driver connection", e);
 		}
 	}
 	
@@ -160,10 +171,12 @@ public class SQLDriver implements ISQLDriver {
 		// Access database
 		try {
 			// Close connection
-			if (connect != null) {connect.close(); connect = null;}
-		} catch (Exception e) {
-			// Print exception to console
-			e.printStackTrace();
+			if (connect != null) {
+				connect.close();
+				connect = null;
+			}
+		} catch (SQLException e) {
+			logger.error("Failed to close sql driver connection", e);
 		}
 	}
 	

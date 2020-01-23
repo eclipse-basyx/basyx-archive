@@ -10,6 +10,8 @@ import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
 import org.eclipse.basyx.components.tools.propertyfile.opdef.OperationDefinition;
 import org.eclipse.basyx.components.tools.propertyfile.opdef.Parameter;
 import org.eclipse.basyx.components.tools.propertyfile.opdef.ResultFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -20,6 +22,7 @@ import org.eclipse.basyx.components.tools.propertyfile.opdef.ResultFilter;
  *
  */
 public class DynamicSQLOperation extends DynamicSQLRunner implements Function<Object[], Object> {
+	private static Logger logger = LoggerFactory.getLogger(DynamicSQLOperation.class);
 
 	
 	/**
@@ -76,7 +79,7 @@ public class DynamicSQLOperation extends DynamicSQLRunner implements Function<Ob
 		// Apply parameter and create SQL query string
 		String sqlQuery = OperationDefinition.getSQLString(sqlQueryString, sqlQueryParameter);
 		
-		System.out.println("Running SQL query:"+sqlQuery);
+		logger.debug("Running SQL query:" + sqlQuery);
 
 		// Execute SQL query
 		ResultSet sqlResult = sqlDriver.sqlQuery(sqlQuery);
@@ -98,8 +101,7 @@ public class DynamicSQLOperation extends DynamicSQLRunner implements Function<Ob
 			// Invoke result filter operation using static invocation
 			return ResultFilter.class.getMethod(OperationDefinition.getOperation(resultFilterString), getMethodParameter(resultParameter)).invoke(null, callParameter);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Could not invoke dynamic sql operation", e);
 		}
 		
 		// No result
