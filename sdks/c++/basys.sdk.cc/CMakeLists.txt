@@ -151,6 +151,10 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/Findasio.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/BaSyxAsio
 )
 
+###############################################
+###           Install overview              ###
+###############################################
+
 message("")
 message("--------------------")
 message("Configuration:")
@@ -159,5 +163,27 @@ message("   Library destination folder: " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTAL
 message("   Includes folder:            " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME} )
 #message("   Pkgconfig folder:           " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/pkgconfig )
 message("   CMake folder:               " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_SHORTNAME} )
-message("---------------------")
 message("")
+if(${BASYX_USE_SYSTEM_LIBFMT})
+message("   Using system supplied fmt")
+else()
+message("   Using contained fmt - Please check if this is necessary!")
+endif()
+
+if(${BASYX_USE_SYSTEM_ASIO})
+message("   Using system supplied asio")
+else()
+message("   Using contained asio - Please check if this is necessary!")
+endif()
+
+if(${BASYX_USE_SYSTEM_JSON})
+message("   Using system supplied nlohmann_json")
+else()
+message("   Using contained nlohmann_json - Please check if this is necessary!")
+endif()
+
+if ((NOT ${BASYX_USE_SYSTEM_LIBFMT}) OR (NOT ${BASYX_USE_SYSTEM_ASIO}) OR (NOT ${BASYX_USE_SYSTEM_JSON}))
+message("")
+message("   A contained external library will be installed while installing \
+BaSyx, please use distribution provided libraries if possible!")
+endif()
