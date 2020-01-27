@@ -18,15 +18,6 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
  *
  */
 public abstract class BaSysProcessModel extends SubModel implements DeviceIF {
-
-	
-	/**
-	 * Version number of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
-	
 	/**
 	 * Process unique ID
 	 */

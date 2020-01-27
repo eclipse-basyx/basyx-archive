@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IReferenceElement;
-import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
@@ -19,8 +18,6 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Propert
  *
  */
 public class ReferenceElement extends DataElement implements IReferenceElement {
-
-	private static final long serialVersionUID = 1L;
 	public static final String MODELTYPE = "ReferenceElement";
 
 	/**
@@ -51,9 +48,9 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 	 * @return a ReferenceElement object, that behaves like a facade for the given map
 	 */
 	public static ReferenceElement createAsFacade(Map<String, Object> obj) {
-		ReferenceElement facade = new ReferenceElement();
-		facade.putAll(obj);
-		return facade;
+		ReferenceElement ret = new ReferenceElement();
+		ret.setMap(obj);
+		return ret;
 	}
 
 	@Override
@@ -65,7 +62,7 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 	@Override
 	@SuppressWarnings("unchecked")
 	public IReference getValue() {
-		return new ReferenceFacade((Map<String, Object>) get(Property.VALUE));
+		return Reference.createAsFacade((Map<String, Object>) get(Property.VALUE));
 	}
 
 }

@@ -14,18 +14,12 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IProperty;
-import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
@@ -39,12 +33,7 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  *
  *
  */
-public class SubModel extends VABModelMap<Object> implements IVABElementContainer, ISubModel {
-
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
+public class SubModel extends VABModelMap<Object> implements IElementContainer, ISubModel {
 
 	public static final String SUBMODELELEMENT = "submodelElement";
 	public static final String PROPERTIES = "dataElements";
@@ -119,125 +108,130 @@ public class SubModel extends VABModelMap<Object> implements IVABElementContaine
 
 
 	public static SubModel createAsFacade(Map<String, Object> map) {
-		SubModel sm = new SubModel();
-		sm.putAll(map);
-		return sm;
+		if (map == null) {
+			return null;
+		}
+
+		SubModel ret = new SubModel();
+		ret.setMap(map);
+		return ret;
 	}
 
 	@Override
 	public IReference getSemanticId() {
-		return new HasSemanticsFacade(this).getSemanticId();
+		return HasSemantics.createAsFacade(this).getSemanticId();
 	}
 
 	public void setSemanticID(IReference ref) {
-		new HasSemanticsFacade(this).setSemanticID(ref);
+		HasSemantics.createAsFacade(this).setSemanticID(ref);
 	}
 
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return new IdentifiableFacade(this).getAdministration();
+		return Identifiable.createAsFacade(this).getAdministration();
 	}
 
 	@Override
 	public IIdentifier getIdentification() {
-		return new IdentifiableFacade(this).getIdentification();
+		return Identifiable.createAsFacade(this).getIdentification();
 	}
 
 	public void setAdministration(String version, String revision) {
-		new IdentifiableFacade(this).setAdministration(version, revision);
+		Identifiable.createAsFacade(this).setAdministration(version, revision);
 	}
 
 	public void setIdentification(String idType, String id) {
-		new IdentifiableFacade(this).setIdentification(idType, id);
+		Identifiable.createAsFacade(this).setIdentification(idType, id);
 	}
 
 	@Override
 	public Set<IReference> getDataSpecificationReferences() {
-		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
+		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
 	}
 
 	public void setDataSpecificationReferences(Set<IReference> ref) {
-		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
+		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
 	}
 
 	@Override
 	public String getKind() {
-		return new HasKindFacade(this).getKind();
+		return HasKind.createAsFacade(this).getKind();
 	}
 
 	public void setKind(String kind) {
-		new HasKindFacade(this).setKind(kind);
+		HasKind.createAsFacade(this).setKind(kind);
 	}
 
 	@Override
 	public String getIdShort() {
-		return new SubmodelFacade(this).getIdShort();
+		return Referable.createAsFacade(this).getIdShort();
 	}
 
 	@Override
 	public void setIdShort(String id) {
-		new SubmodelFacade(this).setIdShort(id);
+		Referable.createAsFacade(this).setIdShort(id);
 	}
 
 	@Override
 	public void setProperties(Map<String, IProperty> properties) {
-		new SubmodelFacade(this).setProperties(properties);
+		put(SubModel.PROPERTIES, properties);
+
 	}
 
 	@Override
 	public void setOperations(Map<String, IOperation> operations) {
-		new SubmodelFacade(this).setOperations(operations);
+		put(SubModel.OPERATIONS, operations);
+
 	}
 
 	@Override
 	public String getCategory() {
-		return new ReferableFacade(this).getCategory();
+		return Referable.createAsFacade(this).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return new ReferableFacade(this).getDescription();
+		return Referable.createAsFacade(this).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return new ReferableFacade(this).getParent();
+		return Referable.createAsFacade(this).getParent();
 	}
 
 	public void setCategory(String category) {
-		new ReferableFacade(this).setCategory(category);
+		Referable.createAsFacade(this).setCategory(category);
 	}
 
 	public void setDescription(LangStrings description) {
-		new ReferableFacade(this).setDescription(description);
+		Referable.createAsFacade(this).setDescription(description);
 	}
 
 	public void setParent(IReference obj) {
-		new ReferableFacade(this).setParent(obj);
-	}
-
-	@Override
-	public Map<String, IDataElement> getDataElements() {
-		return new SubmodelFacade(this).getDataElements();
-	}
-
-	@Override
-	public Map<String, IOperation> getOperations() {
-		return new SubmodelFacade(this).getOperations();
+		Referable.createAsFacade(this).setParent(obj);
 	}
 
 	@Override
 	public void addSubModelElement(ISubmodelElement element) {
-		new SubmodelFacade(this).addSubModelElement(element);
+		ElementContainer.createAsFacade(this).addSubModelElement(element);
+	}
+
+	@Override
+	public Map<String, IDataElement> getDataElements() {
+		return ElementContainer.createAsFacade(this).getDataElements();
+	}
+
+	@Override
+	public Map<String, IOperation> getOperations() {
+		return ElementContainer.createAsFacade(this).getOperations();
 	}
 	
 	@Override
 	public Map<String, ISubmodelElement> getSubmodelElements() {
-		return new SubmodelFacade(this).getSubmodelElements();
+		return ElementContainer.createAsFacade(this).getSubmodelElements();
 	}
-	
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return new QualifiableFacade(this).getQualifier();
+		return Qualifiable.createAsFacade(this).getQualifier();
 	}
 }

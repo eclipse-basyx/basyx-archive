@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
@@ -50,7 +50,7 @@ public class TestRawCFGProviderSimpleValues {
 		Map<String, Object> submodel = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/rawSampleCFG");
 		assertEquals("1.0",
-				new AdministrativeInformationFacade((Map<String, Object>) submodel.get(Identifiable.ADMINISTRATION))
+				AdministrativeInformation.createAsFacade((Map<String, Object>) submodel.get(Identifiable.ADMINISTRATION))
 						.getVersion());
 
 		// Get property value

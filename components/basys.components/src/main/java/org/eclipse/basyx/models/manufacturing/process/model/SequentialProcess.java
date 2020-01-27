@@ -24,15 +24,6 @@ import org.eclipse.basyx.models.manufacturing.process.model.device.SequentialDev
  *
  */
 public class SequentialProcess extends BaSysProcessModel {
-
-	
-	/**
-	 * Version number of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
-	
 	/**
 	 * Input queue device
 	 */

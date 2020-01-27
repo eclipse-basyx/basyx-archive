@@ -14,14 +14,6 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
  *
  */
 public class ProductAAS extends AssetAdministrationShell {
-
-	
-	/**
-	 * Version number of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
 	/**
 	 * Associated product quality sub model
 	 */

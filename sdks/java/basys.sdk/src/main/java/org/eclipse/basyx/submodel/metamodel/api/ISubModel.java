@@ -9,7 +9,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.IHasKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifiable;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IProperty;
-import org.eclipse.basyx.submodel.metamodel.map.IVABElementContainer;
+import org.eclipse.basyx.submodel.metamodel.map.IElementContainer;
 
 /**
  * Interface API for sub models
@@ -17,7 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.map.IVABElementContainer;
  * @author kuhn
  *
  */
-public interface ISubModel extends IElement, IHasSemantics, IIdentifiable, IQualifiable, IHasDataSpecification, IHasKind, IVABElementContainer {
+public interface ISubModel extends IElement, IHasSemantics, IIdentifiable, IQualifiable, IHasDataSpecification, IHasKind, IElementContainer {
 
 	public void setProperties(Map<String, IProperty> properties);
 

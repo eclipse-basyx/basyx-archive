@@ -35,7 +35,6 @@ public class TestConnectedSubModel {
 
 	ConnectedSubModel submodel;
 
-	@SuppressWarnings("unchecked")
 	@Before
 	public void build() {
 		// Create a simple value property

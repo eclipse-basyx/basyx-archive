@@ -7,13 +7,13 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstrain
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedElement;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -28,42 +28,42 @@ public abstract class ConnectedSubmodelElement extends ConnectedElement implemen
 
 	@Override
 	public String getIdShort() {
-		return new ReferableFacade(getElem()).getIdShort();
+		return Referable.createAsFacade(getElem()).getIdShort();
 	}
 
 	@Override
 	public String getCategory() {
-		return new ReferableFacade(getElem()).getCategory();
+		return Referable.createAsFacade(getElem()).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return new ReferableFacade(getElem()).getDescription();
+		return Referable.createAsFacade(getElem()).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return new ReferableFacade(getElem()).getParent();
+		return Referable.createAsFacade(getElem()).getParent();
 	}
 
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return new QualifiableFacade(getElem()).getQualifier();
+		return Qualifiable.createAsFacade(getElem()).getQualifier();
 	}
 
 	@Override
 	public IReference getSemanticId() {
-		return new HasSemanticsFacade(getElem()).getSemanticId();
+		return HasSemantics.createAsFacade(getElem()).getSemanticId();
 	}
 
 	@Override
 	public String getKind() {
-		return new HasKindFacade(getElem()).getKind();
+		return HasKind.createAsFacade(getElem()).getKind();
 	}
 
 	@Override
 	public Set<IReference> getDataSpecificationReferences() {
-		return new HasDataSpecificationFacade(getElem()).getDataSpecificationReferences();
+		return HasDataSpecification.createAsFacade(getElem()).getDataSpecificationReferences();
 	}
 	
 	@Override

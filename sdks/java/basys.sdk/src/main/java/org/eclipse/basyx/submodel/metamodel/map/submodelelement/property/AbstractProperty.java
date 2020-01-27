@@ -7,8 +7,6 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.valuety
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 
 public abstract class AbstractProperty extends DataElement implements IProperty {
-	private static final long serialVersionUID = 1724792579215822224L;
-	
 	public AbstractProperty() {}
 
 	@Override

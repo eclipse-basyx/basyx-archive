@@ -6,13 +6,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
-import org.eclipse.basyx.aas.metamodel.facade.AssetAdministrationShellFacade;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
@@ -23,15 +23,15 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.vab.model.VABModelMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * AssetAdministrationShell class <br/>
@@ -43,6 +43,8 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  */
 
 public class AssetAdministrationShell extends VABModelMap<Object> implements IAssetAdministrationShell {
+	private static Logger logger = LoggerFactory.getLogger(AssetAdministrationShell.class);
+
 	public static final String SECURITY = "security";
 	public static final String DERIVEDFROM = "derivedFrom";
 	public static final String ASSET = "asset";
@@ -53,11 +55,6 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public static final String ADDRESS = "address";
 	public static final String ENDPOINTS = "endpoints";
 	public static final String MODELTYPE = "AssetAdministationShell";
-
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor
@@ -94,6 +91,24 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	/**
+	 * Creates a AssetAdministrationShell object from a map
+	 * 
+	 * @param obj
+	 *            a AssetAdministrationShell object as raw map
+	 * @return a AssetAdministrationShell object, that behaves like a facade for the
+	 *         given map
+	 */
+	public static AssetAdministrationShell createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
+
+		AssetAdministrationShell ret = new AssetAdministrationShell();
+		ret.setMap(map);
+		return ret;
+	}
+
+	/**
 	 * Sets the endpoint of the AAS
 	 * 
 	 * @param endpoint
@@ -115,16 +130,16 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return new IdentifiableFacade(this).getAdministration();
+		return Identifiable.createAsFacade(this).getAdministration();
 	}
 
 	@Override
 	public IIdentifier getIdentification() {
-		return new IdentifiableFacade(this).getIdentification();
+		return Identifiable.createAsFacade(this).getIdentification();
 	}
 
 	public void setAdministration(String version, String revision) {
-		new IdentifiableFacade(this).setAdministration(version, revision);
+		Identifiable.createAsFacade(this).setAdministration(version, revision);
 	}
 
 	public void setIdentification(IIdentifier id) {
@@ -132,119 +147,130 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	public void setIdentification(String idType, String id) {
-		new IdentifiableFacade(this).setIdentification(idType, id);
+		Identifiable.createAsFacade(this).setIdentification(idType, id);
 	}
 
 	@Override
 	public Set<IReference> getDataSpecificationReferences() {
-		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
+		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
 	}
 
 	public void setDataSpecificationReferences(Set<IReference> ref) {
-		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
+		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
 	}
 
 	@Override
 	public void setIdShort(String id) {
-		new AssetAdministrationShellFacade(this).setIdShort(id);
+		Referable.createAsFacade(this).setIdShort(id);
 	}
 
 	public void setSecurity(ISecurity security) {
-		new AssetAdministrationShellFacade(this).setSecurity(security);
-	}
-
-	@Override
-	public ISecurity getSecurity() {
-		return new AssetAdministrationShellFacade(this).getSecurity();
-	}
-
-	public void setDerivedFrom(IReference derivedFrom) {
-		new AssetAdministrationShellFacade(this).setDerivedFrom(derivedFrom);
-	}
-
-	@Override
-	public IReference getDerivedFrom() {
-		return new AssetAdministrationShellFacade(this).getDerivedFrom();
-	}
-
-	public void setAsset(Asset asset) {
-		new AssetAdministrationShellFacade(this).setAsset(asset);
-	}
-
-	@Override
-	public IAsset getAsset() {
-		return new AssetAdministrationShellFacade(this).getAsset();
-	}
-
-	@Override
-	public void setSubModels(Set<SubmodelDescriptor> submodels) {
-		new AssetAdministrationShellFacade(this).setSubModels(submodels);
-	}
-
-	public void setViews(Set<IView> views) {
-		new AssetAdministrationShellFacade(this).setViews(views);
-	}
-
-	@Override
-	public Set<IView> getViews() {
-		return new AssetAdministrationShellFacade(this).getViews();
-	}
-
-	public void setConceptDictionary(Set<IConceptDictionary> dictionaries) {
-		new AssetAdministrationShellFacade(this).setConceptDictionary(dictionaries);
-	}
-
-	@Override
-	public Set<IConceptDictionary> getConceptDictionary() {
-		return new AssetAdministrationShellFacade(this).getConceptDictionary();
-	}
-
-	@Override
-	public Map<String, ISubModel> getSubModels() {
-		return new AssetAdministrationShellFacade(this).getSubModels();
-	}
-
-	@Override
-	public String getIdShort() {
-		return new ReferableFacade(this).getIdShort();
-	}
-
-	@Override
-	public String getCategory() {
-		return new ReferableFacade(this).getCategory();
-	}
-
-	@Override
-	public LangStrings getDescription() {
-		return new ReferableFacade(this).getDescription();
-	}
-
-	@Override
-	public IReference getParent() {
-		return new ReferableFacade(this).getParent();
-	}
-
-	public void setCategory(String category) {
-		new ReferableFacade(this).setCategory(category);
-	}
-
-	public void setDescription(LangStrings description) {
-		new ReferableFacade(this).setDescription(description);
-	}
-
-	public void setParent(IReference obj) {
-		new ReferableFacade(this).setParent(obj);
-	}
-
-	@Override
-	public void addSubModel(SubmodelDescriptor descriptor) {
-		new AssetAdministrationShellFacade(this).addSubModel(descriptor);
+		put(AssetAdministrationShell.SECURITY, security);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
+	public ISecurity getSecurity() {
+		return Security.createAsFacade((Map<String, Object>) get(AssetAdministrationShell.SECURITY));
+	}
+
+	public void setDerivedFrom(IReference derivedFrom) {
+		put(AssetAdministrationShell.DERIVEDFROM, derivedFrom);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public IReference getDerivedFrom() {
+		return Reference.createAsFacade((Map<String, Object>) get(AssetAdministrationShell.DERIVEDFROM));
+	}
+
+	public void setAsset(Asset asset) {
+		put(AssetAdministrationShell.ASSET, asset);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public IAsset getAsset() {
+		return Asset.createAsFacade((Map<String, Object>) get(AssetAdministrationShell.ASSET));
+	}
+
+	@Override
+	public void setSubModels(Set<SubmodelDescriptor> submodels) {
+		put(AssetAdministrationShell.SUBMODELS, submodels);
+	}
+
+	public void setViews(Set<IView> views) {
+		put(AssetAdministrationShell.VIEWS, views);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<IView> getViews() {
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(AssetAdministrationShell.VIEWS);
+		return set.stream().map(m -> View.createAsFacade(m)).collect(Collectors.toSet());
+	}
+
+	public void setConceptDictionary(Set<IConceptDictionary> dictionaries) {
+		put(AssetAdministrationShell.CONCEPTDICTIONARY, dictionaries);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<IConceptDictionary> getConceptDictionary() {
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(AssetAdministrationShell.CONCEPTDICTIONARY);
+
+		return set.stream().map(m -> ConceptDictionary.createAsFacade(m)).collect(Collectors.toSet());
+	}
+
+	@Override
+	public Map<String, ISubModel> getSubModels() {
+		throw new RuntimeException("getSubModels on local copy is not supported");
+	}
+
+	@Override
+	public String getIdShort() {
+		return Referable.createAsFacade(this).getIdShort();
+	}
+
+	@Override
+	public String getCategory() {
+		return Referable.createAsFacade(this).getCategory();
+	}
+
+	@Override
+	public LangStrings getDescription() {
+		return Referable.createAsFacade(this).getDescription();
+	}
+
+	@Override
+	public IReference getParent() {
+		return Referable.createAsFacade(this).getParent();
+	}
+
+	public void setCategory(String category) {
+		Referable.createAsFacade(this).setCategory(category);
+	}
+
+	public void setDescription(LangStrings description) {
+		Referable.createAsFacade(this).setDescription(description);
+	}
+
+	public void setParent(IReference obj) {
+		Referable.createAsFacade(this).setParent(obj);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void addSubModel(SubmodelDescriptor descriptor) {
+		logger.trace("adding Submodel", descriptor.getIdentifier().getId());
+		((Set<SubmodelDescriptor>) get(AssetAdministrationShell.SUBMODELS)).add(descriptor);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
 	public Set<SubmodelDescriptor> getSubModelDescriptors() {
-		return (Set<SubmodelDescriptor>) get(SUBMODELS);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(AssetAdministrationShell.SUBMODELS);
+		return set.stream().map(m -> new SubmodelDescriptor(m)).collect(Collectors.toSet());
 	}
 
 	/**

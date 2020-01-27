@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
@@ -60,7 +60,7 @@ public class TestCFGProviderSubmodelMetaData {
 
 		// Get property value
 		assertEquals("1.0",
-				new AdministrativeInformationFacade((Map<String, Object>) sampleCFG.get(Identifiable.ADMINISTRATION))
+				AdministrativeInformation.createAsFacade((Map<String, Object>) sampleCFG.get(Identifiable.ADMINISTRATION))
 				.getVersion());
 
 		// Get complete sub model

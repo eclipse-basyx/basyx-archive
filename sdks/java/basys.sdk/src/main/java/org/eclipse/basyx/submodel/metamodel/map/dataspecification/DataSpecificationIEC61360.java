@@ -1,8 +1,9 @@
 package org.eclipse.basyx.submodel.metamodel.map.dataspecification;
 
+import java.util.Map;
+
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecificationIEC61360;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.facade.dataspecification.DataSpecificationIEC61360Facade;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
@@ -15,33 +16,27 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
  */
 public class DataSpecificationIEC61360 extends DataSpecificationContent implements IDataSpecificationIEC61360 {
 
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	public static final String PREFERREDNAME="preferredName";
-	
-	public static final String SHORTNAME="shortName";
+	public static final String PREFERREDNAME = "preferredName";
 
-	public static final String UNIT= "unit";
+	public static final String SHORTNAME = "shortName";
 
-	public static final String UNITID="unitId";
+	public static final String UNIT = "unit";
 
-	public static final String SOURCEOFDEFINITION="sourceOfDefinition";
+	public static final String UNITID = "unitId";
 
-	public static final String SYMBOL="symbol";
+	public static final String SOURCEOFDEFINITION = "sourceOfDefinition";
 
-	public static final String DATATYPE="dataType";
+	public static final String SYMBOL = "symbol";
 
-	public static final String DEFINITION="definition";
+	public static final String DATATYPE = "dataType";
 
-	public static final String VALUEFORMAT="valueFormat";
+	public static final String DEFINITION = "definition";
 
-	public static final String VALUELIST="valueList";
+	public static final String VALUEFORMAT = "valueFormat";
 
-	public static final String CODE="code";
+	public static final String VALUELIST = "valueList";
 
+	public static final String CODE = "code";
 
 	/**
 	 * Constructor
@@ -64,7 +59,8 @@ public class DataSpecificationIEC61360 extends DataSpecificationContent implemen
 		put(CODE, null);
 	}
 
-	public DataSpecificationIEC61360(LangStrings preferredName, String shortName, String uni, Reference unitId, LangStrings sourceOfDefinition, String symbol, String dataType, LangStrings definition, String valueFormat/* , Valuelist valueList, Code code */) {
+	public DataSpecificationIEC61360(LangStrings preferredName, String shortName, String uni, Reference unitId, LangStrings sourceOfDefinition, String symbol, String dataType, LangStrings definition,
+			String valueFormat/* , Valuelist valueList, Code code */) {
 		// Add Identifiable class
 		putAll(new Identifiable());
 
@@ -82,126 +78,144 @@ public class DataSpecificationIEC61360 extends DataSpecificationContent implemen
 		put(CODE, null);
 	}
 
+	/**
+	 * Creates a DataSpecificationIEC61360 object from a map
+	 * 
+	 * @param obj
+	 *            a DataSpecificationIEC61360 object as raw map
+	 * @return a DataSpecificationIEC61360 object, that behaves like a facade for
+	 *         the given map
+	 */
+	public static DataSpecificationIEC61360 createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
+
+		DataSpecificationIEC61360 ret = new DataSpecificationIEC61360();
+		ret.putAll(map);
+		return ret;
+	}
+
 	@Override
 	public LangStrings getPreferredName() {
-	return new DataSpecificationIEC61360Facade(this).getPreferredName();
+		if (get(DataSpecificationIEC61360.PREFERREDNAME) == null)
+			return null;
+
+		return (LangStrings) get(DataSpecificationIEC61360.PREFERREDNAME);
 	}
 
 	@Override
 	public String getShortName() {
-		return new DataSpecificationIEC61360Facade(this).getShortName();
+		if (get(DataSpecificationIEC61360.SHORTNAME) == null)
+			return null;
+		return (String) get(DataSpecificationIEC61360.SHORTNAME);
 	}
 
 	@Override
 	public String getUnit() {
-		return new DataSpecificationIEC61360Facade(this).getUnit();
+		if (get(DataSpecificationIEC61360.UNIT) == null)
+			return null;
+		return (String) get(DataSpecificationIEC61360.UNIT);
 	}
 
 	@Override
 	public IReference getUnitId() {
-		return new DataSpecificationIEC61360Facade(this).getUnitId();
+		if (get(DataSpecificationIEC61360.UNITID) == null)
+			return null;
+		return (IReference) get(DataSpecificationIEC61360.UNITID);
 	}
 
 	@Override
 	public LangStrings getSourceOfDefinition() {
-		return new DataSpecificationIEC61360Facade(this).getSourceOfDefinition();
+		if (get(DataSpecificationIEC61360.SOURCEOFDEFINITION) == null)
+			return null;
+		return (LangStrings) get(DataSpecificationIEC61360.SOURCEOFDEFINITION);
 	}
 
 	@Override
 	public String getSymbol() {
-		return new DataSpecificationIEC61360Facade(this).getSymbol();
+		if (get(DataSpecificationIEC61360.SYMBOL) == null)
+			return null;
+		return (String) get(DataSpecificationIEC61360.SYMBOL);
 	}
 
 	@Override
 	public String getDataType() {
-		return new DataSpecificationIEC61360Facade(this).getDataType();
+		if (get(DataSpecificationIEC61360.DATATYPE) == null)
+			return null;
+		return (String) get(DataSpecificationIEC61360.DATATYPE);
 	}
 
 	@Override
 	public LangStrings getDefinition() {
-		return new DataSpecificationIEC61360Facade(this).getDefinition();
+		if (get(DataSpecificationIEC61360.DEFINITION) == null)
+			return null;
+		return (LangStrings) get(DataSpecificationIEC61360.DEFINITION);
 	}
 
 	@Override
 	public String getValueFormat() {
-		return new DataSpecificationIEC61360Facade(this).getValueFormat();
+		if (get(DataSpecificationIEC61360.VALUEFORMAT) == null)
+			return null;
+		return (String) get(DataSpecificationIEC61360.VALUEFORMAT);
 	}
 
 	@Override
-	public Object getValueList() {
-		return new DataSpecificationIEC61360Facade(this).getValueList();
+	public String getValueList() {
+		if (get(DataSpecificationIEC61360.VALUELIST) == null)
+			return null;
+		return (String) get(DataSpecificationIEC61360.VALUELIST);
 	}
 
 	@Override
-	public Object getCode() {
-		return new DataSpecificationIEC61360Facade(this).getCode();
+	public String getCode() {
+		if (get(DataSpecificationIEC61360.CODE) == null)
+			return null;
+		return (String) get(DataSpecificationIEC61360.CODE);
 	}
-
 
 	public void setPreferredName(LangStrings preferredName) {
-		new DataSpecificationIEC61360Facade(this).setPreferredName(preferredName);
-		
+		put(DataSpecificationIEC61360.PREFERREDNAME, preferredName);
 	}
-
 
 	public void setShortName(String shortName) {
-		new DataSpecificationIEC61360Facade(this).setShortName(shortName);
-		
+		put(DataSpecificationIEC61360.SHORTNAME, shortName);
 	}
-
 
 	public void setUnit(String uni) {
-		new DataSpecificationIEC61360Facade(this).setUnit(uni);
-		
+		put(DataSpecificationIEC61360.UNIT, uni);
 	}
-
 
 	public void setUnitId(IReference unitId) {
-		new DataSpecificationIEC61360Facade(this).setUnitId(unitId);
-		
+		put(DataSpecificationIEC61360.UNITID, unitId);
 	}
-
 
 	public void setSourceOfDefinition(LangStrings sourceOfDefinition) {
-		new DataSpecificationIEC61360Facade(this).setSourceOfDefinition(sourceOfDefinition);
-		
+		put(DataSpecificationIEC61360.SOURCEOFDEFINITION, sourceOfDefinition);
 	}
-
 
 	public void setSymbol(String symbol) {
-		new DataSpecificationIEC61360Facade(this).setSymbol(symbol);
-		
+		put(DataSpecificationIEC61360.SYMBOL, symbol);
 	}
-
 
 	public void setDataType(String dataType) {
-		new DataSpecificationIEC61360Facade(this).setDataType(dataType);
-		
+		put(DataSpecificationIEC61360.DATATYPE, dataType);
 	}
-
 
 	public void setDefinition(LangStrings definition) {
-		new DataSpecificationIEC61360Facade(this).setDefinition(definition);
-		
+		put(DataSpecificationIEC61360.DEFINITION, definition);
 	}
-
 
 	public void setValueFormat(String valueFormat) {
-		new DataSpecificationIEC61360Facade(this).setValueFormat(valueFormat);
-		
+		put(DataSpecificationIEC61360.VALUEFORMAT, valueFormat);
 	}
-
 
 	public void setValueList(Object obj) {
-		new DataSpecificationIEC61360Facade(this).setValueList(obj);
-		
+		put(DataSpecificationIEC61360.VALUELIST, obj);
 	}
-
 
 	public void setCode(Object obj) {
-		new DataSpecificationIEC61360Facade(this).setCode(obj);
-		
+		put(DataSpecificationIEC61360.CODE, obj);
 	}
-
 
 }

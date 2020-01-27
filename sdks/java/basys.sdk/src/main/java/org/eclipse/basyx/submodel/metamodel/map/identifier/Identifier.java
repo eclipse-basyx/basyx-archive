@@ -1,10 +1,9 @@
 package org.eclipse.basyx.submodel.metamodel.map.identifier;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * Identification class
@@ -12,17 +11,11 @@ import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
  * @author kuhn, schnicke
  *
  */
-public class Identifier extends HashMap<String, Object> implements IIdentifier {
+public class Identifier extends VABModelMap<Object> implements IIdentifier {
 	
 	
 	public static final String IDTYPE="idType";
 	public static final String ID="id";
-
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * Constructor
 	 */
@@ -32,8 +25,21 @@ public class Identifier extends HashMap<String, Object> implements IIdentifier {
 		put(ID, "");
 	}
 
-	public Identifier(Map<String, Object> copy) {
-		putAll(copy);
+	/**
+	 * Creates a Identifier object from a map
+	 * 
+	 * @param obj
+	 *            a Identifier object as raw map
+	 * @return a Identifier object, that behaves like a facade for the given map
+	 */
+	public static Identifier createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
+
+		Identifier ret = new Identifier();
+		ret.setMap(map);
+		return ret;
 	}
 
 	/**
@@ -45,33 +51,21 @@ public class Identifier extends HashMap<String, Object> implements IIdentifier {
 		put(ID, id);
 	}
 
-	/**
-	 * Get value of 'idType' property
-	 */
 	@Override
 	public String getIdType() {
-		return new IdentifierFacade(this).getIdType();
+		return (String) get(Identifier.IDTYPE);
 	}
 
-	/**
-	 * Update value of 'idType' property
-	 */
 	public void setIdType(String newValue) {
-		new IdentifierFacade(this).setIdType(newValue);
+		put(Identifier.IDTYPE, newValue);
 	}
 
-	/**
-	 * Get value of 'id' property
-	 */
 	@Override
 	public String getId() {
-		return new IdentifierFacade(this).getId();
+		return (String) get(Identifier.ID);
 	}
 
-	/**
-	 * Update value of 'id' property
-	 */
 	public void setId(String newValue) {
-		new IdentifierFacade(this).setId(newValue);
+		put(Identifier.ID, newValue);
 	}
 }

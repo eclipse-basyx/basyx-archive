@@ -9,10 +9,10 @@ import java.util.function.Function;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 
 /**
@@ -23,8 +23,6 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
  *
  */
 public class Operation extends SubmodelElement implements IOperation {
-	private static final long serialVersionUID = -1381491542617026911L;
-
 	public static final String IN = "in";
 	public static final String OUT = "out";
 	public static final String INVOKABLE = "invokable";
@@ -90,9 +88,9 @@ public class Operation extends SubmodelElement implements IOperation {
 	 * @return an Operation object, that behaves like a facade for the given map
 	 */
 	public static Operation createAsFacade(Map<String, Object> obj) {
-		Operation facade = new Operation();
-		facade.putAll(obj);
-		return facade;
+		Operation ret = new Operation();
+		ret.setMap(obj);
+		return ret;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -133,26 +131,26 @@ public class Operation extends SubmodelElement implements IOperation {
 
 	@Override
 	public Set<IReference> getDataSpecificationReferences() {
-		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
+		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
 	}
 
 	@Override
 	public void setDataSpecificationReferences(Set<IReference> ref) {
-		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
+		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
 	}
 
 	@Override
 	public String getIdShort() {
-		return new ReferableFacade(this).getIdShort();
+		return Referable.createAsFacade(this).getIdShort();
 	}
 
 	@Override
 	public String getCategory() {
-		return new ReferableFacade(this).getCategory();
+		return Referable.createAsFacade(this).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return new ReferableFacade(this).getDescription();
+		return Referable.createAsFacade(this).getDescription();
 	}
 }

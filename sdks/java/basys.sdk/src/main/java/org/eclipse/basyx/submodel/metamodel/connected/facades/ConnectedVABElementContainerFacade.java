@@ -12,7 +12,7 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedR
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation.ConnectedOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.property.ConnectedPropertyFactory;
-import org.eclipse.basyx.submodel.metamodel.map.IVABElementContainer;
+import org.eclipse.basyx.submodel.metamodel.map.IElementContainer;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -27,7 +27,7 @@ import org.eclipse.basyx.vab.modelprovider.VABPathTools;
  * @author schnicke
  *
  */
-public class ConnectedVABElementContainerFacade extends ConnectedVABModelMap<Object> implements IVABElementContainer {
+public class ConnectedVABElementContainerFacade extends ConnectedVABModelMap<Object> implements IElementContainer {
 	ConnectedPropertyFactory factory = new ConnectedPropertyFactory();
 
 	public ConnectedVABElementContainerFacade(VABElementProxy proxy) {

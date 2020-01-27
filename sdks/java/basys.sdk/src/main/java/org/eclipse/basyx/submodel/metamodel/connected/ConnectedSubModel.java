@@ -14,16 +14,15 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOpera
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IProperty;
 import org.eclipse.basyx.submodel.metamodel.connected.facades.ConnectedVABElementContainerFacade;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.property.ConnectedPropertyFactory;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
-import org.eclipse.basyx.submodel.metamodel.map.IVABElementContainer;
+import org.eclipse.basyx.submodel.metamodel.map.IElementContainer;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -32,7 +31,7 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  * @author rajashek
  *
  */
-public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements IVABElementContainer, ISubModel {
+public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements IElementContainer, ISubModel {
 
 	ConnectedPropertyFactory factory = new ConnectedPropertyFactory();
 	ConnectedVABElementContainerFacade facade;
@@ -44,27 +43,27 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 
 	@Override
 	public IReference getSemanticId() {
-		return new ReferenceFacade(getElem());
+		return Reference.createAsFacade(getElem());
 	}
 
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return new AdministrativeInformationFacade(getElem());
+		return AdministrativeInformation.createAsFacade(getElem());
 	}
 
 	@Override
 	public IIdentifier getIdentification() {
-		return new IdentifiableFacade(getElem()).getIdentification();
+		return Identifiable.createAsFacade(getElem()).getIdentification();
 	}
 
 	@Override
 	public Set<IReference> getDataSpecificationReferences() {
-		return new HasDataSpecificationFacade(getElem()).getDataSpecificationReferences();
+		return HasDataSpecification.createAsFacade(getElem()).getDataSpecificationReferences();
 	}
 
 	@Override
 	public String getKind() {
-		return new HasKindFacade(getElem()).getKind();
+		return HasKind.createAsFacade(getElem()).getKind();
 	}
 
 	@Override
@@ -89,13 +88,13 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 
 	@Override
 	public LangStrings getDescription() {
-		return new ReferableFacade(getElem()).getDescription();
+		return Referable.createAsFacade(getElem()).getDescription();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getParent() {
-		return new ReferenceFacade((Map<String, Object>) getElem().getPath(Referable.PARENT));
+		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(Referable.PARENT));
 	}
 
 	@Override
@@ -120,6 +119,6 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 	
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return new QualifiableFacade(getElem()).getQualifier();
+		return Qualifiable.createAsFacade(getElem()).getQualifier();
 	}
 }

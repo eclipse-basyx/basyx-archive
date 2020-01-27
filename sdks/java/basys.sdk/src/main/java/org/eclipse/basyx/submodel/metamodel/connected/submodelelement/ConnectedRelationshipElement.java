@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IRelationshipElement;
-import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.RelationshipElement;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -28,7 +28,7 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getFirst() {
-		return new ReferenceFacade((Map<String, Object>) getElem().getPath(RelationshipElement.FIRST));
+		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(RelationshipElement.FIRST));
 	}
 
 	@Override

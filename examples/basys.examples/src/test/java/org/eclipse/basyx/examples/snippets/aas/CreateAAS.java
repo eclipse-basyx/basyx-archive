@@ -18,12 +18,6 @@ public class CreateAAS {
 	 * Example Asset Administration Shell
 	 */
 	static class ExampleAssetAdministrationShell extends AssetAdministrationShell {
-		
-		/**
-		 * Version number of serialized instance
-		 */
-		private static final long serialVersionUID = 1L;
-
 		/**
 		 * Constructor
 		 */

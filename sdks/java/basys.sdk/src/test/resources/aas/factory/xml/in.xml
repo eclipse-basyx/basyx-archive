@@ -214,6 +214,11 @@
 		
 		<!-- This is an Asset with only the minimal required information in it. To test for Nullpointers and such. -->
 		<aas:asset>
+			<aas:assetIdentificationModelRef>
+				<aas:keys>
+					<aas:key type="ConceptDescription" local="true" idType="URI">www.festo.com/dic/08111234</aas:key>
+				</aas:keys>
+			</aas:assetIdentificationModelRef>
 		</aas:asset>
 		
 	</aas:assets>

@@ -14,8 +14,6 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Propert
  *
  */
 public class File extends DataElement implements IFile{
-	private static final long serialVersionUID = 1L;
-	
 	public static final String MIMETYPE="mimeType";
 	public static final String MODELTYPE = "File";
 
@@ -57,7 +55,7 @@ public class File extends DataElement implements IFile{
 	 */
 	public static File createAsFacade(Map<String, Object> obj) {
 		File facade = new File();
-		facade.putAll(obj);
+		facade.setMap(obj);
 		return facade;
 	}
 

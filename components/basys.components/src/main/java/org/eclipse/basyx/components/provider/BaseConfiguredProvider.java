@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacadeCustomSemantics;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacadeIRDISemantics;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -206,21 +205,17 @@ public class BaseConfiguredProvider extends SubModelProvider {
 			basyx_submodelSemantics = IdentifierType.Custom.toLowerCase();
 		if (basyx_submodelSemantics.equals(IdentifierType.IRDI.toLowerCase())) {
 			// Create sub model from template
-			SubmodelFacade template = new SubmodelFacadeIRDISemantics(basyx_submodelSemantics, idType, basyx_id,
+			submodel = new SubmodelFacadeIRDISemantics(basyx_submodelSemantics, idType, basyx_id,
 					basyx_idShort, basyx_category, new LangStrings("", basyx_description),
 					new Qualifier(basyx_qualifierType, basyx_qualifier, null), null, Kind.Instance, basyx_version,
 					basyx_revision);
-			// Get sub model data
-			submodel = template.getSubModel();
 		}
 		if (basyx_submodelSemantics.equals(IdentifierType.Custom.toLowerCase())) {
 			// Create sub model from template
-			SubmodelFacade template = new SubmodelFacadeCustomSemantics(basyx_submodelSemantics, idType, basyx_id,
+			submodel = new SubmodelFacadeCustomSemantics(basyx_submodelSemantics, idType, basyx_id,
 					basyx_idShort, basyx_category, new LangStrings("", basyx_description),
 					new Qualifier(basyx_qualifierType, basyx_qualifier, null), new HasDataSpecification(),
 					Kind.Instance, basyx_version, basyx_revision);
-			// Get sub model data
-			submodel = template.getSubModel();
 		}
 
 		// If no sub model was created, create an empty one

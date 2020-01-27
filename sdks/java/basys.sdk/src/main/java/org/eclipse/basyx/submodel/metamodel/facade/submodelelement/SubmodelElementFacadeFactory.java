@@ -3,7 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.facade.submodelelement;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.facade.modeltype.ModelTypeFacade;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.RelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
@@ -29,7 +29,7 @@ public class SubmodelElementFacadeFactory {
 	 * @return the actual of the given SubmodelElement map created as facade
 	 */
 	public static ISubmodelElement createSubmodelElement(Map<String, Object> submodelElement) {
-		String type = ModelTypeFacade.getModelTypeName(submodelElement);
+		String type = ModelType.getModelTypeName(submodelElement);
 		
 		switch (type) {
 			case Event.MODELTYPE:

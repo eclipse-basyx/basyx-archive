@@ -1,10 +1,13 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * Referable class
@@ -12,13 +15,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
  * @author kuhn, schnicke
  *
  */
-public class Referable extends HashMap<String, Object> implements IReferable {
-
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-	
+public class Referable extends VABModelMap<Object> implements IReferable {
 	public static final String IDSHORT="idShort";
 	
 	public static final String CATEGORY="category";
@@ -68,41 +65,60 @@ public class Referable extends HashMap<String, Object> implements IReferable {
 		put(PARENT, null);
 	}
 
+	/**
+	 * Creates a Referable object from a map
+	 * 
+	 * @param obj
+	 *            a Referable object as raw map
+	 * @return a Referable object, that behaves like a facade for the given map
+	 */
+	public static Referable createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
+
+		Referable ret = new Referable();
+		ret.setMap(map);
+		return ret;
+	}
+
 	@Override
 	public String getIdShort() {
-		return new ReferableFacade(this).getIdShort();
+		return (String) get(Referable.IDSHORT);
 	}
 
 	@Override
 	public String getCategory() {
-		return new ReferableFacade(this).getCategory();
+		return (String) get(Referable.CATEGORY);
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public LangStrings getDescription() {
-		return new ReferableFacade(this).getDescription();
+		LangStrings desc = new LangStrings((HashSet<HashMap<String, Object>>) get(Referable.DESCRIPTION));
+		return desc;
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public IReference getParent() {
-		return new ReferableFacade(this).getParent();
+		return Reference.createAsFacade((Map<String, Object>) get(Referable.PARENT));
 	}
 
 	public void setIdShort(String idShort) {
-		new ReferableFacade(this).setIdShort(idShort);
+		put(Referable.IDSHORT, idShort);
 	}
 
 	public void setCategory(String category) {
-		new ReferableFacade(this).setCategory(category);
-		
+		put(Referable.CATEGORY, category);
 	}
 
 	public void setDescription(LangStrings description) {
-		new ReferableFacade(this).setDescription(description);
-		
+		put(Referable.DESCRIPTION, description);
 	}
 
-	public void setParent(IReference  obj) {
-		new ReferableFacade(this).setParent(obj);
+	public void setParent(IReference obj) {
+		put(Referable.PARENT, obj);
 	}
+
 }
