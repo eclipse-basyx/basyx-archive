@@ -4,16 +4,16 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacadeCustomSemantics;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacadeIRDISemantics;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.Kind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 
 /**
@@ -188,34 +188,34 @@ public class BaseConfiguredProvider extends SubModelProvider {
 		}
 
 		// Process ID Type - default value is internal
-		String idType = IdentifierType.Custom;
+		IdentifierType idType = IdentifierType.CUSTOM;
 		// - Compare to known values
 		if (basyx_idType == null)
 			basyx_idType = "IdentifierType.Custom";
 		if (basyx_idType.equals("IdentifierType.IRDI"))
 			idType = IdentifierType.IRDI;
 		if (basyx_idType.equals("IdentifierType.URI"))
-			idType = IdentifierType.URI;
+			idType = IdentifierType.IRI;
 		if (basyx_idType.equals("IdentifierType.Custom"))
-			idType = IdentifierType.Custom;
+			idType = IdentifierType.CUSTOM;
 
 		// Try to load properties
 		// Check type of sub model template to use
 		if (basyx_submodelSemantics == null)
-			basyx_submodelSemantics = IdentifierType.Custom.toLowerCase();
-		if (basyx_submodelSemantics.equals(IdentifierType.IRDI.toLowerCase())) {
+			basyx_submodelSemantics = IdentifierType.CUSTOM.toString().toLowerCase();
+		if (basyx_submodelSemantics.equals(IdentifierType.IRDI.toString().toLowerCase())) {
 			// Create sub model from template
 			submodel = new SubmodelFacadeIRDISemantics(basyx_submodelSemantics, idType, basyx_id,
 					basyx_idShort, basyx_category, new LangStrings("", basyx_description),
-					new Qualifier(basyx_qualifierType, basyx_qualifier, null), null, Kind.Instance, basyx_version,
+					new Qualifier(basyx_qualifierType, basyx_qualifier, null), null, ModelingKind.INSTANCE, basyx_version,
 					basyx_revision);
 		}
-		if (basyx_submodelSemantics.equals(IdentifierType.Custom.toLowerCase())) {
+		if (basyx_submodelSemantics.equals(IdentifierType.CUSTOM.toString().toLowerCase())) {
 			// Create sub model from template
 			submodel = new SubmodelFacadeCustomSemantics(basyx_submodelSemantics, idType, basyx_id,
 					basyx_idShort, basyx_category, new LangStrings("", basyx_description),
 					new Qualifier(basyx_qualifierType, basyx_qualifier, null), new HasDataSpecification(),
-					Kind.Instance, basyx_version, basyx_revision);
+					ModelingKind.INSTANCE, basyx_version, basyx_revision);
 		}
 
 		// If no sub model was created, create an empty one

@@ -4,8 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
-
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,8 +103,8 @@ public class ModelUrn implements IIdentifier {
 	 * A ModelUrn is a unique identifier and is a specialization of an URI
 	 */
 	@Override
-	public String getIdType() {
-		return IdentifierType.URI;
+	public IdentifierType getIdType() {
+		return IdentifierType.IRI;
 	}
 
 	/**

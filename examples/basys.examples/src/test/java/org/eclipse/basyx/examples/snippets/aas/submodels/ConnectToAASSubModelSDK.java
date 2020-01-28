@@ -11,14 +11,14 @@ import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IContainerProperty;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.IContainerProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.ContainerProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.ContainerProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -49,7 +49,7 @@ public class ConnectToAASSubModelSDK {
 		public SampleSubModel() {
 			// Set sub model id and name
 			setIdShort("smName");
-			setIdentification(IdentifierType.Custom, "sm-001");
+			setIdentification(IdentifierType.CUSTOM, "sm-001");
 
 			// Add example properties
 			// - Add simple property
@@ -111,8 +111,8 @@ public class ConnectToAASSubModelSDK {
 		
 		// Retrieve sub model (created by factory) with SDK connector
 		// - Create and connect SDK connector
-		IIdentifier aasId = new Identifier(IdentifierType.Custom, "aas-001");
-		IIdentifier smId = new Identifier(IdentifierType.Custom, "sm-001");
+		IIdentifier aasId = new Identifier(IdentifierType.CUSTOM, "aas-001");
+		IIdentifier smId = new Identifier(IdentifierType.CUSTOM, "sm-001");
 		ISubModel subModel = manager.retrieveSubModel(aasId, smId);
 
 		// - Retrieve sub model values and compare to expected values

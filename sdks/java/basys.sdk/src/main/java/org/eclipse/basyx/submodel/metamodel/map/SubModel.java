@@ -5,15 +5,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.basyx.submodel.metamodel.api.IElementContainer;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
@@ -22,12 +25,19 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
- * Submodel class
+ * A submodel defines a specific aspect of the asset represented by the AAS.
+ * <br />
+ * <br />
+ * A submodel is used to structure the digital representation and technical
+ * functionality of an Administration Shell into distinguishable parts. Each
+ * submodel refers to a well-defined domain or subject matter. Submodels can
+ * become standardized and thus become submodels types. Submodels can have
+ * different life-cycles.
  * 
  * @author kuhn, schnicke
  *
@@ -122,7 +132,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 		return HasSemantics.createAsFacade(this).getSemanticId();
 	}
 
-	public void setSemanticID(IReference ref) {
+	public void setSemanticId(IReference ref) {
 		HasSemantics.createAsFacade(this).setSemanticID(ref);
 	}
 
@@ -140,7 +150,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 		Identifiable.createAsFacade(this).setAdministration(version, revision);
 	}
 
-	public void setIdentification(String idType, String id) {
+	public void setIdentification(IdentifierType idType, String id) {
 		Identifiable.createAsFacade(this).setIdentification(idType, id);
 	}
 
@@ -154,12 +164,12 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	}
 
 	@Override
-	public String getKind() {
-		return HasKind.createAsFacade(this).getKind();
+	public ModelingKind getModelingKind() {
+		return HasKind.createAsFacade(this).getModelingKind();
 	}
 
-	public void setKind(String kind) {
-		HasKind.createAsFacade(this).setKind(kind);
+	public void setModelingKind(ModelingKind kind) {
+		HasKind.createAsFacade(this).setModelingKind(kind);
 	}
 
 	@Override
@@ -167,18 +177,15 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 		return Referable.createAsFacade(this).getIdShort();
 	}
 
-	@Override
 	public void setIdShort(String id) {
 		Referable.createAsFacade(this).setIdShort(id);
 	}
 
-	@Override
 	public void setProperties(Map<String, IProperty> properties) {
 		put(SubModel.PROPERTIES, properties);
 
 	}
 
-	@Override
 	public void setOperations(Map<String, IOperation> operations) {
 		put(SubModel.OPERATIONS, operations);
 

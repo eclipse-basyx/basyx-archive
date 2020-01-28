@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.factory.xml.converters.qualifier;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
@@ -56,7 +57,7 @@ public class IdentifiableXMLConverter {
 		}
 		
 		identifiable.put(Identifiable.ADMINISTRATION, new AdministrativeInformation(version, revision));
-		identifiable.put(Identifiable.IDENTIFICATION, new Identifier(idType, id));
+		identifiable.put(Identifiable.IDENTIFICATION, new Identifier(IdentifierType.fromString(idType), id));
 	}
 	
 
@@ -95,8 +96,8 @@ public class IdentifiableXMLConverter {
 			Element identificationRoot = document.createElement(IDENTIFICATION);
 			identificationRoot.appendChild(document.createTextNode(id));
 			if(identifiable.getIdentification().getIdType() != null) {
-				String idType = identifiable.getIdentification().getIdType();				
-				identificationRoot.setAttribute(IDTYPE, idType);
+				IdentifierType idType = identifiable.getIdentification().getIdType();
+				identificationRoot.setAttribute(IDTYPE, idType.toString());
 			}
 			root.appendChild(identificationRoot);
 		}

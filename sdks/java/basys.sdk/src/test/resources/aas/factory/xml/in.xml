@@ -16,10 +16,10 @@
 			<aas:parent>
 				<!-- Parent is currently a String in the Schema. But it should be a Reference. -->
 				<aas:keys>
-					<aas:key idType="URI" local="false" type="AssetAdministrationShell">aas_parent_id</aas:key>
+					<aas:key idType="IRI" local="false" type="AssetAdministrationShell">aas_parent_id</aas:key>
 				</aas:keys>
 			</aas:parent>
-			<aas:identification idType="URI">www.admin-shell.io/aas-sample/1/0</aas:identification>
+			<aas:identification idType="IRI">www.admin-shell.io/aas-sample/1/0</aas:identification>
 			<aas:administration>
 				<aas:version>1</aas:version>
 				<aas:revision>0</aas:revision>
@@ -27,7 +27,7 @@
 			<aas:embeddedDataSpecification>
 				<aas:hasDataSpecification>
 					<aas:keys>
-						<aas:key idType="URI" local="false" type="GlobalReference">www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360</aas:key>
+						<aas:key idType="IRI" local="false" type="GlobalReference">www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360</aas:key>
 					</aas:keys>
 				</aas:hasDataSpecification>
 				<aas:dataSpecificationContent>
@@ -48,23 +48,23 @@
 			</aas:embeddedDataSpecification>
 			<aas:derivedFrom>
 				<aas:keys>
-					<aas:key type="ReferenceElement" local="false" idType="URI">http://pk.festo.com/3s7plfdrs35</aas:key>
+					<aas:key type="ReferenceElement" local="false" idType="IRI">http://pk.festo.com/3s7plfdrs35</aas:key>
 				</aas:keys>
 			</aas:derivedFrom>
 			<aas:assetRef>
 				<aas:keys>
-					<aas:key type="Asset" local="false" idType="URI">http://pk.festo.com/3s7plfdrs35</aas:key>
+					<aas:key type="Asset" local="false" idType="IRI">http://pk.festo.com/3s7plfdrs35</aas:key>
 				</aas:keys>
 			</aas:assetRef>
 			<aas:submodelRefs>
 				<aas:submodelRef>
 					<aas:keys>
-						<aas:key type="Submodel" local="true" idType="URI">"http://www.zvei.de/demo/submodel/12345679"</aas:key>
+						<aas:key type="Submodel" local="true" idType="IRI">"http://www.zvei.de/demo/submodel/12345679"</aas:key>
 					</aas:keys>
 				</aas:submodelRef>
 				<aas:submodelRef>
 					<aas:keys>
-						<aas:key type="Submodel" local="true" idType="URI">"http://www.zvei.de/demo/submodel/12345679_2"</aas:key>
+						<aas:key type="Submodel" local="true" idType="IRI">"http://www.zvei.de/demo/submodel/12345679_2"</aas:key>
 					</aas:keys>
 				</aas:submodelRef>
 			</aas:submodelRefs>
@@ -80,18 +80,18 @@
 					<aas:parent>
 						<!-- Parent is currently a String in the Schema. But it should be a Reference. -->
 						<aas:keys>
-							<aas:key idType="URI" local="false" type="Submodel">view_parent_id</aas:key>
+							<aas:key idType="IRI" local="false" type="Submodel">view_parent_id</aas:key>
 						</aas:keys>
 					</aas:parent>
 					<aas:semanticId>
 						<aas:keys>
-							<aas:key idType="URI" local="false" type="Submodel">view_semantic_id</aas:key>
+							<aas:key idType="IRI" local="false" type="Submodel">view_semantic_id</aas:key>
 						</aas:keys>
 					</aas:semanticId>
 					<aas:embeddedDataSpecification>
 						<aas:hasDataSpecification>
 							<aas:keys>
-								<aas:key idType="URI" local="false" type="GlobalReference">www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360</aas:key>
+								<aas:key idType="IRI" local="false" type="GlobalReference">www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360</aas:key>
 							</aas:keys>
 						</aas:hasDataSpecification>
 						<aas:dataSpecificationContent>
@@ -113,8 +113,8 @@
 					<aas:containedElements>
 						<aas:containedElementRef>
 							<aas:keys>
-								<aas:key type="Submodel" local="true" idType="URI">"http://www.zvei.de/demo/submodel/12345679"</aas:key>
-								<aas:key type="Property" local="true" idType="idShort">rotationSpeed</aas:key>
+								<aas:key type="Submodel" local="true" idType="IRI">"http://www.zvei.de/demo/submodel/12345679"</aas:key>
+								<aas:key type="Property" local="true" idType="IdShort">rotationSpeed</aas:key>
 							</aas:keys>
 						</aas:containedElementRef>
 					</aas:containedElements>
@@ -154,7 +154,7 @@
 		<aas:assetAdministrationShell>
 			<aas:assetRef>
 				<aas:keys>
-					<aas:key type="Asset" local="false" idType="URI">http://pk.festo.com/3s7plfdrs35</aas:key>
+					<aas:key type="Asset" local="false" idType="IRI">http://pk.festo.com/3s7plfdrs35</aas:key>
 				</aas:keys>
 			</aas:assetRef>
 		</aas:assetAdministrationShell>
@@ -174,10 +174,10 @@
 			<aas:parent>
 				<!-- Parent is currently a String in the Schema. But it should be a Reference. -->
 				<aas:keys>
-					<aas:key idType="URI" local="false" type="Asset">asset_parent_id</aas:key>
+					<aas:key idType="IRI" local="false" type="Asset">asset_parent_id</aas:key>
 				</aas:keys>
 			</aas:parent>
-			<aas:identification idType="URI">http://pk.festo.com/3s7plfdrs35</aas:identification>
+			<aas:identification idType="IRI">http://pk.festo.com/3s7plfdrs35</aas:identification>
 			<aas:administration>
 				<aas:version>1</aas:version>
 				<aas:revision>0</aas:revision>
@@ -185,7 +185,7 @@
 			<aas:embeddedDataSpecification>
 				<aas:hasDataSpecification>
 					<aas:keys>
-						<aas:key idType="URI" local="false" type="GlobalReference">www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360</aas:key>
+						<aas:key idType="IRI" local="false" type="GlobalReference">www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360</aas:key>
 					</aas:keys>
 				</aas:hasDataSpecification>
 				<aas:dataSpecificationContent>
@@ -207,18 +207,15 @@
 			<aas:kind>Instance</aas:kind>
 			<aas:assetIdentificationModelRef>
 				<aas:keys>
-					<aas:key type="ConceptDescription" local="true" idType="URI">www.festo.com/dic/08111234</aas:key>
+					<aas:key type="ConceptDescription" local="true" idType="IRI">www.festo.com/dic/08111234</aas:key>
 				</aas:keys>
 			</aas:assetIdentificationModelRef>
 		</aas:asset>
 		
 		<!-- This is an Asset with only the minimal required information in it. To test for Nullpointers and such. -->
 		<aas:asset>
-			<aas:assetIdentificationModelRef>
-				<aas:keys>
-					<aas:key type="ConceptDescription" local="true" idType="URI">www.festo.com/dic/08111234</aas:key>
-				</aas:keys>
-			</aas:assetIdentificationModelRef>
+			<aas:kind>Instance</aas:kind>
+			
 		</aas:asset>
 		
 	</aas:assets>
@@ -236,10 +233,10 @@
 			<aas:parent>
 				<!-- Parent is currently a String in the Schema. But it should be a Reference. -->
 				<aas:keys>
-					<aas:key idType="URI" local="false" type="Submodel">submodel_parent_id</aas:key>
+					<aas:key idType="IRI" local="false" type="Submodel">submodel_parent_id</aas:key>
 				</aas:keys>
 			</aas:parent>
-			<aas:identification idType="URI">http://www.zvei.de/demo/submodel/12345679</aas:identification>
+			<aas:identification idType="IRI">http://www.zvei.de/demo/submodel/12345679</aas:identification>
 			<aas:administration>
 				<aas:version>1</aas:version>
 				<aas:revision>0</aas:revision>
@@ -247,7 +244,7 @@
 			<aas:embeddedDataSpecification>
 				<aas:hasDataSpecification>
 					<aas:keys>
-						<aas:key idType="URI" local="false" type="GlobalReference">www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360</aas:key>
+						<aas:key idType="IRI" local="false" type="GlobalReference">www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360</aas:key>
 					</aas:keys>
 				</aas:hasDataSpecification>
 				<aas:dataSpecificationContent>
@@ -268,7 +265,7 @@
 			</aas:embeddedDataSpecification>
 			<aas:semanticId>
 				<aas:keys>
-					<aas:key idType="URI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+					<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
 				</aas:keys>
 			</aas:semanticId>
 			<aas:kind>Instance</aas:kind>
@@ -289,14 +286,14 @@
 				<aas:qualifier>
 					<aas:semanticId>
 						<aas:keys>
-							<aas:key idType="URI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+							<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
 						</aas:keys>
 					</aas:semanticId>
 					<aas:qualifierType>qualifierType</aas:qualifierType>
 					<aas:qualifierValue>qualifierValue</aas:qualifierValue>
 					<aas:qualifierValueId>
 						<aas:keys>
-							<aas:key idType="URI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+							<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
 						</aas:keys>
 					</aas:qualifierValueId>
 				</aas:qualifier>
@@ -309,7 +306,7 @@
 						<aas:category>VARIABLE</aas:category>
 						<aas:semanticId>
 							<aas:keys>
-								<aas:key idType="URI" type="ConceptDescription" local="true">www.festo.com/dic/08111234</aas:key>
+								<aas:key idType="IRI" type="ConceptDescription" local="true">www.festo.com/dic/08111234</aas:key>
 							</aas:keys>
 						</aas:semanticId>
 						<aas:valueType>double</aas:valueType>
@@ -318,14 +315,14 @@
 							<aas:qualifier>
 								<aas:semanticId>
 									<aas:keys>
-										<aas:key idType="URI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+										<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
 									</aas:keys>
 								</aas:semanticId>
 								<aas:qualifierType>qualifierType</aas:qualifierType>
 								<aas:qualifierValue>qualifierValue</aas:qualifierValue>
 								<aas:qualifierValueId>
 									<aas:keys>
-										<aas:key idType="URI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+										<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
 									</aas:keys>
 								</aas:qualifierValueId>
 							</aas:qualifier>
@@ -490,10 +487,10 @@
 			<aas:parent>
 				<!-- Parent is currently a String in the Schema. But it should be a Reference. -->
 				<aas:keys>
-					<aas:key idType="URI" local="false" type="ConceptDescription">cs_parent_id</aas:key>
+					<aas:key idType="IRI" local="false" type="ConceptDescription">cs_parent_id</aas:key>
 				</aas:keys>
 			</aas:parent>
-			<aas:identification idType="URI">www.festo.com/dic/08111234</aas:identification>
+			<aas:identification idType="IRI">www.festo.com/dic/08111234</aas:identification>
 			<aas:administration>
 				<aas:version>1</aas:version>
 				<aas:revision>0</aas:revision>
@@ -501,7 +498,7 @@
 			<aas:embeddedDataSpecification>
 				<aas:hasDataSpecification>
 					<aas:keys>
-						<aas:key idType="URI" local="false" type="GlobalReference">www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360</aas:key>
+						<aas:key idType="IRI" local="false" type="GlobalReference">www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360</aas:key>
 					</aas:keys>
 				</aas:hasDataSpecification>
 				<aas:dataSpecificationContent>
@@ -522,8 +519,8 @@
 			</aas:embeddedDataSpecification>
 			<aas:isCaseOf>
 				<aas:keys>
-					<aas:key idType="URI" type="ConceptDescription" local="true">www.festo.com/dic/08111234</aas:key>
-					<aas:key idType="URI" type="ConceptDescription" local="true">www.festo.com/dic/08111234_2</aas:key>
+					<aas:key idType="IRI" type="ConceptDescription" local="true">www.festo.com/dic/08111234</aas:key>
+					<aas:key idType="IRI" type="ConceptDescription" local="true">www.festo.com/dic/08111234_2</aas:key>
 				</aas:keys>
 			</aas:isCaseOf>
 		</aas:conceptDescription>

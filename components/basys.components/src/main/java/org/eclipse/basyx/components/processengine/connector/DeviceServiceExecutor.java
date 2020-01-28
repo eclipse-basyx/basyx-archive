@@ -7,9 +7,9 @@ import java.util.Map;
 import org.eclipse.basyx.aas.manager.api.IAssetAdministrationShellManager;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 
 
 /**
@@ -40,8 +40,8 @@ public class DeviceServiceExecutor implements IDeviceServiceExecutor {
 	public Object executeService( String servicename, String serviceProvider, String submodelid, List<Object> params) {
 		try {
 			// create ids
-			IIdentifier aasId = new Identifier(IdentifierType.Custom, serviceProvider);
-			IIdentifier smId = new Identifier(IdentifierType.Custom, submodelid);
+			IIdentifier aasId = new Identifier(IdentifierType.CUSTOM, serviceProvider);
+			IIdentifier smId = new Identifier(IdentifierType.CUSTOM, submodelid);
 
 			// create the submodel of the corresponding aas
 			ISubModel serviceSubmodel = manager.retrieveSubModel(aasId, smId);

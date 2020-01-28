@@ -1,13 +1,33 @@
 package org.eclipse.basyx.aas.metamodel.api.security;
 
+import org.eclipse.basyx.aas.metamodel.api.policypoints.IAccessControlPolicyPoints;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+
 /**
- * Interface for Security
+ * Container for security relevant information of the AAS.
  * 
- * @author rajashek
+ * @author rajashek, schnicke
  *
  */
 public interface ISecurity {
-	public Object getAccessControlPolicyPoints();
+	/**
+	 * Gets the access control policy points of the AAS.
+	 * 
+	 * @return
+	 */
+	IAccessControlPolicyPoints getAccessControlPolicyPoints();
 
-	public Object getTrustAnchor();
+	/**
+	 * Gets the certificates of the AAS.
+	 * 
+	 * @return
+	 */
+	ICertificate getCertificate();
+
+	/**
+	 * Gets the certificate extensions as required by the AAS
+	 * 
+	 * @return
+	 */
+	Reference getRequiredCertificateExtension();
 }

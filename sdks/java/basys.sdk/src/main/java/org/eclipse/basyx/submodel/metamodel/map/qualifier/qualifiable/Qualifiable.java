@@ -80,7 +80,7 @@ public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
 		Set<IConstraint> ret = new HashSet<>();
 		if (set != null) {
 			for (Map<String, Object> m : set) {
-				if (ModelType.getModelTypeName(m).equals(Formula.MODELTYPE)) {
+				if (ModelType.createAsFacade(m).getName().equals(Formula.MODELTYPE)) {
 					ret.add(Formula.createAsFacade(m));
 				} else {
 					ret.add(Qualifier.createAsFacade(m));

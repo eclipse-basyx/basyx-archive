@@ -14,11 +14,11 @@ import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;
@@ -35,8 +35,8 @@ import org.junit.Test;
 public class TestConnectedAssetAdministrationShell {
 
 	// String constants used in this test case
-	private static final IIdentifier smId = new Identifier(IdentifierType.Custom, "smId");
-	private static final IIdentifier aasId = new Identifier(IdentifierType.Custom, "aasId");
+	private static final IIdentifier smId = new Identifier(IdentifierType.CUSTOM, "smId");
+	private static final IIdentifier aasId = new Identifier(IdentifierType.CUSTOM, "aasId");
 	private static final String smIdShort = "smName";
 	private static final String aasIdShort = "aasName";
 	private static final String propId = "propId";

@@ -10,7 +10,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.basyx.aas.factory.xml.api.parts.AssetXMLConverter;
 import org.eclipse.basyx.aas.factory.xml.converters.AssetAdministrationShellXMLConverter;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.submodel.factory.xml.api.parts.ConceptDescriptionXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.SubmodelXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;

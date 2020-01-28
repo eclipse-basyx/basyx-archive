@@ -15,11 +15,11 @@ import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.junit.Before;
@@ -56,7 +56,7 @@ public class TestConnectedAssetAdministrationShellManager {
 	@Test
 	public void testCreateAAS() throws Exception {
 		// Register AAS at directory
-		IIdentifier aasId = new Identifier(IdentifierType.Custom, "aasId");
+		IIdentifier aasId = new Identifier(IdentifierType.CUSTOM, "aasId");
 		String aasIdShort = "aasName";
 		registry.register(new AASDescriptor(aasIdShort, aasId, "/aas"));
 		connectorProvider.addMapping("", new VABMultiSubmodelProvider());
@@ -76,8 +76,8 @@ public class TestConnectedAssetAdministrationShellManager {
 
 	@Test
 	public void testCreateSubModel() throws Exception {
-		IIdentifier aasId = new Identifier(IdentifierType.Custom, "aasId");
-		IIdentifier smId = new Identifier(IdentifierType.Custom, "smId");
+		IIdentifier aasId = new Identifier(IdentifierType.CUSTOM, "aasId");
+		IIdentifier smId = new Identifier(IdentifierType.CUSTOM, "smId");
 		String smIdShort = "smName";
 
 		// Register AAS at directory

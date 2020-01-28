@@ -42,9 +42,9 @@ public class HasKindXMLConverter {
 	 * @param hasKind the IHasKind object to be converted to XML
 	 */
 	public static void populateHasKindXML(Document document, Element root, IHasKind hasKind) {
-		if(hasKind.getKind() != null) {
+		if(hasKind.getModelingKind() != null) {
 			Element kindRoot = document.createElement(KIND);
-			kindRoot.appendChild(document.createTextNode(hasKind.getKind()));
+			kindRoot.appendChild(document.createTextNode(hasKind.getModelingKind().toString()));
 			root.appendChild(kindRoot);
 		}
 	}

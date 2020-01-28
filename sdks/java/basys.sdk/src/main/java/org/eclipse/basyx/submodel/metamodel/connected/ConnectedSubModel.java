@@ -3,18 +3,18 @@ package org.eclipse.basyx.submodel.metamodel.connected;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.basyx.submodel.metamodel.api.IElementContainer;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IProperty;
 import org.eclipse.basyx.submodel.metamodel.connected.facades.ConnectedVABElementContainerFacade;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.property.ConnectedPropertyFactory;
-import org.eclipse.basyx.submodel.metamodel.map.IElementContainer;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.ConnectedPropertyFactory;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
@@ -24,6 +24,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+
 
 /**
  * "Connected" implementation of SubModel
@@ -62,18 +63,8 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 	}
 
 	@Override
-	public String getKind() {
-		return HasKind.createAsFacade(getElem()).getKind();
-	}
-
-	@Override
-	public void setProperties(Map<String, IProperty> properties) {
-		throwNotSupportedException();
-	}
-
-	@Override
-	public void setOperations(Map<String, IOperation> operations) {
-		throwNotSupportedException();
+	public ModelingKind getModelingKind() {
+		return HasKind.createAsFacade(getElem()).getModelingKind();
 	}
 
 	@Override

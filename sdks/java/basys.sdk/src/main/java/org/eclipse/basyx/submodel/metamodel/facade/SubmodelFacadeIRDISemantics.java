@@ -3,8 +3,11 @@ package org.eclipse.basyx.submodel.metamodel.facade;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
@@ -14,8 +17,6 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Constraint
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
-import org.eclipse.basyx.submodel.metamodel.map.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.map.reference.enums.KeyType;
 
 /**
  * Facade class that supports the development and access of sub models using
@@ -70,11 +71,11 @@ public class SubmodelFacadeIRDISemantics extends SubModel {
 	 * @param revision
 	 *            Sub model revision
 	 */
-	public SubmodelFacadeIRDISemantics(String semantics, String idType, String id, String idShort, String category, LangStrings description, Constraint constraint, HasDataSpecification dataSpecification, String kind, String version,
+	public SubmodelFacadeIRDISemantics(String semantics, IdentifierType idType, String id, String idShort, String category, LangStrings description, Constraint constraint, HasDataSpecification dataSpecification, ModelingKind kind,
+			String version,
 			String revision) {
 		// Create sub model
-		super(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.IRDI)))),
-				new Identifiable(version, revision, idShort, category, description, IdentifierType.Custom, id), 
+		super(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GLOBALREFERENCE, false, semantics, KeyType.IRDI)))), new Identifiable(version, revision, idShort, category, description, IdentifierType.CUSTOM, id),
 				new Qualifiable(constraint), 
 				dataSpecification,
 				new HasKind(kind));
@@ -114,10 +115,10 @@ public class SubmodelFacadeIRDISemantics extends SubModel {
 	 * @param revision
 	 *            Sub model revision
 	 */
-	public SubmodelFacadeIRDISemantics(String semantics, String idType, String id, String idShort, String category, LangStrings description, Collection<Constraint> qualifier, Constraint constraint,
-			HasDataSpecification dataSpecification, String kind, String version, String revision) {
+	public SubmodelFacadeIRDISemantics(String semantics, IdentifierType idType, String id, String idShort, String category, LangStrings description, Collection<Constraint> qualifier, Constraint constraint,
+			HasDataSpecification dataSpecification, ModelingKind kind, String version, String revision) {
 		// Create sub model
-		super(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.IRDI)))),
+		super(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GLOBALREFERENCE, false, semantics, KeyType.IRDI)))),
 						new Identifiable(version, revision, idShort, category, description, idType, id), 
 						new Qualifiable(qualifier), 
 						dataSpecification, 

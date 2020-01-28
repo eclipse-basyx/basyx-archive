@@ -21,28 +21,31 @@ import javax.xml.transform.stream.StreamResult;
 import org.eclipse.basyx.aas.factory.xml.MetamodelToXMLConverter;
 import org.eclipse.basyx.aas.factory.xml.XMLToMetamodelConverter;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.ReferenceElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.RelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.blob.Blob;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.file.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.blob.Blob;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.file.File;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;
 import org.eclipse.basyx.vab.model.VABModelMap;
 import org.junit.Before;
@@ -176,7 +179,7 @@ public class TestXMLConverter {
 		assertEquals("Beschreibung Verwaltungsschale", aas.getDescription().get("DE"));
 		
 		assertEquals("www.admin-shell.io/aas-sample/1/0", aas.getIdentification().getId());
-		assertEquals("URI", aas.getIdentification().getIdType());
+		assertEquals(IdentifierType.IRI, aas.getIdentification().getIdType());
 		
 		assertEquals("1", aas.getAdministration().getVersion());
 		assertEquals("0", aas.getAdministration().getRevision());
@@ -190,8 +193,8 @@ public class TestXMLConverter {
 
 			// Test key
 			IKey key = keys.get(0);
-			assertEquals("ConceptDescription", key.getType());
-			assertEquals("IRDI", key.getidType());
+			assertEquals(KeyElements.CONCEPTDESCRIPTION, key.getType());
+			assertEquals(KeyType.IRDI, key.getIdType());
 			assertEquals("0173-1#02-BAA120#007", key.getValue());
 			assertEquals(true, key.isLocal());
 		}
@@ -208,14 +211,14 @@ public class TestXMLConverter {
 
 		// Text keys
 		IKey key0 = ref.getKeys().get(0);
-		assertEquals("Submodel", key0.getType());
-		assertEquals("URI", key0.getidType());
+		assertEquals(KeyElements.SUBMODEL, key0.getType());
+		assertEquals(KeyType.IRI, key0.getIdType());
 		assertEquals("\"http://www.zvei.de/demo/submodel/12345679\"", key0.getValue());
 		assertEquals(true, key0.isLocal());
 
 		IKey key1 = ref.getKeys().get(1);
-		assertEquals("Property", key1.getType());
-		assertEquals("idShort", key1.getidType());
+		assertEquals(KeyElements.PROPERTY, key1.getType());
+		assertEquals(KeyType.IDSHORT, key1.getIdType());
 		assertEquals("rotationSpeed", key1.getValue());
 		assertEquals(true, key1.isLocal());
 	}
@@ -236,8 +239,8 @@ public class TestXMLConverter {
 		
 		assertEquals("3s7plfdrs35_asset1", asset.getIdShort());
 		assertEquals("asset1_Description", asset.getDescription().get("EN"));
-		assertEquals("URI", asset.getIdentification().getIdType());
-		assertEquals("Instance", asset.getKind());
+		assertEquals(IdentifierType.IRI, asset.getIdentification().getIdType());
+		assertEquals("Instance", asset.getAssetKind().toString());
 		assertEquals("www.festo.com/dic/08111234", asset.getAssetIdentificationModel().getKeys().get(0).getValue());
 	}
 	
@@ -335,9 +338,9 @@ public class TestXMLConverter {
 		element = submodelElements.get("operation_ID");
 		assertTrue(element instanceof Operation);
 		Operation op = (Operation) element;
-		List<IOperationVariable> parameters = op.getParameterTypes();
+		List<IOperationVariable> parameters = op.getInputVariables();
 		assertEquals(2, parameters.size());
-		List<IOperationVariable> returns = op.getReturnTypes();
+		List<IOperationVariable> returns = op.getOutputVariables();
 		assertEquals(1, returns.size());
 		Object o = returns.get(0).getValue();
 		assertTrue(o instanceof ReferenceElement);
@@ -371,6 +374,7 @@ public class TestXMLConverter {
 		List<IAsset> ret = new ArrayList<>();
 		for(IAsset asset: assetList) {
 			ret.add(Asset.createAsFacade(TypeDestroyer.destroyType((Map<String, Object>) asset)));
+
 		}
 		return ret;
 	}

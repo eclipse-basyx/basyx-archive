@@ -7,8 +7,13 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.IHasKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifiable;
 
-public interface ISubmodelElement extends IElement,IHasDataSpecification,IReferable,IQualifiable,IHasSemantics,IHasKind {
-
+/**
+ * A submodel element is an element suitable for the description and
+ * differentiation of assets.
+ * 
+ * @author schnicke
+ *
+ */
+public interface ISubmodelElement extends IElement, IHasDataSpecification, IReferable, IQualifiable, IHasSemantics, IHasKind {
 	public String getModelType();
-	
 }

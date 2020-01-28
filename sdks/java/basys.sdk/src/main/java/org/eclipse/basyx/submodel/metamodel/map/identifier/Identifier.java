@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.map.identifier;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
@@ -12,16 +13,16 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  *
  */
 public class Identifier extends VABModelMap<Object> implements IIdentifier {
-	
-	
-	public static final String IDTYPE="idType";
-	public static final String ID="id";
+
+	public static final String IDTYPE = "idType";
+	public static final String ID = "id";
+
 	/**
 	 * Constructor
 	 */
 	public Identifier() {
 		// Default values
-		put(IDTYPE, IdentifierType.IRDI);
+		put(IDTYPE, IdentifierType.IRDI.toString());
 		put(ID, "");
 	}
 
@@ -45,19 +46,23 @@ public class Identifier extends VABModelMap<Object> implements IIdentifier {
 	/**
 	 * Constructor that accepts parameter
 	 */
-	public Identifier(String idType, String id) {
+	public Identifier(IdentifierType idType, String id) {
 		// Load values
-		put(IDTYPE, idType);
+		if (idType == null) {
+			put(IDTYPE, null);
+		} else {
+			put(IDTYPE, idType.toString());
+		}
 		put(ID, id);
 	}
 
 	@Override
-	public String getIdType() {
-		return (String) get(Identifier.IDTYPE);
+	public IdentifierType getIdType() {
+		return IdentifierType.fromString((String) get(Identifier.IDTYPE));
 	}
 
-	public void setIdType(String newValue) {
-		put(Identifier.IDTYPE, newValue);
+	public void setIdType(IdentifierType newValue) {
+		put(Identifier.IDTYPE, newValue.toString());
 	}
 
 	@Override

@@ -19,9 +19,9 @@ import org.eclipse.basyx.regression.support.processengine.aas.DeviceAdministrati
 import org.eclipse.basyx.regression.support.processengine.stubs.CoilcarStub;
 import org.eclipse.basyx.regression.support.processengine.submodel.DeviceSubmodelFactory;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
 import org.junit.Before;
@@ -91,11 +91,11 @@ public class TestAASServicecall {
 		IAASRegistryService registry = new InMemoryRegistry();
 		
 		// Create aas descriptor
-		IIdentifier id = new Identifier(IdentifierType.Custom, AAS_ID);
+		IIdentifier id = new Identifier(IdentifierType.CUSTOM, AAS_ID);
 		AASDescriptor aasDescriptor = new AASDescriptor(id, "/aas");
 		
 		// create submodel descriptor
-		IIdentifier smId = new Identifier(IdentifierType.Custom, SUBMODEL_ID);
+		IIdentifier smId = new Identifier(IdentifierType.CUSTOM, SUBMODEL_ID);
 		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1Name", smId, "/aas/submodels/"+SUBMODEL_ID);
 		
 		// Add submodel descriptor to aas descriptor

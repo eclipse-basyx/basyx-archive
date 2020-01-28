@@ -6,8 +6,8 @@ import java.util.function.Function;
 
 import org.eclipse.basyx.regression.support.processengine.stubs.ICoilcar;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 
 
 public class DeviceSubmodelFactory {

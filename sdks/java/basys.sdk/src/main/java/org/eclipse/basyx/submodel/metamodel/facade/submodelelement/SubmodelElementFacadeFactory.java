@@ -4,15 +4,15 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.ReferenceElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.RelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Event;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.blob.Blob;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.file.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Event;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.blob.Blob;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.file.File;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 
 /**
  * Facade factory for SubmodelElement
@@ -29,7 +29,7 @@ public class SubmodelElementFacadeFactory {
 	 * @return the actual of the given SubmodelElement map created as facade
 	 */
 	public static ISubmodelElement createSubmodelElement(Map<String, Object> submodelElement) {
-		String type = ModelType.getModelTypeName(submodelElement);
+		String type = ModelType.createAsFacade(submodelElement).getName();
 		
 		switch (type) {
 			case Event.MODELTYPE:

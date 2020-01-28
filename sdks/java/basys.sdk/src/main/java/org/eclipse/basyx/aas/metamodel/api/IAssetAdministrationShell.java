@@ -3,9 +3,9 @@ package org.eclipse.basyx.aas.metamodel.api;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.submodel.metamodel.api.IElement;
@@ -17,7 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 /**
  * Asset Administration Shell (AAS) interface
  * 
- * @author kuhn
+ * @author kuhn, schnicke
  *
  */
 
@@ -37,17 +37,50 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	 */
 	public void addSubModel(SubmodelDescriptor subModel);
 
+	/**
+	 * Gets the definition of the security relevant aspects of the AAS.
+	 * 
+	 * @return
+	 */
 	public ISecurity getSecurity();
 
+	/**
+	 * Gets the reference to the AAS the AAS was derived from.
+	 * 
+	 * @return
+	 */
 	public IReference getDerivedFrom();
 
+	/**
+	 * Gets the asset the AAS is representing.
+	 * 
+	 * @return
+	 */
 	public IAsset getAsset();
 
-	public void setSubModels(Set<SubmodelDescriptor> submodels);
-
+	/**
+	 * Gets the submodel descriptors
+	 * 
+	 * @return
+	 */
 	public Set<SubmodelDescriptor> getSubModelDescriptors();
 
+	/**
+	 * Gets the views associated with the AAS. <br/>
+	 * If needed stakeholder specific views can be defined on the elements of the
+	 * AAS.
+	 * 
+	 * @return
+	 */
 	public Set<IView> getViews();
 
+	/**
+	 * Gets the concept dictionaries associated with the AAS. <br/>
+	 * An AAS may have one or more concept dictionaries assigned to it. The concept
+	 * dictionaries typically contain only descriptions for elements that are also
+	 * used within the AAS (via HasSemantics).
+	 * 
+	 * @return
+	 */
 	public Set<IConceptDictionary> getConceptDictionary();
 }

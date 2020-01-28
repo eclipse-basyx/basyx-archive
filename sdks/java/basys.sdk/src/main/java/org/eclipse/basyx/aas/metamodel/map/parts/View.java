@@ -86,7 +86,7 @@ public class View extends VABModelMap<Object> implements IView {
 		return HasSemantics.createAsFacade(this).getSemanticId();
 	}
 
-	public void setSemanticID(IReference ref) {
+	public void setSemanticId(IReference ref) {
 		HasSemantics.createAsFacade(this).setSemanticID(ref);
 
 	}

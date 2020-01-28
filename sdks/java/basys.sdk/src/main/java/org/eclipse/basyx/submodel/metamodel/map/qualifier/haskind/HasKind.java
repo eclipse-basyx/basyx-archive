@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.IHasKind;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
@@ -28,10 +29,10 @@ public class HasKind extends VABModelMap<Object> implements IHasKind {
 	 * {@link org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.Kind
 	 * Kind}(either Kind.Instance or Kind.Type)
 	 */
-	public HasKind(String kind) {
+	public HasKind(ModelingKind kind) {
 		// Kind of the element: either type or instance.
 
-		put(KIND, kind);
+		put(KIND, kind.toString());
 	}
 
 	/**
@@ -52,12 +53,13 @@ public class HasKind extends VABModelMap<Object> implements IHasKind {
 	}
 
 	@Override
-	public String getKind() {
-		return (String) get(HasKind.KIND);
+	public ModelingKind getModelingKind() {
+		String str = (String) get(HasKind.KIND);
+		return ModelingKind.fromString(str);
 	}
 
-	public void setKind(String kind) {
-		put(HasKind.KIND, kind);
+	public void setModelingKind(ModelingKind kind) {
+		put(HasKind.KIND, kind.toString());
 	}
 
 }

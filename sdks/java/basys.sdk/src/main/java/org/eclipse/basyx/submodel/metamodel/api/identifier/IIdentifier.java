@@ -1,18 +1,19 @@
 package org.eclipse.basyx.submodel.metamodel.api.identifier;
+
 /**
- * Interface for class Identifier
- *  
- * @author rajashek
+ * Used to uniquely identify an entity by using an identifier.
+ * 
+ * @author rajashek, schnicke
  *
  */
 public interface IIdentifier {
 	/**
-	 * Get value of 'idType' property
+	 * Gets the type of the Identifier, e.g. IRI, IRDI etc.
 	 */
-	public String getIdType(); 
+	public IdentifierType getIdType();
 
 	/**
-	 * Get value of 'id' property
+	 * Gets the identifier of the element. Its type is defined in idType.
 	 */
-	public String getId() ;
+	public String getId();
 }

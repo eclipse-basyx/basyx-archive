@@ -3,21 +3,23 @@ package org.eclipse.basyx.submodel.metamodel.api.reference;
 import java.util.List;
 
 /**
- * Interface for Reference
+ * Reference to either a model element of the same or another AAs or to an
+ * external entity. <br />
+ * <br />
+ * A reference is an ordered list of keys, each key referencing an element. The
+ * complete list of keys may for example be concatenated to a path that then
+ * gives unique access to an element or entity.
  * 
- * @author rajashek
+ * @author rajashek, schnicke
  *
-*/
+ */
 
 public interface IReference {
 
 	/**
-	 * Reference to either a model element of the same or another AAS or to an
-	 * external entity. A reference is an ordered list of keys, each key referencing
-	 * an element. The complete list of keys may for example be concatenated to a
-	 * path that then gives unique access to an element or entity.
+	 * Gets the keys describing the reference.
 	 * 
-	 * @return The complete list of keys
+	 * @return
 	 */
 	public List<IKey> getKeys();
 }

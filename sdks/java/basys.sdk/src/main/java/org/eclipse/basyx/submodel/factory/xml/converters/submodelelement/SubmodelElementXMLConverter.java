@@ -14,27 +14,27 @@ import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.haskind.HasKi
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.qualifiable.QualifiableXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.reference.ReferenceXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IReferenceElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IReferenceElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.blob.IBlob;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.file.IFile;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.blob.IBlob;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.file.IFile;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.ReferenceElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.RelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Event;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.blob.Blob;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.file.File;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Event;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.blob.Blob;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.file.File;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -408,7 +408,7 @@ public class SubmodelElementXMLConverter {
 		
 		populateSubmodelElement(document, operationRoot, operation);
 		
-		List<IOperationVariable> in = operation.getParameterTypes();
+		List<IOperationVariable> in = operation.getInputVariables();
 		if(in != null) {
 			Element valueRoot = document.createElement(IN);
 			operationRoot.appendChild(valueRoot);
@@ -417,7 +417,7 @@ public class SubmodelElementXMLConverter {
 			}
 		}
 		
-		List<IOperationVariable> out = operation.getReturnTypes();
+		List<IOperationVariable> out = operation.getOutputVariables();
 		if(out != null) {
 			Element valueRoot = document.createElement(OUT);
 			operationRoot.appendChild(valueRoot);

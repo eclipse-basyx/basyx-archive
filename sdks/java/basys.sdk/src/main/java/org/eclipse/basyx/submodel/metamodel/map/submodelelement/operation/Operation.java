@@ -23,8 +23,10 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
  *
  */
 public class Operation extends SubmodelElement implements IOperation {
-	public static final String IN = "in";
-	public static final String OUT = "out";
+	public static final String IN = "inputVariables";
+	public static final String OUT = "outputVariables";
+	public static final String INOUT = "inoutputVariables";
+
 	public static final String INVOKABLE = "invokable";
 	public static final String MODELTYPE = "Operation";
 
@@ -40,6 +42,9 @@ public class Operation extends SubmodelElement implements IOperation {
 
 		// Output variables
 		put(OUT, new ArrayList<OperationVariable>());
+
+		// Variables, that are input and output
+		put(INOUT, new ArrayList<OperationVariable>());
 
 		// Extension of DAAS specification for function storage
 		put(INVOKABLE, null);
@@ -58,7 +63,7 @@ public class Operation extends SubmodelElement implements IOperation {
 	public Operation(List<OperationVariable> in, List<OperationVariable> out, Function<Object[], Object> function) {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
-		
+
 		// Input variables
 		put(IN, in);
 
@@ -68,7 +73,7 @@ public class Operation extends SubmodelElement implements IOperation {
 		// Extension of DAAS specification for function storage
 		put(INVOKABLE, function);
 	}
-	
+
 	/**
 	 * Create Operations w/o endpoint
 	 * 
@@ -84,7 +89,8 @@ public class Operation extends SubmodelElement implements IOperation {
 	/**
 	 * Creates an Operation object from a map
 	 * 
-	 * @param obj an Operation object as raw map
+	 * @param obj
+	 *            an Operation object as raw map
 	 * @return an Operation object, that behaves like a facade for the given map
 	 */
 	public static Operation createAsFacade(Map<String, Object> obj) {
@@ -95,14 +101,28 @@ public class Operation extends SubmodelElement implements IOperation {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<IOperationVariable> getParameterTypes() {
-		return (List<IOperationVariable>) get(Operation.IN);
+	public List<IOperationVariable> getInputVariables() {
+		return transformToOperationVariables((List<Map<String, Object>>) get(Operation.IN));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<IOperationVariable> getReturnTypes() {
-		return (List<IOperationVariable>) get(Operation.OUT);
+	public List<IOperationVariable> getOutputVariables() {
+		return transformToOperationVariables((List<Map<String, Object>>) get(Operation.OUT));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<IOperationVariable> getInOutputVariables() {
+		return transformToOperationVariables((List<Map<String, Object>>) get(Operation.INOUT));
+	}
+
+	private List<IOperationVariable> transformToOperationVariables(List<Map<String, Object>> map) {
+		List<IOperationVariable> ret = new ArrayList<>();
+		for (Map<String, Object> m : map) {
+			ret.add(OperationVariable.createAsFacade(m));
+		}
+		return ret;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -111,22 +131,20 @@ public class Operation extends SubmodelElement implements IOperation {
 		return ((Function<Object[], Object>) get(INVOKABLE)).apply(params);
 	}
 
-	public void SetParameterTypes(List<OperationVariable> in) {
+	public void setInputVariables(List<OperationVariable> in) {
 		put(Operation.IN, in);
 	}
 
-	public void setReturnTypes(List<OperationVariable> out) {
+	public void setOutputVariables(List<OperationVariable> out) {
 		put(Operation.OUT, out);
+	}
+
+	public void setInOutputVariables(List<OperationVariable> inOut) {
+		put(Operation.INOUT, inOut);
 	}
 
 	public void setInvocable(Function<Object[], Object> endpoint) {
 		put(Operation.INVOKABLE, endpoint);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public Function<Object[], Object> getInvocable() {
-		return (Function<Object[], Object>) get(Operation.INVOKABLE);
 	}
 
 	@Override

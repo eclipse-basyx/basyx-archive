@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
@@ -34,7 +35,7 @@ public class Identifiable extends Referable implements IIdentifiable {
 	/**
 	 * Constructor that accepts values for most relevant properties
 	 */
-	public Identifiable(String version, String revision, String idShort, String category, LangStrings description, String idType, String id) {
+	public Identifiable(String version, String revision, String idShort, String category, LangStrings description, IdentifierType idType, String id) {
 		// Add qualifier
 		putAll(new Referable(idShort, category, description));
 
@@ -77,7 +78,7 @@ public class Identifiable extends Referable implements IIdentifiable {
 		put(Identifiable.ADMINISTRATION, new AdministrativeInformation(version, revision));
 	}
 
-	public void setIdentification(String idType, String id) {
+	public void setIdentification(IdentifierType idType, String id) {
 		put(Identifiable.IDENTIFICATION, new Identifier(idType, id));
 	}
 

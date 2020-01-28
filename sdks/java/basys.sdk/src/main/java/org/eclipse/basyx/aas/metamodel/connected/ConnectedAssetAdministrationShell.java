@@ -1,15 +1,16 @@
 package org.eclipse.basyx.aas.metamodel.connected;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
@@ -96,11 +97,6 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 		return Asset.createAsFacade((Map<String, Object>) getElem().getPath(AssetAdministrationShell.ASSET));
 	}
 
-	@Override
-	public void setSubModels(Set<SubmodelDescriptor> submodels) {
-		throwNotSupportedException();
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<SubmodelDescriptor> getSubModelDescriptors() {
@@ -112,7 +108,11 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	@Override
 	public Set<IView> getViews() {
 		Set<Map<String, Object>> set = (Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.VIEWS);
-		return set.stream().map(x -> View.createAsFacade(x)).collect(Collectors.toSet());
+		Set<IView> views = new HashSet<>();
+		for (Map<String, Object> m : set) {
+			views.add(View.createAsFacade(m));
+		}
+		return views;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.HasDataSpecificationXMLConverter;
@@ -28,6 +28,8 @@ public class AssetXMLConverter {
 	public static final String ASSETS = "aas:assets";
 	public static final String ASSET = "aas:asset";
 	public static final String ASSET_IDENTIFICATION_MODEL_REF = "aas:assetIdentificationModelRef";
+	public static final String ASSET_KIND = "aas:kind";
+	public static final String ASSET_BILLOFMATERIAL = "aas:billOfMaterialRef";
 	
 	/**
 	 * Parses &lt;aas:assets&gt; and builds the Asset objects from it
@@ -85,8 +87,9 @@ public class AssetXMLConverter {
 			Element assetRoot = document.createElement(ASSET);
 			IdentifiableXMLConverter.populateIdentifiableXML(document, assetRoot, asset);
 			HasDataSpecificationXMLConverter.populateHasDataSpecificationXML(document, assetRoot, asset);
-			HasKindXMLConverter.populateHasKindXML(document, assetRoot, asset);
+			buildAssetKind(document, assetRoot, asset);
 			buildAssetIdentificationModelRef(document, assetRoot, asset);
+			buildBillOfMaterial(document, assetRoot, asset);
 			xmlAssetList.add(assetRoot);
 		}
 		
@@ -112,6 +115,39 @@ public class AssetXMLConverter {
 			set.add(assetIdentificationModel);
 			assetIdentificationroot.appendChild(ReferenceXMLConverter.buildReferencesXML(document, set)); 
 			assetRoot.appendChild(assetIdentificationroot);
+		}
+	}
+	
+	/**
+	 * Builds &lt;aas:kind&gt; from a given IAsset object
+	 * 
+	 * @param document the XML document
+	 * @param assetRoot the XML tag to be populated
+	 * @param asset the IAsset object to build the XML for
+	 */
+	private static void buildAssetKind(Document document, Element root, IAsset asset) {
+		if (asset.getAssetKind() != null) {
+			Element kindRoot = document.createElement(ASSET_KIND);
+			kindRoot.appendChild(document.createTextNode(asset.getAssetKind().toString()));
+			root.appendChild(kindRoot);
+		}
+	}
+	
+	/**
+	 * Builds &lt;billOfMaterialRef&gt; from a given IAsset object
+	 * 
+	 * @param document the XML document
+	 * @param assetRoot the XML tag to be populated
+	 * @param asset the IAsset object to build the XML for
+	 */
+	private static void buildBillOfMaterial(Document document, Element root, IAsset asset) {
+		IReference billOfMaterial = asset.getBillOfMaterial();
+		if (billOfMaterial != null) {
+			Element billOfMaterialRoot = document.createElement(ASSET_IDENTIFICATION_MODEL_REF);
+			HashSet<IReference> set = new HashSet<IReference>();
+			set.add(billOfMaterial);
+			billOfMaterialRoot.appendChild(ReferenceXMLConverter.buildReferencesXML(document, set));
+			root.appendChild(billOfMaterialRoot);
 		}
 	}
 }
