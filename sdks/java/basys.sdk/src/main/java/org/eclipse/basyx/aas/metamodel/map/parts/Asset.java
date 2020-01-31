@@ -1,23 +1,20 @@
 package org.eclipse.basyx.aas.metamodel.map.parts;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
-import org.eclipse.basyx.aas.metamodel.facade.parts.AssetFacade;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.haskind.HasKindFacade;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * Asset class as described in DAAS document<br/>
@@ -29,15 +26,10 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
  * @author kuhn, elsheikh, schnicke
  *
  */
-public class Asset extends HashMap<String, Object> implements IAsset {
-	
-	public static String ASSETIDENTIFICATIONMODEL="assetIdentificationModel";
-	public static String MODELTYPE = "Asset";
+public class Asset extends VABModelMap<Object> implements IAsset {
 
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
+	public static String ASSETIDENTIFICATIONMODEL = "assetIdentificationModel";
+	public static String MODELTYPE = "Asset";
 
 	/**
 	 * Constructor
@@ -57,102 +49,111 @@ public class Asset extends HashMap<String, Object> implements IAsset {
 
 	/**
 	 * 
-	 * @param submodel A reference to a Submodel that defines the handling of
-	 *                 additional domain specific (proprietary) Identifiers for the
-	 *                 asset like e.g. serial number etc.
+	 * @param submodel
+	 *            A reference to a Submodel that defines the handling of additional
+	 *            domain specific (proprietary) Identifiers for the asset like e.g.
+	 *            serial number etc.
 	 */
 	public Asset(Reference submodel) {
 		this();
-		put(ASSETIDENTIFICATIONMODEL, submodel);	
+		put(ASSETIDENTIFICATIONMODEL, submodel);
 	}
-	
+
+	/**
+	 * Creates a Asset object from a map
+	 * 
+	 * @param obj
+	 *            a Asset object as raw map
+	 * @return a Asset object, that behaves like a facade for the given map
+	 */
+	public static Asset createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
+		Asset ret = new Asset();
+		ret.setMap(map);
+		return ret;
+	}
 
 	@Override
 	public Set<IReference> getDataSpecificationReferences() {
-		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
+		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
 	}
-	
+
 	public void setDataSpecificationReferences(Set<IReference> ref) {
-		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
+		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
 	}
 
 	@Override
 	public String getKind() {
-		return new HasKindFacade(this).getKind();
+		return HasKind.createAsFacade(this).getKind();
 	}
-	
+
 	public void setKind(String kind) {
-		new HasKindFacade(this).setKind(kind);
+		HasKind.createAsFacade(this).setKind(kind);
 	}
 
 	@Override
 	public IAdministrativeInformation getAdministration() {
-	return new IdentifiableFacade(this).getAdministration();
+		return Identifiable.createAsFacade(this).getAdministration();
 	}
 
 	@Override
 	public IIdentifier getIdentification() {
-		return new IdentifiableFacade(this).getIdentification();
+		return Identifiable.createAsFacade(this).getIdentification();
 	}
 
 	public void setAdministration(String version, String revision) {
-		new IdentifiableFacade(this).setAdministration(version, revision);
+		Identifiable.createAsFacade(this).setAdministration(version, revision);
 	}
 
 	public void setIdentification(String idType, String id) {
-		new IdentifiableFacade(this).setIdentification(idType, id);
+		Identifiable.createAsFacade(this).setIdentification(idType, id);
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public IReference getAssetIdentificationModel() {
-		 return new AssetFacade(this).getAssetIdentificationModel();
+		return Reference.createAsFacade((Map<String, Object>) get(Asset.ASSETIDENTIFICATIONMODEL));
 	}
 
 	public void setAssetIdentificationModel(IReference submodel) {
-		new AssetFacade(this).setAssetIdentificationModel(submodel);
+		put(Asset.ASSETIDENTIFICATIONMODEL, submodel);
 	}
 
-	public void setId(String string) {
-		new AssetFacade(this).setId(string);
-	}
-	
 	@Override
 	public String getIdShort() {
-		return new ReferableFacade(this).getIdShort();
+		return Referable.createAsFacade(this).getIdShort();
 	}
 
 	@Override
 	public String getCategory() {
-		return new ReferableFacade(this).getCategory();
+		return Referable.createAsFacade(this).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return new ReferableFacade(this).getDescription();
+		return Referable.createAsFacade(this).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return new ReferableFacade(this).getParent();
+		return Referable.createAsFacade(this).getParent();
 	}
 
 	public void setIdShort(String idShort) {
-		new ReferableFacade(this).setIdShort(idShort);
-		
+		Referable.createAsFacade(this).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {
-		new ReferableFacade(this).setCategory(category);
-		
+		Referable.createAsFacade(this).setCategory(category);
 	}
 
 	public void setDescription(LangStrings description) {
-		new ReferableFacade(this).setDescription(description);
-		
+		Referable.createAsFacade(this).setDescription(description);
 	}
 
 	public void setParent(IReference obj) {
-		new ReferableFacade(this).setParent(obj);
-		
+		Referable.createAsFacade(this).setParent(obj);
 	}
 }

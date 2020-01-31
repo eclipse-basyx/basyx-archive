@@ -39,12 +39,6 @@ public class AASSubModelServletConnectorConnection {
 	 * Example sub model. This example sub model is created with the BaSyx SDK factory and defines the AAS meta model properties
 	 */
 	static class SampleSubModel extends SubModel {
-		
-		/**
-		 * Version number of serialized instance
-		 */
-		private static final long serialVersionUID = 1L;
-
 		/**
 		 * Constructor - create sub model property
 		 */

@@ -46,7 +46,8 @@ public class ConnectedElement implements IElement {
 
 	@SuppressWarnings("unchecked")
 	protected VABModelMap<Object> getElem() {
-		return new VABModelMap<Object>((Map<String, Object>) getProxy().getModelPropertyValue(""));
+		VABModelMap<Object> map = new VABModelMap<Object>((Map<String, Object>) getProxy().getModelPropertyValue(""));
+		return map;
 	}
 
 	protected void throwNotSupportedException() {

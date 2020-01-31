@@ -1,9 +1,9 @@
 package org.eclipse.basyx.submodel.metamodel.map.reference;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
-import org.eclipse.basyx.submodel.metamodel.facade.reference.KeyFacade;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * Key as defined in DAAS document <br/>
@@ -13,9 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.reference.KeyFacade;
  * @author schnicke
  *
  */
-public class Key extends HashMap<String, Object> implements IKey {
-	private static final long serialVersionUID = 1L;
-
+public class Key extends VABModelMap<Object> implements IKey {
 	public static final String TYPE = "type";
 	public static final String LOCAL = "local";
 	public static final String VALUE = "value";
@@ -45,44 +43,64 @@ public class Key extends HashMap<String, Object> implements IKey {
 		put(IDTYPE, idType);
 	}
 
+	/**
+	 * Private constructor enabling createAsFacade pattern
+	 */
+	private Key() {
+
+	}
+
+	/**
+	 * Creates a Key object from a map
+	 * 
+	 * @param obj
+	 *            a Key object as raw map
+	 * @return a Key object, that behaves like a facade for the given map
+	 */
+	public static Key createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
+
+		Key ret = new Key();
+		ret.setMap(map);
+		return ret;
+	}
+
 	@Override
 	public String getType() {
-		return new KeyFacade(this).getType();
+		return (String) get(Key.TYPE);
 	}
 
 	@Override
 	public boolean isLocal() {
-		return new KeyFacade(this).isLocal();
+		return (boolean) get(Key.LOCAL);
 	}
 
 	@Override
 	public String getValue() {
-		return new KeyFacade(this).getValue();
+		return (String) get(Key.VALUE);
 	}
 
 	@Override
 	public String getidType() {
-		return new KeyFacade(this).getidType();
+		return (String) get(Key.IDTYPE);
 	}
 
 	public void setType(String type) {
-		new KeyFacade(this).setType(type);
-
+		put(Key.TYPE, type);
 	}
 
 	public void setLocal(boolean local) {
-		new KeyFacade(this).setLocal(local);
-
+		put(Key.LOCAL, local);
 	}
 
 	public void setValue(String value) {
-		new KeyFacade(this).setValue(value);
-
+		put(Key.VALUE, value);
 	}
 
 	public void setIdType(String idType) {
-		new KeyFacade(this).setIdType(idType);
-
+		put(Key.IDTYPE, idType);
 	}
 
 }

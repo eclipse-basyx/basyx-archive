@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.facade.AssetAdministrationShellFacade;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
@@ -60,7 +59,7 @@ public class TestRawCFGProviderAAS {
 		// Read complex property completely
 		Map<String, Object> aasReadBack = (Map<String, Object>) connSubModel.getModelPropertyValue("/aas");
 
-		assertEquals(aas.getIdShort(), new AssetAdministrationShellFacade(aasReadBack).getIdShort());
+		assertEquals(aas.getIdShort(), AssetAdministrationShell.createAsFacade(aasReadBack).getIdShort());
 		
 		// Read AAS SubModel
 		Map<String, Object> smReadBack = (Map<String, Object>) connSubModel

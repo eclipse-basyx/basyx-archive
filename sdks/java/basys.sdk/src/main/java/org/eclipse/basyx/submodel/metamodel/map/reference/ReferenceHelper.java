@@ -1,4 +1,4 @@
-package org.eclipse.basyx.submodel.metamodel.facade.reference;
+package org.eclipse.basyx.submodel.metamodel.map.reference;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class ReferenceHelper {
 		// Transform set of maps to set of IReference
 		Set<IReference> ret = new HashSet<>();
 		for (Map<String, Object> m : set) {
-			ret.add(new ReferenceFacade(m));
+			ret.add(Reference.createAsFacade(m));
 		}
 
 		return ret;

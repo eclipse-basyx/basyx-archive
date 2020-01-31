@@ -1,11 +1,11 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasSemantics;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * HasSemantics class
@@ -13,13 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
  * @author kuhn, schnicke
  *
  */
-public class HasSemantics extends HashMap<String, Object> implements IHasSemantics {
-
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-
+public class HasSemantics extends VABModelMap<Object> implements IHasSemantics {
 	public static final String SEMANTICID = "semanticId";
 
 	/**
@@ -37,13 +31,30 @@ public class HasSemantics extends HashMap<String, Object> implements IHasSemanti
 		this.setSemanticID(ref);
 	}
 
+	/**
+	 * Creates a HasSemantics object from a map
+	 * 
+	 * @param obj
+	 *            a HasSemantics object as raw map
+	 * @return a HasSemantics object, that behaves like a facade for the given map
+	 */
+	public static HasSemantics createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
+
+		HasSemantics ret = new HasSemantics();
+		ret.setMap(map);
+		return ret;
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getSemanticId() {
-		return new HasSemanticsFacade(this).getSemanticId();
+		return Reference.createAsFacade((Map<String, Object>) get(HasSemantics.SEMANTICID));
 	}
 
 	public void setSemanticID(IReference ref) {
-		// Copy the reference to make sure an actual hashmap is put inside this map
-		new HasSemanticsFacade(this).setSemanticID(new Reference(ref.getKeys()));
+		put(HasSemantics.SEMANTICID, ref);
 	}
 }

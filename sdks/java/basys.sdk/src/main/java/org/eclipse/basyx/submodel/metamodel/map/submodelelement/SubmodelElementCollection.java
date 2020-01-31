@@ -9,11 +9,10 @@ import java.util.Set;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
@@ -26,8 +25,6 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Propert
  *
  */
 public class SubmodelElementCollection extends SubmodelElement implements ISubmodelElementCollection {
-	private static final long serialVersionUID = 1L;
-
 	public static final String ORDERED = "ordered";
 	public static final String ALLOWDUPLICATES = "allowDuplicates";
 	public static final String MODELTYPE = "SubmodelElementCollection";
@@ -75,9 +72,9 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	 * @return a SubmodelElementCollection object, that behaves like a facade for the given map
 	 */
 	public static SubmodelElementCollection createAsFacade(Map<String, Object> obj) {
-		SubmodelElementCollection facade = new SubmodelElementCollection();
-		facade.putAll(obj);
-		return facade;
+		SubmodelElementCollection ret = new SubmodelElementCollection();
+		ret.setMap(obj);
+		return ret;
 	}
 	
 	/**
@@ -91,28 +88,28 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 
 	@Override
 	public Set<IReference> getDataSpecificationReferences() {
-		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
+		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
 	}
 
 	@Override
 	public void setDataSpecificationReferences(Set<IReference> ref) {
-		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
+		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
 
 	}
 
 	@Override
 	public String getIdShort() {
-		return new ReferableFacade(this).getIdShort();
+		return Referable.createAsFacade(this).getIdShort();
 	}
 
 	@Override
 	public String getCategory() {
-		return new ReferableFacade(this).getCategory();
+		return Referable.createAsFacade(this).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return new ReferableFacade(this).getDescription();
+		return Referable.createAsFacade(this).getDescription();
 	}
 
 	@Override

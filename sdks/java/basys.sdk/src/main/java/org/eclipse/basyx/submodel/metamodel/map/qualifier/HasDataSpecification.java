@@ -1,13 +1,14 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * HasDataSpecification class
@@ -15,15 +16,9 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
  * @author elsheikh, schnicke
  *
  */
-public class HasDataSpecification extends HashMap<String, Object> implements IHasDataSpecification {
+public class HasDataSpecification extends VABModelMap<Object> implements IHasDataSpecification {
 
 	public static final String HASDATASPECIFICATION = "hasDataSpecification";
-
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * Constructor
 	 */
@@ -37,12 +32,33 @@ public class HasDataSpecification extends HashMap<String, Object> implements IHa
 		put(HASDATASPECIFICATION, ref);
 	}
 
+	/**
+	 * Creates a DataSpecificationIEC61360 object from a map
+	 * 
+	 * @param obj
+	 *            a DataSpecificationIEC61360 object as raw map
+	 * @return a DataSpecificationIEC61360 object, that behaves like a facade for
+	 *         the given map
+	 */
+	public static HasDataSpecification createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
+
+		HasDataSpecification ret = new HasDataSpecification();
+		ret.setMap(map);
+		return ret;
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IReference> getDataSpecificationReferences() {
-		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(HasDataSpecification.HASDATASPECIFICATION);
+		return ReferenceHelper.transform(set);
 	}
 
 	public void setDataSpecificationReferences(Set<IReference> ref) {
-		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
+		put(HasDataSpecification.HASDATASPECIFICATION, ref);
 	}
+
 }

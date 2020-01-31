@@ -1,13 +1,13 @@
 package org.eclipse.basyx.submodel.metamodel.map.reference;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * Reference as described by DAAS document <br/>
@@ -20,9 +20,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
  * @author schnicke
  *
  */
-public class Reference extends HashMap<String, Object> implements IReference {
-	private static final long serialVersionUID = 1L;
-	
+public class Reference extends VABModelMap<Object> implements IReference {
 	public static final String KEY = "keys";
 
 	/**
@@ -40,13 +38,45 @@ public class Reference extends HashMap<String, Object> implements IReference {
 		setKeys(keys);
 	}
 
-	public Reference(Map<String, Object> reference) {
-		putAll(reference);
+	/**
+	 * 
+	 * @param key
+	 *            Unique reference in its name space.
+	 */
+	public Reference(Key key) {
+		this(Collections.singletonList(key));
 	}
 
+	/**
+	 * Creates a Reference object from a map
+	 * 
+	 * @param obj
+	 *            a Reference object as raw map
+	 * @return a Reference object, that behaves like a facade for the given map
+	 */
+	public static Reference createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
+
+		Reference ret = new Reference();
+		ret.setMap(map);
+		return ret;
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<IKey> getKeys() {
-		return new ReferenceFacade(this).getKeys();
+		List<IKey> ret = new ArrayList<>();
+
+		// Transform list of maps to set of IKey
+		List<Map<String, Object>> list = (List<Map<String, Object>>) get(Reference.KEY);
+
+		for (Map<String, Object> m : list) {
+			ret.add(Key.createAsFacade(m));
+		}
+
+		return ret;
 	}
 
 	public void setKeys(List<IKey> keys) {
@@ -55,6 +85,6 @@ public class Reference extends HashMap<String, Object> implements IReference {
 		for (IKey key : keys) {
 			copy.add(new Key(key.getType(), key.isLocal(), key.getValue(), key.getidType()));
 		}
-		new ReferenceFacade(this).setKeys(copy);
+		put(Reference.KEY, copy);
 	}
 }

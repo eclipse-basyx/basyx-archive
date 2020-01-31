@@ -1,13 +1,14 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IFormula;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.FormulaFacade;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
 
 /**
  * Forumla class as defined by DAAS document
@@ -16,8 +17,6 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
  *
  */
 public class Formula extends Constraint implements IFormula {
-
-	private static final long serialVersionUID = 1L;
 
 	public static final String DEPENDSON = "dependsOn";
 
@@ -43,14 +42,34 @@ public class Formula extends Constraint implements IFormula {
 		put(DEPENDSON, dependsOn);
 	}
 
-	public void setDependsOn(Set<IReference> dependsOn) {
-		new FormulaFacade(this).setDependsOn(dependsOn);
+	/**
+	 * Creates a Formula object from a map
+	 * 
+	 * @param obj
+	 *            a Formula object as raw map
+	 * @return a Formula object, that behaves like a facade for the given map
+	 */
+	public static Formula createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
 
+		Formula ret = new Formula();
+		ret.setMap(map);
+		return ret;
 	}
 
+	public void setDependsOn(Set<IReference> dependsOn) {
+		put(Formula.DEPENDSON, dependsOn);
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IReference> getDependsOn() {
-		return new FormulaFacade(this).getDependsOn();
+		// Transform set of maps to set of IReference
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(Formula.DEPENDSON);
+		return ReferenceHelper.transform(set);
 	}
+
 
 }

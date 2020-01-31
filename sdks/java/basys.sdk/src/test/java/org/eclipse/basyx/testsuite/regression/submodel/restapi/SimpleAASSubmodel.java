@@ -16,9 +16,6 @@ import org.eclipse.basyx.vab.exception.ServerException;
  *
  */
 public class SimpleAASSubmodel extends SubModel {
-
-	private static final long serialVersionUID = 1L;
-
 	public SimpleAASSubmodel() {
 		this("SimpleAASSubmodel");
 	}

@@ -17,7 +17,6 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Propert
  *
  */
 public class OperationVariable extends SubmodelElement implements IOperationVariable {
-	private static final long serialVersionUID = 1L;
 	public static final String MODELTYPE = "OperationVariable";
 	private static final String TYPE = "type";
 
@@ -47,7 +46,7 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	 */
 	public static OperationVariable createAsFacade(Map<String, Object> obj) {
 		OperationVariable facade = new OperationVariable();
-		facade.putAll(obj);
+		facade.setMap(obj);
 		return facade;
 	}
 

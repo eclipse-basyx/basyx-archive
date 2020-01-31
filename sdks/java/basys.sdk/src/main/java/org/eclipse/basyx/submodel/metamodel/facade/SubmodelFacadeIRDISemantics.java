@@ -24,7 +24,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.enums.KeyType;
  * @author kuhn
  *
  */
-public class SubmodelFacadeIRDISemantics extends SubmodelFacade {
+public class SubmodelFacadeIRDISemantics extends SubModel {
 
 	/**
 	 * Constructor without arguments - create a sub model with all meta properties
@@ -32,7 +32,7 @@ public class SubmodelFacadeIRDISemantics extends SubmodelFacade {
 	 */
 	public SubmodelFacadeIRDISemantics() {
 		// Create sub model
-		super(new SubModel());
+		super();
 	}
 
 	/**
@@ -73,11 +73,11 @@ public class SubmodelFacadeIRDISemantics extends SubmodelFacade {
 	public SubmodelFacadeIRDISemantics(String semantics, String idType, String id, String idShort, String category, LangStrings description, Constraint constraint, HasDataSpecification dataSpecification, String kind, String version,
 			String revision) {
 		// Create sub model
-		super(new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.IRDI)))),
+		super(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.IRDI)))),
 				new Identifiable(version, revision, idShort, category, description, IdentifierType.Custom, id), 
 				new Qualifiable(constraint), 
 				dataSpecification,
-				new HasKind(kind)));
+				new HasKind(kind));
 	}
 
 	/**
@@ -117,10 +117,10 @@ public class SubmodelFacadeIRDISemantics extends SubmodelFacade {
 	public SubmodelFacadeIRDISemantics(String semantics, String idType, String id, String idShort, String category, LangStrings description, Collection<Constraint> qualifier, Constraint constraint,
 			HasDataSpecification dataSpecification, String kind, String version, String revision) {
 		// Create sub model
-		super(new SubModel(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.IRDI)))),
+		super(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GlobalReference, false, semantics, KeyType.IRDI)))),
 						new Identifiable(version, revision, idShort, category, description, idType, id), 
 						new Qualifiable(qualifier), 
 						dataSpecification, 
-						new HasKind(kind)));
+				new HasKind(kind));
 	}
 }

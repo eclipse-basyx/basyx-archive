@@ -1,13 +1,14 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifiable;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifiableFacade;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * Qualifiable class
@@ -15,13 +16,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.Qualifi
  * @author kuhn
  *
  */
-public class Qualifiable extends HashMap<String, Object> implements IQualifiable {
-
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-
+public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
 	public static final String CONSTRAINTS = "constraints";
 
 	/**
@@ -56,13 +51,43 @@ public class Qualifiable extends HashMap<String, Object> implements IQualifiable
 		put(CONSTRAINTS, qualifier);
 	}
 
-	public void setQualifier(Set<IConstraint> qualifiers) {
-		new QualifiableFacade(this).setQualifier(qualifiers);
+	/**
+	 * Creates a Qualifiable object from a map
+	 * 
+	 * @param obj
+	 *            a Qualifiable object as raw map
+	 * @return a Qualifiable object, that behaves like a facade for the given map
+	 */
+	public static Qualifiable createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
 
+		Qualifiable ret = new Qualifiable();
+		ret.setMap(map);
+		return ret;
 	}
 
+	public void setQualifier(Set<IConstraint> qualifiers) {
+		put(Qualifiable.CONSTRAINTS, qualifiers);
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public Set<IConstraint> getQualifier() {
-		return new QualifiableFacade(this).getQualifier();
+		// Transform set of maps to set of IConstraints
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(Qualifiable.CONSTRAINTS);
+		Set<IConstraint> ret = new HashSet<>();
+		if (set != null) {
+			for (Map<String, Object> m : set) {
+				if (ModelType.getModelTypeName(m).equals(Formula.MODELTYPE)) {
+					ret.add(Formula.createAsFacade(m));
+				} else {
+					ret.add(Qualifier.createAsFacade(m));
+				}
+			}
+		}
+
+		return ret;
 	}
 }

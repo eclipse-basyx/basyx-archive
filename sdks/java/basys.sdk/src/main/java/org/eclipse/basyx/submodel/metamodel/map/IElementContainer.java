@@ -6,7 +6,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 
-public interface IVABElementContainer {
+public interface IElementContainer {
 	public void addSubModelElement(ISubmodelElement element);
 
 	public Map<String, IDataElement> getDataElements();

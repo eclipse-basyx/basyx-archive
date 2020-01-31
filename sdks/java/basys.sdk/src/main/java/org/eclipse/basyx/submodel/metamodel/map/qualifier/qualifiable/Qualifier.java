@@ -1,9 +1,9 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable;
 
+import java.util.Map;
+
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifier;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasSemanticsFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.qualifiable.QualifierFacade;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
@@ -15,12 +15,6 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
  *
  */
 public class Qualifier extends Constraint implements IQualifier {
-
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public static final String QUALIFIER = "qualifier";
 
 	public static final String QUALIFIERTYPE = "qualifierType";
@@ -57,40 +51,57 @@ public class Qualifier extends Constraint implements IQualifier {
 		put(QUALIFIERVALUEID, valueId);
 	}
 
-	public void setQualifierType(String obj) {
-		new QualifierFacade(this).setQualifierType(obj);
+	/**
+	 * Creates a Qualifier object from a map
+	 * 
+	 * @param obj
+	 *            a Qualifier object as raw map
+	 * @return a Qualifier object, that behaves like a facade for the given map
+	 */
+	public static Qualifier createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
 
+		Qualifier ret = new Qualifier();
+		ret.setMap(map);
+		return ret;
+	}
+
+	public void setQualifierType(String obj) {
+		put(Qualifier.QUALIFIERTYPE, obj);
 	}
 
 	@Override
 	public String getQualifierType() {
-		return new QualifierFacade(this).getQualifierType();
+		return (String) get(Qualifier.QUALIFIERTYPE);
 	}
 
 	public void setQualifierValue(String obj) {
-		new QualifierFacade(this).setQualifierValue(obj);
+		put(Qualifier.QUALIFIERVALUE, obj);
 	}
 
 	@Override
 	public String getQualifierValue() {
-		return new QualifierFacade(this).getQualifierValue();
+		return (String) get(Qualifier.QUALIFIERVALUE);
 	}
 
 	public void setQualifierValueId(IReference obj) {
-		new QualifierFacade(this).setQualifierValueId(obj);
+		put(Qualifier.QUALIFIERVALUEID, obj);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getQualifierValueId() {
-		return new QualifierFacade(this).getQualifierValueId();
+		return Reference.createAsFacade((Map<String, Object>) get(Qualifier.QUALIFIERVALUEID));
 	}
 
 	@Override
 	public IReference getSemanticId() {
-		return new HasSemanticsFacade(this).getSemanticId();
+		return HasSemantics.createAsFacade(this).getSemanticId();
 	}
 
 	public void setSemanticID(IReference ref) {
-		new HasSemanticsFacade(this).setSemanticID(ref);
+		HasSemantics.createAsFacade(this).setSemanticID(ref);
 	}
 }

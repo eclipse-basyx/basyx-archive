@@ -1,11 +1,10 @@
 package org.eclipse.basyx.submodel.metamodel.map.dataspecification;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecificationContent;
-import org.eclipse.basyx.submodel.metamodel.facade.dataspecification.DataSpecificationIEC61360Facade;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * DataSpecification as defined in DAAS document <br />
@@ -13,9 +12,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.dataspecification.DataSpecifi
  * @author schnicke
  *
  */
-public class DataSpecification extends HashMap<String, Object> implements IDataSpecification {
-	private static final long serialVersionUID = 1L;
-
+public class DataSpecification extends VABModelMap<Object> implements IDataSpecification {
 	public static final String CONTENT = "content";
 
 	/**
@@ -35,6 +32,6 @@ public class DataSpecification extends HashMap<String, Object> implements IDataS
 	@SuppressWarnings("unchecked")
 	private IDataSpecificationContent getContentFacade() {
 		// Currently, only DataSpecificationIEC61630 is supported
-		return new DataSpecificationIEC61360Facade((Map<String, Object>) get(CONTENT));
+		return DataSpecificationIEC61360.createAsFacade((Map<String, Object>) get(CONTENT));
 	}
 }

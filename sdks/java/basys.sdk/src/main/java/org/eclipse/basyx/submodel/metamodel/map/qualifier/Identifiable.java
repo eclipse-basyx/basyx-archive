@@ -1,9 +1,10 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
+import java.util.Map;
+
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 
 /**
@@ -13,12 +14,6 @@ import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
  *
  */
 public class Identifiable extends Referable implements IIdentifiable {
-
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public static final String ADMINISTRATION = "administration";
 
 	public static final String IDENTIFICATION = "identification";
@@ -49,22 +44,41 @@ public class Identifiable extends Referable implements IIdentifiable {
 		put(IDENTIFICATION, new Identifier(idType, id));
 	}
 
-	@Override
-	public IAdministrativeInformation getAdministration() {
-		return new IdentifiableFacade(this).getAdministration();
+	/**
+	 * Creates a Identifiable object from a map
+	 * 
+	 * @param obj
+	 *            a Identifiable object as raw map
+	 * @return a Identifiable object, that behaves like a facade for the given map
+	 */
+	public static Identifiable createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
+
+		Identifiable ret = new Identifiable();
+		ret.setMap(map);
+		return ret;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public IAdministrativeInformation getAdministration() {
+		return AdministrativeInformation.createAsFacade((Map<String, Object>) get(Identifiable.ADMINISTRATION));
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public IIdentifier getIdentification() {
-		return new IdentifiableFacade(this).getIdentification();
+		return Identifier.createAsFacade((Map<String, Object>) get(Identifiable.IDENTIFICATION));
 	}
 
 	public void setAdministration(String version, String revision) {
-		new IdentifiableFacade(this).setAdministration(version, revision);
+		put(Identifiable.ADMINISTRATION, new AdministrativeInformation(version, revision));
 	}
 
 	public void setIdentification(String idType, String id) {
-		new IdentifiableFacade(this).setIdentification(idType, id);
+		put(Identifiable.IDENTIFICATION, new Identifier(idType, id));
 	}
 
 }

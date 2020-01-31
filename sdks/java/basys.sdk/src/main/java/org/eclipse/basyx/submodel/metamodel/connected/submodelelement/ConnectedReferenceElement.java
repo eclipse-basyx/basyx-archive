@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IReferenceElement;
-import org.eclipse.basyx.submodel.metamodel.facade.reference.ReferenceFacade;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -28,7 +28,7 @@ public class ConnectedReferenceElement extends ConnectedDataElement implements I
 	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getValue() {
-		return new ReferenceFacade((Map<String, Object>) getElem().getPath(Property.VALUE));
+		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(Property.VALUE));
 	}
 
 }

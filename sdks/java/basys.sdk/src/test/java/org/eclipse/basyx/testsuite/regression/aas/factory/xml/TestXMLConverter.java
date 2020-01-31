@@ -24,8 +24,8 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
-import org.eclipse.basyx.aas.metamodel.facade.AssetAdministrationShellFacade;
-import org.eclipse.basyx.aas.metamodel.facade.parts.AssetFacade;
+import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
@@ -33,9 +33,8 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
-import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.parts.ConceptDescriptionFacade;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.RelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
@@ -353,7 +352,7 @@ public class TestXMLConverter {
 	private List<IAssetAdministrationShell> destroyAASTypes(List<IAssetAdministrationShell> aasList) {
 		List<IAssetAdministrationShell> ret = new ArrayList<>();
 		for(IAssetAdministrationShell aas: aasList) {
-			ret.add(new AssetAdministrationShellFacade(TypeDestroyer.destroyType((Map<String, Object>) aas)));
+			ret.add(AssetAdministrationShell.createAsFacade(TypeDestroyer.destroyType((Map<String, Object>) aas)));
 		}
 		return ret;
 	}
@@ -362,7 +361,7 @@ public class TestXMLConverter {
 	private List<ISubModel> destroySubmodelTypes(List<ISubModel> submodelList) {
 		List<ISubModel> ret = new ArrayList<>();
 		for(ISubModel submodel: submodelList) {
-			ret.add(new SubmodelFacade(new VABModelMap<>(TypeDestroyer.destroyType((Map<String, Object>) submodel))));
+			ret.add(SubModel.createAsFacade(new VABModelMap<>(TypeDestroyer.destroyType((Map<String, Object>) submodel))));
 		}
 		return ret;
 	}
@@ -371,7 +370,7 @@ public class TestXMLConverter {
 	private List<IAsset> destroyAssetTypes(List<IAsset> assetList) {
 		List<IAsset> ret = new ArrayList<>();
 		for(IAsset asset: assetList) {
-			ret.add(new AssetFacade(TypeDestroyer.destroyType((Map<String, Object>) asset)));
+			ret.add(Asset.createAsFacade(TypeDestroyer.destroyType((Map<String, Object>) asset)));
 		}
 		return ret;
 	}
@@ -380,7 +379,7 @@ public class TestXMLConverter {
 	private List<IConceptDescription> destroyConceptDescriptionTypes(List<IConceptDescription> cdList) {
 		List<IConceptDescription> ret = new ArrayList<>();
 		for(IConceptDescription cd: cdList) {
-			ret.add(new ConceptDescriptionFacade(TypeDestroyer.destroyType((Map<String, Object>) cd)));
+			ret.add(ConceptDescription.createAsFacade(TypeDestroyer.destroyType((Map<String, Object>) cd)));
 		}
 		return ret;
 	}

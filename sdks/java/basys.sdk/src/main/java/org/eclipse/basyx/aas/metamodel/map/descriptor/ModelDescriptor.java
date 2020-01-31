@@ -8,8 +8,6 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.facade.identifier.IdentifierFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -61,11 +59,11 @@ public abstract class ModelDescriptor extends HashMap<String, Object> {
 	@SuppressWarnings("unchecked")
 	public IIdentifier getIdentifier() {
 		Map<String, Object> identifierModel = (Map<String, Object>) get(Identifiable.IDENTIFICATION);
-		return new IdentifierFacade(identifierModel);
+		return Identifier.createAsFacade(identifierModel);
 	}
 	
 	public String getIdShort() {
-		return new ReferableFacade(this).getIdShort();
+		return Referable.createAsFacade(this).getIdShort();
 	}
 
 	/**

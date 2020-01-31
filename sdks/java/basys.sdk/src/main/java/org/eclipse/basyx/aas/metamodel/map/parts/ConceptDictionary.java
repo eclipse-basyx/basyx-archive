@@ -1,16 +1,16 @@
 package org.eclipse.basyx.aas.metamodel.map.parts;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
-import org.eclipse.basyx.aas.metamodel.facade.parts.ConceptDictionaryFacade;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.ReferableFacade;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * ConceptDictionary class as described in DAAS document
@@ -18,13 +18,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
  * @author elsheikh, schnicke
  *
  */
-public class ConceptDictionary extends HashMap<String, Object> implements IConceptDictionary {
-
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-
+public class ConceptDictionary extends VABModelMap<Object> implements IConceptDictionary {
 	public static final String CONCEPTDESCRIPTION = "conceptDescription";
 
 	// Extension of meta model
@@ -46,54 +40,69 @@ public class ConceptDictionary extends HashMap<String, Object> implements IConce
 		put(CONCEPTDESCRIPTION, ref);
 	}
 
+	/**
+	 * Creates a ConceptDictionary object from a map
+	 * 
+	 * @param obj
+	 *            a ConceptDictionary object as raw map
+	 * @return a ConceptDictionary object, that behaves like a facade for the given
+	 *         map
+	 */
+	public static ConceptDictionary createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
+
+		ConceptDictionary ret = new ConceptDictionary();
+		ret.setMap(map);
+		return ret;
+	}
+
 	@Override
 	public String getIdShort() {
-		return new ReferableFacade(this).getIdShort();
+		return Referable.createAsFacade(this).getIdShort();
 	}
 
 	@Override
 	public String getCategory() {
-		return new ReferableFacade(this).getCategory();
+		return Referable.createAsFacade(this).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return new ReferableFacade(this).getDescription();
+		return Referable.createAsFacade(this).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return new ReferableFacade(this).getParent();
+		return Referable.createAsFacade(this).getParent();
 	}
 
 	public void setIdShort(String idShort) {
-		new ReferableFacade(this).setIdShort(idShort);
-
+		Referable.createAsFacade(this).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {
-		new ReferableFacade(this).setCategory(category);
-
+		Referable.createAsFacade(this).setCategory(category);
 	}
 
 	public void setDescription(LangStrings description) {
-		new ReferableFacade(this).setDescription(description);
-
+		Referable.createAsFacade(this).setDescription(description);
 	}
 
 	public void setParent(IReference obj) {
-		new ReferableFacade(this).setParent(obj);
-
+		Referable.createAsFacade(this).setParent(obj);
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Set<IReference> getConceptDescription() {
-		return new ConceptDictionaryFacade(this).getConceptDescription();
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(ConceptDictionary.CONCEPTDESCRIPTION);
+		return ReferenceHelper.transform(set);
 	}
 
 	public void setConceptDescription(HashSet<IReference> ref) {
-		new ConceptDictionaryFacade(this).setConceptDescription(ref);
-
+		put(ConceptDictionary.CONCEPTDESCRIPTION, ref);
 	}
 
 	@SuppressWarnings("unchecked")

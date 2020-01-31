@@ -1,12 +1,11 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.AdministrativeInformationFacade;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificationFacade;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * AdministrativeInformation class
@@ -14,13 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.qualifier.HasDataSpecificatio
  * @author kuhn
  *
  */
-public class AdministrativeInformation extends HashMap<String, Object> implements IAdministrativeInformation {
-
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-
+public class AdministrativeInformation extends VABModelMap<Object> implements IAdministrativeInformation {
 	public static final String VERSION = "version";
 
 	public static final String REVISION = "revision";
@@ -49,31 +42,48 @@ public class AdministrativeInformation extends HashMap<String, Object> implement
 		put(REVISION, revision);
 	}
 
+	/**
+	 * Creates a AdministrativeInformation object from a map
+	 * 
+	 * @param obj
+	 *            a AdministrativeInformation object as raw map
+	 * @return a AdministrativeInformation object, that behaves like a facade for
+	 *         the given map
+	 */
+	public static AdministrativeInformation createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
+
+		AdministrativeInformation ret = new AdministrativeInformation();
+		ret.setMap(map);
+		return ret;
+	}
+
 	@Override
 	public Set<IReference> getDataSpecificationReferences() {
-		return new HasDataSpecificationFacade(this).getDataSpecificationReferences();
+		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
 	}
 
 	public void setDataSpecificationReferences(Set<IReference> ref) {
-		new HasDataSpecificationFacade(this).setDataSpecificationReferences(ref);
+		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
 	}
 
 	public void setVersion(String version) {
-		new AdministrativeInformationFacade(this).setVersion(version);
+		put(AdministrativeInformation.VERSION, version);
 	}
 
 	@Override
 	public String getVersion() {
-		return new AdministrativeInformationFacade(this).getVersion();
+		return (String) get(AdministrativeInformation.VERSION);
 	}
 
 	public void setRevision(String revision) {
-		new AdministrativeInformationFacade(this).setRevision(revision);
+		put(AdministrativeInformation.REVISION, revision);
 	}
 
 	@Override
 	public String getRevision() {
-		return new AdministrativeInformationFacade(this).getRevision();
+		return (String) get(AdministrativeInformation.REVISION);
 	}
-
 }

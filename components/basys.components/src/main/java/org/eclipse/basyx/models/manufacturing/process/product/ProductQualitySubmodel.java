@@ -21,15 +21,6 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Propert
  *
  */
 public class ProductQualitySubmodel extends SubModel {
-
-	
-	/**
-	 * Version number of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
-	
 	/**
 	 * List of production quality data
 	 */

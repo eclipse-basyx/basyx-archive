@@ -13,9 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Propert
  * @author pschorn, schnicke
  *
  */
-public class Blob extends DataElement implements IBlob{
-	private static final long serialVersionUID = 1L;
-	
+public class Blob extends DataElement implements IBlob {
 	public static final String MIMETYPE="mimeType";
 	public static final String MODELTYPE = "blob";
 	
@@ -52,7 +50,7 @@ public class Blob extends DataElement implements IBlob{
 	 */
 	public static Blob createAsFacade(Map<String, Object> obj) {
 		Blob facade = new Blob();
-		facade.putAll(obj);
+		facade.setMap(obj);
 		return facade;
 	}
 	

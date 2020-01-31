@@ -1,6 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.map.dataspecification;
 
-import java.util.HashMap;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * Abstract DataSpecificationContent to be used as content for
@@ -9,6 +9,5 @@ import java.util.HashMap;
  * @author schnicke
  *
  */
-public abstract class DataSpecificationContent extends HashMap<String, Object> {
-	private static final long serialVersionUID = 1L;
+public abstract class DataSpecificationContent extends VABModelMap<Object> {
 }

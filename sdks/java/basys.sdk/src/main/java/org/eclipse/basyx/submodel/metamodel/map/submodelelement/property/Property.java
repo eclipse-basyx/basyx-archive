@@ -22,11 +22,6 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.valuety
  *
  */
 public class Property extends AbstractProperty implements ISingleProperty {
-
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
 	public static final String VALUE = "value";
 	public static final String VALUEID = "valueId";
 	public static final String VALUETYPE = "valueType";
@@ -52,7 +47,7 @@ public class Property extends AbstractProperty implements ISingleProperty {
 	 */
 	public static Property createAsFacade(Map<String, Object> obj) {
 		Property facade = new Property();
-		facade.putAll(obj);
+		facade.setMap(obj);
 		return facade;
 	}
 

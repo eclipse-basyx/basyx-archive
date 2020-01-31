@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.facade.qualifier.IdentifiableFacade;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 
 /**
  * AAS descriptor class
@@ -119,7 +119,7 @@ public class AASDescriptor extends ModelDescriptor {
 		// Go through all descriptors (as maps) and find the one with the subModelId
 		for (Map<String, Object> smDescriptorMap : smDescriptorMaps) {
 			// Use a facade to access the identifier
-			IIdentifier id = new IdentifiableFacade(smDescriptorMap).getIdentification();
+			IIdentifier id = Identifiable.createAsFacade(smDescriptorMap).getIdentification();
 			if (id.getId().equals(subModelId)) {
 				return new SubmodelDescriptor(smDescriptorMap);
 			}

@@ -11,11 +11,6 @@ import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
  *
  */
 public class Event extends Property {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	public static final String MODELTYPE = "Event";
 
 	/**
@@ -34,7 +29,7 @@ public class Event extends Property {
 	 */
 	public static Event createAsFacade(Map<String, Object> obj) {
 		Event facade = new Event();
-		facade.putAll(obj);
+		facade.setMap(obj);
 		return facade;
 	}
 

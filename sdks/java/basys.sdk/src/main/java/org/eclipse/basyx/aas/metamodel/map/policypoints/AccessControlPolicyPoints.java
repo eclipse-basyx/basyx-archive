@@ -1,9 +1,9 @@
 package org.eclipse.basyx.aas.metamodel.map.policypoints;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.api.policypoints.IAccessControlPolicyPoints;
-import org.eclipse.basyx.aas.metamodel.facade.policypoints.AccessControlPolicyPointsFacade;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * Security class
@@ -11,13 +11,7 @@ import org.eclipse.basyx.aas.metamodel.facade.policypoints.AccessControlPolicyPo
  * @author elsheikh
  *
  */
-public class AccessControlPolicyPoints extends HashMap<String, Object> implements IAccessControlPolicyPoints {
-
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-
+public class AccessControlPolicyPoints extends VABModelMap<Object> implements IAccessControlPolicyPoints {
 	public static final String POLICYADMINISTRATIONPOINT = "policyAdministrationPoint";
 	public static final String POLICYDECISIONPOINT = "policyDecisionPoint";
 	public static final String POLICYENFORECEMENTPOINT = "policyEnforcementPoint";
@@ -35,39 +29,58 @@ public class AccessControlPolicyPoints extends HashMap<String, Object> implement
 		put(POLICYINFORMATIONPOINTS, null);
 	}
 
+	/**
+	 * Creates a DataSpecificationIEC61360 object from a map
+	 * 
+	 * @param obj
+	 *            a DataSpecificationIEC61360 object as raw map
+	 * @return a DataSpecificationIEC61360 object, that behaves like a facade for
+	 *         the given map
+	 */
+	public static AccessControlPolicyPoints createAsFacade(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
+
+		AccessControlPolicyPoints ret = new AccessControlPolicyPoints();
+		ret.setMap(map);
+		return ret;
+	}
+
 	public void setPolicyAdministrationPoint(Object obj) {
-		new AccessControlPolicyPointsFacade(this).setPolicyAdministrationPoint(obj);
+		put(AccessControlPolicyPoints.POLICYADMINISTRATIONPOINT, obj);
 	}
 
 	@Override
 	public Object getPolicyAdministrationPoint() {
-		return new AccessControlPolicyPointsFacade(this).getPolicyAdministrationPoint();
+		return get(AccessControlPolicyPoints.POLICYADMINISTRATIONPOINT);
 	}
 
 	public void setPolicyDecisionPoint(Object obj) {
-		new AccessControlPolicyPointsFacade(this).setPolicyDecisionPoint(obj);
+		put(AccessControlPolicyPoints.POLICYDECISIONPOINT, obj);
 	}
 
 	@Override
 	public Object getPolicyDecisionPoint() {
-		return new AccessControlPolicyPointsFacade(this).getPolicyDecisionPoint();
+		return get(AccessControlPolicyPoints.POLICYDECISIONPOINT);
 	}
 
 	public void setPolicyEnforcementPoint(Object obj) {
-		new AccessControlPolicyPointsFacade(this).setPolicyEnforcementPoint(obj);
+		put(AccessControlPolicyPoints.POLICYENFORECEMENTPOINT, obj);
 	}
 
 	@Override
 	public Object getPolicyEnforcementPoint() {
-		return new AccessControlPolicyPointsFacade(this).getPolicyEnforcementPoint();
+		return get(AccessControlPolicyPoints.POLICYENFORECEMENTPOINT);
 	}
 
 	public void setPolicyInformationPoints(Object obj) {
-		new AccessControlPolicyPointsFacade(this).setPolicyInformationPoints(obj);
+		put(AccessControlPolicyPoints.POLICYINFORMATIONPOINTS, obj);
 	}
 
 	@Override
 	public Object getPolicyInformationPoints() {
-		return new AccessControlPolicyPointsFacade(this).getPolicyInformationPoints();
+		return get(AccessControlPolicyPoints.POLICYINFORMATIONPOINTS);
 	}
+
 }
