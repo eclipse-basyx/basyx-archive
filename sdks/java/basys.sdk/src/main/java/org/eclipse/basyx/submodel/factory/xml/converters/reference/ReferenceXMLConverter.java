@@ -9,6 +9,8 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.w3c.dom.Document;
@@ -78,7 +80,7 @@ public class ReferenceXMLConverter {
 		String type = XMLHelper.getString(xmlObject.get(TYPE));
 		boolean local = Boolean.parseBoolean(XMLHelper.getString(xmlObject.get(LOCAL)));
 	
-		return new Key(type, local, text, idType);
+		return new Key(KeyElements.fromString(type), local, text, KeyType.fromString(idType));
 	}
 	
 	
@@ -130,9 +132,9 @@ public class ReferenceXMLConverter {
 	private static Element buildKey(Document document, IKey key) {
 		Element xmlKey = document.createElement(KEY);	
 		xmlKey.appendChild(document.createTextNode(key.getValue()));
-		xmlKey.setAttribute(IDTYPE, key.getidType());
+		xmlKey.setAttribute(IDTYPE, key.getIdType().toString());
 		xmlKey.setAttribute(LOCAL, String.valueOf(key.isLocal()));
-		xmlKey.setAttribute(TYPE, key.getType());
+		xmlKey.setAttribute(TYPE, key.getType().toString());
 		
 		return xmlKey;
 	}

@@ -3,9 +3,9 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IRelationshipElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.RelationshipElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -19,7 +19,6 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 		super(proxy);
 	}
 
-	@Override
 	public void setFirst(IReference first) {
 		getProxy().setModelPropertyValue(RelationshipElement.FIRST, first);
 
@@ -31,14 +30,14 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(RelationshipElement.FIRST));
 	}
 
-	@Override
 	public void setSecond(IReference second) {
 		getProxy().setModelPropertyValue(RelationshipElement.SECOND, second);
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getSecond() {
-		return (IReference) getProxy().getModelPropertyValue(RelationshipElement.FIRST);
+		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(RelationshipElement.SECOND));
 	}
 }

@@ -7,5 +7,5 @@ package org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind;
  *
 */
 public interface IHasKind {
-	public String getKind();
+	public ModelingKind getModelingKind();
 }

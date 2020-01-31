@@ -7,6 +7,7 @@ import java.util.Set;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecificationIEC61360;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -87,7 +88,7 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 		Identifiable.createAsFacade(this).setAdministration(version, revision);
 	}
 
-	public void setIdentification(String idType, String id) {
+	public void setIdentification(IdentifierType idType, String id) {
 		Identifiable.createAsFacade(this).setIdentification(idType, id);
 	}
 

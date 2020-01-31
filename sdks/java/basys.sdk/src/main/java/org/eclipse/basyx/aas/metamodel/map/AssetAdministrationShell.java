@@ -9,9 +9,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.api.parts.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
@@ -20,6 +20,7 @@ import org.eclipse.basyx.aas.metamodel.map.parts.View;
 import org.eclipse.basyx.aas.metamodel.map.security.Security;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -146,7 +147,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		setIdentification(id.getIdType(), id.getId());
 	}
 
-	public void setIdentification(String idType, String id) {
+	public void setIdentification(IdentifierType idType, String id) {
 		Identifiable.createAsFacade(this).setIdentification(idType, id);
 	}
 
@@ -159,7 +160,6 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
 	}
 
-	@Override
 	public void setIdShort(String id) {
 		Referable.createAsFacade(this).setIdShort(id);
 	}
@@ -194,7 +194,6 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		return Asset.createAsFacade((Map<String, Object>) get(AssetAdministrationShell.ASSET));
 	}
 
-	@Override
 	public void setSubModels(Set<SubmodelDescriptor> submodels) {
 		put(AssetAdministrationShell.SUBMODELS, submodels);
 	}

@@ -14,11 +14,11 @@ import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.ClassRule;
@@ -81,7 +81,7 @@ public class ConnectToSubModelEndpoints {
 		String        aasSrvURL      = "http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer/aas";
 		// - Sub model ID
 		String smIdShort = "exampleSM";
-		IIdentifier smId = new Identifier(IdentifierType.Custom, "exampleSMId");
+		IIdentifier smId = new Identifier(IdentifierType.CUSTOM, "exampleSMId");
 		// - Create AAS descriptor and sub model descriptor
 		AASDescriptor aasDescriptor = new AASDescriptor(aasURN, aasSrvURL);
 		String smEndpoint = VABPathTools.concatenatePaths(aasSrvURL, "submodels", smIdShort);

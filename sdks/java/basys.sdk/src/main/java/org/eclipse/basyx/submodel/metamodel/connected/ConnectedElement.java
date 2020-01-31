@@ -58,9 +58,4 @@ public class ConnectedElement implements IElement {
 	public String getIdShort() {
 		return (String) getElem().getPath(Referable.IDSHORT);
 	}
-
-	@Override
-	public void setIdShort(String id) {
-		throwNotSupportedException();
-	}
 }

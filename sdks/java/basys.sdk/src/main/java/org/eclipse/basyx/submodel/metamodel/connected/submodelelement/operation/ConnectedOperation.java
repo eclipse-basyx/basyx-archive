@@ -3,15 +3,14 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -25,16 +24,19 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		super(proxy);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<IOperationVariable> getParameterTypes() {
-		return (List<IOperationVariable>) getProxy().getModelPropertyValue(Operation.IN);
+	public List<IOperationVariable> getInputVariables() {
+		return Operation.createAsFacade(getElem()).getInputVariables();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<IOperationVariable> getReturnTypes() {
-		return (List<IOperationVariable>) getProxy().getModelPropertyValue(Operation.OUT);
+	public List<IOperationVariable> getOutputVariables() {
+		return Operation.createAsFacade(getElem()).getOutputVariables();
+	}
+
+	@Override
+	public List<IOperationVariable> getInOutputVariables() {
+		return Operation.createAsFacade(getElem()).getInOutputVariables();
 	}
 
 	/**
@@ -71,11 +73,5 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		}
 
 		return result;
-	}
-
-
-	@Override
-	public Function<Object[], Object> getInvocable() {
-		throw new RuntimeException("Not possible on remote side");
 	}
 }

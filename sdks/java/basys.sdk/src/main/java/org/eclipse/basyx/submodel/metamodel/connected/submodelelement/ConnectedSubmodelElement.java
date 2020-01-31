@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
@@ -57,8 +58,9 @@ public abstract class ConnectedSubmodelElement extends ConnectedElement implemen
 	}
 
 	@Override
-	public String getKind() {
-		return HasKind.createAsFacade(getElem()).getKind();
+	public ModelingKind getModelingKind() {
+		return HasKind.createAsFacade(getElem()).getModelingKind();
+
 	}
 
 	@Override

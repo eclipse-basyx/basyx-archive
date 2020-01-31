@@ -7,9 +7,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.property.IMapProperty;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.property.ConnectedMapProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.IMapProperty;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.ConnectedMapProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SinglePropertyProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;

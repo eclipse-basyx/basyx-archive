@@ -4,25 +4,33 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Interface for SubmodelElementCollection
- * @author rajashek
+ * A submodel element collection is a set or list of submodel elements.
+ * 
+ * @author rajashek, schnicke
  *
-*/
+ */
 public interface ISubmodelElementCollection extends ISubmodelElement {
-
-	public void setValue(Collection<ISubmodelElement> value);
 	
 	public Collection<ISubmodelElement> getValue();
 	
-	public void setOrdered(boolean value);
-	
+	/**
+	 * Gets if the collection is ordered or unordered
+	 * 
+	 * @return
+	 */
 	public boolean isOrdered();
 	
-	public void setAllowDuplicates(boolean value);
-	
+	/**
+	 * Gets if the collection allows duplicates
+	 * 
+	 * @return
+	 */
 	public boolean isAllowDuplicates();
 	
-	public void setElements(Map<String, ISubmodelElement> value);
-	
+	/**
+	 * Gets the elements contained in the collection
+	 * 
+	 * @return
+	 */
 	public Map<String, ISubmodelElement> getElements();
 }

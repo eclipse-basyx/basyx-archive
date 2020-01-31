@@ -7,7 +7,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -21,21 +21,10 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 		super(proxy);
 	}
 
-	@Override
-	public void setValue(Collection<ISubmodelElement> value) {
-		getProxy().setModelPropertyValue(Property.VALUE, value);
-
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ISubmodelElement> getValue() {
 		return (Collection<ISubmodelElement>) getProxy().getModelPropertyValue(Property.VALUE);
-	}
-
-	@Override
-	public void setOrdered(boolean value) {
-		getProxy().setModelPropertyValue(SubmodelElementCollection.ORDERED, value);
 	}
 
 	@Override
@@ -44,19 +33,8 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	}
 
 	@Override
-	public void setAllowDuplicates(boolean value) {
-		getProxy().setModelPropertyValue(SubmodelElementCollection.ALLOWDUPLICATES, value);
-
-	}
-
-	@Override
 	public boolean isAllowDuplicates() {
 		return (boolean) getElem().getPath(SubmodelElementCollection.ALLOWDUPLICATES);
-	}
-
-	@Override
-	public void setElements(Map<String, ISubmodelElement> value) {
-		getProxy().setModelPropertyValue(SubModel.SUBMODELELEMENT, value);
 	}
 
 	@SuppressWarnings("unchecked")

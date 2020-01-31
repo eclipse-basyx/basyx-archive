@@ -15,7 +15,7 @@ import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 
 /**
  * SubmodelElementCollection as defined by DAAS document <br/>
@@ -112,10 +112,8 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		return Referable.createAsFacade(this).getDescription();
 	}
 
-	@Override
 	public void setValue(Collection<ISubmodelElement> value) {
 		put(Property.VALUE, value);
-
 	}
 
 	@Override
@@ -130,10 +128,8 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		return ret;
 	}
 
-	@Override
 	public void setOrdered(boolean value) {
 		put(SubmodelElementCollection.ORDERED, value);
-
 	}
 
 	@Override
@@ -141,10 +137,8 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		return (boolean) get(SubmodelElementCollection.ORDERED);
 	}
 
-	@Override
 	public void setAllowDuplicates(boolean value) {
 		put(SubmodelElementCollection.ALLOWDUPLICATES, value);
-
 	}
 
 	@Override
@@ -152,7 +146,6 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		return (boolean) get(SubmodelElementCollection.ALLOWDUPLICATES);
 	}
 
-	@Override
 	public void setElements(Map<String, ISubmodelElement> value) {
 		put(SubModel.SUBMODELELEMENT, value);
 	}

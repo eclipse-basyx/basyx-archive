@@ -83,7 +83,7 @@ public class Reference extends VABModelMap<Object> implements IReference {
 		// Copy the key list to make sure an actual hashmap is put inside this map
 		List<IKey> copy = new ArrayList<>();
 		for (IKey key : keys) {
-			copy.add(new Key(key.getType(), key.isLocal(), key.getValue(), key.getidType()));
+			copy.add(new Key(key.getType(), key.isLocal(), key.getValue(), key.getIdType()));
 		}
 		put(Reference.KEY, copy);
 	}

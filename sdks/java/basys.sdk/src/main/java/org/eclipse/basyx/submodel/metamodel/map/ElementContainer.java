@@ -4,8 +4,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.IElementContainer;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -13,7 +14,7 @@ import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * Facade providing access to attributes of entities implementing
- * IVABElementContainer
+ * IElementContainer
  * 
  * @author schnicke
  *

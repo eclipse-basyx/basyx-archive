@@ -3,8 +3,8 @@ package org.eclipse.basyx.submodel.restapi;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 

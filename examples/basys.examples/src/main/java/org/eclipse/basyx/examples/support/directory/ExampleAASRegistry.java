@@ -5,13 +5,13 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 
 public class ExampleAASRegistry extends InMemoryRegistry {
 
 	public ExampleAASRegistry addAASMapping(String rawUrn, String endpoint) {
-		IIdentifier id = new Identifier(IdentifierType.URI, rawUrn);
+		IIdentifier id = new Identifier(IdentifierType.IRI, rawUrn);
 		AASDescriptor aasDescriptor = new AASDescriptor(id, endpoint);
 		register(aasDescriptor);
 		return this;
@@ -20,7 +20,7 @@ public class ExampleAASRegistry extends InMemoryRegistry {
 	public ExampleAASRegistry addSubmodelMapping(String rawAASUrn, String submodelid, String endpoint) {
 		AASDescriptor aasDescriptor;
 		ModelUrn aasUrn = new ModelUrn(rawAASUrn);
-		IIdentifier smId = new Identifier(IdentifierType.URI, submodelid);
+		IIdentifier smId = new Identifier(IdentifierType.IRI, submodelid);
 		SubmodelDescriptor smDes = new SubmodelDescriptor(submodelid, smId, endpoint);
 
 		if (descriptorMap.keySet().contains(aasUrn.getURN())) {

@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
@@ -14,6 +15,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.vab.model.VABModelMap;
+
 
 /**
  * SubmodelElement as defined in "Details of the Asset Administration Shell"
@@ -80,7 +82,6 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 		return Referable.createAsFacade(this).getParent();
 	}
 
-	@Override
 	public void setIdShort(String idShort) {
 		Referable.createAsFacade(this).setIdShort(idShort);
 	}
@@ -116,12 +117,12 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 	}
 
 	@Override
-	public String getKind() {
-		return HasKind.createAsFacade(this).getKind();
+	public ModelingKind getModelingKind() {
+		return HasKind.createAsFacade(this).getModelingKind();
 	}
 
-	public void setKind(String kind) {
-		HasKind.createAsFacade(this).setKind(kind);
+	public void setModelingKind(ModelingKind kind) {
+		HasKind.createAsFacade(this).setModelingKind(kind);
 	}
 
 	@Override

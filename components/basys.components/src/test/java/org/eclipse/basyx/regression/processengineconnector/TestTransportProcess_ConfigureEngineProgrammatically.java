@@ -19,8 +19,8 @@ import org.eclipse.basyx.components.processengine.connector.DeviceServiceDelegat
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceExecutor;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.IdentifierType;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.Before;
@@ -74,10 +74,10 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 		registry = new InMemoryRegistry();
 
 		// Create aas descriptor with meta-information of the aas
-		IIdentifier id = new Identifier(IdentifierType.Custom, AAS_ID);
+		IIdentifier id = new Identifier(IdentifierType.CUSTOM, AAS_ID);
 		AASDescriptor ccDescriptor = new AASDescriptor(id,
 				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas");
-		IIdentifier smId = new Identifier(IdentifierType.Custom, SUBMODEL_ID);
+		IIdentifier smId = new Identifier(IdentifierType.CUSTOM, SUBMODEL_ID);
 		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1", smId,
 				"http://localhost:8080/basys.components/Testsuite/Processengine/coilcar/aas/submodels/"+SUBMODEL_ID);
 		ccDescriptor.addSubmodelDescriptor(smDescriptor);

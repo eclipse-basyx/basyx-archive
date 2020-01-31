@@ -2,7 +2,10 @@ package org.eclipse.basyx.submodel.metamodel.map.reference;
 
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
@@ -22,25 +25,35 @@ public class Key extends VABModelMap<Object> implements IKey {
 	/**
 	 * 
 	 * @param type
-	 *            Denote which kind of entity is referenced. See
-	 *            {@link org.eclipse.basyx.submodel.metamodel.map.reference.enums.KeyElements
-	 *            KeyElements} and its children for possible values
+	 *            Denote which kind of entity is referenced.
 	 * @param local
 	 *            Denotes if the key references a model element of the same AAS
 	 *            (=true) or not (=false).
 	 * @param value
 	 *            The key value, for example an IRDI if the idType=IRDI.
 	 * @param idType
-	 *            Type of the key value. See
-	 *            {@link org.eclipse.basyx.submodel.metamodel.map.reference.enums.KeyType
-	 *            KeyType} for valid values. In case of idType = idShort local shall
-	 *            be true. In case type=GlobalReference idType shall not be IdShort.
+	 *            Type of the key value. In case of idType = idShort local shall be
+	 *            true. In case type=GlobalReference idType shall not be IdShort.
 	 */
-	public Key(String type, boolean local, String value, String idType) {
-		put(TYPE, type);
+	public Key(KeyElements type, boolean local, String value, KeyType idType) {
+		put(TYPE, type.toString());
 		put(LOCAL, local);
 		put(VALUE, value);
-		put(IDTYPE, idType);
+		put(IDTYPE, idType.toString());
+	}
+	
+	/**
+	 * Helper constructor to translate IdentifierType to KeyType. <br />
+	 * In the meta model KeyType inheritcs from IdentifiertType, however Java does
+	 * not support enum inheritance
+	 * 
+	 * @param type
+	 * @param local
+	 * @param value
+	 * @param idType
+	 */
+	public Key(KeyElements type, boolean local, String value, IdentifierType idType) {
+		this(type, local, value, KeyType.fromString(idType.toString()));
 	}
 
 	/**
@@ -68,8 +81,8 @@ public class Key extends VABModelMap<Object> implements IKey {
 	}
 
 	@Override
-	public String getType() {
-		return (String) get(Key.TYPE);
+	public KeyElements getType() {
+		return KeyElements.fromString((String) get(Key.TYPE));
 	}
 
 	@Override
@@ -83,12 +96,12 @@ public class Key extends VABModelMap<Object> implements IKey {
 	}
 
 	@Override
-	public String getidType() {
-		return (String) get(Key.IDTYPE);
+	public KeyType getIdType() {
+		return KeyType.fromString((String) get(Key.IDTYPE));
 	}
 
-	public void setType(String type) {
-		put(Key.TYPE, type);
+	public void setType(KeyElements type) {
+		put(Key.TYPE, type.toString());
 	}
 
 	public void setLocal(boolean local) {
@@ -99,8 +112,8 @@ public class Key extends VABModelMap<Object> implements IKey {
 		put(Key.VALUE, value);
 	}
 
-	public void setIdType(String idType) {
-		put(Key.IDTYPE, idType);
+	public void setIdType(KeyType idType) {
+		put(Key.IDTYPE, idType.toString());
 	}
 
 }
