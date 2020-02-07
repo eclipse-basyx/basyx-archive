@@ -10,12 +10,17 @@
   	<properties>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-  <repositories>
-	  <repository>
-	    <id>data-local</id>
-	    <name>data</name>
-	    <url>file://${project.basedir}/repo</url>
-	  </repository>
+
+ 	<repositories>
+		<repository>
+			<id>mule</id>
+			<name>Mule Repository</name>
+			<url>https://repository.mulesoft.org/nexus/content/groups/public/</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 
    <build>
@@ -266,7 +271,7 @@
 		<dependency>
 			<groupId>net.sf.saxon</groupId>
 			<artifactId>saxon-xqj</artifactId>
-			<version>8.9</version>
+			<version>8.9.0.4</version>
 		</dependency>
 
 
