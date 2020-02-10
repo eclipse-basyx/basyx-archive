@@ -1,6 +1,6 @@
 package org.eclipse.basyx.examples.contexts;
 
-import org.eclipse.basyx.components.servlet.registry.SQLRegistryServlet;
+import org.eclipse.basyx.components.servlet.SQLRegistryServlet;
 import org.eclipse.basyx.components.servlet.submodel.cfg.RawCFGSubModelProviderServlet;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 

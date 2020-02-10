@@ -62,8 +62,7 @@
       <plugin>
          <groupId>org.apache.maven.plugins</groupId>
          <artifactId>maven-surefire-plugin</artifactId>
-         <!-- <version>2.12.1</version> -->
-         <version>2.4.2</version>
+         <version>3.0.0-M3</version>
           <configuration>
     		<excludes>
       			<exclude>**/*contexts*</exclude>
@@ -86,7 +85,7 @@
        <plugin>
 		  <groupId>org.apache.maven.plugins</groupId>
 		  <artifactId>maven-failsafe-plugin</artifactId>
-		  <version>2.12.4</version>
+		  <version>3.0.0-M3</version>
 		  <configuration>
 		    <includes>
 		      <include>**/*HTTP*</include>
@@ -271,8 +270,24 @@
 		<!-- Add BaSys components from local repository. Maven build of SDK must generate a jar and place it into the repository to update -->
 		<dependency>
 			<groupId>org.eclipse.basyx</groupId>
-			<artifactId>basyx.components</artifactId>
+			<artifactId>basyx.components.lib</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<!-- Add explicit SQLRegistry dependency -->
+		<dependency>
+			<groupId>org.eclipse.basyx</groupId>
+			<artifactId>basyx.components.sqlregistry</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<!-- Adds additional classes of the BaSys SDK for tests -->
+		<dependency>
+			<groupId>org.eclipse.basyx</groupId>
+			<artifactId>basyx.sdk</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
 		</dependency>
   </dependencies>
 </project>
