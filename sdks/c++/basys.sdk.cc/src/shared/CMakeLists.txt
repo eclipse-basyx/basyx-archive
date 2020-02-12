@@ -37,6 +37,8 @@ add_library(${PROJECT_SHORTNAME}::${BASYX_SHARED_LIB_SUFFIX} ALIAS ${BASYX_SHARE
 ###############################################
 ###           Install section               ###
 ###############################################
+if(${BASYX_INSTALL_SDK})
+
 configure_package_config_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/${BASYX_SHARED_LIBRARY_NAME}Config.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/${BASYX_SHARED_LIBRARY_NAME}Config.cmake
@@ -67,3 +69,5 @@ install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../include/${PROJECT_SHORTNAME}/s
 )
 
 diagnostics_print(${BASYX_SHARED_LIB_SUFFIX})
+
+endif()

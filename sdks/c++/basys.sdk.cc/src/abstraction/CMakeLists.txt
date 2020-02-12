@@ -40,7 +40,7 @@ target_sources(${BASYX_ABSTRACTION_LIB_SUFFIX}
 
 if(WIN32)
     message(STATUS "Using winsock2.")
-    target_link_libraries(${BASYX_ABSTRACTION_LIB_SUFFIX} ws2_32)
+    target_link_libraries(${BASYX_ABSTRACTION_LIB_SUFFIX} PUBLIC ws2_32)
     set(socket_platform "windows")
 endif()
 
@@ -70,6 +70,8 @@ add_library(${PROJECT_SHORTNAME}::${BASYX_ABSTRACTION_LIB_SUFFIX} ALIAS ${BASYX_
 ###############################################
 ###           Install section               ###
 ###############################################
+if(${BASYX_INSTALL_SDK})
+
 configure_package_config_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/${BASYX_ABSTRACTION_LIBRARY_NAME}Config.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/${BASYX_ABSTRACTION_LIBRARY_NAME}Config.cmake
@@ -100,3 +102,5 @@ install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../include/${PROJECT_SHORTNAME}/a
 )
 
 diagnostics_print(${BASYX_ABSTRACTION_LIB_SUFFIX})
+
+endif()

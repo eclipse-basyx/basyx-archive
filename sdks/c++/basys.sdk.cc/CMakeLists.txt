@@ -19,11 +19,9 @@ set (BASYX_PACKAGE_VERSION_PATCH "0")
 
 set (PROJECT_NAME "BaSyx C++ SDK")
 set (PROJECT_SHORTNAME "BaSyx")
-set (PROJECT_DESCRIPTION "fill me!")
 
 project (${PROJECT_NAME} 
         VERSION ${BASYX_PACKAGE_VERSION_MAJOR}.${BASYX_PACKAGE_VERSION_MINOR}.${BASYX_PACKAGE_VERSION_PATCH}
-        DESCRIPTION ${PROJECT_DESCRIPTION}
         )
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -40,8 +38,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-### BASYX directories ###
-
+### BaSyx directories ###
 set(BASYX_SOURCE_DIR  "${CMAKE_SOURCE_DIR}/src")
 set(BASYX_TEST_DIR    "${CMAKE_SOURCE_DIR}/regression")
 set(BASYX_LIBRARY_DIR "${CMAKE_SOURCE_DIR}/lib")
@@ -51,18 +48,18 @@ set(BASYX_BUILD_TESTS ON CACHE BOOL "Build unit tests")
 set(BASYX_BUILD_API ON CACHE BOOL "Build BaSyx API")
 set(BASYX_UTILITY_PROJECTS ON CACHE BOOL "Create utility targets")
 set(BASYX_DEBUG_PRINT_FRAMES OFF CACHE BOOL "Print BaSyx frames")
+set(BASYX_INSTALL_SDK ON CACHE BOOL "Create install instructions for BaSyx SDK")
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Shared (.so / .dll) instead of static libraries")
 
 option(BASYX_USE_SYSTEM_LIBFMT "Wether to build external, yet included library libfmt" OFF)
 option(BASYX_USE_SYSTEM_ASIO "Use system supplied ASIO library." OFF)
 option(BASYX_USE_SYSTEM_JSON "Use system supplied nlohmann json library" OFF)
-### Compiler settings ###
 
+### Compiler settings ###
 set(CMAKE_CXX_STANDARD 11)
 
 ### Compile Step Definitions ###
-
 add_compile_definitions(BASYX_MAJOR_REV=${BASYX_PACKAGE_VERSION_MAJOR})
 add_compile_definitions(BASYX_MINOR_REV=${BASYX_PACKAGE_VERSION_MINOR})
 add_compile_definitions(BASYX_PATCH_REV=${BASYX_PACKAGE_VERSION_PATCH})
@@ -91,7 +88,6 @@ endif()
 if(${BASYX_USE_SYSTEM_ASIO})
     find_package(asio REQUIRED)
 else()
-    #add_compile_definitions(ASIO_STANDALONE)
     add_subdirectory(lib/asio)
 endif()
 
@@ -140,50 +136,56 @@ if(${BASYX_UTILITY_PROJECTS})
     enable_testbed()
 endif()
 
-###############################################
-###           Install section               ###
-###############################################
 
-# Let the projects using our server infrastucure find asio (interally /
-# externally provided)
+if(${BASYX_INSTALL_SDK})
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/Findasio.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/BaSyxAsio
-)
+	###############################################
+	###           Install section               ###
+	###############################################
 
-###############################################
-###           Install overview              ###
-###############################################
 
-message("")
-message("--------------------")
-message("Configuration:")
-message("   Library name and version:   " "${PROJECT_NAME}, ${PROJECT_VERSION}" )
-message("   Library destination folder: " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} )
-message("   Includes folder:            " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME} )
-#message("   Pkgconfig folder:           " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/pkgconfig )
-message("   CMake folder:               " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_SHORTNAME} )
-message("")
-if(${BASYX_USE_SYSTEM_LIBFMT})
-message("   Using system supplied fmt")
-else()
-message("   Using contained fmt - Please check if this is necessary!")
-endif()
+	# Let the projects using our server infrastucure find asio (interally /
+	# externally provided)
 
-if(${BASYX_USE_SYSTEM_ASIO})
-message("   Using system supplied asio")
-else()
-message("   Using contained asio - Please check if this is necessary!")
-endif()
+	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/Findasio.cmake
+			DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/BaSyxAsio
+	)
 
-if(${BASYX_USE_SYSTEM_JSON})
-message("   Using system supplied nlohmann_json")
-else()
-message("   Using contained nlohmann_json - Please check if this is necessary!")
-endif()
+	###############################################
+	###           Install overview              ###
+	###############################################
 
-if ((NOT ${BASYX_USE_SYSTEM_LIBFMT}) OR (NOT ${BASYX_USE_SYSTEM_ASIO}) OR (NOT ${BASYX_USE_SYSTEM_JSON}))
-message("")
-message("   A contained external library will be installed while installing \
-BaSyx, please use distribution provided libraries if possible!")
+	message("")
+	message("--------------------")
+	message("Configuration:")
+	message("   Library name and version:   " "${PROJECT_NAME}, ${PROJECT_VERSION}" )
+	message("   Library destination folder: " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} )
+	message("   Includes folder:            " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME} )
+	#message("   Pkgconfig folder:           " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/pkgconfig )
+	message("   CMake folder:               " ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_SHORTNAME} )
+	message("")
+	if(${BASYX_USE_SYSTEM_LIBFMT})
+	message("   Using system supplied fmt")
+	else()
+	message("   Using contained fmt - Please check if this is necessary!")
+	endif()
+
+	if(${BASYX_USE_SYSTEM_ASIO})
+	message("   Using system supplied asio")
+	else()
+	message("   Using contained asio - Please check if this is necessary!")
+	endif()
+
+	if(${BASYX_USE_SYSTEM_JSON})
+	message("   Using system supplied nlohmann_json")
+	else()
+	message("   Using contained nlohmann_json - Please check if this is necessary!")
+	endif()
+
+	if ((NOT ${BASYX_USE_SYSTEM_LIBFMT}) OR (NOT ${BASYX_USE_SYSTEM_ASIO}) OR (NOT ${BASYX_USE_SYSTEM_JSON}))
+	message("")
+	message("   A contained external library will be installed while installing \
+	BaSyx, please use distribution provided libraries if possible!")
+	endif()
+	
 endif()
