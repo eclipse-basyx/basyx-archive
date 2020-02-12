@@ -1,10 +1,9 @@
 #!/bin/bash
+
+# Immediately exit script on errors
 set -e
 
-CWD=$(pwd)
-echo "CWD: $CWD"
-
-GIT_DIFF=$(/usr/bin/git diff --name-only origin/master)
+GIT_DIFF=$(/usr/bin/git diff-tree --no-commit-id --name-only -r HEAD)
 
 CPP_SDK_CHANGED=$(echo $GIT_DIFF | grep -e ".*/basys\.sdk\.cc/.*" | wc -l)
 
@@ -18,5 +17,5 @@ then
     ctest
 else
     echo "No files changed in C++ SDK."
-    echo "Skipping continous integration tests in C++ SDK."
+    echo "Skipping continous integration tests for C++."
 fi

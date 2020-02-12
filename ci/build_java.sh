@@ -5,22 +5,9 @@ set -e
 
 MVN="mvn -ntp -Duser.home=/home/jenkins/agent"
 
-CWD=$(pwd)
-echo "CWD: $CWD"
-
-GIT_DIFF=$(/usr/bin/git diff --name-only origin/master)
-
-/usr/bin/git log -n 1
-echo "Local branches:"
-/usr/bin/git branch
-echo "Remote branches:"
-/usr/bin/git branch -r
-
+GIT_DIFF=$(/usr/bin/git diff-tree --no-commit-id --name-only -r HEAD)
 
 JAVA_SDK_CHANGED=$(echo $GIT_DIFF | grep ".*sdks/java/.*" | wc -l)
-
-echo $GIT_DIFF
-echo $JAVA_SDK_CHANGED
 
 if ((JAVA_SDK_CHANGED > 0));
 then
@@ -35,4 +22,7 @@ then
     cd ./examples/basys.examples
     $MVN verify
     cd "$CWD"
+else
+    echo "No files changed in Java SDK."
+    echo "Skipping continous integration tests for Java."
 fi
