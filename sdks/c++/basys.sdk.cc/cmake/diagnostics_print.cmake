@@ -7,7 +7,7 @@
 ###
 
 function( diagnostics_print target_name )
-	build_source_group()
+	build_source_group(${target_name})
 	
 	message(STATUS "${target_name} settings:")
 	message(STATUS "==============\n")

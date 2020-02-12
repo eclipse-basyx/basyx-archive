@@ -7,6 +7,8 @@ set (BASYX_VAB_LIB_SUFFIX "VAB")
 
 set (BASYX_VAB_LIBRARY_NAME "${PROJECT_SHORTNAME}${BASYX_VAB_LIB_SUFFIX}")
 
+set (BASYX_VAB_INCLUDE_DIR "${BASYX_INCLUDE_DIR}/BaSyx/vab")
+
 add_library(${BASYX_VAB_LIB_SUFFIX})
 
 set_target_properties(${BASYX_VAB_LIB_SUFFIX} PROPERTIES VERSION ${PROJECT_VERSION})
@@ -22,14 +24,36 @@ endif()
 
 target_sources(${BASYX_VAB_LIB_SUFFIX}
     PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/vab/backend/connector/native/BaSyxConnector.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/vab/backend/connector/native/frame/BaSyxNativeFrameBuilder.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/vab/core/proxy/VABElementProxy.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/vab/core/util/VABPath.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/vab/core/VABConnectionManager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/vab/ElementMap.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/vab/provider/native/frame/BaSyxNativeFrameProcessor.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vab/backend/connector/native/BaSyxConnector.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vab/backend/connector/native/frame/BaSyxNativeFrameBuilder.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vab/core/proxy/VABElementProxy.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vab/core/util/VABPath.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vab/core/VABConnectionManager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vab/ElementMap.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vab/provider/native/frame/BaSyxNativeFrameProcessor.cpp
 )
+
+
+target_sources(${BASYX_VAB_LIB_SUFFIX}
+    PRIVATE
+        ${BASYX_VAB_INCLUDE_DIR}/backend/connector/IBaSyxConnector.h
+        ${BASYX_VAB_INCLUDE_DIR}/backend/connector/JSONProvider.h
+        ${BASYX_VAB_INCLUDE_DIR}/backend/connector/native/BaSyxConnector.h
+        ${BASYX_VAB_INCLUDE_DIR}/backend/connector/native/frame/BaSyxNativeFrameBuilder.h
+        ${BASYX_VAB_INCLUDE_DIR}/core/IModelProvider.h
+        ${BASYX_VAB_INCLUDE_DIR}/core/proxy/IVABElementProxy.h
+        ${BASYX_VAB_INCLUDE_DIR}/core/proxy/VABElementProxy.h
+        ${BASYX_VAB_INCLUDE_DIR}/core/util/VABPath.h
+        ${BASYX_VAB_INCLUDE_DIR}/core/VABConnectionManager.h
+        ${BASYX_VAB_INCLUDE_DIR}/ElementMap.h
+        ${BASYX_VAB_INCLUDE_DIR}/provider/hashmap/VABHashmapProvider.h
+        ${BASYX_VAB_INCLUDE_DIR}/provider/IVABElementHandler.h
+        ${BASYX_VAB_INCLUDE_DIR}/provider/native/frame/BaSyxNativeFrameHelper.h
+        ${BASYX_VAB_INCLUDE_DIR}/provider/native/frame/BaSyxNativeFrameProcessor.h
+        ${BASYX_VAB_INCLUDE_DIR}/provider/VABModelProvider.h
+        ${BASYX_VAB_INCLUDE_DIR}/provider/VABMultiElementHandler.h
+)
+
 
 target_include_directories(${BASYX_VAB_LIB_SUFFIX} PRIVATE ${PROJECT_SOURCE_DIR})
 target_link_libraries(${BASYX_VAB_LIB_SUFFIX}
@@ -40,6 +64,8 @@ target_link_libraries(${BASYX_VAB_LIB_SUFFIX}
 
 add_library(basyx::vab ALIAS ${BASYX_VAB_LIB_SUFFIX})
 add_library(${PROJECT_SHORTNAME}::${BASYX_VAB_LIB_SUFFIX} ALIAS ${BASYX_VAB_LIB_SUFFIX})
+
+diagnostics_print(${BASYX_VAB_LIB_SUFFIX})
 
 ###############################################
 ###           Install section               ###
@@ -74,7 +100,5 @@ install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../include/${PROJECT_SHORTNAME}/v
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME}"
         FILES_MATCHING PATTERN "*.h"
 )
-
-diagnostics_print(${BASYX_VAB_LIB_SUFFIX})
 
 endif()

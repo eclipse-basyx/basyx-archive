@@ -6,6 +6,8 @@ set (BASYX_SHARED_LIB_SUFFIX "Shared")
 
 set (BASYX_SHARED_LIBRARY_NAME "${PROJECT_SHORTNAME}${BASYX_SHARED_LIB_SUFFIX}")
 
+set (BASYX_SHARED_INCLUDE_DIR "${BASYX_INCLUDE_DIR}/BaSyx/shared")
+
 add_library(${BASYX_SHARED_LIB_SUFFIX})
 
 set_target_properties(${BASYX_SHARED_LIB_SUFFIX} PROPERTIES VERSION ${PROJECT_VERSION})
@@ -17,10 +19,36 @@ INTERFACE ${CMAKE_INSTALL_PREFIX}/include
 
 target_sources(${BASYX_SHARED_LIB_SUFFIX}
     PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/basysid/BaSysID.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/object/impl/object_impl.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/object/object_type.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/serialization/json/typeid.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/shared/basysid/BaSysID.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/shared/object/impl/object_impl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/shared/object/object_type.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/shared/serialization/json/typeid.cpp
+)
+
+target_sources(${BASYX_SHARED_LIB_SUFFIX}
+    PRIVATE
+        ${BASYX_SHARED_INCLUDE_DIR}/anyTypeChecker.h
+        ${BASYX_SHARED_INCLUDE_DIR}/basysid/BaSysID.h
+        ${BASYX_SHARED_INCLUDE_DIR}/object/bad_object_cast.h
+        ${BASYX_SHARED_INCLUDE_DIR}/object/impl/object_access_impl.h
+        ${BASYX_SHARED_INCLUDE_DIR}/object/impl/object_cast_impl.h
+        ${BASYX_SHARED_INCLUDE_DIR}/object/impl/object_factories_impl.h
+        ${BASYX_SHARED_INCLUDE_DIR}/object/impl/object_meta_impl.h
+        ${BASYX_SHARED_INCLUDE_DIR}/object/object_header.h
+        ${BASYX_SHARED_INCLUDE_DIR}/object/object_map_facade.h
+        ${BASYX_SHARED_INCLUDE_DIR}/object/object_type.h
+        ${BASYX_SHARED_INCLUDE_DIR}/object/obj_function.h
+        ${BASYX_SHARED_INCLUDE_DIR}/object/obj_holder.h
+        ${BASYX_SHARED_INCLUDE_DIR}/object/obj_placeholder.h
+        ${BASYX_SHARED_INCLUDE_DIR}/object/obj_ref_holder.h
+        ${BASYX_SHARED_INCLUDE_DIR}/object.h
+        ${BASYX_SHARED_INCLUDE_DIR}/serialization/json/json.h
+        ${BASYX_SHARED_INCLUDE_DIR}/serialization/json/json_deserializer.h
+        ${BASYX_SHARED_INCLUDE_DIR}/serialization/json/json_serializer.h
+        ${BASYX_SHARED_INCLUDE_DIR}/serialization/json/typeid.h
+        ${BASYX_SHARED_INCLUDE_DIR}/serialization/json.h
+        ${BASYX_SHARED_INCLUDE_DIR}/string_constants.h
+        ${BASYX_SHARED_INCLUDE_DIR}/types.h
 )
 
 target_include_directories(${BASYX_SHARED_LIB_SUFFIX} PRIVATE ${PROJECT_SOURCE_DIR})
@@ -33,6 +61,7 @@ target_link_libraries(${BASYX_SHARED_LIB_SUFFIX}
 add_library(basyx::shared ALIAS ${BASYX_SHARED_LIB_SUFFIX})
 add_library(${PROJECT_SHORTNAME}::${BASYX_SHARED_LIB_SUFFIX} ALIAS ${BASYX_SHARED_LIB_SUFFIX})
 
+diagnostics_print(${BASYX_SHARED_LIB_SUFFIX})
 
 ###############################################
 ###           Install section               ###
@@ -67,7 +96,5 @@ install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../include/${PROJECT_SHORTNAME}/s
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME}"
         FILES_MATCHING PATTERN "*.h"
 )
-
-diagnostics_print(${BASYX_SHARED_LIB_SUFFIX})
 
 endif()

@@ -36,6 +36,8 @@ target_link_libraries(${BASYX_SERVER_LIB_SUFFIX}
 add_library(basyx::server ALIAS ${BASYX_SERVER_LIB_SUFFIX})
 add_library(${PROJECT_SHORTNAME}::${BASYX_SERVER_LIB_SUFFIX} ALIAS ${BASYX_SERVER_LIB_SUFFIX})
 
+diagnostics_print(${BASYX_SERVER_LIB_SUFFIX})
+
 ###############################################
 ###           Install section               ###
 ###############################################
@@ -69,7 +71,5 @@ install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../include/${PROJECT_SHORTNAME}/a
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME}"
         FILES_MATCHING PATTERN "*.h"
 )
-
-diagnostics_print(${BASYX_SERVER_LIB_SUFFIX})
 
 endif()

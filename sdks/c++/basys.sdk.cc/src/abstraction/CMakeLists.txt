@@ -7,6 +7,8 @@ set (BASYX_ABSTRACTION_LIB_SUFFIX "Abstraction")
 
 set (BASYX_ABSTRACTION_LIBRARY_NAME "${PROJECT_SHORTNAME}${BASYX_ABSTRACTION_LIB_SUFFIX}")
 
+set (BASYX_ABSTRACTION_INCLUDE_DIR "${BASYX_INCLUDE_DIR}/BaSyx/abstraction")
+
 add_library(${BASYX_ABSTRACTION_LIB_SUFFIX})
 
 set_target_properties(${BASYX_ABSTRACTION_LIB_SUFFIX} PROPERTIES VERSION ${PROJECT_VERSION})
@@ -31,12 +33,23 @@ target_sources(${BASYX_ABSTRACTION_LIB_SUFFIX}
     ${CMAKE_CURRENT_SOURCE_DIR}/abstraction/impl/${thread_platform}/thread/thread_impl.cpp
 )
 
+target_sources(${BASYX_ABSTRACTION_LIB_SUFFIX}
+    PRIVATE
+        ${BASYX_ABSTRACTION_INCLUDE_DIR}/impl/thread_impl.h
+        ${BASYX_ABSTRACTION_INCLUDE_DIR}/impl/thread_launcher.h
+        ${BASYX_ABSTRACTION_INCLUDE_DIR}/impl/${thread_platform}/thread/thread_impl.h
+        ${BASYX_ABSTRACTION_INCLUDE_DIR}/thread/Thread.h
+        ${BASYX_ABSTRACTION_INCLUDE_DIR}/Thread.h
+)
+
+
 ## basyx::net sources ##
 
 target_sources(${BASYX_ABSTRACTION_LIB_SUFFIX}
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/abstraction/net/Acceptor.cpp
 )
+
 
 if(WIN32)
     message(STATUS "Using winsock2.")
@@ -55,6 +68,18 @@ target_sources(${BASYX_ABSTRACTION_LIB_SUFFIX}
         abstraction/impl/${socket_platform}/socket/acceptor_impl.cpp
 )
 
+target_sources(${BASYX_ABSTRACTION_LIB_SUFFIX}
+    PRIVATE
+        ${BASYX_ABSTRACTION_INCLUDE_DIR}/impl/acceptor_impl.h
+        ${BASYX_ABSTRACTION_INCLUDE_DIR}/impl/socket_impl.h
+        ${BASYX_ABSTRACTION_INCLUDE_DIR}/impl/system_net_types.h
+        ${BASYX_ABSTRACTION_INCLUDE_DIR}/net/Acceptor.h
+        ${BASYX_ABSTRACTION_INCLUDE_DIR}/net/Buffer.h
+        ${BASYX_ABSTRACTION_INCLUDE_DIR}/net/Socket.h
+        ${BASYX_ABSTRACTION_INCLUDE_DIR}/Net.h
+)
+
+
 target_include_directories(${BASYX_ABSTRACTION_LIB_SUFFIX} PRIVATE ${PROJECT_SOURCE_DIR})
 target_link_libraries(${BASYX_ABSTRACTION_LIB_SUFFIX}
     PUBLIC
@@ -66,6 +91,7 @@ target_link_libraries(${BASYX_ABSTRACTION_LIB_SUFFIX}
 add_library(basyx::abstraction ALIAS ${BASYX_ABSTRACTION_LIB_SUFFIX})
 add_library(${PROJECT_SHORTNAME}::${BASYX_ABSTRACTION_LIB_SUFFIX} ALIAS ${BASYX_ABSTRACTION_LIB_SUFFIX})
 
+diagnostics_print(${BASYX_ABSTRACTION_LIB_SUFFIX})
 
 ###############################################
 ###           Install section               ###
@@ -100,7 +126,5 @@ install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../include/${PROJECT_SHORTNAME}/a
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME}"
         FILES_MATCHING PATTERN "*.h"
 )
-
-diagnostics_print(${BASYX_ABSTRACTION_LIB_SUFFIX})
 
 endif()

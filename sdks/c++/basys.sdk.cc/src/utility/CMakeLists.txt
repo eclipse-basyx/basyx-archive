@@ -7,6 +7,8 @@ set (BASYX_UTIL_LIB_SUFFIX "Util")
 
 set (BASYX_UTIL_LIBRARY_NAME "${PROJECT_SHORTNAME}${BASYX_UTIL_LIB_SUFFIX}")
 
+set (BASYX_UTIL_INCLUDE_DIR "${BASYX_INCLUDE_DIR}/BaSyx/util")
+
 add_library(${BASYX_UTIL_LIB_SUFFIX})
 
 set_target_properties(${BASYX_UTIL_LIB_SUFFIX} PROPERTIES VERSION ${PROJECT_VERSION})
@@ -21,10 +23,25 @@ target_sources(${BASYX_UTIL_LIB_SUFFIX}
     ${CMAKE_CURRENT_SOURCE_DIR}/util/util.cpp
 )
 
+target_sources(${BASYX_UTIL_LIB_SUFFIX}
+    PRIVATE
+        ${BASYX_UTIL_INCLUDE_DIR}/function_traits.h
+        ${BASYX_UTIL_INCLUDE_DIR}/invoke.h
+        ${BASYX_UTIL_INCLUDE_DIR}/macros.h
+        ${BASYX_UTIL_INCLUDE_DIR}/make_function.h
+        ${BASYX_UTIL_INCLUDE_DIR}/meta.h
+        ${BASYX_UTIL_INCLUDE_DIR}/printer.h
+        ${BASYX_UTIL_INCLUDE_DIR}/tools/CoderTools.h
+        ${BASYX_UTIL_INCLUDE_DIR}/tools/StringTools.h
+        ${BASYX_UTIL_INCLUDE_DIR}/util.h
+)
+
 target_include_directories(${BASYX_UTIL_LIB_SUFFIX} PRIVATE ${PROJECT_SOURCE_DIR})
 
 add_library(basyx::util ALIAS ${BASYX_UTIL_LIB_SUFFIX})
 add_library(${PROJECT_SHORTNAME}::${BASYX_UTIL_LIB_SUFFIX} ALIAS ${BASYX_UTIL_LIB_SUFFIX})
+
+diagnostics_print(${BASYX_UTIL_LIB_SUFFIX})
 
 ###############################################
 ###           Install section               ###
@@ -59,7 +76,5 @@ install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../include/${PROJECT_SHORTNAME}/u
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_SHORTNAME}"
         FILES_MATCHING PATTERN "*.h"
 )
-
-diagnostics_print(${BASYX_UTIL_LIB_SUFFIX})
 
 endif()
