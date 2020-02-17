@@ -5,7 +5,7 @@ set -e
 
 GIT_DIFF=$(/usr/bin/git diff-tree --no-commit-id --name-only -r HEAD)
 
-CPP_SDK_CHANGED=$(echo $GIT_DIFF | grep -e ".*/basys\.sdk\.cc/.*" | wc -l)
+CPP_SDK_CHANGED=$(echo $GIT_DIFF | grep -i -e "ci/build_cpp.sh" -e ".*/basys\.sdk\.cc/.*" | wc -l)
 
 if  ((CPP_SDK_CHANGED > 0));
 then

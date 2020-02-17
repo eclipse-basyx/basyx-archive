@@ -3,25 +3,29 @@
 # Immediately exit script on errors
 set -e 
 
+CWD=$(pwd)
+echo "Working directory: $CWD"
+echo "Home: $HOME"
+
 MVN="mvn -ntp -Duser.home=/home/jenkins/agent"
 
 GIT_DIFF=$(/usr/bin/git diff-tree --no-commit-id --name-only -r HEAD)
 
-JAVA_SDK_CHANGED=$(echo $GIT_DIFF | grep -e "sdks/java/basys.sdk/" -e "components/basys.components/" -e "examples/basys.examples/" | wc -l)
+JAVA_SDK_CHANGED=$(echo $GIT_DIFF | grep -i -e "ci/build_java.sh" -e "sdks/java/basys.sdk/" -e "components/basys.components/" -e "examples/basys.examples/" | wc -l)
 
 if ((JAVA_SDK_CHANGED > 0));
 then
-    cd ./sdks/java/basys.sdk
+    cd "$CWD/sdks/java/basys.sdk"
     $MVN clean install
-    cd ../../../
+    cd "$CWD"
 
-    cd ./components/basys.components
+    cd "$CWD/components/basys.components"
     $MVN clean install
-    cd ../../
+    cd "$CWD"
 
-    cd ./examples/basys.examples
+    cd "$CWD/examples/basys.examples"
     $MVN verify
-    cd ../../
+    cd "$CWD"
 else
     echo "No files changed in Java SDK."
     echo "Skipping continous integration tests for Java."
