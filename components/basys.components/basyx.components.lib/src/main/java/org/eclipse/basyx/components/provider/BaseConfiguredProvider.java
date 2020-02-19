@@ -214,14 +214,14 @@ public class BaseConfiguredProvider extends SubModelProvider {
 			// Create sub model from template
 			submodel = new SubmodelFacadeIRDISemantics(basyx_submodelSemantics, idType, basyx_id,
 					basyx_idShort, basyx_category, new LangStrings("", basyx_description),
-					new Qualifier(basyx_qualifierType, basyx_qualifier, null), null, ModelingKind.INSTANCE, basyx_version,
+					new Qualifier(basyx_qualifierType, basyx_qualifier, "", null), null, ModelingKind.INSTANCE, basyx_version,
 					basyx_revision);
 		}
 		if (basyx_submodelSemantics.equals(IdentifierType.CUSTOM.toString().toLowerCase())) {
 			// Create sub model from template
 			submodel = new SubmodelFacadeCustomSemantics(basyx_submodelSemantics, idType, basyx_id,
 					basyx_idShort, basyx_category, new LangStrings("", basyx_description),
-					new Qualifier(basyx_qualifierType, basyx_qualifier, null), new HasDataSpecification(),
+					new Qualifier(basyx_qualifierType, basyx_qualifier, "", null), new HasDataSpecification(),
 					ModelingKind.INSTANCE, basyx_version, basyx_revision);
 		}
 
@@ -292,7 +292,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 
 		// Create and return single valued property
 		Property prop = new Property(propertyValue, new Referable(propertyName, "", new LangStrings("", property_description)),
-				property_semanticsInternal, new Qualifier(property_qualifierType, property_qualifier, null));
+				property_semanticsInternal, new Qualifier(property_qualifierType, property_qualifier, "", null));
 		return prop;
 	}
 	

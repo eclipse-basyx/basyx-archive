@@ -35,7 +35,7 @@ public class LangStrings extends HashSet<HashMap<String, Object>> {
 	 */
 	public String get(String language) {
 		for (HashMap<String, Object> langString : this) {
-			if(langString.get(LANGUAGE).equals(language)) {
+			if(langString.get(LANGUAGE).toString().equalsIgnoreCase(language)) {
 				return (String) langString.get(TEXT);
 			}
 		}
@@ -57,7 +57,7 @@ public class LangStrings extends HashSet<HashMap<String, Object>> {
 	/**
 	 * 
 	 * @param lang The language the new LangString is in.
-	 * @param text The content of the 
+	 * @param text The content of the LangString.
 	 */
 	public void add(String lang, String text) {
 		HashMap<String, Object> langString = new HashMap<>();

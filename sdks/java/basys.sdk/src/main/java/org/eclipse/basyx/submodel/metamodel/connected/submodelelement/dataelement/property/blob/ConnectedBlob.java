@@ -2,10 +2,10 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataeleme
 
 import java.util.List;
 
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.blob.IBlob;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedDataElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.blob.Blob;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 /**
  * "Connected" implementation of IBlob

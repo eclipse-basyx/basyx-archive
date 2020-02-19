@@ -56,11 +56,14 @@ public class Operation extends SubmodelElement implements IOperation {
 	 *            Input parameter of the operation.
 	 * @param out
 	 *            Output parameter of the operation.
+	 * @param inout
+	 *            Inoutput parameter of the operation.
 	 * @param function
 	 *            the concrete function
 	 * 
 	 */
-	public Operation(List<OperationVariable> in, List<OperationVariable> out, Function<Object[], Object> function) {
+	public Operation(List<OperationVariable> in, List<OperationVariable> out,
+			List<OperationVariable> inout, Function<Object[], Object> function) {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 
@@ -69,6 +72,9 @@ public class Operation extends SubmodelElement implements IOperation {
 
 		// Output variables
 		put(OUT, out);
+
+		// Output variables
+		put(INOUT, inout);
 
 		// Extension of DAAS specification for function storage
 		put(INVOKABLE, function);

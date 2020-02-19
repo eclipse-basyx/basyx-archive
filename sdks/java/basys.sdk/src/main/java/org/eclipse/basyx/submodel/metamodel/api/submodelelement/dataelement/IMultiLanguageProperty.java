@@ -1,4 +1,4 @@
-package org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property;
+package org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -9,7 +9,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
  * @author schnicke
  *
  */
-public interface IMultiLanguageProperty {
+public interface IMultiLanguageProperty extends IDataElement {
 
 	/**
 	 * Gets the value of the property instance

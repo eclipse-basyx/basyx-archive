@@ -1,7 +1,4 @@
-package org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.file;
-
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
-
+package org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement;
 
 /**
  * A File is a data element that represents an address to a file. The value is

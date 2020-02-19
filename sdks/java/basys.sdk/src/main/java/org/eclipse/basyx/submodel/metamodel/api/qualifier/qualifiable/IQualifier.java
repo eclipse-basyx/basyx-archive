@@ -16,4 +16,6 @@ public interface IQualifier extends IHasSemantics, IConstraint {
 	public String getQualifierValue();
 
 	public IReference getQualifierValueId();
+	
+	public String getValueType();
 }

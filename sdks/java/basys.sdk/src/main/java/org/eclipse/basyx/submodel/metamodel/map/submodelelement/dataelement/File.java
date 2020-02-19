@@ -1,10 +1,9 @@
-package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.file;
+package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement;
 
 import java.util.Map;
 
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.file.IFile;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.DataElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 
 /**

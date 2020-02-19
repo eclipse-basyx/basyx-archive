@@ -23,6 +23,8 @@ public class Qualifier extends Constraint implements IQualifier {
 
 	public static final String QUALIFIERVALUEID = "qualifierValueId";
 
+	public static final String VALUETYPE = "qualifierValueType";
+
 	public static final String MODELTYPE = "Qualifier";
 
 	/**
@@ -39,9 +41,10 @@ public class Qualifier extends Constraint implements IQualifier {
 		put(QUALIFIERTYPE, "");
 		put(QUALIFIERVALUE, null);
 		put(QUALIFIERVALUEID, null);
+		put(VALUETYPE, "");
 	}
 
-	public Qualifier(String type, String value, Reference valueId) {
+	public Qualifier(String type, String value, String valueType, Reference valueId) {
 		// Add all attributes from HasSemantics
 		this.putAll(new HasSemantics());
 
@@ -49,6 +52,7 @@ public class Qualifier extends Constraint implements IQualifier {
 		put(QUALIFIERTYPE,type);
 		put(QUALIFIERVALUE, value);
 		put(QUALIFIERVALUEID, valueId);
+		put(VALUETYPE, valueType);
 	}
 
 	/**
@@ -89,11 +93,20 @@ public class Qualifier extends Constraint implements IQualifier {
 	public void setQualifierValueId(IReference obj) {
 		put(Qualifier.QUALIFIERVALUEID, obj);
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getQualifierValueId() {
 		return Reference.createAsFacade((Map<String, Object>) get(Qualifier.QUALIFIERVALUEID));
+	}
+
+	public void setValueType(String obj) {
+		put(Qualifier.VALUETYPE, obj);
+	}
+	
+	@Override
+	public String getValueType() {
+		return (String) get(Qualifier.VALUETYPE);
 	}
 
 	@Override

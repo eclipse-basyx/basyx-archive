@@ -1,6 +1,4 @@
-package org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.blob;
-
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+package org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement;
 
 /**
  * A BLOB is a data element that represents a file that is contained with its
