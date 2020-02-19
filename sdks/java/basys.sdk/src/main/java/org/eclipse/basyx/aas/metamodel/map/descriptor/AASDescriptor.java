@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 
 /**
@@ -23,11 +24,16 @@ public class AASDescriptor extends ModelDescriptor {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	public static final String MODELTYPE = "AASDescriptor";
+	
 	/**
 	 * Create descriptor from existing hash map
 	 */
 	public AASDescriptor(Map<String, Object> map) {
 		super(map);
+		
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
 	}
 	
 	/**
@@ -68,6 +74,9 @@ public class AASDescriptor extends ModelDescriptor {
 
 		// Set Submodels
 		put(AssetAdministrationShell.SUBMODELS, new HashSet<SubmodelDescriptor>());
+		
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
 	}
 	
 	/**
