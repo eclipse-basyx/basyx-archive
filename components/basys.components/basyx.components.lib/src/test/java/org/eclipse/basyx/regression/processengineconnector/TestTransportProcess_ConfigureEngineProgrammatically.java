@@ -26,6 +26,8 @@ import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -37,6 +39,12 @@ import org.junit.Test;
  * @author Zhang,Zai
  * */
 public class TestTransportProcess_ConfigureEngineProgrammatically {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(TestTransportProcess_ConfigureEngineProgrammatically.class);
+	
 	/**
 	 * Connection aas manager for creating connected aas
 	 * */
@@ -104,7 +112,7 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 		// get the name of the process-engine and prints it out in the console
 		String pName = processEngine.getName();
 		String ver = ProcessEngine.VERSION;
-		System.out.println("ProcessEngine [" + pName + "] Version: [" + ver + "]");
+		logger.debug("ProcessEngine [" + pName + "] Version: [" + ver + "]");
 		
 		// deploy the BPMN-model defined in the xml file on the process engine
 		RepositoryService repositoryService = processEngine.getRepositoryService();

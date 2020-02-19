@@ -11,6 +11,8 @@ import javax.xml.xquery.XQException;
 import javax.xml.xquery.XQSequence;
 
 import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
@@ -25,6 +27,11 @@ import org.w3c.dom.NodeList;
  *
  */
 public class XMLXQuerySubModelProvider extends BaseConfiguredProvider {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(XMLXQuerySubModelProvider.class);
 
 	
 	/**
@@ -284,7 +291,7 @@ public class XMLXQuerySubModelProvider extends BaseConfiguredProvider {
 	
 
 	public String getElementScope(String arg0) {
-		System.out.println("GetScope:"+arg0);
+		logger.debug("GetScope:"+arg0);
 		// TODO Auto-generated method stub
 		return null;
 	}

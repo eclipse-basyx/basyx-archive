@@ -7,6 +7,8 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.models.manufacturing.process.model.BaSysProcessModel;
 import org.eclipse.basyx.models.manufacturing.process.model.SequentialProcess;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -17,6 +19,11 @@ import org.junit.Test;
  *
  */
 public class TestSequentialProcessModel {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(TestSequentialProcessModel.class);
 
 	
 	
@@ -26,23 +33,23 @@ public class TestSequentialProcessModel {
 	protected void outputDeviceState(BaSysProcessModel process, int processInstance) {
 		// Get product on first device (expected: null)
 		Collection<ModelUrn> productIds = process.getCurrentProductsOnDevice(new ModelUrn("dev-000"));
-		System.out.println("ProductID - "+processInstance+" | dev-000::"+productIds.size());
-		try {System.out.println("ProductID - "+processInstance+" | dev-000::"+productIds.iterator().next());} catch (NoSuchElementException e) {}
+		logger.debug("ProductID - "+processInstance+" | dev-000::"+productIds.size());
+		try {logger.debug("ProductID - "+processInstance+" | dev-000::"+productIds.iterator().next());} catch (NoSuchElementException e) {}
 
 		// Get product on second device
 		productIds = process.getCurrentProductsOnDevice(new ModelUrn("dev-001"));
-		System.out.println("ProductID - "+processInstance+" | dev-001::"+productIds.size());
-		try {System.out.println("ProductID - "+processInstance+" | dev-001::"+productIds.iterator().next());} catch (NoSuchElementException e) {}
+		logger.debug("ProductID - "+processInstance+" | dev-001::"+productIds.size());
+		try {logger.debug("ProductID - "+processInstance+" | dev-001::"+productIds.iterator().next());} catch (NoSuchElementException e) {}
 		
 		// Get product on first device
 		productIds = process.getCurrentProductsOnDevice(new ModelUrn("dev-002"));
-		System.out.println("ProductID - "+processInstance+" | dev-002::"+productIds.size());
-		try {System.out.println("ProductID - "+processInstance+" | dev-002::"+productIds.iterator().next());} catch (NoSuchElementException e) {}
+		logger.debug("ProductID - "+processInstance+" | dev-002::"+productIds.size());
+		try {logger.debug("ProductID - "+processInstance+" | dev-002::"+productIds.iterator().next());} catch (NoSuchElementException e) {}
 
 		// Get product on first device
 		productIds = process.getCurrentProductsOnDevice(new ModelUrn("dev-003"));
-		System.out.println("ProductID - "+processInstance+" | dev-003::"+productIds.size());
-		try {System.out.println("ProductID - "+processInstance+" | dev-003::"+productIds.iterator().next());} catch (NoSuchElementException e) {}
+		logger.debug("ProductID - "+processInstance+" | dev-003::"+productIds.size());
+		try {logger.debug("ProductID - "+processInstance+" | dev-003::"+productIds.iterator().next());} catch (NoSuchElementException e) {}
 	}
 	
 	
@@ -71,7 +78,7 @@ public class TestSequentialProcessModel {
 
 		// Get product on first device (expected: )
 		productIds = process.getCurrentProductsOnDevice(new ModelUrn("dev-000"));
-		System.out.println("ProductID - "+(processInstance+1)+" | dev-000::"+productIds.size());
+		logger.debug("ProductID - "+(processInstance+1)+" | dev-000::"+productIds.size());
 	}
 	
 	
@@ -90,7 +97,7 @@ public class TestSequentialProcessModel {
 		process.addDeviceToProcess(new ModelUrn("dev-003"));
 
 		// Check waiting products
-		System.out.println("Waiting products: "+process.getWaitingProducts().size());
+		logger.debug("Waiting products: "+process.getWaitingProducts().size());
 
 		// Add waiting products to process
 		process.addProductToManufacturingQueue(new ModelUrn("prod-000"));
@@ -100,7 +107,7 @@ public class TestSequentialProcessModel {
 		process.addProductToManufacturingQueue(new ModelUrn("prod-004"));
 		
 		// Check waiting products
-		System.out.println("Waiting products: "+process.getWaitingProducts().size());
+		logger.debug("Waiting products: "+process.getWaitingProducts().size());
 
 		// Output device state
 		outputDeviceState(process, 0);
@@ -109,9 +116,9 @@ public class TestSequentialProcessModel {
 		for (int i=1; i<=19; i+=2) runProcess(process, i);
 
 		// Check waiting products
-		System.out.println("Waiting products: "+process.getWaitingProducts().size());
+		logger.debug("Waiting products: "+process.getWaitingProducts().size());
 		
 		// Check finished products
-		System.out.println("Finished products: "+process.getFinishedProducts().size());
+		logger.debug("Finished products: "+process.getFinishedProducts().size());
 	}
 }

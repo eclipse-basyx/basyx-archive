@@ -15,6 +15,8 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base class for providers that receiver their configuration through a configuration properties object
@@ -24,6 +26,11 @@ import org.eclipse.basyx.submodel.restapi.SubModelProvider;
  */
 
 public class BaseConfiguredProvider extends SubModelProvider {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(BaseConfiguredProvider.class);
 
 	/**
 	 * This is a sub model
@@ -105,15 +112,15 @@ public class BaseConfiguredProvider extends SubModelProvider {
 			if (map.get(key) instanceof Map) {
 				// Output key
 				for (int i = 0; i < indent; i++)
-					System.out.print(" ");
-				System.out.println("  " + key);
+					logger.debug(" ");
+				logger.debug("  " + key);
 				// Output hash map
 				printHashMap((Map) map.get(key), indent + 2);
 			} else {
 				// Output element
 				for (int i = 0; i < indent; i++)
-					System.out.print(" ");
-				System.out.println("  " + key + " = " + map.get(key));
+					logger.debug(" ");
+				logger.debug("  " + key + " = " + map.get(key));
 			}
 		}
 	}

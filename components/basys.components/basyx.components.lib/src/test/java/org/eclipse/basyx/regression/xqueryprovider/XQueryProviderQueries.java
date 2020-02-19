@@ -8,6 +8,8 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -18,8 +20,12 @@ import org.junit.Test;
  *
  */
 public class XQueryProviderQueries {
-
 	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(XQueryProviderQueries.class);
+
 	/**
 	 * VAB connection manager backend
 	 */
@@ -44,12 +50,12 @@ public class XQueryProviderQueries {
 		
 		// Get property value
 		//Object version = connSubModel.readElementValue("/aas/submodels/XMLQTestSubmodel/administration/version");
-		//System.out.println("Version:"+version);
+		//logger.debug("Version:"+version);
 		//assertTrue(version.equals("1.0"));
 
 		
 		// Get property value
 		Object value1 = connSubModel.getModelPropertyValue("/aas/submodels/XMLQTestSubmodel/properties/heavySensorNames");
-		System.out.println("Value:"+value1);
+		logger.debug("Value:"+value1);
 	}
 }

@@ -65,6 +65,5 @@ public class TestCFGProviderSubmodelMetaData {
 
 		// Get complete sub model
 		Object value3 = connSubModel.getModelPropertyValue("/aas/submodels/sampleCFG");
-		System.out.println(value3.toString());
 	}
 }

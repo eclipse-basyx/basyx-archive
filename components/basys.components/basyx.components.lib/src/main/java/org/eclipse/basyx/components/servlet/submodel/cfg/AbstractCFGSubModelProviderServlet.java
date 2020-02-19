@@ -9,6 +9,8 @@ import javax.servlet.ServletException;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Abstract super class for all config file using submodel provider servlets
@@ -17,6 +19,12 @@ import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
  *
  */
 public abstract class AbstractCFGSubModelProviderServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(AbstractCFGSubModelProviderServlet.class);
+	
 	/**
 	 * Version information to identify the version of serialized instances
 	 */
@@ -76,15 +84,15 @@ public abstract class AbstractCFGSubModelProviderServlet extends VABHTTPInterfac
 		String configFilePath = getInitParameter("config");
 		// - Read property file
 		loadProperties(configFilePath);
-
-		System.out.println("1:" + submodelID);
+		
+		logger.debug("1:" + submodelID);
 
 		// Create sub model provider
 		SubModelProvider submodelProvider = createProvider(properties);
 		// - Add sub model provider
 		this.getModelProvider().addSubmodel(submodelID, submodelProvider);
 
-		System.out.println("CFG file loaded");
+		logger.debug("CFG file loaded");
 	}
 
 	/**

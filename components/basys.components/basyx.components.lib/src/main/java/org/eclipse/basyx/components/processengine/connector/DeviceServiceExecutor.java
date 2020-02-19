@@ -10,6 +10,8 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -20,6 +22,11 @@ import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
  * @author Zhang, Zai
  * */
 public class DeviceServiceExecutor implements IDeviceServiceExecutor {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(DeviceServiceExecutor.class);
 	
 	protected IAssetAdministrationShellManager manager;
 	protected String  serviceName;
@@ -51,7 +58,7 @@ public class DeviceServiceExecutor implements IDeviceServiceExecutor {
 			IOperation op = operations.get(servicename);
 			
 			// invoke the service
-			System.out.printf("#Service Executor#--Call service: %s with parameter: %s \n", servicename,  params);
+			logger.debug("#Service Executor#--Call service: %s with parameter: %s \n", servicename,  params);
 			Object position = op.invoke(params.toArray());
 			
 			return position;

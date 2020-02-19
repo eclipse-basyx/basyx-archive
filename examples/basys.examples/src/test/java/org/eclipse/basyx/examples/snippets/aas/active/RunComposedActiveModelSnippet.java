@@ -9,8 +9,16 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RunComposedActiveModelSnippet {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(RunComposedActiveModelSnippet.class);
+	
 	/**
 	 * Test active model computing and printing an average temperature property
 	 */
@@ -38,13 +46,13 @@ public class RunComposedActiveModelSnippet {
 
 		// Runs a task group with a single task (1x per second)
 		VABModelTaskGroup printerGroup = activeModel.runTask(1000, model -> {
-			System.out.println("Current count: " + model.getModelPropertyValue("/count"));
-			System.out.println("Current average: " + model.getModelPropertyValue("/average"));
+			logger.debug("Current count: " + model.getModelPropertyValue("/count"));
+			logger.debug("Current average: " + model.getModelPropertyValue("/average"));
 		});
 
 		// Adds an additional task to the existing task group
 		printerGroup.addTask(model -> {
-			System.out.println("Printed count + average");
+			logger.debug("Printed count + average");
 		});
 
 		// Wait for 5 seconds and then stop the printerGroup.

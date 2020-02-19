@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Asset administration shell sub model provider that exports a properties file
@@ -12,6 +14,11 @@ import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
  *
  */
 public class RawCFGSubModelProvider extends BaseConfiguredProvider {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(RawCFGSubModelProvider.class);
 
 	private static final String FTYPE = "$ftype";
 
@@ -64,15 +71,15 @@ public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 					break;
 
 				default:
-					System.out.println("Unknown type:" + cfgValues.get(key + FTYPE));
+					logger.error("Unknown type:" + cfgValues.get(key + FTYPE));
 				}
 
-			System.out.println("Putting:" + key + " = " + cfgValues.get(key) + " as " + value.getClass().getName());
+			logger.debug("Putting:" + key + " = " + cfgValues.get(key) + " as " + value.getClass().getName());
 
 			scope.put(path[path.length - 1], value);
 		}
 
 		// Print configuration values
-		System.out.println("CFG exported");
+		logger.debug("CFG exported");
 	}
 }

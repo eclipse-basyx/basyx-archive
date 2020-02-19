@@ -3,6 +3,9 @@ package org.eclipse.basyx.components.configuration;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Represents a BaSyx http servlet configuration for a BaSyxContext,
  * that can be loaded from a properties file.
@@ -11,6 +14,12 @@ import java.util.Map;
  *
  */
 public class BaSyxContextConfiguration extends BaSyxConfiguration {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(BaSyxContextConfiguration.class);
+	
 	// Default BaSyx Context configuration
 	public static final String DEFAULT_CONTEXTPATH = "/basys.sdk";
 	public static final String DEFAULT_DOCBASE = System.getProperty("java.io.tmpdir");
@@ -28,7 +37,7 @@ public class BaSyxContextConfiguration extends BaSyxConfiguration {
 	public static Map<String, String> getDefaultProperties() {
 		Map<String, String> defaultProps = new HashMap<>();
 		defaultProps.put(CONTEXTPATH, DEFAULT_CONTEXTPATH);
-		System.out.println("DEFAULT " + DOCBASE + " - " + DEFAULT_DOCBASE);
+		logger.debug("DEFAULT " + DOCBASE + " - " + DEFAULT_DOCBASE);
 		defaultProps.put(DOCBASE, DEFAULT_DOCBASE);
 		defaultProps.put(HOSTNAME, DEFAULT_HOSTNAME);
 		defaultProps.put(PORT, Integer.toString(DEFAULT_PORT));
@@ -48,7 +57,7 @@ public class BaSyxContextConfiguration extends BaSyxConfiguration {
 	}
 
 	public String getDocBasePath() {
-		System.out.println("DEFAULT " + DOCBASE + " -- " + getProperty(DOCBASE));
+		logger.debug("DEFAULT " + DOCBASE + " -- " + getProperty(DOCBASE));
 		return getProperty(DOCBASE);
 	}
 

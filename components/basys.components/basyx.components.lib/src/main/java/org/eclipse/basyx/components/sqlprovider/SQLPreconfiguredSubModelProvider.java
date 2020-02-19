@@ -12,6 +12,8 @@ import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLQuery;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLRunner;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLUpdate;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -23,7 +25,11 @@ import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaHandler;
  *
  */
 public class SQLPreconfiguredSubModelProvider extends BaseConfiguredProvider {
-
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(SQLPreconfiguredSubModelProvider.class);
 	
 	/**
 	 * SQL database user name
@@ -246,7 +252,7 @@ public class SQLPreconfiguredSubModelProvider extends BaseConfiguredProvider {
 		}
 		
 		
-		System.out.println("Putting SQL:"+name);
+		logger.debug("Putting SQL:"+name);
 		// Add property as map of lambdas
 		submodelData.getDataElements().put(name, createSubmodelElement(name, value, cfgValues));
 	}
@@ -396,7 +402,7 @@ public class SQLPreconfiguredSubModelProvider extends BaseConfiguredProvider {
 
 	@Override
 	public String getElementScope(String arg0) {
-		System.out.println("GetScope:"+arg0);
+		logger.debug("GetScope:"+arg0);
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -453,7 +459,7 @@ public class SQLPreconfiguredSubModelProvider extends BaseConfiguredProvider {
 		// Null pointer check
 		if (query == null) return;
 
-		System.out.println("LENC:"+arg1);
+		logger.debug("LENC:"+arg1);
 
 		// Create parameter array
 		Object[] parameter = null;
@@ -489,8 +495,8 @@ public class SQLPreconfiguredSubModelProvider extends BaseConfiguredProvider {
 		// Null pointer check
 		if (query == null) return;
 		
-		System.out.println("LEN:"+parameter.length);
-		System.out.println("LEN-0:"+parameter[0]);
+		logger.debug("LEN:"+parameter.length);
+		logger.debug("LEN-0:"+parameter[0]);
 
 		// Execute query and return result
 		query.runUpdate(parameter);

@@ -1,17 +1,25 @@
 package org.eclipse.basyx.regression.support.processengine.stubs;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Coilcar implements ICoilcar {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(Coilcar.class);
+	
 	private int currentPosition = 0;
 	private int currentLifterPosition = 0;
 	
 	
 	@Override
 	public int moveTo(int position) {
-		System.out.printf("#submodel# invoke service +MoveTo+ with parameter: %d \n\n", position);
+		logger.debug("#submodel# invoke service +MoveTo+ with parameter: %d \n\n", position);
 		Double steps[] =  generateCurve(currentPosition,  position);
 		for(Double step : steps) {
-			System.out.println(step);
+			logger.debug(step == null ? "null" : step.toString());
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -25,10 +33,10 @@ public class Coilcar implements ICoilcar {
 
 	@Override
 	public int liftTo(int position) {
-		System.out.printf("#submodel# Call service LiftTo with Parameter: %d \n\n", position);
+		logger.debug("#submodel# Call service LiftTo with Parameter: %d \n\n", position);
 		Double steps[] =  generateCurve(currentLifterPosition,  position);
 		for(Double step : steps) {
-			System.out.println(step);
+			logger.debug(step == null ? "null" : step.toString());
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {

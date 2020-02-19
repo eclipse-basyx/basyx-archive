@@ -7,6 +7,8 @@ import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.eclipse.basyx.vab.service.api.BaSyxService;
 import org.junit.rules.ExternalResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -18,6 +20,11 @@ import org.junit.rules.ExternalResource;
  *
  */
 public class BaSyxDeployment extends ExternalResource {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(BaSyxDeployment.class);
 
 	
 	/**
@@ -86,7 +93,7 @@ public class BaSyxDeployment extends ExternalResource {
     			continue;
     		}
     		
-    		System.out.println("Error:"+contextComponent);
+    		logger.error("Error:"+contextComponent);
     		
     		// Unknown deployment context
     		throw new UnknownContextComponentTypeException();

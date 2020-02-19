@@ -7,6 +7,8 @@ import java.net.URL;
 
 import org.eclipse.basyx.tools.aas.active.VABModelTask;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Task for writing a value to an influxDB
@@ -15,6 +17,12 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  *
  */
 public class InfluxDBTask implements VABModelTask {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(InfluxDBTask.class);
+	
 	private String modelPath;
 	private String dbUrl;
 	private String dbName;
@@ -40,7 +48,7 @@ public class InfluxDBTask implements VABModelTask {
 	}
 
 	private void writeData(String value) {
-		System.out.println("Writing " + value + " to " + dbName + "." + valueName);
+		logger.debug("Writing " + value + " to " + dbName + "." + valueName);
 		try {
 			postInfluxDBCommand("write", valueName + " value=" + value);
 		} catch (IOException e) {
@@ -49,7 +57,7 @@ public class InfluxDBTask implements VABModelTask {
 	}
 
 	private void clearData() {
-		System.out.println("Clearing previous InfluxDB entries for value: " + valueName);
+		logger.debug("Clearing previous InfluxDB entries for value: " + valueName);
 		try {
 			postInfluxDBCommand("query", "q=DROP MEASUREMENT " + valueName);
 		} catch (IOException e) {

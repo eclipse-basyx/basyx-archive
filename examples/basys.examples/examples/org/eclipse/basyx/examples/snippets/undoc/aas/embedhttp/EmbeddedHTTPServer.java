@@ -10,6 +10,9 @@ import java.net.InetSocketAddress;
 import org.eclipse.basyx.vab.backend.server.utils.JSONProvider;
 import org.eclipse.basyx.vab.core.IModelProvider;
 import org.eclipse.basyx.vab.core.tools.VABPathTools;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -26,6 +29,11 @@ import com.sun.net.httpserver.HttpServer;
  *
  */
 public class EmbeddedHTTPServer implements HttpHandler {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(EmbeddedHTTPServer.class);
 
 	
 	/**
@@ -159,7 +167,7 @@ public class EmbeddedHTTPServer implements HttpHandler {
 			
 			// Handle unknown HTTP request methods
 			default:
-				System.out.println("  - Unknown Method:"+t.getRequestMethod());
+				logger.debug("  - Unknown Method:"+t.getRequestMethod());
 				break;
 		}
 		

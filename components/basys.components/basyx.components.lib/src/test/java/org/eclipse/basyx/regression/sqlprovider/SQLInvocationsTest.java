@@ -46,11 +46,9 @@ public class SQLInvocationsTest {
 		
 		// Get property value (1)
 		Object value1 = connSubModel.invokeOperation("/aas/submodels/SQLTestSubmodel/operations/sensorIDForName", "VS_0001");
-		System.out.println("Value:"+value1);
 		
 		// Get property value (2)
 		Object value2 = connSubModel.invokeOperation("/aas/submodels/SQLTestSubmodel/operations/sensorIDForName", "VS_0002");
-		System.out.println("Value:"+value2);
 
 		
 		// Call operation that inserts a value into the database
@@ -59,7 +57,6 @@ public class SQLInvocationsTest {
 
 		// Get property value (3)
 		Object value3 = connSubModel.invokeOperation("/aas/submodels/SQLTestSubmodel/operations/sensorIDForName", "VS_0005");
-		System.out.println("Value:"+value3);
 		
 		
 		// Delete property 'VS_0005'
@@ -71,7 +68,6 @@ public class SQLInvocationsTest {
 
 		// Get property value (4)
 		Object value4 = connSubModel.invokeOperation("/aas/submodels/SQLTestSubmodel/operations/sensorIDForName", "VS_0005");
-		System.out.println("Value:"+value4);
 	}
 }
 

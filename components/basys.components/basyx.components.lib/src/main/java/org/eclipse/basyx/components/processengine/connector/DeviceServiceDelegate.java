@@ -10,6 +10,8 @@ import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Java-Delegate is involved when the corresponding service-task of the BPMN-Model is executed. 
@@ -18,6 +20,11 @@ import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
  * @author Zhang, Zai
  * */
 public class DeviceServiceDelegate implements JavaDelegate {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(DeviceServiceDelegate.class);
 	
 	// id of the submodel which provides the service
 	private Expression submodelId;
@@ -61,7 +68,7 @@ public class DeviceServiceDelegate implements JavaDelegate {
 		String processName = execution.getCurrentFlowElement().getName();
 		String deviceAASId = (String)serviceProvider.getValue(execution);
 		
-		System.out.println("#######process instance: "+ execution.getProcessInstanceId()+" current activity: " + processName +" is executed by "+ deviceAASId);
+		logger.debug("#######process instance: "+ execution.getProcessInstanceId()+" current activity: " + processName +" is executed by "+ deviceAASId);
 		
 		
 		try {

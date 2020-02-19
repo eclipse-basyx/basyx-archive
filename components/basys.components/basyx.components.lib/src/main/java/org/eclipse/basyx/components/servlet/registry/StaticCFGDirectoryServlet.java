@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.eclipse.basyx.components.directory.AASDirectoryEntry;
 import org.eclipse.basyx.components.directory.exception.AASDirectoryProviderException;
 import org.eclipse.basyx.vab.protocol.http.server.BasysHTTPServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -32,6 +34,11 @@ import org.eclipse.basyx.vab.protocol.http.server.BasysHTTPServlet;
  *
  */
 public class StaticCFGDirectoryServlet extends BasysHTTPServlet {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(StaticCFGDirectoryServlet.class);
 
 	
 	/**
@@ -216,9 +223,9 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServlet {
 			properties = new Properties();
 			properties.load(input);
 			
-			System.out.println("properties:"+properties);
-			System.out.println("properties (keys):"+properties.keySet());
-			System.out.println("properties (cfg.downlink.is.pattern):"+properties.get("cfg.downlink.is.pattern"));
+			logger.debug("properties:"+properties);
+			logger.debug("properties (keys):"+properties.keySet());
+			logger.debug("properties (cfg.downlink.is.pattern):"+properties.get("cfg.downlink.is.pattern"));
 			
 			// Process properties
 			// - Uplink server
@@ -230,9 +237,9 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServlet {
 			// - AAS by tag
 			aasByTag = mapAASToTags(aasByID);
 			
-			System.out.println("Downlink:"+downlinks);
-			System.out.println("properties:"+properties);
-			System.out.println("aasbyID:"+aasByID);
+			logger.debug("Downlink:"+downlinks);
+			logger.debug("properties:"+properties);
+			logger.debug("aasbyID:"+aasByID);
 			
 		} catch (IOException e) {
 			// Output exception
@@ -382,7 +389,7 @@ public class StaticCFGDirectoryServlet extends BasysHTTPServlet {
 		}
 		// Get a specific AAS
 		else if (path.startsWith("api/v1/registry/")) {
-			System.out.println("Getting:"+path);
+			logger.debug("Getting:"+path);
 			
 			// Get requested AAS with ID
 			String aas = getAASContentByID(path.substring(new String("api/v1/registry/").length()));

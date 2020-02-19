@@ -2,6 +2,8 @@ package org.eclipse.basyx.components.device;
 
 import org.eclipse.basyx.components.service.BaseBaSyxService;
 import org.eclipse.basyx.models.controlcomponent.ExecutionState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -16,6 +18,11 @@ import org.eclipse.basyx.models.controlcomponent.ExecutionState;
  *
  */
 public abstract class BaseDevice extends BaseBaSyxService implements IBaSysNativeDeviceStatus {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(BaseDevice.class);
 	
 	/**
 	 * Device interface function: (usually native code) indicates that device has
@@ -87,7 +94,7 @@ public abstract class BaseDevice extends BaseBaSyxService implements IBaSysNativ
 	 */
 	protected void onInitialize() {
 		// Here: Initialize device
-		System.out.println("Device " + name + " status change: initialize");
+		logger.debug("Device " + name + " status change: initialize");
 	}
 
 	
@@ -96,7 +103,7 @@ public abstract class BaseDevice extends BaseBaSyxService implements IBaSysNativ
 	 */
 	protected void onServiceInvocation() {
 		// Here: Invoke device service
-		System.out.println("Device " + name + " status change: invoke");
+		logger.debug("Device " + name + " status change: invoke");
 	}
 	
 	
@@ -105,7 +112,7 @@ public abstract class BaseDevice extends BaseBaSyxService implements IBaSysNativ
 	 */
 	protected void onServiceEnd() {
 		// Here: Perform device operation after device service end (if necessary)
-		System.out.println("Device " + name + " status change: end");
+		logger.debug("Device " + name + " status change: end");
 	}
 	
 	
@@ -114,7 +121,7 @@ public abstract class BaseDevice extends BaseBaSyxService implements IBaSysNativ
 	 */
 	protected void onReset() {
 		// Here: Reset device
-		System.out.println("Device " + name + " status change: reset");
+		logger.debug("Device " + name + " status change: reset");
 	}
 }
 

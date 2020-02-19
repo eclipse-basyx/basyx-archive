@@ -3,9 +3,17 @@ package org.eclipse.basyx.regression.support.processengine.stubs;
 import java.util.List;
 
 import org.eclipse.basyx.components.processengine.connector.IDeviceServiceExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class DeviceServiceExecutorStub implements IDeviceServiceExecutor{
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(DeviceServiceExecutorStub.class);
+	
 	private String serviceName;
 	private String serviceProvider;
 	@SuppressWarnings("unused")
@@ -20,15 +28,13 @@ public class DeviceServiceExecutorStub implements IDeviceServiceExecutor{
 		this.serviceProvider = serviceProvider;
 		this.serviceSubmodelid = submodelid;
 		this.params = params;
-		System.out.printf("service: %s, executed by device: %s , parameters: ", servicename, serviceProvider);
+		logger.debug("service: %s, executed by device: %s , parameters: ", servicename, serviceProvider);
 		if (params.size() == 0) {
-			System.out.println("[]");
+			logger.debug("[]");
 		} else {
 			for (Object p : params) {
-				System.out.printf("%s, ", p);
+				logger.debug("%s, ", p);
 			}
-			System.out.println("");
-
 		}
 		
 		return 1;

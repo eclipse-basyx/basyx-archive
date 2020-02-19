@@ -6,6 +6,8 @@ import java.util.List;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
 import org.eclipse.basyx.vab.exception.ServerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Helper class that supports invocation of remote web services. The class
@@ -15,6 +17,11 @@ import org.eclipse.basyx.vab.exception.ServerException;
  *
  */
 public class WebServiceJSONClient {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(WebServiceJSONClient.class);
 
 	/**
 	 * Web service raw client instance
@@ -90,7 +97,7 @@ public class WebServiceJSONClient {
 		// Perform request
 		String jsonResult = client.post(wsURL, json);
 
-		System.out.println("Result:" + jsonResult);
+		logger.debug("Result:" + jsonResult);
 
 		// Return deserialized value
 		return getJSONResult(jsonResult);

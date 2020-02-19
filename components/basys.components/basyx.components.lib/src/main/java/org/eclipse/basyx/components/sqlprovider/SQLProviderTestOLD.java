@@ -7,8 +7,15 @@ import java.util.LinkedList;
 
 import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
 import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SQLProviderTestOLD {
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(SQLProviderTestOLD.class);
 
 	
 	/**
@@ -129,7 +136,7 @@ public class SQLProviderTestOLD {
 	
 	
 	public static void main(String[] args) throws SQLException {
-		System.out.println("Test");
+		logger.debug("Test");
 		
 		ISQLDriver sqlDriver = new SQLDriver("localhost:5432/basyx-sample-vibrations", "postgres", "admin", "jdbc:postgresql://", "org.postgresql.Driver");
 
@@ -141,11 +148,11 @@ public class SQLProviderTestOLD {
 		
 		ResultSet result1 = sqlDriver.sqlQuery(sqlQuery1String);
 		
-		System.out.println(""+result1);
-		System.out.println(""+result1.next());
-		System.out.println("ID   : "+result1.getString("sensorid"));
-		System.out.println("NAME : "+result1.getString("sensorname"));
-		System.out.println(""+result1.next());
+		logger.debug(""+result1);
+		logger.debug(""+result1.next());
+		logger.debug("ID   : "+result1.getString("sensorid"));
+		logger.debug("NAME : "+result1.getString("sensorname"));
+		logger.debug(""+result1.next());
 
 		
 		
@@ -156,24 +163,24 @@ public class SQLProviderTestOLD {
 		
 		ResultSet result2 = sqlDriver.sqlQuery(sqlQuery2String);
 		
-		System.out.println(""+result2);
-		System.out.println(""+result2.next());
-		System.out.println("ID   : "+result2.getString("sensorid"));
-		System.out.println("NAME : "+result2.getString("sensorname"));
-		System.out.println(""+result2.next());
+		logger.debug(""+result2);
+		logger.debug(""+result2.next());
+		logger.debug("ID   : "+result2.getString("sensorid"));
+		logger.debug("NAME : "+result2.getString("sensorname"));
+		logger.debug(""+result2.next());
 
 
 		
 		String call1 = "MapString()";
 		
-		System.out.println("- "+getOperation(call1));
-		System.out.println("- "+getParameter(call1));
+		logger.debug("- "+getOperation(call1));
+		logger.debug("- "+getParameter(call1));
 
 		
 		String call2 = "MapArray(sensorid:int, sensorname:String)";
 		
-		System.out.println("- "+getOperation(call2));
-		System.out.println("- "+getParameter(call2));
+		logger.debug("- "+getOperation(call2));
+		logger.debug("- "+getParameter(call2));
 		
 	}
 }

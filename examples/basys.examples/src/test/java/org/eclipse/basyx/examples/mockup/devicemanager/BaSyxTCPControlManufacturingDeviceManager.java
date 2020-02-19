@@ -18,6 +18,8 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Example manufacturing device manager code
@@ -28,7 +30,11 @@ import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
  *
  */
 public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDeviceManagerComponent implements ControlComponentChangeListener {
-
+	
+	/**
+	 * Initiates a logger using the current class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(BaSyxTCPControlManufacturingDeviceManager.class);
 	
 	/**
 	 * AAS server connection
@@ -182,7 +188,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		// - Trim string to remove possibly trailing and leading white spaces
 		rxStr = rxStr.trim();
 		
-		System.out.println("- - --------------- RXMSG:"+rxStr);
+		logger.debug("- - --------------- RXMSG:"+rxStr);
 		
 		// Check what was being received. This check is performed based on a prefix that he device has to provide);
 		// - Update of device status
