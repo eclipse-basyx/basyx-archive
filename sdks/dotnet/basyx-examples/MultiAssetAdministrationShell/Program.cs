@@ -1,0 +1,83 @@
+﻿/*******************************************************************************
+* Copyright (c) 2020 Robert Bosch GmbH
+* Author: Constantin Ziesche (constantin.ziesche@bosch.com)
+*
+* This program and the accompanying materials are made available under the
+* terms of the Eclipse Distribution License 1.0 which is available at
+* https://www.eclipse.org/org/documents/edl-v10.html
+*
+* 
+*******************************************************************************/
+using BaSyx.AAS.Server.Http;
+using BaSyx.API.AssetAdministrationShell.Extensions;
+using BaSyx.API.Components;
+using BaSyx.Models.Connectivity;
+using BaSyx.Models.Core.AssetAdministrationShell.Enums;
+using BaSyx.Models.Core.AssetAdministrationShell.Identification;
+using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
+using BaSyx.Models.Core.AssetAdministrationShell.References;
+using BaSyx.Models.Core.Common;
+using BaSyx.Utils.Settings.Types;
+using System;
+using System.Collections.Generic;
+
+namespace MultiAssetAdministrationShell
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            ServerSettings aasAggregatorSettings = ServerSettings.CreateSettings();
+            aasAggregatorSettings.ServerConfig.Hosting.ContentPath = "Content";
+            aasAggregatorSettings.ServerConfig.Hosting.Urls.Add("http://+:5999");
+
+            MultiAssetAdministrationShellHttpServer server = new MultiAssetAdministrationShellHttpServer(aasAggregatorSettings);
+            AssetAdministrationShellAggregatorServiceProvider aggregatorService = new AssetAdministrationShellAggregatorServiceProvider();
+
+            for (int i = 0; i < 10; i++)
+            {
+                AssetAdministrationShell aas = new AssetAdministrationShell()
+                {
+                    IdShort = "MultiAAS_" + i,
+                    Identification = new Identifier("http://basys40.de/shells/MultiAAS/" + Guid.NewGuid().ToString(), KeyType.IRI),
+                    Description = new LangStringSet()
+                    {
+                       new LangString("de-DE", i + ". VWS"),
+                       new LangString("en-US", i + ". AAS")
+                    },
+                    Administration = new AdministrativeInformation()
+                    {
+                        Version = "1.0",
+                        Revision = "120"
+                    },
+                    Asset = new Asset()
+                    {
+                        IdShort = "Asset_" + i,
+                        Identification = new Identifier("http://basys40.de/assets/MultiAsset/" + Guid.NewGuid().ToString(), KeyType.IRI),
+                        Kind = AssetKind.Instance,
+                        Description = new LangStringSet()
+                        {
+                              new LangString("de-DE", i + ". Asset"),
+                              new LangString("en-US", i + ". Asset")
+                        }
+                    }
+                };
+
+                aas.Submodels.Create(new Submodel()
+                {
+                    Identification = new Identifier("http://basys40.de/submodels/" + Guid.NewGuid().ToString(), KeyType.IRI),
+                    IdShort = "TestSubmodel"
+                });
+
+                var aasServiceProvider = aas.CreateServiceProvider(true);
+                aggregatorService.RegisterAssetAdministrationShellServiceProvider(aas.IdShort, aasServiceProvider);
+            }
+
+            List<HttpEndpoint> endpoints = server.Settings.ServerConfig.Hosting.Urls.ConvertAll(c => new HttpEndpoint(c.Replace("+", "127.0.0.1")));
+            aggregatorService.UseDefaultEndpointRegistration(endpoints);
+
+            server.SetServiceProvider(aggregatorService);
+            server.Run();
+        }
+    }
+}

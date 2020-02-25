@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ServerSettings.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ServerSettings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BaSyx.Technologies.mDNS" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BaSyx.Registry.ReferenceImpl.FileBased\BaSyx.Registry.ReferenceImpl.FileBased.csproj" />
+    <ProjectReference Include="..\BaSyx.Registry.Server.Http\BaSyx.Registry.Server.Http.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.registry.referenceimpl.filebased\1.0.0\contentFiles\any\netstandard2.0\FileBasedRegistrySettings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.registry.referenceimpl.filebased\1.0.0\contentFiles\any\netstandard2.0\NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.registry.server.http\1.0.0\contentFiles\any\netstandard2.0\DependencySettings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.registry.server.http\1.0.0\contentFiles\any\netstandard2.0\Dockerfile">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.registry.server.http\1.0.0\contentFiles\any\netstandard2.0\NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.registry.server.http\1.0.0\contentFiles\any\netstandard2.0\wwwroot\images\BaSys-Logo-transparent-1080x250.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.registry.server.http\1.0.0\contentFiles\any\netstandard2.0\wwwroot\images\Bosch.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.registry.server.http\1.0.0\contentFiles\any\netstandard2.0\wwwroot\scripts\bootstrap.min.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.registry.server.http\1.0.0\contentFiles\any\netstandard2.0\wwwroot\scripts\bootstrap.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.registry.server.http\1.0.0\contentFiles\any\netstandard2.0\wwwroot\scripts\jquery-3.3.1.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.registry.server.http\1.0.0\contentFiles\any\netstandard2.0\wwwroot\scripts\popper.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
