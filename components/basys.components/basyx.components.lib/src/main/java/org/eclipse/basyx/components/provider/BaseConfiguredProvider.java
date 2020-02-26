@@ -9,6 +9,8 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacadeCustomSemantics;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacadeIRDISemantics;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -38,17 +40,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 	 */
 	protected SubModel submodelData = null;
 	
-	public static final String DATAELEMENTS = "dataElements";
 	public static final String SUBMODELSEMANTICS = "submodelSemantics";
-	public static final String IDTYPE = "idType";
-	public static final String ID = "id";
-	public static final String IDSHORT = "idShort";
-	public static final String CATEGORY = "category";
-	public static final String DESCRIPTION = "description";
-	public static final String QUALIFIER = "qualifier";
-	public static final String QUALIFIERTYPE = "qualifierType";
-	public static final String VERSION = "version";
-	public static final String REVISION = "revision";
 	public static final String TYPE = "type";
 	public static final String SEMANTICSINTERNAL = "semanticsInternal";
 	
@@ -99,7 +91,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 	 */
 	protected Collection<String> getConfiguredProperties(Map<Object, Object> cfgValues) {
 		// Split property string
-		return splitString((String) cfgValues.get(DATAELEMENTS));
+		return splitString((String) cfgValues.get(SubModel.PROPERTIES));
 	}
 
 	/**
@@ -151,47 +143,47 @@ public class BaseConfiguredProvider extends SubModelProvider {
 		}
 		String basyx_idType = null;
 		try {
-			basyx_idType = cfgValues.get(buildBasyxCfgName(IDTYPE)).toString().toLowerCase();
+			basyx_idType = cfgValues.get(buildBasyxCfgName(Identifier.IDTYPE)).toString().toLowerCase();
 		} catch (Exception e) {
 		}
 		String basyx_id = null;
 		try {
-			basyx_id = cfgValues.get(buildBasyxCfgName(ID)).toString();
+			basyx_id = cfgValues.get(buildBasyxCfgName(Identifier.ID)).toString();
 		} catch (Exception e) {
 		}
 		String basyx_idShort = null;
 		try {
-			basyx_idShort = cfgValues.get(buildBasyxCfgName(IDSHORT)).toString();
+			basyx_idShort = cfgValues.get(buildBasyxCfgName(Referable.IDSHORT)).toString();
 		} catch (Exception e) {
 		}
 		String basyx_category = null;
 		try {
-			basyx_category = cfgValues.get(buildBasyxCfgName(CATEGORY)).toString();
+			basyx_category = cfgValues.get(buildBasyxCfgName(Referable.CATEGORY)).toString();
 		} catch (Exception e) {
 		}
 		String basyx_description = null;
 		try {
-			basyx_description = cfgValues.get(buildBasyxCfgName(DESCRIPTION)).toString();
+			basyx_description = cfgValues.get(buildBasyxCfgName(Referable.DESCRIPTION)).toString();
 		} catch (Exception e) {
 		}
 		String basyx_qualifier = null;
 		try {
-			basyx_qualifier = cfgValues.get(buildBasyxCfgName(QUALIFIER)).toString();
+			basyx_qualifier = cfgValues.get(buildBasyxCfgName(Qualifier.QUALIFIER)).toString();
 		} catch (Exception e) {
 		}
 		String basyx_qualifierType = null;
 		try {
-			basyx_qualifierType = cfgValues.get(buildBasyxCfgName(QUALIFIERTYPE)).toString();
+			basyx_qualifierType = cfgValues.get(buildBasyxCfgName(Qualifier.QUALIFIER, Qualifier.TYPE)).toString();
 		} catch (Exception e) {
 		}
 		String basyx_version = null;
 		try {
-			basyx_version = cfgValues.get(buildBasyxCfgName(VERSION)).toString();
+			basyx_version = cfgValues.get(buildBasyxCfgName(AdministrativeInformation.VERSION)).toString();
 		} catch (Exception e) {
 		}
 		String basyx_revision = null;
 		try {
-			basyx_revision = cfgValues.get(buildBasyxCfgName(REVISION)).toString();
+			basyx_revision = cfgValues.get(buildBasyxCfgName(AdministrativeInformation.REVISION)).toString();
 		} catch (Exception e) {
 		}
 
@@ -277,17 +269,17 @@ public class BaseConfiguredProvider extends SubModelProvider {
 		}
 		String property_qualifier = null;
 		try {
-			property_qualifier = cfgValues.get(buildCfgName(propertyName, QUALIFIER)).toString();
+			property_qualifier = cfgValues.get(buildCfgName(propertyName, Qualifier.QUALIFIER)).toString();
 		} catch (Exception e) {
 		} // might need to rename to constraints
 		String property_qualifierType = null;
 		try {
-			property_qualifierType = cfgValues.get(buildCfgName(propertyName, QUALIFIERTYPE)).toString();
+			property_qualifierType = cfgValues.get(buildCfgName(propertyName, Qualifier.QUALIFIER, Qualifier.TYPE)).toString();
 		} catch (Exception e) {
 		}
 		String property_description = null;
 		try {
-			property_description = cfgValues.get(buildCfgName(propertyName, DESCRIPTION)).toString();
+			property_description = cfgValues.get(buildCfgName(propertyName, Referable.DESCRIPTION)).toString();
 		} catch (Exception e) {
 		}
 
@@ -297,12 +289,15 @@ public class BaseConfiguredProvider extends SubModelProvider {
 		return prop;
 	}
 	
-	public static String buildBasyxCfgName(String valueName) {
+	public static String buildBasyxCfgName(String... valueName) {
 		return buildCfgName("basyx", valueName);
 	}
 	
-	public static String buildCfgName(String propertyName, String valueName) {
-		return propertyName + "." + valueName;
+	public static String buildCfgName(String propertyName, String... valueName) {
+		String result = propertyName;
+		for(String s: valueName)
+			result += "." + s;
+		return result;
 	}
 	
 }

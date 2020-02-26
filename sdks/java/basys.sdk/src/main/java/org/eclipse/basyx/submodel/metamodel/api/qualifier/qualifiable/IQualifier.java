@@ -11,11 +11,11 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
  */
 
 public interface IQualifier extends IHasSemantics, IConstraint {
-	public String getQualifierType();
+	public String getType();
 
-	public String getQualifierValue();
+	public String getValue();
 
-	public IReference getQualifierValueId();
+	public IReference getValueId();
 	
 	public String getValueType();
 }

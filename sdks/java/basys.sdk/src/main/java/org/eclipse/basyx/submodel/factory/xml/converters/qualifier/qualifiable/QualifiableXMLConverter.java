@@ -123,9 +123,9 @@ public class QualifiableXMLConverter {
 		Qualifier qualifier = new Qualifier();
 		HasSemanticsXMLConverter.populateHasSemantics(xmlQualifier, qualifier);
 		
-		qualifier.setQualifierType(type);
-		qualifier.setQualifierValue(value);
-		qualifier.setQualifierValueId(ref);
+		qualifier.setType(type);
+		qualifier.setValue(value);
+		qualifier.setValueId(ref);
 		qualifier.setValueType(valueType);
 		
 		return qualifier;
@@ -206,9 +206,9 @@ public class QualifiableXMLConverter {
 	 * @return the &lt;aas:qualifier&gt; XML tag build from the IQualifier
 	 */
 	private static Element buildQualifierXML(Document document, IQualifier qualifier) {
-		IReference qualId = qualifier.getQualifierValueId();
-		String type = XMLHelper.getString(qualifier.getQualifierType());
-		String value = XMLHelper.getString(qualifier.getQualifierValue());
+		IReference qualId = qualifier.getValueId();
+		String type = XMLHelper.getString(qualifier.getType());
+		String value = XMLHelper.getString(qualifier.getValue());
 		String valueType = XMLHelper.getString(qualifier.getValueType());
 		Element qualifierRoot = document.createElement(QUALIFIER);
 		
