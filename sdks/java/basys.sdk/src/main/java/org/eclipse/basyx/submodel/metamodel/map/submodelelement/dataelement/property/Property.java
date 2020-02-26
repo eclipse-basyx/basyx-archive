@@ -9,7 +9,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
@@ -64,11 +64,11 @@ public class Property extends AbstractProperty implements ISingleProperty {
 		set(value);
 	}
 
-	public Property(Object value, Referable referable, String semanticId, Qualifier qualifier) {
+	public Property(Object value, Referable referable, String semanticId, Qualifiable qualifiable) {
 		this(value);
 		putAll(referable);
 		put(HasSemantics.SEMANTICID, value);
-		putAll(qualifier);
+		putAll(qualifiable);
 	}
 
 	/**

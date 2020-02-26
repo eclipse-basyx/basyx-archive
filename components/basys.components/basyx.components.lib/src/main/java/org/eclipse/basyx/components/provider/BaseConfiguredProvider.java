@@ -12,6 +12,7 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
@@ -292,7 +293,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 
 		// Create and return single valued property
 		Property prop = new Property(propertyValue, new Referable(propertyName, "", new LangStrings("", property_description)),
-				property_semanticsInternal, new Qualifier(property_qualifierType, property_qualifier, "", null));
+				property_semanticsInternal, new Qualifiable(new Qualifier(property_qualifierType, property_qualifier, "", null)));
 		return prop;
 	}
 	
