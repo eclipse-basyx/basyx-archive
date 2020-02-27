@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\basyx-components\BaSyx.AAS.Server.Http\BaSyx.AAS.Server.Http.csproj" />
+    <PackageReference Include="BaSyx.AAS.Server.Http" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
