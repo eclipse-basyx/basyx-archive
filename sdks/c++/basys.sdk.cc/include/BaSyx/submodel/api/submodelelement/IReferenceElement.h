@@ -16,9 +16,14 @@ namespace submodel {
 class IReferenceElement
 {
 public:
+  struct Path
+  {
+    static constexpr char Modeltype[] = "ReferenceElement";
+  };
+
+public:
   virtual ~IReferenceElement() = default;
 
-  virtual void setValue(const std::shared_ptr<IReference> & ref) = 0;
   virtual std::shared_ptr<IReference> getValue() const = 0;
 };
 

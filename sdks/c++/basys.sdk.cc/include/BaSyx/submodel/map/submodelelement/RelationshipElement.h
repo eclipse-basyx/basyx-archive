@@ -15,23 +15,23 @@
 namespace basyx {
 namespace submodel {
 
-class RelationshipElement : public SubmodelElement, public submodel::submodelelement::IRelationshipElement
+class RelationshipElement : 
+	public virtual vab::ElementMap,
+	public virtual SubmodelElement,
+	public virtual IRelationshipElement
 {
 public:
-  ~RelationshipElement() = default;
+	~RelationshipElement() = default;
 
-  //constructors
-  RelationshipElement();
-  RelationshipElement(const std::shared_ptr<IReference> & first, const std::shared_ptr<IReference> & second);
+	//constructors
+	RelationshipElement();
+	RelationshipElement(const IReference & first, const IReference & second);
 
-  // Inherited via IRelationshipElement
-  virtual void setFirst(const std::shared_ptr<IReference>& first) override;
-  virtual std::shared_ptr<IReference> getFirst() const override;
-  virtual void setSecond(const std::shared_ptr<IReference>& second) override;
-  virtual std::shared_ptr<IReference> getSecond() const override;
-
-private:
-  std::shared_ptr<IReference> first, second;
+	// Inherited via IRelationshipElement
+	virtual void setFirst(const IReference & first) override;
+	virtual std::shared_ptr<IReference> getFirst() const override;
+	virtual void setSecond(const IReference & second) override;
+	virtual std::shared_ptr<IReference> getSecond() const override;
 };
 
 }

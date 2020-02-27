@@ -16,6 +16,14 @@ namespace submodel {
 class IKey
 {
 public:
+  struct Path
+  {
+    static constexpr char Type[] = "type";
+    static constexpr char Local[] = "local";
+    static constexpr char Value[] = "value";
+    static constexpr char IdType[] = "idType";
+  };
+public:
 	virtual ~IKey() = 0;
 
 	virtual std::string getType() const = 0;

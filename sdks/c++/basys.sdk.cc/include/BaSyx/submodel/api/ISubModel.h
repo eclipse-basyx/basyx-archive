@@ -35,22 +35,26 @@ namespace submodel {
  * Sub model interface class
  * *********************************************************************************/
 class ISubModel : 
-    public virtual IHasSemantics,
-    public virtual IIdentifiable,
-    public virtual IHasDataSpecification,
-    public virtual IHasKind,
-    public virtual map::IVABElementContainer
+	public virtual IHasSemantics, 
+	public virtual IIdentifiable,
+    public virtual IQualifiable,
+	public virtual IHasDataSpecification,
+	public virtual IHasKind,
+	public map::IVABElementContainer
 {
 public:
 	struct Path {
 		static constexpr char Submodelelement[] = "submodelElement";
-		static constexpr char Properties[] = "dataElements";
+		static constexpr char DataElements[] = "dataElements";
 		static constexpr char Operations[] = "operations";
+		static constexpr char ModelType[] = "Submodel";
 	};
 public:
 	virtual ~ISubModel() = default;
-	virtual void setProperties(const basyx::object::object_map_t & properties) = 0;
-	virtual void setOperations(const basyx::object::object_map_t & operations) = 0;
+
+	virtual basyx::specificMap_t<ISubmodelElement> getSubmodelElements() const = 0;
+	virtual basyx::specificMap_t<IDataElement> getDataElements() const = 0;
+	virtual basyx::specificMap_t<IOperation> getOperations() const = 0;
 };
 
 }

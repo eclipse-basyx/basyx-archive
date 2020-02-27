@@ -8,7 +8,6 @@
 
 using namespace basyx::submodel;
 
-
 HasKind::HasKind(Kind kind) 
 	: vab::ElementMap()
 {
@@ -25,14 +24,20 @@ HasKind::HasKind(basyx::object object)
 {
 }
 
+basyx::submodel::HasKind::HasKind(const IHasKind & other) :
+  vab::ElementMap{}
+{
+  this->setHasKindReference(other.getHasKindReference());
+}
+
 Kind HasKind::getHasKindReference() const
 {
-	return util::from_string(this->map.getProperty(Path::Kind).GetStringContent());
+	return util::from_string<Kind>(this->map.getProperty(Path::Kind).GetStringContent());
 }
 
 void HasKind::setHasKindReference(Kind kind)
 {
-	this->map.insertKey("kind", util::to_string(kind), true);
+	this->map.insertKey(Path::Kind, util::to_string(kind), true);
 }
 
 static const std::string kind_to_string[] = {
@@ -52,7 +57,8 @@ const std::string & util::to_string(Kind kind)
 	return kind_to_string[static_cast<char>(kind)];
 }
 
-Kind util::from_string(const std::string & str)
+template<>
+Kind util::from_string<Kind>(const std::string & str)
 {
 	return string_to_kind.at(str);
 };

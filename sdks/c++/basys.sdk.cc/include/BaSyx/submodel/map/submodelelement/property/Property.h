@@ -21,11 +21,19 @@ class Property :
 public:
 	using Path = IProperty::Path;
 public:
-	Property() : ModelType("Property")
+  Property() : ModelType{Path::ModelType}
 	{
 		map.insertKey(Path::Value, basyx::object::make_null());
 		map.insertKey(Path::ValueId, basyx::object::make_null());
 	};
+
+  Property(const IProperty & other) :
+    ModelType{Path::ModelType},
+    DataElement{other}
+  {
+    //this->setValue(other.getValue());
+    this->setValueId(other.getValueId());
+  }
 
 	T & getValue()
 	{
@@ -67,6 +75,7 @@ public:
 	{
 		return PropertyType();
 	}
+
 	virtual void setValueId(const std::string & valueId) override
 	{
 	}

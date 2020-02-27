@@ -25,6 +25,7 @@ public:
 	HasDataSpecification();
 	HasDataSpecification(basyx::object & obj);
 	HasDataSpecification(const basyx::specificCollection_t<IReference> & refs);
+	HasDataSpecification(const IHasDataSpecification & hasDataSpecification);
 
 	~HasDataSpecification() = default;
 

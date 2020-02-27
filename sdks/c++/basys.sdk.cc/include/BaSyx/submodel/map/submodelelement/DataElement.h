@@ -13,8 +13,9 @@
 namespace basyx {
 namespace submodel {
 
-class DataElement : 
-	public SubmodelElement, 
+class DataElement :
+  public virtual vab::ElementMap,
+	public virtual SubmodelElement, 
 	public virtual IDataElement
 {
 public:
@@ -22,13 +23,8 @@ public:
 
 	// constructors
 	DataElement();
-
-	/**
-	* Constructs a DataElement from a given list, provided that all needed elements present in list.
-	*
-	* @param map the map containig all elements.
-	*/
 	DataElement(basyx::object object);
+  DataElement(const IDataElement & other);
 };
 
 }

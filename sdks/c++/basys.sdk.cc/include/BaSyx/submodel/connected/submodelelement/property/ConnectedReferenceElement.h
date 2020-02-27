@@ -19,7 +19,7 @@ public:
   ConnectedReferenceElement(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
   ~ConnectedReferenceElement() = default;
 
-  virtual void setValue(const std::shared_ptr<IReference> & ref) override;
+  virtual void setValue(const IReference & ref);
   virtual std::shared_ptr<IReference> getValue() const override;
 };
 

@@ -14,7 +14,7 @@
 namespace basyx {
 namespace submodel {
 
-class Qualifiable : 
+class Qualifiable :
 	public virtual IQualifiable,
 	public virtual vab::ElementMap
 {
@@ -23,9 +23,11 @@ public:
 
 	// constructors
 	Qualifiable();
+  Qualifiable(const std::shared_ptr<IQualifiable> & other);
+  Qualifiable(const IQualifiable & other);
 	Qualifiable(basyx::object object);
 	Qualifiable(const std::shared_ptr<IConstraint> & constraint);
-	Qualifiable(const basyx::specificCollection_t<IConstraint> constraints);
+	Qualifiable(const basyx::specificCollection_t<IConstraint> & constraints);
 
 	// Inherited via IQualifiable
 	virtual basyx::specificCollection_t<IConstraint> getQualifier() const override;

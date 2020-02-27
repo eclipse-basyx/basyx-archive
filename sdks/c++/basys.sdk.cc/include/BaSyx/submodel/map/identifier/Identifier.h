@@ -18,7 +18,7 @@ namespace basyx {
 namespace submodel {
 
 class Identifier : 
-	public IIdentifier,
+	public virtual IIdentifier,
 	public virtual vab::ElementMap
 {
 public:

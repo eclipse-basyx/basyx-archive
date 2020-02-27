@@ -5,36 +5,44 @@
  */
 
 #include <BaSyx/submodel/map/submodelelement/RelationshipElement.h>
+#include <BaSyx/submodel/map/reference/Reference.h>
 
 namespace basyx {
 namespace submodel {
 
-RelationshipElement::RelationshipElement()
+RelationshipElement::RelationshipElement() :
+  vab::ElementMap {},
+  ModelType{IRelationshipElement::Path::ModelType}
 {}
 
-RelationshipElement::RelationshipElement(const std::shared_ptr<IReference>& first, const std::shared_ptr<IReference>& second) :
-  first {first},
-  second {second}
-{}
-
-void RelationshipElement::setFirst(const std::shared_ptr<IReference>& first)
+RelationshipElement::RelationshipElement(const IReference & first, const IReference & second) :
+  vab::ElementMap{},
+  ModelType {IRelationshipElement::Path::ModelType}
 {
-  this->first = first;
+  this->setFirst(first);
+  this->setSecond(second);
+}
+
+void RelationshipElement::setFirst(const IReference& first)
+{
+  Reference ref {first};
+  this->insertMapElement(IRelationshipElement::Path::First, ref);
 }
 
 std::shared_ptr<IReference> RelationshipElement::getFirst() const
 {
-  return this->first;
+  return std::make_shared<Reference>(this->map.getProperty(IRelationshipElement::Path::First));
 }
 
-void RelationshipElement::setSecond(const std::shared_ptr<IReference>& second)
+void RelationshipElement::setSecond(const IReference& second)
 {
-  this->second = second;
+  Reference ref {second};
+  this->insertMapElement(IRelationshipElement::Path::Second, ref);
 }
 
 std::shared_ptr<IReference> RelationshipElement::getSecond() const
 {
-  return second;
+  return std::make_shared<Reference>(this->map.getProperty(IRelationshipElement::Path::Second));
 }
 
 }

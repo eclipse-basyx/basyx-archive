@@ -1,5 +1,5 @@
 /*
- * OperationVariable.h
+ * ModelType.h
  *
  *      Author: wendel
  */
@@ -29,11 +29,11 @@ public:
 	OperationVariable(basyx::object object);
 
 	// Inherited via IOperationVariable
-	virtual basyx::object getValue() const override;
+	virtual std::shared_ptr<ISubmodelElement> getValue() const override;
 	virtual std::string getType() const override;
 	                                                                        
 	// not inherited
-	void setValue(const std::shared_ptr<ISubmodelElement> & value);
+	void setValue(const ISubmodelElement & value);
 	void setType(const std::string & string);
 };
 

@@ -13,6 +13,10 @@ namespace submodel {
 Referable::Referable()
   : vab::ElementMap{}
 {
+	this->map.insertKey(Path::IdShort, "");
+	this->map.insertKey(Path::Category, "");
+	this->map.insertKey(Path::Description, basyx::object::make_map());
+	this->map.insertKey(Path::Parent, Reference{}.getMap());
 }
 
 basyx::submodel::Referable::Referable(basyx::object & obj)
@@ -21,16 +25,16 @@ basyx::submodel::Referable::Referable(basyx::object & obj)
 	this->map.insertKey(Path::IdShort, "");
 	this->map.insertKey(Path::Category, "");
 	this->map.insertKey(Path::Description, Description{}.getMap());
-	this->map.insertKey(Path::Parent, basyx::object::make_null());
+	this->map.insertKey(Path::Parent, Reference{}.getMap());
 }
 
 Referable::Referable(const std::string & idShort, const std::string & category, const Description & description) :
   vab::ElementMap{}
 {
-	this->map.insertKey(Path::IdShort, idShort);
-	this->map.insertKey(Path::Category, category);
-	this->map.insertKey(Path::Description, description.getMap());
-	this->map.insertKey(Path::Parent, basyx::object::make_null());
+	this->map.insertKey(Path::IdShort, idShort, true);
+	this->map.insertKey(Path::Category, category, true);
+	this->map.insertKey(Path::Description, description.getMap(), true);
+  this->map.insertKey(Path::Parent, Reference{}.getMap(), true);
 }
 
 Referable::Referable(const IReferable & other) :
@@ -39,16 +43,7 @@ Referable::Referable(const IReferable & other) :
   this->setIdShort(other.getIdShort());
   this->setCategory(other.getCategory());
   this->setDescription(other.getDescription());
-  this->setParent(other.getParent());
-}
-
-Referable::Referable(const std::shared_ptr<IReferable>& other)
-
-{
-  this->setIdShort(other->getIdShort());
-  this->setCategory(other->getCategory());
-  this->setDescription(other->getDescription());
-  this->setParent(other->getParent());
+  this->setParent(*other.getParent());
 }
 
 std::string Referable::getIdShort() const
@@ -86,7 +81,7 @@ void Referable::setDescription(const Description & description)
 	this->map.insertKey(Path::Description, description.getMap(), true);
 }
 
-void Referable::setParent(const std::shared_ptr<IReference> & parentReference)
+void Referable::setParent(const IReference & parentReference)
 {
   this->insertMapElement(Path::Parent, Reference{parentReference});
 }

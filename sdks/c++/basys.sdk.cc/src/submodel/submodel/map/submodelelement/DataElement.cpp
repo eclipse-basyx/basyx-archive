@@ -9,10 +9,17 @@
 namespace basyx {
 namespace submodel {
 
-DataElement::DataElement()
+DataElement::DataElement() :
+  vab::ElementMap{},
+  ModelType{IDataElement::Path::ModelType}
 {}
 
-DataElement::DataElement(basyx::object object)
+DataElement::DataElement(basyx::object object) :
+  vab::ElementMap{object}
+{}
+
+DataElement::DataElement(const IDataElement & other) :
+  SubmodelElement{other}
 {}
 
 }

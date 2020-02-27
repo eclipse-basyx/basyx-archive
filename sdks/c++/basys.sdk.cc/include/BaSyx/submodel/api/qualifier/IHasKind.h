@@ -9,6 +9,8 @@
 
 #include <string>
 
+#include <BaSyx/util/util.h>
+
 namespace basyx {
 namespace submodel {
 
@@ -37,8 +39,9 @@ public:
 
 namespace util {
 	const std::string & to_string(basyx::submodel::Kind kind);
-	basyx::submodel::Kind from_string(const std::string & str);
+
+	template<>
+	basyx::submodel::Kind from_string<basyx::submodel::Kind>(const std::string & str);
 }
 
 #endif
-

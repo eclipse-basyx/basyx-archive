@@ -22,6 +22,7 @@ public:
 	// constructors
 	HasKind(Kind kind = Kind::NotSpecified);
 	HasKind(basyx::object object);
+  HasKind(const IHasKind & other);
 
 	void Init(Kind kind = Kind::NotSpecified);
 

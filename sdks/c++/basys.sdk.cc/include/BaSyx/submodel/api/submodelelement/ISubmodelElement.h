@@ -18,7 +18,8 @@
 namespace basyx {
 namespace submodel {
 
-class ISubmodelElement : 
+class ISubmodelElement :
+//	public virtual IElement,
 	public virtual IHasDataSpecification, 
 	public virtual IReferable,
 	public virtual IQualifiable,

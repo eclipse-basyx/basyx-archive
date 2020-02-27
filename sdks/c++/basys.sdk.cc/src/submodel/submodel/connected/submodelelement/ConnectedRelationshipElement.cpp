@@ -13,7 +13,7 @@ ConnectedRelationshipElement::ConnectedRelationshipElement(std::shared_ptr<vab::
   ConnectedSubmodelElement(proxy)
 {}
 
-void ConnectedRelationshipElement::setFirst(const std::shared_ptr<IReference> & first)
+void ConnectedRelationshipElement::setFirst(const IReference & first)
 {
   //todo
   //this->setProxyValue(submodelelement::RelationshipElementPath::FIRST, first);
@@ -25,7 +25,7 @@ std::shared_ptr<IReference> ConnectedRelationshipElement::getFirst() const
   return nullptr;// this->getProxyValue(submodelelement::RelationshipElementPath::FIRST);
 }
 
-void ConnectedRelationshipElement::setSecond(const std::shared_ptr<IReference> & second)
+void ConnectedRelationshipElement::setSecond(const IReference & second)
 {
   //todo
   //this->setProxyValue(submodelelement::RelationshipElementPath::SECOND, second);

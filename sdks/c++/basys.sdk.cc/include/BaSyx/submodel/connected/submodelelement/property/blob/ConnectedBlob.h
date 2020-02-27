@@ -15,20 +15,20 @@
 namespace basyx {
 namespace submodel {
 
-class ConnectedBlob : public submodelelement::IBlob, ConnectedDataElement
+class ConnectedBlob : public IBlob, ConnectedDataElement
 {
 public:
   ConnectedBlob(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
   ~ConnectedBlob() = default;
 
   // Inherited via IBlob
-  virtual void setValue(const std::string & value) override;
+  virtual void setValue(const std::string & value);
 
-  virtual std::string getValue() const override;
+  virtual const std::string & getValue() const override;
 
-  virtual void setMimeType(const std::string & mimeType) override;
+  virtual void setMimeType(const std::string & mimeType);
 
-  virtual std::string getMimeType() const override;
+  virtual const std::string & getMimeType() const override;
 
 };
 

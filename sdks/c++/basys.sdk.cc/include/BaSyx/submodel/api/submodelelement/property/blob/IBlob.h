@@ -9,27 +9,29 @@
 
 #include <BaSyx/shared/types.h>
 
+#include <BaSyx/submodel/api/submodelelement/IDataElement.h>
+
 namespace basyx {
 namespace submodel {
-namespace submodelelement {
 
-namespace BlobPath {
-  static constexpr char MIMETYPE[] = "mimeType";
-}
 
 class IBlob
+	: public IDataElement
 {
 public:
-  virtual ~IBlob() = default;
+	struct Path
+	{
+		static constexpr char MIMEType[] = "mimeType";
+		static constexpr char Value[] = "value";
+		static constexpr char ModelType[] = "blob";
+	};
+public:
+	virtual ~IBlob() = default;
 
-  virtual void setValue(const std::string & bytes) = 0;
-  virtual std::string getValue() const = 0;
-
-  virtual void setMimeType(const std::string & mimeType) = 0;
-  virtual std::string getMimeType() const = 0;
+	virtual const std::string & getValue() const = 0;
+	virtual const std::string & getMimeType() const = 0;
 };
 
-}
 }
 }
 

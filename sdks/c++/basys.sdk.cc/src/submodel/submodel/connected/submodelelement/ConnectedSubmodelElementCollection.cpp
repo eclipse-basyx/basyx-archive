@@ -30,23 +30,23 @@ basyx::specificCollection_t<ISubmodelElement> ConnectedSubmodelElementCollection
 
 void ConnectedSubmodelElementCollection::setOrdered(const bool & value)
 {
-  this->setProxyValue(SubmodelElementCollectionPaths::ORDERED, value);
+  this->setProxyValue(ISubmodelElementCollection::Path::Ordered, value);
 }
 
 bool ConnectedSubmodelElementCollection::isOrdered() const
 {
-  auto element = this->getProxy()->readElementValue(SubmodelElementCollectionPaths::ORDERED);
+  auto element = this->getProxy()->readElementValue(ISubmodelElementCollection::Path::Ordered);
   return element.Get<bool>();
 }
 
 void ConnectedSubmodelElementCollection::setAllowDuplicates(const bool & value)
 {
-  this->setProxyValue(SubmodelElementCollectionPaths::ALLOWDUPLICATES, value);
+  this->setProxyValue(ISubmodelElementCollection::Path::AllowDuplicates, value);
 }
 
 bool ConnectedSubmodelElementCollection::isAllowDuplicates() const
 {
-  auto element = this->getProxy()->readElementValue(SubmodelElementCollectionPaths::ALLOWDUPLICATES);
+  auto element = this->getProxy()->readElementValue(ISubmodelElementCollection::Path::AllowDuplicates);
   return element.Get<bool>();
 }
 

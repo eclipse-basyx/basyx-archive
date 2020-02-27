@@ -21,13 +21,13 @@ public:
   ~ConnectedSubmodelElementCollection() = default;
 
   // Inherited via ISubmodelElementCollection
-  virtual void setValue(const basyx::specificCollection_t<ISubmodelElement> & value) override;
+  virtual void setValue(const basyx::specificCollection_t<ISubmodelElement> & value) ;
   virtual basyx::specificCollection_t<ISubmodelElement> getValue() const override;
-  virtual void setOrdered(const bool & value) override;
+  virtual void setOrdered(const bool & value) ;
   virtual bool isOrdered() const override;
-  virtual void setAllowDuplicates(const bool & value) override;
+  virtual void setAllowDuplicates(const bool & value) ;
   virtual bool isAllowDuplicates() const override;
-  virtual void setElements(const basyx::specificMap_t<ISubmodelElement> & elements) override;
+  virtual void setElements(const basyx::specificMap_t<ISubmodelElement> & elements) ;
   virtual basyx::specificMap_t<ISubmodelElement> getElements() const override;
 };
 

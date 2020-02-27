@@ -19,20 +19,19 @@ void ConnectedBlob::setValue(const std::string & bytes)
   this->setProxyValue(IProperty::Path::Value, bytes);
 }
 
-std::string ConnectedBlob::getValue() const
+const std::string & ConnectedBlob::getValue() const
 {
-  auto value = getProxy()->readElementValue(IProperty::Path::Value);
-  return value.Get<std::string>();
+  return getProxy()->readElementValue(IProperty::Path::Value).GetStringContent();
 }
 
 void ConnectedBlob::setMimeType(const std::string & mimeType)
 {
-  this->setProxyValue(submodelelement::BlobPath::MIMETYPE, mimeType);
+  this->setProxyValue(IBlob::Path::MIMEType, mimeType);
 }
 
-std::string ConnectedBlob::getMimeType() const
+const std::string & ConnectedBlob::getMimeType() const
 {
-  return this->getProxyValue(submodelelement::BlobPath::MIMETYPE);
+  return this->getProxyValue(IBlob::Path::MIMEType);
 }
 
 }
