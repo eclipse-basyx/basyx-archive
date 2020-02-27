@@ -1,5 +1,5 @@
-﻿@page "ui"
-@model BaSyx.AAS.Server.Http.Pages.IndexModel
+﻿@page
+@model BaSyx.AAS.Server.Http.Pages.MultiIndexModel
 @using BaSyx.API.Components;
 @using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 @using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
@@ -8,16 +8,11 @@
 @using BaSyx.Models.Core.Common;
 @using BaSyx.Models.Extensions;
 @using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
-@using BaSyx.Utils.Settings.Types;
 @using Microsoft.AspNetCore.Html;
-@{
-    ViewData["Title"] = "Index";
-}
 
 @{
-    IAssetAdministrationShellServiceProvider sp = Model.ServiceProvider;
-    IAssetAdministrationShell aas = sp.AssetAdministrationShell;
-    ServerSettings settings = Model.Settings;
+    ViewData["Title"] = "MultiIndex";
+    IAssetAdministrationShellAggregatorServiceProvider sp = Model.ServiceProvider;
 
     string eClassLink = "https://www.eclasscontent.com/index.php?action=cc2prdet&language=en&version=10.1&id=&pridatt=";
 
@@ -198,7 +193,7 @@ switch (keyElements)
                     <div class="col-sm-10">@path</div>
                 </div>
             </div>
-            string contentRoot = System.IO.Path.Combine(AppContext.BaseDirectory, settings.ServerConfig.Hosting.ContentPath);
+            string contentRoot = System.IO.Path.Combine(AppContext.BaseDirectory, Model.Settings.ServerConfig.Hosting.ContentPath);
             var contentFileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(contentRoot);
             @if (contentFileProvider.GetFileInfo(path).Exists)
             {
@@ -373,7 +368,7 @@ else
 {
     ISubmodel submodel = submodelwithElement[0] as ISubmodel;
     ISubmodelElement submodelElement = submodelwithElement[1] as ISubmodelElement;
-
+        
     <div class="panel panel-warning">
         <div class="panel-heading">
             <h4 class="panel-title">
@@ -445,19 +440,41 @@ else
 }</text>;
 }
 
+@functions
+{
+    public string GetPath(IFile file)
+    {
+        string content = file.Value;
+        if (string.IsNullOrEmpty(content))
+            return string.Empty;
 
+        content = content.Replace('\\', '/');
+        return content;
+    }
+
+    public string GetValueOrModelType(ISubmodelElement submodelElement)
+    {
+        if (submodelElement is IProperty property)
+        {
+            return property.ValueType?.ToString();
+        }
+        else
+        {
+            return submodelElement.ModelType.Name;
+        }
+    }
+}
 
 <!doctype html>
 <html>
-
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="~/favicon.png" />
     <link rel="stylesheet" href="~/scripts/bootstrap.min.css">
+    <title>BaSys Multi Asset Administration Shell UI</title>
     <script src="~/scripts/jquery-3.3.1.min.js"></script>
     <script src="~/scripts/popper.min.js"></script>
     <script src="~/scripts/bootstrap.min.js"></script>
-    <title>@aas.IdShort - AAS UI</title>
+
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -472,8 +489,8 @@ else
     </style>
 
 </head>
-
 <body>
+
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -489,98 +506,87 @@ else
     <main role="main" class="container">
 
         <div class="starter-template">
-            <h1>@aas.IdShort - Asset Administration Shell UI</h1>
-            <p class="lead">Generic UI to discover the Asset Administration Shell </p>
+            <h1>Multi Asset Administration Shell UI</h1>
+            <p class="lead">Generic UI to display many Asset Administration Shells</p>
         </div>
     </main>
 
 
-    <div class="container">
-        <div class="panel panel-default">
-            <div class="panel-heading" style="background:#7ca1ce"><h4 style="color:white">Asset Administration Shell</h4></div>
-            @ShowIdShort(aas.IdShort)
-            @ShowIdentification(aas.Identification)
-            @ShowDescription(aas.Description)
-        </div>
-    </div>
-    @{
-        var asset = Model.ServiceProvider.AssetAdministrationShell.Asset;
-        if (asset != null)
+    @if (sp.AssetAdministrationShells?.Count() > 0)
+    {
+        foreach (var aas in sp.AssetAdministrationShells)
         {
             <div class="container">
                 <div class="panel panel-default">
-                    <div class="panel-heading" style="background:#b90276"><h4 style="color:white">Asset</h4></div>
-                    @ShowIdShort(asset.IdShort)
-                    @ShowIdentification(asset.Identification)
-                    @ShowDescription(asset.Description)
-                </div>
-            </div>
-        }
-    }
-    @functions
-    {
-        public string GetPath(IFile file)
-        {
-            string content = file.Value;
-            if (string.IsNullOrEmpty(content))
-                return string.Empty;
-
-            content = content.Replace('\\', '/');
-            return content;
-        }
-
-        public string GetValueOrModelType(ISubmodelElement submodelElement)
-        {
-            if (submodelElement is IProperty property)
-            {
-                return property.ValueType?.ToString();
-            }
-            else
-            {
-                return submodelElement.ModelType.Name;
-            }
-        }
-    }
-
-
-    @if (aas.Submodels?.Count > 0)
-    {
-        foreach (var submodel in aas.Submodels)
-        {
-            <div class="container">
-                <div class="panel panel-default">
-                    <div class="panel-heading" style="background:darkgreen">
+                    <div class="panel-heading" style="background:#7ca1ce">
                         <h4>
-                            <a style="color:white" data-toggle="collapse" href="#@submodel.IdShort">@submodel.IdShort</a>
+                            <a style="color:white" data-toggle="collapse" href="#@aas.IdShort">@aas.IdShort</a>
                         </h4>
                     </div>
-                    <div id="@submodel.IdShort" class="panel-collapse collapse">
-                        @ShowIdShort(submodel.IdShort)
-                        @ShowIdentification(submodel.Identification)
-                        @ShowDescription(submodel.Description)
-                        @ShowSemanticId(submodel.SemanticId)
+                    <div id="@aas.IdShort" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <div class="panel-group">
-                                @if (submodel.SubmodelElements?.Count > 0)
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" style="background:#7ca1ce"><h4 style="color:white">Asset Administration Shell</h4></div>
+                                    @ShowIdShort(aas.IdShort)
+                                    @ShowIdentification(aas.Identification)
+                                    @ShowDescription(aas.Description)
+                                </div>
+                            @{
+                                var asset = aas.Asset;
+                                if (asset != null)
                                 {
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading" style="background:#005691"><h4 style="color:white">Submodel-Elements</h4></div>
-                                        <div class="panel-body">
-                                            <div class="panel-group">
-                                                @for (int i = 0; i < submodel.SubmodelElements.Count; i++)
-                                                {
-                                                    var submodelElement = submodel.SubmodelElements[i];
-                                                    if (submodelElement == null)
-                                                    { continue; }
+            
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" style="background:#b90276"><h4 style="color:white">Asset</h4></div>
+                                            @ShowIdShort(asset.IdShort)
+                                            @ShowIdentification(asset.Identification)
+                                            @ShowDescription(asset.Description)
+                                        </div>
+                              
+                                }
+                            }
+                            @if (aas.Submodels?.Count > 0)
+                            {
+                                foreach (var submodel in aas.Submodels)
+                                {
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" style="background:darkgreen">
+                                                <h4>
+                                                    <a style="color:white" data-toggle="collapse" href="#@submodel.IdShort">@submodel.IdShort</a>
+                                                </h4>
+                                            </div>
+                                            <div id="@submodel.IdShort" class="panel-collapse collapse">
+                                                @ShowIdShort(submodel.IdShort)
+                                                @ShowIdentification(submodel.Identification)
+                                                @ShowDescription(submodel.Description)
+                                                @ShowSemanticId(submodel.SemanticId)
+                                                <div class="panel-body">
+                                                    <div class="panel-group">
+                                                        @if (submodel.SubmodelElements?.Count > 0)
+                                                        {
+                                                            <div class="panel panel-default">
+                                                                <div class="panel-heading" style="background:#005691"><h4 style="color:white">Submodel-Elements</h4></div>
+                                                                <div class="panel-body">
+                                                                    <div class="panel-group">
+                                                                        @for (int i = 0; i < submodel.SubmodelElements.Count; i++)
+                                                                        {
+                                                                            var submodelElement = submodel.SubmodelElements[i];
+                                                                            if (submodelElement == null)
+                                                                            { continue; }
 
-                                                    @ShowSubmodelElement(new List<object>() { submodel, submodelElement });
+                                                                            @ShowSubmodelElement(new List<object>() { submodel, submodelElement });
 
-                                                }
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                 }
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -588,91 +594,5 @@ else
         }
     }
 
-
-    <script>
-        function ExecuteOperation(submodelId, operationId) {
-            var argNames = document.getElementsByClassName("argInName " + submodelId + " " + operationId);
-            var argTypes = document.getElementsByClassName("argInType " + submodelId + " " + operationId);
-            var argValues = document.getElementsByClassName("argInValue " + submodelId + " " + operationId);
-
-            var args = [];
-            for (var i = 0; i < argNames.length; i++) {
-                var value = {
-                    idShort: argNames.item(i).innerText,
-                    modelType: {
-                        name: "Property"
-                    },
-                    valueType: {
-                        dataObjectType: {
-                            name: argTypes.item(i).innerText.toLowerCase()
-                        }
-                    },
-                    value: argValues.item(i).value
-                };
-                var arg = { value };
-                args.push(arg);
-            }
-
-
-            $.ajax({
-                type: 'POST',
-                url: '/aas/submodels/' + submodelId + '/submodel/operations/' + operationId,
-                contentType: 'application/json',
-                data: JSON.stringify(args),
-                error: function () {
-                    alert("Failed to execute with args: " + JSON.stringify(args));
-                },
-                success: function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var argOutIdShort = data[i].value.idShort;
-                        $('#argOutValue_' + submodelId + operationId + argOutIdShort).val(JSON.stringify(data[i].value.value));
-                    }
-                }
-            });
-        }
-    </script>
-    <script>
-        function GetPropertyValue(submodelId, propertyId) {
-            $.ajax({
-                type: 'GET',
-                url: '/aas/submodels/' + submodelId + '/submodel/properties/' + propertyId + '/value',
-                success: function (data) {
-                    $('#Input_' + submodelId + propertyId).val(data.value);
-                    $('#Input_' + submodelId + propertyId).css('border-color', 'green');
-                }
-            });
-        }
-    </script>
-    <script>
-        function SetPropertyValue(submodelId, propertyId, dataObjectTypeName, val) {
-            var value =
-            {
-                valueType: {
-                    dataObjectType: {
-                        name: dataObjectTypeName
-                    }
-                },
-                value: val
-            };
-            $.ajax({
-                type: 'PUT',
-                url: '/aas/submodels/' + submodelId + '/submodel/properties/' + propertyId + '/value',
-                contentType: 'application/json',
-                data: JSON.stringify(value),
-                error: function () {
-                    $('#Input_' + submodelId + propertyId).css('border-color', 'red');
-                    alert("Error updating Property-Value: " + JSON.stringify(value));
-                },
-                statusCode: {
-                    204: function () {
-                        $('#Input_' + submodelId + propertyId).css('border-color', 'green');
-                    }
-                },
-                success: function () { }
-            });
-        }
-    </script>
-
 </body>
 </html>
-

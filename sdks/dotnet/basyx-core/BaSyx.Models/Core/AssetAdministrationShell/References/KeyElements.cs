@@ -15,6 +15,8 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.References
     [DataContract]
     public enum KeyElements : int
     {
+        Undefined, 
+
         GlobalReference,
         FragmentReference,
 

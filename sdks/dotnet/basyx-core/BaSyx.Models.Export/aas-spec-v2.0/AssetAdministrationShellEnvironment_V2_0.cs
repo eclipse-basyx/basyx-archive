@@ -159,6 +159,7 @@ namespace BaSyx.Models.Export
                     ExtractAndClearConceptDescriptions(submodel.SubmodelElements);
                     ExtractSupplementalFiles(submodel.SubmodelElements);
                     ResetConstraints(submodel.SubmodelElements);
+                    DeleteEvents(submodel.SubmodelElements);
                 }
             }
         }
@@ -208,7 +209,8 @@ namespace BaSyx.Models.Export
                     EmbeddedDataSpecification = embeddedDataSpecification
                 };
 
-                EnvironmentConceptDescriptions.Add(environmentConceptDescription);
+                if(EnvironmentConceptDescriptions.Find(m => m.Identification.Id == conceptDescription.Identification.Id) == null)
+                    EnvironmentConceptDescriptions.Add(environmentConceptDescription);
             }
             foreach (var assetAdministrationShell in AssetAdministrationShells)
             {
@@ -255,6 +257,14 @@ namespace BaSyx.Models.Export
         }
 
 
+        private void DeleteEvents(IElementContainer<ISubmodelElement> submodelElements)
+        {
+            var eventsToDelete = submodelElements.Where(s => s.ModelType == ModelType.Event || s.ModelType == ModelType.BasicEvent).ToList();
+            foreach (var eventable in eventsToDelete)
+                submodelElements.Remove(eventable);
+        }
+
+
         private void ExtractSupplementalFiles(IEnumerable<ISubmodelElement> submodelElements)
         {
             foreach (var smElement in submodelElements)
@@ -288,7 +298,7 @@ namespace BaSyx.Models.Export
                     (smElement as SubmodelElement).ConceptDescription = null;
                     (smElement as SubmodelElement).EmbeddedDataSpecifications = null;
                 }
-                else if (smElement.ModelType == ModelType.SubmodelElementCollection)
+                if (smElement.ModelType == ModelType.SubmodelElementCollection)
                     ExtractAndClearConceptDescriptions((smElement as Core.AssetAdministrationShell.Implementations.SubmodelElementTypes.SubmodelElementCollection).Value);
             }
         }

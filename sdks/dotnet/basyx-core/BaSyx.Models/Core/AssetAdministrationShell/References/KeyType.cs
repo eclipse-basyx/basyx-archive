@@ -15,6 +15,8 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.References
     [DataContract]
     public enum KeyType
     {
+        [EnumMember(Value = "Undefined")]
+        Undefined,
         [EnumMember(Value = "Custom")]
         Custom,
         [EnumMember(Value = "IRI")]

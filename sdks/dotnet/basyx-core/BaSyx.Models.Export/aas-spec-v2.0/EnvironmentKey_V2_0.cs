@@ -26,6 +26,8 @@ namespace BaSyx.Models.Export
 
     public enum KeyType_V2_0
     {
+        [EnumMember(Value = "Undefined")]
+        Undefined,
         [EnumMember(Value = "Custom")]
         Custom,
         [EnumMember(Value = "IRI")]
@@ -40,6 +42,8 @@ namespace BaSyx.Models.Export
 
     public enum KeyElements_V2_0
     {
+        Undefined,
+
         GlobalReference,
         FragmentReference,
 

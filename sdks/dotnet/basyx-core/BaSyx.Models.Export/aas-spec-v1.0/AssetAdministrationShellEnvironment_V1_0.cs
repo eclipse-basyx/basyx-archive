@@ -157,6 +157,7 @@ namespace BaSyx.Models.Export
                     ExtractAndClearConceptDescriptions(submodel.SubmodelElements);
                     ExtractSupplementalFiles(submodel.SubmodelElements);
                     ResetConstraints(submodel.SubmodelElements);
+                    DeleteEvents(submodel.SubmodelElements);
                 }
             }
         }
@@ -204,8 +205,9 @@ namespace BaSyx.Models.Export
                     IsCaseOf = conceptDescription.IsCaseOf?.ToList()?.ConvertAll(c => c.ToEnvironmentReference_V1_0()),
                     EmbeddedDataSpecification = embeddedDataSpecification
                 };
-                
-                EnvironmentConceptDescriptions.Add(environmentConceptDescription);
+
+                if (EnvironmentConceptDescriptions.Find(m => m.Identification.Id == conceptDescription.Identification.Id) == null)
+                    EnvironmentConceptDescriptions.Add(environmentConceptDescription);
             }
             foreach (var assetAdministrationShell in AssetAdministrationShells)
             {
@@ -276,7 +278,7 @@ namespace BaSyx.Models.Export
                     (smElement as SubmodelElement).ConceptDescription = null;
                     (smElement as SubmodelElement).EmbeddedDataSpecifications = null;
                 }
-                else if (smElement.ModelType == ModelType.SubmodelElementCollection)
+                if (smElement.ModelType == ModelType.SubmodelElementCollection)
                     ExtractAndClearConceptDescriptions((smElement as SubmodelElementCollection).Value);
             }
         }
@@ -299,6 +301,13 @@ namespace BaSyx.Models.Export
                 else if (smElement.ModelType == ModelType.SubmodelElementCollection)
                     ResetConstraints((smElement as SubmodelElementCollection).Value);
             }
+        }
+
+        private void DeleteEvents(IElementContainer<ISubmodelElement> submodelElements)
+        {
+            var eventsToDelete = submodelElements.Where(s => s.ModelType == ModelType.Event || s.ModelType == ModelType.BasicEvent).ToList();
+            foreach (var eventable in eventsToDelete)
+                submodelElements.Remove(eventable);
         }
 
         public void WriteEnvironment_V1_0(ExportType exportType, string filePath) => WriteEnvironment_V1_0(this, exportType, filePath);

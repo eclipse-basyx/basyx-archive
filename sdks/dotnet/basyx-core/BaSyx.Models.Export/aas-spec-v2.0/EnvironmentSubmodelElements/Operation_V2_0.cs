@@ -23,7 +23,7 @@ namespace BaSyx.Models.Export
         public List<OperationVariable_V2_0> InputVariables { get; set; }
 
         [JsonProperty("outputVariables")]
-        [XmlElement(ElementName = "inputVariable"), JsonConverter(typeof(JsonOperationVariableConverter_V2_0))]
+        [XmlElement(ElementName = "outputVariable"), JsonConverter(typeof(JsonOperationVariableConverter_V2_0))]
         public List<OperationVariable_V2_0> OutputVariables { get; set; }
 
         [JsonProperty("inoutputVariables")]

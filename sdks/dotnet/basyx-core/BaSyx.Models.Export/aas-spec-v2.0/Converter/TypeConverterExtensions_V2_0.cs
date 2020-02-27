@@ -58,9 +58,15 @@ namespace BaSyx.Models.Export.Converter
             if (environmentKey == null)
                 return null;
 
+            if (!Enum.TryParse<KeyElements>(environmentKey.Type.ToString(), out KeyElements type))
+                type = KeyElements.Undefined;
+            
+            if (!Enum.TryParse<KeyType>(environmentKey.IdType.ToString(), out KeyType idType))
+                idType = KeyType.Undefined;
+
             Key key = new Key(
-                (KeyElements)Enum.Parse(typeof(KeyElements), environmentKey.Type.ToString()),
-                (KeyType)Enum.Parse(typeof(KeyType), environmentKey.IdType.ToString()),
+                type,
+                idType,
                 environmentKey.Value,
                 environmentKey.Local);
 
@@ -73,8 +79,19 @@ namespace BaSyx.Models.Export.Converter
                 return null;
 
             EnvironmentKey_V2_0 environmentKey = new EnvironmentKey_V2_0();
-            environmentKey.IdType = (KeyType_V2_0)Enum.Parse(typeof(KeyType_V2_0), key.IdType.ToString());
-            environmentKey.Type = (KeyElements_V2_0)Enum.Parse(typeof(KeyElements_V2_0), key.Type.ToString());
+            if(!Enum.TryParse<KeyType_V2_0>(key.IdType.ToString(), out KeyType_V2_0 keyType))
+            {
+                if (key.IdType == KeyType.URI)
+                    keyType = KeyType_V2_0.IRI;
+            }
+            if (!Enum.TryParse<KeyElements_V2_0>(key.Type.ToString(), out KeyElements_V2_0 type))
+            {
+                type = KeyElements_V2_0.Undefined;
+            }
+
+
+            environmentKey.IdType = keyType;
+            environmentKey.Type = type;
             environmentKey.Local = key.Local;
             environmentKey.Value = key.Value;
 
@@ -99,13 +116,19 @@ namespace BaSyx.Models.Export.Converter
             else
                 return null;
 
+            if(!Enum.TryParse<KeyType_V2_0>(identifiable.Identification.IdType.ToString(), out KeyType_V2_0 idType))
+            {
+                if (identifiable.Identification.IdType == KeyType.URI)
+                    idType = KeyType_V2_0.IRI;
+            }
+
             EnvironmentReference_V2_0 reference = new EnvironmentReference_V2_0()
             {
                 Keys = new List<EnvironmentKey_V2_0>()
                 {
                     new EnvironmentKey_V2_0()
                     {
-                        IdType = (KeyType_V2_0)Enum.Parse(typeof(KeyType_V2_0), identifiable.Identification.IdType.ToString()),
+                        IdType = idType,
                         Local = true,
                         Value = identifiable.Identification.Id,
                         Type = type

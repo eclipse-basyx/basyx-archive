@@ -50,9 +50,12 @@ namespace BaSyx.Models.Export.Converter
             if (dataSpecificationContent == null)
                 return null;
 
+            if(!Enum.TryParse<EnvironmentDataTypeIEC61360>(dataSpecificationContent.DataType.ToString(), out EnvironmentDataTypeIEC61360 dataType))
+                dataType = EnvironmentDataTypeIEC61360.UNDEFINED;
+
             EnvironmentDataSpecificationIEC61360_V2_0 environmentDataSpecification = new EnvironmentDataSpecificationIEC61360_V2_0()
             {
-                DataType = (EnvironmentDataTypeIEC61360)Enum.Parse(typeof(EnvironmentDataTypeIEC61360), dataSpecificationContent.DataType.ToString()),
+                DataType = dataType,
                 Definition = dataSpecificationContent.Definition,
                 PreferredName = dataSpecificationContent.PreferredName,
                 ShortName = dataSpecificationContent.ShortName,
@@ -63,12 +66,12 @@ namespace BaSyx.Models.Export.Converter
                 Value = dataSpecificationContent.Value,
                 ValueFormat = dataSpecificationContent.ValueFormat,
                 ValueId = dataSpecificationContent.ValueId?.ToEnvironmentReference_V2_0(),
-                ValueList = dataSpecificationContent.ValueList.ConvertAll(c => new EnvironmentDataSpecifications.ValueReferencePair()
+                ValueList = dataSpecificationContent.ValueList?.ConvertAll(c => new EnvironmentDataSpecifications.ValueReferencePair()
                 {
                     Value = c.Value,
-                    ValueId = c.ValueId.ToEnvironmentReference_V2_0()
+                    ValueId = c.ValueId?.ToEnvironmentReference_V2_0()
                 }),
-                LevelTypes = dataSpecificationContent.LevelTypes.ConvertAll(c => (EnvironmentLevelType)Enum.Parse(typeof(EnvironmentLevelType), c.ToString()))
+                LevelTypes = dataSpecificationContent.LevelTypes?.ConvertAll(c => (EnvironmentLevelType)Enum.Parse(typeof(EnvironmentLevelType), c.ToString()))
             };
 
             return environmentDataSpecification;

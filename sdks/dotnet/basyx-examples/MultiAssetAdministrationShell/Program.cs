@@ -13,8 +13,10 @@ using BaSyx.API.AssetAdministrationShell.Extensions;
 using BaSyx.API.Components;
 using BaSyx.Models.Connectivity;
 using BaSyx.Models.Core.AssetAdministrationShell.Enums;
+using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
+using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using BaSyx.Utils.Settings.Types;
@@ -66,7 +68,14 @@ namespace MultiAssetAdministrationShell
                 aas.Submodels.Create(new Submodel()
                 {
                     Identification = new Identifier("http://basys40.de/submodels/" + Guid.NewGuid().ToString(), KeyType.IRI),
-                    IdShort = "TestSubmodel"
+                    IdShort = "TestSubmodel",
+                    SubmodelElements = new ElementContainer<ISubmodelElement>()
+                    {
+                        new Property<string>()
+                        {
+                            IdShort = "Property_" + i
+                        }
+                    }
                 });
 
                 var aasServiceProvider = aas.CreateServiceProvider(true);

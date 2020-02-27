@@ -14,12 +14,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BaSyx.AAS.Server.Http.Pages
 {
-    public class IndexModel : PageModel
+    public class MultiIndexModel : PageModel
     {
-        public IAssetAdministrationShellServiceProvider ServiceProvider { get; }
+        public IAssetAdministrationShellAggregatorServiceProvider ServiceProvider { get; }
         public ServerSettings Settings { get; }
 
-        public IndexModel(IAssetAdministrationShellServiceProvider provider, ServerSettings serverSettings)
+        public MultiIndexModel(IAssetAdministrationShellAggregatorServiceProvider provider, ServerSettings serverSettings)
         {
             ServiceProvider = provider;
             Settings = serverSettings;

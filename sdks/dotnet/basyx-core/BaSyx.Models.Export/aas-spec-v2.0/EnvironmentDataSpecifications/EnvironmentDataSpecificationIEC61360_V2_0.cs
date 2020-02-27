@@ -101,6 +101,8 @@ namespace BaSyx.Models.Export.EnvironmentDataSpecifications
 
     public enum EnvironmentDataTypeIEC61360
     {
+        [EnumMember(Value = "UNDEFINED")]
+        UNDEFINED,
         [EnumMember(Value = "DATE")]
         DATE,
         [EnumMember(Value = "STRING")]

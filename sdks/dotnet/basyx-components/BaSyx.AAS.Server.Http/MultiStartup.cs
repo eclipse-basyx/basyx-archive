@@ -59,7 +59,8 @@ namespace BaSyx.AAS.Server.Http
 
             services.UseStandardImplementation();
             services.ConfigureStandardDI();
-            
+
+
             //Check whether Asset Administration Shell Service Provider exists and bind it to the AssetAdministrationShell-Services-Controller
             services.AddTransient(ctx =>
             {
@@ -150,16 +151,23 @@ namespace BaSyx.AAS.Server.Http
             });
 
             app.UseCors(
-                options => options.WithOrigins("*").AllowAnyMethod()
-            );
+                options => options.WithOrigins("*")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin()
+            );    
 
             app.Use((context, next) =>
             {
                 string[] pathElements = context.Request.Path.ToUriComponent()?.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
-                if (pathElements == null || pathElements.Length == 0 || pathElements[0] != "shells")
-                    return next();
 
+                if (pathElements == null || pathElements.Length == 0)
+                {
+                    string defaultRoute = ServerSettings.ServerConfig.DefaultRoute ?? "/MultiIndex";
+                    context.Request.Path = new PathString(defaultRoute);
+                    return next();
+                }
                 if (pathElements.Length >= 2)
                 {
                     aasId = pathElements[1];
