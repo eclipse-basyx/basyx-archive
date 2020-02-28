@@ -51,7 +51,7 @@ public abstract class TCPControllableDeviceManagerComponent extends TCPDeviceMan
 		controlComponentServerPort = ctrlComponentServerPort;
 		
 		// Create control component
-		simpleControlComponent = new SimpleControlComponent();
+		simpleControlComponent = new SimpleControlComponent(true);
 		// - Register this component as event listener
 		simpleControlComponent.addControlComponentChangeListener(this);
 	}

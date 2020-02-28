@@ -18,10 +18,25 @@ public class SimpleControlComponent extends ControlComponent {
 		
 
 	
+	private boolean explicitResetFinished;
+
 	/**
 	 * Constructor
 	 */
 	public SimpleControlComponent() {
+		this(false);
+	}
+
+	/**
+	 * Constructs this control component so that it can be configured if the
+	 * resetting stage should finalize on its own or if it needs another
+	 * confirmation through {@link ControlComponent#finishState}
+	 * 
+	 * @param explicitResetFinished
+	 */
+	public SimpleControlComponent(boolean explicitResetFinished) {
+		this.explicitResetFinished = explicitResetFinished;
+
 		// Initial execution state
 		setExecutionState("idle");
 	}
@@ -45,8 +60,11 @@ public class SimpleControlComponent extends ControlComponent {
 
 			// Move from resetting state directly to idle state
 			case "resetting":
-				//return ExecutionState.IDLE.getValue();
+			if (explicitResetFinished) {
 				break;
+			} else {
+				return ExecutionState.IDLE.getValue();
+			}
 
 			// Move from aborting state directly to aborted state
 			case "aborting":
