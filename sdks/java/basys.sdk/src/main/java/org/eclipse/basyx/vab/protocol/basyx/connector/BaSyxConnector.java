@@ -10,7 +10,6 @@ import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
 import org.eclipse.basyx.vab.protocol.basyx.CoderTools;
 import org.eclipse.basyx.vab.protocol.basyx.server.VABBaSyxTCPInterface;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,13 +24,8 @@ import org.slf4j.LoggerFactory;
 public class BaSyxConnector implements IBaSyxConnector {
 	
 	private Logger logger = LoggerFactory.getLogger(BaSyxConnector.class);
-	
-	/**
-	 * Socket channel that connects to provider
-	 */
-	protected SocketChannel channelToProvider = null;
-
-
+	private InetSocketAddress serverSocketAddress;
+	private SocketChannel channelToProvider;
 	
 	
 	/**
@@ -47,40 +41,17 @@ public class BaSyxConnector implements IBaSyxConnector {
 		try {
 			// Resolve address
 			InetAddress       serverIPAddress     = InetAddress.getByName(hostName);
-			InetSocketAddress serverSocketAddress = new InetSocketAddress(serverIPAddress, port);
-		
-			// Create selector and socket channel
-			//Selector      selector = Selector.open();
-			// Channel to provider
-			channelToProvider = SocketChannel.open();
-			// - Setup channel: set to blocking and connect to provider
-			channelToProvider.configureBlocking(true);
-			channelToProvider.connect(serverSocketAddress);
-			// - Register operations for this channel that we will select for
-			//channelToProvider.register(selector, SelectionKey.OP_CONNECT | SelectionKey.OP_READ);
+			serverSocketAddress = new InetSocketAddress(serverIPAddress, port);
 		} catch (IOException e) {
 			// Print stack trace
 			logger.error("Exception in BaSyxConnector", e);
 		}
 	}
 	
-	
-	/**
-	 * Constructor that attaches to an existing connection
-	 */
-	public BaSyxConnector(SocketChannel channel) {
-		// Base constructor
-		super();
-		
-		// Attach to existing connection
-		channelToProvider = channel;
-	}
-	
-	
 	/**
 	 * Close connection
 	 */
-	public void closeConnection() {
+	private void closeConnection() {
 		// Try to close connection
 		try {
 			channelToProvider.close();
@@ -90,7 +61,6 @@ public class BaSyxConnector implements IBaSyxConnector {
 		}
 	}
 
-	
 	/**
 	 * Invoke a BaSyx operation in a remote provider
 	 */
@@ -99,7 +69,13 @@ public class BaSyxConnector implements IBaSyxConnector {
 		try {
 			// Send byte array (BaSyx operation) via channel to provider
 			ByteBuffer txBuffer = ByteBuffer.wrap(call);
-			// System.out.println("TXREQ_GW");
+
+			// Channel to provider
+			channelToProvider = SocketChannel.open();
+			// - Setup channel: set to blocking and connect to provider
+			channelToProvider.configureBlocking(true);
+			channelToProvider.connect(serverSocketAddress);
+
 			channelToProvider.write(txBuffer);
 
 			// Read response
@@ -128,7 +104,9 @@ public class BaSyxConnector implements IBaSyxConnector {
 			int jsonResultLen = CoderTools.getInt32(rxFrame, 1);
 			String jsonResult = new String(rxFrame, 1 + 4, jsonResultLen);
 
-			// System.out.println("RX3-RES");
+			// Close connection to prevent unused open channels
+			closeConnection();
+
 			// Return result
 			return jsonResult.toString();
 		} catch (IOException e) {

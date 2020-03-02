@@ -1,7 +1,6 @@
 package org.eclipse.basyx.testsuite.regression.vab.protocol.basyx;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
 
@@ -43,21 +42,13 @@ public class TestVABBaSyxTCP extends TestProvider {
 	public void testSuccessfulShutdown() throws InterruptedException {
 		BaSyxConnector connector = new BaSyxConnector("localhost", 6998);
 
-		// Wait for thread start
-		Thread.sleep(100);
+		connector.getModelPropertyValue("integer");
 
-		// Ensure that connector thread is running
-		Set<Thread> threads = Thread.getAllStackTraces().keySet();
-		assertTrue(threads.stream().anyMatch(t -> t.getName().contains(VABBaSyxTCPInterface.class.getName()) && t.isAlive()));
-
-		// Close socket --> Should also terminate thread
-		connector.closeConnection();
-
-		// Wait for thread shutdown
+		// Wait until thread is closed on server
 		Thread.sleep(100);
 
 		// Ensure that thread is closed
-		threads = Thread.getAllStackTraces().keySet();
+		Set<Thread> threads = Thread.getAllStackTraces().keySet();
 		assertFalse(threads.stream().anyMatch(t -> t.getName().contains(VABBaSyxTCPInterface.class.getName())));
 	}
 }
