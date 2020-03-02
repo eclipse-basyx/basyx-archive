@@ -31,7 +31,7 @@ public abstract class BaseSmartDevice extends BaseDevice implements ControlCompo
 	 */
 	public BaseSmartDevice() {
 		// Create control component
-		controlComponent = new SimpleControlComponent();
+		controlComponent = new SimpleControlComponent(true);
 		// - Register this component as event listener
 		controlComponent.addControlComponentChangeListener(this);
 	}

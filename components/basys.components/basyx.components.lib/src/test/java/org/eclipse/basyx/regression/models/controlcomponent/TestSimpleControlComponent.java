@@ -62,7 +62,7 @@ public class TestSimpleControlComponent {
 	@Test
 	public void testSimpleProxyControlComponentSequence() {
 		// Instantiate simple proxy control component
-		SimpleControlComponent ctrlComponent = new SimpleControlComponent();
+		SimpleControlComponent ctrlComponent = new SimpleControlComponent(true);
 
 		// Check component initial state
 		assertTrue(ctrlComponent.getExecutionState().equals("idle"));
@@ -99,7 +99,7 @@ public class TestSimpleControlComponent {
 	@Test
 	public void testSimpleProxyControlComponentSequenceAbort() {
 		// Instantiate simple proxy control component
-		SimpleControlComponent ctrlComponent = new SimpleControlComponent();
+		SimpleControlComponent ctrlComponent = new SimpleControlComponent(true);
 
 		// Check component initial state
 		assertTrue(ctrlComponent.getExecutionState().equals("idle"));
