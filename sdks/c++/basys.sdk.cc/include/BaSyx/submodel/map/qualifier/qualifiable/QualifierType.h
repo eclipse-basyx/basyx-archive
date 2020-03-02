@@ -9,10 +9,6 @@
 
 namespace basyx {
 namespace submodel {
-namespace metamodel {
-namespace map {
-namespace qualifier {
-namespace qualifiable {
 
 class QualifierType
 {
@@ -20,10 +16,6 @@ public:
   ~QualifierType() = default;
 };
 
-}
-}
-}
-}
 }
 }
 

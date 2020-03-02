@@ -11,27 +11,27 @@
 
 namespace basyx {
 namespace submodel {
-namespace submodelelement {
 
-namespace RelationshipElementPath
-{
-  static constexpr char FIRST[] = "first";
-  static constexpr char SECOND[] = "second";
-}
 
 class IRelationshipElement
 {
 public:
+  struct Path
+  {
+    static constexpr char First[] = "first";
+    static constexpr char Second[] = "second";
+    static constexpr char ModelType[] = "RelationshipElement";
+  };
+public:
   virtual ~IRelationshipElement() = default;
 
-  virtual void setFirst(const std::shared_ptr<IReference> & first) = 0;
+  virtual void setFirst(const IReference & first) = 0;
   virtual std::shared_ptr<IReference> getFirst() const = 0;
 
-  virtual void setSecond(const std::shared_ptr<IReference> & second) = 0;
+  virtual void setSecond(const IReference & second) = 0;
   virtual std::shared_ptr<IReference> getSecond() const = 0;
 };
 
-}
 }
 }
 

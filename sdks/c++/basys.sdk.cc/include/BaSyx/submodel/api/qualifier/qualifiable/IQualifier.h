@@ -19,7 +19,7 @@ namespace basyx {
 namespace submodel {
 
 class IQualifier 
-  : public IHasSemantics
+  : public virtual IHasSemantics
   , public virtual IConstraint
 {
 public:
@@ -32,15 +32,14 @@ public:
   };
 
 public:
-  virtual ~IQualifier() = default;
+	virtual ~IQualifier() = default;
 
-  virtual std::string getQualifierType() const = 0;
-  virtual basyx::object getQualifierValue() const = 0;
-  virtual std::shared_ptr<IReference> getQualifierValueId() const = 0;
+	virtual std::string getQualifierType() const = 0;
+	virtual basyx::object getQualifierValue() const = 0;
+	virtual std::shared_ptr<IReference> getQualifierValueId() const = 0;
 };
 
 }
 }
 
 #endif
-

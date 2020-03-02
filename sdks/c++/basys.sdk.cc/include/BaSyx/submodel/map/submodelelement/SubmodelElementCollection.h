@@ -13,10 +13,14 @@
 namespace basyx {
 namespace submodel {
 
-class SubmodelElementCollection : 
+class SubmodelElementCollection :
+  public virtual vab::ElementMap,
 	public SubmodelElement, 
 	public ISubmodelElementCollection
 {
+private:
+	virtual void setOrdered(const bool & value);
+	virtual void setAllowDuplicates(const bool & value);
 public:
 	~SubmodelElementCollection() = default;
 
@@ -39,22 +43,15 @@ public:
 	*/
 	SubmodelElementCollection(const basyx::specificCollection_t<ISubmodelElement> & value, const bool ordered, const bool allowDuplicates);
 
-	// Inherited via ISubmodelElementCollection
-	virtual void setValue(const basyx::specificCollection_t<ISubmodelElement> & value) override;
+	virtual void setValue(const basyx::specificCollection_t<ISubmodelElement> & value);
+	virtual void setElements(const basyx::specificMap_t<ISubmodelElement> & value);
+
 	virtual basyx::specificCollection_t<ISubmodelElement> getValue() const override;
-	virtual void setOrdered(const bool & value) override;
 	virtual bool isOrdered() const override;
-	virtual void setAllowDuplicates(const bool & value) override;
 	virtual bool isAllowDuplicates() const override;
-	virtual void setElements(const basyx::specificMap_t<ISubmodelElement> & value) override;
 	virtual basyx::specificMap_t<ISubmodelElement> getElements() const override;
 
-private:
-	bool ordered, allowDuplicates;
-	basyx::specificCollection_t<ISubmodelElement> value;
-	basyx::specificMap_t<ISubmodelElement> elements;
-
-	void orderElements();
+	virtual void addSubmodelElement(const ISubmodelElement & element);
 };
 
 }

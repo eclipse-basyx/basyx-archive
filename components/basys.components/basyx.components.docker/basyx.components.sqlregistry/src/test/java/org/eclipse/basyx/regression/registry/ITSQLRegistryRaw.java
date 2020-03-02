@@ -1,7 +1,6 @@
 package org.eclipse.basyx.regression.registry;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.io.UnsupportedEncodingException;
@@ -49,18 +48,18 @@ public class ITSQLRegistryRaw {
 	/**
 	 * AASDescriptor to test
 	 */
-	private static final IIdentifier id1 = new ModelUrn("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-166");
+	private static final IIdentifier id1 = new ModelUrn("urn:de.FHG:es.iese:aas:0.98:5:lab:microscope#A-166");
 	private static final String endpoint1 = "www.endpoint.de";
 	private static final AASDescriptor aasDescriptor1 = new AASDescriptor(id1, endpoint1);
 	private static final String serializedDescriptor1 = serializer.serialize(aasDescriptor1);
-	private static final IIdentifier id2 = new ModelUrn("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-167");
+	private static final IIdentifier id2 = new ModelUrn("urn:de.FHG:es.iese:aas:0.98:5:lab:microscope#A-167");
 	private static final String endpoint2 = "www.endpoint2.de";
 	private static final String endpoint2b = "www.endpoint2.de";
 	private static final AASDescriptor aasDescriptor2 = new AASDescriptor(id2, endpoint2);
 	private static final AASDescriptor aasDescriptor2b = new AASDescriptor(id2, endpoint2b);
 	private static final String serializedDescriptor2 = serializer.serialize(aasDescriptor2);
 	private static final String serializedDescriptor2b = serializer.serialize(aasDescriptor2b);
-	private static final IIdentifier idUnknown = new ModelUrn("urn:de.FHG:es.iese:aas:0.98:5:lab/microscope#A-168");
+	private static final IIdentifier idUnknown = new ModelUrn("urn:de.FHG:es.iese:aas:0.98:5:lab:microscope#A-168");
 	private static String aasUrl1, aasUrl2, aasUrlUnknown;
 
 	@BeforeClass
@@ -166,14 +165,15 @@ public class ITSQLRegistryRaw {
 	@Test
 	public void testCreateDeleteCall() throws UnsupportedEncodingException {
 		// Update a specific AAS
-		// Delete AAS registration (make sure tests work also iff previous test suite
+		// Delete AAS registration (make sure tests work also if previous test suite
 		// did fail)
 		client.delete(aasUrl2);
 
-		// Get a known AAS by its ID - check if AAS does not exist already
-		Object result = getResult(client.get(aasUrl2));
-		// - Check updated registration
-		assertNull(result);
+		// Try to get deleted AAS, has to throw exception
+		try {
+			getResult(client.get(aasUrl2));
+			fail();
+		} catch(Exception e) {}
 
 		// Create new AAS registration
 		client.post(registryUrl, serializedDescriptor2);
@@ -186,10 +186,11 @@ public class ITSQLRegistryRaw {
 		// Delete AAS registration
 		client.delete(aasUrl2);
 
-		// Check if it is really deleted
-		result = getResult(client.get(aasUrl2));
-		// - Check updated registration
-		assertNull(result);
+		// Try to get deleted AAS, has to throw exception
+		try {
+			getResult(client.get(aasUrl2));
+			fail();
+		} catch(Exception e) {}
 	}
 
 	/**
@@ -199,11 +200,10 @@ public class ITSQLRegistryRaw {
 	 */
 	@Test
 	public void testNonWorkingCalls() throws UnsupportedEncodingException {
-		// Get unknown AAS ID
-		Object result = getResult(client.get(aasUrlUnknown));
-
-		// Check if no AAS are contained in result
-		assertNull(result);
+		// Get unknown AAS ID, has to throw exception
+		try {
+			getResult(client.get(aasUrlUnknown));
+		} catch(Exception e) {}
 	}
 
 	@SuppressWarnings("unchecked")

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 
 
@@ -22,12 +23,17 @@ public class SubmodelDescriptor extends ModelDescriptor {
 	 * Version of serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	public static final String MODELTYPE = "SubmodelDescriptor";
 
 	/**
 	 * Create descriptor from existing hash map
 	 */
 	public SubmodelDescriptor(Map<String, Object> map) {
 		super(map);
+		
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
 	}
 	
 	/**
@@ -46,6 +52,9 @@ public class SubmodelDescriptor extends ModelDescriptor {
 	 */
 	public SubmodelDescriptor(String idShort, IIdentifier id, String httpEndpoint) {
 		super(idShort, id, httpEndpoint);
+		
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
 	}
 }
 

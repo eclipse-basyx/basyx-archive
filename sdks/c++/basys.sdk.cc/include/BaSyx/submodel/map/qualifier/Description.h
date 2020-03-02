@@ -17,7 +17,6 @@
 namespace basyx {
 namespace submodel {
 
-
 class Description : public vab::ElementMap
 {
 public:
@@ -34,6 +33,8 @@ public:
 
   std::string getLanguage() const;
   std::string getText() const;
+
+  friend bool operator==(const Description & left, const Description & right);
 };
 
 }

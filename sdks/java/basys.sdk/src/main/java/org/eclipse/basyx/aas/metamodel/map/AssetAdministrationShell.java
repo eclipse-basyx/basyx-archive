@@ -78,6 +78,9 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	public AssetAdministrationShell(Reference derivedFrom, Security security, Asset asset, Set<SubmodelDescriptor> submodels, Set<ConceptDictionary> dictionaries, Set<View> views) {
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+		
 		// Add qualifiers
 		putAll(new Identifiable());
 		putAll(new HasDataSpecification());

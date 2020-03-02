@@ -6,18 +6,22 @@
 
 #include <BaSyx/submodel/map/qualifier/qualifiable/Qualifier.h>
 #include <BaSyx/submodel/map/reference/Reference.h>
+#include <BaSyx/submodel/map/modeltype/ModelType.h>
 
 namespace basyx {
 namespace submodel {
 
-Qualifier::Qualifier()
-{}
+Qualifier::Qualifier() :
+  vab::ElementMap{ModelType{IQualifier::Path::Modeltype}}
+{
+  this->setQualifierType("Type not specified");
+}
 
 Qualifier::Qualifier(
-	const std::string & qualifierType, 
-	const basyx::object & qualifierValue, 
-	const std::shared_ptr<IReference> & valueId) : 
-    vab::ElementMap{}
+	  const std::string & qualifierType, 
+	  const basyx::object & qualifierValue, 
+	  const IReference & valueId) 
+  : vab::ElementMap{ModelType{IQualifier::Path::Modeltype}}
 {
   this->setQualifierType(qualifierType);
   this->setQualifierValue(qualifierValue);
@@ -41,15 +45,15 @@ std::shared_ptr<IReference> Qualifier::getQualifierValueId() const
 
 void Qualifier::setQualifierType(const std::string & qualifierType)
 {
-  this->map.insertKey(IQualifier::Path::QualifierType, qualifierType);
+  this->map.insertKey(IQualifier::Path::QualifierType, qualifierType, true);
 }
 
 void Qualifier::setQualifierValue(const basyx::object & qualifierValue)
 {
-  this->map.insertKey(IQualifier::Path::QualifierValue, qualifierValue);
+  this->map.insertKey(IQualifier::Path::QualifierValue, qualifierValue, true);
 }
 
-void Qualifier::setQualifierValueId(const std::shared_ptr<IReference> & valueId)
+void Qualifier::setQualifierValueId(const IReference & valueId)
 {
   Reference reference{valueId};
   this->insertMapElement(IQualifier::Path::QualifierValueID, reference);

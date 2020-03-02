@@ -14,7 +14,7 @@ namespace submodel {
 Reference::Reference() 
 	: vab::ElementMap{}
 {
-	map.insertKey("keys", basyx::object::make_list<basyx::object>());
+	this->setKeys(basyx::specificCollection_t<IKey>());
 }
 
 Reference::Reference(const basyx::specificCollection_t<IKey> & keys)
@@ -33,13 +33,7 @@ Reference::Reference(const std::initializer_list<Key> keys)
 		list.insert(key.getMap());
 	}
 
-	map.insertKey("keys", list);
-}
-
-Reference::Reference(const std::shared_ptr<IReference> reference)
-  : vab::ElementMap{}
-{
-  this->setKeys(reference->getKeys());
+	map.insertKey(IReference::Path::Key, list, true);
 }
 
 Reference::Reference(const IReference & reference) :
@@ -51,11 +45,12 @@ Reference::Reference(const IReference & reference) :
 Reference::Reference(basyx::object object)
 	: vab::ElementMap{ object }
 {
+  this->map.insertKey(IReference::Path::Key, basyx::object::make_list<basyx::object>());
 }
 
 const basyx::specificCollection_t<IKey> Reference::getKeys() const
 {
-	auto & obj_list = this->map.getProperty("keys").Get<basyx::object::object_list_t&>();
+	auto & obj_list = this->map.getProperty(IReference::Path::Key).Get<basyx::object::object_list_t&>();
 	basyx::specificCollection_t<IKey> keys;
 
 	for (auto & obj : obj_list)
@@ -81,10 +76,10 @@ void Reference::setKeys(const basyx::specificCollection_t<IKey>& keys)
 
 		list.insert(newKey.getMap());
 	}
-	map.insertKey("keys", list);
+	map.insertKey(IReference::Path::Key, list, true);
 }
 
-Reference Reference::FromIdentifiable(const std::string & keyElementType, bool local, IIdentifiable & identifiable)
+Reference Reference::FromIdentifiable(const std::string & keyElementType, bool local, const IIdentifiable & identifiable)
 {
 	Key key{ keyElementType, local, identifiable.getIdentification()->getId(), identifiable.getIdentification()->getIdType() };
 	return Reference{ key };

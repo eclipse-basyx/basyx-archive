@@ -16,8 +16,8 @@ namespace basyx {
 namespace submodel {
 
 class Identifiable :
-  public virtual Referable,
   public virtual IIdentifiable,
+  public virtual Referable,
   public virtual vab::ElementMap
 {
 public:
@@ -27,6 +27,9 @@ public:
 
 	// constructors
 	Identifiable();
+	Identifiable(const IIdentifiable & identifiable);
+	Identifiable(const basyx::object & obj);
+	Identifiable(const IIdentifier & identifier, const IAdministrativeInformation & administration);
 	Identifiable(
 		const std::string & version, 
 		const std::string & revision, 
@@ -41,9 +44,7 @@ public:
 	virtual std::shared_ptr<IIdentifier> getIdentification() const override;
 
 	// not inherited
-	void setAdministration(const std::shared_ptr<IAdministrativeInformation> & administration);
-  void setAdministration(const IAdministrativeInformation & administration);
-	void setIdentification(const std::shared_ptr<IIdentifier> & identification);
+	void setAdministration(const IAdministrativeInformation & administration);
 	void setIdentification(const IIdentifier & identification);
 };
 

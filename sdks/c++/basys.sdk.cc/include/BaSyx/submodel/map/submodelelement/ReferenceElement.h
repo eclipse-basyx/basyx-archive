@@ -13,21 +13,22 @@
 namespace basyx {
 namespace submodel {
 
-class ReferenceElement : public DataElement, public IReferenceElement
+class ReferenceElement : 
+  public virtual vab::ElementMap, 
+  public DataElement, 
+  public IReferenceElement
 {
 public:
   ~ReferenceElement() = default;
 
   // construtors
   ReferenceElement();
-  ReferenceElement(const std::shared_ptr<IReference> & reference);
+  ReferenceElement(const IReference & reference);
+  ReferenceElement(const basyx::object & map);
 
   // Inherited via IReferenceElement
-  virtual void setValue(const std::shared_ptr<IReference> & ref) override;
+  virtual void setValue(const IReference & ref);
   virtual std::shared_ptr<IReference> getValue() const override;
-
-private:
-  std::shared_ptr<IReference> reference;
 };
 
 }

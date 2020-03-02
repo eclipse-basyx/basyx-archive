@@ -20,16 +20,16 @@
 namespace basyx {
 namespace submodel {
 
-class ConnectedRelationshipElement : public ConnectedSubmodelElement, submodelelement::IRelationshipElement
+class ConnectedRelationshipElement : public ConnectedSubmodelElement, public IRelationshipElement
 {
 public:
   ConnectedRelationshipElement(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
   ~ConnectedRelationshipElement() = default;
   
   // Inherited via IRelationshipElement
-  virtual void setFirst(const std::shared_ptr<IReference> & first) override;
+  virtual void setFirst(const IReference & first) override;
   virtual std::shared_ptr<IReference> getFirst() const override;
-  virtual void setSecond(const std::shared_ptr<IReference> & second) override;
+  virtual void setSecond(const IReference & second) override;
   virtual std::shared_ptr<IReference> getSecond() const override;
 };
 

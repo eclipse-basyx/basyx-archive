@@ -26,17 +26,8 @@ AdministrativeInformation::AdministrativeInformation(const std::string & version
 }
 
 AdministrativeInformation::AdministrativeInformation(basyx::object obj)
-	: HasDataSpecification{ obj }
-  , vab::ElementMap{}
+	: vab::ElementMap{obj}
 {
-}
-
-AdministrativeInformation::AdministrativeInformation(const std::shared_ptr<IAdministrativeInformation>& other)
-  : vab::ElementMap{}
-{
-  this->setDataSpecificationReferences(other->getDataSpecificationReferences());
-  this->setRevision(other->getRevision());
-  this->setVersion(other->getVersion());
 }
 
 AdministrativeInformation::AdministrativeInformation(const IAdministrativeInformation & other)

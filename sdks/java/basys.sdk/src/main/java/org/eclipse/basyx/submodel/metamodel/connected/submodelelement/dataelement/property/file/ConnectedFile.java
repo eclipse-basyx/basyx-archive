@@ -1,9 +1,9 @@
 package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.file;
 
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.file.IFile;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedDataElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.blob.Blob;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 /**
  * "Connected" implementation of IFile

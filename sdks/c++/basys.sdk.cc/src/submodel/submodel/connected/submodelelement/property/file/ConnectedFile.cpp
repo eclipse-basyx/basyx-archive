@@ -17,22 +17,22 @@ ConnectedFile::ConnectedFile(std::shared_ptr<vab::core::proxy::IVABElementProxy>
 
 void ConnectedFile::setValue(const std::string & value)
 {
-  this->setProxyValue(IProperty::Path::Value, value);
+	this->setProxyValue(IProperty::Path::Value, value);
 }
 
-std::string ConnectedFile::getValue() const
+const std::string & ConnectedFile::getValue() const
 {
-  return this->getProxyValue(IProperty::Path::Value);
+	return this->getProxyValue(IProperty::Path::Value);
 }
 
 void ConnectedFile::setMimeType(const std::string & mimeType)
 {
-  this->setProxyValue(submodelelement::BlobPath::MIMETYPE, mimeType);
+	this->setProxyValue(IBlob::Path::MIMEType, mimeType);
 }
 
-std::string ConnectedFile::getMimeType() const
+const std::string & ConnectedFile::getMimeType() const
 {
-  return this->getProxyValue(submodelelement::BlobPath::MIMETYPE);
+	return this->getProxyValue(IBlob::Path::MIMEType);
 }
 
 }

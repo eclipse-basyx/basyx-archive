@@ -17,11 +17,13 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 public class Qualifier extends Constraint implements IQualifier {
 	public static final String QUALIFIER = "qualifier";
 
-	public static final String QUALIFIERTYPE = "qualifierType";
+	public static final String TYPE = "type";
 
-	public static final String QUALIFIERVALUE = "qualifierValue";
+	public static final String VALUE = "value";
 
-	public static final String QUALIFIERVALUEID = "qualifierValueId";
+	public static final String VALUEID = "valueId";
+
+	public static final String VALUETYPE = "valueType";
 
 	public static final String MODELTYPE = "Qualifier";
 
@@ -36,19 +38,21 @@ public class Qualifier extends Constraint implements IQualifier {
 		this.putAll(new HasSemantics());
 
 		// Default values
-		put(QUALIFIERTYPE, "");
-		put(QUALIFIERVALUE, null);
-		put(QUALIFIERVALUEID, null);
+		put(TYPE, "");
+		put(VALUE, null);
+		put(VALUEID, null);
+		put(VALUETYPE, "");
 	}
 
-	public Qualifier(String type, String value, Reference valueId) {
+	public Qualifier(String type, String value, String valueType, Reference valueId) {
 		// Add all attributes from HasSemantics
 		this.putAll(new HasSemantics());
 
 		// Default values
-		put(QUALIFIERTYPE,type);
-		put(QUALIFIERVALUE, value);
-		put(QUALIFIERVALUEID, valueId);
+		put(TYPE,type);
+		put(VALUE, value);
+		put(VALUEID, valueId);
+		put(VALUETYPE, valueType);
 	}
 
 	/**
@@ -68,32 +72,41 @@ public class Qualifier extends Constraint implements IQualifier {
 		return ret;
 	}
 
-	public void setQualifierType(String obj) {
-		put(Qualifier.QUALIFIERTYPE, obj);
+	public void setType(String obj) {
+		put(Qualifier.TYPE, obj);
 	}
 
 	@Override
-	public String getQualifierType() {
-		return (String) get(Qualifier.QUALIFIERTYPE);
+	public String getType() {
+		return (String) get(Qualifier.TYPE);
 	}
 
-	public void setQualifierValue(String obj) {
-		put(Qualifier.QUALIFIERVALUE, obj);
+	public void setValue(String obj) {
+		put(Qualifier.VALUE, obj);
 	}
 
 	@Override
-	public String getQualifierValue() {
-		return (String) get(Qualifier.QUALIFIERVALUE);
+	public String getValue() {
+		return (String) get(Qualifier.VALUE);
 	}
 
-	public void setQualifierValueId(IReference obj) {
-		put(Qualifier.QUALIFIERVALUEID, obj);
+	public void setValueId(IReference obj) {
+		put(Qualifier.VALUEID, obj);
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
-	public IReference getQualifierValueId() {
-		return Reference.createAsFacade((Map<String, Object>) get(Qualifier.QUALIFIERVALUEID));
+	public IReference getValueId() {
+		return Reference.createAsFacade((Map<String, Object>) get(Qualifier.VALUEID));
+	}
+
+	public void setValueType(String obj) {
+		put(Qualifier.VALUETYPE, obj);
+	}
+	
+	@Override
+	public String getValueType() {
+		return (String) get(Qualifier.VALUETYPE);
 	}
 
 	@Override

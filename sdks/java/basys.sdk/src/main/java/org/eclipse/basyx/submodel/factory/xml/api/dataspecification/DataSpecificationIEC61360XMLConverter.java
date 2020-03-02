@@ -18,16 +18,16 @@ import org.w3c.dom.Element;
  */
 public class DataSpecificationIEC61360XMLConverter {
 	
-	public static final String DATA_SPECIFICATION_IEC61360 = "aas:dataSpecificationIEC61360";
-	public static final String IEC_PREFERRED_NAME = "IEC:preferredName";
-	public static final String IEC_UNIT_ID = "IEC:unitId";
-	public static final String IEC_SOURCE_OF_DEFINITION = "IEC:sourceOfDefinition";
-	public static final String IEC_SHORT_NAME = "IEC:shortName";
-	public static final String IEC_VALUE_FORMAT = "IEC:valueFormat";
-	public static final String IEC_UNIT = "IEC:unit";
-	public static final String IEC_SYMBOL = "IEC:symbol";
-	public static final String IEC_DATA_TYPE = "IEC:dataType";
-	public static final String IEC_DEFINITION = "IEC:definition";
+	public static final String DATA_SPECIFICATION_IEC61360 = "aas:dataSpecificationIEC6136061360";
+	public static final String IEC61360_PREFERRED_NAME = "IEC61360:preferredName";
+	public static final String IEC61360_UNIT_ID = "IEC61360:unitId";
+	public static final String IEC61360_SOURCE_OF_DEFINITION = "IEC61360:sourceOfDefinition";
+	public static final String IEC61360_SHORT_NAME = "IEC61360:shortName";
+	public static final String IEC61360_VALUE_FORMAT = "IEC61360:valueFormat";
+	public static final String IEC61360_UNIT = "IEC61360:unit";
+	public static final String IEC61360_SYMBOL = "IEC61360:symbol";
+	public static final String IEC61360_DATA_TYPE = "IEC61360:dataType";
+	public static final String IEC61360_DEFINITION = "IEC61360:definition";
 	
 	
 	/**
@@ -45,23 +45,23 @@ public class DataSpecificationIEC61360XMLConverter {
 		
 		Map<String, Object> xmlDataSpecObj = (Map<String, Object>) xmlDataSpecificationContentObject.get(DATA_SPECIFICATION_IEC61360);
 		
-		LangStrings preferredName = LangStringsXMLConverter.parseLangStrings((Map<String, Object>) xmlDataSpecObj.get(IEC_PREFERRED_NAME));
+		LangStrings preferredName = LangStringsXMLConverter.parseLangStrings((Map<String, Object>) xmlDataSpecObj.get(IEC61360_PREFERRED_NAME));
 		spec.setPreferredName(preferredName);
 		
-		Map<String, Object> xmlKeys = (Map<String, Object>) xmlDataSpecObj.get(IEC_UNIT_ID);
+		Map<String, Object> xmlKeys = (Map<String, Object>) xmlDataSpecObj.get(IEC61360_UNIT_ID);
 		spec.setUnitId(ReferenceXMLConverter.parseReference(xmlKeys));
 		
-		LangStrings sourceOfDefinition = LangStringsXMLConverter.parseLangStrings((Map<String, Object>) xmlDataSpecObj.get(IEC_SOURCE_OF_DEFINITION));
+		LangStrings sourceOfDefinition = LangStringsXMLConverter.parseLangStrings((Map<String, Object>) xmlDataSpecObj.get(IEC61360_SOURCE_OF_DEFINITION));
 		spec.setSourceOfDefinition(sourceOfDefinition);
 		
-		LangStrings definition = LangStringsXMLConverter.parseLangStrings((Map<String, Object>) xmlDataSpecObj.get(IEC_DEFINITION));
+		LangStrings definition = LangStringsXMLConverter.parseLangStrings((Map<String, Object>) xmlDataSpecObj.get(IEC61360_DEFINITION));
 		spec.setDefinition(definition);
 		
-		spec.setShortName(XMLHelper.getString(xmlDataSpecObj.get(IEC_SHORT_NAME)));
-		spec.setValueFormat(XMLHelper.getString(xmlDataSpecObj.get(IEC_VALUE_FORMAT)));
-		spec.setUnit(XMLHelper.getString(xmlDataSpecObj.get(IEC_UNIT)));
-		spec.setSymbol(XMLHelper.getString(xmlDataSpecObj.get(IEC_SYMBOL)));
-		spec.setDataType(XMLHelper.getString(xmlDataSpecObj.get(IEC_DATA_TYPE)));
+		spec.setShortName(XMLHelper.getString(xmlDataSpecObj.get(IEC61360_SHORT_NAME)));
+		spec.setValueFormat(XMLHelper.getString(xmlDataSpecObj.get(IEC61360_VALUE_FORMAT)));
+		spec.setUnit(XMLHelper.getString(xmlDataSpecObj.get(IEC61360_UNIT)));
+		spec.setSymbol(XMLHelper.getString(xmlDataSpecObj.get(IEC61360_SYMBOL)));
+		spec.setDataType(XMLHelper.getString(xmlDataSpecObj.get(IEC61360_DATA_TYPE)));
 		
 		//FIXME Code and ValueList are Objects
 		//FIXME valueType doesn't exist in Object
@@ -83,35 +83,35 @@ public class DataSpecificationIEC61360XMLConverter {
 
 		Element root = document.createElement(DATA_SPECIFICATION_IEC61360);
 		
-		Element xmlElement = document.createElement(IEC_PREFERRED_NAME);
+		Element xmlElement = document.createElement(IEC61360_PREFERRED_NAME);
 		LangStringsXMLConverter.buildLangStringsXML(document, xmlElement, dataSpec.getPreferredName());
-		root.appendChild(root);
+		root.appendChild(xmlElement);
 		
-		xmlElement = document.createElement(IEC_SHORT_NAME);
+		xmlElement = document.createElement(IEC61360_SHORT_NAME);
 		xmlElement.appendChild(document.createTextNode(dataSpec.getShortName()));
 		root.appendChild(xmlElement);
 		
-		xmlElement = document.createElement(IEC_UNIT);
+		xmlElement = document.createElement(IEC61360_UNIT);
 		xmlElement.appendChild(document.createTextNode(dataSpec.getUnit()));
 		root.appendChild(xmlElement);
 		
-		xmlElement = document.createElement(IEC_UNIT_ID);
+		xmlElement = document.createElement(IEC61360_UNIT_ID);
 		xmlElement.appendChild(ReferenceXMLConverter.buildReferenceXML(document, dataSpec.getUnitId()));
 		root.appendChild(xmlElement);
 		
-		xmlElement = document.createElement(IEC_VALUE_FORMAT);
+		xmlElement = document.createElement(IEC61360_VALUE_FORMAT);
 		xmlElement.appendChild(document.createTextNode(dataSpec.getValueFormat()));
 		root.appendChild(xmlElement);
 		
-		xmlElement = document.createElement(IEC_SYMBOL);
+		xmlElement = document.createElement(IEC61360_SYMBOL);
 		xmlElement.appendChild(document.createTextNode(dataSpec.getSymbol()));
 		root.appendChild(xmlElement);
 		
-		xmlElement = document.createElement(IEC_DATA_TYPE);
+		xmlElement = document.createElement(IEC61360_DATA_TYPE);
 		xmlElement.appendChild(document.createTextNode(dataSpec.getDataType()));
 		root.appendChild(xmlElement);
 		
-		xmlElement = document.createElement(IEC_DEFINITION);
+		xmlElement = document.createElement(IEC61360_DEFINITION);
 		LangStringsXMLConverter.buildLangStringsXML(document, xmlElement, dataSpec.getDefinition());
 		root.appendChild(xmlElement);
 		

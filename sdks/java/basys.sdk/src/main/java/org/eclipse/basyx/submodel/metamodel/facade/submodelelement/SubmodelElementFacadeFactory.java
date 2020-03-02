@@ -5,11 +5,14 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Event;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.blob.Blob;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.file.File;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.entity.Entity;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
@@ -32,10 +35,16 @@ public class SubmodelElementFacadeFactory {
 		String type = ModelType.createAsFacade(submodelElement).getName();
 		
 		switch (type) {
-			case Event.MODELTYPE:
-				return Event.createAsFacade(submodelElement);
 			case Property.MODELTYPE:
 				return Property.createAsFacade(submodelElement);
+			case BasicEvent.MODELTYPE:
+				return BasicEvent.createAsFacade(submodelElement);
+			case MultiLanguageProperty.MODELTYPE:
+				return MultiLanguageProperty.createAsFacade(submodelElement);
+			case Range.MODELTYPE:
+				return Range.createAsFacade(submodelElement);
+			case Entity.MODELTYPE:
+				return Entity.createAsFacade(submodelElement);
 			case File.MODELTYPE:
 				return File.createAsFacade(submodelElement);
 			case Blob.MODELTYPE:

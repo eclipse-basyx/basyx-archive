@@ -1,5 +1,5 @@
 /*
- * OperationVariable.cpp
+ * ModelType.cpp
  *
  *      Author: wendel
  */
@@ -10,21 +10,17 @@ namespace basyx {
 namespace submodel {
 
 OperationVariable::OperationVariable()
-	: ModelType("OperationVariable")
-{
-}
+	: ModelType(IOperationVariable::Path::ModelType)
+  , vab::ElementMap{}
+{}
 
 OperationVariable::OperationVariable(basyx::object object)
 	: vab::ElementMap{object}
+{}
+
+std::shared_ptr<ISubmodelElement> OperationVariable::getValue() const
 {
-}
-
-
-
-basyx::object OperationVariable::getValue() const
-{
-//  return this->value;
-	return nullptr;
+  return std::make_shared<SubmodelElement>(this->map.getProperty(IOperationVariable::Path::Value));
 }
 
 std::string OperationVariable::getType() const
@@ -32,9 +28,10 @@ std::string OperationVariable::getType() const
 	return this->map.getProperty(Path::Type).GetStringContent();
 }
 
-void OperationVariable::setValue(const std::shared_ptr<ISubmodelElement> & value)
+void OperationVariable::setValue(const ISubmodelElement & value)
 {
-//  this->value = value;
+  auto map = SubmodelElement(value).getMap();
+  this->map.insertKey(IOperationVariable::Path::Value, map, true);
 }
 
 void OperationVariable::setType(const std::string & string)

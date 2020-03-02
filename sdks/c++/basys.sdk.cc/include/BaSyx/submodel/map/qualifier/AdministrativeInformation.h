@@ -18,8 +18,8 @@ namespace basyx {
 namespace submodel {
 
 class AdministrativeInformation :
-	public IAdministrativeInformation,
-	public HasDataSpecification,
+	public virtual IAdministrativeInformation,
+	public virtual HasDataSpecification,
   public virtual vab::ElementMap
 {
 public:
@@ -28,7 +28,6 @@ public:
   AdministrativeInformation();
   AdministrativeInformation(const std::string & version, const std::string & revision);
   AdministrativeInformation(basyx::object object);
-  AdministrativeInformation(const std::shared_ptr<IAdministrativeInformation> & other);
   AdministrativeInformation(const IAdministrativeInformation & other);
 
   void setVersion(const std::string & version);

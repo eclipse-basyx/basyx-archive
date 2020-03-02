@@ -19,7 +19,8 @@
 namespace basyx {
 namespace submodel {
 
-class IIdentifiable : public virtual IReferable
+class IIdentifiable 
+  : public virtual IReferable
 {
 public:
   struct Path

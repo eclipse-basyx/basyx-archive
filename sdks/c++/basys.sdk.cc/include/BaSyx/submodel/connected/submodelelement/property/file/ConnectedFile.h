@@ -13,17 +13,17 @@
 namespace basyx { 
 namespace submodel {
 
-class ConnectedFile : public submodelelement::property::IFile, ConnectedDataElement
+class ConnectedFile : public IFile, ConnectedDataElement
 {
 public:
   ConnectedFile(std::shared_ptr<vab::core::proxy::IVABElementProxy> proxy);
 	~ConnectedFile() = default;
 
-  virtual void setValue(const std::string & value) override;
-  virtual std::string getValue() const override;
+  virtual void setValue(const std::string & value);
+  virtual const std::string & getValue() const override;
 
-  virtual void setMimeType(const std::string & mimeType) override;
-  virtual std::string getMimeType() const override;
+  virtual void setMimeType(const std::string & mimeType);
+  virtual const std::string & getMimeType() const override;
 
 };
 

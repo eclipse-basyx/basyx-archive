@@ -35,16 +35,21 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.EntityType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.blob.Blob;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.file.File;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.entity.Entity;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;
 import org.eclipse.basyx.vab.model.VABModelMap;
@@ -119,7 +124,6 @@ public class TestXMLConverter {
 			
 			//Build XML-File from the Objects and write it to a StringWriter
 			StringWriter resultWithTypes = new StringWriter();
-			//ObjToXMLConverter.convertToXML(iAssetAdministrationShellList, iAssetList, iConceptDescriptionList, iSubmodelList, new StreamResult(resultWithTypes));
 			MetamodelToXMLConverter.convertToXML(assetAdministrationShellList, assetList, conceptDescriptionList, submodelList, new StreamResult(resultWithTypes));
 			
 			
@@ -163,7 +167,7 @@ public class TestXMLConverter {
 		
 		//select the AAS with a specific ID form the list
 		for(IAssetAdministrationShell shell: aasList) {
-			if(shell.getIdShort().equals("assest_admin_shell")) {
+			if(shell.getIdShort().equals("asset_admin_shell")) {
 				aas = shell;
 				break;
 			}
@@ -171,7 +175,7 @@ public class TestXMLConverter {
 		
 		assertNotNull(aas);
 		
-		assertEquals("assest_admin_shell", aas.getIdShort());
+		assertEquals("asset_admin_shell", aas.getIdShort());
 		assertEquals("test_category", aas.getCategory());
 		assertEquals("aas_parent_id", aas.getParent().getKeys().get(0).getValue());
 		
@@ -266,7 +270,7 @@ public class TestXMLConverter {
 		
 		//select the SubModel with a specific ID form the list
 		for(ISubModel s: submodels) {
-			if(s.getIdShort().equals("3s7plfdrs35_submode1")) {
+			if(s.getIdShort().equals("3s7plfdrs35_submodel1")) {
 				submodel = s;
 				break;
 			}
@@ -274,7 +278,7 @@ public class TestXMLConverter {
 		
 		assertNotNull(submodel);
 		
-		assertEquals("3s7plfdrs35_submode1", submodel.getIdShort());
+		assertEquals("3s7plfdrs35_submodel1", submodel.getIdShort());
 		Set<IConstraint> constraints = submodel.getQualifier();
 		assertEquals(2, constraints.size());
 		checkSubmodelElements(submodel);
@@ -284,7 +288,7 @@ public class TestXMLConverter {
 	private void checkSubmodelElements(ISubModel submodel) {
 		Map<String, ISubmodelElement> submodelElements = (Map<String, ISubmodelElement>)
 				((Map<String, Object>)submodel).get(SubModel.SUBMODELELEMENT);
-		assertEquals(10, submodelElements.size());
+		assertEquals(12, submodelElements.size());
 		
 		ISubmodelElement element = submodelElements.get("rotationSpeed");
 		assertTrue(element instanceof Property);
@@ -293,10 +297,44 @@ public class TestXMLConverter {
 		assertEquals("double", property.getValueType());
 		assertEquals("rotationSpeed", property.getIdShort());
 		
-		element = submodelElements.get("");
+		element = submodelElements.get("emptyDouble");
 		assertTrue(element instanceof Property);
 		property = (Property) element;
 		assertEquals("double", property.getValueType());
+		
+		element = submodelElements.get("basic_event_id");
+		assertTrue(element instanceof BasicEvent);
+		BasicEvent basicEvent = (BasicEvent) element;
+		List<IKey> keys = basicEvent.getObserved().getKeys();
+		assertEquals(1, keys.size());
+		assertEquals("http://www.zvei.de/demo/submodelDefinitions/87654346", keys.get(0).getValue());
+		
+		element = submodelElements.get("entity_id");
+		assertTrue(element instanceof Entity);
+		Entity entity = (Entity) element;
+		assertTrue(entity.getEntityType().equals(EntityType.COMANAGEDENTITY));
+		List<ISubmodelElement> statements = entity.getStatements();
+		assertEquals(2, statements.size());
+		assertTrue((statements.get(0) instanceof File) || (statements.get(1) instanceof File));
+		assertTrue((statements.get(0) instanceof Range) || (statements.get(1) instanceof Range));
+		
+		element = submodelElements.get("multi_language_property_id");
+		assertTrue(element instanceof MultiLanguageProperty);
+		MultiLanguageProperty mLProperty = (MultiLanguageProperty) element;
+		keys = mLProperty.getValueId().getKeys();
+		assertEquals(1, keys.size());
+		assertEquals("0173-1#05-AAA650#002", keys.get(0).getValue());
+		LangStrings langStrings = mLProperty.getValue();
+		assertEquals(2, langStrings.size());
+		assertEquals("Eine Beschreibung auf deutsch", langStrings.get("de"));
+		assertEquals("A description in english", langStrings.get("en"));
+		
+		element = submodelElements.get("range_id");
+		assertTrue(element instanceof Range);
+		Range range = (Range) element;
+		assertEquals("int", range.getValueType());
+		assertEquals("1", range.getMin());
+		assertEquals("10", range.getMax());
 		
 		element = submodelElements.get("file_id");
 		assertTrue(element instanceof File);
@@ -313,7 +351,7 @@ public class TestXMLConverter {
 		element = submodelElements.get("reference_ELE_ID");
 		assertTrue(element instanceof ReferenceElement);
 		ReferenceElement refElem = (ReferenceElement) element;
-		List<IKey> keys = refElem.getValue().getKeys();
+		keys = refElem.getValue().getKeys();
 		assertEquals(1, keys.size());
 		assertEquals("0173-1#05-AAA650#002", keys.get(0).getValue());
 		
@@ -344,11 +382,10 @@ public class TestXMLConverter {
 		assertEquals(1, returns.size());
 		Object o = returns.get(0).getValue();
 		assertTrue(o instanceof ReferenceElement);
-		
-		element = submodelElements.get("operationVariable_ID");
-		assertTrue(element instanceof OperationVariable);
-		OperationVariable opVar = (OperationVariable) element;
-		assertTrue(opVar.getValue() instanceof File);
+		List<IOperationVariable> inout = op.getInOutputVariables();
+		assertEquals(1, inout.size());
+		o = inout.get(0).getValue();
+		assertTrue(o instanceof ReferenceElement);
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -11,7 +11,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
  * @author schnicke
  *
  */
-public interface IEntity {
+public interface IEntity extends ISubmodelElement {
 	/**
 	 * Gets statements applicable to the entity by a set of submodel elements,
 	 * typically with a qualified value.

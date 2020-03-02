@@ -19,7 +19,9 @@
 #include <BaSyx/submodel/map/qualifier/HasSemantics.h>
 #include <BaSyx/submodel/map/qualifier/Identifiable.h>
 #include <BaSyx/submodel/map/qualifier/HasDataSpecification.h>
+#include <BaSyx/submodel/map/qualifier/qualifiable/Qualifiable.h>
 #include <BaSyx/submodel/map/qualifier/HasKind.h>
+#include <BaSyx/submodel/map/modeltype/ModelType.h>
 
 #include <memory>
 
@@ -27,32 +29,37 @@
 namespace basyx {
 namespace submodel {
 
-
 /* *********************************************************************************
  * Sub Model base class
  * *********************************************************************************/
-class SubModel :
-        public ISubModel,
-        public Identifiable,
-        public HasSemantics,
-        public HasDataSpecification,
-        public HasKind
+class SubModel : 
+  public virtual ISubModel,
+  public virtual HasDataSpecification,
+  public virtual HasKind,
+  public virtual HasSemantics,
+  public virtual Identifiable,
+  public virtual Qualifiable,
+  public virtual ModelType,
+  public virtual vab::ElementMap
 {
 public:
-  SubModel();
+	SubModel();
+	SubModel(const IHasSemantics & semantics, const IIdentifiable & identifiable, const IQualifiable & qualifiable, const IHasDataSpecification & specification, const IHasKind & hasKind);
+	SubModel(const basyx::object & object);
+	SubModel(const ISubModel & submodel);
 
-  virtual void setProperties(const basyx::object::object_map_t & properties) override;
-  virtual void setOperations(const basyx::object::object_map_t & operations) override;
+	// Inherited via ISubModel
+	virtual void setDataElements(const basyx::specificMap_t<IDataElement> & properties);
+	virtual void setOperations(const basyx::specificMap_t<IOperation> & operations);
 
-  basyx::specificMap_t<IDataElement> getDataElements() const;
-  basyx::specificMap_t<IOperation> getOperations() const;
+	virtual void addSubModelElement(const std::shared_ptr<ISubmodelElement>& element);
+	virtual void addOperation(const IOperation & operation);
+	virtual void addDataElement(const IDataElement & dataElement);
 
-  void addSubModelElement(const std::shared_ptr<ISubmodelElement> & element);
-
-private:
-  basyx::object::object_map_t properties, operations, submodel_elements;
+	virtual basyx::specificMap_t<ISubmodelElement> getSubmodelElements() const override;
+	virtual basyx::specificMap_t<IDataElement> getDataElements() const override;
+	virtual basyx::specificMap_t<IOperation> getOperations() const override;
 };
-
 
 }
 }

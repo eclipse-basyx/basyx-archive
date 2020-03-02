@@ -11,23 +11,23 @@
 
 namespace basyx {
 namespace submodel {
-namespace submodelelement {
-namespace property {
 
 class IFile
 {
 public:
-  virtual ~IFile() = default;
+	struct Path
+	{
+		static constexpr char MIMEType[] = "mimeType";
+		static constexpr char Value[] = "value";
+		static constexpr char ModelType[] = "file";
+	};
+public:
+	virtual ~IFile() = default;
 
-  virtual void setValue(const std::string & value) = 0;
-  virtual std::string getValue() const = 0;
-
-  virtual void setMimeType(const std::string & mimeType) = 0;
-  virtual std::string getMimeType() const = 0;
+	virtual const std::string & getValue() const = 0;
+	virtual const std::string & getMimeType() const = 0;
 };
 
-}
-}
 }
 }
 
