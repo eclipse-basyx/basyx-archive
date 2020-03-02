@@ -9,6 +9,7 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Registry.ReferenceImpl.FileBased;
+using BaSyx.Technologies.mDNS;
 using BaSyx.Utils.Settings.Types;
 
 namespace BaSyx.Registry.Server.Http.Component
@@ -20,6 +21,7 @@ namespace BaSyx.Registry.Server.Http.Component
             ServerSettings registrySettings = ServerSettings.LoadSettings();
             RegistryHttpServer registryServer = new RegistryHttpServer(registrySettings);
             FileBasedRegistry fileBasedRegistry = new FileBasedRegistry();
+            fileBasedRegistry.StartDiscovery();
             registryServer.SetRegistryProvider(fileBasedRegistry);
             registryServer.Run();
         }

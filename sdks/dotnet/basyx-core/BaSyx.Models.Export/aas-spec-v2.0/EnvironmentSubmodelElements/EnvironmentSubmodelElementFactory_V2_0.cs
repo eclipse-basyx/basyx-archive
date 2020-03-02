@@ -39,7 +39,10 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
 
             if (modelType == ModelType.Property && envSubmodelElement is Property_V2_0 castedProperty)
             {
-                if (!DataObjectType.TryParse(castedProperty.ValueType, out DataObjectType dataObjectType))
+                DataObjectType dataObjectType;
+                if (string.IsNullOrEmpty(castedProperty.ValueType))
+                    dataObjectType = DataObjectType.None;
+                else if (!DataObjectType.TryParse(castedProperty.ValueType, out dataObjectType))
                     return null;
 
                 Property property = new Property(new DataType(dataObjectType))

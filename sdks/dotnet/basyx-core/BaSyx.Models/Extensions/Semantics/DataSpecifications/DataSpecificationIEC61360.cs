@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
+using System.Xml.Serialization;
 
 namespace BaSyx.Models.Extensions.Semantics.DataSpecifications
 {
@@ -65,6 +66,8 @@ namespace BaSyx.Models.Extensions.Semantics.DataSpecifications
     [DataContract]
     public enum LevelType
     {
+        [EnumMember(Value = "Undefined")]
+        Undefined,
         [EnumMember(Value = "Min")]
         Min,
         [EnumMember(Value = "Max")]
@@ -78,6 +81,8 @@ namespace BaSyx.Models.Extensions.Semantics.DataSpecifications
     [DataContract]
     public enum DataTypeIEC61360
     {
+        [EnumMember(Value = "UNDEFINED")]
+        UNDEFINED,
         [EnumMember(Value = "DATE")]
         DATE,
         [EnumMember(Value = "STRING")]

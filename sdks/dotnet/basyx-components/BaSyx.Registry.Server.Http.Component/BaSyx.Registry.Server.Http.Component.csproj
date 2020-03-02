@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\BaSys42\fortiss-gitlab\SDKs\dotnet\basyx-extensions\BaSyx.Technologies.mDNS\BaSyx.Technologies.mDNS.csproj" />
     <ProjectReference Include="..\BaSyx.Registry.ReferenceImpl.FileBased\BaSyx.Registry.ReferenceImpl.FileBased.csproj" />
     <ProjectReference Include="..\BaSyx.Registry.Server.Http\BaSyx.Registry.Server.Http.csproj" />
   </ItemGroup>

@@ -10,6 +10,7 @@
 *******************************************************************************/
 using BaSyx.Models.Core.Common;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
@@ -45,9 +46,40 @@ namespace BaSyx.Models.Export.EnvironmentDataSpecifications
         [XmlElement("symbol", Namespace = AssetAdministrationShellEnvironment_V2_0.IEC61360_NAMESPACE)]
         public string Symbol { get; set; }
 
+        private EnvironmentDataTypeIEC61360 _dataType;
+
         [JsonProperty("dataType")]
         [XmlElement("dataType", Namespace = AssetAdministrationShellEnvironment_V2_0.IEC61360_NAMESPACE)]
-        public EnvironmentDataTypeIEC61360 DataType { get; set; }
+        public string DataTypeAsString
+        {
+            get
+            {
+                return DataType.ToString();
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    DataType = EnvironmentDataTypeIEC61360.UNDEFINED;
+                }
+                else
+                {
+                    if (Enum.TryParse<EnvironmentDataTypeIEC61360>(value, out EnvironmentDataTypeIEC61360 dataType))
+                        DataType = dataType;
+                    else
+                        DataType = EnvironmentDataTypeIEC61360.UNDEFINED;
+                }
+            }
+        }
+
+
+        [JsonIgnore]
+        [XmlIgnore]
+        public EnvironmentDataTypeIEC61360 DataType
+        {
+            get { return _dataType; }
+            set { _dataType = value; }
+        }
 
         [JsonProperty("definition")]
         [XmlArray("definition")]

@@ -21,9 +21,12 @@ namespace BaSyx.Models.Export.Converter
             if (environmentDataSpecification == null)
                 return null;
 
+            if (!Enum.TryParse<DataTypeIEC61360>(environmentDataSpecification.DataType.ToString(), out DataTypeIEC61360 dataType))
+                dataType = DataTypeIEC61360.UNDEFINED;
+
             DataSpecificationIEC61360 dataSpecification = new DataSpecificationIEC61360(new DataSpecificationIEC61360Content()
             {
-                DataType = (DataTypeIEC61360)Enum.Parse(typeof(DataTypeIEC61360), environmentDataSpecification.DataType.ToString()),
+                DataType = dataType,
                 Definition = environmentDataSpecification.Definition,
                 PreferredName = environmentDataSpecification.PreferredName,
                 ShortName = environmentDataSpecification.ShortName,
@@ -34,12 +37,12 @@ namespace BaSyx.Models.Export.Converter
                 Value = environmentDataSpecification.Value,
                 ValueFormat = environmentDataSpecification.ValueFormat,
                 ValueId = environmentDataSpecification.ValueId?.ToReference_V2_0(),
-                ValueList = environmentDataSpecification.ValueList.ConvertAll(c => new Extensions.Semantics.DataSpecifications.ValueReferencePair()
+                ValueList = environmentDataSpecification.ValueList?.ConvertAll(c => new Extensions.Semantics.DataSpecifications.ValueReferencePair()
                 {
                     Value = c.Value,
-                    ValueId = c.ValueId.ToReference_V2_0()
+                    ValueId = c.ValueId?.ToReference_V2_0()
                 }),
-                LevelTypes = environmentDataSpecification.LevelTypes.ConvertAll(c => (LevelType)Enum.Parse(typeof(LevelType), c.ToString()))
+                LevelTypes = environmentDataSpecification.LevelTypes?.ConvertAll(c => (LevelType)Enum.Parse(typeof(LevelType), c.ToString()))
             });
 
             return dataSpecification;
