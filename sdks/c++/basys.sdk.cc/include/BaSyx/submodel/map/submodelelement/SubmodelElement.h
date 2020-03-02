@@ -21,14 +21,15 @@
 namespace basyx {
 namespace submodel {
 
-class SubmodelElement : 
+class SubmodelElement :
+  public virtual vab::ElementMap,
 	public virtual ModelType,
-	public HasDataSpecification,
-	public HasKind,
-	public HasSemantics,
-	public Qualifiable,
-	public Referable,
-	public ISubmodelElement
+	public virtual HasDataSpecification,
+	public virtual HasKind,
+	public virtual HasSemantics,
+	public virtual Qualifiable,
+	public virtual Referable,
+	public virtual ISubmodelElement
 {
 public:
 	~SubmodelElement() = default;
@@ -42,6 +43,8 @@ public:
 	* @param submodelElementMap the map representig the submodel.
 	*/
 	SubmodelElement(basyx::object object);
+
+  SubmodelElement(const ISubmodelElement & abstractSubmodelElement);
 };
 
 }

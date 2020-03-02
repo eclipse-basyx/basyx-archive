@@ -10,11 +10,12 @@
 namespace basyx {
 namespace submodel {
 
-namespace identifierType {
-  static constexpr char IRDI[] = "IRDI";
-  static constexpr char URI[] = "URI";
-  static constexpr char Custom[] = "Custom";
-}
+struct IdentifierType 
+{
+	  static constexpr char IRDI[] = "IRDI";
+	  static constexpr char URI[] = "URI";
+	  static constexpr char Custom[] = "Custom";
+};
 
 }
 }

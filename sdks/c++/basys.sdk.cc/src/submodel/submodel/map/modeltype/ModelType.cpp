@@ -4,6 +4,7 @@ basyx::submodel::ModelType::ModelType()
 	: vab::ElementMap{}
 {
 	this->map.insertKey(Path::Name, "");
+	this->map.insertKey(Path::ModelType, basyx::object::make_map());
 }
 
 //basyx::submodel::ModelType::ModelType(basyx::object object)

@@ -14,12 +14,23 @@ namespace submodel {
 Qualifiable::Qualifiable()
 	: vab::ElementMap{}
 {
-	this->map.insertKey(Path::Constraints, basyx::object::make_null());
+	this->map.insertKey(Path::Constraints, basyx::object::make_list<basyx::object>());
+}
+
+Qualifiable::Qualifiable(const std::shared_ptr<IQualifiable> & other)
+  : Qualifiable{other->getQualifier()}
+{}
+
+Qualifiable::Qualifiable(const IQualifiable & other)
+  : vab::ElementMap{}
+{
+  this->setQualifier(other.getQualifier());
 }
 
 Qualifiable::Qualifiable(basyx::object object)
 	: vab::ElementMap{object}
 {
+  this->map.insertKey(Path::Constraints, basyx::object::make_list<basyx::object>(), false); 
 }
 
 Qualifiable::Qualifiable(const std::shared_ptr<IConstraint>& constraint)
@@ -31,7 +42,7 @@ Qualifiable::Qualifiable(const std::shared_ptr<IConstraint>& constraint)
 	this->map.insertKey(Path::Constraints, list);
 }
 
-Qualifiable::Qualifiable(const basyx::specificCollection_t<IConstraint> constraints)
+Qualifiable::Qualifiable(const basyx::specificCollection_t<IConstraint> & constraints)
 	: vab::ElementMap{}
 {
 	this->setQualifier(constraints);
@@ -39,14 +50,14 @@ Qualifiable::Qualifiable(const basyx::specificCollection_t<IConstraint> constrai
 
 basyx::specificCollection_t<IConstraint> Qualifiable::getQualifier() const
 {
-	auto & list = this->map.getProperty(Path::Constraints).Get<basyx::object::object_list_t&>();
+  auto list = this->map.getProperty(Path::Constraints).Get<basyx::object::object_list_t>();
 	return vab::ElementMap::make_specific_collection<IConstraint, Constraint>(list);
 }
 
 void Qualifiable::setQualifier(const basyx::specificCollection_t<IConstraint>& qualifiers)
 {
 	auto list = vab::ElementMap::make_object_list<IConstraint, Constraint>(qualifiers);
-	map.insertKey("keys", list);
+	map.insertKey(Path::Constraints, list, true);
 }
 
 }

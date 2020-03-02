@@ -28,6 +28,7 @@ public:
 	HasSemantics();
 	HasSemantics(basyx::object object);
 	HasSemantics(const std::shared_ptr<IReference> & reference);
+  HasSemantics(const IHasSemantics & semantics);
 
 	void setSemanticId(const std::shared_ptr<IReference> & reference);
 	void setSemanticId(const IReference & reference);

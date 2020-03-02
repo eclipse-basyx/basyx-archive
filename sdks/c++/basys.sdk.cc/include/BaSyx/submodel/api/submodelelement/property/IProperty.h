@@ -30,6 +30,7 @@ public:
 		static constexpr char Value[] = "value";
 		static constexpr char ValueId[] = "valueId";
 		static constexpr char ValueType[] = "valueType";
+		static constexpr char ModelType[] = "Property";
 	};
 public:
 	virtual PropertyType getPropertyType() const = 0;

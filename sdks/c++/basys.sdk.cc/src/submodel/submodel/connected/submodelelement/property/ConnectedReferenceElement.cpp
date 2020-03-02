@@ -13,7 +13,7 @@ ConnectedReferenceElement::ConnectedReferenceElement(std::shared_ptr<vab::core::
   ConnectedDataElement(proxy)
 {}
 
-void ConnectedReferenceElement::setValue(const std::shared_ptr<IReference> & ref)
+void ConnectedReferenceElement::setValue(const IReference & ref)
 {
   //todo
   //this->setProxyValue(submodelelement::property::PropertyPaths::VALUE, ref);

@@ -1,4 +1,5 @@
 #include <BaSyx/submodel/map/modeltype/ModelType.h>
+#include <BaSyx/submodel/map/identifier/IdentifierType.h>
 #include <BaSyx/submodel/api/identifier/IIdentifier.h>
 #include <BaSyx/submodel/api/qualifier/IReferable.h>
 #include <BaSyx/submodel/api/qualifier/IHasSemantics.h>
@@ -16,15 +17,36 @@
 #include <BaSyx/submodel/api/ISubModel.h>
 #include <BaSyx/submodel/api/qualifier/qualifiable/IFormula.h>
 #include <BaSyx/submodel/api/qualifier/IIdentifiable.h>
+#include <BaSyx/submodel/api/submodelelement/IReferenceElement.h>
+#include <BaSyx/submodel/api/submodelelement/IRelationshipElement.h>
+#include <BaSyx/submodel/api/submodelelement/ISubmodelElementCollection.h>
+
+#include <BaSyx/submodel/api/submodelelement/property/blob/IBlob.h>
+#include <BaSyx/submodel/api/submodelelement/property/file/IFile.h>
+
+
+#include <BaSyx/submodel/api/dataspecification/datatypes/DataTypeIEC61360.h>
+#include <BaSyx/submodel/api/dataspecification/datatypes/LevelType.h>
+#include <BaSyx/submodel/api/dataspecification/IDataSpecificationContent.h>
+#include <BaSyx/submodel/api/dataspecification/IDataSpecification.h>
+#include <BaSyx/submodel/api/dataspecification/IDataSpecificationIEC61360.h>
+
+
+#include <BaSyx/submodel/api/submodelelement/entity/IEntity.h>
+#include <BaSyx/submodel/api/parts/IConceptDescription.h>
+
 
 namespace basyx {
 namespace submodel {
 
 constexpr char IOperationVariable::Path::Type[];
+constexpr char IOperationVariable::Path::ModelType[];
+constexpr char IOperationVariable::Path::Value[];
 
 constexpr char IProperty::Path::Value[];
 constexpr char IProperty::Path::ValueId[];
 constexpr char IProperty::Path::ValueType[];
+constexpr char IProperty::Path::ModelType[];
 
 constexpr char IOperation::Path::Input[];
 constexpr char IOperation::Path::Output[];
@@ -73,8 +95,9 @@ constexpr char IAdministrativeInformation::Path::Version[];
 constexpr char IAdministrativeInformation::Path::Revision[];
 
 constexpr char ISubModel::Path::Submodelelement[];
-constexpr char ISubModel::Path::Properties[];
+constexpr char ISubModel::Path::DataElements[];
 constexpr char ISubModel::Path::Operations[];
+constexpr char ISubModel::Path::ModelType[];
 
 constexpr char Description::Path::Language[];
 constexpr char Description::Path::Text[];
@@ -84,6 +107,51 @@ constexpr char IFormula::Path::Modeltype[];
 
 constexpr char IIdentifiable::Path::Administration[];
 constexpr char IIdentifiable::Path::Identification[];
+
+constexpr char IReferenceElement::Path::Modeltype[];
+
+constexpr char IRelationshipElement::Path::First[];
+constexpr char IRelationshipElement::Path::Second[];
+constexpr char IRelationshipElement::Path::ModelType[];
+
+constexpr char ISubmodelElementCollection::Path::AllowDuplicates[];
+constexpr char ISubmodelElementCollection::Path::Ordered[];
+constexpr char ISubmodelElementCollection::Path::ModelType[];
+
+constexpr char IKey::Path::IdType[];
+constexpr char IKey::Path::Local[];
+constexpr char IKey::Path::Type[];
+constexpr char IKey::Path::Value[];
+
+constexpr char IdentifierType::Custom[];
+constexpr char IdentifierType::IRDI[];
+constexpr char IdentifierType::URI[];
+
+
+
+constexpr char IBlob::Path::Value[];
+constexpr char IBlob::Path::MIMEType[];
+
+
+constexpr char IDataSpecificationIEC61360::Path::Definition[];
+constexpr char IDataSpecificationIEC61360::Path::LevelType[];
+constexpr char IDataSpecificationIEC61360::Path::ValueId[];
+constexpr char IDataSpecificationIEC61360::Path::SourceOfDefinition[];
+constexpr char IDataSpecificationIEC61360::Path::ShortName[];
+constexpr char IDataSpecificationIEC61360::Path::ValueFormat[];
+constexpr char IFile::Path::MIMEType[];
+constexpr char IDataSpecificationIEC61360::Path::UnitId[];
+constexpr char IDataSpecificationIEC61360::Path::Unit[];
+constexpr char IDataSpecificationIEC61360::Path::PreferredName[];
+constexpr char IFile::Path::Value[];
+constexpr char IConceptDescription::Path::ModelType[];
+constexpr char IConceptDescription::Path::IsCaseOf[];
+constexpr char IDataSpecification::Path::Content[];
+constexpr char IDataSpecificationIEC61360::Path::ValueList[];
+constexpr char IEntity::Path::EntityType[];
+constexpr char IDataSpecificationIEC61360::Path::DataType[];
+
+
 
 }
 }

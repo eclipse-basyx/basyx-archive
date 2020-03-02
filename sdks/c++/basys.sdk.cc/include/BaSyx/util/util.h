@@ -100,6 +100,14 @@ namespace util {
 }
 
 namespace util {
+	//template<typename T>
+	//const std::string & to_string(const T && t) = delete;
+
+	template<typename T>
+	T from_string(const std::string & str) = delete;
+}
+
+namespace util {
 
 
 #ifdef USE_STD_DECAY_T

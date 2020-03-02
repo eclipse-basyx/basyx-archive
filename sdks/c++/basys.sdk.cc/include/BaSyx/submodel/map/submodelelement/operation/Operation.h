@@ -30,6 +30,8 @@ public:
 
 	// constructors
 	Operation();
+	Operation(const IOperation & other);
+	Operation(const basyx::object & obj);
 	
 	// Inherited via IOperation
 	virtual basyx::specificCollection_t<IOperationVariable> getParameterTypes() const override;

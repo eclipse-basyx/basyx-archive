@@ -6,16 +6,21 @@
 
 #include <BaSyx/submodel/map/qualifier/qualifiable/Formula.h>
 #include <BaSyx/submodel/map/reference/Reference.h>
+#include <BaSyx/submodel/map/modeltype/ModelType.h>
+
 
 namespace basyx {
 namespace submodel {
 
 
-Formula::Formula()
-{}
+Formula::Formula() :
+  vab::ElementMap{ModelType(std::string(IFormula::Path::Modeltype)).getMap()}
+{
+  this->map.insertKey(IFormula::Path::Dependson, basyx::object::make_list<basyx::object>()); 
+}
 
 Formula::Formula(const basyx::specificCollection_t<IReference>& dependsOn) :
-  vab::ElementMap{}
+  vab::ElementMap{ModelType(std::string(IFormula::Path::Modeltype)).getMap()}
 {
   this->setDependsOn(dependsOn);
 }
@@ -29,7 +34,7 @@ basyx::specificCollection_t<IReference> Formula::getDependsOn() const
 void Formula::setDependsOn(const basyx::specificCollection_t<IReference>& dependsOn)
 {
   auto obj_list = vab::ElementMap::make_object_list<IReference, Reference>(dependsOn);
-  this->map.insertKey(IFormula::Path::Dependson, obj_list);
+  this->map.insertKey(IFormula::Path::Dependson, obj_list, true);
 }
 
 }

@@ -11,12 +11,29 @@ namespace basyx {
 namespace submodel {
 
 Operation::Operation()
-	: ModelType(Path::ModelType)
+  : vab::ElementMap{}
+  , ModelType{Path::ModelType}
+  , SubmodelElement{}
 {
-	this->map.insertKey(Path::Input, basyx::object::make_list<basyx::object>());
-	this->map.insertKey(Path::Invokable, basyx::object::make_null());
-	this->map.insertKey(Path::Output, basyx::object::make_null());
+  this->map.insertKey(Path::Input, basyx::object::make_list<basyx::object>());
+  this->map.insertKey(Path::Invokable, basyx::object::make_null());
+  this->map.insertKey(Path::Output, basyx::object::make_null());
 }
+
+Operation::Operation(const IOperation & other)
+  : vab::ElementMap{}
+  , ModelType{Path::ModelType}
+  , SubmodelElement{other}
+{
+  this->setParameterTypes(other.getParameterTypes());
+  this->setReturnTypes(other.getReturnType());
+  this->setInvocable(other.getInvocable());
+}
+
+Operation::Operation(const basyx::object & obj) :
+  vab::ElementMap{obj}
+  , SubmodelElement{}
+{}
 
 basyx::specificCollection_t<IOperationVariable> Operation::getParameterTypes() const
 {

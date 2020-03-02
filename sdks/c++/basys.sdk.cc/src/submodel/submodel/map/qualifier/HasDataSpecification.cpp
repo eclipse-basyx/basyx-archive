@@ -20,6 +20,7 @@ HasDataSpecification::HasDataSpecification()
 HasDataSpecification::HasDataSpecification(basyx::object & obj)
 	: vab::ElementMap{obj}
 {
+
 }
 
 HasDataSpecification::HasDataSpecification(const basyx::specificCollection_t<IReference>& refs)
@@ -28,9 +29,15 @@ HasDataSpecification::HasDataSpecification(const basyx::specificCollection_t<IRe
 	this->setDataSpecificationReferences(refs);
 }
 
+HasDataSpecification::HasDataSpecification(const IHasDataSpecification & hasDataSpecification)
+  : vab::ElementMap{}
+{
+  this->setDataSpecificationReferences(hasDataSpecification.getDataSpecificationReferences());
+}
+
 basyx::specificCollection_t<IReference> HasDataSpecification::getDataSpecificationReferences() const
 {
-	auto & obj_list = this->map.getProperty(Path::HasDataSpecification).Get<basyx::object::object_list_t&>();
+	auto obj_list = this->map.getProperty(Path::HasDataSpecification).Get<basyx::object::object_list_t&>();
 	return vab::ElementMap::make_specific_collection<IReference, Reference>(obj_list);
 }
 
@@ -44,7 +51,7 @@ void HasDataSpecification::setDataSpecificationReferences(const basyx::specificC
 		list.insert(reference.getMap());
 	};
 
-	this->map.insertKey(Path::HasDataSpecification, list);
+	this->map.insertKey(Path::HasDataSpecification, list, true);
 }
 
 }

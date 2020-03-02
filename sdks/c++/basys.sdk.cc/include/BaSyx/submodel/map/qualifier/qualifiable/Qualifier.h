@@ -17,8 +17,8 @@ namespace submodel {
 
 class Qualifier 
   : public Constraint
-  , public IQualifier
-  , public HasSemantics
+  , public virtual IQualifier
+  , public virtual HasSemantics
   , public virtual basyx::vab::ElementMap
 {
 public:
@@ -29,7 +29,7 @@ public:
   Qualifier(
 	  const std::string & qualifierType, 
 	  const basyx::object & qualifierValue, 
-	  const std::shared_ptr<IReference> & valueId);
+	  const IReference & valueId);
 
   // Inherited via IQualifier
   virtual std::string getQualifierType() const override;
@@ -39,7 +39,7 @@ public:
   // not inherited
   void setQualifierType(const std::string & qualifierType);
   void setQualifierValue(const basyx::object & qualifierValue);
-  void setQualifierValueId(const std::shared_ptr<IReference> & valueId);
+  void setQualifierValueId(const IReference & valueId);
 };
 
 }

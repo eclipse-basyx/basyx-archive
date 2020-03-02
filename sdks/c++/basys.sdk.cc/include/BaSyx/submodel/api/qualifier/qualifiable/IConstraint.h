@@ -18,11 +18,10 @@ public:
 		static constexpr char ModelType[] = "Constraint";
 	};
 public:
-  virtual ~IConstraint() = default;
+	virtual ~IConstraint() = default;
 };
 
 }
 }
 
 #endif
-

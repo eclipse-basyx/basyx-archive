@@ -45,10 +45,10 @@ Kind ConnectedSubmodel::getHasKindReference() const
   return Kind::NotSpecified;
 }
 
-void ConnectedSubmodel::setProperties(const basyx::object::object_map_t & properties)
+void ConnectedSubmodel::setDataElements(const basyx::specificMap_t<IProperty> & properties)
 {}
 
-void ConnectedSubmodel::setOperations(const basyx::object::object_map_t & operations)
+void ConnectedSubmodel::setOperations(const basyx::specificMap_t<IOperation> & operations)
 {}
 
 std::string ConnectedSubmodel::getIdShort() const
@@ -89,7 +89,7 @@ void ConnectedSubmodel::addSubModelElement(const std::shared_ptr<ISubmodelElemen
 basyx::specificMap_t<IDataElement> ConnectedSubmodel::getDataElements() const
 {
   basyx::specificMap_t<IDataElement> map;
-  auto operations = this->getProxy()->readElementValue(Path::Properties).Get<basyx::object::object_list_t>();
+  auto operations = this->getProxy()->readElementValue(Path::DataElements).Get<basyx::object::object_list_t>();
 
   for ( auto & operation : operations )
   {

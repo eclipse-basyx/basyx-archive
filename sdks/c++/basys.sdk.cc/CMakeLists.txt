@@ -108,7 +108,7 @@ endif()
 ###############################################
 include_directories("${BASYX_INCLUDE_DIR}")
 
-add_subdirectory(src/aas)
+#add_subdirectory(src/aas)
 add_subdirectory(src/abstraction)
 add_subdirectory(src/logging)
 add_subdirectory(src/shared)

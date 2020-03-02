@@ -5,3 +5,4 @@ build/
 bin/
 compile_commands.json
 .clangd
+run-msbuild.bat

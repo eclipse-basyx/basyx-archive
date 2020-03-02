@@ -39,5 +39,10 @@ std::string Description::getText() const
 	return this->map.getProperty(Path::Text).GetStringContent();
 }
 
+bool operator==(const Description & left, const Description & right)
+{
+  return (left.getLanguage() == right.getLanguage()) and (left.getText() == right.getText());
+}
+
 }
 }

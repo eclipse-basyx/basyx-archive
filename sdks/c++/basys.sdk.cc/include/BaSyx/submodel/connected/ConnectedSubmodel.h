@@ -30,8 +30,8 @@ public:
   virtual std::shared_ptr<IIdentifier> getIdentification() const override;
   virtual basyx::specificCollection_t<IReference> getDataSpecificationReferences() const override;
   virtual Kind getHasKindReference() const override;
-  virtual void setProperties(const basyx::object::object_map_t & properties) override;
-  virtual void setOperations(const basyx::object::object_map_t & operations) override;
+  virtual void setDataElements(const basyx::specificMap_t<IProperty> & properties);
+  virtual void setOperations(const basyx::specificMap_t<IOperation> & operations);
   virtual std::string getIdShort() const override;
   virtual std::string getCategory() const override;
   virtual Description getDescription() const override;

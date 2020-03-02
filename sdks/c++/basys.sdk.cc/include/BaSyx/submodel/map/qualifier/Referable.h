@@ -28,7 +28,6 @@ public:
   Referable(basyx::object & obj);
   Referable(const std::string & shortID, const std::string & category, const Description & description);
   Referable(const IReferable & other);
-  Referable(const std::shared_ptr<IReferable> & other);
 
   // Inherited via IReferable
   virtual std::string getIdShort() const override;
@@ -40,7 +39,7 @@ public:
   void setIdShort(const std::string & shortID);
   void setCategory(const std::string & category);
   void setDescription(const Description & description);
-  void setParent(const std::shared_ptr<IReference> & parentReference);
+  void setParent(const IReference & parentReference);
 };
 
 }
