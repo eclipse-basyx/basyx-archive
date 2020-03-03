@@ -9,6 +9,8 @@
 - NLog (v4.6.8, https://nlog-project.org/), BSD 3-Clause "New" or "Revised" License, Copyright (c) 2004-2019 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen. All rights reserved.
 - NLog.Web.AspNetCore (v4.9.0, https://github.com/NLog/NLog.Web), BSD 3-Clause "New" or "Revised" License, Copyright (c) 2004-2019 Jaroslaw Kowalski <jaak@jkowalski.net>, Kim Christensen, Julian Verdurmen. All rights reserved.
 - XSerializer (v0.4.2, https://github.com/QuickenLoans/XSerializer), MIT License, Copyright (C) 2013 Quicken Loans
+- Makaretu.Dns (v2.0.1, https://github.com/richardschneider/net-dns, MIT License, Copyright © 2018 Richard Schneider (makaretu@gmail.com)
+- Makaretu.Dns.Multicast (v0.27.0, https://github.com/richardschneider/net-mdns, MIT License, Copyright © 2018-2019 Richard Schneider (makaretu@gmail.com)
 
 2. License Texts
 

@@ -9,7 +9,7 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Registry.ReferenceImpl.FileBased;
-using BaSyx.Technologies.mDNS;
+using BaSyx.Discovery.mDNS;
 using BaSyx.Utils.Settings.Types;
 
 namespace BaSyx.Registry.Server.Http.Component
