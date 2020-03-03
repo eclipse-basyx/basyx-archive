@@ -64,5 +64,9 @@ namespace BaSyx.Models.Connectivity.Descriptors
                 (Endpoints as IList).Add(endpoint);
             }
         }
+        public void SetEndpoints(IEnumerable<IEndpoint> endpoints)
+        {
+            Endpoints = endpoints;
+        }
     }
 }

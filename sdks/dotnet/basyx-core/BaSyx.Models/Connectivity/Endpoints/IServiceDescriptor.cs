@@ -16,5 +16,6 @@ namespace BaSyx.Models.Connectivity
     public interface IServiceDescriptor : IAddressable, IIdentifiable
     {
         void AddEndpoints(IEnumerable<IEndpoint> endpoints);
+        void SetEndpoints(IEnumerable<IEndpoint> endpoints);
     }
 }

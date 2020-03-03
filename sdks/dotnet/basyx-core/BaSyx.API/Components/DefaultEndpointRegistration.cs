@@ -9,13 +9,88 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Models.Connectivity;
+using BaSyx.Utils.Network;
+using BaSyx.Utils.Settings.Sections;
+using NLog;
 using System;
 using System.Collections.Generic;
+using System.Net;
 
 namespace BaSyx.API.Components
 {
     public static class DefaultEndpointRegistration
     {
+        private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
+        public static void UseAutoEndpointRegistration(this IAssetAdministrationShellAggregatorServiceProvider serviceProvider, ServerConfiguration serverConfiguration)
+        {
+            string multiUrl = serverConfiguration.Hosting.Urls.Find(u => u.Contains("+"));
+            if (!string.IsNullOrEmpty(multiUrl))
+            {
+                Uri uri = new Uri(multiUrl.Replace("+", "localhost"));
+                List<IEndpoint> endpoints = GetNetworkInterfaceBasedEndpoints(uri.Scheme, uri.Port);
+                serviceProvider.UseDefaultEndpointRegistration(endpoints);
+            }
+            else
+            {
+                List<IEndpoint> endpoints = serverConfiguration.Hosting.Urls.ConvertAll(endpointConverter);
+                serviceProvider.UseDefaultEndpointRegistration(endpoints);
+            }
+        }
+
+        private static IEndpoint endpointConverter(string input)
+        {
+            Uri uri = new Uri(input);
+            return EndpointFactory.CreateEndpoint(uri.Scheme, uri.Authority, null);
+        }
+
+        public static void UseAutoEndpointRegistration(this IAssetAdministrationShellServiceProvider serviceProvider, ServerConfiguration serverConfiguration)
+        {
+            string multiUrl = serverConfiguration.Hosting.Urls.Find(u => u.Contains("+"));
+            if (!string.IsNullOrEmpty(multiUrl))
+            {
+                Uri uri = new Uri(multiUrl.Replace("+", "localhost"));
+                List<IEndpoint> endpoints = GetNetworkInterfaceBasedEndpoints(uri.Scheme, uri.Port);
+                serviceProvider.UseDefaultEndpointRegistration(endpoints);
+            }
+            else
+            {
+                List<IEndpoint> endpoints = serverConfiguration.Hosting.Urls.ConvertAll(endpointConverter);
+                serviceProvider.UseDefaultEndpointRegistration(endpoints);
+            }
+        }
+
+        public static void UseAutoEndpointRegistration(this ISubmodelServiceProvider serviceProvider, ServerConfiguration serverConfiguration)
+        {
+            string multiUrl = serverConfiguration.Hosting.Urls.Find(u => u.Contains("+"));
+            if (!string.IsNullOrEmpty(multiUrl))
+            {
+                Uri uri = new Uri(multiUrl.Replace("+", "localhost"));
+                List<IEndpoint> endpoints = GetNetworkInterfaceBasedEndpoints(uri.Scheme, uri.Port);
+                serviceProvider.UseDefaultEndpointRegistration(endpoints);
+            }
+            else
+            {
+                List<IEndpoint> endpoints = serverConfiguration.Hosting.Urls.ConvertAll(endpointConverter);
+                serviceProvider.UseDefaultEndpointRegistration(endpoints);
+            }
+        }
+
+        private static List<IEndpoint> GetNetworkInterfaceBasedEndpoints(string endpointType, int port)
+        {
+            IEnumerable<IPAddress> ipAddresses = NetworkUtils.GetIPAddresses();
+            List<IEndpoint> aasEndpoints = new List<IEndpoint>();
+            foreach (var ipAddress in ipAddresses)
+            {
+                if (ipAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    aasEndpoints.Add(EndpointFactory.CreateEndpoint(endpointType, endpointType + "://" + ipAddress.ToString() + ":" + port, null));
+                else if (ipAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+                    aasEndpoints.Add(EndpointFactory.CreateEndpoint(endpointType, endpointType + "://[" + ipAddress.ToString() + "]:" + port, null));
+                else
+                    logger.Error("Invalid address family: " + ipAddress.AddressFamily);
+            }
+            return aasEndpoints;
+        }
+
         public static void UseDefaultEndpointRegistration(this IAssetAdministrationShellAggregatorServiceProvider serviceProvider, IEnumerable<IEndpoint> endpoints)
         {
             List<IEndpoint> aggregatorEndpoints = new List<IEndpoint>();

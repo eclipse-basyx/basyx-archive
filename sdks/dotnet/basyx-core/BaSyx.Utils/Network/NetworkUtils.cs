@@ -8,14 +8,21 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
+using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace BaSyx.Utils.Network
 {
     public static class NetworkUtils
     {
+        private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// This method returns the closest source IP address relative to the the target IP address. 
         /// The probality of being able to call the target IP hence increases.
@@ -57,17 +64,78 @@ namespace BaSyx.Utils.Network
             }
             return score;
         }
+        /// <summary>
+        /// Returns a sequence of network interfaces which are up and running. 
+        /// If there is no other than the loopback interface available, the loopback interface is returned
+        /// </summary>
+        /// <returns>Sequence of network interfaces</returns>
+        public static IEnumerable<NetworkInterface> GetOperationalNetworkInterfaces()
+        {
+            NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+            IEnumerable<NetworkInterface> selectedInterfaces = networkInterfaces?.Where(n => n.OperationalStatus == OperationalStatus.Up && n.NetworkInterfaceType != NetworkInterfaceType.Loopback);
+            if(selectedInterfaces?.Count() > 0)
+                return selectedInterfaces;
+            else
+                return networkInterfaces?.Where(n => n.OperationalStatus == OperationalStatus.Up);
+        }
 
-        public static List<IPAddress> GetAllNetworkIPAddresses()
+        /// <summary>
+        /// Returns all IP addresses of all network interfaces without loopback
+        /// </summary>
+        /// <returns>Sequence of IP addresses</returns>
+        public static IEnumerable<IPAddress> GetIPAddresses()
+        {
+            IEnumerable<NetworkInterface> networkInterfaces = GetOperationalNetworkInterfaces();
+            return networkInterfaces?.SelectMany(n => n.GetIPProperties().UnicastAddresses)?.Select(s => s.Address);
+        }
+
+        /// <summary>
+        /// Returns all link local IP addresses
+        /// </summary>
+        /// <returns>Sequence of link local IP addresses</returns>
+        public static List<IPAddress> GetLinkLocalIPAddresses()
         {
             IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
             List<IPAddress> ipAddresses = new List<IPAddress>();
             foreach (var ip in host.AddressList)
             {
-                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                if (ip.AddressFamily == AddressFamily.InterNetwork || ip.AddressFamily == AddressFamily.InterNetworkV6 && ip.IsIPv6LinkLocal)
                     ipAddresses.Add(ip);
             }
             return ipAddresses;
+        }
+
+        /// <summary>
+        /// Pings a host and returns true if ping was successfull otherwise false
+        /// </summary>
+        /// <param name="hostNameOrAddress">IP-address or host name</param>
+        /// <returns>true if pingable, false otherwise</returns>
+        public static async Task<bool> PingHostAsync(string hostNameOrAddress)
+        {
+            if (string.IsNullOrEmpty(hostNameOrAddress))
+                throw new ArgumentNullException(nameof(hostNameOrAddress));
+
+            try
+            {
+                using (Ping pinger = new Ping())
+                {
+                    PingReply reply = await pinger.SendPingAsync(hostNameOrAddress);
+                    if (reply.Status == IPStatus.Success)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        logger.Warn($"Pinging {hostNameOrAddress} PingReply-Status: " + reply.Status.ToString());
+                        return false;
+                    }
+                }
+            }
+            catch (PingException e)
+            {
+                logger.Error(e, "Ping-Exception");
+                return false;
+            }
         }
     }
 }
