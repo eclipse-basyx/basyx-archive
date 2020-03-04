@@ -176,6 +176,55 @@ namespace BaSyx.API.Http.Controllers
         }
 
 
+        #region SubmodelElement - REST-Calls
+        /// <summary>
+        /// Adds a new Submodel Element to the Submodel
+        /// </summary>
+        /// <param name="submodelElement">The Submodel Element's description object</param>
+        /// <returns></returns>
+        /// <response code="201">Submodel Element created successfully</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="404">Submodel not found</response>
+        [HttpPost("submodel/submodelElements", Name = "PostSubmodelElement")]
+        [ProducesResponseType(typeof(Property), 201)]
+        [ProducesResponseType(typeof(Result), 400)]
+        [ProducesResponseType(typeof(Result), 404)]
+        public IActionResult PostSubmodelElement([FromBody] ISubmodelElement submodelElement)
+        {
+            var result = CreateSubmodelElement(submodelElement);
+            return EvaluateResult(result, CrudOperation.Create, "submodel/submodelElements/" + submodelElement.IdShort);
+        }
+        /// <summary>
+        /// Retrieves a specific Submodel Element from the Submodel
+        /// </summary>
+        /// <param name="submodelElementId">The Submodel Element's short id</param>
+        /// <returns></returns>
+        /// <response code="200">Returns the requested Submodel Element</response>
+        /// <response code="404">Submodel/Submodel Element not found</response>     
+        [HttpGet("submodel/submodelElements/{submodelElementId}", Name = "GetSubmodelElementByIdShort")]
+        [ProducesResponseType(typeof(Property), 200)]
+        [ProducesResponseType(typeof(Result), 404)]
+        public IActionResult GetSubmodelElementByIdShort(string submodelElementId)
+        {
+            var result = RetrieveSubmodelElement(submodelElementId);
+            return EvaluateResult(result, CrudOperation.Retrieve);
+        }
+
+        /// <summary>
+        /// Deletes a specific Submodel Element from the Submodel
+        /// </summary>
+        /// <param name="submodelElementId">The Submodel Element's short id</param>
+        /// <returns></returns>
+        /// <response code="204">Submodel Element deleted successfully</response>
+        /// <response code="404">Submodel/Submodel Element not found</response>
+        [HttpDelete("submodel/submodelElements/{submodelElementId}", Name = "DeleteSubmodelElementByIdShort")]
+        [ProducesResponseType(typeof(IResult), 200)]
+        public IActionResult DeleteSubmodelElementByIdShort(string submodelElementId)
+        {
+            var result = DeleteSubmodelElement(submodelElementId);
+            return EvaluateResult(result, CrudOperation.Delete);
+        }
+        #endregion
 
         #region Property - REST-Calls
         /// <summary>

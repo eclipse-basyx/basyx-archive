@@ -23,6 +23,9 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelEle
         public bool AllowDuplicates { get; set; } = false;
         public bool Ordered { get; set; } = false;
 
-        public SubmodelElementCollection() : base() { }    
+        public SubmodelElementCollection() : base() 
+        {
+            Value = new ElementContainer<ISubmodelElement>();
+        }    
     }
 }

@@ -10,8 +10,6 @@
 *******************************************************************************/
 using BaSyx.API.Components;
 using BaSyx.Models.Connectivity.Descriptors;
-using BaSyx.Models.Core;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Extensions;
 using BaSyx.Utils.ResultHandling;
