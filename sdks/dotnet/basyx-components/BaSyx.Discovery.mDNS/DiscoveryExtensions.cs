@@ -57,10 +57,16 @@ namespace BaSyx.Discovery.mDNS
                     bool pingable = await BaSyx.Utils.Network.NetworkUtils.PingHostAsync(server.Address.ToString());
                     if (pingable)
                     {
-                        string uri = "http://" + server.Address.ToString() + ":" + server.Port + "/aas";
-                        Uri endpoint = new Uri(uri);
+                        string uri = string.Empty;
+                        if (server.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                            uri = "http://" + server.Address.ToString() + ":" + server.Port + "/aas";
+                        else if (server.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+                            uri = "http://[" + server.Address.ToString() + "]:" + server.Port + "/aas";
+                        else
+                            continue;
 
-                        AssetAdministrationShellHttpClient client = new AssetAdministrationShellHttpClient(endpoint);
+                        Uri aasEndpoint = new Uri(uri);
+                        AssetAdministrationShellHttpClient client = new AssetAdministrationShellHttpClient(aasEndpoint);
                         IResult<IAssetAdministrationShellDescriptor> retrieveDescriptor = client.RetrieveAssetAdministrationShellDescriptor();
                         if (retrieveDescriptor.Success && retrieveDescriptor.Entity != null)
                         {
@@ -69,11 +75,38 @@ namespace BaSyx.Discovery.mDNS
                             {
                                 aasDescriptor = retrieveDescriptor.Entity;
                                 aasDescriptor.SetEndpoints(new List<IEndpoint>() { new HttpEndpoint(uri) });
+
+                                foreach (var submodelDescriptor in retrieveDescriptor.Entity.SubmodelDescriptors)
+                                {
+                                    List<IEndpoint> submodelEndpoints = new List<IEndpoint>();
+                                    foreach (var submodelEndpoint in submodelDescriptor.Endpoints)
+                                    {
+                                        if(submodelEndpoint.Address.Contains(server.Address.ToString()))
+                                        {
+                                            submodelEndpoints.Add(submodelEndpoint);
+                                        }
+                                    }
+                                    aasDescriptor.SubmodelDescriptors[submodelDescriptor.IdShort].SetEndpoints(submodelEndpoints);
+                                }
                             }
                             else
                             {
                                 aasDescriptor.AddEndpoints(new List<IEndpoint>() { new HttpEndpoint(uri) });
-                            }
+
+                                foreach (var submodelDescriptor in retrieveDescriptor.Entity.SubmodelDescriptors)
+                                {
+                                    List<IEndpoint> submodelEndpoints = new List<IEndpoint>();
+                                    foreach (var submodelEndpoint in submodelDescriptor.Endpoints)
+                                    {
+                                        if (submodelEndpoint.Address.Contains(server.Address.ToString()))
+                                        {
+                                            if(aasDescriptor.SubmodelDescriptors[submodelDescriptor.IdShort].Endpoints.FirstOrDefault(f => f.Address == submodelEndpoint.Address) == null)
+                                                submodelEndpoints.Add(submodelEndpoint);
+                                        }
+                                    }
+                                    aasDescriptor.SubmodelDescriptors[submodelDescriptor.IdShort].AddEndpoints(submodelEndpoints);
+                                }
+                            }                      
                         }
                         else
                             retrieveDescriptor.LogResult(logger, LogLevel.Info, "Could not retrieve AAS descriptor");
@@ -93,7 +126,23 @@ namespace BaSyx.Discovery.mDNS
                 logger.Error(exc, "Error accessing discovered service instance");
             }
         }
-        
+
+        public class EndpointComparer : IEqualityComparer<IEndpoint>
+        {
+            public bool Equals(IEndpoint x, IEndpoint y)
+            {
+                if (x.Address == y.Address)
+                    return true;
+                else
+                    return false;
+            }
+
+            public int GetHashCode(IEndpoint obj)
+            {
+                return obj.GetHashCode();
+            }
+        }
+
         private static void DiscoveryServer_ServiceInstanceShutdown(object sender, ServiceInstanceEventArgs e)
         {
             try

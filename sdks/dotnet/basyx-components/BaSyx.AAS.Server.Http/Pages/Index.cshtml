@@ -432,11 +432,14 @@ else
             }
             else if (submodelElement is ISubmodelElementCollection collection)
             {
-                @foreach (var value in collection.Value)
+                if (collection.Value?.Count > 0)
                 {
-                    <div class="panel-body">
-                        @ShowSubmodelElement(new List<object>() { submodel, value })
-                    </div>
+                    @foreach (var value in collection.Value)
+                    {
+                        <div class="panel-body">
+                            @ShowSubmodelElement(new List<object>() { submodel, value })
+                        </div>
+                    }
                 }
             }
         </div>
