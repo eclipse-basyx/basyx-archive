@@ -31,6 +31,7 @@ namespace BaSyx.Models.Core.Common
 
         IResult<IElementContainer<T>> RetrieveAll<T>() where T : class, TElement;
 
+        IResult<TElement> CreateOrUpdate(string id, TElement element);
 
         IResult<TElement> Update(TIdentifier id, TElement element);
 

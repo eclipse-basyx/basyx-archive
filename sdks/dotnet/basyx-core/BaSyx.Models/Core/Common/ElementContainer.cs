@@ -111,6 +111,23 @@ namespace BaSyx.Models.Core.Common
                 return new Result<T>(false, new NotFoundMessage());
         }
 
+        public virtual IResult<TElement> CreateOrUpdate(string id, TElement element)
+        {
+            if (string.IsNullOrEmpty(id))
+                return new Result<TElement>(new ArgumentNullException(nameof(id)));
+            if (element == null)
+                return new Result<TElement>(new ArgumentNullException(nameof(element)));
+
+            var index = FindIndex(e => e.IdShort == id);
+            if (index != -1)
+            {
+                this[index] = element;
+                return new Result<TElement>(true, element);
+            }
+            else
+                return Create(element);
+        }
+
 
         public virtual IResult<TElement> Update(string id, TElement element)
         {
