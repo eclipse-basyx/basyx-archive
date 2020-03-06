@@ -1,0 +1,1 @@
+This folder acts as container for code that is experimental and/or not actively maintained. There's no guarantee that this code does fulfill its purpose or any at all.
