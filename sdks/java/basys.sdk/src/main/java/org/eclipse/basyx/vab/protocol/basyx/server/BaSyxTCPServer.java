@@ -66,8 +66,8 @@ public class BaSyxTCPServer<T extends IModelProvider> implements Runnable, BaSyx
 
 		// Create communication channel
 		try {
-			// Resolve address
-			InetAddress hostIPAddress = InetAddress.getByName("localhost");
+			// The channel should listen on all interfaces, binding on 127.0.0.1 prohibits remote communication
+			InetAddress hostIPAddress = InetAddress.getByName("0.0.0.0");
 
 			// Server socket channel
 			serverSockChannel = ServerSocketChannel.open();
