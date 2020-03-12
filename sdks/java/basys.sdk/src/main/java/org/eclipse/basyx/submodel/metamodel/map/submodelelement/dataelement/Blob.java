@@ -37,8 +37,8 @@ public class Blob extends DataElement implements IBlob {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 
-		put(Property.VALUE, value);
-		put(MIMETYPE, mimeType);
+		setValue(value);
+		setMimeType(mimeType);
 	}
 	
 	/**
@@ -54,13 +54,13 @@ public class Blob extends DataElement implements IBlob {
 	}
 	
 	public void setValue(byte[] value) {
-		put(Property.VALUE, value);
+		put(Property.VALUE, new String(value));
 		
 	}
 
 	@Override
 	public byte[] getValue() {
-		return (byte[]) get(Property.VALUE);
+		return ((String) get(Property.VALUE)).getBytes();
 	}
 
 	public void setMimeType(String mimeType) {
