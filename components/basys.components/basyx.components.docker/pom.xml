@@ -18,6 +18,7 @@
 	<modules>
 		<module>basyx.components.simple</module>
 		<module>basyx.components.sqlregistry</module>
+		<module>basyx.components.xmlAAS</module>
 	</modules>
 	
 	<build>
