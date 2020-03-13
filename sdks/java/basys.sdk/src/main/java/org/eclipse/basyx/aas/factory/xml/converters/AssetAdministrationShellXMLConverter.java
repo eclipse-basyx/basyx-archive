@@ -20,6 +20,7 @@ import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.IdentifiableX
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.ReferableXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.reference.ReferenceXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -82,9 +83,8 @@ public class AssetAdministrationShellXMLConverter {
 			adminShell.setConceptDictionary(conceptDictionary);
 			adminShell.setAsset(assetRef);
 			
-			//FIXME SubmodelRef in XML is incompatible with SubmodelDescriptor
-			//Set<SubmodelDescriptor> submodelRefs = transformSubmodelRefs(xmlAASObject);
-			//adminShell.setSubModels(submodelRefs);
+			Set<IReference> submodelRefs = parseSubmodelRefs(xmlAAS);
+			adminShell.setSubmodelReferences(submodelRefs);
 			
 			AASs.add(adminShell);
 		}
@@ -93,26 +93,29 @@ public class AssetAdministrationShellXMLConverter {
 	
 	
 	/**
-	 * Parses &lt;aas:submodelRefs&gt; and builds SubmodelDescriptor objects from it
+	 * Parses &lt;aas:submodelRefs&gt; and builds {@link Reference} objects from it
 	 * 
-	 * @param xmlObject a Map containing the XML tag &lt;aas:submodelRefs&gt;
-	 * @return a Set of SubmodelDescriptor objects parsed form the given XML Map
+	 * @param xmlObject
+	 *            a Map containing the XML tag &lt;aas:submodelRefs&gt;
+	 * @return a Set of {@link IReference} objects parsed form the given XML Map
 	 */
-	/*@SuppressWarnings("unchecked")
-	private static Set<SubmodelDescriptor> parseSubmodelRefs(Map<String, Object> xmlObject) {
-		Set<SubmodelDescriptor> refSet = new HashSet<>();
+	@SuppressWarnings("unchecked")
+	private static Set<IReference> parseSubmodelRefs(Map<String, Object> xmlObject) {
+		Set<IReference> refSet = new HashSet<>();
 		
-		Map<String, Object> xmlSubmodelRefs = (Map<String, Object>) xmlObject.get(SUBMODEL_REFS);
-		
-		List<Map<String, Object>> xmlKeyList = XMLHelper.getList(xmlSubmodelRefs.get(SUBMODEL_REF));
+		Map<String, Object> refMap = (Map<String, Object>) xmlObject.get(SUBMODEL_REFS);
+
+		if (refMap == null) {
+			return new HashSet<IReference>();
+		}
+
+		List<Map<String, Object>> xmlKeyList = XMLHelper.getList(refMap.get(SUBMODEL_REF));
 		for (Map<String, Object> xmlKey : xmlKeyList) {
-			//IIdentifier id = new Identifier("", id)
-			//SubmodelDescriptor d = new SubmodelDescriptor(idShort, id, httpEndpoint)
-			refSet.add(new SubmodelDescriptor(ReferenceXMLConverter.parseReference(xmlKey)));
+			refSet.add(ReferenceXMLConverter.parseReference(xmlKey));
 		}
 	
 		return refSet;
-	}*/
+	}
 	
 	
 	/**
@@ -172,8 +175,7 @@ public class AssetAdministrationShellXMLConverter {
 			
 			buildDerivedFrom(document, aasRoot, aas);
 			buildAssetRef(document, aasRoot, aas);
-			//FIXME SubmodelDescriptor and Submodelref don't fit into each other
-			//buildSubmodelRef(document, aasRoot, aas); 
+			buildSubmodelRef(document, aasRoot, aas);
 			Set<IView> views = aas.getViews();
 			
 			Element buildViews = ViewXMLConverter.buildViewsXML(document, views);
@@ -233,22 +235,18 @@ public class AssetAdministrationShellXMLConverter {
 	 * @param root the XML tag to be populated
 	 * @param aas the IAssetAdministrationShell object to build the XML for
 	 */
-	/*private static void buildSubmodelRef(Document document, Element root, AssetAdministrationShell aas) {
-		Set<IReference> submodelRef = new HashSet<>();
-		//Set<SubmodelDescriptor> submodelDescriptors = aas.getSubModelDescriptors();
+	private static void buildSubmodelRef(Document document, Element root, IAssetAdministrationShell aas) {
+		Set<IReference> submodelRef = aas.getSubmodelReferences();
 		
-		for(ISubModel submodel: aas.getSubModels().values()) {
-			submodelRef.add(submodel.getSemanticId());
-		}
 		
-		if(submodelRef!=null) {
+		if (submodelRef != null && submodelRef.size() > 0) {
 			Element submodelRefsRoot = document.createElement(SUBMODEL_REFS);
 			Element submodelRefRoot = document.createElement(SUBMODEL_REF);
 			submodelRefsRoot.appendChild(submodelRefRoot);
 			submodelRefRoot.appendChild(ReferenceXMLConverter.buildReferencesXML(document, submodelRef)); 
 			root.appendChild(submodelRefsRoot);
 		}
-	}*/
+	}
 	
 
 	/**

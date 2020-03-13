@@ -203,6 +203,25 @@ public class TestXMLConverter {
 			assertEquals(true, key.isLocal());
 		}
 
+		// Test submodel reference retrieval
+		
+		// Select submodel reference's key
+		IKey submodelKey = null;
+		for (IReference ref : aas.getSubmodelReferences()) {
+			for (IKey k : ref.getKeys())
+				if (k.getValue().equals("http://www.zvei.de/demo/submodel/12345679")) {
+					submodelKey = k;
+					break;
+				}
+		}
+
+		assertNotNull(submodelKey);
+
+		// Equality of value is already guaranteed by selection criteria
+		assertEquals(KeyType.IRI, submodelKey.getIdType());
+		assertEquals(KeyElements.SUBMODEL, submodelKey.getType());
+		assertEquals(true, submodelKey.isLocal());
+		
 		// Test view retrieval
 		Object[] views = aas.getViews().toArray();
 		assertEquals(2, views.length);

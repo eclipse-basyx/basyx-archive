@@ -63,12 +63,12 @@
 			<aas:submodelRefs>
 				<aas:submodelRef>
 					<aas:keys>
-						<aas:key type="Submodel" local="true" idType="IRI">"http://www.zvei.de/demo/submodel/12345679"</aas:key>
+						<aas:key type="Submodel" local="true" idType="IRI">http://www.zvei.de/demo/submodel/12345679</aas:key>
 					</aas:keys>
 				</aas:submodelRef>
 				<aas:submodelRef>
 					<aas:keys>
-						<aas:key type="Submodel" local="true" idType="IRI">"http://www.zvei.de/demo/submodel/12345679_2"</aas:key>
+						<aas:key type="Submodel" local="true" idType="IRI">http://www.zvei.de/demo/submodel/12345679_2</aas:key>
 					</aas:keys>
 				</aas:submodelRef>
 			</aas:submodelRefs>
