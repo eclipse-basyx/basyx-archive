@@ -37,7 +37,7 @@ public class MultiAASProviderTest {
 		VABMultiSubmodelProvider aasProvider = new VABMultiSubmodelProvider();
 		aasProvider.addSubmodel("SimpleAASSubmodel", new SubModelProvider(new SimpleAASSubmodel()));
 		provider = new MultiAASProvider();
-		provider.setAssetAdministrationShell("a1", aasProvider);
+		provider.addMultiSubmodelProvider("a1", aasProvider);
 		stub.addProvider(urn, "", provider);
 		proxy = stub.connectToVABElement(urn);
 	}

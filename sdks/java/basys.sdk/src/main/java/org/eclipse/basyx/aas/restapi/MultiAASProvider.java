@@ -23,13 +23,13 @@ public class MultiAASProvider implements IModelProvider {
 	 * Adds an Asset Administration Shell to this provider. The AAS will be
 	 * accessible via path://*id
 	 * 
-	 * @param id
+	 * @param aasIdShort
 	 *            The id of the added Asset Administration Shell.
 	 * @param modelProvider
 	 *            The provider that contains the Asset Administration Shell.
 	 */
-	public void setAssetAdministrationShell(String id, VABMultiSubmodelProvider modelProvider) {
-		aas_providers.put(id, modelProvider);
+	public void addMultiSubmodelProvider(String aasIdShort, VABMultiSubmodelProvider modelProvider) {
+		aas_providers.put(aasIdShort, modelProvider);
 	}
 
 	/**
