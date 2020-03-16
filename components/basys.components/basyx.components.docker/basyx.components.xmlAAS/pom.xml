@@ -83,13 +83,4 @@
 			</build>
 		</profile>
 	</profiles>
-	
-	<dependencies>
-		<!-- Adds additional classes of the BaSys SDK for tests (for TestRegistryProvider) -->
-		<dependency>
-			<groupId>org.eclipse.basyx</groupId>
-			<artifactId>basyx.sdk</artifactId>
-			<classifier>tests</classifier>
-		</dependency>
-	</dependencies>
 </project>

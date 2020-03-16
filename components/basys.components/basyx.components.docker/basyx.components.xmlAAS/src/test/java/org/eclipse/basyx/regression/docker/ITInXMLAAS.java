@@ -27,14 +27,13 @@ import org.slf4j.LoggerFactory;
 public class ITInXMLAAS {
 	private static Logger logger = LoggerFactory.getLogger(ITInXMLAAS.class);
 
-	private static String registryUrl;
 	private IAASRegistryService registry;
 
-	private String aasShortId = "aas1";
-	private IIdentifier aasId = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:1:registryAAS#001");
-	private String aasEndpoint = "http://localhost:4000/registry/aas1/aas";
-	private String submodelShortId = "submodel1";
-	private String assetId = "asset1";
+	private static String aasShortId = "aas1";
+	private static IIdentifier aasId = new ModelUrn("www.admin-shell.io/aas-sample/2/0");
+	private static String aasEndpoint;
+	private static String submodelShortId = "submodel1";
+	private static String assetId = "asset1";
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -50,9 +49,9 @@ public class ITInXMLAAS {
 		BaSyxDockerConfiguration dockerConfig = new BaSyxDockerConfiguration();
 		dockerConfig.loadFromResource(BaSyxDockerConfiguration.DEFAULT_CONFIG_PATH);
 
-		// registryUrl = "http://localhost:4000/registry";
-		registryUrl = "http://localhost:" + dockerConfig.getHostPort() + contextConfig.getContextPath();
-		logger.info("Registry URL for integration test: " + registryUrl);
+		aasEndpoint = "http://localhost:" + dockerConfig.getHostPort() + contextConfig.getContextPath() + "/"
+				+ aasShortId + "/aas";
+		logger.info("AAS URL for integration test: " + aasEndpoint);
 	}
 
 	/**

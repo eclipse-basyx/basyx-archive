@@ -18,7 +18,7 @@
 					<aas:key idType="IRI" local="false" type="AssetAdministrationShell">aas_parent_id</aas:key>
 				</aas:keys>
 			</aas:parent>
-			<aas:identification idType="IRI">www.admin-shell.io/aas-sample/1/0</aas:identification>
+			<aas:identification idType="IRI">www.admin-shell.io/aas-sample/2/0</aas:identification>
 			<aas:administration>
 				<aas:version>1</aas:version>
 				<aas:revision>0</aas:revision>

@@ -1,8 +1,6 @@
 package org.eclipse.basyx.components.servlets;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -16,6 +14,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.submodel.metamodel.api.IElement;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
@@ -76,8 +75,8 @@ public class XMLAASFactory {
 	 */
 	private static XMLToMetamodelConverter convertXMLToMetamodel(String xmlPath)
 			throws ParserConfigurationException, SAXException, IOException {
-		String xmlString = new String(Files.readAllBytes(Paths.get(xmlPath)));
-		return new XMLToMetamodelConverter(xmlString);
+		String output = BaSyxConfiguration.getResourceString(xmlPath);
+		return new XMLToMetamodelConverter(output);
 	}
 
 	/**
