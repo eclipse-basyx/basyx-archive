@@ -45,7 +45,7 @@ public class MultiAASProviderTest {
 	@Test
 	public void clearTest() {
 		provider.clear();
-		Object result = proxy.getModelPropertyValue("path://a1/aas/submodels/SimpleAASSubmodel/");
+		Object result = proxy.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/");
 		assertNull(result);
 	}
 
@@ -54,25 +54,25 @@ public class MultiAASProviderTest {
 	public void getTest() {
 		// test reading from a valid aas
 		Map<String, Object> result = (Map<String, Object>) proxy
-				.getModelPropertyValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
+				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
 		assertEquals(123, result.get(Property.VALUE));
 
 		// test reading from an invalid aas
-		assertNull(proxy.getModelPropertyValue("path://A1/aas/submodels/SimpleAASSubmodel/"));
+		assertNull(proxy.getModelPropertyValue("A1/aas/submodels/SimpleAASSubmodel/"));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test
 	public void setTest() {
 		// test setting in a valid aas
-		proxy.setModelPropertyValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value", 100);
+		proxy.setModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value", 100);
 
 		// test setting in an invalid aas
-		proxy.setModelPropertyValue("path://A1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value", 200);
+		proxy.setModelPropertyValue("A1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value", 200);
 
 		// retrieving property
 		Map<String, Object> result = (Map<String, Object>) proxy
-				.getModelPropertyValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
+				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
 		assertEquals(100, result.get(Property.VALUE));
 	}
 
@@ -80,15 +80,15 @@ public class MultiAASProviderTest {
 	@Test
 	public void removeTest() {
 		// test deleting from an invalid aas
-		proxy.deleteValue("path://A1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
+		proxy.deleteValue("A1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
 		Map<String, Object> result = (Map<String, Object>) proxy
-				.getModelPropertyValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
+				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
 		assertEquals(123, result.get(Property.VALUE));
 
 		// test deleting from a valid aas
-		proxy.deleteValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
+		proxy.deleteValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
 		result = (Map<String, Object>) proxy
-				.getModelPropertyValue("path://a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/");
+				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/");
 		assertNull(result.get("value"));
 	}
 
@@ -96,14 +96,14 @@ public class MultiAASProviderTest {
 	public void invokeExceptionTest() {
 		// Invoke exception1
 		try {
-			proxy.invokeOperation("path://a1/aas/submodels/SimpleAASSubmodel/operations/exception1/invokable");
+			proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/exception1/invokable");
 			fail();
 		} catch (ServerException e) {
 			assertEquals(NullPointerException.class.getCanonicalName(), e.getType());
 		}
 		// Invoke exception2
 		try {
-			proxy.invokeOperation("path://a1/aas/submodels/SimpleAASSubmodel/operations/exception2/invokable", "prop1");
+			proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/exception2/invokable", "prop1");
 			fail();
 		} catch (ServerException e) {
 			assertEquals("ExType", e.getType());
@@ -113,10 +113,10 @@ public class MultiAASProviderTest {
 	@Test
 	public void invokeTest() {
 		// test invoking from an invalid aas
-		assertNull(proxy.invokeOperation("path://A1/aas/submodels/SimpleAASSubmodel/operations/complex/invokable", 10, 3));
+		assertNull(proxy.invokeOperation("A1/aas/submodels/SimpleAASSubmodel/operations/complex/invokable", 10, 3));
 
 		// test invoking with return value
-		assertEquals(7, proxy.invokeOperation("path://a1/aas/submodels/SimpleAASSubmodel/operations/complex/invokable", 10, 3));
-		assertEquals(true, proxy.invokeOperation("path://a1/aas/submodels/SimpleAASSubmodel/operations/simple/invokable"));
+		assertEquals(7, proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/complex/invokable", 10, 3));
+		assertEquals(true, proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/simple/invokable"));
 	}
 }

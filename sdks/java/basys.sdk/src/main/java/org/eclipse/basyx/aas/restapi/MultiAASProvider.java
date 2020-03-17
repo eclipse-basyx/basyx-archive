@@ -7,7 +7,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
 /**
  * Provider, that redirects requests for different Asset Administration Shells.
- * e.g. path://aas1 refers to the AAS with id "aas1".
+ * e.g. aas1 refers to the AAS with id "aas1".
  * 
  * @author espen
  *
@@ -21,7 +21,7 @@ public class MultiAASProvider implements IModelProvider {
 
 	/**
 	 * Adds an Asset Administration Shell to this provider. The AAS will be
-	 * accessible via path://*id
+	 * accessible via *id
 	 * 
 	 * @param aasIdShort
 	 *            The id of the added Asset Administration Shell.
@@ -121,7 +121,7 @@ public class MultiAASProvider implements IModelProvider {
 
 	/**
 	 * Returns the requested aas id from a given VAB path. E.g. returns "aas1", if
-	 * the path is path://aas1/aas/
+	 * the path is aas1/aas/
 	 * 
 	 * @param path
 	 *            The requested VAB path
@@ -129,13 +129,13 @@ public class MultiAASProvider implements IModelProvider {
 	 *         the path is invalid or does not contain an AAS id.
 	 */
 	private String getId(String path) {
-		if (path == null || !path.startsWith("path://")) {
+		if (path == null) {
 			return null;
 		}
 
 		String[] elements = VABPathTools.splitPath(path);
-		if (elements.length >= 2) {
-			String aasId = elements[1];
+		if (elements.length >= 1) {
+			String aasId = elements[0];
 			return aasId;
 		} else {
 			return null;
@@ -144,7 +144,7 @@ public class MultiAASProvider implements IModelProvider {
 
 	/**
 	 * Returns the sub path in the context of a given AAS id. E.g. returns
-	 * "/aas/submodels", if the path is path://aas1/aas/submodels/
+	 * "/aas/submodels", if the path is aas1/aas/submodels/
 	 * 
 	 * @param path
 	 *            The requested VAB path
@@ -153,7 +153,6 @@ public class MultiAASProvider implements IModelProvider {
 	 * @return The remaining sub-path, when removing the id from the VAB path
 	 */
 	private String getSubPath(String path, String aasId) {
-		String prefix = "path://" + aasId;
-		return path.substring(prefix.length());
+		return path.substring(aasId.length());
 	}
 }

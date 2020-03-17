@@ -13,15 +13,17 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 /**
- * A XML registry servlet based on an InMemory Registry. The servlet therefore
- * provides an implementation for the IAASRegistryService interface without a
- * permanent storage capability. it imports AAS from given XML location provided
- * in the context.properties and maps the AAS to servlet as well
+ * Starts an HTTP server providing multiple AAS and submodels as described in
+ * the XML file specified in the properties file <br />
+ * They are made available at <i>localhost:4000/xmlAAS/$aasId/aas</i><br />
+ * <br />
+ * <b>Please note:</b> Neither the AASs nor the Submodels are added to the
+ * registry. Additionally, the Submodel descriptors inside the AAS are missing.
+ * <br />
+ * There reason for this is that the executable does not know about the outside
+ * context (e.g. docker, ...)!
  * 
- * Do not use this registry in a productive environment - the entries are not
- * persistent!
- * 
- * @author haque
+ * @author haque, schnicke
  */
 public class XMLExecutable {
 
