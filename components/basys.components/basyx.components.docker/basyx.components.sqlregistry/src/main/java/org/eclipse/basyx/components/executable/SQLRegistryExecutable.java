@@ -35,7 +35,8 @@ public class SQLRegistryExecutable {
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
 		config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
 
-		// Init HTTP context and add an InMemoryRegistryServlet according to the configuration
+		// Init HTTP context and add an SQLRegistryServlet according to the
+		// configuration
 		BaSyxContext context = new BaSyxContext(config.getContextPath(), config.getDocBasePath(), config.getHostname(),
 				config.getPort());
 		context.addServletMapping(SERVLET_MAPPING, new SQLRegistryServlet("dockerRegistry.properties"));
