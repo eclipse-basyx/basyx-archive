@@ -294,7 +294,7 @@ TEST_F(TestBaSyxObject, HashMapTest_Object)
 	ASSERT_EQ(obj.Get<int>(), i);
 }
 
-TEST_F(TestBaSyxObject, ObjectSetTest)
+TEST_F(TestBaSyxObject, ObjectSetTestInt)
 {
 	basyx::object objectSet = basyx::object::make_set<int>();
 
@@ -330,7 +330,6 @@ TEST_F(TestBaSyxObject, ObjectSetTest)
 	ASSERT_EQ(set.count(2), 0);
 	ASSERT_EQ(set.count(3), 1);
 }
-
 
 TEST_F(TestBaSyxObject, ObjectFunctionTest)
 {
@@ -385,4 +384,51 @@ TEST_F(TestBaSyxObject, ObjectFunctionTest)
 	ASSERT_FALSE(ret3.IsNull());
 	ASSERT_TRUE(ret3.InstanceOf<bool>());
 	ASSERT_EQ(ret3.Get<bool>(), true);
+}
+
+
+TEST_F(TestBaSyxObject, ObjectHashTest)
+{
+	auto map1 = basyx::object::make_map();
+	auto map2 = basyx::object::make_map();
+	basyx::object objInt = 5;
+
+
+	std::hash<basyx::object> hash;
+	ASSERT_EQ(hash(map1), hash(map1));
+	ASSERT_EQ(hash(map2), hash(map2));
+	ASSERT_EQ(hash(objInt), hash(objInt));
+
+	ASSERT_NE(hash(map1), hash(map2));
+	ASSERT_NE(hash(map1), hash(objInt));
+}
+
+TEST_F(TestBaSyxObject, ObjectSetTestObject)
+{
+	auto objectSet = basyx::object::make_object_set();
+
+	ASSERT_TRUE(objectSet.InstanceOf<basyx::object::object_set_t>());
+
+	auto & set = objectSet.Get<basyx::object::object_set_t&>();
+
+	basyx::object objInt = 5;
+	auto map1 = basyx::object::make_map();
+	auto map2 = basyx::object::make_map();
+	map1.insertKey("test", 2);
+
+	// Insert new element
+	objectSet.insert(map1);
+	ASSERT_EQ(set.size(), 1);
+
+	// Insert same element, shouldn't insert
+	objectSet.insert(map1);
+	ASSERT_EQ(set.size(), 1);
+
+	// Insert new element
+	objectSet.insert(map2);
+	ASSERT_EQ(set.size(), 2);
+
+	// Insert new element, different type
+	objectSet.insert(objInt);
+	ASSERT_EQ(set.size(), 3);
 }

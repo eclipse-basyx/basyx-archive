@@ -86,6 +86,14 @@ bool basyx::object::insert(basyx::object obj)
 			return true;
 		}
 	case basyx::type::objectType::Set:
+		if (this->content->value_type() == basyx::type::valueType::Object)
+		{
+			auto & objectSet = this->Get<basyx::object::set_t<basyx::object>&>();
+			auto resultSet = objectSet.emplace(obj);
+			return resultSet.second;
+			break;
+		};
+
 		if (this->content->value_type() == value_type)
 		{
 			switch (value_type)

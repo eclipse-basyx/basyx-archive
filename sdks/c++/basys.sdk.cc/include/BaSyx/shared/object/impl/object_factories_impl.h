@@ -36,10 +36,22 @@ basyx::object basyx::object::make_list(std::initializer_list<T> l)
 	return basyx::object{ object::list_t<T>(std::forward<std::initializer_list<T>>(l)) };
 };
 
+template<typename... Args>
+basyx::object basyx::object::make_object_list(Args && ... args)
+{
+	return basyx::object{ object::list_t<basyx::object>(std::forward<Args>(args)...) };
+};
+
 template<typename T, typename... Args>
 basyx::object basyx::object::make_set(Args && ... args)
 {
 	return basyx::object{ object::set_t<T>(std::forward<Args>(args)...) };
+};
+
+template<typename... Args>
+basyx::object basyx::object::make_object_set(Args && ... args)
+{
+	return basyx::object{ object::set_t<basyx::object>(std::forward<Args>(args)...) };
 };
 
 template<typename... Args>
