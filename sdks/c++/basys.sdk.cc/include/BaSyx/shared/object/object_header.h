@@ -40,10 +40,12 @@ namespace basyx {
 		template<typename T>
 		using hash_map_t = std::unordered_map<std::string, T>;
 
-		using object_list_t = object::list_t<object>;
+		using object_list_t = list_t<basyx::object>;
+		using object_set_t = set_t<basyx::object>;
 		using object_map_t = object::hash_map_t<basyx::object>;
-		using function_t = std::function<basyx::object(basyx::object*)>;
-	
+
+		using function_t = std::function<basyx::object(basyx::object*)>;	
+
 	public:	// Constructors
 		object();
 		object(const char *);
@@ -169,11 +171,17 @@ namespace basyx {
 		template<typename T, typename... Args>
 		static object make_list(Args && ... args);
 
+		template<typename... Args>
+		static object make_object_list(Args && ... args);
+
 		template<typename T>
 		static object make_list(std::initializer_list<T>);
 
 		template<typename T, typename... Args>
 		static object make_set(Args && ... args);
+
+		template<typename... Args>
+		static object make_object_set(Args && ... args);
 
 		template<typename... Args>
 		static object make_map(Args && ... args);
@@ -190,9 +198,25 @@ namespace basyx {
 		bool operator==(const basyx::object& rhs) const;
 	public:
 		friend void to_json(nlohmann::json& json, const basyx::object& object);
+		friend struct std::hash<basyx::object>;
 	};
 
 	void to_json(nlohmann::json& json, const basyx::object& object);
+};
+
+#include <functional>
+
+namespace std
+{
+	template<>
+	struct hash<basyx::object>
+	{
+		std::size_t operator()(basyx::object const & o) const noexcept
+		{
+			auto TEST = reinterpret_cast<std::size_t>(o.content->get_address());
+			return reinterpret_cast<std::size_t>(o.content->get_address());
+		};
+	};
 };
 
 #endif /* BASYX_object_object_H */
