@@ -16,8 +16,7 @@ import org.xml.sax.SAXException;
 /**
  * Starts an HTTP server providing multiple AAS and submodels as described in
  * the XML file specified in the properties file <br />
- * They are made available at
- * <i>localhost:4000/xmlAAS/path://$aasId/aas</i><br />
+ * They are made available at <i>localhost:4000/xmlAAS/$aasId/aas</i><br />
  * <br />
  * <b>Please note:</b> Neither the AASs nor the Submodels are added to the
  * registry. Additionally, the Submodel descriptors inside the AAS are missing.
@@ -39,7 +38,7 @@ public class XMLExecutable {
 	private static AASHTTPServer server;
 
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
-		logger.info("Starting BaSyx XML registry");
+		logger.info("Starting BaSyx XML component");
 
 		// Load configuration
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
