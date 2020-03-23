@@ -5,6 +5,7 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.PropertyType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -34,7 +35,8 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public String getValueType() {
-		return (String) ((Map<String, Object>) getProxy().getModelPropertyValue("")).get(Property.VALUETYPE);
+		Object o = getProxy().getModelPropertyValue("");
+		return PropertyValueTypeDefHelper.readTypeDef(((Map<String, Object>) o).get(Property.VALUETYPE)).toString();
 	}
 
 }

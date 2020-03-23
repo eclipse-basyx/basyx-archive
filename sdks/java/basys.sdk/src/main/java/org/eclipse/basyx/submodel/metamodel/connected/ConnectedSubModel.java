@@ -17,6 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.connected.facades.ConnectedVABElemen
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.ConnectedPropertyFactory;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -42,9 +43,10 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 		facade = new ConnectedVABElementContainerFacade(proxy);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getSemanticId() {
-		return Reference.createAsFacade(getElem());
+		return Reference.createAsFacade((Map<String, Object>) getElem().get(HasSemantics.SEMANTICID));
 	}
 
 	@Override
