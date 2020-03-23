@@ -8,6 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
+using Newtonsoft.Json;
 using System;
 
 namespace BaSyx.Models.Connectivity
@@ -24,12 +25,16 @@ namespace BaSyx.Models.Connectivity
 
         public IEndpointSecurity Security { get; set; }
 
-        public MqttEndpoint(string brokerUri, string topic)
+        [JsonConstructor]
+        public MqttEndpoint(string address)
         {
-            brokerUri = brokerUri ?? throw new ArgumentNullException("url");
-            BrokerUri = new Uri(brokerUri);
-            Topic = topic ?? "/";
-            Address = brokerUri + topic;
+            address = address ?? throw new ArgumentNullException(nameof(address));
+            Uri uri = new Uri(address);
+            BrokerUri = new Uri(uri.AbsoluteUri);
+            Topic = uri.AbsolutePath;
         }
+
+        public MqttEndpoint(Uri uri) : this(uri?.ToString())
+        { }
     }
 }

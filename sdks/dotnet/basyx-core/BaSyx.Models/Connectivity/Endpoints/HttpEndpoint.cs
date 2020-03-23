@@ -28,11 +28,12 @@ namespace BaSyx.Models.Connectivity
         [JsonConstructor]
         public HttpEndpoint(string address)
         {
-            address = address ?? throw new ArgumentNullException("url");
+            address = address ?? throw new ArgumentNullException(nameof(address));
             Url = new Uri(address);
             Address = Url.ToString();
         }
 
-
+        public HttpEndpoint(Uri uri) : this(uri?.ToString())
+        { }
     }
 }

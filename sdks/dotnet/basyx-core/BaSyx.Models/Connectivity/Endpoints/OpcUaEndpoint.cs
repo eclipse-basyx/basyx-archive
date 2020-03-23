@@ -10,9 +10,7 @@
 *******************************************************************************/
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace BaSyx.Models.Connectivity
 {
@@ -31,11 +29,14 @@ namespace BaSyx.Models.Connectivity
         [JsonConstructor]
         public OpcUaEndpoint(string address)
         {
-            Address = address ?? throw new ArgumentNullException("address");
-            var uri = new Uri(address);
+            address = address ?? throw new ArgumentNullException(nameof(address));
+            Uri uri = new Uri(address);
             BrowsePath = uri.AbsolutePath;
             Authority = uri.Authority;
         }
+
+        public OpcUaEndpoint(Uri uri) : this(uri?.ToString())
+        { }
 
     }
 }

@@ -32,15 +32,24 @@ namespace BaSyx.API.Components
             }
             else
             {
-                List<IEndpoint> endpoints = serverConfiguration.Hosting.Urls.ConvertAll(endpointConverter);
+                List<IEndpoint> endpoints = serverConfiguration.Hosting.Urls.ConvertAll(EndpointConverter);
                 serviceProvider.UseDefaultEndpointRegistration(endpoints);
             }
         }
 
-        private static IEndpoint endpointConverter(string input)
+        private static IEndpoint EndpointConverter(string input)
         {
-            Uri uri = new Uri(input);
-            return EndpointFactory.CreateEndpoint(uri.Scheme, uri.Authority, null);
+            try
+            {
+                Uri uri = new Uri(input);
+                return EndpointFactory.CreateEndpoint(uri, null);
+            }
+            catch (Exception e)
+            {
+                logger.Warn(e, "Error converting input string: " + input + " - Message: " + e.Message);
+                return null;
+            }
+            
         }
 
         public static void UseAutoEndpointRegistration(this IAssetAdministrationShellServiceProvider serviceProvider, ServerConfiguration serverConfiguration)
@@ -54,7 +63,7 @@ namespace BaSyx.API.Components
             }
             else
             {
-                List<IEndpoint> endpoints = serverConfiguration.Hosting.Urls.ConvertAll(endpointConverter);
+                List<IEndpoint> endpoints = serverConfiguration.Hosting.Urls.ConvertAll(EndpointConverter);
                 serviceProvider.UseDefaultEndpointRegistration(endpoints);
             }
         }
@@ -70,7 +79,7 @@ namespace BaSyx.API.Components
             }
             else
             {
-                List<IEndpoint> endpoints = serverConfiguration.Hosting.Urls.ConvertAll(endpointConverter);
+                List<IEndpoint> endpoints = serverConfiguration.Hosting.Urls.ConvertAll(EndpointConverter);
                 serviceProvider.UseDefaultEndpointRegistration(endpoints);
             }
         }

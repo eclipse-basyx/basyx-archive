@@ -45,7 +45,7 @@ namespace BaSyx.Discovery.mDNS
             discoveryServer.Start();
         }
 
-        
+
 
         private static async void DiscoveryServer_ServiceInstanceDiscovered(object sender, ServiceInstanceEventArgs e)
         {
@@ -81,7 +81,7 @@ namespace BaSyx.Discovery.mDNS
                                     List<IEndpoint> submodelEndpoints = new List<IEndpoint>();
                                     foreach (var submodelEndpoint in submodelDescriptor.Endpoints)
                                     {
-                                        if(submodelEndpoint.Address.Contains(server.Address.ToString()))
+                                        if (submodelEndpoint.Address.Contains(server.Address.ToString()))
                                         {
                                             submodelEndpoints.Add(submodelEndpoint);
                                         }
@@ -100,13 +100,13 @@ namespace BaSyx.Discovery.mDNS
                                     {
                                         if (submodelEndpoint.Address.Contains(server.Address.ToString()))
                                         {
-                                            if(aasDescriptor.SubmodelDescriptors[submodelDescriptor.IdShort].Endpoints.FirstOrDefault(f => f.Address == submodelEndpoint.Address) == null)
+                                            if (aasDescriptor.SubmodelDescriptors[submodelDescriptor.IdShort].Endpoints.FirstOrDefault(f => f.Address == submodelEndpoint.Address) == null)
                                                 submodelEndpoints.Add(submodelEndpoint);
                                         }
                                     }
                                     aasDescriptor.SubmodelDescriptors[submodelDescriptor.IdShort].AddEndpoints(submodelEndpoints);
                                 }
-                            }                      
+                            }
                         }
                         else
                             retrieveDescriptor.LogResult(logger, LogLevel.Info, "Could not retrieve AAS descriptor");
@@ -172,17 +172,39 @@ namespace BaSyx.Discovery.mDNS
                 logger.Error(exc, "Error service instance shutdown");
             }
         }
-        
+
         public static void StopDiscovery(this IAssetAdministrationShellRegistry registryHttpServer)
         {
             discoveryServer.Stop();
         }
 
-        public static void StartDiscovery(this IAssetAdministrationShellServiceProvider serviceProvider) => StartDiscovery(serviceProvider, null);
-
-        public static void StartDiscovery(this IAssetAdministrationShellServiceProvider serviceProvider, IEnumerable<IPAddress> iPAddresses)
+        /// <summary>
+        /// Starts mDNS dicovery for an Asset Administration Shell Service Provider with included endpoints in its Service Descriptor
+        /// </summary>
+        /// <param name="serviceProvider">The Asset Administration Shell Service Provider</param>
+        public static void StartDiscovery(this IAssetAdministrationShellServiceProvider serviceProvider)
         {
-            int port = new Uri(serviceProvider.ServiceDescriptor.Endpoints.First().Address).Port;
+            List<IPAddress> ipAddresses = new List<IPAddress>();
+            int port = -1;
+            foreach (var endpoint in serviceProvider.ServiceDescriptor.Endpoints)
+            {
+                Uri uriEndpoint = new Uri(endpoint.Address);
+                if(port == -1)
+                    port = uriEndpoint.Port;
+
+                if (IPAddress.TryParse(uriEndpoint.Host, out IPAddress address))
+                    ipAddresses.Add(address);
+            }
+            StartDiscovery(serviceProvider, port, ipAddresses);
+        }
+        /// <summary>
+        /// Starts mDNS dicovery for an Asset Administration Shell Service Provider with a list of given IP-addresses and a port
+        /// </summary>
+        /// <param name="serviceProvider">The Asset Administration Shell Service Provider</param>
+        /// <param name="port">The port to advertise</param>
+        /// <param name="iPAddresses">A list of IP-addresses to advertise, if empty uses locally dicoverable multicast IP addresses</param>
+        public static void StartDiscovery(this IAssetAdministrationShellServiceProvider serviceProvider, int port, IEnumerable<IPAddress> iPAddresses)
+        {
             discoveryClient = new DiscoveryClient(serviceProvider.ServiceDescriptor.IdShort, (ushort)port, ServiceTypes.AAS_SERVICE_TYPE, iPAddresses);
             discoveryClient.AddProperty(ASSETADMINISTRATIONSHELL_ID, serviceProvider.ServiceDescriptor.Identification.Id);
             discoveryClient.AddProperty(ASSETADMINISTRATIONSHELL_IDSHORT, serviceProvider.ServiceDescriptor.IdShort);

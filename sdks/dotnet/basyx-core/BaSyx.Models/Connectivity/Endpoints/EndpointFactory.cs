@@ -14,20 +14,53 @@ namespace BaSyx.Models.Connectivity
 {
     public static partial class EndpointFactory
     {
+        public static IEndpoint CreateEndpoint(Uri uri, IEndpointSecurity security)
+        {
+            switch (uri.Scheme)
+            {
+                case "https":
+                case EndpointType.HTTP:
+                    HttpEndpoint httpEndpoint = new HttpEndpoint(uri);
+                    httpEndpoint.Security = security;
+                    return httpEndpoint;
+
+                case "mqtts":
+                case EndpointType.MQTT:
+                    MqttEndpoint mqttEndpoint = new MqttEndpoint(uri);
+                    mqttEndpoint.Security = security;
+                    return mqttEndpoint;
+
+                case EndpointType.OPC_UA: 
+                    OpcUaEndpoint opcUaEndpoint = new OpcUaEndpoint(uri);
+                    opcUaEndpoint.Security = security;
+                    return opcUaEndpoint;
+
+                default:
+                    return null;
+            }
+        }
         public static IEndpoint CreateEndpoint(string endpointType, string address, IEndpointSecurity security)
         {
             switch (endpointType.ToLower())
             {
-                case EndpointType.HTTP: return new HttpEndpoint(address);
-                case EndpointType.MQTT:
-                    {
-                        Uri uri = new Uri(address);
-                        var brokerUri = uri.AbsoluteUri;
-                        var topic = uri.AbsolutePath;
+                case "https":
+                case EndpointType.HTTP:
+                    HttpEndpoint httpEndpoint = new HttpEndpoint(address);
+                    httpEndpoint.Security = security;
+                    return httpEndpoint;
 
-                        return new MqttEndpoint(brokerUri, topic);
-                    }
-                case EndpointType.OPC_UA: return new OpcUaEndpoint(address);
+                case "mqtts":
+                case EndpointType.MQTT:
+                    Uri uri = new Uri(address);
+                    MqttEndpoint mqttEndpoint = new MqttEndpoint(address);
+                    mqttEndpoint.Security = security;
+                    return mqttEndpoint;
+
+                case EndpointType.OPC_UA:
+                    OpcUaEndpoint opcUaEndpoint = new OpcUaEndpoint(address);
+                    opcUaEndpoint.Security = security;
+                    return opcUaEndpoint;
+
                 default:
                     return null;
             }
