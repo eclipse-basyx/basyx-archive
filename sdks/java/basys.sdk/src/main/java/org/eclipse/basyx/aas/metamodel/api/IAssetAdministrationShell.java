@@ -23,11 +23,18 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 
 public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHasDataSpecification {
 	/**
-	 * Return all registered sub models of this AAS
+	 * Return all registered submodels of this AAS
 	 * 
 	 * @return
 	 */
 	public Map<String, ISubModel> getSubModels();
+
+	/**
+	 * Return the references to all registered submodels
+	 * 
+	 * @return
+	 */
+	public Set<IReference> getSubmodelReferences();
 
 	/**
 	 * Add a sub model to the AAS

@@ -10,6 +10,12 @@ enum class EntityType : char
 	SelfManagedEntity = 1,
 };
 
+enum class Category : char
+{
+	Constant = 0,
+	Parameter = 1,
+	Variable = 2,
+};
 
 };
 

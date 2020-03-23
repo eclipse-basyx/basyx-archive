@@ -31,14 +31,15 @@ public class XMLToMetamodelConverter {
 	/**
 	 * Initializes the Parser with XML given as a String
 	 * 
-	 * @param xml the XML to be parsed
+	 * @param xmlContent
+	 *            the XML content to be parsed
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
-	public XMLToMetamodelConverter(String xml) throws ParserConfigurationException, SAXException, IOException {		
-		root.putAll((Map<? extends String, ? extends Object>) XmlParser.buildXmlMap(xml)
+	public XMLToMetamodelConverter(String xmlContent) throws ParserConfigurationException, SAXException, IOException {		
+		root.putAll((Map<? extends String, ? extends Object>) XmlParser.buildXmlMap(xmlContent)
 				.get(MetamodelToXMLConverter.AASENV));
 	}
 

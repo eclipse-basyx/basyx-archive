@@ -8,16 +8,18 @@ set (BASYX_SHARED_LIBRARY_NAME "${PROJECT_SHORTNAME}${BASYX_SHARED_LIB_SUFFIX}")
 
 set (BASYX_SHARED_INCLUDE_DIR "${BASYX_INCLUDE_DIR}/BaSyx/shared")
 
-add_library(${BASYX_SHARED_LIB_SUFFIX})
+set (BASYX_SHARED_TARGET_NAME "${PROJECT_SHORTNAME}_${BASYX_SHARED_LIB_SUFFIX}")
 
-set_target_properties(${BASYX_SHARED_LIB_SUFFIX} PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(${BASYX_SHARED_LIB_SUFFIX} PROPERTIES SOVERSION ${BASYX_PACKAGE_VERSION_MAJOR})
-set_target_properties(${BASYX_SHARED_LIB_SUFFIX} PROPERTIES PREFIX "${CMAKE_STATIC_LIBRARY_PREFIX}${PROJECT_SHORTNAME}")
-target_include_directories(${BASYX_SHARED_LIB_SUFFIX}
+add_library(${BASYX_SHARED_TARGET_NAME})
+
+set_target_properties(${BASYX_SHARED_TARGET_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
+set_target_properties(${BASYX_SHARED_TARGET_NAME} PROPERTIES SOVERSION ${BASYX_PACKAGE_VERSION_MAJOR})
+set_target_properties(${BASYX_SHARED_TARGET_NAME} PROPERTIES PREFIX "${CMAKE_STATIC_LIBRARY_PREFIX}")
+target_include_directories(${BASYX_SHARED_TARGET_NAME}
 INTERFACE ${CMAKE_INSTALL_PREFIX}/include
        ${CMAKE_INSTALL_PREFIX}/include/${PROJECT_SHORTNAME})
 
-target_sources(${BASYX_SHARED_LIB_SUFFIX}
+target_sources(${BASYX_SHARED_TARGET_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/shared/basysid/BaSysID.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/shared/object/impl/object_impl.cpp
@@ -25,7 +27,7 @@ target_sources(${BASYX_SHARED_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/shared/serialization/json/typeid.cpp
 )
 
-target_sources(${BASYX_SHARED_LIB_SUFFIX}
+target_sources(${BASYX_SHARED_TARGET_NAME}
     PRIVATE
         ${BASYX_SHARED_INCLUDE_DIR}/anyTypeChecker.h
         ${BASYX_SHARED_INCLUDE_DIR}/basysid/BaSysID.h
@@ -52,17 +54,17 @@ target_sources(${BASYX_SHARED_LIB_SUFFIX}
         ${BASYX_SHARED_INCLUDE_DIR}/types.h
 )
 
-target_include_directories(${BASYX_SHARED_LIB_SUFFIX} PRIVATE ${PROJECT_SOURCE_DIR})
-target_link_libraries(${BASYX_SHARED_LIB_SUFFIX}
+target_include_directories(${BASYX_SHARED_TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
+target_link_libraries(${BASYX_SHARED_TARGET_NAME}
     PUBLIC
     BaSyx::Util
     BaSyx::Log
     nlohmann_json::nlohmann_json
 )
-add_library(basyx::shared ALIAS ${BASYX_SHARED_LIB_SUFFIX})
-add_library(${PROJECT_SHORTNAME}::${BASYX_SHARED_LIB_SUFFIX} ALIAS ${BASYX_SHARED_LIB_SUFFIX})
+add_library(basyx::shared ALIAS ${BASYX_SHARED_TARGET_NAME})
+add_library(${PROJECT_SHORTNAME}::${BASYX_SHARED_LIB_SUFFIX} ALIAS ${BASYX_SHARED_TARGET_NAME})
 
-diagnostics_print(${BASYX_SHARED_LIB_SUFFIX})
+diagnostics_print(${BASYX_SHARED_TARGET_NAME})
 
 ###############################################
 ###           Install section               ###
@@ -87,7 +89,7 @@ install(EXPORT ${BASYX_SHARED_LIB_SUFFIX}Targets
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${BASYX_SHARED_LIBRARY_NAME}
 )
 
-install(TARGETS ${BASYX_SHARED_LIB_SUFFIX}
+install(TARGETS ${BASYX_SHARED_TARGET_NAME}
         EXPORT ${BASYX_SHARED_LIB_SUFFIX}Targets
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

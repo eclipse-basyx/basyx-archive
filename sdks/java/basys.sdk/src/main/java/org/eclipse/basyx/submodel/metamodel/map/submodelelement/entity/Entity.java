@@ -34,11 +34,23 @@ public class Entity extends SubmodelElement implements IEntity {
 	
 	public Entity(EntityType entityType, Collection<ISubmodelElement> statements, IReference asset) {
 		this();
-		put(ENTITY_TYPE, entityType);
-		put(STATEMENT, statements);
-		put(ASSET, asset);
+		setEntityType(entityType);
+		setStatements(statements);
+		setAsset(asset);
 	}
 	
+	public void setStatements(Collection<ISubmodelElement> statements) {
+		put(STATEMENT, statements);
+	}
+
+	public void setAsset(IReference asset) {
+		put(ASSET, asset);
+	}
+
+	public void setEntityType(EntityType entityType) {
+		put(ENTITY_TYPE, entityType.toString());
+	}
+
 	/**
 	 * Creates an Entity object from a map
 	 * 
@@ -65,7 +77,7 @@ public class Entity extends SubmodelElement implements IEntity {
 
 	@Override
 	public EntityType getEntityType() {
-		return (EntityType) get(ENTITY_TYPE);
+		return EntityType.fromString((String) get(ENTITY_TYPE));
 	}
 
 	@Override

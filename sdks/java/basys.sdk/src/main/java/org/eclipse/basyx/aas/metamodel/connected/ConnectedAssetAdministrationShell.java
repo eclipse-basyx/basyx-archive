@@ -29,6 +29,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -161,5 +162,11 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	@Override
 	public IReference getParent() {
 		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(Referable.PARENT));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Set<IReference> getSubmodelReferences() {
+		return ReferenceHelper.transform((Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.SUBMODELS));
 	}
 }

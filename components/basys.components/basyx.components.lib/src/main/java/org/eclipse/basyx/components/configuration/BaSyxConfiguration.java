@@ -2,9 +2,11 @@ package org.eclipse.basyx.components.configuration;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +24,16 @@ public class BaSyxConfiguration {
 		this.values = defaultValues;
 	}
 
+	public static InputStream getResourceStream(String relativeResourcePath) {
+		ClassLoader classLoader = BaSyxContextConfiguration.class.getClassLoader();
+		return classLoader.getResourceAsStream(relativeResourcePath);
+	}
+
+	public static String getResourceString(String relativeResourcePath) throws IOException {
+		ClassLoader classLoader = BaSyxContextConfiguration.class.getClassLoader();
+		return IOUtils.resourceToString(relativeResourcePath, StandardCharsets.UTF_8, classLoader);
+	}
+
 	/**
 	 * Load the configuration from a path relative to the current resource folder
 	 * 
@@ -29,16 +41,21 @@ public class BaSyxConfiguration {
 	 *                             are located at /src/main/resources by default.
 	 */
 	public void loadFromResource(String relativeResourcePath) {
-		ClassLoader classLoader = BaSyxContextConfiguration.class.getClassLoader();
-		try (InputStream input = classLoader.getResourceAsStream(relativeResourcePath)) {
-			// Try to load property file for servlet configuration
-			logger.info("Loading properties from file '" + relativeResourcePath + "'");
+		InputStream input = getResourceStream(relativeResourcePath);
+		if (input == null) {
+			logger.error("No properties found at '%s', using default values", relativeResourcePath);
+			return;
+		}
 
-			Properties properties = new Properties();
+		// Try to load property file for servlet configuration
+		logger.info("Loading properties from file '" + relativeResourcePath + "'");
+
+		Properties properties = new Properties();
+		try {
 			properties.load(input);
 			loadFromProperties(properties);
 		} catch (IOException e) {
-			logger.error("No properties found, using default values", e);
+			logger.error("Could not load properties", e);
 		}
 	}
 
