@@ -44,7 +44,7 @@ namespace net {
             // Resolve the server address and port
             int iResult = getaddrinfo(address.c_str(), port.c_str(), &hints, &result);
             if (iResult != 0) {
-                log.error("getaddrinfo() failed! Error code: %d", iResult);
+                log.error("getaddrinfo() failed! Error code: {}", iResult);
                 return -1;
             }
 
@@ -55,7 +55,7 @@ namespace net {
             freeaddrinfo(result);
 
             if (this->SocketDesc < 0) {
-                log.error("socket() failed! Error code: %d", iResult);
+                log.error("socket() failed! Error code: {}", iResult);
                 return -1;
             }
 
@@ -63,7 +63,7 @@ namespace net {
             // 1. server socket, 2. socket address information, 3. size of socket address information ( of the second parameter)
             iResult = ::connect(this->SocketDesc, ptr->ai_addr, (int)ptr->ai_addrlen);
             if (iResult < 0) {
-                log.error("connect() failed! Error code: %d", iResult);
+                log.error("connect() failed! Error code: {}", iResult);
                 ::close(this->SocketDesc);
                 return -1;
             }
@@ -87,11 +87,11 @@ namespace net {
 
         int socket_impl::shutdown(enum SocketShutdownDir how)
         {
-            log.trace("Shutting down socket. Code: %d", how);
+            log.trace("Shutting down socket. Code: {}", how);
             
             auto iResult = ::shutdown(this->SocketDesc, how);
             if (iResult < 0) {
-                log.error("shutdown() failed! Error code: %d", iResult);
+                log.error("shutdown() failed! Error code: {}", iResult);
                 return -1;
             }
             return 0;
@@ -102,7 +102,7 @@ namespace net {
             log.trace("Closing socket");
             auto iResult = ::close(this->SocketDesc);
             if (iResult < 0) {
-                log.error("close() failed! Error code: %d", iResult);
+                log.error("close() failed! Error code: {}", iResult);
                 return -1;
             }
             this->SocketDesc = 0;

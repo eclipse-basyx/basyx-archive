@@ -41,7 +41,7 @@ namespace net {
             // Resolve the local address and port to be used by the server
             iResult = getaddrinfo(NULL, port.c_str(), &hints, &result);
             if (iResult != 0) {
-                log.error("getaddrinfo() failed! Error code: %d", iResult);
+                log.error("getaddrinfo() failed! Error code: {}", iResult);
                 return -1;
             }
 
@@ -49,7 +49,7 @@ namespace net {
             socketDesc = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
 
             if (socketDesc < 0) {
-                log.error("socket() failed! Error code: %d", iResult);
+                log.error("socket() failed! Error code: {}", iResult);
                 freeaddrinfo(result);
                 return -1;
             }
@@ -58,7 +58,7 @@ namespace net {
             iResult = setsockopt(socketDesc, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuse, sizeof(reuse));
 
             if (iResult < 0) {
-                log.error("setsockopt() failed! Error code: %d", iResult);
+                log.error("setsockopt() failed! Error code: {}", iResult);
                 freeaddrinfo(result);
                 ::close(socketDesc);
                 return -1;
@@ -69,7 +69,7 @@ namespace net {
             iResult = bind(socketDesc, result->ai_addr, (int)result->ai_addrlen);
 
             if (iResult < 0) {
-                log.error("bind() failed! Error code: %d", iResult);
+                log.error("bind() failed! Error code: {}", iResult);
                 freeaddrinfo(result);
                 ::close(socketDesc);
                 return -1;
@@ -80,7 +80,7 @@ namespace net {
             // To listen on a socket
             // starts listening to allow clients to connect.
             if (::listen(socketDesc, SOMAXCONN) < 0) {
-                log.error("listen() failed! Error code: %d", iResult);
+                log.error("listen() failed! Error code: {}", iResult);
                 ::close(socketDesc);
                 return -1;
             }
