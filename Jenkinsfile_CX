@@ -24,8 +24,8 @@ spec:
       value: admin
     - name: PGDATA
       value: /run/postgresql/data
-  - name: maven
-    image: maven:latest
+  - name: java
+    image: iesetps/basyx-ci-java:latest
     resources:
       requests:
         memory: "3Gi"
@@ -68,7 +68,7 @@ spec:
       }
       stage('Java SDK Tests') {
           steps {
-              container('maven') {
+              container('java') {
                   sh '''
                      mkdir /home/jenkins/agent/.m2
                      chmod +x ./ci/build_java.sh
