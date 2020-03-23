@@ -11,6 +11,8 @@ import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONToolsFactory;
 import org.eclipse.basyx.vab.exception.LostHTTPRequestParameterException;
 import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,29 +139,26 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	
 
 	/**
-	 * Send JSON encoded response
-	 */
-	private void sendJSONResponse(PrintWriter outputStream, String jsonValue) {
-		// Write result to output stream
-		outputStream.write(jsonValue); 
-		outputStream.flush();
-	}
-	
-
-	/**
 	 * Send Error
 	 * @param e
 	 * @param path
 	 * @param resp
 	 */
-	private void sendException(PrintWriter resp, Exception e) {
-		logger.error("Exception in sendException", e);
+	private void sendException(PrintWriter resp, Exception e) throws ProviderException {
 		
 		// Serialize Exception
 		String jsonString = serialize(e);
 
-		// Send error response
-		sendJSONResponse(resp, jsonString);
+		resp.write(jsonString);
+		
+		//If the Exception is a ProviderException, just rethrow it
+		if(e instanceof ProviderException) {
+			throw (ProviderException) e;
+		}
+		
+		//If the Exception is not a ProviderException encapsulate it in one and log it
+		logger.error("Unknown Exception in JSONProvider", e);
+		throw new ProviderException(e);
 	}
 
 	
@@ -170,24 +169,31 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @param serializedJSONValue
 	 * @param outputStream
 	 * @return
+	 * @throws MalformedRequestException 
 	 * @throws LostHTTPRequestParameterException 
 	 * @throws ServerException
 	 */
-	private Object extractParameter(String path, String serializedJSONValue, PrintWriter outputStream) {
+	private Object extractParameter(String path, String serializedJSONValue, PrintWriter outputStream) throws MalformedRequestException {
 		// Return value
 		Object result = null;
 
-		// Deserialize json body
-		result = serializer.deserialize(serializedJSONValue);
-			
+		try {
+			// Deserialize json body
+			result = serializer.deserialize(serializedJSONValue);
+		} catch (Exception e) {
+			//JSON could not be deserialized
+			throw new MalformedRequestException(e);
+		}
+		
 		return result;
 	}
 	
 
 	/**
 	 * Process a BaSys get operation, return JSON serialized result
+	 * @throws ProviderException 
 	 */
-	public void processBaSysGet(String path, PrintWriter outputStream) {
+	public void processBaSysGet(String path, PrintWriter outputStream) throws ProviderException {
 
 		try {
 			// Get requested value from provider backend
@@ -197,7 +203,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			String jsonString = serialize(true, value, null);
 
 			// Send response
-			sendJSONResponse(outputStream, jsonString);
+			outputStream.write(jsonString);
 		} catch (Exception e) {
 			sendException(outputStream, e);
 		}
@@ -210,8 +216,9 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @param path
 	 * @param serializedJSONValue
 	 * @param outputStream
+	 * @throws ProviderException 
 	 */
-	public void processBaSysSet(String path, String serializedJSONValue, PrintWriter outputStream) {
+	public void processBaSysSet(String path, String serializedJSONValue, PrintWriter outputStream) throws ProviderException {
 		
 		// Try to set value of BaSys VAB element
 		try {
@@ -226,7 +233,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			String jsonString = serialize(true);
 			
 			// Send response
-			sendJSONResponse(outputStream, jsonString);
+			outputStream.write(jsonString);
 
 		} catch (Exception e) {
 			sendException(outputStream, e);
@@ -236,9 +243,10 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	
 	/**
 	 * Process a BaSys invoke operation
+	 * @throws ProviderException 
 	 */
 	@SuppressWarnings("unchecked")
-	public void processBaSysInvoke(String path, String serializedJSONValue, PrintWriter outputStream) {
+	public void processBaSysInvoke(String path, String serializedJSONValue, PrintWriter outputStream) throws ProviderException {
 
 		try {
 			
@@ -271,7 +279,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			String jsonString = serialize(true, result, null);
 			
 			// Send response
-			sendJSONResponse(outputStream, jsonString);
+			outputStream.write(jsonString);
 
 		} catch (Exception e) {
 			sendException(outputStream, e);
@@ -285,8 +293,9 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @param path
 	 * @param serializedJSONValue If this parameter is not null (basystype),we remove an element from a collection by index / remove from map by key. We assume that the parameter only contains 1 element
 	 * @param outputStream
+	 * @throws ProviderException 
 	 */
-	public void processBaSysDelete(String path, String serializedJSONValue, PrintWriter outputStream) {
+	public void processBaSysDelete(String path, String serializedJSONValue, PrintWriter outputStream) throws ProviderException {
 		
 		try {
 
@@ -304,7 +313,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			String jsonString = serialize(true);
 			
 			// Send response
-			sendJSONResponse(outputStream, jsonString);
+			outputStream.write(jsonString);
 
 		} catch (Exception e) {
 			sendException(outputStream, e);
@@ -318,8 +327,9 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @param path
 	 * @param parameter
 	 * @param outputStream
+	 * @throws ProviderException 
 	 */
-	public void processBaSysCreate(String path, String serializedJSONValue, PrintWriter outputStream) {
+	public void processBaSysCreate(String path, String serializedJSONValue, PrintWriter outputStream) throws ProviderException {
 
 		try {
 			// Deserialize json body. 
@@ -332,7 +342,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			String jsonString = serialize(true);
 			
 			// Send response
-			sendJSONResponse(outputStream, jsonString);
+			outputStream.write(jsonString);
 
 		} catch (Exception e) {
 			sendException(outputStream, e);

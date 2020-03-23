@@ -8,6 +8,7 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
 
 import org.eclipse.basyx.vab.coder.json.provider.JSONProvider;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.basyx.CoderTools;
 import org.slf4j.Logger;
@@ -92,11 +93,20 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			String path = new String(rxFrame, 1 + 4, pathLen);
 
 			// Forward request to provider
-			providerBackend.processBaSysGet(path, output);
+			try {
+				providerBackend.processBaSysGet(path, output);
+			} catch (ProviderException e) {
+				logger.error("Exception in BASYX_GET", e);
+				// Catch Exceptions from JSONProvider
+				// No further action here, as the current version
+				// of the TCP-Mapping states, that always Statuscode 0x00 
+				// should be returned with Exceptions encoded in returned String
+			}
 
 			// System.out.println("Processed GET:"+path);
 
 			// Send response frame
+			output.flush();
 			sendResponseFrame(byteArrayOutput);
 
 			break;
@@ -111,9 +121,18 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			String jsonValue = new String(rxFrame, 1 + 4 + pathLen + 4, jsonValueLen);
 
 			// Invoke get operation
-			providerBackend.processBaSysSet(path, jsonValue, output);
+			try {
+				providerBackend.processBaSysSet(path, jsonValue, output);
+			} catch (ProviderException e) {
+				logger.error("Exception in BASYX_SET", e);
+				// Catch Exceptions from JSONProvider
+				// No further action here, as the current version
+				// of the TCP-Mapping states, that always Statuscode 0x00 
+				// should be returned with Exceptions encoded in returned String
+			}
 
 			// Send response frame
+			output.flush();
 			sendResponseFrame(byteArrayOutput);
 
 			break;
@@ -128,9 +147,18 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			String jsonValue = new String(rxFrame, 1 + 4 + pathLen + 4, jsonValueLen);
 
 			// Invoke get operation
-			providerBackend.processBaSysCreate(path, jsonValue, output);
+			try {
+				providerBackend.processBaSysCreate(path, jsonValue, output);
+			} catch (ProviderException e) {
+				logger.error("Exception in BASYX_CREATE", e);
+				// Catch Exceptions from JSONProvider
+				// No further action here, as the current version
+				// of the TCP-Mapping states, that always Statuscode 0x00 
+				// should be returned with Exceptions encoded in returned String
+			}
 
 			// Send response frame
+			output.flush();
 			sendResponseFrame(byteArrayOutput);
 
 			break;
@@ -154,9 +182,18 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			}
 
 			// Invoke delete operation
-			providerBackend.processBaSysDelete(path, jsonValue, output);
+			try {
+				providerBackend.processBaSysDelete(path, jsonValue, output);
+			} catch (ProviderException e) {
+				logger.error("Exception in BASYX_DELETE", e);
+				// Catch Exceptions from JSONProvider
+				// No further action here, as the current version
+				// of the TCP-Mapping states, that always Statuscode 0x00 
+				// should be returned with Exceptions encoded in returned String
+			}
 
 			// Send response frame
+			output.flush();
 			sendResponseFrame(byteArrayOutput);
 
 			break;
@@ -170,9 +207,18 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			int jsonValueLen = CoderTools.getInt32(rxFrame, 1 + 4 + pathLen);
 			String jsonValue = new String(rxFrame, 1 + 4 + pathLen + 4, jsonValueLen);
 			// Invoke get operation
-			providerBackend.processBaSysInvoke(path, jsonValue, output);
+			try {
+				providerBackend.processBaSysInvoke(path, jsonValue, output);
+			} catch (ProviderException e) {
+				logger.error("Exception in BASYX_INVOKE", e);
+				// Catch Exceptions from JSONProvider
+				// No further action here, as the current version
+				// of the TCP-Mapping states, that always Statuscode 0x00 
+				// should be returned with Exceptions encoded in returned String
+			}
 
 			// Send response frame
+			output.flush();
 			sendResponseFrame(byteArrayOutput);
 
 			break;

@@ -9,6 +9,9 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
+import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -34,11 +37,12 @@ public class AASAggregationProvider implements IModelProvider {
 	 * prefix)
 	 * @param path
 	 * @return
+	 * @throws MalformedRequestException 
 	 */
-	private String stripPrefix(String path) {
+	private String stripPrefix(String path) throws MalformedRequestException {
 		path = VABPathTools.stripSlashes(path);
 		if (!path.startsWith(PREFIX)) {
-			throw new RuntimeException("Path " + path + " not recognized as aggregator path. Has to start with " + PREFIX);
+			throw new MalformedRequestException("Path " + path + " not recognized as aggregator path. Has to start with " + PREFIX);
 		}
 		path = path.replace(PREFIX, "");
 		path = VABPathTools.stripSlashes(path);
@@ -51,13 +55,14 @@ public class AASAggregationProvider implements IModelProvider {
 	 * 
 	 * @param value the AAS Map object
 	 * @return an AAS
+	 * @throws MalformedRequestException 
 	 */
 	@SuppressWarnings("unchecked")
-	private AssetAdministrationShell createAASFromMap(Object value) {
+	private AssetAdministrationShell createAASFromMap(Object value) throws MalformedRequestException {
 		
 		//check if the given value is a Map
 		if(!(value instanceof Map)) {
-			throw new RuntimeException("Given newValue is not a Map");
+			throw new MalformedRequestException("Given newValue is not a Map");
 		}
 
 		Map<String, Object> map = (Map<String, Object>) value;
@@ -68,7 +73,7 @@ public class AASAggregationProvider implements IModelProvider {
 		//have to accept Objects without modeltype information,
 		//as modeltype is not part of the public metamodel
 		if(!AssetAdministrationShell.MODELTYPE.equals(type) && type != null) {
-			throw new RuntimeException("Given newValue map has not the correct ModelType");
+			throw new MalformedRequestException("Given newValue map has not the correct ModelType");
 		}
 		
 		AssetAdministrationShell aas = AssetAdministrationShell.createAsFacade(map);
@@ -90,7 +95,7 @@ public class AASAggregationProvider implements IModelProvider {
 			
 			//Throw an Exception if the requested aas does not exist
 			if(aas == null) {
-				throw new RuntimeException("Requested aasID '" + path + "' does not exist.");
+				throw new ResourceNotFoundException("Requested aasID '" + path + "' does not exist.");
 			}
 			return aas;
 		}
@@ -109,16 +114,16 @@ public class AASAggregationProvider implements IModelProvider {
 			ModelUrn identifier = new ModelUrn(path);
 			
 			if(!aas.getIdentification().getId().equals(path)) {
-				throw new RuntimeException("Given aasID and given AAS do not match");
+				throw new MalformedRequestException("Given aasID and given AAS do not match");
 			}
 			
 			if(aggregator.getAAS(identifier) == null) {
-				throw new RuntimeException("Can not update non existing value '" + path + "'. Try create instead.");
+				throw new ResourceAlreadyExistsException("Can not update non existing value '" + path + "'. Try create instead.");
 			}
 
 			aggregator.updateAAS(aas);
 		} else {
-			throw new RuntimeException("Set with empty path is not supported by aggregator");
+			throw new MalformedRequestException("Set with empty path is not supported by aggregator");
 		}
 	}
 
@@ -132,12 +137,12 @@ public class AASAggregationProvider implements IModelProvider {
 		if (path.isEmpty()) { // Creating new entry
 			
 			if(aggregator.getAAS(aas.getIdentification()) != null) {
-				throw new RuntimeException("Value '" + path + "' to be created already exists. Try update instead.");
+				throw new ResourceAlreadyExistsException("Value '" + path + "' to be created already exists. Try update instead.");
 			}
 			
 			aggregator.createAAS(aas);
 		} else {
-			throw new RuntimeException("Create was called with an unsupported path: " + path);
+			throw new MalformedRequestException("Create was called with an unsupported path: " + path);
 		}
 		
 	}
@@ -153,23 +158,23 @@ public class AASAggregationProvider implements IModelProvider {
 			IIdentifier identifier = new ModelUrn(path);
 			
 			if(aggregator.getAAS(identifier) == null) {
-				throw new RuntimeException("Value '" + path + "' to be deleted does not exists.");
+				throw new ResourceNotFoundException("Value '" + path + "' to be deleted does not exists.");
 			}
 			
 			aggregator.deleteAAS(identifier);
 		} else {
-			throw new RuntimeException("Delete with empty path is not supported by registry");
+			throw new MalformedRequestException("Delete with empty path is not supported by registry");
 		}
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws Exception {
-		throw new RuntimeException("DeleteValue with parameter not supported by aggregator");
+		throw new MalformedRequestException("DeleteValue with parameter not supported by aggregator");
 	}
 
 	@Override
 	public Object invokeOperation(String path, Object... parameter) throws Exception {
-		throw new RuntimeException("Invoke not supported by aggregator");
+		throw new MalformedRequestException("Invoke not supported by aggregator");
 	}
 	
 }

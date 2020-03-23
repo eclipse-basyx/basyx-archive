@@ -3,13 +3,13 @@ package org.eclipse.basyx.vab.protocol.http.server;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.basyx.vab.coder.json.provider.JSONProvider;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -91,9 +91,22 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		// Setup HTML response header
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-
-		// Process get request
-		providerBackend.processBaSysGet(path, resp.getWriter());
+		
+		resp.setStatus(200);
+		
+		PrintWriter responseWriter = resp.getWriter();
+		
+		try {
+			// Process get request
+			providerBackend.processBaSysGet(path, responseWriter);
+			responseWriter.flush();
+		} catch(ProviderException e) {
+			int httpCode = ExceptionToHTTPCodeMapper.mapException(e);
+			resp.setStatus(httpCode);
+			responseWriter.flush();
+			logger.error("Exception in HTTP-GET. Response-code: " + httpCode, e);
+		}
+		
 	}
 
 	
@@ -106,7 +119,19 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		String serValue = extractSerializedValue(req);
 		logger.trace("DoPut: {}", serValue);
 		
-		providerBackend.processBaSysSet(path, serValue.toString(), resp.getWriter());
+		resp.setStatus(200);
+		
+		PrintWriter responseWriter = resp.getWriter();
+		
+		try {
+			providerBackend.processBaSysSet(path, serValue.toString(), responseWriter);
+			responseWriter.flush();
+		} catch(ProviderException e) {
+			int httpCode = ExceptionToHTTPCodeMapper.mapException(e);
+			resp.setStatus(httpCode);
+			responseWriter.flush();
+			logger.error("Exception in HTTP-PUT. Response-code: " + httpCode, e);
+		}
 	}
 
 	
@@ -123,16 +148,35 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		logger.trace("DoPost: {}", serValue);
 		
 		// Setup HTML response header
+		resp.setStatus(201);
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
+		
+		PrintWriter responseWriter = resp.getWriter();
 
 		// Check if request is for property creation or operation invoke
 		if (VABPathTools.isOperationPath(path)) {
 			// Invoke BaSys VAB 'invoke' primitive
-			providerBackend.processBaSysInvoke(path, serValue, resp.getWriter());
+			try {
+				providerBackend.processBaSysInvoke(path, serValue, responseWriter);
+				responseWriter.flush();
+			} catch(ProviderException e) {
+				int httpCode = ExceptionToHTTPCodeMapper.mapException(e);
+				resp.setStatus(httpCode);
+				responseWriter.flush();
+				logger.error("Exception in HTTP-POST. Response-code: " + httpCode, e);
+			}
 		} else {
 			// Invoke the BaSys 'create' primitive
-			providerBackend.processBaSysCreate(path, serValue, resp.getWriter());
+			try {
+				providerBackend.processBaSysCreate(path, serValue, responseWriter);
+				responseWriter.flush();
+			} catch(ProviderException e) {
+				int httpCode = ExceptionToHTTPCodeMapper.mapException(e);
+				resp.setStatus(httpCode);
+				responseWriter.flush();
+				logger.error("Exception in HTTP-POST. Response-code: " + httpCode, e);
+			}
 		}
 	}
 
@@ -147,7 +191,19 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		String serValue = extractSerializedValue(req);
 		logger.trace("DoPatch: {}", serValue);
 		
-		providerBackend.processBaSysDelete(path, serValue, resp.getWriter());
+		resp.setStatus(200);
+		
+		PrintWriter responseWriter = resp.getWriter();
+		
+		try {
+			providerBackend.processBaSysDelete(path, serValue, responseWriter);
+			responseWriter.flush();
+		} catch(ProviderException e) {
+			int httpCode = ExceptionToHTTPCodeMapper.mapException(e);
+			resp.setStatus(httpCode);
+			responseWriter.flush();
+			logger.error("Exception in HTTP-PATCH. Response-code: " + httpCode, e);
+		}
 	}
 
 	
@@ -161,7 +217,19 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		// No parameter to read! Provide serialized null
 		String nullParam = "";
 
-		providerBackend.processBaSysDelete(path, nullParam, resp.getWriter());
+		resp.setStatus(200);
+		
+		PrintWriter responseWriter = resp.getWriter();
+		
+		try {
+			providerBackend.processBaSysDelete(path, nullParam, responseWriter);
+			responseWriter.flush();
+		} catch(ProviderException e) {
+			int httpCode = ExceptionToHTTPCodeMapper.mapException(e);
+			resp.setStatus(httpCode);
+			responseWriter.flush();
+			logger.error("Exception in HTTP-DELETE. Response-code: " + httpCode, e);
+		}
 	}
 
 	
