@@ -21,8 +21,6 @@ protected:
 
   void TearDown() override
   {
-    auto map = qualifier.getMap().Get<basyx::object::object_map_t>();
-    ASSERT_EQ(map.at(ModelType::Path::Name).GetStringContent(), std::string(IQualifier::Path::Modeltype));
   }
 };
 

@@ -13,16 +13,17 @@ namespace basyx {
 namespace submodel {
 
 
-  class DataSpecificationContent
+class DataSpecificationContent
   : public IDataSpecificationContent
   , public virtual vab::ElementMap  
 {
 public:
-  ~DataSpecificationContent() = default;
+	using vab::ElementMap::ElementMap;
 
-  DataSpecificationContent() = default;
-  DataSpecificationContent(basyx::object obj);
-  DataSpecificationContent(const IDataSpecificationContent & other);
+	DataSpecificationContent() = default;
+	DataSpecificationContent(const IDataSpecificationContent & other);
+
+	~DataSpecificationContent() = default;
 };
 
 }

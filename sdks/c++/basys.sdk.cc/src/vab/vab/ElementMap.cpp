@@ -14,12 +14,8 @@ ElementMap::ElementMap()
 {}
 
 ElementMap::ElementMap(basyx::object object)
-  : map(basyx::object::make_null())
+  : map(object)
 {
-  if ( object.InstanceOf<basyx::object::object_map_t>() )
-  {
-    map = object;
-  };
 }
 
 ElementMap::ElementMap(const ElementMap & other) :

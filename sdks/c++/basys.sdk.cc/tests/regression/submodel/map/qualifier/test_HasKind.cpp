@@ -17,13 +17,13 @@ protected:
   {}
 };
 
-TEST_F(HasKindTest, TestConstructorKindNotSpecified)
+TEST_F(HasKindTest, TestConstructor)
 {
   HasKind hasKind;
   
   auto map = hasKind.getMap().Get<basyx::object::object_map_t>();
 
-  ASSERT_EQ(map.at(IHasKind::Path::Kind).GetStringContent(), util::to_string(Kind::NotSpecified));
+  ASSERT_EQ(map.at(IHasKind::Path::Kind).GetStringContent(), util::to_string(Kind::Instance));
 }
 
 TEST_F(HasKindTest, TestConstructorKindSpecified)

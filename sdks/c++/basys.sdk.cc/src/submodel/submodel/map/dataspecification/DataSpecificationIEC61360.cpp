@@ -6,33 +6,43 @@
 
 #include <BaSyx/submodel/map/dataspecification/DataSpecificationIEC61360.h>
 #include <BaSyx/submodel/map/reference/Reference.h>
+#include <BaSyx/submodel/map/submodelelement/langstring/LangStringSet.h>
 
 namespace basyx {
 namespace submodel {
 
-std::string DataSpecificationIEC61360::getPreferredName() const
+DataSpecificationIEC61360::DataSpecificationIEC61360()
 {
-  return this->map.getProperty(IDataSpecificationIEC61360::Path::PreferredName).GetStringContent();
+	this->map.insertKey(IDataSpecificationIEC61360::Path::PreferredName, LangStringSet().getMap());
+	this->map.insertKey(IDataSpecificationIEC61360::Path::ShortName, LangStringSet().getMap());
+	this->map.insertKey(IDataSpecificationIEC61360::Path::Definition, LangStringSet().getMap());
 }
 
-std::string DataSpecificationIEC61360::getShortName() const
+std::shared_ptr<ILangStringSet> DataSpecificationIEC61360::PreferredName()
 {
-  return this->map.getProperty(IDataSpecificationIEC61360::Path::ShortName).GetStringContent();
+	auto langStringObj = this->map.getProperty(IDataSpecificationIEC61360::Path::PreferredName);
+	return std::make_shared<LangStringSet>(langStringObj);
+}
+
+std::shared_ptr<ILangStringSet> DataSpecificationIEC61360::ShortName()
+{
+	auto langStringObj = this->map.getProperty(IDataSpecificationIEC61360::Path::ShortName);
+	return std::make_shared<LangStringSet>(langStringObj);
 }
 
 std::string DataSpecificationIEC61360::getUnit() const
 {
-  return this->map.getProperty(IDataSpecificationIEC61360::Path::Unit).GetStringContent();
+	return this->map.getProperty(IDataSpecificationIEC61360::Path::Unit).GetStringContent();
 }
 
 std::shared_ptr<submodel::IReference> DataSpecificationIEC61360::getUnitId() const
 {
-  return std::make_shared<submodel::Reference>(this->map.getProperty(IDataSpecificationIEC61360::Path::UnitId));
+	return std::make_shared<submodel::Reference>(this->map.getProperty(IDataSpecificationIEC61360::Path::UnitId));
 }
 
 std::string DataSpecificationIEC61360::getSourceOfDefinition() const
 {
-  return this->map.getProperty(IDataSpecificationIEC61360::Path::SourceOfDefinition).GetStringContent();
+	return this->map.getProperty(IDataSpecificationIEC61360::Path::SourceOfDefinition).GetStringContent();
 }
 
 DataTypeIEC61360 DataSpecificationIEC61360::getDataType() const
@@ -41,9 +51,10 @@ DataTypeIEC61360 DataSpecificationIEC61360::getDataType() const
 	return util::from_string<DataTypeIEC61360>(dataTypeStr);
 }
 
-std::string DataSpecificationIEC61360::getDefinition() const
+std::shared_ptr<ILangStringSet> DataSpecificationIEC61360::Definition()
 {
-  return this->map.getProperty(IDataSpecificationIEC61360::Path::Definition).GetStringContent();
+	auto langStringObj = this->map.getProperty(IDataSpecificationIEC61360::Path::Definition);
+	return std::make_shared<LangStringSet>(langStringObj);
 }
 
 std::string DataSpecificationIEC61360::getValueFormat() const
@@ -66,16 +77,6 @@ LevelType DataSpecificationIEC61360::getLevelType() const
   return util::from_string<LevelType>(this->map.getProperty(IDataSpecificationIEC61360::Path::LevelType).GetStringContent());
 }
 
-void DataSpecificationIEC61360::setPreferredName(const std::string & preferredName)
-{
-  this->map.insertKey(IDataSpecificationIEC61360::Path::PreferredName, preferredName);
-}
-
-void DataSpecificationIEC61360::setShortName(const std::string & shortName)
-{
-  this->map.insertKey(IDataSpecificationIEC61360::Path::ShortName, shortName);
-}
-
 void DataSpecificationIEC61360::setUnit(const std::string & unit)
 {
   this->map.insertKey(IDataSpecificationIEC61360::Path::Unit, unit);
@@ -94,11 +95,6 @@ void DataSpecificationIEC61360::setSourceOfDefinition(const std::string & source
 void DataSpecificationIEC61360::setDataType(const std::string & dataType)
 {
   this->map.insertKey(IDataSpecificationIEC61360::Path::DataType, dataType);
-}
-
-void DataSpecificationIEC61360::setDefinition(const std::string & definition)
-{
-  this->map.insertKey(IDataSpecificationIEC61360::Path::Definition, definition);
 }
 
 void DataSpecificationIEC61360::setValueFormat(const std::string & valueFormat)
