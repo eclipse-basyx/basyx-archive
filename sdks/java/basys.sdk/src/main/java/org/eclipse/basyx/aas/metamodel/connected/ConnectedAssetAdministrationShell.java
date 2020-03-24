@@ -169,4 +169,10 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	public Set<IReference> getSubmodelReferences() {
 		return ReferenceHelper.transform((Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.SUBMODELS));
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public IReference getAssetReference() {
+		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(AssetAdministrationShell.ASSETREF));
+	}
 }

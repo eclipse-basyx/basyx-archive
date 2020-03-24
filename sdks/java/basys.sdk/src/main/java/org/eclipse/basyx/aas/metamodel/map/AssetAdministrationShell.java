@@ -52,6 +52,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public static final String SECURITY = "security";
 	public static final String DERIVEDFROM = "derivedFrom";
 	public static final String ASSET = "asset";
+	public static final String ASSETREF = "assetRef"; // Currently not standard conforming
 	public static final String SUBMODELS = "submodels"; // Used for storing keys to conform to the standard
 	public static final String SUBMODELDESCRIPTORS = "submodelDescriptors";
 	public static final String VIEWS = "views";
@@ -189,6 +190,16 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	@Override
 	public IAsset getAsset() {
 		return Asset.createAsFacade((Map<String, Object>) get(AssetAdministrationShell.ASSET));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public IReference getAssetReference() {
+		return Reference.createAsFacade((Map<String, Object>) get(ASSETREF));
+	}
+
+	public void setAssetReference(Reference ref) {
+		put(ASSETREF, ref);
 	}
 
 	@SuppressWarnings("unchecked")
