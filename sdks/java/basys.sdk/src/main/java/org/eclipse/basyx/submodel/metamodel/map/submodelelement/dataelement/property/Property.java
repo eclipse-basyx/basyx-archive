@@ -2,7 +2,6 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.pro
 
 import java.util.Map;
 
-import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
@@ -10,7 +9,6 @@ import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
@@ -109,9 +107,7 @@ public class Property extends AbstractProperty implements ISingleProperty {
 	 *            the description to refer
 	 */
 	public void addConceptDescription(IConceptDescription description) {
-		IIdentifier id = description.getIdentification();
-		Key key = new Key(KeyElements.CONCEPTDESCRIPTION, true, id.getId(), id.getIdType());
-		Reference ref = new Reference(key);
+		Reference ref = new Reference(description, KeyElements.CONCEPTDESCRIPTION, true);
 		setSemanticID(ref);
 	}
 }

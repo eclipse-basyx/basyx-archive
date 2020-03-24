@@ -30,7 +30,6 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
 import org.eclipse.basyx.vab.model.VABModelMap;
@@ -316,7 +315,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 
 	private void addSubmodelReferences(SubmodelDescriptor descriptor) {
 		IIdentifier identifier = descriptor.getIdentifier();
-		Reference ref = new Reference(new Key(KeyElements.SUBMODEL, true, identifier.getId(), identifier.getIdType()));
+		Reference ref = new Reference(identifier, KeyElements.SUBMODEL, true);
 		addSubmodelReference(ref);
 	}
 

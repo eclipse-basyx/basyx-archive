@@ -5,8 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
@@ -28,6 +32,30 @@ public class Reference extends VABModelMap<Object> implements IReference {
 	 */
 	public Reference() {
 		setKeys(new ArrayList<IKey>());
+	}
+
+	/**
+	 * Constructs a reference based on an {@link IIdentifiable} and additional
+	 * information (see {@link Key#Key(KeyElements, boolean, String, KeyType)}).
+	 * 
+	 * @param identifiable
+	 * @param keyElement
+	 * @param local
+	 */
+	public Reference(IIdentifiable identifiable, KeyElements keyElement, boolean local) {
+		this(identifiable.getIdentification(), keyElement, local);
+	}
+
+	/**
+	 * Constructs a reference based on an {@link IIdentifier} and additional
+	 * information (see {@link Key#Key(KeyElements, boolean, String, KeyType)}).
+	 * 
+	 * @param identifiable
+	 * @param keyElement
+	 * @param local
+	 */
+	public Reference(IIdentifier identifier, KeyElements keyElement, boolean local) {
+		this(new Key(keyElement, local, identifier.getId(), identifier.getIdType()));
 	}
 
 	/**
