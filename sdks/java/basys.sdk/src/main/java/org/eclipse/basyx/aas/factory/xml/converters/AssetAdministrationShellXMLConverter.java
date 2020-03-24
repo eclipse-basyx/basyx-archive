@@ -12,7 +12,6 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.HasDataSpecificationXMLConverter;
@@ -66,7 +65,7 @@ public class AssetAdministrationShellXMLConverter {
 			Set<IConceptDictionary> conceptDictionary = parseConceptDictionaries(xmlAAS);
 			
 			Map<String, Object> xmlAssetRef = (Map<String, Object>) xmlAAS.get(ASSET_REF);
-			Asset assetRef =  new Asset(ReferenceXMLConverter.parseReference(xmlAssetRef));
+			Reference assetRef = ReferenceXMLConverter.parseReference(xmlAssetRef);
 			
 			//FIXME DataSpecificationIEC61360 has no equivalent in AAS Object
 			/*Map<String, Object> xmlEmbeddedDataSpec = (Map<String, Object>) xmlAAS.get(EMBEDDED_DATA_SPECIFICATION);
@@ -81,7 +80,7 @@ public class AssetAdministrationShellXMLConverter {
 			
 			adminShell.setViews(views);
 			adminShell.setConceptDictionary(conceptDictionary);
-			adminShell.setAsset(assetRef);
+			adminShell.setAssetReference(assetRef);
 			
 			Set<IReference> submodelRefs = parseSubmodelRefs(xmlAAS);
 			adminShell.setSubmodelReferences(submodelRefs);
