@@ -219,9 +219,7 @@ public class AssetAdministrationShellXMLConverter {
 		IReference assetRef = aas.getAsset().getAssetIdentificationModel();
 		if(assetRef!=null) {
 			Element assetrefRoot = document.createElement(ASSET_REF);
-			HashSet<IReference> set = new HashSet<IReference>();
-			set.add(assetRef);
-			assetrefRoot.appendChild(ReferenceXMLConverter.buildReferencesXML(document, set)); 
+			assetrefRoot.appendChild(ReferenceXMLConverter.buildReferenceXML(document, assetRef));
 			root.appendChild(assetrefRoot);
 		}
 	}
@@ -240,9 +238,12 @@ public class AssetAdministrationShellXMLConverter {
 		
 		if (submodelRef != null && submodelRef.size() > 0) {
 			Element submodelRefsRoot = document.createElement(SUBMODEL_REFS);
-			Element submodelRefRoot = document.createElement(SUBMODEL_REF);
-			submodelRefsRoot.appendChild(submodelRefRoot);
-			submodelRefRoot.appendChild(ReferenceXMLConverter.buildReferencesXML(document, submodelRef)); 
+			for (IReference ref : submodelRef) {
+				Element submodelRefRoot = document.createElement(SUBMODEL_REF);
+				submodelRefsRoot.appendChild(submodelRefRoot);
+				submodelRefRoot.appendChild(ReferenceXMLConverter.buildReferenceXML(document, ref));
+			}
+
 			root.appendChild(submodelRefsRoot);
 		}
 	}

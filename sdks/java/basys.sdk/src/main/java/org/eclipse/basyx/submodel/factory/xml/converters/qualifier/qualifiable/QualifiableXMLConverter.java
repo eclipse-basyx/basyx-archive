@@ -228,10 +228,8 @@ public class QualifiableXMLConverter {
 		
 		Element qualifierValueId = document.createElement(VALUE_ID);
 		qualifierRoot.appendChild(qualifierValueId);
-		HashSet<IReference> set = new HashSet<IReference>();
-		set.add(qualId);
 		 
-		Element keysElement = ReferenceXMLConverter.buildReferencesXML(document, set);
+		Element keysElement = ReferenceXMLConverter.buildReferenceXML(document, qualId);
 		if(keysElement != null) {
 			qualifierValueId.appendChild(keysElement);
 		}
