@@ -59,6 +59,7 @@ public class Property extends AbstractProperty implements ISingleProperty {
 	 *            String, but does not make sense in this context !!</b>
 	 */
 	public Property(Object value) {
+		this();
 		// Put attributes
 		put(Property.VALUEID, null);
 		set(value);

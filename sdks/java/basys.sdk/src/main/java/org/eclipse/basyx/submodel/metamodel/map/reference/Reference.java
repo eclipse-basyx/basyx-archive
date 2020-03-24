@@ -87,4 +87,33 @@ public class Reference extends VABModelMap<Object> implements IReference {
 		}
 		put(Reference.KEY, copy);
 	}
+
+	@Override
+	public int hashCode() {
+		List<IKey> keys = getKeys();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((keys == null) ? 0 : keys.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		List<IKey> keys = getKeys();
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Reference other = (Reference) obj;
+		if (keys == null) {
+			if (other.getKeys() != null)
+				return false;
+		} else if (!keys.equals(other.getKeys()))
+			return false;
+		return true;
+	}
+
+
 }

@@ -299,9 +299,18 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		put(SUBMODELS, references);
 	}
 
+	public void addSubmodelReference(IReference reference) {
+		getSubmodelReferencesAsRawSet().add(reference);
+	}
+
 	private void addSubmodelReferences(SubmodelDescriptor descriptor) {
 		IIdentifier identifier = descriptor.getIdentifier();
 		Reference ref = new Reference(new Key(KeyElements.SUBMODEL, true, identifier.getId(), identifier.getIdType()));
-		getSubmodelReferences().add(ref);
+		addSubmodelReference(ref);
+	}
+
+	@SuppressWarnings("unchecked")
+	private Set<Object> getSubmodelReferencesAsRawSet() {
+		return ((Set<Object>) get(SUBMODELS));
 	}
 }

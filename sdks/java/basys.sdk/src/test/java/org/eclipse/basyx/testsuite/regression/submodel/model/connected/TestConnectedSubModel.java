@@ -7,11 +7,16 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
@@ -33,6 +38,8 @@ public class TestConnectedSubModel {
 	private final static String PROP = "prop1";
 	private final static String ID = "TestId";
 
+	private final static Reference testSemanticIdRef = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "testVal", IdentifierType.CUSTOM));
+
 	ConnectedSubModel submodel;
 
 	@Before
@@ -52,6 +59,7 @@ public class TestConnectedSubModel {
 		sm.addSubModelElement(propertyMeta);
 		sm.addSubModelElement(op);
 		sm.setIdShort(ID);
+		sm.setSemanticId(testSemanticIdRef);
 
 		SubModelProvider provider = new SubModelProvider(new VABLambdaProvider(sm));
 
@@ -140,5 +148,14 @@ public class TestConnectedSubModel {
 		IOperation loadedOp = map.get(operation.getIdShort());
 		assertNotNull(loadedOp);
 		assertEquals(operation.getIdShort(), loadedOp.getIdShort());
+	}
+
+	/**
+	 * Tests if the semantic Id can be retrieved correctly
+	 */
+	@Test
+	public void semanticIdRetrievalTest() {
+		IReference ref = submodel.getSemanticId();
+		assertEquals(testSemanticIdRef, ref);
 	}
 }
