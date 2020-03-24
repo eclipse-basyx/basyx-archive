@@ -25,8 +25,6 @@ protected:
 
 	void TearDown() override
 	{
-		auto map = op_var.getMap();
-		basyx::assertions::AssertIsModelType(map, IOperationVariable::Path::ModelType);
 	}
 };
 

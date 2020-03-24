@@ -15,6 +15,6 @@ basyx::submodel::ModelType::ModelType()
 basyx::submodel::ModelType::ModelType(const std::string & type)
 	: vab::ElementMap{}
 {
-	this->map.insertKey(Path::Name, type);
 	this->map.insertKey(Path::ModelType, basyx::object::make_map());
+	this->map.getProperty(Path::ModelType).insertKey(Path::Name, type);
 };

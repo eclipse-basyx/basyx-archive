@@ -13,6 +13,8 @@
 
 #include <BaSyx/submodel/api/reference/IReference.h>
 
+#include <BaSyx/submodel/api/submodelelement/langstring/ILangStringSet.h>
+
 #include <BaSyx/shared/object.h>
 
 #include <string>
@@ -43,13 +45,14 @@ struct Path
 public:
   virtual ~IDataSpecificationIEC61360() = default;
 
-  virtual std::string getPreferredName() const = 0;
-  virtual std::string getShortName() const = 0;
+  virtual std::shared_ptr<ILangStringSet> PreferredName() = 0;
+  virtual std::shared_ptr<ILangStringSet> ShortName() = 0;
+  virtual std::shared_ptr<ILangStringSet> Definition() = 0;
+
   virtual std::string getUnit() const = 0;
   virtual std::shared_ptr<IReference> getUnitId() const = 0;
   virtual std::string getSourceOfDefinition() const = 0;
   virtual DataTypeIEC61360 getDataType() const = 0;
-  virtual std::string getDefinition() const = 0;
   virtual std::string getValueFormat() const = 0;
   virtual basyx::object getValueList() const = 0;
   virtual std::shared_ptr<submodel::IReference> getValueId() const = 0;

@@ -20,11 +20,11 @@ class HasKind :
 {
 public:
 	// constructors
-	HasKind(Kind kind = Kind::NotSpecified);
+	HasKind(Kind kind = Kind::Instance);
 	HasKind(basyx::object object);
   HasKind(const IHasKind & other);
 
-	void Init(Kind kind = Kind::NotSpecified);
+	void Init(Kind kind = Kind::Instance);
 
 	~HasKind() = default;
 

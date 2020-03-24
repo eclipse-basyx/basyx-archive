@@ -21,9 +21,6 @@ protected:
 
   void TearDown() override
   {
-    auto map = formula.getMap().Get<basyx::object::object_map_t>();
-    ASSERT_EQ(map.at(ModelType::Path::Name).GetStringContent(), std::string(IFormula::Path::Modeltype));
-    ASSERT_NO_THROW(map.at(IFormula::Path::Dependson).Get<basyx::object::object_list_t>());
   }
 };
 
