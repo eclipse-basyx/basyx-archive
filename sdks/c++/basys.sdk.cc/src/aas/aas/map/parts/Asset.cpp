@@ -4,9 +4,9 @@
  *      Author: wendel
  */
 
-#include "Asset.h"
+#include <BaSyx/aas/map/parts/Asset.h>
 
-#include "submodel/map/reference/Reference.h"
+#include <BaSyx/submodel/map/reference/Reference.h>
 
 namespace basyx {
 namespace aas {
@@ -36,12 +36,12 @@ std::shared_ptr<submodel::IReference> Asset::getBillOfMaterial() const
 
 void Asset::setAssetIdentificationModel(const std::shared_ptr<submodel::IReference>& submodel)
 {
-  this->map.insertKey(IAsset::Path::AssetIdentificationModel, submodel::Reference(submodel).getMap());
+  this->map.insertKey(IAsset::Path::AssetIdentificationModel, submodel::Reference(*submodel).getMap());
 }
 
 void Asset::setBillOfMaterial(const std::shared_ptr<submodel::IReference>& submodel)
 {
-  this->map.insertKey(IAsset::Path::BillOfMaterial, submodel::Reference(submodel).getMap());
+  this->map.insertKey(IAsset::Path::BillOfMaterial, submodel::Reference(*submodel).getMap());
 }
 
 }

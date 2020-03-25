@@ -8,10 +8,10 @@
 #define BASYX_METAMODEL_IAsset_H_
 
 
-#include "submodel/api/qualifier/IHasDataSpecification.h"
-#include "submodel/api/qualifier/IHasKind.h"
-#include "submodel/api/qualifier/IIdentifiable.h"
-#include "submodel/api/reference/IReference.h"
+#include <BaSyx/submodel/api/qualifier/IHasDataSpecification.h>
+#include <BaSyx/submodel/api/qualifier/IHasKind.h>
+#include <BaSyx/submodel/api/qualifier/IIdentifiable.h>
+#include <BaSyx/submodel/api/reference/IReference.h>
 
 namespace basyx {
 namespace aas {

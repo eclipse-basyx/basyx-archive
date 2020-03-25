@@ -7,12 +7,12 @@
 #ifndef AAS_IMPL_METAMODEL_HASHMAP_PARTS_ASSET_H_
 #define AAS_IMPL_METAMODEL_HASHMAP_PARTS_ASSET_H_
 
-#include "aas/api/parts/IAsset.h"
+#include <BaSyx/aas/api/parts/IAsset.h>
 
-#include "submodel/map/qualifier/HasDataSpecification.h"
-#include "submodel/map/qualifier/HasKind.h"
-#include "submodel/map/qualifier/Identifiable.h"
-#include "submodel/map/modeltype/ModelType.h"
+#include <BaSyx/submodel/map/qualifier/HasDataSpecification.h>
+#include <BaSyx/submodel/map/qualifier/HasKind.h>
+#include <BaSyx/submodel/map/qualifier/Identifiable.h>
+#include <BaSyx/submodel/map/modeltype/ModelType.h>
 
 namespace basyx {
 namespace aas {

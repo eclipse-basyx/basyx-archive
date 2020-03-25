@@ -108,7 +108,6 @@ endif()
 ###############################################
 include_directories("${BASYX_INCLUDE_DIR}")
 
-#add_subdirectory(src/aas)
 add_subdirectory(src/abstraction)
 add_subdirectory(src/logging)
 add_subdirectory(src/shared)
@@ -116,6 +115,7 @@ add_subdirectory(src/utility)
 add_subdirectory(src/vab)
 add_subdirectory(src/server)
 add_subdirectory(src/submodel)
+add_subdirectory(src/aas)
 
 ###############################################
 ###           Test Directory                ###

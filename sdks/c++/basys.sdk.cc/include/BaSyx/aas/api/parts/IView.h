@@ -8,12 +8,10 @@
 #define BASYX_METAMODEL_IView_H_
 
 
-#include "submodel/api/qualifier/IHasSemantics.h"
-#include "submodel/api/qualifier/IHasDataSpecification.h"
-#include "submodel/api/qualifier/IReferable.h"
-#include "submodel/api/reference/IReference.h"
-
-#include <vector>
+#include <BaSyx/submodel/api/qualifier/IHasSemantics.h>
+#include <BaSyx/submodel/api/qualifier/IHasDataSpecification.h>
+#include <BaSyx/submodel/api/qualifier/IReferable.h>
+#include <BaSyx/submodel/api/reference/IReference.h>
 
 namespace basyx {
 namespace aas {

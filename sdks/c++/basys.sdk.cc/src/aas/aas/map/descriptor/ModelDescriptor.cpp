@@ -4,4 +4,4 @@
  *      Author: wendel
  */
 
-#include "ModelDescriptor.h"
+#include "BaSyx/aas/map/descriptor/ModelDescriptor.h"

@@ -4,9 +4,9 @@
  *      Author: wendel
  */
 
-#include "View.h"
+#include <BaSyx/aas/map/parts/View.h>
 
-#include "submodel/map/reference/Reference.h"
+#include <BaSyx/submodel/map/reference/Reference.h>
 
 using namespace basyx::submodel;
 

@@ -7,9 +7,10 @@
 #ifndef AAS_IMPL_METAMODEL_HASHMAP_PARTS_CONCEPTDICTIONARY_H_
 #define AAS_IMPL_METAMODEL_HASHMAP_PARTS_CONCEPTDICTIONARY_H_
 
-#include "aas/api/parts/IConceptDictionary.h"
-#include "aas/api/parts/IConceptDescription.h"
-#include "submodel/map/qualifier/Referable.h"
+#include <BaSyx/aas/api/parts/IConceptDictionary.h>
+
+#include <BaSyx/submodel/api/parts/IConceptDescription.h>
+#include <BaSyx/submodel/map/qualifier/Referable.h>
 
 namespace basyx {
 namespace aas {

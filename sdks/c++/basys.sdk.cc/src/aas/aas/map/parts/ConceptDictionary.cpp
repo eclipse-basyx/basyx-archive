@@ -4,9 +4,9 @@
  *      Author: wendel
  */
 
-#include "ConceptDictionary.h"
+#include <BaSyx/aas/map/parts/ConceptDictionary.h>
 
-#include "submodel/map/reference/Reference.h"
+#include <BaSyx/submodel/map/reference/Reference.h>
 
 using namespace basyx::submodel;
 

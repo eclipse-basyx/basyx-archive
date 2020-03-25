@@ -7,11 +7,11 @@
 #ifndef AAS_IASSETADMINISTRATIONSHELL_H_
 #define AAS_IASSETADMINISTRATIONSHELL_H_
 
-#include "submodel/api/qualifier/IHasDataSpecification.h"
-#include "submodel/api/qualifier/IIdentifiable.h"
-#include "submodel/api/qualifier/IReferable.h"
-#include "aas/api/security/ISecurity.h"
-#include "submodel/api/reference/IReference.h"
+#include <BaSyx/submodel/api/qualifier/IHasDataSpecification.h>
+#include <BaSyx/submodel/api/qualifier/IIdentifiable.h>
+#include <BaSyx/submodel/api/qualifier/IReferable.h>
+#include <BaSyx/aas/api/security/ISecurity.h>
+#include <BaSyx/submodel/api/reference/IReference.h>
 
 #include <memory>
 
