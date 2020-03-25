@@ -16,12 +16,26 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTyp
 {
     public delegate OperationResult MethodCalledHandler(IOperation operation, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments);
 
+    /// <summary>
+    /// An operation is a submodel element with input and output variables. 
+    /// </summary>
     public interface IOperation : ISubmodelElement
     {
+        /// <summary>
+        /// Input parameter of the operation.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "inputVariables")]
         IOperationVariableSet InputVariables { get; set; }
+
+        /// <summary>
+        /// Output parameter of the operation.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "outputVariables")]
         IOperationVariableSet OutputVariables { get; set; }
+
+        /// <summary>
+        ///  Parameter that is input and output of the operation. 
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "inoutputVariables")]
         IOperationVariableSet InOutputVariables { get; set; }
 

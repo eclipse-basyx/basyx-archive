@@ -126,7 +126,7 @@ namespace BaSyx.Utils.Network
                     }
                     else
                     {
-                        logger.Warn($"Pinging {hostNameOrAddress} PingReply-Status: " + reply.Status.ToString());
+                        logger.Warn($"Pinging {hostNameOrAddress} PingReply-Status: " + Enum.GetName(typeof(IPStatus), reply.Status));
                         return false;
                     }
                 }

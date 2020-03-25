@@ -16,8 +16,15 @@ using BaSyx.Models.Core.Common;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Semantics
 {
+    /// <summary>
+    /// The semantics of a property or other elements that may have a semantic description is defined by a concept description. 
+    /// The description of the concept should follow a standardized schema (realized as data specification template). 
+    /// </summary>
     public interface IConceptDescription : IIdentifiable, IHasDataSpecification, IModelElement
     {
+        /// <summary>
+        /// Global reference to an external definition the concept is compatible to or was derived from.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "isCaseOf")]
         IEnumerable<IReference> IsCaseOf { get; }
     }

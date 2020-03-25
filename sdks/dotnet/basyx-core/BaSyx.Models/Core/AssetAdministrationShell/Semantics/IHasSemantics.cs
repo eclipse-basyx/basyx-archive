@@ -13,8 +13,15 @@ using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Semantics
 {
+    /// <summary>
+    /// Element that can have a semantic definition. 
+    /// </summary>
     public interface IHasSemantics
     {
+        /// <summary>
+        /// Identifier of the semantic definition of the element. It is called semantic id of the element.
+        /// The semantic id may either reference an external global id or it may reference a referable model element of kind = Template that defines the semantics of the element.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "semanticId")]
         IReference SemanticId { get; }
     }

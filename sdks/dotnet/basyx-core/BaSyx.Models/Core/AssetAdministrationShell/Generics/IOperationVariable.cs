@@ -13,8 +13,14 @@ using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
 {
+    /// <summary>
+    /// An operation variable is a submodel element that is used as input or output variable of an operation. 
+    /// </summary>
     public interface IOperationVariable : IModelElement
     {
+        /// <summary>
+        /// Describes the needed argument for an operation via a submodel element of kind=Template.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "value")]
         ISubmodelElement Value { get; }
     }

@@ -14,8 +14,14 @@ using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
 {
+    /// <summary>
+    /// A basic event
+    /// </summary>
     public interface IBasicEvent : IEvent
     {
+        /// <summary>
+        /// Reference to the data or other elements that are being observed.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "observed")]
         IReference<IReferable> Observed { get; set; }
     }

@@ -13,10 +13,18 @@ using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Semantics
 {
+    /// <summary>
+    /// Element that can be extended by using data specification templates. A data specification template defines the additional attributes an element may or shall have. 
+    /// The data specifications used are explicitly specified with their global id. 
+    /// </summary>
     public interface IHasDataSpecification
     {
         [IgnoreDataMember]
         IConceptDescription ConceptDescription { get; }
+
+        /// <summary>
+        /// Global reference to the data specification template used by the element. 
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "embeddedDataSpecifications")]
         IEnumerable<IEmbeddedDataSpecification> EmbeddedDataSpecifications { get; }
     }

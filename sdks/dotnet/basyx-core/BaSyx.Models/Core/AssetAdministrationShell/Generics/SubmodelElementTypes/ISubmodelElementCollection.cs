@@ -13,11 +13,20 @@ using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
 {
+    /// <summary>
+    /// A submodel element collection is a set or list of submodel elements.
+    /// </summary>
     public interface ISubmodelElementCollection : ISubmodelElement
     {
+        /// <summary>
+        /// If allowDuplicates=true then it is allowed that the collection contains the same element several times. Default = false 
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "allowDuplicates")]
         bool AllowDuplicates { get; set; }
 
+        /// <summary>
+        /// If ordered=false then the elements in the property collection are not ordered. If ordered=true then the elements in the collection are ordered.Default = false 
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "ordered")]
         bool Ordered { get; set; }
 

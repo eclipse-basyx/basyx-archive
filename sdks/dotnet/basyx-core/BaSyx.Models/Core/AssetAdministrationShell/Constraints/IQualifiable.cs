@@ -13,8 +13,14 @@ using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Constraints
 {
+    /// <summary>
+    /// The value of a qualifiable element may be further qualified by one or more qualifiers or complex formulas. 
+    /// </summary>
     public interface IQualifiable
     {
+        /// <summary>
+        /// A constraint is used to further qualify an element. 
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "qualifiers")]
         List<IConstraint> Constraints { get; }
     }

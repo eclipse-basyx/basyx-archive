@@ -20,6 +20,9 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTyp
     public delegate TValue GetPropertyValueHandler<TValue>(IProperty property);
     public delegate void SetPropertyValueHandler<TValue>(IProperty property, TValue value);
 
+    /// <summary>
+    /// A property is a data element that has a single value. 
+    /// </summary>
     public interface IProperty : ISubmodelElement, IValue
     {
         [IgnoreDataMember]
@@ -27,6 +30,9 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTyp
         [IgnoreDataMember]
         SetPropertyValueHandler Set { get; }
 
+        /// <summary>
+        /// Reference to the global unqiue id of a coded value.  
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "valueId")]
         IReference ValueId { get; set; }
     }

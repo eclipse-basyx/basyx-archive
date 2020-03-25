@@ -15,8 +15,15 @@ using BaSyx.Models.Core.Common;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Semantics
 {
+    /// <summary>
+    /// A dictionary contains elements that can be reused. The concept dictionary contains concept descriptions. 
+    /// Typically a concept description dictionary of an AAS contains only concept descriptions of elements used within submodels of the AAS. 
+    /// </summary>
     public interface IConceptDictionary : IReferable, IModelElement
     {
+        /// <summary>
+        /// Concept description defines a concept.
+        /// </summary>
         List<IReference<IConceptDescription>> ConceptDescriptions { get; }       
     }
 }

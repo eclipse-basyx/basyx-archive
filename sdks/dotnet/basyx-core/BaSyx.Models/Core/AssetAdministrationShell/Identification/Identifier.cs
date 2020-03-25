@@ -15,14 +15,23 @@ using System.Xml.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
 {
+    /// <summary>
+    /// Used to uniquely identify an entity by using an identifier.
+    /// </summary>
     [DataContract]
     public class Identifier
     {
+        /// <summary>
+        /// Identifier of the element. Its type is defined in idType.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = true, Name = "id")]
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Include)]
         [XmlText]
         public string Id { get; set; }
 
+        /// <summary>
+        /// Type of the Identifierr, e.g. IRI, IRDI etc. The supported Identifier types are defined in the enumeration “IdentifierType”. 
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = true, Name = "idType")]
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Include)]
         [XmlAttribute("idType")]
@@ -47,7 +56,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
             public string ElementId { get; internal set; }
             public string InstanceNumber { get; internal set; }
 
-            public UniformResourceIdentifier(string organisation, string subUnit, string domainId, string version, string revision, string elementId, string instanceNumber) 
+            public UniformResourceIdentifier(string organisation, string subUnit, string domainId, string version, string revision, string elementId, string instanceNumber)
                 : base(ToUrn(organisation, subUnit, domainId, version, revision, elementId, instanceNumber), KeyType.IRI)
             {
                 Organisation = organisation;

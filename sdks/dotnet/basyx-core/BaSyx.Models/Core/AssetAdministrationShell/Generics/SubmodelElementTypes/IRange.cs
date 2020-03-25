@@ -13,13 +13,26 @@ using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
 {
+    /// <summary>
+    /// A range data element is a data element that defines a range with min and max
+    /// </summary>
     public interface IRange : ISubmodelElement
     {
+        /// <summary>
+        /// The minimum value of the range. If the min value is missing then the value is assumed to be negative infinite.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "min")]
         IValue Min { get; }
+
+        /// <summary>
+        /// The maximum value of the range. If the max value is missing then the value is assumed to be positive infinite.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "max")]
         IValue Max { get; }
 
+        /// <summary>
+        /// Data type of the min und max.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "valueType")]
         DataType ValueType { get; set; }
     }

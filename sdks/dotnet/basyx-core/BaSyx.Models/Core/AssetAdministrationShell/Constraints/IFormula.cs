@@ -14,8 +14,15 @@ using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Constraints
 {
+    /// <summary>
+    ///  A formula is used to describe constraints by a logical expression.
+    /// </summary>
     public interface IFormula : IConstraint
     {
+        /// <summary>
+        /// A formula may depend on referable or even external global elements that are used in the logical expression. 
+        ///The value of the referenced elements needs to be accessible so that it can be evaluated in the formula to true or false in the corresponding logical expression it is used in.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "dependsOn")]
         List<IReference> DependsOn { get; }
     }

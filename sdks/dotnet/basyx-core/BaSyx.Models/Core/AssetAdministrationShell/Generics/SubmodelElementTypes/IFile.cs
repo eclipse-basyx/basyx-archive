@@ -12,10 +12,20 @@ using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
 {
+    /// <summary>
+    /// A File is a data element that represents an address to a file. The value is an URI that can represent an absolute or relative path. 
+    /// </summary>
     public interface IFile : ISubmodelElement
     {
+        /// <summary>
+        /// Mime type of the content of the file. 
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "mimeType")]
         string MimeType { get; }
+
+        /// <summary>
+        /// Path and name of the referenced file (with file extension).  The path can be absolute or relative
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "value")]
         string Value { get; }
     }

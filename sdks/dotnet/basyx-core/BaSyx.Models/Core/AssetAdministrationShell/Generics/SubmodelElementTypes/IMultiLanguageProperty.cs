@@ -14,10 +14,20 @@ using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
 {
+    /// <summary>
+    /// A property is a data element that has a multi language value. 
+    /// </summary>
     public interface IMultiLanguageProperty : ISubmodelElement
     {
+        /// <summary>
+        /// The value of the property instance.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "valueId")]
         LangStringSet Value { get; }
+
+        /// <summary>
+        /// Reference to the global unqiue id of a coded value.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "valueId")]
         IReference ValueId { get; }
     }

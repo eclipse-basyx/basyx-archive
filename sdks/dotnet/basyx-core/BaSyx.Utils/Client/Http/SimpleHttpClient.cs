@@ -80,6 +80,19 @@ namespace BaSyx.Utils.Client.Http
             }
         }
 
+        protected virtual async Task<IResult<HttpResponseMessage>> SendRequestAsync(HttpRequestMessage message)
+        {
+            try
+            {
+                using(HttpResponseMessage response = await HttpClient.SendAsync(message).ConfigureAwait(false))
+                    return new Result<HttpResponseMessage>(true, response);
+            }
+            catch (Exception e)
+            {
+                return new Result<HttpResponseMessage>(e);
+            }
+        }
+
         protected virtual HttpRequestMessage CreateRequest(Uri uri, HttpMethod method)
         {
             return new HttpRequestMessage(method, uri);
@@ -128,7 +141,7 @@ namespace BaSyx.Utils.Client.Http
                 }
                 else
                 {
-                    messageList.Add(new Message(MessageType.Error, response.ReasonPhrase + "| " + responseString, ((int)response.StatusCode).ToString()));
+                    messageList.Add(new Message(MessageType.Error, response.ReasonPhrase + " | " + responseString, ((int)response.StatusCode).ToString()));
                     return new Result(false, messageList);
                 }
             }
@@ -162,7 +175,7 @@ namespace BaSyx.Utils.Client.Http
                 }
                 else
                 {
-                    messageList.Add(new Message(MessageType.Error, response.ReasonPhrase + "| " + responseString, ((int)response.StatusCode).ToString()));
+                    messageList.Add(new Message(MessageType.Error, response.ReasonPhrase + " | " + responseString, ((int)response.StatusCode).ToString()));
                     return new Result<T>(false, messageList);
                 }
             }

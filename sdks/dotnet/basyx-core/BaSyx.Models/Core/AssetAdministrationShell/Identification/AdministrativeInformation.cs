@@ -13,13 +13,22 @@ using System.Xml.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
 {
+    /// <summary>
+    /// Administrative metainformation for an element like version information. 
+    /// </summary>
     [DataContract]
     public class AdministrativeInformation
     {
+        /// <summary>
+        /// Version of the element. 
+        /// </summary>
         [DataMember(Name = "version")]
         [XmlElement("version")]
         public string Version { get; set; }
 
+        /// <summary>
+        /// Revision of the element. 
+        /// </summary>
         [DataMember(Name = "revision")]
         [XmlElement("revision")]
         public string Revision { get; set; }

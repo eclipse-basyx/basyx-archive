@@ -14,10 +14,20 @@ using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
 {
+    /// <summary>
+    /// A relationship element is used to define a relationship between two referable elements.
+    /// </summary>
     public interface IRelationshipElement : ISubmodelElement
     {
+        /// <summary>
+        /// First element in the relationship taking the role of the subject.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "first")]
         IReference<IReferable> First { get; }
+
+        /// <summary>
+        /// Second element in the relationship taking the role of the object. 
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "second")]
         IReference<IReferable> Second { get; }
     }

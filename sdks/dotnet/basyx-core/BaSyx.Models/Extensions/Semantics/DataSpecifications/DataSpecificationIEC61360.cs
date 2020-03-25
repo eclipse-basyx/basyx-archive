@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
-using System.Xml.Serialization;
 
 namespace BaSyx.Models.Extensions.Semantics.DataSpecifications
 {
@@ -35,7 +34,7 @@ namespace BaSyx.Models.Extensions.Semantics.DataSpecifications
     [DataContract]
     public class DataSpecificationIEC61360Content : IDataSpecificationContent
     {
-        [DataMember(EmitDefaultValue = false, IsRequired = false, Name ="dataType")]
+        [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "dataType")]
         public DataTypeIEC61360 DataType { get; set; }
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "definition")]
         public LangStringSet Definition { get; set; }
@@ -88,7 +87,7 @@ namespace BaSyx.Models.Extensions.Semantics.DataSpecifications
         [EnumMember(Value = "STRING")]
         STRING,
         [EnumMember(Value = "STRING_TRANSLATABLE")]
-        STRING_TRANSLATABLE,       
+        STRING_TRANSLATABLE,
         [EnumMember(Value = "INTEGER")]
         INTEGER,
         [EnumMember(Value = "INTEGER_MEASURE")]
@@ -115,11 +114,21 @@ namespace BaSyx.Models.Extensions.Semantics.DataSpecifications
         TIME_STAMP
     }
 
+    /// <summary>
+    /// A value reference pair within a value list. Each value has a global unique id defining its semantic.
+    /// </summary>
     [DataContract]
     public class ValueReferencePair
     {
+        /// <summary>
+        /// the value of the referenced concept definition of the value in valueId. 
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "value")]
         public object Value { get; set; }
+
+        /// <summary>
+        /// Global unique id of the value.
+        /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "valueId")]
         public IReference ValueId { get; set; }
     }

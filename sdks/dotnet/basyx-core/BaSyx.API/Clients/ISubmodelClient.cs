@@ -42,7 +42,7 @@ namespace BaSyx.API.Clients
 
         IResult DeleteOperation(string operationId);
 
-        IResult InvokeOperation(string operationId, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments, int timeout);
+        IResult InvokeOperation(string operationId, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments, int timeout);        
         #endregion
 
         #region Property - CRUD-Operations
