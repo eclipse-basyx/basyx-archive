@@ -1,6 +1,5 @@
 package org.eclipse.basyx.submodel.metamodel.connected;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.IElement;
@@ -18,11 +17,6 @@ public class ConnectedElement implements IElement {
 
 	private VABElementProxy proxy;
 
-	/*
-	 * Stores element meta-information if retrieved from c# sdk
-	 */
-	private HashMap<String, Object> localInformation = new HashMap<String, Object>();
-
 	public VABElementProxy getProxy() {
 		return proxy;
 	}
@@ -32,17 +26,6 @@ public class ConnectedElement implements IElement {
 		this.proxy = proxy;
 	}
 
-	protected void putLocal(String key, Object value) {
-		this.localInformation.put(key, value);
-	}
-
-	public void putAllLocal(Map<String, Object> opNode) {
-		this.localInformation.putAll(opNode);
-	}
-
-	protected Object getLocal(String key) {
-		return this.localInformation.get(key);
-	}
 
 	@SuppressWarnings("unchecked")
 	protected VABModelMap<Object> getElem() {
