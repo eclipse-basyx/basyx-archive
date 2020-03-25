@@ -3,16 +3,12 @@ package org.eclipse.basyx.submodel.metamodel.connected;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.basyx.submodel.metamodel.api.IElementContainer;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.facades.ConnectedVABElementContainerFacade;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.ConnectedPropertyFactory;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
@@ -33,14 +29,12 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  * @author rajashek
  *
  */
-public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements IElementContainer, ISubModel {
+public class ConnectedSubModel extends ConnectedVABElementContainerFacade implements ISubModel {
 
 	ConnectedPropertyFactory factory = new ConnectedPropertyFactory();
-	ConnectedVABElementContainerFacade facade;
 
 	public ConnectedSubModel(VABElementProxy proxy) {
 		super(proxy);
-		facade = new ConnectedVABElementContainerFacade(proxy);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -88,26 +82,6 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 	@Override
 	public IReference getParent() {
 		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(Referable.PARENT));
-	}
-
-	@Override
-	public void addSubModelElement(ISubmodelElement element) {
-		facade.addSubModelElement(element);
-	}
-
-	@Override
-	public Map<String, IDataElement> getDataElements() {
-		return facade.getDataElements();
-	}
-
-	@Override
-	public Map<String, IOperation> getOperations() {
-		return facade.getOperations();
-	}
-	
-	@Override
-	public Map<String, ISubmodelElement> getSubmodelElements() {
-		return facade.getSubmodelElements();
 	}
 	
 	@Override

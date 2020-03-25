@@ -22,6 +22,7 @@ public class TestXMLAAS extends XMLAASSuite {
 		config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
 
 		aasEndpoint = "http://" + config.getHostname() + ":" + config.getPort() + "/" + config.getContextPath() + "/" + aasShortId + "/aas";
+		smEndpoint = "http://" + config.getHostname() + ":" + config.getPort() + "/" + config.getContextPath() + "/" + aasShortId + "/aas/submodels/" + smShortId + "/submodel";
 		logger.info("AAS URL for servlet test: " + aasEndpoint);
 	}
 }

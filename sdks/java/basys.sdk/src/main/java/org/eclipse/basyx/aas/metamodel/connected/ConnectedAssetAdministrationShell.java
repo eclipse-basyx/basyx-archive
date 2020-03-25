@@ -101,7 +101,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<SubmodelDescriptor> getSubModelDescriptors() {
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.SUBMODELS);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.SUBMODELDESCRIPTORS);
 		return set.stream().map(x -> new SubmodelDescriptor(x)).collect(Collectors.toSet());
 	}
 
@@ -123,18 +123,16 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 		return set.stream().map(x -> ConceptDictionary.createAsFacade(x)).collect(Collectors.toSet());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, ISubModel> getSubModels() {
-
-		Set<Map<?, ?>> submodels = null;
 		Map<String, ISubModel> ret = new HashMap<>();
 
-		submodels = (Set<Map<?, ?>>) getProxy().getModelPropertyValue(AssetAdministrationShell.SUBMODELS);
-		for (Map<?, ?> submodelMap : submodels) {
-			String id = (String) submodelMap.get(Referable.IDSHORT);
+		Set<SubmodelDescriptor> submodelDescriptors = getSubModelDescriptors();
+		for (final SubmodelDescriptor submodelDescriptor : submodelDescriptors) {
+			String id = submodelDescriptor.getIdShort();
 			ret.put(id, new ConnectedSubModel(getProxy().getDeepProxy(AssetAdministrationShell.SUBMODELS + "/" + id)));
 		}
+
 		return ret;
 	}
 
