@@ -2,12 +2,11 @@ package org.eclipse.basyx.regression.xmlAAS;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Map;
-
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
@@ -30,9 +29,14 @@ public class XMLAASSuite {
 
 	protected static final String aasShortId = "aas1";
 	protected static final IIdentifier aasId = new ModelUrn("www.admin-shell.io/aas-sample/2/0");
-	protected static final String submodelShortId = "submodel1";
+	protected static final IIdentifier smId = new ModelUrn("http://www.zvei.de/demo/submodel/12345679");
+	protected static final String smShortId = "submodel1";
 
+	// Has to be individualized by each test inheriting from this suite
 	protected static String aasEndpoint;
+	protected static String smEndpoint;
+
+	private ConnectedAssetAdministrationShellManager manager;
 
 	/**
 	 * Before each test, a dummy registry is created and an AAS is added in the
@@ -40,14 +44,16 @@ public class XMLAASSuite {
 	 */
 	@Before
 	public void setUp() {
-		try {
-			// Create a dummy registry to test integration of XML AAS
-			registry = new InMemoryRegistry();
-			AASDescriptor descriptor = new AASDescriptor(aasShortId, aasId, aasEndpoint);
-			registry.register(descriptor);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// Create a dummy registry to test integration of XML AAS
+		registry = new InMemoryRegistry();
+		AASDescriptor descriptor = new AASDescriptor(aasShortId, aasId, aasEndpoint);
+		descriptor.addSubmodelDescriptor(new SubmodelDescriptor(smShortId, smId, smEndpoint));
+		registry.register(descriptor);
+
+		// Create a ConnectedAssetAdministrationShell using a
+		// ConnectedAssetAdministrationShellManager
+		IConnectorProvider connectorProvider = new HTTPConnectorProvider();
+		manager = new ConnectedAssetAdministrationShellManager(registry, connectorProvider);
 	}
 
 	@Test
@@ -58,25 +64,28 @@ public class XMLAASSuite {
 
 	@Test
 	public void testGetSingleSubmodel() throws Exception {
-		ConnectedAssetAdministrationShell connectedAssetAdministrationShell = getConnectedAssetAdministrationShell();
-		Map<String, ISubModel> submodels = connectedAssetAdministrationShell.getSubModels();
-		ISubModel subModel = submodels.get(submodelShortId);
-		assertEquals(submodelShortId, subModel.getIdShort());
+		ISubModel subModel = getConnectedSubmodel();
+		assertEquals(smShortId, subModel.getIdShort());
 	}
 
 	/**
-	 * Get connected Asset Administration Shell from the registry
+	 * Gets the connected Asset Administration Shell
 	 * 
 	 * @return connected AAS
 	 * @throws Exception
 	 */
 	private ConnectedAssetAdministrationShell getConnectedAssetAdministrationShell() throws Exception {
-		// Create a ConnectedAssetAdministrationShell using a
-		// ConnectedAssetAdministrationShellManager
-		IConnectorProvider connectorProvider = new HTTPConnectorProvider();
-		ConnectedAssetAdministrationShellManager manager = new ConnectedAssetAdministrationShellManager(registry, connectorProvider);
-
-		// return the connected AAS
 		return manager.retrieveAAS(aasId);
 	}
+
+	/**
+	 * Gets the connected Submodel
+	 * 
+	 * @return connected SM
+	 * @throws Exception
+	 */
+	private ISubModel getConnectedSubmodel() {
+		return manager.retrieveSubModel(aasId, smId);
+	}
+
 }

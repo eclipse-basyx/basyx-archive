@@ -1,6 +1,5 @@
 package org.eclipse.basyx.regression.xmlAAS;
 
-
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxDockerConfiguration;
 import org.junit.BeforeClass;
@@ -9,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 public class ITInXMLAAS extends XMLAASSuite {
 	private static Logger logger = LoggerFactory.getLogger(ITInXMLAAS.class);
-
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -25,8 +23,9 @@ public class ITInXMLAAS extends XMLAASSuite {
 		BaSyxDockerConfiguration dockerConfig = new BaSyxDockerConfiguration();
 		dockerConfig.loadFromResource(BaSyxDockerConfiguration.DEFAULT_CONFIG_PATH);
 
-		aasEndpoint = "http://localhost:" + dockerConfig.getHostPort() + contextConfig.getContextPath() + "/"
-				+ aasShortId + "/aas";
+		aasEndpoint = "http://localhost:" + dockerConfig.getHostPort() + contextConfig.getContextPath() + "/" + aasShortId + "/aas";
+		smEndpoint = "http://localhost:" + dockerConfig.getHostPort() + contextConfig.getContextPath() + "/" + aasShortId + "/aas/submodels/" + smShortId + "/submodel";
+
 		logger.info("AAS URL for integration test: " + aasEndpoint);
 	}
 }
