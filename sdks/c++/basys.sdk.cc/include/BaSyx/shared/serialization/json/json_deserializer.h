@@ -31,18 +31,16 @@ namespace json {
 
             if (json.is_primitive()) {
                 return deserialize_helper::fundamental(json);
-            } else // deserialize objectMap
-            if (json.is_object()) 
+            } 
+			// deserialize list
+			else if( json.is_array()) 
 			{
-				if (json.find(basyx::serialization::typeSpecifier) != json.end())
-				{	
-					// deserialize typed basyx list
-					return collection(json);
-				}
-				else // assume is map
-				{
-					return basyx::object{ std::forward<basyx::object::object_map_t>(deserialize_helper::objectMap(json)) };
-				}
+				return deserialize_helper::list(json);
+			}
+			// deserialize objectMap
+			else if (json.is_object()) 
+			{
+				return basyx::object{ std::forward<basyx::object::object_map_t>(deserialize_helper::objectMap(json)) };
             } 
 
 			return basyx::object::make_null();
@@ -60,29 +58,6 @@ namespace json {
 				return basyx::object{ json.get<bool>() };
             else if (json.is_string())
                 return basyx::object { json.get<std::string>() };
-
-            // Get the typeId and value node
-            //auto typeId = json[basyx::serialization::typeIdSpecifier].get<std::string>();
-            //auto valueJson = json[basyx::serialization::valueSpecifier];
-
-            //if (typeId == basyx::serialization::basysType<int>::string) {
-            //	return basyx::object{ valueJson.get<int>() };
-            //}
-            //else if (typeId == basyx::serialization::basysType<bool>::string) {
-            //	return basyx::object{ valueJson.get<bool>() };
-            //}
-            //else if (typeId == basyx::serialization::basysType<float>::string) {
-            //	return basyx::object{ valueJson.get<float>() };
-            //}
-            //else if (typeId == basyx::serialization::basysType<double>::string) {
-            //	return basyx::object{ valueJson.get<double>() };
-            //}
-            //else if (typeId == basyx::serialization::basysType<char>::string) {
-            //	return basyx::object{ valueJson.get<char>() };
-            //}
-            //else if (typeId == basyx::serialization::basysType<std::string>::string) {
-            //	return basyx::object{ valueJson.get<std::string>() };
-            //}
 
             return basyx::object::make_null();
         }
@@ -115,26 +90,10 @@ namespace json {
 			return last_type;
 		};
 
-		static basyx::object collection(const json_t & json)
+		static basyx::object list(const json_t & json_array)
 		{
-			if (json[basyx::serialization::typeSpecifier] == "list")
-			{
-				return deserialize_helper::list(json);
-			}
-			else if (json[basyx::serialization::typeSpecifier] == "set")
-			{
-				return deserialize_helper::set(json);
-			};
-
-			return basyx::object::make_null();
-		};
-
-		static basyx::object list(const json_t & json)
-		{
-			auto json_array = json[basyx::serialization::valueSpecifier];
-
 			if (json_array.empty())
-				return basyx::object::make_list<int>();
+				return basyx::object::object_list_t();
 
 			if (json_array.is_array())
 			{
@@ -152,33 +111,6 @@ namespace json {
 					return deserialize_helper::list_t<double>(json_array);
 				case basyx::type::valueType::Object:
 					return deserialize_helper::object_list(json_array);
-				};
-			}
-
-			return basyx::object::make_null();
-		};
-
-		static basyx::object set(const json_t & json)
-		{
-			auto json_array = json[basyx::serialization::valueSpecifier];
-
-			if (json_array.empty())
-				return basyx::object::make_set<int>();
-
-			if (json_array.is_array())
-			{
-				auto value_type = check_array_type(json_array);
-
-				switch (value_type)
-				{
-				case basyx::type::valueType::Bool:
-					return deserialize_helper::set_t<bool>(json_array);
-				case basyx::type::valueType::Int:
-					return deserialize_helper::set_t<int>(json_array);
-				case basyx::type::valueType::String:
-					return deserialize_helper::set_t<std::string>(json_array);
-				case basyx::type::valueType::Float:
-					return deserialize_helper::set_t<double>(json_array);
 				};
 			}
 
@@ -206,18 +138,6 @@ namespace json {
 			}
 
 			return list;
-		};
-
-		template<typename T>
-		static basyx::object set_t(const json_t & json)
-		{
-			basyx::object set = basyx::object::make_set<T>();
-
-			for (const auto& val : json) {
-				set.insert(deserialize(val));
-			}
-
-			return set;
 		};
 
         // Deserializes an objectMap from the given JSON

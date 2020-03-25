@@ -98,19 +98,6 @@ TEST_F(TestBaSyxObject, TypeTest)
 	ASSERT_EQ(basyx::type::basyx_type<basyx::object::list_t<double>>::object_type, basyx::type::objectType::List);
 	ASSERT_EQ(basyx::type::basyx_type<basyx::object::list_t<double>>::value_type, basyx::type::valueType::Float);
 
-	// sets
-	ASSERT_EQ(basyx::type::basyx_type<basyx::object::set_t<int>>::object_type, basyx::type::objectType::Set);
-	ASSERT_EQ(basyx::type::basyx_type<basyx::object::set_t<int>>::value_type, basyx::type::valueType::Int);
-
-	ASSERT_EQ(basyx::type::basyx_type<basyx::object::set_t<uint64_t>>::object_type, basyx::type::objectType::Set);
-	ASSERT_EQ(basyx::type::basyx_type<basyx::object::set_t<uint64_t>>::value_type, basyx::type::valueType::Int);
-
-	ASSERT_EQ(basyx::type::basyx_type<basyx::object::set_t<std::string>>::object_type, basyx::type::objectType::Set);
-	ASSERT_EQ(basyx::type::basyx_type<basyx::object::set_t<std::string>>::value_type, basyx::type::valueType::String);
-
-	ASSERT_EQ(basyx::type::basyx_type<basyx::object::set_t<double>>::object_type, basyx::type::objectType::Set);
-	ASSERT_EQ(basyx::type::basyx_type<basyx::object::set_t<double>>::value_type, basyx::type::valueType::Float);
-
 	// functions
 	ASSERT_EQ(basyx::type::basyx_type<basyx::detail::functionWrapper>::object_type, basyx::type::objectType::Function);
 	ASSERT_EQ(basyx::type::basyx_type<basyx::detail::functionWrapper>::value_type, basyx::type::valueType::Object);
@@ -223,14 +210,6 @@ TEST_F(TestBaSyxObject, InsertTest)
 	ASSERT_EQ(vec.size(), 2);
 	ASSERT_TRUE(anyVec.insert(3));
 	ASSERT_EQ(vec.size(), 3);
-
-	basyx::object anySet = std::unordered_set<int>{ 1,2 };
-	auto & set = anySet.Get<std::unordered_set<int>&>();
-
-	ASSERT_EQ(set.size(), 2);
-	ASSERT_FALSE(anySet.insert(2));
-	ASSERT_TRUE(anySet.insert(3));
-	ASSERT_EQ(set.size(), 3);
 }
 
 TEST_F(TestBaSyxObject, InsertTestObject)
@@ -254,13 +233,7 @@ TEST_F(TestBaSyxObject, InsertTestObject)
 
 TEST_F(TestBaSyxObject, RemoveTest)
 {
-	basyx::object anySet = std::unordered_set<int>{ 1,2,3 };
-	auto & set = anySet.Get<std::unordered_set<int>&>();
 
-	ASSERT_EQ(set.size(), 3);
-	ASSERT_FALSE(anySet.remove(4));
-	ASSERT_TRUE(anySet.remove(3));
-	ASSERT_EQ(set.size(), 2);
 }
 
 TEST_F(TestBaSyxObject, HashMapTest_Object)
@@ -292,43 +265,6 @@ TEST_F(TestBaSyxObject, HashMapTest_Object)
 	ASSERT_FALSE(obj.IsNull());
 	ASSERT_TRUE(obj.InstanceOf<int>());
 	ASSERT_EQ(obj.Get<int>(), i);
-}
-
-TEST_F(TestBaSyxObject, ObjectSetTestInt)
-{
-	basyx::object objectSet = basyx::object::make_set<int>();
-
-	ASSERT_TRUE(objectSet.InstanceOf<basyx::object::set_t<int>>());
-	auto & set = objectSet.Get<basyx::object::set_t<int>&>();
-
-	// Insert two elements, same type
-	ASSERT_TRUE(objectSet.insert(2));
-	ASSERT_TRUE(objectSet.insert(3));
-	ASSERT_EQ(set.size(), 2);
-	ASSERT_EQ(set.count(2), 1);
-	ASSERT_EQ(set.count(3), 1);
-
-		// Insert new element, already existing value
-	ASSERT_FALSE(objectSet.insert(2));
-	ASSERT_EQ(set.size(), 2);
-	ASSERT_EQ(set.count(2), 1);
-	ASSERT_EQ(set.count(3), 1);
-
-	// Remove non-existing value
-	ASSERT_FALSE(objectSet.remove(5));
-	ASSERT_EQ(set.size(), 2);
-
-	// Remove existing value
-	ASSERT_TRUE(objectSet.remove(2));
-	ASSERT_EQ(set.size(), 1);
-	ASSERT_EQ(set.count(2), 0);
-	ASSERT_EQ(set.count(3), 1);
-
-	// Insert wrong type
-	ASSERT_FALSE(objectSet.insert(4.0));
-	ASSERT_EQ(set.size(), 1);
-	ASSERT_EQ(set.count(2), 0);
-	ASSERT_EQ(set.count(3), 1);
 }
 
 TEST_F(TestBaSyxObject, ObjectFunctionTest)
@@ -401,34 +337,4 @@ TEST_F(TestBaSyxObject, ObjectHashTest)
 
 	ASSERT_NE(hash(map1), hash(map2));
 	ASSERT_NE(hash(map1), hash(objInt));
-}
-
-TEST_F(TestBaSyxObject, ObjectSetTestObject)
-{
-	auto objectSet = basyx::object::make_object_set();
-
-	ASSERT_TRUE(objectSet.InstanceOf<basyx::object::object_set_t>());
-
-	auto & set = objectSet.Get<basyx::object::object_set_t&>();
-
-	basyx::object objInt = 5;
-	auto map1 = basyx::object::make_map();
-	auto map2 = basyx::object::make_map();
-	map1.insertKey("test", 2);
-
-	// Insert new element
-	objectSet.insert(map1);
-	ASSERT_EQ(set.size(), 1);
-
-	// Insert same element, shouldn't insert
-	objectSet.insert(map1);
-	ASSERT_EQ(set.size(), 1);
-
-	// Insert new element
-	objectSet.insert(map2);
-	ASSERT_EQ(set.size(), 2);
-
-	// Insert new element, different type
-	objectSet.insert(objInt);
-	ASSERT_EQ(set.size(), 3);
 }

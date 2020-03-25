@@ -19,7 +19,6 @@
 
 #include <vector>
 #include <unordered_map>
-#include <unordered_set>
 
 namespace basyx {
 // basyx::object
@@ -35,17 +34,12 @@ namespace basyx {
 		using list_t = std::vector<T>;
 
 		template<typename T>
-		using set_t = std::unordered_set<T>;
-
-		template<typename T>
 		using hash_map_t = std::unordered_map<std::string, T>;
 
 		using object_list_t = list_t<basyx::object>;
-		using object_set_t = set_t<basyx::object>;
 		using object_map_t = object::hash_map_t<basyx::object>;
 
 		using function_t = std::function<basyx::object(basyx::object*)>;	
-
 	public:	// Constructors
 		object();
 		object(const char *);
@@ -135,6 +129,7 @@ namespace basyx {
 		template<typename T>
 		bool insertKey(const std::string & key, const T & t, bool override = false);
 
+		std::size_t size();
 
 		template<typename T>
 		bool remove(const T & t);
@@ -177,12 +172,6 @@ namespace basyx {
 		template<typename T>
 		static object make_list(std::initializer_list<T>);
 
-		template<typename T, typename... Args>
-		static object make_set(Args && ... args);
-
-		template<typename... Args>
-		static object make_object_set(Args && ... args);
-
 		template<typename... Args>
 		static object make_map(Args && ... args);
 
@@ -213,7 +202,6 @@ namespace std
 	{
 		std::size_t operator()(basyx::object const & o) const noexcept
 		{
-			auto TEST = reinterpret_cast<std::size_t>(o.content->get_address());
 			return reinterpret_cast<std::size_t>(o.content->get_address());
 		};
 	};

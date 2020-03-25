@@ -3,7 +3,7 @@
 const std::string empty{};
 
 basyx::submodel::LangStringSet::LangStringSet()
-	: vab::ElementMap{basyx::object::make_object_set()}
+	: vab::ElementMap{basyx::object::make_object_list()}
 {
 }
 
@@ -16,7 +16,7 @@ basyx::submodel::LangStringSet::LangStringSet(std::initializer_list<std::pair<st
 
 const std::string & basyx::submodel::LangStringSet::getLangString(const std::string & languageCode) const
 {
-	auto & objectSet = this->getMap().Get<basyx::object::object_set_t&>();
+	auto & objectSet = this->getMap().Get<basyx::object::object_list_t&>();
 
 	for (auto & entry : objectSet)
 	{
@@ -31,15 +31,15 @@ const std::string & basyx::submodel::LangStringSet::getLangString(const std::str
 
 basyx::submodel::LangStringSet::langCodeSet_t basyx::submodel::LangStringSet::getLanguageCodes() const
 {
-	auto & objectSet = this->getMap().Get<basyx::object::object_set_t&>();
+	auto & objectList = this->getMap().Get<basyx::object::object_list_t&>();
 
 	std::remove_const<langCodeSet_t>::type ret;
-	ret.reserve(objectSet.size());
+	ret.reserve(objectList.size());
 
-	for (auto & entry : objectSet)
+	for (auto & entry : objectList)
 	{
 		auto & object = const_cast<basyx::object&>(entry);
-		ret.emplace_back(  std::cref( object.getProperty(Path::Language).GetStringContent()) );
+		ret.emplace_back( std::cref( object.getProperty(Path::Language).GetStringContent()) );
 	};
 
 	return ret;

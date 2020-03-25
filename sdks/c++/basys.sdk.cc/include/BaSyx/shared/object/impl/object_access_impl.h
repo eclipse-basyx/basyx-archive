@@ -16,20 +16,17 @@ bool basyx::object::insert(const T & t)
 			auto & vec = this->Get<object::list_t<T>&>();
 			vec.push_back(t);
 			return true;
-		};
-		break;
-	case basyx::type::objectType::Set:
-		if (this->InstanceOf<object::set_t<T>>())
+		}
+		else if (this->InstanceOf<object::object_list_t>())
 		{
-			auto & set = this->Get<object::set_t<T>&>();
-			return set.emplace(t).second;
-		};
+			auto & vec = this->Get<object::object_list_t&>();
+			vec.emplace_back(t);
+			return true;
+		}
 		break;
 	};
 	return false;
 };
-
-
 
 template<typename T>
 bool basyx::object::insertKey(const std::string & key, const T & t, bool override)
@@ -76,13 +73,6 @@ bool basyx::object::remove(const T & t)
 	// Check if contained object is list or set
 	switch (content->object_type())
 	{
-	case basyx::type::objectType::Set:
-		if (this->InstanceOf<object::set_t<T>>())
-		{
-			auto & set = this->Get<object::set_t<T>&>();
-			return set.erase(t) > 0;
-		};
-		break;
 	case basyx::type::objectType::List:
 		auto & list = this->Get<object::list_t<T>&>();
 		list.erase(std::remove(list.begin(), list.end(), t), list.end());
@@ -109,7 +99,6 @@ inline bool basyx::object::remove(basyx::object & obj)
 	case basyx::type::valueType::Float:
 		return this->remove(obj.Get<const double>());
 		break;
-
 	};
 
 	return false;

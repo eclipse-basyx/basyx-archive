@@ -42,22 +42,6 @@ bool basyx::object::empty()
 			return this->Get<object::object_list_t&>().empty();
 			break;
 		};
-	case basyx::type::objectType::Set:
-		switch (value_type)
-		{
-		case basyx::type::valueType::Bool:
-			return this->Get<object::set_t<bool>&>().empty();
-			break;
-		case basyx::type::valueType::Int:
-			return this->Get<object::set_t<int>&>().empty();
-			break;
-		case basyx::type::valueType::Float:
-			return this->Get<object::set_t<double>&>().empty();
-			break;
-		case basyx::type::valueType::String:
-			return this->Get<object::set_t<std::string>&>().empty();
-			break;
-		};
 	case basyx::type::objectType::Map:
 		return this->Get<object::object_map_t&>().empty();
 		break;
@@ -85,14 +69,6 @@ bool basyx::object::insert(basyx::object obj)
 			this->Get<basyx::object::object_list_t&>().emplace_back(obj);
 			return true;
 		}
-	case basyx::type::objectType::Set:
-		if (this->content->value_type() == basyx::type::valueType::Object)
-		{
-			auto & objectSet = this->Get<basyx::object::set_t<basyx::object>&>();
-			auto resultSet = objectSet.emplace(obj);
-			return resultSet.second;
-			break;
-		};
 
 		if (this->content->value_type() == value_type)
 		{
@@ -157,6 +133,44 @@ bool basyx::object::operator==(const basyx::object& rhs) const
 
 	return this->content->compare(rhs.content.get());
 }
+
+std::size_t basyx::object::size()
+{
+	if (!this->content)
+		return 0;
+
+	auto valueType = this->GetValueType();
+
+	// Check if contained object is list or set
+	switch (content->object_type())
+	{
+	case basyx::type::objectType::List:
+		switch (valueType)
+		{
+		case basyx::type::valueType::Bool:
+			return this->Get<object::list_t<bool>&>().size();
+			break;
+		case basyx::type::valueType::Int:
+			return this->Get<object::list_t<int>&>().size();
+			break;
+		case basyx::type::valueType::Float:
+			return this->Get<object::list_t<float>&>().size();
+			break;
+		case basyx::type::valueType::String:
+			return this->Get<object::list_t<std::string>&>().size();
+			break;
+		case basyx::type::valueType::Object:
+			return this->Get<object::object_list_t&>().size();
+			break;
+		};
+		break;
+	case basyx::type::objectType::Map:
+		return this->Get<object::object_map_t&>().size();
+		break;
+	};
+
+	return 1;
+};
 
 basyx::object basyx::object::make_null()
 {

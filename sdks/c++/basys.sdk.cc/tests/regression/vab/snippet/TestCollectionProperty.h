@@ -52,14 +52,6 @@ private:
 
 	static void testCreateDelete(basyx::vab::core::IModelProvider * modelProvider)
 	{
-		// Create element in Set (no key provided)
-		modelProvider->createValue("/structure/set/", true);
-		auto anySet = modelProvider->getModelPropertyValue("/structure/set/");
-		
-		ASSERT_TRUE(anySet.InstanceOf<basyx::object::set_t<bool>>());
-		
-		auto & objectSet = anySet.Get<basyx::object::set_t<bool>&>();
-
 		// Create elements in List (no key provided)
 		modelProvider->createValue("/structure/list/", 56);
 		auto toTest = modelProvider->getModelPropertyValue("/structure/list/");
@@ -93,13 +85,6 @@ private:
 		modelProvider->deleteValue("listInRoot");
 		toTest = modelProvider->getModelPropertyValue("listInRoot");
 		ASSERT_TRUE(toTest.IsNull());
-
-		// Delete at Set
-		// by value
-		modelProvider->deleteValue("/structure/set/", true);
-		toTest = modelProvider->getModelPropertyValue("/structure/set/");
-		//ASSERT_EQ(toTest.Get<basyx::object::set_t<bool>&>().count(true), 0);
-		ASSERT_TRUE(toTest.empty());
 
 		return;
 	}
