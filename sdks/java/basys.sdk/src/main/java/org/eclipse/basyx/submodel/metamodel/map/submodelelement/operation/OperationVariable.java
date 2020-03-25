@@ -18,7 +18,6 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
  */
 public class OperationVariable extends SubmodelElement implements IOperationVariable {
 	public static final String MODELTYPE = "OperationVariable";
-	private static final String TYPE = "type";
 
 	/**
 	 * 
@@ -58,19 +57,6 @@ public class OperationVariable extends SubmodelElement implements IOperationVari
 	@Override
 	public ISubmodelElement getValue() {
 		return SubmodelElementFacadeFactory.createSubmodelElement((Map<String, Object>) get(Property.VALUE));
-	}
-
-	@Override
-	public String getType() {
-		return (String) get(TYPE);
-	}
-
-	/**
-	 * Allows to set the type of the operation variable
-	 * @param type
-	 */
-	public void setType(String type) {
-		put(TYPE, type);
 	}
 
 }

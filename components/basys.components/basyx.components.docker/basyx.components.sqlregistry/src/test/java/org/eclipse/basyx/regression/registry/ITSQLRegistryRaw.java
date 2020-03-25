@@ -8,6 +8,8 @@ import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.ws.rs.NotFoundException;
+
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
@@ -96,8 +98,12 @@ public class ITSQLRegistryRaw {
 	@After
 	public void tearDown() throws UnsupportedEncodingException {
 		// Delete AAS registration
-		client.delete(aasUrl1);
-		client.delete(aasUrl2);
+		try {
+			client.delete(aasUrl1);			
+		} catch(NotFoundException e) {}
+		try {
+			client.delete(aasUrl2);			
+		} catch(NotFoundException e) {}
 	}
 
 	/**
@@ -173,7 +179,7 @@ public class ITSQLRegistryRaw {
 		try {
 			getResult(client.get(aasUrl2));
 			fail();
-		} catch(Exception e) {}
+		} catch(NotFoundException e) {}
 
 		// Create new AAS registration
 		client.post(registryUrl, serializedDescriptor2);
@@ -190,7 +196,7 @@ public class ITSQLRegistryRaw {
 		try {
 			getResult(client.get(aasUrl2));
 			fail();
-		} catch(Exception e) {}
+		} catch(NotFoundException e) {}
 	}
 
 	/**

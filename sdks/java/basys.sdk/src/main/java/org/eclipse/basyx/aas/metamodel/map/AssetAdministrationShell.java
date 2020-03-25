@@ -30,7 +30,6 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
 import org.eclipse.basyx.vab.model.VABModelMap;
@@ -52,6 +51,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public static final String SECURITY = "security";
 	public static final String DERIVEDFROM = "derivedFrom";
 	public static final String ASSET = "asset";
+	public static final String ASSETREF = "assetRef"; // Currently not standard conforming
 	public static final String SUBMODELS = "submodels"; // Used for storing keys to conform to the standard
 	public static final String SUBMODELDESCRIPTORS = "submodelDescriptors";
 	public static final String VIEWS = "views";
@@ -192,6 +192,16 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
+	public IReference getAssetReference() {
+		return Reference.createAsFacade((Map<String, Object>) get(ASSETREF));
+	}
+
+	public void setAssetReference(Reference ref) {
+		put(ASSETREF, ref);
+	}
+
+	@SuppressWarnings("unchecked")
 	public void setSubModels(Set<SubmodelDescriptor> submodels) {
 		put(AssetAdministrationShell.SUBMODELDESCRIPTORS, submodels);
 
@@ -299,9 +309,18 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		put(SUBMODELS, references);
 	}
 
+	public void addSubmodelReference(IReference reference) {
+		getSubmodelReferencesAsRawSet().add(reference);
+	}
+
 	private void addSubmodelReferences(SubmodelDescriptor descriptor) {
 		IIdentifier identifier = descriptor.getIdentifier();
-		Reference ref = new Reference(new Key(KeyElements.SUBMODEL, true, identifier.getId(), identifier.getIdType()));
-		getSubmodelReferences().add(ref);
+		Reference ref = new Reference(identifier, KeyElements.SUBMODEL, true);
+		addSubmodelReference(ref);
+	}
+
+	@SuppressWarnings("unchecked")
+	private Set<Object> getSubmodelReferencesAsRawSet() {
+		return ((Set<Object>) get(SUBMODELS));
 	}
 }

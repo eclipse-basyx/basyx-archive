@@ -207,13 +207,21 @@ public class TestXMLConverter {
 		
 		// Select submodel reference's key
 		IKey submodelKey = null;
+		boolean foundFirst = false, foundSecond = false;
 		for (IReference ref : aas.getSubmodelReferences()) {
 			for (IKey k : ref.getKeys())
 				if (k.getValue().equals("http://www.zvei.de/demo/submodel/12345679")) {
 					submodelKey = k;
+					foundFirst = true;
+					break;
+				} else if (k.getValue().equals("http://www.zvei.de/demo/submodel/12345679_2")) {
+					foundSecond = true;
 					break;
 				}
 		}
+		// Assert that both submodel references have been found
+		assertTrue(foundFirst);
+		assertTrue(foundSecond);
 
 		assertNotNull(submodelKey);
 

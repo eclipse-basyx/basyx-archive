@@ -1,5 +1,6 @@
 package org.eclipse.basyx.aas.registration.restapi;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +12,10 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -41,11 +46,12 @@ public class DirectoryModelProvider implements IModelProvider {
 	 * 
 	 * @param path
 	 * @return
+	 * @throws MalformedRequestException if path does not start with PERFIX "api/v1/registry"
 	 */
-	private String stripPrefix(String path) {
+	private String stripPrefix(String path) throws MalformedRequestException {
 		path = VABPathTools.stripSlashes(path);
 		if (!path.startsWith(PREFIX)) {
-			throw new RuntimeException("Path " + path + " not recognized as registry path. Has to start with " + PREFIX);
+			throw new MalformedRequestException("Path " + path + " not recognized as registry path. Has to start with " + PREFIX);
 		}
 		path = path.replace(PREFIX, "");
 		path = VABPathTools.stripSlashes(path);
@@ -57,8 +63,9 @@ public class DirectoryModelProvider implements IModelProvider {
 	 * 
 	 * @param path the path to be splitted
 	 * @return Array of path elements
+	 * @throws MalformedRequestException if path is not valid
 	 */
-	private String[] splitPath(String path) {
+	private String[] splitPath(String path) throws MalformedRequestException {
 		
 		if(path.isEmpty()) {
 			return new String[0];
@@ -68,15 +75,28 @@ public class DirectoryModelProvider implements IModelProvider {
 		
 		//Assumes "submodels" is not a valid AASId
 		if(splitted[0].equals(SUBMODELS)) {
-			throw new RuntimeException("Path must not start with " + SUBMODELS);
+			throw new MalformedRequestException("Path must not start with " + SUBMODELS);
 		}
 		
 		//If path contains more than one element, the second one has to be "submodels"
 		if(splitted.length > 1 && !splitted[1].equals(SUBMODELS)) {
-			throw new RuntimeException("Second path element must be (if present): " + SUBMODELS);
+			throw new MalformedRequestException("Second path element must be (if present): " + SUBMODELS);
 		}
 		
 		return splitted;
+	}
+	
+	private String[] preparePath(String path) throws MalformedRequestException {
+		try {
+			path = URLDecoder.decode(path, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			//Malformed request because of unsupported encoding
+			throw new MalformedRequestException("Path has to be encoded as UTF-8 string.");
+		}
+		
+		path = stripPrefix(path);
+		
+		return splitPath(path);
 	}
 	
 	/**
@@ -85,12 +105,13 @@ public class DirectoryModelProvider implements IModelProvider {
 	 * @param expectedModelType the modelType the Object is expected to have
 	 * @param value the Object to be checked and casted
 	 * @return the object casted to a Map
+	 * @throws MalformedRequestException 
 	 */
 	@SuppressWarnings("unchecked")
-	private Map<String, Object> checkModelType(String expectedModelType, Object value) {
+	private Map<String, Object> checkModelType(String expectedModelType, Object value) throws MalformedRequestException {
 		//check if the given value is a Map
 		if(!(value instanceof Map)) {
-			throw new RuntimeException("Given newValue is not a Map");
+			throw new MalformedRequestException("Given newValue is not a Map");
 		}
 
 		Map<String, Object> map = (Map<String, Object>) value;
@@ -101,7 +122,7 @@ public class DirectoryModelProvider implements IModelProvider {
 		//have to accept Objects without modeltype information,
 		//as modeltype is not part of the public metamodel
 		if(!expectedModelType.equals(type) && type != null) {
-			throw new RuntimeException("Given newValue map has not the correct ModelType");
+			throw new MalformedRequestException("Given newValue map has not the correct ModelType");
 		}
 		
 		return map;
@@ -113,8 +134,9 @@ public class DirectoryModelProvider implements IModelProvider {
 	 * 
 	 * @param value the AAS Map object
 	 * @return an AAS
+	 * @throws MalformedRequestException 
 	 */
-	private AASDescriptor createAASDescriptorFromMap(Object value) {
+	private AASDescriptor createAASDescriptorFromMap(Object value) throws MalformedRequestException {
 		Map<String, Object> map = checkModelType(AASDescriptor.MODELTYPE, value);
 		AASDescriptor aasDescriptor = new AASDescriptor(map);
 		return aasDescriptor;
@@ -126,32 +148,30 @@ public class DirectoryModelProvider implements IModelProvider {
 	 * 
 	 * @param value the AAS Map object
 	 * @return an AAS
+	 * @throws MalformedRequestException 
 	 */
-	private SubmodelDescriptor createSMDescriptorFromMap(Object value) {
+	private SubmodelDescriptor createSMDescriptorFromMap(Object value) throws MalformedRequestException {
 		Map<String, Object> map = checkModelType(SubmodelDescriptor.MODELTYPE, value);
 		SubmodelDescriptor smDescriptor = new SubmodelDescriptor(map);
 		return smDescriptor;
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws Exception {
-		path = stripPrefix(path);
-		path = URLDecoder.decode(path, "UTF-8");
+	public Object getModelPropertyValue(String path) throws ProviderException {
+		String[] splitted = preparePath(path);
 
 		//Path is empty, request for all AASDescriptors
-		if (path.isEmpty()) {
+		if (splitted.length == 0) {
 			return registry.lookupAll();
 		} else {
 			
-			String[] splitted = splitPath(path);
-			
 			//Given path consists only of an AAS Id
 			if(splitted.length == 1) {
-				AASDescriptor descriptor = registry.lookupAAS(new ModelUrn(path));
+				AASDescriptor descriptor = registry.lookupAAS(new ModelUrn(splitted[0]));
 				
 				//Throw an Exception if the requested AAS does not exist 
 				if(descriptor == null) {
-					throw new RuntimeException("Specified AASid '" + path + "' does not exist.");
+					throw new ResourceNotFoundException("Specified AASid '" + splitted[0] + "' does not exist.");
 				}
 				return descriptor;
 			
@@ -165,28 +185,24 @@ public class DirectoryModelProvider implements IModelProvider {
 			} else if(splitted.length == 3) {
 				SubmodelDescriptor smDescriptor = getSmDescriptorFromAAS(new ModelUrn(splitted[0]), splitted[2]);
 				if(smDescriptor == null) {
-					throw new RuntimeException("Specified SubmodelId '" + splitted[2] + "' does not exist in AAS '" + splitted[0] + "'.");
+					throw new ResourceNotFoundException("Specified SubmodelId '" + splitted[2] + "' does not exist in AAS '" + splitted[0] + "'.");
 				}
 				return smDescriptor;
 			}
 			
 			//path has more than three elements and is therefore invalid
-			throw new RuntimeException("Given path '" + path + "' contains more than three path elements and is therefore invalid.");
+			throw new MalformedRequestException("Given path '" + path + "' contains more than three path elements and is therefore invalid.");
 		}
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws Exception {
-		path = stripPrefix(path);
-		path = URLDecoder.decode(path, "UTF-8");
+	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+		String[] splitted = preparePath(path);
 
-		if (!path.isEmpty()) { // Overwriting existing entry
-			
-			String[] splitted = splitPath(path);
-			
+		if (splitted.length > 0) { // Overwriting existing entry
 			//if path contains more or less than an aasID after the prefix
 			if(splitted.length != 1) {
-				throw new RuntimeException("Path '" + path + "' is invalid for updating an aas.");
+				throw new MalformedRequestException("Path '" + path + "' is invalid for updating an aas.");
 			}
 			
 			// Decode encoded path
@@ -194,23 +210,20 @@ public class DirectoryModelProvider implements IModelProvider {
 			
 			//aas to be updated does not exist
 			if(registry.lookupAAS(identifier) == null) {
-				throw new RuntimeException("AAS '" + path + "' to be updated does not exist. Try create instead.");
+				throw new ResourceNotFoundException("AAS '" + path + "' to be updated does not exist. Try create instead.");
 			}
 			
 			//delete old value and create the new one
 			registry.delete(identifier);
 			registry.register(createAASDescriptorFromMap(newValue));
 		} else {
-			throw new RuntimeException("Set with empty path is not supported by registry");
+			throw new MalformedRequestException("Set with empty path is not supported by registry");
 		}
 	}
 
 	@Override
-	public void createValue(String path, Object newEntity) throws Exception {
-		path = stripPrefix(path);
-		path = URLDecoder.decode(path, "UTF-8");
-		
-		String[] splitted = splitPath(path);
+	public void createValue(String path, Object newEntity) throws ProviderException {
+		String[] splitted = preparePath(path);
 
 		// Creating new entry
 		if (splitted.length == 0) {
@@ -219,7 +232,7 @@ public class DirectoryModelProvider implements IModelProvider {
 			
 			//aas to be created already exists
 			if(registry.lookupAAS(aas.getIdentifier()) != null) {
-				throw new RuntimeException("AAS with Id '" +
+				throw new ResourceAlreadyExistsException("AAS with Id '" +
 						aas.getIdentifier().getId() + "' already exists. Try update instead.");
 			}
 			
@@ -235,23 +248,20 @@ public class DirectoryModelProvider implements IModelProvider {
 			//a submodel with this Id already exists in given aas
 			//getSmDescriptorFromAAS also checks if aas exists
 			if(getSmDescriptorFromAAS(aasId, smDescriptor.getIdShort()) != null) {
-				throw new RuntimeException("A Submodel with id '" + smDescriptor.getIdShort() +
+				throw new ResourceAlreadyExistsException("A Submodel with id '" + smDescriptor.getIdShort() +
 						"' already exists in aas '" + splitted[0] + "'. Try update instead.");
 			}
 			
 			registry.register(aasId, smDescriptor);
 			
 		} else {
-			throw new RuntimeException("Create was called with an unsupported path: " + path);
+			throw new MalformedRequestException("Create was called with an unsupported path: " + path);
 		}
 	}
 
 	@Override
-	public void deleteValue(String path) throws Exception {
-		path = stripPrefix(path);
-		path = URLDecoder.decode(path, "UTF-8");
-		
-		String[] splitted = splitPath(path);
+	public void deleteValue(String path) throws ProviderException {
+		String[] splitted = preparePath(path);
 			
 		if (splitted.length == 1) { //delete an aas
 			
@@ -259,7 +269,7 @@ public class DirectoryModelProvider implements IModelProvider {
 			
 			//aas to be deleted does not exist
 			if(registry.lookupAAS(aasId) == null) {
-				throw new RuntimeException("AAS '" + splitted[0] + "' to be deleted does not exist.");
+				throw new ResourceNotFoundException("AAS '" + splitted[0] + "' to be deleted does not exist.");
 			}
 			
 			registry.delete(aasId);
@@ -272,25 +282,25 @@ public class DirectoryModelProvider implements IModelProvider {
 			//a submodel with this Id does not exist in given aas
 			//getSmDescriptorFromAAS also checks if aas exists
 			if(getSmDescriptorFromAAS(aasId, smId) == null) {
-				throw new RuntimeException("A Submodel with id '" + smId +
+				throw new ResourceNotFoundException("A Submodel with id '" + smId +
 						"' does not exist in aas '" + splitted[0] + "'.");
 			}
 			
 			registry.delete(aasId, smId);
 			
 		} else {
-			throw new RuntimeException("Delete with empty path is not supported by registry");
+			throw new MalformedRequestException("Delete with empty path is not supported by registry");
 		}
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws Exception {
-		throw new RuntimeException("DeleteValue with parameter not supported by registry");
+		throw new MalformedRequestException("DeleteValue with parameter not supported by registry");
 	}
 
 	@Override
 	public Object invokeOperation(String path, Object... parameter) throws Exception {
-		throw new RuntimeException("Invoke not supported by registry");
+		throw new MalformedRequestException("Invoke not supported by registry");
 	}
 	
 	/**
@@ -299,11 +309,12 @@ public class DirectoryModelProvider implements IModelProvider {
 	 * 
 	 * @param id id of the aas
 	 * @return Set of contained SubmodelDescriptor objects
+	 * @throws ResourceNotFoundException if the AAS does not exist
 	 */
-	private Set<SubmodelDescriptor> getSmDescriptorsFromAAS(IIdentifier id) {
+	private Set<SubmodelDescriptor> getSmDescriptorsFromAAS(IIdentifier id) throws ResourceNotFoundException {
 		AASDescriptor aasDescriptor = registry.lookupAAS(id);
 		if(aasDescriptor == null) {
-			throw new RuntimeException("Specified AASid '" + id.getId() + "' does not exist.");
+			throw new ResourceNotFoundException("Specified AASid '" + id.getId() + "' does not exist.");
 		}
 		return aasDescriptor.getSubModelDescriptors();
 	}
@@ -315,11 +326,13 @@ public class DirectoryModelProvider implements IModelProvider {
 	 * @param aasId id of the aas
 	 * @param smId id of the submodel
 	 * @return the SubmodelDescriptor with the given id
+	 * @throws ResourceNotFoundException if aasId does not exist
 	 */
-	private SubmodelDescriptor getSmDescriptorFromAAS(IIdentifier aasId, String smId) {
+	private SubmodelDescriptor getSmDescriptorFromAAS(IIdentifier aasId, String smId)
+			throws ResourceNotFoundException {
 		AASDescriptor aasDescriptor = registry.lookupAAS(aasId);
 		if(aasDescriptor == null) {
-			throw new RuntimeException("Specified AASid '" + aasId.getId() + "' does not exist.");
+			throw new ResourceNotFoundException("Specified AASid '" + aasId.getId() + "' does not exist.");
 		}
 		
 		return aasDescriptor.getSubmodelDescriptorFromIdShort(smId);

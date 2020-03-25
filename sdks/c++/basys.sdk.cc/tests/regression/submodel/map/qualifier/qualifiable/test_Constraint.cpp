@@ -20,8 +20,6 @@ protected:
 
   void TearDown() override
   {
-    auto map = constraint.getMap().Get<basyx::object::object_map_t>();
-    ASSERT_EQ(map.at(ModelType::Path::Name).GetStringContent(), std::string(IConstraint::Path::ModelType));
   }
 };
 
@@ -46,5 +44,4 @@ TEST_F(ConstraintTest, TestConstructionOtherConstraint)
   Constraint c2{constraint};
 
   auto map = c2.getMap().Get<basyx::object::object_map_t>();
-  ASSERT_EQ(map.at(ModelType::Path::Name).GetStringContent(), std::string(IConstraint::Path::ModelType));
 }

@@ -66,6 +66,13 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	public IAsset getAsset();
 
 	/**
+	 * Gets the reference to the asset the AAS is representing.
+	 * 
+	 * @return
+	 */
+	public IReference getAssetReference();
+
+	/**
 	 * Gets the submodel descriptors
 	 * 
 	 * @return

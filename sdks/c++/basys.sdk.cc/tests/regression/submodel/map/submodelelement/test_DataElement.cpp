@@ -23,8 +23,6 @@ protected:
 
   void TearDown() override
   {
-    auto map = data_element.getMap();
-    basyx::assertions::AssertIsModelType(map, IDataElement::Path::ModelType);
   }
 };
 

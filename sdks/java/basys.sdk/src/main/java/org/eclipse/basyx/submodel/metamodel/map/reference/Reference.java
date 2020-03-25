@@ -5,8 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
@@ -28,6 +32,30 @@ public class Reference extends VABModelMap<Object> implements IReference {
 	 */
 	public Reference() {
 		setKeys(new ArrayList<IKey>());
+	}
+
+	/**
+	 * Constructs a reference based on an {@link IIdentifiable} and additional
+	 * information (see {@link Key#Key(KeyElements, boolean, String, KeyType)}).
+	 * 
+	 * @param identifiable
+	 * @param keyElement
+	 * @param local
+	 */
+	public Reference(IIdentifiable identifiable, KeyElements keyElement, boolean local) {
+		this(identifiable.getIdentification(), keyElement, local);
+	}
+
+	/**
+	 * Constructs a reference based on an {@link IIdentifier} and additional
+	 * information (see {@link Key#Key(KeyElements, boolean, String, KeyType)}).
+	 * 
+	 * @param identifiable
+	 * @param keyElement
+	 * @param local
+	 */
+	public Reference(IIdentifier identifier, KeyElements keyElement, boolean local) {
+		this(new Key(keyElement, local, identifier.getId(), identifier.getIdType()));
 	}
 
 	/**
@@ -87,4 +115,33 @@ public class Reference extends VABModelMap<Object> implements IReference {
 		}
 		put(Reference.KEY, copy);
 	}
+
+	@Override
+	public int hashCode() {
+		List<IKey> keys = getKeys();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((keys == null) ? 0 : keys.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		List<IKey> keys = getKeys();
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Reference other = (Reference) obj;
+		if (keys == null) {
+			if (other.getKeys() != null)
+				return false;
+		} else if (!keys.equals(other.getKeys()))
+			return false;
+		return true;
+	}
+
+
 }

@@ -24,6 +24,7 @@
 #include <BaSyx/submodel/api/submodelelement/property/blob/IBlob.h>
 #include <BaSyx/submodel/api/submodelelement/property/file/IFile.h>
 
+#include <BaSyx/submodel/api/submodelelement/langstring/ILangStringSet.h>
 
 #include <BaSyx/submodel/api/dataspecification/datatypes/DataTypeIEC61360.h>
 #include <BaSyx/submodel/api/dataspecification/datatypes/LevelType.h>
@@ -152,6 +153,8 @@ constexpr char IEntity::Path::EntityType[];
 constexpr char IDataSpecificationIEC61360::Path::DataType[];
 
 
+constexpr char ILangStringSet::Path::Language[];
+constexpr char ILangStringSet::Path::Text[];
 
 }
 }

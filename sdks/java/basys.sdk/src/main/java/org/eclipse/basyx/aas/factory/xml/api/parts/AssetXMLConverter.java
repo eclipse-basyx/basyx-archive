@@ -2,7 +2,6 @@ package org.eclipse.basyx.aas.factory.xml.api.parts;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -111,9 +110,7 @@ public class AssetXMLConverter {
 		IReference assetIdentificationModel = asset.getAssetIdentificationModel();
 		if(assetIdentificationModel != null) {
 			Element assetIdentificationroot = document.createElement(ASSET_IDENTIFICATION_MODEL_REF);
-			HashSet<IReference> set = new HashSet<IReference>();
-			set.add(assetIdentificationModel);
-			assetIdentificationroot.appendChild(ReferenceXMLConverter.buildReferencesXML(document, set)); 
+			assetIdentificationroot.appendChild(ReferenceXMLConverter.buildReferenceXML(document, assetIdentificationModel));
 			assetRoot.appendChild(assetIdentificationroot);
 		}
 	}
@@ -144,9 +141,7 @@ public class AssetXMLConverter {
 		IReference billOfMaterial = asset.getBillOfMaterial();
 		if (billOfMaterial != null) {
 			Element billOfMaterialRoot = document.createElement(ASSET_IDENTIFICATION_MODEL_REF);
-			HashSet<IReference> set = new HashSet<IReference>();
-			set.add(billOfMaterial);
-			billOfMaterialRoot.appendChild(ReferenceXMLConverter.buildReferencesXML(document, set));
+			billOfMaterialRoot.appendChild(ReferenceXMLConverter.buildReferenceXML(document, billOfMaterial));
 			root.appendChild(billOfMaterialRoot);
 		}
 	}

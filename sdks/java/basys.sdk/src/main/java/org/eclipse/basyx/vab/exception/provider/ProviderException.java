@@ -1,13 +1,12 @@
-package org.eclipse.basyx.vab.exception;
-
+package org.eclipse.basyx.vab.exception.provider;
 
 /**
- * Exception that indicates that a requested resource (AAS, sub model, property) was not found
+ * Used to indicate a general exception in a ModelProvider
  * 
- * @author kuhn
+ * @author conradi
  *
  */
-public class ResourceNotFoundException extends RuntimeException {
+public class ProviderException extends Exception {
 
 	
 	/**
@@ -22,17 +21,20 @@ public class ResourceNotFoundException extends RuntimeException {
 	protected String message = null;
 	
 	
-	
 	/**
 	 * Constructor
 	 */
-	public ResourceNotFoundException(String msg) {
+	public ProviderException(String msg) {
 		// Store message
 		message = msg;
 	}
 	
-	
-	
+		
+	public ProviderException(Exception e) {
+		super(e);
+	}
+
+
 	/**
 	 * Return detailed message
 	 */

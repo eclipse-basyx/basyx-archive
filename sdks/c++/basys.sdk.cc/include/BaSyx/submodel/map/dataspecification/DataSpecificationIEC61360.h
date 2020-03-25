@@ -25,28 +25,31 @@ class DataSpecificationIEC61360
   , public virtual vab::ElementMap
 {
 public:
+	using vab::ElementMap::ElementMap;
+	DataSpecificationIEC61360();
   ~DataSpecificationIEC61360() = default;
+public:
 
   // Inherited via IDataSpecificationIEC61360
-  virtual std::string getPreferredName() const override;
-  virtual std::string getShortName() const override;
+  virtual std::shared_ptr<ILangStringSet> PreferredName() override;
+  virtual std::shared_ptr<ILangStringSet> ShortName() override;
   virtual std::string getUnit() const override;
   virtual std::shared_ptr<submodel::IReference> getUnitId() const override;
   virtual std::string getSourceOfDefinition() const override;
   virtual DataTypeIEC61360 getDataType() const override;
-  virtual std::string getDefinition() const override;
+  virtual std::shared_ptr<ILangStringSet> Definition() override;
   virtual std::string getValueFormat() const override;
   virtual basyx::object getValueList() const override;
   virtual std::shared_ptr<submodel::IReference> getValueId() const override;
   virtual LevelType getLevelType() const override;
 
-  void setPreferredName(const std::string & preferredName);
-  void setShortName(const std::string & shortName);
+//  void setPreferredName(const std::string & preferredName);
+//  void setShortName(const std::string & shortName);
   void setUnit(const std::string & unit);
   void setUnitId(const submodel::IReference & unitId);
   void setSourceOfDefinition(const std::string & sourceOfDefinition);
   void setDataType(const std::string & dataType);
-  void setDefinition(const std::string & definition);
+//  void setDefinition(const std::string & definition);
   void setValueFormat(const std::string & valueFormat);
   void setValueList(const basyx::object & valueList);
   void setValueId(const IReference & valueId);

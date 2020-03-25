@@ -3,6 +3,7 @@ package org.eclipse.basyx.testsuite.regression.vab.coder.json;
 import java.io.FileNotFoundException;
 
 import org.eclipse.basyx.vab.coder.json.provider.JSONProvider;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
 import org.slf4j.Logger;
@@ -39,7 +40,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 			provider.processBaSysGet(path, outputstream);
 			
 			return outputstream.getResult();
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException | ProviderException e) {
 			logger.error("[TEST] Exception in getModelPropertyValue", e);
 		}
 		return null;		

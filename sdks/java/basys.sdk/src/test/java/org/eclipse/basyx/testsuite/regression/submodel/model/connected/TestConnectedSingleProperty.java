@@ -7,6 +7,7 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.ConnectedSingleProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.restapi.SinglePropertyProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;
@@ -45,6 +46,17 @@ public class TestConnectedSingleProperty {
 	}
 
 	/**
+	 * Tests if the value type can be correctly retrieved
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testValueTypeRetrieval() {
+		String valueType = prop.getValueType();
+		assertEquals(PropertyValueTypeDef.Integer.toString(), valueType);
+	}
+
+	/**
 	 * Tests setting the value
 	 * 
 	 * @throws Exception
@@ -55,4 +67,5 @@ public class TestConnectedSingleProperty {
 		int val = (int) prop.get();
 		assertEquals(123, val);
 	}
+
 }

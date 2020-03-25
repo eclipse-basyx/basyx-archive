@@ -15,11 +15,13 @@ DataElement::DataElement() :
 {}
 
 DataElement::DataElement(basyx::object object) :
-  vab::ElementMap{object}
+  vab::ElementMap{object},
+	ModelType{ IDataElement::Path::ModelType }
 {}
 
 DataElement::DataElement(const IDataElement & other) :
-  SubmodelElement{other}
+  SubmodelElement{other},
+	ModelType{ IDataElement::Path::ModelType }
 {}
 
 }
