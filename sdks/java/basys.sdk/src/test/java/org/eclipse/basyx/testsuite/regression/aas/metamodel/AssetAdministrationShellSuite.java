@@ -3,6 +3,8 @@ package org.eclipse.basyx.testsuite.regression.aas.metamodel;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Set;
+
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
@@ -37,6 +39,7 @@ public abstract class AssetAdministrationShellSuite {
 	// String constants used in this test case
 	protected static final IIdentifier SMID = new Identifier(IdentifierType.CUSTOM, "smId");
 	protected static final IIdentifier AASID = new Identifier(IdentifierType.CUSTOM, "aasId");
+	protected static final String SMENDPOINT = "http://endpoint";
 	protected static final String SMIDSHORT = "smName";
 	protected static final String AASIDSHORT = "aasName";
 	protected static final String PROPID = "propId";
@@ -58,7 +61,7 @@ public abstract class AssetAdministrationShellSuite {
 	 */
 	protected static AssetAdministrationShell retrieveBaselineShell() {
 		// Create descriptor for the SubModel
-		SubmodelDescriptor smDescriptor = new SubmodelDescriptor(retrieveBaselineSM(), "");
+		SubmodelDescriptor smDescriptor = new SubmodelDescriptor(retrieveBaselineSM(), SMENDPOINT);
 
 		// Create an AAS containing a reference to the created SubModel
 		AssetAdministrationShell aas = new AssetAdministrationShell();
@@ -120,4 +123,16 @@ public abstract class AssetAdministrationShellSuite {
 		ISingleProperty prop = (ISingleProperty) sm.getDataElements().get(PROPID);
 		assertEquals(PROPVAL, prop.get());
 	}
+
+	/**
+	 * Tests retrieving the submodel descriptor
+	 */
+	@Test
+	 public void testGetSubmodelDescriptors() {
+		IAssetAdministrationShell shell = retrieveShell();
+		Set<SubmodelDescriptor> descriptors = shell.getSubModelDescriptors();
+		assertEquals(1, descriptors.size());
+		SubmodelDescriptor desc = descriptors.iterator().next();
+		assertEquals(SMENDPOINT, desc.getFirstEndpoint());
+	 }
 }

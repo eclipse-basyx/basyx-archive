@@ -101,7 +101,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<SubmodelDescriptor> getSubModelDescriptors() {
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.SUBMODELS);
+		Set<Map<String, Object>> set = (Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.SUBMODELDESCRIPTORS);
 		return set.stream().map(x -> new SubmodelDescriptor(x)).collect(Collectors.toSet());
 	}
 
