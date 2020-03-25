@@ -39,7 +39,7 @@ namespace support {
 		// Add structure types
 		vabElement.insertKey("structure", basyx::object::make_map());
 		vabElement.getProperty("structure").insertKey("map", basyx::object::make_map());
-		vabElement.getProperty("structure").insertKey("set", basyx::object::make_set<bool>());
+//		vabElement.getProperty("structure").insertKey("set", basyx::object::make_set<bool>());
 		vabElement.getProperty("structure").insertKey("list", basyx::object::make_list<int>());
 
 		// Add corner cases

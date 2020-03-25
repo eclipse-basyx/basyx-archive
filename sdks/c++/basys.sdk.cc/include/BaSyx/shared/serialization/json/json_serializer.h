@@ -50,42 +50,15 @@ namespace json {
 	template<typename T>
 	inline void serialize_helper(json_t & json, const basyx::object::list_t<T> & list)
 	{
-		json[basyx::serialization::typeSpecifier] = "list";
-		json[basyx::serialization::valueSpecifier] = list ;
-	};
-
-	template<typename T>
-	inline void serialize_helper(json_t & json, const basyx::object::set_t<T> & set)
-	{
-		json[basyx::serialization::typeSpecifier] = "set";
-		json[basyx::serialization::valueSpecifier] = set;
+		json = list ;
 	};
 
     // basyx::object::object_map_t serializer
     inline void serialize_helper(json_t& json, const basyx::object::object_map_t & objectMap)
     {
 		// Initialize as valid json object, even if map is empty
-		json = json_t::object();
-        json_t collectionTypes;
-
-        for (const auto& entry : objectMap) {
-            if (entry.second.InstanceOf<basyx::object::object_list_t>()) {
-                collectionTypes[entry.first] = "list";
-            };
-
-            json[entry.first] = entry.second;
-            if (collectionTypes.size() > 0)
-                json["_basyxTypes"] = collectionTypes;
-        }
+		json = objectMap;
     }
-
-    // basyx::object::object_list_t serializer
-    //inline void serialize_helper(json_t& json, const basyx::object::object_list_t& objectCollection)
-    //{
-    //    for (const auto& object : objectCollection) {
-    //        json.push_back(object);
-    //    }
-    //}
 };
 };
 };

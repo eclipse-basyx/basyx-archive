@@ -42,18 +42,6 @@ basyx::object basyx::object::make_object_list(Args && ... args)
 	return basyx::object{ object::list_t<basyx::object>(std::forward<Args>(args)...) };
 };
 
-template<typename T, typename... Args>
-basyx::object basyx::object::make_set(Args && ... args)
-{
-	return basyx::object{ object::set_t<T>(std::forward<Args>(args)...) };
-};
-
-template<typename... Args>
-basyx::object basyx::object::make_object_set(Args && ... args)
-{
-	return basyx::object{ object::set_t<basyx::object>(std::forward<Args>(args)...) };
-};
-
 template<typename... Args>
 basyx::object basyx::object::make_map(Args && ... args)
 {

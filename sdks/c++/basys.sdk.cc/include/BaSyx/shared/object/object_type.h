@@ -22,7 +22,6 @@ namespace type {
 	enum class objectType {
 		Primitive,
 		List,
-		Set,
 		Map,
 		Function
 	};
@@ -100,14 +99,6 @@ namespace type {
 		static constexpr basyx::type::valueType value_type = basyx::type::basyx_type<T>::value_type;
 	};
 
-	// Specialization for std::unordered_set
-	template <typename T>
-	struct basyx_type<std::unordered_set<T>>
-	{
-		static constexpr basyx::type::objectType object_type = basyx::type::objectType::Set;
-		static constexpr basyx::type::valueType value_type = basyx::type::basyx_type<T>::value_type;
-	};
-
 	// Specialization for std::unordered_map
 	template <typename T>
 	struct basyx_type<std::unordered_map<std::string, T>>
@@ -154,12 +145,6 @@ namespace type {
 
 	template <typename T>
 	constexpr basyx::type::objectType basyx_type<std::vector<T>>::object_type;
-
-	template <typename T>
-	constexpr basyx::type::valueType basyx_type<std::unordered_set<T>>::value_type;
-
-	template <typename T>
-	constexpr basyx::type::objectType basyx_type<std::unordered_set<T>>::object_type;
 };
 };
 
