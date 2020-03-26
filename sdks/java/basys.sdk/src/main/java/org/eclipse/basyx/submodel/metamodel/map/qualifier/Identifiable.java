@@ -74,8 +74,8 @@ public class Identifiable extends Referable implements IIdentifiable {
 		return Identifier.createAsFacade((Map<String, Object>) get(Identifiable.IDENTIFICATION));
 	}
 
-	public void setAdministration(String version, String revision) {
-		put(Identifiable.ADMINISTRATION, new AdministrativeInformation(version, revision));
+	public void setAdministration(AdministrativeInformation info) {
+		put(Identifiable.ADMINISTRATION, info);
 	}
 
 	public void setIdentification(IdentifierType idType, String id) {
