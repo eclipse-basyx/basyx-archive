@@ -35,7 +35,7 @@ namespace native {
 	//	asio::ip::tcp::endpoint endpoint;
 		asio::ip::tcp::acceptor acceptor;
 
-		std::vector<basyx::thread> threads;
+		std::vector<std::thread> threads;
 		std::vector<std::unique_ptr<asio::ip::tcp::socket>> sockets;
 
 		bool closed;
@@ -109,7 +109,7 @@ namespace native {
 				log.info("Incoming new connection");
 				sockets.emplace_back(std::move(ClientSocket));
 
-				basyx::thread handlerThread{ &TCPServer<T>::processConnection, this, std::ref(*sockets.back()) };
+				std::thread handlerThread{ &TCPServer<T>::processConnection, this, std::ref(*sockets.back()) };
 				threads.emplace_back(std::move(handlerThread));
 			}
 		}

@@ -37,36 +37,44 @@ public:
         return serializeToJSON(path, res);
     }
 
-    void processBaSysSet(std::string const& path, std::string const& serializedJSONValue)
+    std::string processBaSysSet(std::string const& path, std::string const& serializedJSONValue)
     {
         if (!isFrozen(BaSysID::getAddress(path))) {
             auto deserialized = basyx::serialization::json::deserialize(serializedJSONValue);
             providerBackend->setModelPropertyValue(path, std::move(deserialized));
             incrementClock(BaSysID::getAddress(path));
         }
+
+        return serializeSuccess();
     }
 
-    void processBaSysCreate(std::string const& path, std::string const& serializedJSONValue)
+    std::string processBaSysCreate(std::string const& path, std::string const& serializedJSONValue)
     {
         auto deserialized = basyx::serialization::json::deserialize(serializedJSONValue);
         providerBackend->createValue(path, std::move(deserialized));
+
+        return serializeSuccess();
     }
 
-    void processBaSysDelete(std::string const& path, std::string const& serializedJSONValue)
+    std::string processBaSysDelete(std::string const& path, std::string const& serializedJSONValue)
     {
         if (!isFrozen(BaSysID::getAddress(path))) {
             auto deserialized = basyx::serialization::json::deserialize(serializedJSONValue);
             providerBackend->deleteValue(path, std::move(deserialized));
             incrementClock(BaSysID::getAddress(path));
         }
+
+        return serializeSuccess();
     }
 
-    void processBaSysDelete(std::string const& path)
+    std::string processBaSysDelete(std::string const& path)
     {
         if (!isFrozen(BaSysID::getAddress(path))) {
             providerBackend->deleteValue(path);
             incrementClock(BaSysID::getAddress(path));
         }
+
+        return serializeSuccess();
     }
 
     std::string processBaSysInvoke(std::string const& path, std::string const& serializedJSONValue, char* output, size_t* size)
@@ -89,6 +97,13 @@ public:
 
 private:
     Provider* providerBackend;
+
+    std::string serializeSuccess()
+    {
+        nlohmann::json retJson { { "success", true } };
+
+        return retJson.dump(4);
+    }
 
     std::string serializeToJSON(const std::string& path, const basyx::object& value)
     {

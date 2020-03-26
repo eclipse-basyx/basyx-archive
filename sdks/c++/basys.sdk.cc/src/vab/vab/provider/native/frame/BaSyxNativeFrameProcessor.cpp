@@ -83,9 +83,14 @@ void BaSyxNativeFrameProcessor::processSet(char const* rxFrame, char* txFrame, s
 
 	// TODO: Error Handling?
 	std::string serializedValue = BaSyxNativeFrameHelper::getString(rxFrame, 1);
-	jsonProvider.processBaSysSet(path, serializedValue);
+	std::string getResult = jsonProvider.processBaSysSet(path, serializedValue);
+	memcpy(txFrame + 5, getResult.c_str(), getResult.size());
 
-	// Set result field to 0 to indicate success
+	// Set return string size
+	CoderTools::setInt32(txFrame + 1, 0, *txSize);
+	*txSize += BASYX_STRINGSIZE_SIZE;
+	
+        // Set result field to 0 to indicate success
 	txFrame[0] = 0;
 	*txSize += 1;
 }
@@ -96,9 +101,15 @@ void BaSyxNativeFrameProcessor::processCreate(char const* rxFrame, char* txFrame
 
 	// TODO: Error Handling?
 	std::string serializedValue = BaSyxNativeFrameHelper::getString(rxFrame, 1);
-	jsonProvider.processBaSysCreate(path, serializedValue);
 
-	// Set result field to 0 to indicate success
+	std::string getResult =	jsonProvider.processBaSysCreate(path, serializedValue);
+	memcpy(txFrame + 5, getResult.c_str(), getResult.size());
+
+	// Set return string size
+	CoderTools::setInt32(txFrame + 1, 0, *txSize);
+	*txSize += BASYX_STRINGSIZE_SIZE;
+	
+        // Set result field to 0 to indicate success
 	txFrame[0] = 0;
 	*txSize += 1;
 }
@@ -107,14 +118,22 @@ void BaSyxNativeFrameProcessor::processDelete(char const* rxFrame, std::size_t r
 {
 	std::string path = BaSyxNativeFrameHelper::getString(rxFrame, 0);
 
+        std::string result;
+
 	// Check if there is a serialized json after the path to distinguish between map/collection delete and simple delete
 	if (path.size() + BASYX_STRINGSIZE_SIZE < rxSize) {
 		std::string serializedValue = BaSyxNativeFrameHelper::getString(rxFrame,
 				1);
-		jsonProvider.processBaSysDelete(path, serializedValue);
+            result = jsonProvider.processBaSysDelete(path, serializedValue);
 	} else {
-		jsonProvider.processBaSysDelete(path);
+	    result = jsonProvider.processBaSysDelete(path);
 	}
+
+	memcpy(txFrame + 5, result.c_str(), result.size());
+
+	// Set return string size
+	CoderTools::setInt32(txFrame + 1, 0, *txSize);
+	*txSize += BASYX_STRINGSIZE_SIZE;
 
 	// Set result field to 0 to indicate success
 	txFrame[0] = 0;
