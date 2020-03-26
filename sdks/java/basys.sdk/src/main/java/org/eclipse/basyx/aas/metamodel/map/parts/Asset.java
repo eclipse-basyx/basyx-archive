@@ -10,6 +10,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -109,8 +110,8 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 		return Identifiable.createAsFacade(this).getIdentification();
 	}
 
-	public void setAdministration(String version, String revision) {
-		Identifiable.createAsFacade(this).setAdministration(version, revision);
+	public void setAdministration(AdministrativeInformation information) {
+		Identifiable.createAsFacade(this).setAdministration(information);
 	}
 
 	public void setIdentification(IdentifierType idType, String id) {

@@ -9,11 +9,7 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.testsuite.regression.aas.metamodel.AssetAdministrationShellSuite;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +18,7 @@ import org.junit.Test;
  * Tests the map implementation of {@link IAssetAdministrationShell} based on
  * the AAS test suite. <br />
  * Additionally to the test suite, the setters of the map implementation are
- * testes
+ * tested
  * 
  * @author schnicke
  *
@@ -45,16 +41,8 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 	}
 
 	@Test
-	public void testSetAndGetReference() {
-		AssetAdministrationShell aas = retrieveShell();
-		Reference ref = new Reference(new Key(KeyElements.ASSET, false, "123", KeyType.CUSTOM));
-		aas.setAssetReference(ref);
-		assertEquals(ref, aas.getAssetReference());
-	}
-
-	@Test
-	public void testSetAndGetSubmodelDescriptors() {
-		AssetAdministrationShell aas = retrieveShell();
+	public void testSetSubmodelDescriptors() {
+		AssetAdministrationShell aas = new AssetAdministrationShell();
 
 		// Set new Submodel descriptors
 		Identifier id = new Identifier(IdentifierType.CUSTOM, "identifier");
@@ -85,7 +73,6 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 		// Select new descriptor
 		desc = descriptors.stream().filter(d -> d.getIdShort().equals(idShort2)).findFirst().get();
 		assertEquals(idShort2, desc.getIdShort());
-
 	}
 
 	@Override

@@ -18,6 +18,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDat
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
@@ -146,8 +147,8 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 		return Identifiable.createAsFacade(this).getIdentification();
 	}
 
-	public void setAdministration(String version, String revision) {
-		Identifiable.createAsFacade(this).setAdministration(version, revision);
+	public void setAdministration(AdministrativeInformation information) {
+		Identifiable.createAsFacade(this).setAdministration(information);
 	}
 
 	public void setIdentification(IdentifierType idType, String id) {
