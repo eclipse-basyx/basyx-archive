@@ -1,8 +1,4 @@
-package org.eclipse.basyx.testsuite.regression.vab.protocol;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+package org.eclipse.basyx.vab.support;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import org.eclipse.basyx.testsuite.regression.vab.modelprovider.SimpleVABElement;
-import org.junit.Test;
 
 /**
  * Removes type information similar to what a communication over VAB would do
@@ -69,14 +62,5 @@ public class TypeDestroyer {
 			ret.put(entry.getKey(), handle(entry.getValue()));
 		}
 		return ret;
-	}
-	
-	@Test
-	public void testTypeDestroyer() {
-		SimpleVABElement sm = new SimpleVABElement();
-		Map<String, Object> generic = destroyType(sm);
-		assertTrue(sm instanceof SimpleVABElement);
-		assertFalse(generic instanceof SimpleVABElement);
-		assertEquals(generic, sm);
 	}
 }

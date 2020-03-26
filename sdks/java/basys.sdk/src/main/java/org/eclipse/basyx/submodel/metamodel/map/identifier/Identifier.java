@@ -73,41 +73,4 @@ public class Identifier extends VABModelMap<Object> implements IIdentifier {
 	public void setId(String newValue) {
 		put(Identifier.ID, newValue);
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		String id = getId();
-		IdentifierType idType = getIdType();
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((idType == null) ? 0 : idType.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		String id = getId();
-		IdentifierType idType = getIdType();
-
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Identifier other = (Identifier) obj;
-		if (id == null) {
-			if (other.getId() != null)
-				return false;
-		} else if (!id.equals(other.getId()))
-			return false;
-		if (idType == null) {
-			if (other.getIdType() != null)
-				return false;
-		} else if (!idType.equals(other.getIdType()))
-			return false;
-		return true;
-	}
-
 }

@@ -204,12 +204,11 @@ public class ITSQLRegistryRaw {
 	 * 
 	 * @throws UnsupportedEncodingException
 	 */
-	@Test
+	@Test(expected = NotFoundException.class)
 	public void testNonWorkingCalls() throws UnsupportedEncodingException {
 		// Get unknown AAS ID, has to throw exception
-		try {
-			getResult(client.get(aasUrlUnknown));
-		} catch(Exception e) {}
+		getResult(client.get(aasUrlUnknown));
+		fail();
 	}
 
 	@SuppressWarnings("unchecked")

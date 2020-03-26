@@ -13,11 +13,11 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelemen
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SinglePropertyProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
-import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;
 import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.exception.TypeMismatchException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
+import org.eclipse.basyx.vab.support.TypeDestroyer;
 import org.junit.Before;
 import org.junit.Test;
 

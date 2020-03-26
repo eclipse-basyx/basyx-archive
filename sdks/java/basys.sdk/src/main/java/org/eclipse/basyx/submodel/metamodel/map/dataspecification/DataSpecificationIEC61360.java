@@ -68,7 +68,7 @@ public class DataSpecificationIEC61360 extends DataSpecificationContent implemen
 		put(PREFERREDNAME, preferredName);
 		put(SHORTNAME, shortName);
 		put(UNIT, uni);
-		put(UNITID, null);
+		put(UNITID, unitId);
 		put(SOURCEOFDEFINITION, sourceOfDefinition);
 		put(SYMBOL, symbol);
 		put(DATATYPE, dataType);

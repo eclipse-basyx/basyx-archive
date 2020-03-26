@@ -115,49 +115,4 @@ public class Key extends VABModelMap<Object> implements IKey {
 	public void setIdType(KeyType idType) {
 		put(Key.IDTYPE, idType.toString());
 	}
-
-	@Override
-	public int hashCode() {
-		KeyElements type = getType();
-		boolean local = isLocal();
-		String value = getValue();
-		KeyType idType = getIdType();
-
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((idType == null) ? 0 : idType.hashCode());
-		result = prime * result + (local ? 1231 : 1237);
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		result = prime * result + ((value == null) ? 0 : value.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		KeyElements type = getType();
-		boolean local = isLocal();
-		String value = getValue();
-		KeyType idType = getIdType();
-
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Key other = (Key) obj;
-		if (idType != other.getIdType())
-			return false;
-		if (local != other.isLocal())
-			return false;
-		if (type != other.getType())
-			return false;
-		if (value == null) {
-			if (other.getValue() != null)
-				return false;
-		} else if (!value.equals(other.getValue()))
-			return false;
-		return true;
-	}
-
 }

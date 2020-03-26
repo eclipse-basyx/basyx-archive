@@ -19,9 +19,9 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operat
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.submodel.restapi.OperationProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
-import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
+import org.eclipse.basyx.vab.support.TypeDestroyer;
 import org.junit.Before;
 import org.junit.Test;
 

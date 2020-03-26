@@ -12,7 +12,7 @@ import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.aas.metamodel.AssetAdministrationShellSuite;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
-import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;
+import org.eclipse.basyx.vab.support.TypeDestroyer;
 import org.junit.Before;
 
 /**

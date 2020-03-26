@@ -50,8 +50,8 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.entity.Entity;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
-import org.eclipse.basyx.testsuite.regression.vab.protocol.TypeDestroyer;
 import org.eclipse.basyx.vab.model.VABModelMap;
+import org.eclipse.basyx.vab.support.TypeDestroyer;
 import org.junit.Before;
 import org.junit.Test;
 
