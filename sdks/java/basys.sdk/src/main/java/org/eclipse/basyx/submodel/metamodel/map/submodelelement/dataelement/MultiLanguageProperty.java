@@ -1,7 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -54,6 +53,6 @@ public class MultiLanguageProperty extends DataElement implements IMultiLanguage
 	@Override
 	@SuppressWarnings("unchecked")
 	public LangStrings getValue() {
-		return new LangStrings((HashSet<HashMap<String, Object>>) get(VALUE));
+		return new LangStrings((Collection<Map<String, Object>>) get(VALUE));
 	}
 }

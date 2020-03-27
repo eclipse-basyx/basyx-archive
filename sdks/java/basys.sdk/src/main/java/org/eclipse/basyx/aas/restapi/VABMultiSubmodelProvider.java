@@ -1,5 +1,6 @@
 package org.eclipse.basyx.aas.restapi;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -153,7 +154,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 			if (pathElements[1].equals(AssetAdministrationShell.SUBMODELS)) {
 				if (pathElements.length == 2) {
 					// Make a list and return all submodels
-					HashSet<Object> submodels = new HashSet<Object>();
+					Collection<Object> submodels = new HashSet<>();
 					for (IModelProvider submodel : submodel_providers.values()) {
 						submodels.add(submodel.getModelPropertyValue(""));
 					}

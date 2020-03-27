@@ -1,6 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.eclipse.basyx.submodel.metamodel.api.IElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
@@ -18,21 +18,21 @@ public interface IOperation extends IElement, ISubmodelElement {
 	 * 
 	 * @return Parameter types
 	 */
-	public List<IOperationVariable> getInputVariables();
+	public Collection<IOperationVariable> getInputVariables();
 
 	/**
 	 * Get operation return type
 	 * 
 	 * @return Operation return type
 	 */
-	public List<IOperationVariable> getOutputVariables();
+	public Collection<IOperationVariable> getOutputVariables();
 
 	/**
 	 * Get the parameters that are input and output of the operation.
 	 * 
 	 * @return
 	 */
-	List<IOperationVariable> getInOutputVariables();
+	public Collection<IOperationVariable> getInOutputVariables();
 
 	/**
 	 * Invoke operation with given parameter

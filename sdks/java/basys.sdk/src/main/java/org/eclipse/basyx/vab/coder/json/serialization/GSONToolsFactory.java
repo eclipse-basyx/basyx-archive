@@ -1,15 +1,14 @@
 package org.eclipse.basyx.vab.coder.json.serialization;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 
 
 /**
- * Factory that controls the kind of Maps, Sets, and Lists that is produced when a Map is deserialized
+ * Factory that controls the kind of Maps and Collections that are produced when an Object is deserialized
  * 
- * @author kuhn
+ * @author kuhn, espen
  *
  */
 public interface GSONToolsFactory {
@@ -22,13 +21,7 @@ public interface GSONToolsFactory {
 	
 	
 	/**
-	 * Create a Set
+	 * Create a Collection
 	 */
-	public Set<Object> createSet();
-
-	
-	/**
-	 * Create a List
-	 */
-	public List<Object> createList();
+	public Collection<Object> createCollection();
 }

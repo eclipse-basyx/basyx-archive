@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -110,19 +111,42 @@ public class TestJson {
 	}
 
 	/**
-	 * Tests if a map containing Sets/Lists is (de-)serialized correctly
+	 * Tests if a map containing a collection is (de-)serialized correctly
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testMapWithCollection() {
-		String str = "{\"" + GSONTools.BASYXTYPE + "\": {\"a\": \"" + GSONTools.LIST + "\", \"b\": \"" + GSONTools.SET + "\"}, \"a\": [1,2,3], \"b\": [4,5,6]}";
+		String str = "{\"a\": [1,2,3]}";
 
-		Map<String, Object> map = new HashMap<>();
-		map.put("a", Arrays.asList(1, 2, 3));
-		map.put("b", Sets.newHashSet(4, 5, 6));
-
-		assertEquals(map, tools.deserialize(str));
+		Map<String, Object> listMap = new HashMap<>();
+		listMap.put("a", Arrays.asList(1, 2, 3));
 		
-		assertEquals(map, tools.deserialize(tools.serialize(map)));
+		Map<String, Object> setMap = new HashMap<>();
+		setMap.put("a", Sets.newHashSet(1, 2, 3));
+		
+		Map<String, Object> deserialized = (Map<String, Object>) tools.deserialize(str);
+		Collection<Object> coll = (Collection<Object>) deserialized.get("a");
+		assertEquals(1, deserialized.size());
+		assertEquals(3, coll.size());
+		assertTrue(coll.contains(1));
+		assertTrue(coll.contains(2));
+		assertTrue(coll.contains(3));
+		
+		deserialized = (Map<String, Object>) tools.deserialize(tools.serialize(listMap));
+		coll = (Collection<Object>) deserialized.get("a");
+		assertEquals(1, deserialized.size());
+		assertEquals(3, coll.size());
+		assertTrue(coll.contains(1));
+		assertTrue(coll.contains(2));
+		assertTrue(coll.contains(3));
+		
+		deserialized = (Map<String, Object>) tools.deserialize(tools.serialize(setMap));
+		coll = (Collection<Object>) deserialized.get("a");
+		assertEquals(1, deserialized.size());
+		assertEquals(3, coll.size());
+		assertTrue(coll.contains(1));
+		assertTrue(coll.contains(2));
+		assertTrue(coll.contains(3));
 	}
 
 	/**
@@ -130,7 +154,7 @@ public class TestJson {
 	 */
 	@Test
 	public void testList() {
-		String strComplexOrdered = "[{\"" + GSONTools.INDEX + "\": 0, \"a\": 2}, {\"" + GSONTools.INDEX + "\": 1, \"a\": false}]";
+		String strComplexOrdered = "[{\"a\": 2}, {\"a\": false}]";
 		List<Map<String, Object>> orderedCollection = new ArrayList<>();
 		orderedCollection.add(Collections.singletonMap("a", 2));
 		orderedCollection.add(Collections.singletonMap("a", false));
@@ -139,11 +163,8 @@ public class TestJson {
 
 		JsonObject o1 = new JsonObject();
 		o1.add("a", new JsonPrimitive(2));
-		o1.add(GSONTools.INDEX, new JsonPrimitive(0));
 		JsonObject o2 = new JsonObject();
 		o2.add("a", new JsonPrimitive(false));
-		o2.add(GSONTools.INDEX, new JsonPrimitive(1));
-
 		JsonArray ordered = new JsonArray();
 		ordered.add(o1);
 		ordered.add(o2);
@@ -159,11 +180,13 @@ public class TestJson {
 	/**
 	 * Tests if an empty list is correctly (de-)serialized
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testEmptyList() {
 		List<String> list = new ArrayList<>();
-
-		assertEquals(list, tools.deserialize(tools.serialize(list)));
+		String serialized = tools.serialize(list);
+		Collection<Object> coll = (Collection<Object>) tools.deserialize(serialized);
+		assertTrue(coll.isEmpty());
 	}
 
 	/**
@@ -172,15 +195,14 @@ public class TestJson {
 	@Test
 	public void testEmptyListInMap() {
 		Map<String, Object> map = new HashMap<>();
-
 		map.put("a", new ArrayList<>());
-
 		assertEquals(map, tools.deserialize(tools.serialize(map)));
 	}
 
 	/**
 	 * Tests if a set is correctly (de-)serialized
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testSet() {
 		String strComplexUnordered = "[{\"a\": 4}]";
@@ -188,8 +210,10 @@ public class TestJson {
 		Set<Map<String, Object>> unorderedSet = new HashSet<>();
 		unorderedSet.add(Collections.singletonMap("a", 4));
 		
-		assertEquals(unorderedSet, tools.deserialize(strComplexUnordered));
-		
+		Collection<Map<String, Object>> deserialized = (Collection<Map<String, Object>>) tools
+				.deserialize(strComplexUnordered);
+		assertEquals(1, deserialized.size());
+		assertEquals(4, deserialized.iterator().next().get("a"));
 		
 		JsonArray unorderedArray = new JsonArray();
 		JsonObject o1 = new JsonObject();
@@ -200,18 +224,21 @@ public class TestJson {
 
 		Set<Integer> primitiveSet = new HashSet<>();
 		primitiveSet.add(1);
-
-		assertEquals(primitiveSet, tools.deserialize(tools.serialize(primitiveSet)));
+		Collection<Object> deserializedColl = (Collection<Object>) tools.deserialize(tools.serialize(primitiveSet));
+		assertEquals(1, deserializedColl.size());
+		assertTrue(deserializedColl.contains(1));
 	}
 
 	/**
 	 * Tests if an empty set is correctly (de-)serialized
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testEmptySet() {
 		Set<String> set = new HashSet<>();
 		String serialized = tools.serialize(set);
-		assertEquals(set, tools.deserialize(serialized));
+		Collection<Object> coll = (Collection<Object>) tools.deserialize(serialized);
+		assertTrue(coll.isEmpty());
 	}
 
 	/**
@@ -221,10 +248,8 @@ public class TestJson {
 	public void testEmptySetInMap() {
 		Map<String, Object> map = new HashMap<>();
 		map.put("test", new ArrayList<>());
-
 		String result = tools.serialize(map);
-		assertEquals("{\"test\":[],\"" + GSONTools.BASYXTYPE + "\":{\"test\":\"" + GSONTools.LIST + "\"}}", result);
-
+		assertEquals("{\"test\":[]}", result);
 		assertEquals(map, tools.deserialize(tools.serialize(map)));
 	}
 

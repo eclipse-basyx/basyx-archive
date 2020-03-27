@@ -1,6 +1,7 @@
 package org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.operation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -96,7 +97,7 @@ public class OperationXMLConverter extends SubmodelElementXMLConverter {
 		
 		populateSubmodelElement(document, operationRoot, operation);
 		
-		List<IOperationVariable> in = operation.getInputVariables();
+		Collection<IOperationVariable> in = operation.getInputVariables();
 		if(in != null) {
 			Element valueRoot = document.createElement(INPUT_VARIABLE);
 			operationRoot.appendChild(valueRoot);
@@ -105,7 +106,7 @@ public class OperationXMLConverter extends SubmodelElementXMLConverter {
 			}
 		}
 		
-		List<IOperationVariable> out = operation.getOutputVariables();
+		Collection<IOperationVariable> out = operation.getOutputVariables();
 		if(out != null) {
 			Element valueRoot = document.createElement(OUTPUT_VARIABLE);
 			operationRoot.appendChild(valueRoot);
@@ -114,7 +115,7 @@ public class OperationXMLConverter extends SubmodelElementXMLConverter {
 			}
 		}
 		
-		List<IOperationVariable> inout = operation.getInOutputVariables();
+		Collection<IOperationVariable> inout = operation.getInOutputVariables();
 		if(out != null) {
 			Element valueRoot = document.createElement(INOUTPUT_VARIABLE);
 			operationRoot.appendChild(valueRoot);

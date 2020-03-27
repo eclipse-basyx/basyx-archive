@@ -1,9 +1,8 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -62,8 +61,8 @@ public class Operation extends SubmodelElement implements IOperation {
 	 *            the concrete function
 	 * 
 	 */
-	public Operation(List<OperationVariable> in, List<OperationVariable> out,
-			List<OperationVariable> inout, Function<Object[], Object> function) {
+	public Operation(Collection<OperationVariable> in, Collection<OperationVariable> out,
+			Collection<OperationVariable> inout, Function<Object[], Object> function) {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 
@@ -105,26 +104,25 @@ public class Operation extends SubmodelElement implements IOperation {
 		return ret;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<IOperationVariable> getInputVariables() {
-		return transformToOperationVariables((List<Map<String, Object>>) get(Operation.IN));
+	public Collection<IOperationVariable> getInputVariables() {
+		return transformToOperationVariables(get(Operation.IN));
+	}
+
+	@Override
+	public Collection<IOperationVariable> getOutputVariables() {
+		return transformToOperationVariables(get(Operation.OUT));
+	}
+
+	@Override
+	public Collection<IOperationVariable> getInOutputVariables() {
+		return transformToOperationVariables(get(Operation.INOUT));
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<IOperationVariable> getOutputVariables() {
-		return transformToOperationVariables((List<Map<String, Object>>) get(Operation.OUT));
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<IOperationVariable> getInOutputVariables() {
-		return transformToOperationVariables((List<Map<String, Object>>) get(Operation.INOUT));
-	}
-
-	private List<IOperationVariable> transformToOperationVariables(List<Map<String, Object>> map) {
-		List<IOperationVariable> ret = new ArrayList<>();
+	private Collection<IOperationVariable> transformToOperationVariables(Object obj) {
+		Collection<Map<String, Object>> map = (Collection<Map<String, Object>>) obj;
+		Collection<IOperationVariable> ret = new ArrayList<>();
 		for (Map<String, Object> m : map) {
 			ret.add(OperationVariable.createAsFacade(m));
 		}
@@ -137,15 +135,15 @@ public class Operation extends SubmodelElement implements IOperation {
 		return ((Function<Object[], Object>) get(INVOKABLE)).apply(params);
 	}
 
-	public void setInputVariables(List<OperationVariable> in) {
+	public void setInputVariables(Collection<OperationVariable> in) {
 		put(Operation.IN, in);
 	}
 
-	public void setOutputVariables(List<OperationVariable> out) {
+	public void setOutputVariables(Collection<OperationVariable> out) {
 		put(Operation.OUT, out);
 	}
 
-	public void setInOutputVariables(List<OperationVariable> inOut) {
+	public void setInOutputVariables(Collection<OperationVariable> inOut) {
 		put(Operation.INOUT, inOut);
 	}
 
@@ -154,12 +152,12 @@ public class Operation extends SubmodelElement implements IOperation {
 	}
 
 	@Override
-	public Set<IReference> getDataSpecificationReferences() {
+	public Collection<IReference> getDataSpecificationReferences() {
 		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
 	}
 
 	@Override
-	public void setDataSpecificationReferences(Set<IReference> ref) {
+	public void setDataSpecificationReferences(Collection<IReference> ref) {
 		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
 	}
 

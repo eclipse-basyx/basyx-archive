@@ -1,9 +1,9 @@
 package org.eclipse.basyx.submodel.factory.xml.converters.qualifier;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.factory.xml.converters.reference.ReferenceXMLConverter;
@@ -40,7 +40,7 @@ public class HasDataSpecificationXMLConverter {
 		
 		Object xmlDataSpecObj = xmlObject.get(EMBEDDED_DATA_SPECIFICATION);
 		
-		HashSet<IReference> refSet = new HashSet<>();
+		Collection<IReference> refSet = new HashSet<>();
 		
 		List<Map<String, Object>> xmlSpecList = XMLHelper.getList(xmlDataSpecObj);
 		for (Map<String, Object> xmlSpec : xmlSpecList) {
@@ -76,9 +76,9 @@ public class HasDataSpecificationXMLConverter {
 	 * @param hasDataSpecification the IHasDataSpecification object to be converted to XML
 	 */
 	public static void populateHasDataSpecificationXML(Document document, Element root, IHasDataSpecification hasDataSpecification) {
-		Set<IReference> references = hasDataSpecification.getDataSpecificationReferences();
-		
-		if(references != null && references.size() > 0) {
+		Collection<IReference> references = hasDataSpecification.getDataSpecificationReferences();
+
+		if (references != null && !references.isEmpty()) {
 			Element embeddedDataSpecRoot = document.createElement(EMBEDDED_DATA_SPECIFICATION);
 			Element dataSpecRoot = document.createElement(HAS_DATA_SPECIFICATION);
 			embeddedDataSpecRoot.appendChild(dataSpecRoot);

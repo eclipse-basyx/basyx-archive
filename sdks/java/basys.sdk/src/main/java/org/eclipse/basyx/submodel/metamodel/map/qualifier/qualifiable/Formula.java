@@ -1,8 +1,8 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IFormula;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -37,7 +37,7 @@ public class Formula extends Constraint implements IFormula {
 	 * @param dependsOn
 	 *            set of References the formula depends on
 	 */
-	public Formula(Set<IReference> dependsOn) {
+	public Formula(Collection<IReference> dependsOn) {
 		putAll(new ModelType(MODELTYPE));
 		put(DEPENDSON, dependsOn);
 	}
@@ -59,16 +59,13 @@ public class Formula extends Constraint implements IFormula {
 		return ret;
 	}
 
-	public void setDependsOn(Set<IReference> dependsOn) {
+	public void setDependsOn(Collection<IReference> dependsOn) {
 		put(Formula.DEPENDSON, dependsOn);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Set<IReference> getDependsOn() {
-		// Transform set of maps to set of IReference
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(Formula.DEPENDSON);
-		return ReferenceHelper.transform(set);
+	public Collection<IReference> getDependsOn() {
+		return ReferenceHelper.transform(get(Formula.DEPENDSON));
 	}
 
 

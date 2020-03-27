@@ -1,8 +1,8 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -23,12 +23,10 @@ public class HasDataSpecification extends VABModelMap<Object> implements IHasDat
 	 * Constructor
 	 */
 	public HasDataSpecification() {
-		// Default values
 		put(HASDATASPECIFICATION, new HashSet<Reference>());
 	}
 
-	public HasDataSpecification(Set<IReference> ref) {
-		// Default values
+	public HasDataSpecification(Collection<IReference> ref) {
 		put(HASDATASPECIFICATION, ref);
 	}
 
@@ -50,14 +48,12 @@ public class HasDataSpecification extends VABModelMap<Object> implements IHasDat
 		return ret;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Set<IReference> getDataSpecificationReferences() {
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(HasDataSpecification.HASDATASPECIFICATION);
-		return ReferenceHelper.transform(set);
+	public Collection<IReference> getDataSpecificationReferences() {
+		return ReferenceHelper.transform(get(HasDataSpecification.HASDATASPECIFICATION));
 	}
 
-	public void setDataSpecificationReferences(Set<IReference> ref) {
+	public void setDataSpecificationReferences(Collection<IReference> ref) {
 		put(HasDataSpecification.HASDATASPECIFICATION, ref);
 	}
 

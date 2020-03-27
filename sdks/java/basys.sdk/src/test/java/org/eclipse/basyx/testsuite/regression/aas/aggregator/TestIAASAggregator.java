@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
@@ -36,7 +36,7 @@ public class TestIAASAggregator {
 	private static final LangStrings description2 = new LangStrings("en", "This is test AAS 2");
 	private static final String aas2Category = "TestCategory2";
 	
-	//initializing dummy test data
+	// initializing dummy test data
 	@Before
 	public void initAASDummies() {
 		aas1 = new AssetAdministrationShell();
@@ -72,16 +72,16 @@ public class TestIAASAggregator {
 	public void testGetAASList() throws Exception {
 		IAASAggregator aggregator = getAggregator();
 		
-		//Create two AASs
+		// Create two AASs
 		aggregator.createAAS(aas1);
 		aggregator.createAAS(aas2);
 		
-		//get the List of all AASs
-		List<IAssetAdministrationShell> list = aggregator.getAASList();
-		assertEquals(2, list.size());
+		// get the collection of all AASs
+		Collection<IAssetAdministrationShell> coll = aggregator.getAASList();
+		assertEquals(2, coll.size());
 		
-		//check the AAS List
-		for(IAssetAdministrationShell aas: list) {
+		// check the AAS collection
+		for (IAssetAdministrationShell aas : coll) {
 			if(aas.getIdShort().equals(aas1Id)) {
 				checkAAS1(aas);
 			} else if(aas.getIdShort().equals(aas2Id)) {
@@ -96,19 +96,19 @@ public class TestIAASAggregator {
 	public void testUpdate() throws Exception {
 		IAASAggregator aggregator = getAggregator();
 		
-		//Create a new AAS
+		// Create a new AAS
 		aggregator.createAAS(aas1);
 		
-		//Get and check the unchanged AAS
+		// Get and check the unchanged AAS
 		checkAAS1(aggregator.getAAS(new ModelUrn(aas1Id)));
 
-		//Change Category of AAS locally
+		// Change category of AAS locally
 		aas1.setCategory(aas1AltCategory);
 		
-		//Update the changed AAS
+		// Update the changed AAS
 		aggregator.updateAAS(aas1);
 		
-		//Get the updated AAS and check its Category
+		// Get the updated AAS and check its category
 		IAssetAdministrationShell aas = aggregator.getAAS(new ModelUrn(aas1Id));
 		assertEquals(aas1AltCategory, aas.getCategory());
 	}
@@ -117,22 +117,22 @@ public class TestIAASAggregator {
 	public void testDelete() throws Exception {
 		IAASAggregator aggregator = getAggregator();
 		
-		//Create two new AASs
+		// Create two new AASs
 		aggregator.createAAS(aas1);
 		aggregator.createAAS(aas2);
 		
-		//Get AAS List and check, that both are present
-		List<IAssetAdministrationShell> list = aggregator.getAASList();
-		assertEquals(2, list.size());
+		// Get AAS collection and check, that both are present
+		Collection<IAssetAdministrationShell> coll = aggregator.getAASList();
+		assertEquals(2, coll.size());
 		
-		//Delete one of the AASs
+		// Delete one of the AASs
 		aggregator.deleteAAS(new ModelUrn(aas1Id));
 		
-		//Get AAS List and check, that one of them is deleted
-		list = aggregator.getAASList();
-		assertEquals(1, list.size());
+		// Get AAS collection and check, that one of them is deleted
+		coll = aggregator.getAASList();
+		assertEquals(1, coll.size());
 		
-		for(IAssetAdministrationShell aas: list) {
+		for (IAssetAdministrationShell aas : coll) {
 			if(aas.getIdShort().equals(aas1Id)) { //aas1 should be deleted
 				fail();
 			} else if(aas.getIdShort().equals(aas2Id)) {
@@ -144,7 +144,7 @@ public class TestIAASAggregator {
 	}
 	
 	
-	//Methods to verify, that AAS objects contain the correct test data
+	// Methods to verify, that AAS objects contain the correct test data
 	private void checkAAS1(Object o) {
 		assertTrue(o instanceof AssetAdministrationShell);
 		AssetAdministrationShell aas = (AssetAdministrationShell) o;

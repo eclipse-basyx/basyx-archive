@@ -1,8 +1,8 @@
 package org.eclipse.basyx.aas.metamodel.map.parts;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
@@ -34,7 +34,7 @@ public class ConceptDictionary extends VABModelMap<Object> implements IConceptDi
 		put(CONCEPTDESCRIPTIONS, new HashSet<IConceptDescription>());
 	}
 
-	public ConceptDictionary(Set<IReference> ref) {
+	public ConceptDictionary(Collection<IReference> ref) {
 		// Add qualifier (Referable)
 		putAll(new Referable());
 		put(CONCEPTDESCRIPTION, ref);
@@ -95,18 +95,16 @@ public class ConceptDictionary extends VABModelMap<Object> implements IConceptDi
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public Set<IReference> getConceptDescription() {
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(ConceptDictionary.CONCEPTDESCRIPTION);
-		return ReferenceHelper.transform(set);
+	public Collection<IReference> getConceptDescription() {
+		return ReferenceHelper.transform(get(ConceptDictionary.CONCEPTDESCRIPTION));
 	}
 
-	public void setConceptDescription(HashSet<IReference> ref) {
+	public void setConceptDescription(Collection<IReference> ref) {
 		put(ConceptDictionary.CONCEPTDESCRIPTION, ref);
 	}
 
 	@SuppressWarnings("unchecked")
 	public void addConceptDescription(IConceptDescription description) {
-		((Set<IConceptDescription>) get(CONCEPTDESCRIPTIONS)).add(description);
+		((Collection<IConceptDescription>) get(CONCEPTDESCRIPTIONS)).add(description);
 	}
 }

@@ -2,7 +2,6 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -65,10 +64,10 @@ public class Entity extends SubmodelElement implements IEntity {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<ISubmodelElement> getStatements() {
-		List<ISubmodelElement> ret = new ArrayList<>();
-		List<Object> smElems = (ArrayList<Object>) get(STATEMENT);
-		for(Object smElemO: smElems) {
+	public Collection<ISubmodelElement> getStatements() {
+		Collection<ISubmodelElement> ret = new ArrayList<>();
+		Collection<Object> smElems = (Collection<Object>) get(STATEMENT);
+		for (Object smElemO : smElems) {
 			Map<String, Object> smElem = (Map<String, Object>) smElemO;
 			ret.add(SubmodelElementFacadeFactory.createSubmodelElement(smElem));
 		}

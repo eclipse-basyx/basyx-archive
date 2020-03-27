@@ -1,8 +1,8 @@
 package org.eclipse.basyx.submodel.metamodel.map.parts;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecificationIEC61360;
@@ -67,11 +67,11 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 	}
 
 	@Override
-	public Set<IReference> getDataSpecificationReferences() {
+	public Collection<IReference> getDataSpecificationReferences() {
 		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
 	}
 
-	public void setDataSpecificationReferences(Set<IReference> ref) {
+	public void setDataSpecificationReferences(Collection<IReference> ref) {
 		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
 	}
 
@@ -94,13 +94,11 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public Set<IReference> getIsCaseOf() {
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(ConceptDescription.ISCASEOF);
-		return ReferenceHelper.transform(set);
+	public Collection<IReference> getIsCaseOf() {
+		return ReferenceHelper.transform(get(ConceptDescription.ISCASEOF));
 	}
 
-	public void setIsCaseOf(Set<Reference> ref) {
+	public void setIsCaseOf(Collection<Reference> ref) {
 		put(ConceptDescription.ISCASEOF, ref);
 	}
 
@@ -142,8 +140,8 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 	}
 
 	@SuppressWarnings("unchecked")
-	public Set<IDataSpecification> getDataSpecifications() {
-		return (Set<IDataSpecification>) get(DATASPECIFICATIONS);
+	public Collection<IDataSpecification> getDataSpecifications() {
+		return (Collection<IDataSpecification>) get(DATASPECIFICATIONS);
 	}
 
 	public void addDataSpecification(IDataSpecificationIEC61360 spec) {

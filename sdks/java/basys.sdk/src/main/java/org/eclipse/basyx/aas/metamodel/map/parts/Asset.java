@@ -1,7 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.map.parts;
 
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
@@ -83,11 +83,11 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 	}
 
 	@Override
-	public Set<IReference> getDataSpecificationReferences() {
+	public Collection<IReference> getDataSpecificationReferences() {
 		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
 	}
 
-	public void setDataSpecificationReferences(Set<IReference> ref) {
+	public void setDataSpecificationReferences(Collection<IReference> ref) {
 		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
 	}
 

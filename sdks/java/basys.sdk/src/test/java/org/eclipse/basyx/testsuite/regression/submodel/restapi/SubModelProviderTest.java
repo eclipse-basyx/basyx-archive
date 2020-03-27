@@ -5,9 +5,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -85,7 +85,7 @@ public class SubModelProviderTest {
 
 		// Read list of properties
 		Object result = submodelElement.getModelPropertyValue("/submodel/dataElements");
-		Set<Map<String, Object>> propertySet = (Set<Map<String, Object>>) result;
+		Collection<Map<String, Object>> propertySet = (Collection<Map<String, Object>>) result;
 		HashMap<String, Object> property = (HashMap<String, Object>) propertySet.stream().filter(elem -> elem.get(Identifiable.IDSHORT).equals("integerProperty")).findFirst().get();
 		assertEquals(123, property.get(Property.VALUE));
 
@@ -105,7 +105,7 @@ public class SubModelProviderTest {
 		assertEquals("Test", resMap.get(Property.VALUE));
 
 		// Read container property
-		Set<Object> resSet = (Set<Object>) submodelElement
+		Collection<Object> resSet = (Collection<Object>) submodelElement
 				.getModelPropertyValue("/submodel/dataElements/containerRoot/submodelElement");
 		assertEquals(1, resSet.size());
 		resSet.forEach(x -> assertEquals("container", ((Map<String, Object>) x).get(Referable.IDSHORT)));
@@ -147,7 +147,7 @@ public class SubModelProviderTest {
 	@Test
 	public void testReadDataElements() {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) submodel.getModelPropertyValue("/submodel/dataElements");
+		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel.getModelPropertyValue("/submodel/dataElements");
 		assertEquals(3, set.size());
 	}
 
@@ -158,7 +158,7 @@ public class SubModelProviderTest {
 	@Test
 	public void testReadOperations() {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) submodel.getModelPropertyValue("/submodel/operations");
+		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel.getModelPropertyValue("/submodel/operations");
 		assertEquals(4, set.size());
 	}
 
@@ -180,7 +180,7 @@ public class SubModelProviderTest {
 	@Test
 	public void testReadSubModelElements() {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) submodel.getModelPropertyValue("/submodel/submodelElement");
+		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel.getModelPropertyValue("/submodel/submodelElement");
 		assertEquals(7, set.size());
 	}
 

@@ -1,6 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.map.reference;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -98,9 +99,8 @@ public class Reference extends VABModelMap<Object> implements IReference {
 		List<IKey> ret = new ArrayList<>();
 
 		// Transform list of maps to set of IKey
-		List<Map<String, Object>> list = (List<Map<String, Object>>) get(Reference.KEY);
-
-		for (Map<String, Object> m : list) {
+		Collection<Map<String, Object>> coll = (Collection<Map<String, Object>>) get(Reference.KEY);
+		for (Map<String, Object> m : coll) {
 			ret.add(Key.createAsFacade(m));
 		}
 

@@ -2,8 +2,8 @@ package org.eclipse.basyx.testsuite.regression.aas.metamodel.map;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
@@ -49,7 +49,7 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 		String idShort = "idShort";
 		String httpEndpoint = "http://endpoint";
 
-		Set<SubmodelDescriptor> descriptors = new HashSet<>();
+		Collection<SubmodelDescriptor> descriptors = new HashSet<>();
 		descriptors.add(new SubmodelDescriptor(idShort, id, httpEndpoint));
 
 		aas.setSubModels(descriptors);

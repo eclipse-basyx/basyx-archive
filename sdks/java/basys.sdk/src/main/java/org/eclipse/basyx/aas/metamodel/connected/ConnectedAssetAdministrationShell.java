@@ -1,7 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.connected;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -76,7 +76,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	}
 
 	@Override
-	public Set<IReference> getDataSpecificationReferences() {
+	public Collection<IReference> getDataSpecificationReferences() {
 		return HasDataSpecification.createAsFacade(getElem()).getDataSpecificationReferences();
 	}
 
@@ -100,34 +100,37 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Set<SubmodelDescriptor> getSubModelDescriptors() {
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.SUBMODELDESCRIPTORS);
-		return set.stream().map(x -> new SubmodelDescriptor(x)).collect(Collectors.toSet());
+
+	public Collection<SubmodelDescriptor> getSubModelDescriptors() {
+		Collection<Map<String, Object>> coll = (Collection<Map<String, Object>>) getElem()
+				.getPath(AssetAdministrationShell.SUBMODELDESCRIPTORS);
+		return coll.stream().map(SubmodelDescriptor::new).collect(Collectors.toSet());
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Set<IView> getViews() {
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.VIEWS);
-		Set<IView> views = new HashSet<>();
-		for (Map<String, Object> m : set) {
-			views.add(View.createAsFacade(m));
-		}
-		return views;
+
+	public Collection<IView> getViews() {
+		Collection<Map<String, Object>> coll = (Collection<Map<String, Object>>) getElem()
+				.getPath(AssetAdministrationShell.VIEWS);
+		return coll.stream().map(View::createAsFacade).collect(Collectors.toSet());
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Set<IConceptDictionary> getConceptDictionary() {
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.CONCEPTDICTIONARY);
-		return set.stream().map(x -> ConceptDictionary.createAsFacade(x)).collect(Collectors.toSet());
+
+	public Collection<IConceptDictionary> getConceptDictionary() {
+		Collection<Map<String, Object>> set = (Set<Map<String, Object>>) getElem()
+				.getPath(AssetAdministrationShell.CONCEPTDICTIONARY);
+		return set.stream().map(ConceptDictionary::createAsFacade).collect(Collectors.toSet());
 	}
+
 
 	@Override
 	public Map<String, ISubModel> getSubModels() {
 		Map<String, ISubModel> ret = new HashMap<>();
 
-		Set<SubmodelDescriptor> submodelDescriptors = getSubModelDescriptors();
+		Collection<SubmodelDescriptor> submodelDescriptors = getSubModelDescriptors();
 		for (final SubmodelDescriptor submodelDescriptor : submodelDescriptors) {
 			String id = submodelDescriptor.getIdShort();
 			ret.put(id, new ConnectedSubModel(getProxy().getDeepProxy(AssetAdministrationShell.SUBMODELS + "/" + id)));
@@ -162,10 +165,9 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(Referable.PARENT));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Set<IReference> getSubmodelReferences() {
-		return ReferenceHelper.transform((Set<Map<String, Object>>) getElem().getPath(AssetAdministrationShell.SUBMODELS));
+	public Collection<IReference> getSubmodelReferences() {
+		return ReferenceHelper.transform(getElem().getPath(AssetAdministrationShell.SUBMODELS));
 	}
 
 	@SuppressWarnings("unchecked")

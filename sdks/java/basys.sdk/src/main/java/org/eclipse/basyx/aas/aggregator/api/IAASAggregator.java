@@ -1,6 +1,6 @@
 package org.eclipse.basyx.aas.aggregator.api;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
@@ -21,7 +21,7 @@ public interface IAASAggregator {
 	 * 
 	 * @return a List of all found Asset Administration Shells
 	 */
-	public List<IAssetAdministrationShell> getAASList();
+	public Collection<IAssetAdministrationShell> getAASList();
 	
 	/**
 	 * Retrieves a specific Asset Administration Shell

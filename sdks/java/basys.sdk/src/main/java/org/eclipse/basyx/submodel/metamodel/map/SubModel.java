@@ -1,5 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.map;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,7 +157,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	}
 
 	@Override
-	public Set<IReference> getDataSpecificationReferences() {
+	public Collection<IReference> getDataSpecificationReferences() {
 		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
 	}
 
@@ -239,7 +240,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 		return ElementContainer.createAsFacade(this).getSubmodelElements();
 	}
 	@Override
-	public Set<IConstraint> getQualifier() {
+	public Collection<IConstraint> getQualifier() {
 		return Qualifiable.createAsFacade(this).getQualifier();
 	}
 }

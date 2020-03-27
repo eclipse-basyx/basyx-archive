@@ -2,7 +2,6 @@ package org.eclipse.basyx.aas.aggregator;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -24,10 +23,8 @@ public class AASAggregator implements IAASAggregator {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<IAssetAdministrationShell> getAASList() {
-		Collection<AASModelProvider> providers = aasProviderMap.values();
-
-		List<IAssetAdministrationShell> ret = providers.stream().map(p -> {
+	public Collection<IAssetAdministrationShell> getAASList() {
+		return aasProviderMap.values().stream().map(p -> {
 			try {
 				return p.getModelPropertyValue("");
 			} catch (Exception e1) {
@@ -39,8 +36,6 @@ public class AASAggregator implements IAASAggregator {
 			aas.putAll((Map<? extends String, ? extends Object>) m);
 			return aas;
 		}).collect(Collectors.toList());
-
-		return ret;
 	}
 
 	@SuppressWarnings("unchecked")

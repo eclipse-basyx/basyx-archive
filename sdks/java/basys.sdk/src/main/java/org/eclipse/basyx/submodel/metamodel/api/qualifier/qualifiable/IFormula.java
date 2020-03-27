@@ -1,6 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable;
 
-import java.util.Set;
+import java.util.Collection;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 /**
@@ -9,5 +9,5 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
  *
 */
 public interface IFormula extends IConstraint {
-	public  Set<IReference> getDependsOn();
+	public Collection<IReference> getDependsOn();
 }

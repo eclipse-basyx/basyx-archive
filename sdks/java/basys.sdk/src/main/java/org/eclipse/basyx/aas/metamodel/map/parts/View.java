@@ -1,5 +1,6 @@
 package org.eclipse.basyx.aas.metamodel.map.parts;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -70,15 +71,13 @@ public class View extends VABModelMap<Object> implements IView {
 		return ret;
 	}
 
-	public void setContainedElement(Set<IReference> references) {
+	public void setContainedElement(Collection<IReference> references) {
 		put(View.CONTAINEDELEMENT, references);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Set<IReference> getContainedElement() {
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(View.CONTAINEDELEMENT);
-		return ReferenceHelper.transform(set);
+	public Collection<IReference> getContainedElement() {
+		return ReferenceHelper.transform(get(View.CONTAINEDELEMENT));
 	}
 
 	@Override
@@ -92,11 +91,11 @@ public class View extends VABModelMap<Object> implements IView {
 	}
 
 	@Override
-	public Set<IReference> getDataSpecificationReferences() {
+	public Collection<IReference> getDataSpecificationReferences() {
 		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
 	}
 
-	public void setDataSpecificationReferences(Set<IReference> ref) {
+	public void setDataSpecificationReferences(Collection<IReference> ref) {
 		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
 
 	}

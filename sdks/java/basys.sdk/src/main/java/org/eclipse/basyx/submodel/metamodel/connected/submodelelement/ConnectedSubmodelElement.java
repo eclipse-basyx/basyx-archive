@@ -1,7 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
@@ -48,7 +48,7 @@ public abstract class ConnectedSubmodelElement extends ConnectedElement implemen
 	}
 
 	@Override
-	public Set<IConstraint> getQualifier() {
+	public Collection<IConstraint> getQualifier() {
 		return Qualifiable.createAsFacade(getElem()).getQualifier();
 	}
 
@@ -64,7 +64,7 @@ public abstract class ConnectedSubmodelElement extends ConnectedElement implemen
 	}
 
 	@Override
-	public Set<IReference> getDataSpecificationReferences() {
+	public Collection<IReference> getDataSpecificationReferences() {
 		return HasDataSpecification.createAsFacade(getElem()).getDataSpecificationReferences();
 	}
 	

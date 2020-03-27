@@ -1,6 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
@@ -18,7 +18,7 @@ public interface IEntity extends ISubmodelElement {
 	 * 
 	 * @return
 	 */
-	List<ISubmodelElement> getStatements();
+	Collection<ISubmodelElement> getStatements();
 
 	/**
 	 * Gets EntityType describing whether the entity is a comanaged entity or a
