@@ -1,6 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable;
 
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * Interface for Qualifiable
@@ -9,5 +9,5 @@ import java.util.Set;
 */
 
 public interface IQualifiable {
-	public Set<IConstraint> getQualifier();
+	public Collection<IConstraint> getQualifier();
 }

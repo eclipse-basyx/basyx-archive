@@ -14,7 +14,6 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.transform.stream.StreamResult;
 
@@ -188,10 +187,10 @@ public class TestXMLConverter {
 		assertEquals("1", aas.getAdministration().getVersion());
 		assertEquals("0", aas.getAdministration().getRevision());
 		
-		Set<IConceptDictionary> conceptDictionary = aas.getConceptDictionary();
+		Collection<IConceptDictionary> conceptDictionary = aas.getConceptDictionary();
 		for (IConceptDictionary iConceptDictionary : conceptDictionary) {
 			assertEquals("SampleDic", iConceptDictionary.getIdShort());
-			Set<IReference> conceptDescription = iConceptDictionary.getConceptDescription();
+			Collection<IReference> conceptDescription = iConceptDictionary.getConceptDescription();
 			List<IKey> keys = conceptDescription.iterator().next().getKeys();
 			assertEquals(1, keys.size());
 
@@ -237,7 +236,7 @@ public class TestXMLConverter {
 		if(!iView.getIdShort().equals("SampleView"))
 			iView = (IView) views[1];
 		assertEquals("SampleView", iView.getIdShort());
-		Set<IReference> containedElement = iView.getContainedElement();
+		Collection<IReference> containedElement = iView.getContainedElement();
 		IReference ref = containedElement.iterator().next();
 
 		// Text keys
@@ -287,7 +286,7 @@ public class TestXMLConverter {
 		assertEquals("conceptDescription1", conceptDescription.getIdShort());
 		assertEquals("conceptDescription_Description", conceptDescription.getDescription().get("EN"));
 		assertEquals("www.festo.com/dic/08111234", conceptDescription.getIdentification().getId());
-		Set<IReference> refs = conceptDescription.getIsCaseOf();
+		Collection<IReference> refs = conceptDescription.getIsCaseOf();
 		assertEquals(1, refs.size());
 	}
 	
@@ -306,7 +305,7 @@ public class TestXMLConverter {
 		assertNotNull(submodel);
 		
 		assertEquals("3s7plfdrs35_submodel1", submodel.getIdShort());
-		Set<IConstraint> constraints = submodel.getQualifier();
+		Collection<IConstraint> constraints = submodel.getQualifier();
 		assertEquals(2, constraints.size());
 		checkSubmodelElements(submodel);
 	}
@@ -340,10 +339,9 @@ public class TestXMLConverter {
 		assertTrue(element instanceof Entity);
 		Entity entity = (Entity) element;
 		assertTrue(entity.getEntityType().equals(EntityType.COMANAGEDENTITY));
-		List<ISubmodelElement> statements = entity.getStatements();
+		Collection<ISubmodelElement> statements = entity.getStatements();
 		assertEquals(2, statements.size());
-		assertTrue((statements.get(0) instanceof File) || (statements.get(1) instanceof File));
-		assertTrue((statements.get(0) instanceof Range) || (statements.get(1) instanceof Range));
+		assertTrue(statements.stream().allMatch(s -> s instanceof File || s instanceof Range));
 		
 		element = submodelElements.get("multi_language_property_id");
 		assertTrue(element instanceof MultiLanguageProperty);
@@ -403,15 +401,15 @@ public class TestXMLConverter {
 		element = submodelElements.get("operation_ID");
 		assertTrue(element instanceof Operation);
 		Operation op = (Operation) element;
-		List<IOperationVariable> parameters = op.getInputVariables();
+		Collection<IOperationVariable> parameters = op.getInputVariables();
 		assertEquals(2, parameters.size());
-		List<IOperationVariable> returns = op.getOutputVariables();
+		Collection<IOperationVariable> returns = op.getOutputVariables();
 		assertEquals(1, returns.size());
-		Object o = returns.get(0).getValue();
+		Object o = returns.iterator().next().getValue();
 		assertTrue(o instanceof ReferenceElement);
-		List<IOperationVariable> inout = op.getInOutputVariables();
+		Collection<IOperationVariable> inout = op.getInOutputVariables();
 		assertEquals(1, inout.size());
-		o = inout.get(0).getValue();
+		o = inout.iterator().next().getValue();
 		assertTrue(o instanceof ReferenceElement);
 	}
 	

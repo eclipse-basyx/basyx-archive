@@ -3,7 +3,7 @@ package org.eclipse.basyx.testsuite.regression.aas.metamodel;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Set;
+import java.util.Collection;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
@@ -149,7 +149,7 @@ public abstract class AssetAdministrationShellSuite {
 	@Test
 	 public void testGetSubmodelDescriptors() {
 		IAssetAdministrationShell shell = retrieveShell();
-		Set<SubmodelDescriptor> descriptors = shell.getSubModelDescriptors();
+		Collection<SubmodelDescriptor> descriptors = shell.getSubModelDescriptors();
 		assertEquals(1, descriptors.size());
 		SubmodelDescriptor desc = descriptors.iterator().next();
 		assertEquals(SMENDPOINT, desc.getFirstEndpoint());

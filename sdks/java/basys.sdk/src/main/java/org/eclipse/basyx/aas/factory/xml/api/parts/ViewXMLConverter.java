@@ -38,9 +38,9 @@ public class ViewXMLConverter {
 	 * @return a Set of IView objects parsed form the given XML Map
 	 */
 	@SuppressWarnings("unchecked")
-	public static Set<IView> parseViews(Map<String, Object> xmlObject) {
+	public static Collection<IView> parseViews(Map<String, Object> xmlObject) {
 
-		Set<IView> viewSet = new HashSet<>();
+		Collection<IView> viewSet = new HashSet<>();
 		if(xmlObject == null) return viewSet;
 		
 		xmlObject = (Map<String, Object>) xmlObject.get(VIEWS);
@@ -110,7 +110,7 @@ public class ViewXMLConverter {
 	 * @param view the IView object to build the XML for
 	 */
 	private static void buildContainedElements(Document document, Element xmlView, IView view) {
-		Set<IReference> containedElement = view.getContainedElement();
+		Collection<IReference> containedElement = view.getContainedElement();
 		if(containedElement != null) {
 			Element xmlContainedElements = document.createElement(CONTAINED_ELEMENTS);
 			Element xmlContainedElementsRef = document.createElement(CONTAINED_ELEMENT_REF);

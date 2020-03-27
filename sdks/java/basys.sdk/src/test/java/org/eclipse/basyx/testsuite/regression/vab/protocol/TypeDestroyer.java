@@ -4,11 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.basyx.testsuite.regression.vab.modelprovider.SimpleVABElement;
 import org.junit.Test;
@@ -36,8 +38,10 @@ public class TypeDestroyer {
 	private static Object handle(Object o) {
 		if(o instanceof Map) {
 			return handleMap((Map<String, Object>) o);
-		} else if(o instanceof Set) {
+		} else if (o instanceof Set) {
 			return handleSet((Set<Object>) o);
+		} else if (o instanceof List) {
+			return handleList((List<Object>) o);
 		} else {
 			return o;
 		}
@@ -46,6 +50,14 @@ public class TypeDestroyer {
 	private static Set<Object> handleSet(Set<Object> set) {
 		Set<Object> ret = new HashSet<>();
 		for (Object o : set) {
+			ret.add(handle(o));
+		}
+		return ret;
+	}
+
+	private static List<Object> handleList(List<Object> list) {
+		List<Object> ret = new ArrayList<>();
+		for (Object o : list) {
 			ret.add(handle(o));
 		}
 		return ret;

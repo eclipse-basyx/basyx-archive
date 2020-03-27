@@ -2,8 +2,8 @@ package org.eclipse.basyx.aas.registration.restapi;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
@@ -311,7 +311,7 @@ public class DirectoryModelProvider implements IModelProvider {
 	 * @return Set of contained SubmodelDescriptor objects
 	 * @throws ResourceNotFoundException if the AAS does not exist
 	 */
-	private Set<SubmodelDescriptor> getSmDescriptorsFromAAS(IIdentifier id) throws ResourceNotFoundException {
+	private Collection<SubmodelDescriptor> getSmDescriptorsFromAAS(IIdentifier id) throws ResourceNotFoundException {
 		AASDescriptor aasDescriptor = registry.lookupAAS(id);
 		if(aasDescriptor == null) {
 			throw new ResourceNotFoundException("Specified AASid '" + id.getId() + "' does not exist.");

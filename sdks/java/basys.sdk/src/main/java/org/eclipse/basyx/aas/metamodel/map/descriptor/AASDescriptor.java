@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
@@ -47,7 +46,7 @@ public class AASDescriptor extends ModelDescriptor {
 		put(AssetAdministrationShell.ENDPOINTS, aas.getEndpoints());
 
 		// Overwrite submodel descriptors
-		Set<SubmodelDescriptor> smDescriptors = aas.getSubModelDescriptors();
+		Collection<SubmodelDescriptor> smDescriptors = aas.getSubModelDescriptors();
 		put(AssetAdministrationShell.SUBMODELS, smDescriptors);
 	}
 	
@@ -62,7 +61,7 @@ public class AASDescriptor extends ModelDescriptor {
 		this(aas.getIdShort(), aas.getIdentification(), endpoint);
 
 		// Overwrite submodel descriptors
-		Set<SubmodelDescriptor> smDescriptors = aas.getSubModelDescriptors();
+		Collection<SubmodelDescriptor> smDescriptors = aas.getSubModelDescriptors();
 		put(AssetAdministrationShell.SUBMODELS, smDescriptors);
 	}
 
@@ -108,7 +107,7 @@ public class AASDescriptor extends ModelDescriptor {
 		// TODO: Exception in else case
 		if (toRemove.isPresent()) {
 			// Don't use getSubmodelDescriptors here since it returns a copy
-			((Set<Object>) get(AssetAdministrationShell.SUBMODELS)).remove(toRemove.get());
+			((Collection<Object>) get(AssetAdministrationShell.SUBMODELS)).remove(toRemove.get());
 		}
 	}
 
@@ -161,9 +160,9 @@ public class AASDescriptor extends ModelDescriptor {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public Set<SubmodelDescriptor> getSubModelDescriptors() {
+	public Collection<SubmodelDescriptor> getSubModelDescriptors() {
 		Collection<Map<String, Object>> descriptors = (Collection<Map<String, Object>>) get(AssetAdministrationShell.SUBMODELS);
-		return descriptors.stream().map(m -> new SubmodelDescriptor(m)).collect(Collectors.toSet());
+		return descriptors.stream().map(SubmodelDescriptor::new).collect(Collectors.toSet());
 	}
 }
 

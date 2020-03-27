@@ -1,9 +1,9 @@
 package org.eclipse.basyx.submodel.factory.xml.converters.qualifier.qualifiable;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.HasSemanticsXMLConverter;
@@ -61,8 +61,8 @@ public class QualifiableXMLConverter {
 	 * @return the Set of IConstraint objects parsed
 	 */
 	@SuppressWarnings("unchecked")
-	private static Set<IConstraint> parseConstraints(Map<String, Object> xmlConstraints) {
-		Set<IConstraint> constraints = new HashSet<>();
+	private static Collection<IConstraint> parseConstraints(Map<String, Object> xmlConstraints) {
+		Collection<IConstraint> constraints = new HashSet<>();
 		
 		if(xmlConstraints == null) return constraints;
 		
@@ -94,7 +94,7 @@ public class QualifiableXMLConverter {
 	@SuppressWarnings("unchecked")
 	private static Formula parseFormula(Map<String, Object> xmlFormula) {
 		Map<String, Object> dependsOnObj = (Map<String, Object>) xmlFormula.get(DEPENDS_ON_REFS);
-		Set<IReference> referenceList = new HashSet<IReference>();
+		Collection<IReference> referenceList = new HashSet<>();
 				
 		List<Map<String, Object>> xmlReferenceList = XMLHelper.getList(dependsOnObj.get(REFERENCE));
 		for (Map<String, Object> xmlReference : xmlReferenceList) {
@@ -146,7 +146,7 @@ public class QualifiableXMLConverter {
 		if(qualifiable.getQualifier() == null || qualifiable.getQualifier().size() == 0) return;
 		
 		
-		Set<IConstraint> constraints = qualifiable.getQualifier();
+		Collection<IConstraint> constraints = qualifiable.getQualifier();
 		
 		Element qualifierRoot = document.createElement(QUALIFIER);
 		
@@ -189,7 +189,7 @@ public class QualifiableXMLConverter {
 	private static Element buildFormulaXML(Document document, IFormula formula) {
 		Element formulaRoot = document.createElement(FORMULA);
 		Element dependsOnRoot = document.createElement(DEPENDS_ON_REFS);
-		Set<IReference> ref = formula.getDependsOn();
+		Collection<IReference> ref = formula.getDependsOn();
 		Element refrenceRoot = document.createElement(REFERENCE);
 		refrenceRoot.appendChild(ReferenceXMLConverter.buildReferencesXML(document, ref));
 		dependsOnRoot.appendChild(refrenceRoot);

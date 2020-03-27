@@ -1,7 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.connected;
 
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
@@ -54,7 +54,7 @@ public class ConnectedSubModel extends ConnectedVABElementContainerFacade implem
 	}
 
 	@Override
-	public Set<IReference> getDataSpecificationReferences() {
+	public Collection<IReference> getDataSpecificationReferences() {
 		return HasDataSpecification.createAsFacade(getElem()).getDataSpecificationReferences();
 	}
 
@@ -85,7 +85,7 @@ public class ConnectedSubModel extends ConnectedVABElementContainerFacade implem
 	}
 	
 	@Override
-	public Set<IConstraint> getQualifier() {
+	public Collection<IConstraint> getQualifier() {
 		return Qualifiable.createAsFacade(getElem()).getQualifier();
 	}
 }

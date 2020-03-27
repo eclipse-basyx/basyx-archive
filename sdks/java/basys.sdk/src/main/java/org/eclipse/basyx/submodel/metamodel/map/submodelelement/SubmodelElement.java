@@ -1,7 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement;
 
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
@@ -50,11 +50,11 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 	}
 
 	@Override
-	public Set<IReference> getDataSpecificationReferences() {
+	public Collection<IReference> getDataSpecificationReferences() {
 		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
 	}
 
-	public void setDataSpecificationReferences(Set<IReference> ref) {
+	public void setDataSpecificationReferences(Collection<IReference> ref) {
 		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
 	}
 
@@ -98,12 +98,12 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 		Referable.createAsFacade(this).setParent(obj);
 	}
 
-	public void setQualifier(Set<IConstraint> qualifiers) {
+	public void setQualifier(Collection<IConstraint> qualifiers) {
 		Qualifiable.createAsFacade(this).setQualifier(qualifiers);
 	}
 
 	@Override
-	public Set<IConstraint> getQualifier() {
+	public Collection<IConstraint> getQualifier() {
 		return Qualifiable.createAsFacade(this).getQualifier();
 	}
 

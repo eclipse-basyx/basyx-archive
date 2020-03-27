@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.HasDataSpecificationXMLConverter;
@@ -48,7 +47,7 @@ public class ConceptDescriptionXMLConverter {
 			IdentifiableXMLConverter.populateIdentifiable(xmlConceptDescription, conceptDescription);
 			HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlConceptDescription, conceptDescription);
 			
-			Set<Reference> handleIsCaseOf = parseIsCaseOfRefs(xmlConceptDescription);
+			Collection<Reference> handleIsCaseOf = parseIsCaseOfRefs(xmlConceptDescription);
 			conceptDescription.setIsCaseOf(handleIsCaseOf);
 			
 			conceptDescriptions.add(conceptDescription);
@@ -64,9 +63,8 @@ public class ConceptDescriptionXMLConverter {
 	 * @param xmlObject a Map containing the XML tag &lt;aas:isCaseOf&gt;
 	 * @return a Reference object parsed form the given XML Map
 	 */
-	private static Set<Reference> parseIsCaseOfRefs(Map<String, Object> xmlObject) {		
-		Set<Reference> references = new HashSet<>();
-		
+	private static Collection<Reference> parseIsCaseOfRefs(Map<String, Object> xmlObject) {
+		Collection<Reference> references = new HashSet<>();
 		List<Map<String, Object>> xmlKeyList = XMLHelper.getList(xmlObject.get(IS_CASE_OF));
 		for (Map<String, Object> xmlKey : xmlKeyList) {
 			references.add(ReferenceXMLConverter.parseReference(xmlKey));
@@ -113,7 +111,7 @@ public class ConceptDescriptionXMLConverter {
 	 * @param conceptDescription the IConceptDescription object to build the XML for
 	 */
 	private static void buildIsCaseOf(Document document, Element xmlConceptDescription, IConceptDescription conceptDescription) {		 
-		Set<IReference> references = conceptDescription.getIsCaseOf();
+		Collection<IReference> references = conceptDescription.getIsCaseOf();
 		Element xmlIsCaseOf = document.createElement(IS_CASE_OF);
 
 		Element keysElement = ReferenceXMLConverter.buildReferencesXML(document, references);

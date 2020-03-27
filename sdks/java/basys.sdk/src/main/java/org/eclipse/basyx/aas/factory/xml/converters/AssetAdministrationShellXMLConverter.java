@@ -61,8 +61,8 @@ public class AssetAdministrationShellXMLConverter {
 			IdentifiableXMLConverter.populateIdentifiable(xmlAAS, adminShell);
 			HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlAAS, adminShell);
 			
-			Set<IView> views = ViewXMLConverter.parseViews(xmlAAS);
-			Set<IConceptDictionary> conceptDictionary = parseConceptDictionaries(xmlAAS);
+			Collection<IView> views = ViewXMLConverter.parseViews(xmlAAS);
+			Collection<IConceptDictionary> conceptDictionary = parseConceptDictionaries(xmlAAS);
 			
 			Map<String, Object> xmlAssetRef = (Map<String, Object>) xmlAAS.get(ASSET_REF);
 			Reference assetRef = ReferenceXMLConverter.parseReference(xmlAssetRef);
@@ -82,7 +82,7 @@ public class AssetAdministrationShellXMLConverter {
 			adminShell.setConceptDictionary(conceptDictionary);
 			adminShell.setAssetReference(assetRef);
 			
-			Set<IReference> submodelRefs = parseSubmodelRefs(xmlAAS);
+			Collection<IReference> submodelRefs = parseSubmodelRefs(xmlAAS);
 			adminShell.setSubmodelReferences(submodelRefs);
 			
 			AASs.add(adminShell);
@@ -99,13 +99,13 @@ public class AssetAdministrationShellXMLConverter {
 	 * @return a Set of {@link IReference} objects parsed form the given XML Map
 	 */
 	@SuppressWarnings("unchecked")
-	private static Set<IReference> parseSubmodelRefs(Map<String, Object> xmlObject) {
+	private static Collection<IReference> parseSubmodelRefs(Map<String, Object> xmlObject) {
 		Set<IReference> refSet = new HashSet<>();
 		
 		Map<String, Object> refMap = (Map<String, Object>) xmlObject.get(SUBMODEL_REFS);
 
 		if (refMap == null) {
-			return new HashSet<IReference>();
+			return new HashSet<>();
 		}
 
 		List<Map<String, Object>> xmlKeyList = XMLHelper.getList(refMap.get(SUBMODEL_REF));
@@ -124,7 +124,7 @@ public class AssetAdministrationShellXMLConverter {
 	 * @return a Set of IConceptDictionary objects parsed form the given XML Map
 	 */
 	@SuppressWarnings("unchecked")
-	private static Set<IConceptDictionary> parseConceptDictionaries(Map<String, Object> xmlConceptDescriptionRefsObject) {
+	private static Collection<IConceptDictionary> parseConceptDictionaries(Map<String, Object> xmlConceptDescriptionRefsObject) {
 		Set<IConceptDictionary> conceptDictionarySet = new HashSet<>();
 		if(xmlConceptDescriptionRefsObject == null) return conceptDictionarySet;
 		
@@ -175,7 +175,7 @@ public class AssetAdministrationShellXMLConverter {
 			buildDerivedFrom(document, aasRoot, aas);
 			buildAssetRef(document, aasRoot, aas);
 			buildSubmodelRef(document, aasRoot, aas);
-			Set<IView> views = aas.getViews();
+			Collection<IView> views = aas.getViews();
 			
 			Element buildViews = ViewXMLConverter.buildViewsXML(document, views);
 			aasRoot.appendChild(buildViews);
@@ -233,10 +233,10 @@ public class AssetAdministrationShellXMLConverter {
 	 * @param aas the IAssetAdministrationShell object to build the XML for
 	 */
 	private static void buildSubmodelRef(Document document, Element root, IAssetAdministrationShell aas) {
-		Set<IReference> submodelRef = aas.getSubmodelReferences();
+		Collection<IReference> submodelRef = aas.getSubmodelReferences();
 		
 		
-		if (submodelRef != null && submodelRef.size() > 0) {
+		if (submodelRef != null && !submodelRef.isEmpty()) {
 			Element submodelRefsRoot = document.createElement(SUBMODEL_REFS);
 			for (IReference ref : submodelRef) {
 				Element submodelRefRoot = document.createElement(SUBMODEL_REF);
@@ -257,7 +257,7 @@ public class AssetAdministrationShellXMLConverter {
 	 * @return the &lt;aas:conceptDictionaries&gt; XML tag build from the IAssetAdministrationShell object
 	 */
 	private static Element buildConceptDictionary(Document document, IAssetAdministrationShell aas) {
-		Set<IConceptDictionary> conceptDicionary = aas.getConceptDictionary();
+		Collection<IConceptDictionary> conceptDicionary = aas.getConceptDictionary();
 		Element conceptDicts = document.createElement(CONCEPT_DICTIONARIES);
 		for(IConceptDictionary iConceptDictionary: conceptDicionary) {
 			Element conceptDict = document.createElement(CONCEPT_DICTIONARY);
@@ -269,7 +269,7 @@ public class AssetAdministrationShellXMLConverter {
 			}
 			conceptDict.appendChild(concDescRoot);
 			conceptDicts.appendChild(conceptDict);
-			Set<IReference> conceptDescriptionRef = iConceptDictionary.getConceptDescription();
+			Collection<IReference> conceptDescriptionRef = iConceptDictionary.getConceptDescription();
 			for (IReference ref: conceptDescriptionRef) {
 				if(ref != null) {
 					Element conceptDescriptionRefRoot = document.createElement(CONCEPT_DESCRIPTION_REF);

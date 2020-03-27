@@ -1,8 +1,8 @@
 package org.eclipse.basyx.submodel.metamodel.map.reference;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 
@@ -15,18 +15,15 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 public class ReferenceHelper {
 	/**
 	 * Helper method used e.g. by facades to transform a set of maps to a set of
-	 * IReference
+	 * IReference -> Assumes the given object is a Collection<Map<String, Object>>
 	 * 
 	 * @param set
 	 * @return
 	 */
-	public static Set<IReference> transform(Set<Map<String, Object>> set) {
+	public static Collection<IReference> transform(Object obj) {
 		// Transform set of maps to set of IReference
-		Set<IReference> ret = new HashSet<>();
-		for (Map<String, Object> m : set) {
-			ret.add(Reference.createAsFacade(m));
-		}
-
-		return ret;
+		@SuppressWarnings("unchecked")
+		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) obj;
+		return collection.stream().map(Reference::createAsFacade).collect(Collectors.toSet());
 	}
 }

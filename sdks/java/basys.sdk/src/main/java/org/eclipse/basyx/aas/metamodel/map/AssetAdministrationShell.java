@@ -1,11 +1,11 @@
 package org.eclipse.basyx.aas.metamodel.map;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
@@ -69,7 +69,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		this(null, null, new Asset(), new HashSet<SubmodelDescriptor>(), new HashSet<IConceptDictionary>(), new HashSet<IView>());
 	}
 
-	public AssetAdministrationShell(Reference derivedFrom, Security security, Asset asset, Set<SubmodelDescriptor> submodels, Set<IConceptDictionary> dictionaries, Set<IView> views) {
+	public AssetAdministrationShell(Reference derivedFrom, Security security, Asset asset, Collection<SubmodelDescriptor> submodels, Collection<IConceptDictionary> dictionaries, Collection<IView> views) {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 		
@@ -150,11 +150,11 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@Override
-	public Set<IReference> getDataSpecificationReferences() {
+	public Collection<IReference> getDataSpecificationReferences() {
 		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
 	}
 
-	public void setDataSpecificationReferences(Set<IReference> ref) {
+	public void setDataSpecificationReferences(Collection<IReference> ref) {
 		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
 	}
 
@@ -203,35 +203,35 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@SuppressWarnings("unchecked")
-	public void setSubModels(Set<SubmodelDescriptor> submodels) {
+	public void setSubModels(Collection<SubmodelDescriptor> submodels) {
 		put(AssetAdministrationShell.SUBMODELDESCRIPTORS, submodels);
 
 		// Clear submodel references and add new keys
-		((Set<Reference>) get(SUBMODELS)).clear();
-		submodels.stream().forEach(s -> addSubmodelReferences(s));
+		((Collection<Reference>) get(SUBMODELS)).clear();
+		submodels.stream().forEach(this::addSubmodelReferences);
 	}
 
-	public void setViews(Set<IView> views) {
+	public void setViews(Collection<IView> views) {
 		put(AssetAdministrationShell.VIEWS, views);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Set<IView> getViews() {
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(AssetAdministrationShell.VIEWS);
-		return set.stream().map(m -> View.createAsFacade(m)).collect(Collectors.toSet());
+	public Collection<IView> getViews() {
+		Collection<Map<String, Object>> coll = (Collection<Map<String, Object>>) get(AssetAdministrationShell.VIEWS);
+		return coll.stream().map(View::createAsFacade).collect(Collectors.toSet());
 	}
 
-	public void setConceptDictionary(Set<IConceptDictionary> dictionaries) {
+	public void setConceptDictionary(Collection<IConceptDictionary> dictionaries) {
 		put(AssetAdministrationShell.CONCEPTDICTIONARY, dictionaries);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Set<IConceptDictionary> getConceptDictionary() {
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(AssetAdministrationShell.CONCEPTDICTIONARY);
-
-		return set.stream().map(m -> ConceptDictionary.createAsFacade(m)).collect(Collectors.toSet());
+	public Collection<IConceptDictionary> getConceptDictionary() {
+		Collection<Map<String, Object>> coll = (Collection<Map<String, Object>>) get(
+				AssetAdministrationShell.CONCEPTDICTIONARY);
+		return coll.stream().map(ConceptDictionary::createAsFacade).collect(Collectors.toSet());
 	}
 
 	@Override
@@ -275,15 +275,16 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	@Override
 	public void addSubModel(SubmodelDescriptor descriptor) {
 		logger.trace("adding Submodel", descriptor.getIdentifier().getId());
-		((Set<SubmodelDescriptor>) get(AssetAdministrationShell.SUBMODELDESCRIPTORS)).add(descriptor);
+		((Collection<SubmodelDescriptor>) get(AssetAdministrationShell.SUBMODELDESCRIPTORS)).add(descriptor);
 		addSubmodelReferences(descriptor);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Set<SubmodelDescriptor> getSubModelDescriptors() {
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(AssetAdministrationShell.SUBMODELDESCRIPTORS);
-		return set.stream().map(m -> new SubmodelDescriptor(m)).collect(Collectors.toSet());
+	public Collection<SubmodelDescriptor> getSubModelDescriptors() {
+		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) get(
+				AssetAdministrationShell.SUBMODELDESCRIPTORS);
+		return set.stream().map(SubmodelDescriptor::new).collect(Collectors.toSet());
 	}
 
 	/**
@@ -292,7 +293,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	 * @param description
 	 */
 	public void addConceptDescription(IConceptDescription description) {
-		Set<IConceptDictionary> dictionaries = getConceptDictionary();
+		Collection<IConceptDictionary> dictionaries = getConceptDictionary();
 		if (dictionaries.isEmpty()) {
 			dictionaries.add(new ConceptDictionary());
 		}
@@ -301,27 +302,23 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public Set<IReference> getSubmodelReferences() {
-		return ReferenceHelper.transform((Set<Map<String, Object>>) get(SUBMODELS));
+	public Collection<IReference> getSubmodelReferences() {
+		return ReferenceHelper.transform(get(SUBMODELS));
 	}
 
-	public void setSubmodelReferences(Set<IReference> references) {
+	public void setSubmodelReferences(Collection<IReference> references) {
 		put(SUBMODELS, references);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void addSubmodelReference(IReference reference) {
-		getSubmodelReferencesAsRawSet().add(reference);
+		Collection<Object> smReferences = (Collection<Object>) get(SUBMODELS);
+		smReferences.add(reference);
 	}
 
 	private void addSubmodelReferences(SubmodelDescriptor descriptor) {
 		IIdentifier identifier = descriptor.getIdentifier();
 		Reference ref = new Reference(identifier, KeyElements.SUBMODEL, true);
 		addSubmodelReference(ref);
-	}
-
-	@SuppressWarnings("unchecked")
-	private Set<Object> getSubmodelReferencesAsRawSet() {
-		return ((Set<Object>) get(SUBMODELS));
 	}
 }

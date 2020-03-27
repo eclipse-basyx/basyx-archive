@@ -1,7 +1,9 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -23,8 +25,12 @@ public class LangStrings extends HashSet<HashMap<String, Object>> {
 		add(language, text);
 	}
 	
-	public LangStrings(HashSet<HashMap<String, Object>> set) {
-		this.addAll(set);
+	public LangStrings(Collection<Map<String, Object>> set) {
+		set.stream().forEach(ls -> {
+			String lang = (String) ls.get(LANGUAGE);
+			String text = (String) ls.get(TEXT);
+			add(lang, text);
+		});
 	}
 
 	/**

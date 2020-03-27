@@ -3,14 +3,14 @@ package org.eclipse.basyx.vab.coder.json.serialization;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Base64;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -44,15 +44,10 @@ public class GSONTools implements Serializer {
 	private static Logger logger = LoggerFactory.getLogger(GSONTools.class);
 	
 	// Used string constants
-	public static final String INDEX = "index";
 	public static final String OPERATION = "operation";
 	public static final String LAMBDA = "lambda";
 	public static final String BASYXFUNCTIONTYPE = "_basyxFunctionType";
 	public static final String BASYXINVOCABLE = "_basyxInvocable";
-	public static final String LIST = "list";
-	public static final String SET = "set";
-	public static final String BASYXTYPE = "_basyxTypes";
-	public static final String BASYXVALUE = "_value";
 	public static final String BASYXFUNCTIONVALUE = "_basyxFunctionValue";
 
 	/**
@@ -84,65 +79,13 @@ public class GSONTools implements Serializer {
 	@Override
 	public Object deserialize(String str) {
 		JsonElement elem = parser.parse(str);
-
-		// Handle edge case of collection of primitives
-		if (isWrappedCollection(elem)) {
-			return handleWrappedCollection(elem);
-		} else {
-			return deserializeJsonElement(elem);
-		}
-
-	}
-
-	private Object handleWrappedCollection(JsonElement elem) {
-		JsonObject obj = elem.getAsJsonObject();
-		JsonArray array = (JsonArray) obj.get(BASYXVALUE);
-		if (obj.get(BASYXTYPE).getAsString().equals(SET)) {
-			return deserializeJsonArrayAsSet(array);
-		} else {
-			return deserializeJsonArrayAsList(array);
-		}
-	}
-
-	private boolean isWrappedCollection(JsonElement elem) {
-		if (elem.isJsonObject()) {
-			JsonObject obj = elem.getAsJsonObject();
-			return obj.has(BASYXVALUE);
-		}
-		return false;
+		return deserializeJsonElement(elem);
 	}
 
 	@Override
 	public String serialize(Object obj) {
-		JsonElement elem = serializeToJsonElement(obj);
-
-		// Handle edge case of collection of primitives and empty collections
-		// Has to be handled here since complete knowledge about element structure is
-		// needed
-		if (obj instanceof Collection<?>) {
-			Collection<?> col = (Collection<?>) obj;
-
-			if (col.size() > 0) {
-				Object item = col.iterator().next();
-
-				// Only handle primitive types. Complex types are already handled
-				if (item.getClass().isPrimitive() || isWrapperType(item.getClass())) {
-					elem = buildCollectionWrapper(col instanceof List<?> ? LIST : SET, elem);
-				}
-			} else {
-				// Empty collections need also to be handled, regardless of intended type
-				elem = buildCollectionWrapper(col instanceof List<?> ? LIST : SET, new JsonArray());
-			}
-		}
-
+		JsonElement elem = serializeObject(obj);
 		return elem.toString();
-	}
-
-	private JsonObject buildCollectionWrapper(String type, JsonElement elem) {
-		JsonObject jObj = new JsonObject();
-		jObj.add(BASYXTYPE, new JsonPrimitive(type));
-		jObj.add(BASYXVALUE, elem);
-		return jObj;
 	}
 
 	/**
@@ -152,7 +95,7 @@ public class GSONTools implements Serializer {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private JsonElement serializeToJsonElement(Object obj) {
+	private JsonElement serializeObject(Object obj) {
 		if (obj == null) {
 			return JsonNull.INSTANCE;
 		} else if (obj.getClass().isPrimitive() || isWrapperType(obj.getClass()) || obj instanceof String) {
@@ -160,11 +103,7 @@ public class GSONTools implements Serializer {
 		} else if (obj instanceof Map<?, ?>) {
 			return serializeMap((Map<String, Object>) obj);
 		} else if (obj instanceof Collection<?>) {
-			if (obj instanceof List<?>) {
-				return serializeList((List<?>) obj);
-			} else {
-				return serializeSet((Set<?>) obj);
-			}
+			return serializeCollection((Collection<Object>) obj);
 		} else if (isFunction(obj)) {
 			return serializeFunction(obj);
 		}
@@ -220,7 +159,7 @@ public class GSONTools implements Serializer {
 	}
 
 	/**
-	 * Serializes either string, int, double or boolean to a JsonPrimitive
+	 * Serializes either string, number or boolean to a JsonPrimitive
 	 * 
 	 * @param primitive
 	 * @return
@@ -244,14 +183,16 @@ public class GSONTools implements Serializer {
 	 */
 	private Object deserializeJsonObject(JsonObject map) {
 		if (map.has(BASYXFUNCTIONTYPE)) {
-			if (map.get(BASYXFUNCTIONTYPE).getAsString().equals(OPERATION)) {
+			String functionType = map.get(BASYXFUNCTIONTYPE).getAsString();
+			if (functionType.equals(OPERATION)) {
 				return BASYXINVOCABLE;
-			} else {
-				// Type equals Lambda
+			} else if (functionType.equals(LAMBDA)) {
 				return deserializeObjectFromString(map.get(BASYXFUNCTIONVALUE).getAsString());
+			} else {
+				throw new RuntimeException("Unknown function type " + functionType + "!");
 			}
 		} else {
-			return deserializeToMap(map);
+			return deserializeObject(map);
 		}
 	}
 
@@ -261,36 +202,10 @@ public class GSONTools implements Serializer {
 	 * @param map
 	 * @return
 	 */
-	private Map<String, Object> deserializeToMap(JsonObject map) {
+	private Map<String, Object> deserializeObject(JsonObject map) {
 		Map<String, Object> ret = toolsFactory.createMap();
-		JsonObject collectionTypes = (JsonObject) map.get(BASYXTYPE);
-
 		for (String k : map.keySet()) {
-			// Ignore BASYXTYPE since it is only used for type meta data
-			if (k.equals(BASYXTYPE)) {
-				continue;
-			}
-
-			// If there are collections in the map, get their types and deserialize them
-			if (collectionTypes != null && collectionTypes.has(k)) {
-				String type = collectionTypes.get(k).getAsString();
-				JsonElement el = map.get(k);
-				if (type.equals(LIST)) {
-					if (el.isJsonArray()) {
-						ret.put(k, deserializeJsonArrayAsList((JsonArray) el));
-					} else {
-						ret.put(k, handleWrappedCollection(el));
-					}
-				} else if (type.equals(SET)) {
-					if (el.isJsonArray()) {
-						ret.put(k, deserializeJsonArrayAsSet((JsonArray) el));
-					} else {
-						ret.put(k, handleWrappedCollection(el));
-					}
-				}
-			} else {
-				ret.put(k, deserializeJsonElement(map.get(k)));
-			}
+			ret.put(k, deserializeJsonElement(map.get(k)));
 		}
 		return ret;
 	}
@@ -303,113 +218,27 @@ public class GSONTools implements Serializer {
 	 */
 	private JsonObject serializeMap(Map<String, Object> map) {
 		JsonObject obj = new JsonObject();
-		JsonObject collectionTypes = new JsonObject();
-		for (String k : map.keySet()) {
-			Object o = map.get(k);
-			if (o instanceof List<?>) {
-				collectionTypes.add(k, new JsonPrimitive(LIST));
-			} else if (o instanceof Set<?>) {
-				collectionTypes.add(k, new JsonPrimitive(SET));
-			}
-
-			obj.add(k, serializeToJsonElement(o));
+		for (Entry<String, Object> entry : map.entrySet()) {
+			obj.add(entry.getKey(), serializeObject(entry.getValue()));
 		}
-
-		// If there are any collections, add collection type meta data
-		if (collectionTypes.size() > 0) {
-			obj.add(BASYXTYPE, collectionTypes);
-		}
-
 		return obj;
 	}
 
 	/**
-	 * Removes INDEX string from ordered lists
-	 * 
-	 * @param obj
-	 * @return
-	 */
-	private JsonObject stripIndex(JsonObject obj) {
-		obj.remove(INDEX);
-		return obj;
-	}
-
-	/**
-	 * Deserializes a JSONArray to either a list or a set, depending on the presence
-	 * of an INDEX value
+	 * Deserializes a JsonArray to a Collection<br/>
+	 * Remark: internally, a List will be used for deserialization & it is assumed, that
+	 * the order in the json equals the correct intended order for the list.
+	 * => The ordering will be preserved in the returned collection
 	 * 
 	 * @param array
 	 * @return
 	 */
-	private Object deserializeJsonArray(JsonArray array) {
-		if (isOrdered(array)) {
-			return deserializeJsonArrayAsList(array);
-		} else {
-			return deserializeJsonArrayAsSet(array);
+	private Collection<Object> deserializeJsonArray(JsonArray array) {
+		Collection<Object> list = toolsFactory.createCollection();
+		for (JsonElement element : array) {
+			list.add(deserializeJsonElement(element));
 		}
-	}
-
-	/**
-	 * Deserializes a JsonArray to a List<br/>
-	 * <b>Assumption:</b> The order in the json is equals the correct order
-	 * 
-	 * @param array
-	 * @return
-	 */
-	private List<Object> deserializeJsonArrayAsList(JsonArray array) {
-		List<Object> list = toolsFactory.createList();
-		for (int i = 0; i < array.size(); i++) {
-			if (array.get(i) instanceof JsonObject) {
-				// If it is a JsonObject it contains an index --> Strip it
-				JsonObject stripped = stripIndex(array.get(i).getAsJsonObject());
-				list.add(deserializeJsonElement(stripped));
-			} else {
-				list.add(deserializeJsonElement(array.get(i)));
-
-			}
-		}
-
 		return list;
-	}
-
-	/**
-	 * Deserializes a JsonArray to a Set
-	 * 
-	 * @param array
-	 * @return
-	 */
-	private Set<Object> deserializeJsonArrayAsSet(JsonArray array) {
-		Set<Object> set = toolsFactory.createSet();
-		for (int i = 0; i < array.size(); i++) {
-			set.add(deserializeJsonElement(array.get(i)));
-		}
-		return set;
-	}
-
-	/**
-	 * Checks if a JsonArray is an ordered list or a set <br/>
-	 * FIXME: Replace this here with BASYXTYPE checks
-	 * 
-	 * @param array
-	 * @return
-	 */
-	private boolean isOrdered(JsonArray array) {
-		if (array.size() == 0) {
-			return true;
-		}
-
-		JsonElement elem = array.get(0);
-
-		if (!elem.isJsonObject()) {
-			return false;
-		}
-
-		JsonObject obj = elem.getAsJsonObject();
-		if (obj.has(INDEX)) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	/**
@@ -419,39 +248,10 @@ public class GSONTools implements Serializer {
 	 * @return
 	 */
 	private boolean isFunction(Object value) {
-		return (value instanceof Supplier<?>) || (value instanceof Function<?, ?>) || (value instanceof Consumer<?>) || (value instanceof BiConsumer<?, ?>);
-	}
-
-	/**
-	 * Checks if an object implements Serializable
-	 * 
-	 * @param value
-	 * @return
-	 */
-	private boolean isSerializable(Object value) {
-		return value instanceof Serializable;
-	}
-
-	/**
-	 * Serializes a set to a JsonArray
-	 * 
-	 * @param set
-	 * @return
-	 */
-	private JsonElement serializeSet(Set<?> set) {
-		JsonArray array = new JsonArray();
-		if (set.size() > 0) {
-			for (Object o : set) {
-				array.add(serializeToJsonElement(o));
-			}
-			return array;
-		} else {
-			// If it is an empty list,
-			JsonObject jObj = new JsonObject();
-			jObj.add(BASYXTYPE, new JsonPrimitive(SET));
-			jObj.add(BASYXVALUE, new JsonArray());
-			return jObj;
-		}
+		return (value instanceof Supplier<?>) 
+				|| (value instanceof Function<?, ?>) 
+				|| (value instanceof Consumer<?>)
+				|| (value instanceof BiConsumer<?, ?>);
 	}
 
 	/**
@@ -460,30 +260,10 @@ public class GSONTools implements Serializer {
 	 * @param list
 	 * @return
 	 */
-	private JsonElement serializeList(List<?> list) {
-
-		if (list.size() > 0 && list.get(0) instanceof Map<?, ?>) {
-			// If the list contains maps, attach the index property
-			JsonArray array = new JsonArray();
-
-			for (int i = 0; i < list.size(); i++) {
-				JsonObject elem = (JsonObject) serializeToJsonElement(list.get(i));
-				elem.add(INDEX, new JsonPrimitive(i));
-				array.add(elem);
-			}
-			return array;
-		} else if (list.size() > 0) {
-			// If it does not contain maps, it is not possible to attach the index property.
-			// Thus BASYXTYPE has to handle the type conversion
-			JsonArray array = new JsonArray();
-			for (Object o : list) {
-				array.add(serializeToJsonElement(o));
-			}
-			return array;
-		} else {
-			// If it is an empty list,
-			return new JsonArray();
-		}
+	private JsonArray serializeCollection(Collection<Object> collection) {
+		JsonArray array = new JsonArray();
+		collection.stream().map(this::serializeObject).forEach(array::add);
+		return array;
 	}
 
 	/**
@@ -493,7 +273,7 @@ public class GSONTools implements Serializer {
 	 * @return
 	 */
 	private JsonObject serializeFunction(Object function) {
-		if (isSerializable(function)) {
+		if (function instanceof Serializable) {
 			return serializeSerializableOperation((Serializable) function);
 		} else {
 			return serializeNotSerializableOperation(function);
@@ -504,26 +284,15 @@ public class GSONTools implements Serializer {
 	 * Read an object from Base64 string.
 	 */
 	protected Object deserializeObjectFromString(String s) {
-		// Return value
 		Object result = null;
-
-		// Decode String
 		byte[] data = Base64.getDecoder().decode(s);
-
-		// Try to deserialize object
-		try {
-			// Object input stream
-			ObjectInputStream stream = new ObjectInputStream(new ByteArrayInputStream(data));
-			// - Read object
+		InputStream byteStream = new ByteArrayInputStream(data);
+		
+		try (ObjectInputStream stream = new ObjectInputStream(byteStream)) {
 			result = stream.readObject();
-
-			// Close stream
-			stream.close();
 		} catch (IOException | ClassNotFoundException e) {
 			logger.error("Exception in deserializeObjectFromString", e);
 		}
-
-		// Return object
 		return result;
 	}
 
@@ -531,20 +300,16 @@ public class GSONTools implements Serializer {
 	 * Write the object to a Base64 string.
 	 */
 	protected String serializeObjectToString(Serializable obj) {
-		// Write object into byte array
 		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
-		// Try to serialize object
-		try {
-			ObjectOutputStream oos = new ObjectOutputStream(outStream);
+		try (ObjectOutputStream oos = new ObjectOutputStream(outStream)) {
 			oos.writeObject(obj);
-			oos.close();
 		} catch (IOException e) {
 			logger.error("Exception in serializeObjectToString", e);
 		}
 
-		// Try to encode to string
-		return Base64.getEncoder().encodeToString(outStream.toByteArray());
+		byte[] data = outStream.toByteArray();
+		return Base64.getEncoder().encodeToString(data);
 	}
 
 	/**
@@ -553,10 +318,8 @@ public class GSONTools implements Serializer {
 	private JsonObject serializeSerializableOperation(Serializable value) {
 		JsonObject target = new JsonObject();
 		// Serializable functions will be serialized.
-		// - Serialize operation kind
 		target.add(BASYXFUNCTIONTYPE, new JsonPrimitive(LAMBDA));
 
-		// - Add value
 		String serialized = serializeObjectToString(value);
 		target.add(BASYXFUNCTIONVALUE, new JsonPrimitive(serialized));
 
@@ -572,7 +335,6 @@ public class GSONTools implements Serializer {
 	private JsonObject serializeNotSerializableOperation(Object function) {
 		JsonObject target = new JsonObject();
 		// Not serializable functions will be not be serialized.
-		// - Serialize operation kind
 		target.add(BASYXFUNCTIONTYPE, new JsonPrimitive(OPERATION));
 
 		return target;

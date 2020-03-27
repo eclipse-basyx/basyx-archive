@@ -1,7 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.api;
 
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
@@ -34,7 +34,7 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	 * 
 	 * @return
 	 */
-	public Set<IReference> getSubmodelReferences();
+	public Collection<IReference> getSubmodelReferences();
 
 	/**
 	 * Add a sub model to the AAS
@@ -77,7 +77,7 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	 * 
 	 * @return
 	 */
-	public Set<SubmodelDescriptor> getSubModelDescriptors();
+	public Collection<SubmodelDescriptor> getSubModelDescriptors();
 
 	/**
 	 * Gets the views associated with the AAS. <br/>
@@ -86,7 +86,7 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	 * 
 	 * @return
 	 */
-	public Set<IView> getViews();
+	public Collection<IView> getViews();
 
 	/**
 	 * Gets the concept dictionaries associated with the AAS. <br/>
@@ -96,5 +96,5 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	 * 
 	 * @return
 	 */
-	public Set<IConceptDictionary> getConceptDictionary();
+	public Collection<IConceptDictionary> getConceptDictionary();
 }

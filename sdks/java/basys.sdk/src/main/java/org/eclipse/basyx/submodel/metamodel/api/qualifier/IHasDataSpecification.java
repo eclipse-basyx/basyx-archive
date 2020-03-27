@@ -1,6 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.api.qualifier;
 
-import java.util.Set;
+import java.util.Collection;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 
@@ -22,5 +22,5 @@ public interface IHasDataSpecification {
 	 * 
 	 * @return
 	 */
-	public Set<IReference> getDataSpecificationReferences();
+	public Collection<IReference> getDataSpecificationReferences();
 }

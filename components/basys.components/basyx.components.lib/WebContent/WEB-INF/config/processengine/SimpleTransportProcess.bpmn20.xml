@@ -10,7 +10,7 @@
         <activiti:field name="serviceProvider">
         	<activiti:string><![CDATA[coilcar]]></activiti:string></activiti:field>
         <activiti:field name="serviceParameter">
-        	<activiti:string><![CDATA[{"_basyxTypes":"list","_value":[0]}]]></activiti:string></activiti:field>
+        	<activiti:string><![CDATA[[0]]]></activiti:string></activiti:field>
         <activiti:field name="submodelId">
         	<activiti:string><![CDATA[submodel1]]></activiti:string></activiti:field>
       </extensionElements>
@@ -23,7 +23,7 @@
         <activiti:field name="serviceProvider">
         	<activiti:string><![CDATA[coilcar]]></activiti:string></activiti:field>
         <activiti:field name="serviceParameter">
-        	<activiti:string><![CDATA[{"_basyxTypes":"list","_value":[5]}]]></activiti:string></activiti:field>
+        	<activiti:string><![CDATA[[5]]]></activiti:string></activiti:field>
         <activiti:field name="submodelId">
         	<activiti:string><![CDATA[submodel1]]></activiti:string></activiti:field>
       </extensionElements>
@@ -41,7 +41,7 @@
         <activiti:field name="serviceProvider">
         	<activiti:string><![CDATA[coilcar]]></activiti:string></activiti:field>
         <activiti:field name="serviceParameter">
-        	<activiti:string><![CDATA[ {"_basyxTypes":"list","_value":[5]}]]></activiti:string></activiti:field>
+        	<activiti:string><![CDATA[[5]]]></activiti:string></activiti:field>
         <activiti:field name="submodelId">
         	<activiti:string><![CDATA[submodel1]]></activiti:string></activiti:field>
       </extensionElements>
@@ -56,7 +56,7 @@
         <activiti:field name="serviceProvider">
         	<activiti:string><![CDATA[coilcar]]></activiti:string></activiti:field>
         <activiti:field name="serviceParameter">
-        	<activiti:string><![CDATA[ {"_basyxTypes":"list","_value":[6]}]]></activiti:string></activiti:field>
+        	<activiti:string><![CDATA[[6]]]></activiti:string></activiti:field>
         <activiti:field name="submodelId">
         	<activiti:string><![CDATA[submodel1]]></activiti:string></activiti:field>
       </extensionElements>
@@ -69,7 +69,7 @@
         <activiti:field name="serviceProvider">
         	<activiti:string><![CDATA[coilcar]]></activiti:string></activiti:field>
         <activiti:field name="serviceParameter">
-        	<activiti:string><![CDATA[ {"_basyxTypes":"list","_value":[0]}]]></activiti:string></activiti:field>
+        	<activiti:string><![CDATA[[0]]]></activiti:string></activiti:field>
         <activiti:field name="submodelId">
         	<activiti:string><![CDATA[submodel1]]></activiti:string></activiti:field>
       </extensionElements>
@@ -84,7 +84,7 @@
         <activiti:field name="serviceProvider">
         	<activiti:string><![CDATA[coilcar]]></activiti:string></activiti:field>
         <activiti:field name="serviceParameter">
-        	<activiti:string><![CDATA[ {"_basyxTypes":"list","_value":[0]}]]></activiti:string></activiti:field>
+        	<activiti:string><![CDATA[[0]]]></activiti:string></activiti:field>
         <activiti:field name="submodelId">
         	<activiti:string><![CDATA[submodel1]]></activiti:string></activiti:field>
       </extensionElements>
@@ -100,7 +100,7 @@
         <activiti:field name="serviceProvider">
         	<activiti:string><![CDATA[coilcar]]></activiti:string></activiti:field>
         <activiti:field name="serviceParameter">
-        	<activiti:string><![CDATA[{"_basyxTypes":"list","_value":[0]}]]></activiti:string></activiti:field>
+        	<activiti:string><![CDATA[[0]]]></activiti:string></activiti:field>
         <activiti:field name="submodelId">
         	<activiti:string><![CDATA[submodel1]]></activiti:string></activiti:field>
       </extensionElements>

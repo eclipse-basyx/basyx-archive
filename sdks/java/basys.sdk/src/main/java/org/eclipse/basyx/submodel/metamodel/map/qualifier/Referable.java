@@ -1,7 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
@@ -95,8 +94,7 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 	@Override
 	@SuppressWarnings("unchecked")
 	public LangStrings getDescription() {
-		LangStrings desc = new LangStrings((HashSet<HashMap<String, Object>>) get(Referable.DESCRIPTION));
-		return desc;
+		return new LangStrings((Collection<Map<String, Object>>) get(Referable.DESCRIPTION));
 	}
 
 	@Override

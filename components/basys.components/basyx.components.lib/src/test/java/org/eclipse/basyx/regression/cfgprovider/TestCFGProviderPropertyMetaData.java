@@ -2,8 +2,7 @@ package org.eclipse.basyx.regression.cfgprovider;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
@@ -54,7 +53,7 @@ public class TestCFGProviderPropertyMetaData {
 		// - Check property meta data (description)
 		Map<String, Object> value1a = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1");
-		LangStrings description = new LangStrings((HashSet<HashMap<String, Object>>) value1a.get("description"));
+		LangStrings description = new LangStrings((Collection<Map<String, Object>>) value1a.get("description"));
 		assertEquals("Configuration property description", description.get(""));
 
 		// Get property value
@@ -64,7 +63,7 @@ public class TestCFGProviderPropertyMetaData {
 		// - Check property meta data (description)
 		Map<String, Object> value2a = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2");
-		description = new LangStrings((HashSet<HashMap<String, Object>>) value2a.get("description"));
+		description = new LangStrings((Collection<Map<String, Object>>) value2a.get("description"));
 		assertEquals("Configuration property description on multiple lines", description.get(""));
 
 		// Get property value

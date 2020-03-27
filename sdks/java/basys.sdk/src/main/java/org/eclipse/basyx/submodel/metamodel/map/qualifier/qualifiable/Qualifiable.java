@@ -3,7 +3,6 @@ package org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifiable;
@@ -33,7 +32,7 @@ public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
 	 */
 	public Qualifiable(Constraint qualifier) {
 		// Create collection with qualifiers
-		Set<Constraint> qualifiers = new HashSet<Constraint>();
+		Collection<Constraint> qualifiers = new HashSet<>();
 		// - Add qualifier
 		qualifiers.add(qualifier);
 
@@ -68,16 +67,16 @@ public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
 		return ret;
 	}
 
-	public void setQualifier(Set<IConstraint> qualifiers) {
+	public void setQualifier(Collection<IConstraint> qualifiers) {
 		put(Qualifiable.CONSTRAINTS, qualifiers);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Set<IConstraint> getQualifier() {
+	public Collection<IConstraint> getQualifier() {
 		// Transform set of maps to set of IConstraints
-		Set<Map<String, Object>> set = (Set<Map<String, Object>>) get(Qualifiable.CONSTRAINTS);
-		Set<IConstraint> ret = new HashSet<>();
+		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) get(Qualifiable.CONSTRAINTS);
+		Collection<IConstraint> ret = new HashSet<>();
 		if (set != null) {
 			for (Map<String, Object> m : set) {
 				if (ModelType.createAsFacade(m).getName().equals(Formula.MODELTYPE)) {
@@ -87,7 +86,6 @@ public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
 				}
 			}
 		}
-
 		return ret;
 	}
 }

@@ -1,6 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.api.parts;
 
-import java.util.Set;
+import java.util.Collection;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
@@ -23,5 +23,5 @@ public interface IConceptDescription extends IHasDataSpecification, IIdentifiabl
 	 * 
 	 * @return
 	 */
-	public Set<IReference> getIsCaseOf();
+	public Collection<IReference> getIsCaseOf();
 }

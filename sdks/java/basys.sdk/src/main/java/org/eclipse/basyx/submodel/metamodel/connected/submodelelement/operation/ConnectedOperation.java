@@ -1,7 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
@@ -25,17 +25,17 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	}
 
 	@Override
-	public List<IOperationVariable> getInputVariables() {
+	public Collection<IOperationVariable> getInputVariables() {
 		return Operation.createAsFacade(getElem()).getInputVariables();
 	}
 
 	@Override
-	public List<IOperationVariable> getOutputVariables() {
+	public Collection<IOperationVariable> getOutputVariables() {
 		return Operation.createAsFacade(getElem()).getOutputVariables();
 	}
 
 	@Override
-	public List<IOperationVariable> getInOutputVariables() {
+	public Collection<IOperationVariable> getInOutputVariables() {
 		return Operation.createAsFacade(getElem()).getInOutputVariables();
 	}
 
@@ -49,7 +49,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		// Wrap parameter with valuetype information
 		int i = 0;
 		for (Object param : params) {
-			HashMap<String, Object> valueWrapper = new HashMap<String, Object>();
+			HashMap<String, Object> valueWrapper = new HashMap<>();
 			valueWrapper.put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(param));
 			valueWrapper.put(Property.VALUE, param);
 
@@ -62,8 +62,12 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		Object result = getProxy().invokeOperation("", params);
 
 		// Unwrap result value
-		if (result instanceof List<?>) {
-			Object resultWrapper = ((List<?>) result).get(0);
+		if (result instanceof Collection<?>) {
+			Collection<Object> coll = (Collection<Object>) result;
+			if (coll.isEmpty()) {
+				return result;
+			}
+			Object resultWrapper = coll.iterator().next();
 			if (resultWrapper instanceof Map<?, ?>) {
 				Map<String, Object> map = (Map<String, Object>) resultWrapper;
 				if (map.get(Referable.IDSHORT).equals("Response") && map.get(Property.VALUE) != null) {
