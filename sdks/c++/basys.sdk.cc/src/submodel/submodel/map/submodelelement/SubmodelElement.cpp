@@ -15,15 +15,6 @@ SubmodelElement::SubmodelElement()
 	, ModelType(ISubmodelElement::Path::ModelType)
 {}
 
-SubmodelElement::SubmodelElement(basyx::object object)
-	: vab::ElementMap( object )
-  , ModelType{ISubmodelElement::Path::ModelType}
-  , HasDataSpecification()
-  , HasKind()
-  , HasSemantics()
-  , Qualifiable()
-  , Referable()
-{}
 
 SubmodelElement::SubmodelElement(const ISubmodelElement & abstractSubmodelElement)
   : vab::ElementMap{}

@@ -37,12 +37,14 @@ public:
 	// constructors
 	SubmodelElement();
 
+	using vab::ElementMap::ElementMap;
+
 	/**
 	* Constructs an SubmodelElement object from a map given that the map contains all required elements.
 	* 
 	* @param submodelElementMap the map representig the submodel.
 	*/
-	SubmodelElement(basyx::object object);
+//	SubmodelElement(basyx::object object);
 
   SubmodelElement(const ISubmodelElement & abstractSubmodelElement);
 };

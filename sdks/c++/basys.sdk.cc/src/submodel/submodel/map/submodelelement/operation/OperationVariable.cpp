@@ -20,12 +20,17 @@ OperationVariable::OperationVariable(basyx::object object)
 
 std::shared_ptr<ISubmodelElement> OperationVariable::getValue() const
 {
-  return std::make_shared<SubmodelElement>(this->map.getProperty(IOperationVariable::Path::Value));
+	return std::make_shared<SubmodelElement>(this->map.getProperty(IOperationVariable::Path::Value));
 }
 
 std::string OperationVariable::getType() const
 {
 	return this->map.getProperty(Path::Type).GetStringContent();
+}
+
+void OperationVariable::setValue(const SubmodelElement & value)
+{
+	this->map.insertKey(IOperationVariable::Path::Value, value.getMap(), true);
 }
 
 void OperationVariable::setValue(const ISubmodelElement & value)

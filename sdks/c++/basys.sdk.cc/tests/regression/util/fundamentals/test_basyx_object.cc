@@ -247,8 +247,8 @@ TEST_F(TestBaSyxObject, HashMapTest_Object)
 	ASSERT_TRUE(anyMap.insertKey("test", basyx::object::make_object_ref(&i)));
 	ASSERT_EQ(map.size(), 1);
 	
-	// Insert element with same key again, shouldn't do anything
-	ASSERT_FALSE(anyMap.insertKey("test", basyx::object::make_object_ref(&i)));
+	// Insert element with same key again, with overwrite = false, shouldn't do anything
+	ASSERT_FALSE(anyMap.insertKey("test", basyx::object::make_object_ref(&i), false));
 	ASSERT_EQ(map.size(), 1);
 
 	// Insert element with another key

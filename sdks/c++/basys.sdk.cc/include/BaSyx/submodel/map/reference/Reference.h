@@ -24,10 +24,11 @@ class Reference :
 	public vab::ElementMap
 {
 public:
+	using vab::ElementMap::ElementMap;
+
 	virtual ~Reference() = default;
 
 	Reference();
-	Reference(basyx::object obj);
 	Reference(const basyx::specificCollection_t<IKey> & keys);
 	Reference(const std::initializer_list<Key> keys);
 	Reference(const IReference & reference);

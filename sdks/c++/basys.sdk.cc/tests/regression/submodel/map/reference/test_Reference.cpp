@@ -37,6 +37,7 @@ TEST_F(ReferenceTest, TestConstructFromObject)
 {
   auto obj = basyx::object::make_map();
   obj.insertKey("test", "testvalue");
+  obj.insertKey(IReference::Path::Key, basyx::object::make_object_list());
   
   reference = Reference(obj);
 

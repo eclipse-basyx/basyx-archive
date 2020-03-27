@@ -6,7 +6,8 @@
 
 #include <gtest/gtest.h>
 
-#include "BaSyx/submodel/map/submodelelement/operation/OperationVariable.h"
+#include <BaSyx/submodel/map/submodelelement/operation/OperationVariable.h>
+#include <BaSyx/submodel/map/submodelelement/property/Property.h>
 
 #include "support/AdditionalAssertions.hpp"
 #include "support/ReferableMock.hpp"
@@ -68,44 +69,17 @@ TEST_F(OperationVariableTest, TestSetType)
 	basyx::assertions::AssertMapContainsValue<std::string>(map, IOperationVariable::Path::Type, "testingType");
 }
 
-TEST_F(OperationVariableTest, TestGetValue)
+TEST_F(OperationVariableTest, TestGetSetValue)
 {
-	// Construct a map containing modelType info
-	ModelType modelType;
-	auto obj = modelType.getMap();
-	obj.insertKey(ModelType::Path::Name, IOperationVariable::Path::ModelType, true);
-  
-	// construct SubmodelElement with testing description
-	basyx::object submodel_element = basyx::object::make_map();
-	Description test_description = basyx::testing::testingDescription();
-	submodel_element.insertKey(IReferable::Path::Description, test_description.getMap());
+	Property<int> prop;
+	prop.setValue(5);
 
-	// set the constructed submodel_element in map
-	obj.insertKey(IOperationVariable::Path::Value, SubmodelElement(submodel_element).getMap());
+	op_var.setValue(prop);
+	auto submodelElement = op_var.getValue();
+	auto elem = std::dynamic_pointer_cast<SubmodelElement>(submodelElement);
+	Property<int> prop2(elem->getMap());
 
-	op_var = OperationVariable(obj);
+	ASSERT_EQ(prop2.getValue(), 5);
 
-	// test if description is kept
-	auto value = op_var.getValue();
-	ASSERT_EQ(value->getDescription(), test_description);
-}
-
-TEST_F(OperationVariableTest, TestSetValue)
-{
-	//construct a map containing testing Description
-	//basyx::object submodel_element = basyx::object::make_map();
-	//Description test_description = basyx::testing::testingDescription();
-	//submodel_element.insertKey(IReferable::Path::Description, test_description.getMap());
-	//// if this is not set, construction fails
-	//submodel_element.insertKey(IHasDataSpecification::Path::HasDataSpecification, basyx::object::make_list<basyx::object>());
-	//submodel_element.insertKey(IHasKind::Path::Kind, util::to_string(Kind::NotSpecified));
-	//submodel_element.insertKey(IHasSemantics::Path::SemanticId, basyx::testing::ReferenceMock().getMap());
-
-	//// call method set value
-	//SubmodelElement elem{ submodel_element };
-	//op_var.setValue(elem);
-
-	////// check if object map contains testing description
-	//auto map = op_var.getMap();
-	//basyx::assertions::AssertMapContainsValue<Description>(map, IReferable::Path::Description, test_description);
+	return;
 }

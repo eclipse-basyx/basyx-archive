@@ -30,12 +30,12 @@ namespace submodel {
         this->map.insertKey(ISubModel::Path::Submodelelement, basyx::object::make_map());
     }
 
-    SubModel::SubModel(const basyx::object& object)
-        : vab::ElementMap { object }
-        , ModelType { ISubModel::Path::ModelType }
-    {
-        //todo: may assert if all sufficient parent classes are in object
-    }
+    //SubModel::SubModel(const basyx::object& object)
+    //    : vab::ElementMap { object }
+    //    , ModelType { ISubModel::Path::ModelType }
+    //{
+    //    //todo: may assert if all sufficient parent classes are in object
+    //}
 
     SubModel::SubModel()
         : SubModel {
