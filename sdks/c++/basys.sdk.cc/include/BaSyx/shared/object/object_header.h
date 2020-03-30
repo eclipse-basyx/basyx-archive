@@ -127,7 +127,7 @@ namespace basyx {
 		bool insert(const T & t);
 
 		template<typename T>
-		bool insertKey(const std::string & key, const T & t, bool override = false);
+		bool insertKey(const std::string & key, const T & t, bool override = true);
 
 		std::size_t size();
 

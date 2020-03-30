@@ -42,12 +42,6 @@ Reference::Reference(const IReference & reference) :
   this->setKeys(reference.getKeys());
 }
 
-Reference::Reference(basyx::object object)
-	: vab::ElementMap{ object }
-{
-  this->map.insertKey(IReference::Path::Key, basyx::object::make_list<basyx::object>());
-}
-
 const basyx::specificCollection_t<IKey> Reference::getKeys() const
 {
 	auto & obj_list = this->map.getProperty(IReference::Path::Key).Get<basyx::object::object_list_t&>();

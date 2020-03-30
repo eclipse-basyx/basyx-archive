@@ -16,11 +16,14 @@ namespace submodel {
 template<typename T>
 class Property : 
 	public virtual ISingleProperty,
-	public virtual DataElement
+	public virtual DataElement,
+	public virtual vab::ElementMap
 {
 public:
 	using Path = IProperty::Path;
 public:
+	using vab::ElementMap::ElementMap;
+
   Property() : ModelType{Path::ModelType}
 	{
 		map.insertKey(Path::Value, basyx::object::make_null());
@@ -42,7 +45,7 @@ public:
 
 	void setValue(const T & t)
 	{
-		map.insertKey(Path::Value, t);
+		map.insertKey(Path::Value, t, true);
 		//map.insertKey(Path::ValueType, util::from_string<basyx::type::basyx_type<T>::value_type>());
 	};
 

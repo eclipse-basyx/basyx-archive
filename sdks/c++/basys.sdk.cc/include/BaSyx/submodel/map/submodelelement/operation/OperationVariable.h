@@ -33,6 +33,8 @@ public:
 	virtual std::string getType() const override;
 	                                                                        
 	// not inherited
+	void setValue(const SubmodelElement & value);
+
 	void setValue(const ISubmodelElement & value);
 	void setType(const std::string & string);
 };

@@ -43,9 +43,10 @@ class SubModel :
   public virtual vab::ElementMap
 {
 public:
+	using vab::ElementMap::ElementMap;
+
 	SubModel();
 	SubModel(const IHasSemantics & semantics, const IIdentifiable & identifiable, const IQualifiable & qualifiable, const IHasDataSpecification & specification, const IHasKind & hasKind);
-	SubModel(const basyx::object & object);
 	SubModel(const ISubModel & submodel);
 
 	// Inherited via ISubModel
