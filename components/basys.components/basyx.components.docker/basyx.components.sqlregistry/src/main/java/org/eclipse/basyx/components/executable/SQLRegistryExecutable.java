@@ -34,12 +34,22 @@ public class SQLRegistryExecutable {
 		// Load configuration
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
 		config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
+		startComponent(config.getHostname(), config.getPort(), config.getContextPath(), config.getDocBasePath(), "dockerRegistry.properties");
+	}
 
+	/**
+	 * Starts the SQLRegistry at http://${hostName}:${port}/${path}
+	 * 
+	 * @param hostName
+	 * @param port
+	 * @param path
+	 * @param docBasePath
+	 */
+	public static void startComponent(String hostName, int port, String path, String docBasePath, String sqlPropertyPath) {
 		// Init HTTP context and add an SQLRegistryServlet according to the
 		// configuration
-		BaSyxContext context = new BaSyxContext(config.getContextPath(), config.getDocBasePath(), config.getHostname(),
-				config.getPort());
-		context.addServletMapping(SERVLET_MAPPING, new SQLRegistryServlet("dockerRegistry.properties"));
+		BaSyxContext context = new BaSyxContext(path, docBasePath, hostName, port);
+		context.addServletMapping(SERVLET_MAPPING, new SQLRegistryServlet(sqlPropertyPath));
 
 		// Create and start server
 		server = new AASHTTPServer(context);

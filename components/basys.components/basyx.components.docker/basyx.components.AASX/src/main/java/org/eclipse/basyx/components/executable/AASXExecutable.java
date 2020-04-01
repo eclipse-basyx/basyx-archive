@@ -42,12 +42,25 @@ public class AASXExecutable {
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
 		config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
 
+		startComponent(config.getHostname(), config.getPort(), config.getContextPath(), config.getDocBasePath(), config.getProperty("aasxPath"));
+	}
+
+	/**
+	 * Starts the AASX component at http://${hostName}:${port}/${path}
+	 * 
+	 * @param hostName
+	 * @param port
+	 * @param path
+	 * @param docBasePath
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws ParserConfigurationException
+	 */
+	public static void startComponent(String hostName, int port, String path, String docBasePath, String aasxPath) throws ParserConfigurationException, SAXException, IOException {
 		// Init HTTP context and add an XMLAAServlet according to the configuration
-		BaSyxContext context = new BaSyxContext(config.getContextPath(), config.getDocBasePath(), config.getHostname(), config.getPort());
+		BaSyxContext context = new BaSyxContext(path, docBasePath, hostName, port);
 
 		// Create the Servlet for aas
-		String aasxPath = config.getProperty("aasxPath");
-
 		context.addServletMapping(SERVLET_MAPPING, new AASXAASServlet(aasxPath));
 
 		// Create and start server
@@ -57,7 +70,6 @@ public class AASXExecutable {
 
 		// start the server
 		server.start();
-
 	}
 
 

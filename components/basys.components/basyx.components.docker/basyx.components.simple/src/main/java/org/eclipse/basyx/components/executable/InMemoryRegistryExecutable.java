@@ -35,9 +35,21 @@ public class InMemoryRegistryExecutable {
 		// Load configuration
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
 		config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
+
+		startComponent(config.getHostname(), config.getPort(), config.getContextPath(), config.getDocBasePath());
+	}
+	
+	/**
+	 * Starts the InMemoryRegistry at http://${hostName}:${port}/${path}
+	 * 
+	 * @param hostName
+	 * @param port
+	 * @param path
+	 * @param docBasePath
+	 */
+	public static void startComponent(String hostName, int port, String path, String docBasePath) {
 		// Init HTTP context and add an InMemoryRegistryServlet according to the configuration
-		BaSyxContext context = new BaSyxContext(config.getContextPath(), config.getDocBasePath(), config.getHostname(),
-				config.getPort());
+		BaSyxContext context = new BaSyxContext(path, docBasePath, hostName, port);
 		context.addServletMapping(SERVLET_MAPPING + "*", new InMemoryRegistryServlet());
 
 		// Create and start server
@@ -45,5 +57,4 @@ public class InMemoryRegistryExecutable {
 		logger.info("Starting server...");
 		server.start();
 	}
-
 }
