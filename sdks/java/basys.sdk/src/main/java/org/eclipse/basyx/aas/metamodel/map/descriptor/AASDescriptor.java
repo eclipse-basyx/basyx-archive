@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
@@ -54,14 +55,14 @@ public class AASDescriptor extends ModelDescriptor {
 	 * Create a new aas descriptor that retrieves the necessary information from a
 	 * passend AssetAdministrationShell
 	 * 
-	 * @param aas
+	 * @param iAssetAdministrationShell
 	 * @param endpoint
 	 */
-	public AASDescriptor(AssetAdministrationShell aas, String endpoint) {
-		this(aas.getIdShort(), aas.getIdentification(), endpoint);
+	public AASDescriptor(IAssetAdministrationShell assetAdministrationShell, String endpoint) {
+		this(assetAdministrationShell.getIdShort(), assetAdministrationShell.getIdentification(), endpoint);
 
 		// Overwrite submodel descriptors
-		Collection<SubmodelDescriptor> smDescriptors = aas.getSubModelDescriptors();
+		Collection<SubmodelDescriptor> smDescriptors = assetAdministrationShell.getSubModelDescriptors();
 		put(AssetAdministrationShell.SUBMODELS, smDescriptors);
 	}
 

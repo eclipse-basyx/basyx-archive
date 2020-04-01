@@ -1,4 +1,4 @@
-package org.eclipse.basyx.support;
+package org.eclipse.basyx.support.bundle;
 
 import java.util.Set;
 

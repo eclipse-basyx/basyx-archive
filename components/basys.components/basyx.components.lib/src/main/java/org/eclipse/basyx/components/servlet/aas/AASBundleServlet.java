@@ -11,7 +11,7 @@ import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
-import org.eclipse.basyx.support.AASBundle;
+import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
 /**

@@ -14,7 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
 import org.eclipse.basyx.components.xml.XMLAASBundleFactory;
-import org.eclipse.basyx.support.AASBundle;
+import org.eclipse.basyx.support.bundle.AASBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
