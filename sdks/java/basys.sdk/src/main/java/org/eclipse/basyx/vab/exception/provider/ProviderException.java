@@ -6,7 +6,7 @@ package org.eclipse.basyx.vab.exception.provider;
  * @author conradi
  *
  */
-public class ProviderException extends Exception {
+public class ProviderException extends RuntimeException {
 
 	
 	/**

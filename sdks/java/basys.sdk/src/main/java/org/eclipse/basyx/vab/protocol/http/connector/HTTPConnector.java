@@ -12,9 +12,8 @@ import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
-
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * HTTP connector class
@@ -40,7 +39,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	 */
 	@Override
 	public String getModelPropertyValue(String servicePath) {
-		return httpGet(encodeHash(servicePath));
+		return httpGet(servicePath);
 	}
 
 	public HTTPConnector(String address) {
@@ -68,7 +67,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	@Override
 	public String setModelPropertyValue(String servicePath, String newValue) throws ServerException {
 
-		return httpPut(encodeHash(servicePath), newValue);
+		return httpPut(servicePath, newValue);
 	}
 
 	/**
@@ -86,7 +85,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	@Override
 	public String deleteValue(String servicePath, String obj) throws ServerException {
 
-		return httpPatch(encodeHash(servicePath), obj);
+		return httpPatch(servicePath, obj);
 	}
 
 	/**
@@ -97,7 +96,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	@Override
 	public String createValue(String servicePath, String newValue) throws ServerException {
 
-		return httpPost(encodeHash(servicePath), newValue);
+		return httpPost(servicePath, newValue);
 	}
 
 	/**
@@ -109,7 +108,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	@Override
 	public String deleteValue(String servicePath) throws ServerException {
 
-		return httpDelete(encodeHash(servicePath));
+		return httpDelete(servicePath);
 	}
 
 	/**
@@ -235,15 +234,4 @@ public class HTTPConnector implements IBaSyxConnector {
 
 		return httpPost(path, parameter);
 	}
-
-	/**
-	 * Replaces # with %23
-	 * 
-	 * @param path
-	 * @return
-	 */
-	private String encodeHash(String path) {
-		return path.replace("#", "%23");
-	}
-
 }

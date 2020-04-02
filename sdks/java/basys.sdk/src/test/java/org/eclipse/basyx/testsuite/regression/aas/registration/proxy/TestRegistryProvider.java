@@ -10,10 +10,8 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
-import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,13 +24,13 @@ import org.junit.Test;
  */
 public abstract class TestRegistryProvider {
 	// The registry proxy that is used to access the sql servlet
-	protected final IAASRegistryService proxy = new AASRegistryProxy(getProxyProvider());
+	protected final IAASRegistryService proxy = getRegistryService();
 
 	// Ids, shortIds and endpoints for registered AAS and submodel
-	protected IIdentifier aasId1 = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:1:registryAAS#001");
-	protected IIdentifier aasId2 = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:1:registryAAS#002");
-	protected IIdentifier smId1 = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:1:statusSM#001");
-	protected IIdentifier smId2 = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:1:testSM#001");
+	protected IIdentifier aasId1 = new ModelUrn("urn:de.FHG:devices.es.iese/test:aas:1.0:1:registryAAS#001");
+	protected IIdentifier aasId2 = new ModelUrn("urn:de.FHG:devices.es.iese/test:aas:1.0:1:registryAAS#002");
+	protected IIdentifier smId1 = new ModelUrn("urn:de.FHG:devices.es.iese/test:aas:1.0:1:statusSM#001");
+	protected IIdentifier smId2 = new ModelUrn("urn:de.FHG:devices.es.iese/test:aas:1.0:1:testSM#001");
 	protected String aasIdShort1 = "aasIdShort1";
 	protected String aasIdShort2 = "aasIdShort2";
 	protected String smIdShort1 = "smIdShort1";
@@ -46,7 +44,7 @@ public abstract class TestRegistryProvider {
 	 * Getter for the tested registry provider. Tests for actual registry provider
 	 * have to realize this method.
 	 */
-	protected abstract IModelProvider getProxyProvider();
+	protected abstract IAASRegistryService getRegistryService();
 
 	/**
 	 * Before each test, clean entries are created in the registry using a proxy

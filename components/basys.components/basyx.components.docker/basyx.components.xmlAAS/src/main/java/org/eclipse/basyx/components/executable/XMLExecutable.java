@@ -44,11 +44,26 @@ public class XMLExecutable {
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
 		config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
 
-		// Init HTTP context and add an XMLAAServlet according to the configuration
-		BaSyxContext context = new BaSyxContext(config.getContextPath(), config.getDocBasePath(), config.getHostname(), config.getPort());
+		startComponent(config.getHostname(), config.getPort(), config.getContextPath(), config.getDocBasePath(), config.getProperty("xmlPath"));
+	}
+	
 
+	/**
+	 * Starts the XML-AAS at http://${hostName}:${port}/${path}
+	 * 
+	 * @param hostName
+	 * @param port
+	 * @param path
+	 * @param docBasePath
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws ParserConfigurationException
+	 */
+	public static void startComponent(String hostName, int port, String path, String docBasePath, String xmlPath) throws IOException, ParserConfigurationException, SAXException {
+		// Init HTTP context and add an XMLAAServlet according to the configuration
+		BaSyxContext context = new BaSyxContext(path, docBasePath, hostName, port);
 		// Load xml content from file
-		String xmlContent = BaSyxConfiguration.getResourceString(config.getProperty("xmlPath"));
+		String xmlContent = BaSyxConfiguration.getResourceString(xmlPath);
 		context.addServletMapping(SERVLET_MAPPING, new XMLAASServlet(xmlContent));
 
 		// Create and start server

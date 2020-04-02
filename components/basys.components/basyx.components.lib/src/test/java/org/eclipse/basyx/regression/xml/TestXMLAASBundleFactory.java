@@ -11,7 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
 import org.eclipse.basyx.components.xml.XMLAASBundleFactory;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
-import org.eclipse.basyx.support.AASBundle;
+import org.eclipse.basyx.support.bundle.AASBundle;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 

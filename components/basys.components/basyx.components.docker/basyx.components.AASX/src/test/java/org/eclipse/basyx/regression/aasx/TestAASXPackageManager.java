@@ -23,7 +23,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.support.AASBundle;
+import org.eclipse.basyx.support.bundle.AASBundle;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;

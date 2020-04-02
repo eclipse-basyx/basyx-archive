@@ -3,16 +3,17 @@ package org.eclipse.basyx.vab.protocol.http.server;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.basyx.vab.coder.json.provider.JSONProvider;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,17 +87,17 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String path = extractPath(req);
-
-		// Setup HTML response header
-		resp.setContentType("application/json");
-		resp.setCharacterEncoding("UTF-8");
-		
-		resp.setStatus(200);
-		
 		PrintWriter responseWriter = resp.getWriter();
 		
 		try {
+			String path = extractPath(req);
+
+			// Setup HTML response header
+			resp.setContentType("application/json");
+			resp.setCharacterEncoding("UTF-8");
+
+			resp.setStatus(200);
+
 			// Process get request
 			providerBackend.processBaSysGet(path, responseWriter);
 			responseWriter.flush();
@@ -115,15 +116,15 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String path = extractPath(req);
-		String serValue = extractSerializedValue(req);
-		logger.trace("DoPut: {}", serValue);
-		
-		resp.setStatus(200);
-		
 		PrintWriter responseWriter = resp.getWriter();
 		
 		try {
+			String path = extractPath(req);
+			String serValue = extractSerializedValue(req);
+			logger.trace("DoPut: {}", serValue);
+
+			resp.setStatus(200);
+
 			providerBackend.processBaSysSet(path, serValue.toString(), responseWriter);
 			responseWriter.flush();
 		} catch(ProviderException e) {
@@ -142,41 +143,36 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String path = extractPath(req);
-		String serValue = extractSerializedValue(req);
-		
-		logger.trace("DoPost: {}", serValue);
-		
-		// Setup HTML response header
-		resp.setStatus(201);
-		resp.setContentType("application/json");
-		resp.setCharacterEncoding("UTF-8");
-		
 		PrintWriter responseWriter = resp.getWriter();
 
-		// Check if request is for property creation or operation invoke
-		if (VABPathTools.isOperationPath(path)) {
+		try {
+			String path = extractPath(req);
+			String serValue = extractSerializedValue(req);
+
+			logger.trace("DoPost: {}", serValue);
+
+			// Setup HTML response header
+			resp.setStatus(201);
+			resp.setContentType("application/json");
+			resp.setCharacterEncoding("UTF-8");
+
+			// Check if request is for property creation or operation invoke
+			if (VABPathTools.isOperationPath(path)) {
 			// Invoke BaSys VAB 'invoke' primitive
-			try {
+
 				providerBackend.processBaSysInvoke(path, serValue, responseWriter);
 				responseWriter.flush();
-			} catch(ProviderException e) {
-				int httpCode = ExceptionToHTTPCodeMapper.mapException(e);
-				resp.setStatus(httpCode);
-				responseWriter.flush();
-				logger.error("Exception in HTTP-POST. Response-code: " + httpCode, e);
-			}
-		} else {
+
+			} else {
 			// Invoke the BaSys 'create' primitive
-			try {
 				providerBackend.processBaSysCreate(path, serValue, responseWriter);
 				responseWriter.flush();
-			} catch(ProviderException e) {
-				int httpCode = ExceptionToHTTPCodeMapper.mapException(e);
-				resp.setStatus(httpCode);
-				responseWriter.flush();
-				logger.error("Exception in HTTP-POST. Response-code: " + httpCode, e);
 			}
+		} catch (ProviderException e) {
+			int httpCode = ExceptionToHTTPCodeMapper.mapException(e);
+			resp.setStatus(httpCode);
+			responseWriter.flush();
+			logger.error("Exception in HTTP-POST. Response-code: " + httpCode, e);
 		}
 	}
 
@@ -187,15 +183,14 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String path = extractPath(req);
-		String serValue = extractSerializedValue(req);
-		logger.trace("DoPatch: {}", serValue);
-		
-		resp.setStatus(200);
-		
 		PrintWriter responseWriter = resp.getWriter();
-		
 		try {
+			String path = extractPath(req);
+			String serValue = extractSerializedValue(req);
+			logger.trace("DoPatch: {}", serValue);
+
+			resp.setStatus(200);
+
 			providerBackend.processBaSysDelete(path, serValue, responseWriter);
 			responseWriter.flush();
 		} catch(ProviderException e) {
@@ -212,16 +207,17 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String path = extractPath(req);
-
-		// No parameter to read! Provide serialized null
-		String nullParam = "";
-
-		resp.setStatus(200);
-		
 		PrintWriter responseWriter = resp.getWriter();
-		
+
 		try {
+			String path = extractPath(req);
+
+			// No parameter to read! Provide serialized null
+			String nullParam = "";
+
+			resp.setStatus(200);
+
+
 			providerBackend.processBaSysDelete(path, nullParam, responseWriter);
 			responseWriter.flush();
 		} catch(ProviderException e) {
@@ -236,13 +232,20 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	private String extractPath(HttpServletRequest req) throws UnsupportedEncodingException {
 		// Extract path
 		String uri = req.getRequestURI();
+
+		// Normalizes URI
+		String nUri = "/" + VABPathTools.stripSlashes(uri) + "/";
 		String contextPath = req.getContextPath();
-		String path = uri.substring(contextPath.length() + req.getServletPath().length() + 1);
+		if (nUri.startsWith(contextPath) && nUri.length() > getEnvironmentPathSize(req)) {
+			String path = nUri.substring(getEnvironmentPathSize(req) + 1);
 
-		// Decode URL
-		path = java.net.URLDecoder.decode(path, "UTF-8");
+			return path;
+		}
+		throw new MalformedRequestException("The passed path " + uri + " is not a possbile path for this server.");
+	}
 
-		return path;
+	private int getEnvironmentPathSize(HttpServletRequest req) {
+		return req.getContextPath().length() + req.getServletPath().length();
 	}
 
 
