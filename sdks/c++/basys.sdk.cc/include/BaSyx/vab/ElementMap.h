@@ -19,13 +19,14 @@ protected:
 	mutable basyx::object map;
 
 protected:
-  void insertMapElement(const std::string & key, const ElementMap & element);
 
 public:
 	ElementMap();
 	ElementMap(basyx::object object);
   ElementMap(const ElementMap & other);
 	virtual ~ElementMap() = default;
+	
+	void insertMapElement(const std::string & key, const ElementMap & element);
 
 	basyx::object getMap() const;
 
