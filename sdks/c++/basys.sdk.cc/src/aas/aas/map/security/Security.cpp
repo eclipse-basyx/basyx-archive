@@ -4,7 +4,7 @@
  *      Author: wendel
  */
 
-#include "Security.h"
+#include "BaSyx/aas/map/security/Security.h"
 
 namespace basyx {
 namespace aas {

@@ -7,11 +7,11 @@
 #ifndef AAS_IMPL_METAMODEL_HASHMAP_SECURITY_SECURITY_H_
 #define AAS_IMPL_METAMODEL_HASHMAP_SECURITY_SECURITY_H_
 
-#include "aas/api/security/ISecurity.h"
+#include <BaSyx/aas/api/security/ISecurity.h>
 
-#include "basyx/types.h"
+#include <BaSyx/shared/types.h>
 
-#include "vab/ElementMap.h"
+#include <BaSyx/vab/ElementMap.h>
 
 namespace basyx {
 namespace aas {

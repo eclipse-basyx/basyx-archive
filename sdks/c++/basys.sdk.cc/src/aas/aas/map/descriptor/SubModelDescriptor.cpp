@@ -4,4 +4,4 @@
  *      Author: wendel
  */
 
-#include "SubModelDescriptor.h"
+#include "BaSyx/aas/map/descriptor/SubModelDescriptor.h"

@@ -4,4 +4,4 @@
  *      Author: wendel
  */
 
-#include "AssetAdministrationShellManager.h"
+#include "BaSyx/aas/map/manager/AssetAdministrationShellManager.h"

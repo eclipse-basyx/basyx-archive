@@ -7,15 +7,15 @@
 #ifndef AAS_IMPL_METAMODEL_HASHMAP_ASSETADMINISTRATIONSHELL_H_
 #define AAS_IMPL_METAMODEL_HASHMAP_ASSETADMINISTRATIONSHELL_H_
 
-#include "aas/api/metamodel/IAssetAdministrationShell.h"
+#include <BaSyx/aas/api/metamodel/IAssetAdministrationShell.h>
 
-#include "submodel/map/qualifier/HasDataSpecification.h"
-#include "submodel/map/qualifier/Identifiable.h"
-#include "submodel/map/qualifier/Referable.h"
-#include "submodel/map/modeltype/ModelType.h"
+#include <BaSyx/submodel/map/qualifier/HasDataSpecification.h>
+#include <BaSyx/submodel/map/qualifier/Identifiable.h>
+#include <BaSyx/submodel/map/qualifier/Referable.h>
+#include <BaSyx/submodel/map/modeltype/ModelType.h>
 
-#include "basyx/object.h"
-#include "vab/ElementMap.h"
+#include <BaSyx/shared/object.h>
+#include <BaSyx/vab/ElementMap.h>
 
 namespace basyx {
 namespace aas {

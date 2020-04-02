@@ -4,4 +4,4 @@
  *      Author: wendel
  */
 
-#include "ConnectedAssetAdministrationShellManager.h"
+#include "BaSyx/aas/connected/ConnectedAssetAdministrationShellManager.h"

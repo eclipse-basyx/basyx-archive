@@ -7,8 +7,8 @@
 #ifndef BASYX_METAMODEL_ISecurity_H_
 #define BASYX_METAMODEL_ISecurity_H_
 
-#include "BaSyx/types.h"
-#include "BaSyx/object.h"
+#include <BaSyx/shared/types.h>
+#include <BaSyx/shared/object.h>
 
 namespace basyx {
 namespace aas {

@@ -4,10 +4,10 @@
  *      Author: wendel
  */
 
-#include "AssetAdministrationShell.h"
+#include "BaSyx/aas/map/metamodel/AssetAdministrationShell.h"
 
-#include "aas/map/security/Security.h"
-#include "submodel/map/reference/Reference.h"
+#include <BaSyx/aas/map/security/Security.h>
+#include <BaSyx/submodel/map/reference/Reference.h>
 
 namespace basyx {
 namespace aas {

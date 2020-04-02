@@ -7,7 +7,7 @@
 #ifndef AAS_IMPL_METAMODEL_HASHMAP_PARTS_VIEW_H_
 #define AAS_IMPL_METAMODEL_HASHMAP_PARTS_VIEW_H_
 
-#include <src/aas/aas/api/parts/IView.h>
+#include <BaSyx/aas/api/parts/IView.h>
 
 #include <BaSyx/submodel/map/modeltype/ModelType.h>
 #include <BaSyx/submodel/map/qualifier/HasDataSpecification.h>
