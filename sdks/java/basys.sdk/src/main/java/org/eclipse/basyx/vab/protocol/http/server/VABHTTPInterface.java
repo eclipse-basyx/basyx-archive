@@ -239,9 +239,6 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		if (nUri.startsWith(contextPath) && nUri.length() > getEnvironmentPathSize(req)) {
 			String path = nUri.substring(getEnvironmentPathSize(req) + 1);
 
-			// Decode URL
-			path = java.net.URLDecoder.decode(path, "UTF-8");
-
 			return path;
 		}
 		throw new MalformedRequestException("The passed path " + uri + " is not a possbile path for this server.");

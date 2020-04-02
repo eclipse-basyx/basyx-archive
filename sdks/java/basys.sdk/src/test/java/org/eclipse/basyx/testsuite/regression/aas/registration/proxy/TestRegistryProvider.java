@@ -27,10 +27,10 @@ public abstract class TestRegistryProvider {
 	protected final IAASRegistryService proxy = getRegistryService();
 
 	// Ids, shortIds and endpoints for registered AAS and submodel
-	protected IIdentifier aasId1 = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:1:registryAAS#001");
-	protected IIdentifier aasId2 = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:1:registryAAS#002");
-	protected IIdentifier smId1 = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:1:statusSM#001");
-	protected IIdentifier smId2 = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:1:testSM#001");
+	protected IIdentifier aasId1 = new ModelUrn("urn:de.FHG:devices.es.iese/test:aas:1.0:1:registryAAS#001");
+	protected IIdentifier aasId2 = new ModelUrn("urn:de.FHG:devices.es.iese/test:aas:1.0:1:registryAAS#002");
+	protected IIdentifier smId1 = new ModelUrn("urn:de.FHG:devices.es.iese/test:aas:1.0:1:statusSM#001");
+	protected IIdentifier smId2 = new ModelUrn("urn:de.FHG:devices.es.iese/test:aas:1.0:1:testSM#001");
 	protected String aasIdShort1 = "aasIdShort1";
 	protected String aasIdShort2 = "aasIdShort2";
 	protected String smIdShort1 = "smIdShort1";

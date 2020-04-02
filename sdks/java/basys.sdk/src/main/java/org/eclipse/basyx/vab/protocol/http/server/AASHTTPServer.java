@@ -12,7 +12,6 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.startup.Tomcat;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +26,11 @@ public class AASHTTPServer {
 	private static Logger logger = LoggerFactory.getLogger(AASHTTPServer.class);
 	
 	private Tomcat tomcat;
+
+	static {
+		// Enable coding of forward slash in tomcat
+		System.setProperty("org.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH", "true");
+	}
 	   
 	/**
 	 * Constructor

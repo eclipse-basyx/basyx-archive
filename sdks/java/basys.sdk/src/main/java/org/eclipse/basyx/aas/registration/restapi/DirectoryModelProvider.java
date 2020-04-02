@@ -87,16 +87,19 @@ public class DirectoryModelProvider implements IModelProvider {
 	}
 	
 	private String[] preparePath(String path) throws MalformedRequestException {
+		path = stripPrefix(path);
+
+		String[] splitted = splitPath(path);
+
 		try {
-			path = URLDecoder.decode(path, "UTF-8");
+			for (int i = 0; i < splitted.length; i++) {
+				splitted[i] = URLDecoder.decode(splitted[i], "UTF-8");
+			}
+			return splitted;
 		} catch (UnsupportedEncodingException e) {
 			//Malformed request because of unsupported encoding
 			throw new MalformedRequestException("Path has to be encoded as UTF-8 string.");
 		}
-		
-		path = stripPrefix(path);
-		
-		return splitPath(path);
 	}
 	
 	/**
@@ -240,8 +243,7 @@ public class DirectoryModelProvider implements IModelProvider {
 			
 		// Creating new submodel entry for existing aas
 		} else if (splitted.length == 2) { 
-			
-			ModelUrn aasId = new ModelUrn(splitted[0]);
+			ModelUrn aasId = retrieveModelURN(splitted[0]);
 			
 			SubmodelDescriptor smDescriptor = createSMDescriptorFromMap(newEntity);
 			
@@ -253,10 +255,13 @@ public class DirectoryModelProvider implements IModelProvider {
 			}
 			
 			registry.register(aasId, smDescriptor);
-			
 		} else {
 			throw new MalformedRequestException("Create was called with an unsupported path: " + path);
 		}
+	}
+
+	private ModelUrn retrieveModelURN(String str) {
+		return new ModelUrn(str);
 	}
 
 	@Override
@@ -275,19 +280,15 @@ public class DirectoryModelProvider implements IModelProvider {
 			registry.delete(aasId);
 			
 		} else if(splitted.length == 3) { //delete a submodel
-	
-			ModelUrn aasId  = new ModelUrn(splitted[0]);
+			ModelUrn aasId = new ModelUrn(splitted[0]);
 			String smId = splitted[2];
-			
-			//a submodel with this Id does not exist in given aas
-			//getSmDescriptorFromAAS also checks if aas exists
-			if(getSmDescriptorFromAAS(aasId, smId) == null) {
-				throw new ResourceNotFoundException("A Submodel with id '" + smId +
-						"' does not exist in aas '" + splitted[0] + "'.");
+			// a submodel with this Id does not exist in given aas
+			// getSmDescriptorFromAAS also checks if aas exists
+			if (getSmDescriptorFromAAS(aasId, smId) == null) {
+				throw new ResourceNotFoundException("A Submodel with id '" + smId + "' does not exist in aas '" + splitted[0] + "'.");
 			}
-			
+
 			registry.delete(aasId, smId);
-			
 		} else {
 			throw new MalformedRequestException("Delete with empty path is not supported by registry");
 		}

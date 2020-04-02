@@ -135,14 +135,22 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 	@Override
 	public void delete(IIdentifier aasId, String smIdShort) {
 		try {
-			provider.deleteValue(VABPathTools.concatenatePaths(buildSubmodelPath(aasId), smIdShort));
+			provider.deleteValue(VABPathTools.concatenatePaths(buildSubmodelPath(aasId), URLEncoder.encode(smIdShort, "UTF-8")));
 		} catch (Exception e) {
 			logger.error("Exception in deleting a Submodel", e);
 		}
 	}
 
 	private String buildSubmodelPath(IIdentifier aas) {
-		return VABPathTools.concatenatePaths(aas.getId(), DirectoryModelProvider.SUBMODELS);
+		try {
+			// Encode id to handle usage of reserved symbols, e.g. /
+			String encodedAASId = URLEncoder.encode(aas.getId(), "UTF-8");
+			return VABPathTools.concatenatePaths(encodedAASId, DirectoryModelProvider.SUBMODELS);
+		} catch (UnsupportedEncodingException e) {
+			logger.error("Could not encode URL. This should not happen");
+			throw new RuntimeException(e);
+		}
+
 	}
 }
 
