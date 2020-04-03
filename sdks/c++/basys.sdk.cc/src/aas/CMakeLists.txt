@@ -22,6 +22,7 @@ target_include_directories(${BASYX_AAS_LIB_SUFFIX}
 
 target_sources(${BASYX_AAS_LIB_SUFFIX}
   PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/aas/map/constant_definitions.cpp
     ${BASYX_AAS_INCLUDE_DIR}/api/manager/IAssetAdministrationShellManager.h
     ${BASYX_AAS_INCLUDE_DIR}/api/metamodel/IAssetAdministrationShell.h
     ${BASYX_AAS_INCLUDE_DIR}/api/parts/IAsset.h
@@ -51,7 +52,7 @@ target_sources(${BASYX_AAS_LIB_SUFFIX}
     ${BASYX_AAS_INCLUDE_DIR}/map/parts/View.h
     ${CMAKE_CURRENT_SOURCE_DIR}/aas/map/security/Security.cpp
     ${BASYX_AAS_INCLUDE_DIR}/map/security/Security.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/aas/map/constant_definitions.h)
+)
 
 
 target_include_directories(${BASYX_AAS_LIB_SUFFIX} PRIVATE ${PROJECT_SOURCE_DIR})

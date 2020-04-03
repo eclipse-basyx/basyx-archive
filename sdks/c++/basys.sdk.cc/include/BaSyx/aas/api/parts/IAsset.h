@@ -17,9 +17,9 @@ namespace basyx {
 namespace aas {
 
 class IAsset :
-	public submodel::IHasDataSpecification,
-	public submodel::IHasKind,
-	public submodel::IIdentifiable
+	public virtual submodel::IHasDataSpecification,
+	public virtual submodel::IHasKind,
+	public virtual submodel::IIdentifiable
 {
 public:
   struct Path
