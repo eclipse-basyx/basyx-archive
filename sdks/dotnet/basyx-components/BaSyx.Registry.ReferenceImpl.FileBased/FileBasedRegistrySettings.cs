@@ -9,9 +9,6 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Utils.Settings;
-using System;
-using System.Collections.Generic;
-using System.Xml.Serialization;
 
 namespace BaSyx.Registry.ReferenceImpl.FileBased
 {

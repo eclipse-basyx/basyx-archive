@@ -23,13 +23,22 @@ namespace BaSyx.API.Http.Controllers.PackageService
     public class PackageService : Controller
     {
         private readonly IAssetAdministrationShellServiceProvider shellServiceProvider;
+
+#if NETCOREAPP3_1
         private readonly IWebHostEnvironment hostingEnvironment;
         public PackageService(IAssetAdministrationShellServiceProvider aasServiceProvider, IWebHostEnvironment environment)
         {
             shellServiceProvider = aasServiceProvider;
             hostingEnvironment = environment;
         }
-
+#else
+        private readonly IHostingEnvironment hostingEnvironment;
+        public PackageService(IAssetAdministrationShellServiceProvider aasServiceProvider, IHostingEnvironment environment)
+        {
+            shellServiceProvider = aasServiceProvider;
+            hostingEnvironment = environment;
+        }
+#endif
 
         #region REST-Interface AASX-Package
 
@@ -80,13 +89,13 @@ namespace BaSyx.API.Http.Controllers.PackageService
             return new BadRequestResult();
         }
 
-        #endregion
+#endregion
 
 
 
-        #region Helper Methods
+#region Helper Methods
 
 
-        #endregion
+#endregion
     }
 }
