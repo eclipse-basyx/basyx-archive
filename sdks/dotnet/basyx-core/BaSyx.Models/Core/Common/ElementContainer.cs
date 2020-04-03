@@ -196,7 +196,7 @@ namespace BaSyx.Models.Core.Common
             return submodelElements.Create(element);
         }
     }
-
+    [JsonConverter(typeof(OperationVariableSetConverter))]
     public interface IOperationVariableSet : IList<IOperationVariable>
     {
         void Add(ISubmodelElement submodelElement);

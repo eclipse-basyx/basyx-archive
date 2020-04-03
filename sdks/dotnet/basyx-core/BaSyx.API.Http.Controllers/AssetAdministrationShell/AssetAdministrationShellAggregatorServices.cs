@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Utils.ResultHandling;
-using static BaSyx.Utils.ResultHandling.Utils;
 using BaSyx.API.Components;
 using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.Common;
@@ -52,7 +51,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult RetrieveAllAssetAdministrationShells()
         {
             var result = RetrieveAssetAdministrationShells();
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
         /// Retrieves a specific Asset Administration Shell from the aggregator service endpint
@@ -68,7 +67,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult RetrieveAssetAdministrationShellByIdShort(string aasId)
         {
             var result = RetrieveAssetAdministrationShell(aasId);
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
         /// Updates a specific Asset Administration Shell at the aggregator service endpint
@@ -84,7 +83,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult UpdateAssetAdministrationShellByIdShort(string aasId, [FromBody] IAssetAdministrationShell aas)
         {
             var result = UpdateAssetAdministrationShell(aasId, aas);
-            return EvaluateResult(result, CrudOperation.Update);
+            return result.CreateActionResult(CrudOperation.Update);
         }
         /// <summary>
         /// Creates a new Asset Administration Shell at the aggregator service endpoint
@@ -99,7 +98,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult CreateNewAssetAdministrationShell([FromBody] IAssetAdministrationShell aas)
         {
             var result = CreateAssetAdministrationShell(aas);
-            return EvaluateResult(result, CrudOperation.Create);
+            return result.CreateActionResult(CrudOperation.Create);
         }
         /// <summary>
         /// Deletes a specific Asset Administration Shell at the aggregator service endpoint
@@ -114,7 +113,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult DeleteAssetAdministrationShellByIdShort(string aasId)
         {
             var result = DeleteAssetAdministrationShell(aasId);
-            return EvaluateResult(result, CrudOperation.Delete);
+            return result.CreateActionResult(CrudOperation.Delete);
         }
 
         #endregion

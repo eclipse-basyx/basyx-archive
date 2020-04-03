@@ -9,6 +9,8 @@
 * 
 *******************************************************************************/
 using BaSyx.AAS.Server.Http;
+using BaSyx.API.Components;
+using BaSyx.Utils.Settings.Types;
 using NLog;
 
 namespace HelloAssetAdministrationShell
@@ -20,19 +22,25 @@ namespace HelloAssetAdministrationShell
 
         static void Main(string[] args)
         {
-            logger.Info("Starting component Http-Rest interface...");
+            logger.Info("Starting Asset Administration Shell's HTTP-REST interface...");
 
-            //Initialize generic Http-REST interface
-            AssetAdministrationShellHttpServer loader = new AssetAdministrationShellHttpServer();
+            //Loading server configurations settings from ServerSettings.xml;
+            ServerSettings serverSettings = ServerSettings.LoadSettingsFromFile("ServerSettings.xml");
+
+            //Initialize generic HTTP-REST interface passing previously loaded server configuration
+            AssetAdministrationShellHttpServer aasServer = new AssetAdministrationShellHttpServer(serverSettings);
 
             //Instantiate Asset Administration Shell Service
             HelloAssetAdministrationShellService shellService = new HelloAssetAdministrationShellService();
 
-            //Assign Shell Service to generic Http-Rest interface
-            loader.SetServiceProvider(shellService);
-            
-            //Run Http-Rest interface with specific Shell Service implementation
-            loader.Run();
+            //Dictate Asset Administration Shell service to use provided endpoints from the server configuration
+            shellService.UseAutoEndpointRegistration(serverSettings.ServerConfig);
+
+            //Assign Asset Administration Shell Service to the generic HTTP-REST interface
+            aasServer.SetServiceProvider(shellService);
+
+            //Run HTTP-REST interface
+            aasServer.Run();
         }
     }
 }

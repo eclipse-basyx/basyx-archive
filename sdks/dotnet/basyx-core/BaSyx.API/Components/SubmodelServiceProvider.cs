@@ -19,21 +19,17 @@ using Newtonsoft.Json;
 using System.Reflection;
 using System.Linq.Expressions;
 using System.Linq;
-using BaSyx.Models.Extensions;
 using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
+using BaSyx.Models.Communication;
+using System.Threading.Tasks;
+
 
 namespace BaSyx.API.Components
 {
     public class SubmodelServiceProvider : ISubmodelServiceProvider
     {
-        public static JsonSerializerSettings JsonSerializerSettings { get; set; }
-        static SubmodelServiceProvider()
-        {
-            JsonSerializerSettings = new JsonStandardSettings();
-        }
-        
         public ISubmodel Submodel { get; protected set; }
         public ISubmodelDescriptor ServiceDescriptor { get; internal set; }
 
@@ -41,6 +37,7 @@ namespace BaSyx.API.Components
         private Dictionary<string, PropertyHandler> propertyHandler;
         private Dictionary<string, Action<IValue>> updateFunctions;
         private Dictionary<string, EventDelegate> eventDelegates;
+        private Dictionary<string, InvocationResponse> invocationResults;
 
         private IMessageClient messageClient;
 
@@ -53,6 +50,7 @@ namespace BaSyx.API.Components
             propertyHandler = new Dictionary<string, PropertyHandler>();
             updateFunctions = new Dictionary<string, Action<IValue>>();
             eventDelegates = new Dictionary<string, EventDelegate>();
+            invocationResults = new Dictionary<string, InvocationResponse>();
         }
 
         public SubmodelServiceProvider(ISubmodel submodel) : this()
@@ -223,27 +221,111 @@ namespace BaSyx.API.Components
             RegisterMethodCalledHandler(operationId, del);
         }
 
-        public IResult InvokeOperation(string operationId, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments, int timeout)
+        public IResult<CallbackResponse> InvokeOperationAsync(string operationId, InvocationRequest invocationRequest)
         {
             if (Submodel == null)
-                return new Result(false, new NotFoundMessage("Submodel"));
+                return new Result<CallbackResponse>(false, new NotFoundMessage("Submodel"));
+            if (invocationRequest == null)
+                return new Result<CallbackResponse>(new ArgumentNullException(nameof(invocationRequest)));
 
             var operation_Retrieved = RetrieveOperation(operationId);
             if (operation_Retrieved.Success && operation_Retrieved.Entity != null)
             {
+                Delegate methodDelegate;
                 if (operation_Retrieved.Entity.OnMethodCalled != null)
-                {
-                    var result = operation_Retrieved.Entity.OnMethodCalled.Invoke(operation_Retrieved.Entity, inputArguments, outputArguments);
-                    return result;
-                }
+                    methodDelegate = operation_Retrieved.Entity.OnMethodCalled;
                 else if (methodCalledHandler.TryGetValue(operationId, out Delegate handler))
+                    methodDelegate = handler;
+                else
+                    return new Result<CallbackResponse>(false, new NotFoundMessage($"MethodHandler for {operationId}"));
+
+                var invocationTask = Task.Run(() =>
                 {
-                    var result = (IResult)handler.DynamicInvoke(operation_Retrieved.Entity, inputArguments, outputArguments);
-                    return result;
+                    InvocationResponse invocationResponse = new InvocationResponse(invocationRequest.RequestId);
+                    SetInvocationResult(operationId, invocationRequest.RequestId, ref invocationResponse);
+
+                    try
+                    {
+                        invocationResponse.ExecutionState = ExecutionState.Running;
+                        Task<OperationResult> taskResult = (Task<OperationResult>)methodDelegate.DynamicInvoke(operation_Retrieved.Entity, invocationRequest.InputArguments, invocationResponse.OutputArguments);
+                        invocationResponse.OperationResult = taskResult.Result;
+                        invocationResponse.ExecutionState = ExecutionState.Completed;
+                    }
+                    catch (Exception e)
+                    {
+                        invocationResponse.ExecutionState = ExecutionState.Failed;
+                        invocationResponse.OperationResult = new OperationResult(e);
+                    }
+                });
+                string endpoint = ServiceDescriptor?.Endpoints?.FirstOrDefault()?.Address;
+                CallbackResponse callbackResponse = new CallbackResponse(invocationRequest.RequestId);
+                if (string.IsNullOrEmpty(endpoint))
+                    callbackResponse.CallbackUrl = new Uri($"/operations/{operationId}/invocationList/{invocationRequest.RequestId}", UriKind.Relative);
+                else
+                    callbackResponse.CallbackUrl = new Uri($"{endpoint}/operations/{operationId}/invocationList/{invocationRequest.RequestId}", UriKind.Absolute);
+                return new Result<CallbackResponse>(true, callbackResponse);
+            }
+            return new Result<CallbackResponse>(operation_Retrieved);
+        }
+
+        private void SetInvocationResult(string operationId, string requestId, ref InvocationResponse invocationResponse)
+        {
+            string key = string.Join("_", operationId, requestId);
+            if (invocationResults.ContainsKey(key))
+            {
+                invocationResults[key] = invocationResponse;
+            }
+            else
+            {
+                invocationResults.Add(key, invocationResponse);
+            }
+        }
+
+        public IResult<InvocationResponse> GetInvocationResult(string operationId, string requestId)
+        {
+            string key = string.Join("_", operationId, requestId);
+            if (invocationResults.ContainsKey(key))
+            {
+                return new Result<InvocationResponse>(true, invocationResults[key]);
+            }
+            else
+            {
+               return new Result<InvocationResponse>(false, new NotFoundMessage($"Request with id {requestId}"));
+            }
+        }
+
+
+        public IResult<InvocationResponse> InvokeOperation(string operationId, InvocationRequest invocationRequest)
+        {
+            if (Submodel == null)
+                return new Result<InvocationResponse>(false, new NotFoundMessage("Submodel"));
+
+            var operation_Retrieved = RetrieveOperation(operationId);
+            if (operation_Retrieved.Success && operation_Retrieved.Entity != null)
+            {
+                Delegate methodDelegate;
+                if (operation_Retrieved.Entity.OnMethodCalled != null)
+                    methodDelegate = operation_Retrieved.Entity.OnMethodCalled;
+                else if (methodCalledHandler.TryGetValue(operationId, out Delegate handler))
+                    methodDelegate = handler;
+                else
+                    return new Result<InvocationResponse>(false, new NotFoundMessage($"MethodHandler for {operationId}"));
+                try
+                {
+                    InvocationResponse invocationResponse = new InvocationResponse(invocationRequest.RequestId);
+                    invocationResponse.ExecutionState = ExecutionState.Running;
+                    Task<OperationResult> taskResult = (Task<OperationResult>)methodDelegate.DynamicInvoke(operation_Retrieved.Entity, invocationRequest.InputArguments, invocationResponse.OutputArguments);
+                    invocationResponse.OperationResult = taskResult.Result;
+                    invocationResponse.ExecutionState = ExecutionState.Completed;
+
+                    return new Result<InvocationResponse>(true, invocationResponse);
+                }
+                catch (Exception e)
+                {
+                    return new Result<InvocationResponse>(e);
                 }
             }
-            outputArguments = null;
-            return operation_Retrieved;
+            return new Result<InvocationResponse>(operation_Retrieved);
         }
 
         public IResult ThrowEvent(IPublishableEvent publishableEvent, string topic = "/", Action<IMessagePublishedEventArgs> MessagePublished = null, byte qosLevel = 2, bool retain = false)
@@ -257,7 +339,7 @@ namespace BaSyx.API.Components
             if (eventDelegates.TryGetValue(publishableEvent.Name, out EventDelegate eventDelegate))
                 eventDelegate.Invoke(this, publishableEvent);
 
-            string message = JsonConvert.SerializeObject(publishableEvent, JsonSerializerSettings);
+            string message = JsonConvert.SerializeObject(publishableEvent, Formatting.Indented);
             return messageClient.Publish(topic, message, MessagePublished, qosLevel, retain);
         }
 
@@ -448,5 +530,7 @@ namespace BaSyx.API.Components
 
             return Submodel.SubmodelElements.Delete(submodelElementId);
         }
+
+        
     }
 }

@@ -24,7 +24,7 @@ using BaSyx.Models.Extensions;
 using BaSyx.Models.Extensions.Semantics.DataSpecifications;
 using BaSyx.Utils.Client;
 using BaSyx.Utils.Client.Mqtt;
-using BaSyx.Utils.ResultHandling.ResultTypes;
+using BaSyx.Utils.ResultHandling;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -103,7 +103,7 @@ namespace HelloAssetAdministrationShell
             return new ElementValue(localProperty.Value, localProperty.ValueType);
         }
 
-        private OperationResult HelloOperationHandler(IOperation operation, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments)
+        private Task<OperationResult> HelloOperationHandler(IOperation operation, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments)
         {
             if (inputArguments?.Count > 0)
             {

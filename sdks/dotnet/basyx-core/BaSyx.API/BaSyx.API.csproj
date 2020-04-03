@@ -1,21 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-  <TargetFramework>netstandard2.0</TargetFramework>
-  <Configurations>Debug;Release</Configurations>
-	<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-	<Authors>Constantin Ziesche</Authors>
-	<Copyright>Copyright 2019 - Robert Bosch GmbH</Copyright>
-	<PackageProjectUrl>https://wiki.eclipse.org/BaSyx</PackageProjectUrl>
-	<RepositoryUrl>https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/sdks/csnet/</RepositoryUrl>
-	<PackageLicenseUrl></PackageLicenseUrl>
-	<Description>The official BaSyx Collection of APIs</Description>
-	<Company>Robert Bosch GmbH</Company>
-	<PackageTags>BaSys BaSyx API</PackageTags>
-	<PackageLicenseExpression>EPL-2.0</PackageLicenseExpression>
-	<RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-  <PackageIcon>basyxlogo.png</PackageIcon>
-  <AssemblyVersion>1.0.0.0</AssemblyVersion>
-  <Version>1.0.0</Version>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <OutputType>Library</OutputType>
+	  <Authors>Constantin Ziesche</Authors>
+	  <Copyright>Copyright 2020 - Robert Bosch GmbH</Copyright>
+	  <PackageProjectUrl>https://wiki.eclipse.org/BaSyx</PackageProjectUrl>
+	  <RepositoryUrl>https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/sdks/csnet/</RepositoryUrl>
+	  <PackageLicenseUrl></PackageLicenseUrl>
+	  <Description>The official BaSyx Collection of APIs</Description>
+	  <Company>Robert Bosch GmbH</Company>
+	  <PackageTags>BaSys BaSyx API</PackageTags>
+	  <PackageLicenseExpression>EPL-2.0</PackageLicenseExpression>
+	  <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <PackageIcon>basyxlogo.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>

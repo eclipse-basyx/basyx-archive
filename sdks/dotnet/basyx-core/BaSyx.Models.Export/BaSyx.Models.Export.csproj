@@ -1,20 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <Configurations>Debug;Release</Configurations>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <Authors>Constantin Ziesche</Authors>
     <Company>Robert Bosch GmbH</Company>
     <Description>The official BaSyx Collection of Information Model Classes for Export</Description>
-    <Copyright>Copyright 2019 - Robert Bosch GmbH</Copyright>
+    <Copyright>Copyright 2020 - Robert Bosch GmbH</Copyright>
     <PackageLicenseExpression>EPL-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://wiki.eclipse.org/BaSyx</PackageProjectUrl>
     <RepositoryUrl>https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/sdks/csnet/</RepositoryUrl>
     <PackageIcon>basyxlogo.png</PackageIcon>
-    <PackageIconUrl />
     <PackageTags>BaSys BaSyx Models Export</PackageTags>
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
-    <Deterministic>false</Deterministic>
-    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,36 +21,56 @@
     <None Remove="AAS_ABAC-v2.0.xsd" />
     <None Remove="IEC61360-v1.0.xsd" />
     <None Remove="IEC61360-v2.0.xsd" />
-    <None Include="basyxlogo.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+    <None Include="basyxlogo.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="AAS-v1.0.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <PackageFlatten>true</PackageFlatten>
+      <PackagePath>contentFiles\any\any\</PackagePath>
     </Content>
     <Content Include="AAS-v2.0.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <PackageFlatten>true</PackageFlatten>
+      <PackagePath>contentFiles\any\any\</PackagePath>
     </Content>
     <Content Include="AAS_ABAC-v2.0.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <PackageFlatten>true</PackageFlatten>
+      <PackagePath>contentFiles\any\any\</PackagePath>
     </Content>
     <Content Include="IEC61360-v1.0.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <PackageFlatten>true</PackageFlatten>
+      <PackagePath>contentFiles\any\any\</PackagePath>
     </Content>
     <Content Include="IEC61360-v2.0.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <PackageFlatten>true</PackageFlatten>
+      <PackagePath>contentFiles\any\any\</PackagePath>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-    <PackageReference Include="NLog" Version="4.6.8" />
+    <PackageReference Include="NLog" Version="4.7.0" />
     <PackageReference Include="System.IO.Packaging" Version="4.7.0" />
   </ItemGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>Full</DebugType>
+  </PropertyGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\BaSyx.Models\BaSyx.Models.csproj" />
   </ItemGroup>

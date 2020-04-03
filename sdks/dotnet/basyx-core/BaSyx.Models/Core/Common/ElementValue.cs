@@ -41,20 +41,21 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
             ValueType = valueType;
         }
 
-        
 
         public T ToObject<T>()
         {
-            if (Value is T)
+            if (Value == null)
+                return default;
+            else if (Value is T)
                 return (T)Value;
             else
             {
                 try
                 {
-                    Value = Convert.ChangeType(Value, DataType.GetSystemTypeFromDataType(ValueType));
+                    Value = Convert.ChangeType(Value, typeof(T));
                     return (T)Value;
                 }
-                catch (Exception e)
+                catch
                 {
                     try
                     {
@@ -62,9 +63,9 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
                         var convertedVal = jVal.ToObject<T>();
                         return convertedVal;
                     }
-                    catch (Exception)
+                    catch
                     {
-                        throw new InvalidCastException("Cannot convert " + DataType.GetDataTypeFromSystemType(typeof(T)).DataObjectType + " to " + ValueType.DataObjectType + "- Exception: " + e.Message);
+                        throw new InvalidCastException("Cannot convert " + Value?.GetType() + " to " + typeof(T).Name);
                     }
                 }
             }

@@ -1,11 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Configurations>Debug;Release</Configurations>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Authors>Constantin Ziesche</Authors>
-    <Copyright>Copyright 2019 - Robert Bosch GmbH</Copyright>
+    <Copyright>Copyright 2020 - Robert Bosch GmbH</Copyright>
     <PackageProjectUrl>https://wiki.eclipse.org/BaSyx</PackageProjectUrl>
     <RepositoryUrl>https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/sdks/csnet/</RepositoryUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
@@ -32,12 +31,18 @@
   <ItemGroup>
     <Content Include="RegistryClientSettings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <Pack>true</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <PackageFlatten>true</PackageFlatten>
+      <PackagePath>contentFiles\any\$(TargetFramework)\</PackagePath>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BaSyx.API" Version="1.0.0" />
-    <PackageReference Include="NLog" Version="4.6.8" />
+    <PackageReference Include="BaSyx.Utils.DependencyInjection" Version="1.0.0" />
+    <PackageReference Include="NLog" Version="4.7.0" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

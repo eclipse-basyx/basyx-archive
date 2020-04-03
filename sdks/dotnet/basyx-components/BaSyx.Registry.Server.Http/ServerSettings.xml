@@ -2,11 +2,12 @@
 <ServerSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ServerConfig>
     <Hosting>
+      <Environment>Development</Environment>
+      <ContentPath>Content</ContentPath>
       <Urls>
         <Url>http://+:4999</Url>
       </Urls>
     </Hosting>
-    <DefaultRoute>/ui</DefaultRoute>
+    <DefaultRoute>/Index</DefaultRoute>
   </ServerConfig>
-  <Miscellaneous/>
 </ServerSettings>

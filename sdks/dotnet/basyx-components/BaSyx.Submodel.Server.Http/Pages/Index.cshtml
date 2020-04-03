@@ -532,8 +532,13 @@ if (embeddedDataSpecifications?.Count() > 0)
         </div>
     </div>
 
-
     <script>
+        function uuidv4() {
+            return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
+        }
+
         function ExecuteOperation(submodelId, operationId) {
             var argNames = document.getElementsByClassName("argInName " + submodelId + " " + operationId);
             var argTypes = document.getElementsByClassName("argInType " + submodelId + " " + operationId);
@@ -553,23 +558,32 @@ if (embeddedDataSpecifications?.Count() > 0)
                     },
                     value: argValues.item(i).value
                 };
-                var arg = { value };
+                var arg = {
+                    modelType: {
+                        name: "OperationVariable"
+                    },
+                    value
+                };
                 args.push(arg);
             }
 
+            var invocationRequest = {
+                requestId: uuidv4(),
+                inputArguments: args
+            }
 
             $.ajax({
                 type: 'POST',
                 url: '/submodel/operations/' + operationId,
                 contentType: 'application/json',
-                data: JSON.stringify(args),
+                data: JSON.stringify(invocationRequest),
                 error: function () {
-                    alert("Failed to execute with args: " + JSON.stringify(args));
+                    alert("Failed to execute: " + JSON.stringify(invocationRequest));
                 },
                 success: function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var argOutIdShort = data[i].value.idShort;
-                        $('#argOutValue_' + submodelId + operationId + argOutIdShort).val(JSON.stringify(data[i].value.value));
+                    for (var i = 0; i < data.outputArguments.length; i++) {
+                        var argOutIdShort = data.outputArguments[i].value.idShort;
+                        $('#argOutValue_' + submodelId + operationId + argOutIdShort).val(JSON.stringify(data.outputArguments[i].value.value));
                     }
                 }
             });

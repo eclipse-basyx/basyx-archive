@@ -8,23 +8,21 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Utils.ResultHandling;
 using BaSyx.API.Components;
-using static BaSyx.Utils.ResultHandling.Utils;
 using BaSyx.Utils.Client;
 using System;
 using BaSyx.API.AssetAdministrationShell;
-using BaSyx.Models.Core;
 using Newtonsoft.Json.Linq;
 using BaSyx.Models.Extensions;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
 using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.Common;
+using BaSyx.Models.Communication;
+using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 
 namespace BaSyx.API.Http.Controllers
 {
@@ -75,7 +73,7 @@ namespace BaSyx.API.Http.Controllers
                 return new JsonResult(customizedSubmodel);
             }
 
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
 
@@ -97,7 +95,7 @@ namespace BaSyx.API.Http.Controllers
                 return new JsonResult(minimizedSubmodel);
             }
 
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
         /// <summary>
@@ -112,7 +110,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult GetSubmodel()
         {
             var result = RetrieveSubmodel();
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
         /// <summary>
@@ -127,7 +125,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult GetSubmodelElements()
         {
             var result = RetrieveSubmodelElements();
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
         /// <summary>
@@ -142,7 +140,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult GetProperties()
         {
             var result = RetrieveProperties();
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
         /// <summary>
@@ -157,7 +155,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult GetOperations()
         {
             var result = RetrieveOperations();
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
         /// <summary>
@@ -172,7 +170,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult GetEvents()
         {
             var result = RetrieveEvents();
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
 
@@ -192,7 +190,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult PostSubmodelElement([FromBody] ISubmodelElement submodelElement)
         {
             var result = CreateSubmodelElement(submodelElement);
-            return EvaluateResult(result, CrudOperation.Create, "submodel/submodelElements/" + submodelElement.IdShort);
+            return result.CreateActionResult(CrudOperation.Create, "submodel/submodelElements/" + submodelElement.IdShort);
         }
         /// <summary>
         /// Retrieves a specific Submodel Element from the Submodel
@@ -207,7 +205,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult GetSubmodelElementByIdShort(string submodelElementId)
         {
             var result = RetrieveSubmodelElement(submodelElementId);
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
         /// <summary>
@@ -222,10 +220,9 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult DeleteSubmodelElementByIdShort(string submodelElementId)
         {
             var result = DeleteSubmodelElement(submodelElementId);
-            return EvaluateResult(result, CrudOperation.Delete);
+            return result.CreateActionResult(CrudOperation.Delete);
         }
         #endregion
-
         #region Property - REST-Calls
         /// <summary>
         /// Adds a new Property to the Asset Administration Shell's Submodel
@@ -242,7 +239,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult PostProperty([FromBody] IProperty property)
         {
             var result = CreateProperty(property);
-            return EvaluateResult(result, CrudOperation.Create, "submodel/properties/" + property.IdShort);
+            return result.CreateActionResult(CrudOperation.Create, "submodel/properties/" + property.IdShort);
         }
         /// <summary>
         /// Retrieves a specific Property from the Asset Administrations's Submodel
@@ -257,7 +254,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult GetProperty(string propertyId)
         {
             var result = RetrieveProperty(propertyId);
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
         /// <summary>
@@ -273,7 +270,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult GetPropertyValue(string propertyId)
         {
             var result = RetrievePropertyValue(propertyId);
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
         /// <summary>
@@ -290,7 +287,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult PutPropertyValue(string propertyId, [FromBody] IValue value)
         {
             var result = UpdatePropertyValue(propertyId, value);
-            return EvaluateResult(result, CrudOperation.Update);
+            return result.CreateActionResult(CrudOperation.Update);
         }
         /// <summary>
         /// Deletes a specific Property from the Asset Administration Shell's Submodel
@@ -304,7 +301,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult DelProperty(string propertyId)
         {
             var result = DeleteProperty(propertyId);
-            return EvaluateResult(result, CrudOperation.Delete);
+            return result.CreateActionResult(CrudOperation.Delete);
         }
         #endregion
         #region Operation - REST-Calls
@@ -323,7 +320,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult PostOperation([FromBody] IOperation operation)
         {
             var result = CreateOperation(operation);
-            return EvaluateResult(result, CrudOperation.Create, "submodel/operations/" + operation.IdShort);
+            return result.CreateActionResult(CrudOperation.Create, "submodel/operations/" + operation.IdShort);
         }
         /// <summary>
         /// Retrieves a specific Operation from the Asset Administration Shell's Submodel
@@ -338,7 +335,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult GetOperation(string operationId)
         {
             var result = RetrieveOperation(operationId);
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
         /// Deletes a specific Operation from the Asset Administration Shell's Submodel
@@ -352,35 +349,63 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult DelOperation(string operationId)
         {
             var result = DeleteOperation(operationId);
-            return EvaluateResult(result, CrudOperation.Delete);
+            return result.CreateActionResult(CrudOperation.Delete);
         }
         /// <summary>
-        /// Invokes a specific operation from the Asset Administration Shell' Submodel with a list of input parameters 
+        /// Synchronously invokes a specific operation from the Submodel
         /// </summary>
         /// <param name="operationId">The operation's short id</param>
-        /// <param name="timeout">Timeout for the operation to finish</param>
-        /// <param name="inputArguments">List of input arguments</param>
+        /// <param name="invocationRequest">The parameterized request object for the invocation</param>
         /// <returns></returns>
         /// <response code="200">Operation invoked successfully</response>
         /// <response code="400">Bad Request</response>
-        /// <response code="404">Submodel not found</response>
+        /// <response code="404">Submodel / Method handler not found</response>
         [HttpPost("submodel/operations/{operationId}", Name = "InvokeOperationRest")]
-        [ProducesResponseType(typeof(SubmodelElement[]), 200)]
+        [ProducesResponseType(typeof(InvocationResponse), 200)]
         [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult InvokeOperationRest(string operationId, [FromQuery] int timeout, [FromBody] OperationVariableSet inputArguments)
+        public IActionResult InvokeOperationRest(string operationId, [FromBody] InvocationRequest invocationRequest)
         {
-            OperationVariableSet outputArguments = new OperationVariableSet();
-            IResult result = InvokeOperation(operationId, inputArguments, outputArguments, timeout);
+            IResult<InvocationResponse> result = InvokeOperation(operationId, invocationRequest);
+            return result.CreateActionResult(CrudOperation.Invoke);
+        }
 
-            if (result != null)
-            {
-                if (result.Success)
-                    return new OkObjectResult(outputArguments);
-                else
-                    return new BadRequestObjectResult(result);
-            }
-            return StatusCode(502);
+        /// <summary>
+        /// Asynchronously invokes a specific operation from the Submodel
+        /// </summary>
+        /// <param name="operationId">The operation's short id</param>
+        /// <param name="invocationRequest">The parameterized request object for the invocation</param>
+        /// <returns></returns>
+        /// <response code="200">Operation invoked successfully</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="404">Submodel / Method handler not found</response>
+        [HttpPost("submodel/operations/{operationId}/async", Name = "InvokeOperationRestAsync")]
+        [ProducesResponseType(typeof(CallbackResponse), 200)]
+        [ProducesResponseType(typeof(Result), 400)]
+        [ProducesResponseType(typeof(Result), 404)]
+        public IActionResult InvokeOperationRestAsync(string operationId, [FromBody] InvocationRequest invocationRequest)
+        {
+            IResult<CallbackResponse> result = InvokeOperationAsync(operationId, invocationRequest);
+            return result.CreateActionResult(CrudOperation.Invoke);
+        }
+
+        /// <summary>
+        /// Retrieves the result of an asynchronously started operation
+        /// </summary>
+        /// <param name="operationId">The operation's short id</param>
+        /// <param name="requestId">The request id</param>
+        /// <returns></returns>
+        /// <response code="200">Result found</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="404">Submodel / Operation / Request not found</response>
+        [HttpGet("submodel/operations/{operationId}/invocationList/{requestId}", Name = "GetInvocationResultRest")]
+        [ProducesResponseType(typeof(InvocationResponse), 200)]
+        [ProducesResponseType(typeof(Result), 400)]
+        [ProducesResponseType(typeof(Result), 404)]
+        public IActionResult GetInvocationResultRest(string operationId, string requestId)
+        {
+            IResult<InvocationResponse> result = GetInvocationResult(operationId, requestId);
+            return result.CreateActionResult(CrudOperation.Invoke);
         }
 
         #endregion
@@ -400,7 +425,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult PostEvent([FromBody] IEvent eventable)
         {
             var result = CreateEvent(eventable);
-            return EvaluateResult(result, CrudOperation.Create, "submodel/events/" + eventable.IdShort);
+            return result.CreateActionResult(CrudOperation.Create, "submodel/events/" + eventable.IdShort);
         }
         /// <summary>
         /// Retrieves a specific event from the Asset Administration Shell's Submodel
@@ -415,7 +440,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult GetEvent(string eventId)
         {
             var result = RetrieveEvent(eventId);
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
         /// Deletes a specific event from the Asset Administration Shell's Submodel
@@ -429,7 +454,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult DelEvent(string eventId)
         {
             var result = DeleteEvent(eventId);
-            return EvaluateResult(result, CrudOperation.Delete);
+            return result.CreateActionResult(CrudOperation.Delete);
         }
 
 
@@ -459,9 +484,9 @@ namespace BaSyx.API.Http.Controllers
             return submodelServiceProvider.DeleteOperation(operationId);
         }
 
-        public IResult InvokeOperation(string operationId, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments, int timeout)
+        public IResult<InvocationResponse> InvokeOperation(string operationId, InvocationRequest invocationRequest)
         {
-            return submodelServiceProvider.InvokeOperation(operationId, inputArguments, outputArguments, timeout);
+            return submodelServiceProvider.InvokeOperation(operationId, invocationRequest);
         }
 
         public IResult<IProperty> CreateProperty(IProperty dataElement)
@@ -592,6 +617,16 @@ namespace BaSyx.API.Http.Controllers
         public IResult DeleteSubmodelElement(string submodelElementId)
         {
             return submodelServiceProvider.DeleteSubmodelElement(submodelElementId);
+        }
+
+        public IResult<CallbackResponse> InvokeOperationAsync(string operationId, InvocationRequest invocationRequest)
+        {
+            return submodelServiceProvider.InvokeOperationAsync(operationId, invocationRequest);
+        }
+
+        public IResult<InvocationResponse> GetInvocationResult(string operationId, string requestId)
+        {
+            return submodelServiceProvider.GetInvocationResult(operationId, requestId);
         }
 
         #endregion

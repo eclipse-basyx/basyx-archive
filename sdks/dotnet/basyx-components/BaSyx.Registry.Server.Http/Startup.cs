@@ -12,19 +12,19 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using BaSyx.Models.Extensions;
-using BaSyx.Utils.DIExtensions;
 using BaSyx.Utils.Settings;
 using BaSyx.Utils.Settings.Types;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Hosting;
+using BaSyx.Components.Common;
+using BaSyx.Utils.DependencyInjection;
 
 namespace BaSyx.Registry.Server.Http
 {
@@ -35,35 +35,42 @@ namespace BaSyx.Registry.Server.Http
 
         public IConfiguration Configuration { get; }
         public IServerApplicationLifetime ServerApplicationLifetime { get; }
-        public static ServerSettings Settings { get; set; }
+        public static ServerSettings ServerSettings { get; set; }
 
         public Startup(IConfiguration configuration, ServerSettings serverSettings, IServerApplicationLifetime serverApplicationLifetime)
         {
             Configuration = configuration;
-            Settings = serverSettings;
+            ServerSettings = serverSettings;
             ServerApplicationLifetime = serverApplicationLifetime;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddStandardImplementation();
+
             Assembly controllerAssembly = Assembly.Load(ControllerAssemblyName);
             services.AddCors();
-            services.AddMvc().AddApplicationPart(controllerAssembly).AddControllersAsServices();
+            services.AddMvc()
+                .AddApplicationPart(controllerAssembly)
+                .AddControllersAsServices()
+                .AddNewtonsoftJson(options => options.GetDefaultMvcJsonOptions(services));
+            services.AddRazorPages(options =>
+            {
+                string pageName = ServerSettings.ServerConfig?.DefaultRoute ?? "/Index";
+                options.Conventions.AddPageRoute(pageName, "");
+            });
 
-            services.UseStandardImplementation();
-            services.ConfigureStandardDI();
-
+           
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info
+                c.SwaggerDoc("v1", new OpenApiInfo()
                 {
                     Version = "v1",
                     Title = "BaSyx Registry HTTP REST-API",
-                    Description = "The full description of the BaSyx Registry HTTP REST-API",
-                    TermsOfService = "None",
-                    Contact = new Contact { Name = "Constantin Ziesche", Email = "constantin.ziesche@bosch.com", Url = "https://www.bosch.com/de/" },
-                    License = new License { Name = "Use under Eclipse Public License 2.0", Url = "https://www.eclipse.org/legal/epl-2.0/" }
+                    Description = "The full description of the BaSyx Registry HTTP REST-API",                    
+                    Contact = new OpenApiContact { Name = "Constantin Ziesche", Email = "constantin.ziesche@bosch.com", Url = new Uri("https://www.bosch.com/de/") },
+                    License = new OpenApiLicense { Name = "EPL-2.0", Url = new Uri("https://www.eclipse.org/legal/epl-2.0/") }
                 });
 
                 var xmlFile = $"{controllerAssembly.GetName().Name}.xml";
@@ -71,16 +78,38 @@ namespace BaSyx.Registry.Server.Http
                 if (ResourceChecker.CheckResourceAvailability(controllerAssembly, ControllerAssemblyName, xmlFile, true))
                     c.IncludeXmlComments(xmlPath);
             });
+            services.AddSwaggerGenNewtonsoftSupport();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
         {
             if (env.IsDevelopment() || Debugger.IsAttached)
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/error");
+                //app.UseHsts();
+            }
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseCors(
+                options => options
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowAnyOrigin()
+            );
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+                endpoints.MapControllers();
+            });
 
             if (ServerApplicationLifetime.ApplicationStarted != null)
                 applicationLifetime.ApplicationStarted.Register(ServerApplicationLifetime.ApplicationStarted);
@@ -94,21 +123,6 @@ namespace BaSyx.Registry.Server.Http
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "BaSyx Registry Http REST-API");
             });
-
-            app.UseCors(
-                options => options.WithOrigins("*")
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowAnyOrigin()
-            );
-
-            //Route rewriter options
-            string defaultRoute = Settings?.ServerConfig?.DefaultRoute ?? "/ui";
-            RewriteOptions rewriteOptions = new RewriteOptions();
-            rewriteOptions.AddRedirect("^$", defaultRoute);
-            app.UseRewriter(rewriteOptions);
-
-            app.UseMvc();
         }
     }
 }

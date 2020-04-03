@@ -15,15 +15,10 @@ using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Export.Converter;
-using BaSyx.Models.Export.EnvironmentDataSpecifications;
 using BaSyx.Models.Export.EnvironmentSubmodelElements;
-using BaSyx.Models.Extensions;
 using BaSyx.Models.Extensions.Semantics.DataSpecifications;
-using BaSyx.Utils.DIExtensions;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -42,8 +37,6 @@ namespace BaSyx.Models.Export
     [XmlRoot(ElementName = "aasenv", Namespace = AAS_NAMESPACE, IsNullable = false)]
     public class AssetAdministrationShellEnvironment_V2_0
     {
-        public static IDIExtension DIExtension { get; }
-
         public const string AAS_NAMESPACE = "http://www.admin-shell.io/aas/2/0";
         public const string IEC61360_NAMESPACE = "http://www.admin-shell.io/IEC61360/2/0";
         public const string ABAC_NAMESPACE = "http://www.admin-shell.io/aas/abac/2/0";
@@ -117,11 +110,6 @@ namespace BaSyx.Models.Export
             XmlSettings.Schemas.Add(AAS_NAMESPACE, AAS_XSD_FILENAME);
             XmlSettings.Schemas.Add(IEC61360_NAMESPACE, IEC61360_XSD_FILENAME);
             XmlSettings.Schemas.Add(ABAC_NAMESPACE, ABAC_XSD_FILENAME);
-
-            var services = new ServiceCollection();
-            services.UseStandardImplementation();
-
-            DIExtension = new DIExtension(services);
         }
 
         [JsonConstructor]

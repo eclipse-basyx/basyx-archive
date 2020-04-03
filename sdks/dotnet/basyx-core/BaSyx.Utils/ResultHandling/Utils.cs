@@ -8,7 +8,6 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Diagnostics;
 using System.Net;
@@ -60,44 +59,6 @@ namespace BaSyx.Utils.ResultHandling
                 iHttpStatusCode = (int)HttpStatusCode.BadRequest;
                 return false;
             }
-        }
-
-        public static IActionResult EvaluateResult(IResult result, CrudOperation crud, string route = null)
-        {
-            if (result == null)
-                return new StatusCodeResult(502);
-
-            switch (crud)
-            {
-                case CrudOperation.Create:
-                    if (result.Success && result.Entity != null)
-                        return new CreatedResult(route, result.Entity);
-                    break;
-                case CrudOperation.Retrieve:
-                    if (result.Success && result.Entity != null)
-                        return new OkObjectResult(result.Entity);
-                    else
-                        return new NotFoundObjectResult(result);
-                case CrudOperation.Update:
-                    if (result.Success)
-                        return new OkObjectResult(result.Entity);
-                    break;
-                case CrudOperation.Delete:
-                    if (result.Success)
-                        return new NoContentResult();
-                    break;
-                default:
-                    return new BadRequestObjectResult(result);
-            }
-            return new BadRequestObjectResult(result);
-        }
-
-        public enum CrudOperation
-        {
-            Create,
-            Retrieve,
-            Update,
-            Delete
         }
     }
 }

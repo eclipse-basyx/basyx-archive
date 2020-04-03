@@ -11,8 +11,8 @@
 using BaSyx.API.Components;
 using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.Common;
-using BaSyx.Models.Extensions;
 using BaSyx.Utils.Client.Http;
+using BaSyx.Utils.DependencyInjection;
 using BaSyx.Utils.ResultHandling;
 using NLog;
 using System;

@@ -88,8 +88,7 @@ namespace BaSyx.Models.Core.Common
         public static DataType GetDataTypeFromSystemType(Type type)
         {
             DataType dataType = new DataType();
-            Type innerType = null;
-
+            Type innerType;
             if (IsGenericList(type))
             {
                 dataType.IsCollection = true;

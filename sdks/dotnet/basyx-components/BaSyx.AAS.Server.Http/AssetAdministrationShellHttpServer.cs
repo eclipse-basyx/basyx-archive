@@ -9,125 +9,23 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.API.Components;
-using BaSyx.Utils.Logging;
+using BaSyx.Components.Common;
 using BaSyx.Utils.Settings.Types;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Web;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace BaSyx.AAS.Server.Http
 {
-    public class AssetAdministrationShellHttpServer : IServerApplicationLifetime
+    public class AssetAdministrationShellHttpServer : ServerApplication
     {
-        private static readonly Logger logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
-        private static Microsoft.Extensions.Logging.LogLevel logLevel;
-        public ServerSettings Settings { get; }
-
-        public Action ApplicationStarted { get; set; }
-
-        public Action ApplicationStopping { get; set; }
-
-        public Action ApplicationStopped { get; set; }
-
-        private IWebHostBuilder webHostBuilder;
-
-        public AssetAdministrationShellHttpServer(ServerSettings serverSettings = null, string[] webHostBuilderargs = null)
-        {
-            Settings = serverSettings ?? ServerSettings.LoadSettings();
-            logLevel = LoggingExtentions.GetLogLevel(logger);
-
-            webHostBuilder = BuildWebHost(webHostBuilderargs);
-            webHostBuilder.ConfigureServices(services =>
-            {
-                services.AddSingleton(typeof(ServerSettings), Settings);
-            });
-        }
-
-        public void Run()
-        {
-            logger.Debug("Starting Component Service...");
-            
-            webHostBuilder.Build().Run();
-        }
-
-        public async Task RunAsync(CancellationToken cancellationToken = default)
-        {
-            logger.Debug("Starting Component Service Async...");
-
-            await webHostBuilder.Build().RunAsync(cancellationToken);
-        }
-
-
-        public void ConfigureApplication(Action<IApplicationBuilder> appConfiguration) => webHostBuilder.Configure(appConfiguration);
-        public void ConfigureServices(Action<IServiceCollection> configureServices) => webHostBuilder.ConfigureServices(configureServices);
-        public void UseContentRoot(string contentRoot) => webHostBuilder.UseContentRoot(contentRoot);
-        public void UseWebRoot(string webRoot) => webHostBuilder.UseWebRoot(webRoot);
-        public void UseUrls(params string[] urls)
-        {
-            webHostBuilder.UseUrls(urls);
-            if (Settings?.ServerConfig?.Hosting != null)
-                Settings.ServerConfig.Hosting.Urls = urls.ToList();
-        }
-
-        public void ProvideContent(Uri relativeUri, Stream content)
-        {
-            using (Stream stream = content)
-            {
-                string fileName = Path.GetFileName(relativeUri.ToString());
-                string directory = Path.GetDirectoryName(relativeUri.ToString());
-                if (directory.StartsWith("\\"))
-                    directory = directory.Substring(1, directory.Length - 1);
-                string hostingDirectory = Path.Combine(AppContext.BaseDirectory, Settings.ServerConfig.Hosting.ContentPath, directory);
-                Directory.CreateDirectory(hostingDirectory);
-
-                string filePath = Path.Combine(hostingDirectory, fileName);
-
-                using (FileStream fileStream = File.OpenWrite(filePath))
-                {
-                    stream.CopyTo(fileStream);
-                }
-            }
-        }
-
+        public AssetAdministrationShellHttpServer(ServerSettings serverSettings = null, string[] webHostBuilderArgs = null)
+            : base(typeof(SingleStartup), serverSettings ?? ServerSettings.LoadSettings(), webHostBuilderArgs)
+        { }
         public void SetServiceProvider(IAssetAdministrationShellServiceProvider aasServiceProvider)
         {
-            webHostBuilder.ConfigureServices(services =>
+            WebHostBuilder.ConfigureServices(services =>
             {
-                services.AddSingleton<IAssetAdministrationShellServiceProvider>(aasServiceProvider);                
+                services.AddSingleton<IAssetAdministrationShellServiceProvider>(aasServiceProvider);
             });
-        }
-
-        public IWebHostBuilder BuildWebHost(string[] args)
-        {
-            var webHost = WebHost.CreateDefaultBuilder(args)
-                .UseStartup<SingleStartup>()
-                .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.SetMinimumLevel(logLevel);
-                })
-                .ConfigureServices(services => services.AddSingleton<IServerApplicationLifetime>(this))
-                .UseNLog()
-                .UseContentRoot(AppContext.BaseDirectory);
-
-            if (Settings?.ServerConfig.Hosting?.Environment != null)
-                webHost.UseEnvironment(Settings.ServerConfig.Hosting.Environment);
-            else
-                webHost.UseEnvironment(EnvironmentName.Production);
-
-            if (Settings?.ServerConfig?.Hosting?.Urls?.Count > 0)
-                webHost.UseUrls(Settings.ServerConfig.Hosting.Urls.ToArray());
-
-            return webHost;
         }
     }
 }

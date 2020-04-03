@@ -6,12 +6,12 @@
     <members>
         <member name="T:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices">
             <summary>
-            All Asset Administration Shell Services provided by the component
+            The Asset Administration Shell Aggregator Controller
             </summary>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.RetrieveAASList">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.RetrieveAllAssetAdministrationShells">
             <summary>
-            Retrieves all Asset Administration Shells from the endpoint
+            Retrieves all Asset Administration Shells from the aggregator service endpoint
             </summary>
             <returns></returns>
             <response code="200">Returns a list of found Asset Administration Shells</response>
@@ -19,43 +19,43 @@
             <response code="400">Bad Request</response>    
             <response code="502">Bad Gateway</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.RetrieveAAS(System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.RetrieveAssetAdministrationShellByIdShort(System.String)">
             <summary>
-            Retrieves a specific Asset Administration Shell
+            Retrieves a specific Asset Administration Shell from the aggregator service endpint
             </summary>
-            <param name="aasId">The AAS's unique id</param>
+            <param name="aasId">The Asset Administration Shell's short id</param>
             <returns></returns>
             <response code="200">Returns the requested Asset Administration Shell</response>
             <response code="404">No Asset Administration Shell found</response>     
             <response code="400">Bad Request</response>         
             <response code="502">Bad Gateway</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.UpdateAAS(System.String,BaSyx.Models.Core.AssetAdministrationShell.Generics.IAssetAdministrationShell)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.UpdateAssetAdministrationShellByIdShort(System.String,BaSyx.Models.Core.AssetAdministrationShell.Generics.IAssetAdministrationShell)">
             <summary>
-            Updates a specific Asset Administration Shell
+            Updates a specific Asset Administration Shell at the aggregator service endpint
             </summary>
-            <param name="aasId">The AAS's unique id</param>
-            <param name="aas">The updated AAS</param>
+            <param name="aasId">The Asset Administration Shell's unique id</param>
+            <param name="aas">The updated Asset Administration Shell</param>
             <returns></returns>
             <response code="200">Asset Administration Shell updated successfully</response>
             <response code="400">Bad Request</response>           
             <response code="502">Bad Gateway</response>   
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.CreateAAS(BaSyx.Models.Core.AssetAdministrationShell.Generics.IAssetAdministrationShell)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.CreateNewAssetAdministrationShell(BaSyx.Models.Core.AssetAdministrationShell.Generics.IAssetAdministrationShell)">
             <summary>
-            Creates a new Asset Administration Shell at the endpoint
+            Creates a new Asset Administration Shell at the aggregator service endpoint
             </summary>
-            <param name="aas">The AAS's description object</param>
+            <param name="aas">The serialized Asset Administration Shell object</param>
             <returns></returns>
             <response code="201">Asset Administration Shell created successfully</response>
             <response code="400">Bad Request</response>             
             <response code="502">Bad Gateway</response> 
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.DeleteAAS(System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.DeleteAssetAdministrationShellByIdShort(System.String)">
             <summary>
-            Deletes a specific Asset Administration Shell
+            Deletes a specific Asset Administration Shell at the aggregator service endpoint
             </summary>
-            <param name="aasId">The AAS's unique id</param>
+            <param name="aasId">The Asset Administration Shell's unique id</param>
             <returns></returns>
             <response code="200">Asset Administration Shell deleted successfully</response>
             <response code="400">Bad Request</response>      
@@ -109,13 +109,13 @@
             <response code="200">Returns a list of found Submodels</response>
             <response code="404">No Submodel Service Providers found</response>       
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedGetDataElements">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedGetProperties">
             <summary>
-            Retrieves all DataElements from the current Submodel
+            Retrieves all Properties from the current Submodel
             </summary>
             <returns></returns>
-            <response code="200">Returns a list of found DataElements</response>
-            <response code="404">Submodel not found / No DataElements found</response>       
+            <response code="200">Returns a list of found Properties</response>
+            <response code="404">Submodel not found / No Properties found</response>       
         </member>
         <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedGetOperations">
             <summary>
@@ -133,11 +133,11 @@
             <response code="200">Success</response>
             <response code="404">Submodel not found / No Events found</response>      
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedPostDataElement(BaSyx.Models.Core.AssetAdministrationShell.Generics.IDataElement)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedPostDataElement(BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes.IProperty)">
             <summary>
-            Adds a new DataElement to the Asset Administration Shell's Submodel
+            Adds a new Property to the Asset Administration Shell's Submodel
             </summary>
-            <param name="dataElement">The DataElement's description object</param>
+            <param name="property">The Property's description object</param>
             <returns></returns>
             <response code="201">DataElement created successfully</response>
             <response code="400">Bad Request</response>
@@ -145,42 +145,42 @@
         </member>
         <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedGetDataElement(System.String)">
             <summary>
-            Retrieves a specific DataElement from the Asset Administrations's Submodel
+            Retrieves a specific Property from the Asset Administrations's Submodel
             </summary>
-            <param name="propertyId">The DataElement's short id</param>
+            <param name="propertyId">The Property's short id</param>
             <returns></returns>
-            <response code="200">Returns the requested DataElement</response>
-            <response code="404">Submodel/DataElement not found</response>     
+            <response code="200">Returns the requested Property</response>
+            <response code="404">Submodel/Property not found</response>     
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedGetDataElementValue(System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedGetPropertyValue(System.String)">
             <summary>
-            Retrieves the value of a specific DataElement from the Asset Administrations Shell's Submodel
+            Retrieves the value of a specific Property from the Asset Administrations Shell's Submodel
             </summary>
-            <param name="propertyId">The DataElement's short id</param>
+            <param name="propertyId">The Property's short id</param>
             <returns></returns>
-            <response code="200">Returns the requested DataElement's value</response>
-            <response code="404">Submodel/DataElement not found</response>     
+            <response code="200">Returns the requested Property's value</response>
+            <response code="404">Submodel/Property not found</response>     
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedPutDataElementValue(System.String,BaSyx.Models.Core.AssetAdministrationShell.Generics.IValue)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedPutPropertyValue(System.String,BaSyx.Models.Core.Common.IValue)">
             <summary>
-            Updates the Asset Administration Shell's Submodel's DataElement
+            Updates the Asset Administration Shell's Submodel's Property
             </summary>
-            <param name="propertyId">The DataElement's short id</param>
+            <param name="propertyId">The Property's short id</param>
             <param name="value">The new value</param>
             <returns></returns>
-            <response code="200">DataElement's value changed successfully</response>
-            <response code="404">Submodel/DataElement not found</response>     
+            <response code="200">Property's value changed successfully</response>
+            <response code="404">Submodel/Property not found</response>     
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedDelDataElement(System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedDelProperty(System.String)">
             <summary>
-            Deletes a specific DataElement from the Asset Administration Shell's Submodel
+            Deletes a specific Property from the Asset Administration Shell's Submodel
             </summary>
-            <param name="propertyId">The DataElement's short id</param>
+            <param name="propertyId">The Property's short id</param>
             <returns></returns>
-            <response code="204">DataElement deleted successfully</response>
+            <response code="204">Property deleted successfully</response>
             <response code="404">Submodel not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedPostOperation(BaSyx.Models.Core.AssetAdministrationShell.Generics.IOperation)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedPostOperation(BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes.IOperation)">
             <summary>
             Adds a new operation to the Asset Administraiton Shell's Submodel
             </summary>
@@ -208,19 +208,18 @@
             <response code="204">Operation deleted successfully</response>  
             <response code="404">Submodel not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedInvokeOperationRest(System.String,System.Int32,System.Collections.Generic.List{BaSyx.Models.Core.AssetAdministrationShell.Generics.IArgument})">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedInvokeOperationRest(System.String,BaSyx.Models.Communication.InvocationRequest)">
             <summary>
-            Invokes a specific operation from the Asset Administration Shell' Submodel with a list of input parameters 
+            Synchronously invokes a specific operation from the Submodel
             </summary>
             <param name="operationId">The operation's short id</param>
-            <param name="timeout">Timeout for the operation to finish</param>
-            <param name="inputArguments">List of input arguments</param>
+            <param name="invocationRequest">The parameterized request object for the invocation</param>
             <returns></returns>
             <response code="200">Operation invoked successfully</response>
             <response code="400">Bad Request</response>
-            <response code="404">Submodel not found</response>
+            <response code="404">Submodel / Method handler not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedPostEvent(BaSyx.Models.Core.AssetAdministrationShell.Generics.IEvent)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.RoutedPostEvent(BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes.IEvent)">
             <summary>
             Adds a new event to the Asset Administration Shell's Submodel
             </summary>
@@ -247,50 +246,6 @@
             <returns></returns>
             <response code="204">Event deleted successfully</response>
             <response code="404">Submodel not found</response>
-        </member>
-        <member name="T:BaSyx.API.Http.Controllers.SubmodelBinding">
-            <summary>
-            Registry for distributed Submodel-Service-Provider
-            </summary>
-        </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelBinding.RetrieveSubmodelServiceProviders">
-            <summary>
-            Retrieves all registered Submodel Service Providers within an Asset Administation Shell Service Provider
-            </summary>
-            <returns></returns>
-            <response code="200">Returns the all registered Submodel Service Provider</response>
-            <response code="404">No Submodel Service Provider found</response>            
-            <response code="400">Bad Request</response>    
-            <response code="502">Bad Gateway</response>
-        </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelBinding.RetrieveSubmodelServiceProvider(System.String)">
-            <summary>
-            Retrieves a specific Submodel Service Provider from its containing Asset Administration Shell Service Provider
-            </summary>
-            <returns></returns>
-            <response code="200">Returns the requested Submodel Service Provider</response>
-            <response code="404">No Submodel Service Provider found</response>     
-            <response code="400">Bad Request</response>         
-            <response code="502">Bad Gateway</response>
-        </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelBinding.RegisterSubmodelServiceProvider(BaSyx.Models.Core.AssetAdministrationShell.Generics.ISubmodelDescriptor)">
-            <summary>
-            Registers a new Distributed Submodel Service Provider at the Asset Administration Shell Service Provider
-            </summary>
-            <param name="serviceDescriptor">The Submodel Service Provider' service descriptor object</param>
-            <returns></returns>
-            <response code="201">Submodel Service Provider registered successfully</response>
-            <response code="400">Bad Request</response>             
-            <response code="502">Bad Gateway</response> 
-        </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelBinding.UnregisterSubmodelServiceProvider(System.String)">
-            <summary>
-            Unregisters a specific Submodel Service Provider from its containing Asset Administration Shell Service Provider
-            </summary>
-            <returns></returns>
-            <response code="200">Submodel Service Provider unregistered successfully</response>
-            <response code="400">Bad Request</response>      
-            <response code="502">Bad Gateway</response>
         </member>
         <member name="T:BaSyx.API.Http.Controllers.SubmodelServices">
             <summary>
@@ -321,13 +276,21 @@
             <response code="200">Success</response>
             <response code="404">Submodel not found</response>       
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.GetDataElements">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.GetSubmodelElements">
             <summary>
-            Retrieves all DataElements from the current Submodel
+            Retrieves all SubmodelElements from the current Submodel
             </summary>
             <returns></returns>
-            <response code="200">Returns a list of found DataElements</response>
-            <response code="404">Submodel not found / No DataElements found</response>       
+            <response code="200">Returns a list of found SubmodelElements</response>
+            <response code="404">Submodel not found / No SubmodelElements found</response>       
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.GetProperties">
+            <summary>
+            Retrieves all Properties from the current Submodel
+            </summary>
+            <returns></returns>
+            <response code="200">Returns a list of found Properties</response>
+            <response code="404">Submodel not found / No Properties found</response>       
         </member>
         <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.GetOperations">
             <summary>
@@ -345,54 +308,82 @@
             <response code="200">Success</response>
             <response code="404">Submodel not found / No Events found</response>      
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.PostDataElement(BaSyx.Models.Core.AssetAdministrationShell.Generics.IDataElement)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.PostSubmodelElement(BaSyx.Models.Core.AssetAdministrationShell.Generics.ISubmodelElement)">
             <summary>
-            Adds a new DataElement to the Asset Administration Shell's Submodel
+            Adds a new Submodel Element to the Submodel
             </summary>
-            <param name="dataElement">The DataElement's description object</param>
+            <param name="submodelElement">The Submodel Element's description object</param>
             <returns></returns>
-            <response code="201">DataElement created successfully</response>
+            <response code="201">Submodel Element created successfully</response>
             <response code="400">Bad Request</response>
             <response code="404">Submodel not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.GetDataElement(System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.GetSubmodelElementByIdShort(System.String)">
             <summary>
-            Retrieves a specific DataElement from the Asset Administrations's Submodel
+            Retrieves a specific Submodel Element from the Submodel
             </summary>
-            <param name="propertyId">The DataElement's short id</param>
+            <param name="submodelElementId">The Submodel Element's short id</param>
             <returns></returns>
-            <response code="200">Returns the requested DataElement</response>
-            <response code="404">Submodel/DataElement not found</response>     
+            <response code="200">Returns the requested Submodel Element</response>
+            <response code="404">Submodel/Submodel Element not found</response>     
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.GetDataElementValue(System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.DeleteSubmodelElementByIdShort(System.String)">
             <summary>
-            Retrieves the value of a specific DataElement from the Asset Administrations Shell's Submodel
+            Deletes a specific Submodel Element from the Submodel
             </summary>
-            <param name="propertyId">The DataElement's short id</param>
+            <param name="submodelElementId">The Submodel Element's short id</param>
             <returns></returns>
-            <response code="200">Returns the requested DataElement's value</response>
-            <response code="404">Submodel/DataElement not found</response>     
+            <response code="204">Submodel Element deleted successfully</response>
+            <response code="404">Submodel/Submodel Element not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.PutDataElementValue(System.String,BaSyx.Models.Core.AssetAdministrationShell.Generics.IValue)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.PostProperty(BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes.IProperty)">
             <summary>
-            Updates the Asset Administration Shell's Submodel's DataElement
+            Adds a new Property to the Asset Administration Shell's Submodel
             </summary>
-            <param name="propertyId">The DataElement's short id</param>
-            <param name="value">The new value</param>
+            <param name="property">The Property's description object</param>
             <returns></returns>
-            <response code="200">DataElement's value changed successfully</response>
-            <response code="404">Submodel/DataElement not found</response>     
-        </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.DelDataElement(System.String)">
-            <summary>
-            Deletes a specific DataElement from the Asset Administration Shell's Submodel
-            </summary>
-            <param name="propertyId">The DataElement's short id</param>
-            <returns></returns>
-            <response code="204">DataElement deleted successfully</response>
+            <response code="201">Property created successfully</response>
+            <response code="400">Bad Request</response>
             <response code="404">Submodel not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.PostOperation(BaSyx.Models.Core.AssetAdministrationShell.Generics.IOperation)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.GetProperty(System.String)">
+            <summary>
+            Retrieves a specific Property from the Asset Administrations's Submodel
+            </summary>
+            <param name="propertyId">The Property's short id</param>
+            <returns></returns>
+            <response code="200">Returns the requested Property</response>
+            <response code="404">Submodel/Property not found</response>     
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.GetPropertyValue(System.String)">
+            <summary>
+            Retrieves the value of a specific Property from the Asset Administrations Shell's Submodel
+            </summary>
+            <param name="propertyId">The Property's short id</param>
+            <returns></returns>
+            <response code="200">Returns the requested Property's value</response>
+            <response code="404">Submodel/Property not found</response>     
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.PutPropertyValue(System.String,BaSyx.Models.Core.Common.IValue)">
+            <summary>
+            Updates the Asset Administration Shell's Submodel's Property
+            </summary>
+            <param name="propertyId">The Property's short id</param>
+            <param name="value">The new value</param>
+            <returns></returns>
+            <response code="200">Property's value changed successfully</response>
+            <response code="404">Submodel/Property not found</response>     
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.DelProperty(System.String)">
+            <summary>
+            Deletes a specific Property from the Asset Administration Shell's Submodel
+            </summary>
+            <param name="propertyId">The Property's short id</param>
+            <returns></returns>
+            <response code="204">Property deleted successfully</response>
+            <response code="404">Submodel not found</response>
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.PostOperation(BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes.IOperation)">
             <summary>
             Adds a new operation to the Asset Administraiton Shell's Submodel
             </summary>
@@ -420,19 +411,40 @@
             <response code="204">Operation deleted successfully</response>  
             <response code="404">Submodel not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.InvokeOperationRest(System.String,System.Int32,System.Collections.Generic.List{BaSyx.Models.Core.AssetAdministrationShell.Generics.IArgument})">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.InvokeOperationRest(System.String,BaSyx.Models.Communication.InvocationRequest)">
             <summary>
-            Invokes a specific operation from the Asset Administration Shell' Submodel with a list of input parameters 
+            Synchronously invokes a specific operation from the Submodel
             </summary>
             <param name="operationId">The operation's short id</param>
-            <param name="timeout">Timeout for the operation to finish</param>
-            <param name="inputArguments">List of input arguments</param>
+            <param name="invocationRequest">The parameterized request object for the invocation</param>
             <returns></returns>
             <response code="200">Operation invoked successfully</response>
             <response code="400">Bad Request</response>
-            <response code="404">Submodel not found</response>
+            <response code="404">Submodel / Method handler not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.PostEvent(BaSyx.Models.Core.AssetAdministrationShell.Generics.IEvent)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.InvokeOperationRestAsync(System.String,BaSyx.Models.Communication.InvocationRequest)">
+            <summary>
+            Asynchronously invokes a specific operation from the Submodel
+            </summary>
+            <param name="operationId">The operation's short id</param>
+            <param name="invocationRequest">The parameterized request object for the invocation</param>
+            <returns></returns>
+            <response code="200">Operation invoked successfully</response>
+            <response code="400">Bad Request</response>
+            <response code="404">Submodel / Method handler not found</response>
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.GetInvocationResultRest(System.String,System.String)">
+            <summary>
+            Retrieves the result of an asynchronously started operation
+            </summary>
+            <param name="operationId">The operation's short id</param>
+            <param name="requestId">The request id</param>
+            <returns></returns>
+            <response code="200">Result found</response>
+            <response code="400">Bad Request</response>
+            <response code="404">Submodel / Operation / Request not found</response>
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelServices.PostEvent(BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes.IEvent)">
             <summary>
             Adds a new event to the Asset Administration Shell's Submodel
             </summary>
@@ -491,7 +503,7 @@
             <response code="404">No Asset Administration Shell with passed id found</response>     
             <response code="502">Bad Gateway</response>   
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRegistry.PostAssetAdministrationShell(BaSyx.Models.Core.AssetAdministrationShell.Generics.IAssetAdministrationShellDescriptor)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRegistry.PostAssetAdministrationShell(BaSyx.Models.Connectivity.Descriptors.IAssetAdministrationShellDescriptor)">
             <summary>
             Registers a new Asset Administration Shell
             </summary>
@@ -513,7 +525,7 @@
             <response code="404">No Asset Administration Shell with passed id found</response>     
             <response code="502">Bad Gateway</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRegistry.PostSubmodel(System.String,BaSyx.Models.Core.AssetAdministrationShell.Generics.ISubmodelDescriptor)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRegistry.PostSubmodelToRegistry(System.String,BaSyx.Models.Connectivity.Descriptors.ISubmodelDescriptor)">
             <summary>
             Adds a new Submodel to an existing resp. registered Asset Administration Shell
             </summary>
@@ -526,7 +538,7 @@
             <response code="422">The passed Submodel conflicts with already registered Submodels</response>
             <response code="502">Bad Gateway</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRegistry.GetSubmodel(System.String,System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRegistry.GetSubmodelFromRegistry(System.String,System.String)">
             <summary>
             Retrieves a specific Submodel from a specific Asset Administration Shell
             </summary>
@@ -538,7 +550,7 @@
             <response code="404">No Asset Administration Shell / Submodel with passed id found</response>     
             <response code="502">Bad Gateway</response> 
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRegistry.DeleteSubmodel_(System.String,System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRegistry.DeleteSubmodelFromRegistry(System.String,System.String)">
             <summary>
             Deletes a specific Submodel from a specific Asset Administration Shell
             </summary>
@@ -550,7 +562,7 @@
             <response code="404">No Asset Administration Shell / Submodel with passed id found</response>  
             <response code="502">Bad Gateway</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRegistry.GetSubmodels(System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRegistry.GetSubmodelsFromRegistry(System.String)">
             <summary>
             Retrieves all Submodels from a specific Asset Administration Shell
             </summary>

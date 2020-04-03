@@ -8,6 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
+using BaSyx.Utils.DependencyInjection.Abstractions;
 using BaSyx.Utils.JsonHandling;
 using Newtonsoft.Json;
 using NLog;
@@ -48,7 +49,9 @@ namespace BaSyx.Models.Extensions
                 try
                 {
                     Type outerTypeDefinition = objectType.GetGenericTypeDefinition();
-                    Type outerType = (serializer.ContractResolver as DIContractResolver).DIExtension.GetRegisteredTypeFor(outerTypeDefinition);
+                    Type outerType = (serializer.ContractResolver as IDependencyInjectionContractResolver)
+                        .DependencyInjectionExtension
+                        .GetRegisteredTypeFor(outerTypeDefinition);
                     Type innerType = objectType.GetGenericArguments()[0];
                     Type containerType = outerType.MakeGenericType(innerType);
 

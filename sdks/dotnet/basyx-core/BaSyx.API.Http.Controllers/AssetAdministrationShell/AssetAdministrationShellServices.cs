@@ -14,7 +14,6 @@ using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Utils.ResultHandling;
 using BaSyx.API.Components;
 using BaSyx.Models.Connectivity;
-using static BaSyx.Utils.ResultHandling.Utils;
 using System.Linq;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +21,7 @@ using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
+using BaSyx.Models.Communication;
 
 namespace BaSyx.API.Http.Controllers
 {
@@ -97,7 +97,7 @@ namespace BaSyx.API.Http.Controllers
                 SubmodelServiceProvider cssp = new SubmodelServiceProvider(submodel, descriptor);
                 assetAdministrationShellServiceProvider.SubmodelRegistry.RegisterSubmodelServiceProvider(submodel.IdShort, cssp);
             }
-            return EvaluateResult(result, CrudOperation.Create, "aas/submodels/" + submodel.IdShort);
+            return result.CreateActionResult(CrudOperation.Create, "aas/submodels/" + submodel.IdShort);
         }
         /// <summary>
         /// Retrieves the Submodel from the Asset Administration Shell
@@ -130,7 +130,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult DeleteSubmodelById(string submodelId)
         {
             var result = DeleteSubmodel(submodelId);
-            return EvaluateResult(result, CrudOperation.Delete);
+            return result.CreateActionResult(CrudOperation.Delete);
         }
         /// <summary>
         /// Retrieves all Submodels from the  Asset Administration Shell
@@ -333,23 +333,22 @@ namespace BaSyx.API.Http.Controllers
             return controller.DelOperation(operationId);
         }
         /// <summary>
-        /// Invokes a specific operation from the Asset Administration Shell' Submodel with a list of input parameters 
+        /// Synchronously invokes a specific operation from the Submodel
         /// </summary>
         /// <param name="operationId">The operation's short id</param>
-        /// <param name="timeout">Timeout for the operation to finish</param>
-        /// <param name="inputArguments">List of input arguments</param>
+        /// <param name="invocationRequest">The parameterized request object for the invocation</param>
         /// <returns></returns>
         /// <response code="200">Operation invoked successfully</response>
         /// <response code="400">Bad Request</response>
-        /// <response code="404">Submodel not found</response>
+        /// <response code="404">Submodel / Method handler not found</response>
         [HttpPost("aas/submodels/{submodelId}/submodel/operations/{operationId}", Name = "RoutedInvokeOperationRest")]
-        [ProducesResponseType(typeof(SubmodelElement[]), 200)]
+        [ProducesResponseType(typeof(InvocationResponse), 200)]
         [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult RoutedInvokeOperationRest(string operationId, [FromQuery] int timeout, [FromBody] OperationVariableSet inputArguments)
+        public IActionResult RoutedInvokeOperationRest(string operationId, [FromBody] InvocationRequest invocationRequest)
         {
             var controller = HttpContext.RequestServices.GetService<SubmodelServices>();
-            return controller.InvokeOperationRest(operationId, timeout, inputArguments);
+            return controller.InvokeOperationRest(operationId, invocationRequest);
         }
 
         #endregion

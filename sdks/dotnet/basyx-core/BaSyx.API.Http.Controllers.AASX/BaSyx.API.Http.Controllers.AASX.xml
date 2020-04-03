@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BaSyx.API.Http.Controllers.AASX</name>
+    </assembly>
+    <members>
+        <member name="T:BaSyx.API.Http.Controllers.PackageService.PackageService">
+            <summary>
+            The AASX Package Service
+            </summary>
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.PackageService.PackageService.GetAASXPackage">
+            <summary>
+            Retrieves the full AASX Package
+            </summary>
+            <returns>AASX Package as download</returns>
+            <response code="200">Success</response>
+            <response code="400">Bad Request</response>       
+        </member>
+    </members>
+</doc>

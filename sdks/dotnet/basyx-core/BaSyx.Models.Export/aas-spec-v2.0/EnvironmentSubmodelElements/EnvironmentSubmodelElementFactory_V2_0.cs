@@ -20,6 +20,7 @@ using System.Linq;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
+using Range = BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes.Range;
 
 namespace BaSyx.Models.Export.EnvironmentSubmodelElements
 {

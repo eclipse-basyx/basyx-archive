@@ -18,6 +18,7 @@ using System;
 using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
+using BaSyx.Models.Communication;
 
 namespace BaSyx.Submodel.ServiceProvider.Distributed
 {
@@ -112,9 +113,9 @@ namespace BaSyx.Submodel.ServiceProvider.Distributed
             return submodelClient.DeleteOperation(operationId);
         }
 
-        public IResult InvokeOperation(string operationId, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments, int timeout)
+        public IResult<InvocationResponse> InvokeOperation(string operationId, InvocationRequest invocationRequest)
         {
-            return submodelClient.InvokeOperation(operationId, inputArguments, outputArguments, timeout);
+            return submodelClient.InvokeOperation(operationId, invocationRequest);
         }
 
         public IResult<IProperty> CreateProperty(IProperty Property)
@@ -215,6 +216,16 @@ namespace BaSyx.Submodel.ServiceProvider.Distributed
         public IResult DeleteSubmodelElement(string submodelElementId)
         {
             return submodelClient.DeleteSubmodelElement(submodelElementId);
+        }
+
+        public IResult<CallbackResponse> InvokeOperationAsync(string operationId, InvocationRequest invocationRequest)
+        {
+            return submodelClient.InvokeOperationAsync(operationId, invocationRequest);
+        }
+
+        public IResult<InvocationResponse> GetInvocationResult(string operationId, string requestId)
+        {
+            return submodelClient.GetInvocationResult(operationId, requestId);
         }
     }
 }

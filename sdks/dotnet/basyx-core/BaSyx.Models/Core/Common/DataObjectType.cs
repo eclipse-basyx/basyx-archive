@@ -108,7 +108,7 @@ namespace BaSyx.Models.Core.Common
         [JsonConstructor]
         protected DataObjectType(string name)
         {
-            Name = name ?? throw new ArgumentNullException("name");
+            Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         public static DataObjectType Parse(DataObjectTypes dataObjectTypeEnum)

@@ -8,9 +8,6 @@
         <Url>http://+:5080</Url>
       </Urls>
     </Hosting>
-    <DefaultRoute>/ui</DefaultRoute>
+    <DefaultRoute>/Index</DefaultRoute>
   </ServerConfig>
-  <RegistryConfig>
-    <Activated>false</Activated>
-  </RegistryConfig>
 </ServerSettings>

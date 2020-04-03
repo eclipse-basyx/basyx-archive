@@ -11,7 +11,7 @@
 using BaSyx.API.Components;
 using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.Common;
-using BaSyx.Models.Extensions;
+using BaSyx.Utils.DependencyInjection;
 using BaSyx.Utils.ResultHandling;
 using Newtonsoft.Json;
 using NLog;

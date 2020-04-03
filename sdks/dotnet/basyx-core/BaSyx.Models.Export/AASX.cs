@@ -16,10 +16,7 @@ using System.Linq;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using NLog;
-using Microsoft.AspNetCore.StaticFiles;
 using BaSyx.Utils.FileHandling;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace BaSyx.Models.Export
 {
@@ -347,9 +344,8 @@ namespace BaSyx.Models.Export
 
         private static string GetContentType(string filePath)
         {
-            if (!new FileExtensionContentTypeProvider().TryGetContentType(filePath, out string contentType))
-                if (!MimeTypes.TryGetContentType(filePath, out contentType))
-                    return null;
+            if (!MimeTypes.TryGetContentType(filePath, out string contentType))
+                return null;
 
             return contentType;
         }

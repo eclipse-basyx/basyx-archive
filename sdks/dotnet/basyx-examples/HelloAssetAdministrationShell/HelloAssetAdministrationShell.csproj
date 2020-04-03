@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>Constantin Ziesche</Authors>
     <Copyright>Copyright 2019 - Robert Bosch GmbH</Copyright>
     <PackageProjectUrl>https://wiki.eclipse.org/BaSyx</PackageProjectUrl>
@@ -26,41 +26,18 @@
 
   <ItemGroup>
     <PackageReference Include="BaSyx.AAS.Server.Http" Version="1.0.0" />
-    <PackageReference Include="NLog" Version="4.6.8" />
+    <PackageReference Include="BaSyx.Utils.Client.Mqtt" Version="1.0.0" />
+    <PackageReference Include="NLog" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netstandard2.0\AAS_Icon.ico">
+    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netcoreapp3.1\AAS_Icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netstandard2.0\NLog.config">
+    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netcoreapp3.1\NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netstandard2.0\RegistryClientSettings.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netstandard2.0\ServerSettings.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netstandard2.0\wwwroot\favicon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netstandard2.0\wwwroot\images\basyxlogo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netstandard2.0\wwwroot\images\Bosch.gif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netstandard2.0\wwwroot\scripts\bootstrap.min.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netstandard2.0\wwwroot\scripts\bootstrap.min.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netstandard2.0\wwwroot\scripts\jquery-3.3.1.min.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netstandard2.0\wwwroot\scripts\popper.min.js">
+    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netcoreapp3.1\ServerSettings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

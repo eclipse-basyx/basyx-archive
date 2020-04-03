@@ -10,9 +10,9 @@
 *******************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
-namespace BaSyx.Utils.ResultHandling.ResultTypes
+namespace BaSyx.Utils.ResultHandling
 {
     public class OperationResult : Result
     {
@@ -24,5 +24,15 @@ namespace BaSyx.Utils.ResultHandling.ResultTypes
         { }
         public OperationResult(bool success, List<IMessage> messages) : base(success, messages)
         { }
+
+        public static implicit operator Task<OperationResult>(OperationResult operationResult)
+        {
+            return Task.FromResult(operationResult);
+        }
+
+        public static explicit operator OperationResult(Task<OperationResult> taskOperationResult)
+        {
+            return taskOperationResult.Result;
+        }
     }
 }

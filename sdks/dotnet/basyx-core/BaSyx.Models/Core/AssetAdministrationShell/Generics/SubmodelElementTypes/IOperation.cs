@@ -9,12 +9,13 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Models.Core.Common;
-using BaSyx.Utils.ResultHandling.ResultTypes;
+using BaSyx.Utils.ResultHandling;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
 {
-    public delegate OperationResult MethodCalledHandler(IOperation operation, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments);
+    public delegate Task<OperationResult> MethodCalledHandler(IOperation operation, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments);
 
     /// <summary>
     /// An operation is a submodel element with input and output variables. 

@@ -12,6 +12,7 @@ using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Utils.ResultHandling;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
+using BaSyx.Models.Communication;
 
 namespace BaSyx.API.Clients
 {
@@ -42,7 +43,10 @@ namespace BaSyx.API.Clients
 
         IResult DeleteOperation(string operationId);
 
-        IResult InvokeOperation(string operationId, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments, int timeout);        
+        IResult<InvocationResponse> InvokeOperation(string operationId, InvocationRequest invocationRequest);
+        IResult<CallbackResponse> InvokeOperationAsync(string operationId, InvocationRequest invocationRequest);
+        IResult<InvocationResponse> GetInvocationResult(string operationId, string requestId);
+
         #endregion
 
         #region Property - CRUD-Operations

@@ -12,9 +12,6 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using BaSyx.API.Components;
 using BaSyx.Utils.ResultHandling;
-using Newtonsoft.Json;
-using static BaSyx.Utils.ResultHandling.Utils;
-using BaSyx.Models.Extensions;
 using System.Web;
 using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.Common;
@@ -23,14 +20,7 @@ namespace BaSyx.API.Http.Controllers
 {
     public class AssetAdministrationShellRegistry : Controller, IAssetAdministrationShellRegistry
     {
-        private static JsonSerializerSettings jsonSerializerSettings;
-        static AssetAdministrationShellRegistry()
-        {
-            jsonSerializerSettings = new JsonStandardSettings();
-        }
         private readonly IAssetAdministrationShellRegistry aasRegistryImpl;
-
-
         public AssetAdministrationShellRegistry(IAssetAdministrationShellRegistry aasRegistry)
         {
             aasRegistryImpl = aasRegistry;
@@ -49,7 +39,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult GetAssetAdministrationShells()
         {
             var result = RetrieveAssetAdministrationShells();
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
         /// Retrieves a specific Asset Administration Shell
@@ -66,7 +56,7 @@ namespace BaSyx.API.Http.Controllers
         {
             aasId = HttpUtility.UrlDecode(aasId);
             var result = RetrieveAssetAdministrationShell(aasId);
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
         /// Renews a specific Asset Administration Shell's registration
@@ -92,7 +82,7 @@ namespace BaSyx.API.Http.Controllers
                 }
             }
             var result = UpdateAssetAdministrationShell(aasId, keyValues);
-            return EvaluateResult(result, CrudOperation.Update);
+            return result.CreateActionResult(CrudOperation.Update);
         }
         /// <summary>
         /// Registers a new Asset Administration Shell
@@ -108,7 +98,7 @@ namespace BaSyx.API.Http.Controllers
         public IActionResult PostAssetAdministrationShell([FromBody] IAssetAdministrationShellDescriptor aas)
         {
             var result = CreateAssetAdministrationShell(aas);
-            return EvaluateResult(result, CrudOperation.Create, "api/v1/registry/"+ HttpUtility.UrlEncode(aas.Identification.Id));
+            return result.CreateActionResult(CrudOperation.Create, "api/v1/registry/"+ HttpUtility.UrlEncode(aas.Identification.Id));
         }
         /// <summary>
         /// Deletes a specific Asset Administration Shell
@@ -125,7 +115,7 @@ namespace BaSyx.API.Http.Controllers
         {
             aasId = HttpUtility.UrlDecode(aasId);
             var result = DeleteAssetAdministrationShell(aasId);
-            return EvaluateResult(result, CrudOperation.Delete);
+            return result.CreateActionResult(CrudOperation.Delete);
         }
 
 
@@ -146,7 +136,7 @@ namespace BaSyx.API.Http.Controllers
         {
             aasId = HttpUtility.UrlDecode(aasId);
             var result = CreateSubmodel(aasId, submodel);
-            return EvaluateResult(result, CrudOperation.Create, "api/v1/registry/" + aasId + "/submodels/" + submodel.IdShort);
+            return result.CreateActionResult(CrudOperation.Create, "api/v1/registry/" + aasId + "/submodels/" + submodel.IdShort);
         }
 
         /// <summary>
@@ -165,7 +155,7 @@ namespace BaSyx.API.Http.Controllers
         {
             aasId = HttpUtility.UrlDecode(aasId);
             var result = RetrieveSubmodel(aasId, submodelIdShort);
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
         /// Deletes a specific Submodel from a specific Asset Administration Shell
@@ -183,7 +173,7 @@ namespace BaSyx.API.Http.Controllers
         {
             aasId = HttpUtility.UrlDecode(aasId);
             var result = DeleteSubmodel(aasId, submodelIdShort);
-            return EvaluateResult(result, CrudOperation.Delete);
+            return result.CreateActionResult(CrudOperation.Delete);
         }
         /// <summary>
         /// Retrieves all Submodels from a specific Asset Administration Shell
@@ -200,7 +190,7 @@ namespace BaSyx.API.Http.Controllers
         {
             aasId = HttpUtility.UrlDecode(aasId);
             var result = RetrieveSubmodels(aasId);
-            return EvaluateResult(result, CrudOperation.Retrieve);
+            return result.CreateActionResult(CrudOperation.Retrieve);
         }
         #endregion
 

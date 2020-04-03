@@ -44,23 +44,5 @@ namespace BaSyx.Utils.Logging
             else
                 logger.Log(logLevel, msg);
         }
-
-        public static Microsoft.Extensions.Logging.LogLevel GetLogLevel(ILogger logger)
-        {
-            if (logger.IsDebugEnabled)
-                return Microsoft.Extensions.Logging.LogLevel.Debug;
-            else if (logger.IsErrorEnabled)
-                return Microsoft.Extensions.Logging.LogLevel.Error;
-            else if (logger.IsFatalEnabled)
-                return Microsoft.Extensions.Logging.LogLevel.Critical;
-            else if (logger.IsInfoEnabled)
-                return Microsoft.Extensions.Logging.LogLevel.Information;
-            else if (logger.IsTraceEnabled)
-                return Microsoft.Extensions.Logging.LogLevel.Trace;
-            else if (logger.IsWarnEnabled)
-                return Microsoft.Extensions.Logging.LogLevel.Warning;
-            else
-                return Microsoft.Extensions.Logging.LogLevel.None;
-        }
     }
 }

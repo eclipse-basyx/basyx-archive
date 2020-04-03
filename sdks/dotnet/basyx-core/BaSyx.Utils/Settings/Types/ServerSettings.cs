@@ -8,22 +8,9 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using System;
-using System.Xml.Serialization;
 
 namespace BaSyx.Utils.Settings.Types
 {
     public class ServerSettings : Settings<ServerSettings>
-    {
-        public RegistryConfiguration RegistryConfig { get; set; } = new RegistryConfiguration();
-       
-        public class RegistryConfiguration
-        {
-            [XmlElement]
-            public bool Activated { get; set; }
-            [XmlElement]
-            public string RegistryUrl { get; set; }
-        }
-
-    }
+    { }
 }

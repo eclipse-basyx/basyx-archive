@@ -13,13 +13,15 @@ using BaSyx.API.AssetAdministrationShell.Extensions;
 using BaSyx.API.Components;
 using BaSyx.Models.Core.AssetAdministrationShell.Enums;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
+using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
+using BaSyx.Models.Extensions;
 using BaSyx.Submodel.Server.Http;
-using BaSyx.Utils.ResultHandling.ResultTypes;
+using BaSyx.Utils.ResultHandling;
 using BaSyx.Utils.Settings.Types;
 using System;
 using System.Threading.Tasks;
@@ -31,7 +33,6 @@ namespace SimpleAssetAdministrationShell
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-
             string propertyValue = "TestFromInside";
             int i = 0;
             double y = 2.0;
@@ -70,7 +71,7 @@ namespace SimpleAssetAdministrationShell
                 }
             };
 
-            Submodel submodel = new Submodel()
+            Submodel testSubmodel = new Submodel()
             {
                 IdShort = "TestSubmodel",
                 Identification = new Identifier(Guid.NewGuid().ToString(), KeyType.Custom),
@@ -125,35 +126,96 @@ namespace SimpleAssetAdministrationShell
                             outArgs.Add(new Property<string>() { IdShort = "Ticks", Value = "Ticks: " + DateTime.Now.Ticks.ToString() });
                             return new OperationResult(true);
                         }
+                    },
+                    new Operation()
+                    {
+                        IdShort = "Calculate",
+                        Description = new LangStringSet()
+                        {
+                            new LangString("DE", "Taschenrechner mit simulierter langer Rechenzeit zum Testen von asynchronen Aufrufen"),
+                            new LangString("EN", "Calculator with simulated long-running computing time for testing asynchronous calls")
+                        },
+                        InputVariables = new OperationVariableSet()
+                        {
+                            new Property<string>()
+                            {
+                                IdShort = "Expression",
+                                Description = new LangStringSet()
+                                {
+                                    new LangString("DE", "Ein mathematischer Ausdruck (z.B. 5*9)"),
+                                    new LangString("EN", "A mathematical expression (e.g. 5*9)")
+                                }                                
+                            },
+                            new Property<int>()
+                            {
+                                IdShort = "ComputingTime",
+                                Description = new LangStringSet()
+                                {
+                                    new LangString("DE", "Die Bearbeitungszeit in Millisekunden"),
+                                    new LangString("EN", "The computation time in milliseconds")
+                                }
+                            }
+                        },
+                       OutputVariables = new OperationVariableSet()
+                       {
+                           new Property<double>()
+                           {
+                               IdShort = "Result"
+                           }
+                       },
+                       OnMethodCalled = async (op, inArgs, outArgs) =>
+                       {
+                           string expression = inArgs.Get("Expression")?.ToModelElement<IProperty>()?.ToObject<string>();
+                           int? computingTime = inArgs.Get("ComputingTime")?.ToModelElement<IProperty>()?.ToObject<int>();
+                           
+                           if(computingTime.HasValue)
+                            await Task.Delay(computingTime.Value);
+
+                           double value = CalulcateExpression(expression);
+
+                           outArgs.Add(new Property<double>() { IdShort = "Result", Value = value });
+
+                           return new OperationResult(true);
+                       }
                     }
+
                 }
             };
             aas.Submodels.Add(identificationSubmodel);
-            aas.Submodels.Add(submodel);
+            aas.Submodels.Add(testSubmodel);
 
-            var submodelSettings = ServerSettings.CreateSettings();
-            submodelSettings.ServerConfig.Hosting.ContentPath = "Content";
-            submodelSettings.ServerConfig.Hosting.Urls.Add("http://+:5222");
-            submodelSettings.RegistryConfig.Activated = false;
+            ServerSettings submodelServerSettings = ServerSettings.CreateSettings();
+            submodelServerSettings.ServerConfig.Hosting.ContentPath = "Content";
+            submodelServerSettings.ServerConfig.Hosting.Urls.Add("http://localhost:5222");
 
-            SubmodelHttpServer submodelLoader = new SubmodelHttpServer(submodelSettings);
-            var submodelServiceProvider = submodel.CreateServiceProvider();
-            submodelLoader.SetServiceProvider(submodelServiceProvider);
-            Task runSubmodelTask = submodelLoader.RunAsync();
+            SubmodelHttpServer submodelServer = new SubmodelHttpServer(submodelServerSettings);
+            ISubmodelServiceProvider submodelServiceProvider = testSubmodel.CreateServiceProvider();
+            submodelServer.SetServiceProvider(submodelServiceProvider);
+            submodelServiceProvider.UseAutoEndpointRegistration(submodelServerSettings.ServerConfig);
+            Task runSubmodelTask = submodelServer.RunAsync();
 
-            var aasSettings = ServerSettings.CreateSettings();
-            aasSettings.ServerConfig.Hosting.ContentPath = "Content";
-            aasSettings.ServerConfig.Hosting.Urls.Add("http://+:5111");
-            aasSettings.RegistryConfig.Activated = false;
+            ServerSettings aasServerSettings = ServerSettings.CreateSettings();
+            aasServerSettings.ServerConfig.Hosting.ContentPath = "Content";
+            aasServerSettings.ServerConfig.Hosting.Urls.Add("http://localhost:5111");
 
             IAssetAdministrationShellServiceProvider serviceProvider = aas.CreateServiceProvider(true);
+            serviceProvider.SubmodelRegistry.RegisterSubmodelServiceProvider(testSubmodel.IdShort, submodelServiceProvider);
+            serviceProvider.UseAutoEndpointRegistration(aasServerSettings.ServerConfig);
 
-            serviceProvider.SubmodelRegistry.RegisterSubmodelServiceProvider(submodel.IdShort, submodelServiceProvider);
-
-            AssetAdministrationShellHttpServer loader = new AssetAdministrationShellHttpServer(aasSettings);
-            loader.SetServiceProvider(serviceProvider);
-
-            loader.Run();
+            AssetAdministrationShellHttpServer aasServer = new AssetAdministrationShellHttpServer(aasServerSettings);
+            aasServer.SetServiceProvider(serviceProvider);
+            aasServer.Run();
         }
+
+        public static double CalulcateExpression(string expression)
+        {
+            string columnName = "Evaluation";
+            System.Data.DataTable dataTable = new System.Data.DataTable();
+            System.Data.DataColumn dataColumn = new System.Data.DataColumn(columnName, typeof(double), expression);
+            dataTable.Columns.Add(dataColumn);
+            dataTable.Rows.Add(0);
+            return (double)(dataTable.Rows[0][columnName]);
+        }
+
     }
 }

@@ -1,28 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <OutputType>Library</OutputType>
     <Configurations>Debug;Release</Configurations>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Authors>Constantin Ziesche</Authors>
-    <Copyright>Copyright 2019 - Robert Bosch GmbH</Copyright>
+    <Copyright>Copyright 2020 - Robert Bosch GmbH</Copyright>
     <PackageProjectUrl>https://wiki.eclipse.org/BaSyx</PackageProjectUrl>
     <RepositoryUrl>https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/sdks/csnet/</RepositoryUrl>
-    <PackageLicenseUrl></PackageLicenseUrl>
     <Description>The official BaSyx Collection of Information Model Classes</Description>
     <Company>Robert Bosch GmbH</Company>
     <PackageTags>BaSys BaSyx Models</PackageTags>
     <PackageLicenseExpression>EPL-2.0</PackageLicenseExpression>
     <PackageIcon>basyxlogo.png</PackageIcon>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="AAS.xsd" />
-    <None Remove="AAS_ABAC.xsd" />
-    <None Remove="IEC61360.xsd" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Include="basyxlogo.png" Pack="true" PackagePath="\" />
@@ -32,12 +23,9 @@
     <DebugType>Full</DebugType>
   </PropertyGroup>
   
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-    <PackageReference Include="System.IO.Packaging" Version="4.7.0" />
-  </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\BaSyx.Utils.DependencyInjection.Abstractions\BaSyx.Utils.DependencyInjection.Abstractions.csproj" />
     <ProjectReference Include="..\BaSyx.Utils\BaSyx.Utils.csproj" />
   </ItemGroup>
   

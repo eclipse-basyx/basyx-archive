@@ -11,7 +11,6 @@
 using BaSyx.API.Clients;
 using BaSyx.API.Components;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Extensions;
 using BaSyx.Utils.Client.Http;
 using BaSyx.Utils.ResultHandling;
 using System;
@@ -26,6 +25,8 @@ using System.Linq;
 using BaSyx.Models.Connectivity;
 using NLog;
 using System.Threading;
+using BaSyx.Models.Communication;
+using BaSyx.Utils.DependencyInjection;
 
 namespace BaSyx.AAS.Client.Http
 {
@@ -149,32 +150,11 @@ namespace BaSyx.AAS.Client.Http
             return base.EvaluateResponse(response, response.Entity);
         }
 
-        public IResult InvokeOperation(string submodelId, string operationId, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments, int timeout = -1)
+        public IResult<InvocationResponse> InvokeOperation(string submodelId, string operationId, InvocationRequest invocationRequest)
         {
-            Uri uri = GetUri(SUBMODELS, submodelId, SUBMODEL, OPERATIONS, operationId);
-            Uri requestUri = uri;
-            if(timeout != -1)
-                requestUri = new Uri(uri.OriginalString + "?timeout=" + timeout);
-
-            var request = base.CreateJsonContentRequest(requestUri, HttpMethod.Post, inputArguments);
+            var request = base.CreateJsonContentRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, OPERATIONS, operationId), HttpMethod.Post, invocationRequest);
             var response = base.SendRequest(request, REQUEST_TIMEOUT);
-            var evaluatedResponse = base.EvaluateResponse(response, response.Entity);
-            outputArguments = evaluatedResponse.GetEntity<IOperationVariableSet>();
-            return evaluatedResponse;
-        }
-
-        public async Task<IResult> InvokeOperationAsync(string submodelId, string operationId, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments, int timeout = Timeout.Infinite)
-        {
-            Uri uri = GetUri(SUBMODELS, submodelId, SUBMODEL, OPERATIONS, operationId);
-            Uri requestUri = uri;
-            if (timeout != Timeout.Infinite)
-                requestUri = new Uri(uri.OriginalString + "?timeout=" + timeout);
-
-            var request = base.CreateJsonContentRequest(requestUri, HttpMethod.Post, inputArguments);
-            var response = await base.SendRequestAsync(request);
-            var evaluatedResponse = base.EvaluateResponse(response, response.Entity);
-            outputArguments = evaluatedResponse.GetEntity<IOperationVariableSet>();
-            return evaluatedResponse;
+            return base.EvaluateResponse<InvocationResponse>(response, response.Entity);
         }
 
         public IResult<IProperty> CreateProperty(string submodelId, IProperty property)
@@ -274,5 +254,19 @@ namespace BaSyx.AAS.Client.Http
             var response = base.SendRequest(request, REQUEST_TIMEOUT);
             return base.EvaluateResponse<IEnumerable<ISubmodelServiceProvider>>(response, response.Entity);
         }
+        public IResult<CallbackResponse> InvokeOperationAsync(string submodelId, string operationId, InvocationRequest invocationRequest)
+        {
+            var request = base.CreateJsonContentRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, OPERATIONS, operationId, "async"), HttpMethod.Post, invocationRequest);
+            var response = base.SendRequest(request, REQUEST_TIMEOUT);
+            return base.EvaluateResponse<CallbackResponse>(response, response.Entity);
+        }
+
+        public IResult<InvocationResponse> GetInvocationResult(string submodelId, string operationId, string requestId)
+        {
+            var request = base.CreateRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, OPERATIONS, operationId, "invocationList", requestId), HttpMethod.Get);
+            var response = base.SendRequest(request, REQUEST_TIMEOUT);
+            return base.EvaluateResponse<InvocationResponse>(response, response.Entity);
+        }
+
     }
 }
