@@ -120,7 +120,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	@Override
 
 	public Collection<IConceptDictionary> getConceptDictionary() {
-		Collection<Map<String, Object>> set = (Set<Map<String, Object>>) getElem()
+		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) getElem()
 				.getPath(AssetAdministrationShell.CONCEPTDICTIONARY);
 		return set.stream().map(ConceptDictionary::createAsFacade).collect(Collectors.toSet());
 	}
