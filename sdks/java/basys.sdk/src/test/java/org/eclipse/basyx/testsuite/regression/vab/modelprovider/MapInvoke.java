@@ -1,10 +1,11 @@
 package org.eclipse.basyx.testsuite.regression.vab.modelprovider;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -15,26 +16,33 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  *
  */
 public class MapInvoke {
+	
 	public static void test(VABConnectionManager connManager) {
 		// Connect to VAB element with ID "urn:fhg:es.iese:vab:1:1:simplevabelement"
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
-
+	
 		// Invoke complex function
 		Object complex = connVABElement.invokeOperation("operations/complex", 12, 34);
 		assertEquals(46, complex);
-
+	
 		// Invoke unsupported functional interface
-		Object supplier = connVABElement.invokeOperation("operations/supplier");
-		assertNull(supplier);
-
+		try {
+			connVABElement.invokeOperation("operations/supplier");
+			fail();
+		} catch (ProviderException e) {}
+	
 		// Invoke non-existing operation
-		Object nonExisting = connVABElement.invokeOperation("operations/unknown");
-		assertNull(nonExisting);
-
+		try {
+			connVABElement.invokeOperation("operations/unknown");
+			fail();
+		} catch (ResourceNotFoundException e) {}
+	
 		// Invoke invalid operation -> not a function, but a primitive data type
-		Object invalid = connVABElement.invokeOperation("operations/invalid");
-		assertNull(invalid);
-
+		try {
+			connVABElement.invokeOperation("operations/invalid");
+			fail();
+		} catch (ProviderException e) {}
+	
 		// Invoke operations that throw Exceptions
 		try {
 			connVABElement.invokeOperation("operations/providerException");
@@ -43,7 +51,7 @@ public class MapInvoke {
 			// exception type not implemented, yet
 			// assertEquals(e.getType(), "testExceptionType");
 		}
-
+	
 		try {
 			connVABElement.invokeOperation("operations/nullException");
 			fail();
@@ -51,14 +59,18 @@ public class MapInvoke {
 			// exception type not implemented, yet
 			// assertEquals(e.getType(), "java.lang.NullPointerException");
 		}
-
+	
 		// Empty paths - should execute, but has no effect
-		connVABElement.invokeOperation("", "");
-
+		try {
+			connVABElement.invokeOperation("", "");
+			fail();
+		} catch (ProviderException e) {}
+		
+	
 		// Null path - should throw exception
 		try {
 			connVABElement.invokeOperation(null, "");
 			fail();
-		} catch (ProviderException e) {}
+		} catch (MalformedRequestException e) {}
 	}
 }

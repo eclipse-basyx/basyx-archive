@@ -102,7 +102,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			providerBackend.processBaSysGet(path, responseWriter);
 			responseWriter.flush();
 		} catch(ProviderException e) {
-			int httpCode = ExceptionToHTTPCodeMapper.mapException(e);
+			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
 			responseWriter.flush();
 			logger.error("Exception in HTTP-GET. Response-code: " + httpCode, e);
@@ -128,7 +128,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			providerBackend.processBaSysSet(path, serValue.toString(), responseWriter);
 			responseWriter.flush();
 		} catch(ProviderException e) {
-			int httpCode = ExceptionToHTTPCodeMapper.mapException(e);
+			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
 			responseWriter.flush();
 			logger.error("Exception in HTTP-PUT. Response-code: " + httpCode, e);
@@ -169,7 +169,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 				responseWriter.flush();
 			}
 		} catch (ProviderException e) {
-			int httpCode = ExceptionToHTTPCodeMapper.mapException(e);
+			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
 			responseWriter.flush();
 			logger.error("Exception in HTTP-POST. Response-code: " + httpCode, e);
@@ -194,7 +194,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			providerBackend.processBaSysDelete(path, serValue, responseWriter);
 			responseWriter.flush();
 		} catch(ProviderException e) {
-			int httpCode = ExceptionToHTTPCodeMapper.mapException(e);
+			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
 			responseWriter.flush();
 			logger.error("Exception in HTTP-PATCH. Response-code: " + httpCode, e);
@@ -221,7 +221,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			providerBackend.processBaSysDelete(path, nullParam, responseWriter);
 			responseWriter.flush();
 		} catch(ProviderException e) {
-			int httpCode = ExceptionToHTTPCodeMapper.mapException(e);
+			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
 			responseWriter.flush();
 			logger.error("Exception in HTTP-DELETE. Response-code: " + httpCode, e);

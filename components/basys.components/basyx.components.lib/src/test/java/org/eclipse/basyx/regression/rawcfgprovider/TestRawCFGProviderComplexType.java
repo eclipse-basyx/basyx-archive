@@ -1,7 +1,7 @@
 package org.eclipse.basyx.regression.rawcfgprovider;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +10,7 @@ import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirecto
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -50,9 +51,10 @@ public class TestRawCFGProviderComplexType {
 
 		
 		// Read element value back and make sure that complex element does not exist yet
-		Object complexElement1 = connSubModel
-				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/complexProperty");
-		assertNull(complexElement1);
+		try {
+			connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/complexProperty");
+			fail();
+		} catch (ResourceNotFoundException e) {}
 
 		
 		// Create map with complex type
@@ -90,8 +92,9 @@ public class TestRawCFGProviderComplexType {
 		// Delete element
 		connSubModel.deleteValue("/aas/submodels/rawSampleCFG/dataElements/complexProperty");
 		// - Read element value back and make sure that element is deleted
-		Object complexElement2 = connSubModel
-				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/complexProperty");
-		assertNull(complexElement2);
+		try {
+			connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/complexProperty");
+			fail();
+		} catch (ResourceNotFoundException e) {}
 	}
 }

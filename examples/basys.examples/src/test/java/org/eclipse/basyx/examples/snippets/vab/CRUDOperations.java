@@ -1,6 +1,7 @@
 package org.eclipse.basyx.examples.snippets.vab;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 
@@ -8,6 +9,7 @@ import org.eclipse.basyx.components.servlet.vab.VABLambdaServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -100,8 +102,14 @@ public class CRUDOperations {
 		connSubModel1.deleteValue("properties/prop2");
 		
 		// Read property values again
-		Object prop1Val_3 = connSubModel1.getModelPropertyValue("properties/prop1");
-		Object prop2Val_3 = connSubModel1.getModelPropertyValue("properties/prop2");
+		try {
+			connSubModel1.getModelPropertyValue("properties/prop1");
+			fail();
+		} catch (ResourceNotFoundException e) {}
+		try {
+			connSubModel1.getModelPropertyValue("properties/prop2");
+			fail();
+		} catch (ResourceNotFoundException e) {}
 
 		
 		// Check expected values from CRUD operations
@@ -109,8 +117,6 @@ public class CRUDOperations {
 		assertTrue(prop2Val.equals("myStr"));
 		assertTrue(prop1Val_2 == 8);
 		assertTrue(prop2Val_2.equals("stillMine"));
-		assertTrue(prop1Val_3 == null);
-		assertTrue(prop2Val_3 == null);
 	}
 }
 

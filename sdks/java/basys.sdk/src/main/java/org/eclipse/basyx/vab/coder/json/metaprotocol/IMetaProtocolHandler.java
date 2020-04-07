@@ -1,5 +1,6 @@
 package org.eclipse.basyx.vab.coder.json.metaprotocol;
 
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 
 /**
  * 
@@ -17,6 +18,6 @@ public interface IMetaProtocolHandler {
 	 * @return
 	 * 				response object with handled meta-information
 	 */
-	public Object deserialize(String message) throws Exception;
+	public Object deserialize(String message) throws ProviderException;
 
 }

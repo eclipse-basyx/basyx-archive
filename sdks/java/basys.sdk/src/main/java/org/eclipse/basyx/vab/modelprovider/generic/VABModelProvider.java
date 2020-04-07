@@ -2,6 +2,10 @@ package org.eclipse.basyx.vab.modelprovider.generic;
 
 import java.util.function.Function;
 
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -34,22 +38,22 @@ public class VABModelProvider implements IModelProvider {
 	@Override
 	public Object getModelPropertyValue(String path) throws Exception {
 		// Check empty paths
-		if (path == null) {
-			throw new RuntimeException("Path is undefined");
-		} else if (VABPathTools.isEmptyPath(path)) {
+		VABPathTools.checkPathForNull(path);
+		if (VABPathTools.isEmptyPath(path)) {
 			return handler.postprocessObject(elements);
 		}
 
 		Object element = getTargetElement(path);
-		return handler.postprocessObject(element);
+		Object postProcessedElement = handler.postprocessObject(element);
+		
+		return postProcessedElement;
 	}
 
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws Exception {
 		// Check empty paths
-		if (path == null) {
-			throw new RuntimeException("Path is undefined");
-		} else if (VABPathTools.isEmptyPath(path)) {
+		VABPathTools.checkPathForNull(path);
+		if (VABPathTools.isEmptyPath(path)) {
 			// Empty path => parent element == null => replace root, if it exists
 			if (elements != null) {
 				elements = handler.preprocessObject(newValue);
@@ -71,12 +75,13 @@ public class VABModelProvider implements IModelProvider {
 	@Override
 	public void createValue(String path, Object newValue) throws Exception {
 		// Check empty paths
-		if (path == null) {
-			throw new RuntimeException("Path is undefined");
-		} else if (VABPathTools.isEmptyPath(path)) {
+		VABPathTools.checkPathForNull(path);
+		if (VABPathTools.isEmptyPath(path)) {
 			// The complete model should be replaced if it does not exist
 			if (elements == null) {
 				elements = handler.preprocessObject(newValue);
+			} else {
+				throw new ResourceAlreadyExistsException("Element \"/\" does already exist.");
 			}
 			return;
 		}
@@ -87,37 +92,47 @@ public class VABModelProvider implements IModelProvider {
 
 		// Only create new, never replace existing elements
 		if (parentElement != null) {
+			
 			newValue = handler.preprocessObject(newValue);
-			Object childElement = handler.getElementProperty(parentElement, propertyName);
+			Object childElement = getElementPropertyIfExistent(parentElement, propertyName);
 			if (childElement == null) {
+				// The last path element does not exist
 				handler.setModelPropertyValue(parentElement, propertyName, newValue);
 			} else {
-				handler.createValue(childElement, newValue);
+				// The last path element does exist
+				// Try to create the value, should work if it is a list
+				if( ! handler.createValue(childElement, newValue)) {
+					// createValue failed
+					throw new ResourceAlreadyExistsException("Element \"" + path + "\" does already exist.");
+				}
 			}
-			return;
+			
+		} else {
+			logger.warn("Could not create element, parent element does not exist for path '{}'", path);
+			throw new ResourceNotFoundException("Parent element for \"" + path + "\" does not exist.");
 		}
-		logger.warn("Could not create element, parent element does not exist for path '{}'", path);
 	}
 
 	@Override
 	public void deleteValue(String path) throws Exception {
 		// Check null path
-		if (path == null) {
-			throw new RuntimeException("Path is undefined");
-		}
+		VABPathTools.checkPathForNull(path);
 
 		Object parentElement = getParentElement(path);
 		String propertyName = VABPathTools.getLastElement(path);
 		if (parentElement != null && propertyName != null) {
-			handler.deleteValue(parentElement, propertyName);
+			if( ! handler.deleteValue(parentElement, propertyName)) {
+				throw new ResourceNotFoundException("Element \"" + path + "\" does not exist.");
+			}
 		}
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws Exception {
 		// Check null path
-		if (path == null) {
-			throw new RuntimeException("Path is undefined");
+		VABPathTools.checkPathForNull(path);
+		if (path.equals("")) {
+			throw new MalformedRequestException("Path must not be empty.");
 		}
 
 		Object parentElement = getParentElement(path);
@@ -125,7 +140,10 @@ public class VABModelProvider implements IModelProvider {
 		if (parentElement != null && propertyName != null) {
 			Object childElement = handler.getElementProperty(parentElement, propertyName);
 			if (childElement != null) {
-				handler.deleteValue(childElement, obj);
+				if( ! handler.deleteValue(childElement, obj)) {
+					// Value was not deleted by any handler, it is contained in a Map
+					throw new MalformedRequestException("Can not delete element \"" + path + "\" by value.");
+				}
 			}
 		}
 	}
@@ -133,16 +151,16 @@ public class VABModelProvider implements IModelProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object invokeOperation(String path, Object... parameters) throws Exception {
+		VABPathTools.checkPathForNull(path);
 		Object childElement = getModelPropertyValue(path);
 
 		// Invoke operation for function interfaces
 		if (childElement instanceof Function<?, ?>) {
 			Function<Object[], Object> function = (Function<Object[], Object>) childElement;
 			return function.apply(parameters);
+		} else {
+			throw new ProviderException("Element \"" + path + "\" is not a function.");
 		}
-
-		// No operation found
-		return null;
 	}
 
 	/**
@@ -162,6 +180,18 @@ public class VABModelProvider implements IModelProvider {
 			currentElement = handler.getElementProperty(currentElement, pathElements[i]);
 		}
 		return currentElement;
+	}
+	
+	
+	/**
+	 * Calls getElementProperty and catches ResourceNotFOundException 
+	 */
+	private Object getElementPropertyIfExistent(Object parentElement, String propertyName) throws Exception {
+		try {
+			return handler.getElementProperty(parentElement, propertyName);
+		} catch (ResourceNotFoundException e) {
+			return null;
+		}
 	}
 
 	/**

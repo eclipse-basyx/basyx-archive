@@ -1,7 +1,6 @@
 package org.eclipse.basyx.testsuite.regression.vab.modelprovider;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -9,7 +8,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.function.Function;
 
-import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -20,11 +20,12 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  *
  */
 public class MapUpdate {
+	
 	@SuppressWarnings("unchecked")
 	public static void test(VABConnectionManager connManager) {
 		// Connect to VAB element with ID "urn:fhg:es.iese:vab:1:1:simplevabelement"
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
-
+		
 		// Set primitives
 		connVABElement.setModelPropertyValue("primitives/integer", 12);
 		connVABElement.setModelPropertyValue("primitives/double", 1.2d);
@@ -44,7 +45,7 @@ public class MapUpdate {
 		connVABElement.setModelPropertyValue("primitives/integer", 123);
 		connVABElement.setModelPropertyValue("primitives/double", 3.14d);
 		connVABElement.setModelPropertyValue("primitives/string", "TestValue");
-
+		
 		// Update serializable function
 		connVABElement.setModelPropertyValue("operations/serializable",
 				(Function<Object[], Object> & Serializable) (param) -> {
@@ -56,32 +57,42 @@ public class MapUpdate {
 		Function<Object[], Object> testFunction = (Function<Object[], Object>) serializableFunction;
 		assertEquals(-1, testFunction.apply(new Object[] { 2, 3 }));
 		// Revert
-		connVABElement.setModelPropertyValue("functions/serializable",
+		connVABElement.setModelPropertyValue("operations/serializable",
 				(Function<Object[], Object> & Serializable) (param) -> {
 					return (int) param[0] + (int) param[1];
 				});
-
+		
 		// Test non-existing parent element
-		connVABElement.createValue("unkown/newElement", 5);
-		Object nonExisting = connVABElement.getModelPropertyValue("unknown/newElement");
-		assertNull(nonExisting);
-
+		try {
+			connVABElement.createValue("unkown/newElement", 5);
+			fail();
+		} catch (ResourceNotFoundException e) {}
+		try {
+			connVABElement.getModelPropertyValue("unknown/newElement");
+			fail();
+		} catch (ResourceNotFoundException e) {}
+		
 		// Test updating a non-existing element
-		connVABElement.setModelPropertyValue("newElement", 10);
-		nonExisting = connVABElement.getModelPropertyValue("newElement");
-		assertEquals(null, nonExisting);
-
+		try {
+			connVABElement.setModelPropertyValue("newElement", 10);
+			fail();
+		} catch (ResourceNotFoundException e) {}
+		try {
+			connVABElement.getModelPropertyValue("newElement");
+			fail();
+		} catch (ResourceNotFoundException e) {}
+		
 		// Null path - should throw exception
 		try {
 			connVABElement.setModelPropertyValue(null, "");
 			fail();
-		} catch (ProviderException e) {}
+		} catch (MalformedRequestException e) {}
 	}
 
 	public static void testPushAll(VABConnectionManager connManager) {
 		// Connect to VAB element with ID "urn:fhg:es.iese:vab:1:1:simplevabelement"
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
-
+	
 		// Push whole map via null-Path - should throw exception
 		// - create object
 		HashMap<String, Object> newMap = new HashMap<>();
@@ -90,8 +101,8 @@ public class MapUpdate {
 		try {
 			connVABElement.setModelPropertyValue(null, newMap);
 			fail();
-		} catch (ProviderException e) {}
-
+		} catch (MalformedRequestException e) {}
+	
 		// Push whole map via ""-Path
 		// - create object
 		HashMap<String, Object> newMap2 = new HashMap<>();
@@ -100,7 +111,13 @@ public class MapUpdate {
 		connVABElement.setModelPropertyValue("", newMap2);
 		// - test
 		assertEquals("testValue2", connVABElement.getModelPropertyValue("testKey2"));
-		assertNull(connVABElement.getModelPropertyValue("testKey"));
-		assertNull(connVABElement.getModelPropertyValue("primitives/integer"));
+		try {
+			connVABElement.getModelPropertyValue("testKey");
+			fail();
+		} catch (ResourceNotFoundException e) {}
+		try {
+			connVABElement.getModelPropertyValue("primitives/integer");
+			fail();
+		} catch (ResourceNotFoundException e) {}
 	}
 }

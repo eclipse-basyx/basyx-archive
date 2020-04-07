@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
+import org.eclipse.basyx.vab.protocol.http.server.ExceptionToHTTPCodeMapper;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,12 +145,33 @@ public class HTTPConnector implements IBaSyxConnector {
 	}
 	
 	/**
+	 * Reads the Response Message form the Response
+	 * Throws a matching ProviderException for Status-Codes over 299
+	 * 
+	 * @param response
+	 * @return the Response Message
+	 */
+	private String processResponse(Response response) throws ProviderException {
+		// Read HTTP-Code and throw ProviderException if needed
+		int status = response.getStatus();
+		
+		// HTTP-Codes under 299 signify success, 300 and above failure
+		if(status > 299) {
+			// Map a HTTP-Code over 299 to a ProviderException and throw it
+			throw ExceptionToHTTPCodeMapper.mapToException(status);
+		}
+
+		// Return response message (header)
+		return response.readEntity(String.class);
+	}
+	
+	/**
 	 * Perform a HTTP get request
 	 * 
 	 * @param servicePath
 	 * @return
 	 */
-	private String httpGet(String servicePath) {
+	private String httpGet(String servicePath) throws ProviderException {
 		logger.trace("[HTTP Get] {}", VABPathTools.concatenatePaths(address, servicePath));
 
 		// Invoke service call via web services
@@ -158,13 +180,11 @@ public class HTTPConnector implements IBaSyxConnector {
 		// Build web service URL
 		Builder request = buildRequest(client, VABPathTools.concatenatePaths(address, servicePath));
 
-		// Perform request, return response
-		String result = request.get(String.class);
+		// Perform request
+		Response rsp = request.get();
 
-		logger.trace("[HTTP Get_Result] {}", result);
-
-		// Return repsonse message (header)
-		return result;
+		// Return response message (header)
+		return processResponse(rsp);
 	}
 
 	private String httpPut(String servicePath, String newValue) throws ProviderException {
@@ -179,8 +199,8 @@ public class HTTPConnector implements IBaSyxConnector {
 		// Perform request
 		Response rsp = request.put(Entity.entity(newValue, mediaType));
 
-		// Return repsonse message (header)
-		return rsp.readEntity(String.class);
+		// Return response message (header)
+		return processResponse(rsp);
 
 	}
 
@@ -193,8 +213,8 @@ public class HTTPConnector implements IBaSyxConnector {
 		// Create and invoke HTTP PATCH request
 		Response rsp = client.target(VABPathTools.concatenatePaths(address, servicePath)).request().build("PATCH", Entity.text(newValue)).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
 
-		// Return repsonse message (header)
-		return rsp.readEntity(String.class);
+		// Return response message (header)
+		return processResponse(rsp);
 	}
 
 	private String httpPost(String servicePath, String parameter) throws ProviderException {
@@ -209,8 +229,8 @@ public class HTTPConnector implements IBaSyxConnector {
 		// Perform request
 		Response rsp = request.post(Entity.entity(parameter, mediaType));
 
-		// Return repsonse message (header)
-		return rsp.readEntity(String.class);
+		// Return response message (header)
+		return processResponse(rsp);
 	}
 
 	private String httpDelete(String servicePath) throws ProviderException {
@@ -225,8 +245,8 @@ public class HTTPConnector implements IBaSyxConnector {
 		// Perform request
 		Response rsp = request.delete();
 
-		// Return repsonse message (header)
-		return rsp.readEntity(String.class);
+		// Return response message (header)
+		return processResponse(rsp);
 	}
 
 	@Override

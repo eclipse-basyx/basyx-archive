@@ -1,6 +1,7 @@
 package org.eclipse.basyx.examples.snippets.undoc.vab.connection;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 
@@ -8,6 +9,7 @@ import org.eclipse.basyx.components.servlet.vab.VABLambdaServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -84,8 +86,14 @@ public class RunAASPropertiesSnippet {
 		connSubModel1.deleteValue("properties/prop2");
 		
 		// Read property values again
-		assertTrue(connSubModel1.getModelPropertyValue("properties/prop1") == null);
-		assertTrue(connSubModel1.getModelPropertyValue("properties/prop2") == null);
+		try {
+			connSubModel1.getModelPropertyValue("properties/prop1");
+			fail();
+		} catch (ResourceNotFoundException e) {}
+		try {
+			connSubModel1.getModelPropertyValue("properties/prop2");
+			fail();
+		} catch (ResourceNotFoundException e) {}
 	}
 }
 

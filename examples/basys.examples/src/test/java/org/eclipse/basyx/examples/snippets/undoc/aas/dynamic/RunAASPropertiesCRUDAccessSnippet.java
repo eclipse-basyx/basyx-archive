@@ -1,6 +1,7 @@
 package org.eclipse.basyx.examples.snippets.undoc.aas.dynamic;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.eclipse.basyx.components.servlet.vab.VABLambdaServlet;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
@@ -8,6 +9,7 @@ import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -99,8 +101,14 @@ public class RunAASPropertiesCRUDAccessSnippet {
 		connSubModel1.deleteValue("dataElements/prop2");
 		
 		// Read property values again
-		assertTrue(connSubModel1.getModelPropertyValue("dataElements/prop1") == null);
-		assertTrue(connSubModel1.getModelPropertyValue("dataElements/prop2") == null);
+		try {
+			connSubModel1.getModelPropertyValue("dataElements/prop1");
+			fail();
+		} catch (ResourceNotFoundException e) {}
+		try {
+			connSubModel1.getModelPropertyValue("dataElements/prop2");
+			fail();
+		} catch (ResourceNotFoundException e) {}
 	}
 }
 

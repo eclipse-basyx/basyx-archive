@@ -43,30 +43,46 @@ public class VABMultiElementHandler implements IVABElementHandler {
 	}
 
 	@Override
-	public void setModelPropertyValue(Object element, String propertyName, Object newValue) throws Exception {
+	public boolean setModelPropertyValue(Object element, String propertyName, Object newValue) throws Exception {
+		boolean result = false;
 		for (IVABElementHandler handler : handlers) {
-			handler.setModelPropertyValue(element, propertyName, newValue);
+			if(handler.setModelPropertyValue(element, propertyName, newValue)) {
+				result = true;
+			}
 		}
+		return result;
 	}
 
 	@Override
-	public void createValue(Object element, Object newValue) throws Exception {
+	public boolean createValue(Object element, Object newValue) throws Exception {
+		boolean result = false;
 		for (IVABElementHandler handler : handlers) {
-			handler.createValue(element, newValue);
+			if(handler.createValue(element, newValue)) {
+				result = true;
+			}
 		}
+		return result;
 	}
 
 	@Override
-	public void deleteValue(Object element, String propertyName) throws Exception {
+	public boolean deleteValue(Object element, String propertyName) throws Exception {
+		boolean result = false;
 		for (IVABElementHandler handler : handlers) {
-			handler.deleteValue(element, propertyName);
+			if(handler.deleteValue(element, propertyName)) {
+				result = true;
+			}
 		}
+		return result;
 	}
 
 	@Override
-	public void deleteValue(Object element, Object property) throws Exception {
+	public boolean deleteValue(Object element, Object property) throws Exception {
+		boolean result = false;
 		for (IVABElementHandler handler : handlers) {
-			handler.deleteValue(element, property);
+			if(handler.deleteValue(element, property)) {
+				result = true;
+			}
 		}
+		return result;
 	}
 }

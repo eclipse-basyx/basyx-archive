@@ -37,7 +37,6 @@ public class ConnectedVABElementContainerFacade extends ConnectedVABModelMap<Obj
 
 	@Override
 	public void addSubModelElement(ISubmodelElement element) {
-		getProxy().createValue(SubModel.SUBMODELELEMENT, element);
 		if (element instanceof IDataElement) {
 			getProxy().createValue(SubModel.PROPERTIES, element);
 		} else if (element instanceof IOperation) {

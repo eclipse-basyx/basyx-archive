@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -60,17 +61,20 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 		String elementAccess = pathElements[1];
 		String subPath = VABPathTools.buildPath(pathElements, 2);
 		VABElementProxy propertyProxy = new VABElementProxy("", this.modelProvider).getDeepProxy(VABPathTools.append(qualifier, elementAccess));
-		if (propertyProxy.getModelPropertyValue(SubModel.PROPERTIES) != null) {
+		try {
+			// Test if it is a container property
+			propertyProxy.getModelPropertyValue(SubModel.PROPERTIES);
+			
 			// Assume container property, if it has "dataElements"
 			return new ContainerPropertyProvider(propertyProxy).getModelPropertyValue(subPath);
-		} else {
-			// Assume single property otherwise
-			return new SinglePropertyProvider(propertyProxy).getModelPropertyValue(subPath);
-		}
+		} catch(ProviderException e) {}
+		// Assume single property otherwise
+		return new SinglePropertyProvider(propertyProxy).getModelPropertyValue(subPath);
 	}
 
 	@Override
 	public Object getModelPropertyValue(String path) throws Exception {
+		VABPathTools.checkPathForNull(path);
 		path = VABPathTools.stripSlashes(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 
@@ -116,6 +120,7 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+		VABPathTools.checkPathForNull(path);
 		newValue = unwrapParameter(newValue);
 		modelProvider.setModelPropertyValue(path, newValue);
 	}
@@ -123,6 +128,7 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void createValue(String path, Object newEntity) throws Exception {
+		VABPathTools.checkPathForNull(path);
 		path = VABPathTools.stripSlashes(path);
 		if (path.isEmpty()) {
 			// Overwrite whole submodel
@@ -144,16 +150,19 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 
 	@Override
 	public void deleteValue(String path) throws Exception {
+		VABPathTools.checkPathForNull(path);
 		modelProvider.deleteValue(path);
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws Exception {
+		VABPathTools.checkPathForNull(path);
 		modelProvider.deleteValue(path, obj);
 	}
 
 	@Override
 	public Object invokeOperation(String path, Object... parameters) throws Exception {
+		VABPathTools.checkPathForNull(path);
 		// Assume that an operation shall be invoked
 		return new OperationProvider(modelProvider).invokeOperation(path, parameters);
 	}

@@ -1,7 +1,6 @@
 package org.eclipse.basyx.testsuite.regression.submodel.restapi;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -15,6 +14,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.TestsuiteDirectory;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -195,8 +195,10 @@ public class SubModelProviderTest {
 		submodelElement.deleteValue("/submodel/dataElements/integerProperty");
 
 		// Test, if it has been deleted
-		Object result = submodelElement.getModelPropertyValue("/submodel/dataElements/integerProperty");
-		assertNull(result);
+		try {
+			submodelElement.getModelPropertyValue("/submodel/dataElements/integerProperty");
+			fail();
+		} catch (ResourceNotFoundException e) {}
 	}
 
 	/**
@@ -210,8 +212,10 @@ public class SubModelProviderTest {
 		submodelElement.deleteValue("/submodel/operations/simple");
 
 		// Test, if it has been deleted
-		Object result = submodelElement.getModelPropertyValue("/submodel/operations/simple");
-		assertNull(result);
+		try {
+			submodelElement.getModelPropertyValue("/submodel/operations/simple");
+			fail();
+		} catch (ResourceNotFoundException e) {}
 	}
 
 	/**

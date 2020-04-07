@@ -1,6 +1,7 @@
 package org.eclipse.basyx.vab.modelprovider.filesystem.filesystem;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -23,13 +24,13 @@ import java.util.stream.Stream;
 public class GenericFileSystem implements FileSystem {
 
 	@Override
-	public String readFile(String path) throws Exception {
+	public String readFile(String path) throws IOException {
 		path = toLowerCase(path);
 		return new String(Files.readAllBytes(getPath(path)), StandardCharsets.UTF_8);
 	}
 
 	@Override
-	public void writeFile(String path, String content) throws Exception {
+	public void writeFile(String path, String content) throws IOException {
 		path = toLowerCase(path);
 		FileWriter f = new FileWriter(path, false);
 		f.write(content);
@@ -37,19 +38,19 @@ public class GenericFileSystem implements FileSystem {
 	}
 
 	@Override
-	public void deleteFile(String path) throws Exception {
+	public void deleteFile(String path) throws IOException {
 		path = toLowerCase(path);
 		Files.deleteIfExists(getPath(path));
 	}
 
 	@Override
-	public void createDirectory(String path) throws Exception {
+	public void createDirectory(String path) throws IOException {
 		path = toLowerCase(path);
 		Files.createDirectories(getPath(path));
 	}
 
 	@Override
-	public List<File> readDirectory(String path) throws Exception {
+	public List<File> readDirectory(String path) throws IOException {
 		path = toLowerCase(path);
 		List<File> files = new ArrayList<>();
 
@@ -70,7 +71,7 @@ public class GenericFileSystem implements FileSystem {
 	}
 
 	@Override
-	public void deleteDirectory(String path) throws Exception {
+	public void deleteDirectory(String path) throws IOException {
 		path = toLowerCase(path);
 		try {
 			Files.walk(getPath(path)).sorted(Comparator.reverseOrder()).map(p -> p.toFile()).forEach(f -> f.delete());
@@ -80,7 +81,7 @@ public class GenericFileSystem implements FileSystem {
 	}
 	
 	@Override
-	public FileType getType(String path) throws Exception {
+	public FileType getType(String path) {
 		path = toLowerCase(path);
 		
 		if(!Files.exists(getPath(path)))

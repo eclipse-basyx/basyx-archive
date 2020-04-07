@@ -3,6 +3,8 @@ package org.eclipse.basyx.vab.modelprovider;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
+
 /**
  * Utility functions to handle a VAB path
  * 
@@ -279,5 +281,16 @@ public class VABPathTools {
 
 		// Return combined path
 		return result.toString();
+	}
+	
+	/**
+	 * Checks if path is null, if yes throw exception
+	 * 
+	 * @param path
+	 */
+	public static void checkPathForNull(String path) throws MalformedRequestException {
+		if (path == null) {
+			throw new MalformedRequestException("Path is not allowed to be null");
+		}
 	}
 }

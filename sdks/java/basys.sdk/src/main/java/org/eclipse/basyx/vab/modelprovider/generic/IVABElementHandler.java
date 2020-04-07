@@ -26,11 +26,11 @@ public interface IVABElementHandler {
 
 	public Object getElementProperty(Object element, String propertyName) throws Exception;
 
-	public void setModelPropertyValue(Object element, String propertyName, Object newValue) throws Exception;
+	public boolean setModelPropertyValue(Object element, String propertyName, Object newValue) throws Exception;
 
-	public void createValue(Object element, Object newValue) throws Exception;
+	public boolean createValue(Object element, Object newValue) throws Exception;
 
-	public void deleteValue(Object element, String propertyName) throws Exception;
+	public boolean deleteValue(Object element, String propertyName) throws Exception;
 
-	public void deleteValue(Object element, Object property) throws Exception;
+	public boolean deleteValue(Object element, Object property) throws Exception;
 }

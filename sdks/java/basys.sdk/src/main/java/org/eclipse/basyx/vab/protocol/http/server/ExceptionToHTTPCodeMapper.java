@@ -20,7 +20,7 @@ public class ExceptionToHTTPCodeMapper {
 	 * @param e The thrown ProviderException
 	 * @return HTTP-Code
 	 */
-	public static int mapException(ProviderException e) {
+	public static int mapFromException(ProviderException e) {
 
 		if(e instanceof MalformedRequestException) {
 			return 400;
@@ -30,6 +30,27 @@ public class ExceptionToHTTPCodeMapper {
 			return 404;
 		}
 		return 500;
+		
+	}
+	
+	/**
+	 * Maps HTTP-Codes to ProviderExceptions
+	 * 
+	 * @param statusCode The received HTTP-code
+	 * @return the corresponding ProviderException
+	 */
+	public static ProviderException mapToException(int statusCode) {
+		
+		switch(statusCode) {
+		case 400:
+			return new MalformedRequestException("Response-code: " + statusCode);
+		case 422:
+			return new ResourceAlreadyExistsException("Response-code: " + statusCode);
+		case 404:
+			return new ResourceNotFoundException("Response-code: " + statusCode);
+		default:
+			return new ProviderException("Response-code: " + statusCode);
+		}
 		
 	}
 	

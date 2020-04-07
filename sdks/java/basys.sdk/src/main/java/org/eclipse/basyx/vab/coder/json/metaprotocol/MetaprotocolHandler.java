@@ -7,7 +7,10 @@ import java.util.Map;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONToolsFactory;
-
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +44,7 @@ public class MetaprotocolHandler implements IMetaProtocolHandler {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public Object deserialize(String message) throws Exception {
+	public Object deserialize(String message) throws ProviderException {
 
 		// First get the GSON object from the JSON string
 		Object gsonObj = serializer.deserialize(message.toString());
@@ -67,7 +70,7 @@ public class MetaprotocolHandler implements IMetaProtocolHandler {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private Object handleResult(Map<String, Object> responseMap) throws Exception {
+	private Object handleResult(Map<String, Object> responseMap) throws ProviderException {
 		// Retrieve messages if any
 		Collection<Map<String, Object>> messages = (Collection<Map<String, Object>>) responseMap.get(Result.MESSAGES);
 		if (messages == null) messages = new LinkedList<Map<String, Object>>();
@@ -83,11 +86,23 @@ public class MetaprotocolHandler implements IMetaProtocolHandler {
 			result = responseMap.get(Result.ENTITY);
 		} else if (isException instanceof Boolean && (boolean) isException) {
 			Map<String, Object> first = messages.iterator().next(); // assumes an Exception always comes with a message
-				
+
 			String text = (String) first.get(Message.TEXT);
-			throw new Exception("Server threw exception: " + text);
+			
+			// The .toString of the occured Exception is contained in the JSON
+			// Throw a new matching ProviderException
+			if (text.contains(ResourceNotFoundException.class.getName())) {
+				throw new ResourceNotFoundException(text);
+			} else if (text.contains(ResourceAlreadyExistsException.class.getName())) {
+				throw new ResourceAlreadyExistsException(text);
+			} else if (text.contains(MalformedRequestException.class.getName())) {
+				throw new MalformedRequestException(text);
+			} else {
+				throw new ProviderException("Server threw exception: " + text);
+			}
+			
 		} else {
-			throw new Exception("Format Error: no success but isException not true or not found.");
+			throw new ProviderException("Format Error: no success but isException not true or not found.");
 		}
 
 		return result;

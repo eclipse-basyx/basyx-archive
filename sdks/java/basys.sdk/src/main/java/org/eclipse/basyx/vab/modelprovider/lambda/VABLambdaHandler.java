@@ -9,6 +9,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.generic.IVABElementHandler;
 import org.eclipse.basyx.vab.modelprovider.generic.VABMultiElementHandler;
 
@@ -42,47 +43,60 @@ public class VABLambdaHandler extends VABMultiElementHandler {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setModelPropertyValue(Object element, String propertyName, Object newValue) throws Exception {
-		Object child = getElementProperty(element, propertyName);
+	public boolean setModelPropertyValue(Object element, String propertyName, Object newValue) throws Exception {
+		Object child = null;
+		try {
+			child = getElementProperty(element, propertyName);
+		} catch (ResourceNotFoundException e) {}
 		if (hasHiddenSetter(child)) {
 			((Consumer<Object>) ((Map<String, Object>) child).get(VALUE_SET_SUFFIX)).accept(newValue);
+			return true;
 		} else if (hasHiddenInserter(element) && (resolveSingle(element) instanceof Map<?, ?>)) {
 			((BiConsumer<String, Object>) ((Map<String, Object>) element).get(VALUE_INSERT_SUFFIX)).accept(propertyName,
 					newValue);
+			return true;
 		} else {
-			super.setModelPropertyValue(resolveSingle(element), propertyName, newValue);
+			return super.setModelPropertyValue(resolveSingle(element), propertyName, newValue);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void createValue(Object element, Object newValue) throws Exception {
+	public boolean createValue(Object element, Object newValue) throws Exception {
 		if (hasHiddenInserter(element)) {
 			((Consumer<Object>) ((Map<String, Object>) element).get(VALUE_INSERT_SUFFIX)).accept(newValue);
+			return true;
 		} else {
-			super.createValue(element, newValue);
+			return super.createValue(element, newValue);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void deleteValue(Object element, String propertyName) throws Exception {
+	public boolean deleteValue(Object element, String propertyName) throws Exception {
 		if (hasHiddenKeyRemover(element)) {
+			super.getElementProperty(resolveSingle(element), propertyName);
 			Consumer<String> c = (Consumer<String>) ((Map<String, Object>) element).get(VALUE_REMOVEKEY_SUFFIX);
 			c.accept(propertyName);
+			return true;
 		} else {
-			super.deleteValue(element, propertyName);
+			return super.deleteValue(element, propertyName);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void deleteValue(Object element, Object property) throws Exception {
+	public boolean deleteValue(Object element, Object property) throws Exception {
 		if (hasHiddenObjectRemover(element)) {
+			if(resolveSingle(element) instanceof Map) {
+				// Can not delete by value from Maps
+				return false;
+			}
 			Consumer<Object> c = (Consumer<Object>) ((Map<String, Object>) element).get(VALUE_REMOVEOBJ_SUFFIX);
 			c.accept(property);
+			return true;
 		} else {
-			super.deleteValue(element, property);
+			return super.deleteValue(element, property);
 		}
 	}
 

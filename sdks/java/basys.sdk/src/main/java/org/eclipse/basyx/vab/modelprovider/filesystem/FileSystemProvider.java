@@ -1,5 +1,7 @@
 package org.eclipse.basyx.vab.modelprovider.filesystem;
 
+import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,12 +13,15 @@ import java.util.Map;
 
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.filesystem.filesystem.File;
 import org.eclipse.basyx.vab.modelprovider.filesystem.filesystem.FileSystem;
 import org.eclipse.basyx.vab.modelprovider.filesystem.filesystem.FileType;
-import org.eclipse.basyx.vab.modelprovider.list.InvalidListReferenceException;
 
 /**
  * Provides models based on a generic file system
@@ -41,18 +46,18 @@ public class FileSystemProvider implements IModelProvider {
 	 * Removes the last '/' from the passed root directory if it exists
 	 * Creates the root directory folder
 	 */
-	public FileSystemProvider(FileSystem fileSystem, String rootDir) throws Exception {
+	public FileSystemProvider(FileSystem fileSystem, String rootDir) throws ProviderException {
 		this.fileSystem = fileSystem;
 		this.rootDir = unifyPath(rootDir);
 
-		fileSystem.createDirectory(rootDir + "/");
+		createDirectory(rootDir + "/");
 	}
 
-	public FileSystemProvider(FileSystem fileSystem, String rootDir, Map<String, Object> VABelement) throws Exception {
+	public FileSystemProvider(FileSystem fileSystem, String rootDir, Map<String, Object> VABelement) throws ProviderException {
 		this.fileSystem = fileSystem;
 		this.rootDir = unifyPath(rootDir);
 
-		fileSystem.createDirectory(rootDir + "/");
+		createDirectory(rootDir + "/");
 		fromMapToDirectory("", VABelement);
 	}
 
@@ -61,20 +66,22 @@ public class FileSystemProvider implements IModelProvider {
 	 * doEmptyDirectory which specifies whether to empty the root directory or not
 	 */
 	public FileSystemProvider(FileSystem fileSystem, String rootDir, Map<String, Object> VABelement,
-			boolean doEmptyDirectory) throws Exception {
+			boolean doEmptyDirectory) throws ProviderException {
 		this.fileSystem = fileSystem;
 		this.rootDir = unifyPath(rootDir);
 
-		fileSystem.createDirectory(rootDir + "/");
+		createDirectory(rootDir + "/");
 		if (doEmptyDirectory)
-			fileSystem.deleteDirectory(rootDir);
+			deleteDirectory(rootDir);
 		fromMapToDirectory("", VABelement);
 	}
 
 	/**
 	 * Removes the first and last character from a String if it is a "/"
+	 * @throws MalformedRequestException 
 	 */
-	private String unifyPath(String path) {
+	private String unifyPath(String path) throws MalformedRequestException {
+		VABPathTools.checkPathForNull(path);
 		if (path.startsWith("/")) {
 			path = path.substring(1);
 		}
@@ -93,7 +100,7 @@ public class FileSystemProvider implements IModelProvider {
 	 * __meta file does not exist. Works only without "/" at the end
 	 */
 	@SuppressWarnings("unchecked")
-	private HashSet<String> readMetaFile(String path) throws Exception {
+	private HashSet<String> readMetaFile(String path) throws ProviderException {
 		path = path.equals("") ? rootDir + "/" + metaFileName : rootDir + "/" + path + "/" + metaFileName;
 		if (fileSystem.getType(path) == FileType.DATA) {
 			Object deserialized = loadAndDeserialize(path);
@@ -102,47 +109,6 @@ public class FileSystemProvider implements IModelProvider {
 				return (HashSet<String>) deserialized;
 			} else if (deserialized instanceof Collection) {
 				return new HashSet<>((List<String>) deserialized);
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Reads the object in the relative path specified
-	 */
-	private Object read(String path) throws Exception {
-		String directory = VABPathTools.getParentPath(path);
-		String fileName = VABPathTools.getLastElement(path);
-
-		String fullDirPath = rootDir + "/" + directory;
-
-		if (fileSystem.getType(fullDirPath) == FileType.DIRECTORY) {
-			List<File> directoryFiles = fileSystem.readDirectory(fullDirPath);
-			// The directory that contains the file, folder or collection to be read does
-			// not exist, return null
-
-			// Get the list of collections that are present as folders from the _meta file
-			HashSet<String> collections = readMetaFile(directory);
-			if (collections != null && collections.contains(fileName)) {
-				// It's a collection
-				return readCollection(path);
-			} else {
-
-				File file = findFileInList(directoryFiles, fileName);
-				if (file != null) {
-					if (file.getType() == FileType.DATA) {
-						// It's a file
-						return loadAndDeserialize(file.getName());
-					} else {
-						// It's a folder
-						return readDirectory(path);
-					}
-				} else if (fileName.matches(regexCollectionElem)) {
-					// We wanted to read an element of a collection. The element does not exist,
-					// throw an Invalid List Reference Exception
-					throw new InvalidListReferenceException(
-							Integer.parseInt(fileName.substring(collectionElemPrefix.length())));
-				}
 			}
 		}
 		return null;
@@ -162,7 +128,7 @@ public class FileSystemProvider implements IModelProvider {
 		return null;
 	}
 
-	private Collection<Object> readCollection(String path) throws Exception {
+	private Collection<Object> readCollection(String path) throws ProviderException {
 		Collection<Object> c = new ArrayList<Object>();
 		String fullPath = rootDir + "/" + path;
 		for (int ref : readReferences(fullPath)) {
@@ -181,12 +147,18 @@ public class FileSystemProvider implements IModelProvider {
 	/**
 	 * Reads the folder in the relative path specified
 	 */
-	private HashMap<String, Object> readDirectory(String path) throws Exception {
+	private HashMap<String, Object> readDirectory(String path) throws ProviderException {
 		String fullPath = rootDir + "/" + path;
 		HashMap<String, Object> returnData = new HashMap<String, Object>();
 		HashSet<String> collections = readMetaFile(path);
 
-		List<File> directoryFiles = fileSystem.readDirectory(fullPath);
+		List<File> directoryFiles;
+		try {
+			directoryFiles = fileSystem.readDirectory(fullPath);
+		} catch (IOException e) {
+			throw new ProviderException("Path \"" + path + "\" could not be read."); 
+		}
+		
 		removeMetaFile(directoryFiles);
 
 		for (File file : directoryFiles) {
@@ -225,7 +197,7 @@ public class FileSystemProvider implements IModelProvider {
 	 * Adds collection to the __meta file present in directoryPath
 	 * Works whether "/" is at the end of path or not
 	 */
-	private void addCollectionToMetaFile(String directoryPath, String collectionName) throws Exception {
+	private void addCollectionToMetaFile(String directoryPath, String collectionName) throws ProviderException {
 		HashSet<String> collections = readMetaFile(directoryPath);
 
 		if (collections != null) {
@@ -243,7 +215,7 @@ public class FileSystemProvider implements IModelProvider {
 	 * If the object is an array or a collection, a collection is written in a folder
 	 */
 	@SuppressWarnings("unchecked")
-	private void writeObject(String path, Object o) throws Exception {
+	private void writeObject(String path, Object o) throws ProviderException {
 		path = unifyPath(path);
 		String directory = VABPathTools.getParentPath(path);
 		String fullPath = rootDir + "/" + path;
@@ -256,7 +228,7 @@ public class FileSystemProvider implements IModelProvider {
 		if (collection != null) {
 			// It's a collection given as an Array or Collection instance
 			addCollectionToMetaFile(directory, VABPathTools.getLastElement(path));
-			fileSystem.createDirectory(fullPath);
+			createDirectory(fullPath);
 			Iterator<?> iterator = collection.iterator();
 			List<Integer> references = new ArrayList<>();
 
@@ -264,7 +236,7 @@ public class FileSystemProvider implements IModelProvider {
 				Object item = iterator.next();
 				references.add(counter);
 				if (item instanceof Map) {
-					fileSystem.createDirectory(constructCollectionRefPath(fullPath, counter));
+					createDirectory(constructCollectionRefPath(fullPath, counter));
 					fromMapToDirectory(constructCollectionRefPath(path, counter), (Map<String, Object>) item);
 				} else {
 					serializeAndSave(constructCollectionRefPath(fullPath, counter), item);
@@ -274,8 +246,32 @@ public class FileSystemProvider implements IModelProvider {
 			writeReferences(fullPath, references);
 		} else {
 			// Otherwise, it's an Object
-			fileSystem.createDirectory(rootDir + "/" + directory);
+			createDirectory(rootDir + "/" + directory);
 			serializeAndSave(fullPath, o);
+		}
+	}
+	
+	private void createDirectory(String path) throws ProviderException {
+		try {
+			fileSystem.createDirectory(path);
+		} catch (IOException e) {
+			throw new ProviderException("Directory \"" + path + "\" could not be created.");
+		}
+	}
+	
+	private void deleteDirectory(String path) throws ProviderException {
+		try {
+			fileSystem.deleteDirectory(path);
+		} catch (IOException e) {
+			throw new ProviderException("Directory \"" + path + "\" could not be deleted.");
+		}
+	}
+	
+	private void deleteFile(String path) throws ProviderException {
+		try {
+			fileSystem.deleteFile(path);
+		} catch (IOException e) {
+			throw new ProviderException("File \"" + path + "\" could not be deleted.");
 		}
 	}
 
@@ -285,10 +281,11 @@ public class FileSystemProvider implements IModelProvider {
 	 * Does not create the directory "path"
 	 */
 	@SuppressWarnings("unchecked")
-	private void fromMapToDirectory(String path, Map<String, Object> map) throws Exception {
+	private void fromMapToDirectory(String path, Map<String, Object> map) throws ProviderException {
 		path = unifyPath(path);
 		String fullPath = rootDir + "/" + path;
-		fileSystem.createDirectory(fullPath);
+		
+		createDirectory(fullPath);
 
 		for (Map.Entry<String, Object> entry : map.entrySet()) {
 			if (entry.getValue() instanceof Map)
@@ -298,27 +295,78 @@ public class FileSystemProvider implements IModelProvider {
 		}
 	}
 
-	private void writeReferences(String path, List<Integer> ref) throws Exception {
+	private void writeReferences(String path, List<Integer> ref) throws ProviderException {
 		serializeAndSave(path + "/" + referenceFileName, ref);
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Integer> readReferences(String path) throws Exception {
+	private List<Integer> readReferences(String path) throws ProviderException {
 		return (List<Integer>) loadAndDeserialize(path + "/" + referenceFileName);
 	}
 
-	private Object loadAndDeserialize(String path) throws Exception {
-		String serialized = fileSystem.readFile(path);
-		return tools.deserialize(serialized);
+	private Object loadAndDeserialize(String path) throws ProviderException {
+		try {
+			String serialized = fileSystem.readFile(path);
+			return tools.deserialize(serialized);
+		} catch (NoSuchFileException e) {
+			throw new ResourceNotFoundException("File \"" + path + "\" does not exist.");
+		} catch (IOException e) {
+			throw new ProviderException("File \"" + path + "\" could not be read.");
+		}
 	}
 
-	private void serializeAndSave(String path, Object o) throws Exception {
-		fileSystem.writeFile(path, tools.serialize(o));
+	private void serializeAndSave(String path, Object o) throws ProviderException {
+		try {
+			fileSystem.writeFile(path, tools.serialize(o));
+		} catch (IOException e) {
+			throw new ProviderException("File \"" + path + "\" could not be written.");
+		}
 	}
 
 	@Override
-	public synchronized Object getModelPropertyValue(String path) throws Exception {
-		return read(unifyPath(path));
+	public synchronized Object getModelPropertyValue(String path) throws ProviderException {
+		path = unifyPath(path);
+		String directory = VABPathTools.getParentPath(path);
+		String fileName = VABPathTools.getLastElement(path);
+
+		String fullDirPath = rootDir + "/" + directory;
+
+		if (fileSystem.getType(fullDirPath) == FileType.DIRECTORY) {
+			
+			List<File> directoryFiles;
+			try {
+				directoryFiles = fileSystem.readDirectory(fullDirPath);
+			} catch (IOException e) {
+				throw new MalformedRequestException("Given directory \"" + directory + "\" could not be read.");
+			}
+			// The directory that contains the file, folder or collection to be read does
+			// not exist, return null
+
+			// Get the list of collections that are present as folders from the _meta file
+			HashSet<String> collections = readMetaFile(directory);
+			if (collections != null && collections.contains(fileName)) {
+				// It's a collection
+				return readCollection(path);
+			} else {
+
+				File file = findFileInList(directoryFiles, fileName);
+				if (file != null) {
+					if (file.getType() == FileType.DATA) {
+						// It's a file
+						return loadAndDeserialize(file.getName());
+					} else {
+						// It's a folder
+						return readDirectory(path);
+					}
+				} else if (fileName.matches(regexCollectionElem)) {
+					// We wanted to read an element of a collection. The element does not exist,
+					// throw an Invalid List Reference Exception
+					throw new ResourceNotFoundException("The specified list element \"" +
+							fileName.substring(collectionElemPrefix.length()) + "\" does not exist.");
+				}
+			}
+		}
+		throw new ResourceNotFoundException("The specified element \"" + path + "\" does not exist.");
 	}
 
 	/**
@@ -327,7 +375,7 @@ public class FileSystemProvider implements IModelProvider {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public synchronized void setModelPropertyValue(String path, Object newValue) throws Exception {
+	public synchronized void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		path = unifyPath(path);
 		String fileName = VABPathTools.getLastElement(path);
 		String fullPath = rootDir + "/" + path;
@@ -339,15 +387,20 @@ public class FileSystemProvider implements IModelProvider {
 			// neither a folder nor a Map
 			if (!(newValue instanceof Map) && !(newValue instanceof Collection<?>)) {
 				serializeAndSave(fullPath, newValue);
+			} else {
+				throw new MalformedRequestException("The single value at \"" + path + 
+						"\" can not be replaced with a Map or Collection");
 			}
 		} else if (type == FileType.DIRECTORY) {
 			if ((collections == null || !collections.contains(fileName)) && newValue instanceof Map) {
-				fileSystem.deleteDirectory(fullPath);
+				deleteDirectory(fullPath);
 				fromMapToDirectory(path, (Map<String, Object>) newValue);
 			} else {
-				fileSystem.deleteDirectory(fullPath);
+				deleteDirectory(fullPath);
 				writeObject(path, newValue);
 			}
+		} else {
+			throw new ResourceNotFoundException("Value \"" + path + "\" does not exist.");
 		}
 	}
 
@@ -357,20 +410,27 @@ public class FileSystemProvider implements IModelProvider {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public synchronized void createValue(String path, Object newEntity) throws Exception {
+	public synchronized void createValue(String path, Object newEntity) throws ProviderException {
 		path = unifyPath(path);
-		String directory = VABPathTools.getParentPath(path);
+		String parentPath = VABPathTools.getParentPath(path);
 		String fileName = VABPathTools.getLastElement(path);
-		fileSystem.createDirectory(rootDir + "/" + directory);
+		
+		
+		if(fileSystem.getType(rootDir + "/" + parentPath) == null) {
+			throw new ResourceNotFoundException("Parent-path for \"" + path + "\" does not exist.");
+		}
+		
 		String fullPath = rootDir + "/" + path;
 		FileType type = fileSystem.getType(fullPath);
 
 		if (type == FileType.DATA) {
-			return; // A file with this name already exists, quit the method
+			// A file with this name already exists, quit the method
+			throw new ResourceAlreadyExistsException("A value at \"" + path + "\" already exists.");
 		} else if (type == FileType.DIRECTORY) {
-			HashSet<String> collections = readMetaFile(directory);
+			HashSet<String> collections = readMetaFile(parentPath);
 
-			if (collections != null && collections.contains(fileName)) { // A Collection already exists
+			if (collections != null && collections.contains(fileName)) {
+				// the given path is a folder and it contains a collection
 
 				List<Integer> references = readReferences(fullPath);
 
@@ -388,12 +448,19 @@ public class FileSystemProvider implements IModelProvider {
 				} else if (!(newEntity instanceof Collection<?>)) {
 					// If the new Object is a Collection, don't add it to the existing one
 					serializeAndSave(constructCollectionRefPath(fullPath, max + 1), newEntity);
+				} else {
+					throw new MalformedRequestException("The given newEntity is a Collection "
+							+ "and can therefore not be added to the existing Collection \"" + path + "\".");
 				}
 
 				references.add(max + 1);
 				writeReferences(fullPath, references);
+			} else {
+				// at given path exists a folder, but it is a map.
+				throw new ResourceAlreadyExistsException("At given path \"" + path + "\" exists a Map.");
 			}
-		} else if (type == null) { // The Object doesn't exist and has to be created
+		} else if (type == null) {
+			// The Object doesn't exist and can be created
 			if (newEntity instanceof Map) {
 				fromMapToDirectory(path, (Map<String, Object>) newEntity);
 			} else {
@@ -408,7 +475,7 @@ public class FileSystemProvider implements IModelProvider {
 	 * the folder that contains the collection
 	 */
 	@Override
-	public synchronized void deleteValue(String path) throws Exception {
+	public synchronized void deleteValue(String path) throws ProviderException {
 		path = unifyPath(path);
 		String directory = VABPathTools.getParentPath(path);
 		String fileName = VABPathTools.getLastElement(path);
@@ -420,7 +487,7 @@ public class FileSystemProvider implements IModelProvider {
 		FileType type = fileSystem.getType(fullPath);
 
 		if (type == FileType.DATA) {
-			fileSystem.deleteFile(fullPath);
+			deleteFile(fullPath);
 			if (fileName.matches(regexCollectionElem)) {
 				// The deleted file was an element of a collection (It is named "byRef_*")
 				int deletedElementIndex = Integer.parseInt(fileName.substring(collectionElemPrefix.length()));
@@ -428,26 +495,27 @@ public class FileSystemProvider implements IModelProvider {
 				references.remove(Integer.valueOf(deletedElementIndex));
 				writeReferences(fullDirPath, references);
 			}
+			return;
 		} else if (type == FileType.DIRECTORY) {
 			if (collections != null && collections.contains(fileName)) {
 				// The folder to delete is a collection
 				collections.remove(fileName);
 				serializeAndSave(fullDirPath + "/" + metaFileName, collections);
 			}
-			fileSystem.deleteDirectory(fullPath);
+			deleteDirectory(fullPath);
+			return;
 		}
 
-		// If no file, folder or collection exists at the path specified,
-		// the method will effectively do nothing (delete nothing)
+		throw new ResourceNotFoundException("Value \"" + path + "\" can not be deleted as it does not exist.");
 	}
 
 	/**
 	 * Deletes the Object or Map that is equal to obj from the collection
 	 * in the specified path
-	 * Otherwise, doesn't do anything
+	 * Otherwise, throw a ResourceNotFoundException
 	 */
 	@Override
-	public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 		path = unifyPath(path);
 		String directory = VABPathTools.getParentPath(path);
 		String fileName = VABPathTools.getLastElement(path);
@@ -470,27 +538,31 @@ public class FileSystemProvider implements IModelProvider {
 				if (type == FileType.DATA) {
 					Object o = loadAndDeserialize(currentPath);
 					if (o.equals(obj)) {
-						fileSystem.deleteFile(currentPath);
+						deleteFile(currentPath);
 						references.remove(Integer.valueOf(j));
-						break;
+						writeReferences(fullCollectionPath, references);
+						return;
 					}
 				} else if (type == FileType.DIRECTORY) {
 					Object o = readDirectory(constructCollectionRefPath(path, j));
 					if (o.equals(obj)) {
-						fileSystem.deleteDirectory(currentPath);
+						deleteDirectory(currentPath);
 						references.remove(Integer.valueOf(j));
-						break;
+						writeReferences(fullCollectionPath, references);
+						return;
 					}
 				}
 			}
-			writeReferences(fullCollectionPath, references);
+			throw new ResourceNotFoundException("Specified Object was not found in Collection \"" + path + "\".");
+		} else {
+			// The Collection in given path does not exist
+			throw new MalformedRequestException("No Collection found at path \"" + path + "\". Delete by value is only possible in Collections.");
 		}
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object... parameter) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
+		throw new MalformedRequestException("Invoke not supported by filesystem");
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.generic.IVABElementHandler;
 
 /**
@@ -53,12 +54,17 @@ public class VABListHandler implements IVABElementHandler {
 		if (element instanceof ReferencedArrayList) {
 			ReferencedArrayList<?> listElement = (ReferencedArrayList<?>) element;
 			if (propertyName.startsWith(VALUE_BYREF_SUFFIX)) {
-				return getReferencedListElement(listElement, propertyName);
+				try {
+					return getReferencedListElement(listElement, propertyName);
+				} catch (InvalidListReferenceException e) {
+					throw new ResourceNotFoundException("Reference \"" + propertyName + "\" does not exist.");
+				}
 			} else if (propertyName.equals(VALUE_REFERENCES_SUFFIX)) {
 				return listElement.getReferences();
 			} else {
 				// not possible to query list index directly
-				return null;
+				throw new ResourceNotFoundException("ReferencedArrayList elements must be queried by using  \""
+						+ VALUE_BYREF_SUFFIX + "\".");
 			}
 		}
 		return null;
@@ -71,14 +77,16 @@ public class VABListHandler implements IVABElementHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setModelPropertyValue(Object element, String propertyName, Object newValue) throws Exception {
+	public boolean setModelPropertyValue(Object element, String propertyName, Object newValue) throws Exception {
 		if (element instanceof ReferencedArrayList) {
 			ReferencedArrayList<Object> list = (ReferencedArrayList<Object>) element;
 			Integer index = getReferencedIndex(list, propertyName);
 			if (index != null) {
 				list.set(index, newValue);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	/**
@@ -87,11 +95,13 @@ public class VABListHandler implements IVABElementHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void createValue(Object element, Object newValue) throws Exception {
+	public boolean createValue(Object element, Object newValue) throws Exception {
 		if (element instanceof Collection) {
 			Collection<Object> collection = (Collection<Object>) element;
 			collection.add(newValue);
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -100,14 +110,16 @@ public class VABListHandler implements IVABElementHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void deleteValue(Object element, String propertyName) throws Exception {
+	public boolean deleteValue(Object element, String propertyName) throws Exception {
 		if (element instanceof ReferencedArrayList) {
 			ReferencedArrayList<Object> list = (ReferencedArrayList<Object>) element;
 			Integer index = getReferencedIndex(list, propertyName);
 			if (index != null) {
 				list.remove((int) index);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	/**
@@ -115,10 +127,11 @@ public class VABListHandler implements IVABElementHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void deleteValue(Object element, Object property) throws Exception {
+	public boolean deleteValue(Object element, Object property) throws Exception {
 		if (element instanceof Collection) {
-			((Collection<Object>) element).remove(property);
+			return ((Collection<Object>) element).remove(property);
 		}
+		return false;
 	}
 
 	private Map<String, Object> prepareMap(Map<String, Object> map) {

@@ -8,6 +8,8 @@ import org.eclipse.basyx.vab.coder.json.metaprotocol.MetaprotocolHandler;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONToolsFactory;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
 
@@ -74,7 +76,8 @@ public class JSONConnector implements IModelProvider {
 	
 
 	@Override
-	public Object getModelPropertyValue(String path) throws Exception {
+	public Object getModelPropertyValue(String path) throws ProviderException {
+		VABPathTools.checkPathForNull(path);
 
 		// Get element from server
 		String message = provider.getModelPropertyValue(path);
@@ -85,6 +88,7 @@ public class JSONConnector implements IModelProvider {
 
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+		VABPathTools.checkPathForNull(path);
 
 		// Serialize value Object
 		String jsonString = serializer.serialize(newValue);
@@ -97,7 +101,8 @@ public class JSONConnector implements IModelProvider {
 
 	@Override
 	public void createValue(String path, Object newEntity) throws Exception {
-
+		VABPathTools.checkPathForNull(path);
+		
 		// Serialize value Object
 		String jsonString = serializer.serialize(newEntity);
 
@@ -109,6 +114,7 @@ public class JSONConnector implements IModelProvider {
 
 	@Override
 	public void deleteValue(String path) throws Exception {
+		VABPathTools.checkPathForNull(path);
 
 		String message = provider.deleteValue(path);
 
@@ -118,6 +124,7 @@ public class JSONConnector implements IModelProvider {
 
 	@Override
 	public void deleteValue(String path, Object obj) throws Exception {
+		VABPathTools.checkPathForNull(path);
 
 		// Serialize parameter
 		String jsonString = serializer.serialize(obj);
@@ -130,6 +137,7 @@ public class JSONConnector implements IModelProvider {
 
 	@Override
 	public Object invokeOperation(String path, Object... parameter) throws Exception {
+		VABPathTools.checkPathForNull(path);
 
 		// Serialize parameter
 		List<Object> params = new ArrayList<>();

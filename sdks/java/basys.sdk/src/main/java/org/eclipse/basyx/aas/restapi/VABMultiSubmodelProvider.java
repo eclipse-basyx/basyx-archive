@@ -34,21 +34,21 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  * /aas/submodels/{subModelId}/operations/{operationId} Retrieves a specific
  * Operation from the AAS's SubModel<br />
  * /aas/submodels/{subModelId}/events/{eventId} Retrieves a specific event from
- * the AAS's submodel<br />
- * <br />
+ * the AAS's submodel
+ * <br /><br />
  * - createValue <br />
  * /aas/submodels Adds a new SubModel to an existing Asset Administration Shell
- * <br />
+ * <br /><br />
  * /aas/submodels/{subModelId}/properties Adds a new property to the AAS's
  * submodel <br />
  * /aas/submodels/{subModelId}/operations Adds a new operation to the AAS's
  * submodel <br />
  * /aas/submodels/{subModelId}/events Adds a new event to the AAS's submodel
- * 
+ * <br /><br />
  * - invokeOperation<br />
  * /aas/submodels/{subModelId}/operations/{operationId} Invokes a specific
  * operation from the AAS' submodel with a list of input parameters
- * 
+ * <br /><br />
  * - deleteValue<br />
  * /aas/submodels/{subModelId} Deletes a specific SubModel from a specific Asset
  * Administration Shell <br />
@@ -58,7 +58,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  * Operation from the AAS's SubModel<br />
  * /aas/submodels/{subModelId}/events/{eventId} Deletes a specific event from
  * the AAS's submodel
- * 
+ * <br /><br />
  * - setModelPropertyValue<br />
  * /aas/submodels/{subModelId}/properties/{propertyId} Sets the value of the
  * AAS's SubModel's Property
@@ -144,6 +144,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 */
 	@Override
 	public Object getModelPropertyValue(String path) throws Exception {
+		VABPathTools.checkPathForNull(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 		if (pathElements.length == 0) { // e.g. "/"
 			return null;
@@ -179,6 +180,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 */
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+		VABPathTools.checkPathForNull(path);
 		// Split path
 		String[] pathElements = VABPathTools.splitPath(path);
 		String propertyPath = VABPathTools.buildPath(pathElements, 3);
@@ -188,6 +190,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 
 	@Override
 	public void createValue(String path, Object newValue) throws Exception {
+		VABPathTools.checkPathForNull(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 		if (pathElements.length >= 1 && pathElements[0].equals("aas")) {
 			if (pathElements.length == 1) {
@@ -216,7 +219,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 
 	@SuppressWarnings("unchecked")
 	private void createSubModel(Object newSM) throws Exception {
-		// Adds a new submodel to to the registered AAS
+		// Adds a new submodel to the registered AAS
 		Map<String, Object> sm = (Map<String, Object>) newSM;
 		SubModelProvider smProvider = new SubModelProvider(sm);
 		submodel_providers.put((String) sm.get(Referable.IDSHORT), smProvider);
@@ -226,13 +229,15 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 
 	@Override
 	public void deleteValue(String path) throws Exception {
+		VABPathTools.checkPathForNull(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 		String propertyPath = VABPathTools.buildPath(pathElements, 3);
 		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
 		if (pathElements.length == 3) {
 			// Delete Submodel from registered AAS
 			String smId = pathElements[2];
-			aas_provider.deleteValue("/" + AssetAdministrationShell.SUBMODELS + "/" + smId);
+			// FIXME inconsistent usage of aas_provider
+			// aas_provider.deleteValue("/" + AssetAdministrationShell.SUBMODELS + "/" + smId);
 			submodel_providers.remove(smId);
 		} else if (propertyPath.length() > 0) {
 			submodel_providers.get(pathElements[2]).deleteValue(propertyPath);
@@ -241,6 +246,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 
 	@Override
 	public void deleteValue(String path, Object obj) throws Exception {
+		VABPathTools.checkPathForNull(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 		String propertyPath = VABPathTools.buildPath(pathElements, 3);
 		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
@@ -249,6 +255,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 
 	@Override
 	public Object invokeOperation(String path, Object... parameter) throws Exception {
+		VABPathTools.checkPathForNull(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 		String operationPath = VABPathTools.buildPath(pathElements, 3);
 		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
