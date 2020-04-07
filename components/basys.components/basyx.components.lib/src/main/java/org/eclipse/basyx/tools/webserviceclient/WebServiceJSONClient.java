@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +36,7 @@ public class WebServiceJSONClient {
 	/**
 	 * Get result from webservice invocation
 	 * 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 */
 	protected Object getJSONResult(String serializedJSONValue) {
 		// Try to deserialize response if any
@@ -44,10 +44,10 @@ public class WebServiceJSONClient {
 			// Try to deserialize response
 
 			Object result = serializer.deserialize(serializedJSONValue);
-			// Check if a server exception was serialized
-			if (result instanceof ServerException) {
-				// Throw server exception
-				throw (ServerException) result;
+			// Check if a provider exception was serialized
+			if (result instanceof ProviderException) {
+				// Throw provider exception
+				throw (ProviderException) result;
 			}
 
 			// Return deserialized value

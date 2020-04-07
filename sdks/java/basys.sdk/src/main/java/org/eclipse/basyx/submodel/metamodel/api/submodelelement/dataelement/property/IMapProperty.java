@@ -3,8 +3,8 @@ package org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.pro
 import java.util.Collection;
 import java.util.Map;
 
-import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.exception.TypeMismatchException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 
 /**
  * Interface for AAS properties that carry a map
@@ -19,22 +19,22 @@ public interface IMapProperty extends IProperty {
 	 * 
 	 * @throws TypeMismatchException
 	 */
-	public Object getValue(String key) throws TypeMismatchException, ServerException;
+	public Object getValue(String key) throws TypeMismatchException, ProviderException;
 
 	/**
 	 * put entry in map
 	 * 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 */
-	public void put(String key, Object value) throws ServerException;
+	public void put(String key, Object value) throws ProviderException;
 
 	/**
 	 * Set new map or override existing
 	 * 
 	 * @param map
-	 * @throws ServerException
+	 * @throws ProviderException
 	 */
-	void set(Map<String, Object> map) throws ServerException;
+	void set(Map<String, Object> map) throws ProviderException;
 
 	/**
 	 * Get map keys
@@ -42,21 +42,21 @@ public interface IMapProperty extends IProperty {
 	 * @return Collection with keys
 	 * @throws TypeMismatchException
 	 */
-	public Collection<String> getKeys() throws TypeMismatchException, ServerException;
+	public Collection<String> getKeys() throws TypeMismatchException, ProviderException;
 
 	/**
 	 * Get entry count
 	 * 
 	 * @throws TypeMismatchException
 	 */
-	public Integer getEntryCount() throws TypeMismatchException, ServerException;
+	public Integer getEntryCount() throws TypeMismatchException, ProviderException;
 
 	/**
 	 * Remove entry
 	 * 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 * @throws TypeMismatchException
 	 */
-	public void remove(String key) throws ServerException, TypeMismatchException;
+	public void remove(String key) throws ProviderException, TypeMismatchException;
 
 }

@@ -13,8 +13,8 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelemen
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SinglePropertyProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
-import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.exception.TypeMismatchException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
@@ -76,11 +76,11 @@ public class TestConnectedCollectionProperty {
 	/**
 	 * Tests adding a value to the contained collection
 	 * 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 * @throws TypeMismatchException
 	 */
 	@Test
-	public void testPut() throws ServerException, TypeMismatchException {
+	public void testPut() throws ProviderException, TypeMismatchException {
 		// Add value
 		prop.add(3);
 
@@ -111,11 +111,11 @@ public class TestConnectedCollectionProperty {
 	/**
 	 * Tests removing a value from the contained collection
 	 * 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 * @throws TypeMismatchException
 	 */
 	@Test
-	public void testRemove() throws ServerException, TypeMismatchException {
+	public void testRemove() throws ProviderException, TypeMismatchException {
 		// Remove a value from the contained collection
 		prop.remove(2);
 

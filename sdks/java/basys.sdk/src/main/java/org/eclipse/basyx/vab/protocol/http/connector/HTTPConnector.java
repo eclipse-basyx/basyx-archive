@@ -8,7 +8,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
@@ -65,7 +65,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	 *            should be an IElement of type Property, Operation or Event
 	 */
 	@Override
-	public String setModelPropertyValue(String servicePath, String newValue) throws ServerException {
+	public String setModelPropertyValue(String servicePath, String newValue) throws ProviderException {
 
 		return httpPut(servicePath, newValue);
 	}
@@ -80,10 +80,10 @@ public class HTTPConnector implements IBaSyxConnector {
 	 *            the URL suffix for the requested property
 	 * @param obj
 	 *            the key or index of the entry that should be deleted
-	 * @throws ServerException
+	 * @throws ProviderException
 	 */
 	@Override
-	public String deleteValue(String servicePath, String obj) throws ServerException {
+	public String deleteValue(String servicePath, String obj) throws ProviderException {
 
 		return httpPatch(servicePath, obj);
 	}
@@ -91,10 +91,10 @@ public class HTTPConnector implements IBaSyxConnector {
 	/**
 	 * Invoke a BaSys invoke operation via HTTP. Implemented as HTTP POST.
 	 * 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 */
 	@Override
-	public String createValue(String servicePath, String newValue) throws ServerException {
+	public String createValue(String servicePath, String newValue) throws ProviderException {
 
 		return httpPost(servicePath, newValue);
 	}
@@ -103,10 +103,10 @@ public class HTTPConnector implements IBaSyxConnector {
 	 * Invoke basysDelete operation via HTTP DELETE. Deletes any resource under the
 	 * given path.
 	 * 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 */
 	@Override
-	public String deleteValue(String servicePath) throws ServerException {
+	public String deleteValue(String servicePath) throws ProviderException {
 
 		return httpDelete(servicePath);
 	}
@@ -167,7 +167,7 @@ public class HTTPConnector implements IBaSyxConnector {
 		return result;
 	}
 
-	private String httpPut(String servicePath, String newValue) throws ServerException {
+	private String httpPut(String servicePath, String newValue) throws ProviderException {
 		logger.trace("[HTTP Put] {} [[ {} ]]", VABPathTools.concatenatePaths(address, servicePath), newValue);
 
 		// Invoke service call via web services
@@ -184,7 +184,7 @@ public class HTTPConnector implements IBaSyxConnector {
 
 	}
 
-	private String httpPatch(String servicePath, String newValue) throws ServerException {
+	private String httpPatch(String servicePath, String newValue) throws ProviderException {
 		logger.trace("[HTTP Patch] {} {}", VABPathTools.concatenatePaths(address, servicePath), newValue);
 
 		// Invoke service call via web services
@@ -197,7 +197,7 @@ public class HTTPConnector implements IBaSyxConnector {
 		return rsp.readEntity(String.class);
 	}
 
-	private String httpPost(String servicePath, String parameter) throws ServerException {
+	private String httpPost(String servicePath, String parameter) throws ProviderException {
 		logger.trace("[HTTP Post] {} {}", VABPathTools.concatenatePaths(address, servicePath), parameter);
 
 		// Invoke service call via web services
@@ -213,7 +213,7 @@ public class HTTPConnector implements IBaSyxConnector {
 		return rsp.readEntity(String.class);
 	}
 
-	private String httpDelete(String servicePath) throws ServerException {
+	private String httpDelete(String servicePath) throws ProviderException {
 		logger.trace("[HTTP Delete] {}", VABPathTools.concatenatePaths(address, servicePath));
 
 		// Invoke service call via web services

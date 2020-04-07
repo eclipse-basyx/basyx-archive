@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -37,9 +37,9 @@ public class MapInvoke {
 
 		// Invoke operations that throw Exceptions
 		try {
-			connVABElement.invokeOperation("operations/serverException");
+			connVABElement.invokeOperation("operations/providerException");
 			fail();
-		} catch (ServerException e) {
+		} catch (ProviderException e) {
 			// exception type not implemented, yet
 			// assertEquals(e.getType(), "testExceptionType");
 		}
@@ -47,7 +47,7 @@ public class MapInvoke {
 		try {
 			connVABElement.invokeOperation("operations/nullException");
 			fail();
-		} catch (ServerException e) {
+		} catch (ProviderException e) {
 			// exception type not implemented, yet
 			// assertEquals(e.getType(), "java.lang.NullPointerException");
 		}
@@ -59,7 +59,6 @@ public class MapInvoke {
 		try {
 			connVABElement.invokeOperation(null, "");
 			fail();
-		} catch (ServerException e) {
-		}
+		} catch (ProviderException e) {}
 	}
 }

@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 
 /**
  * A simple VAB model that explains the use of the VAB primitives
@@ -34,8 +34,8 @@ public class SimpleVABElement extends HashMap<String, Object> {
 		functions.put("supplier", (Supplier<Object>) () -> {
 			return true;
 		});
-		functions.put("serverException", (Function<Object[], Object>) (param) -> {
-			throw new ServerException("testExceptionType", "Exception description");
+		functions.put("providerException", (Function<Object[], Object>) (param) -> {
+			throw new ProviderException("Exception description");
 		});
 		functions.put("nullException", (Function<Object[], Object>) (param) -> {
 			throw new NullPointerException();

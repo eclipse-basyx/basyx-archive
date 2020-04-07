@@ -1,12 +1,11 @@
 package org.eclipse.basyx.testsuite.regression.vab.modelprovider.map;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.eclipse.basyx.testsuite.regression.vab.modelprovider.SimpleVABElement;
 import org.eclipse.basyx.testsuite.regression.vab.modelprovider.TestProvider;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.TestsuiteDirectory;
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -47,8 +46,6 @@ public class TestMapProvider extends TestProvider {
 		try {
 			connVABElement.getModelPropertyValue("structure/list/byRef_23");
 			fail();
-		} catch (ServerException e) {
-			assertTrue(e.getType().contains("InvalidListReferenceException"));
-		}
+		} catch (ProviderException e) {}
 	}
 }

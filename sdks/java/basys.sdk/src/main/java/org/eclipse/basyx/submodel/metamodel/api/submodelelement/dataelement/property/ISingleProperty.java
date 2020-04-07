@@ -1,6 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property;
 
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 
 /**
  * Interface for AAS properties that carry a single value
@@ -22,9 +22,9 @@ public interface ISingleProperty extends IProperty {
 	
 	/**
 	 * Set property value
-	 * @throws ServerException 
+	 * @throws ProviderException 
 	 */
-	public void set(Object newValue) throws ServerException;
+	public void set(Object newValue) throws ProviderException;
 
 	/**
 	 * Gets the data type of the value

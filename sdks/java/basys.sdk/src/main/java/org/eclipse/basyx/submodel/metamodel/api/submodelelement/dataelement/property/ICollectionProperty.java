@@ -2,8 +2,8 @@ package org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.pro
 
 import java.util.Collection;
 
-import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.exception.TypeMismatchException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 
 /**
  * Interface for AAS properties that carry a collection
@@ -18,7 +18,7 @@ public interface ICollectionProperty extends IProperty {
 	 * @param new
 	 *            Collection to be set
 	 */
-	public void set(Collection<Object> collection) throws ServerException;
+	public void set(Collection<Object> collection) throws ProviderException;
 
 	/**
 	 * Add value to collection
@@ -28,29 +28,29 @@ public interface ICollectionProperty extends IProperty {
 	 * @throws TypeMismatchException
 	 * @throws Exception
 	 */
-	void add(Object newValue) throws ServerException, TypeMismatchException;
+	void add(Object newValue) throws ProviderException, TypeMismatchException;
 
 	/**
 	 * Remove property from collection
 	 * 
 	 * @param objectRef
 	 *            Property reference to be removed
-	 * @throws ServerException
+	 * @throws ProviderException
 	 */
-	public abstract void remove(Object objectRef) throws ServerException;
+	public abstract void remove(Object objectRef) throws ProviderException;
 
 	/**
 	 * Get property elements from collection
 	 * 
 	 * @return Collection with values
 	 */
-	public abstract Collection<Object> getElements() throws ServerException;
+	public abstract Collection<Object> getElements() throws ProviderException;
 
 	/**
 	 * Get element count
 	 * 
 	 * @return Element count
 	 */
-	public int getElementCount() throws ServerException;
+	public int getElementCount() throws ProviderException;
 
 }

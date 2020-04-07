@@ -15,7 +15,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.junit.Before;
 import org.junit.Test;
@@ -98,15 +98,15 @@ public class MultiAASProviderTest {
 		try {
 			proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/exception1/invokable");
 			fail();
-		} catch (ServerException e) {
-			assertEquals(NullPointerException.class.getCanonicalName(), e.getType());
+		} catch (ProviderException e) {
+			assertEquals(NullPointerException.class, e.getCause().getClass());
 		}
 		// Invoke exception2
 		try {
 			proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/exception2/invokable", "prop1");
 			fail();
-		} catch (ServerException e) {
-			assertEquals("ExType", e.getType());
+		} catch (ProviderException e) {
+			assertEquals("Exception description", e.getMessage());
 		}
 	}
 

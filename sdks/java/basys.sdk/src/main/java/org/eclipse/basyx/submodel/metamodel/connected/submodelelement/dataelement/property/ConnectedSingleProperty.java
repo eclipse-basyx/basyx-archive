@@ -6,7 +6,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.PropertyType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -28,7 +28,7 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 	}
 
 	@Override
-	public void set(Object newValue) throws ServerException {
+	public void set(Object newValue) throws ProviderException {
 		getProxy().setModelPropertyValue(Property.VALUE, newValue);
 	}
 

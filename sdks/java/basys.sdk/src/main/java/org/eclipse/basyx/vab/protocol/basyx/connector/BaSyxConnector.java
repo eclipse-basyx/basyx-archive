@@ -6,7 +6,7 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
 import org.eclipse.basyx.vab.protocol.basyx.CoderTools;
 import org.eclipse.basyx.vab.protocol.basyx.server.VABBaSyxTCPInterface;
@@ -156,7 +156,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 * Invoke a Basys Set operation. Sets or overrides existing property, operation
 	 * or event.
 	 * 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 *             that carries the Exceptions thrown on the server
 	 */
 	@Override
@@ -173,7 +173,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 * Invoke a BaSys Create operation
 	 */
 	@Override
-	public String createValue(String servicePath, String newValue) throws ServerException {
+	public String createValue(String servicePath, String newValue) throws ProviderException {
 
 		byte[] call = createCall(servicePath, newValue, VABBaSyxTCPInterface.BASYX_CREATE);
 
@@ -186,7 +186,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 * Invoke a Basys invoke operation.
 	 */
 	@Override
-	public String invokeOperation(String servicePath, String parameters) throws ServerException {
+	public String invokeOperation(String servicePath, String parameters) throws ProviderException {
 
 		byte[] call = createCall(servicePath, parameters, VABBaSyxTCPInterface.BASYX_INVOKE);
 
@@ -199,11 +199,11 @@ public class BaSyxConnector implements IBaSyxConnector {
 	/**
 	 * Invoke a Basys delete operation. Deletes any resource under the given path
 	 * 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 *             that carries the Exceptions thrown on the server
 	 */
 	@Override
-	public String deleteValue(String servicePath) throws ServerException {
+	public String deleteValue(String servicePath) throws ProviderException {
 
 		byte[] call = createCall(servicePath, VABBaSyxTCPInterface.BASYX_DELETE);
 
@@ -216,11 +216,11 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 * Invoke a Basys delete operation. Deletes an entry from a map or collection by
 	 * the given key
 	 * 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 *             that carries the Exceptions thrown on the server
 	 */
 	@Override
-	public String deleteValue(String servicePath, String jsonObject) throws ServerException {
+	public String deleteValue(String servicePath, String jsonObject) throws ProviderException {
 
 		byte[] call = createCall(servicePath, jsonObject, VABBaSyxTCPInterface.BASYX_DELETE);
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.opcua.server.BaSyxOpcUaClientRunner;
 import org.eclipse.milo.opcua.stack.core.Identifiers;
@@ -137,7 +137,7 @@ public class OpcUaConnector implements IModelProvider {
         return null;
     }
 
-    private String opcUaWrite(NodeId servicePath, Object parameter) throws ServerException {
+    private String opcUaWrite(NodeId servicePath, Object parameter) throws ProviderException {
         try {
             List<NodeId> nodes = new ArrayList<NodeId>();
             nodes.add(servicePath);

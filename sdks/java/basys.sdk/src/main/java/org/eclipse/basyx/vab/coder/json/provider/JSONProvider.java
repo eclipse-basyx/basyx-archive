@@ -10,7 +10,6 @@ import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONToolsFactory;
 import org.eclipse.basyx.vab.exception.LostHTTPRequestParameterException;
-import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -171,7 +170,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @return
 	 * @throws MalformedRequestException 
 	 * @throws LostHTTPRequestParameterException 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 */
 	private Object extractParameter(String path, String serializedJSONValue, PrintWriter outputStream) throws MalformedRequestException {
 		// Return value

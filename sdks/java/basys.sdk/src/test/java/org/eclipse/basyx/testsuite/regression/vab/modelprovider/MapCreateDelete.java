@@ -9,7 +9,7 @@ import static org.junit.Assert.fail;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -76,8 +76,7 @@ public class MapCreateDelete {
 		try {
 			connVABElement.createValue(null, "");
 			fail();
-		} catch (ServerException e) {
-		}
+		} catch (ProviderException e) {}
 	}
 
 	private static void testDeleteElements(VABElementProxy connVABElement) {
@@ -122,12 +121,10 @@ public class MapCreateDelete {
 		try {
 			connVABElement.deleteValue(null, "");
 			fail();
-		} catch (ServerException e) {
-		}
+		} catch (ProviderException e) {}
 		try {
 			connVABElement.deleteValue(null);
 			fail();
-		} catch (ServerException e) {
-		}
+		} catch (ProviderException e) {}
 	}
 }

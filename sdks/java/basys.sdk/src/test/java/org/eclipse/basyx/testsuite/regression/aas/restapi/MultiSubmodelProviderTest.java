@@ -15,7 +15,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,15 +55,13 @@ public class MultiSubmodelProviderTest {
 		try {
 			proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/exception1/invokable");
 			fail();
-		} catch (ServerException e) {
-		}
+		} catch (ProviderException e) {}
+
 		// Invoke operationEx2
 		try {
 			proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/exception2/invokable", "prop1");
 			fail();
-		} catch (ServerException e) {
-
-		}
+		} catch (ProviderException e) {}
 	}
 
 	@Test
@@ -90,7 +88,7 @@ public class MultiSubmodelProviderTest {
 		try {
 			proxy.getModelPropertyValue("/aas/submodels/TestSM");
 			fail();
-		} catch (ServerException e) {
+		} catch (ProviderException e) {
 			logger.trace("[TEST] VABMultiSubmodelProvider CreateDelete passed");
 		}
 	}

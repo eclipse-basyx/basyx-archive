@@ -6,7 +6,7 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.ContainerProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 
 /**
  * A simple VAB submodel element that explains the development of conforming
@@ -59,7 +59,7 @@ public class SimpleAASSubmodel extends SubModel {
 
 		// - Contained operation that throws VAB exception
 		Operation exception2 = new Operation((Function<Object[], Object>) elId -> {
-			throw new ServerException("ExType", "Exception description");
+			throw new ProviderException("Exception description");
 		});
 		exception2.setIdShort("exception2");
 		addSubModelElement(exception2);

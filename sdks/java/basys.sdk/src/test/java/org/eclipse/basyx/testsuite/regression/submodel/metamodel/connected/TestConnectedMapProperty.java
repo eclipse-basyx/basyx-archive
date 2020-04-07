@@ -12,8 +12,8 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelemen
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SinglePropertyProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
-import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.exception.TypeMismatchException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
@@ -67,11 +67,11 @@ public class TestConnectedMapProperty {
 	/**
 	 * Tests adding a value to the contained map
 	 * 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 * @throws TypeMismatchException
 	 */
 	@Test
-	public void testPut() throws ServerException, TypeMismatchException {
+	public void testPut() throws ProviderException, TypeMismatchException {
 		// Put new value
 		prop.put("test3", 5);
 
@@ -101,11 +101,11 @@ public class TestConnectedMapProperty {
 	/**
 	 * Tests getting keys of the contained map
 	 * 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 * @throws TypeMismatchException
 	 */
 	@Test
-	public void testGetKeys() throws ServerException, TypeMismatchException {
+	public void testGetKeys() throws ProviderException, TypeMismatchException {
 		// Get keys
 		Collection<String> keys = prop.getKeys();
 
@@ -120,22 +120,22 @@ public class TestConnectedMapProperty {
 	/**
 	 * Tests retrieving the entry count
 	 * 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 * @throws TypeMismatchException
 	 */
 	@Test
-	public void testGetEntryCount() throws ServerException, TypeMismatchException {
+	public void testGetEntryCount() throws ProviderException, TypeMismatchException {
 		assertEquals(2, (int) prop.getEntryCount());
 	}
 
 	/**
 	 * Tests removing an element from the contained map
 	 * 
-	 * @throws ServerException
+	 * @throws ProviderException
 	 * @throws TypeMismatchException
 	 */
 	@Test
-	public void testRemove() throws ServerException, TypeMismatchException {
+	public void testRemove() throws ProviderException, TypeMismatchException {
 		// Remove element
 		prop.remove(MAP_1_KEY);
 

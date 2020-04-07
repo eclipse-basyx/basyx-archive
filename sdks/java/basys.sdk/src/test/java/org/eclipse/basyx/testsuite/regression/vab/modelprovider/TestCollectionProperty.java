@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -153,7 +153,7 @@ public class TestCollectionProperty {
 			// Reference 3 does not exist anymore
 			connVABElement.getModelPropertyValue("/structure/list/byRef_" + referenceSecondLast);
 			fail();
-		} catch (ServerException e) {
+		} catch (ProviderException e) {
 			// Exception types not implemented yet
 			// assertEquals(e.getType(), "org.eclipse.basyx.vab.provider.list.InvalidListReferenceException");
 		}

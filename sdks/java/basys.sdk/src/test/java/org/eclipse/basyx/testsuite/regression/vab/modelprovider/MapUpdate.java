@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.function.Function;
 
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -75,8 +75,7 @@ public class MapUpdate {
 		try {
 			connVABElement.setModelPropertyValue(null, "");
 			fail();
-		} catch (ServerException e) {
-		}
+		} catch (ProviderException e) {}
 	}
 
 	public static void testPushAll(VABConnectionManager connManager) {
@@ -91,8 +90,7 @@ public class MapUpdate {
 		try {
 			connVABElement.setModelPropertyValue(null, newMap);
 			fail();
-		} catch (ServerException e) {
-		}
+		} catch (ProviderException e) {}
 
 		// Push whole map via ""-Path
 		// - create object

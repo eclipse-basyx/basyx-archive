@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.eclipse.basyx.vab.exception.ServerException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -76,7 +76,6 @@ public class MapRead {
 		try {
 			connVABElement.getModelPropertyValue(null);
 			fail();
-		} catch (ServerException e) {
-		}
+		} catch (ProviderException e) {}
 	}
 }

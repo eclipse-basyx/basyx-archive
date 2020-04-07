@@ -6,8 +6,8 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.IMapProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.PropertyType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.vab.exception.ServerException;
 import org.eclipse.basyx.vab.exception.TypeMismatchException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 import org.slf4j.Logger;
@@ -28,12 +28,12 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	}
 
 	@Override
-	public Object getValue(String key) throws TypeMismatchException, ServerException {
+	public Object getValue(String key) throws TypeMismatchException, ProviderException {
 		return getMap().get(key);
 	}
 
 	@Override
-	public void put(String key, Object value) throws ServerException {
+	public void put(String key, Object value) throws ProviderException {
 		try {
 			// check whether the value already exists and call update or create accordingly
 			if(getValue(key) != null)
@@ -46,7 +46,7 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	}
 
 	@Override
-	public void set(Map<String, Object> map) throws ServerException {
+	public void set(Map<String, Object> map) throws ProviderException {
 		try {
 			getProxy().setModelPropertyValue(Property.VALUE, map);
 		} catch (Exception e) {
@@ -55,17 +55,17 @@ public class ConnectedMapProperty extends ConnectedProperty implements IMapPrope
 	}
 
 	@Override
-	public Collection<String> getKeys() throws TypeMismatchException, ServerException {
+	public Collection<String> getKeys() throws TypeMismatchException, ProviderException {
 		return getMap().keySet();
 	}
 
 	@Override
-	public Integer getEntryCount() throws TypeMismatchException, ServerException {
+	public Integer getEntryCount() throws TypeMismatchException, ProviderException {
 		return getMap().entrySet().size();
 	}
 
 	@Override
-	public void remove(String key) throws ServerException, TypeMismatchException {
+	public void remove(String key) throws ProviderException, TypeMismatchException {
 		try {
 			getProxy().deleteValue(Property.VALUE + "/" + key);
 		} catch (Exception e) {
