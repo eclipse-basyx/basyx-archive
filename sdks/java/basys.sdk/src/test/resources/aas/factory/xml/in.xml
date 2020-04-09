@@ -353,7 +353,9 @@
 								<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
 							</aas:keys>
 						</aas:assetRef>
+						<aas:entityType>CoManagedEntity</aas:entityType>
 						<aas:statements>
+							<!-- XML Schema currently supports only one statement, but multiple should be supported -->
 							<aas:submodelElement>
 								<aas:file>
 									<aas:idShort>file_ID</aas:idShort>
@@ -364,12 +366,11 @@
 							<aas:submodelElement>
 								<aas:range>
 									<aas:idShort>range_id</aas:idShort>
-									<aas:valueType>int</aas:valueType>
 									<aas:min>10</aas:min>
+									<aas:valueType>int</aas:valueType>
 								</aas:range>
 							</aas:submodelElement>
 						</aas:statements>
-						<aas:entityType>CoManagedEntity</aas:entityType>
 					</aas:entity>
 				</aas:submodelElement>
 				<aas:submodelElement>
@@ -389,9 +390,9 @@
 				<aas:submodelElement>
 					<aas:range>
 						<aas:idShort>range_id</aas:idShort>
-						<aas:valueType>int</aas:valueType>
-						<aas:min>1</aas:min>
 						<aas:max>10</aas:max>
+						<aas:min>1</aas:min>
+						<aas:valueType>int</aas:valueType>
 					</aas:range>
 				</aas:submodelElement>
 				<aas:submodelElement>
@@ -459,6 +460,20 @@
 				<aas:submodelElement>
 					<aas:operation>
 						<aas:idShort>operation_ID</aas:idShort>
+						<aas:inoutputVariable>
+							<aas:operationVariable>
+								<aas:value>
+									<aas:referenceElement>
+										<aas:idShort>reference_ELE_ID2</aas:idShort>
+										<aas:value>
+											<aas:keys>
+												<aas:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#003</aas:key>
+											</aas:keys>
+										</aas:value>
+									</aas:referenceElement>
+								</aas:value>
+							</aas:operationVariable>
+						</aas:inoutputVariable>
 						<aas:inputVariable>
 							<!-- The schema only allows one opVar in inputVariable, one in outputVariable and one in inoutputVariable. The Metamodel allows 0..* in each -->
 							<!-- To be able to have multiple Vars they are surrounded by <aas:operationVariable>. This is also violating the Schema. -->
@@ -495,20 +510,6 @@
 								</aas:value>
 							</aas:operationVariable>
 						</aas:outputVariable>
-						<aas:inoutputVariable>
-							<aas:operationVariable>
-								<aas:value>
-									<aas:referenceElement>
-										<aas:idShort>reference_ELE_ID2</aas:idShort>
-										<aas:value>
-											<aas:keys>
-												<aas:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#003</aas:key>
-											</aas:keys>
-										</aas:value>
-									</aas:referenceElement>
-								</aas:value>
-							</aas:operationVariable>
-						</aas:inoutputVariable>
 					</aas:operation>
 				</aas:submodelElement>
 			</aas:submodelElements>
