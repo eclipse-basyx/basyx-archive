@@ -179,7 +179,6 @@ void TCPSelectServer::clean_up()
   for (int i = 0; i <= max_socket; ++i)
   {
     if (FD_ISSET(i, &master_set))
-    if (FD_ISSET(i, &master_set))
     {
       close(i);
     }
