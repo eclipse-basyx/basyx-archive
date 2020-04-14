@@ -1,9 +1,7 @@
 package org.eclipse.basyx.components.executable;
 
+import org.eclipse.basyx.components.InMemoryRegistryComponent;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
-import org.eclipse.basyx.components.servlets.InMemoryRegistryServlet;
-import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
-import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,14 +16,6 @@ import org.slf4j.LoggerFactory;
 public class InMemoryRegistryExecutable {
 	private static Logger logger = LoggerFactory.getLogger(InMemoryRegistryExecutable.class);
 
-
-
-	// The path the created servlet is mapped to
-	public static final String SERVLET_MAPPING = "/";
-	
-	// The server with the servlet that will be created
-	private static AASHTTPServer server;
-
 	private InMemoryRegistryExecutable() {
 	}
 
@@ -36,25 +26,8 @@ public class InMemoryRegistryExecutable {
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
 		config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
 
-		startComponent(config.getHostname(), config.getPort(), config.getContextPath(), config.getDocBasePath());
-	}
-	
-	/**
-	 * Starts the InMemoryRegistry at http://${hostName}:${port}/${path}
-	 * 
-	 * @param hostName
-	 * @param port
-	 * @param path
-	 * @param docBasePath
-	 */
-	public static void startComponent(String hostName, int port, String path, String docBasePath) {
-		// Init HTTP context and add an InMemoryRegistryServlet according to the configuration
-		BaSyxContext context = new BaSyxContext(path, docBasePath, hostName, port);
-		context.addServletMapping(SERVLET_MAPPING + "*", new InMemoryRegistryServlet());
-
-		// Create and start server
-		server = new AASHTTPServer(context);
-		logger.info("Starting server...");
-		server.start();
+		InMemoryRegistryComponent component = new InMemoryRegistryComponent(config.getHostname(), config.getPort(),
+				config.getContextPath(), config.getDocBasePath());
+		component.startComponent();
 	}
 }

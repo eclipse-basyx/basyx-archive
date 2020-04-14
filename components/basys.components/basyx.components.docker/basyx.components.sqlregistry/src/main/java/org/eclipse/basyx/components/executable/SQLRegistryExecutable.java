@@ -1,9 +1,7 @@
 package org.eclipse.basyx.components.executable;
 
+import org.eclipse.basyx.components.SQLRegistryComponent;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
-import org.eclipse.basyx.components.servlet.SQLRegistryServlet;
-import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
-import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,14 +15,6 @@ import org.slf4j.LoggerFactory;
 public class SQLRegistryExecutable {
 	private static Logger logger = LoggerFactory.getLogger(SQLRegistryExecutable.class);
 
-
-
-	// The path the created servlet is mapped to
-	public static final String SERVLET_MAPPING = "/*";
-	
-	// The server with the servlet that will be created
-	private static AASHTTPServer server;
-
 	private SQLRegistryExecutable() {
 	}
 
@@ -34,27 +24,9 @@ public class SQLRegistryExecutable {
 		// Load configuration
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
 		config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
-		startComponent(config.getHostname(), config.getPort(), config.getContextPath(), config.getDocBasePath(), "dockerRegistry.properties");
+
+		SQLRegistryComponent component = new SQLRegistryComponent(config.getHostname(), config.getPort(),
+				config.getContextPath(), config.getDocBasePath(), "dockerRegistry.properties");
+		component.startComponent();
 	}
-
-	/**
-	 * Starts the SQLRegistry at http://${hostName}:${port}/${path}
-	 * 
-	 * @param hostName
-	 * @param port
-	 * @param path
-	 * @param docBasePath
-	 */
-	public static void startComponent(String hostName, int port, String path, String docBasePath, String sqlPropertyPath) {
-		// Init HTTP context and add an SQLRegistryServlet according to the
-		// configuration
-		BaSyxContext context = new BaSyxContext(path, docBasePath, hostName, port);
-		context.addServletMapping(SERVLET_MAPPING, new SQLRegistryServlet(sqlPropertyPath));
-
-		// Create and start server
-		server = new AASHTTPServer(context);
-		logger.info("Starting server...");
-		server.start();
-	}
-
 }
