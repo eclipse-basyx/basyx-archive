@@ -86,14 +86,14 @@ public class AASServletConnection {
 			// Add example properties
 			// - Add simple property with value and idShort meta elements
 			this.putPath("dataElements/prop1/value", 234);
-			this.putPath("dataElements/prop1/valueType", PropertyValueTypeDefHelper.fromObject(234).toString());
+			this.putPath("dataElements/prop1/valueType", PropertyValueTypeDefHelper.getTypeWrapperFromObject(234).toString());
 			this.putPath("dataElements/prop1/idShort", "prop1");
 
 			// Add container property that holds other properties
 			this.putPath("dataElements/prop2/idShort", "prop2");
 			// - Add contained property
 			this.putPath("dataElements/prop2/dataElements/prop11/value", 123);
-			this.putPath("dataElements/prop2/dataElements/prop11/valueType", PropertyValueTypeDefHelper.fromObject(123).toString());
+			this.putPath("dataElements/prop2/dataElements/prop11/valueType", PropertyValueTypeDefHelper.getTypeWrapperFromObject(123).toString());
 			this.putPath("dataElements/prop2/dataElements/prop11/idShort", "prop11");
 			
 			// Add another property manually to sub model container "properties"

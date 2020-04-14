@@ -84,7 +84,7 @@ public class Property extends AbstractProperty implements ISingleProperty {
 	@Override
 	public void set(Object value) {
 		put(Property.VALUE, value);
-		put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(value));
+		put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(value));
 
 	}
 
