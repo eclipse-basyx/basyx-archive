@@ -24,7 +24,6 @@ import org.xml.sax.SAXException;
  * @author zhang
  */
 public class AASXExecutable {
-	// Creates a Logger based on the current class
 	private static Logger logger = LoggerFactory.getLogger(AASXExecutable.class);
 
 	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
@@ -33,8 +32,11 @@ public class AASXExecutable {
 		// Load configuration
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
 		config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
+		// In addition to the context for the AAS, also the registryUrl can be specified
+		String registryUrl = config.getProperty("registry");
 
-		AASXComponent component = new AASXComponent(config.getHostname(), config.getPort(), config.getContextPath(), config.getDocBasePath(), config.getProperty("aasxPath"));
+		AASXComponent component = new AASXComponent(config.getHostname(), config.getPort(), config.getContextPath(),
+				config.getDocBasePath(), config.getProperty("aasxPath"), registryUrl);
 		component.startComponent();
 	}
 }

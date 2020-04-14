@@ -35,6 +35,15 @@
 		</plugins>
 	</build>
 	
+	<dependencies>
+		<!-- This component is based on the xmlAAS component -->
+		<dependency>
+			<groupId>org.eclipse.basyx</groupId>
+			<artifactId>basyx.components.xmlAAS</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+	
 	<profiles>
 		<profile>
 			<!-- 

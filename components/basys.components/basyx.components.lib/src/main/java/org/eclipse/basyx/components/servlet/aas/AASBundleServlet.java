@@ -1,7 +1,7 @@
 package org.eclipse.basyx.components.servlet.aas;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
@@ -38,7 +38,7 @@ public class AASBundleServlet extends VABHTTPInterface<MultiAASProvider> {
 	 * 
 	 * @param bundles
 	 */
-	public AASBundleServlet(Set<AASBundle> bundles) {
+	public AASBundleServlet(Collection<AASBundle> bundles) {
 		super(new MultiAASProvider());
 
 		MultiAASProvider multiAASProvider = getModelProvider();
