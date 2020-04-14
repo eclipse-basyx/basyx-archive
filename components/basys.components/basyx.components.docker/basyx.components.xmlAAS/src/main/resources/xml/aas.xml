@@ -132,24 +132,28 @@
 					<aas:conceptDescriptionRefs>
 						<aas:conceptDescriptionRef>
 							<aas:keys>
-								<aas:key type="ConceptDescription" local="true" idType="IRDI">0173-1#02-BAA120#007</aas:key>
-							</aas:keys>
-						</aas:conceptDescriptionRef>
-						<aas:conceptDescriptionRef>
-							<aas:keys>
-								<aas:key type="ConceptDescription" local="true" idType="IRDI">0173-1#02-BAA120#007</aas:key>
+								<aas:key type="ConceptDescription" local="true" idType="IRI">www.festo.com/dic/08111234</aas:key>
 							</aas:keys>
 						</aas:conceptDescriptionRef>
 					</aas:conceptDescriptionRefs>
 				</aas:conceptDictionary>
 			</aas:conceptDictionaries>
 		</aas:assetAdministrationShell>
-		
+		<!-- This is an AAS with only the minimal required information in it. To test for Nullpointers and such. -->
+		<aas:assetAdministrationShell>
+			<aas:idShort>asset_admin_shell</aas:idShort>
+			<aas:identification idType="IRI">www.admin-shell.io/aas-sample/1/1</aas:identification>
+			<aas:assetRef>
+				<aas:keys>
+					<aas:key type="Asset" local="false" idType="IRI">http://pk.festo.com/3s7plfdrs35</aas:key>
+				</aas:keys>
+			</aas:assetRef>
+		</aas:assetAdministrationShell>
 	</aas:assetAdministrationShells>
 	<aas:assets>
 		<!-- This Asset is populated with all possible fields -->
 		<aas:asset>
-			<aas:idShort>asset1</aas:idShort>
+			<aas:idShort>3s7plfdrs35_asset1</aas:idShort>
 			<aas:category>asset1_categogy</aas:category>
 			<aas:description>
 				<aas:langString lang="EN">asset1_Description</aas:langString>
@@ -196,6 +200,10 @@
 				</aas:keys>
 			</aas:assetIdentificationModelRef>
 			<aas:kind>Instance</aas:kind>
+		</aas:asset>
+		<aas:asset>
+			<aas:idShort>emptyAsset</aas:idShort>
+			<aas:identification idType="IRI">http://pk.festo.com/q30j38dlajx</aas:identification>
 		</aas:asset>
 	</aas:assets>
 	<aas:submodels>
@@ -307,6 +315,31 @@
 								</aas:qualifier>
 							</aas:qualifiers>
 						</aas:qualifier>
+						<aas:embeddedDataSpecification>
+							<aas:dataSpecificationContent>
+								<aas:dataSpecificationIEC61360>
+									<IEC61360:preferredName>
+										<IEC61360:langString lang="DE">Drehzahl</IEC61360:langString>
+										<IEC61360:langString lang="EN">Rotation Speed</IEC61360:langString>
+									</IEC61360:preferredName>
+									<IEC61360:shortName>
+										<IEC61360:langString lang="DE">N</IEC61360:langString>
+									</IEC61360:shortName>
+									<IEC61360:unit>1/min</IEC61360:unit>
+									<IEC61360:unitId>
+										<IEC61360:keys>
+											<IEC61360:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#002</IEC61360:key>
+										</IEC61360:keys>
+									</IEC61360:unitId>
+									<IEC61360:valueFormat>NR1..5</IEC61360:valueFormat>
+								</aas:dataSpecificationIEC61360>
+							</aas:dataSpecificationContent>
+							<aas:dataSpecification>
+								<aas:keys>
+									<aas:key idType="IRI" local="false" type="GlobalReference">www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360</aas:key>
+								</aas:keys>
+							</aas:dataSpecification>
+						</aas:embeddedDataSpecification>
 						<aas:value>2000</aas:value>
 						<aas:valueType>double</aas:valueType>
 					</aas:property>
@@ -335,7 +368,9 @@
 								<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
 							</aas:keys>
 						</aas:assetRef>
+						<aas:entityType>CoManagedEntity</aas:entityType>
 						<aas:statements>
+							<!-- XML Schema currently supports only one statement, but multiple should be supported -->
 							<aas:submodelElement>
 								<aas:file>
 									<aas:idShort>file_ID</aas:idShort>
@@ -346,12 +381,11 @@
 							<aas:submodelElement>
 								<aas:range>
 									<aas:idShort>range_id</aas:idShort>
-									<aas:valueType>int</aas:valueType>
 									<aas:min>10</aas:min>
+									<aas:valueType>int</aas:valueType>
 								</aas:range>
 							</aas:submodelElement>
 						</aas:statements>
-						<aas:entityType>CoManagedEntity</aas:entityType>
 					</aas:entity>
 				</aas:submodelElement>
 				<aas:submodelElement>
@@ -371,9 +405,9 @@
 				<aas:submodelElement>
 					<aas:range>
 						<aas:idShort>range_id</aas:idShort>
-						<aas:valueType>int</aas:valueType>
-						<aas:min>1</aas:min>
 						<aas:max>10</aas:max>
+						<aas:min>1</aas:min>
+						<aas:valueType>int</aas:valueType>
 					</aas:range>
 				</aas:submodelElement>
 				<aas:submodelElement>
@@ -441,6 +475,20 @@
 				<aas:submodelElement>
 					<aas:operation>
 						<aas:idShort>operation_ID</aas:idShort>
+						<aas:inoutputVariable>
+							<aas:operationVariable>
+								<aas:value>
+									<aas:referenceElement>
+										<aas:idShort>reference_ELE_ID2</aas:idShort>
+										<aas:value>
+											<aas:keys>
+												<aas:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#003</aas:key>
+											</aas:keys>
+										</aas:value>
+									</aas:referenceElement>
+								</aas:value>
+							</aas:operationVariable>
+						</aas:inoutputVariable>
 						<aas:inputVariable>
 							<!-- The schema only allows one opVar in inputVariable, one in outputVariable and one in inoutputVariable. The Metamodel allows 0..* in each -->
 							<!-- To be able to have multiple Vars they are surrounded by <aas:operationVariable>. This is also violating the Schema. -->
@@ -477,31 +525,16 @@
 								</aas:value>
 							</aas:operationVariable>
 						</aas:outputVariable>
-						<aas:inoutputVariable>
-							<aas:operationVariable>
-								<aas:value>
-									<aas:referenceElement>
-										<aas:idShort>reference_ELE_ID2</aas:idShort>
-										<aas:value>
-											<aas:keys>
-												<aas:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#003</aas:key>
-											</aas:keys>
-										</aas:value>
-									</aas:referenceElement>
-								</aas:value>
-							</aas:operationVariable>
-						</aas:inoutputVariable>
 					</aas:operation>
 				</aas:submodelElement>
 			</aas:submodelElements>
 		</aas:submodel>
-	
 	</aas:submodels>
 	<aas:conceptDescriptions>
 		<!-- This ConceptDescription is populated with all possible fields -->
 		<aas:conceptDescription>
 			<aas:idShort>conceptDescription1</aas:idShort>
-			<aas:category>cs_categogy</aas:category>
+			<aas:category>cs_category</aas:category>
 			<aas:description>
 				<aas:langString lang="EN">conceptDescription_Description</aas:langString>
 			</aas:description>
@@ -547,11 +580,6 @@
 					<aas:key idType="IRI" type="ConceptDescription" local="true">www.festo.com/dic/08111234_2</aas:key>
 				</aas:keys>
 			</aas:isCaseOf>
-		</aas:conceptDescription>
-		<!-- This is a ConceptDescription with only the minimal required information in it. To test for Nullpointers and such. -->
-		<aas:conceptDescription>
-			<aas:idShort>conceptDescription2</aas:idShort>
-			<aas:identification idType="IRI">www.festo.com/dic/08111234</aas:identification>
 		</aas:conceptDescription>
 	</aas:conceptDescriptions>
 </aas:aasenv>

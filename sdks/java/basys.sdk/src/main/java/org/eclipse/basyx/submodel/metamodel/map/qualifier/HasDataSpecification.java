@@ -3,9 +3,12 @@ package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.map.dataspecification.EmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
 import org.eclipse.basyx.vab.model.VABModelMap;
@@ -17,17 +20,22 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  *
  */
 public class HasDataSpecification extends VABModelMap<Object> implements IHasDataSpecification {
-
-	public static final String HASDATASPECIFICATION = "hasDataSpecification";
+	public static final String DATASPECIFICATION = "dataSpecification";
+	public static final String EMBEDDEDDATASPECIFICATIONS = "embeddedDataSpecifications";
 	/**
 	 * Constructor
 	 */
 	public HasDataSpecification() {
-		put(HASDATASPECIFICATION, new HashSet<Reference>());
+		put(DATASPECIFICATION, new HashSet<Reference>());
+		put(EMBEDDEDDATASPECIFICATIONS, new HashSet<IEmbeddedDataSpecification>());
 	}
 
-	public HasDataSpecification(Collection<IReference> ref) {
-		put(HASDATASPECIFICATION, ref);
+	/**
+	 * Constructor
+	 */
+	public HasDataSpecification(Collection<IEmbeddedDataSpecification> embedded, Collection<IReference> ref) {
+		put(DATASPECIFICATION, ref);
+		put(EMBEDDEDDATASPECIFICATIONS, embedded);
 	}
 
 	/**
@@ -50,11 +58,21 @@ public class HasDataSpecification extends VABModelMap<Object> implements IHasDat
 
 	@Override
 	public Collection<IReference> getDataSpecificationReferences() {
-		return ReferenceHelper.transform(get(HasDataSpecification.HASDATASPECIFICATION));
+		return ReferenceHelper.transform(get(DATASPECIFICATION));
 	}
 
-	public void setDataSpecificationReferences(Collection<IReference> ref) {
-		put(HasDataSpecification.HASDATASPECIFICATION, ref);
+	public void setDataSpecificationReferences(Collection<IReference> refs) {
+		put(DATASPECIFICATION, refs);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<IEmbeddedDataSpecification> getEmbeddedDataSpecifications() {
+		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) get(EMBEDDEDDATASPECIFICATIONS);
+		return collection.stream().map(EmbeddedDataSpecification::createAsFacade).collect(Collectors.toSet());
+	}
+
+	public void setEmbeddedDataSpecifications(Collection<IEmbeddedDataSpecification> embeddedDataSpecifications) {
+		put(EMBEDDEDDATASPECIFICATIONS, embeddedDataSpecifications);
+	}
 }

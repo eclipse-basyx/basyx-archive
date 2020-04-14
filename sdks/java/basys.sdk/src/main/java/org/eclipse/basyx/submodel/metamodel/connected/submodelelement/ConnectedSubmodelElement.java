@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -66,6 +67,11 @@ public abstract class ConnectedSubmodelElement extends ConnectedElement implemen
 	@Override
 	public Collection<IReference> getDataSpecificationReferences() {
 		return HasDataSpecification.createAsFacade(getElem()).getDataSpecificationReferences();
+	}
+
+	@Override
+	public Collection<IEmbeddedDataSpecification> getEmbeddedDataSpecifications() {
+		return HasDataSpecification.createAsFacade(getElem()).getEmbeddedDataSpecifications();
 	}
 	
 	@Override

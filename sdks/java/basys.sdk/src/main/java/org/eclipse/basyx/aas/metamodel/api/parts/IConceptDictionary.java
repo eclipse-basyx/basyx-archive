@@ -2,6 +2,7 @@ package org.eclipse.basyx.aas.metamodel.api.parts;
 
 import java.util.Collection;
 
+import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 
@@ -18,11 +19,17 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
  */
 
 public interface IConceptDictionary extends IReferable {
-
 	/**
-	 * Returns the concept description that defines a concept.
+	 * Returns the external concept descriptions that defines a concept.
 	 * 
 	 * @return
 	 */
-	public Collection<IReference> getConceptDescription();
+	public Collection<IReference> getConceptDescriptionReferences();
+
+	/**
+	 * Returns the internal concept descriptions that defines a concept.
+	 * 
+	 * @return
+	 */
+	public Collection<IConceptDescription> getConceptDescriptions();
 }

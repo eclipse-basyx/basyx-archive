@@ -4,14 +4,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecification;
-import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecificationIEC61360;
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.map.dataspecification.DataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -32,9 +30,6 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 	public static final String ISCASEOF = "isCaseOf";
 	public static final String MODELTYPE = "ConceptDescription";
 
-	// Addition to meta model
-	public static final String DATASPECIFICATIONS = "dataSpecifications";
-
 	public ConceptDescription() {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
@@ -45,7 +40,6 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 
 		// Add attributes
 		put(ISCASEOF, new HashSet<Reference>());
-		put(DATASPECIFICATIONS, new HashSet<IDataSpecificationIEC61360>());
 	}
 
 	/**
@@ -73,6 +67,15 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 
 	public void setDataSpecificationReferences(Collection<IReference> ref) {
 		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
+	}
+
+	@Override
+	public Collection<IEmbeddedDataSpecification> getEmbeddedDataSpecifications() {
+		return HasDataSpecification.createAsFacade(this).getEmbeddedDataSpecifications();
+	}
+
+	public void setEmbeddedDataSpecifications(Collection<IEmbeddedDataSpecification> embeddedDataSpecifications) {
+		HasDataSpecification.createAsFacade(this).setEmbeddedDataSpecifications(embeddedDataSpecifications);
 	}
 
 	@Override
@@ -138,15 +141,4 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 	public void setParent(IReference obj) {
 		Referable.createAsFacade(this).setParent(obj);
 	}
-
-	@SuppressWarnings("unchecked")
-	public Collection<IDataSpecification> getDataSpecifications() {
-		return (Collection<IDataSpecification>) get(DATASPECIFICATIONS);
-	}
-
-	public void addDataSpecification(IDataSpecificationIEC61360 spec) {
-		getDataSpecifications().add(new DataSpecification(spec));
-	}
-
-
 }

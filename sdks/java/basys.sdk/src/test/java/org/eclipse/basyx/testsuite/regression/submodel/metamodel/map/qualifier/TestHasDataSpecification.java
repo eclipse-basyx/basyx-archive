@@ -2,6 +2,7 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.qualifier;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -33,7 +34,7 @@ public class TestHasDataSpecification {
 	
 	@Before
 	public void buildHasDataSpecification() {
-		specification = new HasDataSpecification(Collections.singleton(REFERENCE));
+		specification = new HasDataSpecification(new ArrayList<>(), Collections.singleton(REFERENCE));
 	}
 	
 	@Test

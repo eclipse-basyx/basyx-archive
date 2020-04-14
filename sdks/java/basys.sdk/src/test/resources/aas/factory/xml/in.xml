@@ -137,12 +137,7 @@
 					<aas:conceptDescriptionRefs>
 						<aas:conceptDescriptionRef>
 							<aas:keys>
-								<aas:key type="ConceptDescription" local="true" idType="IRDI">0173-1#02-BAA120#007</aas:key>
-							</aas:keys>
-						</aas:conceptDescriptionRef>
-						<aas:conceptDescriptionRef>
-							<aas:keys>
-								<aas:key type="ConceptDescription" local="true" idType="IRDI">0173-1#02-BAA120#007</aas:key>
+								<aas:key type="ConceptDescription" local="true" idType="IRI">www.festo.com/dic/08111234</aas:key>
 							</aas:keys>
 						</aas:conceptDescriptionRef>
 					</aas:conceptDescriptionRefs>
@@ -325,6 +320,31 @@
 								</aas:qualifier>
 							</aas:qualifiers>
 						</aas:qualifier>
+						<aas:embeddedDataSpecification>
+							<aas:dataSpecificationContent>
+								<aas:dataSpecificationIEC61360>
+									<IEC61360:preferredName>
+										<IEC61360:langString lang="DE">Drehzahl</IEC61360:langString>
+										<IEC61360:langString lang="EN">Rotation Speed</IEC61360:langString>
+									</IEC61360:preferredName>
+									<IEC61360:shortName>
+										<IEC61360:langString lang="DE">N</IEC61360:langString>
+									</IEC61360:shortName>
+									<IEC61360:unit>1/min</IEC61360:unit>
+									<IEC61360:unitId>
+										<IEC61360:keys>
+											<IEC61360:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#002</IEC61360:key>
+										</IEC61360:keys>
+									</IEC61360:unitId>
+									<IEC61360:valueFormat>NR1..5</IEC61360:valueFormat>
+								</aas:dataSpecificationIEC61360>
+							</aas:dataSpecificationContent>
+							<aas:dataSpecification>
+								<aas:keys>
+									<aas:key idType="IRI" local="false" type="GlobalReference">www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360</aas:key>
+								</aas:keys>
+							</aas:dataSpecification>
+						</aas:embeddedDataSpecification>
 						<aas:value>2000</aas:value>
 						<aas:valueType>double</aas:valueType>
 					</aas:property>
@@ -526,7 +546,7 @@
 		<!-- This ConceptDescription is populated with all possible fields -->
 		<aas:conceptDescription>
 			<aas:idShort>conceptDescription1</aas:idShort>
-			<aas:category>cs_categogy</aas:category>
+			<aas:category>cs_category</aas:category>
 			<aas:description>
 				<aas:langString lang="EN">conceptDescription_Description</aas:langString>
 			</aas:description>
@@ -576,7 +596,7 @@
 		<!-- This is a ConceptDescription with only the minimal required information in it. To test for Nullpointers and such. -->
 		<aas:conceptDescription>
 			<aas:idShort>conceptDescription2</aas:idShort>
-			<aas:identification idType="IRI">www.festo.com/dic/08111234</aas:identification>
+			<aas:identification idType="Custom">IN_emptyConceptDescription</aas:identification>
 		</aas:conceptDescription>
 	</aas:conceptDescriptions>
 </aas:aasenv>

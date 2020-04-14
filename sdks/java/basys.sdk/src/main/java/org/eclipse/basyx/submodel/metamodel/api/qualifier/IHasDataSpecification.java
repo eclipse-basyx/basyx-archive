@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.api.qualifier;
 
 import java.util.Collection;
 
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 
 /**
@@ -17,10 +18,9 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 public interface IHasDataSpecification {
 
 	/**
-	 * Gets the global reference to the data specification template used by the
-	 * element.
-	 * 
-	 * @return
+	 * Global reference to the data specification template used by the element.
 	 */
 	public Collection<IReference> getDataSpecificationReferences();
+
+	public Collection<IEmbeddedDataSpecification> getEmbeddedDataSpecifications();
 }

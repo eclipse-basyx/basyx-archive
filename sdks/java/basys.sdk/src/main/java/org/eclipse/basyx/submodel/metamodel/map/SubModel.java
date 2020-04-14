@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.basyx.submodel.metamodel.api.IElementContainer;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
@@ -161,8 +161,17 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
 	}
 
-	public void setDataSpecificationReferences(Set<IReference> ref) {
+	public void setDataSpecificationReferences(Collection<IReference> ref) {
 		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
+	}
+
+	@Override
+	public Collection<IEmbeddedDataSpecification> getEmbeddedDataSpecifications() {
+		return HasDataSpecification.createAsFacade(this).getEmbeddedDataSpecifications();
+	}
+
+	public void setEmbeddedDataSpecifications(Collection<IEmbeddedDataSpecification> embeddedDataSpecifications) {
+		HasDataSpecification.createAsFacade(this).setEmbeddedDataSpecifications(embeddedDataSpecifications);
 	}
 
 	@Override

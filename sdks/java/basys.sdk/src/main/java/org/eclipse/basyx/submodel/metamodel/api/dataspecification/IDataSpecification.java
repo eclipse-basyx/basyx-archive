@@ -1,17 +1,20 @@
 package org.eclipse.basyx.submodel.metamodel.api.dataspecification;
 
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
+
 /**
- * DataSpecification containing a DataSpecificationContent
+ * Template for an DataSpecification
  * 
- * @author schnicke
+ * 
+ * @author schnicke, espen
  *
  */
-public interface IDataSpecification {
+public interface IDataSpecification extends IIdentifiable {
 
 	/**
 	 * Returns the embedded content of the DataSpecification
 	 * 
 	 * @return
 	 */
-	IDataSpecificationContent getContent();
+	public IDataSpecificationContent getContent();
 }
