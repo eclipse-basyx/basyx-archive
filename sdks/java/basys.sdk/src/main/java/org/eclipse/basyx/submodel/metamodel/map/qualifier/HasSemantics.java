@@ -21,7 +21,7 @@ public class HasSemantics extends VABModelMap<Object> implements IHasSemantics {
 	 */
 	public HasSemantics() {
 		// Default values
-		put(SEMANTICID, new Reference());
+		put(SEMANTICID, null);
 	}
 
 	/**
