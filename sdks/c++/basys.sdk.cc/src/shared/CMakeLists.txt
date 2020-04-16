@@ -21,7 +21,6 @@ INTERFACE ${CMAKE_INSTALL_PREFIX}/include
 
 target_sources(${BASYX_SHARED_TARGET_NAME}
     PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/shared/basysid/BaSysID.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/shared/object/impl/object_impl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/shared/object/object_type.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/shared/serialization/json/typeid.cpp
@@ -30,7 +29,6 @@ target_sources(${BASYX_SHARED_TARGET_NAME}
 target_sources(${BASYX_SHARED_TARGET_NAME}
     PRIVATE
         ${BASYX_SHARED_INCLUDE_DIR}/anyTypeChecker.h
-        ${BASYX_SHARED_INCLUDE_DIR}/basysid/BaSysID.h
         ${BASYX_SHARED_INCLUDE_DIR}/object/bad_object_cast.h
         ${BASYX_SHARED_INCLUDE_DIR}/object/impl/object_access_impl.h
         ${BASYX_SHARED_INCLUDE_DIR}/object/impl/object_cast_impl.h

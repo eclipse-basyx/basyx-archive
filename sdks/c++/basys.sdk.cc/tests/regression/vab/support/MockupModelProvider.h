@@ -10,8 +10,6 @@
 
 #include <string>
 
-#include <BaSyx/shared/basysid/BaSysID.h>
-
 #include <BaSyx/vab/core/IModelProvider.h>
 
 using namespace basyx;
@@ -36,13 +34,7 @@ public:
 	}
 	
 	virtual ~MockupModelProvider() 
-	{
-	}
-
-	virtual std::string getElementScope(const std::string & elementPath) 
-	{
-		return BaSysID::getScopeString(elementPath);
-	}
+	{}
 
 	virtual basyx::object getModelPropertyValue(const std::string & path) override {
 		// Return dummy clock

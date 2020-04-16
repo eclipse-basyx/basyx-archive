@@ -12,7 +12,6 @@
 #include <string>
 
 #include <BaSyx/shared/object.h>
-#include <BaSyx/shared/basysid/BaSysID.h>
 #include <BaSyx/shared/serialization/json.h>
 
 // TODO: Repository?
