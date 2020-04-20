@@ -3,7 +3,7 @@ package org.eclipse.basyx.vab.modelprovider.generic;
 import java.util.function.Function;
 
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
-import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.NotAnInvokableException;
 import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -159,7 +159,7 @@ public class VABModelProvider implements IModelProvider {
 			Function<Object[], Object> function = (Function<Object[], Object>) childElement;
 			return function.apply(parameters);
 		} else {
-			throw new ProviderException("Element \"" + path + "\" is not a function.");
+			throw new NotAnInvokableException("Element \"" + path + "\" is not a function.");
 		}
 	}
 
