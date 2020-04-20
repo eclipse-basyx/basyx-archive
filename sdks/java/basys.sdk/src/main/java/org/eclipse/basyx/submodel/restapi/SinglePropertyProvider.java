@@ -38,7 +38,7 @@ public class SinglePropertyProvider extends MetaModelProvider {
 			if (o != null) {
 				ret.put(Property.VALUE, o);
 				ret.put(Property.VALUEID, p.get(Property.VALUEID));
-				ret.put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(o));
+				ret.put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(o));
 				return ret;
 			} else {
 				return null;
@@ -59,7 +59,7 @@ public class SinglePropertyProvider extends MetaModelProvider {
 		if (path.equals(Property.VALUE)) {
 			// Set value and type
 			proxy.setModelPropertyValue(Property.VALUE, newValue);
-			proxy.setModelPropertyValue(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(newValue));
+			proxy.setModelPropertyValue(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(newValue));
 		} else {
 			throw new RuntimeException();
 		}

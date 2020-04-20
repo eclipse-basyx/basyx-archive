@@ -37,14 +37,14 @@ public class CreateAASSubModelVAB {
 			// Add example properties
 			// - Add simple property with value and idShort meta elements
 			this.putPath("properties/prop1/value",     234);
-			this.putPath("properties/prop1/valueType", PropertyValueTypeDefHelper.fromObject(234));
+			this.putPath("properties/prop1/valueType", PropertyValueTypeDefHelper.getTypeWrapperFromObject(234));
 			this.putPath("properties/prop1/idShort",   "prop1");
 
 			// Add container property that holds other properties
 			this.putPath("properties/prop2/idShort", "prop2");
 			// - Add contained property
 			this.putPath("properties/prop2/properties/prop11/value",     123);
-			this.putPath("properties/prop2/properties/prop11/valueType", PropertyValueTypeDefHelper.fromObject(123).toString());
+			this.putPath("properties/prop2/properties/prop11/valueType", PropertyValueTypeDefHelper.getTypeWrapperFromObject(123).toString());
 			this.putPath("properties/prop2/properties/prop11/idShort", "prop11");
 			
 			// Add another property manually to sub model container "properties"

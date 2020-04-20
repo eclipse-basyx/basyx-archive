@@ -129,7 +129,7 @@ public class SubModelProviderTest {
 		// Wrap object before updating element
 		HashMap<String, Object> updatedElement = new HashMap<>();
 		updatedElement.put(Property.VALUE, 3);
-		updatedElement.put("valueType", PropertyValueTypeDefHelper.fromObject(3));
+		updatedElement.put("valueType", PropertyValueTypeDefHelper.getTypeWrapperFromObject(3));
 
 		// Update element
 		submodelElement.setModelPropertyValue("/submodel/dataElements/integerProperty/value", updatedElement);
@@ -225,11 +225,11 @@ public class SubModelProviderTest {
 		HashMap<String, Object> param1 = new HashMap<>();
 		param1.put("idShort", "SecondNumber");
 		param1.put(Property.VALUE, 5);
-		param1.put("valueType", PropertyValueTypeDefHelper.fromObject(5));
+		param1.put("valueType", PropertyValueTypeDefHelper.getTypeWrapperFromObject(5));
 		HashMap<String, Object> param2 = new HashMap<>();
 		param2.put("idShort", "FirstNumber");
 		param2.put(Property.VALUE, 2);
-		param2.put("valueType", PropertyValueTypeDefHelper.fromObject(2));
+		param2.put("valueType", PropertyValueTypeDefHelper.getTypeWrapperFromObject(2));
 
 		// Invoke operation with wrapped parameters and check result
 		Object result = submodelElement.invokeOperation("/submodel/operations/complex", param1, param2);

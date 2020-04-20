@@ -44,13 +44,22 @@ public class PropertyValueTypeDefHelper {
 	}
 
 	/**
+	 * Creates the appropriate type map for a given object
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	public static Map<String, Object> getTypeWrapperFromObject(Object obj) {
+		return getWrapper(getType(obj));
+	}
+
+	/**
 	 * Creates the PropertyValueTypeDef for an arbitrary object
 	 * 
 	 * @param obj
 	 * @return
 	 */
-	public static Map<String, Object> fromObject(Object obj) {
-
+	public static PropertyValueTypeDef getType(Object obj) {
 		PropertyValueTypeDef objectType;
 		
 		if (obj == null) {
@@ -79,9 +88,15 @@ public class PropertyValueTypeDefHelper {
 			}
 			// TODO: Container, Reference
 		}
-		return getWrapper(objectType);
+		return objectType;
 	}
 
+	/**
+	 * Creates the appropriate type map for a given type
+	 * 
+	 * @param type
+	 * @return
+	 */
 	public static Map<String, Object> getWrapper(PropertyValueTypeDef type) {
 		HashMap<String, Object> valueTypeWrapper = new HashMap<>();
 		HashMap<String, Object> dataObjectTypeWrapper = new HashMap<>();

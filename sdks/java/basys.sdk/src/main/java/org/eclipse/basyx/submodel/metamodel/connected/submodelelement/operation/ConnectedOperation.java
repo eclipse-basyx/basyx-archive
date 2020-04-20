@@ -50,7 +50,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		int i = 0;
 		for (Object param : params) {
 			HashMap<String, Object> valueWrapper = new HashMap<>();
-			valueWrapper.put(Property.VALUETYPE, PropertyValueTypeDefHelper.fromObject(param));
+			valueWrapper.put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(param));
 			valueWrapper.put(Property.VALUE, param);
 
 			params[i] = valueWrapper;
