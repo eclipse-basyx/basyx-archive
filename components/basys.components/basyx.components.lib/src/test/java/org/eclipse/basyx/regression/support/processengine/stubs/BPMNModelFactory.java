@@ -1,21 +1,16 @@
 package org.eclipse.basyx.regression.support.processengine.stubs;
 
+import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.EndEvent;
-import org.activiti.bpmn.model.ExclusiveGateway;
-import org.activiti.bpmn.model.FieldExtension;
-import org.activiti.bpmn.model.Gateway;
-import org.activiti.bpmn.model.SequenceFlow;
-import org.activiti.bpmn.model.ServiceTask;
-import org.activiti.bpmn.model.StartEvent;
+import org.camunda.bpm.model.bpmn.Bpmn;
+import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import org.camunda.bpm.model.bpmn.instance.ExtensionElements;
+import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
-import org.activiti.bpmn.model.Process;
-
 /**
  * A Factory that produces a defined BPMN-Model programically
  * 
@@ -26,206 +21,72 @@ public class BPMNModelFactory {
 	// Path to the java class invoked by the process engine
 	private static final String TASKI_MPL = "org.eclipse.basyx.components.processengine.connector.DeviceServiceDelegate";
 	
+
 	// id of the submodel
-	private static final String SUBMODEL_ID = "submodel1";
-	
-	// All service tasks executed by the process-engine
-	private List<ServiceTask> services = new ArrayList<>();
-	
-	/***
-	 * Create the BPMN-Model and -Process
-	 * @param processId 
-	 * 				Id of the process
-	 * @return
-	 */
-	public BpmnModel create(String processId) {
-		return create( processId, TASKI_MPL);
-	}
-	
+	private static final String SUBMODEL_ID = "submodelId";
+	private static final String SERVICE_NAME = "serviceName";
+	private static final String SERVICE_PROVIDER = "serviceProvider";
+	private static final String SERVICE_PARAMETERS = "serviceParameter";
 	
 	/**
-	 * Create the BPMN-Model and -process with specified process-ID and path to the java-delegate
-	 * @param processId
-	 * @param impl
+	 * Create the BPMN-Model and -process with specified process-ID and path to the
+	 * java-delegate
+	 * 
+	 * @param processId - Id of the process
 	 * @return
 	 */
-	private BpmnModel create(String processId, String impl) {
-		// Create the bpmn-model
-		BpmnModel model = new BpmnModel();
-		
-		// Create the bpmn-process
-	    Process process = new Process();
+	public BpmnModelInstance create(String processId) {
 	    
-	    // Add process to the model
-	    model.addProcess(process);
+		// Create the BPMN Model
+		BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("my-process")
+	  	      .name(processId)
+				.startEvent("start01")
+	  	        .name("pickup the coil")
+				.exclusiveGateway("gateway01")
+	  			.name("check the current position of the coil")
+	  			.condition("Pickup position 1","${coilposition==1}")
+	  		.serviceTask("t1")
+	  	        .name("pickup the coil")
+	  	        .camundaClass(TASKI_MPL)
+	  		.serviceTask("t3")
+	  			.name("drive the coil to the milling machine")
+	  			.camundaClass(TASKI_MPL)
+	  		.serviceTask("t4")
+	  			.name("lift the coil to the expected position")
+	  			.camundaClass(TASKI_MPL)
+	  		.serviceTask("t5")
+	  			.name("put the coil on the mandrel")
+	  			.camundaClass(TASKI_MPL)
+	  		.serviceTask("t6")
+	  			.name("set the lifter to the start position")
+	  			.camundaClass(TASKI_MPL)
+	  		.serviceTask("t7")
+	  			.name("drive the coilcar back to the start position")
+	  			.camundaClass(TASKI_MPL)
+				.endEvent("end01")
+	  			.moveToLastGateway()
+	  			.condition("Pickup position 2"," ${coilposition==2}")
+			.serviceTask("t2")
+				.name("move to the coil")
+				.camundaClass(TASKI_MPL)
+				.connectTo("t1")
+	  		.done();
 	    
-	    // Set process-ID
-	    process.setId(processId);
-	
-	    // Add start event
-	    process.addFlowElement(createStartEvent());
+	    //Add field extensions to service tasks
+	    createFieldExtension( modelInstance, "liftTo", "coilcar", new Object[]{1}, SUBMODEL_ID, "t1");
+	    createFieldExtension( modelInstance, "moveTo", "coilcar", new Object[]{1}, SUBMODEL_ID, "t2");
+	    createFieldExtension( modelInstance, "moveTo", "coilcar", new Object[]{5}, SUBMODEL_ID, "t3");
+	    createFieldExtension( modelInstance, "liftTo", "coilcar", new Object[]{6}, SUBMODEL_ID, "t4");
+	    createFieldExtension( modelInstance, "moveTo", "coilcar", new Object[]{6}, SUBMODEL_ID, "t5");
+	    createFieldExtension( modelInstance, "liftTo", "coilcar", new Object[]{0}, SUBMODEL_ID, "t6");
+	    createFieldExtension( modelInstance, "moveTo", "coilcar", new Object[]{0}, SUBMODEL_ID, "t7");
 	    
-	    // Create task 
-	    ServiceTask task1 = createServiceTask("t1", "pickup the coil", impl, "liftTo", "coilcar", new Object[]{1}, SUBMODEL_ID);
-	    services.add(task1);
-	    
-	    // Create task 
-	    ServiceTask task2 =createServiceTask("t2", "move to the coil", impl, "moveTo", "coilcar", new Object[]{1}, SUBMODEL_ID);
-	    services.add(task2);
-	    
-	    // Create task 
-	    ServiceTask task3 = createServiceTask("t3", "drive the coil to the milling machine", impl, "moveTo", "coilcar", new Object[]{5}, SUBMODEL_ID);
-	    services.add(task3);
-	    
-	    // Create task
-	    ServiceTask task4 = createServiceTask("t4", "lift the coil to the expected position", impl, "liftTo", "coilcar", new Object[]{6}, SUBMODEL_ID);
-	    services.add(task4);
-	    
-	    // Create task
-	    ServiceTask task5 =createServiceTask("t5", "put the coil on the mandrel", impl, "moveTo", "coilcar", new Object[]{6}, SUBMODEL_ID);
-	    services.add(task5);
-	    
-	    // Create task
-	    ServiceTask task6 = createServiceTask("t6", "set the lifter to the start position", impl, "liftTo", "coilcar", new Object[]{0}, SUBMODEL_ID);
-	    services.add(task6);
-	    
-	    // Create task
-	    ServiceTask task7 =createServiceTask("t7", "drive the coilcar back to the start position", impl, "moveTo", "coilcar", new Object[]{0}, SUBMODEL_ID);
-	    services.add(task7);
-	    
-	   // Add tasks to the process
-	    for(ServiceTask t : services) {
-	    	process.addFlowElement(t);
-	    }
-	  
-	    // Add an exclusive gate to the process
-	    process.addFlowElement(createGateway("gateway1", "check the current position of the coil"));
-	    
-	    // Add end event to the process
-	    process.addFlowElement(createEndEvent());
-	    
-	    
-	    // Connect the elements with links
-	    process.addFlowElement(createSequenceFlow("start", "gateway1"));
-	    process.addFlowElement(createSequenceFlowWithCondition("gateway1", "t1", "${coilposition==1}"));
-	    process.addFlowElement(createSequenceFlowWithCondition("gateway1", "t2", "${coilposition==2}"));
-	    process.addFlowElement(createSequenceFlow("t1", "t3"));
-	    process.addFlowElement(createSequenceFlow("t2", "t1"));
-	    process.addFlowElement(createSequenceFlow("t3", "t4"));
-	    process.addFlowElement(createSequenceFlow("t4", "t5"));
-	    process.addFlowElement(createSequenceFlow("t5", "t6"));
-	    process.addFlowElement(createSequenceFlow("t6", "t7"));
-	    process.addFlowElement(createSequenceFlow("t7", "end"));
-	    
-	    
-	    return model;
+	    return modelInstance;
 	}
-	
-	/**
-	 * Create an exclusive gateway
-	 * @param gwid	
-	 * 				id of the gateway
-	 * @param gwname
-	 * 				name of the gateway
-	 * @return
-	 */
-	protected Gateway createGateway(String gwid, String gwname) {
-		Gateway gw = new ExclusiveGateway();
-		gw.setId(gwid);
-		gw.setName(gwname);
-		return gw;
-	}
-	
-	
-	/**
-	 * Create a conditional link between two elements 
-	 * @param from
-	 * 				source of the link
-	 * @param to
-	 * 				gain of the link
-	 * @param conditionExpression
-	 * 				Condition that must be valid for this link
-	 * @return
-	 */
-	protected SequenceFlow createSequenceFlowWithCondition(String from, String to, String conditionExpression) {
-	    SequenceFlow flow = new SequenceFlow();
-	    flow.setSourceRef(from);
-	    flow.setTargetRef(to);
-	    flow.setConditionExpression(conditionExpression);
-	    return flow;
-    }
 	
 
-	/**
-	 * Create a simple link without condition
-	 * @param from -- source
-	 * @param to -- gain
-	 * @return
-	 */
-    protected SequenceFlow createSequenceFlow(String from, String to) {
-	    SequenceFlow flow = new SequenceFlow();
-	    flow.setSourceRef(from);
-	    flow.setTargetRef(to);
-	    return flow;
-    }
-  
     
-    /**
-     * Create a start event
-     * @return start event
-     */
-    protected StartEvent createStartEvent() {
-	    StartEvent startEvent = new StartEvent();
-	    startEvent.setId("start");
-	    return startEvent;
-    }
-  
-    /**
-     * Create an end event
-     * @return end event
-     */
-    protected EndEvent createEndEvent() {
-	    EndEvent endEvent = new EndEvent();
-	    endEvent.setId("end");
-	    return endEvent;
-    }
-    
-    /**
-     * Create a service task with java-delegate
-     * @param taskid	-- id of the task
-     * @param taskName 	-- name of the task
-     * @param impl		-- path to the java-deleate class
-     * @param serviceName	-- name of the service
-     * @param serviceProvider	-- resource that executes the service
-     * @param params	-- parameters required by the service
-     * @return
-     */
-    public ServiceTask createServiceTask(String taskid, String taskName, String impl, String serviceName, String serviceProvider, Object[]  params, String submodelid) {
-		// Create the service task
-    	ServiceTask serviceTask = new ServiceTask();
-    	
-    	// Add java-delegate class to the task
-	    serviceTask.setImplementation(impl);
-	    serviceTask.setImplementationType("class");
-	    
-	    // Set task id
-	    serviceTask.setId(taskid);
-	    // Set task name
-	    serviceTask.setName(taskName);
-	    
-	    // Add field extensions: serviceName, serviceProvider, serviceParameter, set the value of them
-	    List<FieldExtension> fes = new ArrayList<>();
-	    fes.add(createFieldExtension("serviceName", serviceName));
-	    fes.add(createFieldExtension("serviceProvider", serviceProvider));
-	    fes.add(createFieldExtension("serviceParameter", generateJsonString(params)));
-	    fes.add(createFieldExtension("submodelId", submodelid));
-	    
-	    // Set field extension to this task
-	    serviceTask.setFieldExtensions(fes);
-	 
-	    return serviceTask;
-	}
-	
+
 	
 	/***
 	 * Create field extension. This is used to exchange data between a java-delegate and a bpmn-model
@@ -233,11 +94,33 @@ public class BPMNModelFactory {
 	 * @param fexpression	-- value of the field
 	 * @return
 	 */
-	private FieldExtension createFieldExtension(String fname, String fexpression) {
- 	 FieldExtension snf = new FieldExtension();
-	    snf.setFieldName(fname);
-	    snf.setExpression(fexpression);
-	    return snf;
+	private void createFieldExtension(BpmnModelInstance modelInstance, String serviceNameValue, String serviceProviderValue, Object[] params, String smIDValue, String taskid) {
+		ExtensionElements extensionElements = modelInstance.newInstance(ExtensionElements.class);
+
+		// Create the field serviceName
+		ModelElementInstance serviceName = extensionElements.addExtensionElement(CAMUNDA_NS, "field");
+
+		serviceName.setAttributeValueNs(CAMUNDA_NS, "stringValue", serviceNameValue);
+		serviceName.setAttributeValueNs(CAMUNDA_NS, "name", SERVICE_NAME);
+
+
+		// Create field service Provider
+		ModelElementInstance serviceProvider = extensionElements.addExtensionElement(CAMUNDA_NS, "field");
+		serviceProvider.setAttributeValueNs(CAMUNDA_NS, "stringValue", serviceProviderValue);
+		serviceProvider.setAttributeValueNs(CAMUNDA_NS, "name", SERVICE_PROVIDER);
+
+		// Create the field serviceParameter
+		ModelElementInstance serviceParameter = extensionElements.addExtensionElement(CAMUNDA_NS, "field");
+		serviceParameter.setAttributeValueNs(CAMUNDA_NS, "stringValue", generateJsonString(params));
+		serviceParameter.setAttributeValueNs(CAMUNDA_NS, "name", SERVICE_PARAMETERS);
+
+		// Create the field submodelID
+		ModelElementInstance submodelID = extensionElements.addExtensionElement(CAMUNDA_NS, "field");
+		submodelID.setAttributeValueNs(CAMUNDA_NS, "stringValue", smIDValue);
+		submodelID.setAttributeValueNs(CAMUNDA_NS, "name", SUBMODEL_ID);
+
+		// Add all fields into the task
+		modelInstance.getModelElementById(taskid).addChildElement(extensionElements);
 	}
 	
 	/**

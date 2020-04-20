@@ -6,11 +6,11 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.ProcessEngineConfiguration;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration;
-import org.activiti.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.ProcessEngineConfiguration;
+import org.camunda.bpm.engine.RepositoryService;
+import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
@@ -104,7 +104,7 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 				.setJdbcUrl("jdbc:h2:mem:activiti;DB_CLOSE_DELAY=1000").setJdbcUsername("test").setJdbcPassword("test")
 				.setJdbcDriver("org.h2.Driver")
 				.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE)
-				.setAsyncExecutorActivate(false); 
+				.setJobExecutorActivate(false);
 		
 		// create the process engien with defined configuration
 		ProcessEngine processEngine = cfg.buildProcessEngine();

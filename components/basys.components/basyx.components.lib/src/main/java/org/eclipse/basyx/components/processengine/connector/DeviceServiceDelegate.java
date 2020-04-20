@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.delegate.Expression;
+import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public class DeviceServiceDelegate implements JavaDelegate {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void execute(DelegateExecution execution) {
+	public void execute(DelegateExecution execution) throws Exception {
 		
 		// get name of the service
 		String servicename = (String)serviceName.getValue(execution);
@@ -65,10 +65,10 @@ public class DeviceServiceDelegate implements JavaDelegate {
 		paramarray.addAll((Collection<Object>) gson.deserialize(params));
 		
 		// get name of the current process step in the BPMN-Model
-		String processName = execution.getCurrentFlowElement().getName();
+		String processName = execution.getProcessBusinessKey();
 		String deviceAASId = (String)serviceProvider.getValue(execution);
 		
-		logger.debug("#######process instance: "+ execution.getProcessInstanceId()+" current activity: " + processName +" is executed by "+ deviceAASId);
+		logger.debug("#######process instance: " + processName + " current activity: " + execution.getCurrentActivityName() + " is executed by " + deviceAASId);
 		
 		
 		try {
@@ -89,6 +89,6 @@ public class DeviceServiceDelegate implements JavaDelegate {
 	public static IDeviceServiceExecutor getExecutor() {
 		return executor;
 	}
-	
+
 	
 }
