@@ -209,7 +209,7 @@ public class DirectoryModelProvider implements IModelProvider {
 			}
 			
 			// Decode encoded path
-			ModelUrn identifier = new ModelUrn(path);
+			ModelUrn identifier = new ModelUrn(splitted[0]);
 			
 			//aas to be updated does not exist
 			if(registry.lookupAAS(identifier) == null) {
