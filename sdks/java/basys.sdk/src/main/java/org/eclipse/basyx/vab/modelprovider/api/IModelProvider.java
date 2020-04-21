@@ -1,5 +1,7 @@
 package org.eclipse.basyx.vab.modelprovider.api;
 
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
+
 /**
  * Basic model provider backend interface
  * 
@@ -16,7 +18,7 @@ public interface IModelProvider {
 	 * @return Property value. Object type is assumed to be [Integer | ... |
 	 *         Collection]
 	 */
-	public Object getModelPropertyValue(String path) throws Exception;
+	public Object getModelPropertyValue(String path) throws ProviderException;
 
 	/**
 	 * Sets or overrides existing property, operation or event.
@@ -26,7 +28,7 @@ public interface IModelProvider {
 	 * @param newValue
 	 *            Updated value
 	 */
-	public void setModelPropertyValue(String path, Object newValue) throws Exception;
+	public void setModelPropertyValue(String path, Object newValue) throws ProviderException;
 
 	/**
 	 * Create a new property, operation, event submodel or aas under the given path
@@ -36,7 +38,7 @@ public interface IModelProvider {
 	 * @param newEntity
 	 *            new Element to be created on the server
 	 */
-	public void createValue(String path, Object newEntity) throws Exception;
+	public void createValue(String path, Object newEntity) throws ProviderException;
 
 	/**
 	 * Delete a property, operation, event, submodel or aas under the given path
@@ -44,7 +46,7 @@ public interface IModelProvider {
 	 * @param path
 	 *            Path to the entity that should be deleted
 	 */
-	public void deleteValue(String path) throws Exception;
+	public void deleteValue(String path) throws ProviderException;
 
 	/**
 	 * Deletes an entry from a map or collection by the given key
@@ -52,7 +54,7 @@ public interface IModelProvider {
 	 * @param path
 	 *            Path to the entity that should be deleted
 	 */
-	public void deleteValue(String path, Object obj) throws Exception;
+	public void deleteValue(String path, Object obj) throws ProviderException;
 
 	/**
 	 * Invoke an operation
@@ -63,6 +65,6 @@ public interface IModelProvider {
 	 *            Operation parameter
 	 * @return Return value
 	 */
-	public Object invokeOperation(String path, Object... parameter) throws Exception;
+	public Object invokeOperation(String path, Object... parameter) throws ProviderException;
 
 }

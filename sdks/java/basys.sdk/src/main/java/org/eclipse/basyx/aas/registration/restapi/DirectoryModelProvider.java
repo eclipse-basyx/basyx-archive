@@ -295,12 +295,12 @@ public class DirectoryModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 		throw new MalformedRequestException("DeleteValue with parameter not supported by registry");
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object... parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
 		throw new MalformedRequestException("Invoke not supported by registry");
 	}
 	

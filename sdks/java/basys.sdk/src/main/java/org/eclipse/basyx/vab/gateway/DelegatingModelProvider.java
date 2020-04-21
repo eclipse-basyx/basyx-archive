@@ -1,5 +1,6 @@
 package org.eclipse.basyx.vab.gateway;
 
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
@@ -22,32 +23,32 @@ public class DelegatingModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws Exception {
+	public Object getModelPropertyValue(String path) throws ProviderException {
 		return getProvider(path).getModelPropertyValue("");
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		getProvider(path).setModelPropertyValue("", newValue);
 	}
 
 	@Override
-	public void createValue(String path, Object newEntity) throws Exception {
+	public void createValue(String path, Object newEntity) throws ProviderException {
 		getProvider(path).createValue("", newEntity);
 	}
 
 	@Override
-	public void deleteValue(String path) throws Exception {
+	public void deleteValue(String path) throws ProviderException {
 		getProvider(path).deleteValue("");
 	}
 
 	@Override
-	public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 		getProvider(path).deleteValue("", obj);
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object... parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
 		return getProvider(path).invokeOperation("", parameter);
 	}
 

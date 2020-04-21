@@ -2,6 +2,7 @@ package org.eclipse.basyx.aas.restapi;
 
 import java.util.HashMap;
 
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -40,7 +41,7 @@ public class MultiAASProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws Exception {
+	public Object getModelPropertyValue(String path) throws ProviderException {
 		String aasId = getId(path);
 		if (aasId != null) {
 			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
@@ -54,7 +55,7 @@ public class MultiAASProvider implements IModelProvider {
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		String aasId = getId(path);
 		if (aasId != null) {
 			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
@@ -67,7 +68,7 @@ public class MultiAASProvider implements IModelProvider {
 	}
 
 	@Override
-	public void createValue(String path, Object newEntity) throws Exception {
+	public void createValue(String path, Object newEntity) throws ProviderException {
 		String aasId = getId(path);
 		if (aasId != null) {
 			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
@@ -80,7 +81,7 @@ public class MultiAASProvider implements IModelProvider {
 	}
 
 	@Override
-	public void deleteValue(String path) throws Exception {
+	public void deleteValue(String path) throws ProviderException {
 		String aasId = getId(path);
 		if (aasId != null) {
 			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
@@ -93,7 +94,7 @@ public class MultiAASProvider implements IModelProvider {
 	}
 
 	@Override
-	public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 		String aasId = getId(path);
 		if (aasId != null) {
 			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
@@ -106,7 +107,7 @@ public class MultiAASProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object... parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
 		String aasId = getId(path);
 		if (aasId != null) {
 			VABMultiSubmodelProvider provider = aas_providers.get(aasId);

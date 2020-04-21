@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.generic.IVABElementHandler;
 
@@ -50,7 +51,7 @@ public class VABListHandler implements IVABElementHandler {
 	 * 
 	 */
 	@Override
-	public Object getElementProperty(Object element, String propertyName) throws Exception {
+	public Object getElementProperty(Object element, String propertyName) throws ProviderException {
 		if (element instanceof ReferencedArrayList) {
 			ReferencedArrayList<?> listElement = (ReferencedArrayList<?>) element;
 			if (propertyName.startsWith(VALUE_BYREF_SUFFIX)) {
@@ -77,7 +78,7 @@ public class VABListHandler implements IVABElementHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean setModelPropertyValue(Object element, String propertyName, Object newValue) throws Exception {
+	public boolean setModelPropertyValue(Object element, String propertyName, Object newValue) throws ProviderException {
 		if (element instanceof ReferencedArrayList) {
 			ReferencedArrayList<Object> list = (ReferencedArrayList<Object>) element;
 			Integer index = getReferencedIndex(list, propertyName);
@@ -95,7 +96,7 @@ public class VABListHandler implements IVABElementHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean createValue(Object element, Object newValue) throws Exception {
+	public boolean createValue(Object element, Object newValue) throws ProviderException {
 		if (element instanceof Collection) {
 			Collection<Object> collection = (Collection<Object>) element;
 			collection.add(newValue);
@@ -110,7 +111,7 @@ public class VABListHandler implements IVABElementHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean deleteValue(Object element, String propertyName) throws Exception {
+	public boolean deleteValue(Object element, String propertyName) throws ProviderException {
 		if (element instanceof ReferencedArrayList) {
 			ReferencedArrayList<Object> list = (ReferencedArrayList<Object>) element;
 			Integer index = getReferencedIndex(list, propertyName);
@@ -127,7 +128,7 @@ public class VABListHandler implements IVABElementHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean deleteValue(Object element, Object property) throws Exception {
+	public boolean deleteValue(Object element, Object property) throws ProviderException {
 		if (element instanceof Collection) {
 			return ((Collection<Object>) element).remove(property);
 		}
@@ -157,7 +158,7 @@ public class VABListHandler implements IVABElementHandler {
 		return result;
 	}
 
-	private Integer getReferencedIndex(ReferencedArrayList<?> list, String propertyName) throws Exception {
+	private Integer getReferencedIndex(ReferencedArrayList<?> list, String propertyName) throws ProviderException {
 		if (propertyName.startsWith(VALUE_BYREF_SUFFIX)) {
 			String indexName = propertyName.substring(VALUE_BYREF_SUFFIX.length());
 			Integer index = Integer.valueOf(indexName);
@@ -167,7 +168,7 @@ public class VABListHandler implements IVABElementHandler {
 		}
 	}
 
-	private Object getReferencedListElement(ReferencedArrayList<?> list, String propertyName) throws Exception {
+	private Object getReferencedListElement(ReferencedArrayList<?> list, String propertyName) throws ProviderException {
 		String indexName = propertyName.substring(VALUE_BYREF_SUFFIX.length());
 		Integer index = Integer.valueOf(indexName);
 		return list.getByReference(index);

@@ -4,11 +4,11 @@ import java.util.function.Function;
 
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.NotAnInvokableException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +36,7 @@ public class VABModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws Exception {
+	public Object getModelPropertyValue(String path) throws ProviderException {
 		// Check empty paths
 		VABPathTools.checkPathForNull(path);
 		if (VABPathTools.isEmptyPath(path)) {
@@ -50,7 +50,7 @@ public class VABModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		// Check empty paths
 		VABPathTools.checkPathForNull(path);
 		if (VABPathTools.isEmptyPath(path)) {
@@ -73,7 +73,7 @@ public class VABModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public void createValue(String path, Object newValue) throws Exception {
+	public void createValue(String path, Object newValue) throws ProviderException {
 		// Check empty paths
 		VABPathTools.checkPathForNull(path);
 		if (VABPathTools.isEmptyPath(path)) {
@@ -114,7 +114,7 @@ public class VABModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public void deleteValue(String path) throws Exception {
+	public void deleteValue(String path) throws ProviderException {
 		// Check null path
 		VABPathTools.checkPathForNull(path);
 
@@ -128,7 +128,7 @@ public class VABModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 		// Check null path
 		VABPathTools.checkPathForNull(path);
 		if (path.equals("")) {
@@ -150,7 +150,7 @@ public class VABModelProvider implements IModelProvider {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object invokeOperation(String path, Object... parameters) throws Exception {
+	public Object invokeOperation(String path, Object... parameters) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		Object childElement = getModelPropertyValue(path);
 
@@ -167,7 +167,7 @@ public class VABModelProvider implements IModelProvider {
 	 * Get the parent of an element in this provider. The path should include the path to the element separated by '/'.
 	 * E.g., for accessing element c in path a/b, the path should be a/b/c.
 	 */
-	private Object getParentElement(String path) throws Exception {
+	private Object getParentElement(String path) throws ProviderException {
 		// Split path into its elements, separated by '/'
 		String[] pathElements = VABPathTools.splitPath(path);
 
@@ -186,7 +186,7 @@ public class VABModelProvider implements IModelProvider {
 	/**
 	 * Calls getElementProperty and catches ResourceNotFOundException 
 	 */
-	private Object getElementPropertyIfExistent(Object parentElement, String propertyName) throws Exception {
+	private Object getElementPropertyIfExistent(Object parentElement, String propertyName) throws ProviderException {
 		try {
 			return handler.getElementProperty(parentElement, propertyName);
 		} catch (ResourceNotFoundException e) {
@@ -198,7 +198,7 @@ public class VABModelProvider implements IModelProvider {
 	 * Instead of returning the parent element of a path, this function gives the target element.
 	 * E.g., it returns c for the path a/b/c
 	 */
-	protected Object getTargetElement(String path) throws Exception {
+	protected Object getTargetElement(String path) throws ProviderException {
 		if (VABPathTools.isEmptyPath(path)) {
 			return elements;
 		} else {

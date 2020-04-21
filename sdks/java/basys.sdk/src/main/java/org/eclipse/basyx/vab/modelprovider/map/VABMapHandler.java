@@ -2,6 +2,7 @@ package org.eclipse.basyx.vab.modelprovider.map;
 
 import java.util.Map;
 
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.generic.IVABElementHandler;
 
@@ -19,7 +20,7 @@ public class VABMapHandler implements IVABElementHandler {
 	}
 
 	@Override
-	public Object getElementProperty(Object element, String propertyName) throws Exception {
+	public Object getElementProperty(Object element, String propertyName) throws ProviderException {
 		if (element instanceof Map<?, ?>) {
 			Map<?, ?> map = (Map<?, ?>) element;
 
@@ -35,7 +36,7 @@ public class VABMapHandler implements IVABElementHandler {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean setModelPropertyValue(Object element, String propertyName, Object newValue) throws Exception {
+	public boolean setModelPropertyValue(Object element, String propertyName, Object newValue) throws ProviderException {
 		if (element instanceof Map) {
 			Map<String, Object> map = (Map<String, Object>) element;
 			
@@ -49,13 +50,13 @@ public class VABMapHandler implements IVABElementHandler {
 	}
 
 	@Override
-	public boolean createValue(Object element, Object newValue) throws Exception {
+	public boolean createValue(Object element, Object newValue) throws ProviderException {
 		return false;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean deleteValue(Object element, String propertyName) throws Exception {
+	public boolean deleteValue(Object element, String propertyName) throws ProviderException {
 		if (element instanceof Map) {
 			Map<String, Object> map = (Map<String, Object>) element;
 			//check if requested property exists in map
@@ -69,7 +70,7 @@ public class VABMapHandler implements IVABElementHandler {
 	}
 
 	@Override
-	public boolean deleteValue(Object element, Object property) throws Exception {
+	public boolean deleteValue(Object element, Object property) throws ProviderException {
 		return false;
 	}
 }

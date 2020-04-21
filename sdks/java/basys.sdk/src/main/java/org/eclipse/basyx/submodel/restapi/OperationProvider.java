@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.restapi;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -21,34 +22,34 @@ public class OperationProvider extends MetaModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws Exception {
+	public Object getModelPropertyValue(String path) throws ProviderException {
 		// Getting of operation is handled by parent provider
 		throw new RuntimeException();
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		throw new RuntimeException();
 	}
 
 	@Override
-	public void createValue(String path, Object newEntity) throws Exception {
+	public void createValue(String path, Object newEntity) throws ProviderException {
 		throw new RuntimeException();
 	}
 
 	@Override
-	public void deleteValue(String path) throws Exception {
+	public void deleteValue(String path) throws ProviderException {
 		// Deletion of operation is handled by parent provider
 		throw new RuntimeException();
 	}
 
 	@Override
-	public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 		throw new RuntimeException();
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object... parameters) throws Exception {
+	public Object invokeOperation(String path, Object... parameters) throws ProviderException {
 		// Unwrap parameters, if they are wrapped
 		for (int i = 0; i < parameters.length; i++) {
 			parameters[i] = unwrapParameter(parameters[i]);

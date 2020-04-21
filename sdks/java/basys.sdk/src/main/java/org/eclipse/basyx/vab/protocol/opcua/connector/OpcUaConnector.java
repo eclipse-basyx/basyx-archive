@@ -20,7 +20,6 @@ import org.eclipse.milo.opcua.stack.core.types.structured.CallResponse;
 import org.eclipse.milo.opcua.stack.core.types.structured.RelativePath;
 import org.eclipse.milo.opcua.stack.core.types.structured.RelativePathElement;
 import org.eclipse.milo.opcua.stack.core.types.structured.TranslateBrowsePathsToNodeIdsResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +56,7 @@ public class OpcUaConnector implements IModelProvider {
     }
 
     @Override
-    public void setModelPropertyValue(String servicePath, Object newValue) throws Exception {
+	public void setModelPropertyValue(String servicePath, Object newValue) throws ProviderException {
         try {
             clientRunner = new BaSyxOpcUaClientRunner(address);
             clientRunner.run();
@@ -69,22 +68,22 @@ public class OpcUaConnector implements IModelProvider {
     }
 
     @Override
-    public void createValue(String path, Object newEntity) throws Exception {
+	public void createValue(String path, Object newEntity) throws ProviderException {
 
     }
 
     @Override
-    public void deleteValue(String path) throws Exception {
+	public void deleteValue(String path) throws ProviderException {
 
     }
 
     @Override
-    public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 
     }
 
     @Override
-	public Object invokeOperation(String servicePath, Object... parameters) throws Exception {
+	public Object invokeOperation(String servicePath, Object... parameters) throws ProviderException {
         try {
             clientRunner = new BaSyxOpcUaClientRunner(address);
             clientRunner.run();

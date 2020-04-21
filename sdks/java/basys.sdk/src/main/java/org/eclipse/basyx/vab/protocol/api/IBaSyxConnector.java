@@ -1,5 +1,7 @@
 package org.eclipse.basyx.vab.protocol.api;
 
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
+
 /**
  * Connector interface for technology specific communication. Returns the
  * response including meta information
@@ -17,7 +19,7 @@ public interface IBaSyxConnector {
 	 * @return Property value. Object type is assumed to be [Integer | ... |
 	 *         Collection]
 	 */
-	public String getModelPropertyValue(String path);
+	public String getModelPropertyValue(String path) throws ProviderException;
 
 	/**
 	 * Sets or overrides existing property, operation or event.
@@ -27,7 +29,7 @@ public interface IBaSyxConnector {
 	 * @param newValue
 	 *            Updated value
 	 */
-	public String setModelPropertyValue(String path, String newValue) throws Exception;
+	public String setModelPropertyValue(String path, String newValue) throws ProviderException;
 
 	/**
 	 * Create a new property, operation, event submodel or aas under the given path
@@ -37,7 +39,7 @@ public interface IBaSyxConnector {
 	 * @param newEntity
 	 *            new Element to be created on the server
 	 */
-	public String createValue(String path, String newEntity) throws Exception;
+	public String createValue(String path, String newEntity) throws ProviderException;
 
 	/**
 	 * Delete a property, operation, event, submodel or aas under the given path
@@ -45,7 +47,7 @@ public interface IBaSyxConnector {
 	 * @param path
 	 *            Path to the entity that should be deleted
 	 */
-	public String deleteValue(String path) throws Exception;
+	public String deleteValue(String path) throws ProviderException;
 
 	/**
 	 * Deletes an entry from a map or collection by the given key
@@ -53,7 +55,7 @@ public interface IBaSyxConnector {
 	 * @param path
 	 *            Path to the entity that should be deleted
 	 */
-	public String deleteValue(String path, String obj) throws Exception;
+	public String deleteValue(String path, String obj) throws ProviderException;
 
 	/**
 	 * Invoke an operation
@@ -64,5 +66,5 @@ public interface IBaSyxConnector {
 	 *            Operation parameter
 	 * @return Return value
 	 */
-	public String invokeOperation(String path, String jsonObject) throws Exception;
+	public String invokeOperation(String path, String jsonObject) throws ProviderException;
 }

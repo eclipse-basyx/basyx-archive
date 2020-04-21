@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.restapi;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
@@ -71,37 +72,37 @@ public class SubModelProvider extends ContainerPropertyProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws Exception {
+	public Object getModelPropertyValue(String path) throws ProviderException {
 		path = removeSubmodelPrefix(path);
 		return super.getModelPropertyValue(path);
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		path = removeSubmodelPrefix(path);
 		super.setModelPropertyValue(path, newValue);
 	}
 
 	@Override
-	public void createValue(String path, Object newEntity) throws Exception {
+	public void createValue(String path, Object newEntity) throws ProviderException {
 		path = removeSubmodelPrefix(path);
 		super.createValue(path, newEntity);
 	}
 
 	@Override
-	public void deleteValue(String path) throws Exception {
+	public void deleteValue(String path) throws ProviderException {
 		path = removeSubmodelPrefix(path);
 		super.deleteValue(path);
 	}
 
 	@Override
-	public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 		path = removeSubmodelPrefix(path);
 		super.deleteValue(path, obj);
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object... parameters) throws Exception {
+	public Object invokeOperation(String path, Object... parameters) throws ProviderException {
 		path = removeSubmodelPrefix(path);
 		return super.invokeOperation(path, parameters);
 	}

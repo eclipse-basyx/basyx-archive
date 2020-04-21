@@ -28,7 +28,7 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 		this.modelProvider = provider;
 	}
 
-	private Object getSubModel() throws Exception {
+	private Object getSubModel() throws ProviderException {
 		// For access on the container property root, return the whole model
 		Map<String, Object> map = getModel();
 
@@ -40,7 +40,7 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 		return map;
 	}
 
-	private Object handleQualifierGet(String path, String qualifier) throws Exception {
+	private Object handleQualifierGet(String path, String qualifier) throws ProviderException {
 		if (qualifier.equals(SubModel.SUBMODELELEMENT) || qualifier.equals(SubModel.PROPERTIES) || qualifier.equals(SubModel.OPERATIONS)) {
 			// if all submodel elements, data elements or operations are accessed (e.g.
 			// "/operations")
@@ -54,7 +54,7 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 		}
 	}
 
-	private Object handleDetailGet(String qualifier, String[] pathElements) throws Exception {
+	private Object handleDetailGet(String qualifier, String[] pathElements) throws ProviderException {
 		// Build new proxy pointing at sub-property of a submodelelement and forward the
 		// remaininig part of the path
 		// to an appropriate provider
@@ -73,7 +73,7 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws Exception {
+	public Object getModelPropertyValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		path = VABPathTools.stripSlashes(path);
 		String[] pathElements = VABPathTools.splitPath(path);
@@ -98,7 +98,7 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 	 * Returns the contained model and copies the first layer of the HashMap
 	 */
 	@SuppressWarnings("unchecked")
-	private Map<String, Object> getModel() throws Exception {
+	private Map<String, Object> getModel() throws ProviderException {
 		Map<String, Object> map = new HashMap<>();
 		Object o = modelProvider.getModelPropertyValue("");
 		map.putAll((Map<String, Object>) o);
@@ -119,7 +119,7 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		newValue = unwrapParameter(newValue);
 		modelProvider.setModelPropertyValue(path, newValue);
@@ -127,7 +127,7 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void createValue(String path, Object newEntity) throws Exception {
+	public void createValue(String path, Object newEntity) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		path = VABPathTools.stripSlashes(path);
 		if (path.isEmpty()) {
@@ -149,19 +149,19 @@ public class ContainerPropertyProvider extends MetaModelProvider {
 	}
 
 	@Override
-	public void deleteValue(String path) throws Exception {
+	public void deleteValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		modelProvider.deleteValue(path);
 	}
 
 	@Override
-	public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		modelProvider.deleteValue(path, obj);
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object... parameters) throws Exception {
+	public Object invokeOperation(String path, Object... parameters) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		// Assume that an operation shall be invoked
 		return new OperationProvider(modelProvider).invokeOperation(path, parameters);

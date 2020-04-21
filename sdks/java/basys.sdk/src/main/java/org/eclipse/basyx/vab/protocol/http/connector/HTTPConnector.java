@@ -250,7 +250,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	}
 
 	@Override
-	public String invokeOperation(String path, String parameter) throws Exception {
+	public String invokeOperation(String path, String parameter) throws ProviderException {
 
 		return httpPost(path, parameter);
 	}

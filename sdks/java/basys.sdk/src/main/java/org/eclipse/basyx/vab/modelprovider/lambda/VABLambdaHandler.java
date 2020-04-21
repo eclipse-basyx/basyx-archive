@@ -9,6 +9,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.generic.IVABElementHandler;
 import org.eclipse.basyx.vab.modelprovider.generic.VABMultiElementHandler;
@@ -37,13 +38,13 @@ public class VABLambdaHandler extends VABMultiElementHandler {
 	}
 
 	@Override
-	public Object getElementProperty(Object element, String propertyName) throws Exception {
+	public Object getElementProperty(Object element, String propertyName) throws ProviderException {
 		return super.getElementProperty(resolveSingle(element), propertyName);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean setModelPropertyValue(Object element, String propertyName, Object newValue) throws Exception {
+	public boolean setModelPropertyValue(Object element, String propertyName, Object newValue) throws ProviderException {
 		Object child = null;
 		try {
 			child = getElementProperty(element, propertyName);
@@ -62,7 +63,7 @@ public class VABLambdaHandler extends VABMultiElementHandler {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean createValue(Object element, Object newValue) throws Exception {
+	public boolean createValue(Object element, Object newValue) throws ProviderException {
 		if (hasHiddenInserter(element)) {
 			((Consumer<Object>) ((Map<String, Object>) element).get(VALUE_INSERT_SUFFIX)).accept(newValue);
 			return true;
@@ -73,7 +74,7 @@ public class VABLambdaHandler extends VABMultiElementHandler {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean deleteValue(Object element, String propertyName) throws Exception {
+	public boolean deleteValue(Object element, String propertyName) throws ProviderException {
 		if (hasHiddenKeyRemover(element)) {
 			super.getElementProperty(resolveSingle(element), propertyName);
 			Consumer<String> c = (Consumer<String>) ((Map<String, Object>) element).get(VALUE_REMOVEKEY_SUFFIX);
@@ -86,7 +87,7 @@ public class VABLambdaHandler extends VABMultiElementHandler {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean deleteValue(Object element, Object property) throws Exception {
+	public boolean deleteValue(Object element, Object property) throws ProviderException {
 		if (hasHiddenObjectRemover(element)) {
 			if(resolveSingle(element) instanceof Map) {
 				// Can not delete by value from Maps

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -24,7 +25,7 @@ public class SinglePropertyProvider extends MetaModelProvider {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object getModelPropertyValue(String path) throws Exception {
+	public Object getModelPropertyValue(String path) throws ProviderException {
 		path = VABPathTools.stripSlashes(path);
 
 		// Handle "/value" path
@@ -53,7 +54,7 @@ public class SinglePropertyProvider extends MetaModelProvider {
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		path = VABPathTools.stripSlashes(path);
 		// Only handle "/value" paths
 		if (path.equals(Property.VALUE)) {
@@ -66,22 +67,22 @@ public class SinglePropertyProvider extends MetaModelProvider {
 	}
 
 	@Override
-	public void createValue(String path, Object newEntity) throws Exception {
+	public void createValue(String path, Object newEntity) throws ProviderException {
 		proxy.createValue(path, newEntity);
 	}
 
 	@Override
-	public void deleteValue(String path) throws Exception {
+	public void deleteValue(String path) throws ProviderException {
 		proxy.deleteValue(path);
 	}
 
 	@Override
-	public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 		proxy.deleteValue(path, obj);
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object... parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
 		throw new RuntimeException();
 	}
 

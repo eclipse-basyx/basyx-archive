@@ -2,6 +2,8 @@ package org.eclipse.basyx.aas.restapi;
 
 import java.util.Map;
 
+import org.eclipse.basyx.vab.exception.provider.NotAnInvokableException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 
@@ -31,27 +33,27 @@ public class AASModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws Exception {
+	public Object getModelPropertyValue(String path) throws ProviderException {
 		return modelProvider.getModelPropertyValue(path);
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		modelProvider.setModelPropertyValue(path, newValue);
 	}
 
 	@Override
-	public void createValue(String path, Object newEntity) throws Exception {
+	public void createValue(String path, Object newEntity) throws ProviderException {
 		modelProvider.createValue(path, newEntity);
 	}
 
 	@Override
-	public void deleteValue(String path) throws Exception {
+	public void deleteValue(String path) throws ProviderException {
 		modelProvider.deleteValue(path);
 	}
 
 	@Override
-	public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 		modelProvider.deleteValue(path, obj);
 	}
 
@@ -59,7 +61,7 @@ public class AASModelProvider implements IModelProvider {
 	 * Operations that can be invoked are not contained inside of AAS, but inside of submodels
 	 */
 	@Override
-	public Object invokeOperation(String path, Object... parameter) throws Exception {
-		throw new RuntimeException("");
+	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
+		throw new NotAnInvokableException("An AAS does not contain any operations that can be invoked");
 	}
 }

@@ -3,6 +3,7 @@ package org.eclipse.basyx.testsuite.regression.vab.coder.json;
 import java.io.FileNotFoundException;
 
 import org.eclipse.basyx.vab.coder.json.provider.JSONProvider;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
 import org.slf4j.Logger;
@@ -52,7 +53,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 	 * message
 	 */
 	@Override
-	public String setModelPropertyValue(String path, String newValue) throws Exception {
+	public String setModelPropertyValue(String path, String newValue) throws ProviderException {
 		try {
 			PrintWriterStub outputstream = new PrintWriterStub("test.txt", "ignore");
 		
@@ -70,7 +71,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 	 * message
 	 */
 	@Override
-	public String createValue(String path, String newEntity) throws Exception {
+	public String createValue(String path, String newEntity) throws ProviderException {
 		try {
 			PrintWriterStub outputstream = new PrintWriterStub("test.txt", "ignore");
 		
@@ -88,7 +89,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 	 * message
 	 */
 	@Override
-	public String deleteValue(String path) throws Exception {
+	public String deleteValue(String path) throws ProviderException {
 		try {
 			PrintWriterStub outputstream = new PrintWriterStub("test.txt", "ignore");
 		
@@ -107,7 +108,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 	 * message
 	 */
 	@Override
-	public String deleteValue(String path, String obj) throws Exception {
+	public String deleteValue(String path, String obj) throws ProviderException {
 		try {
 			PrintWriterStub outputstream = new PrintWriterStub("test.txt", "ignore");
 		
@@ -125,7 +126,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 	 * message
 	 */
 	@Override
-	public String invokeOperation(String path, String jsonObject) throws Exception {
+	public String invokeOperation(String path, String jsonObject) throws ProviderException {
 		try {
 			PrintWriterStub outputstream = new PrintWriterStub("test.txt", "ignore");
 		

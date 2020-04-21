@@ -87,7 +87,7 @@ public class JSONConnector implements IModelProvider {
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 
 		// Serialize value Object
@@ -100,7 +100,7 @@ public class JSONConnector implements IModelProvider {
 	}
 
 	@Override
-	public void createValue(String path, Object newEntity) throws Exception {
+	public void createValue(String path, Object newEntity) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		
 		// Serialize value Object
@@ -113,7 +113,7 @@ public class JSONConnector implements IModelProvider {
 	}
 
 	@Override
-	public void deleteValue(String path) throws Exception {
+	public void deleteValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 
 		String message = provider.deleteValue(path);
@@ -123,7 +123,7 @@ public class JSONConnector implements IModelProvider {
 	}
 
 	@Override
-	public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 
 		// Serialize parameter
@@ -136,7 +136,7 @@ public class JSONConnector implements IModelProvider {
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object... parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 
 		// Serialize parameter

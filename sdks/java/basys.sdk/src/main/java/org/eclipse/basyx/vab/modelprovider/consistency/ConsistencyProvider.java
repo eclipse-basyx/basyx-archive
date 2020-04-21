@@ -1,6 +1,6 @@
 package org.eclipse.basyx.vab.modelprovider.consistency;
 
-import org.eclipse.basyx.vab.exception.ReadOnlyException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
 public class ConsistencyProvider<T extends IModelProvider> implements IModelProvider {
@@ -50,7 +50,7 @@ public class ConsistencyProvider<T extends IModelProvider> implements IModelProv
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws Exception {
+	public Object getModelPropertyValue(String path) throws ProviderException {
 
 		if (path.endsWith("/frozen")) {
 			return this.frozen;
@@ -70,7 +70,7 @@ public class ConsistencyProvider<T extends IModelProvider> implements IModelProv
 	 * @throws Exception
 	 */
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 
 		if (path.endsWith("/frozen")) {
 
@@ -86,7 +86,7 @@ public class ConsistencyProvider<T extends IModelProvider> implements IModelProv
 			providerBackend.setModelPropertyValue(path, newValue);
 
 		} else {
-			throw new ReadOnlyException(path);
+			throw new ProviderException("Value " + path + " is read only");
 		}
 
 	}
@@ -99,7 +99,7 @@ public class ConsistencyProvider<T extends IModelProvider> implements IModelProv
 	 * @throws Exception
 	 */
 	@Override
-	public void createValue(String path, Object newEntity) throws Exception {
+	public void createValue(String path, Object newEntity) throws ProviderException {
 
 		if (!isFrozen() || path.endsWith("/frozen")) {
 			providerBackend.createValue(path, newEntity);
@@ -113,7 +113,7 @@ public class ConsistencyProvider<T extends IModelProvider> implements IModelProv
 	 * @throws Exception
 	 */
 	@Override
-	public void deleteValue(String path) throws Exception {
+	public void deleteValue(String path) throws ProviderException {
 
 		if (!isFrozen() || path.endsWith("/frozen")) {
 			providerBackend.deleteValue(path);
@@ -130,7 +130,7 @@ public class ConsistencyProvider<T extends IModelProvider> implements IModelProv
 	 * @throws Exception
 	 */
 	@Override
-	public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 
 		if (!isFrozen() || path.endsWith("/frozen")) {
 			// Increment Clock
@@ -140,7 +140,7 @@ public class ConsistencyProvider<T extends IModelProvider> implements IModelProv
 			providerBackend.deleteValue(path, obj);
 
 		} else {
-			throw new ReadOnlyException(path);
+			throw new ProviderException("Value " + path + " is read only");
 		}
 
 	}
@@ -154,7 +154,7 @@ public class ConsistencyProvider<T extends IModelProvider> implements IModelProv
 	 * @throws Exception
 	 */
 	@Override
-	public Object invokeOperation(String path, Object... parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
 		return providerBackend.invokeOperation(path, parameter);
 	}
 

@@ -1,5 +1,6 @@
 package org.eclipse.basyx.aas.aggregator.restapi;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -84,13 +86,13 @@ public class AASAggregationProvider implements IModelProvider {
 	
 	
 	@Override
-	public Object getModelPropertyValue(String path) throws Exception {
+	public Object getModelPropertyValue(String path) throws ProviderException {
 		path = stripPrefix(path);
 		
 		if(path.isEmpty()) { //Return all AAS if path is empty
 			return aggregator.getAASList();
 		} else { //A specific AAS was requested
-			path = URLDecoder.decode(path, ENCODING_SCHEME);
+			path = decodePath(path);
 			IAssetAdministrationShell aas = aggregator.getAAS(new ModelUrn(path));
 			
 			//Throw an Exception if the requested aas does not exist
@@ -102,7 +104,7 @@ public class AASAggregationProvider implements IModelProvider {
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		
 		AssetAdministrationShell aas = createAASFromMap(newValue);
 		
@@ -110,7 +112,7 @@ public class AASAggregationProvider implements IModelProvider {
 		
 		if (!path.isEmpty()) { // Overwriting existing entry
 			// Decode encoded path
-			path = URLDecoder.decode(path, ENCODING_SCHEME);
+			path = decodePath(path);
 			ModelUrn identifier = new ModelUrn(path);
 			
 			if(!aas.getIdentification().getId().equals(path)) {
@@ -128,7 +130,7 @@ public class AASAggregationProvider implements IModelProvider {
 	}
 
 	@Override
-	public void createValue(String path, Object newEntity) throws Exception {
+	public void createValue(String path, Object newEntity) throws ProviderException {
 
 		AssetAdministrationShell aas = createAASFromMap(newEntity);
 		
@@ -148,12 +150,12 @@ public class AASAggregationProvider implements IModelProvider {
 	}
 
 	@Override
-	public void deleteValue(String path) throws Exception {
+	public void deleteValue(String path) throws ProviderException {
 		path = stripPrefix(path);
 
 		if (!path.isEmpty()) { // Deleting an entry
 			// Decode encoded path
-			path = URLDecoder.decode(path, ENCODING_SCHEME);
+			path = decodePath(path);
 			
 			IIdentifier identifier = new ModelUrn(path);
 			
@@ -167,13 +169,29 @@ public class AASAggregationProvider implements IModelProvider {
 		}
 	}
 
+	/**
+	 * Decodes the given path using the default encoding scheme
+	 * 
+	 * @param path
+	 * @return
+	 */
+	private String decodePath(String path) {
+		try {
+			path = URLDecoder.decode(path, ENCODING_SCHEME);
+		} catch (UnsupportedEncodingException e) {
+			// This should never happen
+			throw new RuntimeException("Wrong encoding for " + path);
+		}
+		return path;
+	}
+
 	@Override
-	public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 		throw new MalformedRequestException("DeleteValue with parameter not supported by aggregator");
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object... parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
 		throw new MalformedRequestException("Invoke not supported by aggregator");
 	}
 	

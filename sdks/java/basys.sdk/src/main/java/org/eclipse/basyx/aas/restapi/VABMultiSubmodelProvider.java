@@ -8,6 +8,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -143,7 +144,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * Get the value of an element
 	 */
 	@Override
-	public Object getModelPropertyValue(String path) throws Exception {
+	public Object getModelPropertyValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 		if (pathElements.length == 0) { // e.g. "/"
@@ -179,7 +180,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * Change a model property value
 	 */
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws Exception {
+	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		// Split path
 		String[] pathElements = VABPathTools.splitPath(path);
@@ -189,7 +190,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	}
 
 	@Override
-	public void createValue(String path, Object newValue) throws Exception {
+	public void createValue(String path, Object newValue) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 		if (pathElements.length >= 1 && pathElements[0].equals("aas")) {
@@ -206,7 +207,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 		}
 	}
 
-	private void createSubModelProperty(String smId, String propertyPath, Object newProperty) throws Exception {
+	private void createSubModelProperty(String smId, String propertyPath, Object newProperty) throws ProviderException {
 		SubModelProvider subModelProvider = submodel_providers.get(smId);
 		subModelProvider.createValue(propertyPath, newProperty);
 	}
@@ -218,7 +219,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void createSubModel(Object newSM) throws Exception {
+	private void createSubModel(Object newSM) throws ProviderException {
 		// Adds a new submodel to the registered AAS
 		Map<String, Object> sm = (Map<String, Object>) newSM;
 		SubModelProvider smProvider = new SubModelProvider(sm);
@@ -227,7 +228,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 
 
 	@Override
-	public void deleteValue(String path) throws Exception {
+	public void deleteValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 		String propertyPath = VABPathTools.buildPath(pathElements, 3);
@@ -242,7 +243,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	}
 
 	@Override
-	public void deleteValue(String path, Object obj) throws Exception {
+	public void deleteValue(String path, Object obj) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 		String propertyPath = VABPathTools.buildPath(pathElements, 3);
@@ -251,7 +252,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object invokeOperation(String path, Object... parameter) throws Exception {
+	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 		String operationPath = VABPathTools.buildPath(pathElements, 3);
