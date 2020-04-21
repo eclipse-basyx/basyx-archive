@@ -3,6 +3,7 @@ package org.eclipse.basyx.testsuite.regression.aas.registration.proxy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,8 +68,16 @@ public abstract class TestRegistryProvider {
 	 */
 	@After
 	public void tearDown() {
-		proxy.delete(aasId1);
-		proxy.delete(aasId2);
+		try {
+			proxy.delete(aasId1);
+		} catch (ResourceNotFoundException e) {
+			// Does not matter
+		}
+		try {
+			proxy.delete(aasId2);
+		} catch (ResourceNotFoundException e) {
+			// Does not matter
+		}
 	}
 
 	/**
@@ -140,13 +150,28 @@ public abstract class TestRegistryProvider {
 		
 		// After aas2 has been deleted, only aas1 should be registered
 		assertNotNull(proxy.lookupAAS(aasId1));
-		assertNull(proxy.lookupAAS(aasId2));
-		
+		try {
+			proxy.lookupAAS(aasId2);
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// expected
+		}
+
 		proxy.delete(aasId1);
 		
-		// After aas2 has been deleted, only aas1 should be registered
-		assertNull(proxy.lookupAAS(aasId1));
-		assertNull(proxy.lookupAAS(aasId2));
+		// After aas1 has been deleted, both should not be registered any more
+		try {
+			proxy.lookupAAS(aasId1);
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// expected
+		}
+		try {
+			proxy.lookupAAS(aasId2);
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// expected
+		}
 	}
 
 	/**

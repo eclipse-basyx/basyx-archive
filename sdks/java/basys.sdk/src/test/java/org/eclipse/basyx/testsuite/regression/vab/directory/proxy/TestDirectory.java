@@ -2,10 +2,11 @@ package org.eclipse.basyx.testsuite.regression.vab.directory.proxy;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
 import org.eclipse.basyx.vab.directory.proxy.VABDirectoryProxy;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.junit.After;
 import org.junit.Before;
@@ -84,12 +85,27 @@ public abstract class TestDirectory {
 
 		// After elem2 has been deleted, only elem1 should be registered
 		assertNotNull(proxy.lookup(elem1));
-		assertNull(proxy.lookup(elem2));
+		try {
+			proxy.lookup(elem2);
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// Expected
+		}
 
 		proxy.removeMapping(elem1);
 
 		// After elem2 has been deleted, no element should be registered
-		assertNull(proxy.lookup(elem1));
-		assertNull(proxy.lookup(elem2));
+		try {
+			proxy.lookup(elem1);
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// Expected
+		}
+		try {
+			proxy.lookup(elem2);
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// Expected
+		}
 	}
 }

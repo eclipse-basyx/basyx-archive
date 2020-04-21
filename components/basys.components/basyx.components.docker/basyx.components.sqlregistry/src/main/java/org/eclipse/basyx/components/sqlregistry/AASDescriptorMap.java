@@ -73,7 +73,7 @@ public class AASDescriptorMap implements Map<String, AASDescriptor> {
 		if (result == null) {
 			return null;
 		} else {
-			return new AASDescriptor((Map<String, Object>) result);
+			return new AASDescriptor(result);
 		}
 	}
 

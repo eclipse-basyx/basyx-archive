@@ -2,6 +2,7 @@ package org.eclipse.basyx.vab.directory.proxy;
 
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnector;
@@ -37,11 +38,7 @@ public class VABDirectoryProxy implements IVABDirectoryService {
 	 */
 	@Override
 	public IVABDirectoryService addMapping(String key, String value) {
-		try {
-			provider.createValue(key, value);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		provider.createValue(key, value);
 		return this;
 	}
 
@@ -50,11 +47,7 @@ public class VABDirectoryProxy implements IVABDirectoryService {
 	 */
 	@Override
 	public void removeMapping(String key) {
-		try {
-			provider.deleteValue(key);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		provider.deleteValue(key);
 	}
 
 	/**
@@ -62,16 +55,12 @@ public class VABDirectoryProxy implements IVABDirectoryService {
 	 */
 	@Override
 	public String lookup(String id) {
-		Object response = null;
-		try {
-			response = provider.getModelPropertyValue(id);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Object response = provider.getModelPropertyValue(id);
+		
 		if (response instanceof String) {
 			return (String) response;
 		} else {
-			return null;
+			throw new ProviderException("Lookup returned unexpected object: " + response);
 		}
 	}
 }

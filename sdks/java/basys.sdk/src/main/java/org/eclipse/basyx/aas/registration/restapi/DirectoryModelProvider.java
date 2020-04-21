@@ -233,13 +233,14 @@ public class DirectoryModelProvider implements IModelProvider {
 			
 			AASDescriptor aas = createAASDescriptorFromMap(newEntity);
 			
-			//aas to be created already exists
-			if(registry.lookupAAS(aas.getIdentifier()) != null) {
+			// Check if resource does already exist
+			try {
+				registry.lookupAAS(aas.getIdentifier());
 				throw new ResourceAlreadyExistsException("AAS with Id '" +
 						aas.getIdentifier().getId() + "' already exists. Try update instead.");
+			} catch (ResourceNotFoundException e) {
+				registry.register(aas);
 			}
-			
-			registry.register(aas);
 			
 		// Creating new submodel entry for existing aas
 		} else if (splitted.length == 2) { 
@@ -249,12 +250,13 @@ public class DirectoryModelProvider implements IModelProvider {
 			
 			//a submodel with this Id already exists in given aas
 			//getSmDescriptorFromAAS also checks if aas exists
-			if(getSmDescriptorFromAAS(aasId, smDescriptor.getIdShort()) != null) {
+			try {
+				getSmDescriptorFromAAS(aasId, smDescriptor.getIdShort());
 				throw new ResourceAlreadyExistsException("A Submodel with id '" + smDescriptor.getIdShort() +
 						"' already exists in aas '" + splitted[0] + "'. Try update instead.");
+			} catch (ResourceNotFoundException e) {
+				registry.register(aasId, smDescriptor);
 			}
-			
-			registry.register(aasId, smDescriptor);
 		} else {
 			throw new MalformedRequestException("Create was called with an unsupported path: " + path);
 		}
@@ -333,10 +335,14 @@ public class DirectoryModelProvider implements IModelProvider {
 			throws ResourceNotFoundException {
 		AASDescriptor aasDescriptor = registry.lookupAAS(aasId);
 		if(aasDescriptor == null) {
-			throw new ResourceNotFoundException("Specified AASid '" + aasId.getId() + "' does not exist.");
+			throw new ResourceNotFoundException("Specified AASId '" + aasId.getId() + "' does not exist.");
 		}
 		
-		return aasDescriptor.getSubmodelDescriptorFromIdShort(smId);
+		SubmodelDescriptor smDescriptor = aasDescriptor.getSubmodelDescriptorFromIdShort(smId);
+		if (smDescriptor == null) {
+			throw new ResourceNotFoundException("Specified SMId '" + smId + "' for AAS " + aasId.getId() + " does not exist.");
+		}
+		return smDescriptor;
 	}
 
 }

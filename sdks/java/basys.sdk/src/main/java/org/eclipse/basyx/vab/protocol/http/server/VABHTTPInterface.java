@@ -105,7 +105,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
 			responseWriter.flush();
-			logger.error("Exception in HTTP-GET. Response-code: " + httpCode, e);
+			logger.debug("Exception in HTTP-GET. Response-code: " + httpCode, e);
 		}
 		
 	}
@@ -131,7 +131,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
 			responseWriter.flush();
-			logger.error("Exception in HTTP-PUT. Response-code: " + httpCode, e);
+			logger.debug("Exception in HTTP-PUT. Response-code: " + httpCode, e);
 		}
 	}
 
@@ -172,7 +172,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
 			responseWriter.flush();
-			logger.error("Exception in HTTP-POST. Response-code: " + httpCode, e);
+			logger.debug("Exception in HTTP-POST. Response-code: " + httpCode, e);
 		}
 	}
 
@@ -197,7 +197,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
 			responseWriter.flush();
-			logger.error("Exception in HTTP-PATCH. Response-code: " + httpCode, e);
+			logger.debug("Exception in HTTP-PATCH. Response-code: " + httpCode, e);
 		}
 	}
 
@@ -224,7 +224,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
 			responseWriter.flush();
-			logger.error("Exception in HTTP-DELETE. Response-code: " + httpCode, e);
+			logger.debug("Exception in HTTP-DELETE. Response-code: " + httpCode, e);
 		}
 	}
 

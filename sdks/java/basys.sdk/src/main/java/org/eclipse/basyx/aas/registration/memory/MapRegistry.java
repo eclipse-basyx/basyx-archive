@@ -8,6 +8,8 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,11 +18,12 @@ import org.slf4j.LoggerFactory;
  */
 public class MapRegistry implements IAASRegistryService {
 	protected Map<String, AASDescriptor> descriptorMap;
-	
+
 	Logger logger = LoggerFactory.getLogger(MapRegistry.class);
 
 	/**
-	 * Constructor that takes a reference to a map as a base for the registry entries
+	 * Constructor that takes a reference to a map as a base for the registry
+	 * entries
 	 */
 	public MapRegistry(Map<String, AASDescriptor> rootMap) {
 		descriptorMap = rootMap;
@@ -40,19 +43,31 @@ public class MapRegistry implements IAASRegistryService {
 	@Override
 	public void registerOnly(AASDescriptor aasDescriptor) {
 		String aasId = aasDescriptor.getIdentifier().getId();
-		descriptorMap.put(aasId, aasDescriptor);
-		logger.debug("Registered " + aasId);
+		if (descriptorMap.containsKey(aasId)) {
+			throw new ResourceAlreadyExistsException("Could not create new key for AAS " + aasId + " since it already exists");
+		} else {
+			descriptorMap.put(aasId, aasDescriptor);
+			logger.debug("Registered " + aasId);
+		}
 	}
 
 	@Override
 	public void delete(IIdentifier aasIdentifier) {
-		descriptorMap.remove(aasIdentifier.getId());
-		logger.debug("Removed " + aasIdentifier.getId());
+		String aasId = aasIdentifier.getId();
+		if (!descriptorMap.containsKey(aasId)) {
+			throw new ResourceNotFoundException("Could not delete key for AAS " + aasId + " since it does not exist");
+		} else {
+			descriptorMap.remove(aasId);
+			logger.debug("Removed " + aasId);
+		}
 	}
 
 	@Override
 	public AASDescriptor lookupAAS(IIdentifier aasIdentifier) {
-		logger.debug("Looking up " + aasIdentifier.getId());
+		String aasId = aasIdentifier.getId();
+		if (!descriptorMap.containsKey(aasId)) {
+			throw new ResourceNotFoundException("Could not look up descriptor for AAS " + aasId + " since it does not exist");
+		}
 		return descriptorMap.get(aasIdentifier.getId());
 	}
 
@@ -76,6 +91,14 @@ public class MapRegistry implements IAASRegistryService {
 	@Override
 	public void delete(IIdentifier aasId, String smIdShort) {
 		AASDescriptor desc = descriptorMap.get(aasId.getId());
+		if (desc == null) {
+			throw new ResourceNotFoundException("Could not delete submodel descriptor for AAS " + aasId + " since the AAS does not exist");
+		}
+
+		if (desc.getSubmodelDescriptorFromIdShort(smIdShort) == null) {
+			throw new ResourceNotFoundException("Could not delete submodel descriptor for AAS " + aasId + " since the SM does not exist");
+		}
+
 		desc.removeSubmodelDescriptor(smIdShort);
 		// Do not assume that the returned descriptor is referenced in the base map
 		descriptorMap.put(aasId.getId(), desc);

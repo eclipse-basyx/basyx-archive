@@ -96,7 +96,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			try {
 				providerBackend.processBaSysGet(path, output);
 			} catch (ProviderException e) {
-				logger.error("Exception in BASYX_GET", e);
+				logger.debug("Exception in BASYX_GET", e);
 				// Catch Exceptions from JSONProvider
 				// No further action here, as the current version
 				// of the TCP-Mapping states, that always Statuscode 0x00 
@@ -124,7 +124,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			try {
 				providerBackend.processBaSysSet(path, jsonValue, output);
 			} catch (ProviderException e) {
-				logger.error("Exception in BASYX_SET", e);
+				logger.debug("Exception in BASYX_SET", e);
 				// Catch Exceptions from JSONProvider
 				// No further action here, as the current version
 				// of the TCP-Mapping states, that always Statuscode 0x00 
@@ -150,7 +150,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			try {
 				providerBackend.processBaSysCreate(path, jsonValue, output);
 			} catch (ProviderException e) {
-				logger.error("Exception in BASYX_CREATE", e);
+				logger.debug("Exception in BASYX_CREATE", e);
 				// Catch Exceptions from JSONProvider
 				// No further action here, as the current version
 				// of the TCP-Mapping states, that always Statuscode 0x00 
@@ -185,7 +185,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			try {
 				providerBackend.processBaSysDelete(path, jsonValue, output);
 			} catch (ProviderException e) {
-				logger.error("Exception in BASYX_DELETE", e);
+				logger.debug("Exception in BASYX_DELETE", e);
 				// Catch Exceptions from JSONProvider
 				// No further action here, as the current version
 				// of the TCP-Mapping states, that always Statuscode 0x00 
@@ -210,7 +210,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 			try {
 				providerBackend.processBaSysInvoke(path, jsonValue, output);
 			} catch (ProviderException e) {
-				logger.error("Exception in BASYX_INVOKE", e);
+				logger.debug("Exception in BASYX_INVOKE", e);
 				// Catch Exceptions from JSONProvider
 				// No further action here, as the current version
 				// of the TCP-Mapping states, that always Statuscode 0x00 
