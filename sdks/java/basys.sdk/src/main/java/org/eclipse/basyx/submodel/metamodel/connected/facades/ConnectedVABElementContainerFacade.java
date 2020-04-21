@@ -141,7 +141,7 @@ public class ConnectedVABElementContainerFacade extends ConnectedVABModelMap<Obj
 		// Convert to ISubmodelElement
 		for (Map<String, Object> smElemNode : smElemNodes) {
 			String id = (String) smElemNode.get(Referable.IDSHORT);
-			String modelType = ((String) ((Map<String, Object>) (getProxy().getDeepProxy(VABPathTools.concatenatePaths(ModelType.MODELTYPE, id)))).get(ModelType.NAME));
+			String modelType = ((String) ((Map<String, Object>) (smElemNode.get(ModelType.MODELTYPE))).get(ModelType.NAME));
 
 			// convert ISubmodelElementCollection
 			if (modelType.equals(SubmodelElementCollection.MODELTYPE)) {
