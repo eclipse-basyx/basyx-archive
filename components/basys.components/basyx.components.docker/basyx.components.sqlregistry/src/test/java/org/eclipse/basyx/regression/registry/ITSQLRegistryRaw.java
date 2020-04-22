@@ -81,9 +81,9 @@ public class ITSQLRegistryRaw {
 		registryUrl = "http://localhost:" + dockerConfig.getHostPort() + contextConfig.getContextPath()
 				+ "/api/v1/registry/";
 		logger.info("Registry URL for integration test: " + registryUrl);
-		aasUrl1 = registryUrl + URLEncoder.encode(id1.toString(), "UTF-8");
-		aasUrl2 = registryUrl + URLEncoder.encode(id2.toString(), "UTF-8");
-		aasUrlUnknown = registryUrl + URLEncoder.encode(idUnknown.toString(), "UTF-8");
+		aasUrl1 = registryUrl + URLEncoder.encode(id1.getId(), "UTF-8");
+		aasUrl2 = registryUrl + URLEncoder.encode(id2.getId(), "UTF-8");
+		aasUrlUnknown = registryUrl + URLEncoder.encode(idUnknown.getId(), "UTF-8");
 
 		logger.info("Registry URL for integration test: " + registryUrl);
 	}

@@ -81,16 +81,6 @@ public class ModelUrn implements IIdentifier {
 		}
 	}
 	
-	
-	/**
-	 * Convert to string
-	 */
-	@Override
-	public String toString() {
-		return getEncodedURN();
-	}
-	
-	
 	/**
 	 * Create a new ModelUrn by appending a String to the URN string, e.g. to create a new element instance
 	 */
