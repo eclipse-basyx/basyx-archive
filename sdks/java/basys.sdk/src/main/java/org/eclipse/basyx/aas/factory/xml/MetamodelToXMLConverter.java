@@ -55,11 +55,10 @@ public class MetamodelToXMLConverter {
 		Element root = document.createElement(AASENV);
 		
 		//creating the Header information
-		root.setAttribute("xmlns:aas", "http://www.admin-shell.io/aas/1/0");
+		root.setAttribute("xmlns:aas", "http://www.admin-shell.io/aas/2/0");
 		root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		root.setAttribute("xmlns:IEC", "http://www.admin-shell.io/IEC61360/1/0");
-		root.setAttribute("xsi:schemaLocation",
-				"http://www.admin-shell.io/aas/1/0 AAS.xsd http://www.admin-shell.io/IEC61360/1/0 IEC61360.xsd");
+		root.setAttribute("xmlns:IEC61360", "http://www.admin-shell.io/IEC61360/2/0");
+		root.setAttribute("xsi:schemaLocation", "http://www.admin-shell.io/aas/2/0 AAS.xsd http://www.admin-shell.io/IEC61360/2/0 IEC61360.xsd");
 		document.appendChild(root);
 
 		
@@ -68,12 +67,12 @@ public class MetamodelToXMLConverter {
 		
 		Element assetsObj = AssetXMLConverter.buildAssetsXML(document, assetList);
 		root.appendChild(assetsObj);
+
+		Element subModelsroot = SubmodelXMLConverter.buildSubmodelsXML(document, submodelList);
+		root.appendChild(subModelsroot);
 		
 		Element conceptDescriptionObj = ConceptDescriptionXMLConverter.buildConceptDescriptionsXML(document, conceptDescriptionList);
 		root.appendChild(conceptDescriptionObj);
-		
-		Element subModelsroot = SubmodelXMLConverter.buildSubmodelsXML(document, submodelList);
-		root.appendChild(subModelsroot);
 		
 		
 		//create the xml file

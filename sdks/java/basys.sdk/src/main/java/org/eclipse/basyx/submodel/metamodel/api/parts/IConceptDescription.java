@@ -20,8 +20,6 @@ public interface IConceptDescription extends IHasDataSpecification, IIdentifiabl
 	/**
 	 * Gets the global reference to an external definition the concept is compatible
 	 * to or was derived from.
-	 * 
-	 * @return
 	 */
 	public Collection<IReference> getIsCaseOf();
 }

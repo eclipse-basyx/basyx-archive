@@ -54,8 +54,13 @@ public class XMLToMetamodelConverter {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<IAssetAdministrationShell> parseAAS() throws ParserConfigurationException, SAXException, IOException {
-		Map<String, Object> xmlAASs = (Map<String, Object>) root.get(AssetAdministrationShellXMLConverter.ASSET_ADMINISTRATION_SHELLS);		
-		return AssetAdministrationShellXMLConverter.parseAssetAdministrationShells(xmlAASs);
+		Map<String, Object> xmlAASs = (Map<String, Object>) root
+				.get(AssetAdministrationShellXMLConverter.ASSET_ADMINISTRATION_SHELLS);
+		// First, parse all conceptDescriptions
+		List<IConceptDescription> conceptDescriptions = parseConceptDescriptions();
+		// Then parse the AAS -> the available conceptDescriptions have to be mapped to the contained concept
+		// dictionaries
+		return AssetAdministrationShellXMLConverter.parseAssetAdministrationShells(xmlAASs, conceptDescriptions);
 	}
 
 	

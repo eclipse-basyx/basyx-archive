@@ -28,10 +28,21 @@ public class LangStringsXMLConverter {
 	 * @return the parsed LangStrings object
 	 */
 	public static LangStrings parseLangStrings(Map<String, Object> xmlObject) {
+		return parseLangStrings(xmlObject, LANG_STRING);
+	}
+
+	/**
+	 * Parses the LangStrings object from XML with a custom lang string xml tag
+	 * 
+	 * @param xmlObject the XML map containing the &lt;langString&gt; tags
+	 * @param tagName   the custom &lt;*langString*&gt; tagName
+	 * @return the parsed LangStrings object
+	 */
+	public static LangStrings parseLangStrings(Map<String, Object> xmlObject, String tagName) {
 		LangStrings langStrings = new LangStrings();
 		
 		if(xmlObject != null) {
-			List<Map<String, Object>> xmlLangStrings = XMLHelper.getList(xmlObject.get(LANG_STRING));
+			List<Map<String, Object>> xmlLangStrings = XMLHelper.getList(xmlObject.get(tagName));
 			for (Map<String, Object> xmlLangString : xmlLangStrings) {
 				String text = XMLHelper.getString(xmlLangString.get(XMLHelper.TEXT));
 				String lang = XMLHelper.getString(xmlLangString.get(LANG));
@@ -52,10 +63,22 @@ public class LangStringsXMLConverter {
 	 * @param langStrings the LangStrings object to be converted to XML
 	 */
 	public static void buildLangStringsXML(Document document, Element root, LangStrings langStrings) {
+		buildLangStringsXML(document, root, LANG_STRING, langStrings);
+	}
+
+	/**
+	 * Builds XML form a given LangStrings object with a custom langString tagName
+	 * 
+	 * @param document the XML document
+	 * @param root the root Element where the &lt;langString&gt; tags should be in
+	 * @param tagName the custom &lt;*langString*&gt; tagName
+	 * @param langStrings the LangStrings object to be converted to XML
+	 */
+	public static void buildLangStringsXML(Document document, Element root, String tagName, LangStrings langStrings) {
 		if (langStrings != null) {
 			Set<String> languages = langStrings.getLanguages();
 			for(String language: languages) {
-				Element langStringRoot = document.createElement(LANG_STRING);					
+				Element langStringRoot = document.createElement(tagName);
 				String text = langStrings.get(language);
 
 				langStringRoot.setAttribute(LANG, language);

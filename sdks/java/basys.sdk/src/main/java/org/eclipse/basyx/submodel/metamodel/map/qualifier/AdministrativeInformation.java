@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.vab.model.VABModelMap;
@@ -67,6 +68,15 @@ public class AdministrativeInformation extends VABModelMap<Object> implements IA
 
 	public void setDataSpecificationReferences(Collection<IReference> ref) {
 		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
+	}
+
+	@Override
+	public Collection<IEmbeddedDataSpecification> getEmbeddedDataSpecifications() {
+		return HasDataSpecification.createAsFacade(this).getEmbeddedDataSpecifications();
+	}
+
+	public void setEmbeddedDataSpecifications(Collection<IEmbeddedDataSpecification> embeddedDataSpecifications) {
+		HasDataSpecification.createAsFacade(this).setEmbeddedDataSpecifications(embeddedDataSpecifications);
 	}
 
 	public void setVersion(String version) {

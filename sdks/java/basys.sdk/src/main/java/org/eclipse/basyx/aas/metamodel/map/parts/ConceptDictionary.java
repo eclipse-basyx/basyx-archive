@@ -1,14 +1,18 @@
 package org.eclipse.basyx.aas.metamodel.map.parts;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
@@ -21,23 +25,22 @@ import org.eclipse.basyx.vab.model.VABModelMap;
 public class ConceptDictionary extends VABModelMap<Object> implements IConceptDictionary {
 	public static final String CONCEPTDESCRIPTION = "conceptDescription";
 
-	// Extension of meta model
+	// Extension of meta model to support local concept descriptions
 	public static final String CONCEPTDESCRIPTIONS = "conceptDescriptions";
 
 	/**
 	 * Constructor
 	 */
 	public ConceptDictionary() {
-		// Add qualifier (Referable)
 		putAll(new Referable());
-		put(CONCEPTDESCRIPTION, new HashSet<String>());
-		put(CONCEPTDESCRIPTIONS, new HashSet<IConceptDescription>());
+		put(CONCEPTDESCRIPTION, new ArrayList<IReference>());
+		put(CONCEPTDESCRIPTIONS, new ArrayList<IConceptDescription>());
 	}
 
 	public ConceptDictionary(Collection<IReference> ref) {
-		// Add qualifier (Referable)
 		putAll(new Referable());
 		put(CONCEPTDESCRIPTION, ref);
+		put(CONCEPTDESCRIPTIONS, new ArrayList<IConceptDescription>());
 	}
 
 	/**
@@ -95,16 +98,54 @@ public class ConceptDictionary extends VABModelMap<Object> implements IConceptDi
 	}
 
 	@Override
-	public Collection<IReference> getConceptDescription() {
+	public Collection<IReference> getConceptDescriptionReferences() {
 		return ReferenceHelper.transform(get(ConceptDictionary.CONCEPTDESCRIPTION));
 	}
 
-	public void setConceptDescription(Collection<IReference> ref) {
+	/**
+	 * Sets
+	 * 
+	 * @param ref
+	 */
+	public void setConceptDescriptionReferences(Collection<IReference> ref) {
 		put(ConceptDictionary.CONCEPTDESCRIPTION, ref);
 	}
 
+	/**
+	 * Sets the concept descriptions for this concept dictionary. The method sets local references to the added
+	 * concept descriptions, too.
+	 * 
+	 * @param descriptions All the concept descriptions the concept dictionary shall have
+	 */
+	public void setConceptDescriptions(Collection<IConceptDescription> descriptions) {
+		put(CONCEPTDESCRIPTIONS, descriptions);
+		// Also add the references to these concept descriptions
+		Collection<IReference> refs = new ArrayList<>();
+		for ( IConceptDescription desc : descriptions ) {
+			refs.add(createConceptDescriptionRef(desc));
+		}
+		setConceptDescriptionReferences(refs);
+	}
+
+	/**
+	 * Adds a new concept description together with a local reference to it.
+	 * 
+	 * @param description The new concept description
+	 */
 	@SuppressWarnings("unchecked")
 	public void addConceptDescription(IConceptDescription description) {
 		((Collection<IConceptDescription>) get(CONCEPTDESCRIPTIONS)).add(description);
+		getConceptDescriptionReferences().add(createConceptDescriptionRef(description));
+	}
+
+	private IReference createConceptDescriptionRef(IConceptDescription description) {
+		IIdentifier id = description.getIdentification();
+		return new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, true, id.getId(), id.getIdType()));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<IConceptDescription> getConceptDescriptions() {
+		return ((Collection<IConceptDescription>) get(CONCEPTDESCRIPTIONS));
 	}
 }

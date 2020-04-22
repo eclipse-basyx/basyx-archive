@@ -26,11 +26,13 @@ public class LangStrings extends HashSet<HashMap<String, Object>> {
 	}
 	
 	public LangStrings(Collection<Map<String, Object>> set) {
-		set.stream().forEach(ls -> {
-			String lang = (String) ls.get(LANGUAGE);
-			String text = (String) ls.get(TEXT);
-			add(lang, text);
-		});
+		if (set != null) {
+			set.stream().forEach(ls -> {
+				String lang = (String) ls.get(LANGUAGE);
+				String text = (String) ls.get(TEXT);
+				add(lang, text);
+			});
+		}
 	}
 
 	/**
@@ -49,7 +51,6 @@ public class LangStrings extends HashSet<HashMap<String, Object>> {
 	}
 	
 	/**
-	 * 
 	 * @return A Set of Strings containing all languages of this LangStrings Object
 	 */
 	public Set<String> getLanguages() {

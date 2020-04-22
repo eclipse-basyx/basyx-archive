@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
@@ -31,8 +32,6 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  */
 
 public class Asset extends VABModelMap<Object> implements IAsset {
-
-
 	public static String ASSETIDENTIFICATIONMODEL = "assetIdentificationModel";
 	public static String MODELTYPE = "Asset";
 	public static final String KIND = "kind";
@@ -89,6 +88,15 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 
 	public void setDataSpecificationReferences(Collection<IReference> ref) {
 		HasDataSpecification.createAsFacade(this).setDataSpecificationReferences(ref);
+	}
+
+	@Override
+	public Collection<IEmbeddedDataSpecification> getEmbeddedDataSpecifications() {
+		return HasDataSpecification.createAsFacade(this).getEmbeddedDataSpecifications();
+	}
+
+	public void setEmbeddedDataSpecifications(Collection<IEmbeddedDataSpecification> embeddedDataSpecifications) {
+		HasDataSpecification.createAsFacade(this).setEmbeddedDataSpecifications(embeddedDataSpecifications);
 	}
 
 	@Override

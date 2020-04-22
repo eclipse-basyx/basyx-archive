@@ -18,6 +18,7 @@ import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.parts.View;
 import org.eclipse.basyx.aas.metamodel.map.security.Security;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -77,6 +78,11 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	@Override
 	public Collection<IReference> getDataSpecificationReferences() {
 		return HasDataSpecification.createAsFacade(getElem()).getDataSpecificationReferences();
+	}
+
+	@Override
+	public Collection<IEmbeddedDataSpecification> getEmbeddedDataSpecifications() {
+		return HasDataSpecification.createAsFacade(getElem()).getEmbeddedDataSpecifications();
 	}
 
 	@SuppressWarnings("unchecked")

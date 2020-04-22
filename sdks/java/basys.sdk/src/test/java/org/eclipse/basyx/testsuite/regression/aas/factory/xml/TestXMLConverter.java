@@ -26,8 +26,11 @@ import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecificationContent;
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -37,6 +40,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.EntityType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.dataspecification.DataSpecificationIEC61360Content;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
@@ -183,6 +187,8 @@ public class TestXMLConverter {
 		
 		assertEquals("www.admin-shell.io/aas-sample/1/0", aas.getIdentification().getId());
 		assertEquals(IdentifierType.IRI, aas.getIdentification().getIdType());
+
+		checkDefaultEmbeddedDataSpecification(aas);
 		
 		assertEquals("1", aas.getAdministration().getVersion());
 		assertEquals("0", aas.getAdministration().getRevision());
@@ -190,16 +196,25 @@ public class TestXMLConverter {
 		Collection<IConceptDictionary> conceptDictionary = aas.getConceptDictionary();
 		for (IConceptDictionary iConceptDictionary : conceptDictionary) {
 			assertEquals("SampleDic", iConceptDictionary.getIdShort());
-			Collection<IReference> conceptDescription = iConceptDictionary.getConceptDescription();
-			List<IKey> keys = conceptDescription.iterator().next().getKeys();
-			assertEquals(1, keys.size());
 
-			// Test key
-			IKey key = keys.get(0);
+			// Test concept description reference
+			Collection<IReference> conceptDescriptionRefs = iConceptDictionary.getConceptDescriptionReferences();
+			assertEquals(1, conceptDescriptionRefs.size());
+			IKey key = conceptDescriptionRefs.iterator().next().getKeys().iterator().next();
 			assertEquals(KeyElements.CONCEPTDESCRIPTION, key.getType());
-			assertEquals(KeyType.IRDI, key.getIdType());
-			assertEquals("0173-1#02-BAA120#007", key.getValue());
+			assertEquals(KeyType.IRI, key.getIdType());
+			assertEquals("www.festo.com/dic/08111234", key.getValue());
 			assertEquals(true, key.isLocal());
+
+			// Test concept description
+			Collection<IConceptDescription> conceptDescriptions = iConceptDictionary.getConceptDescriptions();
+			assertEquals(1, conceptDescriptions.size());
+			IConceptDescription desc = conceptDescriptions.iterator().next();
+			assertEquals(IdentifierType.IRI, desc.getIdentification().getIdType());
+			assertEquals("www.festo.com/dic/08111234", desc.getIdentification().getId());
+			assertEquals("cs_category", desc.getCategory());
+			checkDefaultEmbeddedDataSpecification(desc);
+
 		}
 
 		// Test submodel reference retrieval
@@ -236,6 +251,7 @@ public class TestXMLConverter {
 		if(!iView.getIdShort().equals("SampleView"))
 			iView = (IView) views[1];
 		assertEquals("SampleView", iView.getIdShort());
+		checkDefaultEmbeddedDataSpecification(iView);
 		Collection<IReference> containedElement = iView.getContainedElement();
 		IReference ref = containedElement.iterator().next();
 
@@ -253,6 +269,40 @@ public class TestXMLConverter {
 		assertEquals(true, key1.isLocal());
 	}
 	
+	private void checkDefaultEmbeddedDataSpecification(IHasDataSpecification hasDataSpecification) {
+		Collection<IEmbeddedDataSpecification> embeddedSpecs = hasDataSpecification.getEmbeddedDataSpecifications();
+		IEmbeddedDataSpecification embeddedSpec = embeddedSpecs.iterator().next();
+		checkDefaultDataSpecificationReference(embeddedSpec.getDataSpecificationTemplate());
+		checkDefaultDataSpecificationContent(embeddedSpec.getContent());
+	}
+
+	@SuppressWarnings("unchecked")
+	private void checkDefaultDataSpecificationContent(IDataSpecificationContent content) {
+		DataSpecificationIEC61360Content iecContent = DataSpecificationIEC61360Content
+				.createAsFacade((Map<String, Object>) content);
+		LangStrings preferredName = iecContent.getPreferredName();
+		assertEquals("Drehzahl", preferredName.get("DE"));
+		assertEquals("Rotation Speed", preferredName.get("EN"));
+		LangStrings shortName = iecContent.getShortName();
+		assertEquals("N", shortName.get("DE"));
+		assertEquals("1/min", iecContent.getUnit());
+		IReference unitId = iecContent.getUnitId();
+		IKey unitIdKey = unitId.getKeys().iterator().next();
+		assertEquals(KeyType.IRDI, unitIdKey.getIdType());
+		assertEquals(KeyElements.GLOBALREFERENCE, unitIdKey.getType());
+		assertEquals("0173-1#05-AAA650#002", unitIdKey.getValue());
+		assertEquals("NR1..5", iecContent.getValueFormat());
+	}
+
+	private void checkDefaultDataSpecificationReference(IReference dataSpecRef) {
+		IKey dataSpecKey = dataSpecRef.getKeys().iterator().next();
+		assertEquals(1, dataSpecRef.getKeys().size());
+		assertEquals(KeyType.IRI, dataSpecKey.getIdType());
+		assertEquals(KeyElements.GLOBALREFERENCE, dataSpecKey.getType());
+		assertFalse(dataSpecKey.isLocal());
+		assertEquals("www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360", dataSpecKey.getValue());
+	}
+
 	private void checkAssets(List<IAsset> assets) {
 		assertEquals(2, assets.size());
 		IAsset asset = null;
@@ -266,7 +316,7 @@ public class TestXMLConverter {
 		}
 		
 		assertNotNull(asset);
-		
+		checkDefaultEmbeddedDataSpecification(asset);
 		assertEquals("3s7plfdrs35_asset1", asset.getIdShort());
 		assertEquals("asset1_Description", asset.getDescription().get("EN"));
 		assertEquals(IdentifierType.IRI, asset.getIdentification().getIdType());
@@ -303,7 +353,7 @@ public class TestXMLConverter {
 		}
 		
 		assertNotNull(submodel);
-		
+		checkDefaultEmbeddedDataSpecification(submodel);
 		assertEquals("3s7plfdrs35_submodel1", submodel.getIdShort());
 		Collection<IConstraint> constraints = submodel.getQualifier();
 		assertEquals(2, constraints.size());
@@ -319,6 +369,7 @@ public class TestXMLConverter {
 		ISubmodelElement element = submodelElements.get("rotationSpeed");
 		assertTrue(element instanceof Property);
 		Property property = (Property) element;
+		checkDefaultEmbeddedDataSpecification(property);
 		assertEquals("2000", property.get());
 		assertEquals("double", property.getValueType());
 		assertEquals("rotationSpeed", property.getIdShort());

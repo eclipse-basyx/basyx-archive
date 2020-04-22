@@ -18,7 +18,10 @@ import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.HasDataSpecif
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.IdentifiableXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.ReferableXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.reference.ReferenceXMLConverter;
+import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -46,14 +49,15 @@ public class AssetAdministrationShellXMLConverter {
 	/**
 	 * Parses &lt;aas:assetAdministrationShells&gt; and builds the AssetAdministrationShell objects from it
 	 * 
-	 * @param xmlAASObject a Map containing the content of the XML tag &lt;aas:assetAdministrationShells&gt;
+	 * @param xmlAASObject        a Map containing the content of the XML tag &lt;aas:assetAdministrationShells&gt;
+	 * @param conceptDescriptions the available concept descriptions
 	 * @return a List of IAssetAdministrationShell objects parsed form the given XML Map
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<IAssetAdministrationShell> parseAssetAdministrationShells(Map<String, Object> xmlAASObject) {
-		
+	public static List<IAssetAdministrationShell> parseAssetAdministrationShells(Map<String, Object> xmlAASObject,
+			Collection<IConceptDescription> conceptDescriptions) {
 		List<Map<String, Object>> xmlAASs = XMLHelper.getList(xmlAASObject.get(ASSET_ADMINISTRATION_SHELL));
-		List<IAssetAdministrationShell> AASs = new ArrayList<>();
+		List<IAssetAdministrationShell> aasList = new ArrayList<>();
 		
 		for(Map<String, Object> xmlAAS: xmlAASs) {
 			AssetAdministrationShell adminShell = new AssetAdministrationShell();
@@ -62,17 +66,10 @@ public class AssetAdministrationShellXMLConverter {
 			HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlAAS, adminShell);
 			
 			Collection<IView> views = ViewXMLConverter.parseViews(xmlAAS);
-			Collection<IConceptDictionary> conceptDictionary = parseConceptDictionaries(xmlAAS);
+			Collection<IConceptDictionary> conceptDictionary = parseConceptDictionaries(xmlAAS, conceptDescriptions);
 			
 			Map<String, Object> xmlAssetRef = (Map<String, Object>) xmlAAS.get(ASSET_REF);
 			Reference assetRef = ReferenceXMLConverter.parseReference(xmlAssetRef);
-			
-			//FIXME DataSpecificationIEC61360 has no equivalent in AAS Object
-			/*Map<String, Object> xmlEmbeddedDataSpec = (Map<String, Object>) xmlAAS.get(EMBEDDED_DATA_SPECIFICATION);
-			if (xmlEmbeddedDataSpec != null) {
-				DataSpecificationIEC61360 specification = TransformDataSpecification.
-						parseDataSpecification((Map<String, Object>) xmlEmbeddedDataSpec.get(DATA_SPECIFICATION_CONTENT));
-			}*/
 			
 			Map<String, Object> xmlDerivedFrom = (Map<String, Object>) xmlAAS.get(DERIVED_FROM);
 			IReference derivedFrom =  ReferenceXMLConverter.parseReference(xmlDerivedFrom);
@@ -85,9 +82,9 @@ public class AssetAdministrationShellXMLConverter {
 			Collection<IReference> submodelRefs = parseSubmodelRefs(xmlAAS);
 			adminShell.setSubmodelReferences(submodelRefs);
 			
-			AASs.add(adminShell);
+			aasList.add(adminShell);
 		}
-		return AASs;
+		return aasList;
 	}
 	
 	
@@ -121,10 +118,12 @@ public class AssetAdministrationShellXMLConverter {
 	 * Parses &lt;aas:conceptDictionaries&gt; and builds IConceptDictionary objects from it
 	 * 
 	 * @param xmlConceptDescriptionRefsObject a Map containing the XML tag &lt;aas:conceptDictionaries&gt;
+	 * @param conceptDescriptions             the available concept descriptions
 	 * @return a Set of IConceptDictionary objects parsed form the given XML Map
 	 */
 	@SuppressWarnings("unchecked")
-	private static Collection<IConceptDictionary> parseConceptDictionaries(Map<String, Object> xmlConceptDescriptionRefsObject) {
+	private static Collection<IConceptDictionary> parseConceptDictionaries(
+			Map<String, Object> xmlConceptDescriptionRefsObject, Collection<IConceptDescription> conceptDescriptions) {
 		Set<IConceptDictionary> conceptDictionarySet = new HashSet<>();
 		if(xmlConceptDescriptionRefsObject == null) return conceptDictionarySet;
 		
@@ -137,15 +136,13 @@ public class AssetAdministrationShellXMLConverter {
 			ReferableXMLConverter.populateReferable(xmlConceptDictionary, conceptDictionary);
 			
 			Map<String, Object> xmlConceptDescriptionRefs = (Map<String, Object>) xmlConceptDictionary.get(CONCEPT_DESCRIPTION_REFS);
-			
 			HashSet<IReference> referenceSet = new HashSet<>();
-			
 			List<Map<String, Object>> xmlConceptDescriptionRefsList = XMLHelper.getList(xmlConceptDescriptionRefs.get(CONCEPT_DESCRIPTION_REF));
 			for (Map<String, Object> xmlConceptDescriptionRef : xmlConceptDescriptionRefsList) {
 				referenceSet.add(ReferenceXMLConverter.parseReference(xmlConceptDescriptionRef));
 			}
 			
-			conceptDictionary.setConceptDescription(referenceSet);
+			conceptDictionary.setConceptDescriptions(getConceptDescriptions(referenceSet, conceptDescriptions));
 			conceptDictionarySet.add(conceptDictionary);
 		}
 		
@@ -154,11 +151,37 @@ public class AssetAdministrationShellXMLConverter {
 	
 	
 	
-	
+	/**
+	 * Gets concept descriptions according to given references
+	 * 
+	 * @param referenceSet
+	 * @param conceptDescriptions
+	 * @return the matching concept descriptions
+	 */
+	private static Collection<IConceptDescription> getConceptDescriptions(Collection<IReference> referenceSet,
+			Collection<IConceptDescription> conceptDescriptions) {
+		Collection<IConceptDescription> result = new ArrayList<>();
+		for (IReference ref : referenceSet) {
+			if (ref.getKeys() == null || ref.getKeys().isEmpty()) {
+				continue;
+			}
+
+			IKey firstKey = ref.getKeys().iterator().next();
+			if ( firstKey.getType() == KeyElements.CONCEPTDESCRIPTION && firstKey.isLocal() ) {
+				for (IConceptDescription description : conceptDescriptions) {
+					if (description.getIdentification().getId().equals(firstKey.getValue())) {
+						result.add(description);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * Builds &lt;aas:assetAdministrationShells&gt; from a given Collection of IAssetAdministrationShell objects
 	 * 
-	 * @param document the XML document
+	 * @param document                  the XML document
 	 * @param assetAdministrationShells a Collection of IAssetAdministrationShell objects to build the XML for
 	 * @return the &lt;aas:assetAdministrationShells&gt; XML tag for the given IAssetAdministrationShell objects
 	 */
@@ -269,7 +292,7 @@ public class AssetAdministrationShellXMLConverter {
 			}
 			conceptDict.appendChild(concDescRoot);
 			conceptDicts.appendChild(conceptDict);
-			Collection<IReference> conceptDescriptionRef = iConceptDictionary.getConceptDescription();
+			Collection<IReference> conceptDescriptionRef = iConceptDictionary.getConceptDescriptionReferences();
 			for (IReference ref: conceptDescriptionRef) {
 				if(ref != null) {
 					Element conceptDescriptionRefRoot = document.createElement(CONCEPT_DESCRIPTION_REF);

@@ -31,7 +31,7 @@ public class XMLHelper {
 			list.add((Map<String, Object>) xmlObject);
 			return list;
 		}
-		return new ArrayList<Map<String, Object>>();
+		return new ArrayList<>();
 	}
 	
 	
@@ -43,6 +43,6 @@ public class XMLHelper {
 	 * @return the given String or an empty String
 	 */
 	public static String getString(Object object) {
-		return object instanceof String ? (String)object : "";
+		return object instanceof String ? ((String) object).trim() : "";
 	}
 }
