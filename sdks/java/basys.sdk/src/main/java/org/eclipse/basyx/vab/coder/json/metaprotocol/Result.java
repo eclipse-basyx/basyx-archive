@@ -75,14 +75,8 @@ public class Result extends HashMap<String, Object> {
 			messageList.addAll(getMessageListFromException((Exception) e.getCause()));
 		}
 
-		// prepare stacktrace
-		String trace = "\n";
-		for (StackTraceElement s : e.getStackTrace()) {
-			trace = trace + " at " + s.toString() + "\n";
-		}
-
 		// replace with desired debugging output
-		messageList.add(new Message(MessageType.Exception, e.getClass().getName() + ": " + trace));
+		messageList.add(new Message(MessageType.Exception, e.getClass().getSimpleName() + ": " + e.getMessage()));
 		
 		return messageList;
 	}

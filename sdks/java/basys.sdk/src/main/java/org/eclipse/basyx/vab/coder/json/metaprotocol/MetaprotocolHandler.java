@@ -89,22 +89,36 @@ public class MetaprotocolHandler implements IMetaProtocolHandler {
 
 			String text = (String) first.get(Message.TEXT);
 			
-			// The .toString of the occured Exception is contained in the JSON
-			// Throw a new matching ProviderException
-			if (text.contains(ResourceNotFoundException.class.getName())) {
-				throw new ResourceNotFoundException(text);
-			} else if (text.contains(ResourceAlreadyExistsException.class.getName())) {
-				throw new ResourceAlreadyExistsException(text);
-			} else if (text.contains(MalformedRequestException.class.getName())) {
-				throw new MalformedRequestException(text);
-			} else {
-				throw new ProviderException("Server threw exception: " + text);
-			}
+			throw getExceptionFromString(text);
 			
 		} else {
 			throw new ProviderException("Format Error: no success but isException not true or not found.");
 		}
 
 		return result;
+	}
+	
+	/**
+	 * Creates a ProviderException from a String received form the Server</br>
+	 * The String has to be formated e.g. "ResourceNotFoundException: Requested Item was not found"
+	 * 
+	 * @param exceptionString the String received from the server
+	 * @return the matching ProviderException
+	 */
+	public static ProviderException getExceptionFromString(String exceptionString) {
+		
+		// Get the Message of the Exception (the String behind the ":")
+		String message = exceptionString.substring(exceptionString.indexOf(":") + 2);
+		
+		// Get the correct ProviderException matching the name before the ":")
+		if (exceptionString.contains(ResourceNotFoundException.class.getSimpleName())) {
+			return new ResourceNotFoundException(message);
+		} else if (exceptionString.contains(ResourceAlreadyExistsException.class.getSimpleName())) {
+			return new ResourceAlreadyExistsException(message);
+		} else if (exceptionString.contains(MalformedRequestException.class.getSimpleName())) {
+			return new MalformedRequestException(message);
+		} else {
+			return new ProviderException("Server threw exception: " + exceptionString);
+		}
 	}
 }
