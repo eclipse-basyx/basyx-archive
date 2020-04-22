@@ -6,6 +6,6 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
  * @author rajashek
  *
 */
-public interface IOperationVariable extends ISubmodelElement {
+public interface IOperationVariable {
 	public ISubmodelElement getValue();
 }

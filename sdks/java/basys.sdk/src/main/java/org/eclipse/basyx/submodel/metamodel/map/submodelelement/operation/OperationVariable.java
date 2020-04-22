@@ -8,6 +8,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelEleme
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * OperationVariable as described by DAAS document An operation variable is a
@@ -16,7 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
  * @author schnicke
  *
  */
-public class OperationVariable extends SubmodelElement implements IOperationVariable {
+public class OperationVariable extends VABModelMap<Object> implements IOperationVariable {
 	public static final String MODELTYPE = "OperationVariable";
 
 	/**

@@ -78,7 +78,6 @@ public class OperationXMLConverter extends SubmodelElementXMLConverter {
 	private static OperationVariable parseOperationVariable(Map<String, Object> xmlObject) {
 		SubmodelElement submodelElement = getSubmodelElement((Map<String, Object>) xmlObject.get(VALUE));
 		OperationVariable operationVariable = new OperationVariable(submodelElement);
-		populateSubmodelElement(xmlObject, operationVariable);
 		return operationVariable;
 	}
 	
@@ -137,8 +136,6 @@ public class OperationXMLConverter extends SubmodelElementXMLConverter {
 	 */
 	private static Element buildOperationVariable(Document document, IOperationVariable operationVariable) {
 		Element operationVariableRoot = document.createElement(OPERATION_VARIABLE);
-		
-		populateSubmodelElement(document, operationVariableRoot, operationVariable);
 		
 		ISubmodelElement value = operationVariable.getValue();
 		
