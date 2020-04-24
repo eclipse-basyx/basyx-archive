@@ -6,7 +6,6 @@ import static org.junit.Assert.fail;
 
 import java.util.Collection;
 
-import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
@@ -18,20 +17,20 @@ import org.junit.Test;
 
 
 /**
- * Test for implementations of the IAASAggregator interface
+ * Testsuite for implementations of the IAASAggregator interface
  * 
- * @author conradi
+ * @author conradi, schnicke
  *
  */
-public class TestIAASAggregator {
+public abstract class AASAggregatorSuite {
 
-	private AssetAdministrationShell aas1;
+	protected AssetAdministrationShell aas1;
 	private static final String aas1Id = "aas1";
 	private static final LangStrings description1 = new LangStrings("en", "This is test AAS 1");
 	private static final String aas1Category = "TestCategory1";
 	private static final String aas1AltCategory = "OtherTestCategory1";
 	
-	private AssetAdministrationShell aas2;
+	protected AssetAdministrationShell aas2;
 	private static final String aas2Id = "aas2";
 	private static final LangStrings description2 = new LangStrings("en", "This is test AAS 2");
 	private static final String aas2Category = "TestCategory2";
@@ -52,9 +51,7 @@ public class TestIAASAggregator {
 		aas2.setCategory(aas2Category);
 	}
 	
-	private IAASAggregator getAggregator() {
-		return new AASAggregator();
-	}
+	protected abstract IAASAggregator getAggregator();
 	
 	
 	@Test
@@ -142,7 +139,6 @@ public class TestIAASAggregator {
 			}
 		}
 	}
-	
 	
 	// Methods to verify, that AAS objects contain the correct test data
 	private void checkAAS1(Object o) {

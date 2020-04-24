@@ -32,7 +32,44 @@ public class VABPathTools {
 	}
 
 	/**
-	 * Split a path into path elements e.g. /a/b/c -> [ a, b, c ]
+	 * Skips the first N entries of a path. E.g. for <i>a/b/c</i> skipping 2 means
+	 * returning <i>c</i>
+	 * 
+	 * @param path
+	 * @param toSkip
+	 * @return
+	 */
+	public static String skipEntries(String path, int toSkip) {
+		StringBuilder builder = new StringBuilder();
+		String[] splitted = VABPathTools.splitPath(path);
+
+		for (int i = toSkip; i < splitted.length; i++) {
+			builder.append(splitted[i]);
+
+			// Don't add slash at last step
+			if (i < splitted.length - 1) {
+				builder.append("/");
+			}
+
+		}
+
+		return builder.toString();
+	}
+
+	/**
+	 * Returns the Nth entry of a path, e.g. the second entry of <i>a/b/c</i> is
+	 * <i>c</i>
+	 * 
+	 * @param path
+	 * @param entry
+	 * @return
+	 */
+	public static String getEntry(String path, int entry) {
+		return VABPathTools.splitPath(path)[entry];
+	}
+
+	/**
+	 * Split a path into path elements, e.g. /a/b/c -> [ a, b, c ]
 	 */
 	public static String[] splitPath(String path) {
 		// Return null result for null argument

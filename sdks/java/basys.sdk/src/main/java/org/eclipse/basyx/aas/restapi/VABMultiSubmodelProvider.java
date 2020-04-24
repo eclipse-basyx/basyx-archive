@@ -9,6 +9,7 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -164,6 +165,10 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 				} else {
 					IModelProvider hashmapProvider = submodel_providers.get(pathElements[2]);
 
+					if(hashmapProvider == null) {
+						throw new ResourceNotFoundException("Submodel with id " + pathElements[2] + " does not exist");
+					}
+					
 					// - Retrieve submodel or property value
 					return hashmapProvider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 3));
 				}
