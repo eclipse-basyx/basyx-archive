@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
+import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
@@ -23,14 +23,14 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  * @author conradi
  *
  */
-public class AASAggregationProvider implements IModelProvider {
+public class AASAggregatorProvider implements IModelProvider {
 	
-	private IAASAggregator aggregator;
+	private AASAggregator aggregator;
 	
 	private static final String PREFIX = "aasList";
 	private static final String ENCODING_SCHEME = "UTF-8";
 	
-	public AASAggregationProvider(IAASAggregator aggregator) {
+	public AASAggregatorProvider(AASAggregator aggregator) {
 		this.aggregator = aggregator;
 	}
 
@@ -91,15 +91,17 @@ public class AASAggregationProvider implements IModelProvider {
 		
 		if(path.isEmpty()) { //Return all AAS if path is empty
 			return aggregator.getAASList();
-		} else { //A specific AAS was requested
-			path = decodePath(path);
-			IAssetAdministrationShell aas = aggregator.getAAS(new ModelUrn(path));
-			
-			//Throw an Exception if the requested aas does not exist
-			if(aas == null) {
-				throw new ResourceNotFoundException("Requested aasID '" + path + "' does not exist.");
+		} else {
+			String[] splitted = VABPathTools.splitPath(path);
+			if (splitted.length == 1) { // A specific AAS was requested
+				String id = decodePath(splitted[0]);
+				IAssetAdministrationShell aas = aggregator.getAAS(new ModelUrn(id));
+				return aas;
+			} else {
+				String id = decodePath(splitted[0]);
+				String restPath = VABPathTools.skipEntries(path, 1);
+				return aggregator.getProviderForAASId(id).getModelPropertyValue(restPath);
 			}
-			return aas;
 		}
 	}
 
@@ -131,20 +133,21 @@ public class AASAggregationProvider implements IModelProvider {
 
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
-
-		AssetAdministrationShell aas = createAASFromMap(newEntity);
-		
 		path = stripPrefix(path);
-
+		
 		if (path.isEmpty()) { // Creating new entry
-			
-			if(aggregator.getAAS(aas.getIdentification()) != null) {
-				throw new ResourceAlreadyExistsException("Value '" + path + "' to be created already exists. Try update instead.");
+			AssetAdministrationShell aas = createAASFromMap(newEntity);
+			try {
+				aggregator.getAAS(aas.getIdentification());
+				throw new ResourceAlreadyExistsException("AAS with path (id) " + path + " exists already. Try update instead");
+			} catch (ResourceNotFoundException e) {
+				aggregator.createAAS(aas);
 			}
 			
-			aggregator.createAAS(aas);
 		} else {
-			throw new MalformedRequestException("Create was called with an unsupported path: " + path);
+			String id = decodePath(VABPathTools.getEntry(path, 0));
+			String restPath = VABPathTools.skipEntries(path, 1);
+			aggregator.getProviderForAASId(id).createValue(restPath, newEntity);
 		}
 		
 	}
@@ -157,6 +160,8 @@ public class AASAggregationProvider implements IModelProvider {
 			// Decode encoded path
 			path = decodePath(path);
 			
+			if (!path.contains("/")) {
+
 			IIdentifier identifier = new ModelUrn(path);
 			
 			if(aggregator.getAAS(identifier) == null) {
@@ -164,6 +169,11 @@ public class AASAggregationProvider implements IModelProvider {
 			}
 			
 			aggregator.deleteAAS(identifier);
+			} else {
+				String id = decodePath(VABPathTools.getEntry(path, 0));
+				String restPath = VABPathTools.skipEntries(path, 1);
+				aggregator.getProviderForAASId(id).deleteValue(restPath);
+			}
 		} else {
 			throw new MalformedRequestException("Delete with empty path is not supported by registry");
 		}
@@ -192,7 +202,11 @@ public class AASAggregationProvider implements IModelProvider {
 
 	@Override
 	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
-		throw new MalformedRequestException("Invoke not supported by aggregator");
+		path = stripPrefix(path);
+		String id = decodePath(VABPathTools.getEntry(path, 0));
+		String restPath = VABPathTools.skipEntries(path, 1);
+		return aggregator.getProviderForAASId(id).invokeOperation(restPath, parameter);
 	}
 	
+
 }
