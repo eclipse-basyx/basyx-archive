@@ -190,12 +190,12 @@ public class VABModelMap<V extends Object> implements Map<String, V> {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!Map.class.isAssignableFrom(obj.getClass()))
 			return false;
 
 		// Use the type destroyer to ensure that classes extending maps are still seen
 		// as equal
-		VABModelMap<Object> otherVAB = (VABModelMap<Object>) obj;
+		Map<String, Object> otherVAB = (Map<String, Object>) obj;
 		Map<String, Object> otherMap = TypeDestroyer.destroyType(otherVAB);
 
 		if (map == null) {
