@@ -2,8 +2,7 @@ package org.eclipse.basyx.examples.snippets.aas.registry;
 
 import static org.junit.Assert.assertEquals;
 
-import org.eclipse.basyx.aas.aggregator.AASAggregator;
-import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
+import org.basyx.components.AASServer.servlet.AASServerServlet;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
@@ -12,7 +11,6 @@ import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
-import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -55,7 +53,7 @@ public class ConnectToAASEndpoints {
 				// - BaSys topology with one AAS Server and one SQL directory
 				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory().
 					// Deploy example specific servlets to Tomcat server in this context
-					addServletMapping("/Components/BaSys/1.0/aasServer/*", new VABHTTPInterface<AASAggregatorProvider>(new AASAggregatorProvider(new AASAggregator())))
+					addServletMapping("/Components/BaSys/1.0/aasServer/*", new AASServerServlet())
 			);
 
 	
