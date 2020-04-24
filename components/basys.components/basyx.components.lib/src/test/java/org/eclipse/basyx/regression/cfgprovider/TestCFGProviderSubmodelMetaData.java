@@ -54,7 +54,7 @@ public class TestCFGProviderSubmodelMetaData {
 		Map<String, Object> sampleCFG = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/sampleCFG");
 		
-		LangStrings description = new LangStrings((Collection<Map<String, Object>>) sampleCFG.get("description"));
+		LangStrings description = LangStrings.createAsFacade((Collection<Map<String, Object>>) sampleCFG.get("description"));
 		assertEquals("BaSys regression test file for CFG file provider", description.get(""));
 
 		// Get property value

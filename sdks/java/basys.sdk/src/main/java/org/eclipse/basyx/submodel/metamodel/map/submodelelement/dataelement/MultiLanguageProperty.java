@@ -53,6 +53,6 @@ public class MultiLanguageProperty extends DataElement implements IMultiLanguage
 	@Override
 	@SuppressWarnings("unchecked")
 	public LangStrings getValue() {
-		return new LangStrings((Collection<Map<String, Object>>) get(VALUE));
+		return LangStrings.createAsFacade((Collection<Map<String, Object>>) get(VALUE));
 	}
 }

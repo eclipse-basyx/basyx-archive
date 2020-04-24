@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangString;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -46,7 +47,7 @@ public class LangStringsXMLConverter {
 			for (Map<String, Object> xmlLangString : xmlLangStrings) {
 				String text = XMLHelper.getString(xmlLangString.get(XMLHelper.TEXT));
 				String lang = XMLHelper.getString(xmlLangString.get(LANG));
-				langStrings.add(lang, text);
+				langStrings.add(new LangString(lang, text));
 			}
 		}
 		return langStrings;

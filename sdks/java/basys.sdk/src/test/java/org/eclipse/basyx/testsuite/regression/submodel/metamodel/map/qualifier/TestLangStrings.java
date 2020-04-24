@@ -4,11 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangString;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.junit.Test;
 
@@ -34,17 +33,12 @@ public class TestLangStrings {
 	
 	@Test
 	public void testConstructor2() {
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		map1.put("language", LANGUAGE1);
-		map1.put("text", TEXT1);
+		LangString langString1 = new LangString(LANGUAGE1, TEXT1);
+		LangString langString2 = new LangString(LANGUAGE2, TEXT2);
 		
-		Map<String, Object> map2 = new HashMap<String, Object>();
-		map2.put("language", LANGUAGE2);
-		map2.put("text", TEXT2);
-		
-		Collection<Map<String, Object>> listsCollection = new ArrayList<>();
-		listsCollection.add(map1);
-		listsCollection.add(map2);
+		Collection<LangString> listsCollection = new ArrayList<>();
+		listsCollection.add(langString1);
+		listsCollection.add(langString2);
 		
 		LangStrings langStrings = new LangStrings(listsCollection);
 		String textString1 = langStrings.get(LANGUAGE1);
@@ -55,17 +49,25 @@ public class TestLangStrings {
 	}
 	
 	@Test
+	public void testConstructor3() {
+		LangString langString = new LangString(LANGUAGE1, TEXT1);
+		LangStrings langStrings = new LangStrings(langString);
+		String textString = langStrings.get(LANGUAGE1);
+		assertEquals(TEXT1, textString);
+	}
+	
+	@Test
 	public void testAdd() {
 		LangStrings langStrings = new LangStrings(LANGUAGE1, TEXT1);
 		
-		langStrings.add(LANGUAGE2, TEXT2);
+		langStrings.add(new LangString(LANGUAGE2, TEXT2));
 		assertEquals(TEXT2, langStrings.get(LANGUAGE2));
 	}
 	
 	@Test
 	public void testGetLanguages() {
 		LangStrings langStrings = new LangStrings(LANGUAGE1, TEXT1);
-		langStrings.add(LANGUAGE2, TEXT2);
+		langStrings.add(new LangString(LANGUAGE2, TEXT2));
 		
 		Set<String> languageSet = new HashSet<String>();
 		languageSet.add(LANGUAGE1);

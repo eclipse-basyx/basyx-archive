@@ -101,7 +101,7 @@ public class DataSpecificationIEC61360Content extends VABModelMap<Object> implem
 	@SuppressWarnings("unchecked")
 	@Override
 	public LangStrings getPreferredName() {
-		return new LangStrings((Collection<Map<String, Object>>) get(DataSpecificationIEC61360Content.PREFERREDNAME));
+		return LangStrings.createAsFacade((Collection<Map<String, Object>>) get(DataSpecificationIEC61360Content.PREFERREDNAME));
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class DataSpecificationIEC61360Content extends VABModelMap<Object> implem
 	@SuppressWarnings("unchecked")
 	@Override
 	public LangStrings getShortName() {
-		return new LangStrings((Collection<Map<String, Object>>) get(DataSpecificationIEC61360Content.SHORTNAME));
+		return LangStrings.createAsFacade((Collection<Map<String, Object>>) get(DataSpecificationIEC61360Content.SHORTNAME));
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class DataSpecificationIEC61360Content extends VABModelMap<Object> implem
 	@SuppressWarnings("unchecked")
 	@Override
 	public LangStrings getDefinition() {
-		return new LangStrings((Collection<Map<String, Object>>) get(DataSpecificationIEC61360Content.DEFINITION));
+		return LangStrings.createAsFacade((Collection<Map<String, Object>>) get(DataSpecificationIEC61360Content.DEFINITION));
 	}
 
 	/**

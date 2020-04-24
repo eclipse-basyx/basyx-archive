@@ -94,7 +94,7 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 	@Override
 	@SuppressWarnings("unchecked")
 	public LangStrings getDescription() {
-		return new LangStrings((Collection<Map<String, Object>>) get(Referable.DESCRIPTION));
+		return LangStrings.createAsFacade((Collection<Map<String, Object>>) get(Referable.DESCRIPTION));
 	}
 
 	@Override

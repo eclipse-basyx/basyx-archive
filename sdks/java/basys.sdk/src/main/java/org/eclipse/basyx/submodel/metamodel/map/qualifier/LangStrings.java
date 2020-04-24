@@ -1,7 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -10,29 +9,61 @@ import java.util.Set;
  * This Class is a List, which holds LangString Objects <br/>
  * It is used to hold a text in multiple languages
  * 
- * @author conradi
+ * @author conradi, haque
  *
  */
-public class LangStrings extends HashSet<HashMap<String, Object>> {
+public class LangStrings extends HashSet<LangString> {
 	private static final long serialVersionUID = 1L;
-
-	private static final String LANGUAGE = "language";
-	private static final String TEXT = "text";
 	
 	public LangStrings() {}
 	
-	public LangStrings(String language, String text) {
-		add(language, text);
+	/**
+	 * Constructor taking a language and a description in that language
+	 * @param language 
+	 * @param description
+	 */
+	public LangStrings(String language, String description) {
+		add(new LangString(language, description));
 	}
 	
-	public LangStrings(Collection<Map<String, Object>> set) {
-		if (set != null) {
-			set.stream().forEach(ls -> {
-				String lang = (String) ls.get(LANGUAGE);
-				String text = (String) ls.get(TEXT);
-				add(lang, text);
+	/**
+	 * Constructor taking a single LangString
+	 * @param langString single LangString to add
+	 */
+	public LangStrings(LangString langString) {
+		add(langString);
+	}
+	
+	/**
+	 * Constructor taking a collection of LangString
+	 * @param langStrings collection of LangString to add
+	 */
+	public LangStrings(Collection<LangString> langStrings) {
+		if (langStrings != null) {
+			langStrings.stream().forEach(ls -> {
+				add(ls);
 			});
 		}
+	}
+	
+	/**
+	 * Creates a LangStrings object from a collection of map
+	 * 
+	 * @param obj a LangStrings object as raw collection of map
+	 * @return a LangStrings object, that behaves like a facade for
+	 *         the given map
+	 */
+	public static LangStrings createAsFacade(Collection<Map<String, Object>> maps) {
+		if (maps == null) {
+			return null;
+		}
+
+		LangStrings ret = new LangStrings();
+		for (Map<String, Object> map : maps) {
+			LangString langString = LangString.createAsFacade(map);
+			ret.add(langString);
+		}
+		return ret;
 	}
 
 	/**
@@ -42,9 +73,10 @@ public class LangStrings extends HashSet<HashMap<String, Object>> {
 	 * an empty String if no matching LangString is found
 	 */
 	public String get(String language) {
-		for (HashMap<String, Object> langString : this) {
-			if(langString.get(LANGUAGE).toString().equalsIgnoreCase(language)) {
-				return (String) langString.get(TEXT);
+		for (LangString langString : this) {
+			String currLanguage = langString.getLanguage();
+			if(currLanguage == null ? language == null : currLanguage.equalsIgnoreCase(language)) {
+				return langString.getDescription();
 			}
 		}
 		return "";
@@ -55,21 +87,9 @@ public class LangStrings extends HashSet<HashMap<String, Object>> {
 	 */
 	public Set<String> getLanguages() {
 		HashSet<String> languageSet = new HashSet<>();
-		for (HashMap<String, Object> langString : this) {
-			languageSet.add((String) langString.get(LANGUAGE));
+		for (LangString langString : this) {
+			languageSet.add(langString.getLanguage());
 		}
 		return languageSet;
-	}
-	
-	/**
-	 * 
-	 * @param lang The language the new LangString is in.
-	 * @param text The content of the LangString.
-	 */
-	public void add(String lang, String text) {
-		HashMap<String, Object> langString = new HashMap<>();
-		langString.put(LANGUAGE, lang);
-		langString.put(TEXT, text);
-		add(langString);
 	}
 }
