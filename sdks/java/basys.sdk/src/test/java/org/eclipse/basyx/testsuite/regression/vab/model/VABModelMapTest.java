@@ -43,4 +43,15 @@ public class VABModelMapTest {
 		assertEquals(root, map.getPath(""));
 	}
 
+	@Test
+	public void testEquals() {
+		VABModelMap<Object> expected = new VABModelMap<>();
+		expected.put("a", "b");
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("a", "b");
+
+		assertEquals(expected, map);
+	}
+
 }
