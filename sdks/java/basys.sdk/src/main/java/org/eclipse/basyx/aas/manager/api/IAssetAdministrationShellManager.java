@@ -28,10 +28,9 @@ public interface IAssetAdministrationShellManager {
 	public Collection<IAssetAdministrationShell> retrieveAASAll();
 	
 	/**
-	 * Creates an AAS on a remote server. Assumes that the AAS is already registered
-	 * in the directory
+	 * Creates an AAS on a remote server.
 	 */
-	void createAAS(AssetAdministrationShell aas, IIdentifier aasId);
+	void createAAS(AssetAdministrationShell aas, IIdentifier aasId, String endpoint);
 	
 	/**
 	 * Unlink an AAS from the system

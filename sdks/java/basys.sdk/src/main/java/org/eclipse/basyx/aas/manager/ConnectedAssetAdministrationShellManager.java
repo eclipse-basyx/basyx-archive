@@ -3,8 +3,11 @@
  */
 package org.eclipse.basyx.aas.manager;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Collection;
 
+import org.eclipse.basyx.aas.aggregator.proxy.AASAggregatorProxy;
 import org.eclipse.basyx.aas.manager.api.IAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
@@ -19,6 +22,7 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.vab.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 
 /**
@@ -67,9 +71,15 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	}
 
 	@Override
-	public void createAAS(AssetAdministrationShell aas, IIdentifier aasId) {
-		VABElementProxy proxy = getAASProxyFromId(aasId);
-		proxy.createValue("/", aas);
+	public void createAAS(AssetAdministrationShell aas, IIdentifier aasId, String endpoint) {
+		IModelProvider provider = connectorProvider.getConnector(endpoint);
+		AASAggregatorProxy proxy = new AASAggregatorProxy(provider);
+		proxy.createAAS(aas);
+		try {
+			aasDirectory.register(new AASDescriptor(aas, endpoint + "/aasList/" + URLEncoder.encode(aas.getIdentification().getId(), "UTF-8")));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Encoding failed. This should never happen");
+		}
 	}
 
 	private VABElementProxy getAASProxyFromId(IIdentifier aasId) {
