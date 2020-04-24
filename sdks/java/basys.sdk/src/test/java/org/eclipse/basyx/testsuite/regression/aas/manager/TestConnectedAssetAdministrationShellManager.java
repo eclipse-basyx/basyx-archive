@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 
+import org.eclipse.basyx.aas.aggregator.AASAggregator;
+import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
@@ -58,14 +60,13 @@ public class TestConnectedAssetAdministrationShellManager {
 		// Register AAS at directory
 		IIdentifier aasId = new Identifier(IdentifierType.CUSTOM, "aasId");
 		String aasIdShort = "aasName";
-		registry.register(new AASDescriptor(aasIdShort, aasId, "/aas"));
-		connectorProvider.addMapping("", new VABMultiSubmodelProvider());
+		connectorProvider.addMapping("", new AASAggregatorProvider(new AASAggregator()));
 
 		// Create an AAS containing a reference to the created SubModel
 		AssetAdministrationShell aas = new AssetAdministrationShell();
 		aas.setIdentification(aasId);
 		aas.setIdShort(aasIdShort);
-		manager.createAAS(aas, aasId);
+		manager.createAAS(aas, aasId, "");
 
 		// Retrieve it
 		ConnectedAssetAdministrationShell connectedAAS = manager.retrieveAAS(aasId);
