@@ -14,7 +14,6 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.entity.Entity;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 
 /**
@@ -55,8 +54,6 @@ public class SubmodelElementFacadeFactory {
 				return SubmodelElementCollection.createAsFacade(submodelElement);
 			case RelationshipElement.MODELTYPE:
 				return RelationshipElement.createAsFacade(submodelElement);
-			case OperationVariable.MODELTYPE:
-				return OperationVariable.createAsFacade(submodelElement);
 			case Operation.MODELTYPE:
 				return Operation.createAsFacade(submodelElement);
 			default:
