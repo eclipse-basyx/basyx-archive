@@ -24,6 +24,7 @@ import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 
 /**
  * Implement a AAS manager backend that communicates via HTTP/REST<br />
@@ -37,6 +38,15 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	protected IAASRegistryService aasDirectory;
 	protected IConnectorProvider connectorProvider;
 	protected ModelProxyFactory proxyFactory;
+
+	/**
+	 * Creates a manager assuming an HTTP connection
+	 * 
+	 * @param directory
+	 */
+	public ConnectedAssetAdministrationShellManager(IAASRegistryService directory) {
+		this(directory, new HTTPConnectorProvider());
+	}
 
 	/**
 	 * @param networkDirectoryService
