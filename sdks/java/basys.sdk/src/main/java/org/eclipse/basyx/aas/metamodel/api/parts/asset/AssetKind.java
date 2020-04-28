@@ -1,5 +1,8 @@
 package org.eclipse.basyx.aas.metamodel.api.parts.asset;
 
+import org.eclipse.basyx.enumhelper.StandardizedLiteralEnum;
+import org.eclipse.basyx.enumhelper.StandardizedLiteralEnumHelper;
+
 /**
  * AssetKind enum as defined by DAAS document<br />
  * Enumeration for denoting whether an element is a type or an instance.
@@ -7,7 +10,7 @@ package org.eclipse.basyx.aas.metamodel.api.parts.asset;
  * @author schnicke
  *
  */
-public enum AssetKind {
+public enum AssetKind implements StandardizedLiteralEnum {
 	/**
 	 * Hardware or software element which specifies the common attributes shared by
 	 * all instances of the type
@@ -18,27 +21,23 @@ public enum AssetKind {
 	 */
 	INSTANCE("Instance");
 
-	private String name;
+	private String standardizedLiteral;
 
 	private AssetKind(String name) {
-		this.name = name;
+		this.standardizedLiteral = name;
+	}
+
+	@Override
+	public String getStandardizedLiteral() {
+		return standardizedLiteral;
 	}
 
 	@Override
 	public String toString() {
-		return name;
+		return standardizedLiteral;
 	}
 
 	public static AssetKind fromString(String str) {
-		if (str == null || str.isEmpty()) {
-			return null;
-		}
-
-		if (str.equals(AssetKind.INSTANCE.toString())) {
-			return INSTANCE;
-		} else if (str.equals(AssetKind.TYPE.toString())) {
-			return TYPE;
-		}
-		throw new RuntimeException("Unknown AssetKind: " + str);
+		return StandardizedLiteralEnumHelper.fromLiteral(AssetKind.class, str);
 	}
 }

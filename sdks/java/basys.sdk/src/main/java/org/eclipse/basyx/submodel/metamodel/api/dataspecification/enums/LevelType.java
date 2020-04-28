@@ -1,36 +1,34 @@
 package org.eclipse.basyx.submodel.metamodel.api.dataspecification.enums;
 
+import org.eclipse.basyx.enumhelper.StandardizedLiteralEnum;
+import org.eclipse.basyx.enumhelper.StandardizedLiteralEnumHelper;
+
 /**
  * Possible level types as defined in DAAS for IEC61360 data specification templates
  * 
  * @author espen
  *
  */
-public enum LevelType {
+public enum LevelType implements StandardizedLiteralEnum {
 	MIN("Min"), MAX("Max"), NOM("Nom"), TYP("Typ");
 	
-	private String type;
+	private String standardizedLiteral;
 
-	private LevelType(String type) {
-		this.type = type;
+	private LevelType(String standardizedLiteral) {
+		this.standardizedLiteral = standardizedLiteral;
+	}
+
+	@Override
+	public String getStandardizedLiteral() {
+		return standardizedLiteral;
 	}
 
 	@Override
 	public String toString() {
-		return type;
+		return standardizedLiteral;
 	}
 
 	public static LevelType fromString(String str) {
-		if (str == null || str.isEmpty()) {
-			return null;
-		}
-
-		for (LevelType elem : LevelType.values()) {
-			if (elem.toString().equals(str)) {
-				return elem;
-			}
-		}
-
-		throw new RuntimeException("Unknown LevelType: " + str);
+		return StandardizedLiteralEnumHelper.fromLiteral(LevelType.class, str);
 	}
 }

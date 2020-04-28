@@ -1,5 +1,8 @@
 package org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind;
 
+import org.eclipse.basyx.enumhelper.StandardizedLiteralEnum;
+import org.eclipse.basyx.enumhelper.StandardizedLiteralEnumHelper;
+
 /**
  * ModelingKind enum as defined by DAAS document<br />
  * Enumeration for denoting whether an element is a template or an instance.
@@ -7,7 +10,7 @@ package org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind;
  * @author schnicke
  *
  */
-public enum ModelingKind {
+public enum ModelingKind implements StandardizedLiteralEnum {
 
 	/**
 	 * Software element which specifies the common attributes shared by all
@@ -19,27 +22,23 @@ public enum ModelingKind {
 	 */
 	TEMPLATE("Template");
 
-	private String name;
+	private String standardizedLiteral;
 
-	private ModelingKind(String name) {
-		this.name = name;
+	private ModelingKind(String standardizedLiteral) {
+		this.standardizedLiteral = standardizedLiteral;
 	}
 
 	@Override
+	public String getStandardizedLiteral() {
+		return standardizedLiteral;
+	}
+	
+	@Override
 	public String toString() {
-		return name;
+		return standardizedLiteral;
 	}
 
 	public static ModelingKind fromString(String str) {
-		if (str == null || str.isEmpty()) {
-			return null;
-		}
-
-		if(str.equals(ModelingKind.INSTANCE.toString())) {
-			return INSTANCE;
-		} else if (str.equals(ModelingKind.TEMPLATE.toString())) {
-			return TEMPLATE;
-		}
-		throw new RuntimeException("Unknown ModelingKind: " + str);
+		return StandardizedLiteralEnumHelper.fromLiteral(ModelingKind.class, str);
 	}
 }

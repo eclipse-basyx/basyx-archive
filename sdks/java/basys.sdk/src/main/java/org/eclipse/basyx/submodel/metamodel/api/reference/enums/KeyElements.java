@@ -1,5 +1,8 @@
 package org.eclipse.basyx.submodel.metamodel.api.reference.enums;
 
+import org.eclipse.basyx.enumhelper.StandardizedLiteralEnum;
+import org.eclipse.basyx.enumhelper.StandardizedLiteralEnumHelper;
+
 /**
  * KeyElements, ReferableElements, IdentifiableElements as defined in DAAS
  * document <br/>
@@ -10,7 +13,7 @@ package org.eclipse.basyx.submodel.metamodel.api.reference.enums;
  * @author schnicke
  *
  */
-public enum KeyElements {
+public enum KeyElements implements StandardizedLiteralEnum {
 	/**
 	 * Enum values of KeyElements
 	 */
@@ -49,28 +52,23 @@ public enum KeyElements {
 	SUBMODEL("Submodel");
 	
 
-	private String name;
+	private String standardizedLiteral;
 
-	private KeyElements(String name) {
-		this.name = name;
+	private KeyElements(String standardizedLiteral) {
+		this.standardizedLiteral = standardizedLiteral;
+	}
+
+	@Override
+	public String getStandardizedLiteral() {
+		return standardizedLiteral;
 	}
 
 	@Override
 	public String toString() {
-		return name;
+		return standardizedLiteral;
 	}
 
 	public static KeyElements fromString(String str) {
-		if (str == null || str.isEmpty()) {
-			return null;
-		}
-
-		for (KeyElements elem : KeyElements.values()) {
-			if (elem.toString().equals(str)) {
-				return elem;
-			}
-		}
-
-		throw new RuntimeException("Unknown KeyElements: " + str);
+		return StandardizedLiteralEnumHelper.fromLiteral(KeyElements.class, str);
 	}
 }

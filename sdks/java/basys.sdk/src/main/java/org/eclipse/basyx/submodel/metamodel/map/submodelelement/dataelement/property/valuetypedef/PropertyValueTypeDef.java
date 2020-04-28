@@ -1,5 +1,8 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef;
 
+import org.eclipse.basyx.enumhelper.StandardizedLiteralEnum;
+import org.eclipse.basyx.enumhelper.StandardizedLiteralEnumHelper;
+
 /**
  * Helper enum to handle anySimpleTypeDef as defined in DAAS document <br />
  * Represents the type of a data entry <br />
@@ -8,18 +11,27 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.pro
  * @author schnicke
  *
  */
-public enum PropertyValueTypeDef {
+public enum PropertyValueTypeDef implements StandardizedLiteralEnum {
 	Double("double"), Float("float"), Integer("int"), String("string"), Boolean("boolean"), Map("map"), Collection("collection"), Void("void"), Null("null"), Container("container");
 
-	private String name;
+	private String standardizedLiteral;
 
-	private PropertyValueTypeDef(String name) {
-		this.name = name;
+	private PropertyValueTypeDef(String standardizedLiteral) {
+		this.standardizedLiteral = standardizedLiteral;
+	}
+
+	@Override
+	public String getStandardizedLiteral() {
+		return standardizedLiteral;
 	}
 
 	@Override
 	public String toString() {
-		return name;
+		return standardizedLiteral;
+	}
+
+	public static PropertyValueTypeDef fromString(String str) {
+		return StandardizedLiteralEnumHelper.fromLiteral(PropertyValueTypeDef.class, str);
 	}
 
 }

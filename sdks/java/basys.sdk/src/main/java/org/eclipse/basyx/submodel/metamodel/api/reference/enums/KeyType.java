@@ -1,5 +1,8 @@
 package org.eclipse.basyx.submodel.metamodel.api.reference.enums;
 
+import org.eclipse.basyx.enumhelper.StandardizedLiteralEnum;
+import org.eclipse.basyx.enumhelper.StandardizedLiteralEnumHelper;
+
 /**
  * KeyType, LocalKeyType, IdentifierType as defined in DAAS document <br/>
  * <br />
@@ -9,7 +12,7 @@ package org.eclipse.basyx.submodel.metamodel.api.reference.enums;
  * @author schnicke
  *
  */
-public enum KeyType {
+public enum KeyType implements StandardizedLiteralEnum {
 	/**
 	 * Enum values of IdentifierType
 	 */
@@ -20,28 +23,23 @@ public enum KeyType {
 	 */
 	IDSHORT("IdShort"), FRAGMENTID("FragmentId");
 
-	private String name;
+	private String standardizedLiteral;
 
-	private KeyType(String name) {
-		this.name = name;
+	private KeyType(String standardizedLiteral) {
+		this.standardizedLiteral = standardizedLiteral;
+	}
+
+	@Override
+	public String getStandardizedLiteral() {
+		return this.standardizedLiteral;
 	}
 
 	@Override
 	public String toString() {
-		return name;
+		return standardizedLiteral;
 	}
 
 	public static KeyType fromString(String str) {
-		if (str == null || str.isEmpty()) {
-			return null;
-		}
-
-		for (KeyType elem : KeyType.values()) {
-			if (elem.toString().equals(str)) {
-				return elem;
-			}
-		}
-
-		throw new RuntimeException("Unknown KeyType: " + str);
+		return StandardizedLiteralEnumHelper.fromLiteral(KeyType.class, str);
 	}
 }

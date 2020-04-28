@@ -1,5 +1,8 @@
 package org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity;
 
+import org.eclipse.basyx.enumhelper.StandardizedLiteralEnum;
+import org.eclipse.basyx.enumhelper.StandardizedLiteralEnumHelper;
+
 /**
  * Enumeration for denoting whether an entity is a self-managed entity or a
  * comanaged entity.
@@ -7,7 +10,7 @@ package org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity;
  * @author schnicke
  *
  */
-public enum EntityType {
+public enum EntityType implements StandardizedLiteralEnum {
 	/**
 	 * For co-managed entities there is no separate AAS. Co-managed entities need to
 	 * be part of a self-managed entity.
@@ -21,27 +24,23 @@ public enum EntityType {
 	 */
 	SELFMANAGEDENTITY("SelfManagedEntity");
 	
-	private String name;
+	private String standardizedLiteral;
 
-	private EntityType(String name) {
-		this.name = name;
+	private EntityType(String standardizedLiteral) {
+		this.standardizedLiteral = standardizedLiteral;
+	}
+
+	@Override
+	public String getStandardizedLiteral() {
+		return standardizedLiteral;
 	}
 
 	@Override
 	public String toString() {
-		return name;
+		return standardizedLiteral;
 	}
 
 	public static EntityType fromString(String str) {
-		if (str == null || str.isEmpty()) {
-			return null;
-		}
-
-		if (str.equals(EntityType.COMANAGEDENTITY.toString())) {
-			return COMANAGEDENTITY;
-		} else if (str.equals(EntityType.SELFMANAGEDENTITY.toString())) {
-			return SELFMANAGEDENTITY;
-		}
-		throw new RuntimeException("Unknown EntityType: " + str);
+		return StandardizedLiteralEnumHelper.fromLiteral(EntityType.class, str);
 	}
 }
