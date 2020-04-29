@@ -2,8 +2,8 @@ package org.eclipse.basyx.testsuite.regression.enumhelper;
 
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.basyx.enumhelper.StandardizedLiteralEnum;
-import org.eclipse.basyx.enumhelper.StandardizedLiteralEnumHelper;
+import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnum;
+import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnumHelper;
 import org.junit.Test;
 
 public class StandardizedLiteralEnumHelperTests {

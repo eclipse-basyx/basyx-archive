@@ -1,7 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.api.reference.enums;
 
-import org.eclipse.basyx.enumhelper.StandardizedLiteralEnum;
-import org.eclipse.basyx.enumhelper.StandardizedLiteralEnumHelper;
+import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnum;
+import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnumHelper;
 
 /**
  * KeyElements, ReferableElements, IdentifiableElements as defined in DAAS

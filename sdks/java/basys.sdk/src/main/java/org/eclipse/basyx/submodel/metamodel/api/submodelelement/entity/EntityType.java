@@ -1,7 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity;
 
-import org.eclipse.basyx.enumhelper.StandardizedLiteralEnum;
-import org.eclipse.basyx.enumhelper.StandardizedLiteralEnumHelper;
+import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnum;
+import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnumHelper;
 
 /**
  * Enumeration for denoting whether an entity is a self-managed entity or a

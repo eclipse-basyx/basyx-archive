@@ -1,4 +1,4 @@
-package org.eclipse.basyx.enumhelper;
+package org.eclipse.basyx.submodel.metamodel.enumhelper;
 
 /**
  * Enums with this interface hold a custom string literal that is used during e.g. XML serialization.

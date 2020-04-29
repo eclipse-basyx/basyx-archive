@@ -1,7 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.api.parts.asset;
 
-import org.eclipse.basyx.enumhelper.StandardizedLiteralEnum;
-import org.eclipse.basyx.enumhelper.StandardizedLiteralEnumHelper;
+import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnum;
+import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnumHelper;
 
 /**
  * AssetKind enum as defined by DAAS document<br />

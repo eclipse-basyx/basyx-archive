@@ -1,7 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.api.dataspecification.enums;
 
-import org.eclipse.basyx.enumhelper.StandardizedLiteralEnum;
-import org.eclipse.basyx.enumhelper.StandardizedLiteralEnumHelper;
+import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnum;
+import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnumHelper;
 
 /**
  * Possible level types as defined in DAAS for IEC61360 data specification templates

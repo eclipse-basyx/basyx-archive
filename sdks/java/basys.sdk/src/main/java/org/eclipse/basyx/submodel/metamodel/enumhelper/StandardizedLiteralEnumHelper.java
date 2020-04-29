@@ -1,4 +1,4 @@
-package org.eclipse.basyx.enumhelper;
+package org.eclipse.basyx.submodel.metamodel.enumhelper;
 
 import com.google.common.base.Strings;
 

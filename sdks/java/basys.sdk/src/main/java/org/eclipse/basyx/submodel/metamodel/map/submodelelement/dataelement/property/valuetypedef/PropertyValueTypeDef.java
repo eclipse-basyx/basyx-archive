@@ -1,7 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef;
 
-import org.eclipse.basyx.enumhelper.StandardizedLiteralEnum;
-import org.eclipse.basyx.enumhelper.StandardizedLiteralEnumHelper;
+import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnum;
+import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnumHelper;
 
 /**
  * Helper enum to handle anySimpleTypeDef as defined in DAAS document <br />
