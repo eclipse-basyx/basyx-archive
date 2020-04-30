@@ -1,0 +1,70 @@
+#ifndef BASYX_SUBMODEL_SIMPLE_COMMON_ELEMENTCONTAINER_H
+#define BASYX_SUBMODEL_SIMPLE_COMMON_ELEMENTCONTAINER_H
+
+#include <BaSyx/submodel/api_v2/common/IElementContainer.h>
+
+#include <algorithm>
+
+namespace basyx {
+namespace submodel {
+namespace simple {
+
+template<typename IElementType>
+class ElementContainer : public api::IElementContainer<IElementType>
+{
+public:
+    using elementPtr_t = typename api::IElementContainer<IElementType>::elementPtr_t;
+    using container_t = std::vector<elementPtr_t>;
+private:
+    container_t container;
+public:
+	ElementContainer() = default;
+	virtual ~ElementContainer() = default;
+public:
+	// Inherited via IElementContainer
+	virtual std::size_t size() const override;
+	virtual IElementType * const getElement(const std::string & idShort) const override;
+	virtual void addElement(elementPtr_t element) override;
+public:
+	auto begin() -> decltype(this->container.begin())
+	{
+		return this->container.begin();
+	}
+
+	auto end() -> decltype(this->container.end())
+	{
+		return this->container.end();
+	}
+};
+
+template<typename IElementType>
+std::size_t ElementContainer<IElementType>::size() const
+{
+	return this->container.size();
+};
+
+template<typename IElementType>
+IElementType * const ElementContainer<IElementType>::getElement(const std::string & idShort) const
+{
+	auto ret = std::find_if(container.begin(), container.end(),
+		[&idShort](const elementPtr_t & element) { return element->getIdShort() == idShort; });
+
+	if (ret != container.end())
+		return ret->get();
+
+	return nullptr;
+};
+
+template<typename IElementType>
+void ElementContainer<IElementType>::addElement(elementPtr_t element)
+{
+	this->container.emplace_back(std::move(element));
+};
+
+
+
+}
+}
+}
+
+#endif /* BASYX_SUBMODEL_SIMPLE_COMMON_ELEMENTCONTAINER_H */
