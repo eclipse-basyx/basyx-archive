@@ -23,12 +23,12 @@ public class TypeDestroyer {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> destroyType(Map<String, Object> map){
+	public static Map<String, Object> destroyType(Map<String, Object> map) {
 		return (Map<String, Object>) handle(map);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static Object handle(Object o) {
+	public static Object handle(Object o) {
 		if(o instanceof Map) {
 			return handleMap((Map<String, Object>) o);
 		} else if (o instanceof Set) {

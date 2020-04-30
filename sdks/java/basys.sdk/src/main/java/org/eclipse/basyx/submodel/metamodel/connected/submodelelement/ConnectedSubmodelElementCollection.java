@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -21,10 +20,9 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 		super(proxy);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ISubmodelElement> getValue() {
-		return (Collection<ISubmodelElement>) getProxy().getModelPropertyValue(Property.VALUE);
+		return getElements().values();
 	}
 
 	@Override
@@ -37,9 +35,10 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 		return (boolean) getElem().getPath(SubmodelElementCollection.ALLOWDUPLICATES);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, ISubmodelElement> getElements() {
-		return (Map<String, ISubmodelElement>) getProxy().getModelPropertyValue(SubModel.SUBMODELELEMENT);
+		// FIXME: This is a hack, fix this when API is clear
+		VABElementProxy proxy = getProxy().getDeepProxy(Property.VALUE);
+		return ConnectedSubmodelElementFactory.getConnectedSubmodelElements(proxy);
 	}
 }

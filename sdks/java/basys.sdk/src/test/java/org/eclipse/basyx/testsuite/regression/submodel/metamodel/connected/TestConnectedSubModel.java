@@ -2,26 +2,42 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.connected;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
+import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,6 +53,13 @@ public class TestConnectedSubModel {
 	private final static String OP = "add";
 	private final static String PROP = "prop1";
 	private final static String ID = "TestId";
+	
+	private final String OPERATION_ID = "operation_id";
+	private final String PROPERTY_ID = "property_id";
+	private final String BLOB_ID = "blob_id";
+	private final String FILE_ID = "file_id";
+	private final String RELATIONSHIP_ELEM_ID = "relElem_id";
+	private final String SUBMODEL_ELEM_COLLECTION_ID = "elemCollection_id";
 
 	private final static Reference testSemanticIdRef = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "testVal", IdentifierType.CUSTOM));
 
@@ -61,7 +84,7 @@ public class TestConnectedSubModel {
 		sm.setIdShort(ID);
 		sm.setSemanticId(testSemanticIdRef);
 
-		SubModelProvider provider = new SubModelProvider(new VABLambdaProvider(sm));
+		SubModelProvider provider = new SubModelProvider(new TypeDestroyingProvider(new VABLambdaProvider(sm)));
 
 		// Create the ConnectedSubModel based on the manager
 		submodel = new ConnectedSubModel(new VABConnectionManagerStub(provider).connectToVABElement(""));
@@ -112,42 +135,64 @@ public class TestConnectedSubModel {
 	@Test
 	public void saveAndLoadPropertyTest() throws Exception {
 		
-		// Construct test data
-		Property property = new Property();
-		property.setIdShort("test1");
-		property.set("test2");
-		
-		// Save it
-		submodel.addSubModelElement(property);
+		// Get sample DataElements and save them into SubModel
+		Map<String, IDataElement> testData = getTestDataElements();
+		for(ISubmodelElement element: testData.values()) {
+			submodel.addSubModelElement(element);
+		}
 		
 		// Load it
 		Map<String, IDataElement> map = submodel.getDataElements();
 		
 		// Check if it loaded correctly
-		assertNotNull(map);
-		ISingleProperty loadedProp = (ISingleProperty) map.get(property.getIdShort());
-		assertNotNull(loadedProp);
-		assertEquals(property.get(), loadedProp.get());
+		checkDataElements(map);
 	}
 	
 	@Test
 	public void saveAndLoadOperationTest() throws Exception {
-		
-		// Construct test data
-		Operation operation = new Operation();
-		operation.setIdShort("test1");
-		
-		// Save it
-		submodel.addSubModelElement(operation);
+		// Get sample Operations and save them into SubModel
+		Map<String, IOperation> testOperations = getTestOperations();
+		for(ISubmodelElement element: testOperations.values()) {
+			submodel.addSubModelElement(element);
+		}
 		
 		// Load it
 		Map<String, IOperation> map = submodel.getOperations();
 		
 		// Check if it loaded correctly
-		assertNotNull(map);
-		IOperation loadedOp = map.get(operation.getIdShort());
-		assertNotNull(loadedOp);
-		assertEquals(operation.getIdShort(), loadedOp.getIdShort());
+		checkOperations(map);
+	}
+	
+	
+	@Test
+	public void saveAndLoadSubmodelElementTest() throws Exception {
+		
+		// Get sample DataElements and save them into SubModel
+		Map<String, IDataElement> testDataElements = getTestDataElements();
+		for(ISubmodelElement element: testDataElements.values()) {
+			submodel.addSubModelElement(element);
+		}
+		
+		// Get sample Operations and save them into SubModel
+		Map<String, IOperation> testOperations = getTestOperations();
+		for(ISubmodelElement element: testOperations.values()) {
+			submodel.addSubModelElement(element);
+		}
+		
+		// Get sample SubmodelElements and save them into SubModel
+		Map<String, ISubmodelElement> testSMElements = getTestSubmodelElements();
+		for(ISubmodelElement element: testSMElements.values()) {
+			submodel.addSubModelElement(element);
+		}
+		
+		// Load it
+		Map<String, ISubmodelElement> map = submodel.getSubmodelElements();
+		
+		// Check if it loaded correctly
+		// Including DataElements and Operations as they are also SubmodelElements
+		checkDataElements(map);
+		checkOperations(map);
+		checkSubmodelElements(map);
 	}
 
 	/**
@@ -158,4 +203,140 @@ public class TestConnectedSubModel {
 		IReference ref = submodel.getSemanticId();
 		assertEquals(testSemanticIdRef, ref);
 	}
+	
+	/**
+	 * Generates test IDataElements
+	 */
+	private Map<String, IDataElement> getTestDataElements() {
+		Map<String, IDataElement> ret = new HashMap<>();
+		
+		Property property = new Property();
+		property.setIdShort(PROPERTY_ID);
+		property.set("test2");
+		
+		Blob blob = new Blob();
+		blob.setIdShort(BLOB_ID);
+		blob.setValue(new byte[] {1, 2, 3});
+		
+		File file = new File();
+		file.setIdShort(FILE_ID);
+		file.setValue("fileValue");
+		
+		ret.put(property.getIdShort(), property);
+		ret.put(blob.getIdShort(), blob);
+		ret.put(file.getIdShort(), file);
+		
+		return ret;
+	}
+	
+	/**
+	 * Generates test IOperations
+	 */
+	private Map<String, IOperation> getTestOperations() {
+		Map<String, IOperation> ret = new HashMap<>();
+		
+		Operation operation = new Operation();
+		operation.setIdShort(OPERATION_ID);
+		ret.put(operation.getIdShort(), operation);
+		
+		return ret;
+	}
+	
+	/**
+	 * Generates test ISubmodelElements
+	 */
+	private Map<String, ISubmodelElement> getTestSubmodelElements() {
+		Map<String, ISubmodelElement> ret = new HashMap<>();
+		
+		SubmodelElementCollection smECollection = new SubmodelElementCollection();
+		smECollection.setIdShort(SUBMODEL_ELEM_COLLECTION_ID);
+		
+		// Create a Blob to use as Value for smECollection
+		Blob blob = new Blob();
+		blob.setIdShort(BLOB_ID);
+		
+		List<ISubmodelElement> values = new ArrayList<>();
+		values.add(blob);
+		
+		smECollection.setValue(values);
+		ret.put(smECollection.getIdShort(), smECollection);
+		
+		RelationshipElement relElement = new RelationshipElement();
+		relElement.setIdShort(RELATIONSHIP_ELEM_ID);
+		ret.put(relElement.getIdShort(), relElement);
+		
+		return ret;
+	}
+	
+	
+	/**
+	 * Checks if the given Map contains all expected IDataElements
+	 */
+	private void checkDataElements(Map<String, ? extends ISubmodelElement> actual) throws Exception {
+		assertNotNull(actual);
+		
+		Map<String, IDataElement> expected = getTestDataElements();
+		
+		ISingleProperty expectedProperty = (ISingleProperty) expected.get(PROPERTY_ID);
+		ISingleProperty acutalProperty = (ISingleProperty) actual.get(PROPERTY_ID);
+		assertNotNull(acutalProperty);
+		assertEquals(expectedProperty.get(), acutalProperty.get());
+		
+		IBlob expectedBlob = (IBlob) expected.get(BLOB_ID);
+		IBlob actualBlob = (IBlob) actual.get(BLOB_ID);
+		assertNotNull(actualBlob);
+		assertTrue(Arrays.equals(expectedBlob.getValue(), actualBlob.getValue()));
+		
+		IFile expectedFile = (IFile) expected.get(FILE_ID);
+		IFile actualFile = (IFile) actual.get(FILE_ID);
+		assertNotNull(actualFile);
+		assertEquals(expectedFile.getValue(), actualFile.getValue());
+	}
+	
+	/**
+	 * Checks if the given Map contains all expected IOperations
+	 */
+	private void checkOperations(Map<String, ? extends ISubmodelElement> actual) throws Exception {
+		assertNotNull(actual);
+		
+		Map<String, IOperation> expected = getTestOperations();
+		
+		IOperation expectedOperation = (IOperation) expected.get(OPERATION_ID);
+		IOperation actualOperation = (IOperation) actual.get(OPERATION_ID);
+		
+		assertNotNull(actualOperation);
+		assertEquals(expectedOperation.getIdShort(), actualOperation.getIdShort());
+	}
+	
+	/**
+	 * Checks if the given Map contains all expected ISubmodelElements
+	 */
+	private void checkSubmodelElements(Map<String, ISubmodelElement> actual) throws Exception {
+		assertNotNull(actual);
+		
+		Map<String, ISubmodelElement> expected = getTestSubmodelElements();
+		
+		ISubmodelElementCollection expectedCollection = 
+				(ISubmodelElementCollection) expected.get(SUBMODEL_ELEM_COLLECTION_ID);
+		ISubmodelElementCollection actualCollection =
+				(ISubmodelElementCollection) actual.get(SUBMODEL_ELEM_COLLECTION_ID);
+		
+		assertNotNull(actualCollection);
+		
+		Collection<ISubmodelElement> elements = actualCollection.getValue();
+		
+		// Check for correct Type
+		for (ISubmodelElement iSubmodelElement: elements) {
+			assertTrue(iSubmodelElement instanceof IBlob);
+		}
+		
+		assertEquals(expectedCollection.getValue().size(), elements.size());
+		
+		IRelationshipElement expectedRelElem = (IRelationshipElement) expected.get(RELATIONSHIP_ELEM_ID);
+		IRelationshipElement actualRelElem = (IRelationshipElement) actual.get(RELATIONSHIP_ELEM_ID);
+		
+		assertNotNull(actualRelElem);
+		assertEquals(expectedRelElem.getIdShort(), actualRelElem.getIdShort());
+	}
+	
 }

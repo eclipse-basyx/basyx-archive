@@ -1,7 +1,5 @@
 package org.eclipse.basyx.submodel.metamodel.connected.facades;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.IElementContainer;
@@ -9,23 +7,12 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedVABModelMap;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedRelationshipElement;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementCollection;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.ConnectedPropertyFactory;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation.ConnectedOperation;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementFactory;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
-import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 
 /**
- * Facade providing access to a remove VABElementContainer
+ * Facade providing access to a remote VABElementContainer
  * 
  * @author schnicke
  *
@@ -41,121 +28,25 @@ public class ConnectedVABElementContainerFacade extends ConnectedVABModelMap<Obj
 			getProxy().createValue(SubModel.PROPERTIES, element);
 		} else if (element instanceof IOperation) {
 			getProxy().createValue(SubModel.OPERATIONS, element);
+		} else if (element instanceof ISubmodelElement) {
+			getProxy().createValue(SubModel.SUBMODELELEMENT, element);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IDataElement> getDataElements() {
-		// Create return value
-		Map<String, IDataElement> ret = new HashMap<>();
-
-		// Sub model operation list
-		Object smDeList = getProxy().getModelPropertyValue(SubModel.PROPERTIES);
-
-		// Read values
-		Collection<Map<String, Object>> dataElemNodes = (Collection<Map<String, Object>>) smDeList;
-
-		// Convert to IProperty
-		for (Map<String, Object> deNode : dataElemNodes) {
-			String id = (String) deNode.get(Referable.IDSHORT);
-			PropertyValueTypeDef type = getType(deNode);
-			ret.put(id, ConnectedPropertyFactory.createProperty(getProxy().getDeepProxy(VABPathTools.concatenatePaths(SubModel.PROPERTIES, id)), type));
-		}
-		// Return result
-		return ret;
+		return ConnectedSubmodelElementFactory.getDataElements(getProxy().getDeepProxy(SubModel.PROPERTIES));
 	}
 
-	private PropertyValueTypeDef getType(Map<String, Object> deNode) {
-		if (deNode.containsKey(SubModel.PROPERTIES)) {
-			return PropertyValueTypeDef.Container;
-		} else {
-			return PropertyValueTypeDefHelper.readTypeDef(deNode.get(Property.VALUETYPE));
-		}
-	}
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IOperation> getOperations() {
-
-		// Create return value
-		Map<String, IOperation> ret = new HashMap<>();
-
-		// Sub model operation list
-		Object smOpList = getProxy().getModelPropertyValue(SubModel.OPERATIONS);
-		// Read values
-		Collection<Map<String, Object>> operationNodes = (Collection<Map<String, Object>>) smOpList;
-
-		// Convert to IOperation
-		for (Map<String, Object> opNode : operationNodes) {
-			String id = (String) opNode.get(Referable.IDSHORT);
-
-			ConnectedOperation conOp = new ConnectedOperation(getProxy().getDeepProxy(VABPathTools.concatenatePaths(SubModel.OPERATIONS, id)));
-			ret.put(id, conOp);
-		}
-
-		// Return result
-		return ret;
+		return ConnectedSubmodelElementFactory.getOperations(getProxy().getDeepProxy(SubModel.OPERATIONS));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, ISubmodelElement> getSubmodelElements() {
-
-		// Create return value
-		Map<String, ISubmodelElement> ret = new HashMap<>();
-
-		// Sub model operation list
-		Object opList = getProxy().getModelPropertyValue(SubModel.OPERATIONS);
-		// Read values
-		Collection<Map<String, Object>> opNodes = (Collection<Map<String, Object>>) opList;
-
-		// Sub model dataElement list
-		Object deList = getProxy().getModelPropertyValue(SubModel.PROPERTIES);
-		// Read values
-		Collection<Map<String, Object>> deNodes = (Collection<Map<String, Object>>) deList;
-
-		// submodel element list; this list will contain all submodelElements
-		Object smElemList = getProxy().getModelPropertyValue(SubModel.SUBMODELELEMENT);
-		// Read values
-		Collection<Map<String, Object>> smElemNodes = (Collection<Map<String, Object>>) smElemList;
-		// remove all submodelElements already contained in on of the other lists
-		smElemNodes.removeAll(opNodes);
-		smElemNodes.removeAll(deNodes);
-
-		// Convert to IOperation
-		for (Map<String, Object> opNode : opNodes) {
-			String id = (String) opNode.get(Referable.IDSHORT);
-
-			ConnectedOperation conOp = new ConnectedOperation(getProxy().getDeepProxy(VABPathTools.concatenatePaths(SubModel.OPERATIONS, id)));
-			ret.put(id, conOp);
-		}
-
-		// Convert to IProperty
-		for (Map<String, Object> deNode : deNodes) {
-			String id = (String) deNode.get(Referable.IDSHORT);
-			PropertyValueTypeDef type = getType(deNode);
-			ret.put(id, ConnectedPropertyFactory.createProperty(getProxy().getDeepProxy(VABPathTools.concatenatePaths(SubModel.PROPERTIES, id)), type));
-		}
-
-		// Convert to ISubmodelElement
-		for (Map<String, Object> smElemNode : smElemNodes) {
-			String id = (String) smElemNode.get(Referable.IDSHORT);
-			String modelType = ((String) ((Map<String, Object>) (smElemNode.get(ModelType.MODELTYPE))).get(ModelType.NAME));
-
-			// convert ISubmodelElementCollection
-			if (modelType.equals(SubmodelElementCollection.MODELTYPE)) {
-				ret.put(id, new ConnectedSubmodelElementCollection(getProxy().getDeepProxy(VABPathTools.concatenatePaths(SubModel.SUBMODELELEMENT, id))));
-			}
-
-			// convert IRelationshipElement
-			if (modelType.equals(RelationshipElement.MODELTYPE)) {
-				ret.put(id, new ConnectedRelationshipElement(getProxy().getDeepProxy(VABPathTools.concatenatePaths(SubModel.SUBMODELELEMENT, id))));
-			}
-		}
-
-		// Return result
-		return ret;
+		return ConnectedSubmodelElementFactory.getConnectedSubmodelElements(
+				getProxy().getDeepProxy(SubModel.SUBMODELELEMENT));
 	}
 
 }
