@@ -16,6 +16,11 @@ struct KeyPath
 	static constexpr char Local[] = "local";
 };
 
+constexpr char KeyPath::IdType[];
+constexpr char KeyPath::Type[];
+constexpr char KeyPath::Value[];
+constexpr char KeyPath::Local[];
+
 Reference::Reference() 
 	: vab::ElementMap{}
 {

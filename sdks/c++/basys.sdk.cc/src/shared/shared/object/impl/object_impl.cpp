@@ -94,6 +94,20 @@ bool basyx::object::insert(basyx::object obj)
 	return false;
 };
 
+bool basyx::object::hasProperty(const std::string & propertyName)
+{
+	if (!this->content || this->GetObjectType() != basyx::type::objectType::Map)
+		return false;
+
+	auto & map = this->Get<basyx::object::object_map_t&>();
+
+	if (map.find(propertyName) != map.end()) {
+		return true;
+	}
+
+	return false;
+};
+
 basyx::object basyx::object::getProperty(const std::string & propertyName)
 {
 	if (!this->content || this->GetObjectType() != basyx::type::objectType::Map)

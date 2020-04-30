@@ -1,9 +1,8 @@
 #include <BaSyx/submodel/simple/identifier/Identifier.h>
-#include <BaSyx/submodel/simple/identifier/IdentifierType.h>
+#include <BaSyx/submodel/api_v2/identifier/IdentifierType.h>
 
-namespace basyx {
-namespace submodel {
-namespace simple {
+using namespace basyx::submodel;
+using namespace basyx::submodel::simple;
 
 Identifier::Identifier(IdentifierType idType, const std::string & id)
 	: idType(idType)
@@ -35,7 +34,3 @@ const std::string & Identifier::getId() const
 {
 	return this->id;
 };
-
-}
-}
-}

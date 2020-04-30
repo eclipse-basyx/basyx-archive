@@ -55,7 +55,7 @@ public:
 	virtual void setObject(basyx::object & object) override
 	{
 		if (object.InstanceOf<T>())
-			this->value = object.Get<T&>();
+			this->value = object.template Get<T&>();
 	}
 
 	virtual const Reference * const getValueId() const override

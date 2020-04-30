@@ -4,6 +4,11 @@
 using namespace basyx::submodel::map;
 using namespace basyx::submodel::api;
 
+constexpr char Referable::Path::IdShort[];
+constexpr char Referable::Path::Category[];
+constexpr char Referable::Path::Description[];
+constexpr char Referable::Path::Parent[];
+
 Referable::Referable(const std::string & idShort, const Referable * parent)
 	: parent(parent)
 	, vab::ElementMap(basyx::object::make_map())

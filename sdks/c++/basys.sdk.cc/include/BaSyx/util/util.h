@@ -12,6 +12,7 @@
 #include <memory>
 #include <type_traits>
 #include <utility>
+#include <string>
 
 // util::make_unique
 // Based on official std::make_unique proposal https://isocpp.org/files/papers/N3656.txt

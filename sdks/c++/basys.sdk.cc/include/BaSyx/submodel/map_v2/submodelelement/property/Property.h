@@ -30,12 +30,12 @@ public:
 
 	const T & getValue() const
 	{
-		return this->map.getProperty("value").Get<T&>();
+		return this->map.getProperty("value").template Get<T&>();
 	}
 
 	virtual const std::string & getValueType() const override
 	{
-		return this->map.getProperty("valueType").Get<std::string&>();
+		return this->map.getProperty("valueType").template Get<std::string&>();
 	}
 
 	virtual void setValueType(const std::string & valueType) override

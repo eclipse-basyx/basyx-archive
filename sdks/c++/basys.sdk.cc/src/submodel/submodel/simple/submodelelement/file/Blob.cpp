@@ -1,4 +1,4 @@
-#include <basyx/submodel/simple/submodelelement/file/Blob.h>
+#include <BaSyx/submodel/simple/submodelelement/file/Blob.h>
 
 const std::string basyx::submodel::simple::Blob::getValue() const
 {

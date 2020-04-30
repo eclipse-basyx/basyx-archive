@@ -9,6 +9,9 @@ struct IdentifierPath {
 	static constexpr char Id[] = "id";
 };
 
+constexpr char IdentifierPath::IdType[];
+constexpr char IdentifierPath::Id[];
+
 Identifiable::Identifiable(const std::string & idShort, const simple::Identifier & identifier)
 	: Referable(idShort)
 	, vab::ElementMap()

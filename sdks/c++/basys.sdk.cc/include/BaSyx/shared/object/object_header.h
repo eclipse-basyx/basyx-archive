@@ -136,6 +136,7 @@ namespace basyx {
 		bool remove(basyx::object & obj);
 		bool removeProperty(const std::string & propertyName);
 
+		bool hasProperty(const std::string & propertyName);
 		basyx::object getProperty(const std::string & propertyName);
 
 		basyx::object invoke();

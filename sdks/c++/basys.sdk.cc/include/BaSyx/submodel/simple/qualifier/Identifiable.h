@@ -25,7 +25,7 @@ public:
 	inline const Referable & getReferable() const noexcept { return this->referable; };
 	inline Referable & getReferable() noexcept { return this->referable; };
 
-	bool hasAdministrativeInformation() const noexcept;
+	bool hasAdministrativeInformation() const noexcept override;
 
 	// Inherited via IReferable
 	virtual std::string const & getIdShort() const override;

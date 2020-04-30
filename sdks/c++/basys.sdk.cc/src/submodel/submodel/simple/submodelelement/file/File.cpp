@@ -1,4 +1,4 @@
-#include <basyx/submodel/simple/submodelelement/file/File.h>
+#include <BaSyx/submodel/simple/submodelelement/file/File.h>
 
 const std::string basyx::submodel::simple::File::getPath() const
 {
