@@ -1,0 +1,27 @@
+#ifndef BASYX_SUBMODEL_API_V2_DATASPECIFICATION_IDATASPECIFICATION_H
+#define BASYX_SUBMODEL_API_V2_DATASPECIFICATION_IDATASPECIFICATION_H
+
+#include <BaSyx/submodel/api_v2/dataspecification/IDataSpecificationContent.h>
+
+#include <BaSyx/submodel/api_v2/qualifier/IIdentifiable.h>
+#include <BaSyx/submodel/api_v2/qualifier/IReferable.h>
+
+namespace basyx {
+namespace submodel {	
+namespace api {
+
+class IDataSpecification : public virtual IIdentifiable
+{
+public:
+	virtual ~IDataSpecification() = 0;
+
+	virtual IDataSpecificationContent & getContent() = 0;
+};
+
+inline IDataSpecification::~IDataSpecification() = default;
+
+}
+}
+}
+
+#endif /* BASYX_SUBMODEL_API_V2_DATASPECIFICATION_IDATASPECIFICATION_H */
