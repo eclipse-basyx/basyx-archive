@@ -2,6 +2,17 @@ package org.eclipse.basyx.regression.aasx;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
@@ -11,19 +22,28 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedFile;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Suite for testing that the XMLAAS servlet is set up correctly. The tests here
  * can be used by the servlet test itself and the integration test
  * 
- * @author schnicke
+ * @author schnicke, espen
  *
  */
 public class AASXSuite {
+	private static Logger logger = LoggerFactory.getLogger(AASXSuite.class);
+
 	protected IAASRegistryService aasRegistry;
 
 	protected static final String aasShortId = "Festo_3S7PM0CP4BD";
@@ -34,8 +54,12 @@ public class AASXSuite {
 	// Has to be individualized by each test inheriting from this suite
 	protected static String aasEndpoint;
 	protected static String smEndpoint;
+	protected static String rootEndpoint;
 
 	private ConnectedAssetAdministrationShellManager manager;
+
+	// create a REST client
+	private Client client = ClientBuilder.newClient();
 
 	/**
 	 * Before each test, a dummy registry is created and an AAS is added in the
@@ -65,6 +89,69 @@ public class AASXSuite {
 	public void testGetSingleSubmodel() throws Exception {
 		ISubModel subModel = getConnectedSubmodel();
 		assertEquals(smShortId, subModel.getIdShort());
+	}
+
+	@Test
+	public void testGetSingleModule() throws Exception {
+		checkFile("aasx/Nameplate/marking_rcm.jpg");
+
+		// Get the submdoel nameplate
+		ISubModel nameplate = getConnectedSubmodel();
+		// Get the submodel element collection marking_rcm
+		ConnectedSubmodelElementCollection marking_rcm = (ConnectedSubmodelElementCollection) nameplate.getSubmodelElements().get("Marking_RCM");
+		Collection<ISubmodelElement> values = marking_rcm.getValue();
+
+		// navigate to the File element
+		Iterator<ISubmodelElement> iter = values.iterator();
+		while (iter.hasNext()) {
+			ISubmodelElement element = iter.next();
+			if (element instanceof ConnectedFile) {
+				ConnectedFile connectedFile = (ConnectedFile) element;
+				// get value of the file element
+
+				String fileurl = connectedFile.getValue();
+				assertEquals("http://localhost:4000/aasx/docs/marking_rcm.jpg", fileurl);
+			}
+		}
+	}
+
+	@Test
+	public void testAllFiles() throws Exception {
+		logger.info("Checking all files");
+		ConnectedAssetAdministrationShell aas = getConnectedAssetAdministrationShell();
+		logger.info("AAS idShort: " + aas.getIdShort());
+		logger.info("AAS identifier: " + aas.getIdentification().getId());
+		Map<String, ISubModel> submodels = aas.getSubModels();
+		logger.info("# Submodels: " + submodels.size());
+		for (ISubModel sm : submodels.values()) {
+			logger.info("Checking submodel: " + sm.getIdShort());
+			checkElementCollectionFiles(sm.getSubmodelElements().values());
+		}
+
+	}
+
+	private void checkElementCollectionFiles(Collection<ISubmodelElement> elements) {
+		for (ISubmodelElement element : elements) {
+			if (element instanceof IFile) {
+				String fileUrl = ((IFile) element).getValue();
+				checkFile(fileUrl);
+			} else if (element instanceof ISubmodelElementCollection) {
+				ISubmodelElementCollection col = (ISubmodelElementCollection) element;
+				checkElementCollectionFiles(col.getValue());
+			}
+		}
+	}
+
+	private void checkFile(String relativePath) {
+		// connect to the url of the aas
+		WebTarget webTarget = client.target(rootEndpoint);
+		// go to the path of the file
+		WebTarget fileTarget = webTarget.path(relativePath);
+		logger.info("Checking file: " + relativePath);
+		Invocation.Builder invocationBuilder = fileTarget.request(MediaType.APPLICATION_JSON);
+		Response response = invocationBuilder.get();
+		// validate the response
+		assertEquals(200, response.getStatus());
 	}
 
 	/**

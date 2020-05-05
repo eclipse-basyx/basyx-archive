@@ -1,7 +1,10 @@
 package org.eclipse.basyx.components.executable;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
+import javax.servlet.ServletException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.basyx.components.AASXComponent;
@@ -26,7 +29,7 @@ import org.xml.sax.SAXException;
 public class AASXExecutable {
 	private static Logger logger = LoggerFactory.getLogger(AASXExecutable.class);
 
-	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
+	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ServletException {
 		logger.info("Starting BaSyx AASX component");
 
 		// Load configuration
@@ -35,8 +38,12 @@ public class AASXExecutable {
 		// In addition to the context for the AAS, also the registryUrl can be specified
 		String registryUrl = config.getProperty("registry");
 
+		String rootPath = new File(AASXExecutable.class.getProtectionDomain().getCodeSource().getLocation().toURI())
+				.getParentFile().getPath();
+		String docPath = rootPath + config.getDocBasePath();
+		// Get the path to the doc base path
 		AASXComponent component = new AASXComponent(config.getHostname(), config.getPort(), config.getContextPath(),
-				config.getDocBasePath(), config.getProperty("aasxPath"), registryUrl);
+				docPath, config.getProperty("aasxPath"), registryUrl);
 		component.startComponent();
 	}
 }

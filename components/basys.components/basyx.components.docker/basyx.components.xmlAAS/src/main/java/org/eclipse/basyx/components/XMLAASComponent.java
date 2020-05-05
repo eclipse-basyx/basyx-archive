@@ -30,15 +30,15 @@ public class XMLAASComponent {
 	private static Logger logger = LoggerFactory.getLogger(XMLAASComponent.class);
 
 	// The server with the servlet that will be created
-	private AASHTTPServer server;
+	protected AASHTTPServer server;
 
-	private Collection<AASBundle> aasBundles;
+	protected Collection<AASBundle> aasBundles;
 
-	private String hostName;
-	private int port;
-	private String path;
-	private String docBasePath;
-	private String registryUrl;
+	protected String hostName;
+	protected int port;
+	protected String path;
+	protected String docBasePath;
+	protected String registryUrl;
 
 	protected XMLAASComponent(String hostName, int port, String path, String docBasePath) {
 		// Sets the server context (still needs to load the bundle)
@@ -63,6 +63,7 @@ public class XMLAASComponent {
 	protected void setRegistryUrl(String registryUrl) {
 		this.registryUrl = registryUrl;
 	}
+
 
 	/**
 	 * Returns the set of AAS descriptors for the AAS contained in the AASX
@@ -105,6 +106,7 @@ public class XMLAASComponent {
 		// Create the Servlet for aas
 		context.addServletMapping("/*", new AASBundleServlet(aasBundles));
 		server = new AASHTTPServer(context);
+
 
 		logger.info("Start the server...");
 		server.start();
