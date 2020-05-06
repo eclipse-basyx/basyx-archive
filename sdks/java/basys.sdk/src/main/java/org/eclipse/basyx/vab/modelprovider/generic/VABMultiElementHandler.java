@@ -17,15 +17,6 @@ public class VABMultiElementHandler implements IVABElementHandler {
 	}
 
 	@Override
-	public Object preprocessObject(Object element) {
-		Object result = element;
-		for (IVABElementHandler handler : handlers) {
-			result = handler.preprocessObject(result);
-		}
-		return result;
-	}
-
-	@Override
 	public Object postprocessObject(Object element) {
 		Object result = element;
 		for (IVABElementHandler handler : handlers) {

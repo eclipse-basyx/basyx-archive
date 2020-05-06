@@ -1,17 +1,12 @@
 package org.eclipse.basyx.testsuite.regression.vab.modelprovider.map;
 
-import static org.junit.Assert.fail;
-
 import org.eclipse.basyx.testsuite.regression.vab.modelprovider.SimpleVABElement;
 import org.eclipse.basyx.testsuite.regression.vab.modelprovider.TestProvider;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.TestsuiteDirectory;
-import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
-import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
-import org.junit.Test;
 
 /**
  * Tests the functionality of the VABMapProvider according to the test cases in
@@ -37,15 +32,5 @@ public class TestMapProvider extends TestProvider {
 			});
 		}
 		return connManager;
-	}
-	
-	@Test
-	public void testListReferenceException() {
-		// Test invalid reference
-		VABElementProxy connVABElement = getConnectionManager().connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
-		try {
-			connVABElement.getModelPropertyValue("structure/list/byRef_23");
-			fail();
-		} catch (ResourceNotFoundException e) {}
 	}
 }

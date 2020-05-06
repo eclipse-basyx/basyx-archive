@@ -32,7 +32,7 @@ public class VABModelProvider implements IModelProvider {
 
 	public VABModelProvider(Object elements, IVABElementHandler handler) {
 		this.handler = handler;
-		this.elements = handler.preprocessObject(elements);
+		this.elements = elements;
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class VABModelProvider implements IModelProvider {
 		if (VABPathTools.isEmptyPath(path)) {
 			// Empty path => parent element == null => replace root, if it exists
 			if (elements != null) {
-				elements = handler.preprocessObject(newValue);
+				elements = newValue;
 			}
 			return;
 		}
@@ -67,7 +67,6 @@ public class VABModelProvider implements IModelProvider {
 		// Only write values, that already exist
 		Object thisElement = handler.getElementProperty(parentElement, propertyName);
 		if (parentElement != null && propertyName != null && thisElement != null) {
-			newValue = handler.preprocessObject(newValue);
 			handler.setModelPropertyValue(parentElement, propertyName, newValue);
 		}
 	}
@@ -79,7 +78,7 @@ public class VABModelProvider implements IModelProvider {
 		if (VABPathTools.isEmptyPath(path)) {
 			// The complete model should be replaced if it does not exist
 			if (elements == null) {
-				elements = handler.preprocessObject(newValue);
+				elements = newValue;
 			} else {
 				throw new ResourceAlreadyExistsException("Element \"/\" does already exist.");
 			}
@@ -92,8 +91,6 @@ public class VABModelProvider implements IModelProvider {
 
 		// Only create new, never replace existing elements
 		if (parentElement != null) {
-			
-			newValue = handler.preprocessObject(newValue);
 			Object childElement = getElementPropertyIfExistent(parentElement, propertyName);
 			if (childElement == null) {
 				// The last path element does not exist
@@ -106,7 +103,6 @@ public class VABModelProvider implements IModelProvider {
 					throw new ResourceAlreadyExistsException("Element \"" + path + "\" does already exist.");
 				}
 			}
-			
 		} else {
 			logger.warn("Could not create element, parent element does not exist for path '{}'", path);
 			throw new ResourceNotFoundException("Parent element for \"" + path + "\" does not exist.");
@@ -120,10 +116,8 @@ public class VABModelProvider implements IModelProvider {
 
 		Object parentElement = getParentElement(path);
 		String propertyName = VABPathTools.getLastElement(path);
-		if (parentElement != null && propertyName != null) {
-			if( ! handler.deleteValue(parentElement, propertyName)) {
-				throw new ResourceNotFoundException("Element \"" + path + "\" does not exist.");
-			}
+		if (parentElement != null && propertyName != null && !handler.deleteValue(parentElement, propertyName)) {
+			throw new ResourceNotFoundException("Element \"" + path + "\" does not exist.");
 		}
 	}
 
@@ -139,11 +133,9 @@ public class VABModelProvider implements IModelProvider {
 		String propertyName = VABPathTools.getLastElement(path);
 		if (parentElement != null && propertyName != null) {
 			Object childElement = handler.getElementProperty(parentElement, propertyName);
-			if (childElement != null) {
-				if( ! handler.deleteValue(childElement, obj)) {
-					// Value was not deleted by any handler, it is contained in a Map
-					throw new MalformedRequestException("Can not delete element \"" + path + "\" by value.");
-				}
+			if (childElement != null && !handler.deleteValue(childElement, obj)) {
+				// Value was not deleted by any handler, it is contained in a Map
+				throw new MalformedRequestException("Can not delete element \"" + path + "\" by value.");
 			}
 		}
 	}

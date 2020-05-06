@@ -14,12 +14,6 @@ import org.eclipse.basyx.vab.modelprovider.generic.IVABElementHandler;
  */
 public class VABMapHandler implements IVABElementHandler {
 	@Override
-	public Object preprocessObject(Object object) {
-		// TODO check if any element key comprises '/' and throw RunTimeException
-		return object;
-	}
-
-	@Override
 	public Object getElementProperty(Object element, String propertyName) throws ProviderException {
 		if (element instanceof Map<?, ?>) {
 			Map<?, ?> map = (Map<?, ?>) element;

@@ -12,13 +12,6 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  */
 public interface IVABElementHandler {
 	/**
-	 * Handles external objects and prepares them before they get processed further
-	 */
-	public default Object preprocessObject(Object element) {
-		return element;
-	}
-
-	/**
 	 * Handles internal objects after they have been processed
 	 */
 	public default Object postprocessObject(Object element) {
