@@ -11,47 +11,69 @@
 ;
 ;
 $CONSTANT$ NAMESPACE submodel
-#include <memory>
+#ifndef BASYX_SUBMODEL_ENUM_$ENUM_CLASS$_H
+#define BASYX_SUBMODEL_ENUM_$ENUM_CLASS$_H
+
+#include <string>
 
 namespace basyx {
 namespace $NAMESPACE$ {
 
-enum class $ENUM_CLASS${
+enum class $ENUM_CLASS$ {
     $FIRST_ENUM$,
     $MIDDLE_ENUM$,
-    $LAST_ENUM$
+    $LAST_ENUM$,
 };
 
-static const std::array<std::pair<const char*, $ENUM_CLASS$>, $SIZE$> string_to_$ENUM_CLASS$ = 
-{{
-    std::pair<const char*, $ENUM_CLASS$>("$FIRST_ENUM$", $ENUM_CLASS$::$FIRST_ENUM$),
-    std::pair<const char*, $ENUM_CLASS$>("$MIDDLE_ENUM$", $ENUM_CLASS$::$MIDDLE_ENUM$),
-    std::pair<const char*, $ENUM_CLASS$>("$LAST_ENUM$", $ENUM_CLASS$::$LAST_ENUM$)
-}};
-
-template<class $ENUM_CLASS$>
-$ENUM_CLASS$ from_string(const std::string name);
-std::string to_string($ENUM_CLASS$ enum_elem);
-
-}
-}
-
-$FILE_ENDING$ h
-#include <BaSyx/$NAMESPACE$/map/$ENUM_CLASS$.h>
-
-#include <string>
-#include <algorithm>
-
-template<>
-basyx::$NAMESPACE$::$ENUM_CLASS$ basyx::$NAMESPACE$::from_string<basyx::$NAMESPACE$::$ENUM_CLASS$>(const std::string name)
+class $ENUM_CLASS$_
 {
-    auto pair = std::find_if(string_to_$ENUM_CLASS$.begin(), string_to_$ENUM_CLASS$.end(), [name](std::pair<const char*, $ENUM_CLASS$> pair) {return not name.compare(pair.first);});
+public:
+    static $ENUM_CLASS$ from_string(const std::string & name);
+    static const char * to_string($ENUM_CLASS$ value);
+};
+
+
+}
+}
+
+#endif
+$FILE_ENDING$ h
+#include <BaSyx/$NAMESPACE$/enumerations/$ENUM_CLASS$.h>
+
+#include <array>
+#include <algorithm>
+#include <memory>
+#include <string>
+
+using namespace basyx::submodel;
+
+using enum_pair_t = std::pair<const char*, $ENUM_CLASS$>;
+
+static const std::array<enum_pair_t, $SIZE$> string_to_enum = 
+{
+    std::make_pair("$FIRST_ENUM$",  $ENUM_CLASS$::$FIRST_ENUM$),
+    std::make_pair("$MIDDLE_ENUM$", $ENUM_CLASS$::$MIDDLE_ENUM$),
+    std::make_pair("$LAST_ENUM$", $ENUM_CLASS$::$LAST_ENUM$),
+};
+
+$ENUM_CLASS$ $ENUM_CLASS$_::from_string(const std::string & name)
+{
+    auto pair = std::find_if(string_to_enum.begin(), string_to_enum.end(), 
+		[&name](const auto & pair) {
+			return !name.compare(pair.first);
+	});
+
     return pair->second;
 }
 
-std::string basyx::$NAMESPACE$::to_string($ENUM_CLASS$ enum_elem)
+const char * $ENUM_CLASS$_::to_string($ENUM_CLASS$ value)
 {
-    auto pair = std::find_if(string_to_$ENUM_CLASS$.begin(), string_to_$ENUM_CLASS$.end(), [enum_elem](std::pair<const char*, $ENUM_CLASS$> pair) {return enum_elem == pair.second;});
+    auto pair = std::find_if(string_to_enum.begin(), string_to_enum.end(), 
+		[value](const auto & pair) {
+			return value == pair.second;
+	});
+
     return pair->first;
 }
+
 $FILE_ENDING$ cpp
