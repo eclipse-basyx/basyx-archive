@@ -4,8 +4,6 @@ import java.util.Map;
 
 import org.eclipse.basyx.vab.modelprovider.generic.IVABElementHandler;
 import org.eclipse.basyx.vab.modelprovider.generic.VABModelProvider;
-import org.eclipse.basyx.vab.modelprovider.generic.VABMultiElementHandler;
-import org.eclipse.basyx.vab.modelprovider.list.VABListHandler;
 
 
 
@@ -19,7 +17,7 @@ import org.eclipse.basyx.vab.modelprovider.list.VABListHandler;
  */
 public class VABMapProvider extends VABModelProvider {
 	public VABMapProvider(Map<String, Object> elements) {
-		super(elements, new VABMultiElementHandler(new VABMapHandler(), new VABListHandler()));
+		super(elements, new VABMapHandler());
 	}
 
 	protected VABMapProvider(Map<String, Object> elements, IVABElementHandler handler) {

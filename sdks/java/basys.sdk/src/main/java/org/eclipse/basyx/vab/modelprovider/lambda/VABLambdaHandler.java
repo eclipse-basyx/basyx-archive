@@ -9,10 +9,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
-import org.eclipse.basyx.vab.modelprovider.generic.IVABElementHandler;
-import org.eclipse.basyx.vab.modelprovider.generic.VABMultiElementHandler;
+import org.eclipse.basyx.vab.modelprovider.map.VABMapHandler;
 
 /**
  * VABHandler that can additionally handle maps with hidden
@@ -21,16 +20,12 @@ import org.eclipse.basyx.vab.modelprovider.generic.VABMultiElementHandler;
  * @author schnicke, espen
  *
  */
-public class VABLambdaHandler extends VABMultiElementHandler {
+public class VABLambdaHandler extends VABMapHandler {
 	public static final String VALUE_SET_SUFFIX = "set";
 	public static final String VALUE_GET_SUFFIX = "get";
 	public static final String VALUE_INSERT_SUFFIX = "insert";
 	public static final String VALUE_REMOVEKEY_SUFFIX = "removeKey";
 	public static final String VALUE_REMOVEOBJ_SUFFIX = "removeObject";
-
-	public VABLambdaHandler(IVABElementHandler... handlers) {
-		super(handlers);
-	}
 
 	@Override
 	public Object postprocessObject(Object element) {
@@ -38,66 +33,61 @@ public class VABLambdaHandler extends VABMultiElementHandler {
 	}
 
 	@Override
-	public Object getElementProperty(Object element, String propertyName) throws ProviderException {
+	public Object getElementProperty(Object element, String propertyName) {
 		return super.getElementProperty(resolveSingle(element), propertyName);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean setModelPropertyValue(Object element, String propertyName, Object newValue) throws ProviderException {
+	public void setModelPropertyValue(Object element, String propertyName, Object newValue) {
 		Object child = null;
 		try {
 			child = getElementProperty(element, propertyName);
 		} catch (ResourceNotFoundException e) {}
 		if (hasHiddenSetter(child)) {
 			((Consumer<Object>) ((Map<String, Object>) child).get(VALUE_SET_SUFFIX)).accept(newValue);
-			return true;
 		} else if (hasHiddenInserter(element) && (resolveSingle(element) instanceof Map<?, ?>)) {
 			((BiConsumer<String, Object>) ((Map<String, Object>) element).get(VALUE_INSERT_SUFFIX)).accept(propertyName,
 					newValue);
-			return true;
 		} else {
-			return super.setModelPropertyValue(resolveSingle(element), propertyName, newValue);
+			super.setModelPropertyValue(resolveSingle(element), propertyName, newValue);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean createValue(Object element, Object newValue) throws ProviderException {
+	public void createValue(Object element, Object newValue) {
 		if (hasHiddenInserter(element)) {
 			((Consumer<Object>) ((Map<String, Object>) element).get(VALUE_INSERT_SUFFIX)).accept(newValue);
-			return true;
 		} else {
-			return super.createValue(element, newValue);
+			super.createValue(element, newValue);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean deleteValue(Object element, String propertyName) throws ProviderException {
+	public void deleteValue(Object element, String propertyName) {
 		if (hasHiddenKeyRemover(element)) {
 			super.getElementProperty(resolveSingle(element), propertyName);
 			Consumer<String> c = (Consumer<String>) ((Map<String, Object>) element).get(VALUE_REMOVEKEY_SUFFIX);
 			c.accept(propertyName);
-			return true;
 		} else {
-			return super.deleteValue(element, propertyName);
+			super.deleteValue(element, propertyName);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean deleteValue(Object element, Object property) throws ProviderException {
+	public void deleteValue(Object element, Object property) {
 		if (hasHiddenObjectRemover(element)) {
-			if(resolveSingle(element) instanceof Map) {
+			if (resolveSingle(element) instanceof Map) {
 				// Can not delete by value from Maps
-				return false;
+				throw new MalformedRequestException("Could not delete property from a map.");
 			}
 			Consumer<Object> c = (Consumer<Object>) ((Map<String, Object>) element).get(VALUE_REMOVEOBJ_SUFFIX);
 			c.accept(property);
-			return true;
 		} else {
-			return super.deleteValue(element, property);
+			super.deleteValue(element, property);
 		}
 	}
 

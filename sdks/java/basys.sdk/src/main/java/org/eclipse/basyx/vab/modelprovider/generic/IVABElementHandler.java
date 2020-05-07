@@ -1,6 +1,5 @@
 package org.eclipse.basyx.vab.modelprovider.generic;
 
-import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
 /**
@@ -18,13 +17,13 @@ public interface IVABElementHandler {
 		return element;
 	}
 
-	public Object getElementProperty(Object element, String propertyName) throws ProviderException;
+	public Object getElementProperty(Object element, String propertyName);
 
-	public boolean setModelPropertyValue(Object element, String propertyName, Object newValue) throws ProviderException;
+	public void setModelPropertyValue(Object element, String propertyName, Object newValue);
 
-	public boolean createValue(Object element, Object newValue) throws ProviderException;
+	public void createValue(Object element, Object newValue);
 
-	public boolean deleteValue(Object element, String propertyName) throws ProviderException;
+	public void deleteValue(Object element, String propertyName);
 
-	public boolean deleteValue(Object element, Object property) throws ProviderException;
+	public void deleteValue(Object element, Object property);
 }

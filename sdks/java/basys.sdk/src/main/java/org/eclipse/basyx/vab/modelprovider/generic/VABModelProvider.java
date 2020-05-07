@@ -2,15 +2,11 @@ package org.eclipse.basyx.vab.modelprovider.generic;
 
 import java.util.function.Function;
 
-import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.NotAnInvokableException;
-import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A generic VAB model provider.
@@ -18,8 +14,6 @@ import org.slf4j.LoggerFactory;
  * @author espen
  */
 public class VABModelProvider implements IModelProvider {
-
-	private static final Logger logger = LoggerFactory.getLogger(VABModelProvider.class);
 	/**
 	 * Handler, which handles single element objects
 	 */
@@ -36,22 +30,13 @@ public class VABModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
-		// Check empty paths
-		VABPathTools.checkPathForNull(path);
-		if (VABPathTools.isEmptyPath(path)) {
-			return handler.postprocessObject(elements);
-		}
-
+	public Object getModelPropertyValue(String path) {
 		Object element = getTargetElement(path);
-		Object postProcessedElement = handler.postprocessObject(element);
-		
-		return postProcessedElement;
+		return handler.postprocessObject(element);
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
-		// Check empty paths
+	public void setModelPropertyValue(String path, Object newValue) {
 		VABPathTools.checkPathForNull(path);
 		if (VABPathTools.isEmptyPath(path)) {
 			// Empty path => parent element == null => replace root, if it exists
@@ -63,24 +48,21 @@ public class VABModelProvider implements IModelProvider {
 
 		Object parentElement = getParentElement(path);
 		String propertyName = VABPathTools.getLastElement(path);
-
-		// Only write values, that already exist
-		Object thisElement = handler.getElementProperty(parentElement, propertyName);
-		if (parentElement != null && propertyName != null && thisElement != null) {
-			handler.setModelPropertyValue(parentElement, propertyName, newValue);
-		}
+		// Throws an exception, if the element does not exist
+		handler.getElementProperty(parentElement, propertyName);
+		// => Can only set elements that have already been created
+		handler.setModelPropertyValue(parentElement, propertyName, newValue);
 	}
 
 	@Override
-	public void createValue(String path, Object newValue) throws ProviderException {
-		// Check empty paths
+	public void createValue(String path, Object newValue) {
 		VABPathTools.checkPathForNull(path);
 		if (VABPathTools.isEmptyPath(path)) {
 			// The complete model should be replaced if it does not exist
 			if (elements == null) {
 				elements = newValue;
 			} else {
-				throw new ResourceAlreadyExistsException("Element \"/\" does already exist.");
+				throw new ResourceAlreadyExistsException("Root element does already exist.");
 			}
 			return;
 		}
@@ -88,62 +70,35 @@ public class VABModelProvider implements IModelProvider {
 		// Find parent & name of new element
 		Object parentElement = getParentElement(path);
 		String propertyName = VABPathTools.getLastElement(path);
-
-		// Only create new, never replace existing elements
-		if (parentElement != null) {
-			Object childElement = getElementPropertyIfExistent(parentElement, propertyName);
-			if (childElement == null) {
-				// The last path element does not exist
-				handler.setModelPropertyValue(parentElement, propertyName, newValue);
-			} else {
-				// The last path element does exist
-				// Try to create the value, should work if it is a list
-				if( ! handler.createValue(childElement, newValue)) {
-					// createValue failed
-					throw new ResourceAlreadyExistsException("Element \"" + path + "\" does already exist.");
-				}
-			}
-		} else {
-			logger.warn("Could not create element, parent element does not exist for path '{}'", path);
-			throw new ResourceNotFoundException("Parent element for \"" + path + "\" does not exist.");
-		}
-	}
-
-	@Override
-	public void deleteValue(String path) throws ProviderException {
-		// Check null path
-		VABPathTools.checkPathForNull(path);
-
-		Object parentElement = getParentElement(path);
-		String propertyName = VABPathTools.getLastElement(path);
-		if (parentElement != null && propertyName != null && !handler.deleteValue(parentElement, propertyName)) {
-			throw new ResourceNotFoundException("Element \"" + path + "\" does not exist.");
-		}
-	}
-
-	@Override
-	public void deleteValue(String path, Object obj) throws ProviderException {
-		// Check null path
-		VABPathTools.checkPathForNull(path);
-		if (path.equals("")) {
-			throw new MalformedRequestException("Path must not be empty.");
-		}
-
-		Object parentElement = getParentElement(path);
-		String propertyName = VABPathTools.getLastElement(path);
-		if (parentElement != null && propertyName != null) {
+		try {
 			Object childElement = handler.getElementProperty(parentElement, propertyName);
-			if (childElement != null && !handler.deleteValue(childElement, obj)) {
-				// Value was not deleted by any handler, it is contained in a Map
-				throw new MalformedRequestException("Can not delete element \"" + path + "\" by value.");
-			}
+			// The last path element does exist -> create the new value here
+			handler.createValue(childElement, newValue);
+		} catch (ResourceNotFoundException e) {
+			// The last path element does not exist
+			// -> create the new property in the parent element
+			handler.setModelPropertyValue(parentElement, propertyName, newValue);
 		}
+	}
+
+	@Override
+	public void deleteValue(String path) {
+		VABPathTools.checkPathForNull(path);
+
+		Object parentElement = getParentElement(path);
+		String propertyName = VABPathTools.getLastElement(path);
+		handler.deleteValue(parentElement, propertyName);
+	}
+
+	@Override
+	public void deleteValue(String path, Object obj) {
+		Object targetElement = getTargetElement(path);
+		handler.deleteValue(targetElement, obj);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object invokeOperation(String path, Object... parameters) throws ProviderException {
-		VABPathTools.checkPathForNull(path);
+	public Object invokeOperation(String path, Object... parameters) {
 		Object childElement = getModelPropertyValue(path);
 
 		// Invoke operation for function interfaces
@@ -159,46 +114,40 @@ public class VABModelProvider implements IModelProvider {
 	 * Get the parent of an element in this provider. The path should include the path to the element separated by '/'.
 	 * E.g., for accessing element c in path a/b, the path should be a/b/c.
 	 */
-	private Object getParentElement(String path) throws ProviderException {
+	private Object getParentElement(String path) {
+		VABPathTools.checkPathForNull(path);
+
 		// Split path into its elements, separated by '/'
 		String[] pathElements = VABPathTools.splitPath(path);
 
 		Object currentElement = elements;
 		// ignore the leaf element, only return the leaf's parent element
 		for (int i = 0; i < pathElements.length - 1; i++) {
-			if (currentElement == null) {
-				return null;
-			}
 			currentElement = handler.getElementProperty(currentElement, pathElements[i]);
 		}
+
+		if (currentElement == null) {
+			throw new ResourceNotFoundException("Parent element for \"" + path + "\" does not exist.");
+		}
+
 		return currentElement;
 	}
-	
-	
-	/**
-	 * Calls getElementProperty and catches ResourceNotFOundException 
-	 */
-	private Object getElementPropertyIfExistent(Object parentElement, String propertyName) throws ProviderException {
-		try {
-			return handler.getElementProperty(parentElement, propertyName);
-		} catch (ResourceNotFoundException e) {
-			return null;
-		}
-	}
+
 
 	/**
 	 * Instead of returning the parent element of a path, this function gives the target element.
 	 * E.g., it returns c for the path a/b/c
 	 */
-	protected Object getTargetElement(String path) throws ProviderException {
+	protected Object getTargetElement(String path) {
+		VABPathTools.checkPathForNull(path);
 		if (VABPathTools.isEmptyPath(path)) {
 			return elements;
-		} else {
-			Object parentElement = getParentElement(path);
-			String operationName = VABPathTools.getLastElement(path);
-			if (parentElement != null && operationName != null) {
-				return handler.getElementProperty(parentElement, operationName);
-			}
+		}
+
+		Object parentElement = getParentElement(path);
+		String operationName = VABPathTools.getLastElement(path);
+		if (operationName != null) {
+			return handler.getElementProperty(parentElement, operationName);
 		}
 		return null;
 	}

@@ -1,7 +1,9 @@
 package org.eclipse.basyx.vab.modelprovider.map;
 
+import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.generic.IVABElementHandler;
@@ -14,57 +16,70 @@ import org.eclipse.basyx.vab.modelprovider.generic.IVABElementHandler;
  */
 public class VABMapHandler implements IVABElementHandler {
 	@Override
-	public Object getElementProperty(Object element, String propertyName) throws ProviderException {
+	public Object getElementProperty(Object element, String propertyName) {
 		if (element instanceof Map<?, ?>) {
 			Map<?, ?> map = (Map<?, ?>) element;
 
 			//check if requested property exists in map
-			if(!map.containsKey(propertyName)) {
+			if (!map.containsKey(propertyName)) {
 				throw new ResourceNotFoundException("Property \"" + propertyName + "\" does not exist.");
 			}
-			
 			return map.get(propertyName);
+		} else if (element instanceof Collection<?> || element instanceof Object[]) {
+			throw new ResourceNotFoundException("It is not possible to access single elements in lists.");
+		} else {
+			throw new MalformedRequestException("Could not get property \"" + propertyName + "\".");
 		}
-		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean setModelPropertyValue(Object element, String propertyName, Object newValue) throws ProviderException {
+	public void setModelPropertyValue(Object element, String propertyName, Object newValue) throws ProviderException {
 		if (element instanceof Map) {
 			Map<String, Object> map = (Map<String, Object>) element;
-			
-			//It is not possible to block creating new values here,
-			//as createValue doesn't work in MapHandler because of missing propertyName
-			
 			map.put(propertyName, newValue);
-			return true;
+		} else if (element instanceof Collection<?> || element instanceof Object[]) {
+			throw new ResourceNotFoundException("It is not possible to set single elements in lists.");
+		} else {
+			throw new MalformedRequestException("Could not set property \"" + propertyName + "\".");
 		}
-		return false;
-	}
-
-	@Override
-	public boolean createValue(Object element, Object newValue) throws ProviderException {
-		return false;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean deleteValue(Object element, String propertyName) throws ProviderException {
+	public void createValue(Object element, Object newValue) {
+		if (element instanceof Collection<?>) {
+			Collection<Object> collection = (Collection<Object>) element;
+			collection.add(newValue);
+		} else {
+			throw new MalformedRequestException("Could not create property.");
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void deleteValue(Object element, String propertyName) {
 		if (element instanceof Map) {
 			Map<String, Object> map = (Map<String, Object>) element;
-			//check if requested property exists in map
+			// check if requested property exists in map
 			if(!map.containsKey(propertyName)) {
 				throw new ResourceNotFoundException("Property \"" + propertyName + "\" does not exist. Therefore it can not be deleted.");
 			}
 			map.remove(propertyName);
-			return true;
+		} else if (element instanceof Collection<?> || element instanceof Object[]) {
+			throw new ResourceNotFoundException("It is not possible to remove elements from a list using an index.");
+		} else {
+			throw new MalformedRequestException("Could not delete property \"" + propertyName + "\".");
 		}
-		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public boolean deleteValue(Object element, Object property) throws ProviderException {
-		return false;
+	public void deleteValue(Object element, Object property) {
+		if (element instanceof Collection) {
+			((Collection<Object>) element).remove(property);
+		} else {
+			throw new MalformedRequestException("Could not delete object from property.");
+		}
 	}
 }
