@@ -38,8 +38,10 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/operation/OperationVariable.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/property/MultiLanguageProperty.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/property/ReferenceElement.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/SubmodelElementCollection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/SubmodelElement.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/SubmodelElementFactory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/SubmodelElementCollection.cpp
+
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/aas/AssetAdministrationShell.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/aas/Asset.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/ElementContainer.cpp
@@ -113,8 +115,9 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/aas/AssetAdministrationShell.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/aas/Asset.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ElementContainer.h
-        ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ModelType.h
+        ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ElementFactory.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/LangStringSet.h
+        ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ModelType.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/HasDataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Identifiable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Referable.h
@@ -127,8 +130,10 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/property/Property.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/property/ReferenceElement.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/SubmodelElementCollection.h
-        ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/SubmodelElement.h
-        ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/SubModel.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/SubmodelElementFactory.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/SubmodelElement.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/SubModel.h
+		
 
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/aas/AssetAdministrationShell.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/aas/Asset.h

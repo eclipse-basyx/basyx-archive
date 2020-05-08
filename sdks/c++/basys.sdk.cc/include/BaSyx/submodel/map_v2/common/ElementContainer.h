@@ -2,9 +2,10 @@
 #define BASYX_SUBMODEL_MAP_V2_COMMON_ELEMENTCONTAINER_H
 
 #include <BaSyx/submodel/api_v2/common/IElementContainer.h>
+#include <BaSyx/submodel/map_v2/common/ElementFactory.h>
 #include <BaSyx/submodel/map_v2/qualifier/Referable.h>
 #include <BaSyx/submodel/map_v2/qualifier/Identifiable.h>
-#include <BaSyx/submodel/map_v2/submodelelement/property/Property.h>
+#include <BaSyx/submodel/map_v2/submodelelement/SubmodelElementFactory.h>
 #include <BaSyx/vab/ElementMap.h>
 
 #include <unordered_map>
@@ -48,7 +49,7 @@ IElementType * const ElementContainer<IElementType>::getElement(const std::strin
 	// Find element in object tree
 	auto & objectList = this->getMap().template Get<basyx::object::object_list_t&>();
 
-	const auto & object = std::find_if(
+	auto objectIterator = std::find_if(
 		objectList.begin(), objectList.end(),
 		[&idShort](basyx::object & obj) {
 		const auto & id = obj.getProperty(map::Identifiable::Path::IdShort).Get<std::string&>();
@@ -56,7 +57,7 @@ IElementType * const ElementContainer<IElementType>::getElement(const std::strin
 	});
 
 	// element doesn't exist, remove from cache and return nullptr
-	if (object == objectList.end()) {
+	if (objectIterator == objectList.end()) {
 		this->cache.erase(idShort);
 		return nullptr;
 	}
@@ -65,9 +66,9 @@ IElementType * const ElementContainer<IElementType>::getElement(const std::strin
 		auto element = cache.find(idShort);
 		if (element == cache.end()) {
 			// not in cache, re-create elementPtr and return
-//			elementPtr_t elementPtr = util::make_unique<map::Property<int>>("test");
-			//auto ptr = this->cache.emplace(idShort, std::move(elementPtr));
-			//ptr.first->second.get();
+			elementPtr_t elementPtr = ElementFactory<IElementType>::Create(vab::ElementMap(*objectIterator));
+			auto ptr = this->cache.emplace(idShort, std::move(elementPtr));
+			ptr.first->second.get();
 		}
 		else { // found inside cache, return pointer
 			return element->second.get();
