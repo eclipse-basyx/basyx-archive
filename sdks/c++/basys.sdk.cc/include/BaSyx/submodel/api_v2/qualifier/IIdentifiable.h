@@ -19,7 +19,7 @@ namespace api {
 class IIdentifiable : public virtual IReferable
 {
 public:
-  virtual ~IIdentifiable() = default;
+  virtual ~IIdentifiable() = 0;
 
   virtual const simple::AdministrativeInformation & getAdministrativeInformation() const = 0;
   virtual simple::AdministrativeInformation & getAdministrativeInformation() = 0;
@@ -28,6 +28,8 @@ public:
 
   virtual bool hasAdministrativeInformation() const = 0;
 };
+
+inline IIdentifiable::~IIdentifiable() = default;
 
 }
 }

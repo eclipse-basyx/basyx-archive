@@ -14,7 +14,7 @@ namespace api {
 class IReferable
 {
 public:
-	virtual ~IReferable() = default;
+	virtual ~IReferable() = 0;
 
 	virtual const std::string & getIdShort() const = 0;
 	virtual const std::string * const getCategory() const = 0;
@@ -23,6 +23,8 @@ public:
 	virtual const ILangStringSet & getDescription() const = 0;
 	virtual const IReferable * const getParent() const = 0;
 };
+
+inline IReferable::~IReferable() = default;
 
 }
 }

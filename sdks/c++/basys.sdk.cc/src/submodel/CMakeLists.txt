@@ -92,7 +92,6 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/IDataElement.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/IEntity.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/ISubmodelElementCollection.h
-        ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/ISubmodelElement.cpp
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/ISubmodelElement.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/operation/IOperation.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/operation/IOperationVariable.h
@@ -108,7 +107,6 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Identifiable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Referable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/reference/Reference.h
-        ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/DataElement.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/file/Blob.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/file/File.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/operation/Operation.h
@@ -127,8 +125,6 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/DataSpecificationContent.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/DataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/DataSpecificationIEC61360.h
-        ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/datatypes--/DataTypeIEC61360.h
-        ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/datatypes--/LevelType.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/identifier/Identifier.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/parts/ConceptDescription.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/AdministrativeInformation.h
