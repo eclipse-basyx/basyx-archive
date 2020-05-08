@@ -46,6 +46,8 @@ class Generator:
                 
     
     def __write_file__(self, line_templates, ending, output_path):
+        if output_path == "":
+            output_path = "."
         if not os.path.exists(output_path):
             raise Exception("Output path does not exist")
         with open(os.path.abspath(output_path) + "/" + self.enum_class + "." + ending, "w") as out_file:
