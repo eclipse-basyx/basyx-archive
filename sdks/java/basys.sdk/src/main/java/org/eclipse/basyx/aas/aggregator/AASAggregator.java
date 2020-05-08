@@ -71,10 +71,6 @@ public class AASAggregator implements IAASAggregator {
 		aasProviderMap.remove(aasId.getId());
 	}
 
-	public boolean containsAAS(IIdentifier aasId) {
-		return aasProviderMap.containsKey(aasId.getId());
-	}
-
 	public VABMultiSubmodelProvider getProviderForAASId(String aasId) {
 		return aasProviderMap.get(aasId);
 	}
