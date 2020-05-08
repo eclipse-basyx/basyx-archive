@@ -22,7 +22,7 @@ public class ExceptionToHTTPCodeMapper {
 	 */
 	public static int mapFromException(ProviderException e) {
 
-		if(e instanceof MalformedRequestException) {
+		if (e instanceof MalformedRequestException) {
 			return 400;
 		} else if(e instanceof ResourceAlreadyExistsException) {
 			return 422;

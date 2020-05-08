@@ -82,6 +82,11 @@ public class MapUpdate {
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		
+		// Test updating an existing null-element
+		connVABElement.setModelPropertyValue("special/null", true);
+		Object bool = connVABElement.getModelPropertyValue("special/null");
+		assertTrue((boolean) bool);
+
 		// Null path - should throw exception
 		try {
 			connVABElement.setModelPropertyValue(null, "");

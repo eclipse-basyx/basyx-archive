@@ -34,6 +34,18 @@ public class TestConnectedSingleProperty {
 		prop = new ConnectedSingleProperty(new VABConnectionManagerStub(new SinglePropertyProvider(new VABMapProvider(destroyType))).connectToVABElement(""));
 	}
 
+	@Test
+	public void testEmptyProperty() throws Exception {
+		Property propertyMeta = new Property();
+		propertyMeta.setValueType(PropertyValueTypeDef.String);
+		Map<String, Object> destroyType = TypeDestroyer.destroyType(propertyMeta);
+		prop = new ConnectedSingleProperty(
+				new VABConnectionManagerStub(new SinglePropertyProvider(new VABMapProvider(destroyType)))
+						.connectToVABElement(""));
+		prop.set("content");
+		assertEquals("content", prop.get());
+	}
+
 	/**
 	 * Tests getting the value
 	 * 

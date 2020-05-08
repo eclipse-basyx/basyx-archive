@@ -9,7 +9,7 @@
   </parent>
   
   <artifactId>basyx.components.AASServer</artifactId>
-  <name>basyx.components.AASServer</name>
+  <name>AAS Server</name>
 <packaging>jar</packaging>
 	
 	<!-- Define additional plugins that are not included by default -->
@@ -23,15 +23,6 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-	<dependencies>
-		<!-- This component is based on the xmlAAS component -->
-		<dependency>
-			<groupId>org.eclipse.basyx</groupId>
-			<artifactId>basyx.components.xmlAAS</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-	</dependencies>
 	
 	<profiles>
 		<profile>

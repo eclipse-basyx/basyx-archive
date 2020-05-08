@@ -424,8 +424,9 @@ public class FileSystemProvider implements IModelProvider {
 		FileType type = fileSystem.getType(fullPath);
 
 		if (type == FileType.DATA) {
-			// A file with this name already exists, quit the method
-			throw new ResourceAlreadyExistsException("A value at \"" + path + "\" already exists.");
+			// If it would have been a list, entries could have been added
+			// => invalid type
+			throw new MalformedRequestException("Could not create a value for \"" + path + "\"");
 		} else if (type == FileType.DIRECTORY) {
 			HashSet<String> collections = readMetaFile(parentPath);
 

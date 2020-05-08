@@ -1,5 +1,6 @@
 package org.eclipse.basyx.testsuite.regression.vab.modelprovider.lambda;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,6 @@ import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
-import org.eclipse.basyx.vab.modelprovider.list.ReferencedArrayList;
 import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
 
 /**
@@ -27,7 +27,7 @@ import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
 public class TestLambdaProvider extends TestProvider {
 
 	private static double doubleElement = 3.14d;
-	private static ReferencedArrayList<Object> collectionElement = new ReferencedArrayList<>();
+	private static Collection<Object> collectionElement = new ArrayList<>();
 	private static Map<String, Object> rootAccessor;
 	private static HashMap<String, Object> rootElement = new SimpleVABElement();
 	@SuppressWarnings("unchecked")
@@ -69,18 +69,12 @@ public class TestLambdaProvider extends TestProvider {
 		Map<String, Object> collectionAccessor = VABLambdaProviderHelper.createCollection((Supplier<Object>) () -> {
 			return collectionElement;
 		}, (Consumer<Collection<Object>>) (collection) -> {
-			collectionElement = new ReferencedArrayList<>(collection);
+			collectionElement = new ArrayList<>(collection);
 		}, (Consumer<Object>) (value) -> {
 			collectionElement.add(value);
 		}, (Consumer<Object>) (object) -> {
 			collectionElement.remove(object);
 		}, (Consumer<String>) (key) -> {
-			if (key != null && key.length() >= 7) {
-				String refName = key.substring("byRef_".length());
-				Integer reference = Integer.valueOf(refName);
-				Object object = collectionElement.getByReference(reference);
-				collectionElement.remove(object);
-			}
 		});
 		collections.put("list", collectionAccessor);
 

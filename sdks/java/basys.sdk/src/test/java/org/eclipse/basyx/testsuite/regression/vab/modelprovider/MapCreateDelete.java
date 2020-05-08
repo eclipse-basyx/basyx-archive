@@ -55,7 +55,10 @@ public class MapCreateDelete {
 		try {
 			connVABElement.createValue("inRoot", 0);
 			fail();
-		} catch (ResourceAlreadyExistsException e) {}
+		} catch (MalformedRequestException e) {
+			// If inRoot would have been a list 0 could be added here
+			// => 1.2 has an "invalid" type for creating values in it
+		}
 		toTest = connVABElement.getModelPropertyValue("inRoot");
 		assertEquals(1.2, toTest);
 		
@@ -95,7 +98,8 @@ public class MapCreateDelete {
 		try {
 			connVABElement.deleteValue("inRoot", 1.2);
 			fail();
-		} catch (MalformedRequestException e) {}
+		} catch (MalformedRequestException e) {
+		}
 		Object toTest = connVABElement.getModelPropertyValue("inRoot");
 		assertEquals(1.2, toTest);
 		
@@ -122,7 +126,8 @@ public class MapCreateDelete {
 		try {
 			connVABElement.deleteValue("/structure/map/", "inMap");
 			fail();
-		} catch (MalformedRequestException e) {}
+		} catch (MalformedRequestException e) {
+		}
 		
 		toTest = connVABElement.getModelPropertyValue("/structure/map/inMap");
 		assertEquals("34", toTest);
@@ -143,7 +148,11 @@ public class MapCreateDelete {
 		try {
 			connVABElement.deleteValue("", "");
 			fail();
-		} catch (MalformedRequestException e) {}
+		} catch (MalformedRequestException e) {
+			// Can not delete an object ("") from a map (root map)
+			// It would be possible to delete "" from a "root list"
+			// => invalid type
+		}
 		toTest = connVABElement.getModelPropertyValue("/primitives/integer");
 		assertEquals(123, toTest);
 		

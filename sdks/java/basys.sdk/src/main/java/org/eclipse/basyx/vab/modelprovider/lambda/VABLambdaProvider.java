@@ -2,9 +2,7 @@ package org.eclipse.basyx.vab.modelprovider.lambda;
 
 import java.util.Map;
 
-import org.eclipse.basyx.vab.modelprovider.list.VABListHandler;
-import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
-import org.eclipse.basyx.vab.modelprovider.map.VABMapHandler;
+import org.eclipse.basyx.vab.modelprovider.generic.VABModelProvider;
 
 /**
  * Provider that optionally allows properties to be modifiable by hidden
@@ -19,8 +17,8 @@ import org.eclipse.basyx.vab.modelprovider.map.VABMapHandler;
  * @author schnicke, espen
  *
  */
-public class VABLambdaProvider extends VABMapProvider {
+public class VABLambdaProvider extends VABModelProvider {
 	public VABLambdaProvider(Map<String, Object> elements) {
-		super(elements, new VABLambdaHandler(new VABMapHandler(), new VABListHandler()));
+		super(elements, new VABLambdaHandler());
 	}
 }
