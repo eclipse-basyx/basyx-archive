@@ -35,22 +35,7 @@ public class AASDescriptor extends ModelDescriptor {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 	}
-	
-	/**
-	 * Create a new aas descriptor with minimal information based on an existing AAS
-	 */
-	public AASDescriptor(AssetAdministrationShell aas) {
-		// Create descriptor with minimal information (id and idShort)
-		this(aas.getIdShort(), aas.getIdentification(), "");
-		
-		// Overwrite endpoints
-		put(AssetAdministrationShell.ENDPOINTS, aas.getEndpoints());
 
-		// Overwrite submodel descriptors
-		Collection<SubmodelDescriptor> smDescriptors = aas.getSubModelDescriptors();
-		put(AssetAdministrationShell.SUBMODELS, smDescriptors);
-	}
-	
 	/**
 	 * Create a new aas descriptor that retrieves the necessary information from a
 	 * passend AssetAdministrationShell
