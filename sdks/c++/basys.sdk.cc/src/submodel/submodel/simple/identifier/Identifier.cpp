@@ -34,3 +34,12 @@ const std::string & Identifier::getId() const
 {
 	return this->id;
 };
+
+bool operator==(const Identifier & left, const Identifier & right)
+{
+  if (left.getIdType() == right.getIdType())
+  {
+    return left.getId().compare(right.getId());
+  }
+  return false;
+}

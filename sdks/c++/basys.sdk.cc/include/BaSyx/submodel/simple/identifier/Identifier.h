@@ -25,6 +25,9 @@ public:
 public:
 	IdentifierType getIdType() const;
 	const std::string & getId() const;
+
+
+  friend bool operator==(const Identifier & left, const Identifier & right);
 };
 
 }
