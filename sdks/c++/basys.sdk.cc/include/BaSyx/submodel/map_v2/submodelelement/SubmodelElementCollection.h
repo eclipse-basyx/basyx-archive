@@ -4,6 +4,7 @@
 #include <BaSyx/submodel/api_v2/submodelelement/ISubmodelElementCollection.h>
 #include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
 #include <BaSyx/submodel/map_v2/common/ElementContainer.h>
+#include <BaSyx/submodel/map_v2/common/ModelType.h>
 
 
 namespace basyx {
@@ -12,8 +13,9 @@ namespace map {
 
 
 class SubmodelElementCollection : 
+	public api::ISubmodelElementCollection,
 	public SubmodelElement,
-	public api::ISubmodelElementCollection
+	public ModelType<ModelTypes::SubmodelElementCollection>
 {
 public:
 	struct Path {

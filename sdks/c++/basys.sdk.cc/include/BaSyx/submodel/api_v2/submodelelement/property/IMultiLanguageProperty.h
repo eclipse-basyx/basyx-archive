@@ -5,6 +5,7 @@
 #include <BaSyx/submodel/api_v2/reference/IReference.h>
 #include <BaSyx/submodel/api_v2/common/ILangStringSet.h>
 
+
 namespace basyx {
 namespace submodel {
 namespace api {

@@ -8,7 +8,7 @@
 #include <BaSyx/submodel/map_v2/aas/Asset.h>
 #include <BaSyx/submodel/map_v2/reference/Reference.h>
 
-
+#include <BaSyx/submodel/map_v2/common/ModelType.h>
 #include <BaSyx/submodel/map_v2/common/ElementContainer.h>
 
 namespace basyx {
@@ -19,6 +19,7 @@ class AssetAdministrationShell :
 	public api::IAssetAdministrationShell,
 	public map::Identifiable,
 	public map::HasDataSpecification,
+	public map::ModelType<ModelTypes::AssetAdministrationShell>,
 	public virtual vab::ElementMap
 {
 private:

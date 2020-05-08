@@ -5,6 +5,8 @@
 #include <BaSyx/submodel/api_v2/qualifier/IHasSemantics.h>
 #include <BaSyx/submodel/api_v2/qualifier/IReferable.h>
 #include <BaSyx/submodel/api_v2/qualifier/IHasKind.h>
+#include <BaSyx/submodel/api_v2/common/IModelType.h>
+
 
 namespace basyx {
 namespace submodel {
@@ -15,7 +17,8 @@ class ISubmodelElement :
 	public virtual IReferable,
 //	public virtual IQualifiable,
 	public virtual IHasSemantics,
-	public virtual IHasKind
+	public virtual IHasKind,
+	public virtual IModelType
 {
 public:
   virtual ~ISubmodelElement() = 0;

@@ -21,6 +21,11 @@ INTERFACE ${CMAKE_INSTALL_PREFIX}/include
 
 target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
     PRIVATE
+	    ${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/AssetKind.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/DataTypeIEC61360.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/LevelType.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/ModelTypes.cpp
+	
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/aas/AssetAdministrationShell.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/aas/Asset.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/common/LangStringSet.cpp
@@ -67,10 +72,16 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 
 target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
     PRIVATE
+        ${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/AssetKind.h
+        ${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/DataTypeIEC61360.h
+        ${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/LevelType.h
+        ${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/ModelTypes.h
+	
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/aas/IAssetAdministrationShell.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/aas/IAsset.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/common/IElementContainer.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/common/ILangStringSet.h
+        ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/common/IModelType.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/dataspecification/IDataSpecificationContent.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/dataspecification/IDataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/dataspecification/IDataSpecificationIEC61360.h
@@ -102,6 +113,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/aas/AssetAdministrationShell.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/aas/Asset.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ElementContainer.h
+        ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ModelType.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/LangStringSet.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/HasDataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Identifiable.h

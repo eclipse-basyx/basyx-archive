@@ -5,6 +5,7 @@
 #include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
 #include <BaSyx/submodel/map_v2/reference/Reference.h>
 #include <BaSyx/submodel/map_v2/common/LangStringSet.h>
+#include <BaSyx/submodel/map_v2/common/ModelType.h>
 
 namespace basyx {
 namespace submodel {
@@ -13,7 +14,8 @@ namespace map {
 
 class MultiLanguageProperty : 
 	public api::IMultiLanguageProperty,
-	public SubmodelElement
+	public SubmodelElement,
+	public ModelType<ModelTypes::MultiLanguageProperty>
 {
 private:
 	LangStringSet value;

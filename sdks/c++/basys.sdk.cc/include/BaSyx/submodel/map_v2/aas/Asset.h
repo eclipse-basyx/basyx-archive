@@ -3,6 +3,7 @@
 
 #include <BaSyx/submodel/api_v2/aas/IAsset.h>
 
+#include <BaSyx/submodel/map_v2/common/ModelType.h>
 #include <BaSyx/submodel/map_v2/reference/Reference.h>
 #include <BaSyx/submodel/map_v2/qualifier/Identifiable.h>
 #include <BaSyx/submodel/map_v2/qualifier/HasDataSpecification.h>
@@ -15,6 +16,7 @@ class Asset :
 	public api::IAsset,
 	public map::Identifiable,
 	public map::HasDataSpecification,
+	public map::ModelType<ModelTypes::Asset>,
 	public virtual vab::ElementMap
 {
 private:

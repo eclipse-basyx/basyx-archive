@@ -8,6 +8,7 @@
 #include <BaSyx/submodel/map_v2/qualifier/HasDataSpecification.h>
 #include <BaSyx/submodel/map_v2/reference/Reference.h>
 
+#include <BaSyx/submodel/map_v2/common/ModelType.h>
 #include <BaSyx/submodel/map_v2/common/ElementContainer.h>
 
 #include <memory>
@@ -24,6 +25,7 @@ class SubModel :
 	public virtual api::ISubModel,
 	public Identifiable,
 	public HasDataSpecification,
+	public ModelType<ModelTypes::Submodel>,
 	public virtual vab::ElementMap
 {
 private:

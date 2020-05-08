@@ -2,15 +2,20 @@
 #define BASYX_SUBMODEL_MAP_V2_SUBMODELELEMENT_FILE_FILE_H
 
 #include <BaSyx/submodel/api_v2/submodelelement/file/IFile.h>
+#include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
+#include <BaSyx/submodel/map_v2/common/ModelType.h>
 
 #include <vector>
 #include <cstdint>
 
 namespace basyx {
 namespace submodel {
-namespace simple {
+namespace map {
 	
-class File : public virtual api::IFile
+class File : 
+	public virtual api::IFile, 
+	public SubmodelElement,
+	public ModelType<ModelTypes::File>
 {
 private:
 	std::string path;

@@ -50,6 +50,8 @@ public:
 	// Inherited via IHasDataSpecification
 	virtual void addDataSpecification(const Reference & reference) override;
 	virtual const std::vector<Reference> getDataSpecificationReference() const override;
+
+	virtual inline ModelTypes GetModelType() const override { return ModelTypes::Asset; };
 };
 
 }

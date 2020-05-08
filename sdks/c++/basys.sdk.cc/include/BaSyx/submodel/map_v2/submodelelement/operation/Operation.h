@@ -4,14 +4,16 @@
 #include <BaSyx/submodel/api_v2/submodelelement/operation/IOperation.h>
 #include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
 #include <BaSyx/submodel/map_v2/common/ElementContainer.h>
+#include <BaSyx/submodel/map_v2/common/ModelType.h>
 
 namespace basyx {
 namespace submodel {
 namespace map {
 
 class Operation : 
-	public SubmodelElement, 
-	public api::IOperation
+	public api::IOperation,
+	public SubmodelElement,
+	public ModelType<ModelTypes::Operation>
 {
 private:
 	ElementContainer<ISubmodelElement> inputVariables;

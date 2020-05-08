@@ -10,14 +10,14 @@ Asset::Asset(const std::string & idShort, const simple::Identifier & identifier,
 	, assetIdentificationModelRef()
 	, vab::ElementMap()
 {
-	this->map.insertKey("kind", AssetKindUtil::toString(kind));
+	this->map.insertKey("kind", AssetKind_::to_string(kind));
 	this->map.insertKey("assetIdentificationModelRef", assetIdentificationModelRef.getMap());
 	this->map.insertKey("billOfMaterialRef", billOfMaterialRef.getMap());
 };
 
 AssetKind Asset::getKind()
 {
-	return AssetKindUtil::fromString(this->map.getProperty("kind").Get<std::string&>());
+	return AssetKind_::from_string(this->map.getProperty("kind").Get<std::string&>());
 };
 
 IReference * const Asset::getAssetIdentificationModel()

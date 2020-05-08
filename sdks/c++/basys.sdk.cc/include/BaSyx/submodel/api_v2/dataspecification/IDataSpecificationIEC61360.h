@@ -2,39 +2,15 @@
 #define BASYX_SUBMODEL_API_V2_DATASPECIFICATION_IDATASPECIFICATIONIEC61360_H
 
 #include <BaSyx/submodel/api_v2/dataspecification/IDataSpecificationContent.h>
-
 #include <BaSyx/submodel/api_v2/qualifier/IIdentifiable.h>
 #include <BaSyx/submodel/api_v2/qualifier/IReferable.h>
 #include <BaSyx/submodel/api_v2/reference/IReference.h>
+#include <BaSyx/submodel/enumerations/DataTypeIEC61360.h>
+#include <BaSyx/submodel/enumerations/LevelType.h>
+
 
 namespace basyx {
 namespace submodel {
-
-enum class LevelType
-{
-	Min,
-	Max,
-	Nom,
-	Typ,
-	Unknown
-};
-
-enum class DataTypeIEC61360
-{
-	Date,
-	String,
-	StringTranslatable,
-	RealMeasure,
-	RealCount,
-	RealCurrency,
-	Boolean,
-	Url,
-	Rational,
-	RationalMeasure,
-	Time,
-	Timestamp,
-	Unknown
-};
 
 namespace api {
 

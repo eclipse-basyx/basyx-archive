@@ -3,6 +3,7 @@
 
 #include <BaSyx/submodel/api_v2/submodelelement/property/IProperty.h>
 #include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
+#include <BaSyx/submodel/map_v2/common/ModelType.h>
 
 #include <BaSyx/shared/object.h>
 
@@ -12,12 +13,18 @@ namespace map {
 
 template<typename T>
 class Property : 
-	public SubmodelElement, 
-	public virtual api::IProperty
+	public virtual api::IProperty,
+	public SubmodelElement,
+	public ModelType<ModelTypes::Property>
 {
 public:
 	Property(const std::string & idShort)
 		: SubmodelElement(idShort, Kind::Instance)
+	{
+	};
+
+	Property(const vab::ElementMap & elementMap)
+		: SubmodelElement(elementMap.getMap())
 	{
 	};
 

@@ -3,6 +3,7 @@
 
 #include <BaSyx/submodel/simple/qualifier/Identifiable.h>
 #include <BaSyx/submodel/api_v2/qualifier/IHasDataSpecification.h>
+#include <BaSyx/submodel/api_v2/common/IModelType.h>
 #include <BaSyx/submodel/api_v2/aas/IAsset.h>
 #include <BaSyx/submodel/api_v2/ISubModel.h>
 
@@ -14,7 +15,8 @@ namespace api {
 
 class IAssetAdministrationShell : 
 	public virtual IHasDataSpecification, 
-	public virtual IIdentifiable
+	public virtual IIdentifiable,
+	public virtual IModelType
 {
 public:
 	using SubmodelContainer_t = IElementContainer<ISubModel>;
