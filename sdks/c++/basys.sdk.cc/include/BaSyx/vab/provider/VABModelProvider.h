@@ -37,7 +37,7 @@ namespace provider {
 
 			// ignore the leaf element, only return the leaf's parent element
 			const auto & pathElements = vabPath.getElements();
-			for(int i=0; i < pathElements.size()-1; ++i)
+			for(std::size_t i=0; i < pathElements.size()-1; ++i)
 			{
 				if (currentElement.IsNull())
 					return basyx::object::make_null();
