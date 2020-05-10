@@ -2,8 +2,15 @@ package org.eclipse.basyx.testsuite.regression.aas.metamodel.map.security;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.basyx.aas.metamodel.map.policypoints.AccessControlPolicyPoints;
 import org.eclipse.basyx.aas.metamodel.map.security.Security;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.junit.Test;
 
 /**
@@ -22,4 +29,13 @@ public class TestSecurity {
 		security.setAccessControlPolicyPoints(points);
 		assertEquals(points, security.getAccessControlPolicyPoints());
 	}
+	
+	@Test
+	public void testGetRequiredCertificateExtension() {
+		Reference reference = new Reference(new Key(KeyElements.ASSET, false, "testValue", IdentifierType.IRI));
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put(Security.REQUIREDCERTIFICATEEXTENSION, reference);
+		Security security = Security.createAsFacade(map);
+		assertEquals(reference, security.getRequiredCertificateExtension());
+	} 
 }

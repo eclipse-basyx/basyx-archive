@@ -1,11 +1,13 @@
 package org.eclipse.basyx.testsuite.regression.aas.metamodel.map.parts;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -15,6 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +37,9 @@ public class TestConceptDictionary {
 	
 	@Before
 	public void buildConceptDictionary() {
-		dictionary = new ConceptDictionary(Collections.singleton(REFERENCE));
+		List<IReference> refs = new ArrayList<>();
+		refs.add(REFERENCE);
+		dictionary = new ConceptDictionary(refs);
 	}
 	
 	@Test
@@ -92,4 +97,21 @@ public class TestConceptDictionary {
 		assertEquals(descriptions, dictionary.getConceptDescriptions());
 	} 
 	
+	@Test
+	public void testAddConceptDescription() {
+		IdentifierType idType = IdentifierType.IRI;
+		String id = "testId";
+		ConceptDescription description = new ConceptDescription();
+		description.setIdentification(idType, id);
+		description.setCategory("testCategory");
+		dictionary.addConceptDescription(description);
+		assertEquals(Collections.singletonList(description), dictionary.getConceptDescriptions());
+
+		// Build reference for newly added concept description
+		Reference reference = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, true, id, idType));
+
+		Collection<IReference> refs = dictionary.getConceptDescriptionReferences();
+		assertTrue(refs.contains(REFERENCE));
+		assertTrue(refs.contains(reference));
+	}
 }

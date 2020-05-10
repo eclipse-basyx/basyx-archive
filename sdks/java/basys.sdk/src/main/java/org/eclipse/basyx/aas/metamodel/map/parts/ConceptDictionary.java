@@ -134,8 +134,10 @@ public class ConceptDictionary extends VABModelMap<Object> implements IConceptDi
 	 */
 	@SuppressWarnings("unchecked")
 	public void addConceptDescription(IConceptDescription description) {
-		((Collection<IConceptDescription>) get(CONCEPTDESCRIPTIONS)).add(description);
-		getConceptDescriptionReferences().add(createConceptDescriptionRef(description));
+		Collection<IConceptDescription> desc = ((Collection<IConceptDescription>) get(CONCEPTDESCRIPTIONS));
+		desc.add(description);
+		Collection<IReference> refs = (Collection<IReference>) get(ConceptDictionary.CONCEPTDESCRIPTION);
+		refs.add(createConceptDescriptionRef(description));
 	}
 
 	private IReference createConceptDescriptionRef(IConceptDescription description) {

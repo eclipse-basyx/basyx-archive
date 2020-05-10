@@ -38,7 +38,6 @@ public class TestAsset {
 	
 	@Test
 	public void testConstructor() {
-		Asset asset = new Asset(REFERENCE);
 		assertEquals(REFERENCE, asset.getAssetIdentificationModel());
 	}
 	
@@ -112,4 +111,10 @@ public class TestAsset {
 		asset.setParent(parent);
 		assertEquals(parent, asset.getParent());
 	}
+	
+	@Test
+	public void testSetBillOfMaterial() {
+		asset.setBillOfMaterial(REFERENCE);
+		assertEquals(REFERENCE, asset.getBillOfMaterial());
+	} 
 }
