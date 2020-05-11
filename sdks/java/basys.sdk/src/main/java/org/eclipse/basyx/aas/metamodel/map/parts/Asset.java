@@ -16,7 +16,6 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
@@ -46,11 +45,11 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 
 		// Add qualifiers
 		putAll(new HasDataSpecification());
-		putAll(new HasKind());
 		putAll(new Identifiable());
 
 		// Default values
 		put(ASSETIDENTIFICATIONMODEL, null);
+		put(KIND, null);
 	}
 
 	/**
