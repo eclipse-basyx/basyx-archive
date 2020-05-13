@@ -23,8 +23,12 @@ endif()
 target_sources(${BASYX_SERVER_LIB_SUFFIX}
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/server/server.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/server/TCPSelectServer.cpp
 )
+
+# TCPSelectServer currently only supported under UNIX
+if(UNIX)
+	target_sources(${BASYX_SERVER_LIB_SUFFIX} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/server/TCPSelectServer.cpp)
+endif()
 
 target_include_directories(${BASYX_SERVER_LIB_SUFFIX} PRIVATE ${PROJECT_SOURCE_DIR})
 target_link_libraries(${BASYX_SERVER_LIB_SUFFIX}

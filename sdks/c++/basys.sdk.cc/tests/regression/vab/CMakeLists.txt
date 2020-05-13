@@ -22,8 +22,11 @@ target_sources(tests_vab
 		snippet/TestCollectionProperty.h
 		path/test_VABPath.cpp
         support/MockupModelProvider.h
-		server/test_TCPSelectServer.cpp
 )
+
+if (UNIX)
+	target_sources(tests_vab PRIVATE server/test_TCPSelectServer.cpp )
+endif (UNIX)
 
 target_include_directories(tests_vab PUBLIC ${PROJECT_SOURCE_DIR})
 target_link_libraries(tests_vab basyx::util basyx::vab basyx::shared lib::gtest tests::support tests::main basyx::server)
