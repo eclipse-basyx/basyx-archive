@@ -43,6 +43,7 @@ public:
 
 	// Inherited via IHasSemantics
 	virtual api::IReference & getSemanticId() override;
+	virtual void setSemanticId(const api::IReference & semanticId) override;
 };
 
 

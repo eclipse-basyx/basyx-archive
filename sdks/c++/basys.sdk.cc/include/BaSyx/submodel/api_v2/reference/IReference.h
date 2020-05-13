@@ -15,8 +15,10 @@ class IReference
 public:
 	virtual ~IReference() = 0;
 
-	virtual const std::vector<simple::Key> getKeys() const = 0;
+	virtual std::vector<simple::Key> getKeys() const = 0;
 	virtual void addKey(const simple::Key & key) = 0;
+
+	virtual bool empty() const = 0;
 };
 
 inline IReference::~IReference() = default;

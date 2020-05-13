@@ -23,9 +23,11 @@ public:
 public:
 	using vab::ElementMap::ElementMap;
 
+	Reference(const api::IReference & other);
 	Reference(const Reference & other) = default;
 	Reference(Reference && other) noexcept = default;
 
+	Reference & operator=(const api::IReference & other);
 	Reference & operator=(const Reference & other) = default;
 	Reference & operator=(Reference && other) noexcept = default;
 
@@ -34,8 +36,10 @@ public:
 
 	virtual ~Reference() = default;
 public:
-	const std::vector<simple::Key> getKeys() const override;
+	std::vector<simple::Key> getKeys() const override;
 	void addKey(const simple::Key & key) override;
+
+	virtual bool empty() const override;
 public:
 //	static Reference FromIdentifiable(const std::string & keyElementType, bool local, const IIdentifiable & identifiable);
 };

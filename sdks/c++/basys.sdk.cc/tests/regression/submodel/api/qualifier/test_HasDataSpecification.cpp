@@ -47,6 +47,7 @@ TYPED_TEST(HasDataSpecTest, TestAddSingleDataSpec)
 
 	auto dataSpec = this->hasDataSpec->getDataSpecificationReference();
 	ASSERT_EQ(dataSpec.size(), 1);
+	ASSERT_EQ(dataSpec[0], ref);
 }
 
 TYPED_TEST(HasDataSpecTest, TestAddMultipleDataSpec)
@@ -58,4 +59,6 @@ TYPED_TEST(HasDataSpecTest, TestAddMultipleDataSpec)
 
 	auto dataSpec = this->hasDataSpec->getDataSpecificationReference();
 	ASSERT_EQ(dataSpec.size(), 2);
+	ASSERT_EQ(dataSpec[0], ref1);
+	ASSERT_EQ(dataSpec[1], ref2);
 }

@@ -19,8 +19,7 @@ private:
 public:
 	virtual ~Reference() = default;
 
-	Reference() = default;
-
+	Reference(const api::IReference & other);
 	Reference(const Reference & other) = default;
 	Reference(Reference && other) noexcept = default;
 
@@ -29,10 +28,21 @@ public:
 
 	Reference(const Key & key);
 	Reference(const std::vector<Key> & keys);
+	Reference(std::vector<Key> && keys);
 	Reference(const std::initializer_list<Key> keys);
 
-	const std::vector<Key> getKeys() const override;
+	Reference() = default;
+public:
+	bool operator!=(const Reference & other) const;
+	inline bool operator==(const Reference & other) const { return !(*this != other); };
+
+	bool operator!=(const api::IReference & other) const;
+	inline bool operator==(const api::IReference & other) const { return !(*this != other); };
+public:
+	std::vector<Key> getKeys() const override;
 	void addKey(const Key & key) override;
+
+	bool empty() const override;
 public:
 	static Reference FromIdentifiable(KeyElements keyElementType, const api::IIdentifiable & identifiable);
 };

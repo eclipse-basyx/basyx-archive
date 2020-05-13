@@ -54,7 +54,6 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/parts/ConceptDescription.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/qualifier/AdministrativeInformation.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/qualifier/HasDataSpecification.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/qualifier/HasKind.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/qualifier/Identifiable.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/qualifier/Referable.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/reference/Key.cpp
@@ -146,7 +145,6 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/parts/ConceptDescription.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/AdministrativeInformation.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/HasDataSpecification.h
-        ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/HasKind.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/Identifiable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/Referable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/reference/Key.h

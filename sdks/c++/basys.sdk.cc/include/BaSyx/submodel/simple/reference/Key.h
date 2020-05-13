@@ -19,7 +19,10 @@ private:
 	std::string value;
 public:
 	Key(KeyElements type, bool local, KeyType idType, const std::string & value);
-
+public:
+	bool operator!=(const Key & other) const;
+	inline bool operator==(const Key & other) const { return !(*this != other); };
+public:
 	KeyElements getType() const noexcept;
 	KeyType getIdType() const noexcept;
 	bool isLocal() const noexcept;

@@ -33,6 +33,13 @@ std::string Key::getValue() const noexcept
 	return value;
 }
 
+bool Key::operator!=(const Key & other) const
+{
+	return this->idType != other.idType
+		&& this->local != other.local
+		&& this->type != other.type
+		&& this->value != other.value;
+};
 
 }
 }

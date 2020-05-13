@@ -40,7 +40,13 @@ Reference::Reference(const std::vector<simple::Key> & keys)
 		this->addKey(key);
 };
 
-const std::vector<simple::Key> Reference::getKeys() const
+Reference::Reference(const IReference & other)
+	: Reference{other.getKeys()}
+{
+};
+
+
+std::vector<simple::Key> Reference::getKeys() const
 {
 	std::vector<simple::Key> keys;
 
@@ -67,4 +73,20 @@ void Reference::addKey(const simple::Key & key)
 	keyMap.insertKey(KeyPath::Value, key.getValue());
 	keyMap.insertKey(KeyPath::Local, key.isLocal());
 	this->map.getProperty("keys").insert(keyMap);
+}
+
+Reference & Reference::operator=(const api::IReference & other)
+{
+	this->map.insertKey("keys", basyx::object::make_object_list());
+
+	for (const auto & key : other.getKeys())
+		this->addKey(key);
+
+	return *this;
+}
+
+
+bool Reference::empty() const
+{
+	return this->map.getProperty("keys").empty();
 }

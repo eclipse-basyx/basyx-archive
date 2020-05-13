@@ -26,3 +26,8 @@ IReference & SubModel::getSemanticId()
 {
 	return this->semanticId;
 }
+
+void SubModel::setSemanticId(const IReference & semanticId)
+{
+	this->semanticId = semanticId;
+}

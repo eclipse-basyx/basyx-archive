@@ -42,9 +42,5 @@ TYPED_TEST(ReferenceTest, TestAddKey)
 
 	auto keys = this->reference->getKeys();
 	ASSERT_EQ(keys.size(), 1);
-
-	ASSERT_EQ(keys[0].getIdType(), key.getIdType());
-	ASSERT_EQ(keys[0].isLocal(), key.isLocal());
-	ASSERT_EQ(keys[0].getType(), key.getType());
-	ASSERT_EQ(keys[0].getValue(), key.getValue());
+	ASSERT_EQ(keys[0], key);
 }
