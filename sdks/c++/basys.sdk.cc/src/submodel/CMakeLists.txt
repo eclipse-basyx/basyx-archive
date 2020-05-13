@@ -1,6 +1,7 @@
 ###############################################
 ###              BaSyx::Submodel            ###
 ###############################################
+
 include(CMakePackageConfigHelpers)
 
 set (BASYX_SUBMODEL_LIB_SUFFIX "Submodel")
@@ -19,6 +20,7 @@ target_include_directories(${BASYX_SUBMODEL_LIB_SUFFIX}
 INTERFACE ${CMAKE_INSTALL_PREFIX}/include
        ${CMAKE_INSTALL_PREFIX}/include/${PROJECT_SHORTNAME})
 
+
 target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
     PRIVATE
 	    ${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/AssetKind.cpp
@@ -29,9 +31,13 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/aas/AssetAdministrationShell.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/aas/Asset.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/common/LangStringSet.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/common/ModelType.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/constraint/Formula.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/constraint/Qualifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/HasDataSpecification.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/Identifiable.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/Referable.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/Qualifiable.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/Referable.cpp        
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/reference/Reference.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/SubModel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/operation/Operation.cpp
@@ -44,9 +50,9 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/aas/AssetAdministrationShell.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/aas/Asset.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/ElementContainer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/IElementContainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/LangStringSet.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/constraint/Formula.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/constraint/Qualifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/dataspecification/DataSpecificationContent.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/dataspecification/DataSpecification.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/dataspecification/DataSpecificationIEC61360.cpp
@@ -55,6 +61,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/qualifier/AdministrativeInformation.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/qualifier/HasDataSpecification.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/qualifier/Identifiable.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/qualifier/Qualifiable.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/qualifier/Referable.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/reference/Key.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/reference/Reference.cpp
@@ -87,6 +94,9 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/dataspecification/IDataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/dataspecification/IDataSpecificationIEC61360.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/identifier/Identifier.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/constraint/IConstraint.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/constraint/IFormula.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/constraint/IQualifier.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/identifier/IdentifierType.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/ISubModel.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/parts/IConceptDescription.h
@@ -94,6 +104,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IHasKind.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IHasSemantics.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IIdentifiable.h
+        ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IQualifiable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IReferable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/reference/IKey.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/reference/IReference.h
@@ -117,8 +128,11 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ElementFactory.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/LangStringSet.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ModelType.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/constraint/Formula.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/constraint/Qualifier.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/HasDataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Identifiable.h
+        ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Qualifiable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Referable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/reference/Reference.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/file/Blob.h
@@ -133,11 +147,12 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/SubmodelElement.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/SubModel.h
 		
-
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/aas/AssetAdministrationShell.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/aas/Asset.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/ElementContainer.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/LangStringSet.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/constraint/Formula.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/constraint/Qualifier.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/DataSpecificationContent.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/DataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/DataSpecificationIEC61360.h
@@ -146,6 +161,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/AdministrativeInformation.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/HasDataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/Identifiable.h
+        ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/Qualifiable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/Referable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/reference/Key.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/reference/Reference.h

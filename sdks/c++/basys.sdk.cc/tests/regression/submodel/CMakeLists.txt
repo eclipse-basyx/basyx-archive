@@ -10,35 +10,15 @@ add_executable(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME}
   PRIVATE
-#    support/KeyMock.hpp
-#    support/ReferenceMock.hpp
-#    support/IdentifiableMock.hpp
-#    support/IdentifierMock.hpp
-#    support/ReferableMock.hpp
-#    support/AdministrativeInformationMock.hpp
-#    support/AdditionalAssertions.hpp
-#    support/constant_definitions.cpp
-
-#	 map/test_Submodel.cpp
-	 map/common/test_ElementContainer.cpp
-#    map/qualifier/test_HasKind.cpp
-#    map/qualifier/test_HasDataSpecification.cpp
-#    map/qualifier/test_HasSemantics.cpp
-#    map/qualifier/test_Identifiable.cpp
-    api/qualifier/test_HasDataSpecification.cpp
-    api/qualifier/test_Referable.cpp
-    api/qualifier/test_Identifiable.cpp
-#    map/qualifier/qualifiable/test_Constraint.cpp
-#    map/qualifier/qualifiable/test_Formula.cpp
-#    map/qualifier/qualifiable/test_Qualifiable.cpp
-#    map/qualifier/qualifiable/test_Qualifier.cpp
-#    map/reference/test_Key.cpp
-    api/reference/test_Reference.cpp
-#    map/submodelelement/operation/test_OperationVariable.cpp
-     map/submodelelement/test_LangStringSet.cpp
-#    map/submodelelement/test_DataElement.cpp
-#    map/submodelelement/test_ReferenceElement.cpp
-#     map/submodelelement/test_ReferenceElement.cpp
+	api/constraint/test_Formula.cpp
+	api/constraint/test_Qualifier.cpp
+	api/qualifier/test_HasDataSpecification.cpp
+	api/qualifier/test_Identifiable.cpp
+	api/qualifier/test_Qualifiable.cpp
+	api/qualifier/test_Referable.cpp
+	api/reference/test_Reference.cpp
+	map/common/test_ElementContainer.cpp
+	map/submodelelement/test_LangStringSet.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})

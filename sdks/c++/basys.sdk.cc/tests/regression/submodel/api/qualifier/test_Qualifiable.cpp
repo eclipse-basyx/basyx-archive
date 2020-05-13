@@ -1,0 +1,81 @@
+#include <gtest/gtest.h>
+
+#include <BaSyx/submodel/api_v2/qualifier/IQualifiable.h>
+#include <BaSyx/submodel/simple/qualifier/Qualifiable.h>
+#include <BaSyx/submodel/map_v2/qualifier/Qualifiable.h>
+
+using namespace basyx::submodel;
+
+// Implementations to run tests for
+using ImplTypes = ::testing::Types<
+	simple::Qualifiable,
+	map::Qualifiable
+>;
+
+template<class Impl>
+class QualifiableTest :public ::testing::Test {
+protected:
+	using impl_t = Impl;
+	std::unique_ptr<api::IQualifiable> qualifiable;
+protected:
+	void SetUp() override
+	{
+		this->qualifiable = util::make_unique<simple::Qualifiable>();
+	}
+
+	void TearDown() override
+	{
+	}
+};
+
+TYPED_TEST_CASE(QualifiableTest, ImplTypes);
+
+TYPED_TEST(QualifiableTest, TestConstructor)
+{
+	ASSERT_EQ(this->qualifiable->getFormulas().size(), 0);
+	ASSERT_EQ(this->qualifiable->getQualifiers().size(), 0);
+}
+
+TYPED_TEST(QualifiableTest, TestAddFormula)
+{
+	simple::Key key{ KeyElements::Asset, true, KeyType::Custom, "test" };
+	auto formula_in = simple::Formula();
+	formula_in.addDependency(
+		simple::Reference(key)
+	);
+
+	this->qualifiable->addFormula(formula_in);
+
+	ASSERT_EQ(this->qualifiable->getFormulas().size(), 1);
+	ASSERT_EQ(this->qualifiable->getQualifiers().size(), 0);
+
+	const auto formulas = this->qualifiable->getFormulas();
+	const auto & formula_out = formulas.at(0);
+
+	const auto & dependencies = formula_out.getDependencies();
+
+	ASSERT_EQ(dependencies.size(), 1);
+	const auto & ref = dependencies.at(0);
+
+	const auto & keys = ref.getKeys();
+	ASSERT_EQ(keys.size(), 1);
+	ASSERT_EQ(key, keys[0]);
+}
+
+
+TYPED_TEST(QualifiableTest, TestAddQualifier)
+{
+	simple::Key key{ KeyElements::Asset, true, KeyType::Custom, "test" };
+	simple::Qualifier qualifier_in{ "qType", "vType", "vdType", simple::Reference{key} };
+
+	this->qualifiable->addQualifier(qualifier_in);
+
+	ASSERT_EQ(this->qualifiable->getFormulas().size(), 0);
+	ASSERT_EQ(this->qualifiable->getQualifiers().size(), 1);
+
+	const auto qualifiers = this->qualifiable->getQualifiers();
+	ASSERT_EQ(qualifiers.size(), 1);
+	const auto & qualifier_out = qualifiers.at(0);
+
+	ASSERT_EQ(qualifier_in, qualifier_out);
+}
