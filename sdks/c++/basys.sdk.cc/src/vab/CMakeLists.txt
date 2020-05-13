@@ -29,8 +29,9 @@ target_sources(${BASYX_VAB_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/vab/core/proxy/VABElementProxy.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/vab/core/util/VABPath.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/vab/core/VABConnectionManager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/vab/ElementMap.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vab/provider/VABModelProvider.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/vab/provider/native/frame/BaSyxNativeFrameProcessor.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vab/ElementMap.cpp
 )
 
 
