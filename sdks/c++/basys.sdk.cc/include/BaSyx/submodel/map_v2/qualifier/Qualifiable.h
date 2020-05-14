@@ -11,7 +11,7 @@ namespace map {
 
 	
 class Qualifiable : 
-	public api::IQualifiable,
+	public virtual api::IQualifiable,
 	public virtual vab::ElementMap
 {
 public:

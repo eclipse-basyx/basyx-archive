@@ -11,7 +11,7 @@ SubmodelElement::SubmodelElement(const std::string & idShort, Kind kind)
 
 }
 
-IReference & SubmodelElement::getSemanticId()
+const IReference & SubmodelElement::getSemanticId() const
 {
 	return this->semanticId;
 };

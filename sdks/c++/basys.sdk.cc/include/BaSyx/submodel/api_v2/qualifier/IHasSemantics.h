@@ -14,7 +14,8 @@ class IHasSemantics
 {
 public:
 	virtual ~IHasSemantics() = 0;
-	virtual IReference & getSemanticId() = 0;
+
+	virtual const IReference & getSemanticId() const = 0;
 	virtual void setSemanticId(const IReference & reference) = 0;
 };
 

@@ -49,7 +49,7 @@ public:
 	virtual void setValueId(const api::IReference & reference) override;
 
 	// Inherited via IQualifier
-	virtual api::IReference & getSemanticId() override;
+	virtual const api::IReference & getSemanticId() const override;
 	virtual void setSemanticId(const api::IReference & reference) override;
 
 	virtual ModelTypes GetModelType() const;

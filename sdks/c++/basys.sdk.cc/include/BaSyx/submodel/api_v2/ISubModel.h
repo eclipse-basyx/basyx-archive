@@ -5,6 +5,7 @@
 #include <BaSyx/submodel/api_v2/qualifier/IIdentifiable.h>
 #include <BaSyx/submodel/api_v2/qualifier/IHasKind.h>
 #include <BaSyx/submodel/api_v2/qualifier/IHasSemantics.h>
+#include <BaSyx/submodel/api_v2/qualifier/IQualifiable.h>
 #include <BaSyx/submodel/api_v2/common/IElementContainer.h>
 
 
@@ -15,7 +16,7 @@ namespace api {
 class ISubModel : 
 	public virtual IIdentifiable,
 	public virtual IHasSemantics, 
-//  public virtual IQualifiable,
+    public virtual IQualifiable,
 	public virtual IHasDataSpecification,
 	public virtual IHasKind
 {

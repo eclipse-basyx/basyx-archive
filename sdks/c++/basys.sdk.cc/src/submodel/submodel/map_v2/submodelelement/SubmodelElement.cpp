@@ -16,13 +16,14 @@ SubmodelElement::SubmodelElement(const std::string & idShort, Kind kind)
 	this->map.insertKey("semanticId", semanticId.getMap());
 }
 
-api::IReference & SubmodelElement::getSemanticId()
+const api::IReference & SubmodelElement::getSemanticId() const
 {
 	return this->semanticId;
 };
 
 void SubmodelElement::setSemanticId(const api::IReference & semanticId)
 {
+	this->semanticId = semanticId;
 };
 
 Kind SubmodelElement::getKind() const

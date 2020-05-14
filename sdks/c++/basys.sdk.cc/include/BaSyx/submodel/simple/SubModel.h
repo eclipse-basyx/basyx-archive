@@ -6,6 +6,7 @@
 #include <BaSyx/submodel/api_v2/submodelelement/ISubmodelElement.h>
 #include <BaSyx/submodel/simple/qualifier/Identifiable.h>
 #include <BaSyx/submodel/simple/qualifier/HasDataSpecification.h>
+#include <BaSyx/submodel/simple/qualifier/Qualifiable.h>
 
 #include <BaSyx/submodel/simple/common/ElementContainer.h>
 
@@ -26,6 +27,7 @@ private:
 	Kind kind;
 	HasDataSpecification dataSpecification;
 	Reference semanticId;
+	Qualifiable qualifiable;
 
 	ElementContainer<api::ISubmodelElement> elementContainer;
 public:
@@ -41,6 +43,7 @@ public:
 	// Inherited via IReferable
 	virtual const std::string & getIdShort() const override;
 	virtual const std::string * const getCategory() const override;
+	virtual void setCategory(const std::string & category) override;
 	virtual simple::LangStringSet & getDescription() override;
 	virtual const simple::LangStringSet & getDescription() const override;
 	virtual const IReferable * const getParent() const override;
@@ -58,7 +61,15 @@ public:
 	virtual const std::vector<Reference> getDataSpecificationReference() const override;
 
 	// Inherited via IHasSemantics
-	virtual api::IReference & getSemanticId() override;
+	virtual const api::IReference & getSemanticId() const override;
+	virtual void setSemanticId(const api::IReference & semanticId) override;
+
+	// Inherited via IQualifiable
+	virtual void addFormula(const api::IFormula & formula) override;
+	virtual void addQualifier(const api::IQualifier & qualifier) override;
+
+	virtual std::vector<simple::Formula> getFormulas() const override;
+	virtual std::vector<simple::Qualifier> getQualifiers() const override;
 };
 
 

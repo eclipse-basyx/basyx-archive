@@ -30,6 +30,11 @@ const std::string * const SubModel::getCategory() const
 	return this->identifiable.getCategory();
 };
 
+void SubModel::setCategory(const std::string & category)
+{
+	this->identifiable.setCategory(category);
+};
+
 LangStringSet & SubModel::getDescription()
 {
 	return this->identifiable.getDescription();
@@ -75,7 +80,33 @@ const std::vector<Reference> SubModel::getDataSpecificationReference() const
 	return this->dataSpecification.getDataSpecificationReference();
 }
 
-IReference & SubModel::getSemanticId()
+const IReference & SubModel::getSemanticId() const
 {
 	return this->semanticId;
 }
+
+void SubModel::setSemanticId(const IReference & semanticId)
+{
+	this->semanticId = semanticId;
+}
+
+void SubModel::addFormula(const api::IFormula & formula)
+{
+	this->qualifiable.addFormula(formula);
+};
+
+void SubModel::addQualifier(const api::IQualifier & qualifier)
+{
+	this->qualifiable.addQualifier(qualifier);
+};
+
+std::vector<simple::Formula> SubModel::getFormulas() const
+{
+	return this->qualifiable.getFormulas();
+};
+
+std::vector<simple::Qualifier> SubModel::getQualifiers() const
+{
+	return this->qualifiable.getQualifiers();
+};
+

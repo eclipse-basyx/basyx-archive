@@ -80,7 +80,7 @@ bool Qualifier::operator!=(const IQualifier & other) const
 		&& this->getValueId() != other.getValueId();
 };
 
-IReference & Qualifier::getSemanticId()
+const IReference & Qualifier::getSemanticId() const
 {
 	return this->semanticId;
 }

@@ -5,6 +5,7 @@
 #include <BaSyx/submodel/api_v2/ISubModel.h>
 #include <BaSyx/submodel/api_v2/submodelelement/ISubmodelElement.h>
 #include <BaSyx/submodel/map_v2/qualifier/Identifiable.h>
+#include <BaSyx/submodel/map_v2/qualifier/Qualifiable.h>
 #include <BaSyx/submodel/map_v2/qualifier/HasDataSpecification.h>
 #include <BaSyx/submodel/map_v2/reference/Reference.h>
 
@@ -25,6 +26,7 @@ class SubModel :
 	public virtual api::ISubModel,
 	public Identifiable,
 	public HasDataSpecification,
+	public Qualifiable,
 	public ModelType<ModelTypes::Submodel>,
 	public virtual vab::ElementMap
 {
@@ -42,7 +44,7 @@ public:
 	virtual Kind getKind() const override;
 
 	// Inherited via IHasSemantics
-	virtual api::IReference & getSemanticId() override;
+	virtual const api::IReference & getSemanticId() const override;
 	virtual void setSemanticId(const api::IReference & semanticId) override;
 };
 

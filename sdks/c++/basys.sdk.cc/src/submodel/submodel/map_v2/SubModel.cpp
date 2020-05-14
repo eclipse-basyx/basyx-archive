@@ -22,7 +22,7 @@ Kind SubModel::getKind() const
 }
 
 
-IReference & SubModel::getSemanticId()
+const IReference & SubModel::getSemanticId() const
 {
 	return this->semanticId;
 }

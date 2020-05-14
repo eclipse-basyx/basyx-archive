@@ -27,7 +27,7 @@ public:
 	virtual ~SubmodelElement() = default;
 
 	// Inherited via IHasDataSemantics
-	virtual api::IReference & getSemanticId() override;
+	virtual const api::IReference & getSemanticId() const override;
 	void setSemanticId(const api::IReference & reference);
 
 	// Inherited via IHasKind
