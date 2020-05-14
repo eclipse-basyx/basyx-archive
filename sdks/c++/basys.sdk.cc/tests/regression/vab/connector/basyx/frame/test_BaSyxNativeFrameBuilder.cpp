@@ -25,7 +25,7 @@ TEST(BaSyxNativeFrameBuilder, buildGetFrame) {
 	std::string path = "TestPath";
 	size_t size = builder->buildGetFrame(path, buffer.get());
 	
-	ASSERT_EQ(buffer.get()[0], BaSyxCommand::GET);
+	ASSERT_EQ(buffer.get()[0], static_cast<uint8_t>(BaSyxCommand::Get));
 	ASSERT_EQ(StringTools::fromArray(buffer.get() + 1), path);
 	
 	// 1 byte command, 4 byte string size, n byte string
@@ -41,7 +41,7 @@ TEST(BaSyxNativeFrameBuilder, buildSetFrame) {
 	std::string valSerialize = basyx::serialization::json::serialize(val).dump(4);
 
 	size_t size = builder->buildSetFrame(path, val, buffer.get());
-	ASSERT_EQ(buffer.get()[0], BaSyxCommand::SET);
+	ASSERT_EQ(buffer.get()[0], static_cast<uint8_t>(BaSyxCommand::Set));
 	ASSERT_EQ(StringTools::fromArray(buffer.get() + 1), path);
 	ASSERT_EQ(StringTools::fromArray(buffer.get() + 1 + 4 + path.length()), valSerialize);
 	
@@ -58,7 +58,7 @@ TEST(BaSyxNativeFrameBuilder, buildCreateFrame) {
 	std::string valSerialize = basyx::serialization::json::serialize(val).dump(4);
 
 	size_t size = builder->buildCreateFrame(path, val, buffer.get());
-	ASSERT_EQ(buffer.get()[0], BaSyxCommand::CREATE);
+	ASSERT_EQ(buffer.get()[0], static_cast<uint8_t>(BaSyxCommand::Create));
 	ASSERT_EQ(StringTools::fromArray(buffer.get() + 1), path);
 	ASSERT_EQ(StringTools::fromArray(buffer.get() + 1 + 4 + path.length()), valSerialize);
 	
@@ -73,7 +73,7 @@ TEST(BaSyxNativeFrameBuilder, buildSimpleDeleteFrame) {
 	std::string path = "TestPath";
 	size_t size = builder->buildDeleteFrame(path, buffer.get());
 	
-	ASSERT_EQ(buffer.get()[0], BaSyxCommand::DEL);
+	ASSERT_EQ(buffer.get()[0], static_cast<uint8_t>(BaSyxCommand::Delete));
 	ASSERT_EQ(StringTools::fromArray(buffer.get() + 1), path);
 	
 	// 1 byte command, 4 byte string size, n byte string
@@ -89,7 +89,7 @@ TEST(BaSyxNativeFrameBuilder, buildComplexDeleteFrame) {
 	std::string valSerialize = basyx::serialization::json::serialize(val).dump(4);
 
 	size_t size = builder->buildDeleteFrame(path, val, buffer.get());
-	ASSERT_EQ(buffer.get()[0], BaSyxCommand::DEL);
+	ASSERT_EQ(buffer.get()[0], static_cast<uint8_t>(BaSyxCommand::Delete));
 	ASSERT_EQ(StringTools::fromArray(buffer.get() + 1), path);
 	ASSERT_EQ(StringTools::fromArray(buffer.get() + 1 + 4 + path.length()), valSerialize);
 	
@@ -106,7 +106,7 @@ TEST(BaSyxNativeFrameBuilder, buildInvokeFrame) {
 	std::string valSerialize = basyx::serialization::json::serialize(val).dump(4);
 
 	size_t size = builder->buildInvokeFrame(path, val, buffer.get());
-	ASSERT_EQ(buffer.get()[0], BaSyxCommand::INVOKE);
+	ASSERT_EQ(buffer.get()[0], static_cast<uint8_t>(BaSyxCommand::Invoke));
 	ASSERT_EQ(StringTools::fromArray(buffer.get() + 1), path);
 	ASSERT_EQ(StringTools::fromArray(buffer.get() + 1 + 4 + path.length()), valSerialize);
 	

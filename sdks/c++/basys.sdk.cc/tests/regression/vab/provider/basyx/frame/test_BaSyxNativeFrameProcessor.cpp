@@ -25,7 +25,7 @@ TEST(BaSyxNativeFrameProcessor, getTest) {
 	auto mockup = util::make_unique<MockupModelProvider>();
 	vab::provider::native::frame::BaSyxNativeFrameProcessor provider(mockup.get());
 
-	char frame[] = { BaSyxCommand::GET, 4, 0, 0, 0, 't', 'e', 's', 't' };
+	char frame[] = { static_cast<uint8_t>(BaSyxCommand::Get), 4, 0, 0, 0, 't', 'e', 's', 't' };
 
 	std::unique_ptr<char> receive(new char[1000]);
 	
@@ -57,7 +57,7 @@ TEST(BaSyxNativeFrameProcessor, setTest) {
 	std::unique_ptr<char> frame(new char[1000]);
 
 	// Build test frame
-	frame.get()[0] = BaSyxCommand::SET;
+	frame.get()[0] = static_cast<uint8_t>(BaSyxCommand::Set);
 
 	std::string path = "TestPath/aas";
 	StringTools::toArray(path, frame.get() + 1);
@@ -94,7 +94,7 @@ TEST(BaSyxNativeFrameProcessor, createTest) {
 	std::unique_ptr<char> frame(new char[1000]);
 
 	// Build test frame
-	frame.get()[0] = BaSyxCommand::CREATE;
+	frame.get()[0] = static_cast<uint8_t>(BaSyxCommand::Create);
 
 	std::string path = "TestPath";
 	StringTools::toArray(path, frame.get() + 1);
@@ -127,7 +127,7 @@ TEST(BaSyxNativeFrameProcessor, deleteComplexTest) {
 	std::unique_ptr<char> frame(new char[1000]);
 
 	// Build test frame
-	frame.get()[0] = BaSyxCommand::DEL;
+	frame.get()[0] = static_cast<uint8_t>(BaSyxCommand::Delete);
 
 	std::string path = "TestPath/aas/properties/C1";
 	StringTools::toArray(path, frame.get() + 1);
@@ -161,7 +161,7 @@ TEST(BaSyxNativeFrameProcessor, deleteSimpleTest) {
 	std::unique_ptr<char> frame(new char[1000]);
 
 	// Build test frame
-	frame.get()[0] = BaSyxCommand::DEL;
+	frame.get()[0] = static_cast<uint8_t>(BaSyxCommand::Delete);
 
 	std::string path = "TestPath/aas/properties/P1";
 	StringTools::toArray(path, frame.get() + 1);
@@ -185,7 +185,7 @@ TEST(BaSyxNativeFrameProcessor, invokeTest) {
 	std::unique_ptr<char> frame(new char[1000]);
 
 	// Build test frame
-	frame.get()[0] = BaSyxCommand::INVOKE;
+	frame.get()[0] = static_cast<uint8_t>(BaSyxCommand::Invoke);
 
 	std::string path = "TestPath";
 	StringTools::toArray(path, frame.get() + 1);

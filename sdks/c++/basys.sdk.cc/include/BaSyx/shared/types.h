@@ -38,12 +38,13 @@ namespace basyx {
 	};
 };
 
-enum BaSyxCommand {
-	GET = 1,
-	SET = 2,
-	CREATE = 3,
-	DEL = 4, // DELETE is a reserved keyword
-	INVOKE = 5
+enum class BaSyxCommand : uint8_t {
+	None = 0x0,
+	Get = 0x1,
+	Set = 0x2,
+	Create = 0x3,
+	Delete = 0x4,
+	Invoke = 0x5
 };
 
 #define BASYX_FRAMESIZE_SIZE 4

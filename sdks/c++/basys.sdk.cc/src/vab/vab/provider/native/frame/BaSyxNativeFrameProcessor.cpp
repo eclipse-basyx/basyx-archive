@@ -32,22 +32,22 @@ BaSyxNativeFrameProcessor::~BaSyxNativeFrameProcessor()
 void BaSyxNativeFrameProcessor::processInputFrame(char const* rxFrame, std::size_t rxSize, char* txFrame, std::size_t* txSize) 
 {
 	std::size_t offset;
-	char command = vab::provider::native::frame::BaSyxNativeFrameHelper::getCommand(rxFrame, &offset);
+	auto command = vab::provider::native::frame::BaSyxNativeFrameHelper::getCommand(rxFrame, &offset);
 	rxFrame += offset;
 	switch (command) {
-	case BaSyxCommand::GET:
+	case BaSyxCommand::Get:
 		processGet(rxFrame, txFrame, txSize);
 		break;
-	case BaSyxCommand::SET:
+	case BaSyxCommand::Set:
 		processSet(rxFrame, txFrame, txSize);
 		break;
-	case BaSyxCommand::CREATE:
+	case BaSyxCommand::Create:
 		processCreate(rxFrame, txFrame, txSize);
 		break;
-	case BaSyxCommand::DEL:
+	case BaSyxCommand::Delete:
 		processDelete(rxFrame, rxSize - offset, txFrame, txSize);
 		break;
-	case BaSyxCommand::INVOKE:
+	case BaSyxCommand::Invoke:
 		processInvoke(rxFrame, txFrame, txSize);
 		break;
 

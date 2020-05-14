@@ -71,10 +71,10 @@ namespace frame {
     /**
 * Retrieves the command from a basyx frame and writes the size of the command in commandSize
 */
-    static int getCommand(char const* data, std::size_t* commandSize)
+    static BaSyxCommand getCommand(char const* data, std::size_t* commandSize)
     {
         *commandSize = 1;
-        return data[0];
+        return static_cast<BaSyxCommand>(data[0]);
     }
 };
 
