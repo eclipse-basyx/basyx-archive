@@ -29,6 +29,13 @@ namespace basyx {
 
 	class object 
 	{
+	public:
+		enum class error
+		{
+			None,
+			PropertyNotFound,
+			IndexOutOfBounds,
+		};
 	public: // Type definitions
 		template<typename T>
 		using list_t = std::vector<T>;
@@ -78,6 +85,9 @@ namespace basyx {
 			if (this->content == nullptr)
 				return false;
 
+			if (this->err != error::None)
+				return false;
+
 			return this->content->object_type() == basyx::type::basyx_type<T>::object_type
 				&& this->content->value_type() == basyx::type::basyx_type<T>::value_type;
 		};
@@ -88,10 +98,10 @@ namespace basyx {
 			return object_cast<T>(*this);
 		};
 
-    std::string & GetStringContent()
-    {
-      return this->Get<std::string&>();
-    }
+		std::string & GetStringContent()
+		{
+		  return this->Get<std::string&>();
+		}
 
 		template <typename T>
 		T* GetPtr()
@@ -110,6 +120,15 @@ namespace basyx {
 			return this->content == nullptr || this->InstanceOf<std::nullptr_t>();
 		}
 
+		bool IsError() const noexcept
+		{
+			return this->err != error::None;
+		};
+
+		error getError() const noexcept
+		{
+			return this->err;
+		};
 	private: // Private type definitions
 		// PlaceHolder:
 		// Interface class for the actual value to be stored by the object object
@@ -119,7 +138,7 @@ namespace basyx {
 		// The actual object holding the value
 		//	std::unique_ptr<PlaceHolder> content;
 		std::shared_ptr<PlaceHolder> content;		
-
+		error err;
 	public:
 		bool insert(basyx::object obj);
 
@@ -160,6 +179,8 @@ namespace basyx {
 		static inline const T* object_cast(const object* operand);
 	public: // Factories
 		static object make_null();
+
+		static object make_error(error error_code);
 
 		template<typename T>
 		static object make_object_ref(T* t);

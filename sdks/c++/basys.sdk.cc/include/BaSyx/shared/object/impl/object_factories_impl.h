@@ -11,8 +11,8 @@
 
 template <typename T>
 basyx::object::object(const T& t)
-: content{ std::make_shared<basyx::detail::objHolder<typename std::remove_cv<typename std::decay<const T>::type>::type>>(t) } {};
-
+: content{ std::make_shared<basyx::detail::objHolder<typename std::remove_cv<typename std::decay<const T>::type>::type>>(t) }
+, err(error::None) {};
 
 
 template<typename T>
@@ -52,7 +52,6 @@ template<typename... Args>
 basyx::object basyx::object::make_function(Args && ... args)
 {
 	return basyx::detail::functionWrapper::wrap_func(util::make_function(std::forward<Args>(args)...));
-	//			return basyx::object::make_null();
 };
 
 #endif /* SHARED_BASYX_OBJECT_IMPL_OBJECT_FACTORIES_IMPL_H */
