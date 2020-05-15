@@ -22,7 +22,7 @@
 
 namespace basyx {
 // basyx::object
-// Type-safe wrapper class for holding object value possible
+// Type-safe wrapper class for holding vab primitives
 // The actual value is passed at construction time and stored inside a templated placeholder
 // Stores its held value inside its own unique_ptr, thus resource will be freed automatically at destruction time
 // Values can be retrieved type-safely using the basyx::object_cast function
@@ -35,6 +35,9 @@ namespace basyx {
 			None,
 			PropertyNotFound,
 			IndexOutOfBounds,
+			NotInvokable,
+			ObjectAlreadyExists,
+			MalformedRequest,
 		};
 	public: // Type definitions
 		template<typename T>
@@ -85,7 +88,7 @@ namespace basyx {
 			if (this->content == nullptr)
 				return false;
 
-			if (this->err != error::None)
+			if (this->IsError())
 				return false;
 
 			return this->content->object_type() == basyx::type::basyx_type<T>::object_type
@@ -117,18 +120,16 @@ namespace basyx {
 
 		bool IsNull() const noexcept
 		{
-			return this->content == nullptr || this->InstanceOf<std::nullptr_t>();
+			return this->content == nullptr || this->InstanceOf<std::nullptr_t>() || this->IsError();
 		}
 
 		bool IsError() const noexcept
 		{
-			return this->err != error::None;
+			return this->GetObjectType() == basyx::type::objectType::Error;
 		};
 
-		error getError() const noexcept
-		{
-			return this->err;
-		};
+		error getError() const;
+		const std::string & getErrorMessage() const;
 	private: // Private type definitions
 		// PlaceHolder:
 		// Interface class for the actual value to be stored by the object object
@@ -138,7 +139,6 @@ namespace basyx {
 		// The actual object holding the value
 		//	std::unique_ptr<PlaceHolder> content;
 		std::shared_ptr<PlaceHolder> content;		
-		error err;
 	public:
 		bool insert(basyx::object obj);
 
@@ -181,6 +181,7 @@ namespace basyx {
 		static object make_null();
 
 		static object make_error(error error_code);
+		static object make_error(error error_code, const std::string & message);
 
 		template<typename T>
 		static object make_object_ref(T* t);

@@ -83,6 +83,12 @@ TEST_F(TestBaSyxHashmapProvider, GetPropertyValue)
 	ASSERT_EQ(value4.Get<int>(), 7);
 	ASSERT_EQ(mapTest1.Get<int>(), 321);
 	ASSERT_EQ(mapTest2.Get<int>(), 123);
+
+	// Get non-existing property
+	basyx::object unknown = hashMapProvider.getModelPropertyValue("property1/unknown");
+
+	ASSERT_TRUE(unknown.IsError());
+	ASSERT_EQ(unknown.getError(), basyx::object::error::PropertyNotFound);
 }
 
 int testFunc(int a, int b)

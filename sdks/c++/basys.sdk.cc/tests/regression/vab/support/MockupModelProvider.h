@@ -57,7 +57,7 @@ public:
 		return val;
 	}
 
-	virtual void setModelPropertyValue(const std::string & path, const basyx::object newValue) override 
+	virtual basyx::object::error setModelPropertyValue(const std::string & path, const basyx::object newValue) override
 	{
 		// Set dummy clock
 		if (path.find("clock") != std::string::npos)
@@ -70,29 +70,34 @@ public:
 			this->path = path;
 			this->val = std::move(newValue);
 		}
+
+		return basyx::object::error::None;
 	}
 
 	/**
 	 * Create/insert a value in a collection
 	 */
-	virtual void createValue(const std::string & path, const basyx::object addedValue) override 
+	virtual basyx::object::error createValue(const std::string & path, const basyx::object addedValue) override
 	{
 		called = CalledFunction::CREATE;
 		this->path = path;
 		this->val = std::move(addedValue);
+		return basyx::object::error::None;
 	}
 
-	virtual void deleteValue(const std::string & path, const basyx::object deletedValue) override 
+	virtual basyx::object::error deleteValue(const std::string & path, const basyx::object deletedValue) override 
 	{
 		called = CalledFunction::DELETE_COMPLEX;
 		this->path = path;
 		this->val = std::move(deletedValue);
+		return basyx::object::error::None;
 	}
 	
-	virtual void deleteValue(const std::string & path) 
+	virtual basyx::object::error deleteValue(const std::string & path)
 	{
 		called = CalledFunction::DELETE_SIMPLE;
 		this->path = path;
+		return basyx::object::error::None;
 	}
 
 	virtual basyx::object invokeOperation(const std::string & path, basyx::object parameter) override

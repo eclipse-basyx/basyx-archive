@@ -21,14 +21,6 @@ namespace snippet {
 class MapRead {
 public:
 
-	//template<typename T>
-	//static void ASSERT_ANY_EQ(basyx::object & a, const T & val)
-	//{
-	//	ASSERT_TRUE(a.InstanceOf<T>());
-	//	ASSERT_EQ(val, a.Get<T&>());
-	//}
-
-
     static void test(basyx::vab::core::IModelProvider * modelProvider) {
 		// Test path access
 		auto slashB = modelProvider->getModelPropertyValue("primitives/integer/");
@@ -42,19 +34,17 @@ public:
 		ASSERT_ANY_EQ(slashD, 123);
 
 		// Test reading different data types
-		auto map = modelProvider->getModelPropertyValue("primitives");
+		auto mapValue = modelProvider->getModelPropertyValue("primitives");
 		auto doubleValue = modelProvider->getModelPropertyValue("primitives/double");
-		auto string = modelProvider->getModelPropertyValue("primitives/string");
+		auto stringValue = modelProvider->getModelPropertyValue("primitives/string");
 
-		ASSERT_TRUE(map.InstanceOf<basyx::object::object_map_t>());
+		ASSERT_TRUE(mapValue.InstanceOf<basyx::object::object_map_t>());
 		ASSERT_TRUE(doubleValue.InstanceOf<double>());
-		ASSERT_TRUE(string.InstanceOf<std::string>());
+		ASSERT_TRUE(stringValue.InstanceOf<std::string>());
 
-
-		ASSERT_EQ(3, map.Get<basyx::object::object_map_t&>().size());
-
+		ASSERT_EQ(3, mapValue.Get<basyx::object::object_map_t&>().size());
 		ASSERT_EQ(3.14, doubleValue.Get<double>());
-//		ASSERT_EQ("TestValue", string);
+		ASSERT_EQ("TestValue", stringValue.Get<std::string&>());
 
 		// Test case sensitivity
 		auto caseSensitiveA = modelProvider->getModelPropertyValue("special/casesensitivity");
@@ -69,17 +59,19 @@ public:
 		auto nullValue = modelProvider->getModelPropertyValue("special/null");
 		ASSERT_TRUE(nullValue.IsNull());
 
-		//// Test reading serializable functions
-		//auto serializableFunction = modelProvider->getModelPropertyValue("operations/serializable");
-		//Function<auto[], auto> testFunction = (Function<auto[], auto>) serializableFunction;
-		//ASSERT_EQ(3, testFunction.apply(new auto[] { 1, 2 }));
-
 		// Non-existing parent element
-		ASSERT_TRUE(modelProvider->getModelPropertyValue("unknown/x").IsNull());
+		auto errorParent = modelProvider->getModelPropertyValue("unknown/x");
+		ASSERT_TRUE(errorParent.IsError());
+		ASSERT_EQ(errorParent.getError(), basyx::object::error::PropertyNotFound);
 
 		// Non-existing target element
-		ASSERT_TRUE(modelProvider->getModelPropertyValue("primitives/unkown").IsNull());
-		ASSERT_TRUE(modelProvider->getModelPropertyValue("unkown").IsNull());
+		auto unknownError1 = modelProvider->getModelPropertyValue("primitives/unknown");
+		ASSERT_TRUE(unknownError1.IsError());
+		ASSERT_EQ(errorParent.getError(), basyx::object::error::PropertyNotFound);
+
+		auto unknownError2 = modelProvider->getModelPropertyValue("unknown");
+		ASSERT_TRUE(unknownError2.IsError());
+		ASSERT_EQ(unknownError2.getError(), basyx::object::error::PropertyNotFound);
 
 		// Nested access
 		ASSERT_ANY_EQ(modelProvider->getModelPropertyValue("special/nested/nested/value"), 100);
@@ -91,8 +83,8 @@ public:
 		ASSERT_TRUE(rootValueA.InstanceOf<basyx::object::object_map_t>());
 		ASSERT_TRUE(rootValueB.InstanceOf<basyx::object::object_map_t>());
 
-		ASSERT_EQ(4, rootValueA.Get<basyx::object::object_map_t&>().size());
-		ASSERT_EQ(4, rootValueB.Get<basyx::object::object_map_t&>().size());
+		ASSERT_EQ(rootValueA.Get<basyx::object::object_map_t&>().size(), 4);
+		ASSERT_EQ(rootValueB.Get<basyx::object::object_map_t&>().size(), 4);
 	}
 };
 
