@@ -63,10 +63,10 @@ public class Property extends AbstractProperty implements ISingleProperty {
 		set(value);
 	}
 
-	public Property(Object value, Referable referable, String semanticId, Qualifiable qualifiable) {
+	public Property(Object value, Referable referable, Reference semanticId, Qualifiable qualifiable) {
 		this(value);
 		putAll(referable);
-		put(HasSemantics.SEMANTICID, value);
+		put(HasSemantics.SEMANTICID, semanticId);
 		putAll(qualifiable);
 	}
 

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacadeCustomSemantics;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacadeIRDISemantics;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -16,6 +17,8 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.slf4j.Logger;
@@ -284,8 +287,11 @@ public class BaseConfiguredProvider extends SubModelProvider {
 		}
 
 		// Create and return single valued property
-		Property prop = new Property(propertyValue, new Referable(propertyName, "", new LangStrings("", property_description)),
-				property_semanticsInternal, new Qualifiable(new Qualifier(property_qualifierType, property_qualifier, "", null)));
+		Property prop = new Property(
+				propertyValue, 
+				new Referable(propertyName, "", new LangStrings("", property_description)),
+				new Reference(new Key(KeyElements.PROPERTY, true, property_semanticsInternal, IdentifierType.CUSTOM)), 
+				new Qualifiable(new Qualifier(property_qualifierType, property_qualifier, "", null)));
 		return prop;
 	}
 	

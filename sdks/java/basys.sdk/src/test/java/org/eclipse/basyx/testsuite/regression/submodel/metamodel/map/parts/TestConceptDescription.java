@@ -5,9 +5,11 @@ import static org.junit.Assert.assertEquals;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.map.dataspecification.EmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
@@ -94,5 +96,13 @@ public class TestConceptDescription {
 	public void testSetParent() {
 		description.setParent(REFERENCE);
 		assertEquals(REFERENCE, description.getParent());
+	}
+	
+	@Test
+	public void testSetEmbeddedDataSpecifications() {
+		EmbeddedDataSpecification embeddedDataSpecification = new EmbeddedDataSpecification();
+		Collection<IEmbeddedDataSpecification> specifications = Collections.singleton(embeddedDataSpecification);
+		description.setEmbeddedDataSpecifications(specifications);
+		assertEquals(specifications, description.getEmbeddedDataSpecifications());
 	}
 }

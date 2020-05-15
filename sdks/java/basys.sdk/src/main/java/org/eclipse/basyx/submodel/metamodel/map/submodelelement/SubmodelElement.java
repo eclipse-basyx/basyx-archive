@@ -27,7 +27,7 @@ import org.eclipse.basyx.vab.model.VABModelMap;
 public class SubmodelElement extends VABModelMap<Object> implements ISubmodelElement {
 	public static final String MODELTYPE = "SubmodelElement";
 
-	public SubmodelElement() {
+	protected SubmodelElement() {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 

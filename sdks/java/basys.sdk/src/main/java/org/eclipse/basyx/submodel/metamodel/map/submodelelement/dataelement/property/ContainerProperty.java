@@ -36,6 +36,7 @@ public class ContainerProperty extends AbstractProperty implements IContainerPro
 	 */
 	public ContainerProperty(ContainerProperty property, List<SubmodelElement> properties,
 			List<SubmodelElement> operations) {
+		this();
 		putAll(property);
 		properties.stream().forEach(this::addSubModelElement);
 		operations.stream().forEach(this::addSubModelElement);

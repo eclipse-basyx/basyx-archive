@@ -57,7 +57,7 @@ public class SubmodelElementFacadeFactory {
 			case Operation.MODELTYPE:
 				return Operation.createAsFacade(submodelElement);
 			default:
-				return null;
+				throw new RuntimeException("Can not create a submodel element from given map");
 		}
 	}
 	

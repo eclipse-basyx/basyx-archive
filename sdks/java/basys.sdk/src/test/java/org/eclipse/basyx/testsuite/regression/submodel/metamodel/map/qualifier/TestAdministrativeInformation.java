@@ -6,9 +6,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.map.dataspecification.EmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
@@ -65,5 +67,13 @@ public class TestAdministrativeInformation {
 		String newRevisionString = "2.0.1";
 		information.setRevision(newRevisionString);
 		assertEquals(newRevisionString, information.getRevision());
+	}
+	
+	@Test
+	public void testSetEmbeddedDataSpecifications() {
+		EmbeddedDataSpecification embeddedDataSpecification = new EmbeddedDataSpecification();
+		Collection<IEmbeddedDataSpecification> specifications = Collections.singleton(embeddedDataSpecification);
+		information.setEmbeddedDataSpecifications(specifications);
+		assertEquals(specifications, information.getEmbeddedDataSpecifications());
 	}
 }
