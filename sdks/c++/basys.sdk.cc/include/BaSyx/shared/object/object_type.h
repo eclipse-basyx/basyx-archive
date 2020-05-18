@@ -23,7 +23,8 @@ namespace type {
 		Primitive,
 		List,
 		Map,
-		Function
+		Function,
+		Error
 	};
 
 	enum class valueType {

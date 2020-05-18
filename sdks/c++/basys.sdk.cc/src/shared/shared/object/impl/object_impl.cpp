@@ -3,7 +3,7 @@
 #include <BaSyx/shared/object/obj_function.h>
 
 basyx::object::object()
-	: content{ nullptr } {};
+	: content{ nullptr }, err{error::None} {};
 
 basyx::object::object(const char * c)
 	: object{ std::string(c) }
@@ -189,6 +189,13 @@ std::size_t basyx::object::size()
 basyx::object basyx::object::make_null()
 {
 	return basyx::object{ nullptr };
+};
+
+basyx::object basyx::object::make_error(basyx::object::error error_code)
+{
+	basyx::object obj{ nullptr };
+	obj.err = error_code;
+	return obj;
 };
 
 basyx::object basyx::object::invoke()

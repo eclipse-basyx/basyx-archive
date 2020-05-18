@@ -22,7 +22,6 @@ INTERFACE ${CMAKE_INSTALL_PREFIX}/include
 target_sources(${BASYX_SHARED_TARGET_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/shared/object/impl/object_impl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/shared/object/object_type.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/shared/serialization/json/typeid.cpp
 )
 
@@ -35,7 +34,6 @@ target_sources(${BASYX_SHARED_TARGET_NAME}
         ${BASYX_SHARED_INCLUDE_DIR}/object/impl/object_factories_impl.h
         ${BASYX_SHARED_INCLUDE_DIR}/object/impl/object_meta_impl.h
         ${BASYX_SHARED_INCLUDE_DIR}/object/object_header.h
-        ${BASYX_SHARED_INCLUDE_DIR}/object/object_map_facade.h
         ${BASYX_SHARED_INCLUDE_DIR}/object/object_type.h
         ${BASYX_SHARED_INCLUDE_DIR}/object/obj_function.h
         ${BASYX_SHARED_INCLUDE_DIR}/object/obj_holder.h

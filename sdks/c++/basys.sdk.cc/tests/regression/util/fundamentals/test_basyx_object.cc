@@ -110,6 +110,7 @@ TEST_F(TestBaSyxObject, RefTest)
 	basyx::object ref = basyx::object::make_object_ref(&a);
 
 	ASSERT_FALSE(ref.IsNull());
+	ASSERT_FALSE(ref.IsError());
 	ASSERT_TRUE(ref.InstanceOf<int>());
 	ASSERT_EQ(ref.GetPtr<int>(), &a);
 	ASSERT_EQ(ref.Get<int>(), 5);
@@ -130,6 +131,8 @@ TEST_F(TestBaSyxObject, RefTest)
 TEST_F(TestBaSyxObject, IntTest)
 {
 	basyx::object anyInt = 2;
+
+	ASSERT_FALSE(anyInt.IsError());
 	ASSERT_TRUE(anyInt.InstanceOf<int>());
 	ASSERT_FALSE(anyInt.InstanceOf<float>());
 	ASSERT_FALSE(anyInt.InstanceOf<double>());
@@ -160,11 +163,13 @@ TEST_F(TestBaSyxObject, FactoryTest)
 	// Test null object
 	basyx::object nullObject = basyx::object::make_null();
 	ASSERT_TRUE(nullObject.IsNull());
+	ASSERT_FALSE(nullObject.IsError());
 
 	// Test with empty constructor
 	basyx::object anyVec = basyx::object::make_list<int>();
 
 	ASSERT_FALSE(anyVec.IsNull());
+	ASSERT_FALSE(anyVec.IsError());
 	ASSERT_TRUE(anyVec.InstanceOf<basyx::object::list_t<int>>());
 
 	auto & vec = anyVec.Get<basyx::object::list_t<int>&>();
@@ -175,6 +180,7 @@ TEST_F(TestBaSyxObject, FactoryTest)
 	basyx::object anyVec2 = basyx::object::make_list<int>(2, 5);
 
 	ASSERT_FALSE(anyVec2.IsNull());
+	ASSERT_FALSE(anyVec2.IsError());
 	ASSERT_TRUE(anyVec2.InstanceOf<basyx::object::list_t<int>>());
 
 	auto & vec2 = anyVec2.Get<basyx::object::list_t<int>&>();
@@ -187,6 +193,7 @@ TEST_F(TestBaSyxObject, FactoryTest)
 	basyx::object anyVec3 = basyx::object::make_list<int, std::initializer_list<int>>({ 1,2,3 });
 
 	ASSERT_FALSE(anyVec3.IsNull());
+	ASSERT_FALSE(anyVec3.IsError());
 	ASSERT_TRUE(anyVec3.InstanceOf<basyx::object::list_t<int>>());
 
 	auto & vec3 = anyVec3.Get<basyx::object::list_t<int>&>();
@@ -198,8 +205,14 @@ TEST_F(TestBaSyxObject, FactoryTest)
 
 	// Test make_function
 	basyx::object func1 = basyx::object::make_function(objectTest::FuncAdd);
+	ASSERT_FALSE(func1.IsError());
 	ASSERT_EQ(func1.GetObjectType(), basyx::type::objectType::Function);
 	ASSERT_EQ(func1.GetValueType(), basyx::type::valueType::Object);
+
+	// Test make_error
+	basyx::object error = basyx::object::make_error(basyx::object::error::PropertyNotFound);
+	ASSERT_TRUE(error.IsError());
+	ASSERT_EQ(error.getError(), basyx::object::error::PropertyNotFound);
 }
 
 TEST_F(TestBaSyxObject, InsertTest)
