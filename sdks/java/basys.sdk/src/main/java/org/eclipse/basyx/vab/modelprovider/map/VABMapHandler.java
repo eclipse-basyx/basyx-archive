@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.generic.IVABElementHandler;
 
@@ -52,7 +53,7 @@ public class VABMapHandler implements IVABElementHandler {
 			Collection<Object> collection = (Collection<Object>) element;
 			collection.add(newValue);
 		} else {
-			throw new MalformedRequestException("Could not create property.");
+			throw new ResourceAlreadyExistsException("Could not create property.");
 		}
 	}
 

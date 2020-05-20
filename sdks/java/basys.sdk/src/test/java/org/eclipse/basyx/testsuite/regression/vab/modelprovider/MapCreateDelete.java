@@ -55,7 +55,7 @@ public class MapCreateDelete {
 		try {
 			connVABElement.createValue("inRoot", 0);
 			fail();
-		} catch (MalformedRequestException e) {
+		} catch (ResourceAlreadyExistsException e) {
 			// If inRoot would have been a list 0 could be added here
 			// => 1.2 has an "invalid" type for creating values in it
 		}

@@ -426,7 +426,7 @@ public class FileSystemProvider implements IModelProvider {
 		if (type == FileType.DATA) {
 			// If it would have been a list, entries could have been added
 			// => invalid type
-			throw new MalformedRequestException("Could not create a value for \"" + path + "\"");
+			throw new ResourceAlreadyExistsException("Could not create a value for \"" + path + "\" because a value already exists");
 		} else if (type == FileType.DIRECTORY) {
 			HashSet<String> collections = readMetaFile(parentPath);
 
