@@ -15,7 +15,7 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.ContainerProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -62,16 +62,16 @@ public class ConnectToAASSubModelVAB {
 			Property prop11 = new Property(123);
 			prop11.setIdShort("prop11");
 			// - Add container property that holds other properties
-			ContainerProperty container = new ContainerProperty();
+			SubmodelElementCollection container = new SubmodelElementCollection();
 			container.setIdShort("prop2");
-			container.addSubModelElement(prop11);
+			container.addElement(prop11);
 			// - Add container to property map
 			addSubModelElement(container);
 
 			// Add another property manually to sub model container "properties"
 			Property prop3 = new Property(17);
 			prop3.setIdShort("prop3");
-			((Map<String, Object>) this.get("dataElements")).put("prop3", prop3);
+			((Map<String, Object>) this.get("submodelElements")).put("prop3", prop3);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class ConnectToAASSubModelVAB {
 		Map<String, Object> prop1 = (Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1");
 		Map<String, Object> prop2 = (Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2");
 		Map<String, Object> prop11 = (Map<String, Object>) connSubModel1
-				.getModelPropertyValue("dataElements/prop2/dataElements/prop11");
+				.getModelPropertyValue("submodelElements/prop2/value/dataElements/prop11");
 		Map<String, Object> prop3 = (Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop3");
 
 		// - Change property value using VAB primitive

@@ -106,13 +106,13 @@ public class SubModelProviderTest {
 
 		// Read container property
 		Collection<Object> resSet = (Collection<Object>) submodelElement
-				.getModelPropertyValue("/submodel/dataElements/containerRoot/submodelElement");
+				.getModelPropertyValue("/submodel/submodelElements/containerRoot/value/submodelElements");
 		assertEquals(1, resSet.size());
 		resSet.forEach(x -> assertEquals("container", ((Map<String, Object>) x).get(Referable.IDSHORT)));
 
 		// Read nested property
-		String pathToNestedContainer = "/submodel/dataElements/containerRoot/submodelElement/container";
-		String pathToNestedProperty = pathToNestedContainer + "/dataElements/integerProperty/";
+		String pathToNestedContainer = "/submodel/submodelElements/containerRoot/value/submodelElements/container";
+		String pathToNestedProperty = pathToNestedContainer + "/value/dataElements/integerProperty/";
 		result = submodelElement.getModelPropertyValue(pathToNestedProperty);
 		property = (HashMap<String, Object>) result;
 		assertEquals(123, property.get(Property.VALUE));
@@ -148,7 +148,8 @@ public class SubModelProviderTest {
 	public void testReadDataElements() {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
 		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel.getModelPropertyValue("/submodel/dataElements");
-		assertEquals(3, set.size());
+		// Should be two properties, one collection and four operations
+		assertEquals(2, set.size());
 	}
 
 	/**
@@ -180,7 +181,8 @@ public class SubModelProviderTest {
 	@Test
 	public void testReadSubModelElements() {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
-		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel.getModelPropertyValue("/submodel/submodelElement");
+		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel
+				.getModelPropertyValue("/submodel/submodelElements");
 		assertEquals(7, set.size());
 	}
 

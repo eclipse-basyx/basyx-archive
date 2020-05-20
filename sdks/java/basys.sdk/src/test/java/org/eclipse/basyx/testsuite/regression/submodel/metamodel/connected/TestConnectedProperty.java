@@ -4,11 +4,11 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.ConnectedSingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.restapi.SinglePropertyProvider;
+import org.eclipse.basyx.submodel.restapi.DataElementProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
@@ -21,9 +21,9 @@ import org.junit.Test;
  * @author schnicke
  *
  */
-public class TestConnectedSingleProperty {
+public class TestConnectedProperty {
 
-	ISingleProperty prop;
+	IProperty prop;
 	private static final int VALUE = 10;
 
 	@Before
@@ -31,7 +31,7 @@ public class TestConnectedSingleProperty {
 		// Create PropertySingleValued containing the simple value
 		Property propertyMeta = new Property(VALUE);
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(propertyMeta);
-		prop = new ConnectedSingleProperty(new VABConnectionManagerStub(new SinglePropertyProvider(new VABMapProvider(destroyType))).connectToVABElement(""));
+		prop = new ConnectedProperty(new VABConnectionManagerStub(new DataElementProvider(new VABMapProvider(destroyType))).connectToVABElement(""));
 	}
 
 	@Test
@@ -39,8 +39,8 @@ public class TestConnectedSingleProperty {
 		Property propertyMeta = new Property();
 		propertyMeta.setValueType(PropertyValueTypeDef.String);
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(propertyMeta);
-		prop = new ConnectedSingleProperty(
-				new VABConnectionManagerStub(new SinglePropertyProvider(new VABMapProvider(destroyType)))
+		prop = new ConnectedProperty(
+				new VABConnectionManagerStub(new DataElementProvider(new VABMapProvider(destroyType)))
 						.connectToVABElement(""));
 		prop.set("content");
 		assertEquals("content", prop.get());

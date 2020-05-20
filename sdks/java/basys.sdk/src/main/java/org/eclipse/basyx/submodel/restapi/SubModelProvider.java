@@ -1,9 +1,13 @@
 package org.eclipse.basyx.submodel.restapi;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
@@ -24,7 +28,11 @@ import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
  * @author espen, schnicke
  *
  */
-public class SubModelProvider extends ContainerPropertyProvider {
+public class SubModelProvider extends MetaModelProvider {
+
+	// The VAB model provider containing the model this SubModelProvider is based on
+	private IModelProvider modelProvider;
+
 	/**
 	 * Default constructor - based on an empty submodel with a lambda provider
 	 */
@@ -36,14 +44,14 @@ public class SubModelProvider extends ContainerPropertyProvider {
 	 * Creates a SubModelProvider based on a lambda provider and a given model
 	 */
 	public SubModelProvider(SubModel model) {
-		super(new VABLambdaProvider(model));
+		modelProvider = new VABLambdaProvider(model);
 	}
 
 	/**
 	 * Creates a SubModelProvider based on a Map that is supposed to represent the submodel
 	 */
 	public SubModelProvider(Map<String, Object> model) {
-		super(new VABLambdaProvider(model));
+		modelProvider = new VABLambdaProvider(model);
 	}
 
 	/**
@@ -51,7 +59,7 @@ public class SubModelProvider extends ContainerPropertyProvider {
 	 * low-level VAB model provider, for example a VABMapProvider.
 	 */
 	public SubModelProvider(IModelProvider modelProvider) {
-		super(modelProvider);
+		this.modelProvider = modelProvider;
 	}
 
 	/**
@@ -71,39 +79,103 @@ public class SubModelProvider extends ContainerPropertyProvider {
 		return path;
 	}
 
+	/**
+	 * Creates an IModelProvider for handling accesses to the elements within the submodel
+	 * 
+	 * @return returns the SubmodelElementProvider pointing to the contained submodelelements
+	 */
+	private SubmodelElementMapProvider getElementProvider() {
+		IModelProvider elementProxy = new VABElementProxy(SubModel.SUBMODELELEMENT, modelProvider);
+		return new SubmodelElementMapProvider(elementProxy);
+	}
+
+	/**
+	 * Returns the whole submodel, but the submodel element map is replaced by a collection.
+	 */
+	@SuppressWarnings("unchecked")
+	private Object getSubModel() {
+		// For access on the container property root, return the whole model
+		Map<String, Object> map = new HashMap<>();
+		Object o = modelProvider.getModelPropertyValue("");
+		map.putAll((Map<String, Object>) o);
+
+		// Change internal maps to sets for submodelElements
+		setMapToSet(map, SubModel.SUBMODELELEMENT);
+
+		return map;
+	}
+
+	/**
+	 * Converts a map entry to a set, if it is also a map
+	 */
+	@SuppressWarnings("unchecked")
+	private void setMapToSet(Map<String, Object> map, String key) {
+		Object mapEntry = map.get(key);
+		if (mapEntry instanceof Map<?, ?>) {
+			Map<String, Object> elements = (Map<String, Object>) mapEntry;
+			map.put(key, new HashSet<Object>(elements.values()));
+		}
+	}
+
 	@Override
 	public Object getModelPropertyValue(String path) throws ProviderException {
+		VABPathTools.checkPathForNull(path);
 		path = removeSubmodelPrefix(path);
-		return super.getModelPropertyValue(path);
+		if (path.isEmpty()) {
+			return getSubModel();
+		} else {
+			return getElementProvider().getModelPropertyValue(path);
+		}
 	}
 
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		path = removeSubmodelPrefix(path);
-		super.setModelPropertyValue(path, newValue);
+		if (path.isEmpty()) {
+			modelProvider.setModelPropertyValue("", newValue);
+		} else {
+			getElementProvider().setModelPropertyValue(path, newValue);
+		}
 	}
 
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
 		path = removeSubmodelPrefix(path);
-		super.createValue(path, newEntity);
+		if (path.isEmpty()) {
+			// not possible to overwrite existing submodels
+			throw new MalformedRequestException("Invalid access");
+		} else {
+			getElementProvider().createValue(path, newEntity);
+		}
 	}
 
 	@Override
 	public void deleteValue(String path) throws ProviderException {
 		path = removeSubmodelPrefix(path);
-		super.deleteValue(path);
+		if (path.isEmpty()) {
+			modelProvider.deleteValue("");
+		} else {
+			getElementProvider().deleteValue(path);
+		}
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws ProviderException {
 		path = removeSubmodelPrefix(path);
-		super.deleteValue(path, obj);
+		if (path.isEmpty()) {
+			throw new MalformedRequestException("Invalid access");
+		} else {
+			getElementProvider().deleteValue(path, obj);
+		}
 	}
 
 	@Override
 	public Object invokeOperation(String path, Object... parameters) throws ProviderException {
 		path = removeSubmodelPrefix(path);
-		return super.invokeOperation(path, parameters);
+		if (path.isEmpty()) {
+			throw new MalformedRequestException("Invalid access");
+		} else {
+			return getElementProvider().invokeOperation(path, parameters);
+		}
 	}
 }

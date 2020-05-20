@@ -30,13 +30,6 @@ public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 		// Call base constructor -> creates base submodelData from cfgValues
 		super(cfgValues);
 
-		// Push data to provider
-		try {
-			setModelPropertyValue("", submodelData);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		// Load properties
 		for (Object key : cfgValues.keySet()) {
 			// Do not put meta data keys into map
@@ -77,6 +70,13 @@ public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 			logger.debug("Putting:" + key + " = " + cfgValues.get(key) + " as " + value.getClass().getName());
 
 			scope.put(path[path.length - 1], value);
+		}
+
+		// Push data to provider
+		try {
+			setModelPropertyValue("", submodelData);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		// Print configuration values

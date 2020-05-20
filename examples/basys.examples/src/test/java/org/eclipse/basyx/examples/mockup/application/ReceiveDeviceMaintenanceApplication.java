@@ -8,7 +8,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.service.BaseBaSyxService;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementMapProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -72,7 +72,8 @@ public class ReceiveDeviceMaintenanceApplication extends BaseBaSyxService {
 	@SuppressWarnings("unchecked")
 	public int getDevicePartSupplyStatus() {
 		// Read the status property
-		Map<String, Object> property = (Map<String, Object>) aasServerConnection.getModelPropertyValue(SubModel.PROPERTIES + "/partAvailability");
+		Map<String, Object> property = (Map<String, Object>) aasServerConnection
+				.getModelPropertyValue(SubmodelElementMapProvider.DATAELEMENTS + "/partAvailability");
 		// Return the value of the property
 		return Integer.parseInt(property.get("value").toString());
 	}

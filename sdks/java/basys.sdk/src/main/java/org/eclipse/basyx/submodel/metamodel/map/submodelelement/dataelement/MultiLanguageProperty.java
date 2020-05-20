@@ -8,6 +8,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IMul
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 
 /**
  * A MultiLanguageProperty element as defined in DAAS document
@@ -44,6 +45,17 @@ public class MultiLanguageProperty extends DataElement implements IMultiLanguage
 		return facade;
 	}
 	
+	/**
+	 * Returns true if the given submodel element map is recognized as a MultiLanguageProperty
+	 */
+	public static boolean isMultiLanguageProperty(Map<String, Object> map) {
+		String modelType = ModelType.createAsFacade(map).getName();
+		// Either model type is set or the element type specific attributes are contained (fallback)
+		return MODELTYPE.equals(modelType)
+				|| (map.containsKey(VALUE) && map.containsKey(VALUE) && map.containsKey(VALUEID)
+						&& !map.containsKey(Property.VALUETYPE));
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public IReference getValueId() {

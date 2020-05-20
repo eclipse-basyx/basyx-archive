@@ -2,6 +2,8 @@ package org.eclipse.basyx.examples.snippets.undoc.aas.connection.servlet;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
@@ -12,12 +14,13 @@ import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.IContainerProperty;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.ContainerProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementMapProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -54,9 +57,9 @@ public class AASServletConnection {
 			Property prop11 = new Property(123);
 			prop11.setIdShort("prop11");
 			// - Add container property that holds other properties
-			ContainerProperty container = new ContainerProperty();
+			SubmodelElementCollection container = new SubmodelElementCollection();
 			container.setIdShort("prop2");
-			container.addSubModelElement(prop11);
+			container.addElement(prop11);
 			// - Add container to property map
 			addSubModelElement(container);
 
@@ -64,7 +67,7 @@ public class AASServletConnection {
 			Property prop3 = new Property(17);
 			prop3.setIdShort("prop3");
 			{
-				((Map<String, Object>) this.get("dataElements")).put("prop3", prop3);
+				((Map<String, Object>) this.get("submodelElements")).put("prop3", prop3);
 			}
 		}
 	}
@@ -85,16 +88,21 @@ public class AASServletConnection {
 
 			// Add example properties
 			// - Add simple property with value and idShort meta elements
-			this.putPath("dataElements/prop1/value", 234);
-			this.putPath("dataElements/prop1/valueType", PropertyValueTypeDefHelper.getTypeWrapperFromObject(234).toString());
-			this.putPath("dataElements/prop1/idShort", "prop1");
+			this.putPath("submodelElements/prop1/value", 234);
+			this.putPath("submodelElements/prop1/valueType", PropertyValueTypeDefHelper.getTypeWrapperFromObject(234).toString());
+			this.putPath("submodelElements/prop1/idShort", "prop1");
 
 			// Add container property that holds other properties
-			this.putPath("dataElements/prop2/idShort", "prop2");
+			this.putPath("submodelElements/prop2/idShort", "prop2");
+			this.putPath("submodelElements/prop2/ordered", false);
+			this.putPath("submodelElements/prop2/allowDuplicates", false);
 			// - Add contained property
-			this.putPath("dataElements/prop2/dataElements/prop11/value", 123);
-			this.putPath("dataElements/prop2/dataElements/prop11/valueType", PropertyValueTypeDefHelper.getTypeWrapperFromObject(123).toString());
-			this.putPath("dataElements/prop2/dataElements/prop11/idShort", "prop11");
+			Collection<Map<String, Object>> value = new LinkedList<>();
+			Property prop11 = new Property();
+			prop11.setIdShort("prop11");
+			prop11.set(123);
+			value.add(prop11);
+			this.putPath("submodelElements/prop2/value/", value);
 			
 			// Add another property manually to sub model container "properties"
 			// - Using the Property class ensures presence of all meta properties
@@ -103,7 +111,7 @@ public class AASServletConnection {
 			addedProperty.setIdShort("prop3");
 			// - Add property to sub model container "properties"
 			{
-				((Map<String, Object>) this.get(SubModel.PROPERTIES)).put("prop3", addedProperty);
+				((Map<String, Object>) this.get(SubmodelElementMapProvider.ELEMENTS)).put("prop3", addedProperty);
 			}
 		}
 	}
@@ -167,10 +175,11 @@ public class AASServletConnection {
 			// - Retrieve sub model values and compare to expected values
 			assertTrue(subModel.getIdShort().equals("sm-001"));
 			assertTrue(subModel.getDataElements().get("prop1").getIdShort().equals("prop1"));
-			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get() == 234);
-			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop3")).get() == 17);
-			assertTrue(subModel.getDataElements().get("prop2").getIdShort().equals("prop2"));
-			assertTrue((int) ((ISingleProperty) ((IContainerProperty) subModel.getDataElements().get("prop2")).getDataElements().get("prop11")).get() == 123);
+			assertTrue((int) ((IProperty) subModel.getDataElements().get("prop1")).get() == 234);
+			assertTrue((int) ((IProperty) subModel.getDataElements().get("prop3")).get() == 17);
+			assertTrue(subModel.getSubmodelElements().get("prop2").getIdShort().equals("prop2"));
+			assertTrue((int) ((IProperty) ((ISubmodelElementCollection) subModel.getSubmodelElements().get("prop2"))
+					.getDataElements().get("prop11")).get() == 123);
 
 			// Connect to sub model using lower-level VAB interface
 			VABElementProxy connSubModel1 = this.connManager.connectToVABElement("sm-001VAB");
@@ -179,14 +188,15 @@ public class AASServletConnection {
 			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop3")).get("value") == 17);
 			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("idShort").equals("prop1"));
 			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2")).get("idShort").equals("prop2"));
-			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2/dataElements/prop11")).get("value") == 123);
+			assertTrue((int) ((Map<String, Object>) connSubModel1
+					.getModelPropertyValue("submodelElements/prop2/value/dataElements/prop11")).get("value") == 123);
 			// - Change property value using VAB primitive
 			connSubModel1.setModelPropertyValue("dataElements/prop1/value", 456);
 			// - Read value back using VAB primitive
 			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("value") == 456);
 
 			// Read changed value back using SDK connector
-			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get() == 456);
+			assertTrue((int) ((IProperty) subModel.getDataElements().get("prop1")).get() == 456);
 		}
 
 		
@@ -197,10 +207,11 @@ public class AASServletConnection {
 			// - Retrieve sub model values and compare to expected values
 			assertTrue(subModel.getIdShort().equals("sm-001M"));
 			assertTrue(subModel.getDataElements().get("prop1").getIdShort().equals("prop1"));
-			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get() == 234);
-			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop3")).get() == 17);
-			assertTrue(subModel.getDataElements().get("prop2").getIdShort().equals("prop2"));
-			assertTrue((int) ((ISingleProperty) ((IContainerProperty) subModel.getDataElements().get("prop2")).getDataElements().get("prop11")).get() == 123);
+			assertTrue((int) ((IProperty) subModel.getDataElements().get("prop1")).get() == 234);
+			assertTrue((int) ((IProperty) subModel.getDataElements().get("prop3")).get() == 17);
+			assertTrue(subModel.getSubmodelElements().get("prop2").getIdShort().equals("prop2"));
+			assertTrue((int) ((IProperty) ((ISubmodelElementCollection) subModel.getSubmodelElements().get("prop2"))
+					.getDataElements().get("prop11")).get() == 123);
 			
 			
 			// Connect to sub model using lower-level VAB interface
@@ -211,14 +222,14 @@ public class AASServletConnection {
 			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop3")).get("value") == 17);
 			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("idShort").equals("prop1"));
 			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2")).get("idShort").equals("prop2"));
-			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2/dataElements/prop11")).get("value") == 123);
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("submodelElements/prop2/value/dataElements/prop11")).get("value") == 123);
 			// - Change property value using VAB primitive
 			connSubModel1.setModelPropertyValue("dataElements/prop1/value", 456);
 			// - Read value back using VAB primitive
 			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("value") == 456);
 
 			// Read changed value back using SDK connector
-			assertTrue((int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get() == 456);
+			assertTrue((int) ((IProperty) subModel.getDataElements().get("prop1")).get() == 456);
 		}
 	}
 }

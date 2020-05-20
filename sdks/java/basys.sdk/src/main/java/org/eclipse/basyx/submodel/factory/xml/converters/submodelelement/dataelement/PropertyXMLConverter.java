@@ -1,10 +1,10 @@
-package org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.dataelement.property;
+package org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.dataelement;
 
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.SubmodelElementXMLConverter;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.slf4j.Logger;
@@ -58,7 +58,7 @@ public class PropertyXMLConverter extends SubmodelElementXMLConverter {
 	 * @param prop the ISingleProperty to build the XML for
 	 * @return the &lt;aas:property&gt; XML tag for the given Property
 	 */
-	public static Element buildProperty(Document document, ISingleProperty prop) {
+	public static Element buildProperty(Document document, IProperty prop) {
 		Element propertyRoot = document.createElement(PROPERTY);
 		
 		populateSubmodelElement(document, propertyRoot, prop);

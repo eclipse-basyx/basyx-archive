@@ -104,6 +104,15 @@ public class Operation extends SubmodelElement implements IOperation {
 		return ret;
 	}
 
+	/**
+	 * Returns true if the given submodel element map is recognized as an operation
+	 */
+	public static boolean isOperation(Map<String, Object> map) {
+		String modelType = ModelType.createAsFacade(map).getName();
+		// Either model type is set or the element type specific attributes are contained
+		return MODELTYPE.equals(modelType) || (map.containsKey(IN) && map.containsKey(OUT) && map.containsKey(INOUT));
+	}
+
 	@Override
 	public Collection<IOperationVariable> getInputVariables() {
 		return transformToOperationVariables(get(Operation.IN));

@@ -78,7 +78,6 @@ public class MultiSubmodelProviderTest {
 
 	@Test
 	public void createDeleteTest() {
-
 		proxy.createValue("/aas/submodels", new SimpleAASSubmodel("TestSM"));
 
 		getTestRunner("TestSM");

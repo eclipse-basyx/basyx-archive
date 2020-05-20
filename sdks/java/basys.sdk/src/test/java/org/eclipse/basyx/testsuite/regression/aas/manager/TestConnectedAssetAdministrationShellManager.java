@@ -18,7 +18,7 @@ import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -107,8 +107,8 @@ public class TestConnectedAssetAdministrationShellManager {
 		ISubModel sm = manager.retrieveSubModel(aasId, smId);
 
 		// - check id and properties
-		ISingleProperty prop1Connected = (ISingleProperty) sm.getDataElements().get("prop1");
-		ISingleProperty prop2Connected = (ISingleProperty) sm.getDataElements().get("prop2");
+		IProperty prop1Connected = (IProperty) sm.getDataElements().get("prop1");
+		IProperty prop2Connected = (IProperty) sm.getDataElements().get("prop2");
 
 		assertEquals(smIdShort, sm.getIdShort());
 		assertEquals(smId.getId(), sm.getIdentification().getId());

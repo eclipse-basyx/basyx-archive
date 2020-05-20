@@ -60,6 +60,15 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 		return ret;
 	}
 
+	/**
+	 * Returns true if the given submodel element map is recognized as a RelationshipElement
+	 */
+	public static boolean isRelationshipElement(Map<String, Object> map) {
+		String modelType = ModelType.createAsFacade(map).getName();
+		// Either model type is set or the element type specific attributes are contained
+		return MODELTYPE.equals(modelType) || (map.containsKey(FIRST) && map.containsKey(SECOND));
+	}
+
 	public void setFirst(IReference first) {
 		put(RelationshipElement.FIRST, first);
 		

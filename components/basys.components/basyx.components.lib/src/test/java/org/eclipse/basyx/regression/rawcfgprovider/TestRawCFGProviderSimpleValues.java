@@ -55,7 +55,7 @@ public class TestRawCFGProviderSimpleValues {
 
 		// Get property value
 		Map<String, Object> value1 = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/cfgProperty1/value");
+				.getModelPropertyValue("/aas/submodels/rawSampleCFG/submodelElements/cfgProperty1/value");
 		assertEquals("exampleStringValueRaw", value1.get(Property.VALUE));
 		Map<String, Object> cfgProperty1 = (Map<String, Object>) connSubModel
 				.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/cfgProperty1");

@@ -2,11 +2,11 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.support;
 
 import static org.junit.Assert.assertEquals;
 
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.ConnectedSingleProperty;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.support.AASLambdaPropertyHelper;
-import org.eclipse.basyx.submodel.restapi.SinglePropertyProvider;
+import org.eclipse.basyx.submodel.restapi.DataElementProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.junit.Test;
@@ -31,8 +31,8 @@ public class TestAASLambdaPropertyHelper {
 		});
 		
 		// Wrap in provider
-		SinglePropertyProvider provider = new SinglePropertyProvider(new VABLambdaProvider(temperature));
-		ConnectedSingleProperty connectedProperty = new ConnectedSingleProperty(new VABElementProxy("", provider));
+		DataElementProvider provider = new DataElementProvider(new VABLambdaProvider(temperature));
+		ConnectedProperty connectedProperty = new ConnectedProperty(new VABElementProxy("", provider));
 
 		// Check correct property type
 		String expectedType = PropertyValueTypeDef.Double.toString();

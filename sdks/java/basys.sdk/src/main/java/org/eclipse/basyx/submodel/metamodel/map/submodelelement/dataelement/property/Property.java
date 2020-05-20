@@ -4,12 +4,13 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.DataElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 
@@ -19,7 +20,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
  * @author kuhn, schnicke
  *
  */
-public class Property extends AbstractProperty implements ISingleProperty {
+public class Property extends DataElement implements IProperty {
 	public static final String VALUE = "value";
 	public static final String VALUEID = "valueId";
 	public static final String VALUETYPE = "valueType";
@@ -47,6 +48,16 @@ public class Property extends AbstractProperty implements ISingleProperty {
 		Property facade = new Property();
 		facade.setMap(obj);
 		return facade;
+	}
+
+	/**
+	 * Returns true if the given submodel element map is recognized as a property
+	 */
+	public static boolean isProperty(Map<String, Object> map) {
+		String modelType = ModelType.createAsFacade(map).getName();
+		// Either model type is set or the element type specific attributes are contained (fallback)
+		return MODELTYPE.equals(modelType)
+				|| (map.containsKey(VALUE) && map.containsKey(VALUETYPE));
 	}
 
 	/**
@@ -79,6 +90,15 @@ public class Property extends AbstractProperty implements ISingleProperty {
 	 */
 	public void setValueType(PropertyValueTypeDef type) {
 		put(Property.VALUETYPE, PropertyValueTypeDefHelper.getWrapper(type));
+	}
+
+	public void setValueId(String obj) {
+		put(Property.VALUEID, obj);
+	}
+
+	@Override
+	public String getValueId() {
+		return (String) get(Property.VALUEID);
 	}
 
 	@Override

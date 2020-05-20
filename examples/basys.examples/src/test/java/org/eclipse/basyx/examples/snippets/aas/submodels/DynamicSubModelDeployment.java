@@ -10,7 +10,7 @@ import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -97,9 +97,9 @@ public class DynamicSubModelDeployment {
 			// Read sub model properties
 			String smId     = subModel.getIdShort();
 			String prop1Id  = subModel.getDataElements().get("prop1").getIdShort();
-			int    prop1Val = (int) ((ISingleProperty) subModel.getDataElements().get("prop1")).get();
+			int prop1Val = (int) ((IProperty) subModel.getDataElements().get("prop1")).get();
 			String prop2Id  = subModel.getDataElements().get("prop2").getIdShort();
-			String prop2Val = (String) ((ISingleProperty) subModel.getDataElements().get("prop2")).get();
+			String prop2Val = (String) ((IProperty) subModel.getDataElements().get("prop2")).get();
 			
 			// Compare sub model property values
 			assertTrue(smId.equals("Status"));

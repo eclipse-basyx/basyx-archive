@@ -1,4 +1,4 @@
-package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property;
+package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 
 /**
  * "Connected" implementation of Event  

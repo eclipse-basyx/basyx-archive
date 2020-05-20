@@ -11,7 +11,6 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.connected.facades.ConnectedVABElementContainerFacade;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.ConnectedPropertyFactory;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
@@ -31,8 +30,6 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  *
  */
 public class ConnectedSubModel extends ConnectedVABElementContainerFacade implements ISubModel {
-
-	ConnectedPropertyFactory factory = new ConnectedPropertyFactory();
 
 	public ConnectedSubModel(VABElementProxy proxy) {
 		super(proxy);

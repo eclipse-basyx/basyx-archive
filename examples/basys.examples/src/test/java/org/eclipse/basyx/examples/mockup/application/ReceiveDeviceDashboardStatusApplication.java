@@ -8,7 +8,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.service.BaseBaSyxService;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementMapProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -68,7 +68,8 @@ public class ReceiveDeviceDashboardStatusApplication extends BaseBaSyxService {
 	@SuppressWarnings("unchecked")
 	public String getDeviceStatus() {
 		// Read the status property
-		Map<String, Object> property = (Map<String, Object>) aasServerConnection.getModelPropertyValue(SubModel.PROPERTIES + "/status");
+		Map<String, Object> property = (Map<String, Object>) aasServerConnection
+				.getModelPropertyValue(SubmodelElementMapProvider.DATAELEMENTS + "/status");
 		// Return the value of the property
 		return property.get("value").toString();
 	}
@@ -80,7 +81,8 @@ public class ReceiveDeviceDashboardStatusApplication extends BaseBaSyxService {
 	@SuppressWarnings("unchecked")
 	public int getDeviceInvocationCounter() {
 		// Read the invocation counter for device default service
-		Map<String, Object> property = (Map<String, Object>) aasServerConnection.getModelPropertyValue(SubModel.PROPERTIES + "/invocations");
+		Map<String, Object> property = (Map<String, Object>) aasServerConnection
+				.getModelPropertyValue(SubmodelElementMapProvider.DATAELEMENTS + "/invocations");
 		// Return the value of the property
 		return (int) property.get("value");
 	}

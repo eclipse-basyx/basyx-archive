@@ -58,6 +58,17 @@ public class File extends DataElement implements IFile{
 		return facade;
 	}
 
+	/**
+	 * Returns true if the given submodel element map is recognized as a fiel
+	 */
+	public static boolean isFile(Map<String, Object> map) {
+		String modelType = ModelType.createAsFacade(map).getName();
+		// Either model type is set or the element type specific attributes are contained (fallback)
+		// Note: Fallback is ambiguous - Blob has exactly the same attributes
+		// => would need value parsing in order to be able to differentiate
+		return MODELTYPE.equals(modelType) || (map.containsKey(Property.VALUE) && map.containsKey(MIMETYPE));
+	}
+
 	public void setValue(String value) {
 		put(Property.VALUE, value);
 	}

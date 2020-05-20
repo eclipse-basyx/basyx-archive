@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.restapi;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -24,28 +25,28 @@ public class OperationProvider extends MetaModelProvider {
 	@Override
 	public Object getModelPropertyValue(String path) throws ProviderException {
 		// Getting of operation is handled by parent provider
-		throw new RuntimeException();
+		throw new MalformedRequestException("Invalid access path");
 	}
 
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
-		throw new RuntimeException();
+		throw new MalformedRequestException("Invalid access path");
 	}
 
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
-		throw new RuntimeException();
+		throw new MalformedRequestException("Invalid access path");
 	}
 
 	@Override
 	public void deleteValue(String path) throws ProviderException {
 		// Deletion of operation is handled by parent provider
-		throw new RuntimeException();
+		throw new MalformedRequestException("Invalid access path");
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws ProviderException {
-		throw new RuntimeException();
+		throw new MalformedRequestException("Invalid access path");
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class OperationProvider extends MetaModelProvider {
 			parameters[i] = unwrapParameter(parameters[i]);
 		}
 
-		// Invoke /invokable instead of an Operation property
+		// Invoke /invokable instead of an Operation property if existent
 		Object childElement = modelProvider.getModelPropertyValue(path);
 		if (childElement instanceof Map<?, ?> && ((Map<?, ?>) childElement).containsKey(Operation.INVOKABLE)) {
 			path = VABPathTools.concatenatePaths(path, Operation.INVOKABLE);

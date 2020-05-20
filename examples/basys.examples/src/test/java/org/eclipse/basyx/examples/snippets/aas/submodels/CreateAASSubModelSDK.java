@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.ContainerProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.junit.Test;
 
@@ -43,9 +43,9 @@ public class CreateAASSubModelSDK {
 			Property prop11 = new Property(123);
 			prop11.setIdShort("prop11");
 			// - Add container property that holds other properties
-			ContainerProperty container = new ContainerProperty();
+			SubmodelElementCollection container = new SubmodelElementCollection();
 			container.setIdShort("prop2");
-			container.addSubModelElement(prop11);
+			container.addElement(prop11);
 			// - Add container to property map
 			addSubModelElement(container);
 
@@ -53,7 +53,7 @@ public class CreateAASSubModelSDK {
 			Property prop3 = new Property(17);
 			prop3.setIdShort("prop3");
 			{
-				((Map<String, Object>) this.get("dataElements")).put("prop3", prop3);
+				((Map<String, Object>) this.get("submodelElements")).put("prop3", prop3);
 			}
 		}
 	}
@@ -68,7 +68,7 @@ public class CreateAASSubModelSDK {
 		SampleSubModel sampleSM = new SampleSubModel();
 		
 		// Access sub model property
-		int propertyVal = (int) sampleSM.getPath("dataElements/prop1/value");
+		int propertyVal = (int) sampleSM.getPath("submodelElements/prop1/value");
 		
 		// Check property value
 		assertTrue(propertyVal == 234);

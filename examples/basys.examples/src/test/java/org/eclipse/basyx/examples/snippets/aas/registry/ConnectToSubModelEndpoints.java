@@ -15,7 +15,7 @@ import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -123,9 +123,9 @@ public class ConnectToSubModelEndpoints {
 		// Read property values from sub model
 		String smID     = connSM.getIdShort();
 		String prop1Id = connSM.getDataElements().get("prop1").getIdShort();
-		int    prop1Val = (int)    ((ISingleProperty) connSM.getDataElements().get("prop1")).get();
+		int prop1Val = (int) ((IProperty) connSM.getDataElements().get("prop1")).get();
 		String prop2Id  = connSM.getDataElements().get("prop2").getIdShort();
-		String prop2Val = (String) ((ISingleProperty) connSM.getDataElements().get("prop2")).get();
+		String prop2Val = (String) ((IProperty) connSM.getDataElements().get("prop2")).get();
 
 		
 		// Check property values

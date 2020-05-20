@@ -1,5 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,20 +8,15 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.ConnectedPropertyFactory;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.blob.ConnectedBlob;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.file.ConnectedFile;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedBlob;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedFile;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedProperty;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation.ConnectedOperation;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.DataElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -41,7 +37,6 @@ public class ConnectedSubmodelElementFactory {
 	 * @return A Map containing the created connected ISubmodelElements and their IDs
 	 */
 	public static Map<String, ISubmodelElement> getConnectedSubmodelElements(VABElementProxy smElemProxy) {
-		
 		Map<String, ISubmodelElement> ret = new HashMap<>();
 		
 		// Add all DataElements and Operations
@@ -56,15 +51,11 @@ public class ConnectedSubmodelElementFactory {
 		// Convert to ISubmodelElement
 		for (Map<String, Object> smElemNode : smElemNodes) {
 			String id = (String) smElemNode.get(Referable.IDSHORT);
-			String modelType = ModelType.createAsFacade(smElemNode).getName();
 			
-			// Create the SubmodelElement based on its ModelType
-			if(modelType.equals(SubmodelElementCollection.MODELTYPE)) {
-				ret.put(id, new ConnectedSubmodelElementCollection(
-						smElemProxy.getDeepProxy(id)));
-			} else if(modelType.equals(RelationshipElement.MODELTYPE)) {
-				ret.put(id, new ConnectedRelationshipElement(
-						smElemProxy.getDeepProxy(id)));
+			if (SubmodelElementCollection.isSubmodelElementCollection(smElemNode)) {
+				ret.put(id, new ConnectedSubmodelElementCollection(smElemProxy.getDeepProxy(id)));
+			} else if (RelationshipElement.isRelationshipElement(smElemNode)) {
+				ret.put(id, new ConnectedRelationshipElement(smElemProxy.getDeepProxy(id)));
 			}
 		}
 		
@@ -78,29 +69,21 @@ public class ConnectedSubmodelElementFactory {
 	 * @return A Map containing the created connected IOperations and their IDs
 	 */
 	public static Map<String, IOperation> getOperations(VABElementProxy operationsProxy) {
-		if(operationsProxy == null)
-			return null;
-		
-		// Create return value
+		if (operationsProxy == null)
+			return new HashMap<>();
+
 		Map<String, IOperation> ret = new HashMap<>();
-
-		// Read values
-		Collection<Map<String, Object>> operationNodes = getCollection(operationsProxy.getModelPropertyValue("/"));
-
-		// Convert to IOperation
-		for (Map<String, Object> opNode : operationNodes) {
-			String id = (String) opNode.get(Referable.IDSHORT);
-			String modelType = ModelType.createAsFacade(opNode).getName();
-			
-			if(modelType.equals(Operation.MODELTYPE)) {
-				ConnectedOperation conOp = new ConnectedOperation(operationsProxy.getDeepProxy(id));
-				ret.put(id, conOp);
+		Collection<Map<String, Object>> dataElemNodes = getCollection(operationsProxy.getModelPropertyValue("/"));
+		for (Map<String, Object> deNode : dataElemNodes) {
+			String id = Referable.createAsFacade(deNode).getIdShort();
+			if (Operation.isOperation(deNode)) {
+				ret.put(id, new ConnectedOperation(operationsProxy.getDeepProxy(id)));
 			}
 		}
-
-		// Return result
 		return ret;
 	}
+	
+	
 	
 	
 	/**
@@ -110,56 +93,28 @@ public class ConnectedSubmodelElementFactory {
 	 * @return A Map containing the created connected IDataElements and their IDs
 	 */
 	public static Map<String, IDataElement> getDataElements(VABElementProxy dataElemProxy) {
-		if(dataElemProxy == null)
-			return null;
+		if (dataElemProxy == null)
+			return new HashMap<>();
 		
 		Map<String, IDataElement> ret = new HashMap<>();
 		
 		Collection<Map<String, Object>> dataElemNodes = getCollection(dataElemProxy.getModelPropertyValue("/"));
-		
+
 		for (Map<String, Object> deNode : dataElemNodes) {
-			String id = (String) deNode.get(Referable.IDSHORT);
-			
-			// Get the ModelType of the DataElement
-			String modelType = ModelType.createAsFacade(deNode).getName();
-			
-			// Create the DataElement based on its ModelType
-			if(modelType == null || modelType.equals(DataElement.MODELTYPE) || modelType.equals(Property.MODELTYPE)) {
-				PropertyValueTypeDef type = getType(deNode);
-				ret.put(id, ConnectedPropertyFactory.createProperty(
-						dataElemProxy.getDeepProxy(id), type));
-			} else if(modelType.equals(Blob.MODELTYPE)) {
+			String id = Referable.createAsFacade(deNode).getIdShort();
+			if (Property.isProperty(deNode)) {
+				ret.put(id, new ConnectedProperty(dataElemProxy.getDeepProxy(id)));
+			} else if (Blob.isBlob(deNode)) {
 				ret.put(id, new ConnectedBlob(dataElemProxy.getDeepProxy(id)));
-			} else if(modelType.equals(File.MODELTYPE)) {
+			} else if (File.isFile(deNode)) {
 				ret.put(id, new ConnectedFile(dataElemProxy.getDeepProxy(id)));
 			}
 		}
 		return ret;
 	}
 	
-	
-	/**
-	 * Finds the PropertyValueType of a given IDataElement
-	 */
-	private static PropertyValueTypeDef getType(Map<String, Object> deNode) {
-		if (deNode.containsKey(SubModel.PROPERTIES)) {
-			return PropertyValueTypeDef.Container;
-		} else {
-			return PropertyValueTypeDefHelper.readTypeDef(deNode.get(Property.VALUETYPE));
-		}
-	}
-	
-	
 	/**
 	 * Casts an Object to an Collection of Maps.</br>
-	 * 
-	 * If the Collection of Maps is contained in a Property,
-	 * Property.VALUE gets extracted and casted to the required
-	 * Collection of Maps.</br></br>
-	 * 
-	 * This is a necessary hack because getModelPropertyValue wraps values
-	 * into Properties if they are not in the "/dataElements" "/operations"
-	 * or "/submodelElement" path.
 	 */
 	@SuppressWarnings("unchecked")
 	private static Collection<Map<String, Object>> getCollection(Object o) {
@@ -168,7 +123,33 @@ public class ConnectedSubmodelElementFactory {
 		} else if (o instanceof Collection<?>) {
 			return (Collection<Map<String, Object>>) o;
 		}
-		return null;
+		return new ArrayList<>();
+	}
+
+	/**
+	 * Returns a collection of ISubmodelElements
+	 */
+	public static Collection<ISubmodelElement> getElementCollection(VABElementProxy proxy) {
+		Collection<Map<String, Object>> nodes = getCollection(proxy.getModelPropertyValue("/"));
+		ArrayList<ISubmodelElement> ret = new ArrayList<>();
+		for (Map<String, Object> node : nodes) {
+			String id = Referable.createAsFacade(node).getIdShort();
+			proxy = proxy.getDeepProxy(id);
+			if (Property.isProperty(node)) {
+				ret.add(new ConnectedProperty(proxy));
+			} else if (Blob.isBlob(node)) {
+				ret.add(new ConnectedBlob(proxy));
+			} else if (File.isFile(node)) {
+				ret.add(new ConnectedFile(proxy));
+			} else if (SubmodelElementCollection.isSubmodelElementCollection(node)) {
+				ret.add(new ConnectedSubmodelElementCollection(proxy));
+			} else if (RelationshipElement.isRelationshipElement(node)) {
+				ret.add(new ConnectedRelationshipElement(proxy));
+			} else if (Operation.isOperation(node)) {
+				ret.add(new ConnectedOperation(proxy));
+			}
+		}
+		return ret;
 	}
 	
 }

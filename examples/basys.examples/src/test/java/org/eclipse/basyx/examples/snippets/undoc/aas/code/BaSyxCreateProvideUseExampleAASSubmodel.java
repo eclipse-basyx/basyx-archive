@@ -7,6 +7,7 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementMapProvider;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnector;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
@@ -54,7 +55,8 @@ public class BaSyxCreateProvideUseExampleAASSubmodel {
 		// - Create connection to device manager
 		JSONConnector toDeviceManager = new JSONConnector(basyxConnector);	
 		// - Access sub model property, check value
-		Map<String, Object> property = (Map<String, Object>) toDeviceManager.getModelPropertyValue(SubModel.PROPERTIES + "/status");
+		Map<String, Object> property = (Map<String, Object>) toDeviceManager
+				.getModelPropertyValue(SubmodelElementMapProvider.DATAELEMENTS + "/status");
 		assertEquals("offline", property.get("value"));
 		
 		

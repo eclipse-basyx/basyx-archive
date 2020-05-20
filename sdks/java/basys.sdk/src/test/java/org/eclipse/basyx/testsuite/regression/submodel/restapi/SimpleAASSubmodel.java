@@ -3,7 +3,7 @@ package org.eclipse.basyx.testsuite.regression.submodel.restapi;
 import java.util.function.Function;
 
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.ContainerProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -64,13 +64,13 @@ public class SimpleAASSubmodel extends SubModel {
 		exception2.setIdShort("exception2");
 		addSubModelElement(exception2);
 
-		ContainerProperty containerProp = new ContainerProperty();
+		SubmodelElementCollection containerProp = new SubmodelElementCollection();
 		containerProp.setIdShort("container");
-		containerProp.addSubModelElement(intProp);
+		containerProp.addElement(intProp);
 
-		ContainerProperty containerPropRoot = new ContainerProperty();
+		SubmodelElementCollection containerPropRoot = new SubmodelElementCollection();
 		containerPropRoot.setIdShort("containerRoot");
-		containerPropRoot.addSubModelElement(containerProp);
+		containerPropRoot.addElement(containerProp);
 		addSubModelElement(containerPropRoot);
 	}
 }

@@ -14,7 +14,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
@@ -139,7 +139,7 @@ public abstract class AssetAdministrationShellSuite {
 
 		// Check if the submodel has been retrieved correctly
 		ISubModel sm = shell.getSubModels().get(SMIDSHORT);
-		ISingleProperty prop = (ISingleProperty) sm.getDataElements().get(PROPID);
+		IProperty prop = (IProperty) sm.getDataElements().get(PROPID);
 		assertEquals(PROPVAL, prop.get());
 	}
 

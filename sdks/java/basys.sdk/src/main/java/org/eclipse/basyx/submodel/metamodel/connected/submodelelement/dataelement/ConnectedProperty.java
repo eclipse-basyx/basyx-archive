@@ -1,9 +1,8 @@
-package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property;
+package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement;
 
 import java.util.Map;
 
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.PropertyType;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -16,10 +15,10 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  * @author schnicke
  *
  */
-public class ConnectedSingleProperty extends ConnectedProperty implements ISingleProperty {
+public class ConnectedProperty extends ConnectedDataElement implements IProperty {
 
-	public ConnectedSingleProperty(VABElementProxy proxy) {
-		super(PropertyType.Single, proxy);
+	public ConnectedProperty(VABElementProxy proxy) {
+		super(proxy);
 	}
 
 	@Override
@@ -37,6 +36,16 @@ public class ConnectedSingleProperty extends ConnectedProperty implements ISingl
 	public String getValueType() {
 		Object o = getProxy().getModelPropertyValue("");
 		return PropertyValueTypeDefHelper.readTypeDef(((Map<String, Object>) o).get(Property.VALUETYPE)).toString();
+	}
+
+	@Override
+	public String getValueId() {
+		return (String) getProxy().getModelPropertyValue(Property.VALUEID);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T> T retrieveObject() {
+		return (T) ((Map<String, Object>) getProxy().getModelPropertyValue(Property.VALUE)).get(Property.VALUE);
 	}
 
 }

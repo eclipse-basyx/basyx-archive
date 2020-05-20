@@ -47,6 +47,16 @@ public class Range extends DataElement implements IRange {
 		return facade;
 	}
 	
+	/**
+	 * Returns true if the given submodel element map is recognized as a Range element
+	 */
+	public static boolean isRange(Map<String, Object> map) {
+		String modelType = ModelType.createAsFacade(map).getName();
+		// Either model type is set or the element type specific attributes are contained (fallback)
+		return MODELTYPE.equals(modelType)
+				|| (map.containsKey(MIN) && map.containsKey(MAX) && map.containsKey(VALUETYPE));
+	}
+
 	@Override
 	public String getValueType() {
 		return (String) get(VALUETYPE);

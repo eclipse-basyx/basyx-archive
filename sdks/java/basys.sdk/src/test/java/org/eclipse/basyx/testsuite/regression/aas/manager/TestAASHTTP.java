@@ -11,8 +11,9 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.testsuite.regression.aas.restapi.StubAASServlet;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
@@ -112,8 +113,9 @@ public class TestAASHTTP {
 		// - retrieve properties and operations
 
 		Map<String, IDataElement> properties = sm.getDataElements();
-		assertEquals(3, properties.size());
-		ISingleProperty prop = (ISingleProperty) properties.get("integerProperty");
+		// 2 properties -> SMElementCollections don't count
+		assertEquals(2, properties.size());
+		IProperty prop = (IProperty) properties.get("integerProperty");
 		assertEquals(123, prop.get());
 
 		Map<String, IOperation> operations = sm.getOperations();
@@ -121,6 +123,10 @@ public class TestAASHTTP {
 
 		IOperation op = operations.get("complex");
 		assertEquals(1, op.invoke(2, 1));
+
+		Map<String, ISubmodelElement> elements = sm.getSubmodelElements();
+		// 2 properties, 4 operations, 1 collection
+		assertEquals(7, elements.size());
 
 	}
 }

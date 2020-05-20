@@ -3,6 +3,9 @@ package org.eclipse.basyx.submodel.metamodel.api.submodelelement;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
+
 /**
  * A submodel element collection is a set or list of submodel elements.
  * 
@@ -28,9 +31,23 @@ public interface ISubmodelElementCollection extends ISubmodelElement {
 	public boolean isAllowDuplicates();
 	
 	/**
-	 * Gets the elements contained in the collection
+	 * Gets all the elements contained in the collection
 	 * 
 	 * @return
 	 */
-	public Map<String, ISubmodelElement> getElements();
+	public Map<String, ISubmodelElement> getSubmodelElements();
+
+	/**
+	 * Gets the data elements contained in the collection
+	 * 
+	 * @return
+	 */
+	public Map<String, IDataElement> getDataElements();
+
+	/**
+	 * Gets the operations contained in the collection
+	 * 
+	 * @return
+	 */
+	public Map<String, IOperation> getOperations();
 }

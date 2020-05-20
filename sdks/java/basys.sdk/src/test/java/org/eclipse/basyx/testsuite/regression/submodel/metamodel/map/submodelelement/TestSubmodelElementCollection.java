@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -21,7 +24,10 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiabl
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.DataElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,27 +40,39 @@ import org.junit.Test;
  */
 public class TestSubmodelElementCollection {
 	private static final Reference REFERENCE = new Reference(new Identifier(IdentifierType.CUSTOM, "testValue"), KeyElements.ACCESSPERMISSIONRULE, false);
-	private Collection<ISubmodelElement> elements = getSubmodelElements(); 
+	private static final String OPERATION_ID = "testOpID";
+	private static final String PROPERTY_ID = "testPropID";
+
+	private Collection<ISubmodelElement> elements1;
+	private Collection<ISubmodelElement> elements2;
 	private SubmodelElementCollection elementCollection;
 	
 	@Before
 	public void buildSubmodelElementCollection() {
-		elementCollection = new SubmodelElementCollection(elements, true, true);
+		elements1 = new ArrayList<>();
+		elements1.add(getDataElement());
+		elements1.add(getOperation());
+
+		elements2 = new ArrayList<ISubmodelElement>();
+		elements2.add(new Property("testId1"));
+		elements2.add(new Property("testId2"));
+		elementCollection = new SubmodelElementCollection(elements2, false, false);
 	} 
-	
+
 	@Test
 	public void testConstructor() {
+		SubmodelElementCollection elementCollection = new SubmodelElementCollection(elements1, true, true);
 		assertTrue(elementCollection.isAllowDuplicates());
 		assertTrue(elementCollection.isOrdered());
-		assertEquals(elements, elementCollection.getValue());
+		assertEquals(elements1, elementCollection.getValue());
 	} 
 	
 	@Test
 	public void testAddValue() {
 		ISubmodelElement element = new Property("testIdNew");
 		elementCollection.addElement(element);
-		elements.add(element);
-		assertEquals(elements, elementCollection.getValue());
+		elements2.add(element);
+		assertEquals(elements2, elementCollection.getValue());
 	} 
 	
 	@Test
@@ -95,19 +113,64 @@ public class TestSubmodelElementCollection {
 		Map<String, ISubmodelElement> elementsMap = new HashMap<String, ISubmodelElement>();
 		elementsMap.put(idShort, element);
 		elementCollection.setElements(elementsMap);
-		assertEquals(elementsMap, elementCollection.getElements());
+		assertEquals(elementsMap, elementCollection.getSubmodelElements());
 	} 
-	
+
+
+	@Test
+	public void testConstructor1() {
+		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
+
+		Map<String, IDataElement> dataElements = new HashMap<String, IDataElement>();
+		Map<String, IOperation> operations = new HashMap<String, IOperation>();
+		Map<String, ISubmodelElement> submodels = new HashMap<String, ISubmodelElement>();
+		dataElements.put(PROPERTY_ID, getDataElement());
+		operations.put(OPERATION_ID, getOperation());
+		submodels.putAll(operations);
+		submodels.putAll(dataElements);
+		assertEquals(dataElements, collection.getDataElements());
+		assertEquals(operations, collection.getOperations());
+		assertEquals(submodels, collection.getSubmodelElements());
+	}
+
+	@Test
+	public void testAddSubModelElement() {
+		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
+		Property property = new Property("testValue");
+		String newIdShort = "newIdShort";
+		property.put(Referable.IDSHORT, newIdShort);
+		collection.addElement(property);
+		Map<String, ISubmodelElement> submodelElements = new HashMap<String, ISubmodelElement>();
+		submodelElements.put(PROPERTY_ID, getDataElement());
+		submodelElements.put(OPERATION_ID, getOperation());
+		submodelElements.put(newIdShort, property);
+		assertEquals(submodelElements, collection.getSubmodelElements());
+	}
+
 	/**
-	 * A dummy collection of submodel elements
-	 * @return a list of submodel elements
+	 * Get a dummy data element
+	 * 
+	 * @return data element
 	 */
-	private Collection<ISubmodelElement> getSubmodelElements() {
-		ISubmodelElement element1 = new Property("testId1");
-		ISubmodelElement element2 = new Property("testId2");
-		Collection<ISubmodelElement> elements = new ArrayList<ISubmodelElement>();
-		elements.add(element1);
-		elements.add(element2);
-		return elements;
+	private DataElement getDataElement() {
+		Referable referable = new Referable(PROPERTY_ID, "testCategory", new LangStrings("DE", "test"));
+		Reference semanticId = new Reference(new Key(KeyElements.ASSET, true, "testValue", IdentifierType.IRI));
+		Qualifiable qualifiable = new Qualifiable(new Formula(Collections
+				.singleton(new Reference(new Key(KeyElements.BLOB, true, "TestValue", IdentifierType.IRI)))));
+		Property property = new Property("testValue", referable, semanticId, qualifiable);
+		return property;
+	}
+
+	/**
+	 * Get a dummy operation
+	 * 
+	 * @return operation
+	 */
+	private Operation getOperation() {
+		List<OperationVariable> variable = Collections
+				.singletonList(new OperationVariable(new Property("testOpVariableId")));
+		Operation operation = new Operation(variable, variable, variable, null);
+		operation.put(Referable.IDSHORT, OPERATION_ID);
+		return operation;
 	}
 }

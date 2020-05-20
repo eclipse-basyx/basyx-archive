@@ -8,7 +8,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDat
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedVABModelMap;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementFactory;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementMapProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -25,28 +25,30 @@ public class ConnectedVABElementContainerFacade extends ConnectedVABModelMap<Obj
 	@Override
 	public void addSubModelElement(ISubmodelElement element) {
 		if (element instanceof IDataElement) {
-			getProxy().createValue(SubModel.PROPERTIES, element);
+			getProxy().createValue(SubmodelElementMapProvider.DATAELEMENTS, element);
 		} else if (element instanceof IOperation) {
-			getProxy().createValue(SubModel.OPERATIONS, element);
+			getProxy().createValue(SubmodelElementMapProvider.OPERATIONS, element);
 		} else if (element instanceof ISubmodelElement) {
-			getProxy().createValue(SubModel.SUBMODELELEMENT, element);
+			getProxy().createValue(SubmodelElementMapProvider.ELEMENTS, element);
 		}
 	}
 
 	@Override
 	public Map<String, IDataElement> getDataElements() {
-		return ConnectedSubmodelElementFactory.getDataElements(getProxy().getDeepProxy(SubModel.PROPERTIES));
+		return ConnectedSubmodelElementFactory
+				.getDataElements(getProxy().getDeepProxy(SubmodelElementMapProvider.DATAELEMENTS));
 	}
 
 	@Override
 	public Map<String, IOperation> getOperations() {
-		return ConnectedSubmodelElementFactory.getOperations(getProxy().getDeepProxy(SubModel.OPERATIONS));
+		return ConnectedSubmodelElementFactory
+				.getOperations(getProxy().getDeepProxy(SubmodelElementMapProvider.OPERATIONS));
 	}
 
 	@Override
 	public Map<String, ISubmodelElement> getSubmodelElements() {
 		return ConnectedSubmodelElementFactory.getConnectedSubmodelElements(
-				getProxy().getDeepProxy(SubModel.SUBMODELELEMENT));
+				getProxy().getDeepProxy(SubmodelElementMapProvider.ELEMENTS));
 	}
 
 }

@@ -21,7 +21,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
@@ -110,7 +110,7 @@ public class TestConnectedSubModel {
 		assertEquals(1, props.size());
 
 		// Check the value of the property
-		ISingleProperty prop = (ISingleProperty) props.get(PROP);
+		IProperty prop = (IProperty) props.get(PROP);
 		assertEquals(100, prop.get());
 	}
 
@@ -277,8 +277,8 @@ public class TestConnectedSubModel {
 		
 		Map<String, IDataElement> expected = getTestDataElements();
 		
-		ISingleProperty expectedProperty = (ISingleProperty) expected.get(PROPERTY_ID);
-		ISingleProperty acutalProperty = (ISingleProperty) actual.get(PROPERTY_ID);
+		IProperty expectedProperty = (IProperty) expected.get(PROPERTY_ID);
+		IProperty acutalProperty = (IProperty) actual.get(PROPERTY_ID);
 		assertNotNull(acutalProperty);
 		assertEquals(expectedProperty.get(), acutalProperty.get());
 		

@@ -14,9 +14,9 @@ import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.qualifiable.Q
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.dataelement.BlobXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.dataelement.FileXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.dataelement.MultiLanguagePropertyXMLConverter;
+import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.dataelement.PropertyXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.dataelement.RangeXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.dataelement.ReferenceElementXMLConverter;
-import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.dataelement.property.PropertyXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.entity.EntityXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.event.BasicEventXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.operation.OperationXMLConverter;
@@ -26,9 +26,9 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IMultiLanguageProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IRange;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IReferenceElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.IEntity;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.event.IBasicEvent;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
@@ -220,7 +220,7 @@ public class SubmodelElementXMLConverter {
 		
 		switch (type) {
 			case Property.MODELTYPE:
-				return PropertyXMLConverter.buildProperty(document, (ISingleProperty) submodelElement);
+				return PropertyXMLConverter.buildProperty(document, (IProperty) submodelElement);
 			case BasicEvent.MODELTYPE:
 				return BasicEventXMLConverter.buildBasicEvent(document, (IBasicEvent) submodelElement);
 			case MultiLanguageProperty.MODELTYPE:

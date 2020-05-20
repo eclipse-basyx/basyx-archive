@@ -12,12 +12,12 @@ import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.IContainerProperty;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ISingleProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.ContainerProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.ClassRule;
@@ -60,16 +60,16 @@ public class ConnectToAASSubModelSDK {
 			Property prop11 = new Property(123);
 			prop11.setIdShort("prop11");
 			// - Add container property that holds other properties
-			ContainerProperty container = new ContainerProperty();
+			SubmodelElementCollection container = new SubmodelElementCollection();
 			container.setIdShort("prop2");
-			container.addSubModelElement(prop11);
+			container.addElement(prop11);
 			// - Add container to property map
 			addSubModelElement(container);
 
 			// Add another property manually to sub model container "properties"
 			Property prop3 = new Property(17);
 			prop3.setIdShort("prop3");
-			((Map<String, Object>) this.get("dataElements")).put("prop3", prop3);
+			((Map<String, Object>) this.get("submodelElements")).put("prop3", prop3);
 		}
 	}
 
@@ -116,11 +116,11 @@ public class ConnectToAASSubModelSDK {
 		ISubModel subModel = manager.retrieveSubModel(aasId, smId);
 
 		// - Retrieve sub model values and compare to expected values
-		Map<String, IDataElement> dataElements = subModel.getDataElements();
-		ISingleProperty prop1 = (ISingleProperty) dataElements.get("prop1");
-		IContainerProperty prop2 = (IContainerProperty) dataElements.get("prop2");
-		ISingleProperty prop11 = (ISingleProperty) prop2.getDataElements().get("prop11");
-		ISingleProperty prop3 = (ISingleProperty) dataElements.get("prop3");
+		Map<String, ISubmodelElement> smElements = subModel.getSubmodelElements();
+		IProperty prop1 = (IProperty) smElements.get("prop1");
+		ISubmodelElementCollection prop2 = (ISubmodelElementCollection) smElements.get("prop2");
+		IProperty prop11 = (IProperty) prop2.getDataElements().get("prop11");
+		IProperty prop3 = (IProperty) smElements.get("prop3");
 
 		assertEquals(smId.getId(), subModel.getIdentification().getId());
 		assertEquals("smName", subModel.getIdShort());

@@ -1,9 +1,8 @@
-package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.blob;
+package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement;
 
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedDataElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;

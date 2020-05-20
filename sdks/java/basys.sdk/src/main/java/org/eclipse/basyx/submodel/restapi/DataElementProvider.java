@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -15,11 +16,11 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  * @author schnicke
  *
  */
-public class SinglePropertyProvider extends MetaModelProvider {
+public class DataElementProvider extends MetaModelProvider {
 
 	private IModelProvider proxy;
 
-	public SinglePropertyProvider(IModelProvider proxy) {
+	public DataElementProvider(IModelProvider proxy) {
 		this.proxy = proxy;
 	}
 
@@ -60,30 +61,32 @@ public class SinglePropertyProvider extends MetaModelProvider {
 		if (path.equals(Property.VALUE)) {
 			// Set value and type
 			proxy.setModelPropertyValue(Property.VALUE, newValue);
+
+			// TODO: differentiate between different types of data elements
 			proxy.setModelPropertyValue(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(newValue));
 		} else {
-			throw new RuntimeException();
+			throw new MalformedRequestException("Invalid access path");
 		}
 	}
 
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
-		proxy.createValue(path, newEntity);
+		throw new MalformedRequestException("Invalid access path");
 	}
 
 	@Override
 	public void deleteValue(String path) throws ProviderException {
-		proxy.deleteValue(path);
+		throw new MalformedRequestException("Invalid access path");
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws ProviderException {
-		proxy.deleteValue(path, obj);
+		throw new MalformedRequestException("Invalid access path");
 	}
 
 	@Override
 	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
-		throw new RuntimeException();
+		throw new MalformedRequestException("Invalid access path");
 	}
 
 }

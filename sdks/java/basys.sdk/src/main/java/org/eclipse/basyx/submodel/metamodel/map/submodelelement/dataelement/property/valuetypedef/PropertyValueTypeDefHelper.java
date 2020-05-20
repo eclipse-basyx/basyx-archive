@@ -1,6 +1,5 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,14 +78,11 @@ public class PropertyValueTypeDefHelper {
 				objectType = PropertyValueTypeDef.Double;
 			} else if (c == String.class) {
 				objectType = PropertyValueTypeDef.String;
-			} else if (Map.class.isAssignableFrom(c)) {
-				objectType = PropertyValueTypeDef.Map;
-			} else if (Collection.class.isAssignableFrom(c)) {
-				objectType = PropertyValueTypeDef.Collection;
 			} else {
-				throw new RuntimeException("Cannot map object " + obj + " to any PropertyValueTypeDef");
+				// TODO: fix lambda properties (where this type is a map)
+				objectType = PropertyValueTypeDef.Null;
+				// throw new RuntimeException("Cannot map object " + obj + " to any PropertyValueTypeDef");
 			}
-			// TODO: Container, Reference
 		}
 		return objectType;
 	}

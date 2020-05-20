@@ -16,6 +16,7 @@ import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.junit.Before;
 import org.junit.Test;
@@ -86,10 +87,12 @@ public class MultiAASProviderTest {
 		assertEquals(123, result.get(Property.VALUE));
 
 		// test deleting from a valid aas
-		proxy.deleteValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
-		result = (Map<String, Object>) proxy
-				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/");
-		assertNull(result.get("value"));
+		proxy.deleteValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty");
+		try {
+			proxy.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/");
+			fail();
+		} catch (ResourceNotFoundException e) {
+		}
 	}
 
 	@Test

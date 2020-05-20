@@ -2,19 +2,17 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.connected;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.ICollectionProperty;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.property.IContainerProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.property.ConnectedContainerProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.ContainerProperty;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-import org.eclipse.basyx.submodel.restapi.ContainerPropertyProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementCollectionProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
@@ -27,24 +25,18 @@ import org.junit.Test;
  * @author schnicke
  *
  */
-public class TestConnectedContainerProperty {
+public class TestConnectedSubmodelElementCollection {
 	// String constants used in this test case
-	private static final String COLLECTIONPROP = "coll";
+	private static final String PROP = "prop";
 	private static final String OPERATION = "sum";
 
-	IContainerProperty prop;
-	Collection<Integer> collection;
+	ISubmodelElementCollection prop;
 
 	@Before 
 	public void build() {
-		// Create collection for the collection property
-		collection = new ArrayList<>();
-		collection.add(1);
-		collection.add(2);
-
 		// Create PropertySingleValued containing the collection
-		Property propertyMeta = new Property(collection);
-		propertyMeta.setIdShort(COLLECTIONPROP);
+		Property propertyMeta = new Property(4);
+		propertyMeta.setIdShort(PROP);
 
 		// Create operation
 		Operation operation = new Operation(arr -> {
@@ -53,25 +45,27 @@ public class TestConnectedContainerProperty {
 		operation.setIdShort(OPERATION);
 
 		// Create ComplexDataProperty containing the created operation and property
-		ContainerProperty complex = new ContainerProperty();
-		complex.addSubModelElement(propertyMeta);
-		complex.addSubModelElement(operation);
+		SubmodelElementCollection complex = new SubmodelElementCollection();
+		complex.addElement(propertyMeta);
+		complex.addElement(operation);
 
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(complex);
 		// Create a dummy connection manager containing the created ContainerProperty map
 		// The model is wrapped in the corresponding ModelProvider that implements the API access
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
-				new ContainerPropertyProvider(new VABLambdaProvider(destroyType)));
+				new SubmodelElementCollectionProvider(new VABLambdaProvider(destroyType)));
 
 		// Retrieve the ConnectedContainerProperty
-		prop = new ConnectedContainerProperty(manager.connectToVABElement(""));
+		prop = new ConnectedSubmodelElementCollection(manager.connectToVABElement(""));
 	}
 
 	/**
 	 * Tests retrieving a contained property
+	 * 
+	 * @throws Exception
 	 */
 	@Test
-	public void testProperty() {
+	public void testProperty() throws Exception {
 		// Get contained properties
 		Map<String, IDataElement> props = prop.getDataElements();
 
@@ -79,10 +73,10 @@ public class TestConnectedContainerProperty {
 		assertEquals(1, props.size());
 
 		// Retrieves collection property
-		ICollectionProperty collProp = (ICollectionProperty) props.get(COLLECTIONPROP);
+		IProperty prop = (IProperty) props.get(PROP);
 
 		// Check contained values
-		assertEquals(collection, collProp.getElements());
+		assertEquals(4, prop.get());
 	}
 
 	/**

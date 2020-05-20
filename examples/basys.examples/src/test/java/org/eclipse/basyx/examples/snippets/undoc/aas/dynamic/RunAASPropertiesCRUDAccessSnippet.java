@@ -79,34 +79,34 @@ public class RunAASPropertiesCRUDAccessSnippet {
 		connSubModel1.setModelPropertyValue("/", submodel);
 		
 		// Read property values
-		int prop1Val = (int) connSubModel1.getModelPropertyValue("dataElements/prop1/value");
-		String prop2Val = (String) connSubModel1.getModelPropertyValue("dataElements/prop2/value");
+		int prop1Val = (int) connSubModel1.getModelPropertyValue("submodelElements/prop1/value");
+		String prop2Val = (String) connSubModel1.getModelPropertyValue("submodelElements/prop2/value");
 		// - Check property values
 		assertTrue(prop1Val == 7);
 		assertTrue(prop2Val.equals("myStr"));
 		
 		// Update property values
-		connSubModel1.setModelPropertyValue("dataElements/prop1/value", 8);
-		connSubModel1.setModelPropertyValue("dataElements/prop2/value", "stillMine");
+		connSubModel1.setModelPropertyValue("submodelElements/prop1/value", 8);
+		connSubModel1.setModelPropertyValue("submodelElements/prop2/value", "stillMine");
 		
 		// Read property values again
-		prop1Val = (int) connSubModel1.getModelPropertyValue("dataElements/prop1/value");
-		prop2Val = (String) connSubModel1.getModelPropertyValue("dataElements/prop2/value");
+		prop1Val = (int) connSubModel1.getModelPropertyValue("submodelElements/prop1/value");
+		prop2Val = (String) connSubModel1.getModelPropertyValue("submodelElements/prop2/value");
 		// - Check property values
 		assertTrue(prop1Val == 8);
 		assertTrue(prop2Val.equals("stillMine"));
 
 		// Delete property values
-		connSubModel1.deleteValue("dataElements/prop1");
-		connSubModel1.deleteValue("dataElements/prop2");
+		connSubModel1.deleteValue("submodelElements/prop1");
+		connSubModel1.deleteValue("submodelElements/prop2");
 		
 		// Read property values again
 		try {
-			connSubModel1.getModelPropertyValue("dataElements/prop1");
+			connSubModel1.getModelPropertyValue("submodelElements/prop1");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		try {
-			connSubModel1.getModelPropertyValue("dataElements/prop2");
+			connSubModel1.getModelPropertyValue("submodelElements/prop2");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 	}

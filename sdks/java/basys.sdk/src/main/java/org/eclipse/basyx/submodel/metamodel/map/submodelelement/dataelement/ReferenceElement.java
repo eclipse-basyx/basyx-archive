@@ -6,6 +6,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 
 /**
@@ -51,6 +52,19 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 		ReferenceElement ret = new ReferenceElement();
 		ret.setMap(obj);
 		return ret;
+	}
+
+	/**
+	 * Returns true if the given submodel element map is recognized as a ReferenceElement
+	 */
+	public static boolean isReferenceElement(Map<String, Object> map) {
+		String modelType = ModelType.createAsFacade(map).getName();
+		// Either model type is set or the element type specific attributes are contained (fallback)
+		// Ambiguous - fallback could be further improved by parsing the value and recognizing references
+		return MODELTYPE.equals(modelType) || (map.containsKey(Property.VALUE) && !map.containsKey(Property.VALUETYPE)
+				&& !map.containsKey(Property.VALUEID) && !map.containsKey(File.MIMETYPE)
+				&& !map.containsKey(SubmodelElementCollection.ORDERED)
+				&& !map.containsKey(SubmodelElementCollection.ALLOWDUPLICATES));
 	}
 
 	public void setValue(IReference ref) {
