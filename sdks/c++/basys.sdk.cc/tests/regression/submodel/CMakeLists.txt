@@ -18,7 +18,10 @@ target_sources(${PROJECT_NAME}
 	api/qualifier/test_Referable.cpp
 	api/reference/test_Reference.cpp
 	map/common/test_ElementContainer.cpp
-	map/submodelelement/test_LangStringSet.cpp
+	api/common/test_LangStringSet.cpp
+	map_v2/dataspecification/test_DataSpecification.cpp
+	map_v2/dataspecification/test_DataSpecificationIEC61360.cpp
+	map_v2/identifier/test_Identifier.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})

@@ -26,6 +26,8 @@ public:
 
 inline ILangStringSet::~ILangStringSet() = default;
 
+bool operator==(const api::ILangStringSet & left, const api::ILangStringSet & right);
+
 }
 }
 }

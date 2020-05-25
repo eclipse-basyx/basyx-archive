@@ -1,5 +1,7 @@
 #include <BaSyx/submodel/simple/common/LangStringSet.h>
 
+#include <BaSyx/shared/types.h>
+
 namespace basyx {
 namespace submodel {
 namespace simple {
@@ -17,7 +19,10 @@ LangStringSet::LangStringSet(const std::string & languageCode, const std::string
 
 LangStringSet::langCodeSet_t LangStringSet::getLanguageCodes() const
 {
-	return langCodeSet_t();
+  std::vector<std::string> langCodes;
+  for (auto langCode : this->langStrings)
+    langCodes.push_back(langCode.first);
+  return LangStringSet::langCodeSet_t(langCodes.begin(), langCodes.end());
 };
 
 

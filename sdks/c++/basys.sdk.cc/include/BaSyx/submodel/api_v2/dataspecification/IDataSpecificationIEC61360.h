@@ -26,9 +26,14 @@ public:
 	virtual std::string * const getUnit() = 0;
 	virtual IReference * const getUnitId() = 0;
 	virtual std::string * const getSourceOfDefinition() = 0;
+	virtual std::string * const getSymbol() = 0;
 	virtual DataTypeIEC61360 getDataType() const = 0;
 	virtual std::string * const getValueFormat() = 0;
-	virtual IReference * const getValueId() = 0;
+/* TODO
+	virtual MISSINGTYPE const getValueList() = 0;
+  virtual MISSINGTYPE const getValueDataType() = 0;
+	*/
+  virtual IReference * const getValueId() = 0;
 	virtual LevelType getLevelType() const = 0;
 
 	virtual void setUnit(const std::string & unit) = 0;

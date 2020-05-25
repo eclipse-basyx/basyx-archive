@@ -11,6 +11,11 @@ namespace basyx {
 namespace submodel {
 namespace api {
 
+/**
+ * Mandatory members:
+ *    idShort
+ *
+ */
 class IReferable
 {
 public:

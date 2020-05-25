@@ -29,6 +29,8 @@ public:
     const std::string & get(const std::string & languageCode) const override;
     void add(const std::string & languageCode, const std::string & langString) override;
 	bool empty() const noexcept override;
+
+  friend bool api::operator==(const api::ILangStringSet & left, const api::ILangStringSet & right);
 };
 
 }

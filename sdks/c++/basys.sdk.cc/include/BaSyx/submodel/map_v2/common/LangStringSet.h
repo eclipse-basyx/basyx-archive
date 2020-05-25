@@ -30,12 +30,15 @@ public:
 	using vab::ElementMap::ElementMap;
 
 	LangStringSet();
+  LangStringSet(const ILangStringSet & other);
 
 	virtual langCodeSet_t getLanguageCodes() const override;
 
 	virtual const std::string & get(const std::string & languageCode) const override;
 	virtual void add(const std::string & languageCode, const std::string & langString) override;
 	virtual bool empty() const noexcept override;
+
+  friend bool api::operator==(const api::ILangStringSet & left, const api::ILangStringSet & right);
 };
 
 }

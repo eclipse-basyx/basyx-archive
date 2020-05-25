@@ -12,7 +12,7 @@ namespace simple {
 class Identifier
 {
 public:
-	Identifier() = default;
+	Identifier();
 	Identifier(IdentifierType idType, const std::string & id);
 	~Identifier() = default;
 private:

@@ -10,6 +10,11 @@ namespace basyx {
 namespace submodel {	
 namespace api {
 
+
+/**
+ * Mandatory members:
+ *    DataSpecificationContent
+ */
 class IDataSpecification : public virtual IIdentifiable
 {
 public:

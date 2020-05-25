@@ -47,6 +47,8 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/SubmodelElement.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/SubmodelElementFactory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/SubmodelElementCollection.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/dataspecification/DataSpecification.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/dataspecification/DataSpecificationIEC61360.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/aas/AssetAdministrationShell.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/aas/Asset.cpp
@@ -146,7 +148,6 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/SubmodelElementFactory.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/SubmodelElement.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/SubModel.h
-		
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/aas/AssetAdministrationShell.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/aas/Asset.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/ElementContainer.h
