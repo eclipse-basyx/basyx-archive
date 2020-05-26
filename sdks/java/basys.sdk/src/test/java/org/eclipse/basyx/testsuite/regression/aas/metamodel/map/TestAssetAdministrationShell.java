@@ -1,15 +1,29 @@
 package org.eclipse.basyx.testsuite.regression.aas.metamodel.map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
+import org.eclipse.basyx.aas.metamodel.map.security.Security;
+import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.map.dataspecification.EmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
+import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.testsuite.regression.aas.metamodel.AssetAdministrationShellSuite;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +38,8 @@ import org.junit.Test;
  *
  */
 public class TestAssetAdministrationShell extends AssetAdministrationShellSuite {
-
+	private static final Reference REFERENCE = new Reference(new Key(KeyElements.ASSET, true, "testValue", IdentifierType.IRI));
+	
 	private AssetAdministrationShell shell;
 
 	/**
@@ -79,5 +94,58 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 	public void testGetSubmodel() throws Exception {
 		// Overwritten because getting submodels on local AAS is not supported
 	}
-
+	
+	@Test
+	public void testSetEndpoint() {
+		String endpoint = "testEndpoint.com";
+		String endpointType = "http";
+		shell.setEndpoint(endpoint, endpointType);
+		List<HashMap<String, String>> endPoints = shell.getEndpoints();
+		HashMap<String, String> map = endPoints.iterator().next();
+		assertTrue(map.containsValue(endpoint));
+		assertTrue(map.containsValue(endpointType));
+	}
+	
+	@Test
+	public void testSetDataSpecificationReferences() {
+		Collection<IReference> refs = Collections.singleton(REFERENCE);
+		shell.setDataSpecificationReferences(refs);
+		assertEquals(refs, shell.getDataSpecificationReferences());
+	}
+	
+	@Test
+	public void testSetEmbeddedDataSpecifications() {
+		EmbeddedDataSpecification embeddedDataSpecification = new EmbeddedDataSpecification();
+		Collection<IEmbeddedDataSpecification> specifications = Collections.singleton(embeddedDataSpecification);
+		shell.setEmbeddedDataSpecifications(specifications);
+		assertEquals(specifications, shell.getEmbeddedDataSpecifications());
+	}
+	
+	@Test
+	public void testSecurity() {
+		Security security = new Security();
+		shell.setSecurity(security);
+		assertEquals(security, shell.getSecurity());
+	} 
+	
+	@Test
+	public void testSetParent() {
+		shell.setParent(REFERENCE);
+		assertEquals(REFERENCE, shell.getParent());
+	}
+	
+	@Test
+	public void testAddConceptDescription() {
+		IdentifierType idType = IdentifierType.IRI;
+		String id = "testId";
+		ConceptDescription description = new ConceptDescription();
+		description.setIdentification(idType, id);
+		description.setCategory("testCategory");
+		shell.addConceptDescription(description);
+		Collection<IConceptDictionary> dictionaries = new HashSet<IConceptDictionary>();
+		ConceptDictionary dictionary = new ConceptDictionary();
+		dictionary.addConceptDescription(description);
+		dictionaries.add(dictionary);
+		assertEquals(dictionaries, shell.getConceptDictionary());
+	}
 }
