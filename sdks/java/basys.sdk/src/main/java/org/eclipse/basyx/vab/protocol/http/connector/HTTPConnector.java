@@ -27,6 +27,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	
 	private String address;
 	private String mediaType;
+	private Client client;
 
 	/**
 	 * Invoke a BaSys get operation via HTTP GET
@@ -50,6 +51,9 @@ public class HTTPConnector implements IBaSyxConnector {
 		this.address = address;
 		this.mediaType = mediaType;
 		
+		// Create client
+		client = ClientBuilder.newClient();
+
 		logger.trace("Create with addr: {}", address);
 	}
 
@@ -152,11 +156,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	private String httpGet(String servicePath) throws ProviderException {
 		logger.trace("[HTTP Get] {}", VABPathTools.concatenatePaths(address, servicePath));
 
-		// Invoke service call via web services
-		Client client = ClientBuilder.newClient();
-
-		// Build web service URL
-		Builder request = buildRequest(client, VABPathTools.concatenatePaths(address, servicePath));
+		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
 		Response rsp = request.get();
@@ -168,11 +168,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	private String httpPut(String servicePath, String newValue) throws ProviderException {
 		logger.trace("[HTTP Put] {} [[ {} ]]", VABPathTools.concatenatePaths(address, servicePath), newValue);
 
-		// Invoke service call via web services
-		Client client = ClientBuilder.newClient();
-
-		// Build web service URL
-		Builder request = buildRequest(client, VABPathTools.concatenatePaths(address, servicePath));
+		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
 		Response rsp = request.put(Entity.entity(newValue, mediaType));
@@ -198,11 +194,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	private String httpPost(String servicePath, String parameter) throws ProviderException {
 		logger.trace("[HTTP Post] {} {}", VABPathTools.concatenatePaths(address, servicePath), parameter);
 
-		// Invoke service call via web services
-		Client client = ClientBuilder.newClient();
-
-		// Build web service URL
-		Builder request = buildRequest(client, VABPathTools.concatenatePaths(address, servicePath));
+		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
 		Response rsp = request.post(Entity.entity(parameter, mediaType));
@@ -214,11 +206,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	private String httpDelete(String servicePath) throws ProviderException {
 		logger.trace("[HTTP Delete] {}", VABPathTools.concatenatePaths(address, servicePath));
 
-		// Invoke service call via web services
-		Client client = ClientBuilder.newClient();
-
-		// Build web service URL
-		Builder request = buildRequest(client, VABPathTools.concatenatePaths(address, servicePath));
+		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
 		Response rsp = request.delete();
@@ -232,4 +220,15 @@ public class HTTPConnector implements IBaSyxConnector {
 
 		return httpPost(path, parameter);
 	}
+
+	/**
+	 * Create the builder depending on the service path
+	 * 
+	 * @param servicePath
+	 * @return
+	 */
+	private Builder retrieveBuilder(String servicePath) {
+		return buildRequest(client, VABPathTools.concatenatePaths(address, servicePath));
+	}
+
 }
