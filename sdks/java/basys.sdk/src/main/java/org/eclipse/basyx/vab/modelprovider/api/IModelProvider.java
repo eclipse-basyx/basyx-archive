@@ -5,23 +5,22 @@ import org.eclipse.basyx.vab.exception.provider.ProviderException;
 /**
  * Basic model provider backend interface
  * 
- * @author kuhn, pschorn
+ * @author kuhn, pschorn, schnicke
  *
  */
 public interface IModelProvider {
 
 	/**
-	 * Get a sub model property value
+	 * Gets a value stored in a given path
 	 * 
 	 * @param path
 	 *            Path to the requested value
-	 * @return Property value. Object type is assumed to be [Integer | ... |
-	 *         Collection]
+	 * @return Object type is assumed to be [Integer | ... | Collection]
 	 */
 	public Object getModelPropertyValue(String path) throws ProviderException;
 
 	/**
-	 * Sets or overrides existing property, operation or event.
+	 * Sets or overrides existing value in a given path
 	 * 
 	 * @param path
 	 *            Path to the requested value
@@ -31,7 +30,7 @@ public interface IModelProvider {
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException;
 
 	/**
-	 * Create a new property, operation, event submodel or aas under the given path
+	 * Create a new value under the given path
 	 * 
 	 * @param path
 	 *            Path to the entity where the element should be created
@@ -41,7 +40,7 @@ public interface IModelProvider {
 	public void createValue(String path, Object newEntity) throws ProviderException;
 
 	/**
-	 * Delete a property, operation, event, submodel or aas under the given path
+	 * Deletes value under the given path
 	 * 
 	 * @param path
 	 *            Path to the entity that should be deleted
