@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataeleme
 
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -30,6 +31,11 @@ public class ConnectedBlob extends ConnectedDataElement implements IBlob {
 	@Override
 	public String getMimeType() {
 		return (String) getProxy().getModelPropertyValue(Blob.MIMETYPE);
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.BLOB;
 	}
 }
 

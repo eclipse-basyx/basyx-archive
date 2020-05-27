@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.EntityType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.IEntity;
@@ -83,6 +84,11 @@ public class Entity extends SubmodelElement implements IEntity {
 	@SuppressWarnings("unchecked")
 	public IReference getAsset() {
 		return Reference.createAsFacade((Map<String, Object>) get(ASSET));
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.ENTITY;
 	}
 
 }

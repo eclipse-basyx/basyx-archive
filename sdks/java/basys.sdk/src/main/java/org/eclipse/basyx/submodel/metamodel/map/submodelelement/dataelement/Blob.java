@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement;
 
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -82,5 +83,10 @@ public class Blob extends DataElement implements IBlob {
 	@Override
 	public String getMimeType() {
 		return (String) get(Blob.MIMETYPE);
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.BLOB;
 	}
 }

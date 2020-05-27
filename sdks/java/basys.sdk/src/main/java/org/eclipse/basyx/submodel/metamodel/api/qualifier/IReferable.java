@@ -42,4 +42,6 @@ public interface IReferable {
 	 * @return
 	 */
 	public IReference getParent();
+
+	public IReference getReference();
 }

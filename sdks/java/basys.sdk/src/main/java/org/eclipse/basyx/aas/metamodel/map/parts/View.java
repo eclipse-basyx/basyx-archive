@@ -8,6 +8,7 @@ import java.util.Set;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
@@ -111,38 +112,47 @@ public class View extends VABModelMap<Object> implements IView {
 
 	@Override
 	public String getIdShort() {
-		return Referable.createAsFacade(this).getIdShort();
+		return Referable.createAsFacade(this, getKeyElement()).getIdShort();
 	}
 
 	@Override
 	public String getCategory() {
-		return Referable.createAsFacade(this).getCategory();
+		return Referable.createAsFacade(this, getKeyElement()).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return Referable.createAsFacade(this).getDescription();
+		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return Referable.createAsFacade(this).getParent();
+		return Referable.createAsFacade(this, getKeyElement()).getParent();
 	}
 
 	public void setIdShort(String idShort) {
-		Referable.createAsFacade(this).setIdShort(idShort);
+		Referable.createAsFacade(this, getKeyElement()).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {
-		Referable.createAsFacade(this).setCategory(category);
+		Referable.createAsFacade(this, getKeyElement()).setCategory(category);
 	}
 
 	public void setDescription(LangStrings description) {
-		Referable.createAsFacade(this).setDescription(description);
+		Referable.createAsFacade(this, getKeyElement()).setDescription(description);
 	}
 
 	public void setParent(IReference obj) {
-		Referable.createAsFacade(this).setParent(obj);
+		Referable.createAsFacade(this, getKeyElement()).setParent(obj);
+	}
+	
+	private KeyElements getKeyElement() {
+		return KeyElements.VIEW;
+	}
+
+	@Override
+	public IReference getReference() {
+		return Referable.createAsFacade(this, getKeyElement()).getReference();
 	}
 
 }

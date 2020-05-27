@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.restapi;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
@@ -46,7 +47,7 @@ public class SubmodelElementCollectionProvider extends MetaModelProvider {
 
 	private Map<String, Object> findElementInList(String idShort, Collection<Map<String, Object>> list) {
 		for (Map<String, Object> elem : list) {
-			if (idShort.equals(Referable.createAsFacade(elem).getIdShort())) {
+			if (idShort.equals(Referable.createAsFacade(elem, KeyElements.SUBMODELELEMENT).getIdShort())) {
 				return elem;
 			}
 		}

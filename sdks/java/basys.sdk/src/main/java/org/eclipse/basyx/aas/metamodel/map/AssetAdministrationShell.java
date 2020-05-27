@@ -2,6 +2,7 @@ package org.eclipse.basyx.aas.metamodel.map;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -130,16 +131,16 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return Identifiable.createAsFacade(this).getAdministration();
+		return Identifiable.createAsFacade(this, getKeyElement()).getAdministration();
 	}
 
 	@Override
 	public IIdentifier getIdentification() {
-		return Identifiable.createAsFacade(this).getIdentification();
+		return Identifiable.createAsFacade(this, getKeyElement()).getIdentification();
 	}
 
 	public void setAdministration(AdministrativeInformation information) {
-		Identifiable.createAsFacade(this).setAdministration(information);
+		Identifiable.createAsFacade(this, getKeyElement()).setAdministration(information);
 	}
 
 	public void setIdentification(IIdentifier id) {
@@ -147,7 +148,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	public void setIdentification(IdentifierType idType, String id) {
-		Identifiable.createAsFacade(this).setIdentification(idType, id);
+		Identifiable.createAsFacade(this, getKeyElement()).setIdentification(idType, id);
 	}
 
 	@Override
@@ -169,7 +170,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	public void setIdShort(String id) {
-		Referable.createAsFacade(this).setIdShort(id);
+		Referable.createAsFacade(this, getKeyElement()).setIdShort(id);
 	}
 
 	public void setSecurity(ISecurity security) {
@@ -214,6 +215,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 
 	@SuppressWarnings("unchecked")
 	public void setSubModels(Collection<SubmodelDescriptor> submodels) {
+		setSubmodelParent(submodels);
 		put(AssetAdministrationShell.SUBMODELDESCRIPTORS, submodels);
 
 		// Clear submodel references and add new keys
@@ -251,40 +253,41 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 
 	@Override
 	public String getIdShort() {
-		return Referable.createAsFacade(this).getIdShort();
+		return Referable.createAsFacade(this, getKeyElement()).getIdShort();
 	}
 
 	@Override
 	public String getCategory() {
-		return Referable.createAsFacade(this).getCategory();
+		return Referable.createAsFacade(this, getKeyElement()).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return Referable.createAsFacade(this).getDescription();
+		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return Referable.createAsFacade(this).getParent();
+		return Referable.createAsFacade(this, getKeyElement()).getParent();
 	}
 
 	public void setCategory(String category) {
-		Referable.createAsFacade(this).setCategory(category);
+		Referable.createAsFacade(this, getKeyElement()).setCategory(category);
 	}
 
 	public void setDescription(LangStrings description) {
-		Referable.createAsFacade(this).setDescription(description);
+		Referable.createAsFacade(this, getKeyElement()).setDescription(description);
 	}
 
 	public void setParent(IReference obj) {
-		Referable.createAsFacade(this).setParent(obj);
+		Referable.createAsFacade(this, getKeyElement()).setParent(obj);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void addSubModel(SubmodelDescriptor descriptor) {
 		logger.trace("adding Submodel", descriptor.getIdentifier().getId());
+		setSubmodelParent(Collections.singletonList(descriptor));
 		((Collection<SubmodelDescriptor>) get(AssetAdministrationShell.SUBMODELDESCRIPTORS)).add(descriptor);
 		addSubmodelReferences(descriptor);
 	}
@@ -331,5 +334,25 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		IIdentifier identifier = descriptor.getIdentifier();
 		Reference ref = new Reference(identifier, KeyElements.SUBMODEL, true);
 		addSubmodelReference(ref);
+	}
+	
+	private KeyElements getKeyElement() {
+		return KeyElements.ASSETADMINISTRATIONSHELL;
+	}
+	
+	/**
+	 * Set reference of current AAS to each SubModel of a collection
+	 * as a parent reference
+	 * @param submodels collection of Submodel Descriptor
+	 */
+	private void setSubmodelParent(Collection<SubmodelDescriptor> submodels) {
+		for (SubmodelDescriptor submodel : submodels) {
+			submodel.setParent(getReference());
+		}
+	}
+
+	@Override
+	public IReference getReference() {
+		return Identifiable.createAsFacade(this, getKeyElement()).getReference();
 	}
 }

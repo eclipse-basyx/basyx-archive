@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElement;
@@ -77,5 +78,10 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		}
 
 		return result;
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.OPERATION;
 	}
 }

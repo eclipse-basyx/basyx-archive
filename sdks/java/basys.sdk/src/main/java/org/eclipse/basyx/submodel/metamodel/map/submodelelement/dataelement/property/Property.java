@@ -140,4 +140,9 @@ public class Property extends DataElement implements IProperty {
 		Reference ref = new Reference(description, KeyElements.CONCEPTDESCRIPTION, true);
 		setSemanticID(ref);
 	}
+
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.PROPERTY;
+	}
 }

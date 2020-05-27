@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
@@ -89,5 +90,10 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	@SuppressWarnings("unchecked")
 	public IReference getSecond() {
 		return Reference.createAsFacade((Map<String, Object>) get(RelationshipElement.SECOND));
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.RELATIONSHIPELEMENT;
 	}
 }

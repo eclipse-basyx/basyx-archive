@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
@@ -49,7 +50,7 @@ public class ConnectedSubmodelElementFactory {
 		// Get the type and idShort for each element and create the corresponding connected variant
 		Map<String, ISubmodelElement> ret = new HashMap<>();
 		for (Map<String, Object> node : mapElemList) {
-			String idShort = Referable.createAsFacade(node).getIdShort();
+			String idShort = Referable.createAsFacade(node, KeyElements.SUBMODELELEMENT).getIdShort();
 			ISubmodelElement element = getConnectedSubmodelElement(rootProxy, elementPath, idShort, node);
 			ret.put(idShort, element);
 		}
@@ -73,7 +74,7 @@ public class ConnectedSubmodelElementFactory {
 		// Get the type and idShort for each element and create the corresponding connected variant
 		Collection<ISubmodelElement> ret = new ArrayList<>();
 		for (Map<String, Object> node : mapElemList) {
-			String idShort = Referable.createAsFacade(node).getIdShort();
+			String idShort = Referable.createAsFacade(node, KeyElements.SUBMODELELEMENT).getIdShort();
 			ISubmodelElement element = getConnectedSubmodelElement(rootProxy, elementPath, idShort, node);
 			ret.add(element);
 		}
@@ -127,7 +128,7 @@ public class ConnectedSubmodelElementFactory {
 		// Get the type and idShort for each operation and create the corresponding connected variant
 		Map<String, IOperation> ret = new HashMap<>();
 		for (Map<String, Object> node : mapElemList) {
-			String idShort = Referable.createAsFacade(node).getIdShort();
+			String idShort = Referable.createAsFacade(node, KeyElements.OPERATION).getIdShort();
 			String subPath = VABPathTools.concatenatePaths(elementPath, idShort);
 			VABElementProxy proxy = rootProxy.getDeepProxy(subPath);
 			if (Operation.isOperation(node)) {
@@ -155,7 +156,7 @@ public class ConnectedSubmodelElementFactory {
 		// Get the type and idShort for each operation and create the corresponding connected variant
 		Map<String, IDataElement> ret = new HashMap<>();
 		for (Map<String, Object> node : mapElemList) {
-			String idShort = Referable.createAsFacade(node).getIdShort();
+			String idShort = Referable.createAsFacade(node, KeyElements.DATAELEMENT).getIdShort();
 			String subPath = VABPathTools.concatenatePaths(elementPath, idShort);
 			VABElementProxy proxy = rootProxy.getDeepProxy(subPath);
 			if (Property.isProperty(node)) {

@@ -7,6 +7,7 @@ import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataS
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedElement;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
@@ -28,24 +29,28 @@ public abstract class ConnectedSubmodelElement extends ConnectedElement implemen
 		super(proxy);		
 	}
 
+	protected KeyElements getKeyElement() {
+		return KeyElements.SUBMODELELEMENT;
+	}
+	
 	@Override
 	public String getIdShort() {
-		return Referable.createAsFacade(getElem()).getIdShort();
+		return Referable.createAsFacade(getElem(), getKeyElement()).getIdShort();
 	}
 
 	@Override
 	public String getCategory() {
-		return Referable.createAsFacade(getElem()).getCategory();
+		return Referable.createAsFacade(getElem(), getKeyElement()).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return Referable.createAsFacade(getElem()).getDescription();
+		return Referable.createAsFacade(getElem(), getKeyElement()).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return Referable.createAsFacade(getElem()).getParent();
+		return Referable.createAsFacade(getElem(), getKeyElement()).getParent();
 	}
 
 	@Override
@@ -78,5 +83,10 @@ public abstract class ConnectedSubmodelElement extends ConnectedElement implemen
 	@SuppressWarnings("unchecked")
 	public String getModelType() {
 		return (String) ((Map<String, Object>) getElem().get(ModelType.MODELTYPE)).get(ModelType.NAME);
+	}
+	
+	@Override
+	public IReference getReference() {
+		return Referable.createAsFacade(getElem(), getKeyElement()).getReference();
 	}
 }

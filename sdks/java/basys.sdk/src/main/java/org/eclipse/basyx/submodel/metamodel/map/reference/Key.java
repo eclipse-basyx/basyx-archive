@@ -115,4 +115,9 @@ public class Key extends VABModelMap<Object> implements IKey {
 	public void setIdType(KeyType idType) {
 		put(Key.IDTYPE, idType.toString());
 	}
+
+	@Override
+	public String toString() {
+		return "Key [getType()=" + getType() + ", isLocal()=" + isLocal() + ", getValue()=" + getValue() + ", getIdType()=" + getIdType() + "]";
+	}
 }

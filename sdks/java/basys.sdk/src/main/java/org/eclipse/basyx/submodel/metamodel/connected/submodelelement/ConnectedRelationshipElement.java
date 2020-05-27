@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
@@ -39,5 +40,10 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 	@Override
 	public IReference getSecond() {
 		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(RelationshipElement.SECOND));
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.RELATIONSHIPELEMENT;
 	}
 }

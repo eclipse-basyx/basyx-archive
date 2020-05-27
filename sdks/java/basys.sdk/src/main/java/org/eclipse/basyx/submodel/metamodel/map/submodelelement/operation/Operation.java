@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
@@ -172,16 +173,21 @@ public class Operation extends SubmodelElement implements IOperation {
 
 	@Override
 	public String getIdShort() {
-		return Referable.createAsFacade(this).getIdShort();
+		return Referable.createAsFacade(this, getKeyElement()).getIdShort();
 	}
 
 	@Override
 	public String getCategory() {
-		return Referable.createAsFacade(this).getCategory();
+		return Referable.createAsFacade(this, getKeyElement()).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return Referable.createAsFacade(this).getDescription();
+		return Referable.createAsFacade(this, getKeyElement()).getDescription();
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.OPERATION;
 	}
 }

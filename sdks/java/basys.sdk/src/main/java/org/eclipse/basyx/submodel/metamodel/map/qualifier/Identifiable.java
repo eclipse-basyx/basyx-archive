@@ -6,6 +6,8 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 
 /**
@@ -52,13 +54,14 @@ public class Identifiable extends Referable implements IIdentifiable {
 	 *            a Identifiable object as raw map
 	 * @return a Identifiable object, that behaves like a facade for the given map
 	 */
-	public static Identifiable createAsFacade(Map<String, Object> map) {
+	public static Identifiable createAsFacade(Map<String, Object> map, KeyElements type) {
 		if (map == null) {
 			return null;
 		}
 
 		Identifiable ret = new Identifiable();
 		ret.setMap(map);
+		ret.setElementType(type);
 		return ret;
 	}
 
@@ -80,6 +83,22 @@ public class Identifiable extends Referable implements IIdentifiable {
 
 	public void setIdentification(IdentifierType idType, String id) {
 		put(Identifiable.IDENTIFICATION, new Identifier(idType, id));
+	}
+
+	@Override
+	protected String getId() {
+		return getIdentification().getId();
+	}
+
+	@Override
+	protected KeyType getKeyType() {
+		// KeyType and IdentifierType are virtually the same, so convert them here
+		return KeyType.fromString(getIdentification().getIdType().toString());
+	}
+
+	@Override
+	protected boolean isLocal() {
+		return true;
 	}
 
 }

@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.event;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.event.IBasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
@@ -27,6 +28,11 @@ public class BasicEvent extends SubmodelElement implements IBasicEvent {
 	public BasicEvent(IReference observed) {
 		this();
 		put(OBSERVED, observed);
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.BASICEVENT;
 	}
 	
 	/**

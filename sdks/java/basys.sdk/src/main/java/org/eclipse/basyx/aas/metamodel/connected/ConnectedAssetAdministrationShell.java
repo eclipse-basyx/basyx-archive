@@ -22,6 +22,7 @@ import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataS
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedVABModelMap;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -67,12 +68,12 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return Identifiable.createAsFacade(getElem()).getAdministration();
+		return Identifiable.createAsFacade(getElem(), getKeyElement()).getAdministration();
 	}
 
 	@Override
 	public IIdentifier getIdentification() {
-		return Identifiable.createAsFacade(getElem()).getIdentification();
+		return Identifiable.createAsFacade(getElem(), getKeyElement()).getIdentification();
 	}
 
 	@Override
@@ -146,6 +147,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 
 	@Override
 	public void addSubModel(SubmodelDescriptor subModel) {
+		subModel.setParent(getReference());
 		getProxy().createValue("/aas/submodels", subModel);
 	}
 
@@ -161,7 +163,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 
 	@Override
 	public LangStrings getDescription() {
-		return Referable.createAsFacade(getElem()).getDescription();
+		return Referable.createAsFacade(getElem(), getKeyElement()).getDescription();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -179,5 +181,14 @@ public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Obje
 	@Override
 	public IReference getAssetReference() {
 		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(AssetAdministrationShell.ASSETREF));
+	}
+	
+	private KeyElements getKeyElement() {
+		return KeyElements.ASSETADMINISTRATIONSHELL;
+	} 
+
+	@Override
+	public IReference getReference() {
+		return Identifiable.createAsFacade(getElem(), getKeyElement()).getReference();
 	}
 }

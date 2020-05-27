@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
@@ -76,6 +77,11 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 	@SuppressWarnings("unchecked")
 	public IReference getValue() {
 		return Reference.createAsFacade((Map<String, Object>) get(Property.VALUE));
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.REFERENCEELEMENT;
 	}
 
 }

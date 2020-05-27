@@ -116,5 +116,9 @@ public class Reference extends VABModelMap<Object> implements IReference {
 		put(Reference.KEY, copy);
 	}
 
+	@Override
+	public String toString() {
+		return "Reference [getKeys()=" + getKeys() + "]";
+	}
 
 }

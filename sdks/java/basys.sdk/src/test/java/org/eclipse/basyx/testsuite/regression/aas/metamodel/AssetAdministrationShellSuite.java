@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
@@ -171,4 +172,23 @@ public abstract class AssetAdministrationShellSuite {
 		assertEquals(EXPECTED_ADMINISTRATIVEINFORMATION.getRevision(), info.getRevision());
 		assertEquals(EXPECTED_ADMINISTRATIVEINFORMATION.getVersion(), info.getVersion());
 	}
+	
+	@Test
+	public void testAddSubmodel() {
+		// Create a submodel
+		String smId = "newSubmodelId";
+		SubModel subModel = new SubModel(Collections.singletonList(new Property("testProperty")));
+		subModel.setIdShort(smId);
+		
+		// Create a submodel descriptor using the submodel
+		SubmodelDescriptor descriptor = new SubmodelDescriptor(subModel, "http://dummy.com");
+		
+		//Retrieve the aas
+		IAssetAdministrationShell shell = retrieveShell();
+		shell.addSubModel(descriptor);
+		
+		// Create the expected reference for assertion
+		Reference expected = new Reference(new Key(KeyElements.ASSETADMINISTRATIONSHELL, true, "", IdentifierType.IRDI));
+		assertEquals(expected, descriptor.getParent());
+	} 
 }

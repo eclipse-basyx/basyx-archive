@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement;
 
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -85,5 +86,10 @@ public class File extends DataElement implements IFile{
 	@Override
 	public String getMimeType() {
 		return (String) get(File.MIMETYPE);
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.FILE;
 	}
 }

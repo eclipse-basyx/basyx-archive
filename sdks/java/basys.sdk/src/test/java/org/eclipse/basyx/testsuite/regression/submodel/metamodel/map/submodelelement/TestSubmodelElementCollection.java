@@ -13,6 +13,7 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
@@ -140,6 +141,7 @@ public class TestSubmodelElementCollection {
 		String newIdShort = "newIdShort";
 		property.put(Referable.IDSHORT, newIdShort);
 		collection.addElement(property);
+		assertEquals(new Reference(new Key(KeyElements.SUBMODELELEMENTCOLLECTION, true, "", KeyType.IDSHORT)), property.getParent());
 		Map<String, ISubmodelElement> submodelElements = new HashMap<String, ISubmodelElement>();
 		submodelElements.put(PROPERTY_ID, getDataElement());
 		submodelElements.put(OPERATION_ID, getOperation());

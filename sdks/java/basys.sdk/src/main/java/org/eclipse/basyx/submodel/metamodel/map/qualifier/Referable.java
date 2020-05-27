@@ -1,10 +1,16 @@
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
@@ -22,6 +28,8 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 	public static final String DESCRIPTION="description";
 	
 	public static final String PARENT="parent";
+
+	private KeyElements elem;
 
 	/**
 	 * Constructor
@@ -71,13 +79,15 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 	 *            a Referable object as raw map
 	 * @return a Referable object, that behaves like a facade for the given map
 	 */
-	public static Referable createAsFacade(Map<String, Object> map) {
+	public static Referable createAsFacade(Map<String, Object> map, KeyElements type) {
 		if (map == null) {
 			return null;
 		}
 
 		Referable ret = new Referable();
 		ret.setMap(map);
+		ret.setElementType(type);
+
 		return ret;
 	}
 
@@ -115,8 +125,40 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 		put(Referable.DESCRIPTION, description);
 	}
 
+	/**
+	 * Sets the parent and additionally updates the own reference
+	 * 
+	 * @param obj
+	 */
 	public void setParent(IReference obj) {
 		put(Referable.PARENT, obj);
+	}
+
+	protected void setElementType(KeyElements elem) {
+		this.elem = elem;
+	}
+
+	protected KeyType getKeyType() {
+		return KeyType.IDSHORT;
+	}
+
+	protected String getId() {
+		return getIdShort();
+	}
+
+	protected boolean isLocal() {
+		return true;
+	}
+
+	@Override
+	public IReference getReference() {
+		List<IKey> keys = new ArrayList<>();
+		IReference parent = getParent();
+		if (parent != null) {
+			keys.addAll(parent.getKeys());
+		}
+		keys.add(new Key(elem, isLocal(), getId(), getKeyType()));
+		return new Reference(keys);
 	}
 
 }

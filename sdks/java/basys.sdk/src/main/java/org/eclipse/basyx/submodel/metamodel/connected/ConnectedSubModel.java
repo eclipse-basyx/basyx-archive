@@ -10,6 +10,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInforma
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
@@ -23,6 +24,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -39,6 +41,10 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 		super(proxy);
 	}
 
+	protected KeyElements getKeyElement() {
+		return KeyElements.SUBMODELELEMENT;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getSemanticId() {
@@ -52,7 +58,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 
 	@Override
 	public IIdentifier getIdentification() {
-		return Identifiable.createAsFacade(getElem()).getIdentification();
+		return Identifiable.createAsFacade(getElem(), getKeyElement()).getIdentification();
 	}
 
 	@Override
@@ -82,7 +88,7 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 
 	@Override
 	public LangStrings getDescription() {
-		return Referable.createAsFacade(getElem()).getDescription();
+		return Referable.createAsFacade(getElem(), getKeyElement()).getDescription();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -98,6 +104,10 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 
 	@Override
 	public void addSubModelElement(ISubmodelElement element) {
+		if (element instanceof SubmodelElement) {
+			((SubmodelElement) element).setParent(getReference());
+		}
+		
 		if (element instanceof IDataElement) {
 			getProxy().createValue(SubmodelElementProvider.DATAELEMENTS, element);
 		} else if (element instanceof IOperation) {
@@ -123,5 +133,10 @@ public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements I
 	public Map<String, ISubmodelElement> getSubmodelElements() {
 		return ConnectedSubmodelElementFactory.getConnectedSubmodelElements(getProxy(),
 				SubmodelElementProvider.ELEMENTS, SubmodelElementProvider.ELEMENTS);
+	}
+
+	@Override
+	public IReference getReference() {
+		return Identifiable.createAsFacade(getElem(), getKeyElement()).getReference();
 	}
 }

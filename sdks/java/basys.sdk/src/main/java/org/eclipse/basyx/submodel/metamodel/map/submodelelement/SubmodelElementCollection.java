@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
@@ -97,6 +98,9 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	 */
 	@SuppressWarnings("unchecked")
 	public void addElement(ISubmodelElement elem) {
+		if (elem instanceof SubmodelElement) {
+			((SubmodelElement) elem).setParent(getReference());
+		}
 		((List<Object>) get(Property.VALUE)).add(elem);
 	}
 
@@ -113,17 +117,17 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 
 	@Override
 	public String getIdShort() {
-		return Referable.createAsFacade(this).getIdShort();
+		return Referable.createAsFacade(this, getKeyElement()).getIdShort();
 	}
 
 	@Override
 	public String getCategory() {
-		return Referable.createAsFacade(this).getCategory();
+		return Referable.createAsFacade(this, getKeyElement()).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return Referable.createAsFacade(this).getDescription();
+		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
 
 	public void setValue(Collection<ISubmodelElement> value) {
@@ -188,7 +192,7 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		for (Object smElemO : smElems) {
 			Map<String, Object> smElem = (Map<String, Object>) smElemO;
 			if (DataElement.isDataElement(smElem)) {
-				String idShort = Referable.createAsFacade(smElem).getIdShort();
+				String idShort = Referable.createAsFacade(smElem, KeyElements.DATAELEMENT).getIdShort();
 				IDataElement dataElement = (IDataElement) SubmodelElementFacadeFactory.createSubmodelElement(smElem);
 				ret.put(idShort, dataElement);
 			}
@@ -204,10 +208,15 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		for (Object smElemO : smElems) {
 			Map<String, Object> smElem = (Map<String, Object>) smElemO;
 			if (Operation.isOperation(smElem)) {
-				String idShort = Referable.createAsFacade(smElem).getIdShort();
+				String idShort = Referable.createAsFacade(smElem, KeyElements.OPERATION).getIdShort();
 				ret.put(idShort, Operation.createAsFacade(smElem));
 			}
 		}
 		return ret;
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.SUBMODELELEMENTCOLLECTION;
 	}
 }

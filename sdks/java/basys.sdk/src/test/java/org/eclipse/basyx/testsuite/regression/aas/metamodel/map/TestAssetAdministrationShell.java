@@ -3,6 +3,7 @@ package org.eclipse.basyx.testsuite.regression.aas.metamodel.map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,11 +20,13 @@ import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataS
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.dataspecification.EmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.testsuite.regression.aas.metamodel.AssetAdministrationShellSuite;
 import org.junit.Before;
 import org.junit.Test;
@@ -148,4 +151,30 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 		dictionaries.add(dictionary);
 		assertEquals(dictionaries, shell.getConceptDictionary());
 	}
+	
+	@Test
+	public void testSetSubmodels() {
+		// Create submodels
+		SubModel subModel1 = new SubModel(Collections.singletonList(new Property("testProperty1")));
+		subModel1.setIdShort("newSubmodelId1");
+		SubModel subModel2 = new SubModel(Collections.singletonList(new Property("testProperty2")));
+		subModel1.setIdShort("newSubmodelId2");
+		
+		// Create submodel descriptors using the submodels
+		SubmodelDescriptor descriptor1 = new SubmodelDescriptor(subModel1, "http://dummy1.com");
+		SubmodelDescriptor descriptor2 = new SubmodelDescriptor(subModel2, "http://dummy2.com");
+		
+		// create a collection of descriptors and add the above descriptors
+		Collection<SubmodelDescriptor> descriptors = new ArrayList<SubmodelDescriptor>();
+		descriptors.add(descriptor1);
+		descriptors.add(descriptor2);
+		
+		shell.setSubModels(descriptors);
+		
+		// create expected parent reference for assertion
+		Reference expected = new Reference(new Key(KeyElements.ASSETADMINISTRATIONSHELL, true, "", IdentifierType.IRDI));
+		assertEquals(expected, descriptor1.getParent());
+		assertEquals(expected, descriptor2.getParent());
+		
+	} 
 }

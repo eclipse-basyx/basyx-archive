@@ -10,6 +10,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -109,20 +110,20 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return Identifiable.createAsFacade(this).getAdministration();
+		return Identifiable.createAsFacade(this, getKeyElement()).getAdministration();
 	}
 
 	@Override
 	public IIdentifier getIdentification() {
-		return Identifiable.createAsFacade(this).getIdentification();
+		return Identifiable.createAsFacade(this, getKeyElement()).getIdentification();
 	}
 
 	public void setAdministration(AdministrativeInformation information) {
-		Identifiable.createAsFacade(this).setAdministration(information);
+		Identifiable.createAsFacade(this, getKeyElement()).setAdministration(information);
 	}
 
 	public void setIdentification(IdentifierType idType, String id) {
-		Identifiable.createAsFacade(this).setIdentification(idType, id);
+		Identifiable.createAsFacade(this, getKeyElement()).setIdentification(idType, id);
 	}
 
 	@Override
@@ -136,38 +137,38 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 	}
 	@Override
 	public String getIdShort() {
-		return Referable.createAsFacade(this).getIdShort();
+		return Referable.createAsFacade(this, getKeyElement()).getIdShort();
 	}
 
 	@Override
 	public String getCategory() {
-		return Referable.createAsFacade(this).getCategory();
+		return Referable.createAsFacade(this, getKeyElement()).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return Referable.createAsFacade(this).getDescription();
+		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return Referable.createAsFacade(this).getParent();
+		return Referable.createAsFacade(this, getKeyElement()).getParent();
 	}
 
 	public void setIdShort(String idShort) {
-		Referable.createAsFacade(this).setIdShort(idShort);
+		Referable.createAsFacade(this, getKeyElement()).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {
-		Referable.createAsFacade(this).setCategory(category);
+		Referable.createAsFacade(this, getKeyElement()).setCategory(category);
 	}
 
 	public void setDescription(LangStrings description) {
-		Referable.createAsFacade(this).setDescription(description);
+		Referable.createAsFacade(this, getKeyElement()).setDescription(description);
 	}
 
 	public void setParent(IReference obj) {
-		Referable.createAsFacade(this).setParent(obj);
+		Referable.createAsFacade(this, getKeyElement()).setParent(obj);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -178,6 +179,15 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 
 	public void setBillOfMaterial(Reference reference) {
 		put(Asset.BILLOFMATERIAL, reference);
+	}
+	
+	private KeyElements getKeyElement() {
+		return KeyElements.ASSET;
+	}
+
+	@Override
+	public IReference getReference() {
+		return Identifiable.createAsFacade(this, getKeyElement()).getReference();
 	}
 
 }

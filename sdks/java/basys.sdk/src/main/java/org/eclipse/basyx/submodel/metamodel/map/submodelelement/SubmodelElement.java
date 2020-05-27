@@ -7,6 +7,7 @@ import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataS
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -70,38 +71,42 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 
 	@Override
 	public String getIdShort() {
-		return Referable.createAsFacade(this).getIdShort();
+		return Referable.createAsFacade(this, getKeyElement()).getIdShort();
+	}
+
+	protected KeyElements getKeyElement() {
+		return KeyElements.SUBMODELELEMENT;
 	}
 
 	@Override
 	public String getCategory() {
-		return Referable.createAsFacade(this).getCategory();
+		return Referable.createAsFacade(this, getKeyElement()).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return Referable.createAsFacade(this).getDescription();
+		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return Referable.createAsFacade(this).getParent();
+		return Referable.createAsFacade(this, getKeyElement()).getParent();
 	}
 
 	public void setIdShort(String idShort) {
-		Referable.createAsFacade(this).setIdShort(idShort);
+		Referable.createAsFacade(this, getKeyElement()).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {
-		Referable.createAsFacade(this).setCategory(category);
+		Referable.createAsFacade(this, getKeyElement()).setCategory(category);
 	}
 
 	public void setDescription(LangStrings description) {
-		Referable.createAsFacade(this).setDescription(description);
+		Referable.createAsFacade(this, getKeyElement()).setDescription(description);
 	}
 
 	public void setParent(IReference obj) {
-		Referable.createAsFacade(this).setParent(obj);
+		Referable.createAsFacade(this, getKeyElement()).setParent(obj);
 	}
 
 	public void setQualifier(Collection<IConstraint> qualifiers) {
@@ -135,5 +140,10 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 	@SuppressWarnings("unchecked")
 	public String getModelType() {
 		return (String) ((Map<String, Object>) get(ModelType.MODELTYPE)).get(ModelType.NAME);
+	}
+
+	@Override
+	public IReference getReference() {
+		return Referable.createAsFacade(this, getKeyElement()).getReference();
 	}
 }

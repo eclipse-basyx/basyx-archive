@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IMultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -66,5 +67,10 @@ public class MultiLanguageProperty extends DataElement implements IMultiLanguage
 	@SuppressWarnings("unchecked")
 	public LangStrings getValue() {
 		return LangStrings.createAsFacade((Collection<Map<String, Object>>) get(VALUE));
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.MULTILANGUAGEPROPERTY;
 	}
 }

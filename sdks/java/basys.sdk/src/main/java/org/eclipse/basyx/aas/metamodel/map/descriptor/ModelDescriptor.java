@@ -8,9 +8,11 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 
 /**
  * Abstract class for a model descriptor that contains:
@@ -63,7 +65,8 @@ public abstract class ModelDescriptor extends HashMap<String, Object> {
 	}
 	
 	public String getIdShort() {
-		return Referable.createAsFacade(this).getIdShort();
+		// Passing null in KeyElement type since it doesn't matter while only retrieving idShort
+		return Referable.createAsFacade(this, null).getIdShort();
 	}
 
 	/**
@@ -98,5 +101,22 @@ public abstract class ModelDescriptor extends HashMap<String, Object> {
 		} else {
 			return new ArrayList<>();
 		}
+	}
+	
+	/**
+	 * Set parent of a descriptor
+	 * @param obj Reference of the parent element
+	 */
+	public void setParent(IReference obj) {
+		put(Referable.PARENT, obj);
+	}
+	
+	/**
+	 * Get parent of a descriptor
+	 * @return Reference of the parent element
+	 */
+	@SuppressWarnings("unchecked")
+	public IReference getParent() {
+		return Reference.createAsFacade((Map<String, Object>) get(Referable.PARENT));
 	}
 }

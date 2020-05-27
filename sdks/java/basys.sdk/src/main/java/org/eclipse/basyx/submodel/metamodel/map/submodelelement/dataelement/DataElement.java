@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement;
 
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
@@ -23,5 +24,10 @@ public class DataElement extends SubmodelElement implements IDataElement {
 		return MODELTYPE.equals(modelType) || Property.isProperty(map) || Blob.isBlob(map) || File.isFile(map)
 				|| Range.isRange(map) || MultiLanguageProperty.isMultiLanguageProperty(map)
 				|| ReferenceElement.isReferenceElement(map);
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.DATAELEMENT;
 	}
 }

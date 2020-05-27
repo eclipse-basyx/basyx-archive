@@ -16,6 +16,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInforma
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
@@ -28,6 +29,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.model.VABModelMap;
@@ -129,20 +131,20 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return Identifiable.createAsFacade(this).getAdministration();
+		return Identifiable.createAsFacade(this, getKeyElement()).getAdministration();
 	}
 
 	@Override
 	public IIdentifier getIdentification() {
-		return Identifiable.createAsFacade(this).getIdentification();
+		return Identifiable.createAsFacade(this, getKeyElement()).getIdentification();
 	}
 
 	public void setAdministration(AdministrativeInformation information) {
-		Identifiable.createAsFacade(this).setAdministration(information);
+		Identifiable.createAsFacade(this, getKeyElement()).setAdministration(information);
 	}
 
 	public void setIdentification(IdentifierType idType, String id) {
-		Identifiable.createAsFacade(this).setIdentification(idType, id);
+		Identifiable.createAsFacade(this, getKeyElement()).setIdentification(idType, id);
 	}
 
 	@Override
@@ -174,11 +176,11 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 
 	@Override
 	public String getIdShort() {
-		return Referable.createAsFacade(this).getIdShort();
+		return Referable.createAsFacade(this, getKeyElement()).getIdShort();
 	}
 
 	public void setIdShort(String id) {
-		Referable.createAsFacade(this).setIdShort(id);
+		Referable.createAsFacade(this, getKeyElement()).setIdShort(id);
 	}
 
 	public void setDataElements(Map<String, IDataElement> properties) {
@@ -209,33 +211,40 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 
 	@Override
 	public String getCategory() {
-		return Referable.createAsFacade(this).getCategory();
+		return Referable.createAsFacade(this, getKeyElement()).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return Referable.createAsFacade(this).getDescription();
+		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return Referable.createAsFacade(this).getParent();
+		return Referable.createAsFacade(this, getKeyElement()).getParent();
 	}
 
 	public void setCategory(String category) {
-		Referable.createAsFacade(this).setCategory(category);
+		Referable.createAsFacade(this, getKeyElement()).setCategory(category);
 	}
 
 	public void setDescription(LangStrings description) {
-		Referable.createAsFacade(this).setDescription(description);
+		Referable.createAsFacade(this, getKeyElement()).setDescription(description);
 	}
 
 	public void setParent(IReference obj) {
-		Referable.createAsFacade(this).setParent(obj);
+		Referable.createAsFacade(this, getKeyElement()).setParent(obj);
+	}
+
+	private KeyElements getKeyElement() {
+		return KeyElements.SUBMODEL;
 	}
 
 	@Override
 	public void addSubModelElement(ISubmodelElement element) {
+		if (element instanceof SubmodelElement) {
+			((SubmodelElement) element).setParent(getReference());
+		}
 		elements.put(element.getIdShort(), element);
 	}
 
@@ -268,5 +277,10 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	@Override
 	public Collection<IConstraint> getQualifier() {
 		return Qualifiable.createAsFacade(this).getQualifier();
+	}
+
+	@Override
+	public IReference getReference() {
+		return Identifiable.createAsFacade(this, getKeyElement()).getReference();
 	}
 }

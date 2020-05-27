@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataeleme
 
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
@@ -46,6 +47,11 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 	@SuppressWarnings("unchecked")
 	protected <T> T retrieveObject() {
 		return (T) ((Map<String, Object>) getProxy().getModelPropertyValue(Property.VALUE)).get(Property.VALUE);
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.PROPERTY;
 	}
 
 }

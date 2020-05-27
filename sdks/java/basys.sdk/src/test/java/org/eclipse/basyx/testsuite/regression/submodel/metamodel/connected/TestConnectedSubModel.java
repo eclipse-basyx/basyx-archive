@@ -205,6 +205,21 @@ public class TestConnectedSubModel {
 	}
 	
 	/**
+	 * Tests if the adding a submodel element is correctly done
+	 * Also checks the addition of parent reference to the submodel
+	 */
+	@Test
+	public void addSubModelElementTest() {
+		Property property = new Property("testProperty");
+		property.setIdShort("testIdShort");
+		submodel.addSubModelElement(property);
+		
+		// creates an expected reference for assertion
+		Reference expected = new Reference(new Key(KeyElements.SUBMODELELEMENT, true, "", IdentifierType.IRDI));
+		assertEquals(expected, property.getParent());
+	} 
+	
+	/**
 	 * Generates test IDataElements
 	 */
 	private Map<String, IDataElement> getTestDataElements() {

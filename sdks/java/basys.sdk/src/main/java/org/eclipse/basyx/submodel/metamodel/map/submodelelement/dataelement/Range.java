@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement;
 
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IRange;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 
@@ -70,6 +71,11 @@ public class Range extends DataElement implements IRange {
 	@Override
 	public Object getMax() {
 		return get(MAX);
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.RANGE;
 	}
 
 }

@@ -63,38 +63,38 @@ public class ConceptDictionary extends VABModelMap<Object> implements IConceptDi
 
 	@Override
 	public String getIdShort() {
-		return Referable.createAsFacade(this).getIdShort();
+		return Referable.createAsFacade(this, getKeyElement()).getIdShort();
 	}
 
 	@Override
 	public String getCategory() {
-		return Referable.createAsFacade(this).getCategory();
+		return Referable.createAsFacade(this, getKeyElement()).getCategory();
 	}
 
 	@Override
 	public LangStrings getDescription() {
-		return Referable.createAsFacade(this).getDescription();
+		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
 
 	@Override
 	public IReference getParent() {
-		return Referable.createAsFacade(this).getParent();
+		return Referable.createAsFacade(this, getKeyElement()).getParent();
 	}
 
 	public void setIdShort(String idShort) {
-		Referable.createAsFacade(this).setIdShort(idShort);
+		Referable.createAsFacade(this, getKeyElement()).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {
-		Referable.createAsFacade(this).setCategory(category);
+		Referable.createAsFacade(this, getKeyElement()).setCategory(category);
 	}
 
 	public void setDescription(LangStrings description) {
-		Referable.createAsFacade(this).setDescription(description);
+		Referable.createAsFacade(this, getKeyElement()).setDescription(description);
 	}
 
 	public void setParent(IReference obj) {
-		Referable.createAsFacade(this).setParent(obj);
+		Referable.createAsFacade(this, getKeyElement()).setParent(obj);
 	}
 
 	@Override
@@ -149,5 +149,14 @@ public class ConceptDictionary extends VABModelMap<Object> implements IConceptDi
 	@Override
 	public Collection<IConceptDescription> getConceptDescriptions() {
 		return ((Collection<IConceptDescription>) get(CONCEPTDESCRIPTIONS));
+	}
+	
+	private KeyElements getKeyElement() {
+		return KeyElements.CONCEPTDICTIONARY;
+	}
+
+	@Override
+	public IReference getReference() {
+		return Referable.createAsFacade(this, getKeyElement()).getReference();
 	}
 }

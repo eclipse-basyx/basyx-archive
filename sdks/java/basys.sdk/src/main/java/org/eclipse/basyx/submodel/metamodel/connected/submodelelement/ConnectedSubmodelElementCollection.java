@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
@@ -50,5 +51,10 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	@Override
 	public Map<String, IOperation> getOperations() {
 		return ConnectedSubmodelElementFactory.getOperations(getProxy(), Property.VALUE, "");
+	}
+	
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.SUBMODELELEMENTCOLLECTION;
 	}
 }
