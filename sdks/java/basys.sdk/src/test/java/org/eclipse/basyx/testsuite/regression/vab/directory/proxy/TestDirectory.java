@@ -5,9 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
-import org.eclipse.basyx.vab.directory.proxy.VABDirectoryProxy;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
-import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +19,7 @@ import org.junit.Test;
  */
 public abstract class TestDirectory {
 	// The registry proxy that is used to access the backend
-	protected final IVABDirectoryService proxy = new VABDirectoryProxy(getProxyProvider());
+	protected final IVABDirectoryService registry = getRegistry();
 
 	// Ids and endpoints for registered elements
 	protected String elem1 = "elem1";
@@ -35,7 +33,7 @@ public abstract class TestDirectory {
 	 * Getter for the tested registry provider. Tests for actual registry provider
 	 * have to realize this method.
 	 */
-	protected abstract IModelProvider getProxyProvider();
+	protected abstract IVABDirectoryService getRegistry();
 
 	/**
 	 * During setup of the tests, new entries are created in the registry using a
@@ -44,8 +42,8 @@ public abstract class TestDirectory {
 	@Before
 	public void setUp() {
 		// Register Elements
-		proxy.addMapping(elem1, endpoint1);
-		proxy.addMapping(elem2, endpoint2);
+		registry.addMapping(elem1, endpoint1);
+		registry.addMapping(elem2, endpoint2);
 	}
 
 	/**
@@ -53,8 +51,8 @@ public abstract class TestDirectory {
 	 */
 	@After
 	public void tearDown() {
-		proxy.removeMapping(elem1);
-		proxy.removeMapping(elem2);
+		registry.removeMapping(elem1);
+		registry.removeMapping(elem2);
 	}
 
 	/**
@@ -63,12 +61,12 @@ public abstract class TestDirectory {
 	@Test
 	public void testGetSingleElement() {
 		// Retrieve and check the first Element
-		String result = proxy.lookup(elem1);
+		String result = registry.lookup(elem1);
 		assertEquals(endpoint1, result);
 
 
 		// Retrieve and check the second AAS
-		result = proxy.lookup(elem2);
+		result = registry.lookup(elem2);
 		assertEquals(endpoint2, result);
 	}
 
@@ -78,31 +76,31 @@ public abstract class TestDirectory {
 	@Test
 	public void testDeleteCall() {
 		// After the setup, both Elements should have been inserted to the registry
-		assertNotNull(proxy.lookup(elem1));
-		assertNotNull(proxy.lookup(elem2));
+		assertNotNull(registry.lookup(elem1));
+		assertNotNull(registry.lookup(elem2));
 
-		proxy.removeMapping(elem2);
+		registry.removeMapping(elem2);
 
 		// After elem2 has been deleted, only elem1 should be registered
-		assertNotNull(proxy.lookup(elem1));
+		assertNotNull(registry.lookup(elem1));
 		try {
-			proxy.lookup(elem2);
+			registry.lookup(elem2);
 			fail();
 		} catch (ResourceNotFoundException e) {
 			// Expected
 		}
 
-		proxy.removeMapping(elem1);
+		registry.removeMapping(elem1);
 
 		// After elem2 has been deleted, no element should be registered
 		try {
-			proxy.lookup(elem1);
+			registry.lookup(elem1);
 			fail();
 		} catch (ResourceNotFoundException e) {
 			// Expected
 		}
 		try {
-			proxy.lookup(elem2);
+			registry.lookup(elem2);
 			fail();
 		} catch (ResourceNotFoundException e) {
 			// Expected

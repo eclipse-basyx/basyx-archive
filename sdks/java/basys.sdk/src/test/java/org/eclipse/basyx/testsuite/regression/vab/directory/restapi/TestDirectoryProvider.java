@@ -1,17 +1,22 @@
 package org.eclipse.basyx.testsuite.regression.vab.directory.restapi;
 
 import org.eclipse.basyx.testsuite.regression.vab.directory.proxy.TestDirectory;
+import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
+import org.eclipse.basyx.vab.directory.proxy.VABDirectoryProxy;
 import org.eclipse.basyx.vab.directory.restapi.DirectoryModelProvider;
-import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
-import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
+/**
+ * Tests the directory provider using the TestDirectory Suite
+ * 
+ * @author schnicke
+ *
+ */
 public class TestDirectoryProvider extends TestDirectory {
 
 	@Override
-	protected IModelProvider getProxyProvider() {
+	protected IVABDirectoryService getRegistry() {
 		DirectoryModelProvider provider = new DirectoryModelProvider();
-		IModelProvider apiProxy = new VABElementProxy("", provider);
-		return apiProxy;
+		return new VABDirectoryProxy(provider);
 	}
 
 }

@@ -3,7 +3,6 @@ package org.eclipse.basyx.vab.directory.restapi;
 import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
 import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
-import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -37,12 +36,7 @@ public class DirectoryModelProvider implements IModelProvider {
 	@Override
 	public Object getModelPropertyValue(String path) throws ProviderException {
 		path = VABPathTools.stripSlashes(path);
-		Object obj = directory.lookup(path);
-		if (obj == null) {
-			throw new ResourceNotFoundException("Path " + path + " does not exist in the Registry");
-		} else {
-			return obj;
-		}
+		return directory.lookup(path);
 	}
 
 	@Override

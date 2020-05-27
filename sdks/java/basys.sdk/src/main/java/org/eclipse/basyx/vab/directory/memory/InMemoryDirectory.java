@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 
 
 
@@ -52,14 +53,12 @@ public class InMemoryDirectory implements IVABDirectoryService {
 		return this;
 	}
 
-	
 	/**
 	 * Add several mappings to directory
 	 */
-	public void addMappings(Map<String,String> mappings) {
+	public void addMappings(Map<String, String> mappings) {
 		keyToValue.putAll(mappings);
 	}
-
 	
 	/**
 	 * Remove a mapping from directory
@@ -74,6 +73,10 @@ public class InMemoryDirectory implements IVABDirectoryService {
 	 */
 	@Override
 	public String lookup(String id) {
-		return (String) keyToValue.get(id);
+		if(keyToValue.containsKey(id)) {
+			return (String) keyToValue.get(id);
+		} else {
+			throw new ResourceNotFoundException("No entry exists for key " + id);
+		}
 	}
 }

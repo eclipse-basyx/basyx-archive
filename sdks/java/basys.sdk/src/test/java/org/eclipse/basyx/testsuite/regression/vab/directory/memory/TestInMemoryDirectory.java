@@ -5,40 +5,33 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.testsuite.regression.vab.directory.proxy.TestDirectory;
+import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
 import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests constructor and other methods of {@link InMemoryDirectory} for their
- * correctness
+ * Tests the InMemory directory using the TestDirectory Suite
  * 
- * @author haque
+ * @author schnicke, haque
  *
  */
-public class TestInMemoryDirectory {
-	private InMemoryDirectory directory;
-	
-	@Before
-	public void buildInMemoryDirectory() {
-		directory = new InMemoryDirectory(getAddedValues());
-	} 
-	
+public class TestInMemoryDirectory extends TestDirectory {
+
+	@Override
+	protected IVABDirectoryService getRegistry() {
+		return new InMemoryDirectory();
+	}
+
 	@Test
 	public void testConstructor() {
-		testElementsInMap(getAddedValues());
-	} 
-	
-	@Test
-	public void testAddMappingSingleKey() {
-		String newKey = "key3";
-		String newValue = "value3";
-		directory.addMapping(newKey, newValue);
-		assertEquals(newValue, directory.lookup(newKey));
-	} 
-	
+		IVABDirectoryService registry = new InMemoryDirectory(getAddedValues());
+		testElementsInMap(registry, getAddedValues());
+	}
+
 	@Test
 	public void testAddMappingMultipleKey() {
+		InMemoryDirectory registry = new InMemoryDirectory();
 		String key3 = "key3";
 		String value3 = "value3";
 		String key4 = "key4";
@@ -46,27 +39,20 @@ public class TestInMemoryDirectory {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put(key3, value3);
 		map.put(key4, value4);
-		directory.addMappings(map);
-		testElementsInMap(map);
-	} 
-	
-	@Test
-	public void testRemoveMapping() {
-		String key1 = "key1";
-		directory.removeMapping(key1);
-		directory.lookup(key1);
-	} 
-	
-	private void testElementsInMap(Map<String, String> map) {
-		for(Map.Entry<String, String> entry : map.entrySet()) {
-			assertEquals(entry.getValue(), directory.lookup(entry.getKey()));	
+		registry.addMappings(map);
+		testElementsInMap(registry, map);
+	}
+
+	private void testElementsInMap(IVABDirectoryService registry, Map<String, String> map) {
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			assertEquals(entry.getValue(), registry.lookup(entry.getKey()));
 		}
-	} 
-	
+	}
+
 	private Map<String, String> getAddedValues() {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("key1", "value1");
 		map.put("key2", "value2");
 		return map;
-	} 
+	}
 }
