@@ -19,6 +19,7 @@ target_sources(tests_vab
         snippet/MapCreateDelete.h
         snippet/MapInvoke.h
         snippet/MapRead.h
+        snippet/MapUpdate.h
 		snippet/TestCollectionProperty.h
 		path/test_VABPath.cpp
         support/MockupModelProvider.h

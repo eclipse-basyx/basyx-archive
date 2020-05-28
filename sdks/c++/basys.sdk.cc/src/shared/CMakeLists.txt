@@ -38,6 +38,7 @@ target_sources(${BASYX_SHARED_TARGET_NAME}
         ${BASYX_SHARED_INCLUDE_DIR}/object/obj_function.h
         ${BASYX_SHARED_INCLUDE_DIR}/object/obj_holder.h
         ${BASYX_SHARED_INCLUDE_DIR}/object/obj_placeholder.h
+        ${BASYX_SHARED_INCLUDE_DIR}/object/obj_error_holder.h
         ${BASYX_SHARED_INCLUDE_DIR}/object/obj_ref_holder.h
         ${BASYX_SHARED_INCLUDE_DIR}/object.h
         ${BASYX_SHARED_INCLUDE_DIR}/enums.h

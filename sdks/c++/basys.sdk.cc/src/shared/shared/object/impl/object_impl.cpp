@@ -1,9 +1,10 @@
 #include <BaSyx/shared/object.h>
 
 #include <BaSyx/shared/object/obj_function.h>
+#include <BaSyx/shared/object/obj_error_holder.h>
 
 basyx::object::object()
-	: content{ nullptr }, err{error::None} {};
+	: content{ nullptr } {};
 
 basyx::object::object(const char * c)
 	: object{ std::string(c) }
@@ -111,7 +112,7 @@ bool basyx::object::hasProperty(const std::string & propertyName)
 basyx::object basyx::object::getProperty(const std::string & propertyName)
 {
 	if (!this->content || this->GetObjectType() != basyx::type::objectType::Map)
-		return basyx::object::make_null();
+		return basyx::object::make_error(error::PropertyNotFound, "Property access only supported on maps!");
 
 	auto & map = this->Get<basyx::object::object_map_t&>();
 
@@ -119,7 +120,7 @@ basyx::object basyx::object::getProperty(const std::string & propertyName)
 		return map[propertyName];
 	}
 
-	return basyx::object::make_null();
+	return basyx::object::make_error(error::PropertyNotFound, "Property " + propertyName + " not found!");
 };
 
 bool basyx::object::removeProperty(const std::string & propertyName)
@@ -151,7 +152,7 @@ bool basyx::object::operator==(const basyx::object& rhs) const
 std::size_t basyx::object::size()
 {
 	if (!this->content)
-		return 0;
+		return -1;
 
 	auto valueType = this->GetValueType();
 
@@ -193,15 +194,34 @@ basyx::object basyx::object::make_null()
 
 basyx::object basyx::object::make_error(basyx::object::error error_code)
 {
-	basyx::object obj{ nullptr };
-	obj.err = error_code;
+	basyx::object obj;
+	obj.content = std::make_shared<basyx::detail::objErrorHolder>(error_code);
 	return obj;
 };
+
+basyx::object basyx::object::make_error(basyx::object::error error_code, const std::string & msg)
+{
+	basyx::object obj;
+	obj.content = std::make_shared<basyx::detail::objErrorHolder>(error_code, msg);
+	return obj;
+};
+
+basyx::object::error basyx::object::getError() const
+{
+	auto & errorHolder = dynamic_cast<basyx::detail::objErrorHolder&>(*this->content);
+	return errorHolder.error;
+}
+
+const std::string & basyx::object::getErrorMessage() const
+{
+	auto & errorHolder = dynamic_cast<basyx::detail::objErrorHolder&>(*this->content);
+	return errorHolder.message;
+}
 
 basyx::object basyx::object::invoke()
 {
 	if (this->IsNull() || this->GetObjectType() != basyx::type::objectType::Function)
-		return basyx::object::make_null();
+		return basyx::object::make_error(basyx::object::error::NotInvokable, "Object not invokable!");
 
 	return this->Get<basyx::detail::functionWrapper>().invoke();
 };
@@ -209,7 +229,7 @@ basyx::object basyx::object::invoke()
 basyx::object basyx::object::invoke(basyx::object& obj)
 {
 	if (this->IsNull() || this->GetObjectType() != basyx::type::objectType::Function)
-		return basyx::object::make_null();
+		return basyx::object::make_error(basyx::object::error::NotInvokable, "Object not invokable!");
 
 	auto param = obj;
 

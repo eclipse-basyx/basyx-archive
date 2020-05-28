@@ -17,18 +17,11 @@ namespace core {
 		virtual ~IModelProvider() {};
     public:
         virtual basyx::object getModelPropertyValue(const std::string& path) = 0;
-        virtual void setModelPropertyValue(const std::string& path, const basyx::object newValue) = 0;
-        virtual void createValue(const std::string& path, const basyx::object addedValue) = 0;
-        virtual void deleteValue(const std::string& path, basyx::object deletedValue) = 0;
-        virtual void deleteValue(const std::string& path) = 0;
+        virtual basyx::object::error setModelPropertyValue(const std::string& path, const basyx::object newValue) = 0;
+        virtual basyx::object::error createValue(const std::string& path, const basyx::object addedValue) = 0;
+        virtual basyx::object::error deleteValue(const std::string& path, basyx::object deletedValue) = 0;
+        virtual basyx::object::error deleteValue(const std::string& path) = 0;
         virtual basyx::object invokeOperation(const std::string& path, basyx::object parameter) = 0;
-
-		//template<typename... Args>
-		//basyx::object invokeOperation(const std::string& path, const Args&... args)
-		//{
-		//	auto argList = basyx::object::object_list_t{ args... };
-		//	return this->invokeOperationImpl(path, argList);
-		//}
     };
 
 

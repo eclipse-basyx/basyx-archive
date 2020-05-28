@@ -24,7 +24,8 @@ namespace detail {
 	public:
 		enum class HolderType{
 			Owning,
-			Observing
+			Observing,
+			Error
 		};
 	public:
 		virtual void * get_address() const noexcept = 0;

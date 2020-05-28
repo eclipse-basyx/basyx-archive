@@ -11,8 +11,7 @@
 
 template <typename T>
 basyx::object::object(const T& t)
-: content{ std::make_shared<basyx::detail::objHolder<typename std::remove_cv<typename std::decay<const T>::type>::type>>(t) }
-, err(error::None) {};
+: content{ std::make_shared<basyx::detail::objHolder<typename std::remove_cv<typename std::decay<const T>::type>::type>>(t) } {};
 
 
 template<typename T>

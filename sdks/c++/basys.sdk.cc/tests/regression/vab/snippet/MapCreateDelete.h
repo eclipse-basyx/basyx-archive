@@ -26,6 +26,7 @@ public:
 private:
 	static void testCreateElements(basyx::vab::core::IModelProvider * modelProvider)
 	{
+		// Create property directly in root element
 		modelProvider->createValue("inRoot", 1.2);
 		basyx::object toTest = modelProvider->getModelPropertyValue("inRoot");
 		ASSERT_ANY_EQ(toTest, 1.2);
@@ -46,8 +47,9 @@ private:
 		ASSERT_EQ(toTest.Get<basyx::object::object_map_t&>().size(), 2);
 		ASSERT_ANY_EQ(toTest.Get<basyx::object::object_map_t&>().at("entryA"), 3);
 
-		// Try to overwrite existing element (should be ignored, already exists)
-		modelProvider->createValue("inRoot", 0);
+		// Try to overwrite existing element (should throw Exception, already exists)
+		auto overwriteError = modelProvider->createValue("inRoot", 0);
+		ASSERT_EQ(overwriteError, basyx::object::error::ObjectAlreadyExists);
 		toTest = modelProvider->getModelPropertyValue("inRoot");
 		ASSERT_ANY_EQ(toTest, 1.2);
 
@@ -62,12 +64,12 @@ private:
 		modelProvider->createValue("unkown/x", 5);
 		toTest = modelProvider->getModelPropertyValue("unknown/x");
 		ASSERT_TRUE(toTest.IsNull());
+		ASSERT_TRUE(toTest.IsError());
+		ASSERT_EQ(toTest.getError(), basyx::object::error::PropertyNotFound);
 
 		// Empty paths - should execute, but has no effect
-		modelProvider->createValue("", std::string(""));
-		toTest = modelProvider->getModelPropertyValue("");
-		ASSERT_FALSE(toTest.IsNull());
-		ASSERT_FALSE(toTest.InstanceOf<std::string>());
+		auto emptyPathError = modelProvider->createValue("", std::string(""));
+		ASSERT_EQ(emptyPathError, basyx::object::error::ObjectAlreadyExists);
 	}
 
 	static void testDeleteElements(basyx::vab::core::IModelProvider * modelProvider)
@@ -119,109 +121,4 @@ private:
 }
 }
 
-/*
-// Create property directly in root element
-modelProvider->createValue("inRoot", 1.2);
-basyx::object toTest = modelProvider->getModelPropertyValue("inRoot");
-assertEquals(1.2, toTest);
-
-// Create element in Map (with new key contained in the path)
-modelProvider->createValue("/structure/map/inMap", "34");
-toTest = modelProvider->getModelPropertyValue("/structure/map/inMap");
-assertEquals("34", toTest);
-
-// Create map element
-HashMap<String, basyx::object> newMap = new HashMap<>();
-newMap.put("entryA", 3);
-newMap.put("entryB", 4);
-modelProvider->createValue("mapInRoot", newMap);
-toTest = modelProvider->getModelPropertyValue("mapInRoot");
-assertTrue(toTest instanceof Map<?, ?>);
-assertEquals(2, ((Map<String, basyx::object>)toTest).size());
-assertEquals(3, ((Map<String, basyx::object>)toTest).get("entryA"));
-
-// Try to overwrite existing element (should be ignored, already exists)
-modelProvider->createValue("inRoot", 0);
-toTest = modelProvider->getModelPropertyValue("inRoot");
-assertEquals(1.2, toTest);
-
-// Check case-sensitivity
-modelProvider->createValue("inroot", 78);
-toTest = modelProvider->getModelPropertyValue("inRoot");
-assertEquals(1.2, toTest);
-toTest = modelProvider->getModelPropertyValue("inroot");
-assertEquals(78, toTest);
-
-// Non-existing parent element
-modelProvider->createValue("unkown/x", 5);
-toTest = modelProvider->getModelPropertyValue("unknown/x");
-assertNull(toTest);
-
-// Empty paths - should execute, but has no effect
-modelProvider->createValue("", "");
-toTest = modelProvider->getModelPropertyValue("");
-assertNotEquals("", toTest);
-
-// Null path - should throw exception
-try {
-modelProvider->createValue(null, "");
-fail();
-} catch (ServerException e) {
-}
-}
-
-private
-static void testDeleteElements(VABElementProxy connVABElement)
-{
-// Delete at Root
-// - by basyx::object - should not work, root is a map
-modelProvider->deleteValue("inRoot", 1.2);
-basyx::object toTest = modelProvider->getModelPropertyValue("inRoot");
-assertEquals(1.2, toTest);
-// - by index
-modelProvider->deleteValue("inRoot");
-toTest = modelProvider->getModelPropertyValue("inRoot");
-assertNull(toTest);
-
-// Check case-sensitivity
-toTest = modelProvider->getModelPropertyValue("inroot");
-assertEquals(78, toTest);
-modelProvider->deleteValue("inroot");
-toTest = modelProvider->getModelPropertyValue("inroot");
-assertNull(toTest);
-
-// Delete at Map
-// - by basyx::object - should not work in maps, because basyx::object refers to a contained basyx::object, not the index
-modelProvider->deleteValue("/structure/map/", "inMap");
-toTest = modelProvider->getModelPropertyValue("/structure/map/inMap");
-assertEquals("34", toTest);
-// - by index
-modelProvider->deleteValue("/structure/map/inMap");
-toTest = modelProvider->getModelPropertyValue("/structure/map");
-assertEquals(0, ((Map<?, ?>) toTest).size());
-
-// Delete remaining complete Map
-modelProvider->deleteValue("mapInRoot");
-toTest = modelProvider->getModelPropertyValue("mapInRoot");
-assertNull(toTest);
-
-// Empty paths - should not delete anything
-modelProvider->deleteValue("", "");
-toTest = modelProvider->getModelPropertyValue("/primitives/integer");
-assertEquals(123, toTest);
-
-// Null path - should throw exception
-try {
-modelProvider->deleteValue(null, "");
-fail();
-} catch (ServerException e) {
-}
-try {
-modelProvider->deleteValue(null);
-fail();
-} catch (ServerException e) {
-}
-}
-}
-*/
 #endif /* _MAPCREATEDELETE_H */

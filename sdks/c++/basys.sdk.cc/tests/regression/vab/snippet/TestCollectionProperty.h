@@ -53,7 +53,8 @@ private:
 	static void testCreateDelete(basyx::vab::core::IModelProvider * modelProvider)
 	{
 		// Create elements in List (no key provided)
-		modelProvider->createValue("/structure/list/", 56);
+		auto insertResult = modelProvider->createValue("/structure/list/", 56);
+		ASSERT_EQ(insertResult, basyx::object::error::None);
 		auto toTest = modelProvider->getModelPropertyValue("/structure/list/");
 		ASSERT_TRUE(toTest.InstanceOf<basyx::object::list_t<int>>());
 		auto & objectCollection = toTest.Get<basyx::object::list_t<int>&>();

@@ -28,10 +28,10 @@ public:
 	basyx::object getTargetElement(const std::string& path);
 public:
 	virtual basyx::object getModelPropertyValue(const std::string& path) override;
-	virtual void setModelPropertyValue(const std::string& path, const basyx::object newValue) override;
-	virtual void createValue(const std::string& path, const basyx::object newValue) override;
-	virtual void deleteValue(const std::string& path, basyx::object deletedValue) override;
-	virtual void deleteValue(const std::string& path) override;
+	virtual basyx::object::error setModelPropertyValue(const std::string& path, const basyx::object newValue) override;
+	virtual basyx::object::error createValue(const std::string& path, const basyx::object newValue) override;
+	virtual basyx::object::error deleteValue(const std::string& path, basyx::object deletedValue) override;
+	virtual basyx::object::error deleteValue(const std::string& path) override;
 	virtual basyx::object invokeOperation(const std::string& path, basyx::object parameters) override;
 };
 
