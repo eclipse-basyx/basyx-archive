@@ -13,6 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.DataElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 
 /**
  * Property class
@@ -83,10 +84,10 @@ public class Property extends DataElement implements IProperty {
 
 	/**
 	 * Overrides the orignal value type that has been determined by inspecting the given value.
-	 * You can use PropertyValueTypeDefHelper
+	 * Only use this method, if there is no actual value for this property (e.g. when creating templates)
 	 * 
 	 * @param type
-	 *            manually determined type of the value
+	 *             manually determined type of the value
 	 */
 	public void setValueType(PropertyValueTypeDef type) {
 		put(Property.VALUETYPE, PropertyValueTypeDefHelper.getWrapper(type));
@@ -105,7 +106,16 @@ public class Property extends DataElement implements IProperty {
 	public void set(Object value) {
 		put(Property.VALUE, value);
 		put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(value));
+	}
 
+	/**
+	 * Sets the value and explicitly specifies the type of this value.
+	 * 
+	 * @throws ProviderException
+	 */
+	public void set(Object newValue, PropertyValueTypeDef newType) throws ProviderException {
+		put(Property.VALUE, newValue);
+		setValueType(newType);
 	}
 
 	@Override

@@ -1,13 +1,11 @@
 package org.eclipse.basyx.examples.mockup.devicemanager;
 
-import java.util.Map;
-
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.AASLambdaPropertyHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.tools.aas.active.HTTPGetter;
-import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
 
 /**
  * Example manufacturing device manager code
@@ -44,16 +42,16 @@ public class ManufacturingDeviceActiveAASManager extends ManufacturingDeviceMana
 		addShortcut("Supply",     new ModelUrn("urn:de.FHG:devices.es.iese:supplySM:1.0:3:x-509#001"));
 		
 
-		// The device brings a sub model structure with an active AAS part
-		// - Create dynamic get/set operation as lambda expression
-		Map<String, Object> dynamicProperty = VABLambdaProviderHelper.createSimple(new HTTPGetter("http://localhost:8080/basys.examples/Mockup/Supplier"), null);
-
 		// Create sub model
 		SubModel supplySM = new SubModel();
 		// - Set submodel ID
 		supplySM.setIdShort("Supply");
 		//   - Property status: indicate device status
-		Property availabililtyProp = new Property(dynamicProperty);
+		Property availabililtyProp = new Property();
+		// The device brings a sub model structure with an active AAS part
+		// - Create dynamic get/set operation as lambda expression
+		AASLambdaPropertyHelper.setLambdaValue(availabililtyProp,
+				new HTTPGetter("http://localhost:8080/basys.examples/Mockup/Supplier"), null);
 		availabililtyProp.setIdShort("partAvailability");
 		supplySM.addSubModelElement(availabililtyProp);
 

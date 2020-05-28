@@ -1,9 +1,9 @@
-package org.eclipse.basyx.submodel.metamodel.map.support;
+package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
@@ -24,8 +24,9 @@ public class AASLambdaPropertyHelper {
 	 * @return the passed property with updated configuration
 	 */
 	public static Property setLambdaValue(Property property, Supplier<Object> get, Consumer<Object> set) {
-		property.set(VABLambdaProviderHelper.createSimple(get, set));
-		property.setValueType(PropertyValueTypeDefHelper.getType(get.get()));
+		Object newValue = VABLambdaProviderHelper.createSimple(get, set);
+		PropertyValueTypeDef newType = PropertyValueTypeDefHelper.getType(get.get());
+		property.set(newValue, newType);
 		return property;
 	}
 }

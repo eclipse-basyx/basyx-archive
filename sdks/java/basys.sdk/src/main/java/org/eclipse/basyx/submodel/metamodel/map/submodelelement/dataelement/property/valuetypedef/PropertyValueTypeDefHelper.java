@@ -79,9 +79,7 @@ public class PropertyValueTypeDefHelper {
 			} else if (c == String.class) {
 				objectType = PropertyValueTypeDef.String;
 			} else {
-				// TODO: fix lambda properties (where this type is a map)
-				objectType = PropertyValueTypeDef.Null;
-				// throw new RuntimeException("Cannot map object " + obj + " to any PropertyValueTypeDef");
+				throw new RuntimeException("Cannot map object " + obj + " to any PropertyValueTypeDef");
 			}
 		}
 		return objectType;

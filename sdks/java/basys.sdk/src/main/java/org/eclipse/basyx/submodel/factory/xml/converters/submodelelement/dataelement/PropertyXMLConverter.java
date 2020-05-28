@@ -41,8 +41,7 @@ public class PropertyXMLConverter extends SubmodelElementXMLConverter {
 		String valueType = XMLHelper.getString(xmlObject.get(SubmodelElementXMLConverter.VALUE_TYPE));
 		String value = XMLHelper.getString(xmlObject.get(SubmodelElementXMLConverter.VALUE));
 		
-		property.set(value);
-		property.setValueType(PropertyValueTypeDefHelper.fromName(valueType));
+		property.set(value, PropertyValueTypeDefHelper.fromName(valueType));
 		
 		//FIXME the XML-ELement valueId has no corresponding field in Property
 		return property;
