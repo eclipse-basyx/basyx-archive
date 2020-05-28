@@ -13,7 +13,7 @@ import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirecto
 import org.eclipse.basyx.models.controlcomponent.ControlComponentChangeListener;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementMapProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
@@ -124,7 +124,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		SubModel controllerSM = new SubModel();
 		//   - Create sub model contents manually
 		Map<String, Object> listOfControllers = new HashMap<>();
-		((Map<String, Object>) controllerSM.get(SubmodelElementMapProvider.ELEMENTS)).put("controllers",
+		((Map<String, Object>) controllerSM.get(SubmodelElementProvider.ELEMENTS)).put("controllers",
 				listOfControllers);
 		controllerSM.setIdShort("Controller");
 		// - Add the submodel to the AAS

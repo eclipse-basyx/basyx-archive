@@ -12,7 +12,7 @@ import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirecto
 import org.eclipse.basyx.models.controlcomponent.ExecutionState;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementMapProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
@@ -85,7 +85,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		// Implement the device invocation counter - read and increment invocation counter
 		Map<String, Object> property = (Map<String, Object>) aasServerConnection
 				.getModelPropertyValue(
-						"/aas/submodels/Status/" + SubmodelElementMapProvider.DATAELEMENTS + "/invocations");
+						"/aas/submodels/Status/" + SubmodelElementProvider.DATAELEMENTS + "/invocations");
 		int invocations = (int) property.get("value");
 		aasServerConnection.setModelPropertyValue("/aas/submodels/Status/dataElements/invocations/value", ++invocations);
 	}

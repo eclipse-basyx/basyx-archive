@@ -1,11 +1,16 @@
 package org.eclipse.basyx.submodel.restapi;
 
+import java.util.Collection;
+import java.util.Map;
+
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
-import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 
 /**
  * Handles access to SubmodelElementCollections.
@@ -15,11 +20,37 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 public class SubmodelElementCollectionProvider extends MetaModelProvider {
 
 	private IModelProvider proxy;
-	private SubmodelElementListProvider elementProvider;
 
 	public SubmodelElementCollectionProvider(IModelProvider proxy) {
 		this.proxy = proxy;
-		elementProvider = new SubmodelElementListProvider(new VABElementProxy(Property.VALUE, proxy));
+	}
+
+	/**
+	 * Single list elements cannot be directly accessed => resolve it and return a provider
+	 * for the single element
+	 */
+	@SuppressWarnings("unchecked")
+	protected IModelProvider getElementProvider(String idShort) {
+		// Not possible to access single list elements via provider => copy it and wrap it into the
+		// correspondent ElementProvider
+
+		// Resolve the list and return a wrapper provider for the queried element
+		Collection<Map<String, Object>> list = (Collection<Map<String, Object>>) proxy
+				.getModelPropertyValue(Property.VALUE);
+
+		// Wrap the resolved property with idShort into a SubmodelElementProvider and return that provider
+		Map<String, Object> element = findElementInList(idShort, list);
+		IModelProvider defaultProvider = new VABMapProvider(element);
+		return SubmodelElementProvider.getElementProvider(element, defaultProvider);
+	}
+
+	private Map<String, Object> findElementInList(String idShort, Collection<Map<String, Object>> list) {
+		for (Map<String, Object> elem : list) {
+			if (idShort.equals(Referable.createAsFacade(elem).getIdShort())) {
+				return elem;
+			}
+		}
+		throw new ResourceNotFoundException("The element \"" + idShort + "\" could not be found");
 	}
 
 	@Override
@@ -27,20 +58,13 @@ public class SubmodelElementCollectionProvider extends MetaModelProvider {
 		path = VABPathTools.stripSlashes(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 
-		// Handle "/value" path
-		if (pathElements[0].equals(Property.VALUE)) {
-			if (pathElements.length == 1) {
-				return proxy.getModelPropertyValue(Property.VALUE);
-			} else {
-				// Not possible to access list elements via provider
-				String subPath = VABPathTools.buildPath(pathElements, 1);
-				return elementProvider.getModelPropertyValue(subPath);
-			}
-		} else if (path.isEmpty()) {
-			// Handle "" path by returning complete property
-			return proxy.getModelPropertyValue("");
+		if (path.isEmpty() || path.equals(Property.VALUE)) {
+			return proxy.getModelPropertyValue(path);
 		} else {
-			throw getUnknownPathException(path);
+			// Directly access an element inside of the collection
+			String idShort = pathElements[0];
+			String subPath = VABPathTools.buildPath(pathElements, 1);
+			return getElementProvider(idShort).getModelPropertyValue(subPath);
 		}
 	}
 
@@ -49,16 +73,13 @@ public class SubmodelElementCollectionProvider extends MetaModelProvider {
 		path = VABPathTools.stripSlashes(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 
-		// Handle "/value" path
-		if (pathElements[0].equals(Property.VALUE)) {
-			if (pathElements.length == 1) {
-				proxy.setModelPropertyValue(Property.VALUE, newValue);
-			} else {
-				String subPath = VABPathTools.buildPath(pathElements, 1);
-				elementProvider.setModelPropertyValue(subPath, newValue);
-			}
+		if (path.isEmpty() || path.equals(Property.VALUE)) {
+			proxy.setModelPropertyValue(path, newValue);
 		} else {
-			throw new MalformedRequestException("Invalid access path");
+			// Directly access an element inside of the collection
+			String idShort = pathElements[0];
+			String subPath = VABPathTools.buildPath(pathElements, 1);
+			getElementProvider(idShort).setModelPropertyValue(subPath, newValue);
 		}
 	}
 
@@ -67,16 +88,13 @@ public class SubmodelElementCollectionProvider extends MetaModelProvider {
 		path = VABPathTools.stripSlashes(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 
-		// Handle "/value" path
-		if (pathElements[0].equals(Property.VALUE)) {
-			if (pathElements.length == 1) {
-				proxy.createValue(Property.VALUE, newEntity);
-			} else {
-				String subPath = VABPathTools.buildPath(pathElements, 1);
-				elementProvider.createValue(subPath, newEntity);
-			}
+		if (path.isEmpty() || path.equals(Property.VALUE)) {
+			proxy.createValue(path, newEntity);
 		} else {
-			throw new MalformedRequestException("Invalid access path");
+			// Directly access an element inside of the collection
+			String idShort = pathElements[0];
+			String subPath = VABPathTools.buildPath(pathElements, 1);
+			getElementProvider(idShort).createValue(subPath, newEntity);
 		}
 	}
 
@@ -90,16 +108,13 @@ public class SubmodelElementCollectionProvider extends MetaModelProvider {
 		path = VABPathTools.stripSlashes(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 
-		// Handle "/value" path
-		if (pathElements[0].equals(Property.VALUE)) {
-			if (pathElements.length == 1) {
-				proxy.deleteValue(Property.VALUE, obj);
-			} else {
-				String subPath = VABPathTools.buildPath(pathElements, 1);
-				elementProvider.deleteValue(subPath, obj);
-			}
+		if (path.isEmpty() || path.equals(Property.VALUE)) {
+			proxy.deleteValue(path, obj);
 		} else {
-			throw new MalformedRequestException("Invalid access path");
+			// Directly access an element inside of the collection
+			String idShort = pathElements[0];
+			String subPath = VABPathTools.buildPath(pathElements, 1);
+			getElementProvider(idShort).deleteValue(subPath, obj);
 		}
 	}
 
@@ -108,13 +123,13 @@ public class SubmodelElementCollectionProvider extends MetaModelProvider {
 		path = VABPathTools.stripSlashes(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 
-		// Handle "/value" path
-		if (pathElements[0].equals(Property.VALUE)) {
-			String subPath = VABPathTools.buildPath(pathElements, 1);
-			return elementProvider.invokeOperation(subPath, parameter);
-		} else {
+		if (path.isEmpty() || path.equals(Property.VALUE)) {
 			throw new MalformedRequestException("Invalid access path");
+		} else {
+			// Directly access an element inside of the collection
+			String idShort = pathElements[0];
+			String subPath = VABPathTools.buildPath(pathElements, 1);
+			return getElementProvider(idShort).invokeOperation(subPath, parameter);
 		}
 	}
-
 }

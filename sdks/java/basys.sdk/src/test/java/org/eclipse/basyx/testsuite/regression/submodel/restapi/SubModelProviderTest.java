@@ -106,13 +106,13 @@ public class SubModelProviderTest {
 
 		// Read container property
 		Collection<Object> resSet = (Collection<Object>) submodelElement
-				.getModelPropertyValue("/submodel/submodelElements/containerRoot/value/submodelElements");
+				.getModelPropertyValue("/submodel/submodelElements/containerRoot/value");
 		assertEquals(1, resSet.size());
 		resSet.forEach(x -> assertEquals("container", ((Map<String, Object>) x).get(Referable.IDSHORT)));
 
 		// Read nested property
-		String pathToNestedContainer = "/submodel/submodelElements/containerRoot/value/submodelElements/container";
-		String pathToNestedProperty = pathToNestedContainer + "/value/dataElements/integerProperty/";
+		String pathToNestedContainer = "/submodel/submodelElements/containerRoot/container";
+		String pathToNestedProperty = pathToNestedContainer + "/integerProperty/";
 		result = submodelElement.getModelPropertyValue(pathToNestedProperty);
 		property = (HashMap<String, Object>) result;
 		assertEquals(123, property.get(Property.VALUE));

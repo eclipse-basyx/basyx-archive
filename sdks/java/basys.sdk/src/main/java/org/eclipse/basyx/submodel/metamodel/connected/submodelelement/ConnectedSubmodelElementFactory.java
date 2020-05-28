@@ -1,5 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,12 +21,13 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 
 
 /**
  * Factory creating connected ISubmodelElements from a given VABElementProxy
  * 
- * @author conradi
+ * @author conradi, espen
  *
  */
 public class ConnectedSubmodelElementFactory {
@@ -33,123 +35,137 @@ public class ConnectedSubmodelElementFactory {
 	/**
 	 * Creates connected ISubmodelElements from a VABElementProxy
 	 * 
-	 * @param smElemProxy pointing directly to "/submodelElement" in its root
+	 * @param rootProxy      proxy for the root element
+	 * @param collectionPath path in the proxy for accessing all elements
+	 * @param elementPath    path in the proxy for accessing single elements by short ids
 	 * @return A Map containing the created connected ISubmodelElements and their IDs
 	 */
-	public static Map<String, ISubmodelElement> getConnectedSubmodelElements(VABElementProxy smElemProxy) {
+	@SuppressWarnings("unchecked")
+	public static Map<String, ISubmodelElement> getConnectedSubmodelElements(VABElementProxy rootProxy,
+			String collectionPath, String elementPath) {
+		// Query the whole list of elements
+		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy
+				.getModelPropertyValue(collectionPath);
+		// Get the type and idShort for each element and create the corresponding connected variant
 		Map<String, ISubmodelElement> ret = new HashMap<>();
-		
-		// Add all DataElements and Operations
-		ret.putAll(getDataElements(smElemProxy));
-		ret.putAll(getOperations(smElemProxy));
-		
-		// SubmodelElement list; this list will contain all submodelElements
-		Object smElemList = smElemProxy.getModelPropertyValue("/");
-		// Read values
-		Collection<Map<String, Object>> smElemNodes = getCollection(smElemList);
-		
-		// Convert to ISubmodelElement
-		for (Map<String, Object> smElemNode : smElemNodes) {
-			String id = (String) smElemNode.get(Referable.IDSHORT);
-			
-			if (SubmodelElementCollection.isSubmodelElementCollection(smElemNode)) {
-				ret.put(id, new ConnectedSubmodelElementCollection(smElemProxy.getDeepProxy(id)));
-			} else if (RelationshipElement.isRelationshipElement(smElemNode)) {
-				ret.put(id, new ConnectedRelationshipElement(smElemProxy.getDeepProxy(id)));
-			}
+		for (Map<String, Object> node : mapElemList) {
+			String idShort = Referable.createAsFacade(node).getIdShort();
+			ISubmodelElement element = getConnectedSubmodelElement(rootProxy, elementPath, idShort, node);
+			ret.put(idShort, element);
 		}
-		
 		return ret;
+	}
+
+	/**
+	 * Creates a Collection of connected ISubmodelElements from a VABElementProxy
+	 * 
+	 * @param rootProxy      proxy for the root element
+	 * @param collectionPath path in the proxy for accessing all elements
+	 * @param elementPath    path in the proxy for accessing single elements by short ids
+	 * @return A Collection containing the created connected ISubmodelElements
+	 */
+	@SuppressWarnings("unchecked")
+	public static Collection<ISubmodelElement> getElementCollection(VABElementProxy rootProxy,
+			String collectionPath, String elementPath) {
+		// Query the whole list of elements
+		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy
+				.getModelPropertyValue(collectionPath);
+		// Get the type and idShort for each element and create the corresponding connected variant
+		Collection<ISubmodelElement> ret = new ArrayList<>();
+		for (Map<String, Object> node : mapElemList) {
+			String idShort = Referable.createAsFacade(node).getIdShort();
+			ISubmodelElement element = getConnectedSubmodelElement(rootProxy, elementPath, idShort, node);
+			ret.add(element);
+		}
+		return ret;
+	}
+	
+	/**
+	 * Creates a connected ISubmodelElement by idShort, proxy and map content
+	 * 
+	 * @param rootProxy      proxy for the root element
+	 * @param collectionPath path in the proxy for accessing all elements
+	 * @param elementPath    path in the proxy for accessing single elements by short ids
+	 * @return The connected variant of the requested submodel element
+	 */
+	private static ISubmodelElement getConnectedSubmodelElement(VABElementProxy rootProxy,
+			String elementPath, String idShort, Map<String, Object> mapContent) {
+		String subPath = VABPathTools.concatenatePaths(elementPath, idShort);
+		VABElementProxy proxy = rootProxy.getDeepProxy(subPath);
+		if (Property.isProperty(mapContent)) {
+			return new ConnectedProperty(proxy);
+		} else if (Blob.isBlob(mapContent)) {
+			return new ConnectedBlob(proxy);
+		} else if (File.isFile(mapContent)) {
+			return new ConnectedFile(proxy);
+		} else if (SubmodelElementCollection.isSubmodelElementCollection(mapContent)) {
+			return new ConnectedSubmodelElementCollection(proxy);
+		} else if (RelationshipElement.isRelationshipElement(mapContent)) {
+			return new ConnectedRelationshipElement(proxy);
+		} else if (Operation.isOperation(mapContent)) {
+			return new ConnectedOperation(proxy);
+		} else {
+			return null;
+		}
 	}
 	
 	/**
 	 * Creates connected IOperations from a VABElementProxy
 	 * 
-	 * @param operationsProxy pointing directly to "/operations" in its root
+	 * @param rootProxy      proxy for the root element
+	 * @param collectionPath path in the proxy for accessing all elements
+	 * @param elementPath    path in the proxy for accessing single elements by short ids
 	 * @return A Map containing the created connected IOperations and their IDs
 	 */
-	public static Map<String, IOperation> getOperations(VABElementProxy operationsProxy) {
-		if (operationsProxy == null)
-			return new HashMap<>();
+	@SuppressWarnings("unchecked")
+	public static Map<String, IOperation> getOperations(VABElementProxy rootProxy, String collectionPath,
+			String elementPath) {
+		// Query the whole list of elements
+		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy
+				.getModelPropertyValue(collectionPath);
 
+		// Get the type and idShort for each operation and create the corresponding connected variant
 		Map<String, IOperation> ret = new HashMap<>();
-		Collection<Map<String, Object>> dataElemNodes = getCollection(operationsProxy.getModelPropertyValue("/"));
-		for (Map<String, Object> deNode : dataElemNodes) {
-			String id = Referable.createAsFacade(deNode).getIdShort();
-			if (Operation.isOperation(deNode)) {
-				ret.put(id, new ConnectedOperation(operationsProxy.getDeepProxy(id)));
+		for (Map<String, Object> node : mapElemList) {
+			String idShort = Referable.createAsFacade(node).getIdShort();
+			String subPath = VABPathTools.concatenatePaths(elementPath, idShort);
+			VABElementProxy proxy = rootProxy.getDeepProxy(subPath);
+			if (Operation.isOperation(node)) {
+				ret.put(idShort, new ConnectedOperation(proxy));
 			}
 		}
 		return ret;
 	}
-	
-	
-	
 	
 	/**
 	 * Creates connected IDataElements from a VABElementProxy
 	 * 
-	 * @param dataElemProxy pointing directly to "/properties" in its root
-	 * @return A Map containing the created connected IDataElements and their IDs
-	 */
-	public static Map<String, IDataElement> getDataElements(VABElementProxy dataElemProxy) {
-		if (dataElemProxy == null)
-			return new HashMap<>();
-		
-		Map<String, IDataElement> ret = new HashMap<>();
-		
-		Collection<Map<String, Object>> dataElemNodes = getCollection(dataElemProxy.getModelPropertyValue("/"));
-
-		for (Map<String, Object> deNode : dataElemNodes) {
-			String id = Referable.createAsFacade(deNode).getIdShort();
-			if (Property.isProperty(deNode)) {
-				ret.put(id, new ConnectedProperty(dataElemProxy.getDeepProxy(id)));
-			} else if (Blob.isBlob(deNode)) {
-				ret.put(id, new ConnectedBlob(dataElemProxy.getDeepProxy(id)));
-			} else if (File.isFile(deNode)) {
-				ret.put(id, new ConnectedFile(dataElemProxy.getDeepProxy(id)));
-			}
-		}
-		return ret;
-	}
-	
-	/**
-	 * Casts an Object to an Collection of Maps.</br>
+	 * @param rootProxy      proxy for the root element
+	 * @param collectionPath path in the proxy for accessing all elements
+	 * @param elementPath    path in the proxy for accessing single elements by short ids
+	 * @return A Map containing the created connected IDataElement and their IDs
 	 */
 	@SuppressWarnings("unchecked")
-	private static Collection<Map<String, Object>> getCollection(Object o) {
-		if(o instanceof Map<?, ?>) {
-			return (Collection<Map<String, Object>>) ((Map<String, Object>) o).get(Property.VALUE);
-		} else if (o instanceof Collection<?>) {
-			return (Collection<Map<String, Object>>) o;
-		}
-		return new ArrayList<>();
-	}
+	public static Map<String, IDataElement> getDataElements(VABElementProxy rootProxy, String collectionPath,
+			String elementPath) {
+		// Query the whole list of elements
+		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy
+				.getModelPropertyValue(collectionPath);
 
-	/**
-	 * Returns a collection of ISubmodelElements
-	 */
-	public static Collection<ISubmodelElement> getElementCollection(VABElementProxy proxy) {
-		Collection<Map<String, Object>> nodes = getCollection(proxy.getModelPropertyValue("/"));
-		ArrayList<ISubmodelElement> ret = new ArrayList<>();
-		for (Map<String, Object> node : nodes) {
-			String id = Referable.createAsFacade(node).getIdShort();
-			proxy = proxy.getDeepProxy(id);
+		// Get the type and idShort for each operation and create the corresponding connected variant
+		Map<String, IDataElement> ret = new HashMap<>();
+		for (Map<String, Object> node : mapElemList) {
+			String idShort = Referable.createAsFacade(node).getIdShort();
+			String subPath = VABPathTools.concatenatePaths(elementPath, idShort);
+			VABElementProxy proxy = rootProxy.getDeepProxy(subPath);
 			if (Property.isProperty(node)) {
-				ret.add(new ConnectedProperty(proxy));
+				ret.put(idShort, new ConnectedProperty(proxy));
 			} else if (Blob.isBlob(node)) {
-				ret.add(new ConnectedBlob(proxy));
+				ret.put(idShort, new ConnectedBlob(proxy));
 			} else if (File.isFile(node)) {
-				ret.add(new ConnectedFile(proxy));
-			} else if (SubmodelElementCollection.isSubmodelElementCollection(node)) {
-				ret.add(new ConnectedSubmodelElementCollection(proxy));
-			} else if (RelationshipElement.isRelationshipElement(node)) {
-				ret.add(new ConnectedRelationshipElement(proxy));
-			} else if (Operation.isOperation(node)) {
-				ret.add(new ConnectedOperation(proxy));
+				ret.put(idShort, new ConnectedFile(proxy));
 			}
 		}
 		return ret;
 	}
-	
 }

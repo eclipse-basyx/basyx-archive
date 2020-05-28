@@ -132,8 +132,7 @@ public class ConnectToAASSubModelVAB {
 		// - Read properties
 		Map<String, Object> prop1 = (Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1");
 		Map<String, Object> prop2 = (Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2");
-		Map<String, Object> prop11 = (Map<String, Object>) connSubModel1
-				.getModelPropertyValue("submodelElements/prop2/value/dataElements/prop11");
+		Map<String, Object> prop11 = (Map<String, Object>) connSubModel1.getModelPropertyValue("submodelElements/prop2/prop11");
 		Map<String, Object> prop3 = (Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop3");
 
 		// - Change property value using VAB primitive

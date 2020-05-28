@@ -4,11 +4,13 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.DataElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -18,7 +20,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  * @author espen
  *
  */
-public abstract class AbstractSubmodelElementProvider extends MetaModelProvider {
+public class SubmodelElementProvider extends MetaModelProvider {
 	// Constants for API-Access
 	public static final String ELEMENTS = "submodelElements";
 	public static final String DATAELEMENTS = "dataElements";
@@ -31,22 +33,42 @@ public abstract class AbstractSubmodelElementProvider extends MetaModelProvider 
 	/**
 	 * Constructor based on a model provider that contains the container property
 	 */
-	public AbstractSubmodelElementProvider(IModelProvider provider) {
+	public SubmodelElementProvider(IModelProvider provider) {
 		this.modelProvider = provider;
 	}
 
 	/**
-	 * Getter for the contained model provider
+	 * Method for wrapping a generic Map-SubmodelElement in a concrete provider
+	 * 
+	 * @param element      The data with the submodel element
+	 * @param genericProxy A generic element provider for the element
+	 * @return A specific submodel element model provider (e.g. OperationProvider)
 	 */
-	protected IModelProvider getProvider() {
-		return modelProvider;
+	public static IModelProvider getElementProvider(Map<String, Object> element, IModelProvider genericProxy) {
+		if (DataElement.isDataElement(element)) {
+			return new DataElementProvider(genericProxy);
+		} else if (Operation.isOperation(element)) {
+			return new OperationProvider(genericProxy);
+		} else if (SubmodelElementCollection.isSubmodelElementCollection(element)) {
+			return new SubmodelElementCollectionProvider(genericProxy);
+		} else {
+			return genericProxy;
+		}
 	}
 
-	protected abstract Collection<Map<String, Object>> getElementsList();
+	/**
+	 * The elements are stored in a map => convert them to a list
+	 */
+	@SuppressWarnings("unchecked")
+	protected Collection<Map<String, Object>> getElementsList() {
+		Object elements = modelProvider.getModelPropertyValue("");
+		Map<String, Map<String, Object>> all = (Map<String, Map<String, Object>>) elements;
+		return all.values().stream().collect(Collectors.toList());
+	}
 	
 	private Collection<Map<String, Object>> getDataElementList() {
 		Collection<Map<String, Object>> all = getElementsList();
-		// DataElements detection => has ("value" but not "ordered") or ("min" and "max") 
+		// DataElements detection => has ("value" but not "ordered") or ("min" and "max")
 		return all.stream().filter(DataElement::isDataElement).collect(Collectors.toList());
 	}
 
@@ -72,7 +94,13 @@ public abstract class AbstractSubmodelElementProvider extends MetaModelProvider 
 		}
 	}
 
-	protected abstract IModelProvider getElementProxy(String[] pathElements);
+	/**
+	 * Single elements can be directly accessed in maps => return a proxy
+	 */
+	private IModelProvider getElementProxy(String[] pathElements) {
+		String idShort = pathElements[1];
+		return new VABElementProxy(idShort, modelProvider);
+	}
 
 	@SuppressWarnings("unchecked")
 	private Object handleDetailGet(String path) {
@@ -89,22 +117,14 @@ public abstract class AbstractSubmodelElementProvider extends MetaModelProvider 
 		}
 
 		switch (qualifier) {
-		case (ELEMENTS):
-			if (DataElement.isDataElement(element)) {
+			case (ELEMENTS):
+				return getElementProvider(element, elementProxy).getModelPropertyValue(subPath);
+			case (DATAELEMENTS):
 				return new DataElementProvider(elementProxy).getModelPropertyValue(subPath);
-			} else if (Operation.isOperation(element)) {
+			case (OPERATIONS):
 				return new OperationProvider(elementProxy).getModelPropertyValue(subPath);
-			} else if (SubmodelElementCollection.isSubmodelElementCollection(element)) {
-				return new SubmodelElementCollectionProvider(elementProxy).getModelPropertyValue(subPath);
-			}
-			// API for other types is not specified, yet => let modelprovider resolve request
-			return elementProxy.getModelPropertyValue(subPath);
-		case (DATAELEMENTS):
-			return new DataElementProvider(elementProxy).getModelPropertyValue(subPath);
-		case (OPERATIONS):
-			return new OperationProvider(elementProxy).getModelPropertyValue(subPath);
-		default:
-			throw new MalformedRequestException("Invalid access");
+			default:
+				throw new MalformedRequestException("Invalid access");
 		}
 	}
 
@@ -143,8 +163,6 @@ public abstract class AbstractSubmodelElementProvider extends MetaModelProvider 
 			elementProxy.setModelPropertyValue(subPath, newValue);
 		}
 	}
-
-	protected abstract void createSubmodelElement(Object newEntity);
 
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
@@ -210,5 +228,12 @@ public abstract class AbstractSubmodelElementProvider extends MetaModelProvider 
 
 		String subPath = VABPathTools.buildPath(pathElements, 2);
 		return new OperationProvider(elementProxy).invokeOperation(subPath, parameters);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void createSubmodelElement(Object newEntity) {
+		// Create Operation or DataElement in a map
+		String id = SubmodelElement.createAsFacade((Map<String, Object>) newEntity).getIdShort();
+		modelProvider.createValue(id, newEntity);
 	}
 }

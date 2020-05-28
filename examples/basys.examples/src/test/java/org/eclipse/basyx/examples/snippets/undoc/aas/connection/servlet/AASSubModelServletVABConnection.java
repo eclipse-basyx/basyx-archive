@@ -106,7 +106,7 @@ public class AASSubModelServletVABConnection {
 		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop3")).get("value") == 17);
 		assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("idShort").equals("prop1"));
 		assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2")).get("idShort").equals("prop2"));
-		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("submodelElements/prop2/value/dataElements/prop11/value")).get("value") == 123);
+		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("submodelElements/prop2/prop11/value")).get("value") == 123);
 		// - Change property value using VAB primitive
 		connSubModel1.setModelPropertyValue("dataElements/prop1/value", 456);
 		// - Read value back using VAB primitive

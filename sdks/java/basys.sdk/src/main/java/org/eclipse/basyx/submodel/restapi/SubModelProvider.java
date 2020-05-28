@@ -84,9 +84,9 @@ public class SubModelProvider extends MetaModelProvider {
 	 * 
 	 * @return returns the SubmodelElementProvider pointing to the contained submodelelements
 	 */
-	private SubmodelElementMapProvider getElementProvider() {
+	private SubmodelElementProvider getElementProvider() {
 		IModelProvider elementProxy = new VABElementProxy(SubModel.SUBMODELELEMENT, modelProvider);
-		return new SubmodelElementMapProvider(elementProxy);
+		return new SubmodelElementProvider(elementProxy);
 	}
 
 	/**

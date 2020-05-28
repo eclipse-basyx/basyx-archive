@@ -10,7 +10,10 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInforma
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.connected.facades.ConnectedVABElementContainerFacade;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementFactory;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
@@ -20,6 +23,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 
@@ -29,7 +33,7 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  * @author rajashek
  *
  */
-public class ConnectedSubModel extends ConnectedVABElementContainerFacade implements ISubModel {
+public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements ISubModel {
 
 	public ConnectedSubModel(VABElementProxy proxy) {
 		super(proxy);
@@ -90,5 +94,34 @@ public class ConnectedSubModel extends ConnectedVABElementContainerFacade implem
 	@Override
 	public Collection<IConstraint> getQualifier() {
 		return Qualifiable.createAsFacade(getElem()).getQualifier();
+	}
+
+	@Override
+	public void addSubModelElement(ISubmodelElement element) {
+		if (element instanceof IDataElement) {
+			getProxy().createValue(SubmodelElementProvider.DATAELEMENTS, element);
+		} else if (element instanceof IOperation) {
+			getProxy().createValue(SubmodelElementProvider.OPERATIONS, element);
+		} else if (element instanceof ISubmodelElement) {
+			getProxy().createValue(SubmodelElementProvider.ELEMENTS, element);
+		}
+	}
+
+	@Override
+	public Map<String, IDataElement> getDataElements() {
+		return ConnectedSubmodelElementFactory.getDataElements(getProxy(), SubmodelElementProvider.DATAELEMENTS,
+						SubmodelElementProvider.DATAELEMENTS);
+	}
+
+	@Override
+	public Map<String, IOperation> getOperations() {
+		return ConnectedSubmodelElementFactory.getOperations(getProxy(), SubmodelElementProvider.OPERATIONS,
+				SubmodelElementProvider.OPERATIONS);
+	}
+
+	@Override
+	public Map<String, ISubmodelElement> getSubmodelElements() {
+		return ConnectedSubmodelElementFactory.getConnectedSubmodelElements(getProxy(),
+				SubmodelElementProvider.ELEMENTS, SubmodelElementProvider.ELEMENTS);
 	}
 }
