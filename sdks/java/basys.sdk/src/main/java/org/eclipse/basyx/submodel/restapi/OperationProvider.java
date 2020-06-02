@@ -24,8 +24,11 @@ public class OperationProvider extends MetaModelProvider {
 
 	@Override
 	public Object getModelPropertyValue(String path) throws ProviderException {
-		// Getting of operation is handled by parent provider
-		throw new MalformedRequestException("Invalid access path");
+		if (path.isEmpty()) {
+			return modelProvider.getModelPropertyValue("");
+		} else {
+			throw new MalformedRequestException("Invalid access path");
+		}
 	}
 
 	@Override
