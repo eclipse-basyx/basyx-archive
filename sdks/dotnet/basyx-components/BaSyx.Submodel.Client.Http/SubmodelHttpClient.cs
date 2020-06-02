@@ -50,7 +50,7 @@ namespace BaSyx.Submodel.Client.Http
             Endpoint = endpoint;
         }
 
-        public SubmodelHttpClient(ISubmodelDescriptor submodelDescriptor)
+        public SubmodelHttpClient(ISubmodelDescriptor submodelDescriptor) : this()
         {
             submodelDescriptor = submodelDescriptor ?? throw new ArgumentNullException(nameof(submodelDescriptor));
             HttpEndpoint httpEndpoint = submodelDescriptor.Endpoints?.OfType<HttpEndpoint>()?.FirstOrDefault();

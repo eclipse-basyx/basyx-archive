@@ -17,6 +17,7 @@ using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.AssetAdministrationShell.Views;
 using BaSyx.Models.Core.Common;
+using BaSyx.Utils.ResultHandling;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BaSyx.Utils.DependencyInjection
@@ -55,6 +56,10 @@ namespace BaSyx.Utils.DependencyInjection
 
             services.AddTransient<IValue, ElementValue>();
             services.AddTransient<IKey, Key>();
+
+            services.AddTransient<IResult, Result>();
+            services.AddTransient(typeof(IResult<>), typeof(Result<>));
+            services.AddTransient<IMessage, Message>();
 
             services.AddTransient<IReference, Reference>();
             services.AddTransient(typeof(IReference<IAssetAdministrationShell>), typeof(Reference<AssetAdministrationShell>));

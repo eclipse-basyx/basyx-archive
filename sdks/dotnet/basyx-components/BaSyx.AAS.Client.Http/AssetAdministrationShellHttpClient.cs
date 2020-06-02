@@ -61,7 +61,7 @@ namespace BaSyx.AAS.Client.Http
             Endpoint = endpoint;
         }
 
-        public AssetAdministrationShellHttpClient(IAssetAdministrationShellDescriptor aasDescriptor)
+        public AssetAdministrationShellHttpClient(IAssetAdministrationShellDescriptor aasDescriptor) : this()
         {
             aasDescriptor = aasDescriptor ?? throw new ArgumentNullException(nameof(aasDescriptor));
             HttpEndpoint httpEndpoint = aasDescriptor.Endpoints?.OfType<HttpEndpoint>()?.FirstOrDefault();

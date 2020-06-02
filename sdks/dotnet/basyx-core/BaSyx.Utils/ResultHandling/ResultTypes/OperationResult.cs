@@ -8,6 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace BaSyx.Utils.ResultHandling
         { }
         public OperationResult(bool success, IMessage message) : base(success, message)
         { }
+        [JsonConstructor]
         public OperationResult(bool success, List<IMessage> messages) : base(success, messages)
         { }
 
