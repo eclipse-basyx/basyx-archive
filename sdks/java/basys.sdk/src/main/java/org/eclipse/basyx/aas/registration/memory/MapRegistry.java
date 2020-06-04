@@ -79,6 +79,14 @@ public class MapRegistry implements IAASRegistryService {
 
 	@Override
 	public void register(IIdentifier aas, SubmodelDescriptor smDescriptor) {
+
+
+		try {
+			delete(aas, smDescriptor.getIdShort());
+		} catch (ResourceNotFoundException e) {
+			// Doesn't matter
+		}
+
 		AASDescriptor descriptor = descriptorMap.get(aas.getId());
 		descriptor.addSubmodelDescriptor(smDescriptor);
 		// Do not assume that the returned descriptor is referenced in the base map

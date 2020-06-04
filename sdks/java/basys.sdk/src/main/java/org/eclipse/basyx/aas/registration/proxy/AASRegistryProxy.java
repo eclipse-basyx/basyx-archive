@@ -60,13 +60,22 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 	 */
 	@Override
 	public void register(AASDescriptor deviceAASDescriptor) throws ProviderException {
+		// Add a mapping from the AAS id to the serialized descriptor
 		try {
-			delete(deviceAASDescriptor.getIdentifier());
-		} catch (ResourceNotFoundException e) {
-			logger.info("register: Tried to delete AAS that does not exist.");
+			try {
+				lookupAAS(deviceAASDescriptor.getIdentifier());
+				String encodedId = VABPathTools.encodePathElement(deviceAASDescriptor.getIdentifier().getId());
+				provider.setModelPropertyValue(encodedId, deviceAASDescriptor);
+			} catch (ResourceNotFoundException e) {
+				provider.createValue("", deviceAASDescriptor);
+			}
+		} catch (Exception e) {
+			if (e instanceof ProviderException) {
+				throw (ProviderException) e;
+			} else {
+				throw new ProviderException(e);
+			}
 		}
-
-		registerOnly(deviceAASDescriptor);
 	}
 
 	/**
@@ -135,13 +144,16 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 	@Override
 	public void register(IIdentifier aas, SubmodelDescriptor smDescriptor) throws ProviderException {
 		try {
-			delete(aas, smDescriptor.getIdShort());
-		} catch (ResourceNotFoundException e) {
-			logger.info("register: Tried to delete submodel that does not exist.");
-		}
-
-		try {
-			provider.createValue(buildSubmodelPath(aas), smDescriptor);
+			try {
+				AASDescriptor desc = lookupAAS(aas);
+				if (desc.getSubmodelDescriptorFromIdShort(smDescriptor.getIdShort()) != null) {
+					provider.setModelPropertyValue(VABPathTools.concatenatePaths(buildSubmodelPath(aas), smDescriptor.getIdShort()), smDescriptor);
+				} else {
+					provider.createValue(buildSubmodelPath(aas), smDescriptor);
+				}
+			} catch (ResourceNotFoundException e) {
+				throw e;
+			}
 		} catch (Exception e) {
 			if (e instanceof ProviderException) {
 				throw (ProviderException) e;
@@ -165,15 +177,9 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 	}
 
 	private String buildSubmodelPath(IIdentifier aas) throws ProviderException {
-		try {
-			// Encode id to handle usage of reserved symbols, e.g. /
-			String encodedAASId = URLEncoder.encode(aas.getId(), "UTF-8");
-			return VABPathTools.concatenatePaths(encodedAASId, DirectoryModelProvider.SUBMODELS);
-		} catch (UnsupportedEncodingException e) {
-			logger.error("Could not encode URL. This should not happen");
-			throw new RuntimeException(e);
-		}
-
+		// Encode id to handle usage of reserved symbols, e.g. /
+		String encodedAASId = VABPathTools.encodePathElement(aas.getId());
+		return VABPathTools.concatenatePaths(encodedAASId, DirectoryModelProvider.SUBMODELS);
 	}
 }
 

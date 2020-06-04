@@ -1,5 +1,8 @@
 package org.eclipse.basyx.vab.modelprovider;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +32,34 @@ public class VABPathTools {
 			path = path.substring(0, path.length() - 1);
 		}
 		return path;
+	}
+
+	/**
+	 * Encodes sensitive characters, e.g. "/" and "#"
+	 * 
+	 * @param elem
+	 * @return
+	 */
+	public static String encodePathElement(String elem) {
+		try {
+			return URLEncoder.encode(elem, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Decodes sensitive characters, e.g. "/" and "#"
+	 * 
+	 * @param elem
+	 * @return
+	 */
+	public static String decodePathElement(String encodedElem) {
+		try {
+			return URLDecoder.decode(encodedElem, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

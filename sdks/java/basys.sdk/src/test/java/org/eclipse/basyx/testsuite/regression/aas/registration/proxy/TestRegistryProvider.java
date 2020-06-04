@@ -175,6 +175,17 @@ public abstract class TestRegistryProvider {
 	}
 
 	/**
+	 * Tests overwriting the descriptor of an AAS
+	 */
+	@Test
+	public void testOverwritingAASDescriptor() {
+		AASDescriptor aasDesc2 = new AASDescriptor(aasIdShort2, aasId2, "TestEndpoint");
+		proxy.register(aasDesc2);
+		AASDescriptor retrieved = proxy.lookupAAS(aasId2);
+		assertEquals(aasDesc2.getFirstEndpoint(), retrieved.getFirstEndpoint());
+	}
+
+	/**
 	 * Tests addition, retrieval and removal of submodels
 	 */
 	@Test
@@ -185,8 +196,13 @@ public abstract class TestRegistryProvider {
 
 		// Ensure that the submodel is correctly stored in the aas descriptor
 		AASDescriptor aasDesc = proxy.lookupAAS(aasId1);
-		assertEquals(smDesc.getEndpoints(), aasDesc.getSubmodelDescriptorFromIdShort(smIdShort2).getEndpoints());
-		assertNotNull(aasDesc.getSubmodelDescriptorFromIdShort(smIdShort1));
+		assertEquals(smDesc, aasDesc.getSubmodelDescriptorFromIdShort(smIdShort2));
+
+		// Test overwriting an SM descriptor
+		SubmodelDescriptor smDescNew = new SubmodelDescriptor(smIdShort2, smId2, "TestEndpoint");
+		proxy.register(aasId1, smDescNew);
+		AASDescriptor aasDescNew = proxy.lookupAAS(aasId1);
+		assertEquals(smDescNew.getFirstEndpoint(), aasDescNew.getSubmodelDescriptorFromIdShort(smIdShort2).getFirstEndpoint());
 
 		// Remove Submodel
 		proxy.delete(aasId1, smIdShort2);

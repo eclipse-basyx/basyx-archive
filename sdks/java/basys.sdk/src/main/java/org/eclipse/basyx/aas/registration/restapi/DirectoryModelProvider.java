@@ -204,21 +204,24 @@ public class DirectoryModelProvider implements IModelProvider {
 
 		if (splitted.length > 0) { // Overwriting existing entry
 			//if path contains more or less than an aasID after the prefix
-			if(splitted.length != 1) {
-				throw new MalformedRequestException("Path '" + path + "' is invalid for updating an aas.");
-			}
-			
+
 			// Decode encoded path
 			ModelUrn identifier = new ModelUrn(splitted[0]);
 			
-			//aas to be updated does not exist
-			if(registry.lookupAAS(identifier) == null) {
-				throw new ResourceNotFoundException("AAS '" + path + "' to be updated does not exist. Try create instead.");
+			if (splitted.length == 1) {
+				// aas to be updated does not exist
+				if (registry.lookupAAS(identifier) == null) {
+					throw new ResourceNotFoundException("AAS '" + path + "' to be updated does not exist. Try create instead.");
+				}
+
+				registry.register(createAASDescriptorFromMap(newValue));
+			} else if (splitted.length == 3) {
+
+				SubmodelDescriptor smDesc = createSMDescriptorFromMap(newValue);
+				registry.register(identifier, smDesc);
+			} else {
+				throw new MalformedRequestException("Unknown path " + path);
 			}
-			
-			//delete old value and create the new one
-			registry.delete(identifier);
-			registry.register(createAASDescriptorFromMap(newValue));
 		} else {
 			throw new MalformedRequestException("Set with empty path is not supported by registry");
 		}
