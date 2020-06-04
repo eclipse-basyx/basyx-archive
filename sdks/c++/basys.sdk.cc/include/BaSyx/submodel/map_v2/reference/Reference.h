@@ -26,6 +26,7 @@ public:
 	Reference(const api::IReference & other);
 	Reference(const Reference & other) = default;
 	Reference(Reference && other) noexcept = default;
+  Reference(basyx::object & object);
 
 	Reference & operator=(const api::IReference & other);
 	Reference & operator=(const Reference & other) = default;
@@ -42,6 +43,10 @@ public:
 	virtual bool empty() const override;
 public:
 //	static Reference FromIdentifiable(const std::string & keyElementType, bool local, const IIdentifiable & identifiable);
+
+private:
+  static simple::Key keyMap_to_key(basyx::object &keyMap);
+  static std::vector<simple::Key> keyMapList_to_keyList(basyx::object::object_list_t &keyMapList);
 };
 
 }
