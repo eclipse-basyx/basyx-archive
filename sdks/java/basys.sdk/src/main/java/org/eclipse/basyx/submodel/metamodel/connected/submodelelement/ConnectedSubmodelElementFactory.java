@@ -12,13 +12,22 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDat
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedBlob;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedFile;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedMultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedProperty;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedRange;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedReferenceElement;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.event.ConnectedBasicEvent;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation.ConnectedOperation;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.relationship.ConnectedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -101,10 +110,18 @@ public class ConnectedSubmodelElementFactory {
 			return new ConnectedFile(proxy);
 		} else if (SubmodelElementCollection.isSubmodelElementCollection(mapContent)) {
 			return new ConnectedSubmodelElementCollection(proxy);
+		} else if(MultiLanguageProperty.isMultiLanguageProperty(mapContent)) {
+			return new ConnectedMultiLanguageProperty(proxy);
+		} else if(Range.isRange(mapContent)) {
+			return new ConnectedRange(proxy);
+		} else if(ReferenceElement.isReferenceElement(mapContent)) {
+			return new ConnectedReferenceElement(proxy);
 		} else if (RelationshipElement.isRelationshipElement(mapContent)) {
 			return new ConnectedRelationshipElement(proxy);
 		} else if (Operation.isOperation(mapContent)) {
 			return new ConnectedOperation(proxy);
+		} else if(BasicEvent.isBasicEvent(mapContent)) {
+			return new ConnectedBasicEvent(proxy);
 		} else {
 			return null;
 		}
@@ -165,6 +182,12 @@ public class ConnectedSubmodelElementFactory {
 				ret.put(idShort, new ConnectedBlob(proxy));
 			} else if (File.isFile(node)) {
 				ret.put(idShort, new ConnectedFile(proxy));
+			} else if(MultiLanguageProperty.isMultiLanguageProperty(node)) {
+				ret.put(idShort, new ConnectedMultiLanguageProperty(proxy));
+			} else if(Range.isRange(node)) {
+				ret.put(idShort, new ConnectedRange(proxy));
+			} else if(ReferenceElement.isReferenceElement(node)) {
+				ret.put(idShort, new ConnectedReferenceElement(proxy));
 			}
 		}
 		return ret;

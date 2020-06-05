@@ -1,7 +1,4 @@
-/**
- *
- */
-package org.eclipse.basyx.testsuite.regression.submodel.metamodel.connected;
+package org.eclipse.basyx.testsuite.regression.submodel.metamodel.connected.submodelelement.operation;
 
 import static org.junit.Assert.assertEquals;
 

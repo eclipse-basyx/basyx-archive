@@ -30,7 +30,7 @@ public class ConnectedBlob extends ConnectedDataElement implements IBlob {
 
 	@Override
 	public String getMimeType() {
-		return (String) getProxy().getModelPropertyValue(Blob.MIMETYPE);
+		return (String)	getElem().get(Blob.MIMETYPE);
 	}
 	
 	@Override

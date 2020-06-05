@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -30,7 +30,7 @@ public class ConnectedFile extends ConnectedDataElement implements IFile {
 
 	@Override
 	public String getMimeType() {
-		return (String) getProxy().getModelPropertyValue(Blob.MIMETYPE);
+		return (String) getElem().get(File.MIMETYPE);
 	}
 	
 	@Override

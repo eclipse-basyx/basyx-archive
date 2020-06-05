@@ -1,10 +1,11 @@
-package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
+package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.relationship;
 
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
