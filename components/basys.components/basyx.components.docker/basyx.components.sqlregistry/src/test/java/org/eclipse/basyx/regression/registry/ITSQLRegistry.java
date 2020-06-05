@@ -4,12 +4,12 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxDockerConfiguration;
-import org.eclipse.basyx.testsuite.regression.aas.registration.proxy.TestRegistryProvider;
+import org.eclipse.basyx.testsuite.regression.aas.registration.TestRegistryProviderSuite;
 import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ITSQLRegistry extends TestRegistryProvider {
+public class ITSQLRegistry extends TestRegistryProviderSuite {
 	private static Logger logger = LoggerFactory.getLogger(ITSQLRegistry.class);
 
 	private static String registryUrl;

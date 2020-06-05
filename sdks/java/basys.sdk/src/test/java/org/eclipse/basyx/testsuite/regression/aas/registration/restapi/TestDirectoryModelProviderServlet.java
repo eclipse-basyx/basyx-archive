@@ -2,7 +2,7 @@ package org.eclipse.basyx.testsuite.regression.aas.registration.restapi;
 
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
-import org.eclipse.basyx.testsuite.regression.aas.registration.proxy.TestRegistryProvider;
+import org.eclipse.basyx.testsuite.regression.aas.registration.TestRegistryProviderSuite;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.junit.Rule;
@@ -13,7 +13,7 @@ import org.junit.Rule;
  * @author espen
  *
  */
-public class TestDirectoryModelProviderServlet extends TestRegistryProvider {
+public class TestDirectoryModelProviderServlet extends TestRegistryProviderSuite {
 	/**
 	 * Makes sure Tomcat Server is started after before each test case
 	 * Initializes a new directory provider servlet

@@ -1,4 +1,4 @@
-package org.eclipse.basyx.testsuite.regression.aas.registration.proxy;
+package org.eclipse.basyx.testsuite.regression.aas.registration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -12,7 +12,10 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.After;
 import org.junit.Before;
@@ -24,7 +27,7 @@ import org.junit.Test;
  * @author espen
  * 
  */
-public abstract class TestRegistryProvider {
+public abstract class TestRegistryProviderSuite {
 	// The registry proxy that is used to access the sql servlet
 	protected final IAASRegistryService proxy = getRegistryService();
 
@@ -174,6 +177,21 @@ public abstract class TestRegistryProvider {
 		}
 	}
 
+	@Test(expected = ResourceNotFoundException.class)
+	public void testDeleteNotExistingSubmodelFromNotExistingAAS() {
+		proxy.delete(new Identifier(IdentifierType.CUSTOM, "nonExistent"), "nonExistentSubModelId");
+	}
+
+	@Test(expected = ResourceNotFoundException.class)
+	public void testDeleteNotExistingSubModel() {
+		proxy.delete(aasId1, "nonExistentSubModelId");
+	}
+
+	@Test(expected = ResourceNotFoundException.class)
+	public void testDeleteNotExistingAAS() {
+		proxy.delete(new Identifier(IdentifierType.CUSTOM, "nonExistent"));
+	}
+
 	/**
 	 * Tests overwriting the descriptor of an AAS
 	 */
@@ -211,5 +229,20 @@ public abstract class TestRegistryProvider {
 		aasDesc = proxy.lookupAAS(aasId1);
 		assertNotNull(aasDesc.getSubmodelDescriptorFromIdShort(smIdShort1));
 		assertNull(aasDesc.getSubmodelDescriptorFromIdShort(smIdShort2));
+	}
+
+	@Test
+	public void testRegisterOnly() {
+		IIdentifier id = new ModelUrn("testURN");
+		AASDescriptor descriptorToRegister = new AASDescriptor(id, "testEndpoint");
+		proxy.registerOnly(descriptorToRegister);
+		AASDescriptor descriptor = proxy.lookupAAS(id);
+		assertEquals(descriptorToRegister.getFirstEndpoint(), descriptor.getFirstEndpoint());
+	}
+
+	@Test(expected = ResourceAlreadyExistsException.class)
+	public void testRegisterOnlyAlreadyExisting() {
+		AASDescriptor descriptorToRegister = new AASDescriptor(aasIdShort1, aasId1, aasEndpoint1);
+		proxy.registerOnly(descriptorToRegister);
 	}
 }
