@@ -18,7 +18,7 @@
 			basyx.components.executable is the executable class with the definition of the public void main(String[]).
 			It is needed when building the jar in the maven-jar-plugin (see basyx.components.docker/pom.xml) 
 		-->
-		<basyx.components.executable>org.eclipse.basyx.components.executable.XMLExecutable</basyx.components.executable>
+		<basyx.components.executable>org.eclipse.basyx.components.executable.AASXExecutable</basyx.components.executable>
 	</properties>
 	
 	<packaging>jar</packaging>
