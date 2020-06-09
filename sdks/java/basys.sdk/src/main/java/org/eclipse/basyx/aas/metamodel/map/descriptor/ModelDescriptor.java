@@ -27,7 +27,7 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  */
 public abstract class ModelDescriptor extends VABModelMap<Object> {
 
-	private ModelDescriptor() {
+	protected ModelDescriptor() {
 		putAll(new ModelType(getModelType()));
 	}
 
