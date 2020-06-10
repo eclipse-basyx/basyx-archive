@@ -10,9 +10,11 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
  * Abstract class for a model descriptor that contains:
@@ -23,16 +25,17 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
  * @author espen
  *
  */
-public abstract class ModelDescriptor extends HashMap<String, Object> {
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
+public abstract class ModelDescriptor extends VABModelMap<Object> {
+
+	private ModelDescriptor() {
+		putAll(new ModelType(getModelType()));
+	}
 
 	/**
 	 * Create descriptor from existing hash map
 	 */
 	public ModelDescriptor(Map<String, Object> map) {
+		this();
 		// Put all elements from map into this descriptor
 		this.putAll(map);
 	}
@@ -41,6 +44,8 @@ public abstract class ModelDescriptor extends HashMap<String, Object> {
 	 * Create a new descriptor with minimal information
 	 */
 	public ModelDescriptor(String idShort, IIdentifier id, String httpEndpoint) {
+		this();
+
 		// Set idShort
 		put(Referable.IDSHORT, idShort);
 
@@ -119,4 +124,6 @@ public abstract class ModelDescriptor extends HashMap<String, Object> {
 	public IReference getParent() {
 		return Reference.createAsFacade((Map<String, Object>) get(Referable.PARENT));
 	}
+
+	protected abstract String getModelType();
 }

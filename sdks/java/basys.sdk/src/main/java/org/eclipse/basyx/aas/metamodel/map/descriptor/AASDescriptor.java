@@ -20,11 +20,6 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
  *
  */
 public class AASDescriptor extends ModelDescriptor {
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	public static final String MODELTYPE = "AASDescriptor";
 	
 	/**
@@ -32,9 +27,6 @@ public class AASDescriptor extends ModelDescriptor {
 	 */
 	public AASDescriptor(Map<String, Object> map) {
 		super(map);
-		
-		// Add model type
-		putAll(new ModelType(MODELTYPE));
 	}
 
 	/**
@@ -150,6 +142,11 @@ public class AASDescriptor extends ModelDescriptor {
 	public Collection<SubmodelDescriptor> getSubModelDescriptors() {
 		Collection<Map<String, Object>> descriptors = (Collection<Map<String, Object>>) get(AssetAdministrationShell.SUBMODELS);
 		return descriptors.stream().map(SubmodelDescriptor::new).collect(Collectors.toSet());
+	}
+
+	@Override
+	protected String getModelType() {
+		return MODELTYPE;
 	}
 }
 

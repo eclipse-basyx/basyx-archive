@@ -17,12 +17,6 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
  *
  */
 public class SubmodelDescriptor extends ModelDescriptor {
-
-		
-	/**
-	 * Version of serialized instances
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	public static final String MODELTYPE = "SubmodelDescriptor";
 
@@ -31,9 +25,6 @@ public class SubmodelDescriptor extends ModelDescriptor {
 	 */
 	public SubmodelDescriptor(Map<String, Object> map) {
 		super(map);
-		
-		// Add model type
-		putAll(new ModelType(MODELTYPE));
 	}
 	
 	/**
@@ -55,6 +46,11 @@ public class SubmodelDescriptor extends ModelDescriptor {
 		
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
+	}
+
+	@Override
+	protected String getModelType() {
+		return MODELTYPE;
 	}
 }
 
