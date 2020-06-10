@@ -23,8 +23,8 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.connected.ConnectedElement;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
-import org.eclipse.basyx.submodel.metamodel.connected.ConnectedVABModelMap;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -39,7 +39,7 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  * @author rajashek, Zai Zhang
  *
  */
-public class ConnectedAssetAdministrationShell extends ConnectedVABModelMap<Object> implements IAssetAdministrationShell {
+public class ConnectedAssetAdministrationShell extends ConnectedElement implements IAssetAdministrationShell {
 
 	ConnectedAssetAdministrationShellManager manager;
 

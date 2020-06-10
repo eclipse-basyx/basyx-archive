@@ -35,7 +35,7 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  * @author rajashek
  *
  */
-public class ConnectedSubModel extends ConnectedVABModelMap<Object> implements ISubModel {
+public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 
 	public ConnectedSubModel(VABElementProxy proxy) {
 		super(proxy);
