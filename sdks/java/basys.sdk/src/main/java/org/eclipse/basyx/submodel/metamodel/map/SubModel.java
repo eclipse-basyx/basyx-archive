@@ -20,6 +20,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
+import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -110,12 +111,36 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	}
 
 
+	@SuppressWarnings("unchecked")
 	public static SubModel createAsFacade(Map<String, Object> map) {
 		if (map == null) {
 			return null;
 		}
 
 		SubModel ret = new SubModel();
+		
+		Map<String, Object> smElements = new HashMap<>();
+		
+		//SubmodelElemets can be given as Map, Set or List
+		//If it is a Set or List, convert it to a Map first
+		if(map.get(SUBMODELELEMENT) instanceof Collection<?>) {
+			Collection<Object> smElementsSet = (Collection<Object>) map.get(SUBMODELELEMENT);
+			for (Object o: smElementsSet) {
+				Map<String, Object> smElement = (Map<String, Object>) o;
+				String id = (String) smElement.get(Referable.IDSHORT);
+				smElements.put(id, smElement);
+			}
+		} else {
+			smElements = (Map<String, Object>) map.get(SUBMODELELEMENT);
+		}
+		
+		//Iterate through all SubmodelELements and create Facades for them
+		for(Entry<String, Object> smElement: smElements.entrySet()) {
+			ret.elements.put(smElement.getKey(), 
+					SubmodelElementFacadeFactory.createSubmodelElement(
+							(Map<String, Object>) smElement.getValue()));
+		}
+		
 		ret.setMap(map);
 		return ret;
 	}

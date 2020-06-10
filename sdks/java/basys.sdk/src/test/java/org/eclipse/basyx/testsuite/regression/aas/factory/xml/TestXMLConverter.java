@@ -150,7 +150,7 @@ public class TestXMLConverter {
 			
 			
 			//Read the content of the StringWriter, convert it into Objects and check them
-			XMLToMetamodelConverter converterWithoutTypes = new XMLToMetamodelConverter(resultWithTypes.toString());
+			XMLToMetamodelConverter converterWithoutTypes = new XMLToMetamodelConverter(resultWithoutTypes.toString());
 			
 			checkAASs(converterWithoutTypes.parseAAS());
 			checkAssets(converterWithoutTypes.parseAssets());
