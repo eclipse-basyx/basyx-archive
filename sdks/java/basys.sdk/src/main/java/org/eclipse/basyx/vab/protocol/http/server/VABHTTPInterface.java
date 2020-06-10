@@ -3,6 +3,7 @@ package org.eclipse.basyx.vab.protocol.http.server;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
@@ -234,14 +235,49 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		String uri = req.getRequestURI();
 
 		// Normalizes URI
-		String nUri = "/" + VABPathTools.stripSlashes(uri) + "/";
+		String nUri = "/" + VABPathTools.stripSlashes(uri);
 		String contextPath = req.getContextPath();
-		if (nUri.startsWith(contextPath) && nUri.length() > getEnvironmentPathSize(req)) {
-			String path = nUri.substring(getEnvironmentPathSize(req) + 1);
+		if (nUri.startsWith(contextPath) && nUri.length() > getEnvironmentPathSize(req) - 1) {
+			String path = nUri.substring(getEnvironmentPathSize(req));
+			String extractedParameters = extractParameters(req);
 
+			if (path.startsWith("/")) {
+				path = path.replaceFirst("/", "");
+			}
+
+			if (extractedParameters.isEmpty()) {
+				path += "/";
+			} else {
+				path += extractedParameters;
+			}
 			return path;
 		}
 		throw new MalformedRequestException("The passed path " + uri + " is not a possbile path for this server.");
+	}
+
+	private String extractParameters(HttpServletRequest req) {
+		Enumeration<String> parameterNames = req.getParameterNames();
+
+		StringBuilder ret = new StringBuilder();
+		
+		while (parameterNames.hasMoreElements()) {
+
+			String paramName = parameterNames.nextElement();
+			ret.append(paramName);
+			ret.append("=");
+
+			String[] paramValues = req.getParameterValues(paramName);
+			for (int i = 0; i < paramValues.length; i++) {
+				ret.append(paramValues[i]);
+			}
+
+		}
+		String parameters = ret.toString();
+		if (parameters.isEmpty()) {
+			return "";
+		} else {
+			return "?" + parameters;
+		}
 	}
 
 	private int getEnvironmentPathSize(HttpServletRequest req) {

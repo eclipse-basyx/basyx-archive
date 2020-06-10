@@ -2,7 +2,6 @@ package org.eclipse.basyx.vab.modelprovider;
 
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +50,6 @@ public class VABElementProxy implements IModelProvider {
 	public Object getModelPropertyValue(String elementPath) throws ProviderException {
 		// Get element from server
 		try {
-			// Change element on server
 			return provider.getModelPropertyValue(constructPath(elementPath));
 		} catch (ProviderException e) {
 			throw e;
@@ -170,9 +168,11 @@ public class VABElementProxy implements IModelProvider {
 		if ( path.isEmpty() ) {
 			return addr;
 		} else if (addr != null && !addr.isEmpty()) {
-			// Double slashes are used to separate between address and path to be able to
-			// differentiate later on
-			return addr + "/" + path;
+			if (path.startsWith("?")) {
+				return addr + path;
+			} else {
+				return addr + "/" + path;
+			}
 		} else {
 			return path;
 		}

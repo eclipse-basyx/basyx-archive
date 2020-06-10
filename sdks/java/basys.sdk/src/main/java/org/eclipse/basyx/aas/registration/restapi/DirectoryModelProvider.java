@@ -29,7 +29,7 @@ public class DirectoryModelProvider implements IModelProvider {
 
 	IAASRegistryService registry;
 
-	private static final String PREFIX = "api/v1/registry";
+	public static final String PREFIX = "api/v1/registry";
 	public static final String SUBMODELS = "submodels";
 
 	public DirectoryModelProvider(IAASRegistryService registry) {

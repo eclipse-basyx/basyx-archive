@@ -29,6 +29,10 @@ public class AASDescriptor extends ModelDescriptor {
 		super(map);
 	}
 
+	protected AASDescriptor() {
+		super();
+	}
+
 	/**
 	 * Create a new aas descriptor that retrieves the necessary information from a
 	 * passend AssetAdministrationShell
