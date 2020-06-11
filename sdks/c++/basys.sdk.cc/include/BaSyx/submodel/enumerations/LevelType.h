@@ -11,7 +11,7 @@ enum class LevelType {
     Min,
     Nom,
     Typ,
-    Undefined
+    Undefined,
 };
 
 class LevelType_

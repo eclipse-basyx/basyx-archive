@@ -9,7 +9,7 @@ using namespace basyx::submodel;
 
 using enum_pair_t = std::pair<const char*, LevelType>;
 
-static const std::array<enum_pair_t, 5> string_to_enum =
+static const std::array<enum_pair_t, 5> string_to_enum = 
 {
     std::make_pair("Max",  LevelType::Max),
     std::make_pair("Min", LevelType::Min),

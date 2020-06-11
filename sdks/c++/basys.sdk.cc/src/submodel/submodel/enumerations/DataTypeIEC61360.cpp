@@ -9,7 +9,7 @@ using namespace basyx::submodel;
 
 using enum_pair_t = std::pair<const char*, DataTypeIEC61360>;
 
-static const std::array<enum_pair_t, 13> string_to_enum =
+static const std::array<enum_pair_t, 13> string_to_enum = 
 {
     std::make_pair("Boolean",  DataTypeIEC61360::Boolean),
     std::make_pair("Date", DataTypeIEC61360::Date),
