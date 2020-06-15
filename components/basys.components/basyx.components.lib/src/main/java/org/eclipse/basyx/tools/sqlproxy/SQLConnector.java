@@ -1,6 +1,7 @@
 package org.eclipse.basyx.tools.sqlproxy;
 
-
+import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
+import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
 
 /**
  * Base class for classes that connect to SQL databases
@@ -9,43 +10,16 @@ package org.eclipse.basyx.tools.sqlproxy;
  *
  */
 public abstract class SQLConnector {
-
-	
-	/**
-	 * SQL database user name
-	 */
-	protected String sqlUser = null;
-
-	/**
-	 * SQL database password
-	 */
-	protected String sqlPass = null;
-	
-	/**
-	 * SQL database path
-	 */
-	protected String sqlURL  = null;
-
-	
-	
-	/**
-	 * SQL database driver
-	 */
-	protected String sqlDriver = null;
-	
-	/**
-	 * SQL database query prefix
-	 */
-	protected String sqlPrefix = null;
-	
-	
 	
 	/**
 	 * ID of table for this element object
 	 */
-	protected String sqlTableID = null;
-
+	private String sqlTableID = null;
 	
+	/**
+	 * SQL Driver for the connector
+	 */
+	private ISQLDriver driver;
 	
 	
 	/**
@@ -59,14 +33,33 @@ public abstract class SQLConnector {
 	 * @param tableID     ID of table for this element in database
 	 */
 	public SQLConnector(String user, String pass, String url, String driver, String prefix, String tableID) {
+		// ID of table hat contains elements of this element
+		sqlTableID = tableID;
+		
+		// Instantiate a driver for the SQL Connector
+		this.driver = new SQLDriver(url, user, pass, prefix, driver);
+	}
+	
+	/**
+	 * Constructor
+	 *
+	 * @param driver      SQL Driver to connect with the database
+	 * @param tableID     ID of table for this element in database
+	 */
+	public SQLConnector(ISQLDriver driver, String tableID) {
 		// Store variables
-		sqlUser   = user;
-		sqlPass   = pass;
-		sqlURL    = url;
-		sqlDriver = driver;
-		sqlPrefix = prefix;
+		this.driver = driver;
 		
 		// ID of table hat contains elements of this element
 		sqlTableID = tableID;
 	}
+
+	public String getSqlTableID() {
+		return sqlTableID;
+	}
+
+	public ISQLDriver getDriver() {
+		return driver;
+	}
+	
 }

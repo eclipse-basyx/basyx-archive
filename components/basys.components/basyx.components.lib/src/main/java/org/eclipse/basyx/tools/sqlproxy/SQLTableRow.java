@@ -243,7 +243,7 @@ public class SQLTableRow {
 	 * Serialize SQL Map to String
 	 */
 	protected static String serializeSQLMapToString(SQLMap value) {
-		return value.sqlTableID;
+		return value.getSqlTableID();
 	}
 
 	
@@ -252,7 +252,7 @@ public class SQLTableRow {
 	 * Serialize SQL Collection to String
 	 */
 	protected static String serializeSQLCollectionToString(SQLCollection value) {
-		return value.sqlTableID;
+		return value.getSqlTableID();
 	}
 	
 	

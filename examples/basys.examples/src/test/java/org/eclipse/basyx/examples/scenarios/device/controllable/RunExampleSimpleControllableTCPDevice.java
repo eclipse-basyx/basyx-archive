@@ -2,6 +2,7 @@ package org.eclipse.basyx.examples.scenarios.device.controllable;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.basyx.examples.TestContext;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.examplescenario.BaSyxExampleScenario;
@@ -54,7 +55,7 @@ public class RunExampleSimpleControllableTCPDevice extends BaSyxExampleScenario 
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// BaSyx infrastructure
 				// - BaSys topology with one AAS Server and one SQL directory
-				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory(),
+			new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory(),
 				
 				// Simulated runnables
 				// - Manufacturing device manager, e.g. deployed to additonal device

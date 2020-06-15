@@ -1,14 +1,18 @@
 package org.eclipse.basyx.components.sqlprovider.driver;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.RowSetFactory;
+import javax.sql.rowset.RowSetProvider;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zaxxer.hikari.HikariDataSource;
 
 
 /**
@@ -54,6 +58,10 @@ public class SQLDriver implements ISQLDriver {
 	 */
 	protected Connection connect = null;
 	
+	/**
+	 * Data source
+	 */
+	protected HikariDataSource ds = null;
 
 	
 	
@@ -82,36 +90,35 @@ public class SQLDriver implements ISQLDriver {
 	/**
 	 * Execute a SQL query
 	 */
-	public ResultSet sqlQuery(String queryString) {
+	public CachedRowSet sqlQuery(String queryString) {
 		// Store SQL statement, flag that indicates whether the connection was created by this 
 		// operation (and needs to be closed), and result
 		Statement statement              = null;
-		boolean   createdByThisOperation = false;
-		ResultSet resultSet              = null;
+		CachedRowSet rowSet              = null;
 		
 		
 		// Access database
 		try {
-			// Setup the connection with the DB, specify database, user name and password
-			if (connect == null) {connect = DriverManager.getConnection(queryPrefix+dbPath, userName, password); createdByThisOperation = true;}
+			// Open a connection with data source
+			openConnection();
 
 			// Statements allow to issue SQL queries to the database
 			statement = connect.createStatement();
-
+			
 			// ResultSet gets the result of the SQL query
-			resultSet = statement.executeQuery(queryString);	
-
-			// Close database connection
-			if (createdByThisOperation) {
-				connect.close();
-				connect = null;
-			}
+			ResultSet resultSet = statement.executeQuery(queryString);
+			
+			// Convert DB data to memory cache
+			rowSet = getCachedRowSet(resultSet);
+			
+			// Close connection with data source
+			closeConnection();
 		} catch (SQLException e) {
 			logger.error("sqlQuery failed", e);
 		}
 		
 		// Return result of query
-		return resultSet;
+		return rowSet;
 	}
 	
 	
@@ -122,16 +129,11 @@ public class SQLDriver implements ISQLDriver {
 	public void sqlUpdate(String updateString) {
 		// Store SQL statement
 		Statement statement              = null;
-		boolean   createdByThisOperation = false;
-
 		
 		// Access database
 		try {
-			// Setup the connection with the DB, specify database, user name and password
-			if (connect == null) {
-				connect = DriverManager.getConnection(queryPrefix + dbPath, userName, password);
-				createdByThisOperation = true;
-			}
+			// Open a connection with data source
+			openConnection();
 
 			// Statements allow to issue SQL queries to the database
 			statement = connect.createStatement();
@@ -139,10 +141,8 @@ public class SQLDriver implements ISQLDriver {
 			// ResultSet gets the result of the SQL query
 			statement.executeUpdate(updateString);
 
-			if (createdByThisOperation) {
-				connect.close();
-				connect = null;
-			}
+			// Close connection with data source
+			closeConnection();
 		} catch (SQLException e) {
 			logger.error("sqlUpdate failed", e);
 		}
@@ -157,7 +157,10 @@ public class SQLDriver implements ISQLDriver {
 		// Access database
 		try {
 			// Open connection
-			connect = DriverManager.getConnection(queryPrefix+dbPath, userName, password);
+			if (connect == null) {
+				openDataSource();
+				connect = ds.getConnection();	
+			}
 		} catch (SQLException e) {
 			logger.error("Failed to open sql driver connection", e);
 		}
@@ -194,6 +197,25 @@ public class SQLDriver implements ISQLDriver {
 	 */
 	public boolean hasOpenConnection() {
 		return (connect == null);
+	}
+	
+	/**
+	 * Open Data source
+	*/
+	private void openDataSource() {
+		if (ds == null) {
+			ds = new HikariDataSource();
+			ds.setJdbcUrl(queryPrefix+dbPath);
+			ds.setUsername(userName);
+			ds.setPassword(password);
+		}
+	}
+	
+	private CachedRowSet getCachedRowSet(ResultSet resultSet) throws SQLException {
+		RowSetFactory factory = RowSetProvider.newFactory();
+		CachedRowSet rowset = factory.createCachedRowSet();
+		rowset.populate(resultSet);
+		return rowset;
 	}
 }
 

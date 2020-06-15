@@ -2,6 +2,7 @@ package org.eclipse.basyx.examples.scenarios.device.aas;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.basyx.examples.TestContext;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.examplescenario.BaSyxExampleScenario;
@@ -40,7 +41,7 @@ public class RunAASDevice extends BaSyxExampleScenario {
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// Simulated servlets
 				// - BaSys topology with one AAS Server and one SQL directory
-				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory().
+			new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory().
 					// Define additional scenario specific Servlets
 					addServletMapping("/Mockup/Supplier/*", new SupplierStatusServlet()),
 				
