@@ -4,6 +4,7 @@
 #include <BaSyx/submodel/api_v2/submodelelement/ISubmodelElement.h>
 #include <BaSyx/submodel/api_v2/common/IElementContainer.h>
 
+#include <BaSyx/submodel/enumerations/EntityType.h>
 
 namespace basyx {
 namespace submodel {
@@ -17,7 +18,7 @@ public:
 
 	virtual IElementContainer<ISubmodelElement> & getStatement() = 0;
 
-	virtual int getEntityType() const = 0;
+	virtual EntityType getEntityType() const = 0;
 
 	virtual const IReference * const getAssetRef() const = 0;
 	virtual void setAssetRef(const IReference & assetRef) = 0;

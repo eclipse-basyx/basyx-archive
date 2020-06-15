@@ -9,11 +9,11 @@ namespace simple {
 
 
 class DataSpecificationContent
-	: public IDataSpecificationContent
+: public api::IDataSpecificationContent
 {
 public:
 	DataSpecificationContent() = default;
-	DataSpecificationContent(const IDataSpecificationContent & other);
+	DataSpecificationContent(const api::IDataSpecificationContent & other);
 
 	~DataSpecificationContent() = default;
 };

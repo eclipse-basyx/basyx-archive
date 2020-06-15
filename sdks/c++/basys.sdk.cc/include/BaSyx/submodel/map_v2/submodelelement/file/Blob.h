@@ -19,12 +19,12 @@ class Blob :
 {
 private:
 	std::string data;
-	std::string mimeType;
+	MimeType mimeType;
 public:
 	virtual ~Blob() = default;
 
-	const std::string getValue() const override;
-	void setValue(const std::string & value) override;
+	const BlobType getValue() const override;
+	void setValue(const BlobType & value) override;
 
 	const std::string getMimeType() const override;
 	void setMimeType(const std::string & mimeType) override;

@@ -22,7 +22,7 @@ private:
 	Reference semanticId;
 public:
 	using vab::ElementMap::ElementMap;
-	SubmodelElement(const std::string & idShort, Kind kind = Kind::Instance);
+	SubmodelElement(const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
 
 	virtual ~SubmodelElement() = default;
 
@@ -31,7 +31,7 @@ public:
 	void setSemanticId(const api::IReference & reference);
 
 	// Inherited via IHasKind
-	virtual Kind getKind() const override;
+	virtual ModelingKind getKind() const override;
 };
 
 }

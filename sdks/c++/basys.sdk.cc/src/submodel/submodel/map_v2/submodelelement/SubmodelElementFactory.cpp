@@ -2,10 +2,6 @@
 #include <BaSyx/submodel/map_v2/common/ModelType.h>
 
 #include <BaSyx/submodel/map_v2/submodelelement/property/Property.h>
-#include <BaSyx/submodel/map_v2/submodelelement/property/MultiLanguageProperty.h>
-#include <BaSyx/submodel/map_v2/submodelelement/property/ReferenceElement.h>
-#include <BaSyx/submodel/map_v2/submodelelement/file/Blob.h>
-#include <BaSyx/submodel/map_v2/submodelelement/file/File.h>
 #include <BaSyx/submodel/map_v2/submodelelement/SubmodelElementCollection.h>
 
 #include <BaSyx/util/util.h>

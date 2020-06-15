@@ -1,5 +1,5 @@
 #include <BaSyx/submodel/simple/identifier/Identifier.h>
-#include <BaSyx/submodel/api_v2/identifier/IdentifierType.h>
+#include <BaSyx/submodel/enumerations/IdentifierType.h>
 
 namespace basyx {
 namespace submodel {

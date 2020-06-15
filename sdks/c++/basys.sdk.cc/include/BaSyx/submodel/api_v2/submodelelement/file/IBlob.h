@@ -11,6 +11,10 @@
 
 namespace basyx {
 namespace submodel {
+
+using MimeType = std::string;
+using BlobType = unsigned char *;
+
 namespace api {
 	
 class IBlob : public virtual IDataElement
@@ -18,11 +22,11 @@ class IBlob : public virtual IDataElement
 public:
 	virtual ~IBlob() = 0;
 
-	virtual const std::string getValue() const = 0;
-	virtual void setValue(const std::string & value) = 0;
+	virtual const BlobType getValue() const = 0;
+	virtual void setValue(const BlobType & value) = 0;
 
-	virtual const std::string getMimeType() const = 0;
-	virtual void setMimeType(const std::string & mimeType) = 0;
+	virtual const MimeType getMimeType() const = 0;
+	virtual void setMimeType(const MimeType & mimeType) = 0;
 };
 
 inline IBlob::~IBlob() = default;

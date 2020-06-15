@@ -1,21 +1,21 @@
 #include <BaSyx/submodel/simple/submodelelement/file/Blob.h>
 
-const std::string basyx::submodel::simple::Blob::getValue() const
+const basyx::submodel::BlobType basyx::submodel::simple::Blob::getValue() const
 {
 	return this->data;
 }
 
-void basyx::submodel::simple::Blob::setValue(const std::string & value)
+void basyx::submodel::simple::Blob::setValue(const BlobType & value)
 {
 	this->data = value;
 }
 
-const std::string basyx::submodel::simple::Blob::getMimeType() const
+const basyx::submodel::MimeType basyx::submodel::simple::Blob::getMimeType() const
 {
 	return this->mimeType;
 }
 
-void basyx::submodel::simple::Blob::setMimeType(const std::string & mimeType)
+void basyx::submodel::simple::Blob::setMimeType(const MimeType & mimeType)
 {
 	this->mimeType = mimeType;
 }

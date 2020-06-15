@@ -19,7 +19,7 @@ class Property :
 {
 public:
 	Property(const std::string & idShort)
-		: SubmodelElement(idShort, Kind::Instance)
+		: SubmodelElement(idShort, ModelingKind::Instance)
 	{
 	};
 

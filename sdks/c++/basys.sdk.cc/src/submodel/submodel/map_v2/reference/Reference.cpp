@@ -1,7 +1,7 @@
 #include <BaSyx/submodel/map_v2/reference/Reference.h>
 
-#include <BaSyx/submodel/api_v2/reference/KeyType.h>
-#include <BaSyx/submodel/api_v2/reference/KeyElements.h>
+#include <BaSyx/submodel/enumerations/KeyType.h>
+#include <BaSyx/submodel/enumerations/KeyElements.h>
 
 #include <vector>
 
@@ -59,8 +59,8 @@ std::vector<simple::Key> Reference::getKeys() const
 void Reference::addKey(const simple::Key & key)
 {
 	basyx::object keyMap = basyx::object::make_map();
-	keyMap.insertKey(KeyPath::IdType, KeyTypeUtil::toString(key.getIdType()));
-	keyMap.insertKey(KeyPath::Type, KeyElementsUtil::toString(key.getType()));
+	keyMap.insertKey(KeyPath::IdType, KeyType_::to_string(key.getIdType()));
+	keyMap.insertKey(KeyPath::Type, KeyElements_::to_string(key.getType()));
 	keyMap.insertKey(KeyPath::Value, key.getValue());
 	keyMap.insertKey(KeyPath::Local, key.isLocal());
 	this->map.getProperty("keys").insert(keyMap);
@@ -86,9 +86,9 @@ simple::Key Reference::keyMap_to_key(basyx::object &keyMap)
 {
   return simple::Key
   (
-    KeyElementsUtil::fromString(keyMap.getProperty(KeyPath::Type).Get<std::string&>()),
+    KeyElements_::from_string(keyMap.getProperty(KeyPath::Type).Get<std::string&>()),
     keyMap.getProperty(KeyPath::Local).Get<bool>(),
-    KeyTypeUtil::fromString(keyMap.getProperty(KeyPath::IdType).Get<std::string&>()),
+    KeyType_::from_string(keyMap.getProperty(KeyPath::IdType).Get<std::string&>()),
     keyMap.getProperty(KeyPath::Value).Get<std::string&>()
   );
 }

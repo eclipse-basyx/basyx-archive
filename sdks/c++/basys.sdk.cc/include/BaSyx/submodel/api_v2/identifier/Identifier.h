@@ -1,7 +1,7 @@
 #ifndef BASYX_SUBMODEL_API_V2_IDENTIFIER_IDENTIFIER_H
 #define BASYX_SUBMODEL_API_V2_IDENTIFIER_IDENTIFIER_H
 
-#include <BaSyx/submodel/api_v2/identifier/IdentifierType.h>
+#include <BaSyx/submodel/enumerations/IdentifierType.h>
 
 #include <string>
 

@@ -24,7 +24,7 @@ class SubModel : public api::ISubModel
 {
 private:
 	Identifiable identifiable;
-	Kind kind;
+	ModelingKind kind;
 	HasDataSpecification dataSpecification;
 	Reference semanticId;
 	Qualifiable qualifiable;
@@ -38,7 +38,7 @@ public:
 	virtual api::IElementContainer<api::ISubmodelElement> & submodelElements();
 
 	// Inherited via IHasKind
-	virtual Kind getKind() const override;
+	virtual ModelingKind getKind() const override;
 
 	// Inherited via IReferable
 	virtual const std::string & getIdShort() const override;

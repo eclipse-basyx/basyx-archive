@@ -13,16 +13,16 @@ namespace simple {
 class Blob : public virtual api::IBlob
 {
 private:
-	std::string data;
-	std::string mimeType;
+	BlobType data;
+	MimeType mimeType;
 public:
 	virtual ~Blob() = default;
 
-	const std::string getValue() const override;
-	void setValue(const std::string & value) override;
+	const BlobType getValue() const override;
+	void setValue(const BlobType & value) override;
 
-	const std::string getMimeType() const override;
-	void setMimeType(const std::string & mimeType) override;
+	const MimeType getMimeType() const override;
+	void setMimeType(const MimeType & mimeType) override;
 };
 
 }

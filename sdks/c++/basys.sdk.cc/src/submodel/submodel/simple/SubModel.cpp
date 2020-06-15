@@ -5,7 +5,7 @@ using namespace basyx::submodel::api;
 using namespace basyx::submodel::simple;
 
 SubModel::SubModel(const std::string & idShort, const Identifier & identifier)
-	: kind(Kind::Instance)
+	: kind(ModelingKind::Instance)
 	, identifiable(idShort, identifier)
 {
 };
@@ -15,7 +15,7 @@ IElementContainer<ISubmodelElement> & SubModel::submodelElements()
 	return this->elementContainer;
 }
 
-Kind SubModel::getKind() const
+ModelingKind SubModel::getKind() const
 {
 	return this->kind;
 }

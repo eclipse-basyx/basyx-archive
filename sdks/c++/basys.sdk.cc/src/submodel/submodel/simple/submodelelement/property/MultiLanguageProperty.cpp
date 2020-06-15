@@ -4,7 +4,7 @@ using namespace basyx::submodel;
 using namespace basyx::submodel::api;
 using namespace basyx::submodel::simple;
 
-MultiLanguageProperty::MultiLanguageProperty(const std::string & idShort, Kind kind )
+MultiLanguageProperty::MultiLanguageProperty(const std::string & idShort, ModelingKind kind )
 	: SubmodelElement(idShort, kind)
 {
 
