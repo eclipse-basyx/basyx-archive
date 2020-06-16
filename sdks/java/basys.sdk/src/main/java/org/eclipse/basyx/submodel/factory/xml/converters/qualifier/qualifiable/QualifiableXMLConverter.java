@@ -212,27 +212,26 @@ public class QualifiableXMLConverter {
 		String valueType = XMLHelper.getString(qualifier.getValueType());
 		Element qualifierRoot = document.createElement(QUALIFIER);
 		
-		HasSemanticsXMLConverter.populateHasSemanticsXML(document, qualifierRoot, qualifier);
+		Element qualifierValueId = document.createElement(VALUE_ID);
+		Element keysElement = ReferenceXMLConverter.buildReferenceXML(document, qualId);
+		if(keysElement != null) {
+			qualifierValueId.appendChild(keysElement);
+		}
+		qualifierRoot.appendChild(qualifierValueId);
+
+		Element qualifierValue = document.createElement(VALUE);
+		qualifierValue.appendChild(document.createTextNode(value));
+		qualifierRoot.appendChild(qualifierValue);
 		
 		Element qualifierType = document.createElement(TYPE);
 		qualifierType.appendChild(document.createTextNode(type));
 		qualifierRoot.appendChild(qualifierType);
 		
-		Element qualifierValue = document.createElement(VALUE);
-		qualifierValue.appendChild(document.createTextNode(value));
-		qualifierRoot.appendChild(qualifierValue);
-		
 		Element qualifierValueType = document.createElement(VALUE_TYPE);
 		qualifierValueType.appendChild(document.createTextNode(valueType));
 		qualifierRoot.appendChild(qualifierValueType);
 		
-		Element qualifierValueId = document.createElement(VALUE_ID);
-		qualifierRoot.appendChild(qualifierValueId);
-		 
-		Element keysElement = ReferenceXMLConverter.buildReferenceXML(document, qualId);
-		if(keysElement != null) {
-			qualifierValueId.appendChild(keysElement);
-		}
+		HasSemanticsXMLConverter.populateHasSemanticsXML(document, qualifierRoot, qualifier);
 		
 		return qualifierRoot;
 	}

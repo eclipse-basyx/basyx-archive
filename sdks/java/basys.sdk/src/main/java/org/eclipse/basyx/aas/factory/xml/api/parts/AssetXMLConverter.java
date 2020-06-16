@@ -86,9 +86,9 @@ public class AssetXMLConverter {
 			Element assetRoot = document.createElement(ASSET);
 			IdentifiableXMLConverter.populateIdentifiableXML(document, assetRoot, asset);
 			HasDataSpecificationXMLConverter.populateHasDataSpecificationXML(document, assetRoot, asset);
-			buildAssetKind(document, assetRoot, asset);
 			buildAssetIdentificationModelRef(document, assetRoot, asset);
 			buildBillOfMaterial(document, assetRoot, asset);
+			buildAssetKind(document, assetRoot, asset);
 			xmlAssetList.add(assetRoot);
 		}
 		

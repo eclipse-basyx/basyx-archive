@@ -73,6 +73,12 @@ public class PropertyXMLConverter extends SubmodelElementXMLConverter {
 			logger.error("Exeption in buildProperty!", e);
 		}
 		
+		if (value != null) {
+			Element valueEle = document.createElement(SubmodelElementXMLConverter.VALUE);
+			valueEle.appendChild(document.createTextNode(value));
+			propertyRoot.appendChild(valueEle);
+		}
+		
 		String valueType = prop.getValueType();
 		if (valueType != null) {
 			Element valueTypeElem = document.createElement(SubmodelElementXMLConverter.VALUE_TYPE);
@@ -80,11 +86,6 @@ public class PropertyXMLConverter extends SubmodelElementXMLConverter {
 			propertyRoot.appendChild(valueTypeElem);
 		}
 		
-		if (value != null) {
-			Element valueEle = document.createElement(SubmodelElementXMLConverter.VALUE);
-			valueEle.appendChild(document.createTextNode(value));
-			propertyRoot.appendChild(valueEle);
-		}
 		return propertyRoot;
 	}
 }

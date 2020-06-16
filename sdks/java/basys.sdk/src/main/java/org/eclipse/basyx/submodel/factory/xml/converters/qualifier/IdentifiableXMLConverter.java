@@ -74,22 +74,6 @@ public class IdentifiableXMLConverter {
 	public static void populateIdentifiableXML(Document document, Element root, IIdentifiable identifiable) {
 		ReferableXMLConverter.populateReferableXML(document, root, identifiable);
 		
-		//Build the administration if present
-		if(identifiable.getAdministration() != null) {
-			Element administrationRoot = document.createElement(ADMINISTRATION);
-			if(identifiable.getAdministration().getVersion() != null) {
-				Element version = document.createElement(VERSION);
-				version.appendChild(document.createTextNode(identifiable.getAdministration().getVersion()));
-				administrationRoot.appendChild(version);
-			}
-			if(identifiable.getAdministration().getRevision() != null) {
-				Element revision = document.createElement(REVISION);
-				revision.appendChild(document.createTextNode(identifiable.getAdministration().getRevision()));
-				administrationRoot.appendChild(revision);
-			}
-			root.appendChild(administrationRoot);
-		}	
-		
 		//Build the identification if present
 		if (identifiable.getIdentification() != null) {
 			String id = identifiable.getIdentification().getId();
@@ -101,5 +85,36 @@ public class IdentifiableXMLConverter {
 			}
 			root.appendChild(identificationRoot);
 		}
+		
+		//Build the administration if present
+		if(identifiable.getAdministration() != null) {
+			Element version = null;
+			Element revision = null;
+			
+			String versionString = identifiable.getAdministration().getVersion();
+			if(versionString != null && !versionString.isEmpty()) {
+				version = document.createElement(VERSION);
+				version.appendChild(document.createTextNode(versionString));
+				
+			}
+			
+			String revisionString = identifiable.getAdministration().getRevision();
+			if(revisionString != null && !revisionString.isEmpty()) {
+				revision = document.createElement(REVISION);
+				revision.appendChild(document.createTextNode(revisionString));
+			}
+			
+			//If one at least one f the elements exists, create the aas:administration element
+			if(version != null || revision != null) {
+				Element administrationRoot = document.createElement(ADMINISTRATION);
+				if(version != null) {
+					administrationRoot.appendChild(version);
+				}
+				if(revision != null) {
+					administrationRoot.appendChild(revision);
+				}
+				root.appendChild(administrationRoot);
+			}
+		}	
 	}
 }

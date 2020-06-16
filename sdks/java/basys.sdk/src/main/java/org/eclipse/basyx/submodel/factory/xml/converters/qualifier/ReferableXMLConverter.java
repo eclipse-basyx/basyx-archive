@@ -40,7 +40,6 @@ public class ReferableXMLConverter {
 		
 		LangStrings description = parseDescription(xmlObject);
 		
-		//FIXME Parent in xml schema is currently a String, but it should be a Reference
 		Reference parent = ReferenceXMLConverter.parseReference((Map<String, Object>) xmlObject.get(PARENT));
 		
 		referable.put(Referable.IDSHORT, idShort);
@@ -92,16 +91,19 @@ public class ReferableXMLConverter {
 			root.appendChild(categoryElem);
 		}
 		
-		//FIXME Parent in xml schema is currently a String, but it should be a Reference
+		if(!referable.getDescription().isEmpty()) {
+			Element descriptionRoot = document.createElement(DESCRIPTION);
+			LangStringsXMLConverter.buildLangStringsXML(document, descriptionRoot, referable.getDescription());
+			root.appendChild(descriptionRoot);
+		}
+		
 		if(referable.getParent() != null) {
 			Element xmlParent = ReferenceXMLConverter.buildReferenceXML(document, referable.getParent());
 			Element parentElem = document.createElement(PARENT);
 			parentElem.appendChild(xmlParent);
 			root.appendChild(parentElem);
 		}
-		Element descriptionRoot = document.createElement(DESCRIPTION);
-		LangStringsXMLConverter.buildLangStringsXML(document, descriptionRoot, referable.getDescription());
-		root.appendChild(descriptionRoot);
+		
 	}	
 
 }

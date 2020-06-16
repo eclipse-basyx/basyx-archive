@@ -52,11 +52,12 @@ public class RangeXMLConverter extends SubmodelElementXMLConverter {
 		Element rangeRoot = document.createElement(RANGE);
 		populateSubmodelElement(document, rangeRoot, range);
 		
-		String valueType = range.getValueType();
-		if(valueType != null) {
-			Element valueTypeRoot = document.createElement(VALUE_TYPE);
-			valueTypeRoot.appendChild(document.createTextNode(valueType));
-			rangeRoot.appendChild(valueTypeRoot);
+		Object maxObj = range.getMax();
+		String max = maxObj == null ? null : maxObj.toString();
+		if(max != null) {
+			Element maxRoot = document.createElement(MAX);
+			maxRoot.appendChild(document.createTextNode(max));
+			rangeRoot.appendChild(maxRoot);
 		}
 		
 		Object minObj = range.getMin();
@@ -67,12 +68,11 @@ public class RangeXMLConverter extends SubmodelElementXMLConverter {
 			rangeRoot.appendChild(minRoot);
 		}
 		
-		Object maxObj = range.getMax();
-		String max = maxObj == null ? null : maxObj.toString();
-		if(max != null) {
-			Element maxRoot = document.createElement(MAX);
-			maxRoot.appendChild(document.createTextNode(max));
-			rangeRoot.appendChild(maxRoot);
+		String valueType = range.getValueType();
+		if(valueType != null) {
+			Element valueTypeRoot = document.createElement(VALUE_TYPE);
+			valueTypeRoot.appendChild(document.createTextNode(valueType));
+			rangeRoot.appendChild(valueTypeRoot);
 		}
 		
 		return rangeRoot;

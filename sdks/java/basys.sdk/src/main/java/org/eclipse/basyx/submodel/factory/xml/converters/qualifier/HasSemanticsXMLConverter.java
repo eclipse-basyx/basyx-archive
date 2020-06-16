@@ -47,10 +47,10 @@ public class HasSemanticsXMLConverter {
 	 */
 	public static void populateHasSemanticsXML(Document document, Element root, IHasSemantics hasSemantics) {
 		IReference semanticId = hasSemantics.getSemanticId();
-		Element semanticIdRoot = document.createElement(SEMANTIC_ID);
 		if(semanticId != null) {
+			Element semanticIdRoot = document.createElement(SEMANTIC_ID);
 			semanticIdRoot.appendChild(ReferenceXMLConverter.buildReferenceXML(document, semanticId)); 
+			root.appendChild(semanticIdRoot);
 		}
-		root.appendChild(semanticIdRoot);
 	}
 }

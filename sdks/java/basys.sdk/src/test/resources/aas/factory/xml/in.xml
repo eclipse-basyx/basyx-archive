@@ -13,7 +13,6 @@
 				<aas:langString lang="DE">Beschreibung Verwaltungsschale</aas:langString>
 			</aas:description>
 			<aas:parent>
-				<!-- Parent is currently a String in the Schema. But it should be a Reference. -->
 				<aas:keys>
 					<aas:key idType="IRI" local="false" type="AssetAdministrationShell">aas_parent_id</aas:key>
 				</aas:keys>
@@ -81,7 +80,6 @@
 						<aas:langString lang="EN">View_Description</aas:langString>
 					</aas:description>
 					<aas:parent>
-						<!-- Parent is currently a String in the Schema. But it should be a Reference. -->
 						<aas:keys>
 							<aas:key idType="IRI" local="false" type="Submodel">view_parent_id</aas:key>
 						</aas:keys>
@@ -164,7 +162,6 @@
 				<aas:langString lang="EN">asset1_Description</aas:langString>
 			</aas:description>
 			<aas:parent>
-				<!-- Parent is currently a String in the Schema. But it should be a Reference. -->
 				<aas:keys>
 					<aas:key idType="IRI" local="false" type="Asset">asset_parent_id</aas:key>
 				</aas:keys>
@@ -220,7 +217,6 @@
 				<aas:langString lang="EN">submode1_decription</aas:langString>
 			</aas:description>
 			<aas:parent>
-				<!-- Parent is currently a String in the Schema. But it should be a Reference. -->
 				<aas:keys>
 					<aas:key idType="IRI" local="false" type="Submodel">submodel_parent_id</aas:key>
 				</aas:keys>
@@ -495,8 +491,6 @@
 							</aas:operationVariable>
 						</aas:inoutputVariable>
 						<aas:inputVariable>
-							<!-- The schema only allows one opVar in inputVariable, one in outputVariable and one in inoutputVariable. The Metamodel allows 0..* in each -->
-							<!-- To be able to have multiple Vars they are surrounded by <aas:operationVariable>. This is also violating the Schema. -->
 							<aas:operationVariable>
 								<aas:value>
 									<aas:file>
@@ -551,7 +545,6 @@
 				<aas:langString lang="EN">conceptDescription_Description</aas:langString>
 			</aas:description>
 			<aas:parent>
-				<!-- Parent is currently a String in the Schema. But it should be a Reference. -->
 				<aas:keys>
 					<aas:key idType="IRI" local="false" type="ConceptDescription">cs_parent_id</aas:key>
 				</aas:keys>

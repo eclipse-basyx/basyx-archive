@@ -260,9 +260,9 @@ public class SubmodelElementXMLConverter {
 	 */
 	protected static void populateSubmodelElement(Document document, Element root, ISubmodelElement submodelElement) {
 		ReferableXMLConverter.populateReferableXML(document, root, submodelElement);
-		HasDataSpecificationXMLConverter.populateHasDataSpecificationXML(document, root, submodelElement);
-		QualifiableXMLConverter.populateQualifiableXML(document, root, submodelElement);
-		HasSemanticsXMLConverter.populateHasSemanticsXML(document, root, submodelElement);
 		HasKindXMLConverter.populateHasKindXML(document, root, submodelElement);
+		HasSemanticsXMLConverter.populateHasSemanticsXML(document, root, submodelElement);
+		QualifiableXMLConverter.populateQualifiableXML(document, root, submodelElement);
+		HasDataSpecificationXMLConverter.populateHasDataSpecificationXML(document, root, submodelElement);
 	}
 }

@@ -54,18 +54,18 @@ public class BlobXMLConverter extends SubmodelElementXMLConverter {
 		
 		populateSubmodelElement(document, blobRoot, blob);
 		
-		String mimeType = blob.getMimeType();
 		String value = Base64.getEncoder().encodeToString(blob.getValue());
+		String mimeType = blob.getMimeType();
 		
-		if(mimeType != null) {
-			Element mimeTypeRoot = document.createElement(MIME_TYPE);
-			mimeTypeRoot.appendChild(document.createTextNode(mimeType));
-			blobRoot.appendChild(mimeTypeRoot);
-		}
 		if(value != null) {
 			Element valueRoot = document.createElement(VALUE);
 			valueRoot.appendChild(document.createTextNode(value));
 			blobRoot.appendChild(valueRoot);
+		}
+		if(mimeType != null) {
+			Element mimeTypeRoot = document.createElement(MIME_TYPE);
+			mimeTypeRoot.appendChild(document.createTextNode(mimeType));
+			blobRoot.appendChild(mimeTypeRoot);
 		}
 		
 		return blobRoot;

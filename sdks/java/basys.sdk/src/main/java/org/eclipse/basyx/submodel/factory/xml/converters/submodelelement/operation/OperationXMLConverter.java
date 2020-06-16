@@ -96,6 +96,15 @@ public class OperationXMLConverter extends SubmodelElementXMLConverter {
 		
 		populateSubmodelElement(document, operationRoot, operation);
 		
+		Collection<IOperationVariable> inout = operation.getInOutputVariables();
+		if(inout != null) {
+			Element valueRoot = document.createElement(INOUTPUT_VARIABLE);
+			operationRoot.appendChild(valueRoot);
+			for(IOperationVariable operationVariable: inout) {
+				valueRoot.appendChild(buildOperationVariable(document, operationVariable));
+			}
+		}
+		
 		Collection<IOperationVariable> in = operation.getInputVariables();
 		if(in != null) {
 			Element valueRoot = document.createElement(INPUT_VARIABLE);
@@ -110,15 +119,6 @@ public class OperationXMLConverter extends SubmodelElementXMLConverter {
 			Element valueRoot = document.createElement(OUTPUT_VARIABLE);
 			operationRoot.appendChild(valueRoot);
 			for(IOperationVariable operationVariable: out) {
-				valueRoot.appendChild(buildOperationVariable(document, operationVariable));
-			}
-		}
-		
-		Collection<IOperationVariable> inout = operation.getInOutputVariables();
-		if(out != null) {
-			Element valueRoot = document.createElement(INOUTPUT_VARIABLE);
-			operationRoot.appendChild(valueRoot);
-			for(IOperationVariable operationVariable: inout) {
 				valueRoot.appendChild(buildOperationVariable(document, operationVariable));
 			}
 		}

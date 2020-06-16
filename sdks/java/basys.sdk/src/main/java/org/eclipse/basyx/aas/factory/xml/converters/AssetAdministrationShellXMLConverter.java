@@ -239,7 +239,7 @@ public class AssetAdministrationShellXMLConverter {
 	 * @param aas the IAssetAdministrationShell object to build the XML for
 	 */
 	private static void buildAssetRef(Document document, Element root, IAssetAdministrationShell aas) {
-		IReference assetRef = aas.getAsset().getAssetIdentificationModel();
+		IReference assetRef = aas.getAssetReference();
 		if(assetRef!=null) {
 			Element assetrefRoot = document.createElement(ASSET_REF);
 			assetrefRoot.appendChild(ReferenceXMLConverter.buildReferenceXML(document, assetRef));

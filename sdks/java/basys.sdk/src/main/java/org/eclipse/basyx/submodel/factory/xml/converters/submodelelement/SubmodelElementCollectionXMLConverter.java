@@ -57,15 +57,15 @@ public class SubmodelElementCollectionXMLConverter extends SubmodelElementXMLCon
 		
 		populateSubmodelElement(document, smElemCollectionRoot, smElemCollection);
 		
-		String isOrdered = Boolean.toString(smElemCollection.isOrdered());
-		Element orderedElem = document.createElement(ORDERED);
-		orderedElem.appendChild(document.createTextNode(isOrdered));
-		smElemCollectionRoot.appendChild(orderedElem);
-		
 		String isAllowedDuplicates = Boolean.toString(smElemCollection.isAllowDuplicates());
 		Element allowDuplicatesElem = document.createElement(ALLOW_DUPLICATES);
 		allowDuplicatesElem.appendChild(document.createTextNode(isAllowedDuplicates));
 		smElemCollectionRoot.appendChild(allowDuplicatesElem);
+		
+		String isOrdered = Boolean.toString(smElemCollection.isOrdered());
+		Element orderedElem = document.createElement(ORDERED);
+		orderedElem.appendChild(document.createTextNode(isOrdered));
+		smElemCollectionRoot.appendChild(orderedElem);
 		
 		Collection<ISubmodelElement> elems = smElemCollection.getValue();
 		

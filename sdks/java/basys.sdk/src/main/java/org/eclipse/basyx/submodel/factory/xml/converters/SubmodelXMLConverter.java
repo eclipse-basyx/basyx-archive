@@ -77,10 +77,10 @@ public class SubmodelXMLConverter {
 			Element subModelRoot = document.createElement(SUBMODEL);
 
 			IdentifiableXMLConverter.populateIdentifiableXML(document, subModelRoot, subModel);
-			HasSemanticsXMLConverter.populateHasSemanticsXML(document, subModelRoot, subModel);
-			HasDataSpecificationXMLConverter.populateHasDataSpecificationXML(document, subModelRoot, subModel);
 			HasKindXMLConverter.populateHasKindXML(document, subModelRoot, subModel);
+			HasSemanticsXMLConverter.populateHasSemanticsXML(document, subModelRoot, subModel);
 			QualifiableXMLConverter.populateQualifiableXML(document, subModelRoot, subModel);
+			HasDataSpecificationXMLConverter.populateHasDataSpecificationXML(document, subModelRoot, subModel);
 			
 			Collection<ISubmodelElement> submodelElements = (Collection<ISubmodelElement>) subModel.getSubmodelElements().values();
 
