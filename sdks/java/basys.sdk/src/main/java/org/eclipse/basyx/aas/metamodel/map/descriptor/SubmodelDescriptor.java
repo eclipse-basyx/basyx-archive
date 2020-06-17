@@ -35,7 +35,7 @@ public class SubmodelDescriptor extends ModelDescriptor {
 		// Create descriptor with minimal information (id and idShort)
 		this(sm.getIdShort(), sm.getIdentification(), httpEndpoint);
 		
-		put(HasSemantics.SEMANTICID, new HasSemantics(sm.getSemanticId()));
+		putAll(new HasSemantics(sm.getSemanticId()));
 	}
 	
 	/**
