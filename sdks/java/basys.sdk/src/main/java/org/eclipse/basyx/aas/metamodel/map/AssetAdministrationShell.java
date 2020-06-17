@@ -2,7 +2,6 @@ package org.eclipse.basyx.aas.metamodel.map;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -215,7 +214,6 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 
 	@SuppressWarnings("unchecked")
 	public void setSubModels(Collection<SubmodelDescriptor> submodels) {
-		setSubmodelParent(submodels);
 		put(AssetAdministrationShell.SUBMODELDESCRIPTORS, submodels);
 
 		// Clear submodel references and add new keys
@@ -287,7 +285,6 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	@Override
 	public void addSubModel(SubmodelDescriptor descriptor) {
 		logger.trace("adding Submodel", descriptor.getIdentifier().getId());
-		setSubmodelParent(Collections.singletonList(descriptor));
 		((Collection<SubmodelDescriptor>) get(AssetAdministrationShell.SUBMODELDESCRIPTORS)).add(descriptor);
 		addSubmodelReferences(descriptor);
 	}
@@ -338,17 +335,6 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	
 	private KeyElements getKeyElement() {
 		return KeyElements.ASSETADMINISTRATIONSHELL;
-	}
-	
-	/**
-	 * Set reference of current AAS to each SubModel of a collection
-	 * as a parent reference
-	 * @param submodels collection of Submodel Descriptor
-	 */
-	private void setSubmodelParent(Collection<SubmodelDescriptor> submodels) {
-		for (SubmodelDescriptor submodel : submodels) {
-			submodel.setParent(getReference());
-		}
 	}
 
 	@Override

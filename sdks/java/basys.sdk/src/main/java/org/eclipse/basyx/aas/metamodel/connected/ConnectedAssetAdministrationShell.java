@@ -147,7 +147,6 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 
 	@Override
 	public void addSubModel(SubmodelDescriptor subModel) {
-		subModel.setParent(getReference());
 		getProxy().createValue("/aas/submodels", subModel);
 	}
 
