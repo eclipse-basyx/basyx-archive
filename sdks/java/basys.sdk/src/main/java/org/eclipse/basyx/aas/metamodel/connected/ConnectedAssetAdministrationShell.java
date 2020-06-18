@@ -161,7 +161,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 
 	@Override
 	public Collection<IReference> getSubmodelReferences() {
-		return ReferenceHelper.transform(getElem().getPath(AssetAdministrationShell.SUBMODELS));
+		return ReferenceHelper.transform(getElemLive().getPath(AssetAdministrationShell.SUBMODELS));
 	}
 
 	@SuppressWarnings("unchecked")
