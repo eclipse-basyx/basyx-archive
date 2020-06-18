@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.pro
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
@@ -93,13 +94,16 @@ public class Property extends DataElement implements IProperty {
 		put(Property.VALUETYPE, PropertyValueTypeDefHelper.getWrapper(type));
 	}
 
-	public void setValueId(String obj) {
-		put(Property.VALUEID, obj);
+	public void setValueId(IReference ref) {
+		Reference refMap = new Reference();
+		refMap.setKeys(ref.getKeys());
+		put(Property.VALUEID, refMap);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public String getValueId() {
-		return (String) get(Property.VALUEID);
+	public IReference getValueId() {
+		return Reference.createAsFacade((Map<String, Object>) get(VALUEID));
 	}
 
 	@Override

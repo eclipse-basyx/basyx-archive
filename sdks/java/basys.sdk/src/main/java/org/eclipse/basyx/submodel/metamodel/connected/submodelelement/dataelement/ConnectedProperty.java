@@ -2,8 +2,11 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataeleme
 
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -39,9 +42,10 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 		return PropertyValueTypeDefHelper.readTypeDef(((Map<String, Object>) o).get(Property.VALUETYPE)).toString();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public String getValueId() {
-		return (String) getProxy().getModelPropertyValue(Property.VALUEID);
+	public IReference getValueId() {
+		return Reference.createAsFacade((Map<String, Object>) getProxy().getModelPropertyValue(MultiLanguageProperty.VALUEID));
 	}
 
 	@SuppressWarnings("unchecked")

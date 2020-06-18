@@ -1,6 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement;
 
 import org.eclipse.basyx.submodel.metamodel.api.IElement;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 
 /**
@@ -37,5 +38,5 @@ public interface IProperty extends IElement, IDataElement {
 	 * 
 	 * @return
 	 */
-	public String getValueId();
+	public IReference getValueId();
 }

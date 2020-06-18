@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import java.util.Collections;
 
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -16,6 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -28,10 +30,15 @@ import org.junit.Test;
 public class TestProperty {
 	private static final String VALUE = "testValue";
 	private static final String STRING_TYPE = "string";
+	private Property property;
+
+	@Before
+	public void buildFile() {
+		property = new Property(VALUE);
+	}
 	
 	@Test
 	public void testConstructor1() {
-		Property property = new Property(VALUE);
 		assertEquals(VALUE, property.get());
 		assertNull(property.getValueId());
 		assertEquals(STRING_TYPE, property.getValueType());
@@ -50,14 +57,12 @@ public class TestProperty {
 	
 	@Test
 	public void testSetValueType() {
-		Property property = new Property(VALUE);
 		property.setValueType(PropertyValueTypeDef.String);
 		assertEquals(STRING_TYPE, property.getValueType());
 	} 
 	
 	@Test
 	public void testGetValueTypeNull() {
-		Property property = new Property(VALUE);
 		property.put(Property.VALUETYPE, "NonMapType");
 		assertEquals("", property.getValueType());
 	}
@@ -65,12 +70,26 @@ public class TestProperty {
 	@Test
 	public void testSet() {
 		Boolean isSomething = true;
-		Property property = new Property(VALUE);
 		property.set(isSomething);
 		assertEquals(isSomething, property.get());
 		assertEquals("boolean", property.getValueType());
-	} 
-	
+	}
+
+	@Test
+	public void testSetCustom() {
+		property.set(null, PropertyValueTypeDef.String);
+		assertEquals(null, property.get());
+		assertEquals(PropertyValueTypeDef.String.getStandardizedLiteral(), property.getValueType());
+	}
+
+	@Test
+	public void testSetId() {
+		IReference ref = new Reference(new Key(KeyElements.PROPERTY, true, "custom", IdentifierType.CUSTOM));
+		IReference ref2 = new Reference(new Key(KeyElements.PROPERTY, true, "custom", IdentifierType.CUSTOM));
+		property.setValueId(ref);
+		assertEquals(ref2, property.getValueId());
+	}
+
 	@Test
 	public void testAddConceptDescription() {
 		ConceptDescription description = new ConceptDescription();
