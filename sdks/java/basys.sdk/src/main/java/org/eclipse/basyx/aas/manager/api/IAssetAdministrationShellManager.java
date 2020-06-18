@@ -1,6 +1,7 @@
 package org.eclipse.basyx.aas.manager.api;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
@@ -47,4 +48,9 @@ public interface IAssetAdministrationShellManager {
 	 * registered in the directory
 	 */
 	void createSubModel(IIdentifier aasId, SubModel submodel);
+
+	/**
+	 * Retrieves all submodels in a specific AAS
+	 */
+	Map<String, ISubModel> retrieveSubmodels(IIdentifier aasId);
 }

@@ -1,7 +1,6 @@
 package org.eclipse.basyx.aas.metamodel.connected;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -24,7 +23,6 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInforma
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedElement;
-import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -106,7 +104,6 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 
 	@SuppressWarnings("unchecked")
 	@Override
-
 	public Collection<SubmodelDescriptor> getSubModelDescriptors() {
 		Collection<Map<String, Object>> coll = (Collection<Map<String, Object>>) getElem()
 				.getPath(AssetAdministrationShell.SUBMODELDESCRIPTORS);
@@ -115,7 +112,6 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 
 	@SuppressWarnings("unchecked")
 	@Override
-
 	public Collection<IView> getViews() {
 		Collection<Map<String, Object>> coll = (Collection<Map<String, Object>>) getElem()
 				.getPath(AssetAdministrationShell.VIEWS);
@@ -124,7 +120,6 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 
 	@SuppressWarnings("unchecked")
 	@Override
-
 	public Collection<IConceptDictionary> getConceptDictionary() {
 		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) getElem()
 				.getPath(AssetAdministrationShell.CONCEPTDICTIONARY);
@@ -134,16 +129,9 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 
 	@Override
 	public Map<String, ISubModel> getSubModels() {
-		Map<String, ISubModel> ret = new HashMap<>();
-
-		Collection<SubmodelDescriptor> submodelDescriptors = getSubModelDescriptors();
-		for (final SubmodelDescriptor submodelDescriptor : submodelDescriptors) {
-			String id = submodelDescriptor.getIdShort();
-			ret.put(id, new ConnectedSubModel(getProxy().getDeepProxy(AssetAdministrationShell.SUBMODELS + "/" + id)));
-		}
-
-		return ret;
+		return manager.retrieveSubmodels(getIdentification());
 	}
+
 
 	@Override
 	public void addSubModel(SubmodelDescriptor subModel) {

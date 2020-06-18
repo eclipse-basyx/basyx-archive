@@ -76,6 +76,7 @@ public abstract class AssetAdministrationShellSuite {
 		AssetAdministrationShell aas = new AssetAdministrationShell();
 		aas.addSubModel(smDescriptor);
 		aas.setIdShort(AASIDSHORT);
+		aas.setIdentification(AASID);
 		aas.setAssetReference(EXPECTED_ASSETREF);
 		aas.setDerivedFrom(EXPECTED_DERIVEDFROMREF);
 		aas.setAdministration(EXPECTED_ADMINISTRATIVEINFORMATION);

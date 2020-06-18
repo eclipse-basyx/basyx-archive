@@ -6,6 +6,8 @@ package org.eclipse.basyx.aas.manager;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.basyx.aas.aggregator.proxy.AASAggregatorProxy;
 import org.eclipse.basyx.aas.manager.api.IAssetAdministrationShellManager;
@@ -78,6 +80,21 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	public ConnectedAssetAdministrationShell retrieveAAS(IIdentifier aasId) throws Exception {
 		VABElementProxy proxy = getAASProxyFromId(aasId);
 		return new ConnectedAssetAdministrationShell(proxy, this);
+	}
+
+	@Override
+	public Map<String, ISubModel> retrieveSubmodels(IIdentifier aasId) {
+		AASDescriptor aasDesc = aasDirectory.lookupAAS(aasId);
+		Collection<SubmodelDescriptor> smDescriptors = aasDesc.getSubModelDescriptors();
+		Map<String, ISubModel> submodels = new HashMap<>();
+		for (SubmodelDescriptor smDesc : smDescriptors) {
+			String smEndpoint = smDesc.getFirstEndpoint();
+			String smIdShort = smDesc.getIdShort();
+			VABElementProxy smProxy = proxyFactory.createProxy(smEndpoint);
+			ConnectedSubModel connectedSM = new ConnectedSubModel(smProxy);
+			submodels.put(smIdShort, connectedSM);
+		}
+		return submodels;
 	}
 
 	@Override
