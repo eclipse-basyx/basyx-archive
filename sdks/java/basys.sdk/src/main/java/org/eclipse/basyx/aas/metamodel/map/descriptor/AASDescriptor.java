@@ -42,10 +42,6 @@ public class AASDescriptor extends ModelDescriptor {
 	 */
 	public AASDescriptor(IAssetAdministrationShell assetAdministrationShell, String endpoint) {
 		this(assetAdministrationShell.getIdShort(), assetAdministrationShell.getIdentification(), endpoint);
-
-		// Overwrite submodel descriptors
-		Collection<SubmodelDescriptor> smDescriptors = assetAdministrationShell.getSubModelDescriptors();
-		put(AssetAdministrationShell.SUBMODELS, smDescriptors);
 	}
 
 	/**

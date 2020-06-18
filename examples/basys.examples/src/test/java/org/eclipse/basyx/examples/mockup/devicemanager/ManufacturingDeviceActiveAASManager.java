@@ -70,7 +70,6 @@ public class ManufacturingDeviceActiveAASManager extends ManufacturingDeviceMana
 		AASDescriptor aasDescriptor = new AASDescriptor(lookupURN("AAS"), getAASEndpoint(lookupURN("AAS")));
 		addSubModelDescriptorURI(aasDescriptor, lookupURN("Status"), "Status");
 		addSubModelDescriptorURI(aasDescriptor, lookupURN("Supply"), "Supply");
-		addSubModelDescriptorURI(aasDescriptor, lookupURN("Controller"), "Controller");
 		
 		// Return AAS and sub model descriptors
 		return aasDescriptor;

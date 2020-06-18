@@ -3,16 +3,19 @@ package org.eclipse.basyx.testsuite.regression.aas.metamodel;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
@@ -68,13 +71,9 @@ public abstract class AssetAdministrationShellSuite {
 		 * setters, additional tests for setters are needed. Currently, this is tested
 		 * implicitly
 		 */
-
-		// Create descriptor for the SubModel
-		SubmodelDescriptor smDescriptor = new SubmodelDescriptor(retrieveBaselineSM(), SMENDPOINT);
-
 		// Create an AAS containing a reference to the created SubModel
 		AssetAdministrationShell aas = new AssetAdministrationShell();
-		aas.addSubModel(smDescriptor);
+		aas.addSubModel(retrieveBaselineSM());
 		aas.setIdShort(AASIDSHORT);
 		aas.setIdentification(AASID);
 		aas.setAssetReference(EXPECTED_ASSETREF);
@@ -104,6 +103,7 @@ public abstract class AssetAdministrationShellSuite {
 		SubModel sm = new SubModel();
 		sm.addSubModelElement(p);
 		sm.setIdShort(SMIDSHORT);
+		sm.setIdentification(IdentifierType.CUSTOM, "baselineSMId");
 
 		return sm;
 	}
@@ -146,18 +146,6 @@ public abstract class AssetAdministrationShellSuite {
 	}
 
 	/**
-	 * Tests retrieving the submodel descriptor
-	 */
-	@Test
-	 public void testGetSubmodelDescriptors() {
-		IAssetAdministrationShell shell = retrieveShell();
-		Collection<SubmodelDescriptor> descriptors = shell.getSubModelDescriptors();
-		assertEquals(1, descriptors.size());
-		SubmodelDescriptor desc = descriptors.iterator().next();
-		assertEquals(SMENDPOINT, desc.getFirstEndpoint());
-	 }
-	
-	/**
 	 * Tests retrieving the reference to the AAS the current AAS is derived from
 	 */
 	@Test
@@ -179,18 +167,23 @@ public abstract class AssetAdministrationShellSuite {
 		// Create a submodel
 		String smId = "newSubmodelId";
 		SubModel subModel = new SubModel(Collections.singletonList(new Property("testProperty")));
+		subModel.setIdentification(IdentifierType.CUSTOM, "smId");
 		subModel.setIdShort(smId);
-		
-		// Create a submodel descriptor using the submodel
-		SubmodelDescriptor descriptor = new SubmodelDescriptor(subModel, "http://dummy.com");
 		
 		//Retrieve the aas
 		IAssetAdministrationShell shell = retrieveShell();
-		shell.addSubModel(descriptor);
+		shell.addSubModel(subModel);
 		
 		// Create the expected reference for assertion
-		// Reference expected = new Reference(new Key(KeyElements.ASSETADMINISTRATIONSHELL, true, "", IdentifierType.IRDI));
-		// assertEquals(expected, descriptor.getParent());
-		// TODO: Replace with test to check correct references in AAS
+		List<IKey> expected1Keys = new ArrayList<>();
+		expected1Keys.add(new Key(KeyElements.ASSETADMINISTRATIONSHELL, true, AASID.getId(), AASID.getIdType()));
+		expected1Keys.add(new Key(KeyElements.SUBMODEL, true, "smId", IdentifierType.CUSTOM));
+		Reference expected1 = new Reference(expected1Keys);
+		Reference expected1b = new Reference(new Key(KeyElements.SUBMODEL, true, "smId", IdentifierType.CUSTOM));
+		Reference expected2 = new Reference(new Key(KeyElements.SUBMODEL, true, "baselineSMId", IdentifierType.CUSTOM));
+		Collection<IReference> smReferences = shell.getSubmodelReferences();
+		assertTrue(smReferences.contains(expected1) || smReferences.contains(expected1b));
+		assertTrue(smReferences.contains(expected2));
+		assertEquals(2, smReferences.size());
 	} 
 }

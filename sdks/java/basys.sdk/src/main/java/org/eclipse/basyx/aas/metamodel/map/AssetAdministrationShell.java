@@ -2,6 +2,7 @@ package org.eclipse.basyx.aas.metamodel.map;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,7 +14,6 @@ import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.parts.View;
@@ -26,6 +26,7 @@ import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -55,7 +56,6 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public static final String ASSET = "asset";
 	public static final String ASSETREF = "assetRef"; // Currently not standard conforming
 	public static final String SUBMODELS = "submodels"; // Used for storing keys to conform to the standard
-	public static final String SUBMODELDESCRIPTORS = "submodelDescriptors";
 	public static final String VIEWS = "views";
 	public static final String CONCEPTDICTIONARY = "conceptDictionary";
 	public static final String TYPE = "type";
@@ -67,10 +67,11 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	 * Constructor
 	 */
 	public AssetAdministrationShell() {
-		this(null, null, new Asset(), new HashSet<SubmodelDescriptor>(), new HashSet<IConceptDictionary>(), new HashSet<IView>());
+		this(null, null, new Asset(), new HashSet<SubModel>(), new HashSet<IConceptDictionary>(), new HashSet<IView>());
 	}
 
-	public AssetAdministrationShell(Reference derivedFrom, Security security, Asset asset, Collection<SubmodelDescriptor> submodels, Collection<IConceptDictionary> dictionaries, Collection<IView> views) {
+	public AssetAdministrationShell(Reference derivedFrom, Security security, Asset asset,
+			Collection<SubModel> submodels, Collection<IConceptDictionary> dictionaries, Collection<IView> views) {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 		
@@ -213,8 +214,8 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@SuppressWarnings("unchecked")
-	public void setSubModels(Collection<SubmodelDescriptor> submodels) {
-		put(AssetAdministrationShell.SUBMODELDESCRIPTORS, submodels);
+	public void setSubModels(Collection<SubModel> submodels) {
+		setSubmodelParent(submodels);
 
 		// Clear submodel references and add new keys
 		((Collection<Reference>) get(SUBMODELS)).clear();
@@ -281,20 +282,11 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		Referable.createAsFacade(this, getKeyElement()).setParent(obj);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void addSubModel(SubmodelDescriptor descriptor) {
-		logger.trace("adding Submodel", descriptor.getIdentifier().getId());
-		((Collection<SubmodelDescriptor>) get(AssetAdministrationShell.SUBMODELDESCRIPTORS)).add(descriptor);
-		addSubmodelReferences(descriptor);
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public Collection<SubmodelDescriptor> getSubModelDescriptors() {
-		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) get(
-				AssetAdministrationShell.SUBMODELDESCRIPTORS);
-		return set.stream().map(SubmodelDescriptor::new).collect(Collectors.toSet());
+	public void addSubModel(SubModel submodel) {
+		logger.trace("adding Submodel", submodel.getIdentification().getId());
+		setSubmodelParent(Collections.singletonList(submodel));
+		addSubmodelReferences(submodel);
 	}
 
 	/**
@@ -327,8 +319,8 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		smReferences.add(reference);
 	}
 
-	private void addSubmodelReferences(SubmodelDescriptor descriptor) {
-		IIdentifier identifier = descriptor.getIdentifier();
+	private void addSubmodelReferences(SubModel submodel) {
+		IIdentifier identifier = submodel.getIdentification();
 		Reference ref = new Reference(identifier, KeyElements.SUBMODEL, true);
 		addSubmodelReference(ref);
 	}
@@ -336,7 +328,18 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	private KeyElements getKeyElement() {
 		return KeyElements.ASSETADMINISTRATIONSHELL;
 	}
-
+	
+	/**
+	 * Set reference of current AAS to each SubModel of a collection
+	 * as a parent reference
+	 * 
+	 * @param submodels collection of Submodels
+	 */
+	private void setSubmodelParent(Collection<SubModel> submodels) {
+		for (SubModel submodel : submodels) {
+			submodel.setParent(getReference());
+		}
+	}
 	@Override
 	public IReference getReference() {
 		return Identifiable.createAsFacade(this, getKeyElement()).getReference();

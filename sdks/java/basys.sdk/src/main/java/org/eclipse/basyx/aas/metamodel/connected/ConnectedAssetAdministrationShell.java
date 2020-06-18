@@ -11,7 +11,6 @@ import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.parts.View;
@@ -23,6 +22,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInforma
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedElement;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -104,14 +104,6 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<SubmodelDescriptor> getSubModelDescriptors() {
-		Collection<Map<String, Object>> coll = (Collection<Map<String, Object>>) getElem()
-				.getPath(AssetAdministrationShell.SUBMODELDESCRIPTORS);
-		return coll.stream().map(SubmodelDescriptor::new).collect(Collectors.toSet());
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
 	public Collection<IView> getViews() {
 		Collection<Map<String, Object>> coll = (Collection<Map<String, Object>>) getElem()
 				.getPath(AssetAdministrationShell.VIEWS);
@@ -126,16 +118,15 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 		return set.stream().map(ConceptDictionary::createAsFacade).collect(Collectors.toSet());
 	}
 
-
 	@Override
 	public Map<String, ISubModel> getSubModels() {
 		return manager.retrieveSubmodels(getIdentification());
 	}
 
-
 	@Override
-	public void addSubModel(SubmodelDescriptor subModel) {
-		getProxy().createValue("/aas/submodels", subModel);
+	public void addSubModel(SubModel subModel) {
+		subModel.setParent(getReference());
+		getProxy().createValue("/submodels", subModel);
 	}
 
 	@Override

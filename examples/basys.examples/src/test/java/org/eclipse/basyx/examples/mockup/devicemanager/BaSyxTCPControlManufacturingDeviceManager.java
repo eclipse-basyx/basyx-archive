@@ -1,19 +1,16 @@
 package org.eclipse.basyx.examples.mockup.devicemanager;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.devicemanager.TCPControllableDeviceManagerComponent;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.models.controlcomponent.ControlComponentChangeListener;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
@@ -89,12 +86,10 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 	/**
 	 * Create the device AAS and sub model structure
 	 */
-	@SuppressWarnings("unchecked")
 	protected void createDeviceAASAndSubModels() {
 		// Register URNs of managed VAB objects
 		addShortcut("AAS",        new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001"));
 		addShortcut("Status",     new ModelUrn("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#001"));
-		addShortcut("Controller", new ModelUrn("urn:de.FHG:devices.es.iese:controllerSM:1.0:3:x-509#001"));
 		
 		// Create device AAS
 		AssetAdministrationShell aas = new AssetAdministrationShell();
@@ -117,26 +112,13 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		invocationsProp.setIdShort("invocations");
 		statusSM.addSubModelElement(invocationsProp);
 		// - Add the submodel to the AAS
-		aas.addSubModel(new SubmodelDescriptor(statusSM, ""));
+		aas.addSubModel(statusSM);
 		
-		// The device also brings a sub model structure with an own ID that is being pushed on the server
-		// - Create generic sub model 
-		SubModel controllerSM = new SubModel();
-		//   - Create sub model contents manually
-		Map<String, Object> listOfControllers = new HashMap<>();
-		((Map<String, Object>) controllerSM.get(SubmodelElementProvider.ELEMENTS)).put("controllers",
-				listOfControllers);
-		controllerSM.setIdShort("Controller");
-		// - Add the submodel to the AAS
-		aas.addSubModel(new SubmodelDescriptor(controllerSM, ""));
-
 		// Push the AAS and submodels to the server
 		// - Transfer device AAS to server
 		aasServerConnection.createValue("/aas", aas);
 		// - Transfer device sub model to server
 		aasServerConnection.createValue("/aas/submodels", statusSM);
-		// - Transfer device sub model to server
-		aasServerConnection.createValue("/aas/submodels", controllerSM);
 		
 		// Register URNs of control component VAB object
 		addShortcut("ControlComponent", new ModelUrn("urn:de.FHG:devices.es.iese:controlComponentSM:1.0:3:x-509#001"));
@@ -164,7 +146,6 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		// Create AAS and sub model descriptors
 		AASDescriptor aasDescriptor = new AASDescriptor(lookupURN("AAS"), getAASEndpoint(lookupURN("AAS")));
 		addSubModelDescriptorURI(aasDescriptor, lookupURN("Status"), "Status");
-		addSubModelDescriptorURI(aasDescriptor, lookupURN("Controller"), "Controller");
 		
 		// Add descriptor for control component sub model
 		addSubModelDescriptorURI(aasDescriptor, lookupURN("ControlComponent"),

@@ -13,7 +13,6 @@ import java.util.List;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.security.Security;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
@@ -22,7 +21,6 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.dataspecification.EmbeddedDataSpecification;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
@@ -56,41 +54,6 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 	@Override
 	protected AssetAdministrationShell retrieveShell() {
 		return shell;
-	}
-
-	@Test
-	public void testSetSubmodelDescriptors() {
-		AssetAdministrationShell aas = new AssetAdministrationShell();
-
-		// Set new Submodel descriptors
-		Identifier id = new Identifier(IdentifierType.CUSTOM, "identifier");
-		String idShort = "idShort";
-		String httpEndpoint = "http://endpoint";
-
-		Collection<SubmodelDescriptor> descriptors = new HashSet<>();
-		descriptors.add(new SubmodelDescriptor(idShort, id, httpEndpoint));
-
-		aas.setSubModels(descriptors);
-
-		// Check for correct setting
-		descriptors = aas.getSubModelDescriptors();
-		assertEquals(1, descriptors.size());
-		SubmodelDescriptor desc = descriptors.iterator().next();
-		assertEquals(idShort, desc.getIdShort());
-		
-		// Check for correct addition
-		// TODO: This could be moved to Suite when API is clear
-		Identifier id2 = new Identifier(IdentifierType.CUSTOM, "identifier2");
-		String idShort2 = "idShort2";
-		String httpEndpoint2 = "http://endpoint2";
-
-		aas.addSubModel(new SubmodelDescriptor(idShort2, id2, httpEndpoint2));
-		descriptors = aas.getSubModelDescriptors();
-		assertEquals(2, descriptors.size());
-
-		// Select new descriptor
-		desc = descriptors.stream().filter(d -> d.getIdShort().equals(idShort2)).findFirst().get();
-		assertEquals(idShort2, desc.getIdShort());
 	}
 
 	@Override
@@ -157,24 +120,24 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 		// Create submodels
 		SubModel subModel1 = new SubModel(Collections.singletonList(new Property("testProperty1")));
 		subModel1.setIdShort("newSubmodelId1");
+		subModel1.setIdentification(IdentifierType.CUSTOM, "smId1");
 		SubModel subModel2 = new SubModel(Collections.singletonList(new Property("testProperty2")));
-		subModel1.setIdShort("newSubmodelId2");
-		
-		// Create submodel descriptors using the submodels
-		SubmodelDescriptor descriptor1 = new SubmodelDescriptor(subModel1, "http://dummy1.com");
-		SubmodelDescriptor descriptor2 = new SubmodelDescriptor(subModel2, "http://dummy2.com");
+		subModel2.setIdShort("newSubmodelId2");
+		subModel2.setIdentification(IdentifierType.CUSTOM, "smId2");
 		
 		// create a collection of descriptors and add the above descriptors
-		Collection<SubmodelDescriptor> descriptors = new ArrayList<SubmodelDescriptor>();
-		descriptors.add(descriptor1);
-		descriptors.add(descriptor2);
-		
-		shell.setSubModels(descriptors);
-		
-		// create expected parent reference for assertion
-		// Reference expected = new Reference(new Key(KeyElements.ASSETADMINISTRATIONSHELL, true, "", IdentifierType.IRDI));
-		// assertEquals(expected, descriptor1.getParent());
-		// assertEquals(expected, descriptor2.getParent());
-		// TODO: Replace with test to check correct references in AAS
+		Collection<SubModel> submodels = new ArrayList<SubModel>();
+		submodels.add(subModel1);
+		submodels.add(subModel2);
+
+		shell.setSubModels(submodels);
+
+		// expect references to be set according to the descriptors
+		Collection<IReference> smReferences = shell.getSubmodelReferences();
+		Reference expected1 = new Reference(new Key(KeyElements.SUBMODEL, true, "smId1", IdentifierType.CUSTOM));
+		Reference expected2 = new Reference(new Key(KeyElements.SUBMODEL, true, "smId2", IdentifierType.CUSTOM));
+		assertTrue(smReferences.contains(expected1));
+		assertTrue(smReferences.contains(expected2));
+		assertEquals(2, smReferences.size());
 	} 
 }

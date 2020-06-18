@@ -66,7 +66,6 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		// Register URNs of managed VAB objects
 		addShortcut("AAS",        new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001"));
 		addShortcut("Status",     new ModelUrn("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#001"));
-		addShortcut("Controller", new ModelUrn("urn:de.FHG:devices.es.iese:controllerSM:1.0:3:x-509#001"));
 
 		// Configure BaSyx service - registry and connection manager
 		setRegistry(new AASRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL"));
@@ -160,11 +159,8 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		// Create sub model descriptors
 		SubmodelDescriptor statusSMDescriptor = new SubmodelDescriptor("Status", lookupURN("Status"),
 				aasRepoURL + "/submodels/Status");
-		SubmodelDescriptor controllerSMDescriptor = new SubmodelDescriptor("Controller", lookupURN("Controller"),
-				"basyx://127.0.0.1:" + serverPort + "/submodels/Controller");
 		// Add sub model descriptor to AAS descriptor
 		deviceAASDescriptor.addSubmodelDescriptor(statusSMDescriptor);
-		deviceAASDescriptor.addSubmodelDescriptor(controllerSMDescriptor);
 		// - Push AAS descriptor to server
 		getRegistry().register(deviceAASDescriptor);
 	}

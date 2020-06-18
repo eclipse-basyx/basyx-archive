@@ -2,9 +2,9 @@ package org.eclipse.basyx.testsuite.regression.aas.restapi;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
@@ -23,9 +23,11 @@ public class StubAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 	public StubAASServlet() {
 		super(new VABMultiSubmodelProvider());
 
-		SubmodelDescriptor smDesc = new SubmodelDescriptor(SMIDSHORT, SMURN, "");
+		SubModel sm = new SubModel();
+		sm.setIdentification(SMURN.getIdType(), SMURN.getId());
+		sm.setIdShort(SMIDSHORT);
 		AssetAdministrationShell aas = new AssetAdministrationShell();
-		aas.addSubModel(smDesc);
+		aas.addSubModel(sm);
 		aas.setIdShort(AASIDSHORT);
 		aas.setIdentification(AASURN);
 

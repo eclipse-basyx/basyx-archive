@@ -6,9 +6,9 @@ package org.eclipse.basyx.testsuite.regression.aas.restapi;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -40,7 +40,7 @@ public class MultiSubmodelProviderTest {
 		String urn = "urn:fhg:es.iese:aas:1:1:submodel";
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
 		// set dummy aas
-		provider.setAssetAdministrationShell(new AASModelProvider(new HashMap<String, Object>()));
+		provider.setAssetAdministrationShell(new AASModelProvider(new AssetAdministrationShell()));
 		provider.addSubmodel("SimpleAASSubmodel", new SubModelProvider(new SimpleAASSubmodel()));
 		stub.addProvider(urn, "", provider);
 		proxy = stub.connectToVABElement(urn);

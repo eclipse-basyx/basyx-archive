@@ -7,12 +7,12 @@ import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.submodel.metamodel.api.IElement;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 
 /**
  * Asset Administration Shell (AAS) interface
@@ -42,7 +42,7 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	 * @param subModel
 	 *            The added sub model
 	 */
-	public void addSubModel(SubmodelDescriptor subModel);
+	public void addSubModel(SubModel subModel);
 
 	/**
 	 * Gets the definition of the security relevant aspects of the AAS.
@@ -72,12 +72,6 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	 */
 	public IReference getAssetReference();
 
-	/**
-	 * Gets the submodel descriptors
-	 * 
-	 * @return
-	 */
-	public Collection<SubmodelDescriptor> getSubModelDescriptors();
 
 	/**
 	 * Gets the views associated with the AAS. <br/>
