@@ -53,7 +53,7 @@ public class DirectoryModelProvider implements IModelProvider {
 		if (!path.startsWith(PREFIX)) {
 			throw new MalformedRequestException("Path " + path + " not recognized as registry path. Has to start with " + PREFIX);
 		}
-		path = path.replace(PREFIX, "");
+		path = path.replaceFirst(PREFIX, "");
 		path = VABPathTools.stripSlashes(path);
 		return path;
 	}

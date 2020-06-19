@@ -3,7 +3,10 @@ package org.eclipse.basyx.vab.protocol.http.server;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.StringJoiner;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
@@ -241,9 +244,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			String path = nUri.substring(getEnvironmentPathSize(req));
 			String extractedParameters = extractParameters(req);
 
-			if (path.startsWith("/")) {
-				path = path.replaceFirst("/", "");
-			}
+			path = VABPathTools.stripSlashes(path);
 
 			if (extractedParameters.isEmpty()) {
 				path += "/";
@@ -255,13 +256,20 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 		throw new MalformedRequestException("The passed path " + uri + " is not a possbile path for this server.");
 	}
 
+	/**
+	 * Extracts request parameters from the request
+	 * 
+	 * @param req
+	 * @return
+	 */
 	private String extractParameters(HttpServletRequest req) {
 		Enumeration<String> parameterNames = req.getParameterNames();
-
-		StringBuilder ret = new StringBuilder();
 		
+		// Collect list of parameters
+		List<String> parameters = new ArrayList<>();
 		while (parameterNames.hasMoreElements()) {
 
+			StringBuilder ret = new StringBuilder();
 			String paramName = parameterNames.nextElement();
 			ret.append(paramName);
 			ret.append("=");
@@ -270,13 +278,18 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			for (int i = 0; i < paramValues.length; i++) {
 				ret.append(paramValues[i]);
 			}
+			parameters.add(ret.toString());
 
 		}
-		String parameters = ret.toString();
+
+		// If no parameter is existing, return an empty string. Else join the parameters
+		// and return them prefixed with a ?
 		if (parameters.isEmpty()) {
 			return "";
 		} else {
-			return "?" + parameters;
+			StringJoiner joiner = new StringJoiner("&");
+			parameters.stream().forEach(s -> joiner.add(s));
+			return "?" + joiner.toString();
 		}
 	}
 

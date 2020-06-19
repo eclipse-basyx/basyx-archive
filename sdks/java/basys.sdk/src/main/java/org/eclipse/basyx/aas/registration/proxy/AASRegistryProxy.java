@@ -42,7 +42,7 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 	 *            The endpoint of the registry with a HTTP-REST interface
 	 */
 	public AASRegistryProxy(String registryUrl) {
-		this(createProxy(new JSONConnector(new HTTPConnector(registryUrl))));
+		this(new JSONConnector(new HTTPConnector(registryUrl)));
 	}
 
 	/**
