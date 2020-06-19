@@ -4,7 +4,7 @@ using namespace basyx::submodel;
 using namespace basyx::submodel::simple;
 using namespace basyx::submodel::api;
 
-SubmodelElement::SubmodelElement(const std::string & idShort, Kind kind)
+SubmodelElement::SubmodelElement(const std::string & idShort, ModelingKind kind)
 	: referable(idShort)
 	, kind(kind)
 {
@@ -56,7 +56,7 @@ const IReferable * const SubmodelElement::getParent() const
 	return this->referable.getParent();
 }
 
-Kind SubmodelElement::getKind() const
+ModelingKind SubmodelElement::getKind() const
 {
 	return this->kind;
 }

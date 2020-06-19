@@ -26,7 +26,7 @@ public:
 private:
 	ElementContainer<ISubmodelElement> elementContainer;
 public:
-	SubmodelElementCollection(const std::string & idShort, Kind = Kind::Instance, bool ordered = false, bool allowDuplicates = false);
+	SubmodelElementCollection(const std::string & idShort, ModelingKind Kind = ModelingKind::Instance, bool ordered = false, bool allowDuplicates = false);
 	virtual ~SubmodelElementCollection() = default;
 
 	virtual api::IElementContainer<ISubmodelElement> & getSubmodelElements() override;

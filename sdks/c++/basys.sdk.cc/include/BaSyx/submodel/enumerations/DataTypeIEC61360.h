@@ -19,6 +19,7 @@ enum class DataTypeIEC61360 {
     Time,
     Timestamp,
     Url,
+    Undefined,
 };
 
 class DataTypeIEC61360_

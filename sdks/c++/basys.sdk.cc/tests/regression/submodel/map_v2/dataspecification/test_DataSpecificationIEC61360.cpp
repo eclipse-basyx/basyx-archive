@@ -83,10 +83,10 @@ TEST_F(DataSpecificationIEC61360Test, TestValueFormat)
   this->data_spec->setValueFormat("testValueFormat");
   ASSERT_EQ(*this->data_spec->getValueFormat(), std::string("testValueFormat"));
 }
-/* TODO
+
 TEST_F(DataSpecificationIEC61360Test, TestDataType)
 {
-  ASSERT_EQ(this->data_spec->getDataType(), DataTypeIEC61360::Unknown);
+  ASSERT_EQ(this->data_spec->getDataType(), DataTypeIEC61360::Undefined);
 
   this->data_spec->setDataType(DataTypeIEC61360::Rational);
   ASSERT_EQ(this->data_spec->getDataType(), DataTypeIEC61360::Rational);
@@ -94,11 +94,11 @@ TEST_F(DataSpecificationIEC61360Test, TestDataType)
 
 TEST_F(DataSpecificationIEC61360Test, TestLevelType)
 {
-  ASSERT_EQ(this->data_spec->getLevelType(), LevelType::Unknown);
+  ASSERT_EQ(this->data_spec->getLevelType(), LevelType::Undefined);
 
   this->data_spec->setLevelType(LevelType::Min);
   ASSERT_EQ(this->data_spec->getLevelType(), LevelType::Min);
-}*/
+}
 
 TEST_F(DataSpecificationIEC61360Test, TestUnitId)
 {

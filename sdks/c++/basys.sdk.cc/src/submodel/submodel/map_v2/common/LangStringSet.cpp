@@ -26,10 +26,10 @@ LangStringSet::LangStringSet(const ILangStringSet & other)
 LangStringSet::langCodeSet_t LangStringSet::getLanguageCodes() const
 {
   auto &langStrings = this->map.Get<basyx::object::object_list_t &>();
-  std::vector<std::string> langCodes;
-  std::transform(langStrings.begin(), langStrings.end(), std::back_inserter(langCodes),
-                 [](basyx::object langSet) { return langSet.getProperty(Path::Language).GetStringContent(); });
-  return LangStringSet::langCodeSet_t(langCodes.begin(), langCodes.end());
+  LangStringSet::langCodeSet_t langCodes;
+  for (auto & langCode : langStrings)
+    langCodes.emplace(langCode.getProperty(Path::Language).GetStringContent());
+  return langCodes;
 }
 
 const std::string &LangStringSet::get(const std::string &languageCode) const

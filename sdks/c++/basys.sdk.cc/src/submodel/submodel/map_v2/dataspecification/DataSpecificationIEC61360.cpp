@@ -74,7 +74,12 @@ std::string *const DataSpecificationIEC61360::getSymbol()
 }
 
 DataTypeIEC61360 DataSpecificationIEC61360::getDataType() const
-{}
+{
+  auto data_type = this->map.getProperty(Path::DataType);
+  if (data_type.IsNull())
+    return DataTypeIEC61360::Undefined;
+  return DataTypeIEC61360_::from_string(data_type.GetStringContent());
+}
 
 std::string * const DataSpecificationIEC61360::getValueFormat()
 {
@@ -92,8 +97,10 @@ api::IReference * const DataSpecificationIEC61360::getValueId()
 
 LevelType DataSpecificationIEC61360::getLevelType() const
 {
-  throw std::logic_error{"Function not yet implemented."};
-  //return from_string(this->map.getProperty(Path::LevelType));
+  auto level_type = this->map.getProperty(Path::LevelType);
+  if (level_type.IsNull())
+    return LevelType::Undefined;
+  return LevelType_::from_string(level_type.GetStringContent());
 }
 
 void DataSpecificationIEC61360::setPreferredName(const api::ILangStringSet & preferredName)
@@ -123,8 +130,7 @@ void DataSpecificationIEC61360::setSourceOfDefinition(const std::string & source
 
 void DataSpecificationIEC61360::setDataType(DataTypeIEC61360 dataType)
 {
-  throw std::logic_error{"Function not yet implemented."};
-  //this->map.insertKey(Path::DataType, to_string(dataType));
+  this->map.insertKey(Path::DataType, DataTypeIEC61360_::to_string(dataType));
 }
 
 void DataSpecificationIEC61360::setValueFormat(const std::string & valueFormat)
@@ -161,8 +167,7 @@ void DataSpecificationIEC61360::setValueId(std::unique_ptr<api::IReference> valu
 
 void DataSpecificationIEC61360::setLevelType(LevelType levelType)
 {
-  throw std::logic_error{"Function not yet implemented."};
-  //this->map.insertKey(Path::LevelType, to_string(levelType));
+  this->map.insertKey(Path::LevelType, LevelType_::to_string(levelType));
 }
 
 }

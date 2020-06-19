@@ -18,7 +18,7 @@ Identifiable::Identifiable(const std::string & idShort, const simple::Identifier
 {
 	auto identifierMap = basyx::object::make_map();
 	identifierMap.insertKey(IdentifierPath::Id, identifier.getId());
-	identifierMap.insertKey(IdentifierPath::IdType, IdentifierTypeUtil::toString(identifier.getIdType()));
+	identifierMap.insertKey(IdentifierPath::IdType, IdentifierType_::to_string(identifier.getIdType()));
 	this->map.insertKey("identifier", identifierMap);
 }
 
@@ -31,7 +31,7 @@ simple::Identifier Identifiable::getIdentification() const
 {
 	auto identifierMap = this->map.getProperty("identifier");
 	return simple::Identifier{
-		IdentifierTypeUtil::fromString(identifierMap.getProperty(IdentifierPath::IdType).Get<std::string&>()),
+		IdentifierType_::from_string(identifierMap.getProperty(IdentifierPath::IdType).Get<std::string&>()),
 		identifierMap.getProperty(IdentifierPath::Id).Get<std::string&>()
 	};
 }

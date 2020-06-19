@@ -8,7 +8,7 @@ constexpr char SubmodelElementCollection::Path::AllowDuplicates[];
 constexpr char SubmodelElementCollection::Path::Ordered[];
 constexpr char SubmodelElementCollection::Path::Value[];
 
-SubmodelElementCollection::SubmodelElementCollection(const std::string & idShort, Kind kind, bool ordered, bool allowDuplicates)
+SubmodelElementCollection::SubmodelElementCollection(const std::string & idShort, ModelingKind kind, bool ordered, bool allowDuplicates)
 	: SubmodelElement(idShort, kind)
 {
 	this->map.insertKey(Path::AllowDuplicates, allowDuplicates);

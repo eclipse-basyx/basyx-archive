@@ -5,7 +5,7 @@ using namespace basyx::submodel::simple;
 using namespace basyx::submodel::api;
 
 
-SubmodelElementCollection::SubmodelElementCollection(const std::string & idShort, Kind kind, bool ordered, bool allowDuplicates)
+SubmodelElementCollection::SubmodelElementCollection(const std::string & idShort, ModelingKind kind, bool ordered, bool allowDuplicates)
 	: SubmodelElement(idShort, kind)
 	, ordered(ordered)
 	, allowDuplicates(allowDuplicates)

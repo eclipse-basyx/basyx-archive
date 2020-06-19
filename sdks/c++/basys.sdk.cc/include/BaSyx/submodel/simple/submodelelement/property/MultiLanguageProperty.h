@@ -19,7 +19,7 @@ private:
 	LangStringSet value;
 	Reference valueId;
 public:
-	MultiLanguageProperty(const std::string & idShort, Kind kind = Kind::Instance);
+	MultiLanguageProperty(const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
 	virtual ~MultiLanguageProperty() = default;
 
 	virtual api::ILangStringSet & getValue() override;

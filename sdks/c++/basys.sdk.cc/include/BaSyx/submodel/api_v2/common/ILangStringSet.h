@@ -13,7 +13,7 @@ namespace api {
 class ILangStringSet
 {
 public:
-	using langCodeSet_t = const std::unordered_set<std::string>;
+	using langCodeSet_t = std::unordered_set<std::string>;
 public:
 	virtual ~ILangStringSet();
 

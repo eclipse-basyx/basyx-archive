@@ -4,11 +4,12 @@ using namespace basyx::submodel;
 using namespace basyx::submodel::api;
 using namespace basyx::submodel::map;
 
-SubModel::SubModel(const std::string & idShort, const simple::Identifier & identifier)
+SubModel::SubModel(const std::string & idShort, const simple::Identifier & identifier, ModelingKind kind)
 	: Identifiable(idShort, identifier)
 {
 	this->map.insertKey("submodelElements", this->elementContainer.getMap());
 	this->map.insertKey("semanticId", semanticId.getMap());
+  this->map.insertKey("kind", ModelingKind_::to_string(kind));
 };
 
 IElementContainer<ISubmodelElement> & SubModel::submodelElements()
@@ -16,11 +17,10 @@ IElementContainer<ISubmodelElement> & SubModel::submodelElements()
 	return this->elementContainer;
 }
 
-Kind SubModel::getKind() const
+ModelingKind SubModel::getKind() const
 {
-	return Kind::Instance;
+	return ModelingKind_::from_string(this->map.getProperty("kind").GetStringContent());
 }
-
 
 const IReference & SubModel::getSemanticId() const
 {

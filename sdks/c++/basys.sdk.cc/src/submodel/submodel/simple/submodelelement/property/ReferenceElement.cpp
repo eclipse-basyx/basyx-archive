@@ -4,7 +4,7 @@ using namespace basyx::submodel;
 using namespace basyx::submodel::api;
 using namespace basyx::submodel::simple;
 
-ReferenceElement::ReferenceElement(const std::string & idShort, Kind kind)
+ReferenceElement::ReferenceElement(const std::string & idShort, ModelingKind kind)
 	: SubmodelElement(idShort, kind)
 {
 

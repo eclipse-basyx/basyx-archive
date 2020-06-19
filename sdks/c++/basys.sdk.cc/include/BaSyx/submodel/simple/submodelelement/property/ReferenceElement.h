@@ -17,7 +17,7 @@ class ReferenceElement :
 private:
 	Reference value;
 public:
-	ReferenceElement(const std::string & idShort, Kind kind = Kind::Instance);
+	ReferenceElement(const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
 	virtual ~ReferenceElement() = default;
 
 	virtual const api::IReference * const getValue() const = 0;

@@ -59,7 +59,7 @@ static const std::array<enum_pair_t, $SIZE$> string_to_enum =
 $ENUM_CLASS$ $ENUM_CLASS$_::from_string(const std::string & name)
 {
     auto pair = std::find_if(string_to_enum.begin(), string_to_enum.end(), 
-		[&name](const auto & pair) {
+		[&name](const enum_pair_t & pair) {
 			return !name.compare(pair.first);
 	});
 
@@ -69,7 +69,7 @@ $ENUM_CLASS$ $ENUM_CLASS$_::from_string(const std::string & name)
 const char * $ENUM_CLASS$_::to_string($ENUM_CLASS$ value)
 {
     auto pair = std::find_if(string_to_enum.begin(), string_to_enum.end(), 
-		[value](const auto & pair) {
+		[value](const enum_pair_t & pair) {
 			return value == pair.second;
 	});
 

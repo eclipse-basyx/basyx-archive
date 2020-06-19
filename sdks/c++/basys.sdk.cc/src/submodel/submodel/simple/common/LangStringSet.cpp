@@ -19,10 +19,10 @@ LangStringSet::LangStringSet(const std::string & languageCode, const std::string
 
 LangStringSet::langCodeSet_t LangStringSet::getLanguageCodes() const
 {
-  std::vector<std::string> langCodes;
-  for (auto langCode : this->langStrings)
-    langCodes.push_back(langCode.first);
-  return LangStringSet::langCodeSet_t(langCodes.begin(), langCodes.end());
+  LangStringSet::langCodeSet_t langCodes;
+  for (auto & langCode : this->langStrings)
+    langCodes.insert(langCode.first);
+  return langCodes;
 };
 
 

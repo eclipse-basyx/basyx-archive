@@ -34,14 +34,14 @@ private:
 	Reference semanticId;
 	ElementContainer<api::ISubmodelElement> elementContainer;
 public:
-	SubModel(const std::string & idShort, const simple::Identifier & identifier);
+	SubModel(const std::string & idShort, const simple::Identifier & identifier, ModelingKind kind = ModelingKind::Instance);
 
 	virtual ~SubModel() = default;
 public:
 	virtual api::IElementContainer<api::ISubmodelElement> & submodelElements();
 
 	// Inherited via IHasKind
-	virtual Kind getKind() const override;
+	virtual ModelingKind getKind() const override;
 
 	// Inherited via IHasSemantics
 	virtual const api::IReference & getSemanticId() const override;

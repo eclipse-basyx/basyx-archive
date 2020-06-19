@@ -1,7 +1,7 @@
 #include <BaSyx/submodel/map_v2/reference/Reference.h>
 
-#include <BaSyx/submodel/api_v2/reference/KeyType.h>
-#include <BaSyx/submodel/api_v2/reference/KeyElements.h>
+#include <BaSyx/submodel/enumerations/KeyType.h>
+#include <BaSyx/submodel/enumerations/KeyElements.h>
 
 #include <vector>
 
@@ -42,34 +42,25 @@ Reference::Reference(const std::vector<simple::Key> & keys)
 
 Reference::Reference(const IReference & other)
 	: Reference{other.getKeys()}
-{
-};
+{};
+
+
+Reference::Reference(basyx::object &object)
+  : Reference(keyMapList_to_keyList(object.getProperty("keys").Get<object::object_list_t&>()))
+{}
 
 
 std::vector<simple::Key> Reference::getKeys() const
 {
-	std::vector<simple::Key> keys;
-
-	auto keyList = this->map.getProperty("keys").Get<basyx::object::object_list_t&>();
-	for (auto & keyMap : keyList)
-	{
-		keys.emplace_back(
-			  KeyElementsUtil::fromString(keyMap.getProperty(KeyPath::Type).Get<std::string&>()),
-			  keyMap.getProperty(KeyPath::Local).Get<bool>(),
-			  KeyTypeUtil::fromString(keyMap.getProperty(KeyPath::IdType).Get<std::string&>()),
-			  keyMap.getProperty(KeyPath::Value).Get<std::string&>()
-		);
-	};
-
-	return keys;
+	return this->keyMapList_to_keyList(this->map.getProperty("keys").Get<basyx::object::object_list_t&>());
 };
 
 
 void Reference::addKey(const simple::Key & key)
 {
 	basyx::object keyMap = basyx::object::make_map();
-	keyMap.insertKey(KeyPath::IdType, KeyTypeUtil::toString(key.getIdType()));
-	keyMap.insertKey(KeyPath::Type, KeyElementsUtil::toString(key.getType()));
+	keyMap.insertKey(KeyPath::IdType, KeyType_::to_string(key.getIdType()));
+	keyMap.insertKey(KeyPath::Type, KeyElements_::to_string(key.getType()));
 	keyMap.insertKey(KeyPath::Value, key.getValue());
 	keyMap.insertKey(KeyPath::Local, key.isLocal());
 	this->map.getProperty("keys").insert(keyMap);
@@ -90,3 +81,27 @@ bool Reference::empty() const
 {
 	return this->map.getProperty("keys").empty();
 }
+
+simple::Key Reference::keyMap_to_key(basyx::object &keyMap)
+{
+  return simple::Key
+  (
+    KeyElements_::from_string(keyMap.getProperty(KeyPath::Type).Get<std::string&>()),
+    keyMap.getProperty(KeyPath::Local).Get<bool>(),
+    KeyType_::from_string(keyMap.getProperty(KeyPath::IdType).Get<std::string&>()),
+    keyMap.getProperty(KeyPath::Value).Get<std::string&>()
+  );
+}
+
+std::vector<simple::Key> Reference::keyMapList_to_keyList(basyx::object::object_list_t &keyMapList)
+{
+  std::vector<simple::Key> keys;
+
+  for (auto & keyMap : keyMapList)
+  {
+    keys.emplace_back(keyMap_to_key(keyMap));
+  };
+
+  return keys;
+}
+

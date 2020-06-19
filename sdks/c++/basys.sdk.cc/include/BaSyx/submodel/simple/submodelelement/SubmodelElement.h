@@ -16,11 +16,11 @@ class SubmodelElement : public virtual api::ISubmodelElement
 {
 private:
 	HasDataSpecification dataSpecification;
-	Kind kind;
+	ModelingKind kind;
 	Reference semanticId;
 	Referable referable;
 public:
-	SubmodelElement(const std::string & idShort, Kind kind = Kind::Instance);
+	SubmodelElement(const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
 
 	virtual ~SubmodelElement() = default;
 
@@ -40,7 +40,7 @@ public:
 	virtual const IReferable * const getParent() const override;
 
 	// Inherited via IHasKind
-	virtual Kind getKind() const override;
+	virtual ModelingKind getKind() const override;
 };
 
 }
