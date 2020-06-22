@@ -131,12 +131,16 @@ public class Operation extends SubmodelElement implements IOperation {
 
 	@SuppressWarnings("unchecked")
 	private Collection<IOperationVariable> transformToOperationVariables(Object obj) {
-		Collection<Map<String, Object>> map = (Collection<Map<String, Object>>) obj;
-		Collection<IOperationVariable> ret = new ArrayList<>();
-		for (Map<String, Object> m : map) {
-			ret.add(OperationVariable.createAsFacade(m));
+		if (obj instanceof Collection<?>) {
+			Collection<Map<String, Object>> map = (Collection<Map<String, Object>>) obj;
+			Collection<IOperationVariable> ret = new ArrayList<>();
+			for (Map<String, Object> m : map) {
+				ret.add(OperationVariable.createAsFacade(m));
+			}
+			return ret;
+		} else {
+			return new ArrayList<>();
 		}
-		return ret;
 	}
 
 	@SuppressWarnings("unchecked")

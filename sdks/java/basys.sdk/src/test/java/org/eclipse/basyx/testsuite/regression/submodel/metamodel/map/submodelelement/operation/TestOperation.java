@@ -55,6 +55,14 @@ public class TestOperation {
 		assertEquals(new ArrayList<OperationVariable>(), operation.getOutputVariables());
 		assertEquals(new ArrayList<OperationVariable>(), operation.getInOutputVariables());
 		testInvokable();
+	}
+
+	@Test
+	public void testOptionalElements() throws Exception {
+		operation = new Operation(null, null, null, FUNC);
+		assertEquals(0, operation.getInputVariables().size());
+		assertEquals(0, operation.getOutputVariables().size());
+		assertEquals(0, operation.getInOutputVariables().size());
 	} 
 	
 	@Test 
