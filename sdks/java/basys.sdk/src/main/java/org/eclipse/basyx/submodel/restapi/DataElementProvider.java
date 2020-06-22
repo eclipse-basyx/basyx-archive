@@ -37,15 +37,14 @@ public class DataElementProvider extends MetaModelProvider {
 			Object o = p.get(Property.VALUE);
 
 			// Wrap return value in map describing it
-			if (o != null) {
-				ret.put(Property.VALUE, o);
-				ret.put(Property.VALUEID, p.get(Property.VALUEID));
-				ret.put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(o));
-				return ret;
+			ret.put(Property.VALUE, o);
+			ret.put(Property.VALUEID, p.get(Property.VALUEID));
+			if (p.containsKey(Property.VALUETYPE)) {
+				ret.put(Property.VALUETYPE, p.get(Property.VALUETYPE));
 			} else {
-				return null;
+				ret.put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(o));
 			}
-
+			return ret;
 		} else if (path.isEmpty()) {
 			// Handle "" path by returning complete property
 			return proxy.getModelPropertyValue("");

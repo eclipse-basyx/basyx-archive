@@ -36,6 +36,10 @@ public class SimpleAASSubmodel extends SubModel {
 		stringProp.setIdShort("stringProperty");
 		addSubModelElement(stringProp);
 
+		Property nullProp = new Property(null);
+		nullProp.setIdShort("nullProperty");
+		addSubModelElement(nullProp);
+
 		// Create example operations
 		Operation complex = new Operation((Function<Object[], Object>) v -> {
 			return (int) v[0] - (int) v[1];

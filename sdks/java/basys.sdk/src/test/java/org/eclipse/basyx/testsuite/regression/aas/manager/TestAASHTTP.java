@@ -114,7 +114,7 @@ public class TestAASHTTP {
 
 		Map<String, IDataElement> properties = sm.getDataElements();
 		// 2 properties -> SMElementCollections don't count
-		assertEquals(2, properties.size());
+		assertEquals(3, properties.size());
 		IProperty prop = (IProperty) properties.get("integerProperty");
 		assertEquals(123, prop.get());
 
@@ -126,7 +126,7 @@ public class TestAASHTTP {
 
 		Map<String, ISubmodelElement> elements = sm.getSubmodelElements();
 		// 2 properties, 4 operations, 1 collection
-		assertEquals(7, elements.size());
+		assertEquals(8, elements.size());
 
 	}
 }

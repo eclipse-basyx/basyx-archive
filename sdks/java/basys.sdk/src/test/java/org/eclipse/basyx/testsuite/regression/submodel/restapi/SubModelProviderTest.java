@@ -104,6 +104,11 @@ public class SubModelProviderTest {
 				.getModelPropertyValue("/submodel/dataElements/stringProperty/value");
 		assertEquals("Test", resMap.get(Property.VALUE));
 
+		// Read null value
+		resMap = (Map<String, Object>) submodelElement
+				.getModelPropertyValue("/submodel/dataElements/nullProperty/value");
+		assertEquals(null, resMap.get(Property.VALUE));
+
 		// Read container property
 		Collection<Object> resSet = (Collection<Object>) submodelElement
 				.getModelPropertyValue("/submodel/submodelElements/containerRoot/value");
@@ -149,7 +154,7 @@ public class SubModelProviderTest {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
 		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel.getModelPropertyValue("/submodel/dataElements");
 		// Should be two properties, one collection and four operations
-		assertEquals(2, set.size());
+		assertEquals(3, set.size());
 	}
 
 	/**
@@ -183,7 +188,7 @@ public class SubModelProviderTest {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
 		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel
 				.getModelPropertyValue("/submodel/submodelElements");
-		assertEquals(7, set.size());
+		assertEquals(8, set.size());
 	}
 
 	/**
