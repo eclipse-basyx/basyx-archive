@@ -16,17 +16,13 @@ DataSpecification::DataSpecification(const std::string & idShort, const simple::
 
 void DataSpecification::setContent(std::unique_ptr<api::IDataSpecificationContent> content)
 {
-  DataSpecificationContent* dataSpecificationContent;
-  if (content == nullptr)
-    dataSpecificationContent = new DataSpecificationContent();
-  else
-  {
-    dataSpecificationContent = dynamic_cast<DataSpecificationContent*>(content.release());
-    if (!dataSpecificationContent)
-      std::__throw_bad_cast();
-  }
-  this->content = dataSpecificationContent;
-  this->map.insertKey("dataSpecificationContent", dataSpecificationContent->getMap());
+	// Assume content is map::IDataSpecificationContent
+	auto map_content = dynamic_cast<map::DataSpecificationContent*>(content.get());
+	if ( map_content != nullptr) {
+		content.release();
+		this->content = std::unique_ptr<map::DataSpecificationContent>(map_content);
+		this->map.insertKey("dataSpecificationContent", map_content->getMap());
+	};
 }
 
 api::IDataSpecificationContent& DataSpecification::getContent()

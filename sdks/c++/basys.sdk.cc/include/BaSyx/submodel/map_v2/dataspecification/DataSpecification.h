@@ -18,8 +18,7 @@ class DataSpecification :
     public virtual vab::ElementMap
 {
 private:
-  DataSpecificationContent * content;
-
+  std::unique_ptr<DataSpecificationContent> content;
 public:
   DataSpecification(const std::string & idShort, const simple::Identifier & identifier, std::unique_ptr<api::IDataSpecificationContent> content);
 

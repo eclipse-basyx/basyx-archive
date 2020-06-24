@@ -144,7 +144,7 @@ void DataSpecificationIEC61360::setUnitId(std::unique_ptr<api::IReference> unit_
   this->unitId.reset(unit_id.release());
   auto unit_id_ptr = dynamic_cast<map::Reference*>(this->unitId.get());
   if (!unit_id_ptr)
-    std::__throw_bad_cast();
+	  return;
 
   this->map.insertKey(Path::UnitId, unit_id_ptr->getMap());
 }
@@ -160,7 +160,7 @@ void DataSpecificationIEC61360::setValueId(std::unique_ptr<api::IReference> valu
   this->valueId = std::move(valueId);
   auto value_id_ptr = dynamic_cast<map::Reference*>(this->valueId.get());
   if (!value_id_ptr)
-    std::__throw_bad_cast();
+	  return;
 
   this->map.insertKey(Path::ValueId, value_id_ptr->getMap());
 }
