@@ -14,6 +14,7 @@ Entity
 Event
 MultiLanguageProperty
 Operation
+OperationVariable
 Property
 Range
 ReferenceElement

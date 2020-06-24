@@ -23,6 +23,7 @@ enum class ModelTypes {
     Event,
     MultiLanguageProperty,
     Operation,
+    OperationVariable,
     Property,
     Range,
     ReferenceElement,

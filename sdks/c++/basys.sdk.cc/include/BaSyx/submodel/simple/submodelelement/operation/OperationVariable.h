@@ -11,7 +11,7 @@ namespace simple {
 template<typename T>
 class OperationVariable : 
 	public virtual SubmodelElement, 
-	public virtual IOperationVariable
+	public virtual api::IOperationVariable
 {
 private:
 	std::unique_ptr<ISubmodelElement> value;
@@ -20,7 +20,7 @@ public:
 	{};
 
 	OperationVariable(const std::string & idShort, std::unique_ptr<ISubmodelElement> value)
-		: SubmodelElement(idShort, Kind::Type)
+		: SubmodelElement(idShort, ModelingKind::Template)
 		, value(std::move(value))
 	{
 	};

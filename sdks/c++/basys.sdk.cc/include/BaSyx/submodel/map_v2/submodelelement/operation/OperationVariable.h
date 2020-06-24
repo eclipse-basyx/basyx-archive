@@ -11,16 +11,16 @@ namespace map {
 template<typename T>
 class OperationVariable : 
 	public SubmodelElement, 
-	public IOperationVariable
+	public api::IOperationVariable,
+	public ModelType<ModelTypes::OperationVariable>
 {
 private:
 	std::unique_ptr<SubmodelElement> value;
 public:
-	OperationVariable(const std::string & idShort, std::unique_ptr<ISubmodelElement> value)
-		: SubmodelElement(idShort, Kind::Type)
+	OperationVariable(const std::string & idShort, std::unique_ptr<SubmodelElement> value)
+		: SubmodelElement(idShort, ModelingKind::Template)
 		, value(std::move(value))
 	{
-		this->value = dynamic_cast<SubmodelElement>(value.get());
 		this->map.insertKey("value", this->value->getMap());
 	};
 
