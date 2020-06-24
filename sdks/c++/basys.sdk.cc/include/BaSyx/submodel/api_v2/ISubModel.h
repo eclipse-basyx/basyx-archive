@@ -24,6 +24,7 @@ public:
 	virtual ~ISubModel() = 0;
 
 	virtual IElementContainer<ISubmodelElement> & submodelElements() = 0;
+	virtual const IElementContainer<ISubmodelElement> & submodelElements() const = 0;
 };
 
 inline ISubModel::~ISubModel() = default;

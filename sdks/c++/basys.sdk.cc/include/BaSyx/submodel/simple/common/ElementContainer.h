@@ -24,6 +24,7 @@ public:
 	// Inherited via IElementContainer
 	virtual std::size_t size() const override;
 	virtual IElementType * const getElement(const std::string & idShort) const override;
+	virtual IElementType * const getElement(std::size_t n) const override;
 	virtual void addElement(elementPtr_t element) override;
 public:
 	auto begin() -> decltype(this->container.begin())
@@ -54,6 +55,16 @@ IElementType * const ElementContainer<IElementType>::getElement(const std::strin
 
 	return nullptr;
 };
+
+template<typename IElementType>
+IElementType * const ElementContainer<IElementType>::getElement(std::size_t n) const
+{
+	if (n > this->container.size())
+		return nullptr;
+
+	return this->container.at(n).get();
+};
+
 
 template<typename IElementType>
 void ElementContainer<IElementType>::addElement(elementPtr_t element)

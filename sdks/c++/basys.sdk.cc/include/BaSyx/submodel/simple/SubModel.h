@@ -36,6 +36,7 @@ public:
 	virtual ~SubModel() = default;
 public:
 	virtual api::IElementContainer<api::ISubmodelElement> & submodelElements();
+	virtual const api::IElementContainer<api::ISubmodelElement> & submodelElements() const;
 
 	// Inherited via IHasKind
 	virtual ModelingKind getKind() const override;

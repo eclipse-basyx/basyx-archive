@@ -21,6 +21,7 @@ public:
 	virtual ~IElementContainer() = 0;
 
 	virtual IElementType * const getElement(const std::string & idShort) const = 0;
+	virtual IElementType * const getElement(std::size_t n) const = 0;
 
 	virtual void addElement(elementPtr_t element) = 0;
 

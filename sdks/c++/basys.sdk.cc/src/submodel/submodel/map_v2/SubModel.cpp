@@ -17,6 +17,11 @@ IElementContainer<ISubmodelElement> & SubModel::submodelElements()
 	return this->elementContainer;
 }
 
+const IElementContainer<ISubmodelElement> & SubModel::submodelElements() const
+{
+	return this->elementContainer;
+}
+
 ModelingKind SubModel::getKind() const
 {
 	return ModelingKind_::from_string(this->map.getProperty("kind").GetStringContent());

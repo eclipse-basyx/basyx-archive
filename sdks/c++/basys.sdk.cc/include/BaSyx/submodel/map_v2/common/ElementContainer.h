@@ -34,6 +34,7 @@ public:
 public:
 	virtual std::size_t size() const override;
 	virtual IElementType * const getElement(const std::string & idShort) const override;
+	virtual IElementType * const getElement(std::size_t n) const override;
 	virtual void addElement(elementPtr_t element) override;
 };
 
@@ -77,6 +78,22 @@ IElementType * const ElementContainer<IElementType>::getElement(const std::strin
 
 	return nullptr;
 };
+
+template<typename IElementType>
+IElementType * const ElementContainer<IElementType>::getElement(std::size_t n) const
+{
+	if (n > this->size())
+		return nullptr;
+
+	// Find element in object tree
+	auto & objectList = this->getMap().template Get<basyx::object::object_list_t&>();
+	auto & obj = objectList.at(n);
+
+	// Get id of object and create temporary
+	const auto & id = obj.getProperty(map::Identifiable::Path::IdShort).Get<std::string&>();
+	return this->getElement(id);
+};
+
 
 template<typename IElementType>
 void ElementContainer<IElementType>::addElement(elementPtr_t element)
