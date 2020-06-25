@@ -43,7 +43,8 @@ namespace BaSyx.Models.Core.Common
         public static readonly ModelType ConceptDescription = new ModelType("ConceptDescription");
         public static readonly ModelType ConceptDictionary = new ModelType("ConceptDictionary");
 
-        public static readonly ModelType AssetAdministrationShellAggregatorDescriptor = new ModelType("AssetAdministrationShellAggregatorDescriptor");
+        public static readonly ModelType AssetAdministrationShellRepositoryDescriptor = new ModelType("AssetAdministrationShellRepositoryDescriptor");
+        public static readonly ModelType SubmodelRepositoryDescriptor = new ModelType("SubmodelRepositoryDescriptor");
         public static readonly ModelType AssetAdministrationShellDescriptor = new ModelType("AssetAdministrationShellDescriptor");
         public static readonly ModelType SubmodelDescriptor = new ModelType("SubmodelDescriptor");
 

@@ -21,7 +21,23 @@ namespace BaSyx.API.Components
     public static class DefaultEndpointRegistration
     {
         private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
-        public static void UseAutoEndpointRegistration(this IAssetAdministrationShellAggregatorServiceProvider serviceProvider, ServerConfiguration serverConfiguration)
+        public static void UseAutoEndpointRegistration(this IAssetAdministrationShellRepositoryServiceProvider serviceProvider, ServerConfiguration serverConfiguration)
+        {
+            string multiUrl = serverConfiguration.Hosting.Urls.Find(u => u.Contains("+"));
+            if (!string.IsNullOrEmpty(multiUrl))
+            {
+                Uri uri = new Uri(multiUrl.Replace("+", "localhost"));
+                List<IEndpoint> endpoints = GetNetworkInterfaceBasedEndpoints(uri.Scheme, uri.Port);
+                serviceProvider.UseDefaultEndpointRegistration(endpoints);
+            }
+            else
+            {
+                List<IEndpoint> endpoints = serverConfiguration.Hosting.Urls.ConvertAll(EndpointConverter);
+                serviceProvider.UseDefaultEndpointRegistration(endpoints);
+            }
+        }
+
+        public static void UseAutoEndpointRegistration(this ISubmodelRepositoryServiceProvider serviceProvider, ServerConfiguration serverConfiguration)
         {
             string multiUrl = serverConfiguration.Hosting.Urls.Find(u => u.Contains("+"));
             if (!string.IsNullOrEmpty(multiUrl))
@@ -100,24 +116,24 @@ namespace BaSyx.API.Components
             return aasEndpoints;
         }
 
-        public static void UseDefaultEndpointRegistration(this IAssetAdministrationShellAggregatorServiceProvider serviceProvider, IEnumerable<IEndpoint> endpoints)
+        public static void UseDefaultEndpointRegistration(this IAssetAdministrationShellRepositoryServiceProvider serviceProvider, IEnumerable<IEndpoint> endpoints)
         {
-            List<IEndpoint> aggregatorEndpoints = new List<IEndpoint>();
+            List<IEndpoint> repositoryEndpoints = new List<IEndpoint>();
             foreach (var endpoint in endpoints)
             {
                 string epAddress = endpoint.Address;
                 if (!epAddress.EndsWith("/shells"))
                     epAddress = epAddress + (epAddress.EndsWith("/") ? "" : "/") + "shells";
 
-                aggregatorEndpoints.Add(EndpointFactory.CreateEndpoint(endpoint.Type, epAddress, endpoint.Security));
+                repositoryEndpoints.Add(EndpointFactory.CreateEndpoint(endpoint.Type, epAddress, endpoint.Security));
             }
 
-            serviceProvider.ServiceDescriptor.AddEndpoints(aggregatorEndpoints);
-            var aasAggregatorDescriptor = serviceProvider.ServiceDescriptor;
-            foreach (var aasDescriptor in aasAggregatorDescriptor.AssetAdministrationShellDescriptors)
+            serviceProvider.ServiceDescriptor.AddEndpoints(repositoryEndpoints);
+            var aasRepositoryDescriptor = serviceProvider.ServiceDescriptor;
+            foreach (var aasDescriptor in aasRepositoryDescriptor.AssetAdministrationShellDescriptors)
             {
                 List<IEndpoint> aasEndpoints = new List<IEndpoint>();
-                foreach (var endpoint in aggregatorEndpoints)
+                foreach (var endpoint in repositoryEndpoints)
                 {
                     var ep = EndpointFactory.CreateEndpoint(endpoint.Type, GetAssetAdministrationShellEndpoint(endpoint, aasDescriptor.IdShort), endpoint.Security);
                     aasEndpoints.Add(ep);
@@ -134,6 +150,32 @@ namespace BaSyx.API.Components
                     }
                     submodelDescriptor.AddEndpoints(submodelEndpoints);
                 }
+            }
+        }
+
+        public static void UseDefaultEndpointRegistration(this ISubmodelRepositoryServiceProvider serviceProvider, IEnumerable<IEndpoint> endpoints)
+        {
+            List<IEndpoint> repositoryEndpoints = new List<IEndpoint>();
+            foreach (var endpoint in endpoints)
+            {
+                string epAddress = endpoint.Address;
+                if (!epAddress.EndsWith("/submodels"))
+                    epAddress = epAddress + (epAddress.EndsWith("/") ? "" : "/") + "submodels";
+
+                repositoryEndpoints.Add(EndpointFactory.CreateEndpoint(endpoint.Type, epAddress, endpoint.Security));
+            }
+
+            serviceProvider.ServiceDescriptor.AddEndpoints(repositoryEndpoints);
+            var submodelRepositoryDescriptor = serviceProvider.ServiceDescriptor;
+            foreach (var submodelDescriptor in submodelRepositoryDescriptor.SubmodelDescriptors)
+            {
+                List<IEndpoint> submodelEndpoints = new List<IEndpoint>();
+                foreach (var endpoint in repositoryEndpoints)
+                {
+                    var ep = EndpointFactory.CreateEndpoint(endpoint.Type, GetSubmodelInRepositoryEndpoint(endpoint, submodelDescriptor.IdShort), endpoint.Security);
+                    submodelEndpoints.Add(ep);
+                }
+                submodelDescriptor.AddEndpoints(submodelEndpoints);                
             }
         }
 
@@ -176,6 +218,15 @@ namespace BaSyx.API.Components
             }
 
             serviceProvider.ServiceDescriptor.AddEndpoints(submodelEndpoints);         
+        }
+
+        public static string GetSubmodelInRepositoryEndpoint(IEndpoint endpoint, string submodelId)
+        {
+            string epAddress = endpoint.Address;
+            if (!epAddress.EndsWith("/submodels"))
+                epAddress = epAddress + (epAddress.EndsWith("/") ? "" : "/") + "submodels";
+
+            return epAddress + "/" + submodelId + "/submodel";
         }
 
         public static string GetSubmodelEndpoint(IEndpoint endpoint, string submodelId)

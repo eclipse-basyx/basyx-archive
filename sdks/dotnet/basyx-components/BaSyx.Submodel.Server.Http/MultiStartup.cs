@@ -30,18 +30,18 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
-namespace BaSyx.AAS.Server.Http
+namespace BaSyx.Submodel.Server.Http
 {
     public class MultiStartup
     {
-        private static readonly Logger logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
+        private static Logger logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
         private const string ControllerAssemblyName = "BaSyx.API.Http.Controllers";
+
         public IConfiguration Configuration { get; }
+        public static ServerSettings ServerSettings { get; set; }
         public IServerApplicationLifetime ServerApplicationLifetime { get; }
-        public static ServerSettings ServerSettings { get; set; } 
-               
+
         private string submodelId = string.Empty;
-        private string aasId = string.Empty;
 
         public MultiStartup(IConfiguration configuration, ServerSettings serverSettings, IServerApplicationLifetime serverApplicationLifetime)
         {
@@ -49,7 +49,6 @@ namespace BaSyx.AAS.Server.Http
             ServerSettings = serverSettings;
             ServerApplicationLifetime = serverApplicationLifetime;
         }
-
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -69,32 +68,14 @@ namespace BaSyx.AAS.Server.Http
                 options.Conventions.AddPageRoute(pageName, "");
             });
 
-            //Check whether Asset Administration Shell Service Provider exists and bind it to the AssetAdministrationShell-Services-Controller
-            services.AddTransient(ctx =>
-            {
-                IAssetAdministrationShellServiceProvider aasServiceProvider = ctx
-                .GetRequiredService<IAssetAdministrationShellRepositoryServiceProvider>()
-                .GetAssetAdministrationShellServiceProvider(aasId);
-
-                return new AssetAdministrationShellServices(aasServiceProvider);
-            });
-
-
             //Check whether Submodel Service Provider exists and bind it to the Submodel-Services-Controller
             services.AddTransient(ctx =>
             {
-                IAssetAdministrationShellServiceProvider aasServiceProvider = ctx
-               .GetRequiredService<IAssetAdministrationShellRepositoryServiceProvider>()
-               .GetAssetAdministrationShellServiceProvider(aasId);
+                ISubmodelServiceProvider submodelServiceProvider = ctx
+                .GetRequiredService<ISubmodelRepositoryServiceProvider>()
+                .GetSubmodelServiceProvider(submodelId);
 
-                var submodelServiceProvider = aasServiceProvider.SubmodelRegistry.GetSubmodelServiceProvider(submodelId);
-                if(!submodelServiceProvider.Success || submodelServiceProvider.Entity == null)
-                {
-                    SubmodelServiceProvider cssp = new SubmodelServiceProvider();
-                    return new SubmodelServices(cssp);
-                }
-                else
-                    return new SubmodelServices(submodelServiceProvider.Entity);
+                return new SubmodelServices(submodelServiceProvider);
             });
 
             // Register the Swagger generator, defining one or more Swagger documents
@@ -103,11 +84,11 @@ namespace BaSyx.AAS.Server.Http
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "BaSyx Asset Administration Shell Repository HTTP REST-API",
-                    Description = "The full description of the generic BaSyx Asset Administration Shell Repository HTTP REST-API",
+                    Title = "BaSyx Submodel Repository HTTP REST-API",
+                    Description = "The full description of the generic BaSyx Submodel Repository HTTP REST-API",
                     Contact = new OpenApiContact { Name = "Constantin Ziesche", Email = "constantin.ziesche@bosch.com", Url = new Uri("https://www.bosch.com/de/") },
                     License = new OpenApiLicense { Name = "EPL-2.0", Url = new Uri("https://www.eclipse.org/legal/epl-2.0/") }
-                });                
+                });
 
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{controllerAssembly.GetName().Name}.xml";
@@ -117,7 +98,7 @@ namespace BaSyx.AAS.Server.Http
             });
             services.AddSwaggerGenNewtonsoftSupport();
         }
-
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider, IWebHostEnvironment env, ILoggerFactory loggerFactory, IHostApplicationLifetime applicationLifetime)
         {
@@ -162,31 +143,18 @@ namespace BaSyx.AAS.Server.Http
                 }
                 if (pathElements.Length >= 2)
                 {
-                    aasId = pathElements[1];
+                    submodelId = pathElements[1];
                     if (pathElements.Length == 2)
                     {
-                        context.Request.Path = new PathString("/shells/" + aasId);
+                        context.Request.Path = new PathString("/submodels/" + submodelId);
                     }
-                    else if (pathElements.Length == 3 && pathElements[2] == "aas")
+                    else if (pathElements.Length >= 3 && pathElements[2] == "submodel")
                     {
-                        context.Request.Path = new PathString("/aas");
-                    }
-                    else if (pathElements.Length == 4 && pathElements[3] == "submodels")
-                    {
-                        context.Request.Path = new PathString("/aas/submodels");
-                    }
-                    else if (pathElements.Length == 5)
-                    {
-                        submodelId = pathElements[4];
-                        context.Request.Path = new PathString("/aas/submodels/" + submodelId);
-                    }
-                    else if (pathElements.Length > 5)
-                    {
-                        submodelId = pathElements[4];
-                        string[] restOfPathArray = new string[pathElements.Length - 5];
-                        Array.Copy(pathElements, 5, restOfPathArray, 0, pathElements.Length - 5);
+                        string[] restOfPathArray = new string[pathElements.Length - 3];
+                        Array.Copy(pathElements, 3, restOfPathArray, 0, pathElements.Length - 3);
                         string restOfPath = string.Join("/", restOfPathArray);
-                        context.Request.Path = new PathString("/" + restOfPath);
+
+                        context.Request.Path = new PathString("/submodel/" +  restOfPath);
                     }
                 }
                 return next();
@@ -220,8 +188,8 @@ namespace BaSyx.AAS.Server.Http
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BaSyx Asset Administration Shell Repository HTTP REST-API");
-            });                      
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BaSyx Submodel Repository HTTP REST-API");
+            });
         }
     }
 }

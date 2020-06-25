@@ -21,7 +21,7 @@ using System.Collections;
 namespace BaSyx.Models.Connectivity.Descriptors
 {
     [DataContract]
-    public class AssetAdministrationShellAggregatorDescriptor : IAssetAdministrationShellAggregatorDescriptor
+    public class AssetAdministrationShellRepositoryDescriptor : IAssetAdministrationShellRepositoryDescriptor
     {
         [IgnoreDataMember]
         public Identifier Identification { get; set; }
@@ -38,18 +38,18 @@ namespace BaSyx.Models.Connectivity.Descriptors
         [IgnoreDataMember]
         public string Category => null;
 
-        public ModelType ModelType => ModelType.AssetAdministrationShellAggregatorDescriptor;
+        public ModelType ModelType => ModelType.AssetAdministrationShellRepositoryDescriptor;
 
         public IElementContainer<IAssetAdministrationShellDescriptor> AssetAdministrationShellDescriptors { get; set; }
 
-        public AssetAdministrationShellAggregatorDescriptor(IEnumerable<IEndpoint> endpoints) 
+        public AssetAdministrationShellRepositoryDescriptor(IEnumerable<IEndpoint> endpoints) 
         {
             Endpoints = endpoints ?? new List<IEndpoint>();
             AssetAdministrationShellDescriptors = new ElementContainer<IAssetAdministrationShellDescriptor>();
         }
      
         [JsonConstructor]
-        public AssetAdministrationShellAggregatorDescriptor(IEnumerable<IAssetAdministrationShell> shells, IEnumerable<IEndpoint> endpoints) : this(endpoints)
+        public AssetAdministrationShellRepositoryDescriptor(IEnumerable<IAssetAdministrationShell> shells, IEnumerable<IEndpoint> endpoints) : this(endpoints)
         {
             if (shells?.Count() > 0)
                 foreach (var shell in shells)

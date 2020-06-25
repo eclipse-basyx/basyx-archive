@@ -30,7 +30,7 @@ using System.Reflection;
 
 namespace BaSyx.Submodel.Server.Http
 {
-    public class Startup
+    public class SingleStartup
     {
         private static Logger logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
         private const string ControllerAssemblyName = "BaSyx.API.Http.Controllers";
@@ -40,7 +40,7 @@ namespace BaSyx.Submodel.Server.Http
         public IServerApplicationLifetime ServerApplicationLifetime { get; }
 
 
-        public Startup(IConfiguration configuration, ServerSettings serverSettings, IServerApplicationLifetime serverApplicationLifetime)
+        public SingleStartup(IConfiguration configuration, ServerSettings serverSettings, IServerApplicationLifetime serverApplicationLifetime)
         {
             Configuration = configuration;
             ServerSettings = serverSettings;

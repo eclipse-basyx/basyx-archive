@@ -29,12 +29,12 @@ namespace MultiAssetAdministrationShell
     {
         static void Main(string[] args)
         {
-            ServerSettings aasAggregatorSettings = ServerSettings.CreateSettings();
-            aasAggregatorSettings.ServerConfig.Hosting.ContentPath = "Content";
-            aasAggregatorSettings.ServerConfig.Hosting.Urls.Add("http://+:5999");
+            ServerSettings aasRepositorySettings = ServerSettings.CreateSettings();
+            aasRepositorySettings.ServerConfig.Hosting.ContentPath = "Content";
+            aasRepositorySettings.ServerConfig.Hosting.Urls.Add("http://+:5999");
 
-            MultiAssetAdministrationShellHttpServer server = new MultiAssetAdministrationShellHttpServer(aasAggregatorSettings);
-            AssetAdministrationShellAggregatorServiceProvider aggregatorService = new AssetAdministrationShellAggregatorServiceProvider();
+            MultiAssetAdministrationShellHttpServer server = new MultiAssetAdministrationShellHttpServer(aasRepositorySettings);
+            AssetAdministrationShellRepositoryServiceProvider repositoryService = new AssetAdministrationShellRepositoryServiceProvider();
 
             for (int i = 0; i < 10; i++)
             {
@@ -79,13 +79,13 @@ namespace MultiAssetAdministrationShell
                 });
 
                 var aasServiceProvider = aas.CreateServiceProvider(true);
-                aggregatorService.RegisterAssetAdministrationShellServiceProvider(aas.IdShort, aasServiceProvider);
+                repositoryService.RegisterAssetAdministrationShellServiceProvider(aas.IdShort, aasServiceProvider);
             }
 
             List<HttpEndpoint> endpoints = server.Settings.ServerConfig.Hosting.Urls.ConvertAll(c => new HttpEndpoint(c.Replace("+", "127.0.0.1")));
-            aggregatorService.UseDefaultEndpointRegistration(endpoints);
+            repositoryService.UseDefaultEndpointRegistration(endpoints);
 
-            server.SetServiceProvider(aggregatorService);
+            server.SetServiceProvider(repositoryService);
             server.Run();
         }
     }

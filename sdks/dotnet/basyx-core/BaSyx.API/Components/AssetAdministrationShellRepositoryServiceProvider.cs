@@ -19,19 +19,19 @@ using System.Linq;
 
 namespace BaSyx.API.Components
 {
-    public class AssetAdministrationShellAggregatorServiceProvider : IAssetAdministrationShellAggregatorServiceProvider
+    public class AssetAdministrationShellRepositoryServiceProvider : IAssetAdministrationShellRepositoryServiceProvider
     {
         public IEnumerable<IAssetAdministrationShell> AssetAdministrationShells => GetBinding();
 
         private Dictionary<string, IAssetAdministrationShellServiceProvider> AssetAdministrationShellServiceProviders { get; }
 
-        private IAssetAdministrationShellAggregatorDescriptor _serviceDescriptor;
-        public IAssetAdministrationShellAggregatorDescriptor ServiceDescriptor
+        private IAssetAdministrationShellRepositoryDescriptor _serviceDescriptor;
+        public IAssetAdministrationShellRepositoryDescriptor ServiceDescriptor
         {
             get
             {
                 if (_serviceDescriptor == null)
-                    _serviceDescriptor = new AssetAdministrationShellAggregatorDescriptor(AssetAdministrationShells, null);
+                    _serviceDescriptor = new AssetAdministrationShellRepositoryDescriptor(AssetAdministrationShells, null);
 
                 return _serviceDescriptor;
             }
@@ -40,12 +40,12 @@ namespace BaSyx.API.Components
                 _serviceDescriptor = value;
             }
         }
-        public AssetAdministrationShellAggregatorServiceProvider(IAssetAdministrationShellAggregatorDescriptor descriptor) : this()
+        public AssetAdministrationShellRepositoryServiceProvider(IAssetAdministrationShellRepositoryDescriptor descriptor) : this()
         {
             ServiceDescriptor = descriptor;
         }
 
-        public AssetAdministrationShellAggregatorServiceProvider()
+        public AssetAdministrationShellRepositoryServiceProvider()
         {
             AssetAdministrationShellServiceProviders = new Dictionary<string, IAssetAdministrationShellServiceProvider>();
         }
@@ -56,7 +56,7 @@ namespace BaSyx.API.Components
             {
                 RegisterAssetAdministrationShellServiceProvider(assetAdministrationShell.IdShort, assetAdministrationShell.CreateServiceProvider(true));
             }
-            ServiceDescriptor = ServiceDescriptor ?? new AssetAdministrationShellAggregatorDescriptor(assetAdministrationShells, null);
+            ServiceDescriptor = ServiceDescriptor ?? new AssetAdministrationShellRepositoryDescriptor(assetAdministrationShells, null);
         }
         public IEnumerable<IAssetAdministrationShell> GetBinding()
         {

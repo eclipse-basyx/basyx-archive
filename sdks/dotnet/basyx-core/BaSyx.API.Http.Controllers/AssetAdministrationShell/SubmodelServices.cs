@@ -199,12 +199,12 @@ namespace BaSyx.API.Http.Controllers
         /// <returns></returns>
         /// <response code="200">Returns the requested Submodel Element</response>
         /// <response code="404">Submodel/Submodel Element not found</response>     
-        [HttpGet("submodel/submodelElements/{submodelElementId}", Name = "GetSubmodelElementByIdShort")]
+        [HttpGet("submodel/submodelElements/{*submodelElementId}", Name = "GetSubmodelElementByIdShort")]
         [ProducesResponseType(typeof(Property), 200)]
         [ProducesResponseType(typeof(Result), 404)]
         public IActionResult GetSubmodelElementByIdShort(string submodelElementId)
         {
-            var result = RetrieveSubmodelElement(submodelElementId);
+            var result = RetrieveSubmodelElement(submodelElementId);                     
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
@@ -215,7 +215,7 @@ namespace BaSyx.API.Http.Controllers
         /// <returns></returns>
         /// <response code="204">Submodel Element deleted successfully</response>
         /// <response code="404">Submodel/Submodel Element not found</response>
-        [HttpDelete("submodel/submodelElements/{submodelElementId}", Name = "DeleteSubmodelElementByIdShort")]
+        [HttpDelete("submodel/submodelElements/{*submodelElementId}", Name = "DeleteSubmodelElementByIdShort")]
         [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult DeleteSubmodelElementByIdShort(string submodelElementId)
         {

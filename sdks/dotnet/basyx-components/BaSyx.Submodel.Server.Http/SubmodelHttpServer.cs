@@ -18,7 +18,7 @@ namespace BaSyx.Submodel.Server.Http
     public class SubmodelHttpServer : ServerApplication
     {
         public SubmodelHttpServer(ServerSettings serverSettings = null, string[] webHostBuilderArgs = null)
-            : base(typeof(Startup), serverSettings ?? ServerSettings.LoadSettings(), webHostBuilderArgs)
+            : base(typeof(SingleStartup), serverSettings ?? ServerSettings.LoadSettings(), webHostBuilderArgs)
         { }
 
         public void SetServiceProvider(ISubmodelServiceProvider submodelServiceProvider)

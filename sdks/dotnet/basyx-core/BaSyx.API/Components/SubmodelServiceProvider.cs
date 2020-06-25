@@ -24,7 +24,7 @@ using BaSyx.Models.Core.Common;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Communication;
 using System.Threading.Tasks;
-
+using BaSyx.Models.Extensions;
 
 namespace BaSyx.API.Components
 {
@@ -492,7 +492,44 @@ namespace BaSyx.API.Components
 
             if (Submodel.SubmodelElements == null)
                 return new Result<ISubmodelElement>(false, new NotFoundMessage(submodelElementId));
-            return Submodel.SubmodelElements.Retrieve(submodelElementId);
+
+            IResult<ISubmodelElement> result;
+            if(submodelElementId.Contains("/"))
+            {
+                string[] smeIds = submodelElementId.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                IResult<ISubmodelElement> firstElement = Submodel.SubmodelElements.Retrieve(smeIds[0]);
+                result = RetrieveSubordinateElement(firstElement, smeIds.Skip(1));
+            }
+            else
+            {
+                result = Submodel.SubmodelElements.Retrieve(submodelElementId);
+            }
+            return result;
+        }
+
+        private IResult<ISubmodelElement> RetrieveSubordinateElement(IResult<ISubmodelElement> smElement, IEnumerable<string> idShorts)
+        {
+            if(smElement.Success && smElement.Entity != null)
+            {
+                if(smElement.Entity.ModelType == ModelType.SubmodelElementCollection)
+                {
+                    ISubmodelElementCollection smeCollection = smElement.Entity.ToModelElement<ISubmodelElementCollection>();
+                    if(idShorts?.Count() > 0 && smeCollection.Value?.Count > 0)
+                    {
+                        IResult<ISubmodelElement> nextElement = smeCollection.Value.Retrieve(idShorts.First());
+                        if (idShorts.Count() > 1)
+                            return RetrieveSubordinateElement(nextElement, idShorts.Skip(1));
+                        else
+                            return nextElement;
+                    }
+                }
+                else
+                {
+                    if (idShorts.Count() > 0)
+                        return new Result<ISubmodelElement>(false, new NotFoundMessage(string.Join("/", idShorts)));
+                }
+            }
+            return smElement;
         }
 
         public IResult<IValue> RetrieveSubmodelElementValue(string submodelElementId)

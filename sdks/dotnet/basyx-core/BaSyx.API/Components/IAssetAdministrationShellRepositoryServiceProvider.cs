@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace BaSyx.API.Components
 {
-    public interface IAssetAdministrationShellAggregatorServiceProvider : IServiceProvider<IEnumerable<IAssetAdministrationShell>, IAssetAdministrationShellAggregatorDescriptor>, IAssetAdministrationShellAggregator
+    public interface IAssetAdministrationShellRepositoryServiceProvider : IServiceProvider<IEnumerable<IAssetAdministrationShell>, IAssetAdministrationShellRepositoryDescriptor>, IAssetAdministrationShellRepository
     {
         IEnumerable<IAssetAdministrationShell> AssetAdministrationShells { get; }
         void RegisterAssetAdministrationShellServiceProvider(string id, IAssetAdministrationShellServiceProvider assetAdministrationShellServiceProvider);

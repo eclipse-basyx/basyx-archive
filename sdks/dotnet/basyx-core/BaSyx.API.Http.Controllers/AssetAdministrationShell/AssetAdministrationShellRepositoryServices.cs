@@ -19,27 +19,27 @@ using BaSyx.Models.Core.Common;
 namespace BaSyx.API.Http.Controllers
 {
     /// <summary>
-    /// The Asset Administration Shell Aggregator Controller
+    /// The Asset Administration Shell Repository Controller
     /// </summary>
-    public class AssetAdministrationShellAggregatorServices : Controller, IAssetAdministrationShellAggregatorServiceProvider
+    public class AssetAdministrationShellRepositoryServices : Controller, IAssetAdministrationShellRepositoryServiceProvider
     {
 
-        private readonly IAssetAdministrationShellAggregatorServiceProvider aggregator;
+        private readonly IAssetAdministrationShellRepositoryServiceProvider repository;
 
-        public IEnumerable<IAssetAdministrationShell> AssetAdministrationShells => aggregator.AssetAdministrationShells;
-        public IAssetAdministrationShellAggregatorDescriptor ServiceDescriptor { get; }
+        public IEnumerable<IAssetAdministrationShell> AssetAdministrationShells => repository.AssetAdministrationShells;
+        public IAssetAdministrationShellRepositoryDescriptor ServiceDescriptor { get; }
 
 
-        public AssetAdministrationShellAggregatorServices(IAssetAdministrationShellAggregatorServiceProvider assetAdministrationShellAggregatorServiceProvider)
+        public AssetAdministrationShellRepositoryServices(IAssetAdministrationShellRepositoryServiceProvider assetAdministrationShellRepositoryServiceProvider)
         {
-            aggregator = assetAdministrationShellAggregatorServiceProvider;
-            ServiceDescriptor = assetAdministrationShellAggregatorServiceProvider.ServiceDescriptor;
+            repository = assetAdministrationShellRepositoryServiceProvider;
+            ServiceDescriptor = assetAdministrationShellRepositoryServiceProvider.ServiceDescriptor;
         }
 
-        #region REST-Interface AssetAdministrationShellAggregator
+        #region REST-Interface AssetAdministrationShellRepository
 
         /// <summary>
-        /// Retrieves all Asset Administration Shells from the aggregator service endpoint
+        /// Retrieves all Asset Administration Shells from the repository service endpoint
         /// </summary>
         /// <returns></returns>
         /// <response code="200">Returns a list of found Asset Administration Shells</response>
@@ -54,7 +54,7 @@ namespace BaSyx.API.Http.Controllers
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
-        /// Retrieves a specific Asset Administration Shell from the aggregator service endpint
+        /// Retrieves a specific Asset Administration Shell from the repository service endpint
         /// </summary>
         /// <param name="aasId">The Asset Administration Shell's short id</param>
         /// <returns></returns>
@@ -70,7 +70,7 @@ namespace BaSyx.API.Http.Controllers
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
-        /// Updates a specific Asset Administration Shell at the aggregator service endpint
+        /// Updates a specific Asset Administration Shell at the repository service endpint
         /// </summary>
         /// <param name="aasId">The Asset Administration Shell's unique id</param>
         /// <param name="aas">The updated Asset Administration Shell</param>
@@ -86,7 +86,7 @@ namespace BaSyx.API.Http.Controllers
             return result.CreateActionResult(CrudOperation.Update);
         }
         /// <summary>
-        /// Creates a new Asset Administration Shell at the aggregator service endpoint
+        /// Creates a new Asset Administration Shell at the repository service endpoint
         /// </summary>
         /// <param name="aas">The serialized Asset Administration Shell object</param>
         /// <returns></returns>
@@ -101,7 +101,7 @@ namespace BaSyx.API.Http.Controllers
             return result.CreateActionResult(CrudOperation.Create);
         }
         /// <summary>
-        /// Deletes a specific Asset Administration Shell at the aggregator service endpoint
+        /// Deletes a specific Asset Administration Shell at the repository service endpoint
         /// </summary>
         /// <param name="aasId">The Asset Administration Shell's unique id</param>
         /// <returns></returns>
@@ -144,55 +144,55 @@ namespace BaSyx.API.Http.Controllers
         }
         #endregion
 
-        #region Interface Implementation AssetAdministrationShellAggregator
+        #region Interface Implementation AssetAdministrationShellRepository
         public void RegisterAssetAdministrationShellServiceProvider(string id, IAssetAdministrationShellServiceProvider assetAdministrationShellServiceProvider)
         {
-            aggregator.RegisterAssetAdministrationShellServiceProvider(id, assetAdministrationShellServiceProvider);
+            repository.RegisterAssetAdministrationShellServiceProvider(id, assetAdministrationShellServiceProvider);
         }
 
         public IAssetAdministrationShellServiceProvider GetAssetAdministrationShellServiceProvider(string id)
         {
-            return aggregator.GetAssetAdministrationShellServiceProvider(id);
+            return repository.GetAssetAdministrationShellServiceProvider(id);
         }
 
         public IEnumerable<IAssetAdministrationShellServiceProvider> GetAssetAdministrationShellServiceProviders()
         {
-            return aggregator.GetAssetAdministrationShellServiceProviders();
+            return repository.GetAssetAdministrationShellServiceProviders();
         }
 
         public void BindTo(IEnumerable<IAssetAdministrationShell> element)
         {
-            aggregator.BindTo(element);
+            repository.BindTo(element);
         }
 
         public IEnumerable<IAssetAdministrationShell> GetBinding()
         {
-            return aggregator.GetBinding();
+            return repository.GetBinding();
         }
 
         public IResult<IAssetAdministrationShell> CreateAssetAdministrationShell(IAssetAdministrationShell aas)
         {
-            return aggregator.CreateAssetAdministrationShell(aas);
+            return repository.CreateAssetAdministrationShell(aas);
         }
 
         public IResult<IAssetAdministrationShell> RetrieveAssetAdministrationShell(string aasId)
         {
-            return aggregator.RetrieveAssetAdministrationShell(aasId);
+            return repository.RetrieveAssetAdministrationShell(aasId);
         }
 
         public IResult<IElementContainer<IAssetAdministrationShell>> RetrieveAssetAdministrationShells()
         {
-            return aggregator.RetrieveAssetAdministrationShells();
+            return repository.RetrieveAssetAdministrationShells();
         }
 
         public IResult UpdateAssetAdministrationShell(string aasId, IAssetAdministrationShell aas)
         {
-            return aggregator.UpdateAssetAdministrationShell(aasId, aas);
+            return repository.UpdateAssetAdministrationShell(aasId, aas);
         }
 
         public IResult DeleteAssetAdministrationShell(string aasId)
         {
-            return aggregator.DeleteAssetAdministrationShell(aasId);
+            return repository.DeleteAssetAdministrationShell(aasId);
         }
 
 

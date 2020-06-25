@@ -31,7 +31,7 @@ namespace BaSyx.Utils.DependencyInjection
             services.AddTransient<ISubmodel, Submodel>();
             services.AddTransient<IView, View>();
 
-            services.AddTransient<IAssetAdministrationShellAggregatorDescriptor, AssetAdministrationShellAggregatorDescriptor>();
+            services.AddTransient<IAssetAdministrationShellRepositoryDescriptor, AssetAdministrationShellRepositoryDescriptor>();
             services.AddTransient<IAssetAdministrationShellDescriptor, AssetAdministrationShellDescriptor>();
             services.AddTransient<ISubmodelDescriptor, SubmodelDescriptor>();
             services.AddTransient(typeof(IElementContainer<ISubmodelDescriptor>), typeof(ElementContainer<SubmodelDescriptor>));

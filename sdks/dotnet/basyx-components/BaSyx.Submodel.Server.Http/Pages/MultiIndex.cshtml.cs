@@ -12,14 +12,14 @@ using BaSyx.API.Components;
 using BaSyx.Utils.Settings.Types;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace BaSyx.AAS.Server.Http.Pages
+namespace BaSyx.Submodel.Server.Http.Pages
 {
     public class MultiIndexModel : PageModel
     {
-        public IAssetAdministrationShellRepositoryServiceProvider ServiceProvider { get; }
+        public ISubmodelRepositoryServiceProvider ServiceProvider { get; }
         public ServerSettings Settings { get; }
 
-        public MultiIndexModel(IAssetAdministrationShellRepositoryServiceProvider provider, ServerSettings serverSettings)
+        public MultiIndexModel(ISubmodelRepositoryServiceProvider provider, ServerSettings serverSettings)
         {
             ServiceProvider = provider;
             Settings = serverSettings;

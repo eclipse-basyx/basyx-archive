@@ -4,14 +4,14 @@
         <name>BaSyx.API.Http.Controllers</name>
     </assembly>
     <members>
-        <member name="T:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices">
+        <member name="T:BaSyx.API.Http.Controllers.AssetAdministrationShellRepositoryServices">
             <summary>
-            The Asset Administration Shell Aggregator Controller
+            The Asset Administration Shell Repository Controller
             </summary>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.RetrieveAllAssetAdministrationShells">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRepositoryServices.RetrieveAllAssetAdministrationShells">
             <summary>
-            Retrieves all Asset Administration Shells from the aggregator service endpoint
+            Retrieves all Asset Administration Shells from the repository service endpoint
             </summary>
             <returns></returns>
             <response code="200">Returns a list of found Asset Administration Shells</response>
@@ -19,9 +19,9 @@
             <response code="400">Bad Request</response>    
             <response code="502">Bad Gateway</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.RetrieveAssetAdministrationShellByIdShort(System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRepositoryServices.RetrieveAssetAdministrationShellByIdShort(System.String)">
             <summary>
-            Retrieves a specific Asset Administration Shell from the aggregator service endpint
+            Retrieves a specific Asset Administration Shell from the repository service endpint
             </summary>
             <param name="aasId">The Asset Administration Shell's short id</param>
             <returns></returns>
@@ -30,9 +30,9 @@
             <response code="400">Bad Request</response>         
             <response code="502">Bad Gateway</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.UpdateAssetAdministrationShellByIdShort(System.String,BaSyx.Models.Core.AssetAdministrationShell.Generics.IAssetAdministrationShell)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRepositoryServices.UpdateAssetAdministrationShellByIdShort(System.String,BaSyx.Models.Core.AssetAdministrationShell.Generics.IAssetAdministrationShell)">
             <summary>
-            Updates a specific Asset Administration Shell at the aggregator service endpint
+            Updates a specific Asset Administration Shell at the repository service endpint
             </summary>
             <param name="aasId">The Asset Administration Shell's unique id</param>
             <param name="aas">The updated Asset Administration Shell</param>
@@ -41,9 +41,9 @@
             <response code="400">Bad Request</response>           
             <response code="502">Bad Gateway</response>   
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.CreateNewAssetAdministrationShell(BaSyx.Models.Core.AssetAdministrationShell.Generics.IAssetAdministrationShell)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRepositoryServices.CreateNewAssetAdministrationShell(BaSyx.Models.Core.AssetAdministrationShell.Generics.IAssetAdministrationShell)">
             <summary>
-            Creates a new Asset Administration Shell at the aggregator service endpoint
+            Creates a new Asset Administration Shell at the repository service endpoint
             </summary>
             <param name="aas">The serialized Asset Administration Shell object</param>
             <returns></returns>
@@ -51,9 +51,9 @@
             <response code="400">Bad Request</response>             
             <response code="502">Bad Gateway</response> 
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellAggregatorServices.DeleteAssetAdministrationShellByIdShort(System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRepositoryServices.DeleteAssetAdministrationShellByIdShort(System.String)">
             <summary>
-            Deletes a specific Asset Administration Shell at the aggregator service endpoint
+            Deletes a specific Asset Administration Shell at the repository service endpoint
             </summary>
             <param name="aasId">The Asset Administration Shell's unique id</param>
             <returns></returns>
@@ -246,6 +246,63 @@
             <returns></returns>
             <response code="204">Event deleted successfully</response>
             <response code="404">Submodel not found</response>
+        </member>
+        <member name="T:BaSyx.API.Http.Controllers.SubmodelRepositoryServices">
+            <summary>
+            The Submodel Repository Controller
+            </summary>
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryServices.RetrieveAllSubmodels">
+            <summary>
+            Retrieves all Submodels from the repository service endpoint
+            </summary>
+            <returns></returns>
+            <response code="200">Returns a list of found Submodels</response>
+            <response code="404">No Submodels found</response>            
+            <response code="400">Bad Request</response>    
+            <response code="502">Bad Gateway</response>
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryServices.RetrieveSubmodelByIdShort(System.String)">
+            <summary>
+            Retrieves a specific Submodel from the repository service endpint
+            </summary>
+            <param name="submodelId">The Submodel's short id</param>
+            <returns></returns>
+            <response code="200">Returns the requested Submodel</response>
+            <response code="404">No Submodel found</response>     
+            <response code="400">Bad Request</response>         
+            <response code="502">Bad Gateway</response>
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryServices.UpdateSubmodelByIdShort(System.String,BaSyx.Models.Core.AssetAdministrationShell.Generics.ISubmodel)">
+            <summary>
+            Updates a specific Submodel at the repository service endpint
+            </summary>
+            <param name="submodelId">The Submodel's unique id</param>
+            <param name="submodel">The updated Submodel</param>
+            <returns></returns>
+            <response code="200">Submodel updated successfully</response>
+            <response code="400">Bad Request</response>           
+            <response code="502">Bad Gateway</response>   
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryServices.CreateNewSubmodel(BaSyx.Models.Core.AssetAdministrationShell.Generics.ISubmodel)">
+            <summary>
+            Creates a new Submodel at the repository service endpoint
+            </summary>
+            <param name="submodel">The serialized Submodel object</param>
+            <returns></returns>
+            <response code="201">Submodel created successfully</response>
+            <response code="400">Bad Request</response>             
+            <response code="502">Bad Gateway</response> 
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryServices.DeleteSubmodelByIdShort(System.String)">
+            <summary>
+            Deletes a specific Submodel at the repository service endpoint
+            </summary>
+            <param name="submodelId">The Submodel's unique id</param>
+            <returns></returns>
+            <response code="200">Submodel deleted successfully</response>
+            <response code="400">Bad Request</response>      
+            <response code="502">Bad Gateway</response>
         </member>
         <member name="T:BaSyx.API.Http.Controllers.SubmodelServices">
             <summary>

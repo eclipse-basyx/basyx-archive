@@ -14,7 +14,7 @@ using BaSyx.Utils.ResultHandling;
 
 namespace BaSyx.API.Components
 {
-    public interface IAssetAdministrationShellAggregator
+    public interface IAssetAdministrationShellRepository
     {
         IResult<IAssetAdministrationShell> CreateAssetAdministrationShell(IAssetAdministrationShell aas);
 

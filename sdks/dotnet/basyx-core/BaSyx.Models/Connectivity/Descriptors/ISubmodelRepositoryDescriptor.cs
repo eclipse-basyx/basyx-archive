@@ -13,9 +13,9 @@ using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Connectivity.Descriptors
 {
-    public interface IAssetAdministrationShellAggregatorDescriptor : IServiceDescriptor, IModelElement
+    public interface ISubmodelRepositoryDescriptor : IServiceDescriptor, IModelElement
     {
-        [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "assetAdministrationShellDescriptors")]
-        IElementContainer<IAssetAdministrationShellDescriptor> AssetAdministrationShellDescriptors { get; set; }
+        [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "submodelDescriptors")]
+        IElementContainer<ISubmodelDescriptor> SubmodelDescriptors { get; set; }
     }
 }

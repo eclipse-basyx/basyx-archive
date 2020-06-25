@@ -13,19 +13,19 @@ using BaSyx.Components.Common;
 using BaSyx.Utils.Settings.Types;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BaSyx.AAS.Server.Http
+namespace BaSyx.Submodel.Server.Http
 {
-    public class MultiAssetAdministrationShellHttpServer : ServerApplication
+    public class MultiSubmodelHttpServer : ServerApplication
     {
-        public MultiAssetAdministrationShellHttpServer(ServerSettings serverSettings = null, string[] webHostBuilderArgs = null)
+        public MultiSubmodelHttpServer(ServerSettings serverSettings = null, string[] webHostBuilderArgs = null)
             : base(typeof(MultiStartup), serverSettings ?? ServerSettings.LoadSettings(), webHostBuilderArgs)
         { }
 
-        public void SetServiceProvider(IAssetAdministrationShellRepositoryServiceProvider repositoryServiceProvider)
+        public void SetServiceProvider(ISubmodelRepositoryServiceProvider submodelRepositoryServiceProvider)
         {
             WebHostBuilder.ConfigureServices(services =>
             {
-                services.AddSingleton<IAssetAdministrationShellRepositoryServiceProvider>(repositoryServiceProvider);
+                services.AddSingleton<ISubmodelRepositoryServiceProvider>(submodelRepositoryServiceProvider);
             });
         }
     }
