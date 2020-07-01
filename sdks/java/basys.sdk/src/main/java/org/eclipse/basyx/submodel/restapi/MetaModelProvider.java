@@ -22,7 +22,9 @@ public abstract class MetaModelProvider implements IModelProvider {
 	protected Object unwrapParameter(Object parameter) {
 		if (parameter instanceof Map<?, ?>) {
 			Map<String, Object> map = (Map<String, Object>) parameter;
-			if (map.get("valueType") != null && map.get("value") != null) {
+			// Parameters have a strictly defined order and may not be omitted at all.
+			// Enforcing the structure with valueType is ok, but we should unwrap null values, too.
+			if (map.get("valueType") != null && map.containsKey("value")) {
 				return map.get("value");
 			}
 		}
