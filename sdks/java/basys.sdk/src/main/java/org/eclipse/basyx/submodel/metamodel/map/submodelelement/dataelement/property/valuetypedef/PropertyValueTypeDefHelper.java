@@ -108,6 +108,10 @@ public class PropertyValueTypeDefHelper {
 			Map<String, Object> dot = (Map<String, Object>) map.get(TYPE_OBJECT);
 			
 			return fromName(dot.get(TYPE_NAME).toString());
+			
+		} else if (vTypeMap instanceof String) {
+			// From xml/json-schema point of view, this should be only a string.
+			return fromName((String)vTypeMap);
 		}
 		return null;
 	}

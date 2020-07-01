@@ -2,6 +2,7 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.submodelel
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.util.Collections;
 
@@ -62,9 +63,20 @@ public class TestProperty {
 	} 
 	
 	@Test
-	public void testGetValueTypeNull() {
-		property.put(Property.VALUETYPE, "NonMapType");
-		assertEquals("", property.getValueType());
+	public void testGetNonMapValueType() {
+		property.put(Property.VALUETYPE, "string");
+		assertEquals("string", property.getValueType());
+	}
+	
+	@Test
+	public void testGetNotExistingValueType() {
+		// I would vote for fail fast - directly when setting the value
+		property.put(Property.VALUETYPE, "IDoNotExistInPropertyValueTypeDef");
+		try {
+			property.getValueType();
+			fail("Expecting exception when providing invalid type");
+		} catch (RuntimeException e) {
+		}
 	}
 	
 	@Test
