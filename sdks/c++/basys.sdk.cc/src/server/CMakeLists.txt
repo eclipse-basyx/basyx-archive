@@ -6,6 +6,7 @@ include(CMakePackageConfigHelpers)
 set (BASYX_SERVER_LIB_SUFFIX "Server")
 
 set (BASYX_SERVER_LIBRARY_NAME "${PROJECT_SHORTNAME}${BASYX_SERVER_LIB_SUFFIX}")
+set (BASYX_SHARED_INCLUDE_DIR "${BASYX_INCLUDE_DIR}/BaSyx/server")
 
 add_library(${BASYX_SERVER_LIB_SUFFIX})
 
@@ -22,7 +23,8 @@ endif()
 
 target_sources(${BASYX_SERVER_LIB_SUFFIX}
     PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/server/server.cpp
+    ${BASYX_SHARED_INCLUDE_DIR}/TCPServer.h
+    ${BASYX_SHARED_INCLUDE_DIR}/BaSyxNativeProvider.h
 )
 
 # TCPSelectServer currently only supported under UNIX

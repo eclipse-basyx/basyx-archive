@@ -208,6 +208,9 @@ basyx::object basyx::object::make_error(basyx::object::error error_code, const s
 
 basyx::object::error basyx::object::getError() const
 {
+	if (this->GetObjectType() != basyx::type::objectType::Error)
+		return basyx::object::error::None;
+
 	auto & errorHolder = dynamic_cast<basyx::detail::objErrorHolder&>(*this->content);
 	return errorHolder.error;
 }

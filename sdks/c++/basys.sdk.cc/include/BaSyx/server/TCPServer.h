@@ -1,12 +1,5 @@
-/*
-* BaSyxTCPServer.h
-*
-*  Created on: 14.08.2018
-*      Author: schnicke
-*/
-
-#ifndef VAB_VAB_PROVIDER_NATIVE_BASYXTCPSERVER_H
-#define VAB_VAB_PROVIDER_NATIVE_BASYXTCPSERVER_H
+#ifndef VAB_VAB_PROVIDER_NATIVE_BASYXTCPSERVER_2_H
+#define VAB_VAB_PROVIDER_NATIVE_BASYXTCPSERVER_2_H
 
 #include <atomic>
 #include <iostream>
@@ -20,42 +13,86 @@
 #include <BaSyx/vab/provider/native/frame/BaSyxNativeFrameProcessor.h>
 
 namespace basyx {
-namespace vab {
-namespace provider {
-namespace native {
+namespace server {
 
-	template <typename T>
+	template <typename Backend>
 	class TCPServer {
+	public:
+		using socket_ptr_t = std::unique_ptr<asio::ip::tcp::socket>;
 	private:
-		T* backend;
-
-		//basyx::net::tcp::Acceptor acceptor;
+		Backend * backend;
 
 		asio::io_context io_context;
-	//	asio::ip::tcp::endpoint endpoint;
 		asio::ip::tcp::acceptor acceptor;
 
 		std::vector<std::thread> threads;
-		std::vector<std::unique_ptr<asio::ip::tcp::socket>> sockets;
+		std::vector<socket_ptr_t> sockets;
 
 		bool closed;
 		std::atomic_bool running;
 
 		basyx::log log;
-		
+
 	public:
-		// ToDo: Ownership of backend?
-		TCPServer(T* backend, int port)
+		TCPServer(Backend * backend, int port)
 			: backend{ backend }
 			, running{ true }
-		//	, endpoint{ asio::ip::tcp::v4(), port }
+			, io_context{ 0 }
 			, acceptor{ io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port) }
 			, log{ "TCPServer" }
 		{
 			// ToDo: Check health of acceptor
 			log.info("Starting server on port {}", port);
-			acceptor.listen();
+//			acceptor.listen();
+			start_accept();
 		}
+
+		void run()
+		{
+			this->io_context.run();
+		};
+
+		void stop()
+		{
+			this->io_context.stop();
+		};
+
+		void start_accept()
+		{
+			asio::error_code ec;
+			auto client_socket = util::make_unique<asio::ip::tcp::socket>(io_context);
+			//this->acceptor.accept(*client_socket.get(), ec);
+
+			//auto error = WSAGetLastError();
+
+			//if (!client_socket->is_open()) {
+			//	log.warn("Incoming connection failed");
+			//	return;
+			//}
+			sockets.emplace_back(std::move(client_socket));
+
+			acceptor.async_accept(*sockets.back(),
+				std::bind(&TCPServer::handle_accept, this,
+					std::placeholders::_1));
+		};
+
+		void handle_accept(
+			const asio::error_code& error)
+		{
+			if (!error)
+			{
+				log.info("Incoming new connection");
+
+				std::thread handlerThread{ &TCPServer<Backend>::processConnection, this, std::ref(*sockets.back()) };
+				threads.emplace_back(std::move(handlerThread));
+			}
+			else
+			{
+				sockets.pop_back();
+			}
+
+			start_accept();
+		};
 
 		void Close()
 		{
@@ -64,17 +101,27 @@ namespace native {
 			if (!isRunning())
 				return;
 
-			running.store(true);
+			running.store(false);
+			this->stop();
 
-			// Close the acceptor socket
-			log.trace("Closing Acceptor...");
-			acceptor.close();
+			//// Close the acceptor socket
+			//log.trace("Closing Acceptor...");
+			//acceptor.close();
 
 			// Close all accepted connections
 			// This will bring all open connection threads to a finish
 			log.trace("Closing open connections...");
 			for (auto& socket : sockets)
-				socket->close();
+			{
+				try {
+					if (socket->is_open())
+						socket->close();
+				}
+				catch (std::exception & e)
+				{
+					log.warn("Socket closed unexpectedly.");
+				}
+			};
 
 			// Wait for all threads to finish
 			for (auto& thread : threads)
@@ -109,14 +156,14 @@ namespace native {
 				log.info("Incoming new connection");
 				sockets.emplace_back(std::move(ClientSocket));
 
-				std::thread handlerThread{ &TCPServer<T>::processConnection, this, std::ref(*sockets.back()) };
+				std::thread handlerThread{ &TCPServer<Backend>::processConnection, this, std::ref(*sockets.back()) };
 				threads.emplace_back(std::move(handlerThread));
 			}
 		}
 
 		bool isRunning()
 		{
-			return running;
+			return running.load();
 		}
 
 	private:
@@ -137,7 +184,5 @@ namespace native {
 	};
 };
 };
-};
-};
 
-#endif /* VAB_VAB_PROVIDER_NATIVE_BASYXTCPSERVER_H */
+#endif /* VAB_VAB_PROVIDER_NATIVE_BASYXTCPSERVER_2_H */

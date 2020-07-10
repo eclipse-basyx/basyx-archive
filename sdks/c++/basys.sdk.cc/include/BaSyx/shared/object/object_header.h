@@ -15,6 +15,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include <BaSyx/shared/object/obj_error.h>
 #include <BaSyx/shared/object/obj_placeholder.h>
 
 #include <vector>
@@ -30,15 +31,7 @@ namespace basyx {
 	class object 
 	{
 	public:
-		enum class error
-		{
-			None,
-			PropertyNotFound,
-			IndexOutOfBounds,
-			NotInvokable,
-			ObjectAlreadyExists,
-			MalformedRequest,
-		};
+		using error = basyx::detail::error;
 	public: // Type definitions
 		template<typename T>
 		using list_t = std::vector<T>;

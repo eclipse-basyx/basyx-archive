@@ -44,7 +44,8 @@ enum class BaSyxCommand : uint8_t {
 	Set = 0x2,
 	Create = 0x3,
 	Delete = 0x4,
-	Invoke = 0x5
+	Invoke = 0x5,
+	Invalid = 0xFF,
 };
 
 #define BASYX_FRAMESIZE_SIZE 4

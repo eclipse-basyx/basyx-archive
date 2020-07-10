@@ -44,8 +44,6 @@ private:
 		modelProvider->deleteValue("/structure/list", 12);
 
 		auto collection2 = modelProvider->getModelPropertyValue("/structure/list/");
-		//ASSERT_TRUE(collection.InstanceOf<basyx::object::list_t<int>>());
-		//ASSERT_EQ(collection.Get<basyx::object::list_t<int>&>().size(), 0);
 		ASSERT_TRUE(collection2.empty());
 	}
 
@@ -64,8 +62,7 @@ private:
 		// by object
 		modelProvider->deleteValue("/structure/list/", 56);
 		toTest = modelProvider->getModelPropertyValue("/structure/list/");
-		ASSERT_TRUE(toTest.InstanceOf<basyx::object::list_t<int>>());
-		//ASSERT_EQ(toTest.Get<basyx::object::list_t<int>&>().size(), 0);
+		ASSERT_EQ(toTest.GetObjectType(), basyx::type::objectType::List);
 		ASSERT_TRUE(toTest.empty());
 
 		// Create a list element

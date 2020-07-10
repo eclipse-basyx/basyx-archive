@@ -12,6 +12,7 @@
 #include <string>
 
 #include <BaSyx/vab/backend/connector/JSONProvider.h>
+#include <BaSyx/vab/backend/connector/native/frame/Frame.h>
 #include <BaSyx/vab/provider/native/frame/BaSyxNativeFrameHelper.h>
 #include <BaSyx/vab/core/IModelProvider.h>
 
@@ -23,29 +24,21 @@ namespace provider {
 namespace native {
 namespace frame {
 
-class BaSyxNativeFrameProcessor {
-
-public:
-	BaSyxNativeFrameProcessor(vab::core::IModelProvider* providerBackend);
-	~BaSyxNativeFrameProcessor();
-
-
-	/**
-	 * Processes a rxFrame and performs the encoded command
-	 *
-	 * The following structure is assumed:
-	 * 1 byte command
-	 * x byte depending on command
-	 */
-	void processInputFrame(char const* rxFrame, std::size_t rxSize, char* txFrame, std::size_t* txSize);
+class BaSyxNativeFrameProcessor 
+{
 private:
 	JSONProvider<vab::core::IModelProvider> jsonProvider;
-
-	void processGet(char const* rxFrame, char* txFrame, std::size_t* txSize);
-	void processSet(char const* rxFrame, char* txFrame, std::size_t* txSize);
-	void processCreate(char const* rxFrame, char* txFrame, std::size_t* txSize);
-	void processDelete(char const* rxFrame, std::size_t rxSize, char* txFrame, std::size_t* txSize);
-	void processInvoke(char const* rxFrame, char* txFrame, std::size_t* txSize);
+private:
+	connector::native::Frame processGet(const connector::native::Frame & frame);
+	connector::native::Frame processSet(const connector::native::Frame & frame);
+	connector::native::Frame processCreate(const connector::native::Frame & frame);
+	connector::native::Frame processDelete(const connector::native::Frame & frame);
+	connector::native::Frame processInvoke(const connector::native::Frame & frame);
+public:
+	BaSyxNativeFrameProcessor(vab::core::IModelProvider* providerBackend);
+	~BaSyxNativeFrameProcessor() = default;
+public:
+	connector::native::Frame processInputFrame(const connector::native::Frame & frame);
 };
 
 

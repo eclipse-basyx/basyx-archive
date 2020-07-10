@@ -12,13 +12,14 @@
 
 #include <BaSyx/util/tools/CoderTools.h>
 
+#include <BaSyx/vab/backend/connector/native/frame/Frame.h>
 #include <BaSyx/vab/provider/native/frame/BaSyxNativeFrameProcessor.h>
 
 #include <BaSyx/log/log.h>
 
-#include <asio.hpp>
+#include <BaSyx/abstraction/net/Buffer.h>
 
-//#define DEFAULT_BUF_SIZE 1024
+#include <asio.hpp>
 
 
 /**
@@ -41,7 +42,7 @@ namespace native {
 		// Buffers
 		static constexpr std::size_t default_buffer_size = 4096;
 		std::array<char, default_buffer_size> recv_buffer;
-		std::array<char, default_buffer_size> ret;
+		std::array<char, default_buffer_size> send_buffer;
 
 		bool closed;
 		basyx::log log;
@@ -58,7 +59,15 @@ namespace native {
 		~NativeProvider()
 		{
 			// Connection no longer needed, close it
-			this->clientSocket.close();
+			try
+			{
+				if (this->clientSocket.is_open())
+					this->clientSocket.close();
+			}
+			catch (std::exception & e)
+			{
+				log.warn("Exception in closing socket");
+			};
 		}
 
 		// Has to be called repeatedly
@@ -67,49 +76,23 @@ namespace native {
 			log.trace("Updating...");
 			if (!closed)
 			{
-				auto huh = clientSocket.is_open();
-
 				asio::error_code ec;
 				log.trace("Waiting for incoming message");
-				std::size_t bytes_read = this->clientSocket.receive(asio::buffer(recv_buffer.data(), recv_buffer.size()),0, ec);
-				log.debug("Received {} bytes.", bytes_read);
+				auto input_frame = recvFrame(ec);
 
-				if(ec == asio::error::eof) {
-//				if (bytes_read == 0 || !this->clientSocket.is_open()) {
+				if(ec) {
 					log.info("Connection closed");
-					closed = true;
-				}
-				else if (bytes_read < 0) {
-					log.error("Receive failed!");
 					closed = true;
 				}
 				else {
 					log.trace("Received frame.");
-#ifdef PRINT_FRAME
-					log.debug("Received:");
-					vab::provider::native::frame::BaSyxNativeFrameHelper::printFrame(recv_buffer.data(), bytes_read);
-#endif
-					std::size_t txSize = 0;
+					log.info("Received: {}", input_frame.getFirstValue());
 
-					frameProcessor->processInputFrame(
-						recv_buffer.data() + BASYX_FRAMESIZE_SIZE, 
-						bytes_read - BASYX_FRAMESIZE_SIZE,
-						ret.data() + BASYX_FRAMESIZE_SIZE, 
-						&txSize);
-
-					// Encode txSize
-					CoderTools::setInt32(ret.data(), 0, txSize);
-					txSize += BASYX_FRAMESIZE_SIZE;
+					auto output_frame = frameProcessor->processInputFrame(input_frame);
 
 					log.info("Sending reply.");
-#ifdef PRINT_FRAME
-					log.debug("Sending:");
-					vab::provider::native::frame::BaSyxNativeFrameHelper::printFrame(ret.data(), txSize);
-#endif
-					log.debug("Sending {} bytes.", txSize);
-					std::size_t bytes_sent = this->clientSocket.send(asio::buffer(ret.data(), txSize));
-					log.debug("Sent {} bytes.", bytes_sent);
 
+					auto bytes_sent = sendFrame(output_frame);
 					if (bytes_sent < 0) {
 						log.error("Sending failed: {}", "ERROR");
 						closed = true;
@@ -122,6 +105,46 @@ namespace native {
 		{
 			return closed;
 		}
+
+		std::size_t sendData(char* data, std::size_t size)
+		{
+			log.debug("Sending {} bytes.", size);
+			std::size_t bytes_sent = this->clientSocket.send(asio::buffer(data, size));
+			log.debug("Sent {} bytes.", bytes_sent);
+			return bytes_sent;
+		};
+
+
+		std::size_t receiveData(char* data, asio::error_code & ec)
+		{
+			std::size_t bytes_read = this->clientSocket.receive(asio::buffer(recv_buffer.data(), recv_buffer.size()), 0, ec);
+			log.debug("Received {} bytes.", bytes_read);
+			return bytes_read;
+		};
+
+		std::size_t sendFrame(const connector::native::Frame & frame)
+		{
+			connector::native::Frame::write_to_buffer(
+				basyx::net::make_buffer(
+					send_buffer.data() + BASYX_FRAMESIZE_SIZE, default_buffer_size - BASYX_FRAMESIZE_SIZE),
+				frame);
+
+			auto size_field = reinterpret_cast<uint32_t*>(&send_buffer[0]);
+			*size_field = frame.size();
+
+			return sendData(send_buffer.data(), frame.size() + BASYX_FRAMESIZE_SIZE);
+		};
+
+		connector::native::Frame recvFrame(asio::error_code & ec)
+		{
+			this->receiveData(recv_buffer.data(), ec);
+			auto size = *reinterpret_cast<uint32_t*>(recv_buffer.data());
+			auto frame = connector::native::Frame::read_from_buffer(
+				basyx::net::make_buffer(this->recv_buffer.data() + BASYX_FRAMESIZE_SIZE, size - BASYX_FRAMESIZE_SIZE)
+			);
+
+			return frame;
+		};
 	};
 
 };

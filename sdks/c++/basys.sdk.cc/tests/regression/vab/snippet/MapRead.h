@@ -23,8 +23,8 @@ public:
 
     static void test(basyx::vab::core::IModelProvider * modelProvider) {
 		// Test path access
-		auto slashB = modelProvider->getModelPropertyValue("primitives/integer/");
 		auto slashA = modelProvider->getModelPropertyValue("/primitives/integer");
+		auto slashB = modelProvider->getModelPropertyValue("primitives/integer/");
 		auto slashC = modelProvider->getModelPropertyValue("/primitives/integer/");
 		auto slashD = modelProvider->getModelPropertyValue("/primitives/integer/");
 

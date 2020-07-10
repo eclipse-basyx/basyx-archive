@@ -9,13 +9,15 @@
 #ifndef VAB_BACKEND_CONNECTOR_JSONPROVIDER_H
 #define VAB_BACKEND_CONNECTOR_JSONPROVIDER_H
 
-#include <string>
-
 #include <BaSyx/shared/object.h>
 #include <BaSyx/shared/serialization/json.h>
 
-// TODO: Repository?
-// TODO: Implement exception when JSONTools support them
+#include <BaSyx/vab/backend/connector/native/frame/EntityWrapper.h>
+
+#include <string>
+
+namespace basyx {
+namespace vab {
 
 template <typename Provider>
 class JSONProvider {
@@ -33,44 +35,73 @@ public:
     std::string processBaSysGet(std::string const& path)
     {
         auto res = providerBackend->getModelPropertyValue(path);
-        return serializeToJSON(path, res);
+
+		return EntityWrapper::build_from_object(res).dump(4);
     }
 
     std::string processBaSysSet(std::string const& path, std::string const& serializedJSONValue)
     {
         auto deserialized = basyx::serialization::json::deserialize(serializedJSONValue);
-        providerBackend->setModelPropertyValue(path, std::move(deserialized));
+        auto error = providerBackend->setModelPropertyValue(path, std::move(deserialized));
 
-        return serializeSuccess();
+		if (error != basyx::object::error::None)
+		{
+			return EntityWrapper::build_from_error(error).dump(4);
+		}
+		else
+		{
+			return serializeSuccess();
+		}
     }
 
     std::string processBaSysCreate(std::string const& path, std::string const& serializedJSONValue)
     {
         auto deserialized = basyx::serialization::json::deserialize(serializedJSONValue);
-        providerBackend->createValue(path, std::move(deserialized));
+        auto error = providerBackend->createValue(path, std::move(deserialized));
 
-        return serializeSuccess();
-    }
+		if (error != basyx::object::error::None)
+		{
+			return EntityWrapper::build_from_error(error).dump(4);
+		}
+		else
+		{
+			return serializeSuccess();
+		}
+	}
 
     std::string processBaSysDelete(std::string const& path, std::string const& serializedJSONValue)
     {
         auto deserialized = basyx::serialization::json::deserialize(serializedJSONValue);
-        providerBackend->deleteValue(path, std::move(deserialized));
+        auto error = providerBackend->deleteValue(path, std::move(deserialized));
 
-        return serializeSuccess();
-    }
+		if (error != basyx::object::error::None)
+		{
+			return EntityWrapper::build_from_error(error).dump(4);
+		}
+		else
+		{
+			return serializeSuccess();
+		}
+	}
 
     std::string processBaSysDelete(std::string const& path)
     {
-        providerBackend->deleteValue(path);
-        return serializeSuccess();
-    }
+        auto error = providerBackend->deleteValue(path);
+		if (error != basyx::object::error::None)
+		{
+			return EntityWrapper::build_from_error(error).dump(4);
+		}
+		else
+		{
+			return serializeSuccess();
+		}
+	}
 
-    std::string processBaSysInvoke(std::string const& path, std::string const& serializedJSONValue, char* output, size_t* size)
+    std::string processBaSysInvoke(std::string const& path, std::string const& serializedJSONValue)
     {
 		auto deserialized = basyx::serialization::json::deserialize(serializedJSONValue);
 		auto res = providerBackend->invokeOperation(path, deserialized);
-		return serializeToJSON(path, res);
+		return EntityWrapper::build_from_object(res).dump(4);
     }
 
 private:
@@ -81,16 +112,10 @@ private:
         nlohmann::json retJson { { "success", true } };
 
         return retJson.dump(4);
-    }
+	}
+};
 
-    std::string serializeToJSON(const std::string& path, const basyx::object& value)
-    {
-        auto json = basyx::serialization::json::serialize(value);
-
-        nlohmann::json retJson { { "success", true }, { "entity", json } };
-
-        return retJson.dump(4);
-    }
+}
 };
 
 #endif /* VAB_VAB_BACKEND_CONNECTOR_JSONPROVIDER_H */

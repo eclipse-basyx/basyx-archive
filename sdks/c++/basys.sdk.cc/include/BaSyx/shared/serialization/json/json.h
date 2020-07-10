@@ -19,9 +19,9 @@
 #include <BaSyx/shared/serialization/json/typeid.h>
 
 namespace basyx {
+	using json_t = nlohmann::json;
 namespace serialization {
 namespace json {
-    using json_t = nlohmann::json;
 
     template <typename T>
     inline json_t serialize(const T& t)

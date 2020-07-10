@@ -13,158 +13,95 @@
 #include <BaSyx/util/tools/StringTools.h>
 
 #include <BaSyx/shared/types.h>
- 
+
 namespace basyx {
 namespace vab {
 namespace provider {
 namespace native {
 namespace frame {
 
+using connector::native::Frame;
+
+
 BaSyxNativeFrameProcessor::BaSyxNativeFrameProcessor(vab::core::IModelProvider* providerBackend) 
 	: jsonProvider{ providerBackend}
 {
 }
 
-BaSyxNativeFrameProcessor::~BaSyxNativeFrameProcessor() 
+Frame BaSyxNativeFrameProcessor::processInputFrame(const Frame & frame)
 {
-}
+	auto command = static_cast<BaSyxCommand>(frame.getFlag());
 
-void BaSyxNativeFrameProcessor::processInputFrame(char const* rxFrame, std::size_t rxSize, char* txFrame, std::size_t* txSize) 
-{
-	std::size_t offset;
-	auto command = vab::provider::native::frame::BaSyxNativeFrameHelper::getCommand(rxFrame, &offset);
-	rxFrame += offset;
-	switch (command) {
+	switch (command) 
+	{
 	case BaSyxCommand::Get:
-		processGet(rxFrame, txFrame, txSize);
-		break;
+		return processGet(frame);
 	case BaSyxCommand::Set:
-		processSet(rxFrame, txFrame, txSize);
-		break;
+		return processSet(frame);
 	case BaSyxCommand::Create:
-		processCreate(rxFrame, txFrame, txSize);
-		break;
+		return processCreate(frame);
 	case BaSyxCommand::Delete:
-		processDelete(rxFrame, rxSize - offset, txFrame, txSize);
-		break;
+		return processDelete(frame);
 	case BaSyxCommand::Invoke:
-		processInvoke(rxFrame, txFrame, txSize);
-		break;
-
-	}
-}
-
-void BaSyxNativeFrameProcessor::processGet(char const* rxFrame, char* txFrame, std::size_t* txSize) 
-{
-	// Try to get the requested value
-	// TODO: Error Handling?
-
-	std::string path = BaSyxNativeFrameHelper::getString(rxFrame, 0);
-	// Advance txFrame by 5 because of the following setup of txFrame:
-	// 1 byte result field
-	// 4 byte string size
-	// N byte return value
-	std::string getResult = jsonProvider.processBaSysGet(path);
-	*txSize += getResult.size();
-	memcpy(txFrame + 5, getResult.c_str(), getResult.size());
-
-	// Set return string size
-	CoderTools::setInt32(txFrame + 1, 0, *txSize);
-	*txSize += BASYX_STRINGSIZE_SIZE;
-	
-	// Set result field to 0 to indicate success
-	txFrame[0] = 0;
-	*txSize += 1;
-}
-
-void BaSyxNativeFrameProcessor::processSet(char const* rxFrame, char* txFrame, std::size_t* txSize) 
-{
-	std::string path = BaSyxNativeFrameHelper::getString(rxFrame, 0);
-
-	// TODO: Error Handling?
-	std::string serializedValue = BaSyxNativeFrameHelper::getString(rxFrame, 1);
-	std::string getResult = jsonProvider.processBaSysSet(path, serializedValue);
-	memcpy(txFrame + 5, getResult.c_str(), getResult.size());
-
-	// Set return string size
-	CoderTools::setInt32(txFrame + 1, 0, *txSize);
-	*txSize += BASYX_STRINGSIZE_SIZE;
-	
-        // Set result field to 0 to indicate success
-	txFrame[0] = 0;
-	*txSize += 1;
-}
-
-void BaSyxNativeFrameProcessor::processCreate(char const* rxFrame, char* txFrame, std::size_t* txSize)
-{
-	std::string path = BaSyxNativeFrameHelper::getString(rxFrame, 0);
-
-	// TODO: Error Handling?
-	std::string serializedValue = BaSyxNativeFrameHelper::getString(rxFrame, 1);
-
-	std::string getResult =	jsonProvider.processBaSysCreate(path, serializedValue);
-	memcpy(txFrame + 5, getResult.c_str(), getResult.size());
-
-	// Set return string size
-	CoderTools::setInt32(txFrame + 1, 0, *txSize);
-	*txSize += BASYX_STRINGSIZE_SIZE;
-	
-        // Set result field to 0 to indicate success
-	txFrame[0] = 0;
-	*txSize += 1;
-}
-
-void BaSyxNativeFrameProcessor::processDelete(char const* rxFrame, std::size_t rxSize, char* txFrame, std::size_t* txSize) 
-{
-	std::string path = BaSyxNativeFrameHelper::getString(rxFrame, 0);
-
-        std::string result;
-
-	// Check if there is a serialized json after the path to distinguish between map/collection delete and simple delete
-	if (path.size() + BASYX_STRINGSIZE_SIZE < rxSize) {
-		std::string serializedValue = BaSyxNativeFrameHelper::getString(rxFrame,
-				1);
-            result = jsonProvider.processBaSysDelete(path, serializedValue);
-	} else {
-	    result = jsonProvider.processBaSysDelete(path);
+		return processInvoke(frame);
 	}
 
-	memcpy(txFrame + 5, result.c_str(), result.size());
-
-	// Set return string size
-	CoderTools::setInt32(txFrame + 1, 0, *txSize);
-	*txSize += BASYX_STRINGSIZE_SIZE;
-
-	// Set result field to 0 to indicate success
-	txFrame[0] = 0;
-	*txSize += 1;
+	return Frame{};
 }
 
-void BaSyxNativeFrameProcessor::processInvoke(char const* rxFrame, char* txFrame, std::size_t* txSize)
+Frame BaSyxNativeFrameProcessor::processGet(const Frame & frame)
 {
-	std::string path = BaSyxNativeFrameHelper::getString(rxFrame, 0);
+	auto path = frame.getFirstValue();
+	auto getResult = jsonProvider.processBaSysGet(path);
 
-	// TODO: Error Handling?
-	std::string serializedValue = BaSyxNativeFrameHelper::getString(rxFrame, 1);
-
-	// Advance txFrame by 5 because of the following setup of txFrame:
-	// 1 byte result field
-	// 4 byte string size
-	// N byte return value
-	auto result = jsonProvider.processBaSysInvoke(path, serializedValue, txFrame + 5,
-			txSize);
-
-	*txSize = result.size();
-	memcpy(txFrame + 5, result.c_str(), result.size());
-
-	// Set return value size
-	CoderTools::setInt32(txFrame + 1, 0, *txSize);
-	*txSize += BASYX_STRINGSIZE_SIZE;
-
-	// Set result field to 0 to indicate success
-	txFrame[0] = 0;
-	*txSize += 1;
+	return Frame{ 0x00, getResult };
 }
+
+Frame BaSyxNativeFrameProcessor::processSet(const Frame & frame)
+{
+	auto path = frame.getFirstValue();
+	auto value = frame.getSecondValue();
+
+	auto result = jsonProvider.processBaSysSet(path, value);
+
+	return Frame{ 0x00, result };
+};
+
+Frame BaSyxNativeFrameProcessor::processCreate(const Frame & frame)
+{
+	auto path = frame.getFirstValue();
+	auto value = frame.getSecondValue();
+
+	auto result = jsonProvider.processBaSysCreate(path, value);
+
+	return Frame{ 0x00, result };
+};
+
+Frame BaSyxNativeFrameProcessor::processDelete(const Frame & frame)
+{
+	auto path = frame.getFirstValue();
+	auto value = frame.getSecondValue();
+
+	// if no value specified, simple delete
+	if (value.empty())
+	{
+		auto result = jsonProvider.processBaSysDelete(path);
+		return Frame{ 0x00, result };
+	};
+
+	auto result = jsonProvider.processBaSysDelete(path, value);
+	return Frame{ 0x00, result };
+};
+
+Frame BaSyxNativeFrameProcessor::processInvoke(const Frame & frame)
+{
+	auto path = frame.getFirstValue();
+	auto value = frame.getSecondValue();
+
+	auto result = jsonProvider.processBaSysInvoke(path, value);
+
+	return Frame{ 0x00, result };
+};
 
 
 }

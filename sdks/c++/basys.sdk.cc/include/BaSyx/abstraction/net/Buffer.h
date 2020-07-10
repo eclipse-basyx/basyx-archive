@@ -8,6 +8,7 @@
 #ifndef ABSTRACTION_NET_BUFFER_H_
 #define ABSTRACTION_NET_BUFFER_H_
 
+#include <string>
 #include <cstddef>
 
 namespace basyx {

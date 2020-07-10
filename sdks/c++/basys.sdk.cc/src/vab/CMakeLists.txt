@@ -25,7 +25,8 @@ endif()
 target_sources(${BASYX_VAB_LIB_SUFFIX}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/vab/backend/connector/native/BaSyxConnector.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/vab/backend/connector/native/frame/BaSyxNativeFrameBuilder.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vab/backend/connector/native/frame/Frame.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vab/backend/connector/native/frame/EntityWrapper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/vab/core/proxy/VABElementProxy.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/vab/core/util/VABPath.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/vab/core/VABConnectionManager.cpp
@@ -40,7 +41,8 @@ target_sources(${BASYX_VAB_LIB_SUFFIX}
         ${BASYX_VAB_INCLUDE_DIR}/backend/connector/IBaSyxConnector.h
         ${BASYX_VAB_INCLUDE_DIR}/backend/connector/JSONProvider.h
         ${BASYX_VAB_INCLUDE_DIR}/backend/connector/native/BaSyxConnector.h
-        ${BASYX_VAB_INCLUDE_DIR}/backend/connector/native/frame/BaSyxNativeFrameBuilder.h
+        ${BASYX_VAB_INCLUDE_DIR}/backend/connector/native/frame/Frame.h
+        ${BASYX_VAB_INCLUDE_DIR}/backend/connector/native/frame/EntityWrapper.h
         ${BASYX_VAB_INCLUDE_DIR}/core/IModelProvider.h
         ${BASYX_VAB_INCLUDE_DIR}/core/proxy/IVABElementProxy.h
         ${BASYX_VAB_INCLUDE_DIR}/core/proxy/VABElementProxy.h

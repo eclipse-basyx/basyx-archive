@@ -6,7 +6,8 @@
 */
 
 #include <BaSyx/vab/backend/connector/native/BaSyxConnector.h>
-#include <BaSyx/vab/backend/connector/native/frame/BaSyxNativeFrameBuilder.h>
+#include <BaSyx/vab/backend/connector/native/frame/Frame.h>
+#include <BaSyx/vab/backend/connector/native/frame/EntityWrapper.h>
 #include <BaSyx/vab/provider/native/frame/BaSyxNativeFrameHelper.h>
 
 #include <BaSyx/shared/serialization/json.h>
@@ -22,8 +23,7 @@ namespace connector {
 namespace native {
 
 NativeConnector::NativeConnector(std::string const& address, int port)
-	: builder{}
-	, socket{ basyx::net::tcp::Socket::Connect(address, port) }
+	: socket{ basyx::net::tcp::Socket::Connect(address, port) }
 	, log{ "NativeConnector" }
 {
 	log.trace("Connected to {}:{}", address, port);
@@ -32,7 +32,6 @@ NativeConnector::NativeConnector(std::string const& address, int port)
 
 
 NativeConnector::~NativeConnector() {
-	this->socket.Close();
 }
 
 
@@ -42,65 +41,69 @@ basyx::object NativeConnector::basysGet(std::string const& path)
 	log.trace("basysGet() called:");
 	log.trace("    path: {}", path);
 
-	auto entityWrapper = basysGetRaw(path);
-	auto value = basyx::serialization::json::deserialize(entityWrapper["entity"]);
+	auto value = basysProcess(Frame::Builder::Get(path));
 	return value;
 }
 
-nlohmann::json NativeConnector::basysGetRaw(std::string const& path) {
-	size_t size = builder.buildGetFrame(path, buffer.data() + BASYX_FRAMESIZE_SIZE);
-	sendData(buffer.data(), size);
-	size = receiveData(buffer.data());
-	if (buffer[4] != 0) { // Error happened
-		return ""_json; // TODO: Error handling
-	}
-	std::string data = StringTools::fromArray(buffer.data() + BASYX_FRAMESIZE_SIZE + 1);
-	return nlohmann::json::parse(data);
-}
+basyx::object NativeConnector::basysProcess(const Frame & frame)
+{
+	this->sendFrame(frame);
 
-void NativeConnector::basysSet(std::string const& path, const basyx::object & newValue)
+	auto response_frame = this->recvFrame();
+	if (response_frame.getFlag() != 0x00) {
+		return basyx::object::make_error(basyx::object::error::MalformedRequest, "invalid frame received");
+	};
+
+	auto entityWrapper = nlohmann::json::parse(response_frame.getFirstValue());
+
+	auto value = basyx::vab::EntityWrapper::from_json(entityWrapper);
+	return value;
+};
+
+basyx::object NativeConnector::basysSet(std::string const& path, const basyx::object & newValue)
 {
 	log.trace("basysSet() called:");
 	log.trace("    path: {}", path);
 
-	size_t size = builder.buildSetFrame(path, newValue, buffer.data() + BASYX_FRAMESIZE_SIZE);
-	sendData(buffer.data(), size);
-	size = receiveData(buffer.data());
+	auto return_code = basysProcess(Frame::Builder::Set(path, newValue));
+	return return_code;
 }
 
-void NativeConnector::basysCreate(std::string const& path, const basyx::object & val)
+basyx::object NativeConnector::basysCreate(std::string const& path, const basyx::object & val)
 {
-	size_t size = builder.buildCreateFrame(path, val, buffer.data() + BASYX_FRAMESIZE_SIZE);
-	sendData(buffer.data(), size);
-	size = receiveData(buffer.data());
+	log.trace("basysCreate() called:");
+	log.trace("    path: {}", path);
+
+	auto return_code = basysProcess(Frame::Builder::Create(path, val));
+	return return_code;
 }
 
 basyx::object NativeConnector::basysInvoke(std::string const& path, const basyx::object & param)
 {
-	size_t size = builder.buildInvokeFrame(path, param, buffer.data() + BASYX_FRAMESIZE_SIZE);
-	sendData(buffer.data(), size);
-	size = receiveData(buffer.data());
-	return decode(buffer.data() + 5);
+	log.trace("basysInvoke() called:");
+	log.trace("    path: {}", path);
+
+	auto return_code = basysProcess(Frame::Builder::Invoke(path, param));
+	return return_code;
 }
 
-void NativeConnector::basysDelete(std::string const& path)
+basyx::object NativeConnector::basysDelete(std::string const& path)
 {
-	size_t size = builder.buildDeleteFrame(path, buffer.data() + BASYX_FRAMESIZE_SIZE);
-	sendData(buffer.data(), size);
-	size = receiveData(buffer.data());
+	log.trace("basysDelete() called:");
+	log.trace("    path: {}", path);
+
+	auto return_code = basysProcess(Frame::Builder::Delete(path));
+	return return_code;
 }
 
-void NativeConnector::basysDelete(std::string const& path, const basyx::object & obj) {
-	size_t size = builder.buildDeleteFrame(path, obj, buffer.data() + BASYX_FRAMESIZE_SIZE);
-	sendData(buffer.data(), size);
-	size = receiveData(buffer.data());
-}
+basyx::object NativeConnector::basysDelete(std::string const& path, const basyx::object & obj) 
+{
+	log.trace("basysDelete() called:");
+	log.trace("    path: {}", path);
 
-// TODO: Error handling
-/**
-	* Builds a send frame and sends it to server
-	* @param msg a frame constructed with the BaSyxNativeFrameBuilder
-	*/
+	auto return_code = basysProcess(Frame::Builder::Delete(path, obj));
+	return return_code;
+}
 
 void NativeConnector::sendData(char* msg, size_t size) 
 {
@@ -110,10 +113,6 @@ void NativeConnector::sendData(char* msg, size_t size)
 
 	CoderTools::setInt32(msg, 0, size);
 	size += BASYX_FRAMESIZE_SIZE;
-#ifdef PRINT_FRAME
-	log.debug("Sending:");
-	vab::provider::native::frame::BaSyxNativeFrameHelper::printFrame(msg, size);
-#endif
 
 	log.debug("Sending {} bytes.", size);
 	int sent_bytes = this->socket.Send(basyx::net::make_buffer(msg, size));
@@ -125,7 +124,8 @@ void NativeConnector::sendData(char* msg, size_t size)
 }
 
 // TODO: Error handling
-size_t NativeConnector::receiveData(char* data) {
+size_t NativeConnector::receiveData(char* data) 
+{
 	log.trace("receiveData() called");
 	log.trace("    data: 0x{0:x}", (std::size_t)data);
 
@@ -135,10 +135,6 @@ size_t NativeConnector::receiveData(char* data) {
 	log.debug("Received {} bytes.", recv_bytes);
 
 	if (recv_bytes > 0) {
-#ifdef PRINT_FRAME
-		log.debug("Received:");
-		vab::provider::native::frame::BaSyxNativeFrameHelper::printFrame(data, recv_bytes);
-#endif
 		return recv_bytes;
 	}
 	else {
@@ -147,10 +143,23 @@ size_t NativeConnector::receiveData(char* data) {
 	}
 }
 
-basyx::object NativeConnector::decode(char* buffer)
+void NativeConnector::sendFrame(const Frame & frame)
 {
-	std::string data = StringTools::fromArray(buffer);
-	return basyx::serialization::json::deserialize(data).Get<basyx::object::object_map_t&>()["entity"];
+	Frame::write_to_buffer(
+		basyx::net::make_buffer(
+			buffer.data() + BASYX_FRAMESIZE_SIZE, default_buffer_length - BASYX_FRAMESIZE_SIZE), 
+		frame);
+
+	sendData(buffer.data(), frame.size());
+};
+
+Frame NativeConnector::recvFrame()
+{
+	this->receiveData(buffer.data());
+	auto size = *reinterpret_cast<uint32_t*>(buffer.data());
+	auto frame = Frame::read_from_buffer(basyx::net::make_buffer(this->buffer.data() + BASYX_FRAMESIZE_SIZE, size));
+
+	return frame;
 };
 
 }

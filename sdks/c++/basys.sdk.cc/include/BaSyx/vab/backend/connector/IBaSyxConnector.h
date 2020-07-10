@@ -29,20 +29,14 @@ public:
 	virtual basyx::object basysGet(std::string const& path) = 0;
 
 	/**
-	 * Invoke a BaSys get operation without de-serialization
-	 * @return the serialized element as a JSONObject
-	 */
-	virtual basyx::serialization::json::json_t basysGetRaw(std::string const& path) = 0;
-
-	/**
 	 * Invoke a Basys Set operation. Sets or overrides existing property, operation or event.
 	 */
-	virtual void basysSet(std::string const& path, const basyx::object &  newValue) = 0;
+	virtual basyx::object basysSet(std::string const& path, const basyx::object &  newValue) = 0;
 
 	/**
 	 * Creates a new Property, Operation, Event, Submodel or AAS
 	 */
-	virtual void basysCreate(std::string const& servicePath, const basyx::object & value) = 0;
+	virtual basyx::object basysCreate(std::string const& servicePath, const basyx::object & value) = 0;
 
 	/**
 	 * Invoke a Basys Invoke operation. Invokes an operation on the server.
@@ -53,12 +47,12 @@ public:
 	 * Invoke a Basys operation. Deletes any resource under the given path.
 	 * 
 	 */
-	virtual void basysDelete(std::string const& servicePath) = 0;
+	virtual basyx::object basysDelete(std::string const& servicePath) = 0;
 
 	/**
 	 * Invoke a Basys oxperation. Deletes an entry from a map or collection by the given key
 	 */
-	virtual void basysDelete(std::string const& servicePath, const basyx::object & obj) = 0;
+	virtual basyx::object basysDelete(std::string const& servicePath, const basyx::object & obj) = 0;
 };
 
 }

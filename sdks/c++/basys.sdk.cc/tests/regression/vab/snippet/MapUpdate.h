@@ -15,10 +15,15 @@ namespace vab {
 namespace snippet {
 
 
-class MapRead {
+class MapUpdate{
 public:
+	static void test(basyx::vab::core::IModelProvider * modelProvider)
+	{
+		testUpdate(modelProvider);
+		testWholeMap(modelProvider);
+	}
 
-    static void test(basyx::vab::core::IModelProvider * modelProvider) 
+    static void testUpdate(basyx::vab::core::IModelProvider * modelProvider) 
 	{
 		// Set primitives
 		modelProvider->setModelPropertyValue("primitives/integer", 12);
@@ -56,7 +61,7 @@ public:
 		ASSERT_EQ(nullUpdate.Get<bool>(), true);
 	}
 
-	static void test(basyx::vab::core::IModelProvider * modelProvider)
+	static void testWholeMap(basyx::vab::core::IModelProvider * modelProvider)
 	{
 		// Push whole map via ""-Path
 		// - create object

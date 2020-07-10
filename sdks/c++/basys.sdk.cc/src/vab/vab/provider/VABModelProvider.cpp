@@ -87,11 +87,12 @@ basyx::object::error VABModelProvider::setModelPropertyValue(const std::string& 
 	// Only write values, that already exist
 	auto thisElement = parentElement.getProperty(propertyName);
 
-	if (!parentElement.IsNull() && !thisElement.IsNull()) {
+	if (!parentElement.IsNull()/* && !thisElement.IsNull()*/) {
 		parentElement.insertKey(propertyName, newValue, true);
+		return basyx::object::error::None;
 	}
 
-	return basyx::object::error::None;
+	return basyx::object::error::PropertyNotFound;
 };
 
 basyx::object::error VABModelProvider::createValue(const std::string& path, const basyx::object newValue)
@@ -163,10 +164,11 @@ basyx::object::error VABModelProvider::deleteValue(const std::string& path, basy
 		if (!childElement.IsNull()) {
 			//handler.DeleteValue(childElement, deletedValue);
 			childElement.remove(deletedValue);
+			return basyx::object::error::None;
 		}
 	}
 
-	return basyx::object::error::None;
+	return basyx::object::error::PropertyNotFound;
 };
 
 basyx::object::error VABModelProvider::deleteValue(const std::string& path)
@@ -200,14 +202,14 @@ basyx::object VABModelProvider::invokeOperation(const std::string& path, basyx::
 		log.error("Function not found!");
 		log.trace("Returning basyx::object::null");
 
-		return basyx::object{ nullptr };
+		return basyx::object::make_error(basyx::object::error::PropertyNotFound, "method not found");
 	}
 
 	if (!element.IsInvokable()) {
 		log.error("Found object is not invokable!");
 		log.trace("Returning basyx::object::null");
 
-		return basyx::object{ nullptr };
+		return basyx::object::make_error(basyx::object::error::ProviderException, "method not invokable");
 	};
 
 	log.trace("Function found. Invoking...");
