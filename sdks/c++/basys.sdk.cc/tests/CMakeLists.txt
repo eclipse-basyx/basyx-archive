@@ -20,13 +20,18 @@ target_link_libraries(tests_main gtest)
 add_library(tests::main ALIAS tests_main)
 diagnostics_print(tests_main)
 
-### UnitTests ###
+### Unit Tests ###
 
-#add_subdirectory(regression/aas)
 add_subdirectory(regression/util)
 add_subdirectory(regression/vab)
 add_subdirectory(regression/aas)
 add_subdirectory(regression/submodel)
+
+### Integration tests ###
+
+if(BASYX_BUILD_INTEGRATION_TESTS)
+	add_subdirectory(integration)
+endif()
 
 ### Support ###
 
