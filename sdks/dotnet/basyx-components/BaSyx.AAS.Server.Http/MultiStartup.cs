@@ -70,7 +70,7 @@ namespace BaSyx.AAS.Server.Http
             });
 
             //Check whether Asset Administration Shell Service Provider exists and bind it to the AssetAdministrationShell-Services-Controller
-            services.AddTransient(ctx =>
+            services.AddTransient<IAssetAdministrationShellServiceProvider>(ctx =>
             {
                 IAssetAdministrationShellServiceProvider aasServiceProvider = ctx
                 .GetRequiredService<IAssetAdministrationShellRepositoryServiceProvider>()
@@ -81,7 +81,7 @@ namespace BaSyx.AAS.Server.Http
 
 
             //Check whether Submodel Service Provider exists and bind it to the Submodel-Services-Controller
-            services.AddTransient(ctx =>
+            services.AddTransient<ISubmodelServiceProvider>(ctx =>
             {
                 IAssetAdministrationShellServiceProvider aasServiceProvider = ctx
                .GetRequiredService<IAssetAdministrationShellRepositoryServiceProvider>()

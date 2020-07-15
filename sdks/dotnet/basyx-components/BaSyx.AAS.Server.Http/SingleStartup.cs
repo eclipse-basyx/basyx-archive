@@ -73,7 +73,7 @@ namespace BaSyx.AAS.Server.Http
             services.AddDirectoryBrowser();
            
             //Check whether Submodel Service Provider exists and bind it to Submodel-REST-Controller
-            services.AddTransient(ctx =>
+            services.AddTransient<ISubmodelServiceProvider>(ctx =>
             {
                 var aasServiceProvider = ctx.GetRequiredService<IAssetAdministrationShellServiceProvider>();
                 var submodelServiceProvider = aasServiceProvider.SubmodelRegistry.GetSubmodelServiceProvider(submodelId);

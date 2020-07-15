@@ -10,7 +10,10 @@
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
+using BaSyx.Models.Core.AssetAdministrationShell.Identification;
+using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
+using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using BaSyx.Utils.StringOperations;
 using Newtonsoft.Json.Linq;
@@ -23,6 +26,25 @@ namespace BaSyx.Models.Extensions
 {
     public static class SubmodelExtensions
     {
+        public static ISubmodel CreateSubmodelFromObject(this object target)
+        {
+            if (target == null)
+                return null;
+
+            Type type = target.GetType();
+            Submodel submodel = new Submodel()
+            {
+                IdShort = type.Name,
+                Identification = new Identifier(type.FullName, KeyType.Custom)
+            };
+            foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                ISubmodelElement smElement = property.CreateSubmodelElement(target);
+                submodel.SubmodelElements.Add(smElement);
+            }
+            return submodel;
+        }
+
         private static readonly JsonMergeSettings JsonMergeSettings = new JsonMergeSettings
         {
             MergeArrayHandling = MergeArrayHandling.Merge,
