@@ -68,6 +68,10 @@ public class TestConnectedAssetAdministrationShellManager {
 		aas.setIdShort(aasIdShort);
 		manager.createAAS(aas, aasId, "");
 
+		// Check descriptor for correct endpoint
+		String endpoint = registry.lookupAAS(aasId).getFirstEndpoint();
+		assertEquals("/aasList/" + aasId.getId() + "/aas", endpoint);
+
 		// Retrieve it
 		ConnectedAssetAdministrationShell connectedAAS = manager.retrieveAAS(aasId);
 		assertEquals(aasIdShort, connectedAAS.getIdShort());

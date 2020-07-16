@@ -24,6 +24,7 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.vab.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -103,7 +104,8 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		AASAggregatorProxy proxy = new AASAggregatorProxy(provider);
 		proxy.createAAS(aas);
 		try {
-			aasDirectory.register(new AASDescriptor(aas, endpoint + "/aasList/" + URLEncoder.encode(aas.getIdentification().getId(), "UTF-8")));
+			String combinedEndpoint = VABPathTools.concatenatePaths(endpoint, "aasList", URLEncoder.encode(aas.getIdentification().getId(), "UTF-8"), "aas");
+			aasDirectory.register(new AASDescriptor(aas, combinedEndpoint));
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException("Encoding failed. This should never happen");
 		}
