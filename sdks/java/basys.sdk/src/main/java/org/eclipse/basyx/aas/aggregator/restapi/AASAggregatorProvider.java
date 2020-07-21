@@ -107,25 +107,30 @@ public class AASAggregatorProvider implements IModelProvider {
 
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
-		
-		AssetAdministrationShell aas = createAASFromMap(newValue);
-		
 		path = stripPrefix(path);
 		
 		if (!path.isEmpty()) { // Overwriting existing entry
-			// Decode encoded path
-			path = decodePath(path);
-			ModelUrn identifier = new ModelUrn(path);
-			
-			if(!aas.getIdentification().getId().equals(path)) {
-				throw new MalformedRequestException("Given aasID and given AAS do not match");
-			}
-			
-			if(aggregator.getAAS(identifier) == null) {
-				throw new ResourceAlreadyExistsException("Can not update non existing value '" + path + "'. Try create instead.");
-			}
+			if (!path.contains("/")) { // Update of AAS
 
-			aggregator.updateAAS(aas);
+				AssetAdministrationShell aas = createAASFromMap(newValue);
+				// Decode encoded path
+				path = decodePath(path);
+				ModelUrn identifier = new ModelUrn(path);
+
+				if (!aas.getIdentification().getId().equals(path)) {
+					throw new MalformedRequestException("Given aasID and given AAS do not match");
+				}
+
+				if (aggregator.getAAS(identifier) == null) {
+					throw new ResourceAlreadyExistsException("Can not update non existing value '" + path + "'. Try create instead.");
+				}
+
+				aggregator.updateAAS(aas);
+			} else { // Update of contained element
+				String id = decodePath(VABPathTools.getEntry(path, 0));
+				String restPath = VABPathTools.skipEntries(path, 1);
+				aggregator.getProviderForAASId(id).setModelPropertyValue(restPath, newValue);
+			}
 		} else {
 			throw new MalformedRequestException("Set with empty path is not supported by aggregator");
 		}
@@ -161,14 +166,13 @@ public class AASAggregatorProvider implements IModelProvider {
 			path = decodePath(path);
 			
 			if (!path.contains("/")) {
+				IIdentifier identifier = new ModelUrn(path);
 
-			IIdentifier identifier = new ModelUrn(path);
-			
-			if(aggregator.getAAS(identifier) == null) {
-				throw new ResourceNotFoundException("Value '" + path + "' to be deleted does not exists.");
-			}
-			
-			aggregator.deleteAAS(identifier);
+				if (aggregator.getAAS(identifier) == null) {
+					throw new ResourceNotFoundException("Value '" + path + "' to be deleted does not exists.");
+				}
+
+				aggregator.deleteAAS(identifier);
 			} else {
 				String id = decodePath(VABPathTools.getEntry(path, 0));
 				String restPath = VABPathTools.skipEntries(path, 1);
