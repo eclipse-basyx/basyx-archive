@@ -5,7 +5,6 @@
 
 #include <BaSyx/submodel/map_v2/common/LangStringSet.h>
 #include <BaSyx/submodel/map_v2/reference/Reference.h>
-#include <BaSyx/submodel/map_v2/dataspecification/DataSpecificationContent.h>
 #include <BaSyx/vab/ElementMap.h>
 
 namespace basyx {
@@ -13,7 +12,6 @@ namespace submodel {
 namespace map {
 class DataSpecificationIEC61360
     : public api::IDataSpecificationIEC61360
-    , public virtual DataSpecificationContent
     , public virtual vab::ElementMap
 {
 public:

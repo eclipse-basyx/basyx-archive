@@ -32,6 +32,12 @@ LangStringSet::LangStringSet(std::initializer_list<LangStringSet::langStringMap_
 		this->add(entry.first, entry.second);
 }
 
+LangStringSet::LangStringSet(const api::ILangStringSet &other)
+{
+  for( auto & lang_code : other.getLanguageCodes())
+    this->add(lang_code, other.get(lang_code));
+}
+
 const std::string & LangStringSet::get(const std::string & languageCode) const
 {
 	if (this->langStrings.find(languageCode) != langStrings.end()) {

@@ -22,8 +22,6 @@ public:
 		static constexpr char Description[] = "description";
 		static constexpr char Parent[] = "parent";
 	};
-protected:
-	Referable() = default;
 private:
 	map::LangStringSet description;
 	const IReferable * const parent = nullptr;
@@ -33,7 +31,6 @@ public:
 	// Constructors
 	Referable(const std::string & idShort, const Referable * parent = nullptr);
 	//Referable(const IReferable & other);
-	using vab::ElementMap::ElementMap;
 
 	// Inherited via IReferable
 	virtual const std::string & getIdShort() const override;

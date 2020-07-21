@@ -7,8 +7,14 @@ using namespace basyx::submodel::api;
 Referable::Referable(const std::string & idShort, const Referable * parent)
 	: idShort(idShort)
 	, parent(parent)
-{
-}
+{}
+
+Referable::Referable(const IReferable &other)
+  : idShort(other.getIdShort())
+  , category(*other.getCategory())
+  , description(other.getDescription())
+  , parent(other.getParent())
+{};
 
 const std::string & Referable::getIdShort() const
 {
@@ -61,4 +67,4 @@ bool Referable::hasDescription() const noexcept
 bool Referable::hasCategory() const noexcept 
 {
 	return !this->category.empty();
-};
+}

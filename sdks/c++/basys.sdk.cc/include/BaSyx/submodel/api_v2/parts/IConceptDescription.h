@@ -21,9 +21,8 @@ class IConceptDescription :
 public:
 	virtual ~IConceptDescription() = 0;
 
-
-	virtual std::vector<simple::Reference> & getIsCaseOf() = 0;
-	virtual IElementContainer<IDataSpecification> & getEmbeddedDataSpecification() = 0;
+	virtual const std::vector<std::unique_ptr<IReference>> & getIsCaseOf() const = 0;
+	virtual const IElementContainer<IDataSpecification> & getEmbeddedDataSpecification() const = 0;
 };
 
 inline IConceptDescription::~IConceptDescription() = default;

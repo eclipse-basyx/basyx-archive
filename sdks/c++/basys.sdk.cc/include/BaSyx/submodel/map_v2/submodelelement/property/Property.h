@@ -12,10 +12,11 @@ namespace submodel {
 namespace map {
 
 template<typename T>
-class Property : 
-	public virtual api::IProperty,
-	public SubmodelElement,
-	public ModelType<ModelTypes::Property>
+class Property
+  : public virtual api::IProperty
+  , public virtual SubmodelElement
+  , public virtual vab::ElementMap
+  , public ModelType<ModelTypes::Property>
 {
 public:
 	Property(const std::string & idShort)
@@ -24,7 +25,8 @@ public:
 	};
 
 	Property(const vab::ElementMap & elementMap)
-		: SubmodelElement(elementMap.getMap())
+		: vab::ElementMap(elementMap.getMap())
+		, SubmodelElement(elementMap.getMap().getProperty(Referable::Path::IdShort).GetStringContent(), ModelingKind::Instance)
 	{
 	};
 

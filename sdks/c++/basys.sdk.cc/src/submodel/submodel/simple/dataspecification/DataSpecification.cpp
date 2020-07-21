@@ -9,9 +9,7 @@ using namespace basyx::submodel::api;
 DataSpecification::DataSpecification(const std::string & idShort, const Identifier & identifier)
 	: ident(idShort, identifier)
 	, content(nullptr)
-{
-
-}
+{}
 
 void DataSpecification::setContent(std::unique_ptr<IDataSpecificationContent> content)
 {
@@ -66,6 +64,11 @@ bool DataSpecification::hasAdministrativeInformation() const
 IDataSpecificationContent & DataSpecification::getContent()
 {
 	return *this->content;
+}
+
+void DataSpecification::setCategory(const std::string &category)
+{
+  this->ident.setCategory(category);
 }
 
 
