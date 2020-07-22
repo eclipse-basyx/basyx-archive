@@ -28,7 +28,13 @@ public class AASServerExecutable {
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
 		// Load configuration
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
-		config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
+		if (args.length > 0 && args[0] instanceof String) {
+			// file path available? => load configs from file
+			config.loadFromFile(args[0]);
+		} else {
+			// fallback: load default configs (in resources)
+			config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
+		}
 
 		AASServerComponent component = new AASServerComponent(config.getHostname(), config.getPort(), config.getContextPath(), config.getDocBasePath());
 		component.startComponent();
