@@ -238,6 +238,8 @@ public abstract class TestRegistryProviderSuite {
 		proxy.registerOnly(descriptorToRegister);
 		AASDescriptor descriptor = proxy.lookupAAS(id);
 		assertEquals(descriptorToRegister.getFirstEndpoint(), descriptor.getFirstEndpoint());
+		// clean up after this test
+		proxy.delete(id);
 	}
 
 	@Test(expected = ResourceAlreadyExistsException.class)
