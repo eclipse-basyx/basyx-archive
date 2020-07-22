@@ -25,7 +25,6 @@ public class ConnectedElement implements IElement {
 	public ConnectedElement(VABElementProxy proxy) {
 		super();
 		this.proxy = proxy;
-		cached = getElemLive();
 	}
 
 
@@ -37,7 +36,9 @@ public class ConnectedElement implements IElement {
 	 */
 	@SuppressWarnings("unchecked")
 	protected VABModelMap<Object> getElemLive() {
-		VABModelMap<Object> map = new VABModelMap<Object>((Map<String, Object>) getProxy().getModelPropertyValue(""));
+		VABModelMap<Object> map = new VABModelMap<>((Map<String, Object>) getProxy().getModelPropertyValue(""));
+		// update cache
+		cached = map;
 		return map;
 	}
 
@@ -49,7 +50,11 @@ public class ConnectedElement implements IElement {
 	 * @return
 	 */
 	protected VABModelMap<Object> getElem() {
-		return cached;
+		if (cached == null) {
+			return getElemLive();
+		} else {
+			return cached;
+		}
 	}
 
 	protected void throwNotSupportedException() {
