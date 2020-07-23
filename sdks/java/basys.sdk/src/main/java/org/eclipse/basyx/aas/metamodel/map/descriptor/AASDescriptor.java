@@ -7,7 +7,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
@@ -21,6 +23,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
  */
 public class AASDescriptor extends ModelDescriptor {
 	public static final String MODELTYPE = "AASDescriptor";
+	public static final String ASSET = "asset";
 	
 	/**
 	 * Create descriptor from existing hash map
@@ -35,20 +38,25 @@ public class AASDescriptor extends ModelDescriptor {
 
 	/**
 	 * Create a new aas descriptor that retrieves the necessary information from a
-	 * passend AssetAdministrationShell
+	 * passed AssetAdministrationShell
 	 * 
 	 * @param iAssetAdministrationShell
+	 * @param IAsset                    - The asset which is associated to the AAS
 	 * @param endpoint
 	 */
 	public AASDescriptor(IAssetAdministrationShell assetAdministrationShell, String endpoint) {
-		this(assetAdministrationShell.getIdShort(), assetAdministrationShell.getIdentification(), endpoint);
+		this(assetAdministrationShell.getIdShort(), assetAdministrationShell.getIdentification(), assetAdministrationShell.getAsset(), endpoint);
 	}
 
+
 	/**
-	 * Create a new descriptor with minimal information
+	 * Create a new descriptor with aasid, idshort , assetid, and endpoint
 	 */
-	public AASDescriptor(String idShort, IIdentifier id, String httpEndpoint) {
-		super(idShort, id, httpEndpoint);
+	public AASDescriptor(String idShort, IIdentifier aasid, IAsset asset, String httpEndpoint) {
+		super(idShort, aasid, httpEndpoint);
+
+		// Set Asset
+		put(ASSET, asset);
 
 		// Set Submodels
 		put(AssetAdministrationShell.SUBMODELS, new HashSet<SubmodelDescriptor>());
@@ -58,10 +66,24 @@ public class AASDescriptor extends ModelDescriptor {
 	}
 	
 	/**
-	 * Create a new descriptor with minimal information (idShort is assumed to be set to "")
+	 * Create a new descriptor with minimal information
 	 */
-	public AASDescriptor(IIdentifier id, String httpEndpoint) {
-		this("", id, httpEndpoint);
+	public AASDescriptor(String idShort, IIdentifier aasid, String httpEndpoint) {
+		super(idShort, aasid, httpEndpoint);
+
+		// Set Submodels
+		put(AssetAdministrationShell.SUBMODELS, new HashSet<SubmodelDescriptor>());
+
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+	}
+
+	/**
+	 * Create a new descriptor with minimal information (idShort is assumed to be
+	 * set to "")
+	 */
+	public AASDescriptor(IIdentifier aasid, String httpEndpoint) {
+		this("", aasid, httpEndpoint);
 	}
 	
 	/**
@@ -147,6 +169,15 @@ public class AASDescriptor extends ModelDescriptor {
 	@Override
 	protected String getModelType() {
 		return MODELTYPE;
+	}
+	
+	/**
+	 * Get asset
+	 */
+	@SuppressWarnings("unchecked")
+	public IAsset getAsset() {
+		Map<String, Object> assetModel = (Map<String, Object>) get(ASSET);
+		return Asset.createAsFacade(assetModel);
 	}
 }
 
