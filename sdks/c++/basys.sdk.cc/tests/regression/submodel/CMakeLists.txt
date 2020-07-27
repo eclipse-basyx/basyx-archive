@@ -10,6 +10,7 @@ add_executable(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME}
   PRIVATE
+	api/common/test_ElementContainer.cpp
 	api/constraint/test_Formula.cpp
 	api/constraint/test_Qualifier.cpp
 	api/qualifier/test_HasDataSpecification.cpp
@@ -18,6 +19,10 @@ target_sources(${PROJECT_NAME}
 	api/qualifier/test_Referable.cpp
 	api/reference/test_Reference.cpp
 	api/dataspecification/test_ValueList.cpp
+	api/dataspecification/test_DataSpecificationPhysicalUnit.cpp
+	api/parts/test_ConceptDictionary.cpp
+	api/parts/test_ConceptDescription.cpp
+	api/parts/test_View.cpp
 	map/common/test_ElementContainer.cpp
 	api/common/test_LangStringSet.cpp
 	map_v2/dataspecification/test_DataSpecification.cpp

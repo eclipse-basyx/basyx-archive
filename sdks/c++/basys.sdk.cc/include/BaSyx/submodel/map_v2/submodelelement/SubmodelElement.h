@@ -21,7 +21,6 @@ class SubmodelElement :
 private:
 	Reference semanticId;
 public:
-	using vab::ElementMap::ElementMap;
 	SubmodelElement(const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
 
 	virtual ~SubmodelElement() = default;

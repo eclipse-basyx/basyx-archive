@@ -42,6 +42,9 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/common/ModelType.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/constraint/Formula.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/constraint/Qualifier.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/parts/ConceptDictionary.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/parts/ConceptDescription.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/parts/View.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/HasDataSpecification.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/Identifiable.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/Qualifiable.cpp
@@ -58,18 +61,21 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/dataspecification/DataSpecification.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/dataspecification/DataSpecificationIEC61360.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/dataspecification/ValueList.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/dataspecification/DataSpecificationPhysicalUnit.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/aas/AssetAdministrationShell.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/aas/Asset.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/LangStringSet.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/constraint/Formula.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/constraint/Qualifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/dataspecification/DataSpecificationContent.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/dataspecification/DataSpecification.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/dataspecification/DataSpecificationIEC61360.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/dataspecification/DataSpecificationPhysicalUnit.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/dataspecification/ValueList.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/identifier/Identifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/parts/ConceptDescription.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/parts/ConceptDictionary.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/parts/View.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/qualifier/AdministrativeInformation.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/qualifier/HasDataSpecification.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/qualifier/Identifiable.cpp
@@ -122,6 +128,8 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/constraint/IQualifier.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/ISubModel.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/parts/IConceptDescription.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/parts/IConceptDictionary.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/parts/IView.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IHasDataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IHasKind.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IHasSemantics.h
@@ -154,10 +162,13 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ElementFactory.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/LangStringSet.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ModelType.h
-		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/dataspecification/DataSpecificationContent.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/dataspecification/DataSpecificationIEC61360.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/dataspecification/DataSpecificationPhysicalUnit.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/dataspecification/DataSpecification.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/dataspecification/ValueList.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/parts/ConceptDictionary.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/parts/ConceptDescription.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/parts/View.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/constraint/Formula.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/constraint/Qualifier.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/HasDataSpecification.h
@@ -176,19 +187,22 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/SubmodelElementFactory.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/SubmodelElement.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/SubModel.h
+
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/aas/AssetAdministrationShell.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/aas/Asset.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/ElementContainer.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/LangStringSet.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/constraint/Formula.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/constraint/Qualifier.h
-        ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/DataSpecificationContent.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/DataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/DataSpecificationIEC61360.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/DataSpecificationPhysicalUnit.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/ValueReferencePair.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/ValueList.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/identifier/Identifier.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/parts/ConceptDescription.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/parts/ConceptDictionary.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/parts/View.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/AdministrativeInformation.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/HasDataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/Identifiable.h

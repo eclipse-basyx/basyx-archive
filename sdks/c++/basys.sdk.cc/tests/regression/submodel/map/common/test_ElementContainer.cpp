@@ -8,7 +8,7 @@ using namespace basyx::submodel;
 using namespace basyx::submodel::map;
 using namespace basyx::submodel::api;
 
-class MapElementContainerTest :public ::testing::Test {
+class ElementContainerTest : public ::testing::Test {
 protected:
 	ElementContainer<ISubmodelElement> elementContainer;
 protected:
@@ -21,13 +21,13 @@ protected:
 	}
 };
 
-TEST_F(MapElementContainerTest, TestInit)
+TEST_F(ElementContainerTest, TestInit)
 {
 	ASSERT_EQ(this->elementContainer.size(), 0);
 }
 
 
-TEST_F(MapElementContainerTest, TestAdd)
+TEST_F(ElementContainerTest, TestAdd)
 {
 	auto prop = util::make_unique<Property<int>>( "testProperty" );
 	prop->setValue(5);
@@ -41,7 +41,7 @@ TEST_F(MapElementContainerTest, TestAdd)
 	ASSERT_EQ(propB->getValue(), 5);
 };
 
-TEST_F(MapElementContainerTest, TestCreate)
+TEST_F(ElementContainerTest, TestCreate)
 {
 	auto prop = this->elementContainer.createElement<Property<int>>("testProperty");
 	ASSERT_EQ(this->elementContainer.size(), 1);
@@ -53,7 +53,7 @@ TEST_F(MapElementContainerTest, TestCreate)
 	ASSERT_EQ(propB->getValue(), 5);
 };
 
-TEST_F(MapElementContainerTest, TestCreateDeleteAfterwards)
+TEST_F(ElementContainerTest, TestCreateDeleteAfterwards)
 {
 	auto prop = this->elementContainer.createElement<Property<int>>("testProperty");
 	ASSERT_EQ(this->elementContainer.size(), 1);

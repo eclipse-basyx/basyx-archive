@@ -4,46 +4,22 @@ using namespace basyx::submodel::simple;
 using namespace basyx::submodel::api;
 
 Identifiable::Identifiable(const std::string & idShort, const Identifier & identifier)
-	: referable(idShort)
+	: Referable(idShort)
 	, identifier(identifier)
+{}
+
+Identifiable::Identifiable(const IIdentifiable &other)
+  : Referable(other)
+  , identifier(other.getIdentification().getIdType(), other.getIdentification().getId())
+  , administrativeInformation(other.getAdministrativeInformation())
 {
+
 }
 
 bool Identifiable::hasAdministrativeInformation() const noexcept
 { 
 	return this->administrativeInformation.exists(); 
 };
-
-
-std::string const & Identifiable::getIdShort() const
-{
-	return this->referable.getIdShort();
-}
-
-const std::string * const Identifiable::getCategory() const
-{
-	return this->referable.getCategory();
-}
-
-void Identifiable::setCategory(const std::string & category)
-{
-	this->referable.setCategory(category);
-}
-
-LangStringSet & Identifiable::getDescription()
-{
-	return this->referable.getDescription();
-}
-
-const LangStringSet & Identifiable::getDescription() const
-{
-	return this->referable.getDescription();
-}
-
-const IReferable * const Identifiable::getParent() const
-{
-	return this->referable.getParent();
-}
 
 const AdministrativeInformation & Identifiable::getAdministrativeInformation() const
 {
@@ -58,4 +34,9 @@ AdministrativeInformation & Identifiable::getAdministrativeInformation()
 Identifier Identifiable::getIdentification() const
 {
 	return this->identifier;
+}
+
+void Identifiable::setAdministrativeInformation(const AdministrativeInformation &administrativeInformation)
+{
+  this->administrativeInformation = administrativeInformation;
 }

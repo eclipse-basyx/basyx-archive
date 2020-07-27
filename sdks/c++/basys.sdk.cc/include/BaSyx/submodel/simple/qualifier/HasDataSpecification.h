@@ -9,7 +9,8 @@ namespace basyx {
 namespace submodel {
 namespace simple {
 
-class HasDataSpecification : public api::IHasDataSpecification
+class HasDataSpecification
+  : public virtual api::IHasDataSpecification
 {
 private:
 	std::vector<Reference> dataSpecification;
@@ -18,7 +19,7 @@ public:
 
 	virtual ~HasDataSpecification() = default;
 public:
-	virtual void addDataSpecification(const Reference & reference) override;
+	void addDataSpecification(const Reference & reference) override;
 	const std::vector<Reference> getDataSpecificationReference() const override;
 };
 

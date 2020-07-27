@@ -105,3 +105,13 @@ std::vector<simple::Key> Reference::keyMapList_to_keyList(basyx::object::object_
   return keys;
 }
 
+bool Reference::operator!=(const Reference & other) const
+{
+  return this->getKeys() != other.getKeys();
+};
+
+bool Reference::operator!=(const api::IReference & other) const
+{
+  return this->getKeys() != other.getKeys();
+};
+
