@@ -33,13 +33,7 @@ TEST(BaSyxNativeFrameProcessor, getTest) {
 	ASSERT_EQ(mockup->called, MockupModelProvider::CalledFunction::GET);
 	ASSERT_EQ(answerFrame.getFlag(), 0);
 	
-	basyx::object deserialzed = basyx::serialization::json::deserialize(answerFrame.getFirstValue());
-
-	ASSERT_TRUE(deserialzed.InstanceOf<basyx::object::object_map_t>());
-	auto & entityWrapper = deserialzed.Get<basyx::object::object_map_t&>();
-
-	ASSERT_TRUE(entityWrapper.count("entity") == 1);
-	auto val = entityWrapper["entity"];
+	basyx::object val = basyx::serialization::json::deserialize(answerFrame.getFirstValue());
 
 	ASSERT_TRUE(val.InstanceOf<int>());
 	ASSERT_EQ(val.Get<int>(), 2);
@@ -136,7 +130,7 @@ TEST(BaSyxNativeFrameProcessor, invokeTest) {
 	ASSERT_EQ(answerFrame.getFlag(), 0);
 
 	// Deserialize return value of operation
-	auto val = basyx::serialization::json::deserialize(nlohmann::json::parse(answerFrame.getFirstValue())["entity"]);
+	auto val = basyx::serialization::json::deserialize(nlohmann::json::parse(answerFrame.getFirstValue()));
 	ASSERT_TRUE(val.InstanceOf<int>());
 	ASSERT_EQ(val.Get<int>(),3);
 }
