@@ -10,16 +10,16 @@ namespace {
 		switch (errorCode)
 		{
 		case basyx::object::error::PropertyNotFound:
-			error = "ResourceNotFoundException";
+			error = "404";
 			break;
 		case basyx::object::error::ObjectAlreadyExists:
-			error = "ResourceAlreadyExistsException";
+			error = "422";
 			break;
 		case basyx::object::error::MalformedRequest:
-			error = "MalformedRequestException";
+			error = "400";
 			break;
 		default:
-			error = "ProviderException";
+			error = "500";
 			break;
 		};
 		return error;
@@ -31,23 +31,23 @@ namespace {
 	};
 }
 
-basyx::object build_exception(const std::string & type, const std::string & message)
+basyx::object build_exception(const std::string & code, const std::string & message)
 {
 	basyx::object::error error = basyx::object::error::ProviderException;
 
-	if (type == "ResourceNotFoundException")
+	if (code == "404")
 	{
 		error = basyx::object::error::PropertyNotFound;
 	}
-	else if (type == "ResourceAlreadyExistsException")
+	else if (code == "422")
 	{
 		error = basyx::object::error::ObjectAlreadyExists;
 	}
-	else if (type == "MalformedRequestException")
+	else if (code == "400")
 	{
 		error = basyx::object::error::MalformedRequest;
 	}
-	else if (type == "ProviderException")
+	else if (code == "500")
 	{
 		error = basyx::object::error::ProviderException;
 	};
@@ -58,51 +58,47 @@ basyx::object build_exception(const std::string & type, const std::string & mess
 basyx::json_t EntityWrapper::build_from_error(basyx::object::error error, const std::string & message)
 {
 	json_t msg;
-	msg["messageType"] = 6;
+	msg["messageType"] = "Information";
 	msg["text"] = prepareErrorMessage(error, message);
-	msg["code"] = nullptr;
+	msg["code"] = prepareErrorCode(error);
 
 	basyx::json_t j_obj;
 	j_obj["success"] = false;
-	j_obj["isException"] = true;
 	j_obj["messages"] = json_t::array({ msg });
-	j_obj["entityType"] = prepareErrorCode(error);
 	return j_obj;
 };
 
 basyx::json_t EntityWrapper::build_from_object(const basyx::object & object)
 {
-	basyx::json_t j_obj;
 	if (object.IsError())
 	{
 		return build_from_error(object.getError(), object.getErrorMessage());
 	}
 	else
 	{
-		j_obj["success"] = true;
-//		j_obj["isException"] = false;
-		j_obj["entityType"] = "entity";
-		j_obj["entity"] = basyx::serialization::json::serialize(object);
+		return basyx::serialization::json::serialize(object);
 	}
-	return j_obj;
 };
 
 
 basyx::object EntityWrapper::from_json(const basyx::json_t & json)
 {
-	bool success = json["success"];
+	bool exception = (json.contains("success") && !json["success"]);
+
 	// everyhing okay, deserialize entity
-	if (success)
+	if (!exception)
 	{
-		if (json.contains("entity"))
-			return basyx::serialization::json::deserialize(json["entity"]);
-		else
-			return basyx::object::make_null();
+		return basyx::serialization::json::deserialize(json);
 	}
 	// something went wrong, check for exception
-	else if (json.contains("isException") && json.contains("messages"))
+	else if (json.contains("messages"))
 	{
-		return build_exception(json["entityType"], json["messages"][0]["text"]);
+		auto & msg = json["messages"][0];
+
+		auto code = msg["code"];
+		auto text = msg["text"];
+
+		return build_exception(code, text);
 	}
 	// error and no exception; create one
 	else
