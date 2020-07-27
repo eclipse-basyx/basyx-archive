@@ -134,16 +134,22 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 
 	@Override
 	public void createSubModel(IIdentifier aasId, SubModel submodel) {
+		
+		// Push the SM to the server using the ConnectedAAS
+		try {
+			retrieveAAS(aasId).addSubModel(submodel);
+		} catch (Exception e) {
+			throw new RuntimeException("Could not create Submodel on server", e);
+		}
+		
 		// Lookup AAS descriptor
 		AASDescriptor aasDescriptor = aasDirectory.lookupAAS(aasId);
 
 		// Get aas endpoint
 		String addr = aasDescriptor.getFirstEndpoint();
-
-		// Return a new VABElementProxy
-		VABElementProxy proxy = proxyFactory.createProxy(addr);
-
-		// Create sm
-		proxy.createValue(AssetAdministrationShell.SUBMODELS, submodel);
+		
+		// Register the SM
+		String smEndpoint = VABPathTools.concatenatePaths(addr, AssetAdministrationShell.SUBMODELS, submodel.getIdShort());
+		aasDirectory.register(aasId, new SubmodelDescriptor(submodel, smEndpoint));
 	}
 }

@@ -8,7 +8,6 @@ import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
@@ -85,7 +84,6 @@ public class TestConnectedAssetAdministrationShellManager {
 
 		// Register AAS at directory
 		AASDescriptor desc = new AASDescriptor(aasId, "/aas");
-		desc.addSubmodelDescriptor(new SubmodelDescriptor(smIdShort, smId, "/aas/submodels/" + smIdShort));
 		registry.register(desc);
 		IModelProvider provider = new VABMultiSubmodelProvider(new AASModelProvider(new AssetAdministrationShell()));
 		connectorProvider.addMapping("", provider);
