@@ -86,7 +86,7 @@ public class AASModelProvider implements IModelProvider {
 			// => the key either points to the idShort of the submodel or its identifier
 			if ((idType.equals(KeyType.IDSHORT) && idValue.equals(idShort))
 					|| (idType.toString().equals(smId.getIdType().toString()) && idValue.equals(smId.getId()))) {
-				iterator.remove();
+				modelProvider.deleteValue(AssetAdministrationShell.SUBMODELS, ref);
 				break;
 			}
 		}

@@ -6,11 +6,15 @@ package org.eclipse.basyx.testsuite.regression.aas.restapi;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
@@ -78,11 +82,21 @@ public class MultiSubmodelProviderTest {
 
 	@Test
 	public void createDeleteTest() {
-		proxy.createValue("/aas/submodels", new SimpleAASSubmodel("TestSM"));
+		SubModel sm = new SimpleAASSubmodel("TestSM");
+		proxy.createValue("/aas/submodels", sm);
 
 		getTestRunner("TestSM");
 
+		// Ensure that the Submodel References where updated
+		ConnectedAssetAdministrationShell shell = new ConnectedAssetAdministrationShell(proxy.getDeepProxy("/aas"), null);
+		Collection<IReference> refs = shell.getSubmodelReferences();
+		assertEquals(1, refs.size());
+		assertEquals(sm.getReference(), refs.iterator().next());
+
 		proxy.deleteValue("/aas/submodels/TestSM");
+
+		// Ensure that the Submodel Reference was removed again
+		assertEquals(0, shell.getSubmodelReferences().size());
 
 		try {
 			proxy.getModelPropertyValue("/aas/submodels/TestSM");
