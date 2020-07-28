@@ -39,17 +39,17 @@ public class ExceptionToHTTPCodeMapper {
 	 * @param statusCode The received HTTP-code
 	 * @return the corresponding ProviderException
 	 */
-	public static ProviderException mapToException(int statusCode) {
+	public static ProviderException mapToException(int statusCode, String text) {
 		
 		switch(statusCode) {
 		case 400:
-			return new MalformedRequestException("Response-code: " + statusCode);
+			return new MalformedRequestException(text);
 		case 422:
-			return new ResourceAlreadyExistsException("Response-code: " + statusCode);
+			return new ResourceAlreadyExistsException(text);
 		case 404:
-			return new ResourceNotFoundException("Response-code: " + statusCode);
+			return new ResourceNotFoundException(text);
 		default:
-			return new ProviderException("Response-code: " + statusCode);
+			return new ProviderException(text);
 		}
 		
 	}

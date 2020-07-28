@@ -7,10 +7,8 @@ import java.util.Map;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONToolsFactory;
-import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
-import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
-import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
+import org.eclipse.basyx.vab.protocol.http.server.ExceptionToHTTPCodeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,9 +85,13 @@ public class MetaprotocolHandler implements IMetaProtocolHandler {
 		} else if (isException instanceof Boolean && (boolean) isException) {
 			Map<String, Object> first = messages.iterator().next(); // assumes an Exception always comes with a message
 
-			String text = (String) first.get(Message.TEXT);
+			// Get the code of the exception message
+			String code = (String) first.get(Message.CODE);
 			
-			throw getExceptionFromString(text);
+			// Get the text from the exception
+			String text = (String) first.get(Message.TEXT);
+
+			throw getExceptionFromCode(code, text);
 			
 		} else {
 			throw new ProviderException("Format Error: no success but isException not true or not found.");
@@ -100,25 +102,17 @@ public class MetaprotocolHandler implements IMetaProtocolHandler {
 	
 	/**
 	 * Creates a ProviderException from a String received form the Server</br>
-	 * The String has to be formated e.g. "ResourceNotFoundException: Requested Item was not found"
+	 * The String has to be formated e.g. "ResourceNotFoundException: Requested Item
+	 * was not found"
 	 * 
-	 * @param exceptionString the String received from the server
+	 * @param code - code of the exception message
 	 * @return the matching ProviderException
 	 */
-	public static ProviderException getExceptionFromString(String exceptionString) {
+	public static ProviderException getExceptionFromCode(String code, String text) {
+
+		int exceptionCode = Integer.parseInt(code);
 		
-		// Get the Message of the Exception (the String behind the ":")
-		String message = exceptionString.substring(exceptionString.indexOf(":") + 2);
-		
-		// Get the correct ProviderException matching the name before the ":")
-		if (exceptionString.contains(ResourceNotFoundException.class.getSimpleName())) {
-			return new ResourceNotFoundException(message);
-		} else if (exceptionString.contains(ResourceAlreadyExistsException.class.getSimpleName())) {
-			return new ResourceAlreadyExistsException(message);
-		} else if (exceptionString.contains(MalformedRequestException.class.getSimpleName())) {
-			return new MalformedRequestException(message);
-		} else {
-			return new ProviderException("Server threw exception: " + exceptionString);
-		}
+		// return exception based on code
+		return ExceptionToHTTPCodeMapper.mapToException(exceptionCode, text);
 	}
 }
