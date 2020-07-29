@@ -7,6 +7,7 @@
 #include <BaSyx/server/TCPSelectServer.h>
 #include <BaSyx/vab/backend//connector/native/frame/Frame.h>
 #include <BaSyx/vab/provider/native/frame/BaSyxNativeFrameProcessor.h>
+#include <BaSyx/abstraction/net/Buffer.h>
 
 #include <errno.h>
 #include <stdio.h>
@@ -221,23 +222,28 @@ void TCPSelectServer::receive_incoming_data(int fd)
         int len = receive_state;
         log.info("{} bytes received", len);
 
-        std::size_t txSize = 0;
+        // Determine input frame size and create frame
+        auto input_size = *reinterpret_cast<uint32_t*>(recv_buffer.data());
+        auto input_frame = connector::native::Frame::read_from_buffer(basyx::net::make_buffer(this->recv_buffer.data() + BASYX_FRAMESIZE_SIZE, input_size));
 
+        // Process frame to obtain output frame
+        auto output_frame = frame_processor->processInputFrame(input_frame);
 
+        // Write the output frame to an output buffer
+        net::Buffer out_buffer = basyx::net::make_buffer(send_buffer.data() + BASYX_FRAMESIZE_SIZE, default_buffer_size - BASYX_FRAMESIZE_SIZE);
+        connector::native::Frame::write_to_buffer(out_buffer, output_frame);
 
-
-
-
-        // ToDo: Use new frame handling
-  //      frame_processor->processInputFrame(recv_buffer.data() + BASYX_FRAMESIZE_SIZE, len - BASYX_FRAMESIZE_SIZE, ret_buffer.data() + BASYX_FRAMESIZE_SIZE, &txSize);
-  //      txSize += BASYX_FRAMESIZE_SIZE;
+        // Add size of the containing frame to buffer
+        auto size_field = reinterpret_cast<uint32_t*>(&send_buffer[0]);
+        *size_field = output_frame.size();
 
         // answer client
-        int send_state = send(fd, ret_buffer.data(), txSize, 0);
-        if (send_state < 0) {
-            log.error("send() failed");
-            close_connection = true;
-            break;
+        int send_state = send(fd, send_buffer.data(), output_frame.size() + BASYX_FRAMESIZE_SIZE, 0);
+        if (send_state < 0)
+        {
+          log.error("send() failed");
+          close_connection = true;
+          break;
         }
 
     } while (true);
