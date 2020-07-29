@@ -99,14 +99,11 @@ public class DynamicSubModelDeploymentHTTP {
 		// Read property values using the WebServiceJSONClient class. 
 		// - Returned property contains meta data. The actual property is stored in property "entity", property value is in entity property "value"
 		String smEndpoint = "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/Status";
-		Map<String, Object> sm = (Map<String, Object>) ((Map<String, Object>) jsonClient.get(smEndpoint)).get("entity");
+		Map<String, Object> sm = ((Map<String, Object>) jsonClient.get(smEndpoint));
 		String smId = (String) sm.get("idShort");
-		int prop1Val = (int) ((Map<String, Object>) ((Map<String, Object>) jsonClient
-				.get(smEndpoint + "/dataElements/prop1")).get("entity")).get("value");
-		String prop1Id = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient
-				.get(smEndpoint + "/dataElements/prop1")).get("entity")).get("idShort");
-		String prop2Val = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient
-				.get(smEndpoint + "/dataElements/prop2")).get("entity")).get("value");
+		int prop1Val = (int) ((Map<String, Object>) jsonClient.get(smEndpoint + "/dataElements/prop1")).get("value");
+		String prop1Id = (String) ((Map<String, Object>) jsonClient.get(smEndpoint + "/dataElements/prop1")).get("idShort");
+		String prop2Val = (String) ((Map<String, Object>) jsonClient.get(smEndpoint + "/dataElements/prop2")).get("value");
 
 		
 		// Check results

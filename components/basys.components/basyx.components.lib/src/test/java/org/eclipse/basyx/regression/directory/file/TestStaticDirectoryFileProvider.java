@@ -134,7 +134,7 @@ public class TestStaticDirectoryFileProvider {
 		try {
 			return (String) handler.deserialize(res);
 		} catch (Exception e) {
-			throw new RuntimeException();
+			throw new RuntimeException(e);
 		}
 	}
 }
