@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +18,6 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
@@ -30,7 +27,6 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
@@ -57,7 +53,6 @@ public class TestConnectedSubModel {
 	private final String OPERATION_ID = "operation_id";
 	private final String PROPERTY_ID = "property_id";
 	private final String BLOB_ID = "blob_id";
-	private final String FILE_ID = "file_id";
 	private final String RELATIONSHIP_ELEM_ID = "relElem_id";
 	private final String SUBMODEL_ELEM_COLLECTION_ID = "elemCollection_id";
 
@@ -104,13 +99,13 @@ public class TestConnectedSubModel {
 	@Test
 	public void propertiesTest() throws Exception {
 		// Retrieve all properties
-		Map<String, IDataElement> props = submodel.getDataElements();
+		Map<String, IProperty> props = submodel.getProperties();
 
 		// Check if number of properties is as expected
 		assertEquals(1, props.size());
 
 		// Check the value of the property
-		IProperty prop = (IProperty) props.get(PROP);
+		IProperty prop = props.get(PROP);
 		assertEquals(100, prop.get());
 	}
 
@@ -136,16 +131,16 @@ public class TestConnectedSubModel {
 	public void saveAndLoadPropertyTest() throws Exception {
 		
 		// Get sample DataElements and save them into SubModel
-		Map<String, IDataElement> testData = getTestDataElements();
+		Map<String, IProperty> testData = getTestDataProperty();
 		for(ISubmodelElement element: testData.values()) {
 			submodel.addSubModelElement(element);
 		}
 		
 		// Load it
-		Map<String, IDataElement> map = submodel.getDataElements();
+		Map<String, IProperty> map = submodel.getProperties();
 		
 		// Check if it loaded correctly
-		checkDataElements(map);
+		checkProperties(map);
 	}
 	
 	@Test
@@ -168,7 +163,7 @@ public class TestConnectedSubModel {
 	public void saveAndLoadSubmodelElementTest() throws Exception {
 		
 		// Get sample DataElements and save them into SubModel
-		Map<String, IDataElement> testDataElements = getTestDataElements();
+		Map<String, IProperty> testDataElements = getTestDataProperty();
 		for(ISubmodelElement element: testDataElements.values()) {
 			submodel.addSubModelElement(element);
 		}
@@ -190,7 +185,7 @@ public class TestConnectedSubModel {
 		
 		// Check if it loaded correctly
 		// Including DataElements and Operations as they are also SubmodelElements
-		checkDataElements(map);
+		checkProperties(map);
 		checkOperations(map);
 		checkSubmodelElements(map);
 	}
@@ -222,25 +217,14 @@ public class TestConnectedSubModel {
 	/**
 	 * Generates test IDataElements
 	 */
-	private Map<String, IDataElement> getTestDataElements() {
-		Map<String, IDataElement> ret = new HashMap<>();
+	private Map<String, IProperty> getTestDataProperty() {
+		Map<String, IProperty> ret = new HashMap<>();
 		
 		Property property = new Property();
 		property.setIdShort(PROPERTY_ID);
 		property.set("test2");
 		
-		Blob blob = new Blob();
-		blob.setIdShort(BLOB_ID);
-		blob.setValue(new byte[] {1, 2, 3});
-		
-		File file = new File();
-		file.setIdShort(FILE_ID);
-		file.setValue("fileValue");
-		
 		ret.put(property.getIdShort(), property);
-		ret.put(blob.getIdShort(), blob);
-		ret.put(file.getIdShort(), file);
-		
 		return ret;
 	}
 	
@@ -287,25 +271,15 @@ public class TestConnectedSubModel {
 	/**
 	 * Checks if the given Map contains all expected IDataElements
 	 */
-	private void checkDataElements(Map<String, ? extends ISubmodelElement> actual) throws Exception {
+	private void checkProperties(Map<String, ? extends ISubmodelElement> actual) throws Exception {
 		assertNotNull(actual);
 		
-		Map<String, IDataElement> expected = getTestDataElements();
+		Map<String, IProperty> expected = getTestDataProperty();
 		
-		IProperty expectedProperty = (IProperty) expected.get(PROPERTY_ID);
+		IProperty expectedProperty = expected.get(PROPERTY_ID);
 		IProperty acutalProperty = (IProperty) actual.get(PROPERTY_ID);
 		assertNotNull(acutalProperty);
 		assertEquals(expectedProperty.get(), acutalProperty.get());
-		
-		IBlob expectedBlob = (IBlob) expected.get(BLOB_ID);
-		IBlob actualBlob = (IBlob) actual.get(BLOB_ID);
-		assertNotNull(actualBlob);
-		assertTrue(Arrays.equals(expectedBlob.getValue(), actualBlob.getValue()));
-		
-		IFile expectedFile = (IFile) expected.get(FILE_ID);
-		IFile actualFile = (IFile) actual.get(FILE_ID);
-		assertNotNull(actualFile);
-		assertEquals(expectedFile.getValue(), actualFile.getValue());
 	}
 	
 	/**
@@ -316,7 +290,7 @@ public class TestConnectedSubModel {
 		
 		Map<String, IOperation> expected = getTestOperations();
 		
-		IOperation expectedOperation = (IOperation) expected.get(OPERATION_ID);
+		IOperation expectedOperation = expected.get(OPERATION_ID);
 		IOperation actualOperation = (IOperation) actual.get(OPERATION_ID);
 		
 		assertNotNull(actualOperation);

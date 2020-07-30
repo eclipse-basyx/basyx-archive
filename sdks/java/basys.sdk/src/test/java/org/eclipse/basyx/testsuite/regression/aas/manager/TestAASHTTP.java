@@ -12,7 +12,6 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.testsuite.regression.aas.restapi.StubAASServlet;
@@ -112,10 +111,10 @@ public class TestAASHTTP {
 		// TODO: Extend
 		// - retrieve properties and operations
 
-		Map<String, IDataElement> properties = sm.getDataElements();
+		Map<String, IProperty> properties = sm.getProperties();
 		// 2 properties -> SMElementCollections don't count
 		assertEquals(3, properties.size());
-		IProperty prop = (IProperty) properties.get("integerProperty");
+		IProperty prop = properties.get("integerProperty");
 		assertEquals(123, prop.get());
 
 		Map<String, IOperation> operations = sm.getOperations();

@@ -13,6 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.TestsuiteDirectory;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
@@ -57,56 +58,56 @@ public class SubModelProviderTest {
 	}
 
 	/**
-	 * Test creating single data elements
+	 * Test creating single property
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testCreateDataElement() {
+	public void testCreateProperty() {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 
 		// Create element
 		Property prop = new Property(500);
 		prop.setIdShort("newProperty");
-		submodelElement.createValue("/submodel/dataElements", prop);
+		submodelElement.createValue("/submodel/" + SubmodelElementProvider.PROPERTIES + "", prop);
 
 		// Read back value
 		Map<String, Object> result = (Map<String, Object>) submodelElement
-				.getModelPropertyValue("/submodel/dataElements/newProperty/value");
+				.getModelPropertyValue("/submodel/" + SubmodelElementProvider.PROPERTIES + "/newProperty/value");
 		assertEquals(500, result.get(Property.VALUE));
 	}
 
 	/**
-	 * Test reading single data elements
+	 * Test reading single property
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testReadDataElement() {
+	public void testReadProperty() {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 
 		// Read list of properties
-		Object result = submodelElement.getModelPropertyValue("/submodel/dataElements");
+		Object result = submodelElement.getModelPropertyValue("/submodel/" + SubmodelElementProvider.PROPERTIES + "");
 		Collection<Map<String, Object>> propertySet = (Collection<Map<String, Object>>) result;
 		HashMap<String, Object> property = (HashMap<String, Object>) propertySet.stream().filter(elem -> elem.get(Identifiable.IDSHORT).equals("integerProperty")).findFirst().get();
 		assertEquals(123, property.get(Property.VALUE));
 
 		// Read whole property
-		result = submodelElement.getModelPropertyValue("/submodel/dataElements/integerProperty");
+		result = submodelElement.getModelPropertyValue("/submodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty");
 		property = (HashMap<String, Object>) result;
 		assertEquals(123, property.get(Property.VALUE));
 
 		// Read idShort
-		result = submodelElement.getModelPropertyValue("/submodel/dataElements/stringProperty");
+		result = submodelElement.getModelPropertyValue("/submodel/" + SubmodelElementProvider.PROPERTIES + "/stringProperty");
 		property = (HashMap<String, Object>) result;
 		assertEquals("stringProperty", property.get(Identifiable.IDSHORT));
 
 		// Read single value
 		Map<String, Object> resMap = (Map<String, Object>) submodelElement
-				.getModelPropertyValue("/submodel/dataElements/stringProperty/value");
+				.getModelPropertyValue("/submodel/" + SubmodelElementProvider.PROPERTIES + "/stringProperty/value");
 		assertEquals("Test", resMap.get(Property.VALUE));
 
 		// Read null value
 		resMap = (Map<String, Object>) submodelElement
-				.getModelPropertyValue("/submodel/dataElements/nullProperty/value");
+				.getModelPropertyValue("/submodel/" + SubmodelElementProvider.PROPERTIES + "/nullProperty/value");
 		assertEquals(null, resMap.get(Property.VALUE));
 
 		// Read container property
@@ -124,11 +125,11 @@ public class SubModelProviderTest {
 	}
 
 	/**
-	 * Test updating single data elements
+	 * Test updating single property
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testUpdateDataElement() {
+	public void testUpdateProperty() {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 
 		// Wrap object before updating element
@@ -137,22 +138,22 @@ public class SubModelProviderTest {
 		updatedElement.put("valueType", PropertyValueTypeDefHelper.getTypeWrapperFromObject(3));
 
 		// Update element
-		submodelElement.setModelPropertyValue("/submodel/dataElements/integerProperty/value", updatedElement);
+		submodelElement.setModelPropertyValue("/submodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value", updatedElement);
 
 		// Check result
 		Map<String, Object> result = (Map<String, Object>) submodelElement
-				.getModelPropertyValue("/submodel/dataElements/integerProperty");
+				.getModelPropertyValue("/submodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty");
 		assertEquals(3, result.get(Property.VALUE));
 	}
 
 	/**
-	 * Test reading all data elements of the submodel
+	 * Test reading all properties of the submodel
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testReadDataElements() {
+	public void testReadProperties() {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
-		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel.getModelPropertyValue("/submodel/dataElements");
+		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel.getModelPropertyValue("/submodel/" + SubmodelElementProvider.PROPERTIES);
 		// Should be two properties, one collection and four operations
 		assertEquals(3, set.size());
 	}
@@ -192,18 +193,18 @@ public class SubModelProviderTest {
 	}
 
 	/**
-	 * Test deleting a single data element
+	 * Test deleting a single property
 	 */
 	@Test
-	public void testDeleteDataElement() {
+	public void testDeleteProperty() {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 
 		// Delete property
-		submodelElement.deleteValue("/submodel/dataElements/integerProperty");
+		submodelElement.deleteValue("/submodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty");
 
 		// Test, if it has been deleted
 		try {
-			submodelElement.getModelPropertyValue("/submodel/dataElements/integerProperty");
+			submodelElement.getModelPropertyValue("/submodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 	}

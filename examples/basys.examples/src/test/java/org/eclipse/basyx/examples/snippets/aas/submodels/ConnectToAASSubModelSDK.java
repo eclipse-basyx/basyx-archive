@@ -119,7 +119,7 @@ public class ConnectToAASSubModelSDK {
 		Map<String, ISubmodelElement> smElements = subModel.getSubmodelElements();
 		IProperty prop1 = (IProperty) smElements.get("prop1");
 		ISubmodelElementCollection prop2 = (ISubmodelElementCollection) smElements.get("prop2");
-		IProperty prop11 = (IProperty) prop2.getDataElements().get("prop11");
+		IProperty prop11 = (IProperty) prop2.getProperties().get("prop11");
 		IProperty prop3 = (IProperty) smElements.get("prop3");
 
 		assertEquals(smId.getId(), subModel.getIdentification().getId());

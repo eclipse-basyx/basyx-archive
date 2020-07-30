@@ -25,7 +25,6 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiabl
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.DataElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
@@ -51,7 +50,7 @@ public class TestSubmodelElementCollection {
 	@Before
 	public void buildSubmodelElementCollection() {
 		elements1 = new ArrayList<>();
-		elements1.add(getDataElement());
+		elements1.add(getProperty());
 		elements1.add(getOperation());
 
 		elements2 = new ArrayList<ISubmodelElement>();
@@ -125,11 +124,11 @@ public class TestSubmodelElementCollection {
 		Map<String, IDataElement> dataElements = new HashMap<String, IDataElement>();
 		Map<String, IOperation> operations = new HashMap<String, IOperation>();
 		Map<String, ISubmodelElement> submodels = new HashMap<String, ISubmodelElement>();
-		dataElements.put(PROPERTY_ID, getDataElement());
+		dataElements.put(PROPERTY_ID, getProperty());
 		operations.put(OPERATION_ID, getOperation());
 		submodels.putAll(operations);
 		submodels.putAll(dataElements);
-		assertEquals(dataElements, collection.getDataElements());
+		assertEquals(dataElements, collection.getProperties());
 		assertEquals(operations, collection.getOperations());
 		assertEquals(submodels, collection.getSubmodelElements());
 	}
@@ -143,18 +142,18 @@ public class TestSubmodelElementCollection {
 		collection.addElement(property);
 		assertEquals(new Reference(new Key(KeyElements.SUBMODELELEMENTCOLLECTION, true, "", KeyType.IDSHORT)), property.getParent());
 		Map<String, ISubmodelElement> submodelElements = new HashMap<String, ISubmodelElement>();
-		submodelElements.put(PROPERTY_ID, getDataElement());
+		submodelElements.put(PROPERTY_ID, getProperty());
 		submodelElements.put(OPERATION_ID, getOperation());
 		submodelElements.put(newIdShort, property);
 		assertEquals(submodelElements, collection.getSubmodelElements());
 	}
 
 	/**
-	 * Get a dummy data element
+	 * Get a dummy property
 	 * 
-	 * @return data element
+	 * @return property
 	 */
-	private DataElement getDataElement() {
+	private Property getProperty() {
 		Referable referable = new Referable(PROPERTY_ID, "testCategory", new LangStrings("DE", "test"));
 		Reference semanticId = new Reference(new Key(KeyElements.ASSET, true, "testValue", IdentifierType.IRI));
 		Qualifiable qualifiable = new Qualifiable(new Formula(Collections

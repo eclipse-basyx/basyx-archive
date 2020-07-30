@@ -9,7 +9,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
-import org.eclipse.basyx.submodel.restapi.DataElementProvider;
+import org.eclipse.basyx.submodel.restapi.PropertyProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
@@ -36,7 +36,7 @@ public class TestConnectedMultiLanguageProperty {
 		MLP = new MultiLanguageProperty(ref, langStrings);
 		
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
-				new DataElementProvider(new TypeDestroyingProvider(new VABLambdaProvider(MLP))));
+				new PropertyProvider(new TypeDestroyingProvider(new VABLambdaProvider(MLP))));
 
 		// Retrieve the ConnectedContainerProperty
 		connectedMLP = new ConnectedMultiLanguageProperty(manager.connectToVABElement(""));

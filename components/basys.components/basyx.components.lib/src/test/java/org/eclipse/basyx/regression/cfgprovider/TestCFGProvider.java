@@ -7,6 +7,7 @@ import java.util.Map;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -49,19 +50,19 @@ public class TestCFGProvider {
 		
 		// Get property value
 		Map<String, Object> value1 = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1/value");
+				.getModelPropertyValue("/aas/submodels/sampleCFG/" + SubmodelElementProvider.PROPERTIES + "/cfgProperty1/value");
 
 		assertEquals("exampleStringValue", value1.get(Property.VALUE));
 
 		
 		// Get property value
 		Map<String, Object> value2 = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2/value");
+				.getModelPropertyValue("/aas/submodels/sampleCFG/" + SubmodelElementProvider.PROPERTIES + "/cfgProperty2/value");
 		assertEquals("12", value2.get(Property.VALUE));
 
 		// Get property value
 		Map<String, Object> value3 = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty3/value");
+				.getModelPropertyValue("/aas/submodels/sampleCFG/" + SubmodelElementProvider.PROPERTIES + "/cfgProperty3/value");
 		assertEquals("45.8", value3.get(Property.VALUE));
 	}
 }

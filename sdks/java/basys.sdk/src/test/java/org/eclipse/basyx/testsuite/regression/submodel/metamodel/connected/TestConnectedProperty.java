@@ -8,7 +8,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IPro
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.restapi.DataElementProvider;
+import org.eclipse.basyx.submodel.restapi.PropertyProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
@@ -31,7 +31,7 @@ public class TestConnectedProperty {
 		// Create PropertySingleValued containing the simple value
 		Property propertyMeta = new Property(VALUE);
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(propertyMeta);
-		prop = new ConnectedProperty(new VABConnectionManagerStub(new DataElementProvider(new VABMapProvider(destroyType))).connectToVABElement(""));
+		prop = new ConnectedProperty(new VABConnectionManagerStub(new PropertyProvider(new VABMapProvider(destroyType))).connectToVABElement(""));
 	}
 
 	@Test
@@ -40,7 +40,7 @@ public class TestConnectedProperty {
 		propertyMeta.setValueType(PropertyValueTypeDef.String);
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(propertyMeta);
 		prop = new ConnectedProperty(
-				new VABConnectionManagerStub(new DataElementProvider(new VABMapProvider(destroyType)))
+				new VABConnectionManagerStub(new PropertyProvider(new VABMapProvider(destroyType)))
 						.connectToVABElement(""));
 		prop.set("content");
 		assertEquals("content", prop.get());

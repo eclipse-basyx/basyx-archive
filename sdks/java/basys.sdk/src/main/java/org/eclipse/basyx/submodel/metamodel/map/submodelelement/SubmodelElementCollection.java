@@ -10,14 +10,13 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.DataElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 
@@ -186,14 +185,14 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, IDataElement> getDataElements() {
-		Map<String, IDataElement> ret = new HashMap<>();
+	public Map<String, IProperty> getProperties() {
+		Map<String, IProperty> ret = new HashMap<>();
 		Collection<Object> smElems = (Collection<Object>) get(Property.VALUE);
 		for (Object smElemO : smElems) {
 			Map<String, Object> smElem = (Map<String, Object>) smElemO;
-			if (DataElement.isDataElement(smElem)) {
+			if (Property.isProperty(smElem)) {
 				String idShort = Referable.createAsFacade(smElem, KeyElements.DATAELEMENT).getIdShort();
-				IDataElement dataElement = (IDataElement) SubmodelElementFacadeFactory.createSubmodelElement(smElem);
+				IProperty dataElement = (IProperty) SubmodelElementFacadeFactory.createSubmodelElement(smElem);
 				ret.put(idShort, dataElement);
 			}
 		}
