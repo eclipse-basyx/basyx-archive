@@ -3,6 +3,8 @@ package org.eclipse.basyx.components.cfgprovider;
 import java.util.Map;
 
 import org.eclipse.basyx.components.provider.BaseConfiguredProvider;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +33,8 @@ public class CFGSubModelProvider extends BaseConfiguredProvider {
 		// Add properties
 		for (String key: getConfiguredProperties(cfgValues)) {
 			// Create properties
-			submodelData.addSubModelElement(createSubmodelElement(key, cfgValues.get(key), cfgValues));
+			SubmodelElement elem = createSubmodelElement(key, cfgValues.get(key), cfgValues);
+			createValue("submodel/" + SubmodelElementProvider.ELEMENTS, elem);
 			
 			// Debug output
 			logger.debug("Adding configured property: "+key.toString()+" = "+cfgValues.get(key));

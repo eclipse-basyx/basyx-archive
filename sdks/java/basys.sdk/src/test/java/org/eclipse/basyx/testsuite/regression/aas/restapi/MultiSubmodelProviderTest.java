@@ -72,8 +72,8 @@ public class MultiSubmodelProviderTest {
 	@Test
 	public void invokeTest() {
 		// Invoke operation
-		assertEquals(7, proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/complex/invokable", 10, 3));
-		assertEquals(true, proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/simple/invokable"));
+		assertEquals(7, proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/complex", 10, 3));
+		assertEquals(true, proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/simple"));
 	}
 
 	@Test

@@ -9,6 +9,7 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.aas.metamodel.AssetAdministrationShellSuite;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
@@ -29,7 +30,7 @@ public class TestConnectedAssetAdministrationShell extends AssetAdministrationSh
 	@Before
 	public void build() throws Exception {
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
-		provider.addSubmodel(SMIDSHORT, new SubModelProvider(TypeDestroyer.destroyType(retrieveBaselineSM())));
+		provider.addSubmodel(SMIDSHORT, new SubModelProvider(SubModel.createAsFacade(TypeDestroyer.destroyType(retrieveBaselineSM()))));
 		provider.setAssetAdministrationShell(new AASModelProvider(TypeDestroyer.destroyType(retrieveBaselineShell())));
 	
 		// Create AAS registry

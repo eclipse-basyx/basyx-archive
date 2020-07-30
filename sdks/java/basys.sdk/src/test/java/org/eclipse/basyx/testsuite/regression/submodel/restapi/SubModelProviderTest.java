@@ -87,17 +87,17 @@ public class SubModelProviderTest {
 		// Read list of properties
 		Object result = submodelElement.getModelPropertyValue("/submodel/" + SubmodelElementProvider.PROPERTIES + "");
 		Collection<Map<String, Object>> propertySet = (Collection<Map<String, Object>>) result;
-		HashMap<String, Object> property = (HashMap<String, Object>) propertySet.stream().filter(elem -> elem.get(Identifiable.IDSHORT).equals("integerProperty")).findFirst().get();
+		Map<String, Object> property = propertySet.stream().filter(elem -> elem.get(Identifiable.IDSHORT).equals("integerProperty")).findFirst().get();
 		assertEquals(123, property.get(Property.VALUE));
 
 		// Read whole property
 		result = submodelElement.getModelPropertyValue("/submodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty");
-		property = (HashMap<String, Object>) result;
+		property = (Map<String, Object>) result;
 		assertEquals(123, property.get(Property.VALUE));
 
 		// Read idShort
 		result = submodelElement.getModelPropertyValue("/submodel/" + SubmodelElementProvider.PROPERTIES + "/stringProperty");
-		property = (HashMap<String, Object>) result;
+		property = (Map<String, Object>) result;
 		assertEquals("stringProperty", property.get(Identifiable.IDSHORT));
 
 		// Read single value
@@ -120,7 +120,7 @@ public class SubModelProviderTest {
 		String pathToNestedContainer = "/submodel/submodelElements/containerRoot/container";
 		String pathToNestedProperty = pathToNestedContainer + "/integerProperty/";
 		result = submodelElement.getModelPropertyValue(pathToNestedProperty);
-		property = (HashMap<String, Object>) result;
+		property = (Map<String, Object>) result;
 		assertEquals(123, property.get(Property.VALUE));
 	}
 
@@ -133,7 +133,7 @@ public class SubModelProviderTest {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 
 		// Wrap object before updating element
-		HashMap<String, Object> updatedElement = new HashMap<>();
+		Map<String, Object> updatedElement = new HashMap<>();
 		updatedElement.put(Property.VALUE, 3);
 		updatedElement.put("valueType", PropertyValueTypeDefHelper.getTypeWrapperFromObject(3));
 
@@ -234,11 +234,11 @@ public class SubModelProviderTest {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 
 		// Wrap parameters before invoking add-operation
-		HashMap<String, Object> param1 = new HashMap<>();
+		Map<String, Object> param1 = new HashMap<>();
 		param1.put("idShort", "SecondNumber");
 		param1.put(Property.VALUE, 5);
 		param1.put("valueType", PropertyValueTypeDefHelper.getTypeWrapperFromObject(5));
-		HashMap<String, Object> param2 = new HashMap<>();
+		Map<String, Object> param2 = new HashMap<>();
 		param2.put("idShort", "FirstNumber");
 		param2.put(Property.VALUE, 2);
 		param2.put("valueType", PropertyValueTypeDefHelper.getTypeWrapperFromObject(2));

@@ -229,7 +229,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	private void createSubModel(Object newSM) throws ProviderException {
 		// Adds a new submodel to the registered AAS
 		Map<String, Object> sm = (Map<String, Object>) newSM;
-		SubModelProvider smProvider = new SubModelProvider(sm);
+		SubModelProvider smProvider = new SubModelProvider(SubModel.createAsFacade(sm));
 		submodel_providers.put((String) sm.get(Referable.IDSHORT), smProvider);
 		aas_provider.createValue("/submodels", newSM);
 	}

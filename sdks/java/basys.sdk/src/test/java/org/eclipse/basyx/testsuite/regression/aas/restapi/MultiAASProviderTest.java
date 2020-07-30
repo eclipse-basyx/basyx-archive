@@ -100,14 +100,14 @@ public class MultiAASProviderTest {
 	public void invokeExceptionTest() {
 		// Invoke exception1
 		try {
-			proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/exception1/invokable");
+			proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/exception1");
 			fail();
 		} catch (ProviderException e) {
 			assertEquals(NullPointerException.class, e.getCause().getClass());
 		}
 		// Invoke exception2
 		try {
-			proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/exception2/invokable", "prop1");
+			proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/exception2", "prop1");
 			fail();
 		} catch (ProviderException e) {
 			assertEquals("Exception description", e.getMessage());
@@ -117,10 +117,10 @@ public class MultiAASProviderTest {
 	@Test
 	public void invokeTest() {
 		// test invoking from an invalid aas
-		assertNull(proxy.invokeOperation("A1/aas/submodels/SimpleAASSubmodel/operations/complex/invokable", 10, 3));
+		assertNull(proxy.invokeOperation("A1/aas/submodels/SimpleAASSubmodel/operations/complex", 10, 3));
 
 		// test invoking with return value
-		assertEquals(7, proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/complex/invokable", 10, 3));
-		assertEquals(true, proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/simple/invokable"));
+		assertEquals(7, proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/complex", 10, 3));
+		assertEquals(true, proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/simple"));
 	}
 }
