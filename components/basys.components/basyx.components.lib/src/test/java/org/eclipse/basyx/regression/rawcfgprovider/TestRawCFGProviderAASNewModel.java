@@ -7,6 +7,7 @@ import java.util.Map;
 import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirectory;
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -51,11 +52,11 @@ public class TestRawCFGProviderAASNewModel {
 		Property prop = new Property ();
 		prop.setIdShort("prop");
 		// Create AAS structure on server
-		connSubModel.createValue("/aas/submodels/rawSampleCFG/dataElements", prop);
+		connSubModel.createValue("/aas/submodels/rawSampleCFG/" + SubmodelElementProvider.PROPERTIES, prop);
 
 		
 		// Read complex property completely
-		Map<String, Object> aasReadBack = (Map<String, Object>) connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/dataElements/prop");
+		Map<String, Object> aasReadBack = (Map<String, Object>) connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/" + SubmodelElementProvider.PROPERTIES + "/prop");
 		assertEquals(prop.getIdShort(), Property.createAsFacade(prop).getIdShort());
 	}
 }

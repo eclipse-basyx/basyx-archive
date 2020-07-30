@@ -6,7 +6,7 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -44,8 +44,8 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	}
 
 	@Override
-	public Map<String, IDataElement> getDataElements() {
-		return ConnectedSubmodelElementFactory.getDataElements(getProxy(), Property.VALUE, "");
+	public Map<String, IProperty> getProperties() {
+		return ConnectedSubmodelElementFactory.getProperties(getProxy(), Property.VALUE, "");
 	}
 
 	@Override

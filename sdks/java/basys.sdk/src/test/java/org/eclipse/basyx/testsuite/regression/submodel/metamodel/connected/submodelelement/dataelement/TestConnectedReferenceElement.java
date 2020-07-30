@@ -8,7 +8,7 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelemen
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
-import org.eclipse.basyx.submodel.restapi.DataElementProvider;
+import org.eclipse.basyx.submodel.restapi.PropertyProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
@@ -34,7 +34,7 @@ public class TestConnectedReferenceElement {
 		refElem = new ReferenceElement(ref);
 		
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
-				new DataElementProvider(new TypeDestroyingProvider(new VABLambdaProvider(refElem))));
+				new PropertyProvider(new TypeDestroyingProvider(new VABLambdaProvider(refElem))));
 
 		connectedRefElem = new ConnectedReferenceElement(manager.connectToVABElement(""));
 	}

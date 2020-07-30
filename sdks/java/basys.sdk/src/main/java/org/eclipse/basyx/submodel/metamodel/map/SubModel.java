@@ -18,7 +18,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstrain
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
@@ -207,16 +207,16 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 		Referable.createAsFacade(this, getKeyElement()).setIdShort(id);
 	}
 
-	public void setDataElements(Map<String, IDataElement> properties) {
-		// first, remove all data elements
+	public void setProperties(Map<String, IProperty> properties) {
+		// first, remove all properties
 		Set<Entry<String, ISubmodelElement>> elementSet = getSubmodelElements().entrySet();
 		for ( Iterator<Entry<String, ISubmodelElement>> iterator = elementSet.iterator(); iterator.hasNext(); ) {
 			Entry<String, ISubmodelElement> entry = iterator.next();
-			if (entry.getValue() instanceof IDataElement) {
+			if (entry.getValue() instanceof IProperty) {
 				iterator.remove();
 			}
 		}
-		// then add all given data elements
+		// then add all given data properties
 		properties.values().forEach(this::addSubModelElement);
 	}
 
@@ -273,14 +273,14 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	}
 
 	@Override
-	public Map<String, IDataElement> getDataElements() {
-		Map<String, IDataElement> dataElements = new HashMap<>();
+	public Map<String, IProperty> getProperties() {
+		Map<String, IProperty> properties = new HashMap<>();
 		getSubmodelElements().values().forEach(e -> {
-			if (e instanceof IDataElement) {
-				dataElements.put(e.getIdShort(), (IDataElement) e);
+			if (e instanceof IProperty) {
+				properties.put(e.getIdShort(), (IProperty) e);
 			}
 		});
-		return dataElements;
+		return properties;
 	}
 
 	@Override

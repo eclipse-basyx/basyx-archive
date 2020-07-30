@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedBlob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
-import org.eclipse.basyx.submodel.restapi.DataElementProvider;
+import org.eclipse.basyx.submodel.restapi.PropertyProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
@@ -33,7 +33,7 @@ public class TestConnectedBlob {
 		blob.setMimeType("mimeType");
 		
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
-				new DataElementProvider(new TypeDestroyingProvider(new VABLambdaProvider(blob))));
+				new PropertyProvider(new TypeDestroyingProvider(new VABLambdaProvider(blob))));
 
 		connectedBlob = new ConnectedBlob(manager.connectToVABElement(""));
 	}

@@ -111,8 +111,8 @@ public class TestConnectedAssetAdministrationShellManager {
 		ISubModel sm = manager.retrieveSubModel(aasId, smId);
 
 		// - check id and properties
-		IProperty prop1Connected = (IProperty) sm.getDataElements().get("prop1");
-		IProperty prop2Connected = (IProperty) sm.getDataElements().get("prop2");
+		IProperty prop1Connected = (IProperty) sm.getProperties().get("prop1");
+		IProperty prop2Connected = (IProperty) sm.getProperties().get("prop2");
 
 		assertEquals(smIdShort, sm.getIdShort());
 		assertEquals(smId.getId(), sm.getIdentification().getId());

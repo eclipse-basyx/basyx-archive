@@ -15,7 +15,6 @@ import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -174,28 +173,28 @@ public class AASServletConnection {
 			ISubModel subModel = manager.retrieveSubModel(new ModelUrn("aas-001"), new ModelUrn("sm-001"));
 			// - Retrieve sub model values and compare to expected values
 			assertTrue(subModel.getIdShort().equals("sm-001"));
-			assertTrue(subModel.getDataElements().get("prop1").getIdShort().equals("prop1"));
-			assertTrue((int) ((IProperty) subModel.getDataElements().get("prop1")).get() == 234);
-			assertTrue((int) ((IProperty) subModel.getDataElements().get("prop3")).get() == 17);
+			assertTrue(subModel.getProperties().get("prop1").getIdShort().equals("prop1"));
+			assertTrue((int) subModel.getProperties().get("prop1").get() == 234);
+			assertTrue((int) subModel.getProperties().get("prop3").get() == 17);
 			assertTrue(subModel.getSubmodelElements().get("prop2").getIdShort().equals("prop2"));
-			assertTrue((int) ((IProperty) ((ISubmodelElementCollection) subModel.getSubmodelElements().get("prop2"))
-					.getDataElements().get("prop11")).get() == 123);
+			assertTrue((int) ((ISubmodelElementCollection) subModel.getSubmodelElements().get("prop2"))
+					.getProperties().get("prop11").get() == 123);
 
 			// Connect to sub model using lower-level VAB interface
 			VABElementProxy connSubModel1 = this.connManager.connectToVABElement("sm-001VAB");
 			// - Read property values and compare with expected values
-			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("value") == 234);
-			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop3")).get("value") == 17);
-			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("idShort").equals("prop1"));
-			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2")).get("idShort").equals("prop2"));
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1")).get("value") == 234);
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop3")).get("value") == 17);
+			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1")).get("idShort").equals("prop1"));
+			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop2")).get("idShort").equals("prop2"));
 			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("submodelElements/prop2/prop11")).get("value") == 123);
 			// - Change property value using VAB primitive
-			connSubModel1.setModelPropertyValue("dataElements/prop1/value", 456);
+			connSubModel1.setModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1/value", 456);
 			// - Read value back using VAB primitive
-			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("value") == 456);
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1")).get("value") == 456);
 
 			// Read changed value back using SDK connector
-			assertTrue((int) ((IProperty) subModel.getDataElements().get("prop1")).get() == 456);
+			assertTrue((int) subModel.getProperties().get("prop1").get() == 456);
 		}
 
 		
@@ -205,30 +204,30 @@ public class AASServletConnection {
 			ISubModel subModel = manager.retrieveSubModel(new ModelUrn("aas-001M"), new ModelUrn("sm-001M"));
 			// - Retrieve sub model values and compare to expected values
 			assertTrue(subModel.getIdShort().equals("sm-001M"));
-			assertTrue(subModel.getDataElements().get("prop1").getIdShort().equals("prop1"));
-			assertTrue((int) ((IProperty) subModel.getDataElements().get("prop1")).get() == 234);
-			assertTrue((int) ((IProperty) subModel.getDataElements().get("prop3")).get() == 17);
+			assertTrue(subModel.getProperties().get("prop1").getIdShort().equals("prop1"));
+			assertTrue((int) subModel.getProperties().get("prop1").get() == 234);
+			assertTrue((int) subModel.getProperties().get("prop3").get() == 17);
 			assertTrue(subModel.getSubmodelElements().get("prop2").getIdShort().equals("prop2"));
-			assertTrue((int) ((IProperty) ((ISubmodelElementCollection) subModel.getSubmodelElements().get("prop2"))
-					.getDataElements().get("prop11")).get() == 123);
+			assertTrue((int) ((ISubmodelElementCollection) subModel.getSubmodelElements().get("prop2"))
+					.getProperties().get("prop11").get() == 123);
 			
 			
 			// Connect to sub model using lower-level VAB interface
 			VABElementProxy connSubModel1 = this.connManager.connectToVABElement("sm-001MVAB");
 			// - Read property values and compare with expected values
 			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("/")).get("idShort").equals("sm-001M"));
-			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("value") == 234);
-			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop3")).get("value") == 17);
-			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("idShort").equals("prop1"));
-			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop2")).get("idShort").equals("prop2"));
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1")).get("value") == 234);
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop3")).get("value") == 17);
+			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1")).get("idShort").equals("prop1"));
+			assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop2")).get("idShort").equals("prop2"));
 			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("submodelElements/prop2/prop11")).get("value") == 123);
 			// - Change property value using VAB primitive
-			connSubModel1.setModelPropertyValue("dataElements/prop1/value", 456);
+			connSubModel1.setModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1/value", 456);
 			// - Read value back using VAB primitive
-			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("dataElements/prop1")).get("value") == 456);
+			assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1")).get("value") == 456);
 
 			// Read changed value back using SDK connector
-			assertTrue((int) ((IProperty) subModel.getDataElements().get("prop1")).get() == 456);
+			assertTrue((int) subModel.getProperties().get("prop1").get() == 456);
 		}
 	}
 }

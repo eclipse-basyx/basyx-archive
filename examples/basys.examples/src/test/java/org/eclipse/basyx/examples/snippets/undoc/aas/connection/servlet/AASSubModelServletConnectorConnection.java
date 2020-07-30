@@ -14,7 +14,6 @@ import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
@@ -120,14 +119,14 @@ public class AASSubModelServletConnectorConnection {
 		
 		// - Retrieve sub model values and compare to expected values
 		assertTrue(subModel.getIdShort().equals("sm-001"));
-		assertTrue(subModel.getDataElements().get("prop1").getIdShort().equals("prop1"));
-		assertTrue((int) ((IProperty) subModel.getDataElements().get("prop1")).get() == 234);
-		assertTrue((int) ((IProperty) subModel.getDataElements().get("prop3")).get() == 17);
+		assertTrue(subModel.getProperties().get("prop1").getIdShort().equals("prop1"));
+		assertTrue((int) subModel.getProperties().get("prop1").get() == 234);
+		assertTrue((int) subModel.getProperties().get("prop3").get() == 17);
 
 		ISubmodelElementCollection prop2 = (ISubmodelElementCollection) subModel.getSubmodelElements().get("prop2");
 		assertEquals("prop2", prop2.getIdShort());
-		Map<String, IDataElement> dataElements = prop2.getDataElements();
-		assertEquals(123, ((IProperty) dataElements.get("prop11")).get());
+		Map<String, IProperty> properties = prop2.getProperties();
+		assertEquals(123, properties.get("prop11").get());
 	}
 }
 

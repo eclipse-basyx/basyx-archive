@@ -84,9 +84,9 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		// Implement the device invocation counter - read and increment invocation counter
 		Map<String, Object> property = (Map<String, Object>) aasServerConnection
 				.getModelPropertyValue(
-						"/aas/submodels/Status/" + SubmodelElementProvider.DATAELEMENTS + "/invocations");
+						"/aas/submodels/Status/" + SubmodelElementProvider.PROPERTIES + "/invocations");
 		int invocations = (int) property.get("value");
-		aasServerConnection.setModelPropertyValue("/aas/submodels/Status/dataElements/invocations/value", ++invocations);
+		aasServerConnection.setModelPropertyValue("/aas/submodels/Status/" + SubmodelElementProvider.PROPERTIES + "/invocations/value", ++invocations);
 	}
 
 	
@@ -99,7 +99,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		super.onChangedExecutionState(newExecutionState);
 		
 		// Update property "properties/status" in external AAS
-		aasServerConnection.setModelPropertyValue("/aas/submodels/Status/dataElements/status/value",
+		aasServerConnection.setModelPropertyValue("/aas/submodels/Status/" + SubmodelElementProvider.PROPERTIES + "/status/value",
 				newExecutionState.getValue());
 	}
 

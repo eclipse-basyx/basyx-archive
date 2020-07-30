@@ -73,7 +73,7 @@ public class ReceiveDeviceMaintenanceApplication extends BaseBaSyxService {
 	public int getDevicePartSupplyStatus() {
 		// Read the status property
 		Map<String, Object> property = (Map<String, Object>) aasServerConnection
-				.getModelPropertyValue(SubmodelElementProvider.DATAELEMENTS + "/partAvailability");
+				.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/partAvailability");
 		// Return the value of the property
 		return Integer.parseInt(property.get("value").toString());
 	}

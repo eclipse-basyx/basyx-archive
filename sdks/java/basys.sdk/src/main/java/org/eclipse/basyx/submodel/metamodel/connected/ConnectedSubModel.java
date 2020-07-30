@@ -13,6 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementFactory;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
@@ -109,7 +110,7 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 		}
 		
 		if (element instanceof IDataElement) {
-			getProxy().createValue(SubmodelElementProvider.DATAELEMENTS, element);
+			getProxy().createValue(SubmodelElementProvider.PROPERTIES, element);
 		} else if (element instanceof IOperation) {
 			getProxy().createValue(SubmodelElementProvider.OPERATIONS, element);
 		} else if (element instanceof ISubmodelElement) {
@@ -118,9 +119,9 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 	}
 
 	@Override
-	public Map<String, IDataElement> getDataElements() {
-		return ConnectedSubmodelElementFactory.getDataElements(getProxy(), SubmodelElementProvider.DATAELEMENTS,
-						SubmodelElementProvider.DATAELEMENTS);
+	public Map<String, IProperty> getProperties() {
+		return ConnectedSubmodelElementFactory.getProperties(getProxy(), SubmodelElementProvider.PROPERTIES,
+						SubmodelElementProvider.PROPERTIES);
 	}
 
 	@Override

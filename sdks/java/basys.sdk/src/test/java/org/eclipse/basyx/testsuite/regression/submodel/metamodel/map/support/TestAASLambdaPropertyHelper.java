@@ -6,7 +6,7 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelemen
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.AASLambdaPropertyHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.restapi.DataElementProvider;
+import org.eclipse.basyx.submodel.restapi.PropertyProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.junit.Test;
@@ -31,7 +31,7 @@ public class TestAASLambdaPropertyHelper {
 		});
 		
 		// Wrap in provider
-		DataElementProvider provider = new DataElementProvider(new VABLambdaProvider(temperature));
+		PropertyProvider provider = new PropertyProvider(new VABLambdaProvider(temperature));
 		ConnectedProperty connectedProperty = new ConnectedProperty(new VABElementProxy("", provider));
 
 		// Check correct property type

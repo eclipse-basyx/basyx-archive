@@ -3,7 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.api;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 
 /**
@@ -28,11 +28,11 @@ public interface IElementContainer {
 	public Map<String, ISubmodelElement> getSubmodelElements();
 
 	/**
-	 * Gets only submodel elements that are data elements
+	 * Gets only submodel elements that are properties
 	 * 
 	 * @return
 	 */
-	public Map<String, IDataElement> getDataElements();
+	public Map<String, IProperty> getProperties();
 
 	/**
 	 * Gets only submodel elements that are operations

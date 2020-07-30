@@ -16,11 +16,11 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  * @author schnicke
  *
  */
-public class DataElementProvider extends MetaModelProvider {
+public class PropertyProvider extends MetaModelProvider {
 
 	private IModelProvider proxy;
 
-	public DataElementProvider(IModelProvider proxy) {
+	public PropertyProvider(IModelProvider proxy) {
 		this.proxy = proxy;
 	}
 
@@ -60,8 +60,6 @@ public class DataElementProvider extends MetaModelProvider {
 		if (path.equals(Property.VALUE)) {
 			// Set value and type
 			proxy.setModelPropertyValue(Property.VALUE, newValue);
-
-			// TODO: differentiate between different types of data elements
 			proxy.setModelPropertyValue(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(newValue));
 		} else {
 			throw new MalformedRequestException("Invalid access path");
