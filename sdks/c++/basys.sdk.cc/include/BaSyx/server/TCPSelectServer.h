@@ -97,7 +97,7 @@ private:
   // Buffers
   static constexpr std::size_t default_buffer_size = 4096;
   std::array<char, default_buffer_size> recv_buffer;
-  std::array<char, default_buffer_size> ret_buffer;
+  std::array<char, default_buffer_size> send_buffer;
 
   //tcp
   int port;
