@@ -11,8 +11,10 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -24,8 +26,6 @@ import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Tests the capability to multiplex of a VABMultiSubmodelProvider
@@ -34,10 +34,13 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class MultiSubmodelProviderTest {
-	
-	private static Logger logger = LoggerFactory.getLogger(MultiSubmodelProviderTest.class);
-	
-	VABElementProxy proxy;
+	private VABElementProxy proxy;
+
+	// Used short ids
+	private static final String AASIDSHORT = "StubAAS";
+
+	// Used URNs
+	private static final ModelUrn AASURN = new ModelUrn("urn:fhg:es.iese:aas:1:1:myAAS#001");
 
 	@Before
 	public void build() {
@@ -45,7 +48,10 @@ public class MultiSubmodelProviderTest {
 		String urn = "urn:fhg:es.iese:aas:1:1:submodel";
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
 		// set dummy aas
-		provider.setAssetAdministrationShell(new AASModelProvider(new AssetAdministrationShell()));
+		AssetAdministrationShell aas = new AssetAdministrationShell();
+		aas.setIdShort(AASIDSHORT);
+		aas.setIdentification(AASURN);
+		provider.setAssetAdministrationShell(new AASModelProvider(aas));
 		provider.addSubmodel("SimpleAASSubmodel", new SubModelProvider(new SimpleAASSubmodel()));
 		stub.addProvider(urn, "", provider);
 		proxy = stub.connectToVABElement(urn);
@@ -76,14 +82,19 @@ public class MultiSubmodelProviderTest {
 		assertEquals(true, proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/simple"));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void getTest() {
+		AssetAdministrationShell aas = AssetAdministrationShell.createAsFacade((Map<String, Object>) proxy.getModelPropertyValue("/aas"));
+		assertEquals(AASIDSHORT, aas.getIdShort());
+
 		getTestRunner("SimpleAASSubmodel");
 	}
 
 	@Test
-	public void createDeleteTest() {
+	public void createDeleteSubmodelTest() {
 		SubModel sm = new SimpleAASSubmodel("TestSM");
+		sm.setIdentification(IdentifierType.CUSTOM, "TestId");
 		proxy.createValue("/aas/submodels", sm);
 
 		getTestRunner("TestSM");
@@ -103,7 +114,7 @@ public class MultiSubmodelProviderTest {
 			proxy.getModelPropertyValue("/aas/submodels/TestSM");
 			fail();
 		} catch (ProviderException e) {
-			logger.trace("[TEST] VABMultiSubmodelProvider CreateDelete passed");
+			// Expected
 		}
 	}
 

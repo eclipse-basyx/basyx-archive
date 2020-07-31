@@ -43,6 +43,12 @@ public class SubModelProvider extends MetaModelProvider {
 		this(new SubModel());
 	}
 
+	/**
+	 * Creates a SubmodelProvider based on the VAB API, wrapping the passed provider
+	 * 
+	 * @param provider
+	 *            to be wrapped by submodel API
+	 */
 	public SubModelProvider(IModelProvider provider) {
 		submodelAPI = new VABSubmodelAPI(provider);
 	}

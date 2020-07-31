@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
@@ -222,7 +221,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	@SuppressWarnings("unchecked")
 	private void createAssetAdministrationShell(Object newAAS) {
 		Map<String, Object> aas = (Map<String, Object>) newAAS;
-		aas_provider = new AASModelProvider(aas);
+		aas_provider = new AASModelProvider(AssetAdministrationShell.createAsFacade(aas));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -250,11 +249,9 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 			}
 
 			// Delete submodel reference from aas
-			IModelProvider smProvider = submodel_providers.get(smIdShort);
-			Map<String, Object> smMap = (Map<String, Object>) smProvider.getModelPropertyValue("/");
-			SubModel sm = SubModel.createAsFacade(smMap);
-			IIdentifier smId = sm.getIdentification();
-			aas_provider.removeSubmodelReference(smIdShort, smId);
+			// TODO: This is a hack until the API is further clarified
+			SubModel sm = SubModel.createAsFacade((Map<String, Object>) submodel_providers.get(smIdShort).getModelPropertyValue("/"));
+			aas_provider.deleteValue("aas/submodels/" + sm.getIdentification().getId());
 
 			// Remove submodel provider
 			submodel_providers.remove(smIdShort);

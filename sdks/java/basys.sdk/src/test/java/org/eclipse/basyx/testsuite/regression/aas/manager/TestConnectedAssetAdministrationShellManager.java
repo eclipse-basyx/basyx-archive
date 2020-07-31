@@ -2,8 +2,6 @@ package org.eclipse.basyx.testsuite.regression.aas.manager;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashMap;
-
 import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
@@ -89,7 +87,7 @@ public class TestConnectedAssetAdministrationShellManager {
 		AASDescriptor desc = new AASDescriptor(aasId, "/aas");
 		desc.addSubmodelDescriptor(new SubmodelDescriptor(smIdShort, smId, "/aas/submodels/" + smIdShort));
 		registry.register(desc);
-		IModelProvider provider = new VABMultiSubmodelProvider(new AASModelProvider(new HashMap<>()));
+		IModelProvider provider = new VABMultiSubmodelProvider(new AASModelProvider(new AssetAdministrationShell()));
 		connectorProvider.addMapping("", provider);
 
 		// Create sub model
@@ -111,8 +109,8 @@ public class TestConnectedAssetAdministrationShellManager {
 		ISubModel sm = manager.retrieveSubModel(aasId, smId);
 
 		// - check id and properties
-		IProperty prop1Connected = (IProperty) sm.getProperties().get("prop1");
-		IProperty prop2Connected = (IProperty) sm.getProperties().get("prop2");
+		IProperty prop1Connected = sm.getProperties().get("prop1");
+		IProperty prop2Connected = sm.getProperties().get("prop2");
 
 		assertEquals(smIdShort, sm.getIdShort());
 		assertEquals(smId.getId(), sm.getIdentification().getId());
