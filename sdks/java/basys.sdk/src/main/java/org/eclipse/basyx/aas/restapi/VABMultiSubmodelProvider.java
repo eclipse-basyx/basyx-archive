@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
@@ -86,7 +85,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * Constructor
 	 */
 	public VABMultiSubmodelProvider() {
-		// Do nothing
+		this(new AASModelProvider(new AssetAdministrationShell()));
 	}
 
 	/**
@@ -101,6 +100,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * Constructor that accepts Submodel
 	 */
 	public VABMultiSubmodelProvider(String smID, SubModelProvider contentProvider) {
+		this();
 		// Store content provider
 		addSubmodel(smID, contentProvider);
 	}
@@ -126,9 +126,15 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * @param modelContentProvider
 	 *            Model content provider
 	 */
+	@SuppressWarnings("unchecked")
 	public void addSubmodel(String elementId, SubModelProvider modelContentProvider) {
 		// Add model provider
 		submodel_providers.put(elementId, modelContentProvider);
+
+		SubModel sm = SubModel.createAsFacade((Map<String, Object>) modelContentProvider.getModelPropertyValue("/"));
+
+		// Adds a new submodel to the registered AAS
+		aas_provider.createValue("/submodels", sm);
 	}
 
 	/**
@@ -227,10 +233,9 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	@SuppressWarnings("unchecked")
 	private void createSubModel(Object newSM) throws ProviderException {
 		// Adds a new submodel to the registered AAS
-		Map<String, Object> sm = (Map<String, Object>) newSM;
-		SubModelProvider smProvider = new SubModelProvider(SubModel.createAsFacade(sm));
-		submodel_providers.put((String) sm.get(Referable.IDSHORT), smProvider);
-		aas_provider.createValue("/submodels", newSM);
+		SubModel sm = SubModel.createAsFacade((Map<String, Object>) newSM);
+
+		addSubmodel(sm.getIdShort(), new SubModelProvider(sm));
 	}
 
 

@@ -4,6 +4,7 @@
 package org.eclipse.basyx.testsuite.regression.aas.restapi;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import java.util.Collection;
@@ -102,13 +103,14 @@ public class MultiSubmodelProviderTest {
 		// Ensure that the Submodel References where updated
 		ConnectedAssetAdministrationShell shell = new ConnectedAssetAdministrationShell(proxy.getDeepProxy("/aas"), null);
 		Collection<IReference> refs = shell.getSubmodelReferences();
-		assertEquals(1, refs.size());
+		assertEquals(2, refs.size());
 		assertEquals(sm.getReference(), refs.iterator().next());
 
 		proxy.deleteValue("/aas/submodels/TestSM");
 
 		// Ensure that the Submodel Reference was removed again
-		assertEquals(0, shell.getSubmodelReferences().size());
+		assertEquals(1, shell.getSubmodelReferences().size());
+		assertFalse(shell.getSubmodelReferences().contains(sm.getReference()));
 
 		try {
 			proxy.getModelPropertyValue("/aas/submodels/TestSM");

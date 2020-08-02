@@ -31,9 +31,13 @@ public class TestConnectedAssetAdministrationShell extends AssetAdministrationSh
 	@Before
 	public void build() throws Exception {
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
-		provider.addSubmodel(SMIDSHORT, new SubModelProvider(SubModel.createAsFacade(TypeDestroyer.destroyType(retrieveBaselineSM()))));
-		provider.setAssetAdministrationShell(new AASModelProvider(AssetAdministrationShell.createAsFacade(TypeDestroyer.destroyType(retrieveBaselineShell()))));
-	
+		AssetAdministrationShell shell = retrieveBaselineShell();
+		provider.setAssetAdministrationShell(new AASModelProvider(AssetAdministrationShell.createAsFacade(TypeDestroyer.destroyType(shell))));
+
+		SubModel sm = retrieveBaselineSM();
+		sm.setParent(shell.getReference());
+		provider.addSubmodel(SMIDSHORT, new SubModelProvider(SubModel.createAsFacade(TypeDestroyer.destroyType(sm))));
+
 		// Create AAS registry
 		IAASRegistryService registry = new InMemoryRegistry();
 		// Create AAS Descriptor
