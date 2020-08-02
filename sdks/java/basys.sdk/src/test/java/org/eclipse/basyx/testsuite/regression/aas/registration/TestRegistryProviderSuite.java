@@ -19,7 +19,6 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
-import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.After;
 import org.junit.Before;
@@ -265,26 +264,5 @@ public abstract class TestRegistryProviderSuite {
 		aasDesc = proxy.lookupAAS(aasId1);
 		assertNotNull(aasDesc.getSubmodelDescriptorFromIdShort(smIdShort1));
 		assertNull(aasDesc.getSubmodelDescriptorFromIdShort(smIdShort2));
-	}
-
-	@Test
-	public void testRegisterOnly() {
-		IIdentifier id = new ModelUrn("testURN");
-		String shortid = "testShortId";
-		Asset asset = new Asset(new Reference(new Identifier(IdentifierType.CUSTOM, "testAsset"), KeyElements.ASSET, false));
-		asset.setIdentification(IdentifierType.CUSTOM, "testAsset");
-		AASDescriptor descriptorToRegister = new AASDescriptor(shortid, id, asset, "testEndpoint");
-		proxy.registerOnly(descriptorToRegister);
-		AASDescriptor descriptor = proxy.lookupAAS(id);
-		assertEquals(descriptorToRegister.getFirstEndpoint(), descriptor.getFirstEndpoint());
-		assertEquals(asset.getIdentification().getId(), descriptor.getAsset().getIdentification().getId());
-		// clean up after this test
-		proxy.delete(id);
-	}
-
-	@Test(expected = ResourceAlreadyExistsException.class)
-	public void testRegisterOnlyAlreadyExisting() {
-		AASDescriptor descriptorToRegister = new AASDescriptor(aasIdShort1, aasId1, aasEndpoint1);
-		proxy.registerOnly(descriptorToRegister);
 	}
 }

@@ -209,14 +209,10 @@ public class DirectoryModelProvider implements IModelProvider {
 			ModelUrn identifier = new ModelUrn(splitted[0]);
 			
 			if (splitted.length == 1) {
-				// aas to be updated does not exist
-				if (registry.lookupAAS(identifier) == null) {
-					throw new ResourceNotFoundException("AAS '" + path + "' to be updated does not exist. Try create instead.");
-				}
-
+				// Typically, VAB SET should not create new entries. Nevertheless, the registry
+				// API is defined to do it.
 				registry.register(createAASDescriptorFromMap(newValue));
 			} else if (splitted.length == 3) {
-
 				SubmodelDescriptor smDesc = createSMDescriptorFromMap(newValue);
 				registry.register(identifier, smDesc);
 			} else {

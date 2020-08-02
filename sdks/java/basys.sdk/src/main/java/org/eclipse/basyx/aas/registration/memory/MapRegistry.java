@@ -10,7 +10,6 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,29 +54,6 @@ public class MapRegistry implements IAASRegistryService {
 
 		descriptorMap.put(aasId, aasDescriptor);
 		logger.debug("Registered " + aasId);
-	}
-
-	@Override
-	public void registerOnly(AASDescriptor aasDescriptor) {
-		String aasId = aasDescriptor.getIdentifier().getId();
-		IAsset asset = aasDescriptor.getAsset();
-
-		// Check if the asset id exists in the mapping
-		if (asset != null) {
-			String assetId = aasDescriptor.getAsset().getIdentification().getId();
-			if (descriptorMap.containsKey(assetId)) {
-				throw new ResourceAlreadyExistsException("Could not create new key for AAS with Asset Id" + assetId + " since it already exists");
-			} else {
-				descriptorMap.put(assetId, aasDescriptor);
-			}
-		}
-
-		if (descriptorMap.containsKey(aasId)) {
-			throw new ResourceAlreadyExistsException("Could not create new key for AAS " + aasId + " since it already exists");
-		} else {
-			descriptorMap.put(aasId, aasDescriptor);
-			logger.debug("Registered " + aasId);
-		}
 	}
 
 	@Override
@@ -132,8 +108,6 @@ public class MapRegistry implements IAASRegistryService {
 		// Do not assume that the returned descriptor is referenced in the base map
 		descriptorMap.put(aas.getId(), descriptor);
 		logger.debug("Registered submodel " + smDescriptor.getIdShort() + " for AAS " + aas.getId());
-
-		// TODO: Add data to remote AAS
 	}
 
 	@Override
