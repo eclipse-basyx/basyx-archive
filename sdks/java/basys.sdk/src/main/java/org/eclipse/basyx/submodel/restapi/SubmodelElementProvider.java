@@ -155,7 +155,7 @@ public class SubmodelElementProvider extends MetaModelProvider {
 		newValue = unwrapParameter(newValue);
 		if (Operation.isOperation(element)) {
 			throw new MalformedRequestException("Invalid access");
-		} else if (DataElement.isDataElement(element)) {
+		} else if (Property.isProperty(element)) {
 			String subPath = VABPathTools.buildPath(pathElements, 2);
 			new PropertyProvider(elementProxy).setModelPropertyValue(subPath, newValue);
 		} else {

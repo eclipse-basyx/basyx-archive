@@ -2,7 +2,6 @@ package org.eclipse.basyx.examples.scenarios.device.controllable;
 
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.basyx.examples.TestContext;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.examplescenario.BaSyxExampleScenario;

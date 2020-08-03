@@ -110,15 +110,9 @@ public class SubModelProvider extends MetaModelProvider {
 					return submodelAPI.getPropertyValue(idShort);
 				} else if (isSubmodelElementListPath(splitted)) {
 					// Create list from array and wrap it in ArrayList to ensure modifiability
-					List<String> idShorts = new ArrayList<>(Arrays.asList(splitted));
-
-					// Drop inital "submodels"
-					idShorts.remove(0);
+					List<String> idShorts = getIdShorts(splitted);
 					
-					if (splitted[splitted.length - 1].equals(Property.VALUE)) {
-						// Remove "value" from list
-						idShorts.remove(idShorts.size() - 1);
-
+					if (endsWithValue(splitted)) {
 						return submodelAPI.getNestedPropertyValue(idShorts);
 					} else {
 						return submodelAPI.getNestedSubmodelElement(idShorts);
@@ -129,9 +123,26 @@ public class SubModelProvider extends MetaModelProvider {
 		throw new MalformedRequestException("Unknown path " + path + " was requested");
 	}
 
+	private List<String> getIdShorts(String[] splitted) {
+		// Create list from array and wrap it in ArrayList to ensure modifiability
+		List<String> idShorts = new ArrayList<>(Arrays.asList(splitted));
+
+		// Drop inital "submodels"
+		idShorts.remove(0);
+
+		// If value is contained in path, remove it
+		if (splitted[splitted.length - 1].equals(Property.VALUE)) {
+			idShorts.remove(idShorts.size() - 1);
+		}
+		return idShorts;
+	}
 
 	private boolean isPropertyValuePath(String[] splitted) {
-		return splitted.length == 3 && splitted[0].equals(SubmodelElementProvider.PROPERTIES) && splitted[2].equals(Property.VALUE);
+		return splitted.length == 3 && splitted[0].equals(SubmodelElementProvider.PROPERTIES) && endsWithValue(splitted);
+	}
+
+	private boolean endsWithValue(String[] splitted) {
+		return splitted[splitted.length - 1].equals(Property.VALUE);
 	}
 
 	private boolean isSubmodelElementListPath(String[] splitted) {
