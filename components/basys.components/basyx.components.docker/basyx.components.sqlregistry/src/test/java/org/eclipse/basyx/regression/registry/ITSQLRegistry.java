@@ -28,8 +28,7 @@ public class ITSQLRegistry extends TestRegistryProviderSuite {
 		BaSyxDockerConfiguration dockerConfig = new BaSyxDockerConfiguration();
 		dockerConfig.loadFromResource(BaSyxDockerConfiguration.DEFAULT_CONFIG_PATH);
 
-		registryUrl = "http://localhost:" + dockerConfig.getHostPort() + contextConfig.getContextPath()
-				+ "/api/v1/registry";
+		registryUrl = "http://localhost:" + dockerConfig.getHostPort() + contextConfig.getContextPath();
 		logger.info("Registry URL for integration test: " + registryUrl);
 	}
 
