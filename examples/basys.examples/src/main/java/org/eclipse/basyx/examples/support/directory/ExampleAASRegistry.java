@@ -23,8 +23,8 @@ public class ExampleAASRegistry extends InMemoryRegistry {
 		IIdentifier smId = new Identifier(IdentifierType.IRI, submodelid);
 		SubmodelDescriptor smDes = new SubmodelDescriptor(submodelid, smId, endpoint);
 
-		if (descriptorMap.keySet().contains(aasUrn.getURN())) {
-			aasDescriptor = descriptorMap.get(aasUrn.getURN());
+		if (handler.contains(aasUrn)) {
+			aasDescriptor = handler.get(aasUrn);
 		} else {
 			throw new RuntimeException("AASDescriptor for " + rawAASUrn + " missing");
 		}

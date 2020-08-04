@@ -9,12 +9,12 @@ import java.util.HashMap;
  * @author espen
  *
  */
-public class InMemoryRegistry extends MapRegistry {
+public class InMemoryRegistry extends AASRegistry {
 
 	/**
 	 * Default constructor based on HashMaps
 	 */
 	public InMemoryRegistry() {
-		super(new HashMap<>());
+		super(new MapRegistryHandler(new HashMap<>()));
 	}
 }

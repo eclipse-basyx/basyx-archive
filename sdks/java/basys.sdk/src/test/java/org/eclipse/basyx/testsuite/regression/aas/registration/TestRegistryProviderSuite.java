@@ -212,6 +212,31 @@ public abstract class TestRegistryProviderSuite {
 		}
 	}
 
+	/**
+	 * Tests deletion for aas entries
+	 */
+	@Test
+	public void testDeleteByAssetIdCall() {
+		proxy.delete(asset1.getIdentification());
+
+		// After aas1 has been deleted, only aas2 should be registered
+		assertNotNull(proxy.lookupAAS(aasId2));
+		assertNotNull(proxy.lookupAAS(asset2.getIdentification()));
+		try {
+			proxy.lookupAAS(aasId1);
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// expected
+		}
+
+		try {
+			proxy.lookupAAS(asset1.getIdentification());
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// expected
+		}
+	}
+
 	@Test(expected = ResourceNotFoundException.class)
 	public void testDeleteNotExistingSubmodelFromNotExistingAAS() {
 		proxy.delete(new Identifier(IdentifierType.CUSTOM, "nonExistent"), "nonExistentSubModelId");

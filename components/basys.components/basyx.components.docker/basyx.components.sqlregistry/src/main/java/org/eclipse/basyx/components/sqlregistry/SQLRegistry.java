@@ -6,7 +6,8 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 
-import org.eclipse.basyx.aas.registration.memory.MapRegistry;
+import org.eclipse.basyx.aas.registration.memory.AASRegistry;
+import org.eclipse.basyx.aas.registration.memory.MapRegistryHandler;
 import org.eclipse.basyx.components.configuration.BaSyxSQLConfiguration;
 import org.eclipse.basyx.tools.sqlproxy.SQLRootElement;
 
@@ -16,7 +17,7 @@ import org.eclipse.basyx.tools.sqlproxy.SQLRootElement;
  * @author espen
  *
  */
-public class SQLRegistry extends MapRegistry {
+public class SQLRegistry extends AASRegistry {
 	private static final String DEFAULT_SQL_CONFIG_PATH = "registry.properties";
 
 	/**
@@ -25,7 +26,7 @@ public class SQLRegistry extends MapRegistry {
 	 * @param configFilePath
 	 */
 	public SQLRegistry(String configFilePath) {
-		super(new AASDescriptorMap(createRootMap(configFilePath)));
+		super(new MapRegistryHandler(new AASDescriptorMap(createRootMap(configFilePath))));
 	}
 
 	/**
@@ -39,7 +40,7 @@ public class SQLRegistry extends MapRegistry {
 	 * Creates a SQLRegistry from a sql configuration
 	 */
 	public SQLRegistry(BaSyxSQLConfiguration configuration) {
-		super(new AASDescriptorMap(createRootMap(configuration)));
+		super(new MapRegistryHandler(new AASDescriptorMap(createRootMap(configuration))));
 	}
 
 	private static Map<String, Object> createRootMap(String configFilePath) {
