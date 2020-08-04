@@ -5,14 +5,12 @@ namespace submodel {
 namespace simple {
 
 AdministrativeInformation::AdministrativeInformation()
-{
-
-};
+{};
 
 AdministrativeInformation::AdministrativeInformation(const std::string & version, const std::string & revision)
-{
-
-};
+  : version{version}
+  , revision{revision}
+{};
 
 void AdministrativeInformation::setVersion(const std::string & version)
 {
@@ -24,14 +22,20 @@ void AdministrativeInformation::setRevision(const std::string & revision)
 	this->revision = revision;
 }
 
-std::string AdministrativeInformation::getVersion() const
+const std::string * const AdministrativeInformation::getVersion() const
 {
-	return version;
+  if (this->version.empty())
+    return nullptr;
+
+  return &this->version;
 }
 
-std::string AdministrativeInformation::getRevision() const
+const std::string * const AdministrativeInformation::getRevision() const
 {
-	return revision;
+  if (this->revision.empty())
+    return nullptr;
+
+  return &this->revision;
 }
 
 void AdministrativeInformation::addDataSpecification(const Reference & reference)

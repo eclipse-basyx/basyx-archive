@@ -45,6 +45,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/parts/ConceptDictionary.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/parts/ConceptDescription.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/parts/View.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/AdministrativeInformation.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/HasDataSpecification.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/Identifiable.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/Qualifiable.cpp
@@ -130,6 +131,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/parts/IConceptDescription.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/parts/IConceptDictionary.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/parts/IView.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IAdministrativeInformation.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IHasDataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IHasKind.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IHasSemantics.h
@@ -171,6 +173,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/parts/View.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/constraint/Formula.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/constraint/Qualifier.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/AdministrativeInformation.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/HasDataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Identifiable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Qualifiable.h

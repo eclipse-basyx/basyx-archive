@@ -7,14 +7,14 @@
 #ifndef BASYX_SUBMODEL_SIMPLE_QUALIFIER_ADMINISTRATIVEINFORMATION_H
 #define BASYX_SUBMODEL_SIMPLE_QUALIFIER_ADMINISTRATIVEINFORMATION_H
 
-//#include <BaSyx/submodel/api_v2/qualifier/IAdministrativeInformation.h>
 #include <BaSyx/submodel/simple/qualifier/HasDataSpecification.h>
+#include <BaSyx/submodel/api_v2/qualifier/IAdministrativeInformation.h>
 
 namespace basyx {
 namespace submodel {
 namespace simple {
 
-class AdministrativeInformation : public api::IHasDataSpecification
+class AdministrativeInformation : public api::IAdministrativeInformation
 {
 private:
 	HasDataSpecification hasDataSpecification;
@@ -28,16 +28,16 @@ public:
 	AdministrativeInformation(const std::string & version, const std::string & revision);
 //	AdministrativeInformation(const IAdministrativeInformation & other);
 
-	void setVersion(const std::string & version);
-	void setRevision(const std::string & revision);
+	void setVersion(const std::string & version) override;
+	void setRevision(const std::string & revision) override;
 
-	inline bool hasVersion() const { return version.empty(); };
-	inline bool hasRevision() const { return revision.empty(); };
+	inline bool hasVersion() const override { return not version.empty(); };
+	inline bool hasRevision() const override { return not revision.empty(); };
 
 	inline bool exists() const noexcept { return !version.empty() && !revision.empty(); };
 
-	virtual std::string getVersion() const;
-	virtual std::string getRevision() const;
+	virtual const std::string * const getVersion() const override;
+	virtual const std::string * const getRevision() const override;
 
 	// Inherited via IHasDataSpecification
 	virtual void addDataSpecification(const Reference & reference) override;

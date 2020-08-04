@@ -13,6 +13,7 @@ target_sources(${PROJECT_NAME}
 	api/common/test_ElementContainer.cpp
 	api/constraint/test_Formula.cpp
 	api/constraint/test_Qualifier.cpp
+	api/qualifier/test_AdministrativeInformation.cpp
 	api/qualifier/test_HasDataSpecification.cpp
 	api/qualifier/test_Identifiable.cpp
 	api/qualifier/test_Qualifiable.cpp
