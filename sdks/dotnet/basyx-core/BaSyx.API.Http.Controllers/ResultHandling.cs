@@ -6,6 +6,15 @@ namespace BaSyx.API.Http.Controllers
 {
     public static class ResultHandling
     {
+        public static IActionResult NullResult(string elementName)
+        {
+            ObjectResult objectResult = new ObjectResult(new Result(false, new Message(MessageType.Error, $"Argument {elementName} is null or empty")))
+            {
+                StatusCode = 400
+            };
+            return objectResult;
+        }
+
         public static IActionResult CreateActionResult(this IResult result, CrudOperation crud, string route = null)
         {
             if (result == null)

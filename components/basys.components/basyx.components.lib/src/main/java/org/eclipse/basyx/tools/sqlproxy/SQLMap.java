@@ -1,7 +1,6 @@
 package org.eclipse.basyx.tools.sqlproxy;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
-import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLQuery;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLUpdate;
 
@@ -41,7 +39,7 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	 */
 	public SQLMap(SQLRootElement rootElement, int tableId) {
 		// Invoke base constructor
-		super(rootElement.sqlUser, rootElement.sqlPass, rootElement.sqlURL, rootElement.sqlDriver, rootElement.sqlPrefix, rootElement.sqlTableID+"__"+tableId, rootElement);	
+		super(rootElement.getDriver(), rootElement.getSqlTableID() + "__" + tableId, rootElement);	
 	}
 
 	
@@ -53,7 +51,7 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	 */
 	public SQLMap(SQLRootElement rootElement, String tableIdWithprefix) {
 		// Invoke base constructor
-		super(rootElement.sqlUser, rootElement.sqlPass, rootElement.sqlURL, rootElement.sqlDriver, rootElement.sqlPrefix, tableIdWithprefix, rootElement);	
+		super(rootElement.getDriver(), tableIdWithprefix, rootElement);	
 	}
 
 	/**
@@ -84,10 +82,10 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	@Override
 	public int size() {
 		// Build query string
-		String          queryString = "SELECT * FROM elements."+sqlTableID;
+		String          queryString = "SELECT * FROM elements."+ getSqlTableID();
 		// - Build dynamic query
 		// - basically, the last parameter is not used here, as getRaw does not post process query results 
-		DynamicSQLQuery dynQuery    = new DynamicSQLQuery(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, queryString, "mapArray(name:String,value:String,type:String)");
+		DynamicSQLQuery dynQuery    = new DynamicSQLQuery(getDriver(), queryString, "mapArray(name:String,value:String,type:String)");
 		
 		// Execute query and get result set
 		ResultSet result = dynQuery.getRaw();
@@ -115,7 +113,7 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	@Override
 	public boolean containsKey(Object key) {
 		// Use new driver for operation
-		return containsKey(new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver), key);
+		return containsKey(getDriver(), key);
 	}
 	
 	
@@ -124,7 +122,7 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	 */
 	protected boolean containsKey(ISQLDriver drv, Object key) {
 		// Build query string
-		String          queryString = "SELECT * FROM elements."+sqlTableID+" WHERE name='$name'";
+		String          queryString = "SELECT * FROM elements." + getSqlTableID() + " WHERE name='$name'";
 		// - Build dynamic query
 		// - basically, the last parameter is not used here, as getRaw does not post process query results 
 		DynamicSQLQuery dynQuery    = new DynamicSQLQuery(drv, queryString, "mapArray(name:String,value:String,type:String)");
@@ -150,7 +148,7 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	@Override
 	public boolean containsValue(Object value) {
 		// Use new driver for operation
-		return containsValue(new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver), value);
+		return containsValue(getDriver(), value);
 	}
 
 
@@ -160,7 +158,7 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	 */
 	protected boolean containsValue(ISQLDriver drv, Object value) {
 		// Build query string
-		String          queryString = "SELECT * FROM elements."+sqlTableID+" WHERE value='$value'";
+		String          queryString = "SELECT * FROM elements."+ getSqlTableID() +" WHERE value='$value'";
 		// - Build dynamic query
 		// - basically, the last parameter is not used here, as getRaw does not post process query results 
 		DynamicSQLQuery dynQuery    = new DynamicSQLQuery(drv, queryString, "mapArray(name:String,value:String,type:String)");
@@ -184,7 +182,7 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	@Override
 	public Object get(Object key) {
 		// Get value from SQL database table
-		return getValueFromMap(sqlTableID, key.toString());
+		return getValueFromMap(getSqlTableID(), key.toString());
 	}
 
 	
@@ -194,30 +192,7 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	 */
 	@Override
 	public Object put(String key, Object value) {
-		// SQL driver used for operation
-		SQLDriver sqlDrv = null;
-
-		// Try to complete transaction
-		try {
-			// Create connection and start transaction
-			sqlDrv = new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver);
-			// - Open connection
-			sqlDrv.openConnection();
-			// - Switch off auto commit
-			sqlDrv.getConnection().setAutoCommit(false);
-		
-			putValue(sqlDrv, key, value);
-		
-			// Commit and close transaction
-			sqlDrv.getConnection().commit();
-			sqlDrv.closeConnection();
-		} catch (SQLException e) {
-			// Output exception
-			e.printStackTrace();
-		} finally {
-			// Close connection
-			sqlDrv.closeConnection();			
-		}
+		putValue(getDriver(), key, value);
 		
 		// Return inserted object
 		return value;
@@ -227,7 +202,7 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	 * Puts arbitrary values in the map (even if they already exist). Does not commit the changes
 	 * using the SQLDriver.
 	 */
-	protected void putValue(SQLDriver sqlDrv, String key, Object value) {
+	protected void putValue(ISQLDriver sqlDrv, String key, Object value) {
 		value = convertToSimpleValue(value);
 		putSimpleValue(sqlDrv, key, value);
 	}
@@ -236,11 +211,11 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	 * Puts simple values to the map (those, that can be directly converted to a table row). Does not commit the
 	 * changes using the SQLDriver.
 	 */
-	private void putSimpleValue(SQLDriver sqlDrv, String key, Object value) {
+	private void putSimpleValue(ISQLDriver sqlDrv, String key, Object value) {
 		if (containsKey(sqlDrv, key)) {
-			updateInMapSimple(sqlDrv, sqlTableID, new SQLTableRow(key, value));
+			updateInMapSimple(sqlDrv, getSqlTableID(), new SQLTableRow(key, value));
 		} else {
-			addToMapSimple(sqlDrv, sqlTableID, new SQLTableRow(key, value));
+			addToMapSimple(sqlDrv, getSqlTableID(), new SQLTableRow(key, value));
 		}
 	}
 
@@ -253,7 +228,7 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	private Object convertToSimpleValue(Object value) {
 		// If the value is a map that can not be directly referenced by this root element
 		if (value instanceof Map && (!(value instanceof SQLMap)
-				|| !(((SQLMap) value).sqlRootElement.sqlTableID.equals(sqlRootElement.sqlTableID)))) {
+				|| !(((SQLMap) value).sqlRootElement.getSqlTableID().equals(sqlRootElement.getSqlTableID())))) {
 			// Create a new referable SQLMap out of the value in the scope of this root element
 			return new SQLMap(sqlRootElement, (Map<String, Object>) value);
 		}
@@ -265,46 +240,22 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	 */
 	@Override
 	public Object remove(Object key) {
-		// SQL driver used for operation
-		SQLDriver sqlDrv = null;
-		
 		// Return value
 		Object result = null;
-		
+	
+		// Get element from map for return value
+		result = getValueFromMap(getDriver(), getSqlTableID(), key.toString());
 
-		// Try to complete transaction
-		try {
-			// Create connection and start transaction
-			sqlDrv = new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver);
-			// - Open connection
-			sqlDrv.openConnection();
-			// - Switch off auto commit
-			sqlDrv.getConnection().setAutoCommit(false);
+		// Delete element from map
+		String updateString = "DELETE FROM elements."+getSqlTableID()+" WHERE name='$name'";
+		DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(getDriver(), updateString);
 
-			// Get element from map for return value
-			result = getValueFromMap(sqlDrv, sqlTableID, key.toString());
-
-			// Delete element from map
-			String updateString = "DELETE FROM elements."+sqlTableID+" WHERE name='$name'";
-			DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(sqlDrv, updateString);
-
-			// Parameter map
-			Map<String, Object> parameter = new HashMap<>();
-			// - Put name in map
-			parameter.put("name", key);
-			// - Execute delete
-			dynUpdate.accept(parameter);
-			
-			// Commit and close transaction
-			sqlDrv.getConnection().commit();
-			sqlDrv.closeConnection();
-		} catch (SQLException e) {
-			// Output exception
-			e.printStackTrace();
-		} finally {
-			// Close connection
-			sqlDrv.closeConnection();			
-		}
+		// Parameter map
+		Map<String, Object> parameter = new HashMap<>();
+		// - Put name in map
+		parameter.put("name", key);
+		// - Execute delete
+		dynUpdate.accept(parameter);
 
 		// Return element
 		return result;
@@ -317,39 +268,16 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	 */
 	@Override @SuppressWarnings("unchecked")
 	public void putAll(Map<? extends String, ? extends Object> map) {
-		// SQL driver used for operation
-		SQLDriver sqlDrv = null;
-
-		// Try to complete transaction
-		try {
-			// Create connection and start transaction
-			sqlDrv = new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver);
-			// - Open connection
-			sqlDrv.openConnection();
-			// - Switch off auto commit
-			sqlDrv.getConnection().setAutoCommit(false);
-
-			// Remove old elements
-			removeAllKeys(sqlDrv, (Set<String>) map.keySet());
-		
-			// Create map elements
-			Collection<SQLTableRow> mapElements = new LinkedList<>();
-			// - Fill collection
-			for (String key: map.keySet()) {mapElements.add(new SQLTableRow(key, map.get(key)));}
-		
-			// Add elements to map
-			addToMapMultiple(sqlDrv, sqlTableID, mapElements);
-
-			// Commit and close transaction
-			sqlDrv.getConnection().commit();
-			sqlDrv.closeConnection();
-		} catch (SQLException e) {
-			// Output exception
-			e.printStackTrace();
-		} finally {
-			// Close connection
-			sqlDrv.closeConnection();			
-		}
+		// Remove old elements
+		removeAllKeys(getDriver(), (Set<String>) map.keySet());
+	
+		// Create map elements
+		Collection<SQLTableRow> mapElements = new LinkedList<>();
+		// - Fill collection
+		for (String key: map.keySet()) {mapElements.add(new SQLTableRow(key, map.get(key)));}
+	
+		// Add elements to map
+		addToMapMultiple(getDriver(), getSqlTableID(), mapElements);
 	}
 
 	
@@ -360,8 +288,8 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	@Override
 	public void clear() {
 		// Build SQL update string
-		String updateString = "DELETE FROM elements."+sqlTableID;
-		DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, updateString);
+		String updateString = "DELETE FROM elements."+ getSqlTableID();
+		DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(getDriver(), updateString);
 		
 		// Empty parameter set
 		Map<String, Object> parameter = new HashMap<>();
@@ -378,7 +306,7 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	@Override @SuppressWarnings("unchecked")
 	public Set<String> keySet() {
 		// Get key set - keys are stored in "name" column in table
-		return (Set<String>) getSingleMapColumnRaw(sqlTableID, "name");
+		return (Set<String>) getSingleMapColumnRaw(getSqlTableID(), "name");
 	}
 
 	
@@ -389,7 +317,7 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	@Override @SuppressWarnings("unchecked")
 	public Collection<Object> values() {
 		// Get values
-		List<Map<String, Object>> sqlResult = (List<Map<String, Object>>) getMapColumnRaw(sqlTableID, "type", "value");
+		List<Map<String, Object>> sqlResult = (List<Map<String, Object>>) getMapColumnRaw(getSqlTableID(), "type", "value");
 		
 		// Build types
 		Collection<Object> result = new LinkedList<Object>();
@@ -410,7 +338,7 @@ public class SQLMap extends SQLProxy implements Map<String, Object> {
 	@Override @SuppressWarnings("unchecked")
 	public Set<Entry<String, Object>> entrySet() {
 		// Get values
-		List<Map<String, Object>> sqlResult = (List<Map<String, Object>>) getMapColumnRaw(sqlTableID, "name", "type", "value");
+		List<Map<String, Object>> sqlResult = (List<Map<String, Object>>) getMapColumnRaw(getSqlTableID(), "name", "type", "value");
 		
 		// Build result
 		Set<Entry<String, Object>> result = new HashSet<>();

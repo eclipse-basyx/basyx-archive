@@ -320,9 +320,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	private void addSubmodelReferences(SubModel submodel) {
-		IIdentifier identifier = submodel.getIdentification();
-		Reference ref = new Reference(identifier, KeyElements.SUBMODEL, true);
-		addSubmodelReference(ref);
+		addSubmodelReference(submodel.getReference());
 	}
 	
 	private KeyElements getKeyElement() {

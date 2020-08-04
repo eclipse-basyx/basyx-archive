@@ -43,6 +43,21 @@ namespace BaSyx.Models.Export
         [JsonProperty("modelType")]
         [XmlIgnore]
         public ModelType ModelType => ModelType.ConceptDescription;
+
+        public bool ShouldSerializeEmbeddedDataSpecifications()
+        {
+            if (EmbeddedDataSpecifications == null || EmbeddedDataSpecifications.Count == 0)
+                return false;
+            else
+                return true;
+        }
+        public bool ShouldSerializeIsCaseOf()
+        {
+            if (IsCaseOf == null || IsCaseOf.Count == 0)
+                return false;
+            else
+                return true;
+        }
     }
 
     public class EmbeddedDataSpecification_V1_0

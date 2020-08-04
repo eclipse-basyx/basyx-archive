@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
-import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLQuery;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLUpdate;
 
@@ -32,18 +31,14 @@ public abstract class SQLProxy extends SQLConnector {
 
 	/**
 	 * Constructor
-	 * 
-	 * @param user        SQL user name
-	 * @param pass        SQL password
-	 * @param url         SQL server URL
-	 * @param driver      SQL driver
-	 * @param prefix      JDBC SQL driver prefix
+	 *
+	 * @param driver       SQL Driver to connect with the database
 	 * @param tableID     ID of table for this map in database
 	 * @param rootTableID ID of root table in database
 	 */
-	public SQLProxy(String user, String pass, String url, String driver, String prefix, String tableID, SQLRootElement rootElement) {
+	public SQLProxy(ISQLDriver driver, String tableID, SQLRootElement rootElement) {
 		// Invoke base constructor
-		super(user, pass, url, driver, prefix, tableID);
+		super(driver, tableID);
 		
 		// Store SQL root element
 		sqlRootElement = rootElement;
@@ -84,7 +79,7 @@ public abstract class SQLProxy extends SQLConnector {
 	 */
 	protected void addToMapSimple(String mapName, SQLTableRow sqlMapElement) {
 		// Execute addToMapSimple operation
-		addToMapSimple(new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver), mapName, sqlMapElement);
+		addToMapSimple(getDriver(), mapName, sqlMapElement);
 	}
 
 	
@@ -120,7 +115,7 @@ public abstract class SQLProxy extends SQLConnector {
 	 */
 	protected void addToCollectionSimple(String collectionName, SQLTableRow sqlCollectionElement) {
 		// Add element to collection 
-		addToCollectionSimple(new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver), collectionName, sqlCollectionElement);
+		addToCollectionSimple(getDriver(), collectionName, sqlCollectionElement);
 	}
 
 	
@@ -154,7 +149,7 @@ public abstract class SQLProxy extends SQLConnector {
 	 */
 	protected void addToMapMultiple(String mapName, Collection<SQLTableRow> values) {
 		// Execute operation
-		addToMapMultiple(new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver), mapName, values);		
+		addToMapMultiple(getDriver(), mapName, values);		
 	}
 
 	
@@ -205,7 +200,7 @@ public abstract class SQLProxy extends SQLConnector {
 	 * @param sqlMapElement Map element
 	 */
 	protected void updateInMapSimple(String mapName, SQLTableRow sqlMapElement) {
-		updateInMapSimple(new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver), mapName, sqlMapElement);
+		updateInMapSimple(getDriver(), mapName, sqlMapElement);
 	}
 	
 	
@@ -219,7 +214,7 @@ public abstract class SQLProxy extends SQLConnector {
 	protected void updateInMapSimple(ISQLDriver drv, String mapName, SQLTableRow sqlMapElement) {
 		// SQL update statement
 		String updateString = "UPDATE elements."+mapName+" SET value='$value', type='$type' WHERE name='$name'";
-		DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, updateString);
+		DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(getDriver(), updateString);
 		
 		// Parameter for insert statement
 		Map<String, Object> parameter = new HashMap<>();
@@ -236,7 +231,7 @@ public abstract class SQLProxy extends SQLConnector {
 	 * Remove elements with keys from map
 	 */
 	protected void removeAllKeys(Set<String> keys) {
-		removeAllKeys(new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver), keys);
+		removeAllKeys(getDriver(), keys);
 	}
 	
 	
@@ -254,7 +249,7 @@ public abstract class SQLProxy extends SQLConnector {
 		}
 		
 		// Delete elements from SQL data base
-		String updateString = "DELETE FROM elements."+sqlTableID+" WHERE name IN ("+idList.toString()+")";
+		String updateString = "DELETE FROM elements." + getSqlTableID() + " WHERE name IN ("+idList.toString()+")";
 		DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(drv, updateString);
 		
 		// Empty parameter map
@@ -272,7 +267,7 @@ public abstract class SQLProxy extends SQLConnector {
 	 * @param sqlMapElement Map element
 	 */
 	protected Object getValueFromMap(String mapName, String key) {
-		return getValueFromMap(new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver), mapName, key);
+		return getValueFromMap(getDriver(), mapName, key);
 	}
 	
 	
@@ -314,7 +309,7 @@ public abstract class SQLProxy extends SQLConnector {
 	 * @param sqlMapElement Map element
 	 */
 	protected Object getMapRowRaw(String mapName, String key) {
-		return getMapRowRaw(new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver), mapName, key);
+		return getMapRowRaw(getDriver(), mapName, key);
 	}
 	
 	
@@ -348,7 +343,7 @@ public abstract class SQLProxy extends SQLConnector {
 	 * @param columnName Table column name
 	 */
 	protected Object getSingleMapColumnRaw(String mapName, String columnName) {
-		return getSingleMapColumnRaw(new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver), mapName, columnName);
+		return getSingleMapColumnRaw(getDriver(), mapName, columnName);
 	}
 	
 	
@@ -379,7 +374,7 @@ public abstract class SQLProxy extends SQLConnector {
 	 * @param columnName Table column name
 	 */
 	protected Object getMapColumnRaw(String mapName, String... columnNames) {
-		return getMapColumnRaw(new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver), mapName, columnNames);
+		return getMapColumnRaw(getDriver(), mapName, columnNames);
 	}
 	
 	

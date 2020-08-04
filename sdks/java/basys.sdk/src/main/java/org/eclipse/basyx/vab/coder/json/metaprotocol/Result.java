@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.protocol.http.server.ExceptionToHTTPCodeMapper;
+
 /**
  * Wrapper class that handles meta-data
  * 
@@ -70,13 +73,24 @@ public class Result extends HashMap<String, Object> {
 	private static List<Message> getMessageListFromException(Exception e) {
 
 		List<Message> messageList = new LinkedList<Message>();
+		
+
+		// Translate the exception to code
+		if (e instanceof ProviderException) {
+			String code = new Integer(ExceptionToHTTPCodeMapper.mapFromException((ProviderException) e)).toString();
+			Message message = new Message(MessageType.Exception, code,
+					e.getClass().getSimpleName() + ": " + e.getMessage());
+
+			// replace with desired debugging output
+			messageList.add(message);
+		}
+
+
 
 		if (e.getCause() != null) {
 			messageList.addAll(getMessageListFromException((Exception) e.getCause()));
 		}
 
-		// replace with desired debugging output
-		messageList.add(new Message(MessageType.Exception, e.getClass().getSimpleName() + ": " + e.getMessage()));
 		
 		return messageList;
 	}

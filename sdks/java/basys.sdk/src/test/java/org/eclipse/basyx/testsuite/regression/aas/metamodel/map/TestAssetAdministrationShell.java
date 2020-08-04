@@ -17,6 +17,7 @@ import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.security.Security;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -134,8 +135,15 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 
 		// expect references to be set according to the descriptors
 		Collection<IReference> smReferences = shell.getSubmodelReferences();
-		Reference expected1 = new Reference(new Key(KeyElements.SUBMODEL, true, "smId1", IdentifierType.CUSTOM));
-		Reference expected2 = new Reference(new Key(KeyElements.SUBMODEL, true, "smId2", IdentifierType.CUSTOM));
+		List<IKey> expected1Keys = new ArrayList<>();
+		expected1Keys.add(new Key(KeyElements.ASSETADMINISTRATIONSHELL, true, AASID.getId(), AASID.getIdType()));
+		expected1Keys.add(new Key(KeyElements.SUBMODEL, true, "smId1", IdentifierType.CUSTOM));
+		Reference expected1 = new Reference(expected1Keys);
+
+		List<IKey> expected2Keys = new ArrayList<>();
+		expected2Keys.add(new Key(KeyElements.ASSETADMINISTRATIONSHELL, true, AASID.getId(), AASID.getIdType()));
+		expected2Keys.add(new Key(KeyElements.SUBMODEL, true, "smId1", IdentifierType.CUSTOM));
+		Reference expected2 = new Reference(expected2Keys);
 		assertTrue(smReferences.contains(expected1));
 		assertTrue(smReferences.contains(expected2));
 		assertEquals(2, smReferences.size());

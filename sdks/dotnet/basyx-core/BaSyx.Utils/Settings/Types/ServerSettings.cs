@@ -9,8 +9,24 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 
+using System.Collections.Generic;
+using System.Xml.Serialization;
+
 namespace BaSyx.Utils.Settings.Types
 {
     public class ServerSettings : Settings<ServerSettings>
-    { }
+    {
+        public ControllerConfiguration ControllerConfig { get; set; } = new ControllerConfiguration();
+
+        public class ControllerConfiguration
+        {
+            [XmlArrayItem("Controller")]
+            public List<string> Controllers { get; set; }
+
+            public ControllerConfiguration()
+            {
+                Controllers = new List<string>();
+            }
+        }
+    }
 }

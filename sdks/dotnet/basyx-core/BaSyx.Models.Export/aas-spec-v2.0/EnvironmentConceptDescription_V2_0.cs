@@ -43,17 +43,33 @@ namespace BaSyx.Models.Export
         [JsonProperty("modelType")]
         [XmlIgnore]
         public ModelType ModelType => ModelType.ConceptDescription;
+
+        public bool ShouldSerializeEmbeddedDataSpecifications()
+        {
+            if (EmbeddedDataSpecifications == null || EmbeddedDataSpecifications.Count == 0)
+                return false;
+            else
+                return true;
+        }
+
+        public bool ShouldSerializeIsCaseOf()
+        {
+            if (IsCaseOf == null || IsCaseOf.Count == 0)
+                return false;
+            else
+                return true;
+        }
     }
 
     public class EmbeddedDataSpecification_V2_0
     {
-        [JsonProperty("hasDataSpecification")]
-        [XmlElement("hasDataSpecification")]
-        public EnvironmentReference_V2_0 HasDataSpecification { get; set; }
-
         [JsonProperty("dataSpecificationContent")]
         [XmlElement("dataSpecificationContent")]
         public DataSpecificationContent_V2_0 DataSpecificationContent { get; set; }
+
+        [JsonProperty("dataSpecification")]
+        [XmlElement("dataSpecification")]
+        public EnvironmentReference_V2_0 DataSpecification { get; set; }
     }
 
     public class DataSpecificationContent_V2_0

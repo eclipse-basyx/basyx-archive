@@ -70,9 +70,9 @@ namespace BaSyx.Registry.ReferenceImpl.FileBased
             if (aasDescriptor == null)
                 return new Result<IAssetAdministrationShellDescriptor>(new ArgumentNullException(nameof(aasDescriptor)));
             if (aasDescriptor.Identification?.Id == null)
-                return new Result<IAssetAdministrationShellDescriptor>(new ArgumentNullException("aas.Identification"));
+                return new Result<IAssetAdministrationShellDescriptor>(new ArgumentNullException(nameof(aasDescriptor.Identification)));
             if (string.IsNullOrEmpty(aasDescriptor.IdShort))
-                return new Result<IAssetAdministrationShellDescriptor>(new ArgumentNullException("aas.IdShort"));
+                return new Result<IAssetAdministrationShellDescriptor>(new ArgumentNullException(nameof(aasDescriptor.IdShort)));
 
             try
             {

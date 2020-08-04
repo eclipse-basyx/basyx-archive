@@ -22,6 +22,8 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
+import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,12 +63,11 @@ public class BaseConfiguredProvider extends SubModelProvider {
 		// Create sub model
 		submodelData = createSubModel(cfgValues);
 
-		// Load predefined elements from sub model
-		try {
-			setModelPropertyValue("", submodelData);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		setSubmodel(submodelData);
+	}
+
+	protected void setSubmodel(SubModel sm) {
+		setAPI(new VABSubmodelAPI(new VABMapProvider(sm)));
 	}
 
 	/**
@@ -95,7 +96,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 	 */
 	protected Collection<String> getConfiguredProperties(Map<Object, Object> cfgValues) {
 		// Split property string
-		return splitString((String) cfgValues.get(SubmodelElementProvider.DATAELEMENTS));
+		return splitString((String) cfgValues.get(SubmodelElementProvider.PROPERTIES));
 	}
 
 	/**

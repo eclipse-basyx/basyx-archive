@@ -60,5 +60,12 @@ namespace BaSyx.Models.Export
             this.SemanticId = submodelElementType.SemanticId;
         }
 
+        public bool ShouldSerializeQualifier()
+        {
+            if (Qualifier == null || Qualifier.Count == 0)
+                return false;
+            else
+                return true;
+        }
     }
 }

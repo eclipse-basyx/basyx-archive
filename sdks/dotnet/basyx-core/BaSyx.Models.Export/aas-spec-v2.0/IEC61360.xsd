@@ -105,7 +105,11 @@
 			<element name="keys" type="IEC61360:keys_t"/>
 		</sequence>
 	</complexType>
-	<complexType name="valueDataType_t"/>
+	<complexType name="valueDataType_t">
+		<simpleContent>
+			<extension base="anySimpleType"></extension>
+		</simpleContent>
+	</complexType>
 	<complexType name="valueList_t">
 		<sequence>
 			<element maxOccurs="unbounded" minOccurs="1" name="valueReferencePair" type="IEC61360:valueReferencePair_t"/>
@@ -120,18 +124,22 @@
 	<element name="key" type="IEC61360:key_t"/>
 	<simpleType name="dataTypeIEC61360_t">
 		<restriction base="string">
-			<enumeration value="BOOLEAN"/>
-			<enumeration value="DATE"/>
-			<enumeration value="RATIONAL"/>
-			<enumeration value="RATIONAL_MEASURE"/>
-			<enumeration value="REAL_COUNT"/>
-			<enumeration value="REAL_CURRENCY"/>
-			<enumeration value="REAL_MEASURE"/>
-			<enumeration value="STRING"/>
-			<enumeration value="STRING_TRANSLATABLE"/>
-			<enumeration value="TIME"/>
-			<enumeration value="TIME_STAMP"/>
-			<enumeration value="URL"/>
+			<enumeration value="" />
+			<enumeration value="BOOLEAN" />
+			<enumeration value="DATE" />
+			<enumeration value="RATIONAL" />
+			<enumeration value="RATIONAL_MEASURE" />
+			<enumeration value="REAL_COUNT" />
+			<enumeration value="REAL_CURRENCY" />
+			<enumeration value="REAL_MEASURE" />
+			<enumeration value="STRING" />
+			<enumeration value="STRING_TRANSLATABLE" />
+			<enumeration value="TIME" />
+			<enumeration value="TIMESTAMP" />
+			<enumeration value="URL" />
+			<enumeration value="INTEGER" />
+			<enumeration value="INTEGER_COUNT" />
+			<enumeration value="INTEGER_CURRENCY" />
 		</restriction>
 	</simpleType>
 	<simpleType name="levelType_t">

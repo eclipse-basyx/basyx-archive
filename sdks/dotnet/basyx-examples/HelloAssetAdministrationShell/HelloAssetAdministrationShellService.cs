@@ -85,7 +85,7 @@ namespace HelloAssetAdministrationShell
         {
             helloSubmodelServiceProvider.ThrowEvent(new PublishableEvent()
             {
-                EventReference = new Reference<IEvent>(AssetAdministrationShell.Submodels["HelloSubmodel"].SubmodelElements["HelloEvent"].ToModelElement<IEvent>()),
+                EventReference = new Reference<IEvent>(AssetAdministrationShell.Submodels["HelloSubmodel"].SubmodelElements["HelloEvent"].Cast<IEvent>()),
                 Originator = "HelloAssetAdministrationShell",
                 Timestamp = DateTime.Now.ToString(),
                 Message = "Pew Pew",
@@ -94,12 +94,12 @@ namespace HelloAssetAdministrationShell
 
         private void HelloPropertySetHandler(IProperty property, IValue value)
         {
-            AssetAdministrationShell.Submodels["HelloSubmodel"].SubmodelElements["HelloProperty"].ToModelElement<IProperty>().Value = value.Value;
+            AssetAdministrationShell.Submodels["HelloSubmodel"].SubmodelElements["HelloProperty"].Cast<IProperty>().Value = value.Value;
         }
 
         private IValue HelloPropertyGetHandler(IProperty property)
         {
-            var localProperty = AssetAdministrationShell.Submodels["HelloSubmodel"].SubmodelElements["HelloProperty"].ToModelElement<IProperty>();
+            var localProperty = AssetAdministrationShell.Submodels["HelloSubmodel"].SubmodelElements["HelloProperty"].Cast<IProperty>();
             return new ElementValue(localProperty.Value, localProperty.ValueType);
         }
 
@@ -111,7 +111,7 @@ namespace HelloAssetAdministrationShell
                     new Property<string>()
                     {
                         IdShort = "ReturnValue",
-                        Value = "Hello '" + inputArguments["Text"].ToModelElement<IProperty>().ToObject<string>() + "'"
+                        Value = "Hello '" + inputArguments["Text"].Cast<IProperty>().ToObject<string>() + "'"
                     });
                 return new OperationResult(true);
             }

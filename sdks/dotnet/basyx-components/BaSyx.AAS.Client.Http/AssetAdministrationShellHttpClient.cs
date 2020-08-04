@@ -20,11 +20,9 @@ using BaSyx.Utils.PathHandling;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Connectivity.Descriptors;
-using System.Threading.Tasks;
 using System.Linq;
 using BaSyx.Models.Connectivity;
 using NLog;
-using System.Threading;
 using BaSyx.Models.Communication;
 using BaSyx.Utils.DependencyInjection;
 
@@ -34,18 +32,21 @@ namespace BaSyx.AAS.Client.Http
     {
         private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
 
+        private const string SEPARATOR = "/";
         private const string AAS = "aas";
         private const string SUBMODELS = "submodels";
         private const string SUBMODEL = "submodel";
+        private const string SUBMODEL_ELEMENTS = "submodelElements";
         private const string PROPERTIES = "properties";
         private const string OPERATIONS = "operations";
         private const string EVENTS = "events";
         private const string VALUE = "value";
+        private const string ASYNC = "async";
+        private const string INVOCATION_LIST = "invocationList";
 
         private const string BINDING = "binding";
         private const string BINDINGS = "bindings";
 
-        private const string SEPERATOR = "/";
         private const int REQUEST_TIMEOUT = 30000;
 
         public Uri Endpoint { get; }
@@ -68,9 +69,13 @@ namespace BaSyx.AAS.Client.Http
             if (httpEndpoint == null || string.IsNullOrEmpty(httpEndpoint.Address))
                 throw new Exception("There is no http endpoint for instantiating a client");
             else
-                Endpoint = new Uri(httpEndpoint.Address);
+            {
+                if (!httpEndpoint.Address.EndsWith(SEPARATOR + AAS) || !httpEndpoint.Address.EndsWith(SEPARATOR + AAS + SEPARATOR))
+                    Endpoint = new Uri(httpEndpoint.Address + SEPARATOR + AAS);
+                else
+                    Endpoint = new Uri(httpEndpoint.Address);
+            }
         }
-
 
 
         public Uri GetUri(params string[] pathElements)
@@ -96,7 +101,7 @@ namespace BaSyx.AAS.Client.Http
 
         public IResult<ISubmodel> CreateSubmodel(ISubmodel submodel)
         {
-            var request = base.CreateJsonContentRequest(GetUri(SUBMODELS), HttpMethod.Post, submodel);
+            var request = base.CreateJsonContentRequest(GetUri(SUBMODELS), HttpMethod.Put, submodel);
             var response = base.SendRequest(request, REQUEST_TIMEOUT);
             return base.EvaluateResponse<ISubmodel>(response, response.Entity);
         }
@@ -124,9 +129,16 @@ namespace BaSyx.AAS.Client.Http
 
         public IResult<IOperation> CreateOperation(string submodelId, IOperation operation)
         {
-            var request = base.CreateJsonContentRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, OPERATIONS), HttpMethod.Post, operation);
+            var request = base.CreateJsonContentRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, OPERATIONS), HttpMethod.Put, operation);
             var response = base.SendRequest(request, REQUEST_TIMEOUT);
             return base.EvaluateResponse<IOperation>(response, response.Entity);
+        }
+
+        public IResult<IElementContainer<ISubmodelElement>> RetrieveSubmodelElements(string submodelId)
+        {
+            var request = base.CreateRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, SUBMODEL_ELEMENTS), HttpMethod.Get);
+            var response = base.SendRequest(request, REQUEST_TIMEOUT);
+            return base.EvaluateResponse<ElementContainer<ISubmodelElement>>(response, response.Entity);
         }
 
         public IResult<IElementContainer<IOperation>> RetrieveOperations(string submodelId)
@@ -159,9 +171,16 @@ namespace BaSyx.AAS.Client.Http
 
         public IResult<IProperty> CreateProperty(string submodelId, IProperty property)
         {
-            var request = base.CreateJsonContentRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, PROPERTIES), HttpMethod.Post, property);
+            var request = base.CreateJsonContentRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, PROPERTIES), HttpMethod.Put, property);
             var response = base.SendRequest(request, REQUEST_TIMEOUT);
             return base.EvaluateResponse<IProperty>(response, response.Entity);
+        }
+
+        public IResult<ISubmodelElement> CreateSubmodelElement(string submodelId, ISubmodelElement submodelElement)
+        {
+            var request = base.CreateJsonContentRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, SUBMODEL_ELEMENTS), HttpMethod.Put, submodelElement);
+            var response = base.SendRequest(request, REQUEST_TIMEOUT);
+            return base.EvaluateResponse<ISubmodelElement>(response, response.Entity);
         }
 
         public IResult<IElementContainer<IProperty>> RetrieveProperties(string submodelId)
@@ -178,6 +197,13 @@ namespace BaSyx.AAS.Client.Http
             return base.EvaluateResponse<IProperty>(response, response.Entity);
         }
 
+        public IResult<ISubmodelElement> RetrieveSubmodelElement(string submodelId, string submodelElementId)
+        {
+            var request = base.CreateRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, SUBMODEL_ELEMENTS, submodelElementId), HttpMethod.Get);
+            var response = base.SendRequest(request, REQUEST_TIMEOUT);
+            return base.EvaluateResponse<ISubmodelElement>(response, response.Entity);
+        }
+
         public IResult UpdatePropertyValue(string submodelId, string propertyId, IValue value)
         {
             var request = base.CreateJsonContentRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, PROPERTIES, propertyId, VALUE), HttpMethod.Put, value);
@@ -192,6 +218,13 @@ namespace BaSyx.AAS.Client.Http
             return base.EvaluateResponse<IValue>(response, response.Entity);
         }
 
+        public IResult DeleteSubmodelElement(string submodelId, string submodelElementId)
+        {
+            var request = base.CreateRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, SUBMODEL_ELEMENTS, submodelElementId), HttpMethod.Delete);
+            var response = base.SendRequest(request, REQUEST_TIMEOUT);
+            return base.EvaluateResponse(response, response.Entity);
+        }
+
         public IResult DeleteProperty(string submodelId, string propertyId)
         {
             var request = base.CreateRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, PROPERTIES, propertyId), HttpMethod.Delete);
@@ -201,7 +234,7 @@ namespace BaSyx.AAS.Client.Http
 
         public IResult<IEvent> CreateEvent(string submodelId, IEvent eventable)
         {
-            var request = base.CreateJsonContentRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, EVENTS), HttpMethod.Post, eventable);
+            var request = base.CreateJsonContentRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, EVENTS), HttpMethod.Put, eventable);
             var response = base.SendRequest(request, REQUEST_TIMEOUT);
             return base.EvaluateResponse<IEvent>(response, response.Entity);
         }
@@ -256,14 +289,14 @@ namespace BaSyx.AAS.Client.Http
         }
         public IResult<CallbackResponse> InvokeOperationAsync(string submodelId, string operationId, InvocationRequest invocationRequest)
         {
-            var request = base.CreateJsonContentRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, OPERATIONS, operationId, "async"), HttpMethod.Post, invocationRequest);
+            var request = base.CreateJsonContentRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, OPERATIONS, operationId, ASYNC), HttpMethod.Post, invocationRequest);
             var response = base.SendRequest(request, REQUEST_TIMEOUT);
             return base.EvaluateResponse<CallbackResponse>(response, response.Entity);
         }
 
         public IResult<InvocationResponse> GetInvocationResult(string submodelId, string operationId, string requestId)
         {
-            var request = base.CreateRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, OPERATIONS, operationId, "invocationList", requestId), HttpMethod.Get);
+            var request = base.CreateRequest(GetUri(SUBMODELS, submodelId, SUBMODEL, OPERATIONS, operationId, INVOCATION_LIST, requestId), HttpMethod.Get);
             var response = base.SendRequest(request, REQUEST_TIMEOUT);
             return base.EvaluateResponse<InvocationResponse>(response, response.Entity);
         }

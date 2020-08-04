@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.DataElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -23,7 +24,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 public class SubmodelElementProvider extends MetaModelProvider {
 	// Constants for API-Access
 	public static final String ELEMENTS = "submodelElements";
-	public static final String DATAELEMENTS = "dataElements";
+	public static final String PROPERTIES = "properties";
 	public static final String OPERATIONS = "operations";
 
 	// The VAB model provider containing the submodelElements this SubmodelElementProvider is based on
@@ -46,7 +47,7 @@ public class SubmodelElementProvider extends MetaModelProvider {
 	 */
 	public static IModelProvider getElementProvider(Map<String, Object> element, IModelProvider genericProxy) {
 		if (DataElement.isDataElement(element)) {
-			return new DataElementProvider(genericProxy);
+			return new PropertyProvider(genericProxy);
 		} else if (Operation.isOperation(element)) {
 			return new OperationProvider(genericProxy);
 		} else if (SubmodelElementCollection.isSubmodelElementCollection(element)) {
@@ -66,10 +67,10 @@ public class SubmodelElementProvider extends MetaModelProvider {
 		return all.values().stream().collect(Collectors.toList());
 	}
 	
-	private Collection<Map<String, Object>> getDataElementList() {
+	private Collection<Map<String, Object>> getPropertyList() {
 		Collection<Map<String, Object>> all = getElementsList();
-		// DataElements detection => has ("value" but not "ordered") or ("min" and "max")
-		return all.stream().filter(DataElement::isDataElement).collect(Collectors.toList());
+		// Property detection => has ("value" but not "ordered") or ("min" and "max")
+		return all.stream().filter(Property::isProperty).collect(Collectors.toList());
 	}
 
 	private Collection<Map<String, Object>> getOperationList() {
@@ -78,11 +79,11 @@ public class SubmodelElementProvider extends MetaModelProvider {
 	}
 
 	/**
-	 * Handles first-level access on submodel elements (e.g. /dataElements/)
+	 * Handles first-level access on submodel elements (e.g. /properties/)
 	 */
 	private Object handleQualifierGet(String qualifier, String path) {
-		if (qualifier.equals(DATAELEMENTS)) {
-			return getDataElementList();
+		if (qualifier.equals(PROPERTIES)) {
+			return getPropertyList();
 		} else if (qualifier.equals(OPERATIONS)) {
 			return getOperationList();
 		} else if (qualifier.equals(ELEMENTS)) {
@@ -119,8 +120,8 @@ public class SubmodelElementProvider extends MetaModelProvider {
 		switch (qualifier) {
 			case (ELEMENTS):
 				return getElementProvider(element, elementProxy).getModelPropertyValue(subPath);
-			case (DATAELEMENTS):
-				return new DataElementProvider(elementProxy).getModelPropertyValue(subPath);
+			case (PROPERTIES):
+				return new PropertyProvider(elementProxy).getModelPropertyValue(subPath);
 			case (OPERATIONS):
 				return new OperationProvider(elementProxy).getModelPropertyValue(subPath);
 			default:
@@ -144,7 +145,7 @@ public class SubmodelElementProvider extends MetaModelProvider {
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		String[] pathElements = VABPathTools.splitPath(path);
 		String qualifier = pathElements[0];
-		if (pathElements.length < 2 || (!qualifier.equals(DATAELEMENTS) && !qualifier.equals(ELEMENTS))) {
+		if (pathElements.length < 2 || (!qualifier.equals(PROPERTIES) && !qualifier.equals(ELEMENTS))) {
 			// only possible to set values in a data elements, currently
 			throw new MalformedRequestException("Invalid access");
 		}
@@ -154,9 +155,9 @@ public class SubmodelElementProvider extends MetaModelProvider {
 		newValue = unwrapParameter(newValue);
 		if (Operation.isOperation(element)) {
 			throw new MalformedRequestException("Invalid access");
-		} else if (DataElement.isDataElement(element)) {
+		} else if (Property.isProperty(element)) {
 			String subPath = VABPathTools.buildPath(pathElements, 2);
-			new DataElementProvider(elementProxy).setModelPropertyValue(subPath, newValue);
+			new PropertyProvider(elementProxy).setModelPropertyValue(subPath, newValue);
 		} else {
 			// API for other elements not specified, yet => let modelprovider resolve request
 			String subPath = VABPathTools.buildPath(pathElements, 2);
@@ -166,7 +167,7 @@ public class SubmodelElementProvider extends MetaModelProvider {
 
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
-		if (path.equals(DATAELEMENTS) || path.equals(OPERATIONS) || path.equals(ELEMENTS)) {
+		if (path.equals(PROPERTIES) || path.equals(OPERATIONS) || path.equals(ELEMENTS)) {
 			createSubmodelElement(newEntity);
 		} else {
 			String[] pathElements = VABPathTools.splitPath(path);
@@ -187,7 +188,7 @@ public class SubmodelElementProvider extends MetaModelProvider {
 
 		String qualifier = pathElements[0];
 		String idShort = pathElements[1];
-		if (qualifier.equals(DATAELEMENTS) || qualifier.equals(OPERATIONS) || qualifier.equals(ELEMENTS)) {
+		if (qualifier.equals(PROPERTIES) || qualifier.equals(OPERATIONS) || qualifier.equals(ELEMENTS)) {
 			// Delete a specific submodel element
 			modelProvider.deleteValue(idShort);
 		} else {
@@ -199,7 +200,7 @@ public class SubmodelElementProvider extends MetaModelProvider {
 	public void deleteValue(String path, Object obj) {
 		String[] pathElements = VABPathTools.splitPath(path);
 		String qualifier = pathElements[0];
-		if (!qualifier.equals(ELEMENTS) && !qualifier.equals(DATAELEMENTS)) {
+		if (!qualifier.equals(ELEMENTS) && !qualifier.equals(PROPERTIES)) {
 			// only possible to delete values from data elements (or in collections)
 			throw new MalformedRequestException("Invalid access");
 		}

@@ -1,12 +1,11 @@
 package org.eclipse.basyx.examples.snippets.vab;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.basyx.components.servlet.vab.VABLambdaServlet;
-import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
+import org.eclipse.basyx.examples.TestContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceJSONClient;
@@ -14,7 +13,6 @@ import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.ClassRule;
-import org.junit.Test;
 
 /**
  * Code snippet that illustrates the use of VABvia HTTP REST calls
@@ -55,7 +53,7 @@ public class ManualHTTPCalls {
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// Simulated servlets
 				// - BaSys topology with one AAS Server and one SQL directory
-				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory().
+				TestContext.sqlContext.
 					// Deploy example specific servlets to Tomcat server in this context
 					addServletMapping("/Testsuite/components/BaSys/1.0/devicestatusVAB/*", new VABLambdaServlet())
 			);
@@ -67,7 +65,6 @@ public class ManualHTTPCalls {
 	 * Run code snippet. This code snippet illustrates the use of HTTP operations to 
 	 * access Virtual Automation Bus objects
 	 */
-	@Test @SuppressWarnings("unchecked")
 	public void snippet() throws Exception {
 
 		// Server connections
@@ -75,15 +72,16 @@ public class ManualHTTPCalls {
 		//   its directory
 		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
 
-		
+		int prop1Val = 7;
+		String prop2Val = "myStr";
 		// Create properties in VAB object using connection
 		// - This code creates a simple container "properties" and two contained
 		//   properties "prop1" and "prop2". Container and properties lack the 
 		//   required properties for AAS and AAS sub models. They are therefore
 		//   not compliant to Asset Administration Shells.
 		connSubModel1.createValue("properties", new HashMap<String, Object>());
-		connSubModel1.createValue("properties/prop1", 7);
-		connSubModel1.createValue("properties/prop2", "myStr");
+		connSubModel1.createValue("properties/prop1", prop1Val);
+		connSubModel1.createValue("properties/prop2", prop2Val);
 		
 		
 		// Web service client 
@@ -92,15 +90,11 @@ public class ManualHTTPCalls {
 		WebServiceJSONClient jsonClient = new WebServiceJSONClient();
 		
 		
-		// Read property values via WebServiceJSONClient class. 
-		// - Returned property contains meta data. The actual value is stored in property "entity"
-		int    prop1Val = (int) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/properties/prop1")).get("entity");
-		String prop2Val = (String) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/properties/prop2")).get("entity");
-		
-		
-		// Compare read values to expected values
-		assertTrue(prop1Val == 7);
-		assertTrue(prop2Val.equals("myStr"));
+		// Read property values
+		// - Use WebServiceJSONClient class.
+		assertEquals(prop1Val, jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/properties/prop1"));
+		assertEquals(prop2Val, jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/properties/prop2"));
+
 	}
 }
 

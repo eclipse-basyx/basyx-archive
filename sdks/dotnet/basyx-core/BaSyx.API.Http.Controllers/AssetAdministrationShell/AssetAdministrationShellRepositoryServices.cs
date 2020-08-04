@@ -46,57 +46,48 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="404">No Asset Administration Shells found</response>            
         /// <response code="400">Bad Request</response>    
         /// <response code="502">Bad Gateway</response>
-        [HttpGet("shells", Name = "RetrieveAllAssetAdministrationShells")]
-        [ProducesResponseType(typeof(IResult<List<IAssetAdministrationShell>>), 200)]
-        public IActionResult RetrieveAllAssetAdministrationShells()
+        [HttpGet("shells", Name = "GetAllAssetAdministrationShells")]
+        [ProducesResponseType(typeof(List<BaSyx.Models.Core.AssetAdministrationShell.Implementations.AssetAdministrationShell>), 200)]
+        public IActionResult GetAllAssetAdministrationShells()
         {
             var result = RetrieveAssetAdministrationShells();
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
-        /// Retrieves a specific Asset Administration Shell from the repository service endpint
+        /// Retrieves a specific Asset Administration Shell from the repository service endpoint
         /// </summary>
-        /// <param name="aasId">The Asset Administration Shell's short id</param>
+        /// <param name="aasId">The Asset Administration Shell's unique id</param>
         /// <returns></returns>
         /// <response code="200">Returns the requested Asset Administration Shell</response>
         /// <response code="404">No Asset Administration Shell found</response>     
         /// <response code="400">Bad Request</response>         
         /// <response code="502">Bad Gateway</response>
-        [HttpGet("shells/{aasId}", Name = "RetrieveAssetAdministrationShellByIdShort")]
-        [ProducesResponseType(typeof(IResult<IAssetAdministrationShell>), 200)]
-        public IActionResult RetrieveAssetAdministrationShellByIdShort(string aasId)
+        [HttpGet("shells/{aasId}", Name = "GetAssetAdministrationShellById")]
+        [ProducesResponseType(typeof(BaSyx.Models.Core.AssetAdministrationShell.Implementations.AssetAdministrationShell), 200)]
+        public IActionResult GetAssetAdministrationShellById(string aasId)
         {
+            if (string.IsNullOrEmpty(aasId))
+                return ResultHandling.NullResult(nameof(aasId));
+
             var result = RetrieveAssetAdministrationShell(aasId);
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
+
         /// <summary>
-        /// Updates a specific Asset Administration Shell at the repository service endpint
-        /// </summary>
-        /// <param name="aasId">The Asset Administration Shell's unique id</param>
-        /// <param name="aas">The updated Asset Administration Shell</param>
-        /// <returns></returns>
-        /// <response code="200">Asset Administration Shell updated successfully</response>
-        /// <response code="400">Bad Request</response>           
-        /// <response code="502">Bad Gateway</response>   
-        [HttpPut("shells/{aasId}", Name = "UpdateAssetAdministrationShellByIdShort")]
-        [ProducesResponseType(typeof(IResult), 200)]
-        public IActionResult UpdateAssetAdministrationShellByIdShort(string aasId, [FromBody] IAssetAdministrationShell aas)
-        {
-            var result = UpdateAssetAdministrationShell(aasId, aas);
-            return result.CreateActionResult(CrudOperation.Update);
-        }
-        /// <summary>
-        /// Creates a new Asset Administration Shell at the repository service endpoint
+        /// Creates or updates a Asset Administration Shell at the repository service endpoint
         /// </summary>
         /// <param name="aas">The serialized Asset Administration Shell object</param>
         /// <returns></returns>
         /// <response code="201">Asset Administration Shell created successfully</response>
         /// <response code="400">Bad Request</response>             
         /// <response code="502">Bad Gateway</response> 
-        [HttpPost("shells", Name = "CreateNewAssetAdministrationShell")]
-        [ProducesResponseType(typeof(IResult<IAssetAdministrationShell>), 201)]
-        public IActionResult CreateNewAssetAdministrationShell([FromBody] IAssetAdministrationShell aas)
+        [HttpPost("shells", Name = "PutAssetAdministrationShell")]
+        [ProducesResponseType(typeof(BaSyx.Models.Core.AssetAdministrationShell.Implementations.AssetAdministrationShell), 201)]
+        public IActionResult PutAssetAdministrationShell([FromBody] IAssetAdministrationShell aas)
         {
+            if (aas == null)
+                return ResultHandling.NullResult(nameof(aas));
+
             var result = CreateAssetAdministrationShell(aas);
             return result.CreateActionResult(CrudOperation.Create);
         }
@@ -108,10 +99,13 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="200">Asset Administration Shell deleted successfully</response>
         /// <response code="400">Bad Request</response>      
         /// <response code="502">Bad Gateway</response>
-        [HttpDelete("shells/{aasId}", Name = "DeleteAssetAdministrationShellByIdShort")]
-        [ProducesResponseType(typeof(IResult), 200)]
-        public IActionResult DeleteAssetAdministrationShellByIdShort(string aasId)
+        [HttpDelete("shells/{aasId}", Name = "DeleteAssetAdministrationShellById")]
+        [ProducesResponseType(typeof(Result), 200)]
+        public IActionResult DeleteAssetAdministrationShellById(string aasId)
         {
+            if (string.IsNullOrEmpty(aasId))
+                return ResultHandling.NullResult(nameof(aasId));
+
             var result = DeleteAssetAdministrationShell(aasId);
             return result.CreateActionResult(CrudOperation.Delete);
         }

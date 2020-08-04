@@ -54,7 +54,7 @@ public class RunExampleSimpleControllableTCPDevice extends BaSyxExampleScenario 
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// BaSyx infrastructure
 				// - BaSys topology with one AAS Server and one SQL directory
-				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory(),
+			new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory(),
 				
 				// Simulated runnables
 				// - Manufacturing device manager, e.g. deployed to additonal device

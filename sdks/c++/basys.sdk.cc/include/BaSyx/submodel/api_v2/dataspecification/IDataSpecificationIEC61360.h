@@ -14,7 +14,8 @@ namespace submodel {
 
 namespace api {
 
-class IDataSpecificationIEC61360 : public IDataSpecificationContent
+class IDataSpecificationIEC61360
+    : public IDataSpecificationContent
 {
 public:
 	virtual ~IDataSpecificationIEC61360() = 0;

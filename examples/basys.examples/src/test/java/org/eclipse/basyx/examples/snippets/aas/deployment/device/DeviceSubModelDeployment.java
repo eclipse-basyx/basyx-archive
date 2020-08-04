@@ -77,10 +77,10 @@ public class DeviceSubModelDeployment {
 		
 		// Retrieve sub model values and compare to expected values
 		String submodelId = subModel.getIdShort();
-		String prop1Id    = subModel.getDataElements().get("prop1").getIdShort();
-		int prop1Val = (int) ((IProperty) subModel.getDataElements().get("prop1")).get();
-		String prop2Id    = subModel.getDataElements().get("prop2").getIdShort();
-		String prop2Val = (String) ((IProperty) subModel.getDataElements().get("prop2")).get();
+		String prop1Id    = subModel.getProperties().get("prop1").getIdShort();
+		int prop1Val = (int) ((IProperty) subModel.getProperties().get("prop1")).get();
+		String prop2Id    = subModel.getProperties().get("prop2").getIdShort();
+		String prop2Val = (String) ((IProperty) subModel.getProperties().get("prop2")).get();
 
 		
 		// Compare received property values to expected values

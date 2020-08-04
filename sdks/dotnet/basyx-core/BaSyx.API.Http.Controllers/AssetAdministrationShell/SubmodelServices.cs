@@ -17,12 +17,12 @@ using System;
 using BaSyx.API.AssetAdministrationShell;
 using Newtonsoft.Json.Linq;
 using BaSyx.Models.Extensions;
+using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
 using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Communication;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 
 namespace BaSyx.API.Http.Controllers
 {
@@ -54,21 +54,25 @@ namespace BaSyx.API.Http.Controllers
 
         #region REST-Interface Submodel
 
+
         /// <summary>
         /// Retrieves a customizable table version of a Submodel
         /// </summary>
+        /// <param name="columns">A comma-separated list of field names to structure the payload beeing returned</param>
         /// <returns></returns>
         /// <response code="200">Success</response>
-        /// <response code="404">Submodel not found</response>       
+        /// <response code="404">Submodel not found</response>   
         [HttpGet("submodel/table", Name = "GetSubmodelAsTable")]
         [ProducesResponseType(typeof(Result), 404)]
         public IActionResult GetSubmodelAsTable([FromQuery] string columns)
         {
-            var result = RetrieveSubmodel();
+            if (string.IsNullOrEmpty(columns))
+                return ResultHandling.NullResult(nameof(columns));
 
+            var result = RetrieveSubmodel();
             if (result != null && result.Entity != null)
             {
-                string[] columnNames = columns.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] columnNames = columns.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 JToken customizedSubmodel = result.Entity.CustomizeSubmodel(columnNames);
                 return new JsonResult(customizedSubmodel);
             }
@@ -78,7 +82,7 @@ namespace BaSyx.API.Http.Controllers
 
 
         /// <summary>
-        /// Retrieves the minimized version of a Submodel
+        /// Retrieves the minimized version of a Submodel, i.e. only the values of SubmodelElements are serialized and returned
         /// </summary>
         /// <returns></returns>
         /// <response code="200">Success</response>
@@ -99,7 +103,7 @@ namespace BaSyx.API.Http.Controllers
         }
 
         /// <summary>
-        /// Retrieves the Submodel
+        /// Retrieves the entire Submodel
         /// </summary>
         /// <returns></returns>
         /// <response code="200">Success</response>
@@ -120,7 +124,7 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="200">Returns a list of found SubmodelElements</response>
         /// <response code="404">Submodel not found / No SubmodelElements found</response>       
         [HttpGet("submodel/submodelElements", Name = "GetSubmodelElements")]
-        [ProducesResponseType(typeof(Property[]), 200)]
+        [ProducesResponseType(typeof(SubmodelElement[]), 200)]
         [ProducesResponseType(typeof(Result), 404)]
         public IActionResult GetSubmodelElements()
         {
@@ -178,48 +182,59 @@ namespace BaSyx.API.Http.Controllers
         /// <summary>
         /// Adds a new Submodel Element to the Submodel
         /// </summary>
-        /// <param name="submodelElement">The Submodel Element's description object</param>
+        /// <param name="submodelElement">The serialized Submodel Element object</param>
         /// <returns></returns>
         /// <response code="201">Submodel Element created successfully</response>
         /// <response code="400">Bad Request</response>
         /// <response code="404">Submodel not found</response>
-        [HttpPost("submodel/submodelElements", Name = "PostSubmodelElement")]
-        [ProducesResponseType(typeof(Property), 201)]
+        [HttpPut("submodel/submodelElements", Name = "PutSubmodelElement")]
+        [ProducesResponseType(typeof(SubmodelElement), 201)]
         [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult PostSubmodelElement([FromBody] ISubmodelElement submodelElement)
+        public IActionResult PutSubmodelElement([FromBody] ISubmodelElement submodelElement)
         {
+            if(submodelElement == null)
+                return ResultHandling.NullResult(nameof(submodelElement));
+
             var result = CreateSubmodelElement(submodelElement);
             return result.CreateActionResult(CrudOperation.Create, "submodel/submodelElements/" + submodelElement.IdShort);
         }
+                
+
         /// <summary>
         /// Retrieves a specific Submodel Element from the Submodel
         /// </summary>
-        /// <param name="submodelElementId">The Submodel Element's short id</param>
+        /// <param name="submodelElementIdShort">The Submodel Element's short id</param>
         /// <returns></returns>
         /// <response code="200">Returns the requested Submodel Element</response>
         /// <response code="404">Submodel/Submodel Element not found</response>     
-        [HttpGet("submodel/submodelElements/{*submodelElementId}", Name = "GetSubmodelElementByIdShort")]
+        [HttpGet("submodel/submodelElements/{*submodelElementIdShort}", Name = "GetSubmodelElementByIdShort")]
         [ProducesResponseType(typeof(Property), 200)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult GetSubmodelElementByIdShort(string submodelElementId)
+        public IActionResult GetSubmodelElementByIdShort(string submodelElementIdShort)
         {
-            var result = RetrieveSubmodelElement(submodelElementId);                     
+            if (string.IsNullOrEmpty(submodelElementIdShort))
+                return ResultHandling.NullResult(nameof(submodelElementIdShort));
+
+            var result = RetrieveSubmodelElement(submodelElementIdShort);                     
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
         /// <summary>
         /// Deletes a specific Submodel Element from the Submodel
         /// </summary>
-        /// <param name="submodelElementId">The Submodel Element's short id</param>
+        /// <param name="submodelElementIdShort">The Submodel Element's short id</param>
         /// <returns></returns>
         /// <response code="204">Submodel Element deleted successfully</response>
         /// <response code="404">Submodel/Submodel Element not found</response>
-        [HttpDelete("submodel/submodelElements/{*submodelElementId}", Name = "DeleteSubmodelElementByIdShort")]
-        [ProducesResponseType(typeof(IResult), 200)]
-        public IActionResult DeleteSubmodelElementByIdShort(string submodelElementId)
+        [HttpDelete("submodel/submodelElements/{*submodelElementIdShort}", Name = "DeleteSubmodelElementByIdShort")]
+        [ProducesResponseType(typeof(Result), 200)]
+        public IActionResult DeleteSubmodelElementByIdShort(string submodelElementIdShort)
         {
-            var result = DeleteSubmodelElement(submodelElementId);
+            if (string.IsNullOrEmpty(submodelElementIdShort))
+                return ResultHandling.NullResult(nameof(submodelElementIdShort));
+
+            var result = DeleteSubmodelElement(submodelElementIdShort);
             return result.CreateActionResult(CrudOperation.Delete);
         }
         #endregion
@@ -227,80 +242,95 @@ namespace BaSyx.API.Http.Controllers
         /// <summary>
         /// Adds a new Property to the Asset Administration Shell's Submodel
         /// </summary>
-        /// <param name="property">The Property's description object</param>
+        /// <param name="property">The serialized Property object</param>
         /// <returns></returns>
         /// <response code="201">Property created successfully</response>
         /// <response code="400">Bad Request</response>
         /// <response code="404">Submodel not found</response>
-        [HttpPost("submodel/properties", Name = "PostProperty")]
+        [HttpPut("submodel/properties", Name = "PutProperty")]
         [ProducesResponseType(typeof(Property), 201)]
         [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult PostProperty([FromBody] IProperty property)
+        public IActionResult PutProperty([FromBody] IProperty property)
         {
+            if (property == null)
+                return ResultHandling.NullResult(nameof(property));
+
             var result = CreateProperty(property);
             return result.CreateActionResult(CrudOperation.Create, "submodel/properties/" + property.IdShort);
         }
         /// <summary>
         /// Retrieves a specific Property from the Asset Administrations's Submodel
         /// </summary>
-        /// <param name="propertyId">The Property's short id</param>
+        /// <param name="propertyIdShort">The Property's short id</param>
         /// <returns></returns>
         /// <response code="200">Returns the requested Property</response>
         /// <response code="404">Submodel/Property not found</response>     
-        [HttpGet("submodel/properties/{propertyId}", Name = "GetProperty")]
+        [HttpGet("submodel/properties/{propertyIdShort}", Name = "GetPropertyByIdShort")]
         [ProducesResponseType(typeof(Property), 200)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult GetProperty(string propertyId)
+        public IActionResult GetPropertyByIdShort(string propertyIdShort)
         {
-            var result = RetrieveProperty(propertyId);
+            if (string.IsNullOrEmpty(propertyIdShort))
+                return ResultHandling.NullResult(nameof(propertyIdShort));
+
+            var result = RetrieveProperty(propertyIdShort);
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
         /// <summary>
         /// Retrieves the value of a specific Property from the Asset Administrations Shell's Submodel
         /// </summary>
-        /// <param name="propertyId">The Property's short id</param>
+        /// <param name="propertyIdShort">The Property's short id</param>
         /// <returns></returns>
         /// <response code="200">Returns the requested Property's value</response>
         /// <response code="404">Submodel/Property not found</response>     
-        [HttpGet("submodel/properties/{propertyId}/value", Name = "GetPropertyValue")]
+        [HttpGet("submodel/properties/{propertyIdShort}/value", Name = "GetPropertyValueByIdShort")]
         [ProducesResponseType(typeof(ElementValue), 200)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult GetPropertyValue(string propertyId)
+        public IActionResult GetPropertyValueByIdShort(string propertyIdShort)
         {
-            var result = RetrievePropertyValue(propertyId);
+            if (string.IsNullOrEmpty(propertyIdShort))
+                return ResultHandling.NullResult(nameof(propertyIdShort));
+
+            var result = RetrievePropertyValue(propertyIdShort);
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
         /// <summary>
         /// Updates the Asset Administration Shell's Submodel's Property
         /// </summary>
-        /// <param name="propertyId">The Property's short id</param>
+        /// <param name="propertyIdShort">The Property's short id</param>
         /// <param name="value">The new value</param>
         /// <returns></returns>
         /// <response code="200">Property's value changed successfully</response>
         /// <response code="404">Submodel/Property not found</response>     
-        [HttpPut("submodel/properties/{propertyId}/value", Name = "PutPropertyValue")]
+        [HttpPut("submodel/properties/{propertyIdShort}/value", Name = "PutPropertyValueByIdShort")]
         [ProducesResponseType(typeof(ElementValue), 200)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult PutPropertyValue(string propertyId, [FromBody] IValue value)
+        public IActionResult PutPropertyValueByIdShort(string propertyIdShort, [FromBody] IValue value)
         {
-            var result = UpdatePropertyValue(propertyId, value);
+            if (string.IsNullOrEmpty(propertyIdShort))
+                return ResultHandling.NullResult(nameof(propertyIdShort));
+
+            var result = UpdatePropertyValue(propertyIdShort, value);
             return result.CreateActionResult(CrudOperation.Update);
         }
         /// <summary>
         /// Deletes a specific Property from the Asset Administration Shell's Submodel
         /// </summary>
-        /// <param name="propertyId">The Property's short id</param>
+        /// <param name="propertyIdShort">The Property's short id</param>
         /// <returns></returns>
         /// <response code="204">Property deleted successfully</response>
         /// <response code="404">Submodel not found</response>
-        [HttpDelete("submodel/properties/{propertyId}", Name = "DelProperty")]
-        [ProducesResponseType(typeof(IResult), 200)]
-        public IActionResult DelProperty(string propertyId)
+        [HttpDelete("submodel/properties/{propertyIdShort}", Name = "DeletePropertyByIdShort")]
+        [ProducesResponseType(typeof(Result), 200)]
+        public IActionResult DeletePropertyByIdShort(string propertyIdShort)
         {
-            var result = DeleteProperty(propertyId);
+            if (string.IsNullOrEmpty(propertyIdShort))
+                return ResultHandling.NullResult(nameof(propertyIdShort));
+
+            var result = DeleteProperty(propertyIdShort);
             return result.CreateActionResult(CrudOperation.Delete);
         }
         #endregion
@@ -308,103 +338,127 @@ namespace BaSyx.API.Http.Controllers
         /// <summary>
         /// Adds a new operation to the Asset Administraiton Shell's Submodel
         /// </summary>
-        /// <param name="operation">The operation description object</param>
+        /// <param name="operation">The serialized Operation object</param>
         /// <returns></returns>
         /// <response code="201">Operation created successfully</response>
         /// <response code="400">Bad Request</response>
         /// <response code="404">Submodel not found</response>
-        [HttpPost("submodel/operations", Name = "PostOperation")]
+        [HttpPut("submodel/operations", Name = "PutOperation")]
         [ProducesResponseType(typeof(Operation), 201)]
         [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult PostOperation([FromBody] IOperation operation)
+        public IActionResult PutOperation([FromBody] IOperation operation)
         {
+            if (operation == null)
+                return ResultHandling.NullResult(nameof(operation));
+
             var result = CreateOperation(operation);
             return result.CreateActionResult(CrudOperation.Create, "submodel/operations/" + operation.IdShort);
         }
         /// <summary>
         /// Retrieves a specific Operation from the Asset Administration Shell's Submodel
         /// </summary>
-        /// <param name="operationId">The Operation's short id</param>
+        /// <param name="operationIdShort">The Operation's short id</param>
         /// <returns></returns>
         /// <response code="200">Success</response>
         /// <response code="404">Submodel/Operation not found</response>     
-        [HttpGet("submodel/operations/{operationId}", Name = "GetOperation")]
+        [HttpGet("submodel/operations/{operationIdShort}", Name = "GetOperationByIdShort")]
         [ProducesResponseType(typeof(Operation), 200)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult GetOperation(string operationId)
+        public IActionResult GetOperationByIdShort(string operationIdShort)
         {
-            var result = RetrieveOperation(operationId);
+            if (string.IsNullOrEmpty(operationIdShort))
+                return ResultHandling.NullResult(nameof(operationIdShort));
+
+            var result = RetrieveOperation(operationIdShort);
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
         /// Deletes a specific Operation from the Asset Administration Shell's Submodel
         /// </summary>
-        /// <param name="operationId">The Operation's short id</param>
+        /// <param name="operationIdShort">The Operation's short id</param>
         /// <returns></returns>
         /// <response code="204">Operation deleted successfully</response>  
         /// <response code="404">Submodel not found</response>
-        [HttpDelete("submodel/operations/{operationId}", Name = "DelOperation")]
+        [HttpDelete("submodel/operations/{operationIdShort}", Name = "DeleteOperationByIdShort")]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult DelOperation(string operationId)
+        public IActionResult DeleteOperationByIdShort(string operationIdShort)
         {
-            var result = DeleteOperation(operationId);
+            if (string.IsNullOrEmpty(operationIdShort))
+                return ResultHandling.NullResult(nameof(operationIdShort));
+
+            var result = DeleteOperation(operationIdShort);
             return result.CreateActionResult(CrudOperation.Delete);
         }
         /// <summary>
         /// Synchronously invokes a specific operation from the Submodel
         /// </summary>
-        /// <param name="operationId">The operation's short id</param>
+        /// <param name="operationIdShort">The Operation's short id</param>
         /// <param name="invocationRequest">The parameterized request object for the invocation</param>
         /// <returns></returns>
         /// <response code="200">Operation invoked successfully</response>
         /// <response code="400">Bad Request</response>
         /// <response code="404">Submodel / Method handler not found</response>
-        [HttpPost("submodel/operations/{operationId}", Name = "InvokeOperationRest")]
+        [HttpPost("submodel/operations/{operationIdShort}", Name = "InvokeOperationByIdShort")]
         [ProducesResponseType(typeof(InvocationResponse), 200)]
         [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult InvokeOperationRest(string operationId, [FromBody] InvocationRequest invocationRequest)
+        public IActionResult InvokeOperationByIdShort(string operationIdShort, [FromBody] InvocationRequest invocationRequest)
         {
-            IResult<InvocationResponse> result = InvokeOperation(operationId, invocationRequest);
+            if (string.IsNullOrEmpty(operationIdShort))
+                return ResultHandling.NullResult(nameof(operationIdShort));
+            if (invocationRequest == null)
+                return ResultHandling.NullResult(nameof(invocationRequest));
+
+            IResult<InvocationResponse> result = InvokeOperation(operationIdShort, invocationRequest);
             return result.CreateActionResult(CrudOperation.Invoke);
         }
 
         /// <summary>
         /// Asynchronously invokes a specific operation from the Submodel
         /// </summary>
-        /// <param name="operationId">The operation's short id</param>
+        /// <param name="operationIdShort">The Operation's short id</param>
         /// <param name="invocationRequest">The parameterized request object for the invocation</param>
         /// <returns></returns>
         /// <response code="200">Operation invoked successfully</response>
         /// <response code="400">Bad Request</response>
         /// <response code="404">Submodel / Method handler not found</response>
-        [HttpPost("submodel/operations/{operationId}/async", Name = "InvokeOperationRestAsync")]
+        [HttpPost("submodel/operations/{operationIdShort}/async", Name = "InvokeOperationByIdShortAsync")]
         [ProducesResponseType(typeof(CallbackResponse), 200)]
         [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult InvokeOperationRestAsync(string operationId, [FromBody] InvocationRequest invocationRequest)
+        public IActionResult InvokeOperationByIdShortAsync(string operationIdShort, [FromBody] InvocationRequest invocationRequest)
         {
-            IResult<CallbackResponse> result = InvokeOperationAsync(operationId, invocationRequest);
+            if (string.IsNullOrEmpty(operationIdShort))
+                return ResultHandling.NullResult(nameof(operationIdShort));
+            if (invocationRequest == null)
+                return ResultHandling.NullResult(nameof(invocationRequest));
+
+            IResult<CallbackResponse> result = InvokeOperationAsync(operationIdShort, invocationRequest);
             return result.CreateActionResult(CrudOperation.Invoke);
         }
 
         /// <summary>
         /// Retrieves the result of an asynchronously started operation
         /// </summary>
-        /// <param name="operationId">The operation's short id</param>
+        /// <param name="operationIdShort">The Operation's short id</param>
         /// <param name="requestId">The request id</param>
         /// <returns></returns>
         /// <response code="200">Result found</response>
         /// <response code="400">Bad Request</response>
         /// <response code="404">Submodel / Operation / Request not found</response>
-        [HttpGet("submodel/operations/{operationId}/invocationList/{requestId}", Name = "GetInvocationResultRest")]
+        [HttpGet("submodel/operations/{operationIdShort}/invocationList/{requestId}", Name = "GetInvocationResultByIdShort")]
         [ProducesResponseType(typeof(InvocationResponse), 200)]
         [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult GetInvocationResultRest(string operationId, string requestId)
+        public IActionResult GetInvocationResultByIdShort(string operationIdShort, string requestId)
         {
-            IResult<InvocationResponse> result = GetInvocationResult(operationId, requestId);
+            if (string.IsNullOrEmpty(operationIdShort))
+                return ResultHandling.NullResult(nameof(operationIdShort));
+            if (string.IsNullOrEmpty(requestId))
+                return ResultHandling.NullResult(nameof(requestId));
+
+            IResult<InvocationResponse> result = GetInvocationResult(operationIdShort, requestId);
             return result.CreateActionResult(CrudOperation.Invoke);
         }
 
@@ -413,47 +467,56 @@ namespace BaSyx.API.Http.Controllers
         /// <summary>
         /// Adds a new event to the Asset Administration Shell's Submodel
         /// </summary>
-        /// <param name="eventable">The Event description object</param>
+        /// <param name="eventable">The serialized Event object</param>
         /// <returns></returns>
         /// <response code="201">Event created successfully</response>
         /// <response code="400">Bad Request</response>
         /// <response code="404">Submodel not found</response>
-        [HttpPost("submodel/events", Name = "PostEvent")]
+        [HttpPut("submodel/events", Name = "PutEvent")]
         [ProducesResponseType(typeof(Event), 201)]
         [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult PostEvent([FromBody] IEvent eventable)
+        public IActionResult PutEvent([FromBody] IEvent eventable)
         {
+            if (eventable == null)
+                return ResultHandling.NullResult(nameof(eventable));
+
             var result = CreateEvent(eventable);
             return result.CreateActionResult(CrudOperation.Create, "submodel/events/" + eventable.IdShort);
         }
         /// <summary>
         /// Retrieves a specific event from the Asset Administration Shell's Submodel
         /// </summary>
-        /// <param name="eventId">The Event's short id</param>
+        /// <param name="eventIdShort">The Event's short id</param>
         /// <returns></returns>
         /// <response code="200">Success</response>
         /// <response code="404">Submodel/Event not found</response>     
-        [HttpGet("submodel/events/{eventId}", Name = "GetEvent")]
+        [HttpGet("submodel/events/{eventIdShort}", Name = "GetEventByIdShort")]
         [ProducesResponseType(typeof(Event), 200)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult GetEvent(string eventId)
+        public IActionResult GetEventByIdShort(string eventIdShort)
         {
-            var result = RetrieveEvent(eventId);
+            if (string.IsNullOrEmpty(eventIdShort))
+                return ResultHandling.NullResult(nameof(eventIdShort));
+
+            var result = RetrieveEvent(eventIdShort);
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
         /// Deletes a specific event from the Asset Administration Shell's Submodel
         /// </summary>
-        /// <param name="eventId">The Event's short id</param>
+        /// <param name="eventIdShort">The Event's short id</param>
         /// <returns></returns>
         /// <response code="204">Event deleted successfully</response>
         /// <response code="404">Submodel not found</response>
-        [HttpDelete("submodel/events/{eventId}", Name = "DelEvent")]
+        [HttpDelete("submodel/events/{eventIdShort}", Name = "DeleteEventByIdShort")]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult DelEvent(string eventId)
+        public IActionResult DeleteEventByIdShort(string eventIdShort)
         {
-            var result = DeleteEvent(eventId);
+            if (string.IsNullOrEmpty(eventIdShort))
+                return ResultHandling.NullResult(nameof(eventIdShort));
+
+            var result = DeleteEvent(eventIdShort);
             return result.CreateActionResult(CrudOperation.Delete);
         }
 
@@ -489,9 +552,9 @@ namespace BaSyx.API.Http.Controllers
             return submodelServiceProvider.InvokeOperation(operationId, invocationRequest);
         }
 
-        public IResult<IProperty> CreateProperty(IProperty dataElement)
+        public IResult<IProperty> CreateProperty(IProperty property)
         {
-            return submodelServiceProvider.CreateProperty(dataElement);
+            return submodelServiceProvider.CreateProperty(property);
         }
 
         public IResult<IElementContainer<IProperty>> RetrieveProperties()

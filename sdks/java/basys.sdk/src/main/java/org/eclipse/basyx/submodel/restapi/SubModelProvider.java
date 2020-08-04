@@ -1,13 +1,17 @@
 package org.eclipse.basyx.submodel.restapi;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
+import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
-import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
@@ -30,8 +34,7 @@ import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
  */
 public class SubModelProvider extends MetaModelProvider {
 
-	// The VAB model provider containing the model this SubModelProvider is based on
-	private IModelProvider modelProvider;
+	ISubmodelAPI submodelAPI;
 
 	/**
 	 * Default constructor - based on an empty submodel with a lambda provider
@@ -41,25 +44,27 @@ public class SubModelProvider extends MetaModelProvider {
 	}
 
 	/**
+	 * Creates a SubmodelProvider based on the VAB API, wrapping the passed provider
+	 * 
+	 * @param provider
+	 *            to be wrapped by submodel API
+	 */
+	public SubModelProvider(IModelProvider provider) {
+		submodelAPI = new VABSubmodelAPI(provider);
+	}
+
+	/**
 	 * Creates a SubModelProvider based on a lambda provider and a given model
 	 */
 	public SubModelProvider(SubModel model) {
-		modelProvider = new VABLambdaProvider(model);
+		submodelAPI = new VABSubmodelAPI(new VABLambdaProvider(model));
 	}
 
 	/**
-	 * Creates a SubModelProvider based on a Map that is supposed to represent the submodel
+	 * Creates a SubModelProvider based on a given ISubmodelAPI.
 	 */
-	public SubModelProvider(Map<String, Object> model) {
-		modelProvider = new VABLambdaProvider(model);
-	}
-
-	/**
-	 * Creates a SubModelProvider based on a given IModelProvider. Should be a
-	 * low-level VAB model provider, for example a VABMapProvider.
-	 */
-	public SubModelProvider(IModelProvider modelProvider) {
-		this.modelProvider = modelProvider;
+	public SubModelProvider(ISubmodelAPI submodelAPI) {
+		this.submodelAPI = submodelAPI;
 	}
 
 	/**
@@ -79,65 +84,88 @@ public class SubModelProvider extends MetaModelProvider {
 		return path;
 	}
 
-	/**
-	 * Creates an IModelProvider for handling accesses to the elements within the submodel
-	 * 
-	 * @return returns the SubmodelElementProvider pointing to the contained submodelelements
-	 */
-	private SubmodelElementProvider getElementProvider() {
-		IModelProvider elementProxy = new VABElementProxy(SubModel.SUBMODELELEMENT, modelProvider);
-		return new SubmodelElementProvider(elementProxy);
-	}
-
-	/**
-	 * Returns the whole submodel, but the submodel element map is replaced by a collection.
-	 */
-	@SuppressWarnings("unchecked")
-	private Object getSubModel() {
-		// For access on the container property root, return the whole model
-		Map<String, Object> map = new HashMap<>();
-		Object o = modelProvider.getModelPropertyValue("");
-		map.putAll((Map<String, Object>) o);
-
-		// Change internal maps to sets for submodelElements
-		setMapToSet(map, SubModel.SUBMODELELEMENT);
-
-		return map;
-	}
-
-	/**
-	 * Converts a map entry to a set, if it is also a map
-	 */
-	@SuppressWarnings("unchecked")
-	private void setMapToSet(Map<String, Object> map, String key) {
-		Object mapEntry = map.get(key);
-		if (mapEntry instanceof Map<?, ?>) {
-			Map<String, Object> elements = (Map<String, Object>) mapEntry;
-			map.put(key, new HashSet<Object>(elements.values()));
-		}
-	}
-
 	@Override
 	public Object getModelPropertyValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		path = removeSubmodelPrefix(path);
 		if (path.isEmpty()) {
-			return getSubModel();
+			return submodelAPI.getSubmodel();
 		} else {
-			return getElementProvider().getModelPropertyValue(path);
+			String[] splitted = VABPathTools.splitPath(path);
+			String qualifier = splitted[0];
+			if (splitted.length == 1 && isQualifier(splitted[0])) { // Request for either properties, operations or submodelElements
+				switch (qualifier) {
+				case SubmodelElementProvider.ELEMENTS:
+					return submodelAPI.getElements();
+				case SubmodelElementProvider.OPERATIONS:
+					return submodelAPI.getOperations();
+				case SubmodelElementProvider.PROPERTIES:
+					return submodelAPI.getProperties();
+				}
+			} else if (splitted.length >= 2 && isQualifier(splitted[0])) { // Request for element with specific idShort
+				String idShort = splitted[1];
+				if (splitted.length == 2) {
+					return submodelAPI.getSubmodelElement(idShort);
+				} else if (isPropertyValuePath(splitted)) { // Request for the value of an property
+					return submodelAPI.getPropertyValue(idShort);
+				} else if (isSubmodelElementListPath(splitted)) {
+					// Create list from array and wrap it in ArrayList to ensure modifiability
+					List<String> idShorts = getIdShorts(splitted);
+					
+					if (endsWithValue(splitted)) {
+						return submodelAPI.getNestedPropertyValue(idShorts);
+					} else {
+						return submodelAPI.getNestedSubmodelElement(idShorts);
+					}
+				}
+			}
 		}
+		throw new MalformedRequestException("Unknown path " + path + " was requested");
+	}
+
+	private List<String> getIdShorts(String[] splitted) {
+		// Create list from array and wrap it in ArrayList to ensure modifiability
+		List<String> idShorts = new ArrayList<>(Arrays.asList(splitted));
+
+		// Drop inital "submodels"
+		idShorts.remove(0);
+
+		// If value is contained in path, remove it
+		if (splitted[splitted.length - 1].equals(Property.VALUE)) {
+			idShorts.remove(idShorts.size() - 1);
+		}
+		return idShorts;
+	}
+
+	private boolean isPropertyValuePath(String[] splitted) {
+		return splitted.length == 3 && splitted[0].equals(SubmodelElementProvider.PROPERTIES) && endsWithValue(splitted);
+	}
+
+	private boolean endsWithValue(String[] splitted) {
+		return splitted[splitted.length - 1].equals(Property.VALUE);
+	}
+
+	private boolean isSubmodelElementListPath(String[] splitted) {
+		return splitted.length > 2 && splitted[0].equals(SubmodelElementProvider.ELEMENTS);
 	}
 
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		path = removeSubmodelPrefix(path);
 		if (path.isEmpty()) {
-			modelProvider.setModelPropertyValue("", newValue);
+			throw new MalformedRequestException("Set on \"submodel\" not supported");
 		} else {
-			getElementProvider().setModelPropertyValue(path, newValue);
+			String[] splitted = VABPathTools.splitPath(path);
+			if (isPropertyValuePath(splitted)) {
+				String idShort = splitted[1];
+				submodelAPI.updateProperty(idShort, newValue);
+			} else {
+				throw new MalformedRequestException("Update on path " + path + " not supported");
+			}
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
 		path = removeSubmodelPrefix(path);
@@ -145,28 +173,33 @@ public class SubModelProvider extends MetaModelProvider {
 			// not possible to overwrite existing submodels
 			throw new MalformedRequestException("Invalid access");
 		} else {
-			getElementProvider().createValue(path, newEntity);
+			submodelAPI.addSubmodelElement(SubmodelElement.createAsFacade((Map<String, Object>) newEntity));
 		}
 	}
 
 	@Override
 	public void deleteValue(String path) throws ProviderException {
 		path = removeSubmodelPrefix(path);
-		if (path.isEmpty()) {
-			modelProvider.deleteValue("");
+		if (!path.isEmpty()) {
+			String[] splitted = VABPathTools.splitPath(path);
+			if (splitted.length == 2 && isQualifier(splitted[0])) {
+				String idShort = splitted[1];
+				submodelAPI.deleteSubmodelElement(idShort);
+			} else {
+				throw new MalformedRequestException("Path " + path + " not supported for delete");
+			}
 		} else {
-			getElementProvider().deleteValue(path);
+			throw new MalformedRequestException("Path \"submodel\" not supported for delete");
 		}
+	}
+
+	private boolean isQualifier(String str) {
+		return str.equals(SubmodelElementProvider.ELEMENTS) || str.equals(SubmodelElementProvider.OPERATIONS) || str.equals(SubmodelElementProvider.PROPERTIES);
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws ProviderException {
-		path = removeSubmodelPrefix(path);
-		if (path.isEmpty()) {
-			throw new MalformedRequestException("Invalid access");
-		} else {
-			getElementProvider().deleteValue(path, obj);
-		}
+		throw new MalformedRequestException("Delete with a passed argument not allowed");
 	}
 
 	@Override
@@ -175,7 +208,17 @@ public class SubModelProvider extends MetaModelProvider {
 		if (path.isEmpty()) {
 			throw new MalformedRequestException("Invalid access");
 		} else {
-			return getElementProvider().invokeOperation(path, parameters);
+			String[] splitted = VABPathTools.splitPath(path);
+			if (splitted.length == 2 && splitted[0].equals(SubmodelElementProvider.OPERATIONS)) {
+				String idShort = splitted[1];
+				return submodelAPI.invokeOperation(idShort, parameters);
+			} else {
+				throw new MalformedRequestException("Unknown path " + path);
+			}
 		}
+	}
+
+	protected void setAPI(ISubmodelAPI api) {
+		this.submodelAPI = api;
 	}
 }

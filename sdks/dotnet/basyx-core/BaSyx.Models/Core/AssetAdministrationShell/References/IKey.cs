@@ -43,5 +43,11 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.References
         /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "local")]
         bool Local { get; }
+
+        /// <summary>
+        /// Returns the official string representation of a Key according to Details of Asset Administration Shell (Chapter 5.2.1)
+        /// </summary>
+        /// <returns></returns>
+        string ToStandardizedString();
     }
 }

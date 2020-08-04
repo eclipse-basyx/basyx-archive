@@ -1,22 +1,22 @@
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.connected.submodelelement;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementFactory;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedBlob;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedFile;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedMultiLanguageProperty;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedProperty;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedRange;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedReferenceElement;
-import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedProperty;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.event.ConnectedBasicEvent;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation.ConnectedOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.relationship.ConnectedRelationshipElement;
@@ -76,7 +76,7 @@ public class TestConnectedSubmodelElementFactory {
 		
 		Map<String, Object> values = new HashMap<>();
 		
-		values.put(SubmodelElementProvider.DATAELEMENTS, dataElements);
+		values.put(SubmodelElementProvider.PROPERTIES, dataElements);
 		values.put(SubmodelElementProvider.OPERATIONS, operations);
 		values.put(SubModel.SUBMODELELEMENT, submodelElements);
 		
@@ -97,23 +97,23 @@ public class TestConnectedSubmodelElementFactory {
 		Blob blob = new Blob();
 		blob.setIdShort(BLOB_ID);
 		ret.put(BLOB_ID, blob);
-		
+
 		File file = new File();
 		file.setIdShort(FILE_ID);
 		ret.put(FILE_ID, file);
-		
+
 		MultiLanguageProperty mlp = new MultiLanguageProperty();
 		mlp.setIdShort(MLP_ID);
 		ret.put(MLP_ID, mlp);
-		
+
 		Range range = new Range();
 		range.setIdShort(RANGE_ID);
 		ret.put(RANGE_ID, range);
-		
+
 		ReferenceElement refElement = new ReferenceElement();
 		refElement.setIdShort(REFELEMENT_ID);
 		ret.put(REFELEMENT_ID, refElement);
-		
+
 		return ret;
 	}
 
@@ -155,21 +155,16 @@ public class TestConnectedSubmodelElementFactory {
 	}
 	
 	/**
-	 * Tests if getDataElements() returns the correct value
+	 * Tests if getProperties() returns the correct value
 	 */
 	@Test
-	public void testGetDataElements() {
-		Map<String, IDataElement> dataElements =
-				ConnectedSubmodelElementFactory.getDataElements(
-						proxy, SubmodelElementProvider.DATAELEMENTS, SubmodelElementProvider.DATAELEMENTS);
+	public void testGetProperties() {
+		Map<String, IProperty> properties =
+				ConnectedSubmodelElementFactory.getProperties(
+						proxy, SubmodelElementProvider.PROPERTIES, SubmodelElementProvider.PROPERTIES);
 		
-		assertEquals(6, dataElements.size());
-		assertTrue(dataElements.get(PROPERTY_ID) instanceof ConnectedProperty);
-		assertTrue(dataElements.get(BLOB_ID) instanceof ConnectedBlob);
-		assertTrue(dataElements.get(FILE_ID) instanceof ConnectedFile);
-		assertTrue(dataElements.get(MLP_ID) instanceof ConnectedMultiLanguageProperty);
-		assertTrue(dataElements.get(RANGE_ID) instanceof ConnectedRange);
-		assertTrue(dataElements.get(REFELEMENT_ID) instanceof ConnectedReferenceElement);
+		assertEquals(1, properties.size());
+		assertTrue(properties.get(PROPERTY_ID) instanceof ConnectedProperty);
 	}
 	
 	/**

@@ -73,9 +73,9 @@ public abstract class AssetAdministrationShellSuite {
 		 */
 		// Create an AAS containing a reference to the created SubModel
 		AssetAdministrationShell aas = new AssetAdministrationShell();
-		aas.addSubModel(retrieveBaselineSM());
 		aas.setIdShort(AASIDSHORT);
 		aas.setIdentification(AASID);
+		aas.addSubModel(retrieveBaselineSM());
 		aas.setAssetReference(EXPECTED_ASSETREF);
 		aas.setDerivedFrom(EXPECTED_DERIVEDFROMREF);
 		aas.setAdministration(EXPECTED_ADMINISTRATIVEINFORMATION);
@@ -103,7 +103,7 @@ public abstract class AssetAdministrationShellSuite {
 		SubModel sm = new SubModel();
 		sm.addSubModelElement(p);
 		sm.setIdShort(SMIDSHORT);
-		sm.setIdentification(IdentifierType.CUSTOM, "baselineSMId");
+		sm.setIdentification(SMID.getIdType(), SMID.getId());
 
 		return sm;
 	}
@@ -141,7 +141,7 @@ public abstract class AssetAdministrationShellSuite {
 
 		// Check if the submodel has been retrieved correctly
 		ISubModel sm = shell.getSubModels().get(SMIDSHORT);
-		IProperty prop = (IProperty) sm.getDataElements().get(PROPID);
+		IProperty prop = sm.getProperties().get(PROPID);
 		assertEquals(PROPVAL, prop.get());
 	}
 
@@ -166,8 +166,9 @@ public abstract class AssetAdministrationShellSuite {
 	public void testAddSubmodel() {
 		// Create a submodel
 		String smId = "newSubmodelId";
+		String testId = "smIdTest";
 		SubModel subModel = new SubModel(Collections.singletonList(new Property("testProperty")));
-		subModel.setIdentification(IdentifierType.CUSTOM, "smId");
+		subModel.setIdentification(IdentifierType.CUSTOM, testId);
 		subModel.setIdShort(smId);
 		
 		//Retrieve the aas
@@ -179,10 +180,15 @@ public abstract class AssetAdministrationShellSuite {
 		expected1Keys.add(new Key(KeyElements.ASSETADMINISTRATIONSHELL, true, AASID.getId(), AASID.getIdType()));
 		expected1Keys.add(new Key(KeyElements.SUBMODEL, true, "smId", IdentifierType.CUSTOM));
 		Reference expected1 = new Reference(expected1Keys);
-		Reference expected1b = new Reference(new Key(KeyElements.SUBMODEL, true, "smId", IdentifierType.CUSTOM));
-		Reference expected2 = new Reference(new Key(KeyElements.SUBMODEL, true, "baselineSMId", IdentifierType.CUSTOM));
+
+		List<IKey> expected2Keys = new ArrayList<>();
+		expected2Keys.add(new Key(KeyElements.ASSETADMINISTRATIONSHELL, true, AASID.getId(), AASID.getIdType()));
+
+		expected2Keys.add(new Key(KeyElements.SUBMODEL, true, testId, IdentifierType.CUSTOM));
+		Reference expected2 = new Reference(expected2Keys);
+
 		Collection<IReference> smReferences = shell.getSubmodelReferences();
-		assertTrue(smReferences.contains(expected1) || smReferences.contains(expected1b));
+		assertTrue(smReferences.contains(expected1));
 		assertTrue(smReferences.contains(expected2));
 		assertEquals(2, smReferences.size());
 	} 

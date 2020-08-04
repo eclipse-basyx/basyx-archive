@@ -53,7 +53,7 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// BaSyx infrastructure
 				// - BaSys topology with one AAS Server and one SQL directory
-				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory(),
+			new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory(),
 				
 				// Device mockups
 				new SmartBaSyxTCPDeviceMockup(9997).setName("Device"),

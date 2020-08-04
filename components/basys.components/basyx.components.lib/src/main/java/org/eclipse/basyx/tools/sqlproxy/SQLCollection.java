@@ -2,7 +2,6 @@ package org.eclipse.basyx.tools.sqlproxy;
 
 import java.lang.reflect.Array;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
-import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLQuery;
 import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLUpdate;
 
@@ -38,7 +36,7 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	 */
 	public SQLCollection(SQLRootElement rootElement, int tableId) {
 		// Invoke base constructor
-		super(rootElement.sqlUser, rootElement.sqlPass, rootElement.sqlURL, rootElement.sqlDriver, rootElement.sqlPrefix, rootElement.sqlTableID+"__"+tableId, rootElement);
+		super(rootElement.getDriver(), rootElement.getSqlTableID() + "__" + tableId, rootElement);
 	}
 
 	
@@ -50,7 +48,7 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	 */
 	public SQLCollection(SQLRootElement rootElement, String tableIdWithprefix) {
 		// Invoke base constructor
-		super(rootElement.sqlUser, rootElement.sqlPass, rootElement.sqlURL, rootElement.sqlDriver, rootElement.sqlPrefix, tableIdWithprefix, rootElement);	
+		super(rootElement.getDriver(), tableIdWithprefix, rootElement);	
 	}
 
 	
@@ -62,10 +60,10 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	@Override
 	public int size() {
 		// Build query string
-		String          queryString = "SELECT * FROM elements."+sqlTableID;
+		String          queryString = "SELECT * FROM elements."+ getSqlTableID();
 		// - Build dynamic query
 		// - basically, the last parameter is not used here, as getRaw does not post process query results 
-		DynamicSQLQuery dynQuery    = new DynamicSQLQuery(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, queryString, "mapArray(name:String,value:String,type:String)");
+		DynamicSQLQuery dynQuery    = new DynamicSQLQuery(getDriver(), queryString, "mapArray(name:String,value:String,type:String)");
 		
 		// Execute query and get result set
 		ResultSet result = dynQuery.getRaw();
@@ -91,7 +89,7 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	@Override
 	public boolean contains(Object value) {
 		// Return query, use new driver
-		return contains(new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver), value);
+		return contains(getDriver(), value);
 	}
 	
 	
@@ -100,7 +98,7 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	 */
 	protected boolean contains(ISQLDriver drv, Object value) {
 		// Build query string
-		String          queryString = "SELECT * FROM elements."+sqlTableID+" WHERE value='$value'";
+		String          queryString = "SELECT * FROM elements." + getSqlTableID() + " WHERE value='$value'";
 		// - Build dynamic query
 		// - basically, the last parameter is not used here, as getRaw does not post process query results 
 		DynamicSQLQuery dynQuery    = new DynamicSQLQuery(drv, queryString, "mapArray(value:String,type:String)");
@@ -125,7 +123,7 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	@Override @SuppressWarnings("unchecked")
 	public Iterator<Object> iterator() {
 		// Get values
-		List<Map<String, Object>> sqlResult = (List<Map<String, Object>>) getMapColumnRaw(sqlTableID, "type", "value");
+		List<Map<String, Object>> sqlResult = (List<Map<String, Object>>) getMapColumnRaw(getSqlTableID(), "type", "value");
 
 		// Create iterator interface instance
 		Iterator<Object> it = new Iterator<Object>() {
@@ -167,7 +165,7 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	@Override @SuppressWarnings("unchecked")
 	public Object[] toArray() {
 		// Get values
-		List<Map<String, Object>> sqlResult = (List<Map<String, Object>>) getMapColumnRaw(sqlTableID, "type", "value");
+		List<Map<String, Object>> sqlResult = (List<Map<String, Object>>) getMapColumnRaw(getSqlTableID(), "type", "value");
 		
 		// Create return value
 		Object[] result = new Object[sqlResult.size()];
@@ -188,7 +186,7 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	@Override @SuppressWarnings("unchecked")
 	public <T> T[] toArray(T[] array) {
 		// Get values
-		List<Map<String, Object>> sqlResult = (List<Map<String, Object>>) getMapColumnRaw(sqlTableID, "type", "value");
+		List<Map<String, Object>> sqlResult = (List<Map<String, Object>>) getMapColumnRaw(getSqlTableID(), "type", "value");
 		
 		// Create return value if necessary
 		T[] result = array;
@@ -212,7 +210,7 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	@Override
 	public boolean add(Object value) {
 		// Put object
-		addToCollectionSimple(sqlTableID, new SQLTableRow(value));
+		addToCollectionSimple(getSqlTableID(), new SQLTableRow(value));
 		
 		// Indicate success
 		return true;
@@ -224,44 +222,21 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	 */
 	@Override
 	public boolean remove(Object value) {
-		// SQL driver used for operation
-		SQLDriver sqlDrv = null;
+		// Check if key is in map, then update SQL database
+		if (contains(getDriver(), value)) {
+			// Delete element from map
+			String updateString = "DELETE FROM elements." + getSqlTableID() + " WHERE value='$value'";
+			DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(getDriver(), updateString);
 
-		// Try to complete transaction
-		try {
-			// Create connection and start transaction
-			sqlDrv = new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver);
-			// - Open connection
-			sqlDrv.openConnection();
-			// - Switch off auto commit
-			sqlDrv.getConnection().setAutoCommit(false);
-		
-			// Check if key is in map, then update SQL database
-			if (contains(sqlDrv, value)) {
-				// Delete element from map
-				String updateString = "DELETE FROM elements."+sqlTableID+" WHERE value='$value'";
-				DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(sqlDrv, updateString);
-
-				// Parameter map
-				Map<String, Object> parameter = new HashMap<>();
-				// - Put name in map
-				parameter.put("value", SQLTableRow.getValueAsString(value));
-				// - Execute delete
-				dynUpdate.accept(parameter);
-		
-				// Commit and close transaction
-				sqlDrv.getConnection().commit();
-				sqlDrv.closeConnection();
-
-				// Indicate collection change
-				return true;
-			}
-		} catch (SQLException e) {
-			// Output exception
-			e.printStackTrace();
-		} finally {
-			// Close connection
-			sqlDrv.closeConnection();			
+			// Parameter map
+			Map<String, Object> parameter = new HashMap<>();
+			// - Put name in map
+			parameter.put("value", SQLTableRow.getValueAsString(value));
+			// - Execute delete
+			dynUpdate.accept(parameter);
+	
+			// Indicate collection change
+			return true;
 		}
 		
 		// No change in collection
@@ -272,11 +247,11 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	/**
 	 * Remove element if element table does contain it
 	 */
-	protected boolean removeIfContained(SQLDriver sqlDrv, Object value) {
+	protected boolean removeIfContained(ISQLDriver sqlDrv, Object value) {
 		// Check if key is in map, then update SQL database
 		if (contains(sqlDrv, value)) {
 			// Delete element from map
-			String updateString = "DELETE FROM elements."+sqlTableID+" WHERE value='$value'";
+			String updateString = "DELETE FROM elements." + getSqlTableID() + " WHERE value='$value'";
 			DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(sqlDrv, updateString);
 
 			// Parameter map
@@ -298,11 +273,11 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	/**
 	 * Remove element if element table does contain it
 	 */
-	protected boolean removeSerValueIfContained(SQLDriver sqlDrv, String value) {
+	protected boolean removeSerValueIfContained(ISQLDriver sqlDrv, String value) {
 		// Check if key is in map, then update SQL database
 		if (contains(sqlDrv, value)) {
 			// Delete element from map
-			String updateString = "DELETE FROM elements."+sqlTableID+" WHERE value='$value'";
+			String updateString = "DELETE FROM elements."+ getSqlTableID() +" WHERE value='$value'";
 			DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(sqlDrv, updateString);
 
 			// Parameter map
@@ -325,36 +300,19 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	 * Check if collection contains all given elements
 	 */
 	@Override
-	public boolean containsAll(Collection<?> values) {
-		// SQL driver used for operation
-		SQLDriver sqlDrv = null;
-		
+	public boolean containsAll(Collection<?> values) {	
 		// Flag that indicates if all checked elements are contained in map
 		boolean containsAllFlag = true;
 
-		// Try to complete transaction
 		try {
-			// Create connection and start transaction
-			sqlDrv = new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver);
-			// - Open connection
-			sqlDrv.openConnection();
-			// - Switch off auto commit
-			sqlDrv.getConnection().setAutoCommit(false);
-		
 			// Check if all elements are contained 
-			for (Object val : values) if (!contains(sqlDrv, val)) containsAllFlag = false;
-
-			// Close transaction
-			sqlDrv.closeConnection();
+			for (Object val : values) if (!contains(getDriver(), val)) containsAllFlag = false;
 
 			// Indicate if all requested elements are contained
 			return containsAllFlag;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// Output exception
 			e.printStackTrace();
-		} finally {
-			// Close connection
-			sqlDrv.closeConnection();			
 		}
 
 		// An exception did occur
@@ -367,33 +325,10 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	 */
 	@Override
 	public boolean addAll(Collection<? extends Object> values) {
-		// SQL driver used for operation
-		SQLDriver sqlDrv = null;
-
-		// Try to complete transaction
-		try {
-			// Create connection and start transaction
-			sqlDrv = new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver);
-			// - Open connection
-			sqlDrv.openConnection();
-			// - Switch off auto commit
-			sqlDrv.getConnection().setAutoCommit(false);
-		
-			// Iterate elements
-			for (Object val: values) {
-				// Remove element iff contained in SQL table
-				addToCollectionSimple(sqlDrv, sqlTableID, new SQLTableRow(val));
-			}
-			
-			// Commit transaction and close connection
-			sqlDrv.getConnection().commit();
-			sqlDrv.closeConnection();
-		} catch (SQLException e) {
-			// Output exception
-			e.printStackTrace();
-		} finally {
-			// Close connection
-			sqlDrv.closeConnection();			
+		// Iterate elements
+		for (Object val: values) {
+			// Remove element iff contained in SQL table
+			addToCollectionSimple(getDriver(), getSqlTableID(), new SQLTableRow(val));
 		}
 
 		// Indicate collection change
@@ -406,38 +341,14 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	 */
 	@Override
 	public boolean removeAll(Collection<?> values) {
-		// SQL driver used for operation
-		SQLDriver sqlDrv = null;
-		
 		// Change in SQL database
 		boolean performedChange = false;
-		
-
-		// Try to complete transaction
-		try {
-			// Create connection and start transaction
-			sqlDrv = new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver);
-			// - Open connection
-			sqlDrv.openConnection();
-			// - Switch off auto commit
-			sqlDrv.getConnection().setAutoCommit(false);
-		
-			// Iterate elements
-			for (Object val: values) {
-				// Remove element iff contained in SQL table
-				performedChange |= removeIfContained(sqlDrv, val);
-			}
-			
-			// Commit transaction and close connection
-			sqlDrv.getConnection().commit();
-			sqlDrv.closeConnection();
-		} catch (SQLException e) {
-			// Output exception
-			e.printStackTrace();
-		} finally {
-			// Close connection
-			sqlDrv.closeConnection();			
-		}
+	
+		// Iterate elements
+		for (Object val: values) {
+			// Remove element iff contained in SQL table
+			performedChange |= removeIfContained(getDriver(), val);
+		}			
 
 		// Return changed flag
 		return performedChange;
@@ -449,9 +360,6 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	 */
 	@Override @SuppressWarnings("unchecked")
 	public boolean retainAll(Collection<?> values) {
-		// SQL driver used for operation
-		SQLDriver sqlDrv = null;
-		
 		// Change in SQL database
 		boolean performedChange = false;
 		
@@ -459,35 +367,14 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 		Collection<String> serValues = new LinkedList<String>();
 		// - Serialize values
 		for (Object val: values) serValues.add(SQLTableRow.getValueAsString(val));
+
+		// Get all values in table
+		List<Map<String, Object>> sqlResult = (List<Map<String, Object>>) getMapColumnRaw(getDriver(), getSqlTableID(), "type", "value");
 		
-
-		// Try to complete transaction
-		try {
-			// Create connection and start transaction
-			sqlDrv = new SQLDriver(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver);
-			// - Open connection
-			sqlDrv.openConnection();
-			// - Switch off auto commit
-			sqlDrv.getConnection().setAutoCommit(false);
-
-			// Get all values in table
-			List<Map<String, Object>> sqlResult = (List<Map<String, Object>>) getMapColumnRaw(sqlDrv, sqlTableID, "type", "value");
-			
-			// Remove all elements that are not part of values collection
-			for (Map<String, Object> row: sqlResult) {
-				// Remove value if contained in map
-				if (!serValues.contains((String) row.get("value"))) performedChange |= this.removeSerValueIfContained(sqlDrv, (String) row.get("value"));
-			}
-			
-			// Commit transaction and close connection
-			sqlDrv.getConnection().commit();
-			sqlDrv.closeConnection();
-		} catch (SQLException e) {
-			// Output exception
-			e.printStackTrace();
-		} finally {
-			// Close connection
-			sqlDrv.closeConnection();			
+		// Remove all elements that are not part of values collection
+		for (Map<String, Object> row: sqlResult) {
+			// Remove value if contained in map
+			if (!serValues.contains((String) row.get("value"))) performedChange |= this.removeSerValueIfContained(getDriver(), (String) row.get("value"));
 		}
 
 		// Changed flag
@@ -501,8 +388,8 @@ public class SQLCollection extends SQLProxy implements Collection<Object> {
 	@Override
 	public void clear() {
 		// Build SQL update string
-		String updateString = "DELETE FROM elements."+sqlTableID;
-		DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(sqlURL, sqlUser, sqlPass, sqlPrefix, sqlDriver, updateString);
+		String updateString = "DELETE FROM elements."+getSqlTableID();
+		DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(getDriver(), updateString);
 		
 		// Empty parameter set
 		Map<String, Object> parameter = new HashMap<>();

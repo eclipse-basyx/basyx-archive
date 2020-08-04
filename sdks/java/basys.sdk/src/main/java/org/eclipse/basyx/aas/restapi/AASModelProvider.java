@@ -1,17 +1,11 @@
 package org.eclipse.basyx.aas.restapi;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
-import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
+import org.eclipse.basyx.aas.restapi.api.IAASAPI;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.NotAnInvokableException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -27,74 +21,84 @@ import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
  */
 public class AASModelProvider implements IModelProvider {
 
-	private IModelProvider modelProvider;
+	private IAASAPI aasApi;
 
 	/**
 	 * Constructor based on the model provider containing the AAS model
 	 */
 	public AASModelProvider(IModelProvider modelProvider) {
-		this.modelProvider = modelProvider;
+		aasApi = new VABAASAPI(modelProvider);
 	}
 
 	/**
-	 * Creates a AASModelProvider based on a lambda provider and a given model
+	 * Creates an AASModelProvider based on a lambda provider and a given model
 	 */
-	public AASModelProvider(Map<String, Object> model) {
-		this.modelProvider = new VABLambdaProvider(model);
+	public AASModelProvider(AssetAdministrationShell shell) {
+		this.aasApi = new VABAASAPI(new VABLambdaProvider(shell));
+	}
+
+	/**
+	 * Creates an AASModelProvider based on a passed AAS API
+	 * 
+	 * @param aasApi
+	 */
+	public AASModelProvider(IAASAPI aasApi) {
+		this.aasApi = aasApi;
 	}
 
 	@Override
 	public Object getModelPropertyValue(String path) throws ProviderException {
-		return modelProvider.getModelPropertyValue(path);
+		path = preparePath(path);
+		if (path.isEmpty()) {
+			return aasApi.getAAS();
+		} else {
+			throw new MalformedRequestException("Path " + path + " is not supported");
+		}
 	}
 
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
-		modelProvider.setModelPropertyValue(path, newValue);
+		throw new MalformedRequestException("For an AAS, Set is not supported");
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
-		VABPathTools.checkPathForNull(path);
-		path = VABPathTools.stripSlashes(path);
+		path = preparePath(path);
 		if (path.equals("submodels")) {
 			Map<String, Object> smMap = (Map<String, Object>) newEntity;
 			SubModel sm = SubModel.createAsFacade(smMap);
-			modelProvider.createValue(path, sm.getReference());
+			aasApi.addSubmodel(sm.getReference());
+		} else {
+			throw new MalformedRequestException("Path " + path + " is not supported");
 		}
+	}
+
+	/**
+	 * @param path
+	 * @return
+	 */
+	private String preparePath(String path) {
+		VABPathTools.checkPathForNull(path);
+		path = VABPathTools.stripSlashes(path);
+		return path;
 	}
 
 	@Override
 	public void deleteValue(String path) throws ProviderException {
-		modelProvider.deleteValue(path);
-	}
-
-	@SuppressWarnings("unchecked")
-	protected void removeSubmodelReference(String idShort, IIdentifier smId) {
-		Collection<Map<String, Object>> smReferences = (Collection<Map<String, Object>>) modelProvider
-				.getModelPropertyValue(AssetAdministrationShell.SUBMODELS);
-		// Reference to submodel could be either by idShort (=> local) or directly via its identifier
-		for (Iterator<Map<String, Object>> iterator = smReferences.iterator(); iterator.hasNext();) {
-			Map<String, Object> smRefMap = iterator.next();
-			IReference ref = Reference.createAsFacade(smRefMap);
-			List<IKey> keys = ref.getKeys();
-			IKey lastKey = keys.get(keys.size() - 1);
-			KeyType idType = lastKey.getIdType();
-			String idValue = lastKey.getValue();
-			// remove this reference, if the last key points to the submodel
-			// => the key either points to the idShort of the submodel or its identifier
-			if ((idType.equals(KeyType.IDSHORT) && idValue.equals(idShort))
-					|| (idType.toString().equals(smId.getIdType().toString()) && idValue.equals(smId.getId()))) {
-				iterator.remove();
-				break;
-			}
+		path = preparePath(path);
+		String[] splitted = VABPathTools.splitPath(path);
+		if (splitted.length == 3 && splitted[1].equals(AssetAdministrationShell.SUBMODELS)) {
+			String id = splitted[2];
+			aasApi.removeSubmodel(id);
+		} else {
+			throw new MalformedRequestException("Delete on path " + path + " is not supported");
 		}
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws ProviderException {
-		modelProvider.deleteValue(path, obj);
+		throw new MalformedRequestException("Delete with parameter is not supported");
 	}
 
 	/**

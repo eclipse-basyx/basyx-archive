@@ -29,6 +29,12 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.References
         /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "keys")]
         List<IKey> Keys { get; }
+
+        /// <summary>
+        /// Returns the official string representation of a Reference
+        /// </summary>
+        /// <returns></returns>
+        string ToStandardizedString();
     }
 
     public interface IReference<out T> : IReference where T : IReferable

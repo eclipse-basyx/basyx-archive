@@ -19,13 +19,13 @@ namespace BaSyx.Models.Export
 {
     public class EnvironmentSubmodel_V1_0 : EnvironmentIdentifiable_V1_0, IModelType
     {
-        [JsonProperty("semanticId")]
-        [XmlElement("semanticId")]
-        public EnvironmentReference_V1_0 SemanticId { get; set; }
-
         [JsonProperty("kind")]
         [XmlElement("kind")]
         public ModelingKind Kind { get; set; }
+
+        [JsonProperty("semanticId")]
+        [XmlElement("semanticId")]
+        public EnvironmentReference_V1_0 SemanticId { get; set; }        
 
         [JsonProperty("constraints")]
         [XmlArray("qualifier")]
@@ -40,5 +40,29 @@ namespace BaSyx.Models.Export
         [JsonProperty("modelType")]
         [XmlIgnore]
         public ModelType ModelType => ModelType.Submodel;
+
+        public bool ShouldSerializeSemanticId()
+        {
+            if (SemanticId == null)
+                return false;
+            else
+                return true;
+        }
+
+        public bool ShouldSerializeQualifier()
+        {
+            if (Qualifier == null || Qualifier.Count == 0)
+                return false;
+            else
+                return true;
+        }
+
+        public bool ShouldSerializeSubmodelElements()
+        {
+            if (SubmodelElements == null || SubmodelElements.Count == 0)
+                return false;
+            else
+                return true;
+        }
     }
 }

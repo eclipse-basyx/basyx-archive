@@ -46,57 +46,48 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="404">No Submodels found</response>            
         /// <response code="400">Bad Request</response>    
         /// <response code="502">Bad Gateway</response>
-        [HttpGet("submodels", Name = "RetrieveAllSubmodels")]
-        [ProducesResponseType(typeof(IResult<List<ISubmodel>>), 200)]
-        public IActionResult RetrieveAllSubmodels()
+        [HttpGet("submodels", Name = "GetAllSubmodels")]
+        [ProducesResponseType(typeof(List<BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel>), 200)]
+        public IActionResult GetAllSubmodels()
         {
             var result = RetrieveSubmodels();
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
-        /// Retrieves a specific Submodel from the repository service endpint
+        /// Retrieves a specific Submodel from the repository service endpoint
         /// </summary>
-        /// <param name="submodelId">The Submodel's short id</param>
+        /// <param name="submodelId">The Submodel's unique id</param>
         /// <returns></returns>
         /// <response code="200">Returns the requested Submodel</response>
         /// <response code="404">No Submodel found</response>     
         /// <response code="400">Bad Request</response>         
         /// <response code="502">Bad Gateway</response>
-        [HttpGet("submodels/{submodelId}", Name = "RetrieveSubmodelByIdShort")]
-        [ProducesResponseType(typeof(IResult<ISubmodel>), 200)]
-        public IActionResult RetrieveSubmodelByIdShort(string submodelId)
+        [HttpGet("submodels/{submodelId}", Name = "GetSubmodelById")]
+        [ProducesResponseType(typeof(BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel), 200)]
+        public IActionResult RetrieveSubmodelById(string submodelId)
         {
+            if (string.IsNullOrEmpty(submodelId))
+                return ResultHandling.NullResult(nameof(submodelId));
+
             var result = RetrieveSubmodel(submodelId);
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
+        
         /// <summary>
-        /// Updates a specific Submodel at the repository service endpint
-        /// </summary>
-        /// <param name="submodelId">The Submodel's unique id</param>
-        /// <param name="submodel">The updated Submodel</param>
-        /// <returns></returns>
-        /// <response code="200">Submodel updated successfully</response>
-        /// <response code="400">Bad Request</response>           
-        /// <response code="502">Bad Gateway</response>   
-        [HttpPut("submodels/{submodelId}", Name = "UpdateSubmodelByIdShort")]
-        [ProducesResponseType(typeof(IResult), 200)]
-        public IActionResult UpdateSubmodelByIdShort(string submodelId, [FromBody] ISubmodel submodel)
-        {
-            var result = UpdateSubmodel(submodelId, submodel);
-            return result.CreateActionResult(CrudOperation.Update);
-        }
-        /// <summary>
-        /// Creates a new Submodel at the repository service endpoint
+        /// Creates or updates a Submodel at the repository service endpoint
         /// </summary>
         /// <param name="submodel">The serialized Submodel object</param>
         /// <returns></returns>
-        /// <response code="201">Submodel created successfully</response>
+        /// <response code="201">Submodel created/updated successfully</response>
         /// <response code="400">Bad Request</response>             
         /// <response code="502">Bad Gateway</response> 
-        [HttpPost("submodels", Name = "CreateNewSubmodel")]
-        [ProducesResponseType(typeof(IResult<ISubmodel>), 201)]
-        public IActionResult CreateNewSubmodel([FromBody] ISubmodel submodel)
+        [HttpPost("submodels", Name = "PutSubmodel")]
+        [ProducesResponseType(typeof(BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel), 201)]
+        public IActionResult PutSubmodel([FromBody] ISubmodel submodel)
         {
+            if (submodel == null)
+                return ResultHandling.NullResult(nameof(submodel));
+
             var result = CreateSubmodel(submodel);
             return result.CreateActionResult(CrudOperation.Create);
         }
@@ -108,10 +99,13 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="200">Submodel deleted successfully</response>
         /// <response code="400">Bad Request</response>      
         /// <response code="502">Bad Gateway</response>
-        [HttpDelete("submodels/{submodelId}", Name = "DeleteSubmodelByIdShort")]
-        [ProducesResponseType(typeof(IResult), 200)]
-        public IActionResult DeleteSubmodelByIdShort(string submodelId)
+        [HttpDelete("submodels/{submodelId}", Name = "DeleteSubmodelById")]
+        [ProducesResponseType(typeof(Result), 200)]
+        public IActionResult DeleteSubmodelById(string submodelId)
         {
+            if (string.IsNullOrEmpty(submodelId))
+                return ResultHandling.NullResult(nameof(submodelId));
+
             var result = DeleteSubmodel(submodelId);
             return result.CreateActionResult(CrudOperation.Delete);
         }
@@ -120,28 +114,6 @@ namespace BaSyx.API.Http.Controllers
         
         #region Helper Methods
 
-        private static IActionResult AggregateResultHandling(IResult result)
-        {
-            if (result != null)
-            {
-                var objResult = new ObjectResult(result);
-
-                if (result.Success)
-                {
-                    if (result.Entity == null)
-                        objResult.StatusCode = 404;
-                    else
-                        objResult.StatusCode = 200;
-                }
-                else if (Utils.ResultHandling.Utils.TryParseStatusCode(result, out int httpStatusCode))
-                    objResult.StatusCode = httpStatusCode;
-                else
-                    objResult.StatusCode = 502;
-
-                return objResult;
-            }
-            return new BadRequestResult();
-        }
         #endregion
 
         #region Interface Implementation SubmodelRepository

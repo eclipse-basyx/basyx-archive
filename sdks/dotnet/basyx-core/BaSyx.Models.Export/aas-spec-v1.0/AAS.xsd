@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema targetNamespace="http://www.admin-shell.io/aas/1/0"	elementFormDefault="qualified"	xmlns="http://www.w3.org/2001/XMLSchema"	xmlns:aas="http://www.admin-shell.io/aas/1/0"	xmlns:IEC61360="http://www.admin-shell.io/IEC61360/1/0">
-	<import schemaLocation="IEC61360-v1.0.xsd"	namespace="http://www.admin-shell.io/IEC61360/1/0"/>
+	<import schemaLocation="IEC61360.xsd"	namespace="http://www.admin-shell.io/IEC61360/1/0"/>
 	<element name="aasenv"	type="aas:aasenv_t"/>
 	<complexType name="aasenv_t">
 		<sequence>

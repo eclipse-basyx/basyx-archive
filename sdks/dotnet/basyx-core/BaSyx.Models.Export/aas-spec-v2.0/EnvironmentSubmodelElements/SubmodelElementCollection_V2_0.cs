@@ -30,12 +30,20 @@ namespace BaSyx.Models.Export
         [JsonProperty("allowDuplicates")]
         [XmlElement("allowDuplicates")]
         public bool AllowDuplicates { get; set; }
-
+              
         [JsonProperty("modelType")]
         [XmlIgnore]
         public override ModelType ModelType => ModelType.SubmodelElementCollection;
 
         public SubmodelElementCollection_V2_0() { }
         public SubmodelElementCollection_V2_0(SubmodelElementType_V2_0 submodelElementType) : base(submodelElementType) { }
+
+        public bool ShouldSerializeValue()
+        {
+            if (Value == null || Value.Count == 0)
+                return false;
+            else
+                return true;
+        }
     }
 }

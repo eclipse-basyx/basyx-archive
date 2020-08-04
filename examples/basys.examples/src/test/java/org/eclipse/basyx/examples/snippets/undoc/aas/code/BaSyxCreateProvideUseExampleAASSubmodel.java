@@ -56,7 +56,7 @@ public class BaSyxCreateProvideUseExampleAASSubmodel {
 		JSONConnector toDeviceManager = new JSONConnector(basyxConnector);	
 		// - Access sub model property, check value
 		Map<String, Object> property = (Map<String, Object>) toDeviceManager
-				.getModelPropertyValue(SubmodelElementProvider.DATAELEMENTS + "/status");
+				.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/status");
 		assertEquals("offline", property.get("value"));
 		
 		

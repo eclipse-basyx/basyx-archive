@@ -13,6 +13,7 @@ import org.eclipse.basyx.aas.restapi.MultiAASProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -55,7 +56,7 @@ public class MultiAASProviderTest {
 	public void getTest() {
 		// test reading from a valid aas
 		Map<String, Object> result = (Map<String, Object>) proxy
-				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
+				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value");
 		assertEquals(123, result.get(Property.VALUE));
 
 		// test reading from an invalid aas
@@ -66,14 +67,14 @@ public class MultiAASProviderTest {
 	@Test
 	public void setTest() {
 		// test setting in a valid aas
-		proxy.setModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value", 100);
+		proxy.setModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value", 100);
 
 		// test setting in an invalid aas
-		proxy.setModelPropertyValue("A1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value", 200);
+		proxy.setModelPropertyValue("A1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value", 200);
 
 		// retrieving property
 		Map<String, Object> result = (Map<String, Object>) proxy
-				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
+				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value");
 		assertEquals(100, result.get(Property.VALUE));
 	}
 
@@ -81,15 +82,15 @@ public class MultiAASProviderTest {
 	@Test
 	public void removeTest() {
 		// test deleting from an invalid aas
-		proxy.deleteValue("A1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
+		proxy.deleteValue("A1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value");
 		Map<String, Object> result = (Map<String, Object>) proxy
-				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/value");
+				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value");
 		assertEquals(123, result.get(Property.VALUE));
 
 		// test deleting from a valid aas
-		proxy.deleteValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty");
+		proxy.deleteValue("a1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty");
 		try {
-			proxy.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/dataElements/integerProperty/");
+			proxy.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/");
 			fail();
 		} catch (ResourceNotFoundException e) {
 		}
@@ -99,14 +100,14 @@ public class MultiAASProviderTest {
 	public void invokeExceptionTest() {
 		// Invoke exception1
 		try {
-			proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/exception1/invokable");
+			proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/exception1");
 			fail();
 		} catch (ProviderException e) {
 			assertEquals(NullPointerException.class, e.getCause().getClass());
 		}
 		// Invoke exception2
 		try {
-			proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/exception2/invokable", "prop1");
+			proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/exception2", "prop1");
 			fail();
 		} catch (ProviderException e) {
 			assertEquals("Exception description", e.getMessage());
@@ -116,10 +117,10 @@ public class MultiAASProviderTest {
 	@Test
 	public void invokeTest() {
 		// test invoking from an invalid aas
-		assertNull(proxy.invokeOperation("A1/aas/submodels/SimpleAASSubmodel/operations/complex/invokable", 10, 3));
+		assertNull(proxy.invokeOperation("A1/aas/submodels/SimpleAASSubmodel/operations/complex", 10, 3));
 
 		// test invoking with return value
-		assertEquals(7, proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/complex/invokable", 10, 3));
-		assertEquals(true, proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/simple/invokable"));
+		assertEquals(7, proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/complex", 10, 3));
+		assertEquals(true, proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/simple"));
 	}
 }

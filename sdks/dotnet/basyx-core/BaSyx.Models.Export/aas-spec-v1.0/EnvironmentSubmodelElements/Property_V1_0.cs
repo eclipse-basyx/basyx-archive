@@ -16,17 +16,17 @@ namespace BaSyx.Models.Export
 {
     public class Property_V1_0 : SubmodelElementType_V1_0
     {
-        [JsonProperty("valueType")]
-        [XmlElement("valueType")]
-        public string ValueType { get; set; }
+        [JsonProperty("valueId")]
+        [XmlElement("valueId")]
+        public EnvironmentReference_V1_0 ValueId { get; set; }
 
         [JsonProperty("value")]
         [XmlElement("value")]
         public string Value { get; set; }
 
-        [JsonProperty("valueId")]
-        [XmlElement("valueId")]
-        public EnvironmentReference_V1_0 ValueId { get; set; }
+        [JsonProperty("valueType")]
+        [XmlElement("valueType")]
+        public string ValueType { get; set; }
 
         [JsonProperty("modelType")]
         [XmlIgnore]

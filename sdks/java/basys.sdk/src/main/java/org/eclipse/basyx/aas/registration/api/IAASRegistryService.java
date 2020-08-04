@@ -22,13 +22,7 @@ public interface IAASRegistryService {
 	 * Register AAS descriptor in registry, delete old registration 
 	 */
 	public void register(AASDescriptor deviceAASDescriptor) throws ProviderException;
-	
-	/**
-	 * Only register AAS descriptor in registry
-	 */
-	public void registerOnly(AASDescriptor deviceAASDescriptor) throws ProviderException;
 
-	
 	/**
 	 * Register SM descriptor in registry, delete old registration
 	 */

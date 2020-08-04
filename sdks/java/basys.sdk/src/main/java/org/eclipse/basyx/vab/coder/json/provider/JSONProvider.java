@@ -2,9 +2,7 @@ package org.eclipse.basyx.vab.coder.json.provider;
 
 import java.io.PrintWriter;
 import java.util.Collection;
-import java.util.List;
 
-import org.eclipse.basyx.vab.coder.json.metaprotocol.Message;
 import org.eclipse.basyx.vab.coder.json.metaprotocol.Result;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
@@ -81,36 +79,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 */
 	public ModelProvider getBackendReference() {
 		return providerBackend;
-	}
-	
-	
-	/**
-	 * Wrap object with meta-protocol and return serialized string 
-	 */
-	private String serialize(boolean success, Object entity, List<Message> messages) {
-		
-		// Wrap the entity in the meta-protocol
-		Result result = new Result(success, entity, messages);
-		
-		// Serialize the whole thing
-		return serialize(result);
-	}
-	
-	
-	/**
-	 * Acknowledges successful operation without entity body
-	 * @param success
-	 * @return
-	 */
-	private String serialize(boolean success) {
-		
-		// Create Ack
-		Result result = new Result(success);
-		
-		// Serialize the whole thing
-		return serialize(result);
-	}
-	
+	}	
 	
 	/**
 	 * Marks success as false and delivers exception cause messages 
@@ -199,7 +168,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			Object value = providerBackend.getModelPropertyValue(path);
 
 			// Serialize as json string - any messages?
-			String jsonString = serialize(true, value, null);
+			String jsonString = serializer.serialize(value);
 
 			// Send response
 			outputStream.write(jsonString);
@@ -228,11 +197,8 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			// Set the value of the element
 			providerBackend.setModelPropertyValue(path, parameter);
 
-			// Create serialized acknowledgement 
-			String jsonString = serialize(true);
-			
 			// Send response
-			outputStream.write(jsonString);
+			outputStream.write("");
 
 		} catch (Exception e) {
 			sendException(outputStream, e);
@@ -274,8 +240,8 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 
 			Object result = providerBackend.invokeOperation(path, (Object[]) parameter);
 
-			// Serialize result as json string - are there any messages?
-			String jsonString = serialize(true, result, null);
+			// Serialize result as json string
+			String jsonString = serializer.serialize(result);
 			
 			// Send response
 			outputStream.write(jsonString);
@@ -308,11 +274,8 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 				this.providerBackend.deleteValue(path, parameter);
 			}
 
-			// Create serialized acknowledgement 
-			String jsonString = serialize(true);
-			
 			// Send response
-			outputStream.write(jsonString);
+			outputStream.write("");
 
 		} catch (Exception e) {
 			sendException(outputStream, e);
@@ -337,12 +300,8 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 
 			providerBackend.createValue(path, parameter);
 
-			// Create serialized acknowledgement 
-			String jsonString = serialize(true);
-			
 			// Send response
-			outputStream.write(jsonString);
-
+			outputStream.write("");
 		} catch (Exception e) {
 			sendException(outputStream, e);
 		}

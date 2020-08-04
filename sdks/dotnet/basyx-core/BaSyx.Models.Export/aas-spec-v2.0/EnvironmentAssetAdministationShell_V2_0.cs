@@ -17,6 +17,10 @@ namespace BaSyx.Models.Export
 {    
     public class EnvironmentAssetAdministationShell_V2_0 : EnvironmentIdentifiable_V2_0, IModelType
     {
+        [JsonProperty("derivedFrom")]
+        [XmlElement("derivedFrom")]
+        public EnvironmentReference_V2_0 DerivedFrom { get; set; }
+
         [JsonProperty("asset")]
         [XmlElement("assetRef")]
         public EnvironmentReference_V2_0 AssetReference { get; set; }
@@ -26,22 +30,42 @@ namespace BaSyx.Models.Export
         [XmlArrayItem("submodelRef")]
         public List<EnvironmentReference_V2_0> SubmodelReferences { get; set; }
 
-        [JsonProperty("conceptDictionaries")]
-        [XmlElement("conceptDictionaries")]
-        public List<ConceptDictionary_V2_0> ConceptDictionaries { get; set; }
-
-        [JsonProperty("derivedFrom")]
-        [XmlElement("derivedFrom")]
-        public EnvironmentReference_V2_0 DerivedFrom { get; set; }
-
         [JsonProperty("views")]
         [XmlArray("views")]
         [XmlArrayItem("view")]
         public List<View_V2_0> Views { get; set; }
 
+        [JsonProperty("conceptDictionaries")]
+        [XmlElement("conceptDictionaries")]
+        public List<ConceptDictionary_V2_0> ConceptDictionaries { get; set; }
+
         [JsonProperty("modelType")]
         [XmlIgnore]
         public ModelType ModelType => ModelType.AssetAdministationShell;
+
+        public bool ShouldSerializeConceptDictionaries()
+        {
+            if (ConceptDictionaries == null || ConceptDictionaries.Count == 0)
+                return false;
+            else
+                return true;
+        }
+
+        public bool ShouldSerializeViews()
+        {
+            if (Views == null || Views.Count == 0)
+                return false;
+            else
+                return true;
+        }
+
+        public bool ShouldSerializeSubmodelReferences()
+        {
+            if (SubmodelReferences == null || SubmodelReferences.Count == 0)
+                return false;
+            else
+                return true;
+        }
     }
 
     public class ConceptDictionary_V2_0 : EnvironmentReferable_V2_0
@@ -50,6 +74,14 @@ namespace BaSyx.Models.Export
         [XmlArray("conceptDescriptions")]
         [XmlArrayItem("conceptDescriptionRefs")]
         public List<EnvironmentReference_V2_0> ConceptDescriptionsRefs {get; set; }
+
+        public bool ShouldSerializeConceptDescriptionsRefs()
+        {
+            if (ConceptDescriptionsRefs == null || ConceptDescriptionsRefs.Count == 0)
+                return false;
+            else
+                return true;
+        }
     }
 
     public class View_V2_0 : EnvironmentReferable_V2_0, IModelType
@@ -65,5 +97,13 @@ namespace BaSyx.Models.Export
 
         [XmlIgnore]
         public ModelType ModelType => ModelType.View;
+
+        public bool ShouldSerializeContainedElements()
+        {
+            if (ContainedElements == null || ContainedElements.Count == 0)
+                return false;
+            else
+                return true;
+        }
     }
 }

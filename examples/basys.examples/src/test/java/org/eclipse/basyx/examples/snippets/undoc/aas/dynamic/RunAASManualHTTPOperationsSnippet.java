@@ -1,11 +1,11 @@
 package org.eclipse.basyx.examples.snippets.undoc.aas.dynamic;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
 import org.eclipse.basyx.components.servlet.vab.VABLambdaServlet;
-import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
+import org.eclipse.basyx.examples.TestContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -46,7 +46,7 @@ public class RunAASManualHTTPOperationsSnippet {
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// Simulated servlets
 				// - BaSys topology with one AAS Server and one SQL directory
-				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory().
+				TestContext.sqlContext.
 					// Deploy example specific servlets to Tomcat server in this context
 					addServletMapping("/Testsuite/components/BaSys/1.0/devicestatusVAB/*", new VABLambdaServlet())
 			);
@@ -64,14 +64,17 @@ public class RunAASManualHTTPOperationsSnippet {
 		// - Connect to device (VAB object)
 		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
 
+		int prop1Val = 7;
+		String prop1IdShort = "prop1";
+		String prop2Val = "myStr";
 		// Add example properties
 		SubModel submodel = new SubModel();
 		submodel.setIdShort("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
-		Property prop1 = new Property(7);
-		prop1.setIdShort("prop1");
+		Property prop1 = new Property(prop1Val);
+		prop1.setIdShort(prop1IdShort);
 		submodel.addSubModelElement(prop1);
 
-		Property prop2 = new Property("myStr");
+		Property prop2 = new Property(prop2Val);
 		prop2.setIdShort("prop2");
 		submodel.addSubModelElement(prop2);
 
@@ -83,14 +86,14 @@ public class RunAASManualHTTPOperationsSnippet {
 		
 		// Read property values
 		// - Use WebServiceJSONClient class. Returned property contains meta data. The actual property is stored in property "entity", property value is in entity property "value"
-		int prop1Val = (int) ((Map<String, Object>) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/submodelElements/prop1")).get("entity")).get("value");
-		String prop1Id = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/submodelElements/prop1")).get("entity")).get("idShort");
-		String prop2Val = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/submodelElements/prop2")).get("entity")).get("value");
+		int retrievedProp1Val = (int) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/submodelElements/prop1")).get("value");
+		String retrievedProp1Id = (String) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/submodelElements/prop1")).get("idShort");
+		String retrievedProp2Val = (String) ((Map<String, Object>) jsonClient.get("http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/submodelElements/prop2")).get("value");
 		
 		// Check results
-		assertTrue(prop1Val == 7);
-		assertTrue(prop1Id.equals("prop1"));
-		assertTrue(prop2Val.equals("myStr"));
+		assertEquals(prop1Val, retrievedProp1Val);
+		assertEquals(prop1IdShort, retrievedProp1Id);
+		assertEquals(prop2Val, retrievedProp2Val);
 	}
 }
 

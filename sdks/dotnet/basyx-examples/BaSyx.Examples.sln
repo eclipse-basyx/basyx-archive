@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleAssetAdministrationSh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiAssetAdministrationShell", "MultiAssetAdministrationShell\MultiAssetAdministrationShell.csproj", "{82FDA941-6905-48D5-91FD-2DCF7B97F1C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComplexAssetAdministrationShellScenario", "ComplexAssetAdministrationShellScenario\ComplexAssetAdministrationShellScenario.csproj", "{41026E20-E7A5-46BE-B51E-2E11DA085921}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComplexAssetAdministrationShellScenario", "ComplexAssetAdministrationShellScenario\ComplexAssetAdministrationShellScenario.csproj", "{41026E20-E7A5-46BE-B51E-2E11DA085921}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

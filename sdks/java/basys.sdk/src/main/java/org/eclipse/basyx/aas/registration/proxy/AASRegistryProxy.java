@@ -15,7 +15,6 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.directory.proxy.VABDirectoryProxy;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
-import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -66,13 +65,11 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 	public void register(AASDescriptor deviceAASDescriptor) throws ProviderException {
 		// Add a mapping from the AAS id to the serialized descriptor
 		try {
-			try {
-				lookupAAS(deviceAASDescriptor.getIdentifier());
-				String encodedId = VABPathTools.encodePathElement(deviceAASDescriptor.getIdentifier().getId());
-				provider.setModelPropertyValue(encodedId, deviceAASDescriptor);
-			} catch (ResourceNotFoundException e) {
-				provider.createValue("", deviceAASDescriptor);
-			}
+			String encodedId = VABPathTools.encodePathElement(deviceAASDescriptor.getIdentifier().getId());
+
+			// Typically, VAB SET should not create new entries. Nevertheless, the registry
+			// API is defined to do it.
+			provider.setModelPropertyValue(encodedId, deviceAASDescriptor);
 		} catch (Exception e) {
 			if (e instanceof ProviderException) {
 				throw (ProviderException) e;
@@ -82,23 +79,6 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 		}
 	}
 
-	/**
-	 * Register AAS descriptor in registry
-	 */
-	@Override
-	public void registerOnly(AASDescriptor deviceAASDescriptor) throws ProviderException {
-		// Add a mapping from the AAS id to the serialized descriptor
-		try {
-			provider.createValue("", deviceAASDescriptor);
-		} catch (Exception e) {
-			if (e instanceof ProviderException) {
-				throw (ProviderException) e;
-			} else {
-				throw new ProviderException(e);
-			}
-		}
-	}
-	
 	/**
 	 * Delete AAS descriptor from registry
 	 */
@@ -148,16 +128,9 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 	@Override
 	public void register(IIdentifier aas, SubmodelDescriptor smDescriptor) throws ProviderException {
 		try {
-			try {
-				AASDescriptor desc = lookupAAS(aas);
-				if (desc.getSubmodelDescriptorFromIdShort(smDescriptor.getIdShort()) != null) {
-					provider.setModelPropertyValue(VABPathTools.concatenatePaths(buildSubmodelPath(aas), smDescriptor.getIdShort()), smDescriptor);
-				} else {
-					provider.createValue(buildSubmodelPath(aas), smDescriptor);
-				}
-			} catch (ResourceNotFoundException e) {
-				throw e;
-			}
+			// Typically, VAB SET should not create new entries. Nevertheless, the registry
+			// API is defined to do it.
+			provider.setModelPropertyValue(VABPathTools.concatenatePaths(buildSubmodelPath(aas), smDescriptor.getIdShort()), smDescriptor);
 		} catch (Exception e) {
 			if (e instanceof ProviderException) {
 				throw (ProviderException) e;

@@ -7,15 +7,18 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.After;
 import org.junit.Before;
@@ -44,7 +47,8 @@ public abstract class TestRegistryProviderSuite {
 	protected String aasEndpoint2 = "http://www.registrytest.de/aas02/aas";
 	protected String smEndpoint1 = "http://www.registrytest.de/aas01/aas/submodels/" + smIdShort1;
 	protected String smEndpoint2 = "http://www.registrytest.de/aas01/aas/submodels/" + smIdShort2;
-	
+	protected Asset asset1;
+	protected Asset asset2;
 	/**
 	 * Getter for the tested registry provider. Tests for actual registry provider
 	 * have to realize this method.
@@ -56,10 +60,15 @@ public abstract class TestRegistryProviderSuite {
 	 */
 	@Before
 	public void setUp() {
+		// Create assets
+		asset1 = new Asset(new Reference(new Identifier(IdentifierType.CUSTOM, "asset001"), KeyElements.ASSET, false));
+		asset1.setIdentification(IdentifierType.CUSTOM, "asset001");
+		asset2 = new Asset(new Reference(new Identifier(IdentifierType.CUSTOM, "asset002"), KeyElements.ASSET, false));
+		asset2.setIdentification(IdentifierType.CUSTOM, "asset002");
 		// Create descriptors for AAS and submodels
-		AASDescriptor aasDesc1 = new AASDescriptor(aasIdShort1, aasId1, aasEndpoint1);
+		AASDescriptor aasDesc1 = new AASDescriptor(aasIdShort1, aasId1, asset1, aasEndpoint1);
 		aasDesc1.addSubmodelDescriptor(new SubmodelDescriptor(smIdShort1, smId1, smEndpoint1));
-		AASDescriptor aasDesc2 = new AASDescriptor(aasIdShort2, aasId2, aasEndpoint2);
+		AASDescriptor aasDesc2 = new AASDescriptor(aasIdShort2, aasId2, asset2, aasEndpoint2);
 		
 		// Register Asset Administration Shells
 		proxy.register(aasDesc1);
@@ -93,6 +102,7 @@ public abstract class TestRegistryProviderSuite {
 		validateDescriptor1(descriptor);
 	}
 
+
 	/**
 	 * Tests getting all entries from the registry and validates the result.
 	 */
@@ -118,7 +128,8 @@ public abstract class TestRegistryProviderSuite {
 	private void validateDescriptor1(AASDescriptor descriptor) {
 		assertEquals(aasId1.getId(), descriptor.getIdentifier().getId());
 		assertEquals(aasId1.getIdType(), descriptor.getIdentifier().getIdType());
-		assertEquals(aasId1.getIdType(), descriptor.getIdentifier().getIdType());
+		IAsset asset = descriptor.getAsset();
+		assertEquals(asset1.getIdentification(), asset.getIdentification());
 		assertEquals(aasEndpoint1, descriptor.getFirstEndpoint());
 
 		// Check, if the SM descriptor in the AASDescriptor is correct
@@ -136,7 +147,8 @@ public abstract class TestRegistryProviderSuite {
 	private void validateDescriptor2(AASDescriptor descriptor) {
 		assertEquals(aasId2.getId(), descriptor.getIdentifier().getId());
 		assertEquals(aasId2.getIdType(), descriptor.getIdentifier().getIdType());
-		assertEquals(aasId2.getIdType(), descriptor.getIdentifier().getIdType());
+		IAsset asset = descriptor.getAsset();
+		assertEquals(asset2.getIdentification(), asset.getIdentification());
 		assertEquals(aasEndpoint2, descriptor.getFirstEndpoint());
 	}
 
@@ -153,6 +165,7 @@ public abstract class TestRegistryProviderSuite {
 		
 		// After aas2 has been deleted, only aas1 should be registered
 		assertNotNull(proxy.lookupAAS(aasId1));
+		assertNotNull(proxy.lookupAAS(asset1.getIdentification()));
 		try {
 			proxy.lookupAAS(aasId2);
 			fail();
@@ -160,8 +173,16 @@ public abstract class TestRegistryProviderSuite {
 			// expected
 		}
 
+		// Reference of asset-id to the AAS descriptor should also to deleted
+		try {
+			proxy.lookupAAS(asset2.getIdentification());
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// expected
+		}
+
 		proxy.delete(aasId1);
-		
+
 		// After aas1 has been deleted, both should not be registered any more
 		try {
 			proxy.lookupAAS(aasId1);
@@ -171,6 +192,20 @@ public abstract class TestRegistryProviderSuite {
 		}
 		try {
 			proxy.lookupAAS(aasId2);
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// expected
+		}
+
+		// Reference of both asset-ids to the AAS descriptors should also to deleted
+		try {
+			proxy.lookupAAS(asset1.getIdentification());
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// expected
+		}
+		try {
+			proxy.lookupAAS(asset2.getIdentification());
 			fail();
 		} catch (ResourceNotFoundException e) {
 			// expected
@@ -197,7 +232,7 @@ public abstract class TestRegistryProviderSuite {
 	 */
 	@Test
 	public void testOverwritingAASDescriptor() {
-		AASDescriptor aasDesc2 = new AASDescriptor(aasIdShort2, aasId2, "TestEndpoint");
+		AASDescriptor aasDesc2 = new AASDescriptor(aasIdShort2, aasId2, asset2, "TestEndpoint");
 		proxy.register(aasDesc2);
 		AASDescriptor retrieved = proxy.lookupAAS(aasId2);
 		assertEquals(aasDesc2.getFirstEndpoint(), retrieved.getFirstEndpoint());
@@ -229,20 +264,5 @@ public abstract class TestRegistryProviderSuite {
 		aasDesc = proxy.lookupAAS(aasId1);
 		assertNotNull(aasDesc.getSubmodelDescriptorFromIdShort(smIdShort1));
 		assertNull(aasDesc.getSubmodelDescriptorFromIdShort(smIdShort2));
-	}
-
-	@Test
-	public void testRegisterOnly() {
-		IIdentifier id = new ModelUrn("testURN");
-		AASDescriptor descriptorToRegister = new AASDescriptor(id, "testEndpoint");
-		proxy.registerOnly(descriptorToRegister);
-		AASDescriptor descriptor = proxy.lookupAAS(id);
-		assertEquals(descriptorToRegister.getFirstEndpoint(), descriptor.getFirstEndpoint());
-	}
-
-	@Test(expected = ResourceAlreadyExistsException.class)
-	public void testRegisterOnlyAlreadyExisting() {
-		AASDescriptor descriptorToRegister = new AASDescriptor(aasIdShort1, aasId1, aasEndpoint1);
-		proxy.registerOnly(descriptorToRegister);
 	}
 }

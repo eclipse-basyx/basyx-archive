@@ -54,7 +54,10 @@ namespace BaSyx.Models.Export.EnvironmentDataSpecifications
         {
             get
             {
-                return DataType.ToString();
+                if (DataType == EnvironmentDataTypeIEC61360.UNDEFINED)
+                    return null;
+                else
+                    return DataType.ToString();
             }
             set
             {
@@ -106,6 +109,54 @@ namespace BaSyx.Models.Export.EnvironmentDataSpecifications
         [JsonProperty("levelType")]
         [XmlElement("levelType", Namespace = AssetAdministrationShellEnvironment_V2_0.IEC61360_NAMESPACE)]
         public List<EnvironmentLevelType> LevelTypes { get; set; }
+
+        public bool ShouldSerializeLevelTypes()
+        {
+            if (LevelTypes == null || LevelTypes.Count == 0)
+                return false;
+            else
+                return true;
+        }
+
+        public bool ShouldSerializeValueId()
+        {
+            if (ValueId == null)
+                return false;
+            else
+                return true;
+        }
+
+        public bool ShouldSerializeUnitId()
+        {
+            if (UnitId == null || UnitId.Keys?.Count == 0)
+                return false;
+            else
+                return true;
+        }
+
+        public bool ShouldSerializeValueList()
+        {
+            if (ValueList == null || ValueList.Count == 0)
+                return false;
+            else
+                return true;
+        }
+
+        public bool ShouldSerializeShortName()
+        {
+            if (ShortName == null || ShortName.Count == 0)
+                return false;
+            else
+                return true;
+        }
+
+        public bool ShouldSerializeDefinition()
+        {
+            if (Definition == null || Definition.Count == 0)
+                return false;
+            else
+                return true;
+        }
     }
 
     public class ValueReferencePair

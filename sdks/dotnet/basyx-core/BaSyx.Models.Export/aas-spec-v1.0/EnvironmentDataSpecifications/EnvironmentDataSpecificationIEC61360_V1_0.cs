@@ -55,5 +55,21 @@ namespace BaSyx.Models.Export.EnvironmentDataSpecifications
         [XmlArray("definition")]
         [XmlArrayItem("langString", Namespace = AssetAdministrationShellEnvironment_V1_0.AAS_NAMESPACE)]
         public LangStringSet Definition { get; set; }
+
+        public bool ShouldSerializeSourceOfDefinition()
+        {
+            if (SourceOfDefinition == null || SourceOfDefinition.Count == 0)
+                return false;
+            else
+                return true;
+        }
+
+        public bool ShouldSerializeDefinition()
+        {
+            if (Definition == null || Definition.Count == 0)
+                return false;
+            else
+                return true;
+        }
     }
 }

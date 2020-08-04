@@ -18,18 +18,18 @@ namespace BaSyx.Models.Export
 {
     public class SubmodelElementCollection_V1_0 : SubmodelElementType_V1_0, IModelType
     {
-        [JsonProperty("value"), JsonConverter(typeof(JsonSubmodelElementConverter_V1_0))]
-        [XmlArray("value")]
-        [XmlArrayItem("submodelElement")]
-        public List<EnvironmentSubmodelElement_V1_0> Value { get; set; }
+        [JsonProperty("allowDuplicates")]
+        [XmlElement("allowDuplicates")]
+        public bool AllowDuplicates { get; set; }
 
         [JsonProperty("ordered")]
         [XmlElement("ordered")]
         public bool Ordered { get; set; }
 
-        [JsonProperty("allowDuplicates")]
-        [XmlElement("allowDuplicates")]
-        public bool AllowDuplicates { get; set; }
+        [JsonProperty("value"), JsonConverter(typeof(JsonSubmodelElementConverter_V1_0))]
+        [XmlArray("value")]
+        [XmlArrayItem("submodelElement")]
+        public List<EnvironmentSubmodelElement_V1_0> Value { get; set; }
 
         [JsonProperty("modelType")]
         [XmlIgnore]
@@ -37,5 +37,13 @@ namespace BaSyx.Models.Export
 
         public SubmodelElementCollection_V1_0() { }
         public SubmodelElementCollection_V1_0(SubmodelElementType_V1_0 submodelElementType) : base(submodelElementType) { }
+
+        public bool ShouldSerializeValue()
+        {
+            if (Value == null || Value.Count == 0)
+                return false;
+            else
+                return true;
+        }
     }
 }

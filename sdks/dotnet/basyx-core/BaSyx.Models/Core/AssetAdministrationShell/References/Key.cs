@@ -50,7 +50,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.References
             Local = local;
         }
 
-        public static KeyElements GetReferableElement(Type type)
+        public static KeyElements GetKeyElementFromType(Type type)
         {
             if (typeof(IAsset).IsAssignableFrom(type))
                 return KeyElements.Asset;
@@ -68,8 +68,35 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.References
                 return KeyElements.Event;
             else if (typeof(IConceptDescription).IsAssignableFrom(type))
                 return KeyElements.ConceptDescription;
+            else if (typeof(IReferenceElement).IsAssignableFrom(type))
+                return KeyElements.ReferenceElement;
+            else if (typeof(IRange).IsAssignableFrom(type))
+                return KeyElements.Range;
+            else if (typeof(IOperation).IsAssignableFrom(type))
+                return KeyElements.Operation;
+            else if (typeof(IRelationshipElement).IsAssignableFrom(type))
+                return KeyElements.RelationshipElement;
+            else if (typeof(IAnnotatedRelationshipElement).IsAssignableFrom(type))
+                return KeyElements.AnnotatedRelationshipElement;
+            else if (typeof(IEvent).IsAssignableFrom(type))
+                return KeyElements.Event;
+            else if (typeof(IBasicEvent).IsAssignableFrom(type))
+                return KeyElements.BasicEvent;
+            else if (typeof(IFile).IsAssignableFrom(type))
+                return KeyElements.File;
+            else if (typeof(IBlob).IsAssignableFrom(type))
+                return KeyElements.Blob;
+            else if (typeof(ISubmodelElementCollection).IsAssignableFrom(type))
+                return KeyElements.SubmodelElementCollection;
+            else if (typeof(IEntity).IsAssignableFrom(type))
+                return KeyElements.Entity;
             else
                 throw new InvalidOperationException("Cannot convert type " + type.FullName + "to referable element");
+        }
+
+        public string ToStandardizedString()
+        {
+            return string.Format("({0})({1})[{2}]{3}", Type, Local ? "local" : "no-local", IdType, Value);
         }
 
         #region IEquatable
@@ -148,8 +175,8 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.References
     [DataContract]
     public class Key<T> : Key
     {
-        public Key(KeyType idType, string value, bool local) : base(GetReferableElement(typeof(T)), idType, value, local)
-        { }
+        public Key(KeyType idType, string value, bool local) : base(GetKeyElementFromType(typeof(T)), idType, value, local)
+        { }       
     }
 
 }

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedFile;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
-import org.eclipse.basyx.submodel.restapi.DataElementProvider;
+import org.eclipse.basyx.submodel.restapi.PropertyProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
@@ -29,7 +29,7 @@ public class TestConnectedFile {
 		file.setMimeType("mimeType");
 		
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
-				new DataElementProvider(new TypeDestroyingProvider(new VABLambdaProvider(file))));
+				new PropertyProvider(new TypeDestroyingProvider(new VABLambdaProvider(file))));
 
 		connectedFile = new ConnectedFile(manager.connectToVABElement(""));
 	}

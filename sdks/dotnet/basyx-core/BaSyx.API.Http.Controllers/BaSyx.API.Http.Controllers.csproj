@@ -14,14 +14,6 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <PackageIcon>basyxlogo.png</PackageIcon>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="BaSyx.API.Http.Controllers.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="BaSyx.API.Http.Controllers.xml">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
 
   <PropertyGroup>
     <IsPackable>true</IsPackable>

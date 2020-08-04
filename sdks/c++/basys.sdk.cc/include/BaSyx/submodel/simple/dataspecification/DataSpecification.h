@@ -26,6 +26,7 @@ public:
 	// Inherited via IIdentifiable
 	virtual const std::string & getIdShort() const override;
 	virtual const std::string * const getCategory() const override;
+  void setCategory(const std::string & category) override;
 	virtual simple::LangStringSet & getDescription() override;
 	virtual const simple::LangStringSet & getDescription() const override;
 	virtual const IReferable * const getParent() const override;

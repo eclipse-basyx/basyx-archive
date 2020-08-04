@@ -2,6 +2,8 @@ package org.eclipse.basyx.examples.snippets.aas.deployment.device;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.Map;
+
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
@@ -24,6 +26,7 @@ public class DeviceAASDeploymentVAB {
 	/**
 	 * Run code snippet. Connect to AAS on server, access AAS properties. 
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void createExportAndAccessSubModel() throws Exception {
 
@@ -49,11 +52,11 @@ public class DeviceAASDeploymentVAB {
 		// - Create connection to BaSyx server manager
 		JSONConnector toDeviceManager = new JSONConnector(basyxConnector);	
 		// - Access sub model property, check value
-		Object propertyId = toDeviceManager.getModelPropertyValue("aas/idShort");
+		AssetAdministrationShell shell = AssetAdministrationShell.createAsFacade((Map<String, Object>) toDeviceManager.getModelPropertyValue("aas"));
 
 		
 		// Check value
-		assertTrue(propertyId.equals("urn:de.FHG:devices.es.iese:AAS:1.0:3:x-509#003"));
+		assertTrue(shell.getIdShort().equals("urn:de.FHG:devices.es.iese:AAS:1.0:3:x-509#003"));
 		
 	
 		// Stop local BaSyx/TCP server

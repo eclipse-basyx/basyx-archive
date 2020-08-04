@@ -2,15 +2,12 @@ package org.eclipse.basyx.testsuite.regression.aas.manager;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashMap;
-
 import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
@@ -68,6 +65,10 @@ public class TestConnectedAssetAdministrationShellManager {
 		aas.setIdShort(aasIdShort);
 		manager.createAAS(aas, aasId, "");
 
+		// Check descriptor for correct endpoint
+		String endpoint = registry.lookupAAS(aasId).getFirstEndpoint();
+		assertEquals("/aasList/" + aasId.getId() + "/aas", endpoint);
+
 		// Retrieve it
 		ConnectedAssetAdministrationShell connectedAAS = manager.retrieveAAS(aasId);
 		assertEquals(aasIdShort, connectedAAS.getIdShort());
@@ -83,9 +84,8 @@ public class TestConnectedAssetAdministrationShellManager {
 
 		// Register AAS at directory
 		AASDescriptor desc = new AASDescriptor(aasId, "/aas");
-		desc.addSubmodelDescriptor(new SubmodelDescriptor(smIdShort, smId, "/aas/submodels/" + smIdShort));
 		registry.register(desc);
-		IModelProvider provider = new VABMultiSubmodelProvider(new AASModelProvider(new HashMap<>()));
+		IModelProvider provider = new VABMultiSubmodelProvider(new AASModelProvider(new AssetAdministrationShell()));
 		connectorProvider.addMapping("", provider);
 
 		// Create sub model
@@ -107,8 +107,8 @@ public class TestConnectedAssetAdministrationShellManager {
 		ISubModel sm = manager.retrieveSubModel(aasId, smId);
 
 		// - check id and properties
-		IProperty prop1Connected = (IProperty) sm.getDataElements().get("prop1");
-		IProperty prop2Connected = (IProperty) sm.getDataElements().get("prop2");
+		IProperty prop1Connected = sm.getProperties().get("prop1");
+		IProperty prop2Connected = sm.getProperties().get("prop2");
 
 		assertEquals(smIdShort, sm.getIdShort());
 		assertEquals(smId.getId(), sm.getIdentification().getId());

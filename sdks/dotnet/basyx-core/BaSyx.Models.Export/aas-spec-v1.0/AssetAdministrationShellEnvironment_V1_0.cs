@@ -41,8 +41,8 @@ namespace BaSyx.Models.Export
     {
         public const string AAS_NAMESPACE = "http://www.admin-shell.io/aas/1/0";
         public const string IEC61360_NAMESPACE = "http://www.admin-shell.io/IEC61360/1/0";
-        public const string AAS_XSD_FILENAME = "AAS-v1.0.xsd";
-        public const string IEC61360_XSD_FILENAME = "IEC61360-v1.0.xsd";
+        public const string AAS_XSD_FILENAME = "aas-spec-v1.0/AAS.xsd";
+        public const string IEC61360_XSD_FILENAME = "aas-spec-v1.0/IEC61360.xsd";
 
         [DataMember(EmitDefaultValue = false, IsRequired = true, Name = "assetAdministrationShells", Order = 0)]
         [XmlIgnore, JsonIgnore]

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema elementFormDefault="qualified" targetNamespace="http://www.admin-shell.io/aas/2/0" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:aas="http://www.admin-shell.io/aas/2/0" xmlns:abac="http://www.admin-shell.io/aas/abac/2/0" xmlns:IEC61360="http://www.admin-shell.io/IEC61360/2/0">
+<schema elementFormDefault="qualified" targetNamespace="http://www.admin-shell.io/aas/2/0" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:aas="http://www.admin-shell.io/aas/2/0" xmlns:abac="http://www.admin-shell.io/aas/abac/2/0" xmlns:IEC61360="http://www.admin-shell.io/IEC61360/2/0" xmlns:Q1="http://www.admin-shell.io/aas/2/0">
 	<import namespace="http://www.admin-shell.io/aas/abac/2/0" schemaLocation="AAS_ABAC.xsd"/>
 	<import namespace="http://www.admin-shell.io/IEC61360/2/0" schemaLocation="IEC61360.xsd"/>
 	<attributeGroup name="keyTypes">
@@ -120,11 +120,6 @@
 			<element maxOccurs="1" minOccurs="0" name="qualifier" type="aas:qualifier_t"/>
 		</choice>
 	</complexType>
-	<complexType name="constraints_t">
-		<sequence>
-			<element maxOccurs="unbounded" minOccurs="0" name="qualifiers" type="aas:constraint_t"/>
-		</sequence>
-	</complexType>
 	<complexType name="containedElements_t">
 		<sequence>
 			<element maxOccurs="unbounded" minOccurs="0" name="containedElementRef" type="aas:reference_t"/>
@@ -149,16 +144,16 @@
 		<complexContent>
 			<extension base="aas:submodelElementAbstract_t">
 				<sequence>
-					<element name="assetRef" type="aas:reference_t"/>
-					<element name="entityType">
+                    <element name="statements" type="aas:submodelElements_t"/>
+                    <element name="entityType">
 						<simpleType>
 							<restriction base="aas:entityType_t">
-								<enumeration value="CoManagedEntity"/>
-								<enumeration value="SelfManagedEntity"/>
+								<enumeration value="CoManagedEntity" />
+								<enumeration value="SelfManagedEntity" />
 							</restriction>
 						</simpleType>
 					</element>
-					<element name="statements" type="aas:submodelElement_t"/>
+                    <element name="assetRef" type="aas:reference_t" minOccurs="0" maxOccurs="1"/>
 				</sequence>
 			</extension>
 		</complexContent>
@@ -173,7 +168,7 @@
 			<extension base="aas:submodelElementAbstract_t">
 				<sequence>
 					<element name="mimeType" type="string"/>
-					<element name="value" type="aas:pathType_t"/>
+					<element name="value" type="aas:pathType_t" minOccurs="0" maxOccurs="1"/>
 				</sequence>
 			</extension>
 		</complexContent>
@@ -296,17 +291,12 @@
 		<complexContent>
 			<extension base="aas:submodelElementAbstract_t">
 				<sequence>
-					<element maxOccurs="1" minOccurs="0" name="inoutputVariable" type="aas:operationsVariables_t"/>
-					<element maxOccurs="1" minOccurs="0" name="inputVariable" type="aas:operationsVariables_t"/>
-					<element maxOccurs="1" minOccurs="0" name="outputVariable" type="aas:operationsVariables_t"/>
+					<element maxOccurs="unbounded" minOccurs="0" name="inputVariable" type="aas:operationVariable_t"/>
+					<element maxOccurs="unbounded" minOccurs="0" name="outputVariable" type="aas:operationVariable_t"/>
+					<element maxOccurs="unbounded" minOccurs="0" name="inoutputVariable" type="aas:operationVariable_t"></element>
 				</sequence>
 			</extension>
 		</complexContent>
-	</complexType>
-	<complexType name="operationsVariables_t">
-		<sequence>
-			<element maxOccurs="unbounded" minOccurs="0" name="operationVariable" type="aas:operationVariable_t"/>
-		</sequence>
 	</complexType>
 	<complexType name="operationVariable_t">
 		<sequence>
@@ -322,19 +312,19 @@
 		<complexContent>
 			<extension base="aas:submodelElementAbstract_t">
 				<sequence>
-					<element maxOccurs="1" minOccurs="0" name="valueId" type="aas:reference_t"/>
-					<element maxOccurs="1" minOccurs="0" name="value" type="aas:valueDataType_t"/>
 					<element maxOccurs="1" minOccurs="1" name="valueType" type="aas:dataTypeDef_t"/>
+					<element maxOccurs="1" minOccurs="0" name="value" type="aas:valueDataType_t"/>
+					<element maxOccurs="1" minOccurs="0" name="valueId" type="aas:reference_t"/>
 				</sequence>
 			</extension>
 		</complexContent>
 	</complexType>
 	<complexType name="qualifier_t">
 		<sequence>
-			<element maxOccurs="1" minOccurs="0" name="valueId" type="aas:reference_t"/>
-			<element maxOccurs="1" minOccurs="0" name="value" type="aas:valueDataType_t"/>
 			<element maxOccurs="1" minOccurs="1" name="type" type="aas:qualifierType_t"/>
 			<element maxOccurs="1" minOccurs="1" name="valueType" type="aas:dataTypeDef_t"/>
+			<element maxOccurs="1" minOccurs="0" name="valueId" type="aas:reference_t"/>
+			<element maxOccurs="1" minOccurs="0" name="value" type="aas:valueDataType_t"/>
 			<group ref="aas:hasSemantics"/>
 		</sequence>
 	</complexType>
@@ -347,9 +337,9 @@
 		<complexContent>
 			<extension base="aas:submodelElementAbstract_t">
 				<sequence>
-					<element maxOccurs="1" minOccurs="0" name="max" type="aas:valueDataType_t"/>
-					<element maxOccurs="1" minOccurs="0" name="min" type="aas:valueDataType_t"/>
-					<element maxOccurs="1" minOccurs="1" name="valueType" type="aas:dataTypeDef_t"/>
+                    <element maxOccurs="1" minOccurs="1" name="valueType" type="aas:dataTypeDef_t" />
+                    <element maxOccurs="1" minOccurs="0" name="min" type="aas:valueDataType_t" />
+                    <element maxOccurs="1" minOccurs="0" name="max" type="aas:valueDataType_t"/>
 				</sequence>
 			</extension>
 		</complexContent>
@@ -363,7 +353,7 @@
 		<complexContent>
 			<extension base="aas:submodelElementAbstract_t">
 				<sequence>
-					<element name="value" type="aas:reference_t"/>
+					<element name="value" type="aas:reference_t" minOccurs="0" maxOccurs="1"/>
 				</sequence>
 			</extension>
 		</complexContent>
@@ -400,17 +390,12 @@
 	</complexType>
 	<complexType name="submodelElement_t">
 		<choice>
-			<element name="annotatedRelationshipElement" type="aas:relationshipElement_t"/>
+			<group ref="aas:dataElement" />
+			<element name="annotatedRelationshipElement" type="aas:annotatedRelationshipElement_t"/>
 			<element name="basicEvent" type="aas:basicEvent_t"/>
-			<element name="blob" type="aas:blob_t"/>
-			<element name="capability" type="string"/>
+			<element name="capability" type="aas:submodelElementAbstract_t"/>
 			<element name="entity" type="aas:entity_t"/>
-			<element name="file" type="aas:file_t"/>
-			<element name="multiLanguageProperty" type="aas:multiLanguageProperty_t"/>
 			<element name="operation" type="aas:operation_t"/>
-			<element name="property" type="aas:property_t"/>
-			<element name="range" type="aas:range_t"/>
-			<element name="referenceElement" type="aas:referenceElement_t"/>
 			<element name="relationshipElement" type="aas:relationshipElement_t"/>
 			<element name="submodelElementCollection" type="aas:submodelElementCollection_t"/>
 		</choice>
@@ -428,9 +413,9 @@
 		<complexContent>
 			<extension base="aas:submodelElementAbstract_t">
 				<sequence>
-					<element name="allowDuplicates" type="boolean"/>
-					<element name="ordered" type="boolean"/>
 					<element name="value" type="aas:submodelElements_t"/>
+					<element name="ordered" type="boolean"/>
+					<element name="allowDuplicates" type="boolean"/>
 				</sequence>
 			</extension>
 		</complexContent>
@@ -501,7 +486,7 @@
 	</group>
 	<group name="qualifiable">
 		<sequence>
-			<element maxOccurs="1" minOccurs="0" name="qualifier" type="aas:constraints_t"/>
+			<element maxOccurs="unbounded" minOccurs="0" name="qualifier" type="aas:constraint_t"/>
 		</sequence>
 	</group>
 	<simpleType name="assetKind_t">
@@ -526,4 +511,34 @@
 			<enumeration value="Template"/>
 		</restriction>
 	</simpleType>
+
+	<complexType name="annotatedRelationshipElement_t">
+		<complexContent>
+			<extension base="aas:relationshipElement_t">
+			<sequence>
+			<element name="annotations" type="aas:dataElements_t"/>
+			</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<group name="dataElement">
+		<choice>
+			<element name="multiLanguageProperty" type="aas:multiLanguageProperty_t"/>
+			<element name="property" type="aas:property_t"/>
+			<element name="range" type="aas:range_t"/>
+			<element name="blob" type="aas:blob_t"/>
+			<element name="file" type="aas:file_t"/>
+			<element name="referenceElement" type="aas:referenceElement_t"/>
+		</choice>
+	</group>
+
+	<complexType name="dataElements_t">
+		<sequence>			<element name="dataElement" type="aas:dataElementAbstract_t" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="dataElementAbstract_t">
+        <group ref="aas:dataElement"></group>
+    </complexType>
 </schema>

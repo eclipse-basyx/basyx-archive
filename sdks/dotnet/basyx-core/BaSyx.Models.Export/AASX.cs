@@ -35,7 +35,7 @@ namespace BaSyx.Models.Export
 
         public List<PackagePart> SupplementaryFiles { get; } = new List<PackagePart>();
 
-        private Package aasxPackage;
+        private readonly Package aasxPackage;
         private PackagePart originPart;
         private PackagePart specPart;
 
@@ -60,7 +60,7 @@ namespace BaSyx.Models.Export
         {
             if (specPart != null)
             {
-                PackageRelationshipCollection relationships = specPart.GetRelationshipsByType("http://www.admin-shell.io/aasx/relationships/aas-suppl");
+                PackageRelationshipCollection relationships = specPart.GetRelationshipsByType(SUPPLEMENTAL_RELATIONSHIP_TYPE);
                 foreach (var relationship in relationships)
                 {
                     try
@@ -145,6 +145,53 @@ namespace BaSyx.Models.Export
             }
         }
 
+        /// <summary>
+        /// Returns the AASX-Package thumbnail as stream
+        /// </summary>
+        /// <returns></returns>
+        public Stream GetThumbnailAsStream()
+        {
+            PackageRelationshipCollection relationships = aasxPackage.GetRelationshipsByType(THUMBNAIL_RELATIONSHIP_TYPE);
+            foreach (var relationship in relationships)
+            {
+                try
+                {
+                    PackagePart packagePart = aasxPackage.GetPart(relationship.TargetUri);
+                    if(packagePart != null)
+                        return packagePart.GetStream(FileMode.Open, FileAccess.Read);
+                }
+                catch (Exception e)
+                {
+                    logger.Warn(e, "Relationsship " + relationship.TargetUri + "does not exist in the package - Exception: " + e.Message);
+                    continue;
+                }
+            }
+            return null;
+        }
+        /// <summary>
+        /// Returns the AASX-Package thumbnail as PackagePart
+        /// </summary>
+        /// <returns></returns>
+        public PackagePart GetThumbnailAsPackagePart()
+        {
+            PackageRelationshipCollection relationships = aasxPackage.GetRelationshipsByType(THUMBNAIL_RELATIONSHIP_TYPE);
+            foreach (var relationship in relationships)
+            {
+                try
+                {
+                    PackagePart packagePart = aasxPackage.GetPart(relationship.TargetUri);
+                    if (packagePart != null)
+                        return packagePart;
+                }
+                catch (Exception e)
+                {
+                    logger.Warn(e, "Relationsship " + relationship.TargetUri + "does not exist in the package - Exception: " + e.Message);
+                    continue;
+                }
+            }
+            return null;
+        }
+
         public void AddThumbnail(string thumbnailPath)
         {
             ClearRelationshipsAndPartFromPackage(THUMBNAIL_RELATIONSHIP_TYPE);
@@ -157,28 +204,28 @@ namespace BaSyx.Models.Export
             CopyFileToPackagePart(thumbnailPart, thumbnailPath);
         }
 
-        public void AddEnvironment(Identifier aasId, string aasEnvPath)
+        public void AddEnvironment(Identifier aasId, string aasEnvironmentFilePath)
         {
             if (aasId == null)
-                throw new ArgumentNullException("aasId");
-            if (string.IsNullOrEmpty(aasEnvPath))
-                throw new ArgumentNullException("aasEnvPath");
-            if(!System.IO.File.Exists(aasEnvPath))
-                throw new InvalidOperationException(aasEnvPath + " does not exist");
+                throw new ArgumentNullException(nameof(aasId));
+            if (string.IsNullOrEmpty(aasEnvironmentFilePath))
+                throw new ArgumentNullException(nameof(aasEnvironmentFilePath));
+            if(!File.Exists(aasEnvironmentFilePath))
+                throw new InvalidOperationException(aasEnvironmentFilePath + " does not exist");
         
             string aasIdName = aasId.Id;
             foreach (char invalidChar in Path.GetInvalidFileNameChars())
                 aasIdName = aasIdName.Replace(invalidChar, '_');
 
-            string aasFilePath = "/aasx/" + aasIdName + "/" + aasIdName + ".aas" + Path.GetExtension(aasEnvPath);
+            string aasFilePath = AASX_FOLDER + "/" + aasIdName + "/" + aasIdName + ".aas" + Path.GetExtension(aasEnvironmentFilePath);
 
             Uri partUri = PackUriHelper.CreatePartUri(new Uri(aasFilePath, UriKind.RelativeOrAbsolute));
             ClearRelationshipAndPartFromPackagePart(originPart, SPEC_RELATIONSHIP_TYPE, partUri);
 
-            specPart = aasxPackage.CreatePart(partUri, GetContentType(aasEnvPath), CompressionOption.Maximum);
+            specPart = aasxPackage.CreatePart(partUri, GetContentType(aasEnvironmentFilePath), CompressionOption.Maximum);
             originPart.CreateRelationship(specPart.Uri, TargetMode.Internal, SPEC_RELATIONSHIP_TYPE);
 
-            CopyFileToPackagePart(specPart, aasEnvPath);
+            CopyFileToPackagePart(specPart, aasEnvironmentFilePath);
         }
 
         public void AddEnvironment(Identifier aasId, AssetAdministrationShellEnvironment_V2_0 environment, ExportType exportType)
@@ -192,7 +239,7 @@ namespace BaSyx.Models.Export
             foreach (char invalidChar in Path.GetInvalidFileNameChars())
                 aasIdName = aasIdName.Replace(invalidChar, '_');
 
-            string aasFilePath = "/aasx/" + aasIdName + "/" + aasIdName + ".aas." + exportType.ToString().ToLower();
+            string aasFilePath = AASX_FOLDER + "/" + aasIdName + "/" + aasIdName + ".aas." + exportType.ToString().ToLower();
 
             Uri partUri = PackUriHelper.CreatePartUri(new Uri(aasFilePath, UriKind.RelativeOrAbsolute));
             ClearRelationshipAndPartFromPackagePart(originPart, SPEC_RELATIONSHIP_TYPE, partUri);

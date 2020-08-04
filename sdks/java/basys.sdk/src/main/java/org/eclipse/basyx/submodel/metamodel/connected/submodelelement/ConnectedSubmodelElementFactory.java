@@ -9,6 +9,7 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedBlob;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedFile;
@@ -188,6 +189,34 @@ public class ConnectedSubmodelElementFactory {
 				ret.put(idShort, new ConnectedRange(proxy));
 			} else if(ReferenceElement.isReferenceElement(node)) {
 				ret.put(idShort, new ConnectedReferenceElement(proxy));
+			}
+		}
+		return ret;
+	}
+	
+	/**
+	 * Creates connected IProperty elements from VABElementProxy
+	 * 
+	 * @param rootProxy
+	 * @param collectionPath
+	 * @param elementPath
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<String, IProperty> getProperties(VABElementProxy rootProxy, String collectionPath,
+			String elementPath) {
+		// Query the whole list of elements
+		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy.getModelPropertyValue(collectionPath);
+
+		// Get the type and idShort for each operation and create the corresponding
+		// connected variant
+		Map<String, IProperty> ret = new HashMap<>();
+		for (Map<String, Object> node : mapElemList) {
+			String idShort = Referable.createAsFacade(node, KeyElements.DATAELEMENT).getIdShort();
+			String subPath = VABPathTools.concatenatePaths(elementPath, idShort);
+			VABElementProxy proxy = rootProxy.getDeepProxy(subPath);
+			if (Property.isProperty(node)) {
+				ret.put(idShort, new ConnectedProperty(proxy));
 			}
 		}
 		return ret;

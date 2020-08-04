@@ -40,9 +40,9 @@ namespace BaSyx.Models.Export
         public const string AAS_NAMESPACE = "http://www.admin-shell.io/aas/2/0";
         public const string IEC61360_NAMESPACE = "http://www.admin-shell.io/IEC61360/2/0";
         public const string ABAC_NAMESPACE = "http://www.admin-shell.io/aas/abac/2/0";
-        public const string AAS_XSD_FILENAME = "AAS-v2.0.xsd";
-        public const string IEC61360_XSD_FILENAME = "IEC61360-v2.0.xsd";
-        public const string ABAC_XSD_FILENAME = "AAS_ABAC-v2.0.xsd";
+        public const string AAS_XSD_FILENAME = "aas-spec-v2.0/AAS.xsd";
+        public const string IEC61360_XSD_FILENAME = "aas-spec-v2.0/IEC61360.xsd";
+        public const string ABAC_XSD_FILENAME = "aas-spec-v2.0/AAS_ABAC.xsd";
 
         [DataMember(EmitDefaultValue = false, IsRequired = true, Name = "assetAdministrationShells", Order = 0)]
         [XmlIgnore, JsonIgnore]
@@ -177,7 +177,7 @@ namespace BaSyx.Models.Export
                 {
                     embeddedDataSpecification = new EmbeddedDataSpecification_V2_0()
                     {
-                        HasDataSpecification = dataSpecification.HasDataSpecification?.ToEnvironmentReference_V2_0(),
+                        DataSpecification = dataSpecification.HasDataSpecification?.ToEnvironmentReference_V2_0(),
                         DataSpecificationContent = new DataSpecificationContent_V2_0()
                         {
                             DataSpecificationIEC61360 = dataSpecificationContent.ToEnvironmentDataSpecificationIEC61360_V2_0()

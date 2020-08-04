@@ -6,7 +6,7 @@ import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.components.servlet.aas.AASServlet;
-import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
+import org.eclipse.basyx.examples.TestContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
@@ -50,7 +50,7 @@ public class DynamicSubModelDeployment {
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// Simulated servlets
 				// - BaSys topology with one AAS Server and one SQL directory
-				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory().
+				TestContext.sqlContext.
 					// Deploy example specific servlets to Apache Tomcat server in this context
 					addServletMapping("/Testsuite/components/BaSys/1.0/dynamicModelRepository/*",
 							new AASServlet(new AssetAdministrationShell()))
@@ -96,10 +96,10 @@ public class DynamicSubModelDeployment {
 
 			// Read sub model properties
 			String smId     = subModel.getIdShort();
-			String prop1Id  = subModel.getDataElements().get("prop1").getIdShort();
-			int prop1Val = (int) ((IProperty) subModel.getDataElements().get("prop1")).get();
-			String prop2Id  = subModel.getDataElements().get("prop2").getIdShort();
-			String prop2Val = (String) ((IProperty) subModel.getDataElements().get("prop2")).get();
+			String prop1Id  = subModel.getProperties().get("prop1").getIdShort();
+			int prop1Val = (int) ((IProperty) subModel.getProperties().get("prop1")).get();
+			String prop2Id  = subModel.getProperties().get("prop2").getIdShort();
+			String prop2Val = (String) ((IProperty) subModel.getProperties().get("prop2")).get();
 			
 			// Compare sub model property values
 			assertTrue(smId.equals("Status"));

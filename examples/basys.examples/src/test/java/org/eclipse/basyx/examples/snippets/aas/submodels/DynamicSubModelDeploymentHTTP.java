@@ -6,11 +6,12 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.components.servlet.aas.AASServlet;
-import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
+import org.eclipse.basyx.examples.TestContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceJSONClient;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -54,7 +55,7 @@ public class DynamicSubModelDeploymentHTTP {
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// Simulated servlets
 				// - BaSys topology with one AAS Server and one SQL directory
-				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory().
+				TestContext.sqlContext.
 					// Deploy example specific servlets to Apache Tomcat server in this context
 					addServletMapping("/Testsuite/components/BaSys/1.0/dynamicModelRepository/*",
 							new AASServlet(new AssetAdministrationShell()))
@@ -99,14 +100,11 @@ public class DynamicSubModelDeploymentHTTP {
 		// Read property values using the WebServiceJSONClient class. 
 		// - Returned property contains meta data. The actual property is stored in property "entity", property value is in entity property "value"
 		String smEndpoint = "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/Status";
-		Map<String, Object> sm = (Map<String, Object>) ((Map<String, Object>) jsonClient.get(smEndpoint)).get("entity");
+		Map<String, Object> sm = ((Map<String, Object>) jsonClient.get(smEndpoint));
 		String smId = (String) sm.get("idShort");
-		int prop1Val = (int) ((Map<String, Object>) ((Map<String, Object>) jsonClient
-				.get(smEndpoint + "/dataElements/prop1")).get("entity")).get("value");
-		String prop1Id = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient
-				.get(smEndpoint + "/dataElements/prop1")).get("entity")).get("idShort");
-		String prop2Val = (String) ((Map<String, Object>) ((Map<String, Object>) jsonClient
-				.get(smEndpoint + "/dataElements/prop2")).get("entity")).get("value");
+		int prop1Val = (int) ((Map<String, Object>) jsonClient.get(smEndpoint + "/" + SubmodelElementProvider.PROPERTIES + "/prop1")).get("value");
+		String prop1Id = (String) ((Map<String, Object>) jsonClient.get(smEndpoint + "/" + SubmodelElementProvider.PROPERTIES + "/prop1")).get("idShort");
+		String prop2Val = (String) ((Map<String, Object>) jsonClient.get(smEndpoint + "/" + SubmodelElementProvider.PROPERTIES + "/prop2")).get("value");
 
 		
 		// Check results

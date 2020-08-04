@@ -21,5 +21,13 @@ namespace BaSyx.Models.Export
         [XmlArray("keys")]
         [XmlArrayItem("key")]
         public List<EnvironmentKey_V1_0> Keys { get; set; }
+
+        public bool ShouldSerializeKeys()
+        {
+            if (Keys == null || Keys.Count == 0)
+                return false;
+            else
+                return true;
+        }
     }
 }

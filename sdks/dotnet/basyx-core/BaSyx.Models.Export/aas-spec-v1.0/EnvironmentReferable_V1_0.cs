@@ -33,5 +33,13 @@ namespace BaSyx.Models.Export
         [JsonProperty("parent", Order = -3)]
         [XmlElement("parent")]
         public string Parent { get; set; }
+
+        public bool ShouldSerializeDescription()
+        {
+            if (Description == null || Description.Count == 0)
+                return false;
+            else
+                return true;
+        }
     }
 }

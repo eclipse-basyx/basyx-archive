@@ -17,12 +17,14 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
     {
         public static SubmodelElement CreateSubmodelElement(DataObjectType modelType, DataType valueType = null)
         {
-            if (modelType == ModelType.Property || modelType == DataObjectType.DateTime)
+            if (modelType == ModelType.Property)
                 return new Property(valueType);
             if (modelType == ModelType.Operation)
                 return new Operation();
             if (modelType == ModelType.Event)
                 return new Event();
+            if (modelType == ModelType.BasicEvent)
+                return new BasicEvent();
             else if (modelType == ModelType.Blob)
                 return new Blob();
             else if (modelType == ModelType.File)
@@ -35,6 +37,12 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
                 return new RelationshipElement();
             else if (modelType == ModelType.SubmodelElementCollection)
                 return new SubmodelElementCollection();
+            else if (modelType == ModelType.AnnotatedRelationshipElement)
+                return new AnnotatedRelationshipElement();
+            else if (modelType == ModelType.Entity)
+                return new Entity();
+            if (modelType == ModelType.Range)
+                return new Range();
             else
                 return null;
         }

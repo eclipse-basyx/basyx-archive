@@ -41,6 +41,13 @@ public:
 	void addKey(const simple::Key & key) override;
 
 	virtual bool empty() const override;
+
+
+  bool operator!=(const Reference & other) const;
+  inline bool operator==(const Reference & other) const { return !(*this != other); };
+
+  bool operator!=(const api::IReference & other) const;
+  inline bool operator==(const api::IReference & other) const { return !(*this != other); };
 public:
 //	static Reference FromIdentifiable(const std::string & keyElementType, bool local, const IIdentifiable & identifiable);
 

@@ -21,6 +21,12 @@ namespace BaSyx.Models.Extensions
 {
     public static class SubmodelElementExtensions
     {
+        public static T Cast<T>(this IReferable referable) where T : class, IReferable
+        {
+            return referable as T;
+        }
+
+        [Obsolete("Use Cast<T>(IReferable referable) instead")]
         public static T ToModelElement<T>(this IReferable referable) where T : class, IReferable
         {
             return referable as T;

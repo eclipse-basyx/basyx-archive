@@ -38,8 +38,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.References
         [JsonConstructor]
         public Reference(params IKey[] keys)
         {
-            if (keys == null)
-                throw new ArgumentNullException("keys");
+            keys = keys ?? throw new ArgumentNullException(nameof(keys));
 
             if (Keys?.Count > 0)
             {
@@ -49,6 +48,21 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.References
             }
             else
                 Keys = keys.ToList();
+        }
+
+        public string ToStandardizedString()
+        {
+            string referenceString = string.Empty;
+            for (int i = 0; i < Keys.Count; i++)
+            {
+                referenceString += Keys[i].ToStandardizedString();
+
+                if (i + 1 == Keys.Count)
+                    break;
+                else
+                    referenceString += ",";
+            }
+            return referenceString;
         }
     }
 
@@ -62,20 +76,20 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.References
         public Reference(T element)
         {
             if (element == null)
-                throw new ArgumentNullException("element");
+                throw new ArgumentNullException(nameof(element));
 
-            var keys = new List<IKey>();
+            List<IKey> keys = new List<IKey>();
 
             if (element is IIdentifiable identifiable)
             {
-                keys.Add(new ModelKey(Key.GetReferableElement(identifiable.GetType()), identifiable.Identification.IdType, identifiable.Identification.Id));
+                keys.Add(new ModelKey(Key.GetKeyElementFromType(identifiable.GetType()), identifiable.Identification.IdType, identifiable.Identification.Id));
             }
             else if (element is IReferable referable)
             {
                 if (referable.Parent != null && referable.Parent is IIdentifiable parentIdentifiable)
-                    keys.Add(new ModelKey(Key.GetReferableElement(parentIdentifiable.GetType()), parentIdentifiable.Identification.IdType, parentIdentifiable.Identification.Id));
+                    keys.Add(new ModelKey(Key.GetKeyElementFromType(parentIdentifiable.GetType()), parentIdentifiable.Identification.IdType, parentIdentifiable.Identification.Id));
 
-                keys.Add(new ModelKey(Key.GetReferableElement(referable.GetType()), KeyType.IdShort, referable.IdShort));
+                keys.Add(new ModelKey(Key.GetKeyElementFromType(referable.GetType()), KeyType.IdShort, referable.IdShort));
             }
 
             Keys = keys.ToList();

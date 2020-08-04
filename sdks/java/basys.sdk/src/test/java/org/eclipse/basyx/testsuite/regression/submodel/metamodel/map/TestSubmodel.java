@@ -1,6 +1,7 @@
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,4 +64,27 @@ public class TestSubmodel {
 		Reference expectedParent = new Reference(new Key(KeyElements.SUBMODEL, true, identifierId, IdentifierType.IRDI));
 		assertEquals(expectedParent, property.getParent());
 	} 
+
+	/**
+	 * Tests if a SubModel containing a list for SUBMODELELEMENT is correctly
+	 * handled by the facading submodel. This is necessary because the submodel
+	 * serialization does specify SUBMODELELEMENT as list
+	 */
+	@Test
+	public void testCreateAsFacadePropertyList() {
+		// Create test property
+		String propId = "testProp";
+		
+		Property expected = new Property(5);
+		expected.setIdShort(propId);
+
+		// Create test submodel and force key SUBMODELELEMENT to contain a list
+		SubModel sm = new SubModel();
+		sm.put(SubModel.SUBMODELELEMENT, Collections.singleton(expected));
+
+		// Check if the facade converts the SUBMODELELEMENT value correctly
+		SubModel facade = SubModel.createAsFacade(sm);
+		assertTrue(facade.get(SubModel.SUBMODELELEMENT) instanceof Map<?, ?>);
+		assertEquals(expected, facade.getSubmodelElements().get(propId));
+	}
 }

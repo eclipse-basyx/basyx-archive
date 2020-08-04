@@ -18,8 +18,10 @@ using NLog.Web;
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using static BaSyx.Utils.Settings.Types.ServerSettings;
 
 namespace BaSyx.Components.Common
 {
@@ -114,6 +116,23 @@ namespace BaSyx.Components.Common
             {
                 logger.Error(e, $"Error providing content {relativeUri}");
             }
+        }
+
+        public virtual void MapControllers(ControllerConfiguration controllerConfig)
+        {
+            this.ConfigureServices(services =>
+            {
+                if (controllerConfig?.Controllers?.Count > 0)
+                {
+                    var mvcBuilder = services.AddMvc();
+                    foreach (var controllerAssemblyName in controllerConfig.Controllers)
+                    {
+                        Assembly controllerAssembly = Assembly.Load(controllerAssemblyName);
+                        mvcBuilder.AddApplicationPart(controllerAssembly);
+                    }
+                    mvcBuilder.AddControllersAsServices();
+                }
+            });
         }
     }
 }

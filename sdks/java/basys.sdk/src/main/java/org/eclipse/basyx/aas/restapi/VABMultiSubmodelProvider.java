@@ -6,9 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
@@ -87,7 +85,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * Constructor
 	 */
 	public VABMultiSubmodelProvider() {
-		// Do nothing
+		this(new AASModelProvider(new AssetAdministrationShell()));
 	}
 
 	/**
@@ -102,6 +100,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * Constructor that accepts Submodel
 	 */
 	public VABMultiSubmodelProvider(String smID, SubModelProvider contentProvider) {
+		this();
 		// Store content provider
 		addSubmodel(smID, contentProvider);
 	}
@@ -127,9 +126,15 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * @param modelContentProvider
 	 *            Model content provider
 	 */
+	@SuppressWarnings("unchecked")
 	public void addSubmodel(String elementId, SubModelProvider modelContentProvider) {
 		// Add model provider
 		submodel_providers.put(elementId, modelContentProvider);
+
+		SubModel sm = SubModel.createAsFacade((Map<String, Object>) modelContentProvider.getModelPropertyValue("/"));
+
+		// Adds a new submodel to the registered AAS
+		aas_provider.createValue("/submodels", sm);
 	}
 
 	/**
@@ -222,16 +227,15 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	@SuppressWarnings("unchecked")
 	private void createAssetAdministrationShell(Object newAAS) {
 		Map<String, Object> aas = (Map<String, Object>) newAAS;
-		aas_provider = new AASModelProvider(aas);
+		aas_provider = new AASModelProvider(AssetAdministrationShell.createAsFacade(aas));
 	}
 
 	@SuppressWarnings("unchecked")
 	private void createSubModel(Object newSM) throws ProviderException {
 		// Adds a new submodel to the registered AAS
-		Map<String, Object> sm = (Map<String, Object>) newSM;
-		SubModelProvider smProvider = new SubModelProvider(sm);
-		submodel_providers.put((String) sm.get(Referable.IDSHORT), smProvider);
-		aas_provider.createValue("/submodels", newSM);
+		SubModel sm = SubModel.createAsFacade((Map<String, Object>) newSM);
+
+		addSubmodel(sm.getIdShort(), new SubModelProvider(sm));
 	}
 
 
@@ -250,11 +254,9 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 			}
 
 			// Delete submodel reference from aas
-			IModelProvider smProvider = submodel_providers.get(smIdShort);
-			Map<String, Object> smMap = (Map<String, Object>) smProvider.getModelPropertyValue("/");
-			SubModel sm = SubModel.createAsFacade(smMap);
-			IIdentifier smId = sm.getIdentification();
-			aas_provider.removeSubmodelReference(smIdShort, smId);
+			// TODO: This is a hack until the API is further clarified
+			SubModel sm = SubModel.createAsFacade((Map<String, Object>) submodel_providers.get(smIdShort).getModelPropertyValue("/"));
+			aas_provider.deleteValue("aas/submodels/" + sm.getIdentification().getId());
 
 			// Remove submodel provider
 			submodel_providers.remove(smIdShort);

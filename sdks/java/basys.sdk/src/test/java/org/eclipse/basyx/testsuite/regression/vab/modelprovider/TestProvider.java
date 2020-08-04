@@ -52,4 +52,9 @@ public abstract class TestProvider {
 	public void testObjectTransfer() {
 		MapUpdate.testPushAll(getConnectionManager());
 	}
+
+	@Test
+	public void testHandlingException() {
+		Exceptions.testHandlingException(getConnectionManager());
+	}
 }

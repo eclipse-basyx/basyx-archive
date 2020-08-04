@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.admin-shell.io/IEC61360/1/0" xmlns:IEC61360="http://www.admin-shell.io/IEC61360/1/0" xmlns:aas="http://www.admin-shell.io/aas/1/0" xmlns:Q1="aas">
-	<xsd:import schemaLocation="AAS-v1.0.xsd" namespace="http://www.admin-shell.io/aas/1/0"/>
+	<xsd:import schemaLocation="AAS.xsd" namespace="http://www.admin-shell.io/aas/1/0"/>
 	<xsd:complexType name="dataSpecificationIEC61630_t">
 		<xsd:sequence>
 			<xsd:element ref="IEC61360:preferredName" maxOccurs="1" minOccurs="1"/>

@@ -10,7 +10,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.servlet.aas.AASServlet;
-import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
+import org.eclipse.basyx.examples.TestContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
@@ -60,7 +60,7 @@ public class ConnectToSubModelEndpoints {
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// Simulated servlets
 				// - BaSys topology with one AAS Server and one SQL directory
-				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory().
+				TestContext.sqlContext.
 					// Deploy example specific servlets to Tomcat server in this context
 					addServletMapping("/Components/BaSys/1.0/aasServer/*",
 							new AASServlet(new AssetAdministrationShell()))
@@ -122,10 +122,10 @@ public class ConnectToSubModelEndpoints {
 		
 		// Read property values from sub model
 		String smID     = connSM.getIdShort();
-		String prop1Id = connSM.getDataElements().get("prop1").getIdShort();
-		int prop1Val = (int) ((IProperty) connSM.getDataElements().get("prop1")).get();
-		String prop2Id  = connSM.getDataElements().get("prop2").getIdShort();
-		String prop2Val = (String) ((IProperty) connSM.getDataElements().get("prop2")).get();
+		String prop1Id = connSM.getProperties().get("prop1").getIdShort();
+		int prop1Val = (int) ((IProperty) connSM.getProperties().get("prop1")).get();
+		String prop2Id  = connSM.getProperties().get("prop2").getIdShort();
+		String prop2Val = (String) ((IProperty) connSM.getProperties().get("prop2")).get();
 
 		
 		// Check property values

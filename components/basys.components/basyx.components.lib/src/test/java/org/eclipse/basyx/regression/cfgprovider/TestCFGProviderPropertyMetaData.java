@@ -9,6 +9,7 @@ import org.eclipse.basyx.regression.support.directory.ComponentsTestsuiteDirecto
 import org.eclipse.basyx.regression.support.server.context.ComponentsRegressionContext;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -48,27 +49,27 @@ public class TestCFGProviderPropertyMetaData {
 
 		// Get property value
 		Map<String, Object> value1 = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1");
+				.getModelPropertyValue("/aas/submodels/sampleCFG/" + SubmodelElementProvider.PROPERTIES + "/cfgProperty1");
 		assertEquals("exampleStringValue", value1.get(Property.VALUE));
 		// - Check property meta data (description)
 		Map<String, Object> value1a = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty1");
+				.getModelPropertyValue("/aas/submodels/sampleCFG/" + SubmodelElementProvider.PROPERTIES + "/cfgProperty1");
 		LangStrings description = LangStrings.createAsFacade((Collection<Map<String, Object>>) value1a.get("description"));
 		assertEquals("Configuration property description", description.get(""));
 
 		// Get property value
 		Map<String, Object> value2 = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2");
+				.getModelPropertyValue("/aas/submodels/sampleCFG/" + SubmodelElementProvider.PROPERTIES + "/cfgProperty2");
 		assertEquals("12", value2.get(Property.VALUE));
 		// - Check property meta data (description)
 		Map<String, Object> value2a = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty2");
+				.getModelPropertyValue("/aas/submodels/sampleCFG/" + SubmodelElementProvider.PROPERTIES + "/cfgProperty2");
 		description = LangStrings.createAsFacade((Collection<Map<String, Object>>) value2a.get("description"));
 		assertEquals("Configuration property description on multiple lines", description.get(""));
 
 		// Get property value
 		Map<String, Object> value3 = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/sampleCFG/dataElements/cfgProperty3");
+				.getModelPropertyValue("/aas/submodels/sampleCFG/" + SubmodelElementProvider.PROPERTIES + "/cfgProperty3");
 		assertEquals("45.8", value3.get(Property.VALUE));
 	}
 }

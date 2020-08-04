@@ -143,7 +143,7 @@ public class SQLProviderTestOLD {
 		
 		
 		Collection<String> sqlQuery1Params = new LinkedList<>();
-		sqlQuery1Params.add(new Integer(1).toString());
+		sqlQuery1Params.add(Integer.valueOf(1).toString());
 		String     sqlQuery1String = getSQLString("SELECT * FROM vibrations.sensors WHERE vibrations.sensors.sensorid='$1'", sqlQuery1Params);
 		
 		ResultSet result1 = sqlDriver.sqlQuery(sqlQuery1String);
@@ -158,7 +158,7 @@ public class SQLProviderTestOLD {
 		
 		Collection<String> sqlQuery2Params = new LinkedList<>();
 		sqlQuery2Params.add("vibrations.sensors.sensorid");
-		sqlQuery2Params.add(new Integer(1).toString());
+		sqlQuery2Params.add(Integer.valueOf(1).toString());
 		String     sqlQuery2String = getSQLString("SELECT * FROM vibrations.sensors WHERE $1='$2'", sqlQuery2Params);
 		
 		ResultSet result2 = sqlDriver.sqlQuery(sqlQuery2String);

@@ -3,12 +3,14 @@ package org.eclipse.basyx.testsuite.regression.aas.metamodel.connected;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.aas.metamodel.AssetAdministrationShellSuite;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
@@ -29,9 +31,13 @@ public class TestConnectedAssetAdministrationShell extends AssetAdministrationSh
 	@Before
 	public void build() throws Exception {
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
-		provider.addSubmodel(SMIDSHORT, new SubModelProvider(TypeDestroyer.destroyType(retrieveBaselineSM())));
-		provider.setAssetAdministrationShell(new AASModelProvider(TypeDestroyer.destroyType(retrieveBaselineShell())));
-	
+		AssetAdministrationShell shell = retrieveBaselineShell();
+		provider.setAssetAdministrationShell(new AASModelProvider(AssetAdministrationShell.createAsFacade(TypeDestroyer.destroyType(shell))));
+
+		SubModel sm = retrieveBaselineSM();
+		sm.setParent(shell.getReference());
+		provider.addSubmodel(SMIDSHORT, new SubModelProvider(SubModel.createAsFacade(TypeDestroyer.destroyType(sm))));
+
 		// Create AAS registry
 		IAASRegistryService registry = new InMemoryRegistry();
 		// Create AAS Descriptor

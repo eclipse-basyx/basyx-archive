@@ -16,49 +16,44 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="AAS-v1.0.xsd" />
-    <None Remove="AAS-v2.0.xsd" />
-    <None Remove="AAS_ABAC-v2.0.xsd" />
-    <None Remove="IEC61360-v1.0.xsd" />
-    <None Remove="IEC61360-v2.0.xsd" />
     <None Include="basyxlogo.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="AAS-v1.0.xsd">
+    <Content Include="aas-spec-v1.0\AAS.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackageCopyToOutput>true</PackageCopyToOutput>
       <PackageFlatten>true</PackageFlatten>
-      <PackagePath>contentFiles\any\any\</PackagePath>
+      <PackagePath>contentFiles\any\any\aas-spec-v1.0\</PackagePath>
     </Content>
-    <Content Include="AAS-v2.0.xsd">
+    <Content Include="aas-spec-v2.0\AAS.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackageCopyToOutput>true</PackageCopyToOutput>
       <PackageFlatten>true</PackageFlatten>
-      <PackagePath>contentFiles\any\any\</PackagePath>
+      <PackagePath>contentFiles\any\any\aas-spec-v2.0\</PackagePath>
     </Content>
-    <Content Include="AAS_ABAC-v2.0.xsd">
+    <Content Include="aas-spec-v2.0\AAS_ABAC.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackageCopyToOutput>true</PackageCopyToOutput>
       <PackageFlatten>true</PackageFlatten>
-      <PackagePath>contentFiles\any\any\</PackagePath>
+      <PackagePath>contentFiles\any\any\aas-spec-v2.0\</PackagePath>
     </Content>
-    <Content Include="IEC61360-v1.0.xsd">
+    <Content Include="aas-spec-v1.0\IEC61360.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackageCopyToOutput>true</PackageCopyToOutput>
       <PackageFlatten>true</PackageFlatten>
-      <PackagePath>contentFiles\any\any\</PackagePath>
+      <PackagePath>contentFiles\any\any\aas-spec-v1.0\</PackagePath>
     </Content>
-    <Content Include="IEC61360-v2.0.xsd">
+    <Content Include="aas-spec-v2.0\IEC61360.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackageCopyToOutput>true</PackageCopyToOutput>
       <PackageFlatten>true</PackageFlatten>
-      <PackagePath>contentFiles\any\any\</PackagePath>
+      <PackagePath>contentFiles\any\any\aas-spec-v2.0\</PackagePath>
     </Content>
   </ItemGroup>
 

@@ -73,11 +73,7 @@ public class RawCFGSubModelProvider extends BaseConfiguredProvider {
 		}
 
 		// Push data to provider
-		try {
-			setModelPropertyValue("", submodelData);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		setSubmodel(submodelData);
 
 		// Print configuration values
 		logger.debug("CFG exported");

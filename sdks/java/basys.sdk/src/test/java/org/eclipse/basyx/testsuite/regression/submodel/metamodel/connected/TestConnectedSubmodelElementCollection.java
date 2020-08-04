@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementCollection;
@@ -67,13 +66,13 @@ public class TestConnectedSubmodelElementCollection {
 	@Test
 	public void testProperty() throws Exception {
 		// Get contained properties
-		Map<String, IDataElement> props = prop.getDataElements();
+		Map<String, IProperty> props = prop.getProperties();
 
 		// Check number of properties
 		assertEquals(1, props.size());
 
 		// Retrieves collection property
-		IProperty prop = (IProperty) props.get(PROP);
+		IProperty prop = props.get(PROP);
 
 		// Check contained values
 		assertEquals(4, prop.get());
