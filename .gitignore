@@ -55,3 +55,6 @@
 /components/basys.components/WebContent/WEB-INF/lib/saxonxmlparser/saxon9-xqj.jar
 /components/basys.components/WebContent/WEB-INF/lib/saxonxmlparser/saxon9he.jar
 /components/basys.components/WebContent/WEB-INF/lib/sdk/basyx_sdk.jar
+/.vs
+/sdks/dotnet/.vs/BaSyx
+launchSettings.json

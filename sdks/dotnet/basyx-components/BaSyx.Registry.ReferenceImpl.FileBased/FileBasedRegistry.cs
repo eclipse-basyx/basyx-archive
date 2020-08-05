@@ -145,7 +145,7 @@ namespace BaSyx.Registry.ReferenceImpl.FileBased
             string aasIdHash = GetHashString(aasId);
             string aasDirectoryPath = Path.Combine(FolderPath, aasIdHash);
             if (!Directory.Exists(aasDirectoryPath))
-                return new Result(true, new Message(MessageType.Information, "No Asset Administration Shell found"));
+                return new Result(false, new NotFoundMessage($"Asset Administration Shell with {aasId}"));
             else
             {
                 try
@@ -168,9 +168,13 @@ namespace BaSyx.Registry.ReferenceImpl.FileBased
                 return new Result(new ArgumentNullException(nameof(submodelId)));
 
             string aasIdHash = GetHashString(aasId);
-            string submodelFilePath = Path.Combine(FolderPath, aasIdHash, SubmodelFolder, submodelId) + ".json";
+            string aasDirectoryPath = Path.Combine(FolderPath, aasIdHash);
+            if (!Directory.Exists(aasDirectoryPath))
+                return new Result(false, new NotFoundMessage($"Asset Administration Shell with {aasId}"));
+
+            string submodelFilePath = Path.Combine(aasDirectoryPath, SubmodelFolder, submodelId) + ".json";
             if (!File.Exists(submodelFilePath))
-                return new Result(true, new Message(MessageType.Information, "No Submodel found"));
+                return new Result(false, new NotFoundMessage($"Submodel with {submodelId}"));
             else
             {
                 try
@@ -211,32 +215,41 @@ namespace BaSyx.Registry.ReferenceImpl.FileBased
                 }
             }
             else
-                return new Result<IAssetAdministrationShellDescriptor>(false, new NotFoundMessage("Asset Administration Shell"));
+                return new Result<IAssetAdministrationShellDescriptor>(false, new NotFoundMessage($"Asset Administration Shell with {aasId}"));
 
         }
 
         public IResult<IElementContainer<IAssetAdministrationShellDescriptor>> RetrieveAssetAdministrationShells()
         {
-            string[] aasDirectories = Directory.GetDirectories(FolderPath);
-            if(aasDirectories == null || aasDirectories.Length == 0)
-                return new Result<ElementContainer<IAssetAdministrationShellDescriptor>>(false, new NotFoundMessage("Asset Administration Shells"));
-            else
+            string[] aasDirectories;
+            try
             {
-                ElementContainer<IAssetAdministrationShellDescriptor> aasDescriptors = new ElementContainer<IAssetAdministrationShellDescriptor>();
-                foreach (var directory in aasDirectories)
-                {
-                    string aasIdHash = directory.Split(Path.DirectorySeparatorChar).Last();
-                    string aasFilePath = Path.Combine(directory, aasIdHash) + ".json";
-                    IResult<IAssetAdministrationShellDescriptor> readAASDescriptor = ReadAssetAdministrationShell(aasFilePath);
-                    if (readAASDescriptor.Success && readAASDescriptor.Entity != null)
-                        aasDescriptors.Create(readAASDescriptor.Entity);
-                }
-                if (aasDescriptors.Count == 0)
-                    return new Result<ElementContainer<IAssetAdministrationShellDescriptor>>(false, new NotFoundMessage("Asset Administration Shells"));
-                else
-                    return new Result<ElementContainer<IAssetAdministrationShellDescriptor>>(true, aasDescriptors);
+                aasDirectories = Directory.GetDirectories(FolderPath);
+            }
+            catch (Exception e)
+            {
+                return new Result<ElementContainer<IAssetAdministrationShellDescriptor>>(e);
             }
 
+            ElementContainer<IAssetAdministrationShellDescriptor> aasDescriptors = new ElementContainer<IAssetAdministrationShellDescriptor>();
+
+            if (aasDirectories?.Length > 0)
+                foreach (var directory in aasDirectories)
+                {
+                    try
+                    {
+                        string aasIdHash = directory.Split(Path.DirectorySeparatorChar).Last();
+                        string aasFilePath = Path.Combine(directory, aasIdHash) + ".json";
+                        IResult<IAssetAdministrationShellDescriptor> readAASDescriptor = ReadAssetAdministrationShell(aasFilePath);
+                        if (readAASDescriptor.Success && readAASDescriptor.Entity != null)
+                            aasDescriptors.Create(readAASDescriptor.Entity);
+                    }
+                    catch (Exception e)
+                    {
+                        return new Result<ElementContainer<IAssetAdministrationShellDescriptor>>(e);
+                    }
+                }
+            return new Result<ElementContainer<IAssetAdministrationShellDescriptor>>(true, aasDescriptors);
         }
 
         private IResult<IAssetAdministrationShellDescriptor> ReadAssetAdministrationShell(string aasFilePath)
@@ -293,10 +306,10 @@ namespace BaSyx.Registry.ReferenceImpl.FileBased
                     }
                 }
                 else
-                    return new Result<ISubmodelDescriptor>(false, new NotFoundMessage("Submodel"));
+                    return new Result<ISubmodelDescriptor>(false, new NotFoundMessage($"Submodel with {submodelId}"));
             }
             else
-                return new Result<ISubmodelDescriptor>(false, new NotFoundMessage("Asset Administration Shell"));
+                return new Result<ISubmodelDescriptor>(false, new NotFoundMessage($"Asset Administration Shell with {aasId}"));
         }
 
         public IResult<IElementContainer<ISubmodelDescriptor>> RetrieveSubmodels(string aasId)
@@ -308,10 +321,10 @@ namespace BaSyx.Registry.ReferenceImpl.FileBased
             string aasDirectoryPath = Path.Combine(FolderPath, aasIdHash);
             if (Directory.Exists(aasDirectoryPath))
             {
+                ElementContainer<ISubmodelDescriptor> submodelDescriptors = new ElementContainer<ISubmodelDescriptor>();
                 string submodelDirectoryPath = Path.Combine(aasDirectoryPath, SubmodelFolder);
                 if (Directory.Exists(submodelDirectoryPath))
                 {
-                    ElementContainer<ISubmodelDescriptor> submodelDescriptors = new ElementContainer<ISubmodelDescriptor>();
                     string[] files = Directory.GetFiles(submodelDirectoryPath);
                     foreach (var file in files)
                     {
@@ -320,16 +333,11 @@ namespace BaSyx.Registry.ReferenceImpl.FileBased
                         if (descriptor.Success && descriptor.Entity != null)
                             submodelDescriptors.Create(descriptor.Entity);
                     }
-                    if (submodelDescriptors.Count == 0)
-                        return new Result<ElementContainer<ISubmodelDescriptor>>(false, new NotFoundMessage("Submodels"));
-                    else
-                        return new Result<ElementContainer<ISubmodelDescriptor>>(true, submodelDescriptors);
                 }
-                else
-                    return new Result<ElementContainer<ISubmodelDescriptor>>(false, new NotFoundMessage("Submodel"));
+                return new Result<ElementContainer<ISubmodelDescriptor>>(true, submodelDescriptors);
             }
             else
-                return new Result<ElementContainer<ISubmodelDescriptor>>(false, new NotFoundMessage("Asset Administration Shell"));
+                return new Result<ElementContainer<ISubmodelDescriptor>>(false, new NotFoundMessage($"Asset Administration Shell with {aasId}"));
         }
 
         public IResult UpdateAssetAdministrationShell(string aasId, Dictionary<string, string> metaData)
