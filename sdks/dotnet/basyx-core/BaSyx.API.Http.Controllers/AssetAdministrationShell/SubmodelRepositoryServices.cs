@@ -46,9 +46,9 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="404">No Submodels found</response>            
         /// <response code="400">Bad Request</response>    
         /// <response code="502">Bad Gateway</response>
-        [HttpGet("submodels", Name = "GetAllSubmodels")]
+        [HttpGet("submodels", Name = "GetAllSubmodelsFromRepo")]
         [ProducesResponseType(typeof(List<BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel>), 200)]
-        public IActionResult GetAllSubmodels()
+        public IActionResult GetAllSubmodelsFromRepo()
         {
             var result = RetrieveSubmodels();
             return result.CreateActionResult(CrudOperation.Retrieve);
@@ -62,9 +62,9 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="404">No Submodel found</response>     
         /// <response code="400">Bad Request</response>         
         /// <response code="502">Bad Gateway</response>
-        [HttpGet("submodels/{submodelId}", Name = "GetSubmodelById")]
+        [HttpGet("submodels/{submodelId}", Name = "RetrieveSubmodelFromRepoById")]
         [ProducesResponseType(typeof(BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel), 200)]
-        public IActionResult RetrieveSubmodelById(string submodelId)
+        public IActionResult RetrieveSubmodelFromRepoById(string submodelId)
         {
             if (string.IsNullOrEmpty(submodelId))
                 return ResultHandling.NullResult(nameof(submodelId));
@@ -81,9 +81,9 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="201">Submodel created/updated successfully</response>
         /// <response code="400">Bad Request</response>             
         /// <response code="502">Bad Gateway</response> 
-        [HttpPost("submodels", Name = "PutSubmodel")]
+        [HttpPost("submodels", Name = "PutSubmodelToRepo")]
         [ProducesResponseType(typeof(BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel), 201)]
-        public IActionResult PutSubmodel([FromBody] ISubmodel submodel)
+        public IActionResult PutSubmodelToRepo([FromBody] ISubmodel submodel)
         {
             if (submodel == null)
                 return ResultHandling.NullResult(nameof(submodel));
@@ -99,9 +99,9 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="200">Submodel deleted successfully</response>
         /// <response code="400">Bad Request</response>      
         /// <response code="502">Bad Gateway</response>
-        [HttpDelete("submodels/{submodelId}", Name = "DeleteSubmodelById")]
+        [HttpDelete("submodels/{submodelId}", Name = "DeleteSubmodelFromRepoById")]
         [ProducesResponseType(typeof(Result), 200)]
-        public IActionResult DeleteSubmodelById(string submodelId)
+        public IActionResult DeleteSubmodelFromRepoById(string submodelId)
         {
             if (string.IsNullOrEmpty(submodelId))
                 return ResultHandling.NullResult(nameof(submodelId));

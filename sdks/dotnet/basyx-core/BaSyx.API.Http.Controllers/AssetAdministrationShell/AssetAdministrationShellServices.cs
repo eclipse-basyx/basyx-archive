@@ -83,10 +83,10 @@ namespace BaSyx.API.Http.Controllers
         /// <returns></returns>
         /// <response code="201">Submodel created successfully</response>
         /// <response code="400">Bad Request</response>               
-        [HttpPost("aas/submodels", Name = "PutSubmodel")]
+        [HttpPost("aas/submodels", Name = "PutSubmodelToShell")]
         [ProducesResponseType(typeof(BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel), 201)]
         [ProducesResponseType(typeof(Result), 400)]
-        public IActionResult PutSubmodel([FromBody] ISubmodel submodel)
+        public IActionResult PutSubmodelToShell([FromBody] ISubmodel submodel)
         {
             if (submodel == null)
                 return ResultHandling.NullResult(nameof(submodel));
@@ -109,10 +109,10 @@ namespace BaSyx.API.Http.Controllers
         /// <returns></returns>
         /// <response code="200">Submodel retrieved successfully</response>
         /// <response code="404">No Submodel Service Provider found</response>    
-        [HttpGet("aas/submodels/{submodelIdShort}", Name = "GetSubmodelByIdShort")]
+        [HttpGet("aas/submodels/{submodelIdShort}", Name = "GetSubmodelFromShellByIdShort")]
         [ProducesResponseType(typeof(BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel), 200)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult GetSubmodelByIdShort(string submodelIdShort)
+        public IActionResult GetSubmodelFromShellByIdShort(string submodelIdShort)
         {
             if (string.IsNullOrEmpty(submodelIdShort))
                 return ResultHandling.NullResult(nameof(submodelIdShort));
@@ -130,9 +130,9 @@ namespace BaSyx.API.Http.Controllers
         /// <returns></returns>
         /// <response code="204">Submodel deleted successfully</response>
         /// <response code="400">Bad Request</response>    
-        [HttpDelete("aas/submodels/{submodelIdShort}", Name = "DeleteSubmodelByIdShort")]
+        [HttpDelete("aas/submodels/{submodelIdShort}", Name = "DeleteSubmodelFromShellByIdShort")]
         [ProducesResponseType(typeof(Result), 400)]
-        public IActionResult DeleteSubmodelByIdShort(string submodelIdShort)
+        public IActionResult DeleteSubmodelFromShellByIdShort(string submodelIdShort)
         {
             if (string.IsNullOrEmpty(submodelIdShort))
                 return ResultHandling.NullResult(nameof(submodelIdShort));
@@ -146,10 +146,10 @@ namespace BaSyx.API.Http.Controllers
         /// <returns></returns>
         /// <response code="200">Returns a list of found Submodels</response>
         /// <response code="404">No Submodel Service Providers found</response>       
-        [HttpGet("aas/submodels", Name = "GetSubmodels")]
+        [HttpGet("aas/submodels", Name = "GetSubmodelsFromShell")]
         [ProducesResponseType(typeof(BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel[]), 200)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult GetSubmodels()
+        public IActionResult GetSubmodelsFromShell()
         {
             var submodelProviders = GetSubmodelServiceProviders();
 

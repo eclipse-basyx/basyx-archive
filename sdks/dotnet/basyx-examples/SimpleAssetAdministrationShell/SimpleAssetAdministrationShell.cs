@@ -161,8 +161,8 @@ namespace SimpleAssetAdministrationShell
                        },
                        OnMethodCalled = async (op, inArgs, outArgs) =>
                        {
-                           string expression = inArgs.Get("Expression")?.ToModelElement<IProperty>()?.ToObject<string>();
-                           int? computingTime = inArgs.Get("ComputingTime")?.ToModelElement<IProperty>()?.ToObject<int>();
+                           string expression = inArgs.Get("Expression")?.Cast<IProperty>()?.ToObject<string>();
+                           int? computingTime = inArgs.Get("ComputingTime")?.Cast<IProperty>()?.ToObject<int>();
 
                            if(computingTime.HasValue)
                             await Task.Delay(computingTime.Value);

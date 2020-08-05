@@ -63,7 +63,7 @@
             <response code="200">Success</response>
             <response code="502">Bad Gateway - Asset Administration Shell not available</response>       
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.PutSubmodel(BaSyx.Models.Core.AssetAdministrationShell.Generics.ISubmodel)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.PutSubmodelToShell(BaSyx.Models.Core.AssetAdministrationShell.Generics.ISubmodel)">
             <summary>
             Creates or updates a Submodel to an existing Asset Administration Shell
             </summary>
@@ -72,7 +72,7 @@
             <response code="201">Submodel created successfully</response>
             <response code="400">Bad Request</response>               
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.GetSubmodelByIdShort(System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.GetSubmodelFromShellByIdShort(System.String)">
             <summary>
             Retrieves the Submodel from the Asset Administration Shell
             </summary>
@@ -81,7 +81,7 @@
             <response code="200">Submodel retrieved successfully</response>
             <response code="404">No Submodel Service Provider found</response>    
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.DeleteSubmodelByIdShort(System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.DeleteSubmodelFromShellByIdShort(System.String)">
             <summary>
             Deletes a specific Submodel from the Asset Administration Shell
             </summary>
@@ -90,7 +90,7 @@
             <response code="204">Submodel deleted successfully</response>
             <response code="400">Bad Request</response>    
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.GetSubmodels">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellServices.GetSubmodelsFromShell">
             <summary>
             Retrieves all Submodels from the  Asset Administration Shell
             </summary>
@@ -277,7 +277,7 @@
             The Submodel Repository Controller
             </summary>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryServices.GetAllSubmodels">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryServices.GetAllSubmodelsFromRepo">
             <summary>
             Retrieves all Submodels from the repository service endpoint
             </summary>
@@ -287,7 +287,7 @@
             <response code="400">Bad Request</response>    
             <response code="502">Bad Gateway</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryServices.RetrieveSubmodelById(System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryServices.RetrieveSubmodelFromRepoById(System.String)">
             <summary>
             Retrieves a specific Submodel from the repository service endpoint
             </summary>
@@ -298,7 +298,7 @@
             <response code="400">Bad Request</response>         
             <response code="502">Bad Gateway</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryServices.PutSubmodel(BaSyx.Models.Core.AssetAdministrationShell.Generics.ISubmodel)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryServices.PutSubmodelToRepo(BaSyx.Models.Core.AssetAdministrationShell.Generics.ISubmodel)">
             <summary>
             Creates or updates a Submodel at the repository service endpoint
             </summary>
@@ -308,7 +308,7 @@
             <response code="400">Bad Request</response>             
             <response code="502">Bad Gateway</response> 
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryServices.DeleteSubmodelById(System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryServices.DeleteSubmodelFromRepoById(System.String)">
             <summary>
             Deletes a specific Submodel at the repository service endpoint
             </summary>
