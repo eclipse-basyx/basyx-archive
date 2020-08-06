@@ -1,10 +1,10 @@
-package org.basyx.components.AASServer;
+package org.eclipse.basyx.components;
 
 import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.basyx.components.AASServer.servlet.AASServerServlet;
+import org.eclipse.basyx.components.servlet.AASServerServlet;
 import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.slf4j.Logger;

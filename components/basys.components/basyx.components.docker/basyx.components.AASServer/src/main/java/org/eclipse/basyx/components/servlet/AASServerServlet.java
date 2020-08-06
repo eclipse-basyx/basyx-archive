@@ -1,4 +1,4 @@
-package org.basyx.components.AASServer.servlet;
+package org.eclipse.basyx.components.servlet;
 
 import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;

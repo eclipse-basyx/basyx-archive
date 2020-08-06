@@ -2,12 +2,12 @@ package org.eclipse.basyx.examples.snippets.aas.registry;
 
 import static org.junit.Assert.assertEquals;
 
-import org.basyx.components.AASServer.servlet.AASServerServlet;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
+import org.eclipse.basyx.components.servlet.AASServerServlet;
 import org.eclipse.basyx.examples.TestContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;

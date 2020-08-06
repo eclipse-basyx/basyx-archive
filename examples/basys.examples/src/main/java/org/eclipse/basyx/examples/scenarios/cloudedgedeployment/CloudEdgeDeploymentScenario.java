@@ -1,9 +1,10 @@
 package org.eclipse.basyx.examples.scenarios.cloudedgedeployment;
 
-import org.basyx.components.AASServer.AASServerComponent;
+
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
+import org.eclipse.basyx.components.AASServerComponent;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;

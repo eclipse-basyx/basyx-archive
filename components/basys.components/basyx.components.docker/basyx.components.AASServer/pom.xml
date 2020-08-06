@@ -10,7 +10,16 @@
   
   <artifactId>basyx.components.AASServer</artifactId>
   <name>AAS Server</name>
-<packaging>jar</packaging>
+  
+  	<properties>
+		<!--  
+			basyx.components.executable is the executable class with the definition of the public void main(String[]).
+			It is needed when building the jar in the maven-jar-plugin (see basyx.components.docker/pom.xml) 
+		-->
+		<basyx.components.executable>org.eclipse.basyx.components.executable.AASServerExecutable</basyx.components.executable>
+	</properties>
+  
+	<packaging>jar</packaging>
 	
 	<!-- Define additional plugins that are not included by default -->
 	<!-- Plugin configuration is done in parent project(s) -->

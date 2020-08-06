@@ -6,4 +6,3 @@ services:
     container_name: ${BASYX_CONTAINER_NAME}
     ports:
       - ${BASYX_HOST_PORT}:${BASYX_CONTAINER_PORT}
-      

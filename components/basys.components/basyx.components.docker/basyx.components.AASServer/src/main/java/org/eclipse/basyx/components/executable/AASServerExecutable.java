@@ -1,10 +1,10 @@
-package org.basyx.components.AASServer.executable;
+package org.eclipse.basyx.components.executable;
 
 import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.basyx.components.AASServer.AASServerComponent;
+import org.eclipse.basyx.components.AASServerComponent;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

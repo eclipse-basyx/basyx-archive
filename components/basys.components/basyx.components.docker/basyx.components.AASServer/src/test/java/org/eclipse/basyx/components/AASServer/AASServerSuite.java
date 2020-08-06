@@ -1,4 +1,4 @@
-package org.basyx.components.AASServer;
+package org.eclipse.basyx.components.AASServer;
 
 import static org.junit.Assert.assertEquals;
 

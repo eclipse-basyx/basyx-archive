@@ -1,9 +1,10 @@
-package org.basyx.components.AASServer;
+package org.eclipse.basyx.components.AASServer;
 
 import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.basyx.components.AASServerComponent;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.junit.BeforeClass;
 import org.xml.sax.SAXException;

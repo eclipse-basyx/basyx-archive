@@ -1,4 +1,4 @@
-package org.basyx.components.AASServer;
+package org.eclipse.basyx.components.AASServer;
 
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxDockerConfiguration;
