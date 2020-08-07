@@ -6,17 +6,20 @@
 #include <BaSyx/submodel/map_v2/qualifier/HasDataSpecification.h>
 #include <BaSyx/submodel/map_v2/qualifier/Referable.h>
 #include <BaSyx/submodel/map_v2/reference/Reference.h>
+#include <BaSyx/submodel/map_v2/qualifier/Qualifiable.h>
+#include <BaSyx/submodel/map_v2/common/ModelType.h>
 
 
 namespace basyx {
 namespace submodel {
 namespace map {
 
-class SubmodelElement : 
-	public virtual api::ISubmodelElement,
-	public virtual vab::ElementMap,
-	public Referable,
-	public HasDataSpecification
+class SubmodelElement
+  :	public virtual api::ISubmodelElement
+  , public virtual vab::ElementMap
+  , public virtual Qualifiable
+  , public Referable
+  , public HasDataSpecification
 {
 private:
 	Reference semanticId;

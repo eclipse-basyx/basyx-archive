@@ -2,7 +2,7 @@
 #define BASYX_SUBMODEL_MAP_V2_QUALIFIER_QUALIFIABLE_H
 
 #include <BaSyx/submodel/api_v2/qualifier/IQualifiable.h>
-
+#include <BaSyx/submodel/simple/constraint/Qualifier.h>
 #include <BaSyx/vab/ElementMap.h>
 
 namespace basyx {

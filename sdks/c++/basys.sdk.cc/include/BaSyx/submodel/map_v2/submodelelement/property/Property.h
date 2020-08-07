@@ -4,6 +4,7 @@
 #include <BaSyx/submodel/api_v2/submodelelement/property/IProperty.h>
 #include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
 #include <BaSyx/submodel/map_v2/common/ModelType.h>
+#include <BaSyx/submodel/map_v2/qualifier/Qualifiable.h>
 
 #include <BaSyx/shared/object.h>
 
@@ -16,6 +17,7 @@ class Property
   : public virtual api::IProperty
   , public virtual SubmodelElement
   , public virtual vab::ElementMap
+  , public virtual Qualifiable
   , public ModelType<ModelTypes::Property>
 {
 public:
