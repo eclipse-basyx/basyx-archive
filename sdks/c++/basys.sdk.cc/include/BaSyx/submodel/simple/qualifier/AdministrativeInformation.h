@@ -14,11 +14,11 @@ namespace basyx {
 namespace submodel {
 namespace simple {
 
-class AdministrativeInformation : public api::IAdministrativeInformation
+class AdministrativeInformation
+  : public api::IAdministrativeInformation
+  , public HasDataSpecification
 {
 private:
-	HasDataSpecification hasDataSpecification;
-
 	std::string version;
 	std::string revision;
 public:
@@ -26,7 +26,7 @@ public:
 
 	AdministrativeInformation();
 	AdministrativeInformation(const std::string & version, const std::string & revision);
-//	AdministrativeInformation(const IAdministrativeInformation & other);
+	explicit AdministrativeInformation(const IAdministrativeInformation & other);
 
 	void setVersion(const std::string & version) override;
 	void setRevision(const std::string & revision) override;
@@ -38,10 +38,6 @@ public:
 
 	virtual const std::string * const getVersion() const override;
 	virtual const std::string * const getRevision() const override;
-
-	// Inherited via IHasDataSpecification
-	virtual void addDataSpecification(const Reference & reference) override;
-	const std::vector<Reference> getDataSpecificationReference() const override;
 };
 
 }

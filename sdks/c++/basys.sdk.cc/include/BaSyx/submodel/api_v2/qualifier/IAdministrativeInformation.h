@@ -3,6 +3,8 @@
 
 #include <BaSyx/submodel/api_v2/qualifier/IHasDataSpecification.h>
 
+#include <string>
+
 namespace basyx {
 namespace submodel {
 namespace api {

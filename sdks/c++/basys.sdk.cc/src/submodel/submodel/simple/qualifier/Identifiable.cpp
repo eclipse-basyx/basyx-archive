@@ -12,9 +12,7 @@ Identifiable::Identifiable(const IIdentifiable &other)
   : Referable(other)
   , identifier(other.getIdentification().getIdType(), other.getIdentification().getId())
   , administrativeInformation(other.getAdministrativeInformation())
-{
-
-}
+{}
 
 bool Identifiable::hasAdministrativeInformation() const noexcept
 { 

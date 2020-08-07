@@ -12,6 +12,11 @@ AdministrativeInformation::AdministrativeInformation(const std::string & version
   , revision{revision}
 {};
 
+AdministrativeInformation::AdministrativeInformation(const api::IAdministrativeInformation &other)
+    : revision{*other.getRevision()}
+    , version{*other.getVersion()}
+{}
+
 void AdministrativeInformation::setVersion(const std::string & version)
 {
 	this->version = version;
@@ -36,16 +41,6 @@ const std::string * const AdministrativeInformation::getRevision() const
     return nullptr;
 
   return &this->revision;
-}
-
-void AdministrativeInformation::addDataSpecification(const Reference & reference)
-{
-	this->hasDataSpecification.addDataSpecification(reference);
-}
-
-const std::vector<Reference> AdministrativeInformation::getDataSpecificationReference() const
-{
-	return this->hasDataSpecification.getDataSpecificationReference();
 }
 
 }

@@ -7,10 +7,12 @@ using namespace basyx::submodel::api;
 struct IdentifierPath {
 	static constexpr char IdType[] = "idType";
 	static constexpr char Id[] = "id";
+  static constexpr char AdministrativeInformation[] = "AdministrativeInformation";
 };
 
 constexpr char IdentifierPath::IdType[];
 constexpr char IdentifierPath::Id[];
+constexpr char IdentifierPath::AdministrativeInformation[];
 
 Identifiable::Identifiable(const std::string & idShort, const simple::Identifier & identifier)
 	: Referable(idShort)
@@ -23,8 +25,8 @@ Identifiable::Identifiable(const std::string & idShort, const simple::Identifier
 }
 
 bool Identifiable::hasAdministrativeInformation() const noexcept
-{ 
-	return this->administrativeInformation.exists(); 
+{
+  return not this->map.getProperty(IdentifierPath::AdministrativeInformation).IsNull();
 };
 
 simple::Identifier Identifiable::getIdentification() const
@@ -36,12 +38,18 @@ simple::Identifier Identifiable::getIdentification() const
 	};
 }
 
-const simple::AdministrativeInformation & Identifiable::getAdministrativeInformation() const
+const AdministrativeInformation & Identifiable::getAdministrativeInformation() const
 {
 	return this->administrativeInformation;
 }
 
-simple::AdministrativeInformation & Identifiable::getAdministrativeInformation()
+AdministrativeInformation & Identifiable::getAdministrativeInformation()
 {
 	return this->administrativeInformation;
+}
+
+void Identifiable::setAdministrativeInformation(const AdministrativeInformation &administrativeInformation)
+{
+  this->administrativeInformation = administrativeInformation;
+  this->map.insertKey(IdentifierPath::AdministrativeInformation, this->administrativeInformation.getMap());
 }

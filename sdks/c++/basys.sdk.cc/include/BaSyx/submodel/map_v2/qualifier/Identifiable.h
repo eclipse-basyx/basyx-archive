@@ -3,7 +3,7 @@
 
 #include <BaSyx/submodel/api_v2/qualifier/IIdentifiable.h>
 #include <BaSyx/submodel/map_v2/qualifier/Referable.h>
-#include <BaSyx/submodel/simple/qualifier/AdministrativeInformation.h>
+#include <BaSyx/submodel/map_v2/qualifier/AdministrativeInformation.h>
 
 namespace basyx {
 namespace submodel {
@@ -15,7 +15,7 @@ class Identifiable :
 {
 private:
 //	Referable referable;
-	simple::AdministrativeInformation administrativeInformation;
+	map::AdministrativeInformation administrativeInformation;
 public:
 	virtual ~Identifiable() = default;
 
@@ -29,10 +29,12 @@ public:
 	bool hasAdministrativeInformation() const noexcept;
 
 	// Inherited via IIdentifiable
-	virtual const simple::AdministrativeInformation & getAdministrativeInformation() const override;
-	virtual simple::AdministrativeInformation & getAdministrativeInformation() override;
+	const AdministrativeInformation & getAdministrativeInformation() const override;
+	AdministrativeInformation & getAdministrativeInformation() override;
 
 	virtual simple::Identifier getIdentification() const override;
+
+  void setAdministrativeInformation(const AdministrativeInformation & administrativeInformation);
 };
 
 }
