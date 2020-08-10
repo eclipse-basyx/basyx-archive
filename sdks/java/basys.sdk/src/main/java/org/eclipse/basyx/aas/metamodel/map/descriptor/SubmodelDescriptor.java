@@ -25,6 +25,7 @@ public class SubmodelDescriptor extends ModelDescriptor {
 	 */
 	public SubmodelDescriptor(Map<String, Object> map) {
 		super(map);
+		validate(map);
 	}
 	
 	/**

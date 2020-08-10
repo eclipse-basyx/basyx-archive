@@ -14,6 +14,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 
 /**
  * AAS descriptor class
@@ -30,6 +31,7 @@ public class AASDescriptor extends ModelDescriptor {
 	 */
 	public AASDescriptor(Map<String, Object> map) {
 		super(map);
+		validate(map);
 	}
 
 	protected AASDescriptor() {
@@ -178,6 +180,13 @@ public class AASDescriptor extends ModelDescriptor {
 	public IAsset getAsset() {
 		Map<String, Object> assetModel = (Map<String, Object>) get(ASSET);
 		return Asset.createAsFacade(assetModel);
+	}
+	
+	@Override
+	public void validate(Map<String, Object> map) {
+		super.validate(map);
+		if (!map.containsKey(AssetAdministrationShell.SUBMODELS) || !(map.get(AssetAdministrationShell.SUBMODELS) instanceof Collection<?>))
+			throw new MalformedRequestException(getModelType() + " is missing endpoints entry");
 	}
 }
 
