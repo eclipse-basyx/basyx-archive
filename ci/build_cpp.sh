@@ -13,7 +13,7 @@ then
 
     mkdir build && cd build
     cmake ../sdks/c++/basys.sdk.cc -DBASYX_UTILITY_PROJECTS=OFF -DBUILD_SHARED_LIBS=ON
-    make all
+    make -j2 all
     ctest
 else
     echo "No files changed in C++ SDK."
