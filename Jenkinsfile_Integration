@@ -1,0 +1,61 @@
+pipeline {
+  agent {
+    kubernetes {
+      label 'basyx-' + env.BRANCH_NAME + '-' + env.BUILD_NUMBER
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: java
+    image: maven:3.6-jdk-8
+    resources:
+      requests:
+        memory: "4Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "1"
+    command:
+    - cat
+    tty: true
+    env:
+    - name: MAVEN_CONFIG
+      value: /home/jenkins/agent/.m2
+  - name: cpp
+    image: iesetps/basyx-ci-cpp:latest
+    resources:
+      requests:
+        memory: "4Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "1"
+    command:
+    - cat
+    tty: true
+"""
+    }
+  }
+  stages {
+      stage('Prepare C++ VAB Server') {
+          steps {
+              container('cpp') {
+                  sh '''
+                     ./ci/build_and_run_cpp_server.sh
+                     '''
+              }
+          }
+      }
+      stage('Run Java VAB connector') {
+          steps {
+              container('java') {
+                  sh '''
+                     mkdir -p /home/jenkins/agent/.m2
+                     ./ci/build_and_run_java_client.sh
+                     '''
+              }
+          }
+      }
+  }
+}

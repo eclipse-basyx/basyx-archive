@@ -12,7 +12,7 @@ import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
  *
  */
 public class VABClientTest extends CppTestProvider {
-	public static String url = "basyx://localhost:8384/";
+	public static String url = "basyx://127.0.0.1:7001/";
 
 	protected VABConnectionManager connManager;
 
