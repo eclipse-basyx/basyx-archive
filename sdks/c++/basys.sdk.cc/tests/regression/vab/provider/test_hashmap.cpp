@@ -13,6 +13,7 @@
 
 #include "snippet/MapRead.h"
 #include "snippet/MapCreateDelete.h"
+#include "snippet/MapUpdate.h"
 #include "snippet/MapInvoke.h"
 #include "snippet/TestCollectionProperty.h"
 
@@ -186,6 +187,13 @@ TEST_F(TestBaSyxHashmapProvider, MapRead)
 	vab::provider::VABModelProvider hashMapProvider{ tests::support::make_simple_vab_element() };
 
 	tests::regression::vab::snippet::MapRead::test(&hashMapProvider);
+}
+
+TEST_F(TestBaSyxHashmapProvider, MapUpdate)
+{
+	vab::provider::VABModelProvider hashMapProvider{ tests::support::make_simple_vab_element() };
+
+	tests::regression::vab::snippet::MapUpdate::test(&hashMapProvider);
 }
 
 TEST_F(TestBaSyxHashmapProvider, MapCreateDelete)

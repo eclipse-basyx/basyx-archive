@@ -9,6 +9,7 @@
 
 #include "snippet/MapRead.h"
 #include "snippet/MapCreateDelete.h"
+#include "snippet/MapUpdate.h"
 #include "snippet/MapInvoke.h"
 #include "snippet/TestCollectionProperty.h"
 
@@ -111,6 +112,14 @@ TEST_F(TestBaSyxNative, MapRead)
 	auto provider = ConnectedModelProvider(connector.get());
 
 	tests::regression::vab::snippet::MapRead::test(&provider);
+}
+
+TEST_F(TestBaSyxNative, MapUpdate)
+{
+	auto connector = util::make_unique<vab::connector::native::NativeConnector>("127.0.0.1", port);
+	auto provider = ConnectedModelProvider(connector.get());
+
+	tests::regression::vab::snippet::MapUpdate::test(&provider);
 }
 
 TEST_F(TestBaSyxNative, MapCreateDelete)

@@ -35,6 +35,11 @@ private:
     	ASSERT_TRUE(collection.InstanceOf<basyx::object::list_t<int>>());
     	ASSERT_EQ(collection.Get<basyx::object::list_t<int>&>().size(), 2);
 
+		// Test invalid list access - single list elements cannot be accessed directly
+		auto singleAccess = modelProvider->getModelPropertyValue("/structure/list/0");
+		ASSERT_TRUE(singleAccess.IsError());
+		ASSERT_EQ(singleAccess.getError(), basyx::object::error::PropertyNotFound);
+
 		// Test invalid list access
 		auto invalid = modelProvider->getModelPropertyValue("/structure/list/invalid");
 		ASSERT_TRUE(invalid.IsNull());
