@@ -30,6 +30,14 @@
 	</build>
 
 	<dependencies>
+		<!-- JUnit 4 for running JUnit tests -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		
 		<!-- Add BaSys SDK from local repository -->
 		<dependency>
 			<groupId>org.eclipse.basyx</groupId>

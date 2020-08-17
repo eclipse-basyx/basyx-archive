@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -154,7 +155,7 @@ public class SubModelProviderTest {
 	public void testReadProperties() {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
 		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel.getModelPropertyValue("/submodel/" + SubmodelElementProvider.PROPERTIES);
-		// Should be two properties, one collection and four operations
+		// Should be two properties, one collection
 		assertEquals(3, set.size());
 	}
 
@@ -178,6 +179,18 @@ public class SubModelProviderTest {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
 		Map<String, Object> operation = (Map<String, Object>) submodel.getModelPropertyValue("/submodel/operations/simple");
 		assertEquals("simple", operation.get(Identifiable.IDSHORT));
+	}
+
+	/**
+	 * Checks if the submodel elements in a read submodel are within a collection
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testReadSubmodelCheckElementsInCollection() {
+		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
+		Map<String, Object> smMap = (Map<String, Object>) submodel.getModelPropertyValue("/submodel");
+		Object o = smMap.get(SubModel.SUBMODELELEMENT);
+		assertTrue(o instanceof Collection<?>);
 	}
 
 	/**
