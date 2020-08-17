@@ -1,7 +1,7 @@
 package org.eclipse.basyx.submodel.restapi.vab;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -61,10 +61,10 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 		// For access on the container property root, return the whole model
 		Map<String, Object> map = (Map<String, Object>) modelProvider.getModelPropertyValue("");
 
-		// Change internal maps to sets for submodelElements
-		setMapToSet(map, SubModel.SUBMODELELEMENT);
-
-		return SubModel.createAsFacade(map);
+		// Only return a copy of the Submodel
+		Map<String, Object> smCopy = new HashMap<>();
+		smCopy.putAll(map);
+		return SubModel.createAsFacade(smCopy);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -89,19 +89,6 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	public Collection<IOperation> getOperations() {
 		Collection<Map<String, Object>> operations = (Collection<Map<String, Object>>) getElementProvider().getModelPropertyValue(SubmodelElementProvider.OPERATIONS);
 		return operations.stream().map(e -> Operation.createAsFacade(e)).collect(Collectors.toList());
-	}
-
-
-	/**
-	 * Converts a map entry to a set, if it is also a map
-	 */
-	@SuppressWarnings("unchecked")
-	private void setMapToSet(Map<String, Object> map, String key) {
-		Object mapEntry = map.get(key);
-		if (mapEntry instanceof Map<?, ?>) {
-			Map<String, Object> elements = (Map<String, Object>) mapEntry;
-			map.put(key, new HashSet<Object>(elements.values()));
-		}
 	}
 
 	@SuppressWarnings("unchecked")
