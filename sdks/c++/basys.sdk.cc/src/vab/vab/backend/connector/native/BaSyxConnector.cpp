@@ -54,10 +54,16 @@ basyx::object NativeConnector::basysProcess(const Frame & frame)
 		return basyx::object::make_error(basyx::object::error::MalformedRequest, "invalid frame received");
 	};
 
-	auto entityWrapper = nlohmann::json::parse(response_frame.getFirstValue());
+	auto firstField = response_frame.getFirstValue();
+	if (!firstField.empty())
+	{
+		auto entityWrapper = nlohmann::json::parse(response_frame.getFirstValue());
 
-	auto value = basyx::vab::EntityWrapper::from_json(entityWrapper);
-	return value;
+		auto value = basyx::vab::EntityWrapper::from_json(entityWrapper);
+		return value;
+	};
+
+	return basyx::object::make_null();
 };
 
 basyx::object NativeConnector::basysSet(std::string const& path, const basyx::object & newValue)

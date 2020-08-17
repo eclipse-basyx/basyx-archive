@@ -76,7 +76,8 @@ private:
 	{
 		// Delete at Root
 		// - by basyx::object - should not work, root is a map
-		modelProvider->deleteValue("inRoot", 1.2);
+		auto deleteResult = modelProvider->deleteValue("inRoot", 1.2);
+		ASSERT_EQ(deleteResult, basyx::object::error::MalformedRequest);
 		basyx::object toTest = modelProvider->getModelPropertyValue("inRoot");
 		ASSERT_ANY_EQ(toTest, 1.2);
 		// - by index
@@ -90,6 +91,10 @@ private:
 		modelProvider->deleteValue("inroot");
 		toTest = modelProvider->getModelPropertyValue("inroot");
 		ASSERT_TRUE(toTest.IsNull());
+
+		// Delete empty path
+		auto deleteError = modelProvider->deleteValue("", "");
+		ASSERT_EQ(deleteError, basyx::object::error::MalformedRequest);
 
 		// Delete at Map
 		// - by basyx::object - should not work in maps, because basyx::object refers to a contained basyx::object, not the index

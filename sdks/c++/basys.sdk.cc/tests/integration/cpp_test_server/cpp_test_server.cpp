@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 
     IntegrationTestModelProvider modelProvider;
     modelProvider.Reset();
-    server::TCPServer<IntegrationTestModelProvider> tcpServer { &modelProvider, port };
+	server::TCPServer<IntegrationTestModelProvider> tcpServer { &modelProvider, port };
 
     while (true) {
         tcpServer.update();

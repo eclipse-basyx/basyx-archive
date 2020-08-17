@@ -89,44 +89,50 @@ public:
 };
 
 #define HOST "127.0.0.1"
+#define PORT "8383"
 
-int test() 
+std::string host(HOST);
+std::string port(PORT);
+
+int connector_run(const std::string & host, const std::string & port) 
 {
-	//std::string host;
-	//if (argc > 1)
-	//	host = argv[1];
-	//else
-	//	host = HOST;
-
-	std::string host = HOST;
-
-   	auto connector = util::make_unique<vab::connector::native::NativeConnector>(host, 7001);
+   	auto connector = util::make_unique<vab::connector::native::NativeConnector>(host, port);
 
 	auto provider = ConnectedModelProvider(connector.get());
 
+	connector->basysInvoke("/reset", 0);
 	basyx::tests::regression::vab::snippet::MapRead::test(&provider);
+	
+	connector->basysInvoke("/reset", 0);
 	basyx::tests::regression::vab::snippet::MapUpdate::test(&provider);
+	
+	connector->basysInvoke("/reset", 0);	
 	basyx::tests::regression::vab::snippet::MapCreateDelete::test(&provider);
+	
+	connector->basysInvoke("/reset", 0);
 	basyx::tests::regression::vab::snippet::TestCollectionProperty::test(&provider);
+	
+	connector->basysInvoke("/reset", 0);
 	basyx::tests::regression::vab::snippet::MapInvoke::test(&provider);
-
-	//auto get = connector->basysGet("primitives/integer");
-
-	//connector->basysSet("primitives/integer", 20);
-
-	//auto get2 = connector->basysGet("primitives/integer");
-
-	//auto inv = connector->basysInvoke("operations/complex", basyx::object::object_list_t{ 1,2 });
+	
+	connector->basysInvoke("/reset", 0);
 
 	return 0;
 };
 
 TEST(Test_Case, Test)
 {
-	test();
+	connector_run(host, port);
 };
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv) 
+{
+	if (argc > 1)
+		host = argv[1];
+
+	if (argc > 2)
+		port = argv[2];
+
 	// Init gtest framework
 	::testing::InitGoogleTest(&argc, argv);
 

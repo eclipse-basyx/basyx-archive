@@ -109,9 +109,7 @@ private:
 
     std::string serializeSuccess()
     {
-        nlohmann::json retJson { { "success", true } };
-
-        return retJson.dump(4);
+        return "";
 	}
 };
 
