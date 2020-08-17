@@ -12,6 +12,7 @@ import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
@@ -104,6 +105,20 @@ public abstract class ModelDescriptor extends VABModelMap<Object> {
 		} else {
 			return new ArrayList<>();
 		}
+	}
+	
+	/**
+	 * Validates a model descriptor by checking whether
+	 * idShort, identification and endpoints key is present in the given map
+	 * @param map
+	 */
+	protected void validate(Map<String, Object> map) {
+		if (!map.containsKey(Referable.IDSHORT) || !(map.get(Referable.IDSHORT) instanceof String)) 
+			throw new MalformedRequestException(getModelType() + " is missing idShort entry");
+		if (!map.containsKey(Identifiable.IDENTIFICATION) || !(map.get(Identifiable.IDENTIFICATION) instanceof Map<?, ?>))
+			throw new MalformedRequestException(getModelType() + " is missing identification entry");
+		if (!map.containsKey(AssetAdministrationShell.ENDPOINTS) || !(map.get(AssetAdministrationShell.ENDPOINTS) instanceof Collection<?>))
+			throw new MalformedRequestException(getModelType() + " is missing endpoints entry");
 	}
 
 	protected abstract String getModelType();
