@@ -14,6 +14,7 @@ using BaSyx.Utils.ResultHandling;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BaSyx.Models.Core.Common
 {
@@ -29,9 +30,11 @@ namespace BaSyx.Models.Core.Common
 
         IResult<T> Retrieve<T>(TIdentifier id) where T : class, TElement;
 
-        IResult<IElementContainer<T>> RetrieveAll<T>() where T : class, TElement;
+        IResult<IQueryableElementContainer<T>> RetrieveAll<T>() where T : class, TElement;
 
-        IResult<TElement> CreateOrUpdate(string id, TElement element);
+        IResult<IQueryableElementContainer<T>> RetrieveAll<T>(Predicate<T> predicate) where T : class, TElement;
+
+        IResult<TElement> CreateOrUpdate(TIdentifier id, TElement element);
 
         IResult<TElement> Update(TIdentifier id, TElement element);
 
@@ -39,13 +42,19 @@ namespace BaSyx.Models.Core.Common
         
         void AddRange(IEnumerable<TElement> collection);
     }
+
+    public interface IQueryableElementContainer<TElement> : IElementContainer<TElement>, IQueryable<TElement>
+    {
+
+    }
+
     [JsonConverter(typeof(ElementContainerConverter))]
     public interface IElementContainer<TElement> : IGenericElementContainer<string, TElement>
     {
-        IResult<IElementContainer<TElement>> RetrieveAll();
+        IResult<IQueryableElementContainer<TElement>> RetrieveAll();
+        IResult<IQueryableElementContainer<TElement>> RetrieveAll(Predicate<TElement> predicate);
 
         IElementContainer<TOutput> ConvertAll<TOutput>(Converter<TElement, TOutput> converter) where TOutput : IReferable, IModelElement;
-
         IElementContainer<TModelElementType> Filter<TModelElementType>(ModelType modelType) where TModelElementType : IReferable, IModelElement, TElement;
         IEnumerable<TModelElementType> FilterAsReference<TModelElementType>(ModelType modelType) where TModelElementType : IReferable, IModelElement, TElement;
     }

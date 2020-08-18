@@ -90,7 +90,7 @@ namespace BaSyx.API.Components
 
         public virtual IResult UnregisterSubmodelServiceProvider(string submodelId)
         {
-            if (SubmodelServiceProviders.TryGetValue(submodelId, out ISubmodelServiceProvider submodelServiceProvider))
+            if (SubmodelServiceProviders.ContainsKey(submodelId))
             {
                 SubmodelServiceProviders.Remove(submodelId);
                 return new Result<ISubmodelServiceProvider>(true);

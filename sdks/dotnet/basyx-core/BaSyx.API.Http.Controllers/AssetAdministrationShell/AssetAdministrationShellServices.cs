@@ -28,51 +28,36 @@ namespace BaSyx.API.Http.Controllers
     /// <summary>
     /// All Asset Administration Shell Services provided by the component
     /// </summary>
-    public class AssetAdministrationShellServices : Controller, IAssetAdministrationShellServiceProvider
+    public class AssetAdministrationShellServices : Controller
     {
-        private readonly IAssetAdministrationShellServiceProvider assetAdministrationShellServiceProvider;
+        private readonly IAssetAdministrationShellServiceProvider serviceProvider;
 
-        public IAssetAdministrationShellDescriptor ServiceDescriptor { get; }
-
-        public IAssetAdministrationShell AssetAdministrationShell => assetAdministrationShellServiceProvider.GetBinding();
-
-        public ISubmodelServiceProviderRegistry SubmodelRegistry => assetAdministrationShellServiceProvider.SubmodelRegistry;        
-
+        /// <summary>
+        /// Constructor for the Asset Administration Shell Services Controller
+        /// </summary>
+        /// <param name="assetAdministrationShellServiceProvider">The Asset Administration Shell Service Provider implementation provided by the dependency injection</param>
         public AssetAdministrationShellServices(IAssetAdministrationShellServiceProvider assetAdministrationShellServiceProvider)
         {
-            this.assetAdministrationShellServiceProvider = assetAdministrationShellServiceProvider;
-            ServiceDescriptor = assetAdministrationShellServiceProvider.ServiceDescriptor;
+            serviceProvider = assetAdministrationShellServiceProvider;
         }
-
-        public void BindTo(IAssetAdministrationShell element)
-        {
-            assetAdministrationShellServiceProvider.BindTo(element);
-        }
-        public IAssetAdministrationShell GetBinding()
-        {
-            return assetAdministrationShellServiceProvider.GetBinding();
-        }
-
 
         #region REST-Interface AssetAdministrationShell
 
         /// <summary>
-        /// Retrieves the Asset Administration Shell
+        /// Retrieves the Asset Administration Shell Descriptor
         /// </summary>
         /// <returns></returns>
-        /// <response code="200">Success</response>
-        /// <response code="502">Bad Gateway - Asset Administration Shell not available</response>       
+        /// <response code="200">Success</response>   
         [HttpGet("aas", Name = "GetAssetAdministrationShell")]
         [ProducesResponseType(typeof(AssetAdministrationShellDescriptor), 200)]
-        [ProducesResponseType(typeof(Result), 502)]
         public IActionResult GetAssetAdministrationShell()
         {
-            var serviceDescriptor = assetAdministrationShellServiceProvider?.ServiceDescriptor;
+            var serviceDescriptor = serviceProvider?.ServiceDescriptor;
 
             if(serviceDescriptor == null)
                 return StatusCode(502);
             else
-                return new OkObjectResult(assetAdministrationShellServiceProvider.ServiceDescriptor);
+                return new OkObjectResult(serviceProvider.ServiceDescriptor);
         }
 
         #region Submodel - REST-Calls
@@ -84,21 +69,26 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="201">Submodel created successfully</response>
         /// <response code="400">Bad Request</response>               
         [HttpPost("aas/submodels", Name = "PutSubmodelToShell")]
-        [ProducesResponseType(typeof(BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel), 201)]
+        [ProducesResponseType(typeof(Submodel), 201)]
         [ProducesResponseType(typeof(Result), 400)]
         public IActionResult PutSubmodelToShell([FromBody] ISubmodel submodel)
         {
             if (submodel == null)
                 return ResultHandling.NullResult(nameof(submodel));
 
-            var result = CreateSubmodel(submodel);
+            var result = serviceProvider.CreateSubmodel(submodel);
             if(result.Success && result.Entity != null)
             {
-                var spEndpoints = ServiceDescriptor.Endpoints.ToList().ConvertAll(c => new HttpEndpoint(DefaultEndpointRegistration.GetSubmodelEndpoint(c, submodel.IdShort)));
+                var spEndpoints = serviceProvider
+                    .ServiceDescriptor
+                    .Endpoints
+                    .ToList()
+                    .ConvertAll(c => new HttpEndpoint(DefaultEndpointRegistration.GetSubmodelEndpoint(c, submodel.IdShort)));
+
                 ISubmodelDescriptor descriptor = new SubmodelDescriptor(submodel, spEndpoints);
 
                 SubmodelServiceProvider cssp = new SubmodelServiceProvider(submodel, descriptor);
-                assetAdministrationShellServiceProvider.SubmodelRegistry.RegisterSubmodelServiceProvider(submodel.IdShort, cssp);
+                serviceProvider.SubmodelRegistry.RegisterSubmodelServiceProvider(submodel.IdShort, cssp);
             }
             return result.CreateActionResult(CrudOperation.Create, "aas/submodels/" + submodel.IdShort);
         }
@@ -110,14 +100,15 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="200">Submodel retrieved successfully</response>
         /// <response code="404">No Submodel Service Provider found</response>    
         [HttpGet("aas/submodels/{submodelIdShort}", Name = "GetSubmodelFromShellByIdShort")]
-        [ProducesResponseType(typeof(BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel), 200)]
+        [ProducesResponseType(typeof(Submodel), 200)]
+        [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
         public IActionResult GetSubmodelFromShellByIdShort(string submodelIdShort)
         {
             if (string.IsNullOrEmpty(submodelIdShort))
                 return ResultHandling.NullResult(nameof(submodelIdShort));
 
-            var submodelProvider = GetSubmodelServiceProvider(submodelIdShort);
+            var submodelProvider = serviceProvider.SubmodelRegistry.GetSubmodelServiceProvider(submodelIdShort);
             if (!submodelProvider.Success || submodelProvider?.Entity == null)
                 return NotFound(new Result(false, new NotFoundMessage("Submodel")));
 
@@ -137,7 +128,7 @@ namespace BaSyx.API.Http.Controllers
             if (string.IsNullOrEmpty(submodelIdShort))
                 return ResultHandling.NullResult(nameof(submodelIdShort));
 
-            var result = DeleteSubmodel(submodelIdShort);
+            var result = serviceProvider.DeleteSubmodel(submodelIdShort);
             return result.CreateActionResult(CrudOperation.Delete);
         }
         /// <summary>
@@ -151,7 +142,7 @@ namespace BaSyx.API.Http.Controllers
         [ProducesResponseType(typeof(Result), 404)]
         public IActionResult GetSubmodelsFromShell()
         {
-            var submodelProviders = GetSubmodelServiceProviders();
+            var submodelProviders = serviceProvider.SubmodelRegistry.GetSubmodelServiceProviders();
 
             if (!submodelProviders.Success || submodelProviders.Entity?.Count() == 0)
                 return NotFound(new Result(false, new NotFoundMessage("Submodels")));
@@ -272,9 +263,9 @@ namespace BaSyx.API.Http.Controllers
         /// </summary>
         /// <param name="submodelElementIdShort">The Submodel-Element's short id</param>
         /// <returns></returns>
-        /// <response code="204">Property deleted successfully</response>
+        /// <response code="204">Submodel-Element deleted successfully</response>
         /// <response code="404">Submodel not found</response>
-        [HttpDelete("aas/submodels/{submodelIdShort}/submodel/properties/{propertyIdShort}", Name = "RoutedDeleteSubmodelElementByIdShort")]
+        [HttpDelete("aas/submodels/{submodelIdShort}/submodel/submodelElements/{submodelElementIdShort}", Name = "RoutedDeleteSubmodelElementByIdShort")]
         [ProducesResponseType(typeof(Result), 200)]
         public IActionResult RoutedDeleteSubmodelElementByIdShort(string submodelElementIdShort)
         {
@@ -524,52 +515,7 @@ namespace BaSyx.API.Http.Controllers
         #endregion
         #endregion
 
-        #region Interface Implementation AssetAdministrationShellServiceProvider
-
-        public void RegisterSubmodelServiceProvider(string id, ISubmodelServiceProvider submodelServiceProvider)
-        {
-            assetAdministrationShellServiceProvider.SubmodelRegistry.RegisterSubmodelServiceProvider(id, submodelServiceProvider);
-        }
-
-        public IResult<ISubmodelServiceProvider> GetSubmodelServiceProvider(string id)
-        {
-            return assetAdministrationShellServiceProvider.SubmodelRegistry.GetSubmodelServiceProvider(id);
-        }
-
-        public IResult<ISubmodel> CreateSubmodel(ISubmodel submodel)
-        {
-            return assetAdministrationShellServiceProvider.CreateSubmodel(submodel);
-        }
-
-        public IResult<ISubmodel> RetrieveSubmodel(string submodelId)
-        {
-            return assetAdministrationShellServiceProvider.RetrieveSubmodel(submodelId);
-        }
-
-        public IResult<IElementContainer<ISubmodel>> RetrieveSubmodels()
-        {
-            return assetAdministrationShellServiceProvider.RetrieveSubmodels();
-        }
-
-        public IResult DeleteSubmodel(string submodelId)
-        {
-            return assetAdministrationShellServiceProvider.DeleteSubmodel(submodelId);
-        }
-
-        public IResult<IEnumerable<ISubmodelServiceProvider>> GetSubmodelServiceProviders()
-        {
-            return assetAdministrationShellServiceProvider.SubmodelRegistry.GetSubmodelServiceProviders();
-        }
-
-        public IResult<IAssetAdministrationShell> RetrieveAssetAdministrationShell()
-        {
-            return assetAdministrationShellServiceProvider.RetrieveAssetAdministrationShell();
-        }
-
-        #endregion
-
         #region Helper Methods
-
 
         #endregion
     }

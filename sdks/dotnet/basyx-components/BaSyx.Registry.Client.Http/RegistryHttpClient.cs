@@ -17,7 +17,7 @@ using BaSyx.Utils.ResultHandling;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.Net;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,43 +30,38 @@ namespace BaSyx.Registry.Client.Http
         private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
         public RegistryClientSettings Settings { get; }
 
-        private const string RegistryPath = "api/v1/registry";
-        private const string SubmodelPath = "submodels";
-        private const string PathSeperator = "/";
-
-        private const int Timeout = 5000;
+        public const string REGISTRY_BASE_PATH = "api/v1/registry";
+        public const string SUBMODEL_PATH = "submodels";
+        public const string PATH_SEPERATOR = "/";
 
         private int RepeatRegistrationInterval = -1;
+        private string baseUrl = null;
+        private int Timeout = -1;
         private CancellationTokenSource RepeatRegistrationCancellationToken = null;
+        
 
         public void LoadSettings(RegistryClientSettings settings)
         {
-            if (settings.ProxyConfig.UseProxy && !string.IsNullOrEmpty(settings.ProxyConfig.ProxyAddress))
-            {
-                HttpClientHandler.UseProxy = true;
-                if (!string.IsNullOrEmpty(settings.ProxyConfig.UserName) && !string.IsNullOrEmpty(settings.ProxyConfig.Password))
-                {
-                    NetworkCredential credential;
-                    if (!string.IsNullOrEmpty(settings.ProxyConfig.Domain))
-                        credential = new NetworkCredential(settings.ProxyConfig.UserName, settings.ProxyConfig.Password, settings.ProxyConfig.Domain);
-                    else
-                        credential = new NetworkCredential(settings.ProxyConfig.UserName, settings.ProxyConfig.Password);
+            LoadProxy(settings.ProxyConfig);
 
-                    HttpClientHandler.Proxy = new WebProxy(settings.ProxyConfig.ProxyAddress, false, null, credential);
-                }
-                else
-                    HttpClientHandler.Proxy = new WebProxy(settings.ProxyConfig.ProxyAddress);
-            }
-            else
-                HttpClientHandler.UseProxy = false;
-
-            if(settings.RegistryConfig.RepeatRegistration.HasValue)
+            if (settings.RegistryConfig.RepeatRegistration.HasValue)
                 RepeatRegistrationInterval = settings.RegistryConfig.RepeatRegistration.Value;
+
+            if (settings.ClientConfig.RequestConfig.RequestTimeout.HasValue)
+                Timeout = settings.ClientConfig.RequestConfig.RequestTimeout.Value;
+            else
+                Timeout = DEFAULT_REQUEST_TIMEOUT;
+
+            baseUrl = settings.RegistryConfig.RegistryUrl.TrimEnd('/') + PATH_SEPERATOR + REGISTRY_BASE_PATH;
         }
 
-        public RegistryHttpClient(RegistryClientSettings registryClientSettings = null)
+        public RegistryHttpClient() : this(null)
+        { }
+
+        public RegistryHttpClient(RegistryClientSettings registryClientSettings)
         {
             Settings = registryClientSettings ?? RegistryClientSettings.LoadSettings();
+            Settings = Settings ?? throw new NullReferenceException("Settings is null");
 
             LoadSettings(Settings);
             JsonSerializerSettings = new JsonStandardSettings();
@@ -74,35 +69,25 @@ namespace BaSyx.Registry.Client.Http
 
         public Uri GetUri(params string[] pathElements)
         {
-            string path = string.Empty;
-            if (!Settings.RegistryConfig.RegistryUrl.EndsWith("/") && !RegistryPath.StartsWith("/"))
-                path = Settings.RegistryConfig.RegistryUrl + PathSeperator + RegistryPath;
-            else
-                path = Settings.RegistryConfig.RegistryUrl + RegistryPath;
+            string path = baseUrl;
 
             if (pathElements?.Length > 0)
                 foreach (var pathElement in pathElements)
                 {
                     string encodedPathElement = HttpUtility.UrlEncode(pathElement);
-                    if (!encodedPathElement.EndsWith("/") && !encodedPathElement.StartsWith("/"))
-                        path = path + PathSeperator + encodedPathElement;
-                    else
-                        path = path + encodedPathElement;
-
-                    //if (!path.EndsWith("/"))
-                    //    path = path + PathSeperator;
+                    path = path.TrimEnd('/') + PATH_SEPERATOR + encodedPathElement.TrimEnd('/');
                 }
             return new Uri(path);
         }
 
-        public void RepeatRegistration(IAssetAdministrationShellDescriptor aas, CancellationTokenSource cancellationToken)
+        public void RepeatRegistration(IAssetAdministrationShellDescriptor aasDescriptor, CancellationTokenSource cancellationToken)
         {
             RepeatRegistrationCancellationToken = cancellationToken;
             Task.Factory.StartNew(async () =>
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    IResult<IAssetAdministrationShellDescriptor> result = CreateAssetAdministrationShell(aas);
+                    IResult<IAssetAdministrationShellDescriptor> result = CreateOrUpdateAssetAdministrationShellRegistration(aasDescriptor.Identification.Id, aasDescriptor);
                     logger.Info("Registration-Renewal - Success: " + result.Success + " | Messages: " + result.Messages.ToString());
                     await Task.Delay(RepeatRegistrationInterval);
                 }
@@ -114,72 +99,135 @@ namespace BaSyx.Registry.Client.Http
             RepeatRegistrationCancellationToken?.Cancel();
         }
 
-        public IResult<IAssetAdministrationShellDescriptor> CreateAssetAdministrationShell(IAssetAdministrationShellDescriptor aas)
+        public IResult<IAssetAdministrationShellDescriptor> CreateOrUpdateAssetAdministrationShellRegistration(string aasId, IAssetAdministrationShellDescriptor aasDescriptor)
         {
-            var request = base.CreateJsonContentRequest(GetUri(), HttpMethod.Post, aas);
+            if (string.IsNullOrEmpty(aasId))
+                return new Result<IAssetAdministrationShellDescriptor>(new ArgumentNullException(nameof(aasId)));
+            if (aasDescriptor == null)
+                return new Result<IAssetAdministrationShellDescriptor>(new ArgumentNullException(nameof(aasDescriptor)));
+
+            var request = base.CreateJsonContentRequest(GetUri(aasId), HttpMethod.Put, aasDescriptor);
             var response = base.SendRequest(request, Timeout);
             return base.EvaluateResponse<IAssetAdministrationShellDescriptor>(response, response.Entity);
         }
 
-        public IResult<IAssetAdministrationShellDescriptor> RetrieveAssetAdministrationShell(string aasId)
+        public IResult<IAssetAdministrationShellDescriptor> RetrieveAssetAdministrationShellRegistration(string aasId)
         {
+            if (string.IsNullOrEmpty(aasId))
+                return new Result<IAssetAdministrationShellDescriptor>(new ArgumentNullException(nameof(aasId)));
+
             var request = base.CreateRequest(GetUri(aasId), HttpMethod.Get);
             var response = base.SendRequest(request, Timeout);
             return base.EvaluateResponse<IAssetAdministrationShellDescriptor>(response, response.Entity);
         }
 
-        public IResult<IElementContainer<IAssetAdministrationShellDescriptor>> RetrieveAssetAdministrationShells()
+        public IResult<IQueryableElementContainer<IAssetAdministrationShellDescriptor>> RetrieveAllAssetAdministrationShellRegistrations(Predicate<IAssetAdministrationShellDescriptor> predicate)
+        {
+            if (predicate == null)
+                return new Result<IQueryableElementContainer<IAssetAdministrationShellDescriptor>>(new ArgumentNullException(nameof(predicate)));
+
+            var request = base.CreateRequest(GetUri(), HttpMethod.Get);
+            var response = base.SendRequest(request, Timeout);
+            var result = base.EvaluateResponse<IEnumerable<IAssetAdministrationShellDescriptor>>(response, response.Entity);
+
+            if (!result.Success || result.Entity == null)
+                return new Result<IQueryableElementContainer<IAssetAdministrationShellDescriptor>>(result);
+            else
+            {
+                var foundItems = result.Entity.Where(w => predicate.Invoke(w));
+                return new Result<IQueryableElementContainer<IAssetAdministrationShellDescriptor>>(result.Success, foundItems.AsQueryableElementContainer(), result.Messages);
+            }
+        }
+
+        public IResult<IQueryableElementContainer<IAssetAdministrationShellDescriptor>> RetrieveAllAssetAdministrationShellRegistrations()
         {
             var request = base.CreateRequest(GetUri(), HttpMethod.Get);
             var response = base.SendRequest(request, Timeout);
-            return base.EvaluateResponse<ElementContainer<IAssetAdministrationShellDescriptor>>(response, response.Entity);
+            var result = base.EvaluateResponse<IEnumerable<IAssetAdministrationShellDescriptor>>(response, response.Entity);
+            return new Result<IQueryableElementContainer<IAssetAdministrationShellDescriptor>>(result.Success, result.Entity.AsQueryableElementContainer(), result.Messages);
         }
 
-        public IResult UpdateAssetAdministrationShell(string aasId, Dictionary<string, string> metaData)
+        public IResult DeleteAssetAdministrationShellRegistration(string aasId)
         {
-            var request = base.CreateRequest(GetUri(aasId), HttpMethod.Put);
-            var response = base.SendRequest(request, Timeout);
-            return base.EvaluateResponse(response, response.Entity);
-        }
+            if (string.IsNullOrEmpty(aasId))
+                return new Result(new ArgumentNullException(nameof(aasId)));
 
-        public IResult DeleteAssetAdministrationShell(string aasId)
-        {
-            if(RepeatRegistrationInterval > 0)
-            {
+            if (RepeatRegistrationInterval > 0)
                 RepeatRegistrationCancellationToken?.Cancel();
-            }
 
             var request = base.CreateRequest(GetUri(aasId), HttpMethod.Delete);
             var response = base.SendRequest(request, Timeout);
             return base.EvaluateResponse(response, response.Entity);
         }
 
-        public IResult<ISubmodelDescriptor> CreateSubmodel(string aasId, ISubmodelDescriptor submodel)
+        public IResult<ISubmodelDescriptor> CreateOrUpdateSubmodelRegistration(string aasId, string submodelId, ISubmodelDescriptor submodelDescriptor)
         {
-            var request = base.CreateJsonContentRequest(GetUri(aasId, SubmodelPath), HttpMethod.Post, submodel);
+            if (string.IsNullOrEmpty(aasId))
+                return new Result<ISubmodelDescriptor>(new ArgumentNullException(nameof(aasId)));
+            if (string.IsNullOrEmpty(submodelId))
+                return new Result<ISubmodelDescriptor>(new ArgumentNullException(nameof(submodelId)));
+            if (submodelDescriptor == null)
+                return new Result<ISubmodelDescriptor>(new ArgumentNullException(nameof(submodelDescriptor)));
+
+            var request = base.CreateJsonContentRequest(GetUri(aasId, SUBMODEL_PATH, submodelId), HttpMethod.Put, submodelDescriptor);
             var response = base.SendRequest(request, Timeout);
             return base.EvaluateResponse<ISubmodelDescriptor>(response, response.Entity);
         }
 
-        public IResult<IElementContainer<ISubmodelDescriptor>> RetrieveSubmodels(string aasId)
+        public IResult<IQueryableElementContainer<ISubmodelDescriptor>> RetrieveAllSubmodelRegistrations(string aasId, Predicate<ISubmodelDescriptor> predicate)
         {
-            var request = base.CreateRequest(GetUri(aasId, SubmodelPath), HttpMethod.Get);
+            if (string.IsNullOrEmpty(aasId))
+                return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(new ArgumentNullException(nameof(aasId)));
+            if (predicate == null)
+                return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(new ArgumentNullException(nameof(predicate)));
+
+            var request = base.CreateRequest(GetUri(aasId, SUBMODEL_PATH), HttpMethod.Get);
             var response = base.SendRequest(request, Timeout);
-            return base.EvaluateResponse<ElementContainer<ISubmodelDescriptor>>(response, response.Entity);
+            var result = base.EvaluateResponse<IEnumerable<ISubmodelDescriptor>>(response, response.Entity);
+
+            if (!result.Success || result.Entity == null)
+                return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(result);
+            else
+            {
+                var foundItems = result.Entity.Where(w => predicate.Invoke(w));
+                return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(result.Success, foundItems.AsQueryableElementContainer(), result.Messages);
+            }
         }
 
-        public IResult<ISubmodelDescriptor> RetrieveSubmodel(string aasId, string submodelId)
+        public IResult<IQueryableElementContainer<ISubmodelDescriptor>> RetrieveAllSubmodelRegistrations(string aasId)
         {
-            var request = base.CreateRequest(GetUri(aasId, SubmodelPath, submodelId), HttpMethod.Get);
+            if (string.IsNullOrEmpty(aasId))
+                return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(new ArgumentNullException(nameof(aasId)));
+
+            var request = base.CreateRequest(GetUri(aasId, SUBMODEL_PATH), HttpMethod.Get);
+            var response = base.SendRequest(request, Timeout);
+            var result = base.EvaluateResponse<IEnumerable<ISubmodelDescriptor>>(response, response.Entity);
+
+            return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(result.Success, result.Entity.AsQueryableElementContainer(), result.Messages);
+        }
+
+        public IResult<ISubmodelDescriptor> RetrieveSubmodelRegistration(string aasId, string submodelId)
+        {
+            if (string.IsNullOrEmpty(aasId))
+                return new Result<ISubmodelDescriptor>(new ArgumentNullException(nameof(aasId)));
+            if (string.IsNullOrEmpty(submodelId))
+                return new Result<ISubmodelDescriptor>(new ArgumentNullException(nameof(submodelId)));
+
+            var request = base.CreateRequest(GetUri(aasId, SUBMODEL_PATH, submodelId), HttpMethod.Get);
             var response = base.SendRequest(request, Timeout);
             return base.EvaluateResponse<ISubmodelDescriptor>(response, response.Entity);
         }
 
-        public IResult DeleteSubmodel(string aasId, string submodelId)
+        public IResult DeleteSubmodelRegistration(string aasId, string submodelId)
         {
-            var request = base.CreateRequest(GetUri(aasId, SubmodelPath, submodelId), HttpMethod.Delete);
+            if (string.IsNullOrEmpty(aasId))
+                return new Result(new ArgumentNullException(nameof(aasId)));
+            if (string.IsNullOrEmpty(submodelId))
+                return new Result(new ArgumentNullException(nameof(submodelId)));
+
+            var request = base.CreateRequest(GetUri(aasId, SUBMODEL_PATH, submodelId), HttpMethod.Delete);
             var response = base.SendRequest(request, Timeout);
             return base.EvaluateResponse(response, response.Entity);
-        }
+        }   
     }
 }

@@ -169,7 +169,7 @@ ShowModelElementSpecificAttributes = @<text>
             break;
         case KeyElements.File:
             {
-                IFile file = submodelElement?.ToModelElement<IFile>();
+                IFile file = submodelElement?.Cast<IFile>();
                 if (file == null)
                 {
                     return;
@@ -196,7 +196,7 @@ ShowModelElementSpecificAttributes = @<text>
             break;
         case KeyElements.Event:
             {
-                IEvent eventable = submodelElement?.ToModelElement<IEvent>();
+                IEvent eventable = submodelElement?.Cast<IEvent>();
                 if (eventable == null)
                 {
                     return;
@@ -205,7 +205,7 @@ ShowModelElementSpecificAttributes = @<text>
                 @foreach (var element in eventable.DataElements)
                 {
                     <div class="row">
-                        @{ string valueTypeName = element.ToModelElement<IProperty>()?.ValueType?.ToString() ?? "ANY"; }
+                        @{ string valueTypeName = element.Cast<IProperty>()?.ValueType?.ToString() ?? "ANY"; }
                         <div class="col-sm-10"><b>@element.IdShort (@valueTypeName)</b></div>
                     </div>
                 }
@@ -216,7 +216,7 @@ ShowModelElementSpecificAttributes = @<text>
         case KeyElements.Operation:
             break;
         case KeyElements.Property:
-            IProperty property = submodelElement?.ToModelElement<IProperty>();
+            IProperty property = submodelElement?.Cast<IProperty>();
             if (property == null)
             {
                 return;

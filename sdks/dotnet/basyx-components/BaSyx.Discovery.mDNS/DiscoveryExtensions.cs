@@ -114,7 +114,7 @@ namespace BaSyx.Discovery.mDNS
                 }
                 if (aasDescriptor != null)
                 {
-                    var registeredResult = assetAdministrationShellRegistry.CreateAssetAdministrationShell(aasDescriptor);
+                    var registeredResult = assetAdministrationShellRegistry.CreateOrUpdateAssetAdministrationShellRegistration(aasDescriptor.Identification.Id, aasDescriptor);
                     if (registeredResult.Success)
                         registeredResult.LogResult(logger, LogLevel.Info, "Successfully registered AAS at registry");
                     else
@@ -157,7 +157,7 @@ namespace BaSyx.Discovery.mDNS
                         {
                             if (splittedItem[0] == ASSETADMINISTRATIONSHELL_ID)
                             {
-                                var deletedResult = assetAdministrationShellRegistry.DeleteAssetAdministrationShell(splittedItem[1]);
+                                var deletedResult = assetAdministrationShellRegistry.DeleteAssetAdministrationShellRegistration(splittedItem[1]);
                                 if (deletedResult.Success)
                                     deletedResult.LogResult(logger, LogLevel.Info, "Successfully deregistered AAS from registry");
                                 else

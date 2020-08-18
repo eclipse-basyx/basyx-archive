@@ -8,7 +8,7 @@
 @{
     ViewData["Title"] = "Index";
     IAssetAdministrationShellRegistry registry = Model.Registry;
-    IElementContainer<IAssetAdministrationShellDescriptor> shells = registry.RetrieveAssetAdministrationShells().Entity;
+    IElementContainer<IAssetAdministrationShellDescriptor> shells = registry.RetrieveAllAssetAdministrationShellRegistrations().Entity;
 }
 
 <!doctype html>

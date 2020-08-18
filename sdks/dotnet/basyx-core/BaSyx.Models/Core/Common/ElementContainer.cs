@@ -18,9 +18,25 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace BaSyx.Models.Core.Common
 {
+    public class QueryableElementContainer<TElement> : ElementContainer<TElement>, IQueryableElementContainer<TElement> where TElement : IReferable, IModelElement
+    {
+        private readonly IQueryable<TElement> _queryable;
+        public QueryableElementContainer(IEnumerable<TElement> list) : base(list)
+        {
+            _queryable = list.AsQueryable();
+        }
+
+        public Type ElementType => _queryable.ElementType;
+
+        public Expression Expression => _queryable.Expression;
+
+        public IQueryProvider Provider => _queryable.Provider;
+    }
+
     public class ElementContainer<TElement> : List<TElement>, IElementContainer<TElement> where TElement : IReferable, IModelElement
     {
         public TElement this[string idShort] => this.Find(e => e.IdShort == idShort);
@@ -58,32 +74,71 @@ namespace BaSyx.Models.Core.Common
         }
 
 
-        public virtual IResult<IElementContainer<TElement>> RetrieveAll()
+        public virtual IResult<IQueryableElementContainer<TElement>> RetrieveAll()
         {
             if (Count == 0)
-                return new Result<ElementContainer<TElement>>(true, new EmptyMessage());
+                return new Result<IQueryableElementContainer<TElement>>(true, new EmptyMessage());
             else
-                return new Result<ElementContainer<TElement>>(true, this);
+                return new Result<IQueryableElementContainer<TElement>>(true, this.AsQueryableElementContainer());
         }
 
-        public virtual IResult<IElementContainer<T>> RetrieveAll<T>() where T : class, TElement
+        public virtual IResult<IQueryableElementContainer<T>> RetrieveAll<T>() where T : class, TElement
         {
             if (Count == 0)
-                return new Result<IElementContainer<T>>(true, new EmptyMessage());
+                return new Result<IQueryableElementContainer<T>>(true, new EmptyMessage());
             else
             {
                 ElementContainer<T> container = new ElementContainer<T>();
                 foreach (var element in this)
                 {
-                    T tElement = element.ToModelElement<T>();
+                    T tElement = element.Cast<T>();
                     if (tElement != null)
                         container.Add(tElement);
                 }
 
                 if(container.Count > 0)
-                    return new Result<IElementContainer<T>>(true, container);
+                    return new Result<IQueryableElementContainer<T>>(true, container.AsQueryableElementContainer());
                 else
-                    return new Result<IElementContainer<T>>(true, new EmptyMessage());
+                    return new Result<IQueryableElementContainer<T>>(true, new EmptyMessage());
+            }
+        }
+
+        public IResult<IQueryableElementContainer<TElement>> RetrieveAll(Predicate<TElement> predicate)
+        {
+            if (Count == 0)
+                return new Result<IQueryableElementContainer<TElement>>(true, new EmptyMessage());
+            else
+            {
+                ElementContainer<TElement> container = new ElementContainer<TElement>();
+                var elements = this.FindAll(predicate);
+                if(elements?.Count() > 0)
+                    container.AddRange(elements);
+
+                if (container.Count > 0)
+                    return new Result<IQueryableElementContainer<TElement>>(true, container.AsQueryableElementContainer());
+                else
+                    return new Result<IQueryableElementContainer<TElement>>(true, new EmptyMessage());
+            }
+        }
+
+        public virtual IResult<IQueryableElementContainer<T>> RetrieveAll<T>(Predicate<T> predicate) where T : class, TElement
+        {
+            if (Count == 0)
+                return new Result<IQueryableElementContainer<T>>(true, new EmptyMessage());
+            else
+            {
+                ElementContainer<T> container = new ElementContainer<T>();
+                foreach (var element in this)
+                {
+                    T tElement = element.Cast<T>();
+                    if (tElement != null)
+                        container.Add(tElement);
+                }
+
+                if (container.Count > 0)
+                    return new Result<IQueryableElementContainer<T>>(true, container.AsQueryableElementContainer());
+                else
+                    return new Result<IQueryableElementContainer<T>>(true, new EmptyMessage());
             }
         }
 
@@ -104,7 +159,7 @@ namespace BaSyx.Models.Core.Common
             if (string.IsNullOrEmpty(id))
                 return new Result<T>(new ArgumentNullException(nameof(id)));
 
-            T element = this[id].ToModelElement<T>();
+            T element = this[id].Cast<T>();
             if (element != null)
                 return new Result<T>(true, element);
             else
@@ -180,7 +235,7 @@ namespace BaSyx.Models.Core.Common
             return new ElementContainer<TOutput>(this.ConvertAll(converter));
         }
 
-       
+        
     }
 
     public class PropertyContainer : ElementContainer<IProperty>

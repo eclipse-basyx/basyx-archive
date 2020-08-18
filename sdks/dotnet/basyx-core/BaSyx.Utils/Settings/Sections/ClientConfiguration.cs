@@ -8,18 +8,30 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using System;
 using System.Xml;
 using System.Xml.Serialization;
 
 namespace BaSyx.Utils.Settings.Sections
 {
-        
-        public class ClientConfiguration
+
+    public class ClientConfiguration
+    {
+        [XmlElement]
+        public string ClientId { get; set; }
+        [XmlElement]
+        public string Endpoint { get; set; }
+        [XmlElement]
+        public RequestConfiguration RequestConfig { get; set; }
+
+        public ClientConfiguration()
         {
-            [XmlElement]
-            public string ClientId { get; set; }
-            [XmlElement]
-            public string Endpoint { get; set; }         
+            RequestConfig = new RequestConfiguration();
         }
+    }
+
+    public class RequestConfiguration
+    {
+        [XmlElement]
+        public int? RequestTimeout { get; set; }
+    }
 }

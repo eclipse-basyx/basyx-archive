@@ -24,7 +24,7 @@ namespace BaSyx.Registry.Client.Http
             if (registryHttpClient.Settings?.RegistryConfig?.RepeatRegistration != null)
                 registryHttpClient.RepeatRegistration(serviceProvider.ServiceDescriptor, new CancellationTokenSource());
 
-            IResult<IAssetAdministrationShellDescriptor> result = registryHttpClient.CreateAssetAdministrationShell(serviceProvider.ServiceDescriptor);
+            IResult<IAssetAdministrationShellDescriptor> result = registryHttpClient.CreateOrUpdateAssetAdministrationShellRegistration(serviceProvider.ServiceDescriptor.Identification.Id, serviceProvider.ServiceDescriptor);
 
             return result;
         }

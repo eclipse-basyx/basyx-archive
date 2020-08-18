@@ -76,7 +76,7 @@ namespace BaSyx.Registry.Server.Http
                 var xmlFile = $"{controllerAssembly.GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 if (ResourceChecker.CheckResourceAvailability(controllerAssembly, ControllerAssemblyName, xmlFile, true))
-                    c.IncludeXmlComments(xmlPath);
+                    c.IncludeXmlComments(xmlPath, true);               
             });
             services.AddSwaggerGenNewtonsoftSupport();
         }
@@ -118,7 +118,6 @@ namespace BaSyx.Registry.Server.Http
             if (ServerApplicationLifetime.ApplicationStopped != null)
                 applicationLifetime.ApplicationStopped.Register(ServerApplicationLifetime.ApplicationStopped);
 
-            app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "BaSyx Registry Http REST-API");

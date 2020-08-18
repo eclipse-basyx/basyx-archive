@@ -19,6 +19,16 @@
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="BaSyx.API.Http.Controllers.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="BaSyx.API.Http.Controllers.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
 
   <ItemGroup>
     <None Include="basyxlogo.png" Pack="true" PackagePath="\" />
@@ -39,7 +49,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BaSyx.API\BaSyx.API.csproj" />
-    <ProjectReference Include="..\BaSyx.Submodel.ServiceProvider.Distributed\BaSyx.Submodel.ServiceProvider.Distributed.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

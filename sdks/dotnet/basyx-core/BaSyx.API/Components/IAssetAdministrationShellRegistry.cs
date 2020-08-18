@@ -11,16 +11,48 @@
 using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.Common;
 using BaSyx.Utils.ResultHandling;
-using System.Collections.Generic;
+using System;
 
 namespace BaSyx.API.Components
 {
+    /// <summary>
+    /// The AssetAdministrationShellRegistry-Interface
+    /// </summary>
     public interface IAssetAdministrationShellRegistry : ISubmodelRegistry
     {
-        IResult<IAssetAdministrationShellDescriptor> CreateAssetAdministrationShell(IAssetAdministrationShellDescriptor aas);
-        IResult<IAssetAdministrationShellDescriptor> RetrieveAssetAdministrationShell(string aasId);
-        IResult<IElementContainer<IAssetAdministrationShellDescriptor>> RetrieveAssetAdministrationShells();
-        IResult UpdateAssetAdministrationShell(string aasId, Dictionary<string, string> metaData);
-        IResult DeleteAssetAdministrationShell(string aasId);
+        /// <summary>
+        /// Creates a new or updates an existing Asset Administration Shell registration at the Registry
+        /// </summary>
+        /// <param name="aasId">The Asset Administration Shell's unique id</param>
+        /// <param name="aasDescriptor">The Asset Administration Shell Descriptor</param>
+        /// <returns>Result object with embedded Asset Administration Shell Descriptor</returns>
+        IResult<IAssetAdministrationShellDescriptor> CreateOrUpdateAssetAdministrationShellRegistration(string aasId, IAssetAdministrationShellDescriptor aasDescriptor);
+        
+        /// <summary>
+        /// Retrieves the Asset Administration Shell registration from the Registry
+        /// </summary>
+        /// <param name="aasId">The Asset Administration Shell's unique id</param>
+        /// <returns>Result object with embedded Asset Administration Shell Descriptor</returns>
+        IResult<IAssetAdministrationShellDescriptor> RetrieveAssetAdministrationShellRegistration(string aasId);
+
+        /// <summary>
+        /// Retrieves all Asset Administration Shell registrations from the Registry
+        /// </summary>
+        /// <param name="predicate">The predicate to explicitly look for specific Asset Administration Shell Descriptors</param>
+        /// <returns>Result object with embedded list of Asset Administration Shell Descriptors</returns>
+        IResult<IQueryableElementContainer<IAssetAdministrationShellDescriptor>> RetrieveAllAssetAdministrationShellRegistrations();
+        /// <summary>
+        /// Retrieves all Asset Administration Shell registrations from the Registry with a certain search predicate
+        /// </summary>
+        /// <param name="predicate">The predicate to explicitly look for specific Asset Administration Shell Descriptors</param>
+        /// <returns>Result object with embedded list of Asset Administration Shell Descriptors</returns>
+        IResult<IQueryableElementContainer<IAssetAdministrationShellDescriptor>> RetrieveAllAssetAdministrationShellRegistrations(Predicate<IAssetAdministrationShellDescriptor> predicate);
+
+        /// <summary>
+        /// Deletes the Asset Administration Shell registration from the Registry
+        /// </summary>
+        /// <param name="aasId">The Asset Administration Shell's unique id</param>
+        /// <returns>Result object returning only the success of the operation</returns>
+        IResult DeleteAssetAdministrationShellRegistration(string aasId);
     }
 }

@@ -35,6 +35,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{12CD4B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaSyx.AASX.Server.Http", "BaSyx.AASX.Server.Http\BaSyx.AASX.Server.Http.csproj", "{CACC3BFB-04DF-4E46-BBBD-2A5DA27D957D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EB38D1D3-2539-4EA3-9FA9-B91487278FC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaSyx.Components.Tests", "BaSyx.Components.Tests\BaSyx.Components.Tests.csproj", "{A925E735-99D9-44F8-A7BE-36836D7CC1C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +89,10 @@ Global
 		{CACC3BFB-04DF-4E46-BBBD-2A5DA27D957D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CACC3BFB-04DF-4E46-BBBD-2A5DA27D957D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CACC3BFB-04DF-4E46-BBBD-2A5DA27D957D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A925E735-99D9-44F8-A7BE-36836D7CC1C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A925E735-99D9-44F8-A7BE-36836D7CC1C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A925E735-99D9-44F8-A7BE-36836D7CC1C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A925E735-99D9-44F8-A7BE-36836D7CC1C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +109,7 @@ Global
 		{4DC3AA08-91EB-4A53-8F24-3F11E3A41149} = {D4730DAB-AF9B-4ECD-9BB3-FA386754D3F8}
 		{D8A737D1-4275-4DB2-9C1F-0C942C71E0B0} = {12CD4BF1-B0A6-4DBD-AFB6-6F232C92AAFA}
 		{CACC3BFB-04DF-4E46-BBBD-2A5DA27D957D} = {D3E29E3D-ECAC-4F1E-A3F7-7236ED32A4C4}
+		{A925E735-99D9-44F8-A7BE-36836D7CC1C2} = {EB38D1D3-2539-4EA3-9FA9-B91487278FC2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DC440E9-3A4D-4D67-B741-72B8F15EB8C7}

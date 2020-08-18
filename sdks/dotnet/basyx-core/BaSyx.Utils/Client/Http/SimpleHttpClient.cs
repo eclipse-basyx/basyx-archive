@@ -13,6 +13,7 @@ using BaSyx.Utils.Settings.Sections;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -27,12 +28,20 @@ namespace BaSyx.Utils.Client.Http
         public HttpClientHandler HttpClientHandler { get; }
         public JsonSerializerSettings JsonSerializerSettings { get; protected set; }
 
+        public const int DEFAULT_REQUEST_TIMEOUT = 20000;
+
         protected SimpleHttpClient()
         {
             HttpClientHandler = new HttpClientHandler() { MaxConnectionsPerServer = 100, UseProxy = false };
             HttpClient = new HttpClient(HttpClientHandler);
 
-            JsonSerializerSettings = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore, Formatting = Formatting.Indented, DefaultValueHandling = DefaultValueHandling.Include };
+            JsonSerializerSettings = new JsonSerializerSettings() 
+            { 
+                NullValueHandling = NullValueHandling.Ignore, 
+                Formatting = Formatting.Indented, 
+                DefaultValueHandling = DefaultValueHandling.Include,
+                MissingMemberHandling = MissingMemberHandling.Ignore
+            };
         }
 
         protected virtual void LoadProxy(ProxyConfiguration proxyConfiguration)
@@ -161,15 +170,14 @@ namespace BaSyx.Utils.Client.Http
                 {
                     try
                     {
-                        responseString = CheckAndExtractResultContruct(responseString);
-                        var requestResult = JsonConvert.DeserializeObject<T>(responseString, JsonSerializerSettings);
+                        T requestResult = JsonConvert.DeserializeObject<T>(responseString, JsonSerializerSettings);
 
                         messageList.Add(new Message(MessageType.Information, response.ReasonPhrase, ((int)response.StatusCode).ToString()));
                         return new Result<T>(true, requestResult, messageList);
                     }
                     catch (Exception e)
                     {
-                        messageList.Add(new Message(MessageType.Error, e.Message, e.HelpLink));
+                        messageList.Add(new ExceptionMessage(e));
                         return new Result<T>(false, messageList);
                     }
                 }
@@ -181,26 +189,6 @@ namespace BaSyx.Utils.Client.Http
             }
             messageList.Add(new Message(MessageType.Error, "Evaluation of response failed - Response from host is null", null));
             return new Result<T>(false, messageList);
-        }
-
-        private string CheckAndExtractResultContruct(string responseString)
-        {
-            if (responseString == null)
-                return null;
-
-            try
-            {
-                JToken jToken = JToken.Parse(responseString);
-                var jEntity = jToken.SelectToken("entity");
-                if (jEntity != null)
-                    return jEntity.ToString();
-                else
-                    return responseString;
-            }
-            catch
-            {
-                return responseString;
-            }
         }
     }
 }

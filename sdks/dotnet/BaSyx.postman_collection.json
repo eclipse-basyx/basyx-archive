@@ -1,0 +1,987 @@
+{
+	"info": {
+		"_postman_id": "7b915939-0386-4f61-a518-235dcf636193",
+		"name": "BaSyx",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Component",
+			"item": [
+				{
+					"name": "Submodels",
+					"item": [
+						{
+							"name": "DataElements",
+							"item": [
+								{
+									"name": "Create DataElement",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "088a0eb7-5981-4d96-9879-34e2298acb1c",
+												"exec": [
+													"pm.environment.set(\"dataElement_idShort\", pm.response.json().idShort);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"idShort\": \"{{dataElement_idShort}}\",\n    \"modelType\": {\n        \"name\": \"Property\"\n    },\n    \"valueType\": {\n        \"dataObjectType\": {\n            \"name\": \"string\"\n        }\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/dataElements",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"dataElements"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Retrieve DataElement by Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/dataElements/{{dataElement_idShort}}",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"dataElements",
+												"{{dataElement_idShort}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Retrieve all DataElements",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/dataElements",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"dataElements"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update DataElement Value by Id",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"value\" : \"TestValue\",\n\t\"valueType\": {\n        \"dataObjectType\": {\n            \"name\": \"string\"\n        }\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/dataElements/{{dataElement_idShort}}/value",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"dataElements",
+												"{{dataElement_idShort}}",
+												"value"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Retrieve DataElement Value by Id",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/dataElements/{{dataElement_idShort}}/value",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"dataElements",
+												"{{dataElement_idShort}}",
+												"value"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete DataElement by Id",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/dataElements/{{dataElement_idShort}}",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"dataElements",
+												"{{dataElement_idShort}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Operations",
+							"item": [
+								{
+									"name": "Create Operation",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "c604880d-7816-436e-9470-32ebaae358b1",
+												"exec": [
+													"pm.environment.set(\"operation_idShort\", pm.response.json().idShort);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"idShort\": \"{{operation_idShort}}\",\n    \"in\": [\n      {\n        \"index\" : 0,\n        \"idShort\" : \"{{parameter1_idShort}}\",\n        \"dataType\": {\n            \"dataObjectType\": {\n                \"name\": \"String\"\n            }\n        }\n      },\n      {\n        \"index\" : 1,\n        \"idShort\" : \"{{parameter2_idShort}}\",\n        \"dataType\": {\n            \"dataObjectType\": {\n                \"name\": \"String\"\n            }\n        }\n      }],\n     \"out\": [\n      {\n        \"index\" : 0,\n        \"idShort\" : \"{{returnType_idShort}}\",\n        \"dataType\": {\n            \"dataObjectType\": {\n                \"name\": \"String\"\n            }\n        }\n      }]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/operations",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"operations"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Retrieve Operation by Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodel/operations/{{operation_idShort}}",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"submodel",
+												"operations",
+												"{{operation_idShort}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Retrieve all Operations",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodel/operations",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"submodel",
+												"operations"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Operation by Id",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/operations/{{operation_idShort}}",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"operations",
+												"{{operation_idShort}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Invoke Operation by Id",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"requestId\" : \"12345678\",\n\t\"inputArguments\" : [{\n\t\t\"value\" : {\n\t\t\t\"idShort\" : \"Expression\",\n\t\t\t\"modelType\" : {\n\t\t\t\t\"name\" : \"Property\"\n\t\t\t},\n\t    \t\"value\" : \"5*9\"\n\t\t}\n\t}],\n\t\"timeout\" : 5000\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodel/operations/Calculate",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"submodel",
+												"operations",
+												"Calculate"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Execute Workflow",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"requestId\" : \"12345678\",\n\t\"inputArguments\" : [{\n\t\t\"value\" : {\n\t\t\t\"idShort\" : \"WorkflowId\",\n\t\t\t\"modelType\" : {\n\t\t\t\t\"name\" : \"Property\"\n\t\t\t},\n\t    \t\"value\" : \"TestSchrauben\"\n\t\t}\n\t},\n\t{\n\t\t\"value\" : {\n\t\t\t\"idShort\" : \"Roles\",\n\t\t\t\"modelType\" : {\n\t\t\t\t\"name\" : \"Property\"\n\t\t\t},\n\t    \t\"value\" : \"schrauber\"\n\t\t}\n\t}],\n\t\"timeout\" : 5000\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:5080/aas/submodels/Workflows/submodel/operations/ExecuteWorkflow",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "5080",
+											"path": [
+												"aas",
+												"submodels",
+												"Workflows",
+												"submodel",
+												"operations",
+												"ExecuteWorkflow"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Invoke Operation by Id (async)",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"requestId\" : \"1234567\",\n\t\"inputArguments\" : [{\n\t\t\"value\" : {\n\t\t\t\"idShort\" : \"Expression\",\n\t\t\t\"modelType\" : {\n\t\t\t\t\"name\" : \"Property\"\n\t\t\t},\n\t    \t\"value\" : \"5*9\"\n\t\t}\n\t}],\n\t\"timeout\" : 5000\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodel/operations/Calculate/async",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"submodel",
+												"operations",
+												"Calculate",
+												"async"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Retrieve Invocation Result",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodel/operations/Calculate/invocationList/1234567",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"submodel",
+												"operations",
+												"Calculate",
+												"invocationList",
+												"1234567"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Events",
+							"item": [
+								{
+									"name": "Create Event",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "742c9202-2bf5-4eb8-bedb-2101c42858ae",
+												"exec": [
+													"pm.environment.set(\"event_idShort\", pm.response.json().idShort);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"idShort\": \"{{event_idShort}}\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/events",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"events"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Retrieve Event by Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/events/{{event_idShort}}",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"events",
+												"{{event_idShort}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Retrieve all Events",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/events",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"events"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Event by Id",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/events/{{event_idShort}}",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"events",
+												"{{event_idShort}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Bindings",
+							"item": [
+								{
+									"name": "Retrieve all Submodel Bindings",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{component_endpoint}}/aas/submodels/bindings",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"aas",
+												"submodels",
+												"bindings"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Create Submodel",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b324cbc3-5623-495f-b5f9-549a10fc31a6",
+										"exec": [
+											"pm.environment.set(\"submodel_idShort\", pm.response.json().idShort);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"idShort\": \"{{submodel_idShort}}\",\n    \"identification\" : {\n\t\t\t\"id\" : \"{{$guid}}\",\n\t\t\t\"idType\" : \"Custom\"\n\t},\n    \"kind\" : \"Instance\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{component_endpoint}}/aas/submodels",
+									"host": [
+										"{{component_endpoint}}"
+									],
+									"path": [
+										"aas",
+										"submodels"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve all Submodels",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{component_endpoint}}/aas/submodels",
+									"host": [
+										"{{component_endpoint}}"
+									],
+									"path": [
+										"aas",
+										"submodels"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Submodel by Id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}",
+									"host": [
+										"{{component_endpoint}}"
+									],
+									"path": [
+										"aas",
+										"submodels",
+										"{{submodel_idShort}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Submodel by Id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}",
+									"host": [
+										"{{component_endpoint}}"
+									],
+									"path": [
+										"aas",
+										"submodels",
+										"{{submodel_idShort}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Retrieve AAS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{component_endpoint}}/aas",
+							"host": [
+								"{{component_endpoint}}"
+							],
+							"path": [
+								"aas"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Registry",
+			"item": [
+				{
+					"name": "Register Asset Administration Shell",
+					"item": [
+						{
+							"name": "Create AAS for Component (Minimal)",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"idShort\" : \"{{aas_idShort}}\",\n\t\"identification\" : {\n\t\t\t\"id\" : \"{{aas_id}}\",\n\t\t\t\"idType\" : \"Custom\"\n\t},\n    \"endpoints\" : [\n    \t{\n    \t\t\"type\" : \"http\",\n    \t\t\"address\" : \"http://localhost:5080/aas\"\n    \t}],\n    \"submodels\" : [{\n    \t\"idShort\" : \"{{submodel_idShort}}\",\n    \t\"identification\" : {\n\t\t\t\"id\" : \"{{submodel_id}}\",\n\t\t\t\"idType\" : \"Custom\"\n\t\t},\n\t\t\"endpoints\" : [\n    \t{\n    \t\t\"type\" : \"http\",\n    \t\t\"address\" : \"http://localhost:5080/aas/submodels/{{submodel_id_encoded}}/submodel\"\n    \t}]\n    }]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{registry_endpoint}}/api/v1/registry/{{aas_id_encoded}}",
+									"host": [
+										"{{registry_endpoint}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"registry",
+										"{{aas_id_encoded}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create AAS for Component (Maximal)",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"idShort\" : \"{{aas_idShort}}\",\n\t\"identification\" : {\n\t\t\t\"id\" : \"{{aas_id}}\",\n\t\t\t\"idType\" : \"Custom\"\n\t},\n\t\"asset\" : {\n\t\t\t\"kind\": \"Instance\",\n\t\t\t\"idShort\" : \"{{asset_idShort}}\",\n\t\t\t\"identification\" : {\n\t\t\t\t\"id\" : \"{{asset_id}}\",\n\t\t\t\t\"idType\" : \"Custom\"\n\t\t\t}\n\t},\n\t\"descriptions\" : [\n\t{\n\t\t\"language\" : \"EN\",\n\t\t\"text\" : \"My Asset Administration Shell\"\n\t},\n\t{\n\t\t\"language\" : \"DE\",\n\t\t\"text\" : \"Meine Asset Administration Shell\"\n\t}],\n\t\"administration\" : {\n\t\t\"version\" : \"1.0.0\",\n\t\t\"revision\" : \"0.0.1\"\n\t},\n    \"endpoints\" : [\n    \t{\n    \t\t\"type\" : \"http\",\n    \t\t\"address\" : \"http://localhost:5080/aas\"\n    \t}],\n    \"submodels\" : [{\n    \t\"idShort\" : \"{{submodel_idShort}}\",\n    \t\"identification\" : {\n\t\t\t\"id\" : \"{{submodel_id}}\",\n\t\t\t\"idType\" : \"Custom\"\n\t\t},\n    \t\"semanticId\" : {\n    \t    \"keys\": [\n    \t        {\n    \t            \"type\": \"Submodel\",\n    \t            \"idType\": \"URI\",\n    \t            \"value\": \"urn:basys:org.eclipse.basyx:submodels:{{submodel_idShort}}:1.0.0\",\n    \t            \"local\": false\n    \t        }\n    \t    ]\n    \t},\n\t\t\"endpoints\" : [\n    \t{\n    \t\t\"type\" : \"http\",\n    \t\t\"address\" : \"http://localhost:5080/aas/submodels/{{submodel_id_encoded}}/submodel\"\n    \t}]\n    }]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{registry_endpoint}}/api/v1/registry/{{aas_id_encoded}}",
+									"host": [
+										"{{registry_endpoint}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"registry",
+										"{{aas_id_encoded}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve AAS by Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{registry_endpoint}}/api/v1/registry/{{aas_id_encoded}}",
+									"host": [
+										"{{registry_endpoint}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"registry",
+										"{{aas_id_encoded}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve all AAS",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{registry_endpoint}}/api/v1/registry/",
+									"host": [
+										"{{registry_endpoint}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"registry",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete AAS by Id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{registry_endpoint}}/api/v1/registry/{{aas_id_encoded}}",
+									"host": [
+										"{{registry_endpoint}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"registry",
+										"{{aas_id_encoded}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Register Submodel",
+					"item": [
+						{
+							"name": "Retrieve all Submodels",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{registry_endpoint}}/api/v1/registry/{{aas_id_encoded}}/submodels",
+									"host": [
+										"{{registry_endpoint}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"registry",
+										"{{aas_id_encoded}}",
+										"submodels"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Submodel by Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{registry_endpoint}}/api/v1/registry/{{aas_id_encoded}}/submodels/{{submodel_id_encoded}}",
+									"host": [
+										"{{registry_endpoint}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"registry",
+										"{{aas_id_encoded}}",
+										"submodels",
+										"{{submodel_id_encoded}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register Submodel at AAS",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"idShort\": \"AdditionalTestSubmodel\",\n    \"identification\": {\n        \"id\": \"AdditionalTestSubmodel_id\",\n        \"idType\": \"Custom\"\n    },\n    \"semanticId\" : {\n        \"keys\": [\n            {\n                \"type\": \"Submodel\",\n                \"idType\": \"URI\",\n                \"value\": \"urn:basys:org.eclipse.basyx:submodels:AdditionalTestSubmodel:1.0.0\",\n                \"local\": false\n            }\n        ]\n    },\n    \"endpoints\": [\n        {\n            \"address\": \"http://localhost:5080/aas/submodels/AdditionalTestSubmodel/submodel\",\n            \"type\": \"http\"\n        }\n    ]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{registry_endpoint}}/api/v1/registry/{{aas_id_encoded}}/submodels/{{submodel_id_encoded}}",
+									"host": [
+										"{{registry_endpoint}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"registry",
+										"{{aas_id_encoded}}",
+										"submodels",
+										"{{submodel_id_encoded}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Submodel from AAS",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{registry_endpoint}}/api/v1/registry/{{aas_id_encoded}}/submodels/{{submodel_id_encoded}}",
+									"host": [
+										"{{registry_endpoint}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"registry",
+										"{{aas_id_encoded}}",
+										"submodels",
+										"{{submodel_id_encoded}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		}
+	]
+}

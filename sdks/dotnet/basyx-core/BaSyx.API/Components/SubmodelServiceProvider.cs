@@ -513,7 +513,7 @@ namespace BaSyx.API.Components
             {
                 if(smElement.Entity.ModelType == ModelType.SubmodelElementCollection)
                 {
-                    ISubmodelElementCollection smeCollection = smElement.Entity.ToModelElement<ISubmodelElementCollection>();
+                    ISubmodelElementCollection smeCollection = smElement.Entity.Cast<ISubmodelElementCollection>();
                     if(idShorts?.Count() > 0 && smeCollection.Value?.Count > 0)
                     {
                         IResult<ISubmodelElement> nextElement = smeCollection.Value.Retrieve(idShorts.First());

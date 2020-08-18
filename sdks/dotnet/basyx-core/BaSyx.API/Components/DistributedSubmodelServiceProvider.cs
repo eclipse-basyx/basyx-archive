@@ -10,7 +10,6 @@
 *******************************************************************************/
 using BaSyx.API.AssetAdministrationShell;
 using BaSyx.API.Clients;
-using BaSyx.API.Components;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Utils.Client;
 using BaSyx.Utils.ResultHandling;
@@ -20,7 +19,7 @@ using BaSyx.Models.Core.Common;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Communication;
 
-namespace BaSyx.Submodel.ServiceProvider.Distributed
+namespace BaSyx.API.Components
 {
     public class DistributedSubmodelServiceProvider : ISubmodelServiceProvider
     {
