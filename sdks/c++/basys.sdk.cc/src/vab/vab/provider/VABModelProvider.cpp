@@ -71,7 +71,7 @@ basyx::object::error VABModelProvider::setModelPropertyValue(const std::string& 
 
 	// Check empty paths
 	if (vabPath.isEmpty()) {
-		// If path is empty, replace parenet element, but only if it doesn't exist
+		// If path is empty, replace parent element, but only if it does already exist
 		if (!elements.IsNull()) {
 			elements = newValue;
 			return basyx::object::error::None;
@@ -87,7 +87,7 @@ basyx::object::error VABModelProvider::setModelPropertyValue(const std::string& 
 	// Only write values, that already exist
 	auto thisElement = parentElement.getProperty(propertyName);
 
-	if (!parentElement.IsNull()/* && !thisElement.IsNull()*/) {
+	if (!parentElement.IsNull() && !thisElement.IsError() ) {
 		parentElement.insertKey(propertyName, newValue, true);
 		return basyx::object::error::None;
 	}
@@ -150,7 +150,7 @@ basyx::object::error VABModelProvider::deleteValue(const std::string& path, basy
 	core::VABPath vabPath{ path };
 
 	if (vabPath.isEmpty())
-		return basyx::object::error::PropertyNotFound;
+		return basyx::object::error::MalformedRequest;
 
 	// Find parent & name of element
 	auto parentElement = this->getParentElement(path);
@@ -163,7 +163,8 @@ basyx::object::error VABModelProvider::deleteValue(const std::string& path, basy
 
 		if (!childElement.IsNull()) {
 			//handler.DeleteValue(childElement, deletedValue);
-			childElement.remove(deletedValue);
+			if (!childElement.remove(deletedValue))
+				return basyx::object::error::MalformedRequest;
 			return basyx::object::error::None;
 		}
 	}
