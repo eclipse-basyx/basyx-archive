@@ -4,8 +4,16 @@ using System;
 
 namespace BaSyx.API.Http.Controllers
 {
+    /// <summary>
+    /// Helper class for handling Action Results for HTTP-Requests
+    /// </summary>
     public static class ResultHandling
     {
+        /// <summary>
+        /// Returns a Result-Object in an ObjectResult with status code 400 and a message which element is null or empty
+        /// </summary>
+        /// <param name="elementName">The name of the element which is null or empty</param>
+        /// <returns></returns>
         public static IActionResult NullResult(string elementName)
         {
             ObjectResult objectResult = new ObjectResult(new Result(false, new Message(MessageType.Error, $"Argument {elementName} is null or empty")))
@@ -14,13 +22,21 @@ namespace BaSyx.API.Http.Controllers
             };
             return objectResult;
         }
-
+        /// <summary>
+        /// Returns a Result-Object wrapped in an ObjectResult according to the CRUD-operation
+        /// </summary>
+        /// <param name="result">The orignary Result object</param>
+        /// <param name="crud">The CRUD-operation taken</param>
+        /// <param name="route">Optional route for Create-Operations</param>
+        /// <returns></returns>
         public static IActionResult CreateActionResult(this IResult result, CrudOperation crud, string route = null)
         {
             if (result == null)
             {
-                ObjectResult objectResult = new ObjectResult(new Result(false, new Message(MessageType.Error, "Result object is null")));
-                objectResult.StatusCode = 500;
+                ObjectResult objectResult = new ObjectResult(new Result(false, new Message(MessageType.Error, "Result object is null")))
+                {
+                    StatusCode = 500
+                };
                 return objectResult;
             }
 
@@ -67,12 +83,30 @@ namespace BaSyx.API.Http.Controllers
             return new BadRequestObjectResult(result);
         }
     }
+    /// <summary>
+    /// Enumeration of the different CRUD-Operations
+    /// </summary>
     public enum CrudOperation
     {
+        /// <summary>
+        /// Create
+        /// </summary>
         Create,
+        /// <summary>
+        /// Retrieve
+        /// </summary>
         Retrieve,
+        /// <summary>
+        /// Update
+        /// </summary>
         Update,
+        /// <summary>
+        /// Delete
+        /// </summary>
         Delete,
+        /// <summary>
+        /// Invoke
+        /// </summary>
         Invoke
     }
 }

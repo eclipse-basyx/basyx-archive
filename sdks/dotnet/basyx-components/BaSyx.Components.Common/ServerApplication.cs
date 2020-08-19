@@ -98,13 +98,19 @@ namespace BaSyx.Components.Common
                 using (Stream stream = content)
                 {
                     string fileName = Path.GetFileName(relativeUri.ToString());
-                    string directory = Path.GetDirectoryName(relativeUri.ToString());
-                    if (directory.StartsWith("\\"))
-                        directory = directory.Substring(1, directory.Length - 1);
-                    string hostingDirectory = Path.Combine(AppContext.BaseDirectory, Settings.ServerConfig.Hosting.ContentPath, directory);
+                    logger.Info("FileName: " + fileName);
+                    string directory = Path.GetDirectoryName(relativeUri.ToString()).TrimStart('\\');
+                    logger.Info("Directory: " + directory);
+
+                    logger.Info("Content Path from Settings: " + Settings.ServerConfig.Hosting.ContentPath);
+                    logger.Info("Current Working Directory: " + Directory.GetCurrentDirectory());
+                    string hostingDirectory = Path.Join(Directory.GetCurrentDirectory(), Settings.ServerConfig.Hosting.ContentPath, directory);
+
+                    logger.Info($"Try creating hosting directory if not existing: {hostingDirectory}");
                     Directory.CreateDirectory(hostingDirectory);
 
-                    string filePath = Path.Combine(hostingDirectory, fileName);
+                    string filePath = Path.Join(hostingDirectory, fileName);
+                    logger.Info($"Try writing file: {filePath}");
 
                     using (FileStream fileStream = File.OpenWrite(filePath))
                     {

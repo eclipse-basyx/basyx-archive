@@ -135,7 +135,7 @@ namespace BaSyx.Registry.Client.Http
             else
             {
                 var foundItems = result.Entity.Where(w => predicate.Invoke(w));
-                return new Result<IQueryableElementContainer<IAssetAdministrationShellDescriptor>>(result.Success, foundItems.AsQueryableElementContainer(), result.Messages);
+                return new Result<IQueryableElementContainer<IAssetAdministrationShellDescriptor>>(result.Success, foundItems?.AsQueryableElementContainer(), result.Messages);
             }
         }
 
@@ -144,7 +144,7 @@ namespace BaSyx.Registry.Client.Http
             var request = base.CreateRequest(GetUri(), HttpMethod.Get);
             var response = base.SendRequest(request, Timeout);
             var result = base.EvaluateResponse<IEnumerable<IAssetAdministrationShellDescriptor>>(response, response.Entity);
-            return new Result<IQueryableElementContainer<IAssetAdministrationShellDescriptor>>(result.Success, result.Entity.AsQueryableElementContainer(), result.Messages);
+            return new Result<IQueryableElementContainer<IAssetAdministrationShellDescriptor>>(result.Success, result.Entity?.AsQueryableElementContainer(), result.Messages);
         }
 
         public IResult DeleteAssetAdministrationShellRegistration(string aasId)
@@ -190,7 +190,7 @@ namespace BaSyx.Registry.Client.Http
             else
             {
                 var foundItems = result.Entity.Where(w => predicate.Invoke(w));
-                return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(result.Success, foundItems.AsQueryableElementContainer(), result.Messages);
+                return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(result.Success, foundItems?.AsQueryableElementContainer(), result.Messages);
             }
         }
 
@@ -203,7 +203,7 @@ namespace BaSyx.Registry.Client.Http
             var response = base.SendRequest(request, Timeout);
             var result = base.EvaluateResponse<IEnumerable<ISubmodelDescriptor>>(response, response.Entity);
 
-            return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(result.Success, result.Entity.AsQueryableElementContainer(), result.Messages);
+            return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(result.Success, result.Entity?.AsQueryableElementContainer(), result.Messages);
         }
 
         public IResult<ISubmodelDescriptor> RetrieveSubmodelRegistration(string aasId, string submodelId)

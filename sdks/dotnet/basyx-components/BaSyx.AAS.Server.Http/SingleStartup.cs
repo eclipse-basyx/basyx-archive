@@ -9,7 +9,6 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.API.Components;
-using BaSyx.API.Http.Controllers;
 using BaSyx.Components.Common;
 using BaSyx.Utils.DependencyInjection;
 using BaSyx.Utils.Settings;
@@ -17,6 +16,7 @@ using BaSyx.Utils.Settings.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -25,11 +25,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace BaSyx.AAS.Server.Http
@@ -38,6 +36,8 @@ namespace BaSyx.AAS.Server.Http
     {
         private static readonly Logger logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
         private const string ControllerAssemblyName = "BaSyx.API.Http.Controllers";
+
+        private const string UI_RELATIVE_PATH = "/ui";
 
         public IConfiguration Configuration { get; }
         public IServerApplicationLifetime ServerApplicationLifetime { get; }
@@ -64,11 +64,7 @@ namespace BaSyx.AAS.Server.Http
                 .AddApplicationPart(controllerAssembly)
                 .AddControllersAsServices()
                 .AddNewtonsoftJson(options => options.GetDefaultMvcJsonOptions(services));
-            services.AddRazorPages(options =>
-            {
-                string pageName = ServerSettings.ServerConfig?.DefaultRoute ?? "/Index";
-                options.Conventions.AddPageRoute(pageName, "");
-            });
+            services.AddRazorPages(options => options.Conventions.AddPageRoute("/Index", "/ui"));
 
             services.AddDirectoryBrowser();
            
@@ -77,13 +73,13 @@ namespace BaSyx.AAS.Server.Http
             {
                 var aasServiceProvider = ctx.GetRequiredService<IAssetAdministrationShellServiceProvider>();
                 var submodelServiceProvider = aasServiceProvider.SubmodelRegistry.GetSubmodelServiceProvider(submodelId);
-                if(!submodelServiceProvider.Success || submodelServiceProvider.Entity == null)
+                if (!submodelServiceProvider.Success || submodelServiceProvider.Entity == null)
                 {
                     SubmodelServiceProvider cssp = new SubmodelServiceProvider();
-                    return new SubmodelServices(cssp);
+                    return cssp; //new SubmodelServices(cssp);
                 }
                 else
-                    return new SubmodelServices(submodelServiceProvider.Entity);
+                    return submodelServiceProvider.Entity; //new SubmodelServices(submodelServiceProvider.Entity);
             });
 
             // Register the Swagger generator, defining one or more Swagger documents
@@ -102,9 +98,7 @@ namespace BaSyx.AAS.Server.Http
                 var xmlFile = $"{controllerAssembly.GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 if (ResourceChecker.CheckResourceAvailability(controllerAssembly, ControllerAssemblyName, xmlFile, true))
-                    c.IncludeXmlComments(xmlPath);
-                
-                c.DocumentFilter<ControllerFilter>();
+                    c.IncludeXmlComments(xmlPath);           
             });
             services.AddSwaggerGenNewtonsoftSupport();
         }
@@ -143,12 +137,6 @@ namespace BaSyx.AAS.Server.Http
             app.Use((context, next) =>
             {
                 string[] pathElements = context.Request.Path.ToUriComponent()?.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-                if (pathElements == null || pathElements.Length == 0)
-                {
-                    string defaultRoute = ServerSettings.ServerConfig.DefaultRoute ?? "/ui";
-                    context.Request.Path = new PathString(defaultRoute);
-                    return next();
-                }
                 if (pathElements.Length >= 4)
                 {
                     submodelId = pathElements[2];
@@ -176,6 +164,9 @@ namespace BaSyx.AAS.Server.Http
                 endpoints.MapControllers();
             });
 
+            var options = new RewriteOptions().AddRedirect("^$", UI_RELATIVE_PATH);
+            app.UseRewriter(options);
+
             if (ServerApplicationLifetime.ApplicationStarted != null)
                 applicationLifetime.ApplicationStarted.Register(ServerApplicationLifetime.ApplicationStarted);
             if (ServerApplicationLifetime.ApplicationStopping != null)
@@ -192,15 +183,6 @@ namespace BaSyx.AAS.Server.Http
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "BaSyx Asset Administration Shell HTTP REST-API");
             });            
-        }
-    }
-
-    internal class ControllerFilter : IDocumentFilter
-    {
-        private static readonly Logger logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
-        public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
-        {
-            logger.Info("Hier");
         }
     }
 }

@@ -8,6 +8,6 @@
         <Url>http://+:4999</Url>
       </Urls>
     </Hosting>
-    <DefaultRoute>/Index</DefaultRoute>
+    <DefaultRoute/>
   </ServerConfig>
 </ServerSettings>

@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>Constantin Ziesche</Authors>
-    <Copyright>Copyright 2019 - Robert Bosch GmbH</Copyright>
+    <Copyright>Copyright 2020 - Robert Bosch GmbH</Copyright>
     <PackageProjectUrl>https://wiki.eclipse.org/BaSyx</PackageProjectUrl>
     <RepositoryUrl>https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/sdks/csnet/</RepositoryUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
@@ -28,18 +28,6 @@
     <PackageReference Include="BaSyx.AAS.Server.Http" Version="1.0.0" />
     <PackageReference Include="BaSyx.Utils.Client.Mqtt" Version="1.0.0" />
     <PackageReference Include="NLog" Version="4.7.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netcoreapp3.1\AAS_Icon.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netcoreapp3.1\NLog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netcoreapp3.1\ServerSettings.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>

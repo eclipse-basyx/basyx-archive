@@ -76,20 +76,16 @@ namespace BaSyx.API.Http.Controllers
             if (submodel == null)
                 return ResultHandling.NullResult(nameof(submodel));
 
-            var result = serviceProvider.CreateSubmodel(submodel);
-            if(result.Success && result.Entity != null)
-            {
-                var spEndpoints = serviceProvider
-                    .ServiceDescriptor
-                    .Endpoints
-                    .ToList()
-                    .ConvertAll(c => new HttpEndpoint(DefaultEndpointRegistration.GetSubmodelEndpoint(c, submodel.IdShort)));
+            var spEndpoints = serviceProvider
+                .ServiceDescriptor
+                .Endpoints
+                .ToList()
+                .ConvertAll(c => new HttpEndpoint(DefaultEndpointRegistration.GetSubmodelEndpoint(c, submodel.IdShort)));
 
-                ISubmodelDescriptor descriptor = new SubmodelDescriptor(submodel, spEndpoints);
+            ISubmodelDescriptor descriptor = new SubmodelDescriptor(submodel, spEndpoints);
+            SubmodelServiceProvider cssp = new SubmodelServiceProvider(submodel, descriptor);
+            var result = serviceProvider.SubmodelRegistry.RegisterSubmodelServiceProvider(submodel.IdShort, cssp);
 
-                SubmodelServiceProvider cssp = new SubmodelServiceProvider(submodel, descriptor);
-                serviceProvider.SubmodelRegistry.RegisterSubmodelServiceProvider(submodel.IdShort, cssp);
-            }
             return result.CreateActionResult(CrudOperation.Create, "aas/submodels/" + submodel.IdShort);
         }
         /// <summary>
@@ -128,7 +124,7 @@ namespace BaSyx.API.Http.Controllers
             if (string.IsNullOrEmpty(submodelIdShort))
                 return ResultHandling.NullResult(nameof(submodelIdShort));
 
-            var result = serviceProvider.DeleteSubmodel(submodelIdShort);
+            var result = serviceProvider.SubmodelRegistry.UnregisterSubmodelServiceProvider(submodelIdShort);
             return result.CreateActionResult(CrudOperation.Delete);
         }
         /// <summary>
@@ -138,7 +134,7 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="200">Returns a list of found Submodels</response>
         /// <response code="404">No Submodel Service Providers found</response>       
         [HttpGet("aas/submodels", Name = "GetSubmodelsFromShell")]
-        [ProducesResponseType(typeof(BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel[]), 200)]
+        [ProducesResponseType(typeof(Submodel[]), 200)]
         [ProducesResponseType(typeof(Result), 404)]
         public IActionResult GetSubmodelsFromShell()
         {
@@ -244,8 +240,8 @@ namespace BaSyx.API.Http.Controllers
         /// </summary>
         /// <param name="submodelElementIdShort">The Submodel-Element's short id</param>
         /// <returns></returns>
-        /// <response code="200">Returns the requested Property</response>
-        /// <response code="404">Submodel/Property not found</response>     
+        /// <response code="200">Returns the requested Submodel-Element</response>
+        /// <response code="404">Submodel / Submodel-Element not found</response>     
         [HttpGet("aas/submodels/{submodelIdShort}/submodel/submodelElements/{submodelElementIdShort}", Name = "RoutedGetSubmodelElementByIdShort")]
         [ProducesResponseType(typeof(SubmodelElement), 200)]
         [ProducesResponseType(typeof(Result), 404)]
@@ -278,32 +274,12 @@ namespace BaSyx.API.Http.Controllers
         #endregion
         #region Property - REST-Calls
         /// <summary>
-        /// Creates or updated a Property to the Asset Administration Shell's Submodel
-        /// </summary>
-        /// <param name="property">The Property's description object</param>
-        /// <returns></returns>
-        /// <response code="201">Property created successfully</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="404">Submodel not found</response>
-        [HttpPut("aas/submodels/{submodelIdShort}/submodel/properties", Name = "RoutedPutProperty")]
-        [ProducesResponseType(typeof(Property), 201)]
-        [ProducesResponseType(typeof(Result), 400)]
-        [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult RoutedPutProperty([FromBody] IProperty property)
-        {
-            if (property == null)
-                return ResultHandling.NullResult(nameof(property));
-
-            var controller = HttpContext.RequestServices.GetService<SubmodelServices>();
-            return controller.PutProperty(property);
-        }
-        /// <summary>
-        /// Retrieves a specific Property from the Asset Administrations's Submodel
+        /// Retrieves a specific Property from the Asset Administration Shell's Submodel
         /// </summary>
         /// <param name="propertyIdShort">The Property's short id</param>
         /// <returns></returns>
         /// <response code="200">Returns the requested Property</response>
-        /// <response code="404">Submodel/Property not found</response>     
+        /// <response code="404">Submodel / Property not found</response>     
         [HttpGet("aas/submodels/{submodelIdShort}/submodel/properties/{propertyIdShort}", Name = "RoutedGetPropertyByIdShort")]
         [ProducesResponseType(typeof(Property), 200)]
         [ProducesResponseType(typeof(Result), 404)]
@@ -322,7 +298,7 @@ namespace BaSyx.API.Http.Controllers
         /// <param name="propertyIdShort">The Property's short id</param>
         /// <returns></returns>
         /// <response code="200">Returns the requested Property's value</response>
-        /// <response code="404">Submodel/Property not found</response>     
+        /// <response code="404">Submodel / Property not found</response>     
         [HttpGet("aas/submodels/{submodelIdShort}/submodel/properties/{propertyIdShort}/value", Name = "RoutedGetPropertyValueByIdShort")]
         [ProducesResponseType(typeof(ElementValue), 200)]
         [ProducesResponseType(typeof(Result), 404)]
@@ -336,7 +312,7 @@ namespace BaSyx.API.Http.Controllers
         }
 
         /// <summary>
-        /// Updates the Asset Administration Shell's Submodel's Property
+        /// Updates the Asset Administration Shell's Submodel's Property's value
         /// </summary>
         /// <param name="propertyIdShort">The Property's short id</param>
         /// <param name="value">The new value</param>
@@ -356,52 +332,16 @@ namespace BaSyx.API.Http.Controllers
             var controller = HttpContext.RequestServices.GetService<SubmodelServices>();
             return controller.PutPropertyValueByIdShort(propertyIdShort, value);
         }
-        /// <summary>
-        /// Deletes a specific Property from the Asset Administration Shell's Submodel
-        /// </summary>
-        /// <param name="propertyIdShort">The Property's short id</param>
-        /// <returns></returns>
-        /// <response code="204">Property deleted successfully</response>
-        /// <response code="404">Submodel not found</response>
-        [HttpDelete("aas/submodels/{submodelIdShort}/submodel/properties/{propertyIdShort}", Name = "RoutedDeletePropertyByIdShort")]
-        [ProducesResponseType(typeof(Result), 200)]
-        public IActionResult RoutedDeletePropertyByIdShort(string propertyIdShort)
-        {
-            if (string.IsNullOrEmpty(propertyIdShort))
-                return ResultHandling.NullResult(nameof(propertyIdShort));
 
-            var controller = HttpContext.RequestServices.GetService<SubmodelServices>();
-            return controller.DeletePropertyByIdShort(propertyIdShort);
-        }
         #endregion
         #region Operation - REST-Calls
-        /// <summary>
-        /// Adds a new operation to the Asset Administration Shell's Submodel
-        /// </summary>
-        /// <param name="operation">The serialized Operation object</param>
-        /// <returns></returns>
-        /// <response code="201">Operation created successfully</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="404">Submodel not found</response>
-        [HttpPut("aas/submodels/{submodelIdShort}/submodel/operations", Name = "RoutedPutOperation")]
-        [ProducesResponseType(typeof(Operation), 201)]
-        [ProducesResponseType(typeof(Result), 400)]
-        [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult RoutedPutOperation([FromBody] IOperation operation)
-        {
-            if (operation == null)
-                return ResultHandling.NullResult(nameof(operation));
-
-            var controller = HttpContext.RequestServices.GetService<SubmodelServices>();
-            return controller.PutOperation(operation);
-        }
         /// <summary>
         /// Retrieves a specific Operation from the Asset Administration Shell's Submodel
         /// </summary>
         /// <param name="operationIdShort">The Operation's short id</param>
         /// <returns></returns>
         /// <response code="200">Success</response>
-        /// <response code="404">Submodel/Operation not found</response>     
+        /// <response code="404">Submodel / Operation not found</response>     
         [HttpGet("aas/submodels/{submodelIdShort}/submodel/operations/{operationIdShort}", Name = "RoutedGetOperationByIdShort")]
         [ProducesResponseType(typeof(Operation), 200)]
         [ProducesResponseType(typeof(Result), 404)]
@@ -412,23 +352,6 @@ namespace BaSyx.API.Http.Controllers
 
             var controller = HttpContext.RequestServices.GetService<SubmodelServices>();
             return controller.GetOperationByIdShort(operationIdShort);
-        }
-        /// <summary>
-        /// Deletes a specific Operation from the Asset Administration Shell's Submodel
-        /// </summary>
-        /// <param name="operationIdShort">The Operation's short id</param>
-        /// <returns></returns>
-        /// <response code="204">Operation deleted successfully</response>  
-        /// <response code="404">Submodel not found</response>
-        [HttpDelete("aas/submodels/{submodelIdShort}/submodel/operations/{operationIdShort}", Name = "RoutedDeleteOperationByIdShort")]
-        [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult RoutedDeleteOperationByIdShort(string operationIdShort)
-        {
-            if (string.IsNullOrEmpty(operationIdShort))
-                return ResultHandling.NullResult(nameof(operationIdShort));
-
-            var controller = HttpContext.RequestServices.GetService<SubmodelServices>();
-            return controller.DeleteOperationByIdShort(operationIdShort);
         }
         /// <summary>
         /// Synchronously invokes a specific operation from the Submodel
@@ -457,33 +380,13 @@ namespace BaSyx.API.Http.Controllers
         #endregion
         #region Event - REST-Calls
         /// <summary>
-        /// Adds a new event to the Asset Administration Shell's Submodel
-        /// </summary>
-        /// <param name="eventable">The Event description object</param>
-        /// <returns></returns>
-        /// <response code="201">Event created successfully</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="404">Submodel not found</response>
-        [HttpPut("aas/submodels/{submodelIdShort}/submodel/events", Name = "RoutedPutEvent")]
-        [ProducesResponseType(typeof(Event), 201)]
-        [ProducesResponseType(typeof(Result), 400)]
-        [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult RoutedPutEvent([FromBody] IEvent eventable)
-        {
-            if (eventable == null)
-                return ResultHandling.NullResult(nameof(eventable));
-
-            var controller = HttpContext.RequestServices.GetService<SubmodelServices>();
-            return controller.PutEvent(eventable);
-        }
-        /// <summary>
         /// Retrieves a specific event from the Asset Administration Shell's Submodel
         /// </summary>
         /// <param name="eventIdShort">The Event's short id</param>
         /// <returns></returns>
         /// <response code="200">Success</response>
         /// <response code="404">Submodel/Event not found</response>     
-        [HttpGet("aas/submodels/{submodelIdShort}/submodel/events/{eventIdShort}", Name = "RoutedGetEvent")]
+        [HttpGet("aas/submodels/{submodelIdShort}/submodel/events/{eventIdShort}", Name = "RoutedGetEventByIdShort")]
         [ProducesResponseType(typeof(Event), 200)]
         [ProducesResponseType(typeof(Result), 404)]
         public IActionResult RoutedGetEventByIdShort(string eventIdShort)
@@ -494,24 +397,6 @@ namespace BaSyx.API.Http.Controllers
             var controller = HttpContext.RequestServices.GetService<SubmodelServices>();
             return controller.GetEventByIdShort(eventIdShort);
         }
-        /// <summary>
-        /// Deletes a specific event from the Asset Administration Shell's Submodel
-        /// </summary>
-        /// <param name="eventIdShort">The Event's short id</param>
-        /// <returns></returns>
-        /// <response code="204">Event deleted successfully</response>
-        /// <response code="404">Submodel not found</response>
-        [HttpDelete("aas/submodels/{submodelIdShort}/submodel/events/{eventIdShort}", Name = "RoutedDeleteEventByIdShort")]
-        [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult RoutedDeleteEventByIdShort(string eventIdShort)
-        {
-            if (string.IsNullOrEmpty(eventIdShort))
-                return ResultHandling.NullResult(nameof(eventIdShort));
-
-            var controller = HttpContext.RequestServices.GetService<SubmodelServices>();
-            return controller.DeleteEventByIdShort(eventIdShort);
-        }
-
         #endregion
         #endregion
 

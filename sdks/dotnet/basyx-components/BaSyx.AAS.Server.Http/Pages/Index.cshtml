@@ -1,4 +1,4 @@
-﻿@page "ui"
+﻿@page
 @model BaSyx.AAS.Server.Http.Pages.IndexModel
 @using BaSyx.API.Components;
 @using BaSyx.Models.Core.AssetAdministrationShell.Generics;
@@ -16,7 +16,7 @@
 
 @{
     IAssetAdministrationShellServiceProvider sp = Model.ServiceProvider;
-    IAssetAdministrationShell aas = sp.AssetAdministrationShell;
+    IAssetAdministrationShell aas = sp.GetBinding();
     ServerSettings settings = Model.Settings;
 
     string eClassLink = "https://www.eclasscontent.com/index.php?action=cc2prdet&language=en&version=10.1&id=&pridatt=";
@@ -507,7 +507,7 @@ else
         </div>
     </div>
     @{
-        var asset = Model.ServiceProvider.AssetAdministrationShell.Asset;
+        var asset = aas.Asset;
         if (asset != null)
         {
             <div class="container">

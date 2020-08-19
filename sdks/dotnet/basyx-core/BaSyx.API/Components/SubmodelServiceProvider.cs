@@ -33,11 +33,11 @@ namespace BaSyx.API.Components
         public ISubmodel Submodel { get; protected set; }
         public ISubmodelDescriptor ServiceDescriptor { get; internal set; }
 
-        private Dictionary<string, Delegate> methodCalledHandler;
-        private Dictionary<string, PropertyHandler> propertyHandler;
-        private Dictionary<string, Action<IValue>> updateFunctions;
-        private Dictionary<string, EventDelegate> eventDelegates;
-        private Dictionary<string, InvocationResponse> invocationResults;
+        private readonly Dictionary<string, Delegate> methodCalledHandler;
+        private readonly Dictionary<string, PropertyHandler> propertyHandler;
+        private readonly Dictionary<string, Action<IValue>> updateFunctions;
+        private readonly Dictionary<string, EventDelegate> eventDelegates;
+        private readonly Dictionary<string, InvocationResponse> invocationResults;
 
         private IMessageClient messageClient;
 
@@ -334,7 +334,7 @@ namespace BaSyx.API.Components
                 return new Result(false, new Message(MessageType.Warning, "MessageClient is not initialized or not connected"));
 
             if (publishableEvent == null)
-                return new Result(new ArgumentNullException("publishableEvent"));
+                return new Result(new ArgumentNullException(nameof(publishableEvent)));
 
             if (eventDelegates.TryGetValue(publishableEvent.Name, out EventDelegate eventDelegate))
                 eventDelegate.Invoke(this, publishableEvent);
@@ -566,8 +566,6 @@ namespace BaSyx.API.Components
                 return new Result(false, new NotFoundMessage(submodelElementId));
 
             return Submodel.SubmodelElements.Delete(submodelElementId);
-        }
-
-        
+        }        
     }
 }

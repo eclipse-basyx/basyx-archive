@@ -17,6 +17,7 @@ using BaSyx.Utils.Settings.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -36,6 +37,8 @@ namespace BaSyx.Submodel.Server.Http
     {
         private static Logger logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
         private const string ControllerAssemblyName = "BaSyx.API.Http.Controllers";
+
+        private const string UI_RELATIVE_PATH = "/multiui";
 
         public IConfiguration Configuration { get; }
         public static ServerSettings ServerSettings { get; set; }
@@ -61,12 +64,7 @@ namespace BaSyx.Submodel.Server.Http
                 .AddApplicationPart(controllerAssembly)
                 .AddControllersAsServices()
                 .AddNewtonsoftJson(options => options.GetDefaultMvcJsonOptions(services));
-
-            services.AddRazorPages(options =>
-            {
-                string pageName = ServerSettings.ServerConfig?.DefaultRoute ?? "/Index";
-                options.Conventions.AddPageRoute(pageName, "");
-            });
+            services.AddRazorPages();
 
             //Check whether Submodel Service Provider exists and bind it to the Submodel-Services-Controller
             services.AddTransient(ctx =>
@@ -133,14 +131,6 @@ namespace BaSyx.Submodel.Server.Http
             app.Use((context, next) =>
             {
                 string[] pathElements = context.Request.Path.ToUriComponent()?.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-
-
-                if (pathElements == null || pathElements.Length == 0)
-                {
-                    string defaultRoute = ServerSettings.ServerConfig.DefaultRoute ?? "/MultiIndex";
-                    context.Request.Path = new PathString(defaultRoute);
-                    return next();
-                }
                 if (pathElements.Length >= 2)
                 {
                     submodelId = pathElements[1];
@@ -174,6 +164,9 @@ namespace BaSyx.Submodel.Server.Http
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
+
+            var options = new RewriteOptions().AddRedirect("^$", UI_RELATIVE_PATH);
+            app.UseRewriter(options);
 
             if (ServerApplicationLifetime.ApplicationStarted != null)
                 applicationLifetime.ApplicationStarted.Register(ServerApplicationLifetime.ApplicationStarted);

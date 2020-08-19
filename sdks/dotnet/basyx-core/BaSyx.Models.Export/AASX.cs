@@ -39,22 +39,22 @@ namespace BaSyx.Models.Export
         private PackagePart originPart;
         private PackagePart specPart;
 
-        public AASX(Package package)
+        public AASX(Package aasxPackage)
         {
-            aasxPackage = package;
-
-            LoadOrCreateOrigin();
-            LoadSpec();
-        }
-
-        public AASX(string aasxFilePath)
-        {
-            aasxPackage = Package.Open(aasxFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
+            this.aasxPackage = aasxPackage ?? throw new ArgumentNullException(nameof(aasxPackage));
 
             LoadOrCreateOrigin();
             LoadSpec();
             LoadSupplementaryFiles();
         }
+
+        public AASX(string aasxFilePath) 
+            : this(Package.Open(aasxFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
+        { }
+
+        public AASX(string aasxFilePath, FileMode fileMode, FileAccess fileAccess, FileShare fileShare) 
+            : this(Package.Open(aasxFilePath, fileMode, fileAccess, fileShare))
+        { }
 
         private void LoadSupplementaryFiles()
         {
@@ -143,6 +143,18 @@ namespace BaSyx.Models.Export
                 if (aasxPackage.PartExists(relationship.TargetUri))
                     aasxPackage.DeletePart(relationship.TargetUri);
             }
+        }
+
+        public Stream GetFileAsStream(string fileName)
+        {
+            PackagePart part = SupplementaryFiles.Find(p => p.Uri.ToString().Contains(fileName));
+            return part?.GetStream();
+        }
+
+        public Stream GetFileAsStream(Uri relativeUri)
+        {
+            PackagePart part = SupplementaryFiles.Find(p => p.Uri == relativeUri);
+            return part?.GetStream();
         }
 
         /// <summary>

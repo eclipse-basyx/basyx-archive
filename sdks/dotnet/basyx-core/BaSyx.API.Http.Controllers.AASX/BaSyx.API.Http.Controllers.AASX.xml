@@ -9,6 +9,13 @@
             The AASX Package Service
             </summary>
         </member>
+        <member name="M:BaSyx.API.Http.Controllers.PackageService.PackageService.#ctor(BaSyx.API.Components.IAssetAdministrationShellServiceProvider,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            Constructor for the AASX-Package Services Controller
+            </summary>
+            <param name="aasServiceProvider">The Asset Administration Shell Service Provider implementation provided by the dependency injection</param>
+            <param name="environment">The Hosting Environment provided by the dependency injection</param>
+        </member>
         <member name="M:BaSyx.API.Http.Controllers.PackageService.PackageService.GetAASXPackage">
             <summary>
             Retrieves the full AASX Package

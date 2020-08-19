@@ -12,7 +12,7 @@
     ViewData["Title"] = "Index";
 }
 @{
-    ISubmodel submodel = Model.ServiceProvider.Submodel;
+    ISubmodel submodel = Model.ServiceProvider.GetBinding();
     string eClassLink = "https://www.eclasscontent.com/index.php?action=cc2prdet&language=en&version=10.1&id=&pridatt=";
 
     Func<Identifier, IHtmlContent> ShowIdentification = @<text>@{

@@ -71,9 +71,10 @@ namespace MultiAssetAdministrationShell
                     IdShort = "TestSubmodel",
                     SubmodelElements = new ElementContainer<ISubmodelElement>()
                     {
-                        new Property<string>()
+                        new Property<double>()
                         {
-                            IdShort = "Property_" + i
+                            IdShort = "Property_" + i,
+                            Get = prop => { return Math.Pow(i, 2); }
                         }
                     }
                 });

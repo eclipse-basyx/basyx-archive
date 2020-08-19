@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Linq;
 using BaSyx.API.AssetAdministrationShell.Extensions;
 using BaSyx.Models.Connectivity.Descriptors;
-using BaSyx.Models.Core.Common;
 
 namespace BaSyx.API.Components
 {
@@ -62,6 +61,18 @@ namespace BaSyx.API.Components
             BindTo(AssetAdministrationShell);
         }
 
+        public abstract IAssetAdministrationShell GenerateAssetAdministrationShell();
+
+        public virtual void BindTo(IAssetAdministrationShell element)
+        {
+            AssetAdministrationShell = element;
+            ServiceDescriptor = ServiceDescriptor ?? new AssetAdministrationShellDescriptor(element, null);
+        }
+        public virtual IAssetAdministrationShell GetBinding()
+        {
+            return AssetAdministrationShell;
+        }
+
         public virtual void UseDefaultSubmodelServiceProvider()
         {
             foreach (var submodel in AssetAdministrationShell.Submodels)
@@ -69,6 +80,14 @@ namespace BaSyx.API.Components
                 var submodelServiceProvider = submodel.CreateServiceProvider();
                 RegisterSubmodelServiceProvider(submodel.IdShort, submodelServiceProvider);
             }
+        }
+
+        public virtual IResult<IEnumerable<ISubmodelServiceProvider>> GetSubmodelServiceProviders()
+        {
+            if (SubmodelServiceProviders.Values == null)
+                return new Result<IEnumerable<ISubmodelServiceProvider>>(false, new NotFoundMessage("Submodel Service Providers"));
+
+            return new Result<IEnumerable<ISubmodelServiceProvider>>(true, SubmodelServiceProviders.Values?.ToList());
         }
 
         public virtual IResult<ISubmodelDescriptor> RegisterSubmodelServiceProvider(string submodelId, ISubmodelServiceProvider submodelServiceProvider)
@@ -97,60 +116,6 @@ namespace BaSyx.API.Components
             }
             else
                 return new Result<ISubmodelServiceProvider>(false, new NotFoundMessage());
-        }
-
-        public abstract IAssetAdministrationShell GenerateAssetAdministrationShell();
-
-        public virtual void BindTo(IAssetAdministrationShell element)
-        {
-            AssetAdministrationShell = element;
-            ServiceDescriptor = ServiceDescriptor ?? new AssetAdministrationShellDescriptor(element, null);
-        }
-        public virtual IAssetAdministrationShell GetBinding()
-        {
-            return AssetAdministrationShell;
-        }
-
-        public virtual IResult<ISubmodel> CreateSubmodel(ISubmodel submodel)
-        {
-            if (AssetAdministrationShell.Submodels == null)
-                AssetAdministrationShell.Submodels = new ElementContainer<ISubmodel>();
-            return AssetAdministrationShell.Submodels.Create(submodel);
-        }
-
-        public virtual IResult DeleteSubmodel(string submodelId)
-        {
-            if (AssetAdministrationShell.Submodels == null)
-                return new Result(false, new NotFoundMessage(submodelId));
-            return AssetAdministrationShell.Submodels.Delete(submodelId);
-        }
-
-        public virtual IResult<ISubmodel> RetrieveSubmodel(string submodelId)
-        {
-            if (AssetAdministrationShell.Submodels == null)
-                return new Result<ISubmodel>(false, new NotFoundMessage(submodelId));
-            return AssetAdministrationShell.Submodels.Retrieve(submodelId);
-        }
-
-        public virtual IResult<IElementContainer<ISubmodel>> RetrieveSubmodels()
-        {
-            if (AssetAdministrationShell.Submodels == null)
-                return new Result<ElementContainer<ISubmodel>>(false, new NotFoundMessage("Submodels"));
-            return AssetAdministrationShell.Submodels.RetrieveAll();
-        }
-
-        public virtual IResult<IEnumerable<ISubmodelServiceProvider>> GetSubmodelServiceProviders()
-        {
-            if (SubmodelServiceProviders.Values == null)
-                return new Result<IEnumerable<ISubmodelServiceProvider>>(false, new NotFoundMessage("Submodel Service Providers"));
-
-            return new Result<IEnumerable<ISubmodelServiceProvider>>(true, SubmodelServiceProviders.Values?.ToList());
-        }
-
-        public IResult<IAssetAdministrationShell> RetrieveAssetAdministrationShell()
-        {
-            var binding = GetBinding();
-            return new Result<IAssetAdministrationShell>(binding == null, binding);
-        }
+        }     
     }
 }

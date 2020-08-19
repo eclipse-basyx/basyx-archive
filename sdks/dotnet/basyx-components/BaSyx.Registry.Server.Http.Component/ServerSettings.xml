@@ -6,7 +6,7 @@
         <Url>http://+:4999</Url>
       </Urls>
     </Hosting>
-    <DefaultRoute>/ui</DefaultRoute>
+    <DefaultRoute/>
   </ServerConfig>
   <Miscellaneous/>
 </ServerSettings>

@@ -26,6 +26,12 @@ namespace BaSyx.API.Http.Controllers.PackageService
 
 #if NETCOREAPP3_1
         private readonly IWebHostEnvironment hostingEnvironment;
+
+        /// <summary>
+        /// Constructor for the AASX-Package Services Controller
+        /// </summary>
+        /// <param name="aasServiceProvider">The Asset Administration Shell Service Provider implementation provided by the dependency injection</param>
+        /// <param name="environment">The Hosting Environment provided by the dependency injection</param>
         public PackageService(IAssetAdministrationShellServiceProvider aasServiceProvider, IWebHostEnvironment environment)
         {
             shellServiceProvider = aasServiceProvider;
@@ -33,6 +39,12 @@ namespace BaSyx.API.Http.Controllers.PackageService
         }
 #else
         private readonly IHostingEnvironment hostingEnvironment;
+
+        /// <summary>
+        /// Constructor for the AASX-Package Services Controller
+        /// </summary>
+        /// <param name="aasServiceProvider">The Asset Administration Shell Service Provider implementation provided by the dependency injection</param>
+        /// <param name="environment">The Hosting Environment provided by the dependency injection</param>
         public PackageService(IAssetAdministrationShellServiceProvider aasServiceProvider, IHostingEnvironment environment)
         {
             shellServiceProvider = aasServiceProvider;
@@ -52,12 +64,13 @@ namespace BaSyx.API.Http.Controllers.PackageService
         [ProducesResponseType(typeof(Result), 400)]
         public IActionResult GetAASXPackage()
         {
-            string filename = shellServiceProvider.AssetAdministrationShell.IdShort + ".aasx";
+            var aas = shellServiceProvider.GetBinding();
+            string filename = aas.IdShort + ".aasx";
             using (AASX aasx = new AASX(filename))
             {
-                AssetAdministrationShellEnvironment_V2_0 env = new AssetAdministrationShellEnvironment_V2_0(shellServiceProvider.AssetAdministrationShell);
-                aasx.AddEnvironment(shellServiceProvider.AssetAdministrationShell.Identification, env, ExportType.Xml);
-      
+                AssetAdministrationShellEnvironment_V2_0 env = new AssetAdministrationShellEnvironment_V2_0(aas);
+                aasx.AddEnvironment(aas.Identification, env, ExportType.Xml);
+
                 if (aasx != null)
                 {
                     IFileProvider fileProvider = hostingEnvironment.ContentRootFileProvider;
@@ -65,15 +78,15 @@ namespace BaSyx.API.Http.Controllers.PackageService
                     {
                         if (item.IsDirectory)
                         {
-                            foreach(var subItem in fileProvider.GetDirectoryContents("Content/aasx/" + item.Name))
+                            foreach (var subItem in fileProvider.GetDirectoryContents("Content/aasx/" + item.Name))
                             {
-                                if(subItem.Exists)
+                                if (subItem.Exists)
                                     aasx.AddFileToAASX("/aasx/" + item.Name + "/" + subItem.Name, subItem.PhysicalPath);
                             }
                         }
                         else
                         {
-                            if(item.Exists)
+                            if (item.Exists)
                                 aasx.AddFileToAASX("/aasx/" + item.Name, item.PhysicalPath);
                         }
                     }
@@ -89,13 +102,11 @@ namespace BaSyx.API.Http.Controllers.PackageService
             return new BadRequestResult();
         }
 
-#endregion
+        #endregion
+
+        #region Helper Methods
 
 
-
-#region Helper Methods
-
-
-#endregion
+        #endregion
     }
 }

@@ -8,6 +8,6 @@
         <Url>http://+:5080</Url>
       </Urls>
     </Hosting>
-    <DefaultRoute>/Index</DefaultRoute>
+    <DefaultRoute/>
   </ServerConfig>
 </ServerSettings>

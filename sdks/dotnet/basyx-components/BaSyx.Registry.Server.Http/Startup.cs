@@ -25,6 +25,7 @@ using NLog.Web;
 using Microsoft.AspNetCore.Hosting;
 using BaSyx.Components.Common;
 using BaSyx.Utils.DependencyInjection;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace BaSyx.Registry.Server.Http
 {
@@ -32,6 +33,8 @@ namespace BaSyx.Registry.Server.Http
     {
         private static Logger logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
         private const string ControllerAssemblyName = "BaSyx.API.Http.Controllers";
+
+        private const string UI_RELATIVE_PATH = "/ui";
 
         public IConfiguration Configuration { get; }
         public IServerApplicationLifetime ServerApplicationLifetime { get; }
@@ -55,13 +58,8 @@ namespace BaSyx.Registry.Server.Http
                 .AddApplicationPart(controllerAssembly)
                 .AddControllersAsServices()
                 .AddNewtonsoftJson(options => options.GetDefaultMvcJsonOptions(services));
-            services.AddRazorPages(options =>
-            {
-                string pageName = ServerSettings.ServerConfig?.DefaultRoute ?? "/Index";
-                options.Conventions.AddPageRoute(pageName, "");
-            });
+            services.AddRazorPages();
 
-           
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()
@@ -110,6 +108,9 @@ namespace BaSyx.Registry.Server.Http
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
+
+            var options = new RewriteOptions().AddRedirect("^$", UI_RELATIVE_PATH);
+            app.UseRewriter(options);
 
             if (ServerApplicationLifetime.ApplicationStarted != null)
                 applicationLifetime.ApplicationStarted.Register(ServerApplicationLifetime.ApplicationStarted);

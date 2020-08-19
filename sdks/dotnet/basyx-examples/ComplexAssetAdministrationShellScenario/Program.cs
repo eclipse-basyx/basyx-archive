@@ -113,20 +113,21 @@ namespace ComplexAssetAdministrationShellScenario
             {
                 for (int i = 0; i < repositoryService.ServiceDescriptor.SubmodelDescriptors.Count; i++)
                 {
-                    registryClient.DeleteSubmodel("http://basyx.de/shells/MultiAAS/" + i, repositoryService.ServiceDescriptor.SubmodelDescriptors[i].IdShort);
+                    registryClient.DeleteSubmodelRegistration("http://basyx.de/shells/MultiAAS/" + i, repositoryService.ServiceDescriptor.SubmodelDescriptors[i].IdShort);
                 }
             };
 
             multiServer.RunAsync();
 
-            var shells = registryClient.RetrieveAssetAdministrationShells();
-            var shell = shells.Entity?.FirstOrDefault(f => f.Identification.Id.Contains("SimpleAAS"));
+            var shells = registryClient.RetrieveAllAssetAdministrationShellRegistrations(p => p.Identification.Id.Contains("SimpleAAS"));
+            var shell = shells.Entity?.FirstOrDefault();
             for (int i = 0; i < repositoryService.ServiceDescriptor.SubmodelDescriptors.Count; i++)
             {
-                registryClient.CreateSubmodel("http://basyx.de/shells/MultiAAS/" + i, repositoryService.ServiceDescriptor.SubmodelDescriptors[i]);
+                var descriptor = repositoryService.ServiceDescriptor.SubmodelDescriptors[i];
+                registryClient.CreateOrUpdateSubmodelRegistration("http://basyx.de/shells/MultiAAS/" + i, descriptor.Identification.Id, descriptor);
 
                 if(shell != null)
-                    registryClient.CreateSubmodel(shell.Identification.Id, repositoryService.ServiceDescriptor.SubmodelDescriptors[i]);
+                    registryClient.CreateOrUpdateSubmodelRegistration(shell.Identification.Id, descriptor.Identification.Id, descriptor);
             }
         }
 
@@ -207,7 +208,7 @@ namespace ComplexAssetAdministrationShellScenario
             {
                 foreach (var aasDescriptor in repositoryService.ServiceDescriptor.AssetAdministrationShellDescriptors)
                 {
-                    registryClient.DeleteAssetAdministrationShell(aasDescriptor.Identification.Id);
+                    registryClient.DeleteAssetAdministrationShellRegistration(aasDescriptor.Identification.Id);
                 }
             };
 
@@ -215,7 +216,7 @@ namespace ComplexAssetAdministrationShellScenario
 
             foreach (var aasDescriptor in repositoryService.ServiceDescriptor.AssetAdministrationShellDescriptors)
             {
-                registryClient.CreateAssetAdministrationShell(aasDescriptor);
+                registryClient.CreateOrUpdateAssetAdministrationShellRegistration(aasDescriptor.Identification.Id, aasDescriptor);
             }
          
         }
@@ -245,11 +246,11 @@ namespace ComplexAssetAdministrationShellScenario
 
             AssetAdministrationShellHttpServer aasServer = new AssetAdministrationShellHttpServer(aasServerSettings);
             aasServer.SetServiceProvider(aasServiceProvider);
-            aasServer.ApplicationStopping = () => { registryClient.DeleteAssetAdministrationShell(aas.Identification.Id); };
+            aasServer.ApplicationStopping = () => { registryClient.DeleteAssetAdministrationShellRegistration(aas.Identification.Id); };
             aasServer.RunAsync();
 
-            registryClient.CreateAssetAdministrationShell(new AssetAdministrationShellDescriptor(aas, aasServiceProvider.ServiceDescriptor.Endpoints));
-            registryClient.CreateSubmodel(aas.Identification.Id, new SubmodelDescriptor(testSubmodel, submodelServiceProvider.ServiceDescriptor.Endpoints));
+            registryClient.CreateOrUpdateAssetAdministrationShellRegistration(aas.Identification.Id, new AssetAdministrationShellDescriptor(aas, aasServiceProvider.ServiceDescriptor.Endpoints));
+            registryClient.CreateOrUpdateSubmodelRegistration(aas.Identification.Id, testSubmodel.Identification.Id, new SubmodelDescriptor(testSubmodel, submodelServiceProvider.ServiceDescriptor.Endpoints));
         }
 
         private static void LoadRegistry()

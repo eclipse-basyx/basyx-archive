@@ -22,8 +22,6 @@ namespace BaSyx.API.Components
 {
     public interface ISubmodelServiceProvider : IServiceProvider<ISubmodel, ISubmodelDescriptor>, ISubmodelClient
     {
-        ISubmodel Submodel { get; }
-
         void SubscribeUpdates(string propertyId, Action<IValue> updateFunction);
         void PublishUpdate(string propertyId, IValue value);
         IResult ThrowEvent(IPublishableEvent publishableEvent, string topic, Action<IMessagePublishedEventArgs> MessagePublished, byte qosLevel, bool retain);
