@@ -208,10 +208,12 @@ namespace BaSyx.Discovery.mDNS
             discoveryClient = new DiscoveryClient(serviceProvider.ServiceDescriptor.IdShort, (ushort)port, ServiceTypes.AAS_SERVICE_TYPE, iPAddresses);
             discoveryClient.AddProperty(ASSETADMINISTRATIONSHELL_ID, serviceProvider.ServiceDescriptor.Identification.Id);
             discoveryClient.AddProperty(ASSETADMINISTRATIONSHELL_IDSHORT, serviceProvider.ServiceDescriptor.IdShort);
-            foreach (var endpoint in serviceProvider.ServiceDescriptor.Endpoints)
+            for (int i = 0; i < serviceProvider.ServiceDescriptor.Endpoints.Count(); i++)
             {
-                discoveryClient.AddProperty(ASSETADMINISTRATIONSHELL_ENDPOINT + "." + endpoint.Type, endpoint.Address + "aas");
+                var endpoint = serviceProvider.ServiceDescriptor.Endpoints.ElementAt(i);
+                discoveryClient.AddProperty(ASSETADMINISTRATIONSHELL_ENDPOINT + "." + endpoint.Type + "[" + i + "]", endpoint.Address);
             }
+   
             discoveryClient.Start();
             
         }
