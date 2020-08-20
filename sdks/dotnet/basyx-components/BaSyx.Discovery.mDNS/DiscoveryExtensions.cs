@@ -175,6 +175,8 @@ namespace BaSyx.Discovery.mDNS
 
         public static void StopDiscovery(this IAssetAdministrationShellRegistry registryHttpServer)
         {
+            discoveryServer.ServiceInstanceDiscovered -= DiscoveryServer_ServiceInstanceDiscovered;
+            discoveryServer.ServiceInstanceShutdown -= DiscoveryServer_ServiceInstanceShutdown;
             discoveryServer.Stop();
         }
 

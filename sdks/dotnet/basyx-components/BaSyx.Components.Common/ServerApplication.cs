@@ -133,8 +133,30 @@ namespace BaSyx.Components.Common
                     var mvcBuilder = services.AddMvc();
                     foreach (var controllerAssemblyName in controllerConfig.Controllers)
                     {
-                        Assembly controllerAssembly = Assembly.Load(controllerAssemblyName);
-                        mvcBuilder.AddApplicationPart(controllerAssembly);
+                        Assembly controllerAssembly = null;
+                        try
+                        {
+                            controllerAssembly = Assembly.Load(controllerAssemblyName);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Warn(e, $"Assembly {controllerAssemblyName} cannot be loaded - maybe it is not referenced. Try reading from file...");
+                            try
+                            {
+                                if (File.Exists(controllerAssemblyName))
+                                    controllerAssembly = Assembly.LoadFile(controllerAssemblyName);
+                                else if (File.Exists(controllerAssemblyName + ".dll"))
+                                    controllerAssembly = Assembly.LoadFile(controllerAssemblyName + ".dll");
+                                else
+                                    controllerAssembly = Assembly.LoadFrom(controllerAssemblyName);
+                            }
+                            catch (Exception exp)
+                            {
+                                logger.Warn(exp, $"Assembly {controllerAssemblyName} can finally not be loaded");
+                            }                            
+                        }
+                        if(controllerAssembly != null)
+                            mvcBuilder.AddApplicationPart(controllerAssembly);
                     }
                     mvcBuilder.AddControllersAsServices();
                 }

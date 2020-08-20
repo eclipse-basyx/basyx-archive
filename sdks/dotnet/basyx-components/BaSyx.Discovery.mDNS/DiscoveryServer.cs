@@ -149,7 +149,7 @@ namespace BaSyx.Discovery.mDNS
         {
             logger.Info("Discover thread stopping...");
             cancellationToken?.Cancel();
-            bool success = discoverThread.Join(5000);
+            bool success = discoverThread.Join(DISCOVER_THREAD_DELAY + 500);
             logger.Info("Discover thread stopped successfully:" + success);
         }
     }
