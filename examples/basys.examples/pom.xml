@@ -281,6 +281,13 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		
+		<!-- Add explicit InMemoryRegistry dependency -->
+		<dependency>
+			<groupId>org.eclipse.basyx</groupId>
+			<artifactId>basyx.components.simple</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
 				
 		<!-- Add explicit AAS Server component dependency -->
 		<dependency>

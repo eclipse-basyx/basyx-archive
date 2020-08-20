@@ -3,8 +3,9 @@ package org.eclipse.basyx.examples.scenarios.cloudedgedeployment;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
-import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
+import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.AASServerComponent;
+import org.eclipse.basyx.components.InMemoryRegistryComponent;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -21,7 +22,7 @@ import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
  * Server B is created as a server hosted near a machine.
  * It provides a Submodel containing sensor value.
  * 
- * @author conradi
+ * @author conradi, schnicke
  *
  */
 public class CloudEdgeDeploymentScenario {
@@ -29,7 +30,8 @@ public class CloudEdgeDeploymentScenario {
 	/**
 	 * The registry used in the manager
 	 */
-	public IAASRegistryService registry;
+	private IAASRegistryService registry;
+	public static String registryPath = "http://localhost:8080/registry";
 	
 	/**
 	 * AASManager used to handle registration and server communication
@@ -67,12 +69,13 @@ public class CloudEdgeDeploymentScenario {
 	 */
 	public CloudEdgeDeploymentScenario() {
 		
+		startupRegistryServer();
 		startupEdgeServer();
 		startupCloudServer();
 		
 		
 		// Create a InMemoryRegistry to be used by the manager
-		registry = new InMemoryRegistry();
+		registry = new AASRegistryProxy(registryPath);
 		
 		// Create a ConnectedAASManager with the registry created above
 		aasManager = new ConnectedAssetAdministrationShellManager(registry);
@@ -95,6 +98,14 @@ public class CloudEdgeDeploymentScenario {
 		registry.register(aasIdentifier, ComponentBuilder.getEdgeSubmodelDescriptor());
 	}
 	
+	/**
+	 * Startup an empty registry at "http://localhost:8080/registry"
+	 * 
+	 */
+	private void startupRegistryServer() {
+		new InMemoryRegistryComponent("localhost", 8080, "registry", "").startComponent();
+	}
+
 	/**
 	 * Startup a server responsible for hosting the "current_temp" edgeSubModel
 	 * at the endpoint "http://localhost:8082/oven/current_temp"
