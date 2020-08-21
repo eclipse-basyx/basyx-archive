@@ -152,6 +152,42 @@ public abstract class TestRegistryProviderSuite {
 		assertEquals(aasEndpoint2, descriptor.getFirstEndpoint());
 	}
 
+	@Test
+	public void testDeleteWithAssetExtension() {
+		// After the setup, both AAS should have been inserted to the registry
+		assertNotNull(proxy.lookupAAS(aasId1));
+		assertNotNull(proxy.lookupAAS(aasId2));
+
+		proxy.delete(aasId2);
+
+		// After aas2 has been deleted, only aas1 should be registered
+		assertNotNull(proxy.lookupAAS(asset1.getIdentification()));
+
+		// Reference of asset-id to the AAS descriptor should also to deleted
+		try {
+			proxy.lookupAAS(asset2.getIdentification());
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// expected
+		}
+
+		proxy.delete(aasId1);
+
+		// Reference of both asset-ids to the AAS descriptors should also to deleted
+		try {
+			proxy.lookupAAS(asset1.getIdentification());
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// expected
+		}
+		try {
+			proxy.lookupAAS(asset2.getIdentification());
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// expected
+		}
+	}
+
 	/**
 	 * Tests deletion for aas entries
 	 */
@@ -165,17 +201,8 @@ public abstract class TestRegistryProviderSuite {
 		
 		// After aas2 has been deleted, only aas1 should be registered
 		assertNotNull(proxy.lookupAAS(aasId1));
-		assertNotNull(proxy.lookupAAS(asset1.getIdentification()));
 		try {
 			proxy.lookupAAS(aasId2);
-			fail();
-		} catch (ResourceNotFoundException e) {
-			// expected
-		}
-
-		// Reference of asset-id to the AAS descriptor should also to deleted
-		try {
-			proxy.lookupAAS(asset2.getIdentification());
 			fail();
 		} catch (ResourceNotFoundException e) {
 			// expected
@@ -192,20 +219,6 @@ public abstract class TestRegistryProviderSuite {
 		}
 		try {
 			proxy.lookupAAS(aasId2);
-			fail();
-		} catch (ResourceNotFoundException e) {
-			// expected
-		}
-
-		// Reference of both asset-ids to the AAS descriptors should also to deleted
-		try {
-			proxy.lookupAAS(asset1.getIdentification());
-			fail();
-		} catch (ResourceNotFoundException e) {
-			// expected
-		}
-		try {
-			proxy.lookupAAS(asset2.getIdentification());
 			fail();
 		} catch (ResourceNotFoundException e) {
 			// expected
@@ -257,7 +270,7 @@ public abstract class TestRegistryProviderSuite {
 	 */
 	@Test
 	public void testOverwritingAASDescriptor() {
-		AASDescriptor aasDesc2 = new AASDescriptor(aasIdShort2, aasId2, asset2, "TestEndpoint");
+		AASDescriptor aasDesc2 = new AASDescriptor(aasIdShort2, aasId2, asset2, "http://testendpoint2/");
 		proxy.register(aasDesc2);
 		AASDescriptor retrieved = proxy.lookupAAS(aasId2);
 		assertEquals(aasDesc2.getFirstEndpoint(), retrieved.getFirstEndpoint());
@@ -277,7 +290,7 @@ public abstract class TestRegistryProviderSuite {
 		assertEquals(smDesc, aasDesc.getSubmodelDescriptorFromIdShort(smIdShort2));
 
 		// Test overwriting an SM descriptor
-		SubmodelDescriptor smDescNew = new SubmodelDescriptor(smIdShort2, smId2, "TestEndpoint");
+		SubmodelDescriptor smDescNew = new SubmodelDescriptor(smIdShort2, smId2, "http://testendpoint2/submodel/");
 		proxy.register(aasId1, smDescNew);
 		AASDescriptor aasDescNew = proxy.lookupAAS(aasId1);
 		assertEquals(smDescNew.getFirstEndpoint(), aasDescNew.getSubmodelDescriptorFromIdShort(smIdShort2).getFirstEndpoint());

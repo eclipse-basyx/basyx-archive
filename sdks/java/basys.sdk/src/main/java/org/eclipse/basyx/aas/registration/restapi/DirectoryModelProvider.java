@@ -211,7 +211,16 @@ public class DirectoryModelProvider implements IModelProvider {
 			if (splitted.length == 1) {
 				// Typically, VAB SET should not create new entries. Nevertheless, the registry
 				// API is defined to do it.
-				registry.register(createAASDescriptorFromMap(newValue));
+				AASDescriptor desc = createAASDescriptorFromMap(newValue);
+
+				// Ensure the passed identifier is equals the
+				String descId = desc.getIdentifier().getId();
+				String urlId = splitted[0];
+				if (descId.equals(urlId)) {
+					registry.register(desc);
+				} else {
+					throw new MalformedRequestException("The Identifier " + descId + " in the descriptor does not match the URL with id " + urlId);
+				}
 			} else if (splitted.length == 3) {
 				SubmodelDescriptor smDesc = createSMDescriptorFromMap(newValue);
 				registry.register(identifier, smDesc);

@@ -18,4 +18,14 @@ public class RegistryProviderSuiteWithDefinedURL extends TestRegistryProviderSui
 		return new AASRegistryProxy(url);
 	}
 
+	@Override
+	public void testDeleteByAssetIdCall() {
+		// Not within official specification
+	}
+
+	@Override
+	public void testDeleteWithAssetExtension() {
+		// Not within official specification
+	}
+
 }
