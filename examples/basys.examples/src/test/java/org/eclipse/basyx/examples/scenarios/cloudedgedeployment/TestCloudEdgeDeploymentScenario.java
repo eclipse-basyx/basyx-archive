@@ -16,6 +16,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -28,6 +29,11 @@ public class TestCloudEdgeDeploymentScenario {
 		scenario = new CloudEdgeDeploymentScenario();
 	}
 	
+	@AfterClass
+	public static void tearDown() {
+		scenario.stop();
+	}
+
 	private IAASRegistryService getRegistry() {
 		return new AASRegistryProxy(CloudEdgeDeploymentScenario.registryPath);
 	}

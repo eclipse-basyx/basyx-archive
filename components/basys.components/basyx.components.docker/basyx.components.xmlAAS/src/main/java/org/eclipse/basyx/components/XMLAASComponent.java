@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
  * @author schnicke, espen
  *
  */
-public class XMLAASComponent {
+public class XMLAASComponent implements IComponent {
 	private static Logger logger = LoggerFactory.getLogger(XMLAASComponent.class);
 
 	// The server with the servlet that will be created
@@ -99,6 +99,7 @@ public class XMLAASComponent {
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 */
+	@Override
 	public void startComponent() {
 		logger.info("Create the server...");
 		// Init HTTP context and add an XMLAAServlet according to the configuration
@@ -119,5 +120,10 @@ public class XMLAASComponent {
 		} else {
 			logger.info("No registry specified, skipped registration");
 		}
+	}
+
+	@Override
+	public void stopComponent() {
+		server.shutdown();
 	}
 }

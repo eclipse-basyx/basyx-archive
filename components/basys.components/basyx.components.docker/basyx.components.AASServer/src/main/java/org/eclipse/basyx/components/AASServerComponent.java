@@ -19,7 +19,7 @@ import org.xml.sax.SAXException;
  * @author schnicke
  *
  */
-public class AASServerComponent {
+public class AASServerComponent implements IComponent {
 	private static Logger logger = LoggerFactory.getLogger(AASServerComponent.class);
 
 	// The server with the servlet that will be created
@@ -57,6 +57,7 @@ public class AASServerComponent {
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 */
+	@Override
 	public void startComponent() {
 		logger.info("Create the server...");
 		// Init HTTP context and add an XMLAAServlet according to the configuration
@@ -76,5 +77,10 @@ public class AASServerComponent {
 	 */
 	public String getURL() {
 		return "http://" + hostName + ":" + port + "/" + path;
+	}
+
+	@Override
+	public void stopComponent() {
+		server.shutdown();
 	}
 }

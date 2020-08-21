@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author espen
  */
-public class SQLRegistryComponent {
+public class SQLRegistryComponent implements IComponent {
 	private static Logger logger = LoggerFactory.getLogger(SQLRegistryComponent.class);
 
 	// BaSyx context information
@@ -36,6 +36,7 @@ public class SQLRegistryComponent {
 	/**
 	 * Starts the SQLRegistry at http://${hostName}:${port}/${path}
 	 */
+	@Override
 	public void startComponent() {
 		logger.info("Create the server...");
 		// Init HTTP context and add an InMemoryRegistryServlet according to the configuration
@@ -45,5 +46,10 @@ public class SQLRegistryComponent {
 
 		logger.info("Start the server...");
 		server.start();
+	}
+
+	@Override
+	public void stopComponent() {
+		server.shutdown();
 	}
 }

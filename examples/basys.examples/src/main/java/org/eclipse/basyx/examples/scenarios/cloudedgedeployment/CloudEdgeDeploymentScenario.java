@@ -1,10 +1,14 @@
 package org.eclipse.basyx.examples.scenarios.cloudedgedeployment;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.AASServerComponent;
+import org.eclipse.basyx.components.IComponent;
 import org.eclipse.basyx.components.InMemoryRegistryComponent;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
@@ -55,6 +59,10 @@ public class CloudEdgeDeploymentScenario {
 	 */
 	public IIdentifier edgeSmIdentifier = ComponentBuilder.getEdgeSubmodelDescriptor().getIdentifier();
 
+	// Used for shutting down the scenario
+	private List<IComponent> startedComponents = new ArrayList<>();
+	private AASHTTPServer edgeServer;
+
 	/**
 	 * Main method to start the scenario
 	 * 
@@ -103,7 +111,9 @@ public class CloudEdgeDeploymentScenario {
 	 * 
 	 */
 	private void startupRegistryServer() {
-		new InMemoryRegistryComponent("localhost", 8080, "registry", "").startComponent();
+		IComponent component = new InMemoryRegistryComponent("localhost", 8080, "registry", "");
+		component.startComponent();
+		startedComponents.add(component);
 	}
 
 	/**
@@ -130,7 +140,7 @@ public class CloudEdgeDeploymentScenario {
 		
 		
 		// Create and start a HTTP server with the context created above
-		AASHTTPServer edgeServer = new AASHTTPServer(context);
+		edgeServer = new AASHTTPServer(context);
 		edgeServer.start();
 	}
 	
@@ -148,6 +158,12 @@ public class CloudEdgeDeploymentScenario {
 		
 		// Start the created server
 		cloudServer.startComponent();
+		startedComponents.add(cloudServer);
+	}
+
+	public void stop() {
+		startedComponents.stream().forEach(IComponent::stopComponent);
+		edgeServer.shutdown();
 	}
 
 }
