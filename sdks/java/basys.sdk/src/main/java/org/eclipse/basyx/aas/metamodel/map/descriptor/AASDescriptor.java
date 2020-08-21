@@ -23,7 +23,7 @@ import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
  *
  */
 public class AASDescriptor extends ModelDescriptor {
-	public static final String MODELTYPE = "AASDescriptor";
+	public static final String MODELTYPE = "AssetAdministrationShellDescriptor";
 	public static final String ASSET = "asset";
 	
 	/**
@@ -32,6 +32,9 @@ public class AASDescriptor extends ModelDescriptor {
 	public AASDescriptor(Map<String, Object> map) {
 		super(map);
 		validate(map);
+
+		// Set map again
+		putAll(map);
 	}
 
 	protected AASDescriptor() {
@@ -98,6 +101,7 @@ public class AASDescriptor extends ModelDescriptor {
 		
 		// Add new sub model descriptor to list
 		submodelDescriptors.add(desc);
+		put(AssetAdministrationShell.SUBMODELS, submodelDescriptors);
 
 		// Enable method chaining
 		return this;
@@ -106,6 +110,17 @@ public class AASDescriptor extends ModelDescriptor {
 	@SuppressWarnings("unchecked")
 	public void removeSubmodelDescriptor(String idShort) {
 		Optional<SubmodelDescriptor> toRemove = getSubModelDescriptors().stream().filter(x -> x.getIdShort().equals(idShort)).findAny();
+
+		// TODO: Exception in else case
+		if (toRemove.isPresent()) {
+			// Don't use getSubmodelDescriptors here since it returns a copy
+			((Collection<Object>) get(AssetAdministrationShell.SUBMODELS)).remove(toRemove.get());
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void removeSubmodelDescriptor(IIdentifier id) {
+		Optional<SubmodelDescriptor> toRemove = getSubModelDescriptors().stream().filter(x -> x.getIdentifier().getId().equals(id.getId())).findAny();
 
 		// TODO: Exception in else case
 		if (toRemove.isPresent()) {
@@ -185,8 +200,11 @@ public class AASDescriptor extends ModelDescriptor {
 	@Override
 	public void validate(Map<String, Object> map) {
 		super.validate(map);
-		if (!map.containsKey(AssetAdministrationShell.SUBMODELS) || !(map.get(AssetAdministrationShell.SUBMODELS) instanceof Collection<?>))
-			throw new MalformedRequestException(getModelType() + " is missing endpoints entry");
+		if (!map.containsKey(AssetAdministrationShell.SUBMODELS)) {
+			map.put(AssetAdministrationShell.SUBMODELS, new HashSet<>());
+		} else if (map.containsKey(AssetAdministrationShell.SUBMODELS) && !(map.get(AssetAdministrationShell.SUBMODELS) instanceof Collection<?>)) {
+			throw new MalformedRequestException("Passed entry for " + AssetAdministrationShell.SUBMODELS + " is not a list of submodelDescriptors!");
+		}
 	}
 }
 

@@ -1,6 +1,7 @@
 package org.eclipse.basyx.testsuite.regression.aas.metamodel.map.descriptor;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -111,21 +112,21 @@ public class TestAASDescriptor {
 		new AASDescriptor(map);
 	}
 	
-	@Test(expected = MalformedRequestException.class)
+	@Test
 	public void testValidateNoSubmodels() {
 		map.remove(AssetAdministrationShell.SUBMODELS);
-		new AASDescriptor(map);
+		assertNotNull(new AASDescriptor(map).getSubModelDescriptors());
 	}
-	
+
 	@Test(expected = MalformedRequestException.class)
 	public void testValidateNullSubmodels() {
 		map.put(AssetAdministrationShell.SUBMODELS, null);
-		new AASDescriptor(map);
+		new AASDescriptor(map).getSubModelDescriptors();
 	}
-	
+
 	@Test(expected = MalformedRequestException.class)
 	public void testValidateWrongSubmodels() {
 		map.put(AssetAdministrationShell.SUBMODELS, "testSubmodel");
-		new AASDescriptor(map);
+		new AASDescriptor(map).getSubModelDescriptors();
 	}
 }

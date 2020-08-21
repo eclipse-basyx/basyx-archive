@@ -1,11 +1,13 @@
 package org.eclipse.basyx.aas.registration.memory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +65,7 @@ public class AASRegistry implements IAASRegistryService {
 	@Override
 	public void register(IIdentifier aas, SubmodelDescriptor smDescriptor) {
 		try {
-			delete(aas, smDescriptor.getIdShort());
+			delete(aas, smDescriptor.getIdentifier());
 		} catch (ResourceNotFoundException e) {
 			// Doesn't matter
 		}
@@ -75,20 +77,43 @@ public class AASRegistry implements IAASRegistryService {
 	}
 
 	@Override
-	public void delete(IIdentifier aasId, String smIdShort) {
+	public void delete(IIdentifier aasId, IIdentifier smId) {
+		String smIdString = smId.getId();
 		AASDescriptor desc = handler.get(aasId);
 		if (desc == null) {
 			throw new ResourceNotFoundException(
 					"Could not delete submodel descriptor for AAS " + aasId.getId() + " since the AAS does not exist");
 		}
-
-		if (desc.getSubmodelDescriptorFromIdShort(smIdShort) == null) {
+		if (desc.getSubModelDescriptorFromIdentifierId(smIdString) == null) {
 			throw new ResourceNotFoundException(
 					"Could not delete submodel descriptor for AAS " + aasId.getId() + " since the SM does not exist");
 		}
 
-		desc.removeSubmodelDescriptor(smIdShort);
+		desc.removeSubmodelDescriptor(smId);
 		handler.update(desc);
-		logger.debug("Deleted submodel " + smIdShort + " from AAS " + aasId.getId());
+		logger.debug("Deleted submodel " + smIdString + " from AAS " + aasId.getId());
+	}
+
+	@Override
+	public List<SubmodelDescriptor> lookupSubmodels(IIdentifier aasId) throws ProviderException {
+		AASDescriptor desc = handler.get(aasId);
+		if (desc == null) {
+			throw new ResourceNotFoundException("Could not look up submodels for AAS " + aasId + " since it does not exist");
+		}
+
+		return new ArrayList<>(desc.getSubModelDescriptors());
+	}
+
+	@Override
+	public SubmodelDescriptor lookupSubmodel(IIdentifier aasId, IIdentifier smId) throws ProviderException {
+		AASDescriptor desc = handler.get(aasId);
+		if (desc == null) {
+			throw new ResourceNotFoundException("Could not look up descriptor for SM " + smId + " of AAS " + aasId + " since the AAS does not exist");
+		}
+		SubmodelDescriptor smDesc = desc.getSubModelDescriptorFromIdentifierId(smId.getId());
+		if (smDesc == null) {
+			throw new ResourceNotFoundException("Could not look up descriptor for SM " + smId + " of AAS " + aasId + " since the SM does not exist");
+		}
+		return smDesc;
 	}
 }

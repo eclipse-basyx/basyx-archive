@@ -252,17 +252,30 @@ public abstract class TestRegistryProviderSuite {
 
 	@Test(expected = ResourceNotFoundException.class)
 	public void testDeleteNotExistingSubmodelFromNotExistingAAS() {
-		proxy.delete(new Identifier(IdentifierType.CUSTOM, "nonExistent"), "nonExistentSubModelId");
+		proxy.delete(new Identifier(IdentifierType.CUSTOM, "nonExistent"), new Identifier(IdentifierType.CUSTOM, "nonExistentSubModelId"));
 	}
 
 	@Test(expected = ResourceNotFoundException.class)
 	public void testDeleteNotExistingSubModel() {
-		proxy.delete(aasId1, "nonExistentSubModelId");
+		proxy.delete(aasId1, new Identifier(IdentifierType.CUSTOM, "nonExistentSubModelId"));
 	}
 
 	@Test(expected = ResourceNotFoundException.class)
 	public void testDeleteNotExistingAAS() {
 		proxy.delete(new Identifier(IdentifierType.CUSTOM, "nonExistent"));
+	}
+
+	@Test
+	public void testRetrieveSubmodelDescriptors() {
+		List<SubmodelDescriptor> descs = proxy.lookupSubmodels(aasId1);
+		assertEquals(1, descs.size());
+		assertEquals(smIdShort1, descs.get(0).getIdShort());
+	}
+
+	@Test
+	public void testRetrieveSpecificSubmodelDescriptor() {
+		SubmodelDescriptor desc = proxy.lookupSubmodel(aasId1, smId1);
+		assertEquals(smIdShort1, desc.getIdShort());
 	}
 
 	/**
@@ -296,7 +309,7 @@ public abstract class TestRegistryProviderSuite {
 		assertEquals(smDescNew.getFirstEndpoint(), aasDescNew.getSubmodelDescriptorFromIdShort(smIdShort2).getFirstEndpoint());
 
 		// Remove Submodel
-		proxy.delete(aasId1, smIdShort2);
+		proxy.delete(aasId1, smId2);
 
 		// Ensure that the submodel was correctly removed
 		aasDesc = proxy.lookupAAS(aasId1);

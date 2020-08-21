@@ -127,9 +127,12 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			String serValue = extractSerializedValue(req);
 			logger.trace("DoPut: {}", serValue);
 
+			resp.setContentType("application/json");
+			resp.setCharacterEncoding("UTF-8");
 			resp.setStatus(200);
 
 			providerBackend.processBaSysSet(path, serValue.toString(), responseWriter);
+			responseWriter.write(serValue);
 			responseWriter.flush();
 		} catch(ProviderException e) {
 			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);

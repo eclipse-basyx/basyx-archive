@@ -255,12 +255,13 @@ public class DirectoryModelProvider implements IModelProvider {
 			ModelUrn aasId = retrieveModelURN(splitted[0]);
 			
 			SubmodelDescriptor smDescriptor = createSMDescriptorFromMap(newEntity);
+			String smId = smDescriptor.getIdentifier().getId();
 			
 			//a submodel with this Id already exists in given aas
 			//getSmDescriptorFromAAS also checks if aas exists
 			try {
-				getSmDescriptorFromAAS(aasId, smDescriptor.getIdShort());
-				throw new ResourceAlreadyExistsException("A Submodel with id '" + smDescriptor.getIdShort() +
+				getSmDescriptorFromAAS(aasId, smId);
+				throw new ResourceAlreadyExistsException("A Submodel with id '" + smId +
 						"' already exists in aas '" + splitted[0] + "'. Try update instead.");
 			} catch (ResourceNotFoundException e) {
 				registry.register(aasId, smDescriptor);
@@ -294,11 +295,12 @@ public class DirectoryModelProvider implements IModelProvider {
 			String smId = splitted[2];
 			// a submodel with this Id does not exist in given aas
 			// getSmDescriptorFromAAS also checks if aas exists
-			if (getSmDescriptorFromAAS(aasId, smId) == null) {
+			SubmodelDescriptor smDesc = getSmDescriptorFromAAS(aasId, smId);
+			if (smDesc == null) {
 				throw new ResourceNotFoundException("A Submodel with id '" + smId + "' does not exist in aas '" + splitted[0] + "'.");
 			}
 
-			registry.delete(aasId, smId);
+			registry.delete(aasId, smDesc.getIdentifier());
 		} else {
 			throw new MalformedRequestException("Delete with empty path is not supported by registry");
 		}
@@ -346,7 +348,7 @@ public class DirectoryModelProvider implements IModelProvider {
 			throw new ResourceNotFoundException("Specified AASId '" + aasId.getId() + "' does not exist.");
 		}
 		
-		SubmodelDescriptor smDescriptor = aasDescriptor.getSubmodelDescriptorFromIdShort(smId);
+		SubmodelDescriptor smDescriptor = aasDescriptor.getSubModelDescriptorFromIdentifierId(smId);
 		if (smDescriptor == null) {
 			throw new ResourceNotFoundException("Specified SMId '" + smId + "' for AAS " + aasId.getId() + " does not exist.");
 		}

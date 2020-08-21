@@ -90,6 +90,7 @@ public class SQLDriver implements ISQLDriver {
 	/**
 	 * Execute a SQL query
 	 */
+	@Override
 	public CachedRowSet sqlQuery(String queryString) {
 		// Store SQL statement, flag that indicates whether the connection was created by this 
 		// operation (and needs to be closed), and result
@@ -126,6 +127,7 @@ public class SQLDriver implements ISQLDriver {
 	/**
 	 * Execute a SQL update
 	 */
+	@Override
 	public void sqlUpdate(String updateString) {
 		// Store SQL statement
 		Statement statement              = null;
@@ -159,7 +161,7 @@ public class SQLDriver implements ISQLDriver {
 			// Open connection
 			if (connect == null) {
 				openDataSource();
-				connect = ds.getConnection();	
+				connect = ds.getConnection();
 			}
 		} catch (SQLException e) {
 			logger.error("Failed to open sql driver connection", e);
@@ -208,6 +210,7 @@ public class SQLDriver implements ISQLDriver {
 			ds.setJdbcUrl(queryPrefix+dbPath);
 			ds.setUsername(userName);
 			ds.setPassword(password);
+			ds.setMaximumPoolSize(5);
 		}
 	}
 	
