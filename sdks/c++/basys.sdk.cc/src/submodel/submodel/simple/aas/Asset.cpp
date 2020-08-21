@@ -82,9 +82,14 @@ const LangStringSet & Asset::getDescription() const
 	return this->identifiable.getDescription();
 }
 
-const api::IReferable * const Asset::getParent() const
+api::IReferable * Asset::getParent() const
 {
 	return this->identifiable.getParent();
+}
+
+void Asset::setParent(IReferable * parent)
+{
+	this->identifiable.setParent(parent);
 }
 
 const AdministrativeInformation & Asset::getAdministrativeInformation() const
@@ -101,6 +106,17 @@ Identifier Asset::getIdentification() const
 {
 	return this->identifiable.getIdentification();
 }
+
+simple::Reference Asset::getReference() const
+{
+	return this->identifiable.getReference();
+};
+
+simple::Key Asset::getKey(bool local) const
+{
+	return this->identifiable.getKey();
+};
+
 
 }
 }

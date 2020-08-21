@@ -37,7 +37,7 @@ public:
 	virtual const std::string * const getCategory() const override;
 	virtual simple::LangStringSet & getDescription() override;
 	virtual const simple::LangStringSet & getDescription() const override;
-	virtual const IReferable * const getParent() const override;
+	virtual IReferable * getParent() const override;
 
 	// Inherited via IHasKind
 	virtual ModelingKind getKind() const override;

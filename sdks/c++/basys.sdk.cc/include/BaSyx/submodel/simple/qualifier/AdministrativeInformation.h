@@ -31,8 +31,8 @@ public:
 	void setVersion(const std::string & version) override;
 	void setRevision(const std::string & revision) override;
 
-	inline bool hasVersion() const override { return not version.empty(); };
-	inline bool hasRevision() const override { return not revision.empty(); };
+	inline bool hasVersion() const override { return !version.empty(); };
+	inline bool hasRevision() const override { return !revision.empty(); };
 
 	inline bool exists() const noexcept { return !version.empty() && !revision.empty(); };
 

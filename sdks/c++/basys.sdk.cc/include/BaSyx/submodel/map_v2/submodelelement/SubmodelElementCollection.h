@@ -33,6 +33,8 @@ public:
 
 	virtual bool isOrdered() const override;
 	virtual bool isAllowDuplicates() const override;
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::SubmodelElementCollection; };
 };
 
 }

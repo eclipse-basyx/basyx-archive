@@ -26,6 +26,7 @@ public:
   api::IDataSpecificationContent & getContent() override;
 
   void setContent(std::unique_ptr<DataSpecificationContent> content);
+  virtual KeyElements getKeyElementType() const override { return KeyElements::Unknown; };
 };
 
 }

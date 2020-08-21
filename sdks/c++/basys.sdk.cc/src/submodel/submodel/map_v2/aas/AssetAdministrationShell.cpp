@@ -7,8 +7,10 @@ using namespace basyx::submodel::api;
 AssetAdministrationShell::AssetAdministrationShell(const std::string & idShort, const simple::Identifier & identifier, const Asset & asset)
 	: Identifiable(idShort, identifier)
 	, asset(asset)
+	, submodels(this)
+	, conceptDictionary(this)
 {
-	this->map.insertKey("submodels", submodels.getMap());
+	this->map.insertKey("submodels", submodels.getKeyMap());
 	this->map.insertKey("asset", asset.getMap());
 };
 

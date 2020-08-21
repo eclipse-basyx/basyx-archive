@@ -111,6 +111,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/KeyType.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/KeyElements.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/IdentifiableElements.h
+	    ${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/Conversions.h
 	
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/aas/IAssetAdministrationShell.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/aas/IAsset.h
@@ -161,6 +162,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/aas/AssetAdministrationShell.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/aas/Asset.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ElementContainer.h
+        ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/SubModelContainer.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ElementFactory.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/LangStringSet.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ModelType.h

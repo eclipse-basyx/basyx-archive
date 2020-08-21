@@ -12,6 +12,8 @@ class IEvent
 {
 public:
   ~IEvent() = 0;
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::Event; };
 };
 
 inline IEvent::~IEvent() = default;

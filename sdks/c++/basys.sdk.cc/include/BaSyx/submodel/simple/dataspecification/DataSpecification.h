@@ -26,14 +26,19 @@ public:
 	// Inherited via IIdentifiable
 	virtual const std::string & getIdShort() const override;
 	virtual const std::string * const getCategory() const override;
-  void setCategory(const std::string & category) override;
+	void setCategory(const std::string & category) override;
 	virtual simple::LangStringSet & getDescription() override;
 	virtual const simple::LangStringSet & getDescription() const override;
-	virtual const IReferable * const getParent() const override;
+	virtual IReferable * getParent() const override;
+	virtual void setParent(IReferable * parent) override;
 	virtual const AdministrativeInformation & getAdministrativeInformation() const override;
 	virtual AdministrativeInformation & getAdministrativeInformation() override;
 	virtual Identifier getIdentification() const override;
 	virtual bool hasAdministrativeInformation() const override;
+	virtual simple::Reference getReference() const override;
+
+        virtual Key getKey(bool local = true) const override { return ident.getKey(); }
+
 };
 
 }

@@ -6,7 +6,23 @@
 #include <unordered_set>
 #include <unordered_map>
 
+template<typename T>
+struct dataTypeMapper
+{
 
+};
+
+template<>
+struct dataTypeMapper<float>
+{
+	static constexpr char datatype_string[] = "xsd:float";
+};
+
+template<>
+struct dataTypeMapper<int>
+{
+	static constexpr char datatype_string[] = "xsd:integer";
+};
 
 namespace basyx {
 

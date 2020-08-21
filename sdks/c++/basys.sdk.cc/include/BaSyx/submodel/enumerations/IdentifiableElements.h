@@ -7,24 +7,10 @@ namespace basyx {
 namespace submodel {
 
 enum class IdentifiableElements {
-    AccessPermissionRule,
-    AnnotatedRelationshipElemenBasicEvent,
-    Blob,
-    Capability,
-    ConceptDictionary,
-    DataElement,
-    Entity,
-    Event,
-    File,
-    MultiLanguageProperty,
-    Operation,
-    Property,
-    Range,
-    ReferenceElement,
-    RelationshipElement,
-    SubmodelElement,
-    SubmodelElementCollection,
-    View,
+    Asset,
+    AssetAdministrationShell,
+    ConceptDescription,
+    Submodel,
 };
 
 class IdentifiableElements_

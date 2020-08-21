@@ -3,7 +3,7 @@
 using namespace basyx::submodel;
 using namespace basyx::submodel::map;
 
-View::View(const std::string &idShort, const Referable *parent)
+View::View(const std::string &idShort, Referable *parent)
   : vab::ElementMap{}
   , Referable(idShort, parent)
 {

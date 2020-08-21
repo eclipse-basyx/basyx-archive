@@ -14,9 +14,9 @@ namespace simple {
 
 class ConceptDescription
   : public virtual api::IConceptDescription
-  , public Identifiable
 {
 private:
+	Identifiable identifiable;
 	HasDataSpecification dataSpec;
 	std::vector<std::unique_ptr<api::IReference>> isCaseOf;
 	ElementContainer<api::IDataSpecification> embeddedDataSpecs;
@@ -33,9 +33,30 @@ public:
 	void addDataSpecification(const Reference & reference) override;
 	const std::vector<Reference> getDataSpecificationReference() const override;
 
-  //not inherited
-  void addIsCaseOf(std::unique_ptr<simple::Reference> reference);
-  void addEmbeddedDataSpecification(std::unique_ptr<DataSpecification> data_specification);
+	// Inherited via IReferable
+	virtual const std::string & getIdShort() const override;
+	virtual const std::string * const getCategory() const override;
+	virtual void setCategory(const std::string & category) override;
+	virtual simple::LangStringSet & getDescription() override;
+	virtual const simple::LangStringSet & getDescription() const override;
+	virtual void setParent(api::IReferable * parent) override;
+	virtual IReferable * getParent() const override;
+	virtual simple::Reference getReference() const override;
+
+	// Inherited via IIdentifiable
+	virtual const AdministrativeInformation & getAdministrativeInformation() const override;
+	virtual AdministrativeInformation & getAdministrativeInformation() override;
+
+	virtual Identifier getIdentification() const override;
+
+	virtual bool hasAdministrativeInformation() const override;
+
+	//not inherited
+	void addIsCaseOf(std::unique_ptr<simple::Reference> reference);
+	void addEmbeddedDataSpecification(std::unique_ptr<DataSpecification> data_specification);
+
+        virtual Key getKey(bool local = true) const override { return identifiable.getKey(); }
+	virtual KeyElements getKeyElementType() const override { return KeyElements::ConceptDescription; };
 };
 
 }

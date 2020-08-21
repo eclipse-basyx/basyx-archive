@@ -14,17 +14,12 @@ class Identifiable :
 	public Referable
 {
 private:
-//	Referable referable;
 	map::AdministrativeInformation administrativeInformation;
 public:
 	virtual ~Identifiable() = default;
 
 	// Constructors
 	Identifiable(const std::string & idShort, const simple::Identifier & identifier);
-
-	//// Member-access
-	//inline const Referable & getReferable() const noexcept { return this->referable; };
-	//inline Referable & getReferable() noexcept { return this->referable; };
 
 	bool hasAdministrativeInformation() const noexcept;
 
@@ -34,7 +29,7 @@ public:
 
 	virtual simple::Identifier getIdentification() const override;
 
-  void setAdministrativeInformation(const AdministrativeInformation & administrativeInformation);
+    void setAdministrativeInformation(const AdministrativeInformation & administrativeInformation);
 };
 
 }

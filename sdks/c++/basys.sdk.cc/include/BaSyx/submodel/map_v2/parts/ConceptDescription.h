@@ -40,6 +40,8 @@ public:
   //not inherited
   void addIsCaseOf(std::unique_ptr<Reference> reference);
   void addEmbeddedDataSpecification(std::unique_ptr<DataSpecification> data_specification);
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::ConceptDescription; };
 };
 
 }

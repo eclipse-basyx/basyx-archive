@@ -47,6 +47,8 @@ public:
 	// Inherited via IHasSemantics
 	virtual const api::IReference & getSemanticId() const override;
 	virtual void setSemanticId(const api::IReference & semanticId) override;
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::Submodel; };
 };
 
 

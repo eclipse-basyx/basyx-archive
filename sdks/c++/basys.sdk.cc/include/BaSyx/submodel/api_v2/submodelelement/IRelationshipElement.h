@@ -18,6 +18,8 @@ public:
 
   virtual IReferable & getFirst() const = 0;
   virtual IReferable & getSecond() const = 0;
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::RelationshipElement; };
 };
 
 inline IRelationshipElement::~IRelationshipElement() = default;

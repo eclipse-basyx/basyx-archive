@@ -27,6 +27,8 @@ public:
 
 	virtual const MimeType getMimeType() const = 0;
 	virtual void setMimeType(const MimeType & mimeType) = 0;
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::Blob; };
 };
 
 inline IBlob::~IBlob() = default;

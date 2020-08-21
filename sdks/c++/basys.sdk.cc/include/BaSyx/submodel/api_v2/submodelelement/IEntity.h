@@ -22,6 +22,8 @@ public:
 
 	virtual const IReference * const getAssetRef() const = 0;
 	virtual void setAssetRef(const IReference & assetRef) = 0;
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::Entity; };
 };
 
 inline IEntity::~IEntity() = default;

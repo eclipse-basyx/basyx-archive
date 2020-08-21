@@ -28,6 +28,8 @@ public:
 
 	virtual const api::IReference * const getValueId() const override;
 	virtual void setValueId(const api::IReference & valueId) override;
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::MultiLanguageProperty; };
 };
 
 

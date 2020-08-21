@@ -26,6 +26,9 @@ public:
 
   // not inherited
   void addConceptDescription(std::unique_ptr<ConceptDescription> description);
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::ConceptDictionary; };
+
 };
 
 }

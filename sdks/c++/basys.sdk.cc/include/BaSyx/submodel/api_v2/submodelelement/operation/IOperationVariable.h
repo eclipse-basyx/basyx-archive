@@ -16,6 +16,8 @@ public:
 	virtual ~IOperationVariable() = 0;
 
 	virtual ISubmodelElement & getValue() const = 0;
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::OperationVariable; };
 };
 
 inline IOperationVariable::~IOperationVariable() = default;

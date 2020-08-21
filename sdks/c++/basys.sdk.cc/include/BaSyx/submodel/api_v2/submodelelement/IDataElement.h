@@ -12,6 +12,8 @@ class IDataElement : public virtual ISubmodelElement
 {
 public:
   virtual ~IDataElement() = 0;
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::DataElement; };
 };
 
 inline IDataElement::~IDataElement() = default;

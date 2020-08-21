@@ -30,6 +30,8 @@ public:
 	virtual api::IElementContainer<ISubmodelElement> & getOutputVariables() override;
 	virtual api::IElementContainer<ISubmodelElement> & getInOutputVariables() override;
 	virtual basyx::object invoke(basyx::object args) override;
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::Operation; };
 };
 
 }

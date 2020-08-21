@@ -34,6 +34,8 @@ public:
 
 	// Inherited via IHasKind
 	virtual ModelingKind getKind() const override;
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::SubmodelElement; };
 };
 
 }

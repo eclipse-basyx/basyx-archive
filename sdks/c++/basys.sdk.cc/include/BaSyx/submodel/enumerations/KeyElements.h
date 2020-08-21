@@ -21,6 +21,7 @@ enum class KeyElements {
     File,
     MultiLanguageProperty,
     Operation,
+    OperationVariable,
     Property,
     Range,
     ReferenceElement,

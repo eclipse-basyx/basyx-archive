@@ -1,3 +1,5 @@
+#ifdef IDENT_TYPE
+
 #include <BaSyx/submodel/enumerations/IdentifierType.h>
 
 #include <array>
@@ -37,3 +39,4 @@ const char * IdentifierType_::to_string(IdentifierType value)
     return pair->first;
 }
 
+#endif

@@ -51,7 +51,7 @@ const simple::LangStringSet & SubmodelElement::getDescription() const
 	return this->referable.getDescription();
 }
 
-const IReferable * const SubmodelElement::getParent() const
+IReferable * SubmodelElement::getParent() const
 {
 	return this->referable.getParent();
 }

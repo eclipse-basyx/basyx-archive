@@ -34,8 +34,12 @@ ModelType<modelType>::ModelType()
 template<ModelTypes modelType>
 ModelTypes ModelType<modelType>::GetModelType() const
 {
-	auto model_type = this->map.getProperty("modelType").getProperty("name").Get<std::string&>();
-	return ModelTypes_::from_string(model_type);
+	auto model_type = this->map
+            .getProperty("modelType")
+            .getProperty("name")
+            .template Get<std::string&>();
+	
+        return ModelTypes_::from_string(model_type);
 };
 
 }

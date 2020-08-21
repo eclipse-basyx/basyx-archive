@@ -34,6 +34,8 @@ public:
 
 	virtual api::IReference * const getBillOfMaterial() override;
 	virtual void setBillOfMaterial(const api::IReference & billOfMaterialRef) override;
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::Asset; };
 };
 
 }

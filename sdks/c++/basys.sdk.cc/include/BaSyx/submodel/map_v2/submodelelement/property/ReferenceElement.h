@@ -25,6 +25,8 @@ public:
 
 	virtual const api::IReference * const getValue() const = 0;
 	virtual void setValue(const api::IReference & value) = 0;
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::ReferenceElement; };
 };
 
 }

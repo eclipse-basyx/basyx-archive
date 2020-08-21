@@ -73,6 +73,8 @@ public:
 	virtual void setValueId(const api::IReference & valueId) override
 	{
 	}
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::Property; };
 };
 
 }

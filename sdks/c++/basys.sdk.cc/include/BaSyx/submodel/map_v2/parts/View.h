@@ -23,7 +23,8 @@ private:
   ElementContainer<IReferable> contained_elements;
   Reference semanticId;
 public:
-  View(const std::string & idShort, const Referable * parent = nullptr);
+  View(const std::string & idShort, Referable * parent = nullptr);
+  virtual ~View() = default;
 
   //inherited via api::IView
   const api::IElementContainer<IReferable> & getContainedElements() const override;
@@ -34,6 +35,8 @@ public:
   //inherited via IHasSemantics
   const api::IReference & getSemanticId() const override;
   void setSemanticId(const api::IReference & reference) override;
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::View; };
 };
 
 }

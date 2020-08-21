@@ -28,6 +28,8 @@ class IRange
 
   virtual ValueDataType getMin() = 0;
   virtual ValueDataType getMax() = 0;
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::Range; };
 };
 
 inline IRange::~IRange() = default;

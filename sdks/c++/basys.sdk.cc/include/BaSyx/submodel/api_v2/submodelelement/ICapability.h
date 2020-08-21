@@ -12,6 +12,8 @@ class ICapability
 {
 public:
   ~ICapability() = 0;
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::Capability; };
 };
 
 inline ICapability::~ICapability() = default;
