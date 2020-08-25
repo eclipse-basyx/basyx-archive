@@ -25,6 +25,7 @@ target_sources(${PROJECT_NAME}
 	api/parts/test_ConceptDictionary.cpp
 	api/parts/test_ConceptDescription.cpp
 	api/parts/test_View.cpp
+	api/property/test_Property.cpp
 	api/common/test_LangStringSet.cpp
 	map_v2/test_Submodel.cpp
 	map_v2/common/test_ElementContainer.cpp

@@ -16,7 +16,7 @@ const IReference & SubmodelElement::getSemanticId() const
 	return this->semanticId;
 };
 
-void SubmodelElement::setSemanticId(Reference semanticId)
+void SubmodelElement::setSemanticId(const api::IReference & semanticId)
 {
 	this->semanticId = semanticId;
 };
@@ -34,6 +34,11 @@ const std::vector<Reference> SubmodelElement::getDataSpecificationReference() co
 const std::string & SubmodelElement::getIdShort() const
 {
 	return this->referable.getIdShort();
+}
+
+void SubmodelElement::setCategory(const std::string &category)
+{
+  this->referable.setCategory(category);
 }
 
 const std::string * const SubmodelElement::getCategory() const
@@ -56,7 +61,47 @@ IReferable * SubmodelElement::getParent() const
 	return this->referable.getParent();
 }
 
+void SubmodelElement::setParent(IReferable * parent)
+{
+	this->setParent(parent);
+};
+
 ModelingKind SubmodelElement::getKind() const
 {
 	return this->kind;
+}
+
+void SubmodelElement::addFormula(const api::IFormula &formula)
+{
+  this->qualifiable.addFormula(formula);
+}
+
+void SubmodelElement::addQualifier(const api::IQualifier &qualifier)
+{
+  this->qualifiable.addQualifier(qualifier);
+}
+
+std::vector<Qualifier> SubmodelElement::getQualifiers() const
+{
+  return this->qualifiable.getQualifiers();
+}
+
+std::vector<Formula> SubmodelElement::getFormulas() const
+{
+  return this->qualifiable.getFormulas();
+}
+
+ModelTypes SubmodelElement::GetModelType() const
+{
+  return this->modelType;
+}
+
+Key SubmodelElement::getKey(bool local) const 
+{
+	return this->referable.getKey(local);
+}
+
+simple::Reference SubmodelElement::getReference() const
+{
+	return this->referable.getReference();
 }

@@ -20,6 +20,9 @@ class Property
   , public virtual Qualifiable
   , public ModelType<ModelTypes::Property>
 {
+private:
+  std::unique_ptr<Reference> valueId;
+
 public:
 	Property(const std::string & idShort)
 		: SubmodelElement(idShort, ModelingKind::Instance)
@@ -67,11 +70,17 @@ public:
 
 	virtual const Reference * const getValueId() const override
 	{
+		if (&this->valueId)
+    {
+		  return this->valueId.get();
+    }
 		return nullptr;
 	}
 
 	virtual void setValueId(const api::IReference & valueId) override
 	{
+	  this->valueId = util::make_unique<Reference>(valueId);
+	  this->map.insertKey("valueId", this->valueId->getMap());
 	}
 
 	virtual KeyElements getKeyElementType() const override { return KeyElements::Property; };
