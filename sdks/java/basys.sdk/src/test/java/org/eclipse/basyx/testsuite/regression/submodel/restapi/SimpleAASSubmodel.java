@@ -16,6 +16,10 @@ import org.eclipse.basyx.vab.exception.provider.ProviderException;
  *
  */
 public class SimpleAASSubmodel extends SubModel {
+
+	public static final String INTPROPIDSHORT = "integerProperty";
+	public static final String OPERATIONSIMPLEIDSHORT = "simple";
+
 	public SimpleAASSubmodel() {
 		this("SimpleAASSubmodel");
 	}
@@ -29,7 +33,7 @@ public class SimpleAASSubmodel extends SubModel {
 		setIdShort(idShort);
 
 		Property intProp = new Property(123);
-		intProp.setIdShort("integerProperty");
+		intProp.setIdShort(INTPROPIDSHORT);
 		addSubModelElement(intProp);
 
 		Property stringProp = new Property("Test");
@@ -50,7 +54,7 @@ public class SimpleAASSubmodel extends SubModel {
 		Operation simple = new Operation((Function<Object[], Object>) v -> {
 			return true;
 		});
-		simple.setIdShort("simple");
+		simple.setIdShort(OPERATIONSIMPLEIDSHORT);
 		addSubModelElement(simple);
 
 		// Create example operations
