@@ -12,7 +12,7 @@ import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnumHe
  *
  */
 public enum PropertyValueTypeDef implements StandardizedLiteralEnum {
-	Double("double"), Float("float"), Integer("int"), String("string"), Boolean("boolean"), Void("void"), Null("null");
+	Double("double"), Float("float"), Integer("int"), Long("long"), String("string"), Boolean("boolean"), Void("void"), Null("null");
 
 	private String standardizedLiteral;
 
