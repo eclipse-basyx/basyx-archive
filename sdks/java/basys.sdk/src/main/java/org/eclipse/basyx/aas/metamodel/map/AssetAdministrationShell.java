@@ -61,7 +61,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public static final String TYPE = "type";
 	public static final String ADDRESS = "address";
 	public static final String ENDPOINTS = "endpoints";
-	public static final String MODELTYPE = "AssetAdministationShell";
+	public static final String MODELTYPE = "AssetAdministrationShell";
 
 	/**
 	 * Constructor
