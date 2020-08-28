@@ -67,6 +67,8 @@ public class PropertyValueTypeDefHelper {
 			Class<?> c = obj.getClass();
 			if (c == int.class || c == Integer.class) {
 				objectType = PropertyValueTypeDef.Integer;
+			} else if (c == long.class || c == Long.class) {
+				objectType = PropertyValueTypeDef.Long;
 			} else if (c == void.class || c == Void.class) {
 				objectType = PropertyValueTypeDef.Void;
 			} else if (c == boolean.class || c == Boolean.class) {
