@@ -73,4 +73,9 @@ public class AASAggregatorProxy implements IAASAggregator {
 		logger.info("AAS with Id " + aasId.getId() + " created");
 	}
 
+	@Override
+	public IModelProvider getAASProvider(IIdentifier aasId) {
+		return new VABElementProxy(aasId.getId(), provider);
+	}
+
 }

@@ -2,7 +2,7 @@ package org.eclipse.basyx.components.executable;
 
 import org.eclipse.basyx.components.MongoDBRegistryComponent;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
-import org.eclipse.basyx.components.mongodbregistry.BaSyxMongoDBConfiguration;
+import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

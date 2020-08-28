@@ -4,11 +4,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.aggregator.AASAggregator;
+import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -25,12 +27,12 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  */
 public class AASAggregatorProvider implements IModelProvider {
 	
-	private AASAggregator aggregator;
+	private IAASAggregator aggregator;
 	
 	private static final String PREFIX = "aasList";
 	private static final String ENCODING_SCHEME = "UTF-8";
 	
-	public AASAggregatorProvider(AASAggregator aggregator) {
+	public AASAggregatorProvider(IAASAggregator aggregator) {
 		this.aggregator = aggregator;
 	}
 
@@ -100,7 +102,8 @@ public class AASAggregatorProvider implements IModelProvider {
 			} else {
 				String id = decodePath(splitted[0]);
 				String restPath = VABPathTools.skipEntries(path, 1);
-				return aggregator.getProviderForAASId(id).getModelPropertyValue(restPath);
+				IIdentifier identifier = new Identifier(IdentifierType.CUSTOM, id);
+				return aggregator.getAASProvider(identifier).getModelPropertyValue(restPath);
 			}
 		}
 	}
@@ -129,7 +132,8 @@ public class AASAggregatorProvider implements IModelProvider {
 			} else { // Update of contained element
 				String id = decodePath(VABPathTools.getEntry(path, 0));
 				String restPath = VABPathTools.skipEntries(path, 1);
-				aggregator.getProviderForAASId(id).setModelPropertyValue(restPath, newValue);
+				IIdentifier identifier = new Identifier(IdentifierType.CUSTOM, id);
+				aggregator.getAASProvider(identifier).setModelPropertyValue(restPath, newValue);
 			}
 		} else {
 			throw new MalformedRequestException("Set with empty path is not supported by aggregator");
@@ -152,7 +156,8 @@ public class AASAggregatorProvider implements IModelProvider {
 		} else {
 			String id = decodePath(VABPathTools.getEntry(path, 0));
 			String restPath = VABPathTools.skipEntries(path, 1);
-			aggregator.getProviderForAASId(id).createValue(restPath, newEntity);
+			IIdentifier identifier = new Identifier(IdentifierType.CUSTOM, id);
+			aggregator.getAASProvider(identifier).createValue(restPath, newEntity);
 		}
 		
 	}
@@ -176,7 +181,8 @@ public class AASAggregatorProvider implements IModelProvider {
 			} else {
 				String id = decodePath(VABPathTools.getEntry(path, 0));
 				String restPath = VABPathTools.skipEntries(path, 1);
-				aggregator.getProviderForAASId(id).deleteValue(restPath);
+				IIdentifier identifier = new Identifier(IdentifierType.CUSTOM, id);
+				aggregator.getAASProvider(identifier).deleteValue(restPath);
 			}
 		} else {
 			throw new MalformedRequestException("Delete with empty path is not supported by registry");
@@ -209,7 +215,8 @@ public class AASAggregatorProvider implements IModelProvider {
 		path = stripPrefix(path);
 		String id = decodePath(VABPathTools.getEntry(path, 0));
 		String restPath = VABPathTools.skipEntries(path, 1);
-		return aggregator.getProviderForAASId(id).invokeOperation(restPath, parameter);
+		IIdentifier identifier = new Identifier(IdentifierType.CUSTOM, id);
+		return aggregator.getAASProvider(identifier).invokeOperation(restPath, parameter);
 	}
 	
 

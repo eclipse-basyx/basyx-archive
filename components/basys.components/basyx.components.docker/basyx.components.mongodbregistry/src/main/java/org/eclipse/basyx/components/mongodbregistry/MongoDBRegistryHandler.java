@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.registration.memory.IRegistryHandler;
+import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
@@ -61,7 +62,7 @@ public class MongoDBRegistryHandler implements IRegistryHandler {
 		this.config = config;
 		MongoClient client = MongoClients.create(config.getConnectionUrl());
 		this.mongoOps = new MongoTemplate(client, config.getDatabase());
-		this.collection = config.getCollection();
+		this.collection = config.getRegistryCollection();
 	}
 
 	@Override

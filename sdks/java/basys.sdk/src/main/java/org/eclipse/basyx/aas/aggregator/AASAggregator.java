@@ -12,6 +12,7 @@ import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
 /**
  * An implementation of the IAASAggregator interface using maps internally
@@ -43,14 +44,10 @@ public class AASAggregator implements IAASAggregator {
 	@SuppressWarnings("unchecked")
 	@Override
 	public IAssetAdministrationShell getAAS(IIdentifier aasId) {
-		VABMultiSubmodelProvider provider = aasProviderMap.get(aasId.getId());
-
-		if (provider == null) {
-			throw new ResourceNotFoundException("AAS with Id " + aasId.getId() + " does not exist");
-		}
+		IModelProvider aasProvider = getAASProvider(aasId);
 
 		// get all Elements from provider
-		Map<String, Object> aasMap = (Map<String, Object>) provider.getModelPropertyValue("/aas");
+		Map<String, Object> aasMap = (Map<String, Object>) aasProvider.getModelPropertyValue("/aas");
 		IAssetAdministrationShell aas = AssetAdministrationShell.createAsFacade(aasMap);
 
 		return aas;
@@ -71,7 +68,14 @@ public class AASAggregator implements IAASAggregator {
 		aasProviderMap.remove(aasId.getId());
 	}
 
-	public VABMultiSubmodelProvider getProviderForAASId(String aasId) {
-		return aasProviderMap.get(aasId);
+	@Override
+	public IModelProvider getAASProvider(IIdentifier aasId) {
+		VABMultiSubmodelProvider provider = aasProviderMap.get(aasId.getId());
+
+		if (provider == null) {
+			throw new ResourceNotFoundException("AAS with Id " + aasId.getId() + " does not exist");
+		}
+
+		return provider;
 	}
 }

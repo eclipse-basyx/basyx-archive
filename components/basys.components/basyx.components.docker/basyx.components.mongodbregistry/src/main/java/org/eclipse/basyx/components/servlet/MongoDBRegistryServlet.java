@@ -2,7 +2,7 @@ package org.eclipse.basyx.components.servlet;
 
 import org.eclipse.basyx.aas.registration.memory.AASRegistry;
 import org.eclipse.basyx.aas.registration.restapi.DirectoryModelProvider;
-import org.eclipse.basyx.components.mongodbregistry.BaSyxMongoDBConfiguration;
+import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
 import org.eclipse.basyx.components.mongodbregistry.MongoDBRegistryHandler;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 

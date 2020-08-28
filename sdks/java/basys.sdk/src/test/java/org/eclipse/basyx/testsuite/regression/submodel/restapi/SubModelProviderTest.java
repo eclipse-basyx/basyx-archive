@@ -25,7 +25,7 @@ import org.junit.Test;
 
 public class SubModelProviderTest {
 	private VABConnectionManager connManager;
-	private static final String submodelAddr = "urn:fhg:es.iese:aas:1:1:submodel";
+	protected static final String submodelAddr = "urn:fhg:es.iese:aas:1:1:submodel";
 
 	protected VABConnectionManager getConnectionManager() {
 		if (connManager == null) {

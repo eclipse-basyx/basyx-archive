@@ -1,6 +1,6 @@
 package org.eclipse.basyx.components;
 
-import org.eclipse.basyx.components.mongodbregistry.BaSyxMongoDBConfiguration;
+import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
 import org.eclipse.basyx.components.servlet.MongoDBRegistryServlet;
 import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
