@@ -149,6 +149,14 @@ public class GSONTools implements Serializer {
 			if (primitive.getAsString().contains(".")) {
 				return primitive.getAsDouble();
 			} else {
+				if (primitive.getAsString().length() > 9) {
+					long tmp = primitive.getAsLong();
+					if (tmp <= Integer.MAX_VALUE) {
+						return primitive.getAsInt();
+					} else {
+						return tmp;
+					}
+				}
 				return primitive.getAsInt();
 			}
 		} else if (primitive.isBoolean()) {
