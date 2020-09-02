@@ -50,7 +50,7 @@ public class QualifiableXMLConverter {
 		//The IQualifiable object has to be treated as Map here, as the Interface has no Setters
 		
 		Map<String, Object> qualifierObj = (Map<String, Object>) xmlObject.get(QUALIFIER);
-		qualifiable.put(Qualifiable.CONSTRAINTS, parseConstraints(qualifierObj));
+		qualifiable.put(Qualifiable.QUALIFIERS, parseConstraints(qualifierObj));
 	}
 	
 	

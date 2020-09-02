@@ -16,7 +16,7 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  *
  */
 public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
-	public static final String CONSTRAINTS = "constraints";
+	public static final String QUALIFIERS = "qualifiers";
 
 	/**
 	 * Constructor
@@ -24,7 +24,7 @@ public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
 	public Qualifiable() {
 		// The instance of an element may be further qualified by one or more
 		// qualifiers.
-		put(CONSTRAINTS, null);
+		put(QUALIFIERS, null);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
 
 		// The instance of an element may be further qualified by one or more
 		// qualifiers.
-		put(CONSTRAINTS, qualifiers);
+		put(QUALIFIERS, qualifiers);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
 	public Qualifiable(Collection<Constraint> qualifier) {
 		// The instance of an element may be further qualified by one or more
 		// qualifiers.
-		put(CONSTRAINTS, qualifier);
+		put(QUALIFIERS, qualifier);
 	}
 
 	/**
@@ -68,14 +68,14 @@ public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
 	}
 
 	public void setQualifier(Collection<IConstraint> qualifiers) {
-		put(Qualifiable.CONSTRAINTS, qualifiers);
+		put(Qualifiable.QUALIFIERS, qualifiers);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<IConstraint> getQualifier() {
 		// Transform set of maps to set of IConstraints
-		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) get(Qualifiable.CONSTRAINTS);
+		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) get(Qualifiable.QUALIFIERS);
 		Collection<IConstraint> ret = new HashSet<>();
 		if (set != null) {
 			for (Map<String, Object> m : set) {
