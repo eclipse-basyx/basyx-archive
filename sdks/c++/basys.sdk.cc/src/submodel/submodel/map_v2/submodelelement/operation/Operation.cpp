@@ -8,6 +8,7 @@ Operation::Operation(const std::string & idShort, basyx::object invokable)
 	, invokable(basyx::object::make_null())
 {
 	this->invokable = invokable;
+	this->map.insertKey("invokable", this->invokable);
 	this->map.insertKey("inputVariable", inputVariables.getMap());
 	this->map.insertKey("outputVariable", outputVariables.getMap());
 	this->map.insertKey("inoutputVariable", inOutVariables.getMap());
