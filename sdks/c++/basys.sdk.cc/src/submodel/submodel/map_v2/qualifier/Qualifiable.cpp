@@ -9,14 +9,14 @@ using namespace basyx::submodel::map;
 
 Qualifiable::Qualifiable(const std::vector<simple::Formula> & formulas, const std::vector<simple::Qualifier> & qualifiers)
 {
-	this->map.insertKey("qualifier", basyx::object::make_object_list());
+	this->map.insertKey("qualifiers", basyx::object::make_object_list());
 };
 
 void Qualifiable::addFormula(const api::IFormula & formula)
 {
 	map::Formula f{ formula };
 
-	auto & objectList = this->map.getProperty("qualifier").Get<basyx::object::object_list_t&>();
+	auto & objectList = this->map.getProperty("qualifiers").Get<basyx::object::object_list_t&>();
 
 	objectList.emplace_back(f.getMap());
 }
@@ -25,7 +25,7 @@ void Qualifiable::addQualifier(const api::IQualifier & qualifier)
 {
 	map::Qualifier q{ qualifier };
 
-	auto & objectList = this->map.getProperty("qualifier").Get<basyx::object::object_list_t&>();
+	auto & objectList = this->map.getProperty("qualifiers").Get<basyx::object::object_list_t&>();
 
 	objectList.emplace_back(q.getMap());
 }
@@ -34,7 +34,7 @@ std::vector<simple::Formula> Qualifiable::getFormulas() const
 {
 	std::vector<simple::Formula> formulas;
 
-	auto & objectList = this->map.getProperty("qualifier").Get<basyx::object::object_list_t&>();
+	auto & objectList = this->map.getProperty("qualifiers").Get<basyx::object::object_list_t&>();
 	for (auto & object : objectList)
 	{
 		if(ModelType<ModelTypes::Constraint>(object).GetModelType() == ModelTypes::Formula)
@@ -51,7 +51,7 @@ std::vector<simple::Qualifier> Qualifiable::getQualifiers() const
 {
 	std::vector<simple::Qualifier> qualifiers;
 
-	auto & objectList = this->map.getProperty("qualifier").Get<basyx::object::object_list_t&>();
+	auto & objectList = this->map.getProperty("qualifiers").Get<basyx::object::object_list_t&>();
 	for (auto & object : objectList)
 	{
 		if (ModelType<ModelTypes::Constraint>(object).GetModelType() == ModelTypes::Qualifier)
