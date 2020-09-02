@@ -110,12 +110,12 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 	}
 
 	public void setQualifier(Collection<IConstraint> qualifiers) {
-		Qualifiable.createAsFacade(this).setQualifier(qualifiers);
+		Qualifiable.createAsFacade(this).setQualifiers(qualifiers);
 	}
 
 	@Override
-	public Collection<IConstraint> getQualifier() {
-		return Qualifiable.createAsFacade(this).getQualifier();
+	public Collection<IConstraint> getQualifiers() {
+		return Qualifiable.createAsFacade(this).getQualifiers();
 	}
 
 	@Override

@@ -99,8 +99,8 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 	}
 	
 	@Override
-	public Collection<IConstraint> getQualifier() {
-		return Qualifiable.createAsFacade(getElem()).getQualifier();
+	public Collection<IConstraint> getQualifiers() {
+		return Qualifiable.createAsFacade(getElem()).getQualifiers();
 	}
 
 	@Override

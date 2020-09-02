@@ -44,10 +44,10 @@ public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
 	/**
 	 * Constructor
 	 */
-	public Qualifiable(Collection<Constraint> qualifier) {
+	public Qualifiable(Collection<Constraint> qualifiers) {
 		// The instance of an element may be further qualified by one or more
 		// qualifiers.
-		put(QUALIFIERS, qualifier);
+		put(QUALIFIERS, qualifiers);
 	}
 
 	/**
@@ -67,13 +67,13 @@ public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
 		return ret;
 	}
 
-	public void setQualifier(Collection<IConstraint> qualifiers) {
+	public void setQualifiers(Collection<IConstraint> qualifiers) {
 		put(Qualifiable.QUALIFIERS, qualifiers);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<IConstraint> getQualifier() {
+	public Collection<IConstraint> getQualifiers() {
 		// Transform set of maps to set of IConstraints
 		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) get(Qualifiable.QUALIFIERS);
 		Collection<IConstraint> ret = new HashSet<>();

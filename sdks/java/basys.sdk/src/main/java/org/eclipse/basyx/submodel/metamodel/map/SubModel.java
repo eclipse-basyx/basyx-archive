@@ -300,8 +300,8 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 		return (Map<String, ISubmodelElement>) get(SUBMODELELEMENT);
 	}
 	@Override
-	public Collection<IConstraint> getQualifier() {
-		return Qualifiable.createAsFacade(this).getQualifier();
+	public Collection<IConstraint> getQualifiers() {
+		return Qualifiable.createAsFacade(this).getQualifiers();
 	}
 
 	@Override

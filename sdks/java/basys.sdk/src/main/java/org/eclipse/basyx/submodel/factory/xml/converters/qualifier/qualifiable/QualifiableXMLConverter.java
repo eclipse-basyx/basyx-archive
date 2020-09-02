@@ -143,10 +143,10 @@ public class QualifiableXMLConverter {
 	 * @param qualifiable the IQualifiable object to be converted to XML
 	 */
 	public static void populateQualifiableXML(Document document, Element root, IQualifiable qualifiable) {
-		if(qualifiable.getQualifier() == null || qualifiable.getQualifier().size() == 0) return;
+		if(qualifiable.getQualifiers() == null || qualifiable.getQualifiers().size() == 0) return;
 		
 		
-		Collection<IConstraint> constraints = qualifiable.getQualifier();
+		Collection<IConstraint> constraints = qualifiable.getQualifiers();
 		
 		Element qualifierRoot = document.createElement(QUALIFIER);
 		

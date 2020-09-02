@@ -355,7 +355,7 @@ public class TestXMLConverter {
 		assertNotNull(submodel);
 		checkDefaultEmbeddedDataSpecification(submodel);
 		assertEquals("3s7plfdrs35_submodel1", submodel.getIdShort());
-		Collection<IConstraint> constraints = submodel.getQualifier();
+		Collection<IConstraint> constraints = submodel.getQualifiers();
 		assertEquals(2, constraints.size());
 		checkSubmodelElements(submodel);
 	}

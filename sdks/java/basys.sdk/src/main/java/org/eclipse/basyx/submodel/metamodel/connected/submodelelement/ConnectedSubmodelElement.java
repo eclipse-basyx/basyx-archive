@@ -54,8 +54,8 @@ public abstract class ConnectedSubmodelElement extends ConnectedElement implemen
 	}
 
 	@Override
-	public Collection<IConstraint> getQualifier() {
-		return Qualifiable.createAsFacade(getElem()).getQualifier();
+	public Collection<IConstraint> getQualifiers() {
+		return Qualifiable.createAsFacade(getElem()).getQualifiers();
 	}
 
 	@Override
