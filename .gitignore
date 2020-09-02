@@ -58,3 +58,4 @@
 /.vs
 /sdks/dotnet/.vs/BaSyx
 launchSettings.json
+.project
