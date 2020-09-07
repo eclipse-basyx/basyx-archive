@@ -55,7 +55,7 @@ public:
 
 	virtual Identifier getIdentification() const override;
 
-	virtual bool hasAdministrativeInformation() const;
+	virtual bool hasAdministrativeInformation() const override;
 
 	// Inherited via IHasDataSpecification
 	virtual void addDataSpecification(const Reference & reference) override;

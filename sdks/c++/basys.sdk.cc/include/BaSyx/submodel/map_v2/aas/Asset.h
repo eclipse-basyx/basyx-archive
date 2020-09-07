@@ -27,7 +27,7 @@ public:
 	Asset(const std::string & idShort, const simple::Identifier & identifier, AssetKind kind = AssetKind::Instance);
 	virtual ~Asset() = default;
 
-	virtual AssetKind getKind();
+	virtual AssetKind getKind() override;
 
 	virtual api::IReference * const getAssetIdentificationModel() override;
 	virtual void setAssetIdentificationModel(const api::IReference & assetIdentificationModelRef) override;

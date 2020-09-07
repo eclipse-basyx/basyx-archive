@@ -22,7 +22,7 @@ public:
 	Asset(const std::string & idShort, const Identifier & identifier, AssetKind kind = AssetKind::Instance);
 	virtual ~Asset() = default;
 
-	virtual AssetKind getKind();
+	virtual AssetKind getKind() override;
 
 	virtual Reference * const getAssetIdentificationModel() override;
 	virtual void setAssetIdentificationModel(const api::IReference & assetIdentificationModelRef) override;
@@ -47,7 +47,7 @@ public:
 
 	virtual Identifier getIdentification() const override;
 
-	virtual bool hasAdministrativeInformation() const;
+	virtual bool hasAdministrativeInformation() const override;
 
 	// Inherited via IHasDataSpecification
 	virtual void addDataSpecification(const Reference & reference) override;

@@ -111,6 +111,8 @@ namespace json {
 					return deserialize_helper::list_t<double>(json_array);
 				case basyx::type::valueType::Object:
 					return deserialize_helper::object_list(json_array);
+                                default:
+                                    break;
 				};
 			}
 

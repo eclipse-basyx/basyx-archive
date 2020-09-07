@@ -21,7 +21,7 @@ public:
 	// Constructors
 	Identifiable(const std::string & idShort, const simple::Identifier & identifier);
 
-	bool hasAdministrativeInformation() const noexcept;
+	bool hasAdministrativeInformation() const noexcept override;
 
 	// Inherited via IIdentifiable
 	const AdministrativeInformation & getAdministrativeInformation() const override;
