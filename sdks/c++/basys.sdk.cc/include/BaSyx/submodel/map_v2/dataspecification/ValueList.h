@@ -1,5 +1,5 @@
-#ifndef BASYX_C_SDK_VALUELIST_H
-#define BASYX_C_SDK_VALUELIST_H
+#ifndef BASYX_SUBMODEL_MAP_V2_DATASPECIFICATION_VALUELIST_H
+#define BASYX_SUBMODEL_MAP_V2_DATASPECIFICATION_VALUELIST_H
 
 #include <BaSyx/submodel/api_v2/dataspecification/IValueList.h>
 #include <BaSyx/vab/ElementMap.h>
@@ -24,4 +24,4 @@ public:
 }
 }
 
-#endif //BASYX_C_SDK_VALUELIST_H
+#endif /* BASYX_SUBMODEL_MAP_V2_DATASPECIFICATION_VALUELIST_H */

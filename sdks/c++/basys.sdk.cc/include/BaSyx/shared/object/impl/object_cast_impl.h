@@ -1,5 +1,5 @@
-#ifndef SHARED_BASYX_OBJECT_IMPL_OBJECT_CAST_IMPL_H
-#define SHARED_BASYX_OBJECT_IMPL_OBJECT_CAST_IMPL_H
+#ifndef BASYX_SHARED_OBJECT_IMPL_OBJECT_CAST_IMPL_H
+#define BASYX_SHARED_OBJECT_IMPL_OBJECT_CAST_IMPL_H
 
 #include <BaSyx/shared/object/object_header.h>
 #include <BaSyx/shared/object/obj_holder.h>
@@ -66,4 +66,4 @@ inline const T* basyx::object::object_cast(const object* operand)
 	return object_cast<T>(const_cast<object*>(operand));
 }
 
-#endif /* SHARED_BASYX_OBJECT_IMPL_OBJECT_CAST_IMPL_H */
+#endif /* BASYX_SHARED_OBJECT_IMPL_OBJECT_CAST_IMPL_H */

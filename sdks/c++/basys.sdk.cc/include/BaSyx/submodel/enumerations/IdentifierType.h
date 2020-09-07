@@ -1,5 +1,5 @@
-#ifndef BASYX_SUBMODEL_ENUM_IdentifierType_H
-#define BASYX_SUBMODEL_ENUM_IdentifierType_H
+#ifndef BASYX_SUBMODEL_ENUMERATIONS_IDENTIFIERTYPE_H
+#define BASYX_SUBMODEL_ENUMERATIONS_IDENTIFIERTYPE_H
 
 #include <BaSyx/submodel/enumerations/KeyType.h>
 
@@ -29,4 +29,4 @@ using IdentifierType_ = KeyType_;
 }
 }
 
-#endif
+#endif /* BASYX_SUBMODEL_ENUMERATIONS_IDENTIFIERTYPE_H */

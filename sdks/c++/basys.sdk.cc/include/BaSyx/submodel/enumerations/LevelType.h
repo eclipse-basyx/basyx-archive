@@ -1,5 +1,5 @@
-#ifndef BASYX_SUBMODEL_ENUM_LevelType_H
-#define BASYX_SUBMODEL_ENUM_LevelType_H
+#ifndef BASYX_SUBMODEL_ENUMERATIONS_LEVELTYPE_H
+#define BASYX_SUBMODEL_ENUMERATIONS_LEVELTYPE_H
 
 #include <string>
 
@@ -25,4 +25,4 @@ public:
 }
 }
 
-#endif
+#endif /* BASYX_SUBMODEL_ENUMERATIONS_LEVELTYPE_H */

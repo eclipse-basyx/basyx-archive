@@ -1,5 +1,5 @@
-#ifndef BASYX_SUBMODEL_MAP_V2_QUALIFIER_FORMULA_H
-#define BASYX_SUBMODEL_MAP_V2_QUALIFIER_FORMULA_H
+#ifndef BASYX_SUBMODEL_MAP_V2_CONSTRAINT_FORMULA_H
+#define BASYX_SUBMODEL_MAP_V2_CONSTRAINT_FORMULA_H
 
 #include <BaSyx/submodel/api_v2/constraint/IFormula.h>
 #include <BaSyx/submodel/map_v2/common/ModelType.h>
@@ -39,4 +39,4 @@ public:
 }
 }
 
-#endif /* BASYX_SUBMODEL_API_V2_QUALIFIER_IFORMULA_H */
+#endif /* BASYX_SUBMODEL_MAP_V2_CONSTRAINT_FORMULA_H */

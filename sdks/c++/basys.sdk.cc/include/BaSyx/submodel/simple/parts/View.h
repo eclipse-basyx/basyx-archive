@@ -1,5 +1,5 @@
-#ifndef BASYX_SIMPLE_SDK_VIEW_H
-#define BASYX_SIMPLE_SDK_VIEW_H
+#ifndef BASYX_SUBMODEL_SIMPLE_PARTS_VIEW_H
+#define BASYX_SUBMODEL_SIMPLE_PARTS_VIEW_H
 
 #include <BaSyx/submodel/api_v2/parts/IView.h>
 
@@ -54,4 +54,4 @@ public:
 }
 }
 }
-#endif //BASYX_SIMPLE_SDK_VIEW_H
+#endif /* BASYX_SUBMODEL_SIMPLE_PARTS_VIEW_H */

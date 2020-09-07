@@ -1,5 +1,5 @@
-#ifndef BASYX_MAP_V2_SDK_VIEW_H
-#define BASYX_MAP_V2_SDK_VIEW_H
+#ifndef BASYX_SUBMODEL_MAP_V2_PARTS_VIEW_H
+#define BASYX_SUBMODEL_MAP_V2_PARTS_VIEW_H
 
 #include <BaSyx/submodel/api_v2/parts/IView.h>
 
@@ -42,4 +42,4 @@ public:
 }
 }
 }
-#endif //BASYX_MAP_V2_SDK_VIEW_H
+#endif /* BASYX_SUBMODEL_MAP_V2_PARTS_VIEW_H */

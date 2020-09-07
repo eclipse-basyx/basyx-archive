@@ -1,12 +1,12 @@
 /*
- * Socket.h
- *
- *  Created on: 05.02.2018
- *      Author: psota
- */
+* Socket.h
+*
+*  Created on: 05.02.2018
+*      Author: psota
+*/
 
-#ifndef ABSTRACTION_NET_SOCKET_H_
-#define ABSTRACTION_NET_SOCKET_H_
+#ifndef BASYX_ABSTRACTION_NET_SOCKET_H
+#define BASYX_ABSTRACTION_NET_SOCKET_H
 
 #include <BaSyx/abstraction/impl/socket_impl.h>
 
@@ -17,121 +17,112 @@
 #include <string>
 
 namespace basyx {
-	namespace net {
-		namespace tcp {
+namespace net {
+namespace tcp {
 
-			template<typename socket_impl>
-			class basic_socket
-			{
-			private:
-				basyx::log log;
-				std::unique_ptr<socket_impl> socket;
+template <typename socket_impl>
+class basic_socket {
+private:
+    basyx::log log;
+    std::unique_ptr<socket_impl> socket;
 
-				basic_socket<socket_impl> & _move_socket(basic_socket<socket_impl> && other)
-				{
-					// close current socket and assign new one
-					if (this->socket != nullptr)
-						this->socket->close();
+    basic_socket<socket_impl>& _move_socket(basic_socket<socket_impl>&& other)
+    {
+        // close current socket and assign new one
+        if (this->socket != nullptr)
+            this->socket->close();
 
-					this->socket = std::move(other.socket);
-					// other no longer represents a socket connection
-					other.socket.reset(nullptr);
-					return *this;
-				}
-			public:
-				basic_socket()
-					: socket{ nullptr }
-					, log{ "Socket" }
-				{
-				};
+        this->socket = std::move(other.socket);
+        // other no longer represents a socket connection
+        other.socket.reset(nullptr);
+        return *this;
+    }
 
-				basic_socket(std::unique_ptr<socket_impl> socket)
-					: socket{ std::forward<std::unique_ptr<socket_impl>>(socket) }
-					, log{"Socket"}
-				{
-				};
+public:
+    basic_socket()
+        : socket { nullptr }
+        , log { "Socket" } {};
 
-				~basic_socket()
-				{
-				};
+    basic_socket(std::unique_ptr<socket_impl> socket)
+        : socket { std::forward<std::unique_ptr<socket_impl>>(socket) }
+        , log { "Socket" } {};
 
-				// Delete copy-assignment and constructor, there should only ever be one Socket object representing a single connection
-				basic_socket<socket_impl> & operator=(basic_socket<socket_impl> & other) = delete;
-				basic_socket(basic_socket<socket_impl> & other) = delete;
+    ~basic_socket() {};
 
-				// Allow move-operations
-				basic_socket<socket_impl> & operator=(basic_socket<socket_impl> && other) { return _move_socket(std::forward<basic_socket<socket_impl>>(other)); };
-				basic_socket(basic_socket<socket_impl> && other) { _move_socket(std::forward<basic_socket<socket_impl>>(other)); };
+    // Delete copy-assignment and constructor, there should only ever be one Socket object representing a single connection
+    basic_socket<socket_impl>& operator=(basic_socket<socket_impl>& other) = delete;
+    basic_socket(basic_socket<socket_impl>& other) = delete;
 
-				template<typename Buffer>
-				std::size_t Send(Buffer && buffer)
-				{
-					if (socket == nullptr)
-						return 0;
+    // Allow move-operations
+    basic_socket<socket_impl>& operator=(basic_socket<socket_impl>&& other) { return _move_socket(std::forward<basic_socket<socket_impl>>(other)); };
+    basic_socket(basic_socket<socket_impl>&& other) { _move_socket(std::forward<basic_socket<socket_impl>>(other)); };
 
-					return socket->write(buffer.data(), buffer.size());
-				}
+    template <typename Buffer>
+    std::size_t Send(Buffer&& buffer)
+    {
+        if (socket == nullptr)
+            return 0;
 
-				template<typename MutableBuffer>
-				std::size_t Receive(MutableBuffer && buffer)
-				{
-					if (socket == nullptr)
-						return 0;
+        return socket->write(buffer.data(), buffer.size());
+    }
 
-					return socket->recv(buffer.data(), buffer.size(), 0);
-				}
+    template <typename MutableBuffer>
+    std::size_t Receive(MutableBuffer&& buffer)
+    {
+        if (socket == nullptr)
+            return 0;
 
-				static basic_socket<socket_impl> Connect(const std::string & address, int port)
-				{
-					return basic_socket<socket_impl>::Connect(address, std::to_string(port));
-				}
+        return socket->recv(buffer.data(), buffer.size(), 0);
+    }
 
-				static basic_socket<socket_impl> Connect(const std::string & address, const std::string & port)
-				{
-					//ToDo: Error handling
-					auto sock_impl = util::make_unique<socket_impl>();
-					auto result = sock_impl->connect(address, port);
+    static basic_socket<socket_impl> Connect(const std::string& address, int port)
+    {
+        return basic_socket<socket_impl>::Connect(address, std::to_string(port));
+    }
 
-					if (result != 0)
-						return basic_socket<socket_impl>{};
+    static basic_socket<socket_impl> Connect(const std::string& address, const std::string& port)
+    {
+        //ToDo: Error handling
+        auto sock_impl = util::make_unique<socket_impl>();
+        auto result = sock_impl->connect(address, port);
 
-					return basic_socket<socket_impl>{std::forward<std::unique_ptr<socket_impl>>(sock_impl)};
-				}
+        if (result != 0)
+            return basic_socket<socket_impl> {};
 
-				int GetErrorCode()
-				{
-					if (this->socket == nullptr)
-						return -1;
+        return basic_socket<socket_impl> { std::forward<std::unique_ptr<socket_impl>>(sock_impl) };
+    }
 
-					return this->socket->getErrorCode();
-				}
+    int GetErrorCode()
+    {
+        if (this->socket == nullptr)
+            return -1;
 
-				void Close()
-				{
-					if (this->socket != nullptr)
-					{
-						log.trace("Closing socket...");
+        return this->socket->getErrorCode();
+    }
 
-						//this->socket->shutdown(SHUTDOWN_RDWR);
-						this->socket->close();
-						this->socket.reset();
-					}
-				}
+    void Close()
+    {
+        if (this->socket != nullptr) {
+            log.trace("Closing socket...");
 
-				bool Healthy()
-				{
-					if (this->socket == nullptr)
-						return false;
+            //this->socket->shutdown(SHUTDOWN_RDWR);
+            this->socket->close();
+            this->socket.reset();
+        }
+    }
 
-					return true;
-				}
-			};
+    bool Healthy()
+    {
+        if (this->socket == nullptr)
+            return false;
 
+        return true;
+    }
+};
 
-
-			using Socket = basic_socket<basyx::net::impl::socket_impl>;
-		};
-	}
+using Socket = basic_socket<basyx::net::impl::socket_impl>;
+};
+}
 }
 
-#endif
+#endif /* BASYX_ABSTRACTION_NET_SOCKET_H */

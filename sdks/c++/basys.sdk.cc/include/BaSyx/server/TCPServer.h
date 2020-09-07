@@ -1,5 +1,5 @@
-#ifndef VAB_VAB_PROVIDER_NATIVE_BASYXTCPSERVER_2_H
-#define VAB_VAB_PROVIDER_NATIVE_BASYXTCPSERVER_2_H
+#ifndef BASYX_SERVER_TCPSERVER_H
+#define BASYX_SERVER_TCPSERVER_H
 
 #include <atomic>
 #include <iostream>
@@ -15,174 +15,169 @@
 namespace basyx {
 namespace server {
 
-	template <typename Backend>
-	class TCPServer {
-	public:
-		using socket_ptr_t = std::unique_ptr<asio::ip::tcp::socket>;
-	private:
-		Backend * backend;
+template <typename Backend>
+class TCPServer {
+public:
+    using socket_ptr_t = std::unique_ptr<asio::ip::tcp::socket>;
 
-		asio::io_context io_context;
-		asio::ip::tcp::acceptor acceptor;
+private:
+    Backend* backend;
 
-		std::vector<std::thread> threads;
-		std::vector<socket_ptr_t> sockets;
+    asio::io_context io_context;
+    asio::ip::tcp::acceptor acceptor;
 
-		bool closed;
-		std::atomic_bool running;
+    std::vector<std::thread> threads;
+    std::vector<socket_ptr_t> sockets;
 
-		basyx::log log;
+    bool closed;
+    std::atomic_bool running;
 
-	public:
-		TCPServer(Backend * backend, int port)
-			: backend{ backend }
-			, running{ true }
-			, io_context{ 0 }
-			, acceptor{ io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port) }
-			, log{ "TCPServer" }
-		{
-			// ToDo: Check health of acceptor
-			log.info("Starting server on port {}", port);
-//			acceptor.listen();
-			start_accept();
-		}
+    basyx::log log;
 
-		void run()
-		{
-			this->io_context.run();
-		};
+public:
+    TCPServer(Backend* backend, int port)
+        : backend { backend }
+        , running { true }
+        , io_context { 0 }
+        , acceptor { io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port) }
+        , log { "TCPServer" }
+    {
+        // ToDo: Check health of acceptor
+        log.info("Starting server on port {}", port);
+        //			acceptor.listen();
+        start_accept();
+    }
 
-		void stop()
-		{
-			this->io_context.stop();
-		};
+    void run()
+    {
+        this->io_context.run();
+    };
 
-		void start_accept()
-		{
-			asio::error_code ec;
-			auto client_socket = util::make_unique<asio::ip::tcp::socket>(io_context);
-			//this->acceptor.accept(*client_socket.get(), ec);
+    void stop()
+    {
+        this->io_context.stop();
+    };
 
-			//auto error = WSAGetLastError();
+    void start_accept()
+    {
+        asio::error_code ec;
+        auto client_socket = util::make_unique<asio::ip::tcp::socket>(io_context);
+        //this->acceptor.accept(*client_socket.get(), ec);
 
-			//if (!client_socket->is_open()) {
-			//	log.warn("Incoming connection failed");
-			//	return;
-			//}
-			sockets.emplace_back(std::move(client_socket));
+        //auto error = WSAGetLastError();
 
-			acceptor.async_accept(*sockets.back(),
-				std::bind(&TCPServer::handle_accept, this,
-					std::placeholders::_1));
-		};
+        //if (!client_socket->is_open()) {
+        //	log.warn("Incoming connection failed");
+        //	return;
+        //}
+        sockets.emplace_back(std::move(client_socket));
 
-		void handle_accept(
-			const asio::error_code& error)
-		{
-			if (!error)
-			{
-				log.info("Incoming new connection");
+        acceptor.async_accept(*sockets.back(),
+            std::bind(&TCPServer::handle_accept, this,
+                std::placeholders::_1));
+    };
 
-				std::thread handlerThread{ &TCPServer<Backend>::processConnection, this, std::ref(*sockets.back()) };
-				threads.emplace_back(std::move(handlerThread));
-			}
-			else
-			{
-				sockets.pop_back();
-			}
+    void handle_accept(
+        const asio::error_code& error)
+    {
+        if (!error) {
+            log.info("Incoming new connection");
 
-			start_accept();
-		};
+            std::thread handlerThread { &TCPServer<Backend>::processConnection, this, std::ref(*sockets.back()) };
+            threads.emplace_back(std::move(handlerThread));
+        } else {
+            sockets.pop_back();
+        }
 
-		void Close()
-		{
-			log.trace("Closing...");
+        start_accept();
+    };
 
-			if (!isRunning())
-				return;
+    void Close()
+    {
+        log.trace("Closing...");
 
-			running.store(false);
-			this->stop();
+        if (!isRunning())
+            return;
 
-			//// Close the acceptor socket
-			//log.trace("Closing Acceptor...");
-			//acceptor.close();
+        running.store(false);
+        this->stop();
 
-			// Close all accepted connections
-			// This will bring all open connection threads to a finish
-			log.trace("Closing open connections...");
-			for (auto& socket : sockets)
-			{
-				try {
-					if (socket->is_open())
-						socket->close();
-				}
-				catch (std::exception & e)
-				{
-					log.warn("Socket closed unexpectedly.");
-				}
-			};
+        //// Close the acceptor socket
+        //log.trace("Closing Acceptor...");
+        //acceptor.close();
 
-			// Wait for all threads to finish
-			for (auto& thread : threads)
-				thread.join();
+        // Close all accepted connections
+        // This will bring all open connection threads to a finish
+        log.trace("Closing open connections...");
+        for (auto& socket : sockets) {
+            try {
+                if (socket->is_open())
+                    socket->close();
+            } catch (std::exception& e) {
+                log.warn("Socket closed unexpectedly.");
+            }
+        };
 
-			// ToDo: Check for errors during cleanup
-		}
+        // Wait for all threads to finish
+        for (auto& thread : threads)
+            thread.join();
 
-		~TCPServer()
-		{
-			this->Close();
-		}
+        // ToDo: Check for errors during cleanup
+    }
 
-		/**
-		* Has to be called periodically
-		*/
-		void update()
-		{
-			if (isRunning()) {
-				log.info("Accepting new connections.");
+    ~TCPServer()
+    {
+        this->Close();
+    }
 
-				auto ClientSocket = util::make_unique<asio::ip::tcp::socket>(io_context);
-				this->acceptor.accept(*ClientSocket.get());
+    /**
+    * Has to be called periodically
+    */
+    void update()
+    {
+        if (isRunning()) {
+            log.info("Accepting new connections.");
 
-				//auto error = WSAGetLastError();
+            auto ClientSocket = util::make_unique<asio::ip::tcp::socket>(io_context);
+            this->acceptor.accept(*ClientSocket.get());
 
-				if (!ClientSocket->is_open()) {
-					log.warn("Incoming connection failed");
-					return;
-				}
+            //auto error = WSAGetLastError();
 
-				log.info("Incoming new connection");
-				sockets.emplace_back(std::move(ClientSocket));
+            if (!ClientSocket->is_open()) {
+                log.warn("Incoming connection failed");
+                return;
+            }
 
-				std::thread handlerThread{ &TCPServer<Backend>::processConnection, this, std::ref(*sockets.back()) };
-				threads.emplace_back(std::move(handlerThread));
-			}
-		}
+            log.info("Incoming new connection");
+            sockets.emplace_back(std::move(ClientSocket));
 
-		bool isRunning()
-		{
-			return running.load();
-		}
+            std::thread handlerThread { &TCPServer<Backend>::processConnection, this, std::ref(*sockets.back()) };
+            threads.emplace_back(std::move(handlerThread));
+        }
+    }
 
-	private:
-		/**
-	* Handles a BaSyxNativeProvider
-	*/
-		void processConnection(asio::ip::tcp::socket & socket)
-		{
-			log.trace("Processing new connection");
+    bool isRunning()
+    {
+        return running.load();
+    }
 
-			vab::provider::native::frame::BaSyxNativeFrameProcessor processor{ this->backend };
-			vab::provider::native::NativeProvider provider{ socket, &processor };
+private:
+    /**
+* Handles a BaSyxNativeProvider
+*/
+    void processConnection(asio::ip::tcp::socket& socket)
+    {
+        log.trace("Processing new connection");
 
-			while (!provider.isClosed()) {
-				provider.update();
-			}
-		}
-	};
+        vab::provider::native::frame::BaSyxNativeFrameProcessor processor { this->backend };
+        vab::provider::native::NativeProvider provider { socket, &processor };
+
+        while (!provider.isClosed()) {
+            provider.update();
+        }
+    }
+};
 };
 };
 
-#endif /* VAB_VAB_PROVIDER_NATIVE_BASYXTCPSERVER_2_H */
+#endif /* BASYX_SERVER_TCPSERVER_H */

@@ -1,6 +1,6 @@
-#ifndef _JSON_H
-#define _JSON_H
+#ifndef BASYX_SHARED_SERIALIZATION_JSON_H
+#define BASYX_SHARED_SERIALIZATION_JSON_H
 
 #include <BaSyx/shared/serialization/json/json.h>
 
-#endif /* _JSON_H */
+#endif /* BASYX_SHARED_SERIALIZATION_JSON_H */

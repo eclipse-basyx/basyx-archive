@@ -20,4 +20,4 @@ inline IModelType::~IModelType() = default;
 }
 }
 
-#endif /* BASYX_SUBMODEL_API_V2_COMMON_IELEMENTCONTAINER_H */
+#endif /* BASYX_SUBMODEL_API_V2_COMMON_IMODELTYPE_H */

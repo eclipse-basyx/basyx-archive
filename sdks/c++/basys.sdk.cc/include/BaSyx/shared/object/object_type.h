@@ -1,5 +1,5 @@
-#ifndef BASYX_object_object_TYPE_H
-#define BASYX_object_object_TYPE_H
+#ifndef BASYX_SHARED_OBJECT_OBJECT_TYPE_H
+#define BASYX_SHARED_OBJECT_OBJECT_TYPE_H
 
 #include <string>
 #include <vector>
@@ -178,4 +178,4 @@ namespace util {
 	template<> inline std::string to_string<basyx::type::valueType::Object>() { return "Object"; };
 }
 
-#endif
+#endif /* BASYX_SHARED_OBJECT_OBJECT_TYPE_H */

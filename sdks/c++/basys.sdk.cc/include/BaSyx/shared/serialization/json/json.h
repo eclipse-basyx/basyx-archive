@@ -5,8 +5,8 @@
  *      Author: psota
  */
 
-#ifndef BASYX_SERIALIZATION_JSON_JSON_H
-#define BASYX_SERIALIZATION_JSON_JSON_H
+#ifndef BASYX_SHARED_SERIALIZATION_JSON_JSON_H
+#define BASYX_SHARED_SERIALIZATION_JSON_JSON_H
 
 #include <nlohmann/json.hpp>
 
@@ -49,4 +49,4 @@ namespace json {
 };
 };
 
-#endif /* BASYX_SERIALIZATION_JSON_JSON_H */
+#endif /* BASYX_SHARED_SERIALIZATION_JSON_JSON_H */

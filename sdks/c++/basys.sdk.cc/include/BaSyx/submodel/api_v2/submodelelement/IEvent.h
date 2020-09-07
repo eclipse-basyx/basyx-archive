@@ -1,5 +1,5 @@
-#ifndef BASYX_API_V2_SDK_IEVENT_H
-#define BASYX_API_V2_SDK_IEVENT_H
+#ifndef BASYX_SUBMODEL_API_V2_SUBMODELELEMENT_IEVENT_H
+#define BASYX_SUBMODEL_API_V2_SUBMODELELEMENT_IEVENT_H
 
 #include <BaSyx/submodel/api_v2/submodelelement/ISubmodelElement.h>
 
@@ -21,4 +21,4 @@ inline IEvent::~IEvent() = default;
 }
 }
 }
-#endif //BASYX_API_V2_SDK_IEVENT_H
+#endif /* BASYX_SUBMODEL_API_V2_SUBMODELELEMENT_IEVENT_H */

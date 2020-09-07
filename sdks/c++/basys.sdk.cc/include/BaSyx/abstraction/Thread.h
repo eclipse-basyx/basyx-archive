@@ -1,3 +1,6 @@
+#ifndef BASYX_ABSTRACTION_THREAD_H
+#define BASYX_ABSTRACTION_THREAD_H
+
 /*
  * Thread.h
  *
@@ -6,3 +9,5 @@
  */
 
 #include <BaSyx/abstraction/thread/Thread.h>
+
+#endif /* BASYX_ABSTRACTION_THREAD_H */

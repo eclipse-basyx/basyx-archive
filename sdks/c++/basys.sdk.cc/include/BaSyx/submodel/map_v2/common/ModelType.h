@@ -46,4 +46,4 @@ ModelTypes ModelType<modelType>::GetModelType() const
 }
 }
 
-#endif /* BASYX_SUBMODEL_MAP_V2_COMMON_LANGSTRINGSET_H */
+#endif /* BASYX_SUBMODEL_MAP_V2_COMMON_MODELTYPE_H */

@@ -23,4 +23,4 @@ public:
 }
 }
 
-#endif
+#endif /* BASYX_SUBMODEL_MAP_V2_COMMON_SUBMODELCONTAINER_H */
