@@ -59,7 +59,7 @@ public class Property extends DataElement implements IProperty {
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained (fallback)
 		return MODELTYPE.equals(modelType)
-				|| (map.containsKey(VALUE) && map.containsKey(VALUETYPE));
+				|| (modelType == null && (map.containsKey(VALUE) && map.containsKey(VALUETYPE)));
 	}
 
 	/**

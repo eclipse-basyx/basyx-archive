@@ -3,7 +3,6 @@ package org.eclipse.basyx.submodel.metamodel.facade.submodelelement;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
@@ -31,34 +30,32 @@ public class SubmodelElementFacadeFactory {
 	 * @return the actual of the given SubmodelElement map created as facade
 	 */
 	public static ISubmodelElement createSubmodelElement(Map<String, Object> submodelElement) {
-		String type = ModelType.createAsFacade(submodelElement).getName();
-		
-		switch (type) {
-			case Property.MODELTYPE:
-				return Property.createAsFacade(submodelElement);
-			case BasicEvent.MODELTYPE:
-				return BasicEvent.createAsFacade(submodelElement);
-			case MultiLanguageProperty.MODELTYPE:
-				return MultiLanguageProperty.createAsFacade(submodelElement);
-			case Range.MODELTYPE:
-				return Range.createAsFacade(submodelElement);
-			case Entity.MODELTYPE:
-				return Entity.createAsFacade(submodelElement);
-			case File.MODELTYPE:
-				return File.createAsFacade(submodelElement);
-			case Blob.MODELTYPE:
-				return Blob.createAsFacade(submodelElement);
-			case ReferenceElement.MODELTYPE:
-				return ReferenceElement.createAsFacade(submodelElement);
-			case SubmodelElementCollection.MODELTYPE:
-				return SubmodelElementCollection.createAsFacade(submodelElement);
-			case RelationshipElement.MODELTYPE:
-				return RelationshipElement.createAsFacade(submodelElement);
-			case Operation.MODELTYPE:
-				return Operation.createAsFacade(submodelElement);
-			default:
-				throw new RuntimeException("Can not create a submodel element from given map");
+		if (Property.isProperty(submodelElement)) {
+			return Property.createAsFacade(submodelElement);
+		} else if (Blob.isBlob(submodelElement)) {
+			return Blob.createAsFacade(submodelElement);
+		} else if (File.isFile(submodelElement)) {
+			return File.createAsFacade(submodelElement);
+		} else if (SubmodelElementCollection.isSubmodelElementCollection(submodelElement)) {
+			return SubmodelElementCollection.createAsFacade(submodelElement);
+		} else if (MultiLanguageProperty.isMultiLanguageProperty(submodelElement)) {
+			return MultiLanguageProperty.createAsFacade(submodelElement);
+		} else if (Entity.isEntity(submodelElement)) {
+			return Entity.createAsFacade(submodelElement);
+		} else if (Range.isRange(submodelElement)) {
+			return Range.createAsFacade(submodelElement);
+		} else if (ReferenceElement.isReferenceElement(submodelElement)) {
+			return ReferenceElement.createAsFacade(submodelElement);
+		} else if (RelationshipElement.isRelationshipElement(submodelElement)) {
+			return RelationshipElement.createAsFacade(submodelElement);
+		} else if (Operation.isOperation(submodelElement)) {
+			return Operation.createAsFacade(submodelElement);
+		} else if (BasicEvent.isBasicEvent(submodelElement)) {
+			return BasicEvent.createAsFacade(submodelElement);
+		} else {
+			throw new RuntimeException("Can not create a submodel element from given map");
 		}
 	}
+
 	
 }

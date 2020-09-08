@@ -62,7 +62,8 @@ public class Blob extends DataElement implements IBlob {
 		// Either model type is set or the element type specific attributes are contained (fallback)
 		// Note: Fallback is ambiguous - File has exactly the same attributes
 		// => would need value parsing in order to be able to differentiate
-		return MODELTYPE.equals(modelType) || (map.containsKey(Property.VALUE) && map.containsKey(MIMETYPE));
+		return MODELTYPE.equals(modelType)
+				|| (modelType == null && (map.containsKey(Property.VALUE) && map.containsKey(MIMETYPE)));
 	}
 
 	public void setValue(byte[] value) {

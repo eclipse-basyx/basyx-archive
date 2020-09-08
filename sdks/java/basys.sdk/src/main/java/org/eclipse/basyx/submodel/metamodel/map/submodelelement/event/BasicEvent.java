@@ -53,7 +53,7 @@ public class BasicEvent extends SubmodelElement implements IBasicEvent {
 	public static boolean isBasicEvent(Map<String, Object> map) {
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained (fallback)
-		return MODELTYPE.equals(modelType) || map.containsKey(OBSERVED);
+		return MODELTYPE.equals(modelType) || (modelType == null && map.containsKey(OBSERVED));
 	}
 
 	@Override

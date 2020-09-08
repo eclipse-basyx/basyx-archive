@@ -86,8 +86,8 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	public static boolean isSubmodelElementCollection(Map<String, Object> map) {
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained (fallback)
-		return MODELTYPE.equals(modelType)
-				|| (map.containsKey(Property.VALUE) && map.containsKey(ORDERED) && map.containsKey(ALLOWDUPLICATES));
+		return MODELTYPE.equals(modelType) || (modelType == null
+				&& (map.containsKey(Property.VALUE) && map.containsKey(ORDERED) && map.containsKey(ALLOWDUPLICATES)));
 	}
 
 	/**

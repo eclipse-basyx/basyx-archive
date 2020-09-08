@@ -51,6 +51,12 @@ public class Entity extends SubmodelElement implements IEntity {
 		put(ENTITY_TYPE, entityType.toString());
 	}
 
+	public static boolean isEntity(Map<String, Object> map) {
+		String modelType = ModelType.createAsFacade(map).getName();
+		// Either model type is set or the element type specific attributes are contained (fallback)
+		return MODELTYPE.equals(modelType) || (modelType == null && map.containsKey(Entity.STATEMENT));
+	}
+
 	/**
 	 * Creates an Entity object from a map
 	 * 
@@ -90,5 +96,4 @@ public class Entity extends SubmodelElement implements IEntity {
 	protected KeyElements getKeyElement() {
 		return KeyElements.ENTITY;
 	}
-
 }

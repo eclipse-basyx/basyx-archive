@@ -111,7 +111,8 @@ public class Operation extends SubmodelElement implements IOperation {
 	public static boolean isOperation(Map<String, Object> map) {
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained
-		return MODELTYPE.equals(modelType) || (map.containsKey(IN) && map.containsKey(OUT) && map.containsKey(INOUT));
+		return MODELTYPE.equals(modelType)
+				|| (modelType == null && (map.containsKey(IN) && map.containsKey(OUT) && map.containsKey(INOUT)));
 	}
 
 	@Override

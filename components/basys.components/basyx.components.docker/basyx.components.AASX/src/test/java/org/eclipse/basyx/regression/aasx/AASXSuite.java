@@ -1,6 +1,7 @@
 package org.eclipse.basyx.regression.aasx;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -93,7 +94,8 @@ public class AASXSuite {
 
 	@Test
 	public void testGetSingleModule() throws Exception {
-		checkFile("aasx/Nameplate/marking_rcm.jpg");
+		final String FILE_PATH = "aasx/Nameplate/marking_rcm.jpg";
+		checkFile(FILE_PATH);
 
 		// Get the submdoel nameplate
 		ISubModel nameplate = getConnectedSubmodel();
@@ -110,7 +112,7 @@ public class AASXSuite {
 				// get value of the file element
 
 				String fileurl = connectedFile.getValue();
-				assertEquals("http://localhost:4000/aasx/docs/marking_rcm.jpg", fileurl);
+				assertTrue(fileurl.endsWith(FILE_PATH));
 			}
 		}
 	}

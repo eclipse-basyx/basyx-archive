@@ -62,10 +62,11 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained (fallback)
 		// Ambiguous - fallback could be further improved by parsing the value and recognizing references
-		return MODELTYPE.equals(modelType) || (map.containsKey(Property.VALUE) && !map.containsKey(Property.VALUETYPE)
+		return MODELTYPE.equals(modelType)
+				|| (modelType == null && (map.containsKey(Property.VALUE) && !map.containsKey(Property.VALUETYPE)
 				&& !map.containsKey(Property.VALUEID) && !map.containsKey(File.MIMETYPE)
 				&& !map.containsKey(SubmodelElementCollection.ORDERED)
-				&& !map.containsKey(SubmodelElementCollection.ALLOWDUPLICATES));
+						&& !map.containsKey(SubmodelElementCollection.ALLOWDUPLICATES)));
 	}
 
 	public void setValue(IReference ref) {

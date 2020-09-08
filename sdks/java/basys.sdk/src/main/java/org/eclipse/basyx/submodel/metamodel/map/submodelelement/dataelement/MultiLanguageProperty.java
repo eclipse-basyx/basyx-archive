@@ -53,8 +53,8 @@ public class MultiLanguageProperty extends DataElement implements IMultiLanguage
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained (fallback)
 		return MODELTYPE.equals(modelType)
-				|| (map.containsKey(VALUE) && map.containsKey(VALUE) && map.containsKey(VALUEID)
-						&& !map.containsKey(Property.VALUETYPE));
+				|| (modelType == null && (map.containsKey(VALUE) && map.containsKey(VALUE) && map.containsKey(VALUEID)
+						&& !map.containsKey(Property.VALUETYPE)));
 	}
 
 	@Override

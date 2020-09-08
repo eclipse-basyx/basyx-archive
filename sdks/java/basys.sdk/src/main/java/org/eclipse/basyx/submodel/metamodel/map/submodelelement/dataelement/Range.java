@@ -55,7 +55,7 @@ public class Range extends DataElement implements IRange {
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained (fallback)
 		return MODELTYPE.equals(modelType)
-				|| (map.containsKey(MIN) && map.containsKey(MAX) && map.containsKey(VALUETYPE));
+				|| (modelType == null && (map.containsKey(MIN) && map.containsKey(MAX) && map.containsKey(VALUETYPE)));
 	}
 
 	@Override
