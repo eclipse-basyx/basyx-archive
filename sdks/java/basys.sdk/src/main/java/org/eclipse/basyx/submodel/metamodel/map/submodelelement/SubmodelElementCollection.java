@@ -137,7 +137,7 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	@SuppressWarnings("unchecked")
 	public Collection<ISubmodelElement> getValue() {
 		Collection<ISubmodelElement> ret = new ArrayList<>();
-		Collection<Object> smElems = (ArrayList<Object>) get(Property.VALUE);
+		Collection<Object> smElems = (Collection<Object>) get(Property.VALUE);
 		for(Object smElemO: smElems) {
 			Map<String, Object> smElem = (Map<String, Object>) smElemO;
 			ret.add(SubmodelElementFacadeFactory.createSubmodelElement(smElem));
