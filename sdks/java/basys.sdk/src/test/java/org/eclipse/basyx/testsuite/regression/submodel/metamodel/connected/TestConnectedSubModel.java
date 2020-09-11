@@ -33,6 +33,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.Rel
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
+import org.eclipse.basyx.vab.support.TypeDestroyer;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,7 +59,8 @@ public class TestConnectedSubModel {
 
 	private final static Reference testSemanticIdRef = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "testVal", IdentifierType.CUSTOM));
 
-	ConnectedSubModel submodel;
+	private ConnectedSubModel submodel;
+	private SubModel localSubmodel;
 
 	@Before
 	public void build() {
@@ -73,13 +75,13 @@ public class TestConnectedSubModel {
 		op.setIdShort(OP);
 
 		// Create the SubModel using the created property and operation
-		SubModel sm = new SubModel();
-		sm.addSubModelElement(propertyMeta);
-		sm.addSubModelElement(op);
-		sm.setIdShort(ID);
-		sm.setSemanticId(testSemanticIdRef);
+		localSubmodel = new SubModel();
+		localSubmodel.addSubModelElement(propertyMeta);
+		localSubmodel.addSubModelElement(op);
+		localSubmodel.setIdShort(ID);
+		localSubmodel.setSemanticId(testSemanticIdRef);
 
-		SubModelProvider provider = new SubModelProvider(new TypeDestroyingProvider(new VABLambdaProvider(sm)));
+		SubModelProvider provider = new SubModelProvider(new TypeDestroyingProvider(new VABLambdaProvider(localSubmodel)));
 
 		// Create the ConnectedSubModel based on the manager
 		submodel = new ConnectedSubModel(new VABConnectionManagerStub(provider).connectToVABElement(""));
@@ -214,6 +216,13 @@ public class TestConnectedSubModel {
 		assertEquals(expected, property.getParent());
 	} 
 	
+	@Test
+	public void testGetLocalCopy() {
+		System.out.println(TypeDestroyer.destroyType(localSubmodel));
+		System.out.println(submodel.getLocalCopy());
+		assertEquals(localSubmodel, submodel.getLocalCopy());
+	}
+
 	/**
 	 * Generates test IDataElements
 	 */
@@ -297,6 +306,7 @@ public class TestConnectedSubModel {
 		assertEquals(expectedOperation.getIdShort(), actualOperation.getIdShort());
 	}
 	
+
 	/**
 	 * Checks if the given Map contains all expected ISubmodelElements
 	 */

@@ -16,6 +16,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDat
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementFactory;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
@@ -139,5 +140,16 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 	@Override
 	public IReference getReference() {
 		return Identifiable.createAsFacade(getElem(), getKeyElement()).getReference();
+	}
+
+	/**
+	 * Returns a local copy of the submodel, i.e. a snapshot of the current state.
+	 * <br>
+	 * No changes of this copy are reflected in the remote Submodel
+	 * 
+	 * @return the local copy
+	 */
+	public SubModel getLocalCopy() {
+		return SubModel.createAsFacade(getElem());
 	}
 }
