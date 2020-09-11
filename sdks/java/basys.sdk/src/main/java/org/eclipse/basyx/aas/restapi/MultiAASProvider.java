@@ -2,7 +2,9 @@ package org.eclipse.basyx.aas.restapi;
 
 import java.util.HashMap;
 
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -46,12 +48,13 @@ public class MultiAASProvider implements IModelProvider {
 		if (aasId != null) {
 			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
 			if (provider == null) {
-				return null;
+				throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 			}
 			String subPath = getSubPath(path, aasId);
 			return provider.getModelPropertyValue(subPath);
+		} else {
+			throw new MalformedRequestException("No AASId specified.");
 		}
-		return null;
 	}
 
 	@Override
@@ -60,10 +63,12 @@ public class MultiAASProvider implements IModelProvider {
 		if (aasId != null) {
 			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
 			if (provider == null) {
-				return;
+				throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 			}
 			String subPath = getSubPath(path, aasId);
 			provider.setModelPropertyValue(subPath, newValue);
+		} else {
+			throw new MalformedRequestException("No AASId specified.");
 		}
 	}
 
@@ -73,10 +78,12 @@ public class MultiAASProvider implements IModelProvider {
 		if (aasId != null) {
 			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
 			if (provider == null) {
-				return;
+				throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 			}
 			String subPath = getSubPath(path, aasId);
 			provider.createValue(subPath, newEntity);
+		} else {
+			throw new MalformedRequestException("No AASId specified.");
 		}
 	}
 
@@ -86,10 +93,12 @@ public class MultiAASProvider implements IModelProvider {
 		if (aasId != null) {
 			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
 			if (provider == null) {
-				return;
+				throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 			}
 			String subPath = getSubPath(path, aasId);
 			provider.deleteValue(subPath);
+		} else {
+			throw new MalformedRequestException("No AASId specified.");
 		}
 	}
 
@@ -99,10 +108,12 @@ public class MultiAASProvider implements IModelProvider {
 		if (aasId != null) {
 			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
 			if (provider == null) {
-				return;
+				throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 			}
 			String subPath = getSubPath(path, aasId);
 			provider.deleteValue(subPath, obj);
+		} else {
+			throw new MalformedRequestException("No AASId specified.");
 		}
 	}
 
@@ -112,12 +123,13 @@ public class MultiAASProvider implements IModelProvider {
 		if (aasId != null) {
 			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
 			if (provider == null) {
-				return null;
+				throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 			}
 			String subPath = getSubPath(path, aasId);
 			return provider.invokeOperation(subPath, parameter);
+		} else {
+			throw new MalformedRequestException("No AASId specified.");
 		}
-		return null;
 	}
 
 	/**
