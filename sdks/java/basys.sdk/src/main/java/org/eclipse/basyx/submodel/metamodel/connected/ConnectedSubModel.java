@@ -44,18 +44,17 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 	}
 
 	protected KeyElements getKeyElement() {
-		return KeyElements.SUBMODELELEMENT;
+		return KeyElements.SUBMODEL;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getSemanticId() {
-		return Reference.createAsFacade((Map<String, Object>) getElem().get(HasSemantics.SEMANTICID));
+		return HasSemantics.createAsFacade(getElem()).getSemanticId();
 	}
 
 	@Override
 	public IAdministrativeInformation getAdministration() {
-		return AdministrativeInformation.createAsFacade(getElem());
+		return Identifiable.createAsFacade(getElem(), getKeyElement()).getAdministration();
 	}
 
 	@Override
@@ -93,10 +92,9 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 		return Referable.createAsFacade(getElem(), getKeyElement()).getDescription();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getParent() {
-		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(Referable.PARENT));
+		return Referable.createAsFacade(getElem(), getKeyElement()).getParent();
 	}
 	
 	@Override
