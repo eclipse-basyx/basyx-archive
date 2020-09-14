@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
+import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
@@ -27,7 +28,7 @@ public class AASAggregatorProxy implements IAASAggregator {
 	 *            The endpoint of the aggregator with a HTTP-REST interface
 	 */
 	public AASAggregatorProxy(String aasAggregatorURL) {
-		this(new JSONConnector(new HTTPConnector(aasAggregatorURL)));
+		this(new JSONConnector(new HTTPConnector(aasAggregatorURL + "/" + AASAggregatorProvider.PREFIX)));
 	}
 
 	/**
