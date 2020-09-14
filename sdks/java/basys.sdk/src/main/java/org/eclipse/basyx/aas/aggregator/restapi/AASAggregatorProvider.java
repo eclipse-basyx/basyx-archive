@@ -29,7 +29,7 @@ public class AASAggregatorProvider implements IModelProvider {
 	
 	private IAASAggregator aggregator;
 	
-	private static final String PREFIX = "aasList";
+	public static final String PREFIX = "aasList";
 	private static final String ENCODING_SCHEME = "UTF-8";
 	
 	public AASAggregatorProvider(IAASAggregator aggregator) {
