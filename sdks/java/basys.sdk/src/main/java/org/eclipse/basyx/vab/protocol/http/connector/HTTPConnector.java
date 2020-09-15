@@ -1,5 +1,6 @@
 package org.eclipse.basyx.vab.protocol.http.connector;
 
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -14,6 +15,8 @@ import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.netty.handler.codec.http.HttpMethod;
 
 /**
  * HTTP connector class
@@ -159,7 +162,12 @@ public class HTTPConnector implements IBaSyxConnector {
 		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
-		Response rsp = request.get();
+		Response rsp;
+		try {
+			rsp = request.get();
+		} catch (ProcessingException e) {
+			throw this.handleProcessingException(HttpMethod.GET, e);
+		}
 
 		// Return response message (header)
 		return rsp.readEntity(String.class);
@@ -171,7 +179,12 @@ public class HTTPConnector implements IBaSyxConnector {
 		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
-		Response rsp = request.put(Entity.entity(newValue, mediaType));
+		Response rsp;
+		try {
+			rsp = request.put(Entity.entity(newValue, mediaType));
+		} catch (ProcessingException e) {
+			throw this.handleProcessingException(HttpMethod.PUT, e);
+		}
 
 		// Return response message (header)
 		return rsp.readEntity(String.class);
@@ -185,7 +198,12 @@ public class HTTPConnector implements IBaSyxConnector {
 		Client client = ClientBuilder.newClient();
 
 		// Create and invoke HTTP PATCH request
-		Response rsp = client.target(VABPathTools.concatenatePaths(address, servicePath)).request().build("PATCH", Entity.text(newValue)).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
+		Response rsp;
+		try {
+			rsp = client.target(VABPathTools.concatenatePaths(address, servicePath)).request().build("PATCH", Entity.text(newValue)).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
+		} catch (ProcessingException e) {
+			throw this.handleProcessingException(HttpMethod.PATCH, e);
+		}
 
 		// Return response message (header)
 		return rsp.readEntity(String.class);
@@ -197,7 +215,12 @@ public class HTTPConnector implements IBaSyxConnector {
 		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
-		Response rsp = request.post(Entity.entity(parameter, mediaType));
+		Response rsp;
+		try {
+			rsp = request.post(Entity.entity(parameter, mediaType));
+		} catch (ProcessingException e) {
+			throw this.handleProcessingException(HttpMethod.POST, e);
+		}
 
 		// Return response message (header)
 		return rsp.readEntity(String.class);
@@ -209,7 +232,12 @@ public class HTTPConnector implements IBaSyxConnector {
 		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
-		Response rsp = request.delete();
+		Response rsp;
+		try {
+			rsp = request.delete();
+		} catch (ProcessingException e) {
+			throw this.handleProcessingException(HttpMethod.DELETE, e);
+		}
 
 		// Return response message (header)
 		return rsp.readEntity(String.class);
@@ -231,4 +259,7 @@ public class HTTPConnector implements IBaSyxConnector {
 		return buildRequest(client, VABPathTools.concatenatePaths(address, servicePath));
 	}
 
+	private ProviderException handleProcessingException(HttpMethod method, ProcessingException e) {
+		return new ProviderException("[HTTP " + method.name() + "] Failed to request " + this.address + " with mediatype " + this.mediaType);
+	}
 }

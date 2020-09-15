@@ -35,6 +35,12 @@ public class ProviderException extends RuntimeException {
 	}
 
 
+	public ProviderException(String message, Throwable cause) {
+		super(cause);
+		this.message = message;
+	}
+
+
 	/**
 	 * Return detailed message
 	 */
