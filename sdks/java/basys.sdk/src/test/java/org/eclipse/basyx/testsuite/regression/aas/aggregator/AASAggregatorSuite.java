@@ -25,7 +25,9 @@ import org.junit.Test;
 public abstract class AASAggregatorSuite {
 
 	protected AssetAdministrationShell aas1;
-	private static final String aas1Id = "aas1";
+
+	// Choose AAS Id that needs encoding due to '/'
+	private static final String aas1Id = "aas1/s";
 	private static final LangStrings description1 = new LangStrings("en", "This is test AAS 1");
 	private static final String aas1Category = "TestCategory1";
 	private static final String aas1AltCategory = "OtherTestCategory1";

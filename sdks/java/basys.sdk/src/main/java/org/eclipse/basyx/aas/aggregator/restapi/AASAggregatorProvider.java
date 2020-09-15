@@ -1,7 +1,5 @@
 package org.eclipse.basyx.aas.aggregator.restapi;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
@@ -30,7 +28,6 @@ public class AASAggregatorProvider implements IModelProvider {
 	private IAASAggregator aggregator;
 	
 	public static final String PREFIX = "aasList";
-	private static final String ENCODING_SCHEME = "UTF-8";
 	
 	public AASAggregatorProvider(IAASAggregator aggregator) {
 		this.aggregator = aggregator;
@@ -96,11 +93,11 @@ public class AASAggregatorProvider implements IModelProvider {
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
 			if (splitted.length == 1) { // A specific AAS was requested
-				String id = decodePath(splitted[0]);
+				String id = VABPathTools.decodePathElement(splitted[0]);
 				IAssetAdministrationShell aas = aggregator.getAAS(new ModelUrn(id));
 				return aas;
 			} else {
-				String id = decodePath(splitted[0]);
+				String id = VABPathTools.decodePathElement(splitted[0]);
 				String restPath = VABPathTools.skipEntries(path, 1);
 				IIdentifier identifier = new Identifier(IdentifierType.CUSTOM, id);
 				return aggregator.getAASProvider(identifier).getModelPropertyValue(restPath);
@@ -117,7 +114,7 @@ public class AASAggregatorProvider implements IModelProvider {
 
 				AssetAdministrationShell aas = createAASFromMap(newValue);
 				// Decode encoded path
-				path = decodePath(path);
+				path = VABPathTools.decodePathElement(path);
 				ModelUrn identifier = new ModelUrn(path);
 
 				if (!aas.getIdentification().getId().equals(path)) {
@@ -130,7 +127,7 @@ public class AASAggregatorProvider implements IModelProvider {
 
 				aggregator.updateAAS(aas);
 			} else { // Update of contained element
-				String id = decodePath(VABPathTools.getEntry(path, 0));
+				String id = VABPathTools.decodePathElement(VABPathTools.getEntry(path, 0));
 				String restPath = VABPathTools.skipEntries(path, 1);
 				IIdentifier identifier = new Identifier(IdentifierType.CUSTOM, id);
 				aggregator.getAASProvider(identifier).setModelPropertyValue(restPath, newValue);
@@ -154,7 +151,7 @@ public class AASAggregatorProvider implements IModelProvider {
 			}
 			
 		} else {
-			String id = decodePath(VABPathTools.getEntry(path, 0));
+			String id = VABPathTools.decodePathElement(VABPathTools.getEntry(path, 0));
 			String restPath = VABPathTools.skipEntries(path, 1);
 			IIdentifier identifier = new Identifier(IdentifierType.CUSTOM, id);
 			aggregator.getAASProvider(identifier).createValue(restPath, newEntity);
@@ -167,19 +164,17 @@ public class AASAggregatorProvider implements IModelProvider {
 		path = stripPrefix(path);
 
 		if (!path.isEmpty()) { // Deleting an entry
-			// Decode encoded path
-			path = decodePath(path);
-			
 			if (!path.contains("/")) {
-				IIdentifier identifier = new ModelUrn(path);
+				String aasId = VABPathTools.decodePathElement(path);
+				IIdentifier identifier = new ModelUrn(aasId);
 
 				if (aggregator.getAAS(identifier) == null) {
-					throw new ResourceNotFoundException("Value '" + path + "' to be deleted does not exists.");
+					throw new ResourceNotFoundException("Value '" + aasId + "' to be deleted does not exists.");
 				}
 
 				aggregator.deleteAAS(identifier);
 			} else {
-				String id = decodePath(VABPathTools.getEntry(path, 0));
+				String id = VABPathTools.decodePathElement(VABPathTools.getEntry(path, 0));
 				String restPath = VABPathTools.skipEntries(path, 1);
 				IIdentifier identifier = new Identifier(IdentifierType.CUSTOM, id);
 				aggregator.getAASProvider(identifier).deleteValue(restPath);
@@ -187,22 +182,6 @@ public class AASAggregatorProvider implements IModelProvider {
 		} else {
 			throw new MalformedRequestException("Delete with empty path is not supported by registry");
 		}
-	}
-
-	/**
-	 * Decodes the given path using the default encoding scheme
-	 * 
-	 * @param path
-	 * @return
-	 */
-	private String decodePath(String path) {
-		try {
-			path = URLDecoder.decode(path, ENCODING_SCHEME);
-		} catch (UnsupportedEncodingException e) {
-			// This should never happen
-			throw new RuntimeException("Wrong encoding for " + path);
-		}
-		return path;
 	}
 
 	@Override
@@ -213,7 +192,7 @@ public class AASAggregatorProvider implements IModelProvider {
 	@Override
 	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
 		path = stripPrefix(path);
-		String id = decodePath(VABPathTools.getEntry(path, 0));
+		String id = VABPathTools.decodePathElement(VABPathTools.getEntry(path, 0));
 		String restPath = VABPathTools.skipEntries(path, 1);
 		IIdentifier identifier = new Identifier(IdentifierType.CUSTOM, id);
 		return aggregator.getAASProvider(identifier).invokeOperation(restPath, parameter);

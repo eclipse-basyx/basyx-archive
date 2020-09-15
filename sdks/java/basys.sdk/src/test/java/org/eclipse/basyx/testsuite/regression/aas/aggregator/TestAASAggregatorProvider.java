@@ -45,7 +45,7 @@ public class TestAASAggregatorProvider extends AASAggregatorSuite {
 		AASAggregatorProvider provider = new AASAggregatorProvider(aggregator);
 
 		// Test feedthrough of GET
-		String aasPath = "/aasList/" + aas1.getIdentification().getId() + "/aas";
+		String aasPath = "/aasList/" + VABPathTools.encodePathElement(aas1.getIdentification().getId()) + "/aas";
 		AssetAdministrationShell retrievedAAS = retrieveAAS(provider, aasPath);
 		assertEquals(aas1.getIdentification(), retrievedAAS.getIdentification());
 
