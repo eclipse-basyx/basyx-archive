@@ -12,6 +12,8 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -142,6 +144,24 @@ public abstract class AASAggregatorSuite {
 		}
 	}
 	
+	@After
+	public void deleteExistingAAS() {
+		IAASAggregator aggregator = getAggregator();
+
+		// Delete aas1 if exists
+		try {
+			aggregator.deleteAAS(new ModelUrn(aas1Id));
+		} catch (ResourceNotFoundException e) {
+			// do nothing
+		}
+
+		// Delete aas2 if exists
+		try {
+			aggregator.deleteAAS(new ModelUrn(aas2Id));
+		} catch (ResourceNotFoundException e) {
+			// do nothing
+		}
+	}
 	// Methods to verify, that AAS objects contain the correct test data
 	private void checkAAS1(Object o) {
 		assertTrue(o instanceof AssetAdministrationShell);

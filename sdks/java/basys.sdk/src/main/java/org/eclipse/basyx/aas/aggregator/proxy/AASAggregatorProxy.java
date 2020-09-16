@@ -72,7 +72,7 @@ public class AASAggregatorProxy implements IAASAggregator {
 	@Override
 	public void deleteAAS(IIdentifier aasId) {
 		provider.deleteValue(getEncodedIdentifier(aasId));
-		logger.info("AAS with Id " + aasId.getId() + " created");
+		logger.info("AAS with Id " + aasId.getId() + " deleted");
 	}
 
 	@Override

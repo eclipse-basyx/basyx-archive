@@ -14,7 +14,7 @@
 	
 	<!-- Includes all components in this project as separated modules -->
 	<modules>
-		<module>basyx.tck.AASAggregator</module>
+		<module>basyx.tck.AASServer</module>
 		<module>basyx.tck.registry</module>
 	</modules>
 	
