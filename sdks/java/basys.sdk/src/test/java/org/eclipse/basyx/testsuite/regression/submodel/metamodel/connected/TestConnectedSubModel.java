@@ -12,10 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
@@ -76,6 +77,8 @@ public class TestConnectedSubModel {
 
 		// Create the SubModel using the created property and operation
 		localSubmodel = new SubModel();
+		IIdentifier submodelId = new ModelUrn("testUrn");
+		localSubmodel.setIdentification(submodelId.getIdType(), submodelId.getId());
 		localSubmodel.addSubModelElement(propertyMeta);
 		localSubmodel.addSubModelElement(op);
 		localSubmodel.setIdShort(ID);
@@ -216,8 +219,8 @@ public class TestConnectedSubModel {
 		assertEquals(property.get(), connectedProperty.get());
 		
 		// creates an expected reference for assertion
-		// Reference expected = new Reference(new Key(KeyElements.SUBMODEL, true, ID, KeyType.IDSHORT));
-		// assertEquals(expected, property.getParent());
+		IReference expected = submodel.getReference();
+		assertEquals(expected, property.getParent());
 	} 
 	
 	@Test
