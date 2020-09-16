@@ -1,5 +1,7 @@
 package org.eclipse.basyx.testsuite.regression.aas.metamodel.connected;
 
+import static org.junit.Assert.assertEquals;
+
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
@@ -14,8 +16,10 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.aas.metamodel.AssetAdministrationShellSuite;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
+import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
 import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Tests the connected implementation of {@link IAssetAdministrationShell} based
@@ -64,5 +68,13 @@ public class TestConnectedAssetAdministrationShell extends AssetAdministrationSh
 	@Override
 	protected ConnectedAssetAdministrationShell retrieveShell() {
 		return connectedAAS;
+	}
+
+	@Test
+	public void testGetLocalCopy() {
+		AASModelProvider aasProvider = new AASModelProvider(retrieveBaselineShell());
+		ConnectedAssetAdministrationShell localCAAS = new ConnectedAssetAdministrationShell(new VABElementProxy("", aasProvider), null);
+
+		assertEquals(retrieveBaselineShell(), localCAAS.getLocalCopy());
 	}
 }

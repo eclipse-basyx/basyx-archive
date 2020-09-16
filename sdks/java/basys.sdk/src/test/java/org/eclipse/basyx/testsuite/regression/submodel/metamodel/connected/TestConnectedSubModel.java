@@ -33,7 +33,6 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.Rel
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
-import org.eclipse.basyx.vab.support.TypeDestroyer;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -218,8 +217,6 @@ public class TestConnectedSubModel {
 	
 	@Test
 	public void testGetLocalCopy() {
-		System.out.println(TypeDestroyer.destroyType(localSubmodel));
-		System.out.println(submodel.getLocalCopy());
 		assertEquals(localSubmodel, submodel.getLocalCopy());
 	}
 

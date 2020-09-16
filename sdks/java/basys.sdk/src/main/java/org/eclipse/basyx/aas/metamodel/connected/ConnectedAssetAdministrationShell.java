@@ -169,4 +169,14 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	public IReference getReference() {
 		return Identifiable.createAsFacade(getElem(), getKeyElement()).getReference();
 	}
+
+	/**
+	 * Returns a local copy of the AAS, i.e. a snapshot of the current state. <br>
+	 * No changes of this copy are reflected in the remote AAS
+	 * 
+	 * @return the local copy
+	 */
+	public AssetAdministrationShell getLocalCopy() {
+		return AssetAdministrationShell.createAsFacade(getElem());
+	}
 }

@@ -183,6 +183,12 @@ public class VABModelMap<V extends Object> implements Map<String, V> {
 		return result;
 	}
 
+	/**
+	 * VABModelMaps are assumed to be equal iff they are containing the same data
+	 * independent of the used containers. <br>
+	 * In consequence, it does not matter if a collection is represented as Set or
+	 * as List, as long as the same elements are contained.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj) {
@@ -223,7 +229,17 @@ public class VABModelMap<V extends Object> implements Map<String, V> {
 				if (aVal == null) {
 					return bVal == null;
 				} else {
-					return aVal.equals(bVal);
+					if (aVal.equals(bVal)) {
+						return true;
+					} else {
+						if (aVal instanceof Collection<?> && bVal instanceof Collection<?>) {
+							Collection<?> aCol = (Collection<?>) aVal;
+							Collection<?> bCol = (Collection<?>) bVal;
+							return aCol.size() == bCol.size() && aCol.containsAll(bCol);
+						} else {
+							return false;
+						}
+					}
 				}
 			}
 		}
