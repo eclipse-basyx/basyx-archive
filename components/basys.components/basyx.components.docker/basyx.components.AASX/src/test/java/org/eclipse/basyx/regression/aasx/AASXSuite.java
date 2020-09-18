@@ -11,7 +11,6 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
@@ -94,7 +93,8 @@ public class AASXSuite {
 
 	@Test
 	public void testGetSingleModule() throws Exception {
-		final String FILE_PATH = "aasx/Nameplate/marking_rcm.jpg";
+		final String FILE_ENDING = "aasx/Nameplate/marking_rcm.jpg";
+		final String FILE_PATH = rootEndpoint + "aasx/Nameplate/marking_rcm.jpg";
 		checkFile(FILE_PATH);
 
 		// Get the submdoel nameplate
@@ -112,7 +112,7 @@ public class AASXSuite {
 				// get value of the file element
 
 				String fileurl = connectedFile.getValue();
-				assertTrue(fileurl.endsWith(FILE_PATH));
+				assertTrue(fileurl.endsWith(FILE_ENDING));
 			}
 		}
 	}
@@ -144,13 +144,11 @@ public class AASXSuite {
 		}
 	}
 
-	private void checkFile(String relativePath) {
+	private void checkFile(String absolutePath) {
 		// connect to the url of the aas
-		WebTarget webTarget = client.target(rootEndpoint);
-		// go to the path of the file
-		WebTarget fileTarget = webTarget.path(relativePath);
-		logger.info("Checking file: " + relativePath);
-		Invocation.Builder invocationBuilder = fileTarget.request(MediaType.APPLICATION_JSON);
+		WebTarget webTarget = client.target(absolutePath);
+		logger.info("Checking file: " + absolutePath);
+		Invocation.Builder invocationBuilder = webTarget.request();
 		Response response = invocationBuilder.get();
 		// validate the response
 		assertEquals(200, response.getStatus());
