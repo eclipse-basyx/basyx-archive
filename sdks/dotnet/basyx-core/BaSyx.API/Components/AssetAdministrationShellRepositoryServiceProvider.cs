@@ -129,7 +129,7 @@ namespace BaSyx.API.Components
 
         public IResult<IElementContainer<IAssetAdministrationShell>> RetrieveAssetAdministrationShells()
         {
-            return new Result<IElementContainer<IAssetAdministrationShell>>(true, new ElementContainer<IAssetAdministrationShell>(AssetAdministrationShells));
+            return new Result<IElementContainer<IAssetAdministrationShell>>(true, new ElementContainer<IAssetAdministrationShell>(null, AssetAdministrationShells));
         }
 
         public IResult UpdateAssetAdministrationShell(string aasId, IAssetAdministrationShell aas)

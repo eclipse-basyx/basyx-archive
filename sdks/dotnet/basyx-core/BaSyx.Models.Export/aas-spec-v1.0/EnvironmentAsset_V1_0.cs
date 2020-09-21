@@ -8,7 +8,8 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using BaSyx.Models.Core.AssetAdministrationShell.Enums;
+
+using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
@@ -46,6 +47,6 @@ namespace BaSyx.Models.Export
         public IReference<ISubmodel> BillOfMaterial => throw new System.NotImplementedException();
 
         [XmlIgnore]
-        IReference IReferable.Parent => null;
+        IReferable IReferable.Parent { get; set; }
     }
 }

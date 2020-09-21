@@ -9,12 +9,11 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 {
     [DataContract]
     public class Entity : SubmodelElement, IEntity
@@ -27,9 +26,12 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelEle
 
         public IReference<IAsset> Asset { get; set; }
 
-        public Entity() : base()
+        public Entity(string idShort) : base(idShort)
         {
-            Statements = new ElementContainer<ISubmodelElement>();
+            Statements = new ElementContainer<ISubmodelElement>(this);
+
+            Get = element => { return new ElementValue(new { Statements, EntityType, Asset }, new DataType(DataObjectType.AnyType)); };
+            Set = (element, value) => { dynamic dVal = value?.Value; Statements = dVal?.Statements; EntityType = dVal?.EntityType; Asset = dVal?.Asset; };
         }
     }
 }

@@ -13,11 +13,10 @@ using BaSyx.API.AssetAdministrationShell.Extensions;
 using BaSyx.API.Components;
 using BaSyx.Models.Connectivity;
 using BaSyx.Models.Connectivity.Descriptors;
-using BaSyx.Models.Core.AssetAdministrationShell.Enums;
+using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using BaSyx.Registry.Client.Http;
@@ -65,10 +64,8 @@ namespace ComplexAssetAdministrationShellScenario
 
             for (int i = 0; i < 3; i++)
             {
-                Submodel submodel = new Submodel()
+                Submodel submodel = new Submodel("MultiSubmodel_" + i, new Identifier("http://basys40.de/submodel/MultiSubmodel/" + Guid.NewGuid().ToString(), KeyType.IRI))
                 {
-                    IdShort = "MultiSubmodel_" + i,
-                    Identification = new Identifier("http://basys40.de/submodel/MultiSubmodel/" + Guid.NewGuid().ToString(), KeyType.IRI),
                     Description = new LangStringSet()
                     {
                        new LangString("de-DE", i + ". Teilmodell"),
@@ -81,21 +78,12 @@ namespace ComplexAssetAdministrationShellScenario
                     },
                     SubmodelElements = new ElementContainer<ISubmodelElement>()
                     {
-                        new Property<string>()
+                        new Property<string>("Property_" + i, "TestValue_" + i),
+                        new SubmodelElementCollection("Coll_" + i)
                         {
-                            IdShort = "Property_" + i,
-                            Value = "TestValue_" + i
-                        },
-                        new SubmodelElementCollection()
-                        {
-                            IdShort = "Coll_" + i,
-                            Value = new ElementContainer<ISubmodelElement>()
+                            Value =
                             {
-                                new Property<string>()
-                                {
-                                    IdShort = "SubProperty_" + i,
-                                    Value = "TestSubValue_" + i
-                                }
+                                new Property<string>("SubProperty_" + i, "TestSubValue_" + i)
                             }
                         }
                     }
@@ -111,7 +99,7 @@ namespace ComplexAssetAdministrationShellScenario
             multiServer.SetServiceProvider(repositoryService);
             multiServer.ApplicationStopping = () =>
             {
-                for (int i = 0; i < repositoryService.ServiceDescriptor.SubmodelDescriptors.Count; i++)
+                for (int i = 0; i < repositoryService.ServiceDescriptor.SubmodelDescriptors.Count(); i++)
                 {
                     registryClient.DeleteSubmodelRegistration("http://basyx.de/shells/MultiAAS/" + i, repositoryService.ServiceDescriptor.SubmodelDescriptors[i].IdShort);
                 }
@@ -121,7 +109,7 @@ namespace ComplexAssetAdministrationShellScenario
 
             var shells = registryClient.RetrieveAllAssetAdministrationShellRegistrations(p => p.Identification.Id.Contains("SimpleAAS"));
             var shell = shells.Entity?.FirstOrDefault();
-            for (int i = 0; i < repositoryService.ServiceDescriptor.SubmodelDescriptors.Count; i++)
+            for (int i = 0; i < repositoryService.ServiceDescriptor.SubmodelDescriptors.Count(); i++)
             {
                 var descriptor = repositoryService.ServiceDescriptor.SubmodelDescriptors[i];
                 registryClient.CreateOrUpdateSubmodelRegistration("http://basyx.de/shells/MultiAAS/" + i, descriptor.Identification.Id, descriptor);
@@ -143,10 +131,8 @@ namespace ComplexAssetAdministrationShellScenario
 
             for (int i = 0; i < 3; i++)
             {
-                AssetAdministrationShell aas = new AssetAdministrationShell()
+                AssetAdministrationShell aas = new AssetAdministrationShell("MultiAAS_" + i, new Identifier("http://basyx.de/shells/MultiAAS/" + i, KeyType.IRI))
                 {
-                    IdShort = "MultiAAS_" + i,
-                    Identification = new Identifier("http://basyx.de/shells/MultiAAS/" + i, KeyType.IRI),
                     Description = new LangStringSet()
                     {
                        new LangString("de-DE", i + ". VWS"),
@@ -157,10 +143,8 @@ namespace ComplexAssetAdministrationShellScenario
                         Version = "1.0",
                         Revision = "120"
                     },
-                    Asset = new Asset()
+                    Asset = new Asset("Asset_" + i, new Identifier("http://basyx.de/assets/MultiAsset/" + i, KeyType.IRI))
                     {
-                        IdShort = "Asset_" + i,
-                        Identification = new Identifier("http://basyx.de/assets/MultiAsset/" + i, KeyType.IRI),
                         Kind = AssetKind.Instance,
                         Description = new LangStringSet()
                         {
@@ -170,27 +154,16 @@ namespace ComplexAssetAdministrationShellScenario
                     }
                 };
 
-                aas.Submodels.Create(new Submodel()
+                aas.Submodels.Create(new Submodel("TestSubmodel", new Identifier("http://basyx.de/submodels/" + i, KeyType.IRI))
                 {
-                    Identification = new Identifier("http://basyx.de/submodels/" + i, KeyType.IRI),
-                    IdShort = "TestSubmodel",
-                    SubmodelElements = new ElementContainer<ISubmodelElement>()
+                    SubmodelElements =
                     {
-                        new Property<string>()
+                        new Property<string>("Property_" + i, "TestValue_" + i ),
+                        new SubmodelElementCollection("Coll_" + i)
                         {
-                            IdShort = "Property_" + i,
-                            Value = "TestValue_" + i 
-                        },
-                        new SubmodelElementCollection()
-                        {
-                            IdShort = "Coll_" + i,
-                            Value = new ElementContainer<ISubmodelElement>()
+                            Value =
                             {
-                                new Property<string>()
-                                {
-                                    IdShort = "SubProperty_" + i,
-                                    Value = "TestSubValue_" + i
-                                }
+                                new Property<string>("SubProperty_" + i, "TestSubValue_" + i)
                             }
                         }
                     }

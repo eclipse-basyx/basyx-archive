@@ -11,7 +11,7 @@
 using BaSyx.Models.Core.Common;
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
 {
     public interface IEvent : ISubmodelElement
     {

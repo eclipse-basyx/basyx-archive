@@ -12,7 +12,7 @@ using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using System.Runtime.Serialization;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
-using BaSyx.Models.Core.AssetAdministrationShell.Enums;
+
 using BaSyx.Models.Core.Common;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Generics

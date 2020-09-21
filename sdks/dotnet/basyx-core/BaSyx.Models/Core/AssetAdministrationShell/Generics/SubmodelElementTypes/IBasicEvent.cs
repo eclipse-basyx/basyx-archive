@@ -12,7 +12,7 @@ using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
 {
     /// <summary>
     /// A basic event

@@ -10,14 +10,14 @@
 *******************************************************************************/
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Enums
+namespace BaSyx.Models.Core.AssetAdministrationShell
 {
     [DataContract]
     public enum SchemaType : int
     {
-        None = 0,
+        NONE = 0,
         XSD = 1,
         RDFS = 2,
-        JSchema = 3
+        JSON = 3
     }
 }

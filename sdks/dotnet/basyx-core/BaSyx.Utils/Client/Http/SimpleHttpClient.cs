@@ -8,12 +8,11 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
+using BaSyx.Utils.JsonHandling;
 using BaSyx.Utils.ResultHandling;
 using BaSyx.Utils.Settings.Sections;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -35,13 +34,7 @@ namespace BaSyx.Utils.Client.Http
             HttpClientHandler = new HttpClientHandler() { MaxConnectionsPerServer = 100, UseProxy = false };
             HttpClient = new HttpClient(HttpClientHandler);
 
-            JsonSerializerSettings = new JsonSerializerSettings() 
-            { 
-                NullValueHandling = NullValueHandling.Ignore, 
-                Formatting = Formatting.Indented, 
-                DefaultValueHandling = DefaultValueHandling.Include,
-                MissingMemberHandling = MissingMemberHandling.Ignore
-            };
+            JsonSerializerSettings = new DefaultJsonSerializerSettings();
         }
 
         protected virtual void LoadProxy(ProxyConfiguration proxyConfiguration)

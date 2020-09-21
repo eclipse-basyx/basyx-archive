@@ -37,7 +37,7 @@ namespace SimpleAssetAdministrationShell
             ISubmodelServiceProvider submodelServiceProvider = testSubmodel.CreateServiceProvider();
             submodelServer.SetServiceProvider(submodelServiceProvider);
             submodelServiceProvider.UseAutoEndpointRegistration(submodelServerSettings.ServerConfig);
-            Task runSubmodelTask = submodelServer.RunAsync();
+            submodelServer.RunAsync();
 
             ServerSettings aasServerSettings = ServerSettings.CreateSettings();
             aasServerSettings.ServerConfig.Hosting.ContentPath = "Content";
@@ -50,9 +50,6 @@ namespace SimpleAssetAdministrationShell
             AssetAdministrationShellHttpServer aasServer = new AssetAdministrationShellHttpServer(aasServerSettings);
             aasServer.SetServiceProvider(serviceProvider);
             aasServer.Run();
-        }
-
-       
-
+        }     
     }
 }

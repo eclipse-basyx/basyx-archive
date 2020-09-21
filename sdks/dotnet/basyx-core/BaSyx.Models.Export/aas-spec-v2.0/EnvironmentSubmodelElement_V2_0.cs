@@ -8,7 +8,8 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using BaSyx.Models.Core.AssetAdministrationShell.Enums;
+
+using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.Common;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -20,10 +21,15 @@ namespace BaSyx.Models.Export
     public class EnvironmentSubmodelElement_V2_0
     {
         [XmlElement(ElementName = "property", Type = typeof(Property_V2_0))]
+        [XmlElement(ElementName = "multiLanguageProperty", Type = typeof(MultiLanguageProperty_V2_0))]
         [XmlElement(ElementName = "file", Type = typeof(File_V2_0))]
         [XmlElement(ElementName = "blob", Type = typeof(Blob_V2_0))]
         [XmlElement(ElementName = "event", Type = typeof(Event_V2_0))]
+        [XmlElement(ElementName = "basicEvent", Type = typeof(BasicEvent_V2_0))]
+        [XmlElement(ElementName = "range", Type = typeof(Range_V2_0))]
+        [XmlElement(ElementName = "entity", Type = typeof(Entity_V2_0))]
         [XmlElement(ElementName = "referenceElement", Type = typeof(ReferenceElement_V2_0))]
+        [XmlElement(ElementName = "annotatedRelationshipElement", Type = typeof(AnnotatedRelationshipElement_V2_0))]
         [XmlElement(ElementName = "relationshipElement", Type = typeof(RelationshipElement_V2_0))]
         [XmlElement(ElementName = "submodelElementCollection", Type = typeof(SubmodelElementCollection_V2_0))]
         [XmlElement(ElementName = "operation", Type = typeof(Operation_V2_0))]

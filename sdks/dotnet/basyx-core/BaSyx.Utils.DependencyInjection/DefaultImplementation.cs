@@ -10,19 +10,18 @@
 *******************************************************************************/
 using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.AssetAdministrationShell.Views;
 using BaSyx.Models.Core.Common;
 using BaSyx.Utils.ResultHandling;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace BaSyx.Utils.DependencyInjection
 {
-    public static class StandardImplementation
+    public static class DefaultImplementation
     {
         public static IServiceCollection AddStandardImplementation(this IServiceCollection services)
         {
@@ -73,6 +72,20 @@ namespace BaSyx.Utils.DependencyInjection
             services.AddTransient(typeof(IReference<IConceptDescription>), typeof(Reference<ConceptDescription>));
 
             return services;
+        }
+
+        public static IServiceCollection GetStandardServiceCollection()
+        {
+            IServiceCollection services = new ServiceCollection();
+            services.AddStandardImplementation();
+            return services;
+        }
+
+        public static IServiceProvider GetStandardServiceProvider()
+        {
+            IServiceCollection standardServiceCollection = GetStandardServiceCollection();
+            DefaultServiceProviderFactory serviceProviderFactory = new DefaultServiceProviderFactory();
+            return serviceProviderFactory.CreateServiceProvider(standardServiceCollection);
         }
     }
 }

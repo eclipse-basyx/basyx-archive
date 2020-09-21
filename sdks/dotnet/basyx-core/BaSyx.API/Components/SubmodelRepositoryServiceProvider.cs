@@ -129,7 +129,7 @@ namespace BaSyx.API.Components
 
         public IResult<IElementContainer<ISubmodel>> RetrieveSubmodels()
         {
-            return new Result<IElementContainer<ISubmodel>>(true, new ElementContainer<ISubmodel>(Submodels));
+            return new Result<IElementContainer<ISubmodel>>(true, new ElementContainer<ISubmodel>(null, Submodels));
         }
 
         public IResult UpdateSubmodel(string submodelId, ISubmodel submodel)

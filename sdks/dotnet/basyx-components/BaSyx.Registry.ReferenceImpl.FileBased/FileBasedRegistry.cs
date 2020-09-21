@@ -36,7 +36,7 @@ namespace BaSyx.Registry.ReferenceImpl.FileBased
         public FileBasedRegistry(FileBasedRegistrySettings settings = null)
         {
             Settings = settings ?? FileBasedRegistrySettings.LoadSettings();
-            JsonSerializerSettings = new JsonStandardSettings();
+            JsonSerializerSettings = new DependencyInjectionJsonSerializerSettings();
 
             FolderPath = Settings.Miscellaneous["FolderPath"];
 
@@ -84,7 +84,7 @@ namespace BaSyx.Registry.ReferenceImpl.FileBased
                 if (!Directory.Exists(aasDirectoryPath))
                     Directory.CreateDirectory(aasDirectoryPath);
 
-                if(aasDescriptor.SubmodelDescriptors?.Count > 0)
+                if(aasDescriptor.SubmodelDescriptors?.Count() > 0)
                 {
                     foreach (var submodelDescriptor in aasDescriptor.SubmodelDescriptors)
                     {
@@ -93,7 +93,7 @@ namespace BaSyx.Registry.ReferenceImpl.FileBased
                             return new Result<IAssetAdministrationShellDescriptor>(interimResult);
                     }
                 }
-                aasDescriptor.SubmodelDescriptors.Clear();
+                aasDescriptor.SubmodelDescriptors = new ElementContainer<ISubmodelDescriptor>();
 
                 string aasDescriptorContent = JsonConvert.SerializeObject(aasDescriptor, JsonSerializerSettings);
                 string aasFilePath = Path.Combine(aasDirectoryPath, aasIdHash) + ".json";
@@ -210,7 +210,7 @@ namespace BaSyx.Registry.ReferenceImpl.FileBased
                     IAssetAdministrationShellDescriptor descriptor = JsonConvert.DeserializeObject<IAssetAdministrationShellDescriptor>(aasContent, JsonSerializerSettings);
 
                     var submodelDescriptors = RetrieveAllSubmodelRegistrations(aasId);
-                    if(submodelDescriptors.Success && submodelDescriptors.Entity?.Count > 0)
+                    if(submodelDescriptors.Success && submodelDescriptors.Entity?.Count() > 0)
                         descriptor.SubmodelDescriptors = submodelDescriptors.Entity;
 
                     return new Result<IAssetAdministrationShellDescriptor>(true, descriptor);

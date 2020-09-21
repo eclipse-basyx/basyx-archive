@@ -11,7 +11,7 @@
 using BaSyx.Models.Core.Common;
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
 {
     /// <summary>
     /// A range data element is a data element that defines a range with min and max

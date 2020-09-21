@@ -105,7 +105,7 @@ namespace BaSyx.Models.Extensions
 
             if (modelTypeToken != null)
             {
-                submodelElement = SubmodelElementFactory.CreateSubmodelElement(modelTypeToken, valueTypeToken);
+                submodelElement = SubmodelElementFactory.CreateSubmodelElement(string.Empty, modelTypeToken, valueTypeToken);
                 submodelElement.EmbeddedDataSpecifications = embeddedDataSpecifications;
                 submodelElement.ConceptDescription = conceptDescription;
             }

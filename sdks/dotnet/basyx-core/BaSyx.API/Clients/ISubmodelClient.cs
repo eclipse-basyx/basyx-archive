@@ -11,7 +11,6 @@
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Utils.ResultHandling;
 using BaSyx.Models.Core.Common;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Communication;
 
 namespace BaSyx.API.Clients
@@ -20,57 +19,42 @@ namespace BaSyx.API.Clients
     {
         IResult<ISubmodel> RetrieveSubmodel();
 
-        #region SubmodelElement - CRUD-Operations
-        IResult<ISubmodelElement> CreateSubmodelElement(ISubmodelElement submodelElement);
+        IResult<ISubmodelElement> CreateSubmodelElement(string rootSubmodelElementPath, ISubmodelElement submodelElement);
 
         IResult<IElementContainer<ISubmodelElement>> RetrieveSubmodelElements();
 
-        IResult<ISubmodelElement> RetrieveSubmodelElement(string submodelElementId);
+        IResult<ISubmodelElement> RetrieveSubmodelElement(string pathToSubmodelElement);
 
-        IResult<IValue> RetrieveSubmodelElementValue(string submodelElementId);
+        IResult<IValue> RetrieveSubmodelElementValue(string pathToSubmodelElement);
 
-        IResult UpdateSubmodelElement(string submodelElementId, ISubmodelElement submodelElement);
+        IResult UpdateSubmodelElementValue(string pathToSubmodelElement, IValue value);
 
-        IResult DeleteSubmodelElement(string submodelElementId);
-        #endregion
+        IResult UpdateSubmodelElement(string pathToSubmodelElement, ISubmodelElement submodelElement);
 
-        #region Operation - CRUD-Operations
-        IResult<IOperation> CreateOperation(IOperation operation);
+        IResult DeleteSubmodelElement(string pathToSubmodelElement);
 
-        IResult<IElementContainer<IOperation>> RetrieveOperations();
+        /// <summary>
+        /// Invokes a specific Operation synchronously
+        /// </summary>
+        /// <param name="pathToOperation">IdShort-Path to the Operation</param>
+        /// <param name="invocationRequest">Request-Parameters for the invocation</param>
+        /// <returns></returns>
+        IResult<InvocationResponse> InvokeOperation(string pathToOperation, InvocationRequest invocationRequest);
 
-        IResult<IOperation> RetrieveOperation(string operationId);
+        /// <summary>
+        /// Invokes a specific Operation asynchronously
+        /// </summary>
+        /// <param name="pathToOperation">IdShort-Path to the Operation</param>
+        /// <param name="invocationRequest">Request-Parameters for the invocation</param>
+        /// <returns></returns>
+        IResult<CallbackResponse> InvokeOperationAsync(string pathToOperation, InvocationRequest invocationRequest);
 
-        IResult DeleteOperation(string operationId);
-
-        IResult<InvocationResponse> InvokeOperation(string operationId, InvocationRequest invocationRequest);
-        IResult<CallbackResponse> InvokeOperationAsync(string operationId, InvocationRequest invocationRequest);
-        IResult<InvocationResponse> GetInvocationResult(string operationId, string requestId);
-
-        #endregion
-
-        #region Property - CRUD-Operations
-        IResult<IProperty> CreateProperty(IProperty property);
-
-        IResult<IElementContainer<IProperty>> RetrieveProperties();
-
-        IResult<IProperty> RetrieveProperty(string propertyId);
-
-        IResult<IValue> RetrievePropertyValue(string propertyId);
-
-        IResult UpdatePropertyValue(string propertyId, IValue propertyValue);
-
-        IResult DeleteProperty(string propertyId);
-        #endregion
-
-        #region Event - CRUD-Operations
-        IResult<IEvent> CreateEvent(IEvent eventable);
-
-        IResult<IElementContainer<IEvent>> RetrieveEvents();
-
-        IResult<IEvent> RetrieveEvent(string eventId);
-
-        IResult DeleteEvent(string eventId);
-        #endregion
+        /// <summary>
+        /// Returns the Invocation Result of specific Operation
+        /// </summary>
+        /// <param name="pathToOperation">IdShort-Path to the Operation</param>
+        /// <param name="requestId">Request-Id</param>
+        /// <returns></returns>
+        IResult<InvocationResponse> GetInvocationResult(string pathToOperation, string requestId);
     }
 }

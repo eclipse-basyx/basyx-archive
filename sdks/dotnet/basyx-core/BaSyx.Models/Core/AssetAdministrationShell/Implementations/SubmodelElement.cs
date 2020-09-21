@@ -8,7 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using BaSyx.Models.Core.AssetAdministrationShell.Enums;
+
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Constraints;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
@@ -19,29 +19,27 @@ using System.Runtime.Serialization;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
+using NLog;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 {
     [DataContract]
-    public abstract class SubmodelElement : ISubmodelElement
+    public abstract class SubmodelElement : Referable, ISubmodelElement
     {
+        private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
+
         public IReference SemanticId { get; set; }
 
         public List<IConstraint> Constraints { get; set; }
 
-        public string IdShort { get; set; }
-
-        public string Category { get; set; }
-
-        public LangStringSet Description { get; set; }
-
-        public IReference Parent { get; set; }
-
-        public Dictionary<string, string> MetaData { get; set; }
-
         public ModelingKind Kind { get; set; }
 
         public abstract ModelType ModelType { get; }
+
+        [IgnoreDataMember]
+        public virtual GetValueHandler Get { get; set; }
+        [IgnoreDataMember]
+        public virtual SetValueHandler Set { get; set; }
 
         public IEnumerable<IEmbeddedDataSpecification> EmbeddedDataSpecifications { get; set; }
 
@@ -61,9 +59,11 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
                 }
             }
         }
+
+
         [JsonConstructor]
-        public SubmodelElement()
-        {
+        protected SubmodelElement(string idShort) : base(idShort)
+        {            
             Constraints = new List<IConstraint>();
             MetaData = new Dictionary<string, string>();
             EmbeddedDataSpecifications = new List<IEmbeddedDataSpecification>();

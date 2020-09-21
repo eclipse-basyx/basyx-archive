@@ -19,9 +19,35 @@ namespace BaSyx.API.Components
 {
     public abstract class AssetAdministrationShellServiceProvider : IAssetAdministrationShellServiceProvider, ISubmodelServiceProviderRegistry
     {
-        public abstract IAssetAdministrationShell AssetAdministrationShell { get; protected set; }
+        private IAssetAdministrationShell _assetAdministrationShell;
+
+        /// <summary>
+        /// Stores the Asset Administration Shell built by the BuildAssetAdministationShell() function
+        /// </summary>
+        public virtual IAssetAdministrationShell AssetAdministrationShell 
+        { 
+            get
+            {
+                if (_assetAdministrationShell == null)
+                {
+                    IAssetAdministrationShell assetAdministrationShell = BuildAssetAdministrationShell();
+                    BindTo(assetAdministrationShell);
+                }
+                return _assetAdministrationShell;
+            }
+        }
+        /// <summary>
+        /// Custom function to build the Asset Administration Shell to be provided by the ServiceProvider. 
+        /// Within this function you can import data (e.g. from AASX-packages, databases, etc.) to build your Asset Administration Shell.
+        /// </summary>
+        /// <returns>The built Asset Administration Shell</returns>
+        public abstract IAssetAdministrationShell BuildAssetAdministrationShell();
 
         private IAssetAdministrationShellDescriptor _serviceDescriptor;
+        
+        /// <summary>
+        /// The Asset Administration Shell Descriptor containing the information to register the Service Provider at the next higher instance (e.g. AssetAdministrationShellRepository, AssetAdministrationShellRegistry)
+        /// </summary>
         public IAssetAdministrationShellDescriptor ServiceDescriptor
         {
             get
@@ -29,7 +55,7 @@ namespace BaSyx.API.Components
                 if (_serviceDescriptor == null)
                     _serviceDescriptor = new AssetAdministrationShellDescriptor(AssetAdministrationShell, null);
 
-                if (_serviceDescriptor.SubmodelDescriptors?.Count == 0 && SubmodelServiceProviders != null)
+                if (_serviceDescriptor.SubmodelDescriptors?.Count() == 0 && SubmodelServiceProviders != null)
                     foreach (var submodelServiceProvider in SubmodelServiceProviders)
                     {
                         if (submodelServiceProvider.Value?.ServiceDescriptor != null)
@@ -46,27 +72,26 @@ namespace BaSyx.API.Components
         public ISubmodelServiceProviderRegistry SubmodelRegistry => this;
         private Dictionary<string, ISubmodelServiceProvider> SubmodelServiceProviders { get; } = new Dictionary<string, ISubmodelServiceProvider>();
 
-        public AssetAdministrationShellServiceProvider(IAssetAdministrationShellDescriptor assetAdministrationShellDescriptor) : this()
+        /// <summary>
+        /// Base implementation for IAssetAdministrationShellServiceProvider
+        /// </summary>
+        protected AssetAdministrationShellServiceProvider()
+        { }
+
+        protected AssetAdministrationShellServiceProvider(IAssetAdministrationShellDescriptor assetAdministrationShellDescriptor) : this()
         {
             ServiceDescriptor = assetAdministrationShellDescriptor;
         }
-        public AssetAdministrationShellServiceProvider(IAssetAdministrationShell assetAdministrationShell)
+
+        protected AssetAdministrationShellServiceProvider(IAssetAdministrationShell assetAdministrationShell)
         {
             BindTo(assetAdministrationShell);
         }
 
-        public AssetAdministrationShellServiceProvider()
-        {
-            AssetAdministrationShell = GenerateAssetAdministrationShell();
-            BindTo(AssetAdministrationShell);
-        }
-
-        public abstract IAssetAdministrationShell GenerateAssetAdministrationShell();
-
         public virtual void BindTo(IAssetAdministrationShell element)
         {
-            AssetAdministrationShell = element;
-            ServiceDescriptor = ServiceDescriptor ?? new AssetAdministrationShellDescriptor(element, null);
+            _assetAdministrationShell = element;
+            ServiceDescriptor = ServiceDescriptor ?? new AssetAdministrationShellDescriptor(_assetAdministrationShell, null);
         }
         public virtual IAssetAdministrationShell GetBinding()
         {
@@ -75,7 +100,7 @@ namespace BaSyx.API.Components
 
         public virtual void UseDefaultSubmodelServiceProvider()
         {
-            foreach (var submodel in AssetAdministrationShell.Submodels)
+            foreach (var submodel in AssetAdministrationShell.Submodels.Values)
             {
                 var submodelServiceProvider = submodel.CreateServiceProvider();
                 RegisterSubmodelServiceProvider(submodel.IdShort, submodelServiceProvider);

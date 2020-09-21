@@ -130,7 +130,7 @@ namespace BaSyx.API.Components
 
             serviceProvider.ServiceDescriptor.AddEndpoints(repositoryEndpoints);
             var aasRepositoryDescriptor = serviceProvider.ServiceDescriptor;
-            foreach (var aasDescriptor in aasRepositoryDescriptor.AssetAdministrationShellDescriptors)
+            foreach (var aasDescriptor in aasRepositoryDescriptor.AssetAdministrationShellDescriptors.Values)
             {
                 List<IEndpoint> aasEndpoints = new List<IEndpoint>();
                 foreach (var endpoint in repositoryEndpoints)
@@ -140,7 +140,7 @@ namespace BaSyx.API.Components
                 }
                 aasDescriptor.AddEndpoints(aasEndpoints);
 
-                foreach (var submodelDescriptor in aasDescriptor.SubmodelDescriptors)
+                foreach (var submodelDescriptor in aasDescriptor.SubmodelDescriptors.Values)
                 {
                     List<IEndpoint> submodelEndpoints = new List<IEndpoint>();
                     foreach (var endpoint in aasEndpoints)
@@ -167,7 +167,7 @@ namespace BaSyx.API.Components
 
             serviceProvider.ServiceDescriptor.AddEndpoints(repositoryEndpoints);
             var submodelRepositoryDescriptor = serviceProvider.ServiceDescriptor;
-            foreach (var submodelDescriptor in submodelRepositoryDescriptor.SubmodelDescriptors)
+            foreach (var submodelDescriptor in submodelRepositoryDescriptor.SubmodelDescriptors.Values)
             {
                 List<IEndpoint> submodelEndpoints = new List<IEndpoint>();
                 foreach (var endpoint in repositoryEndpoints)
@@ -193,7 +193,7 @@ namespace BaSyx.API.Components
 
             serviceProvider.ServiceDescriptor.AddEndpoints(aasEndpoints);
             var aasDescriptor = serviceProvider.ServiceDescriptor;
-            foreach (var submodel in aasDescriptor.SubmodelDescriptors)
+            foreach (var submodel in aasDescriptor.SubmodelDescriptors.Values)
             {
                 List<IEndpoint> spEndpoints = new List<IEndpoint>();
                 foreach (var endpoint in aasEndpoints)

@@ -12,24 +12,13 @@ using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
 {
-    public delegate IValue GetPropertyValueHandler(IProperty property);
-    public delegate void SetPropertyValueHandler(IProperty property, IValue value);
-
-    public delegate TValue GetPropertyValueHandler<TValue>(IProperty property);
-    public delegate void SetPropertyValueHandler<TValue>(IProperty property, TValue value);
-
     /// <summary>
     /// A property is a data element that has a single value. 
     /// </summary>
     public interface IProperty : ISubmodelElement, IValue
     {
-        [IgnoreDataMember]
-        GetPropertyValueHandler Get { get; }
-        [IgnoreDataMember]
-        SetPropertyValueHandler Set { get; }
-
         /// <summary>
         /// Reference to the global unqiue id of a coded value.  
         /// </summary>
@@ -37,11 +26,12 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTyp
         IReference ValueId { get; set; }
     }
 
+    ///<inheritdoc cref="IProperty"/>
     public interface IProperty<TValue> : IProperty, IValue<TValue>
     {
         [IgnoreDataMember]
-        new GetPropertyValueHandler<TValue> Get { get; }
+        new GetValueHandler<TValue> Get { get; }
         [IgnoreDataMember]
-        new SetPropertyValueHandler<TValue> Set { get; }
+        new SetValueHandler<TValue> Set { get; }
     }
 }

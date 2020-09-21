@@ -9,10 +9,10 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
+using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Core.Common;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -21,59 +21,93 @@ namespace BaSyx.Models.Extensions
 {
     public static class SubmodelElementExtensions
     {
+        private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
+
         public static T Cast<T>(this IReferable referable) where T : class, IReferable
         {
             return referable as T;
         }
 
-        [Obsolete("Use Cast<T>(IReferable referable) instead")]
-        public static T ToModelElement<T>(this IReferable referable) where T : class, IReferable
+        public static IValue GetValue(this ISubmodelElement submodelElement)
         {
-            return referable as T;
+            return submodelElement?.Get?.Invoke(submodelElement);
+        }
+
+        public static T GetValue<T>(this ISubmodelElement submodelElement)
+        {
+            IValue value = submodelElement?.Get?.Invoke(submodelElement);
+            if (value != null)
+                return value.ToObject<T>();
+            else
+                return default;
+        }
+
+        public static void SetValue<T>(this ISubmodelElement submodelElement, T value)
+        {
+            submodelElement?.Set?.Invoke(submodelElement, new ElementValue<T>(value));
+        }
+
+        public static void SetValue(this ISubmodelElement submodelElement, IValue value)
+        {
+            submodelElement?.Set?.Invoke(submodelElement, value);
         }
 
         public static ISubmodelElementCollection CreateSubmodelElementCollection<T>(this IEnumerable<T> enumerable, string idShort)
         {
-            SubmodelElementCollection smCollection = new SubmodelElementCollection()
-            {
-                IdShort = idShort
-            };
+            SubmodelElementCollection smCollection = new SubmodelElementCollection(idShort);
             Type type = typeof(T);
             foreach (var item in enumerable)
             {
                 foreach (var property in type.GetProperties())
-                {
+                {                    
                     ISubmodelElement smElement = CreateSubmodelElement(property, item);
-                    smCollection.Value.Add(smElement);
+                    smCollection.Value.Create(smElement);
                 }
             }
             return smCollection;
         }
 
-        public static ISubmodelElement CreateSubmodelElement(this PropertyInfo property, object target)
+        public static ISubmodelElementCollection CreateSubmodelElementCollection(this Type type, string idShort)
         {
+            SubmodelElementCollection smCollection = new SubmodelElementCollection(idShort);
+
+            foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                ISubmodelElement smElement = CreateSubmodelElement(property);
+                smCollection.Value.Create(smElement);
+            }
+            return smCollection;
+        }
+
+        public static ISubmodelElement CreateSubmodelElement(this PropertyInfo property, object target = null)
+        {
+            DataType dataType = DataType.GetDataTypeFromSystemType(property.PropertyType);
+            if(dataType == null)
+            {
+                logger.Warn($"Unable to convert system type {property.PropertyType} to DataType");
+                return null;
+            }
+
             if (DataType.IsSimpleType(property.PropertyType))
             {
-                DataType dataType = DataType.GetDataTypeFromSystemType(property.PropertyType);
-                Property smProp = new Property(dataType)
-                {
-                    IdShort = property.Name,
-                    Value = property.GetValue(target)
-                };
+                Property smProp = new Property(property.Name, dataType);
+                if (target != null)
+                    smProp.Value = property.GetValue(target);
+
                 return smProp;
             }
             else
             {
-                SubmodelElementCollection smCollection = new SubmodelElementCollection()
+                SubmodelElementCollection smCollection = new SubmodelElementCollection(property.Name);
+
+                object subTarget = null;
+                if(target != null)
+                    subTarget = property.GetValue(target);
+
+                foreach (var subProperty in dataType.SystemType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 {
-                    IdShort = property.Name
-                };
-                object value = property.GetValue(target);
-                Type valueType = value.GetType();
-                foreach (var subProperty in valueType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-                {
-                    ISubmodelElement smElement = CreateSubmodelElement(subProperty, value);
-                    smCollection.Value.Add(smElement);
+                    ISubmodelElement smElement = CreateSubmodelElement(subProperty, subTarget);
+                    smCollection.Value.Create(smElement);
                 }
                 return smCollection;
             }

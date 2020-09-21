@@ -8,12 +8,12 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
+using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 {
     [DataContract]
     public class ReferenceElement : SubmodelElement, IReferenceElement
@@ -21,6 +21,10 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelEle
         public override ModelType ModelType => ModelType.ReferenceElement;
         public IReference Value { get; set; }
 
-        public ReferenceElement() : base() { }
+        public ReferenceElement(string idShort) : base(idShort) 
+        {
+            Get = element => { return new ElementValue(Value, new DataType(DataObjectType.AnyType)); };
+            Set = (element, value) => { Value = value?.Value as IReference; };
+        }
     }
 }

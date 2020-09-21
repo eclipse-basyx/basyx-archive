@@ -10,17 +10,19 @@
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 {
     public class AnnotatedRelationshipElement : RelationshipElement, IAnnotatedRelationshipElement
     {
         public override ModelType ModelType => ModelType.AnnotatedRelationshipElement;
-
         public IReference<ISubmodelElement> Annotation { get; set; }
 
-        public AnnotatedRelationshipElement() : base() { }     
+        public AnnotatedRelationshipElement(string idShort) : base(idShort) 
+        {
+            Get = element => { return new ElementValue(Annotation, new DataType(DataObjectType.AnyType)); };
+            Set = (element, value) => { Annotation = value.Value as IReference<ISubmodelElement>; };
+        }     
     }
 }

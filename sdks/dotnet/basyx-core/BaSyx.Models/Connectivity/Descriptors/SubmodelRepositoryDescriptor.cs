@@ -17,6 +17,7 @@ using System.Runtime.Serialization;
 using BaSyx.Models.Core.Common;
 using System.Linq;
 using System.Collections;
+using BaSyx.Models.Core.AssetAdministrationShell;
 
 namespace BaSyx.Models.Connectivity.Descriptors
 {
@@ -34,7 +35,7 @@ namespace BaSyx.Models.Connectivity.Descriptors
         public IEnumerable<IEndpoint> Endpoints { get; internal set; }
 
         [IgnoreDataMember]
-        public IReference Parent => null;
+        public IReferable Parent { get; set; }
         [IgnoreDataMember]
         public string Category => null;
 
@@ -45,7 +46,7 @@ namespace BaSyx.Models.Connectivity.Descriptors
         public SubmodelRepositoryDescriptor(IEnumerable<IEndpoint> endpoints) 
         {
             Endpoints = endpoints ?? new List<IEndpoint>();
-            SubmodelDescriptors = new ElementContainer<ISubmodelDescriptor>();
+            SubmodelDescriptors = new ElementContainer<ISubmodelDescriptor>(this);
         }
      
         [JsonConstructor]

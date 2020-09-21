@@ -16,12 +16,34 @@ namespace BaSyx.API.Http.Controllers
         /// <returns></returns>
         public static IActionResult NullResult(string elementName)
         {
-            ObjectResult objectResult = new ObjectResult(new Result(false, new Message(MessageType.Error, $"Argument {elementName} is null or empty")))
+            BadRequestObjectResult objectResult = new BadRequestObjectResult(new Result(false, new Message(MessageType.Error, $"Argument {elementName} is null or empty")));
+            return objectResult;
+        }
+
+        /// <summary>
+        /// Returns a Result-Object in an BadRequest(400)-ObjectResult and a message why it is a BadRequest
+        /// </summary>
+        /// <param name="message">The message why it is a BadRequest</param>
+        /// <returns></returns>
+        public static IActionResult BadRequestResult(string message)
+        {
+            BadRequestObjectResult objectResult = new BadRequestObjectResult(new Result(false, new Message(MessageType.Error, message)));
+            return objectResult;
+        }
+
+        /// <summary>
+        /// Returns a Result-Object in an MethodNotAllowed(405)-ObjectResult
+        /// </summary>
+        /// <returns></returns>
+        public static IActionResult MethodNotAllowedResult()
+        {
+            ObjectResult objectResult = new ObjectResult(new Result(false, new MethodNotAllowedMessage()))
             {
-                StatusCode = 400
+                StatusCode = 405
             };
             return objectResult;
         }
+
         /// <summary>
         /// Returns a Result-Object wrapped in an ObjectResult according to the CRUD-operation
         /// </summary>
@@ -59,7 +81,7 @@ namespace BaSyx.API.Http.Controllers
                         return new NoContentResult();
                     break;
                 case CrudOperation.Invoke:
-                    if (result.Success && result.Entity != null)
+                    if (result.Entity != null)
                         return new OkObjectResult(result.Entity);
                     break;
                 default:

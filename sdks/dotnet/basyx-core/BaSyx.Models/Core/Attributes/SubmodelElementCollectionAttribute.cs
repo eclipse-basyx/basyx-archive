@@ -10,7 +10,7 @@
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using System;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
+using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 
 namespace BaSyx.Models.Core.Attributes
 {
@@ -57,17 +57,13 @@ namespace BaSyx.Models.Core.Attributes
 
         public SubmodelElementCollectionAttribute(string idShort)
         {
-            SubmodelElementCollection = new SubmodelElementCollection()
-            {
-                IdShort = idShort
-            };
+            SubmodelElementCollection = new SubmodelElementCollection(idShort);
         }
 
         public SubmodelElementCollectionAttribute(string idShort, string semanticId, KeyElements semanticKeyElement, KeyType semanticKeyType, bool semanticIdLocal)
         {
-            SubmodelElementCollection = new SubmodelElementCollection()
+            SubmodelElementCollection = new SubmodelElementCollection(idShort)
             {
-                IdShort = idShort,
                 SemanticId = new Reference(new Key(semanticKeyElement, semanticKeyType, semanticId, semanticIdLocal)) 
             };
         }

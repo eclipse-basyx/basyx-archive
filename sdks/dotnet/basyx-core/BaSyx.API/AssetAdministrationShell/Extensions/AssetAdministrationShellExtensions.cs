@@ -10,6 +10,7 @@
 *******************************************************************************/
 using BaSyx.API.Components;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
+using System.Linq;
 
 namespace BaSyx.API.AssetAdministrationShell.Extensions
 {
@@ -19,8 +20,8 @@ namespace BaSyx.API.AssetAdministrationShell.Extensions
         {
             InternalAssetAdministationShellServiceProvider sp = new InternalAssetAdministationShellServiceProvider(aas);            
 
-            if(includeSubmodels && aas.Submodels?.Count > 0)
-                foreach (var submodel in aas.Submodels)
+            if(includeSubmodels && aas.Submodels?.Count() > 0)
+                foreach (var submodel in aas.Submodels.Values)
                 {
                     var submodelSp = submodel.CreateServiceProvider();
                     sp.RegisterSubmodelServiceProvider(submodel.IdShort, submodelSp);

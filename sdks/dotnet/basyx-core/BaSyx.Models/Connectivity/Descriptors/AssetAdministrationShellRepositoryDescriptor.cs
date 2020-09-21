@@ -9,7 +9,6 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -17,6 +16,7 @@ using System.Runtime.Serialization;
 using BaSyx.Models.Core.Common;
 using System.Linq;
 using System.Collections;
+using BaSyx.Models.Core.AssetAdministrationShell;
 
 namespace BaSyx.Models.Connectivity.Descriptors
 {
@@ -34,7 +34,7 @@ namespace BaSyx.Models.Connectivity.Descriptors
         public IEnumerable<IEndpoint> Endpoints { get; internal set; }
 
         [IgnoreDataMember]
-        public IReference Parent => null;
+        public IReferable Parent { get; set; }
         [IgnoreDataMember]
         public string Category => null;
 
@@ -45,7 +45,7 @@ namespace BaSyx.Models.Connectivity.Descriptors
         public AssetAdministrationShellRepositoryDescriptor(IEnumerable<IEndpoint> endpoints) 
         {
             Endpoints = endpoints ?? new List<IEndpoint>();
-            AssetAdministrationShellDescriptors = new ElementContainer<IAssetAdministrationShellDescriptor>();
+            AssetAdministrationShellDescriptors = new ElementContainer<IAssetAdministrationShellDescriptor>(this);
         }
      
         [JsonConstructor]
@@ -61,8 +61,8 @@ namespace BaSyx.Models.Connectivity.Descriptors
         public void AddAssetAdministrationShell(IAssetAdministrationShell aas)
         {
             AssetAdministrationShellDescriptor assetAdministrationShellDescriptor = new AssetAdministrationShellDescriptor(aas, Endpoints.ToList());
-            if (aas.Submodels?.Count > 0)
-                foreach (var submodel in aas.Submodels)
+            if (aas.Submodels?.Count() > 0)
+                foreach (var submodel in aas.Submodels.Values)
                 {
                     assetAdministrationShellDescriptor.SubmodelDescriptors.Create(new SubmodelDescriptor(submodel, Endpoints.ToList()));
                 }

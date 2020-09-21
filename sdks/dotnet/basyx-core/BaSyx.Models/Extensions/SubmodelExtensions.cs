@@ -9,10 +9,8 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using BaSyx.Utils.StringOperations;
@@ -32,15 +30,11 @@ namespace BaSyx.Models.Extensions
                 return null;
 
             Type type = target.GetType();
-            Submodel submodel = new Submodel()
-            {
-                IdShort = type.Name,
-                Identification = new Identifier(type.FullName, KeyType.Custom)
-            };
+            Submodel submodel = new Submodel(type.Name, new Identifier(type.FullName, KeyType.Custom));
             foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 ISubmodelElement smElement = property.CreateSubmodelElement(target);
-                submodel.SubmodelElements.Add(smElement);
+                submodel.SubmodelElements.Create(smElement);
             }
             return submodel;
         }
@@ -54,9 +48,9 @@ namespace BaSyx.Models.Extensions
         public static JArray CustomizeSubmodel(this ISubmodel submodel, string[] columns)
         {
             JArray jArray = new JArray();
-            if (submodel.SubmodelElements.Count > 0)
+            if (submodel.SubmodelElements?.Count() > 0)
             {
-                foreach (var element in submodel.SubmodelElements)
+                foreach (var element in submodel.SubmodelElements.Values)
                 {
                     JArray elementJArray = CustomizeSubmodelElement(element, columns);
                     jArray.Merge(elementJArray, new JsonMergeSettings() { MergeArrayHandling = MergeArrayHandling.Union } );
@@ -74,7 +68,7 @@ namespace BaSyx.Models.Extensions
             if (element.ModelType == ModelType.SubmodelElementCollection)
             {
                 var valueContainer = element as SubmodelElementCollection;
-                foreach (var subElement in valueContainer.Value)
+                foreach (var subElement in valueContainer.Value.Values)
                 {
                     JArray subJArray = CustomizeSubmodelElement(subElement, columns);
                     jArray.Merge(subJArray, new JsonMergeSettings() { MergeArrayHandling = MergeArrayHandling.Union });
@@ -104,9 +98,9 @@ namespace BaSyx.Models.Extensions
         public static JObject MinimizeSubmodel(this ISubmodel submodel)
         {
             JObject jObject = new JObject();
-            if (submodel.SubmodelElements.Count > 0)
+            if (submodel.SubmodelElements?.Count() > 0)
             {
-                JObject submodelElementsObject = MinimizeSubmodelElements(submodel.SubmodelElements);
+                JObject submodelElementsObject = MinimizeSubmodelElements(submodel.SubmodelElements.Values);
                 jObject.Merge(submodelElementsObject, JsonMergeSettings);
             }
             return jObject;
@@ -119,7 +113,7 @@ namespace BaSyx.Models.Extensions
             {
                 if (smElement.ModelType == ModelType.SubmodelElementCollection)
                 {
-                    JObject subObjects = MinimizeSubmodelElements((smElement as SubmodelElementCollection).Value);
+                    JObject subObjects = MinimizeSubmodelElements((smElement as SubmodelElementCollection).Value.Values);
                     jObject.Add(smElement.IdShort, subObjects);
                 }
                 else

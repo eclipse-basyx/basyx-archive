@@ -10,9 +10,9 @@
 *******************************************************************************/
 using System.Runtime.Serialization;
 using BaSyx.Models.Core.Common;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
+using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 {
     [DataContract]
     public class Operation : SubmodelElement, IOperation
@@ -22,10 +22,8 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelEle
         public IOperationVariableSet InOutputVariables { get; set; }
         [IgnoreDataMember]
         public MethodCalledHandler OnMethodCalled { get; set; }
-
         public override ModelType ModelType => ModelType.Operation;
-        
-        public Operation() : base() 
+        public Operation(string idShort) : base(idShort) 
         {
             InputVariables = new OperationVariableSet();
             OutputVariables = new OperationVariableSet();

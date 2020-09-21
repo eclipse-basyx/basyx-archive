@@ -9,7 +9,6 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -17,6 +16,7 @@ using System.Runtime.Serialization;
 using BaSyx.Models.Core.Common;
 using System.Collections;
 using System.Linq;
+using BaSyx.Models.Core.AssetAdministrationShell;
 
 namespace BaSyx.Models.Connectivity.Descriptors
 {
@@ -30,20 +30,21 @@ namespace BaSyx.Models.Connectivity.Descriptors
         public IEnumerable<IEndpoint> Endpoints { get; internal set; }
 
         [IgnoreDataMember]
-        public IReference Parent => null;
+        public IReferable Parent { get; set; }
         [IgnoreDataMember]
         public string Category => null;
 
         public ModelType ModelType => ModelType.AssetAdministrationShellDescriptor;
 
         public IAsset Asset { get; set; }
+
         public IElementContainer<ISubmodelDescriptor> SubmodelDescriptors { get; set; }
 
         [JsonConstructor]
         public AssetAdministrationShellDescriptor(IEnumerable<IEndpoint> endpoints) 
         {
             Endpoints = endpoints ?? new List<IEndpoint>();
-            SubmodelDescriptors = new ElementContainer<ISubmodelDescriptor>();
+            SubmodelDescriptors = new ElementContainer<ISubmodelDescriptor>(this);
         }
 
         public AssetAdministrationShellDescriptor(IAssetAdministrationShell aas, IEnumerable<IEndpoint> endpoints) : this(endpoints)

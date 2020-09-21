@@ -14,15 +14,10 @@ namespace BaSyx.API.Components
 {
     internal sealed class InternalAssetAdministationShellServiceProvider : AssetAdministrationShellServiceProvider
     {
-
         internal InternalAssetAdministationShellServiceProvider(IAssetAdministrationShell aas) : base(aas)
-        {
-            AssetAdministrationShell = aas;
-        }
+        { }
 
-        public override IAssetAdministrationShell AssetAdministrationShell { get; protected set; }
-
-        public override IAssetAdministrationShell GenerateAssetAdministrationShell()
+        public override IAssetAdministrationShell BuildAssetAdministrationShell()
         {
             return AssetAdministrationShell;
         }

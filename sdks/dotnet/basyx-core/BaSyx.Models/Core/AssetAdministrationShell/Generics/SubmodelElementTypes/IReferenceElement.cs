@@ -13,7 +13,7 @@ using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
 {
     /// <summary>
     /// A reference element is a data element that defines a logical reference to another element within the same or another AAS or a reference to an external object or entity. 

@@ -8,7 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
+using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using System;
 using BaSyx.Models.Core.Common;
@@ -34,17 +34,13 @@ namespace BaSyx.Models.Core.Attributes
 
         public PropertyAttribute(string idShort, DataObjectTypes propertyType)
         {
-            Property = new Property(new DataType(DataObjectType.Parse(propertyType)))
-            {
-                IdShort = idShort
-            };
+            Property = new Property(idShort, new DataType(DataObjectType.Parse(propertyType)));
         }
 
         public PropertyAttribute(string idShort, DataObjectTypes propertyType, string semanticId, KeyElements semanticKeyElement, KeyType semanticKeyType, bool semanticIdLocal)
         {
-            Property = new Property(new DataType(DataObjectType.Parse(propertyType)))
+            Property = new Property(idShort, new DataType(DataObjectType.Parse(propertyType)))
             {
-                IdShort = idShort,
                 SemanticId = new Reference(new Key(semanticKeyElement, semanticKeyType, semanticId, semanticIdLocal)) 
             };
         }

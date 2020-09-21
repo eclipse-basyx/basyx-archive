@@ -11,6 +11,7 @@
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using System.Collections.Generic;
 using BaSyx.Models.Core.Common;
+using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Semantics
 {
@@ -22,7 +23,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Semantics
 
         public LangStringSet Description { get; set; }
 
-        public IReference Parent { get; set; }
+        public IReferable Parent { get; set; }
 
         public Dictionary<string, string> MetaData { get; set; }
 

@@ -40,7 +40,7 @@ namespace HelloAssetAdministrationShell
             aasServer.SetServiceProvider(shellService);
 
             //Run HTTP-REST interface
-            aasServer.Run();
+            aasServer.Run();           
         }
     }
 }

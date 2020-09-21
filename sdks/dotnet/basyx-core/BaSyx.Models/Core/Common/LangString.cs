@@ -11,7 +11,7 @@
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
-namespace BaSyx.Models.Core.Common
+namespace BaSyx.Models.Core.AssetAdministrationShell
 {
     [DataContract]
     public class LangString

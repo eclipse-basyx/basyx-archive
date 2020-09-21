@@ -8,41 +8,40 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
 using BaSyx.Models.Core.Common;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 {
     public static class SubmodelElementFactory
     {
-        public static SubmodelElement CreateSubmodelElement(DataObjectType modelType, DataType valueType = null)
+        public static SubmodelElement CreateSubmodelElement(string idShort, DataObjectType modelType, DataType valueType = null)
         {
             if (modelType == ModelType.Property)
-                return new Property(valueType);
+                return new Property(idShort, valueType);
             if (modelType == ModelType.Operation)
-                return new Operation();
+                return new Operation(idShort);
             if (modelType == ModelType.Event)
-                return new Event();
+                return new Event(idShort);
             if (modelType == ModelType.BasicEvent)
-                return new BasicEvent();
+                return new BasicEvent(idShort);
             else if (modelType == ModelType.Blob)
-                return new Blob();
+                return new Blob(idShort);
             else if (modelType == ModelType.File)
-                return new File();
+                return new File(idShort);
             else if (modelType == ModelType.MultiLanguageProperty)
-                return new MultiLanguageProperty();
+                return new MultiLanguageProperty(idShort);
             else if (modelType == ModelType.ReferenceElement)
-                return new ReferenceElement();
+                return new ReferenceElement(idShort);
             else if (modelType == ModelType.RelationshipElement)
-                return new RelationshipElement();
+                return new RelationshipElement(idShort);
             else if (modelType == ModelType.SubmodelElementCollection)
-                return new SubmodelElementCollection();
+                return new SubmodelElementCollection(idShort);
             else if (modelType == ModelType.AnnotatedRelationshipElement)
-                return new AnnotatedRelationshipElement();
+                return new AnnotatedRelationshipElement(idShort);
             else if (modelType == ModelType.Entity)
-                return new Entity();
+                return new Entity(idShort);
             if (modelType == ModelType.Range)
-                return new Range();
+                return new Range(idShort);
             else
                 return null;
         }

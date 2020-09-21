@@ -8,12 +8,12 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
+using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 {
     [DataContract]
     public class Range : SubmodelElement, IRange
@@ -24,6 +24,10 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelEle
         public IValue Max { get; set; }
         public DataType ValueType { get; set; }
 
-        public Range() : base() { }
+        public Range(string idShort) : base(idShort) 
+        {            
+            Get = element => { return new ElementValue(new { Min = Min?.Value, Max = Max?.Value}, new DataType(DataObjectType.AnyType)); };
+            Set = (element, value) => { dynamic dVal = value?.Value; Min = new ElementValue(dVal?.Min, ValueType); Max = new ElementValue(dVal?.Max, ValueType); };
+        }
     }
 }

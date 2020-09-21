@@ -67,13 +67,13 @@ namespace BaSyx.Submodel.Server.Http
             services.AddRazorPages();
 
             //Check whether Submodel Service Provider exists and bind it to the Submodel-Services-Controller
-            services.AddTransient(ctx =>
+            services.AddTransient<ISubmodelServiceProvider>(ctx =>
             {
                 ISubmodelServiceProvider submodelServiceProvider = ctx
                 .GetRequiredService<ISubmodelRepositoryServiceProvider>()
                 .GetSubmodelServiceProvider(submodelId);
 
-                return new SubmodelServices(submodelServiceProvider);
+                return submodelServiceProvider;
             });
 
             // Register the Swagger generator, defining one or more Swagger documents

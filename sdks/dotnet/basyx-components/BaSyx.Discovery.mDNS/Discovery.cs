@@ -11,7 +11,7 @@ namespace BaSyx.Discovery.mDNS
         /// Returns an AssetAdministrationShell-Http-Client if found via mDNS Discovery
         /// </summary>
         /// <param name="aasId">The Asset Administration Shell's unique id to look for</param>
-        /// <param name="timeout">Timeout in ms until it stops looking</param>
+        /// <param name="timeout">Timeout in ms until it stops looking (0 = INFINITY)</param>
         /// <returns></returns>
         public static async Task<AssetAdministrationShellHttpClient> GetHttpClientByShellIdAsync(string aasId, int timeout)
         {
@@ -41,10 +41,19 @@ namespace BaSyx.Discovery.mDNS
             discoveryServer.ServiceInstanceDiscovered += eventHandler;
             discoveryServer.Start();
 
-            Task timeoutTask = Task.Delay(timeout);
-
-            while (client == null && !timeoutTask.IsCompleted)
-                await Task.Delay(100);
+            if (timeout > 0)
+            {
+                Task timeoutTask = Task.Delay(timeout);
+                while (client == null && !timeoutTask.IsCompleted)
+                    await Task.Delay(100);
+            }
+            else if (timeout == 0)
+            {
+                while (client == null)
+                    await Task.Delay(100);
+            }
+            else
+                throw new ArgumentOutOfRangeException(nameof(timeout), "Timeout must not be negative");
 
             discoveryServer.ServiceInstanceDiscovered -= eventHandler;
             discoveryServer.Stop();

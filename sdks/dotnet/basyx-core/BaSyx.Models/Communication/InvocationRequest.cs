@@ -22,6 +22,9 @@ namespace BaSyx.Models.Communication
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "inputArguments")]
         public IOperationVariableSet InputArguments { get; set; }
 
+        [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "inoutputArguments")]
+        public IOperationVariableSet InOutputArguments { get; set; }
+
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "timeout")]
         public int? Timeout { get; set; }
 
@@ -29,6 +32,7 @@ namespace BaSyx.Models.Communication
         {
             RequestId = requestId;
             InputArguments = new OperationVariableSet();
+            InOutputArguments = new OperationVariableSet();
         }
     }
 }

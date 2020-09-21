@@ -10,8 +10,8 @@
 *******************************************************************************/
 using BaSyx.Models.Extensions.Semantics.DataSpecifications;
 using BaSyx.Models.Export.EnvironmentDataSpecifications;
-using BaSyx.Models.Core.Common;
 using System;
+using BaSyx.Models.Core.AssetAdministrationShell;
 
 namespace BaSyx.Models.Export.Converter
 {

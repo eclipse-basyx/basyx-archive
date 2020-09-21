@@ -1,7 +1,7 @@
 ﻿@page "ui"
 @model BaSyx.Submodel.Server.Http.Pages.IndexModel
+@using BaSyx.Models.Core.AssetAdministrationShell;
 @using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-@using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 @using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 @using BaSyx.Models.Core.AssetAdministrationShell.References;
 @using BaSyx.Models.Core.Common;
@@ -204,9 +204,11 @@ ShowModelElementSpecificAttributes = @<text>
 
                 @foreach (var element in eventable.DataElements)
                 {
-                    <div class="row">
-                        @{ string valueTypeName = element.Cast<IProperty>()?.ValueType?.ToString() ?? "ANY"; }
-                        <div class="col-sm-10"><b>@element.IdShort (@valueTypeName)</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            @{ string valueTypeName = element.Cast<IProperty>()?.ValueType?.ToString() ?? "ANY"; }
+                            <div class="col-sm-10"><b>@element.IdShort (@valueTypeName)</b></div>
+                        </div>
                     </div>
                 }
             }
@@ -436,15 +438,14 @@ if (embeddedDataSpecifications?.Count() > 0)
                 @ShowSemanticId(submodel.SemanticId)
                 <div class="panel-body">
                     <div class="panel-group">
-                        @if (submodel.SubmodelElements?.Count > 0)
+                        @if (submodel.SubmodelElements?.Count() > 0)
                         {
                             <div class="panel panel-default">
                                 <div class="panel-heading" style="background:#005691"><h4 style="color:white">Submodel-Elements</h4></div>
                                 <div class="panel-body">
                                     <div class="panel-group">
-                                        @for (int i = 0; i < submodel.SubmodelElements.Count; i++)
+                                        @foreach (var submodelElement in submodel.SubmodelElements)
                                         {
-                                            var submodelElement = submodel.SubmodelElements[i];
                                             if (submodelElement == null)
                                             { continue; }
 

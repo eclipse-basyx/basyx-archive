@@ -8,8 +8,8 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using BaSyx.Models.Core.AssetAdministrationShell.Enums;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
+
+using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using Newtonsoft.Json;
@@ -20,20 +20,11 @@ using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.Common
 {
-
     [DataContract]
     public class DataType : IHasSemantics, IEquatable<DataType>
     {
-        [IgnoreDataMember]
-        public bool? IsCollection { get; internal set; }
-
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "dataObjectType")]
         public DataObjectType DataObjectType { get; internal set; }
-
-        [IgnoreDataMember]
-        public Type SystemType { get; internal set; }
-
-        public IReference SemanticId { get; internal set; }
 
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "schemaType")]
         public SchemaType? SchemaType { get; internal set; }
@@ -41,33 +32,42 @@ namespace BaSyx.Models.Core.Common
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "schema")]
         public string Schema { get; internal set; }
 
-        //[DataMember(EmitDefaultValue = false, IsRequired = false, Name = "valueRank")]
-        //public ValueRank? ValueRank { get; }
+        [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "semanticId")]
+        public IReference SemanticId { get; internal set; }
+
+        [IgnoreDataMember]
+        public Type SystemType { get; internal set; }
+
+        [IgnoreDataMember]
+        public bool IsCollection { get; internal set; }
 
         internal DataType() { }
 
-        public DataType(DataObjectType dataObjectType) : this(dataObjectType, false, null)
-        { }
 
         [JsonConstructor]
-        public DataType(DataObjectType dataObjectType, bool? isCollection, IReference semanticId = null)
+        public DataType(DataObjectType dataObjectType) : this(dataObjectType, false)
+        { }
+
+        public DataType(DataObjectType dataObjectType, bool isCollection) : this(dataObjectType, isCollection, null)
+        { }
+
+        public DataType(DataObjectType dataObjectType, bool isCollection, IReference semanticId) 
+            : this(dataObjectType, isCollection, semanticId, AssetAdministrationShell.SchemaType.NONE, null)
+        { }
+
+        public DataType(DataObjectType dataObjectType, bool isCollection, IReference semanticId, SchemaType schemaType, string schema)
         {
-            DataObjectType = dataObjectType;
+            DataObjectType = dataObjectType ?? throw new ArgumentNullException(nameof(dataObjectType));
+            SystemType = GetSystemTypeFromDataType(dataObjectType) ??
+                throw new ArgumentOutOfRangeException(nameof(dataObjectType), $"Unable to get system type from DataObjectType '{dataObjectType}'");
+
+            IsCollection = isCollection;
             SemanticId = semanticId;
 
-            SystemType = GetSystemTypeFromDataType(dataObjectType);
-
-            
-            if (isCollection.HasValue)
-                IsCollection = isCollection;
+            if (schemaType == AssetAdministrationShell.SchemaType.NONE)
+                SchemaType = null;
             else
-                IsCollection = false;
-            
-        }
-        public DataType(IReference semanticId, SchemaType schemaType, string schema)
-            :this(DataObjectType.AnyType, false, semanticId)
-        {
-            SchemaType = schemaType;
+                SchemaType = schemaType;
             Schema = schema;
         }
 
@@ -76,15 +76,6 @@ namespace BaSyx.Models.Core.Common
             return DataObjectType?.Name;
         }
 
-        /*
-        public enum ValueRank : int
-        {
-            Scalar = -1,
-            OneDimensional = 1,
-            TwoDimensional = 2,
-            ScalarOrOneDimensional = 3
-        }
-        */
         public static DataType GetDataTypeFromSystemType(Type type)
         {
             DataType dataType = new DataType();
@@ -205,16 +196,6 @@ namespace BaSyx.Models.Core.Common
                 return typeof(TimeSpan);
             else if (dataObjectType == DataObjectType.YearMonthDuration)
                 return typeof(TimeSpan);
-            else if (dataObjectType == ModelType.Property)
-                return typeof(Property);
-            else if (dataObjectType == ModelType.Blob)
-                return typeof(Blob);
-            else if (dataObjectType == ModelType.File)
-                return typeof(File);
-            else if (dataObjectType == ModelType.ReferenceElement)
-                return typeof(ReferenceElement);
-            else if (dataObjectType == ModelType.SubmodelElementCollection)
-                return typeof(SubmodelElementCollection);
             else
                 return null;
         }
@@ -268,7 +249,7 @@ namespace BaSyx.Models.Core.Common
             {
                 var result = 0;
                 result = (result * 397) ^ DataObjectType.GetHashCode();
-                result = (result * 397) ^ (IsCollection.Value ? 1 : 0);
+                result = (result * 397) ^ (IsCollection ? 1 : 0);
                 return result;
             }
         }
@@ -298,6 +279,21 @@ namespace BaSyx.Models.Core.Common
         }
         #endregion
 
+        public static implicit operator Type(DataType dataType)
+        {
+            if(dataType.IsCollection)
+            {
+                Type outerTypeDefinition = typeof(List<>).GetGenericTypeDefinition();
+                Type containerType = outerTypeDefinition.MakeGenericType(dataType.SystemType);
+                return containerType;
+            }
+            return dataType.SystemType;
+        }
+
+        public static implicit operator DataType(Type type)
+        {
+            return GetDataTypeFromSystemType(type);
+        }
     }
 
 

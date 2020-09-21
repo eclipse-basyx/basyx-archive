@@ -16,7 +16,6 @@ using BaSyx.Utils.ResultHandling;
 using System;
 using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.Common;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Communication;
 
 namespace BaSyx.API.Components
@@ -50,22 +49,22 @@ namespace BaSyx.API.Components
             throw new NotImplementedException();
         }
 
-        public PropertyHandler RetrievePropertyHandler(string propertyId)
+        public SubmodelElementHandler RetrieveSubmodelElementHandler(string submodelElementIdShort)
         {
             throw new NotImplementedException();
         }
 
-        public void RegisterPropertyHandler(string propertyId, PropertyHandler handler)
+        public void RegisterSubmodelElementHandler(string submodelElementIdShort, SubmodelElementHandler handler)
         {
             throw new NotImplementedException();
         }
 
-        public Delegate RetrieveMethodDelegate(string operationId)
+        public MethodCalledHandler RetrieveMethodCalledHandler(string pathToOperation)
         {
             throw new NotImplementedException();
         }
 
-        public void RegisterMethodCalledHandler(string operationId, Delegate handler)
+        public void RegisterMethodCalledHandler(string pathToOperation, MethodCalledHandler methodCalledHandler)
         {
             throw new NotImplementedException();
         }
@@ -91,81 +90,12 @@ namespace BaSyx.API.Components
         {
             return submodelClient.RetrieveSubmodel();
         }
-
-        public IResult<IOperation> CreateOperation(IOperation operation)
-        {
-            return submodelClient.CreateOperation(operation);
-        }
-
-        public IResult<IElementContainer<IOperation>> RetrieveOperations()
-        {
-            return submodelClient.RetrieveOperations();
-        }
-
-        public IResult<IOperation> RetrieveOperation(string operationId)
-        {
-            return submodelClient.RetrieveOperation(operationId);
-        }
-
-        public IResult DeleteOperation(string operationId)
-        {
-            return submodelClient.DeleteOperation(operationId);
-        }
-
+        
         public IResult<InvocationResponse> InvokeOperation(string operationId, InvocationRequest invocationRequest)
         {
             return submodelClient.InvokeOperation(operationId, invocationRequest);
         }
-
-        public IResult<IProperty> CreateProperty(IProperty Property)
-        {
-            return submodelClient.CreateProperty(Property);
-        }
-
-        public IResult<IElementContainer<IProperty>> RetrieveProperties()
-        {
-            return submodelClient.RetrieveProperties();
-        }
-
-        public IResult<IProperty> RetrieveProperty(string propertyId)
-        {
-            return submodelClient.RetrieveProperty(propertyId);
-        }
-
-        public IResult<IValue> RetrievePropertyValue(string propertyId)
-        {
-            return submodelClient.RetrievePropertyValue(propertyId);
-        }
-
-        public IResult UpdatePropertyValue(string propertyId, IValue value)
-        {
-            return submodelClient.UpdatePropertyValue(propertyId, value);
-        }
-
-        public IResult DeleteProperty(string propertyId)
-        {
-            return submodelClient.DeleteProperty(propertyId);
-        }
-
-        public IResult<IEvent> CreateEvent(IEvent eventable)
-        {
-            return submodelClient.CreateEvent(eventable);
-        }
-
-        public IResult<IElementContainer<IEvent>> RetrieveEvents()
-        {
-            return submodelClient.RetrieveEvents();
-        }
-
-        public IResult<IEvent> RetrieveEvent(string eventId)
-        {
-            return submodelClient.RetrieveEvent(eventId);
-        }
-
-        public IResult DeleteEvent(string eventId)
-        {
-            return submodelClient.DeleteEvent(eventId);
-        }
+        
 
         public IResult ThrowEvent(IPublishableEvent publishableEvent, string topic, Action<IMessagePublishedEventArgs> MessagePublished, byte qosLevel, bool retain)
         {
@@ -187,9 +117,9 @@ namespace BaSyx.API.Components
             throw new NotImplementedException();
         }
 
-        public IResult<ISubmodelElement> CreateSubmodelElement(ISubmodelElement submodelElement)
+        public IResult<ISubmodelElement> CreateSubmodelElement(string rootSubmodelElementPath, ISubmodelElement submodelElement)
         {
-            return submodelClient.CreateSubmodelElement(submodelElement);
+            return submodelClient.CreateSubmodelElement(rootSubmodelElementPath, submodelElement);
         }
 
         public IResult<IElementContainer<ISubmodelElement>> RetrieveSubmodelElements()
@@ -225,6 +155,11 @@ namespace BaSyx.API.Components
         public IResult<InvocationResponse> GetInvocationResult(string operationId, string requestId)
         {
             return submodelClient.GetInvocationResult(operationId, requestId);
+        }
+
+        public IResult UpdateSubmodelElementValue(string submodelElementId, IValue value)
+        {
+            return submodelClient.UpdateSubmodelElementValue(submodelElementId, value);
         }
     }
 }

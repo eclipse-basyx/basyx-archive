@@ -9,7 +9,7 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Constraints;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
+using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
@@ -25,15 +25,6 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
     /// </summary>
     public interface ISubmodel : IIdentifiable, IHasKind, IHasSemantics, IModelElement, IHasDataSpecification, IQualifiable
     {
-        [IgnoreDataMember]
-        IEnumerable<IProperty> Properties { get; }
-
-        [IgnoreDataMember]
-        IEnumerable<IOperation> Operations { get; }
-
-        [IgnoreDataMember]
-        IEnumerable<IEvent> Events { get; }
-
         /// <summary>
         /// A submodel consists of zero or more submodel elements. 
         /// </summary>

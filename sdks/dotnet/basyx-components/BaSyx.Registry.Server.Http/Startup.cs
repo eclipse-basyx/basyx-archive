@@ -119,6 +119,10 @@ namespace BaSyx.Registry.Server.Http
             if (ServerApplicationLifetime.ApplicationStopped != null)
                 applicationLifetime.ApplicationStopped.Register(ServerApplicationLifetime.ApplicationStopped);
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "BaSyx Registry Http REST-API");

@@ -21,6 +21,7 @@ namespace BaSyx.Models.Core.Common
         DataType ValueType { get; }
         event EventHandler<ValueChangedArgs> ValueChanged;
         T ToObject<T>();
+        object ToObject(Type type);
     }
 
     public interface IValue<out T> : IValue

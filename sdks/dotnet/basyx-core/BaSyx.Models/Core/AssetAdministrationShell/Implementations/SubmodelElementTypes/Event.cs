@@ -9,11 +9,10 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Core.Common;
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 {
     [DataContract]
     public class Event : SubmodelElement, IEvent
@@ -22,9 +21,9 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelEle
 
         public IElementContainer<ISubmodelElement> DataElements { get; set; }
 
-        public Event() : base()
+        public Event(string idShort) : base(idShort)
         {
-            DataElements = new ElementContainer<ISubmodelElement>();
+            DataElements = new ElementContainer<ISubmodelElement>(this);
         }
     }
 }

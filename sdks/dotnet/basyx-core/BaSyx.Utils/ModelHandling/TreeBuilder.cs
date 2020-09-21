@@ -15,193 +15,83 @@ using System.Linq;
 
 namespace BaSyx.Utils.ModelHandling
 {
-    public class ObjectTreeBuilder : TreeBuilder<object>
-    {
-        protected new List<ObjectTreeBuilder> children;
-        public ObjectTreeBuilder(string rootObjectName, object rootObjectValue) : this(rootObjectName, new List<object>() { rootObjectValue })
-        { }
-        public ObjectTreeBuilder(string rootObjectName, List<object> rootObjectValues) : base(rootObjectName, rootObjectValues)
-        {
-            this.children = new List<ObjectTreeBuilder>();
-        }
-
-        public T GetValue<T>()
-        {
-            if (value != null)
-                return (T)value.FirstOrDefault(c => c.GetType().IsSubclassOf(typeof(T)) || c.GetType() == typeof(T));
-            else
-                return default(T);
-        }
-
-        public new ObjectTreeBuilder AddValue(object value)
-        {
-            this.value.Add(value);
-            return this;
-        }
-
-        public ObjectTreeBuilder AddChild(ObjectTreeBuilder child)
-        {
-            child.Parent = this;
-            this.children.Add(child);
-            return this;
-        }
-
-        public new ObjectTreeBuilder AddChild(string name, params object[] value)
-        {
-            return (AddChild(name, value.ToList()));
-        }
-
-        public new ObjectTreeBuilder AddChild(string name, List<object> value)
-        {
-            var node = new ObjectTreeBuilder(name, value) { Parent = this };
-            children.Add(node);
-            return node;
-        }
-
-        public new ObjectTreeBuilder this[int i]
-        {
-            get { return children[i]; }
-        }
-       
-        public new ObjectTreeBuilder this[string name]
-        {
-            get { return children.FirstOrDefault(s => s.Name == name); }
-        }
-
-        public new ReadOnlyCollection<ObjectTreeBuilder> Children => children.AsReadOnly();
-
-        public new bool HasChild(string childName)
-        {
-            if (children == null || children.Count == 0)
-                return false;
-            else
-            {
-                var child = children.Find(c => c.Name == childName);
-                if (child == null)
-                    return false;
-                else
-                    return true;
-            }
-        }
-
-        public new bool HasChildPath(string childPath)
-        {
-            if (string.IsNullOrEmpty(childPath))
-                return false;
-
-            if (children == null || children.Count == 0)
-                return false;
-            else
-            {
-                if (childPath.Contains("/"))
-                {
-                    string[] splittedPath = childPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (!HasChild(splittedPath[0]))
-                        return false;
-                    else
-                    {
-                        var child = this[splittedPath[0]];
-                        return (child.HasChildPath(string.Join("/", splittedPath.Skip(1))));
-                    }
-                }
-                else
-                    return HasChild(childPath);
-            }
-        }
-
-        public new ObjectTreeBuilder GetChild(string childPath)
-        {
-            if (string.IsNullOrEmpty(childPath))
-                return null;
-
-            if (children == null || children.Count == 0)
-                return null;
-            else
-            {
-                ObjectTreeBuilder superChild = null;
-                if (childPath.Contains("/"))
-                {
-                    string[] splittedPath = childPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (!HasChild(splittedPath[0]))
-                        return null;
-                    else
-                    {
-                        var child = this[splittedPath[0]];
-                        superChild = child.GetChild(string.Join("/", splittedPath.Skip(1)));
-                    }
-                }
-                else
-                    superChild = this[childPath];
-
-                return superChild;
-            }
-        }
-
-        public new bool HasChildren()
-        {
-            if (children == null)
-                return false;
-            else
-            {
-                if (children.Count == 0)
-                    return false;
-                else
-                    return true;
-            }
-        }
-
-       
-
-        public new void Traverse(Action<List<object>> action)
-        {
-            action(Value);
-            foreach (var child in children)
-                child.Traverse(action);
-        }
-    }
     public class TreeBuilder<T>
     {
-        protected List<T> value;
-        protected List<TreeBuilder<T>> children;
+        protected T _value;
+        protected List<object> _additionalValues;
+        protected List<TreeBuilder<T>> _children;
+        protected string _name;
+        protected string _path;
+
+        public const string PATH_SEPERATOR = "/";
+
         public TreeBuilder<T> Parent { get; protected set; }
-        public List<T> Value { get { return value; } }
-        public string Name { get; protected set; }
+        public List<object> AdditionalValues { get { return _additionalValues; } }
+        public T Value { get { return _value; } }
+        public string Name { get { return _name; } }
+        public string Path { get { return _path; } }
 
-        public TreeBuilder(string name, T data) : this (name, new List<T>() { data })
-        { }
-
-        public TreeBuilder(string name, List<T> data)
+        public TreeBuilder(string name, T value)
         {
-            this.Name = name;
-            this.value = data;
-            this.children = new List<TreeBuilder<T>>();
+            this._name = name;
+            this._value = value;
+            this._children = new List<TreeBuilder<T>>();
+            this._additionalValues = new List<object>();
+
+            if (this.Parent != null)
+                _path += PATH_SEPERATOR + this._name;
+            else
+                _path = this._name;
         }
 
         public ReadOnlyCollection<TreeBuilder<T>> Children
         {
-            get { return children.AsReadOnly(); }
+            get { return _children.AsReadOnly(); }
         }
 
-        public TreeBuilder<T> AddValue(T value)
+        public TreeBuilder<T> ReplaceValue(T value)
         {
-            this.value.Add(value);
+            this._value = value;
+            return this;
+        }
+
+        public TreeBuilder<T> AddAdditionalValue(object value)
+        {
+            this._additionalValues.Add(value);
             return this;
         } 
 
+        public bool TryGetAdditionalValue<U>(out U obj)
+        {
+            obj = GetAdditionalValue<U>();
+            if (obj != null)
+                return true;
+            else
+                return false;
+        }
+
+        public U GetAdditionalValue<U>()
+        {
+            object obj =_additionalValues.Find(o => o is U);
+            if(obj != null)
+                return (U)obj;
+            return default;
+        }
+
         public TreeBuilder<T> this[int i]
         {
-            get { return children[i]; }
+            get { return _children[i]; }
         }
 
         public TreeBuilder<T> this[string name]
         {
-            get { return children.FirstOrDefault(s => s.Name == name); }
+            get { return _children.FirstOrDefault(s => s.Name == name); }
         }
 
-        public void Traverse(Action<List<T>> action)
+        public void Traverse(Action<T> action)
         {
-            action(Value);
-            foreach (var child in children)
+            action(_value);
+            foreach (var child in _children)
                 child.Traverse(action);
         }
 
@@ -209,27 +99,44 @@ namespace BaSyx.Utils.ModelHandling
         public TreeBuilder<T> AddChild(TreeBuilder<T> child)
         {
             child.Parent = this;
-            this.children.Add(child);
+            this._children.Add(child);
             return this;
         }
 
-        public TreeBuilder<T> AddChild(string name, params T[] value)
+        public TreeBuilder<T> AddChild(string name, T value)
         {
-            return (AddChild(name, value.ToList()));
+            TreeBuilder<T> node = new TreeBuilder<T>(name, value) { Parent = this };
+            _children.Add(node);
+            return node;
         }
 
-        public TreeBuilder<T> AddChild(string name, List<T> value)
+        public string GetPath()
         {
-            var node = new TreeBuilder<T>(name, value) { Parent = this };
-            children.Add(node);
-            return node;
+            List<string> path = GetInternalPath();
+            if(path != null)
+            {
+                path.Reverse();
+                return string.Join("/", path);
+            }
+            return null;
+        }
+
+        private List<string> GetInternalPath()
+        {
+            List<string> path = new List<string>() { this.Name };
+            if (Parent != null)
+            {
+                List<string> parentPath = Parent.GetInternalPath();
+                path.AddRange(parentPath);
+            }
+            return path;
         }
         public bool HasChildPath(string childPath)
         {
             if (string.IsNullOrEmpty(childPath))
                 return false;
 
-            if (children == null || children.Count == 0)
+            if (_children == null || _children.Count == 0)
                 return false;
             else
             {
@@ -250,11 +157,11 @@ namespace BaSyx.Utils.ModelHandling
         }
         public bool HasChildren()
         {
-            if (children == null)
+            if (_children == null)
                 return false;
             else
             {
-                if (children.Count == 0)
+                if (_children.Count == 0)
                     return false;
                 else
                     return true;
@@ -262,11 +169,11 @@ namespace BaSyx.Utils.ModelHandling
         }
         public bool HasChild(string childName)
         {
-            if (children == null || children.Count == 0)
+            if (_children == null || _children.Count == 0)
                 return false;
             else
             {
-                var child = children.Find(c => c.Name == childName);
+                var child = _children.Find(c => c.Name == childName);
                 if (child == null)
                     return false;
                 else
@@ -279,16 +186,16 @@ namespace BaSyx.Utils.ModelHandling
             if (string.IsNullOrEmpty(childPath))
                 return null;
 
-            if (children == null || children.Count == 0)
+            if (_children == null || _children.Count == 0)
                 return null;
             else
             {
-                TreeBuilder<T> superChild = null;
+                TreeBuilder<T> superChild;
                 if (childPath.Contains("/"))
                 {
                     string[] splittedPath = childPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
                     if (!HasChild(splittedPath[0]))
-                        return null;
+                        superChild = null;
                     else
                     {
                         var child = this[splittedPath[0]];

@@ -9,9 +9,7 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Export.Converter;
 using System;
@@ -19,14 +17,13 @@ using System.Collections.Generic;
 using System.Linq;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
-using Range = BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes.Range;
+using Range = BaSyx.Models.Core.AssetAdministrationShell.Implementations.Range;
 
 namespace BaSyx.Models.Export.EnvironmentSubmodelElements
 {
     public static class EnvironmentSubmodelElementFactory_V2_0
     {
-        public static ISubmodelElement ToSubmodelElement(this SubmodelElementType_V2_0 envSubmodelElement, List<IConceptDescription> conceptDescriptions)
+        public static ISubmodelElement ToSubmodelElement(this SubmodelElementType_V2_0 envSubmodelElement, List<IConceptDescription> conceptDescriptions, IReferable parent)
         {
             if (envSubmodelElement == null)
                 return null;
@@ -46,7 +43,7 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
                 else if (!DataObjectType.TryParse(castedProperty.ValueType, out dataObjectType))
                     return null;
 
-                Property property = new Property(new DataType(dataObjectType))
+                Property property = new Property(castedProperty.IdShort, new DataType(dataObjectType))
                 {
                     Value = castedProperty.Value,
                     ValueId = castedProperty.ValueId?.ToReference_V2_0()
@@ -56,7 +53,7 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             }
             else if (modelType == ModelType.MultiLanguageProperty && envSubmodelElement is MultiLanguageProperty_V2_0 castedMultiLanguageProperty)
             {
-                MultiLanguageProperty multiLanguageProperty = new MultiLanguageProperty
+                MultiLanguageProperty multiLanguageProperty = new MultiLanguageProperty(castedMultiLanguageProperty.IdShort)
                 {
                     Value = castedMultiLanguageProperty.Value,
                     ValueId = castedMultiLanguageProperty.ValueId?.ToReference_V2_0()
@@ -69,7 +66,7 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
                 if (!DataObjectType.TryParse(castedRange.ValueType, out DataObjectType dataObjectType))
                     return null;
 
-                Range range = new Range()
+                Range range = new Range(castedRange.IdShort)
                 {
                     Min = new ElementValue(castedRange.Min, new DataType(dataObjectType)),
                     Max = new ElementValue(castedRange.Max, new DataType(dataObjectType)),
@@ -80,7 +77,7 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             }            
             else if (modelType == ModelType.File && envSubmodelElement is File_V2_0 castedFile)
             {
-                File file = new File
+                File file = new File(castedFile.IdShort)
                 {
                     MimeType = castedFile.MimeType,
                     Value = castedFile.Value
@@ -90,7 +87,7 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             }
             else if (modelType == ModelType.Blob && envSubmodelElement is Blob_V2_0 castedBlob)
             {
-                Blob blob = new Blob
+                Blob blob = new Blob(castedBlob.IdShort)
                 {
                     MimeType = castedBlob.MimeType,
                     Value = Convert.FromBase64String(castedBlob.Value)
@@ -100,7 +97,7 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             }
             else if (modelType == ModelType.RelationshipElement && envSubmodelElement is RelationshipElement_V2_0 castedRelationshipElement)
             {
-                RelationshipElement relationshipElement = new RelationshipElement
+                RelationshipElement relationshipElement = new RelationshipElement(castedRelationshipElement.IdShort)
                 {
                     First = castedRelationshipElement.First?.ToReference_V2_0<IReferable>(),
                     Second = castedRelationshipElement.Second?.ToReference_V2_0<IReferable>()
@@ -110,7 +107,7 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             }
             else if (modelType == ModelType.AnnotatedRelationshipElement && envSubmodelElement is AnnotatedRelationshipElement_V2_0 castedAnnotatedRelationshipElement)
             {
-                AnnotatedRelationshipElement annotatedRelationshipElement = new AnnotatedRelationshipElement()
+                AnnotatedRelationshipElement annotatedRelationshipElement = new AnnotatedRelationshipElement(castedAnnotatedRelationshipElement.IdShort)
                 {
                     First = castedAnnotatedRelationshipElement.First?.ToReference_V2_0<IReferable>(),
                     Second = castedAnnotatedRelationshipElement.Second?.ToReference_V2_0<IReferable>(),
@@ -121,7 +118,7 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             }
             else if (modelType == ModelType.ReferenceElement && envSubmodelElement is ReferenceElement_V2_0 castedReferenceElement)
             {
-                ReferenceElement referenceElement = new ReferenceElement
+                ReferenceElement referenceElement = new ReferenceElement(castedReferenceElement.IdShort)
                 {
                     Value = castedReferenceElement.Value?.ToReference_V2_0()
                 };
@@ -130,13 +127,13 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             }
             else if (modelType == ModelType.Event && envSubmodelElement is Event_V2_0 castedEvent)
             {
-                Event eventable = new Event();
+                Event eventable = new Event(castedEvent.IdShort);
 
                 submodelElement = eventable;
             }
             else if (modelType == ModelType.BasicEvent && envSubmodelElement is BasicEvent_V2_0 castedBasicEvent)
             {
-                BasicEvent basicEvent = new BasicEvent()
+                BasicEvent basicEvent = new BasicEvent(castedBasicEvent.IdShort)
                 {
                     Observed = castedBasicEvent.Observed.ToReference_V2_0<IReferable>()
                 };
@@ -145,39 +142,39 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             }
             else if (modelType == ModelType.Entity && envSubmodelElement is Entity_V2_0 castedEntity)
             {
-                Entity entity = new Entity()
+                Entity entity = new Entity(castedEntity.IdShort)
                 {
                     EntityType = (EntityType)Enum.Parse(typeof(EntityType), castedEntity.EntityType.ToString()),
                     Asset = castedEntity.AssetReference.ToReference_V2_0<IAsset>()
                 };
 
-                var statements = castedEntity.Statements?.ConvertAll(c => c.submodelElement.ToSubmodelElement(conceptDescriptions));
+                var statements = castedEntity.Statements?.ConvertAll(c => c.submodelElement.ToSubmodelElement(conceptDescriptions, parent));
                 if (statements?.Count > 0)
                     foreach (var element in statements)
-                        entity.Statements.Add(element);
+                        entity.Statements.Create(element);
 
                 submodelElement = entity;
             }
             else if (modelType == ModelType.Operation && envSubmodelElement is Operation_V2_0 castedOperation)
             {
-                Operation operation = new Operation
+                Operation operation = new Operation(castedOperation.IdShort)
                 {
                     InputVariables = new OperationVariableSet(),
                     OutputVariables = new OperationVariableSet(),
                     InOutputVariables = new OperationVariableSet()
                 };
 
-                var operationInElements = castedOperation.InputVariables?.ConvertAll(c => c.Value?.submodelElement?.ToSubmodelElement(conceptDescriptions));
+                var operationInElements = castedOperation.InputVariables?.ConvertAll(c => c.Value?.submodelElement?.ToSubmodelElement(conceptDescriptions, parent));
                 if(operationInElements?.Count > 0)
                     foreach (var element in operationInElements)
                         operation.InputVariables.Add(element);
                 
-                var operationOutElements = castedOperation.OutputVariables?.ConvertAll(c => c.Value?.submodelElement?.ToSubmodelElement(conceptDescriptions));
+                var operationOutElements = castedOperation.OutputVariables?.ConvertAll(c => c.Value?.submodelElement?.ToSubmodelElement(conceptDescriptions, parent));
                 if (operationOutElements?.Count > 0)
                     foreach (var element in operationOutElements)
                         operation.OutputVariables.Add(element);
 
-                var operationInOutElements = castedOperation.InOutputVariables?.ConvertAll(c => c.Value?.submodelElement?.ToSubmodelElement(conceptDescriptions));
+                var operationInOutElements = castedOperation.InOutputVariables?.ConvertAll(c => c.Value?.submodelElement?.ToSubmodelElement(conceptDescriptions, parent));
                 if (operationInOutElements?.Count > 0)
                     foreach (var element in operationInOutElements)
                         operation.InOutputVariables.Add(element);
@@ -186,14 +183,14 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             }
             else if (modelType == ModelType.SubmodelElementCollection && envSubmodelElement is SubmodelElementCollection_V2_0 castedSubmodelElementCollection)
             {
-                SubmodelElementCollection submodelElementCollection = new SubmodelElementCollection();
+                SubmodelElementCollection submodelElementCollection = new SubmodelElementCollection(castedSubmodelElementCollection.IdShort);
 
                 if (castedSubmodelElementCollection.Value?.Count > 0)
                 {
-                    submodelElementCollection.Value = new ElementContainer<ISubmodelElement>();
-                    List<ISubmodelElement> smElements = castedSubmodelElementCollection.Value?.ConvertAll(c => c.submodelElement?.ToSubmodelElement(conceptDescriptions));
+                    submodelElementCollection.Value = new ElementContainer<ISubmodelElement>(parent, submodelElementCollection, null);
+                    List<ISubmodelElement> smElements = castedSubmodelElementCollection.Value?.ConvertAll(c => c.submodelElement?.ToSubmodelElement(conceptDescriptions, parent));
                     foreach (var smElement in smElements)
-                        submodelElementCollection.Value.Add(smElement);
+                        submodelElementCollection.Value.Create(smElement);
                 }
 
                 submodelElement = submodelElementCollection;
@@ -208,9 +205,6 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             submodelElement.IdShort = envSubmodelElement.IdShort;
             submodelElement.Kind = envSubmodelElement.Kind;
             submodelElement.SemanticId = envSubmodelElement.SemanticId?.ToReference_V2_0();
-            submodelElement.Parent = string.IsNullOrEmpty(envSubmodelElement.Parent) ? null :
-                    new Reference(
-                        new Key(KeyElements.AssetAdministrationShell, KeyType.IRI, envSubmodelElement.Parent, true));
             submodelElement.Constraints = null;
 
             string semanticId = envSubmodelElement.SemanticId?.Keys?.FirstOrDefault()?.Value;
@@ -241,7 +235,6 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
                 Description = element.Description,
                 IdShort = element.IdShort,
                 Kind = element.Kind,
-                Parent = element.Parent?.First?.Value,
                 Qualifier = null,
                 SemanticId = element.SemanticId?.ToEnvironmentReference_V2_0(),
             };
@@ -309,7 +302,7 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
                 };
 
                 List<EnvironmentSubmodelElement_V2_0> statements = new List<EnvironmentSubmodelElement_V2_0>();
-                if (castedEntity.Statements?.Count > 0)
+                if (castedEntity.Statements?.Count() > 0)
                     foreach (var smElement in castedEntity.Statements)
                         statements.Add(smElement.ToEnvironmentSubmodelElement_V2_0());
                 (environmentSubmodelElement.submodelElement as Entity_V2_0).Statements = statements;
@@ -350,7 +343,7 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             {
                 environmentSubmodelElement.submodelElement = new SubmodelElementCollection_V2_0(submodelElementType);
                 List<EnvironmentSubmodelElement_V2_0> environmentSubmodelElements = new List<EnvironmentSubmodelElement_V2_0>();
-                if (castedSubmodelElementCollection.Value?.Count > 0)
+                if (castedSubmodelElementCollection.Value?.Count() > 0)
                     foreach (var smElement in castedSubmodelElementCollection.Value)
                         environmentSubmodelElements.Add(smElement.ToEnvironmentSubmodelElement_V2_0());
                 (environmentSubmodelElement.submodelElement as SubmodelElementCollection_V2_0).Value = environmentSubmodelElements;

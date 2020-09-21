@@ -13,30 +13,24 @@ using Microsoft.AspNetCore.Mvc;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Utils.ResultHandling;
 using BaSyx.API.Components;
-using BaSyx.Models.Connectivity.Descriptors;
-using BaSyx.Models.Core.Common;
 
 namespace BaSyx.API.Http.Controllers
 {
     /// <summary>
     /// The Submodel Repository Controller
     /// </summary>
-    public class SubmodelRepositoryServices : Controller, ISubmodelRepositoryServiceProvider
+    public class SubmodelRepositoryServices : Controller
     {
+        private readonly ISubmodelRepositoryServiceProvider serviceProvider;
 
-        private readonly ISubmodelRepositoryServiceProvider repository;
-
-        public IEnumerable<ISubmodel> Submodels => repository.Submodels;
-        public ISubmodelRepositoryDescriptor ServiceDescriptor { get; }
-
-
+        /// <summary>
+        /// Constructor for the Submodel Repository Services Controller
+        /// </summary>
+        /// <param name="submodelRepositoryServiceProvider"></param>
         public SubmodelRepositoryServices(ISubmodelRepositoryServiceProvider submodelRepositoryServiceProvider)
         {
-            repository = submodelRepositoryServiceProvider;
-            ServiceDescriptor = submodelRepositoryServiceProvider.ServiceDescriptor;
+            serviceProvider = submodelRepositoryServiceProvider;
         }
-
-        #region REST-Interface SubmodelRepository
 
         /// <summary>
         /// Retrieves all Submodels from the repository service endpoint
@@ -50,7 +44,7 @@ namespace BaSyx.API.Http.Controllers
         [ProducesResponseType(typeof(List<BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel>), 200)]
         public IActionResult GetAllSubmodelsFromRepo()
         {
-            var result = RetrieveSubmodels();
+            var result = serviceProvider.RetrieveSubmodels();
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
@@ -69,7 +63,7 @@ namespace BaSyx.API.Http.Controllers
             if (string.IsNullOrEmpty(submodelId))
                 return ResultHandling.NullResult(nameof(submodelId));
 
-            var result = RetrieveSubmodel(submodelId);
+            var result = serviceProvider.RetrieveSubmodel(submodelId);
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
         
@@ -88,7 +82,7 @@ namespace BaSyx.API.Http.Controllers
             if (submodel == null)
                 return ResultHandling.NullResult(nameof(submodel));
 
-            var result = CreateSubmodel(submodel);
+            var result = serviceProvider.CreateSubmodel(submodel);
             return result.CreateActionResult(CrudOperation.Create);
         }
         /// <summary>
@@ -106,70 +100,8 @@ namespace BaSyx.API.Http.Controllers
             if (string.IsNullOrEmpty(submodelId))
                 return ResultHandling.NullResult(nameof(submodelId));
 
-            var result = DeleteSubmodel(submodelId);
+            var result = serviceProvider.DeleteSubmodel(submodelId);
             return result.CreateActionResult(CrudOperation.Delete);
         }
-
-        #endregion
-        
-        #region Helper Methods
-
-        #endregion
-
-        #region Interface Implementation SubmodelRepository
-        public void RegisterSubmodelServiceProvider(string id, ISubmodelServiceProvider submodelServiceProvider)
-        {
-            repository.RegisterSubmodelServiceProvider(id, submodelServiceProvider);
-        }
-
-        public ISubmodelServiceProvider GetSubmodelServiceProvider(string id)
-        {
-            return repository.GetSubmodelServiceProvider(id);
-        }
-
-        public IEnumerable<ISubmodelServiceProvider> GetSubmodelServiceProviders()
-        {
-            return repository.GetSubmodelServiceProviders();
-        }
-
-        public void BindTo(IEnumerable<ISubmodel> element)
-        {
-            repository.BindTo(element);
-        }
-
-        public IEnumerable<ISubmodel> GetBinding()
-        {
-            return repository.GetBinding();
-        }
-
-        public IResult<ISubmodel> CreateSubmodel(ISubmodel submodel)
-        {
-            return repository.CreateSubmodel(submodel);
-        }
-
-        public IResult<ISubmodel> RetrieveSubmodel(string submodelId)
-        {
-            return repository.RetrieveSubmodel(submodelId);
-        }
-
-        public IResult<IElementContainer<ISubmodel>> RetrieveSubmodels()
-        {
-            return repository.RetrieveSubmodels();
-        }
-
-        public IResult UpdateSubmodel(string submodelId, ISubmodel submodel)
-        {
-            return repository.UpdateSubmodel(submodelId, submodel);
-        }
-
-        public IResult DeleteSubmodel(string submodelId)
-        {
-            return repository.DeleteSubmodel(submodelId);
-        }
-
-
-
-
-        #endregion
     }
 }

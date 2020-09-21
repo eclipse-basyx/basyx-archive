@@ -41,6 +41,30 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
             ValueType = valueType;
         }
 
+        public object ToObject(Type type)
+        {
+            if (Value == null || type == null)
+                return null;
+
+            try
+            {
+                Value = Convert.ChangeType(Value, type);
+                return Value;
+            }
+            catch
+            {
+                try
+                {
+                    JToken jVal = JToken.Parse(Value.ToString());
+                    object convertedVal = jVal.ToObject(type);
+                    return convertedVal;
+                }
+                catch
+                {
+                    throw new InvalidCastException("Cannot convert " + Value?.GetType() + " to " + type.Name);
+                }
+            }
+        }
 
         public T ToObject<T>()
         {
@@ -59,8 +83,8 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
                 {
                     try
                     {
-                        var jVal = JValue.Parse(Value.ToString());
-                        var convertedVal = jVal.ToObject<T>();
+                        JToken jVal = JToken.Parse(Value.ToString());
+                        T convertedVal = jVal.ToObject<T>();
                         return convertedVal;
                     }
                     catch
@@ -71,27 +95,28 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
             }
         }
     }
+
     [DataContract]
-    public class PropertyValue<TValue> : ElementValue, IValue<TValue>
+    public class ElementValue<TValue> : ElementValue, IValue<TValue>
     {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Include)]
         public new TValue Value { get; set; }
 
-        public PropertyValue() : this(default, DataType.GetDataTypeFromSystemType(typeof(TValue)))
+        public ElementValue() : this(default, DataType.GetDataTypeFromSystemType(typeof(TValue)))
         { }
 
-        public PropertyValue(TValue value) : this(value, DataType.GetDataTypeFromSystemType(typeof(TValue)))
+        public ElementValue(TValue value) : this(value, DataType.GetDataTypeFromSystemType(typeof(TValue)))
         { }
 
-        public PropertyValue(TValue value, DataType valueType) : base(value, valueType)
+        public ElementValue(TValue value, DataType valueType) : base(value, valueType)
         {
             Value = value;
             ValueType = valueType;
         }
 
-        public static implicit operator PropertyValue<TValue>(TValue value)
+        public static implicit operator ElementValue<TValue>(TValue value)
         {
-            return new PropertyValue<TValue>(value);
+            return new ElementValue<TValue>(value);
         }
     }
 }

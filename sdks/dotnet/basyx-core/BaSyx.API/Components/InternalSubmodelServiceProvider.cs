@@ -16,7 +16,7 @@ namespace BaSyx.API.Components
     {
         internal InternalSubmodelServiceProvider(ISubmodel submodel) : base(submodel)
         {
-            UseInMemoryPropertyHandler();
+            UseInMemorySubmodelElementHandler();
         }
     }
 }

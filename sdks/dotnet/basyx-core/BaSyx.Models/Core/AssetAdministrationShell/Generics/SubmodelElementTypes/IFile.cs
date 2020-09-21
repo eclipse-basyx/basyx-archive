@@ -10,7 +10,7 @@
 *******************************************************************************/
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
 {
     /// <summary>
     /// A File is a data element that represents an address to a file. The value is an URI that can represent an absolute or relative path. 

@@ -18,7 +18,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using BaSyx.Utils.PathHandling;
 using BaSyx.Models.Core.Common;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Connectivity.Descriptors;
 using System.Linq;
 using BaSyx.Models.Connectivity;
@@ -53,7 +52,7 @@ namespace BaSyx.AAS.Client.Http
 
         private AssetAdministrationShellHttpClient()
         {
-            JsonSerializerSettings = new JsonStandardSettings();
+            JsonSerializerSettings = new DependencyInjectionJsonSerializerSettings();
         }
 
         public AssetAdministrationShellHttpClient(Uri endpoint) : this()

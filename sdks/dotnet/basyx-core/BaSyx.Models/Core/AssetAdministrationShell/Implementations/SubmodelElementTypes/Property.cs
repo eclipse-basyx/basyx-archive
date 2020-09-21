@@ -8,60 +8,65 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
+using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using Newtonsoft.Json;
 using System;
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 {
+    ///<inheritdoc cref="IProperty"/>
     [DataContract]
     public class Property : SubmodelElement, IProperty
     {
         public override ModelType ModelType => ModelType.Property;
-        
-        internal object _value;
+
+        private object _value;
         public virtual object Value
         {
-            get => _value;
+            get => _value;            
             set
             {
                 ValueChanged?.Invoke(this, new ValueChangedArgs(this.IdShort, value, ValueType));
                 _value = value;
             }
         }
+
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "valueType")]
         public virtual DataType ValueType { get; set; }
         public IReference ValueId { get; set; }
 
         public event EventHandler<ValueChangedArgs> ValueChanged;
 
-        [IgnoreDataMember]
-        public virtual GetPropertyValueHandler Get { get; set; }
-        [IgnoreDataMember]
-        public virtual SetPropertyValueHandler Set { get; set; }
-
-        public Property() : this(null, null)
+        public Property(string idShort) : this(idShort, null, null)
         { }
 
-        public Property(DataType valueType) : this(valueType, null)
+        public Property(string idShort, DataType valueType) : this(idShort, valueType, null)
         { }
 
         [JsonConstructor]
-        public Property(DataType valueType, object value) : base()
+        public Property(string idShort, DataType valueType, object value) : base(idShort)
         {
             ValueType = valueType;
             Value = value;
+
+            Get = element  => { return new ElementValue(Value, ValueType); };
+            Set = (element, val) => { Value = val.Value; };
         }
 
         public T ToObject<T>()
         {
             return new ElementValue(Value, ValueType).ToObject<T>();
         }
-    }
 
+        public object ToObject(Type type)
+        {
+            return new ElementValue(Value, ValueType).ToObject(type);
+        }
+    }
+    ///<inheritdoc cref="IProperty"/>
     [DataContract]
     public class Property<TInnerType> : Property, IProperty<TInnerType>
     {
@@ -79,34 +84,37 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelEle
             }
             set => base.Value = value;
         }
-        public override DataType ValueType => DataType.GetDataTypeFromSystemType(typeof(TInnerType));
+        public override DataType ValueType => typeof(TInnerType);
 
         [IgnoreDataMember]
-        public new GetPropertyValueHandler<TInnerType> Get
+        public new GetValueHandler<TInnerType> Get
         {
             get
             {
                 if (base.Get != null)
-                    return new GetPropertyValueHandler<TInnerType>(de => { return base.Get.Invoke(de).ToObject<TInnerType>(); });
+                    return new GetValueHandler<TInnerType>(element => { return base.Get.Invoke(element).ToObject<TInnerType>(); });
                 else
                     return null;
             }
-            set => base.Get = new GetPropertyValueHandler(de => new PropertyValue<TInnerType>(value.Invoke(de)));
+            set => base.Get = new GetValueHandler(de => new ElementValue<TInnerType>(value.Invoke(de)));
         }
         [IgnoreDataMember]
-        public new SetPropertyValueHandler<TInnerType> Set
+        public new SetValueHandler<TInnerType> Set
         {
             get
             {
                 if (base.Set != null)
-                    return new SetPropertyValueHandler<TInnerType>((de, val) => { base.Set.Invoke(de, new PropertyValue<TInnerType>(val)); });
+                    return new SetValueHandler<TInnerType>((element, val) => { base.Set.Invoke(element, new ElementValue<TInnerType>(val)); });
                 else
                     return null;
             }
-            set => base.Set = new SetPropertyValueHandler((de, val) => value.Invoke(de, val.ToObject<TInnerType>()));
+            set => base.Set = new SetValueHandler((element, val) => value.Invoke(element, val.ToObject<TInnerType>()));
         }
 
-        public Property() : base(DataType.GetDataTypeFromSystemType(typeof(TInnerType))) { }
+        public Property(string idShort) : base(idShort, typeof(TInnerType)) { }
+
+        [JsonConstructor]
+        public Property(string idShort, TInnerType value) : base(idShort, typeof(TInnerType), value) { }
 
     }
 }

@@ -1,7 +1,7 @@
 using BaSyx.API.Components;
 using BaSyx.Models.Connectivity;
 using BaSyx.Models.Connectivity.Descriptors;
-using BaSyx.Models.Core.AssetAdministrationShell.Enums;
+using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
@@ -31,19 +31,16 @@ namespace BaSyx.Components.Tests
             registryHttpServer.SetRegistryProvider(new FileBasedRegistry());
             _ = registryHttpServer.RunAsync();
 
-            registryHttpClient = new RegistryHttpClient();
+            RegistryClientSettings registryClientSettings = RegistryClientSettings.LoadSettings();
+            registryHttpClient = new RegistryHttpClient(registryClientSettings);
         }
 
         
 
-        private static IAssetAdministrationShell aas = new AssetAdministrationShell()
+        private static IAssetAdministrationShell aas = new AssetAdministrationShell("MyTestAAS", new Identifier("https://www.basys40.de/shells/MyTestAAS", KeyType.IRI))
         {
-            IdShort = "MyTestAAS",
-            Identification = new Identifier("https://www.basys40.de/shells/MyTestAAS", KeyType.IRI),
-            Asset = new Asset()
+            Asset = new Asset("MyTestAsset", new Identifier("https://www.basys40.de/assets/MyTestAsset", KeyType.IRI))
             {
-                IdShort = "MyTestAsset",
-                Identification = new Identifier("https://www.basys40.de/assets/MyTestAsset", KeyType.IRI),
                 Kind = AssetKind.Instance
             },
             Administration = new AdministrativeInformation()
@@ -58,19 +55,15 @@ namespace BaSyx.Components.Tests
             },
             Submodels = new ElementContainer<ISubmodel>()
             {
-                new Models.Core.AssetAdministrationShell.Implementations.Submodel()
+                new Submodel("MyTestSubmodel", new Identifier("https://www.basys40.de/submodels/MyTestSubmodel", KeyType.IRI))
                 {
-                    IdShort = "MyTestSubmodel",
-                    Identification = new Identifier("https://www.basys40.de/submodels/MyTestSubmodel", KeyType.IRI),
                     SemanticId = new Reference(new Key(KeyElements.GlobalReference, KeyType.IRI, "urn:basys:org.eclipse.basyx:submodels:MyTestSubmodel:1.0.0", false))
                 }
             }
         };
 
-        private static ISubmodel submodel = new Models.Core.AssetAdministrationShell.Implementations.Submodel()
+        private static ISubmodel submodel = new Submodel("MyAdditionalTestSubmodel", new Identifier("https://www.basys40.de/submodels/MyAdditionalTestSubmodel", KeyType.IRI))
         {
-            IdShort = "MyAdditionalTestSubmodel",
-            Identification = new Identifier("https://www.basys40.de/submodels/MyAdditionalTestSubmodel", KeyType.IRI),
             SemanticId = new Reference(new Key(KeyElements.GlobalReference, KeyType.IRI, "urn:basys:org.eclipse.basyx:submodels:MyAdditionalTestSubmodel:1.0.0", false))
         };
 
@@ -85,18 +78,31 @@ namespace BaSyx.Components.Tests
         });
 
         [TestMethod]
-        public void Test1CreateOrUpdateAssetAdministrationShellRegistration()
+        public void Test11_CreateBlankAssetAdministrationShellRegistration()
         {
             var result = CreateOrUpdateAssetAdministrationShellRegistration(aas.Identification.Id, aasDescriptor);
             result.Entity.Should().BeEquivalentTo(aasDescriptor);
         }
+
+        [TestMethod]
+        public void Test12_UpdateAssetAdministrationShellRegistration()
+        {
+            aasDescriptor.SubmodelDescriptors.Add(new SubmodelDescriptor(aas.Submodels["MyTestSubmodel"], new List<IEndpoint>()
+            {
+                new HttpEndpoint("http://localhost:5080/aas/submodels/MyTestSubmodel/submodel")
+            }));
+
+            var updatedResult = CreateOrUpdateAssetAdministrationShellRegistration(aas.Identification.Id, aasDescriptor);
+            updatedResult.Entity.Should().BeEquivalentTo(aasDescriptor);
+        }
+
         public IResult<IAssetAdministrationShellDescriptor> CreateOrUpdateAssetAdministrationShellRegistration(string aasId, IAssetAdministrationShellDescriptor aasDescriptor)
         {
             return registryHttpClient.CreateOrUpdateAssetAdministrationShellRegistration(aasId, aasDescriptor);
         }
 
         [TestMethod]
-        public void Test2CreateOrUpdateSubmodelRegistration()
+        public void Test2_CreateOrUpdateSubmodelRegistration()
         {
             var result = CreateOrUpdateSubmodelRegistration(aas.Identification.Id, submodel.Identification.Id, submodelDescriptor);
             result.Entity.Should().BeEquivalentTo(submodelDescriptor);
@@ -109,7 +115,7 @@ namespace BaSyx.Components.Tests
         }
 
         [TestMethod]
-        public void Test3RetrieveAssetAdministrationShellRegistration()
+        public void Test3_RetrieveAssetAdministrationShellRegistration()
         {
             var result = RetrieveAssetAdministrationShellRegistration(aas.Identification.Id);
             result.Entity.Should().BeEquivalentTo(aasDescriptor);
@@ -121,7 +127,7 @@ namespace BaSyx.Components.Tests
         }
 
         [TestMethod]
-        public void Test41RetrieveAllAssetAdministrationShellRegistrations()
+        public void Test41_RetrieveAllAssetAdministrationShellRegistrations()
         {
             var result = RetrieveAllAssetAdministrationShellRegistrations();
             result.Entity.Should().ContainEquivalentOf(aasDescriptor);
@@ -133,7 +139,7 @@ namespace BaSyx.Components.Tests
         }
 
         [TestMethod]
-        public void Test42RetrieveAllAssetAdministrationShellRegistrations()
+        public void Test42_RetrieveAllAssetAdministrationShellRegistrations()
         {
             var result = RetrieveAllAssetAdministrationShellRegistrations(p => p.Identification.Id == aas.Identification.Id);
             result.Entity.Should().ContainEquivalentOf(aasDescriptor);
@@ -145,7 +151,7 @@ namespace BaSyx.Components.Tests
         }
 
         [TestMethod]
-        public void Test5RetrieveSubmodelRegistration()
+        public void Test5_RetrieveSubmodelRegistration()
         {
             var result = RetrieveSubmodelRegistration(aas.Identification.Id, submodel.Identification.Id);
             result.Entity.Should().BeEquivalentTo(submodelDescriptor);
@@ -158,7 +164,7 @@ namespace BaSyx.Components.Tests
         }
 
         [TestMethod]
-        public void Test61RetrieveAllSubmodelRegistrations()
+        public void Test61_RetrieveAllSubmodelRegistrations()
         {
             var result = RetrieveAllSubmodelRegistrations(aas.Identification.Id);
             result.Entity.Should().ContainEquivalentOf(submodelDescriptor);
@@ -170,7 +176,7 @@ namespace BaSyx.Components.Tests
         }
 
         [TestMethod]
-        public void Test62RetrieveAllSubmodelRegistrations()
+        public void Test62_RetrieveAllSubmodelRegistrations()
         {
             var result = RetrieveAllSubmodelRegistrations(aas.Identification.Id, p => p.Identification.Id == submodel.Identification.Id);
             result.Entity.Should().ContainEquivalentOf(submodelDescriptor);
@@ -182,7 +188,7 @@ namespace BaSyx.Components.Tests
         }
 
         [TestMethod]
-        public void Test7DeleteSubmodelRegistration()
+        public void Test7_DeleteSubmodelRegistration()
         {
             var deleted = DeleteSubmodelRegistration(aas.Identification.Id, submodel.Identification.Id);
             deleted.Success.Should().BeTrue();
@@ -198,7 +204,7 @@ namespace BaSyx.Components.Tests
         }
 
         [TestMethod]
-        public void Test8DeleteAssetAdministrationShellRegistration()
+        public void Test8_DeleteAssetAdministrationShellRegistration()
         {
             var deleted = DeleteAssetAdministrationShellRegistration(aas.Identification.Id);
             deleted.Success.Should().BeTrue();

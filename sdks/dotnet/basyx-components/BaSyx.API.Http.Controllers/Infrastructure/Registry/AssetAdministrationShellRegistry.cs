@@ -14,17 +14,15 @@ using BaSyx.API.Components;
 using BaSyx.Utils.ResultHandling;
 using System.Web;
 using BaSyx.Models.Connectivity.Descriptors;
-using BaSyx.Models.Core.Common;
-using System;
 
 namespace BaSyx.API.Http.Controllers
 {
     /// <summary>
     /// The Http-Controller implementation of the IAssetAdministrationShellRegistry interface
     /// </summary>
-    public class AssetAdministrationShellRegistry : Controller, IAssetAdministrationShellRegistry
+    public class AssetAdministrationShellRegistry : Controller
     {
-        private readonly IAssetAdministrationShellRegistry aasRegistryImpl;
+        private readonly IAssetAdministrationShellRegistry serviceProvider;
 
         /// <summary>
         /// The Constructor for the AssetAdministrationShellRegistry-Controller
@@ -32,10 +30,9 @@ namespace BaSyx.API.Http.Controllers
         /// <param name="aasRegistry">The backend implementation for the IAssetAdministrationShellRegistry interface. Usually provided by the Depedency Injection mechanism.</param>
         public AssetAdministrationShellRegistry(IAssetAdministrationShellRegistry aasRegistry)
         {
-            aasRegistryImpl = aasRegistry;
+            serviceProvider = aasRegistry;
         }
 
-        #region REST-Interface
         /// <summary>
         /// Retrieves all registered Asset Administration Shells within system (e.g. Station, Line, Plant, Area, etc.) defined by the Registry
         /// </summary>
@@ -45,7 +42,7 @@ namespace BaSyx.API.Http.Controllers
         [ProducesResponseType(typeof(List<AssetAdministrationShellDescriptor>), 200)]
         public IActionResult GetAllAssetAdministrationShellDescriptors()
         {
-            var result = RetrieveAllAssetAdministrationShellRegistrations();
+            var result = serviceProvider.RetrieveAllAssetAdministrationShellRegistrations();
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
@@ -64,7 +61,7 @@ namespace BaSyx.API.Http.Controllers
                 return ResultHandling.NullResult(nameof(aasId));
 
             aasId = HttpUtility.UrlDecode(aasId);
-            var result = RetrieveAssetAdministrationShellRegistration(aasId);
+            var result = serviceProvider.RetrieveAssetAdministrationShellRegistration(aasId);
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
 
@@ -83,9 +80,15 @@ namespace BaSyx.API.Http.Controllers
         {
             if (string.IsNullOrEmpty(aasId))
                 return ResultHandling.NullResult(nameof(aasId));
-            
+            if(aasDescriptor.Identification == null || string.IsNullOrEmpty(aasDescriptor.Identification.Id))
+                return ResultHandling.NullResult("The identification property of the Asset Administration Shell Descriptor is null or empty");
+
             aasId = HttpUtility.UrlDecode(aasId);
-            var result = CreateOrUpdateAssetAdministrationShellRegistration(aasId, aasDescriptor);
+
+            if (aasId != aasDescriptor.Identification.Id)
+                return ResultHandling.BadRequestResult($"Path parameter {aasId} does not equal Asset Administration Shell Descriptor identification property {aasDescriptor.Identification.Id}");
+            
+            var result = serviceProvider.CreateOrUpdateAssetAdministrationShellRegistration(aasId, aasDescriptor);
             return result.CreateActionResult(CrudOperation.Create, "api/v1/registry/" + HttpUtility.UrlEncode(aasId));
         }
 
@@ -105,7 +108,7 @@ namespace BaSyx.API.Http.Controllers
                 return ResultHandling.NullResult(nameof(aasId));
 
             aasId = HttpUtility.UrlDecode(aasId);
-            var result = DeleteAssetAdministrationShellRegistration(aasId);
+            var result = serviceProvider.DeleteAssetAdministrationShellRegistration(aasId);
             return result.CreateActionResult(CrudOperation.Delete);
         }
 
@@ -130,11 +133,16 @@ namespace BaSyx.API.Http.Controllers
                 return ResultHandling.NullResult(nameof(submodelId));
             if (submodelDescriptor == null)
                 return ResultHandling.NullResult(nameof(submodelDescriptor));
+            if (submodelDescriptor.Identification == null || string.IsNullOrEmpty(submodelDescriptor.Identification.Id))
+                return ResultHandling.NullResult("The identification property of the Submodel Descriptor is null or empty");
 
             aasId = HttpUtility.UrlDecode(aasId);
             submodelId = HttpUtility.UrlDecode(submodelId);
 
-            var result = CreateOrUpdateSubmodelRegistration(aasId, submodelId, submodelDescriptor);
+            if (submodelId != submodelDescriptor.Identification.Id)
+                return ResultHandling.BadRequestResult($"Path parameter {aasId} does not equal Submodel Descriptor identification property {submodelDescriptor.Identification.Id}");
+
+            var result = serviceProvider.CreateOrUpdateSubmodelRegistration(aasId, submodelId, submodelDescriptor);
             return result.CreateActionResult(CrudOperation.Create, "api/v1/registry/" + HttpUtility.UrlEncode(aasId) + "/submodels/" + HttpUtility.UrlEncode(submodelId));
         }
 
@@ -159,7 +167,7 @@ namespace BaSyx.API.Http.Controllers
             aasId = HttpUtility.UrlDecode(aasId);
             submodelId = HttpUtility.UrlDecode(submodelId);
 
-            var result = RetrieveSubmodelRegistration(aasId, submodelId);
+            var result = serviceProvider.RetrieveSubmodelRegistration(aasId, submodelId);
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
         /// <summary>
@@ -183,7 +191,7 @@ namespace BaSyx.API.Http.Controllers
             aasId = HttpUtility.UrlDecode(aasId);
             submodelId = HttpUtility.UrlDecode(submodelId);
 
-            var result = DeleteSubmodelRegistration(aasId, submodelId);
+            var result = serviceProvider.DeleteSubmodelRegistration(aasId, submodelId);
             return result.CreateActionResult(CrudOperation.Delete);
         }
         /// <summary>
@@ -202,70 +210,8 @@ namespace BaSyx.API.Http.Controllers
                 return ResultHandling.NullResult(nameof(aasId));
 
             aasId = HttpUtility.UrlDecode(aasId);
-            var result = RetrieveAllSubmodelRegistrations(aasId);
+            var result = serviceProvider.RetrieveAllSubmodelRegistrations(aasId);
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
-        #endregion
-
-        #region InterfaceImplementation
-        ///<inheritdoc/>
-        public IResult<IAssetAdministrationShellDescriptor> RetrieveAssetAdministrationShellRegistration(string aasId)
-        {
-            return aasRegistryImpl.RetrieveAssetAdministrationShellRegistration(aasId);
-        }
-        ///<inheritdoc/>
-        public IResult<ISubmodelDescriptor> RetrieveSubmodelRegistration(string aasId, string submodelId)
-        {
-            return aasRegistryImpl.RetrieveSubmodelRegistration(aasId, submodelId);
-        }
-        ///<inheritdoc/>
-        public IResult DeleteSubmodelRegistration(string aasId, string submodelIdShort)
-        {
-            return aasRegistryImpl.DeleteSubmodelRegistration(aasId, submodelIdShort);
-        }
-        ///<inheritdoc/>
-        public IResult<IAssetAdministrationShellDescriptor> CreateOrUpdateAssetAdministrationShellRegistration(string aasId, IAssetAdministrationShellDescriptor aasDescriptor)
-        {
-            return aasRegistryImpl.CreateOrUpdateAssetAdministrationShellRegistration(aasId, aasDescriptor);
-        }
-        ///<inheritdoc/>
-        public IResult<IQueryableElementContainer<IAssetAdministrationShellDescriptor>> RetrieveAllAssetAdministrationShellRegistrations(Predicate<IAssetAdministrationShellDescriptor> predicate)
-        {
-            return aasRegistryImpl.RetrieveAllAssetAdministrationShellRegistrations(predicate);
-        }
-        ///<inheritdoc/>
-        public IResult<ISubmodelDescriptor> CreateOrUpdateSubmodelRegistration(string aasId, string submodelId, ISubmodelDescriptor submodelDescriptor)
-        {
-            return aasRegistryImpl.CreateOrUpdateSubmodelRegistration(aasId, submodelId, submodelDescriptor);
-        }
-
-        ///<inheritdoc/>
-        public IResult<IQueryableElementContainer<ISubmodelDescriptor>> RetrieveAllSubmodelRegistrations(string aasId, Predicate<ISubmodelDescriptor> predicate)
-        {
-            return aasRegistryImpl.RetrieveAllSubmodelRegistrations(aasId, predicate);
-        }
-        ///<inheritdoc/>
-        public IResult DeleteAssetAdministrationShellRegistration(string aasId)
-        {
-            return aasRegistryImpl.DeleteAssetAdministrationShellRegistration(aasId);
-        }
-        ///<inheritdoc/>
-        public IResult<IQueryableElementContainer<IAssetAdministrationShellDescriptor>> RetrieveAllAssetAdministrationShellRegistrations()
-        {
-            return aasRegistryImpl.RetrieveAllAssetAdministrationShellRegistrations();
-        }
-        ///<inheritdoc/>
-        public IResult<IQueryableElementContainer<ISubmodelDescriptor>> RetrieveAllSubmodelRegistrations(string aasId)
-        {
-            return aasRegistryImpl.RetrieveAllSubmodelRegistrations(aasId);
-        }
-
-
-        #endregion
-
-        #region Helper Methods
-
-
-        #endregion
     }
 }

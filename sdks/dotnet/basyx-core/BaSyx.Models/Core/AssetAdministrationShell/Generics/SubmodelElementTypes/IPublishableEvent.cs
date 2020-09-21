@@ -11,7 +11,7 @@
 using System.Runtime.Serialization;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
 {
     public interface IPublishableEvent
     {

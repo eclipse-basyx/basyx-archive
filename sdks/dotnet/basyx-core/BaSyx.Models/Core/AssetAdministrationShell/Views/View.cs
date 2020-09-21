@@ -30,7 +30,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Views
 
         public LangStringSet Description { get; set; }
 
-        public IReference Parent { get; set; }
+        public IReferable Parent { get; set; }
         public Dictionary<string, string> MetaData { get; set; }
 
         public ModelType ModelType => ModelType.View;

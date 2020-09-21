@@ -20,6 +20,9 @@ namespace BaSyx.Models.Communication
         [DataMember(EmitDefaultValue = false, IsRequired = true, Name = "requestId")]
         public string RequestId { get; private set; }
 
+        [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "inoutputArguments")]
+        public IOperationVariableSet InOutputArguments { get; set; }
+
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "outputArguments")]
         public IOperationVariableSet OutputArguments { get; set; }
 
@@ -32,6 +35,7 @@ namespace BaSyx.Models.Communication
         public InvocationResponse(string requestId)
         {
             RequestId = requestId;
+            InOutputArguments = new OperationVariableSet();
             OutputArguments = new OperationVariableSet();
             ExecutionState = ExecutionState.Initiated;
         }

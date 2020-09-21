@@ -94,16 +94,15 @@ namespace BaSyx.Models.Core.Common
         public static readonly DataObjectType Base64Binary = new DataObjectType("base64binary");
         public static readonly DataObjectType HexBinary = new DataObjectType("hexBinary");
 
-        private static Dictionary<string, DataObjectType> DataObjectTypes;
+        private static readonly Dictionary<string, DataObjectType> _dataObjectTypes;
         static DataObjectType()
         {
             var fields = typeof(DataObjectType).GetFields(BindingFlags.Public | BindingFlags.Static);
-            DataObjectTypes = fields.ToDictionary(k => ((DataObjectType)k.GetValue(null)).Name, v => ((DataObjectType)v.GetValue(null)));
+            _dataObjectTypes = fields.ToDictionary(k => ((DataObjectType)k.GetValue(null)).Name, v => ((DataObjectType)v.GetValue(null)));
         }
 
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "name")]
         public string Name { get; }
-
        
         [JsonConstructor]
         protected DataObjectType(string name)
@@ -113,7 +112,7 @@ namespace BaSyx.Models.Core.Common
 
         public static DataObjectType Parse(DataObjectTypes dataObjectTypeEnum)
         {
-            if (DataObjectTypes.TryGetValue(Enum.GetName(typeof(DataObjectTypes), dataObjectTypeEnum), out DataObjectType dataObjectType))
+            if (_dataObjectTypes.TryGetValue(Enum.GetName(typeof(DataObjectTypes), dataObjectTypeEnum), out DataObjectType dataObjectType))
                 return dataObjectType;
             else
                 throw new InvalidOperationException("Cannot parse " + dataObjectType);
@@ -121,7 +120,7 @@ namespace BaSyx.Models.Core.Common
 
         public static bool TryParse(string s, out DataObjectType dataObjectType)
         {
-            if (DataObjectTypes.TryGetValue(s, out dataObjectType))
+            if (_dataObjectTypes.TryGetValue(s, out dataObjectType))
                 return true;
             else
                 return false;
@@ -192,6 +191,16 @@ namespace BaSyx.Models.Core.Common
         public static bool operator !=(DataObjectType x, DataObjectType y)
         {
             return !(x == y);
+        }
+
+        public static implicit operator Type(DataObjectType dataObjectType)
+        {
+            return DataType.GetSystemTypeFromDataType(dataObjectType);
+        }
+
+        public static implicit operator DataObjectType(Type type)
+        {
+            return DataType.GetDataTypeFromSystemType(type).DataObjectType;
         }
     }
 

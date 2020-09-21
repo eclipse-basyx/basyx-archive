@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.Common
+namespace BaSyx.Models.Core.AssetAdministrationShell
 {
     [DataContract]
     public class LangStringSet : List<LangString>

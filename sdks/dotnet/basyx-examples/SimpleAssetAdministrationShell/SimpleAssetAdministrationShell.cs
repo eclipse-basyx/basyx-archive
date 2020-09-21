@@ -8,12 +8,10 @@
 *
 * 
 *******************************************************************************/
-using BaSyx.Models.Core.AssetAdministrationShell.Enums;
+using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Extensions;
@@ -27,10 +25,8 @@ namespace SimpleAssetAdministrationShell
     {
         public static AssetAdministrationShell GetAssetAdministrationShell()
         {
-            AssetAdministrationShell aas = new AssetAdministrationShell()
+            AssetAdministrationShell aas = new AssetAdministrationShell("SimpleAAS", new Identifier("http://basys40.de/shells/SimpleAAS/" + Guid.NewGuid().ToString(), KeyType.IRI))
             {
-                IdShort = "SimpleAAS",
-                Identification = new Identifier("http://basys40.de/shells/SimpleAAS/" + Guid.NewGuid().ToString(), KeyType.IRI),
                 Description = new LangStringSet()
                 {
                    new LangString("de-DE", "Einfache VWS"),
@@ -41,10 +37,8 @@ namespace SimpleAssetAdministrationShell
                     Version = "1.0",
                     Revision = "120"
                 },
-                Asset = new Asset()
+                Asset = new Asset("SimpleAsset", new Identifier("http://basys40.de/assets/SimpleAsset/" + Guid.NewGuid().ToString(), KeyType.IRI))
                 {
-                    IdShort = "SimpleAsset",
-                    Identification = new Identifier("http://basys40.de/assets/SimpleAsset/" + Guid.NewGuid().ToString(), KeyType.IRI),
                     Kind = AssetKind.Instance,
                     Description = new LangStringSet()
                     {
@@ -67,65 +61,48 @@ namespace SimpleAssetAdministrationShell
             int i = 0;
             double y = 2.0;
 
-            Submodel testSubmodel = new Submodel()
+            Submodel testSubmodel = new Submodel("TestSubmodel", new Identifier(Guid.NewGuid().ToString(), KeyType.Custom))
             {
-                IdShort = "TestSubmodel",
-                Identification = new Identifier(Guid.NewGuid().ToString(), KeyType.Custom),
-                SubmodelElements = new ElementContainer<ISubmodelElement>()
+                SubmodelElements =
                 {
-                    new Property<string>()
+                    new Property<string>("TestProperty1")
                     {
-                        IdShort = "TestProperty1",
                         Set = (prop, val) => propertyValue = val,
                         Get = prop => { return propertyValue + "_" + i++; }
                     },
-                    new Property<string>()
+                    new Property<string>("TestProperty2")
                     {
-                        IdShort = "TestProperty2",
                         Set = (prop, val) => propertyValue = val,
                         Get = prop => { return propertyValue + "_" + i++; }
                     },
-                    new Property<int>()
+                    new Property<int>("TestProperty3")
                     {
-                        IdShort = "TestProperty3",
                         Set = (prop, val) => i = val,
                         Get = prop => { return i++; }
                     },
-                    new Property<double>()
+                    new Property<double>("TestProperty4")
                     {
-                        IdShort = "TestProperty4",
                         Set = (prop, val) => y = val,
                         Get = prop => { return Math.Pow(y, i); }
                     },
-                    new Operation()
+                    new Operation("GetTime")
                     {
-                        IdShort = "GetTime",
                         OutputVariables = new OperationVariableSet()
                         {
-                            new Property<string>()
-                            {
-                                IdShort = "Date"
-                            },
-                            new Property<string>()
-                            {
-                                IdShort = "Time"
-                            },
-                            new Property<string>()
-                            {
-                                IdShort = "Ticks"
-                            },
+                            new Property<string>("Date"),
+                            new Property<string>("Time"),
+                            new Property<string>("Ticks")
                         },
-                        OnMethodCalled = (op, inArgs, outArgs) =>
+                        OnMethodCalled = (op, inArgs, inOutArgs, outArgs, cancellationToken) =>
                         {
-                            outArgs.Add(new Property<string>() { IdShort = "Date", Value = "Heute ist der " + DateTime.Now.Date.ToString() });
-                            outArgs.Add(new Property<string>() { IdShort = "Time", Value = "Es ist " + DateTime.Now.TimeOfDay.ToString() + " Uhr" });
-                            outArgs.Add(new Property<string>() { IdShort = "Ticks", Value = "Ticks: " + DateTime.Now.Ticks.ToString() });
+                            outArgs.Add(new Property<string>("Date") { Value = "Heute ist der " + DateTime.Now.Date.ToString() });
+                            outArgs.Add(new Property<string>("Time") { Value = "Es ist " + DateTime.Now.TimeOfDay.ToString() + " Uhr" });
+                            outArgs.Add(new Property<string>("Ticks") { Value = "Ticks: " + DateTime.Now.Ticks.ToString() });
                             return new OperationResult(true);
                         }
                     },
-                    new Operation()
+                    new Operation("Calculate")
                     {
-                        IdShort = "Calculate",
                         Description = new LangStringSet()
                         {
                             new LangString("DE", "Taschenrechner mit simulierter langer Rechenzeit zum Testen von asynchronen Aufrufen"),
@@ -133,18 +110,16 @@ namespace SimpleAssetAdministrationShell
                         },
                         InputVariables = new OperationVariableSet()
                         {
-                            new Property<string>()
+                            new Property<string>("Expression")
                             {
-                                IdShort = "Expression",
                                 Description = new LangStringSet()
                                 {
                                     new LangString("DE", "Ein mathematischer Ausdruck (z.B. 5*9)"),
                                     new LangString("EN", "A mathematical expression (e.g. 5*9)")
                                 }
                             },
-                            new Property<int>()
+                            new Property<int>("ComputingTime")
                             {
-                                IdShort = "ComputingTime",
                                 Description = new LangStringSet()
                                 {
                                     new LangString("DE", "Die Bearbeitungszeit in Millisekunden"),
@@ -154,23 +129,24 @@ namespace SimpleAssetAdministrationShell
                         },
                        OutputVariables = new OperationVariableSet()
                        {
-                           new Property<double>()
-                           {
-                               IdShort = "Result"
-                           }
+                           new Property<double>("Result")
                        },
-                       OnMethodCalled = async (op, inArgs, outArgs) =>
+                       OnMethodCalled = async (op, inArgs, inOutArgs, outArgs, cancellationToken) =>
                        {
-                           string expression = inArgs.Get("Expression")?.Cast<IProperty>()?.ToObject<string>();
-                           int? computingTime = inArgs.Get("ComputingTime")?.Cast<IProperty>()?.ToObject<int>();
+                           string expression = inArgs["Expression"]?.GetValue<string>();
+                           int? computingTime = inArgs["ComputingTime"]?.GetValue<int>();
+
+                           inOutArgs["HierRein"]?.SetValue("DaWiederRaus");
 
                            if(computingTime.HasValue)
-                            await Task.Delay(computingTime.Value);
+                            await Task.Delay(computingTime.Value, cancellationToken);
+                     
+                           if(cancellationToken.IsCancellationRequested)
+                               return new OperationResult(false, new Message(MessageType.Information, "Cancellation was requested"));
 
                            double value = CalulcateExpression(expression);
 
-                           outArgs.Add(new Property<double>() { IdShort = "Result", Value = value });
-
+                           outArgs.Add(new Property<double>("Result", value));
                            return new OperationResult(true);
                        }
                     }

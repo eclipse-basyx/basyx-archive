@@ -8,7 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using BaSyx.Models.Core.AssetAdministrationShell.Enums;
+
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Constraints;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
@@ -18,35 +18,24 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 {
     [DataContract]
-    public class Submodel : ISubmodel
+    public class Submodel : Identifiable, ISubmodel
     {
-        public string IdShort { get; set; }
-        public Identifier Identification { get; set; }
-        public IReference Parent { get; set; }
         public ModelingKind Kind { get; set; }
         public IReference SemanticId { get; set; }
-        public LangStringSet Description { get; set; }
-        public IEnumerable<IProperty> Properties => SubmodelElements.FilterAsReference<IProperty>(ModelType.Property);
-        public IEnumerable<IOperation> Operations => SubmodelElements.FilterAsReference<IOperation>(ModelType.Operation);
-        public IEnumerable<IEvent> Events => SubmodelElements.FilterAsReference<IEvent>(ModelType.Event);
         public IElementContainer<ISubmodelElement> SubmodelElements { get; set; }
-        public Dictionary<string, string> MetaData { get; set; }
-        public AdministrativeInformation Administration { get; set; }
-        public string Category { get; set; }
         public ModelType ModelType => ModelType.Submodel;
         public IEnumerable<IEmbeddedDataSpecification> EmbeddedDataSpecifications { get; set; }
         public IConceptDescription ConceptDescription { get; set; }
         public List<IConstraint> Constraints { get; set; }
 
         [JsonConstructor]
-        public Submodel()
+        public Submodel(string idShort, Identifier identification) : base(idShort, identification)
         {
-            SubmodelElements = new ElementContainer<ISubmodelElement>();
+            SubmodelElements = new ElementContainer<ISubmodelElement>(this);
             MetaData = new Dictionary<string, string>();
             EmbeddedDataSpecifications = new List<IEmbeddedDataSpecification>();
             Constraints = new List<IConstraint>();

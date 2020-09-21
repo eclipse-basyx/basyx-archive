@@ -15,9 +15,9 @@ namespace BaSyx.Models.Core.Common
 {
     public static class ElementContainerExtensions
     {
-        public static IQueryableElementContainer<T> AsQueryableElementContainer<T>(this IEnumerable<T> enumerable) where T: IReferable, IModelElement
+        public static IQueryableElementContainer<T> AsQueryableElementContainer<T>(this IEnumerable<T> enumerable, IReferable parent = null) where T: IReferable, IModelElement
         {
-            return new QueryableElementContainer<T>(enumerable);
-        }
+            return new QueryableElementContainer<T>(parent, enumerable);
+        }        
     }
 }

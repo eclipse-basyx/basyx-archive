@@ -10,4 +10,7 @@
     </Hosting>
     <DefaultRoute/>
   </ServerConfig>
+  <Miscellaneous>
+    <CompanyLogo>/images/Bosch.gif</CompanyLogo>
+  </Miscellaneous>
 </ServerSettings>

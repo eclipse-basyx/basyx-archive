@@ -1,8 +1,8 @@
 ﻿@page
 @model BaSyx.AAS.Server.Http.Pages.MultiIndexModel
 @using BaSyx.API.Components;
+@using BaSyx.Models.Core.AssetAdministrationShell;
 @using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-@using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 @using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 @using BaSyx.Models.Core.AssetAdministrationShell.References;
 @using BaSyx.Models.Core.Common;
@@ -368,7 +368,7 @@ else
 {
     ISubmodel submodel = submodelwithElement[0] as ISubmodel;
     ISubmodelElement submodelElement = submodelwithElement[1] as ISubmodelElement;
-        
+
     <div class="panel panel-warning">
         <div class="panel-heading">
             <h4 class="panel-title">
@@ -427,7 +427,7 @@ else
             }
             else if (submodelElement is ISubmodelElementCollection collection)
             {
-                if (collection.Value?.Count > 0)
+                if (collection.Value?.Count() > 0)
                 {
                     @foreach (var value in collection.Value)
                     {
@@ -528,66 +528,65 @@ else
                     </div>
                     <div id="@aas.IdShort" class="panel-collapse collapse">
                         <div class="panel-body">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" style="background:#7ca1ce"><h4 style="color:white">Asset Administration Shell</h4></div>
-                                    @ShowIdShort(aas.IdShort)
-                                    @ShowIdentification(aas.Identification)
-                                    @ShowDescription(aas.Description)
-                                </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="background:#7ca1ce"><h4 style="color:white">Asset Administration Shell</h4></div>
+                                @ShowIdShort(aas.IdShort)
+                                @ShowIdentification(aas.Identification)
+                                @ShowDescription(aas.Description)
+                            </div>
                             @{
                                 var asset = aas.Asset;
                                 if (asset != null)
                                 {
-            
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading" style="background:#b90276"><h4 style="color:white">Asset</h4></div>
-                                            @ShowIdShort(asset.IdShort)
-                                            @ShowIdentification(asset.Identification)
-                                            @ShowDescription(asset.Description)
-                                        </div>
-                              
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" style="background:#b90276"><h4 style="color:white">Asset</h4></div>
+                                        @ShowIdShort(asset.IdShort)
+                                        @ShowIdentification(asset.Identification)
+                                        @ShowDescription(asset.Description)
+                                    </div>
+
                                 }
                             }
-                            @if (aas.Submodels?.Count > 0)
+                            @if (aas.Submodels?.Count() > 0)
                             {
                                 foreach (var submodel in aas.Submodels)
                                 {
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading" style="background:darkgreen">
-                                                <h4>
-                                                    <a style="color:white" data-toggle="collapse" href="#@submodel.IdShort">@submodel.IdShort</a>
-                                                </h4>
-                                            </div>
-                                            <div id="@submodel.IdShort" class="panel-collapse collapse">
-                                                @ShowIdShort(submodel.IdShort)
-                                                @ShowIdentification(submodel.Identification)
-                                                @ShowDescription(submodel.Description)
-                                                @ShowSemanticId(submodel.SemanticId)
-                                                <div class="panel-body">
-                                                    <div class="panel-group">
-                                                        @if (submodel.SubmodelElements?.Count > 0)
-                                                        {
-                                                            <div class="panel panel-default">
-                                                                <div class="panel-heading" style="background:#005691"><h4 style="color:white">Submodel-Elements</h4></div>
-                                                                <div class="panel-body">
-                                                                    <div class="panel-group">
-                                                                        @for (int i = 0; i < submodel.SubmodelElements.Count; i++)
-                                                                        {
-                                                                            var submodelElement = submodel.SubmodelElements[i];
-                                                                            if (submodelElement == null)
-                                                                            { continue; }
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" style="background:darkgreen">
+                                            <h4>
+                                                <a style="color:white" data-toggle="collapse" href="#@submodel.IdShort">@submodel.IdShort</a>
+                                            </h4>
+                                        </div>
+                                        <div id="@submodel.IdShort" class="panel-collapse collapse">
+                                            @ShowIdShort(submodel.IdShort)
+                                            @ShowIdentification(submodel.Identification)
+                                            @ShowDescription(submodel.Description)
+                                            @ShowSemanticId(submodel.SemanticId)
+                                            <div class="panel-body">
+                                                <div class="panel-group">
+                                                    @if (submodel.SubmodelElements?.Count() > 0)
+                                                    {
+                                                        <div class="panel panel-default">
+                                                            <div class="panel-heading" style="background:#005691"><h4 style="color:white">Submodel-Elements</h4></div>
+                                                            <div class="panel-body">
+                                                                <div class="panel-group">
+                                                                    @foreach (var submodelElement in submodel.SubmodelElements)
+                                                                    {
+                                                                        if (submodelElement == null)
+                                                                        { continue; }
 
-                                                                            @ShowSubmodelElement(new List<object>() { submodel, submodelElement });
+                                                                        @ShowSubmodelElement(new List<object>() { submodel, submodelElement });
 
-                                                                        }
-                                                                    </div>
+                                                                    }
                                                                 </div>
                                                             </div>
-                                                        }
-                                                    </div>
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
                                 }
                             }
                         </div>

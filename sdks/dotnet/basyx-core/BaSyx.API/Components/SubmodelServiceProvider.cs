@@ -10,259 +10,331 @@
 *******************************************************************************/
 using BaSyx.API.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Utils.ResultHandling;
 using BaSyx.Utils.Client;
 using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
-using System.Reflection;
-using System.Linq.Expressions;
 using System.Linq;
 using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.Common;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Communication;
 using System.Threading.Tasks;
-using BaSyx.Models.Extensions;
+using NLog;
+using System.Threading;
 
 namespace BaSyx.API.Components
 {
+    /// <summary>
+    /// Reference implementation of ISubmodelServiceProvider interface
+    /// </summary>
     public class SubmodelServiceProvider : ISubmodelServiceProvider
     {
-        public ISubmodel Submodel { get; protected set; }
+        private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
+
+        private ISubmodel _submodel;
+
         public ISubmodelDescriptor ServiceDescriptor { get; internal set; }
 
-        private readonly Dictionary<string, Delegate> methodCalledHandler;
-        private readonly Dictionary<string, PropertyHandler> propertyHandler;
+        private readonly Dictionary<string, MethodCalledHandler> methodCalledHandler;
+        private readonly Dictionary<string, SubmodelElementHandler> submodelElementHandler;
         private readonly Dictionary<string, Action<IValue>> updateFunctions;
         private readonly Dictionary<string, EventDelegate> eventDelegates;
         private readonly Dictionary<string, InvocationResponse> invocationResults;
 
         private IMessageClient messageClient;
 
-        private readonly GetPropertyValueHandler GenericPropertyGetHandler = de => { return new ElementValue(de.Value, de.ValueType); };
-        private readonly SetPropertyValueHandler GenericPropertySetHandler = (de, val) => { de.Value = val.Value; };
-
+        /// <summary>
+        /// Constructor for SubmodelServiceProvider
+        /// </summary>
         public SubmodelServiceProvider()
         {
-            methodCalledHandler = new Dictionary<string, Delegate>();
-            propertyHandler = new Dictionary<string, PropertyHandler>();
+            methodCalledHandler = new Dictionary<string, MethodCalledHandler>();
+            submodelElementHandler = new Dictionary<string, SubmodelElementHandler>();
             updateFunctions = new Dictionary<string, Action<IValue>>();
             eventDelegates = new Dictionary<string, EventDelegate>();
             invocationResults = new Dictionary<string, InvocationResponse>();
         }
-
+        /// <summary>
+        /// Contructor for SubmodelServiceProvider with a Submodel object to bind to
+        /// </summary>
+        /// <param name="submodel">Submodel object</param>
         public SubmodelServiceProvider(ISubmodel submodel) : this()
         {
             BindTo(submodel);
         }
+        /// <summary>
+        /// Contructor for SubmodelServiceProvider with a Submodel object to bind to and a SubmodelDescriptor as ServiceDescriptor
+        /// </summary>
+        /// <param name="submodel">Submodel object</param>
+        /// <param name="submodelDescriptor">SubmodelDescriptor object</param>
         public SubmodelServiceProvider(ISubmodel submodel, ISubmodelDescriptor submodelDescriptor) : this()
         {
-            Submodel = submodel;
+            _submodel = submodel;
             ServiceDescriptor = submodelDescriptor;
         }
 
-        public void BindTo(ISubmodel element)
+        /// <summary>
+        /// Bind this SubmodelServiceProvider to a specific Submodel
+        /// </summary>
+        /// <param name="submodel">Submodel object</param>
+        public void BindTo(ISubmodel submodel)
         {
-            Submodel = element;
-            ServiceDescriptor = new SubmodelDescriptor(element, null);
+            _submodel = submodel;
+            ServiceDescriptor = new SubmodelDescriptor(submodel, null);
         }
+
+        /// <summary>
+        /// Returns the model binding of this SubmodelServiceProvider
+        /// </summary>
+        /// <returns>Submodel object</returns>
         public ISubmodel GetBinding()
         {
-            return Submodel;
+            return _submodel;
         }
 
-        public void UseInMemoryPropertyHandler()
+        public void UseInMemorySubmodelElementHandler()
         {
-            if(Submodel.Properties?.Count() > 0)
-                foreach (var property in Submodel.Properties)
+            UseInMemorySubmodelElementHandlerInternal(_submodel.SubmodelElements);
+        }
+        private void UseInMemorySubmodelElementHandlerInternal(IElementContainer<ISubmodelElement> submodelElements)
+        {
+            if (submodelElements.HasChildren())
+            {
+                foreach (var child in submodelElements.Children)
                 {
-                    RegisterPropertyHandler(property.IdShort,
-                        new PropertyHandler(property.Get ?? GenericPropertyGetHandler, property.Set ?? GenericPropertySetHandler));
+                    UseInMemorySubmodelElementHandlerInternal(child);
                 }
+            }
+            if(submodelElements.Value != null)
+            {
+                if (submodelElements.Value.ModelType != ModelType.Operation)
+                    RegisterSubmodelElementHandler(submodelElements.Path, new SubmodelElementHandler(submodelElements.Value.Get, submodelElements.Value.Set));                
+            }
         }
 
-        public void UsePropertyHandler(PropertyHandler propertyHandler)
+        /// <summary>
+        /// Use as specific SubmodelElementHandler for all SubmodelElements
+        /// </summary>
+        /// <param name="elementHandler">SubmodelElementHandler</param>
+        public void UseSubmodelElementHandler(SubmodelElementHandler elementHandler)
         {
-            if (Submodel.Properties?.Count() > 0)
-                foreach (var property in Submodel.Properties)
-                    RegisterPropertyHandler(property.IdShort, propertyHandler);
+            UseSubmodelElementHandlerInternal(_submodel.SubmodelElements, elementHandler, null);
+        }
+        /// <summary>
+        /// Use a specific SubmodelElementHandler for all SubmodelElements of a specific ModelType (e.g. Property) except Operations
+        /// </summary>
+        /// <param name="elementHandler">SubmodelElementHandler</param>
+        /// <param name="modelType">ModelType</param>
+        public void UseSubmodelElementHandlerForModelType(SubmodelElementHandler elementHandler, ModelType modelType)
+        {
+            UseSubmodelElementHandlerInternal(_submodel.SubmodelElements, elementHandler, modelType);
         }
 
+        private void UseSubmodelElementHandlerInternal(IElementContainer<ISubmodelElement> submodelElements, SubmodelElementHandler elementHandler, ModelType modelType = null)
+        {
+            if (submodelElements.HasChildren())
+            {
+                foreach (var child in submodelElements.Children)
+                {
+                    UseSubmodelElementHandlerInternal(child, elementHandler, modelType);
+                }
+            }
+            if (submodelElements.Value != null)
+            {
+                if (modelType == null)
+                    RegisterSubmodelElementHandler(submodelElements.Path, elementHandler);
+                else if (submodelElements.Value.ModelType == modelType)
+                    RegisterSubmodelElementHandler(submodelElements.Path, elementHandler);
+                else
+                    return;
+            }
+        }
+        /// <summary>
+        /// Use a specific MethodCalledHandler for all Operations
+        /// </summary>
+        /// <param name="methodCalledHandler"></param>
         public void UseOperationHandler(MethodCalledHandler methodCalledHandler)
         {
-            if (Submodel.Operations?.Count() > 0)
-                foreach (var operation in Submodel.Operations)
-                    RegisterMethodCalledHandler(operation.IdShort, methodCalledHandler);
+            UseOperationHandlerInternal(_submodel.SubmodelElements, methodCalledHandler);
         }
 
-        public IResult<IEvent> CreateEvent(IEvent eventable)
+        private void UseOperationHandlerInternal(IElementContainer<ISubmodelElement> submodelElements, MethodCalledHandler methodCalledHandler)
         {
-            if (Submodel == null)
-                return new Result<IEvent>(false, new NotFoundMessage("Submodel"));
-
-            return Submodel.SubmodelElements.Create(eventable);
-        }
-
-        public IResult<IOperation> CreateOperation(IOperation operation)
-        {
-            if (Submodel == null)
-                return new Result<IOperation>(false, new NotFoundMessage("Submodel"));
-
-            return Submodel.SubmodelElements.Create(operation);
-        }
-
-        public IResult<IProperty> CreateProperty(IProperty property)
-        {
-            if (Submodel == null)
-                return new Result<IProperty>(false, new NotFoundMessage("Submodel"));
-
-            RegisterPropertyHandler(property.IdShort, 
-                new PropertyHandler(property.Get ?? GenericPropertyGetHandler, property.Set ?? GenericPropertySetHandler));
-
-            return Submodel.SubmodelElements.Create(property);
-        }
-
-        public IResult DeleteEvent(string eventId)
-        {
-            if (Submodel == null)
-                return new Result(false, new NotFoundMessage("Submodel"));
-
-            if (Submodel.Events == null)
-                return new Result(false, new NotFoundMessage(eventId));
-            return Submodel.SubmodelElements.Delete(eventId);
-        }
-
-        public IResult DeleteOperation(string operationId)
-        {
-            if (Submodel == null)
-                return new Result(false, new NotFoundMessage("Submodel"));
-
-            if (Submodel.Operations == null)
-                return new Result(false, new NotFoundMessage(operationId));
-            return Submodel.SubmodelElements.Delete(operationId);
-        }
-
-        public IResult DeleteProperty(string propertyId)
-        {
-            if (Submodel == null)
-                return new Result(false, new NotFoundMessage("Submodel"));
-
-            if (Submodel.Properties == null)
-                return new Result(false, new NotFoundMessage(propertyId));
-
-            if (propertyHandler.ContainsKey(propertyId))
-                propertyHandler.Remove(propertyId);
-
-            return Submodel.SubmodelElements.Delete(propertyId);
-        }
-
-        public MethodCalledHandler RetrieveMethodCalledHandler(string operationId)
-        {
-            if (methodCalledHandler.TryGetValue(operationId, out Delegate handler))
-                return (MethodCalledHandler)handler;
+            if (submodelElements.HasChildren())
+            {
+                foreach (var child in submodelElements.Children)
+                {
+                    UseOperationHandlerInternal(child, methodCalledHandler);
+                }
+            }
             else
-                return null;
+            {
+                if (submodelElements.Value is IOperation)
+                    RegisterMethodCalledHandler(submodelElements.Path, methodCalledHandler);
+                else
+                    return;
+            }
         }
-
-        public Delegate RetrieveMethodDelegate(string operationId)
+        
+        public MethodCalledHandler RetrieveMethodCalledHandler(string pathToOperation)
         {
-            if (methodCalledHandler.TryGetValue(operationId, out Delegate handler))
+            if (methodCalledHandler.TryGetValue(pathToOperation, out MethodCalledHandler handler))
                 return handler;
             else
                 return null;
         }
-
-        public PropertyHandler RetrievePropertyHandler(string propertyId)
+       
+        public SubmodelElementHandler RetrieveSubmodelElementHandler(string pathToElement)
         {
-            if (propertyHandler.TryGetValue(propertyId, out PropertyHandler handler))
-                return handler;
+            if (submodelElementHandler.TryGetValue(pathToElement, out SubmodelElementHandler elementHandler))
+                return elementHandler;
             else
                 return null;
         }
-
-        public void RegisterPropertyHandler(string propertyId, PropertyHandler handler)
+      
+        public void RegisterSubmodelElementHandler(string pathToElement, SubmodelElementHandler elementHandler)
         {
-            if (!propertyHandler.ContainsKey(propertyId))
-                propertyHandler.Add(propertyId, handler);
+            if (!submodelElementHandler.ContainsKey(pathToElement))
+                submodelElementHandler.Add(pathToElement, elementHandler);
             else
-                propertyHandler[propertyId] = handler;
+                submodelElementHandler[pathToElement] = elementHandler;
         }
-
-        public void RegisterMethodCalledHandler(string operationId, MethodCalledHandler handler)
+        
+        public void RegisterMethodCalledHandler(string pathToOperation, MethodCalledHandler handler)
         {
-            if (!methodCalledHandler.ContainsKey(operationId))
-                methodCalledHandler.Add(operationId, handler);
+            if (!methodCalledHandler.ContainsKey(pathToOperation))
+                methodCalledHandler.Add(pathToOperation, handler);
             else
-                methodCalledHandler[operationId] = handler;
+                methodCalledHandler[pathToOperation] = handler;
         }
-
-        public void RegisterMethodCalledHandler(string operationId, Delegate handler)
+          
+        public void RegisterEventDelegate(string pathToEvent, EventDelegate eventDelegate)
         {
-            if (!methodCalledHandler.ContainsKey(operationId))
-                methodCalledHandler.Add(operationId, handler);
+            if (!eventDelegates.ContainsKey(pathToEvent))
+                eventDelegates.Add(pathToEvent, eventDelegate);
             else
-                methodCalledHandler[operationId] = handler;
+                eventDelegates[pathToEvent] = eventDelegate;
         }
 
-        public void RegisterEventDelegate(string eventId, EventDelegate eventDelegate)
+        public IResult<InvocationResponse> InvokeOperation(string pathToOperation, InvocationRequest invocationRequest)
         {
-            if (!eventDelegates.ContainsKey(eventId))
-                eventDelegates.Add(eventId, eventDelegate);
-            else
-                eventDelegates[eventId] = eventDelegate;
+            if (_submodel == null)
+                return new Result<InvocationResponse>(false, new NotFoundMessage("Submodel"));
+
+            var operation_Retrieved = _submodel.SubmodelElements.Retrieve<IOperation>(pathToOperation);
+            if (operation_Retrieved.Success && operation_Retrieved.Entity != null)
+            {
+                MethodCalledHandler methodHandler;
+                if (operation_Retrieved.Entity.OnMethodCalled != null)
+                    methodHandler = operation_Retrieved.Entity.OnMethodCalled;
+                else if (methodCalledHandler.TryGetValue(pathToOperation, out MethodCalledHandler handler))
+                    methodHandler = handler;
+                else
+                    return new Result<InvocationResponse>(false, new NotFoundMessage($"MethodHandler for {pathToOperation}"));
+
+                InvocationResponse invocationResponse = new InvocationResponse(invocationRequest.RequestId);
+                invocationResponse.InOutputArguments = invocationRequest.InOutputArguments;
+
+                using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+                {
+                    Task<OperationResult> runner = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            invocationResponse.ExecutionState = ExecutionState.Running;
+                            var result = await methodHandler.Invoke(operation_Retrieved.Entity, invocationRequest.InputArguments, invocationResponse.InOutputArguments, invocationResponse.OutputArguments, cancellationTokenSource.Token);
+                            invocationResponse.ExecutionState = ExecutionState.Completed;
+                            return result;
+                        }
+                        catch (Exception e)
+                        {
+                            invocationResponse.ExecutionState = ExecutionState.Failed;
+                            return new OperationResult(e);
+                        }
+
+                    }, cancellationTokenSource.Token);
+
+                    if (Task.WhenAny(runner, Task.Delay(invocationRequest.Timeout.Value, cancellationTokenSource.Token)).Result == runner)
+                    {
+                        cancellationTokenSource.Cancel();
+                        invocationResponse.OperationResult = runner.Result;
+                        return new Result<InvocationResponse>(true, invocationResponse);
+                    }
+                    else
+                    {
+                        cancellationTokenSource.Cancel();
+                        invocationResponse.OperationResult = new OperationResult(false, new TimeoutMessage());
+                        invocationResponse.ExecutionState = ExecutionState.Timeout;
+                        return new Result<InvocationResponse>(false, invocationResponse);
+                    }
+                }
+            }
+            return new Result<InvocationResponse>(operation_Retrieved);
         }
 
-        public void RegisterMethodCalledHandler(string operationId, MethodInfo methodInfo, object target)
+        public IResult<CallbackResponse> InvokeOperationAsync(string pathToOperation, InvocationRequest invocationRequest)
         {
-            var parameters = from parameter in methodInfo.GetParameters() select parameter.ParameterType;
-            Delegate del = methodInfo.CreateDelegate(Expression.GetDelegateType(parameters.Concat(new[] { methodInfo.ReturnType }).ToArray()), target);
-            RegisterMethodCalledHandler(operationId, del);
-        }
-
-        public IResult<CallbackResponse> InvokeOperationAsync(string operationId, InvocationRequest invocationRequest)
-        {
-            if (Submodel == null)
+            if (_submodel == null)
                 return new Result<CallbackResponse>(false, new NotFoundMessage("Submodel"));
             if (invocationRequest == null)
                 return new Result<CallbackResponse>(new ArgumentNullException(nameof(invocationRequest)));
 
-            var operation_Retrieved = RetrieveOperation(operationId);
+            var operation_Retrieved = _submodel.SubmodelElements.Retrieve<IOperation>(pathToOperation);
             if (operation_Retrieved.Success && operation_Retrieved.Entity != null)
             {
-                Delegate methodDelegate;
+                MethodCalledHandler methodHandler;
                 if (operation_Retrieved.Entity.OnMethodCalled != null)
-                    methodDelegate = operation_Retrieved.Entity.OnMethodCalled;
-                else if (methodCalledHandler.TryGetValue(operationId, out Delegate handler))
-                    methodDelegate = handler;
+                    methodHandler = operation_Retrieved.Entity.OnMethodCalled;
+                else if (methodCalledHandler.TryGetValue(pathToOperation, out MethodCalledHandler handler))
+                    methodHandler = handler;
                 else
-                    return new Result<CallbackResponse>(false, new NotFoundMessage($"MethodHandler for {operationId}"));
+                    return new Result<CallbackResponse>(false, new NotFoundMessage($"MethodHandler for {pathToOperation}"));
 
-                var invocationTask = Task.Run(() =>
+                Task invocationTask = Task.Run(async() =>
                 {
                     InvocationResponse invocationResponse = new InvocationResponse(invocationRequest.RequestId);
-                    SetInvocationResult(operationId, invocationRequest.RequestId, ref invocationResponse);
+                    invocationResponse.InOutputArguments = invocationRequest.InOutputArguments;
+                    SetInvocationResult(pathToOperation, invocationRequest.RequestId, ref invocationResponse);
 
-                    try
+                    using (var cancellationTokenSource = new CancellationTokenSource())
                     {
-                        invocationResponse.ExecutionState = ExecutionState.Running;
-                        Task<OperationResult> taskResult = (Task<OperationResult>)methodDelegate.DynamicInvoke(operation_Retrieved.Entity, invocationRequest.InputArguments, invocationResponse.OutputArguments);
-                        invocationResponse.OperationResult = taskResult.Result;
-                        invocationResponse.ExecutionState = ExecutionState.Completed;
-                    }
-                    catch (Exception e)
-                    {
-                        invocationResponse.ExecutionState = ExecutionState.Failed;
-                        invocationResponse.OperationResult = new OperationResult(e);
+                        Task<OperationResult> runner = Task.Run(async () =>
+                        {
+                            try
+                            {
+                                invocationResponse.ExecutionState = ExecutionState.Running;
+                                var result = await methodHandler.Invoke(operation_Retrieved.Entity, invocationRequest.InputArguments, invocationResponse.InOutputArguments, invocationResponse.OutputArguments, cancellationTokenSource.Token);
+                                invocationResponse.ExecutionState = ExecutionState.Completed;
+                                return result;
+                            }
+                            catch (Exception e)
+                            {
+                                invocationResponse.ExecutionState = ExecutionState.Failed;
+                                return new OperationResult(e);
+                            }
+                        }, cancellationTokenSource.Token);
+
+                        if (await Task.WhenAny(runner, Task.Delay(invocationRequest.Timeout.Value, cancellationTokenSource.Token)) == runner)
+                        {
+                            cancellationTokenSource.Cancel();
+                            invocationResponse.OperationResult = runner.Result;
+                        }
+                        else
+                        {
+                            cancellationTokenSource.Cancel();
+                            invocationResponse.OperationResult = new OperationResult(false, new TimeoutMessage());
+                            invocationResponse.ExecutionState = ExecutionState.Timeout;
+                        }
                     }
                 });
+         
                 string endpoint = ServiceDescriptor?.Endpoints?.FirstOrDefault()?.Address;
                 CallbackResponse callbackResponse = new CallbackResponse(invocationRequest.RequestId);
                 if (string.IsNullOrEmpty(endpoint))
-                    callbackResponse.CallbackUrl = new Uri($"/operations/{operationId}/invocationList/{invocationRequest.RequestId}", UriKind.Relative);
+                    callbackResponse.CallbackUrl = new Uri($"/submodelElements/{pathToOperation}/invocationList/{invocationRequest.RequestId}", UriKind.Relative);
                 else
-                    callbackResponse.CallbackUrl = new Uri($"{endpoint}/operations/{operationId}/invocationList/{invocationRequest.RequestId}", UriKind.Absolute);
+                    callbackResponse.CallbackUrl = new Uri($"{endpoint}/submodelElements/{pathToOperation}/invocationList/{invocationRequest.RequestId}", UriKind.Absolute);
                 return new Result<CallbackResponse>(true, callbackResponse);
             }
             return new Result<CallbackResponse>(operation_Retrieved);
@@ -280,10 +352,10 @@ namespace BaSyx.API.Components
                 invocationResults.Add(key, invocationResponse);
             }
         }
-
-        public IResult<InvocationResponse> GetInvocationResult(string operationId, string requestId)
+      
+        public IResult<InvocationResponse> GetInvocationResult(string pathToOperation, string requestId)
         {
-            string key = string.Join("_", operationId, requestId);
+            string key = string.Join("_", pathToOperation, requestId);
             if (invocationResults.ContainsKey(key))
             {
                 return new Result<InvocationResponse>(true, invocationResults[key]);
@@ -292,42 +364,8 @@ namespace BaSyx.API.Components
             {
                return new Result<InvocationResponse>(false, new NotFoundMessage($"Request with id {requestId}"));
             }
-        }
-
-
-        public IResult<InvocationResponse> InvokeOperation(string operationId, InvocationRequest invocationRequest)
-        {
-            if (Submodel == null)
-                return new Result<InvocationResponse>(false, new NotFoundMessage("Submodel"));
-
-            var operation_Retrieved = RetrieveOperation(operationId);
-            if (operation_Retrieved.Success && operation_Retrieved.Entity != null)
-            {
-                Delegate methodDelegate;
-                if (operation_Retrieved.Entity.OnMethodCalled != null)
-                    methodDelegate = operation_Retrieved.Entity.OnMethodCalled;
-                else if (methodCalledHandler.TryGetValue(operationId, out Delegate handler))
-                    methodDelegate = handler;
-                else
-                    return new Result<InvocationResponse>(false, new NotFoundMessage($"MethodHandler for {operationId}"));
-                try
-                {
-                    InvocationResponse invocationResponse = new InvocationResponse(invocationRequest.RequestId);
-                    invocationResponse.ExecutionState = ExecutionState.Running;
-                    Task<OperationResult> taskResult = (Task<OperationResult>)methodDelegate.DynamicInvoke(operation_Retrieved.Entity, invocationRequest.InputArguments, invocationResponse.OutputArguments);
-                    invocationResponse.OperationResult = taskResult.Result;
-                    invocationResponse.ExecutionState = ExecutionState.Completed;
-
-                    return new Result<InvocationResponse>(true, invocationResponse);
-                }
-                catch (Exception e)
-                {
-                    return new Result<InvocationResponse>(e);
-                }
-            }
-            return new Result<InvocationResponse>(operation_Retrieved);
-        }
-
+        }              
+       
         public IResult ThrowEvent(IPublishableEvent publishableEvent, string topic = "/", Action<IMessagePublishedEventArgs> MessagePublished = null, byte qosLevel = 2, bool retain = false)
         {
             if (messageClient == null || !messageClient.IsConnected)
@@ -343,229 +381,117 @@ namespace BaSyx.API.Components
             return messageClient.Publish(topic, message, MessagePublished, qosLevel, retain);
         }
 
-        public IResult<IEvent> RetrieveEvent(string eventId)
-        {
-            if (Submodel == null)
-                return new Result<IEvent>(false, new NotFoundMessage("Submodel"));
-
-            if (Submodel.Events == null)
-                return new Result<IEvent>(false, new NotFoundMessage(eventId));
-            return Submodel.SubmodelElements.Retrieve<IEvent>(eventId);
-        }
-
-        public IResult<IElementContainer<IEvent>> RetrieveEvents()
-        {
-            if (Submodel == null)
-                return new Result<ElementContainer<IEvent>>(false, new NotFoundMessage("Submodel"));
-
-            if(Submodel.Events == null)
-                return new Result<ElementContainer<IEvent>>(false, new NotFoundMessage("Events"));
-            return Submodel.SubmodelElements.RetrieveAll<IEvent>();
-        }
-
-        public IResult<IOperation> RetrieveOperation(string operationId)
-        {
-            if (Submodel == null)
-                return new Result<IOperation>(false, new NotFoundMessage("Submodel"));
-
-            if (Submodel.Operations == null)
-                return new Result<IOperation>(false, new NotFoundMessage(operationId));
-            return Submodel.SubmodelElements.Retrieve<IOperation>(operationId);
-        }
-
-        public IResult<IElementContainer<IOperation>> RetrieveOperations()
-        {
-            if (Submodel == null)
-                return new Result<ElementContainer<IOperation>>(false, new NotFoundMessage("Submodel"));
-
-            if (Submodel.Operations == null)
-                return new Result<ElementContainer<IOperation>>(false, new NotFoundMessage("Operations"));
-            return Submodel.SubmodelElements.RetrieveAll<IOperation>();
-        }
-
-        public IResult<IElementContainer<IProperty>> RetrieveProperties()
-        {
-            if (Submodel == null)
-                return new Result<ElementContainer<IProperty>>(false, new NotFoundMessage("Submodel"));
-
-            if (Submodel.Properties == null)
-                return new Result<ElementContainer<IProperty>>(false, new NotFoundMessage("Properties"));
-            return Submodel.SubmodelElements.RetrieveAll<IProperty>();
-        }
-
-        public IResult<IProperty> RetrieveProperty(string propertyId)
-        {
-            if (Submodel == null)
-                return new Result<IProperty>(false, new NotFoundMessage("Submodel"));
-
-            if (Submodel.Properties == null)
-                return new Result<IProperty>(false, new NotFoundMessage(propertyId));
-            return Submodel.SubmodelElements.Retrieve<IProperty>(propertyId);
-        }
-
-        public IResult<IValue> RetrievePropertyValue(string propertyId)
-        {
-            if (Submodel == null)
-                return new Result<IValue>(false, new NotFoundMessage("Submodel"));
-
-            if (propertyHandler.TryGetValue(propertyId, out PropertyHandler handler) && handler.GetHandler != null)
-            {
-                var property = RetrieveProperty(propertyId);
-                if(property.Success && property.Entity != null)
-                    return new Result<IValue>(true, handler.GetHandler.Invoke(property.Entity));
-                else
-                    return new Result<IValue>(false, new Message(MessageType.Error, "property not found"));
-            }
-            else
-                return new Result<IValue>(false, new Message(MessageType.Error, "propertyHandler or GetHandler not found"));
-        }
-
-
-        public IResult UpdatePropertyValue(string propertyId, IValue value)
-        {
-            if (Submodel == null)
-                return new Result(false, new NotFoundMessage("Submodel"));
-
-            if (propertyHandler.TryGetValue(propertyId, out PropertyHandler handler) && handler.SetHandler != null)
-            {
-                var property = RetrieveProperty(propertyId);
-                if (property.Success && property.Entity != null)
-                {
-                    handler.SetHandler.Invoke(property.Entity, value);
-                    return new Result(true);
-                }
-                else
-                    return new Result<IValue>(false, new Message(MessageType.Error, "property not found"));
-            }
-            else
-                return new Result<IValue>(false, new Message(MessageType.Error, "propertyHandler or SetHandler not found"));
-        }
-
+       
         public virtual void ConfigureEventHandler(IMessageClient messageClient)
         {
             this.messageClient = messageClient;
         }
-
-        public virtual void SubscribeUpdates(string propertyId, Action<IValue> updateFunction)
+       
+        public virtual void SubscribeUpdates(string pathToSubmodelElement, Action<IValue> updateFunction)
         {
-            if (!updateFunctions.ContainsKey(propertyId))
-                updateFunctions.Add(propertyId, updateFunction);
+            if (!updateFunctions.ContainsKey(pathToSubmodelElement))
+                updateFunctions.Add(pathToSubmodelElement, updateFunction);
             else
-                updateFunctions[propertyId] = updateFunction;
+                updateFunctions[pathToSubmodelElement] = updateFunction;
         }
-
-        public virtual void PublishUpdate(string propertyId, IValue value)
+       
+        public virtual void PublishUpdate(string pathToSubmodelElement, IValue value)
         {
-            if (updateFunctions.TryGetValue(propertyId, out Action<IValue> updateFunction))
+            if (updateFunctions.TryGetValue(pathToSubmodelElement, out Action<IValue> updateFunction))
                 updateFunction.Invoke(value);
 
         }
 
         public IResult<ISubmodel> RetrieveSubmodel()
         {
-            var submodel = GetBinding();
-            return new Result<ISubmodel>(submodel != null, submodel);
+            return new Result<ISubmodel>(_submodel != null, _submodel);
         }
 
-        public IResult<ISubmodelElement> CreateSubmodelElement(ISubmodelElement submodelElement)
+        public IResult<ISubmodelElement> CreateSubmodelElement(string pathToSubmodelElement, ISubmodelElement submodelElement)
         {
-            if (Submodel == null)
+            if (_submodel == null)
                 return new Result<ISubmodelElement>(false, new NotFoundMessage("Submodel"));
 
-            return Submodel.SubmodelElements.Create(submodelElement);
+            return _submodel.SubmodelElements.Create(submodelElement);
         }
 
         public IResult<IElementContainer<ISubmodelElement>> RetrieveSubmodelElements()
         {
-            if (Submodel == null)
+            if (_submodel == null)
                 return new Result<ElementContainer<ISubmodelElement>>(false, new NotFoundMessage("Submodel"));
 
-            if (Submodel.SubmodelElements == null)
+            if (_submodel.SubmodelElements == null)
                 return new Result<ElementContainer<ISubmodelElement>>(false, new NotFoundMessage("SubmodelElements"));
-            return Submodel.SubmodelElements.RetrieveAll();
+            return _submodel.SubmodelElements.RetrieveAll();
         }
 
         public IResult<ISubmodelElement> RetrieveSubmodelElement(string submodelElementId)
         {
-            if (Submodel == null)
+            if (_submodel == null)
                 return new Result<ISubmodelElement>(false, new NotFoundMessage("Submodel"));
 
-            if (Submodel.SubmodelElements == null)
+            if (_submodel.SubmodelElements == null)
                 return new Result<ISubmodelElement>(false, new NotFoundMessage(submodelElementId));
 
-            IResult<ISubmodelElement> result;
-            if(submodelElementId.Contains("/"))
-            {
-                string[] smeIds = submodelElementId.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-                IResult<ISubmodelElement> firstElement = Submodel.SubmodelElements.Retrieve(smeIds[0]);
-                result = RetrieveSubordinateElement(firstElement, smeIds.Skip(1));
-            }
-            else
-            {
-                result = Submodel.SubmodelElements.Retrieve(submodelElementId);
-            }
-            return result;
+            return _submodel.SubmodelElements.Retrieve(submodelElementId);
         }
-
-        private IResult<ISubmodelElement> RetrieveSubordinateElement(IResult<ISubmodelElement> smElement, IEnumerable<string> idShorts)
-        {
-            if(smElement.Success && smElement.Entity != null)
-            {
-                if(smElement.Entity.ModelType == ModelType.SubmodelElementCollection)
-                {
-                    ISubmodelElementCollection smeCollection = smElement.Entity.Cast<ISubmodelElementCollection>();
-                    if(idShorts?.Count() > 0 && smeCollection.Value?.Count > 0)
-                    {
-                        IResult<ISubmodelElement> nextElement = smeCollection.Value.Retrieve(idShorts.First());
-                        if (idShorts.Count() > 1)
-                            return RetrieveSubordinateElement(nextElement, idShorts.Skip(1));
-                        else
-                            return nextElement;
-                    }
-                }
-                else
-                {
-                    if (idShorts.Count() > 0)
-                        return new Result<ISubmodelElement>(false, new NotFoundMessage(string.Join("/", idShorts)));
-                }
-            }
-            return smElement;
-        }
-
         public IResult<IValue> RetrieveSubmodelElementValue(string submodelElementId)
         {
-            if (Submodel == null)
+            if (_submodel == null)
                 return new Result<IValue>(false, new NotFoundMessage("Submodel"));
 
-            if (Submodel.SubmodelElements == null)
-                return new Result<IValue>(false, new NotFoundMessage(submodelElementId));
-
-            return new Result<IValue>(true, 
-                new ElementValue(
-                    (Submodel.SubmodelElements[submodelElementId] as dynamic).Value, 
-                    (Submodel.SubmodelElements[submodelElementId] as dynamic).ValueType as DataType));
+            if (submodelElementHandler.TryGetValue(submodelElementId, out SubmodelElementHandler elementHandler) && elementHandler.GetValueHandler != null)
+            {
+                var submodelElement = _submodel.SubmodelElements.Retrieve<ISubmodelElement>(submodelElementId);
+                if (submodelElement.Success && submodelElement.Entity != null)
+                    return new Result<IValue>(true, elementHandler.GetValueHandler.Invoke(submodelElement.Entity));
+                else
+                    return new Result<IValue>(false, new Message(MessageType.Error, "SubmodelElement not found"));
+            }
+            else
+                return new Result<IValue>(false, new Message(MessageType.Error, "SubmodelElementHandler not found"));
         }
 
         public IResult UpdateSubmodelElement(string submodelElementId, ISubmodelElement submodelElement)
         {
-            if (Submodel == null)
+            if (_submodel == null)
                 return new Result(false, new NotFoundMessage("Submodel"));
 
-            if (Submodel.SubmodelElements == null)
+            if (_submodel.SubmodelElements == null)
                 return new Result(false, new NotFoundMessage(submodelElementId));
 
-            return Submodel.SubmodelElements.Update(submodelElementId, submodelElement);
+            return _submodel.SubmodelElements.Update(submodelElementId, submodelElement);
+        }
+
+        public IResult UpdateSubmodelElementValue(string submodelElementId, IValue value)
+        {
+            if (_submodel == null)
+                return new Result(false, new NotFoundMessage("Submodel"));
+
+            if (submodelElementHandler.TryGetValue(submodelElementId, out SubmodelElementHandler elementHandler) && elementHandler.SetValueHandler != null)
+            {
+                var submodelElement = _submodel.SubmodelElements.Retrieve<ISubmodelElement>(submodelElementId);
+                if (submodelElement.Success && submodelElement.Entity != null)
+                {
+                    elementHandler.SetValueHandler.Invoke(submodelElement.Entity, value);
+                    return new Result(true);
+                }
+                else
+                    return new Result<IValue>(false, new Message(MessageType.Error, "property not found"));
+            }
+            else
+                return new Result<IValue>(false, new Message(MessageType.Error, "SubmodelElementHandler not found"));
         }
 
         public IResult DeleteSubmodelElement(string submodelElementId)
         {
-            if (Submodel == null)
+            if (_submodel == null)
                 return new Result(false, new NotFoundMessage("Submodel"));
 
-            if (Submodel.SubmodelElements == null)
+            if (_submodel.SubmodelElements == null)
                 return new Result(false, new NotFoundMessage(submodelElementId));
 
-            return Submodel.SubmodelElements.Delete(submodelElementId);
+            return _submodel.SubmodelElements.Delete(submodelElementId);
         }        
     }
 }

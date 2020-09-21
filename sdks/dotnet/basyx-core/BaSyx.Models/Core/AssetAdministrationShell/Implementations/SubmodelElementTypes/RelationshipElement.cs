@@ -12,9 +12,8 @@ using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.Common;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 {
     public class RelationshipElement : SubmodelElement, IRelationshipElement
     {
@@ -22,8 +21,12 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelEle
 
         public IReference<IReferable> First { get; set; }
 
-        public IReference<IReferable> Second { get; set; }
+        public IReference<IReferable> Second { get; set; }      
 
-        public RelationshipElement() : base() { }     
+        public RelationshipElement(string idShort) : base(idShort) 
+        {
+            Get = element => { return new ElementValue(new { First, Second }, new DataType(DataObjectType.AnyType)); };
+            Set = (element, value) => { dynamic dVal = value?.Value; First = dVal?.First; Second = dVal?.Second; };
+        }     
     }
 }

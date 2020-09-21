@@ -8,6 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
+using BaSyx.Utils.Settings;
 using BaSyx.Utils.Settings.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -61,7 +62,7 @@ namespace BaSyx.Components.Common
         {
             logger.Debug("Starting Server...");
 
-            WebHostBuilder.Build().Run();
+             WebHostBuilder.Build().Run();
         }
 
         public virtual async Task RunAsync(CancellationToken cancellationToken = default)
@@ -155,8 +156,14 @@ namespace BaSyx.Components.Common
                                 logger.Warn(exp, $"Assembly {controllerAssemblyName} can finally not be loaded");
                             }                            
                         }
-                        if(controllerAssembly != null)
+                        if (controllerAssembly != null)
+                        {
                             mvcBuilder.AddApplicationPart(controllerAssembly);
+                            string xmlDocFile = $"{controllerAssembly.GetName().Name}.xml";
+                            string xmlDocFilePath = Path.Combine(AppContext.BaseDirectory, xmlDocFile);
+                            if (ResourceChecker.CheckResourceAvailability(controllerAssembly, controllerAssembly.GetName().Name, xmlDocFilePath, true))
+                                logger.Info($"{xmlDocFile} of Assembly {controllerAssembly.GetName().Name} exists or has just been created");
+                        }
                     }
                     mvcBuilder.AddControllersAsServices();
                 }

@@ -11,7 +11,7 @@
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
 {
     /// <summary>
     /// An annotated relationship element is a relationship element that can be annotated with additional data elements. 

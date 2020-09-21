@@ -1,8 +1,8 @@
 ﻿@page "multiui"
 @model BaSyx.Submodel.Server.Http.Pages.MultiIndexModel
 @using BaSyx.API.Components;
+@using BaSyx.Models.Core.AssetAdministrationShell;
 @using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-@using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 @using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 @using BaSyx.Models.Core.AssetAdministrationShell.References;
 @using BaSyx.Models.Core.Common;
@@ -368,7 +368,7 @@ else
 {
     ISubmodel submodel = submodelwithElement[0] as ISubmodel;
     ISubmodelElement submodelElement = submodelwithElement[1] as ISubmodelElement;
-        
+
     <div class="panel panel-warning">
         <div class="panel-heading">
             <h4 class="panel-title">
@@ -427,7 +427,7 @@ else
             }
             else if (submodelElement is ISubmodelElementCollection collection)
             {
-                if (collection.Value?.Count > 0)
+                if (collection.Value?.Count() > 0)
                 {
                     @foreach (var value in collection.Value)
                     {
@@ -536,15 +536,14 @@ else
                                 @ShowSemanticId(submodel.SemanticId)
                                 <div class="panel-body">
                                     <div class="panel-group">
-                                        @if (submodel.SubmodelElements?.Count > 0)
+                                        @if (submodel.SubmodelElements?.Count() > 0)
                                         {
                                             <div class="panel panel-default">
                                                 <div class="panel-heading" style="background:#005691"><h4 style="color:white">Submodel-Elements</h4></div>
                                                 <div class="panel-body">
                                                     <div class="panel-group">
-                                                        @for (int i = 0; i < submodel.SubmodelElements.Count; i++)
+                                                        @foreach (var submodelElement in submodel.SubmodelElements)
                                                         {
-                                                            var submodelElement = submodel.SubmodelElements[i];
                                                             if (submodelElement == null)
                                                             { continue; }
 
@@ -557,7 +556,7 @@ else
                                         }
                                     </div>
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
                     </div>
                 </div>

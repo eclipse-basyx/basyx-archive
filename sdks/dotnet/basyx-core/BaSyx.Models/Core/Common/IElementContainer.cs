@@ -14,16 +14,11 @@ using BaSyx.Utils.ResultHandling;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace BaSyx.Models.Core.Common
 {
-    public interface IGenericElementContainer<TIdentifier, TElement> : IList<TElement>
+    public interface ICrudContainer<TIdentifier, TElement>
     {
-        TElement this[TIdentifier id] { get; }
-
-        IResult<TElement> Create(TElement element);
-
         IResult<T> Create<T>(T element) where T : class, TElement;
 
         IResult<TElement> Retrieve(TIdentifier id);
@@ -39,23 +34,37 @@ namespace BaSyx.Models.Core.Common
         IResult<TElement> Update(TIdentifier id, TElement element);
 
         IResult Delete(TIdentifier id);
-        
-        void AddRange(IEnumerable<TElement> collection);
-    }
-
-    public interface IQueryableElementContainer<TElement> : IElementContainer<TElement>, IQueryable<TElement>
-    {
-
+       
     }
 
     [JsonConverter(typeof(ElementContainerConverter))]
-    public interface IElementContainer<TElement> : IGenericElementContainer<string, TElement>
+    public interface IElementContainer<TElement> : ICrudContainer<string, TElement>, IEnumerable<TElement>
     {
+        TElement this[int i] { get; }
+        TElement this[string idShort] { get; }
+
         IResult<IQueryableElementContainer<TElement>> RetrieveAll();
         IResult<IQueryableElementContainer<TElement>> RetrieveAll(Predicate<TElement> predicate);
 
-        IElementContainer<TOutput> ConvertAll<TOutput>(Converter<TElement, TOutput> converter) where TOutput : IReferable, IModelElement;
-        IElementContainer<TModelElementType> Filter<TModelElementType>(ModelType modelType) where TModelElementType : IReferable, IModelElement, TElement;
-        IEnumerable<TModelElementType> FilterAsReference<TModelElementType>(ModelType modelType) where TModelElementType : IReferable, IModelElement, TElement;
+        IEnumerable<IElementContainer<TElement>> Children { get; }
+        IEnumerable<TElement> Values { get; }
+        IElementContainer<TElement> ParentContainer { get; set; }
+
+        IReferable Parent { get; set; }
+        TElement Value { get; set; }
+        string Path { get; set; }
+        string IdShort { get; }
+        bool IsRoot { get; }
+
+        bool HasChildren();
+        bool HasChild(string idShort);
+        bool HasChildPath(string idShortPath);
+        void Traverse(Action<TElement> action);
+        IEnumerable<TElement> Flatten();
+        IElementContainer<TElement> GetChild(string idShortPath);
+        void AppendRootPath(string rootPath);
+        void Add(TElement element);
+        void Remove(string idShort);
+        void AddRange(IEnumerable<TElement> elements);
     }
 }

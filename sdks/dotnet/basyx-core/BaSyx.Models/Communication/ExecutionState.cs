@@ -10,12 +10,35 @@
 *******************************************************************************/
 namespace BaSyx.Models.Communication
 {
+    /// <summary>
+    /// Defines the execution state of an invoked operation
+    /// </summary>
     public enum ExecutionState
     {
+        /// <summary>
+        /// Initial state of execution
+        /// </summary>
         Initiated,
+        /// <summary>
+        /// The operation is running
+        /// </summary>
         Running,
+        /// <summary>
+        /// The operation execution has been completed
+        /// </summary>
         Completed,
+        /// <summary>
+        /// The operation execution has been canceled
+        /// </summary>
         Canceled,
-        Failed
+        /// <summary>
+        /// The operation execution has been failed
+        /// </summary>
+        Failed,
+        /// <summary>
+        /// The operation execution has timed out
+        /// </summary>
+        Timeout
+
     }
 }

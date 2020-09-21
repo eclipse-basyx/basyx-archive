@@ -14,7 +14,7 @@ using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
+using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using NLog;
 using BaSyx.Utils.FileHandling;
 
@@ -409,9 +409,25 @@ namespace BaSyx.Models.Export
             return contentType;
         }
 
+        #region IDisposable Support
+        private bool disposedValue = false;
+
+        void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    aasxPackage.Close();
+                }
+                disposedValue = true;
+            }
+        }
+
         public void Dispose()
         {
-            aasxPackage.Close();
+            Dispose(true);
         }
+        #endregion
     }
 }

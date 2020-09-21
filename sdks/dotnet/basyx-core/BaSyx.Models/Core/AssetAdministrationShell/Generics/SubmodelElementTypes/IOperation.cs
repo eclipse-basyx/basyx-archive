@@ -11,11 +11,17 @@
 using BaSyx.Models.Core.Common;
 using BaSyx.Utils.ResultHandling;
 using System.Runtime.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
 {
-    public delegate Task<OperationResult> MethodCalledHandler(IOperation operation, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments);
+    public delegate Task<OperationResult> MethodCalledHandler(
+        IOperation operation,
+        IOperationVariableSet inputArguments, 
+        IOperationVariableSet inoutputArguments, 
+        IOperationVariableSet outputArguments, 
+        CancellationToken cancellationToken);
 
     /// <summary>
     /// An operation is a submodel element with input and output variables. 

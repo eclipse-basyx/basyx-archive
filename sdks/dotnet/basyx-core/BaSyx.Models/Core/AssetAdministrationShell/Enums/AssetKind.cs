@@ -11,7 +11,7 @@
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Enums
+namespace BaSyx.Models.Core.AssetAdministrationShell
 {
     [DataContract]
     public enum AssetKind : int

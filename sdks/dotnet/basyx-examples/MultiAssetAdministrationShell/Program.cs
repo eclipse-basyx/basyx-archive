@@ -12,11 +12,10 @@ using BaSyx.AAS.Server.Http;
 using BaSyx.API.AssetAdministrationShell.Extensions;
 using BaSyx.API.Components;
 using BaSyx.Models.Connectivity;
-using BaSyx.Models.Core.AssetAdministrationShell.Enums;
+using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using BaSyx.Utils.Settings.Types;
@@ -38,10 +37,8 @@ namespace MultiAssetAdministrationShell
 
             for (int i = 0; i < 10; i++)
             {
-                AssetAdministrationShell aas = new AssetAdministrationShell()
+                AssetAdministrationShell aas = new AssetAdministrationShell("MultiAAS_" + i, new Identifier("http://basys40.de/shells/MultiAAS/" + Guid.NewGuid().ToString(), KeyType.IRI))
                 {
-                    IdShort = "MultiAAS_" + i,
-                    Identification = new Identifier("http://basys40.de/shells/MultiAAS/" + Guid.NewGuid().ToString(), KeyType.IRI),
                     Description = new LangStringSet()
                     {
                        new LangString("de-DE", i + ". VWS"),
@@ -52,10 +49,8 @@ namespace MultiAssetAdministrationShell
                         Version = "1.0",
                         Revision = "120"
                     },
-                    Asset = new Asset()
+                    Asset = new Asset("Asset_" + i, new Identifier("http://basys40.de/assets/MultiAsset/" + Guid.NewGuid().ToString(), KeyType.IRI))
                     {
-                        IdShort = "Asset_" + i,
-                        Identification = new Identifier("http://basys40.de/assets/MultiAsset/" + Guid.NewGuid().ToString(), KeyType.IRI),
                         Kind = AssetKind.Instance,
                         Description = new LangStringSet()
                         {
@@ -65,15 +60,12 @@ namespace MultiAssetAdministrationShell
                     }
                 };
 
-                aas.Submodels.Create(new Submodel()
+                aas.Submodels.Create(new Submodel("TestSubmodel", new Identifier("http://basys40.de/submodels/" + Guid.NewGuid().ToString(), KeyType.IRI))
                 {
-                    Identification = new Identifier("http://basys40.de/submodels/" + Guid.NewGuid().ToString(), KeyType.IRI),
-                    IdShort = "TestSubmodel",
-                    SubmodelElements = new ElementContainer<ISubmodelElement>()
+                    SubmodelElements =
                     {
-                        new Property<double>()
+                        new Property<double>("Property_" + i)
                         {
-                            IdShort = "Property_" + i,
                             Get = prop => { return Math.Pow(i, 2); }
                         }
                     }

@@ -8,22 +8,18 @@
 *
 * 
 *******************************************************************************/
-using BaSyx.API.AssetAdministrationShell;
 using BaSyx.API.Components;
 using BaSyx.Models.Connectivity;
-using BaSyx.Models.Core.AssetAdministrationShell.Enums;
+using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Extensions;
 using BaSyx.Models.Extensions.Semantics.DataSpecifications;
 using BaSyx.Utils.Client;
-using BaSyx.Utils.Client.Mqtt;
 using BaSyx.Utils.ResultHandling;
 using System;
 using System.Collections.Generic;
@@ -34,131 +30,77 @@ namespace HelloAssetAdministrationShell
 {
     public class HelloAssetAdministrationShellService : AssetAdministrationShellServiceProvider
     {
-        public override IAssetAdministrationShell AssetAdministrationShell { get; protected set; }
-
-        private SubmodelServiceProvider helloSubmodelServiceProvider;
-        private SubmodelServiceProvider assetIdentificationSubmodelProvider;
-
-        private IMessageClient messageClient;
-        private CancellationTokenSource cancellationToken;
+        private readonly SubmodelServiceProvider helloSubmodelServiceProvider;
+        private readonly SubmodelServiceProvider assetIdentificationSubmodelProvider;
 
         public HelloAssetAdministrationShellService()
         {
             helloSubmodelServiceProvider = new SubmodelServiceProvider();
             helloSubmodelServiceProvider.BindTo(AssetAdministrationShell.Submodels["HelloSubmodel"]);
             helloSubmodelServiceProvider.RegisterMethodCalledHandler("HelloOperation", HelloOperationHandler);
-            helloSubmodelServiceProvider.RegisterPropertyHandler("HelloProperty",
-                new PropertyHandler(HelloPropertyGetHandler, HelloPropertySetHandler));
-            helloSubmodelServiceProvider.ConfigureEventHandler(messageClient);
+            helloSubmodelServiceProvider.RegisterSubmodelElementHandler("HelloProperty",
+                new SubmodelElementHandler(HelloSubmodelElementGetHandler, HelloSubmodelElementSetHandler));
             this.RegisterSubmodelServiceProvider("HelloSubmodel", helloSubmodelServiceProvider);
 
             assetIdentificationSubmodelProvider = new SubmodelServiceProvider();
             assetIdentificationSubmodelProvider.BindTo(AssetAdministrationShell.Submodels["AssetIdentification"]);
-            assetIdentificationSubmodelProvider.UseInMemoryPropertyHandler();
+            assetIdentificationSubmodelProvider.UseInMemorySubmodelElementHandler();
             this.RegisterSubmodelServiceProvider("AssetIdentification", assetIdentificationSubmodelProvider);
-
-            
-
-            InitializeMessageClient();
-
-            cancellationToken = new CancellationTokenSource();
-            Task.Factory.StartNew(async() =>
-            {
-                while(!cancellationToken.IsCancellationRequested)
-                {
-                    Run();
-                    await Task.Delay(5000);
-                }
-            }, cancellationToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
 
-        private void InitializeMessageClient()
-        {
-            messageClient = new SimpleMqttClient(
-                new MqttConfig(
-                    Guid.NewGuid().ToString(),
-                    "mqtt://127.0.0.1:1883"));
-            messageClient.Start();
-        }
-
-        public void Run()
-        {
-            helloSubmodelServiceProvider.ThrowEvent(new PublishableEvent()
-            {
-                EventReference = new Reference<IEvent>(AssetAdministrationShell.Submodels["HelloSubmodel"].SubmodelElements["HelloEvent"].Cast<IEvent>()),
-                Originator = "HelloAssetAdministrationShell",
-                Timestamp = DateTime.Now.ToString(),
-                Message = "Pew Pew",
-            }, "/" + AssetAdministrationShell.IdShort + "/submodels/HelloSubmodel/HelloEvent", null, 2);
-        }
-
-        private void HelloPropertySetHandler(IProperty property, IValue value)
+        private void HelloSubmodelElementSetHandler(ISubmodelElement submodelElement, IValue value)
         {
             AssetAdministrationShell.Submodels["HelloSubmodel"].SubmodelElements["HelloProperty"].Cast<IProperty>().Value = value.Value;
         }
 
-        private IValue HelloPropertyGetHandler(IProperty property)
+        private IValue HelloSubmodelElementGetHandler(ISubmodelElement submodelElement)
         {
             var localProperty = AssetAdministrationShell.Submodels["HelloSubmodel"].SubmodelElements["HelloProperty"].Cast<IProperty>();
             return new ElementValue(localProperty.Value, localProperty.ValueType);
         }
 
-        private Task<OperationResult> HelloOperationHandler(IOperation operation, IOperationVariableSet inputArguments, IOperationVariableSet outputArguments)
+        private Task<OperationResult> HelloOperationHandler(IOperation operation, IOperationVariableSet inputArguments, IOperationVariableSet inoutputArguments, IOperationVariableSet outputArguments, CancellationToken cancellationToken)
         {
             if (inputArguments?.Count > 0)
             {
                 outputArguments.Add(
-                    new Property<string>()
-                    {
-                        IdShort = "ReturnValue",
-                        Value = "Hello '" + inputArguments["Text"].Cast<IProperty>().ToObject<string>() + "'"
-                    });
+                    new Property<string>("ReturnValue", "Hello '" + inputArguments["Text"].Cast<IProperty>().ToObject<string>() + "'"));
                 return new OperationResult(true);
             }
             return new OperationResult(false);
         }
 
-        public override IAssetAdministrationShell GenerateAssetAdministrationShell()
+        public override IAssetAdministrationShell BuildAssetAdministrationShell()
         {
-            AssetAdministrationShell aas = new AssetAdministrationShell();
-
-            aas.IdShort = "HelloAAS";
-            aas.Identification = new Identifier("http://basys40.de/shells/HelloAAS/" + Guid.NewGuid().ToString(), KeyType.IRI);
-            aas.Description = new LangStringSet() { new LangString("en-US", "This is an exemplary Asset Administration Shell for starters") };
-                        
-            aas.Asset = new Asset()
+            AssetAdministrationShell aas = new AssetAdministrationShell("HelloAAS", new Identifier("http://basys40.de/shells/HelloAAS/" + Guid.NewGuid().ToString(), KeyType.IRI))
             {
-                Description = new LangStringSet() { new LangString("en-US", "This is an exemplary Asset reference from the Asset Administration Shell") },
-                IdShort = "HelloAsset",
-                Identification = new Identifier("http://basys40.de/assets/HelloAsset/" + Guid.NewGuid().ToString(), KeyType.IRI),
-                Kind = AssetKind.Instance,
-                SemanticId = new Reference(new GlobalKey(KeyElements.Asset, KeyType.IRI, "urn:basys:org.eclipse.basyx:assets:HelloAsset:1.0.0"))
+                Description = new LangStringSet() { new LangString("en-US", "This is an exemplary Asset Administration Shell for starters") },
+
+                Asset = new Asset("HelloAsset", new Identifier("http://basys40.de/assets/HelloAsset/" + Guid.NewGuid().ToString(), KeyType.IRI))
+                {
+                    Description = new LangStringSet() { new LangString("en-US", "This is an exemplary Asset reference from the Asset Administration Shell") },
+                    Kind = AssetKind.Instance,
+                    SemanticId = new Reference(new GlobalKey(KeyElements.Asset, KeyType.IRI, "urn:basys:org.eclipse.basyx:assets:HelloAsset:1.0.0"))
+                }
             };
 
-            Submodel helloSubmodel = new Submodel
+            Submodel helloSubmodel = new Submodel("HelloSubmodel", new Identifier("http://basys40.de/submodels/HelloSubmodel/" + Guid.NewGuid().ToString(), KeyType.IRI))
             {
                 Description = new LangStringSet() { new LangString("en-US", "This is an exemplary Submodel") },
-                IdShort = "HelloSubmodel",
-                Identification = new Identifier("http://basys40.de/submodels/HelloSubmodel/" + Guid.NewGuid().ToString(), KeyType.IRI),
                 Kind = ModelingKind.Instance,
                 SemanticId = new Reference(new GlobalKey(KeyElements.Submodel, KeyType.IRI, "urn:basys:org.eclipse.basyx:submodels:HelloSubmodel:1.0.0"))
             };
 
             helloSubmodel.SubmodelElements = new ElementContainer<ISubmodelElement>();
-            helloSubmodel.SubmodelElements.Add(new Property<string>()
+            helloSubmodel.SubmodelElements.Add(new Property<string>("HelloProperty", "TestValue")
             {
                 Description = new LangStringSet() { new LangString("en-US", "This is an exemplary property") },
-                IdShort = "HelloProperty",
-                Kind = ModelingKind.Instance,
-                Value = "TestValue",
                 SemanticId = new Reference(new GlobalKey(KeyElements.Property, KeyType.IRI, "urn:basys:org.eclipse.basyx:dataElements:HelloProperty:1.0.0"))
             });
 
-            helloSubmodel.SubmodelElements.Add(new File()
+            helloSubmodel.SubmodelElements.Add(new File("HelloFile")
             {
                 Description = new LangStringSet() { new LangString("en-US", "This is an exemplary file attached to the Asset Administration Shell")},
-                IdShort = "HelloFile",
-                Kind = ModelingKind.Instance,
                 MimeType = "application/pdf",
                 Value = "/HelloAssetAdministrationShell.pdf"
             });
@@ -177,44 +119,25 @@ namespace HelloAssetAdministrationShell
                 }
             };
 
-            helloSubmodel.SubmodelElements.Add(new Operation()
+            helloSubmodel.SubmodelElements.Add(new Operation("HelloOperation")
             {
                 Description = new LangStringSet() { new LangString("en-US", "This is an exemplary operation returning the input argument with 'Hello' as prefix") },
-                IdShort = "HelloOperation",
-                InputVariables = new OperationVariableSet() { new Property<string>() { IdShort = "Text" } },
-                OutputVariables = new OperationVariableSet() { new Property<string>() { IdShort = "ReturnValue" } },
+                InputVariables = new OperationVariableSet() { new Property<string>("Text") },
+                OutputVariables = new OperationVariableSet() { new Property<string>("ReturnValue") },
                 ConceptDescription = helloOperation_ConceptDescription
-            });
-
-            helloSubmodel.SubmodelElements.Add(new Event()
-            {
-                Description = new LangStringSet() { new LangString("en-US", "This is an exemplary event with only one property as event payload") },
-                IdShort = "HelloEvent",
-                Kind = ModelingKind.Template,
-                DataElements = new ElementContainer<ISubmodelElement>()
-                {
-                    new Property<string>()
-                    {
-                        IdShort = "HelloEvent_Property",                        
-                        Kind = ModelingKind.Template
-                    }
-                }
-
             });
 
             aas.Submodels = new ElementContainer<ISubmodel>();
             aas.Submodels.Add(helloSubmodel);
 
-            var assetIdentificationSubmodel = new Submodel();
-            assetIdentificationSubmodel.IdShort = "AssetIdentification";
-            assetIdentificationSubmodel.Identification = new Identifier(Guid.NewGuid().ToString(), KeyType.Custom);
-            assetIdentificationSubmodel.Kind = ModelingKind.Instance;
-            assetIdentificationSubmodel.Parent = new Reference<IAssetAdministrationShell>(aas);
-
-            var productTypeProp = new Property<string>()
+            var assetIdentificationSubmodel = new Submodel("AssetIdentification", new Identifier(Guid.NewGuid().ToString(), KeyType.Custom))
             {
-                IdShort = "ProductType",
                 Kind = ModelingKind.Instance,
+                Parent = aas
+            };
+
+            var productTypeProp = new Property<string>("ProductType")
+            {
                 SemanticId = new Reference(
                   new GlobalKey(
                       KeyElements.Property,
@@ -237,10 +160,8 @@ namespace HelloAssetAdministrationShell
                 }
             };
 
-            var orderNumber = new Property<string>()
+            var orderNumber = new Property<string>("OrderNumber")
             {
-                IdShort = "OrderNumber",
-                Kind = ModelingKind.Instance,
                 SemanticId = new Reference(
                     new GlobalKey(
                         KeyElements.Property,
@@ -250,12 +171,7 @@ namespace HelloAssetAdministrationShell
                 ConceptDescription = orderNumberCD
             };
 
-            var serialNumber = new Property<string>()
-            {
-                IdShort = "SerialNumber",
-                Kind = ModelingKind.Instance,
-                Value = "HelloAsset_SerialNumber"
-            };
+            var serialNumber = new Property<string>("SerialNumber", "HelloAsset_SerialNumber");
 
             assetIdentificationSubmodel.SubmodelElements.Add(productTypeProp);
             assetIdentificationSubmodel.SubmodelElements.Add(orderNumber);

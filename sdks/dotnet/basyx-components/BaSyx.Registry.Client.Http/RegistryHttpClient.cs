@@ -64,7 +64,7 @@ namespace BaSyx.Registry.Client.Http
             Settings = Settings ?? throw new NullReferenceException("Settings is null");
 
             LoadSettings(Settings);
-            JsonSerializerSettings = new JsonStandardSettings();
+            JsonSerializerSettings = new DependencyInjectionJsonSerializerSettings();
         }
 
         public Uri GetUri(params string[] pathElements)

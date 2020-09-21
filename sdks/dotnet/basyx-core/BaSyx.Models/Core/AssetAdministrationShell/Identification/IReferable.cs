@@ -8,10 +8,8 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using BaSyx.Models.Core.AssetAdministrationShell.References;
 using Newtonsoft.Json;
 using System.Runtime.Serialization;
-using BaSyx.Models.Core.Common;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
 {
@@ -38,10 +36,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "description")]
         LangStringSet Description { get; }
 
-        /// <summary>
-        /// Reference to the next referable parent element of the element.
-        /// </summary>
-        [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "parent")]
-        IReference Parent { get; }
+        [IgnoreDataMember]
+        IReferable Parent { get; set; }
     }
 }

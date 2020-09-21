@@ -15,7 +15,6 @@ using BaSyx.Utils.ResultHandling;
 using System;
 using System.Net.Http;
 using BaSyx.Models.Core.Common;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Communication;
 using BaSyx.Utils.PathHandling;
 using BaSyx.Models.Connectivity.Descriptors;
@@ -43,7 +42,7 @@ namespace BaSyx.Submodel.Client.Http
 
         private SubmodelHttpClient()
         {
-            JsonSerializerSettings = new JsonStandardSettings();
+            JsonSerializerSettings = new DependencyInjectionJsonSerializerSettings();
         }
 
         public SubmodelHttpClient(Uri endpoint) : this()
@@ -187,7 +186,7 @@ namespace BaSyx.Submodel.Client.Http
             return base.EvaluateResponse(response, response.Entity);
         }
 
-        public IResult<ISubmodelElement> CreateSubmodelElement(ISubmodelElement submodelElement)
+        public IResult<ISubmodelElement> CreateSubmodelElement(string rootSubmodelElementIdShort, ISubmodelElement submodelElement)
         {
             var request = base.CreateJsonContentRequest(GetUri(SUBMODELELEMENTS), HttpMethod.Put, submodelElement);
             var response = base.SendRequest(request, REQUEST_TIMEOUT);
@@ -241,6 +240,13 @@ namespace BaSyx.Submodel.Client.Http
             var request = base.CreateRequest(GetUri(OPERATIONS, operationId, INVOCATION_LIST, requestId), HttpMethod.Get);
             var response = base.SendRequest(request, REQUEST_TIMEOUT);
             return base.EvaluateResponse<InvocationResponse>(response, response.Entity);
+        }
+
+        public IResult UpdateSubmodelElementValue(string submodelElementId, IValue value)
+        {
+            var request = base.CreateJsonContentRequest(GetUri(SUBMODELELEMENTS, submodelElementId, VALUE), HttpMethod.Put, value);
+            var response = base.SendRequest(request, REQUEST_TIMEOUT);
+            return base.EvaluateResponse(response, response.Entity);
         }
     }
 }

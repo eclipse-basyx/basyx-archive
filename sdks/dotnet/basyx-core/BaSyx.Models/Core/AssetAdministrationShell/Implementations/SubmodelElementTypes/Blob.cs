@@ -8,11 +8,11 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
+using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.Common;
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelElementTypes
+namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 {
     [DataContract]
     public class Blob : SubmodelElement, IBlob
@@ -21,6 +21,10 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations.SubmodelEle
         public string MimeType { get; set; }
         public byte[] Value { get; set; }
 
-        public Blob() : base() { }
+        public Blob(string idShort) : base(idShort) 
+        {
+            Get = element => { return new ElementValue(Value, new DataType(DataObjectType.Base64Binary)); };
+            Set = (element, value) => { Value = value.Value as byte[]; };
+        }
     }
 }

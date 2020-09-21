@@ -64,7 +64,9 @@ namespace BaSyx.AAS.Server.Http
                 .AddApplicationPart(controllerAssembly)
                 .AddControllersAsServices()
                 .AddNewtonsoftJson(options => options.GetDefaultMvcJsonOptions(services));
-            services.AddRazorPages(options => options.Conventions.AddPageRoute("/Index", "/ui"));
+            services
+                .AddRazorPages(options => options.Conventions.AddPageRoute("/Index", "/ui"))
+                .AddRazorRuntimeCompilation();
 
             services.AddDirectoryBrowser();
            
@@ -74,12 +76,9 @@ namespace BaSyx.AAS.Server.Http
                 var aasServiceProvider = ctx.GetRequiredService<IAssetAdministrationShellServiceProvider>();
                 var submodelServiceProvider = aasServiceProvider.SubmodelRegistry.GetSubmodelServiceProvider(submodelId);
                 if (!submodelServiceProvider.Success || submodelServiceProvider.Entity == null)
-                {
-                    SubmodelServiceProvider cssp = new SubmodelServiceProvider();
-                    return cssp; //new SubmodelServices(cssp);
-                }
+                    return new SubmodelServiceProvider();
                 else
-                    return submodelServiceProvider.Entity; //new SubmodelServices(submodelServiceProvider.Entity);
+                    return submodelServiceProvider.Entity;
             });
 
             // Register the Swagger generator, defining one or more Swagger documents

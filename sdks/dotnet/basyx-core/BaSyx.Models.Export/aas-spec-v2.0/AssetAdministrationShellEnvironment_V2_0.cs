@@ -9,7 +9,6 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
@@ -139,10 +138,10 @@ namespace BaSyx.Models.Export
         {
             AssetAdministrationShells.Add(aas);
             Assets.Add(aas.Asset);
-            if (aas.Submodels?.Count > 0)
+            if (aas.Submodels?.Count() > 0)
             {
-                Submodels.AddRange(aas.Submodels);
-                foreach (var submodel in aas.Submodels)
+                Submodels.AddRange(aas.Submodels.Values);
+                foreach (var submodel in aas.Submodels.Values)
                 {
                     ExtractAndClearConceptDescriptions(submodel.SubmodelElements);
                     ExtractSupplementalFiles(submodel.SubmodelElements);
@@ -165,7 +164,6 @@ namespace BaSyx.Models.Export
                     Identification = asset.Identification,
                     IdShort = asset.IdShort,
                     Kind = asset.Kind,
-                    Parent = asset.Parent?.First?.Value
                 };
                 EnvironmentAssets.Add(envAsset);
             }
@@ -192,7 +190,6 @@ namespace BaSyx.Models.Export
                     Description = conceptDescription.Description,
                     Identification = conceptDescription.Identification,
                     IdShort = conceptDescription.IdShort,
-                    Parent = conceptDescription.Parent?.First?.Value,
                     IsCaseOf = conceptDescription.IsCaseOf?.ToList()?.ConvertAll(c => c.ToEnvironmentReference_V2_0()),
                     EmbeddedDataSpecification = embeddedDataSpecification
                 };
@@ -209,7 +206,6 @@ namespace BaSyx.Models.Export
                     Description = assetAdministrationShell.Description,
                     IdShort = assetAdministrationShell.IdShort,
                     Identification = assetAdministrationShell.Identification,
-                    Parent = assetAdministrationShell.Parent?.First?.Value,
                     AssetReference = assetAdministrationShell.Asset?.ToEnvironmentReference_V2_0(),
                     Views = null,
                     ConceptDictionaries = null
@@ -230,7 +226,6 @@ namespace BaSyx.Models.Export
                     Identification = submodel.Identification,
                     IdShort = submodel.IdShort,
                     Kind = submodel.Kind,
-                    Parent = submodel.Parent?.First?.Value,
                     Qualifier = null,
                     SemanticId = submodel.SemanticId?.ToEnvironmentReference_V2_0()
                 };
@@ -249,15 +244,15 @@ namespace BaSyx.Models.Export
         {
             var eventsToDelete = submodelElements.Where(s => s.ModelType == ModelType.Event || s.ModelType == ModelType.BasicEvent).ToList();
             foreach (var eventable in eventsToDelete)
-                submodelElements.Remove(eventable);
+                submodelElements.Delete(eventable.IdShort);
         }
 
 
-        private void ExtractSupplementalFiles(IEnumerable<ISubmodelElement> submodelElements)
+        private void ExtractSupplementalFiles(IElementContainer<ISubmodelElement> submodelElements)
         {
             foreach (var smElement in submodelElements)
             {
-                if (smElement is Core.AssetAdministrationShell.Implementations.SubmodelElementTypes.File file)
+                if (smElement is Core.AssetAdministrationShell.Implementations.File file)
                 {
                     string filePath = ContentRoot + file.Value.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
                     if (System.IO.File.Exists(filePath))
@@ -271,11 +266,11 @@ namespace BaSyx.Models.Export
                     }
                 }
                 else if (smElement.ModelType == ModelType.SubmodelElementCollection)
-                    ExtractSupplementalFiles((smElement as Core.AssetAdministrationShell.Implementations.SubmodelElementTypes.SubmodelElementCollection).Value);
+                    ExtractSupplementalFiles((smElement as SubmodelElementCollection).Value);
             }
         }
 
-        private void ExtractAndClearConceptDescriptions(IEnumerable<ISubmodelElement> submodelElements)
+        private void ExtractAndClearConceptDescriptions(IElementContainer<ISubmodelElement> submodelElements)
         {
             foreach (var smElement in submodelElements)
             {
@@ -287,13 +282,13 @@ namespace BaSyx.Models.Export
                     (smElement as SubmodelElement).EmbeddedDataSpecifications = null;
                 }
                 if (smElement.ModelType == ModelType.SubmodelElementCollection)
-                    ExtractAndClearConceptDescriptions((smElement as Core.AssetAdministrationShell.Implementations.SubmodelElementTypes.SubmodelElementCollection).Value);
+                    ExtractAndClearConceptDescriptions((smElement as SubmodelElementCollection).Value);
             }
         }
 
         public void SetContentRoot(string contentRoot) => ContentRoot = contentRoot;
 
-        private void ResetConstraints(IEnumerable<ISubmodelElement> submodelElements)
+        private void ResetConstraints(IElementContainer<ISubmodelElement> submodelElements)
         {
             foreach (var smElement in submodelElements)
             {
@@ -307,7 +302,7 @@ namespace BaSyx.Models.Export
                         ResetConstraints((smElement as IOperation).OutputVariables.ToElementContainer());
                 }
                 else if (smElement.ModelType == ModelType.SubmodelElementCollection)
-                    ResetConstraints((smElement as Core.AssetAdministrationShell.Implementations.SubmodelElementTypes.SubmodelElementCollection).Value);
+                    ResetConstraints((smElement as SubmodelElementCollection).Value);
             }
         }
 
@@ -431,13 +426,11 @@ namespace BaSyx.Models.Export
         {
             foreach (var envAsset in environment.EnvironmentAssets)
             {
-                Asset asset = new Asset
+                Asset asset = new Asset(envAsset.IdShort, envAsset.Identification)
                 {
                     Administration = envAsset.Administration,
                     Category = envAsset.Category,
                     Description = envAsset.Description,
-                    Identification = envAsset.Identification,
-                    IdShort = envAsset.IdShort,
                     Kind = envAsset.Kind,
                     AssetIdentificationModel = envAsset.AssetIdentificationModelReference?.ToReference_V2_0<ISubmodel>()                    
                 };
@@ -469,36 +462,29 @@ namespace BaSyx.Models.Export
             }
             foreach (var envSubmodel in environment.EnvironmentSubmodels)
             {
-                Submodel submodel = new Submodel()
+                Submodel submodel = new Submodel(envSubmodel.IdShort, envSubmodel.Identification)
                 {
                     Administration = envSubmodel.Administration,
                     Category = envSubmodel.Category,
                     Description = envSubmodel.Description,
-                    Identification = envSubmodel.Identification,
-                    IdShort = envSubmodel.IdShort,
                     Kind = envSubmodel.Kind,
-                    Parent = string.IsNullOrEmpty(envSubmodel.Parent) ? null :
-                    new Reference(
-                        new Key(KeyElements.AssetAdministrationShell, KeyType.IRI, envSubmodel.Parent, true)),
                     SemanticId = envSubmodel.SemanticId?.ToReference_V2_0(),
-                    ConceptDescription = null,
+                    ConceptDescription = null
                 };
-                List<ISubmodelElement> smElements = envSubmodel.SubmodelElements.ConvertAll(c => c.submodelElement?.ToSubmodelElement(environment.ConceptDescriptions));
+                List<ISubmodelElement> smElements = envSubmodel.SubmodelElements.ConvertAll(c => c.submodelElement?.ToSubmodelElement(environment.ConceptDescriptions, submodel));
                 foreach (var smElement in smElements)
-                    submodel.SubmodelElements.Add(smElement);
+                    submodel.SubmodelElements.Create(smElement);
 
                 environment.Submodels.Add(submodel);
             }
             foreach (var envAssetAdministrationShell in environment.EnvironmentAssetAdministationShells)
             {
-                AssetAdministrationShell assetAdministrationShell = new AssetAdministrationShell()
+                AssetAdministrationShell assetAdministrationShell = new AssetAdministrationShell(envAssetAdministrationShell.IdShort, envAssetAdministrationShell.Identification)
                 {
                     Administration = envAssetAdministrationShell.Administration,
                     Category = envAssetAdministrationShell.Category,
                     DerivedFrom = envAssetAdministrationShell.DerivedFrom?.ToReference_V2_0<IAssetAdministrationShell>(),
-                    Description = envAssetAdministrationShell.Description,
-                    Identification = envAssetAdministrationShell.Identification,
-                    IdShort = envAssetAdministrationShell.IdShort
+                    Description = envAssetAdministrationShell.Description
                 };
 
                 IAsset asset = environment.Assets.Find(a => a.Identification.Id == envAssetAdministrationShell.AssetReference?.Keys?.FirstOrDefault()?.Value);
@@ -508,7 +494,7 @@ namespace BaSyx.Models.Export
                 {
                     ISubmodel submodel = environment.Submodels.Find(s => s.Identification.Id == envSubmodelRef.Keys?.FirstOrDefault()?.Value);
                     if (submodel != null)
-                        assetAdministrationShell.Submodels.Add(submodel);
+                        assetAdministrationShell.Submodels.Create(submodel);
                 }
 
                 environment.AssetAdministrationShells.Add(assetAdministrationShell);

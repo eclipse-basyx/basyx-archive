@@ -1,8 +1,8 @@
 ﻿@page
 @model BaSyx.AAS.Server.Http.Pages.IndexModel
 @using BaSyx.API.Components;
+@using BaSyx.Models.Core.AssetAdministrationShell;
 @using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-@using BaSyx.Models.Core.AssetAdministrationShell.Generics.SubmodelElementTypes;
 @using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 @using BaSyx.Models.Core.AssetAdministrationShell.References;
 @using BaSyx.Models.Core.Common;
@@ -10,22 +10,24 @@
 @using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 @using BaSyx.Utils.Settings.Types;
 @using Microsoft.AspNetCore.Html;
+@using System.Security.Cryptography;
+@using System.Text;
+@using System.Text.RegularExpressions;
+
 @{
     ViewData["Title"] = "Index";
-}
-
-@{
     IAssetAdministrationShellServiceProvider sp = Model.ServiceProvider;
     IAssetAdministrationShell aas = sp.GetBinding();
+    ElementTree aasElementTree = aas.GetElementTree();
     ServerSettings settings = Model.Settings;
 
+    string pathToCompanyLogo = settings.Miscellaneous.TryGetValue("CompanyLogo", out string path) ? path : "/images/Bosch.gif";
     string eClassLink = "https://www.eclasscontent.com/index.php?action=cc2prdet&language=en&version=10.1&id=&pridatt=";
 
     Func<Identifier, IHtmlContent> ShowIdentification = @<text>@{
     var identifier = item;
     @if (identifier != null)
     {
-
         <div class="panel-body">
             <div class="row">
                 <div class="col-sm-2"><b>Identifier (@identifier.IdType.ToString())</b></div>
@@ -57,16 +59,20 @@ var reference = item;
     <div class="panel-body">
         <div class="row">
             <div class="col-sm-2"><b>SemanticId</b></div>
-            @if (reference.First.IdType == KeyType.IRDI)
+            @if (reference.IsEClassReference())
             {
                 {
                     string link = eClassLink + Uri.EscapeDataString(reference.First.Value);
                     <div class="col-sm-10"><a target="_blank" href="@link">@reference.First.Value (eCl@ss)</a></div>
                 }
             }
+            else if (reference.IsIsoReference())
+            {
+                <div class="col-sm-10">@reference.First.Value (CDD)</div>
+            }
             else
             {
-                <div class="col-sm-10">@reference.First.Value</div>
+                <div class="col-sm-10">@reference.ToStandardizedString()</div>
             }
         </div>
     </div>
@@ -81,15 +87,13 @@ var langStringCollection = item;
     string description = string.Empty;
     for (int i = 0; i < langStringCollection.Count; i++)
     {
-        description = langStringCollection[i].Language + ":" + langStringCollection[i].Text + (i != langStringCollection.Count - 1 ? ";" : "");
-    }
-
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-sm-2"><b>Description</b></div>
-            <div class="col-sm-10">@description</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-2"><b>Description[@langStringCollection[i].Language]</b></div>
+                <div class="col-sm-10">@langStringCollection[i].Text</div>
+            </div>
         </div>
-    </div>
+    }
 }
 }</text>;
 
@@ -106,42 +110,28 @@ else
 }
 }</text>;
 
-Func<string, IHtmlContent> ShowSubmodelElementHeader = @<text>@{
-var idShort = item;
-if (string.IsNullOrEmpty(idShort))
+
+Func<string, string, IProperty, IHtmlContent> ShowPropertyFooter = (submodelId, pathId, property) => new Func<object, Microsoft.AspNetCore.Mvc.Razor.HelperResult>(@<text>@{
+
+if (string.IsNullOrEmpty(submodelId) || string.IsNullOrEmpty(pathId) || property == null)
 {
     return;
 }
 else
 {
-    <div class="panel-heading">
-        <h4 class="panel-title">
-            <a data-toggle="collapse" href="#@idShort">@idShort</a>
-        </h4>
-    </div>
-}
-}</text>;
-
-Func<string, IProperty, IHtmlContent> ShowPropertyFooter = (submodelIdShort, property) => new Func<object, Microsoft.AspNetCore.Mvc.Razor.HelperResult>(@<text>@{
-
-if (string.IsNullOrEmpty(submodelIdShort) || property == null)
-{
-    return;
-}
-else
-{
+    string relativeSubmodelElementPath = string.Join("/", pathId.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).SkipWhile(p => p != submodelId).Skip(1));
     <div class="panel-footer">
         <div class="row">
             <div class="col-sm-8">
 
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                    <input id="Input_@submodelIdShort@property.IdShort" type="text" class="form-control" placeholder="Value" value="@ShowValue(property)" />
+                    <input id="@GetHashString(pathId + ";Input")" type="text" class="form-control" placeholder="Value" value="@ShowValue(property)" />
                 </div>
 
             </div>
-            <div class="col-sm-1"><button onclick="@("GetPropertyValue('" + submodelIdShort + "', '" + property.IdShort + "')")" id="@property.IdShort;Retrieve" type="button" class="btn btn-primary">Retrieve</button></div>
-            <div class="col-sm-1"><button onclick="@("SetPropertyValue('" + submodelIdShort + "', '" + property.IdShort + "', '" + property.ValueType?.ToString() + "', $('#Input_" + submodelIdShort + property.IdShort + "').val() )")" id="@property.IdShort;Update" type="button" class="btn btn-success">Update</button></div>
+            <div class="col-sm-1"><button onclick="@("GetPropertyValue('" + submodelId + "', '" + relativeSubmodelElementPath + "', '" + @GetHashString(pathId + ";Input") + "')")" id="@GetHashString(pathId + ";Retrieve")" type="button" class="btn btn-primary">Retrieve</button></div>
+            <div class="col-sm-1"><button onclick="@("SetPropertyValue('" + submodelId + "', '" + relativeSubmodelElementPath + "', '" + @GetHashString(pathId + ";Input") + "', '" + property.ValueType?.ToString() + "', $('#" + @GetHashString(pathId + ";Input") + "').val() )")" id="@GetHashString(pathId + ";Update")" type="button" class="btn btn-success">Update</button></div>
 
         </div>
     </div>
@@ -202,7 +192,11 @@ switch (keyElements)
             var contentFileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(contentRoot);
             @if (contentFileProvider.GetFileInfo(path).Exists)
             {
-                <embed src="@path#navpanes=0&scrollbar=0" width="100%" />
+                <div class="panel-body">
+                    <div class="row">
+                        <object data="@path" style="height:500px; width:100%"></object>
+                    </div>
+                </div>
             }
         }
         return;
@@ -236,21 +230,52 @@ switch (keyElements)
             return;
         }
 
-        string dataTypeName = property.ValueType?.ToString()?.ToUpper();
-        if (string.IsNullOrEmpty(dataTypeName))
+        string propDataTypeName = property.ValueType?.ToString()?.ToUpper();
+        if (string.IsNullOrEmpty(propDataTypeName))
         {
-            dataTypeName = property?.ModelType?.Name;
+            propDataTypeName = property?.ModelType?.Name;
         }
 
         <div class="panel-body">
             <div class="row">
                 <div class="col-sm-2"><b>ValueType</b></div>
-                <div class="col-sm-10">@dataTypeName</div>
+                <div class="col-sm-10">@propDataTypeName</div>
             </div>
         </div>
         return;
     case KeyElements.Range:
-        break;
+
+        IRange range = submodelElement?.Cast<IRange>();
+        if (range == null)
+        {
+            return;
+        }
+
+        string rangeDataTypeName = range.ValueType?.ToString()?.ToUpper();
+        if (string.IsNullOrEmpty(rangeDataTypeName))
+        {
+            rangeDataTypeName = range?.ModelType?.Name;
+        }
+
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-2"><b>ValueType</b></div>
+                <div class="col-sm-10">@rangeDataTypeName</div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-2"><b>Min-Value</b></div>
+                <div class="col-sm-10">@range.Min?.Value</div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-2"><b>Max-Value</b></div>
+                <div class="col-sm-10">@range.Max?.Value</div>
+            </div>
+        </div>
+        return;
     case KeyElements.ReferenceElement:
         break;
     case KeyElements.RelationshipElement:
@@ -269,29 +294,6 @@ switch (keyElements)
         break;
 }
 
-}</text>;
-
-Func<ISubmodelElement, IHtmlContent> ShowValueType = @<text>@{
-var submodelElement = item;
-if (submodelElement.GetType().GetInterfaces().Where(i => i.Name == "ISubmodelElement") == null)
-{
-    return;
-}
-else
-{
-    var property = (IProperty)submodelElement;
-    var dataTypeName = property.ValueType?.DataObjectType?.Name?.ToUpper();
-    if (string.IsNullOrEmpty(dataTypeName))
-    {
-        dataTypeName = property.ModelType?.Name;
-    }
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-sm-2"><b>ValueType</b></div>
-            <div class="col-sm-10">@dataTypeName</div>
-        </div>
-    </div>
-}
 }</text>;
 
 Func<IEnumerable<IEmbeddedDataSpecification>, IHtmlContent> ShowDataSpecifications = @<text>@{
@@ -364,87 +366,78 @@ if (embeddedDataSpecifications?.Count() > 0)
 Func<List<object>, IHtmlContent> ShowSubmodelElement = null;
 
 ShowSubmodelElement = @<text>@{
-var submodelwithElement = item;
-if (submodelwithElement?.Count < 2)
-{
-    return;
-}
-else
-{
-    ISubmodel submodel = submodelwithElement[0] as ISubmodel;
-    ISubmodelElement submodelElement = submodelwithElement[1] as ISubmodelElement;
+string submodelId = item[0] as string;
+ElementTree submodelElementTree = item[1] as ElementTree;
+string sePathId = submodelElementTree.GetPath();
+ISubmodelElement submodelElement = submodelElementTree.Value.Cast<ISubmodelElement>();
 
-    <div class="panel panel-warning">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" href="#@submodelElement.IdShort">@submodelElement.IdShort</a>
-            </h4>
-        </div>
-        <div id="@submodelElement.IdShort" class="panel-collapse collapse">
-            @ShowDataSpecifications(submodelElement.EmbeddedDataSpecifications)
-            @ShowDescription(submodelElement.Description)
-            @ShowSemanticId(submodelElement.SemanticId)
-            @ShowModelElementSpecificAttributes(submodelElement)
-
-            @if (submodelElement is IProperty property)
-            {
-                @ShowPropertyFooter(submodel.IdShort, property)
-            }
-            else if (submodelElement is IOperation operation)
-            {
-                if (operation.InputVariables?.Count > 0)
-                {
-                    foreach (var argument in operation.InputVariables.ToElementContainer())
-                    {
-                        <div class="panel-body" style="background:#88b8d9">
-                            <div class="row">
-                                <div class="col-sm-2 argInName @submodel.IdShort @operation.IdShort"><b>@argument.IdShort</b></div>
-                                <div class="col-sm-2 argInType @submodel.IdShort @operation.IdShort">@GetValueOrModelType(argument)</div>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                                        <input id="msg" type="text" class="form-control argInValue @submodel.IdShort  @operation.IdShort" name="msg" placeholder="Argument Value">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                }
-                if (operation.OutputVariables?.Count > 0)
-                {
-                    foreach (var argument in operation.OutputVariables.ToElementContainer())
-                    {
-                        <div class="panel-body" style="background:#d68dbc">
-                            <div class="row">
-                                <div class="col-sm-2 argOutName @submodel.IdShort @operation.IdShort"><b>@argument.IdShort</b></div>
-                                <div class="col-sm-2 argOutType @submodel.IdShort @operation.IdShort">@GetValueOrModelType(argument)</div>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                                        <input id="argOutValue_@submodel.IdShort@operation.IdShort@argument.IdShort" type="text" class="form-control argOutValue @submodel.IdShort  @operation.IdShort" name="msg" placeholder="Return Value">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                }
-                <div class="panel-footer"><button onclick="@("ExecuteOperation('" + submodel.IdShort + "', '" + operation.IdShort + "')")" type="button" class="btn btn-success">Execute</button></div>
-            }
-            else if (submodelElement is ISubmodelElementCollection collection)
-            {
-                if (collection.Value?.Count > 0)
-                {
-                    @foreach (var value in collection.Value)
-                    {
-                        <div class="panel-body">
-                            @ShowSubmodelElement(new List<object>() { submodel, value })
-                        </div>
-                    }
-                }
-            }
-        </div>
+<div class="panel panel-warning">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#@GetHashString(sePathId)">@submodelElementTree.Name</a>
+        </h4>
     </div>
-}
+    <div id="@GetHashString(sePathId)" class="panel-collapse collapse">
+        @ShowDataSpecifications(submodelElement.EmbeddedDataSpecifications)
+        @ShowDescription(submodelElement.Description)
+        @ShowSemanticId(submodelElement.SemanticId)
+        @ShowModelElementSpecificAttributes(submodelElement)
+
+        @if (submodelElement is IProperty property)
+        {
+            @ShowPropertyFooter(submodelId, sePathId, property)
+        }
+        else if (submodelElement is IOperation operation)
+        {
+            if (operation.InputVariables?.Count > 0)
+            {
+                foreach (var argument in operation.InputVariables.ToElementContainer())
+                {
+                    <div class="panel-body" style="background:#88b8d9">
+                        <div class="row">
+                            <div class="col-sm-2 argInName @submodelId @operation.IdShort"><b>@argument.IdShort</b></div>
+                            <div class="col-sm-2 argInType @submodelId @operation.IdShort">@GetValueOrModelType(argument)</div>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    <input id="msg" type="text" class="form-control argInValue @submodelId  @operation.IdShort" name="msg" placeholder="Argument Value">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            if (operation.OutputVariables?.Count > 0)
+            {
+                foreach (var argument in operation.OutputVariables.ToElementContainer())
+                {
+                    <div class="panel-body" style="background:#d68dbc">
+                        <div class="row">
+                            <div class="col-sm-2 argOutName @submodelId @operation.IdShort"><b>@argument.IdShort</b></div>
+                            <div class="col-sm-2 argOutType @submodelId @operation.IdShort">@GetValueOrModelType(argument)</div>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    <input id="argOutValue_@submodelId@operation.IdShort@argument.IdShort" type="text" class="form-control argOutValue @submodelId  @operation.IdShort" name="msg" placeholder="Return Value">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            <div class="panel-footer"><button onclick="@("ExecuteOperation('" + submodelId + "', '" + operation.IdShort + "')")" type="button" class="btn btn-success">Execute</button></div>
+        }
+        else if (submodelElementTree.HasChildren())
+        {
+            @foreach (var valueChild in submodelElementTree.Children)
+            {
+                <div class="panel-body">
+                    @ShowSubmodelElement(new List<object>() { submodelId, (ElementTree)valueChild })
+                </div>
+            }
+        }
+    </div>
+</div>
 }</text>;
 }
 
@@ -485,7 +478,9 @@ else
             <ul class="nav navbar-nav">
                 <li><a href="#" style="margin-top:15px">Main</a></li>
             </ul>
-            <div class="navbar-right"><img src="~/images/Bosch.gif" width="103" height="30" style="margin-top:25px; margin-right:15px" /></div>
+            <div class="navbar-right">
+                <img src="@pathToCompanyLogo" width="103" height="30" style="margin-top:25px; margin-right:15px" />
+            </div>
         </div>
     </nav>
 
@@ -543,45 +538,65 @@ else
                 return submodelElement.ModelType.Name;
             }
         }
+
+        private static string GetHashString(string input)
+        {
+            SHA256 shaAlgorithm = SHA256.Create();
+            byte[] data = Encoding.UTF8.GetBytes(input);
+
+            byte[] bHash = shaAlgorithm.ComputeHash(data);
+
+            string hashString = string.Empty;
+            for (int i = 0; i < bHash.Length; i++)
+            {
+                hashString += bHash[i].ToString("x2");
+            }
+            var output = Regex.Replace(hashString, @"[\d-]", string.Empty);
+            return output;
+        }
     }
 
 
-    @if (aas.Submodels?.Count > 0)
+    @if (aasElementTree.HasChildren())
     {
-        foreach (var submodel in aas.Submodels)
+        foreach (var submodelChild in aasElementTree.Children)
         {
+            ISubmodel submodel = submodelChild.Value.Cast<ISubmodel>();
+            string pathId = submodelChild.GetPath();
+
             <div class="container">
                 <div class="panel panel-default">
                     <div class="panel-heading" style="background:darkgreen">
                         <h4>
-                            <a style="color:white" data-toggle="collapse" href="#@submodel.IdShort">@submodel.IdShort</a>
+                            <a style="color:white" data-toggle="collapse" href="#@GetHashString(pathId)">@submodel.IdShort</a>
                         </h4>
                     </div>
-                    <div id="@submodel.IdShort" class="panel-collapse collapse">
+                    <div id="@GetHashString(pathId)" class="panel-collapse collapse">
                         @ShowIdShort(submodel.IdShort)
                         @ShowIdentification(submodel.Identification)
                         @ShowDescription(submodel.Description)
                         @ShowSemanticId(submodel.SemanticId)
                         <div class="panel-body">
                             <div class="panel-group">
-                                @if (submodel.SubmodelElements?.Count > 0)
-                                {
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading" style="background:#005691"><h4 style="color:white">Submodel-Elements</h4></div>
-                                        <div class="panel-body">
-                                            <div class="panel-group">
-                                                @for (int i = 0; i < submodel.SubmodelElements.Count; i++)
-                                                {
-                                                    var submodelElement = submodel.SubmodelElements[i];
-                                                    if (submodelElement == null)
-                                                    { continue; }
+                                @{
+                                    @if (submodelChild.HasChildren())
+                                    {
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" style="background:#005691"><h4 style="color:white">Submodel-Elements</h4></div>
+                                            <div class="panel-body">
+                                                <div class="panel-group">
+                                                    @foreach (var submodelElementChild in submodelChild.Children)
+                                                    {
+                                                        if (submodelElementChild == null)
+                                                        { continue; }
 
-                                                    @ShowSubmodelElement(new List<object>() { submodel, submodelElement });
+                                                        @ShowSubmodelElement(new List<object>() { submodel.IdShort, (ElementTree)submodelElementChild });
 
-                                                }
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
                                 }
                             </div>
                         </div>
@@ -594,16 +609,16 @@ else
 
     <script>
         function uuidv4() {
-          return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-          );
+            return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
         }
 
-        function ExecuteOperation(submodelId, operationId) {
-            var argNames = document.getElementsByClassName("argInName " + submodelId + " " + operationId);
-            var argTypes = document.getElementsByClassName("argInType " + submodelId + " " + operationId);
-            var argValues = document.getElementsByClassName("argInValue " + submodelId + " " + operationId);
-           
+        function ExecuteOperation(submodelId, pathToOperation) {
+            var argNames = document.getElementsByClassName("argInName " + submodelId + " " + pathToOperation);
+            var argTypes = document.getElementsByClassName("argInType " + submodelId + " " + pathToOperation);
+            var argValues = document.getElementsByClassName("argInValue " + submodelId + " " + pathToOperation);
+
             var args = [];
             for (var i = 0; i < argNames.length; i++) {
                 var value = {
@@ -629,40 +644,42 @@ else
 
             var invocationRequest = {
                 requestId: uuidv4(),
-                inputArguments: args
+                inputArguments: args,
+                timeout: 30000
             }
 
             $.ajax({
                 type: 'POST',
-                url: '/aas/submodels/' + submodelId + '/submodel/operations/' + operationId,
+                url: '/aas/submodels/' + submodelId + '/submodel/submodelElements/' + pathToOperation + '/invoke?async=false',
                 contentType: 'application/json',
                 data: JSON.stringify(invocationRequest),
-                error: function () {
-                    alert("Failed to execute: " + JSON.stringify(invocationRequest));
+                error: function (jqXHR, errorType, exception) {
+                    alert("Failed to execute: " + JSON.stringify(invocationRequest));                   
+                    alert(jqXHR.responseText + " | " + errorType + " | " + exception);
                 },
                 success: function (data) {
                     for (var i = 0; i < data.outputArguments.length; i++) {
                         var argOutIdShort = data.outputArguments[i].value.idShort;
-                        $('#argOutValue_' + submodelId + operationId + argOutIdShort).val(JSON.stringify(data.outputArguments[i].value.value));
+                        $('#argOutValue_' + submodelId + pathToOperation + argOutIdShort).val(JSON.stringify(data.outputArguments[i].value.value));
                     }
                 }
             });
         }
     </script>
     <script>
-        function GetPropertyValue(submodelId, propertyId) {
+        function GetPropertyValue(submodelId, submodelElementId, hashedPathIdInput) {
             $.ajax({
                 type: 'GET',
-                url: '/aas/submodels/' + submodelId + '/submodel/properties/' + propertyId + '/value',
+                url: '/aas/submodels/' + submodelId + '/submodel/submodelElements/' + submodelElementId + '/value',
                 success: function (data) {
-                    $('#Input_' + submodelId + propertyId).val(data.value);
-                    $('#Input_' + submodelId + propertyId).css('border-color', 'green');
+                    $('#' + hashedPathIdInput).val(data);
+                    $('#' + hashedPathIdInput).css('border-color', 'green');
                 }
             });
         }
     </script>
     <script>
-        function SetPropertyValue(submodelId, propertyId, dataObjectTypeName, val) {
+        function SetPropertyValue(submodelId, submodelElementId, hashedPathIdInput, dataObjectTypeName, val) {
             var value =
             {
                 valueType: {
@@ -674,16 +691,16 @@ else
             };
             $.ajax({
                 type: 'PUT',
-                url: '/aas/submodels/' + submodelId + '/submodel/properties/' + propertyId + '/value',
+                url: '/aas/submodels/' + submodelId + '/submodel/submodelElements/' + submodelElementId + '/value',
                 contentType: 'application/json',
                 data: JSON.stringify(value),
                 error: function () {
-                    $('#Input_' + submodelId + propertyId).css('border-color', 'red');
+                    $('#' + hashedPathIdInput).css('border-color', 'red');
                     alert("Error updating Property-Value: " + JSON.stringify(value));
                 },
                 statusCode: {
                     204: function () {
-                        $('#Input_' + submodelId + propertyId).css('border-color', 'green');
+                        $('#' + hashedPathIdInput).css('border-color', 'green');
                     }
                 },
                 success: function () { }

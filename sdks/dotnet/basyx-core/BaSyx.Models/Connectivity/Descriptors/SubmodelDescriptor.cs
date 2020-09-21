@@ -16,6 +16,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BaSyx.Models.Core.Common;
+using BaSyx.Models.Core.AssetAdministrationShell;
 
 namespace BaSyx.Models.Connectivity.Descriptors
 {
@@ -32,7 +33,7 @@ namespace BaSyx.Models.Connectivity.Descriptors
         public IEnumerable<IEndpoint> Endpoints { get; private set; }
 
         [IgnoreDataMember]
-        public IReference Parent => null;
+        public IReferable Parent { get; set; }
         [IgnoreDataMember]
         public string Category => null;
 

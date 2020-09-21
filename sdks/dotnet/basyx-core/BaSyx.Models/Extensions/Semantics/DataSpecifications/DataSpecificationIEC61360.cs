@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
+using BaSyx.Models.Core.AssetAdministrationShell;
 
 namespace BaSyx.Models.Extensions.Semantics.DataSpecifications
 {
