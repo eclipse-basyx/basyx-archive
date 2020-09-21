@@ -47,8 +47,12 @@ public class MultiAASProviderTest {
 	@Test
 	public void clearTest() {
 		provider.clear();
-		Object result = proxy.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/");
-		assertNull(result);
+		
+		// test if AAS is deleted
+		try {
+			proxy.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/");
+			fail();
+		} catch(ResourceNotFoundException e) {}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -60,7 +64,10 @@ public class MultiAASProviderTest {
 		assertEquals(123, result.get(Property.VALUE));
 
 		// test reading from an invalid aas
-		assertNull(proxy.getModelPropertyValue("A1/aas/submodels/SimpleAASSubmodel/"));
+		try {
+			proxy.getModelPropertyValue("A1/aas/submodels/SimpleAASSubmodel/");
+			fail();
+		} catch(ResourceNotFoundException e) {}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -70,7 +77,10 @@ public class MultiAASProviderTest {
 		proxy.setModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value", 100);
 
 		// test setting in an invalid aas
-		proxy.setModelPropertyValue("A1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value", 200);
+		try {
+			proxy.setModelPropertyValue("A1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value", 200);
+			fail();
+		} catch(ResourceNotFoundException e) {}
 
 		// retrieving property
 		Map<String, Object> result = (Map<String, Object>) proxy
@@ -82,7 +92,11 @@ public class MultiAASProviderTest {
 	@Test
 	public void removeTest() {
 		// test deleting from an invalid aas
-		proxy.deleteValue("A1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value");
+		try {
+			proxy.deleteValue("A1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value");
+			fail();
+		} catch(ResourceNotFoundException e) {}
+		
 		Map<String, Object> result = (Map<String, Object>) proxy
 				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value");
 		assertEquals(123, result.get(Property.VALUE));
@@ -117,7 +131,10 @@ public class MultiAASProviderTest {
 	@Test
 	public void invokeTest() {
 		// test invoking from an invalid aas
-		assertNull(proxy.invokeOperation("A1/aas/submodels/SimpleAASSubmodel/operations/complex", 10, 3));
+		try {
+			proxy.invokeOperation("A1/aas/submodels/SimpleAASSubmodel/operations/complex", 10, 3);
+			fail();
+		} catch(ResourceNotFoundException e) {}
 
 		// test invoking with return value
 		assertEquals(7, proxy.invokeOperation("a1/aas/submodels/SimpleAASSubmodel/operations/complex", 10, 3));
