@@ -17,6 +17,11 @@ class DataSpecification :
     public virtual Identifiable,
     public virtual vab::ElementMap
 {
+public:
+  struct Path {
+    static constexpr char DataSpecificationContent[] = "dataSpecificationContent";
+  };
+
 private:
   std::unique_ptr<DataSpecificationContent> content;
 public:

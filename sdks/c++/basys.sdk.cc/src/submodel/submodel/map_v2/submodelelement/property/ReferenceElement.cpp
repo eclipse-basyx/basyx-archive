@@ -4,11 +4,14 @@ using namespace basyx::submodel;
 using namespace basyx::submodel::api;
 using namespace basyx::submodel::map;
 
+constexpr char ReferenceElement::Path::Value[];
+constexpr char ReferenceElement::Path::Kind[];
+
 ReferenceElement::ReferenceElement(const std::string & idShort, ModelingKind kind)
 	: SubmodelElement(idShort, kind)
 {
-	this->map.insertKey("value", value.getMap());
-  this->map.insertKey("kind", ModelingKind_::to_string(kind));
+	this->map.insertKey(Path::Value, value.getMap());
+  this->map.insertKey(Path::Kind, ModelingKind_::to_string(kind));
 };
 
 const api::IReference * const ReferenceElement::getValue() const

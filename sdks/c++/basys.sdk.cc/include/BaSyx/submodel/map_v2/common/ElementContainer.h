@@ -16,6 +16,10 @@ namespace basyx {
 namespace submodel {
 namespace map {
 
+struct ElementContainerPath {
+  static constexpr char IdShort[] = "idShort";
+};
+
 template<typename IElementType>
 class ElementContainer : public api::IElementContainer<IElementType>, public virtual vab::ElementMap
 {
@@ -99,7 +103,7 @@ IElementType * const ElementContainer<IElementType>::getElement(std::size_t n) c
 	auto & obj = objectList.at(n);
 
 	// Get id of object and create temporary
-	const auto & id = obj.getProperty(map::Identifiable::Path::IdShort).template Get<std::string&>();
+	const auto & id = obj.getProperty(ElementContainerPath::IdShort).Get<std::string&>();
 	return this->getElement(id);
 };
 

@@ -4,13 +4,16 @@
 namespace basyx {
 namespace submodel {
 namespace map {
+
 using namespace basyx::submodel::api;
+
+constexpr char ConceptDictionary::Path::ConceptDescriptions[];
 
 ConceptDictionary::ConceptDictionary(const std::string & idShort)
   : vab::ElementMap{}
   , Referable(idShort)
 {
-  this->map.insertKey("ConceptDescriptions", this->concept_descriptions.getMap());
+  this->map.insertKey(Path::ConceptDescriptions, this->concept_descriptions.getMap());
 }
 
 const api::IElementContainer<api::IConceptDescription> & ConceptDictionary::getConceptDescriptions() const

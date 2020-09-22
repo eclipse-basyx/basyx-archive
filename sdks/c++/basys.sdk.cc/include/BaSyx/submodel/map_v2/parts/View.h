@@ -19,6 +19,12 @@ class View
   , public virtual Referable
   , public virtual vab::ElementMap
 {
+public:
+  struct Path {
+    static constexpr char ContainedElements[] = "containedElements";
+    static constexpr char SemanticId[] = "semanticId";
+  };
+
 private:
   ElementContainer<IReferable> contained_elements;
   Reference semanticId;

@@ -17,6 +17,11 @@ class Formula :
 	public virtual vab::ElementMap
 {
 public:
+  struct Path {
+    static constexpr char Dependencies[] = "dependencies";
+  };
+
+public:
 	using vab::ElementMap::ElementMap;
 
 	Formula();

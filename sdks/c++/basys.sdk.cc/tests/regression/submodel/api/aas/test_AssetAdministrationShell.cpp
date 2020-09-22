@@ -10,20 +10,23 @@
 
 using namespace basyx::submodel;
 
-using ImplTypes = ::testing::Types<map::AssetAdministrationShell, simple::AssetAdministrationShell>;
+using ImplTypes = ::testing::Types<
+    std::tuple<map::AssetAdministrationShell, map::Asset>,
+    std::tuple<simple::AssetAdministrationShell, simple::Asset>>;
 
 template<class Impl>
 class AssetAdministrationShellTest :public ::testing::Test {
 protected:
-	using impl_t = Impl;
+  using impl_t = typename std::tuple_element<0, Impl>::type;
+  using asset_t = typename std::tuple_element<1, Impl>::type;
 
 	std::unique_ptr<api::IAssetAdministrationShell> aas;
 protected:
 	void SetUp() override
 	{
-		aas = util::make_unique<Impl>("testAas", 
+		aas = util::make_unique<impl_t>("testAas",
 			simple::Identifier::Custom("testAas"), 
-			typename Impl::asset_t{ "testAsset", simple::Identifier::Custom("testAsset") }
+			asset_t{ "testAsset", simple::Identifier::Custom("testAsset") }
 			);
 	}
 

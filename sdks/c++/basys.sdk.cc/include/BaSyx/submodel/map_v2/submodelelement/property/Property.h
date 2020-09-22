@@ -12,6 +12,12 @@ namespace basyx {
 namespace submodel {
 namespace map {
 
+struct PropertyPath {
+  static constexpr char Value[] = "value";
+  static constexpr char ValueType[] = "valueType";
+  static constexpr char ValueId[] = "valueId";
+};
+
 template<typename T>
 class Property
   : public virtual api::IProperty
@@ -20,6 +26,9 @@ class Property
   , public virtual Qualifiable
   , public ModelType<ModelTypes::Property>
 {
+private:
+  std::unique_ptr<Reference> valueId;
+
 public:
 	Property(const std::string & idShort)
 		: SubmodelElement(idShort, ModelingKind::Instance)
@@ -36,33 +45,33 @@ public:
 
 	void setValue(const T & t)
 	{
-		this->map.insertKey("value", t);
+		this->map.insertKey(PropertyPath::Value, t);
 	}
 
 	const T & getValue() const
 	{
-		return this->map.getProperty("value").template Get<T&>();
+		return this->map.getProperty(PropertyPath::Value).template Get<T&>();
 	}
 
 	virtual const std::string & getValueType() const override
 	{
-		return this->map.getProperty("valueType").template Get<std::string&>();
+		return this->map.getProperty(PropertyPath::ValueType).template Get<std::string&>();
 	}
 
 	virtual void setValueType(const std::string & valueType) override
 	{
-		this->map.insertKey("valueType", valueType);
+		this->map.insertKey(PropertyPath::ValueType, valueType);
 	}
 
 	virtual void setObject(basyx::object & object) override
 	{
 		if (object.InstanceOf<T>())
-			this->map.insertKey("value", object);
+			this->map.insertKey(PropertyPath::Value, object);
 	}
 
 	virtual basyx::object getObject() override
 	{
-		return this->map.getProperty("value");
+		return this->map.getProperty(PropertyPath::Value);
 	}
 
 	virtual const Reference * const getValueId() const override
@@ -72,6 +81,8 @@ public:
 
 	virtual void setValueId(const api::IReference & valueId) override
 	{
+	  this->valueId = util::make_unique<Reference>(valueId);
+	  this->map.insertKey(PropertyPath::ValueId, this->valueId->getMap());
 	}
 
 	virtual KeyElements getKeyElementType() const override { return KeyElements::Property; };

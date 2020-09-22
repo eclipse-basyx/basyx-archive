@@ -13,6 +13,13 @@ class Identifiable :
 	public virtual api::IIdentifiable,
 	public Referable
 {
+public:
+  struct Path {
+    static constexpr char IdType[] = "idType";
+    static constexpr char Id[] = "id";
+    static constexpr char AdministrativeInformation[] = "administrativeInformation";
+    static constexpr char Identifier[] = "identifier";
+  };
 private:
 	map::AdministrativeInformation administrativeInformation;
 public:
