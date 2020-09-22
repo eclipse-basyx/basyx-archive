@@ -53,6 +53,29 @@ public class BaSyxConfiguration {
 	}
 
 	/**
+	 * Load the configuration from a path relative to the current folder
+	 * 
+	 * @param filePath Path to the resource in the application folder
+	 */
+	public void loadFileOrDefaultResource(String fileKey, String defaultResource) {
+		// Try to load property that points to the configuration file (e.g. java -DfileKey=yx.properties [...])
+		String configFilePath = System.getProperty(fileKey);
+		if ( configFilePath == null || configFilePath.isEmpty() ) {
+			// Try to load environment variable that points to the configuration file
+			configFilePath = System.getenv(fileKey);
+		}
+
+		// Load context configuration
+		if (configFilePath != null && !configFilePath.isEmpty()) {
+			// file path available? => load configs from file
+			loadFromFile(configFilePath);
+		} else {
+			// fallback: load default configs (by resource)
+			loadFromResource(defaultResource);
+		}
+	}
+
+	/**
 	 * Load the configuration from an input stream
 	 * 
 	 * @param input the input stream containing the properties

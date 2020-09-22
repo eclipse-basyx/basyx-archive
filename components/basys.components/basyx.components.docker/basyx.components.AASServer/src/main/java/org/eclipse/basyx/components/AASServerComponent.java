@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.servlet.AASServerServlet;
 import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
@@ -25,10 +26,7 @@ public class AASServerComponent implements IComponent {
 	// The server with the servlet that will be created
 	private AASHTTPServer server;
 
-	private String hostName;
-	private int port;
-	private String path;
-	private String docBasePath;
+	private BaSyxContextConfiguration contextConfig;
 
 	/**
 	 * Constructs an empty AAS server using the passed arguments
@@ -38,12 +36,8 @@ public class AASServerComponent implements IComponent {
 	 * @param path
 	 * @param docBasePath
 	 */
-	public AASServerComponent(String hostName, int port, String path, String docBasePath) {
-		// Sets the server context
-		this.hostName = hostName;
-		this.port = port;
-		this.path = path;
-		this.docBasePath = docBasePath;
+	public AASServerComponent(BaSyxContextConfiguration contextConfig) {
+		this.contextConfig = contextConfig;
 	}
 
 	/**
@@ -61,7 +55,7 @@ public class AASServerComponent implements IComponent {
 	public void startComponent() {
 		logger.info("Create the server...");
 		// Init HTTP context and add an XMLAAServlet according to the configuration
-		BaSyxContext context = new BaSyxContext(path, docBasePath, hostName, port);
+		BaSyxContext context = contextConfig.createBaSyxContext();
 		// Create the Servlet for aas
 		context.addServletMapping("/*", new AASServerServlet());
 		server = new AASHTTPServer(context);
@@ -76,7 +70,7 @@ public class AASServerComponent implements IComponent {
 	 * @return
 	 */
 	public String getURL() {
-		return "http://" + hostName + ":" + port + "/" + path;
+		return contextConfig.getUrl();
 	}
 
 	@Override

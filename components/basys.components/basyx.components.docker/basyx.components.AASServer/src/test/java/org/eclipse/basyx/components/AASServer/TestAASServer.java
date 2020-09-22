@@ -29,7 +29,7 @@ public class TestAASServer extends AASServerSuite {
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
 		config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
 
-		component = new AASServerComponent(config.getHostname(), config.getPort(), config.getContextPath(), config.getDocBasePath());
+		component = new AASServerComponent(config);
 		component.startComponent();
 	}
 }

@@ -10,6 +10,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
+import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.servlet.aas.AASBundleServlet;
 import org.eclipse.basyx.components.xml.XMLAASBundleFactory;
 import org.eclipse.basyx.support.bundle.AASBundle;
@@ -34,23 +35,17 @@ public class XMLAASComponent implements IComponent {
 
 	protected Collection<AASBundle> aasBundles;
 
-	protected String hostName;
-	protected int port;
-	protected String path;
-	protected String docBasePath;
+	protected BaSyxContextConfiguration contextConfig;
 	protected String registryUrl;
 
-	protected XMLAASComponent(String hostName, int port, String path, String docBasePath) {
+	protected XMLAASComponent(BaSyxContextConfiguration contextConfig) {
 		// Sets the server context (still needs to load the bundle)
-		this.hostName = hostName;
-		this.port = port;
-		this.path = path;
-		this.docBasePath = docBasePath;
+		this.contextConfig = contextConfig;
 	}
 
-	public XMLAASComponent(String hostName, int port, String path, String docBasePath, String xmlPath,
+	public XMLAASComponent(BaSyxContextConfiguration contextConfig, String xmlPath,
 			String registryUrl) throws ParserConfigurationException, SAXException, IOException {
-		this(hostName, port, path, docBasePath);
+		this(contextConfig);
 		String xmlContent = BaSyxConfiguration.getResourceString(xmlPath);
 		setAASBundle(new XMLAASBundleFactory(xmlContent).create());
 		setRegistryUrl(registryUrl);
@@ -84,7 +79,7 @@ public class XMLAASComponent implements IComponent {
 	 * @return
 	 */
 	public Set<AASDescriptor> retrieveDescriptors() {
-		String hostBasePath = "http://" + hostName + ":" + port + "/" + path;
+		String hostBasePath = contextConfig.getUrl();
 		return retrieveDescriptors(hostBasePath);
 	}
 
@@ -103,7 +98,7 @@ public class XMLAASComponent implements IComponent {
 	public void startComponent() {
 		logger.info("Create the server...");
 		// Init HTTP context and add an XMLAAServlet according to the configuration
-		BaSyxContext context = new BaSyxContext(path, docBasePath, hostName, port);
+		BaSyxContext context = contextConfig.createBaSyxContext();
 		// Create the Servlet for aas
 		context.addServletMapping("/*", new AASBundleServlet(aasBundles));
 		server = new AASHTTPServer(context);

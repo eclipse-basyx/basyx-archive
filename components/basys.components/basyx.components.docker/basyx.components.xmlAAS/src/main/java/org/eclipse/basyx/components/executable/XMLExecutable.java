@@ -32,16 +32,12 @@ public class XMLExecutable {
 
 		// Load configuration
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
-		if (args.length > 0 && args[0] instanceof String) {
-			// file path available? => load configs from file
-			config.loadFromFile(args[0]);
-		} else {
-			// fallback: load default configs (in resources)
-			config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
-		}
+		config.loadFromDefaultSource();
 
-		XMLAASComponent component = new XMLAASComponent(config.getHostname(), config.getPort(), config.getContextPath(),
-				config.getDocBasePath(), config.getProperty("xmlPath"), config.getProperty("registry"));
+		String xmlPath = config.getProperty("xmlPath");
+		String registryUrl = config.getProperty("registry");
+		XMLAASComponent component = new XMLAASComponent(config, xmlPath, registryUrl);
 		component.startComponent();
+		logger.info("BaSyx XML component started");
 	}
 }

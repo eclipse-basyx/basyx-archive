@@ -1,5 +1,7 @@
 package org.eclipse.basyx.components;
 
+import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
+import org.eclipse.basyx.components.configuration.BaSyxSQLConfiguration;
 import org.eclipse.basyx.components.servlet.SQLRegistryServlet;
 import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
@@ -14,23 +16,30 @@ import org.slf4j.LoggerFactory;
 public class SQLRegistryComponent implements IComponent {
 	private static Logger logger = LoggerFactory.getLogger(SQLRegistryComponent.class);
 
-	// BaSyx context information
-	private String hostName;
-	private int port;
-	private String path;
-	private String docBasePath;
-	private String sqlPropertyPath;
+	// The component configuration
+	private BaSyxContextConfiguration contextConfig;
+	private BaSyxSQLConfiguration dbConfig;
 
 	// The server with the servlet that will be created
 	private AASHTTPServer server;
 
-	public SQLRegistryComponent(String hostName, int port, String path, String docBasePath, String sqlPropertyPath) {
-		this.sqlPropertyPath = sqlPropertyPath;
-		// Sets the server context
-		this.hostName = hostName;
-		this.port = port;
-		this.path = path;
-		this.docBasePath = docBasePath;
+	/**
+	 * Default constructor that loads default configurations
+	 */
+	public SQLRegistryComponent() {
+		this.contextConfig = new BaSyxContextConfiguration();
+		this.dbConfig = new BaSyxSQLConfiguration();
+	}
+
+	/**
+	 * Constructs an empty SQL Registry component using the passed arguments
+	 * 
+	 * @param contextConfig
+	 * @param dbConfig
+	 */
+	public SQLRegistryComponent(BaSyxContextConfiguration contextConfig, BaSyxSQLConfiguration dbConfig) {
+		this.contextConfig = contextConfig;
+		this.dbConfig = dbConfig;
 	}
 
 	/**
@@ -40,8 +49,8 @@ public class SQLRegistryComponent implements IComponent {
 	public void startComponent() {
 		logger.info("Create the server...");
 		// Init HTTP context and add an InMemoryRegistryServlet according to the configuration
-		BaSyxContext context = new BaSyxContext(path, docBasePath, hostName, port);
-		context.addServletMapping("/*", new SQLRegistryServlet(sqlPropertyPath));
+		BaSyxContext context = contextConfig.createBaSyxContext();
+		context.addServletMapping("/*", new SQLRegistryServlet(dbConfig));
 		server = new AASHTTPServer(context);
 
 		logger.info("Start the server...");

@@ -18,6 +18,7 @@ import org.eclipse.basyx.components.AASServerComponent;
 import org.eclipse.basyx.components.IComponent;
 import org.eclipse.basyx.components.InMemoryRegistryComponent;
 import org.eclipse.basyx.components.aasx.AASXPackageManager;
+import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.support.bundle.AASBundle;
@@ -87,7 +88,10 @@ public class StaticDynamicScenario {
 	 * Starts an empty registry at "http://localhost:4000"
 	 */
 	private void startRegistry() {
-		InMemoryRegistryComponent registry = new InMemoryRegistryComponent("localhost", 4000, "registry", "");
+		// Load a registry context configuration using a .properties file
+		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration();
+		contextConfig.loadFromResource("RegistryContext.properties");
+		InMemoryRegistryComponent registry = new InMemoryRegistryComponent(contextConfig);
 		registry.startComponent();
 		startedComponents.add(registry);
 	}
@@ -97,7 +101,8 @@ public class StaticDynamicScenario {
 	 */	
 	private void startAASServer() {
 		// Create a server at port 4001 with the endpoint "/aasx"
-		AASServerComponent aasServer = new AASServerComponent("localhost", 4001, "/aasx", "/");
+		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration(4001, "/aasx");
+		AASServerComponent aasServer = new AASServerComponent(contextConfig);
 		
 		// Start the created server
 		aasServer.startComponent();

@@ -14,6 +14,6 @@ public class TestSQLRegistryProvider extends TestRegistryProviderSuite {
 
 	@Override
 	protected IAASRegistryService getRegistryService() {
-		return new SQLRegistry("localRegistry.properties");
+		return new SQLRegistry("sql.properties");
 	}
 }

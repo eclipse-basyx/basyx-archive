@@ -11,18 +11,21 @@ import java.util.Map;
  */
 public class BaSyxDockerConfiguration extends BaSyxConfiguration {
 	// Default BaSyx Context configuration
-	private static final int DEFAULT_HOSTPORT = 8082;
-	private static final int DEFAULT_CONTAINERPORT = 4000;
-	private static final String DEFAULT_IMAGENAME = "basys/component";
-	private static final String DEFAULT_CONTAINERNAME = "component";
+	public static final int DEFAULT_HOSTPORT = 8082;
+	public static final int DEFAULT_CONTAINERPORT = 4000;
+	public static final String DEFAULT_IMAGENAME = "basys/component";
+	public static final String DEFAULT_CONTAINERNAME = "component";
 
-	private static final String HOSTPORT = "BASYX_HOST_PORT";
-	private static final String CONTAINERPORT = "BASYX_CONTAINER_PORT";
-	private static final String IMAGENAME = "BASYX_IMAGE_NAME";
-	private static final String CONTAINERNAME = "BASYX_CONTAINER_NAME";
+	public static final String HOSTPORT = "BASYX_HOST_PORT";
+	public static final String CONTAINERPORT = "BASYX_CONTAINER_PORT";
+	public static final String IMAGENAME = "BASYX_IMAGE_NAME";
+	public static final String CONTAINERNAME = "BASYX_CONTAINER_NAME";
 
 	// The default path for the context properties file
 	public static final String DEFAULT_CONFIG_PATH = ".env";
+
+	// The default key for variables pointing to the configuration file
+	public static final String DEFAULT_FILE_KEY = "BASYX_DOCKER";
 
 	public static Map<String, String> getDefaultProperties() {
 		Map<String, String> defaultProps = new HashMap<>();
@@ -42,19 +45,47 @@ public class BaSyxDockerConfiguration extends BaSyxConfiguration {
 		super(values);
 	}
 
+	public BaSyxDockerConfiguration(int hostPort, int containerPort, String imageName, String containerName) {
+		this();
+		setHostPort(hostPort);
+		setContainerPort(containerPort);
+		setImageName(imageName);
+		setContainerName(containerName);
+	}
+
+	public void loadFromDefaultSource() {
+		loadFileOrDefaultResource(DEFAULT_FILE_KEY, DEFAULT_CONFIG_PATH);
+	}
+
 	public int getHostPort() {
 		return Integer.parseInt(getProperty(HOSTPORT));
+	}
+
+	public void setHostPort(int hostPort) {
+		setProperty(HOSTPORT, Integer.toString(hostPort));
 	}
 
 	public int getContainerPort() {
 		return Integer.parseInt(getProperty(CONTAINERPORT));
 	}
 
+	public void setContainerPort(int containerPort) {
+		setProperty(CONTAINERPORT, Integer.toString(containerPort));
+	}
+
 	public String getImageName() {
 		return getProperty(IMAGENAME);
 	}
 
+	public void setImageName(String imageName) {
+		setProperty(IMAGENAME, imageName);
+	}
+
 	public String getContainerName() {
 		return getProperty(CONTAINERNAME);
+	}
+
+	public void setContainerName(String containerName) {
+		setProperty(CONTAINERNAME, containerName);
 	}
 }

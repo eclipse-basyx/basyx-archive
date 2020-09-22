@@ -20,30 +20,18 @@ public class MongoDBRegistryExecutable {
 	}
 
 	public static void main(String[] args) {
-		logger.info("Starting BaSyx SQL registry");
+		logger.info("Starting BaSyx MongoDB Registry component...");
+		// Load context configuration
+		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration();
+		contextConfig.loadFromDefaultSource();
 
-		// Load configuration
-		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
-		if (args.length > 0 && args[0] instanceof String) {
-			// file path available? => load configs from file
-			config.loadFromFile(args[0]);
-		} else {
-			// fallback: load default configs (in resources)
-			config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
-		}
-
-		MongoDBRegistryComponent component;
+		// Load db configuration
 		BaSyxMongoDBConfiguration dbConfig = new BaSyxMongoDBConfiguration();
-		if (args.length > 1 && args[1] instanceof String) {
-			// file path available? => load mongodb configs from file
-			dbConfig.loadFromFile(args[1]);
-			component = new MongoDBRegistryComponent(config.getHostname(), config.getPort(), config.getContextPath(),
-					config.getDocBasePath(), dbConfig);
-		} else {
-			component = new MongoDBRegistryComponent(config.getHostname(), config.getPort(), config.getContextPath(),
-					config.getDocBasePath(), "dockerMongodb.properties");
-		}
+		dbConfig.loadFromDefaultSource();
 
+		// Create and start component according to the configuration
+		MongoDBRegistryComponent component = new MongoDBRegistryComponent(contextConfig, dbConfig);
 		component.startComponent();
+		logger.info("BaSyx MongoDB Registry component started");
 	}
 }

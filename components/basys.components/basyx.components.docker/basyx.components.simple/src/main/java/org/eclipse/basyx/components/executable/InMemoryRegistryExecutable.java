@@ -20,20 +20,14 @@ public class InMemoryRegistryExecutable {
 	}
 
 	public static void main(String[] args) {
-		logger.info("Starting BaSyx InMemory registry");
+		logger.info("Starting BaSyx InMemory Registry component...");
+		// Load context configuration
+		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration();
+		contextConfig.loadFromDefaultSource();
 
-		// Load configuration
-		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
-		if (args.length > 0 && args[0] instanceof String) {
-			// file path available? => load configs from file
-			config.loadFromFile(args[0]);
-		} else {
-			// fallback: load default configs (in resources)
-			config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
-		}
-
-		InMemoryRegistryComponent component = new InMemoryRegistryComponent(config.getHostname(), config.getPort(),
-				config.getContextPath(), config.getDocBasePath());
+		// Create and start component according to the configuration
+		InMemoryRegistryComponent component = new InMemoryRegistryComponent(contextConfig);
 		component.startComponent();
+		logger.info("BaSyx InMemory Registry component started");
 	}
 }

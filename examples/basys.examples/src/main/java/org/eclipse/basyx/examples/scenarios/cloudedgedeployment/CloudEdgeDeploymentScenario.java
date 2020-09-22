@@ -10,6 +10,7 @@ import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.AASServerComponent;
 import org.eclipse.basyx.components.IComponent;
 import org.eclipse.basyx.components.InMemoryRegistryComponent;
+import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -111,7 +112,9 @@ public class CloudEdgeDeploymentScenario {
 	 * 
 	 */
 	private void startupRegistryServer() {
-		IComponent component = new InMemoryRegistryComponent("localhost", 8080, "registry", "");
+		// Start a registry server with a direct configuration
+		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration(8080, "registry");
+		IComponent component = new InMemoryRegistryComponent(contextConfig);
 		component.startComponent();
 		startedComponents.add(component);
 	}
@@ -126,8 +129,9 @@ public class CloudEdgeDeploymentScenario {
 	 */
 	private void startupEdgeServer() {
 		
-		// Create a BaSyxConetxt for port 8082 with an empty endpoint and the tmpdir for storing its data
-		BaSyxContext context = new BaSyxContext("", System.getProperty("java.io.tmpdir"), "localhost", 8082);
+		// Create a BaSyxConetxt for port 8082 with an empty endpoint
+		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration(8082, "");
+		BaSyxContext context = contextConfig.createBaSyxContext();
 		
 		// Get the edgeSubmodel from the ComponentBuilder
 		SubModel edgeSubmodel = ComponentBuilder.createEdgeSubModel();
@@ -152,9 +156,12 @@ public class CloudEdgeDeploymentScenario {
 	 * 
 	 */
 	private void startupCloudServer() {
-		
-		// Create a server at port 8081 with the endpoint "/cloud"
-		AASServerComponent cloudServer = new AASServerComponent("localhost", 8081, "/cloud", "/");
+		// Load the AAS context from a .properties file resource
+		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration();
+		contextConfig.loadFromResource("CloudEdgeDeploymentScenarioAASContext.properties");
+
+		// Create a server according to this configuration
+		AASServerComponent cloudServer = new AASServerComponent(contextConfig);
 		
 		// Start the created server
 		cloudServer.startComponent();

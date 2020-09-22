@@ -6,6 +6,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.basyx.components.MongoDBAASServerComponent;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
+import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
 import org.eclipse.basyx.components.mongodb.MongoDBAASAggregator;
 import org.junit.BeforeClass;
 import org.xml.sax.SAXException;
@@ -32,8 +33,7 @@ public class TestAASServer extends AASServerSuite {
 
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
 		config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
-		component = new MongoDBAASServerComponent(config.getHostname(), config.getPort(), config.getContextPath(),
-				config.getDocBasePath());
+		component = new MongoDBAASServerComponent(config, new BaSyxMongoDBConfiguration());
 		component.startComponent();
 	}
 }

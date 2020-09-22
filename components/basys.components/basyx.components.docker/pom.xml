@@ -110,6 +110,11 @@
 						<buildArgs>
 							<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
 							<PORT>${BASYX_CONTAINER_PORT}</PORT>
+							<!-- The system property/env keys for basyx configuration files -->
+							<CONTEXT_CONFIG_KEY>BASYX_CONTEXT</CONTEXT_CONFIG_KEY>
+							<MONGODB_CONFIG_KEY>BASYX_MONGODB</MONGODB_CONFIG_KEY>
+							<DOCKER_CONFIG_KEY>BASYX_DOCKER</DOCKER_CONFIG_KEY>
+							<SQL_CONFIG_KEY>BASYX_SQL</SQL_CONFIG_KEY>
 						</buildArgs>
 					</configuration>
 				</plugin>

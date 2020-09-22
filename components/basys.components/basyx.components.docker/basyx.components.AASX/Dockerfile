@@ -10,6 +10,10 @@ COPY src/main/resources/context.properties /usr/share/context.properties
 # Expose the appropriate port. In case of Tomcat, this is 8080.
 ARG PORT
 EXPOSE ${PORT}
+
+# Set the path for the context configuration file
+ARG CONTEXT_CONFIG_KEY
+ENV ${CONTEXT_CONFIG_KEY} "/usr/share/context.properties"
  
 # Start the jar
-CMD java -jar "/usr/share/basyxExecutable.jar" "/usr/share/context.properties"
+CMD java -jar "/usr/share/basyxExecutable.jar"

@@ -34,23 +34,20 @@ public class AASXExecutable {
 
 		// Load configuration
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
-		if (args.length > 0 && args[0] instanceof String) {
-			// file path available? => load configs from file
-			config.loadFromFile(args[0]);
-		} else {
-			// fallback: load default configs (in resources)
-			config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
-		}
+		config.loadFromDefaultSource();
 
-		// In addition to the context for the AAS, also the registryUrl can be specified
+		// In addition to the context for the AAS, also the registryUrl and aasxPath can be specified
 		String registryUrl = config.getProperty("registry");
+		String aasxPath = config.getProperty("aasxPath");
 
+		// Load the additional file path relative to the executed jar file
 		String rootPath = new File(AASXExecutable.class.getProtectionDomain().getCodeSource().getLocation().toURI())
 				.getParentFile().getPath();
 		String docPath = rootPath + config.getDocBasePath();
+		config.setProperty(BaSyxContextConfiguration.DOCBASE, docPath);
+
 		// Get the path to the doc base path
-		AASXComponent component = new AASXComponent(config.getHostname(), config.getPort(), config.getContextPath(),
-				docPath, config.getProperty("aasxPath"), registryUrl);
+		AASXComponent component = new AASXComponent(config, aasxPath, registryUrl);
 		component.startComponent();
 	}
 }

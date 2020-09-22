@@ -2,6 +2,7 @@ package org.eclipse.basyx.components.executable;
 
 import org.eclipse.basyx.components.SQLRegistryComponent;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
+import org.eclipse.basyx.components.configuration.BaSyxSQLConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,20 +20,18 @@ public class SQLRegistryExecutable {
 	}
 
 	public static void main(String[] args) {
-		logger.info("Starting BaSyx SQL registry");
+		logger.info("Starting BaSyx SQL Registry component...");
+		// Load context configuration
+		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration();
+		contextConfig.loadFromDefaultSource();
 
-		// Load configuration
-		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
-		if (args.length > 0 && args[0] instanceof String) {
-			// file path available? => load configs from file
-			config.loadFromFile(args[0]);
-		} else {
-			// fallback: load default configs (in resources)
-			config.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
-		}
+		// Load db configuration
+		BaSyxSQLConfiguration dbConfig = new BaSyxSQLConfiguration();
+		dbConfig.loadFromDefaultSource();
 
-		SQLRegistryComponent component = new SQLRegistryComponent(config.getHostname(), config.getPort(),
-				config.getContextPath(), config.getDocBasePath(), "dockerRegistry.properties");
+		// Create and start component according to the configuration
+		SQLRegistryComponent component = new SQLRegistryComponent(contextConfig, dbConfig);
 		component.startComponent();
+		logger.info("BaSyx SQL Registry component started");
 	}
 }

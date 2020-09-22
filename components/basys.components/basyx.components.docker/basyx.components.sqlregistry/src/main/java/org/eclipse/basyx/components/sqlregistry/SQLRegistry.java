@@ -71,7 +71,7 @@ public class SQLRegistry extends AASRegistry {
 		String user = config.getUser();
 		String pass = config.getPass();
 		String qryPfx = config.getPrefix();
-		String qDrvCls = config.getDrv();
+		String qDrvCls = config.getDriver();
 
 		// Create SQL driver instance
 		return new SQLRootElement(user, pass, path, qDrvCls, qryPfx, "root_registry");

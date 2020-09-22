@@ -13,6 +13,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.aasx.AASXPackageManager;
 import org.eclipse.basyx.components.aasx.SubmodelFileEndpointLoader;
+import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.servlet.aas.AASBundleServlet;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.support.bundle.AASBundle;
@@ -27,9 +28,9 @@ import org.xml.sax.SAXException;
  *
  */
 public class AASXComponent extends XMLAASComponent {
-	public AASXComponent(String hostName, int port, String path, String docBasePath, String aasxPath,
+	public AASXComponent(BaSyxContextConfiguration contextConfig, String aasxPath,
 			String registryUrl) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
-		super(hostName, port, path, docBasePath);
+		super(contextConfig);
 
 		// Instantiate the aasx package manager
 		AASXPackageManager packageManager = new AASXPackageManager(aasxPath);
@@ -59,14 +60,14 @@ public class AASXComponent extends XMLAASComponent {
 	@Override
 	public void startComponent() {
 		// Init HTTP context and add an XMLAAServlet according to the configuration
-		BaSyxContext context = new BaSyxContext(path, docBasePath, hostName, port);
+		BaSyxContext context = contextConfig.createBaSyxContext();
 		// Create the Servlet for aas
 		context.addServletMapping("/*", new AASBundleServlet(aasBundles));
 		context.addServletMapping("/aasx/*", new DefaultServlet());
 		server = new AASHTTPServer(context);
 
 		// Fix the file paths according to the servlet configuration
-		modifyFilePaths(hostName, port, "");
+		modifyFilePaths(contextConfig.getHostname(), contextConfig.getPort(), "");
 
 		// logger.info("Start the server...");
 		server.start();

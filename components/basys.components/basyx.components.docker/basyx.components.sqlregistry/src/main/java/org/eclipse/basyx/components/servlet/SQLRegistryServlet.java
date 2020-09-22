@@ -1,6 +1,7 @@
 package org.eclipse.basyx.components.servlet;
 
 import org.eclipse.basyx.aas.registration.restapi.DirectoryModelProvider;
+import org.eclipse.basyx.components.configuration.BaSyxSQLConfiguration;
 import org.eclipse.basyx.components.sqlregistry.SQLRegistry;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
@@ -21,7 +22,7 @@ public class SQLRegistryServlet extends VABHTTPInterface<DirectoryModelProvider>
 		super(new DirectoryModelProvider(new SQLRegistry()));
 	}
 
-	public SQLRegistryServlet(String customConfigFilePath) {
-		super(new DirectoryModelProvider(new SQLRegistry(customConfigFilePath)));
+	public SQLRegistryServlet(BaSyxSQLConfiguration sqlConfig) {
+		super(new DirectoryModelProvider(new SQLRegistry(sqlConfig)));
 	}
 }
