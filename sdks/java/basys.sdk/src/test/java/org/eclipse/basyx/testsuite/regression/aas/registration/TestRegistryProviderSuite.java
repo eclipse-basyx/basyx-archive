@@ -316,4 +316,9 @@ public abstract class TestRegistryProviderSuite {
 		assertNotNull(aasDesc.getSubmodelDescriptorFromIdShort(smIdShort1));
 		assertNull(aasDesc.getSubmodelDescriptorFromIdShort(smIdShort2));
 	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testRegisterSubmodelToNotExistingAAS() {
+		proxy.register(new Identifier(IdentifierType.CUSTOM, "nonExistent"), new SubmodelDescriptor(smIdShort1, smId1, smEndpoint1));
+	}
 }

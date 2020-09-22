@@ -71,6 +71,11 @@ public class AASRegistry implements IAASRegistryService {
 		}
 
 		AASDescriptor descriptor = handler.get(aas);
+		if(descriptor == null) {
+			throw new ResourceNotFoundException(
+					"Could not add submodel descriptor for AAS " + aas.getId() + " since the AAS does not exist");
+		}
+		
 		descriptor.addSubmodelDescriptor(smDescriptor);
 		handler.update(descriptor);
 		logger.debug("Registered submodel " + smDescriptor.getIdShort() + " for AAS " + aas.getId());
