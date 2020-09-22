@@ -9,8 +9,10 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.AASServerComponent;
 import org.eclipse.basyx.components.IComponent;
-import org.eclipse.basyx.components.InMemoryRegistryComponent;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
+import org.eclipse.basyx.components.registry.RegistryComponent;
+import org.eclipse.basyx.components.registry.configuration.BaSyxRegistryConfiguration;
+import org.eclipse.basyx.components.registry.configuration.RegistryBackend;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -112,9 +114,10 @@ public class CloudEdgeDeploymentScenario {
 	 * 
 	 */
 	private void startupRegistryServer() {
-		// Start a registry server with a direct configuration
+		// Start an InMemory registry server with a direct configuration
 		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration(8080, "registry");
-		IComponent component = new InMemoryRegistryComponent(contextConfig);
+		BaSyxRegistryConfiguration registryConfig = new BaSyxRegistryConfiguration(RegistryBackend.INMEMORY);
+		IComponent component = new RegistryComponent(contextConfig, registryConfig);
 		component.startComponent();
 		startedComponents.add(component);
 	}

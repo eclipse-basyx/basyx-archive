@@ -15,8 +15,7 @@
 
 	<!-- Includes all components in this project as separated modules -->
 	<modules>
-		<module>basyx.components.simple</module>
-		<module>basyx.components.sqlregistry</module>
+		<module>basyx.components.registry</module>
 		<module>basyx.components.xmlAAS</module>
 		<module>basyx.components.AASX</module>
     	<module>basyx.components.AASServer</module>

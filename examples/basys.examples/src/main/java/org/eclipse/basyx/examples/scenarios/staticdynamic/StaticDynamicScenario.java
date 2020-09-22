@@ -16,9 +16,11 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.AASServerComponent;
 import org.eclipse.basyx.components.IComponent;
-import org.eclipse.basyx.components.InMemoryRegistryComponent;
 import org.eclipse.basyx.components.aasx.AASXPackageManager;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
+import org.eclipse.basyx.components.registry.RegistryComponent;
+import org.eclipse.basyx.components.registry.configuration.BaSyxRegistryConfiguration;
+import org.eclipse.basyx.components.registry.configuration.RegistryBackend;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.support.bundle.AASBundle;
@@ -91,7 +93,8 @@ public class StaticDynamicScenario {
 		// Load a registry context configuration using a .properties file
 		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration();
 		contextConfig.loadFromResource("RegistryContext.properties");
-		InMemoryRegistryComponent registry = new InMemoryRegistryComponent(contextConfig);
+		BaSyxRegistryConfiguration registryConfig = new BaSyxRegistryConfiguration(RegistryBackend.INMEMORY);
+		RegistryComponent registry = new RegistryComponent(contextConfig, registryConfig);
 		registry.startComponent();
 		startedComponents.add(registry);
 	}
