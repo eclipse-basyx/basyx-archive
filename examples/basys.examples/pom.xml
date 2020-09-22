@@ -296,6 +296,13 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		
+		<!-- Add explicit AASX component dependency -->
+		<dependency>
+			<groupId>org.eclipse.basyx</groupId>
+			<artifactId>basyx.components.AASX</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
 		<!-- Adds additional classes of the BaSys SDK for tests -->
 		<dependency>
 			<groupId>org.eclipse.basyx</groupId>
