@@ -6,12 +6,19 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 
 /**
  * Provider class that implements the AssetAdministrationShellServices <br />
@@ -75,11 +82,26 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * Store aas providers
 	 */
 	protected AASModelProvider aas_provider = null;
+	
+	/**
+	 * Store aasId
+	 */
+	protected IIdentifier aasId = null;
 
 	/**
 	 * Store submodel providers
 	 */
 	protected Map<String, SubModelProvider> submodel_providers = new HashMap<>();
+	
+	/**
+	 * Store AAS Registry
+	 */
+	protected IAASRegistryService registry = null;
+	
+	/**
+	 * Store HTTP Connector
+	 */
+	protected IConnectorProvider connectorProvider = null;
 
 	/**
 	 * Constructor
@@ -104,6 +126,29 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 		// Store content provider
 		addSubmodel(smID, contentProvider);
 	}
+	
+	/**
+	 * Constructor that accepts a registry and a connection provider
+	 * @param registry
+	 * @param provider
+	 */
+	public VABMultiSubmodelProvider(IAASRegistryService registry, IConnectorProvider provider) {
+		this();
+		this.registry = registry;
+		this.connectorProvider = provider;
+	}
+	
+	/**
+	 * Constructor that accepts a aas provider, a registry and a connection provider
+	 * @param contentProvider
+	 * @param registry
+	 * @param provider
+	 */
+	public VABMultiSubmodelProvider(AASModelProvider contentProvider, IAASRegistryService registry, HTTPConnectorProvider provider) {
+		this(contentProvider);
+		this.registry = registry;
+		this.connectorProvider = provider;
+	}
 
 	/**
 	 * Set an AAS for this provider
@@ -113,9 +158,11 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * @param modelContentProvider
 	 *            Model content provider
 	 */
+	@SuppressWarnings("unchecked")
 	public void setAssetAdministrationShell(AASModelProvider modelContentProvider) {
 		// Add model provider
 		aas_provider = modelContentProvider;
+		aasId = AssetAdministrationShell.createAsFacade((Map<String, Object>) modelContentProvider.getModelPropertyValue("")).getIdentification();
 	}
 
 	/**
@@ -155,9 +202,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	public Object getModelPropertyValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		String[] pathElements = VABPathTools.splitPath(path);
-		if (pathElements.length == 0) { // e.g. "/"
-			return null;
-		} else if (pathElements[0].equals("aas")) {
+		if (pathElements.length > 0 && pathElements[0].equals("aas")) {
 			if (pathElements.length == 1) {
 				return aas_provider.getModelPropertyValue("");
 			}
@@ -170,21 +215,22 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 					}
 					return submodels;
 				} else {
-					IModelProvider hashmapProvider = submodel_providers.get(pathElements[2]);
+					IModelProvider provider = submodel_providers.get(pathElements[2]);
 
-					if(hashmapProvider == null) {
-						throw new ResourceNotFoundException("Submodel with id " + pathElements[2] + " does not exist");
+					if (provider == null) {
+						// Get a model provider for the submodel in the registry
+						provider = getModelProvider(pathElements[2]);
 					}
 					
 					// - Retrieve submodel or property value
-					return hashmapProvider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 3));
+					return provider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 3));
 				}
 			} else {
 				// Handle access to AAS
 				return aas_provider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 1));
 			}
 		} else {
-			return null;
+			return new MalformedRequestException("The request " + path + " is not allowed for this endpoint");
 		}
 	}
 
@@ -193,12 +239,20 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 */
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
-		VABPathTools.checkPathForNull(path);
+ 		VABPathTools.checkPathForNull(path);
 		// Split path
 		String[] pathElements = VABPathTools.splitPath(path);
 		String propertyPath = VABPathTools.buildPath(pathElements, 3);
 		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
-		submodel_providers.get(pathElements[2]).setModelPropertyValue(propertyPath, newValue);
+		IModelProvider provider;
+		if (isSubmodelLocal(pathElements[2])) {
+			provider = submodel_providers.get(pathElements[2]);
+		} else {
+			// Get a model provider for the submodel in the registry
+			provider = getModelProvider(pathElements[2]);
+		}
+
+		provider.setModelPropertyValue(propertyPath, newValue);
 	}
 
 	@Override
@@ -220,8 +274,15 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	}
 
 	private void createSubModelProperty(String smId, String propertyPath, Object newProperty) throws ProviderException {
-		SubModelProvider subModelProvider = submodel_providers.get(smId);
-		subModelProvider.createValue(propertyPath, newProperty);
+		IModelProvider modelProvider;
+		if (isSubmodelLocal(smId)) {
+			modelProvider = submodel_providers.get(smId);
+		} else {
+			// Get a model provider for the submodel in the registry
+			modelProvider = getModelProvider(smId);
+		}
+
+		modelProvider.createValue(propertyPath, newProperty);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -249,8 +310,8 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 		if (pathElements.length == 3) {
 			// Delete Submodel from registered AAS
 			String smIdShort = pathElements[2];
-			if (!submodel_providers.containsKey(smIdShort)) {
-				return;
+			if (!isSubmodelLocal(smIdShort)) {
+				return;	
 			}
 
 			// Delete submodel reference from aas
@@ -261,7 +322,15 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 			// Remove submodel provider
 			submodel_providers.remove(smIdShort);
 		} else if (propertyPath.length() > 0) {
-			submodel_providers.get(pathElements[2]).deleteValue(propertyPath);
+			IModelProvider provider;
+			if (isSubmodelLocal(pathElements[2])) {
+				provider = submodel_providers.get(pathElements[2]);
+			} else {
+				// Get a model provider for the submodel in the registry
+				provider = getModelProvider(pathElements[2]);
+			}
+
+			provider.deleteValue(propertyPath);
 		}
 	}
 
@@ -271,7 +340,15 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 		String[] pathElements = VABPathTools.splitPath(path);
 		String propertyPath = VABPathTools.buildPath(pathElements, 3);
 		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
-		submodel_providers.get(pathElements[2]).deleteValue(propertyPath, obj);
+		IModelProvider provider;
+		if (isSubmodelLocal(pathElements[2])) {
+			provider = submodel_providers.get(pathElements[2]);
+		} else {
+			// Get a model provider for the submodel in the registry
+			provider = getModelProvider(pathElements[2]);
+		}
+
+		provider.deleteValue(propertyPath, obj);
 	}
 
 	@Override
@@ -281,6 +358,66 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 		String operationPath = VABPathTools.buildPath(pathElements, 3);
 		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
 		// - Invoke provider and return result
-		return submodel_providers.get(pathElements[2]).invokeOperation(operationPath, parameter);
+		IModelProvider provider;
+		if (isSubmodelLocal(pathElements[2])) {
+			provider = submodel_providers.get(pathElements[2]);
+		} else {
+			// Get a model provider for the submodel in the registry
+			provider = getModelProvider(pathElements[2]);
+		}
+
+		return provider.invokeOperation(operationPath, parameter);
+	}
+	
+	/**
+	 * Check whether the given submodel exists in submodel provider
+	 * @param key to search the submodel
+	 * @return boolean true/false
+	 */
+	private boolean isSubmodelLocal(String submodelId) {
+		return submodel_providers.containsKey(submodelId);
+	}
+	
+	/**
+	 * Check whether a registry exists
+	 * @return boolean true/false
+	 */
+	private boolean doesRegistryExist() {
+		return this.registry != null;
+	}
+	
+	/**
+	 * Get submodel descriptor from the registry
+	 * @param submodelId to search the submodel
+	 * @return a specifi submodel descriptor
+	 */
+	private SubmodelDescriptor getSubmodelDescriptorFromRegistry(String submodelId) {
+		AASDescriptor aasDescriptor = registry.lookupAAS(aasId);
+		return aasDescriptor.getSubmodelDescriptorFromIdShort(submodelId);
+	}
+	
+	/**
+	 * Get a model provider from a submodel descriptor
+	 * @param submodelDescriptor
+	 * @return a model provider
+	 */
+	private IModelProvider getModelProvider(SubmodelDescriptor submodelDescriptor) {
+		String endpoint = submodelDescriptor.getFirstEndpoint();
+		return connectorProvider.getConnector(endpoint);
+	}
+	
+	/**
+	 * Get a model provider from a submodel id
+	 * @param submodelId to select a specific submodel
+	 * @throws ResourceNotFoundException if no registry is found
+	 * @return a model provider
+	 */
+	private IModelProvider getModelProvider(String submodelId) {
+		if (!doesRegistryExist()) {
+			throw new ResourceNotFoundException("Submodel with id " + submodelId + " cannot be resolved locally, but no registry is passed");	
+		}
+		
+		SubmodelDescriptor submodelDescriptor = getSubmodelDescriptorFromRegistry(submodelId);
+		return getModelProvider(submodelDescriptor);
 	}
 }
