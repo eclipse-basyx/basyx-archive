@@ -10,6 +10,7 @@
 *******************************************************************************/
 using BaSyx.API.Components;
 using BaSyx.Utils.Settings.Types;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BaSyx.AAS.Server.Http.Pages
@@ -18,11 +19,13 @@ namespace BaSyx.AAS.Server.Http.Pages
     {
         public IAssetAdministrationShellServiceProvider ServiceProvider { get; }
         public ServerSettings Settings { get; }
+        public IWebHostEnvironment HostingEnvironment { get; }
 
-        public IndexModel(IAssetAdministrationShellServiceProvider provider, ServerSettings serverSettings)
+        public IndexModel(IAssetAdministrationShellServiceProvider provider, ServerSettings serverSettings, IWebHostEnvironment hostingEnvironment)
         {
             ServiceProvider = provider;
             Settings = serverSettings;
+            HostingEnvironment = hostingEnvironment;
         }
 
         public void OnGet()

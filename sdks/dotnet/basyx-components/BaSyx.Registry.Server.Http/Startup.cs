@@ -12,7 +12,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using BaSyx.Utils.Settings;
 using BaSyx.Utils.Settings.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +25,10 @@ using Microsoft.AspNetCore.Hosting;
 using BaSyx.Components.Common;
 using BaSyx.Utils.DependencyInjection;
 using Microsoft.AspNetCore.Rewrite;
+using BaSyx.Utils.AssemblyHandling;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Routing.Patterns;
 
 namespace BaSyx.Registry.Server.Http
 {
@@ -72,9 +75,9 @@ namespace BaSyx.Registry.Server.Http
                 });
 
                 var xmlFile = $"{controllerAssembly.GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                if (ResourceChecker.CheckResourceAvailability(controllerAssembly, ControllerAssemblyName, xmlFile, true))
-                    c.IncludeXmlComments(xmlPath, true);               
+                var xmlPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), xmlFile);
+                if (EmbeddedResource.CheckOrWriteRessourceToFile(controllerAssembly, xmlPath))
+                    c.IncludeXmlComments(xmlPath, true);
             });
             services.AddSwaggerGenNewtonsoftSupport();
         }
@@ -92,7 +95,21 @@ namespace BaSyx.Registry.Server.Http
                 //app.UseHsts();
             }
             //app.UseHttpsRedirection();
-            app.UseStaticFiles();
+
+            app.Use((context, next) =>
+            {
+                var url = context.GetServerVariable("UNENCODED_URL");
+                if (!string.IsNullOrEmpty(url))
+                    context.Request.Path = new PathString(url);
+
+                return next();
+            });
+
+            var options = new RewriteOptions()
+                    .AddRedirect("^$", UI_RELATIVE_PATH);
+            app.UseRewriter(options);
+
+            app.UseStaticFiles();            
 
             app.UseRouting();
 
@@ -107,10 +124,7 @@ namespace BaSyx.Registry.Server.Http
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
-            });
-
-            var options = new RewriteOptions().AddRedirect("^$", UI_RELATIVE_PATH);
-            app.UseRewriter(options);
+            });                    
 
             if (ServerApplicationLifetime.ApplicationStarted != null)
                 applicationLifetime.ApplicationStarted.Register(ServerApplicationLifetime.ApplicationStarted);

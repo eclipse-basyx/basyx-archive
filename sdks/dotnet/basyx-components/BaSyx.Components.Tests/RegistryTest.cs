@@ -81,7 +81,7 @@ namespace BaSyx.Components.Tests
         public void Test11_CreateBlankAssetAdministrationShellRegistration()
         {
             var result = CreateOrUpdateAssetAdministrationShellRegistration(aas.Identification.Id, aasDescriptor);
-            result.Entity.Should().BeEquivalentTo(aasDescriptor);
+            result.Entity.Should().BeEquivalentTo(aasDescriptor, opts => opts.IgnoringCyclicReferences());
         }
 
         [TestMethod]
@@ -93,7 +93,7 @@ namespace BaSyx.Components.Tests
             }));
 
             var updatedResult = CreateOrUpdateAssetAdministrationShellRegistration(aas.Identification.Id, aasDescriptor);
-            updatedResult.Entity.Should().BeEquivalentTo(aasDescriptor);
+            updatedResult.Entity.Should().BeEquivalentTo(aasDescriptor, opts => opts.IgnoringCyclicReferences());
         }
 
         public IResult<IAssetAdministrationShellDescriptor> CreateOrUpdateAssetAdministrationShellRegistration(string aasId, IAssetAdministrationShellDescriptor aasDescriptor)
@@ -105,7 +105,7 @@ namespace BaSyx.Components.Tests
         public void Test2_CreateOrUpdateSubmodelRegistration()
         {
             var result = CreateOrUpdateSubmodelRegistration(aas.Identification.Id, submodel.Identification.Id, submodelDescriptor);
-            result.Entity.Should().BeEquivalentTo(submodelDescriptor);
+            result.Entity.Should().BeEquivalentTo(submodelDescriptor, opts => opts.IgnoringCyclicReferences());
             aasDescriptor.SubmodelDescriptors.Add(submodelDescriptor);
         }
 
@@ -118,7 +118,7 @@ namespace BaSyx.Components.Tests
         public void Test3_RetrieveAssetAdministrationShellRegistration()
         {
             var result = RetrieveAssetAdministrationShellRegistration(aas.Identification.Id);
-            result.Entity.Should().BeEquivalentTo(aasDescriptor);
+            result.Entity.Should().BeEquivalentTo(aasDescriptor, opts => opts.IgnoringCyclicReferences());
         }
 
         public IResult<IAssetAdministrationShellDescriptor> RetrieveAssetAdministrationShellRegistration(string aasId)
@@ -130,7 +130,7 @@ namespace BaSyx.Components.Tests
         public void Test41_RetrieveAllAssetAdministrationShellRegistrations()
         {
             var result = RetrieveAllAssetAdministrationShellRegistrations();
-            result.Entity.Should().ContainEquivalentOf(aasDescriptor);
+            result.Entity.Should().ContainEquivalentOf(aasDescriptor, opts => opts.IgnoringCyclicReferences());
         }
 
         public IResult<IQueryableElementContainer<IAssetAdministrationShellDescriptor>> RetrieveAllAssetAdministrationShellRegistrations()
@@ -142,7 +142,7 @@ namespace BaSyx.Components.Tests
         public void Test42_RetrieveAllAssetAdministrationShellRegistrations()
         {
             var result = RetrieveAllAssetAdministrationShellRegistrations(p => p.Identification.Id == aas.Identification.Id);
-            result.Entity.Should().ContainEquivalentOf(aasDescriptor);
+            result.Entity.Should().ContainEquivalentOf(aasDescriptor, opts => opts.IgnoringCyclicReferences());
         }
 
         public IResult<IQueryableElementContainer<IAssetAdministrationShellDescriptor>> RetrieveAllAssetAdministrationShellRegistrations(Predicate<IAssetAdministrationShellDescriptor> predicate)
@@ -154,7 +154,7 @@ namespace BaSyx.Components.Tests
         public void Test5_RetrieveSubmodelRegistration()
         {
             var result = RetrieveSubmodelRegistration(aas.Identification.Id, submodel.Identification.Id);
-            result.Entity.Should().BeEquivalentTo(submodelDescriptor);
+            result.Entity.Should().BeEquivalentTo(submodelDescriptor, opts => opts.IgnoringCyclicReferences().Excluding(o => o.Parent));
         }
 
 
@@ -167,7 +167,7 @@ namespace BaSyx.Components.Tests
         public void Test61_RetrieveAllSubmodelRegistrations()
         {
             var result = RetrieveAllSubmodelRegistrations(aas.Identification.Id);
-            result.Entity.Should().ContainEquivalentOf(submodelDescriptor);
+            result.Entity.Should().ContainEquivalentOf(submodelDescriptor, opts => opts.IgnoringCyclicReferences().Excluding(o => o.Parent));
         }
 
         public IResult<IQueryableElementContainer<ISubmodelDescriptor>> RetrieveAllSubmodelRegistrations(string aasId)
@@ -179,7 +179,7 @@ namespace BaSyx.Components.Tests
         public void Test62_RetrieveAllSubmodelRegistrations()
         {
             var result = RetrieveAllSubmodelRegistrations(aas.Identification.Id, p => p.Identification.Id == submodel.Identification.Id);
-            result.Entity.Should().ContainEquivalentOf(submodelDescriptor);
+            result.Entity.Should().ContainEquivalentOf(submodelDescriptor, opts => opts.IgnoringCyclicReferences().Excluding(o => o.Parent));
         }
 
         public IResult<IQueryableElementContainer<ISubmodelDescriptor>> RetrieveAllSubmodelRegistrations(string aasId, Predicate<ISubmodelDescriptor> predicate)

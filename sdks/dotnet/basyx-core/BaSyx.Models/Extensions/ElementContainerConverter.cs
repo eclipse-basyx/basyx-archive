@@ -21,11 +21,7 @@ namespace BaSyx.Models.Extensions
 
         public override bool CanWrite => false;
         public override bool CanRead => true;
-
-        public override bool CanConvert(Type objectType)
-        {
-            return true;
-        }
+        public override bool CanConvert(Type objectType) => true;
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
@@ -47,14 +43,19 @@ namespace BaSyx.Models.Extensions
             {
                 try
                 {
-                    Type outerTypeDefinition = objectType.GetGenericTypeDefinition();
-                    Type outerType = (serializer.ContractResolver as IDependencyInjectionContractResolver)
+                    Type outerType = objectType.GetGenericTypeDefinition();
+                    Type resolvedOuterType = (serializer.ContractResolver as IDependencyInjectionContractResolver)
                         .DependencyInjectionExtension
-                        .GetRegisteredTypeFor(outerTypeDefinition);
-                    Type innerType = objectType.GetGenericArguments()[0];
-                    Type containerType = outerType.MakeGenericType(innerType);
+                        .GetRegisteredTypeFor(outerType);
 
+                    Type innerType = objectType.GetGenericArguments()[0];
+                    //Type resolvedInnerType = (serializer.ContractResolver as IDependencyInjectionContractResolver)
+                    //    .DependencyInjectionExtension
+                    //    .GetRegisteredTypeFor(innerType);
+
+                    Type containerType = resolvedOuterType.MakeGenericType(innerType);
                     object container = Activator.CreateInstance(containerType);
+
                     serializer.Populate(reader, container);
                     return container;
                 }

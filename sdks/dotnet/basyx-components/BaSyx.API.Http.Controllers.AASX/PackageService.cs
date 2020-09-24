@@ -14,6 +14,8 @@ using BaSyx.API.Components;
 using BaSyx.Models.Export;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
+using System.IO;
+using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 
 namespace BaSyx.API.Http.Controllers.PackageService
 {
@@ -64,42 +66,40 @@ namespace BaSyx.API.Http.Controllers.PackageService
         [ProducesResponseType(typeof(Result), 400)]
         public IActionResult GetAASXPackage()
         {
-            var aas = shellServiceProvider.GetBinding();
-            string filename = aas.IdShort + ".aasx";
-            using (AASX aasx = new AASX(filename))
+            IAssetAdministrationShell aas = shellServiceProvider.GetBinding();
+            string aasxFileName = aas.IdShort + ".aasx";
+            string aasxFilePath = Path.Combine(hostingEnvironment.ContentRootPath, aasxFileName);
+            IFileProvider fileProvider = hostingEnvironment.ContentRootFileProvider;
+
+            using (AASX aasx = new AASX(aasxFilePath))
             {
                 AssetAdministrationShellEnvironment_V2_0 env = new AssetAdministrationShellEnvironment_V2_0(aas);
                 aasx.AddEnvironment(aas.Identification, env, ExportType.Xml);
 
-                if (aasx != null)
+                foreach (var item in fileProvider.GetDirectoryContents("aasx"))
                 {
-                    IFileProvider fileProvider = hostingEnvironment.ContentRootFileProvider;
-                    foreach (var item in fileProvider.GetDirectoryContents("Content/aasx"))
+                    if (item.IsDirectory)
                     {
-                        if (item.IsDirectory)
+                        foreach (var subItem in fileProvider.GetDirectoryContents("aasx/" + item.Name))
                         {
-                            foreach (var subItem in fileProvider.GetDirectoryContents("Content/aasx/" + item.Name))
-                            {
-                                if (subItem.Exists)
-                                    aasx.AddFileToAASX("/aasx/" + item.Name + "/" + subItem.Name, subItem.PhysicalPath);
-                            }
-                        }
-                        else
-                        {
-                            if (item.Exists)
-                                aasx.AddFileToAASX("/aasx/" + item.Name, item.PhysicalPath);
+                            if (subItem.Exists)
+                                aasx.AddFileToAASX("/aasx/" + item.Name + "/" + subItem.Name, subItem.PhysicalPath);
                         }
                     }
-
-                    var fileInfo = fileProvider.GetFileInfo(filename);
-                    var fileResult = new PhysicalFileResult(fileInfo.PhysicalPath, "application/asset-administration-shell-package")
+                    else
                     {
-                        FileDownloadName = filename
-                    };
-                    return fileResult;
+                        if (item.Exists)
+                            aasx.AddFileToAASX("/aasx/" + item.Name, item.PhysicalPath);
+                    }
                 }
+
             }
-            return new BadRequestResult();
+            var fileInfo = fileProvider.GetFileInfo(aasxFileName);
+            var fileResult = new PhysicalFileResult(fileInfo.PhysicalPath, "application/asset-administration-shell-package")
+            {
+                FileDownloadName = aasxFileName
+            };
+            return fileResult;           
         }
 
         #endregion

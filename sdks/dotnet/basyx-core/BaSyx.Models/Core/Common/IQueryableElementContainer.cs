@@ -8,11 +8,12 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
+using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using System.Linq;
 
 namespace BaSyx.Models.Core.Common
 {
-    public interface IQueryableElementContainer<TElement> : IElementContainer<TElement>, IQueryable<TElement>
+    public interface IQueryableElementContainer<TElement> : IElementContainer<TElement>, IQueryable<TElement> where TElement : IReferable, IModelElement
     {
 
     }

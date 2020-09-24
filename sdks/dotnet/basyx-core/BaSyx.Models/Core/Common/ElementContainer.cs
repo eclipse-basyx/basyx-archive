@@ -34,12 +34,12 @@ namespace BaSyx.Models.Core.Common
         public IElementContainer<TElement> ParentContainer { get; set; }
 
         [JsonConstructor]
-        public ElementContainer() : this(null)
+        public ElementContainer()
         {
             _children = new List<IElementContainer<TElement>>();
         }
 
-        public ElementContainer(IReferable parent) : this(parent, default(TElement), null)
+        public ElementContainer(IReferable parent) : this(parent, default, null)
         { }
 
         public ElementContainer(IReferable parent, TElement rootElement, IElementContainer<TElement> parentContainer)
@@ -104,6 +104,10 @@ namespace BaSyx.Models.Core.Common
         {
             get => _children;
         }
+
+        public int Count => _children.Count;
+
+        public bool IsReadOnly => false;
 
         public IResult<TElement> Create(TElement element)
         {
@@ -285,7 +289,7 @@ namespace BaSyx.Models.Core.Common
                 return new Result<IQueryableElementContainer<TElement>>(true, this.AsQueryableElementContainer());
         }
 
-        public virtual IResult<IQueryableElementContainer<T>> RetrieveAll<T>() where T : class, TElement
+        public virtual IResult<IQueryableElementContainer<T>> RetrieveAll<T>() where T : class, IReferable, IModelElement
         {
             if (this.Count() == 0)
                 return new Result<IQueryableElementContainer<T>>(true, new EmptyMessage());
@@ -324,7 +328,7 @@ namespace BaSyx.Models.Core.Common
             }
         }
 
-        public virtual IResult<IQueryableElementContainer<T>> RetrieveAll<T>(Predicate<T> predicate) where T : class, TElement
+        public virtual IResult<IQueryableElementContainer<T>> RetrieveAll<T>(Predicate<T> predicate) where T : class, IReferable, IModelElement
         {
             if (this.Count() == 0)
                 return new Result<IQueryableElementContainer<T>>(true, new EmptyMessage());
@@ -436,6 +440,33 @@ namespace BaSyx.Models.Core.Common
         IEnumerator IEnumerable.GetEnumerator()
         {
             return Values.GetEnumerator();
+        }
+
+        public void Clear()
+        {
+            _children.Clear();
+        }
+
+        public bool Contains(TElement item)
+        {
+            return this[item.IdShort] != null;
+        }
+
+        public void CopyTo(TElement[] array, int arrayIndex)
+        {
+            for (int i = arrayIndex; i < array.Length && i < _children.Count; i++)
+            {
+                array[i] = _children[i].Value;
+            }
+        }
+
+        public bool Remove(TElement item)
+        {
+            var removed = _children.RemoveAll(c => c.IdShort == item.IdShort);
+            if (removed > 0)
+                return true;
+            else
+                return false;
         }
     }
 }

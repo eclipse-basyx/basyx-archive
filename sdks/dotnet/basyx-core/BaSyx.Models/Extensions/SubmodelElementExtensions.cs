@@ -23,6 +23,11 @@ namespace BaSyx.Models.Extensions
     {
         private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
 
+        internal static T As<T>(this IReferable referable) where T : class, IReferable
+        {
+            return referable as T;
+        }
+
         public static T Cast<T>(this IReferable referable) where T : class, IReferable
         {
             return referable as T;

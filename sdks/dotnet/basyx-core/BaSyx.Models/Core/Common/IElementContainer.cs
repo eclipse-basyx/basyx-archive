@@ -17,7 +17,7 @@ using System.Collections.Generic;
 
 namespace BaSyx.Models.Core.Common
 {
-    public interface ICrudContainer<TIdentifier, TElement>
+    public interface ICrudContainer<TIdentifier, TElement> : ICollection<TElement> where TElement : IReferable, IModelElement
     {
         IResult<T> Create<T>(T element) where T : class, TElement;
 
@@ -25,9 +25,9 @@ namespace BaSyx.Models.Core.Common
 
         IResult<T> Retrieve<T>(TIdentifier id) where T : class, TElement;
 
-        IResult<IQueryableElementContainer<T>> RetrieveAll<T>() where T : class, TElement;
+        IResult<IQueryableElementContainer<T>> RetrieveAll<T>() where T : class, IReferable, IModelElement;
 
-        IResult<IQueryableElementContainer<T>> RetrieveAll<T>(Predicate<T> predicate) where T : class, TElement;
+        IResult<IQueryableElementContainer<T>> RetrieveAll<T>(Predicate<T> predicate) where T : class, IReferable, IModelElement;
 
         IResult<TElement> CreateOrUpdate(TIdentifier id, TElement element);
 
@@ -38,7 +38,7 @@ namespace BaSyx.Models.Core.Common
     }
 
     [JsonConverter(typeof(ElementContainerConverter))]
-    public interface IElementContainer<TElement> : ICrudContainer<string, TElement>, IEnumerable<TElement>
+    public interface IElementContainer<TElement> : ICrudContainer<string, TElement> where TElement : IReferable, IModelElement
     {
         TElement this[int i] { get; }
         TElement this[string idShort] { get; }
@@ -63,7 +63,6 @@ namespace BaSyx.Models.Core.Common
         IEnumerable<TElement> Flatten();
         IElementContainer<TElement> GetChild(string idShortPath);
         void AppendRootPath(string rootPath);
-        void Add(TElement element);
         void Remove(string idShort);
         void AddRange(IEnumerable<TElement> elements);
     }

@@ -50,6 +50,10 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
         [IgnoreDataMember, JsonIgnore]
         public IElementContainer<ISubmodelElement> ParentContainer { get => this; set { } }
 
+        public int Count => Value.Count;
+
+        public bool IsReadOnly => Value.IsReadOnly;
+
         [IgnoreDataMember, JsonIgnore]
         public ISubmodelElement this[string idShort] => Value[idShort];
         [IgnoreDataMember, JsonIgnore]
@@ -171,6 +175,26 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
         public IEnumerable<ISubmodelElement> Flatten()
         {
             return Value.Flatten();
+        }
+
+        public void Clear()
+        {
+            Value.Clear();
+        }
+
+        public bool Contains(ISubmodelElement item)
+        {
+            return Value.Contains(item);
+        }
+
+        public void CopyTo(ISubmodelElement[] array, int arrayIndex)
+        {
+            Value.CopyTo(array, arrayIndex);
+        }
+
+        public bool Remove(ISubmodelElement item)
+        {
+            return Value.Remove(item);
         }
     }
 }

@@ -83,7 +83,7 @@ namespace BaSyx.Models.Export
         [XmlIgnore]
         public Dictionary<string, IFile> SupplementalFiles;
 
-        private string ContentRoot = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        private static string ContentRoot = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         public static JsonSerializerSettings JsonSettings;
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -106,9 +106,9 @@ namespace BaSyx.Models.Export
             XmlSettings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;
             XmlSettings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
             XmlSettings.ValidationEventHandler += new ValidationEventHandler(ValidationCallBack);
-            XmlSettings.Schemas.Add(AAS_NAMESPACE, AAS_XSD_FILENAME);
-            XmlSettings.Schemas.Add(IEC61360_NAMESPACE, IEC61360_XSD_FILENAME);
-            XmlSettings.Schemas.Add(ABAC_NAMESPACE, ABAC_XSD_FILENAME);
+            XmlSettings.Schemas.Add(AAS_NAMESPACE, Path.Combine(ContentRoot, AAS_XSD_FILENAME));
+            XmlSettings.Schemas.Add(IEC61360_NAMESPACE, Path.Combine(ContentRoot, IEC61360_XSD_FILENAME));
+            XmlSettings.Schemas.Add(ABAC_NAMESPACE, Path.Combine(ContentRoot, ABAC_XSD_FILENAME));
         }
 
         [JsonConstructor]

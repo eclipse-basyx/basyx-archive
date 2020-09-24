@@ -16,7 +16,6 @@ using BaSyx.Utils.ResultHandling;
 using Newtonsoft.Json;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;

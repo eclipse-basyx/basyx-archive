@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BaSyx.Models\BaSyx.Models.csproj" />
+    <ProjectReference Include="..\BaSyx.Utils.DependencyInjection\BaSyx.Utils.DependencyInjection.csproj" />
   </ItemGroup>
 
 </Project>

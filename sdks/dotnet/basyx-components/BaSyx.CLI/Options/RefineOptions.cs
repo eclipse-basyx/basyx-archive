@@ -44,6 +44,8 @@ namespace BaSyx.CLI.Options
                             {
                                 AssetAdministrationShellEnvironment_V2_0 env = aasx.GetEnvironment_V2_0();
 
+                                ModifyEnvironment(env);
+
                                 aasIdentifier = env.AssetAdministrationShells.First().Identification;
                                 env.WriteEnvironment_V2_0(ExportType.Xml, tempEnvironmentFile);
 
@@ -91,8 +93,6 @@ namespace BaSyx.CLI.Options
                             //Clear all temporary ressources
                             Directory.Delete(tempDirInfo.FullName, true);
                             File.Delete(tempEnvironmentFile);
-                            if (thumbnail != null)
-                                File.Delete(thumbnail.FullName);
 
                             return 0;
                         }
@@ -105,6 +105,33 @@ namespace BaSyx.CLI.Options
                 default:
                     logger.Error($"Unable to parse file extension ${fileExtension}");
                     return -1;
+            }
+        }
+
+        private static void ModifyEnvironment(AssetAdministrationShellEnvironment_V2_0 env)
+        {
+            foreach (var cd in env.EnvironmentConceptDescriptions)
+            {
+                foreach (var cdemb in cd.EmbeddedDataSpecifications)
+                {
+                    if (cdemb.DataSpecification?.Keys?.Count == 0)
+                        cdemb.DataSpecification = new EnvironmentReference_V2_0()
+                        {
+                            Keys = new List<EnvironmentKey_V2_0>()
+                            {
+                                new EnvironmentKey_V2_0()
+                                {
+                                    IdType = KeyType_V2_0.IRI,
+                                    Local = false,
+                                    Type = KeyElements_V2_0.GlobalReference,
+                                    Value = "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/2/0"
+                                }
+                            }
+                        };
+
+                    if (cdemb.DataSpecificationContent?.DataSpecificationIEC61360?.PreferredName?.Count == 0)
+                        cdemb.DataSpecificationContent.DataSpecificationIEC61360.PreferredName = null;
+                }
             }
         }
     }

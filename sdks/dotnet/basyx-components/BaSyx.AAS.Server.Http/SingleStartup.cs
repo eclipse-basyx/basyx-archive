@@ -10,8 +10,8 @@
 *******************************************************************************/
 using BaSyx.API.Components;
 using BaSyx.Components.Common;
+using BaSyx.Utils.AssemblyHandling;
 using BaSyx.Utils.DependencyInjection;
-using BaSyx.Utils.Settings;
 using BaSyx.Utils.Settings.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -95,9 +95,9 @@ namespace BaSyx.AAS.Server.Http
 
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{controllerAssembly.GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                if (ResourceChecker.CheckResourceAvailability(controllerAssembly, ControllerAssemblyName, xmlFile, true))
-                    c.IncludeXmlComments(xmlPath);           
+                var xmlPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), xmlFile);
+                if (EmbeddedResource.CheckOrWriteRessourceToFile(controllerAssembly, xmlPath))
+                    c.IncludeXmlComments(xmlPath, true);
             });
             services.AddSwaggerGenNewtonsoftSupport();
         }
@@ -117,7 +117,7 @@ namespace BaSyx.AAS.Server.Http
             //app.UseHttpsRedirection();
             app.UseStaticFiles(); //necessary for the wwwroot folder
 
-            string path = Path.Combine(env.ContentRootPath, ServerSettings.ServerConfig.Hosting.ContentPath);
+            string path = env.ContentRootPath;
             if (Directory.Exists(path))
             {
                 app.UseStaticFiles(new StaticFileOptions()

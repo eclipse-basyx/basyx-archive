@@ -10,6 +10,7 @@
 @using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 @using BaSyx.Utils.Settings.Types;
 @using Microsoft.AspNetCore.Html;
+@using Microsoft.AspNetCore.Hosting;
 @using System.Security.Cryptography;
 @using System.Text;
 @using System.Text.RegularExpressions;
@@ -18,7 +19,7 @@
     ViewData["Title"] = "Index";
     IAssetAdministrationShellServiceProvider sp = Model.ServiceProvider;
     IAssetAdministrationShell aas = sp.GetBinding();
-    ElementTree aasElementTree = aas.GetElementTree();
+    IWebHostEnvironment hostingEnvironment = Model.HostingEnvironment;
     ServerSettings settings = Model.Settings;
 
     string pathToCompanyLogo = settings.Miscellaneous.TryGetValue("CompanyLogo", out string path) ? path : "/images/Bosch.gif";
@@ -188,9 +189,7 @@ switch (keyElements)
                     <div class="col-sm-10">@path</div>
                 </div>
             </div>
-            string contentRoot = System.IO.Path.Combine(AppContext.BaseDirectory, settings.ServerConfig.Hosting.ContentPath);
-            var contentFileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(contentRoot);
-            @if (contentFileProvider.GetFileInfo(path).Exists)
+            @if (hostingEnvironment.ContentRootFileProvider.GetFileInfo(path).Exists)
             {
                 <div class="panel-body">
                     <div class="row">
@@ -366,15 +365,15 @@ if (embeddedDataSpecifications?.Count() > 0)
 Func<List<object>, IHtmlContent> ShowSubmodelElement = null;
 
 ShowSubmodelElement = @<text>@{
-string submodelId = item[0] as string;
-ElementTree submodelElementTree = item[1] as ElementTree;
-string sePathId = submodelElementTree.GetPath();
-ISubmodelElement submodelElement = submodelElementTree.Value.Cast<ISubmodelElement>();
+    string submodelId = item[0] as string;
+    IElementContainer<ISubmodelElement> submodelElementContainer = item[1] as IElementContainer<ISubmodelElement>;
+    string sePathId = submodelElementContainer.Path;
+    ISubmodelElement submodelElement = submodelElementContainer.Value;
 
 <div class="panel panel-warning">
     <div class="panel-heading">
         <h4 class="panel-title">
-            <a data-toggle="collapse" href="#@GetHashString(sePathId)">@submodelElementTree.Name</a>
+            <a data-toggle="collapse" href="#@GetHashString(sePathId)">@submodelElementContainer.IdShort</a>
         </h4>
     </div>
     <div id="@GetHashString(sePathId)" class="panel-collapse collapse">
@@ -427,12 +426,12 @@ ISubmodelElement submodelElement = submodelElementTree.Value.Cast<ISubmodelEleme
             }
             <div class="panel-footer"><button onclick="@("ExecuteOperation('" + submodelId + "', '" + operation.IdShort + "')")" type="button" class="btn btn-success">Execute</button></div>
         }
-        else if (submodelElementTree.HasChildren())
+        else if (submodelElementContainer.HasChildren())
         {
-            @foreach (var valueChild in submodelElementTree.Children)
+            @foreach (var valueChild in submodelElementContainer.Children)
             {
                 <div class="panel-body">
-                    @ShowSubmodelElement(new List<object>() { submodelId, (ElementTree)valueChild })
+                    @ShowSubmodelElement(new List<object>() { submodelId, valueChild })
                 </div>
             }
         }
@@ -557,21 +556,18 @@ ISubmodelElement submodelElement = submodelElementTree.Value.Cast<ISubmodelEleme
     }
 
 
-    @if (aasElementTree.HasChildren())
+    @if (aas.Submodels.Count() > 0)
     {
-        foreach (var submodelChild in aasElementTree.Children)
+        foreach (var submodel in aas.Submodels)
         {
-            ISubmodel submodel = submodelChild.Value.Cast<ISubmodel>();
-            string pathId = submodelChild.GetPath();
-
             <div class="container">
                 <div class="panel panel-default">
                     <div class="panel-heading" style="background:darkgreen">
                         <h4>
-                            <a style="color:white" data-toggle="collapse" href="#@GetHashString(pathId)">@submodel.IdShort</a>
+                            <a style="color:white" data-toggle="collapse" href="#@GetHashString(submodel.IdShort)">@submodel.IdShort</a>
                         </h4>
                     </div>
-                    <div id="@GetHashString(pathId)" class="panel-collapse collapse">
+                    <div id="@GetHashString(submodel.IdShort)" class="panel-collapse collapse">
                         @ShowIdShort(submodel.IdShort)
                         @ShowIdentification(submodel.Identification)
                         @ShowDescription(submodel.Description)
@@ -579,18 +575,18 @@ ISubmodelElement submodelElement = submodelElementTree.Value.Cast<ISubmodelEleme
                         <div class="panel-body">
                             <div class="panel-group">
                                 @{
-                                    @if (submodelChild.HasChildren())
+                                    @if (submodel.SubmodelElements.Count() > 0)
                                     {
                                         <div class="panel panel-default">
                                             <div class="panel-heading" style="background:#005691"><h4 style="color:white">Submodel-Elements</h4></div>
                                             <div class="panel-body">
                                                 <div class="panel-group">
-                                                    @foreach (var submodelElementChild in submodelChild.Children)
+                                                    @foreach (var submodelElement in submodel.SubmodelElements.Children)
                                                     {
-                                                        if (submodelElementChild == null)
+                                                        if (submodelElement == null)
                                                         { continue; }
 
-                                                        @ShowSubmodelElement(new List<object>() { submodel.IdShort, (ElementTree)submodelElementChild });
+                                                        @ShowSubmodelElement(new List<object>() { submodel.IdShort, submodelElement });
 
                                                     }
                                                 </div>

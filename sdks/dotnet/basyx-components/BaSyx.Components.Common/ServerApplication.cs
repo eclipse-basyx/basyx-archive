@@ -8,11 +8,13 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using BaSyx.Utils.Settings;
+using BaSyx.Utils.AssemblyHandling;
 using BaSyx.Utils.Settings.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Web;
@@ -30,8 +32,15 @@ namespace BaSyx.Components.Common
     {
         private static readonly Logger logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
 
+        private string _contentRoot;
+        private string _webRoot;
+
+        public const string DEFAULT_CONTENT_ROOT = "Content";
+        public const string DEFAULT_WEB_ROOT = "wwwroot";
+
         public ServerSettings Settings { get; protected set; }
         public IWebHostBuilder WebHostBuilder { get; protected set; }
+        public string ExecutionPath { get; }
 
         public Action ApplicationStarted { get; set; }
 
@@ -39,7 +48,7 @@ namespace BaSyx.Components.Common
 
         public Action ApplicationStopped { get; set; }
 
-        protected ServerApplication(Type startupType) : this(startupType, ServerSettings.LoadSettings() ?? throw new NullReferenceException("ServerSettings.xml not found"), null)
+        protected ServerApplication(Type startupType) : this(startupType, ServerSettings.LoadSettings(), null)
         { }
 
         protected ServerApplication(Type startupType, ServerSettings settings) : this(startupType, settings, null)
@@ -47,8 +56,55 @@ namespace BaSyx.Components.Common
 
         protected ServerApplication(Type startupType, ServerSettings settings, string[] webHostBuilderArgs)
         {
-            Settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            ExecutionPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            if (!EmbeddedResource.CheckOrWriteRessourceToFile(this.GetType().Assembly, Path.Combine(ExecutionPath, "NLog.config")))
+                logger.Error("NLog.config cannot be loaded or written");
+
+            if (settings == null && !EmbeddedResource.CheckOrWriteRessourceToFile(this.GetType().Assembly, Path.Combine(ExecutionPath, "ServerSettings.xml")))
+                logger.Error("ServerSettings.xml cannot be loaded or written");
+
+            Settings = settings ?? ServerSettings.LoadSettingsFromFile("ServerSettings.xml") ?? throw new ArgumentNullException(nameof(settings));
+
+            if (string.IsNullOrEmpty(Settings.ServerConfig.Hosting.ContentPath))
+                _contentRoot = Path.Join(ExecutionPath, DEFAULT_CONTENT_ROOT);
+            else if (Path.IsPathRooted(Settings.ServerConfig.Hosting.ContentPath))
+                _contentRoot = Settings.ServerConfig.Hosting.ContentPath;
+            else
+                _contentRoot = Path.Join(ExecutionPath, Settings.ServerConfig.Hosting.ContentPath);
+
+            _webRoot = Path.Join(ExecutionPath, DEFAULT_WEB_ROOT);
+
+            if (webHostBuilderArgs?.Length > 0)
+                for (int i = 0; i < webHostBuilderArgs.Length; i++)
+                    logger.Info($"webHostBuilderArg[{i}]: {webHostBuilderArgs[i]}");
+
             WebHostBuilder = DefaultWebHostBuilder.CreateWebHostBuilder(webHostBuilderArgs, Settings, startupType);
+
+            try
+            {
+                if (!Directory.Exists(_contentRoot))
+                    Directory.CreateDirectory(_contentRoot);
+                WebHostBuilder.UseContentRoot(_contentRoot);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, $"ContentRoot path {_contentRoot} cannot be created ");
+            }
+
+
+            try
+            {
+                if (!Directory.Exists(_webRoot))
+                    Directory.CreateDirectory(_webRoot);
+                WebHostBuilder.UseWebRoot(_webRoot);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, $"WebRoot path {_webRoot} cannot be created ");
+            }
+
+
             WebHostBuilder.ConfigureServices(services =>
             {
                 services.AddSingleton(typeof(ServerSettings), Settings);
@@ -62,7 +118,7 @@ namespace BaSyx.Components.Common
         {
             logger.Debug("Starting Server...");
 
-             WebHostBuilder.Build().Run();
+            WebHostBuilder.Build().Run();
         }
 
         public virtual async Task RunAsync(CancellationToken cancellationToken = default)
@@ -75,16 +131,24 @@ namespace BaSyx.Components.Common
         public virtual void ConfigureLogging(Microsoft.Extensions.Logging.LogLevel logLevel)
         {
             WebHostBuilder.ConfigureLogging(logging =>
-             {
-                 logging.ClearProviders();
-                 logging.SetMinimumLevel(logLevel);
-             });
+            {
+                logging.ClearProviders();
+                logging.SetMinimumLevel(logLevel);
+            });
         }
 
         public virtual void ConfigureApplication(Action<IApplicationBuilder> appConfiguration) => WebHostBuilder.Configure(appConfiguration);
         public virtual void ConfigureServices(Action<IServiceCollection> configureServices) => WebHostBuilder.ConfigureServices(configureServices);
-        public virtual void UseContentRoot(string contentRoot) => WebHostBuilder.UseContentRoot(contentRoot);
-        public virtual void UseWebRoot(string webRoot) => WebHostBuilder.UseWebRoot(webRoot);
+        public virtual void UseContentRoot(string contentRoot)
+        {
+            _contentRoot = contentRoot;
+            WebHostBuilder.UseContentRoot(contentRoot);
+        }
+        public virtual void UseWebRoot(string webRoot)
+        {
+            _webRoot = webRoot;
+            WebHostBuilder.UseWebRoot(webRoot);
+        }
         public virtual void UseUrls(params string[] urls)
         {
             WebHostBuilder.UseUrls(urls);
@@ -103,9 +167,7 @@ namespace BaSyx.Components.Common
                     string directory = Path.GetDirectoryName(relativeUri.ToString()).TrimStart('\\');
                     logger.Info("Directory: " + directory);
 
-                    logger.Info("Content Path from Settings: " + Settings.ServerConfig.Hosting.ContentPath);
-                    logger.Info("Current Working Directory: " + Directory.GetCurrentDirectory());
-                    string hostingDirectory = Path.Join(Directory.GetCurrentDirectory(), Settings.ServerConfig.Hosting.ContentPath, directory);
+                    string hostingDirectory = Path.Join(_contentRoot, directory);
 
                     logger.Info($"Try creating hosting directory if not existing: {hostingDirectory}");
                     Directory.CreateDirectory(hostingDirectory);
@@ -132,37 +194,62 @@ namespace BaSyx.Components.Common
                 if (controllerConfig?.Controllers?.Count > 0)
                 {
                     var mvcBuilder = services.AddMvc();
-                    foreach (var controllerAssemblyName in controllerConfig.Controllers)
+                    foreach (var controllerAssemblyString in controllerConfig.Controllers)
                     {
                         Assembly controllerAssembly = null;
                         try
                         {
-                            controllerAssembly = Assembly.Load(controllerAssemblyName);
+                            controllerAssembly = Assembly.Load(controllerAssemblyString);
                         }
                         catch (Exception e)
                         {
-                            logger.Warn(e, $"Assembly {controllerAssemblyName} cannot be loaded - maybe it is not referenced. Try reading from file...");
+                            logger.Warn(e, $"Assembly {controllerAssemblyString} cannot be loaded - maybe it is not referenced. Try reading from file...");
                             try
                             {
-                                if (File.Exists(controllerAssemblyName))
-                                    controllerAssembly = Assembly.LoadFile(controllerAssemblyName);
-                                else if (File.Exists(controllerAssemblyName + ".dll"))
-                                    controllerAssembly = Assembly.LoadFile(controllerAssemblyName + ".dll");
+                                if (File.Exists(controllerAssemblyString))
+                                    controllerAssembly = Assembly.LoadFile(controllerAssemblyString);
+                                else if (File.Exists(controllerAssemblyString + ".dll"))
+                                    controllerAssembly = Assembly.LoadFile(controllerAssemblyString + ".dll");
                                 else
-                                    controllerAssembly = Assembly.LoadFrom(controllerAssemblyName);
+                                    controllerAssembly = Assembly.LoadFrom(controllerAssemblyString);
                             }
                             catch (Exception exp)
                             {
-                                logger.Warn(exp, $"Assembly {controllerAssemblyName} can finally not be loaded");
-                            }                            
+                                logger.Warn(exp, $"Assembly {controllerAssemblyString} can finally not be loaded");
+                            }
                         }
                         if (controllerAssembly != null)
                         {
                             mvcBuilder.AddApplicationPart(controllerAssembly);
-                            string xmlDocFile = $"{controllerAssembly.GetName().Name}.xml";
-                            string xmlDocFilePath = Path.Combine(AppContext.BaseDirectory, xmlDocFile);
-                            if (ResourceChecker.CheckResourceAvailability(controllerAssembly, controllerAssembly.GetName().Name, xmlDocFilePath, true))
-                                logger.Info($"{xmlDocFile} of Assembly {controllerAssembly.GetName().Name} exists or has just been created");
+                            string controllerAssemblyName = controllerAssembly.GetName().Name;
+                            string xmlDocFile = $"{controllerAssemblyName}.xml";
+                            string xmlDocFilePath = Path.Combine(ExecutionPath, xmlDocFile);
+
+                            if (File.Exists(xmlDocFilePath))
+                                continue;
+
+                            try
+                            {
+                                ManifestEmbeddedFileProvider embeddedFileProvider = new ManifestEmbeddedFileProvider(controllerAssembly);
+                                IFileInfo fileInfo = embeddedFileProvider.GetFileInfo(xmlDocFile);
+                                if (fileInfo == null)
+                                {
+                                    logger.Warn($"{xmlDocFile} of Assembly {controllerAssemblyName} not found");
+                                    continue;
+                                }
+                                using (Stream stream = fileInfo.CreateReadStream())
+                                {
+                                    using (FileStream fileStream = File.OpenWrite(xmlDocFilePath))
+                                    {
+                                        stream.CopyTo(fileStream);
+                                    }
+                                }
+                                logger.Info($"{xmlDocFile} of Assembly {controllerAssemblyName} has been created successfully");
+                            }
+                            catch (Exception e)
+                            {
+                                logger.Warn(e, $"{xmlDocFile} of Assembly {controllerAssemblyName} cannot be read");
+                            }
                         }
                     }
                     mvcBuilder.AddControllersAsServices();

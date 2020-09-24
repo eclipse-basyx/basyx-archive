@@ -13,16 +13,15 @@ using BaSyx.Models.Core.AssetAdministrationShell.References;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
-using BaSyx.Models.Core.Common;
 using BaSyx.Models.Core.AssetAdministrationShell;
 
 namespace BaSyx.Models.Extensions.Semantics.DataSpecifications
 {
-    [DataContract, DataSpecification("www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360")]
+    [DataContract, DataSpecification("http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/2/0")]
     public class DataSpecificationIEC61360 : IEmbeddedDataSpecification
     {
         public IReference HasDataSpecification => new Reference(
-            new GlobalKey(KeyElements.GlobalReference, KeyType.IRI, "www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360"));
+            new GlobalKey(KeyElements.GlobalReference, KeyType.IRI, "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/2/0"));
         [DataSpecificationContent(typeof(DataSpecificationIEC61360Content), "IEC61360")]
         public IDataSpecificationContent DataSpecificationContent { get; set; }
 

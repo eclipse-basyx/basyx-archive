@@ -9,10 +9,9 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.API.Components;
-using BaSyx.API.Http.Controllers;
 using BaSyx.Components.Common;
+using BaSyx.Utils.AssemblyHandling;
 using BaSyx.Utils.DependencyInjection;
-using BaSyx.Utils.Settings;
 using BaSyx.Utils.Settings.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -113,8 +112,8 @@ namespace BaSyx.AAS.Server.Http
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{controllerAssembly.GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                if (ResourceChecker.CheckResourceAvailability(controllerAssembly, ControllerAssemblyName, xmlFile, true))
-                    c.IncludeXmlComments(xmlPath);
+                if (EmbeddedResource.CheckOrWriteRessourceToFile(controllerAssembly, xmlPath))
+                    c.IncludeXmlComments(xmlPath, true);
             });
             services.AddSwaggerGenNewtonsoftSupport();
         }
