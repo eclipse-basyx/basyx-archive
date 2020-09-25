@@ -71,7 +71,7 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="404">Submodel not found</response>       
         [HttpGet("submodel/values", Name = "GetSubmodelValues")]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult GetMinimizedSubmodel()
+        public IActionResult GetSubmodelValues()
         {
             var result = serviceProvider.RetrieveSubmodel();
 
@@ -100,10 +100,10 @@ namespace BaSyx.API.Http.Controllers
         }
 
         /// <summary>
-        /// Retrieves all SubmodelElements from the current Submodel
+        /// Retrieves all Submodel-Elements from the Submodel
         /// </summary>
         /// <returns></returns>
-        /// <response code="200">Returns a list of found SubmodelElements</response>
+        /// <response code="200">Returns a list of found Submodel-Elements</response>
         /// <response code="404">Submodel not found</response>       
         [HttpGet("submodel/submodelElements", Name = "GetSubmodelElements")]
         [ProducesResponseType(typeof(SubmodelElement[]), 200)]
@@ -119,7 +119,7 @@ namespace BaSyx.API.Http.Controllers
         /// </summary>
         /// <param name="submodelElement">The Submodel-Element object</param>
         /// <returns></returns>
-        /// <response code="201">Submodel Element created successfully</response>
+        /// <response code="201">Submodel-Element created successfully</response>
         /// <response code="400">Bad Request</response>
         /// <response code="404">Submodel not found</response>
         [HttpPut("submodel/submodelElements", Name = "PutSubmodelElement")]

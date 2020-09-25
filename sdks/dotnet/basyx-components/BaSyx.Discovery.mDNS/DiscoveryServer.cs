@@ -109,13 +109,15 @@ namespace BaSyx.Discovery.mDNS
             var servers = e.Message.AdditionalRecords.OfType<SRVRecord>();
             var addresses = e.Message.AdditionalRecords.OfType<AddressRecord>();
             var txtRecords = e.Message.AdditionalRecords.OfType<TXTRecord>()?.SelectMany(s => s.Strings);
-            if (servers?.Count() > 0 && addresses.Count() > 0)
+
+            ServiceInstanceEventArgs args = new ServiceInstanceEventArgs();
+            if (txtRecords?.Count() > 0)
+                args.TxtRecords.AddRange(txtRecords);
+
+            if (servers?.Count() > 0 && addresses?.Count() > 0)
+            {
                 foreach (var server in servers)
                 {
-                    ServiceInstanceEventArgs args = new ServiceInstanceEventArgs();
-                    if (txtRecords?.Count() > 0)
-                        args.TxtRecords.AddRange(txtRecords);
-
                     logger.Info($"host '{server.Target}' for '{server.Name}' at port '{server.Port}'");
                     var serverAddresses = addresses.Where(w => w.Name == server.Target);
                     if (serverAddresses?.Count() > 0)
@@ -134,7 +136,8 @@ namespace BaSyx.Discovery.mDNS
                         return args;
                     }
                 }
-            return null;
+            }
+            return args;
         }
         
         public void Start()

@@ -59,7 +59,7 @@ namespace BaSyx.Utils.AssemblyHandling
                         stream.CopyTo(fileStream);
                     }
                 }
-                logger.Error($"Resource '{resourceFileName}' successfully created at {destinationFilename}");
+                logger.Info($"Resource '{resourceFileName}' successfully created at {destinationFilename}");
                 return true;
             }
             else

@@ -54,16 +54,14 @@ namespace BaSyx.API.Http.Controllers.PackageService
         }
 #endif
 
-        #region REST-Interface AASX-Package
 
         /// <summary>
-        /// Retrieves the full AASX Package
+        /// Retrieves the full AASX Package for a single Asset Administration Shell
         /// </summary>
         /// <returns>AASX Package as download</returns>
-        /// <response code="200">Success</response>
-        /// <response code="400">Bad Request</response>       
+        /// <response code="200">Success</response>     
         [HttpGet("aasx", Name = "GetAASXPackage")]
-        [ProducesResponseType(typeof(Result), 400)]
+        [ProducesResponseType(200)]
         public IActionResult GetAASXPackage()
         {
             IAssetAdministrationShell aas = shellServiceProvider.GetBinding();
@@ -101,12 +99,5 @@ namespace BaSyx.API.Http.Controllers.PackageService
             };
             return fileResult;           
         }
-
-        #endregion
-
-        #region Helper Methods
-
-
-        #endregion
     }
 }

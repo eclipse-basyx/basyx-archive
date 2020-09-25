@@ -45,14 +45,13 @@ namespace BaSyx.Discovery.mDNS
             discoveryServer.Start();
         }
 
-
-
         private static async void DiscoveryServer_ServiceInstanceDiscovered(object sender, ServiceInstanceEventArgs e)
         {
             try
             {
                 IAssetAdministrationShellDescriptor aasDescriptor = null;
                 if (e?.Servers?.Count > 0)
+                {
                     foreach (var server in e.Servers)
                     {
                         bool pingable = await BaSyx.Utils.Network.NetworkUtils.PingHostAsync(server.Address.ToString());
@@ -66,56 +65,32 @@ namespace BaSyx.Discovery.mDNS
                             else
                                 continue;
 
-                            Uri aasEndpoint = new Uri(uri);
-                            AssetAdministrationShellHttpClient client = new AssetAdministrationShellHttpClient(aasEndpoint);
-                            IResult<IAssetAdministrationShellDescriptor> retrieveDescriptor = client.RetrieveAssetAdministrationShellDescriptor();
-                            if (retrieveDescriptor.Success && retrieveDescriptor.Entity != null)
-                            {
-                                retrieveDescriptor.LogResult(logger, LogLevel.Info, "Successfully retrieved AAS descriptor");
-                                if (aasDescriptor == null)
-                                {
-                                    aasDescriptor = retrieveDescriptor.Entity;
-                                    aasDescriptor.SetEndpoints(new List<IEndpoint>() { new HttpEndpoint(uri) });
-
-                                    foreach (var submodelDescriptor in retrieveDescriptor.Entity.SubmodelDescriptors)
-                                    {
-                                        List<IEndpoint> submodelEndpoints = new List<IEndpoint>();
-                                        foreach (var submodelEndpoint in submodelDescriptor.Endpoints)
-                                        {
-                                            if (submodelEndpoint.Address.Contains(server.Address.ToString()))
-                                            {
-                                                submodelEndpoints.Add(submodelEndpoint);
-                                            }
-                                        }
-                                        aasDescriptor.SubmodelDescriptors[submodelDescriptor.IdShort].SetEndpoints(submodelEndpoints);
-                                    }
-                                }
-                                else
-                                {
-                                    aasDescriptor.AddEndpoints(new List<IEndpoint>() { new HttpEndpoint(uri) });
-
-                                    foreach (var submodelDescriptor in retrieveDescriptor.Entity.SubmodelDescriptors)
-                                    {
-                                        List<IEndpoint> submodelEndpoints = new List<IEndpoint>();
-                                        foreach (var submodelEndpoint in submodelDescriptor.Endpoints)
-                                        {
-                                            if (submodelEndpoint.Address.Contains(server.Address.ToString()))
-                                            {
-                                                if (aasDescriptor.SubmodelDescriptors[submodelDescriptor.IdShort].Endpoints.FirstOrDefault(f => f.Address == submodelEndpoint.Address) == null)
-                                                    submodelEndpoints.Add(submodelEndpoint);
-                                            }
-                                        }
-                                        aasDescriptor.SubmodelDescriptors[submodelDescriptor.IdShort].AddEndpoints(submodelEndpoints);
-                                    }
-                                }
-                            }
-                            else
-                                retrieveDescriptor.LogResult(logger, LogLevel.Info, "Could not retrieve AAS descriptor");
+                            AssemblyDescriptor(ref aasDescriptor, new Uri(uri));
                         }
                     }
+                }
                 else
-                    logger.Warn("Informations about the server are not available");
-
+                {
+                    logger.Warn("Informations about the server are not available. Trying endpoints from TXT-record...");
+                    if (e?.TxtRecords?.Count > 0)
+                    {
+                        foreach (var txtRecord in e.TxtRecords)
+                        {
+                            if (txtRecord.StartsWith(ASSETADMINISTRATIONSHELL_ENDPOINT))
+                            {
+                                string[] splittedEndpoint = txtRecord.Split(new char[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                                if (splittedEndpoint.Length == 2 && splittedEndpoint[0].ToLower().Contains("http"))
+                                {
+                                    AssemblyDescriptor(ref aasDescriptor, new Uri(splittedEndpoint[1]));
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        logger.Warn("Got no discovery information even from TXT-records. I'm afraid.");
+                    }
+                }
                 if (aasDescriptor != null)
                 {
                     var registeredResult = assetAdministrationShellRegistry.CreateOrUpdateAssetAdministrationShellRegistration(aasDescriptor.Identification.Id, aasDescriptor);
@@ -131,7 +106,55 @@ namespace BaSyx.Discovery.mDNS
             }
         }
 
-        public class EndpointComparer : IEqualityComparer<IEndpoint>
+        private static void AssemblyDescriptor(ref IAssetAdministrationShellDescriptor aasDescriptor, Uri aasEndpoint)
+        {
+            AssetAdministrationShellHttpClient client = new AssetAdministrationShellHttpClient(aasEndpoint);
+            IResult<IAssetAdministrationShellDescriptor> retrieveDescriptor = client.RetrieveAssetAdministrationShellDescriptor();
+            if (retrieveDescriptor.Success && retrieveDescriptor.Entity != null)
+            {
+                retrieveDescriptor.LogResult(logger, LogLevel.Info, "Successfully retrieved AAS descriptor");
+                if (aasDescriptor == null)
+                {
+                    aasDescriptor = retrieveDescriptor.Entity;
+                    aasDescriptor.SetEndpoints(new List<IEndpoint>() { new HttpEndpoint(aasEndpoint) });
+
+                    foreach (var submodelDescriptor in retrieveDescriptor.Entity.SubmodelDescriptors)
+                    {
+                        List<IEndpoint> submodelEndpoints = new List<IEndpoint>();
+                        foreach (var submodelEndpoint in submodelDescriptor.Endpoints)
+                        {
+                            if (submodelEndpoint.Address.Contains(aasEndpoint.Host))
+                            {
+                                submodelEndpoints.Add(submodelEndpoint);
+                            }
+                        }
+                        aasDescriptor.SubmodelDescriptors[submodelDescriptor.IdShort].SetEndpoints(submodelEndpoints);
+                    }
+                }
+                else
+                {
+                    aasDescriptor.AddEndpoints(new List<IEndpoint>() { new HttpEndpoint(aasEndpoint) });
+
+                    foreach (var submodelDescriptor in retrieveDescriptor.Entity.SubmodelDescriptors)
+                    {
+                        List<IEndpoint> submodelEndpoints = new List<IEndpoint>();
+                        foreach (var submodelEndpoint in submodelDescriptor.Endpoints)
+                        {
+                            if (submodelEndpoint.Address.Contains(aasEndpoint.Host))
+                            {
+                                if (aasDescriptor.SubmodelDescriptors[submodelDescriptor.IdShort].Endpoints.FirstOrDefault(f => f.Address == submodelEndpoint.Address) == null)
+                                    submodelEndpoints.Add(submodelEndpoint);
+                            }
+                        }
+                        aasDescriptor.SubmodelDescriptors[submodelDescriptor.IdShort].AddEndpoints(submodelEndpoints);
+                    }
+                }
+            }
+            else
+                retrieveDescriptor.LogResult(logger, LogLevel.Info, "Could not retrieve AAS descriptor");
+        }
+
+        private class EndpointComparer : IEqualityComparer<IEndpoint>
         {
             public bool Equals(IEndpoint x, IEndpoint y)
             {
