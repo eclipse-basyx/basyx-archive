@@ -8,9 +8,11 @@ import org.eclipse.basyx.examples.examplescenario.BaSyxExampleScenario;
 import org.eclipse.basyx.examples.mockup.application.ReceiveDeviceDashboardStatusApplication;
 import org.eclipse.basyx.examples.mockup.device.SmartBaSyxTCPDeviceMockup;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
+import org.eclipse.basyx.models.controlcomponent.ControlComponent;
 import org.eclipse.basyx.models.controlcomponent.ExecutionState;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnector;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.ClassRule;
@@ -87,7 +89,7 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 		
 		
 		// Change device operation mode
-		toControlComponent.setModelPropertyValue("status/opMode", "RegularMilling");
+		toControlComponent.setModelPropertyValue(VABPathTools.concatenatePaths(ControlComponent.STATUS, ControlComponent.OP_MODE), "RegularMilling");
 		// - Validate device control component operation mode
 		waitfor( () -> ((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).getControlComponent().getOperationMode().equals("RegularMilling") );
 

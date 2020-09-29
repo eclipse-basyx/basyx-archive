@@ -9,9 +9,11 @@ import org.eclipse.basyx.examples.mockup.application.ReceiveDeviceDashboardStatu
 import org.eclipse.basyx.examples.mockup.device.ControllableTCPDeviceMockup;
 import org.eclipse.basyx.examples.mockup.devicemanager.BaSyxTCPControlManufacturingDeviceManager;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
+import org.eclipse.basyx.models.controlcomponent.ControlComponent;
 import org.eclipse.basyx.models.controlcomponent.ExecutionState;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnector;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.ClassRule;
@@ -94,7 +96,7 @@ public class RunExampleSimpleControllableTCPDevice extends BaSyxExampleScenario 
 
 		
 		// Change device operation mode
-		toControlComponent.setModelPropertyValue("status/opMode", "RegularMilling");
+		toControlComponent.setModelPropertyValue(VABPathTools.concatenatePaths(ControlComponent.STATUS, ControlComponent.OP_MODE), "RegularMilling");
 		// - Validate device operation mode
 		waitfor(() -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).getOpMode().equals("RegularMilling"));
 
