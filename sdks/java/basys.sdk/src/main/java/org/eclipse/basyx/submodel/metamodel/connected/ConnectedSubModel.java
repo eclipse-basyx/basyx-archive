@@ -17,7 +17,6 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IPro
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementFactory;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
@@ -25,7 +24,6 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
