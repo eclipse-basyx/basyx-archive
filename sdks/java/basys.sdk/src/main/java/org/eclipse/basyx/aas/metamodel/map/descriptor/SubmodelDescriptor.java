@@ -4,8 +4,11 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasSemantics;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 
 
 
@@ -16,7 +19,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
  * @author kuhn
  *
  */
-public class SubmodelDescriptor extends ModelDescriptor {
+public class SubmodelDescriptor extends ModelDescriptor implements IHasSemantics {
 	
 	public static final String MODELTYPE = "SubmodelDescriptor";
 
@@ -53,5 +56,15 @@ public class SubmodelDescriptor extends ModelDescriptor {
 	protected String getModelType() {
 		return MODELTYPE;
 	}
+
+	@Override
+	public IReference getSemanticId() {
+		return HasSemantics.createAsFacade(this).getSemanticId();
+	}
+
+	public void setSemanticId(Reference ref) {
+		HasSemantics.createAsFacade(this).setSemanticID(ref);
+	}
+
 }
 
