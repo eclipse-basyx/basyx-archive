@@ -2,11 +2,11 @@ package org.eclipse.basyx.submodel.restapi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelMapConverter;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -86,7 +86,6 @@ public class SubModelProvider extends MetaModelProvider {
 		return path;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object getModelPropertyValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
@@ -94,13 +93,12 @@ public class SubModelProvider extends MetaModelProvider {
 		if (path.isEmpty()) {
 			ISubModel sm = submodelAPI.getSubmodel();
 
-			// TODO: This is a hack, remove it at a later point in time
 			// Change internal map representation to set
-			if (sm instanceof Map<?, ?>) {
-				Map<String, Object> map = (Map<String, Object>) sm;
-				setMapToSet(map, SubModel.SUBMODELELEMENT);
+			if (sm instanceof SubModel) {
+				return SubmodelMapConverter.smToMap((SubModel) sm);
+			} else {
+				return sm;
 			}
-			return sm;
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
 			String qualifier = splitted[0];
@@ -132,18 +130,6 @@ public class SubModelProvider extends MetaModelProvider {
 			}
 		}
 		throw new MalformedRequestException("Unknown path " + path + " was requested");
-	}
-
-	/**
-	 * Converts a map entry to a set, if it is also a map
-	 */
-	@SuppressWarnings("unchecked")
-	private void setMapToSet(Map<String, Object> map, String key) {
-		Object mapEntry = map.get(key);
-		if (mapEntry instanceof Map<?, ?>) {
-			Map<String, Object> elements = (Map<String, Object>) mapEntry;
-			map.put(key, new HashSet<Object>(elements.values()));
-		}
 	}
 
 	private List<String> getIdShorts(String[] splitted) {
