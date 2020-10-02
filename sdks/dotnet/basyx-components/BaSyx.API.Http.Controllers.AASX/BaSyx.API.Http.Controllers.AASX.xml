@@ -9,7 +9,7 @@
             The AASX Package Service
             </summary>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.PackageService.PackageService.#ctor(BaSyx.API.Components.IAssetAdministrationShellServiceProvider,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+        <member name="M:BaSyx.API.Http.Controllers.PackageService.PackageService.#ctor(BaSyx.API.Components.IAssetAdministrationShellServiceProvider,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
             <summary>
             Constructor for the AASX-Package Services Controller
             </summary>
@@ -18,11 +18,17 @@
         </member>
         <member name="M:BaSyx.API.Http.Controllers.PackageService.PackageService.GetAASXPackage">
             <summary>
-            Retrieves the full AASX Package
+            Retrieves the full AASX package for a single Asset Administration Shell
             </summary>
             <returns>AASX Package as download</returns>
-            <response code="200">Success</response>
-            <response code="400">Bad Request</response>       
+            <response code="200">Success</response>     
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.PackageService.PackageService.GetThumbnail">
+            <summary>
+            Returns the thumbnail of the AASX package
+            </summary>
+            <returns>AASX Package as download</returns>
+            <response code="200">Success</response>     
         </member>
     </members>
 </doc>

@@ -23,7 +23,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
     [DataContract]
     public class Asset : Identifiable, IAsset
     {
-        public AssetKind Kind { get; set; } = AssetKind.Instance;
+        public AssetKind Kind { get; set; }
         public IReference<ISubmodel> AssetIdentificationModel { get; set; }
         public IReference<ISubmodel> BillOfMaterial { get; set; }
         public IReference SemanticId { get; set; }
@@ -34,6 +34,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
         [JsonConstructor]
         public Asset(string idShort, Identifier identification) : base(idShort, identification)
         {
+            Kind = AssetKind.Instance;
             EmbeddedDataSpecifications = new List<IEmbeddedDataSpecification>();
         }
     }

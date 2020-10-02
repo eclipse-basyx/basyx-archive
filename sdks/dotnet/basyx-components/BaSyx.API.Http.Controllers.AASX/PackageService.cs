@@ -16,6 +16,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
+using System.Linq;
+using BaSyx.Utils.FileHandling;
+using System;
 
 namespace BaSyx.API.Http.Controllers.PackageService
 {
@@ -56,7 +59,7 @@ namespace BaSyx.API.Http.Controllers.PackageService
 
 
         /// <summary>
-        /// Retrieves the full AASX Package for a single Asset Administration Shell
+        /// Retrieves the full AASX package for a single Asset Administration Shell
         /// </summary>
         /// <returns>AASX Package as download</returns>
         /// <response code="200">Success</response>     
@@ -74,22 +77,8 @@ namespace BaSyx.API.Http.Controllers.PackageService
                 AssetAdministrationShellEnvironment_V2_0 env = new AssetAdministrationShellEnvironment_V2_0(aas);
                 aasx.AddEnvironment(aas.Identification, env, ExportType.Xml);
 
-                foreach (var item in fileProvider.GetDirectoryContents("aasx"))
-                {
-                    if (item.IsDirectory)
-                    {
-                        foreach (var subItem in fileProvider.GetDirectoryContents("aasx/" + item.Name))
-                        {
-                            if (subItem.Exists)
-                                aasx.AddFileToAASX("/aasx/" + item.Name + "/" + subItem.Name, subItem.PhysicalPath);
-                        }
-                    }
-                    else
-                    {
-                        if (item.Exists)
-                            aasx.AddFileToAASX("/aasx/" + item.Name, item.PhysicalPath);
-                    }
-                }
+                AddFilesToAASX(fileProvider, "aasx", aasx);
+                AddThumbnailToAASX(fileProvider, aasx);
 
             }
             var fileInfo = fileProvider.GetFileInfo(aasxFileName);
@@ -97,7 +86,76 @@ namespace BaSyx.API.Http.Controllers.PackageService
             {
                 FileDownloadName = aasxFileName
             };
-            return fileResult;           
+            return fileResult;
+        }
+
+        private void AddThumbnailToAASX(IFileProvider fileProvider, AASX aasx)
+        {
+            foreach (var item in fileProvider.GetDirectoryContents(""))
+            {
+                if (item.IsDirectory)
+                    continue;
+
+                string fileName = item.Name.ToLower();
+                if (fileName.Contains(".jpg") ||
+                    fileName.Contains(".jpeg") ||
+                    fileName.Contains(".png") ||
+                    fileName.Contains(".bmp") ||
+                    fileName.Contains(".gif"))
+                {
+                    aasx.AddThumbnail(item.PhysicalPath);
+                }
+            }
+        }
+
+        private void AddFilesToAASX(IFileProvider fileProvider, string path, AASX aasx)
+        {
+            foreach (var item in fileProvider.GetDirectoryContents(path))
+            {
+                if (item.IsDirectory)
+                {
+                    AddFilesToAASX(fileProvider, path + "/" + item.Name, aasx);
+                }
+                else
+                {
+                    if (item.Exists)
+                        aasx.AddFileToAASX("/" + path + "/" + item.Name, item.PhysicalPath);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns the thumbnail of the AASX package
+        /// </summary>
+        /// <returns>AASX Package as download</returns>
+        /// <response code="200">Success</response>     
+        [HttpGet("aasx/thumbnail", Name = "GetThumbnail")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public IActionResult GetThumbnail()
+        {
+            IFileProvider fileProvider = hostingEnvironment.ContentRootFileProvider;
+            var files = fileProvider.GetDirectoryContents("");
+            if (files?.Count() > 0)
+            {
+                foreach (var file in files)
+                {
+                    if (file.IsDirectory)
+                        continue;
+
+                    string fileName = file.Name.ToLower();
+                    if (fileName.Contains(".jpg") ||
+                        fileName.Contains(".jpeg") ||
+                        fileName.Contains(".png") ||
+                        fileName.Contains(".bmp") ||
+                        fileName.Contains(".gif"))
+                    {
+                        if (MimeTypes.TryGetContentType(file.PhysicalPath, out string contentType))
+                            return File(file.CreateReadStream(), contentType);
+                    }
+                }
+            }
+            return NotFound();
         }
     }
 }

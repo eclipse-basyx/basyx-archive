@@ -72,7 +72,7 @@ namespace BaSyx.AASX.Server.Http
 
         private static void LoadMultiAssetAdministrationShellServer(List<IAssetAdministrationShell> assetAdministrationShells, List<PackagePart> supplementaryFiles, string[] args)
         {
-            MultiAssetAdministrationShellHttpServer multiServer = new MultiAssetAdministrationShellHttpServer();
+            AssetAdministrationShellRepositoryHttpServer multiServer = new AssetAdministrationShellRepositoryHttpServer();
             AssetAdministrationShellRepositoryServiceProvider repositoryService = new AssetAdministrationShellRepositoryServiceProvider();
 
             foreach (var shell in assetAdministrationShells)

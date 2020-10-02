@@ -12,27 +12,24 @@ using BaSyx.Utils.Settings.Types;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using System;
 
 namespace BaSyx.Components.Common
 {
     public static class DefaultWebHostBuilder
     {
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args, ServerSettings settings, Type startupType)
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args, ServerSettings settings)
         {
-            var webHost = WebHost.CreateDefaultBuilder(args)
-                .UseStartup(startupType)                        
-                .UseContentRoot(AppContext.BaseDirectory);
-
+            IWebHostBuilder webHostBuilder = WebHost.CreateDefaultBuilder(args);            
+                   
             if (settings?.ServerConfig.Hosting?.Environment != null)
-                webHost.UseEnvironment(settings.ServerConfig.Hosting.Environment);
+                webHostBuilder.UseEnvironment(settings.ServerConfig.Hosting.Environment);
             else
-                webHost.UseEnvironment(Environments.Production);
+                webHostBuilder.UseEnvironment(Environments.Production);
 
             if (settings?.ServerConfig?.Hosting?.Urls?.Count > 0)
-                webHost.UseUrls(settings.ServerConfig.Hosting.Urls.ToArray());
+                webHostBuilder.UseUrls(settings.ServerConfig.Hosting.Urls.ToArray());
 
-            return webHost;
+            return webHostBuilder;
         }
     }
 }

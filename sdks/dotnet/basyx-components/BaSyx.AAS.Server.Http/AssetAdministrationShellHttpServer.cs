@@ -11,15 +11,27 @@
 using BaSyx.API.Components;
 using BaSyx.Components.Common;
 using BaSyx.Utils.Settings.Types;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace BaSyx.AAS.Server.Http
 {
     public class AssetAdministrationShellHttpServer : ServerApplication
     {
-        public AssetAdministrationShellHttpServer(ServerSettings serverSettings = null, string[] webHostBuilderArgs = null)
-            : base(typeof(SingleStartup), serverSettings ?? ServerSettings.LoadSettings(), webHostBuilderArgs)
+        public AssetAdministrationShellHttpServer() : this(null, null)
         { }
+
+        public AssetAdministrationShellHttpServer(ServerSettings serverSettings) : this(serverSettings, null)
+        { }
+
+        public AssetAdministrationShellHttpServer(ServerSettings serverSettings, string[] webHostBuilderArgs)
+            : base(serverSettings , webHostBuilderArgs)
+        {
+            Assembly entryAssembly = Assembly.GetEntryAssembly();
+            WebHostBuilder.UseSetting(WebHostDefaults.ApplicationKey, entryAssembly.FullName);
+        }
+
         public void SetServiceProvider(IAssetAdministrationShellServiceProvider aasServiceProvider)
         {
             WebHostBuilder.ConfigureServices(services =>

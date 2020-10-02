@@ -10,6 +10,8 @@
 *******************************************************************************/
 using BaSyx.AAS.Server.Http;
 using BaSyx.API.Components;
+using BaSyx.Common.UI;
+using BaSyx.Common.UI.Swagger;
 using BaSyx.Utils.Settings.Types;
 using NLog;
 
@@ -38,6 +40,12 @@ namespace HelloAssetAdministrationShell
 
             //Assign Asset Administration Shell Service to the generic HTTP-REST interface
             aasServer.SetServiceProvider(shellService);
+
+            //Add Swagger documentation and UI
+            aasServer.AddSwagger(Interface.AssetAdministrationShell);
+
+            //Asdd BaSyx Web UI
+            aasServer.AddBaSyxUI(PageNames.AssetAdministrationShellServer);
 
             //Run HTTP-REST interface
             aasServer.Run();           

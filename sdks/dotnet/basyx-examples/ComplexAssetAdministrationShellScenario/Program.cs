@@ -11,6 +11,8 @@
 using BaSyx.AAS.Server.Http;
 using BaSyx.API.AssetAdministrationShell.Extensions;
 using BaSyx.API.Components;
+using BaSyx.Common.UI;
+using BaSyx.Common.UI.Swagger;
 using BaSyx.Models.Connectivity;
 using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.AssetAdministrationShell;
@@ -58,8 +60,9 @@ namespace ComplexAssetAdministrationShellScenario
             ServerSettings submodelRepositorySettings = ServerSettings.CreateSettings();
             submodelRepositorySettings.ServerConfig.Hosting.ContentPath = "Content";
             submodelRepositorySettings.ServerConfig.Hosting.Urls.Add("http://+:6999");
+            submodelRepositorySettings.ServerConfig.Hosting.Urls.Add("https://+:6499");
 
-            MultiSubmodelHttpServer multiServer = new MultiSubmodelHttpServer(submodelRepositorySettings);
+            SubmodelRepositoryHttpServer multiServer = new SubmodelRepositoryHttpServer(submodelRepositorySettings);
             SubmodelRepositoryServiceProvider repositoryService = new SubmodelRepositoryServiceProvider();
 
             for (int i = 0; i < 3; i++)
@@ -105,7 +108,10 @@ namespace ComplexAssetAdministrationShellScenario
                 }
             };
 
-            multiServer.RunAsync();
+            multiServer.AddBaSyxUI(PageNames.SubmodelRepositoryServer);
+            multiServer.AddSwagger(Interface.SubmodelRepository);
+
+            _ = multiServer.RunAsync();
 
             var shells = registryClient.RetrieveAllAssetAdministrationShellRegistrations(p => p.Identification.Id.Contains("SimpleAAS"));
             var shell = shells.Entity?.FirstOrDefault();
@@ -125,8 +131,9 @@ namespace ComplexAssetAdministrationShellScenario
             ServerSettings aasRepositorySettings = ServerSettings.CreateSettings();
             aasRepositorySettings.ServerConfig.Hosting.ContentPath = "Content";
             aasRepositorySettings.ServerConfig.Hosting.Urls.Add("http://+:5999");
+            aasRepositorySettings.ServerConfig.Hosting.Urls.Add("https://+:5499");
 
-            MultiAssetAdministrationShellHttpServer multiServer = new MultiAssetAdministrationShellHttpServer(aasRepositorySettings);
+            AssetAdministrationShellRepositoryHttpServer multiServer = new AssetAdministrationShellRepositoryHttpServer(aasRepositorySettings);
             AssetAdministrationShellRepositoryServiceProvider repositoryService = new AssetAdministrationShellRepositoryServiceProvider();
 
             for (int i = 0; i < 3; i++)
@@ -185,7 +192,10 @@ namespace ComplexAssetAdministrationShellScenario
                 }
             };
 
-            multiServer.RunAsync();
+            multiServer.AddBaSyxUI(PageNames.AssetAdministrationShellRepositoryServer);
+            multiServer.AddSwagger(Interface.AssetAdministrationShellRepository);
+
+            _ = multiServer.RunAsync();
 
             foreach (var aasDescriptor in repositoryService.ServiceDescriptor.AssetAdministrationShellDescriptors)
             {
@@ -202,16 +212,20 @@ namespace ComplexAssetAdministrationShellScenario
             ServerSettings submodelServerSettings = ServerSettings.CreateSettings();
             submodelServerSettings.ServerConfig.Hosting.ContentPath = "Content";
             submodelServerSettings.ServerConfig.Hosting.Urls.Add("http://localhost:5222");
+            submodelServerSettings.ServerConfig.Hosting.Urls.Add("https://localhost:5422");
 
             SubmodelHttpServer submodelServer = new SubmodelHttpServer(submodelServerSettings);
             ISubmodelServiceProvider submodelServiceProvider = testSubmodel.CreateServiceProvider();
             submodelServer.SetServiceProvider(submodelServiceProvider);
             submodelServiceProvider.UseAutoEndpointRegistration(submodelServerSettings.ServerConfig);
-            submodelServer.RunAsync();
+            submodelServer.AddBaSyxUI(PageNames.SubmodelServer);
+            submodelServer.AddSwagger(Interface.Submodel);
+            _ = submodelServer.RunAsync();
 
             ServerSettings aasServerSettings = ServerSettings.CreateSettings();
             aasServerSettings.ServerConfig.Hosting.ContentPath = "Content";
             aasServerSettings.ServerConfig.Hosting.Urls.Add("http://localhost:5111");
+            aasServerSettings.ServerConfig.Hosting.Urls.Add("https://localhost:5411");
 
             IAssetAdministrationShellServiceProvider aasServiceProvider = aas.CreateServiceProvider(true);
             aasServiceProvider.SubmodelRegistry.RegisterSubmodelServiceProvider(testSubmodel.IdShort, submodelServiceProvider);
@@ -220,7 +234,9 @@ namespace ComplexAssetAdministrationShellScenario
             AssetAdministrationShellHttpServer aasServer = new AssetAdministrationShellHttpServer(aasServerSettings);
             aasServer.SetServiceProvider(aasServiceProvider);
             aasServer.ApplicationStopping = () => { registryClient.DeleteAssetAdministrationShellRegistration(aas.Identification.Id); };
-            aasServer.RunAsync();
+            aasServer.AddBaSyxUI(PageNames.AssetAdministrationShellServer);
+            aasServer.AddSwagger(Interface.AssetAdministrationShell);
+            _ = aasServer.RunAsync();
 
             registryClient.CreateOrUpdateAssetAdministrationShellRegistration(aas.Identification.Id, new AssetAdministrationShellDescriptor(aas, aasServiceProvider.ServiceDescriptor.Endpoints));
             registryClient.CreateOrUpdateSubmodelRegistration(aas.Identification.Id, testSubmodel.Identification.Id, new SubmodelDescriptor(testSubmodel, submodelServiceProvider.ServiceDescriptor.Endpoints));
@@ -233,14 +249,19 @@ namespace ComplexAssetAdministrationShellScenario
             {
                 Urls = new List<string>()
                 {
-                    "http://localhost:4999"
-                }
+                    "http://localhost:4999",
+                    "https://localhost:4499"
+                },
+                Environment = "Development",
+                ContentPath = "Content"
             };
 
             RegistryHttpServer registryServer = new RegistryHttpServer(registrySettings);
             FileBasedRegistry fileBasedRegistry = new FileBasedRegistry();
             registryServer.SetRegistryProvider(fileBasedRegistry);
-            registryServer.RunAsync();
+            registryServer.AddBaSyxUI(PageNames.RegistryServer);
+            registryServer.AddSwagger(Interface.AssetAdministrationShellRegistry);
+            _ = registryServer.RunAsync();
         }
     }
 }

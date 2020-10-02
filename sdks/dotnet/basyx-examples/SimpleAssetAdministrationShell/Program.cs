@@ -11,12 +11,13 @@
 using BaSyx.AAS.Server.Http;
 using BaSyx.API.AssetAdministrationShell.Extensions;
 using BaSyx.API.Components;
+using BaSyx.Common.UI;
+using BaSyx.Common.UI.Swagger;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Submodel.Server.Http;
 using BaSyx.Utils.Settings.Types;
 using System;
-using System.Threading.Tasks;
 
 namespace SimpleAssetAdministrationShell
 {
@@ -31,17 +32,23 @@ namespace SimpleAssetAdministrationShell
 
             ServerSettings submodelServerSettings = ServerSettings.CreateSettings();
             submodelServerSettings.ServerConfig.Hosting.ContentPath = "Content";
-            submodelServerSettings.ServerConfig.Hosting.Urls.Add("http://localhost:5222");
+            submodelServerSettings.ServerConfig.Hosting.Environment = "Development";
+            submodelServerSettings.ServerConfig.Hosting.Urls.Add("http://localhost:5040");
+            submodelServerSettings.ServerConfig.Hosting.Urls.Add("https://localhost:5440");
 
             SubmodelHttpServer submodelServer = new SubmodelHttpServer(submodelServerSettings);
             ISubmodelServiceProvider submodelServiceProvider = testSubmodel.CreateServiceProvider();
             submodelServer.SetServiceProvider(submodelServiceProvider);
             submodelServiceProvider.UseAutoEndpointRegistration(submodelServerSettings.ServerConfig);
-            submodelServer.RunAsync();
+            submodelServer.AddBaSyxUI(PageNames.SubmodelServer);
+            submodelServer.AddSwagger(Interface.Submodel);
+            _ = submodelServer.RunAsync();
 
             ServerSettings aasServerSettings = ServerSettings.CreateSettings();
             aasServerSettings.ServerConfig.Hosting.ContentPath = "Content";
-            aasServerSettings.ServerConfig.Hosting.Urls.Add("http://localhost:5111");
+            aasServerSettings.ServerConfig.Hosting.Environment = "Development";
+            aasServerSettings.ServerConfig.Hosting.Urls.Add("http://localhost:5080");
+            aasServerSettings.ServerConfig.Hosting.Urls.Add("https://localhost:5443");
 
             IAssetAdministrationShellServiceProvider serviceProvider = aas.CreateServiceProvider(true);
             serviceProvider.SubmodelRegistry.RegisterSubmodelServiceProvider(testSubmodel.IdShort, submodelServiceProvider);
@@ -49,6 +56,8 @@ namespace SimpleAssetAdministrationShell
 
             AssetAdministrationShellHttpServer aasServer = new AssetAdministrationShellHttpServer(aasServerSettings);
             aasServer.SetServiceProvider(serviceProvider);
+            aasServer.AddBaSyxUI(PageNames.AssetAdministrationShellServer);
+            aasServer.AddSwagger(Interface.AssetAdministrationShell);
             aasServer.Run();
         }     
     }

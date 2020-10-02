@@ -11,13 +11,13 @@
 using BaSyx.AAS.Server.Http;
 using BaSyx.API.AssetAdministrationShell.Extensions;
 using BaSyx.API.Components;
+using BaSyx.Common.UI;
+using BaSyx.Common.UI.Swagger;
 using BaSyx.Models.Connectivity;
 using BaSyx.Models.Core.AssetAdministrationShell;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Core.AssetAdministrationShell.References;
-using BaSyx.Models.Core.Common;
 using BaSyx.Utils.Settings.Types;
 using System;
 using System.Collections.Generic;
@@ -30,9 +30,10 @@ namespace MultiAssetAdministrationShell
         {
             ServerSettings aasRepositorySettings = ServerSettings.CreateSettings();
             aasRepositorySettings.ServerConfig.Hosting.ContentPath = "Content";
-            aasRepositorySettings.ServerConfig.Hosting.Urls.Add("http://+:5999");
+            aasRepositorySettings.ServerConfig.Hosting.Urls.Add("http://+:5080");
+            aasRepositorySettings.ServerConfig.Hosting.Urls.Add("https://+:5443");
 
-            MultiAssetAdministrationShellHttpServer server = new MultiAssetAdministrationShellHttpServer(aasRepositorySettings);
+            AssetAdministrationShellRepositoryHttpServer server = new AssetAdministrationShellRepositoryHttpServer(aasRepositorySettings);
             AssetAdministrationShellRepositoryServiceProvider repositoryService = new AssetAdministrationShellRepositoryServiceProvider();
 
             for (int i = 0; i < 10; i++)
@@ -79,6 +80,11 @@ namespace MultiAssetAdministrationShell
             repositoryService.UseDefaultEndpointRegistration(endpoints);
 
             server.SetServiceProvider(repositoryService);
+
+            server.AddBaSyxUI(PageNames.AssetAdministrationShellRepositoryServer);
+
+            server.AddSwagger(Interface.AssetAdministrationShellRepository);
+
             server.Run();
         }
     }

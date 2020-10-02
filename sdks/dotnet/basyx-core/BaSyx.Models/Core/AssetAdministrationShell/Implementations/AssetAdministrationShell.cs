@@ -14,7 +14,6 @@ using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Xml.Serialization;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Core.AssetAdministrationShell.Views;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;

@@ -1,0 +1,36 @@
+﻿@page
+@model BaSyx.Common.UI.Pages.MultipleSubmodelsModel
+@using BaSyx.API.Components;
+@using BaSyx.Utils.Settings.Types;
+@using Microsoft.AspNetCore.Hosting;
+
+
+@{
+    ISubmodelRepositoryServiceProvider sp = Model.ServiceProvider;
+    IWebHostEnvironment hostingEnvironment = Model.HostingEnvironment;
+    ServerSettings settings = Model.Settings;
+    string pathToCompanyLogo = settings.Miscellaneous.TryGetValue("CompanyLogo", out string path) ? path : string.Empty;
+
+    ViewData["Title"] = "Submodel Repository";
+    ViewData["ApiRoot"] = "/submodels";
+    ViewData["CompanyLogo"] = pathToCompanyLogo;
+    ViewData["ApiType"] = "SubmodelRepository";
+    ViewData["aasId"] = string.Empty;
+}
+
+
+<div class="starter-template">
+    <h1>Submodel Repository UI</h1>
+    <p class="lead">Generic UI to discover the Submodel Repository</p>
+</div>
+
+@if (sp.Submodels?.Count() > 0)
+{
+    foreach (var submodel in sp.Submodels)
+    {
+        @await Html.PartialAsync("_Submodel", submodel)
+    }
+}
+
+
+

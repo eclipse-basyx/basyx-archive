@@ -9,9 +9,13 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Utils.AssemblyHandling;
+using BaSyx.Utils.DependencyInjection;
 using BaSyx.Utils.Settings.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
@@ -19,11 +23,15 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Web;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using static BaSyx.Utils.Settings.Types.ServerSettings;
 
 namespace BaSyx.Components.Common
@@ -34,12 +42,20 @@ namespace BaSyx.Components.Common
 
         private string _contentRoot;
         private string _webRoot;
+        private bool _secure = false;
+
+        private List<Action<IApplicationBuilder>> AppBuilderPipeline;
+        private List<Action<IServiceCollection>> ServiceBuilderPipeline;
 
         public const string DEFAULT_CONTENT_ROOT = "Content";
         public const string DEFAULT_WEB_ROOT = "wwwroot";
+        public const string UI_RELATIVE_PATH = "/ui";
+        public const string CONTROLLER_ASSEMBLY_NAME = "BaSyx.API.Http.Controllers";
 
+        public Assembly ControllerAssembly { get; private set; }
         public ServerSettings Settings { get; protected set; }
         public IWebHostBuilder WebHostBuilder { get; protected set; }
+               
         public string ExecutionPath { get; }
 
         public Action ApplicationStarted { get; set; }
@@ -48,23 +64,41 @@ namespace BaSyx.Components.Common
 
         public Action ApplicationStopped { get; set; }
 
-        protected ServerApplication(Type startupType) : this(startupType, ServerSettings.LoadSettings(), null)
+        protected ServerApplication() : this(null, null)
         { }
 
-        protected ServerApplication(Type startupType, ServerSettings settings) : this(startupType, settings, null)
+        protected ServerApplication(ServerSettings settings) : this(settings, null)
         { }
 
-        protected ServerApplication(Type startupType, ServerSettings settings, string[] webHostBuilderArgs)
+        protected ServerApplication(ServerSettings settings, string[] webHostBuilderArgs)
         {
             ExecutionPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            ControllerAssembly = Assembly.Load(CONTROLLER_ASSEMBLY_NAME);
 
-            if (!EmbeddedResource.CheckOrWriteRessourceToFile(this.GetType().Assembly, Path.Combine(ExecutionPath, "NLog.config")))
+            if (!EmbeddedResource.CheckOrWriteRessourceToFile(typeof(ServerApplication).Assembly, Path.Combine(ExecutionPath, "NLog.config")))
                 logger.Error("NLog.config cannot be loaded or written");
 
-            if (settings == null && !EmbeddedResource.CheckOrWriteRessourceToFile(this.GetType().Assembly, Path.Combine(ExecutionPath, "ServerSettings.xml")))
+            if (settings == null && !EmbeddedResource.CheckOrWriteRessourceToFile(typeof(ServerApplication).Assembly, Path.Combine(ExecutionPath, "ServerSettings.xml")))
                 logger.Error("ServerSettings.xml cannot be loaded or written");
 
             Settings = settings ?? ServerSettings.LoadSettingsFromFile("ServerSettings.xml") ?? throw new ArgumentNullException(nameof(settings));
+
+            WebHostBuilder = DefaultWebHostBuilder.CreateWebHostBuilder(webHostBuilderArgs, Settings);
+            AppBuilderPipeline = new List<Action<IApplicationBuilder>>();
+            ServiceBuilderPipeline = new List<Action<IServiceCollection>>();
+
+            WebHostBuilder.ConfigureServices(services =>
+            {
+                ConfigureServices(services);
+            });
+
+            WebHostBuilder.Configure(app =>
+            {
+                Configure(app);
+            });
+
+            WebHostBuilder.UseNLog();
+            ConfigureLogging(logger.GetLogLevel());
 
             if (string.IsNullOrEmpty(Settings.ServerConfig.Hosting.ContentPath))
                 _contentRoot = Path.Join(ExecutionPath, DEFAULT_CONTENT_ROOT);
@@ -72,14 +106,6 @@ namespace BaSyx.Components.Common
                 _contentRoot = Settings.ServerConfig.Hosting.ContentPath;
             else
                 _contentRoot = Path.Join(ExecutionPath, Settings.ServerConfig.Hosting.ContentPath);
-
-            _webRoot = Path.Join(ExecutionPath, DEFAULT_WEB_ROOT);
-
-            if (webHostBuilderArgs?.Length > 0)
-                for (int i = 0; i < webHostBuilderArgs.Length; i++)
-                    logger.Info($"webHostBuilderArg[{i}]: {webHostBuilderArgs[i]}");
-
-            WebHostBuilder = DefaultWebHostBuilder.CreateWebHostBuilder(webHostBuilderArgs, Settings, startupType);
 
             try
             {
@@ -92,38 +118,31 @@ namespace BaSyx.Components.Common
                 logger.Error(e, $"ContentRoot path {_contentRoot} cannot be created ");
             }
 
+            _webRoot = Path.Join(ExecutionPath, DEFAULT_WEB_ROOT);
 
             try
             {
                 if (!Directory.Exists(_webRoot))
                     Directory.CreateDirectory(_webRoot);
                 WebHostBuilder.UseWebRoot(_webRoot);
+                logger.Info($"wwwroot-Path: {_webRoot}");
             }
             catch (Exception e)
             {
                 logger.Error(e, $"WebRoot path {_webRoot} cannot be created ");
-            }
-
-
-            WebHostBuilder.ConfigureServices(services =>
-            {
-                services.AddSingleton(typeof(ServerSettings), Settings);
-                services.AddSingleton<IServerApplicationLifetime>(this);
-            })
-            .UseNLog();
-            ConfigureLogging(logger.GetLogLevel());
+            }            
         }
 
         public virtual void Run()
         {
-            logger.Debug("Starting Server...");
+            logger.Info("Starting Server...");
 
             WebHostBuilder.Build().Run();
         }
 
         public virtual async Task RunAsync(CancellationToken cancellationToken = default)
         {
-            logger.Debug("Starting Server Async...");
+            logger.Info("Starting Server asynchronously...");
 
             await WebHostBuilder.Build().RunAsync(cancellationToken);
         }
@@ -137,8 +156,8 @@ namespace BaSyx.Components.Common
             });
         }
 
-        public virtual void ConfigureApplication(Action<IApplicationBuilder> appConfiguration) => WebHostBuilder.Configure(appConfiguration);
-        public virtual void ConfigureServices(Action<IServiceCollection> configureServices) => WebHostBuilder.ConfigureServices(configureServices);
+        public virtual void Configure(Action<IApplicationBuilder> app) => AppBuilderPipeline.Add(app);
+        public virtual void ConfigureServices(Action<IServiceCollection> services) => ServiceBuilderPipeline.Add(services);
         public virtual void UseContentRoot(string contentRoot)
         {
             _contentRoot = contentRoot;
@@ -255,6 +274,140 @@ namespace BaSyx.Components.Common
                     mvcBuilder.AddControllersAsServices();
                 }
             });
+        }
+
+        protected virtual void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton(typeof(ServerSettings), Settings);
+            services.AddSingleton<IServerApplicationLifetime>(this);
+
+            var urls = Settings.ServerConfig.Hosting.Urls;
+            var secureUrl = urls.Find(s => s.StartsWith("https"));
+            if (!string.IsNullOrEmpty(secureUrl))
+            {
+                secureUrl = secureUrl.Replace("+", "0.0.0.0");
+                Uri secureUri = new Uri(secureUrl);
+                _secure = true;
+                services.AddHttpsRedirection(opts =>
+                {
+                    opts.HttpsPort = secureUri.Port;   
+                });
+            }
+
+            services.AddStandardImplementation();
+
+            services.AddCors();
+            services.AddMvc()
+                .AddApplicationPart(ControllerAssembly)
+                .AddControllersAsServices()
+                .AddNewtonsoftJson(options => options.GetDefaultMvcJsonOptions(services));
+
+            services.AddRazorPages(opts =>
+            {
+                logger.Info("Pages-RootDirectory: " + opts.RootDirectory);
+            });
+
+            services.AddDirectoryBrowser();
+
+            foreach (var serviceBuider in ServiceBuilderPipeline)
+            {
+                serviceBuider.Invoke(services);
+            }
+        }
+
+        protected virtual void Configure(IApplicationBuilder app)
+        {
+            var env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
+            var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
+
+            if (env.IsDevelopment() || Debugger.IsAttached)
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
+
+            if(_secure)
+                app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+
+            string path = env.ContentRootPath;
+            if (Directory.Exists(path))
+            {
+                app.UseStaticFiles(new StaticFileOptions()
+                {
+                    FileProvider = new PhysicalFileProvider(@path),
+                    RequestPath = new PathString("")
+                });
+
+                app.UseDirectoryBrowser(new DirectoryBrowserOptions
+                {
+                    FileProvider = new PhysicalFileProvider(@path),
+                    RequestPath = new PathString("/browse")
+                });
+            }
+
+            app.Use((context, next) =>
+            {
+                string requestPath = context.Request.Path.ToUriComponent();
+                
+                if (requestPath.Contains("submodelElements/"))
+                {
+                    Match valueMatch = Regex.Match(requestPath, "(?<=submodelElements/)(.*)(?=/value|/invoke|/invocationList)");
+                    if(valueMatch.Success)
+                    {
+                        string elementPath = HttpUtility.UrlEncode(valueMatch.Value);
+                        requestPath = requestPath.Replace(valueMatch.Value, elementPath);
+                        context.Request.Path = new PathString(requestPath);
+                    }
+                    else
+                    {
+                        Match baseMatch = Regex.Match(requestPath, "(?<=submodelElements/)(.*)");
+                        if(baseMatch.Success)
+                        {
+                            string elementPath = HttpUtility.UrlEncode(baseMatch.Value);
+                            requestPath = requestPath.Replace(baseMatch.Value, elementPath);
+                            context.Request.Path = new PathString(requestPath);
+                        }
+                    }
+                }
+                return next();
+            });
+
+            app.UseRouting();
+
+            app.UseCors(
+                options => options
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowAnyOrigin()
+            );
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+                endpoints.MapControllers();
+            });
+
+            var options = new RewriteOptions().AddRedirect("^$", UI_RELATIVE_PATH);
+            app.UseRewriter(options);
+
+            if (ApplicationStarted != null)
+                applicationLifetime.ApplicationStarted.Register(ApplicationStarted);
+            if (ApplicationStopping != null)
+                applicationLifetime.ApplicationStopping.Register(ApplicationStopping);
+            if (ApplicationStopped != null)
+                applicationLifetime.ApplicationStopped.Register(ApplicationStopped);
+
+            foreach (var appBuilder in AppBuilderPipeline)
+            {
+                appBuilder.Invoke(app);
+            }
         }
     }
 }

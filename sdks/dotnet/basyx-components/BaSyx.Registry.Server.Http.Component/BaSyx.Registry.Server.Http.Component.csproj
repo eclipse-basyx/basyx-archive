@@ -16,20 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ServerSettings.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="ServerSettings.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BaSyx.Common.UI.Swagger\BaSyx.Common.UI.Swagger.csproj" />
+    <ProjectReference Include="..\BaSyx.Common.UI\BaSyx.Common.UI.csproj" />
     <ProjectReference Include="..\BaSyx.Discovery.mDNS\BaSyx.Discovery.mDNS.csproj" />
     <ProjectReference Include="..\BaSyx.Registry.ReferenceImpl.FileBased\BaSyx.Registry.ReferenceImpl.FileBased.csproj" />
     <ProjectReference Include="..\BaSyx.Registry.Server.Http\BaSyx.Registry.Server.Http.csproj" />
@@ -42,6 +34,17 @@
       <PackageCopyToOutput>true</PackageCopyToOutput>
       <Pack>true</Pack>
     </Content>
+    <Content Update="Properties\launchSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ServerSettings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

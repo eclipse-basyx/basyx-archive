@@ -11,15 +11,26 @@
 using BaSyx.API.Components;
 using BaSyx.Components.Common;
 using BaSyx.Utils.Settings.Types;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace BaSyx.Submodel.Server.Http
 {
     public class SubmodelHttpServer : ServerApplication
     {
-        public SubmodelHttpServer(ServerSettings serverSettings = null, string[] webHostBuilderArgs = null)
-            : base(typeof(SingleStartup), serverSettings ?? ServerSettings.LoadSettings(), webHostBuilderArgs)
+        public SubmodelHttpServer() : this(null, null)
         { }
+
+        public SubmodelHttpServer(ServerSettings serverSettings) : this(serverSettings, null)
+        { }
+
+        public SubmodelHttpServer(ServerSettings serverSettings, string[] webHostBuilderArgs)
+            : base(serverSettings, webHostBuilderArgs)
+        {
+            Assembly entryAssembly = Assembly.GetEntryAssembly();
+            WebHostBuilder.UseSetting(WebHostDefaults.ApplicationKey, entryAssembly.FullName);
+        }
 
         public void SetServiceProvider(ISubmodelServiceProvider submodelServiceProvider)
         {

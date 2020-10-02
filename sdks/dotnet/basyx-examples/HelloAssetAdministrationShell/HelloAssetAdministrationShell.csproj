@@ -1,7 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>Constantin Ziesche</Authors>
     <Copyright>Copyright 2020 - Robert Bosch GmbH</Copyright>
@@ -12,22 +11,30 @@
     <Company>Robert Bosch GmbH</Company>
     <PackageTags>BaSys BaSyx Hello Asset Administration Shell Example</PackageTags>
     <PackageLicenseExpression>EDL-1.0</PackageLicenseExpression>
+    <StartupObject>HelloAssetAdministrationShell.Program</StartupObject>
   </PropertyGroup>
-  
+ 
   <ItemGroup>
-    <None Remove="Content\HelloAssetAdministrationShell.pdf" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Content\HelloAssetAdministrationShell.pdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="BaSyx.AAS.Server.Http" Version="1.0.0" />
     <PackageReference Include="BaSyx.Utils.Client.Mqtt" Version="1.0.0" />
     <PackageReference Include="NLog" Version="4.7.0" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <ProjectReference Include="..\..\basyx-components\BaSyx.AAS.Server.Http\BaSyx.AAS.Server.Http.csproj" />
+    <ProjectReference Include="..\..\basyx-components\BaSyx.Common.UI.Swagger\BaSyx.Common.UI.Swagger.csproj" />
+    <ProjectReference Include="..\..\basyx-components\BaSyx.Common.UI\BaSyx.Common.UI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Content\HelloAssetAdministrationShell.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ServerSettings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

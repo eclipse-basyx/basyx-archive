@@ -1,0 +1,12 @@
+{
+  "Prop1_IdShort": "PropValue as string",
+  "Prop2_IdShort": 5,
+  "SM-Collection_IdShort": {
+	"SubProp1_IdShort" : "SubPropValue as string",
+	"SubProp2_IdShort" : 9
+  },
+  "RangeProp_IdShort": {
+	"Min" : 3,
+	"Max" : 8
+  }
+}

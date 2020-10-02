@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "BaSyx Submodel HTTP REST-API",
-    "description": "The full description of the generic BaSyx Submodel HTTP REST-API",
+    "description": "The full OpenAPI 3.0.1 specification of the BaSyx Submodel HTTP REST-API",
     "contact": {
       "name": "Constantin Ziesche",
       "url": "https://www.bosch.com/de/",
@@ -151,11 +151,11 @@
         "tags": [
           "SubmodelServices"
         ],
-        "summary": "Retrieves all SubmodelElements from the current Submodel",
+        "summary": "Retrieves all Submodel-Elements from the Submodel",
         "operationId": "GetSubmodelElements",
         "responses": {
           "200": {
-            "description": "Returns a list of found SubmodelElements",
+            "description": "Returns a list of found Submodel-Elements",
             "content": {
               "text/plain": {
                 "schema": {
@@ -238,7 +238,7 @@
         },
         "responses": {
           "201": {
-            "description": "Submodel Element created successfully",
+            "description": "Submodel-Element created successfully",
             "content": {
               "text/plain": {
                 "schema": {
@@ -586,121 +586,12 @@
         }
       }
     },
-    "/submodel/operations/{operationIdShort}": {
+    "/submodel/submodelElements/{operationIdShort}/invoke/{async}": {
       "post": {
         "tags": [
           "SubmodelServices"
         ],
-        "summary": "Synchronously invokes a specific operation from the Submodel",
-        "operationId": "InvokeOperationByIdShort",
-        "parameters": [
-          {
-            "name": "operationIdShort",
-            "in": "path",
-            "description": "The Operation's short id",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The Operation's short id",
-              "nullable": true
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "The parameterized request object for the invocation",
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/InvocationRequest"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InvocationRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InvocationRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/InvocationRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Operation invoked successfully",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvocationResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvocationResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvocationResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Submodel / Operation not found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/submodel/operations/{operationIdShort}/async": {
-      "post": {
-        "tags": [
-          "SubmodelServices"
-        ],
-        "summary": "Asynchronously invokes a specific operation from the Submodel",
+        "summary": "Invokes a specific operation from the Submodel synchronously or asynchronously",
         "operationId": "InvokeOperationByIdShortAsync",
         "parameters": [
           {
@@ -713,6 +604,23 @@
               "description": "The Operation's short id",
               "nullable": true
             }
+          },
+          {
+            "name": "async",
+            "in": "query",
+            "description": "Determines whether the execution of the operation is asynchronous (true) or not (false)",
+            "schema": {
+              "type": "boolean",
+              "description": "Determines whether the execution of the operation is asynchronous (true) or not (false)"
+            }
+          },
+          {
+            "name": "async",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -741,26 +649,6 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Operation invoked successfully",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CallbackResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CallbackResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CallbackResponse"
-                }
-              }
-            }
-          },
           "400": {
             "description": "Bad Request",
             "content": {
@@ -800,11 +688,14 @@
                 }
               }
             }
+          },
+          "200": {
+            "description": "Operation invoked successfully"
           }
         }
       }
     },
-    "/submodel/operations/{operationIdShort}/invocationList/{requestId}": {
+    "/submodel/submodelElements/{operationIdShort}/invocationList/{requestId}": {
       "get": {
         "tags": [
           "SubmodelServices"
@@ -1092,31 +983,14 @@
             "type": "string",
             "nullable": true
           },
-          "identification": {
-            "$ref": "#/components/schemas/Identifier"
-          },
           "kind": {
             "$ref": "#/components/schemas/AssetKind"
-          },
-          "description": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LangString"
-            },
-            "nullable": true
           },
           "assetIdentificationModel": {
             "$ref": "#/components/schemas/SubmodelReference"
           },
           "billOfMaterial": {
             "$ref": "#/components/schemas/SubmodelReference"
-          },
-          "administration": {
-            "$ref": "#/components/schemas/AdministrativeInformation"
-          },
-          "category": {
-            "type": "string",
-            "nullable": true
           },
           "embeddedDataSpecifications": {
             "type": "array",
@@ -1128,6 +1002,23 @@
           },
           "modelType": {
             "$ref": "#/components/schemas/ModelType"
+          },
+          "identification": {
+            "$ref": "#/components/schemas/Identifier"
+          },
+          "administration": {
+            "$ref": "#/components/schemas/AdministrativeInformation"
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LangString"
+            },
+            "nullable": true
           }
         }
       },
@@ -1344,34 +1235,17 @@
             "type": "string",
             "nullable": true
           },
-          "identification": {
-            "$ref": "#/components/schemas/Identifier"
-          },
           "kind": {
             "$ref": "#/components/schemas/ModelingKind"
           },
           "semanticId": {
             "$ref": "#/components/schemas/Reference"
           },
-          "description": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LangString"
-            },
-            "nullable": true
-          },
           "submodelElements": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ISubmodelElement"
             },
-            "nullable": true
-          },
-          "administration": {
-            "$ref": "#/components/schemas/AdministrativeInformation"
-          },
-          "category": {
-            "type": "string",
             "nullable": true
           },
           "modelType": {
@@ -1388,6 +1262,23 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/IConstraint"
+            },
+            "nullable": true
+          },
+          "identification": {
+            "$ref": "#/components/schemas/Identifier"
+          },
+          "administration": {
+            "$ref": "#/components/schemas/AdministrativeInformation"
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LangString"
             },
             "nullable": true
           }
@@ -1494,9 +1385,6 @@
             "type": "string",
             "nullable": true
           },
-          "identification": {
-            "$ref": "#/components/schemas/Identifier"
-          },
           "asset": {
             "$ref": "#/components/schemas/Asset"
           },
@@ -1504,13 +1392,6 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Submodel"
-            },
-            "nullable": true
-          },
-          "description": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LangString"
             },
             "nullable": true
           },
@@ -1522,13 +1403,6 @@
             "items": {
               "$ref": "#/components/schemas/View"
             },
-            "nullable": true
-          },
-          "administration": {
-            "$ref": "#/components/schemas/AdministrativeInformation"
-          },
-          "category": {
-            "type": "string",
             "nullable": true
           },
           "modelType": {
@@ -1546,6 +1420,23 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ConceptDictionary"
+            },
+            "nullable": true
+          },
+          "identification": {
+            "$ref": "#/components/schemas/Identifier"
+          },
+          "administration": {
+            "$ref": "#/components/schemas/AdministrativeInformation"
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LangString"
             },
             "nullable": true
           }
@@ -1568,17 +1459,6 @@
             },
             "nullable": true
           },
-          "category": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LangString"
-            },
-            "nullable": true
-          },
           "kind": {
             "$ref": "#/components/schemas/ModelingKind"
           },
@@ -1590,6 +1470,26 @@
             "items": {
               "$ref": "#/components/schemas/IEmbeddedDataSpecification"
             },
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LangString"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "ElementValue": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
             "nullable": true
           }
         }
@@ -1613,6 +1513,13 @@
             "nullable": true
           },
           "inputArguments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OperationVariable"
+            },
+            "nullable": true
+          },
+          "inoutputArguments": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/OperationVariable"
@@ -1660,7 +1567,8 @@
           "Running",
           "Completed",
           "Canceled",
-          "Failed"
+          "Failed",
+          "Timeout"
         ],
         "type": "string"
       },
@@ -1669,6 +1577,13 @@
         "properties": {
           "requestId": {
             "type": "string",
+            "nullable": true
+          },
+          "inoutputArguments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OperationVariable"
+            },
             "nullable": true
           },
           "outputArguments": {
@@ -1685,30 +1600,13 @@
             "$ref": "#/components/schemas/ExecutionState"
           }
         }
-      },
-      "ElementValue": {
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "object",
-            "nullable": true
-          }
-        }
-      },
-      "CallbackResponse": {
-        "type": "object",
-        "properties": {
-          "requestId": {
-            "type": "string",
-            "nullable": true
-          },
-          "callbackUrl": {
-            "type": "string",
-            "format": "uri",
-            "nullable": true
-          }
-        }
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "SubmodelServices",
+      "description": "All Submodel Services provided by the component"
+    }
+  ]
 }

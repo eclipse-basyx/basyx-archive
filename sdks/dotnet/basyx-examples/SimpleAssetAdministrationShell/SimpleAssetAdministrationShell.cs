@@ -85,6 +85,32 @@ namespace SimpleAssetAdministrationShell
                         Set = (prop, val) => y = val,
                         Get = prop => { return Math.Pow(y, i); }
                     },
+                    new SubmodelElementCollection("TestSubmodelElementCollection")
+                    {
+                        Value =
+                        {
+                            new Property<string>("TestSubProperty1")
+                            {
+                                Set = (prop, val) => propertyValue = val,
+                                Get = prop => { return propertyValue + "_" + i--; }
+                            },
+                            new Property<string>("TestSubProperty2")
+                            {
+                                Set = (prop, val) => propertyValue = val,
+                                Get = prop => { return propertyValue + "_" + i--; }
+                            },
+                            new Property<int>("TestSubProperty3")
+                            {
+                                Set = (prop, val) => i = val,
+                                Get = prop => { return i--; }
+                            },
+                            new Property<double>("TestSubProperty4")
+                            {
+                                Set = (prop, val) => y = val,
+                                Get = prop => { return Math.Pow(y, i); }
+                            }
+                        }
+                    },
                     new Operation("GetTime")
                     {
                         OutputVariables = new OperationVariableSet()

@@ -16,6 +16,8 @@ using NLog;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using BaSyx.Common.UI;
+using BaSyx.Common.UI.Swagger;
 
 namespace BaSyx.Registry.Server.Http.Component
 {
@@ -80,6 +82,12 @@ namespace BaSyx.Registry.Server.Http.Component
             {
                 fileBasedRegistry.StopDiscovery();
             };
+
+            //Add BaSyx Web UI
+            registryServer.AddBaSyxUI(PageNames.RegistryServer);
+
+            //Add Swagger Documentation and UI
+            registryServer.AddSwagger(Interface.AssetAdministrationShellRegistry);
 
             //Run the server
             registryServer.Run();

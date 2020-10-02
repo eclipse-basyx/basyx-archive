@@ -1,0 +1,41 @@
+﻿@page
+@model BaSyx.Common.UI.Pages.SingleShellModel
+@using BaSyx.API.Components;
+@using BaSyx.Models.Core.AssetAdministrationShell.Generics;
+@using BaSyx.Utils.Settings.Types;
+@using Microsoft.AspNetCore.Hosting;
+
+
+@{
+    IAssetAdministrationShellServiceProvider sp = Model.ServiceProvider;
+    IAssetAdministrationShell aas = sp.GetBinding();
+    IWebHostEnvironment hostingEnvironment = Model.HostingEnvironment;
+    ServerSettings settings = Model.Settings;
+    string pathToCompanyLogo = settings.Miscellaneous.TryGetValue("CompanyLogo", out string path) ? path : string.Empty;
+
+    ViewData["Title"] = aas.IdShort;
+    ViewData["ApiRoot"] = "/aas";
+    ViewData["CompanyLogo"] = pathToCompanyLogo;
+    ViewData["ApiType"] = "AssetAdministrationShell";
+    ViewData["aasId"] = aas.IdShort;
+}
+
+
+<div class="starter-template">
+    <h1>@aas.IdShort - Asset Administration Shell UI</h1>
+    <p class="lead">Generic UI to discover the Asset Administration Shell </p>
+</div>
+
+@await Html.PartialAsync("_AssetAdministrationShell", aas)
+
+@await Html.PartialAsync("_Asset", aas.Asset)
+
+@if (aas.Submodels.Count() > 0)
+{
+    foreach (var submodel in aas.Submodels)
+    {
+        @await Html.PartialAsync("_Submodel", submodel)
+    }
+}
+
+

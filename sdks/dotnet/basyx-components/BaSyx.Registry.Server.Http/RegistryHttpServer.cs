@@ -11,21 +11,48 @@
 using BaSyx.API.Components;
 using BaSyx.Components.Common;
 using BaSyx.Utils.Settings.Types;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace BaSyx.Registry.Server.Http
 {
     public class RegistryHttpServer : ServerApplication
     {
-        public RegistryHttpServer(ServerSettings serverSettings = null, string[] webHostBuilderArgs = null)
-            : base(typeof(Startup), serverSettings ?? ServerSettings.LoadSettings(), webHostBuilderArgs)
+        public RegistryHttpServer() : this(null, null)
         { }
+
+        public RegistryHttpServer(ServerSettings serverSettings) : this(serverSettings, null)
+        { }
+
+        public RegistryHttpServer(ServerSettings serverSettings, string[] webHostBuilderArgs)
+            : base(serverSettings, webHostBuilderArgs)
+        {
+            Assembly entryAssembly = Assembly.GetEntryAssembly();
+            WebHostBuilder.UseSetting(WebHostDefaults.ApplicationKey, entryAssembly.FullName);
+        }
 
         public void SetRegistryProvider(IAssetAdministrationShellRegistry aasRegistryProvider)
         {
             WebHostBuilder.ConfigureServices(services =>
             {
                 services.AddSingleton<IAssetAdministrationShellRegistry>(aasRegistryProvider);
+            });
+        }
+
+        protected override void Configure(IApplicationBuilder app)
+        {
+            base.Configure(app);
+
+            app.Use((context, next) =>
+            {
+                var url = context.GetServerVariable("UNENCODED_URL");
+                if (!string.IsNullOrEmpty(url))
+                    context.Request.Path = new PathString(url);
+
+                return next();
             });
         }
     }
