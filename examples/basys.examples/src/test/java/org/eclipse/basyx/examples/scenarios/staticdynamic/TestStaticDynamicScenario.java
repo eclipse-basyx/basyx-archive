@@ -47,12 +47,12 @@ public class TestStaticDynamicScenario {
 		// The aas should contain 6 SMs
 		assertEquals(6, submodels.size());
 		
-		ISubModel staticSM = submodels.get(ExampleStaticSubmodel.SM_ID_SHORT);
+		ISubModel staticSM = submodels.get(ExampleDynamicSubmodel.SM_ID_SHORT);
 		
 		// Get the Property from the SubModel
-		IProperty smElement = (IProperty) staticSM.getSubmodelElements().get(ExampleStaticSubmodel.PROPERTY_ID_SHORT);
+		IProperty smElement = (IProperty) staticSM.getSubmodelElements().get(ExampleDynamicSubmodel.PROPERTY_ID_SHORT);
 
 		// Check if the Property contains the correct value
-		assertEquals(ExampleStaticSubmodel.PROPERTY_VALUE, smElement.get());
+		assertEquals(ExampleDynamicSubmodel.PROPERTY_VALUE, smElement.get());
 	}
 }

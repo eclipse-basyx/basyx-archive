@@ -41,7 +41,20 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 	 *            The endpoint of the registry with a HTTP-REST interface
 	 */
 	public AASRegistryProxy(String registryUrl) {
-		this(new JSONConnector(new HTTPConnector(registryUrl)));
+		this(new JSONConnector(new HTTPConnector(harmonizeURL(registryUrl))));
+	}
+
+	/**
+	 * Removes prefix if it exists since it will be readded at a later stage
+	 * 
+	 * @param url
+	 * @return
+	 */
+	private static String harmonizeURL(String url) {
+		if (url.endsWith(DirectoryModelProvider.PREFIX)) {
+			url = url.substring(0, url.length() - DirectoryModelProvider.PREFIX.length());
+		}
+		return url;
 	}
 
 	/**

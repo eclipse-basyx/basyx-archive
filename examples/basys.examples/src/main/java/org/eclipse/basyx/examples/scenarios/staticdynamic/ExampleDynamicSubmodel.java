@@ -5,14 +5,14 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 
 /**
- * Minimal implementation of a static information Submodel <br>
+ * Minimal implementation of a dynamic information Submodel <br>
  * Please note that it is just for showcasing, several mandatory attributes are
  * missing.
  * 
  * @author schnicke, conradi
  *
  */
-public class ExampleStaticSubmodel extends SubModel {
+public class ExampleDynamicSubmodel extends SubModel {
 
 	public static final String SM_ID_SHORT = "maintenance";
 	public static final String SM_ID = "maintenanceInformationSubmodel";
@@ -21,7 +21,7 @@ public class ExampleStaticSubmodel extends SubModel {
 	public static final String PROPERTY_VALUE = "2 months";
 	
 	
-	public ExampleStaticSubmodel() {
+	public ExampleDynamicSubmodel() {
 		// Create Property
 		Property interval = new Property();
 		interval.set(PROPERTY_VALUE);

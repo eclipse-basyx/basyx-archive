@@ -19,6 +19,8 @@ import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 /**
@@ -28,6 +30,8 @@ import org.xml.sax.SAXException;
  *
  */
 public class AASXComponent extends XMLAASComponent {
+	private static Logger logger = LoggerFactory.getLogger(AASXComponent.class);
+
 	public AASXComponent(BaSyxContextConfiguration contextConfig, String aasxPath,
 			String registryUrl) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
 		super(contextConfig);
@@ -73,12 +77,12 @@ public class AASXComponent extends XMLAASComponent {
 		server.start();
 
 		if (registryUrl != null && !registryUrl.isEmpty()) {
-			// logger.info("Registering AAS at registry \"" + registryUrl + "\"...");
+			logger.info("Registering AAS at registry \"" + registryUrl + "\"...");
 			AASRegistryProxy registryProxy = new AASRegistryProxy(registryUrl);
 			Set<AASDescriptor> descriptors = retrieveDescriptors();
 			descriptors.stream().forEach(registryProxy::register);
 		} else {
-			// logger.info("No registry specified, skipped registration");
+			logger.info("No registry specified, skipped registration");
 		}
 	}
 

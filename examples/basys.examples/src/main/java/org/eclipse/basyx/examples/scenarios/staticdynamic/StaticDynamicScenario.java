@@ -69,7 +69,7 @@ public class StaticDynamicScenario {
 		Set<AASBundle> bundles = packageManager.retrieveAASBundles();
 		
 		// Create static SubModel
-		SubModel sm = new ExampleStaticSubmodel();
+		SubModel sm = new ExampleDynamicSubmodel();
 
 		// Get the correct Bundle from the Set
 		AASBundle bundle = findBundle(bundles, AAS_ID_SHORT);

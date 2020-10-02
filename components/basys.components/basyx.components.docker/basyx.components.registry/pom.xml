@@ -13,7 +13,7 @@
 	<name>BaSyx Registry</name>
 	
 	<properties>
-		<basyx.components.executable>org.eclipse.basyx.components.executable.RegistryExecutable</basyx.components.executable>
+		<basyx.components.executable>org.eclipse.basyx.components.registry.executable.RegistryExecutable</basyx.components.executable>
 	</properties>
 	
 	<packaging>jar</packaging>
