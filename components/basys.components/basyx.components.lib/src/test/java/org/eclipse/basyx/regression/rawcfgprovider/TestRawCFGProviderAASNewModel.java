@@ -52,11 +52,11 @@ public class TestRawCFGProviderAASNewModel {
 		Property prop = new Property ();
 		prop.setIdShort("prop");
 		// Create AAS structure on server
-		connSubModel.createValue("/aas/submodels/rawSampleCFG/" + SubmodelElementProvider.PROPERTIES, prop);
+		connSubModel.createValue("/aas/submodels/rawSampleCFG/" + SubmodelElementProvider.ELEMENTS, prop);
 
 		
 		// Read complex property completely
-		Map<String, Object> aasReadBack = (Map<String, Object>) connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/" + SubmodelElementProvider.PROPERTIES + "/prop");
+		Map<String, Object> aasReadBack = (Map<String, Object>) connSubModel.getModelPropertyValue("/aas/submodels/rawSampleCFG/" + SubmodelElementProvider.ELEMENTS + "/prop");
 		assertEquals(prop.getIdShort(), Property.createAsFacade(prop).getIdShort());
 	}
 }

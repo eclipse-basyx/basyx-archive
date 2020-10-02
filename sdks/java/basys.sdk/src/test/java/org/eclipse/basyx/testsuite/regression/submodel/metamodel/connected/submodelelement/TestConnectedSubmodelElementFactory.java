@@ -161,7 +161,7 @@ public class TestConnectedSubmodelElementFactory {
 	public void testGetProperties() {
 		Map<String, IProperty> properties =
 				ConnectedSubmodelElementFactory.getProperties(
-						proxy, SubmodelElementProvider.PROPERTIES, SubmodelElementProvider.PROPERTIES);
+						proxy, SubmodelElementProvider.ELEMENTS, SubmodelElementProvider.ELEMENTS);
 		
 		assertEquals(1, properties.size());
 		assertTrue(properties.get(PROPERTY_ID) instanceof ConnectedProperty);
@@ -174,7 +174,7 @@ public class TestConnectedSubmodelElementFactory {
 	public void testGetOperations() {
 		Map<String, IOperation> operations =
 				ConnectedSubmodelElementFactory.getOperations(
-						proxy, SubmodelElementProvider.OPERATIONS, SubmodelElementProvider.OPERATIONS);
+						proxy, SubmodelElementProvider.ELEMENTS, SubmodelElementProvider.ELEMENTS);
 		
 		assertEquals(1, operations.size());
 		assertTrue(operations.get(OPERATION_ID) instanceof ConnectedOperation);

@@ -71,7 +71,7 @@ public class TestAASAggregatorProvider extends AASAggregatorSuite {
 		assertEquals(sm.getIdShort(), retrievedSm.getIdShort());
 
 		// Test feedthrough of SET
-		String propValuePath = VABPathTools.concatenatePaths(smPath, SubmodelElementProvider.PROPERTIES, prop.getIdShort(), "value");
+		String propValuePath = VABPathTools.concatenatePaths(smPath, SubmodelElementProvider.ELEMENTS, prop.getIdShort(), "value");
 		int expectedPropValue = 20;
 		provider.setModelPropertyValue(propValuePath, expectedPropValue);
 
@@ -79,7 +79,7 @@ public class TestAASAggregatorProvider extends AASAggregatorSuite {
 		assertEquals(expectedPropValue, value.get(Property.VALUE));
 
 		// Test feedthrough of INVOKE
-		assertTrue((boolean) provider.invokeOperation(smPath + "/operations/op"));
+		assertTrue((boolean) provider.invokeOperation(smPath + "/submodelElements/op/invoke"));
 		
 		// Test feedthrough of DELETE
 		provider.deleteValue(smPath);

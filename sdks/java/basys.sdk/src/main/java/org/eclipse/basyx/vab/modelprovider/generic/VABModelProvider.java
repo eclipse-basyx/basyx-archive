@@ -99,6 +99,9 @@ public class VABModelProvider implements IModelProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object invokeOperation(String path, Object... parameters) {
+		
+		path = VABPathTools.stripInvokeFromPath(path);
+		
 		Object childElement = getModelPropertyValue(path);
 
 		// Invoke operation for function interfaces

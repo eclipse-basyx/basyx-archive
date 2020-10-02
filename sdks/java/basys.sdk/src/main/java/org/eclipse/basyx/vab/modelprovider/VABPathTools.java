@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 
 /**
@@ -229,10 +230,10 @@ public class VABPathTools {
 	}
 
 	/**
-	 * Check if the path to an VAB elements leads to an operation. In this case, the
-	 * element path conforms to /aas/submodels/{subModelId}/operations
+	 * Check if the path to an VAB elements leads to the invocation of an operation. In this case, the
+	 * element path conforms to /aas/submodels/{subModelId}/submodelElements/{operationId}/invoke
 	 */
-	public static boolean isOperationPath(String path) {
+	public static boolean isOperationInvokationPath(String path) {
 		// null-Paths are no operation paths
 		if (path == null) {
 			return false;
@@ -240,16 +241,13 @@ public class VABPathTools {
 
 		// Split path
 		String[] pathElements = splitPath(path);
-
-		// Look for the 'operation' element inside the path
-		for (String s : pathElements) {
-			if (s.equals("operations")) {
-				return true;
-			}
+		
+		if(pathElements.length == 0) {
+			return false;
 		}
 
-		// No operation
-		return false;
+		// Check if last path element is "invoke" and the one two before is "submodelElements"
+		return pathElements[pathElements.length - 1].equals(Operation.INVOKE);
 	}
 
 	/**
@@ -360,5 +358,23 @@ public class VABPathTools {
 		if (path == null) {
 			throw new MalformedRequestException("Path is not allowed to be null");
 		}
+	}
+	
+	/**
+	 * Strips the last path element if it is "invoke"
+	 * 
+	 * @param path
+	 * @return path without last element "invoke" or unchanged path
+	 */
+	public static String stripInvokeFromPath(String path) {
+		
+		if(path == null)
+			return null;
+		
+		if(getLastElement(path).equals(Operation.INVOKE)) {
+			return getParentPath(path);
+		}
+		
+		return path;
 	}
 }

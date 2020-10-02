@@ -29,6 +29,8 @@ public class Operation extends SubmodelElement implements IOperation {
 
 	public static final String INVOKABLE = "invokable";
 	public static final String MODELTYPE = "Operation";
+	
+	public static final String INVOKE = "invoke";
 
 	/**
 	 * Constructor

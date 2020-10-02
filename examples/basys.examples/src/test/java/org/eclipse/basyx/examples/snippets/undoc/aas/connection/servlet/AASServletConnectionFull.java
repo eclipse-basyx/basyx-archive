@@ -132,15 +132,15 @@ public class AASServletConnectionFull {
 		// Connect to sub model using lower-level VAB interface
 		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("sm-001VAB");
 		// - Read property values and compare with expected values
-		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1")).get("value") == 234);
-		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop3")).get("value") == 17);
-		assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1")).get("idShort").equals("prop1"));
-		assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop2")).get("idShort").equals("prop2"));
+		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop1")).get("value") == 234);
+		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop3")).get("value") == 17);
+		assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop1")).get("idShort").equals("prop1"));
+		assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop2")).get("idShort").equals("prop2"));
 		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("submodelElements/prop2/prop11")).get("value") == 123);
 		// - Change property value using VAB primitive
-		connSubModel1.setModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1/value", 456);
+		connSubModel1.setModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop1/value", 456);
 		// - Read value back using VAB primitive
-		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1")).get("value") == 456);
+		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop1")).get("value") == 456);
 
 		// Read changed value back using SDK connector
 		assertTrue((int) subModel.getProperties().get("prop1").get() == 456);

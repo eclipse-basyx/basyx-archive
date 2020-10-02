@@ -69,7 +69,7 @@ public class ReceiveDeviceDashboardStatusApplication extends BaseBaSyxService {
 	public String getDeviceStatus() {
 		// Read the status property
 		Map<String, Object> property = (Map<String, Object>) aasServerConnection
-				.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/status");
+				.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/status");
 		// Return the value of the property
 		return property.get("value").toString();
 	}
@@ -82,7 +82,7 @@ public class ReceiveDeviceDashboardStatusApplication extends BaseBaSyxService {
 	public int getDeviceInvocationCounter() {
 		// Read the invocation counter for device default service
 		Map<String, Object> property = (Map<String, Object>) aasServerConnection
-				.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/invocations");
+				.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/invocations");
 		// Return the value of the property
 		return (int) property.get("value");
 	}

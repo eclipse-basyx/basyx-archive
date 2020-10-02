@@ -282,7 +282,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 			modelProvider = getModelProvider(smId);
 		}
 
-		modelProvider.createValue(propertyPath, newProperty);
+		modelProvider.setModelPropertyValue(propertyPath, newProperty);
 	}
 
 	@SuppressWarnings("unchecked")

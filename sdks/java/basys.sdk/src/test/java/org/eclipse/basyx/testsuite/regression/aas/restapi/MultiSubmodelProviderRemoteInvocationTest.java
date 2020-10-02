@@ -19,8 +19,10 @@ import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
 import org.eclipse.basyx.vab.service.api.BaSyxService;
@@ -105,7 +107,8 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 	@Test
 	public void testSetModelPropertyValue() throws Exception {
 		int newVal = 0;
-		provider.setModelPropertyValue(REMOTEPATH + "/properties/" + SimpleAASSubmodel.INTPROPIDSHORT + "/" + Property.VALUE, newVal);
+		String path = VABPathTools.concatenatePaths(REMOTEPATH, SubModel.SUBMODELELEMENT, SimpleAASSubmodel.INTPROPIDSHORT, Property.VALUE);
+		provider.setModelPropertyValue(path, newVal);
 
 		SubModel sm = getRemoteSubmodel();
 		assertEquals(newVal, sm.getProperties().get(SimpleAASSubmodel.INTPROPIDSHORT).get());
@@ -123,7 +126,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 		String testPropIdShort = "testProperty";
 		p.setIdShort(testPropIdShort);
 
-		provider.createValue(REMOTEPATH + "/submodelElements", p);
+		provider.setModelPropertyValue(REMOTEPATH + "/submodelElements", p);
 
 		assertTrue(getRemoteSubmodel().getProperties().containsKey(testPropIdShort));
 	}
@@ -136,7 +139,8 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 	 */
 	@Test
 	public void testDeleteModelPropertyValue() throws Exception {
-		provider.deleteValue(REMOTEPATH + "/properties/" + SimpleAASSubmodel.INTPROPIDSHORT);
+		String path = VABPathTools.concatenatePaths(REMOTEPATH, SubModel.SUBMODELELEMENT, SimpleAASSubmodel.INTPROPIDSHORT);
+		provider.deleteValue(path);
 		assertFalse(getRemoteSubmodel().getProperties().containsKey(SimpleAASSubmodel.INTPROPIDSHORT));
 	}
 
@@ -148,7 +152,8 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 	 */
 	@Test
 	public void testInvoke() throws Exception {
-		assertTrue((Boolean) provider.invokeOperation(REMOTEPATH + "/operations/" + SimpleAASSubmodel.OPERATIONSIMPLEIDSHORT));
+		String path = VABPathTools.concatenatePaths(REMOTEPATH, SubModel.SUBMODELELEMENT, SimpleAASSubmodel.OPERATIONSIMPLEIDSHORT, Operation.INVOKE);
+		assertTrue((Boolean) provider.invokeOperation(path));
 	}
 
 	@SuppressWarnings("unchecked")

@@ -54,6 +54,10 @@ public class OperationProvider extends MetaModelProvider {
 
 	@Override
 	public Object invokeOperation(String path, Object... parameters) throws ProviderException {
+		
+		// remove the "invoke" from the end of the path
+		path = VABPathTools.stripInvokeFromPath(path);
+		
 		// Unwrap parameters, if they are wrapped
 		for (int i = 0; i < parameters.length; i++) {
 			parameters[i] = unwrapParameter(parameters[i]);

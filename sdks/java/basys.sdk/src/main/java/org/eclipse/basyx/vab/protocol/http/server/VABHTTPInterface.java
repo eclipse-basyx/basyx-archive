@@ -164,7 +164,7 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			resp.setCharacterEncoding("UTF-8");
 
 			// Check if request is for property creation or operation invoke
-			if (VABPathTools.isOperationPath(path)) {
+			if (VABPathTools.isOperationInvokationPath(path)) {
 			// Invoke BaSys VAB 'invoke' primitive
 
 				providerBackend.processBaSysInvoke(path, serValue, responseWriter);

@@ -50,19 +50,19 @@ public class TestCFGProvider {
 		
 		// Get property value
 		Map<String, Object> value1 = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/sampleCFG/" + SubmodelElementProvider.PROPERTIES + "/cfgProperty1/value");
+				.getModelPropertyValue("/aas/submodels/sampleCFG/" + SubmodelElementProvider.ELEMENTS + "/cfgProperty1/value");
 
 		assertEquals("exampleStringValue", value1.get(Property.VALUE));
 
 		
 		// Get property value
 		Map<String, Object> value2 = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/sampleCFG/" + SubmodelElementProvider.PROPERTIES + "/cfgProperty2/value");
+				.getModelPropertyValue("/aas/submodels/sampleCFG/" + SubmodelElementProvider.ELEMENTS + "/cfgProperty2/value");
 		assertEquals("12", value2.get(Property.VALUE));
 
 		// Get property value
 		Map<String, Object> value3 = (Map<String, Object>) connSubModel
-				.getModelPropertyValue("/aas/submodels/sampleCFG/" + SubmodelElementProvider.PROPERTIES + "/cfgProperty3/value");
+				.getModelPropertyValue("/aas/submodels/sampleCFG/" + SubmodelElementProvider.ELEMENTS + "/cfgProperty3/value");
 		assertEquals("45.8", value3.get(Property.VALUE));
 	}
 }

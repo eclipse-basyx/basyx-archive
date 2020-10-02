@@ -34,7 +34,7 @@ public class CFGSubModelProvider extends BaseConfiguredProvider {
 		for (String key: getConfiguredProperties(cfgValues)) {
 			// Create properties
 			SubmodelElement elem = createSubmodelElement(key, cfgValues.get(key), cfgValues);
-			createValue("submodel/" + SubmodelElementProvider.ELEMENTS, elem);
+			setModelPropertyValue("submodel/" + SubmodelElementProvider.ELEMENTS, elem);
 			
 			// Debug output
 			logger.debug("Adding configured property: "+key.toString()+" = "+cfgValues.get(key));

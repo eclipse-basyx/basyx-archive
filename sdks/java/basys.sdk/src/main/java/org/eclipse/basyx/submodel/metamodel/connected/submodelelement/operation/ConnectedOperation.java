@@ -60,7 +60,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 		// Invoke operation passing an empty string, since the used proxy already points
 		// to the operation
-		Object result = getProxy().invokeOperation("", params);
+		Object result = getProxy().invokeOperation(Operation.INVOKE, params);
 
 		// Unwrap result value
 		if (result instanceof Collection<?>) {

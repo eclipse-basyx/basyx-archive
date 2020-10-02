@@ -10,6 +10,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.SubmodelMapConverter;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
 import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
@@ -101,16 +102,9 @@ public class SubModelProvider extends MetaModelProvider {
 			}
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
-			String qualifier = splitted[0];
-			if (splitted.length == 1 && isQualifier(splitted[0])) { // Request for either properties, operations or submodelElements
-				switch (qualifier) {
-				case SubmodelElementProvider.ELEMENTS:
-					return submodelAPI.getElements();
-				case SubmodelElementProvider.OPERATIONS:
-					return submodelAPI.getOperations();
-				case SubmodelElementProvider.PROPERTIES:
-					return submodelAPI.getProperties();
-				}
+			// Request for submodelElements
+			if (splitted.length == 1 && splitted[0].equals(SubmodelElementProvider.ELEMENTS)) {
+				return submodelAPI.getElements();
 			} else if (splitted.length >= 2 && isQualifier(splitted[0])) { // Request for element with specific idShort
 				String idShort = splitted[1];
 				if (splitted.length == 2) {
@@ -147,7 +141,7 @@ public class SubModelProvider extends MetaModelProvider {
 	}
 
 	private boolean isPropertyValuePath(String[] splitted) {
-		return splitted.length == 3 && splitted[0].equals(SubmodelElementProvider.PROPERTIES) && endsWithValue(splitted);
+		return splitted.length == 3 && splitted[0].equals(SubmodelElementProvider.ELEMENTS) && endsWithValue(splitted);
 	}
 
 	private boolean endsWithValue(String[] splitted) {
@@ -158,6 +152,7 @@ public class SubModelProvider extends MetaModelProvider {
 		return splitted.length > 2 && splitted[0].equals(SubmodelElementProvider.ELEMENTS);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		path = removeSubmodelPrefix(path);
@@ -169,21 +164,14 @@ public class SubModelProvider extends MetaModelProvider {
 				String idShort = splitted[1];
 				submodelAPI.updateProperty(idShort, newValue);
 			} else {
-				throw new MalformedRequestException("Update on path " + path + " not supported");
+				submodelAPI.addSubmodelElement(SubmodelElement.createAsFacade((Map<String, Object>) newValue));
 			}
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
-		path = removeSubmodelPrefix(path);
-		if (path.isEmpty()) {
-			// not possible to overwrite existing submodels
-			throw new MalformedRequestException("Invalid access");
-		} else {
-			submodelAPI.addSubmodelElement(SubmodelElement.createAsFacade((Map<String, Object>) newEntity));
-		}
+		throw new MalformedRequestException("Invalid access");
 	}
 
 	@Override
@@ -203,7 +191,7 @@ public class SubModelProvider extends MetaModelProvider {
 	}
 
 	private boolean isQualifier(String str) {
-		return str.equals(SubmodelElementProvider.ELEMENTS) || str.equals(SubmodelElementProvider.OPERATIONS) || str.equals(SubmodelElementProvider.PROPERTIES);
+		return str.equals(SubmodelElementProvider.ELEMENTS);
 	}
 
 	@Override
@@ -218,7 +206,7 @@ public class SubModelProvider extends MetaModelProvider {
 			throw new MalformedRequestException("Invalid access");
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
-			if (splitted.length == 2 && splitted[0].equals(SubmodelElementProvider.OPERATIONS)) {
+			if (splitted.length == 3 && isQualifier(splitted[0]) && splitted[2].equals(Operation.INVOKE)) {
 				String idShort = splitted[1];
 				return submodelAPI.invokeOperation(idShort, parameters);
 			} else {

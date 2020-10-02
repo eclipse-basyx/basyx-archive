@@ -131,17 +131,17 @@ public class ConnectToAASSubModelVAB {
 		Map<String, Object> smId = (Map<String, Object>) submodel.get(Identifiable.IDENTIFICATION);
 
 		// - Read properties
-		Map<String, Object> prop1 = (Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1");
-		Map<String, Object> prop2 = (Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop2");
+		Map<String, Object> prop1 = (Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop1");
+		Map<String, Object> prop2 = (Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop2");
 		Map<String, Object> prop11 = (Map<String, Object>) connSubModel1.getModelPropertyValue("submodelElements/prop2/prop11");
-		Map<String, Object> prop3 = (Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop3");
+		Map<String, Object> prop3 = (Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop3");
 
 		// - Change property value using VAB primitive
-		connSubModel1.setModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1/value", 456);
+		connSubModel1.setModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop1/value", 456);
 
 		// - Read value back using VAB primitive
 		Map<String, Object> changedProp1 = (Map<String, Object>) connSubModel1
-				.getModelPropertyValue(SubmodelElementProvider.PROPERTIES + "/prop1");
+				.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop1");
 
 		// - Check results
 		assertEquals("sm-001", smId.get(Identifier.ID));

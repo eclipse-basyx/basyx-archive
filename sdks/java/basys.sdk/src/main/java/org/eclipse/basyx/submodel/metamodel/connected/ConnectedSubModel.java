@@ -107,24 +107,24 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 		}
 		
 		if (element instanceof IDataElement) {
-			getProxy().createValue(SubmodelElementProvider.PROPERTIES, element);
+			getProxy().setModelPropertyValue(SubmodelElementProvider.PROPERTIES, element);
 		} else if (element instanceof IOperation) {
-			getProxy().createValue(SubmodelElementProvider.OPERATIONS, element);
+			getProxy().setModelPropertyValue(SubmodelElementProvider.OPERATIONS, element);
 		} else if (element instanceof ISubmodelElement) {
-			getProxy().createValue(SubmodelElementProvider.ELEMENTS, element);
+			getProxy().setModelPropertyValue(SubmodelElementProvider.ELEMENTS, element);
 		}
 	}
 
 	@Override
 	public Map<String, IProperty> getProperties() {
-		return ConnectedSubmodelElementFactory.getProperties(getProxy(), SubmodelElementProvider.PROPERTIES,
-						SubmodelElementProvider.PROPERTIES);
+		return ConnectedSubmodelElementFactory.getProperties(getProxy(), SubmodelElementProvider.ELEMENTS,
+						SubmodelElementProvider.ELEMENTS);
 	}
 
 	@Override
 	public Map<String, IOperation> getOperations() {
-		return ConnectedSubmodelElementFactory.getOperations(getProxy(), SubmodelElementProvider.OPERATIONS,
-				SubmodelElementProvider.OPERATIONS);
+		return ConnectedSubmodelElementFactory.getOperations(getProxy(), SubmodelElementProvider.ELEMENTS,
+				SubmodelElementProvider.ELEMENTS);
 	}
 
 	@Override

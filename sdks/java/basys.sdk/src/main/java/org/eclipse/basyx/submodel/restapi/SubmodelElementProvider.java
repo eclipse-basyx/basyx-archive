@@ -117,15 +117,10 @@ public class SubmodelElementProvider extends MetaModelProvider {
 			return element;
 		}
 
-		switch (qualifier) {
-			case (ELEMENTS):
-				return getElementProvider(element, elementProxy).getModelPropertyValue(subPath);
-			case (PROPERTIES):
-				return new PropertyProvider(elementProxy).getModelPropertyValue(subPath);
-			case (OPERATIONS):
-				return new OperationProvider(elementProxy).getModelPropertyValue(subPath);
-			default:
-				throw new MalformedRequestException("Invalid access");
+		if(qualifier.equals(ELEMENTS) || qualifier.equals(PROPERTIES) ||qualifier.equals(OPERATIONS)) {
+			return getElementProvider(element, elementProxy).getModelPropertyValue(subPath);			
+		} else {
+			throw new MalformedRequestException("Invalid access");
 		}
 	}
 

@@ -19,6 +19,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
@@ -65,13 +66,13 @@ public class MultiSubmodelProviderTest {
 	public void invokeExceptionTest() {
 		// Invoke operationEx1
 		try {
-			proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/exception1/invokable");
+			proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/submodelElements/exception1/invokable/invoke");
 			fail();
 		} catch (ProviderException e) {}
 
 		// Invoke operationEx2
 		try {
-			proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/exception2/invokable", "prop1");
+			proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/submodelElements/exception2/invokable/invoke", "prop1");
 			fail();
 		} catch (ProviderException e) {}
 	}
@@ -79,8 +80,8 @@ public class MultiSubmodelProviderTest {
 	@Test
 	public void invokeTest() {
 		// Invoke operation
-		assertEquals(7, proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/complex", 10, 3));
-		assertEquals(true, proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/operations/simple"));
+		assertEquals(7, proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/submodelElements/complex/" + Operation.INVOKE, 10, 3));
+		assertEquals(true, proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/submodelElements/simple/" + Operation.INVOKE));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -124,11 +125,11 @@ public class MultiSubmodelProviderTest {
 	void getTestRunner(String smId) {
 		// Get property value
 		Map<String, Object> value = (Map<String, Object>) proxy
-				.getModelPropertyValue("/aas/submodels/" + smId + "/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value");
+				.getModelPropertyValue("/aas/submodels/" + smId + "/" + SubmodelElementProvider.ELEMENTS + "/integerProperty/value");
 		assertEquals(123, value.get(Property.VALUE));
 
 		// Get property value with /submodel suffix
-		value = (Map<String, Object>) proxy.getModelPropertyValue("/aas/submodels/" + smId + "/submodel/" + SubmodelElementProvider.PROPERTIES + "/integerProperty/value");
+		value = (Map<String, Object>) proxy.getModelPropertyValue("/aas/submodels/" + smId + "/submodel/" + SubmodelElementProvider.ELEMENTS + "/integerProperty/value");
 		assertEquals(123, value.get(Property.VALUE));
 	}
 }

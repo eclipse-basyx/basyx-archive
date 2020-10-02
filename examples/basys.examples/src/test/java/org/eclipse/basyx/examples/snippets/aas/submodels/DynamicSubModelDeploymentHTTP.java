@@ -102,9 +102,9 @@ public class DynamicSubModelDeploymentHTTP {
 		String smEndpoint = "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/Status";
 		Map<String, Object> sm = ((Map<String, Object>) jsonClient.get(smEndpoint));
 		String smId = (String) sm.get("idShort");
-		int prop1Val = (int) ((Map<String, Object>) jsonClient.get(smEndpoint + "/" + SubmodelElementProvider.PROPERTIES + "/prop1")).get("value");
-		String prop1Id = (String) ((Map<String, Object>) jsonClient.get(smEndpoint + "/" + SubmodelElementProvider.PROPERTIES + "/prop1")).get("idShort");
-		String prop2Val = (String) ((Map<String, Object>) jsonClient.get(smEndpoint + "/" + SubmodelElementProvider.PROPERTIES + "/prop2")).get("value");
+		int prop1Val = (int) ((Map<String, Object>) jsonClient.get(smEndpoint + "/" + SubmodelElementProvider.ELEMENTS + "/prop1")).get("value");
+		String prop1Id = (String) ((Map<String, Object>) jsonClient.get(smEndpoint + "/" + SubmodelElementProvider.ELEMENTS + "/prop1")).get("idShort");
+		String prop2Val = (String) ((Map<String, Object>) jsonClient.get(smEndpoint + "/" + SubmodelElementProvider.ELEMENTS + "/prop2")).get("value");
 
 		
 		// Check results
