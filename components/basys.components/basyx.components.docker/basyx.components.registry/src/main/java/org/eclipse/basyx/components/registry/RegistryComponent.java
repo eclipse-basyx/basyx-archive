@@ -34,6 +34,10 @@ public class RegistryComponent implements IComponent {
 	private BaSyxContextConfiguration contextConfig;
 	private BaSyxRegistryConfiguration registryConfig;
 
+	// The backend configuration
+	private BaSyxMongoDBConfiguration mongoDBConfig;
+	private BaSyxSQLConfiguration sqlConfig;
+
 	/**
 	 * Default constructor that loads default configurations
 	 */
@@ -43,7 +47,45 @@ public class RegistryComponent implements IComponent {
 	}
 
 	/**
-	 * Constructor with given configuration for the registry and its server context
+	 * Constructor with given configuration for the registry and its server context. This constructor will create an
+	 * InMemory registry.
+	 * 
+	 * @param contextConfig The context configuration
+	 */
+	public RegistryComponent(BaSyxContextConfiguration contextConfig) {
+		this.contextConfig = contextConfig;
+		this.registryConfig = new BaSyxRegistryConfiguration(RegistryBackend.INMEMORY);
+	}
+
+	/**
+	 * Constructor with given configuration for the registry and its server context. This constructor will create a
+	 * registry with a MongoDB backend.
+	 * 
+	 * @param contextConfig The context configuration
+	 * @param mongoDBConfig The mongoDB configuration
+	 */
+	public RegistryComponent(BaSyxContextConfiguration contextConfig, BaSyxMongoDBConfiguration mongoDBConfig) {
+		this.contextConfig = contextConfig;
+		this.registryConfig = new BaSyxRegistryConfiguration(RegistryBackend.MONGODB);
+		this.mongoDBConfig = mongoDBConfig;
+	}
+
+	/**
+	 * Constructor with given configuration for the registry and its server context. This constructor will create a
+	 * registry with an SQL backend.
+	 * 
+	 * @param contextConfig The context configuration
+	 * @param sqlConfig     The sql configuration
+	 */
+	public RegistryComponent(BaSyxContextConfiguration contextConfig, BaSyxSQLConfiguration sqlConfig) {
+		this.contextConfig = contextConfig;
+		this.registryConfig = new BaSyxRegistryConfiguration(RegistryBackend.SQL);
+		this.sqlConfig = sqlConfig;
+	}
+
+	/**
+	 * Constructor with given configuration for the registry and its server context.
+	 * Will load the backend configuration using the default load process.
 	 * 
 	 * @param contextConfig  The context configuration
 	 * @param registryConfig The registry configuration
@@ -94,9 +136,14 @@ public class RegistryComponent implements IComponent {
 	 */
 	private HttpServlet loadSQLRegistryServlet() {
 		logger.info("Loading SQLRegistry");
-		BaSyxSQLConfiguration sqlConfig = new BaSyxSQLConfiguration();
-		sqlConfig.loadFromDefaultSource();
-		return new SQLRegistryServlet(sqlConfig);
+		BaSyxSQLConfiguration config;
+		if (this.sqlConfig == null) {
+			config = new BaSyxSQLConfiguration();
+			config.loadFromDefaultSource();
+		} else {
+			config = this.sqlConfig;
+		}
+		return new SQLRegistryServlet(config);
 	}
 
 	/**
@@ -106,9 +153,14 @@ public class RegistryComponent implements IComponent {
 	 */
 	private HttpServlet loadMongoDBRegistryServlet() {
 		logger.info("Loading MongoDBRegistry");
-		BaSyxMongoDBConfiguration mConfig = new BaSyxMongoDBConfiguration();
-		mConfig.loadFromDefaultSource();
-		return new MongoDBRegistryServlet(mConfig);
+		BaSyxMongoDBConfiguration config;
+		if (this.mongoDBConfig == null) {
+			config = new BaSyxMongoDBConfiguration();
+			config.loadFromDefaultSource();
+		} else {
+			config = this.mongoDBConfig;
+		}
+		return new MongoDBRegistryServlet(config);
 	}
 
 	/**
