@@ -50,6 +50,17 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	}
 	
 	/**
+	 * Constructor with only mandatory attributes
+	 * @param idShort
+	 * @param first
+	 * @param second
+	 */
+	public RelationshipElement(String idShort, Reference first, Reference second) {
+		this(first, second);
+		setIdShort(idShort);
+	}
+	
+	/**
 	 * Creates a RelationshipElement object from a map
 	 * 
 	 * @param obj a RelationshipElement object as raw map

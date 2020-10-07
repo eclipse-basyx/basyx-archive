@@ -51,6 +51,28 @@ public class Operation extends SubmodelElement implements IOperation {
 		// Extension of DAAS specification for function storage
 		put(INVOKABLE, null);
 	}
+	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 */
+	public Operation(String idShort) {
+		super(idShort);
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
+		// Input variables
+		setInputVariables(new ArrayList<OperationVariable>());
+
+		// Output variables
+		setOutputVariables(new ArrayList<OperationVariable>());
+
+		// Variables, that are input and output
+		setInOutputVariables(new ArrayList<OperationVariable>());
+
+		// Extension of DAAS specification for function storage
+		setInvocable(null);
+	}
 
 	/**
 	 * 

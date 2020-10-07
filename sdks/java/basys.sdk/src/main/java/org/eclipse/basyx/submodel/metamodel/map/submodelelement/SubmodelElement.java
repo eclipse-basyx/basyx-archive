@@ -40,6 +40,15 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 	}
 	
 	/**
+	 * Constructor with only mandatory attribute
+	 * @param idShort
+	 */
+	protected SubmodelElement(String idShort) {
+		this();
+		setIdShort(idShort);
+	}
+	
+	/**
 	 * Creates a SubmodelElement object from a map
 	 * 
 	 * @param obj a SubmodelElement object as raw map

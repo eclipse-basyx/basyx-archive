@@ -32,6 +32,19 @@ public class Entity extends SubmodelElement implements IEntity {
 		putAll(new ModelType(MODELTYPE));
 	}
 	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 * @param entityType
+	 */
+	public Entity(String idShort, EntityType entityType) {
+		super(idShort);
+		setEntityType(entityType);
+		
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+	}
+	
 	public Entity(EntityType entityType, Collection<ISubmodelElement> statements, IReference asset) {
 		this();
 		setEntityType(entityType);

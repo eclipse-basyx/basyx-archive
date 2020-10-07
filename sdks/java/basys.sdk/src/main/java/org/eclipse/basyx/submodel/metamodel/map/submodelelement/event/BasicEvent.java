@@ -30,6 +30,19 @@ public class BasicEvent extends SubmodelElement implements IBasicEvent {
 		put(OBSERVED, observed);
 	}
 	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 * @param observed
+	 */
+	public BasicEvent(String idShort, IReference observed) {
+		super(idShort);
+		
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+		put(OBSERVED, observed);
+	}
+	
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.BASICEVENT;

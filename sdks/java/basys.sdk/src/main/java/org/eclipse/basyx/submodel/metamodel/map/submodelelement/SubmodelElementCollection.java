@@ -45,6 +45,21 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		put(ORDERED, true);
 		put(ALLOWDUPLICATES, true);
 	}
+	
+	/**
+	 * Constructor with only mandatory attribute
+	 * @param idShort
+	 */
+	protected SubmodelElementCollection(String idShort) {
+		super(idShort);
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
+		// Put attributes
+		setValue(new ArrayList<>());
+		setOrdered(true);
+		setAllowDuplicates(true);
+	}
 
 	/**
 	 * 

@@ -24,6 +24,17 @@ public class Blob extends DataElement implements IBlob {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 	}
+	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 * @param mimeType
+	 */
+	public Blob(String idShort, String mimeType) {
+		super(idShort);
+		putAll(new ModelType(MODELTYPE));
+		setMimeType(mimeType);
+	}
 
 	/**
 	 * Has to have a MimeType

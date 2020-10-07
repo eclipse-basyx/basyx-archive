@@ -26,6 +26,15 @@ public class File extends DataElement implements IFile{
 	}
 	
 	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param mimeType
+	 */
+	public File(String mimeType) {
+		this();
+		setMimeType(mimeType);
+	}
+	
+	/**
 	 * Creates a file data element. It has to have a mimeType <br/>
 	 * An absolute path is used in the case that the file exists independently of
 	 * the AAS. A relative path, relative to the package root should be used if the

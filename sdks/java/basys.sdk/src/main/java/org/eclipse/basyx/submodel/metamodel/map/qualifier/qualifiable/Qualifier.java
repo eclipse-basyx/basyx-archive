@@ -43,6 +43,15 @@ public class Qualifier extends Constraint implements IQualifier {
 		put(VALUEID, null);
 		put(VALUETYPE, "");
 	}
+	
+	/**
+	 * Constructor accepting mandatory attributes
+	 * @param type
+	 * @param valueType
+	 */
+	public Qualifier(String type, String valueType) {
+		this(type, null, valueType, null);
+	}
 
 	public Qualifier(String type, String value, String valueType, Reference valueId) {
 		// Add all attributes from HasSemantics

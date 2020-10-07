@@ -39,6 +39,24 @@ public class Property extends DataElement implements IProperty {
 		put(Property.VALUE, null);
 		put(Property.VALUEID, null);
 	}
+	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 * @param valueType
+	 */
+	public Property(String idShort, PropertyValueTypeDef valueType) {
+		super(idShort);
+		setValueType(valueType);
+		setIdShort(idShort);
+		
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
+		// Put attributes
+		put(Property.VALUE, null);
+		put(Property.VALUEID, null);
+	}
 
 	/**
 	 * Creates a Property object from a map

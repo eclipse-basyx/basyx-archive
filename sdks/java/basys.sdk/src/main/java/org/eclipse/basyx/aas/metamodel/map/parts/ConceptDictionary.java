@@ -36,6 +36,15 @@ public class ConceptDictionary extends VABModelMap<Object> implements IConceptDi
 		put(CONCEPTDESCRIPTION, new ArrayList<IReference>());
 		put(CONCEPTDESCRIPTIONS, new ArrayList<IConceptDescription>());
 	}
+	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 */
+	public ConceptDictionary(String idShort) {
+		this();
+		setIdShort(idShort);
+	}
 
 	public ConceptDictionary(Collection<IReference> ref) {
 		putAll(new Referable());

@@ -30,6 +30,18 @@ public class Range extends DataElement implements IRange {
 		put(VALUETYPE, valueType);
 	}
 	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 * @param valueType
+	 */
+	public Range(String idShort, String valueType) {
+		super(idShort);
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+		put(VALUETYPE, valueType);
+	}
+	
 	public Range(String valueType, Object min, Object max) {
 		this(valueType);
 		put(MIN, min);

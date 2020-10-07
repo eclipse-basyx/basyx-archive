@@ -48,6 +48,14 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 		// Reference to the parent of this element (Referable)
 		put(PARENT, null);
 	}
+	
+	/**
+	 * Constructor with mandatory attribute
+	 * @param idShort
+	 */
+	public Referable(String idShort) {
+		setIdShort(idShort);
+	}
 
 	/**
 	 * Constructor with idShort, category and description

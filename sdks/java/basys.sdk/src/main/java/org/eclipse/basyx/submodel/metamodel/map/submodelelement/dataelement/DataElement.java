@@ -15,6 +15,17 @@ public class DataElement extends SubmodelElement implements IDataElement {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 	}
+	
+	/**
+	 * Constructor with mandatory attribute
+	 * @param idShort
+	 */
+	public DataElement(String idShort) {
+		super(idShort);
+		
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+	}
 
 	/**
 	 * Returns true if the given submodel element map is recognized as a data element

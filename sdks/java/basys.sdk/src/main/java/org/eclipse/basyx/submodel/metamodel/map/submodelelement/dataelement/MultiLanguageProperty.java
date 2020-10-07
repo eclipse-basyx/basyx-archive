@@ -28,6 +28,16 @@ public class MultiLanguageProperty extends DataElement implements IMultiLanguage
 		putAll(new ModelType(MODELTYPE));
 	}
 	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 */
+	public MultiLanguageProperty(String idShort) {
+		super(idShort);
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+	}
+	
 	public MultiLanguageProperty(Reference reference, LangStrings langStrings) {
 		this();
 		put(VALUE, langStrings);

@@ -27,6 +27,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInforma
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -68,6 +69,18 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	 */
 	public AssetAdministrationShell() {
 		this(null, null, new Asset(), new HashSet<SubModel>(), new HashSet<IConceptDictionary>(), new HashSet<IView>());
+	}
+	
+	/**
+	 * Constructor accepting only mandatory attributes
+	 * @param idShort
+	 * @param identification
+	 * @param asset
+	 */
+	public AssetAdministrationShell(String idShort, Identifier identification, Asset asset) {
+		this(null, null, asset, new HashSet<SubModel>(), new HashSet<IConceptDictionary>(), new HashSet<IView>());
+		setIdentification(identification);
+		setIdShort(idShort);
 	}
 
 	public AssetAdministrationShell(Reference derivedFrom, Security security, Asset asset,
