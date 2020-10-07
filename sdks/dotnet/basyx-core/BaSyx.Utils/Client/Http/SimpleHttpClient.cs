@@ -16,23 +16,47 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BaSyx.Utils.Client.Http
 {
-    public abstract class SimpleHttpClient
+    public abstract class SimpleHttpClient : IDisposable
     {
         public HttpClient HttpClient { get; }
         public HttpClientHandler HttpClientHandler { get; }
         public JsonSerializerSettings JsonSerializerSettings { get; protected set; }
 
-        public const int DEFAULT_REQUEST_TIMEOUT = 20000;
+        public const int DEFAULT_REQUEST_TIMEOUT = 30000;
 
-        protected SimpleHttpClient()
+        public static HttpClientHandler DEFAULT_HTTP_CLIENT_HANDLER
         {
-            HttpClientHandler = new HttpClientHandler() { MaxConnectionsPerServer = 100, UseProxy = false };
-            HttpClient = new HttpClient(HttpClientHandler);
+            get
+            {
+                return new HttpClientHandler()
+                {
+                    MaxConnectionsPerServer = 100,
+                    AllowAutoRedirect = true,
+                    UseProxy = false,
+                    ServerCertificateCustomValidationCallback = Validate
+                };
+            }
+        }
+
+        private static bool Validate(HttpRequestMessage message, X509Certificate2 cert, X509Chain chain, SslPolicyErrors policyErrors)
+        {
+            return true;
+        }
+
+        protected SimpleHttpClient(HttpClientHandler clientHandler)
+        {
+            if (clientHandler == null)
+                clientHandler = DEFAULT_HTTP_CLIENT_HANDLER;
+
+            HttpClientHandler = clientHandler;
+            HttpClient = new HttpClient(HttpClientHandler, true);
 
             JsonSerializerSettings = new DefaultJsonSerializerSettings();
         }
@@ -130,19 +154,23 @@ namespace BaSyx.Utils.Client.Http
 
         protected virtual IResult EvaluateResponse(IResult result, HttpResponseMessage response)
         {
-            var messageList = new List<IMessage>();
+            List<IMessage> messageList = new List<IMessage>();
             messageList.AddRange(result.Messages);
 
             if (response != null)
             {
-                var responseString = response.Content.ReadAsStringAsync().Result;
+                byte[] responseByteArray = response.Content.ReadAsByteArrayAsync().Result;
                 if (response.IsSuccessStatusCode)
                 {
                     messageList.Add(new Message(MessageType.Information, response.ReasonPhrase, ((int)response.StatusCode).ToString()));
-                    return new Result(true, messageList);
+                    return new Result(true, responseByteArray, typeof(byte[]), messageList);
                 }
                 else
                 {
+                    string responseString = string.Empty;
+                    if(responseByteArray?.Length > 0)
+                        responseString = Encoding.UTF8.GetString(responseByteArray);
+
                     messageList.Add(new Message(MessageType.Error, response.ReasonPhrase + " | " + responseString, ((int)response.StatusCode).ToString()));
                     return new Result(false, messageList);
                 }
@@ -153,12 +181,12 @@ namespace BaSyx.Utils.Client.Http
 
         protected virtual IResult<T> EvaluateResponse<T>(IResult result, HttpResponseMessage response)
         {
-            var messageList = new List<IMessage>();
+            List<IMessage> messageList = new List<IMessage>();
             messageList.AddRange(result.Messages);
 
             if (response != null)
             {
-                var responseString = response.Content.ReadAsStringAsync().Result;
+                string responseString = response.Content.ReadAsStringAsync().Result;
                 if (response.IsSuccessStatusCode)
                 {
                     try
@@ -183,5 +211,28 @@ namespace BaSyx.Utils.Client.Http
             messageList.Add(new Message(MessageType.Error, "Evaluation of response failed - Response from host is null", null));
             return new Result<T>(false, messageList);
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    HttpClient.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
+
+
     }
 }

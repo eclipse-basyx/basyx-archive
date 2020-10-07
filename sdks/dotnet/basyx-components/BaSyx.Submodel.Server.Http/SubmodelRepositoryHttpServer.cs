@@ -19,8 +19,6 @@ namespace BaSyx.Submodel.Server.Http
 {
     public class SubmodelRepositoryHttpServer : ServerApplication
     {
-        private string submodelId = string.Empty;
-
         public SubmodelRepositoryHttpServer() : this(null, null)
         { }
 
@@ -40,21 +38,6 @@ namespace BaSyx.Submodel.Server.Http
             {
                 services.AddSingleton<ISubmodelRepositoryServiceProvider>(submodelRepositoryServiceProvider);
             });
-        }
-
-        protected override void ConfigureServices(IServiceCollection services)
-        {
-            base.ConfigureServices(services);
-
-            //Check whether Submodel Service Provider exists and bind it to the Submodel-Services-Controller
-            services.AddTransient<ISubmodelServiceProvider>(ctx =>
-            {
-                ISubmodelServiceProvider submodelServiceProvider = ctx
-                .GetRequiredService<ISubmodelRepositoryServiceProvider>()
-                .GetSubmodelServiceProvider(submodelId);
-
-                return submodelServiceProvider;
-            });
-        }
+        }       
     }
 }

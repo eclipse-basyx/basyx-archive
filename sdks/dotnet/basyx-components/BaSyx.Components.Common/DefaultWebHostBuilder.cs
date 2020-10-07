@@ -24,7 +24,7 @@ namespace BaSyx.Components.Common
             if (settings?.ServerConfig.Hosting?.Environment != null)
                 webHostBuilder.UseEnvironment(settings.ServerConfig.Hosting.Environment);
             else
-                webHostBuilder.UseEnvironment(Environments.Production);
+                webHostBuilder.UseEnvironment(Environments.Development);
 
             if (settings?.ServerConfig?.Hosting?.Urls?.Count > 0)
                 webHostBuilder.UseUrls(settings.ServerConfig.Hosting.Urls.ToArray());

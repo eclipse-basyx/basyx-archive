@@ -19,6 +19,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using BaSyx.Utils.Logging;
+using System.Net.Http;
+using BaSyx.Utils.Client.Http;
 
 namespace BaSyx.Discovery.mDNS
 {
@@ -108,8 +110,10 @@ namespace BaSyx.Discovery.mDNS
 
         private static void AssemblyDescriptor(ref IAssetAdministrationShellDescriptor aasDescriptor, Uri aasEndpoint)
         {
-            AssetAdministrationShellHttpClient client = new AssetAdministrationShellHttpClient(aasEndpoint);
-            IResult<IAssetAdministrationShellDescriptor> retrieveDescriptor = client.RetrieveAssetAdministrationShellDescriptor();
+            IResult<IAssetAdministrationShellDescriptor> retrieveDescriptor;
+            using (var client = new AssetAdministrationShellHttpClient(aasEndpoint, SimpleHttpClient.DEFAULT_HTTP_CLIENT_HANDLER))
+                retrieveDescriptor = client.RetrieveAssetAdministrationShellDescriptor();
+
             if (retrieveDescriptor.Success && retrieveDescriptor.Entity != null)
             {
                 retrieveDescriptor.LogResult(logger, LogLevel.Info, "Successfully retrieved AAS descriptor");

@@ -21,7 +21,7 @@ using System.Linq;
 
 namespace BaSyx.Common.UI.Swagger
 {
-    public static class OpenApiInfos
+    internal static class OpenApiInfos
     {
         #region Static OpenApi-Infos
         internal static readonly OpenApiInfo AssetAdministrationShell_OpenApiInfo = new OpenApiInfo
@@ -98,9 +98,9 @@ namespace BaSyx.Common.UI.Swagger
         All,
         AssetAdministrationShell,
         AssetAdministrationShellRepository,
+        AssetAdministrationShellRegistry,
         Submodel,
-        SubmodelRepository,
-        AssetAdministrationShellRegistry
+        SubmodelRepository,        
     }
     public static class SwaggerExtensions
     {
@@ -114,12 +114,13 @@ namespace BaSyx.Common.UI.Swagger
                     c.SwaggerDoc("v1", info);
 
                     // Set the comments path for the Swagger JSON and UI.
-                    var xmlFile = $"{serverApp.ControllerAssembly.GetName().Name}.xml";
-                    var xmlPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), xmlFile);
+                    string xmlFile = $"{serverApp.ControllerAssembly.GetName().Name}.xml";
+                    string xmlPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), xmlFile);
                     if (EmbeddedResource.CheckOrWriteRessourceToFile(serverApp.ControllerAssembly, xmlPath))
                         c.IncludeXmlComments(xmlPath, true);
 
-                    c.DocumentFilter<ControllerSelector>(interfaceType);
+                    if(interfaceType != Interface.All)
+                        c.DocumentFilter<ControllerSelector>(interfaceType);
                 });
                 services.AddSwaggerGenNewtonsoftSupport();
             });
@@ -141,10 +142,12 @@ namespace BaSyx.Common.UI.Swagger
         {
             private readonly Interface _interfaceType;
             private readonly string _interfaceName;
+            private readonly string _controllerName;
             public ControllerSelector(Interface interfaceType)
             {
                 _interfaceType = interfaceType;
                 _interfaceName = Enum.GetName(typeof(Interface), _interfaceType);
+                _controllerName = _interfaceName + "Controller";
             }
 
             public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
@@ -152,7 +155,7 @@ namespace BaSyx.Common.UI.Swagger
                 foreach (var apiDescription in context.ApiDescriptions)
                 {
                     string name = apiDescription.ActionDescriptor.DisplayName;
-                    if(!name.Contains(_interfaceName + "Controller"))
+                    if(!name.Contains(_controllerName))
                     {
                         string route = "/" + apiDescription.ActionDescriptor.AttributeRouteInfo.Template;
                         swaggerDoc.Paths.Remove(route);                        
@@ -160,7 +163,7 @@ namespace BaSyx.Common.UI.Swagger
                 }
                 foreach (var tag in swaggerDoc.Tags.ToList())
                 {
-                    if(tag.Name != (_interfaceName + "Controller"))
+                    if(tag.Name != _controllerName)
                     {
                         swaggerDoc.Tags.Remove(tag);
                     }

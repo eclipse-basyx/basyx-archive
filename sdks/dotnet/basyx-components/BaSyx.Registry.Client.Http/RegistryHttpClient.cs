@@ -36,9 +36,9 @@ namespace BaSyx.Registry.Client.Http
 
         private int RepeatRegistrationInterval = -1;
         private string baseUrl = null;
-        private int Timeout = -1;
-        private CancellationTokenSource RepeatRegistrationCancellationToken = null;
         
+        private CancellationTokenSource RepeatRegistrationCancellationToken = null;
+        public int RequestTimeout = DEFAULT_REQUEST_TIMEOUT;
 
         public void LoadSettings(RegistryClientSettings settings)
         {
@@ -48,24 +48,29 @@ namespace BaSyx.Registry.Client.Http
                 RepeatRegistrationInterval = settings.RegistryConfig.RepeatRegistration.Value;
 
             if (settings.ClientConfig.RequestConfig.RequestTimeout.HasValue)
-                Timeout = settings.ClientConfig.RequestConfig.RequestTimeout.Value;
+                RequestTimeout = settings.ClientConfig.RequestConfig.RequestTimeout.Value;
             else
-                Timeout = DEFAULT_REQUEST_TIMEOUT;
+                RequestTimeout = DEFAULT_REQUEST_TIMEOUT;
 
             baseUrl = settings.RegistryConfig.RegistryUrl.TrimEnd('/') + PATH_SEPERATOR + REGISTRY_BASE_PATH;
         }
 
-        public RegistryHttpClient() : this(null)
-        { }
-
-        public RegistryHttpClient(RegistryClientSettings registryClientSettings)
+        private RegistryHttpClient(HttpClientHandler clientHandler, RegistryClientSettings registryClientSettings) : base(clientHandler) 
         {
+            JsonSerializerSettings = new DependencyInjectionJsonSerializerSettings();
+
             Settings = registryClientSettings ?? RegistryClientSettings.LoadSettings();
             Settings = Settings ?? throw new NullReferenceException("Settings is null");
 
             LoadSettings(Settings);
-            JsonSerializerSettings = new DependencyInjectionJsonSerializerSettings();
         }
+
+        public RegistryHttpClient() : this (DEFAULT_HTTP_CLIENT_HANDLER, null)
+        { }
+        public RegistryHttpClient(RegistryClientSettings registryClientSettings) : this(DEFAULT_HTTP_CLIENT_HANDLER, registryClientSettings)
+        { }
+        public RegistryHttpClient(RegistryClientSettings registryClientSettings, HttpClientHandler clientHandler) : this(clientHandler, registryClientSettings)
+        { }
 
         public Uri GetUri(params string[] pathElements)
         {
@@ -107,7 +112,7 @@ namespace BaSyx.Registry.Client.Http
                 return new Result<IAssetAdministrationShellDescriptor>(new ArgumentNullException(nameof(aasDescriptor)));
 
             var request = base.CreateJsonContentRequest(GetUri(aasId), HttpMethod.Put, aasDescriptor);
-            var response = base.SendRequest(request, Timeout);
+            var response = base.SendRequest(request, RequestTimeout);
             return base.EvaluateResponse<IAssetAdministrationShellDescriptor>(response, response.Entity);
         }
 
@@ -117,7 +122,7 @@ namespace BaSyx.Registry.Client.Http
                 return new Result<IAssetAdministrationShellDescriptor>(new ArgumentNullException(nameof(aasId)));
 
             var request = base.CreateRequest(GetUri(aasId), HttpMethod.Get);
-            var response = base.SendRequest(request, Timeout);
+            var response = base.SendRequest(request, RequestTimeout);
             return base.EvaluateResponse<IAssetAdministrationShellDescriptor>(response, response.Entity);
         }
 
@@ -127,7 +132,7 @@ namespace BaSyx.Registry.Client.Http
                 return new Result<IQueryableElementContainer<IAssetAdministrationShellDescriptor>>(new ArgumentNullException(nameof(predicate)));
 
             var request = base.CreateRequest(GetUri(), HttpMethod.Get);
-            var response = base.SendRequest(request, Timeout);
+            var response = base.SendRequest(request, RequestTimeout);
             var result = base.EvaluateResponse<IEnumerable<IAssetAdministrationShellDescriptor>>(response, response.Entity);
 
             if (!result.Success || result.Entity == null)
@@ -142,7 +147,7 @@ namespace BaSyx.Registry.Client.Http
         public IResult<IQueryableElementContainer<IAssetAdministrationShellDescriptor>> RetrieveAllAssetAdministrationShellRegistrations()
         {
             var request = base.CreateRequest(GetUri(), HttpMethod.Get);
-            var response = base.SendRequest(request, Timeout);
+            var response = base.SendRequest(request, RequestTimeout);
             var result = base.EvaluateResponse<IEnumerable<IAssetAdministrationShellDescriptor>>(response, response.Entity);
             return new Result<IQueryableElementContainer<IAssetAdministrationShellDescriptor>>(result.Success, result.Entity?.AsQueryableElementContainer(), result.Messages);
         }
@@ -156,7 +161,7 @@ namespace BaSyx.Registry.Client.Http
                 RepeatRegistrationCancellationToken?.Cancel();
 
             var request = base.CreateRequest(GetUri(aasId), HttpMethod.Delete);
-            var response = base.SendRequest(request, Timeout);
+            var response = base.SendRequest(request, RequestTimeout);
             return base.EvaluateResponse(response, response.Entity);
         }
 
@@ -170,7 +175,7 @@ namespace BaSyx.Registry.Client.Http
                 return new Result<ISubmodelDescriptor>(new ArgumentNullException(nameof(submodelDescriptor)));
 
             var request = base.CreateJsonContentRequest(GetUri(aasId, SUBMODEL_PATH, submodelId), HttpMethod.Put, submodelDescriptor);
-            var response = base.SendRequest(request, Timeout);
+            var response = base.SendRequest(request, RequestTimeout);
             return base.EvaluateResponse<ISubmodelDescriptor>(response, response.Entity);
         }
 
@@ -182,7 +187,7 @@ namespace BaSyx.Registry.Client.Http
                 return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(new ArgumentNullException(nameof(predicate)));
 
             var request = base.CreateRequest(GetUri(aasId, SUBMODEL_PATH), HttpMethod.Get);
-            var response = base.SendRequest(request, Timeout);
+            var response = base.SendRequest(request, RequestTimeout);
             var result = base.EvaluateResponse<IEnumerable<ISubmodelDescriptor>>(response, response.Entity);
 
             if (!result.Success || result.Entity == null)
@@ -200,7 +205,7 @@ namespace BaSyx.Registry.Client.Http
                 return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(new ArgumentNullException(nameof(aasId)));
 
             var request = base.CreateRequest(GetUri(aasId, SUBMODEL_PATH), HttpMethod.Get);
-            var response = base.SendRequest(request, Timeout);
+            var response = base.SendRequest(request, RequestTimeout);
             var result = base.EvaluateResponse<IEnumerable<ISubmodelDescriptor>>(response, response.Entity);
 
             return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(result.Success, result.Entity?.AsQueryableElementContainer(), result.Messages);
@@ -214,7 +219,7 @@ namespace BaSyx.Registry.Client.Http
                 return new Result<ISubmodelDescriptor>(new ArgumentNullException(nameof(submodelId)));
 
             var request = base.CreateRequest(GetUri(aasId, SUBMODEL_PATH, submodelId), HttpMethod.Get);
-            var response = base.SendRequest(request, Timeout);
+            var response = base.SendRequest(request, RequestTimeout);
             return base.EvaluateResponse<ISubmodelDescriptor>(response, response.Entity);
         }
 
@@ -226,7 +231,7 @@ namespace BaSyx.Registry.Client.Http
                 return new Result(new ArgumentNullException(nameof(submodelId)));
 
             var request = base.CreateRequest(GetUri(aasId, SUBMODEL_PATH, submodelId), HttpMethod.Delete);
-            var response = base.SendRequest(request, Timeout);
+            var response = base.SendRequest(request, RequestTimeout);
             return base.EvaluateResponse(response, response.Entity);
         }   
     }

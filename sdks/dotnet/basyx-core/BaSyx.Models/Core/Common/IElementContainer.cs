@@ -19,8 +19,6 @@ namespace BaSyx.Models.Core.Common
 {
     public interface ICrudContainer<TIdentifier, TElement> : ICollection<TElement> where TElement : IReferable, IModelElement
     {
-        IResult<T> Create<T>(T element) where T : class, TElement;
-
         IResult<TElement> Retrieve(TIdentifier id);
 
         IResult<T> Retrieve<T>(TIdentifier id) where T : class, TElement;
@@ -31,10 +29,11 @@ namespace BaSyx.Models.Core.Common
 
         IResult<TElement> CreateOrUpdate(TIdentifier id, TElement element);
 
+        IResult<TElement> Create(TElement element);
+
         IResult<TElement> Update(TIdentifier id, TElement element);
 
         IResult Delete(TIdentifier id);
-       
     }
 
     [JsonConverter(typeof(ElementContainerConverter))]

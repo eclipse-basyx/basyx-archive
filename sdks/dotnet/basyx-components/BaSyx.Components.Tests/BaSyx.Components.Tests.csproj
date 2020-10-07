@@ -30,6 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BaSyx.AAS.Client.Http\BaSyx.AAS.Client.Http.csproj" />
+    <ProjectReference Include="..\BaSyx.AAS.Server.Http\BaSyx.AAS.Server.Http.csproj" />
     <ProjectReference Include="..\BaSyx.Registry.Client.Http\BaSyx.Registry.Client.Http.csproj" />
     <ProjectReference Include="..\BaSyx.Registry.ReferenceImpl.FileBased\BaSyx.Registry.ReferenceImpl.FileBased.csproj" />
     <ProjectReference Include="..\BaSyx.Registry.Server.Http\BaSyx.Registry.Server.Http.csproj" />

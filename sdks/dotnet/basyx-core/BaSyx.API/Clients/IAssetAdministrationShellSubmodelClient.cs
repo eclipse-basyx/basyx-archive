@@ -15,21 +15,21 @@ using BaSyx.Models.Communication;
 
 namespace BaSyx.API.Clients
 {
-    public interface ISubmodelClient
+    public interface IAssetAdministrationShellSubmodelClient
     {
-        IResult<ISubmodel> RetrieveSubmodel();
+        IResult<ISubmodel> RetrieveSubmodel(string submodelId);
 
-        IResult<ISubmodelElement> CreateOrUpdateSubmodelElement(string rootSeIdShortPath, ISubmodelElement submodelElement);
+        IResult<ISubmodelElement> CreateOrUpdateSubmodelElement(string submodelId, string rootSeIdShortPath, ISubmodelElement submodelElement);
 
-        IResult<IElementContainer<ISubmodelElement>> RetrieveSubmodelElements();
+        IResult<IElementContainer<ISubmodelElement>> RetrieveSubmodelElements(string submodelId);
 
-        IResult<ISubmodelElement> RetrieveSubmodelElement(string seIdShortPath);
+        IResult<ISubmodelElement> RetrieveSubmodelElement(string submodelId, string seIdShortPath);
 
-        IResult<IValue> RetrieveSubmodelElementValue(string seIdShortPath);
+        IResult<IValue> RetrieveSubmodelElementValue(string submodelId, string seIdShortPath);
 
-        IResult UpdateSubmodelElementValue(string seIdShortPath, IValue value);
+        IResult UpdateSubmodelElementValue(string submodelId, string seIdShortPath, IValue value);
 
-        IResult DeleteSubmodelElement(string seIdShortPath);
+        IResult DeleteSubmodelElement(string submodelId, string seIdShortPath);
 
         /// <summary>
         /// Invokes a specific Operation synchronously
@@ -37,7 +37,7 @@ namespace BaSyx.API.Clients
         /// <param name="operationIdShortPath">IdShort-Path to the Operation</param>
         /// <param name="invocationRequest">Request-Parameters for the invocation</param>
         /// <returns></returns>
-        IResult<InvocationResponse> InvokeOperation(string operationIdShortPath, InvocationRequest invocationRequest);
+        IResult<InvocationResponse> InvokeOperation(string submodelId, string operationIdShortPath, InvocationRequest invocationRequest);
 
         /// <summary>
         /// Invokes a specific Operation asynchronously
@@ -45,7 +45,7 @@ namespace BaSyx.API.Clients
         /// <param name="operationIdShortPath">IdShort-Path to the Operation</param>
         /// <param name="invocationRequest">Request-Parameters for the invocation</param>
         /// <returns></returns>
-        IResult<CallbackResponse> InvokeOperationAsync(string operationIdShortPath, InvocationRequest invocationRequest);
+        IResult<CallbackResponse> InvokeOperationAsync(string submodelId, string operationIdShortPath, InvocationRequest invocationRequest);
 
         /// <summary>
         /// Returns the Invocation Result of specific Operation
@@ -53,6 +53,6 @@ namespace BaSyx.API.Clients
         /// <param name="operationIdShortPath">IdShort-Path to the Operation</param>
         /// <param name="requestId">Request-Id</param>
         /// <returns></returns>
-        IResult<InvocationResponse> GetInvocationResult(string operationIdShortPath, string requestId);
+        IResult<InvocationResponse> GetInvocationResult(string submodelId, string operationIdShortPath, string requestId);
     }
 }

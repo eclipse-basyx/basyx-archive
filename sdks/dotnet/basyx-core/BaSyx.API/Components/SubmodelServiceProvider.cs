@@ -200,7 +200,13 @@ namespace BaSyx.API.Components
             else
                 submodelElementHandler[pathToElement] = elementHandler;
         }
-        
+
+        public void UnregisterSubmodelElementHandler(string pathToElement)
+        {
+            if (submodelElementHandler.ContainsKey(pathToElement))
+                submodelElementHandler.Remove(pathToElement);
+        }
+
         public void RegisterMethodCalledHandler(string pathToOperation, MethodCalledHandler handler)
         {
             if (!methodCalledHandler.ContainsKey(pathToOperation))
@@ -208,7 +214,7 @@ namespace BaSyx.API.Components
             else
                 methodCalledHandler[pathToOperation] = handler;
         }
-          
+
         public void RegisterEventDelegate(string pathToEvent, EventDelegate eventDelegate)
         {
             if (!eventDelegates.ContainsKey(pathToEvent))
@@ -407,12 +413,15 @@ namespace BaSyx.API.Components
             return new Result<ISubmodel>(_submodel != null, _submodel);
         }
 
-        public IResult<ISubmodelElement> CreateSubmodelElement(string pathToSubmodelElement, ISubmodelElement submodelElement)
+        public IResult<ISubmodelElement> CreateOrUpdateSubmodelElement(string pathToSubmodelElement, ISubmodelElement submodelElement)
         {
             if (_submodel == null)
                 return new Result<ISubmodelElement>(false, new NotFoundMessage("Submodel"));
 
-            return _submodel.SubmodelElements.Create(submodelElement);
+            var created = _submodel.SubmodelElements.CreateOrUpdate(pathToSubmodelElement, submodelElement);
+            if(created.Success && created.Entity != null)
+                RegisterSubmodelElementHandler(pathToSubmodelElement, new SubmodelElementHandler(submodelElement.Get, submodelElement.Set));
+            return created;
         }
 
         public IResult<IElementContainer<ISubmodelElement>> RetrieveSubmodelElements()
@@ -447,20 +456,9 @@ namespace BaSyx.API.Components
                     return new Result<IValue>(true, elementHandler.GetValueHandler.Invoke(submodelElement.Entity));
                 else
                     return new Result<IValue>(false, new Message(MessageType.Error, "SubmodelElement not found"));
-            }
+            }            
             else
                 return new Result<IValue>(false, new Message(MessageType.Error, "SubmodelElementHandler not found"));
-        }
-
-        public IResult UpdateSubmodelElement(string submodelElementId, ISubmodelElement submodelElement)
-        {
-            if (_submodel == null)
-                return new Result(false, new NotFoundMessage("Submodel"));
-
-            if (_submodel.SubmodelElements == null)
-                return new Result(false, new NotFoundMessage(submodelElementId));
-
-            return _submodel.SubmodelElements.Update(submodelElementId, submodelElement);
         }
 
         public IResult UpdateSubmodelElementValue(string submodelElementId, IValue value)
@@ -491,7 +489,10 @@ namespace BaSyx.API.Components
             if (_submodel.SubmodelElements == null)
                 return new Result(false, new NotFoundMessage(submodelElementId));
 
-            return _submodel.SubmodelElements.Delete(submodelElementId);
+            var deleted = _submodel.SubmodelElements.Delete(submodelElementId);
+            if (deleted.Success)
+                UnregisterSubmodelElementHandler(submodelElementId);
+            return deleted;
         }        
     }
 }

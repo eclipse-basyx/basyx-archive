@@ -21,7 +21,7 @@ namespace BaSyx.Models.Connectivity
         [IgnoreDataMember]
         public Uri Url { get; }
 
-        public string Type => EndpointType.HTTP;
+        public string Type { get; }
 
         public IEndpointSecurity Security { get; set;}
 
@@ -30,6 +30,7 @@ namespace BaSyx.Models.Connectivity
         {
             address = address ?? throw new ArgumentNullException(nameof(address));
             Url = new Uri(address);
+            Type = Url.Scheme;
             Address = Url.ToString();
         }
 

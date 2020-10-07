@@ -142,7 +142,7 @@ namespace BaSyx.API.Http.Controllers
 
             seIdShortPath = HttpUtility.UrlDecode(seIdShortPath);
 
-            var result = serviceProvider.CreateSubmodelElement(seIdShortPath, submodelElement);
+            var result = serviceProvider.CreateOrUpdateSubmodelElement(seIdShortPath, submodelElement);
             return result.CreateActionResult(CrudOperation.Create, "submodel/submodelElements/" + seIdShortPath);
         }
 

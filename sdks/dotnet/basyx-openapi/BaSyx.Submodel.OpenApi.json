@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "BaSyx Submodel HTTP REST-API",
-    "description": "The full OpenAPI 3.0.1 specification of the BaSyx Submodel HTTP REST-API",
+    "description": "The full description of the generic BaSyx Submodel HTTP REST-API",
     "contact": {
       "name": "Constantin Ziesche",
       "url": "https://www.bosch.com/de/",
@@ -15,10 +15,65 @@
     "version": "v1"
   },
   "paths": {
+    "/submodel": {
+      "get": {
+        "tags": [
+          "Submodel"
+        ],
+        "summary": "Retrieves the entire Submodel",
+        "operationId": "GetSubmodel",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Submodel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Submodel not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/submodel/values": {
+      "get": {
+        "tags": [
+          "Submodel"
+        ],
+        "summary": "Retrieves the minimized version of a Submodel, i.e. only the values of SubmodelElements are serialized and returned",
+        "operationId": "GetSubmodelValues",
+        "responses": {
+          "404": {
+            "description": "Submodel not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/submodel/table": {
       "get": {
         "tags": [
-          "SubmodelServices"
+          "Submodel"
         ],
         "summary": "Retrieves a customizable table version of a Submodel",
         "operationId": "GetSubmodelAsTable",
@@ -38,17 +93,7 @@
           "404": {
             "description": "Submodel not found",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Result"
                 }
@@ -57,91 +102,6 @@
           },
           "200": {
             "description": "Success"
-          }
-        }
-      }
-    },
-    "/submodel/values": {
-      "get": {
-        "tags": [
-          "SubmodelServices"
-        ],
-        "summary": "Retrieves the minimized version of a Submodel, i.e. only the values of SubmodelElements are serialized and returned",
-        "operationId": "GetSubmodelValues",
-        "responses": {
-          "404": {
-            "description": "Submodel not found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/submodel": {
-      "get": {
-        "tags": [
-          "SubmodelServices"
-        ],
-        "summary": "Retrieves the entire Submodel",
-        "operationId": "GetSubmodel",
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Submodel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Submodel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Submodel"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Submodel not found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              }
-            }
           }
         }
       }
@@ -149,7 +109,7 @@
     "/submodel/submodelElements": {
       "get": {
         "tags": [
-          "SubmodelServices"
+          "Submodel"
         ],
         "summary": "Retrieves all Submodel-Elements from the Submodel",
         "operationId": "GetSubmodelElements",
@@ -157,23 +117,7 @@
           "200": {
             "description": "Returns a list of found Submodel-Elements",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SubmodelElement"
-                  }
-                }
-              },
               "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SubmodelElement"
-                  }
-                }
-              },
-              "text/json": {
                 "schema": {
                   "type": "array",
                   "items": {
@@ -186,17 +130,7 @@
           "404": {
             "description": "Submodel not found",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Result"
                 }
@@ -204,32 +138,32 @@
             }
           }
         }
-      },
+      }
+    },
+    "/submodel/submodelElements/{seIdShortPath}": {
       "put": {
         "tags": [
-          "SubmodelServices"
+          "Submodel"
         ],
-        "summary": "Adds a new Submodel-Element to the Submodel",
+        "summary": "Creates or updates a Submodel-Element at the Submodel",
         "operationId": "PutSubmodelElement",
+        "parameters": [
+          {
+            "name": "seIdShortPath",
+            "in": "path",
+            "description": "The Submodel-Element's IdShort-Path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The Submodel-Element's IdShort-Path",
+              "nullable": true
+            }
+          }
+        ],
         "requestBody": {
           "description": "The Submodel-Element object",
           "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ISubmodelElement"
-              }
-            },
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ISubmodelElement"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ISubmodelElement"
-              }
-            },
-            "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/ISubmodelElement"
               }
@@ -240,17 +174,7 @@
           "201": {
             "description": "Submodel-Element created successfully",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/SubmodelElement"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SubmodelElement"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SubmodelElement"
                 }
@@ -260,17 +184,7 @@
           "400": {
             "description": "Bad Request",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Result"
                 }
@@ -278,19 +192,9 @@
             }
           },
           "404": {
-            "description": "Submodel not found",
+            "description": "Not Found",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Result"
                 }
@@ -298,24 +202,22 @@
             }
           }
         }
-      }
-    },
-    "/submodel/submodelElements/{submodelElementIdShort}": {
+      },
       "get": {
         "tags": [
-          "SubmodelServices"
+          "Submodel"
         ],
         "summary": "Retrieves a specific Submodel-Element from the Submodel",
         "operationId": "GetSubmodelElementByIdShort",
         "parameters": [
           {
-            "name": "submodelElementIdShort",
+            "name": "seIdShortPath",
             "in": "path",
-            "description": "The Submodel-Element's short id",
+            "description": "The Submodel-Element's IdShort-Path",
             "required": true,
             "schema": {
               "type": "string",
-              "description": "The Submodel-Element's short id",
+              "description": "The Submodel-Element's IdShort-Path",
               "nullable": true
             }
           }
@@ -324,17 +226,7 @@
           "200": {
             "description": "Returns the requested Submodel-Element",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/SubmodelElement"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SubmodelElement"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SubmodelElement"
                 }
@@ -342,132 +234,32 @@
             }
           },
           "404": {
-            "description": "Submodel / Submodel Element not found",
+            "description": "Submodel Element not found",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Result"
                 }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
               }
             }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "SubmodelServices"
-        ],
-        "summary": "Updates the Asset Administration Shell's Submodel's Submodel-Element",
-        "operationId": "PutSubmodelElementValueByIdShort",
-        "parameters": [
-          {
-            "name": "submodelElementIdShort",
-            "in": "path",
-            "description": "The Submodel-Element's short id",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The Submodel-Element's short id",
-              "nullable": true
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "The new value",
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ElementValue"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ElementValue"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ElementValue"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ElementValue"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Submodel-Element's value changed successfully",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ElementValue"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ElementValue"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ElementValue"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Submodel / Submodel-Element not found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              }
-            }
-          },
-          "405": {
-            "description": "Method not allowed"
           }
         }
       },
       "delete": {
         "tags": [
-          "SubmodelServices"
+          "Submodel"
         ],
         "summary": "Deletes a specific Submodel-Element from the Submodel",
         "operationId": "DeleteSubmodelElementByIdShort",
         "parameters": [
           {
-            "name": "submodelElementIdShort",
+            "name": "seIdShortPath",
             "in": "path",
-            "description": "The Submodel-Element's short id",
+            "description": "The Submodel-Element's IdShort-Path",
             "required": true,
             "schema": {
               "type": "string",
-              "description": "The Submodel-Element's short id",
+              "description": "The Submodel-Element's IdShort-Path",
               "nullable": true
             }
           }
@@ -476,17 +268,7 @@
           "200": {
             "description": "Success",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Result"
                 }
@@ -497,27 +279,27 @@
             "description": "Submodel-Element deleted successfully"
           },
           "404": {
-            "description": "Submodel / Submodel-Element not found"
+            "description": "Submodel-Element not found"
           }
         }
       }
     },
-    "/submodel/submodelElements/{submodelElementIdShort}/value": {
+    "/submodel/submodelElements/{seIdShortPath}/value": {
       "get": {
         "tags": [
-          "SubmodelServices"
+          "Submodel"
         ],
         "summary": "Retrieves the value of a specific Submodel-Element from the Submodel",
         "operationId": "GetSubmodelElementValueByIdShort",
         "parameters": [
           {
-            "name": "submodelElementIdShort",
+            "name": "seIdShortPath",
             "in": "path",
-            "description": "The Submodel-Element's short id",
+            "description": "The Submodel-Element's IdShort-Path",
             "required": true,
             "schema": {
               "type": "string",
-              "description": "The Submodel-Element's short id",
+              "description": "The Submodel-Element's IdShort-Path",
               "nullable": true
             }
           }
@@ -526,17 +308,7 @@
           "200": {
             "description": "Returns the value of a specific Submodel-Element",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "object"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "type": "object"
                 }
@@ -546,17 +318,7 @@
           "404": {
             "description": "Submodel / Submodel-Element not found",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Result"
                 }
@@ -566,17 +328,7 @@
           "405": {
             "description": "Method not allowed",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Result"
                 }
@@ -584,24 +336,81 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "Submodel"
+        ],
+        "summary": "Updates the Submodel-Element's value",
+        "operationId": "PutSubmodelElementValueByIdShort",
+        "parameters": [
+          {
+            "name": "seIdShortPath",
+            "in": "path",
+            "description": "The Submodel-Element's IdShort-Path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The Submodel-Element's IdShort-Path",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The new value",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "The new value",
+                "nullable": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Submodel-Element's value changed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ElementValue"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Submodel-Element not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed"
+          }
+        }
       }
     },
-    "/submodel/submodelElements/{operationIdShort}/invoke/{async}": {
+    "/submodel/submodelElements/{idShortPathToOperation}/invoke": {
       "post": {
         "tags": [
-          "SubmodelServices"
+          "Submodel"
         ],
         "summary": "Invokes a specific operation from the Submodel synchronously or asynchronously",
         "operationId": "InvokeOperationByIdShortAsync",
         "parameters": [
           {
-            "name": "operationIdShort",
+            "name": "idShortPathToOperation",
             "in": "path",
-            "description": "The Operation's short id",
+            "description": "The IdShort path to the Operation",
             "required": true,
             "schema": {
               "type": "string",
-              "description": "The Operation's short id",
+              "description": "The IdShort path to the Operation",
               "nullable": true
             }
           },
@@ -613,35 +422,12 @@
               "type": "boolean",
               "description": "Determines whether the execution of the operation is asynchronous (true) or not (false)"
             }
-          },
-          {
-            "name": "async",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "requestBody": {
           "description": "The parameterized request object for the invocation",
           "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/InvocationRequest"
-              }
-            },
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InvocationRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InvocationRequest"
-              }
-            },
-            "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/InvocationRequest"
               }
@@ -652,17 +438,7 @@
           "400": {
             "description": "Bad Request",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Result"
                 }
@@ -670,19 +446,9 @@
             }
           },
           "404": {
-            "description": "Submodel / Method handler not found",
+            "description": "Method handler not found",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Result"
                 }
@@ -695,22 +461,22 @@
         }
       }
     },
-    "/submodel/submodelElements/{operationIdShort}/invocationList/{requestId}": {
+    "/submodel/submodelElements/{idShortPathToOperation}/invocationList/{requestId}": {
       "get": {
         "tags": [
-          "SubmodelServices"
+          "Submodel"
         ],
         "summary": "Retrieves the result of an asynchronously started operation",
         "operationId": "GetInvocationResultByIdShort",
         "parameters": [
           {
-            "name": "operationIdShort",
+            "name": "idShortPathToOperation",
             "in": "path",
-            "description": "The Operation's short id",
+            "description": "The IdShort path to the Operation",
             "required": true,
             "schema": {
               "type": "string",
-              "description": "The Operation's short id",
+              "description": "The IdShort path to the Operation",
               "nullable": true
             }
           },
@@ -730,17 +496,7 @@
           "200": {
             "description": "Result found",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvocationResponse"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvocationResponse"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InvocationResponse"
                 }
@@ -750,17 +506,7 @@
           "400": {
             "description": "Bad Request",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Result"
                 }
@@ -768,19 +514,9 @@
             }
           },
           "404": {
-            "description": "Submodel / Operation / Request not found",
+            "description": "Operation / Request not found",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Result"
                 }
@@ -1109,62 +845,6 @@
           }
         }
       },
-      "MessageType": {
-        "enum": [
-          "Unspecified",
-          "Debug",
-          "Information",
-          "Warning",
-          "Error",
-          "Fatal",
-          "Exception"
-        ],
-        "type": "string"
-      },
-      "Message": {
-        "type": "object",
-        "properties": {
-          "messageType": {
-            "$ref": "#/components/schemas/MessageType"
-          },
-          "text": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "Result": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "isException": {
-            "type": "boolean",
-            "nullable": true,
-            "readOnly": true
-          },
-          "entity": {
-            "type": "object",
-            "nullable": true
-          },
-          "entityType": {
-            "type": "string",
-            "nullable": true
-          },
-          "messages": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Message"
-            },
-            "nullable": true
-          }
-        }
-      },
       "ModelingKind": {
         "enum": [
           "Instance",
@@ -1284,159 +964,57 @@
           }
         }
       },
-      "AssetAdministrationShellReference": {
+      "MessageType": {
+        "enum": [
+          "Unspecified",
+          "Debug",
+          "Information",
+          "Warning",
+          "Error",
+          "Fatal",
+          "Exception"
+        ],
+        "type": "string"
+      },
+      "Message": {
         "type": "object",
         "properties": {
-          "keys": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Key"
-            },
+          "messageType": {
+            "$ref": "#/components/schemas/MessageType"
+          },
+          "text": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
             "nullable": true
           }
         }
       },
-      "View": {
+      "Result": {
         "type": "object",
         "properties": {
-          "idShort": {
-            "type": "string",
-            "nullable": true
+          "success": {
+            "type": "boolean"
           },
-          "containedElements": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Reference"
-            },
-            "nullable": true
-          },
-          "semanticId": {
-            "$ref": "#/components/schemas/Reference"
-          },
-          "category": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LangString"
-            },
-            "nullable": true
-          },
-          "modelType": {
-            "$ref": "#/components/schemas/ModelType"
-          }
-        }
-      },
-      "ConceptDescriptionReference": {
-        "type": "object",
-        "properties": {
-          "keys": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Key"
-            },
-            "nullable": true
-          }
-        }
-      },
-      "ConceptDictionary": {
-        "type": "object",
-        "properties": {
-          "idShort": {
-            "type": "string",
-            "nullable": true
-          },
-          "category": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LangString"
-            },
-            "nullable": true
-          },
-          "metaData": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "conceptDescriptions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ConceptDescriptionReference"
-            },
-            "nullable": true
-          },
-          "modelType": {
-            "$ref": "#/components/schemas/ModelType"
-          }
-        }
-      },
-      "AssetAdministrationShell": {
-        "type": "object",
-        "properties": {
-          "idShort": {
-            "type": "string",
-            "nullable": true
-          },
-          "asset": {
-            "$ref": "#/components/schemas/Asset"
-          },
-          "submodels": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Submodel"
-            },
-            "nullable": true
-          },
-          "derivedFrom": {
-            "$ref": "#/components/schemas/AssetAdministrationShellReference"
-          },
-          "views": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/View"
-            },
-            "nullable": true
-          },
-          "modelType": {
-            "$ref": "#/components/schemas/ModelType"
-          },
-          "embeddedDataSpecifications": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/IEmbeddedDataSpecification"
-            },
+          "isException": {
+            "type": "boolean",
             "nullable": true,
             "readOnly": true
           },
-          "conceptDictionaries": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ConceptDictionary"
-            },
+          "entity": {
+            "type": "object",
             "nullable": true
           },
-          "identification": {
-            "$ref": "#/components/schemas/Identifier"
-          },
-          "administration": {
-            "$ref": "#/components/schemas/AdministrativeInformation"
-          },
-          "category": {
+          "entityType": {
             "type": "string",
             "nullable": true
           },
-          "description": {
+          "messages": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/LangString"
+              "$ref": "#/components/schemas/Message"
             },
             "nullable": true
           }
@@ -1600,13 +1178,165 @@
             "$ref": "#/components/schemas/ExecutionState"
           }
         }
+      },
+      "AssetAdministrationShellReference": {
+        "type": "object",
+        "properties": {
+          "keys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Key"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "View": {
+        "type": "object",
+        "properties": {
+          "idShort": {
+            "type": "string",
+            "nullable": true
+          },
+          "containedElements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Reference"
+            },
+            "nullable": true
+          },
+          "semanticId": {
+            "$ref": "#/components/schemas/Reference"
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LangString"
+            },
+            "nullable": true
+          },
+          "modelType": {
+            "$ref": "#/components/schemas/ModelType"
+          }
+        }
+      },
+      "ConceptDescriptionReference": {
+        "type": "object",
+        "properties": {
+          "keys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Key"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "ConceptDictionary": {
+        "type": "object",
+        "properties": {
+          "idShort": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LangString"
+            },
+            "nullable": true
+          },
+          "metaData": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "conceptDescriptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConceptDescriptionReference"
+            },
+            "nullable": true
+          },
+          "modelType": {
+            "$ref": "#/components/schemas/ModelType"
+          }
+        }
+      },
+      "AssetAdministrationShell": {
+        "type": "object",
+        "properties": {
+          "idShort": {
+            "type": "string",
+            "nullable": true
+          },
+          "asset": {
+            "$ref": "#/components/schemas/Asset"
+          },
+          "submodels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Submodel"
+            },
+            "nullable": true
+          },
+          "derivedFrom": {
+            "$ref": "#/components/schemas/AssetAdministrationShellReference"
+          },
+          "views": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/View"
+            },
+            "nullable": true
+          },
+          "modelType": {
+            "$ref": "#/components/schemas/ModelType"
+          },
+          "embeddedDataSpecifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IEmbeddedDataSpecification"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "conceptDictionaries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConceptDictionary"
+            },
+            "nullable": true
+          },
+          "identification": {
+            "$ref": "#/components/schemas/Identifier"
+          },
+          "administration": {
+            "$ref": "#/components/schemas/AdministrativeInformation"
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LangString"
+            },
+            "nullable": true
+          }
+        }
       }
     }
-  },
-  "tags": [
-    {
-      "name": "SubmodelServices",
-      "description": "All Submodel Services provided by the component"
-    }
-  ]
+  }
 }

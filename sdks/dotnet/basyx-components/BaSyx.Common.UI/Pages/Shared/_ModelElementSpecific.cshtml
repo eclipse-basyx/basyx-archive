@@ -58,7 +58,15 @@
                 {
                     <li class="list-group-item">
                         <div class="row align-items-center">
-                            <object data="@path" style="height:500px; width:100%"></object>
+                            @if (file.MimeType.StartsWith("image"))
+                            {
+                                <img src="@path" style="display:block; max-width:100%; height:auto" />
+                            }
+                            else
+                            {
+                                <object data="@path" style="min-height:500px; width:100%"></object>
+                            }
+
                         </div>
                     </li>
                 }

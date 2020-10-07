@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
@@ -44,8 +43,8 @@ namespace BaSyx.Components.Common
         private string _webRoot;
         private bool _secure = false;
 
-        private List<Action<IApplicationBuilder>> AppBuilderPipeline;
-        private List<Action<IServiceCollection>> ServiceBuilderPipeline;
+        private readonly List<Action<IApplicationBuilder>> AppBuilderPipeline;
+        private readonly List<Action<IServiceCollection>> ServiceBuilderPipeline;
 
         public const string DEFAULT_CONTENT_ROOT = "Content";
         public const string DEFAULT_WEB_ROOT = "wwwroot";
@@ -87,9 +86,9 @@ namespace BaSyx.Components.Common
             AppBuilderPipeline = new List<Action<IApplicationBuilder>>();
             ServiceBuilderPipeline = new List<Action<IServiceCollection>>();
 
-            WebHostBuilder.ConfigureServices(services =>
+            WebHostBuilder.ConfigureServices( (context, services) =>
             {
-                ConfigureServices(services);
+                ConfigureServices(context, services);
             });
 
             WebHostBuilder.Configure(app =>
@@ -276,14 +275,15 @@ namespace BaSyx.Components.Common
             });
         }
 
-        protected virtual void ConfigureServices(IServiceCollection services)
+        protected virtual void ConfigureServices(WebHostBuilderContext context, IServiceCollection services)
         {
             services.AddSingleton(typeof(ServerSettings), Settings);
             services.AddSingleton<IServerApplicationLifetime>(this);
 
+            
             var urls = Settings.ServerConfig.Hosting.Urls;
             var secureUrl = urls.Find(s => s.StartsWith("https"));
-            if (!string.IsNullOrEmpty(secureUrl))
+            if (!string.IsNullOrEmpty(secureUrl) && !context.HostingEnvironment.IsDevelopment())
             {
                 secureUrl = secureUrl.Replace("+", "0.0.0.0");
                 Uri secureUri = new Uri(secureUrl);
@@ -330,7 +330,7 @@ namespace BaSyx.Components.Common
                 app.UseHsts();
             }
 
-            if(_secure)
+            if(_secure && !env.IsDevelopment())
                 app.UseHttpsRedirection();
 
             app.UseStaticFiles();

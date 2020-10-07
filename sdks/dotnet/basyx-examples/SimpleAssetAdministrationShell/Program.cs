@@ -33,8 +33,8 @@ namespace SimpleAssetAdministrationShell
             ServerSettings submodelServerSettings = ServerSettings.CreateSettings();
             submodelServerSettings.ServerConfig.Hosting.ContentPath = "Content";
             submodelServerSettings.ServerConfig.Hosting.Environment = "Development";
-            submodelServerSettings.ServerConfig.Hosting.Urls.Add("http://localhost:5040");
-            submodelServerSettings.ServerConfig.Hosting.Urls.Add("https://localhost:5440");
+            submodelServerSettings.ServerConfig.Hosting.Urls.Add("http://+:5040");
+            submodelServerSettings.ServerConfig.Hosting.Urls.Add("https://+:5440");
 
             SubmodelHttpServer submodelServer = new SubmodelHttpServer(submodelServerSettings);
             ISubmodelServiceProvider submodelServiceProvider = testSubmodel.CreateServiceProvider();
@@ -47,8 +47,8 @@ namespace SimpleAssetAdministrationShell
             ServerSettings aasServerSettings = ServerSettings.CreateSettings();
             aasServerSettings.ServerConfig.Hosting.ContentPath = "Content";
             aasServerSettings.ServerConfig.Hosting.Environment = "Development";
-            aasServerSettings.ServerConfig.Hosting.Urls.Add("http://localhost:5080");
-            aasServerSettings.ServerConfig.Hosting.Urls.Add("https://localhost:5443");
+            aasServerSettings.ServerConfig.Hosting.Urls.Add("http://+:5080");
+            aasServerSettings.ServerConfig.Hosting.Urls.Add("https://+:5443");
 
             IAssetAdministrationShellServiceProvider serviceProvider = aas.CreateServiceProvider(true);
             serviceProvider.SubmodelRegistry.RegisterSubmodelServiceProvider(testSubmodel.IdShort, submodelServiceProvider);

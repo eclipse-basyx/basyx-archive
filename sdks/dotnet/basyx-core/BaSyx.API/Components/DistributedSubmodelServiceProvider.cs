@@ -26,7 +26,7 @@ namespace BaSyx.API.Components
 
         public ISubmodelDescriptor ServiceDescriptor { get; }
 
-        private ISubmodelClient submodelClient;
+        private readonly ISubmodelClient submodelClient;
 
         public DistributedSubmodelServiceProvider(ISubmodelClientFactory submodelClientFactory, ISubmodelDescriptor serviceDescriptor)
         {
@@ -117,9 +117,9 @@ namespace BaSyx.API.Components
             throw new NotImplementedException();
         }
 
-        public IResult<ISubmodelElement> CreateSubmodelElement(string rootSubmodelElementPath, ISubmodelElement submodelElement)
+        public IResult<ISubmodelElement> CreateOrUpdateSubmodelElement(string rootSubmodelElementPath, ISubmodelElement submodelElement)
         {
-            return submodelClient.CreateSubmodelElement(rootSubmodelElementPath, submodelElement);
+            return submodelClient.CreateOrUpdateSubmodelElement(rootSubmodelElementPath, submodelElement);
         }
 
         public IResult<IElementContainer<ISubmodelElement>> RetrieveSubmodelElements()
@@ -135,11 +135,6 @@ namespace BaSyx.API.Components
         public IResult<IValue> RetrieveSubmodelElementValue(string submodelElementId)
         {
             return submodelClient.RetrieveSubmodelElementValue(submodelElementId);
-        }
-
-        public IResult UpdateSubmodelElement(string submodelElementId, ISubmodelElement submodelElement)
-        {
-            return submodelClient.UpdateSubmodelElement(submodelElementId, submodelElement);
         }
 
         public IResult DeleteSubmodelElement(string submodelElementId)

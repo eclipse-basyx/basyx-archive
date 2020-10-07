@@ -11,6 +11,8 @@ using BaSyx.Registry.Client.Http;
 using BaSyx.Registry.ReferenceImpl.FileBased;
 using BaSyx.Registry.Server.Http;
 using BaSyx.Utils.ResultHandling;
+using BaSyx.Utils.Settings.Sections;
+using BaSyx.Utils.Settings.Types;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -27,7 +29,19 @@ namespace BaSyx.Components.Tests
 
         static RegistryTest()
         {
-            registryHttpServer = new RegistryHttpServer();
+            ServerSettings registrySettings = ServerSettings.CreateSettings();
+            registrySettings.ServerConfig.Hosting = new HostingConfiguration()
+            {
+                Urls = new List<string>()
+                {
+                    "http://localhost:4999",
+                    "https://localhost:4499"
+                },
+                Environment = "Development",
+                ContentPath = "Content"
+            };
+
+            registryHttpServer = new RegistryHttpServer(registrySettings);
             registryHttpServer.SetRegistryProvider(new FileBasedRegistry());
             _ = registryHttpServer.RunAsync();
 

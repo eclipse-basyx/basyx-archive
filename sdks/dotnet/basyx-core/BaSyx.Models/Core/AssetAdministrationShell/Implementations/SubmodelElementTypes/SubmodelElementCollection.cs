@@ -107,7 +107,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
             Value.AddRange(elements);
         }
 
-        IResult<T> ICrudContainer<string, ISubmodelElement>.Create<T>(T element)
+        public IResult<ISubmodelElement> Create(ISubmodelElement element)
         {
             return Value.Create(element);
         }

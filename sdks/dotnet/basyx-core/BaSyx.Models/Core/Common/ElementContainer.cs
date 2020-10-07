@@ -378,15 +378,24 @@ namespace BaSyx.Models.Core.Common
                 return new Result<TElement>(new ArgumentNullException(nameof(idShortPath)));
             if (element == null)
                 return new Result<TElement>(new ArgumentNullException(nameof(element)));
-
+            
             var child = GetChild(idShortPath);
             if (child != null)
             {
                 child.Value = element;
                 return new Result<TElement>(true, element);
             }
+            else if (idShortPath.Contains(PATH_SEPERATOR))
+            {
+                string parentPath = idShortPath.Substring(0, idShortPath.LastIndexOf('/'));
+                var parent = GetChild(parentPath);
+                if (parent != null)
+                    return parent.Create(element);
+                else
+                    return new Result<TElement>(false, new NotFoundMessage($"Parent element {parentPath} not found"));
+            }
             else
-                return Create(element);
+                return this.Create(element);
         }
 
 
@@ -415,6 +424,7 @@ namespace BaSyx.Models.Core.Common
             if (child != null)
             {
                 child.ParentContainer.Remove(child.IdShort);
+                return new Result(true);
             }
             return new Result(false, new NotFoundMessage());
         }
