@@ -77,7 +77,7 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 	 * Returns the actual endpoint of the AAS managed by this component
 	 */
 	protected String getAASEndpoint(ModelUrn aasURN) {
-		return VABPathTools.concatenatePaths(getAASServerURL(), "/aas", aasURN.getEncodedURN());
+		return VABPathTools.concatenatePaths(getAASServerURL(), "/aasList", aasURN.getEncodedURN(), "/aas");
 	}
 	
 	/**
@@ -90,7 +90,7 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 	 */
 	protected SubmodelDescriptor addSubModelDescriptorURI(AASDescriptor aasDescriptor, ModelUrn subModelURN, String subModelId) {
 		// Create sub model descriptor
-		String submodelEndpoint = VABPathTools.concatenatePaths(getAASServerURL(), "/aas/submodels", subModelId);
+		String submodelEndpoint = VABPathTools.concatenatePaths(getAASServerURL(), "/aasList", VABPathTools.encodePathElement(aasDescriptor.getIdentifier().getId()), "/aas/submodels", subModelId);
 		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelId, subModelURN, submodelEndpoint);
 		
 		// Add sub model descriptor to AAS descriptor

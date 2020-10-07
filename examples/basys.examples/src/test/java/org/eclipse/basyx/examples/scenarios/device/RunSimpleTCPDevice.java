@@ -2,7 +2,7 @@ package org.eclipse.basyx.examples.scenarios.device;
 
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
+import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.examplescenario.BaSyxExampleScenario;
 import org.eclipse.basyx.examples.mockup.application.ReceiveDeviceDashboardStatusApplication;
@@ -44,7 +44,7 @@ public class RunSimpleTCPDevice extends BaSyxExampleScenario {
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// Simulated servlets
 				// - BaSys topology with one AAS Server and one SQL directory
-				new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory(),
+				new BaSyxExamplesContext(),
 				
 				// Simulated runnables
 				// - Manufacturing device manager, e.g. deployed to additonal device

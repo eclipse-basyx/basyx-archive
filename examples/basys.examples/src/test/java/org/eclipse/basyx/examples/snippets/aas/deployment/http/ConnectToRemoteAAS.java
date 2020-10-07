@@ -25,7 +25,7 @@ import org.junit.Test;
  */
 public class ConnectToRemoteAAS {
 
-	
+
 	/**
 	 * Example Asset Administration Shell
 	 */
@@ -53,7 +53,7 @@ public class ConnectToRemoteAAS {
 	@ClassRule
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// Servlets for example snippet
-				new BaSyxExamplesContext_Empty().
+			new BaSyxExamplesContext_Empty().
 					// Deploy example specific servlets to Tomcat server in this context
 					addServletMapping("/Testsuite/components/BaSys/1.0/SampleAAS/*",         new AASServlet(new ExampleAssetAdministrationShell()))
 			);

@@ -8,12 +8,14 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.configuration.CFGBaSyxProtocolType;
 import org.eclipse.basyx.components.devicemanager.TCPDeviceManagerComponent;
+import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 
 /**
@@ -57,28 +59,13 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		
 		// Configure this device manager
 		configure()
-			.registryURL("http://localhost:8080/basys.examples/Components/Directory/SQL")
+				.registryURL("http://localhost:8080/" + BaSyxExamplesContext.REGISTRYURL)
 			.connectionManagerType(CFGBaSyxProtocolType.HTTP)
 				.directoryService(new ExamplesPreconfiguredDirectory())
 			.end();
 		
-		// configure()
-		//   .registryURL()
-		//   .connectionManagerDirectory(new ExamplesPreconfiguredDirectory())
-		//   .connectionManagerProtocol(HTTP)
-		//   .AASServerObjectID(...)
-		//   .addAASAAS()
-		//   	.whateverAASProperty()
-		//   	.addSubmodel()
-		//			.property()
-		//			.endSubModel()
-		//		.end();
-		
-		
-		// configure(Map<>...)
-		
 		// Set registry that will be used by this service
-		setRegistry(new AASRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL"));
+		setRegistry(new AASRegistryProxy("http://localhost:8080/" + BaSyxExamplesContext.REGISTRYURL));
 		
 		
 		// Set service connection manager and create AAS server connection
@@ -89,7 +76,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		
 		// Set AAS server VAB object ID, AAS server URL, and AAS server path prefix
 		setAASServerObjectID("AASServer");
-		setAASServerURL("http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer");
+		setAASServerURL("http://localhost:8080/" + BaSyxExamplesContext.AASSERVERURL);
 	}
 
 
@@ -137,8 +124,9 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		AssetAdministrationShell aas = new AssetAdministrationShell();
 		// - Populate AAS
 		aas.setIdShort("DeviceIDShort");
+		aas.setIdentification(lookupURN("AAS"));
 		// - Transfer device AAS to server
-		aasServerConnection.createValue("/aas", aas);
+		aasServerConnection.createValue("/aasList", aas);
 
 	
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
@@ -157,7 +145,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		invocationsProp.setIdShort("invocations");
 		statusSM.addSubModelElement(invocationsProp);
 		// - Transfer device sub model to server
-		aasServerConnection.createValue("/aas/submodels/", statusSM);
+		aasServerConnection.createValue("/aasList/" + VABPathTools.encodePathElement(lookupURN("AAS").getId()) + "/aas/submodels/", statusSM);
 	}
 
 
@@ -174,6 +162,8 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		// Do not process null values
 		if (rxData == null) return;
 		
+		String aasPath = "/aasList/" + VABPathTools.encodePathElement(lookupURN("AAS").getId());
+
 		// Convert received data to string
 		String rxStr = new String(rxData); 
 		// - Trim string to remove possibly trailing and leading white spaces
@@ -182,15 +172,15 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		// Check what was being received. This check is performed based on a prefix that he device has to provide);
 		// - Update of device status
 		if (hasPrefix(rxStr, "status:"))
-			aasServerConnection.setModelPropertyValue("/aas/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/status/value", removePrefix(rxStr, "status"));
+			aasServerConnection.setModelPropertyValue(aasPath + "/aas/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/status/value", removePrefix(rxStr, "status"));
 		// - Device indicates service invocation
 		if (hasPrefix(rxStr, "invocation:")) {
 			// Start of process
 			if (hasPrefix(rxStr, "invocation:start")) {
 				// Read and increment invocation counter
-				HashMap<String, Object> property = (HashMap<String, Object>) aasServerConnection.getModelPropertyValue("/aas/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/invocations");
+				HashMap<String, Object> property = (HashMap<String, Object>) aasServerConnection.getModelPropertyValue(aasPath + "/aas/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/invocations");
 				int invocations = (int) property.get("value");
-				aasServerConnection.setModelPropertyValue("/aas/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
+				aasServerConnection.setModelPropertyValue(aasPath + "/aas/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
 			} 
 			// End of process
 			if (hasPrefix(rxStr, "invocation:end")) {

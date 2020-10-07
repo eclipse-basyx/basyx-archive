@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 
 import org.eclipse.basyx.components.servlet.vab.VABLambdaServlet;
-import org.eclipse.basyx.examples.TestContext;
+import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.tools.webserviceclient.WebServiceJSONClient;
@@ -26,7 +26,7 @@ import org.junit.ClassRule;
  */
 public class ManualHTTPCalls {
 
-	
+
 	/**
 	 * Create VAB connection manager backend
 	 * 
@@ -53,7 +53,7 @@ public class ManualHTTPCalls {
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// Simulated servlets
 				// - BaSys topology with one AAS Server and one SQL directory
-				TestContext.sqlContext.
+				new BaSyxExamplesContext().
 					// Deploy example specific servlets to Tomcat server in this context
 					addServletMapping("/Testsuite/components/BaSys/1.0/devicestatusVAB/*", new VABLambdaServlet())
 			);

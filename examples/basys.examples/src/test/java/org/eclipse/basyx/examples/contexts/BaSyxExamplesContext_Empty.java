@@ -16,14 +16,14 @@ public class BaSyxExamplesContext_Empty extends BaSyxContext {
 	 */
 	private static final long serialVersionUID = 1L;
 
-
+	public static final String CONTEXT = "/basys.examples";
 	
 	/**
 	 * Constructor
 	 */
 	public BaSyxExamplesContext_Empty() {
 		// Invoke base constructor to set up Tomcat server in basys.components context
-		super("/basys.examples", "");
+		super(CONTEXT, "");
 	}
 }
 

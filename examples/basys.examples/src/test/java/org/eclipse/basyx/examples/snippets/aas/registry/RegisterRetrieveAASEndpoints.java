@@ -1,13 +1,13 @@
 package org.eclipse.basyx.examples.snippets.aas.registry;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
-import org.eclipse.basyx.examples.TestContext;
+import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
@@ -49,9 +49,7 @@ public class RegisterRetrieveAASEndpoints {
 	 */
 	@ClassRule
 	public static BaSyxDeployment context = new BaSyxDeployment(
-				// Simulated servlets
-				// - BaSys topology with one AAS Server and one SQL directory
-				TestContext.sqlContext
+			new BaSyxExamplesContext()
 			);
 
 	
@@ -67,20 +65,21 @@ public class RegisterRetrieveAASEndpoints {
 		// Create AAS descriptor and sub model descriptors
 		ModelUrn      aasURN         = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001");
 		ModelUrn      subModelURN    = new ModelUrn("urn:de.FHG:devices.es.iese:exampleSM:1.0:3:x-509#001");
-		String        aasSrvURL      = "http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer";
-		String        aasSrvPrefix   = "/aas/submodels/aasRepository/sampleAAS";
+		String aasSrvURL = "http://localhost:8080" + BaSyxExamplesContext.AASSERVERURL;
+		String aasPath = VABPathTools.concatenatePaths(aasSrvURL, aasURN.getEncodedURN(), "/aas");
 		// - Create AAS descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor(aasURN,
-				VABPathTools.concatenatePaths(aasSrvURL, aasSrvPrefix, aasURN.getEncodedURN()));
+		AASDescriptor aasDescriptor = new AASDescriptor(aasURN, aasPath);
 		// - Add sub model descriptor URI
-		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelURN.getEncodedURN(), subModelURN, VABPathTools.concatenatePaths(aasSrvURL, aasSrvPrefix, subModelURN.getEncodedURN()));
+
+		String smPath = VABPathTools.concatenatePaths(aasPath, "/submodels/" + subModelURN.getEncodedURN());
+		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor("smIdShort", subModelURN, smPath);
 		aasDescriptor.addSubmodelDescriptor(submodelDescriptor);
 
 
 		// Register AAS and sub model descriptors in directory (push AAS descriptor to server)
 		// - Connect to AAS registry
 		IAASRegistryService regProxy = new AASRegistryProxy(
-				"http://localhost:8080/basys.examples/Components/Directory/SQL");
+				"http://localhost:8080/" + BaSyxExamplesContext.REGISTRYURL);
 		// - Register AAS descriptor with AAS and sub model endpoints in registry
 		regProxy.register(aasDescriptor);
 
@@ -93,8 +92,8 @@ public class RegisterRetrieveAASEndpoints {
 		
 		
 		// Check results
-		assertTrue(aasEndpointURL.equals("http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer/aas/submodels/aasRepository/sampleAAS/urn%3Ade.FHG%3Adevices.es.iese%3Aaas%3A1.0%3A3%3Ax-509%23001"));
-		assertTrue(smEndpointURL.equals("http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer/aas/submodels/aasRepository/sampleAAS/urn%3Ade.FHG%3Adevices.es.iese%3AexampleSM%3A1.0%3A3%3Ax-509%23001"));
+		assertEquals(aasPath, aasEndpointURL);
+		assertEquals(smPath, smEndpointURL);
 	}
 }
 

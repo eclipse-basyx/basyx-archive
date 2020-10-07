@@ -35,7 +35,7 @@ import org.junit.Test;
  */
 public class ConnectToAASSubModelSDK {
 
-	
+
 	/**
 	 * Example sub model. This example sub model is created with the BaSyx SDK factory and defines the AAS meta model properties
 	 */
@@ -87,7 +87,7 @@ public class ConnectToAASSubModelSDK {
 	@ClassRule
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// Servlets for example snippet
-				new BaSyxExamplesContext_Empty().
+			new BaSyxExamplesContext_Empty().
 					// Deploy example specific servlets to Tomcat server in this context
 					addServletMapping("/Testsuite/components/BaSys/1.0/SampleModel/*",       new SubmodelServlet(new SampleSubModel()))
 			);
@@ -119,7 +119,7 @@ public class ConnectToAASSubModelSDK {
 		Map<String, ISubmodelElement> smElements = subModel.getSubmodelElements();
 		IProperty prop1 = (IProperty) smElements.get("prop1");
 		ISubmodelElementCollection prop2 = (ISubmodelElementCollection) smElements.get("prop2");
-		IProperty prop11 = (IProperty) prop2.getProperties().get("prop11");
+		IProperty prop11 = prop2.getProperties().get("prop11");
 		IProperty prop3 = (IProperty) smElements.get("prop3");
 
 		assertEquals(smId.getId(), subModel.getIdentification().getId());

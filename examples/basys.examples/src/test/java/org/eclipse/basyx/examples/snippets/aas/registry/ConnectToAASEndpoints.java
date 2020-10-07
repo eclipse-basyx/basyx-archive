@@ -7,8 +7,7 @@ import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShe
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
-import org.eclipse.basyx.components.servlet.AASServerServlet;
-import org.eclipse.basyx.examples.TestContext;
+import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.ClassRule;
@@ -34,7 +33,7 @@ public class ConnectToAASEndpoints {
 	 * network addresses, and a HTTP connector to connect to VAB objects.
 	 */
 	protected ConnectedAssetAdministrationShellManager connManager = new ConnectedAssetAdministrationShellManager(
-			new AASRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL"),
+			new AASRegistryProxy("http://localhost:8080" + BaSyxExamplesContext.REGISTRYURL),
 			new HTTPConnectorProvider());
 
 	
@@ -49,11 +48,7 @@ public class ConnectToAASEndpoints {
 	 */
 	@ClassRule
 	public static BaSyxDeployment context = new BaSyxDeployment(
-				// Simulated servlets
-				// - BaSys topology with one AAS Server and one SQL directory
-				TestContext.sqlContext.
-					// Deploy example specific servlets to Tomcat server in this context
-					addServletMapping("/Components/BaSys/1.0/aasServer/*", new AASServerServlet())
+			new BaSyxExamplesContext()
 			);
 
 	
@@ -68,7 +63,7 @@ public class ConnectToAASEndpoints {
 		
 		// Create AAS descriptor and sub model descriptors
 		ModelUrn      aasURN         = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001");
-		String aasSrvURL = "http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer";
+		String aasSrvURL = "http://localhost:8080" + BaSyxExamplesContext.AASSERVERURL;
 
 		// Create AAS
 		AssetAdministrationShell aas = new AssetAdministrationShell();

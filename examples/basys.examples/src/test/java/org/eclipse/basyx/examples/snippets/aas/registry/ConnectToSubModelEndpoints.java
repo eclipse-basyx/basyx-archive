@@ -4,22 +4,16 @@ import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
-import org.eclipse.basyx.components.servlet.aas.AASServlet;
-import org.eclipse.basyx.examples.TestContext;
+import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -43,7 +37,7 @@ public class ConnectToSubModelEndpoints {
 	 * network addresses, and a HTTP connector to connect to VAB objects.
 	 */
 	protected ConnectedAssetAdministrationShellManager connManager = new ConnectedAssetAdministrationShellManager(
-			new AASRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL"),
+			new AASRegistryProxy("http://localhost:8080" + BaSyxExamplesContext.REGISTRYURL),
 			new HTTPConnectorProvider());
 
 	
@@ -58,12 +52,7 @@ public class ConnectToSubModelEndpoints {
 	 */
 	@ClassRule
 	public static BaSyxDeployment context = new BaSyxDeployment(
-				// Simulated servlets
-				// - BaSys topology with one AAS Server and one SQL directory
-				TestContext.sqlContext.
-					// Deploy example specific servlets to Tomcat server in this context
-					addServletMapping("/Components/BaSys/1.0/aasServer/*",
-							new AASServlet(new AssetAdministrationShell()))
+			new BaSyxExamplesContext()
 			);
 
 	
@@ -78,24 +67,23 @@ public class ConnectToSubModelEndpoints {
 		
 		// Create AAS descriptor and sub model descriptors
 		ModelUrn      aasURN         = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001");
-		String        aasSrvURL      = "http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer/aas";
+		String aasSrvURL = "http://localhost:8080" + BaSyxExamplesContext.AASSERVERURL;
+
+		// Create AAS
+		AssetAdministrationShell aas = new AssetAdministrationShell();
+
+		// - Set AAS ID
+		aas.setIdentification(aasURN);
+
+		// - Transfer AAS to server
+		// - This creates the "urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001" element
+		// on the server, which is the server
+		// end point that will host the AAS.
+		connManager.createAAS(aas, aasURN, aasSrvURL);
+
 		// - Sub model ID
 		String smIdShort = "exampleSM";
 		IIdentifier smId = new Identifier(IdentifierType.CUSTOM, "exampleSMId");
-		// - Create AAS descriptor and sub model descriptor
-		AASDescriptor aasDescriptor = new AASDescriptor(aasURN, aasSrvURL);
-		String smEndpoint = VABPathTools.concatenatePaths(aasSrvURL, "submodels", smIdShort);
-		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(smIdShort, smId, smEndpoint);
-		// - Add sub model descriptor to AAS descriptor
-		aasDescriptor.addSubmodelDescriptor(submodelDescriptor);
-		
-
-		// Register AAS and sub model descriptors in directory (push AAS descriptor to server)
-		// - Connect to AAS registry
-		IAASRegistryService regProxy = new AASRegistryProxy(
-				"http://localhost:8080/basys.examples/Components/Directory/SQL");
-		// - Register AAS descriptor with AAS and sub model endpoints in registry
-		regProxy.register(aasDescriptor);
 		
 		// Create sub model
 		SubModel submodel = new SubModel();
@@ -123,9 +111,9 @@ public class ConnectToSubModelEndpoints {
 		// Read property values from sub model
 		String smID     = connSM.getIdShort();
 		String prop1Id = connSM.getProperties().get("prop1").getIdShort();
-		int prop1Val = (int) ((IProperty) connSM.getProperties().get("prop1")).get();
+		int prop1Val = (int) connSM.getProperties().get("prop1").get();
 		String prop2Id  = connSM.getProperties().get("prop2").getIdShort();
-		String prop2Val = (String) ((IProperty) connSM.getProperties().get("prop2")).get();
+		String prop2Val = (String) connSM.getProperties().get("prop2").get();
 
 		
 		// Check property values

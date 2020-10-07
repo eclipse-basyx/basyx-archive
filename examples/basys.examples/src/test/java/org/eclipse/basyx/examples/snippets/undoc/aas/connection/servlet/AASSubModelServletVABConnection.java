@@ -28,8 +28,8 @@ import org.junit.Test;
  */
 public class AASSubModelServletVABConnection {
 
-	
-	/**
+
+	/** 
 	 * Example sub model. This example sub model is created with the BaSyx SDK factory and defines the AAS meta model properties
 	 */
 	static class SampleSubModel extends SubModel {
@@ -74,9 +74,9 @@ public class AASSubModelServletVABConnection {
 			// Add example specific mappings
 			new ExamplesPreconfiguredDirectory()
 					// Entries map directly at the SubmodelServlet
-				.addMapping("aas-001",    "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
-			    .addMapping("sm-001",     "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
-			    .addMapping("sm-001VAB",  "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel"),
+					.addMapping("aas-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
+					.addMapping("sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel")
+					.addMapping("sm-001VAB", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel"),
 			// We connect via HTTP
 			new HTTPConnectorProvider());
 

@@ -8,6 +8,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.device.BaseSmartDevice;
+import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.models.controlcomponent.ExecutionState;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -15,6 +16,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -22,12 +24,13 @@ import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 /**
  * This class implements a mockup of a smart manufacturing device
  * 
- * The device pushes its AAS to an external asset administration shell server
- * - The sub model "statusSM" is pushed to the external asset administration shell server as well
- * - The sub model "controllerSM" is provided by an BaSyx/TCP server of the smart device
+ * The device pushes its AAS to an external asset administration shell server -
+ * The sub model "statusSM" is pushed to the external asset administration shell
+ * server as well - The sub model "controllerSM" is provided by an BaSyx/TCP
+ * server of the smart device
  * 
  * @author kuhn
- *
+ * 
  */
 public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 
@@ -49,6 +52,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 	 */
 	protected VABElementProxy aasServerConnection = null;
 
+	protected String aasPath;
 	
 	
 
@@ -68,7 +72,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		addShortcut("Status",     new ModelUrn("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#001"));
 
 		// Configure BaSyx service - registry and connection manager
-		setRegistry(new AASRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL"));
+		setRegistry(new AASRegistryProxy("http://localhost:8080/" + BaSyxExamplesContext.REGISTRYURL));
 		setConnectionManager(new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorProvider()));
 	}
 
@@ -83,10 +87,9 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		super.onServiceInvocation();
 		// Implement the device invocation counter - read and increment invocation counter
 		Map<String, Object> property = (Map<String, Object>) aasServerConnection
-				.getModelPropertyValue(
-						"/aas/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/invocations");
+				.getModelPropertyValue(aasPath + "/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/invocations");
 		int invocations = (int) property.get("value");
-		aasServerConnection.setModelPropertyValue("/aas/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
+		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
 	}
 
 	
@@ -99,7 +102,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		super.onChangedExecutionState(newExecutionState);
 		
 		// Update property "properties/status" in external AAS
-		aasServerConnection.setModelPropertyValue("/aas/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/status/value",
+		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/status/value",
 				newExecutionState.getValue());
 	}
 
@@ -121,9 +124,14 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		
 		// Create device AAS
 		// - Create device AAS
-		AssetAdministrationShell aas = new AssetAdministrationShell().putPath("idShort", "DeviceIDShort");
+		AssetAdministrationShell aas = new AssetAdministrationShell();
+		aas.setIdShort("DeviceIDShort");
+		aas.setIdentification(lookupURN("AAS"));
+
 		// - Transfer device AAS to server
-		aasServerConnection.createValue("/aas", aas);
+		aasServerConnection.createValue("/aasList", aas);
+
+		aasPath = VABPathTools.concatenatePaths("aasList", lookupURN("AAS").getEncodedURN(), "aas");
 
 		
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
@@ -141,7 +149,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		invocationsProp.setIdShort("invocations");
 		statusSM.addSubModelElement(invocationsProp);
 		// - Transfer device sub model to server
-		aasServerConnection.createValue("/aas/submodels", statusSM);
+		aasServerConnection.createValue(aasPath + "/submodels", statusSM);
 
 		
 		// Register control component as local sub model
@@ -153,7 +161,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		
 		// Register AAS and sub models in directory (push AAS descriptor to server)
 		// - AAS repository server URL
-		String aasRepoURL = "http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer/aas";
+		String aasRepoURL = "http://localhost:8080" + BaSyxExamplesContext.AASSERVERURL + "/aasList/" + lookupURN("AAS").getEncodedURN() + "/aas";
 		// - Build an AAS descriptor, add sub model descriptors
 		AASDescriptor deviceAASDescriptor = new AASDescriptor(lookupURN("AAS"), aasRepoURL);
 		// Create sub model descriptors
