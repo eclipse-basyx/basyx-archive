@@ -72,9 +72,15 @@ public class SimpleAASSubmodel extends SubModel {
 		exception2.setIdShort("exception2");
 		addSubModelElement(exception2);
 
+		Operation opInCollection = new Operation((Function<Object[], Object>) v -> {
+			return 123;
+		});
+		opInCollection.setIdShort("operationId");
+		
 		SubmodelElementCollection containerProp = new SubmodelElementCollection();
 		containerProp.setIdShort("container");
 		containerProp.addElement(intProp);
+		containerProp.addElement(opInCollection);
 
 		SubmodelElementCollection containerPropRoot = new SubmodelElementCollection();
 		containerPropRoot.setIdShort("containerRoot");

@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -251,15 +250,14 @@ public class TestAASXPackageManager {
 		// get values
 		assertTrue(sele.getModelType().equalsIgnoreCase("SubmodelElementCollection"));
 		SubmodelElementCollection collection = (SubmodelElementCollection) sele;
-		Collection<ISubmodelElement> subelements = collection.getValue();
+		Map<String, ISubmodelElement> smElemMap = collection.getValue();
 
-		assertEquals(5, subelements.size());
-		Iterator<ISubmodelElement> iterator = subelements.iterator();
-		Property prop1 = (Property) (iterator.next());
+		assertEquals(5, smElemMap.size());
+		Property prop1 = (Property) smElemMap.get("CountryCode");
 		assertEquals("CountryCode", prop1.getIdShort());
 		assertEquals("DE", prop1.get());
 
-		Property prop2 = (Property) (iterator.next());
+		Property prop2 = (Property) smElemMap.get("Street");
 		assertEquals("Street", prop2.getIdShort());
 		assertEquals("Ruiter Straße 82", prop2.get());
 	}

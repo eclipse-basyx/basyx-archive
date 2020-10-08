@@ -60,6 +60,14 @@ public class TestSubmodelProvider extends SubModelProviderTest {
 	@Test
 	public void testInvokeOperation() {
 	}
+	
+	/**
+	 * Operations are not supported
+	 */
+	@Override
+	@Test
+	public void testInvokeOperationInCollection() {
+	}
 
 	/**
 	 * Now 4 instead of 8 elements

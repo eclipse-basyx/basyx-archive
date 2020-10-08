@@ -64,7 +64,9 @@ public class SubmodelElementProvider extends MetaModelProvider {
 	protected Collection<Map<String, Object>> getElementsList() {
 		Object elements = modelProvider.getModelPropertyValue("");
 		Map<String, Map<String, Object>> all = (Map<String, Map<String, Object>>) elements;
-		return all.values().stream().collect(Collectors.toList());
+
+		// Feed all ELements through their Providers, in case someting needs to be done to them (e.g. smElemCollections)
+		return all.entrySet().stream().map(e -> (Map<String, Object>) handleDetailGet(ELEMENTS + "/" + e.getKey())).collect(Collectors.toList());
 	}
 	
 	private Collection<Map<String, Object>> getPropertyList() {
@@ -113,10 +115,6 @@ public class SubmodelElementProvider extends MetaModelProvider {
 		IModelProvider elementProxy = getElementProxy(pathElements);
 		Map<String, Object> element = (Map<String, Object>) elementProxy.getModelPropertyValue("");
 
-		if (pathElements.length == 2) {
-			return element;
-		}
-
 		if(qualifier.equals(ELEMENTS) || qualifier.equals(PROPERTIES) ||qualifier.equals(OPERATIONS)) {
 			return getElementProvider(element, elementProxy).getModelPropertyValue(subPath);			
 		} else {
@@ -148,14 +146,15 @@ public class SubmodelElementProvider extends MetaModelProvider {
 		IModelProvider elementProxy = getElementProxy(pathElements);
 		Map<String, Object> element = (Map<String, Object>) elementProxy.getModelPropertyValue("");
 		newValue = unwrapParameter(newValue);
+		String subPath = VABPathTools.buildPath(pathElements, 2);
 		if (Operation.isOperation(element)) {
 			throw new MalformedRequestException("Invalid access");
 		} else if (Property.isProperty(element)) {
-			String subPath = VABPathTools.buildPath(pathElements, 2);
 			new PropertyProvider(elementProxy).setModelPropertyValue(subPath, newValue);
+		} else if (SubmodelElementCollection.isSubmodelElementCollection(element)) {
+			new SubmodelElementCollectionProvider(elementProxy).setModelPropertyValue(subPath, newValue);
 		} else {
 			// API for other elements not specified, yet => let modelprovider resolve request
-			String subPath = VABPathTools.buildPath(pathElements, 2);
 			elementProxy.setModelPropertyValue(subPath, newValue);
 		}
 	}
@@ -173,19 +172,24 @@ public class SubmodelElementProvider extends MetaModelProvider {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void deleteValue(String path) throws ProviderException {
 		String[] pathElements = VABPathTools.splitPath(path);
-		if (pathElements.length < 2) {
-			// only possible to directly delete elements with this deletion type
-			throw new MalformedRequestException("Invalid access");
+		String qualifier = pathElements[0];
+		String subPath = VABPathTools.buildPath(pathElements, 2);
+		IModelProvider elementProvider = modelProvider;
+		
+		// If the first Element is a Collection, use its Provider
+		if(pathElements.length > 2) {
+			IModelProvider elementProxy = getElementProxy(pathElements);
+			Map<String, Object> element = (Map<String, Object>) elementProxy.getModelPropertyValue("");
+			elementProvider = getElementProvider(element, elementProxy); 
 		}
 
-		String qualifier = pathElements[0];
-		String idShort = pathElements[1];
 		if (qualifier.equals(PROPERTIES) || qualifier.equals(OPERATIONS) || qualifier.equals(ELEMENTS)) {
 			// Delete a specific submodel element
-			modelProvider.deleteValue(idShort);
+			elementProvider.deleteValue(subPath);
 		} else {
 			throw new MalformedRequestException("Unknown access path " + path);
 		}
@@ -208,22 +212,17 @@ public class SubmodelElementProvider extends MetaModelProvider {
 	@Override
 	public Object invokeOperation(String path, Object... parameters) throws ProviderException {
 		String[] pathElements = VABPathTools.splitPath(path);
+		String subPath = VABPathTools.buildPath(pathElements, 2);
+
 		String qualifier = pathElements[0];
-		if (pathElements.length < 2 || (!qualifier.equals(OPERATIONS) && !qualifier.equals(ELEMENTS))) {
-			// only possible to invoke operations
+		if (!qualifier.equals(ELEMENTS)) {
 			throw new MalformedRequestException("Invalid access");
 		}
-
+		
 		IModelProvider elementProxy = getElementProxy(pathElements);
 		Map<String, Object> element = (Map<String, Object>) elementProxy.getModelPropertyValue("");
 
-		if (!Operation.isOperation(element)) {
-			// only possible to invoke operations
-			throw new MalformedRequestException("Invalid access");
-		}
-
-		String subPath = VABPathTools.buildPath(pathElements, 2);
-		return new OperationProvider(elementProxy).invokeOperation(subPath, parameters);
+		return getElementProvider(element, elementProxy).invokeOperation(subPath, parameters);
 	}
 
 	@SuppressWarnings("unchecked")

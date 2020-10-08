@@ -1,13 +1,17 @@
 package org.eclipse.basyx.testsuite.regression.submodel.restapi;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -19,6 +23,7 @@ import org.eclipse.basyx.testsuite.regression.vab.protocol.http.TestsuiteDirecto
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
 import org.junit.Test;
@@ -145,6 +150,59 @@ public class SubModelProviderTest {
 		Map<String, Object> result = (Map<String, Object>) submodelElement
 				.getModelPropertyValue("/submodel/" + SubmodelElementProvider.ELEMENTS + "/integerProperty");
 		assertEquals(3, result.get(Property.VALUE));
+		
+
+	}
+	
+	/**
+	 * Test updating a SubmodelElementCollection
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testUpdateSmElementCollection() {
+		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
+		
+		Collection<ISubmodelElement> smElements = new ArrayList<>();
+		Property newProperty = new Property("propValue");
+		newProperty.setIdShort("propIdShort");
+		smElements.add(newProperty);
+		
+		// update value of smElemCollection
+		String path = VABPathTools.concatenatePaths("submodel", SubmodelElementProvider.ELEMENTS, "containerRoot");
+		submodelElement.setModelPropertyValue(path + "/value", smElements);
+		
+		// read back the collection
+		Map<String, Object> map = (Map<String, Object>) submodelElement
+				.getModelPropertyValue(path);
+		
+		assertTrue(map.get(Property.VALUE) instanceof Collection<?>);
+		
+		Collection<Map<String, Object>> elements = (Collection<Map<String, Object>>) map.get(Property.VALUE);
+		assertEquals(1, elements.size());
+		
+		Iterator<Map<String, Object>> i = elements.iterator();
+		
+		assertEquals("propIdShort", i.next().get(Referable.IDSHORT));
+	}
+
+	/**
+	 * Test updating a Property inside a SubmodelElementCollection 
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testUpdateElementInSmElementCollection() {
+		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
+
+		String path = VABPathTools.concatenatePaths("submodel", SubmodelElementProvider.ELEMENTS,
+				"containerRoot", "container", "integerProperty", "value");
+
+		Map<String, Object> value = (Map<String, Object>) submodelElement.getModelPropertyValue(path);
+		assertEquals(123, value.get(Property.VALUE));
+
+		submodelElement.setModelPropertyValue(path, 321);
+
+		value = (Map<String, Object>) submodelElement.getModelPropertyValue(path);
+		assertEquals(321, value.get(Property.VALUE));
 	}
 
 	/**
@@ -215,6 +273,46 @@ public class SubModelProviderTest {
 			fail();
 		} catch (ResourceNotFoundException e) {}
 	}
+	
+	/**
+	 * Test deleting a single property from a SubmodelElementCollection
+	 */
+	@Test
+	public void testDeletePropertyFromCollection() {
+		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
+
+		String path = VABPathTools.concatenatePaths("submodel", SubmodelElementProvider.ELEMENTS,
+				"containerRoot", "container", "integerProperty");
+		
+		assertNotNull(submodelElement.getModelPropertyValue(path));
+
+		// Delete property
+		submodelElement.deleteValue(path);
+		
+		// Test if parent Collection is still there
+		assertNotNull(submodelElement.getModelPropertyValue(VABPathTools.getParentPath(path)));
+
+		// Test, if it has been deleted
+		try {
+			submodelElement.getModelPropertyValue(path);
+			fail();
+		} catch (ResourceNotFoundException e) {}
+		
+		// Test delete the Collection "container"
+		path = VABPathTools.getParentPath(path);
+		
+		// Delete property
+		submodelElement.deleteValue(path);
+		
+		// Test if parent Collection is still there
+		assertNotNull(submodelElement.getModelPropertyValue(VABPathTools.getParentPath(path)));
+
+		// Test, if it has been deleted
+		try {
+			submodelElement.getModelPropertyValue(path);
+			fail();
+		} catch (ResourceNotFoundException e) {}
+	}
 
 	/**
 	 * Test invoking an operation
@@ -240,5 +338,19 @@ public class SubModelProviderTest {
 		// Invoke operation on parent element
 		result = submodelElement.invokeOperation("/submodel/submodelElements/simple/invoke");
 		assertTrue((boolean) result);
+	}
+	
+	/**
+	 * Test invoking an operation from within a SubmodelElementCollection
+	 */
+	@Test
+	public void testInvokeOperationInCollection() {
+		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
+		
+		String path = VABPathTools.concatenatePaths("submodel", SubmodelElementProvider.ELEMENTS,
+				"containerRoot", "container", "operationId", "invoke");
+		
+		Object result = submodelElement.invokeOperation(path);
+		assertEquals(123, result);
 	}
 }

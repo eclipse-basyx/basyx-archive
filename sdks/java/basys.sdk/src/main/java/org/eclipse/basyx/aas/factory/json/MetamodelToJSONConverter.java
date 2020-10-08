@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
-import org.eclipse.basyx.submodel.metamodel.facade.SubmodelMapConverter;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
@@ -46,7 +46,7 @@ public class MetamodelToJSONConverter {
 		List<Object> smMapList;
 		if(submodelList != null) {
 			smMapList = submodelList.stream()
-					.map(sm -> SubmodelMapConverter.smToMap(sm)).collect(Collectors.toList());
+					.map(sm -> SubmodelElementMapCollectionConverter.smToMap(sm)).collect(Collectors.toList());
 		} else {
 			smMapList = new ArrayList<>();
 		}

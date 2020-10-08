@@ -327,7 +327,7 @@ public class TestConnectedSubModel {
 		
 		assertNotNull(actualCollection);
 		
-		Collection<ISubmodelElement> elements = actualCollection.getValue();
+		Collection<ISubmodelElement> elements = actualCollection.getValue().values();
 		
 		// Check for correct Type
 		for (ISubmodelElement iSubmodelElement: elements) {

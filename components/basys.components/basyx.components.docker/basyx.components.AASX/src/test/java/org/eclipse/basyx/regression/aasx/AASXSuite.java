@@ -101,7 +101,7 @@ public class AASXSuite {
 		ISubModel nameplate = getConnectedSubmodel();
 		// Get the submodel element collection marking_rcm
 		ConnectedSubmodelElementCollection marking_rcm = (ConnectedSubmodelElementCollection) nameplate.getSubmodelElements().get("Marking_RCM");
-		Collection<ISubmodelElement> values = marking_rcm.getValue();
+		Collection<ISubmodelElement> values = marking_rcm.getValue().values();
 
 		// navigate to the File element
 		Iterator<ISubmodelElement> iter = values.iterator();
@@ -139,7 +139,7 @@ public class AASXSuite {
 				checkFile(fileUrl);
 			} else if (element instanceof ISubmodelElementCollection) {
 				ISubmodelElementCollection col = (ISubmodelElementCollection) element;
-				checkElementCollectionFiles(col.getValue());
+				checkElementCollectionFiles(col.getValue().values());
 			}
 		}
 	}

@@ -64,15 +64,20 @@ public class TestSubmodelElementCollection {
 		SubmodelElementCollection elementCollection = new SubmodelElementCollection(elements1, true, true);
 		assertTrue(elementCollection.isAllowDuplicates());
 		assertTrue(elementCollection.isOrdered());
-		assertEquals(elements1, elementCollection.getValue());
+		
+		ISubmodelElement checkOperation = elementCollection.getValue().get(OPERATION_ID);
+		assertEquals(OPERATION_ID, checkOperation.getIdShort());
 	} 
 	
 	@Test
 	public void testAddValue() {
-		ISubmodelElement element = new Property("testIdNew");
+		Property element = new Property("testProperty");
+		element.setIdShort("propId");
 		elementCollection.addElement(element);
 		elements2.add(element);
-		assertEquals(elements2, elementCollection.getValue());
+		
+		ISubmodelElement checkProperty = elementCollection.getValue().get("propId");
+		assertEquals(element.getIdShort(), checkProperty.getIdShort());
 	} 
 	
 	@Test
@@ -85,9 +90,13 @@ public class TestSubmodelElementCollection {
 	@Test
 	public void testSetValue() {
 		Collection<ISubmodelElement> elements = new ArrayList<ISubmodelElement>();
-		elements.add(new Property("testId1"));
+		Property element = new Property("testProperty");
+		element.setIdShort("propId");
+		elements.add(element);
 		elementCollection.setValue(elements);
-		assertEquals(elements, elementCollection.getValue());
+		
+		ISubmodelElement checkProperty = elementCollection.getValue().get("propId");
+		assertEquals(element.getIdShort(), checkProperty.getIdShort());
 	} 
 	
 	@Test

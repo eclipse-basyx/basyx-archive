@@ -1,6 +1,5 @@
 package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 
-import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
@@ -24,8 +23,8 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	}
 
 	@Override
-	public Collection<ISubmodelElement> getValue() {
-		return getSubmodelElements().values();
+	public Map<String, ISubmodelElement> getValue() {
+		return getSubmodelElements();
 	}
 
 	@Override

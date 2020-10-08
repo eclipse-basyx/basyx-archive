@@ -8,19 +8,19 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.facade.SubmodelMapConverter;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
 import org.junit.Test;
 
 /**
- * Tests for SubmodelMapConverter
+ * Tests for SubmodelElementMapCollectionConverter
  * 
  * @author conradi
  *
  */
-public class TestSubmodelMapConverter {
+public class TestSubmodelElementMapCollectionConverter {
 
 	private static final String ID_SHORT = "testElement";
 
@@ -36,7 +36,7 @@ public class TestSubmodelMapConverter {
 		Map<String, Object> map = TypeDestroyer.destroyType(sm);
 		
 		
-		sm = SubmodelMapConverter.mapToSM(map);
+		sm = SubmodelElementMapCollectionConverter.mapToSM(map);
 		
 		assertTrue(sm.get(SubModel.SUBMODELELEMENT) instanceof Map<?, ?>);
 		
@@ -49,7 +49,7 @@ public class TestSubmodelMapConverter {
 	public void testSMToMap() {
 		SubModel sm = getSM();
 		
-		Map<String, Object> map = SubmodelMapConverter.smToMap(sm);
+		Map<String, Object> map = SubmodelElementMapCollectionConverter.smToMap(sm);
 		
 		assertTrue(map.get(SubModel.SUBMODELELEMENT) instanceof Collection<?>);
 		assertEquals(1, ((Collection<ISubmodelElement>) map.get(SubModel.SUBMODELELEMENT)).size());

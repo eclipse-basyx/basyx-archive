@@ -16,7 +16,7 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.facade.SubmodelMapConverter;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.support.bundle.AASBundle;
@@ -132,7 +132,7 @@ public class TestAASBundleIntegrator {
 		assertEquals(AAS_ID, aas.getIdShort());
 		IModelProvider provider = aggregator.getAASProvider(new Identifier(IdentifierType.CUSTOM, AAS_ID));
 		
-		SubModel sm = SubmodelMapConverter.mapToSM(
+		SubModel sm = SubmodelElementMapCollectionConverter.mapToSM(
 				(Map<String, Object>) provider.getModelPropertyValue("/aas/submodels/" + SM_ID));
 		
 		assertEquals(SM_ID, sm.getIdentification().getId());

@@ -22,6 +22,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementC
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
+import org.eclipse.basyx.vab.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -205,6 +206,11 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 		Query hasId = query(where(SMIDPATH).is(smId));
 		mongoOps.findAndReplace(hasId, sm, collection);
 	}
+	
+	@Override
+	public void updateNestedProperty(List<String> idShorts, Object newValue) {
+		throw new FeatureNotImplementedException();
+	}
 
 	@SuppressWarnings("unchecked")
 	protected Object unwrapParameter(Object parameter) {
@@ -264,6 +270,17 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 
 	@Override
 	public Object invokeOperation(String idShort, Object... params) {
+		// not possible to invoke operations on a submodel that is stored in a db
+		throw new MalformedRequestException("Invoke not supported by filesystem");
+	}
+
+	@Override
+	public void deleteNestedSubmodelElement(List<String> idShorts) {
+		throw new FeatureNotImplementedException();
+	}
+
+	@Override
+	public Object invokeNestedOperation(List<String> idShorts, Object... params) {
 		// not possible to invoke operations on a submodel that is stored in a db
 		throw new MalformedRequestException("Invoke not supported by filesystem");
 	}

@@ -3,7 +3,6 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -12,7 +11,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
-import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -41,7 +40,7 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		putAll(new ModelType(MODELTYPE));
 
 		// Put attributes
-		put(Property.VALUE, new ArrayList<>());
+		put(Property.VALUE, new HashMap<>());
 		put(ORDERED, true);
 		put(ALLOWDUPLICATES, true);
 	}
@@ -78,7 +77,7 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		putAll(new ModelType(MODELTYPE));
 		
 		// Put attributes
-		put(Property.VALUE, value);
+		put(Property.VALUE, SubmodelElementMapCollectionConverter.convertCollectionToIDMap(value));
 		put(ORDERED, ordered);
 		put(ALLOWDUPLICATES, allowDuplicates);
 	}
@@ -90,9 +89,11 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	 * @return a SubmodelElementCollection object, that behaves like a facade for the given map
 	 */
 	public static SubmodelElementCollection createAsFacade(Map<String, Object> obj) {
-		SubmodelElementCollection ret = new SubmodelElementCollection();
-		ret.setMap(obj);
-		return ret;
+		if (obj == null) {
+			return null;
+		}
+
+		return SubmodelElementMapCollectionConverter.mapToSmECollection(obj);
 	}
 	
 	/**
@@ -115,7 +116,7 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		if (elem instanceof SubmodelElement) {
 			((SubmodelElement) elem).setParent(getReference());
 		}
-		((List<Object>) get(Property.VALUE)).add(elem);
+		((Map<String, ISubmodelElement>) get(Property.VALUE)).put(elem.getIdShort(), elem);
 	}
 
 	@Override
@@ -145,19 +146,13 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	}
 
 	public void setValue(Collection<ISubmodelElement> value) {
-		put(Property.VALUE, value);
+		put(Property.VALUE, SubmodelElementMapCollectionConverter.convertCollectionToIDMap(value));
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Collection<ISubmodelElement> getValue() {
-		Collection<ISubmodelElement> ret = new ArrayList<>();
-		Collection<Object> smElems = (Collection<Object>) get(Property.VALUE);
-		for(Object smElemO: smElems) {
-			Map<String, Object> smElem = (Map<String, Object>) smElemO;
-			ret.add(SubmodelElementFacadeFactory.createSubmodelElement(smElem));
-		}
-		return ret;
+	public Map<String, ISubmodelElement> getValue() {
+		return (Map<String, ISubmodelElement>) get(Property.VALUE);
 	}
 
 	public void setOrdered(boolean value) {
@@ -179,7 +174,7 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	}
 
 	public void setElements(Map<String, ISubmodelElement> value) {
-		put(Property.VALUE, value.values());
+		put(Property.VALUE, value);
 	}
 
 	public void setElements(Collection<ISubmodelElement> value) {
@@ -187,30 +182,22 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Map<String, ISubmodelElement> getSubmodelElements() {
-		Map<String, ISubmodelElement> ret = new HashMap<>();
-		Collection<Object> smElems = (Collection<Object>) get(Property.VALUE);
-		for(Object smElemO: smElems) {
-			Map<String, Object> smElem = (Map<String, Object>) smElemO;
-			ret.put((String) smElem.get(Referable.IDSHORT), SubmodelElementFacadeFactory.createSubmodelElement(smElem));
-		}
-		return ret;
+		return getValue();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IProperty> getProperties() {
 		Map<String, IProperty> ret = new HashMap<>();
-		Collection<Object> smElems = (Collection<Object>) get(Property.VALUE);
-		for (Object smElemO : smElems) {
-			Map<String, Object> smElem = (Map<String, Object>) smElemO;
-			if (Property.isProperty(smElem)) {
-				String idShort = Referable.createAsFacade(smElem, KeyElements.DATAELEMENT).getIdShort();
-				IProperty dataElement = (IProperty) SubmodelElementFacadeFactory.createSubmodelElement(smElem);
-				ret.put(idShort, dataElement);
+		Map<String, ISubmodelElement> smElems = (Map<String, ISubmodelElement>) get(Property.VALUE);
+		
+		for(ISubmodelElement smElement: smElems.values()) {
+			if (Property.isProperty((Map<String, Object>) smElement)) {
+				ret.put(smElement.getIdShort(), (IProperty) smElement);
 			}
 		}
+
 		return ret;
 	}
 
@@ -218,14 +205,14 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	@Override
 	public Map<String, IOperation> getOperations() {
 		Map<String, IOperation> ret = new HashMap<>();
-		Collection<Object> smElems = (Collection<Object>) get(Property.VALUE);
-		for (Object smElemO : smElems) {
-			Map<String, Object> smElem = (Map<String, Object>) smElemO;
-			if (Operation.isOperation(smElem)) {
-				String idShort = Referable.createAsFacade(smElem, KeyElements.OPERATION).getIdShort();
-				ret.put(idShort, Operation.createAsFacade(smElem));
+		Map<String, ISubmodelElement> smElems = (Map<String, ISubmodelElement>) get(Property.VALUE);
+		
+		for(ISubmodelElement smElement: smElems.values()) {
+			if (Operation.isOperation((Map<String, Object>) smElement)) {
+				ret.put(smElement.getIdShort(), (IOperation) smElement);
 			}
 		}
+
 		return ret;
 	}
 	

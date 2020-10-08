@@ -56,6 +56,14 @@ public interface ISubmodelAPI {
 	public void deleteSubmodelElement(String idShort);
 
 	/**
+	 * Removes a submodel element from a SubmodelElementCollection
+	 * 
+	 * @param idShort
+	 *            of the element to be removed
+	 */
+	public void deleteNestedSubmodelElement(List<String> idShorts);
+
+	/**
 	 * Helper function for quick access of operations
 	 * 
 	 * @return all operations contained by the submodel
@@ -78,6 +86,16 @@ public interface ISubmodelAPI {
 	 *            new value of the property
 	 */
 	public void updateProperty(String idShort, Object newValue);
+
+	/**
+	 * Updates the value of a property nested inside a SubmodelElementCollection.
+	 * 
+	 * @param idShorts
+	 *            the idShort path to the property
+	 * @param newValue
+	 *            new value of the property
+	 */
+	public void updateNestedProperty(List<String> idShorts, Object newValue);
 
 	/**
 	 * Retrieves the value of a property
@@ -115,4 +133,16 @@ public interface ISubmodelAPI {
 	 * @return the result of the operation
 	 */
 	public Object invokeOperation(String idShort, Object... params);
+
+	/**
+	 * Invokes an operation
+	 * 
+	 * @param idShorts
+	 *            the idShort path to the operation
+	 * @param params
+	 *            to be passed to the operation
+	 * @return the result of the operation
+	 */
+	public Object invokeNestedOperation(List<String> idShorts, Object... params);
+
 }

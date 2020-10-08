@@ -434,7 +434,7 @@ public class TestXMLConverter {
 		element = submodelElements.get("submodelElementCollection_ID");
 		assertTrue(element instanceof SubmodelElementCollection);
 		SubmodelElementCollection smCollection = (SubmodelElementCollection) element;
-		Collection<ISubmodelElement> elements = smCollection.getValue();
+		Collection<ISubmodelElement> elements = smCollection.getValue().values();
 		assertEquals(2, elements.size());
 		assertTrue(smCollection.isAllowDuplicates());
 		assertFalse(smCollection.isOrdered());

@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
-import org.eclipse.basyx.submodel.metamodel.facade.SubmodelMapConverter;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
 import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
@@ -96,7 +95,7 @@ public class SubModelProvider extends MetaModelProvider {
 
 			// Change internal map representation to set
 			if (sm instanceof SubModel) {
-				return SubmodelMapConverter.smToMap((SubModel) sm);
+				return SubmodelElementMapCollectionConverter.smToMap((SubModel) sm);
 			} else {
 				return sm;
 			}
@@ -160,9 +159,8 @@ public class SubModelProvider extends MetaModelProvider {
 			throw new MalformedRequestException("Set on \"submodel\" not supported");
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
-			if (isPropertyValuePath(splitted)) {
-				String idShort = splitted[1];
-				submodelAPI.updateProperty(idShort, newValue);
+			if (endsWithValue(splitted)) {
+				submodelAPI.updateNestedProperty(getIdShorts(splitted), newValue);
 			} else {
 				submodelAPI.addSubmodelElement(SubmodelElement.createAsFacade((Map<String, Object>) newValue));
 			}
@@ -179,9 +177,8 @@ public class SubModelProvider extends MetaModelProvider {
 		path = removeSubmodelPrefix(path);
 		if (!path.isEmpty()) {
 			String[] splitted = VABPathTools.splitPath(path);
-			if (splitted.length == 2 && isQualifier(splitted[0])) {
-				String idShort = splitted[1];
-				submodelAPI.deleteSubmodelElement(idShort);
+			if (isQualifier(splitted[0])) {
+				submodelAPI.deleteNestedSubmodelElement(getIdShorts(splitted));
 			} else {
 				throw new MalformedRequestException("Path " + path + " not supported for delete");
 			}
@@ -206,9 +203,8 @@ public class SubModelProvider extends MetaModelProvider {
 			throw new MalformedRequestException("Invalid access");
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
-			if (splitted.length == 3 && isQualifier(splitted[0]) && splitted[2].equals(Operation.INVOKE)) {
-				String idShort = splitted[1];
-				return submodelAPI.invokeOperation(idShort, parameters);
+			if (VABPathTools.isOperationInvokationPath(path)) {
+				return submodelAPI.invokeNestedOperation(getIdShorts(splitted), parameters);
 			} else {
 				throw new MalformedRequestException("Unknown path " + path);
 			}

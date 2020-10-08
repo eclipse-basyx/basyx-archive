@@ -84,6 +84,11 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 		getElementProvider().deleteValue(SubmodelElementProvider.ELEMENTS + "/" + idShort);
 	}
 
+	@Override
+	public void deleteNestedSubmodelElement(List<String> idShorts) {
+		getElementProvider().deleteValue(buildNestedElementPath(idShorts));
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<IOperation> getOperations() {
@@ -104,6 +109,11 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	}
 
 	@Override
+	public void updateNestedProperty(List<String> idShorts, Object newValue) {
+		getElementProvider().setModelPropertyValue(buildNestedElementPath(idShorts) + "/" + Property.VALUE, newValue);
+	}
+
+	@Override
 	public Object getPropertyValue(String idShort) {
 		return getElementProvider().getModelPropertyValue(buildValuePathForProperty(idShort));
 	}
@@ -117,6 +127,11 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	@Override
 	public Object invokeOperation(String idShort, Object... params) {
 		return getElementProvider().invokeOperation(SubmodelElementProvider.OPERATIONS + "/" + idShort, params);
+	}
+	
+	@Override
+	public Object invokeNestedOperation(List<String> idShorts, Object... params) {
+		return getElementProvider().invokeOperation(buildNestedElementPath(idShorts), params);
 	}
 
 	private String buildValuePathForProperty(String idShort) {
