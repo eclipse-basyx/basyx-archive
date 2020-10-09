@@ -1,8 +1,0 @@
-version: '3'
-services:
-
-  registry:
-    image: ${BASYX_IMAGE_NAME}:${BASYX_IMAGE_TAG}
-    container_name: ${BASYX_CONTAINER_NAME}
-    ports:
-      - ${BASYX_HOST_PORT}:${BASYX_CONTAINER_PORT}

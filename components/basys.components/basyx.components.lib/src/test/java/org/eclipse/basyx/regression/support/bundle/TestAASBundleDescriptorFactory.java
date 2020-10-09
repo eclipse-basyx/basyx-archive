@@ -8,6 +8,7 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.support.bundle.AASBundleDescriptorFactory;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -24,7 +25,7 @@ public class TestAASBundleDescriptorFactory {
 	public void testDescriptorCreation() {
 		String aasId = "aasId";
 		AssetAdministrationShell shell = new AssetAdministrationShell();
-		shell.setIdShort(aasId);
+		shell.setIdentification(new Identifier(IdentifierType.CUSTOM, aasId));
 
 		String smId = "smId";
 		SubModel sm = new SubModel();

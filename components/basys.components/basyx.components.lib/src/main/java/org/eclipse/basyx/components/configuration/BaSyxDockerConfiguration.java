@@ -37,14 +37,28 @@ public class BaSyxDockerConfiguration extends BaSyxConfiguration {
 		return defaultProps;
 	}
 
+	/**
+	 * Empty Constructor - use default values
+	 */
 	public BaSyxDockerConfiguration() {
 		super(getDefaultProperties());
 	}
 
+	/**
+	 * Constructor with predefined value map
+	 */
 	public BaSyxDockerConfiguration(Map<String, String> values) {
 		super(values);
 	}
 
+	/**
+	 * Constructor with initial configuration
+	 * 
+	 * @param hostPort      The port for the HOST
+	 * @param containerPort The port for the CONTAINER
+	 * @param imageName     The name of the image
+	 * @param containerName The name of the container
+	 */
 	public BaSyxDockerConfiguration(int hostPort, int containerPort, String imageName, String containerName) {
 		this();
 		setHostPort(hostPort);

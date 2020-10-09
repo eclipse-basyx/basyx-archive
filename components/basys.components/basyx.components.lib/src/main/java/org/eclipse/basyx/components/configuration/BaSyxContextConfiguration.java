@@ -39,20 +39,40 @@ public class BaSyxContextConfiguration extends BaSyxConfiguration {
 		return defaultProps;
 	}
 
+	/**
+	 * Empty Constructor - use default values
+	 */
 	public BaSyxContextConfiguration() {
 		super(getDefaultProperties());
 	}
 
+	/**
+	 * Constructor with predefined value map
+	 */
 	public BaSyxContextConfiguration(Map<String, String> values) {
 		super(values);
 	}
 
+	/**
+	 * Constructor with initial configuration - docBasePath and hostname are default values
+	 * 
+	 * @param port        The port that will be occupied
+	 * @param contextPath The subpath for this context
+	 */
 	public BaSyxContextConfiguration(int port, String contextPath) {
 		this();
 		setPort(port);
 		setContextPath(contextPath);
 	}
 
+	/**
+	 * Constructor with initial configuration - docBasePath and hostname are default values
+	 * 
+	 * @param contextPath The subpath for this context
+	 * @param docBasePath The local base path for the documents
+	 * @param hostname    The hostname
+	 * @param port        The port that will be occupied
+	 */
 	public BaSyxContextConfiguration(String contextPath, String docBasePath, String hostname, int port) {
 		this();
 		setContextPath(contextPath);

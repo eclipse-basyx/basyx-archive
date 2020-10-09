@@ -16,8 +16,6 @@
 	<!-- Includes all components in this project as separated modules -->
 	<modules>
 		<module>basyx.components.registry</module>
-		<module>basyx.components.xmlAAS</module>
-		<module>basyx.components.AASX</module>
     	<module>basyx.components.AASServer</module>
   </modules>
 	
@@ -112,6 +110,7 @@
 							<!-- The system property/env keys for basyx configuration files -->
 							<CONTEXT_CONFIG_KEY>BASYX_CONTEXT</CONTEXT_CONFIG_KEY>
 							<REGISTRY_CONFIG_KEY>BASYX_REGISTRY</REGISTRY_CONFIG_KEY>
+							<AAS_CONFIG_KEY>BASYX_AAS</AAS_CONFIG_KEY>
 							<MONGODB_CONFIG_KEY>BASYX_MONGODB</MONGODB_CONFIG_KEY>
 							<DOCKER_CONFIG_KEY>BASYX_DOCKER</DOCKER_CONFIG_KEY>
 							<SQL_CONFIG_KEY>BASYX_SQL</SQL_CONFIG_KEY>

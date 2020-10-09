@@ -43,14 +43,30 @@ public class BaSyxMongoDBConfiguration extends BaSyxConfiguration {
 		return defaultProps;
 	}
 
+	/**
+	 * Constructor with predefined value map
+	 */
 	public BaSyxMongoDBConfiguration(Map<String, String> values) {
 		super(values);
 	}
 
+	/**
+	 * Empty Constructor - use default values
+	 */
 	public BaSyxMongoDBConfiguration() {
 		super(getDefaultProperties());
 	}
 
+	/**
+	 * Constructor with initial configuration
+	 * 
+	 * @param user               The username for the mongodb
+	 * @param connectionUrl      Connection-URL for the mongodb
+	 * @param database           The database that shall be used
+	 * @param registryCollection Collection name for the registry data
+	 * @param aasCollection      Collection name for the AAS data
+	 * @param submodelCollection Collection name for the submodel data
+	 */
 	public BaSyxMongoDBConfiguration(String user, String connectionUrl, String database, String registryCollection,
 			String aasCollection, String submodelCollection) {
 		this();
@@ -62,6 +78,15 @@ public class BaSyxMongoDBConfiguration extends BaSyxConfiguration {
 		setSubmodelCollection(submodelCollection);
 	}
 
+	/**
+	 * Constructor with initial configuration (without registry collection)
+	 * 
+	 * @param user               The username for the mongodb
+	 * @param connectionUrl      Connection-URL for the mongodb
+	 * @param database           The database that shall be used
+	 * @param aasCollection      Collection name for the AAS data
+	 * @param submodelCollection Collection name for the submodel data
+	 */
 	public BaSyxMongoDBConfiguration(String user, String connectionUrl, String database, String aasCollection,
 			String submodelCollection) {
 		this();
@@ -72,6 +97,15 @@ public class BaSyxMongoDBConfiguration extends BaSyxConfiguration {
 		setSubmodelCollection(submodelCollection);
 	}
 
+	/**
+	 * Constructor with initial configuration (without aas collection)
+	 * 
+	 * @param user               The username for the mongodb
+	 * @param connectionUrl      Connection-URL for the mongodb
+	 * @param database           The database that shall be used
+	 * @param aasCollection      Collection name for the AAS data
+	 * @param submodelCollection Collection name for the submodel data
+	 */
 	public BaSyxMongoDBConfiguration(String user, String connectionUrl, String database, String registryCollection) {
 		this();
 		setUser(user);

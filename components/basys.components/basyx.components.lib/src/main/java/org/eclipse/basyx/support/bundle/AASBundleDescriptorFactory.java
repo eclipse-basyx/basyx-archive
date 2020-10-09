@@ -24,7 +24,9 @@ public class AASBundleDescriptorFactory {
 		String nHostBasePath = VABPathTools.stripSlashes(hostBasePath);
 
 		// Create AASDescriptor
-		String aasBase = VABPathTools.concatenatePaths(nHostBasePath, bundle.getAAS().getIdShort(), "aas");
+		String endpointId = bundle.getAAS().getIdentification().getId();
+		endpointId = VABPathTools.encodePathElement(endpointId);
+		String aasBase = VABPathTools.concatenatePaths(nHostBasePath, endpointId, "aas");
 		AASDescriptor desc = new AASDescriptor(bundle.getAAS(), aasBase);
 		bundle.getSubmodels().stream().forEach(s -> {
 			SubmodelDescriptor smDesc = new SubmodelDescriptor(s, VABPathTools.concatenatePaths(aasBase, "submodels", s.getIdShort(), "submodel"));

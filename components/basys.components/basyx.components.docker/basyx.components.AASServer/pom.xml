@@ -16,7 +16,7 @@
 			basyx.components.executable is the executable class with the definition of the public void main(String[]).
 			It is needed when building the jar in the maven-jar-plugin (see basyx.components.docker/pom.xml) 
 		-->
-		<basyx.components.executable>org.eclipse.basyx.components.executable.AASServerExecutable</basyx.components.executable>
+		<basyx.components.executable>org.eclipse.basyx.components.aas.executable.AASServerExecutable</basyx.components.executable>
 	</properties>
   
 	<packaging>jar</packaging>
@@ -32,6 +32,29 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<dependencies>
+		<!-- Use MongoDB Java Drivers for db connections -->
+	    <dependency>
+	        <groupId>org.mongodb</groupId>
+	        <artifactId>mongodb-driver-sync</artifactId>
+	        <version>4.0.5</version>
+	    </dependency>
+
+		<!-- Use Spring Data MongoDB for db data management -->		
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>3.0.1.RELEASE</version>
+		</dependency>
+		
+		<!-- Adds additional classes of the BaSys SDK for tests -->
+		<dependency>
+			<groupId>org.eclipse.basyx</groupId>
+			<artifactId>basyx.sdk</artifactId>
+			<classifier>tests</classifier>
+		</dependency>
+	</dependencies>
 	
 	<profiles>
 		<profile>

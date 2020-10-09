@@ -40,14 +40,29 @@ public class BaSyxSQLConfiguration extends BaSyxConfiguration {
 		return defaultProps;
 	}
 
+	/**
+	 * Constructor with predefined value map
+	 */
 	public BaSyxSQLConfiguration(Map<String, String> values) {
 		super(values);
 	}
 
+	/**
+	 * Empty Constructor - use default values
+	 */
 	public BaSyxSQLConfiguration() {
 		super(getDefaultProperties());
 	}
 
+	/**
+	 * Constructor with initial configuration
+	 * 
+	 * @param user   Username for SQL database
+	 * @param pass   Password for SQL database
+	 * @param path   SQL connection path
+	 * @param driver SQL driver
+	 * @param prefix SQL driver prefix
+	 */
 	public BaSyxSQLConfiguration(String user, String pass, String path, String driver, String prefix) {
 		this();
 		setUser(user);

@@ -26,9 +26,12 @@ public class SubmodelElementProvider extends MetaModelProvider {
 	private boolean specializedProvider = false;
 
 	public SubmodelElementProvider(IModelProvider proxy) {
+		IModelProvider unchangedProxy = proxy;
 		this.proxy = getElementProvider(proxy);
+		// if the returned element provider is the same, no specialized provider exists
+		specializedProvider = unchangedProxy != this.proxy;
 	}
-	
+
 	/**
 	 * Used to find out if an Element needs a specialized Provider (Collection, Operation)
 	 * 
@@ -36,19 +39,15 @@ public class SubmodelElementProvider extends MetaModelProvider {
 	 * @return either the unchanged Provider or the Provider nested into a specialized ElementProvider
 	 */
 	@SuppressWarnings("unchecked")
-	private IModelProvider getElementProvider(IModelProvider proxy) {
+	public static IModelProvider getElementProvider(IModelProvider proxy) {
 		Map<String, Object> elementMap = (Map<String, Object>) proxy.getModelPropertyValue("");
 		if(Operation.isOperation(elementMap)) {
-			specializedProvider = true;
 			return new OperationProvider(proxy);
 		} else if (SubmodelElementCollection.isSubmodelElementCollection(elementMap)) {
-			specializedProvider = true;
 			return new SubmodelElementCollectionProvider(proxy);
 		} else if(Property.isProperty(elementMap)) {
-			specializedProvider = true;
 			return new PropertyProvider(proxy);
 		} else {
-			specializedProvider = false;
 			return proxy;
 		}
 	}

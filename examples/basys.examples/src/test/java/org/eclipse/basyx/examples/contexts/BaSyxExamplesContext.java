@@ -1,7 +1,7 @@
 package org.eclipse.basyx.examples.contexts;
 
+import org.eclipse.basyx.components.aas.servlet.AASAggregatorServlet;
 import org.eclipse.basyx.components.registry.servlet.InMemoryRegistryServlet;
-import org.eclipse.basyx.components.servlet.AASServerServlet;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 
 /**
@@ -38,7 +38,7 @@ public class BaSyxExamplesContext extends BaSyxContext {
 		
 		// Define Servlet infrastucture
 		addServletMapping(REGISTRYFRAGMENT + "*", new InMemoryRegistryServlet());
-		addServletMapping(AASSERVERFRAGMENT + "*", new AASServerServlet());
+		addServletMapping(AASSERVERFRAGMENT + "*", new AASAggregatorServlet());
 	}
 }
 
