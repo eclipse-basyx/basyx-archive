@@ -109,7 +109,7 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 		Referable.createAsFacade(this, getKeyElement()).setParent(obj);
 	}
 
-	public void setQualifier(Collection<IConstraint> qualifiers) {
+	public void setQualifiers(Collection<IConstraint> qualifiers) {
 		Qualifiable.createAsFacade(this).setQualifiers(qualifiers);
 	}
 
