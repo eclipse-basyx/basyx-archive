@@ -289,6 +289,9 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	public Collection<IConstraint> getQualifiers() {
 		return Qualifiable.createAsFacade(this).getQualifiers();
 	}
+	public void setQualifiers(Collection<IConstraint> qualifiers) {
+		Qualifiable.createAsFacade(this).setQualifiers(qualifiers);
+	}
 
 	@Override
 	public IReference getReference() {

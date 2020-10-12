@@ -84,7 +84,7 @@ public class TestSubmodelmodelElement {
 	
 	@Test
 	public void testSetQualifier() {
-		submodelElement.setQualifier(Collections.singleton(FORMULA));
+		submodelElement.setQualifiers(Collections.singleton(FORMULA));
 		assertEquals(Collections.singleton(FORMULA), submodelElement.getQualifiers());
 	}
 	
