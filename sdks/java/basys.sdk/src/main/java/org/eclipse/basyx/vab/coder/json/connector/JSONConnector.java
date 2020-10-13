@@ -2,6 +2,7 @@ package org.eclipse.basyx.vab.coder.json.connector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.eclipse.basyx.vab.coder.json.metaprotocol.IMetaProtocolHandler;
 import org.eclipse.basyx.vab.coder.json.metaprotocol.MetaprotocolHandler;
@@ -12,6 +13,8 @@ import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -24,6 +27,9 @@ import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
  */
 public class JSONConnector implements IModelProvider {
 
+	private static final Logger LOGGER_DEFAULT = LoggerFactory.getLogger(JSONConnector.class);
+	private static final Logger LOGGER_COMMUNICATION = LoggerFactory.getLogger(LOGGER_DEFAULT.getName() + ".MALFORMED");
+	
 	
 	/**
 	 * Reference to Connector backend
@@ -83,7 +89,17 @@ public class JSONConnector implements IModelProvider {
 		String message = provider.getModelPropertyValue(path);
 
 		// De-serialize and verify
-		return metaProtocolHandler.deserialize(message);
+		try {
+			return metaProtocolHandler.deserialize(message);
+		} catch (ProviderException e) {
+			throw e;
+		} catch (RuntimeException e) {
+			String messageCorrelation = UUID.randomUUID().toString();
+			String msg = "Failed to deserialize request for '" + provider.getEndpointRepresentation(path) + "' (" + messageCorrelation + ")";
+			LOGGER_DEFAULT.warn(msg);
+			LOGGER_COMMUNICATION.warn(msg + ": " + message);
+			throw new ProviderException(msg, e);
+		}
 	}
 
 	@Override
