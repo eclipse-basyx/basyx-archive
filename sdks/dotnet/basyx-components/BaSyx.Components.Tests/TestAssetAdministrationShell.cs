@@ -9,10 +9,8 @@
 * 
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Extensions;
 using BaSyx.Utils.ResultHandling;
@@ -48,20 +46,20 @@ namespace BaSyx.Components.Tests
                 }
             };
 
-            Submodel testSubmodel = GetTestSubmodel();
+            BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel testSubmodel = GetTestSubmodel();
 
             aas.Submodels.Add(testSubmodel);
 
             return aas;
         }
 
-        public static Submodel GetTestSubmodel()
+        public static BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel GetTestSubmodel()
         {
             string propertyValue = "TestFromInside";
             int i = 0;
             double y = 2.0;
 
-            Submodel testSubmodel = new Submodel("TestSubmodel", new Identifier(Guid.NewGuid().ToString(), KeyType.Custom))
+            BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel testSubmodel = new BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel("TestSubmodel", new Identifier(Guid.NewGuid().ToString(), KeyType.Custom))
             {
                 SubmodelElements =
                 {
@@ -162,7 +160,10 @@ namespace BaSyx.Components.Tests
                            string expression = inArgs["Expression"]?.GetValue<string>();
                            int? computingTime = inArgs["ComputingTime"]?.GetValue<int>();
 
-                           inOutArgs["HierRein"]?.SetValue("DaWiederRaus");
+                           string throughput = inOutArgs["ThroughputVariable"]?.GetValue<string>();
+                           if(!string.IsNullOrEmpty(throughput))
+                            inOutArgs["ThroughputVariable"].SetValue(throughput + " modified in Calculate Method");
+                           
 
                            if(computingTime.HasValue)
                             await Task.Delay(computingTime.Value, cancellationToken);

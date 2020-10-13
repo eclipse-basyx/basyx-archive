@@ -9,19 +9,16 @@
 * 
 *******************************************************************************/
 using BaSyx.API.Components;
-using BaSyx.Models.Connectivity;
 using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
+using BaSyx.Models.Core.AssetAdministrationShell.Identification.BaSyx;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Extensions;
 using BaSyx.Models.Extensions.Semantics.DataSpecifications;
-using BaSyx.Utils.Client;
 using BaSyx.Utils.ResultHandling;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -72,11 +69,11 @@ namespace HelloAssetAdministrationShell
 
         public override IAssetAdministrationShell BuildAssetAdministrationShell()
         {
-            AssetAdministrationShell aas = new AssetAdministrationShell("HelloAAS", new Identifier("http://basys40.de/shells/HelloAAS/" + Guid.NewGuid().ToString(), KeyType.IRI))
+            AssetAdministrationShell aas = new AssetAdministrationShell("HelloAAS", new BaSyxShellIdentifier("HelloAAS", "1.0.0"))
             {
                 Description = new LangStringSet() { new LangString("en-US", "This is an exemplary Asset Administration Shell for starters") },
 
-                Asset = new Asset("HelloAsset", new Identifier("http://basys40.de/assets/HelloAsset/" + Guid.NewGuid().ToString(), KeyType.IRI))
+                Asset = new Asset("HelloAsset", new BaSyxAssetIdentifier("HelloAsset", "1.0.0"))
                 {
                     Description = new LangStringSet() { new LangString("en-US", "This is an exemplary Asset reference from the Asset Administration Shell") },
                     Kind = AssetKind.Instance,
@@ -84,7 +81,7 @@ namespace HelloAssetAdministrationShell
                 }
             };
 
-            Submodel helloSubmodel = new Submodel("HelloSubmodel", new Identifier("http://basys40.de/submodels/HelloSubmodel/" + Guid.NewGuid().ToString(), KeyType.IRI))
+            Submodel helloSubmodel = new Submodel("HelloSubmodel", new BaSyxSubmodelIdentifier("HelloSubmodel", "1.0.0"))
             {
                 Description = new LangStringSet() { new LangString("en-US", "This is an exemplary Submodel") },
                 Kind = ModelingKind.Instance,
@@ -106,31 +103,17 @@ namespace HelloAssetAdministrationShell
             });
 
 
-            var helloOperation_ConceptDescription = new ConceptDescription()
-            {
-                Identification = new Identifier("urn:basys:org.eclipse.basyx:dataSpecifications:EndpointSpecification:1.0.0", KeyType.IRI),
-                EmbeddedDataSpecifications = new List<IEmbeddedDataSpecification>()
-                {
-                    new EndpointSpecification(
-                        new EndpointSpecificationContent()
-                        {
-                            Endpoints = new List<IEndpoint>() { new OpcUaEndpoint("opc.tcp://127.0.0.1:4840/Objects/1:HelloAAS/1:SERVICE/1:TestOperation") }
-                        })                  
-                }
-            };
-
             helloSubmodel.SubmodelElements.Add(new Operation("HelloOperation")
             {
                 Description = new LangStringSet() { new LangString("en-US", "This is an exemplary operation returning the input argument with 'Hello' as prefix") },
                 InputVariables = new OperationVariableSet() { new Property<string>("Text") },
-                OutputVariables = new OperationVariableSet() { new Property<string>("ReturnValue") },
-                ConceptDescription = helloOperation_ConceptDescription
+                OutputVariables = new OperationVariableSet() { new Property<string>("ReturnValue") }
             });
 
             aas.Submodels = new ElementContainer<ISubmodel>();
             aas.Submodels.Add(helloSubmodel);
 
-            var assetIdentificationSubmodel = new Submodel("AssetIdentification", new Identifier(Guid.NewGuid().ToString(), KeyType.Custom))
+            var assetIdentificationSubmodel = new Submodel("AssetIdentification", new BaSyxSubmodelIdentifier("AssetIdentification", "1.0.0"))
             {
                 Kind = ModelingKind.Instance,
                 Parent = aas

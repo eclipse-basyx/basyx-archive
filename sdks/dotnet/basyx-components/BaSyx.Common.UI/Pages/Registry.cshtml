@@ -78,10 +78,11 @@
                                         <div class="col-sm-10"><a target="_blank" href="@endpoint.Address">@endpoint.Address</a></div>
                                     </div>
                                 </li>
-                                @if (endpoint.Type == EndpointType.HTTP && !string.IsNullOrEmpty(endpoint.Address) && endpoint.Address.EndsWith("/aas"))
+                                @if (((endpoint.Type == Uri.UriSchemeHttp) || (endpoint.Type == Uri.UriSchemeHttps)) 
+                                    && !string.IsNullOrEmpty(endpoint.Address) && endpoint.Address.EndsWith("/aas"))
                                 {
                                     var httpEndpoint = endpoint as HttpEndpoint;
-                                    string uiEndpoint = httpEndpoint.Url.Scheme + "://" + httpEndpoint.Url.Host + ":" + httpEndpoint.Url.Port + "/ui";
+                                    string uiEndpoint = httpEndpoint.Url.GetLeftPart(UriPartial.Authority) + "/ui";
                                     <li class="list-group-item">
                                         <div class="row align-items-center">
                                             <div class="col-sm-2"><b>Endpoint (http-UI)</b></div>

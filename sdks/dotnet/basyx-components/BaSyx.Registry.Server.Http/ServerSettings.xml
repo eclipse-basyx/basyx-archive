@@ -12,6 +12,6 @@
     <DefaultRoute/>
   </ServerConfig>
   <Miscellaneous>
-    <CompanyLogo>/images/Bosch.gif</CompanyLogo>
+    <CompanyLogo>/images/Bosch.png</CompanyLogo>
   </Miscellaneous>
 </ServerSettings>

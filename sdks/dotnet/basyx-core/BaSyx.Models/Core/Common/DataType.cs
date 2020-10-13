@@ -10,7 +10,7 @@
 *******************************************************************************/
 
 using BaSyx.Models.Core.AssetAdministrationShell;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
+using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using Newtonsoft.Json;
 using System;

@@ -10,7 +10,7 @@
 *******************************************************************************/
 using System.Runtime.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.References
+namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
 {
     /// <summary>
     /// A key is a reference to an element by its id. 

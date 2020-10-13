@@ -35,6 +35,8 @@
     <ProjectReference Include="..\BaSyx.Registry.Client.Http\BaSyx.Registry.Client.Http.csproj" />
     <ProjectReference Include="..\BaSyx.Registry.ReferenceImpl.FileBased\BaSyx.Registry.ReferenceImpl.FileBased.csproj" />
     <ProjectReference Include="..\BaSyx.Registry.Server.Http\BaSyx.Registry.Server.Http.csproj" />
+    <ProjectReference Include="..\BaSyx.Submodel.Client.Http\BaSyx.Submodel.Client.Http.csproj" />
+    <ProjectReference Include="..\BaSyx.Submodel.Server.Http\BaSyx.Submodel.Server.Http.csproj" />
   </ItemGroup>
 
 </Project>

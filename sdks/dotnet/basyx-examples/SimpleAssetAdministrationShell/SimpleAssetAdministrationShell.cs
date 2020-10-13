@@ -9,10 +9,9 @@
 * 
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell;
-using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
+using BaSyx.Models.Core.AssetAdministrationShell.Identification.BaSyx;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Extensions;
 using BaSyx.Utils.ResultHandling;
@@ -25,7 +24,7 @@ namespace SimpleAssetAdministrationShell
     {
         public static AssetAdministrationShell GetAssetAdministrationShell()
         {
-            AssetAdministrationShell aas = new AssetAdministrationShell("SimpleAAS", new Identifier("http://basys40.de/shells/SimpleAAS/" + Guid.NewGuid().ToString(), KeyType.IRI))
+            AssetAdministrationShell aas = new AssetAdministrationShell("SimpleAAS", new BaSyxShellIdentifier("SimpleAAS", "1.0.0"))
             {
                 Description = new LangStringSet()
                 {
@@ -37,7 +36,7 @@ namespace SimpleAssetAdministrationShell
                     Version = "1.0",
                     Revision = "120"
                 },
-                Asset = new Asset("SimpleAsset", new Identifier("http://basys40.de/assets/SimpleAsset/" + Guid.NewGuid().ToString(), KeyType.IRI))
+                Asset = new Asset("SimpleAsset", new BaSyxAssetIdentifier("SimpleAsset", "1.0.0"))
                 {
                     Kind = AssetKind.Instance,
                     Description = new LangStringSet()
@@ -61,7 +60,7 @@ namespace SimpleAssetAdministrationShell
             int i = 0;
             double y = 2.0;
 
-            Submodel testSubmodel = new Submodel("TestSubmodel", new Identifier(Guid.NewGuid().ToString(), KeyType.Custom))
+            Submodel testSubmodel = new Submodel("TestSubmodel", new BaSyxSubmodelIdentifier("TestSubmodel", "1.0.0"))
             {
                 SubmodelElements =
                 {

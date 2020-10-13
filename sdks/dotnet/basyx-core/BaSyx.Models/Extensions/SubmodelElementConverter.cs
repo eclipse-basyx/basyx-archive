@@ -11,7 +11,7 @@
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Core.Attributes;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
+using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;

@@ -24,13 +24,10 @@
                     <div class="col-sm-8">
                         <input id="@inputId" type="text" class="form-control" placeholder="Value" value="@await Html.PartialAsync("_Value", property)" />
                     </div>
-                    <div class="col-sm-1">
-                        <button onclick="@("GetPropertyValue('" + requestPath + "', '" + @inputId + "')")" id="@retrieveButtonId" type="button" class="btn btn-primary">Retrieve</button>
+                    <div class="col-sm-4">
+                        <button onclick="@("GetPropertyValue('" + requestPath + "', '" + @inputId + "')")" id="@retrieveButtonId" type="button" class="btn btn-outline-danger">Retrieve</button>
+                        <button onclick="@("SetPropertyValue('" + requestPath + "', '" + @inputId + "', $('#" + @inputId + "').val() )")" id="@updateButtonId" type="button" class="btn btn-outline-success">Update</button>
                     </div>
-                    <div class="col-sm-1">
-                        <button onclick="@("SetPropertyValue('" + requestPath + "', '" + @inputId + "', $('#" + @inputId + "').val() )")" id="@updateButtonId" type="button" class="btn btn-success">Update</button>
-                    </div>
-
                 </div>
             </div>
         }

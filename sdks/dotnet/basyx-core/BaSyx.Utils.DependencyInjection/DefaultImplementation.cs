@@ -11,7 +11,7 @@
 using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
+using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.AssetAdministrationShell.Views;
 using BaSyx.Models.Core.Common;

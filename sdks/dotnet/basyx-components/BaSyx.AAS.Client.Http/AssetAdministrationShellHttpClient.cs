@@ -62,7 +62,10 @@ namespace BaSyx.AAS.Client.Http
         public AssetAdministrationShellHttpClient(Uri endpoint, HttpClientHandler clientHandler) : this (clientHandler)
         {
             endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
-            Endpoint = endpoint;
+            if (!endpoint.AbsolutePath.EndsWith(AAS))
+                Endpoint = new Uri(endpoint, AAS);
+            else
+                Endpoint = endpoint;
         }
         public AssetAdministrationShellHttpClient(IAssetAdministrationShellDescriptor aasDescriptor) : this(aasDescriptor, DEFAULT_HTTP_CLIENT_HANDLER)
         { }
@@ -88,8 +91,6 @@ namespace BaSyx.AAS.Client.Http
             }
         }
         
-
-
         public Uri GetUri(params string[] pathElements)
         {
             if (pathElements == null)

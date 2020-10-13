@@ -8,11 +8,11 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-namespace BaSyx.Models.Core.AssetAdministrationShell.References
+namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
 {
-    public class GlobalKey : Key
+    public class ModelKey : Key
     {
-        public GlobalKey(KeyElements type, KeyType idType, string value) : base(type, idType, value, false)
+        public ModelKey(KeyElements type, KeyType idType, string value) : base(type, idType, value, true)
         { }
     }
 }

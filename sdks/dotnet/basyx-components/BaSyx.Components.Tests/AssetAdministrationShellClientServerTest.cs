@@ -10,7 +10,6 @@ using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Extensions;
 using BaSyx.Registry.Client.Http;
@@ -170,10 +169,145 @@ namespace BaSyx.Components.Tests
             return client.DeleteSubmodelElement(submodelId, seIdShortPath);
         }
 
+        [TestMethod]
+        public void Test91_InvokeOperation()
+        {
+            string requestId = Guid.NewGuid().ToString();
+            var invocationResponse = InvokeOperation(submodel.IdShort, "Calculate", new InvocationRequest(requestId)
+            {
+                InputArguments =
+                {
+                    new Property<string>("Expression", "6*(8+5)"),
+                    new Property<int>("ComputingTime", 1000)
+                },
+                InOutputArguments =
+                {
+                     new Property<string>("ThroughputVariable", "Test for InOutputArguments"),
+                },
+                Timeout = 5000
+            });
+            invocationResponse.Success.Should().BeTrue();
+            invocationResponse.Entity.Should().NotBeNull();
+            invocationResponse.Entity.RequestId.Should().BeEquivalentTo(requestId);
+            
+            invocationResponse.Entity.OperationResult.Success.Should().BeTrue();
+            invocationResponse.Entity.ExecutionState.Should().BeEquivalentTo(ExecutionState.Completed);
+            invocationResponse.Entity.InOutputArguments.Get("ThroughputVariable").Cast<IProperty>().GetValue<string>().Should().Contain("Test for InOutputArguments");
+            invocationResponse.Entity.OutputArguments.Get("Result").Cast<IProperty>().GetValue<double>().Should().Be(78.0);            
+        }
+
+        [TestMethod]
+        public void Test91_InvokeOperation_Timeout()
+        {
+            string requestId = Guid.NewGuid().ToString();
+            var invocationResponse = InvokeOperation(submodel.IdShort, "Calculate", new InvocationRequest(requestId)
+            {
+                InputArguments =
+                {
+                    new Property<string>("Expression", "6*(8+5)"),
+                    new Property<int>("ComputingTime", 5000)
+                },
+                InOutputArguments =
+                {
+                     new Property<string>("ThroughputVariable", "Test for InOutputArguments"),
+                },
+                Timeout = 2000
+            });
+            invocationResponse.Success.Should().BeTrue();
+            invocationResponse.Entity.Should().NotBeNull();
+            invocationResponse.Entity.RequestId.Should().BeEquivalentTo(requestId);
+
+            invocationResponse.Entity.OperationResult.Success.Should().BeFalse();
+            invocationResponse.Entity.InOutputArguments.Get("ThroughputVariable").Cast<IProperty>().GetValue<string>().Should().Contain("Test for InOutputArguments");
+            invocationResponse.Entity.ExecutionState.Should().BeEquivalentTo(ExecutionState.Timeout);
+        }
+
         public IResult<InvocationResponse> InvokeOperation(string submodelId, string operationIdShortPath, InvocationRequest invocationRequest)
         {
             return client.InvokeOperation(submodelId, operationIdShortPath, invocationRequest);
         }
+
+        [TestMethod]
+        public void Test92_InvokeOperationAsync()
+        {
+            string requestId = Guid.NewGuid().ToString();
+            var callbackResponse = InvokeOperationAsync(submodel.IdShort, "Calculate", new InvocationRequest(requestId)
+            {
+                InputArguments =
+                {
+                    new Property<string>("Expression", "6*(8+5)"),
+                    new Property<int>("ComputingTime", 5000)
+                },
+                InOutputArguments =
+                {
+                     new Property<string>("ThroughputVariable", "Test for InOutputArguments"),
+                },
+                Timeout = 15000
+            });
+            callbackResponse.Success.Should().BeTrue();
+            callbackResponse.Entity.Should().NotBeNull();
+            callbackResponse.Entity.RequestId.Should().BeEquivalentTo(requestId);
+            callbackResponse.Entity.CallbackUrl.Should().NotBeNull();
+
+            InvocationResponse response = null;
+
+            do
+            {
+                var invocationResponse = GetInvocationResult(submodel.IdShort, "Calculate", requestId);
+                invocationResponse.Success.Should().BeTrue();
+                invocationResponse.Entity.Should().NotBeNull();
+
+                response = invocationResponse.Entity;
+                response.RequestId.Should().BeEquivalentTo(requestId);
+
+            } while (response.ExecutionState == ExecutionState.Running);          
+
+            response.OperationResult.Success.Should().BeTrue();
+            response.ExecutionState.Should().BeEquivalentTo(ExecutionState.Completed);
+            response.InOutputArguments.Get("ThroughputVariable").Cast<IProperty>().GetValue<string>().Should().Contain("Test for InOutputArguments");
+            response.OutputArguments.Get("Result").Cast<IProperty>().GetValue<double>().Should().Be(78.0);
+        }
+
+        [TestMethod]
+        public void Test92_InvokeOperationAsync_Timeout()
+        {
+            string requestId = Guid.NewGuid().ToString();
+            var callbackResponse = InvokeOperationAsync(submodel.IdShort, "Calculate", new InvocationRequest(requestId)
+            {
+                InputArguments =
+                {
+                    new Property<string>("Expression", "6*(8+5)"),
+                    new Property<int>("ComputingTime", 10000)
+                },
+                InOutputArguments =
+                {
+                     new Property<string>("ThroughputVariable", "Test for InOutputArguments"),
+                },
+                Timeout = 3000
+            });
+            callbackResponse.Success.Should().BeTrue();
+            callbackResponse.Entity.Should().NotBeNull();
+            callbackResponse.Entity.RequestId.Should().BeEquivalentTo(requestId);
+            callbackResponse.Entity.CallbackUrl.Should().NotBeNull();
+
+            InvocationResponse response = null;
+
+            do
+            {
+                var invocationResponse = GetInvocationResult(submodel.IdShort, "Calculate", requestId);
+                invocationResponse.Success.Should().BeTrue();
+                invocationResponse.Entity.Should().NotBeNull();
+
+                response = invocationResponse.Entity;
+                response.RequestId.Should().BeEquivalentTo(requestId);
+
+            } while (response.ExecutionState == ExecutionState.Running);
+
+            response.OperationResult.Success.Should().BeFalse();
+            response.InOutputArguments.Get("ThroughputVariable").Cast<IProperty>().GetValue<string>().Should().Contain("Test for InOutputArguments");
+            response.ExecutionState.Should().BeEquivalentTo(ExecutionState.Timeout);
+        }
+
 
         public IResult<CallbackResponse> InvokeOperationAsync(string submodelId, string operationIdShortPath, InvocationRequest invocationRequest)
         {

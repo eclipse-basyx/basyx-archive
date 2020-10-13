@@ -61,6 +61,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaSyx.Common.UI", "BaSyx.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaSyx.Common.UI.Swagger", "BaSyx.Common.UI.Swagger\BaSyx.Common.UI.Swagger.csproj", "{415242FE-C464-48DB-96AD-FF4E02500AB7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClockAssetAdministrationShell", "..\basyx-examples\ClockAssetAdministrationShell\ClockAssetAdministrationShell.csproj", "{26F4B9ED-BF2F-43AA-B59B-187E66305B7B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +153,10 @@ Global
 		{415242FE-C464-48DB-96AD-FF4E02500AB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{415242FE-C464-48DB-96AD-FF4E02500AB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{415242FE-C464-48DB-96AD-FF4E02500AB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26F4B9ED-BF2F-43AA-B59B-187E66305B7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26F4B9ED-BF2F-43AA-B59B-187E66305B7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26F4B9ED-BF2F-43AA-B59B-187E66305B7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26F4B9ED-BF2F-43AA-B59B-187E66305B7B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -177,6 +183,7 @@ Global
 		{088964C6-FE4A-4CF3-9B47-903DF36EA890} = {17391EC4-6892-45AE-9873-B6724C3CB6D2}
 		{CB4CBEF9-F654-4FBD-9DFB-2340721F24D7} = {12CD4BF1-B0A6-4DBD-AFB6-6F232C92AAFA}
 		{415242FE-C464-48DB-96AD-FF4E02500AB7} = {12CD4BF1-B0A6-4DBD-AFB6-6F232C92AAFA}
+		{26F4B9ED-BF2F-43AA-B59B-187E66305B7B} = {17391EC4-6892-45AE-9873-B6724C3CB6D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DC440E9-3A4D-4D67-B741-72B8F15EB8C7}

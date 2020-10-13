@@ -2,7 +2,6 @@ using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using FluentAssertions;
 using FluentAssertions.Equivalency;

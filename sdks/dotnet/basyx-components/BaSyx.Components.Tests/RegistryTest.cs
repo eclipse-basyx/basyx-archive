@@ -5,7 +5,6 @@ using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.Common;
 using BaSyx.Registry.Client.Http;
 using BaSyx.Registry.ReferenceImpl.FileBased;
@@ -69,14 +68,14 @@ namespace BaSyx.Components.Tests
             },
             Submodels = new ElementContainer<ISubmodel>()
             {
-                new Submodel("MyTestSubmodel", new Identifier("https://www.basys40.de/submodels/MyTestSubmodel", KeyType.IRI))
+                new BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel("MyTestSubmodel", new Identifier("https://www.basys40.de/submodels/MyTestSubmodel", KeyType.IRI))
                 {
                     SemanticId = new Reference(new Key(KeyElements.GlobalReference, KeyType.IRI, "urn:basys:org.eclipse.basyx:submodels:MyTestSubmodel:1.0.0", false))
                 }
             }
         };
 
-        private static ISubmodel submodel = new Submodel("MyAdditionalTestSubmodel", new Identifier("https://www.basys40.de/submodels/MyAdditionalTestSubmodel", KeyType.IRI))
+        private static ISubmodel submodel = new BaSyx.Models.Core.AssetAdministrationShell.Implementations.Submodel("MyAdditionalTestSubmodel", new Identifier("https://www.basys40.de/submodels/MyAdditionalTestSubmodel", KeyType.IRI))
         {
             SemanticId = new Reference(new Key(KeyElements.GlobalReference, KeyType.IRI, "urn:basys:org.eclipse.basyx:submodels:MyAdditionalTestSubmodel:1.0.0", false))
         };

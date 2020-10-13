@@ -10,7 +10,6 @@
 *******************************************************************************/
 
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using Newtonsoft.Json;
 using System.Collections.Generic;

@@ -10,12 +10,13 @@
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
+using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Export.Converter;
 using BaSyx.Models.Export.EnvironmentSubmodelElements;
 using BaSyx.Models.Extensions.Semantics.DataSpecifications;
+using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using NLog;
@@ -39,9 +40,9 @@ namespace BaSyx.Models.Export
         public const string AAS_NAMESPACE = "http://www.admin-shell.io/aas/2/0";
         public const string IEC61360_NAMESPACE = "http://www.admin-shell.io/IEC61360/2/0";
         public const string ABAC_NAMESPACE = "http://www.admin-shell.io/aas/abac/2/0";
-        public const string AAS_XSD_FILENAME = "aas-spec-v2.0/AAS.xsd";
-        public const string IEC61360_XSD_FILENAME = "aas-spec-v2.0/IEC61360.xsd";
-        public const string ABAC_XSD_FILENAME = "aas-spec-v2.0/AAS_ABAC.xsd";
+        public const string AAS_XSD_FILENAME = "AAS.xsd";
+        public const string IEC61360_XSD_FILENAME = "IEC61360.xsd";
+        public const string ABAC_XSD_FILENAME = "AAS_ABAC.xsd";
 
         [DataMember(EmitDefaultValue = false, IsRequired = true, Name = "assetAdministrationShells", Order = 0)]
         [XmlIgnore, JsonIgnore]
@@ -83,11 +84,12 @@ namespace BaSyx.Models.Export
         [XmlIgnore]
         public Dictionary<string, IFile> SupplementalFiles;
 
-        private static string ContentRoot = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        private string ContentRoot = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly ManifestEmbeddedFileProvider fileProvider;
 
         public static JsonSerializerSettings JsonSettings;
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-
         public static XmlReaderSettings XmlSettings;
 
         static AssetAdministrationShellEnvironment_V2_0()
@@ -100,15 +102,23 @@ namespace BaSyx.Models.Export
             };
             JsonSettings.Converters.Add(new StringEnumConverter());
 
+            fileProvider = new ManifestEmbeddedFileProvider(typeof(AssetAdministrationShellEnvironment_V2_0).Assembly, "aas-spec-v2.0");
+
             XmlSettings = new XmlReaderSettings();
             XmlSettings.ValidationType = ValidationType.Schema;
             XmlSettings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
             XmlSettings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;
             XmlSettings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
             XmlSettings.ValidationEventHandler += new ValidationEventHandler(ValidationCallBack);
-            XmlSettings.Schemas.Add(AAS_NAMESPACE, Path.Combine(ContentRoot, AAS_XSD_FILENAME));
-            XmlSettings.Schemas.Add(IEC61360_NAMESPACE, Path.Combine(ContentRoot, IEC61360_XSD_FILENAME));
-            XmlSettings.Schemas.Add(ABAC_NAMESPACE, Path.Combine(ContentRoot, ABAC_XSD_FILENAME));
+
+            using (var stream = fileProvider.GetFileInfo(AAS_XSD_FILENAME).CreateReadStream())
+                XmlSettings.Schemas.Add(AAS_NAMESPACE, XmlReader.Create(stream));
+
+            using (var stream = fileProvider.GetFileInfo(IEC61360_XSD_FILENAME).CreateReadStream())
+                XmlSettings.Schemas.Add(IEC61360_NAMESPACE, XmlReader.Create(stream));
+
+            using (var stream = fileProvider.GetFileInfo(ABAC_XSD_FILENAME).CreateReadStream())
+                XmlSettings.Schemas.Add(ABAC_NAMESPACE, XmlReader.Create(stream));
         }
 
         [JsonConstructor]

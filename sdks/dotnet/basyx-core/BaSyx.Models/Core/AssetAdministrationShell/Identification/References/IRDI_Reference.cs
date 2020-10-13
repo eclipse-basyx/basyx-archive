@@ -8,7 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-namespace BaSyx.Models.Core.AssetAdministrationShell.References
+namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
 {
     public class IRDI_Reference : Reference
     {

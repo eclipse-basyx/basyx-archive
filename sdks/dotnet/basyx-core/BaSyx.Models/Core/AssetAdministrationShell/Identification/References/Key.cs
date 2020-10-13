@@ -16,7 +16,7 @@ using System;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
-namespace BaSyx.Models.Core.AssetAdministrationShell.References
+namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
 {
     [DataContract]
     [XmlType("key")]

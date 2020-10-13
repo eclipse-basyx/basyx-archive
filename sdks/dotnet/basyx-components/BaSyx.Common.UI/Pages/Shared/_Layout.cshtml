@@ -8,40 +8,43 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body style="margin-top:100px;">
+<body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow mb-3 fixed-top" style="max-height:80px">
-            <div class="container">
-                <a class="navbar-brand align-middle" href="#"><img src="~/images/basyxlogo.png" width="200" height="60" /></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#"><img src="~/images/basyxlogo.png" width="200" /></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" style="width:100%">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" asp-area="" asp-page="/Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/swagger">Swagger Doc</a>
+                            <a class="nav-link" href="/swagger">Swagger Doc</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="@ViewData["ApiRoot"]">REST-API</a>
+                            <a class="nav-link" href="@ViewData["ApiRoot"]">REST-API</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="https://www.eclipse.org/legal/epl-2.0/">Licence</a>
+                            <a class="nav-link" href="https://www.eclipse.org/legal/epl-2.0/">License</a>
                         </li>
                     </ul>
-                </div>
-                <div class="navbar-right">
                     @if (!string.IsNullOrEmpty((string)ViewData["CompanyLogo"]))
                     {
-                        <img src="@ViewData["CompanyLogo"]" width="160" />
+                        <div class="order-sm-last">
+                            <img src="@ViewData["CompanyLogo"]" width="160" />
+                        </div>
                     }
+                    @*<form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                   *@
                 </div>
-            </div>
-        </nav>
-    </header>
+            </nav>
+     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -50,7 +53,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; Robert Bosch GmbH 2020 <a href="https://www.eclipse.org/legal/epl-2.0/">Licence EPL-2.0</a>
+            &copy; Robert Bosch GmbH 2020 <a href="https://www.eclipse.org/legal/epl-2.0/">License EPL-2.0</a>
         </div>
     </footer>
 

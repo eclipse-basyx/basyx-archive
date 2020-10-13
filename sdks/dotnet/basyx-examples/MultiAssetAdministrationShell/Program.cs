@@ -16,8 +16,8 @@ using BaSyx.Common.UI.Swagger;
 using BaSyx.Models.Connectivity;
 using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
+using BaSyx.Models.Core.AssetAdministrationShell.Identification.BaSyx;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Utils.Settings.Types;
 using System;
 using System.Collections.Generic;
@@ -38,7 +38,7 @@ namespace MultiAssetAdministrationShell
 
             for (int i = 0; i < 10; i++)
             {
-                AssetAdministrationShell aas = new AssetAdministrationShell("MultiAAS_" + i, new Identifier("http://basys40.de/shells/MultiAAS/" + Guid.NewGuid().ToString(), KeyType.IRI))
+                AssetAdministrationShell aas = new AssetAdministrationShell("MultiAAS_" + i, new BaSyxShellIdentifier("MultiAAS_" + i, "1.0.0"))
                 {
                     Description = new LangStringSet()
                     {
@@ -50,7 +50,7 @@ namespace MultiAssetAdministrationShell
                         Version = "1.0",
                         Revision = "120"
                     },
-                    Asset = new Asset("Asset_" + i, new Identifier("http://basys40.de/assets/MultiAsset/" + Guid.NewGuid().ToString(), KeyType.IRI))
+                    Asset = new Asset("Asset_" + i, new BaSyxAssetIdentifier("Asset_" + i, "1.0.0"))
                     {
                         Kind = AssetKind.Instance,
                         Description = new LangStringSet()
@@ -61,7 +61,7 @@ namespace MultiAssetAdministrationShell
                     }
                 };
 
-                aas.Submodels.Create(new Submodel("TestSubmodel", new Identifier("http://basys40.de/submodels/" + Guid.NewGuid().ToString(), KeyType.IRI))
+                aas.Submodels.Create(new Submodel("TestSubmodel", new BaSyxSubmodelIdentifier("TestSubmodel", "1.0.0"))
                 {
                     SubmodelElements =
                     {

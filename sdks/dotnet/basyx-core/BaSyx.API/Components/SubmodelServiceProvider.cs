@@ -34,6 +34,7 @@ namespace BaSyx.API.Components
 
         private ISubmodel _submodel;
 
+        public const int DEFAULT_TIMEOUT = 30000;
         public ISubmodelDescriptor ServiceDescriptor { get; internal set; }
 
         private readonly Dictionary<string, MethodCalledHandler> methodCalledHandler;
@@ -41,7 +42,7 @@ namespace BaSyx.API.Components
         private readonly Dictionary<string, Action<IValue>> updateFunctions;
         private readonly Dictionary<string, EventDelegate> eventDelegates;
         private readonly Dictionary<string, InvocationResponse> invocationResults;
-
+        
         private IMessageClient messageClient;
 
         /// <summary>
@@ -242,6 +243,10 @@ namespace BaSyx.API.Components
                 InvocationResponse invocationResponse = new InvocationResponse(invocationRequest.RequestId);
                 invocationResponse.InOutputArguments = invocationRequest.InOutputArguments;
 
+                int timeout = DEFAULT_TIMEOUT;
+                if (invocationRequest.Timeout.HasValue)
+                    timeout = invocationRequest.Timeout.Value;
+
                 using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
                 {
                     Task<OperationResult> runner = Task.Run(async () =>
@@ -261,7 +266,7 @@ namespace BaSyx.API.Components
 
                     }, cancellationTokenSource.Token);
 
-                    if (Task.WhenAny(runner, Task.Delay(invocationRequest.Timeout.Value, cancellationTokenSource.Token)).Result == runner)
+                    if (Task.WhenAny(runner, Task.Delay(timeout, cancellationTokenSource.Token)).Result == runner)
                     {
                         cancellationTokenSource.Cancel();
                         invocationResponse.OperationResult = runner.Result;
@@ -296,12 +301,16 @@ namespace BaSyx.API.Components
                     methodHandler = handler;
                 else
                     return new Result<CallbackResponse>(false, new NotFoundMessage($"MethodHandler for {pathToOperation}"));
-
+             
                 Task invocationTask = Task.Run(async() =>
                 {
                     InvocationResponse invocationResponse = new InvocationResponse(invocationRequest.RequestId);
                     invocationResponse.InOutputArguments = invocationRequest.InOutputArguments;
                     SetInvocationResult(pathToOperation, invocationRequest.RequestId, ref invocationResponse);
+
+                    int timeout = DEFAULT_TIMEOUT;
+                    if (invocationRequest.Timeout.HasValue)
+                        timeout = invocationRequest.Timeout.Value;
 
                     using (var cancellationTokenSource = new CancellationTokenSource())
                     {
@@ -321,7 +330,7 @@ namespace BaSyx.API.Components
                             }
                         }, cancellationTokenSource.Token);
 
-                        if (await Task.WhenAny(runner, Task.Delay(invocationRequest.Timeout.Value, cancellationTokenSource.Token)) == runner)
+                        if (await Task.WhenAny(runner, Task.Delay(timeout, cancellationTokenSource.Token)) == runner)
                         {
                             cancellationTokenSource.Cancel();
                             invocationResponse.OperationResult = runner.Result;

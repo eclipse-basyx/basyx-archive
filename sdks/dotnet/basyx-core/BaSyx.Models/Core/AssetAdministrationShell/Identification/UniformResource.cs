@@ -84,5 +84,10 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
             }
             return urn;
         }
+
+        public static implicit operator Identifier(UniformResource urn)
+        {
+            return urn.ToIdentifier();
+        }
     }
 }

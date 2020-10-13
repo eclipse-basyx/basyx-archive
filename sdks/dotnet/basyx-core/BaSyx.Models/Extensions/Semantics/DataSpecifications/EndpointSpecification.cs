@@ -10,7 +10,7 @@
 *******************************************************************************/
 using BaSyx.Models.Connectivity;
 using BaSyx.Models.Core.Attributes;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
+using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;

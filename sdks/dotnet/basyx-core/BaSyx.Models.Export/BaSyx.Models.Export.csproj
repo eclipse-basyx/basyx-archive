@@ -13,6 +13,7 @@
     <RepositoryUrl>https://git.eclipse.org/r/plugins/gitiles/basyx/basyx/+/master/sdks/csnet/</RepositoryUrl>
     <PackageIcon>basyxlogo.png</PackageIcon>
     <PackageTags>BaSys BaSyx Models Export</PackageTags>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,46 +21,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="aas-spec-v1.0\AAS.xsd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-      <PackageFlatten>true</PackageFlatten>
-      <PackagePath>contentFiles\any\any\aas-spec-v1.0\</PackagePath>
-    </Content>
-    <Content Include="aas-spec-v2.0\AAS.xsd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-      <PackageFlatten>true</PackageFlatten>
-      <PackagePath>contentFiles\any\any\aas-spec-v2.0\</PackagePath>
-    </Content>
-    <Content Include="aas-spec-v2.0\AAS_ABAC.xsd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-      <PackageFlatten>true</PackageFlatten>
-      <PackagePath>contentFiles\any\any\aas-spec-v2.0\</PackagePath>
-    </Content>
-    <Content Include="aas-spec-v1.0\IEC61360.xsd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-      <PackageFlatten>true</PackageFlatten>
-      <PackagePath>contentFiles\any\any\aas-spec-v1.0\</PackagePath>
-    </Content>
-    <Content Include="aas-spec-v2.0\IEC61360.xsd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-      <PackageFlatten>true</PackageFlatten>
-      <PackagePath>contentFiles\any\any\aas-spec-v2.0\</PackagePath>
-    </Content>
+    <EmbeddedResource Include="aas-spec-v1.0\**\*" />
+    <EmbeddedResource Include="aas-spec-v2.0\**\*" />
   </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.7.0" />
     <PackageReference Include="System.IO.Packaging" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.8" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

@@ -11,14 +11,13 @@
 
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Constraints;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
+using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
-using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using NLog;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations

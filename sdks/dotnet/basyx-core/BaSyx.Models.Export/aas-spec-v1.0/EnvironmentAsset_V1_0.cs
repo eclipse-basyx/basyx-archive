@@ -12,7 +12,6 @@
 using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Export.Converter;

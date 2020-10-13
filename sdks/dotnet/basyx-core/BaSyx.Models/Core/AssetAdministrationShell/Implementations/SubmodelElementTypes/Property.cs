@@ -9,7 +9,7 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Core.AssetAdministrationShell.References;
+using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.Common;
 using Newtonsoft.Json;
 using System;
