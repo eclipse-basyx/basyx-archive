@@ -67,4 +67,11 @@ public interface IBaSyxConnector {
 	 * @return Return value
 	 */
 	public String invokeOperation(String path, String jsonObject) throws ProviderException;
+	
+	/**
+	 * Get string representation of endpoint for given path for debugging. 
+	 * @param path Requested path
+	 * @return String representing requested endpoint
+	 */
+	public String getEndpointRepresentation(String path);
 }

@@ -139,5 +139,8 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 		return null;
 	}
 
-	
+	@Override
+	public String getEndpointRepresentation(String path) {
+		return "test://" + path;
+	}
 }
