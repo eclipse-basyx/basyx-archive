@@ -23,6 +23,9 @@ using System.Linq;
 using BaSyx.Utils.DependencyInjection;
 using NLog;
 using System.Collections.Generic;
+using System.Text;
+using Newtonsoft.Json;
+using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 
 namespace BaSyx.Submodel.Client.Http
 {
@@ -34,7 +37,7 @@ namespace BaSyx.Submodel.Client.Http
 
         private const string SEPARATOR = "/";
         private const string SUBMODEL = "submodel";
-        private const string SUBMODELELEMENTS = "submodelElements";
+        private const string SUBMODEL_ELEMENTS = "submodelElements";
         private const string VALUE = "value";
         private const string INVOKE = "invoke";
         private const string SYNCHRONOUS = "?async=false";
@@ -99,63 +102,71 @@ namespace BaSyx.Submodel.Client.Http
 
         public IResult<InvocationResponse> InvokeOperation(string operationId, InvocationRequest invocationRequest)
         {
-            var request = base.CreateJsonContentRequest(GetUri(SUBMODELELEMENTS, operationId, INVOKE + SYNCHRONOUS), HttpMethod.Post, invocationRequest);
+            var request = base.CreateJsonContentRequest(GetUri(SUBMODEL_ELEMENTS, operationId, INVOKE + SYNCHRONOUS), HttpMethod.Post, invocationRequest);
             var response = base.SendRequest(request, RequestTimeout);
             return base.EvaluateResponse<InvocationResponse>(response, response.Entity);
         }      
 
         public IResult<ISubmodelElement> CreateOrUpdateSubmodelElement(string rootSubmodelElementIdShort, ISubmodelElement submodelElement)
         {
-            var request = base.CreateJsonContentRequest(GetUri(SUBMODELELEMENTS), HttpMethod.Put, submodelElement);
+            var request = base.CreateJsonContentRequest(GetUri(SUBMODEL_ELEMENTS, rootSubmodelElementIdShort), HttpMethod.Put, submodelElement);
             var response = base.SendRequest(request, RequestTimeout);
             return base.EvaluateResponse<ISubmodelElement>(response, response.Entity);
         }
 
         public IResult<IElementContainer<ISubmodelElement>> RetrieveSubmodelElements()
         {
-            var request = base.CreateRequest(GetUri(SUBMODELELEMENTS), HttpMethod.Get);
+            var request = base.CreateRequest(GetUri(SUBMODEL_ELEMENTS), HttpMethod.Get);
             var response = base.SendRequest(request, RequestTimeout);
             return base.EvaluateResponse<IElementContainer<ISubmodelElement>>(response, response.Entity);
         }
 
         public IResult<ISubmodelElement> RetrieveSubmodelElement(string submodelElementId)
         {
-            var request = base.CreateRequest(GetUri(SUBMODELELEMENTS, submodelElementId), HttpMethod.Get);
+            var request = base.CreateRequest(GetUri(SUBMODEL_ELEMENTS, submodelElementId), HttpMethod.Get);
             var response = base.SendRequest(request, RequestTimeout);
             return base.EvaluateResponse<ISubmodelElement>(response, response.Entity);
         }
 
         public IResult<IValue> RetrieveSubmodelElementValue(string submodelElementId)
         {
-            var request = base.CreateRequest(GetUri(SUBMODELELEMENTS, submodelElementId, VALUE), HttpMethod.Get);
+            var request = base.CreateRequest(GetUri(SUBMODEL_ELEMENTS, submodelElementId, VALUE), HttpMethod.Get);
             var response = base.SendRequest(request, RequestTimeout);
-            return base.EvaluateResponse<IValue>(response, response.Entity);
+            IResult result = base.EvaluateResponse(response, response.Entity);
+            if (result.Success && result.Entity != null)
+            {
+                string sValue = Encoding.UTF8.GetString((byte[])result.Entity);
+                object deserializedValue = JsonConvert.DeserializeObject(sValue);
+                return new Result<IValue>(result.Success, new ElementValue(deserializedValue, deserializedValue.GetType()), result.Messages);
+            }
+            else
+                return new Result<IValue>(result);
         }      
 
         public IResult DeleteSubmodelElement(string submodelElementId)
         {
-            var request = base.CreateRequest(GetUri(SUBMODELELEMENTS, submodelElementId), HttpMethod.Delete);
+            var request = base.CreateRequest(GetUri(SUBMODEL_ELEMENTS, submodelElementId), HttpMethod.Delete);
             var response = base.SendRequest(request, RequestTimeout);
             return base.EvaluateResponse(response, response.Entity);
         }
 
         public IResult<CallbackResponse> InvokeOperationAsync(string operationId, InvocationRequest invocationRequest)
         {
-            var request = base.CreateJsonContentRequest(GetUri(SUBMODELELEMENTS, operationId, INVOKE + ASYNCHRONOUS), HttpMethod.Post, invocationRequest);
+            var request = base.CreateJsonContentRequest(GetUri(SUBMODEL_ELEMENTS, operationId, INVOKE + ASYNCHRONOUS), HttpMethod.Post, invocationRequest);
             var response = base.SendRequest(request, RequestTimeout);
             return base.EvaluateResponse<CallbackResponse>(response, response.Entity);
         }
 
         public IResult<InvocationResponse> GetInvocationResult(string operationId, string requestId)
         {
-            var request = base.CreateRequest(GetUri(SUBMODELELEMENTS, operationId, INVOCATION_LIST, requestId), HttpMethod.Get);
+            var request = base.CreateRequest(GetUri(SUBMODEL_ELEMENTS, operationId, INVOCATION_LIST, requestId), HttpMethod.Get);
             var response = base.SendRequest(request, RequestTimeout);
             return base.EvaluateResponse<InvocationResponse>(response, response.Entity);
         }
 
         public IResult UpdateSubmodelElementValue(string submodelElementId, IValue value)
         {
-            var request = base.CreateJsonContentRequest(GetUri(SUBMODELELEMENTS, submodelElementId, VALUE), HttpMethod.Put, value);
+            var request = base.CreateJsonContentRequest(GetUri(SUBMODEL_ELEMENTS, submodelElementId, VALUE), HttpMethod.Put, value.Value);
             var response = base.SendRequest(request, RequestTimeout);
             return base.EvaluateResponse(response, response.Entity);
         }

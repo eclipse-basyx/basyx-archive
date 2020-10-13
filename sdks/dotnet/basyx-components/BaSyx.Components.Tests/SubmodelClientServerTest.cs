@@ -31,8 +31,8 @@ namespace BaSyx.Components.Tests
             ServerSettings submodelServerSettings = ServerSettings.CreateSettings();
             submodelServerSettings.ServerConfig.Hosting.ContentPath = "Content";
             submodelServerSettings.ServerConfig.Hosting.Environment = "Development";
-            submodelServerSettings.ServerConfig.Hosting.Urls.Add("http://localhost:5080");
-            submodelServerSettings.ServerConfig.Hosting.Urls.Add("https://localhost:5443");
+            submodelServerSettings.ServerConfig.Hosting.Urls.Add("http://localhost:5085");
+            submodelServerSettings.ServerConfig.Hosting.Urls.Add("https://localhost:5448");
 
             submodel = TestAssetAdministrationShell.GetTestSubmodel();
             var serviceProvider = submodel.CreateServiceProvider();
