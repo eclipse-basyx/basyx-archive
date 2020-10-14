@@ -1,6 +1,10 @@
 package org.eclipse.basyx.testsuite.regression.vab.coder.json;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import org.eclipse.basyx.vab.coder.json.provider.JSONProvider;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -34,18 +38,14 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 	 */
 	@Override
 	public String getModelPropertyValue(String path) {
-		try {
-			PrintWriterStub outputstream = new PrintWriterStub("test.txt", "ignore");
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		provider.processBaSysGet(path, outputStream);
 		
-			provider.processBaSysGet(path, outputstream);
-			
-			return outputstream.getResult();
-		} catch (FileNotFoundException e) {
-			logger.error("[TEST] Exception in getModelPropertyValue", e);
+		try {
+			return outputStream.toString(StandardCharsets.UTF_8.displayName());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Should not happen...");
 		}
-
-		// This should never happen
-		return null;		
 	}
 
 	/**
@@ -54,16 +54,14 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 	 */
 	@Override
 	public String setModelPropertyValue(String path, String newValue) throws ProviderException {
-		try {
-			PrintWriterStub outputstream = new PrintWriterStub("test.txt", "ignore");
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		provider.processBaSysSet(path, newValue, outputStream);
 		
-			provider.processBaSysSet(path, newValue, outputstream);
-			
-			return outputstream.getResult();
-		} catch (FileNotFoundException e) {
-			logger.error("[TEST] Exception in setModelPropertyValue", e);
+		try {
+			return outputStream.toString(StandardCharsets.UTF_8.displayName());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Should not happen...");
 		}
-		return null;		
 	}
 
 	/**
@@ -72,16 +70,14 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 	 */
 	@Override
 	public String createValue(String path, String newEntity) throws ProviderException {
-		try {
-			PrintWriterStub outputstream = new PrintWriterStub("test.txt", "ignore");
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		provider.processBaSysCreate(path, newEntity, outputStream);
 		
-			provider.processBaSysCreate(path, newEntity, outputstream);
-			
-			return outputstream.getResult();
-		} catch (FileNotFoundException e) {
-			logger.error("[TEST] Exception in createValue", e);
-		}
-		return null;		
+		try {
+			return outputStream.toString(StandardCharsets.UTF_8.displayName());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Should not happen...");
+		}	
 	}
 
 	/**
@@ -90,17 +86,15 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 	 */
 	@Override
 	public String deleteValue(String path) throws ProviderException {
-		try {
-			PrintWriterStub outputstream = new PrintWriterStub("test.txt", "ignore");
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		String nullParam = "null";
+		provider.processBaSysDelete(path, nullParam, outputStream);
 		
-			String nullParam = "null";
-			provider.processBaSysDelete(path, nullParam, outputstream);
-			
-			return outputstream.getResult();
-		} catch (FileNotFoundException e) {
-			logger.error("[TEST] Exception in deleteValue", e);
+		try {
+			return outputStream.toString(StandardCharsets.UTF_8.displayName());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Should not happen...");
 		}
-		return null;
 	}
 
 	/**
@@ -109,16 +103,14 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 	 */
 	@Override
 	public String deleteValue(String path, String obj) throws ProviderException {
-		try {
-			PrintWriterStub outputstream = new PrintWriterStub("test.txt", "ignore");
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		provider.processBaSysDelete(path, obj, outputStream);
 		
-			provider.processBaSysDelete(path, obj, outputstream);
-			
-			return outputstream.getResult();
-		} catch (FileNotFoundException e) {
-			logger.error("[TEST] Exception in deleteValue", e);
+		try {
+			return outputStream.toString(StandardCharsets.UTF_8.displayName());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Should not happen...");
 		}
-		return null;
 	}
 
 	/**
@@ -127,16 +119,14 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 	 */
 	@Override
 	public String invokeOperation(String path, String jsonObject) throws ProviderException {
-		try {
-			PrintWriterStub outputstream = new PrintWriterStub("test.txt", "ignore");
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		provider.processBaSysInvoke(path, jsonObject, outputStream);
 		
-			provider.processBaSysInvoke(path, jsonObject, outputstream);
-			
-			return outputstream.getResult();
-		} catch (FileNotFoundException e) {
-			logger.error("[TEST] Exception in invokeOperation", e);
+		try {
+			return outputStream.toString(StandardCharsets.UTF_8.displayName());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Should not happen...");
 		}
-		return null;
 	}
 
 	@Override
