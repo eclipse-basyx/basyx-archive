@@ -2,7 +2,6 @@ package org.eclipse.basyx.vab.protocol.basyx.server;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
@@ -81,8 +80,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 	 */
 	public void processInputFrame(byte[] rxFrame) throws IOException {
 		// Create output streams
-		ByteArrayOutputStream byteArrayOutput = new ByteArrayOutputStream();
-		PrintWriter output = new PrintWriter(byteArrayOutput);
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
 
 		// Get command
 		switch (rxFrame[0]) {
@@ -107,7 +105,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 
 			// Send response frame
 			output.flush();
-			sendResponseFrame(byteArrayOutput);
+			sendResponseFrame(output);
 
 			break;
 		}
@@ -133,7 +131,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 
 			// Send response frame
 			output.flush();
-			sendResponseFrame(byteArrayOutput);
+			sendResponseFrame(output);
 
 			break;
 		}
@@ -159,7 +157,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 
 			// Send response frame
 			output.flush();
-			sendResponseFrame(byteArrayOutput);
+			sendResponseFrame(output);
 
 			break;
 		}
@@ -194,7 +192,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 
 			// Send response frame
 			output.flush();
-			sendResponseFrame(byteArrayOutput);
+			sendResponseFrame(output);
 
 			break;
 		}
@@ -219,7 +217,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 
 			// Send response frame
 			output.flush();
-			sendResponseFrame(byteArrayOutput);
+			sendResponseFrame(output);
 
 			break;
 		}
