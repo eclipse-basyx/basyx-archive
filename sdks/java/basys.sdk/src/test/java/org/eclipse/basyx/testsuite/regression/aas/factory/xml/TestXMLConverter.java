@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.StringWriter;
 import java.nio.file.Files;
@@ -67,101 +66,70 @@ public class TestXMLConverter {
 	private XMLToMetamodelConverter converter;
 	
 	@Before
-	public void buildConverter() {
-		try {
-			String xml = new String(Files.readAllBytes(Paths.get(xmlInPath)));
-			converter = new XMLToMetamodelConverter(xml);
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+	public void buildConverter() throws Exception {
+		String xml = new String(Files.readAllBytes(Paths.get(xmlInPath)));
+		converter = new XMLToMetamodelConverter(xml);
 	}
 
 	@Test
-	public void testParseAAS() {
-		try {
-			checkAASs(converter.parseAAS());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+	public void testParseAAS() throws Exception {
+		checkAASs(converter.parseAAS());
 	}
 	
 	@Test
-	public void testParseAssets() {
-		try {
-			checkAssets(converter.parseAssets());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+	public void testParseAssets() throws Exception {
+		checkAssets(converter.parseAssets());
 	}
 	
 	@Test
 	public void testParseConceptDescriptions() {
-		try {
-			checkConceptDescriptions(converter.parseConceptDescriptions());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+		checkConceptDescriptions(converter.parseConceptDescriptions());
 	}
 	
 	@Test
 	public void testParseSubmodels() {
-		try {
-			checkSubmodels(converter.parseSubmodels());			
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+		checkSubmodels(converter.parseSubmodels());
 	}
 	
 	@Test
-	public void testBuildXML() {
-		try {
-			//Convert the in.xml to Objects
-			List<IAssetAdministrationShell> assetAdministrationShellList = converter.parseAAS();
-			List<IAsset> assetList = converter.parseAssets();
-			List<IConceptDescription> conceptDescriptionList = converter.parseConceptDescriptions();
-			List<ISubModel> submodelList = converter.parseSubmodels();
-			
-			//Build XML-File from the Objects and write it to a StringWriter
-			StringWriter resultWithTypes = new StringWriter();
-			MetamodelToXMLConverter.convertToXML(assetAdministrationShellList, assetList, conceptDescriptionList, submodelList, new StreamResult(resultWithTypes));
-			
-			
-			//Read the content of the StringWriter, convert it into Objects and check them
-			XMLToMetamodelConverter converterWithTypes = new XMLToMetamodelConverter(resultWithTypes.toString());
-
-			checkAASs(converterWithTypes.parseAAS());
-			checkAssets(converterWithTypes.parseAssets());
-			checkConceptDescriptions(converterWithTypes.parseConceptDescriptions());
-			checkSubmodels(converterWithTypes.parseSubmodels());
-			
-			//erase the types of the Objects, that they are plain Maps as if they were transferred over the VAB
-			List<IAssetAdministrationShell> iAssetAdministrationShellList = destroyAASTypes(assetAdministrationShellList);
-			List<IAsset> iAssetList = destroyAssetTypes(assetList);
-			List<IConceptDescription> iConceptDescriptionList = destroyConceptDescriptionTypes(conceptDescriptionList);
-			List<ISubModel> iSubmodelList = destroySubmodelTypes(submodelList);
-			
-			//Build XML-File from the Objects and write it to a StringWriter
-			StringWriter resultWithoutTypes = new StringWriter();
-			MetamodelToXMLConverter.convertToXML(iAssetAdministrationShellList, iAssetList, iConceptDescriptionList, iSubmodelList, new StreamResult(resultWithoutTypes));
-			
-			
-			//Read the content of the StringWriter, convert it into Objects and check them
-			XMLToMetamodelConverter converterWithoutTypes = new XMLToMetamodelConverter(resultWithoutTypes.toString());
-			
-			checkAASs(converterWithoutTypes.parseAAS());
-			checkAssets(converterWithoutTypes.parseAssets());
-			checkConceptDescriptions(converterWithoutTypes.parseConceptDescriptions());
-			checkSubmodels(converterWithoutTypes.parseSubmodels());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+	public void testBuildXML() throws Exception {
+		//Convert the in.xml to Objects
+		List<IAssetAdministrationShell> assetAdministrationShellList = converter.parseAAS();
+		List<IAsset> assetList = converter.parseAssets();
+		List<IConceptDescription> conceptDescriptionList = converter.parseConceptDescriptions();
+		List<ISubModel> submodelList = converter.parseSubmodels();
+		
+		//Build XML-File from the Objects and write it to a StringWriter
+		StringWriter resultWithTypes = new StringWriter();
+		MetamodelToXMLConverter.convertToXML(assetAdministrationShellList, assetList, conceptDescriptionList, submodelList, new StreamResult(resultWithTypes));
+		
+		
+		//Read the content of the StringWriter, convert it into Objects and check them
+		XMLToMetamodelConverter converterWithTypes = new XMLToMetamodelConverter(resultWithTypes.toString());
+	
+		checkAASs(converterWithTypes.parseAAS());
+		checkAssets(converterWithTypes.parseAssets());
+		checkConceptDescriptions(converterWithTypes.parseConceptDescriptions());
+		checkSubmodels(converterWithTypes.parseSubmodels());
+		
+		//erase the types of the Objects, that they are plain Maps as if they were transferred over the VAB
+		List<IAssetAdministrationShell> iAssetAdministrationShellList = destroyAASTypes(assetAdministrationShellList);
+		List<IAsset> iAssetList = destroyAssetTypes(assetList);
+		List<IConceptDescription> iConceptDescriptionList = destroyConceptDescriptionTypes(conceptDescriptionList);
+		List<ISubModel> iSubmodelList = destroySubmodelTypes(submodelList);
+		
+		//Build XML-File from the Objects and write it to a StringWriter
+		StringWriter resultWithoutTypes = new StringWriter();
+		MetamodelToXMLConverter.convertToXML(iAssetAdministrationShellList, iAssetList, iConceptDescriptionList, iSubmodelList, new StreamResult(resultWithoutTypes));
+		
+		
+		//Read the content of the StringWriter, convert it into Objects and check them
+		XMLToMetamodelConverter converterWithoutTypes = new XMLToMetamodelConverter(resultWithoutTypes.toString());
+		
+		checkAASs(converterWithoutTypes.parseAAS());
+		checkAssets(converterWithoutTypes.parseAssets());
+		checkConceptDescriptions(converterWithoutTypes.parseConceptDescriptions());
+		checkSubmodels(converterWithoutTypes.parseSubmodels());
 	}
 	
 	private void checkAASs(List<IAssetAdministrationShell> aasList) {
@@ -371,6 +339,9 @@ public class TestXMLConverter {
 		assertTrue(element instanceof Property);
 		Property property = (Property) element;
 		checkDefaultEmbeddedDataSpecification(property);
+		List<IKey> keys = property.getValueId().getKeys();
+		assertEquals(1, keys.size());
+		assertEquals("0173-1#05-AAA650#002", keys.get(0).getValue());
 		assertEquals("2000", property.get());
 		assertEquals(PropertyValueTypeDef.Double, property.getValueType());
 		assertEquals("rotationSpeed", property.getIdShort());
@@ -383,7 +354,7 @@ public class TestXMLConverter {
 		element = submodelElements.get("basic_event_id");
 		assertTrue(element instanceof BasicEvent);
 		BasicEvent basicEvent = (BasicEvent) element;
-		List<IKey> keys = basicEvent.getObserved().getKeys();
+		keys = basicEvent.getObserved().getKeys();
 		assertEquals(1, keys.size());
 		assertEquals("http://www.zvei.de/demo/submodelDefinitions/87654346", keys.get(0).getValue());
 		
