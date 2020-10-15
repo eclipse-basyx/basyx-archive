@@ -2,7 +2,6 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.submodelel
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
 import java.util.Collections;
 
@@ -30,7 +29,7 @@ import org.junit.Test;
  */
 public class TestProperty {
 	private static final String VALUE = "testValue";
-	private static final String STRING_TYPE = "string";
+	private static final PropertyValueTypeDef STRING_TYPE = PropertyValueTypeDef.String;
 	private Property property;
 
 	@Before
@@ -63,35 +62,18 @@ public class TestProperty {
 	} 
 	
 	@Test
-	public void testGetNonMapValueType() {
-		property.put(Property.VALUETYPE, "string");
-		assertEquals("string", property.getValueType());
-	}
-	
-	@Test
-	public void testGetNotExistingValueType() {
-		// I would vote for fail fast - directly when setting the value
-		property.put(Property.VALUETYPE, "IDoNotExistInPropertyValueTypeDef");
-		try {
-			property.getValueType();
-			fail("Expecting exception when providing invalid type");
-		} catch (RuntimeException e) {
-		}
-	}
-	
-	@Test
 	public void testSet() {
 		Boolean isSomething = true;
 		property.set(isSomething);
 		assertEquals(isSomething, property.get());
-		assertEquals("boolean", property.getValueType());
+		assertEquals(PropertyValueTypeDef.Boolean, property.getValueType());
 	}
 
 	@Test
 	public void testSetCustom() {
 		property.set(null, PropertyValueTypeDef.String);
 		assertEquals(null, property.get());
-		assertEquals(PropertyValueTypeDef.String.getStandardizedLiteral(), property.getValueType());
+		assertEquals(PropertyValueTypeDef.String, property.getValueType());
 	}
 
 	@Test

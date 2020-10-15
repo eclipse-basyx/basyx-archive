@@ -3,6 +3,8 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataeleme
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IRange;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -17,8 +19,8 @@ public class ConnectedRange extends ConnectedDataElement implements IRange {
 	}
 
 	@Override
-	public String getValueType() {
-		return (String) getElem().getPath(Range.VALUETYPE);
+	public PropertyValueTypeDef getValueType() {
+		return PropertyValueTypeDefHelper.readTypeDef(getElem().getPath(Range.VALUETYPE));
 	}
 
 	@Override

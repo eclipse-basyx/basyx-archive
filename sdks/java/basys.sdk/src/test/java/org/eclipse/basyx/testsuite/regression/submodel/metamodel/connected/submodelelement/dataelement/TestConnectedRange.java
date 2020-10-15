@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedRange;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.restapi.PropertyProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
@@ -24,7 +25,7 @@ public class TestConnectedRange {
 	
 	@Before
 	public void build() {
-		range = new Range("valueType", new Integer(1), new Integer(10));
+		range = new Range(PropertyValueTypeDef.Integer, new Integer(1), new Integer(10));
 		
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
 				new PropertyProvider(new TypeDestroyingProvider(new VABLambdaProvider(range))));

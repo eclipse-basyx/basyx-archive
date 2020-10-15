@@ -146,9 +146,8 @@ public class Property extends DataElement implements IProperty {
 	}
 
 	@Override
-	public String getValueType() {
-		PropertyValueTypeDef def = PropertyValueTypeDefHelper.readTypeDef(get(Property.VALUETYPE));
-		return def!=null ? def.toString() : "";
+	public PropertyValueTypeDef getValueType() {
+		return PropertyValueTypeDefHelper.readTypeDef(get(Property.VALUETYPE));
 	}
 
 	/**

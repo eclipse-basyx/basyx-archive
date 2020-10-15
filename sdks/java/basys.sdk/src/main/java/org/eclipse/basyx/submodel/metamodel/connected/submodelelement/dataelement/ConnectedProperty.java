@@ -8,6 +8,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IPro
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -35,11 +36,9 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 		getProxy().setModelPropertyValue(Property.VALUE, newValue);
 	}
 
-	@SuppressWarnings({ "unchecked" })
 	@Override
-	public String getValueType() {
-		Object o = getProxy().getModelPropertyValue("");
-		return PropertyValueTypeDefHelper.readTypeDef(((Map<String, Object>) o).get(Property.VALUETYPE)).toString();
+	public PropertyValueTypeDef getValueType() {
+		return PropertyValueTypeDefHelper.readTypeDef(getElem().getPath(Property.VALUETYPE));
 	}
 
 	@SuppressWarnings("unchecked")

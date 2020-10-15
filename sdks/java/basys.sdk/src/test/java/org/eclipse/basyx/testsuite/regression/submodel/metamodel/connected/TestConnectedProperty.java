@@ -64,8 +64,8 @@ public class TestConnectedProperty {
 	 */
 	@Test
 	public void testValueTypeRetrieval() {
-		String valueType = prop.getValueType();
-		assertEquals(PropertyValueTypeDef.Integer.toString(), valueType);
+		PropertyValueTypeDef valueType = prop.getValueType();
+		assertEquals(PropertyValueTypeDef.Integer, valueType);
 	}
 
 	/**

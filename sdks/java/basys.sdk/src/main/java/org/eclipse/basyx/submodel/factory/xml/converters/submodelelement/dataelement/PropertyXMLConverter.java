@@ -79,7 +79,7 @@ public class PropertyXMLConverter extends SubmodelElementXMLConverter {
 			propertyRoot.appendChild(valueEle);
 		}
 		
-		String valueType = prop.getValueType();
+		String valueType = prop.getValueType().toString();
 		if (valueType != null) {
 			Element valueTypeElem = document.createElement(SubmodelElementXMLConverter.VALUE_TYPE);
 			valueTypeElem.appendChild(document.createTextNode(valueType));

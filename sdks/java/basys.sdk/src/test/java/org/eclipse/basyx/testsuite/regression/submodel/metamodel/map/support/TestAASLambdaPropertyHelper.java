@@ -35,7 +35,7 @@ public class TestAASLambdaPropertyHelper {
 		ConnectedProperty connectedProperty = new ConnectedProperty(new VABElementProxy("", provider));
 
 		// Check correct property type
-		String expectedType = PropertyValueTypeDef.Double.toString();
+		PropertyValueTypeDef expectedType = PropertyValueTypeDef.Double;
 		assertEquals(expectedType, connectedProperty.getValueType());
 		
 		// Check value is correctly retrievable by property

@@ -50,6 +50,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Mult
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.entity.Entity;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
@@ -371,13 +372,13 @@ public class TestXMLConverter {
 		Property property = (Property) element;
 		checkDefaultEmbeddedDataSpecification(property);
 		assertEquals("2000", property.get());
-		assertEquals("double", property.getValueType());
+		assertEquals(PropertyValueTypeDef.Double, property.getValueType());
 		assertEquals("rotationSpeed", property.getIdShort());
 		
 		element = submodelElements.get("emptyDouble");
 		assertTrue(element instanceof Property);
 		property = (Property) element;
-		assertEquals("double", property.getValueType());
+		assertEquals(PropertyValueTypeDef.Double, property.getValueType());
 		
 		element = submodelElements.get("basic_event_id");
 		assertTrue(element instanceof BasicEvent);
@@ -408,7 +409,7 @@ public class TestXMLConverter {
 		element = submodelElements.get("range_id");
 		assertTrue(element instanceof Range);
 		Range range = (Range) element;
-		assertEquals("int", range.getValueType());
+		assertEquals(PropertyValueTypeDef.Integer, range.getValueType());
 		assertEquals("1", range.getMin());
 		assertEquals("10", range.getMax());
 		

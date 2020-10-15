@@ -5,6 +5,9 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IRange;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 
 /**
  * A range element as defined in DAAS document
@@ -25,24 +28,24 @@ public class Range extends DataElement implements IRange {
 		putAll(new ModelType(MODELTYPE));
 	}
 	
-	public Range(String valueType) {
+	public Range(PropertyValueTypeDef valueType) {
 		this();
-		put(VALUETYPE, valueType);
+		setValueType(valueType);
 	}
-	
+
 	/**
 	 * Constructor accepting only mandatory attribute
 	 * @param idShort
 	 * @param valueType
 	 */
-	public Range(String idShort, String valueType) {
+	public Range(String idShort, PropertyValueTypeDef valueType) {
 		super(idShort);
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 		put(VALUETYPE, valueType);
 	}
 	
-	public Range(String valueType, Object min, Object max) {
+	public Range(PropertyValueTypeDef valueType, Object min, Object max) {
 		this(valueType);
 		put(MIN, min);
 		put(MAX, max);
@@ -70,9 +73,13 @@ public class Range extends DataElement implements IRange {
 				|| (modelType == null && (map.containsKey(MIN) && map.containsKey(MAX) && map.containsKey(VALUETYPE)));
 	}
 
+	private void setValueType(PropertyValueTypeDef valueType) {
+		put(Property.VALUETYPE, PropertyValueTypeDefHelper.getWrapper(valueType));
+	}
+
 	@Override
-	public String getValueType() {
-		return (String) get(VALUETYPE);
+	public PropertyValueTypeDef getValueType() {
+		return PropertyValueTypeDefHelper.readTypeDef(get(Property.VALUETYPE));
 	}
 
 	@Override
