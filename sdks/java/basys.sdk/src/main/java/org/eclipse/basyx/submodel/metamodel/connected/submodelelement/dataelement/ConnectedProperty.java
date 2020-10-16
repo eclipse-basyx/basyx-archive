@@ -49,7 +49,7 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 
 	@SuppressWarnings("unchecked")
 	protected <T> T retrieveObject() {
-		return (T) ((Map<String, Object>) getProxy().getModelPropertyValue(Property.VALUE)).get(Property.VALUE);
+		return (T) getProxy().getModelPropertyValue(Property.VALUE);
 	}
 	
 	@Override

@@ -107,11 +107,11 @@ public class AASSubModelServletVABConnection {
 		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop3")).get("value") == 17);
 		assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop1")).get("idShort").equals("prop1"));
 		assertTrue(((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop2")).get("idShort").equals("prop2"));
-		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue("submodelElements/prop2/prop11/value")).get("value") == 123);
+		assertTrue((Integer) connSubModel1.getModelPropertyValue("submodelElements/prop2/prop11/value") == 123);
 		// - Change property value using VAB primitive
 		connSubModel1.setModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop1/value", 456);
 		// - Read value back using VAB primitive
-		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop1/value")).get("value") == 456);
+		assertTrue((Integer) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop1/value") == 456);
 	}
 }
 

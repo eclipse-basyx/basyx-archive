@@ -6,11 +6,8 @@ package org.eclipse.basyx.testsuite.regression.aas.restapi;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.util.Map;
-
 import org.eclipse.basyx.aas.restapi.MultiAASProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
@@ -55,13 +52,12 @@ public class MultiAASProviderTest {
 		} catch(ResourceNotFoundException e) {}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void getTest() {
 		// test reading from a valid aas
-		Map<String, Object> result = (Map<String, Object>) proxy
+		Integer result = (Integer) proxy
 				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.ELEMENTS + "/integerProperty/value");
-		assertEquals(123, result.get(Property.VALUE));
+		assertEquals(123, result.intValue());
 
 		// test reading from an invalid aas
 		try {
@@ -70,7 +66,6 @@ public class MultiAASProviderTest {
 		} catch(ResourceNotFoundException e) {}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void setTest() {
 		// test setting in a valid aas
@@ -83,12 +78,11 @@ public class MultiAASProviderTest {
 		} catch(ResourceNotFoundException e) {}
 
 		// retrieving property
-		Map<String, Object> result = (Map<String, Object>) proxy
+		Integer result = (Integer) proxy
 				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.ELEMENTS + "/integerProperty/value");
-		assertEquals(100, result.get(Property.VALUE));
+		assertEquals(100, result.intValue());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void removeTest() {
 		// test deleting from an invalid aas
@@ -97,9 +91,9 @@ public class MultiAASProviderTest {
 			fail();
 		} catch(ResourceNotFoundException e) {}
 		
-		Map<String, Object> result = (Map<String, Object>) proxy
+		Integer result = (Integer) proxy
 				.getModelPropertyValue("a1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.ELEMENTS + "/integerProperty/value");
-		assertEquals(123, result.get(Property.VALUE));
+		assertEquals(123, result.intValue());
 
 		// test deleting from a valid aas
 		proxy.deleteValue("a1/aas/submodels/SimpleAASSubmodel/" + SubmodelElementProvider.ELEMENTS + "/integerProperty");

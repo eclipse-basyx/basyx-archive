@@ -1,7 +1,5 @@
 package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement;
 
-import java.util.Map;
-
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
@@ -19,13 +17,11 @@ public class ConnectedFile extends ConnectedDataElement implements IFile {
 		super(proxy);		
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public String getValue() {
 		
 		// FIXME: This is a hack, fix this when API is clear
-		Property value = Property.createAsFacade((Map<String, Object>) getProxy().getModelPropertyValue(Property.VALUE));
-		return (String) value.get();
+		return (String) getProxy().getModelPropertyValue(Property.VALUE);
 	}
 
 	@Override

@@ -18,7 +18,6 @@ import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
@@ -121,15 +120,14 @@ public class MultiSubmodelProviderTest {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	void getTestRunner(String smId) {
 		// Get property value
-		Map<String, Object> value = (Map<String, Object>) proxy
+		Integer value = (Integer) proxy
 				.getModelPropertyValue("/aas/submodels/" + smId + "/" + SubmodelElementProvider.ELEMENTS + "/integerProperty/value");
-		assertEquals(123, value.get(Property.VALUE));
+		assertEquals(123, value.intValue());
 
 		// Get property value with /submodel suffix
-		value = (Map<String, Object>) proxy.getModelPropertyValue("/aas/submodels/" + smId + "/submodel/" + SubmodelElementProvider.ELEMENTS + "/integerProperty/value");
-		assertEquals(123, value.get(Property.VALUE));
+		value = (Integer) proxy.getModelPropertyValue("/aas/submodels/" + smId + "/submodel/" + SubmodelElementProvider.ELEMENTS + "/integerProperty/value");
+		assertEquals(123, value.intValue());
 	}
 }

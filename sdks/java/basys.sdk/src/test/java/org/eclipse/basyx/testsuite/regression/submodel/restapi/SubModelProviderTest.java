@@ -66,7 +66,6 @@ public class SubModelProviderTest {
 	/**
 	 * Test creating single property
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testCreateProperty() {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
@@ -77,9 +76,9 @@ public class SubModelProviderTest {
 		submodelElement.setModelPropertyValue("/submodel/" + SubmodelElementProvider.ELEMENTS + "", prop);
 
 		// Read back value
-		Map<String, Object> result = (Map<String, Object>) submodelElement
+		Integer result = (Integer) submodelElement
 				.getModelPropertyValue("/submodel/" + SubmodelElementProvider.ELEMENTS + "/newProperty/value");
-		assertEquals(500, result.get(Property.VALUE));
+		assertEquals(500, result.intValue());
 	}
 
 	/**
@@ -107,14 +106,14 @@ public class SubModelProviderTest {
 		assertEquals("stringProperty", property.get(Identifiable.IDSHORT));
 
 		// Read single value
-		Map<String, Object> resMap = (Map<String, Object>) submodelElement
+		String resString = (String) submodelElement
 				.getModelPropertyValue("/submodel/" + SubmodelElementProvider.ELEMENTS + "/stringProperty/value");
-		assertEquals("Test", resMap.get(Property.VALUE));
+		assertEquals("Test", resString);
 
 		// Read null value
-		resMap = (Map<String, Object>) submodelElement
+		Object resObject = submodelElement
 				.getModelPropertyValue("/submodel/" + SubmodelElementProvider.ELEMENTS + "/nullProperty/value");
-		assertEquals(null, resMap.get(Property.VALUE));
+		assertEquals(null, resObject);
 
 		// Read container property
 		Collection<Object> resSet = (Collection<Object>) submodelElement
@@ -188,7 +187,6 @@ public class SubModelProviderTest {
 	/**
 	 * Test updating a Property inside a SubmodelElementCollection 
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testUpdateElementInSmElementCollection() {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
@@ -196,13 +194,13 @@ public class SubModelProviderTest {
 		String path = VABPathTools.concatenatePaths("submodel", SubmodelElementProvider.ELEMENTS,
 				"containerRoot", "container", "integerProperty", "value");
 
-		Map<String, Object> value = (Map<String, Object>) submodelElement.getModelPropertyValue(path);
-		assertEquals(123, value.get(Property.VALUE));
+		Integer value = (Integer) submodelElement.getModelPropertyValue(path);
+		assertEquals(123, value.intValue());
 
 		submodelElement.setModelPropertyValue(path, 321);
 
-		value = (Map<String, Object>) submodelElement.getModelPropertyValue(path);
-		assertEquals(321, value.get(Property.VALUE));
+		value = (Integer) submodelElement.getModelPropertyValue(path);
+		assertEquals(321, value.intValue());
 	}
 
 	/**

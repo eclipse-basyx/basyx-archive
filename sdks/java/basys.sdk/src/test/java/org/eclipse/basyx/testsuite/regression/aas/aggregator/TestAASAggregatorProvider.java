@@ -75,8 +75,8 @@ public class TestAASAggregatorProvider extends AASAggregatorSuite {
 		int expectedPropValue = 20;
 		provider.setModelPropertyValue(propValuePath, expectedPropValue);
 
-		Map<String, Object> value = (Map<String, Object>) provider.getModelPropertyValue(propValuePath);
-		assertEquals(expectedPropValue, value.get(Property.VALUE));
+		Integer value = (Integer) provider.getModelPropertyValue(propValuePath);
+		assertEquals(expectedPropValue, value.intValue());
 
 		// Test feedthrough of INVOKE
 		assertTrue((boolean) provider.invokeOperation(smPath + "/submodelElements/op/invoke"));

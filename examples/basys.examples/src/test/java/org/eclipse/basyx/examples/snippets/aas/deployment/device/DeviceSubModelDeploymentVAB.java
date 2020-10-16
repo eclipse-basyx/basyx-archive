@@ -2,8 +2,6 @@ package org.eclipse.basyx.examples.snippets.aas.deployment.device;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
-
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -29,7 +27,6 @@ public class DeviceSubModelDeploymentVAB {
 	/**
 	 * Run code snippet. Connect to AAS sub model on server, access sub model properties using VAB properties. 
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void createExportAndAccessSubModel() throws Exception {
 
@@ -63,8 +60,8 @@ public class DeviceSubModelDeploymentVAB {
 		// - Create connection to BaSyx server manager
 		JSONConnector toDeviceManager = new JSONConnector(basyxConnector);	
 		// - Access sub model property, check value
-		int propVal = (int) ((HashMap<String, Object>) toDeviceManager
-				.getModelPropertyValue("/aas/submodels/dynamicSM/" + SubmodelElementProvider.ELEMENTS + "/prop1/value")).get("value");
+		int propVal = (Integer) toDeviceManager
+				.getModelPropertyValue("/aas/submodels/dynamicSM/" + SubmodelElementProvider.ELEMENTS + "/prop1/value");
 		
 		
 		// Check value
