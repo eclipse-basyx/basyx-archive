@@ -11,7 +11,6 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -60,7 +59,7 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 	 * @param identification
 	 * @param kind
 	 */
-	public Asset(String idShort, Identifier identification, AssetKind kind) {
+	public Asset(String idShort, IIdentifier identification, AssetKind kind) {
 		this();
 		setIdentification(identification);
 		setIdShort(idShort);

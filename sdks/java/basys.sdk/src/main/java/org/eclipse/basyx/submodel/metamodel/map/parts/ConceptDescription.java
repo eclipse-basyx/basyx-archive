@@ -11,7 +11,6 @@ import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -49,7 +48,7 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 	 * @param idShort
 	 * @param identification
 	 */
-	public ConceptDescription(String idShort, Identifier identification) {
+	public ConceptDescription(String idShort, IIdentifier identification) {
 		this();
 		setIdentification(identification.getIdType(), identification.getId());
 		setIdShort(idShort);

@@ -41,7 +41,7 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	 * @param second
 	 *            Second element in the relationship taking the role of the object.
 	 */
-	public RelationshipElement(Reference first, Reference second) {
+	public RelationshipElement(IReference first, IReference second) {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 		
@@ -55,7 +55,7 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	 * @param first
 	 * @param second
 	 */
-	public RelationshipElement(String idShort, Reference first, Reference second) {
+	public RelationshipElement(String idShort, IReference first, IReference second) {
 		this(first, second);
 		setIdShort(idShort);
 	}

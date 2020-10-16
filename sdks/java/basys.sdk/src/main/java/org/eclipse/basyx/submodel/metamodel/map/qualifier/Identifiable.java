@@ -39,7 +39,7 @@ public class Identifiable extends Referable implements IIdentifiable {
 	 * @param idShort
 	 * @param identification
 	 */
-	public Identifiable(String idShort, Identifier identification) {
+	public Identifiable(String idShort, IIdentifier identification) {
 		super(idShort);
 		setIdentification(identification.getIdType(), identification.getId());
 		setAdministration(new AdministrativeInformation());

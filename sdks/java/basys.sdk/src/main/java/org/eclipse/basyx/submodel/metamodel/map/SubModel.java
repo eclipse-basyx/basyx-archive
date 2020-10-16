@@ -21,7 +21,6 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -78,7 +77,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	 * @param idShort
 	 * @param identification
 	 */
-	public SubModel(String idShort, Identifier identification) {
+	public SubModel(String idShort, IIdentifier identification) {
 		this();
 		setIdentification(identification);
 		setIdShort(idShort);
