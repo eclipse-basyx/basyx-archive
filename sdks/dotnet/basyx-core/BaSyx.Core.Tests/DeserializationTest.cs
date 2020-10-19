@@ -71,7 +71,7 @@ namespace BaSyx.Core.Tests
 
             string serialized = JsonConvert.SerializeObject(aasDescriptor, jsonSerializerSettings);
             IAssetAdministrationShellDescriptor descriptor = JsonConvert.DeserializeObject<IAssetAdministrationShellDescriptor>(serialized, jsonSerializerSettings);
-            descriptor.Should().BeEquivalentTo(aasDescriptor, opts => opts.IgnoringCyclicReferences());
+            descriptor.Should().BeEquivalentTo(aasDescriptor, opts => opts.IgnoringCyclicReferences());             
         }
     }
 }

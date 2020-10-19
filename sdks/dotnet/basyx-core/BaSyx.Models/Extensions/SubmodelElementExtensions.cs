@@ -47,14 +47,23 @@ namespace BaSyx.Models.Extensions
                 return default;
         }
 
+        
         public static void SetValue<T>(this ISubmodelElement submodelElement, T value)
         {
-            submodelElement?.Set?.Invoke(submodelElement, new ElementValue<T>(value));
+            if(typeof(IValue).IsAssignableFrom(typeof(T)))
+                submodelElement?.Set?.Invoke(submodelElement, value as IValue);
+            else
+                submodelElement?.Set?.Invoke(submodelElement, new ElementValue<T>(value));
         }
 
         public static void SetValue(this ISubmodelElement submodelElement, IValue value)
         {
             submodelElement?.Set?.Invoke(submodelElement, value);
+        }
+
+        public static void SetValue(this ISubmodelElement submodelElement, object value, DataType valueType)
+        {
+            submodelElement?.Set?.Invoke(submodelElement, new ElementValue(value, valueType));
         }
 
         public static ISubmodelElementCollection CreateSubmodelElementCollection<T>(this IEnumerable<T> enumerable, string idShort)
