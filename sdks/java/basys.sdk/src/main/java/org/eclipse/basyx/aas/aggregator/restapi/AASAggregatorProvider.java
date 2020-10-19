@@ -12,7 +12,6 @@ import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
-import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -24,11 +23,11 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  *
  */
 public class AASAggregatorProvider implements IModelProvider {
-	
+
 	private IAASAggregator aggregator;
-	
-	public static final String PREFIX = "aasList";
-	
+
+	public static final String PREFIX = "shells";
+
 	public AASAggregatorProvider(IAASAggregator aggregator) {
 		this.aggregator = aggregator;
 	}
@@ -36,9 +35,10 @@ public class AASAggregatorProvider implements IModelProvider {
 	/**
 	 * Check for correctness of path and returns a stripped path (i.e. no leading
 	 * prefix)
+	 * 
 	 * @param path
 	 * @return
-	 * @throws MalformedRequestException 
+	 * @throws MalformedRequestException
 	 */
 	private String stripPrefix(String path) throws MalformedRequestException {
 		path = VABPathTools.stripSlashes(path);
@@ -49,46 +49,45 @@ public class AASAggregatorProvider implements IModelProvider {
 		path = VABPathTools.stripSlashes(path);
 		return path;
 	}
-	
+
 	/**
 	 * Makes sure, that given Object is an AAS by checking its ModelType<br />
 	 * Creates a new AAS with the content of the given Map
 	 * 
-	 * @param value the AAS Map object
+	 * @param value
+	 *            the AAS Map object
 	 * @return an AAS
-	 * @throws MalformedRequestException 
+	 * @throws MalformedRequestException
 	 */
 	@SuppressWarnings("unchecked")
 	private AssetAdministrationShell createAASFromMap(Object value) throws MalformedRequestException {
-		
-		//check if the given value is a Map
-		if(!(value instanceof Map)) {
+
+		// check if the given value is a Map
+		if (!(value instanceof Map)) {
 			throw new MalformedRequestException("Given newValue is not a Map");
 		}
 
 		Map<String, Object> map = (Map<String, Object>) value;
-		
-		//check if the given Map contains an AAS
+
+		// check if the given Map contains an AAS
 		String type = ModelType.createAsFacade(map).getName();
-		
-		//have to accept Objects without modeltype information,
-		//as modeltype is not part of the public metamodel
-		if(!AssetAdministrationShell.MODELTYPE.equals(type) && type != null) {
+
+		// have to accept Objects without modeltype information,
+		// as modeltype is not part of the public metamodel
+		if (!AssetAdministrationShell.MODELTYPE.equals(type) && type != null) {
 			throw new MalformedRequestException("Given newValue map has not the correct ModelType");
 		}
-		
+
 		AssetAdministrationShell aas = AssetAdministrationShell.createAsFacade(map);
-		
+
 		return aas;
 	}
-	
-	
-	
+
 	@Override
 	public Object getModelPropertyValue(String path) throws ProviderException {
 		path = stripPrefix(path);
-		
-		if(path.isEmpty()) { //Return all AAS if path is empty
+
+		if (path.isEmpty()) { // Return all AAS if path is empty
 			return aggregator.getAASList();
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
@@ -108,7 +107,7 @@ public class AASAggregatorProvider implements IModelProvider {
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		path = stripPrefix(path);
-		
+
 		if (!path.isEmpty()) { // Overwriting existing entry
 			if (!path.contains("/")) { // Update of AAS
 
@@ -121,11 +120,12 @@ public class AASAggregatorProvider implements IModelProvider {
 					throw new MalformedRequestException("Given aasID and given AAS do not match");
 				}
 
-				if (aggregator.getAAS(identifier) == null) {
-					throw new ResourceAlreadyExistsException("Can not update non existing value '" + path + "'. Try create instead.");
+				try {
+					aggregator.getAAS(identifier);
+					aggregator.updateAAS(aas);
+				} catch (ResourceNotFoundException e) {
+					aggregator.createAAS(aas);
 				}
-
-				aggregator.updateAAS(aas);
 			} else { // Update of contained element
 				String id = VABPathTools.decodePathElement(VABPathTools.getEntry(path, 0));
 				String restPath = VABPathTools.skipEntries(path, 1);
@@ -140,23 +140,16 @@ public class AASAggregatorProvider implements IModelProvider {
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
 		path = stripPrefix(path);
-		
-		if (path.isEmpty()) { // Creating new entry
-			AssetAdministrationShell aas = createAASFromMap(newEntity);
-			try {
-				aggregator.getAAS(aas.getIdentification());
-				throw new ResourceAlreadyExistsException("AAS with path (id) " + path + " exists already. Try update instead");
-			} catch (ResourceNotFoundException e) {
-				aggregator.createAAS(aas);
-			}
-			
+
+		if (path.isEmpty()) {
+			throw new MalformedRequestException("Create with empty path is not supported by aggregator");
 		} else {
 			String id = VABPathTools.decodePathElement(VABPathTools.getEntry(path, 0));
 			String restPath = VABPathTools.skipEntries(path, 1);
 			IIdentifier identifier = new Identifier(IdentifierType.CUSTOM, id);
 			aggregator.getAASProvider(identifier).createValue(restPath, newEntity);
 		}
-		
+
 	}
 
 	@Override
@@ -197,6 +190,5 @@ public class AASAggregatorProvider implements IModelProvider {
 		IIdentifier identifier = new Identifier(IdentifierType.CUSTOM, id);
 		return aggregator.getAASProvider(identifier).invokeOperation(restPath, parameter);
 	}
-	
 
 }

@@ -39,7 +39,7 @@ public class AASAggregatorProxy implements IAASAggregator {
 	 * @param provider
 	 */
 	public AASAggregatorProxy(IModelProvider provider) {
-		this.provider = new VABElementProxy("/aasList", provider);
+		this.provider = new VABElementProxy("/" + AASAggregatorProvider.PREFIX, provider);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -59,7 +59,7 @@ public class AASAggregatorProxy implements IAASAggregator {
 
 	@Override
 	public void createAAS(AssetAdministrationShell aas) {
-		provider.createValue("", aas);
+		provider.setModelPropertyValue(getEncodedIdentifier(aas.getIdentification()), aas);
 		logger.info("AAS with Id " + aas.getIdentification().getId() + " created");
 	}
 

@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.basyx.aas.aggregator.proxy.AASAggregatorProxy;
+import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
@@ -46,7 +47,7 @@ public class StaticDynamicScenario {
 
 	public static final String AAS_ID = "smart.festo.com/demo/aas/1/1/454576463545648365874"; 
 	public static final String AAS_ID_SHORT = "Festo_3S7PM0CP4BD";
-	public static final String AAS_ENDPOINT = SERVER_URL + "aasList/smart.festo.com%2Fdemo%2Faas%2F1%2F1%2F454576463545648365874/aas";
+	public static final String AAS_ENDPOINT = SERVER_URL + "shells/smart.festo.com%2Fdemo%2Faas%2F1%2F1%2F454576463545648365874/aas";
 	
 	private List<IComponent> startedComponents = new ArrayList<>();
 	
@@ -139,7 +140,7 @@ public class StaticDynamicScenario {
 		for(AASBundle bundle: bundles) {
 			IAssetAdministrationShell aas = bundle.getAAS();
 			String encodedAASId = VABPathTools.encodePathElement(aas.getIdentification().getId());
-			String aasEndpoint = VABPathTools.concatenatePaths(serverURL, "aasList", encodedAASId, "aas");
+			String aasEndpoint = VABPathTools.concatenatePaths(serverURL, AASAggregatorProvider.PREFIX, encodedAASId, "aas");
 			AASDescriptor aasDescriptor = new AASDescriptor(aas, aasEndpoint);
 			try {
 				registry.register(aasDescriptor);

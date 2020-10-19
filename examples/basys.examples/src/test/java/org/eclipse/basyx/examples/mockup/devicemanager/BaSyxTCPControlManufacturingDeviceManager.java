@@ -2,6 +2,7 @@ package org.eclipse.basyx.examples.mockup.devicemanager;
 
 import java.util.HashMap;
 
+import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
@@ -122,9 +123,9 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		
 		// Push the AAS and submodels to the server
 		// - Transfer device AAS to server
-		aasServerConnection.createValue("/aasList", aas);
+		aasServerConnection.setModelPropertyValue(VABPathTools.append(AASAggregatorProvider.PREFIX, VABPathTools.encodePathElement(aas.getIdentification().getId())), aas);
 		// - Transfer device sub model to server
-		aasPath = "/aasList/" + VABPathTools.encodePathElement(aas.getIdentification().getId()) + "/aas";
+		aasPath = AASAggregatorProvider.PREFIX + "/" + VABPathTools.encodePathElement(aas.getIdentification().getId()) + "/aas";
 		aasServerConnection.createValue(VABPathTools.concatenatePaths(aasPath, "submodels"), statusSM);
 		
 		// Register URNs of control component VAB object

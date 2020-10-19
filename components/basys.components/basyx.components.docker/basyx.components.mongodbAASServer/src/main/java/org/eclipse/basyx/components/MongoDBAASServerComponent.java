@@ -9,8 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Component providing a persistent AAS server that is able to receive AAS/SMs from
- * remote. It uses the Aggregator API, i.e. AAS should be pushed to ${URL}/aasList
+ * Component providing a persistent AAS server that is able to receive AAS/SMs
+ * from remote. It uses the Aggregator API, i.e. AAS should be pushed to
+ * ${URL}/shells
  * 
  * @author espen
  *

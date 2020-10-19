@@ -143,7 +143,7 @@ public class TestAASBundleIntegrator {
 	}
 	
 	private void pushSubmodel(SubModel sm, IIdentifier aasIdentifier) {
-		provider.createValue("/aasList/" + aasIdentifier.getId() + "/aas/submodels", sm);
+		provider.createValue("/" + AASAggregatorProvider.PREFIX + "/" + aasIdentifier.getId() + "/aas/submodels", sm);
 	}
 	
 	private AssetAdministrationShell getTestAAS() {

@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
  * Starts an HTTP server that is able to receive AAS and submodels pushed from
  * remote <br />
  * They are made available at
- * <i>localhost:4000/aasServer/aasList/${aasId}/aas</i>. Submodels are available
+ * <i>localhost:4000/aasServer/shells/${aasId}/aas</i>. Submodels are available
  * at
- * <i>localhost:4000/aasServer/aasList/${aasId}/submodels/${submodelId}/submodel</i><br
+ * <i>localhost:4000/aasServer/shells/${aasId}/submodels/${submodelId}/submodel</i><br
  * />
  * 
  * @author schnicke

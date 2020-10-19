@@ -2,6 +2,7 @@ package org.eclipse.basyx.examples.mockup.device;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
@@ -129,9 +130,9 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		aas.setIdentification(lookupURN("AAS"));
 
 		// - Transfer device AAS to server
-		aasServerConnection.createValue("/aasList", aas);
+		aasServerConnection.setModelPropertyValue(VABPathTools.append(AASAggregatorProvider.PREFIX, VABPathTools.encodePathElement(aas.getIdentification().getId())), aas);
 
-		aasPath = VABPathTools.concatenatePaths("aasList", lookupURN("AAS").getEncodedURN(), "aas");
+		aasPath = VABPathTools.concatenatePaths(AASAggregatorProvider.PREFIX, lookupURN("AAS").getEncodedURN(), "aas");
 
 		
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
@@ -161,7 +162,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		
 		// Register AAS and sub models in directory (push AAS descriptor to server)
 		// - AAS repository server URL
-		String aasRepoURL = "http://localhost:8080" + BaSyxExamplesContext.AASSERVERURL + "/aasList/" + lookupURN("AAS").getEncodedURN() + "/aas";
+		String aasRepoURL = "http://localhost:8080" + BaSyxExamplesContext.AASSERVERURL + "/" + AASAggregatorProvider.PREFIX + "/" + lookupURN("AAS").getEncodedURN() + "/aas";
 		// - Build an AAS descriptor, add sub model descriptors
 		AASDescriptor deviceAASDescriptor = new AASDescriptor(lookupURN("AAS"), aasRepoURL);
 		// Create sub model descriptors

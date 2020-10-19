@@ -34,7 +34,7 @@ public class TestAASAggregatorProvider extends AASAggregatorSuite {
 	}
 
 	/**
-	 * Requests like /aasList/${aasId}/aas need to be fed through correctly. This
+	 * Requests like /shells/${aasId}/aas need to be fed through correctly. This
 	 * behaviour is tested here.
 	 */
 	@SuppressWarnings("unchecked")
@@ -45,7 +45,7 @@ public class TestAASAggregatorProvider extends AASAggregatorSuite {
 		AASAggregatorProvider provider = new AASAggregatorProvider(aggregator);
 
 		// Test feedthrough of GET
-		String aasPath = "/aasList/" + VABPathTools.encodePathElement(aas1.getIdentification().getId()) + "/aas";
+		String aasPath = "/" + AASAggregatorProvider.PREFIX + "/" + VABPathTools.encodePathElement(aas1.getIdentification().getId()) + "/aas";
 		AssetAdministrationShell retrievedAAS = retrieveAAS(provider, aasPath);
 		assertEquals(aas1.getIdentification(), retrievedAAS.getIdentification());
 

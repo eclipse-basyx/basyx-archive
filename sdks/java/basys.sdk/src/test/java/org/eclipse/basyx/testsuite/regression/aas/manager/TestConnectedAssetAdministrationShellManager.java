@@ -67,7 +67,7 @@ public class TestConnectedAssetAdministrationShellManager {
 
 		// Check descriptor for correct endpoint
 		String endpoint = registry.lookupAAS(aasId).getFirstEndpoint();
-		assertEquals("/aasList/" + aasId.getId() + "/aas", endpoint);
+		assertEquals("/" + AASAggregatorProvider.PREFIX + "/" + aasId.getId() + "/aas", endpoint);
 
 		// Retrieve it
 		ConnectedAssetAdministrationShell connectedAAS = manager.retrieveAAS(aasId);

@@ -15,7 +15,7 @@ import org.xml.sax.SAXException;
 /**
  * Component providing an empty AAS server that is able to receive AAS/SMs from
  * remote. It uses the Aggregator API, i.e. AAS should be pushed to
- * ${URL}/aasList
+ * ${URL}/shells
  * 
  * @author schnicke
  *

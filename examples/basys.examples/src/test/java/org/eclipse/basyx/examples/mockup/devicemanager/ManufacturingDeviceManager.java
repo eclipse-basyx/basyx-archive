@@ -2,6 +2,7 @@ package org.eclipse.basyx.examples.mockup.devicemanager;
 
 import java.util.HashMap;
 
+import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
@@ -126,7 +127,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		aas.setIdShort("DeviceIDShort");
 		aas.setIdentification(lookupURN("AAS"));
 		// - Transfer device AAS to server
-		aasServerConnection.createValue("/aasList", aas);
+		aasServerConnection.setModelPropertyValue(VABPathTools.concatenatePaths(AASAggregatorProvider.PREFIX, VABPathTools.encodePathElement(aas.getIdentification().getId())), aas);
 
 	
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
@@ -145,7 +146,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		invocationsProp.setIdShort("invocations");
 		statusSM.addSubModelElement(invocationsProp);
 		// - Transfer device sub model to server
-		aasServerConnection.createValue("/aasList/" + VABPathTools.encodePathElement(lookupURN("AAS").getId()) + "/aas/submodels/", statusSM);
+		aasServerConnection.createValue(AASAggregatorProvider.PREFIX + "/" + VABPathTools.encodePathElement(lookupURN("AAS").getId()) + "/aas/submodels/", statusSM);
 	}
 
 
@@ -162,7 +163,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		// Do not process null values
 		if (rxData == null) return;
 		
-		String aasPath = "/aasList/" + VABPathTools.encodePathElement(lookupURN("AAS").getId());
+		String aasPath = "/" + AASAggregatorProvider.PREFIX + "/" + VABPathTools.encodePathElement(lookupURN("AAS").getId());
 
 		// Convert received data to string
 		String rxStr = new String(rxData); 
