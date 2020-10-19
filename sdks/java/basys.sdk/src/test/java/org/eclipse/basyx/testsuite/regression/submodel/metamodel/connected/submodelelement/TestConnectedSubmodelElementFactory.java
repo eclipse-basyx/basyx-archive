@@ -76,8 +76,6 @@ public class TestConnectedSubmodelElementFactory {
 		
 		Map<String, Object> values = new HashMap<>();
 		
-		values.put(SubmodelElementProvider.PROPERTIES, dataElements);
-		values.put(SubmodelElementProvider.OPERATIONS, operations);
 		values.put(SubModel.SUBMODELELEMENT, submodelElements);
 		
 		proxy = new VABElementProxy("", new SubModelProvider(new TypeDestroyingProvider(new VABLambdaProvider(values))));

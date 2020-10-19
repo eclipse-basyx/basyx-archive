@@ -96,7 +96,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 	 */
 	protected Collection<String> getConfiguredProperties(Map<Object, Object> cfgValues) {
 		// Split property string
-		return splitString((String) cfgValues.get(SubmodelElementProvider.PROPERTIES));
+		return splitString((String) cfgValues.get(SubmodelElementProvider.ELEMENTS));
 	}
 
 	/**

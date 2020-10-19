@@ -12,7 +12,6 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstrain
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementFactory;
@@ -106,13 +105,7 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 			((SubmodelElement) element).setParent(getReference());
 		}
 		
-		if (element instanceof IDataElement) {
-			getProxy().setModelPropertyValue(SubmodelElementProvider.PROPERTIES, element);
-		} else if (element instanceof IOperation) {
-			getProxy().setModelPropertyValue(SubmodelElementProvider.OPERATIONS, element);
-		} else if (element instanceof ISubmodelElement) {
-			getProxy().setModelPropertyValue(SubmodelElementProvider.ELEMENTS, element);
-		}
+		getProxy().setModelPropertyValue(SubmodelElementProvider.ELEMENTS, element);
 	}
 
 	@Override

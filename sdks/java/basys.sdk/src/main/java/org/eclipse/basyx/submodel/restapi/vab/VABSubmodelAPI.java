@@ -13,7 +13,6 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOpera
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -89,18 +88,14 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 		getElementProvider().deleteValue(buildNestedElementPath(idShorts));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<IOperation> getOperations() {
-		Collection<Map<String, Object>> operations = (Collection<Map<String, Object>>) getElementProvider().getModelPropertyValue(SubmodelElementProvider.OPERATIONS);
-		return operations.stream().map(e -> Operation.createAsFacade(e)).collect(Collectors.toList());
+		return getElements().stream().filter(e -> e instanceof IOperation).map(e -> (IOperation) e).collect(Collectors.toList());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<IProperty> getProperties() {
-		Collection<Map<String, Object>> props = (Collection<Map<String, Object>>) getElementProvider().getModelPropertyValue(SubmodelElementProvider.PROPERTIES);
-		return props.stream().map(e -> Property.createAsFacade(e)).collect(Collectors.toList());
+		return getElements().stream().filter(e -> e instanceof IProperty).map(e -> (IProperty) e).collect(Collectors.toList());
 	}
 
 	@Override
@@ -126,7 +121,7 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 
 	@Override
 	public Object invokeOperation(String idShort, Object... params) {
-		return getElementProvider().invokeOperation(SubmodelElementProvider.OPERATIONS + "/" + idShort, params);
+		return getElementProvider().invokeOperation(SubmodelElementProvider.ELEMENTS + "/" + idShort, params);
 	}
 	
 	@Override
@@ -135,7 +130,7 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	}
 
 	private String buildValuePathForProperty(String idShort) {
-		return SubmodelElementProvider.PROPERTIES + "/" + idShort + "/" + Property.VALUE;
+		return SubmodelElementProvider.ELEMENTS + "/" + idShort + "/" + Property.VALUE;
 	}
 
 	@Override

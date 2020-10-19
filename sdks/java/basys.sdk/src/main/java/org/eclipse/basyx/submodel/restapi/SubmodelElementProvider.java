@@ -24,8 +24,6 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 public class SubmodelElementProvider extends MetaModelProvider {
 	// Constants for API-Access
 	public static final String ELEMENTS = "submodelElements";
-	public static final String PROPERTIES = "properties";
-	public static final String OPERATIONS = "operations";
 
 	// The VAB model provider containing the submodelElements this SubmodelElementProvider is based on
 	// Assumed to be a map that maps idShorts to the submodel elements
@@ -69,26 +67,11 @@ public class SubmodelElementProvider extends MetaModelProvider {
 		return all.entrySet().stream().map(e -> (Map<String, Object>) handleDetailGet(ELEMENTS + "/" + e.getKey())).collect(Collectors.toList());
 	}
 	
-	private Collection<Map<String, Object>> getPropertyList() {
-		Collection<Map<String, Object>> all = getElementsList();
-		// Property detection => has ("value" but not "ordered") or ("min" and "max")
-		return all.stream().filter(Property::isProperty).collect(Collectors.toList());
-	}
-
-	private Collection<Map<String, Object>> getOperationList() {
-		Collection<Map<String, Object>> all = getElementsList();
-		return all.stream().filter(Operation::isOperation).collect(Collectors.toList());
-	}
-
 	/**
 	 * Handles first-level access on submodel elements (e.g. /properties/)
 	 */
 	private Object handleQualifierGet(String qualifier, String path) {
-		if (qualifier.equals(PROPERTIES)) {
-			return getPropertyList();
-		} else if (qualifier.equals(OPERATIONS)) {
-			return getOperationList();
-		} else if (qualifier.equals(ELEMENTS)) {
+		if (qualifier.equals(ELEMENTS)) {
 			// returns all elements
 			return getElementsList();
 		} else {
@@ -115,8 +98,8 @@ public class SubmodelElementProvider extends MetaModelProvider {
 		IModelProvider elementProxy = getElementProxy(pathElements);
 		Map<String, Object> element = (Map<String, Object>) elementProxy.getModelPropertyValue("");
 
-		if(qualifier.equals(ELEMENTS) || qualifier.equals(PROPERTIES) ||qualifier.equals(OPERATIONS)) {
-			return getElementProvider(element, elementProxy).getModelPropertyValue(subPath);			
+		if (qualifier.equals(ELEMENTS)) {
+			return getElementProvider(element, elementProxy).getModelPropertyValue(subPath);
 		} else {
 			throw new MalformedRequestException("Invalid access");
 		}
@@ -138,7 +121,7 @@ public class SubmodelElementProvider extends MetaModelProvider {
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		String[] pathElements = VABPathTools.splitPath(path);
 		String qualifier = pathElements[0];
-		if (pathElements.length < 2 || (!qualifier.equals(PROPERTIES) && !qualifier.equals(ELEMENTS))) {
+		if (pathElements.length < 2 || !qualifier.equals(ELEMENTS)) {
 			// only possible to set values in a data elements, currently
 			throw new MalformedRequestException("Invalid access");
 		}
@@ -161,7 +144,7 @@ public class SubmodelElementProvider extends MetaModelProvider {
 
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
-		if (path.equals(PROPERTIES) || path.equals(OPERATIONS) || path.equals(ELEMENTS)) {
+		if (path.equals(ELEMENTS)) {
 			createSubmodelElement(newEntity);
 		} else {
 			String[] pathElements = VABPathTools.splitPath(path);
@@ -187,7 +170,7 @@ public class SubmodelElementProvider extends MetaModelProvider {
 			elementProvider = getElementProvider(element, elementProxy); 
 		}
 
-		if (qualifier.equals(PROPERTIES) || qualifier.equals(OPERATIONS) || qualifier.equals(ELEMENTS)) {
+		if (qualifier.equals(ELEMENTS)) {
 			// Delete a specific submodel element
 			elementProvider.deleteValue(subPath);
 		} else {
@@ -199,7 +182,7 @@ public class SubmodelElementProvider extends MetaModelProvider {
 	public void deleteValue(String path, Object obj) {
 		String[] pathElements = VABPathTools.splitPath(path);
 		String qualifier = pathElements[0];
-		if (!qualifier.equals(ELEMENTS) && !qualifier.equals(PROPERTIES)) {
+		if (!qualifier.equals(ELEMENTS)) {
 			// only possible to delete values from data elements (or in collections)
 			throw new MalformedRequestException("Invalid access");
 		}
