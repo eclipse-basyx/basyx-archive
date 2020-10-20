@@ -28,7 +28,7 @@ import org.junit.Test;
  * @author haque
  *
  */
-public class TestSubmodelmodelElement {
+public class TestSubmodelElement {
 	private static final Reference REFERENCE = new Reference(new Identifier(IdentifierType.CUSTOM, "testValue"), KeyElements.ACCESSPERMISSIONRULE, false);
 	private static final Formula FORMULA = new Formula(Collections.singleton(new Reference(new Key(KeyElements.BLOB, true, "TestValue", IdentifierType.IRI))));
 	
