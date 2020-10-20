@@ -251,7 +251,7 @@ public class TestAASXPackageManager {
 		// get values
 		assertTrue(sele.getModelType().equalsIgnoreCase("SubmodelElementCollection"));
 		SubmodelElementCollection collection = (SubmodelElementCollection) sele;
-		Map<String, ISubmodelElement> smElemMap = collection.getValue();
+		Map<String, ISubmodelElement> smElemMap = collection.getSubmodelElements();
 
 		assertEquals(5, smElemMap.size());
 		Property prop1 = (Property) smElemMap.get("CountryCode");

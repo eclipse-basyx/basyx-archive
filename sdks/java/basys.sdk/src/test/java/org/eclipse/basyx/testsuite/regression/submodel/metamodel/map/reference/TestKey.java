@@ -1,6 +1,7 @@
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.reference;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -82,5 +83,14 @@ public class TestKey {
 		KeyType type = KeyType.IRI;
 		key.setIdType(type);
 		assertEquals(type, key.getIdType());
+	}
+	
+	@Test
+	public void testIsKey() {
+		assertTrue(Key.isKey(key));
+		
+		key.put(Key.IDTYPE, "nonsense");
+		
+		assertFalse(Key.isKey(key));
 	}
 }

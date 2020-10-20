@@ -115,7 +115,7 @@ public class TestAASHTTP {
 		// 2 properties -> SMElementCollections don't count
 		assertEquals(3, properties.size());
 		IProperty prop = properties.get("integerProperty");
-		assertEquals(123, prop.get());
+		assertEquals(123, prop.getValue());
 
 		Map<String, IOperation> operations = sm.getOperations();
 		assertEquals(4, operations.size());

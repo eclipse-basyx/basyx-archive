@@ -139,7 +139,7 @@ public class AASXSuite {
 				checkFile(fileUrl);
 			} else if (element instanceof ISubmodelElementCollection) {
 				ISubmodelElementCollection col = (ISubmodelElementCollection) element;
-				checkElementCollectionFiles(col.getValue().values());
+				checkElementCollectionFiles(col.getSubmodelElements().values());
 			}
 		}
 	}

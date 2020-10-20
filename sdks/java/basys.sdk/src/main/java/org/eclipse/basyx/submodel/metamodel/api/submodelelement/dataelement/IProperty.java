@@ -13,11 +13,13 @@ import org.eclipse.basyx.vab.exception.provider.ProviderException;
  */
 public interface IProperty extends IElement, IDataElement {
 	/**
+	 * Will be replaced by getValue()
 	 * Get property value
 	 * 
 	 * @return Property value
 	 * @throws Exception
 	 */
+	@Deprecated
 	public Object get() throws Exception;
 
 	/**

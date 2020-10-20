@@ -83,7 +83,7 @@ public class PropertyXMLConverter extends SubmodelElementXMLConverter {
 		
 		//for some reason, get() in ISingleProperty might throw an Exception
 		try {
-			Object valueObj = prop.get();
+			Object valueObj = prop.getValue();
 			value = valueObj == null ? null : valueObj.toString();
 		} catch (Exception e) {
 			logger.error("Exeption in buildProperty!", e);

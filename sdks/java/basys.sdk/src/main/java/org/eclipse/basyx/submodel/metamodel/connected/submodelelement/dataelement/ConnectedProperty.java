@@ -6,7 +6,6 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
@@ -44,7 +43,7 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getValueId() {
-		return Reference.createAsFacade((Map<String, Object>) getProxy().getModelPropertyValue(MultiLanguageProperty.VALUEID));
+		return Reference.createAsFacade((Map<String, Object>) getProxy().getModelPropertyValue(Property.VALUEID));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -55,6 +54,11 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.PROPERTY;
+	}
+
+	@Override
+	public Object getValue() {
+		return retrieveObject();
 	}
 
 }

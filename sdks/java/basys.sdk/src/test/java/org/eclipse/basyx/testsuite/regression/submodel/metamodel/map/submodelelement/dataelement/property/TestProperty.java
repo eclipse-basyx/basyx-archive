@@ -66,6 +66,7 @@ public class TestProperty {
 		Boolean isSomething = true;
 		property.set(isSomething);
 		assertEquals(isSomething, property.get());
+		assertEquals(isSomething, property.getValue());
 		assertEquals(PropertyValueTypeDef.Boolean, property.getValueType());
 	}
 

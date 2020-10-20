@@ -1,6 +1,8 @@
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.qualifier;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,6 +75,20 @@ public class TestLangStrings {
 		languageSet.add(LANGUAGE1);
 		languageSet.add(LANGUAGE2);
 		assertEquals(languageSet, langStrings.getLanguages());
+	}
+	
+	@Test
+	public void testIsLangStrings() {
+		LangStrings langStrings = new LangStrings(LANGUAGE1, TEXT1);
+		
+		assertTrue(LangStrings.isLangStrings(langStrings));
+		
+		LangString langString = new LangString(LANGUAGE1, TEXT1);
+		langString.put("language", null);
+		
+		langStrings.add(langString);
+		
+		assertFalse(LangStrings.isLangStrings(langStrings));
 	}
 	
 }

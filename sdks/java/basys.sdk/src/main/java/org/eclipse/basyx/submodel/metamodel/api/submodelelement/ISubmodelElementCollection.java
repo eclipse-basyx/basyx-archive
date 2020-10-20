@@ -14,13 +14,6 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOpera
 public interface ISubmodelElementCollection extends ISubmodelElement {
 	
 	/**
-	 * Gets all the elements contained in the collection
-	 * 
-	 * @return
-	 */
-	public Map<String, ISubmodelElement> getValue();
-	
-	/**
 	 * Gets if the collection is ordered or unordered
 	 * 
 	 * @return
@@ -35,12 +28,10 @@ public interface ISubmodelElementCollection extends ISubmodelElement {
 	public boolean isAllowDuplicates();
 	
 	/**
-	 * Will be replaced by getValue() at release
 	 * Gets all the elements contained in the collection
 	 * 
 	 * @return
 	 */
-	@Deprecated
 	public Map<String, ISubmodelElement> getSubmodelElements();
 
 	/**

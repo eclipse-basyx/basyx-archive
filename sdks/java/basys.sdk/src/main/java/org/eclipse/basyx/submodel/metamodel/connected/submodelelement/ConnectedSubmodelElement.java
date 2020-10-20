@@ -17,6 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
+import org.eclipse.basyx.vab.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -88,5 +89,10 @@ public abstract class ConnectedSubmodelElement extends ConnectedElement implemen
 	@Override
 	public IReference getReference() {
 		return Referable.createAsFacade(getElem(), getKeyElement()).getReference();
+	}
+	
+	@Override
+	public void setValue(Object value) {
+		throw new FeatureNotImplementedException();
 	}
 }

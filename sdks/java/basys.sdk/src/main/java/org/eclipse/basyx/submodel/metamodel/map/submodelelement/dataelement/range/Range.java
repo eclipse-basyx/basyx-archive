@@ -1,10 +1,11 @@
-package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement;
+package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range;
 
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IRange;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.DataElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
@@ -95,6 +96,23 @@ public class Range extends DataElement implements IRange {
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.RANGE;
+	}
+
+	@Override
+	public RangeValue getValue() {
+		return new RangeValue(getMin(), getMax());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setValue(Object value) {
+		if(RangeValue.isRangeValue(value)) {
+			RangeValue rv = RangeValue.createAsFacade((Map<String, Object>) value);
+			put(Range.MIN, rv.getMin());
+			put(Range.MAX, rv.getMax());
+		} else {
+			throw new IllegalArgumentException("Given Object is not a RangeValue");
+		}
 	}
 
 }

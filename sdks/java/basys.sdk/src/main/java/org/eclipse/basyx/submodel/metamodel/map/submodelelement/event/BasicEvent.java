@@ -74,4 +74,20 @@ public class BasicEvent extends SubmodelElement implements IBasicEvent {
 	public IReference getObserved() {
 		return Reference.createAsFacade((Map<String, Object>) get(OBSERVED));
 	}
+
+	@Override
+	public IReference getValue() {
+		return getObserved();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setValue(Object value) {
+		if(Reference.isReference(value)) {
+			put(OBSERVED, Reference.createAsFacade((Map<String, Object>) value));
+		}
+		else {
+			throw new IllegalArgumentException("Given Object is not a Reference");
+		}
+	}
 }

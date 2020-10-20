@@ -83,4 +83,15 @@ public class MultiLanguageProperty extends DataElement implements IMultiLanguage
 	protected KeyElements getKeyElement() {
 		return KeyElements.MULTILANGUAGEPROPERTY;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setValue(Object value) {
+		if(LangStrings.isLangStrings(value)) {
+			put(VALUE, LangStrings.createAsFacade((Collection<Map<String, Object>>) value));
+		}
+		else {
+			throw new IllegalArgumentException("Given Object is not a LangStrings");
+		}
+	}
 }

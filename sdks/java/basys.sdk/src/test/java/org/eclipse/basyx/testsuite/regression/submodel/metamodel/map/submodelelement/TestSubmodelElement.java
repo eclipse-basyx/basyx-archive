@@ -36,8 +36,7 @@ public class TestSubmodelElement {
 	
 	@Before
 	public void buidSubmodelElement() {
-		Property property = new Property("testId");
-		submodelElement = SubmodelElement.createAsFacade(property);
+		submodelElement = new Property("testId");
 	}
 	
 	@Test

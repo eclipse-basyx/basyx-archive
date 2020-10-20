@@ -75,7 +75,7 @@ public class TestConnectedSubmodelElementCollection {
 		IProperty prop = props.get(PROP);
 
 		// Check contained values
-		assertEquals(4, prop.get());
+		assertEquals(4, prop.getValue());
 	}
 
 	/**

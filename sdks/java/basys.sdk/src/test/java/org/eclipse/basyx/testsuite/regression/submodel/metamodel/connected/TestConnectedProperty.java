@@ -43,7 +43,7 @@ public class TestConnectedProperty {
 				new VABConnectionManagerStub(new PropertyProvider(new VABMapProvider(destroyType)))
 						.connectToVABElement(""));
 		prop.set("content");
-		assertEquals("content", prop.get());
+		assertEquals("content", prop.getValue());
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class TestConnectedProperty {
 	 */
 	@Test
 	public void testGet() throws Exception {
-		int val = (int) prop.get();
+		int val = (int) prop.getValue();
 		assertEquals(VALUE, val);
 	}
 
@@ -76,7 +76,7 @@ public class TestConnectedProperty {
 	@Test
 	public void testSet() throws Exception {
 		prop.set(123);
-		int val = (int) prop.get();
+		int val = (int) prop.getValue();
 		assertEquals(123, val);
 	}
 

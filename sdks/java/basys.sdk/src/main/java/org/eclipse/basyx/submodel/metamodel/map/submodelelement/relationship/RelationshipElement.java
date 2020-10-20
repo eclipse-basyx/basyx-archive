@@ -107,4 +107,22 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	protected KeyElements getKeyElement() {
 		return KeyElements.RELATIONSHIPELEMENT;
 	}
+
+	@Override
+	public RelationshipElementValue getValue() {
+		return new RelationshipElementValue(getFirst(), getSecond());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setValue(Object value) {
+		if(RelationshipElementValue.isRelationshipElementValue(value)) {
+			RelationshipElementValue rev = 
+					RelationshipElementValue.createAsFacade((Map<String, Object>) value);
+			setFirst(rev.getFirst());
+			setSecond(rev.getSecond());
+		} else {
+			throw new IllegalArgumentException("Given Object is not an RelationshipElementValue");
+		}
+	}
 }

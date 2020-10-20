@@ -155,4 +155,14 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 	public IReference getReference() {
 		return Referable.createAsFacade(this, getKeyElement()).getReference();
 	}
+	
+	@Override
+	public Object getValue() {
+		throw new UnsupportedOperationException("getValue is only possible in specific Element");
+	}
+	
+	@Override
+	public void setValue(Object value) {
+		throw new UnsupportedOperationException("setValue is only possible in specific Element");
+	}
 }

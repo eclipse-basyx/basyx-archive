@@ -77,8 +77,14 @@ public class Blob extends DataElement implements IBlob {
 				|| (modelType == null && (map.containsKey(Property.VALUE) && map.containsKey(MIMETYPE)));
 	}
 
-	public void setValue(byte[] value) {
-		put(Property.VALUE, new String(value));
+	@Override
+	public void setValue(Object value) {
+		if(value instanceof byte[]) {
+			put(Property.VALUE, new String((byte[]) value));
+		}
+		else {
+			throw new IllegalArgumentException("Given Object is not a byte[]");
+		}
 		
 	}
 

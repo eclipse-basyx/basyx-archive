@@ -3,8 +3,9 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.connected.subm
 import static org.junit.Assert.assertEquals;
 
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedRange;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.RangeValue;
 import org.eclipse.basyx.submodel.restapi.PropertyProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
@@ -55,5 +56,15 @@ public class TestConnectedRange {
 	@Test
 	public void testGetMax() {
 		assertEquals(range.getMax(), connectedRange.getMax());
+	}
+	
+	/**
+	 * Tests if getValue() returns the correct value
+	 */
+	@Test
+	public void testGetValue() {
+		RangeValue rv = connectedRange.getValue();
+		assertEquals(range.getMin(), rv.getMin());
+		assertEquals(range.getMax(), rv.getMax());
 	}
 }

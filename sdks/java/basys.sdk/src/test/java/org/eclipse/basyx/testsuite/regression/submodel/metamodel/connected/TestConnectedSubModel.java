@@ -111,7 +111,7 @@ public class TestConnectedSubModel {
 
 		// Check the value of the property
 		IProperty prop = props.get(PROP);
-		assertEquals(100, prop.get());
+		assertEquals(100, prop.getValue());
 	}
 
 	/**
@@ -216,7 +216,7 @@ public class TestConnectedSubModel {
 		
 		IProperty connectedProperty = (IProperty)submodel.getSubmodelElements().get("testIdShort");
 		assertEquals(property.getIdShort(), connectedProperty.getIdShort());
-		assertEquals(property.get(), connectedProperty.get());
+		assertEquals(property.get(), connectedProperty.getValue());
 		
 		// creates an expected reference for assertion
 		IReference expected = submodel.getReference();
@@ -293,7 +293,7 @@ public class TestConnectedSubModel {
 		IProperty expectedProperty = expected.get(PROPERTY_ID);
 		IProperty acutalProperty = (IProperty) actual.get(PROPERTY_ID);
 		assertNotNull(acutalProperty);
-		assertEquals(expectedProperty.get(), acutalProperty.get());
+		assertEquals(expectedProperty.getValue(), acutalProperty.getValue());
 	}
 	
 	/**
@@ -327,14 +327,14 @@ public class TestConnectedSubModel {
 		
 		assertNotNull(actualCollection);
 		
-		Collection<ISubmodelElement> elements = actualCollection.getValue().values();
+		Collection<ISubmodelElement> elements = actualCollection.getSubmodelElements().values();
 		
 		// Check for correct Type
 		for (ISubmodelElement iSubmodelElement: elements) {
 			assertTrue(iSubmodelElement instanceof IBlob);
 		}
 		
-		assertEquals(expectedCollection.getValue().size(), elements.size());
+		assertEquals(expectedCollection.getSubmodelElements().size(), elements.size());
 		
 		IRelationshipElement expectedRelElem = (IRelationshipElement) expected.get(RELATIONSHIP_ELEM_ID);
 		IRelationshipElement actualRelElem = (IRelationshipElement) actual.get(RELATIONSHIP_ELEM_ID);

@@ -145,14 +145,14 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
 
-	public void setValue(Collection<ISubmodelElement> value) {
+	@Override
+	public void setValue(Object value) {
 		put(Property.VALUE, SubmodelElementMapCollectionConverter.convertCollectionToIDMap(value));
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public Map<String, ISubmodelElement> getValue() {
-		return (Map<String, ISubmodelElement>) get(Property.VALUE);
+	public Collection<ISubmodelElement> getValue() {
+		return (getSubmodelElements()).values();
 	}
 
 	public void setOrdered(boolean value) {
@@ -178,12 +178,13 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	}
 
 	public void setElements(Collection<ISubmodelElement> value) {
-		put(Property.VALUE, value);
+		put(Property.VALUE, SubmodelElementMapCollectionConverter.convertCollectionToIDMap(value));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, ISubmodelElement> getSubmodelElements() {
-		return getValue();
+		return (Map<String, ISubmodelElement>) get(Property.VALUE);
 	}
 
 	@SuppressWarnings("unchecked")

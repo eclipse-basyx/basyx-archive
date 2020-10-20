@@ -44,6 +44,17 @@ public class LangString extends VABModelMap<Object> {
 		return ret;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static boolean isLangString(Object value) {
+		if(!(value instanceof Map<?, ?>)) {
+			return false;
+		}
+		
+		Map<String, Object> map = (Map<String, Object>) value;
+		
+		return map.get(LANGUAGE) instanceof String && map.get(DESCRIPTION) instanceof String;
+	}
+	
 	/**
 	 * Get Language of the langString
 	 * @return Language

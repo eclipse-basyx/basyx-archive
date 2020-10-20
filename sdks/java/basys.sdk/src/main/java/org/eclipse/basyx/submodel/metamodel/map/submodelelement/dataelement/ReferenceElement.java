@@ -69,15 +69,21 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 						&& !map.containsKey(SubmodelElementCollection.ALLOWDUPLICATES)));
 	}
 
-	public void setValue(IReference ref) {
-		put(Property.VALUE, ref);
-		
-	}
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public IReference getValue() {
 		return Reference.createAsFacade((Map<String, Object>) get(Property.VALUE));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setValue(Object value) {
+		if(Reference.isReference(value)) {
+			put(Property.VALUE, Reference.createAsFacade((Map<String, Object>) value));
+		}
+		else {
+			throw new IllegalArgumentException("Given Object is not a Reference");
+		}
 	}
 	
 	@Override

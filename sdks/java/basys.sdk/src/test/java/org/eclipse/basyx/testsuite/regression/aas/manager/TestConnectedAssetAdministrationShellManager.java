@@ -114,9 +114,9 @@ public class TestConnectedAssetAdministrationShellManager {
 		assertEquals(smId.getId(), sm.getIdentification().getId());
 		assertEquals(smId.getIdType(), sm.getIdentification().getIdType());
 		assertEquals("prop1", prop1Connected.getIdShort());
-		assertEquals(7, prop1Connected.get());
+		assertEquals(7, prop1Connected.getValue());
 		assertEquals("prop2", prop2Connected.getIdShort());
-		assertEquals("myStr", prop2Connected.get());
+		assertEquals("myStr", prop2Connected.getValue());
 	}
 
 }

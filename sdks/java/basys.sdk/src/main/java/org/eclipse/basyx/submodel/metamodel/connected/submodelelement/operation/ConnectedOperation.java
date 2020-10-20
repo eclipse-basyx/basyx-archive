@@ -84,4 +84,14 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	protected KeyElements getKeyElement() {
 		return KeyElements.OPERATION;
 	}
+	
+	@Override
+	public Object getValue() {
+		throw new UnsupportedOperationException("An Operation has no value");
+	}
+
+	@Override
+	public void setValue(Object value) {
+		throw new UnsupportedOperationException("An Operation has no value");
+	}
 }

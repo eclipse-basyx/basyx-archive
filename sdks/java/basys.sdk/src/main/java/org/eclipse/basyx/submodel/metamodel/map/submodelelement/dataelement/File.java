@@ -80,8 +80,15 @@ public class File extends DataElement implements IFile{
 				|| (modelType == null && (map.containsKey(Property.VALUE) && map.containsKey(MIMETYPE)));
 	}
 
-	public void setValue(String value) {
-		put(Property.VALUE, value);
+	@Override
+	public void setValue(Object value) {
+		if(value instanceof String) {
+			put(Property.VALUE, (String) value);
+		}
+		else {
+			throw new IllegalArgumentException("Given Object is not a String");
+		}
+		
 	}
 
 	@Override

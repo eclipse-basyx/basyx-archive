@@ -65,7 +65,7 @@ public class TestSubmodelElementCollection {
 		assertTrue(elementCollection.isAllowDuplicates());
 		assertTrue(elementCollection.isOrdered());
 		
-		ISubmodelElement checkOperation = elementCollection.getValue().get(OPERATION_ID);
+		ISubmodelElement checkOperation = elementCollection.getSubmodelElements().get(OPERATION_ID);
 		assertEquals(OPERATION_ID, checkOperation.getIdShort());
 	} 
 	
@@ -76,7 +76,7 @@ public class TestSubmodelElementCollection {
 		elementCollection.addElement(element);
 		elements2.add(element);
 		
-		ISubmodelElement checkProperty = elementCollection.getValue().get("propId");
+		ISubmodelElement checkProperty = elementCollection.getSubmodelElements().get("propId");
 		assertEquals(element.getIdShort(), checkProperty.getIdShort());
 	} 
 	
@@ -95,7 +95,7 @@ public class TestSubmodelElementCollection {
 		elements.add(element);
 		elementCollection.setValue(elements);
 		
-		ISubmodelElement checkProperty = elementCollection.getValue().get("propId");
+		ISubmodelElement checkProperty = elementCollection.getSubmodelElements().get("propId");
 		assertEquals(element.getIdShort(), checkProperty.getIdShort());
 	} 
 	

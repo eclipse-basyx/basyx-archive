@@ -166,4 +166,14 @@ public class Property extends DataElement implements IProperty {
 	protected KeyElements getKeyElement() {
 		return KeyElements.PROPERTY;
 	}
+
+	@Override
+	public Object getValue() {
+		return get();
+	}
+	
+	@Override
+	public void setValue(Object value) {
+		set(value);
+	}
 }

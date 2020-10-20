@@ -152,6 +152,11 @@ public class SubmodelElementMapCollectionConverter {
 	public static Map<String, Object> convertCollectionToIDMap(Object smElements) {
 		Map<String, Object> smElementsMap = new HashMap<>();
 		
+		if(smElements == null) {
+			// if null was given, return an empty Map
+			return smElementsMap;
+		}
+		
 		// SubmodelElemets can be given as Map, Set or List
 		// If it is a Set or List, convert it to a Map first
 		if(smElements instanceof Collection<?>) {
@@ -163,6 +168,8 @@ public class SubmodelElementMapCollectionConverter {
 			}
 		} else if(smElements instanceof Map<?, ?>){
 			smElementsMap = (Map<String, Object>) smElements;
+		} else {
+			throw new RuntimeException("Elements must be given as Map or Collection");
 		}
 		
 		// Iterate through all SubmodelElements and create Facades for them

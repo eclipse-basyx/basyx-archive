@@ -111,7 +111,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 		provider.setModelPropertyValue(path, newVal);
 
 		SubModel sm = getRemoteSubmodel();
-		assertEquals(newVal, sm.getProperties().get(SimpleAASSubmodel.INTPROPIDSHORT).get());
+		assertEquals(newVal, sm.getProperties().get(SimpleAASSubmodel.INTPROPIDSHORT).getValue());
 	}
 	
 	/**
