@@ -202,7 +202,11 @@ public class SubModelProvider extends MetaModelProvider {
 		if (!path.isEmpty()) {
 			String[] splitted = VABPathTools.splitPath(path);
 			if (isQualifier(splitted[0])) {
-				submodelAPI.deleteNestedSubmodelElement(getIdShorts(splitted));
+				if (splitted.length > 2) {
+					submodelAPI.deleteNestedSubmodelElement(getIdShorts(splitted));
+				} else {
+					submodelAPI.deleteSubmodelElement(splitted[1]);
+				}
 			} else {
 				throw new MalformedRequestException("Path " + path + " not supported for delete");
 			}

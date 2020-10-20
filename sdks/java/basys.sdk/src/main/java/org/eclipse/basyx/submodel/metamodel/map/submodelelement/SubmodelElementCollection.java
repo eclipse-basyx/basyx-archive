@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.IElementContainer;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
@@ -12,6 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
+import org.eclipse.basyx.submodel.metamodel.map.helper.ElementContainerHelper;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -26,7 +28,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operat
  * @author schnicke
  *
  */
-public class SubmodelElementCollection extends SubmodelElement implements ISubmodelElementCollection {
+public class SubmodelElementCollection extends SubmodelElement implements ISubmodelElementCollection, IElementContainer {
 	public static final String ORDERED = "ordered";
 	public static final String ALLOWDUPLICATES = "allowDuplicates";
 	public static final String MODELTYPE = "SubmodelElementCollection";
@@ -105,6 +107,19 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		return MODELTYPE.equals(modelType) || (modelType == null
 				&& (map.containsKey(Property.VALUE) && map.containsKey(ORDERED) && map.containsKey(ALLOWDUPLICATES)));
 	}
+		
+	/**
+	 * Adds an element to the SubmodelElementCollection
+	 * @param elem
+	 * 
+	 * @deprecated
+	 * This method is deprecated. Use addSubModelElement instead
+	 * which does the same work
+	 */
+	@Deprecated
+	public void addElement(ISubmodelElement elem) {
+		addSubModelElement(elem);
+	}
 
 	/**
 	 * Adds an element to the SubmodelElementCollection
@@ -112,7 +127,8 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	 * @param elem
 	 */
 	@SuppressWarnings("unchecked")
-	public void addElement(ISubmodelElement elem) {
+	@Override
+	public void addSubModelElement(ISubmodelElement elem) {
 		if (elem instanceof SubmodelElement) {
 			((SubmodelElement) elem).setParent(getReference());
 		}
@@ -215,6 +231,29 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		}
 
 		return ret;
+	}
+
+	/**
+	 * Retrieves an element from element collection
+	 * @param id
+	 * @return retrieved element
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public ISubmodelElement getSubmodelElement(String id) {
+		Map<String, ISubmodelElement> submodelElems = (Map<String, ISubmodelElement>) get(Property.VALUE);
+		return ElementContainerHelper.getElementById(submodelElems, id);
+	}
+
+	/**
+	 * Deletes an element from element collection
+	 * @param id
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public void deleteSubmodelElement(String id) {
+		Map<String, ISubmodelElement> submodelElems = (Map<String, ISubmodelElement>) get(Property.VALUE);
+		ElementContainerHelper.removeElementById(submodelElems, id);
 	}
 	
 	@Override

@@ -23,6 +23,8 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiabl
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -32,37 +34,41 @@ import org.junit.Test;
  *
  */
 public class TestSubmodel {
+	public static String SUBMODEL_ID = "submodelID";
+	public static String IDENTIFIER_ID = "testId";
+	public static String PROP_ID = "propertyID";
+	public static Property PROPERTY = new Property("testValue");
 	
-	@Test
-	public void testAddSubmodelElement() {
-		String submodelId = "submodelID";
-		String identifierId = "testId";
-		String propId = "propertyID";
-		
+	private SubModel subModel;
+	
+	@Before
+	public void init() {
 		HasSemantics semantics = new HasSemantics(new Reference(new Key(KeyElements.ASSET, true, "testValue", IdentifierType.IRDI)));
-		Identifiable identifiable = new Identifiable("1", "5", submodelId, "testCategory", new LangStrings("DE", "test"), IdentifierType.IRDI, identifierId);
+		Identifiable identifiable = new Identifiable("1", "5", SUBMODEL_ID, "testCategory", new LangStrings("DE", "test"), IdentifierType.IRDI, IDENTIFIER_ID);
 		Qualifiable qualifiable = new Qualifiable(new Formula(Collections.singleton(new Reference(new Key(KeyElements.BLOB, true, "TestValue", IdentifierType.IRI)))));
 		HasDataSpecification specification = new HasDataSpecification(new ArrayList<>(), Collections.singleton(new Reference(new Key(KeyElements.BLOB, true, "testRef", IdentifierType.IRI))));
 		HasKind hasKind = new HasKind(ModelingKind.INSTANCE);
 		
 		// Create a submodel 
-		SubModel subModel = new SubModel(semantics, identifiable, qualifiable, specification, hasKind);
+		subModel = new SubModel(semantics, identifiable, qualifiable, specification, hasKind);
 		
-		//Create a submodel element and set an id to it
-		Property property = new Property("testValue");
-		property.setIdShort(propId);
+		//set an id to the submodel element
+		PROPERTY.setIdShort(PROP_ID);
 		
 		// Add the element to the submodel
-		subModel.addSubModelElement(property);
-		
+		subModel.addSubModelElement(PROPERTY);
+	}
+	
+	@Test
+	public void testAddSubmodelElement() {
 		// Create expected map of added submodel element for assertion
 		Map<String, ISubmodelElement> submodelElemMap = new HashMap<String, ISubmodelElement>();
-		submodelElemMap.put(propId, property);
+		submodelElemMap.put(PROP_ID, PROPERTY);
 		assertEquals(submodelElemMap, subModel.getSubmodelElements());
 		
 		// Create expected parent of the element for assertion
-		Reference expectedParent = new Reference(new Key(KeyElements.SUBMODEL, true, identifierId, IdentifierType.IRDI));
-		assertEquals(expectedParent, property.getParent());
+		Reference expectedParent = new Reference(new Key(KeyElements.SUBMODEL, true, IDENTIFIER_ID, IdentifierType.IRDI));
+		assertEquals(expectedParent, PROPERTY.getParent());
 	} 
 
 	/**
@@ -86,5 +92,43 @@ public class TestSubmodel {
 		SubModel facade = SubModel.createAsFacade(sm);
 		assertTrue(facade.get(SubModel.SUBMODELELEMENT) instanceof Map<?, ?>);
 		assertEquals(expected, facade.getSubmodelElements().get(propId));
+	}
+	
+	/**
+	 * This method tests getSubmodelElement method of SubModel class
+	 * with existing element id
+	 */
+	@Test
+	public void testGetSubmodelElement() {
+		ISubmodelElement element = subModel.getSubmodelElement(PROP_ID);
+		assertEquals(PROPERTY, element);
+	}
+	
+	/**
+	 * This method tests getSubmodelElement method of SubModel class
+	 * with non existing element id
+	 */
+	@Test(expected = ResourceNotFoundException.class)
+	public void testGetSubModelElementNotExist() {
+		subModel.getSubmodelElement("Id_Which_Does_Not_Exist");
+	}
+	
+	/**
+	 * This method tests deleteSubmodelElement method of SubModel class
+	 * with existing element id
+	 */
+	@Test(expected = ResourceNotFoundException.class)
+	public void testDeleteSubmodelElement() {
+		subModel.deleteSubmodelElement(PROP_ID);
+		subModel.getSubmodelElement(PROP_ID);
+	}
+	
+	/**
+	 * This method tests deleteSubmodelElement method of SubModel class
+	 * with non existing element id
+	 */
+	@Test(expected = ResourceNotFoundException.class)
+	public void testDeleteSubModelElementNotExist() {
+		subModel.deleteSubmodelElement("Id_Which_Does_Not_Exist");
 	}
 }

@@ -17,7 +17,6 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Formula;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

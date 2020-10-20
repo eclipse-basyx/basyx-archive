@@ -35,11 +35,11 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
 import org.junit.Before;
@@ -69,6 +69,7 @@ public class TestConnectedSubModel {
 	private ConnectedSubModel submodel;
 	private SubModel localSubmodel;
 
+	@SuppressWarnings("unchecked")
 	@Before
 	public void build() {
 		// Create a simple value property
@@ -233,6 +234,19 @@ public class TestConnectedSubModel {
 	public void testGetLocalCopy() {
 		assertEquals(localSubmodel, submodel.getLocalCopy());
 	}
+	
+	
+	@Test
+	public void testGetSubmodelElement() {
+		ISubmodelElement element = submodel.getSubmodelElement(PROP);
+		assertEquals(PROP, element.getIdShort());
+	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testDeleteSubmodelElement() {
+		submodel.deleteSubmodelElement(PROP);
+		submodel.getSubmodelElement(PROP);
+	}
 
 	/**
 	 * Tests getValues function 
@@ -247,7 +261,7 @@ public class TestConnectedSubModel {
 			submodel.addSubModelElement(element);
 		}
 		
-		Map<String, Object> values = (Map<String, Object>) submodel.getValues();
+		Map<String, Object> values = submodel.getValues();
 		assertEquals(3, values.size());
 		
 		// Check if all expected Values are present
@@ -274,7 +288,7 @@ public class TestConnectedSubModel {
 		
 		Property byteProp = new Property();
 		byteProp.setIdShort("byte_prop01");
-		Byte byteNumber = new Byte("2");
+		Byte byteNumber = Byte.parseByte("2");
 		byteProp.set(byteNumber);
 		ret.put(byteProp.getIdShort(), byteProp);
 		
@@ -410,5 +424,4 @@ public class TestConnectedSubModel {
 		assertNotNull(actualRelElem);
 		assertEquals(expectedRelElem.getIdShort(), actualRelElem.getIdShort());
 	}
-	
 }

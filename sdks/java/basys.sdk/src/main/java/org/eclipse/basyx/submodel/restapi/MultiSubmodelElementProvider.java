@@ -124,21 +124,25 @@ public class MultiSubmodelElementProvider extends MetaModelProvider {
 	public void deleteValue(String path) throws ProviderException {
 		String[] pathElements = VABPathTools.splitPath(path);
 		String qualifier = pathElements[0];
-		String subPath = VABPathTools.buildPath(pathElements, 2);
-		IModelProvider elementProvider = modelProvider;
+		String subPath;
+		IModelProvider elementProvider;
 		
+		if (!qualifier.equals(ELEMENTS)) {
+			throw new MalformedRequestException("Given path '" + path + "' does not start with /submodelElements");
+		}
+
 		// If the first Element is a Collection, use its Provider
 		if(pathElements.length > 2) {
 			IModelProvider elementProxy = getElementProxy(pathElements);
 			elementProvider = new SubmodelElementProvider(elementProxy); 
+			subPath = VABPathTools.buildPath(pathElements, 2);
+		} else {
+			elementProvider = modelProvider;
+			subPath = VABPathTools.buildPath(pathElements, 1);
 		}
 
-		if (qualifier.equals(ELEMENTS)) {
-			// Delete a specific submodel element
-			elementProvider.deleteValue(subPath);
-		} else {
-			throw new MalformedRequestException("Given path '" + path + "' does not start with /submodelElements");
-		}
+		// Delete a specific submodel element
+		elementProvider.deleteValue(subPath);
 	}
 
 	@Override

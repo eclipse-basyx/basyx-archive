@@ -99,7 +99,7 @@ public class ConnectedSubmodelElementFactory {
 	 * @param elementPath    path in the proxy for accessing single elements by short ids
 	 * @return The connected variant of the requested submodel element
 	 */
-	private static ISubmodelElement getConnectedSubmodelElement(VABElementProxy rootProxy,
+	public static ISubmodelElement getConnectedSubmodelElement(VABElementProxy rootProxy,
 			String elementPath, String idShort, Map<String, Object> mapContent) {
 		String subPath = VABPathTools.concatenatePaths(elementPath, idShort);
 		VABElementProxy proxy = rootProxy.getDeepProxy(subPath);

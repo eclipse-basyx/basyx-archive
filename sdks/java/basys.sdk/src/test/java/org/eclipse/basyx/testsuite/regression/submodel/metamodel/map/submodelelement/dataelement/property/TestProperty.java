@@ -10,8 +10,6 @@ import java.time.Month;
 import java.time.Period;
 import java.util.Collections;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;

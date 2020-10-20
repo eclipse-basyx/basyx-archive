@@ -52,7 +52,7 @@ public class AASSubModelServletVABConnection {
 			// - Add container property that holds other properties
 			SubmodelElementCollection container = new SubmodelElementCollection();
 			container.setIdShort("prop2");
-			container.addElement(prop11);
+			container.addSubModelElement(prop11);
 			// - Add container to property map
 			addSubModelElement(container);
 

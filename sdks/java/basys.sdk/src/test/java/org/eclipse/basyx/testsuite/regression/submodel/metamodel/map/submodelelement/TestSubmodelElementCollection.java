@@ -28,6 +28,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementC
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -73,7 +74,7 @@ public class TestSubmodelElementCollection {
 	public void testAddValue() {
 		Property element = new Property("testProperty");
 		element.setIdShort("propId");
-		elementCollection.addElement(element);
+		elementCollection.addSubModelElement(element);
 		elements2.add(element);
 		
 		ISubmodelElement checkProperty = elementCollection.getSubmodelElements().get("propId");
@@ -148,13 +149,39 @@ public class TestSubmodelElementCollection {
 		Property property = new Property("testValue");
 		String newIdShort = "newIdShort";
 		property.put(Referable.IDSHORT, newIdShort);
-		collection.addElement(property);
+		collection.addSubModelElement(property);
 		assertEquals(new Reference(new Key(KeyElements.SUBMODELELEMENTCOLLECTION, true, "", KeyType.IDSHORT)), property.getParent());
 		Map<String, ISubmodelElement> submodelElements = new HashMap<String, ISubmodelElement>();
 		submodelElements.put(PROPERTY_ID, getProperty());
 		submodelElements.put(OPERATION_ID, getOperation());
 		submodelElements.put(newIdShort, property);
 		assertEquals(submodelElements, collection.getSubmodelElements());
+	}
+	
+	@Test
+	public void testGetSubModelElement() {
+		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
+		ISubmodelElement retrievedElement = collection.getSubmodelElement(PROPERTY_ID);
+		assertEquals(getProperty(), retrievedElement);
+	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testGetSubModelElementNotExist() {
+		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
+		collection.getSubmodelElement("Id_Which_Does_Not_Exist");
+	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testDeleteSubModelElement() {
+		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
+		collection.deleteSubmodelElement(PROPERTY_ID);
+		collection.getSubmodelElement(PROPERTY_ID);
+	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testDeleteSubModelElementNotExist() {
+		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
+		collection.deleteSubmodelElement("Id_Which_Does_Not_Exist");
 	}
 
 	/**

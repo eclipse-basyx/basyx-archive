@@ -142,7 +142,7 @@ public abstract class AssetAdministrationShellSuite {
 		// Check if the submodel has been retrieved correctly
 		ISubModel sm = shell.getSubModels().get(SMIDSHORT);
 		IProperty prop = sm.getProperties().get(PROPID);
-		assertEquals(PROPVAL, prop.get());
+		assertEquals(PROPVAL, prop.getValue());
 	}
 
 	/**

@@ -2,11 +2,13 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.IElementContainer;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -17,7 +19,7 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  * @author rajashek
  *
  */
-public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement implements ISubmodelElementCollection {
+public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement implements ISubmodelElementCollection, IElementContainer  {
 	public ConnectedSubmodelElementCollection(VABElementProxy proxy) {
 		super(proxy);
 	}
@@ -55,5 +57,40 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.SUBMODELELEMENTCOLLECTION;
+	}
+	
+	/**
+	 * Get submodel element by given id
+	 * @param id
+	 * @return specific submodel element
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public ISubmodelElement getSubmodelElement(String id) {
+		Map<String, Object> node =(Map<String, Object>) getProxy().getModelPropertyValue(id);
+		ISubmodelElement element = ConnectedSubmodelElementFactory.getConnectedSubmodelElement(getProxy(), "", id, node);
+		return element;			
+	}
+
+	/**
+	 * Delete a submodel element by given id
+	 * @param id
+	 */
+	@Override
+	public void deleteSubmodelElement(String id) {
+		getProxy().deleteValue(id);
+	}
+	
+	/**
+	 * adds a submodel element to the collection
+	 * @param element
+	 */
+	@Override
+	public void addSubModelElement(ISubmodelElement element) {
+		if (element instanceof SubmodelElement) {
+			((SubmodelElement) element).setParent(getReference());
+		}
+		
+		getProxy().setModelPropertyValue(element.getIdShort(), element);
 	}
 }

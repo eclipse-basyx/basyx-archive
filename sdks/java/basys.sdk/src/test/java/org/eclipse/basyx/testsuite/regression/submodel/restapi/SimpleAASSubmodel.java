@@ -79,12 +79,12 @@ public class SimpleAASSubmodel extends SubModel {
 		
 		SubmodelElementCollection containerProp = new SubmodelElementCollection();
 		containerProp.setIdShort("container");
-		containerProp.addElement(intProp);
-		containerProp.addElement(opInCollection);
+		containerProp.addSubModelElement(intProp);
+		containerProp.addSubModelElement(opInCollection);
 
 		SubmodelElementCollection containerPropRoot = new SubmodelElementCollection();
 		containerPropRoot.setIdShort("containerRoot");
-		containerPropRoot.addElement(containerProp);
+		containerPropRoot.addSubModelElement(containerProp);
 		addSubModelElement(containerPropRoot);
 	}
 }

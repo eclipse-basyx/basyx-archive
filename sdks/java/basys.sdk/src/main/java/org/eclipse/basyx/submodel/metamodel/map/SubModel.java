@@ -22,6 +22,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IPro
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelValuesHelper;
+import org.eclipse.basyx.submodel.metamodel.map.helper.ElementContainerHelper;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -304,5 +305,26 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	@Override
 	public IReference getReference() {
 		return Identifiable.createAsFacade(this, getKeyElement()).getReference();
+	}
+
+	/**
+	 * Retrieves an element from element collection
+	 * @param id
+	 * @return retrieved element
+	 */
+	@Override
+	public ISubmodelElement getSubmodelElement(String id) {
+		Map<String, ISubmodelElement> submodelElems = getSubmodelElements();
+		return ElementContainerHelper.getElementById(submodelElems, id);
+	}
+
+	/**
+	 * Deletes an element from element collection
+	 * @param id
+	 */
+	@Override
+	public void deleteSubmodelElement(String id) {
+		Map<String, ISubmodelElement> submodelElems = getSubmodelElements();
+		ElementContainerHelper.removeElementById(submodelElems, id);
 	}
 }

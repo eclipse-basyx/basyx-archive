@@ -7,15 +7,16 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
 import org.junit.Before;
@@ -32,7 +33,7 @@ public class TestConnectedSubmodelElementCollection {
 	private static final String PROP = "prop";
 	private static final String OPERATION = "sum";
 
-	ISubmodelElementCollection prop;
+	ConnectedSubmodelElementCollection prop;
 
 	@Before 
 	public void build() {
@@ -48,17 +49,22 @@ public class TestConnectedSubmodelElementCollection {
 
 		// Create ComplexDataProperty containing the created operation and property
 		SubmodelElementCollection complex = new SubmodelElementCollection();
-		complex.addElement(propertyMeta);
-		complex.addElement(operation);
+		complex.addSubModelElement(propertyMeta);
+		complex.addSubModelElement(operation);
+		complex.setIdShort("CollectionId");
+		
+		SubModel sm = new SubModel();
+		sm.setIdShort("submodelId");
+		sm.addSubModelElement(complex);
 
-		Map<String, Object> destroyType = TypeDestroyer.destroyType(complex);
+		Map<String, Object> destroyType = TypeDestroyer.destroyType(sm);
 		// Create a dummy connection manager containing the created ContainerProperty map
 		// The model is wrapped in the corresponding ModelProvider that implements the API access
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
-				new SubmodelElementProvider(new VABLambdaProvider(destroyType)));
+				new SubModelProvider(new VABLambdaProvider(destroyType)));
 
 		// Retrieve the ConnectedContainerProperty
-		prop = new ConnectedSubmodelElementCollection(manager.connectToVABElement(""));
+		prop = new ConnectedSubmodelElementCollection(manager.connectToVABElement("").getDeepProxy("/submodel/submodelElements/" + complex.getIdShort()));
 	}
 
 	/**
@@ -114,5 +120,27 @@ public class TestConnectedSubmodelElementCollection {
 		IProperty property2 = (IProperty) value.get(PROP);
 		
 		assertEquals("testProperty", property2.getValue());
+	}
+
+	@Test
+	public void testGetSubmodelElement() {
+		ISubmodelElement element = prop.getSubmodelElement(PROP);
+		assertEquals(PROP, element.getIdShort());
+	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testDeleteSubmodelElement() {
+		prop.deleteSubmodelElement(PROP);
+		prop.getSubmodelElement(PROP);
+	}
+	
+	@Test
+	public void testAddSubmodelElement() {
+		String newId = "abc";
+		Property newProp = new Property(6);
+		newProp.setIdShort(newId);
+		prop.addSubModelElement(newProp);
+		ISubmodelElement element = prop.getSubmodelElement(newId);
+		assertEquals(newId, element.getIdShort());
 	}
 }

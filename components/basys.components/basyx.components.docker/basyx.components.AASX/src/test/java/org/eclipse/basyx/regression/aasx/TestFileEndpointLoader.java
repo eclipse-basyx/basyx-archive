@@ -35,7 +35,7 @@ public class TestFileEndpointLoader {
 		col.setIdShort("fileCollection");
 		File fCol = new File(relativePath, "application/json");
 		fCol.setIdShort("fInside");
-		col.addElement(fCol);
+		col.addSubModelElement(fCol);
 		submodel = new SubModel();
 		submodel.setIdShort("FileTestSubmodel");
 		submodel.addSubModelElement(fRel);

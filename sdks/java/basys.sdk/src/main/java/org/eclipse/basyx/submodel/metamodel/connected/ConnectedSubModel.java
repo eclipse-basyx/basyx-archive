@@ -151,4 +151,26 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 	public SubModel getLocalCopy() {
 		return SubModel.createAsFacade(getElem());
 	}
+
+	/**
+	 * Get submodel element by given id
+	 * @param id
+	 * @return specific submodel element
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public ISubmodelElement getSubmodelElement(String id) {
+		Map<String, Object> node =(Map<String, Object>) getProxy().getModelPropertyValue(VABPathTools.concatenatePaths(MultiSubmodelElementProvider.ELEMENTS, id));
+		ISubmodelElement element = ConnectedSubmodelElementFactory.getConnectedSubmodelElement(getProxy(), MultiSubmodelElementProvider.ELEMENTS, id, node);
+		return element;		
+	}
+
+	/**
+	 * Delete a submodel element by given id
+	 * @param id
+	 */
+	@Override
+	public void deleteSubmodelElement(String id) {
+		getProxy().deleteValue(VABPathTools.concatenatePaths(MultiSubmodelElementProvider.ELEMENTS, id));
+	}
 }
