@@ -49,5 +49,54 @@ namespace BaSyx.Core.Tests
             string newValue = property.GetValue<string>();
             newValue.Should().BeEquivalentTo("NewTestValue");
         }
+        [TestMethod]
+        public void TestMethod31_TypeProperty_ExternalGetterSetter()
+        {
+            string _value = "StartValue_";
+            Property property = new Property("TestProperty", typeof(string))
+            {
+                Set = (prop, value) => { _value += value.Value; },
+                Get = (prop) => { return new ElementValue<string>("TestGetter_" + _value); }
+            };
+
+            property.SetValue("SuperNewValue");
+            string returnValue = property.GetValue<string>();
+
+            returnValue.Should().BeEquivalentTo("TestGetter_StartValue_SuperNewValue");
+
+            string valueProperty = (string)property.Value;
+
+            valueProperty.Should().BeEquivalentTo("TestGetter_StartValue_SuperNewValue");
+
+            property.Value = "_ResetValue";
+            string resetValueProperty = (string)property.Value;
+
+            resetValueProperty.Should().BeEquivalentTo("TestGetter_StartValue_SuperNewValue_ResetValue");
+        }
+
+        [TestMethod]
+        public void TestMethod32_GenericProperty_ExternalGetterSetter()
+        {
+            string _value = "StartValue_";
+            Property<string> property = new Property<string>("TestProperty")
+            {
+                Set = (prop, value) => { _value += value; },
+                Get = (prop) => { return "TestGetter_" + _value; }
+            };
+
+            property.SetValue("SuperNewValue");
+            string returnValue = property.GetValue<string>();
+
+            returnValue.Should().BeEquivalentTo("TestGetter_StartValue_SuperNewValue");
+
+            string valueProperty = property.Value;
+
+            valueProperty.Should().BeEquivalentTo("TestGetter_StartValue_SuperNewValue");
+
+            property.Value = "_ResetValue";
+            string resetValueProperty = property.Value;
+
+            resetValueProperty.Should().BeEquivalentTo("TestGetter_StartValue_SuperNewValue_ResetValue");
+        }
     }
 }

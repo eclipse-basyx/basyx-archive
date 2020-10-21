@@ -23,14 +23,26 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
     {
         public override ModelType ModelType => ModelType.Property;
 
-        private object _value;
+        /// <summary>
+        /// Only internal temporary storage of the current value. 
+        /// Get and Set operations shall only be processed via its respective handler.
+        /// </summary>
+        protected object _value;
+
         public virtual object Value
         {
-            get => _value;            
+            get
+            {
+                return Get.Invoke(this)?.Value;
+            }            
             set
             {
-                ValueChanged?.Invoke(this, new ValueChangedArgs(this.IdShort, value, ValueType));
-                _value = value;
+                if (value is IValue)
+                    Set.Invoke(this, value as IValue);
+                else
+                    Set.Invoke(this, new ElementValue(value, value.GetType()));
+                        
+                ValueChanged?.Invoke(this, new ValueChangedArgs(this.IdShort, value, value.GetType()));
             }
         }
 
@@ -50,10 +62,11 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
         public Property(string idShort, DataType valueType, object value) : base(idShort)
         {
             ValueType = valueType;
-            Value = value;
 
-            Get = element  => { return new ElementValue(Value, ValueType); };
-            Set = (element, val) => { Value = val.Value; };
+            _value = value;
+
+            Get = element  => { return new ElementValue(_value, ValueType); };
+            Set = (element, iValue) => { _value = iValue.Value; };
         }
 
         public T ToObject<T>()
@@ -71,50 +84,57 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
     public class Property<TInnerType> : Property, IProperty<TInnerType>
     {
         public override ModelType ModelType => ModelType.Property;
+        public override DataType ValueType => typeof(TInnerType);
 
-        [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "value")]
+        public new event EventHandler<ValueChangedArgs> ValueChanged;
+        
+        [JsonIgnore, IgnoreDataMember]
         public virtual new TInnerType Value
         {
             get
             {
-                if (base.Value != null)
-                    return (TInnerType)base.Value;
-                else
-                    return default;
+                return Get.Invoke(this);
             }
-            set => base.Value = value;
-        }
-        public override DataType ValueType => typeof(TInnerType);
+            set
+            {
+                Set.Invoke(this, value);
 
-        [IgnoreDataMember]
-        public new GetValueHandler<TInnerType> Get
-        {
-            get
-            {
-                if (base.Get != null)
-                    return new GetValueHandler<TInnerType>(element => { return base.Get.Invoke(element).ToObject<TInnerType>(); });
-                else
-                    return null;
+                ValueChanged?.Invoke(this, new ValueChangedArgs(this.IdShort, value, value.GetType()));
             }
-            set => base.Get = new GetValueHandler(de => new ElementValue<TInnerType>(value.Invoke(de)));
-        }
-        [IgnoreDataMember]
-        public new SetValueHandler<TInnerType> Set
-        {
-            get
-            {
-                if (base.Set != null)
-                    return new SetValueHandler<TInnerType>((element, val) => { base.Set.Invoke(element, new ElementValue<TInnerType>(val)); });
-                else
-                    return null;
-            }
-            set => base.Set = new SetValueHandler((element, val) => value.Invoke(element, val.ToObject<TInnerType>()));
         }
 
-        public Property(string idShort) : base(idShort, typeof(TInnerType)) { }
+        private GetValueHandler<TInnerType> _get;
+        private SetValueHandler<TInnerType> _set;
+
+        [JsonIgnore, IgnoreDataMember]
+        public new GetValueHandler<TInnerType> Get 
+        {
+            get => _get;
+            set
+            {
+                _get = value;
+                base.Get = new GetValueHandler(element => new ElementValue<TInnerType>(_get.Invoke(element)));
+            }
+        }
+        [JsonIgnore, IgnoreDataMember]
+        public new SetValueHandler<TInnerType> Set 
+        {
+            get => _set;
+            set
+            {
+                _set = value;
+                base.Set = new SetValueHandler((element, iValue) => _set.Invoke(element, iValue.ToObject<TInnerType>()));
+            }
+        }
+
+        public Property(string idShort) : this(idShort, default) { }
 
         [JsonConstructor]
-        public Property(string idShort, TInnerType value) : base(idShort, typeof(TInnerType), value) { }
+        public Property(string idShort, TInnerType value) : base(idShort, typeof(TInnerType), value) 
+        {
+            _get = element => { return base.Get.Invoke(element).ToObject<TInnerType>(); };
+            _set = (element, iValue) => { base.Set.Invoke(element, new ElementValue<TInnerType>(iValue)); };
+        }
 
     }
 }

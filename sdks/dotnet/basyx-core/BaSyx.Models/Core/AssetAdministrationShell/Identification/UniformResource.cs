@@ -58,6 +58,10 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
                 uri = uri.Substring(0, uri.Length - 2);
                 uri += "#" + instanceNumber;
             }
+
+            if (uri.EndsWith("/"))
+                uri = uri.Remove(uri.Length - 1);
+
             return uri;
         }
         public static string ToUrn(string organisation, string subUnit, string domainId, string version, string revision, string elementId, string instanceNumber)
@@ -82,6 +86,10 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
                 urn = urn.Substring(0, urn.Length - 2);
                 urn += "#" + instanceNumber;
             }
+
+            if (urn.EndsWith(":"))
+                urn = urn.Remove(urn.Length - 1);
+
             return urn;
         }
 
