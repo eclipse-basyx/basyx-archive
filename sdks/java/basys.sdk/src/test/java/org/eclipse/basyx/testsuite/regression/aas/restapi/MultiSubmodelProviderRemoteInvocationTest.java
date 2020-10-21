@@ -126,7 +126,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 		String testPropIdShort = "testProperty";
 		p.setIdShort(testPropIdShort);
 
-		provider.setModelPropertyValue(REMOTEPATH + "/submodelElements", p);
+		provider.setModelPropertyValue(REMOTEPATH + "/submodelElements/" + testPropIdShort, p);
 
 		assertTrue(getRemoteSubmodel().getProperties().containsKey(testPropIdShort));
 	}

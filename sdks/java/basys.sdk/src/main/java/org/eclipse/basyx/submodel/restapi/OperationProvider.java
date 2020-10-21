@@ -27,29 +27,29 @@ public class OperationProvider extends MetaModelProvider {
 		if (path.isEmpty()) {
 			return modelProvider.getModelPropertyValue("");
 		} else {
-			throw new MalformedRequestException("Invalid access path");
+			throw new MalformedRequestException("Get of an Operation only supports an empty path");
 		}
 	}
 
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
-		throw new MalformedRequestException("Invalid access path");
+		throw new MalformedRequestException("Set not allowed at path '" + path + "'");
 	}
 
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
-		throw new MalformedRequestException("Invalid access path");
+		throw new MalformedRequestException("Create not allowed at path '" + path + "'");
 	}
 
 	@Override
 	public void deleteValue(String path) throws ProviderException {
 		// Deletion of operation is handled by parent provider
-		throw new MalformedRequestException("Invalid access path");
+		throw new MalformedRequestException("Delete not allowed at path '" + path + "'");
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws ProviderException {
-		throw new MalformedRequestException("Invalid access path");
+		throw new MalformedRequestException("Delete not allowed at path '" + path + "'");
 	}
 
 	@Override

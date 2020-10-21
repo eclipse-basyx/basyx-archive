@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedFile;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
-import org.eclipse.basyx.submodel.restapi.PropertyProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
@@ -29,7 +29,7 @@ public class TestConnectedFile {
 		file.setMimeType("mimeType");
 		
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
-				new PropertyProvider(new TypeDestroyingProvider(new VABLambdaProvider(file))));
+				new SubmodelElementProvider(new TypeDestroyingProvider(new VABLambdaProvider(file))));
 
 		connectedFile = new ConnectedFile(manager.connectToVABElement(""));
 	}
@@ -48,6 +48,14 @@ public class TestConnectedFile {
 	@Test
 	public void testGetMimeType() {
 		assertEquals(file.getMimeType(), connectedFile.getMimeType());
+	}
+	
+	@Test
+	public void testSetValue() {
+		String value = connectedFile.getValue();
+		value += "TEST";
+		connectedFile.setValue(value);
+		assertEquals(value, connectedFile.getValue());
 	}
 	
 }

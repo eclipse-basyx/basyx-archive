@@ -102,20 +102,20 @@ public class SubModelProvider extends MetaModelProvider {
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
 			// Request for submodelElements
-			if (splitted.length == 1 && splitted[0].equals(SubmodelElementProvider.ELEMENTS)) {
+			if (splitted.length == 1 && splitted[0].equals(MultiSubmodelElementProvider.ELEMENTS)) {
 				return submodelAPI.getElements();
 			} else if (splitted.length >= 2 && isQualifier(splitted[0])) { // Request for element with specific idShort
 				String idShort = splitted[1];
 				if (splitted.length == 2) {
 					return submodelAPI.getSubmodelElement(idShort);
 				} else if (isPropertyValuePath(splitted)) { // Request for the value of an property
-					return submodelAPI.getPropertyValue(idShort);
+					return submodelAPI.getSubmodelElementValue(idShort);
 				} else if (isSubmodelElementListPath(splitted)) {
 					// Create list from array and wrap it in ArrayList to ensure modifiability
 					List<String> idShorts = getIdShorts(splitted);
 					
 					if (endsWithValue(splitted)) {
-						return submodelAPI.getNestedPropertyValue(idShorts);
+						return submodelAPI.getNestedSubmodelElementValue(idShorts);
 					} else {
 						return submodelAPI.getNestedSubmodelElement(idShorts);
 					}
@@ -140,7 +140,7 @@ public class SubModelProvider extends MetaModelProvider {
 	}
 
 	private boolean isPropertyValuePath(String[] splitted) {
-		return splitted.length == 3 && splitted[0].equals(SubmodelElementProvider.ELEMENTS) && endsWithValue(splitted);
+		return splitted.length == 3 && splitted[0].equals(MultiSubmodelElementProvider.ELEMENTS) && endsWithValue(splitted);
 	}
 
 	private boolean endsWithValue(String[] splitted) {
@@ -148,7 +148,7 @@ public class SubModelProvider extends MetaModelProvider {
 	}
 
 	private boolean isSubmodelElementListPath(String[] splitted) {
-		return splitted.length > 2 && splitted[0].equals(SubmodelElementProvider.ELEMENTS);
+		return splitted.length > 2 && splitted[0].equals(MultiSubmodelElementProvider.ELEMENTS);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -160,16 +160,24 @@ public class SubModelProvider extends MetaModelProvider {
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
 			if (endsWithValue(splitted)) {
-				submodelAPI.updateNestedProperty(getIdShorts(splitted), newValue);
+				submodelAPI.updateNestedSubmodelElement(getIdShorts(splitted), newValue);
 			} else {
-				submodelAPI.addSubmodelElement(SubmodelElement.createAsFacade((Map<String, Object>) newValue));
+				
+				SubmodelElement element = SubmodelElement.createAsFacade((Map<String, Object>) newValue);
+				
+				if(!path.endsWith(element.getIdShort())) {
+					throw new MalformedRequestException("The idShort of given Element '"
+							+ element.getIdShort() + "' does not match the ending of the given path '" + path + "'");
+				}
+				
+				submodelAPI.addSubmodelElement(getIdShorts(splitted), element);
 			}
 		}
 	}
 
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
-		throw new MalformedRequestException("Invalid access");
+		throw new MalformedRequestException("POST (create) on '" + path + "' not allowed. Use PUT (set) instead.");
 	}
 
 	@Override
@@ -188,7 +196,7 @@ public class SubModelProvider extends MetaModelProvider {
 	}
 
 	private boolean isQualifier(String str) {
-		return str.equals(SubmodelElementProvider.ELEMENTS);
+		return str.equals(MultiSubmodelElementProvider.ELEMENTS);
 	}
 
 	@Override
@@ -200,13 +208,13 @@ public class SubModelProvider extends MetaModelProvider {
 	public Object invokeOperation(String path, Object... parameters) throws ProviderException {
 		path = removeSubmodelPrefix(path);
 		if (path.isEmpty()) {
-			throw new MalformedRequestException("Invalid access");
+			throw new MalformedRequestException("Given path must not be empty");
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
 			if (VABPathTools.isOperationInvokationPath(path)) {
 				return submodelAPI.invokeNestedOperation(getIdShorts(splitted), parameters);
 			} else {
-				throw new MalformedRequestException("Unknown path " + path);
+				throw new MalformedRequestException("Given path '" + path + "' does not end in /invoke");
 			}
 		}
 	}

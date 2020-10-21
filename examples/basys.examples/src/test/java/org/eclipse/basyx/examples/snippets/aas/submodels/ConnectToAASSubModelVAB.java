@@ -17,7 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -131,17 +131,17 @@ public class ConnectToAASSubModelVAB {
 		Map<String, Object> smId = (Map<String, Object>) submodel.get(Identifiable.IDENTIFICATION);
 
 		// - Read properties
-		Map<String, Object> prop1 = (Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop1");
-		Map<String, Object> prop2 = (Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop2");
+		Map<String, Object> prop1 = (Map<String, Object>) connSubModel1.getModelPropertyValue(MultiSubmodelElementProvider.ELEMENTS + "/prop1");
+		Map<String, Object> prop2 = (Map<String, Object>) connSubModel1.getModelPropertyValue(MultiSubmodelElementProvider.ELEMENTS + "/prop2");
 		Map<String, Object> prop11 = (Map<String, Object>) connSubModel1.getModelPropertyValue("submodelElements/prop2/prop11");
-		Map<String, Object> prop3 = (Map<String, Object>) connSubModel1.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop3");
+		Map<String, Object> prop3 = (Map<String, Object>) connSubModel1.getModelPropertyValue(MultiSubmodelElementProvider.ELEMENTS + "/prop3");
 
 		// - Change property value using VAB primitive
-		connSubModel1.setModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop1/value", 456);
+		connSubModel1.setModelPropertyValue(MultiSubmodelElementProvider.ELEMENTS + "/prop1/value", 456);
 
 		// - Read value back using VAB primitive
 		Map<String, Object> changedProp1 = (Map<String, Object>) connSubModel1
-				.getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/prop1");
+				.getModelPropertyValue(MultiSubmodelElementProvider.ELEMENTS + "/prop1");
 
 		// - Check results
 		assertEquals("sm-001", smId.get(Identifier.ID));

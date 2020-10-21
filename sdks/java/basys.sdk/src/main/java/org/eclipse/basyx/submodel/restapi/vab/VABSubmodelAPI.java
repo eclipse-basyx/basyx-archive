@@ -8,12 +8,11 @@ import java.util.stream.Collectors;
 
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -49,9 +48,9 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	 * @return returns the SubmodelElementProvider pointing to the contained
 	 *         submodelelements
 	 */
-	private SubmodelElementProvider getElementProvider() {
+	private MultiSubmodelElementProvider getElementProvider() {
 		IModelProvider elementProxy = new VABElementProxy(SubModel.SUBMODELELEMENT, modelProvider);
-		return new SubmodelElementProvider(elementProxy);
+		return new MultiSubmodelElementProvider(elementProxy);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -69,18 +68,23 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ISubmodelElement> getElements() {
-		Collection<Map<String, Object>> operations = (Collection<Map<String, Object>>) getElementProvider().getModelPropertyValue(SubmodelElementProvider.ELEMENTS);
+		Collection<Map<String, Object>> operations = (Collection<Map<String, Object>>) getElementProvider().getModelPropertyValue(MultiSubmodelElementProvider.ELEMENTS);
 		return operations.stream().map(e -> SubmodelElement.createAsFacade(e)).collect(Collectors.toList());
 	}
 
 	@Override
 	public void addSubmodelElement(ISubmodelElement elem) {
-		getElementProvider().createValue(SubmodelElementProvider.ELEMENTS + "/" + elem.getIdShort(), elem);
+		getElementProvider().createValue(MultiSubmodelElementProvider.ELEMENTS, elem);
+	}
+
+	@Override
+	public void addSubmodelElement(List<String> idShorts, ISubmodelElement elem) {
+		getElementProvider().createValue(buildNestedElementPath(idShorts), elem);
 	}
 
 	@Override
 	public void deleteSubmodelElement(String idShort) {
-		getElementProvider().deleteValue(SubmodelElementProvider.ELEMENTS + "/" + idShort);
+		getElementProvider().deleteValue(MultiSubmodelElementProvider.ELEMENTS + "/" + idShort);
 	}
 
 	@Override
@@ -94,34 +98,34 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	}
 
 	@Override
-	public Collection<IProperty> getProperties() {
-		return getElements().stream().filter(e -> e instanceof IProperty).map(e -> (IProperty) e).collect(Collectors.toList());
+	public Collection<ISubmodelElement> getSubmodelElements() {
+		return getElements().stream().filter(e -> e instanceof ISubmodelElement).map(e -> (ISubmodelElement) e).collect(Collectors.toList());
 	}
 
 	@Override
-	public void updateProperty(String idShort, Object newValue) {
+	public void updateSubmodelElement(String idShort, Object newValue) {
 		getElementProvider().setModelPropertyValue(buildValuePathForProperty(idShort), newValue);
 	}
 
 	@Override
-	public void updateNestedProperty(List<String> idShorts, Object newValue) {
+	public void updateNestedSubmodelElement(List<String> idShorts, Object newValue) {
 		getElementProvider().setModelPropertyValue(buildNestedElementPath(idShorts) + "/" + Property.VALUE, newValue);
 	}
 
 	@Override
-	public Object getPropertyValue(String idShort) {
+	public Object getSubmodelElementValue(String idShort) {
 		return getElementProvider().getModelPropertyValue(buildValuePathForProperty(idShort));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public ISubmodelElement getSubmodelElement(String idShort) {
-		return SubmodelElement.createAsFacade((Map<String, Object>) getElementProvider().getModelPropertyValue(SubmodelElementProvider.ELEMENTS + "/" + idShort));
+		return SubmodelElement.createAsFacade((Map<String, Object>) getElementProvider().getModelPropertyValue(MultiSubmodelElementProvider.ELEMENTS + "/" + idShort));
 	}
 
 	@Override
 	public Object invokeOperation(String idShort, Object... params) {
-		return getElementProvider().invokeOperation(SubmodelElementProvider.ELEMENTS + "/" + idShort, params);
+		return getElementProvider().invokeOperation(MultiSubmodelElementProvider.ELEMENTS + "/" + idShort, params);
 	}
 	
 	@Override
@@ -130,11 +134,11 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	}
 
 	private String buildValuePathForProperty(String idShort) {
-		return SubmodelElementProvider.ELEMENTS + "/" + idShort + "/" + Property.VALUE;
+		return MultiSubmodelElementProvider.ELEMENTS + "/" + idShort + "/" + Property.VALUE;
 	}
 
 	@Override
-	public Object getNestedPropertyValue(List<String> idShorts) {
+	public Object getNestedSubmodelElementValue(List<String> idShorts) {
 		return getElementProvider().getModelPropertyValue(buildNestedElementPath(idShorts) + "/" + Property.VALUE);
 	}
 
@@ -150,6 +154,7 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	 * @return
 	 */
 	private String buildNestedElementPath(List<String> idShorts) {
-		return SubmodelElementProvider.ELEMENTS + "/" + VABPathTools.concatenatePaths(idShorts.toArray(new String[1]));
+		return MultiSubmodelElementProvider.ELEMENTS + "/" + VABPathTools.concatenatePaths(idShorts.toArray(new String[0]));
 	}
+
 }

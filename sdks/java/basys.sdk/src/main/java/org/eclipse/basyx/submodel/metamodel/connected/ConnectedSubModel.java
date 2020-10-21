@@ -24,8 +24,9 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 
 
 /**
@@ -105,25 +106,27 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 			((SubmodelElement) element).setParent(getReference());
 		}
 		
-		getProxy().setModelPropertyValue(SubmodelElementProvider.ELEMENTS, element);
+		String path = VABPathTools.concatenatePaths(MultiSubmodelElementProvider.ELEMENTS, element.getIdShort());
+		
+		getProxy().setModelPropertyValue(path, element);
 	}
 
 	@Override
 	public Map<String, IProperty> getProperties() {
-		return ConnectedSubmodelElementFactory.getProperties(getProxy(), SubmodelElementProvider.ELEMENTS,
-						SubmodelElementProvider.ELEMENTS);
+		return ConnectedSubmodelElementFactory.getProperties(getProxy(), MultiSubmodelElementProvider.ELEMENTS,
+						MultiSubmodelElementProvider.ELEMENTS);
 	}
 
 	@Override
 	public Map<String, IOperation> getOperations() {
-		return ConnectedSubmodelElementFactory.getOperations(getProxy(), SubmodelElementProvider.ELEMENTS,
-				SubmodelElementProvider.ELEMENTS);
+		return ConnectedSubmodelElementFactory.getOperations(getProxy(), MultiSubmodelElementProvider.ELEMENTS,
+				MultiSubmodelElementProvider.ELEMENTS);
 	}
 
 	@Override
 	public Map<String, ISubmodelElement> getSubmodelElements() {
 		return ConnectedSubmodelElementFactory.getConnectedSubmodelElements(getProxy(),
-				SubmodelElementProvider.ELEMENTS, SubmodelElementProvider.ELEMENTS);
+				MultiSubmodelElementProvider.ELEMENTS, MultiSubmodelElementProvider.ELEMENTS);
 	}
 
 	@Override

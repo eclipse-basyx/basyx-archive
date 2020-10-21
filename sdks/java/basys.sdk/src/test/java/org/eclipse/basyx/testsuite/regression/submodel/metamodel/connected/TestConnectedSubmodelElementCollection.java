@@ -2,8 +2,11 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.connected;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
@@ -11,7 +14,7 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedS
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementCollectionProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
@@ -52,7 +55,7 @@ public class TestConnectedSubmodelElementCollection {
 		// Create a dummy connection manager containing the created ContainerProperty map
 		// The model is wrapped in the corresponding ModelProvider that implements the API access
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
-				new SubmodelElementCollectionProvider(new VABLambdaProvider(destroyType)));
+				new SubmodelElementProvider(new VABLambdaProvider(destroyType)));
 
 		// Retrieve the ConnectedContainerProperty
 		prop = new ConnectedSubmodelElementCollection(manager.connectToVABElement(""));
@@ -94,5 +97,22 @@ public class TestConnectedSubmodelElementCollection {
 
 		// Check operation invocation
 		assertEquals(5, sum.invoke(2, 3));
+	}
+	
+	@Test
+	public void testSetValue() {
+		Property property = new Property("testProperty");
+		property.setIdShort(PROP);
+		
+		
+		Collection<ISubmodelElement> newValue = new ArrayList<>();
+		newValue.add(property);
+		
+		prop.setValue(newValue);
+		
+		Map<String, ISubmodelElement> value = prop.getSubmodelElements();
+		IProperty property2 = (IProperty) value.get(PROP);
+		
+		assertEquals("testProperty", property2.getValue());
 	}
 }

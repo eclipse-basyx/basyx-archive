@@ -32,7 +32,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
@@ -159,7 +159,7 @@ public class TestConnectedSubmodelElementFactory {
 	public void testGetProperties() {
 		Map<String, IProperty> properties =
 				ConnectedSubmodelElementFactory.getProperties(
-						proxy, SubmodelElementProvider.ELEMENTS, SubmodelElementProvider.ELEMENTS);
+						proxy, MultiSubmodelElementProvider.ELEMENTS, MultiSubmodelElementProvider.ELEMENTS);
 		
 		assertEquals(1, properties.size());
 		assertTrue(properties.get(PROPERTY_ID) instanceof ConnectedProperty);
@@ -172,7 +172,7 @@ public class TestConnectedSubmodelElementFactory {
 	public void testGetOperations() {
 		Map<String, IOperation> operations =
 				ConnectedSubmodelElementFactory.getOperations(
-						proxy, SubmodelElementProvider.ELEMENTS, SubmodelElementProvider.ELEMENTS);
+						proxy, MultiSubmodelElementProvider.ELEMENTS, MultiSubmodelElementProvider.ELEMENTS);
 		
 		assertEquals(1, operations.size());
 		assertTrue(operations.get(OPERATION_ID) instanceof ConnectedOperation);

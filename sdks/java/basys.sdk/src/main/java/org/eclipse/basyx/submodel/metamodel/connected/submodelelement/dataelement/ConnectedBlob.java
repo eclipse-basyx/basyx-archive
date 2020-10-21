@@ -21,7 +21,7 @@ public class ConnectedBlob extends ConnectedDataElement implements IBlob {
 	public byte[] getValue() {
 		
 		// FIXME: This is a hack, fix this when API is clear
-		return ((String) getProxy().getModelPropertyValue(Property.VALUE)).getBytes();
+		return (byte[]) getProxy().getModelPropertyValue(Property.VALUE);
 	}
 
 	@Override

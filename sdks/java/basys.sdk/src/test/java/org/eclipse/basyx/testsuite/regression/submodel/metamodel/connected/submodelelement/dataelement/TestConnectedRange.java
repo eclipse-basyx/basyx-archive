@@ -6,7 +6,7 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelemen
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.RangeValue;
-import org.eclipse.basyx.submodel.restapi.PropertyProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
@@ -29,7 +29,7 @@ public class TestConnectedRange {
 		range = new Range(PropertyValueTypeDef.Integer, new Integer(1), new Integer(10));
 		
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
-				new PropertyProvider(new TypeDestroyingProvider(new VABLambdaProvider(range))));
+				new SubmodelElementProvider(new TypeDestroyingProvider(new VABLambdaProvider(range))));
 
 		connectedRange = new ConnectedRange(manager.connectToVABElement(""));
 	}

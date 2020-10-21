@@ -14,7 +14,7 @@ import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirecto
 import org.eclipse.basyx.models.controlcomponent.ExecutionState;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -88,9 +88,9 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		super.onServiceInvocation();
 		// Implement the device invocation counter - read and increment invocation counter
 		Map<String, Object> property = (Map<String, Object>) aasServerConnection
-				.getModelPropertyValue(aasPath + "/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/invocations");
+				.getModelPropertyValue(aasPath + "/submodels/Status/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations");
 		int invocations = (int) property.get("value");
-		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
+		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
 	}
 
 	
@@ -103,7 +103,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		super.onChangedExecutionState(newExecutionState);
 		
 		// Update property "properties/status" in external AAS
-		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/" + SubmodelElementProvider.ELEMENTS + "/status/value",
+		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/" + MultiSubmodelElementProvider.ELEMENTS + "/status/value",
 				newExecutionState.getValue());
 	}
 

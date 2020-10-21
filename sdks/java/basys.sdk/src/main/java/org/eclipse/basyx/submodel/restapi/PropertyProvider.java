@@ -51,28 +51,28 @@ public class PropertyProvider extends MetaModelProvider {
 			proxy.setModelPropertyValue(Property.VALUE, newValue);
 			proxy.setModelPropertyValue(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(newValue));
 		} else {
-			throw new MalformedRequestException("Invalid access path");
+			throw new MalformedRequestException("Given Set path '" + path + "' does not end in /value");
 		}
 	}
 
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
-		throw new MalformedRequestException("Invalid access path");
+		throw new MalformedRequestException("Create not allowed at path '" + path + "'");
 	}
 
 	@Override
 	public void deleteValue(String path) throws ProviderException {
-		throw new MalformedRequestException("Invalid access path");
+		throw new MalformedRequestException("Delete not allowed at path '" + path + "'");
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws ProviderException {
-		throw new MalformedRequestException("Invalid access path");
+		throw new MalformedRequestException("Delete not allowed at path '" + path + "'");
 	}
 
 	@Override
 	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
-		throw new MalformedRequestException("Invalid access path");
+		throw new MalformedRequestException("Invoke not allowed at path '" + path + "'");
 	}
 
 }

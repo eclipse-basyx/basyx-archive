@@ -15,7 +15,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.junit.Test;
@@ -71,7 +71,7 @@ public class TestAASAggregatorProvider extends AASAggregatorSuite {
 		assertEquals(sm.getIdShort(), retrievedSm.getIdShort());
 
 		// Test feedthrough of SET
-		String propValuePath = VABPathTools.concatenatePaths(smPath, SubmodelElementProvider.ELEMENTS, prop.getIdShort(), "value");
+		String propValuePath = VABPathTools.concatenatePaths(smPath, MultiSubmodelElementProvider.ELEMENTS, prop.getIdShort(), "value");
 		int expectedPropValue = 20;
 		provider.setModelPropertyValue(propValuePath, expectedPropValue);
 
