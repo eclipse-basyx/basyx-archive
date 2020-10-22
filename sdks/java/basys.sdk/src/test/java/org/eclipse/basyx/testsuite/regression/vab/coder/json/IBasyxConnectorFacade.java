@@ -1,8 +1,6 @@
 package org.eclipse.basyx.testsuite.regression.vab.coder.json;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
@@ -10,8 +8,6 @@ import org.eclipse.basyx.vab.coder.json.provider.JSONProvider;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class is required for Meta-protocol integration testing. It makes
@@ -23,8 +19,6 @@ import org.slf4j.LoggerFactory;
  *            should be VABMapProvider or stub
  */
 public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxConnector {
-	
-	private static Logger logger = LoggerFactory.getLogger(IBasyxConnectorFacade.class);
 	
 	JSONProvider<T> provider;
 	

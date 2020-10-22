@@ -23,7 +23,7 @@ public class MapInvoke {
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 	
 		// Invoke complex function
-		Object complex = connVABElement.invokeOperation("operations/complex/" + Operation.INVOKE, 12, 34);
+		Object complex = connVABElement.invokeOperation("operations/complex/", 12, 34);
 		assertEquals(46, complex);
 	
 		// Invoke unsupported functional interface

@@ -170,9 +170,9 @@ public class VABPathToolsTest {
 	@Test
 	public void testIsOperationPath() {
 		String[] positive = { "submodelElements/id/invoke", "submodelElements/id/invoke/",
-				"operations/id/invoke", "operations/id/invoke/"};
+				"operations/id/invoke", "operations/id/invoke/", "operations/test", "elem/operations/id" };
 		String[] negative = { "", "/submodelElementsX/", "/myoperations/", "/submodelElementsFake/",
-				"/submodelElementsFake/operationX/",  "submodelElements/id/", "operations/id"};
+				"/submodelElementsFake/operationX/", "submodelElements/id/" };
 		for (String test : positive) {
 			assertTrue(test, VABPathTools.isOperationInvokationPath(test));
 		}

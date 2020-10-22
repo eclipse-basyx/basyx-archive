@@ -246,8 +246,13 @@ public class VABPathTools {
 			return false;
 		}
 
-		// Check if last path element is "invoke" and the one two before is "submodelElements"
-		return pathElements[pathElements.length - 1].equals(Operation.INVOKE);
+		// Check if last path element is "invoke" or "operations" is contained anywhere
+		return pathElements[pathElements.length - 1].equals(Operation.INVOKE) || isOperationPath(path);
+	}
+
+	private static boolean isOperationPath(String path) {
+		String lowerCasePath = path.toLowerCase();
+		return lowerCasePath.startsWith("operations/") || path.toLowerCase().contains("/operations/");
 	}
 
 	/**
