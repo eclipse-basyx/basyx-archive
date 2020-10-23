@@ -20,6 +20,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.TestsuiteDirectory;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -231,6 +232,13 @@ public class SubModelProviderTest {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
 		Map<String, Object> operation = (Map<String, Object>) submodel.getModelPropertyValue("/submodel/submodelElements/simple");
 		assertEquals("simple", operation.get(Identifiable.IDSHORT));
+		
+		try {
+			submodel.getModelPropertyValue("/submodel/submodelElements/simple/value");
+			fail();
+		} catch (MalformedRequestException e) {
+			// An Operation has no value
+		}
 	}
 
 	/**

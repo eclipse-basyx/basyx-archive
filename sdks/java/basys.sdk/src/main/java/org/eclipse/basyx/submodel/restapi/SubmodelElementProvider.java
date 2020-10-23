@@ -65,7 +65,12 @@ public class SubmodelElementProvider extends MetaModelProvider {
 			
 			ISubmodelElement element = SubmodelElementFacadeFactory.createSubmodelElement(elementMap);
 			
-			return element.getValue();
+			try {
+				return element.getValue();
+			} catch (UnsupportedOperationException e) {
+				// e.g. an Operation
+				throw new MalformedRequestException("The requested Element '" + element.getIdShort() + "' has no value.");
+			}
 		} else {
 			// Path has more Elements -> pass it to Provider below
 			return proxy.getModelPropertyValue(path);
