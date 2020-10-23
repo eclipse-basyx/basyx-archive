@@ -5,6 +5,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.Serializable;
+import java.math.BigInteger;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,6 +35,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
@@ -264,8 +270,35 @@ public class TestConnectedSubModel {
 		Property property = new Property();
 		property.setIdShort(PROPERTY_ID);
 		property.set("test2");
-		
 		ret.put(property.getIdShort(), property);
+		
+		Property byteProp = new Property();
+		byteProp.setIdShort("byte_prop01");
+		Byte byteNumber = new Byte("2");
+		byteProp.set(byteNumber);
+		ret.put(byteProp.getIdShort(), byteProp);
+		
+		Property durationProp = new Property();
+		durationProp.setIdShort("duration_prop01");
+		Duration duration = Duration.ofSeconds(10);
+		durationProp.set(duration);
+		ret.put(durationProp.getIdShort(), durationProp);
+
+		Property periodProp = new Property();
+		periodProp.setIdShort("period_prop01");
+		LocalDate today = LocalDate.now();
+		LocalDate birthday = LocalDate.of(1960, Month.JANUARY, 1);
+		Period p = Period.between(birthday, today);
+		periodProp.set(p);
+		ret.put(periodProp.getIdShort(), periodProp);
+		
+		Property bigNumberProp = new Property();
+		bigNumberProp.setIdShort("bignumber_prop01");
+		BigInteger bignumber = new BigInteger("9223372036854775817");
+		property.set(bignumber);
+		ret.put(bigNumberProp.getIdShort(), bigNumberProp);
+		
+		
 		return ret;
 	}
 	
@@ -317,10 +350,18 @@ public class TestConnectedSubModel {
 		
 		Map<String, IProperty> expected = getTestDataProperty();
 		
-		IProperty expectedProperty = expected.get(PROPERTY_ID);
-		IProperty acutalProperty = (IProperty) actual.get(PROPERTY_ID);
-		assertNotNull(acutalProperty);
-		assertEquals(expectedProperty.getValue(), acutalProperty.getValue());
+		// Check value and type of each property in the submodel
+		expected.forEach((id, prop)->{
+			IProperty expectedProperty = expected.get(PROPERTY_ID);
+			IProperty acutalProperty = (IProperty) actual.get(PROPERTY_ID);
+			assertNotNull(acutalProperty);
+			try {
+				assertEquals(expectedProperty.getValue(), acutalProperty.getValue());
+				assertEquals(expectedProperty.getValueType(), acutalProperty.getValueType());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	/**

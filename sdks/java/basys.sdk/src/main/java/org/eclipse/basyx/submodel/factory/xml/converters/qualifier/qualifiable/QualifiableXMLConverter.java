@@ -17,6 +17,8 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Formula;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -126,7 +128,7 @@ public class QualifiableXMLConverter {
 		qualifier.setType(type);
 		qualifier.setValue(value);
 		qualifier.setValueId(ref);
-		qualifier.setValueType(valueType);
+		qualifier.setValueType(PropertyValueTypeDefHelper.fromName(valueType));
 		
 		return qualifier;
 	}
@@ -209,7 +211,7 @@ public class QualifiableXMLConverter {
 		IReference qualId = qualifier.getValueId();
 		String type = XMLHelper.getString(qualifier.getType());
 		String value = XMLHelper.getString(qualifier.getValue());
-		String valueType = XMLHelper.getString(qualifier.getValueType());
+		String valueType = qualifier.getValueType().toString();
 		Element qualifierRoot = document.createElement(QUALIFIER);
 		
 		Element qualifierValueId = document.createElement(VALUE_ID);

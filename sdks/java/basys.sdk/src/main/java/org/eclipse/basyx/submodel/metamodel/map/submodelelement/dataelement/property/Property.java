@@ -126,8 +126,11 @@ public class Property extends DataElement implements IProperty {
 
 	@Override
 	public void set(Object value) {
-		put(Property.VALUE, value);
-		put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(value));
+		put(Property.VALUE, PropertyValueTypeDefHelper.prepareForSerialization(value));
+		// Value type is only set if it is not set before
+		if(getValueType() == null) {
+			put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(value));
+		}
 	}
 
 	/**
@@ -142,7 +145,12 @@ public class Property extends DataElement implements IProperty {
 
 	@Override
 	public Object get() {
-		return get(Property.VALUE);
+		Object value = get(Property.VALUE);
+		if(value instanceof String) {
+			return PropertyValueTypeDefHelper.getJavaObject(value, getValueType());
+		}else {
+			return value;
+		}
 	}
 
 	@Override

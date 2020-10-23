@@ -6,7 +6,6 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IRange;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.DataElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 
@@ -75,22 +74,32 @@ public class Range extends DataElement implements IRange {
 	}
 
 	private void setValueType(PropertyValueTypeDef valueType) {
-		put(Property.VALUETYPE, PropertyValueTypeDefHelper.getWrapper(valueType));
+		put(Range.VALUETYPE, PropertyValueTypeDefHelper.getWrapper(valueType));
 	}
 
 	@Override
 	public PropertyValueTypeDef getValueType() {
-		return PropertyValueTypeDefHelper.readTypeDef(get(Property.VALUETYPE));
+		return PropertyValueTypeDefHelper.readTypeDef(get(Range.VALUETYPE));
 	}
 
 	@Override
 	public Object getMin() {
-		return get(MIN);
+		Object value = get(MIN);
+		if(value instanceof String) {
+			return PropertyValueTypeDefHelper.getJavaObject(value, getValueType());
+		}else {
+			return value;
+		}
 	}
 
 	@Override
 	public Object getMax() {
-		return get(MAX);
+		Object value = get(MAX);
+		if(value instanceof String) {
+			return PropertyValueTypeDefHelper.getJavaObject(value, getValueType());
+		}else {
+			return value;
+		}
 	}
 	
 	@Override
@@ -108,8 +117,14 @@ public class Range extends DataElement implements IRange {
 	public void setValue(Object value) {
 		if(RangeValue.isRangeValue(value)) {
 			RangeValue rv = RangeValue.createAsFacade((Map<String, Object>) value);
-			put(Range.MIN, rv.getMin());
-			put(Range.MAX, rv.getMax());
+			Object minValue = rv.getMin();
+			Object maxValue = rv.getMax();
+			
+			put(Range.MIN, PropertyValueTypeDefHelper.prepareForSerialization(minValue));
+			put(Range.MAX, PropertyValueTypeDefHelper.prepareForSerialization(maxValue));
+			if(getValueType() == null) { 
+				setValueType(PropertyValueTypeDefHelper.getType(minValue));
+			}
 		} else {
 			throw new IllegalArgumentException("Given Object is not a RangeValue");
 		}

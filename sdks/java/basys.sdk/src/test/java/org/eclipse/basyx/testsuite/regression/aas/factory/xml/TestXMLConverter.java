@@ -342,7 +342,7 @@ public class TestXMLConverter {
 		List<IKey> keys = property.getValueId().getKeys();
 		assertEquals(1, keys.size());
 		assertEquals("0173-1#05-AAA650#002", keys.get(0).getValue());
-		assertEquals("2000", property.get());
+		assertEquals(2000.0, property.get());
 		assertEquals(PropertyValueTypeDef.Double, property.getValueType());
 		assertEquals("rotationSpeed", property.getIdShort());
 		

@@ -27,12 +27,12 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 
 	@Override
 	public Object get() throws Exception {
-		return retrieveObject();
+		return getValue();
 	}
 
 	@Override
 	public void set(Object newValue) throws ProviderException {
-		getProxy().setModelPropertyValue(Property.VALUE, newValue);
+		getProxy().setModelPropertyValue(Property.VALUE, PropertyValueTypeDefHelper.prepareForSerialization(newValue));
 	}
 
 	@Override
@@ -58,7 +58,17 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 
 	@Override
 	public Object getValue() {
-		return retrieveObject();
+		Object value =  retrieveObject();
+		if(value instanceof String) {
+			return PropertyValueTypeDefHelper.getJavaObject(value, getValueType());
+		}else {
+			return value;
+		}
+	}
+	
+	@Override
+	public void setValue(Object value) {
+		this.set(value);
 	}
 
 }

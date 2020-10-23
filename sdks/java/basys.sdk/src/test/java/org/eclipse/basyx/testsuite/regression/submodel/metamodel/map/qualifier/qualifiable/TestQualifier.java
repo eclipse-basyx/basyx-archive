@@ -7,6 +7,8 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +24,7 @@ public class TestQualifier {
 	private static final boolean IS_LOCAL = false;
 	private static final String VALUE = "testValue";
 	private static final String TYPE = "testType";
-	private static final String VALUE_TYPE = "testValueType";
+	private static final String VALUE_TYPE = "anyType";
 	private static final IdentifierType ID_TYPE = IdentifierType.CUSTOM;
 	private static final Identifier IDENTIFIER = new Identifier(ID_TYPE, VALUE);
 	private static final Reference VALUE_ID = new Reference(IDENTIFIER, KEY_ELEMENTS, IS_LOCAL);
@@ -38,7 +40,7 @@ public class TestQualifier {
 	public void testConstructor() {
 		assertEquals(TYPE, qualifier.getType());
 		assertEquals(VALUE, qualifier.getValue());
-		assertEquals(VALUE_TYPE, qualifier.getValueType());
+		assertEquals(PropertyValueTypeDefHelper.fromName(VALUE_TYPE), qualifier.getValueType());
 		assertEquals(VALUE_ID, qualifier.getValueId());
 	}
 	
@@ -65,7 +67,7 @@ public class TestQualifier {
 	
 	@Test
 	public void testSetValueType() {
-		String newValueTypeString = "newValueType";
+		PropertyValueTypeDef newValueTypeString = PropertyValueTypeDef.AnyType;
 		qualifier.setValueType(newValueTypeString);
 		assertEquals(newValueTypeString, qualifier.getValueType());
 	}

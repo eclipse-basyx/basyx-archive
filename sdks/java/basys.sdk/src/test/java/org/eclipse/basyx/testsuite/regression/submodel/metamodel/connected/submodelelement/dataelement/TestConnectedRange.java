@@ -67,4 +67,18 @@ public class TestConnectedRange {
 		assertEquals(range.getMin(), rv.getMin());
 		assertEquals(range.getMax(), rv.getMax());
 	}
+	
+	/**
+	 * Tests if setValue() sets the correct value.
+	 */
+	@Test
+	public void testSetValue() {
+		RangeValue value = new RangeValue(2, 8);
+		
+		connectedRange.setValue(value);
+		
+		assertEquals(2, connectedRange.getMin());
+		assertEquals(8, connectedRange.getMax());
+		assertEquals(range.getValueType(), connectedRange.getValueType());
+	}
 }

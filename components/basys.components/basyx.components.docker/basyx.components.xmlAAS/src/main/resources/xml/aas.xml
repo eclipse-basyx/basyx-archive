@@ -252,7 +252,7 @@
 						</aas:valueId>
 						<aas:value>qualifierValue</aas:value>
 						<aas:type>qualifierType</aas:type>
-						<aas:valueType>valueType</aas:valueType>
+						<aas:valueType>anyType</aas:valueType>
 						<aas:semanticId>
 							<aas:keys>
 								<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
@@ -306,7 +306,7 @@
 									</aas:valueId>
 									<aas:value>qualifierValue</aas:value>
 									<aas:type>qualifierType</aas:type>
-									<aas:valueType>valueType</aas:valueType>
+									<aas:valueType>anyType</aas:valueType>
 									<aas:semanticId>
 										<aas:keys>
 											<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
