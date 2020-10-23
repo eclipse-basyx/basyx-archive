@@ -50,7 +50,7 @@ const LangStringSet & SubModel::getDescription() const
 	return this->identifiable.getDescription();
 }
 
-const IReferable * const SubModel::getParent() const
+IReferable * SubModel::getParent() const
 {
 	return this->identifiable.getParent();
 }

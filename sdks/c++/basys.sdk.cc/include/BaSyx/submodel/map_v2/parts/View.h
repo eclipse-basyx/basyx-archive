@@ -1,5 +1,5 @@
-#ifndef BASYX_MAP_V2_SDK_VIEW_H
-#define BASYX_MAP_V2_SDK_VIEW_H
+#ifndef BASYX_SUBMODEL_MAP_V2_PARTS_VIEW_H
+#define BASYX_SUBMODEL_MAP_V2_PARTS_VIEW_H
 
 #include <BaSyx/submodel/api_v2/parts/IView.h>
 
@@ -19,11 +19,18 @@ class View
   , public virtual Referable
   , public virtual vab::ElementMap
 {
+public:
+  struct Path {
+    static constexpr char ContainedElements[] = "containedElements";
+    static constexpr char SemanticId[] = "semanticId";
+  };
+
 private:
   ElementContainer<IReferable> contained_elements;
   Reference semanticId;
 public:
-  View(const std::string & idShort, const Referable * parent = nullptr);
+  View(const std::string & idShort, Referable * parent = nullptr);
+  virtual ~View() = default;
 
   //inherited via api::IView
   const api::IElementContainer<IReferable> & getContainedElements() const override;
@@ -34,9 +41,11 @@ public:
   //inherited via IHasSemantics
   const api::IReference & getSemanticId() const override;
   void setSemanticId(const api::IReference & reference) override;
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::View; };
 };
 
 }
 }
 }
-#endif //BASYX_MAP_V2_SDK_VIEW_H
+#endif /* BASYX_SUBMODEL_MAP_V2_PARTS_VIEW_H */

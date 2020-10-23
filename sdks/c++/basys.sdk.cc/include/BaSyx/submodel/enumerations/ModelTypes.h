@@ -1,5 +1,5 @@
-#ifndef BASYX_SUBMODEL_ENUM_ModelTypes_H
-#define BASYX_SUBMODEL_ENUM_ModelTypes_H
+#ifndef BASYX_SUBMODEL_ENUMERATIONS_MODELTYPES_H
+#define BASYX_SUBMODEL_ENUMERATIONS_MODELTYPES_H
 
 #include <string>
 
@@ -49,4 +49,4 @@ public:
 }
 }
 
-#endif
+#endif /* BASYX_SUBMODEL_ENUMERATIONS_MODELTYPES_H */

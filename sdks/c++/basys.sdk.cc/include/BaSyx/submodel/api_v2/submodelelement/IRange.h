@@ -1,5 +1,5 @@
-#ifndef BASYX_API_V2_SDK_IRANGE_H
-#define BASYX_API_V2_SDK_IRANGE_H
+#ifndef BASYX_SUBMODEL_API_V2_SUBMODELELEMENT_IRANGE_H
+#define BASYX_SUBMODEL_API_V2_SUBMODELELEMENT_IRANGE_H
 
 #include <string>
 
@@ -28,6 +28,8 @@ class IRange
 
   virtual ValueDataType getMin() = 0;
   virtual ValueDataType getMax() = 0;
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::Range; };
 };
 
 inline IRange::~IRange() = default;
@@ -35,4 +37,4 @@ inline IRange::~IRange() = default;
 }
 }
 }
-#endif //BASYX_API_V2_SDK_IRANGE_H
+#endif /* BASYX_SUBMODEL_API_V2_SUBMODELELEMENT_IRANGE_H */

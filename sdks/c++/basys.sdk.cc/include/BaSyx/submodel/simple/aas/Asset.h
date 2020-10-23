@@ -22,7 +22,7 @@ public:
 	Asset(const std::string & idShort, const Identifier & identifier, AssetKind kind = AssetKind::Instance);
 	virtual ~Asset() = default;
 
-	virtual AssetKind getKind();
+	virtual AssetKind getKind() override;
 
 	virtual Reference * const getAssetIdentificationModel() override;
 	virtual void setAssetIdentificationModel(const api::IReference & assetIdentificationModelRef) override;
@@ -37,7 +37,9 @@ public:
 	virtual void setCategory(const std::string & category) override;
 	virtual simple::LangStringSet & getDescription() override;
 	virtual const simple::LangStringSet & getDescription() const override;
-	virtual const IReferable * const getParent() const override;
+	virtual void setParent(api::IReferable * parent) override;
+	virtual IReferable * getParent() const override;
+	virtual simple::Reference getReference() const override;
 
 	// Inherited via IIdentifiable
 	virtual const AdministrativeInformation & getAdministrativeInformation() const override;
@@ -45,13 +47,15 @@ public:
 
 	virtual Identifier getIdentification() const override;
 
-	virtual bool hasAdministrativeInformation() const;
+	virtual bool hasAdministrativeInformation() const override;
 
 	// Inherited via IHasDataSpecification
 	virtual void addDataSpecification(const Reference & reference) override;
 	virtual const std::vector<Reference> getDataSpecificationReference() const override;
 
 	virtual inline ModelTypes GetModelType() const override { return ModelTypes::Asset; };
+	virtual KeyElements getKeyElementType() const override { return KeyElements::Asset; };
+	virtual Key getKey(bool local = true) const override;
 };
 
 }

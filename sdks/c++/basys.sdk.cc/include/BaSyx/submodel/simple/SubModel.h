@@ -47,7 +47,7 @@ public:
 	virtual void setCategory(const std::string & category) override;
 	virtual simple::LangStringSet & getDescription() override;
 	virtual const simple::LangStringSet & getDescription() const override;
-	virtual const IReferable * const getParent() const override;
+	virtual IReferable * getParent() const override;
 
 	// Inherited via IIdentifiable
 	virtual const AdministrativeInformation & getAdministrativeInformation() const override;

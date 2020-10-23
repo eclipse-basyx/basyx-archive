@@ -9,26 +9,12 @@ using namespace basyx::submodel;
 
 using enum_pair_t = std::pair<const char*, IdentifiableElements>;
 
-static const std::array<enum_pair_t, 18> string_to_enum = 
+static const std::array<enum_pair_t, 4> string_to_enum = 
 {
-    std::make_pair("AccessPermissionRule",  IdentifiableElements::AccessPermissionRule),
-    std::make_pair("AnnotatedRelationshipElemenBasicEvent", IdentifiableElements::AnnotatedRelationshipElemenBasicEvent),
-    std::make_pair("Blob", IdentifiableElements::Blob),
-    std::make_pair("Capability", IdentifiableElements::Capability),
-    std::make_pair("ConceptDictionary", IdentifiableElements::ConceptDictionary),
-    std::make_pair("DataElement", IdentifiableElements::DataElement),
-    std::make_pair("Entity", IdentifiableElements::Entity),
-    std::make_pair("Event", IdentifiableElements::Event),
-    std::make_pair("File", IdentifiableElements::File),
-    std::make_pair("MultiLanguageProperty", IdentifiableElements::MultiLanguageProperty),
-    std::make_pair("Operation", IdentifiableElements::Operation),
-    std::make_pair("Property", IdentifiableElements::Property),
-    std::make_pair("Range", IdentifiableElements::Range),
-    std::make_pair("ReferenceElement", IdentifiableElements::ReferenceElement),
-    std::make_pair("RelationshipElement", IdentifiableElements::RelationshipElement),
-    std::make_pair("SubmodelElement", IdentifiableElements::SubmodelElement),
-    std::make_pair("SubmodelElementCollection", IdentifiableElements::SubmodelElementCollection),
-    std::make_pair("View", IdentifiableElements::View),
+    std::make_pair("Asset",  IdentifiableElements::Asset),
+    std::make_pair("AssetAdministrationShell", IdentifiableElements::AssetAdministrationShell),
+    std::make_pair("ConceptDescription", IdentifiableElements::ConceptDescription),
+    std::make_pair("Submodel", IdentifiableElements::Submodel),
 };
 
 IdentifiableElements IdentifiableElements_::from_string(const std::string & name)

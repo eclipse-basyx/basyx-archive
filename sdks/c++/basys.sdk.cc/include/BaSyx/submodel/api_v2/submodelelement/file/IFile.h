@@ -24,6 +24,8 @@ public:
 
 	virtual const MimeType getMimeType() const = 0;
 	virtual void setMimeType(const MimeType & mimeType) = 0;
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::File; };
 };
 
 inline IFile::~IFile() = default;

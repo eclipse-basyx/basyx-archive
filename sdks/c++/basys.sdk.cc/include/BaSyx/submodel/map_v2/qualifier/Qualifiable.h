@@ -15,6 +15,10 @@ class Qualifiable :
 	public virtual vab::ElementMap
 {
 public:
+  struct Path {
+    static constexpr char Qualifier[] = "qualifier";
+  };
+public:
 	Qualifiable() = default;
 	Qualifiable(const std::vector<simple::Formula> & formulas, const std::vector<simple::Qualifier> & qualifiers);
 
@@ -37,4 +41,4 @@ public:
 }
 }
 
-#endif /* BASYX_SUBMODEL_MAP_V2_QUALIFIER_IQUALIFIABLE_H */
+#endif /* BASYX_SUBMODEL_MAP_V2_QUALIFIER_QUALIFIABLE_H */

@@ -44,6 +44,8 @@ Frame BaSyxNativeFrameProcessor::processInputFrame(const Frame & frame)
 		return processDelete(frame);
 	case BaSyxCommand::Invoke:
 		return processInvoke(frame);
+        default:
+                break;
 	}
 
 	return Frame{};

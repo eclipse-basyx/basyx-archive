@@ -4,12 +4,17 @@ using namespace basyx::submodel;
 using namespace basyx::submodel::map;
 using namespace basyx::submodel::api;
 
+constexpr char AssetAdministrationShell::Path::Submodels[];
+constexpr char AssetAdministrationShell::Path::Asset[];
+
 AssetAdministrationShell::AssetAdministrationShell(const std::string & idShort, const simple::Identifier & identifier, const Asset & asset)
 	: Identifiable(idShort, identifier)
 	, asset(asset)
+	, submodels(this)
+	, conceptDictionary(this)
 {
-	this->map.insertKey("submodels", submodels.getMap());
-	this->map.insertKey("asset", asset.getMap());
+	this->map.insertKey(Path::Submodels, submodels.getKeyMap());
+	this->map.insertKey(Path::Asset, asset.getMap());
 };
 
 

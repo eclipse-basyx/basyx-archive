@@ -1,5 +1,5 @@
-#ifndef BASYX_API_V2_SDK_ICONCEPTDICTIONARY_H
-#define BASYX_API_V2_SDK_ICONCEPTDICTIONARY_H
+#ifndef BASYX_SUBMODEL_API_V2_PARTS_ICONCEPTDICTIONARY_H
+#define BASYX_SUBMODEL_API_V2_PARTS_ICONCEPTDICTIONARY_H
 
 #include <BaSyx/submodel/api_v2/parts/IConceptDescription.h>
 
@@ -21,4 +21,4 @@ inline IConceptDictionary::~IConceptDictionary() = default;
 }
 }
 }
-#endif //BASYX_API_V2_SDK_ICONCEPTDICTIONARY_H
+#endif /* BASYX_SUBMODEL_API_V2_PARTS_ICONCEPTDICTIONARY_H */

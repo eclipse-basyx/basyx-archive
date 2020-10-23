@@ -1,12 +1,12 @@
 /*
- * BaSyxNativeProvider.h
- *
- *  Created on: 14.08.2018
- *      Author: schnicke
- */
+* BaSyxNativeProvider.h
+*
+*  Created on: 14.08.2018
+*      Author: schnicke
+*/
 
-#ifndef VAB_VAB_PROVIDER_NATIVE_BASYXNATIVEPROVIDER_H
-#define VAB_VAB_PROVIDER_NATIVE_BASYXNATIVEPROVIDER_H
+#ifndef BASYX_SERVER_BASYXNATIVEPROVIDER_H
+#define BASYX_SERVER_BASYXNATIVEPROVIDER_H
 
 #include <BaSyx/shared/types.h>
 
@@ -21,135 +21,128 @@
 
 #include <asio.hpp>
 
-
 /**
- * Provies access based on the basyx native protocol
- */
+* Provies access based on the basyx native protocol
+*/
 
 namespace basyx {
 namespace vab {
 namespace provider {
 namespace native {
 
-	class NativeProvider {
-	private:
-		// Connection socket
-		asio::ip::tcp::socket & clientSocket;
+class NativeProvider {
+private:
+    // Connection socket
+    asio::ip::tcp::socket& clientSocket;
 
-		// Frame processor
-		frame::BaSyxNativeFrameProcessor * frameProcessor;
+    // Frame processor
+    frame::BaSyxNativeFrameProcessor* frameProcessor;
 
-		// Buffers
-		static constexpr std::size_t default_buffer_size = 4096;
-		std::array<char, default_buffer_size> recv_buffer;
-		std::array<char, default_buffer_size> send_buffer;
+    // Buffers
+    static constexpr std::size_t default_buffer_size = 4096;
+    std::array<char, default_buffer_size> recv_buffer;
+    std::array<char, default_buffer_size> send_buffer;
 
-		bool closed;
-		basyx::log log;
-	public:
-		NativeProvider(asio::ip::tcp::socket & clientSocket,
-			frame::BaSyxNativeFrameProcessor* frameProcessor)
-			: clientSocket(clientSocket)
-			, frameProcessor(frameProcessor)
-			, closed(false)
-			, log{ "NativeProvider" }
-		{
-		}
+    bool closed;
+    basyx::log log;
 
-		~NativeProvider()
-		{
-			// Connection no longer needed, close it
-			try
-			{
-				if (this->clientSocket.is_open())
-					this->clientSocket.close();
-			}
-			catch (std::exception & e)
-			{
-				log.warn("Exception in closing socket");
-			};
-		}
+public:
+    NativeProvider(asio::ip::tcp::socket& clientSocket,
+        frame::BaSyxNativeFrameProcessor* frameProcessor)
+        : clientSocket(clientSocket)
+        , frameProcessor(frameProcessor)
+        , closed(false)
+        , log { "NativeProvider" }
+    {
+    }
 
-		// Has to be called repeatedly
-		void update()
-		{
-			log.trace("Updating...");
-			if (!closed)
-			{
-				asio::error_code ec;
-				log.trace("Waiting for incoming message");
-				auto input_frame = recvFrame(ec);
+    ~NativeProvider()
+    {
+        // Connection no longer needed, close it
+        try {
+            if (this->clientSocket.is_open())
+                this->clientSocket.close();
+        } catch (std::exception& e) {
+            log.warn("Exception in closing socket");
+        };
+    }
 
-				if(ec) {
-					log.info("Connection closed");
-					closed = true;
-				}
-				else {
-					log.trace("Received frame.");
-					log.info("Received: {}", input_frame.getFirstValue());
+    // Has to be called repeatedly
+    void update()
+    {
+        log.trace("Updating...");
+        if (!closed) {
+            asio::error_code ec;
+            log.trace("Waiting for incoming message");
+            auto input_frame = recvFrame(ec);
 
-					auto output_frame = frameProcessor->processInputFrame(input_frame);
+            if (ec) {
+                log.info("Connection closed");
+                closed = true;
+            } else {
+                log.trace("Received frame.");
+                log.info("Received: {}", input_frame.getFirstValue());
 
-					log.info("Sending reply.");
+                auto output_frame = frameProcessor->processInputFrame(input_frame);
 
-					auto bytes_sent = sendFrame(output_frame);
-					if (bytes_sent < 0) {
-						log.error("Sending failed: {}", "ERROR");
-						closed = true;
-					}
-				}
-			}
-		}
+                log.info("Sending reply.");
 
-		bool isClosed()
-		{
-			return closed;
-		}
+                auto bytes_sent = sendFrame(output_frame);
+                if (bytes_sent < 0) {
+                    log.error("Sending failed: {}", "ERROR");
+                    closed = true;
+                }
+            }
+        }
+    }
 
-		std::size_t sendData(char* data, std::size_t size)
-		{
-			log.debug("Sending {} bytes.", size);
-			std::size_t bytes_sent = this->clientSocket.send(asio::buffer(data, size));
-			log.debug("Sent {} bytes.", bytes_sent);
-			return bytes_sent;
-		};
+    bool isClosed()
+    {
+        return closed;
+    }
 
+    std::size_t sendData(char* data, std::size_t size)
+    {
+        log.debug("Sending {} bytes.", size);
+        std::size_t bytes_sent = this->clientSocket.send(asio::buffer(data, size));
+        log.debug("Sent {} bytes.", bytes_sent);
+        return bytes_sent;
+    };
 
-		std::size_t receiveData(char* data, asio::error_code & ec)
-		{
-			std::size_t bytes_read = this->clientSocket.receive(asio::buffer(recv_buffer.data(), recv_buffer.size()), 0, ec);
-			log.debug("Received {} bytes.", bytes_read);
-			return bytes_read;
-		};
+    std::size_t receiveData(char* data, asio::error_code& ec)
+    {
+        std::size_t bytes_read = this->clientSocket.receive(asio::buffer(recv_buffer.data(), recv_buffer.size()), 0, ec);
+        log.debug("Received {} bytes.", bytes_read);
+        return bytes_read;
+    };
 
-		std::size_t sendFrame(const connector::native::Frame & frame)
-		{
-			connector::native::Frame::write_to_buffer(
-				basyx::net::make_buffer(
-					send_buffer.data() + BASYX_FRAMESIZE_SIZE, default_buffer_size - BASYX_FRAMESIZE_SIZE),
-				frame);
+    std::size_t sendFrame(const connector::native::Frame& frame)
+    {
+        connector::native::Frame::write_to_buffer(
+            basyx::net::make_buffer(
+                send_buffer.data() + BASYX_FRAMESIZE_SIZE, default_buffer_size - BASYX_FRAMESIZE_SIZE),
+            frame);
 
-			auto size_field = reinterpret_cast<uint32_t*>(&send_buffer[0]);
-			*size_field = frame.size();
+        auto size_field = reinterpret_cast<uint32_t*>(&send_buffer[0]);
+        *size_field = frame.size();
 
-			return sendData(send_buffer.data(), frame.size() + BASYX_FRAMESIZE_SIZE);
-		};
+        return sendData(send_buffer.data(), frame.size() + BASYX_FRAMESIZE_SIZE);
+    };
 
-		connector::native::Frame recvFrame(asio::error_code & ec)
-		{
-			this->receiveData(recv_buffer.data(), ec);
-			auto size = *reinterpret_cast<uint32_t*>(recv_buffer.data());
-			auto frame = connector::native::Frame::read_from_buffer(
-				basyx::net::make_buffer(this->recv_buffer.data() + BASYX_FRAMESIZE_SIZE, size - BASYX_FRAMESIZE_SIZE)
-			);
+    connector::native::Frame recvFrame(asio::error_code& ec)
+    {
+        this->receiveData(recv_buffer.data(), ec);
+        auto size = *reinterpret_cast<uint32_t*>(recv_buffer.data());
+        auto frame = connector::native::Frame::read_from_buffer(
+            basyx::net::make_buffer(this->recv_buffer.data() + BASYX_FRAMESIZE_SIZE, size - BASYX_FRAMESIZE_SIZE));
 
-			return frame;
-		};
-	};
+        return frame;
+    };
+};
 
 };
 };
 };
 };
 
-#endif /* VAB_VAB_PROVIDER_NATIVE_BASYXNATIVEPROVIDER_H */
+#endif /* BASYX_SERVER_BASYXNATIVEPROVIDER_H */

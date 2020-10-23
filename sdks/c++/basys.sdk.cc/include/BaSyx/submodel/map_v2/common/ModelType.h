@@ -8,6 +8,11 @@ namespace basyx {
 namespace submodel {
 namespace map {
 
+struct ModelTypePath {
+  static constexpr char Name[] = "name";
+  static constexpr char ModelType[] = "modelType";
+};
+
 template<ModelTypes modelType>
 class ModelType :
 	public virtual api::IModelType,
@@ -27,14 +32,14 @@ template<ModelTypes modelType>
 ModelType<modelType>::ModelType()
 {
 	auto modelTypeMap = basyx::object::make_map();
-	modelTypeMap.insertKey("name", ModelTypes_::to_string(modelType));
-	this->map.insertKey("modelType", modelTypeMap);
+	modelTypeMap.insertKey(ModelTypePath::Name, ModelTypes_::to_string(modelType));
+	this->map.insertKey(ModelTypePath::ModelType, modelTypeMap);
 };
 
 template<ModelTypes modelType>
 ModelTypes ModelType<modelType>::GetModelType() const
 {
-	auto model_type = this->map.getProperty("modelType").getProperty("name").Get<std::string&>();
+	auto model_type = this->map.getProperty(ModelTypePath::ModelType).getProperty(ModelTypePath::Name).Get<std::string&>();
 	return ModelTypes_::from_string(model_type);
 };
 
@@ -42,4 +47,4 @@ ModelTypes ModelType<modelType>::GetModelType() const
 }
 }
 
-#endif /* BASYX_SUBMODEL_MAP_V2_COMMON_LANGSTRINGSET_H */
+#endif /* BASYX_SUBMODEL_MAP_V2_COMMON_MODELTYPE_H */

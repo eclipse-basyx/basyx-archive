@@ -1,5 +1,5 @@
-#ifndef BASYX_ENUM_ERROR_H
-#define BASYX_ENUM_ERROR_H
+#ifndef BASYX_SHARED_OBJECT_OBJ_ERROR_H
+#define BASYX_SHARED_OBJECT_OBJ_ERROR_H
 
 #include <string>
 
@@ -26,4 +26,4 @@ public:
 }
 }
 
-#endif
+#endif /* BASYX_SHARED_OBJECT_OBJ_ERROR_H */

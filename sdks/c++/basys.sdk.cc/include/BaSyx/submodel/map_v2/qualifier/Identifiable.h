@@ -13,8 +13,14 @@ class Identifiable :
 	public virtual api::IIdentifiable,
 	public Referable
 {
+public:
+  struct Path {
+    static constexpr char IdType[] = "idType";
+    static constexpr char Id[] = "id";
+    static constexpr char AdministrativeInformation[] = "administrativeInformation";
+    static constexpr char Identifier[] = "identifier";
+  };
 private:
-//	Referable referable;
 	map::AdministrativeInformation administrativeInformation;
 public:
 	virtual ~Identifiable() = default;
@@ -22,11 +28,7 @@ public:
 	// Constructors
 	Identifiable(const std::string & idShort, const simple::Identifier & identifier);
 
-	//// Member-access
-	//inline const Referable & getReferable() const noexcept { return this->referable; };
-	//inline Referable & getReferable() noexcept { return this->referable; };
-
-	bool hasAdministrativeInformation() const noexcept;
+	bool hasAdministrativeInformation() const noexcept override;
 
 	// Inherited via IIdentifiable
 	const AdministrativeInformation & getAdministrativeInformation() const override;
@@ -34,7 +36,7 @@ public:
 
 	virtual simple::Identifier getIdentification() const override;
 
-  void setAdministrativeInformation(const AdministrativeInformation & administrativeInformation);
+    void setAdministrativeInformation(const AdministrativeInformation & administrativeInformation);
 };
 
 }

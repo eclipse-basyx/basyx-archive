@@ -22,6 +22,11 @@ class AssetAdministrationShell :
 	public map::ModelType<ModelTypes::AssetAdministrationShell>,
 	public virtual vab::ElementMap
 {
+public:
+  struct Path {
+    static constexpr char Submodels[] = "submodels";
+    static constexpr char Asset[] = "asset";
+  };
 private:
 	Reference derivedFrom;
 	Asset asset;
@@ -39,6 +44,8 @@ public:
 	virtual api::IReference * getDerivedFrom() override;
 	virtual void setDerivedFrom(const api::IReference & reference) override;
 	virtual SubmodelContainer_t & getSubmodels() override;
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::AssetAdministrationShell; };
 };
 
 }

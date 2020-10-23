@@ -5,8 +5,8 @@
  *      Author: psota
  */
 
-#ifndef BASYX_object_error_HOLDER_H
-#define BASYX_object_error_HOLDER_H
+#ifndef BASYX_SHARED_OBJECT_OBJ_ERROR_HOLDER_H
+#define BASYX_SHARED_OBJECT_OBJ_ERROR_HOLDER_H
 
 #include <memory>
 #include <string>
@@ -76,4 +76,4 @@ namespace detail {
 }
 }
 
-#endif /* BASYX_object_error_HOLDER_H */
+#endif /* BASYX_SHARED_OBJECT_OBJ_ERROR_HOLDER_H */

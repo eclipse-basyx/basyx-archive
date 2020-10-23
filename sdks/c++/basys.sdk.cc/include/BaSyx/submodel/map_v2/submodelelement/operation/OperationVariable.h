@@ -8,6 +8,12 @@ namespace basyx {
 namespace submodel {
 namespace map {
 
+struct OperationVariablePath {
+  static constexpr char Value[] = "value";
+};
+
+constexpr char OperationVariablePath::Value[];
+
 template<typename T>
 class OperationVariable : 
 	public SubmodelElement, 
@@ -21,7 +27,7 @@ public:
 		: SubmodelElement(idShort, ModelingKind::Template)
 		, value(std::move(value))
 	{
-		this->map.insertKey("value", this->value->getMap());
+		this->map.insertKey(OperationVariablePath::Value, this->value->getMap());
 	};
 
 	OperationVariable(const OperationVariable & other) = default;

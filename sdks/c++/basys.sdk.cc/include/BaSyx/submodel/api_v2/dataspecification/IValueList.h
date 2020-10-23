@@ -22,4 +22,4 @@ inline IValueList::~IValueList() = default;
 }
 }
 
-#endif
+#endif /* BASYX_SUBMODEL_API_V2_DATASPECIFICATION_IVALUELIST_H */

@@ -21,7 +21,6 @@ namespace basyx {
 namespace submodel {
 namespace map {
 
-
 class SubModel : 
 	public virtual api::ISubModel,
 	public Identifiable,
@@ -30,6 +29,12 @@ class SubModel :
 	public ModelType<ModelTypes::Submodel>,
 	public virtual vab::ElementMap
 {
+public:
+  struct Path {
+    static constexpr char SubmodelElements[] = "submodelElements";
+    static constexpr char SemanticId[] = "semanticId";
+    static constexpr char Kind[] = "kind";
+  };
 private:
 	Reference semanticId;
 	ElementContainer<api::ISubmodelElement> elementContainer;
@@ -47,6 +52,8 @@ public:
 	// Inherited via IHasSemantics
 	virtual const api::IReference & getSemanticId() const override;
 	virtual void setSemanticId(const api::IReference & semanticId) override;
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::Submodel; };
 };
 
 

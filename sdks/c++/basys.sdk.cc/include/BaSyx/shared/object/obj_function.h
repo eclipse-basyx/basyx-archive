@@ -1,5 +1,5 @@
-#ifndef OBJ_FUNCTION_H
-#define OBJ_FUNCTION_H
+#ifndef BASYX_SHARED_OBJECT_OBJ_FUNCTION_H
+#define BASYX_SHARED_OBJECT_OBJ_FUNCTION_H
 
 #include <functional>
 
@@ -109,4 +109,4 @@ static void to_json(nlohmann::json & json, const functionWrapper &)
 }
 
 
-#endif /* OBJ_FUNCTION_H */
+#endif /* BASYX_SHARED_OBJECT_OBJ_FUNCTION_H */

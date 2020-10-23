@@ -4,5 +4,6 @@ build/
 .cproject
 bin/
 compile_commands.json
-.clangd
 run-msbuild.bat
+.clangd/
+*.swp

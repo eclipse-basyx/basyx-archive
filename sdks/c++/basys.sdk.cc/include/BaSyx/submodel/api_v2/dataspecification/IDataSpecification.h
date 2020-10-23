@@ -21,7 +21,11 @@ public:
 	virtual ~IDataSpecification() = 0;
 
 	virtual IDataSpecificationContent & getContent() = 0;
+
+	virtual KeyElements getKeyElementType() const override;
 };
+
+inline KeyElements IDataSpecification::getKeyElementType() const { return KeyElements::DataElement; };
 
 inline IDataSpecification::~IDataSpecification() = default;
 

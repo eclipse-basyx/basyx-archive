@@ -1,5 +1,5 @@
-#ifndef BASYX_MAP_V2_SDK_ADMINISTRATIVEINFORMATION_H
-#define BASYX_MAP_V2_SDK_ADMINISTRATIVEINFORMATION_H
+#ifndef BASYX_SUBMODEL_MAP_V2_QUALIFIER_ADMINISTRATIVEINFORMATION_H
+#define BASYX_SUBMODEL_MAP_V2_QUALIFIER_ADMINISTRATIVEINFORMATION_H
 
 #include <BaSyx/submodel/api_v2/qualifier/IAdministrativeInformation.h>
 
@@ -15,6 +15,12 @@ class AdministrativeInformation
   , public HasDataSpecification
   , public virtual vab::ElementMap
 {
+public:
+  struct Path {
+    static constexpr char Version[] = "version";
+    static constexpr char Revision[] = "revision";
+  };
+
 public:
   AdministrativeInformation();
   AdministrativeInformation(const std::string & version, const std::string & revision);
@@ -32,4 +38,4 @@ public:
 }
 }
 }
-#endif //BASYX_MAP_V2_SDK_ADMINISTRATIVEINFORMATION_H
+#endif /* BASYX_SUBMODEL_MAP_V2_QUALIFIER_ADMINISTRATIVEINFORMATION_H */

@@ -4,14 +4,17 @@ using namespace basyx::submodel;
 using namespace basyx::submodel::api;
 using namespace basyx::submodel::map;
 
+constexpr char SubmodelElement::Path::Kind[];
+constexpr char SubmodelElement::Path::SemanticId[];
+
 SubmodelElement::SubmodelElement(const std::string & idShort, ModelingKind kind)
 	: Referable(idShort, nullptr)
 	, HasDataSpecification()
 	, semanticId()
 	, vab::ElementMap{}
 {
-	this->map.insertKey("kind", ModelingKind_::to_string(kind));
-	this->map.insertKey("semanticId", semanticId.getMap());
+	this->map.insertKey(Path::Kind, ModelingKind_::to_string(kind));
+	this->map.insertKey(Path::SemanticId, semanticId.getMap());
 }
 
 const api::IReference & SubmodelElement::getSemanticId() const
@@ -26,5 +29,5 @@ void SubmodelElement::setSemanticId(const api::IReference & semanticId)
 
 ModelingKind SubmodelElement::getKind() const
 {
-	return ModelingKind_::from_string(this->map.getProperty("kind").GetStringContent());
+	return ModelingKind_::from_string(this->map.getProperty(Path::Kind).GetStringContent());
 }
