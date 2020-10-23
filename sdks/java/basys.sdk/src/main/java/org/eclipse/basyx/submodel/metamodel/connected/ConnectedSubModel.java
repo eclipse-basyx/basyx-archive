@@ -25,6 +25,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 
@@ -127,6 +128,12 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 	public Map<String, ISubmodelElement> getSubmodelElements() {
 		return ConnectedSubmodelElementFactory.getConnectedSubmodelElements(getProxy(),
 				MultiSubmodelElementProvider.ELEMENTS, MultiSubmodelElementProvider.ELEMENTS);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> getValues() {
+		return (Map<String, Object>) getProxy().getModelPropertyValue(SubModelProvider.VALUES);
 	}
 
 	@Override

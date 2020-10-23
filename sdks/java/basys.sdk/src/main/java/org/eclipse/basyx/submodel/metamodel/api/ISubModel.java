@@ -1,5 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.api;
 
+import java.util.Map;
+
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasSemantics;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
@@ -20,4 +22,12 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifiab
  *
  */
 public interface ISubModel extends IElement, IHasSemantics, IIdentifiable, IQualifiable, IHasDataSpecification, IHasKind, IElementContainer {
+	
+	/**
+	 * Gets a Map<IdShort, smElement.getValue()> containing the values of all submodelElements
+	 * 
+	 * @return a Map with the values of all submodelElements
+	 */
+	public Map<String, Object> getValues();
+	
 }

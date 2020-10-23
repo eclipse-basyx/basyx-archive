@@ -90,6 +90,9 @@ public class Blob extends DataElement implements IBlob {
 
 	@Override
 	public byte[] getValue() {
+		if(!containsKey(Property.VALUE)) {
+			return null;
+		}
 		return ((String) get(Property.VALUE)).getBytes();
 	}
 

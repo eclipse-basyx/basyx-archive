@@ -378,4 +378,30 @@ public class SubModelProviderTest {
 		Object result = submodelElement.invokeOperation(path);
 		assertEquals(123, result);
 	}
+	
+	/**
+	 * Test getting /values of the Submodel
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetValues() {
+		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
+		Map<String, Object> values = (Map<String, Object>) submodelElement.getModelPropertyValue("submodel/" + SubModelProvider.VALUES);
+		
+		assertEquals(4, values.size());
+		
+		// Check if all expected Values are present
+		assertTrue(values.containsKey("containerRoot"));
+		Map<String, Object> collection1 = (Map<String, Object>) values.get("containerRoot");
+		
+		assertTrue(collection1.containsKey("container"));
+		Map<String, Object> collection2 = (Map<String, Object>) collection1.get("container");
+		
+		// Check the Value in /containerRoot/container/integerProperty
+		assertEquals(123, collection2.get("integerProperty"));
+		
+		assertEquals("Test", values.get("stringProperty"));
+		assertEquals(123, values.get("integerProperty"));
+		assertEquals(null, values.get("nullProperty"));
+	}
 }

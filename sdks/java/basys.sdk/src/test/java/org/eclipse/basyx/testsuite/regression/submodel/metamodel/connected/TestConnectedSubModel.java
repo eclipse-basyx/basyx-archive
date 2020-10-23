@@ -229,6 +229,33 @@ public class TestConnectedSubModel {
 	}
 
 	/**
+	 * Tests getValues function 
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetValues() {
+		
+		// Add elements to the Submodel
+		Map<String, ISubmodelElement> testSMElements = getTestSubmodelElements();
+		for(ISubmodelElement element: testSMElements.values()) {
+			submodel.addSubModelElement(element);
+		}
+		
+		Map<String, Object> values = (Map<String, Object>) submodel.getValues();
+		assertEquals(3, values.size());
+		
+		// Check if all expected Values are present
+		assertEquals(100, values.get(PROP));
+		
+		assertTrue(values.containsKey(RELATIONSHIP_ELEM_ID));
+		
+		assertTrue(values.containsKey(SUBMODEL_ELEM_COLLECTION_ID));
+		Map<String, Object> collection = (Map<String, Object>) values.get(SUBMODEL_ELEM_COLLECTION_ID);
+		
+		assertTrue(collection.containsKey(BLOB_ID));
+	}
+
+	/**
 	 * Generates test IDataElements
 	 */
 	private Map<String, IProperty> getTestDataProperty() {

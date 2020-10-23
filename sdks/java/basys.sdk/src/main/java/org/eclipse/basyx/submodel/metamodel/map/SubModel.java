@@ -21,6 +21,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelValuesHelper;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -285,10 +286,17 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	public Map<String, ISubmodelElement> getSubmodelElements() {
 		return (Map<String, ISubmodelElement>) get(SUBMODELELEMENT);
 	}
+
+	@Override
+	public Map<String, Object> getValues() {
+		return SubmodelValuesHelper.getSubmodelValue(this);
+	}
+	
 	@Override
 	public Collection<IConstraint> getQualifiers() {
 		return Qualifiable.createAsFacade(this).getQualifiers();
 	}
+
 	public void setQualifiers(Collection<IConstraint> qualifiers) {
 		Qualifiable.createAsFacade(this).setQualifiers(qualifiers);
 	}

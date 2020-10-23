@@ -36,6 +36,8 @@ import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
  */
 public class SubModelProvider extends MetaModelProvider {
 
+	public static final String VALUES = "values";
+	
 	ISubmodelAPI submodelAPI;
 
 	/**
@@ -102,7 +104,10 @@ public class SubModelProvider extends MetaModelProvider {
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
 			// Request for submodelElements
-			if (splitted.length == 1 && splitted[0].equals(MultiSubmodelElementProvider.ELEMENTS)) {
+			if (splitted.length == 1 && splitted[0].equals(VALUES)) {
+				// Request for values of all submodelElements
+				return submodelAPI.getSubmodel().getValues();
+			} else if (splitted.length == 1 && splitted[0].equals(MultiSubmodelElementProvider.ELEMENTS)) {
 				return submodelAPI.getElements();
 			} else if (splitted.length >= 2 && isQualifier(splitted[0])) { // Request for element with specific idShort
 				String idShort = splitted[1];
