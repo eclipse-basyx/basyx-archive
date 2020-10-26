@@ -61,6 +61,11 @@ public class SubmodelElementProvider extends MetaModelProvider {
 		if (path.equals(MultiSubmodelElementProvider.VALUE)) {
 			// Handle "/value" path
 			// return value
+			
+			if(specializedProvider) {
+				return proxy.getModelPropertyValue(path);
+			}
+			
 			Map<String, Object> elementMap = (Map<String, Object>) proxy.getModelPropertyValue("");
 			
 			ISubmodelElement element = SubmodelElementFacadeFactory.createSubmodelElement(elementMap);

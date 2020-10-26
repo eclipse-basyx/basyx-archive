@@ -104,39 +104,17 @@ public class SubmodelElementMapCollectionConverter {
 	 * @param smElement the SubmodelElement to be converted.
 	 * @return a Map made from the given SubmodelElement.
 	 */
-	@SuppressWarnings("unchecked")
 	public static Map<String, Object> smElementToMap(Map<String, Object> smElement) {		
 		
 		if(!SubmodelElementCollection.isSubmodelElementCollection((Map<String, Object>) smElement)) {
 			return (Map<String, Object>) smElement;
 		}
 		
-		
-		Collection<Object> smElements = null;
-		
-		// Check if the contained value is a Map or a Collection
-		if(smElement.get(Property.VALUE) instanceof Collection<?>) {
-			// It it is a Collection proceed, as there could be nested Collections that need conversion
-			smElements = (Collection<Object>) smElement.get(Property.VALUE);
-		} else if(smElement.get(Property.VALUE) instanceof Map<?, ?>) {
-			smElements = ((Map<String, Object>) smElement.get(Property.VALUE)).values();
-		} else {
-			throw new RuntimeException("The SubmodelElementCollection contains neither a Collection nor a Map as value.");
-		}
-		
-		// Get the smElements Map from the given smElementsCollection
-		//Map<String, Object> smElements = (Map<String, Object>) smElement.get(Property.VALUE);
-		
 		// Put the Entries of the SM in a new Map
 		Map<String, Object> ret = new HashMap<>();
 		ret.putAll(smElement);
 		
-		// Feed all contained smElements recursively through smElementToMap again to deal with nested smElemCollections
-		List<Map<String, Object>> newElements = smElements.stream()
-				.map(e -> smElementToMap((Map<String, Object>) e)).collect(Collectors.toList());
-		
-		// Replace the smElements Map with the Collection of Elements
-		ret.put(Property.VALUE, newElements);
+		ret.put(Property.VALUE, convertIDMapToCollection(smElement.get(Property.VALUE)));
 		
 		return ret;
 	}
@@ -177,6 +155,34 @@ public class SubmodelElementMapCollectionConverter {
 			SubmodelElementFacadeFactory.createSubmodelElement((Map<String, Object>) smElement));
 		
 		return smElementsMap;
+	}
+	
+	
+	/**
+	 * Converts a given Map<idShort, smElement> to a smElement Collection. 
+	 * 
+	 * @param smElements the smElements to be converted
+	 * @return Collection<smElement>
+	 */
+	@SuppressWarnings("unchecked")
+	public static Collection<Map<String, Object>> convertIDMapToCollection(Object map) {
+		Collection<Object> smElements = null;
+		
+		// Check if the contained value is a Map or a Collection
+		if(map instanceof Collection<?>) {
+			// It it is a Collection proceed, as there could be nested Collections that need conversion
+			smElements = (Collection<Object>) map;
+		} else if(map instanceof Map<?, ?>) {
+			smElements = ((Map<String, Object>) map).values();
+		} else {
+			throw new RuntimeException("The SubmodelElementCollection contains neither a Collection nor a Map as value.");
+		}
+		
+		// Feed all contained smElements recursively through smElementToMap again to deal with nested smElemCollections
+		List<Map<String, Object>> newElements = smElements.stream()
+				.map(e -> smElementToMap((Map<String, Object>) e)).collect(Collectors.toList());
+		
+		return newElements;
 	}
 	
 }

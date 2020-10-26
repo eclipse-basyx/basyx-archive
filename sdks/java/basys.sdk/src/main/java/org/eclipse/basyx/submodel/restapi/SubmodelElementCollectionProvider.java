@@ -50,7 +50,7 @@ public class SubmodelElementCollectionProvider extends MetaModelProvider {
 			return SubmodelElementMapCollectionConverter.smElementToMap(smElemColl);
 		} else if(path.equals(MultiSubmodelElementProvider.VALUE)) {
 			// Return only a Collection of Elements. Not the internally used Map.
-			return ((Map<String, Object>) proxy.getModelPropertyValue(path)).values();
+			return SubmodelElementMapCollectionConverter.convertIDMapToCollection(proxy.getModelPropertyValue(path));
 		} else {
 			// Directly access an element inside of the collection
 			String idShort = pathElements[0];

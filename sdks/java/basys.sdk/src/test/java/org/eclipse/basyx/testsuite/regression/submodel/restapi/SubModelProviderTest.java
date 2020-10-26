@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -146,7 +147,20 @@ public class SubModelProviderTest {
 		Collection<Object> resSet = (Collection<Object>) submodelElement
 				.getModelPropertyValue("/submodel/submodelElements/containerRoot/value");
 		assertEquals(1, resSet.size());
-		resSet.forEach(x -> assertEquals("container", ((Map<String, Object>) x).get(Referable.IDSHORT)));
+		
+		// Get Collection from root-Collection
+		Map<String, Object> container = (Map<String, Object>) resSet.iterator().next();
+		
+		assertEquals("container", container.get(Referable.IDSHORT));
+		assertTrue(container.get(Property.VALUE) instanceof Collection<?>);
+		
+		// Get Value of nested Collection
+		Map<String, Object> containerValue = SubmodelElementMapCollectionConverter.convertCollectionToIDMap(container.get(Property.VALUE));
+		
+		// Check content of nested Collection
+		assertTrue(containerValue.containsKey("operationId"));
+		assertTrue(containerValue.containsKey("integerProperty"));
+		assertEquals(123, ((Property) containerValue.get("integerProperty")).get());
 
 		// Read nested property
 		String pathToNestedContainer = "/submodel/submodelElements/containerRoot/container";
