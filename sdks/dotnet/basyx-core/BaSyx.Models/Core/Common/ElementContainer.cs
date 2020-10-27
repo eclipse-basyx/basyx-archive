@@ -382,7 +382,8 @@ namespace BaSyx.Models.Core.Common
             var child = GetChild(idShortPath);
             if (child != null)
             {
-                child.Value = element;
+                int childIndex = _children.FindIndex(p => p.IdShort == idShortPath); //ToDo: Does not work in deeper hierarchy
+                _children[childIndex] = new ElementContainer<TElement>(Parent, element, this);
                 return new Result<TElement>(true, element);
             }
             else if (idShortPath.Contains(PATH_SEPERATOR))

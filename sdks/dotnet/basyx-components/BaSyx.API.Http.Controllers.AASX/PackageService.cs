@@ -9,7 +9,6 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using Microsoft.AspNetCore.Mvc;
-using BaSyx.Utils.ResultHandling;
 using BaSyx.API.Components;
 using BaSyx.Models.Export;
 using Microsoft.AspNetCore.Hosting;
@@ -18,7 +17,6 @@ using System.IO;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using System.Linq;
 using BaSyx.Utils.FileHandling;
-using System;
 
 namespace BaSyx.API.Http.Controllers.PackageService
 {

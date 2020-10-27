@@ -18,6 +18,8 @@ using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification.BaSyx;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
+using BaSyx.Models.Extensions;
+using BaSyx.Utils.ResultHandling;
 using BaSyx.Utils.Settings.Types;
 using System;
 using System.Collections.Generic;
@@ -36,14 +38,16 @@ namespace MultiAssetAdministrationShell
             AssetAdministrationShellRepositoryHttpServer server = new AssetAdministrationShellRepositoryHttpServer(aasRepositorySettings);
             AssetAdministrationShellRepositoryServiceProvider repositoryService = new AssetAdministrationShellRepositoryServiceProvider();
 
+            double baseValue = 2;
+
             for (int i = 0; i < 10; i++)
             {
                 AssetAdministrationShell aas = new AssetAdministrationShell("MultiAAS_" + i, new BaSyxShellIdentifier("MultiAAS_" + i, "1.0.0"))
                 {
                     Description = new LangStringSet()
                     {
-                       new LangString("de-DE", i + ". VWS"),
-                       new LangString("en-US", i + ". AAS")
+                       new LangString("de", i + ". VWS"),
+                       new LangString("en", i + ". AAS")
                     },
                     Administration = new AdministrativeInformation()
                     {
@@ -55,19 +59,40 @@ namespace MultiAssetAdministrationShell
                         Kind = AssetKind.Instance,
                         Description = new LangStringSet()
                         {
-                              new LangString("de-DE", i + ". Asset"),
-                              new LangString("en-US", i + ". Asset")
+                              new LangString("de", i + ". Asset"),
+                              new LangString("en", i + ". Asset")
                         }
                     }
                 };
 
+                string propertyIdShort = "Property_" + i;
+                string loopVariable = i.ToString();
                 aas.Submodels.Create(new Submodel("TestSubmodel", new BaSyxSubmodelIdentifier("TestSubmodel", "1.0.0"))
                 {
                     SubmodelElements =
                     {
-                        new Property<double>("Property_" + i)
+                        new Property<double>(propertyIdShort)
                         {
-                            Get = prop => { return Math.Pow(i, 2); }
+                            Description = new LangStringSet()
+                            {
+                                  new LangString("de", $"Gibt die {i}.Potenz der Basis zurück (Basis-Default-Wert: 2)"),
+                                  new LangString("en", $"Returns the base raised to the power of {i} (base default value: 2)")
+                            },
+                            Get = prop => { return Math.Pow(baseValue, Int32.Parse(loopVariable)); }
+                        },
+                        new Operation("SetBase")
+                        {
+                            Description = new LangStringSet()
+                            {
+                                  new LangString("de", "Setzt die Basis der Exponentialfunktion"),
+                                  new LangString("en", "Sets the base of the exponential funktion")
+                            },
+                            InputVariables = { new Property<double>("Base") },
+                            OnMethodCalled = (op, inargs, inoutargs, outargs, ct) =>
+                            {
+                                baseValue =  inargs.Get("Base").GetValue<double>();
+                                return new OperationResult(true);
+                            }
                         }
                     }
                 });

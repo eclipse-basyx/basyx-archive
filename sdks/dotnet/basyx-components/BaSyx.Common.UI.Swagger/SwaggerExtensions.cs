@@ -15,9 +15,9 @@ using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using BaSyx.Utils.AssemblyHandling;
-using BaSyx.Components.Common;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq;
+using BaSyx.Components.Common.Abstractions;
 
 namespace BaSyx.Common.UI.Swagger
 {
@@ -104,7 +104,7 @@ namespace BaSyx.Common.UI.Swagger
     }
     public static class SwaggerExtensions
     {
-        public static void AddSwagger(this ServerApplication serverApp, Interface interfaceType)
+        public static void AddSwagger(this IServerApplication serverApp, Interface interfaceType)
         {
             OpenApiInfo info = OpenApiInfos.GetApiInfo(interfaceType);
             serverApp.ConfigureServices(services =>

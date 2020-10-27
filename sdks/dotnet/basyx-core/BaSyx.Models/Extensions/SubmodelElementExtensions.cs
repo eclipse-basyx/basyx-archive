@@ -65,16 +65,24 @@ namespace BaSyx.Models.Extensions
         {
             submodelElement?.Set?.Invoke(submodelElement, new ElementValue(value, valueType));
         }
+        public static ISubmodelElementCollection CreateSubmodelElementCollectionFromObject(this object target, string idShort)
+            => CreateSubmodelElementCollectionFromObject(target, idShort, BindingFlags.Public | BindingFlags.Instance);
+
+        public static ISubmodelElementCollection CreateSubmodelElementCollectionFromObject(this object target, string idShort, BindingFlags bindingFlags)
+            => CreateSubmodelElementCollection(target.GetType(), idShort, bindingFlags, target);
 
         public static ISubmodelElementCollection CreateSubmodelElementCollection<T>(this IEnumerable<T> enumerable, string idShort)
+            => CreateSubmodelElementCollection<T>(enumerable, idShort, BindingFlags.Public | BindingFlags.Instance);
+
+        public static ISubmodelElementCollection CreateSubmodelElementCollection<T>(this IEnumerable<T> enumerable, string idShort, BindingFlags bindingFlags)
         {
             SubmodelElementCollection smCollection = new SubmodelElementCollection(idShort);
             Type type = typeof(T);
             foreach (var item in enumerable)
             {
-                foreach (var property in type.GetProperties())
+                foreach (var property in type.GetProperties(bindingFlags))
                 {                    
-                    ISubmodelElement smElement = CreateSubmodelElement(property, item);
+                    ISubmodelElement smElement = CreateSubmodelElement(property, bindingFlags, item);
                     smCollection.Value.Create(smElement);
                 }
             }
@@ -82,18 +90,30 @@ namespace BaSyx.Models.Extensions
         }
 
         public static ISubmodelElementCollection CreateSubmodelElementCollection(this Type type, string idShort)
+            => CreateSubmodelElementCollection(type, idShort, BindingFlags.Public | BindingFlags.Instance, null);
+
+        public static ISubmodelElementCollection CreateSubmodelElementCollection(this Type type, string idShort, BindingFlags bindingFlags)
+            => CreateSubmodelElementCollection(type, idShort, bindingFlags, null);
+
+        public static ISubmodelElementCollection CreateSubmodelElementCollection(this Type type, string idShort, BindingFlags bindingFlags, object target)
         {
             SubmodelElementCollection smCollection = new SubmodelElementCollection(idShort);
 
-            foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (var property in type.GetProperties(bindingFlags))
             {
-                ISubmodelElement smElement = CreateSubmodelElement(property);
+                ISubmodelElement smElement = CreateSubmodelElement(property, bindingFlags, target);
                 smCollection.Value.Create(smElement);
             }
             return smCollection;
         }
 
-        public static ISubmodelElement CreateSubmodelElement(this PropertyInfo property, object target = null)
+        public static ISubmodelElement CreateSubmodelElement(this PropertyInfo property)
+            => CreateSubmodelElement(property, BindingFlags.Public | BindingFlags.Instance, null);
+
+        public static ISubmodelElement CreateSubmodelElement(this PropertyInfo property, BindingFlags bindingFlags)
+           => CreateSubmodelElement(property, bindingFlags, null);
+
+        public static ISubmodelElement CreateSubmodelElement(this PropertyInfo property, BindingFlags bindingFlags, object target)
         {
             DataType dataType = DataType.GetDataTypeFromSystemType(property.PropertyType);
             if(dataType == null)
@@ -110,6 +130,14 @@ namespace BaSyx.Models.Extensions
 
                 return smProp;
             }
+            else if (property.PropertyType == typeof(DateTime))
+            {
+                Property smProp = new Property(property.Name, new DataType(DataObjectType.DateTime));
+                if (target != null && property.GetValue(target) is DateTime dateTime)
+                    smProp.Value = dateTime.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
+
+                return smProp;
+            }
             else
             {
                 SubmodelElementCollection smCollection = new SubmodelElementCollection(property.Name);
@@ -118,9 +146,9 @@ namespace BaSyx.Models.Extensions
                 if(target != null)
                     subTarget = property.GetValue(target);
 
-                foreach (var subProperty in dataType.SystemType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                foreach (var subProperty in dataType.SystemType.GetProperties(bindingFlags))
                 {
-                    ISubmodelElement smElement = CreateSubmodelElement(subProperty, subTarget);
+                    ISubmodelElement smElement = CreateSubmodelElement(subProperty, bindingFlags, subTarget);
                     smCollection.Value.Create(smElement);
                 }
                 return smCollection;

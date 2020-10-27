@@ -12,34 +12,38 @@ using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using System;
 using BaSyx.Models.Core.Common;
+using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 
 namespace BaSyx.Models.Core.Attributes
 {
-    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    public sealed class PropertyAttribute : Attribute
+    [AttributeUsage(AttributeTargets.All, Inherited = true, AllowMultiple = false)]
+    public sealed class SubmodelElementAttribute : Attribute
     {
-        public Property Property { get; }
+        public SubmodelElement SubmodelElement { get; }
 
         public string Category
         {
             get
             {
-                return Property.Category;
+                return SubmodelElement.Category;
             }
             set
             {
-                Property.Category = value;
+                SubmodelElement.Category = value;
             }
         }
 
-        public PropertyAttribute(string idShort, DataObjectTypes propertyType)
+        public SubmodelElementAttribute(string idShort, ModelTypes modelType)
         {
-            Property = new Property(idShort, new DataType(DataObjectType.Parse(propertyType)));
+            //ModelType modelType = new ModelType()
+            //SubmodelElement = SubmodelElementFactory.CreateSubmodelElement(idShort, modelType)
+                
+            //    //new Property(idShort, new DataType(DataObjectType.Parse(propertyType)));
         }
 
-        public PropertyAttribute(string idShort, DataObjectTypes propertyType, string semanticId, KeyElements semanticKeyElement, KeyType semanticKeyType, bool semanticIdLocal)
+        public SubmodelElementAttribute(string idShort, DataObjectTypes propertyType, string semanticId, KeyElements semanticKeyElement, KeyType semanticKeyType, bool semanticIdLocal)
         {
-            Property = new Property(idShort, new DataType(DataObjectType.Parse(propertyType)))
+            SubmodelElement = new Property(idShort, new DataType(DataObjectType.Parse(propertyType)))
             {
                 SemanticId = new Reference(new Key(semanticKeyElement, semanticKeyType, semanticId, semanticIdLocal)) 
             };

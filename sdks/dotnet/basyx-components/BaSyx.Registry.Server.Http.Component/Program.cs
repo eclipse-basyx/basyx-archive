@@ -84,7 +84,7 @@ namespace BaSyx.Registry.Server.Http.Component
             };
 
             //Add BaSyx Web UI
-            registryServer.AddBaSyxUI(PageNames.RegistryServer);
+            registryServer.AddBaSyxUI(PageNames.AssetAdministrationShellRegistryServer);
 
             //Add Swagger Documentation and UI
             registryServer.AddSwagger(Interface.AssetAdministrationShellRegistry);

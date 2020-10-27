@@ -8,24 +8,23 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
-using BaSyx.Components.Common;
+using BaSyx.Components.Common.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BaSyx.Common.UI
 {
     public static class PageNames
     {
-        public const string AssetAdministrationShellServer = "SingleShell";
-        public const string AssetAdministrationShellRepositoryServer = "MultipleShells";
-
-        public const string SubmodelServer = "SingleSubmodel";
-        public const string SubmodelRepositoryServer = "MultipleSubmodels";
-
-        public const string RegistryServer = "Registry";
+        public const string AssetAdministrationShellServer = "AssetAdministrationShell";
+        public const string AssetAdministrationShellRegistryServer = "AssetAdministrationShellRegistry";
+        public const string AssetAdministrationShellRepositoryServer = "AssetAdministrationShellRepository";
+        
+        public const string SubmodelServer = "Submodel";
+        public const string SubmodelRepositoryServer = "SubmodelRepository";        
     }
     public static class CommonUIExtensions
     {
-        public static void AddBaSyxUI(this ServerApplication serverApp, string pageName)
+        public static void AddBaSyxUI(this IServerApplication serverApp, string pageName)
         {
             serverApp.ConfigureServices(services =>
             {
@@ -35,10 +34,8 @@ namespace BaSyx.Common.UI
 
         public static void AddBaSyxUI(this IServiceCollection services, string pageName)
         {
-            services
-             .AddRazorPages()
-             .AddRazorRuntimeCompilation()
-             .AddRazorPagesOptions(options => options.Conventions.AddPageRoute("/" + pageName, "ui"));
+            services.AddMvc()
+                .AddRazorPagesOptions(options => options.Conventions.AddPageRoute("/" + pageName, "ui"));
 
             services.ConfigureOptions(typeof(CommonUIConfigureOptions));
         }

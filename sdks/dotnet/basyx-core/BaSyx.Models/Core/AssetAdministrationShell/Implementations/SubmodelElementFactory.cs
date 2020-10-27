@@ -14,7 +14,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 {
     public static class SubmodelElementFactory
     {
-        public static SubmodelElement CreateSubmodelElement(string idShort, DataObjectType modelType, DataType valueType = null)
+        public static SubmodelElement CreateSubmodelElement(string idShort, ModelType modelType, DataType valueType = null)
         {
             if (modelType == ModelType.Property)
                 return new Property(idShort, valueType);

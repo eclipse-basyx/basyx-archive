@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Constantin Ziesche</Authors>
     <Copyright>Copyright 2020 - Robert Bosch GmbH</Copyright>
     <PackageProjectUrl>https://wiki.eclipse.org/BaSyx</PackageProjectUrl>
@@ -15,11 +15,8 @@
     <PackageIcon>basyxlogo.png</PackageIcon>   
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Include="basyxlogo.png" Pack="true" PackagePath="\" />
@@ -27,8 +24,9 @@
 
   <ItemGroup>
     <PackageReference Include="BaSyx.API" Version="1.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.7" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Composite" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.8" />
   </ItemGroup>
@@ -38,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BaSyx.Components.Common\BaSyx.Components.Common.csproj" />
+    <ProjectReference Include="..\BaSyx.Components.Common.Abstractions\BaSyx.Components.Common.Abstractions.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

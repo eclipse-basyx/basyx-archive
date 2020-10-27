@@ -1,5 +1,5 @@
 ﻿@page
-@model BaSyx.Common.UI.Pages.RegistryModel
+@model BaSyx.Common.UI.Pages.AssetAdministrationShellRegistryModel
 @using BaSyx.API.Components;
 @using BaSyx.Models.Connectivity;
 @using BaSyx.Models.Connectivity.Descriptors;
@@ -13,7 +13,7 @@
 @{
     IAssetAdministrationShellRegistry registry = Model.ServiceProvider;
     IElementContainer<IAssetAdministrationShellDescriptor> shells = registry.RetrieveAllAssetAdministrationShellRegistrations().Entity;
-    IWebHostEnvironment hostingEnvironment = Model.HostingEnvironment;
+    IHostingEnvironment hostingEnvironment = Model.HostingEnvironment;
     ServerSettings settings = Model.Settings;
     string pathToCompanyLogo = settings.Miscellaneous.TryGetValue("CompanyLogo", out string path) ? path : string.Empty;
 

@@ -15,12 +15,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BaSyx.Common.UI.Pages
 {
-    public class MultipleShellsModel : PageModel
+    public class AssetAdministrationShellRepositoryModel : PageModel
     {
         public IAssetAdministrationShellRepositoryServiceProvider ServiceProvider { get; }
         public ServerSettings Settings { get; }
-        public IWebHostEnvironment HostingEnvironment { get; }
-        public MultipleShellsModel(IAssetAdministrationShellRepositoryServiceProvider provider, ServerSettings serverSettings, IWebHostEnvironment hostingEnvironment)
+        public IHostingEnvironment HostingEnvironment { get; }
+        public AssetAdministrationShellRepositoryModel(IAssetAdministrationShellRepositoryServiceProvider provider, ServerSettings serverSettings, IHostingEnvironment hostingEnvironment)
         {
             ServiceProvider = provider;
             Settings = serverSettings;

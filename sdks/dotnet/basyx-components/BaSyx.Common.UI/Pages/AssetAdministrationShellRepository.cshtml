@@ -1,5 +1,5 @@
 ﻿@page
-@model BaSyx.Common.UI.Pages.MultipleShellsModel
+@model BaSyx.Common.UI.Pages.AssetAdministrationShellRepositoryModel
 @using BaSyx.API.Components;
 @using BaSyx.Utils.Settings.Types;
 @using Microsoft.AspNetCore.Hosting;
@@ -9,7 +9,7 @@
 
 @{
     IAssetAdministrationShellRepositoryServiceProvider sp = Model.ServiceProvider;
-    IWebHostEnvironment hostingEnvironment = Model.HostingEnvironment;
+    IHostingEnvironment hostingEnvironment = Model.HostingEnvironment;
     ServerSettings settings = Model.Settings;
     string pathToCompanyLogo = settings.Miscellaneous.TryGetValue("CompanyLogo", out string path) ? path : string.Empty;
 

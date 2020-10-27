@@ -8,6 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
+using BaSyx.Components.Common.Abstractions;
 using BaSyx.Utils.AssemblyHandling;
 using BaSyx.Utils.DependencyInjection;
 using BaSyx.Utils.Settings.Types;
@@ -35,7 +36,7 @@ using static BaSyx.Utils.Settings.Types.ServerSettings;
 
 namespace BaSyx.Components.Common
 {
-    public abstract class ServerApplication : IServerApplicationLifetime
+    public abstract class ServerApplication : IServerApplication
     {
         private static readonly Logger logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
 

@@ -19,8 +19,8 @@ namespace BaSyx.Common.UI
 {
     internal class CommonUIConfigureOptions : IPostConfigureOptions<StaticFileOptions>
     {
-        private readonly IWebHostEnvironment _environment;
-        public CommonUIConfigureOptions(IWebHostEnvironment environment)
+        private readonly IHostingEnvironment _environment;
+        public CommonUIConfigureOptions(IHostingEnvironment environment)
         {
             _environment = environment;
         }

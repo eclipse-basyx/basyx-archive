@@ -15,13 +15,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BaSyx.Common.UI.Pages
 {
-    public class MultipleSubmodelsModel : PageModel
+    public class SubmodelRepositoryModel : PageModel
     {
         public ISubmodelRepositoryServiceProvider ServiceProvider { get; }
         public ServerSettings Settings { get; }
-        public IWebHostEnvironment HostingEnvironment { get; }
+        public IHostingEnvironment HostingEnvironment { get; }
 
-        public MultipleSubmodelsModel(ISubmodelRepositoryServiceProvider provider, ServerSettings serverSettings, IWebHostEnvironment hostingEnvironment)
+        public SubmodelRepositoryModel(ISubmodelRepositoryServiceProvider provider, ServerSettings serverSettings, IHostingEnvironment hostingEnvironment)
         {
             ServiceProvider = provider;
             Settings = serverSettings;

@@ -13,6 +13,35 @@ using System;
 
 namespace BaSyx.Models.Core.Common
 {
+    public enum ModelTypes
+    {
+        Asset,
+        AssetAdministationShell,
+        Submodel,
+        SubmodelElement,
+        SubmodelElementCollection,
+        Operation,
+        OperationVariable,
+        Event,
+        BasicEvent,
+        View,
+        RelationshipElement,
+        AnnotatedRelationshipElement,
+        DataElement,
+        Property,
+        File,
+        Blob,
+        ReferenceElement,
+        MultiLanguageProperty,
+        Range,
+        Entity,
+        Constraint,
+        Formula,
+        Qualifier,
+        ConceptDescription,
+        ConceptDictionary
+    }
+
     public class ModelType : DataObjectType, IEquatable<ModelType>
     {
         public static readonly ModelType Asset = new ModelType("Asset");

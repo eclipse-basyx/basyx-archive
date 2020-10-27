@@ -10,7 +10,7 @@
 *******************************************************************************/
 using System;
 
-namespace BaSyx.Components.Common
+namespace BaSyx.Components.Common.Abstractions
 {
     public interface IServerApplicationLifetime
     {
