@@ -57,6 +57,11 @@ public class ConnectedElement implements IElement {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return getElemLive().toString();
+	}
+
 	protected void throwNotSupportedException() {
 		throw new RuntimeException("Not supported on remote object");
 	}

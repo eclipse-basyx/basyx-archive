@@ -25,7 +25,7 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	/**
 	 * Return all registered submodels of this AAS
 	 * 
-	 * @return
+	 * @return IdShort -> ISubmodel
 	 */
 	public Map<String, ISubModel> getSubModels();
 

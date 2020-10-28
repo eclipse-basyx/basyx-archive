@@ -53,8 +53,13 @@ public abstract class TestOperationSuite {
 	
 	@Before
 	public void setup() {
-		operation = prepareOperation(new Operation(IN, OUT, INOUT, FUNC));
-		operationException = prepareOperation(new Operation(IN, OUT, INOUT, EXCEPTION_FUNC));
+		Operation op1 = new Operation(IN, OUT, INOUT, FUNC);
+		op1.setIdShort("op1");
+		operation = prepareOperation(op1);
+
+		Operation op2 = new Operation(IN, OUT, INOUT, EXCEPTION_FUNC);
+		op2.setIdShort("op2");
+		operationException = prepareOperation(op2);
 	}
 	
 	@Test

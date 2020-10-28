@@ -5,11 +5,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -25,6 +25,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformat
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.junit.Test;
 
 
@@ -100,10 +101,8 @@ public abstract class AssetAdministrationShellSuite {
 		Property p = new Property(PROPVAL);
 		p.setIdShort(PROPID);
 
-		SubModel sm = new SubModel();
+		SubModel sm = new SubModel(SMIDSHORT, SMID);
 		sm.addSubModelElement(p);
-		sm.setIdShort(SMIDSHORT);
-		sm.setIdentification(SMID.getIdType(), SMID.getId());
 
 		return sm;
 	}
@@ -167,9 +166,10 @@ public abstract class AssetAdministrationShellSuite {
 		// Create a submodel
 		String smId = "newSubmodelId";
 		String testId = "smIdTest";
-		SubModel subModel = new SubModel(Collections.singletonList(new Property("testProperty")));
-		subModel.setIdentification(IdentifierType.CUSTOM, testId);
-		subModel.setIdShort(smId);
+		SubModel subModel = new SubModel(smId, new ModelUrn(testId));
+		Property prop = new Property("prop1", PropertyValueTypeDef.String);
+		prop.setValue("testProperty");
+		subModel.addSubModelElement(prop);
 		
 		//Retrieve the aas
 		IAssetAdministrationShell shell = retrieveShell();
@@ -184,7 +184,7 @@ public abstract class AssetAdministrationShellSuite {
 		List<IKey> expected2Keys = new ArrayList<>();
 		expected2Keys.add(new Key(KeyElements.ASSETADMINISTRATIONSHELL, true, AASID.getId(), AASID.getIdType()));
 
-		expected2Keys.add(new Key(KeyElements.SUBMODEL, true, testId, IdentifierType.CUSTOM));
+		expected2Keys.add(new Key(KeyElements.SUBMODEL, true, testId, IdentifierType.IRI));
 		Reference expected2 = new Reference(expected2Keys);
 
 		Collection<IReference> smReferences = shell.getSubmodelReferences();

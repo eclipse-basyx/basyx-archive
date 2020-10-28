@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -57,7 +58,7 @@ public class TestSubmodelElementMapCollectionConverter {
 
 
 	private SubModel getSM() {
-		SubModel sm = new SubModel();
+		SubModel sm = new SubModel("submodelIdShort", new ModelUrn("submodelUrn"));
 		Property property = new Property();
 		property.setIdShort(ID_SHORT);
 		

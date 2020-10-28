@@ -5,9 +5,12 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
@@ -58,11 +61,9 @@ public class TestConnectedAssetAdministrationShellManager {
 		IIdentifier aasId = new Identifier(IdentifierType.CUSTOM, "aasId");
 		String aasIdShort = "aasName";
 		connectorProvider.addMapping("", new AASAggregatorProvider(new AASAggregator()));
-
+ 
 		// Create an AAS containing a reference to the created SubModel
-		AssetAdministrationShell aas = new AssetAdministrationShell();
-		aas.setIdentification(aasId);
-		aas.setIdShort(aasIdShort);
+		AssetAdministrationShell aas = new AssetAdministrationShell(aasIdShort, aasId, new Asset("assetIdShort", new ModelUrn("assetId"), AssetKind.INSTANCE));
 		manager.createAAS(aas, aasId, "");
 
 		// Check descriptor for correct endpoint

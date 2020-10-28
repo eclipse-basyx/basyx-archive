@@ -37,6 +37,7 @@ import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 public class SubModelProvider extends MetaModelProvider {
 
 	public static final String VALUES = "values";
+	public static final String SUBMODEL = "submodel";
 	
 	ISubmodelAPI submodelAPI;
 
@@ -79,9 +80,10 @@ public class SubModelProvider extends MetaModelProvider {
 	 */
 	private String removeSubmodelPrefix(String path) {
 		path = VABPathTools.stripSlashes(path);
-		if (path.startsWith("submodel/")) {
+		String submodelWithSlash = SUBMODEL + "/";
+		if (path.startsWith(submodelWithSlash)) {
 			path = path.replaceFirst("submodel/", "");
-		} else if (path.equals("submodel")) {
+		} else if (path.equals(SUBMODEL)) {
 			path = "";
 		}
 		path = VABPathTools.stripSlashes(path);

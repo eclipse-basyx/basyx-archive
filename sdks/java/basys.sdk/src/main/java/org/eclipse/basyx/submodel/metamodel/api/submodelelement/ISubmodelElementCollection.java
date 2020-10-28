@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.api.submodelelement;
 
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.IElementContainer;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 
@@ -11,7 +12,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOpera
  * @author rajashek, schnicke
  *
  */
-public interface ISubmodelElementCollection extends ISubmodelElement {
+public interface ISubmodelElementCollection extends ISubmodelElement, IElementContainer {
 	
 	/**
 	 * Gets if the collection is ordered or unordered
@@ -32,6 +33,7 @@ public interface ISubmodelElementCollection extends ISubmodelElement {
 	 * 
 	 * @return
 	 */
+	@Override
 	public Map<String, ISubmodelElement> getSubmodelElements();
 
 	/**
@@ -39,6 +41,7 @@ public interface ISubmodelElementCollection extends ISubmodelElement {
 	 * 
 	 * @return
 	 */
+	@Override
 	public Map<String, IProperty> getProperties();
 
 	/**
@@ -46,5 +49,6 @@ public interface ISubmodelElementCollection extends ISubmodelElement {
 	 * 
 	 * @return
 	 */
+	@Override
 	public Map<String, IOperation> getOperations();
 }

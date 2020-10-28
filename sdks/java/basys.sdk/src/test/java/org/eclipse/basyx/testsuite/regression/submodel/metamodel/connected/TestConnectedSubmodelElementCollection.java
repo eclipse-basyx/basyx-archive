@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
@@ -52,9 +53,8 @@ public class TestConnectedSubmodelElementCollection {
 		complex.addSubModelElement(propertyMeta);
 		complex.addSubModelElement(operation);
 		complex.setIdShort("CollectionId");
-		
-		SubModel sm = new SubModel();
-		sm.setIdShort("submodelId");
+
+		SubModel sm = new SubModel("submodelId", new ModelUrn("testUrn"));
 		sm.addSubModelElement(complex);
 
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(sm);

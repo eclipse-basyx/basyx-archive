@@ -15,6 +15,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementFactory;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
@@ -24,6 +25,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -101,14 +103,22 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 		return Qualifiable.createAsFacade(getElem()).getQualifiers();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addSubModelElement(ISubmodelElement element) {
+		String path = VABPathTools.concatenatePaths(MultiSubmodelElementProvider.ELEMENTS, element.getIdShort());
+
 		if (element instanceof SubmodelElement) {
 			((SubmodelElement) element).setParent(getReference());
+			
+			// Convert "value" in SubmodelElementCollection from Map to Collection
+			if (element instanceof SubmodelElementCollection) {
+				Map<String, Object> converted = SubmodelElementMapCollectionConverter.smElementToMap((Map<String, Object>) element);
+				
+				getProxy().setModelPropertyValue(path, converted);
+				return;
+			}
 		}
-		
-		String path = VABPathTools.concatenatePaths(MultiSubmodelElementProvider.ELEMENTS, element.getIdShort());
-		
 		getProxy().setModelPropertyValue(path, element);
 	}
 

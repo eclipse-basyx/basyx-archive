@@ -267,8 +267,8 @@ public abstract class TestSubmodelSuite {
 		smECollection.setIdShort(SUBMODEL_ELEM_COLLECTION_ID);
 
 		// Create a Blob to use as Value for smECollection
-		Blob blob = new Blob();
-		blob.setIdShort(BLOB_ID);
+		Blob blob = new Blob(BLOB_ID, "text/json");
+		blob.setValue(new byte[] { 1, 2, 3 });
 
 		List<ISubmodelElement> values = new ArrayList<>();
 		values.add(blob);
@@ -276,8 +276,10 @@ public abstract class TestSubmodelSuite {
 		smECollection.setValue(values);
 		ret.put(smECollection.getIdShort(), smECollection);
 
-		RelationshipElement relElement = new RelationshipElement();
-		relElement.setIdShort(RELATIONSHIP_ELEM_ID);
+		Reference first = new Reference(new Key(KeyElements.BASICEVENT, true, "testFirst", IdentifierType.CUSTOM));
+		Reference second = new Reference(new Key(KeyElements.BASICEVENT, true, "testSecond", IdentifierType.CUSTOM));
+
+		RelationshipElement relElement = new RelationshipElement(RELATIONSHIP_ELEM_ID, first, second);
 		ret.put(relElement.getIdShort(), relElement);
 
 		return ret;

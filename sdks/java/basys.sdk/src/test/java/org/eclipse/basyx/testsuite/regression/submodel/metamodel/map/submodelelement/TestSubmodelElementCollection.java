@@ -146,11 +146,13 @@ public class TestSubmodelElementCollection {
 	@Test
 	public void testAddSubModelElement() {
 		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
+		String smCollIdShort = "coll1";
+		collection.setIdShort(smCollIdShort);
 		Property property = new Property("testValue");
 		String newIdShort = "newIdShort";
 		property.put(Referable.IDSHORT, newIdShort);
 		collection.addSubModelElement(property);
-		assertEquals(new Reference(new Key(KeyElements.SUBMODELELEMENTCOLLECTION, true, "", KeyType.IDSHORT)), property.getParent());
+		assertEquals(new Reference(new Key(KeyElements.SUBMODELELEMENTCOLLECTION, true, smCollIdShort, KeyType.IDSHORT)), property.getParent());
 		Map<String, ISubmodelElement> submodelElements = new HashMap<String, ISubmodelElement>();
 		submodelElements.put(PROPERTY_ID, getProperty());
 		submodelElements.put(OPERATION_ID, getOperation());

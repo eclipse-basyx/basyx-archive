@@ -2,6 +2,7 @@ package org.eclipse.basyx.testsuite.regression.submodel.restapi;
 
 import java.util.function.Function;
 
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -31,6 +32,7 @@ public class SimpleAASSubmodel extends SubModel {
 		// Create sub model
 
 		setIdShort(idShort);
+		setIdentification(new ModelUrn("simpleAASSubmodelUrn"));
 
 		Property intProp = new Property(123);
 		intProp.setIdShort(INTPROPIDSHORT);

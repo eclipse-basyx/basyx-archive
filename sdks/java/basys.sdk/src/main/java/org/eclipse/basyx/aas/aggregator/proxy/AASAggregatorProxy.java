@@ -29,7 +29,7 @@ public class AASAggregatorProxy implements IAASAggregator {
 	 *            The endpoint of the aggregator with a HTTP-REST interface
 	 */
 	public AASAggregatorProxy(String aasAggregatorURL) {
-		this(new JSONConnector(new HTTPConnector(aasAggregatorURL + "/" + AASAggregatorProvider.PREFIX)));
+		this(new JSONConnector(new HTTPConnector(harmonizeURL(aasAggregatorURL))));
 	}
 
 	/**
@@ -40,6 +40,19 @@ public class AASAggregatorProxy implements IAASAggregator {
 	 */
 	public AASAggregatorProxy(IModelProvider provider) {
 		this.provider = new VABElementProxy("/" + AASAggregatorProvider.PREFIX, provider);
+	}
+
+	/**
+	 * Removes prefix if it exists since it will be readded at a later stage
+	 * 
+	 * @param url
+	 * @return
+	 */
+	private static String harmonizeURL(String url) {
+		if (url.endsWith(AASAggregatorProvider.PREFIX)) {
+			url = url.substring(0, url.length() - AASAggregatorProvider.PREFIX.length());
+		}
+		return url;
 	}
 
 	@SuppressWarnings("unchecked")

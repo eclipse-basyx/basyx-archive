@@ -62,6 +62,9 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	public SubModel() {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
+		setModelingKind(ModelingKind.INSTANCE);
+
+		put(SUBMODELELEMENT, new HashMap<String, ISubmodelElement>());
 
 		// Add qualifiers
 		putAll(new HasSemantics());
@@ -69,9 +72,6 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 		putAll(new Qualifiable());
 		putAll(new HasDataSpecification());
 		putAll(new HasKind());
-
-		// Attributes
-		put(SUBMODELELEMENT, new HashMap<String, ISubmodelElement>());
 	}
 	
 	/**
@@ -91,6 +91,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	 */
 	public SubModel(HasSemantics semantics, Identifiable identifiable, Qualifiable qualifiable,
 			HasDataSpecification specification, HasKind hasKind) {
+		this();
 		// Add qualifiers
 		putAll(semantics);
 		putAll(identifiable);

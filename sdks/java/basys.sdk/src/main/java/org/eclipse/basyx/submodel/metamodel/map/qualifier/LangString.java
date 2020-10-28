@@ -12,7 +12,7 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  */
 public class LangString extends VABModelMap<Object> {
 	private static final String LANGUAGE = "language";
-	private static final String DESCRIPTION = "description";
+	private static final String DESCRIPTION = "text";
 	
 	private LangString() {
 	}

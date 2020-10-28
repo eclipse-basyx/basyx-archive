@@ -8,9 +8,12 @@ import java.util.Collection;
 
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.After;
@@ -42,21 +45,22 @@ public abstract class AASAggregatorSuite {
 	// initializing dummy test data
 	@Before
 	public void initAASDummies() {
-		aas1 = new AssetAdministrationShell();
-		aas1.setIdentification(IdentifierType.CUSTOM, aas1Id);
-		aas1.setIdShort(aas1Id);
+		aas1 = new AssetAdministrationShell(aas1Id, new Identifier(IdentifierType.CUSTOM, aas1Id), new Asset("asset1IdShort", new Identifier(IdentifierType.CUSTOM, "asset1"), AssetKind.INSTANCE));
 		aas1.setDescription(description1);
 		aas1.setCategory(aas1Category);
 		
-		aas2 = new AssetAdministrationShell();
-		aas2.setIdentification(IdentifierType.CUSTOM, aas2Id);
-		aas2.setIdShort(aas2Id);
+		aas2 = new AssetAdministrationShell(aas2Id, new Identifier(IdentifierType.CUSTOM, aas2Id), new Asset("asset2IdShort", new Identifier(IdentifierType.CUSTOM, "asset2"), AssetKind.INSTANCE));
 		aas2.setDescription(description2);
 		aas2.setCategory(aas2Category);
 	}
 	
 	protected abstract IAASAggregator getAggregator();
 	
+	@Before
+	public void clearAASAggregator() {
+		IAASAggregator aggregator = getAggregator();
+		aggregator.getAASList().stream().map(a -> a.getIdentification()).forEach(id -> aggregator.deleteAAS(id));
+	}
 	
 	@Test
 	public void testCreateAndGetAAS() {
@@ -66,7 +70,8 @@ public abstract class AASAggregatorSuite {
 		aggregator.createAAS(aas1);
 		
 		//get and check the created AAS
-		checkAAS1(aggregator.getAAS(new ModelUrn(aas1Id)));
+		IAssetAdministrationShell retrieved = aggregator.getAAS(aas1.getIdentification());
+		checkAAS1(retrieved);
 	}
 	
 	@Test

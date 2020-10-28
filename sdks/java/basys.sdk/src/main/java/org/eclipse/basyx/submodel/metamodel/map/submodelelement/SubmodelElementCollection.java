@@ -51,7 +51,7 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	 * Constructor with only mandatory attribute
 	 * @param idShort
 	 */
-	protected SubmodelElementCollection(String idShort) {
+	public SubmodelElementCollection(String idShort) {
 		super(idShort);
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
@@ -225,7 +225,7 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		Map<String, ISubmodelElement> smElems = (Map<String, ISubmodelElement>) get(Property.VALUE);
 		
 		for(ISubmodelElement smElement: smElems.values()) {
-			if (Operation.isOperation((Map<String, Object>) smElement)) {
+			if (Operation.isOperation(smElement)) {
 				ret.put(smElement.getIdShort(), (IOperation) smElement);
 			}
 		}

@@ -2,12 +2,12 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 
 import java.util.Map;
 
-import org.eclipse.basyx.submodel.metamodel.api.IElementContainer;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -19,7 +19,7 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  * @author rajashek
  *
  */
-public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement implements ISubmodelElementCollection, IElementContainer  {
+public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement implements ISubmodelElementCollection {
 	public ConnectedSubmodelElementCollection(VABElementProxy proxy) {
 		super(proxy);
 	}
@@ -85,10 +85,18 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	 * adds a submodel element to the collection
 	 * @param element
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addSubModelElement(ISubmodelElement element) {
 		if (element instanceof SubmodelElement) {
 			((SubmodelElement) element).setParent(getReference());
+
+			// Convert "value" in SubmodelElementCollection from Map to Collection
+			if (element instanceof SubmodelElementCollection) {
+				Map<String, Object> converted = SubmodelElementMapCollectionConverter.smElementToMap((Map<String, Object>) element);
+				getProxy().setModelPropertyValue(element.getIdShort(), converted);
+				return;
+			}
 		}
 		
 		getProxy().setModelPropertyValue(element.getIdShort(), element);
