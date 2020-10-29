@@ -1,7 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement;
 
 import java.util.Map;
-
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
@@ -13,49 +12,48 @@ import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
- * Connects to a PropertySingleValued as specified by DAAS containing a simple
- * value
- * 
+ * Connects to a PropertySingleValued as specified by DAAS containing a simple value
+ *
  * @author schnicke
  *
  */
 public class ConnectedProperty extends ConnectedDataElement implements IProperty {
 
-	public ConnectedProperty(VABElementProxy proxy) {
-		super(proxy);
-	}
+  public ConnectedProperty(VABElementProxy proxy) {
+    super(proxy);
+  }
 
-	@Override
-	public Object get() throws Exception {
-		return retrieveObject();
-	}
+  @Override
+  public Object get() throws Exception {
+    return retrieveObject();
+  }
 
-	@Override
-	public void set(Object newValue) throws ProviderException {
-		getProxy().setModelPropertyValue(Property.VALUE, newValue);
-	}
+  @Override
+  public void set(Object newValue) throws ProviderException {
+    getProxy().setModelPropertyValue(Property.VALUE, newValue);
+  }
 
-	@SuppressWarnings({ "unchecked" })
-	@Override
-	public String getValueType() {
-		Object o = getProxy().getModelPropertyValue("");
-		return PropertyValueTypeDefHelper.readTypeDef(((Map<String, Object>) o).get(Property.VALUETYPE)).toString();
-	}
+  @SuppressWarnings({"unchecked"})
+  @Override
+  public String getValueType() {
+    Object o = getProxy().getModelPropertyValue("");
+    return String.valueOf(PropertyValueTypeDefHelper.readTypeDef(((Map<String, Object>) o).get(Property.VALUETYPE)));
+  }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public IReference getValueId() {
-		return Reference.createAsFacade((Map<String, Object>) getProxy().getModelPropertyValue(MultiLanguageProperty.VALUEID));
-	}
+  @SuppressWarnings("unchecked")
+  @Override
+  public IReference getValueId() {
+    return Reference.createAsFacade((Map<String, Object>) getProxy().getModelPropertyValue(MultiLanguageProperty.VALUEID));
+  }
 
-	@SuppressWarnings("unchecked")
-	protected <T> T retrieveObject() {
-		return (T) ((Map<String, Object>) getProxy().getModelPropertyValue(Property.VALUE)).get(Property.VALUE);
-	}
-	
-	@Override
-	protected KeyElements getKeyElement() {
-		return KeyElements.PROPERTY;
-	}
+  @SuppressWarnings("unchecked")
+  protected <T> T retrieveObject() {
+    return (T) ((Map<String, Object>) getProxy().getModelPropertyValue(Property.VALUE)).get(Property.VALUE);
+  }
+
+  @Override
+  protected KeyElements getKeyElement() {
+    return KeyElements.PROPERTY;
+  }
 
 }
