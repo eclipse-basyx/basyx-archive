@@ -13,38 +13,28 @@ using System;
 
 namespace BaSyx.Models.Core.Attributes
 {
-    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, Inherited = true, AllowMultiple = true)]
     sealed class DataSpecificationAttribute : Attribute
     {
-        readonly IReference reference;
+        public IReference Reference { get; }
 
         public DataSpecificationAttribute(string dataSpecificationReference)
         {
-            reference = new Reference(
+            Reference = new Reference(
                 new GlobalKey(KeyElements.GlobalReference, KeyType.IRI, dataSpecificationReference));
-        }
-
-        public IReference Reference
-        {
-            get { return reference; }
         }
     }
 
-    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = true)]
     sealed class DataSpecificationContentAttribute : Attribute
     {
-        readonly Type contentType;
         public string ShortNamespace { get; }
+        public Type ContentType { get; }
 
         public DataSpecificationContentAttribute(Type contentType, string shortNamespace)
         {
-            this.contentType = contentType;
+            ContentType = contentType;
             ShortNamespace = shortNamespace;
-        }
-
-        public Type ContentType
-        {
-            get { return contentType; }
         }
     }
 }

@@ -9,12 +9,17 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using System;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
+using BaSyx.Models.Core.AssetAdministrationShell;
 
 namespace BaSyx.Models.Core.Attributes
-{    
-    public abstract class SubmodelElementAttribute : Attribute
+{
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Interface | AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
+    public sealed class DisplayNameAttribute : Attribute
     {
-        public abstract SubmodelElement SubmodelElement { get; }
+        public LangString DisplayName { get; }
+        public DisplayNameAttribute(string language, string text)
+        {
+            DisplayName = new LangString(language, text);
+        }
     }
 }

@@ -11,9 +11,11 @@
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
+using BaSyx.Models.Core.Attributes;
 using BaSyx.Models.Core.Common;
 using NLog;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -22,6 +24,8 @@ namespace BaSyx.Models.Extensions
     public static class SubmodelElementExtensions
     {
         private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
+
+        public const BindingFlags DEFAULT_BINDING_FLAGS = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
 
         internal static T As<T>(this IReferable referable) where T : class, IReferable
         {
@@ -65,93 +69,191 @@ namespace BaSyx.Models.Extensions
         {
             submodelElement?.Set?.Invoke(submodelElement, new ElementValue(value, valueType));
         }
+        public static ISubmodelElementCollection CreateSubmodelElementCollectionFromObject(this object target)
+            => CreateSubmodelElementCollectionFromType(target.GetType(), target.GetType().Name, DEFAULT_BINDING_FLAGS, target);
+
         public static ISubmodelElementCollection CreateSubmodelElementCollectionFromObject(this object target, string idShort)
-            => CreateSubmodelElementCollectionFromObject(target, idShort, BindingFlags.Public | BindingFlags.Instance);
+            => CreateSubmodelElementCollectionFromType(target.GetType(), idShort, BindingFlags.Public | BindingFlags.Instance, target);
+
+        public static ISubmodelElementCollection CreateSubmodelElementCollectionFromObject(this object target, BindingFlags bindingFlags)
+            => CreateSubmodelElementCollectionFromType(target.GetType(), target.GetType().Name, bindingFlags, target);
 
         public static ISubmodelElementCollection CreateSubmodelElementCollectionFromObject(this object target, string idShort, BindingFlags bindingFlags)
-            => CreateSubmodelElementCollection(target.GetType(), idShort, bindingFlags, target);
+            => CreateSubmodelElementCollectionFromType(target.GetType(), idShort, bindingFlags, target);
 
-        public static ISubmodelElementCollection CreateSubmodelElementCollection<T>(this IEnumerable<T> enumerable, string idShort)
-            => CreateSubmodelElementCollection<T>(enumerable, idShort, BindingFlags.Public | BindingFlags.Instance);
+        public static ISubmodelElementCollection CreateSubmodelElementCollectionFromEnumerable<T>(this IEnumerable enumerable)
+            => CreateSubmodelElementCollectionFromEnumerable(enumerable, typeof(T).Name, DEFAULT_BINDING_FLAGS);
 
-        public static ISubmodelElementCollection CreateSubmodelElementCollection<T>(this IEnumerable<T> enumerable, string idShort, BindingFlags bindingFlags)
+        public static ISubmodelElementCollection CreateSubmodelElementCollectionFromEnumerable(this IEnumerable enumerable, string idShort)
+            => CreateSubmodelElementCollectionFromEnumerable(enumerable, idShort, DEFAULT_BINDING_FLAGS);
+
+        public static ISubmodelElementCollection CreateSubmodelElementCollectionFromEnumerable<T>(this IEnumerable enumerable, BindingFlags bindingFlags)
+         => CreateSubmodelElementCollectionFromEnumerable(enumerable, typeof(T).Name, bindingFlags);
+
+        public static ISubmodelElementCollection CreateSubmodelElementCollectionFromEnumerable(this IEnumerable enumerable, string idShort, BindingFlags bindingFlags)
         {
             SubmodelElementCollection smCollection = new SubmodelElementCollection(idShort);
-            Type type = typeof(T);
             foreach (var item in enumerable)
             {
-                foreach (var property in type.GetProperties(bindingFlags))
+                foreach (var propertyInfo in item.GetType().GetProperties(bindingFlags))
                 {                    
-                    ISubmodelElement smElement = CreateSubmodelElement(property, bindingFlags, item);
-                    smCollection.Value.Create(smElement);
+                    ISubmodelElement smElement = CreateSubmodelElementFromPropertyInfo(propertyInfo, propertyInfo.Name, bindingFlags, item);
+                    if(smElement != null)
+                        smCollection.Value.Create(smElement);
                 }
             }
             return smCollection;
         }
 
-        public static ISubmodelElementCollection CreateSubmodelElementCollection(this Type type, string idShort)
-            => CreateSubmodelElementCollection(type, idShort, BindingFlags.Public | BindingFlags.Instance, null);
+        public static ISubmodelElementCollection CreateSubmodelElementCollectionFromType(this Type type)
+            => CreateSubmodelElementCollectionFromType(type, type.Name, DEFAULT_BINDING_FLAGS, null);
 
-        public static ISubmodelElementCollection CreateSubmodelElementCollection(this Type type, string idShort, BindingFlags bindingFlags)
-            => CreateSubmodelElementCollection(type, idShort, bindingFlags, null);
+        public static ISubmodelElementCollection CreateSubmodelElementCollectionFromType(this Type type, string idShort)
+            => CreateSubmodelElementCollectionFromType(type, idShort, DEFAULT_BINDING_FLAGS, null);
 
-        public static ISubmodelElementCollection CreateSubmodelElementCollection(this Type type, string idShort, BindingFlags bindingFlags, object target)
+        public static ISubmodelElementCollection CreateSubmodelElementCollectionFromType(this Type type, BindingFlags bindingFlags)
+            => CreateSubmodelElementCollectionFromType(type, type.Name, bindingFlags, null);
+
+        public static ISubmodelElementCollection CreateSubmodelElementCollectionFromType(this Type type, string idShort, BindingFlags bindingFlags)
+            => CreateSubmodelElementCollectionFromType(type, idShort, bindingFlags, null);
+
+        public static ISubmodelElementCollection CreateSubmodelElementCollectionFromType(this Type type, string idShort, BindingFlags bindingFlags, object target)
         {
-            SubmodelElementCollection smCollection = new SubmodelElementCollection(idShort);
-
-            foreach (var property in type.GetProperties(bindingFlags))
+            Attribute attribute = Attribute.GetCustomAttribute(type, typeof(SubmodelElementCollectionAttribute), true);
+            SubmodelElementCollection smCollection;
+            if (attribute is SubmodelElementCollectionAttribute seCollectionAttribute)
             {
-                ISubmodelElement smElement = CreateSubmodelElement(property, bindingFlags, target);
-                smCollection.Value.Create(smElement);
+                smCollection = seCollectionAttribute.SubmodelElementCollection;
+                if(!string.IsNullOrEmpty(idShort) && idShort != type.Name)
+                    smCollection.IdShort = idShort;
+            }
+            else 
+            {
+                smCollection = new SubmodelElementCollection(idShort);
+            }
+            foreach (var propertyInfo in type.GetProperties(bindingFlags))
+            {
+                ISubmodelElement smElement = CreateSubmodelElementFromPropertyInfo(propertyInfo, propertyInfo.Name, bindingFlags, target);
+                if(smElement != null)
+                    smCollection.Value.Create(smElement);
             }
             return smCollection;
         }
 
-        public static ISubmodelElement CreateSubmodelElement(this PropertyInfo property)
-            => CreateSubmodelElement(property, BindingFlags.Public | BindingFlags.Instance, null);
+        public static ISubmodelElement CreateSubmodelElementFromPropertyInfo(this PropertyInfo propertyInfo)
+            => CreateSubmodelElementFromPropertyInfo(propertyInfo, propertyInfo.Name, DEFAULT_BINDING_FLAGS, null);
 
-        public static ISubmodelElement CreateSubmodelElement(this PropertyInfo property, BindingFlags bindingFlags)
-           => CreateSubmodelElement(property, bindingFlags, null);
+        public static ISubmodelElement CreateSubmodelElementFromPropertyInfo(this PropertyInfo propertyInfo, string idShort)
+            => CreateSubmodelElementFromPropertyInfo(propertyInfo, idShort, DEFAULT_BINDING_FLAGS, null);
 
-        public static ISubmodelElement CreateSubmodelElement(this PropertyInfo property, BindingFlags bindingFlags, object target)
+        public static ISubmodelElement CreateSubmodelElementFromPropertyInfo(this PropertyInfo propertyInfo, BindingFlags bindingFlags)
+           => CreateSubmodelElementFromPropertyInfo(propertyInfo, propertyInfo.Name, bindingFlags, null);
+
+        public static ISubmodelElement CreateSubmodelElementFromPropertyInfo(this PropertyInfo propertyInfo, string idShort, BindingFlags bindingFlags)
+           => CreateSubmodelElementFromPropertyInfo(propertyInfo, idShort, bindingFlags, null);
+
+        public static ISubmodelElement CreateSubmodelElementFromPropertyInfo(this PropertyInfo propertyInfo, string idShort, BindingFlags bindingFlags, object target)
         {
-            DataType dataType = DataType.GetDataTypeFromSystemType(property.PropertyType);
-            if(dataType == null)
+            Attribute attribute = Attribute.GetCustomAttribute(propertyInfo, typeof(SubmodelElementAttribute), true);
+            if (attribute is SubmodelElementAttribute seAttribute)
             {
-                logger.Warn($"Unable to convert system type {property.PropertyType} to DataType");
+                SubmodelElement se = seAttribute.SubmodelElement;
+                if (!string.IsNullOrEmpty(idShort) && idShort != propertyInfo.Name)
+                    se.IdShort = idShort;
+
+                if (se is SubmodelElementCollection seCollection)
+                {
+                    if (DataType.IsGenericList(propertyInfo.PropertyType) || DataType.IsArray(propertyInfo.PropertyType))
+                    {
+                        ISubmodelElementCollection tempSeCollection;
+                        if (target != null && propertyInfo.CanRead && propertyInfo.GetValue(target) is IEnumerable enumerable)
+                            tempSeCollection = enumerable.CreateSubmodelElementCollectionFromEnumerable(idShort, bindingFlags);
+                        else
+                            tempSeCollection = new SubmodelElementCollection(idShort);
+
+                        seCollection.Value.AddRange(tempSeCollection.Value);
+
+                        return seCollection;
+                    }
+                    else
+                    {
+                        object subTarget = null;
+                        if (target != null && propertyInfo.CanRead)
+                            subTarget = propertyInfo.GetValue(target);
+
+                        foreach (var subPropertyInfo in propertyInfo.PropertyType.GetProperties(bindingFlags))
+                        {
+                            ISubmodelElement smElement = CreateSubmodelElementFromPropertyInfo(subPropertyInfo, subPropertyInfo.Name, bindingFlags, subTarget);
+                            if (smElement != null)
+                                seCollection.Value.Create(smElement);
+                        }
+                    }
+                    return seCollection;
+                }
+                else if (se is Property seProp)
+                {
+                    if (target != null && propertyInfo.CanRead)
+                        seProp.Value = propertyInfo.GetValue(target);
+                    return seProp;
+                }
+                else
+                {
+                    return se;
+                }
+            }
+            else if (Attribute.IsDefined(propertyInfo, typeof(IgnoreElementAttribute)))
                 return null;
-            }
-
-            if (DataType.IsSimpleType(property.PropertyType))
-            {
-                Property smProp = new Property(property.Name, dataType);
-                if (target != null)
-                    smProp.Value = property.GetValue(target);
-
-                return smProp;
-            }
-            else if (property.PropertyType == typeof(DateTime))
-            {
-                Property smProp = new Property(property.Name, new DataType(DataObjectType.DateTime));
-                if (target != null && property.GetValue(target) is DateTime dateTime)
-                    smProp.Value = dateTime.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
-
-                return smProp;
-            }
             else
             {
-                SubmodelElementCollection smCollection = new SubmodelElementCollection(property.Name);
-
-                object subTarget = null;
-                if(target != null)
-                    subTarget = property.GetValue(target);
-
-                foreach (var subProperty in dataType.SystemType.GetProperties(bindingFlags))
+                DataType dataType = DataType.GetDataTypeFromSystemType(propertyInfo.PropertyType);
+                if (dataType == null)
                 {
-                    ISubmodelElement smElement = CreateSubmodelElement(subProperty, bindingFlags, subTarget);
-                    smCollection.Value.Create(smElement);
+                    logger.Warn($"Unable to convert system type {propertyInfo.PropertyType} to DataType");
+                    return null;
                 }
-                return smCollection;
+
+                if (DataType.IsSimpleType(propertyInfo.PropertyType))
+                {
+                    Property smProp = new Property(idShort, dataType);
+                    if (target != null && propertyInfo.CanRead)
+                        smProp.Value = propertyInfo.GetValue(target);
+
+                    return smProp;
+                }
+                else if (propertyInfo.PropertyType == typeof(DateTime))
+                {
+                    Property smProp = new Property(idShort, new DataType(DataObjectType.DateTime));
+                    if (target != null && propertyInfo.CanRead && propertyInfo.GetValue(target) is DateTime dateTime)
+                        smProp.Value = dateTime;
+
+                    return smProp;
+                }
+                else if (DataType.IsGenericList(propertyInfo.PropertyType) || DataType.IsArray(propertyInfo.PropertyType))
+                {
+                    ISubmodelElementCollection seCollection;
+                    if (target != null && propertyInfo.CanRead && propertyInfo.GetValue(target) is IEnumerable enumerable)
+                        seCollection = enumerable.CreateSubmodelElementCollectionFromEnumerable(idShort, bindingFlags);
+                    else
+                        seCollection = new SubmodelElementCollection(idShort);
+
+                    return seCollection;
+                }
+                else
+                {
+                    SubmodelElementCollection smCollection = new SubmodelElementCollection(idShort);
+
+                    object subTarget = null;
+                    if (target != null && propertyInfo.CanRead)
+                        subTarget = propertyInfo.GetValue(target);
+
+                    foreach (var subPropertyInfo in dataType.SystemType.GetProperties(bindingFlags))
+                    {
+                        ISubmodelElement smElement = CreateSubmodelElementFromPropertyInfo(subPropertyInfo, subPropertyInfo.Name, bindingFlags, subTarget);
+                        if (smElement != null)
+                            smCollection.Value.Create(smElement);
+                    }
+                    return smCollection;
+                }
             }
         }
     }

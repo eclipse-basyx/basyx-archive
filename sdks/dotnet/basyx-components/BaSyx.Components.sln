@@ -51,13 +51,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaSyx.Common.UI", "BaSyx.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaSyx.Common.UI.Swagger", "BaSyx.Common.UI.Swagger\BaSyx.Common.UI.Swagger.csproj", "{415242FE-C464-48DB-96AD-FF4E02500AB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaSyx.Components.Common.Abstractions", "BaSyx.Components.Common.Abstractions\BaSyx.Components.Common.Abstractions.csproj", "{1471A481-AD5B-4641-B953-11FE678A0844}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{4CE7C9EA-A52E-4798-BA12-6D5BAF4FC4D1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleAssetAdministrationShell", "..\basyx-examples\SimpleAssetAdministrationShell\SimpleAssetAdministrationShell.csproj", "{FEA57F0A-F4B8-4F0B-81F5-4FD86E0E711C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewtonsoftJsonAdapter", "NewtonsoftJsonAdapter\NewtonsoftJsonAdapter.csproj", "{894ED98A-9F87-4A1A-ABB6-D57461554663}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaSyx.Components.Common.Abstractions", "BaSyx.Components.Common.Abstractions\BaSyx.Components.Common.Abstractions.csproj", "{1471A481-AD5B-4641-B953-11FE678A0844}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -137,14 +131,6 @@ Global
 		{1471A481-AD5B-4641-B953-11FE678A0844}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1471A481-AD5B-4641-B953-11FE678A0844}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1471A481-AD5B-4641-B953-11FE678A0844}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FEA57F0A-F4B8-4F0B-81F5-4FD86E0E711C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FEA57F0A-F4B8-4F0B-81F5-4FD86E0E711C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FEA57F0A-F4B8-4F0B-81F5-4FD86E0E711C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FEA57F0A-F4B8-4F0B-81F5-4FD86E0E711C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{894ED98A-9F87-4A1A-ABB6-D57461554663}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{894ED98A-9F87-4A1A-ABB6-D57461554663}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{894ED98A-9F87-4A1A-ABB6-D57461554663}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{894ED98A-9F87-4A1A-ABB6-D57461554663}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -168,8 +154,6 @@ Global
 		{CB4CBEF9-F654-4FBD-9DFB-2340721F24D7} = {12CD4BF1-B0A6-4DBD-AFB6-6F232C92AAFA}
 		{415242FE-C464-48DB-96AD-FF4E02500AB7} = {12CD4BF1-B0A6-4DBD-AFB6-6F232C92AAFA}
 		{1471A481-AD5B-4641-B953-11FE678A0844} = {12CD4BF1-B0A6-4DBD-AFB6-6F232C92AAFA}
-		{FEA57F0A-F4B8-4F0B-81F5-4FD86E0E711C} = {4CE7C9EA-A52E-4798-BA12-6D5BAF4FC4D1}
-		{894ED98A-9F87-4A1A-ABB6-D57461554663} = {12CD4BF1-B0A6-4DBD-AFB6-6F232C92AAFA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DC440E9-3A4D-4D67-B741-72B8F15EB8C7}

@@ -8,6 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
+using BaSyx.Utils.StringOperations;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -95,10 +96,12 @@ namespace BaSyx.Models.Core.Common
         public static readonly DataObjectType HexBinary = new DataObjectType("hexBinary");
 
         private static readonly Dictionary<string, DataObjectType> _dataObjectTypes;
+        private static readonly Dictionary<DataObjectTypes, DataObjectType> _enumDataObjectTypes;
         static DataObjectType()
         {
             var fields = typeof(DataObjectType).GetFields(BindingFlags.Public | BindingFlags.Static);
             _dataObjectTypes = fields.ToDictionary(k => ((DataObjectType)k.GetValue(null)).Name, v => ((DataObjectType)v.GetValue(null)));
+            _enumDataObjectTypes = fields.ToDictionary(k => (DataObjectTypes)Enum.Parse(typeof(DataObjectTypes), k.Name), v => ((DataObjectType)v.GetValue(null)));
         }
 
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "name")]
@@ -110,17 +113,18 @@ namespace BaSyx.Models.Core.Common
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
-        public static DataObjectType Parse(DataObjectTypes dataObjectTypeEnum)
+        public static DataObjectType GetDataObjectType(DataObjectTypes dataObjectTypeEnum)
         {
-            if (_dataObjectTypes.TryGetValue(Enum.GetName(typeof(DataObjectTypes), dataObjectTypeEnum), out DataObjectType dataObjectType))
+            if (_enumDataObjectTypes.TryGetValue(dataObjectTypeEnum, out DataObjectType dataObjectType))
                 return dataObjectType;
             else
-                throw new InvalidOperationException("Cannot parse " + dataObjectType);
+                return None;
         }
 
-        public static bool TryParse(string s, out DataObjectType dataObjectType)
+        public static bool TryParse(string dataObjectTypeString, out DataObjectType dataObjectType)
         {
-            if (_dataObjectTypes.TryGetValue(s, out dataObjectType))
+            dataObjectTypeString = dataObjectTypeString.LowercaseFirst();
+            if (_dataObjectTypes.TryGetValue(dataObjectTypeString, out dataObjectType))
                 return true;
             else
                 return false;

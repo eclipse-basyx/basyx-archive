@@ -8,49 +8,45 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
+using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using System;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Core.AssetAdministrationShell;
 
 namespace BaSyx.Models.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Interface, Inherited = true, AllowMultiple = false)]
-    public sealed class SubmodelElementCollectionAttribute : SubmodelElementAttribute
+    public sealed class SubmodelAttribute : Attribute
     {
-        private SubmodelElementCollection _submodelElementCollection;
-        public SubmodelElementCollection SubmodelElementCollection => Build();
+        private Submodel _submodel;
+        public Submodel Submodel => Build();
 
-        private SubmodelElementCollection Build()
+        private Submodel Build()
         {
-            _submodelElementCollection = new SubmodelElementCollection(IdShort)
+            _submodel = new Submodel(IdShort, Identification)
             {
-                AllowDuplicates = AllowDuplicates,
-                Ordered = Ordered,
                 SemanticId = SemanticId,
                 Kind = Kind,
                 Category = Category
             };
-            return _submodelElementCollection;
+            return _submodel;
         }
-
-        public bool Ordered { get; set; } = false;
-        public bool AllowDuplicates { get; set; } = false;
-        public string IdShort { get; set; }
+        public string IdShort { get; }
+        public Identifier Identification { get; }
         public string Category { get; set; }
-        public Reference SemanticId { get; set; }
+        public Reference SemanticId { get; }
         public ModelingKind Kind { get; set; } = ModelingKind.Instance;
 
-        public override SubmodelElement SubmodelElement => SubmodelElementCollection;
-
-        public SubmodelElementCollectionAttribute(string idShort)
+        public SubmodelAttribute(string idShort, string id, KeyType idType)
         {
             IdShort = idShort;
+            Identification = new Identifier(id, idType);
         }
 
-        public SubmodelElementCollectionAttribute(string idShort, string semanticId, KeyElements semanticKeyElement, KeyType semanticKeyType)
+        public SubmodelAttribute(string idShort, string id, KeyType idType, string semanticId, KeyElements semanticKeyElement, KeyType semanticKeyType)
         {
             IdShort = idShort;
+            Identification = new Identifier(id, idType);
             SemanticId = new Reference(new Key(semanticKeyElement, semanticKeyType, semanticId, false));
         }
     }

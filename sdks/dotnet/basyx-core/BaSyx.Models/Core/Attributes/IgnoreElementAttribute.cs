@@ -9,12 +9,12 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using System;
-using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 
 namespace BaSyx.Models.Core.Attributes
-{    
-    public abstract class SubmodelElementAttribute : Attribute
+{
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Interface | AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
+    public sealed class IgnoreElementAttribute : Attribute
     {
-        public abstract SubmodelElement SubmodelElement { get; }
+        public IgnoreElementAttribute() { }
     }
 }

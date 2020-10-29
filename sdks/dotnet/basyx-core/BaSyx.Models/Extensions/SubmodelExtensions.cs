@@ -11,6 +11,7 @@
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
+using BaSyx.Models.Core.Attributes;
 using BaSyx.Models.Core.Common;
 using BaSyx.Utils.StringOperations;
 using Newtonsoft.Json.Linq;
@@ -23,20 +24,63 @@ namespace BaSyx.Models.Extensions
 {
     public static class SubmodelExtensions
     {
-        public static ISubmodel CreateSubmodelFromObject(this object target)
-        {
-            if (target == null)
-                return null;
+        public const BindingFlags DEFAULT_BINDING_FLAGS = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
 
-            Type type = target.GetType();
-            Submodel submodel = new Submodel(type.Name, new Identifier(type.FullName, KeyType.Custom));
-            foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        #region Create Submodel from object
+        public static ISubmodel CreateSubmodelFromObject(this object target)
+           => CreateSubmodelFromType(target.GetType(), null, null, BindingFlags.Public | BindingFlags.Instance, target);
+
+        public static ISubmodel CreateSubmodelFromObject(this object target, BindingFlags bindingFlags)
+           => CreateSubmodelFromType(target.GetType(), null, null, bindingFlags, target);
+
+        public static ISubmodel CreateSubmodelFromObject(this object target, string idShort, Identifier identification)
+            => CreateSubmodelFromType(target.GetType(), idShort, identification, BindingFlags.Public | BindingFlags.Instance, target);
+
+        public static ISubmodel CreateSubmodelFromObject(this object target, string idShort, Identifier identification, BindingFlags bindingFlags)
+            => CreateSubmodelFromType(target.GetType(), idShort, identification, bindingFlags, target);
+
+        #endregion
+
+        #region Create Submodel from Type
+        public static ISubmodel CreateSubmodelFromType(this Type type)
+            => CreateSubmodelFromType(type, type.Name, new Identifier(type.FullName, KeyType.Custom), DEFAULT_BINDING_FLAGS, null);
+
+        public static ISubmodel CreateSubmodelFromType(this Type type, BindingFlags bindingFlags)
+            => CreateSubmodelFromType(type, type.Name, new Identifier(type.FullName, KeyType.Custom), bindingFlags, null);
+
+        public static ISubmodel CreateSubmodelFromType(this Type type, string idShort, Identifier identification)
+            => CreateSubmodelFromType(type, idShort, identification, DEFAULT_BINDING_FLAGS, null);
+
+        public static ISubmodel CreateSubmodelFromType(this Type type, string idShort, Identifier identification, BindingFlags bindingFlags)
+            => CreateSubmodelFromType(type, idShort, identification, bindingFlags, null);
+
+        public static ISubmodel CreateSubmodelFromType(this Type type, string idShort, Identifier identification, BindingFlags bindingFlags, object target)
+        {
+            Attribute attribute = Attribute.GetCustomAttribute(type, typeof(SubmodelAttribute), true);
+            Submodel submodel;
+            if (attribute is SubmodelAttribute smAttribute)
             {
-                ISubmodelElement smElement = property.CreateSubmodelElement(target);
-                submodel.SubmodelElements.Create(smElement);
+                submodel = smAttribute.Submodel;
+                if (!string.IsNullOrEmpty(idShort) && idShort != type.Name)
+                    submodel.IdShort = idShort;
+                if (identification != null && identification.Id != type.FullName)
+                    submodel.Identification = identification;
+            }
+            else
+            {
+                submodel = new Submodel(idShort, identification);
+            }
+
+            foreach (var propertyInfo in type.GetProperties(bindingFlags))
+            {
+                ISubmodelElement smElement = propertyInfo.CreateSubmodelElementFromPropertyInfo(propertyInfo.Name, bindingFlags, target);
+                if(smElement != null)
+                    submodel.SubmodelElements.Create(smElement);
             }
             return submodel;
         }
+
+        #endregion
 
         private static readonly JsonMergeSettings JsonMergeSettings = new JsonMergeSettings
         {

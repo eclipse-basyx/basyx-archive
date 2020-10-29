@@ -10,6 +10,9 @@
 *******************************************************************************/
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace BaSyx.Models.Core.Common
 {
@@ -77,9 +80,37 @@ namespace BaSyx.Models.Core.Common
         public static readonly ModelType AssetAdministrationShellDescriptor = new ModelType("AssetAdministrationShellDescriptor");
         public static readonly ModelType SubmodelDescriptor = new ModelType("SubmodelDescriptor");
 
+        private static readonly Dictionary<string, ModelType> _modelTypes;
+        static ModelType()
+        {
+            var fields = typeof(ModelType).GetFields(BindingFlags.Public | BindingFlags.Static);
+            _modelTypes = fields.ToDictionary(k => ((ModelType)k.GetValue(null)).Name, v => ((ModelType)v.GetValue(null)));
+        }
+
         [JsonConstructor]
         protected ModelType(string name) : base(name)
         { }
+
+        public static ModelType Parse(ModelTypes modelTypeEnum)
+        {
+            if (_modelTypes.TryGetValue(Enum.GetName(typeof(ModelTypes), modelTypeEnum), out ModelType modelType))
+                return modelType;
+            else
+                throw new InvalidOperationException("Cannot parse " + modelType);
+        }
+
+        public static bool TryParse(string s, out ModelType modelType)
+        {
+            if (_modelTypes.TryGetValue(s, out modelType))
+                return true;
+            else
+                return false;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
 
         #region IEquatable Interface Implementation
         public bool Equals(ModelType other)
