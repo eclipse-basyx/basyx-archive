@@ -115,6 +115,13 @@ public class SubModelProvider extends MetaModelProvider {
 					return submodelAPI.getSubmodelElement(idShort);
 				} else if (isPropertyValuePath(splitted)) { // Request for the value of an property
 					return submodelAPI.getSubmodelElementValue(idShort);
+				} else if (isInvocationListPath(splitted)) {
+					List<String> idShorts = getIdShorts(splitted);
+
+					// Remove invocationList/{requestId} from the idShorts
+					idShorts.remove(idShorts.size() - 1);
+					idShorts.remove(idShorts.size() - 1);
+					return submodelAPI.getOperationResult(idShorts, splitted[splitted.length - 1]);
 				} else if (isSubmodelElementListPath(splitted)) {
 					// Create list from array and wrap it in ArrayList to ensure modifiability
 					List<String> idShorts = getIdShorts(splitted);
@@ -134,7 +141,7 @@ public class SubModelProvider extends MetaModelProvider {
 		// Create list from array and wrap it in ArrayList to ensure modifiability
 		List<String> idShorts = new ArrayList<>(Arrays.asList(splitted));
 
-		// Drop inital "submodels"
+		// Drop inital "submodelElements"
 		idShorts.remove(0);
 
 		// If value is contained in path, remove it
@@ -154,6 +161,10 @@ public class SubModelProvider extends MetaModelProvider {
 
 	private boolean isSubmodelElementListPath(String[] splitted) {
 		return splitted.length > 2 && splitted[0].equals(MultiSubmodelElementProvider.ELEMENTS);
+	}
+
+	private boolean isInvocationListPath(String[] splitted) {
+		return splitted.length > 2 && splitted[splitted.length - 2].equals(OperationProvider.INVOCATION_LIST);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -217,7 +228,13 @@ public class SubModelProvider extends MetaModelProvider {
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
 			if (VABPathTools.isOperationInvokationPath(path)) {
-				return submodelAPI.invokeNestedOperation(getIdShorts(splitted), parameters);
+				if(path.endsWith(OperationProvider.ASYNC)) {
+					List<String> idShorts = getIdShorts(splitted);
+					idShorts.remove(idShorts.size() - 1);
+					return submodelAPI.invokeNestedOperationAsync(idShorts, parameters);
+				} else {
+					return submodelAPI.invokeNestedOperation(getIdShorts(splitted), parameters);
+				}
 			} else {
 				throw new MalformedRequestException("Given path '" + path + "' does not end in /invoke");
 			}

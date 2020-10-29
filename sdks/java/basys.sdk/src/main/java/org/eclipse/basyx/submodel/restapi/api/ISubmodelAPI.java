@@ -154,4 +154,26 @@ public interface ISubmodelAPI {
 	 */
 	public Object invokeNestedOperation(List<String> idShorts, Object... params);
 
+	/**
+	 * Invokes an operation asynchronously
+	 * 
+	 * @param idShorts
+	 *            the idShort path to the operation
+	 * @param params
+	 *            to be passed to the operation
+	 * @return the requestId of the invocation
+	 */
+	public Object invokeNestedOperationAsync(List<String> idShorts, Object... params);
+	
+	/**
+	 * Gets the result of an asynchronously invoked operation
+	 * 
+	 * @param idShorts 
+	 *            the idShort path to the operation
+	 * @param requestId
+	 *            the requestId of the invocation
+	 * @return the result of the Operation or a Message that it is not finished yet
+	 */
+	public Object getOperationResult(List<String> idShorts, String requestId);
+
 }

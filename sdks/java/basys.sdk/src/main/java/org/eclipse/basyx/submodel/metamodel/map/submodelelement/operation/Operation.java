@@ -132,7 +132,14 @@ public class Operation extends SubmodelElement implements IOperation {
 	/**
 	 * Returns true if the given submodel element map is recognized as an operation
 	 */
-	public static boolean isOperation(Map<String, Object> map) {
+	@SuppressWarnings("unchecked")
+	public static boolean isOperation(Object value) {
+		if(!(value instanceof Map<?, ?>)) {
+			return false;
+		}
+		
+		Map<String, Object> map = (Map<String, Object>) value;
+		
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained
 		return MODELTYPE.equals(modelType)
@@ -172,6 +179,12 @@ public class Operation extends SubmodelElement implements IOperation {
 	@Override
 	public Object invoke(Object... params) throws Exception {
 		return ((Function<Object[], Object>) get(INVOKABLE)).apply(params);
+	}
+
+	@Override
+	public AsyncInvocation invokeAsync(Object... params) {
+		AsyncInvocation invocation = new AsyncInvocation(this, params);
+		return invocation;
 	}
 
 	public void setInputVariables(Collection<OperationVariable> in) {

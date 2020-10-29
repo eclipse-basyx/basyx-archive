@@ -247,7 +247,7 @@ public class VABPathTools {
 		}
 
 		// Check if last path element is "invoke" or "operations" is contained anywhere
-		return pathElements[pathElements.length - 1].equals(Operation.INVOKE) || isOperationPath(path);
+		return pathElements[pathElements.length - 1].startsWith(Operation.INVOKE) || isOperationPath(path);
 	}
 
 	private static boolean isOperationPath(String path) {
@@ -376,7 +376,7 @@ public class VABPathTools {
 		if(path == null)
 			return null;
 		
-		if(getLastElement(path).equals(Operation.INVOKE)) {
+		if(getLastElement(path).startsWith(Operation.INVOKE)) {
 			return getParentPath(path);
 		}
 		

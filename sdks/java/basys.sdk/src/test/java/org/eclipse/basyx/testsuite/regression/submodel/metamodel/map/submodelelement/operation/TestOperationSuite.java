@@ -1,6 +1,7 @@
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.submodelelement.operation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -9,10 +10,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.function.Function;
 
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IAsyncInvocation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationExecutionErrorException;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.junit.Before;
 import org.junit.Test;
@@ -69,6 +72,38 @@ public abstract class TestOperationSuite {
 			assertTrue(e instanceof NullPointerException
 					|| e.getCause() instanceof NullPointerException);
 		}
+	}
+	
+	@Test
+	public void testInvokeAsync() throws Exception {
+		AsyncOperationHelper helper = new AsyncOperationHelper();
+		operation = prepareOperation(helper.getAsyncOperation());
+
+		IAsyncInvocation invocation = operation.invokeAsync(3, 2);
+		
+		assertFalse(invocation.isFinished());
+		
+		helper.releaseWaitingOperation();
+
+		assertTrue(invocation.isFinished());
+		assertEquals(5, invocation.getResult());
+	}
+	
+	@Test
+	public void testInvokeExceptionAsync() throws Exception {
+		AsyncOperationHelper helper = new AsyncOperationHelper();
+		operation = prepareOperation(helper.getAsyncExceptionOperation());
+		IAsyncInvocation invocation = operationException.invokeAsync();
+		assertFalse(invocation.isFinished());
+		
+		helper.releaseWaitingOperation();
+		
+		try {
+			invocation.getResult();
+			fail();
+		} catch (OperationExecutionErrorException e) {
+		}
+
 	}
 	
 	@Test

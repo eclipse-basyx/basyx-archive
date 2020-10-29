@@ -12,7 +12,9 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOpera
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.OperationProvider;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -132,6 +134,11 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	public Object invokeNestedOperation(List<String> idShorts, Object... params) {
 		return getElementProvider().invokeOperation(buildNestedElementPath(idShorts), params);
 	}
+	
+	@Override
+	public Object invokeNestedOperationAsync(List<String> idShorts, Object... params) {
+		return getElementProvider().invokeOperation(buildNestedElementPath(idShorts) + "/" + Operation.INVOKE + OperationProvider.ASYNC, params);
+	}
 
 	private String buildValuePathForProperty(String idShort) {
 		return MultiSubmodelElementProvider.ELEMENTS + "/" + idShort + "/" + Property.VALUE;
@@ -147,6 +154,11 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	public ISubmodelElement getNestedSubmodelElement(List<String> idShorts) {
 		Map<String, Object> map = (Map<String, Object>) getElementProvider().getModelPropertyValue(buildNestedElementPath(idShorts));
 		return SubmodelElement.createAsFacade(map);
+	}
+	
+	@Override
+	public Object getOperationResult(List<String> idShorts, String requestId) {
+		return getElementProvider().getModelPropertyValue(buildNestedElementPath(idShorts) + "/" + OperationProvider.INVOCATION_LIST + "/" + requestId);
 	}
 
 	/**
