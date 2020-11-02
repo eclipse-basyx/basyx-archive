@@ -123,10 +123,10 @@ public class AASServletConnectionFull {
 		// - Retrieve sub model values and compare to expected values
 		assertTrue(subModel.getIdShort().equals("sm-001"));
 		assertTrue(subModel.getProperties().get("prop1").getIdShort().equals("prop1"));
-		assertTrue((int) subModel.getProperties().get("prop1").get() == 234);
-		assertTrue((int) subModel.getProperties().get("prop3").get() == 17);
+		assertTrue((int) subModel.getProperties().get("prop1").getValue() == 234);
+		assertTrue((int) subModel.getProperties().get("prop3").getValue() == 17);
 		assertTrue(subModel.getSubmodelElements().get("prop2").getIdShort().equals("prop2"));
-		assertTrue((int) ((ISubmodelElementCollection) subModel.getSubmodelElements().get("prop2")).getProperties().get("prop11").get() == 123);
+		assertTrue((int) ((ISubmodelElementCollection) subModel.getSubmodelElements().get("prop2")).getProperties().get("prop11").getValue() == 123);
 
 
 		// Connect to sub model using lower-level VAB interface
@@ -143,7 +143,7 @@ public class AASServletConnectionFull {
 		assertTrue((int) ((Map<String, Object>) connSubModel1.getModelPropertyValue(MultiSubmodelElementProvider.ELEMENTS + "/prop1")).get("value") == 456);
 
 		// Read changed value back using SDK connector
-		assertTrue((int) subModel.getProperties().get("prop1").get() == 456);
+		assertTrue((int) subModel.getProperties().get("prop1").getValue() == 456);
 	}
 }
 

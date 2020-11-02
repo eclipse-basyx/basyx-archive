@@ -96,9 +96,9 @@ public class DynamicSubModelDeployment {
 			// Read sub model properties
 			String smId     = subModel.getIdShort();
 			String prop1Id  = subModel.getProperties().get("prop1").getIdShort();
-			int prop1Val = (int) subModel.getProperties().get("prop1").get();
+			int prop1Val = (int) subModel.getProperties().get("prop1").getValue();
 			String prop2Id  = subModel.getProperties().get("prop2").getIdShort();
-			String prop2Val = (String) subModel.getProperties().get("prop2").get();
+			String prop2Val = (String) subModel.getProperties().get("prop2").getValue();
 			
 			// Compare sub model property values
 			assertTrue(smId.equals("Status"));

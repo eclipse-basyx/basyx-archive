@@ -111,9 +111,9 @@ public class ConnectToSubModelEndpoints {
 		// Read property values from sub model
 		String smID     = connSM.getIdShort();
 		String prop1Id = connSM.getProperties().get("prop1").getIdShort();
-		int prop1Val = (int) connSM.getProperties().get("prop1").get();
+		int prop1Val = (int) connSM.getProperties().get("prop1").getValue();
 		String prop2Id  = connSM.getProperties().get("prop2").getIdShort();
-		String prop2Val = (String) connSM.getProperties().get("prop2").get();
+		String prop2Val = (String) connSM.getProperties().get("prop2").getValue();
 
 		
 		// Check property values

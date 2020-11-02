@@ -125,12 +125,12 @@ public class ConnectToAASSubModelSDK {
 		assertEquals(smId.getId(), subModel.getIdentification().getId());
 		assertEquals("smName", subModel.getIdShort());
 		assertEquals("prop1", prop1.getIdShort());
-		assertEquals(234, prop1.get());
+		assertEquals(234, prop1.getValue());
 		assertEquals("prop2", prop2.getIdShort());
 		assertEquals("prop11", prop11.getIdShort());
-		assertEquals(123, prop11.get());
+		assertEquals(123, prop11.getValue());
 		assertEquals("prop3", prop3.getIdShort());
-		assertEquals(17, prop3.get());
+		assertEquals(17, prop3.getValue());
 	}
 }
 

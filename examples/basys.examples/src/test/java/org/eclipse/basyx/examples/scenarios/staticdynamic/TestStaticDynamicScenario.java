@@ -53,6 +53,6 @@ public class TestStaticDynamicScenario {
 		IProperty smElement = (IProperty) staticSM.getSubmodelElements().get(ExampleDynamicSubmodel.PROPERTY_ID_SHORT);
 
 		// Check if the Property contains the correct value
-		assertEquals(ExampleDynamicSubmodel.PROPERTY_VALUE, smElement.get());
+		assertEquals(ExampleDynamicSubmodel.PROPERTY_VALUE, smElement.getValue());
 	}
 }

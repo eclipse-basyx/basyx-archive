@@ -120,13 +120,13 @@ public class AASSubModelServletConnectorConnection {
 		// - Retrieve sub model values and compare to expected values
 		assertTrue(subModel.getIdShort().equals("sm-001"));
 		assertTrue(subModel.getProperties().get("prop1").getIdShort().equals("prop1"));
-		assertTrue((int) subModel.getProperties().get("prop1").get() == 234);
-		assertTrue((int) subModel.getProperties().get("prop3").get() == 17);
+		assertTrue((int) subModel.getProperties().get("prop1").getValue() == 234);
+		assertTrue((int) subModel.getProperties().get("prop3").getValue() == 17);
 
 		ISubmodelElementCollection prop2 = (ISubmodelElementCollection) subModel.getSubmodelElements().get("prop2");
 		assertEquals("prop2", prop2.getIdShort());
 		Map<String, IProperty> properties = prop2.getProperties();
-		assertEquals(123, properties.get("prop11").get());
+		assertEquals(123, properties.get("prop11").getValue());
 	}
 }
 

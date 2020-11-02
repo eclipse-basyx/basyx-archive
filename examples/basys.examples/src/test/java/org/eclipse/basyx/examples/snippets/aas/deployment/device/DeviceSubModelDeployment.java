@@ -8,7 +8,6 @@ import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.examples.support.directory.ExampleAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
@@ -78,9 +77,9 @@ public class DeviceSubModelDeployment {
 		// Retrieve sub model values and compare to expected values
 		String submodelId = subModel.getIdShort();
 		String prop1Id    = subModel.getProperties().get("prop1").getIdShort();
-		int prop1Val = (int) ((IProperty) subModel.getProperties().get("prop1")).get();
+		int prop1Val = (int) subModel.getProperties().get("prop1").getValue();
 		String prop2Id    = subModel.getProperties().get("prop2").getIdShort();
-		String prop2Val = (String) ((IProperty) subModel.getProperties().get("prop2")).get();
+		String prop2Val = (String) subModel.getProperties().get("prop2").getValue();
 
 		
 		// Compare received property values to expected values
