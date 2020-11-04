@@ -557,7 +557,7 @@
             <response code="400">Bad Request</response>
             <response code="404">Submodel not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.SubmodelRepo_GetSubmodelElementByIdShort(System.String,System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.SubmodelRepo_GetSubmodelElementById(System.String,System.String)">
             <summary>
             Retrieves a specific Submodel-Element from the Submodel
             </summary>
@@ -567,7 +567,7 @@
             <response code="200">Returns the requested Submodel-Element</response>
             <response code="404">Submodel / Submodel-Element not found</response>     
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.SubmodelRepo_GetSubmodelElementValueByIdShort(System.String,System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.SubmodelRepo_GetSubmodelElementValueById(System.String,System.String)">
             <summary>
             Retrieves the value of a specific Submodel-Element from the Submodel
             </summary>
@@ -578,7 +578,7 @@
             <response code="404">Submodel / Submodel-Element not found</response>  
             <response code="405">Method not allowed</response>  
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.SubmodelRepo_PutSubmodelElementValueByIdShort(System.String,System.String,System.Object)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.SubmodelRepo_PutSubmodelElementValueById(System.String,System.String,System.Object)">
             <summary>
             Updates the Submodel-Element's value
             </summary>
@@ -590,7 +590,7 @@
             <response code="404">Submodel / Submodel-Element not found</response>     
             <response code="405">Method not allowed</response>  
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.SubmodelRepo_DeleteSubmodelElementByIdShort(System.String,System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.SubmodelRepo_DeleteSubmodelElementById(System.String,System.String)">
             <summary>
             Deletes a specific Submodel-Element from the Submodel
             </summary>
@@ -600,7 +600,7 @@
             <response code="204">Submodel-Element deleted successfully</response>
             <response code="404">Submodel / Submodel-Element not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.SubmodelRepo_InvokeOperationByIdShort(System.String,System.String,BaSyx.Models.Communication.InvocationRequest,System.Boolean)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.SubmodelRepo_InvokeOperationById(System.String,System.String,BaSyx.Models.Communication.InvocationRequest,System.Boolean)">
             <summary>
             Invokes a specific operation from the Submodel synchronously or asynchronously
             </summary>
@@ -613,7 +613,7 @@
             <response code="400">Bad Request</response>
             <response code="404">Submodel / Method handler not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.SubmodelRepo_GetInvocationResultByIdShort(System.String,System.String,System.String)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.SubmodelRepo_GetInvocationResultById(System.String,System.String,System.String)">
             <summary>
             Retrieves the result of an asynchronously started operation
             </summary>

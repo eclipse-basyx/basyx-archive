@@ -15,6 +15,7 @@ using BaSyx.Utils.ResultHandling;
 using BaSyx.API.Components;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Communication;
+using System.Web;
 
 namespace BaSyx.API.Http.Controllers
 {
@@ -63,6 +64,8 @@ namespace BaSyx.API.Http.Controllers
             if (string.IsNullOrEmpty(aasId))
                 return ResultHandling.NullResult(nameof(aasId));
 
+            aasId = HttpUtility.UrlDecode(aasId);
+
             var result = serviceProvider.RetrieveAssetAdministrationShell(aasId);
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
@@ -86,8 +89,18 @@ namespace BaSyx.API.Http.Controllers
             if (aas == null)
                 return ResultHandling.NullResult(nameof(aas));
 
+            aasId = HttpUtility.UrlDecode(aasId);
+
+            if (aasId != aas.Identification.Id)
+            {
+                Result badRequestResult = new Result(false,
+                    new Message(MessageType.Error, $"Passed path parameter {aasId} does not equal the Asset Administration Shells's id {aas.Identification.Id}", "400"));
+
+                return badRequestResult.CreateActionResult(CrudOperation.Create, $"shells/{aasId}");
+            }
+
             var result = serviceProvider.CreateAssetAdministrationShell(aas);
-            return result.CreateActionResult(CrudOperation.Create);
+            return result.CreateActionResult(CrudOperation.Create, $"shells/{aasId}");
         }
         /// <summary>
         /// Deletes a specific Asset Administration Shell at the Asset Administration Shell repository
@@ -102,6 +115,8 @@ namespace BaSyx.API.Http.Controllers
         {
             if (string.IsNullOrEmpty(aasId))
                 return ResultHandling.NullResult(nameof(aasId));
+
+            aasId = HttpUtility.UrlDecode(aasId);
 
             var result = serviceProvider.DeleteAssetAdministrationShell(aasId);
             return result.CreateActionResult(CrudOperation.Delete);            
@@ -422,14 +437,19 @@ namespace BaSyx.API.Http.Controllers
                 provider = null;
                 return true;
             }
-            provider = serviceProvider.GetAssetAdministrationShellServiceProvider(aasId);
-            if (provider == null)
+            aasId = HttpUtility.UrlDecode(aasId);
+            var retrievedProvider = serviceProvider.GetAssetAdministrationShellServiceProvider(aasId);
+            if (retrievedProvider.TryGetEntity(out provider))
             {
+                result = null;
+                return false;
+            }
+            else
+            {
+                provider = null;
                 result = NotFound(new Result(false, new NotFoundMessage("Asset Administration Shell Provider")));
                 return true;
             }
-            result = null;
-            return false;
         }
 
         #endregion

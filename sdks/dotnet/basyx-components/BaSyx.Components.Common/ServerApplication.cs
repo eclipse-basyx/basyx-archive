@@ -359,7 +359,7 @@ namespace BaSyx.Components.Common
                 if (requestPath.Contains("submodelElements/"))
                 {
                     Match valueMatch = Regex.Match(requestPath, "(?<=submodelElements/)(.*)(?=/value|/invoke|/invocationList)");
-                    if(valueMatch.Success)
+                    if(valueMatch.Success && !string.IsNullOrEmpty(valueMatch.Value))
                     {
                         string elementPath = HttpUtility.UrlEncode(valueMatch.Value);
                         requestPath = requestPath.Replace(valueMatch.Value, elementPath);
@@ -368,7 +368,7 @@ namespace BaSyx.Components.Common
                     else
                     {
                         Match baseMatch = Regex.Match(requestPath, "(?<=submodelElements/)(.*)");
-                        if(baseMatch.Success)
+                        if(baseMatch.Success && !string.IsNullOrEmpty(baseMatch.Value))
                         {
                             string elementPath = HttpUtility.UrlEncode(baseMatch.Value);
                             requestPath = requestPath.Replace(baseMatch.Value, elementPath);

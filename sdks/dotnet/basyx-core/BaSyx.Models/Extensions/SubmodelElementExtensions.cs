@@ -11,8 +11,10 @@
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
+using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Attributes;
 using BaSyx.Models.Core.Common;
+using BaSyx.Models.Extensions.Semantics.DataSpecifications;
 using NLog;
 using System;
 using System.Collections;
@@ -161,6 +163,19 @@ namespace BaSyx.Models.Extensions
                 if (!string.IsNullOrEmpty(idShort) && idShort != propertyInfo.Name)
                     se.IdShort = idShort;
 
+                if(Attribute.IsDefined(propertyInfo, typeof(DataSpecificationIEC61360Attribute)))
+                {
+                    var specAttribute = Attribute.GetCustomAttribute(propertyInfo, typeof(DataSpecificationIEC61360Attribute)) as DataSpecificationIEC61360Attribute;
+                    se.ConceptDescription = new ConceptDescription()
+                    {
+                        Identification = specAttribute.Identification,
+                        EmbeddedDataSpecifications = new List<IEmbeddedDataSpecification>()
+                        {
+                            new DataSpecificationIEC61360(specAttribute.Content)
+                        }
+                    };
+                }
+
                 if (se is SubmodelElementCollection seCollection)
                 {
                     if (DataType.IsGenericList(propertyInfo.PropertyType) || DataType.IsArray(propertyInfo.PropertyType))
@@ -212,12 +227,27 @@ namespace BaSyx.Models.Extensions
                     return null;
                 }
 
+                IConceptDescription conceptDescription = null;
+                if (Attribute.IsDefined(propertyInfo, typeof(DataSpecificationIEC61360Attribute)))
+                {
+                    var specAttribute = Attribute.GetCustomAttribute(propertyInfo, typeof(DataSpecificationIEC61360Attribute)) as DataSpecificationIEC61360Attribute;
+                    conceptDescription = new ConceptDescription()
+                    {
+                        Identification = specAttribute.Identification,
+                        EmbeddedDataSpecifications = new List<IEmbeddedDataSpecification>()
+                        {
+                            new DataSpecificationIEC61360(specAttribute.Content)
+                        }
+                    };
+                }
+
                 if (DataType.IsSimpleType(propertyInfo.PropertyType))
                 {
                     Property smProp = new Property(idShort, dataType);
                     if (target != null && propertyInfo.CanRead)
                         smProp.Value = propertyInfo.GetValue(target);
-
+                    
+                    smProp.ConceptDescription = conceptDescription;
                     return smProp;
                 }
                 else if (propertyInfo.PropertyType == typeof(DateTime))
@@ -226,16 +256,18 @@ namespace BaSyx.Models.Extensions
                     if (target != null && propertyInfo.CanRead && propertyInfo.GetValue(target) is DateTime dateTime)
                         smProp.Value = dateTime;
 
+                    smProp.ConceptDescription = conceptDescription;
                     return smProp;
                 }
                 else if (DataType.IsGenericList(propertyInfo.PropertyType) || DataType.IsArray(propertyInfo.PropertyType))
                 {
-                    ISubmodelElementCollection seCollection;
+                    SubmodelElementCollection seCollection;
                     if (target != null && propertyInfo.CanRead && propertyInfo.GetValue(target) is IEnumerable enumerable)
-                        seCollection = enumerable.CreateSubmodelElementCollectionFromEnumerable(idShort, bindingFlags);
+                        seCollection = (SubmodelElementCollection)enumerable.CreateSubmodelElementCollectionFromEnumerable(idShort, bindingFlags);
                     else
                         seCollection = new SubmodelElementCollection(idShort);
 
+                    seCollection.ConceptDescription = conceptDescription;
                     return seCollection;
                 }
                 else
@@ -252,6 +284,8 @@ namespace BaSyx.Models.Extensions
                         if (smElement != null)
                             smCollection.Value.Create(smElement);
                     }
+
+                    smCollection.ConceptDescription = conceptDescription;
                     return smCollection;
                 }
             }

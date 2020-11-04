@@ -54,18 +54,21 @@ namespace BaSyx.API.Components
         {
             foreach (var assetAdministrationShell in assetAdministrationShells)
             {
-                RegisterAssetAdministrationShellServiceProvider(assetAdministrationShell.IdShort, assetAdministrationShell.CreateServiceProvider(true));
+                RegisterAssetAdministrationShellServiceProvider(assetAdministrationShell.Identification.Id, assetAdministrationShell.CreateServiceProvider(true));
             }
             ServiceDescriptor = ServiceDescriptor ?? new AssetAdministrationShellRepositoryDescriptor(assetAdministrationShells, null);
         }
         public IEnumerable<IAssetAdministrationShell> GetBinding()
         {
-            IEnumerable<IAssetAdministrationShellServiceProvider> serviceProviders = GetAssetAdministrationShellServiceProviders();
             List<IAssetAdministrationShell> assetAdministrationShells = new List<IAssetAdministrationShell>();
-            foreach (var serviceProvider in serviceProviders)
+            var retrievedShellServiceProviders = GetAssetAdministrationShellServiceProviders();
+            if (retrievedShellServiceProviders.TryGetEntity(out IEnumerable<IAssetAdministrationShellServiceProvider> serviceProviders))
             {
-                IAssetAdministrationShell binding = serviceProvider.GetBinding();
-                assetAdministrationShells.Add(binding);
+                foreach (var serviceProvider in serviceProviders)
+                {
+                    IAssetAdministrationShell binding = serviceProvider.GetBinding();
+                    assetAdministrationShells.Add(binding);
+                }
             }
             return assetAdministrationShells;
         }
@@ -74,10 +77,13 @@ namespace BaSyx.API.Components
         {
             if (aas == null)
                 return new Result<IAssetAdministrationShell>(new ArgumentNullException(nameof(aas)));
-            RegisterAssetAdministrationShellServiceProvider(aas.IdShort, aas.CreateServiceProvider(true));
+            
+            var registered = RegisterAssetAdministrationShellServiceProvider(aas.Identification.Id, aas.CreateServiceProvider(true));
+            if (!registered.Success)
+                return new Result<IAssetAdministrationShell>(registered);
 
-            IAssetAdministrationShellServiceProvider serviceProvider = GetAssetAdministrationShellServiceProvider(aas.IdShort);
-            if (serviceProvider != null && serviceProvider.GetBinding() != null)
+            var retrievedShellServiceProvider = GetAssetAdministrationShellServiceProvider(aas.Identification.Id);
+            if (retrievedShellServiceProvider.TryGetEntity(out IAssetAdministrationShellServiceProvider serviceProvider))
                 return new Result<IAssetAdministrationShell>(true, serviceProvider.GetBinding());
             else
                 return new Result<IAssetAdministrationShell>(false, new Message(MessageType.Error, "Could not retrieve Asset Administration Shell Service Provider"));
@@ -87,39 +93,51 @@ namespace BaSyx.API.Components
         {
             if (string.IsNullOrEmpty(aasId))
                 return new Result<IAssetAdministrationShell>(new ArgumentNullException(nameof(aasId)));
-            UnregisterAssetAdministrationShellServiceProvider(aasId);
-            return new Result(true);
+            
+            return UnregisterAssetAdministrationShellServiceProvider(aasId);
         }
 
-        public IAssetAdministrationShellServiceProvider GetAssetAdministrationShellServiceProvider(string id)
+        public IResult<IAssetAdministrationShellServiceProvider> GetAssetAdministrationShellServiceProvider(string id)
         {
             if (AssetAdministrationShellServiceProviders.TryGetValue(id, out IAssetAdministrationShellServiceProvider assetAdministrationShellServiceProvider))
-                return assetAdministrationShellServiceProvider;
+                return new Result<IAssetAdministrationShellServiceProvider>(true, assetAdministrationShellServiceProvider);
             else
-                return null;
+                return new Result<IAssetAdministrationShellServiceProvider>(false, new NotFoundMessage(id));
         }
 
-        public IEnumerable<IAssetAdministrationShellServiceProvider> GetAssetAdministrationShellServiceProviders()
+        public IResult<IEnumerable<IAssetAdministrationShellServiceProvider>> GetAssetAdministrationShellServiceProviders()
         {
-           return AssetAdministrationShellServiceProviders?.Values.ToList();
+            if (AssetAdministrationShellServiceProviders.Values == null)
+                return new Result<IEnumerable<IAssetAdministrationShellServiceProvider>>(false, new NotFoundMessage("Asset AdministrationShell Service Providers"));
+
+            return new Result<IEnumerable<IAssetAdministrationShellServiceProvider>>(true, AssetAdministrationShellServiceProviders.Values?.ToList());
         }
 
-        public void RegisterAssetAdministrationShellServiceProvider(string id, IAssetAdministrationShellServiceProvider assetAdministrationShellServiceProvider)
+        public IResult<IAssetAdministrationShellDescriptor> RegisterAssetAdministrationShellServiceProvider(string id, IAssetAdministrationShellServiceProvider assetAdministrationShellServiceProvider)
         {
-            if (!AssetAdministrationShellServiceProviders.ContainsKey(id))
+            if (AssetAdministrationShellServiceProviders.ContainsKey(id))
+                AssetAdministrationShellServiceProviders[id] = assetAdministrationShellServiceProvider;
+            else
                 AssetAdministrationShellServiceProviders.Add(id, assetAdministrationShellServiceProvider);
+
+            return new Result<IAssetAdministrationShellDescriptor>(true, assetAdministrationShellServiceProvider.ServiceDescriptor);
         }
 
-        public void UnregisterAssetAdministrationShellServiceProvider(string id)
+        public IResult UnregisterAssetAdministrationShellServiceProvider(string id)
         {
-            if (!AssetAdministrationShellServiceProviders.ContainsKey(id))
+            if (AssetAdministrationShellServiceProviders.ContainsKey(id))
+            {
                 AssetAdministrationShellServiceProviders.Remove(id);
+                return new Result(true);
+            }
+            else
+                return new Result(false, new NotFoundMessage(id));
         }
 
         public IResult<IAssetAdministrationShell> RetrieveAssetAdministrationShell(string aasId)
         {
-            IAssetAdministrationShellServiceProvider serviceProvider = GetAssetAdministrationShellServiceProvider(aasId);
-            if(serviceProvider != null && serviceProvider.GetBinding() != null)
+            var retrievedShellServiceProvider = GetAssetAdministrationShellServiceProvider(aasId);
+            if(retrievedShellServiceProvider.TryGetEntity(out IAssetAdministrationShellServiceProvider serviceProvider))
             {
                 IAssetAdministrationShell binding = serviceProvider.GetBinding();
                 return new Result<IAssetAdministrationShell>(true, binding);

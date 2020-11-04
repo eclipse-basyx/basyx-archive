@@ -98,6 +98,14 @@ namespace BaSyx.API.Http.Controllers
             if (submodel == null)
                 return ResultHandling.NullResult(nameof(submodel));
 
+            if (submodelIdShort != submodel.IdShort)
+            {
+                Result badRequestResult = new Result(false,
+                    new Message(MessageType.Error, $"Passed path parameter {submodelIdShort} does not equal the Submodel's IdShort {submodel.IdShort}", "400"));
+
+                return badRequestResult.CreateActionResult(CrudOperation.Create, "aas/submodels/" + submodelIdShort);
+            }
+
             var spEndpoints = serviceProvider
                 .ServiceDescriptor
                 .Endpoints

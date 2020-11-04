@@ -98,7 +98,7 @@ namespace MultiAssetAdministrationShell
                 });
 
                 var aasServiceProvider = aas.CreateServiceProvider(true);
-                repositoryService.RegisterAssetAdministrationShellServiceProvider(aas.IdShort, aasServiceProvider);
+                repositoryService.RegisterAssetAdministrationShellServiceProvider(aas.Identification.Id, aasServiceProvider);
             }
 
             List<HttpEndpoint> endpoints = server.Settings.ServerConfig.Hosting.Urls.ConvertAll(c => new HttpEndpoint(c.Replace("+", "127.0.0.1")));

@@ -60,6 +60,15 @@ namespace BaSyx.Models.Extensions.Semantics.DataSpecifications
         public object Value { get; set; }
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "levelTypes")]
         public List<LevelType> LevelTypes { get; set; }
+
+        public DataSpecificationIEC61360Content()
+        {
+            PreferredName = new LangStringSet();
+            Definition = new LangStringSet();
+            ShortName = new LangStringSet();
+            ValueList = new List<ValueReferencePair>();
+            LevelTypes = new List<LevelType>();
+        }
     }
 
     [DataContract]

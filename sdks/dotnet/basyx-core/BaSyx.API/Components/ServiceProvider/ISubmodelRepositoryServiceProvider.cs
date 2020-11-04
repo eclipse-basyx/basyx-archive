@@ -14,11 +14,6 @@ using System.Collections.Generic;
 
 namespace BaSyx.API.Components
 {
-    public interface ISubmodelRepositoryServiceProvider : IServiceProvider<IEnumerable<ISubmodel>, ISubmodelRepositoryDescriptor>, ISubmodelRepository
-    {
-        IEnumerable<ISubmodel> Submodels { get; }
-        void RegisterSubmodelServiceProvider(string id, ISubmodelServiceProvider submodelServiceProvider);
-        ISubmodelServiceProvider GetSubmodelServiceProvider(string id);
-        IEnumerable<ISubmodelServiceProvider> GetSubmodelServiceProviders();
-    }
+    public interface ISubmodelRepositoryServiceProvider : IServiceProvider<IEnumerable<ISubmodel>, ISubmodelRepositoryDescriptor>, ISubmodelRepository, ISubmodelServiceProviderRegistry
+    { }
 }

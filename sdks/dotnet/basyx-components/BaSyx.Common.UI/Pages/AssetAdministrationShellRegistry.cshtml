@@ -12,7 +12,14 @@
 
 @{
     IAssetAdministrationShellRegistry registry = Model.ServiceProvider;
-    IElementContainer<IAssetAdministrationShellDescriptor> shells = registry.RetrieveAllAssetAdministrationShellRegistrations().Entity;
+
+    IElementContainer<IAssetAdministrationShellDescriptor> shellsDescriptors = null;
+    var retrievedShellDescriptors = registry.RetrieveAllAssetAdministrationShellRegistrations();
+    if (retrievedShellDescriptors.Success && retrievedShellDescriptors.Entity != null)
+    {
+        shellsDescriptors = retrievedShellDescriptors.Entity;
+    }
+
     IHostingEnvironment hostingEnvironment = Model.HostingEnvironment;
     ServerSettings settings = Model.Settings;
     string pathToCompanyLogo = settings.Miscellaneous.TryGetValue("CompanyLogo", out string path) ? path : string.Empty;
@@ -48,9 +55,9 @@
     <p class="lead">Generic UI to discover the Asset Administration Shell Registry</p>
 </div>
 
-@if (shells?.Count() > 0)
+@if (shellsDescriptors?.Count() > 0)
 {
-    foreach (var aas in shells)
+    foreach (var aas in shellsDescriptors)
     {
         <div class="card border-dark mb-3">
             <div class="card-header bg-dark">

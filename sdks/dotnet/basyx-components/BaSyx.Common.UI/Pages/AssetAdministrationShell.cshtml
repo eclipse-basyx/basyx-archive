@@ -8,6 +8,14 @@
 
 @{
     IAssetAdministrationShellServiceProvider sp = Model.ServiceProvider;
+
+    IEnumerable<ISubmodelServiceProvider> submodelServiceProviders = null;
+    var retrievedSubmodelServiceProvider = sp.SubmodelRegistry.GetSubmodelServiceProviders();
+    if (retrievedSubmodelServiceProvider.Success && retrievedSubmodelServiceProvider.Entity != null)
+    {
+        submodelServiceProviders = retrievedSubmodelServiceProvider.Entity;
+    }
+
     IAssetAdministrationShell aas = sp.GetBinding();
     IHostingEnvironment hostingEnvironment = Model.HostingEnvironment;
     ServerSettings settings = Model.Settings;
@@ -30,10 +38,11 @@
 
 @await Html.PartialAsync("_Asset", aas.Asset)
 
-@if (aas.Submodels.Count() > 0)
+@if (submodelServiceProviders?.Count() > 0)
 {
-    foreach (var submodel in aas.Submodels)
+    foreach (var submodelServiceProvider in submodelServiceProviders)
     {
+        ISubmodel submodel = submodelServiceProvider.GetBinding();
         @await Html.PartialAsync("_Submodel", submodel)
     }
 }

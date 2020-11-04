@@ -4,6 +4,7 @@ using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Core.Attributes;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Extensions;
+using BaSyx.Models.Extensions.Semantics.DataSpecifications;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -41,9 +42,20 @@ namespace BaSyx.Core.Tests
     public class TestSubClass
     {
         [Property("TestSubIntProperty", DataObjectTypes.Int32, "urn:semantic:id:testSubIntProperty:1.0.0", KeyElements.Property, KeyType.IRI, Category = "VARIABLE")]
+        [DataSpecificationIEC61360("0173-ABC123-00#", KeyType.IRDI, 
+            DataType = DataTypeIEC61360.INTEGER, 
+            PreferredName_DE = "Test Integer Variable",
+            PreferredName_EN = "Test Integer Variable",
+            ShortName_DE = "testSubIntProperty",
+            ShortName_EN = "testSubIntProperty",
+            Definition_DE = "Eine Variable als Integer innerhalb einer SubmodelModelElementCollection",
+            Definition_EN = "A variable as integer within a SubmodelElementCollection",
+            Unit = "V",
+            UnitId = "0173-CCDAB52-004",
+            UnitIdKeyType = KeyType.IRDI)]
         public int TestSubIntProperty { get; set; }
 
-        [Property("TestSubDataTimeProperty", DataObjectTypes.DateTime, "urn:semantic:id:testSubDataTimeProperty:1.0.0", KeyElements.Property, KeyType.IRI, Category = "VARIABLE")]
+        [Property("TestSubDataTimeProperty", DataObjectTypes.DateTime, "urn:semantic:id:testSubDataTimeProperty:1.0.0", KeyElements.Property, KeyType.IRI, Category = "VARIABLE")]       
         public DateTime TestSubDataTimeProperty { get; set; } = DateTime.Now;
     }
 

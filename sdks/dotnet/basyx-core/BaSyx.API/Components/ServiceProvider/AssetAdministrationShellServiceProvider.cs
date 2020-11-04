@@ -33,7 +33,7 @@ namespace BaSyx.API.Components
                     IAssetAdministrationShell assetAdministrationShell = BuildAssetAdministrationShell();
                     BindTo(assetAdministrationShell);
                 }
-                return _assetAdministrationShell;
+                return GetBinding();
             }
         }
         /// <summary>
@@ -95,7 +95,14 @@ namespace BaSyx.API.Components
         }
         public virtual IAssetAdministrationShell GetBinding()
         {
-            return AssetAdministrationShell;
+            IAssetAdministrationShell shell = _assetAdministrationShell;
+
+            foreach (var submodelServiceProvider in SubmodelServiceProviders)
+            {
+                ISubmodel submodel = submodelServiceProvider.Value.GetBinding();
+                shell.Submodels.CreateOrUpdate(submodel.IdShort, submodel);
+            }
+            return shell;
         }
 
         public virtual void UseDefaultSubmodelServiceProvider()
@@ -129,7 +136,7 @@ namespace BaSyx.API.Components
             if (SubmodelServiceProviders.TryGetValue(submodelId, out ISubmodelServiceProvider submodelServiceProvider))
                 return new Result<ISubmodelServiceProvider>(true, submodelServiceProvider);
             else
-                return new Result<ISubmodelServiceProvider>(false, new NotFoundMessage());
+                return new Result<ISubmodelServiceProvider>(false, new NotFoundMessage(submodelId));
         }
 
         public virtual IResult UnregisterSubmodelServiceProvider(string submodelId)
@@ -137,10 +144,10 @@ namespace BaSyx.API.Components
             if (SubmodelServiceProviders.ContainsKey(submodelId))
             {
                 SubmodelServiceProviders.Remove(submodelId);
-                return new Result<ISubmodelServiceProvider>(true);
+                return new Result(true);
             }
             else
-                return new Result<ISubmodelServiceProvider>(false, new NotFoundMessage());
+                return new Result(false, new NotFoundMessage(submodelId));
         }     
     }
 }

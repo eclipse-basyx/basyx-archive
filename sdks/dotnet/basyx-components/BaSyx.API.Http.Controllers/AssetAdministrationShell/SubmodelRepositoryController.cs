@@ -15,6 +15,7 @@ using BaSyx.Utils.ResultHandling;
 using BaSyx.API.Components;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Communication;
+using System.Web;
 
 namespace BaSyx.API.Http.Controllers
 {
@@ -63,6 +64,8 @@ namespace BaSyx.API.Http.Controllers
             if (string.IsNullOrEmpty(submodelId))
                 return ResultHandling.NullResult(nameof(submodelId));
 
+            submodelId = HttpUtility.UrlDecode(submodelId);
+
             var result = serviceProvider.RetrieveSubmodel(submodelId);
             return result.CreateActionResult(CrudOperation.Retrieve);
         }
@@ -86,6 +89,16 @@ namespace BaSyx.API.Http.Controllers
             if (submodel == null)
                 return ResultHandling.NullResult(nameof(submodel));
 
+            submodelId = HttpUtility.UrlDecode(submodelId);
+
+            if (submodelId != submodel.Identification.Id)
+            {
+                Result badRequestResult = new Result(false,
+                    new Message(MessageType.Error, $"Passed path parameter {submodelId} does not equal the Submodel's Id {submodel.Identification.Id}", "400"));
+
+                return badRequestResult.CreateActionResult(CrudOperation.Create, "submodels/" + submodelId);
+            }
+
             var result = serviceProvider.CreateSubmodel(submodel);
             return result.CreateActionResult(CrudOperation.Create, "submodels/"+ submodelId);
         }
@@ -102,6 +115,8 @@ namespace BaSyx.API.Http.Controllers
         {
             if (string.IsNullOrEmpty(submodelId))
                 return ResultHandling.NullResult(nameof(submodelId));
+
+            submodelId = HttpUtility.UrlDecode(submodelId);
 
             var result = serviceProvider.DeleteSubmodel(submodelId);
             return result.CreateActionResult(CrudOperation.Delete);
@@ -181,11 +196,11 @@ namespace BaSyx.API.Http.Controllers
         /// <returns></returns>
         /// <response code="200">Returns the requested Submodel-Element</response>
         /// <response code="404">Submodel / Submodel-Element not found</response>     
-        [HttpGet("submodels/{submodelId}/submodel/submodelElements/{seIdShortPath}", Name = "SubmodelRepo_GetSubmodelElementByIdShort")]
+        [HttpGet("submodels/{submodelId}/submodel/submodelElements/{seIdShortPath}", Name = "SubmodelRepo_GetSubmodelElementById")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(SubmodelElement), 200)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult SubmodelRepo_GetSubmodelElementByIdShort(string submodelId, string seIdShortPath)
+        public IActionResult SubmodelRepo_GetSubmodelElementById(string submodelId, string seIdShortPath)
         {
             if (IsNullOrNotFound(submodelId, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
@@ -203,12 +218,12 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="200">Returns the value of a specific Submodel-Element</response>
         /// <response code="404">Submodel / Submodel-Element not found</response>  
         /// <response code="405">Method not allowed</response>  
-        [HttpGet("submodels/{submodelId}/submodel/submodelElements/{seIdShortPath}/value", Name = "SubmodelRepo_GetSubmodelElementValueByIdShort")]
+        [HttpGet("submodels/{submodelId}/submodel/submodelElements/{seIdShortPath}/value", Name = "SubmodelRepo_GetSubmodelElementValueById")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(object), 200)]
         [ProducesResponseType(typeof(Result), 404)]
         [ProducesResponseType(typeof(Result), 405)]
-        public IActionResult SubmodelRepo_GetSubmodelElementValueByIdShort(string submodelId, string seIdShortPath)
+        public IActionResult SubmodelRepo_GetSubmodelElementValueById(string submodelId, string seIdShortPath)
         {
             if (IsNullOrNotFound(submodelId, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
@@ -227,12 +242,12 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="200">Submodel-Element's value changed successfully</response>
         /// <response code="404">Submodel / Submodel-Element not found</response>     
         /// <response code="405">Method not allowed</response>  
-        [HttpPut("submodels/{submodelId}/submodel/submodelElements/{seIdShortPath}/value", Name = "SubmodelRepo_PutSubmodelElementValueByIdShort")]
+        [HttpPut("submodels/{submodelId}/submodel/submodelElements/{seIdShortPath}/value", Name = "SubmodelRepo_PutSubmodelElementValueById")]
         [Produces("application/json")]
         [Consumes("application/json")]
         [ProducesResponseType(typeof(ElementValue), 200)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult SubmodelRepo_PutSubmodelElementValueByIdShort(string submodelId, string seIdShortPath, [FromBody] object value)
+        public IActionResult SubmodelRepo_PutSubmodelElementValueById(string submodelId, string seIdShortPath, [FromBody] object value)
         {
             if (IsNullOrNotFound(submodelId, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
@@ -249,10 +264,10 @@ namespace BaSyx.API.Http.Controllers
         /// <returns></returns>
         /// <response code="204">Submodel-Element deleted successfully</response>
         /// <response code="404">Submodel / Submodel-Element not found</response>
-        [HttpDelete("submodels/{submodelId}/submodel/submodelElements/{seIdShortPath}", Name = "SubmodelRepo_DeleteSubmodelElementByIdShort")]
+        [HttpDelete("submodels/{submodelId}/submodel/submodelElements/{seIdShortPath}", Name = "SubmodelRepo_DeleteSubmodelElementById")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(Result), 200)]
-        public IActionResult SubmodelRepo_DeleteSubmodelElementByIdShort(string submodelId, string seIdShortPath)
+        public IActionResult SubmodelRepo_DeleteSubmodelElementById(string submodelId, string seIdShortPath)
         {
             if (IsNullOrNotFound(submodelId, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
@@ -272,12 +287,12 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="200">Operation invoked successfully</response>
         /// <response code="400">Bad Request</response>
         /// <response code="404">Submodel / Method handler not found</response>
-        [HttpPost("submodels/{submodelId}/submodel/submodelElements/{idShortPathToOperation}/invoke", Name = "SubmodelRepo_InvokeOperationByIdShort")]
+        [HttpPost("submodels/{submodelId}/submodel/submodelElements/{idShortPathToOperation}/invoke", Name = "SubmodelRepo_InvokeOperationById")]
         [Produces("application/json")]
         [Consumes("application/json")]
         [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult SubmodelRepo_InvokeOperationByIdShort(string submodelId, string idShortPathToOperation, [FromBody] InvocationRequest invocationRequest, [FromQuery] bool async)
+        public IActionResult SubmodelRepo_InvokeOperationById(string submodelId, string idShortPathToOperation, [FromBody] InvocationRequest invocationRequest, [FromQuery] bool async)
         {
             if (IsNullOrNotFound(submodelId, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
@@ -296,12 +311,12 @@ namespace BaSyx.API.Http.Controllers
         /// <response code="200">Result found</response>
         /// <response code="400">Bad Request</response>
         /// <response code="404">Submodel / Operation / Request not found</response>
-        [HttpGet("submodels/{submodelId}/submodel/submodelElements/{idShortPathToOperation}/invocationList/{requestId}", Name = "SubmodelRepo_GetInvocationResultByIdShort")]
+        [HttpGet("submodels/{submodelId}/submodel/submodelElements/{idShortPathToOperation}/invocationList/{requestId}", Name = "SubmodelRepo_GetInvocationResultById")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(InvocationResponse), 200)]
         [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult SubmodelRepo_GetInvocationResultByIdShort(string submodelId, string idShortPathToOperation, string requestId)
+        public IActionResult SubmodelRepo_GetInvocationResultById(string submodelId, string idShortPathToOperation, string requestId)
         {
             if (IsNullOrNotFound(submodelId, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
@@ -327,14 +342,19 @@ namespace BaSyx.API.Http.Controllers
                 provider = null;
                 return true;
             }
-            provider = serviceProvider.GetSubmodelServiceProvider(submodelId);
-            if (provider == null)
+            submodelId = HttpUtility.UrlDecode(submodelId);
+            var retrievedProvider = serviceProvider.GetSubmodelServiceProvider(submodelId);
+            if (retrievedProvider.TryGetEntity(out provider))
             {
+                result = null;
+                return false;
+            }
+            else
+            {
+                provider = null;
                 result = NotFound(new Result(false, new NotFoundMessage("Submodel Provider")));
                 return true;
             }
-            result = null;
-            return false;
         }
 
         #endregion

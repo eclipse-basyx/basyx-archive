@@ -1,6 +1,7 @@
 ﻿@page
 @model BaSyx.Common.UI.Pages.AssetAdministrationShellRepositoryModel
 @using BaSyx.API.Components;
+@using BaSyx.Models.Core.AssetAdministrationShell.Generics; 
 @using BaSyx.Utils.Settings.Types;
 @using Microsoft.AspNetCore.Hosting;
 @using System.Security.Cryptography;
@@ -9,6 +10,14 @@
 
 @{
     IAssetAdministrationShellRepositoryServiceProvider sp = Model.ServiceProvider;
+
+    IEnumerable<IAssetAdministrationShellServiceProvider> shellServiceProviders = null;
+    var retrievedShellServiceProviders = sp.GetAssetAdministrationShellServiceProviders();
+    if (retrievedShellServiceProviders.Success && retrievedShellServiceProviders.Entity != null)
+    {
+        shellServiceProviders = retrievedShellServiceProviders.Entity;
+    }
+
     IHostingEnvironment hostingEnvironment = Model.HostingEnvironment;
     ServerSettings settings = Model.Settings;
     string pathToCompanyLogo = settings.Miscellaneous.TryGetValue("CompanyLogo", out string path) ? path : string.Empty;
@@ -16,7 +25,7 @@
     ViewData["Title"] = "Asset Administration Shell Repository";
     ViewData["ApiRoot"] = "/shells";
     ViewData["CompanyLogo"] = pathToCompanyLogo;
-    ViewData["ApiType"] = "AssetAdministrationShellRepository";    
+    ViewData["ApiType"] = "AssetAdministrationShellRepository";
 }
 
 @functions
@@ -45,10 +54,11 @@
 </div>
    
 
-@if (sp.AssetAdministrationShells?.Count() > 0)
+@if (shellServiceProviders?.Count() > 0)
 {
-    foreach (var aas in sp.AssetAdministrationShells)
+    foreach (var shellServiceProvider in shellServiceProviders)
     {
+        IAssetAdministrationShell aas = shellServiceProvider.GetBinding();
         <div class="card border-dark mb-3">
             <div class="card-header bg-dark">
                 <h4>
@@ -64,10 +74,20 @@
                 <div class="card-body">                        
                     @await Html.PartialAsync("_Asset", aas.Asset)
 
-                    @if (aas.Submodels.Count() > 0)
-                    {
-                        foreach (var submodel in aas.Submodels)
+                    @{
+                        IEnumerable<ISubmodelServiceProvider> submodelServiceProviders = null;
+                        var retrievedSubmodelServiceProvider = shellServiceProvider.SubmodelRegistry.GetSubmodelServiceProviders();
+                        if (retrievedSubmodelServiceProvider.Success && retrievedSubmodelServiceProvider.Entity != null)
                         {
+                            submodelServiceProviders = retrievedSubmodelServiceProvider.Entity;
+                        }
+                    }
+
+                    @if (submodelServiceProviders?.Count() > 0)
+                    {
+                        foreach (var submodelServiceProvider in submodelServiceProviders)
+                        {
+                            ISubmodel submodel = submodelServiceProvider.GetBinding();
                             @await Html.PartialAsync("_Submodel", submodel, new ViewDataDictionary(ViewData) { {"aasId",  aas.IdShort} })
                         }
                     }
