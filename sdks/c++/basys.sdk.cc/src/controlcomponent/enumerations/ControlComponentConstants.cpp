@@ -1,4 +1,4 @@
-#include <BaSyx/submodel/enumerations/ControlComponentConstants.h>
+#include <BaSyx/controlcomponent/enumerations/ControlComponentConstants.h>
 
 #include <array>
 #include <algorithm>
