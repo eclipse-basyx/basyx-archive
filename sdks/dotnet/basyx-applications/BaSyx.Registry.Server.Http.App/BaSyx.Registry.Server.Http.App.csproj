@@ -15,15 +15,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BaSyx.Common.UI" Version="1.0.0" />
+    <PackageReference Include="BaSyx.Common.UI.Swagger" Version="1.0.0" />
+    <PackageReference Include="BaSyx.Discovery.mDNS" Version="1.0.0" />
+    <PackageReference Include="BaSyx.Registry.ReferenceImpl.FileBased" Version="1.0.0" />
+    <PackageReference Include="BaSyx.Registry.Server.Http" Version="1.0.0" />
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\BaSyx.Common.UI.Swagger\BaSyx.Common.UI.Swagger.csproj" />
-    <ProjectReference Include="..\BaSyx.Common.UI\BaSyx.Common.UI.csproj" />
-    <ProjectReference Include="..\BaSyx.Discovery.mDNS\BaSyx.Discovery.mDNS.csproj" />
-    <ProjectReference Include="..\BaSyx.Registry.ReferenceImpl.FileBased\BaSyx.Registry.ReferenceImpl.FileBased.csproj" />
-    <ProjectReference Include="..\BaSyx.Registry.Server.Http\BaSyx.Registry.Server.Http.csproj" />
   </ItemGroup>
 
   <ItemGroup>
