@@ -150,6 +150,8 @@ namespace BaSyx.Models.Core.Common
                 return typeof(float);
             else if (dataObjectType == DataObjectType.Double)
                 return typeof(double);
+            else if (dataObjectType == DataObjectType.Decimal)
+                return typeof(decimal);
             else if (dataObjectType == DataObjectType.UInt8)
                 return typeof(byte);
             else if (dataObjectType == DataObjectType.UInt16)

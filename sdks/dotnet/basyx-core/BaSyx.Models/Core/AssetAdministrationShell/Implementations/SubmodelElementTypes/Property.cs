@@ -37,12 +37,15 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
             }            
             set
             {
-                if (value is IValue)
-                    Set.Invoke(this, value as IValue);
-                else
-                    Set.Invoke(this, new ElementValue(value, value.GetType()));
-                        
-                ValueChanged?.Invoke(this, new ValueChangedArgs(this.IdShort, value, value.GetType()));
+                if (value != null)
+                {
+                    if (value is IValue iValue)
+                        Set.Invoke(this, iValue);
+                    else
+                        Set.Invoke(this, new ElementValue(value, value.GetType()));
+
+                    ValueChanged?.Invoke(this, new ValueChangedArgs(this.IdShort, value, value.GetType()));
+                }
             }
         }
 
@@ -97,9 +100,12 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
             }
             set
             {
-                Set.Invoke(this, value);
-
-                ValueChanged?.Invoke(this, new ValueChangedArgs(this.IdShort, value, value.GetType()));
+                if (value != null)
+                {
+                    Set.Invoke(this, value);
+                    
+                    ValueChanged?.Invoke(this, new ValueChangedArgs(this.IdShort, value, value.GetType()));
+                }
             }
         }
 

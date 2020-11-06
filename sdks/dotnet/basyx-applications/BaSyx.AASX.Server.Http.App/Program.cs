@@ -11,6 +11,8 @@
 using BaSyx.AAS.Server.Http;
 using BaSyx.API.AssetAdministrationShell.Extensions;
 using BaSyx.API.Components;
+using BaSyx.Common.UI;
+using BaSyx.Common.UI.Swagger;
 using BaSyx.Models.Connectivity;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Export;
@@ -66,6 +68,7 @@ namespace BaSyx.AASX.Server.Http
                     }
                 }
             }
+            Console.WriteLine("Press any key to exit...");
             Console.Read();
             logger.Info("Application shut down");
         }
@@ -109,7 +112,8 @@ namespace BaSyx.AASX.Server.Http
                     multiServer.ProvideContent(file.Uri, stream);
                 }
             }
-            
+            multiServer.AddBaSyxUI(PageNames.AssetAdministrationShellRepositoryServer);
+            multiServer.AddSwagger(Interface.AssetAdministrationShellRepository);
             multiServer.RunAsync();
         }
 
@@ -154,6 +158,9 @@ namespace BaSyx.AASX.Server.Http
                 }
             }
             logger.Info("Server is starting up...");
+
+            server.AddBaSyxUI(PageNames.AssetAdministrationShellServer);
+            server.AddSwagger(Interface.AssetAdministrationShell);
             server.RunAsync();
         }
     }
