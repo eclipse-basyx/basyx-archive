@@ -21,7 +21,7 @@ public class TestAASServer extends AASServerSuite {
 
 	@Override
 	protected String getURL() {
-		return component.getURL();
+		return component.getURL() + "/shells";
 	}
 
 	@BeforeClass

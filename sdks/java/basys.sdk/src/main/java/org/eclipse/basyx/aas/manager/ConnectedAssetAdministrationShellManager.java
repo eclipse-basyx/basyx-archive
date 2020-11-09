@@ -106,7 +106,10 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		AASAggregatorProxy proxy = new AASAggregatorProxy(provider);
 		proxy.createAAS(aas);
 		try {
-			String combinedEndpoint = VABPathTools.concatenatePaths(endpoint, AASAggregatorProvider.PREFIX, URLEncoder.encode(aas.getIdentification().getId(), "UTF-8"), "aas");
+			if (!endpoint.endsWith(AASAggregatorProvider.PREFIX)) {
+				endpoint += "/" + AASAggregatorProvider.PREFIX;
+			}
+			String combinedEndpoint = VABPathTools.concatenatePaths(endpoint, URLEncoder.encode(aas.getIdentification().getId(), "UTF-8"), "aas");
 			aasDirectory.register(new AASDescriptor(aas, combinedEndpoint));
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException("Encoding failed. This should never happen");

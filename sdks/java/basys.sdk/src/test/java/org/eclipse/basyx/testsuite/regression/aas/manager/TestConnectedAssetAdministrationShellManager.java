@@ -60,15 +60,17 @@ public class TestConnectedAssetAdministrationShellManager {
 		// Register AAS at directory
 		IIdentifier aasId = new Identifier(IdentifierType.CUSTOM, "aasId");
 		String aasIdShort = "aasName";
-		connectorProvider.addMapping("", new AASAggregatorProvider(new AASAggregator()));
+		IModelProvider provider = new AASAggregatorProvider(new AASAggregator());
+		connectorProvider.addMapping("/shells", provider);
+		connectorProvider.addMapping("", provider);
  
 		// Create an AAS containing a reference to the created SubModel
 		AssetAdministrationShell aas = new AssetAdministrationShell(aasIdShort, aasId, new Asset("assetIdShort", new ModelUrn("assetId"), AssetKind.INSTANCE));
-		manager.createAAS(aas, aasId, "");
+		manager.createAAS(aas, aasId, "/shells");
 
 		// Check descriptor for correct endpoint
 		String endpoint = registry.lookupAAS(aasId).getFirstEndpoint();
-		assertEquals("/" + AASAggregatorProvider.PREFIX + "/" + aasId.getId() + "/aas", endpoint);
+		assertEquals(AASAggregatorProvider.PREFIX + "/" + aasId.getId() + "/aas", endpoint);
 
 		// Retrieve it
 		ConnectedAssetAdministrationShell connectedAAS = manager.retrieveAAS(aasId);
