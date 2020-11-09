@@ -8,8 +8,11 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.CustomId;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -73,9 +76,7 @@ public abstract class AssetAdministrationShellSuite {
 		 * implicitly
 		 */
 		// Create an AAS containing a reference to the created SubModel
-		AssetAdministrationShell aas = new AssetAdministrationShell();
-		aas.setIdShort(AASIDSHORT);
-		aas.setIdentification(AASID);
+		AssetAdministrationShell aas = new AssetAdministrationShell(AASIDSHORT, AASID, new Asset("assetIdShort", new CustomId("assetId"), AssetKind.INSTANCE));
 		aas.addSubModel(retrieveBaselineSM());
 		aas.setAssetReference(EXPECTED_ASSETREF);
 		aas.setDerivedFrom(EXPECTED_DERIVEDFROMREF);

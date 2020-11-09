@@ -49,8 +49,7 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 		putAll(new Identifiable());
 
 		// Default values
-		put(ASSETIDENTIFICATIONMODEL, null);
-		put(KIND, null);
+		setAssetKind(AssetKind.INSTANCE);
 	}
 	
 	/**
