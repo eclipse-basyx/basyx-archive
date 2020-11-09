@@ -44,6 +44,17 @@ public class ConnectedSubModel extends ConnectedElement implements ISubModel {
 		super(proxy);
 	}
 
+	/**
+	 * Creates a ConnectedSubmodel based on a proxy and an already cached local copy
+	 * 
+	 * @param proxy
+	 * @param localCopy
+	 */
+	public ConnectedSubModel(VABElementProxy proxy, SubModel localCopy) {
+		super(proxy);
+		cached = localCopy;
+	}
+
 	protected KeyElements getKeyElement() {
 		return KeyElements.SUBMODEL;
 	}

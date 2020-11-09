@@ -82,7 +82,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	@Override
 	public ConnectedAssetAdministrationShell retrieveAAS(IIdentifier aasId) {
 		VABElementProxy proxy = getAASProxyFromId(aasId);
-		return new ConnectedAssetAdministrationShell(proxy, this);
+		return new ConnectedAssetAdministrationShell(proxy);
 	}
 
 	@Override

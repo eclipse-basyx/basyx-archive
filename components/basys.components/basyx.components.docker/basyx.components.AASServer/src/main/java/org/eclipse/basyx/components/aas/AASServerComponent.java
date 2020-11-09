@@ -13,6 +13,7 @@ import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.IComponent;
 import org.eclipse.basyx.components.aas.aasx.AASXPackageManager;
@@ -48,6 +49,7 @@ public class AASServerComponent implements IComponent {
 
 	// The server with the servlet that will be created
 	private AASHTTPServer server;
+	private IAASRegistryService registry;
 
 	// Configurations
 	private BaSyxContextConfiguration contextConfig;
@@ -82,6 +84,10 @@ public class AASServerComponent implements IComponent {
 		this.aasConfig = aasConfig;
 		this.aasConfig.setAASBackend(AASServerBackend.MONGODB);
 		this.mongoDBConfig = mongoDBConfig;
+	}
+
+	public void setRegistry(IAASRegistryService registry) {
+		this.registry = registry;
 	}
 
 	/**
@@ -237,7 +243,7 @@ public class AASServerComponent implements IComponent {
 		IAASAggregator aggregator = null;
 		if ( backendType == AASServerBackend.INMEMORY ) {
 			logger.info("Using InMemory backend");
-			aggregator = new AASAggregator();
+			aggregator = new AASAggregator(registry);
 		} else if ( backendType == AASServerBackend.MONGODB ) {
 			logger.info("Using MongoDB backend");
 			aggregator = loadMongoDBAggregator();
@@ -254,6 +260,8 @@ public class AASServerComponent implements IComponent {
 		} else {
 			config = this.mongoDBConfig;
 		}
-		return new MongoDBAASAggregator(config);
+		MongoDBAASAggregator aggregator = new MongoDBAASAggregator(config);
+		aggregator.setRegistry(registry);
+		return aggregator;
 	}
 }

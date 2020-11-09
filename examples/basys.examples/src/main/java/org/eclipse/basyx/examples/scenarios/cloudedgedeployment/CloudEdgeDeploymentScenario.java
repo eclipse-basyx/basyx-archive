@@ -81,13 +81,13 @@ public class CloudEdgeDeploymentScenario {
 	public CloudEdgeDeploymentScenario() {
 		
 		startupRegistryServer();
-		startupEdgeServer();
-		startupCloudServer();
-		
 		
 		// Create a InMemoryRegistry to be used by the manager
 		registry = new AASRegistryProxy(registryPath);
 		
+		startupEdgeServer();
+		startupCloudServer();
+
 		// Create a ConnectedAASManager with the registry created above
 		aasManager = new ConnectedAssetAdministrationShellManager(registry);
 		
@@ -165,6 +165,7 @@ public class CloudEdgeDeploymentScenario {
 
 		// Create a server according to this configuration
 		AASServerComponent cloudServer = new AASServerComponent(contextConfig);
+		cloudServer.setRegistry(registry);
 		
 		// Start the created server
 		cloudServer.startComponent();

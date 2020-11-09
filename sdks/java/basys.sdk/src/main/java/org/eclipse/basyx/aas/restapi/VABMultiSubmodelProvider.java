@@ -309,35 +309,8 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	@Override
 	public void createValue(String path, Object newValue) throws ProviderException {
 		throw new MalformedRequestException("Create is not supported by VABMultiSubmodelProvider. Path was: " + path);
-		
-//		VABPathTools.checkPathForNull(path);
-//		String[] pathElements = VABPathTools.splitPath(path);
-//		if (pathElements.length >= 1 && pathElements[0].equals("aas")) {
-//			if (pathElements.length == 1) {
-//				createAssetAdministrationShell(newValue);
-//			} else if (pathElements[1].equals(AssetAdministrationShell.SUBMODELS)) {
-//				if (pathElements.length == 2) {
-//					createSubModel(newValue);
-//				} else {
-//					String propertyPath = VABPathTools.buildPath(pathElements, 3);
-//					createSubModelProperty(pathElements[2], propertyPath, newValue);
-//				}
-//			}
-//		}
 	}
-	//
-	// private void createSubModelProperty(String smId, String propertyPath, Object
-	// newProperty) throws ProviderException {
-	// IModelProvider modelProvider;
-	// if (isSubmodelLocal(smId)) {
-	// modelProvider = submodel_providers.get(smId);
-	// } else {
-	// // Get a model provider for the submodel in the registry
-	// modelProvider = getModelProvider(smId);
-	// }
-	//
-	// modelProvider.setModelPropertyValue(propertyPath, newProperty);
-	// }
+
 
 	@SuppressWarnings("unchecked")
 	private void createAssetAdministrationShell(Object newAAS) {
@@ -435,9 +408,13 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * @param submodelId to search the submodel
 	 * @return a specifi submodel descriptor
 	 */
-	private SubmodelDescriptor getSubmodelDescriptorFromRegistry(String submodelId) {
+	private SubmodelDescriptor getSubmodelDescriptorFromRegistry(String submodelIdShort) {
 		AASDescriptor aasDescriptor = registry.lookupAAS(aasId);
-		return aasDescriptor.getSubmodelDescriptorFromIdShort(submodelId);
+		SubmodelDescriptor desc = aasDescriptor.getSubmodelDescriptorFromIdShort(submodelIdShort);
+		if(desc == null) {
+			throw new ResourceNotFoundException("Could not resolve Submodel with idShort " + submodelIdShort + " for AAS " + aasId);
+		}
+		return desc;
 	}
 	
 	/**

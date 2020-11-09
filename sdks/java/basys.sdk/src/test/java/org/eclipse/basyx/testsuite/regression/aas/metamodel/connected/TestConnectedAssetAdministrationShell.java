@@ -73,7 +73,7 @@ public class TestConnectedAssetAdministrationShell extends AssetAdministrationSh
 	@Test
 	public void testGetLocalCopy() {
 		AASModelProvider aasProvider = new AASModelProvider(retrieveBaselineShell());
-		ConnectedAssetAdministrationShell localCAAS = new ConnectedAssetAdministrationShell(new VABElementProxy("", aasProvider), null);
+		ConnectedAssetAdministrationShell localCAAS = new ConnectedAssetAdministrationShell(new VABElementProxy("", aasProvider));
 
 		assertEquals(retrieveBaselineShell(), localCAAS.getLocalCopy());
 	}

@@ -1,6 +1,7 @@
 package org.eclipse.basyx.aas.metamodel.connected;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInforma
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedElement;
+import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -30,6 +32,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
+import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 
@@ -40,20 +43,24 @@ import org.eclipse.basyx.vab.modelprovider.VABPathTools;
  *
  */
 public class ConnectedAssetAdministrationShell extends ConnectedElement implements IAssetAdministrationShell {
-
-	ConnectedAssetAdministrationShellManager manager;
-
 	/**
 	 * Constructor creating a ConnectedAAS pointing to the AAS represented by proxy
-	 * and path
 	 * 
-	 * @param path
 	 * @param proxy
 	 * @param manager
 	 */
+	@Deprecated
 	public ConnectedAssetAdministrationShell(VABElementProxy proxy, ConnectedAssetAdministrationShellManager manager) {
 		super(proxy);
-		this.manager = manager;
+	}
+
+	/**
+	 * Constructor creating a ConnectedAAS pointing to the AAS represented by proxy
+	 * 
+	 * @param proxy
+	 */
+	public ConnectedAssetAdministrationShell(VABElementProxy proxy) {
+		super(proxy);
 	}
 
 	/**
@@ -120,9 +127,20 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 		return set.stream().map(ConceptDictionary::createAsFacade).collect(Collectors.toSet());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, ISubModel> getSubModels() {
-		return manager.retrieveSubmodels(getIdentification());
+		Collection<Map<String, Object>> submodelCollection = (Collection<Map<String, Object>>) getProxy().getModelPropertyValue(AssetAdministrationShell.SUBMODELS);
+
+		Map<String, ISubModel> ret = new HashMap<>();
+
+		for (Map<String, Object> m : submodelCollection) {
+			SubModel sm = SubModel.createAsFacade(m);
+			String path = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, sm.getIdShort(), SubModelProvider.SUBMODEL);
+			ret.put(sm.getIdShort(), new ConnectedSubModel(getProxy().getDeepProxy(path), sm));
+		}
+
+		return ret;
 	}
 
 	@Override

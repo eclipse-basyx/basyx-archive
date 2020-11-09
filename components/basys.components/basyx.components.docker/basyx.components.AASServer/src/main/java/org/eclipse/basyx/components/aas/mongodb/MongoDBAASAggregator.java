@@ -14,6 +14,7 @@ import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.aas.restapi.api.IAASAPI;
@@ -30,6 +31,7 @@ import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -60,6 +62,8 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	protected String aasCollection;
 	protected String smCollection;
 
+	private IAASRegistryService registry;
+
 	/**
 	 * Receives the path of the configuration.properties file in it's constructor.
 	 * 
@@ -68,6 +72,10 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	public MongoDBAASAggregator(BaSyxMongoDBConfiguration config) {
 		this.setConfiguration(config);
 		init();
+	}
+
+	public void setRegistry(IAASRegistryService registry) {
+		this.registry = registry;
 	}
 
 	/**
@@ -121,7 +129,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	private VABMultiSubmodelProvider createMultiSubmodelProvider(AssetAdministrationShell aas) {
 		IAASAPI aasApi = new MongoDBAASAPI(config, aas.getIdentification().getId());
 		AASModelProvider aasProvider = new AASModelProvider(aasApi);
-		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider(aasProvider);
+		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider(aasProvider, registry, new HTTPConnectorProvider());
 
 		// Get ids and idShorts from aas
 		Collection<IReference> submodelRefs = aas.getSubmodelReferences();

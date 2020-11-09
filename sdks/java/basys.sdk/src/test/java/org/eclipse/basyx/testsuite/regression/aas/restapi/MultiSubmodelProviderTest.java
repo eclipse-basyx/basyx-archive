@@ -102,8 +102,8 @@ public class MultiSubmodelProviderTest {
 
 		getTestRunner("TestSM");
 
-		// Ensure that the Submodel References where updated
-		ConnectedAssetAdministrationShell shell = new ConnectedAssetAdministrationShell(proxy.getDeepProxy("/aas"), null);
+		// Ensure that the Submodel References were updated
+		ConnectedAssetAdministrationShell shell = new ConnectedAssetAdministrationShell(proxy.getDeepProxy("/aas"));
 		Collection<IReference> refs = shell.getSubmodelReferences();
 		assertEquals(2, refs.size());
 		assertEquals(sm.getReference(), refs.iterator().next());
