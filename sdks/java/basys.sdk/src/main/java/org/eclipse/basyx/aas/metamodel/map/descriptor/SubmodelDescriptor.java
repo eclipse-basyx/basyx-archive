@@ -46,7 +46,7 @@ public class SubmodelDescriptor extends ModelDescriptor implements IHasSemantics
 	 * Create a new descriptor with minimal information
 	 */
 	public SubmodelDescriptor(String idShort, IIdentifier id, String httpEndpoint) {
-		super(idShort, id, httpEndpoint);
+		super(idShort, id, harmonizeEndpoint(httpEndpoint));
 		
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
@@ -55,6 +55,14 @@ public class SubmodelDescriptor extends ModelDescriptor implements IHasSemantics
 	@Override
 	protected String getModelType() {
 		return MODELTYPE;
+	}
+
+	private static String harmonizeEndpoint(String endpoint) {
+		if (!endpoint.endsWith("/submodel")) {
+			return endpoint + "/submodel";
+		} else {
+			return endpoint;
+		}
 	}
 
 	@Override

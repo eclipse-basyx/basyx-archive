@@ -31,7 +31,7 @@ import org.junit.Test;
  */
 public class TestSubmodelDescriptor {
 	private static final IdentifierType ID_TYPE = IdentifierType.CUSTOM;
-	private static final String HTTP_ENDPOINT = "testEnd";
+	private static final String HTTP_ENDPOINT = "testEnd/submodel";
 	private static final String ID_SHORT_STRING = "testIdShort";
 	private static final Identifier IDENTIFIER = new Identifier(ID_TYPE, ID_SHORT_STRING);
 	

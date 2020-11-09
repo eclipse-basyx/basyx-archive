@@ -63,10 +63,10 @@ public class TestAASAggregatorProvider extends AASAggregatorSuite {
 		prop.setIdShort("prop");
 		sm.addSubModelElement(prop);
 
-		provider.createValue(aasPath + "/submodels", sm);
+		provider.setModelPropertyValue(aasPath + "/submodels/" + sm.getIdShort(), sm);
 
 		// Check if it was created
-		String smPath = aasPath + "/submodels/smIdShort";
+		String smPath = aasPath + "/submodels/smIdShort/submodel";
 		SubModel retrievedSm = SubModel.createAsFacade((Map<String, Object>) provider.getModelPropertyValue(smPath));
 		assertEquals(sm.getIdShort(), retrievedSm.getIdShort());
 
@@ -82,7 +82,7 @@ public class TestAASAggregatorProvider extends AASAggregatorSuite {
 		assertTrue((boolean) provider.invokeOperation(smPath + "/submodelElements/op/invoke"));
 		
 		// Test feedthrough of DELETE
-		provider.deleteValue(smPath);
+		provider.deleteValue(aasPath + "/submodels/smIdShort");
 
 		// Ensure only the submodel has been deleted
 		retrievedAAS = retrieveAAS(provider, aasPath);

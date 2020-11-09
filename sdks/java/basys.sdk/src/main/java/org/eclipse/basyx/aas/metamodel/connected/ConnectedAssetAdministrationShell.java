@@ -22,6 +22,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInforma
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedElement;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
@@ -30,6 +31,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 
 /**
  * "Connected" implementation of IAssetAdministrationShell
@@ -126,7 +128,9 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	@Override
 	public void addSubModel(SubModel subModel) {
 		subModel.setParent(getReference());
-		getProxy().createValue("/submodels", subModel);
+		Map<String, Object> convertedMap = SubmodelElementMapCollectionConverter.smToMap(subModel);
+		String accessPath = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, subModel.getIdShort());
+		getProxy().setModelPropertyValue(accessPath, convertedMap);
 	}
 
 	@Override

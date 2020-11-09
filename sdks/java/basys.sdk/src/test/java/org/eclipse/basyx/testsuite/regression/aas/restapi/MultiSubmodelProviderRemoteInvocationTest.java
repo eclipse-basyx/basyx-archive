@@ -42,7 +42,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 
 	private static final IIdentifier REMOTESMID = new ModelUrn("remoteSm");
 	private static final String REMOTESMIDSHORT = "remoteSmIdShort";
-	private static final String REMOTEPATH = "/aas/submodels/" + REMOTESMIDSHORT;
+	private static final String REMOTEPATH = "/aas/submodels/" + REMOTESMIDSHORT + "/" + SubModelProvider.SUBMODEL;
 
 	private List<BaSyxService> services = new ArrayList<>();
 

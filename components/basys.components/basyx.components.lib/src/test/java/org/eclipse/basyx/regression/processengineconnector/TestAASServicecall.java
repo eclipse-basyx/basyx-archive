@@ -82,7 +82,7 @@ public class TestAASServicecall {
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
 		
 		// Add sub-model to the provider
-		provider.addSubmodel(SUBMODEL_ID, new SubModelProvider(sm));
+		provider.addSubmodel(new SubModelProvider(sm));
 		
 		// Add aas to the provider
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
@@ -96,7 +96,7 @@ public class TestAASServicecall {
 		
 		// create submodel descriptor
 		IIdentifier smId = new Identifier(IdentifierType.CUSTOM, SUBMODEL_ID);
-		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1Name", smId, "/aas/submodels/"+SUBMODEL_ID);
+		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1Name", smId, "/aas/submodels/" + SUBMODEL_ID + "/submodel");
 		
 		// Add submodel descriptor to aas descriptor
 		aasDescriptor.addSubmodelDescriptor(smDescriptor);

@@ -88,9 +88,9 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		super.onServiceInvocation();
 		// Implement the device invocation counter - read and increment invocation counter
 		Map<String, Object> property = (Map<String, Object>) aasServerConnection
-				.getModelPropertyValue(aasPath + "/submodels/Status/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations");
+				.getModelPropertyValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations");
 		int invocations = (int) property.get("value");
-		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
+		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
 	}
 
 	
@@ -103,7 +103,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		super.onChangedExecutionState(newExecutionState);
 		
 		// Update property "properties/status" in external AAS
-		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/" + MultiSubmodelElementProvider.ELEMENTS + "/status/value",
+		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/status/value",
 				newExecutionState.getValue());
 	}
 
@@ -150,7 +150,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		invocationsProp.setIdShort("invocations");
 		statusSM.addSubModelElement(invocationsProp);
 		// - Transfer device sub model to server
-		aasServerConnection.createValue(aasPath + "/submodels", statusSM);
+		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/" + statusSM.getIdShort(), statusSM);
 
 		
 		// Register control component as local sub model
@@ -167,7 +167,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		AASDescriptor deviceAASDescriptor = new AASDescriptor(lookupURN("AAS"), aasRepoURL);
 		// Create sub model descriptors
 		SubmodelDescriptor statusSMDescriptor = new SubmodelDescriptor("Status", lookupURN("Status"),
-				aasRepoURL + "/submodels/Status");
+				aasRepoURL + "/submodels/Status/submodel");
 		// Add sub model descriptor to AAS descriptor
 		deviceAASDescriptor.addSubmodelDescriptor(statusSMDescriptor);
 		// - Push AAS descriptor to server

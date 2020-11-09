@@ -79,10 +79,10 @@ public class AASServletConnectionFull {
 			new ExamplesPreconfiguredDirectory()
 					// - VAB needs to know the relative path of the sub model that is defined by AAS
 					// meta model
-					.addMapping("sm-001VAB", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/")
+					.addMapping("sm-001VAB", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/submodel")
 					// - VAB needs to know the relative path of the sub model that is defined by AAS
 					// meta model
-					.addMapping("sm-001MVAB", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual/"),
+					.addMapping("sm-001MVAB", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModelManual/submodel"),
 			// We connect via HTTP
 			new HTTPConnectorProvider());
 	
@@ -95,7 +95,7 @@ public class AASServletConnectionFull {
 			// Add example specific mappings
 			new ExampleAASRegistry()
 					.addAASMapping("aas-001", "") // no AAS is provided in this example
-					.addSubmodelMapping("aas-001", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/"),
+					.addSubmodelMapping("aas-001", "sm-001", "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/SampleModel/submodel"),
 			// We connect via HTTP
 			new HTTPConnectorProvider());
 

@@ -47,7 +47,7 @@ public class TestConnectedAssetAdministrationShell extends AssetAdministrationSh
 		// Create AAS Descriptor
 		AASDescriptor aasDescriptor = new AASDescriptor(AASID, "/aas");
 		// Create Submodel Descriptor
-		SubmodelDescriptor smDescriptor2 = new SubmodelDescriptor(SMIDSHORT, SMID, "/aas/submodels/" + SMIDSHORT);
+		SubmodelDescriptor smDescriptor2 = new SubmodelDescriptor(SMIDSHORT, SMID, "/aas/submodels/" + SMIDSHORT + "/submodel");
 		// Add Submodel descriptor to aas descriptor
 		aasDescriptor.addSubmodelDescriptor(smDescriptor2);
 

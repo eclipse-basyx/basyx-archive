@@ -99,7 +99,8 @@ public class SubModelProvider extends MetaModelProvider {
 
 			// Change internal map representation to set
 			if (sm instanceof SubModel) {
-				return SubmodelElementMapCollectionConverter.smToMap((SubModel) sm);
+				Object o = SubmodelElementMapCollectionConverter.smToMap((SubModel) sm);
+				return o;
 			} else {
 				return sm;
 			}

@@ -52,7 +52,7 @@ public class TestAASHTTP {
 		InMemoryDirectory directory = new InMemoryDirectory();
 		directory.addMapping(StubAASServlet.AASURN.getId(), "http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas");
 		directory.addMapping(StubAASServlet.SMURN.getId(),
-				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMIDSHORT);
+				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMIDSHORT + "/submodel");
 
 		InMemoryRegistry registry = new InMemoryRegistry();
 
@@ -62,7 +62,7 @@ public class TestAASHTTP {
 
 		// Create the submodel descriptor
 		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(StubAASServlet.SMIDSHORT, StubAASServlet.SMURN,
-				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMIDSHORT);
+				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMIDSHORT + "/submodel");
 
 		// add submodel descriptor to the aas descriptor
 		aasDescriptor.addSubmodelDescriptor(submodelDescriptor);

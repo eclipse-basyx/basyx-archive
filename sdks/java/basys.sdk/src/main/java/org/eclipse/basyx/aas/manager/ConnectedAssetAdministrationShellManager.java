@@ -22,6 +22,7 @@ import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.vab.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -79,7 +80,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	}
 
 	@Override
-	public ConnectedAssetAdministrationShell retrieveAAS(IIdentifier aasId) throws Exception {
+	public ConnectedAssetAdministrationShell retrieveAAS(IIdentifier aasId) {
 		VABElementProxy proxy = getAASProxyFromId(aasId);
 		return new ConnectedAssetAdministrationShell(proxy, this);
 	}
@@ -137,11 +138,8 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	public void createSubModel(IIdentifier aasId, SubModel submodel) {
 		
 		// Push the SM to the server using the ConnectedAAS
-		try {
-			retrieveAAS(aasId).addSubModel(submodel);
-		} catch (Exception e) {
-			throw new RuntimeException("Could not create Submodel on server", e);
-		}
+
+		retrieveAAS(aasId).addSubModel(submodel);
 		
 		// Lookup AAS descriptor
 		AASDescriptor aasDescriptor = aasDirectory.lookupAAS(aasId);
@@ -150,7 +148,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		String addr = aasDescriptor.getFirstEndpoint();
 		
 		// Register the SM
-		String smEndpoint = VABPathTools.concatenatePaths(addr, AssetAdministrationShell.SUBMODELS, submodel.getIdShort());
+		String smEndpoint = VABPathTools.concatenatePaths(addr, AssetAdministrationShell.SUBMODELS, submodel.getIdShort(), SubModelProvider.SUBMODEL);
 		aasDirectory.register(aasId, new SubmodelDescriptor(submodel, smEndpoint));
 	}
 }

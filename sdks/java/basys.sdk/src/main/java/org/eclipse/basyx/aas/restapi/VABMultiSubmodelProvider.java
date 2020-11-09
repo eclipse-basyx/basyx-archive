@@ -211,6 +211,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	@Override
 	public Object getModelPropertyValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
+		path = VABPathTools.stripSlashes(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 		if (pathElements.length > 0 && pathElements[0].equals("aas")) {
 			if (pathElements.length == 1) {
@@ -233,7 +234,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 					}
 					
 					// - Retrieve submodel or property value
-					return provider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 3));
+					return provider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 4));
 				}
 			} else {
 				// Handle access to AAS
@@ -250,50 +251,64 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
  		VABPathTools.checkPathForNull(path);
+		path = VABPathTools.stripSlashes(path);
 		// Split path
 		String[] pathElements = VABPathTools.splitPath(path);
 		String propertyPath = VABPathTools.buildPath(pathElements, 3);
 		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
-		IModelProvider provider;
-		if (isSubmodelLocal(pathElements[2])) {
-			provider = submodel_providers.get(pathElements[2]);
-		} else {
-			// Get a model provider for the submodel in the registry
-			provider = getModelProvider(pathElements[2]);
+		
+		if (path.equals("aas")) {
+			createAssetAdministrationShell(newValue);
+		} else if (!path.startsWith("aas/submodels")) {
+			throw new MalformedRequestException("Access to MultiSubmodelProvider always has to start with \"aas/submodels\", was " + path);
 		}
 
-		provider.setModelPropertyValue(propertyPath, newValue);
+		IModelProvider provider;
+		try {
+			if (isSubmodelLocal(pathElements[2])) {
+				provider = submodel_providers.get(pathElements[2]);
+			} else {
+				// Get a model provider for the submodel in the registry
+				provider = getModelProvider(pathElements[2]);
+			}
+			provider.setModelPropertyValue(propertyPath, newValue);
+		} catch (ResourceNotFoundException e) {
+			createSubModel(newValue);
+		}
 	}
 
 	@Override
 	public void createValue(String path, Object newValue) throws ProviderException {
-		VABPathTools.checkPathForNull(path);
-		String[] pathElements = VABPathTools.splitPath(path);
-		if (pathElements.length >= 1 && pathElements[0].equals("aas")) {
-			if (pathElements.length == 1) {
-				createAssetAdministrationShell(newValue);
-			} else if (pathElements[1].equals(AssetAdministrationShell.SUBMODELS)) {
-				if (pathElements.length == 2) {
-					createSubModel(newValue);
-				} else {
-					String propertyPath = VABPathTools.buildPath(pathElements, 3);
-					createSubModelProperty(pathElements[2], propertyPath, newValue);
-				}
-			}
-		}
+		throw new MalformedRequestException("Create is not supported by VABMultiSubmodelProvider. Path was: " + path);
+		
+//		VABPathTools.checkPathForNull(path);
+//		String[] pathElements = VABPathTools.splitPath(path);
+//		if (pathElements.length >= 1 && pathElements[0].equals("aas")) {
+//			if (pathElements.length == 1) {
+//				createAssetAdministrationShell(newValue);
+//			} else if (pathElements[1].equals(AssetAdministrationShell.SUBMODELS)) {
+//				if (pathElements.length == 2) {
+//					createSubModel(newValue);
+//				} else {
+//					String propertyPath = VABPathTools.buildPath(pathElements, 3);
+//					createSubModelProperty(pathElements[2], propertyPath, newValue);
+//				}
+//			}
+//		}
 	}
-
-	private void createSubModelProperty(String smId, String propertyPath, Object newProperty) throws ProviderException {
-		IModelProvider modelProvider;
-		if (isSubmodelLocal(smId)) {
-			modelProvider = submodel_providers.get(smId);
-		} else {
-			// Get a model provider for the submodel in the registry
-			modelProvider = getModelProvider(smId);
-		}
-
-		modelProvider.setModelPropertyValue(propertyPath, newProperty);
-	}
+	//
+	// private void createSubModelProperty(String smId, String propertyPath, Object
+	// newProperty) throws ProviderException {
+	// IModelProvider modelProvider;
+	// if (isSubmodelLocal(smId)) {
+	// modelProvider = submodel_providers.get(smId);
+	// } else {
+	// // Get a model provider for the submodel in the registry
+	// modelProvider = getModelProvider(smId);
+	// }
+	//
+	// modelProvider.setModelPropertyValue(propertyPath, newProperty);
+	// }
 
 	@SuppressWarnings("unchecked")
 	private void createAssetAdministrationShell(Object newAAS) {
@@ -306,7 +321,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 		// Adds a new submodel to the registered AAS
 		SubModel sm = SubModel.createAsFacade((Map<String, Object>) newSM);
 
-		addSubmodel(sm.getIdShort(), new SubModelProvider(sm));
+		addSubmodel(new SubModelProvider(sm));
 	}
 
 
@@ -314,6 +329,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	@Override
 	public void deleteValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
+		path = VABPathTools.stripSlashes(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 		String propertyPath = VABPathTools.buildPath(pathElements, 3);
 		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
@@ -346,24 +362,13 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 
 	@Override
 	public void deleteValue(String path, Object obj) throws ProviderException {
-		VABPathTools.checkPathForNull(path);
-		String[] pathElements = VABPathTools.splitPath(path);
-		String propertyPath = VABPathTools.buildPath(pathElements, 3);
-		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
-		IModelProvider provider;
-		if (isSubmodelLocal(pathElements[2])) {
-			provider = submodel_providers.get(pathElements[2]);
-		} else {
-			// Get a model provider for the submodel in the registry
-			provider = getModelProvider(pathElements[2]);
-		}
-
-		provider.deleteValue(propertyPath, obj);
+		throw new MalformedRequestException("DeleteValue with a parameter is not supported. Path was: " + path);
 	}
 
 	@Override
 	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
+		path = VABPathTools.stripSlashes(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 		String operationPath = VABPathTools.buildPath(pathElements, 3);
 		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
@@ -413,6 +418,10 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 */
 	private IModelProvider getModelProvider(SubmodelDescriptor submodelDescriptor) {
 		String endpoint = submodelDescriptor.getFirstEndpoint();
+
+		// Remove "/submodel" since it will be readded later
+		endpoint = endpoint.substring(0, endpoint.length() - SubModelProvider.SUBMODEL.length() - 1);
+
 		return connectorProvider.getConnector(endpoint);
 	}
 	

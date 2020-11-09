@@ -71,7 +71,7 @@ public class RegisterRetrieveAASEndpoints {
 		AASDescriptor aasDescriptor = new AASDescriptor(aasURN, aasPath);
 		// - Add sub model descriptor URI
 
-		String smPath = VABPathTools.concatenatePaths(aasPath, "/submodels/" + subModelURN.getEncodedURN());
+		String smPath = VABPathTools.concatenatePaths(aasPath, "/submodels/" + subModelURN.getEncodedURN() + "/submodel");
 		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor("smIdShort", subModelURN, smPath);
 		aasDescriptor.addSubmodelDescriptor(submodelDescriptor);
 

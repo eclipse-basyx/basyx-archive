@@ -45,8 +45,8 @@ public abstract class TestRegistryProviderSuite {
 	protected String smIdShort2 = "smIdShort2";
 	protected String aasEndpoint1 = "http://www.registrytest.de/aas01/aas";
 	protected String aasEndpoint2 = "http://www.registrytest.de/aas02/aas";
-	protected String smEndpoint1 = "http://www.registrytest.de/aas01/aas/submodels/" + smIdShort1;
-	protected String smEndpoint2 = "http://www.registrytest.de/aas01/aas/submodels/" + smIdShort2;
+	protected String smEndpoint1 = "http://www.registrytest.de/aas01/aas/submodels/" + smIdShort1 + "/submodel";
+	protected String smEndpoint2 = "http://www.registrytest.de/aas01/aas/submodels/" + smIdShort2 + "/submodel";
 	protected Asset asset1;
 	protected Asset asset2;
 	/**

@@ -5,8 +5,8 @@ import static org.junit.Assert.assertTrue;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnector;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
@@ -61,7 +61,7 @@ public class DeviceSubModelDeploymentVAB {
 		JSONConnector toDeviceManager = new JSONConnector(basyxConnector);	
 		// - Access sub model property, check value
 		int propVal = (Integer) toDeviceManager
-				.getModelPropertyValue("/aas/submodels/dynamicSM/" + MultiSubmodelElementProvider.ELEMENTS + "/prop1/value");
+				.getModelPropertyValue("/aas/submodels/dynamicSM/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/prop1/value");
 		
 		
 		// Check value

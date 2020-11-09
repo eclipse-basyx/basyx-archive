@@ -67,7 +67,7 @@ public class AASBundleIntegrator {
 					// AAS does not exist and needs to be pushed to the server
 					// Check if ISubModel is a concrete SubModel
 					if(sm instanceof SubModel) {
-						provider.createValue("/aas/submodels/", sm);
+						provider.setModelPropertyValue("/aas/submodels/" + sm.getIdShort(), sm);
 						objectUploaded = true;
 					} else {
 						throw new RuntimeException("sm Objects in bundles need to be instance of 'SubModel'");

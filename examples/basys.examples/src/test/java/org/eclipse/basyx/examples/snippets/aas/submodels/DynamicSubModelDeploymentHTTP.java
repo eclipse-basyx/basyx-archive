@@ -91,7 +91,7 @@ public class DynamicSubModelDeploymentHTTP {
 		submodel.addSubModelElement(prop2);
 
 		// Transfer sub model to server
-		connSubModels.createValue("/submodels", submodel);
+		connSubModels.setModelPropertyValue("/submodels/" + submodel.getIdShort(), submodel);
 
 		
 		// Web service client accesses AAS using HTTP REST calls
@@ -99,7 +99,7 @@ public class DynamicSubModelDeploymentHTTP {
 		
 		// Read property values using the WebServiceJSONClient class. 
 		// - Returned property contains meta data. The actual property is stored in property "entity", property value is in entity property "value"
-		String smEndpoint = "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/Status";
+		String smEndpoint = "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/dynamicModelRepository/aas/submodels/Status/submodel";
 		Map<String, Object> sm = ((Map<String, Object>) jsonClient.get(smEndpoint));
 		String smId = (String) sm.get("idShort");
 		int prop1Val = (int) ((Map<String, Object>) jsonClient.get(smEndpoint + "/" + MultiSubmodelElementProvider.ELEMENTS + "/prop1")).get("value");
