@@ -99,7 +99,7 @@ public class GSONTools implements Serializer {
 	private JsonElement serializeObject(Object obj) {
 		if (obj == null) {
 			return JsonNull.INSTANCE;
-		} else if (obj.getClass().isPrimitive() || isWrapperType(obj.getClass()) || obj instanceof String) {
+		} else if (obj.getClass().isPrimitive() || isWrapperType(obj.getClass()) || obj instanceof String || obj instanceof Number) {
 			return serializePrimitive(obj);
 		} else if (obj instanceof Map<?, ?>) {
 			return serializeMap((Map<String, Object>) obj);
