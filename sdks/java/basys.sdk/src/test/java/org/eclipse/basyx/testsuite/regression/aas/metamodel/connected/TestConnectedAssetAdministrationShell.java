@@ -40,7 +40,7 @@ public class TestConnectedAssetAdministrationShell extends AssetAdministrationSh
 
 		SubModel sm = retrieveBaselineSM();
 		sm.setParent(shell.getReference());
-		provider.addSubmodel(SMIDSHORT, new SubModelProvider(SubModel.createAsFacade(TypeDestroyer.destroyType(sm))));
+		provider.addSubmodel(new SubModelProvider(SubModel.createAsFacade(TypeDestroyer.destroyType(sm))));
 
 		// Create AAS registry
 		IAASRegistryService registry = new InMemoryRegistry();

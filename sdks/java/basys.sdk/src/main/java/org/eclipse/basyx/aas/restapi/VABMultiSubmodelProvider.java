@@ -174,11 +174,21 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 *            Model content provider
 	 */
 	@SuppressWarnings("unchecked")
+	@Deprecated
 	public void addSubmodel(String elementId, SubModelProvider modelContentProvider) {
 		// Add model provider
 		submodel_providers.put(elementId, modelContentProvider);
 
 		SubModel sm = SubModel.createAsFacade((Map<String, Object>) modelContentProvider.getModelPropertyValue("/"));
+
+		// Adds a new submodel to the registered AAS
+		aas_provider.createValue("/submodels", sm);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void addSubmodel(SubModelProvider modelContentProvider) {
+		SubModel sm = SubModel.createAsFacade((Map<String, Object>) modelContentProvider.getModelPropertyValue("/"));
+		submodel_providers.put(sm.getIdShort(), modelContentProvider);
 
 		// Adds a new submodel to the registered AAS
 		aas_provider.createValue("/submodels", sm);

@@ -19,8 +19,8 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -53,7 +53,7 @@ public class MultiSubmodelProviderTest {
 		aas.setIdShort(AASIDSHORT);
 		aas.setIdentification(AASURN);
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
-		provider.addSubmodel("SimpleAASSubmodel", new SubModelProvider(new SimpleAASSubmodel()));
+		provider.addSubmodel(new SubModelProvider(new SimpleAASSubmodel()));
 		stub.addProvider(urn, "", provider);
 		proxy = stub.connectToVABElement(urn);
 	}
@@ -120,7 +120,7 @@ public class MultiSubmodelProviderTest {
 		}
 	}
 
-	void getTestRunner(String smId) {
+	private void getTestRunner(String smId) {
 		// Get property value
 		Integer value = (Integer) proxy
 				.getModelPropertyValue("/aas/submodels/" + smId + "/" + MultiSubmodelElementProvider.ELEMENTS + "/integerProperty/value");
