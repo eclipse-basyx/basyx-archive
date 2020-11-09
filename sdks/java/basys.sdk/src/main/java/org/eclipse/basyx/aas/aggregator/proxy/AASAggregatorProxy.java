@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
@@ -60,14 +61,33 @@ public class AASAggregatorProxy implements IAASAggregator {
 	public Collection<IAssetAdministrationShell> getAASList() {
 		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) provider.getModelPropertyValue("");
 		logger.debug("Getting all AAS");
-		return collection.stream().map(m -> AssetAdministrationShell.createAsFacade(m)).collect(Collectors.toSet());
+		return collection.stream().map(m -> AssetAdministrationShell.createAsFacade(m)).map(aas -> getConnectedAAS(aas.getIdentification(), aas)).collect(Collectors.toList());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public IAssetAdministrationShell getAAS(IIdentifier aasId) {
 		logger.debug("Getting AAS with id " + aasId);
-		return AssetAdministrationShell.createAsFacade((Map<String, Object>) provider.getModelPropertyValue(getEncodedIdentifier(aasId)));
+		return getConnectedAAS(aasId);
+	}
+
+	@SuppressWarnings("unchecked")
+	private ConnectedAssetAdministrationShell getConnectedAAS(IIdentifier aasId) {
+		VABElementProxy proxy = getAASProxy(aasId);
+		Map<String, Object> map = (Map<String, Object>) proxy.getModelPropertyValue("");
+		AssetAdministrationShell aas = AssetAdministrationShell.createAsFacade(map);
+		return new ConnectedAssetAdministrationShell(proxy, aas);
+	}
+
+	private ConnectedAssetAdministrationShell getConnectedAAS(IIdentifier aasId, AssetAdministrationShell localCopy) {
+		VABElementProxy proxy = getAASProxy(aasId);
+		return new ConnectedAssetAdministrationShell(proxy, localCopy);
+	}
+
+
+	private VABElementProxy getAASProxy(IIdentifier aasId) {
+		String path = VABPathTools.concatenatePaths(getEncodedIdentifier(aasId), "aas");
+		VABElementProxy proxy = new VABElementProxy(path, provider);
+		return proxy;
 	}
 
 	@Override

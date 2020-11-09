@@ -11,6 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.catalina.servlets.DefaultServlet;
 import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
+import org.eclipse.basyx.aas.aggregator.proxy.AASAggregatorProxy;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
@@ -30,6 +31,7 @@ import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.support.bundle.AASBundleDescriptorFactory;
 import org.eclipse.basyx.support.bundle.AASBundleIntegrator;
+import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.slf4j.Logger;
@@ -163,7 +165,7 @@ public class AASServerComponent implements IComponent {
 		loadAASFromSource(aasConfig.getAASSource());
 
 		// Load the aggregator
-		IAASAggregator aggregator = loadAASAggregator();
+		AASAggregatorProxy aggregator = loadAASAggregator();
 
 		// Integrate the loaded bundles into the aggregator
 		if (aasBundles != null) {
@@ -237,7 +239,7 @@ public class AASServerComponent implements IComponent {
 	 * 
 	 * @return
 	 */
-	private IAASAggregator loadAASAggregator() {
+	private AASAggregatorProxy loadAASAggregator() {
 		// Get aggregator according to backend config
 		AASServerBackend backendType = aasConfig.getAASBackend();
 		IAASAggregator aggregator = null;
@@ -249,7 +251,9 @@ public class AASServerComponent implements IComponent {
 			aggregator = loadMongoDBAggregator();
 		}
 
-		return aggregator;
+		// Wrap in AASAggregatorProxy to support AASBundleIntegrator
+		VABElementProxy proxy = new VABElementProxy(AASAggregatorProvider.PREFIX, new AASAggregatorProvider(aggregator));
+		return new AASAggregatorProxy(proxy);
 	}
 
 	private IAASAggregator loadMongoDBAggregator() {

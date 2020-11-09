@@ -149,6 +149,11 @@ public abstract class AASAggregatorSuite {
 		}
 	}
 	
+	@Test(expected = ResourceNotFoundException.class)
+	public void deleteNotExistingAAS() {
+		getAggregator().getAAS(new Identifier(IdentifierType.CUSTOM, "IDontExist"));
+	}
+
 	@After
 	public void deleteExistingAAS() {
 		IAASAggregator aggregator = getAggregator();
@@ -167,10 +172,11 @@ public abstract class AASAggregatorSuite {
 			// do nothing
 		}
 	}
+
 	// Methods to verify, that AAS objects contain the correct test data
 	private void checkAAS1(Object o) {
-		assertTrue(o instanceof AssetAdministrationShell);
-		AssetAdministrationShell aas = (AssetAdministrationShell) o;
+		assertTrue(o instanceof IAssetAdministrationShell);
+		IAssetAdministrationShell aas = (IAssetAdministrationShell) o;
 		
 		assertEquals(aas1Id, aas.getIdShort());
 		assertEquals(aas1Id, aas.getIdentification().getId());
@@ -179,8 +185,8 @@ public abstract class AASAggregatorSuite {
 	}
 	
 	private void checkAAS2(Object o) {
-		assertTrue(o instanceof AssetAdministrationShell);
-		AssetAdministrationShell aas = (AssetAdministrationShell) o;
+		assertTrue(o instanceof IAssetAdministrationShell);
+		IAssetAdministrationShell aas = (IAssetAdministrationShell) o;
 		
 		assertEquals(aas2Id, aas.getIdShort());
 		assertEquals(aas2Id, aas.getIdentification().getId());

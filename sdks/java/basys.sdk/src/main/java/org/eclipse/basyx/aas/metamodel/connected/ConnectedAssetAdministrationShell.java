@@ -64,6 +64,17 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	}
 
 	/**
+	 * Constructor creating a ConnectedAAS pointing to the AAS represented by proxy
+	 * and an already cached local copy
+	 * 
+	 * @param proxy
+	 * @param localCopy
+	 */
+	public ConnectedAssetAdministrationShell(VABElementProxy proxy, AssetAdministrationShell localCopy) {
+		super(proxy);
+	}
+
+	/**
 	 * Copy constructor, allowing to create a ConnectedAAS pointing to the same AAS
 	 * as <i>shell</i>
 	 * 

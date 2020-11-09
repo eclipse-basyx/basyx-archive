@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.aggregator.AASAggregator;
+import org.eclipse.basyx.aas.aggregator.proxy.AASAggregatorProxy;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
@@ -21,6 +22,7 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.support.bundle.AASBundleIntegrator;
+import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +39,7 @@ public class TestAASBundleIntegrator {
 	private static final String SM_ID = "TestSM";
 	
 	
-	private AASAggregator aggregator;
+	private AASAggregatorProxy aggregator;
 	private List<AASBundle> bundles;
 	private AASAggregatorProvider provider;
 	
@@ -45,8 +47,8 @@ public class TestAASBundleIntegrator {
 	
 	@Before
 	public void init() {
-		aggregator = new AASAggregator();
-		provider = new AASAggregatorProvider(aggregator);
+		provider = new AASAggregatorProvider(new AASAggregator());
+		aggregator = new AASAggregatorProxy(new VABElementProxy("/shells", provider));
 		bundles = new ArrayList<>();		
 	}
 	
