@@ -39,18 +39,18 @@ public class AASAggregatorProxy implements IAASAggregator {
 	 * @param provider
 	 */
 	public AASAggregatorProxy(IModelProvider provider) {
-		this.provider = new VABElementProxy("/" + AASAggregatorProvider.PREFIX, provider);
+		this.provider = new VABElementProxy("", provider);
 	}
 
 	/**
-	 * Removes prefix if it exists since it will be readded at a later stage
+	 * Adds the "/shells" suffix if it does not exist
 	 * 
 	 * @param url
 	 * @return
 	 */
 	private static String harmonizeURL(String url) {
-		if (url.endsWith(AASAggregatorProvider.PREFIX)) {
-			url = url.substring(0, url.length() - AASAggregatorProvider.PREFIX.length());
+		if (!url.endsWith(AASAggregatorProvider.PREFIX)) {
+			url = url + AASAggregatorProvider.PREFIX;
 		}
 		return url;
 	}

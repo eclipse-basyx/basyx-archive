@@ -43,7 +43,7 @@ import org.xml.sax.SAXException;
 public class StaticDynamicScenario {
 	
 	public static final String REGISTRY_URL = "http://localhost:4000/registry";
-	public static final String SERVER_URL = "http://localhost:4001/aasx/";
+	public static final String SERVER_URL = "http://localhost:4001/aasx/shells";
 
 	public static final String AAS_ID = "smart.festo.com/demo/aas/1/1/454576463545648365874"; 
 	public static final String AAS_ID_SHORT = "Festo_3S7PM0CP4BD";

@@ -63,7 +63,7 @@ public class ConnectToAASEndpoints {
 		
 		// Create AAS descriptor and sub model descriptors
 		ModelUrn      aasURN         = new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001");
-		String aasSrvURL = "http://localhost:8080" + BaSyxExamplesContext.AASSERVERURL;
+		String aasSrvURL = "http://localhost:8080" + BaSyxExamplesContext.AASSERVERURL + "/shells";
 
 		// Create AAS
 		AssetAdministrationShell aas = new AssetAdministrationShell();

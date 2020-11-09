@@ -17,6 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
+import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.junit.Test;
 
@@ -30,7 +31,7 @@ public class TestAASAggregatorProvider extends AASAggregatorSuite {
 
 	@Override
 	protected IAASAggregator getAggregator() {
-		return new AASAggregatorProxy(new AASAggregatorProvider(new AASAggregator()));
+		return new AASAggregatorProxy(new VABElementProxy("/shells", new AASAggregatorProvider(new AASAggregator())));
 	}
 
 	/**

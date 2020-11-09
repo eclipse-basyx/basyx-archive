@@ -23,6 +23,7 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
+import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,8 +62,9 @@ public class TestConnectedAssetAdministrationShellManager {
 		IIdentifier aasId = new Identifier(IdentifierType.CUSTOM, "aasId");
 		String aasIdShort = "aasName";
 		IModelProvider provider = new AASAggregatorProvider(new AASAggregator());
-		connectorProvider.addMapping("/shells", provider);
-		connectorProvider.addMapping("", provider);
+		VABElementProxy proxy = new VABElementProxy("/shells", provider);
+		connectorProvider.addMapping("shells", proxy);
+		connectorProvider.addMapping("", proxy);
  
 		// Create an AAS containing a reference to the created SubModel
 		AssetAdministrationShell aas = new AssetAdministrationShell(aasIdShort, aasId, new Asset("assetIdShort", new ModelUrn("assetId"), AssetKind.INSTANCE));
