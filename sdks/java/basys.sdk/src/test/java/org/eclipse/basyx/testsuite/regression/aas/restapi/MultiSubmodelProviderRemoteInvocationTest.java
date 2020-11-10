@@ -5,8 +5,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
@@ -42,6 +44,10 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 
 	private static final IIdentifier REMOTESMID = new ModelUrn("remoteSm");
 	private static final String REMOTESMIDSHORT = "remoteSmIdShort";
+
+	private static final IIdentifier LOCALSMID = new ModelUrn("localSm");
+	private static final String LOCALSMIDSHORT = "localSmIdShort";
+
 	private static final String REMOTEPATH = "/aas/submodels/" + REMOTESMIDSHORT + "/" + SubModelProvider.SUBMODEL;
 
 	private List<BaSyxService> services = new ArrayList<>();
@@ -57,10 +63,11 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 		// Create descriptors for AAS and submodels
 		String aasEndpoint = "basyx://localhost:8000/aas";
 		String remoteSmEndpoint = "basyx://localhost:8001/submodel";
+		String localSmEndpoint = "basyx://localhost:8000/aas/submodels/" + LOCALSMIDSHORT;
 
 		AASDescriptor aasDesc = new AASDescriptor(AASIDSHORT1, AASID1, aasEndpoint);
 		aasDesc.addSubmodelDescriptor(new SubmodelDescriptor(REMOTESMIDSHORT, REMOTESMID, remoteSmEndpoint));
-
+		aasDesc.addSubmodelDescriptor(new SubmodelDescriptor(LOCALSMIDSHORT, LOCALSMID, localSmEndpoint));
 
 		// Register Asset Administration Shells
 		registry.register(aasDesc);
@@ -74,6 +81,10 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 		aas.setIdShort(AASIDSHORT1);
 		aas.setIdentification(AASID1);
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
+
+		// Create the local SM
+		SubModel localSM = new SubModel(LOCALSMIDSHORT, LOCALSMID);
+		provider.addSubmodel(new SubModelProvider(localSM));
 
 		// Create the remote SM
 		SubModel remoteSm = new SimpleAASSubmodel(REMOTESMIDSHORT);
@@ -98,6 +109,19 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 		assertEquals(sm.getIdentification().getId(), REMOTESMID.getId());
 	}
 	
+	/**
+	 * Checks if a call to "/aas/submodels" correctly includes the remote submodels
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetAllSubmodels() {
+		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) provider.getModelPropertyValue("/aas/submodels");
+		Collection<String> smIdShorts = collection.stream().map(m -> SubModel.createAsFacade(m)).map(sm -> sm.getIdShort()).collect(Collectors.toList());
+		assertTrue(smIdShorts.contains(REMOTESMIDSHORT));
+		assertTrue(smIdShorts.contains(LOCALSMIDSHORT));
+		assertTrue(smIdShorts.size() == 2);
+	}
+
 	/**
 	 * Checks if SET is correctly forwarded by checking if a property value of the
 	 * remote submodel can be changed

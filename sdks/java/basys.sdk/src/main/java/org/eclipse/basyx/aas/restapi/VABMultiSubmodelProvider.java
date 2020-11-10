@@ -3,7 +3,9 @@ package org.eclipse.basyx.aas.restapi;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
@@ -219,12 +221,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 			}
 			if (pathElements[1].equals(AssetAdministrationShell.SUBMODELS)) {
 				if (pathElements.length == 2) {
-					// Make a list and return all submodels
-					Collection<Object> submodels = new HashSet<>();
-					for (IModelProvider submodel : submodel_providers.values()) {
-						submodels.add(submodel.getModelPropertyValue(""));
-					}
-					return submodels;
+					return retrieveSubmodels();
 				} else {
 					IModelProvider provider = submodel_providers.get(pathElements[2]);
 
@@ -243,6 +240,38 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 		} else {
 			return new MalformedRequestException("The request " + path + " is not allowed for this endpoint");
 		}
+	}
+
+	/**
+	 * Retrieves all submodels of the AAS. If there's a registry, remote Submodels
+	 * will also be retrieved.
+	 * 
+	 * @return
+	 * @throws ProviderException
+	 */
+	@SuppressWarnings("unchecked")
+	private Object retrieveSubmodels() throws ProviderException {
+		// Make a list and return all local submodels
+		Collection<SubModel> submodels = new HashSet<>();
+		for (IModelProvider submodel : submodel_providers.values()) {
+			submodels.add(SubModel.createAsFacade((Map<String, Object>) submodel.getModelPropertyValue("")));
+		}
+
+		// Check for remote submodels
+		if (registry != null) {
+			AASDescriptor desc = registry.lookupAAS(aasId);
+			List<String> localIds = submodels.stream().map(sm -> sm.getIdentification().getId()).collect(Collectors.toList());
+			List<IIdentifier> missingIds = desc.getSubModelDescriptors().stream().map(d -> d.getIdentifier()).
+					filter(id -> !localIds.contains(id.getId())).collect(Collectors.toList());
+			if(!missingIds.isEmpty()) {
+				List<SubModel> remoteSms = missingIds.stream().map(id -> desc.getSubModelDescriptorFromIdentifierId(id.getId())).
+						map(smDesc -> smDesc.getFirstEndpoint()).map(endpoint -> connectorProvider.getConnector(endpoint)).
+						map(p -> (Map<String, Object>) p.getModelPropertyValue("")).map(m -> SubModel.createAsFacade(m)).collect(Collectors.toList());
+				submodels.addAll(remoteSms);
+			}
+		}
+
+		return submodels;
 	}
 
 	/**
