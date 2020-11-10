@@ -1,6 +1,7 @@
 package org.eclipse.basyx.testsuite.regression.aas.metamodel.connected;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
@@ -68,6 +69,12 @@ public class TestConnectedAssetAdministrationShell extends AssetAdministrationSh
 	@Override
 	protected ConnectedAssetAdministrationShell retrieveShell() {
 		return connectedAAS;
+	}
+
+	@Test
+	public void testDeleteSubmodel() {
+		retrieveShell().removeSubmodel(SMID);
+		assertFalse(retrieveShell().getSubModels().containsKey(SMIDSHORT));
 	}
 
 	@Test

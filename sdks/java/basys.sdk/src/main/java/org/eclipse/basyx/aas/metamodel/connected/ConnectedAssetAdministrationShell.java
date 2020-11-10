@@ -3,6 +3,7 @@ package org.eclipse.basyx.aas.metamodel.connected;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
@@ -33,6 +34,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 
@@ -211,5 +213,17 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	 */
 	public AssetAdministrationShell getLocalCopy() {
 		return AssetAdministrationShell.createAsFacade(getElem());
+	}
+
+	@Override
+	public void removeSubmodel(IIdentifier id) {
+		// FIXME: Change this when AAS API supports Submodel retrieval by Identifier
+		Optional<ISubModel> op = getSubModels().values().stream().filter(sm -> sm.getIdentification().getId().equals(id.getId())).findFirst();
+		if (!op.isPresent()) {
+			throw new ResourceNotFoundException("AAS " + getIdentification() + " does not have a submodel with id " + id);
+		}
+
+		String path = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, op.get().getIdShort());
+		getProxy().deleteValue(path);
 	}
 }

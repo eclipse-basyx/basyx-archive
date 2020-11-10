@@ -157,4 +157,17 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		String smEndpoint = VABPathTools.concatenatePaths(addr, AssetAdministrationShell.SUBMODELS, submodel.getIdShort(), SubModelProvider.SUBMODEL);
 		aasDirectory.register(aasId, new SubmodelDescriptor(submodel, smEndpoint));
 	}
+
+	@Override
+	public void deleteSubModel(IIdentifier aasId, IIdentifier submodelId) {
+		IAssetAdministrationShell shell = retrieveAAS(aasId);
+		shell.removeSubmodel(submodelId);
+
+		aasDirectory.delete(aasId, submodelId);
+	}
+
+	@Override
+	public void createAAS(AssetAdministrationShell aas, String endpoint) {
+		createAAS(aas, aas.getIdentification(), endpoint);
+	}
 }

@@ -1,10 +1,12 @@
 package org.eclipse.basyx.testsuite.regression.aas.manager;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
@@ -67,7 +69,7 @@ public class TestConnectedAssetAdministrationShellManager {
 		connectorProvider.addMapping("", proxy);
  
 		// Create an AAS containing a reference to the created SubModel
-		AssetAdministrationShell aas = new AssetAdministrationShell(aasIdShort, aasId, new Asset("assetIdShort", new ModelUrn("assetId"), AssetKind.INSTANCE));
+		AssetAdministrationShell aas = createTestAAS(aasId, aasIdShort);
 		manager.createAAS(aas, aasId, "/shells");
 
 		// Check descriptor for correct endpoint
@@ -80,6 +82,7 @@ public class TestConnectedAssetAdministrationShellManager {
 		assertEquals(aasId.getId(), connectedAAS.getIdentification().getId());
 		assertEquals(aasId.getIdType(), connectedAAS.getIdentification().getIdType());
 	}
+
 
 	@Test
 	public void testCreateSubModel() throws Exception {
@@ -124,4 +127,36 @@ public class TestConnectedAssetAdministrationShellManager {
 		assertEquals("myStr", prop2Connected.getValue());
 	}
 
+	@Test
+	public void testDeleteSubmodel() {
+		IIdentifier aasId = new Identifier(IdentifierType.CUSTOM, "aasId");
+		String aasIdShort = "aasName";
+
+		IIdentifier smId = new Identifier(IdentifierType.CUSTOM, "smId");
+		String smIdShort = "smName";
+		
+		IModelProvider provider = new AASAggregatorProvider(new AASAggregator());
+		connectorProvider.addMapping("shells", new VABElementProxy("/shells", provider));
+		connectorProvider.addMapping("", provider);
+
+		AssetAdministrationShell aas = createTestAAS(aasId, aasIdShort);
+		manager.createAAS(aas, "/shells");
+
+		SubModel sm = new SubModel(smIdShort, smId);
+		manager.createSubModel(aasId, sm);
+
+		// Assert everything was created correctly
+		IAssetAdministrationShell connectedAAS = manager.retrieveAAS(aasId);
+		ISubModel connectedSm = connectedAAS.getSubModels().get(sm.getIdShort());
+
+		assertEquals(sm.getIdShort(), connectedSm.getIdShort());
+
+		manager.deleteSubModel(aasId, smId);
+		assertFalse(connectedAAS.getSubModels().containsKey(smIdShort));
+	}
+
+	private AssetAdministrationShell createTestAAS(IIdentifier aasId, String aasIdShort) {
+		AssetAdministrationShell aas = new AssetAdministrationShell(aasIdShort, aasId, new Asset("assetIdShort", new ModelUrn("assetId"), AssetKind.INSTANCE));
+		return aas;
+	}
 }

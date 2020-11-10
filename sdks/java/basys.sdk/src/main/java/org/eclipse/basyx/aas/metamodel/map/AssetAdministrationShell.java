@@ -35,6 +35,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
+import org.eclipse.basyx.vab.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.vab.model.VABModelMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -301,6 +302,13 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		addSubmodelReferences(submodel);
 	}
 
+
+	@Override
+	public void removeSubmodel(IIdentifier id) {
+		// Currently not implemented since future of Submodel References in AAS is not clear
+		throw new FeatureNotImplementedException();
+	}
+
 	/**
 	 * Allows addition of a concept description to the concept dictionary
 	 * 
@@ -334,7 +342,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	private void addSubmodelReferences(SubModel submodel) {
 		addSubmodelReference(submodel.getReference());
 	}
-	
+
 	private KeyElements getKeyElement() {
 		return KeyElements.ASSETADMINISTRATIONSHELL;
 	}
@@ -354,4 +362,5 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public IReference getReference() {
 		return Identifiable.createAsFacade(this, getKeyElement()).getReference();
 	}
+
 }
