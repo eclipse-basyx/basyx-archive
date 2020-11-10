@@ -11,6 +11,7 @@ import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.LifecycleState;
+import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Starter Class for Apache Tomcat 8.0.53 HTTP server that adds the provided servlets and respective mappings on startup.
  * 
- * @author pschorn, espen
+ * @author pschorn, espen, haque
  * 
  */
 public class AASHTTPServer {
@@ -40,10 +41,18 @@ public class AASHTTPServer {
 	 * @param context
 	 *            Basyx context with of url mappings to HTTPServlet
 	 */
+
 	public AASHTTPServer(BaSyxContext context) {
 		// Instantiate and setup Tomcat server
 		tomcat = new Tomcat();
-		tomcat.setPort(context.port);
+		
+		if (context.isSecuredConnectionEnabled()) {
+			Connector httpsConnector = tomcat.getConnector();
+			configureSslConnector(context, httpsConnector);
+		} else {
+			tomcat.setPort(context.port);
+		}
+		
 		tomcat.setHostname(context.hostname);
 		tomcat.getHost().setAppBase(".");
 
@@ -68,6 +77,28 @@ public class AASHTTPServer {
 			rootCtx.addServletMappingDecoded(mapping, Integer.toString(servlet.hashCode()));
 		}
 	}
+	
+	/**
+	 * SSL Configuration for SSL connector
+	 * @param context
+	 * @param httpsConnector
+	 */
+	private void configureSslConnector(BaSyxContext context, Connector httpsConnector) {
+		httpsConnector.setPort(context.port);
+		httpsConnector.setSecure(true);
+		httpsConnector.setScheme("https");
+		httpsConnector.setAttribute("keystoreFile", context.getCertificatePath());
+		httpsConnector.setAttribute("clientAuth", "false");
+		httpsConnector.setAttribute("sslProtocol", "TLS");
+		httpsConnector.setAttribute("SSLEnabled", true);
+		httpsConnector.setAttribute("protocol", "HTTP/1.1");
+		httpsConnector.setAttribute("keystorePass", context.getKeyPassword());
+		
+		httpsConnector.setAttribute("keyAlias", "tomcat");
+		
+		httpsConnector.setAttribute("maxThreads", "200");
+		httpsConnector.setAttribute("protocol", "org.apache.coyote.http11.Http11AprProtocol");
+	 }
 	
 	/**
 	 * Starts the server in a new thread to avoid blocking the main thread

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 /**
  * BaSyx context that contains an Industrie 4.0 Servlet infrastructure 
  * 
- * @author kuhn
+ * @author kuhn, haque
  *
  */
 public class BaSyxContext extends HashMap<String, HttpServlet> {
@@ -43,6 +43,20 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 	 */
 	protected int port;
 	
+	/**
+	 * Indicates whether the connection is secures or not
+	 */
+	private boolean isSecuredConnection;
+	
+	/**
+	 * Password of the SSL key
+	 */
+	private String keyPassword;
+	
+	/**
+	 * Path to the certificate
+	 */
+	private String certificatePath;
 	
 	/**
 	 * Servlet parameter
@@ -62,7 +76,11 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 
 	
 	/**
-	 * Constructor
+	 * Initiates a BasyxContext
+	 * @param reqContextPath context path
+	 * @param reqDocBasePath  base path of doc
+	 * @param hostn host name
+	 * @param reqPort connection port
 	 */
 	public BaSyxContext(String reqContextPath, String reqDocBasePath, String hostn, int reqPort) {
 		// Store context path and doc base path
@@ -70,8 +88,26 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 		docBasePath = reqDocBasePath;
 		hostname = hostn;
 		port        = reqPort;
+		isSecuredConnection = false;
 	}
 	
+	/**
+	 * Initiates a BasyxContext. this constructor can indicate whether 
+	 * the connection is secured or not
+	 * @param reqContextPath context path
+	 * @param reqDocBasePath  base path of doc
+	 * @param hostn host name
+	 * @param reqPort connection port
+	 * @param isSecuredCon boolean value indicating the connection is secured or not
+	 * @param keyPass password of the SSL key
+	 * @param keyPath path to the SSL certificate
+	 */
+	public BaSyxContext(String reqContextPath, String reqDocBasePath, String hostn, int reqPort, boolean isSecuredCon, String keyPath,  String keyPass) {
+		this(reqContextPath, reqDocBasePath, hostn, reqPort);
+		this.isSecuredConnection = isSecuredCon;
+		this.certificatePath = keyPath;
+		this.keyPassword = keyPass;
+	}
 	
 	
 	/**
@@ -130,6 +166,49 @@ public class BaSyxContext extends HashMap<String, HttpServlet> {
 	 */
 	public int getPort() {
 		return port;
+	}
+	
+	/**
+	 * Returns whether the secured connection enabled or not
+	 * @return
+	 */
+	public boolean isSecuredConnectionEnabled() {
+		return this.isSecuredConnection;
+	}
+
+	/**
+	 * Returns password of the SSL key
+	 * @return
+	 */
+	public String getKeyPassword() {
+		return keyPassword;
+	}
+
+
+	/**
+	 * Sets password of the SSL key
+	 * @param keyPassword
+	 */
+	public void setKeyPassword(String keyPassword) {
+		this.keyPassword = keyPassword;
+	}
+
+
+	/**
+	 * Returns Path to the certificate
+	 * @return
+	 */
+	public String getCertificatePath() {
+		return certificatePath;
+	}
+
+
+	/**
+	 * Sets Certificate Path
+	 * @param certificatePath
+	 */
+	public void setCertificatePath(String certificatePath) {
+		this.certificatePath = certificatePath;
 	}
 }
 

@@ -30,7 +30,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	
 	private String address;
 	private String mediaType;
-	private Client client;
+	protected Client client;
 
 	/**
 	 * Invoke a BaSys get operation via HTTP GET
@@ -193,13 +193,10 @@ public class HTTPConnector implements IBaSyxConnector {
 	private String httpPatch(String servicePath, String newValue) throws ProviderException {
 		logger.trace("[HTTP Patch] {} {}", VABPathTools.concatenatePaths(address, servicePath), newValue);
 
-		// Invoke service call via web services
-		Client client = ClientBuilder.newClient();
-
 		// Create and invoke HTTP PATCH request
 		Response rsp;
 		try {
-			rsp = client.target(VABPathTools.concatenatePaths(address, servicePath)).request().build("PATCH", Entity.text(newValue)).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
+			rsp = this.client.target(VABPathTools.concatenatePaths(address, servicePath)).request().build("PATCH", Entity.text(newValue)).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
 		} catch (ProcessingException e) {
 			throw this.handleProcessingException(HttpMethod.PATCH, e);
 		}

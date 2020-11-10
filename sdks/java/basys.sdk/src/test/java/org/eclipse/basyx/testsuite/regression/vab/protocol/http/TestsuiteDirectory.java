@@ -12,15 +12,28 @@ import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
  *
  */
 public class TestsuiteDirectory extends InMemoryDirectory {
-
 	
 	/**
 	 * Constructor - load all directory entries
 	 */
 	public TestsuiteDirectory() {
-		// Define mappings
-		// - Asset administration shells
-		addMapping("urn:fhg:es.iese:vab:1:1:simplevabelement",  "http://localhost:8080/basys.sdk/Testsuite/SimpleVAB/");
-		addMapping("urn:fhg:es.iese:aas:1:1:submodel", "http://localhost:8080/basys.sdk/Testsuite/SimpleAASSubmodel/");
+		this("http");
+	}
+	
+	/**
+	 * Constructor - load all directory entries with link 
+	 * protocol defined in the parameter
+	 * @param protocol
+	 */
+	public TestsuiteDirectory(String protocol) {
+		defineMapping(protocol);
+	}
+	
+	/**
+	 * Define mapping of submodel and vab element
+	 */
+	private void defineMapping(String protocol) {
+		addMapping("urn:fhg:es.iese:vab:1:1:simplevabelement",  protocol + "://localhost:8080/basys.sdk/Testsuite/SimpleVAB/");
+		addMapping("urn:fhg:es.iese:aas:1:1:submodel", protocol + "://localhost:8080/basys.sdk/Testsuite/SimpleAASSubmodel/");
 	}
 }
