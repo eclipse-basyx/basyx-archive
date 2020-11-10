@@ -67,13 +67,6 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 		return SubModel.createAsFacade(smCopy);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Collection<ISubmodelElement> getElements() {
-		Collection<Map<String, Object>> operations = (Collection<Map<String, Object>>) getElementProvider().getModelPropertyValue(MultiSubmodelElementProvider.ELEMENTS);
-		return operations.stream().map(e -> SubmodelElement.createAsFacade(e)).collect(Collectors.toList());
-	}
-
 	@Override
 	public void addSubmodelElement(ISubmodelElement elem) {
 		getElementProvider().createValue(MultiSubmodelElementProvider.ELEMENTS, elem);
@@ -96,12 +89,15 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 
 	@Override
 	public Collection<IOperation> getOperations() {
-		return getElements().stream().filter(e -> e instanceof IOperation).map(e -> (IOperation) e).collect(Collectors.toList());
+		return getSubmodelElements().stream().filter(e -> e instanceof IOperation).map(e -> (IOperation) e).collect(Collectors.toList());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ISubmodelElement> getSubmodelElements() {
-		return getElements().stream().filter(e -> e instanceof ISubmodelElement).map(e -> (ISubmodelElement) e).collect(Collectors.toList());
+		Collection<Map<String, Object>> elements = (Collection<Map<String, Object>>) getElementProvider()
+				.getModelPropertyValue(MultiSubmodelElementProvider.ELEMENTS);
+		return elements.stream().map(SubmodelElement::createAsFacade).collect(Collectors.toList());
 	}
 
 	@Override

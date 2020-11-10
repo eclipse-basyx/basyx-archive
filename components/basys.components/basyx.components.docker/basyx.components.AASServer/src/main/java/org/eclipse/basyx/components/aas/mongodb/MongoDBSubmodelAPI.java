@@ -143,12 +143,6 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 	}
 
 	@Override
-	public Collection<ISubmodelElement> getElements() {
-		ISubModel sm = getSubmodel();
-		return sm.getSubmodelElements().values();
-	}
-
-	@Override
 	public void addSubmodelElement(ISubmodelElement elem) {
 		// Get sm from db
 		SubModel sm = (SubModel) getSubmodel();

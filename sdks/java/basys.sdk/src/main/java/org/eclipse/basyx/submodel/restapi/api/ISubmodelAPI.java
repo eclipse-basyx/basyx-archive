@@ -23,13 +23,6 @@ public interface ISubmodelAPI {
 	public ISubModel getSubmodel();
 
 	/**
-	 * Returns all submodelElements contained by the submodel
-	 * 
-	 * @return the submodelElements
-	 */
-	public Collection<ISubmodelElement> getElements();
-
-	/**
 	 * Adds a submodelElement to the submodel
 	 * 
 	 * @param elem

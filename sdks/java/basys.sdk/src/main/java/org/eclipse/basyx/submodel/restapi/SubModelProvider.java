@@ -99,8 +99,7 @@ public class SubModelProvider extends MetaModelProvider {
 
 			// Change internal map representation to set
 			if (sm instanceof SubModel) {
-				Object o = SubmodelElementMapCollectionConverter.smToMap((SubModel) sm);
-				return o;
+				return SubmodelElementMapCollectionConverter.smToMap((SubModel) sm);
 			} else {
 				return sm;
 			}
@@ -111,7 +110,7 @@ public class SubModelProvider extends MetaModelProvider {
 				// Request for values of all submodelElements
 				return submodelAPI.getSubmodel().getValues();
 			} else if (splitted.length == 1 && splitted[0].equals(MultiSubmodelElementProvider.ELEMENTS)) {
-				return submodelAPI.getElements();
+				return submodelAPI.getSubmodelElements();
 			} else if (splitted.length >= 2 && isQualifier(splitted[0])) { // Request for element with specific idShort
 				String idShort = splitted[1];
 				if (splitted.length == 2) {
