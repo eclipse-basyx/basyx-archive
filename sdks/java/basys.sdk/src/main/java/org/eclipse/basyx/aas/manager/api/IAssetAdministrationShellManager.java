@@ -46,7 +46,7 @@ public interface IAssetAdministrationShellManager {
 	/**
 	 * Unlink an AAS from the system
 	 */
-	void deleteAAS(String id) throws Exception;
+	void deleteAAS(IIdentifier id) throws Exception;
 
 	/**
 	 * Retrieves a submodel

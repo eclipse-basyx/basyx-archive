@@ -123,7 +123,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		// Lookup AAS descriptor
 		AASDescriptor aasDescriptor = aasDirectory.lookupAAS(aasId);
 
-		// Get AAD address from AAS descriptor
+		// Get AAS address from AAS descriptor
 		String addr = aasDescriptor.getFirstEndpoint();
 
 		// Return a new VABElementProxy
@@ -136,8 +136,24 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	}
 
 	@Override
-	public void deleteAAS(String id) throws Exception {
-		throw new FeatureNotImplementedException();
+	public void deleteAAS(IIdentifier id) {
+		// Lookup AAS descriptor
+		AASDescriptor aasDescriptor = aasDirectory.lookupAAS(id);
+
+		// Get AAS address from AAS descriptor
+		String addr = aasDescriptor.getFirstEndpoint();
+
+		// Address ends in "/aas", has to be stripped for removal
+		addr = VABPathTools.stripSlashes(addr);
+		addr = addr.substring(0, addr.length() - "/aas".length());
+
+		// Delete from server
+		proxyFactory.createProxy(addr).deleteValue("");
+
+		// Delete from Registry
+		aasDirectory.delete(id);
+
+		// TODO: How to handle submodels -> Lifecycle needs to be clarified
 	}
 
 	@Override

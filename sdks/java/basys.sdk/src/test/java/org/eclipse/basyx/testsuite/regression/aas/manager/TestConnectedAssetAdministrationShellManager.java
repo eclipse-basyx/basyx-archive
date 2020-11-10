@@ -2,6 +2,7 @@ package org.eclipse.basyx.testsuite.regression.aas.manager;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
@@ -25,6 +26,7 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.junit.Before;
@@ -64,9 +66,7 @@ public class TestConnectedAssetAdministrationShellManager {
 		IIdentifier aasId = new Identifier(IdentifierType.CUSTOM, "aasId");
 		String aasIdShort = "aasName";
 		IModelProvider provider = new AASAggregatorProvider(new AASAggregator());
-		VABElementProxy proxy = new VABElementProxy("/shells", provider);
-		connectorProvider.addMapping("shells", proxy);
-		connectorProvider.addMapping("", proxy);
+		prepareConnectorProvider(provider);
  
 		// Create an AAS containing a reference to the created SubModel
 		AssetAdministrationShell aas = createTestAAS(aasId, aasIdShort);
@@ -136,8 +136,7 @@ public class TestConnectedAssetAdministrationShellManager {
 		String smIdShort = "smName";
 		
 		IModelProvider provider = new AASAggregatorProvider(new AASAggregator());
-		connectorProvider.addMapping("shells", new VABElementProxy("/shells", provider));
-		connectorProvider.addMapping("", provider);
+		prepareConnectorProvider(provider);
 
 		AssetAdministrationShell aas = createTestAAS(aasId, aasIdShort);
 		manager.createAAS(aas, "/shells");
@@ -153,6 +152,34 @@ public class TestConnectedAssetAdministrationShellManager {
 
 		manager.deleteSubModel(aasId, smId);
 		assertFalse(connectedAAS.getSubModels().containsKey(smIdShort));
+	}
+
+	@Test
+	public void testDeleteAAS() {
+		IIdentifier aasId = new Identifier(IdentifierType.CUSTOM, "aasId");
+		String aasIdShort = "aasName";
+
+		IModelProvider provider = new AASAggregatorProvider(new AASAggregator());
+		prepareConnectorProvider(provider);
+
+		AssetAdministrationShell aas = createTestAAS(aasId, aasIdShort);
+		manager.createAAS(aas, "/shells");
+		manager.deleteAAS(aas.getIdentification());
+		try {
+			manager.retrieveAAS(aas.getIdentification());
+			fail();
+		} catch (ResourceNotFoundException e) {
+			// Expected
+		}
+	}
+
+	/**
+	 * @param provider
+	 */
+	private void prepareConnectorProvider(IModelProvider provider) {
+		VABElementProxy proxy = new VABElementProxy("/shells", provider);
+		connectorProvider.addMapping("shells", proxy);
+		connectorProvider.addMapping("", proxy);
 	}
 
 	private AssetAdministrationShell createTestAAS(IIdentifier aasId, String aasIdShort) {
