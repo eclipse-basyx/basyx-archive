@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.eclipse.basyx</groupId>
     <artifactId>basyx.tck</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
   </parent>
   
   <artifactId>basyx.tck.AASServer</artifactId>
@@ -39,12 +39,7 @@
 		<!-- This component is based on the xmlAAS component -->
 		<dependency>
 			<groupId>org.eclipse.basyx</groupId>
-			<artifactId>basyx.components.xmlAAS</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.basyx</groupId>
-			<artifactId>basyx.components.AASX</artifactId>
+			<artifactId>basyx.components.AASServer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- BaSyx SDK -->
