@@ -8,11 +8,13 @@ import java.util.stream.Collectors;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 
 /**
  * An implementation of the IAASAggregator interface using maps internally
@@ -23,6 +25,24 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 public class AASAggregator implements IAASAggregator {
 
 	protected Map<String, VABMultiSubmodelProvider> aasProviderMap = new HashMap<>();
+
+	protected IAASRegistryService registry;
+
+	/**
+	 * Constructs default AAS Aggregator
+	 */
+	public AASAggregator() {
+	}
+
+	/**
+	 * Constructs AAS Aggregator using the passed registry. This registry is used to
+	 * resolve requests for remote submodels
+	 * 
+	 * @param registry
+	 */
+	public AASAggregator(IAASRegistryService registry) {
+		this.registry = registry;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -55,12 +75,16 @@ public class AASAggregator implements IAASAggregator {
 
 	@Override
 	public void createAAS(AssetAdministrationShell aas) {
-		aasProviderMap.put(aas.getIdentification().getId(), new VABMultiSubmodelProvider(new AASModelProvider(aas)));
+		aasProviderMap.put(aas.getIdentification().getId(), createMultiSubmodelProvider(aas));
 	}
 
 	@Override
 	public void updateAAS(AssetAdministrationShell aas) {
-		aasProviderMap.put(aas.getIdentification().getId(), new VABMultiSubmodelProvider(new AASModelProvider(aas)));
+		aasProviderMap.put(aas.getIdentification().getId(), createMultiSubmodelProvider(aas));
+	}
+
+	private VABMultiSubmodelProvider createMultiSubmodelProvider(AssetAdministrationShell aas) {
+		return new VABMultiSubmodelProvider(new AASModelProvider(aas), registry, new HTTPConnectorProvider());
 	}
 
 	@Override
