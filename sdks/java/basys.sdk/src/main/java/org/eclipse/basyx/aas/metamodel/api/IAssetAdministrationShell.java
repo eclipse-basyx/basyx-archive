@@ -53,6 +53,13 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	public void removeSubmodel(IIdentifier id);
 
 	/**
+	 * Gets a submodel from the AAS
+	 * 
+	 * @param id
+	 */
+	public ISubModel getSubmodel(IIdentifier id);
+
+	/**
 	 * Gets the definition of the security relevant aspects of the AAS.
 	 * 
 	 * @return

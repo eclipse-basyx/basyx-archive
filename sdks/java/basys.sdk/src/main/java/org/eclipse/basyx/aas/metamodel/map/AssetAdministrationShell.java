@@ -363,4 +363,9 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		return Identifiable.createAsFacade(this, getKeyElement()).getReference();
 	}
 
+	@Override
+	public ISubModel getSubmodel(IIdentifier id) {
+		throw new RuntimeException("getSubmodel on local copy is not supported");
+	}
+
 }

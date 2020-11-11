@@ -13,6 +13,7 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.aas.metamodel.AssetAdministrationShellSuite;
@@ -69,6 +70,12 @@ public class TestConnectedAssetAdministrationShell extends AssetAdministrationSh
 	@Override
 	protected ConnectedAssetAdministrationShell retrieveShell() {
 		return connectedAAS;
+	}
+
+	@Test
+	public void testGetSpecificSubmodel() {
+		ISubModel sm = retrieveShell().getSubmodel(SMID);
+		assertEquals(SMIDSHORT, sm.getIdShort());
 	}
 
 	@Test

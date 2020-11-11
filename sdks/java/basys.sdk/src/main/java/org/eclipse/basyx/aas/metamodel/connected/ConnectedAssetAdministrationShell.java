@@ -41,7 +41,7 @@ import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 /**
  * "Connected" implementation of IAssetAdministrationShell
  * 
- * @author rajashek, Zai Zhang
+ * @author rajashek, Zai Zhang, schnicke
  *
  */
 public class ConnectedAssetAdministrationShell extends ConnectedElement implements IAssetAdministrationShell {
@@ -217,13 +217,19 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 
 	@Override
 	public void removeSubmodel(IIdentifier id) {
+		ISubModel sm = getSubmodel(id);
+
+		String path = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, sm.getIdShort());
+		getProxy().deleteValue(path);
+	}
+
+	@Override
+	public ISubModel getSubmodel(IIdentifier id) {
 		// FIXME: Change this when AAS API supports Submodel retrieval by Identifier
 		Optional<ISubModel> op = getSubModels().values().stream().filter(sm -> sm.getIdentification().getId().equals(id.getId())).findFirst();
 		if (!op.isPresent()) {
 			throw new ResourceNotFoundException("AAS " + getIdentification() + " does not have a submodel with id " + id);
 		}
-
-		String path = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, op.get().getIdShort());
-		getProxy().deleteValue(path);
+		return op.get();
 	}
 }
