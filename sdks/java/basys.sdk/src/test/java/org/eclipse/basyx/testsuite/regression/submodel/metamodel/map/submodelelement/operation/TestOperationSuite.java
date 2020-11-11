@@ -82,7 +82,7 @@ public abstract class TestOperationSuite {
 	@Test
 	public void testInvokeAsync() throws Exception {
 		AsyncOperationHelper helper = new AsyncOperationHelper();
-		operation = prepareOperation(helper.getAsyncOperation());
+		IOperation operation = prepareOperation(helper.getAsyncOperation());
 
 		IAsyncInvocation invocation = operation.invokeAsync(3, 2);
 		
@@ -97,7 +97,7 @@ public abstract class TestOperationSuite {
 	@Test
 	public void testInvokeExceptionAsync() throws Exception {
 		AsyncOperationHelper helper = new AsyncOperationHelper();
-		operation = prepareOperation(helper.getAsyncExceptionOperation());
+		IOperation operationException = prepareOperation(helper.getAsyncExceptionOperation());
 		IAsyncInvocation invocation = operationException.invokeAsync();
 		assertFalse(invocation.isFinished());
 		
