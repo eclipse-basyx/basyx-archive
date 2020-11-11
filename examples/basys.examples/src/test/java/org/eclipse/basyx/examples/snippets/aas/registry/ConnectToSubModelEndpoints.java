@@ -79,7 +79,7 @@ public class ConnectToSubModelEndpoints {
 		// - This creates the "urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001" element
 		// on the server, which is the server
 		// end point that will host the AAS.
-		connManager.createAAS(aas, aasURN, aasSrvURL);
+		connManager.createAAS(aas, aasSrvURL);
 
 		// - Sub model ID
 		String smIdShort = "exampleSM";

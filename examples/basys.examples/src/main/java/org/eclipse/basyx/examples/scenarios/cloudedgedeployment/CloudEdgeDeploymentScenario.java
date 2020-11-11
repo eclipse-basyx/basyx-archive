@@ -94,7 +94,7 @@ public class CloudEdgeDeploymentScenario {
 		
 		// Push the AAS to the cloud server
 		// The manager automatically registers it in the registry
-		aasManager.createAAS(ComponentBuilder.getAAS(), aasIdentifier, "http://localhost:8081/cloud");
+		aasManager.createAAS(ComponentBuilder.getAAS(), "http://localhost:8081/cloud");
 		
 		
 		// Get the docuSubmodel from the ComponentBuilder

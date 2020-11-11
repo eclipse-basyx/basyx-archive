@@ -45,7 +45,7 @@ public abstract class AASServerSuite {
 		IIdentifier identifier = new ModelUrn(aasId);
 		shell.setIdentification(identifier);
 		shell.setIdShort("aasIdShort");
-		manager.createAAS(shell, identifier, getURL());
+		manager.createAAS(shell, getURL());
 
 		IAssetAdministrationShell remote = manager.retrieveAAS(identifier);
 		assertEquals(shell.getIdShort(), remote.getIdShort());

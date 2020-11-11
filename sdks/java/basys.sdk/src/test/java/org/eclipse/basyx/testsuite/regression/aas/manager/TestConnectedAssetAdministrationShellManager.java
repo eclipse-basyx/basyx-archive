@@ -70,7 +70,7 @@ public class TestConnectedAssetAdministrationShellManager {
  
 		// Create an AAS containing a reference to the created SubModel
 		AssetAdministrationShell aas = createTestAAS(aasId, aasIdShort);
-		manager.createAAS(aas, aasId, "/shells");
+		manager.createAAS(aas, "/shells");
 
 		// Check descriptor for correct endpoint
 		String endpoint = registry.lookupAAS(aasId).getFirstEndpoint();

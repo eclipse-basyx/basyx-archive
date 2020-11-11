@@ -101,22 +101,9 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	}
 
 	@Override
+	@Deprecated
 	public void createAAS(AssetAdministrationShell aas, IIdentifier aasId, String endpoint) {
-		endpoint = VABPathTools.stripSlashes(endpoint);
-		if (!endpoint.endsWith(AASAggregatorProvider.PREFIX)) {
-			endpoint += "/" + AASAggregatorProvider.PREFIX;
-		}
-
-		IModelProvider provider = connectorProvider.getConnector(endpoint);
-		AASAggregatorProxy proxy = new AASAggregatorProxy(provider);
-		proxy.createAAS(aas);
-		try {
-
-			String combinedEndpoint = VABPathTools.concatenatePaths(endpoint, URLEncoder.encode(aas.getIdentification().getId(), "UTF-8"), "aas");
-			aasDirectory.register(new AASDescriptor(aas, combinedEndpoint));
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("Encoding failed. This should never happen");
-		}
+		createAAS(aas, endpoint);
 	}
 
 	private VABElementProxy getAASProxyFromId(IIdentifier aasId) {
@@ -184,6 +171,20 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 
 	@Override
 	public void createAAS(AssetAdministrationShell aas, String endpoint) {
-		createAAS(aas, aas.getIdentification(), endpoint);
+		endpoint = VABPathTools.stripSlashes(endpoint);
+		if (!endpoint.endsWith(AASAggregatorProvider.PREFIX)) {
+			endpoint += "/" + AASAggregatorProvider.PREFIX;
+		}
+
+		IModelProvider provider = connectorProvider.getConnector(endpoint);
+		AASAggregatorProxy proxy = new AASAggregatorProxy(provider);
+		proxy.createAAS(aas);
+		try {
+
+			String combinedEndpoint = VABPathTools.concatenatePaths(endpoint, URLEncoder.encode(aas.getIdentification().getId(), "UTF-8"), "aas");
+			aasDirectory.register(new AASDescriptor(aas, combinedEndpoint));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Encoding failed. This should never happen");
+		}
 	}
 }

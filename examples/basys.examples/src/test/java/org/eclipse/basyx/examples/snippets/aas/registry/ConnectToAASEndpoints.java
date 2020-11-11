@@ -74,7 +74,7 @@ public class ConnectToAASEndpoints {
 		// - Transfer AAS to server
 		//   - This creates the "urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001" element on the server, which is the server
 		//     end point that will host the AAS.
-		connManager.createAAS(aas, aasURN, aasSrvURL);
+		connManager.createAAS(aas, aasSrvURL);
 
 		// Server connections
 		// - Connect AAS

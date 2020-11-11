@@ -81,7 +81,7 @@ public class AASAggregatorSuiteWithDefinedURL extends AASAggregatorSuite {
 			IIdentifier aasid = aas.getIdentification();
 
 			// Create the AAS on the server
-			manager.createAAS(aas, aasid, serverHost);
+			manager.createAAS(aas, serverHost);
 			aasMap.put(aasid.getId(), aas);
 
 			// create the Submodels
