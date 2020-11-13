@@ -1,6 +1,7 @@
 package org.eclipse.basyx.components.aas.aasx;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -185,13 +186,13 @@ public class AASXPackageManager {
 	private String getXMLResourceString(String filePath) throws IOException, ParserConfigurationException, SAXException {
 		String aasXmlPath;
 		// Create the zip input stream
-		try (ZipInputStream stream = new ZipInputStream(BaSyxConfiguration.getResourceStream(filePath))) {
+		try (ZipInputStream stream = getZipInputStream(filePath)) {
 
 			// find the path of the aas xml
 			aasXmlPath = this.findAASXml(stream);
 		}
 
-		try (ZipInputStream stream = new ZipInputStream(BaSyxConfiguration.getResourceStream(filePath))) {
+		try (ZipInputStream stream = getZipInputStream(filePath)) {
 			// Find the entry of the aas xml
 			ZipInputStream streamPointingToEntry = this.returnFileEntryStream(aasXmlPath, stream);
 
@@ -215,12 +216,12 @@ public class AASXPackageManager {
 			throws IOException, ParserConfigurationException, SAXException {
 		String xmlPath;
 		logger.info("AASX filepath: " + aasxFilePath);
-		try (ZipInputStream stream = new ZipInputStream(BaSyxConfiguration.getResourceStream(aasxFilePath))) {
+		try (ZipInputStream stream = getZipInputStream(aasxFilePath)) {
 			// find the aasx xml file
 			xmlPath = this.findAASXml(stream);
 		}
 
-		try (ZipInputStream stream = new ZipInputStream(BaSyxConfiguration.getResourceStream(aasxFilePath))) {
+		try (ZipInputStream stream = getZipInputStream(aasxFilePath)) {
 			// find the relationship file next to the aas xml file
 			String[] xmlPathParts = xmlPath.split("/");
 			String relPath = xmlPath.substring(0, xmlPath.lastIndexOf("/")) + "/_rels/" + xmlPathParts[xmlPathParts.length - 1] + ".rels";
@@ -291,7 +292,7 @@ public class AASXPackageManager {
 		byte[] buffer = new byte[1024];
 
 		// Find the file with the "filePath"
-		try (ZipInputStream stream = new ZipInputStream(BaSyxConfiguration.getResourceStream(aasxPath))) {
+		try (ZipInputStream stream = getZipInputStream(aasxPath)) {
 			ZipEntry zipEntry = stream.getNextEntry();
 			while (zipEntry != null) {
 				if (!zipEntry.isDirectory() && zipEntry.getName().contains(filePath)) {
@@ -372,5 +373,14 @@ public class AASXPackageManager {
 			}
 		}
 		return files;
+	}
+
+	private ZipInputStream getZipInputStream(String aasxFilePath) throws IOException {
+		try {
+			return new ZipInputStream(BaSyxConfiguration.getResourceStream(aasxFilePath));
+		} catch (NullPointerException ex) {
+			// Alternativ, if resource has not been found: load from a file
+			return new ZipInputStream(new FileInputStream(aasxFilePath));
+		}
 	}
 }
