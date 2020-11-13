@@ -11,7 +11,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.catalina.servlets.DefaultServlet;
 import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
-import org.eclipse.basyx.aas.aggregator.proxy.AASAggregatorProxy;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
@@ -31,7 +30,6 @@ import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.support.bundle.AASBundleDescriptorFactory;
 import org.eclipse.basyx.support.bundle.AASBundleIntegrator;
-import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.slf4j.Logger;
@@ -101,7 +99,7 @@ public class AASServerComponent implements IComponent {
 		// Load the aggregator servlet
 		AASAggregatorServlet aggregatorServlet = loadAggregatorServlet();
 
-		// Init HTTP context and add an XMLAAServlet according to the configuration
+		// Init HTTP context and add an XMLAASServlet according to the configuration
 		BaSyxContext context = contextConfig.createBaSyxContext();
 		context.addServletMapping("/*", aggregatorServlet);
 
@@ -113,7 +111,8 @@ public class AASServerComponent implements IComponent {
 			// 2. Fix the file paths according to the servlet configuration
 			modifyFilePaths(contextConfig.getHostname(), contextConfig.getPort(), contextConfig.getContextPath());
 
-			// 3. Register the initial AAS
+			// 3. Create registry & register the initial AAS
+			createRegistryFromUrl();
 			registerAAS();
 		}
 
@@ -154,10 +153,6 @@ public class AASServerComponent implements IComponent {
 
 		// Retrieve the aas from the package
 		this.aasBundles = packageManager.retrieveAASBundles();
-
-		// this.aasBundles.forEach(b -> Identifiable
-		// .createAsFacade((AssetAdministrationShell) b.getAAS(), KeyElements.ASSETADMINISTRATIONSHELL)
-		// .setIdentification(IdentifierType.CUSTOM, b.getAAS().getIdentification().getId().split("/")[0]));
 	}
 
 	private AASAggregatorServlet loadAggregatorServlet() {
@@ -165,7 +160,7 @@ public class AASServerComponent implements IComponent {
 		loadAASFromSource(aasConfig.getAASSource());
 
 		// Load the aggregator
-		AASAggregatorProxy aggregator = loadAASAggregator();
+		IAASAggregator aggregator = loadAASAggregator();
 
 		// Integrate the loaded bundles into the aggregator
 		if (aasBundles != null) {
@@ -193,14 +188,26 @@ public class AASServerComponent implements IComponent {
 		}
 	}
 
-
-	private void registerAAS() {
+	/**
+	 * Only creates the registry, if it hasn't been set explicitly before
+	 */
+	private void createRegistryFromUrl() {
+		if (this.registry != null) {
+			// Do not overwrite an explicitly set registry
+			return;
+		}
+		// Load registry url from config
 		String registryUrl = this.aasConfig.getRegistry();
 		if (registryUrl != null && !registryUrl.isEmpty()) {
-			logger.info("Registering AAS at registry \"" + registryUrl + "\"");
-			AASRegistryProxy registryProxy = new AASRegistryProxy(registryUrl);
+			registry = new AASRegistryProxy(registryUrl);
+			logger.info("Registry loaded at \"" + registryUrl + "\"");
+		}
+	}
+
+	private void registerAAS() {
+		if (registry != null) {
 			Set<AASDescriptor> descriptors = retrieveDescriptors(contextConfig.getUrl());
-			descriptors.stream().forEach(registryProxy::register);
+			descriptors.stream().forEach(registry::register);
 		} else {
 			logger.info("No registry specified, skipped registration");
 		}
@@ -239,7 +246,7 @@ public class AASServerComponent implements IComponent {
 	 * 
 	 * @return
 	 */
-	private AASAggregatorProxy loadAASAggregator() {
+	private IAASAggregator loadAASAggregator() {
 		// Get aggregator according to backend config
 		AASServerBackend backendType = aasConfig.getAASBackend();
 		IAASAggregator aggregator = null;
@@ -251,9 +258,7 @@ public class AASServerComponent implements IComponent {
 			aggregator = loadMongoDBAggregator();
 		}
 
-		// Wrap in AASAggregatorProxy to support AASBundleIntegrator
-		VABElementProxy proxy = new VABElementProxy(AASAggregatorProvider.PREFIX, new AASAggregatorProvider(aggregator));
-		return new AASAggregatorProxy(proxy);
+		return aggregator;
 	}
 
 	private IAASAggregator loadMongoDBAggregator() {

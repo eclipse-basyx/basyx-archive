@@ -2,18 +2,24 @@ package org.eclipse.basyx.regression.AASServer;
 
 import static org.junit.Assert.assertEquals;
 
+import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
+import org.eclipse.basyx.components.aas.AASServerComponent;
+import org.eclipse.basyx.components.aas.configuration.AASServerBackend;
+import org.eclipse.basyx.components.aas.configuration.BaSyxAASServerConfiguration;
+import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Suite for testing that the XMLAAS servlet is set up correctly. The tests here
@@ -22,9 +28,8 @@ import org.junit.Test;
  * @author schnicke
  *
  */
-public abstract class XMLAASSuite {
-
-	protected IAASRegistryService registry;
+public class TestXMLAASServer {
+	private static Logger logger = LoggerFactory.getLogger(TestXMLAASServer.class);
 
 	protected static final String aasShortId = "aas1";
 	protected static final ModelUrn aasId = new ModelUrn("www.admin-shell.io/aas-sample/2/0");
@@ -35,24 +40,41 @@ public abstract class XMLAASSuite {
 	protected static String aasEndpoint;
 	protected static String smEndpoint;
 
-	private ConnectedAssetAdministrationShellManager manager;
+	// Registry and AAS component
+	protected static IAASRegistryService registry;
+	protected static AASServerComponent component;
+	protected static ConnectedAssetAdministrationShellManager manager;
 
-	/**
-	 * Before each test, a dummy registry is created and an AAS is added in the
-	 * registry
-	 */
-	@Before
-	public void setUp() {
-		// Create a dummy registry to test integration of XML AAS
+	@BeforeClass
+	public static void setUp() {
+		// Setup component's test configuration
+		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration();
+		contextConfig.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
+		BaSyxAASServerConfiguration aasConfig = new BaSyxAASServerConfiguration(AASServerBackend.INMEMORY, "xml/aas.xml");
+
+		// Setup endpoints
+		String rootEndpoint = "http://" + contextConfig.getHostname() + ":" + contextConfig.getPort() + "/"
+				+ contextConfig.getContextPath() + "/";
+		aasEndpoint = rootEndpoint + "/" + AASAggregatorProvider.PREFIX + "/" + aasId.getEncodedURN() + "/aas";
+		smEndpoint = aasEndpoint + "/submodels/" + smShortId + "/submodel";
+		logger.info("AAS URL for servlet test: " + aasEndpoint);
+
+		// Create and start AASServer component
+		component = new AASServerComponent(contextConfig, aasConfig);
 		registry = new InMemoryRegistry();
-		AASDescriptor descriptor = new AASDescriptor(aasShortId, aasId, aasEndpoint);
-		descriptor.addSubmodelDescriptor(new SubmodelDescriptor(smShortId, smId, smEndpoint));
-		registry.register(descriptor);
+		component.setRegistry(registry);
+		component.startComponent();
 
 		// Create a ConnectedAssetAdministrationShell using a
 		// ConnectedAssetAdministrationShellManager
 		IConnectorProvider connectorProvider = new HTTPConnectorProvider();
 		manager = new ConnectedAssetAdministrationShellManager(registry, connectorProvider);
+	}
+
+
+	@AfterClass
+	public static void tearDown() {
+		component.stopComponent();
 	}
 
 	@Test

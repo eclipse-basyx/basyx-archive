@@ -5,15 +5,19 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.proxy.AASAggregatorProxy;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -59,21 +63,15 @@ public class TestAASBundleIntegrator {
 	 */
 	@Test
 	public void testIntegrationOfExistingAASAndSM() {
-
-		AssetAdministrationShell aas = getTestAAS();
-		
-		SubModel sm = getTestSM();
-		
-		// Load AAS and SM AASAggregator
-		pushAAS(aas);
-		pushSubmodel(sm, aas.getIdentification());
-		
-		HashSet<ISubModel> submodels = new HashSet<>();
-		submodels.add(sm);
-		
-		AASBundle bundle = new AASBundle(aas, submodels);
+		AASBundle bundle = getTestBundle();
 		bundles.add(bundle);
 		
+		// Load AAS and SM AASAggregator
+		AssetAdministrationShell aas = (AssetAdministrationShell) bundle.getAAS();
+		Set<ISubModel> submodels = bundle.getSubmodels();
+		SubModel sm = (SubModel) submodels.iterator().next();
+		pushAAS(aas);
+		pushSubmodel(sm, aas.getIdentification());
 		
 		assertFalse(AASBundleIntegrator.integrate(aggregator, bundles));
 		checkAggregatorContent();
@@ -86,20 +84,12 @@ public class TestAASBundleIntegrator {
 	 */
 	@Test
 	public void testIntegrationOfExistingAASAndNonexistingSM() {
-
-		AssetAdministrationShell aas = getTestAAS();
-		
-		SubModel sm = getTestSM();
-		
-		// Load only AAS into AASAggregator
-		pushAAS(aas);
-		
-		HashSet<ISubModel> submodels = new HashSet<>();
-		submodels.add(sm);
-		
-		AASBundle bundle = new AASBundle(aas, submodels);
+		AASBundle bundle = getTestBundle();
 		bundles.add(bundle);
 		
+		// Load only AAS into AASAggregator
+		AssetAdministrationShell aas = (AssetAdministrationShell) bundle.getAAS();
+		pushAAS(aas);
 		
 		assertTrue(AASBundleIntegrator.integrate(aggregator, bundles));
 		checkAggregatorContent();
@@ -112,22 +102,33 @@ public class TestAASBundleIntegrator {
 	 */
 	@Test
 	public void testIntegrationOfNonexistingAASAndSM() {
-
-		AssetAdministrationShell aas = getTestAAS();
-		
-		SubModel sm = getTestSM();
-		
-		HashSet<ISubModel> submodels = new HashSet<>();
-		submodels.add(sm);
-		
-		AASBundle bundle = new AASBundle(aas, submodels);
+		AASBundle bundle = getTestBundle();
 		bundles.add(bundle);
-		
 		
 		assertTrue(AASBundleIntegrator.integrate(aggregator, bundles));
 		checkAggregatorContent();
 	}
 	
+	/**
+	 * This test loads nothing into the Aggregator,
+	 * runs the integration with the AAS and a SM,
+	 * checks if both is present in Aggregator afterwards. Furthermore,
+	 * the AASAggregator has a registry for registering and resolving potential
+	 * submodels.
+	 */
+	@Test
+	public void testIntegrationOfNonexistingAASAndSMWithRegistry() {
+		IAASRegistryService registry = new InMemoryRegistry();
+		provider = new AASAggregatorProvider(new AASAggregator(registry));
+		aggregator = new AASAggregatorProxy(new VABElementProxy("/shells", provider));
+
+		AASBundle bundle = getTestBundle();
+		bundles.add(bundle);
+
+		assertTrue(AASBundleIntegrator.integrate(aggregator, bundles));
+		checkAggregatorContent();
+	}
+
 	@SuppressWarnings("unchecked")
 	private void checkAggregatorContent() {
 		IAssetAdministrationShell aas = aggregator.getAAS(new Identifier(IdentifierType.CUSTOM, AAS_ID));
@@ -148,18 +149,16 @@ public class TestAASBundleIntegrator {
 		provider.setModelPropertyValue("/" + AASAggregatorProvider.PREFIX + "/" + aasIdentifier.getId() + "/aas/submodels/" + sm.getIdShort(), sm);
 	}
 	
-	private AssetAdministrationShell getTestAAS() {
-		AssetAdministrationShell aas = new AssetAdministrationShell();
-		aas.setIdentification(IdentifierType.CUSTOM, AAS_ID);
-		aas.setIdShort(AAS_ID);
-		return aas;
-	}
-	
-	private SubModel getTestSM() {
+	private AASBundle getTestBundle() {
 		SubModel sm = new SubModel();
 		sm.setIdShort(SM_ID);
 		sm.setIdentification(IdentifierType.CUSTOM, SM_ID);
-		return sm;
+
+		AssetAdministrationShell aas = new AssetAdministrationShell();
+		aas.setIdentification(IdentifierType.CUSTOM, AAS_ID);
+		aas.setIdShort(AAS_ID);
+		aas.addSubModel(sm);
+
+		return new AASBundle(aas, new HashSet<>(Arrays.asList(sm)));
 	}
-	
 }
