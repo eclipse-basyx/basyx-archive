@@ -174,6 +174,62 @@ public class TestConnectedAssetAdministrationShellManager {
 	}
 
 	/**
+	 * Tries to retrieve a nonexistent AAS
+	 */
+	@Test
+	public void testRetrieveNonexistentAAS() {
+		IModelProvider provider = new AASAggregatorProvider(new AASAggregator());
+		prepareConnectorProvider(provider);
+		
+		IIdentifier nonexistentAASId = new Identifier(IdentifierType.CUSTOM, "nonexistentAAS");
+		
+		// Try to retrieve a nonexistent AAS
+		try {
+			manager.retrieveAAS(nonexistentAASId);
+			fail();
+		} catch (ResourceNotFoundException e) {
+		}
+	}
+	
+	/**
+	 * Tries to retrieve a nonexistent Submodel from a nonexistent AAS
+	 */
+	@Test
+	public void testRetrieveNonexistentSMFromNonexistentSM() {
+		IModelProvider provider = new AASAggregatorProvider(new AASAggregator());
+		prepareConnectorProvider(provider);
+		
+		IIdentifier nonexistentAASId = new Identifier(IdentifierType.CUSTOM, "nonexistentAAS");
+		IIdentifier nonexistentSMId = new Identifier(IdentifierType.CUSTOM, "nonexistentSM");
+		
+		// Try to retrieve a nonexistent Submodel from a nonexistent AAS
+		try {
+			manager.retrieveSubModel(nonexistentAASId, nonexistentSMId);
+			fail();
+		} catch (ResourceNotFoundException e) {
+		}
+	}
+	
+	/**
+	 * Tries to retrieve a nonexistent Submodel from an existing AAS
+	 */
+	@Test
+	public void testRetrieveNonexistentSMFromExistentAAS() {
+		IModelProvider provider = new AASAggregatorProvider(new AASAggregator());
+		prepareConnectorProvider(provider);
+		
+		IIdentifier aasId = new Identifier(IdentifierType.CUSTOM, "aasId");
+		IIdentifier nonexistentSMId = new Identifier(IdentifierType.CUSTOM, "nonexistentSM");
+		
+		// Try to retrieve a nonexistent Submodel from an existing AAS
+		try {
+			manager.retrieveSubModel(aasId, nonexistentSMId);
+			fail();
+		} catch (ResourceNotFoundException e) {
+		}
+	}
+	
+	/**
 	 * @param provider
 	 */
 	private void prepareConnectorProvider(IModelProvider provider) {
