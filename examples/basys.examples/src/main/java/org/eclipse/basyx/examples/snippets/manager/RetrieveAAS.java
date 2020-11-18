@@ -1,4 +1,4 @@
-package org.eclipse.basyx.examples.snippets.aas;
+package org.eclipse.basyx.examples.snippets.manager;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
@@ -6,12 +6,12 @@ import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 
 /**
- * This snippet showcases how to retrieve an AAS from a server
+ * This snippet showcases how to retrieve an AAS from a server using the AASManager
  * 
  * @author conradi
  *
  */
-public class RetrieveRemoteAAS {
+public class RetrieveAAS {
 
 	/**
 	 * Get an AAS from a server

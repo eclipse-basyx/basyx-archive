@@ -1,6 +1,6 @@
 package org.eclipse.basyx.examples.snippets.submodel;
 
-import org.eclipse.basyx.examples.snippets.aas.RetrieveSubmodelFromAAS;
+import org.eclipse.basyx.examples.snippets.manager.RetrieveSubmodelFromAAS;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;

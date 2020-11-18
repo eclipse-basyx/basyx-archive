@@ -1,7 +1,8 @@
-package org.eclipse.basyx.examples.snippets.aas;
+package org.eclipse.basyx.examples.snippets.registry;
 
 import static org.junit.Assert.fail;
 
+import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.examples.snippets.AbstractSnippetTest;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -10,29 +11,29 @@ import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.Test;
 
 /**
- * Test for the DeleteAAS snippet
+ * Test for the DeregisterAAS Snippet
  * 
  * @author conradi
  *
  */
-public class TestDeleteAAS extends AbstractSnippetTest {
+public class TestDeregisterAAS extends AbstractSnippetTest {
 
 	@Test
-	public void testDeleteAAS() {
+	public void testDeregisterAAS() {
 		
 		// Get the Identifier of the example AAS
 		IIdentifier aasIdentifier = new Identifier(IdentifierType.CUSTOM, AAS_ID);
 		
-		// Delete the AAS
-		DeleteAAS.deleteAAS(aasIdentifier, registryComponent.getRegistryPath());
+		DeregisterAAS.registerAAS(aasIdentifier, registryComponent.getRegistryPath());
 		
-		// Try to retrieve deleted AAS; should throw ResourceNotFoundException
+		// Lookup the AAS in the registry
+		AASRegistryProxy registry = new AASRegistryProxy(registryComponent.getRegistryPath());
+		
 		try {
-			RetrieveRemoteAAS.retrieveRemoteAAS(aasIdentifier, registryComponent.getRegistryPath());
+			registry.lookupAAS(aasIdentifier);
 			fail();
 		} catch (ResourceNotFoundException e) {
-		}
-		
+		}	
 	}
 	
 }

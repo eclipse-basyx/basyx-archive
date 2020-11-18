@@ -1,4 +1,4 @@
-package org.eclipse.basyx.examples.snippets.aas;
+package org.eclipse.basyx.examples.snippets.registry;
 
 import static org.junit.Assert.assertEquals;
 

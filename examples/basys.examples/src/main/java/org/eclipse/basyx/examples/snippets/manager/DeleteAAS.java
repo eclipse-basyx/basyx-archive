@@ -1,11 +1,11 @@
-package org.eclipse.basyx.examples.snippets.aas;
+package org.eclipse.basyx.examples.snippets.manager;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 
 /**
- * Snippet that showcases how to delete an AAS from a server
+ * Snippet that showcases how to delete an AAS from a server using the AASManager
  * 
  * @author conradi
  *

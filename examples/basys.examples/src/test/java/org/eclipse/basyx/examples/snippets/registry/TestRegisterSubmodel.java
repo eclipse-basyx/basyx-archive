@@ -1,4 +1,4 @@
-package org.eclipse.basyx.examples.snippets.submodel;
+package org.eclipse.basyx.examples.snippets.registry;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,7 +6,6 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.examples.snippets.AbstractSnippetTest;
-import org.eclipse.basyx.examples.snippets.aas.RegisterAAS;
 import org.eclipse.basyx.examples.support.ExampleComponentBuilder;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.junit.Test;

@@ -1,8 +1,6 @@
 package org.eclipse.basyx.examples.snippets.aas;
 
-import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
-import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 
 /**
@@ -15,26 +13,18 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 public class AddSubmodelToAAS {
 
 	/**
-	 * Adds a Submodel to an AAS and registers it
+	 * Adds a Submodel to an AAS
 	 * 
 	 * @param submodel the Submodel to be added
-	 * @param aasIdentifier the Identifier of the AAS the Submodel should be added to
-	 * @param registryServerURL the URL of the registry server
+	 * @param aas the AAS the Submodel should be added to
 	 */
-	public static void addSubmodelToAAS(SubModel submodel, IIdentifier aasIdentifier, String registryServerURL) {
-
-		// Create a proxy pointing to the registry server
-		AASRegistryProxy registryProxy = new AASRegistryProxy(registryServerURL);
+	public static void addSubmodelToAAS(SubModel submodel, IAssetAdministrationShell aas) {
 		
-		// Create a ConnectedAASManager using the registryProxy as its registry
-		ConnectedAssetAdministrationShellManager manager =
-				new ConnectedAssetAdministrationShellManager(registryProxy);
-		
-		// Add the submodel to the AAS using the ConnectedAASManager
-		// The manager pushes the submodel to the server and registers it
-		// For this to work, the Identification of the Submodel has to be set
-		manager.createSubModel(aasIdentifier, submodel);
-		
+		// Add the submodel to the AAS
+		// If the given AAS is a ConnectedAssetAdministrationShell
+		// the Submodel will be uploaded to the server the AAS is hosted on
+		// The Submodel will NOT be registered. The RegisterSubmodel snippet can be used for that.
+		aas.addSubModel(submodel);
 	}
 	
 }

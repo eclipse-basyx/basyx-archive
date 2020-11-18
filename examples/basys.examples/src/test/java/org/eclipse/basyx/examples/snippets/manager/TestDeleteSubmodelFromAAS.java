@@ -1,4 +1,4 @@
-package org.eclipse.basyx.examples.snippets.aas;
+package org.eclipse.basyx.examples.snippets.manager;
 
 import static org.junit.Assert.fail;
 
@@ -26,11 +26,12 @@ public class TestDeleteSubmodelFromAAS extends AbstractSnippetTest {
 		IIdentifier aasIdentifier = new Identifier(IdentifierType.CUSTOM, AAS_ID);
 		IIdentifier smIdentifier = new Identifier(IdentifierType.CUSTOM, SM_ID);
 		
+		// Delete the Submodel
+		DeleteSubmodelFromAAS.deleteSubmodelFromAAS(smIdentifier, aasIdentifier, registryComponent.getRegistryPath());		
+		
 		// Get the AAS as ConnectedAAS
 		ConnectedAssetAdministrationShellManager manager = getManager();
 		IAssetAdministrationShell aas = manager.retrieveAAS(aasIdentifier);
-		
-		DeleteSubmodelFromAAS.deleteSubmodelFromAAS(smIdentifier, aas);
 		
 		// Try to retrieve deleted Submodel; should throw ResourceNotFoundException
 		try {

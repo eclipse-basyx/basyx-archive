@@ -1,4 +1,4 @@
-package org.eclipse.basyx.examples.snippets.aas;
+package org.eclipse.basyx.examples.snippets.manager;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
@@ -6,7 +6,7 @@ import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 
 
 /**
- * This snippet showcases how to push a AAS to a server
+ * This snippet showcases how to push an AAS to a server using the AASManager
  * 
  * @author conradi
  *

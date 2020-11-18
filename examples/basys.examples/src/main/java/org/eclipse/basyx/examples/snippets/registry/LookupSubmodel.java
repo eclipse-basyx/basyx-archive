@@ -1,4 +1,4 @@
-package org.eclipse.basyx.examples.snippets.submodel;
+package org.eclipse.basyx.examples.snippets.registry;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;

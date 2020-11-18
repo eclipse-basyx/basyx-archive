@@ -1,4 +1,4 @@
-package org.eclipse.basyx.examples.snippets.aas;
+package org.eclipse.basyx.examples.snippets.manager;
 
 import static org.junit.Assert.assertEquals;
 
@@ -15,7 +15,7 @@ import org.junit.Test;
  * @author conradi
  *
  */
-public class TestRetrieveRemoteAAS extends AbstractSnippetTest {
+public class TestRetrieveAAS extends AbstractSnippetTest {
 	
 	@Test
 	public void testRetrieveRemoteAAS() {
@@ -25,7 +25,7 @@ public class TestRetrieveRemoteAAS extends AbstractSnippetTest {
 		
 		// Retrieve the AAS from the server
 		IAssetAdministrationShell remoteAAS =
-				RetrieveRemoteAAS.retrieveRemoteAAS(aasIdentifier, registryComponent.getRegistryPath());
+				RetrieveAAS.retrieveRemoteAAS(aasIdentifier, registryComponent.getRegistryPath());
 		
 		// Check if the retrieved AAS can be used correctly
 		assertEquals(AAS_ID_SHORT, remoteAAS.getIdShort());

@@ -1,7 +1,6 @@
 package org.eclipse.basyx.examples.snippets.aas;
 
-import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
+import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 
 /**
@@ -16,20 +15,13 @@ public class DeleteSubmodelFromAAS {
 	 * Removes a Submodel from an AAS
 	 * 
 	 * @param smIdentifier the Identifier of the Submodel to be deleted
-	 * @param aasIdentifier the Identifier of the AAS the Submodel belongs to
-	 * @param registryServerURL the URL of the registry server (e.g. http://localhost:8080/registry)
+	 * @param aas the AAS the Submodel belongs to
 	 */
-	public static void deleteSubmodelFromAAS(IIdentifier smIdentifier, IIdentifier aasIdentifier, String registryServerURL) {
-	
-		// Create a proxy pointing to the registry server
-		AASRegistryProxy registryProxy = new AASRegistryProxy(registryServerURL);
+	public static void deleteSubmodelFromAAS(IIdentifier smIdentifier, IAssetAdministrationShell aas) {
 		
-		// Create a ConnectedAASManager using the registryProxy as its registry
-		ConnectedAssetAdministrationShellManager manager =
-				new ConnectedAssetAdministrationShellManager(registryProxy);
-		
-		// Delete the Submodel
-		// Automatically deregisters it
-		manager.deleteSubModel(aasIdentifier, smIdentifier);
+		// Delete the Submodel from the AAS
+		// Does NOT deregisters the Submodel
+		// The DeregisterSubmodel snippet can be used to do that
+		aas.removeSubmodel(smIdentifier);
 	}
 }
