@@ -3,7 +3,7 @@
 
 #include "Timezone.h"
 
-#include <stdint-gcc.h>
+#include <cstdint>
 #include <string>
 
 namespace basyx {
@@ -38,4 +38,5 @@ public:
 }
 }
 }
+
 #endif /* BASYX_SIMPLE_SDK_TIME_H */
