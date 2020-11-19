@@ -75,12 +75,12 @@ void AssetAdministrationShell::setParent(IReferable * parent)
 }
 
 
-const AdministrativeInformation & AssetAdministrationShell::getAdministrativeInformation() const
+const api::IAdministrativeInformation & AssetAdministrationShell::getAdministrativeInformation() const
 {
 	return this->identifiable.getAdministrativeInformation();
 }
 
-AdministrativeInformation & AssetAdministrationShell::getAdministrativeInformation()
+api::IAdministrativeInformation & AssetAdministrationShell::getAdministrativeInformation()
 {
 	return this->identifiable.getAdministrativeInformation();
 }

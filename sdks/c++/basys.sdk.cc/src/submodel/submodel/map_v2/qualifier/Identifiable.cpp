@@ -33,12 +33,12 @@ simple::Identifier Identifiable::getIdentification() const
 	};
 }
 
-const AdministrativeInformation & Identifiable::getAdministrativeInformation() const
+const api::IAdministrativeInformation & Identifiable::getAdministrativeInformation() const
 {
 	return this->administrativeInformation;
 }
 
-AdministrativeInformation & Identifiable::getAdministrativeInformation()
+api::IAdministrativeInformation & Identifiable::getAdministrativeInformation()
 {
 	return this->administrativeInformation;
 }

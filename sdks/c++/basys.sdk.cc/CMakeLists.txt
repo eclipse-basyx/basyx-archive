@@ -115,6 +115,7 @@ add_subdirectory(src/utility)
 add_subdirectory(src/vab)
 add_subdirectory(src/server)
 add_subdirectory(src/submodel)
+add_subdirectory(src/controlcomponent)
 
 ###############################################
 ###           Test Directory                ###

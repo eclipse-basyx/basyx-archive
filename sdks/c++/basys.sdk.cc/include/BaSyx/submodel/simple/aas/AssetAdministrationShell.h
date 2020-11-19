@@ -50,8 +50,8 @@ public:
 	virtual simple::Reference getReference() const override;
 
 	// Inherited via IIdentifiable
-	virtual const AdministrativeInformation & getAdministrativeInformation() const override;
-	virtual AdministrativeInformation & getAdministrativeInformation() override;
+	virtual const api::IAdministrativeInformation & getAdministrativeInformation() const override;
+	virtual api::IAdministrativeInformation & getAdministrativeInformation() override;
 
 	virtual Identifier getIdentification() const override;
 

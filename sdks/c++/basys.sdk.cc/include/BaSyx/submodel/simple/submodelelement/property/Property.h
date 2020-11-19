@@ -13,7 +13,9 @@ namespace submodel {
 namespace simple {
 
 template<typename T>
-class Property : public SubmodelElement, public api::IProperty
+class Property
+  : public SubmodelElement
+  , public virtual api::IProperty
 {
 private:
 	std::string valueType;
@@ -63,7 +65,7 @@ public:
 		return &this->valueId;
 	}
 
-  virtual void setValueId(const api::IReference & valueId) override
+	virtual void setValueId(const api::IReference & valueId) override
 	{
 		this->valueId = valueId;
 	}

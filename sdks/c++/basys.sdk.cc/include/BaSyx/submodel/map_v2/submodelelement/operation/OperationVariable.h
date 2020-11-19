@@ -43,6 +43,8 @@ public:
 	{
 		return *this->value;
 	};
+
+	virtual inline KeyElements getKeyElementType() const override { return KeyElements::OperationVariable; };
 };
 
 

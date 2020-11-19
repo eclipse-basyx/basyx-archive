@@ -7,7 +7,7 @@ using namespace basyx::submodel;
 
 // Implementations to run tests for
 using ImplTypes = ::testing::Types<
-//	simple::Property<int>,
+	simple::Property<int>,
 	map::Property<int>
 >;
 
@@ -15,14 +15,12 @@ template<class Impl>
 class PropertyTest :public ::testing::Test {
 protected:
 	using impl_t = Impl;
-
 protected:
 	std::unique_ptr<api::IProperty> property;
-
 protected:
 	void SetUp() override
 	{
-	  std::string idShort("id test");
+		std::string idShort("id test");
 		this->property = util::make_unique<Impl>(idShort);
 	}
 

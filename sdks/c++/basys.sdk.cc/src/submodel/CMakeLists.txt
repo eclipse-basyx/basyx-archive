@@ -125,7 +125,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/KeyType.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/KeyElements.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/IdentifiableElements.h
-	    ${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/Conversions.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/Conversions.h
 	
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/aas/IAssetAdministrationShell.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/aas/IAsset.h

@@ -2,18 +2,18 @@
 ; Indicate a source-code file by $FILE_ENDING$-tag and the corresponding file ending
 ; at the end of the file. i.e.: "$FILE_ENDING cpp". If $FILE_ENDING$ is not set, ".hpp" will be used.
 ; Other tags that can be used are:
-; $ENUM_CLASS$  : Class name of enum, obtained from file name
+; $ENUM_CLASS$     : Class name of enum, obtained from file name
 ; $ENUM_CLASS_CAP$ : Class name of enum in uppercase
-; $FIRST_ENUM$  : The first enum in the list of enums
-; $MIDDLE_ENUM$ : All enums that are in between first and last enum.
-; $LAST_ENUM$   : The last enum in the list of enums
-; $SIZE$        : The number of enums
-; $CONSTANT$    : Define a costant, i.e.: $CONSTSANT$ NAME value, usage in document with $NAME$
+; $FIRST_ENUM$     : The first enum in the list of enums
+; $MIDDLE_ENUM$    : All enums that are in between first and last enum.
+; $LAST_ENUM$      : The last enum in the list of enums
+; $SIZE$           : The number of enums
+; $CONSTANT$       : Define a costant, i.e.: $CONSTSANT$ NAME value, usage in document with $NAME$
 ;
 ;
-$CONSTANT$ NAMESPACE submodel
-#ifndef BASYX_SUBMODEL_ENUMERATIONS_$ENUM_CLASS_CAP$_H
-#define BASYX_SUBMODEL_ENUMERATIONS_$ENUM_CLASS_CAP$_H
+$CONSTANT$ NAMESPACE controlcomponent
+#ifndef BASYX_CONTROLCOMPONENT_ENUM_$ENUM_CLASS_CAP$_H
+#define BASYX_CONTROLCOMPONENT_ENUM_$ENUM_CLASS_CAP$_H
 
 #include <string>
 
@@ -37,7 +37,7 @@ public:
 }
 }
 
-#endif /* BASYX_SUBMODEL_ENUMERATIONS_$ENUM_CLASS_CAP$_H */
+#endif
 $FILE_ENDING$ h
 #include <BaSyx/$NAMESPACE$/enumerations/$ENUM_CLASS$.h>
 
@@ -46,7 +46,7 @@ $FILE_ENDING$ h
 #include <memory>
 #include <string>
 
-using namespace basyx::submodel;
+using namespace basyx::controlcomponent;
 
 using enum_pair_t = std::pair<const char*, $ENUM_CLASS$>;
 
