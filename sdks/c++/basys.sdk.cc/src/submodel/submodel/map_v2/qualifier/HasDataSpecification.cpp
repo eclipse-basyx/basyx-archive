@@ -13,7 +13,7 @@ HasDataSpecification::HasDataSpecification()
 	: vab::ElementMap()
 	, dataSpecification()
 {
-	this->map.insertKey(Path::DataSpecification, basyx::object::make_object_ref(&dataSpecification));
+	this->map.insertKey(Path::DataSpecification, this->dataSpecification);
 }
 
 void HasDataSpecification::addDataSpecification(const simple::Reference & reference)

@@ -52,6 +52,25 @@ TYPED_TEST(ElementContainerTest, TestAdd)
 	ASSERT_EQ(propB->getValue(), 5);
 };
 
+TYPED_TEST(ElementContainerTest, TestGetByIndex)
+{
+	auto prop = util::make_unique<Property<int>>("prop1");
+	prop->setValue(5);
+
+	auto prop2 = util::make_unique<Property<float>>("prop2");
+	prop2->setValue(10.0f);
+
+	this->elementContainer->addElement(std::move(prop));
+	this->elementContainer->addElement(std::move(prop2));
+	ASSERT_EQ(this->elementContainer->size(), 2);
+
+	auto submodelElement1 = this->elementContainer->getElement(0);
+	ASSERT_TRUE(submodelElement1->getIdShort() == "prop1" || submodelElement1->getIdShort() == "prop2");
+
+	auto submodelElement2 = this->elementContainer->getElement(0);
+	ASSERT_TRUE(submodelElement2->getIdShort() == "prop1" || submodelElement2->getIdShort() == "prop2");
+};
+
 TYPED_TEST(ElementContainerTest, TestCreate)
 {
 	auto prop = this->elementContainer->template createElement<Property<int>>("testProperty");

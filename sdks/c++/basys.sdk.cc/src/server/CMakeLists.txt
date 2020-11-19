@@ -23,6 +23,7 @@ endif()
 
 target_sources(${BASYX_SERVER_LIB_SUFFIX}
     PRIVATE
+	${CMAKE_CURRENT_SOURCE_DIR}/server/TCPServer.cpp
     ${BASYX_SHARED_INCLUDE_DIR}/TCPServer.h
     ${BASYX_SHARED_INCLUDE_DIR}/BaSyxNativeProvider.h
 )

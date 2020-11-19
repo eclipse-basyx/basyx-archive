@@ -17,7 +17,7 @@ namespace submodel {
 namespace map {
 
 struct ElementContainerPath {
-  static constexpr char IdShort[] = "idShort";
+	static constexpr char IdShort[] = "idShort";
 };
 
 template<typename IElementType>
@@ -98,13 +98,20 @@ IElementType * const ElementContainer<IElementType>::getElement(std::size_t n) c
 	if (n > this->size())
 		return nullptr;
 
-	// Find element in object tree
-	auto & objectList = this->getMap().template Get<basyx::object::object_list_t&>();
-	auto & obj = objectList.at(n);
+	// Iterate through object map
+	int i = 0;
+	
+	for(const auto & entry : map.Get<basyx::object::object_map_t&>())
+	{
+		if (i++ == n)
+		{
+			// Get id of object and create temporary
+			const auto & id = entry.first;
+			return this->getElement(id);
+		};
+	};
 
-	// Get id of object and create temporary
-	const auto & id = obj.getProperty(ElementContainerPath::IdShort).Get<std::string&>();
-	return this->getElement(id);
+	return nullptr;
 };
 
 
