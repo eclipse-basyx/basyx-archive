@@ -33,6 +33,17 @@ public class Identifiable extends Referable implements IIdentifiable {
 		// The globally unique identification of an element. (Identificator)
 		put(IDENTIFICATION, new Identifier());
 	}
+	
+	/**
+	 * Constructor with mandatory attribute
+	 * @param idShort
+	 * @param identification
+	 */
+	public Identifiable(String idShort, IIdentifier identification) {
+		super(idShort);
+		setIdentification(identification.getIdType(), identification.getId());
+		setAdministration(new AdministrativeInformation());
+	}
 
 	/**
 	 * Constructor that accepts values for most relevant properties

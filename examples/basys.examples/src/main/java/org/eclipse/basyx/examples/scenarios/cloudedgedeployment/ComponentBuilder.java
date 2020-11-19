@@ -17,15 +17,15 @@ public class ComponentBuilder {
 
 	public static final String EDGESM_ID_SHORT = "curr_temp";
 	public static final String EDGESM_ID = "current_oven_temperature";
-	public static final String EDGESM_ENDPOINT = "http://localhost:8082/oven/current_temp";
+	public static final String EDGESM_ENDPOINT = "http://localhost:8082/oven/current_temp/submodel";
 	
 	public static final String DOCUSM_ID_SHORT = "oven_doc";
 	public static final String DOCUSM_ID = "oven_documentation_sm";
-	public static final String DOCUSM_ENDPOINT = "http://localhost:8081/cloud/aasList/aasId/aas/submodels/oven_doc";
+	public static final String DOCUSM_ENDPOINT = "http://localhost:8081/cloud/shells/aasId/aas/submodels/oven_doc/submodel";
 	
 	public static final String AAS_ID_SHORT = "aasIdShort";
 	public static final String AAS_ID = "aasId";
-	public static final String AAS_ENDPOINT = "http://localhost:8081/cloud/aasList/aasId/aas";
+	public static final String AAS_ENDPOINT = "http://localhost:8081/cloud/shells/aasId/aas";
 	
 	
 	

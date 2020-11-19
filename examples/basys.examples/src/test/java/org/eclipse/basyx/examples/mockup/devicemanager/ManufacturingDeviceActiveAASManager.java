@@ -1,5 +1,6 @@
 package org.eclipse.basyx.examples.mockup.devicemanager;
 
+import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -57,7 +58,7 @@ public class ManufacturingDeviceActiveAASManager extends ManufacturingDeviceMana
 
 
 		// Transfer device sub model to server
-		aasServerConnection.createValue("/aas/submodels", supplySM);
+		aasServerConnection.setModelPropertyValue("/" + AASAggregatorProvider.PREFIX + "/" + lookupURN("AAS").getEncodedURN() + "/aas/submodels/" + supplySM.getIdShort(), supplySM);
 	}
 
 

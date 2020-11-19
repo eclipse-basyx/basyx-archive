@@ -92,6 +92,21 @@ public class Reference extends VABModelMap<Object> implements IReference {
 		ret.setMap(map);
 		return ret;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static boolean isReference(Object value) {
+		if(!(value instanceof Map<?, ?>)) {
+			return false;
+		}
+		
+		Map<String, Object> map = (Map<String, Object>) value;
+		
+		if(!(map.get(KEY) instanceof Collection<?>)) {
+			return false;
+		}
+		
+		return ((Collection<Key>) map.get(KEY)).stream().allMatch(Key::isKey);
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

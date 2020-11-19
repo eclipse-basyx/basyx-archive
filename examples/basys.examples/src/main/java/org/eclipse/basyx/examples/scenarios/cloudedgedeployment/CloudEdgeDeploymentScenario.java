@@ -1,9 +1,18 @@
 package org.eclipse.basyx.examples.scenarios.cloudedgedeployment;
 
-import org.basyx.components.AASServer.AASServerComponent;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
-import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
+import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
+import org.eclipse.basyx.components.IComponent;
+import org.eclipse.basyx.components.aas.AASServerComponent;
+import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
+import org.eclipse.basyx.components.registry.RegistryComponent;
+import org.eclipse.basyx.components.registry.configuration.BaSyxRegistryConfiguration;
+import org.eclipse.basyx.components.registry.configuration.RegistryBackend;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -20,7 +29,7 @@ import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
  * Server B is created as a server hosted near a machine.
  * It provides a Submodel containing sensor value.
  * 
- * @author conradi
+ * @author conradi, schnicke
  *
  */
 public class CloudEdgeDeploymentScenario {
@@ -28,7 +37,8 @@ public class CloudEdgeDeploymentScenario {
 	/**
 	 * The registry used in the manager
 	 */
-	public IAASRegistryService registry;
+	private IAASRegistryService registry;
+	public static String registryPath = "http://localhost:8080/registry";
 	
 	/**
 	 * AASManager used to handle registration and server communication
@@ -52,6 +62,10 @@ public class CloudEdgeDeploymentScenario {
 	 */
 	public IIdentifier edgeSmIdentifier = ComponentBuilder.getEdgeSubmodelDescriptor().getIdentifier();
 
+	// Used for shutting down the scenario
+	private List<IComponent> startedComponents = new ArrayList<>();
+	private AASHTTPServer edgeServer;
+
 	/**
 	 * Main method to start the scenario
 	 * 
@@ -66,20 +80,21 @@ public class CloudEdgeDeploymentScenario {
 	 */
 	public CloudEdgeDeploymentScenario() {
 		
-		startupEdgeServer();
-		startupCloudServer();
-		
+		startupRegistryServer();
 		
 		// Create a InMemoryRegistry to be used by the manager
-		registry = new InMemoryRegistry();
+		registry = new AASRegistryProxy(registryPath);
 		
+		startupEdgeServer();
+		startupCloudServer();
+
 		// Create a ConnectedAASManager with the registry created above
 		aasManager = new ConnectedAssetAdministrationShellManager(registry);
 		
 		
 		// Push the AAS to the cloud server
 		// The manager automatically registers it in the registry
-		aasManager.createAAS(ComponentBuilder.getAAS(), aasIdentifier, "http://localhost:8081/cloud");
+		aasManager.createAAS(ComponentBuilder.getAAS(), "http://localhost:8081/cloud");
 		
 		
 		// Get the docuSubmodel from the ComponentBuilder
@@ -95,6 +110,19 @@ public class CloudEdgeDeploymentScenario {
 	}
 	
 	/**
+	 * Startup an empty registry at "http://localhost:8080/registry"
+	 * 
+	 */
+	private void startupRegistryServer() {
+		// Start an InMemory registry server with a direct configuration
+		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration(8080, "registry");
+		BaSyxRegistryConfiguration registryConfig = new BaSyxRegistryConfiguration(RegistryBackend.INMEMORY);
+		IComponent component = new RegistryComponent(contextConfig, registryConfig);
+		component.startComponent();
+		startedComponents.add(component);
+	}
+
+	/**
 	 * Startup a server responsible for hosting the "current_temp" edgeSubModel
 	 * at the endpoint "http://localhost:8082/oven/current_temp"
 	 * 
@@ -104,8 +132,9 @@ public class CloudEdgeDeploymentScenario {
 	 */
 	private void startupEdgeServer() {
 		
-		// Create a BaSyxConetxt for port 8082 with an empty endpoint and the tmpdir for storing its data
-		BaSyxContext context = new BaSyxContext("", System.getProperty("java.io.tmpdir"), "localhost", 8082);
+		// Create a BaSyxConetxt for port 8082 with an empty endpoint
+		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration(8082, "");
+		BaSyxContext context = contextConfig.createBaSyxContext();
 		
 		// Get the edgeSubmodel from the ComponentBuilder
 		SubModel edgeSubmodel = ComponentBuilder.createEdgeSubModel();
@@ -118,7 +147,7 @@ public class CloudEdgeDeploymentScenario {
 		
 		
 		// Create and start a HTTP server with the context created above
-		AASHTTPServer edgeServer = new AASHTTPServer(context);
+		edgeServer = new AASHTTPServer(context);
 		edgeServer.start();
 	}
 	
@@ -130,12 +159,22 @@ public class CloudEdgeDeploymentScenario {
 	 * 
 	 */
 	private void startupCloudServer() {
-		
-		// Create a server at port 8081 with the endpoint "/cloud"
-		AASServerComponent cloudServer = new AASServerComponent("localhost", 8081, "/cloud", "/");
+		// Load the AAS context from a .properties file resource
+		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration();
+		contextConfig.loadFromResource("CloudEdgeDeploymentScenarioAASContext.properties");
+
+		// Create a server according to this configuration
+		AASServerComponent cloudServer = new AASServerComponent(contextConfig);
+		cloudServer.setRegistry(registry);
 		
 		// Start the created server
 		cloudServer.startComponent();
+		startedComponents.add(cloudServer);
+	}
+
+	public void stop() {
+		startedComponents.stream().forEach(IComponent::stopComponent);
+		edgeServer.shutdown();
 	}
 
 }

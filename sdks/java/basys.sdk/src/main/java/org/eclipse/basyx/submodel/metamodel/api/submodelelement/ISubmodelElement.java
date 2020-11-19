@@ -16,4 +16,8 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifiab
  */
 public interface ISubmodelElement extends IElement, IHasDataSpecification, IReferable, IQualifiable, IHasSemantics, IHasKind {
 	public String getModelType();
+	
+	public Object getValue();
+	
+	public void setValue(Object value);
 }

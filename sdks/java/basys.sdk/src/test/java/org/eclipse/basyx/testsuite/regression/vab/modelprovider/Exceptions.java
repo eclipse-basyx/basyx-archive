@@ -58,7 +58,7 @@ public class Exceptions {
 
 		// Invoke unsupported functional interface
 		try {
-			connVABElement.invokeOperation("operations/supplier");
+			connVABElement.invokeOperation("operations/supplier/invoke");
 			fail();
 		} catch (MalformedRequestException e) {
 			// this is for FileSystemProvider that does not support invoke

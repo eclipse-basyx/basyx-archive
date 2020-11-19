@@ -29,7 +29,7 @@ public class TestQualifiable {
 	@Test
 	public void testConstructor1() {
 		Qualifiable qualifiable = new Qualifiable(FORMULA1);
-		assertEquals(Collections.singleton(FORMULA1), qualifiable.getQualifier());
+		assertEquals(Collections.singleton(FORMULA1), qualifiable.getQualifiers());
 	}
 	
 	@Test
@@ -39,14 +39,14 @@ public class TestQualifiable {
 		constraints.add(FORMULA2);
 		
 		Qualifiable qualifiable = new Qualifiable(constraints);
-		assertEquals(constraints, qualifiable.getQualifier());
+		assertEquals(constraints, qualifiable.getQualifiers());
 	}
 	
 	@Test
 	public void testSetQualifier() {
 		Qualifiable qualifiable = new Qualifiable(FORMULA1);
 		
-		qualifiable.setQualifier(Collections.singleton(FORMULA2));
-		assertEquals(Collections.singleton(FORMULA2), qualifiable.getQualifier());
+		qualifiable.setQualifiers(Collections.singleton(FORMULA2));
+		assertEquals(Collections.singleton(FORMULA2), qualifiable.getQualifiers());
 	}
 }

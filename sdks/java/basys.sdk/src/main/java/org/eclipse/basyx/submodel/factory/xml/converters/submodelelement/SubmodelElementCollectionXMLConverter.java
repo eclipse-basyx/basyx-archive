@@ -67,7 +67,7 @@ public class SubmodelElementCollectionXMLConverter extends SubmodelElementXMLCon
 		orderedElem.appendChild(document.createTextNode(isOrdered));
 		smElemCollectionRoot.appendChild(orderedElem);
 		
-		Collection<ISubmodelElement> elems = smElemCollection.getValue();
+		Collection<ISubmodelElement> elems = smElemCollection.getSubmodelElements().values();
 		
 		//recursively build the SubmodelElements contained in the ElementCollection
 		if(elems != null) {

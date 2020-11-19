@@ -25,9 +25,9 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementC
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
@@ -99,7 +99,7 @@ public class ConnectedSubmodelElementFactory {
 	 * @param elementPath    path in the proxy for accessing single elements by short ids
 	 * @return The connected variant of the requested submodel element
 	 */
-	private static ISubmodelElement getConnectedSubmodelElement(VABElementProxy rootProxy,
+	public static ISubmodelElement getConnectedSubmodelElement(VABElementProxy rootProxy,
 			String elementPath, String idShort, Map<String, Object> mapContent) {
 		String subPath = VABPathTools.concatenatePaths(elementPath, idShort);
 		VABElementProxy proxy = rootProxy.getDeepProxy(subPath);

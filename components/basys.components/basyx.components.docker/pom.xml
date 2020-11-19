@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.eclipse.basyx</groupId>
 		<artifactId>basyx.components</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.1.0-SNAPSHOT</version>
     </parent>
 	
 	<artifactId>basyx.components.docker</artifactId>
@@ -15,10 +15,7 @@
 
 	<!-- Includes all components in this project as separated modules -->
 	<modules>
-		<module>basyx.components.simple</module>
-		<module>basyx.components.sqlregistry</module>
-		<module>basyx.components.xmlAAS</module>
-		<module>basyx.components.AASX</module>
+		<module>basyx.components.registry</module>
     	<module>basyx.components.AASServer</module>
   </modules>
 	
@@ -106,10 +103,17 @@
 					</executions>
 					<configuration>
 						<repository>${BASYX_IMAGE_NAME}</repository>
-						<tag>${project.version}</tag>
+						<tag>${BASYX_IMAGE_TAG}</tag>
 						<buildArgs>
 							<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
 							<PORT>${BASYX_CONTAINER_PORT}</PORT>
+							<!-- The system property/env keys for basyx configuration files -->
+							<CONTEXT_CONFIG_KEY>BASYX_CONTEXT</CONTEXT_CONFIG_KEY>
+							<REGISTRY_CONFIG_KEY>BASYX_REGISTRY</REGISTRY_CONFIG_KEY>
+							<AAS_CONFIG_KEY>BASYX_AAS</AAS_CONFIG_KEY>
+							<MONGODB_CONFIG_KEY>BASYX_MONGODB</MONGODB_CONFIG_KEY>
+							<DOCKER_CONFIG_KEY>BASYX_DOCKER</DOCKER_CONFIG_KEY>
+							<SQL_CONFIG_KEY>BASYX_SQL</SQL_CONFIG_KEY>
 						</buildArgs>
 					</configuration>
 				</plugin>

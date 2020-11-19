@@ -13,6 +13,12 @@ class ValueList
   , public vab::ElementMap
 {
 public:
+  struct Path {
+    static constexpr char Value[] = "value";
+    static constexpr char ValueId[] = "valueId";
+  };
+
+public:
   ValueList();
   explicit ValueList(const std::vector<simple::ValueReferencePair> & list);
 

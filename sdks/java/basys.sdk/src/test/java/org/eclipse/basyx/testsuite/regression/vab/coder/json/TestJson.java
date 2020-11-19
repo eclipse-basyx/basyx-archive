@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -59,6 +60,13 @@ public class TestJson {
 
 		JsonPrimitive primitive = new JsonPrimitive(12);
 		assertEquals(primitive.toString(), tools.serialize(12));
+	}
+
+	@Test
+	public void testBigInteger() {
+		BigInteger dec = new BigInteger("10000000000000000000000000000000000000");
+		BigInteger deserialized = (BigInteger) tools.deserialize(tools.serialize(dec));
+		assertEquals(dec, deserialized);
 	}
 
 	/**

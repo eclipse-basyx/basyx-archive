@@ -43,4 +43,13 @@ public interface IOperation extends IElement, ISubmodelElement {
 	 * @throws Exception
 	 */
 	public Object invoke(Object... params) throws Exception;
+	
+	/**
+	 * Invoke operation with given parameter asynchronously
+	 * 
+	 * @param params
+	 *            Operation parameter
+	 * @return An IAsyncInvocation
+	 */
+	public IAsyncInvocation invokeAsync(Object... params);
 }

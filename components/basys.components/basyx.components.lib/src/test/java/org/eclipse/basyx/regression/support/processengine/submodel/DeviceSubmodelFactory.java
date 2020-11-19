@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.eclipse.basyx.regression.support.processengine.stubs.ICoilcar;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 
@@ -45,7 +47,7 @@ public class DeviceSubmodelFactory {
 		propList.add(property3);
 		// create the sub-model and add the property and operations to the sub-model
 		SubModel sm = new SubModel(propList, opList);
-
+		sm.setIdentification(new Identifier(IdentifierType.CUSTOM, id + "Custom"));
 		sm.setIdShort(id);
 		return sm;
 	}

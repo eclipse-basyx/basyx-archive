@@ -1,5 +1,6 @@
 package org.eclipse.basyx.components.devicemanager;
 
+import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
@@ -77,7 +78,7 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 	 * Returns the actual endpoint of the AAS managed by this component
 	 */
 	protected String getAASEndpoint(ModelUrn aasURN) {
-		return VABPathTools.concatenatePaths(getAASServerURL(), "/aas", aasURN.getEncodedURN());
+		return VABPathTools.concatenatePaths(getAASServerURL(), AASAggregatorProvider.PREFIX, aasURN.getEncodedURN(), "/aas");
 	}
 	
 	/**
@@ -90,7 +91,7 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 	 */
 	protected SubmodelDescriptor addSubModelDescriptorURI(AASDescriptor aasDescriptor, ModelUrn subModelURN, String subModelId) {
 		// Create sub model descriptor
-		String submodelEndpoint = VABPathTools.concatenatePaths(getAASServerURL(), "/aas/submodels", subModelId);
+		String submodelEndpoint = VABPathTools.concatenatePaths(getAASServerURL(), AASAggregatorProvider.PREFIX, VABPathTools.encodePathElement(aasDescriptor.getIdentifier().getId()), "/aas/submodels", subModelId);
 		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelId, subModelURN, submodelEndpoint);
 		
 		// Add sub model descriptor to AAS descriptor

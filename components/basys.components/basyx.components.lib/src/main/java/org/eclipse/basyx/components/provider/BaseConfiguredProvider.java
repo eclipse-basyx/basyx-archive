@@ -21,7 +21,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.slf4j.Logger;
@@ -96,7 +96,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 	 */
 	protected Collection<String> getConfiguredProperties(Map<Object, Object> cfgValues) {
 		// Split property string
-		return splitString((String) cfgValues.get(SubmodelElementProvider.PROPERTIES));
+		return splitString((String) cfgValues.get(MultiSubmodelElementProvider.ELEMENTS));
 	}
 
 	/**

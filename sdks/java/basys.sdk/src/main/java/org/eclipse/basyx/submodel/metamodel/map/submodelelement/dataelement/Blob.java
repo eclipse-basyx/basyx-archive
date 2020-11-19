@@ -1,5 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
@@ -15,7 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
  */
 public class Blob extends DataElement implements IBlob {
 	public static final String MIMETYPE="mimeType";
-	public static final String MODELTYPE = "blob";
+	public static final String MODELTYPE = "Blob";
 	
 	/**
 	 * Creates an empty Blob object
@@ -23,6 +25,17 @@ public class Blob extends DataElement implements IBlob {
 	public Blob() {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
+	}
+	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 * @param mimeType
+	 */
+	public Blob(String idShort, String mimeType) {
+		super(idShort);
+		putAll(new ModelType(MODELTYPE));
+		setMimeType(mimeType);
 	}
 
 	/**
@@ -62,17 +75,43 @@ public class Blob extends DataElement implements IBlob {
 		// Either model type is set or the element type specific attributes are contained (fallback)
 		// Note: Fallback is ambiguous - File has exactly the same attributes
 		// => would need value parsing in order to be able to differentiate
-		return MODELTYPE.equals(modelType) || (map.containsKey(Property.VALUE) && map.containsKey(MIMETYPE));
-	}
-
-	public void setValue(byte[] value) {
-		put(Property.VALUE, new String(value));
-		
+		return MODELTYPE.equals(modelType)
+				|| (modelType == null && (map.containsKey(Property.VALUE) && map.containsKey(MIMETYPE)));
 	}
 
 	@Override
+	public void setValue(Object value) {
+		if(value instanceof byte[]) {
+			List<Byte> list = new ArrayList<>();
+			
+			byte[] bytes = (byte[]) value;
+			
+			for (int i = 0; i < bytes.length; i++) {
+				list.add(bytes[i]);
+			}
+			
+			put(Property.VALUE, list);
+		}
+		else {
+			throw new IllegalArgumentException("Given Object is not a byte[]");
+		}
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
 	public byte[] getValue() {
-		return ((String) get(Property.VALUE)).getBytes();
+		if(!containsKey(Property.VALUE)) {
+			return null;
+		}
+		List<Number> list = (List<Number>) get(Property.VALUE);
+		byte[] ret = new byte[list.size()];
+		
+		for(int i = 0; i < list.size(); i++) {
+			ret[i] = list.get(i).byteValue();
+		}
+		
+		return ret;
 	}
 
 	public void setMimeType(String mimeType) {

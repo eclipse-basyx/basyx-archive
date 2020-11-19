@@ -23,7 +23,7 @@ import org.eclipse.basyx.vab.support.TypeDestroyer;
 */
 
 public class VABModelMap<V extends Object> implements Map<String, V> {
-	Map<String, V> map;
+	protected Map<String, V> map;
 
 	/**
 	 * Default constructor
@@ -183,6 +183,12 @@ public class VABModelMap<V extends Object> implements Map<String, V> {
 		return result;
 	}
 
+	/**
+	 * VABModelMaps are assumed to be equal iff they are containing the same data
+	 * independent of the used containers. <br>
+	 * In consequence, it does not matter if a collection is represented as Set or
+	 * as List, as long as the same elements are contained.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj) {
@@ -199,14 +205,49 @@ public class VABModelMap<V extends Object> implements Map<String, V> {
 		Map<String, Object> otherMap = TypeDestroyer.destroyType(otherVAB);
 
 		if (map == null) {
-			if (otherMap != null)
-				return false;
+			return otherMap == null;
 		} else {
 			Map<String, Object> thisMap = TypeDestroyer.destroyType((Map<String, Object>) map);
-			if (!thisMap.equals(otherMap)) {
+			return testEquivalence(thisMap, otherMap);
+		}
+	}
+ 
+	@SuppressWarnings("unchecked")
+	private boolean testEquivalence(Map<String, Object> a, Map<String, Object> b) {
+		if (a.size() != b.size()) {
+			return false;
+		}
+
+		for (String k : a.keySet()) {
+			Object aVal = a.get(k);
+			Object bVal = b.get(k);
+			if (aVal instanceof Map<?, ?> && !(bVal instanceof Map<?, ?>)) {
 				return false;
+			} else if (aVal instanceof Map<?, ?> && bVal instanceof Map<?, ?>) {
+				return testEquivalence((Map<String, Object>) aVal, (Map<String, Object>) bVal);
+			} else {
+				if (aVal == null) {
+					return bVal == null;
+				} else {
+					if (aVal.equals(bVal)) {
+						return true;
+					} else {
+						if (aVal instanceof Collection<?> && bVal instanceof Collection<?>) {
+							Collection<?> aCol = (Collection<?>) aVal;
+							Collection<?> bCol = (Collection<?>) bVal;
+							return aCol.size() == bCol.size() && aCol.containsAll(bCol);
+						} else {
+							return false;
+						}
+					}
+				}
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return map.toString();
 	}
 }

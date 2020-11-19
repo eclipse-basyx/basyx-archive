@@ -169,15 +169,25 @@ public class VABPathToolsTest {
 
 	@Test
 	public void testIsOperationPath() {
-		String[] positive = { "operations", "operations/", "/operations", "operations/", "operations/test/",
-				"operations/test", "/operations/test", "operations/test/" };
-		String[] negative = { "", "/operationX/", "/myOperation/", "/operationsFake/", "/operationsFake/operationX/" };
+		String[] positive = { "submodelElements/id/invoke", "submodelElements/id/invoke/",
+				"operations/id/invoke", "operations/id/invoke/", "operations/test", "elem/operations/id" };
+		String[] negative = { "", "/submodelElementsX/", "/myoperations/", "/submodelElementsFake/",
+				"/submodelElementsFake/operationX/", "submodelElements/id/" };
 		for (String test : positive) {
-			assertTrue(test, VABPathTools.isOperationPath(test));
+			assertTrue(test, VABPathTools.isOperationInvokationPath(test));
 		}
 		for (String test : negative) {
-			assertFalse(test, VABPathTools.isOperationPath(test));
+			assertFalse(test, VABPathTools.isOperationInvokationPath(test));
 		}
-		assertFalse(VABPathTools.isOperationPath(null));
+		assertFalse(VABPathTools.isOperationInvokationPath(null));
+	}
+	
+	@Test
+	public void testStripInvokeFromPath() {
+		assertEquals("id", VABPathTools.stripInvokeFromPath("id/invoke"));
+		assertEquals("", VABPathTools.stripInvokeFromPath("invoke"));
+		assertEquals("", VABPathTools.stripInvokeFromPath("/invoke"));
+		assertEquals("id/value", VABPathTools.stripInvokeFromPath("id/value"));
+		assertEquals("", VABPathTools.stripInvokeFromPath(""));
 	}
 }

@@ -36,7 +36,7 @@ public interface IAASRegistryService {
 	/**
 	 * Delete SM descriptor from registry
 	 */
-	public void delete(IIdentifier aasId, String smIdShort) throws ProviderException;
+	public void delete(IIdentifier aasId, IIdentifier smId) throws ProviderException;
 	
 	/**
 	 * Lookup AAS
@@ -49,5 +49,28 @@ public interface IAASRegistryService {
 	 * @return
 	 */
 	public List<AASDescriptor> lookupAll() throws ProviderException;
+
+	/**
+	 * Retrieves all SubmodelDescriptors of submodels of an AAS
+	 * 
+	 * @param aasId
+	 *            of the AAS
+	 * @return list of SubmodelDescriptors
+	 * @throws ProviderException
+	 */
+	public List<SubmodelDescriptor> lookupSubmodels(IIdentifier aasId) throws ProviderException;
+
+	/**
+	 * Retrieves the SubmodelDescriptor of a specific submodel of an AAS
+	 * 
+	 * @param aasId
+	 *            of the AAS
+	 * @param smId
+	 *            of the Submodel
+	 * @return the SubmodelDescriptor
+	 * @throws ProviderException
+	 */
+	public SubmodelDescriptor lookupSubmodel(IIdentifier aasId, IIdentifier smId) throws ProviderException;
+
 }
 

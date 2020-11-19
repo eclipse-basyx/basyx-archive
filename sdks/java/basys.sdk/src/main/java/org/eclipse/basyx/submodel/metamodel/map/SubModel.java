@@ -20,7 +20,9 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
-import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelValuesHelper;
+import org.eclipse.basyx.submodel.metamodel.map.helper.ElementContainerHelper;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -58,9 +60,6 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	 * Constructor
 	 */
 	public SubModel() {
-		// Add model type
-		putAll(new ModelType(MODELTYPE));
-
 		// Add qualifiers
 		putAll(new HasSemantics());
 		putAll(new Identifiable());
@@ -68,8 +67,23 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 		putAll(new HasDataSpecification());
 		putAll(new HasKind());
 
-		// Attributes
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+		setModelingKind(ModelingKind.INSTANCE);
+
 		put(SUBMODELELEMENT, new HashMap<String, ISubmodelElement>());
+
+	}
+	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 * @param identification
+	 */
+	public SubModel(String idShort, IIdentifier identification) {
+		this();
+		setIdentification(identification);
+		setIdShort(idShort);
 	}
 
 
@@ -78,6 +92,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	 */
 	public SubModel(HasSemantics semantics, Identifiable identifiable, Qualifiable qualifiable,
 			HasDataSpecification specification, HasKind hasKind) {
+		this();
 		// Add qualifiers
 		putAll(semantics);
 		putAll(identifiable);
@@ -107,41 +122,12 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	}
 
 
-	@SuppressWarnings("unchecked")
 	public static SubModel createAsFacade(Map<String, Object> map) {
 		if (map == null) {
 			return null;
 		}
 
-		SubModel ret = new SubModel();
-		
-		Map<String, Object> smElements = new HashMap<>();
-		
-		//SubmodelElemets can be given as Map, Set or List
-		//If it is a Set or List, convert it to a Map first
-		if(map.get(SUBMODELELEMENT) instanceof Collection<?>) {
-			Collection<Object> smElementsSet = (Collection<Object>) map.get(SUBMODELELEMENT);
-			for (Object o: smElementsSet) {
-				Map<String, Object> smElement = (Map<String, Object>) o;
-				String id = (String) smElement.get(Referable.IDSHORT);
-				smElements.put(id, smElement);
-			}
-		} else {
-			smElements = (Map<String, Object>) map.get(SUBMODELELEMENT);
-		}
-		
-		// Transfer map and overwrite SUBMODELELEMENt to prepare it for manual setting
-		ret.setMap(map);
-		ret.put(SUBMODELELEMENT, new HashMap<String, Object>());
-
-		//Iterate through all SubmodelELements and create Facades for them
-		for(Entry<String, Object> smElement: smElements.entrySet()) {
-			ret.getSubmodelElements().put(smElement.getKey(),
-					SubmodelElementFacadeFactory.createSubmodelElement(
-							(Map<String, Object>) smElement.getValue()));
-		}
-
-		return ret;
+		return SubmodelElementMapCollectionConverter.mapToSM(map);
 	}
 
 	@Override
@@ -165,6 +151,10 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 
 	public void setAdministration(AdministrativeInformation information) {
 		Identifiable.createAsFacade(this, getKeyElement()).setAdministration(information);
+	}
+
+	public void setIdentification(IIdentifier id) {
+		setIdentification(id.getIdType(), id.getId());
 	}
 
 	public void setIdentification(IdentifierType idType, String id) {
@@ -299,13 +289,44 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	public Map<String, ISubmodelElement> getSubmodelElements() {
 		return (Map<String, ISubmodelElement>) get(SUBMODELELEMENT);
 	}
+
 	@Override
-	public Collection<IConstraint> getQualifier() {
-		return Qualifiable.createAsFacade(this).getQualifier();
+	public Map<String, Object> getValues() {
+		return SubmodelValuesHelper.getSubmodelValue(this);
+	}
+	
+	@Override
+	public Collection<IConstraint> getQualifiers() {
+		return Qualifiable.createAsFacade(this).getQualifiers();
+	}
+
+	public void setQualifiers(Collection<IConstraint> qualifiers) {
+		Qualifiable.createAsFacade(this).setQualifiers(qualifiers);
 	}
 
 	@Override
 	public IReference getReference() {
 		return Identifiable.createAsFacade(this, getKeyElement()).getReference();
+	}
+
+	/**
+	 * Retrieves an element from element collection
+	 * @param id
+	 * @return retrieved element
+	 */
+	@Override
+	public ISubmodelElement getSubmodelElement(String id) {
+		Map<String, ISubmodelElement> submodelElems = getSubmodelElements();
+		return ElementContainerHelper.getElementById(submodelElems, id);
+	}
+
+	/**
+	 * Deletes an element from element collection
+	 * @param id
+	 */
+	@Override
+	public void deleteSubmodelElement(String id) {
+		Map<String, ISubmodelElement> submodelElems = getSubmodelElements();
+		ElementContainerHelper.removeElementById(submodelElems, id);
 	}
 }

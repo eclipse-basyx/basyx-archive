@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLQuery;
-import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLUpdate;
+import org.eclipse.basyx.tools.sql.query.DynamicSQLQuery;
+import org.eclipse.basyx.tools.sql.query.DynamicSQLUpdate;
 
 
 

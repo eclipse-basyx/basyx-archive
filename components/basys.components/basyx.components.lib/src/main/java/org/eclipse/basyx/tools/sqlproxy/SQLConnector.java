@@ -1,7 +1,7 @@
 package org.eclipse.basyx.tools.sqlproxy;
 
-import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
-import org.eclipse.basyx.components.sqlprovider.driver.SQLDriver;
+import org.eclipse.basyx.tools.sql.driver.ISQLDriver;
+import org.eclipse.basyx.tools.sql.driver.SQLDriver;
 
 /**
  * Base class for classes that connect to SQL databases

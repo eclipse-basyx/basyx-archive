@@ -35,6 +35,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
+import org.eclipse.basyx.vab.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.vab.model.VABModelMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,13 +62,25 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public static final String TYPE = "type";
 	public static final String ADDRESS = "address";
 	public static final String ENDPOINTS = "endpoints";
-	public static final String MODELTYPE = "AssetAdministationShell";
+	public static final String MODELTYPE = "AssetAdministrationShell";
 
 	/**
 	 * Constructor
 	 */
 	public AssetAdministrationShell() {
 		this(null, null, new Asset(), new HashSet<SubModel>(), new HashSet<IConceptDictionary>(), new HashSet<IView>());
+	}
+	
+	/**
+	 * Constructor accepting only mandatory attributes
+	 * @param idShort
+	 * @param identification
+	 * @param asset
+	 */
+	public AssetAdministrationShell(String idShort, IIdentifier identification, Asset asset) {
+		this(null, null, asset, new HashSet<SubModel>(), new HashSet<IConceptDictionary>(), new HashSet<IView>());
+		setIdentification(identification);
+		setIdShort(idShort);
 	}
 
 	public AssetAdministrationShell(Reference derivedFrom, Security security, Asset asset,
@@ -289,6 +302,13 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		addSubmodelReferences(submodel);
 	}
 
+
+	@Override
+	public void removeSubmodel(IIdentifier id) {
+		// Currently not implemented since future of Submodel References in AAS is not clear
+		throw new FeatureNotImplementedException();
+	}
+
 	/**
 	 * Allows addition of a concept description to the concept dictionary
 	 * 
@@ -322,7 +342,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	private void addSubmodelReferences(SubModel submodel) {
 		addSubmodelReference(submodel.getReference());
 	}
-	
+
 	private KeyElements getKeyElement() {
 		return KeyElements.ASSETADMINISTRATIONSHELL;
 	}
@@ -342,4 +362,10 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public IReference getReference() {
 		return Identifiable.createAsFacade(this, getKeyElement()).getReference();
 	}
+
+	@Override
+	public ISubModel getSubmodel(IIdentifier id) {
+		throw new RuntimeException("getSubmodel on local copy is not supported");
+	}
+
 }

@@ -16,6 +16,12 @@ class AdministrativeInformation
   , public virtual vab::ElementMap
 {
 public:
+  struct Path {
+    static constexpr char Version[] = "version";
+    static constexpr char Revision[] = "revision";
+  };
+
+public:
   AdministrativeInformation();
   AdministrativeInformation(const std::string & version, const std::string & revision);
 

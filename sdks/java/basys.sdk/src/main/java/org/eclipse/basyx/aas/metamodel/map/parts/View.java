@@ -45,6 +45,15 @@ public class View extends VABModelMap<Object> implements IView {
 		// Default values
 		put(CONTAINEDELEMENT, new HashSet<Reference>());
 	}
+	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 */
+	public View(String idShort) {
+		this();
+		setIdShort(idShort);
+	}
 
 	/**
 	 * 

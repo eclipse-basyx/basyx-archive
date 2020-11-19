@@ -30,6 +30,19 @@ public class BasicEvent extends SubmodelElement implements IBasicEvent {
 		put(OBSERVED, observed);
 	}
 	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 * @param observed
+	 */
+	public BasicEvent(String idShort, IReference observed) {
+		super(idShort);
+		
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+		put(OBSERVED, observed);
+	}
+	
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.BASICEVENT;
@@ -53,12 +66,28 @@ public class BasicEvent extends SubmodelElement implements IBasicEvent {
 	public static boolean isBasicEvent(Map<String, Object> map) {
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained (fallback)
-		return MODELTYPE.equals(modelType) || map.containsKey(OBSERVED);
+		return MODELTYPE.equals(modelType) || (modelType == null && map.containsKey(OBSERVED));
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public IReference getObserved() {
 		return Reference.createAsFacade((Map<String, Object>) get(OBSERVED));
+	}
+
+	@Override
+	public IReference getValue() {
+		return getObserved();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setValue(Object value) {
+		if(Reference.isReference(value)) {
+			put(OBSERVED, Reference.createAsFacade((Map<String, Object>) value));
+		}
+		else {
+			throw new IllegalArgumentException("Given Object is not a Reference");
+		}
 	}
 }

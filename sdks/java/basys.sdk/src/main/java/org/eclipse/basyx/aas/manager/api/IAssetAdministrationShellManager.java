@@ -31,12 +31,22 @@ public interface IAssetAdministrationShellManager {
 	/**
 	 * Creates an AAS on a remote server.
 	 */
+	@Deprecated
 	void createAAS(AssetAdministrationShell aas, IIdentifier aasId, String endpoint);
 	
 	/**
+	 * Creates an AAS on a remote server
+	 * 
+	 * @param aas
+	 * @param aasId
+	 * @param endpoint
+	 */
+	void createAAS(AssetAdministrationShell aas, String endpoint);
+
+	/**
 	 * Unlink an AAS from the system
 	 */
-	void deleteAAS(String id) throws Exception;
+	void deleteAAS(IIdentifier id) throws Exception;
 
 	/**
 	 * Retrieves a submodel
@@ -48,6 +58,14 @@ public interface IAssetAdministrationShellManager {
 	 * registered in the directory
 	 */
 	void createSubModel(IIdentifier aasId, SubModel submodel);
+
+	/**
+	 * Deletes a submodel on a remote server and removes its registry entry
+	 * 
+	 * @param aasId
+	 * @param submodelId
+	 */
+	void deleteSubModel(IIdentifier aasId, IIdentifier submodelId);
 
 	/**
 	 * Retrieves all submodels in a specific AAS

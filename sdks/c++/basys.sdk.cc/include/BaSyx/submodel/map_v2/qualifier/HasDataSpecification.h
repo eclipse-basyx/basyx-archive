@@ -13,6 +13,11 @@ class HasDataSpecification :
 	public virtual api::IHasDataSpecification,
 	public virtual vab::ElementMap
 {
+public:
+  struct Path {
+    static constexpr char DataSpecification[] = "dataSpecification";
+  };
+
 private:
 	basyx::object::object_list_t dataSpecification;
 public:

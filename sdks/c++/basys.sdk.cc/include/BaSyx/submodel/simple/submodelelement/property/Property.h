@@ -69,6 +69,8 @@ public:
 	{
 		this->valueId = valueId;
 	}
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::Property; };
 };
 
 }

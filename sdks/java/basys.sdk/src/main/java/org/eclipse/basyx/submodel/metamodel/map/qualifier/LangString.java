@@ -12,7 +12,7 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  */
 public class LangString extends VABModelMap<Object> {
 	private static final String LANGUAGE = "language";
-	private static final String DESCRIPTION = "description";
+	private static final String DESCRIPTION = "text";
 	
 	private LangString() {
 	}
@@ -42,6 +42,17 @@ public class LangString extends VABModelMap<Object> {
 		LangString ret = new LangString();
 		ret.setMap(map);
 		return ret;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static boolean isLangString(Object value) {
+		if(!(value instanceof Map<?, ?>)) {
+			return false;
+		}
+		
+		Map<String, Object> map = (Map<String, Object>) value;
+		
+		return map.get(LANGUAGE) instanceof String && map.get(DESCRIPTION) instanceof String;
 	}
 	
 	/**

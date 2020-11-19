@@ -9,5 +9,5 @@ import java.util.Collection;
 */
 
 public interface IQualifiable {
-	public Collection<IConstraint> getQualifier();
+	public Collection<IConstraint> getQualifiers();
 }

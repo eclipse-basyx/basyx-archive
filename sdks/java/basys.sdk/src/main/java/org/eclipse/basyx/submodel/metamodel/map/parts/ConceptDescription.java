@@ -42,6 +42,17 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 		// Add attributes
 		put(ISCASEOF, new HashSet<Reference>());
 	}
+	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 * @param identification
+	 */
+	public ConceptDescription(String idShort, IIdentifier identification) {
+		this();
+		setIdentification(identification.getIdType(), identification.getId());
+		setIdShort(idShort);
+	}
 
 	/**
 	 * Creates a DataSpecificationIEC61360 object from a map

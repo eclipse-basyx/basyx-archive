@@ -9,6 +9,7 @@ import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
 import org.eclipse.basyx.submodel.metamodel.api.IElement;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -25,7 +26,7 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	/**
 	 * Return all registered submodels of this AAS
 	 * 
-	 * @return
+	 * @return IdShort -> ISubmodel
 	 */
 	public Map<String, ISubModel> getSubModels();
 
@@ -37,12 +38,26 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	public Collection<IReference> getSubmodelReferences();
 
 	/**
-	 * Add a sub model to the AAS
+	 * Add a submodel to the AAS
 	 * 
 	 * @param subModel
 	 *            The added sub model
 	 */
 	public void addSubModel(SubModel subModel);
+
+	/**
+	 * Removes a submodel from the AAS
+	 * 
+	 * @param id
+	 */
+	public void removeSubmodel(IIdentifier id);
+
+	/**
+	 * Gets a submodel from the AAS
+	 * 
+	 * @param id
+	 */
+	public ISubModel getSubmodel(IIdentifier id);
 
 	/**
 	 * Gets the definition of the security relevant aspects of the AAS.

@@ -3,8 +3,10 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.connected.subm
 import static org.junit.Assert.assertEquals;
 
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedRange;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
-import org.eclipse.basyx.submodel.restapi.PropertyProvider;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.RangeValue;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
@@ -24,10 +26,10 @@ public class TestConnectedRange {
 	
 	@Before
 	public void build() {
-		range = new Range("valueType", new Integer(1), new Integer(10));
+		range = new Range(PropertyValueTypeDef.Integer, new Integer(1), new Integer(10));
 		
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
-				new PropertyProvider(new TypeDestroyingProvider(new VABLambdaProvider(range))));
+				new SubmodelElementProvider(new TypeDestroyingProvider(new VABLambdaProvider(range))));
 
 		connectedRange = new ConnectedRange(manager.connectToVABElement(""));
 	}
@@ -54,5 +56,29 @@ public class TestConnectedRange {
 	@Test
 	public void testGetMax() {
 		assertEquals(range.getMax(), connectedRange.getMax());
+	}
+	
+	/**
+	 * Tests if getValue() returns the correct value
+	 */
+	@Test
+	public void testGetValue() {
+		RangeValue rv = connectedRange.getValue();
+		assertEquals(range.getMin(), rv.getMin());
+		assertEquals(range.getMax(), rv.getMax());
+	}
+	
+	/**
+	 * Tests if setValue() sets the correct value.
+	 */
+	@Test
+	public void testSetValue() {
+		RangeValue value = new RangeValue(2, 8);
+		
+		connectedRange.setValue(value);
+		
+		assertEquals(2, connectedRange.getMin());
+		assertEquals(8, connectedRange.getMax());
+		assertEquals(range.getValueType(), connectedRange.getValueType());
 	}
 }

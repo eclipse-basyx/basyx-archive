@@ -34,7 +34,7 @@ public class CoilcarAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider
 		SubModel coilcarSubmodel = new DeviceSubmodelFactory().create(submodelid, new Coilcar());
 
 		getModelProvider().setAssetAdministrationShell(new AASModelProvider(coilcarAAS));
-		getModelProvider().addSubmodel(submodelid, new SubModelProvider(coilcarSubmodel));
+		getModelProvider().addSubmodel(new SubModelProvider(coilcarSubmodel));
 	}
 
 }

@@ -2,7 +2,9 @@ package org.eclipse.basyx.aas.restapi;
 
 import java.util.HashMap;
 
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -43,81 +45,67 @@ public class MultiAASProvider implements IModelProvider {
 	@Override
 	public Object getModelPropertyValue(String path) throws ProviderException {
 		String aasId = getId(path);
-		if (aasId != null) {
-			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
-			if (provider == null) {
-				return null;
-			}
-			String subPath = getSubPath(path, aasId);
-			return provider.getModelPropertyValue(subPath);
+		VABMultiSubmodelProvider provider = aas_providers.get(aasId);
+		if (provider == null) {
+			throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 		}
-		return null;
+		String subPath = getSubPath(path, aasId);
+		return provider.getModelPropertyValue(subPath);
 	}
 
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		String aasId = getId(path);
-		if (aasId != null) {
-			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
-			if (provider == null) {
-				return;
-			}
-			String subPath = getSubPath(path, aasId);
-			provider.setModelPropertyValue(subPath, newValue);
+		VABMultiSubmodelProvider provider = aas_providers.get(aasId);
+		if (provider == null) {
+			throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 		}
+		String subPath = getSubPath(path, aasId);
+		provider.setModelPropertyValue(subPath, newValue);
 	}
 
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
 		String aasId = getId(path);
-		if (aasId != null) {
-			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
-			if (provider == null) {
-				return;
-			}
-			String subPath = getSubPath(path, aasId);
-			provider.createValue(subPath, newEntity);
+		VABMultiSubmodelProvider provider = aas_providers.get(aasId);
+		if (provider == null) {
+			throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 		}
+		String subPath = getSubPath(path, aasId);
+		provider.createValue(subPath, newEntity);
 	}
 
 	@Override
 	public void deleteValue(String path) throws ProviderException {
 		String aasId = getId(path);
-		if (aasId != null) {
-			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
-			if (provider == null) {
-				return;
-			}
-			String subPath = getSubPath(path, aasId);
-			provider.deleteValue(subPath);
+		VABMultiSubmodelProvider provider = aas_providers.get(aasId);
+		if (provider == null) {
+			throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 		}
+		String subPath = getSubPath(path, aasId);
+		provider.deleteValue(subPath);
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws ProviderException {
 		String aasId = getId(path);
-		if (aasId != null) {
-			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
-			if (provider == null) {
-				return;
-			}
-			String subPath = getSubPath(path, aasId);
-			provider.deleteValue(subPath, obj);
+		VABMultiSubmodelProvider provider = aas_providers.get(aasId);
+		if (provider == null) {
+			throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 		}
+		String subPath = getSubPath(path, aasId);
+		provider.deleteValue(subPath, obj);
 	}
 
 	@Override
 	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
 		String aasId = getId(path);
-		if (aasId != null) {
-			VABMultiSubmodelProvider provider = aas_providers.get(aasId);
-			if (provider == null) {
-				return null;
-			}
-			String subPath = getSubPath(path, aasId);
-			return provider.invokeOperation(subPath, parameter);
+		VABMultiSubmodelProvider provider = aas_providers.get(aasId);
+		if (provider == null) {
+			throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 		}
-		return null;
+		String subPath = getSubPath(path, aasId);
+		return provider.invokeOperation(subPath, parameter);
 	}
 
 	/**
@@ -131,7 +119,7 @@ public class MultiAASProvider implements IModelProvider {
 	 */
 	private String getId(String path) {
 		if (path == null) {
-			return null;
+			throw new MalformedRequestException("No AASId specified.");
 		}
 
 		String[] elements = VABPathTools.splitPath(path);
@@ -139,7 +127,7 @@ public class MultiAASProvider implements IModelProvider {
 			String aasId = elements[0];
 			return aasId;
 		} else {
-			return null;
+			throw new MalformedRequestException("No AASId specified.");
 		}
 	}
 

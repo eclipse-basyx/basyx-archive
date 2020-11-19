@@ -1,7 +1,9 @@
 package org.eclipse.basyx.aas.metamodel.connected;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
@@ -22,6 +24,8 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInforma
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedElement;
+import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
@@ -29,29 +33,47 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
+import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 
 /**
  * "Connected" implementation of IAssetAdministrationShell
  * 
- * @author rajashek, Zai Zhang
+ * @author rajashek, Zai Zhang, schnicke
  *
  */
 public class ConnectedAssetAdministrationShell extends ConnectedElement implements IAssetAdministrationShell {
-
-	ConnectedAssetAdministrationShellManager manager;
-
 	/**
 	 * Constructor creating a ConnectedAAS pointing to the AAS represented by proxy
-	 * and path
 	 * 
-	 * @param path
 	 * @param proxy
 	 * @param manager
 	 */
+	@Deprecated
 	public ConnectedAssetAdministrationShell(VABElementProxy proxy, ConnectedAssetAdministrationShellManager manager) {
 		super(proxy);
-		this.manager = manager;
+	}
+
+	/**
+	 * Constructor creating a ConnectedAAS pointing to the AAS represented by proxy
+	 * 
+	 * @param proxy
+	 */
+	public ConnectedAssetAdministrationShell(VABElementProxy proxy) {
+		super(proxy);
+	}
+
+	/**
+	 * Constructor creating a ConnectedAAS pointing to the AAS represented by proxy
+	 * and an already cached local copy
+	 * 
+	 * @param proxy
+	 * @param localCopy
+	 */
+	public ConnectedAssetAdministrationShell(VABElementProxy proxy, AssetAdministrationShell localCopy) {
+		super(proxy);
 	}
 
 	/**
@@ -118,15 +140,28 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 		return set.stream().map(ConceptDictionary::createAsFacade).collect(Collectors.toSet());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, ISubModel> getSubModels() {
-		return manager.retrieveSubmodels(getIdentification());
+		Collection<Map<String, Object>> submodelCollection = (Collection<Map<String, Object>>) getProxy().getModelPropertyValue(AssetAdministrationShell.SUBMODELS);
+
+		Map<String, ISubModel> ret = new HashMap<>();
+
+		for (Map<String, Object> m : submodelCollection) {
+			SubModel sm = SubModel.createAsFacade(m);
+			String path = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, sm.getIdShort(), SubModelProvider.SUBMODEL);
+			ret.put(sm.getIdShort(), new ConnectedSubModel(getProxy().getDeepProxy(path), sm));
+		}
+
+		return ret;
 	}
 
 	@Override
 	public void addSubModel(SubModel subModel) {
 		subModel.setParent(getReference());
-		getProxy().createValue("/submodels", subModel);
+		Map<String, Object> convertedMap = SubmodelElementMapCollectionConverter.smToMap(subModel);
+		String accessPath = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, subModel.getIdShort());
+		getProxy().setModelPropertyValue(accessPath, convertedMap);
 	}
 
 	@Override
@@ -168,5 +203,33 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	@Override
 	public IReference getReference() {
 		return Identifiable.createAsFacade(getElem(), getKeyElement()).getReference();
+	}
+
+	/**
+	 * Returns a local copy of the AAS, i.e. a snapshot of the current state. <br>
+	 * No changes of this copy are reflected in the remote AAS
+	 * 
+	 * @return the local copy
+	 */
+	public AssetAdministrationShell getLocalCopy() {
+		return AssetAdministrationShell.createAsFacade(getElem());
+	}
+
+	@Override
+	public void removeSubmodel(IIdentifier id) {
+		ISubModel sm = getSubmodel(id);
+
+		String path = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, sm.getIdShort());
+		getProxy().deleteValue(path);
+	}
+
+	@Override
+	public ISubModel getSubmodel(IIdentifier id) {
+		// FIXME: Change this when AAS API supports Submodel retrieval by Identifier
+		Optional<ISubModel> op = getSubModels().values().stream().filter(sm -> sm.getIdentification().getId().equals(id.getId())).findFirst();
+		if (!op.isPresent()) {
+			throw new ResourceNotFoundException("AAS " + getIdentification() + " does not have a submodel with id " + id);
+		}
+		return op.get();
 	}
 }

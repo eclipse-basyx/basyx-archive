@@ -5,12 +5,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
+import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnector;
 import org.slf4j.Logger;
@@ -27,7 +30,7 @@ public class AASAggregatorProxy implements IAASAggregator {
 	 *            The endpoint of the aggregator with a HTTP-REST interface
 	 */
 	public AASAggregatorProxy(String aasAggregatorURL) {
-		this(new JSONConnector(new HTTPConnector(aasAggregatorURL)));
+		this(new JSONConnector(new HTTPConnector(harmonizeURL(aasAggregatorURL))));
 	}
 
 	/**
@@ -37,7 +40,20 @@ public class AASAggregatorProxy implements IAASAggregator {
 	 * @param provider
 	 */
 	public AASAggregatorProxy(IModelProvider provider) {
-		this.provider = new VABElementProxy("/aasList", provider);
+		this.provider = new VABElementProxy("", provider);
+	}
+
+	/**
+	 * Adds the "/shells" suffix if it does not exist
+	 * 
+	 * @param url
+	 * @return
+	 */
+	private static String harmonizeURL(String url) {
+		if (!url.endsWith(AASAggregatorProvider.PREFIX)) {
+			url = url + AASAggregatorProvider.PREFIX;
+		}
+		return url;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -45,32 +61,60 @@ public class AASAggregatorProxy implements IAASAggregator {
 	public Collection<IAssetAdministrationShell> getAASList() {
 		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) provider.getModelPropertyValue("");
 		logger.debug("Getting all AAS");
-		return collection.stream().map(m -> AssetAdministrationShell.createAsFacade(m)).collect(Collectors.toSet());
+		return collection.stream().map(m -> AssetAdministrationShell.createAsFacade(m)).map(aas -> getConnectedAAS(aas.getIdentification(), aas)).collect(Collectors.toList());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public IAssetAdministrationShell getAAS(IIdentifier aasId) {
 		logger.debug("Getting AAS with id " + aasId);
-		return AssetAdministrationShell.createAsFacade((Map<String, Object>) provider.getModelPropertyValue(aasId.getId()));
+		return getConnectedAAS(aasId);
+	}
+
+	@SuppressWarnings("unchecked")
+	private ConnectedAssetAdministrationShell getConnectedAAS(IIdentifier aasId) {
+		VABElementProxy proxy = getAASProxy(aasId);
+		Map<String, Object> map = (Map<String, Object>) proxy.getModelPropertyValue("");
+		AssetAdministrationShell aas = AssetAdministrationShell.createAsFacade(map);
+		return new ConnectedAssetAdministrationShell(proxy, aas);
+	}
+
+	private ConnectedAssetAdministrationShell getConnectedAAS(IIdentifier aasId, AssetAdministrationShell localCopy) {
+		VABElementProxy proxy = getAASProxy(aasId);
+		return new ConnectedAssetAdministrationShell(proxy, localCopy);
+	}
+
+
+	private VABElementProxy getAASProxy(IIdentifier aasId) {
+		String path = VABPathTools.concatenatePaths(getEncodedIdentifier(aasId), "aas");
+		VABElementProxy proxy = new VABElementProxy(path, provider);
+		return proxy;
 	}
 
 	@Override
 	public void createAAS(AssetAdministrationShell aas) {
-		provider.createValue("", aas);
+		provider.setModelPropertyValue(getEncodedIdentifier(aas.getIdentification()), aas);
 		logger.info("AAS with Id " + aas.getIdentification().getId() + " created");
 	}
 
 	@Override
 	public void updateAAS(AssetAdministrationShell aas) {
-		provider.setModelPropertyValue(aas.getIdentification().getId(), aas);
+		provider.setModelPropertyValue(getEncodedIdentifier(aas.getIdentification()), aas);
 		logger.info("AAS with Id " + aas.getIdentification().getId() + " updated");
 	}
 
 	@Override
 	public void deleteAAS(IIdentifier aasId) {
-		provider.deleteValue(aasId.getId());
-		logger.info("AAS with Id " + aasId.getId() + " created");
+		provider.deleteValue(getEncodedIdentifier(aasId));
+		logger.info("AAS with Id " + aasId.getId() + " deleted");
+	}
+
+	@Override
+	public IModelProvider getAASProvider(IIdentifier aasId) {
+		return new VABElementProxy(getEncodedIdentifier(aasId), provider);
+	}
+
+	private String getEncodedIdentifier(IIdentifier aasId) {
+		return VABPathTools.encodePathElement(aasId.getId());
 	}
 
 }

@@ -3,26 +3,20 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Formula;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.testsuite.regression.submodel.metamodel.TestSubmodelSuite;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -31,38 +25,25 @@ import org.junit.Test;
  * @author haque
  *
  */
-public class TestSubmodel {
-	
+public class TestSubmodel extends TestSubmodelSuite {
+
+	ISubModel submodel;
+
+	@Before
+	public void build() {
+		submodel = getReferenceSubmodel();
+	}
+
 	@Test
-	public void testAddSubmodelElement() {
-		String submodelId = "submodelID";
-		String identifierId = "testId";
-		String propId = "propertyID";
-		
-		HasSemantics semantics = new HasSemantics(new Reference(new Key(KeyElements.ASSET, true, "testValue", IdentifierType.IRDI)));
-		Identifiable identifiable = new Identifiable("1", "5", submodelId, "testCategory", new LangStrings("DE", "test"), IdentifierType.IRDI, identifierId);
-		Qualifiable qualifiable = new Qualifiable(new Formula(Collections.singleton(new Reference(new Key(KeyElements.BLOB, true, "TestValue", IdentifierType.IRI)))));
-		HasDataSpecification specification = new HasDataSpecification(new ArrayList<>(), Collections.singleton(new Reference(new Key(KeyElements.BLOB, true, "testRef", IdentifierType.IRI))));
-		HasKind hasKind = new HasKind(ModelingKind.INSTANCE);
-		
-		// Create a submodel 
-		SubModel subModel = new SubModel(semantics, identifiable, qualifiable, specification, hasKind);
-		
-		//Create a submodel element and set an id to it
-		Property property = new Property("testValue");
-		property.setIdShort(propId);
-		
-		// Add the element to the submodel
-		subModel.addSubModelElement(property);
-		
-		// Create expected map of added submodel element for assertion
-		Map<String, ISubmodelElement> submodelElemMap = new HashMap<String, ISubmodelElement>();
-		submodelElemMap.put(propId, property);
-		assertEquals(submodelElemMap, subModel.getSubmodelElements());
+	public void testParentAddSubmodelElement() {
+		Property prop = new Property("propIdShort", PropertyValueTypeDef.String);
+		IIdentifier identifier = new ModelUrn("testId");
+		SubModel submodel = new SubModel("smIdShort", identifier);
+		submodel.addSubModelElement(prop);
 		
 		// Create expected parent of the element for assertion
-		Reference expectedParent = new Reference(new Key(KeyElements.SUBMODEL, true, identifierId, IdentifierType.IRDI));
-		assertEquals(expectedParent, property.getParent());
+		Reference expectedParent = new Reference(new Key(KeyElements.SUBMODEL, true, identifier.getId(), identifier.getIdType()));
+		assertEquals(expectedParent, prop.getParent());
 	} 
 
 	/**
@@ -86,5 +67,10 @@ public class TestSubmodel {
 		SubModel facade = SubModel.createAsFacade(sm);
 		assertTrue(facade.get(SubModel.SUBMODELELEMENT) instanceof Map<?, ?>);
 		assertEquals(expected, facade.getSubmodelElements().get(propId));
+	}
+
+	@Override
+	protected ISubModel getSubmodel() {
+		return submodel;
 	}
 }

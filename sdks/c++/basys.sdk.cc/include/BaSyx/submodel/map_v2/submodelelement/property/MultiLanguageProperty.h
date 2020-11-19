@@ -17,6 +17,12 @@ class MultiLanguageProperty :
 	public SubmodelElement,
 	public ModelType<ModelTypes::MultiLanguageProperty>
 {
+public:
+  struct Path {
+    static constexpr char Value[] = "value";
+    static constexpr char ValueId[] = "valueId";
+    static constexpr char Kind[] = "kind";
+  };
 private:
 	LangStringSet value;
 	Reference valueId;

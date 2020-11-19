@@ -6,7 +6,7 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelemen
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.AASLambdaPropertyHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.restapi.PropertyProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.junit.Test;
@@ -31,11 +31,11 @@ public class TestAASLambdaPropertyHelper {
 		});
 		
 		// Wrap in provider
-		PropertyProvider provider = new PropertyProvider(new VABLambdaProvider(temperature));
+		SubmodelElementProvider provider = new SubmodelElementProvider(new VABLambdaProvider(temperature));
 		ConnectedProperty connectedProperty = new ConnectedProperty(new VABElementProxy("", provider));
 
 		// Check correct property type
-		String expectedType = PropertyValueTypeDef.Double.toString();
+		PropertyValueTypeDef expectedType = PropertyValueTypeDef.Double;
 		assertEquals(expectedType, connectedProperty.getValueType());
 		
 		// Check value is correctly retrievable by property

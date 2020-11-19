@@ -2,6 +2,7 @@ package org.eclipse.basyx.testsuite.regression.submodel.restapi;
 
 import java.util.function.Function;
 
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -16,6 +17,10 @@ import org.eclipse.basyx.vab.exception.provider.ProviderException;
  *
  */
 public class SimpleAASSubmodel extends SubModel {
+
+	public static final String INTPROPIDSHORT = "integerProperty";
+	public static final String OPERATIONSIMPLEIDSHORT = "simple";
+
 	public SimpleAASSubmodel() {
 		this("SimpleAASSubmodel");
 	}
@@ -27,9 +32,10 @@ public class SimpleAASSubmodel extends SubModel {
 		// Create sub model
 
 		setIdShort(idShort);
+		setIdentification(new ModelUrn("simpleAASSubmodelUrn"));
 
 		Property intProp = new Property(123);
-		intProp.setIdShort("integerProperty");
+		intProp.setIdShort(INTPROPIDSHORT);
 		addSubModelElement(intProp);
 
 		Property stringProp = new Property("Test");
@@ -50,7 +56,7 @@ public class SimpleAASSubmodel extends SubModel {
 		Operation simple = new Operation((Function<Object[], Object>) v -> {
 			return true;
 		});
-		simple.setIdShort("simple");
+		simple.setIdShort(OPERATIONSIMPLEIDSHORT);
 		addSubModelElement(simple);
 
 		// Create example operations
@@ -68,13 +74,19 @@ public class SimpleAASSubmodel extends SubModel {
 		exception2.setIdShort("exception2");
 		addSubModelElement(exception2);
 
+		Operation opInCollection = new Operation((Function<Object[], Object>) v -> {
+			return 123;
+		});
+		opInCollection.setIdShort("operationId");
+		
 		SubmodelElementCollection containerProp = new SubmodelElementCollection();
 		containerProp.setIdShort("container");
-		containerProp.addElement(intProp);
+		containerProp.addSubModelElement(intProp);
+		containerProp.addSubModelElement(opInCollection);
 
 		SubmodelElementCollection containerPropRoot = new SubmodelElementCollection();
 		containerPropRoot.setIdShort("containerRoot");
-		containerPropRoot.addElement(containerProp);
+		containerPropRoot.addSubModelElement(containerProp);
 		addSubModelElement(containerPropRoot);
 	}
 }

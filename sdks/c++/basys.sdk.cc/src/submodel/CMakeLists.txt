@@ -23,6 +23,8 @@ INTERFACE ${CMAKE_INSTALL_PREFIX}/include
 
 target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
     PRIVATE
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/constexpr.cpp
+
 	    ${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/AssetKind.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/DataTypeIEC61360.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/LevelType.cpp
@@ -67,6 +69,18 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/aas/AssetAdministrationShell.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/aas/Asset.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/LangStringSet.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/Timezone.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/AnyURI.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/DateTime.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/Date.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/DayTimeDuration.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/YearMonthDuration.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/Time.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/GYearMonth.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/GYear.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/GMonthDay.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/GDay.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/GMonth.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/constraint/Formula.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/constraint/Qualifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/dataspecification/DataSpecification.cpp
@@ -151,6 +165,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/operation/IOperationVariable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/property/IMultiLanguageProperty.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/property/IProperty.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/property/XSDAnySimpleType.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/property/IReferenceElement.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/IRelationshipElement.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/IAnnotatedRelationshipElement.h
@@ -197,6 +212,18 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/aas/Asset.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/ElementContainer.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/LangStringSet.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/Timezone.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/AnyURI.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/DateTime.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/Date.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/DayTimeDuration.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/YearMonthDuration.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/Time.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/GYearMonth.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/GYear.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/GMonthDay.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/GDay.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/GMonth.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/constraint/Formula.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/constraint/Qualifier.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/DataSpecification.h

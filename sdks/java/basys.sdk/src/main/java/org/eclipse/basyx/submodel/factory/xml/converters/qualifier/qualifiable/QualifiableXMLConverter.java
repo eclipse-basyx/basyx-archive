@@ -17,6 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Formula;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -50,7 +51,7 @@ public class QualifiableXMLConverter {
 		//The IQualifiable object has to be treated as Map here, as the Interface has no Setters
 		
 		Map<String, Object> qualifierObj = (Map<String, Object>) xmlObject.get(QUALIFIER);
-		qualifiable.put(Qualifiable.CONSTRAINTS, parseConstraints(qualifierObj));
+		qualifiable.put(Qualifiable.QUALIFIERS, parseConstraints(qualifierObj));
 	}
 	
 	
@@ -126,7 +127,7 @@ public class QualifiableXMLConverter {
 		qualifier.setType(type);
 		qualifier.setValue(value);
 		qualifier.setValueId(ref);
-		qualifier.setValueType(valueType);
+		qualifier.setValueType(PropertyValueTypeDefHelper.fromName(valueType));
 		
 		return qualifier;
 	}
@@ -143,10 +144,10 @@ public class QualifiableXMLConverter {
 	 * @param qualifiable the IQualifiable object to be converted to XML
 	 */
 	public static void populateQualifiableXML(Document document, Element root, IQualifiable qualifiable) {
-		if(qualifiable.getQualifier() == null || qualifiable.getQualifier().size() == 0) return;
+		if(qualifiable.getQualifiers() == null || qualifiable.getQualifiers().size() == 0) return;
 		
 		
-		Collection<IConstraint> constraints = qualifiable.getQualifier();
+		Collection<IConstraint> constraints = qualifiable.getQualifiers();
 		
 		Element qualifierRoot = document.createElement(QUALIFIER);
 		
@@ -209,7 +210,7 @@ public class QualifiableXMLConverter {
 		IReference qualId = qualifier.getValueId();
 		String type = XMLHelper.getString(qualifier.getType());
 		String value = XMLHelper.getString(qualifier.getValue());
-		String valueType = XMLHelper.getString(qualifier.getValueType());
+		String valueType = qualifier.getValueType().toString();
 		Element qualifierRoot = document.createElement(QUALIFIER);
 		
 		Element qualifierValueId = document.createElement(VALUE_ID);

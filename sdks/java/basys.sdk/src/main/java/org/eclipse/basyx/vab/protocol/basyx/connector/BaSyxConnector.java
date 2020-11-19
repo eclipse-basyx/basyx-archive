@@ -278,4 +278,14 @@ public class BaSyxConnector implements IBaSyxConnector {
 
 		return call;
 	}
+
+	/**
+	 * Get string representation of endpoint for given path for debugging. 
+	 * @param path Requested path
+	 * @return String representing requested endpoint
+	 */
+	@Override
+	public String getEndpointRepresentation(String path) {
+		return "basyx://" + serverSocketAddress.getHostString() + ":" + serverSocketAddress.getPort() + "/" + path;
+	}
 }

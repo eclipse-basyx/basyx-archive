@@ -2,18 +2,21 @@ package org.eclipse.basyx.examples.mockup.devicemanager;
 
 import java.util.HashMap;
 
+import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.devicemanager.TCPControllableDeviceManagerComponent;
+import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.models.controlcomponent.ControlComponentChangeListener;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
@@ -29,7 +32,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDeviceManagerComponent implements ControlComponentChangeListener {
-	
+
 	/**
 	 * Initiates a logger using the current class
 	 */
@@ -39,6 +42,8 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 	 * AAS server connection
 	 */
 	protected VABElementProxy aasServerConnection = null;
+
+	protected String aasPath;
 
 	
 	
@@ -52,7 +57,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		
 		
 		// Set registry that will be used by this service
-		setRegistry(new AASRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL"));
+		setRegistry(new AASRegistryProxy("http://localhost:8080/" + BaSyxExamplesContext.REGISTRYURL));
 		
 		
 		// Set service connection manager and create AAS server connection
@@ -63,7 +68,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		
 		// Set AAS server VAB object ID, AAS server URL, and AAS server path prefix
 		setAASServerObjectID("AASServer");
-		setAASServerURL("http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer");
+		setAASServerURL("http://localhost:8080/" + BaSyxExamplesContext.AASSERVERURL);
 	}
 
 	
@@ -96,6 +101,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		AssetAdministrationShell aas = new AssetAdministrationShell();
 		// - Populate AAS
 		aas.setIdShort("DeviceIDShort");
+		aas.setIdentification(lookupURN("AAS"));
 	
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
 		// - Create generic sub model and add properties
@@ -117,9 +123,10 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		
 		// Push the AAS and submodels to the server
 		// - Transfer device AAS to server
-		aasServerConnection.createValue("/aas", aas);
+		aasServerConnection.setModelPropertyValue(VABPathTools.append(AASAggregatorProvider.PREFIX, VABPathTools.encodePathElement(aas.getIdentification().getId())), aas);
 		// - Transfer device sub model to server
-		aasServerConnection.createValue("/aas/submodels", statusSM);
+		aasPath = AASAggregatorProvider.PREFIX + "/" + VABPathTools.encodePathElement(aas.getIdentification().getId()) + "/aas";
+		aasServerConnection.setModelPropertyValue(VABPathTools.concatenatePaths(aasPath, "submodels", statusSM.getIdShort()), statusSM);
 		
 		// Register URNs of control component VAB object
 		addShortcut("ControlComponent", new ModelUrn("urn:de.FHG:devices.es.iese:controlComponentSM:1.0:3:x-509#001"));
@@ -177,15 +184,15 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		// Check what was being received. This check is performed based on a prefix that he device has to provide);
 		// - Update of device status
 		if (hasPrefix(rxStr, "status:"))
-			aasServerConnection.setModelPropertyValue("/aas/submodels/Status/" + SubmodelElementProvider.PROPERTIES + "/status/value", removePrefix(rxStr, "status"));
+			aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/status/value", removePrefix(rxStr, "status"));
 		// - Device indicates service invocation
 		if (hasPrefix(rxStr, "invocation:")) {
 			// Start of process
 			if (hasPrefix(rxStr, "invocation:start")) {
 				// Read and increment invocation counter
-				HashMap<String, Object> property = (HashMap<String, Object>) aasServerConnection.getModelPropertyValue("/aas/submodels/Status/" + SubmodelElementProvider.PROPERTIES + "/invocations");
+				HashMap<String, Object> property = (HashMap<String, Object>) aasServerConnection.getModelPropertyValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations");
 				int invocations = (int) property.get("value");
-				aasServerConnection.setModelPropertyValue("/aas/submodels/Status/" + SubmodelElementProvider.PROPERTIES + "/invocations/value", ++invocations);
+				aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
 			}
 			
 			// End of process

@@ -29,6 +29,8 @@ public class Operation extends SubmodelElement implements IOperation {
 
 	public static final String INVOKABLE = "invokable";
 	public static final String MODELTYPE = "Operation";
+	
+	public static final String INVOKE = "invoke";
 
 	/**
 	 * Constructor
@@ -48,6 +50,28 @@ public class Operation extends SubmodelElement implements IOperation {
 
 		// Extension of DAAS specification for function storage
 		put(INVOKABLE, null);
+	}
+	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 */
+	public Operation(String idShort) {
+		super(idShort);
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
+		// Input variables
+		setInputVariables(new ArrayList<OperationVariable>());
+
+		// Output variables
+		setOutputVariables(new ArrayList<OperationVariable>());
+
+		// Variables, that are input and output
+		setInOutputVariables(new ArrayList<OperationVariable>());
+
+		// Extension of DAAS specification for function storage
+		setInvocable(null);
 	}
 
 	/**
@@ -108,10 +132,18 @@ public class Operation extends SubmodelElement implements IOperation {
 	/**
 	 * Returns true if the given submodel element map is recognized as an operation
 	 */
-	public static boolean isOperation(Map<String, Object> map) {
+	@SuppressWarnings("unchecked")
+	public static boolean isOperation(Object value) {
+		if(!(value instanceof Map<?, ?>)) {
+			return false;
+		}
+		
+		Map<String, Object> map = (Map<String, Object>) value;
+		
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained
-		return MODELTYPE.equals(modelType) || (map.containsKey(IN) && map.containsKey(OUT) && map.containsKey(INOUT));
+		return MODELTYPE.equals(modelType)
+				|| (modelType == null && (map.containsKey(IN) && map.containsKey(OUT) && map.containsKey(INOUT)));
 	}
 
 	@Override
@@ -147,6 +179,12 @@ public class Operation extends SubmodelElement implements IOperation {
 	@Override
 	public Object invoke(Object... params) throws Exception {
 		return ((Function<Object[], Object>) get(INVOKABLE)).apply(params);
+	}
+
+	@Override
+	public AsyncInvocation invokeAsync(Object... params) {
+		AsyncInvocation invocation = new AsyncInvocation(this, params);
+		return invocation;
 	}
 
 	public void setInputVariables(Collection<OperationVariable> in) {
@@ -193,5 +231,15 @@ public class Operation extends SubmodelElement implements IOperation {
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.OPERATION;
+	}
+
+	@Override
+	public Object getValue() {
+		throw new UnsupportedOperationException("An Operation has no value");
+	}
+
+	@Override
+	public void setValue(Object value) {
+		throw new UnsupportedOperationException("An Operation has no value");
 	}
 }

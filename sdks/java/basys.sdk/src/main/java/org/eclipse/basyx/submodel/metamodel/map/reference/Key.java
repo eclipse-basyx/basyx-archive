@@ -79,6 +79,31 @@ public class Key extends VABModelMap<Object> implements IKey {
 		ret.setMap(map);
 		return ret;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static boolean isKey(Object value) {
+		if(!(value instanceof Map<?, ?>)) {
+			return false;
+		}
+		
+		Map<String, Object> map = (Map<String, Object>) value;
+		
+		if(!(map.get(LOCAL) instanceof Boolean && map.get(VALUE) instanceof String
+				&& map.get(IDTYPE) instanceof String && map.get(TYPE) instanceof String)) {
+			return false;
+		}
+		
+		try {
+			// Try to convert the Strings to Enum-Types
+			// If that fails an Exception is thrown
+			KeyType.fromString((String) map.get(IDTYPE));
+			KeyElements.fromString((String) map.get(TYPE));
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+		
+		return true;
+	}
 
 	@Override
 	public KeyElements getType() {

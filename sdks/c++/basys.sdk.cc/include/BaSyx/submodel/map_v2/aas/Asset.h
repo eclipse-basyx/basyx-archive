@@ -19,6 +19,12 @@ class Asset :
 	public map::ModelType<ModelTypes::Asset>,
 	public virtual vab::ElementMap
 {
+public:
+  struct Path {
+    static constexpr char Kind[] = "kind";
+    static constexpr char AssetIdentificationModelRef[] = "assetIdentificationModelRef";
+    static constexpr char BillOfMaterialRef[] = "billOfMaterialRef";
+  };
 private:
 	Reference assetIdentificationModelRef;
 	Reference billOfMaterialRef;

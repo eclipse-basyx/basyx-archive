@@ -8,6 +8,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRe
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElementValue;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -46,5 +47,10 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.RELATIONSHIPELEMENT;
+	}
+	
+	@Override
+	public RelationshipElementValue getValue() {
+		return new RelationshipElementValue(getFirst(), getSecond());
 	}
 }

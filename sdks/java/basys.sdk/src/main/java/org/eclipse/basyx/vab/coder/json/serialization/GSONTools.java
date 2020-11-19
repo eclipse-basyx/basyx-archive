@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Map;
@@ -98,7 +99,7 @@ public class GSONTools implements Serializer {
 	private JsonElement serializeObject(Object obj) {
 		if (obj == null) {
 			return JsonNull.INSTANCE;
-		} else if (obj.getClass().isPrimitive() || isWrapperType(obj.getClass()) || obj instanceof String) {
+		} else if (obj.getClass().isPrimitive() || isWrapperType(obj.getClass()) || obj instanceof String || obj instanceof Number) {
 			return serializePrimitive(obj);
 		} else if (obj instanceof Map<?, ?>) {
 			return serializeMap((Map<String, Object>) obj);
@@ -149,7 +150,19 @@ public class GSONTools implements Serializer {
 			if (primitive.getAsString().contains(".")) {
 				return primitive.getAsDouble();
 			} else {
-				return primitive.getAsInt();
+				// Get value as Big integer
+				BigInteger tmp= primitive.getAsBigInteger();
+				if (BigInteger.valueOf(Integer.MAX_VALUE).compareTo(tmp) >= 0 && BigInteger.valueOf(Integer.MIN_VALUE).compareTo(tmp) <= 0) {
+					// convert to int
+					return primitive.getAsInt();
+				} else if (BigInteger.valueOf(Long.MAX_VALUE).compareTo(tmp) >= 0 && BigInteger.valueOf(Long.MIN_VALUE).compareTo(tmp) <= 0) {
+					// convert to long
+					return primitive.getAsLong();
+				} else {
+					// for types NonNegativeInteger, NonPositiveInteger, NegativeInteger,
+					// PositiveInteger
+					return tmp;
+				}
 			}
 		} else if (primitive.isBoolean()) {
 			return primitive.getAsBoolean();
@@ -157,6 +170,7 @@ public class GSONTools implements Serializer {
 			return primitive.getAsString();
 		}
 	}
+
 
 	/**
 	 * Serializes either string, number or boolean to a JsonPrimitive

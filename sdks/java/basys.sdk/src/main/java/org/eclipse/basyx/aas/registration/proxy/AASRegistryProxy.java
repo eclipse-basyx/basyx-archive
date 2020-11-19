@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Local proxy class that hides HTTP calls to BaSys registry
  * 
- * @author kuhn
+ * @author kuhn, schnicke
  *
  */
 public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryService {
@@ -41,7 +41,20 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 	 *            The endpoint of the registry with a HTTP-REST interface
 	 */
 	public AASRegistryProxy(String registryUrl) {
-		this(new JSONConnector(new HTTPConnector(registryUrl)));
+		this(new JSONConnector(new HTTPConnector(harmonizeURL(registryUrl))));
+	}
+
+	/**
+	 * Removes prefix if it exists since it will be readded at a later stage
+	 * 
+	 * @param url
+	 * @return
+	 */
+	private static String harmonizeURL(String url) {
+		if (url.endsWith(DirectoryModelProvider.PREFIX)) {
+			url = url.substring(0, url.length() - DirectoryModelProvider.PREFIX.length());
+		}
+		return url;
 	}
 
 	/**
@@ -130,7 +143,7 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 		try {
 			// Typically, VAB SET should not create new entries. Nevertheless, the registry
 			// API is defined to do it.
-			provider.setModelPropertyValue(VABPathTools.concatenatePaths(buildSubmodelPath(aas), smDescriptor.getIdShort()), smDescriptor);
+			provider.setModelPropertyValue(VABPathTools.concatenatePaths(buildSubmodelPath(aas), URLEncoder.encode(smDescriptor.getIdentifier().getId(), "UTF-8")), smDescriptor);
 		} catch (Exception e) {
 			if (e instanceof ProviderException) {
 				throw (ProviderException) e;
@@ -141,9 +154,9 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 	}
 
 	@Override
-	public void delete(IIdentifier aasId, String smIdShort) throws ProviderException {
+	public void delete(IIdentifier aasId, IIdentifier smId) throws ProviderException {
 		try {
-			provider.deleteValue(VABPathTools.concatenatePaths(buildSubmodelPath(aasId), URLEncoder.encode(smIdShort, "UTF-8")));
+			provider.deleteValue(VABPathTools.concatenatePaths(buildSubmodelPath(aasId), URLEncoder.encode(smId.getId(), "UTF-8")));
 		} catch (Exception e) {
 			if (e instanceof ProviderException) {
 				throw (ProviderException) e;
@@ -157,6 +170,37 @@ public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryS
 		// Encode id to handle usage of reserved symbols, e.g. /
 		String encodedAASId = VABPathTools.encodePathElement(aas.getId());
 		return VABPathTools.concatenatePaths(encodedAASId, DirectoryModelProvider.SUBMODELS);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SubmodelDescriptor> lookupSubmodels(IIdentifier aasId) throws ProviderException {
+		try {
+			Object result = provider.getModelPropertyValue(VABPathTools.concatenatePaths(buildSubmodelPath(aasId)));
+			Collection<?> descriptors = (Collection<?>) result;
+			return descriptors.stream().map(x -> new SubmodelDescriptor((Map<String, Object>) x)).collect(Collectors.toList());
+		} catch (Exception e) {
+			if (e instanceof ProviderException) {
+				throw (ProviderException) e;
+			} else {
+				throw new ProviderException(e);
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public SubmodelDescriptor lookupSubmodel(IIdentifier aasId, IIdentifier smId) throws ProviderException {
+		try {
+			Object result = provider.getModelPropertyValue(VABPathTools.concatenatePaths(buildSubmodelPath(aasId), URLEncoder.encode(smId.getId(), "UTF-8")));
+			return new SubmodelDescriptor((Map<String, Object>) result);
+		} catch (Exception e) {
+			if (e instanceof ProviderException) {
+				throw (ProviderException) e;
+			} else {
+				throw new ProviderException(e);
+			}
+		}
 	}
 }
 

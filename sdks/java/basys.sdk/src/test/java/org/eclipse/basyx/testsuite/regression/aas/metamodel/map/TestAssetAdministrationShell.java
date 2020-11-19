@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -22,10 +21,12 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.dataspecification.EmbeddedDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.testsuite.regression.aas.metamodel.AssetAdministrationShellSuite;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,17 +61,6 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 	@Override
 	public void testGetSubmodel() throws Exception {
 		// Overwritten because getting submodels on local AAS is not supported
-	}
-	
-	@Test
-	public void testSetEndpoint() {
-		String endpoint = "testEndpoint.com";
-		String endpointType = "http";
-		shell.setEndpoint(endpoint, endpointType);
-		List<HashMap<String, String>> endPoints = shell.getEndpoints();
-		HashMap<String, String> map = endPoints.iterator().next();
-		assertTrue(map.containsValue(endpoint));
-		assertTrue(map.containsValue(endpointType));
 	}
 	
 	@Test
@@ -119,12 +109,15 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 	@Test
 	public void testSetSubmodels() {
 		// Create submodels
-		SubModel subModel1 = new SubModel(Collections.singletonList(new Property("testProperty1")));
-		subModel1.setIdShort("newSubmodelId1");
-		subModel1.setIdentification(IdentifierType.CUSTOM, "smId1");
-		SubModel subModel2 = new SubModel(Collections.singletonList(new Property("testProperty2")));
-		subModel2.setIdShort("newSubmodelId2");
-		subModel2.setIdentification(IdentifierType.CUSTOM, "smId2");
+		SubModel subModel1 = new SubModel("newSubmodelId1", new Identifier(IdentifierType.CUSTOM, "smId1"));
+		Property prop1 = new Property("prop1Id", PropertyValueTypeDef.String);
+		prop1.setValue("testProperty1");
+		subModel1.addSubModelElement(prop1);
+
+		SubModel subModel2 = new SubModel("newSubmodelId2", new Identifier(IdentifierType.CUSTOM, "smId2"));
+		Property prop2 = new Property("prop2Id", PropertyValueTypeDef.String);
+		prop2.setValue("testProperty2");
+		subModel2.addSubModelElement(prop2);
 		
 		// create a collection of descriptors and add the above descriptors
 		Collection<SubModel> submodels = new ArrayList<SubModel>();

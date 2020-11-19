@@ -1,8 +1,8 @@
 package org.eclipse.basyx.examples.scenarios.cloudedgedeployment;
 
-import static org.junit.Assert.fail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,7 +14,9 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -27,15 +29,22 @@ public class TestCloudEdgeDeploymentScenario {
 		scenario = new CloudEdgeDeploymentScenario();
 	}
 	
+	@AfterClass
+	public static void tearDown() {
+		scenario.stop();
+	}
+
+	private IAASRegistryService getRegistry() {
+		return new AASRegistryProxy(CloudEdgeDeploymentScenario.registryPath);
+	}
+
 	/**
 	 * This tests if all the expected registry entries are present
 	 * 
 	 */
 	@Test
 	public void testRegistry() throws Exception {
-		IAASRegistryService registry = scenario.registry;
-		
-		List<AASDescriptor> aasDescriptors = registry.lookupAll();
+		List<AASDescriptor> aasDescriptors = getRegistry().lookupAll();
 		assertEquals(1, aasDescriptors.size());
 		
 		AASDescriptor aasDescriptor = aasDescriptors.get(0);
@@ -68,7 +77,7 @@ public class TestCloudEdgeDeploymentScenario {
 	@Test
 	public void testAAS() throws Exception {
 		ConnectedAssetAdministrationShellManager manager =
-				new ConnectedAssetAdministrationShellManager(scenario.registry);
+				new ConnectedAssetAdministrationShellManager(getRegistry());
 		
 		IAssetAdministrationShell aas = manager.retrieveAAS(scenario.aasIdentifier);
 		
@@ -90,7 +99,7 @@ public class TestCloudEdgeDeploymentScenario {
 	@Test
 	public void testDocuSM() {
 		ConnectedAssetAdministrationShellManager manager =
-				new ConnectedAssetAdministrationShellManager(scenario.registry);
+				new ConnectedAssetAdministrationShellManager(getRegistry());
 		
 		ISubModel docuSM = manager.retrieveSubModel(scenario.aasIdentifier, scenario.docuSmIdentifier);
 		
@@ -107,7 +116,7 @@ public class TestCloudEdgeDeploymentScenario {
 	@Test
 	public void testEdgeSM() {
 		ConnectedAssetAdministrationShellManager manager =
-				new ConnectedAssetAdministrationShellManager(scenario.registry);
+				new ConnectedAssetAdministrationShellManager(getRegistry());
 		
 		ISubModel edgeSM = manager.retrieveSubModel(scenario.aasIdentifier, scenario.edgeSmIdentifier);
 		

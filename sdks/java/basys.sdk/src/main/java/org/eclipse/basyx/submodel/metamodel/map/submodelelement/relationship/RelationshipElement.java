@@ -41,12 +41,23 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	 * @param second
 	 *            Second element in the relationship taking the role of the object.
 	 */
-	public RelationshipElement(Reference first, Reference second) {
+	public RelationshipElement(IReference first, IReference second) {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 		
 		put(FIRST, first);
 		put(SECOND, second);
+	}
+	
+	/**
+	 * Constructor with only mandatory attributes
+	 * @param idShort
+	 * @param first
+	 * @param second
+	 */
+	public RelationshipElement(String idShort, IReference first, IReference second) {
+		this(first, second);
+		setIdShort(idShort);
 	}
 	
 	/**
@@ -67,7 +78,7 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	public static boolean isRelationshipElement(Map<String, Object> map) {
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained
-		return MODELTYPE.equals(modelType) || (map.containsKey(FIRST) && map.containsKey(SECOND));
+		return MODELTYPE.equals(modelType) || (modelType == null && map.containsKey(FIRST) && map.containsKey(SECOND));
 	}
 
 	public void setFirst(IReference first) {
@@ -95,5 +106,23 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.RELATIONSHIPELEMENT;
+	}
+
+	@Override
+	public RelationshipElementValue getValue() {
+		return new RelationshipElementValue(getFirst(), getSecond());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setValue(Object value) {
+		if(RelationshipElementValue.isRelationshipElementValue(value)) {
+			RelationshipElementValue rev = 
+					RelationshipElementValue.createAsFacade((Map<String, Object>) value);
+			setFirst(rev.getFirst());
+			setSecond(rev.getSecond());
+		} else {
+			throw new IllegalArgumentException("Given Object is not an RelationshipElementValue");
+		}
 	}
 }

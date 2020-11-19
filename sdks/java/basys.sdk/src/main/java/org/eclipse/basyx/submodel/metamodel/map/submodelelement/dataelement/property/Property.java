@@ -39,6 +39,24 @@ public class Property extends DataElement implements IProperty {
 		put(Property.VALUE, null);
 		put(Property.VALUEID, null);
 	}
+	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 * @param valueType
+	 */
+	public Property(String idShort, PropertyValueTypeDef valueType) {
+		super(idShort);
+		setValueType(valueType);
+		setIdShort(idShort);
+		
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
+		// Put attributes
+		put(Property.VALUE, null);
+		put(Property.VALUEID, null);
+	}
 
 	/**
 	 * Creates a Property object from a map
@@ -59,7 +77,7 @@ public class Property extends DataElement implements IProperty {
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained (fallback)
 		return MODELTYPE.equals(modelType)
-				|| (map.containsKey(VALUE) && map.containsKey(VALUETYPE));
+				|| (modelType == null && (map.containsKey(VALUE) && map.containsKey(VALUETYPE)));
 	}
 
 	/**
@@ -108,8 +126,11 @@ public class Property extends DataElement implements IProperty {
 
 	@Override
 	public void set(Object value) {
-		put(Property.VALUE, value);
-		put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(value));
+		put(Property.VALUE, PropertyValueTypeDefHelper.prepareForSerialization(value));
+		// Value type is only set if it is not set before
+		if(getValueType() == null) {
+			put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(value));
+		}
 	}
 
 	/**
@@ -124,13 +145,17 @@ public class Property extends DataElement implements IProperty {
 
 	@Override
 	public Object get() {
-		return get(Property.VALUE);
+		Object value = get(Property.VALUE);
+		if(value instanceof String) {
+			return PropertyValueTypeDefHelper.getJavaObject(value, getValueType());
+		}else {
+			return value;
+		}
 	}
 
 	@Override
-	public String getValueType() {
-		PropertyValueTypeDef def = PropertyValueTypeDefHelper.readTypeDef(get(Property.VALUETYPE));
-		return def!=null ? def.toString() : "";
+	public PropertyValueTypeDef getValueType() {
+		return PropertyValueTypeDefHelper.readTypeDef(get(Property.VALUETYPE));
 	}
 
 	/**
@@ -148,5 +173,15 @@ public class Property extends DataElement implements IProperty {
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.PROPERTY;
+	}
+
+	@Override
+	public Object getValue() {
+		return get();
+	}
+	
+	@Override
+	public void setValue(Object value) {
+		set(value);
 	}
 }

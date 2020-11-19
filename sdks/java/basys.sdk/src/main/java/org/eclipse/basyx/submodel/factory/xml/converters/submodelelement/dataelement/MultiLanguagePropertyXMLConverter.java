@@ -15,7 +15,7 @@ import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:multiLanguageProperty&gt; and builds the MultiLanguageProperty object from it <br>
- * Builds &lt;aas:multiLanguageProperty&gt; form a given MultiLanguageProperty object
+ * Builds &lt;aas:multiLanguageProperty&gt; from a given MultiLanguageProperty object
  * 
  * @author conradi
  *
@@ -23,7 +23,6 @@ import org.w3c.dom.Element;
 public class MultiLanguagePropertyXMLConverter extends SubmodelElementXMLConverter {
 	
 	public static final String MULTI_LANGUAGE_PROPERTY = "aas:multiLanguageProperty";
-	public static final String VALUE_ID = "aas:valueId";
 	
 	/**
 	 * Parses a Map containing the content of XML tag &lt;aas:multiLanguageProperty&gt;

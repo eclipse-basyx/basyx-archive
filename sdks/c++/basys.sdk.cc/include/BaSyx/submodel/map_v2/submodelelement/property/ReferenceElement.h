@@ -14,6 +14,11 @@ class ReferenceElement : public api::IReferenceElement,
                          public SubmodelElement,
                          public ModelType<ModelTypes::ReferenceElement> 
 {
+public:
+  struct Path {
+    static constexpr char Value[] = "value";
+    static constexpr char Kind[] = "kind";
+  };
 private:
     Reference value;
 public:

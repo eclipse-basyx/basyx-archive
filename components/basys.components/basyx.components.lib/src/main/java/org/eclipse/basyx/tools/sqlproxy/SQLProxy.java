@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
-import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLQuery;
-import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLUpdate;
+import org.eclipse.basyx.tools.sql.driver.ISQLDriver;
+import org.eclipse.basyx.tools.sql.query.DynamicSQLQuery;
+import org.eclipse.basyx.tools.sql.query.DynamicSQLUpdate;
 
 
 

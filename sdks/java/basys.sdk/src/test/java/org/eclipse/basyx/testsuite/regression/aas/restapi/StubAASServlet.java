@@ -32,7 +32,7 @@ public class StubAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 		aas.setIdentification(AASURN);
 
 		getModelProvider().setAssetAdministrationShell(new AASModelProvider(aas));
-		getModelProvider().addSubmodel(SMIDSHORT, new SubModelProvider(new SimpleAASSubmodel(SMIDSHORT)));
+		getModelProvider().addSubmodel(new SubModelProvider(new SimpleAASSubmodel(SMIDSHORT)));
 	}
 
 }

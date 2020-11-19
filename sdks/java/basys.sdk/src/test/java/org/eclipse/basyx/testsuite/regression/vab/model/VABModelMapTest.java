@@ -1,6 +1,7 @@
 package org.eclipse.basyx.testsuite.regression.vab.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,11 +48,19 @@ public class VABModelMapTest {
 	public void testEquals() {
 		VABModelMap<Object> expected = new VABModelMap<>();
 		expected.put("a", "b");
+		expected.put("x", "y");
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("a", "b");
+		map.put("x", "y");
 
 		assertEquals(expected, map);
+
+		map.put("a", "c");
+		assertNotEquals(expected, map);
+
+		map.remove("a");
+		assertNotEquals(expected, map);
 	}
 
 }

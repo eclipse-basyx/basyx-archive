@@ -9,9 +9,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.basyx.components.sqlprovider.driver.ISQLDriver;
-import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLQuery;
-import org.eclipse.basyx.components.sqlprovider.query.DynamicSQLUpdate;
+import org.eclipse.basyx.tools.sql.driver.ISQLDriver;
+import org.eclipse.basyx.tools.sql.query.DynamicSQLQuery;
+import org.eclipse.basyx.tools.sql.query.DynamicSQLUpdate;
 
 
 

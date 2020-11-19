@@ -49,8 +49,20 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 		putAll(new Identifiable());
 
 		// Default values
-		put(ASSETIDENTIFICATIONMODEL, null);
-		put(KIND, null);
+		setAssetKind(AssetKind.INSTANCE);
+	}
+	
+	/**
+	 * Constructor accepting only mandatory attributes
+	 * @param idShort
+	 * @param identification
+	 * @param kind
+	 */
+	public Asset(String idShort, IIdentifier identification, AssetKind kind) {
+		this();
+		setIdentification(identification);
+		setIdShort(idShort);
+		setAssetKind(kind);
 	}
 
 	/**
@@ -120,6 +132,10 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 
 	public void setAdministration(AdministrativeInformation information) {
 		Identifiable.createAsFacade(this, getKeyElement()).setAdministration(information);
+	}
+
+	public void setIdentification(IIdentifier id) {
+		setIdentification(id.getIdType(), id.getId());
 	}
 
 	public void setIdentification(IdentifierType idType, String id) {

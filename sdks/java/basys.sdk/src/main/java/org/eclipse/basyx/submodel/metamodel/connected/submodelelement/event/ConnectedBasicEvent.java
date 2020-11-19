@@ -31,4 +31,9 @@ public class ConnectedBasicEvent extends ConnectedSubmodelElement implements IBa
 	protected KeyElements getKeyElement() {
 		return KeyElements.BASICEVENT;
 	}
+
+	@Override
+	public IReference getValue() {
+		return getObserved();
+	}
 }

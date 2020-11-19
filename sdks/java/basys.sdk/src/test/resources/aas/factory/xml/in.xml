@@ -253,7 +253,7 @@
 						</aas:valueId>
 						<aas:value>qualifierValue</aas:value>
 						<aas:type>qualifierType</aas:type>
-						<aas:valueType>valueType</aas:valueType>
+						<aas:valueType>anyType</aas:valueType>
 						<aas:semanticId>
 							<aas:keys>
 								<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
@@ -307,7 +307,7 @@
 									</aas:valueId>
 									<aas:value>qualifierValue</aas:value>
 									<aas:type>qualifierType</aas:type>
-									<aas:valueType>valueType</aas:valueType>
+									<aas:valueType>anyType</aas:valueType>
 									<aas:semanticId>
 										<aas:keys>
 											<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
@@ -341,6 +341,11 @@
 								</aas:keys>
 							</aas:dataSpecification>
 						</aas:embeddedDataSpecification>
+						<aas:valueId>
+							<aas:keys>
+								<aas:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#002</aas:key>
+							</aas:keys>
+						</aas:valueId>
 						<aas:value>2000</aas:value>
 						<aas:valueType>double</aas:valueType>
 					</aas:property>
@@ -383,7 +388,7 @@
 								<aas:range>
 									<aas:idShort>range_id</aas:idShort>
 									<aas:min>10</aas:min>
-									<aas:valueType>int</aas:valueType>
+									<aas:valueType>integer</aas:valueType>
 								</aas:range>
 							</aas:submodelElement>
 						</aas:statements>
@@ -408,7 +413,7 @@
 						<aas:idShort>range_id</aas:idShort>
 						<aas:max>10</aas:max>
 						<aas:min>1</aas:min>
-						<aas:valueType>int</aas:valueType>
+						<aas:valueType>integer</aas:valueType>
 					</aas:range>
 				</aas:submodelElement>
 				<aas:submodelElement>

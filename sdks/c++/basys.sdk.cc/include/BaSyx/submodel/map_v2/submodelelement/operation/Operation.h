@@ -15,6 +15,13 @@ class Operation :
 	public SubmodelElement,
 	public ModelType<ModelTypes::Operation>
 {
+public:
+  struct Path {
+    static constexpr char Invokable[] = "invokable";
+    static constexpr char InputVariable[] = "inputVariable";
+    static constexpr char OutputVariable[] = "outputVariable";
+    static constexpr char InoutputVariable[] = "inoutputVariable";
+  };
 private:
 	ElementContainer<ISubmodelElement> inputVariables;
 	ElementContainer<ISubmodelElement> outputVariables;

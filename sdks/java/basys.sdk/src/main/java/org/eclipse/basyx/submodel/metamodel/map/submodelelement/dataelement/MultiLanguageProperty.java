@@ -28,6 +28,16 @@ public class MultiLanguageProperty extends DataElement implements IMultiLanguage
 		putAll(new ModelType(MODELTYPE));
 	}
 	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 */
+	public MultiLanguageProperty(String idShort) {
+		super(idShort);
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+	}
+	
 	public MultiLanguageProperty(Reference reference, LangStrings langStrings) {
 		this();
 		put(VALUE, langStrings);
@@ -53,8 +63,8 @@ public class MultiLanguageProperty extends DataElement implements IMultiLanguage
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained (fallback)
 		return MODELTYPE.equals(modelType)
-				|| (map.containsKey(VALUE) && map.containsKey(VALUE) && map.containsKey(VALUEID)
-						&& !map.containsKey(Property.VALUETYPE));
+				|| (modelType == null && (map.containsKey(VALUE) && map.containsKey(VALUE) && map.containsKey(VALUEID)
+						&& !map.containsKey(Property.VALUETYPE)));
 	}
 
 	@Override
@@ -72,5 +82,16 @@ public class MultiLanguageProperty extends DataElement implements IMultiLanguage
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.MULTILANGUAGEPROPERTY;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setValue(Object value) {
+		if(LangStrings.isLangStrings(value)) {
+			put(VALUE, LangStrings.createAsFacade((Collection<Map<String, Object>>) value));
+		}
+		else {
+			throw new IllegalArgumentException("Given Object is not a LangStrings");
+		}
 	}
 }

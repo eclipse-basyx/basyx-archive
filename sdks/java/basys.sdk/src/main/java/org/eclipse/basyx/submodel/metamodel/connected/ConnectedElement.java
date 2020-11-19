@@ -16,7 +16,7 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 public class ConnectedElement implements IElement {
 
 	private VABElementProxy proxy;
-	private VABModelMap<Object> cached;
+	protected VABModelMap<Object> cached;
 
 	public VABElementProxy getProxy() {
 		return proxy;
@@ -55,6 +55,11 @@ public class ConnectedElement implements IElement {
 		} else {
 			return cached;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return getElemLive().toString();
 	}
 
 	protected void throwNotSupportedException() {

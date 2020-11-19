@@ -16,8 +16,14 @@ class ConceptDictionary
     , public virtual Referable
     , public virtual vab::ElementMap
 {
+public:
+  struct Path {
+    static constexpr char ConceptDescriptions[] = "conceptDescriptions";
+  };
+
 private:
   ElementContainer<api::IConceptDescription> concept_descriptions;
+
 public:
   ConceptDictionary(const std::string & idShort);
 

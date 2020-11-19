@@ -70,7 +70,7 @@ public class AASBundleServlet extends VABHTTPInterface<MultiAASProvider> {
 				throw new RuntimeException("Only instances of SubModel are allowed here");
 			}
 
-			provider.addSubmodel(sm.getIdShort(), new SubModelProvider((SubModel) sm));
+			provider.addSubmodel(new SubModelProvider((SubModel) sm));
 		}
 		return provider;
 	}

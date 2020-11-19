@@ -23,7 +23,10 @@ class AssetAdministrationShell :
 	public virtual vab::ElementMap
 {
 public:
-	using asset_t = basyx::submodel::map::Asset;
+  struct Path {
+    static constexpr char Submodels[] = "submodels";
+    static constexpr char Asset[] = "asset";
+  };
 private:
 	Reference derivedFrom;
 	Asset asset;

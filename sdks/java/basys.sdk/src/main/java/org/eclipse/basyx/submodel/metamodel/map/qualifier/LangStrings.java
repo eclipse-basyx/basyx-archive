@@ -65,6 +65,17 @@ public class LangStrings extends HashSet<LangString> {
 		}
 		return ret;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static boolean isLangStrings(Object value) {
+		if(!(value instanceof Collection<?>)) {
+			return false;
+		}
+		
+		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) value;
+		
+		return collection.stream().allMatch(LangString::isLangString);
+	}
 
 	/**
 	 * 

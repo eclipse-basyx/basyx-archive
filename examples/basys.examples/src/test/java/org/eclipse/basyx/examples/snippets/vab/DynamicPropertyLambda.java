@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import org.eclipse.basyx.components.servlet.vab.VABLambdaServlet;
-import org.eclipse.basyx.examples.TestContext;
+import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
@@ -35,7 +35,7 @@ import org.junit.Test;
  */
 public class DynamicPropertyLambda {
 
-	
+
 	/**
 	 * VAB connection manager backend
 	 * 
@@ -62,7 +62,7 @@ public class DynamicPropertyLambda {
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// Simulated servlets
 				// - BaSys topology with one AAS Server and one SQL directory
-				TestContext.sqlContext.
+				new BaSyxExamplesContext().
 					// Deploy example specific servlets to Tomcat server in this context
 					addServletMapping("/Testsuite/components/BaSys/1.0/devicestatusVAB/*", new VABLambdaServlet())
 			);

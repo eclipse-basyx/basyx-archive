@@ -32,6 +32,19 @@ public class Entity extends SubmodelElement implements IEntity {
 		putAll(new ModelType(MODELTYPE));
 	}
 	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 * @param entityType
+	 */
+	public Entity(String idShort, EntityType entityType) {
+		super(idShort);
+		setEntityType(entityType);
+		
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+	}
+	
 	public Entity(EntityType entityType, Collection<ISubmodelElement> statements, IReference asset) {
 		this();
 		setEntityType(entityType);
@@ -49,6 +62,12 @@ public class Entity extends SubmodelElement implements IEntity {
 
 	public void setEntityType(EntityType entityType) {
 		put(ENTITY_TYPE, entityType.toString());
+	}
+
+	public static boolean isEntity(Map<String, Object> map) {
+		String modelType = ModelType.createAsFacade(map).getName();
+		// Either model type is set or the element type specific attributes are contained (fallback)
+		return MODELTYPE.equals(modelType) || (modelType == null && map.containsKey(Entity.STATEMENT));
 	}
 
 	/**
@@ -91,4 +110,21 @@ public class Entity extends SubmodelElement implements IEntity {
 		return KeyElements.ENTITY;
 	}
 
+	@Override
+	public EntityValue getValue() {
+		return new EntityValue(getStatements(), getAsset());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setValue(Object value) {
+		if(EntityValue.isEntityValue(value)) {
+			EntityValue ev = EntityValue.createAsFacade((Map<String, Object>) value);
+			put(Entity.STATEMENT, ev.getStatement());
+			put(Entity.ASSET, ev.getAsset());
+		}
+		else {
+			throw new IllegalArgumentException("Given Object is not an EntityValue");
+		}
+	}
 }

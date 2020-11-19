@@ -5,7 +5,8 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.SubmodelElementXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IRange;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -33,7 +34,7 @@ public class RangeXMLConverter extends SubmodelElementXMLConverter {
 		String valueType = XMLHelper.getString(xmlObject.get(VALUE_TYPE));
 		String min = XMLHelper.getString(xmlObject.get(MIN));
 		String max = XMLHelper.getString(xmlObject.get(MAX));
-		Range range = new Range(valueType, min, max);
+		Range range = new Range(PropertyValueTypeDefHelper.fromName(valueType), min, max);
 		populateSubmodelElement(xmlObject, range);
 		return range;
 	}
@@ -68,7 +69,7 @@ public class RangeXMLConverter extends SubmodelElementXMLConverter {
 			rangeRoot.appendChild(minRoot);
 		}
 		
-		String valueType = range.getValueType();
+		String valueType = range.getValueType().toString();
 		if(valueType != null) {
 			Element valueTypeRoot = document.createElement(VALUE_TYPE);
 			valueTypeRoot.appendChild(document.createTextNode(valueType));

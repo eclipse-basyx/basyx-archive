@@ -3,8 +3,7 @@ package org.eclipse.basyx.components.configuration;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 
 /**
  * Represents a BaSyx http servlet configuration for a BaSyxContext,
@@ -14,58 +13,119 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class BaSyxContextConfiguration extends BaSyxConfiguration {
-	
-	/**
-	 * Initiates a logger using the current class
-	 */
-	private static final Logger logger = LoggerFactory.getLogger(BaSyxContextConfiguration.class);
-	
 	// Default BaSyx Context configuration
 	public static final String DEFAULT_CONTEXTPATH = "/basys.sdk";
 	public static final String DEFAULT_DOCBASE = System.getProperty("java.io.tmpdir");
 	public static final String DEFAULT_HOSTNAME = "localhost";
 	public static final int DEFAULT_PORT = 4000;
 
-	private static final String CONTEXTPATH = "contextPath";
-	private static final String DOCBASE = "contextDocPath";
-	private static final String HOSTNAME = "contextHostname";
-	private static final String PORT = "contextPort";
+	public static final String CONTEXTPATH = "contextPath";
+	public static final String DOCBASE = "contextDocPath";
+	public static final String HOSTNAME = "contextHostname";
+	public static final String PORT = "contextPort";
 
 	// The default path for the context properties file
 	public static final String DEFAULT_CONFIG_PATH = "context.properties";
 
+	// The default key for variables pointing to the configuration file
+	public static final String DEFAULT_FILE_KEY = "BASYX_CONTEXT";
+
 	public static Map<String, String> getDefaultProperties() {
 		Map<String, String> defaultProps = new HashMap<>();
 		defaultProps.put(CONTEXTPATH, DEFAULT_CONTEXTPATH);
-		logger.debug("DEFAULT " + DOCBASE + " - " + DEFAULT_DOCBASE);
 		defaultProps.put(DOCBASE, DEFAULT_DOCBASE);
 		defaultProps.put(HOSTNAME, DEFAULT_HOSTNAME);
 		defaultProps.put(PORT, Integer.toString(DEFAULT_PORT));
 		return defaultProps;
 	}
 
+	/**
+	 * Empty Constructor - use default values
+	 */
 	public BaSyxContextConfiguration() {
 		super(getDefaultProperties());
 	}
 
+	/**
+	 * Constructor with predefined value map
+	 */
 	public BaSyxContextConfiguration(Map<String, String> values) {
 		super(values);
+	}
+
+	/**
+	 * Constructor with initial configuration - docBasePath and hostname are default values
+	 * 
+	 * @param port        The port that will be occupied
+	 * @param contextPath The subpath for this context
+	 */
+	public BaSyxContextConfiguration(int port, String contextPath) {
+		this();
+		setPort(port);
+		setContextPath(contextPath);
+	}
+
+	/**
+	 * Constructor with initial configuration - docBasePath and hostname are default values
+	 * 
+	 * @param contextPath The subpath for this context
+	 * @param docBasePath The local base path for the documents
+	 * @param hostname    The hostname
+	 * @param port        The port that will be occupied
+	 */
+	public BaSyxContextConfiguration(String contextPath, String docBasePath, String hostname, int port) {
+		this();
+		setContextPath(contextPath);
+		setDocBasePath(docBasePath);
+		setHostname(hostname);
+		setPort(port);
+	}
+
+	public void loadFromDefaultSource() {
+		loadFileOrDefaultResource(DEFAULT_FILE_KEY, DEFAULT_CONFIG_PATH);
+	}
+
+	public BaSyxContext createBaSyxContext() {
+		String reqContextPath = getContextPath();
+		String reqDocBasePath = getDocBasePath();
+		String hostName = getHostname();
+		int reqPort = getPort();
+		return new BaSyxContext(reqContextPath, reqDocBasePath, hostName, reqPort);
 	}
 
 	public String getContextPath() {
 		return getProperty(CONTEXTPATH);
 	}
 
+	public void setContextPath(String contextPath) {
+		setProperty(CONTEXTPATH, contextPath);
+	}
+
 	public String getDocBasePath() {
-		logger.debug("DEFAULT " + DOCBASE + " -- " + getProperty(DOCBASE));
 		return getProperty(DOCBASE);
+	}
+
+	public void setDocBasePath(String docBasePath) {
+		setProperty(DOCBASE, docBasePath);
 	}
 
 	public String getHostname() {
 		return getProperty(HOSTNAME);
 	}
 
+	public void setHostname(String hostname) {
+		setProperty(HOSTNAME, hostname);
+	}
+
 	public int getPort() {
 		return Integer.parseInt(getProperty(PORT));
+	}
+
+	public void setPort(int port) {
+		setProperty(PORT, Integer.toString(port));
+	}
+
+	public String getUrl() {
+		return "http://" + getHostname() + ":" + getPort() + "/" + getContextPath();
 	}
 }

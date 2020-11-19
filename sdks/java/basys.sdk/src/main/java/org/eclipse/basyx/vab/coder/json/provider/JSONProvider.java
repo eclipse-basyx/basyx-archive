@@ -1,6 +1,8 @@
 package org.eclipse.basyx.vab.coder.json.provider;
 
-import java.io.PrintWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
 import org.eclipse.basyx.vab.coder.json.metaprotocol.Result;
@@ -112,12 +114,15 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @param path
 	 * @param resp
 	 */
-	private void sendException(PrintWriter resp, Exception e) throws ProviderException {
+	private void sendException(OutputStream resp, Exception e) throws ProviderException {
 		
 		// Serialize Exception
 		String jsonString = serialize(e);
-
-		resp.write(jsonString);
+		try {
+			resp.write(jsonString.getBytes(StandardCharsets.UTF_8));
+		} catch(IOException innerE) {
+			throw new ProviderException("Failed to send Exception '" + e.getMessage() + "' to client", innerE);
+		}
 		
 		//If the Exception is a ProviderException, just rethrow it
 		if(e instanceof ProviderException) {
@@ -141,7 +146,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @throws LostHTTPRequestParameterException 
 	 * @throws ProviderException
 	 */
-	private Object extractParameter(String path, String serializedJSONValue, PrintWriter outputStream) throws MalformedRequestException {
+	private Object extractParameter(String path, String serializedJSONValue, OutputStream outputStream) throws MalformedRequestException {
 		// Return value
 		Object result = null;
 
@@ -161,7 +166,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * Process a BaSys get operation, return JSON serialized result
 	 * @throws ProviderException 
 	 */
-	public void processBaSysGet(String path, PrintWriter outputStream) throws ProviderException {
+	public void processBaSysGet(String path, OutputStream outputStream) throws ProviderException {
 
 		try {
 			// Get requested value from provider backend
@@ -171,7 +176,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			String jsonString = serializer.serialize(value);
 
 			// Send response
-			outputStream.write(jsonString);
+			outputStream.write(jsonString.getBytes(StandardCharsets.UTF_8));
 		} catch (Exception e) {
 			sendException(outputStream, e);
 		}
@@ -186,7 +191,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @param outputStream
 	 * @throws ProviderException 
 	 */
-	public void processBaSysSet(String path, String serializedJSONValue, PrintWriter outputStream) throws ProviderException {
+	public void processBaSysSet(String path, String serializedJSONValue, OutputStream outputStream) throws ProviderException {
 		
 		// Try to set value of BaSys VAB element
 		try {
@@ -198,7 +203,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			providerBackend.setModelPropertyValue(path, parameter);
 
 			// Send response
-			outputStream.write("");
+			outputStream.write("".getBytes(StandardCharsets.UTF_8));
 
 		} catch (Exception e) {
 			sendException(outputStream, e);
@@ -211,7 +216,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @throws ProviderException 
 	 */
 	@SuppressWarnings("unchecked")
-	public void processBaSysInvoke(String path, String serializedJSONValue, PrintWriter outputStream) throws ProviderException {
+	public void processBaSysInvoke(String path, String serializedJSONValue, OutputStream outputStream) throws ProviderException {
 
 		try {
 			
@@ -244,7 +249,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			String jsonString = serializer.serialize(result);
 			
 			// Send response
-			outputStream.write(jsonString);
+			outputStream.write(jsonString.getBytes(StandardCharsets.UTF_8));
 
 		} catch (Exception e) {
 			sendException(outputStream, e);
@@ -260,7 +265,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @param outputStream
 	 * @throws ProviderException 
 	 */
-	public void processBaSysDelete(String path, String serializedJSONValue, PrintWriter outputStream) throws ProviderException {
+	public void processBaSysDelete(String path, String serializedJSONValue, OutputStream outputStream) throws ProviderException {
 		
 		try {
 
@@ -275,7 +280,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			}
 
 			// Send response
-			outputStream.write("");
+			outputStream.write("".getBytes(StandardCharsets.UTF_8));
 
 		} catch (Exception e) {
 			sendException(outputStream, e);
@@ -291,7 +296,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 	 * @param outputStream
 	 * @throws ProviderException 
 	 */
-	public void processBaSysCreate(String path, String serializedJSONValue, PrintWriter outputStream) throws ProviderException {
+	public void processBaSysCreate(String path, String serializedJSONValue, OutputStream outputStream) throws ProviderException {
 
 		try {
 			// Deserialize json body. 
@@ -301,7 +306,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			providerBackend.createValue(path, parameter);
 
 			// Send response
-			outputStream.write("");
+			outputStream.write("".getBytes(StandardCharsets.UTF_8));
 		} catch (Exception e) {
 			sendException(outputStream, e);
 		}

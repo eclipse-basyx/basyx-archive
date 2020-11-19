@@ -3,6 +3,7 @@ package org.eclipse.basyx.testsuite.regression.vab.modelprovider;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
@@ -22,30 +23,30 @@ public class MapInvoke {
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 	
 		// Invoke complex function
-		Object complex = connVABElement.invokeOperation("operations/complex", 12, 34);
+		Object complex = connVABElement.invokeOperation("operations/complex/", 12, 34);
 		assertEquals(46, complex);
 	
 		// Invoke unsupported functional interface
 		try {
-			connVABElement.invokeOperation("operations/supplier");
+			connVABElement.invokeOperation("operations/supplier/" + Operation.INVOKE);
 			fail();
 		} catch (ProviderException e) {}
 	
 		// Invoke non-existing operation
 		try {
-			connVABElement.invokeOperation("operations/unknown");
+			connVABElement.invokeOperation("operations/unknown/" + Operation.INVOKE);
 			fail();
 		} catch (ResourceNotFoundException e) {}
 	
 		// Invoke invalid operation -> not a function, but a primitive data type
 		try {
-			connVABElement.invokeOperation("operations/invalid");
+			connVABElement.invokeOperation("operations/invalid/" + Operation.INVOKE);
 			fail();
 		} catch (ProviderException e) {}
 	
 		// Invoke operations that throw Exceptions
 		try {
-			connVABElement.invokeOperation("operations/providerException");
+			connVABElement.invokeOperation("operations/providerException/" + Operation.INVOKE);
 			fail();
 		} catch (ProviderException e) {
 			// exception type not implemented, yet
@@ -53,7 +54,7 @@ public class MapInvoke {
 		}
 	
 		try {
-			connVABElement.invokeOperation("operations/nullException");
+			connVABElement.invokeOperation("operations/nullException/" + Operation.INVOKE);
 			fail();
 		} catch (ProviderException e) {
 			// exception type not implemented, yet

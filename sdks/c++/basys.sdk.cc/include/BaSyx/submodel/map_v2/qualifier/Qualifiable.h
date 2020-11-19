@@ -15,6 +15,10 @@ class Qualifiable :
 	public virtual vab::ElementMap
 {
 public:
+  struct Path {
+    static constexpr char Qualifier[] = "qualifier";
+  };
+public:
 	Qualifiable() = default;
 	Qualifiable(const std::vector<simple::Formula> & formulas, const std::vector<simple::Qualifier> & qualifiers);
 

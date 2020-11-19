@@ -22,6 +22,9 @@ public class ConnectorProviderStub implements IConnectorProvider {
 
 	@Override
 	public IModelProvider getConnector(String addr) {
+		if (!providerMap.containsKey(addr)) {
+			throw new RuntimeException("Unknown addr " + addr);
+		}
 		return providerMap.get(addr);
 	}
 }

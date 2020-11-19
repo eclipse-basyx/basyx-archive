@@ -38,9 +38,9 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementC
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.entity.Entity;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
@@ -50,7 +50,7 @@ import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:submodelElements&gt; and builds the SubmodelElement objects from it <br>
- * Builds &lt;aas:submodelElements&gt; form a given Collection of SubmodelElement
+ * Builds &lt;aas:submodelElements&gt; from a given Collection of SubmodelElement
  * 
  * @author conradi
  *
@@ -61,6 +61,7 @@ public class SubmodelElementXMLConverter {
 	public static final String SUBMODEL_ELEMENT = "aas:submodelElement";
 	public static final String VALUE = "aas:value";
 	public static final String VALUE_TYPE = "aas:valueType";
+	public static final String VALUE_ID = "aas:valueId";
 	public static final String MIME_TYPE = "aas:mimeType";
 
 	
@@ -68,7 +69,7 @@ public class SubmodelElementXMLConverter {
 	 * Parses a given Map containing the XML tag &lt;aas:submodelElements&gt;
 	 * 
 	 * @param xmlSubmodelElements a Map of the XML tag &lt;aas:submodelElements&gt;
-	 * @return a List with the ISubmodelElement Objects parsed form the XML  
+	 * @return a List with the ISubmodelElement Objects parsed from the XML  
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<ISubmodelElement> parseSubmodelElements(Map<String, Object> xmlSubmodelElements) {
@@ -78,10 +79,10 @@ public class SubmodelElementXMLConverter {
 	
 
 	/**
-	 * Parses the individual &lt;aas:submodelElement&gt; tags form the Map
+	 * Parses the individual &lt;aas:submodelElement&gt; tags from the Map
 	 * 
 	 * @param xmlObject a Map of &lt;aas:submodelElement&gt; tags
-	 * @return a List with the ISubmodelElement Objects parsed form the XML 
+	 * @return a List with the ISubmodelElement Objects parsed from the XML 
 	 */
 	protected static List<ISubmodelElement> getSubmodelElements(Map<String, Object> xmlObject) {
 		List<ISubmodelElement> submodelElemList = new ArrayList<>();
@@ -100,7 +101,7 @@ public class SubmodelElementXMLConverter {
 	 * Parses the one SubmodelElement
 	 * 
 	 * @param xmlObject a Map of the SubmodelElement XML
-	 * @return a List with the ISubmodelElement Objects parsed form the XML 
+	 * @return a List with the ISubmodelElement Objects parsed from the XML 
 	 */
 	@SuppressWarnings("unchecked")
 	protected static SubmodelElement getSubmodelElement(Map<String, Object> xmlObject) {
@@ -191,7 +192,7 @@ public class SubmodelElementXMLConverter {
 	
 	
 	/**
-	 * Builds the individual SubmodelElement XML tags form a List of SubmodelElements and <br>
+	 * Builds the individual SubmodelElement XML tags from a List of SubmodelElements and <br>
 	 * populates the given root Element with them
 	 * 
 	 * @param document the XML document

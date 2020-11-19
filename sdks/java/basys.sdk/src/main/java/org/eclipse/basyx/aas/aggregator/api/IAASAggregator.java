@@ -5,6 +5,8 @@ import java.util.Collection;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
 
 /**
@@ -29,8 +31,16 @@ public interface IAASAggregator {
 	 * @param aasId the ID of the AAS
 	 * @return the requested AAS
 	 */
-	public IAssetAdministrationShell getAAS(IIdentifier aasId);
+	public IAssetAdministrationShell getAAS(IIdentifier aasId) throws ResourceNotFoundException;
 	
+	/**
+	 * Retrieves the provider for a specific Asset Administration Shell
+	 * 
+	 * @param aasId the ID of the AAS
+	 * @return the requested AAS provider
+	 */
+	public IModelProvider getAASProvider(IIdentifier aasId) throws ResourceNotFoundException;
+
 	/**
 	 * Creates a new Asset Administration Shell at the endpoint
 	 * 
@@ -43,7 +53,7 @@ public interface IAASAggregator {
 	 * 
 	 * @param aas the updated AAS
 	 */
-	public void updateAAS(AssetAdministrationShell aas);
+	public void updateAAS(AssetAdministrationShell aas) throws ResourceNotFoundException;
 	
 	/**
 	 * Deletes a specific Asset Administration Shell

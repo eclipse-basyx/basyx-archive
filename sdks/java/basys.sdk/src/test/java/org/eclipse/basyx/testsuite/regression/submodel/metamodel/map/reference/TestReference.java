@@ -1,6 +1,8 @@
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.reference;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -76,5 +78,17 @@ public class TestReference {
 		Reference reference = new Reference(new Identifier(ID_TYPE, VALUE), KEY_ELEMENTS, IS_LOCAL);
  		reference.setKeys(keysList);
 		assertEquals(keysList, reference.getKeys());
+	}
+	
+	@Test
+	public void testIsReference() {
+		Identifiable identifiable = new Identifiable("2.0", "5", "testIDShort", "testCategory", new LangStrings("Eng", "test"), IdentifierType.IRI, "newId");
+		Reference reference = new Reference(identifiable, KEY_ELEMENTS, IS_LOCAL);
+		
+		assertTrue(Reference.isReference(reference));
+		
+		reference.put(Reference.KEY, "nonsense");
+		
+		assertFalse(Reference.isReference(reference));
 	}
 }

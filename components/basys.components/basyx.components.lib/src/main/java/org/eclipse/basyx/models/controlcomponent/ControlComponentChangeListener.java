@@ -27,14 +27,6 @@ public interface ControlComponentChangeListener {
 	 * Indicate new occupation state
 	 */
 	public void onNewOccupationState(OccupationState state);
-
-	
-	/**
-	 * Indicate a change of last occupier. This is probably not relevant for many sub classes, therefore this class
-	 * provides a default implementation. 
-	 */
-	default void onLastOccupier(String lastOccupierId) { /* Do nothing */ }
-
 		
 	/**
 	 * Indicate an execution mode change
@@ -64,12 +56,5 @@ public interface ControlComponentChangeListener {
 	 * Indicate an error state change
 	 */
 	public void onChangedErrorState(String newWorkState);
-
-	
-	/**
-	 * Indicate an previous error state change. This is probably not relevant for many sub classes, therefore this class
-	 * provides a default implementation. 
-	 */
-	default void onChangedPrevError(String newWorkState) { /* Do nothing */ }
 }
 

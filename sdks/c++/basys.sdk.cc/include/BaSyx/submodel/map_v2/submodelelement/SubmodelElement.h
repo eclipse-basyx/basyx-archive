@@ -14,11 +14,17 @@ namespace submodel {
 namespace map {
 
 class SubmodelElement
-    : public virtual api::ISubmodelElement,
-      public virtual vab::ElementMap,
-      public virtual Qualifiable,
-      public Referable,
-      public HasDataSpecification {
+  :	public virtual api::ISubmodelElement
+  , public virtual vab::ElementMap
+  , public virtual Qualifiable
+  , public Referable
+  , public HasDataSpecification
+{
+public:
+  struct Path {
+    static constexpr char Kind[] = "kind";
+    static constexpr char SemanticId[] = "semanticId";
+  };
 private:
     Reference semanticId;
 
