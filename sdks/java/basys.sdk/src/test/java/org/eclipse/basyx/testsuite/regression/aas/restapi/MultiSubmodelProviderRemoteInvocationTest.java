@@ -3,6 +3,7 @@ package org.eclipse.basyx.testsuite.regression.aas.restapi;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,6 +25,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
@@ -53,11 +55,12 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 	private List<BaSyxService> services = new ArrayList<>();
 
 	private VABMultiSubmodelProvider provider;
+	
+	// Creating a new AAS Registry
+	private IAASRegistryService registry = new InMemoryRegistry();
 
 	@Before
 	public void init() {
-		// Creating a new AAS Registry
-		IAASRegistryService registry = new InMemoryRegistry();
 		
 		
 		// Create descriptors for AAS and submodels
@@ -120,6 +123,26 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 		assertTrue(smIdShorts.contains(REMOTESMIDSHORT));
 		assertTrue(smIdShorts.contains(LOCALSMIDSHORT));
 		assertTrue(smIdShorts.size() == 2);
+	}
+	
+	/**
+	 * Tries to register a Submodel, not actually push it to the server and try to request all Submodels
+	 * This will result in an endless loop if not handled correctly
+	 */
+	@Test
+	public void testGetRegisteredButNotExistentSM() {
+		// Create a Descriptor for a Submodel (with a local Endpoint), that is not present on the server
+		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("nonexist", new ModelUrn("nonexisting"), "basyx://localhost:8000/aas/submodels/nonexist");
+		
+		// Register this SubmodelDescriptor
+		registry.register(AASID1, smDescriptor);
+		
+		// Try to request all Submodels from the server
+		try {
+			provider.getModelPropertyValue("/aas/submodels");
+			fail();
+		} catch (ResourceNotFoundException e) {
+		}
 	}
 
 	/**

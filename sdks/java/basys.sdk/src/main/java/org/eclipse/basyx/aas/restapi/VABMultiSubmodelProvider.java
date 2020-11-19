@@ -260,12 +260,38 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 		// Check for remote submodels
 		if (registry != null) {
 			AASDescriptor desc = registry.lookupAAS(aasId);
+			
+			// Get the address of the AAS e.g. http://localhost:8080
+			// This address should be equal to the address of this server
+			String aasEndpoint = desc.getFirstEndpoint();
+			String aasServerURL = getServerURL(aasEndpoint);
+			
 			List<String> localIds = submodels.stream().map(sm -> sm.getIdentification().getId()).collect(Collectors.toList());
 			List<IIdentifier> missingIds = desc.getSubModelDescriptors().stream().map(d -> d.getIdentifier()).
 					filter(id -> !localIds.contains(id.getId())).collect(Collectors.toList());
+			
 			if(!missingIds.isEmpty()) {
-				List<SubModel> remoteSms = missingIds.stream().map(id -> desc.getSubModelDescriptorFromIdentifierId(id.getId())).
-						map(smDesc -> smDesc.getFirstEndpoint()).map(endpoint -> connectorProvider.getConnector(endpoint)).
+				List<String> missingEndpoints = missingIds.stream().map(id -> desc.getSubModelDescriptorFromIdentifierId(id.getId()))
+						.map(smDesc -> smDesc.getFirstEndpoint()).collect(Collectors.toList());
+				
+				// Check if any of the missing Submodels have the same address as the AAS.
+				// This would mean, that the Submodel should be present on the same
+				// server of the AAS but is not
+				
+				// If this error would not be caught here an endless loop would develop
+				// as the registry would be asked for this Submodel and then it would be requested
+				// from this server again, which would ask the registry about it again
+				
+				// Such a situation might originate from a deleted but not unregistered Submodel
+				// or from a manually registered but never pushed Submodel
+				for(String missingEndpoint: missingEndpoints) {
+					if(getServerURL(missingEndpoint).equals(aasServerURL)) {
+						throw new ResourceNotFoundException("The Submodel at Endpoint '" + missingEndpoint + 
+								"' does not exist on this server. It seems to be registered but not actually present.");
+					}
+				}
+				
+				List<SubModel> remoteSms = missingEndpoints.stream().map(endpoint -> connectorProvider.getConnector(endpoint)).
 						map(p -> (Map<String, Object>) p.getModelPropertyValue("")).map(m -> SubModel.createAsFacade(m)).collect(Collectors.toList());
 				submodels.addAll(remoteSms);
 			}
@@ -444,5 +470,23 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 		
 		SubmodelDescriptor submodelDescriptor = getSubmodelDescriptorFromRegistry(submodelId);
 		return getModelProvider(submodelDescriptor);
+	}
+	
+	/**
+	 * Gets the server URL of a given endpoint.
+	 * e.g. http://localhost:1234/x/y/z/aas/submodels/Sm1IdShort would return
+	 * http://localhost:1234/x/y/z
+	 * 
+	 * @param endpoint
+	 * @return the server URL part of the given endpoint
+	 */
+	public static String getServerURL(String endpoint) {
+		int endServerURL = endpoint.indexOf("/aas");
+		// if indexOf returned -1 ("/aas" not present in String)
+		// return the whole given path
+		if(endServerURL < 0) {
+			return endpoint;
+		}
+		return endpoint.substring(0, endServerURL);
 	}
 }
