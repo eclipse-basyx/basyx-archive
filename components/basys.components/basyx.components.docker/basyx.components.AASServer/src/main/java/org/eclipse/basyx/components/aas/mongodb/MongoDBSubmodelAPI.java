@@ -3,6 +3,7 @@ package org.eclipse.basyx.components.aas.mongodb;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -153,8 +155,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 		mongoOps.findAndReplace(hasId, sm, collection);
 	}
 
-	@Override
-	public ISubmodelElement getSubmodelElement(String idShort) {
+	private ISubmodelElement getTopLevelSubmodelElement(String idShort) {
 		SubModel sm = (SubModel) getSubmodel();
 		Map<String, ISubmodelElement> submodelElements = sm.getSubmodelElements();
 		ISubmodelElement element = submodelElements.get(idShort);
@@ -173,8 +174,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 		return SubmodelElement.createAsFacade((Map<String, Object>) elementVABObj);
 	}
 
-	@Override
-	public void deleteSubmodelElement(String idShort) {
+	private void deleteTopLevelSubmodelElement(String idShort) {
 		// Get sm from db
 		SubModel sm = (SubModel) getSubmodel();
 		// Remove element
@@ -191,8 +191,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 	}
 
 
-	@Override
-	public void addSubmodelElement(List<String> idShorts, ISubmodelElement elem) {
+	private void addNestedSubmodelElement(List<String> idShorts, ISubmodelElement elem) {
 		SubModel sm = (SubModel) getSubmodel();
 		// > 1 idShorts => add new sm element to an existing sm element
 		if (idShorts.size() > 1) {
@@ -220,8 +219,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 		return sm.getSubmodelElements().values();
 	}
 
-	@Override
-	public void updateSubmodelElement(String idShort, Object newValue) {
+	private void updateTopLevelSubmodelElement(String idShort, Object newValue) {
 		// Get sm from db
 		SubModel sm = (SubModel) getSubmodel();
 		// Unwrap value
@@ -234,8 +232,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public void updateNestedSubmodelElement(List<String> idShorts, Object newValue) {
+	private void updateNestedSubmodelElement(List<String> idShorts, Object newValue) {
 		SubModel sm = (SubModel) getSubmodel();
 
 		// Get parent SM element
@@ -251,15 +248,13 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 		mongoOps.findAndReplace(hasId, sm, collection);
 	}
 
-	@Override
-	public Object getSubmodelElementValue(String idShort) {
+	private Object getTopLevelSubmodelElementValue(String idShort) {
 		SubModel sm = (SubModel) getSubmodel();
 		return getElementProvider(sm, idShort).getModelPropertyValue("/value");
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public Object getNestedSubmodelElementValue(List<String> idShorts) {
+	private Object getNestedSubmodelElementValue(List<String> idShorts) {
 		ISubmodelElement lastElement = getNestedSubmodelElement(idShorts);
 		IModelProvider mapProvider = new VABMapProvider((Map<String, Object>) lastElement);
 		return SubmodelElementProvider.getElementProvider(mapProvider).getModelPropertyValue("/value");
@@ -306,22 +301,19 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 		return elemMap.get(lastIdShort);
 	}
 
-	@Override
-	public ISubmodelElement getNestedSubmodelElement(List<String> idShorts) {
+	private ISubmodelElement getNestedSubmodelElement(List<String> idShorts) {
 		// Get sm from db
 		SubModel sm = (SubModel) getSubmodel();
 		// Get nested sm element from this sm
 		return convertSubmodelElement(getNestedSubmodelElement(sm, idShorts));
 	}
 
-	@Override
-	public Object invokeOperation(String idShort, Object... params) {
+	private Object invokeTopLevelOperation(String idShort, Object... params) {
 		// not possible to invoke operations on a submodel that is stored in a db
 		throw new MalformedRequestException("Invoke not supported by this backend");
 	}
 
-	@Override
-	public void deleteNestedSubmodelElement(List<String> idShorts) {
+	private void deleteNestedSubmodelElement(List<String> idShorts) {
 		if ( idShorts.size() == 1 ) {
 			deleteSubmodelElement(idShorts.get(0));
 			return;
@@ -340,21 +332,88 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 		mongoOps.findAndReplace(hasId, sm, collection);
 	}
 
-	@Override
-	public Object invokeNestedOperation(List<String> idShorts, Object... params) {
+	private Object invokeNestedOperation(List<String> idShorts, Object... params) {
+		// not possible to invoke operations on a submodel that is stored in a db
+		throw new MalformedRequestException("Invoke not supported by this backend");
+	}
+
+	private Object invokeNestedOperationAsync(List<String> idShorts, Object... params) {
 		// not possible to invoke operations on a submodel that is stored in a db
 		throw new MalformedRequestException("Invoke not supported by this backend");
 	}
 
 	@Override
-	public Object invokeNestedOperationAsync(List<String> idShorts, Object... params) {
+	public Object getOperationResult(String idShort, String requestId) {
 		// not possible to invoke operations on a submodel that is stored in a db
 		throw new MalformedRequestException("Invoke not supported by this backend");
 	}
 
 	@Override
-	public Object getOperationResult(List<String> idShorts, String requestId) {
-		// not possible to invoke operations on a submodel that is stored in a db
-		throw new MalformedRequestException("Invoke not supported by this backend");
+	public ISubmodelElement getSubmodelElement(String idShortPath) {
+		if(idShortPath.contains("/")) {
+			String[] splitted = VABPathTools.splitPath(idShortPath);
+			List<String> idShorts = Arrays.asList(splitted);
+			return getNestedSubmodelElement(idShorts);
+		}else {
+			return getTopLevelSubmodelElement(idShortPath);
+		}
+	}
+
+	@Override
+	public void deleteSubmodelElement(String idShortPath) {
+		if(idShortPath.contains("/")) {
+			String[] splitted = VABPathTools.splitPath(idShortPath);
+			List<String> idShorts = Arrays.asList(splitted);
+			deleteNestedSubmodelElement(idShorts);
+		}else {
+			deleteTopLevelSubmodelElement(idShortPath);
+		}
+	}
+
+	@Override
+	public void updateSubmodelElement(String idShortPath, Object newValue) {
+		if(idShortPath.contains("/")) {
+			String[] splitted = VABPathTools.splitPath(idShortPath);
+			List<String> idShorts = Arrays.asList(splitted);
+			updateNestedSubmodelElement(idShorts, newValue);
+		}else {
+			updateTopLevelSubmodelElement(idShortPath, newValue);
+		}
+	}
+
+	@Override
+	public Object getSubmodelElementValue(String idShortPath) {
+		if(idShortPath.contains("/")) {
+			String[] splitted = VABPathTools.splitPath(idShortPath);
+			List<String> idShorts = Arrays.asList(splitted);
+			return getNestedSubmodelElementValue(idShorts);
+		}else {
+			return getTopLevelSubmodelElementValue(idShortPath);
+		}
+	}
+
+	@Override
+	public Object invokeOperation(String idShortPath, Object... params) {
+		if(idShortPath.contains("/")) {
+			String[] splitted = VABPathTools.splitPath(idShortPath);
+			List<String> idShorts = Arrays.asList(splitted);
+			return invokeNestedOperation(idShorts, params);
+		}else {
+			return invokeTopLevelOperation(idShortPath, params);
+		}
+	}
+
+	@Override
+	public Object invokeAsync(String idShortPath, Object... params) {
+		String[] splitted = VABPathTools.splitPath(idShortPath);
+		List<String> idShorts = Arrays.asList(splitted);
+		return invokeNestedOperationAsync(idShorts, params);
+	}
+
+	@Override
+	public void addSubmodelElement(String idShortPath, ISubmodelElement elem) {
+		String[] splitted = VABPathTools.splitPath(idShortPath);
+		List<String> idShorts = Arrays.asList(splitted);
+		addNestedSubmodelElement(idShorts, elem);
 	}
 }

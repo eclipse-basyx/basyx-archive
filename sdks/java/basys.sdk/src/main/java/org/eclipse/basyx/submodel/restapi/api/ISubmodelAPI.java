@@ -1,7 +1,6 @@
 package org.eclipse.basyx.submodel.restapi.api;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
@@ -33,37 +32,30 @@ public interface ISubmodelAPI {
 	/**
 	 * Adds a submodelElement to the submodel
 	 * 
-	 * @param idShorts
+	 * @param idShortPath
 	 *            the idShort path to the submodelElement
 	 * @param  elem
 	 *            the submodelElement to be added
 	 */
-	public void addSubmodelElement(List<String> idShorts, ISubmodelElement elem);
+	public void addSubmodelElement(String idShortPath, ISubmodelElement elem);
 
 	/**
 	 * Retrieves a submodelElement
 	 * 
-	 * @param idShort
-	 *            of the submodelElement
+	 * @param idShortPath
+	 *            the idShort Path to the submodelElement
 	 * @return the submodelElement
 	 */
-	public ISubmodelElement getSubmodelElement(String idShort);
+	public ISubmodelElement getSubmodelElement(String idShortPath);
 
 	/**
 	 * Removes a submodelElement from the submodel
 	 * 
-	 * @param idShort
-	 *            of the submodelElement to be removed
+	 * @param idShortPath
+	 *            the idShort path to the submodelElement, which is to be removed
 	 */
-	public void deleteSubmodelElement(String idShort);
+	public void deleteSubmodelElement(String idShortPath);
 
-	/**
-	 * Removes a submodelElement from a SubmodelElementCollection
-	 * 
-	 * @param idShort
-	 *            of the submodelElement to be removed
-	 */
-	public void deleteNestedSubmodelElement(List<String> idShorts);
 
 	/**
 	 * Helper function for quick access of operations
@@ -82,91 +74,55 @@ public interface ISubmodelAPI {
 	/**
 	 * Updates the value of a submodelElement
 	 * 
-	 * @param idShort
-	 *            of the submodelElement
-	 * @param newValue
-	 *            new value of the submodelElement
-	 */
-	public void updateSubmodelElement(String idShort, Object newValue);
-
-	/**
-	 * Updates the value of a submodelElement nested inside a SubmodelElementCollection.
-	 * 
-	 * @param idShorts
+	 * @param idShortPath
 	 *            the idShort path to the submodelElement
 	 * @param newValue
 	 *            new value of the submodelElement
 	 */
-	public void updateNestedSubmodelElement(List<String> idShorts, Object newValue);
+	public void updateSubmodelElement(String idShortPath, Object newValue);
 
 	/**
 	 * Retrieves the value of a submodelElement
 	 * 
-	 * @param idShort
-	 *            of the submodelElement
+	 * @param idShortPath
+	 *            the idShort path to the submodelElement
 	 * @return submodelElement value
 	 */
-	public Object getSubmodelElementValue(String idShort);
+	public Object getSubmodelElementValue(String idShortPath);
 
-	/**
-	 * Retrieves the value of a submodelElement nested inside a SubmodelElementCollection.
-	 * 
-	 * @param idShorts
-	 *            the idShort path to the submodelElement
-	 */
-	public Object getNestedSubmodelElementValue(List<String> idShorts);
-
-	/**
-	 * Retrieves a submodel element nested inside a SubmodelElementCollection
-	 * 
-	 * @param idShorts
-	 *            the idShort path to the submodelElement
-	 * @return
-	 */
-	public ISubmodelElement getNestedSubmodelElement(List<String> idShorts);
 
 	/**
 	 * Invokes an operation
 	 * 
-	 * @param idShort
-	 *            of the operation
-	 * @param params
-	 *            to be passed to the operation
-	 * @return the result of the operation
-	 */
-	public Object invokeOperation(String idShort, Object... params);
-
-	/**
-	 * Invokes an operation
-	 * 
-	 * @param idShorts
+	 * @param idShortPath
 	 *            the idShort path to the operation
 	 * @param params
 	 *            to be passed to the operation
 	 * @return the result of the operation
 	 */
-	public Object invokeNestedOperation(List<String> idShorts, Object... params);
+	public Object invokeOperation(String idShortPath, Object... params);
 
+	
 	/**
-	 * Invokes an operation asynchronously
+	 * Invoke an operation asynchronously
 	 * 
-	 * @param idShorts
-	 *            the idShort path to the operation
+	 * @param idShortPath
+	 * 			the idShort path to the operation
 	 * @param params
-	 *            to be passed to the operation
+	 * 			to be passed to the operation
 	 * @return the requestId of the invocation
 	 */
-	public Object invokeNestedOperationAsync(List<String> idShorts, Object... params);
+	public Object invokeAsync(String idShortPath, Object... params);
 	
 	/**
 	 * Gets the result of an asynchronously invoked operation
 	 * 
-	 * @param idShorts 
-	 *            the idShort path to the operation
+	 * @param idShort 
+	 *            of the operation
 	 * @param requestId
 	 *            the requestId of the invocation
 	 * @return the result of the Operation or a Message that it is not finished yet
 	 */
-	public Object getOperationResult(List<String> idShorts, String requestId);
+	public Object getOperationResult(String idShort, String requestId);
 
 }

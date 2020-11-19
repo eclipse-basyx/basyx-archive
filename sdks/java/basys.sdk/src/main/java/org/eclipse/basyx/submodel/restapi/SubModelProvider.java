@@ -10,6 +10,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionC
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
 import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
@@ -112,31 +113,25 @@ public class SubModelProvider extends MetaModelProvider {
 			} else if (splitted.length == 1 && splitted[0].equals(MultiSubmodelElementProvider.ELEMENTS)) {
 				return submodelAPI.getSubmodelElements();
 			} else if (splitted.length >= 2 && isQualifier(splitted[0])) { // Request for element with specific idShort
-				String idShort = splitted[1];
-				if (splitted.length == 2) {
-					return submodelAPI.getSubmodelElement(idShort);
-				} else if (isPropertyValuePath(splitted)) { // Request for the value of an property
-					return submodelAPI.getSubmodelElementValue(idShort);
-				} else if (isInvocationListPath(splitted)) {
-					List<String> idShorts = getIdShorts(splitted);
+				// Remove initial "/submodelElements"
+				path = removeSMElementPrefix(path);
 
-					// Remove invocationList/{requestId} from the idShorts
-					idShorts.remove(idShorts.size() - 1);
-					idShorts.remove(idShorts.size() - 1);
-					return submodelAPI.getOperationResult(idShorts, splitted[splitted.length - 1]);
-				} else if (isSubmodelElementListPath(splitted)) {
-					// Create list from array and wrap it in ArrayList to ensure modifiability
-					List<String> idShorts = getIdShorts(splitted);
-					
-					if (endsWithValue(splitted)) {
-						return submodelAPI.getNestedSubmodelElementValue(idShorts);
-					} else {
-						return submodelAPI.getNestedSubmodelElement(idShorts);
-					}
-				}
-			}
-		}
-		throw new MalformedRequestException("Unknown path " + path + " was requested");
+                if (endsWithValue(splitted)) { // Request for the value of an property
+                    String idShortPath = path.replace("/value", "");
+                    return submodelAPI.getSubmodelElementValue(idShortPath);
+                } else if (isInvocationListPath(splitted)) {
+                    List<String> idShorts = getIdShorts(splitted);
+
+                    // Remove invocationList/{requestId} from the idShorts
+                    idShorts.remove(idShorts.size() - 1);
+                    idShorts.remove(idShorts.size() - 1);
+                    return submodelAPI.getOperationResult(idShorts.get(0), splitted[splitted.length - 1]);
+                } else {
+                    return submodelAPI.getSubmodelElement(path);
+                }
+            }
+        }
+        throw new MalformedRequestException("Unknown path " + path + " was requested");
 	}
 
 	private List<String> getIdShorts(String[] splitted) {
@@ -153,17 +148,11 @@ public class SubModelProvider extends MetaModelProvider {
 		return idShorts;
 	}
 
-	private boolean isPropertyValuePath(String[] splitted) {
-		return splitted.length == 3 && splitted[0].equals(MultiSubmodelElementProvider.ELEMENTS) && endsWithValue(splitted);
-	}
 
 	private boolean endsWithValue(String[] splitted) {
 		return splitted[splitted.length - 1].equals(Property.VALUE);
 	}
 
-	private boolean isSubmodelElementListPath(String[] splitted) {
-		return splitted.length > 2 && splitted[0].equals(MultiSubmodelElementProvider.ELEMENTS);
-	}
 
 	private boolean isInvocationListPath(String[] splitted) {
 		return splitted.length > 2 && splitted[splitted.length - 2].equals(OperationProvider.INVOCATION_LIST);
@@ -177,8 +166,10 @@ public class SubModelProvider extends MetaModelProvider {
 			throw new MalformedRequestException("Set on \"submodel\" not supported");
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
+			path = removeSMElementPrefix(path);
+			String idshortPath = path.replace("/value", "");
 			if (endsWithValue(splitted)) {
-				submodelAPI.updateNestedSubmodelElement(getIdShorts(splitted), newValue);
+				submodelAPI.updateSubmodelElement(idshortPath, newValue);
 			} else {
 				
 				SubmodelElement element = SubmodelElement.createAsFacade((Map<String, Object>) newValue);
@@ -188,7 +179,7 @@ public class SubModelProvider extends MetaModelProvider {
 							+ element.getIdShort() + "' does not match the ending of the given path '" + path + "'");
 				}
 				
-				submodelAPI.addSubmodelElement(getIdShorts(splitted), element);
+				submodelAPI.addSubmodelElement(idshortPath, element);
 			}
 		}
 	}
@@ -205,7 +196,8 @@ public class SubModelProvider extends MetaModelProvider {
 			String[] splitted = VABPathTools.splitPath(path);
 			if (isQualifier(splitted[0])) {
 				if (splitted.length > 2) {
-					submodelAPI.deleteNestedSubmodelElement(getIdShorts(splitted));
+					path = removeSMElementPrefix(path);
+					submodelAPI.deleteSubmodelElement(path);
 				} else {
 					submodelAPI.deleteSubmodelElement(splitted[1]);
 				}
@@ -232,14 +224,14 @@ public class SubModelProvider extends MetaModelProvider {
 		if (path.isEmpty()) {
 			throw new MalformedRequestException("Given path must not be empty");
 		} else {
-			String[] splitted = VABPathTools.splitPath(path);
 			if (VABPathTools.isOperationInvokationPath(path)) {
 				if(path.endsWith(OperationProvider.ASYNC)) {
-					List<String> idShorts = getIdShorts(splitted);
-					idShorts.remove(idShorts.size() - 1);
-					return submodelAPI.invokeNestedOperationAsync(idShorts, parameters);
+					path = removeSMElementPrefix(path);
+					path = path.replace(Operation.INVOKE + OperationProvider.ASYNC, "");
+					return submodelAPI.invokeAsync(path, parameters);
 				} else {
-					return submodelAPI.invokeNestedOperation(getIdShorts(splitted), parameters);
+					path = removeSMElementPrefix(path);
+					return submodelAPI.invokeOperation(path, parameters);
 				}
 			} else {
 				throw new MalformedRequestException("Given path '" + path + "' does not end in /invoke");
@@ -249,5 +241,9 @@ public class SubModelProvider extends MetaModelProvider {
 
 	protected void setAPI(ISubmodelAPI api) {
 		this.submodelAPI = api;
+	}
+	
+	private String removeSMElementPrefix(String path) {
+		return  path.replace("submodelElements", "");
 	}
 }
