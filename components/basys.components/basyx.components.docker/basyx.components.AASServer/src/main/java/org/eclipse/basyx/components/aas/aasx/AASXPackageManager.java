@@ -351,6 +351,10 @@ public class AASXPackageManager {
 			throws ParserConfigurationException, SAXException, IOException {
 		List<String> files = new ArrayList<>();
 
+		if (insRelFile == null) {
+			return files;
+		}
+
 		// create the XML document parser
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
