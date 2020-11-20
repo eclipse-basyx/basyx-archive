@@ -41,7 +41,7 @@ public class SQLProxyTestCollectionTypes {
 		sqlRootElement.drop();
 
 		// Create new table in database for root element
-		sqlRootElement.create();
+		sqlRootElement.createRootTableIfNotExists();
 
 		// Create collection
 		Collection<Object> sqlColl = sqlRootElement.createCollection(1);

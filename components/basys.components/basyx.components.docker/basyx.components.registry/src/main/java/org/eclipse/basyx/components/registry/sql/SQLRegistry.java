@@ -18,6 +18,8 @@ import org.eclipse.basyx.tools.sqlproxy.SQLRootElement;
  *
  */
 public class SQLRegistry extends AASRegistry {
+	public final static String TABLE_ID = "root_registry";
+
 	/**
 	 * Constructor using default sql connection
 	 */
@@ -34,10 +36,8 @@ public class SQLRegistry extends AASRegistry {
 
 	private static Map<String, Object> createRootMap(BaSyxSQLConfiguration config) {
 		SQLRootElement sqlRootElement = initSQLConnection(config);
-		sqlRootElement.drop();
-		sqlRootElement.create();
-
-		return sqlRootElement.createMap(sqlRootElement.getNextIdentifier());
+		sqlRootElement.createRootTableIfNotExists();
+		return sqlRootElement.retrieveRootMap();
 	}
 
 	/**
@@ -57,6 +57,6 @@ public class SQLRegistry extends AASRegistry {
 		String qDrvCls = config.getDriver();
 
 		// Create SQL driver instance
-		return new SQLRootElement(user, pass, path, qDrvCls, qryPfx, "root_registry");
+		return new SQLRootElement(user, pass, path, qDrvCls, qryPfx, TABLE_ID);
 	}
 }

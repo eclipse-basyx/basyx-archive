@@ -41,7 +41,7 @@ public class SQLProxyTestMapSimple {
 		sqlRootElement.drop();
 
 		// Create new table in database for root element
-		sqlRootElement.create();
+		sqlRootElement.createRootTableIfNotExists();
 
 		// Create new SQL map
 		Map<String, Object> sqlMap = sqlRootElement.createMap(1);

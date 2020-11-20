@@ -125,7 +125,7 @@ public abstract class TestRegistryProviderSuite {
 	 * Checks, if the given descriptor is valid. Should contain the values of the first descriptor
 	 * as given by the test setup
 	 */
-	private void validateDescriptor1(AASDescriptor descriptor) {
+	protected void validateDescriptor1(AASDescriptor descriptor) {
 		assertEquals(aasId1.getId(), descriptor.getIdentifier().getId());
 		assertEquals(aasId1.getIdType(), descriptor.getIdentifier().getIdType());
 		IAsset asset = descriptor.getAsset();
@@ -144,7 +144,7 @@ public abstract class TestRegistryProviderSuite {
 	 * Checks, if the given descriptor is valid. Should contain the values of the second descriptor
 	 * as given by the test setup
 	 */
-	private void validateDescriptor2(AASDescriptor descriptor) {
+	protected void validateDescriptor2(AASDescriptor descriptor) {
 		assertEquals(aasId2.getId(), descriptor.getIdentifier().getId());
 		assertEquals(aasId2.getIdType(), descriptor.getIdentifier().getIdType());
 		IAsset asset = descriptor.getAsset();

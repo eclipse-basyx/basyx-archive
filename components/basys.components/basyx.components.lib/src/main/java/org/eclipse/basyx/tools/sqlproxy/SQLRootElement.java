@@ -38,7 +38,7 @@ public class SQLRootElement extends SQLConnector {
 	/**
 	 * Creates the root table if it does not exist (including a possibly missing schema)
 	 */
-	public void create() {
+	public void createRootTableIfNotExists() {
 		createSchema();
 		createRootTable();
 	}
@@ -54,38 +54,41 @@ public class SQLRootElement extends SQLConnector {
 	/**
 	 * Get next free identifier for another element
 	 */
-	@SuppressWarnings("unchecked")
 	public int getNextIdentifier() {
-		// Element ID
-		int elementID = -1;
+		Map<String, Object> sqlResult = readCurrentElementPointer();
 
+		// Store element ID
+		int elementId = Integer.parseInt((String) sqlResult.get("NextElementID"));
+
+		// SQL update statement
+		String updateString = "UPDATE elements." + getSqlTableID() + " SET NextElementID='" + (elementId + 1)
+				+ "', ElementPrefix='" + sqlResult.get("ElementPrefix") + "'";
+		DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(getDriver(), updateString);
+
+		// Empty parameter set
+		Map<String, Object> parameter = new HashMap<>();
+
+		// Execute SQL statement
+		dynUpdate.accept(parameter);
+
+		// Return element ID
+		return elementId;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Map<String, Object> readCurrentElementPointer() {
 		// SQL query string
-		String queryString = "SELECT * FROM elements."+getSqlTableID();
-		DynamicSQLQuery dynQuery = new DynamicSQLQuery(getDriver(), queryString, "mapArray(NextElementID:Integer,ElementPrefix:String)");
+		String queryString = "SELECT * FROM elements." + getSqlTableID();
+		DynamicSQLQuery dynQuery = new DynamicSQLQuery(getDriver(), queryString,
+				"mapArray(NextElementID:Integer,ElementPrefix:String)");
 		
 		// Empty parameter set
 		Map<String, Object> parameter = new HashMap<>();
-		// - Execute query, return the column as 
-		Map<String, Object> sqlResult = (Map<String, Object>) dynQuery.get(parameter);
-
-		// Store element ID
-		elementID = Integer.parseInt((String) sqlResult.get("NextElementID"));
-
-		
-		// SQL update statement
-		String updateString = "UPDATE elements."+getSqlTableID()+" SET NextElementID='"+(elementID+1)+"', ElementPrefix='"+sqlResult.get("ElementPrefix")+"'";
-		DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(getDriver(), updateString);
-		
-		// Empty parameter set
-		parameter.clear();
-		
-		// Execute SQL statement
-		dynUpdate.accept(parameter);
-		
-		// Return element ID
-		return elementID;
+		// - Execute query, return the column as
+		return (Map<String, Object>) dynQuery.get(parameter);
 	}
 	
+
 	/**
 	 * Creates a schema for the root element
 	 */
@@ -131,16 +134,20 @@ public class SQLRootElement extends SQLConnector {
 		// Execute SQL statement
 		dynCmd.accept(parameter);
 		
+		Map<String, Object> currentPointer = readCurrentElementPointer();
 		
-		// Initially fill table
-		String sqlInsertString = "INSERT INTO elements."+ getSqlTableID() +" (NextElementID, ElementPrefix) VALUES ('1', '"+getSqlTableID()+":')";
-		DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(getDriver(), sqlInsertString);
+		if (!currentPointer.containsKey("NextElementID")) {
+			// Initially fill table if it is empty
+			String sqlInsertString = "INSERT INTO elements." + getSqlTableID()
+					+ " (NextElementID, ElementPrefix) VALUES ('1', '" + getSqlTableID() + ":')";
+			DynamicSQLUpdate dynUpdate = new DynamicSQLUpdate(getDriver(), sqlInsertString);
 
-		// Clear parameter
-		parameter.clear();
-		
-		// Run SQL operation
-		dynUpdate.accept(parameter);
+			// Clear parameter
+			parameter.clear();
+
+			// Run SQL operation
+			dynUpdate.accept(parameter);
+		}
 	}
 
 	
@@ -230,6 +237,24 @@ public class SQLRootElement extends SQLConnector {
 
 		// Execute SQL statement
 		dynCmd.accept(parameter);		
+	}
+
+	/**
+	 * Creates a new root map, if it does not exist. Otherwise, returns
+	 * the first map within this root element.
+	 * 
+	 * @return
+	 */
+	public SQLMap retrieveRootMap() {
+		Map<String, Object> currentPointer = readCurrentElementPointer();
+		int elementId = Integer.parseInt((String) currentPointer.get("NextElementID"));
+		if (elementId == 1) {
+			// No element has been created, yet => create new root map
+			return createMap(getNextIdentifier());
+		} else {
+			// Root map already exists => return first
+			return new SQLMap(this, 1);
+		}
 	}
 }
 
