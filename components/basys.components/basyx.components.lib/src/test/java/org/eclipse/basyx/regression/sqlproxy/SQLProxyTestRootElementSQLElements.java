@@ -37,7 +37,7 @@ public class SQLProxyTestRootElementSQLElements {
 		sqlRootElement = new SQLRootElement(SQLConfig.SQLUSER, SQLConfig.SQLPW,  "//localhost/basyx-map?", "org.postgresql.Driver", "jdbc:postgresql:", "root_el_01");
 		// - Create new table in database for root element
 		sqlRootElement.drop();
-		sqlRootElement.create();
+		sqlRootElement.createRootTableIfNotExists();
 		
 		// Create map
 		Map<String, Object> rootMap = sqlRootElement.createMap(0);
