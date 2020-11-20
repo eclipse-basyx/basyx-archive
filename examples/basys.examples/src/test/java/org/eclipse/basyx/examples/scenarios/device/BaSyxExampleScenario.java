@@ -1,4 +1,4 @@
-package org.eclipse.basyx.examples.examplescenario;
+package org.eclipse.basyx.examples.scenarios.device;
 
 import java.util.function.Supplier;
 

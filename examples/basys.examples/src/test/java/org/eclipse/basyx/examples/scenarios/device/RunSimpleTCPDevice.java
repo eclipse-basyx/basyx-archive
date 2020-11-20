@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
-import org.eclipse.basyx.examples.examplescenario.BaSyxExampleScenario;
 import org.eclipse.basyx.examples.mockup.application.ReceiveDeviceDashboardStatusApplication;
 import org.eclipse.basyx.examples.mockup.device.SimpleTCPDeviceMockup;
 import org.eclipse.basyx.examples.mockup.devicemanager.ManufacturingDeviceManager;

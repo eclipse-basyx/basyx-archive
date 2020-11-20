@@ -4,10 +4,10 @@ import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
-import org.eclipse.basyx.examples.examplescenario.BaSyxExampleScenario;
 import org.eclipse.basyx.examples.mockup.application.ReceiveDeviceDashboardStatusApplication;
 import org.eclipse.basyx.examples.mockup.device.ControllableTCPDeviceMockup;
 import org.eclipse.basyx.examples.mockup.devicemanager.BaSyxTCPControlManufacturingDeviceManager;
+import org.eclipse.basyx.examples.scenarios.device.BaSyxExampleScenario;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.models.controlcomponent.ControlComponent;
 import org.eclipse.basyx.models.controlcomponent.ExecutionState;
