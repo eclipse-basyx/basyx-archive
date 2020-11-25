@@ -15,6 +15,12 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.junit.Test;
 
+/**
+ * Test for the AddSubmodelToAAS snippet
+ * 
+ * @author conradi
+ *
+ */
 public class TestAddSubmodelToAAS extends AbstractSnippetTest {
 
 	private static final String NEW_SM_ID_SHORT = "smIdShort_New";
