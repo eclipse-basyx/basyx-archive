@@ -45,15 +45,34 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 	}
 
 	/**
-	 * Constructor with initial configuration - docBasePath and hostname are default values
+	 * Constructor with initial configuration
 	 * 
-	 * @param backend The backend for the AASServer
-	 * @param source  The file source for the AASServer (e.g. an .aasx file)
+	 * @param backend
+	 *            The backend for the AASServer
+	 * @param source
+	 *            The file source for the AASServer (e.g. an .aasx file)
 	 */
 	public BaSyxAASServerConfiguration(AASServerBackend backend, String source) {
 		super(getDefaultProperties());
 		setAASBackend(backend);
 		setAASSource(source);
+	}
+
+	/**
+	 * Constructor with initial configuration values
+	 * 
+	 * @param backend
+	 *            The backend for the AASServer
+	 * @param source
+	 *            The file source for the AASServer (e.g. an .aasx file)
+	 * @param registryUrl
+	 *            The url to the registry
+	 */
+	public BaSyxAASServerConfiguration(AASServerBackend backend, String source, String registryUrl) {
+		super(getDefaultProperties());
+		setAASBackend(backend);
+		setAASSource(source);
+		setRegistry(registryUrl);
 	}
 
 	/**
