@@ -1,77 +1,85 @@
 #ifndef BASYX_CONTROLCOMPONENT_ICONTROLCOMPONENTCHANGELISTENER_H
 #define BASYX_CONTROLCOMPONENT_ICONTROLCOMPONENTCHANGELISTENER_H
 
-#include <BaSyx/controlcomponent/enumerations/ExecutionMode.h>
+#include <BaSyx/shared/object.h>
 #include <BaSyx/controlcomponent/enumerations/OccupationState.h>
+#include <BaSyx/controlcomponent/enumerations/ExecutionState.h>
+#include <BaSyx/controlcomponent/enumerations/ExecutionMode.h>
 
 namespace basyx {
 namespace controlcomponent {
 
+/**
+ * Receive change events from control components.
+ */
 class IControlComponentChangeListener
 {
 public:
   virtual ~IControlComponentChangeListener() = 0;
+
   /**
- * Indicate change of a variable
- */
-  virtual void onVariableChange(const std::string & varName, basyx::object newValue);
+   * Indicate change of a variable
+   */
+  virtual void onVariableChange(const std::string & varName, object newValue) = 0;
 
 
   /**
    * Indicate new occupier
    */
-  virtual void onNewOccupier(const std::string & occupierId);
+  virtual void onNewOccupier(const std::string & occupierId) = 0;
 
 
   /**
    * Indicate new occupation state
    */
-  virtual void onNewOccupationState(const OccupationState & state);
+  virtual void onNewOccupationState(OccupationState state) = 0;
 
 
   /**
-   * Indicate a change of last occupier. This is probably not relevant for many sub classes, therefore this class
-   * provides a default implementation. 
+   * Indicate a change of last occupier.
    */
-  virtual void onLastOccupier(const std::string & lastOccupierId);
+  virtual void onLastOccupier(const std::string & lastOccupierId) = 0;
 
 
   /**
    * Indicate an execution mode change
    */
-  virtual void onChangedExecutionMode(const ExecutionMode & newExecutionMode);
+  virtual void onChangedExecutionMode(ExecutionMode newExecutionMode) = 0;
 
 
   /**
    * Indicate an execution state change
    */
-  virtual void onChangedExecutionState(const ExecutionMode & newExecutionState);
+  virtual void onChangedExecutionState(ExecutionState newExecutionState) = 0;
 
 
   /**
    * Indicate an operation mode change
    */
-  virtual void onChangedOperationMode(const std::string & newOperationMode);
+  virtual void onChangedOperationMode(const std::string & newOperationMode) = 0;
 
 
   /**
    * Indicate an work state change
    */
-  virtual void onChangedWorkState(const std::string & newWorkState);
+  virtual void onChangedWorkState(const std::string & newWorkState) = 0;
 
 
   /**
    * Indicate an error state change
    */
-  virtual void onChangedErrorState(const std::string & newWorkState);
+  virtual void onChangedErrorState(const std::string & newWorkState) = 0;
 
 
   /**
-   * Indicate an previous error state change. This is probably not relevant for many sub classes, therefore this class
-   * provides a default implementation. 
+   * Indicate an previous error state change.
    */
-  virtual void onChangedPrevError(const std::string & newWorkState);
-  
+  virtual void onChangedPrevError(const std::string & newWorkState) = 0;
+
+  /**
+   * Generates a unique ID to identify ControlComponentChangeListener
+   */
+  virtual int getUniqueID() = 0;
 };
 
 inline IControlComponentChangeListener::~IControlComponentChangeListener() = default;

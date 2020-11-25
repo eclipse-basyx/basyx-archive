@@ -4,7 +4,7 @@
 #include <string>
 
 namespace basyx {
-namespace submodel {
+namespace controlcomponent {
 
 enum class ControlComponentConstants {
     status,

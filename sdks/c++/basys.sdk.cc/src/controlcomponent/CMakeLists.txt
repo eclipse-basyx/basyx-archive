@@ -27,10 +27,10 @@ target_include_directories(${BASYX_CONTROLCOMPONENT_LIB_SUFFIX}
 target_sources(${BASYX_CONTROLCOMPONENT_LIB_SUFFIX}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/enumerations/ControlComponentConstants.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/enumerations/ExecutionMode.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/enumerations/ExecutionOrder.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/enumerations/ExecutionState.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/enumerations/OccupationState.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/implementation/ControlComponent.cpp
 )
 
 #Header files
@@ -38,9 +38,6 @@ target_sources(${BASYX_CONTROLCOMPONENT_LIB_SUFFIX}
     PRIVATE
         ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/interfaces/IControlComponentChangeListener.h
         ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/interfaces/IControlComponent.h
-        ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/interfaces/ISimpleControlComponent.h
-        ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/interfaces/ISimpleProxyControlComponent.h
-        ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/interfaces/IStatusMap.h
 
         ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/enumerations/ControlComponentConstants.h
         ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/enumerations/ExecutionMode.h
@@ -48,9 +45,15 @@ target_sources(${BASYX_CONTROLCOMPONENT_LIB_SUFFIX}
         ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/enumerations/ExecutionState.h
         ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/enumerations/OccupationState.h
 
+        ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/headers/ControlComponent.h
         )
 
 add_library(basyx::controlcomponent ALIAS ${BASYX_CONTROLCOMPONENT_LIB_SUFFIX})
 add_library(${PROJECT_SHORTNAME}::${BASYX_CONTROLCOMPONENT_LIB_SUFFIX} ALIAS ${BASYX_CONTROLCOMPONENT_LIB_SUFFIX})
 
 target_include_directories(${BASYX_CONTROLCOMPONENT_LIB_SUFFIX} PRIVATE ${PROJECT_SOURCE_DIR})
+target_link_libraries(${BASYX_CONTROLCOMPONENT_LIB_SUFFIX}
+        PUBLIC
+        BaSyx::Shared
+        BaSyx::VAB
+)

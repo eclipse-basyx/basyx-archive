@@ -5,11 +5,11 @@
 
 #include <BaSyx/shared/object.h>
 
-#include <BaSyx/controlcomponent/interfaces/IStatusMap.h>
 #include <BaSyx/controlcomponent/interfaces/IControlComponentChangeListener.h>
 
 #include <BaSyx/controlcomponent/enumerations/OccupationState.h>
 #include <BaSyx/controlcomponent/enumerations/ExecutionMode.h>
+#include <BaSyx/controlcomponent/enumerations/ExecutionState.h>
 
 /**
  * BaSys 4.0 control component interface. This is a VAB object that cannot be serialized.
@@ -17,30 +17,29 @@
 namespace basyx {
 namespace controlcomponent {
 
-class ControlComponent
+class IControlComponent
 {
 public:
-  ControlComponent();
 
   /**
    * Add ControlComponentChangeListener
    */
-  virtual void addControlComponentChangeListener(const IControlComponentChangeListener &listener) = 0;
+  virtual void addControlComponentChangeListener(const std::shared_ptr<IControlComponentChangeListener> listener) = 0;
 
   /**
    * Remove ControlComponentChangeListener
    */
-  virtual void removeControlComponentChangeListener(const IControlComponentChangeListener &listener) = 0;
+  virtual void removeControlComponentChangeListener(const std::shared_ptr<IControlComponentChangeListener> listener) = 0;
 
   /**
    * Get "operations" map
    */
-  const basyx::object &getServiceOperationMap();
+  virtual const basyx::object getServiceOperationMap() = 0;
 
   /**
    * Update an value
    */
-  virtual void put(const std::string &key, const basyx::object &value) = 0;
+  virtual void put(const std::string &key, basyx::object value) = 0;
 
   /**
    * Finish current execution state (execute 'SC' order). This only works in transition states
@@ -75,7 +74,7 @@ public:
   /**
    * Get occupier ID
    */
-  virtual std::string getOccupierID() = 0;;
+  virtual std::string getOccupierID() = 0;
 
   /**
    * Set occupier ID
@@ -85,7 +84,7 @@ public:
   /**
    * Get last occupier ID
    */
-  virtual std::string getLastOccupierID() = 0;;
+  virtual std::string getLastOccupierID() = 0;
 
   /**
    * Set last occupier ID
@@ -105,17 +104,17 @@ public:
   /**
    * Get execution state
    */
-  virtual std::string getExecutionState() = 0;;
+  virtual ExecutionState getExecutionState() = 0;
 
   /**
    * Set execution state
    */
-  virtual void setExecutionState(const std::string &newSt) = 0;
+  virtual void setExecutionState(const ExecutionState &newSt) = 0;
 
   /**
    * Get operation mode
    */
-  virtual std::string getOperationMode() = 0;;
+  virtual std::string getOperationMode() = 0;
 
   /**
    * Set operation mode
@@ -125,7 +124,7 @@ public:
   /**
    * Get work state
    */
-  virtual std::string getWorkState() = 0;;
+  virtual std::string getWorkState() = 0;
 
   /**
    * Set work state
@@ -135,7 +134,7 @@ public:
   /**
    * Get error state
    */
-  virtual std::string getErrorState() = 0;;
+  virtual std::string getErrorState() = 0;
 
   /**
    * Set error state
@@ -145,7 +144,7 @@ public:
   /**
    * Get last error state
    */
-  virtual std::string getLastErrorState() = 0;;
+  virtual std::string getLastErrorState() = 0;
 
   /**
    * Set last error state
@@ -155,7 +154,7 @@ public:
   /**
    * Get last command
    */
-  virtual std::string getCommand() = 0;;
+  virtual std::string getCommand() = 0;
 
   /**
    * Set command
@@ -165,7 +164,7 @@ public:
   /**
    * Get local overwrite variable
    */
-  virtual std::string getLocalOverwrite() = 0;;
+  virtual std::string getLocalOverwrite() = 0;
 
   /**
    * Set local overwrite variable
@@ -175,13 +174,12 @@ public:
   /**
    * Get local overwrite free variable
    */
-  virtual std::string getLocalOverwriteFree() = 0;;
+  virtual std::string getLocalOverwriteFree() = 0;
 
   /**
    * Set local overwrite free variable
    */
   virtual void setLocalOverwriteFree(const std::string &cmd) = 0;
-
 };
 
 }

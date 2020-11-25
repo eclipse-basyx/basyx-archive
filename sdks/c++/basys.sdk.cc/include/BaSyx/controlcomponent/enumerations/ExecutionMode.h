@@ -7,20 +7,12 @@ namespace basyx {
 namespace controlcomponent {
 
 enum class ExecutionMode {
-    Auto,
-    Semiauto,
-    Manual,
-    Reserved,
-    Simulation,
+    Auto = 1,
+    Semiauto = 2,
+    Manual = 3,
+    Reserved = 4,
+    Simulation = 5
 };
-
-class ExecutionMode_
-{
-public:
-    static ExecutionMode from_string(const std::string & name);
-    static const char * to_string(ExecutionMode value);
-};
-
 
 }
 }

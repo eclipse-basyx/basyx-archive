@@ -5,7 +5,7 @@
 #include <memory>
 #include <string>
 
-using namespace basyx::submodel;
+using namespace basyx::controlcomponent;
 
 using enum_pair_t = std::pair<const char*, ControlComponentConstants>;
 
