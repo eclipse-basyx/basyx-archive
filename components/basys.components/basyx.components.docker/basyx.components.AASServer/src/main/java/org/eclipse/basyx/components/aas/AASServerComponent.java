@@ -97,11 +97,13 @@ public class AASServerComponent implements IComponent {
 	public void startComponent() {
 		logger.info("Create the server...");
 		// Load the aggregator servlet
+		createRegistryFromUrl();
 		AASAggregatorServlet aggregatorServlet = loadAggregatorServlet();
 
 		// Init HTTP context and add an XMLAASServlet according to the configuration
 		BaSyxContext context = contextConfig.createBaSyxContext();
 		context.addServletMapping("/*", aggregatorServlet);
+
 
 		// An initial AAS has been loaded from the drive?
 		if (aasBundles != null) {
@@ -111,8 +113,7 @@ public class AASServerComponent implements IComponent {
 			// 2. Fix the file paths according to the servlet configuration
 			modifyFilePaths(contextConfig.getHostname(), contextConfig.getPort(), contextConfig.getContextPath());
 
-			// 3. Create registry & register the initial AAS
-			createRegistryFromUrl();
+			// 3. Register the initial AAS
 			registerAAS();
 		}
 

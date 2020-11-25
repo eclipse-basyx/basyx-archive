@@ -9,6 +9,8 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.IComponent;
 import org.eclipse.basyx.components.aas.AASServerComponent;
+import org.eclipse.basyx.components.aas.configuration.AASServerBackend;
+import org.eclipse.basyx.components.aas.configuration.BaSyxAASServerConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.registry.RegistryComponent;
 import org.eclipse.basyx.components.registry.configuration.BaSyxRegistryConfiguration;
@@ -159,13 +161,15 @@ public class CloudEdgeDeploymentScenario {
 	 * 
 	 */
 	private void startupCloudServer() {
-		// Load the AAS context from a .properties file resource
+		// Load the server context from a .properties file resource
 		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration();
 		contextConfig.loadFromResource("CloudEdgeDeploymentScenarioAASContext.properties");
 
+		// Create the AAS - Can alternatively also be loaded from a .property file
+		BaSyxAASServerConfiguration aasServerConfig = new BaSyxAASServerConfiguration(AASServerBackend.INMEMORY, "", registryPath);
+
 		// Create a server according to this configuration
-		AASServerComponent cloudServer = new AASServerComponent(contextConfig);
-		cloudServer.setRegistry(registry);
+		AASServerComponent cloudServer = new AASServerComponent(contextConfig, aasServerConfig);
 		
 		// Start the created server
 		cloudServer.startComponent();
