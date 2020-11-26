@@ -2,6 +2,7 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.submodelel
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.math.BigInteger;
 import java.time.Duration;
@@ -124,5 +125,27 @@ public class TestProperty {
 		Property property = new Property(VALUE);
 		property.addConceptDescription(description);
 		assertEquals(new Reference(description, KeyElements.CONCEPTDESCRIPTION, true), property.getSemanticId());
-	} 
+	}
+	
+	@Test
+	public void testInitializeWithNullValue() {
+		try {
+			// Should not work as valueType is a mandatory attribute
+			new Property("id", null);
+			fail();
+		} catch (RuntimeException e) {
+		}
+		
+		try {
+			// Should not work as valueType can not be set with null as value
+			Property prop = new Property();
+			prop.setValue(null);
+			fail();
+		} catch (RuntimeException e) {
+		}
+		
+		Property prop = new Property("id", "value");
+		// This should work as the valueType is already set
+		prop.setValue(null);
+	}
 }

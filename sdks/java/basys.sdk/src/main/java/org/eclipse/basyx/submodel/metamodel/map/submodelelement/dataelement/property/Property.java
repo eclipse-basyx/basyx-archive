@@ -57,6 +57,23 @@ public class Property extends DataElement implements IProperty {
 		put(Property.VALUE, null);
 		put(Property.VALUEID, null);
 	}
+	
+	/**
+	 * Constructor accepting an idShort and a value
+	 * The valueType is set automatically 
+	 * @param idShort the idShort for the Property
+	 * @param value the value for the Property
+	 */
+	public Property(String idShort, Object value) {
+		setIdShort(idShort);
+		
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+		
+		// Set the value for the Property
+		// set() also automatically sets the value type
+		set(value);
+	}
 
 	/**
 	 * Creates a Property object from a map
@@ -109,6 +126,9 @@ public class Property extends DataElement implements IProperty {
 	 *             manually determined type of the value
 	 */
 	public void setValueType(PropertyValueTypeDef type) {
+		if(type == null) {
+			throw new RuntimeException("Can not set null as valueType");
+		}
 		put(Property.VALUETYPE, PropertyValueTypeDefHelper.getWrapper(type));
 	}
 
@@ -129,6 +149,13 @@ public class Property extends DataElement implements IProperty {
 		put(Property.VALUE, PropertyValueTypeDefHelper.prepareForSerialization(value));
 		// Value type is only set if it is not set before
 		if(getValueType() == null) {
+			
+			// If valueType has not been set yet,
+			// a null can not be accepted as value, because valueType needs to be set
+			if(value == null) {
+				throw new RuntimeException("Can not set mandatory attribute 'valueType' with null as value");
+			}
+			
 			put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(value));
 		}
 	}

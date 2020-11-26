@@ -6,6 +6,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 
@@ -42,7 +43,7 @@ public class SimpleAASSubmodel extends SubModel {
 		stringProp.setIdShort("stringProperty");
 		addSubModelElement(stringProp);
 
-		Property nullProp = new Property(null);
+		Property nullProp = new Property(null, PropertyValueTypeDef.String);
 		nullProp.setIdShort("nullProperty");
 		addSubModelElement(nullProp);
 
