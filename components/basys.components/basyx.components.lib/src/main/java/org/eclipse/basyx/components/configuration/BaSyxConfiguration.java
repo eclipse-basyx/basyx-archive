@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -135,6 +137,16 @@ public class BaSyxConfiguration {
 	 */
 	public void setProperty(String name, String value) {
 		values.put(name, value);
+	}
+
+	/**
+	 * Returns all contained properties that begin with a specific prefix
+	 * 
+	 * @param prefix The filtered prefix (e.g. "aas.")
+	 * @return The list of all contained properties that begin with the prefix
+	 */
+	public List<String> getProperties(String prefix) {
+		return values.keySet().stream().filter(key -> key.startsWith(prefix)).collect(Collectors.toList());
 	}
 
 	/**

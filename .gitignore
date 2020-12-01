@@ -1,3 +1,4 @@
+.lck
 *.class
 /components/basys.components/WebContent/WEB-INF/lib/jdbc/postgresql-42.2.2.jar
 /components/basys.components/WebContent/WEB-INF/lib/jersey/ext/aopalliance-repackaged-2.5.0-b42.jar
