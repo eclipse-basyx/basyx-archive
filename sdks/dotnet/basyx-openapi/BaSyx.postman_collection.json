@@ -6,30 +6,30 @@
 	},
 	"item": [
 		{
-			"name": "Component",
+			"name": "Asset Administration Shell",
 			"item": [
 				{
-					"name": "Submodels",
+					"name": "Submodel",
 					"item": [
 						{
 							"name": "SubmodelElements",
 							"item": [
 								{
-									"name": "Create SubmodelElement",
+									"name": "Create or Update SubmodelElement",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"id": "088a0eb7-5981-4d96-9879-34e2298acb1c",
 												"exec": [
-													"pm.environment.set(\"dataElement_idShort\", pm.response.json().idShort);"
+													"pm.environment.set(\"submodelElement_idShort\", pm.response.json().idShort);"
 												],
 												"type": "text/javascript"
 											}
 										}
 									],
 									"request": {
-										"method": "POST",
+										"method": "PUT",
 										"header": [
 											{
 												"key": "Content-Type",
@@ -40,7 +40,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"idShort\": \"{{dataElement_idShort}}\",\n    \"modelType\": {\n        \"name\": \"Property\"\n    },\n    \"valueType\": {\n        \"dataObjectType\": {\n            \"name\": \"string\"\n        }\n    }\n}",
+											"raw": "{\n    \"idShort\": \"{{submodelElement_idShort}}\",\n    \"modelType\": {\n        \"name\": \"Property\"\n    },\n    \"valueType\": {\n        \"dataObjectType\": {\n            \"name\": \"string\"\n        }\n    }\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -48,7 +48,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodelElements",
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodel/submodelElements/{{submodelElement_idShort}}",
 											"host": [
 												"{{component_endpoint}}"
 											],
@@ -56,7 +56,9 @@
 												"aas",
 												"submodels",
 												"{{submodel_idShort}}",
-												"submodelElements"
+												"submodel",
+												"submodelElements",
+												"{{submodelElement_idShort}}"
 											]
 										}
 									},
@@ -68,7 +70,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodelElements/{{submodelElement_idShort}}",
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodel/submodelElements/{{submodelElement_idShort}}",
 											"host": [
 												"{{component_endpoint}}"
 											],
@@ -76,6 +78,7 @@
 												"aas",
 												"submodels",
 												"{{submodel_idShort}}",
+												"submodel",
 												"submodelElements",
 												"{{submodelElement_idShort}}"
 											]
@@ -89,7 +92,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodelElements",
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodel/submodelElements",
 											"host": [
 												"{{component_endpoint}}"
 											],
@@ -97,6 +100,7 @@
 												"aas",
 												"submodels",
 												"{{submodel_idShort}}",
+												"submodel",
 												"submodelElements"
 											]
 										}
@@ -117,7 +121,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"value\" : \"TestValue\",\n\t\"valueType\": {\n        \"dataObjectType\": {\n            \"name\": \"string\"\n        }\n    }\n}",
+											"raw": "\"TestStringValue\"",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -125,7 +129,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodelElements/{{submodelElement_idShort}}/value",
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodel/submodelElements/{{submodelElement_idShort}}/value",
 											"host": [
 												"{{component_endpoint}}"
 											],
@@ -133,6 +137,7 @@
 												"aas",
 												"submodels",
 												"{{submodel_idShort}}",
+												"submodel",
 												"submodelElements",
 												"{{submodelElement_idShort}}",
 												"value"
@@ -156,10 +161,13 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": ""
+											"raw": "",
+											"options": {
+												"raw": {}
+											}
 										},
 										"url": {
-											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodelElements/{{submodelElement_idShort}}/value",
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodel/submodelElements/{{submodelElement_idShort}}/value",
 											"host": [
 												"{{component_endpoint}}"
 											],
@@ -167,6 +175,7 @@
 												"aas",
 												"submodels",
 												"{{submodel_idShort}}",
+												"submodel",
 												"submodelElements",
 												"{{submodelElement_idShort}}",
 												"value"
@@ -181,7 +190,7 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodelElements/{{submodelElement_idShort}}",
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodel/submodelElements/{{submodelElement_idShort}}",
 											"host": [
 												"{{component_endpoint}}"
 											],
@@ -189,6 +198,7 @@
 												"aas",
 												"submodels",
 												"{{submodel_idShort}}",
+												"submodel",
 												"submodelElements",
 												"{{submodelElement_idShort}}"
 											]
@@ -249,6 +259,18 @@
 								},
 								{
 									"name": "Invoke Operation by Id (async)",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "bd346ea3-d16e-478e-aa1c-b0610b994bfb",
+												"exec": [
+													"pm.environment.set(\"requestId\", pm.response.json().requestId);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
 									"request": {
 										"method": "POST",
 										"header": [
@@ -261,7 +283,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"requestId\" : \"123456789\",\n    \"inoutputArguments\": [{\n        \"value\" : {\n\t\t\t\"idShort\" : \"HierRein\",\n\t\t\t\"modelType\" : {\n\t\t\t\t\"name\" : \"Property\"\n\t\t\t},\n            \"valueType\": {\n                    \"dataObjectType\": {\n                        \"name\": \"string\"\n                    }\n            }\n\t\t}\n    }],\n\t\"inputArguments\" : [{\n\t\t\"value\" : {\n\t\t\t\"idShort\" : \"Expression\",\n\t\t\t\"modelType\" : {\n\t\t\t\t\"name\" : \"Property\"\n\t\t\t},\n\t    \t\"value\" : \"5*(3+2)\",\n            \"valueType\": {\n                    \"dataObjectType\": {\n                        \"name\": \"string\"\n                    }\n                }\n\t\t}\n\t},\n    {\n\t\t\"value\" : {\n\t\t\t\"idShort\" : \"ComputingTime\",\n\t\t\t\"modelType\" : {\n\t\t\t\t\"name\" : \"Property\"\n\t\t\t},\n\t    \t\"value\" : 5000,\n            \"valueType\": {\n                    \"dataObjectType\": {\n                        \"name\": \"int\"\n                    }\n                }\n\t\t}\n\t}],\n\t\"timeout\" : 6000\n}",
+											"raw": "{\n\t\"requestId\" : \"{{$guid}}\",\n    \"inoutputArguments\": [{\n        \"value\" : {\n\t\t\t\"idShort\" : \"HierRein\",\n\t\t\t\"modelType\" : {\n\t\t\t\t\"name\" : \"Property\"\n\t\t\t},\n            \"valueType\": {\n                    \"dataObjectType\": {\n                        \"name\": \"string\"\n                    }\n            }\n\t\t}\n    }],\n\t\"inputArguments\" : [{\n\t\t\"value\" : {\n\t\t\t\"idShort\" : \"Expression\",\n\t\t\t\"modelType\" : {\n\t\t\t\t\"name\" : \"Property\"\n\t\t\t},\n\t    \t\"value\" : \"5*(3+2)\",\n            \"valueType\": {\n                    \"dataObjectType\": {\n                        \"name\": \"string\"\n                    }\n                }\n\t\t}\n\t},\n    {\n\t\t\"value\" : {\n\t\t\t\"idShort\" : \"ComputingTime\",\n\t\t\t\"modelType\" : {\n\t\t\t\t\"name\" : \"Property\"\n\t\t\t},\n\t    \t\"value\" : 5000,\n            \"valueType\": {\n                    \"dataObjectType\": {\n                        \"name\": \"int\"\n                    }\n                }\n\t\t}\n\t}],\n\t\"timeout\" : 6000\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -298,7 +320,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodel/submodelElements/{{operation_idShort}}/invocationList/12345678",
+											"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}/submodel/submodelElements/{{operation_idShort}}/invocationList/{{requestId}}",
 											"host": [
 												"{{component_endpoint}}"
 											],
@@ -310,7 +332,7 @@
 												"submodelElements",
 												"{{operation_idShort}}",
 												"invocationList",
-												"12345678"
+												"{{requestId}}"
 											]
 										}
 									},
@@ -320,7 +342,7 @@
 							"_postman_isSubFolder": true
 						},
 						{
-							"name": "Create Submodel",
+							"name": "Create or Update Submodel",
 							"event": [
 								{
 									"listen": "test",
@@ -335,7 +357,7 @@
 								}
 							],
 							"request": {
-								"method": "POST",
+								"method": "PUT",
 								"header": [
 									{
 										"key": "Content-Type",
@@ -346,7 +368,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"idShort\": \"{{submodel_idShort}}\",\n    \"identification\" : {\n\t\t\t\"id\" : \"{{$guid}}\",\n\t\t\t\"idType\" : \"Custom\"\n\t},\n    \"kind\" : \"Instance\"\n}",
+									"raw": "{\n    \"idShort\": \"{{submodel_idShort}}\",\n    \"identification\" : {\n\t\t\t\"id\" : \"{{submodel_id}}\",\n\t\t\t\"idType\" : \"Custom\"\n\t},\n    \"kind\" : \"Instance\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -354,13 +376,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{component_endpoint}}/aas/submodels",
+									"raw": "{{component_endpoint}}/aas/submodels/{{submodel_idShort}}",
 									"host": [
 										"{{component_endpoint}}"
 									],
 									"path": [
 										"aas",
-										"submodels"
+										"submodels",
+										"{{submodel_idShort}}"
 									]
 								}
 							},
@@ -385,7 +408,7 @@
 							"response": []
 						},
 						{
-							"name": "Retrieve Submodel by Id",
+							"name": "Retrieve Submodel by IdShort",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -411,7 +434,7 @@
 							"response": []
 						},
 						{
-							"name": "Delete Submodel by Id",
+							"name": "Delete Submodel by IdShort",
 							"request": {
 								"method": "DELETE",
 								"header": [],
@@ -433,7 +456,7 @@
 					"_postman_isSubFolder": true
 				},
 				{
-					"name": "Retrieve AAS",
+					"name": "Retrieve Asset Administration Shell",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -452,13 +475,364 @@
 			]
 		},
 		{
+			"name": "Asset Administration Shell Repository",
+			"item": [
+				{
+					"name": "Submodel",
+					"item": [
+						{
+							"name": "SubmodelElements",
+							"item": [
+								{
+									"name": "Create or Update SubmodelElement",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "c7a5216f-f6e6-4fe8-8cf7-989669f64ee3",
+												"exec": [
+													"pm.environment.set(\"submodelElement_idShort\", pm.response.json().idShort);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"idShort\": \"{{submodelElement_idShort}}\",\n    \"modelType\": {\n        \"name\": \"Property\"\n    },\n    \"valueType\": {\n        \"dataObjectType\": {\n            \"name\": \"string\"\n        }\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{component_endpoint}}/shells/{{aas_id_encoded}}/aas/submodels/{{submodel_idShort}}/submodel/submodelElements/{{submodelElement_idShort}}",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"shells",
+												"{{aas_id_encoded}}",
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"submodel",
+												"submodelElements",
+												"{{submodelElement_idShort}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Retrieve SubmodelElement by IdShort",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{component_endpoint}}/shells/{{aas_id_encoded}}/aas/submodels/{{submodel_idShort}}/submodel/submodelElements/{{submodelElement_idShort}}",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"shells",
+												"{{aas_id_encoded}}",
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"submodel",
+												"submodelElements",
+												"{{submodelElement_idShort}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Retrieve all SubmodelElements",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{component_endpoint}}/shells/{{aas_id_encoded}}/aas/submodels/{{submodel_idShort}}/submodel/submodelElements",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"shells",
+												"{{aas_id_encoded}}",
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"submodel",
+												"submodelElements"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update SubmodelElement Value by IdShort",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "\"TestStringValue\"",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{component_endpoint}}/shells/{{aas_id_encoded}}/aas/submodels/{{submodel_idShort}}/submodel/submodelElements/{{submodelElement_idShort}}/value",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"shells",
+												"{{aas_id_encoded}}",
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"submodel",
+												"submodelElements",
+												"{{submodelElement_idShort}}",
+												"value"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Retrieve SubmodelElement Value by IdShort",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {}
+											}
+										},
+										"url": {
+											"raw": "{{component_endpoint}}/shells/{{aas_id_encoded}}/aas/submodels/{{submodel_idShort}}/submodel/submodelElements/{{submodelElement_idShort}}/value",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"shells",
+												"{{aas_id_encoded}}",
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"submodel",
+												"submodelElements",
+												"{{submodelElement_idShort}}",
+												"value"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete SubmodelElement by IdShort",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{component_endpoint}}/shells/{{aas_id_encoded}}/aas/submodels/{{submodel_idShort}}/submodel/submodelElements/{{submodelElement_idShort}}",
+											"host": [
+												"{{component_endpoint}}"
+											],
+											"path": [
+												"shells",
+												"{{aas_id_encoded}}",
+												"aas",
+												"submodels",
+												"{{submodel_idShort}}",
+												"submodel",
+												"submodelElements",
+												"{{submodelElement_idShort}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Create or Update Submodel at Asset Administration Shell",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"idShort\": \"{{submodel_idShort}}\",\n    \"identification\": {\n        \"id\": \"{{submodel_id}}\",\n        \"idType\": \"IRI\"\n    },\n    \"modelType\" : {\n\t\t\t\"name\" : \"Submodel\"\n\t},\n    \"semanticId\" : {\n        \"keys\": [\n            {\n                \"type\": \"Submodel\",\n                \"idType\": \"IRI\",\n                \"value\": \"urn:basys:org.eclipse.basyx:submodels:{{submodel_idShort}}:1.0.0\",\n                \"local\": false\n            }\n        ]\n    }\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{component_endpoint}}/shells/{{aas_id_encoded}}/aas/submodels/{{submodel_idShort}}",
+									"host": [
+										"{{component_endpoint}}"
+									],
+									"path": [
+										"shells",
+										"{{aas_id_encoded}}",
+										"aas",
+										"submodels",
+										"{{submodel_idShort}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Submodel from Asset Administration Shell",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{component_endpoint}}/shells/{{aas_id_encoded}}/aas/submodels/{{submodel_idShort}}",
+									"host": [
+										"{{component_endpoint}}"
+									],
+									"path": [
+										"shells",
+										"{{aas_id_encoded}}",
+										"aas",
+										"submodels",
+										"{{submodel_idShort}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Create or Update Asset Administration Shell",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"idShort\" : \"{{aas_idShort}}\",\r\n\t\"identification\" : {\r\n\t\t\t\"id\" : \"{{aas_id}}\",\r\n\t\t\t\"idType\" : \"IRI\"\r\n\t},\r\n\t\"modelType\" : {\r\n\t\t\"name\" : \"AssetAdministrationShell\"\r\n\t}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{component_endpoint}}/shells/{{aas_id_encoded}}",
+							"host": [
+								"{{component_endpoint}}"
+							],
+							"path": [
+								"shells",
+								"{{aas_id_encoded}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Asset Administration Shell By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{component_endpoint}}/shells/{{aas_id_encoded}}",
+							"host": [
+								"{{component_endpoint}}"
+							],
+							"path": [
+								"shells",
+								"{{aas_id_encoded}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve All Asset Administration Shells",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{component_endpoint}}/shells",
+							"host": [
+								"{{component_endpoint}}"
+							],
+							"path": [
+								"shells"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "Registry",
 			"item": [
 				{
 					"name": "Register Asset Administration Shell",
 					"item": [
 						{
-							"name": "Create AAS for Component (Minimal)",
+							"name": "Register Asset Administration Shell  (Minimal)",
 							"request": {
 								"method": "PUT",
 								"header": [
@@ -494,7 +868,7 @@
 							"response": []
 						},
 						{
-							"name": "Create AAS for Component (Maximal)",
+							"name": "Register Asset Administration Shell (Maximal)",
 							"request": {
 								"method": "PUT",
 								"header": [
@@ -530,7 +904,7 @@
 							"response": []
 						},
 						{
-							"name": "Retrieve AAS by Id",
+							"name": "Retrieve Asset Administration Shell by Id",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -550,7 +924,7 @@
 							"response": []
 						},
 						{
-							"name": "Retrieve all AAS",
+							"name": "Retrieve All Asset Administration Shells",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -570,7 +944,7 @@
 							"response": []
 						},
 						{
-							"name": "Delete AAS by Id",
+							"name": "Delete Asset Administration Shell by Id",
 							"request": {
 								"method": "DELETE",
 								"header": [],
@@ -596,7 +970,7 @@
 					"name": "Register Submodel",
 					"item": [
 						{
-							"name": "Retrieve all Submodels",
+							"name": "Retrieve All Submodels",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -639,7 +1013,7 @@
 							"response": []
 						},
 						{
-							"name": "Register Submodel at AAS",
+							"name": "Register Submodel at Asset Administration Shell",
 							"request": {
 								"method": "PUT",
 								"header": [
@@ -677,7 +1051,7 @@
 							"response": []
 						},
 						{
-							"name": "Delete Submodel from AAS",
+							"name": "Delete Submodel from Asset Adminstration Shell",
 							"request": {
 								"method": "DELETE",
 								"header": [],

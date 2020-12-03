@@ -20,6 +20,7 @@ namespace BaSyx.API.Http.Controllers
     /// <summary>
     /// The Asset Administration Shell Registry Controller
     /// </summary>
+    [ApiController]
     public class AssetAdministrationShellRegistryController : Controller
     {
         private readonly IAssetAdministrationShellRegistry serviceProvider;

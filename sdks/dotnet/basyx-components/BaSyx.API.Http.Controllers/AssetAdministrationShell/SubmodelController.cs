@@ -25,7 +25,7 @@ namespace BaSyx.API.Http.Controllers
     /// <summary>
     /// The Submodel Controller
     /// </summary>
-    [DisplayName("Submodel Interface")]
+    [ApiController]
     public class SubmodelController : Controller
     {
         private readonly ISubmodelServiceProvider serviceProvider;

@@ -22,12 +22,12 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
         /// First element in the relationship taking the role of the subject.
         /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "first")]
-        IReference<IReferable> First { get; }
+        IReference First { get; }
 
         /// <summary>
         /// Second element in the relationship taking the role of the object. 
         /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "second")]
-        IReference<IReferable> Second { get; }
+        IReference Second { get; }
     }
 }

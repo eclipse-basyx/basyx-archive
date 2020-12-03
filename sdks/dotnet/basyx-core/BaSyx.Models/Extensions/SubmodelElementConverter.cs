@@ -116,7 +116,7 @@ namespace BaSyx.Models.Extensions
             }
             if (submodelElement == null)
             {
-                logger.Error("DataElement is null: " + jObject.ToString());
+                logger.Error("SubmodelElement is null: " + jObject.ToString());
                 return null;
             }
 

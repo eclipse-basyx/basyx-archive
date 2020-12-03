@@ -25,7 +25,7 @@ using System.IO.Packaging;
 using System.Linq;
 using System.Reflection;
 
-namespace BaSyx.AASX.Server.Http
+namespace BaSyx.AASX.Server.Http.App
 {
     class Program
     {

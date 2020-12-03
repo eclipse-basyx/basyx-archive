@@ -156,15 +156,6 @@
             <response code="400">Bad Request</response>
             <response code="404">Submodel / Operation / Request not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellController.IsNullOrNotFound(System.String,Microsoft.AspNetCore.Mvc.IActionResult@,BaSyx.API.Components.ISubmodelServiceProvider@)">
-            <summary>
-            Checks whether aasId is null or Asset Administration Shell Service Provider cannot be found
-            </summary>
-            <param name="submodelId">The Submodel's unique id</param>
-            <param name="result">The IActionResult in case aasId is null or the provider cannot be found</param>
-            <param name="provider">The Asset Administration Shell Service Provider</param>
-            <returns></returns>
-        </member>
         <member name="T:BaSyx.API.Http.Controllers.AssetAdministrationShellRepositoryController">
             <summary>
             The Asset Administration Shell Repository Controller
@@ -356,15 +347,6 @@
             <response code="200">Result found</response>
             <response code="400">Bad Request</response>
             <response code="404">Submodel / Operation / Request not found</response>
-        </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRepositoryController.IsNullOrNotFound(System.String,Microsoft.AspNetCore.Mvc.IActionResult@,BaSyx.API.Components.IAssetAdministrationShellServiceProvider@)">
-            <summary>
-            Checks whether aasId is null or Asset Administration Shell Service Provider cannot be found
-            </summary>
-            <param name="aasId">The Asset Administration Shell's unique id</param>
-            <param name="result">The IActionResult in case aasId is null or the provider cannot be found</param>
-            <param name="provider">The Asset Administration Shell Service Provider</param>
-            <returns></returns>
         </member>
         <member name="T:BaSyx.API.Http.Controllers.SubmodelController">
             <summary>
@@ -625,13 +607,15 @@
             <response code="400">Bad Request</response>
             <response code="404">Submodel / Operation / Request not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.IsNullOrNotFound(System.String,Microsoft.AspNetCore.Mvc.IActionResult@,BaSyx.API.Components.ISubmodelServiceProvider@)">
+        <member name="T:BaSyx.API.Http.Controllers.ErrorsController">
             <summary>
-            Checks whether submodelId is null or Submodel Service Provider cannot be found
+            The Error Controller
             </summary>
-            <param name="submodelId">The Submodel's unique id</param>
-            <param name="result">The IActionResult in case submodelId is null or the provider cannot be found</param>
-            <param name="provider">The Submodel Service Provider</param>
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.ErrorsController.Error">
+            <summary>
+            The main error function
+            </summary>
             <returns></returns>
         </member>
         <member name="T:BaSyx.API.Http.Controllers.AssetAdministrationShellRegistryController">
@@ -731,6 +715,36 @@
             <summary>
             Helper class for handling Action Results for HTTP-Requests
             </summary>
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.ResultHandling.IsNullOrNotFound(BaSyx.API.Components.ISubmodelServiceProviderRegistry,System.String,Microsoft.AspNetCore.Mvc.IActionResult@,BaSyx.API.Components.ISubmodelServiceProvider@)">
+            <summary>
+            Checks whether submodelId is null or Submodel Service Provider cannot be found
+            </summary>
+            <param name="spRegistry">The Submodel Service Provider Registry</param>
+            <param name="submodelId">The Submodel's unique id</param>
+            <param name="result">The IActionResult in case aasId is null or the provider cannot be found</param>
+            <param name="provider">The Asset Administration Shell Service Provider</param>
+            <returns></returns>
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.ResultHandling.IsNullOrNotFound(BaSyx.API.Components.IAssetAdministrationShellRepositoryServiceProvider,System.String,Microsoft.AspNetCore.Mvc.IActionResult@,BaSyx.API.Components.IAssetAdministrationShellServiceProvider@)">
+            <summary>
+            Checks whether aasId is null or Asset Administration Shell Service Provider cannot be found
+            </summary>
+            <param name="serviceProvider">The Asset Administration Shell Repository Service Provider</param>
+            <param name="aasId">The Asset Administration Shell's unique id</param>
+            <param name="result">The IActionResult in case aasId is null or the provider cannot be found</param>
+            <param name="provider">The Asset Administration Shell Service Provider</param>
+            <returns></returns>
+        </member>
+        <member name="M:BaSyx.API.Http.Controllers.ResultHandling.IsNullOrNotFound(BaSyx.API.Components.ISubmodelRepositoryServiceProvider,System.String,Microsoft.AspNetCore.Mvc.IActionResult@,BaSyx.API.Components.ISubmodelServiceProvider@)">
+            <summary>
+            Checks whether submodelId is null or Submodel Service Provider cannot be found
+            </summary>
+            <param name="serviceProvider">The Submodel Repository Service Provider</param>
+            <param name="submodelId">The Submodel's unique id</param>
+            <param name="result">The IActionResult in case submodelId is null or the provider cannot be found</param>
+            <param name="provider">The Submodel Service Provider</param>
+            <returns></returns>        
         </member>
         <member name="M:BaSyx.API.Http.Controllers.ResultHandling.NullResult(System.String)">
             <summary>

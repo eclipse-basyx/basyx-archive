@@ -1,6 +1,18 @@
-﻿using BaSyx.Utils.ResultHandling;
+﻿/*******************************************************************************
+* Copyright (c) 2020 Robert Bosch GmbH
+* Author: Constantin Ziesche (constantin.ziesche@bosch.com)
+*
+* This program and the accompanying materials are made available under the
+* terms of the Eclipse Public License 2.0 which is available at
+* http://www.eclipse.org/legal/epl-2.0
+*
+* SPDX-License-Identifier: EPL-2.0
+*******************************************************************************/
+using BaSyx.API.Components;
+using BaSyx.Utils.ResultHandling;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Web;
 
 namespace BaSyx.API.Http.Controllers
 {
@@ -9,6 +21,96 @@ namespace BaSyx.API.Http.Controllers
     /// </summary>
     public static class ResultHandling
     {
+        /// <summary>
+        /// Checks whether submodelId is null or Submodel Service Provider cannot be found
+        /// </summary>
+        /// <param name="spRegistry">The Submodel Service Provider Registry</param>
+        /// <param name="submodelId">The Submodel's unique id</param>
+        /// <param name="result">The IActionResult in case aasId is null or the provider cannot be found</param>
+        /// <param name="provider">The Asset Administration Shell Service Provider</param>
+        /// <returns></returns>
+        public static bool IsNullOrNotFound(this ISubmodelServiceProviderRegistry spRegistry, string submodelId, out IActionResult result, out ISubmodelServiceProvider provider)
+        {
+            if (string.IsNullOrEmpty(submodelId))
+            {
+                result = NullResult(nameof(submodelId));
+                provider = null;
+                return true;
+            }
+            var retrieved = spRegistry.GetSubmodelServiceProvider(submodelId);
+            if (!retrieved.Success || retrieved?.Entity == null)
+            {
+                result = new NotFoundObjectResult(new Result(false, new NotFoundMessage("Submodel Service Provider")));
+                provider = null;
+                return true;
+            }
+            result = null;
+            provider = retrieved.Entity;
+            return false;
+        }
+
+        /// <summary>
+        /// Checks whether aasId is null or Asset Administration Shell Service Provider cannot be found
+        /// </summary>
+        /// <param name="serviceProvider">The Asset Administration Shell Repository Service Provider</param>
+        /// <param name="aasId">The Asset Administration Shell's unique id</param>
+        /// <param name="result">The IActionResult in case aasId is null or the provider cannot be found</param>
+        /// <param name="provider">The Asset Administration Shell Service Provider</param>
+        /// <returns></returns>
+        public static bool IsNullOrNotFound(this IAssetAdministrationShellRepositoryServiceProvider serviceProvider, string aasId, out IActionResult result, out IAssetAdministrationShellServiceProvider provider)
+        {
+            if (string.IsNullOrEmpty(aasId))
+            {
+                result = NullResult(nameof(aasId));
+                provider = null;
+                return true;
+            }
+            aasId = HttpUtility.UrlDecode(aasId);
+            var retrievedProvider = serviceProvider.GetAssetAdministrationShellServiceProvider(aasId);
+            if (retrievedProvider.TryGetEntity(out provider))
+            {
+                result = null;
+                return false;
+            }
+            else
+            {
+                provider = null;
+                result = new NotFoundObjectResult(new Result(false, new NotFoundMessage("Asset Administration Shell Service Provider")));
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Checks whether submodelId is null or Submodel Service Provider cannot be found
+        /// </summary>
+        /// <param name="serviceProvider">The Submodel Repository Service Provider</param>
+        /// <param name="submodelId">The Submodel's unique id</param>
+        /// <param name="result">The IActionResult in case submodelId is null or the provider cannot be found</param>
+        /// <param name="provider">The Submodel Service Provider</param>
+        /// <returns></returns>        
+        public static bool IsNullOrNotFound(this ISubmodelRepositoryServiceProvider serviceProvider, string submodelId, out IActionResult result, out ISubmodelServiceProvider provider)
+        {
+            if (string.IsNullOrEmpty(submodelId))
+            {
+                result = NullResult(nameof(submodelId));
+                provider = null;
+                return true;
+            }
+            submodelId = HttpUtility.UrlDecode(submodelId);
+            var retrievedProvider = serviceProvider.GetSubmodelServiceProvider(submodelId);
+            if (retrievedProvider.TryGetEntity(out provider))
+            {
+                result = null;
+                return false;
+            }
+            else
+            {
+                provider = null;
+                result = new NotFoundObjectResult(new Result(false, new NotFoundMessage("Submodel Service Provider")));
+                return true;
+            }
+        }
+
         /// <summary>
         /// Returns a Result-Object in an ObjectResult with status code 400 and a message which element is null or empty
         /// </summary>

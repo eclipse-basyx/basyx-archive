@@ -11,15 +11,20 @@
 using BaSyx.Components.Common.Abstractions;
 using BaSyx.Utils.AssemblyHandling;
 using BaSyx.Utils.DependencyInjection;
+using BaSyx.Utils.JsonHandling;
+using BaSyx.Utils.ResultHandling;
 using BaSyx.Utils.Settings.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NLog;
 using NLog.Web;
 using System;
@@ -38,7 +43,7 @@ namespace BaSyx.Components.Common
 {
     public abstract class ServerApplication : IServerApplication
     {
-        private static readonly Logger logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
+        private static readonly Logger logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();        
 
         private string _contentRoot;
         private string _webRoot;
@@ -50,6 +55,8 @@ namespace BaSyx.Components.Common
         public const string DEFAULT_CONTENT_ROOT = "Content";
         public const string DEFAULT_WEB_ROOT = "wwwroot";
         public const string UI_RELATIVE_PATH = "/ui";
+        public const string BROWSE_PATH = "/browse";
+        public const string ERROR_PATH = "/error";
         public const string CONTROLLER_ASSEMBLY_NAME = "BaSyx.API.Http.Controllers";
 
         public Assembly ControllerAssembly { get; private set; }
@@ -66,10 +73,8 @@ namespace BaSyx.Components.Common
 
         protected ServerApplication() : this(null, null)
         { }
-
         protected ServerApplication(ServerSettings settings) : this(settings, null)
         { }
-
         protected ServerApplication(ServerSettings settings, string[] webHostBuilderArgs)
         {
             ExecutionPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -139,14 +144,12 @@ namespace BaSyx.Components.Common
 
             WebHostBuilder.Build().Run();
         }
-
         public virtual async Task RunAsync(CancellationToken cancellationToken = default)
         {
             logger.Info("Starting Server asynchronously...");
 
             await WebHostBuilder.Build().RunAsync(cancellationToken);
         }
-
         public virtual void ConfigureLogging(Microsoft.Extensions.Logging.LogLevel logLevel)
         {
             WebHostBuilder.ConfigureLogging(logging =>
@@ -155,7 +158,6 @@ namespace BaSyx.Components.Common
                 logging.SetMinimumLevel(logLevel);
             });
         }
-
         public virtual void Configure(Action<IApplicationBuilder> app) => AppBuilderPipeline.Add(app);
         public virtual void ConfigureServices(Action<IServiceCollection> services) => ServiceBuilderPipeline.Add(services);
         public virtual void UseContentRoot(string contentRoot)
@@ -174,7 +176,6 @@ namespace BaSyx.Components.Common
             if (Settings?.ServerConfig?.Hosting != null)
                 Settings.ServerConfig.Hosting.Urls = urls?.ToList();
         }
-
         public virtual void ProvideContent(Uri relativeUri, Stream content)
         {
             try
@@ -205,7 +206,6 @@ namespace BaSyx.Components.Common
                 logger.Error(e, $"Error providing content {relativeUri}");
             }
         }
-
         public virtual void MapControllers(ControllerConfiguration controllerConfig)
         {
             this.ConfigureServices(services =>
@@ -275,7 +275,6 @@ namespace BaSyx.Components.Common
                 }
             });
         }
-
         protected virtual void ConfigureServices(WebHostBuilderContext context, IServiceCollection services)
         {
             services.AddSingleton(typeof(ServerSettings), Settings);
@@ -310,26 +309,58 @@ namespace BaSyx.Components.Common
 
             services.AddDirectoryBrowser();
 
+            services.PostConfigure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    ValidationProblemDetails error = actionContext.ModelState
+                        .Where(e => e.Value.Errors.Count > 0)
+                        .Select(e => new ValidationProblemDetails(actionContext.ModelState)).FirstOrDefault();
+
+                    Result result = new Result(false,
+                        new Message(
+                            MessageType.Error, 
+                            $"Path '{actionContext.HttpContext.Request.Path.Value}' received invalid or malformed request: {error.Errors.Values}",
+                            actionContext.HttpContext.Response.StatusCode.ToString()));
+
+                    return new BadRequestObjectResult(result);
+                };
+            });
+
             foreach (var serviceBuider in ServiceBuilderPipeline)
             {
                 serviceBuider.Invoke(services);
             }
         }
-
         protected virtual void Configure(IApplicationBuilder app)
         {
             var env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
             var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 
-            if (env.IsDevelopment() || Debugger.IsAttached)
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
+            if (env.IsProduction())
                 app.UseHsts();
-            }
+
+            app.UseExceptionHandler(ERROR_PATH);
+
+            app.UseStatusCodePages(async context =>
+            {
+                context.HttpContext.Response.ContentType = "application/json";
+
+                JsonSerializerSettings settings;
+                var options = context.HttpContext.RequestServices.GetService<MvcNewtonsoftJsonOptions>();
+                if (options == null)
+                    settings = new DefaultJsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+                else
+                    settings = options.SerializerSettings;
+
+                Result result = new Result(false, 
+                    new Message(MessageType.Error, "Path: " + context.HttpContext.Request.Path.Value, 
+                    context.HttpContext.Response.StatusCode.ToString()));
+                              
+                string resultMessage = JsonConvert.SerializeObject(result, settings);
+
+                await context.HttpContext.Response.WriteAsync(resultMessage);
+            });
 
             if(_secure && !env.IsDevelopment())
                 app.UseHttpsRedirection();
@@ -348,7 +379,7 @@ namespace BaSyx.Components.Common
                 app.UseDirectoryBrowser(new DirectoryBrowserOptions
                 {
                     FileProvider = new PhysicalFileProvider(@path),
-                    RequestPath = new PathString("/browse")
+                    RequestPath = new PathString(BROWSE_PATH)
                 });
             }
 

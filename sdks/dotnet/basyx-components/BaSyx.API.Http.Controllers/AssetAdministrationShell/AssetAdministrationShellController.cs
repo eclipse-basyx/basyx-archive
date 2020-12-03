@@ -23,6 +23,7 @@ namespace BaSyx.API.Http.Controllers
     /// <summary>
     /// The Asset Administration Shell Controller
     /// </summary>
+    [ApiController]
     public class AssetAdministrationShellController : Controller
     {
         private readonly IAssetAdministrationShellServiceProvider serviceProvider;
@@ -114,6 +115,7 @@ namespace BaSyx.API.Http.Controllers
 
             ISubmodelDescriptor descriptor = new SubmodelDescriptor(submodel, spEndpoints);
             SubmodelServiceProvider cssp = new SubmodelServiceProvider(submodel, descriptor);
+            cssp.UseInMemorySubmodelElementHandler();
             var result = serviceProvider.SubmodelRegistry.RegisterSubmodelServiceProvider(submodelIdShort, cssp);
 
             return result.CreateActionResult(CrudOperation.Create, "aas/submodels/" + submodelIdShort);
@@ -179,7 +181,7 @@ namespace BaSyx.API.Http.Controllers
         [ProducesResponseType(typeof(Result), 404)]
         public IActionResult Shell_GetSubmodelValues(string submodelIdShort)
         {
-            if (IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
+            if (serviceProvider.SubmodelRegistry.IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
 
             var service = new SubmodelController(provider);
@@ -199,7 +201,7 @@ namespace BaSyx.API.Http.Controllers
         [ProducesResponseType(typeof(Result), 404)]
         public IActionResult Shell_GetSubmodelElements(string submodelIdShort)
         {
-            if (IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
+            if (serviceProvider.SubmodelRegistry.IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
 
             var service = new SubmodelController(provider);
@@ -224,7 +226,7 @@ namespace BaSyx.API.Http.Controllers
         [ProducesResponseType(typeof(Result), 404)]
         public IActionResult Shell_PutSubmodelElement(string submodelIdShort, string seIdShortPath, [FromBody] ISubmodelElement submodelElement)
         {
-            if (IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
+            if (serviceProvider.SubmodelRegistry.IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
 
             var service = new SubmodelController(provider);
@@ -244,7 +246,7 @@ namespace BaSyx.API.Http.Controllers
         [ProducesResponseType(typeof(Result), 404)]
         public IActionResult Shell_GetSubmodelElementByIdShort(string submodelIdShort, string seIdShortPath)
         {
-            if (IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
+            if (serviceProvider.SubmodelRegistry.IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
 
             var service = new SubmodelController(provider);
@@ -267,7 +269,7 @@ namespace BaSyx.API.Http.Controllers
         [ProducesResponseType(typeof(Result), 405)]
         public IActionResult Shell_GetSubmodelElementValueByIdShort(string submodelIdShort, string seIdShortPath)
         {
-            if (IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
+            if (serviceProvider.SubmodelRegistry.IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
 
             var service = new SubmodelController(provider);
@@ -291,7 +293,7 @@ namespace BaSyx.API.Http.Controllers
         [ProducesResponseType(typeof(Result), 404)]
         public IActionResult Shell_PutSubmodelElementValueByIdShort(string submodelIdShort, string seIdShortPath, [FromBody] object value)
         {
-            if (IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
+            if (serviceProvider.SubmodelRegistry.IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
 
             var service = new SubmodelController(provider);
@@ -311,7 +313,7 @@ namespace BaSyx.API.Http.Controllers
         [ProducesResponseType(typeof(Result), 200)]
         public IActionResult Shell_DeleteSubmodelElementByIdShort(string submodelIdShort, string seIdShortPath)
         {
-            if (IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
+            if (serviceProvider.SubmodelRegistry.IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
 
             var service = new SubmodelController(provider);
@@ -336,7 +338,7 @@ namespace BaSyx.API.Http.Controllers
         [ProducesResponseType(typeof(Result), 404)]
         public IActionResult Shell_InvokeOperationByIdShort(string submodelIdShort, string idShortPathToOperation, [FromBody] InvocationRequest invocationRequest, [FromQuery] bool async)
         {
-            if (IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
+            if (serviceProvider.SubmodelRegistry.IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
 
             var service = new SubmodelController(provider);
@@ -360,42 +362,12 @@ namespace BaSyx.API.Http.Controllers
         [ProducesResponseType(typeof(Result), 404)]
         public IActionResult Shell_GetInvocationResultByIdShort(string submodelIdShort, string idShortPathToOperation, string requestId)
         {
-            if (IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
+            if (serviceProvider.SubmodelRegistry.IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;
 
             var service = new SubmodelController(provider);
             return service.GetInvocationResultByIdShort(idShortPathToOperation, requestId);
         }
-        #endregion
-
-        #region Helper
-        /// <summary>
-        /// Checks whether aasId is null or Asset Administration Shell Service Provider cannot be found
-        /// </summary>
-        /// <param name="submodelId">The Submodel's unique id</param>
-        /// <param name="result">The IActionResult in case aasId is null or the provider cannot be found</param>
-        /// <param name="provider">The Asset Administration Shell Service Provider</param>
-        /// <returns></returns>
-        public bool IsNullOrNotFound(string submodelId, out IActionResult result, out ISubmodelServiceProvider provider)
-        {
-            if (string.IsNullOrEmpty(submodelId))
-            {
-                result = ResultHandling.NullResult(nameof(submodelId));
-                provider = null;
-                return true;
-            }
-            var retrieved = serviceProvider.SubmodelRegistry.GetSubmodelServiceProvider(submodelId);
-            if (!retrieved.Success || retrieved?.Entity == null)
-            {
-                result = NotFound(new Result(false, new NotFoundMessage("Submodel Provider")));
-                provider = null;
-                return true;
-            }
-            result = null;
-            provider = retrieved.Entity;
-            return false;
-        }
-
-        #endregion
+        #endregion        
     }
 }

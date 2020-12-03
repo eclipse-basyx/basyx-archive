@@ -258,7 +258,7 @@ namespace ComplexAssetAdministrationShellScenario
             RegistryHttpServer registryServer = new RegistryHttpServer(registrySettings);
             FileBasedRegistry fileBasedRegistry = new FileBasedRegistry();
             registryServer.SetRegistryProvider(fileBasedRegistry);
-            registryServer.AddBaSyxUI(PageNames.RegistryServer);
+            registryServer.AddBaSyxUI(PageNames.AssetAdministrationShellRegistryServer);
             registryServer.AddSwagger(Interface.AssetAdministrationShellRegistry);
             _ = registryServer.RunAsync();
         }

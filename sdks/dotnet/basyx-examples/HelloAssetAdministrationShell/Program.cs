@@ -44,7 +44,7 @@ namespace HelloAssetAdministrationShell
             //Add Swagger documentation and UI
             aasServer.AddSwagger(Interface.AssetAdministrationShell);
 
-            //Asdd BaSyx Web UI
+            //Add BaSyx Web UI
             aasServer.AddBaSyxUI(PageNames.AssetAdministrationShellServer);
 
             //Run HTTP-REST interface

@@ -11,22 +11,21 @@
 using BaSyx.Utils.JsonHandling;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace BaSyx.Utils.ResultHandling
 {
     public interface IResult
     {
-        [DataMember(EmitDefaultValue = false, IsRequired = false)]
+        [DataMember(Name = "entityType", EmitDefaultValue = false, IsRequired = false)]
         Type EntityType { get; }
-        [DataMember(EmitDefaultValue = false, IsRequired = false)]
+        [DataMember(Name = "entity", EmitDefaultValue = false, IsRequired = false)]
         object Entity { get; }
-        [DataMember(IsRequired = true)]
+        [DataMember(Name = "success", IsRequired = true)]
         bool Success { get; }
-        [DataMember(EmitDefaultValue = false, IsRequired = false)]
+        [DataMember(Name = "isException", EmitDefaultValue = false, IsRequired = false)]
         bool? IsException { get; }
-        [DataMember(EmitDefaultValue = false, IsRequired = false)]
+        [DataMember(Name = "messages", EmitDefaultValue = false, IsRequired = false)]
         MessageCollection Messages { get; }
 
         T GetEntity<T>();
@@ -34,6 +33,7 @@ namespace BaSyx.Utils.ResultHandling
 
     public interface IResult<out TEntity> : IResult
     {
+        [DataMember(Name = "entity", EmitDefaultValue = false, IsRequired = false)]
         [JsonConverter(typeof(CustomTypeSerializer))]
         new TEntity Entity { get; }
     }

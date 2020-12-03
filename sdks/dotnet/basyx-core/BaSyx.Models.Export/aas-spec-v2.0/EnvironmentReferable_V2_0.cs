@@ -9,7 +9,6 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell;
-using BaSyx.Models.Core.Common;
 using Newtonsoft.Json;
 using System.Xml.Serialization;
 
@@ -33,7 +32,7 @@ namespace BaSyx.Models.Export
 
         [JsonProperty("parent", Order = -3)]
         [XmlElement("parent")]
-        public string Parent { get; set; }
+        public EnvironmentReference_V2_0 Parent { get; set; }
 
         public bool ShouldSerializeDescription()
         {

@@ -18,9 +18,9 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
     {
         public override ModelType ModelType => ModelType.RelationshipElement;
 
-        public IReference<IReferable> First { get; set; }
+        public IReference First { get; set; }
 
-        public IReference<IReferable> Second { get; set; }      
+        public IReference Second { get; set; }      
 
         public RelationshipElement(string idShort) : base(idShort) 
         {

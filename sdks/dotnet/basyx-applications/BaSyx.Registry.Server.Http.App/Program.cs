@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using BaSyx.Common.UI;
 using BaSyx.Common.UI.Swagger;
 
-namespace BaSyx.Registry.Server.Http.Component
+namespace BaSyx.Registry.Server.Http.App
 {
     class Program
     {

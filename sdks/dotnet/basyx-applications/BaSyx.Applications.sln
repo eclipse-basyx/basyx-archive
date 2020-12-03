@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaSyx.AASX.Server.Http.App"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaSyx.Registry.Server.Http.App", "BaSyx.Registry.Server.Http.App\BaSyx.Registry.Server.Http.App.csproj", "{DF9E563B-B541-49FC-B6F8-03FABFB6CB0E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaSyx.AssetAdministrationShellRepository.Server.Http.App", "BaSyx.AssetAdministrationShellRepository.Server.Http.App\BaSyx.AssetAdministrationShellRepository.Server.Http.App.csproj", "{BE2FA888-9410-4934-A149-4EB475E02023}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DF9E563B-B541-49FC-B6F8-03FABFB6CB0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF9E563B-B541-49FC-B6F8-03FABFB6CB0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF9E563B-B541-49FC-B6F8-03FABFB6CB0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE2FA888-9410-4934-A149-4EB475E02023}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE2FA888-9410-4934-A149-4EB475E02023}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE2FA888-9410-4934-A149-4EB475E02023}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE2FA888-9410-4934-A149-4EB475E02023}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
