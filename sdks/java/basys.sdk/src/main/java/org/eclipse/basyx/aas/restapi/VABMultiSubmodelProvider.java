@@ -11,14 +11,20 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.restapi.api.IAASAPI;
+import org.eclipse.basyx.aas.restapi.api.IAASAPIFactory;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
+import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
+import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPIFactory;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 
@@ -106,16 +112,39 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	protected IConnectorProvider connectorProvider = null;
 
 	/**
-	 * Constructor
+	 * Store AAS API Provider. By default, uses the VAB API Provider
+	 */
+	protected IAASAPIFactory aasApiProvider;
+
+	/**
+	 * Store Submodel API Provider. By default, uses the VAB Submodel Provider
+	 */
+	protected ISubmodelAPIFactory smApiProvider;
+
+	/**
+	 * Constructor with empty default aas and default VAB APIs
 	 */
 	public VABMultiSubmodelProvider() {
-		this(new AASModelProvider(new AssetAdministrationShell()));
+		this(new VABAASAPIFactory(), new VABSubmodelAPIFactory());
+	}
+
+	/**
+	 * Constructor for using custom APIs
+	 */
+	public VABMultiSubmodelProvider(IAASAPIFactory aasApiProvider, ISubmodelAPIFactory smApiProvider) {
+		this.aasApiProvider = aasApiProvider;
+		this.smApiProvider = smApiProvider;
+		IModelProvider aasLambdaProvider = new VABLambdaProvider(new AssetAdministrationShell());
+		IAASAPI aasApi = aasApiProvider.getAASApi(aasLambdaProvider);
+		setAssetAdministrationShell(new AASModelProvider(aasApi));
 	}
 
 	/**
 	 * Constructor that accepts an AAS
 	 */
 	public VABMultiSubmodelProvider(AASModelProvider contentProvider) {
+		this.aasApiProvider = new VABAASAPIFactory();
+		this.smApiProvider = new VABSubmodelAPIFactory();
 		// Store content provider
 		setAssetAdministrationShell(contentProvider);
 	}
@@ -141,7 +170,18 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	}
 	
 	/**
+	 * Constructor that accepts a registry, a connection provider and API providers
+	 */
+	public VABMultiSubmodelProvider(IAASRegistryService registry, IConnectorProvider connectorProvider,
+			ISubmodelAPIFactory smApiProvider, IAASAPIFactory aasApiProvider) {
+		this(aasApiProvider, smApiProvider);
+		this.registry = registry;
+		this.connectorProvider = connectorProvider;
+	}
+
+	/**
 	 * Constructor that accepts a aas provider, a registry and a connection provider
+	 * 
 	 * @param contentProvider
 	 * @param registry
 	 * @param provider
@@ -341,7 +381,9 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	@SuppressWarnings("unchecked")
 	private void createAssetAdministrationShell(Object newAAS) {
 		Map<String, Object> aas = (Map<String, Object>) newAAS;
-		aas_provider = new AASModelProvider(AssetAdministrationShell.createAsFacade(aas));
+		AssetAdministrationShell shell = AssetAdministrationShell.createAsFacade(aas);
+		IAASAPI aasApi = aasApiProvider.getAASApi(new VABLambdaProvider(shell));
+		aas_provider = new AASModelProvider(aasApi);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -349,7 +391,8 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 		// Adds a new submodel to the registered AAS
 		SubModel sm = SubModel.createAsFacade((Map<String, Object>) newSM);
 
-		addSubmodel(new SubModelProvider(sm));
+		ISubmodelAPI smApi = smApiProvider.getSubmodelAPI(new VABLambdaProvider(sm));
+		addSubmodel(new SubModelProvider(smApi));
 	}
 
 

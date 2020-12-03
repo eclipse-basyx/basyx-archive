@@ -13,8 +13,8 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 
 /**
- * Model provider explicitely meant to implement the access to the AAS object. This excludes access to the submodels,
- * that are wrapped into their own provider.
+ * Model provider explicitely meant to implement the access to the AAS object.
+ * This excludes access to the submodels, that are wrapped into their own provider.
  * 
  * @author espen
  *
@@ -24,7 +24,8 @@ public class AASModelProvider implements IModelProvider {
 	private IAASAPI aasApi;
 
 	/**
-	 * Constructor based on the model provider containing the AAS model
+	 * Constructor based on the model provider containing the AAS model. This is based
+	 * on the default AAS API
 	 */
 	public AASModelProvider(IModelProvider modelProvider) {
 		aasApi = new VABAASAPI(modelProvider);

@@ -17,11 +17,13 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 	public static final String DEFAULT_BACKEND = AASServerBackend.INMEMORY.toString();
 	public static final String DEFAULT_SOURCE = "";
 	public static final String DEFAULT_REGISTRY = "";
+	public static final String DEFAULT_EVENTS = AASEventBackend.NONE.toString();
 
 	// Configuration keys
 	public static final String REGISTRY = "registry.path";
 	public static final String BACKEND = "aas.backend";
 	public static final String SOURCE = "aas.source";
+	public static final String EVENTS = "aas.events";
 
 	// The default path for the context properties file
 	public static final String DEFAULT_CONFIG_PATH = "aas.properties";
@@ -34,6 +36,7 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 		defaultProps.put(BACKEND, DEFAULT_BACKEND);
 		defaultProps.put(SOURCE, DEFAULT_SOURCE);
 		defaultProps.put(REGISTRY, DEFAULT_REGISTRY);
+		defaultProps.put(EVENTS, DEFAULT_EVENTS);
 		return defaultProps;
 	}
 
@@ -92,6 +95,14 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 
 	public void setAASBackend(AASServerBackend backend) {
 		setProperty(BACKEND, backend.toString());
+	}
+
+	public AASEventBackend getAASEvents() {
+		return AASEventBackend.fromString(getProperty(EVENTS));
+	}
+
+	public void setAASEvents(AASEventBackend events) {
+		setProperty(EVENTS, events.toString());
 	}
 
 	public String getAASSource() {

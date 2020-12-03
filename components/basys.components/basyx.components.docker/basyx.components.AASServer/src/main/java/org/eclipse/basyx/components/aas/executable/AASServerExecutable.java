@@ -4,8 +4,10 @@ import java.io.File;
 import java.net.URISyntaxException;
 
 import org.eclipse.basyx.components.aas.AASServerComponent;
+import org.eclipse.basyx.components.aas.configuration.AASEventBackend;
 import org.eclipse.basyx.components.aas.configuration.BaSyxAASServerConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
+import org.eclipse.basyx.components.configuration.BaSyxMqttConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +42,14 @@ public class AASServerExecutable {
 		contextConfig.setDocBasePath(docBasePath);
 
 		AASServerComponent component = new AASServerComponent(contextConfig, aasConfig);
+
+		// If enabled, load mqtt configuration
+		if (aasConfig.getAASEvents().equals(AASEventBackend.MQTT)) {
+			BaSyxMqttConfiguration mqttConfig = new BaSyxMqttConfiguration();
+			mqttConfig.loadFromDefaultSource();
+			component.enableMQTT(mqttConfig);
+		}
+
 		component.startComponent();
 
 		logger.info("BaSyx AAS Server component started");

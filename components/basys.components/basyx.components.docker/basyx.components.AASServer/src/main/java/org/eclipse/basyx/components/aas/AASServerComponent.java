@@ -15,18 +15,23 @@ import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
+import org.eclipse.basyx.aas.restapi.VABAASAPIFactory;
+import org.eclipse.basyx.aas.restapi.api.IAASAPIFactory;
 import org.eclipse.basyx.components.IComponent;
 import org.eclipse.basyx.components.aas.aasx.AASXPackageManager;
 import org.eclipse.basyx.components.aas.aasx.SubmodelFileEndpointLoader;
 import org.eclipse.basyx.components.aas.configuration.AASServerBackend;
 import org.eclipse.basyx.components.aas.configuration.BaSyxAASServerConfiguration;
 import org.eclipse.basyx.components.aas.mongodb.MongoDBAASAggregator;
+import org.eclipse.basyx.components.aas.mqtt.MqttSubmodelAPIFactory;
 import org.eclipse.basyx.components.aas.servlet.AASAggregatorServlet;
 import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
+import org.eclipse.basyx.components.configuration.BaSyxMqttConfiguration;
 import org.eclipse.basyx.components.xml.XMLAASBundleFactory;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.support.bundle.AASBundleDescriptorFactory;
 import org.eclipse.basyx.support.bundle.AASBundleIntegrator;
@@ -55,6 +60,7 @@ public class AASServerComponent implements IComponent {
 	private BaSyxContextConfiguration contextConfig;
 	private BaSyxAASServerConfiguration aasConfig;
 	private BaSyxMongoDBConfiguration mongoDBConfig;
+	private BaSyxMqttConfiguration mqttConfig;
 
 	// Initial AASBundle
 	protected Collection<AASBundle> aasBundles;
@@ -86,6 +92,28 @@ public class AASServerComponent implements IComponent {
 		this.mongoDBConfig = mongoDBConfig;
 	}
 
+	/**
+	 * Sets and enables mqtt connection configuration for this component. Has to be called before the component is
+	 * started. Currently only works for InMemory backend.
+	 * 
+	 * @param configuration
+	 */
+	public void enableMQTT(BaSyxMqttConfiguration configuration) {
+		this.mqttConfig = configuration;
+	}
+
+	/**
+	 * Disables mqtt configuration. Has to be called before the component is started.
+	 */
+	public void disableMQTT() {
+		this.mqttConfig = null;
+	}
+
+	/**
+	 * Sets a registry service for registering AAS that are created during startup
+	 * 
+	 * @param registry
+	 */
 	public void setRegistry(IAASRegistryService registry) {
 		this.registry = registry;
 	}
@@ -251,9 +279,14 @@ public class AASServerComponent implements IComponent {
 		// Get aggregator according to backend config
 		AASServerBackend backendType = aasConfig.getAASBackend();
 		IAASAggregator aggregator = null;
-		if ( backendType == AASServerBackend.INMEMORY ) {
+		if (backendType == AASServerBackend.INMEMORY && mqttConfig == null) {
 			logger.info("Using InMemory backend");
 			aggregator = new AASAggregator(registry);
+		} else if (backendType == AASServerBackend.INMEMORY && mqttConfig != null) {
+			logger.info("Using InMemory backend with MQTT providers");
+			IAASAPIFactory aasApiProvider = new VABAASAPIFactory();
+			ISubmodelAPIFactory smApiProvider = new MqttSubmodelAPIFactory(mqttConfig);
+			aggregator = new AASAggregator(aasApiProvider, smApiProvider, registry);
 		} else if ( backendType == AASServerBackend.MONGODB ) {
 			logger.info("Using MongoDB backend");
 			aggregator = loadMongoDBAggregator();

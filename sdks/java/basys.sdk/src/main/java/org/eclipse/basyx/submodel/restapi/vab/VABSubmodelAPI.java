@@ -67,7 +67,7 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 
 	@Override
 	public void addSubmodelElement(ISubmodelElement elem) {
-		getElementProvider().createValue(MultiSubmodelElementProvider.ELEMENTS, elem);
+		getElementProvider().createValue(MultiSubmodelElementProvider.ELEMENTS + "/" + elem.getIdShort(), elem);
 	}
 
 	@Override
