@@ -63,7 +63,7 @@ public class Qualifier extends Constraint implements IQualifier {
 		put(TYPE,type);
 		put(VALUE, PropertyValueTypeDefHelper.prepareForSerialization(value));
 		put(VALUEID, valueId);
-		put(VALUETYPE, PropertyValueTypeDefHelper.getWrapper(PropertyValueTypeDefHelper.fromName(valueType)));
+		put(VALUETYPE, valueType);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class Qualifier extends Constraint implements IQualifier {
 		put(Qualifier.VALUE, PropertyValueTypeDefHelper.prepareForSerialization(obj));
 		// Value type is only set if it is not set before
 		if(getValueType() == null) {
-			put(Qualifier.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(obj));
+			put(Qualifier.VALUETYPE, PropertyValueTypeDefHelper.getType(obj));
 		}
 	}
 
@@ -121,7 +121,7 @@ public class Qualifier extends Constraint implements IQualifier {
 	}
 
 	public void setValueType(PropertyValueTypeDef obj) {
-		put(Qualifier.VALUETYPE, PropertyValueTypeDefHelper.getWrapper(obj));
+		put(Qualifier.VALUETYPE, obj.toString());
 	}
 	
 	@Override

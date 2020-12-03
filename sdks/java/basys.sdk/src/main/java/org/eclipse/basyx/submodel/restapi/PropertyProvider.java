@@ -49,7 +49,7 @@ public class PropertyProvider extends MetaModelProvider {
 		if (path.equals(Property.VALUE)) {
 			// Set value and type
 			proxy.setModelPropertyValue(Property.VALUE, newValue);
-			proxy.setModelPropertyValue(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(newValue));
+			proxy.setModelPropertyValue(Property.VALUETYPE, PropertyValueTypeDefHelper.getType(newValue).toString());
 		} else {
 			throw new MalformedRequestException("Given Set path '" + path + "' does not end in /value");
 		}

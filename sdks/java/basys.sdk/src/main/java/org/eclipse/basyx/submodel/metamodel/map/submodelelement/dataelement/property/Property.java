@@ -129,7 +129,7 @@ public class Property extends DataElement implements IProperty {
 		if(type == null) {
 			throw new RuntimeException("Can not set null as valueType");
 		}
-		put(Property.VALUETYPE, PropertyValueTypeDefHelper.getWrapper(type));
+		put(Property.VALUETYPE, type.toString());
 	}
 
 	public void setValueId(IReference ref) {
@@ -156,7 +156,7 @@ public class Property extends DataElement implements IProperty {
 				throw new RuntimeException("Can not set mandatory attribute 'valueType' with null as value");
 			}
 			
-			put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(value));
+			put(Property.VALUETYPE, PropertyValueTypeDefHelper.getType(value).toString());
 		}
 	}
 
@@ -182,7 +182,13 @@ public class Property extends DataElement implements IProperty {
 
 	@Override
 	public PropertyValueTypeDef getValueType() {
-		return PropertyValueTypeDefHelper.readTypeDef(get(Property.VALUETYPE));
+		String valueType = (String) get(Property.VALUETYPE);
+		if (valueType == null) {
+			return null;
+		} else {
+			return PropertyValueTypeDefHelper.fromName(valueType);
+		}
+
 	}
 
 	/**

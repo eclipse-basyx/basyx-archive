@@ -504,7 +504,7 @@ public class SubModelProviderTest {
 		Map<String, Object> param = new HashMap<>();
 		param.put(Identifiable.IDSHORT, name);
 		param.put(Property.VALUE, value);
-		param.put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(value));
+		param.put(Property.VALUETYPE, PropertyValueTypeDefHelper.getType(value).toString());
 		return param;
 	}
 }

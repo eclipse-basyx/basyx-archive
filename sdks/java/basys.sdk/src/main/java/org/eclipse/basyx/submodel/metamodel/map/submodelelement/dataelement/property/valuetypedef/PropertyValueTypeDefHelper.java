@@ -52,16 +52,6 @@ public class PropertyValueTypeDefHelper {
 	}
 
 	/**
-	 * Creates the appropriate type map for a given object
-	 * 
-	 * @param obj
-	 * @return
-	 */
-	public static Map<String, Object> getTypeWrapperFromObject(Object obj) {
-		return getWrapper(getType(obj));
-	}
-
-	/**
 	 * Creates the PropertyValueTypeDef for an arbitrary object
 	 * 
 	 * @param obj
@@ -228,33 +218,17 @@ public class PropertyValueTypeDefHelper {
 
 	}
 
-	/**
-	 * Creates the appropriate type map for a given type
-	 * 
-	 * @param type
-	 * @return
-	 */
-	public static Map<String, Object> getWrapper(PropertyValueTypeDef type) {
-		HashMap<String, Object> valueTypeWrapper = new HashMap<>();
-		HashMap<String, Object> dataObjectTypeWrapper = new HashMap<>();
-		valueTypeWrapper.put(TYPE_OBJECT, dataObjectTypeWrapper);
-		dataObjectTypeWrapper.put(TYPE_NAME, type.toString());
-		return valueTypeWrapper;
-	}
-
 	@SuppressWarnings("unchecked")
 	public static PropertyValueTypeDef readTypeDef(Object vTypeMap) {
-		
-		if (vTypeMap instanceof Map<?,?>) {
-
+		if (vTypeMap instanceof String) {
+			// From xml/json-schema point of view, this should be only a string.
+			return fromName((String) vTypeMap);
+		} else if (vTypeMap instanceof Map<?, ?>) {
+			// Reading still supported, but should be a simple string
 			Map<String, Object> map = (Map<String, Object>) vTypeMap;
 			Map<String, Object> dot = (Map<String, Object>) map.get(TYPE_OBJECT);
-			
+
 			return fromName(dot.get(TYPE_NAME).toString());
-			
-		} else if (vTypeMap instanceof String) {
-			// From xml/json-schema point of view, this should be only a string.
-			return fromName((String)vTypeMap);
 		}
 		return null;
 	}

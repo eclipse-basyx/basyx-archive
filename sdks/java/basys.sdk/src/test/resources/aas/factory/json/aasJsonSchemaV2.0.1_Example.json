@@ -120,11 +120,7 @@
           "modelType": {
             "name": "Property"
           },
-          "valueType": {
-            "dataObjectType": {
-              "name": "integer"
-            }
-          },
+          "valueType": "integer",
           "kind": "Instance"
         }
       ]
@@ -181,11 +177,7 @@
               "modelType": {
                 "name": "Property"
               },
-              "valueType": {
-                "dataObjectType": {
-                  "name": "langString"
-                }
-              },
+              "valueType": "langString",
               "kind": "Instance"
             },
             {
@@ -251,11 +243,7 @@
           "modelType": {
             "name": "Property"
           },
-          "valueType": {
-            "dataObjectType": {
-              "name": "integer"
-            }
-          },
+          "valueType": "integer",
           "kind": "Instance"
         }
       ]

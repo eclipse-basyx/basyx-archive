@@ -74,7 +74,7 @@ public class Range extends DataElement implements IRange {
 	}
 
 	private void setValueType(PropertyValueTypeDef valueType) {
-		put(Range.VALUETYPE, PropertyValueTypeDefHelper.getWrapper(valueType));
+		put(Range.VALUETYPE, valueType.toString());
 	}
 
 	@Override
