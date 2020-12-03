@@ -6,8 +6,11 @@ import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
 
@@ -21,6 +24,9 @@ public class JSONToMetamodelConverter {
 	
 	private Map<String, Object> root;
 	
+	// Buffer used for parsed assets to prevent deserializing them multiple times
+	private List<Asset> assetBuf;
+
 	@SuppressWarnings("unchecked")
 	public JSONToMetamodelConverter(String jsonContent) {
 		root = (Map<String, Object>) new GSONTools(new DefaultTypeFactory()).deserialize(jsonContent);
@@ -33,8 +39,34 @@ public class JSONToMetamodelConverter {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<AssetAdministrationShell> parseAAS() {
+		assetBuf = parseAssets();
 		return ((List<Object>) root.get(MetamodelToJSONConverter.ASSET_ADMINISTRATION_SHELLS)).stream()
-				.map(i -> AssetAdministrationShell.createAsFacade((Map<String, Object>) i)).collect(Collectors.toList());
+				.map(this::parseAssetAdministrationShell).collect(Collectors.toList());
+	}
+
+	@SuppressWarnings("unchecked")
+	private AssetAdministrationShell parseAssetAdministrationShell(Object mapObject) {
+		AssetAdministrationShell parsedAAS = AssetAdministrationShell.createAsFacade((Map<String, Object>) mapObject);
+		// Fix Asset - Asset in json-Serialization is just a reference 
+		Map<String, Object> assetRefMap = (Map<String, Object>) parsedAAS.get(AssetAdministrationShell.ASSET);
+		if (assetRefMap.get(Reference.KEY) == null && assetRefMap.get(Asset.KIND) != null) {
+			// => Is already an asset, => does not need to be fixed
+			return parsedAAS;
+		}
+		parsedAAS.put(AssetAdministrationShell.ASSETREF, assetRefMap);
+		
+		// Now try to find the Asset and add it to the AssetAdministrationShell
+		IReference assetRef = parsedAAS.getAssetReference();
+		IKey lastKey = assetRef.getKeys().get(assetRef.getKeys().size() - 1);
+		String idValue = lastKey.getValue();
+		for (Asset asset : assetBuf) {
+			if (asset.getIdentification().getId().equals(idValue)) {
+				parsedAAS.put(AssetAdministrationShell.ASSET, asset);
+				break;
+			}
+		}
+
+		return parsedAAS;
 	}
 	
 	/**

@@ -29,6 +29,7 @@ import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxMqttConfiguration;
+import org.eclipse.basyx.components.json.JSONAASBundleFactory;
 import org.eclipse.basyx.components.xml.XMLAASBundleFactory;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
@@ -170,6 +171,12 @@ public class AASServerComponent implements IComponent {
 		this.aasBundles = new XMLAASBundleFactory(xmlContent).create();
 	}
 
+	private void loadBundleFromJSON(String jsonPath) throws IOException, ParserConfigurationException, SAXException {
+		logger.info("Loading aas from json \"" + jsonPath + "\"");
+		String jsonContent = BaSyxConfiguration.getResourceString(jsonPath);
+		this.aasBundles = new JSONAASBundleFactory(jsonContent).create();
+	}
+
 	private void loadBundleFromAASX(String aasxPath)
 			throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
 		logger.info("Loading aas from aasx \"" + aasxPath + "\"");
@@ -208,6 +215,8 @@ public class AASServerComponent implements IComponent {
 		try {
 			if (aasSource.endsWith(".aasx")) {
 				loadBundleFromAASX(aasSource);
+			} else if (aasSource.endsWith(".json")) {
+				loadBundleFromJSON(aasSource);
 			} else if (aasSource.endsWith(".xml")) {
 				loadBundleFromXML(aasSource);
 			}

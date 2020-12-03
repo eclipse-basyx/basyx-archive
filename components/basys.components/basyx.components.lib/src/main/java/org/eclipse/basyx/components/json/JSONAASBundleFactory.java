@@ -1,4 +1,4 @@
-package org.eclipse.basyx.components.xml;
+package org.eclipse.basyx.components.json;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,73 +8,66 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.eclipse.basyx.aas.factory.xml.XMLToMetamodelConverter;
-import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
+import org.eclipse.basyx.aas.factory.json.JSONToMetamodelConverter;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
 /**
- * Creates multiple {@link AASBundle} from an XML containing several AAS and
+ * Creates multiple {@link AASBundle} from a JSON containing several AAS and
  * Submodels <br />
  * TODO: ConceptDescriptions
  * 
- * @author schnicke
+ * @author espen
  *
  */
-public class XMLAASBundleFactory {
-	private static Logger logger = LoggerFactory.getLogger(XMLAASBundleFactory.class);
+public class JSONAASBundleFactory {
+	private static Logger logger = LoggerFactory.getLogger(JSONAASBundleFactory.class);
 
 	private String content;
 
 	/**
 	 * 
-	 * @param xmlContent
-	 *            the content of the XML
+	 * @param jsonContent
+	 *                    the content of the JSON
 	 */
-	public XMLAASBundleFactory(String xmlContent) {
-		this.content = xmlContent;
+	public JSONAASBundleFactory(String jsonContent) {
+		this.content = jsonContent;
 	}
 
-	public XMLAASBundleFactory(Path xmlFile) throws IOException {
-		content = new String(Files.readAllBytes(xmlFile));
+	public JSONAASBundleFactory(Path jsonFile) throws IOException {
+		content = new String(Files.readAllBytes(jsonFile));
 	}
 
 	/**
-	 * Creates the set of {@link AASBundle} contained in the XML string.
+	 * Creates the set of {@link AASBundle} contained in the JSON string.
 	 * 
 	 * @return
-	 * @throws IOException
-	 * @throws SAXException
-	 * @throws ParserConfigurationException
 	 */
-	public Set<AASBundle> create() throws ParserConfigurationException, SAXException, IOException {
-		XMLToMetamodelConverter converter = new XMLToMetamodelConverter(content);
+	public Set<AASBundle> create() {
+		JSONToMetamodelConverter converter = new JSONToMetamodelConverter(content);
 
-		List<IAssetAdministrationShell> shells = converter.parseAAS();
-		List<ISubModel> submodels = converter.parseSubmodels();
+		List<AssetAdministrationShell> shells = converter.parseAAS();
+		List<SubModel> submodels = converter.parseSubmodels();
 
-		List<IAsset> assets = converter.parseAssets();
+		List<Asset> assets = converter.parseAssets();
 
 		Set<AASBundle> bundles = new HashSet<>();
 
-		for (IAssetAdministrationShell shell : shells) {
+		for (AssetAdministrationShell shell : shells) {
 			// Retrieve asset
 			try {
 				IReference assetRef = shell.getAssetReference();
-				IAsset asset = getByReference(assetRef, assets);
-				((AssetAdministrationShell) shell).setAsset((Asset) asset);
+				Asset asset = getByReference(assetRef, assets);
+				shell.setAsset(asset);
 			} catch (ResourceNotFoundException e) {
 				logger.warn("Can't find asset with id " + shell.getAssetReference().getKeys().get(0).getValue() + " for AAS " + shell.getIdShort() + "; If the asset is not provided in another way, this is an error!");
 			}
@@ -94,7 +87,7 @@ public class XMLAASBundleFactory {
 	 * @param shell
 	 * @return
 	 */
-	private Set<ISubModel> retrieveSubmodelsForAAS(List<ISubModel> submodels, IAssetAdministrationShell shell) {
+	private Set<ISubModel> retrieveSubmodelsForAAS(List<SubModel> submodels, AssetAdministrationShell shell) {
 		Set<ISubModel> currentSM = new HashSet<>();
 
 		for (IReference submodelRef : shell.getSubmodelReferences()) {
@@ -115,17 +108,17 @@ public class XMLAASBundleFactory {
 	 * Retrieves an identifiable from a list of identifiable by its reference
 	 * 
 	 * @param submodelRef
-	 * @param submodels
+	 * @param identifiable
 	 * @return
 	 * @throws ResourceNotFoundException
 	 */
-	private <T extends IIdentifiable> T getByReference(IReference ref, List<T> submodels) throws ResourceNotFoundException {
+	private <T extends IIdentifiable> T getByReference(IReference ref, List<T> identifiable) throws ResourceNotFoundException {
 		IKey lastKey = null;
 		// It may be that only one key fits to the Submodel contained in the XML
 		for (IKey key : ref.getKeys()) {
 			lastKey = key;
 			// There will only be a single submodel matching the identification at max
-			Optional<T> match = submodels.stream().filter(s -> s.getIdentification().getId().equals(key.getValue())).findFirst();
+			Optional<T> match = identifiable.stream().filter(s -> s.getIdentification().getId().equals(key.getValue())).findFirst();
 			if (match.isPresent()) {
 				return match.get();
 			}
@@ -133,7 +126,8 @@ public class XMLAASBundleFactory {
 		if (lastKey == null) {
 			throw new ResourceNotFoundException("Could not resolve reference without keys");
 		} else {
-			throw new ResourceNotFoundException("Could not resolve reference with last key " + lastKey.getValue());
+			throw new ResourceNotFoundException(
+					"Could not resolve reference with last key '" + lastKey.getValue() + "'");
 		}
 
 		// If no identifiable is found, indicate it by throwing an exception
