@@ -29,7 +29,6 @@ using NLog;
 using NLog.Web;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -382,6 +381,15 @@ namespace BaSyx.Components.Common
                     RequestPath = new PathString(BROWSE_PATH)
                 });
             }
+
+            app.Use((context, next) =>
+            {
+                var url = context.GetServerVariable("UNENCODED_URL");
+                if (!string.IsNullOrEmpty(url))
+                    context.Request.Path = new PathString(url);
+
+                return next();
+            });
 
             app.Use((context, next) =>
             {

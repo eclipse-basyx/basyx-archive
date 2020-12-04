@@ -41,19 +41,5 @@ namespace BaSyx.Registry.Server.Http
                 services.AddSingleton<IAssetAdministrationShellRegistry>(aasRegistryProvider);
             });
         }
-
-        protected override void Configure(IApplicationBuilder app)
-        {
-            base.Configure(app);
-
-            app.Use((context, next) =>
-            {
-                var url = context.GetServerVariable("UNENCODED_URL");
-                if (!string.IsNullOrEmpty(url))
-                    context.Request.Path = new PathString(url);
-
-                return next();
-            });
-        }
     }
 }
