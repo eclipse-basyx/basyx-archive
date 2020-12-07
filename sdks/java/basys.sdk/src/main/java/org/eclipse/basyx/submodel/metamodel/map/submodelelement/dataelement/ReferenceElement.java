@@ -28,8 +28,28 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 	public ReferenceElement() {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
+	}
 
-		put(Property.VALUE, null);
+	/**
+	 * Constructor with mandatory attribute
+	 * 
+	 * @param idShort
+	 */
+	public ReferenceElement(String idShort) {
+		super(idShort);
+		putAll(new ModelType(MODELTYPE));
+	}
+
+	/**
+	 * 
+	 * @param idShort
+	 * @param ref
+	 *            Reference to any other referable element of the same or any other
+	 *            AAS or a reference to an external object or entity
+	 */
+	public ReferenceElement(String idShort, Reference ref) {
+		this(idShort);
+		setValue(ref);
 	}
 
 	/**

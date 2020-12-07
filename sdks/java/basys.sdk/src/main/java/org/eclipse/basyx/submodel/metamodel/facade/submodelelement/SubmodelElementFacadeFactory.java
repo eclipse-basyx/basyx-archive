@@ -53,7 +53,7 @@ public class SubmodelElementFacadeFactory {
 		} else if (BasicEvent.isBasicEvent(submodelElement)) {
 			return BasicEvent.createAsFacade(submodelElement);
 		} else {
-			throw new RuntimeException("Can not create a submodel element from given map");
+			throw new RuntimeException("Can not create a submodel element from given map: " + submodelElement);
 		}
 	}
 

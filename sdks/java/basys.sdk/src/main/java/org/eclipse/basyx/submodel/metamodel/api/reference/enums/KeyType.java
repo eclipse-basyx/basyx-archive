@@ -1,5 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.api.reference.enums;
 
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnum;
 import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnumHelper;
 
@@ -16,7 +17,7 @@ public enum KeyType implements StandardizedLiteralEnum {
 	/**
 	 * Enum values of IdentifierType
 	 */
-	CUSTOM("Custom"), IRDI("IRDI"), IRI("IRI"),
+	CUSTOM(IdentifierType.CUSTOM.toString()), IRDI(IdentifierType.IRDI.toString()), IRI(IdentifierType.IRI.toString()),
 
 	/**
 	 * Enum values of LocalKeyType
@@ -37,6 +38,10 @@ public enum KeyType implements StandardizedLiteralEnum {
 	@Override
 	public String toString() {
 		return standardizedLiteral;
+	}
+
+	public static KeyType fromIdentifierType(IdentifierType type) {
+		return fromString(type.toString());
 	}
 
 	public static KeyType fromString(String str) {

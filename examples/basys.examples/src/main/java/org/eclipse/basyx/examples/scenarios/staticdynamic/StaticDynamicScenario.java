@@ -9,11 +9,6 @@ import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.basyx.aas.aggregator.proxy.AASAggregatorProxy;
-import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
-import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.IComponent;
 import org.eclipse.basyx.components.aas.AASServerComponent;
@@ -22,12 +17,9 @@ import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.registry.RegistryComponent;
 import org.eclipse.basyx.components.registry.configuration.BaSyxRegistryConfiguration;
 import org.eclipse.basyx.components.registry.configuration.RegistryBackend;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.support.bundle.AASBundleIntegrator;
-import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
-import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.xml.sax.SAXException;
 
 /**
@@ -83,7 +75,7 @@ public class StaticDynamicScenario {
 		
 		// Get a RegistryProxy and register all Objects contained in the Bundles
 		AASRegistryProxy proxy = new AASRegistryProxy(REGISTRY_URL);
-		registerBundles(bundles, proxy, SERVER_URL);
+		AASBundleIntegrator.register(proxy, bundles, SERVER_URL);
 				
 	}
 	
@@ -127,38 +119,6 @@ public class StaticDynamicScenario {
 				return aasBundle;
 		}
 		return null;
-	}
-	
-	/**
-	 * Registers all AASs and SMs contained in the given Bundles
-	 * 
-	 * @param bundles the Bundles to be registered
-	 * @param registry the registry to be used
-	 * @param serverURL the URL of the server, that holds the AASs/SMs
-	 */
-	private void registerBundles(Set<AASBundle> bundles, IAASRegistryService registry, String serverURL) {
-		for(AASBundle bundle: bundles) {
-			IAssetAdministrationShell aas = bundle.getAAS();
-			String encodedAASId = VABPathTools.encodePathElement(aas.getIdentification().getId());
-			String aasEndpoint = VABPathTools.concatenatePaths(serverURL, AASAggregatorProvider.PREFIX, encodedAASId, "aas");
-			AASDescriptor aasDescriptor = new AASDescriptor(aas, aasEndpoint);
-			try {
-				registry.register(aasDescriptor);
-			} catch(ResourceAlreadyExistsException e) {
-				// Does not matter; AAS was already registered
-			}
-			
-			for(ISubModel sm: bundle.getSubmodels()) {
-				String encodedSMId = VABPathTools.encodePathElement(sm.getIdShort());
-				String smEndpoint = VABPathTools.concatenatePaths(aasEndpoint, "submodels", encodedSMId);
-				SubmodelDescriptor smDescriptor = new SubmodelDescriptor(sm, smEndpoint);
-				try {
-					registry.register(aas.getIdentification(), smDescriptor);
-				} catch(ResourceAlreadyExistsException e) {
-					// Does not matter; SM was already registered
-				}	
-			}
-		}
 	}
 	
 	/**

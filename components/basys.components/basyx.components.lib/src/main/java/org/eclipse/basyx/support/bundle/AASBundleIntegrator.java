@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
@@ -77,4 +78,17 @@ public class AASBundleIntegrator {
 		return objectUploaded;
 	}
 	
+	/**
+	 * Registers a given set of bundles with the registry
+	 * 
+	 * @param registry
+	 *            the registry to register with
+	 * @param bundles
+	 *            the bundles to register
+	 * @param aasAggregatorPath
+	 *            the aggregator path, e.g. <i>http://localhost:4000/shells</i>
+	 */
+	public static void register(IAASRegistryService registry, Collection<AASBundle> bundles, String aasAggregatorPath) {
+		bundles.stream().map(b -> AASBundleDescriptorFactory.createAASDescriptor(b, aasAggregatorPath)).forEach(registry::register);
+	}
 }
