@@ -1,5 +1,6 @@
 package org.eclipse.basyx.submodel.metamodel.map;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -125,6 +126,10 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	public static SubModel createAsFacade(Map<String, Object> map) {
 		if (map == null) {
 			return null;
+		}
+
+		if (!map.containsKey(SUBMODELELEMENT)) {
+			map.put(SUBMODELELEMENT, new ArrayList<>());
 		}
 
 		return SubmodelElementMapCollectionConverter.mapToSM(map);

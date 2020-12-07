@@ -1,5 +1,6 @@
 package org.eclipse.basyx.aas.metamodel.map;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -115,6 +116,10 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public static AssetAdministrationShell createAsFacade(Map<String, Object> map) {
 		if (map == null) {
 			return null;
+		}
+
+		if (!map.containsKey(SUBMODELS)) {
+			map.put(SUBMODELS, new ArrayList<>());
 		}
 
 		AssetAdministrationShell ret = new AssetAdministrationShell();
