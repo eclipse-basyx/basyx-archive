@@ -33,7 +33,8 @@ target_sources(${BASYX_CONTROLCOMPONENT_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/enumerations/ExecutionOrder.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/enumerations/ExecutionState.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/implementation/ControlComponent.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/map/ControlComponent.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/simple/ControlComponent.cpp
 )
 
 #Header files
@@ -48,7 +49,8 @@ target_sources(${BASYX_CONTROLCOMPONENT_LIB_SUFFIX}
         ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/enumerations/ExecutionState.h
         ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/enumerations/OccupationState.h
 
-        ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/headers/ControlComponent.h
+        ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/map/ControlComponent.h
+        ${BASYX_CONTROLCOMPONENT_INCLUDE_DIR}/simple/ControlComponent.h
         )
 
 add_library(basyx::controlcomponent ALIAS ${BASYX_CONTROLCOMPONENT_LIB_SUFFIX})

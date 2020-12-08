@@ -2,6 +2,7 @@
 #define BASYX_CONTROLCOMPONENT_ICONTROLCOMPONENT_H
 
 #include <string>
+#include <vector>
 
 #include <BaSyx/shared/object.h>
 
@@ -37,11 +38,6 @@ public:
   virtual const basyx::object getServiceOperationMap() = 0;
 
   /**
-   * Update an value
-   */
-  virtual void put(const std::string &key, basyx::object value) = 0;
-
-  /**
    * Finish current execution state (execute 'SC' order). This only works in transition states
    */
   virtual void finishState() = 0;
@@ -49,7 +45,7 @@ public:
   /**
    * Get order list
    */
-  virtual basyx::object getOrderList() = 0;
+  virtual const std::vector<std::string> & getOrderList() = 0;
 
   /**
    * Add order to order list
