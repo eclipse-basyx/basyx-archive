@@ -55,6 +55,11 @@ IReferable * SubModel::getParent() const
 	return this->identifiable.getParent();
 }
 
+void SubModel::setParent(IReferable * parent)
+{
+	return this->identifiable.setParent(parent);
+};
+
 const AdministrativeInformation & SubModel::getAdministrativeInformation() const
 {
 	return this->identifiable.getAdministrativeInformation();
@@ -115,3 +120,12 @@ std::vector<simple::Qualifier> SubModel::getQualifiers() const
 	return this->qualifiable.getQualifiers();
 };
 
+simple::Reference SubModel::getReference() const
+{
+	return this->identifiable.getReference();
+};
+
+simple::Key SubModel::getKey(bool local) const
+{
+	return this->identifiable.getKey();
+};
