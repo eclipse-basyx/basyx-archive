@@ -1,7 +1,10 @@
 package org.eclipse.basyx.examples.scenarios.cloudedgedeployment;
 
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.CustomId;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
@@ -14,21 +17,17 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
  *
  */
 public class ComponentBuilder {
+	public static final String AAS_ID_SHORT = "oven";
+	public static final String AAS_ID = "basyx.examples.oven";
+	public static final String AAS_ENDPOINT = "http://localhost:8081/cloud/shells/" + AAS_ID + "/aas";
 
 	public static final String EDGESM_ID_SHORT = "curr_temp";
-	public static final String EDGESM_ID = "current_oven_temperature";
-	public static final String EDGESM_ENDPOINT = "http://localhost:8082/oven/current_temp/submodel";
+	public static final String EDGESM_ID = "basyx.examples.oven.current_oven_temperature";
+	public static final String EDGESM_ENDPOINT = "http://localhost:8082/oven/" + EDGESM_ID_SHORT + "/submodel";
 	
 	public static final String DOCUSM_ID_SHORT = "oven_doc";
-	public static final String DOCUSM_ID = "oven_documentation_sm";
-	public static final String DOCUSM_ENDPOINT = "http://localhost:8081/cloud/shells/aasId/aas/submodels/oven_doc/submodel";
-	
-	public static final String AAS_ID_SHORT = "aasIdShort";
-	public static final String AAS_ID = "aasId";
-	public static final String AAS_ENDPOINT = "http://localhost:8081/cloud/shells/aasId/aas";
-	
-	
-	
+	public static final String DOCUSM_ID = "basyx.examples.oven.oven_documentation_sm";
+	public static final String DOCUSM_ENDPOINT = "http://localhost:8081/cloud/shells/" + AAS_ID + "/aas/submodels/" + DOCUSM_ID_SHORT + "/submodel";
 	
 	/**
 	 * Creates the AAS, which gets pushed to the cloud server
@@ -36,10 +35,13 @@ public class ComponentBuilder {
 	 * @return the created AAS
 	 */
 	public static AssetAdministrationShell getAAS() {
-		AssetAdministrationShell aas = new AssetAdministrationShell();
-		aas.setIdShort(AAS_ID_SHORT);
-		aas.setIdentification(IdentifierType.CUSTOM, AAS_ID);
-		return aas;
+		// Create the oven asset
+		Asset ovenAsset = new Asset("OvenAsset", new CustomId("basyx.examples.OvenAsset"), AssetKind.INSTANCE);
+
+		// Create the AAS representing the oven
+		AssetAdministrationShell ovenAAS = new AssetAdministrationShell(AAS_ID_SHORT, new CustomId(AAS_ID), ovenAsset);
+
+		return ovenAAS;
 	}
 	
 	/**
@@ -49,15 +51,14 @@ public class ComponentBuilder {
 	 * @return the created Submodel
 	 */
 	public static SubModel getDocuSM() {
-		SubModel sm = new SubModel();
-		sm.setIdentification(IdentifierType.CUSTOM, DOCUSM_ID);
-		sm.setIdShort(DOCUSM_ID_SHORT);
+		// Create the documentation Submodel
+		SubModel docuSm = new SubModel(DOCUSM_ID_SHORT, new CustomId(DOCUSM_ID));
 
-		Property property = new Property(1000);
-		property.setIdShort("max_temp");
-		sm.addSubModelElement(property);
+		// Create the maximum temperature property and include it in the submodel
+		Property maxTemp = new Property("max_temp", 1000);
+		docuSm.addSubModelElement(maxTemp);
 		
-		return sm;
+		return docuSm;
 	}
 	
 	/**
@@ -76,16 +77,14 @@ public class ComponentBuilder {
 	 * @return the created Submodel
 	 */
 	public static SubModel createEdgeSubModel() {
-		SubModel sm = new SubModel();
-		sm.setIdentification(IdentifierType.CUSTOM, EDGESM_ID);
-		sm.setIdShort(EDGESM_ID_SHORT);
+		// Create the edge submodel
+		SubModel edgeSm = new SubModel(EDGESM_ID_SHORT, new CustomId(EDGESM_ID));
 		
 		// The property in this Submodel contains the currently measured temperature of the oven
 		// It is represented by a static value in this example
-		Property property = new Property(31);
-		property.setIdShort("temp");
-		sm.addSubModelElement(property);
-		return sm;
+		Property property = new Property("temp", 31);
+		edgeSm.addSubModelElement(property);
+		return edgeSm;
 	}
 	
 	/**

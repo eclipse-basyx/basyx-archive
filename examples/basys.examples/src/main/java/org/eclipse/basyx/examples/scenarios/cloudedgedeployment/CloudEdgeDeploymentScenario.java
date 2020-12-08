@@ -50,19 +50,19 @@ public class CloudEdgeDeploymentScenario {
 	/**
 	 * Identifier of the AAS hosted in the cloud.
 	 */
-	public IIdentifier aasIdentifier = ComponentBuilder.getAAS().getIdentification();
+	public static IIdentifier aasIdentifier = ComponentBuilder.getAAS().getIdentification();
 
 	/**
 	 * Identifier of the SM hosted in the cloud.
 	 * It contains never changing properties of the machine.
 	 */
-	public IIdentifier docuSmIdentifier = ComponentBuilder.getDocuSMDescriptor().getIdentifier();
+	public static IIdentifier docuSmIdentifier = ComponentBuilder.getDocuSMDescriptor().getIdentifier();
 
 	/**
 	 * Identifier of the SM hosted near the machine.
 	 * It contains constantly changing sensor data.
 	 */
-	public IIdentifier edgeSmIdentifier = ComponentBuilder.getEdgeSubmodelDescriptor().getIdentifier();
+	public static IIdentifier edgeSmIdentifier = ComponentBuilder.getEdgeSubmodelDescriptor().getIdentifier();
 
 	// Used for shutting down the scenario
 	private List<IComponent> startedComponents = new ArrayList<>();
@@ -144,8 +144,8 @@ public class CloudEdgeDeploymentScenario {
 		// Create a new SubmodelServlet containing the edgeSubmodel
 		SubmodelServlet smServlet = new SubmodelServlet(edgeSubmodel);
 		
-		// Add the SubmodelServlet mapping to the context at the path "/oven/current_temp"
-		context.addServletMapping("/oven/current_temp/*", smServlet);
+		// Add the SubmodelServlet mapping to the context at the path "/oven/curr_temp"
+		context.addServletMapping("/oven/" + ComponentBuilder.EDGESM_ID_SHORT + "/*", smServlet);
 		
 		
 		// Create and start a HTTP server with the context created above

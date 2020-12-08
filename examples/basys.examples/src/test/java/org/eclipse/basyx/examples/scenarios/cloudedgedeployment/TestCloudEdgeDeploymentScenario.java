@@ -79,7 +79,7 @@ public class TestCloudEdgeDeploymentScenario {
 		ConnectedAssetAdministrationShellManager manager =
 				new ConnectedAssetAdministrationShellManager(getRegistry());
 		
-		IAssetAdministrationShell aas = manager.retrieveAAS(scenario.aasIdentifier);
+		IAssetAdministrationShell aas = manager.retrieveAAS(CloudEdgeDeploymentScenario.aasIdentifier);
 		
 		// Check if it has the correct idShort
 		assertEquals(ComponentBuilder.AAS_ID_SHORT, aas.getIdShort());
@@ -101,7 +101,7 @@ public class TestCloudEdgeDeploymentScenario {
 		ConnectedAssetAdministrationShellManager manager =
 				new ConnectedAssetAdministrationShellManager(getRegistry());
 		
-		ISubModel docuSM = manager.retrieveSubModel(scenario.aasIdentifier, scenario.docuSmIdentifier);
+		ISubModel docuSM = manager.retrieveSubModel(CloudEdgeDeploymentScenario.aasIdentifier, CloudEdgeDeploymentScenario.docuSmIdentifier);
 		
 		// Check if it has the correct idShort, and 1 SubmodelElement
 		assertEquals(ComponentBuilder.DOCUSM_ID_SHORT, docuSM.getIdShort());
@@ -118,7 +118,7 @@ public class TestCloudEdgeDeploymentScenario {
 		ConnectedAssetAdministrationShellManager manager =
 				new ConnectedAssetAdministrationShellManager(getRegistry());
 		
-		ISubModel edgeSM = manager.retrieveSubModel(scenario.aasIdentifier, scenario.edgeSmIdentifier);
+		ISubModel edgeSM = manager.retrieveSubModel(CloudEdgeDeploymentScenario.aasIdentifier, CloudEdgeDeploymentScenario.edgeSmIdentifier);
 		
 		// Check if it has the correct idShort, and 1 SubmodelElement
 		assertEquals(ComponentBuilder.EDGESM_ID_SHORT, edgeSM.getIdShort());
