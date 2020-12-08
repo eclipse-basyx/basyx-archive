@@ -41,7 +41,6 @@ public:
 	virtual void setParent(IReferable * parent) override;
 	virtual IReferable * getParent() const override;
 
-	// not inherited
 	void setIdShort(const std::string & shortID);
 	void setCategory(const std::string & category) override;
 

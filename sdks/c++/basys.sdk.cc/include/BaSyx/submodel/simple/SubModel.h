@@ -47,8 +47,10 @@ public:
 	virtual void setCategory(const std::string & category) override;
 	virtual simple::LangStringSet & getDescription() override;
 	virtual const simple::LangStringSet & getDescription() const override;
+	
 	virtual IReferable * getParent() const override;
-
+	virtual void setParent(IReferable * parent) override;
+	
 	// Inherited via IIdentifiable
 	virtual const AdministrativeInformation & getAdministrativeInformation() const override;
 	virtual AdministrativeInformation & getAdministrativeInformation() override;
@@ -71,6 +73,10 @@ public:
 
 	virtual std::vector<simple::Formula> getFormulas() const override;
 	virtual std::vector<simple::Qualifier> getQualifiers() const override;
+
+	virtual KeyElements getKeyElementType() const override { return KeyElements::Submodel; };
+	virtual simple::Reference getReference() const override;
+	virtual simple::Key getKey(bool local = true) const override;
 };
 
 
