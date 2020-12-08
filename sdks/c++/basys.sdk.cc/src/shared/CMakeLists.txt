@@ -16,8 +16,10 @@ set_target_properties(${BASYX_SHARED_TARGET_NAME} PROPERTIES VERSION ${PROJECT_V
 set_target_properties(${BASYX_SHARED_TARGET_NAME} PROPERTIES SOVERSION ${BASYX_PACKAGE_VERSION_MAJOR})
 set_target_properties(${BASYX_SHARED_TARGET_NAME} PROPERTIES PREFIX "${CMAKE_STATIC_LIBRARY_PREFIX}${PROJECT_SHORTNAME}")
 target_include_directories(${BASYX_SHARED_TARGET_NAME}
-INTERFACE ${CMAKE_INSTALL_PREFIX}/include
-       ${CMAKE_INSTALL_PREFIX}/include/${PROJECT_SHORTNAME})
+	PUBLIC 
+	    $<BUILD_INTERFACE:${BASYX_INCLUDE_DIR}>  
+		$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
+)
 
 target_sources(${BASYX_SHARED_TARGET_NAME}
     PRIVATE
@@ -63,7 +65,15 @@ target_link_libraries(${BASYX_SHARED_TARGET_NAME}
 add_library(basyx::shared ALIAS ${BASYX_SHARED_TARGET_NAME})
 add_library(${PROJECT_SHORTNAME}::${BASYX_SHARED_LIB_SUFFIX} ALIAS ${BASYX_SHARED_TARGET_NAME})
 
-diagnostics_print(${BASYX_SHARED_TARGET_NAME})
+if(BASYX_IS_SUBMODULE)
+	set_target_properties(${BASYX_SHARED_TARGET_NAME} PROPERTIES FOLDER BaSyx)
+endif()
+
+if(BASYX_VERBOSE_CMAKE_OUTPUT)
+	diagnostics_print(${BASYX_SHARED_TARGET_NAME})
+endif()
+
+build_source_group(${BASYX_SHARED_TARGET_NAME})
 
 ###############################################
 ###           Install section               ###

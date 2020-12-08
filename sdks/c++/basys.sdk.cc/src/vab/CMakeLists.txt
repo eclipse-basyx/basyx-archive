@@ -15,8 +15,10 @@ set_target_properties(${BASYX_VAB_LIB_SUFFIX} PROPERTIES VERSION ${PROJECT_VERSI
 set_target_properties(${BASYX_VAB_LIB_SUFFIX} PROPERTIES SOVERSION ${BASYX_PACKAGE_VERSION_MAJOR})
 set_target_properties(${BASYX_VAB_LIB_SUFFIX} PROPERTIES PREFIX "${CMAKE_STATIC_LIBRARY_PREFIX}${PROJECT_SHORTNAME}")
 target_include_directories(${BASYX_VAB_LIB_SUFFIX}
-INTERFACE ${CMAKE_INSTALL_PREFIX}/include
-       ${CMAKE_INSTALL_PREFIX}/include/${PROJECT_SHORTNAME})
+	PUBLIC 
+	    $<BUILD_INTERFACE:${BASYX_INCLUDE_DIR}>  
+		$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
+)
 
 if(${BASYX_DEBUG_PRINT_FRAMES})
     target_compile_definitions(${BASYX_VAB_LIB_SUFFIX} PUBLIC PRINT_FRAME)
@@ -68,7 +70,15 @@ target_link_libraries(${BASYX_VAB_LIB_SUFFIX}
 add_library(basyx::vab ALIAS ${BASYX_VAB_LIB_SUFFIX})
 add_library(${PROJECT_SHORTNAME}::${BASYX_VAB_LIB_SUFFIX} ALIAS ${BASYX_VAB_LIB_SUFFIX})
 
-diagnostics_print(${BASYX_VAB_LIB_SUFFIX})
+if(BASYX_IS_SUBMODULE)
+	set_target_properties(${BASYX_VAB_LIB_SUFFIX} PROPERTIES FOLDER BaSyx)
+endif()
+
+if(BASYX_VERBOSE_CMAKE_OUTPUT)
+	diagnostics_print(${BASYX_VAB_LIB_SUFFIX})
+endif()
+
+build_source_group(${BASYX_VAB_LIB_SUFFIX})
 
 ###############################################
 ###           Install section               ###

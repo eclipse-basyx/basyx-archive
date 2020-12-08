@@ -6,9 +6,7 @@
 ### about the specified target
 ###
 
-function( diagnostics_print target_name )
-	build_source_group(${target_name})
-	
+function( diagnostics_print target_name )	
 	message(STATUS "${target_name} settings:")
 	message(STATUS "==============\n")
 

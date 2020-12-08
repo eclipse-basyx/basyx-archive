@@ -19,8 +19,11 @@ set_target_properties(${BASYX_CONTROLCOMPONENT_LIB_SUFFIX} PROPERTIES PREFIX "${
 set_target_properties(${BASYX_CONTROLCOMPONENT_LIB_SUFFIX} PROPERTIES LINKER_LANGUAGE CXX)
 
 target_include_directories(${BASYX_CONTROLCOMPONENT_LIB_SUFFIX}
-        INTERFACE ${CMAKE_INSTALL_PREFIX}/Include
-        ${CMAKE_INSTALL_PREFIX}/Include/${PROJECT_SHORTNAME})
+	PUBLIC 
+	    $<BUILD_INTERFACE:${BASYX_INCLUDE_DIR}>  
+		$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
+)
+
 
 
 #Implementation files
@@ -57,3 +60,9 @@ target_link_libraries(${BASYX_CONTROLCOMPONENT_LIB_SUFFIX}
         BaSyx::Shared
         BaSyx::VAB
 )
+
+if(BASYX_IS_SUBMODULE)
+	set_target_properties(${BASYX_CONTROLCOMPONENT_LIB_SUFFIX} PROPERTIES FOLDER BaSyx)
+endif()
+
+build_source_group(${BASYX_CONTROLCOMPONENT_LIB_SUFFIX})
