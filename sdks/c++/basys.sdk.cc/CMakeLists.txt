@@ -13,6 +13,9 @@ include(enable_cppcheck)
 include(enable_testbed)
 include(GNUInstallDirs)
 
+# Check if standalone build or being included as submodule
+get_directory_property(BASYX_IS_SUBMODULE PARENT_DIRECTORY)
+
 set (BASYX_PACKAGE_VERSION_MAJOR "0")
 set (BASYX_PACKAGE_VERSION_MINOR "1")
 set (BASYX_PACKAGE_VERSION_PATCH "0")
@@ -34,24 +37,43 @@ message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
 message(STATUS "CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}")
 message(STATUS "" )
 
+if(NOT BASYX_IS_SUBMODULE)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+endif()
 
 ### BaSyx directories ###
-set(BASYX_SOURCE_DIR  "${CMAKE_SOURCE_DIR}/src")
-set(BASYX_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
-set(BASYX_TEST_DIR    "${CMAKE_SOURCE_DIR}/regression")
-set(BASYX_LIBRARY_DIR "${CMAKE_SOURCE_DIR}/lib")
+set(BASYX_SOURCE_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/src")
+set(BASYX_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set(BASYX_TEST_DIR    "${CMAKE_CURRENT_SOURCE_DIR}/regression")
+set(BASYX_LIBRARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib")
+
+## Set project defaults
+if(BASYX_IS_SUBMODULE)
+  message(STATUS "BaSyx included as submodule.")
+  set(BASYX_BUILD_TESTS_DEFAULT OFF)
+  set(BASYX_UTILITY_PROJECTS_DEFAULT OFF)
+  set(BASYX_INSTALL_SDK_DEFAULT OFF)
+  set(BUILD_SHARED_LIBS_DEFAULT OFF)
+  set(BASYX_VERBOSE_CMAKE_OUTPUT OFF)
+else()
+  set(BASYX_BUILD_TESTS_DEFAULT ON)
+  set(BASYX_UTILITY_PROJECTS_DEFAULT ON)
+  set(BASYX_INSTALL_SDK_DEFAULT ON)
+  set(BUILD_SHARED_LIBS_DEFAULT OFF)
+endif()
 
 ### Build options ###
-set(BASYX_BUILD_TESTS ON CACHE BOOL "Build unit tests")
+set(BASYX_BUILD_TESTS ${BASYX_BUILD_TESTS_DEFAULT} CACHE BOOL "Build unit tests")
 set(BASYX_BUILD_API ON CACHE BOOL "Build BaSyx API")
-set(BASYX_UTILITY_PROJECTS ON CACHE BOOL "Create utility targets")
+set(BASYX_UTILITY_PROJECTS ${BASYX_UTILITY_PROJECTS_DEFAULT} CACHE BOOL "Create utility targets")
 set(BASYX_DEBUG_PRINT_FRAMES OFF CACHE BOOL "Print BaSyx frames")
-set(BASYX_INSTALL_SDK ON CACHE BOOL "Create install instructions for BaSyx SDK")
+set(BASYX_INSTALL_SDK ${BASYX_INSTALL_SDK_DEFAULT} CACHE BOOL "Create install instructions for BaSyx SDK")
+option(BASYX_VERBOSE_CMAKE_OUTPUT "Show detailed CMake output" ON)
 
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Shared (.so / .dll) instead of static libraries")
+
+set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_DEFAULT} CACHE BOOL "Build Shared (.so / .dll) instead of static libraries")
 
 option(BASYX_USE_SYSTEM_LIBFMT "Wether to build external, yet included library libfmt" OFF)
 option(BASYX_USE_SYSTEM_ASIO "Use system supplied ASIO library." OFF)
@@ -64,8 +86,12 @@ set(CMAKE_CXX_STANDARD 11)
 add_compile_definitions(BASYX_MAJOR_REV=${BASYX_PACKAGE_VERSION_MAJOR})
 add_compile_definitions(BASYX_MINOR_REV=${BASYX_PACKAGE_VERSION_MINOR})
 add_compile_definitions(BASYX_PATCH_REV=${BASYX_PACKAGE_VERSION_PATCH})
-add_compile_definitions(WIN32_LEAN_AND_MEAN)
-##add_compile_definitions(__USE_MINGW_ANSI_STDIO=0)
+
+### Load system specific config ###
+if(WIN32)
+	include(config.windows)
+endif()
+
 
 ###############################################
 ###           Library Settings              ###
@@ -106,7 +132,7 @@ endif()
 ###############################################
 ###           Source Directory              ###
 ###############################################
-include_directories("${BASYX_INCLUDE_DIR}")
+#include_directories("${BASYX_INCLUDE_DIR}")
 
 add_subdirectory(src/abstraction)
 add_subdirectory(src/logging)
