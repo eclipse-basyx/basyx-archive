@@ -12,6 +12,7 @@ import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.parts.View;
@@ -113,14 +114,30 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(AssetAdministrationShell.class, map);
+		}
+					
 		if (!map.containsKey(SUBMODELS)) {
 			map.put(SUBMODELS, new ArrayList<>());
 		}
 
 		AssetAdministrationShell ret = new AssetAdministrationShell();
 		ret.setMap(map);
-		return ret;
+		return ret;	
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	@SuppressWarnings("unchecked")
+	public static boolean isValid(Map<String, Object> map) {
+		return Identifiable.isValid(map) &&
+				map.containsKey(AssetAdministrationShell.ASSET) &&
+				Asset.isValid((Map<String, Object>)map.get(AssetAdministrationShell.ASSET));
 	}
 
 	@Override
@@ -142,7 +159,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	public void setIdentification(IdentifierType idType, String id) {
-		Identifiable.createAsFacade(this, getKeyElement()).setIdentification(idType, id);
+		Identifiable.createAsFacadeNonStrict(this, getKeyElement()).setIdentification(idType, id);
 	}
 
 	@Override
@@ -164,7 +181,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	public void setIdShort(String id) {
-		Referable.createAsFacade(this, getKeyElement()).setIdShort(id);
+		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(id);
 	}
 
 	public void setSecurity(ISecurity security) {

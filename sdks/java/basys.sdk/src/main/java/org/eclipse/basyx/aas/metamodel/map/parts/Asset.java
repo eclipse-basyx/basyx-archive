@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -88,9 +89,24 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 		if (map == null) {
 			return null;
 		}
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(Asset.class, map);
+		}
+		
 		Asset ret = new Asset();
 		ret.setMap(map);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return Identifiable.isValid(map) && 
+				map.containsKey(Asset.KIND);
 	}
 
 	@Override
@@ -139,7 +155,7 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 	}
 
 	public void setIdentification(IdentifierType idType, String id) {
-		Identifiable.createAsFacade(this, getKeyElement()).setIdentification(idType, id);
+		Identifiable.createAsFacadeNonStrict(this, getKeyElement()).setIdentification(idType, id);
 	}
 
 	@Override
@@ -172,7 +188,7 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 	}
 
 	public void setIdShort(String idShort) {
-		Referable.createAsFacade(this, getKeyElement()).setIdShort(idShort);
+		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {

@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
@@ -54,9 +55,22 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 			return null;
 		}
 		
+		if (!isValid(obj)) {
+			throw new MetamodelConstructionException(SubmodelElement.class, obj);	
+		}
+
 		SubmodelElement ret = new SubmodelElement();
 		ret.setMap(obj);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> obj) {
+		return Referable.isValid(obj);
 	}
 
 	@Override
@@ -102,7 +116,7 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 	}
 
 	public void setIdShort(String idShort) {
-		Referable.createAsFacade(this, getKeyElement()).setIdShort(idShort);
+		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {

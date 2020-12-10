@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
@@ -71,9 +72,28 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 			return null;
 		}
 		
+		if (!isValid(obj)) {
+			throw new MetamodelConstructionException(RelationshipElement.class, obj);
+		}
+		
+		
 		RelationshipElement ret = new RelationshipElement();
 		ret.setMap(obj);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	@SuppressWarnings("unchecked")
+	public static boolean isValid(Map<String, Object> obj) {
+		return SubmodelElement.isValid(obj) &&
+				obj.containsKey(FIRST) &&
+				obj.containsKey(SECOND) &&
+				Reference.isValid((Map<String, Object>)obj.get(FIRST)) &&
+				Reference.isValid((Map<String, Object>)obj.get(SECOND));
 	}
 
 	/**

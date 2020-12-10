@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.identifier;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.vab.model.VABModelMap;
@@ -37,10 +38,23 @@ public class Identifier extends VABModelMap<Object> implements IIdentifier {
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(Identifier.class, map);
+		}
+		
 		Identifier ret = new Identifier();
 		ret.setMap(map);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return map != null && map.containsKey(IDTYPE) && map.containsKey(ID);
 	}
 
 	/**

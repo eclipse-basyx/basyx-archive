@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -64,10 +65,23 @@ public class ConceptDictionary extends VABModelMap<Object> implements IConceptDi
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(ConceptDictionary.class, map);
+		}
+		
 		ConceptDictionary ret = new ConceptDictionary();
 		ret.setMap(map);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return Referable.isValid(map);
 	}
 
 	@Override
@@ -91,7 +105,7 @@ public class ConceptDictionary extends VABModelMap<Object> implements IConceptDi
 	}
 
 	public void setIdShort(String idShort) {
-		Referable.createAsFacade(this, getKeyElement()).setIdShort(idShort);
+		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {
