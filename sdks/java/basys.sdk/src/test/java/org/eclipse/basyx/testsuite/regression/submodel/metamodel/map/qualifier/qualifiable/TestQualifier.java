@@ -72,6 +72,14 @@ public class TestQualifier {
 		assertEquals(newValueTypeString, qualifier.getValueType());
 	}
 	
+	// Tests if the valueType is correctly converted to a string
+	@Test
+	public void testSetValueCorrectValueType() {
+		Qualifier emptyQualifier = new Qualifier();
+		emptyQualifier.setValue("Test");
+		assertEquals(PropertyValueTypeDef.String.toString(), emptyQualifier.get(Qualifier.VALUETYPE));
+	}
+
 	@Test
 	public void testSetSemanticID() {
 		Reference reference = new Reference(new Identifier(IdentifierType.IRI, "newId"), KeyElements.BLOB, true);

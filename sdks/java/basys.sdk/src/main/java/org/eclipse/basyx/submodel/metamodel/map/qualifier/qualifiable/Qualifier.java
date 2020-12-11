@@ -96,7 +96,7 @@ public class Qualifier extends Constraint implements IQualifier {
 		put(Qualifier.VALUE, PropertyValueTypeDefHelper.prepareForSerialization(obj));
 		// Value type is only set if it is not set before
 		if(getValueType() == null) {
-			put(Qualifier.VALUETYPE, PropertyValueTypeDefHelper.getType(obj));
+			put(Qualifier.VALUETYPE, PropertyValueTypeDefHelper.getType(obj).toString());
 		}
 	}
 
