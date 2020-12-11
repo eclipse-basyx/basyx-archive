@@ -77,6 +77,10 @@ public class Entity extends SubmodelElement implements IEntity {
 	 * @return an Entity object, that behaves like a facade for the given map
 	 */
 	public static Entity createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
 		Entity facade = new Entity();
 		facade.setMap(obj);
 		return facade;

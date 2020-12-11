@@ -51,6 +51,10 @@ public class MultiLanguageProperty extends DataElement implements IMultiLanguage
 	 * @return a MultiLanguageProperty object, that behaves like a facade for the given map
 	 */
 	public static MultiLanguageProperty createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
 		MultiLanguageProperty facade = new MultiLanguageProperty();
 		facade.setMap(obj);
 		return facade;

@@ -82,6 +82,10 @@ public class Property extends DataElement implements IProperty {
 	 * @return a Property object, that behaves like a facade for the given map
 	 */
 	public static Property createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
 		Property facade = new Property();
 		facade.setMap(obj);
 		return facade;

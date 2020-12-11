@@ -55,6 +55,10 @@ public class BasicEvent extends SubmodelElement implements IBasicEvent {
 	 * @return a BasicEvent object, that behaves like a facade for the given map
 	 */
 	public static BasicEvent createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
 		BasicEvent facade = new BasicEvent();
 		facade.setMap(obj);
 		return facade;

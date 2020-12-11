@@ -41,6 +41,10 @@ public class RangeValue extends VABModelMap<Object> {
 	 * @return a RangeValue object, that behaves like a facade for the given map
 	 */
 	public static RangeValue createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
 		RangeValue facade = new RangeValue();
 		facade.setMap(obj);
 		return facade;

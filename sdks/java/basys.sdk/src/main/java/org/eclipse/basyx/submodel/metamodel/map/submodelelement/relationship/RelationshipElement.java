@@ -67,6 +67,10 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	 * @return a RelationshipElement object, that behaves like a facade for the given map
 	 */
 	public static RelationshipElement createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
 		RelationshipElement ret = new RelationshipElement();
 		ret.setMap(obj);
 		return ret;

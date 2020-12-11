@@ -124,6 +124,10 @@ public class Operation extends SubmodelElement implements IOperation {
 	 * @return an Operation object, that behaves like a facade for the given map
 	 */
 	public static Operation createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
 		Operation ret = new Operation();
 		ret.setMap(obj);
 		return ret;

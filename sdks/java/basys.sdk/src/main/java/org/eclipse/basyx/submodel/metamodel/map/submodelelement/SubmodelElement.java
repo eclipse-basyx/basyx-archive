@@ -50,6 +50,10 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 	 * @return a SubmodelElement object, that behaves like a facade for the given map
 	 */
 	public static SubmodelElement createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
 		SubmodelElement ret = new SubmodelElement();
 		ret.setMap(obj);
 		return ret;

@@ -29,6 +29,10 @@ public class RelationshipElementValue extends VABModelMap<Object> {
 	 * @return a RelationshipElementValue object, that behaves like a facade for the given map
 	 */
 	public static RelationshipElementValue createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
 		RelationshipElementValue facade = new RelationshipElementValue();
 		facade.setMap(obj);
 		return facade;

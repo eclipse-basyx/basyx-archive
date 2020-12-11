@@ -33,6 +33,10 @@ public class EntityValue extends VABModelMap<Object> {
 	 * @return a EntityValue object, that behaves like a facade for the given map
 	 */
 	public static EntityValue createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
 		EntityValue facade = new EntityValue();
 		facade.setMap(obj);
 		return facade;

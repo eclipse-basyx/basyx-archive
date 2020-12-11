@@ -70,6 +70,10 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 	 * @return a ReferenceElement object, that behaves like a facade for the given map
 	 */
 	public static ReferenceElement createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
 		ReferenceElement ret = new ReferenceElement();
 		ret.setMap(obj);
 		return ret;

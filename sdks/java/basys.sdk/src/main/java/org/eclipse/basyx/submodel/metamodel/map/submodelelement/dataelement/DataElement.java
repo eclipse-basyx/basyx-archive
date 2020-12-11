@@ -29,6 +29,22 @@ public class DataElement extends SubmodelElement implements IDataElement {
 	}
 
 	/**
+	 * Creates a DataElement object from a map
+	 * 
+	 * @param obj a DataElement object as raw map
+	 * @return a DataElement object, that behaves like a facade for the given map
+	 */
+	public static DataElement createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
+		DataElement facade = new DataElement();
+		facade.setMap(obj);
+		return facade;
+	}
+	
+	/**
 	 * Returns true if the given submodel element map is recognized as a data element
 	 */
 	public static boolean isDataElement(Map<String, Object> map) {

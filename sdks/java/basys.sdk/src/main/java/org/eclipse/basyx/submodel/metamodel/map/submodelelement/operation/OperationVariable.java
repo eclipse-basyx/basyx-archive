@@ -45,6 +45,10 @@ public class OperationVariable extends VABModelMap<Object> implements IOperation
 	 * @return an OperationVariable object, that behaves like a facade for the given map
 	 */
 	public static OperationVariable createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
 		OperationVariable facade = new OperationVariable();
 		facade.setMap(obj);
 		return facade;

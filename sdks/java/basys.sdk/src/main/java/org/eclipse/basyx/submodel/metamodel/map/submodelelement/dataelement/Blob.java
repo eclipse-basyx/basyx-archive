@@ -62,6 +62,10 @@ public class Blob extends DataElement implements IBlob {
 	 * @return a Blob object, that behaves like a facade for the given map
 	 */
 	public static Blob createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
 		Blob facade = new Blob();
 		facade.setMap(obj);
 		return facade;

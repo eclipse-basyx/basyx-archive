@@ -63,6 +63,10 @@ public class File extends DataElement implements IFile{
 	 * @return a File object, that behaves like a facade for the given map
 	 */
 	public static File createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
 		File facade = new File();
 		facade.setMap(obj);
 		return facade;
