@@ -30,7 +30,6 @@ import org.w3c.dom.Element;
 public class QualifiableXMLConverter {
 	
 	public static final String QUALIFIER = "aas:qualifier";
-	public static final String QUALIFIERS = "aas:qualifiers";
 	public static final String FORMULA = "aas:formula";
 	public static final String DEPENDS_ON_REFS = "aas:dependsOnRefs";
 	public static final String REFERENCE = "aas:reference";
@@ -61,26 +60,18 @@ public class QualifiableXMLConverter {
 	 * @param xmlConstraints the XML map containing the &lt;aas:formula&gt; and &lt;aas:qualifier&gt; tags
 	 * @return the Set of IConstraint objects parsed
 	 */
-	@SuppressWarnings("unchecked")
 	private static Collection<IConstraint> parseConstraints(Map<String, Object> xmlConstraints) {
 		Collection<IConstraint> constraints = new HashSet<>();
 		
 		if(xmlConstraints == null) return constraints;
 		
-		List<Map<String, Object>> xmlQualifiersList = XMLHelper.getList(xmlConstraints.get(QUALIFIERS));
-		
-		for (Map<String, Object> xmlQualifiers : xmlQualifiersList) {
+		List<Map<String, Object>> xmlQualifier = XMLHelper.getList(xmlConstraints.get(QUALIFIER));
+		xmlQualifier.stream().map(QualifiableXMLConverter::parseQualifier).forEach(constraints::add);
+
 			
-			Map<String, Object> xmlFormula = (Map<String, Object>) xmlQualifiers.get(FORMULA);
-			if(xmlFormula != null) {
-				constraints.add(parseFormula(xmlFormula));
-			}
+		List<Map<String, Object>> xmlFormula = XMLHelper.getList(xmlConstraints.get(FORMULA));
+		xmlFormula.stream().map(QualifiableXMLConverter::parseFormula).forEach(constraints::add);
 			
-			Map<String, Object> xmlQualifier = (Map<String, Object>) xmlQualifiers.get(QUALIFIER);
-			if(xmlQualifier != null) {
-				constraints.add(parseQualifier(xmlQualifier));
-			}
-		}
 		
 		return constraints;
 	}
@@ -154,7 +145,7 @@ public class QualifiableXMLConverter {
 		for (IConstraint constraint : constraints) {
 			qualifierRoot.appendChild(buildQualifiersXML(document, constraint));
 		}
-		
+
 		root.appendChild(qualifierRoot);
 	}
 	
@@ -162,21 +153,22 @@ public class QualifiableXMLConverter {
 	/**
 	 * Builds XML from a given IConstraint objcet
 	 * 
-	 * @param document the XML document
-	 * @param constraint the IConstraint to be converted to XML
-	 * @return the &lt;aas:qualifiers&gt; XML tag build from the IConstraint
+	 * @param document
+	 *            the XML document
+	 * @param constraint
+	 *            the IConstraint to be converted to XML
+	 * @return the &lt;aas:qualifier&gt; XML tag build from the IConstraint
 	 */
 	private static Element buildQualifiersXML(Document document, IConstraint constraint) {
-		Element qualifiersRoot = document.createElement(QUALIFIERS);
-		
+
 		//the constraints can be IFormula or IQualifier
 		if(constraint instanceof IFormula) {
-			qualifiersRoot.appendChild(buildFormulaXML(document, (IFormula) constraint));
+			return buildFormulaXML(document, (IFormula) constraint);
 		} else if(constraint instanceof IQualifier) {
-			qualifiersRoot.appendChild(buildQualifierXML(document, (IQualifier) constraint));
+			return buildQualifierXML(document, (IQualifier) constraint);
 		}
 		
-		return qualifiersRoot;
+		throw new RuntimeException("Unknown qualifier type " + constraint);
 	}
 	
 	

@@ -233,34 +233,54 @@
 				</aas:keys>
 			</aas:semanticId>
 			<aas:qualifier>
-				<aas:qualifiers>
-					<aas:formula>
-						<aas:dependsOnRefs>
-							<aas:reference>
-								<aas:keys>
-									<aas:key local="false" type="GlobalReference" idType="IRDI">qualifier_reference</aas:key>
-								</aas:keys>
-							</aas:reference>
-						</aas:dependsOnRefs>
-					</aas:formula>
-				</aas:qualifiers>
-				<aas:qualifiers>
-					<aas:qualifier>
-						<aas:valueId>
+				<aas:formula>
+					<aas:dependsOnRefs>
+						<aas:reference>
 							<aas:keys>
-								<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+								<aas:key local="false" type="GlobalReference" idType="IRDI">qualifier_reference</aas:key>
 							</aas:keys>
-						</aas:valueId>
-						<aas:value>qualifierValue</aas:value>
-						<aas:type>qualifierType</aas:type>
-						<aas:valueType>anyType</aas:valueType>
-						<aas:semanticId>
+						</aas:reference>
+					</aas:dependsOnRefs>
+				</aas:formula>
+				<aas:formula>
+					<aas:dependsOnRefs>
+						<aas:reference>
 							<aas:keys>
-								<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+								<aas:key local="false" type="GlobalReference" idType="IRDI">qualifier_reference2</aas:key>
 							</aas:keys>
-						</aas:semanticId>
-					</aas:qualifier>
-				</aas:qualifiers>
+						</aas:reference>
+					</aas:dependsOnRefs>
+				</aas:formula>
+				<aas:qualifier>
+					<aas:valueId>
+						<aas:keys>
+							<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+						</aas:keys>
+					</aas:valueId>
+					<aas:value>qualifierValue</aas:value>
+					<aas:type>qualifierType</aas:type>
+					<aas:valueType>anyType</aas:valueType>
+					<aas:semanticId>
+						<aas:keys>
+							<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+						</aas:keys>
+					</aas:semanticId>
+				</aas:qualifier>
+				<aas:qualifier>
+					<aas:valueId>
+						<aas:keys>
+							<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+						</aas:keys>
+					</aas:valueId>
+					<aas:value>qualifierValue2</aas:value>
+					<aas:type>qualifierType</aas:type>
+					<aas:valueType>anyType</aas:valueType>
+					<aas:semanticId>
+						<aas:keys>
+							<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+						</aas:keys>
+					</aas:semanticId>
+				</aas:qualifier>
 			</aas:qualifier>
 			<aas:embeddedDataSpecification>
 				<aas:dataSpecificationContent>
@@ -298,23 +318,21 @@
 							</aas:keys>
 						</aas:semanticId>
 						<aas:qualifier>
-							<aas:qualifiers>
-								<aas:qualifier>
-									<aas:valueId>
-										<aas:keys>
-											<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
-										</aas:keys>
-									</aas:valueId>
-									<aas:value>qualifierValue</aas:value>
-									<aas:type>qualifierType</aas:type>
-									<aas:valueType>anyType</aas:valueType>
-									<aas:semanticId>
-										<aas:keys>
-											<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
-										</aas:keys>
-									</aas:semanticId>
-								</aas:qualifier>
-							</aas:qualifiers>
+							<aas:qualifier>
+								<aas:valueId>
+									<aas:keys>
+										<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+									</aas:keys>
+								</aas:valueId>
+								<aas:value>qualifierValue</aas:value>
+								<aas:type>qualifierType</aas:type>
+								<aas:valueType>anyType</aas:valueType>
+								<aas:semanticId>
+									<aas:keys>
+										<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+									</aas:keys>
+								</aas:semanticId>
+							</aas:qualifier>
 						</aas:qualifier>
 						<aas:embeddedDataSpecification>
 							<aas:dataSpecificationContent>
