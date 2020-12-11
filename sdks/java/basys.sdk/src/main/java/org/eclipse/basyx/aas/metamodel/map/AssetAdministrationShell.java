@@ -1,12 +1,9 @@
 package org.eclipse.basyx.aas.metamodel.map;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -62,7 +59,6 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public static final String CONCEPTDICTIONARY = "conceptDictionary";
 	public static final String TYPE = "type";
 	public static final String ADDRESS = "address";
-	public static final String ENDPOINTS = "endpoints";
 	public static final String MODELTYPE = "AssetAdministrationShell";
 
 	/**
@@ -125,26 +121,6 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		AssetAdministrationShell ret = new AssetAdministrationShell();
 		ret.setMap(map);
 		return ret;
-	}
-
-	/**
-	 * Sets the endpoint of the AAS
-	 * 
-	 * @param endpoint
-	 *            is expected to end with "/aas"
-	 * @param endpointType
-	 */
-	public void setEndpoint(String endpoint, String endpointType) {
-		HashMap<String, String> endpointWrapper = new HashMap<String, String>();
-		endpointWrapper.put(TYPE, endpointType);
-		endpointWrapper.put(ADDRESS, endpoint);
-
-		put(ENDPOINTS, Arrays.asList(endpointWrapper));
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<HashMap<String, String>> getEndpoints() {
-		return (List<HashMap<String, String>>) get(ENDPOINTS);
 	}
 
 	@Override
