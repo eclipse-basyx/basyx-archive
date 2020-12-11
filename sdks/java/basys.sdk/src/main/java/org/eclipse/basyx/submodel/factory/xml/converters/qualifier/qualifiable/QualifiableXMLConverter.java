@@ -18,6 +18,8 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiabl
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -29,6 +31,8 @@ import org.w3c.dom.Element;
  */
 public class QualifiableXMLConverter {
 	
+	private static Logger logger = LoggerFactory.getLogger(QualifiableXMLConverter.class);
+
 	public static final String QUALIFIER = "aas:qualifier";
 	public static final String FORMULA = "aas:formula";
 	public static final String DEPENDS_ON_REFS = "aas:dependsOnRefs";
@@ -118,8 +122,12 @@ public class QualifiableXMLConverter {
 		qualifier.setType(type);
 		qualifier.setValue(value);
 		qualifier.setValueId(ref);
-		qualifier.setValueType(PropertyValueTypeDefHelper.fromName(valueType));
-		
+
+		if (valueType == null || valueType.isEmpty()) {
+			logger.warn("Creating element " + xmlQualifier + " without mandatory valueType!");
+		} else {
+			qualifier.setValueType(PropertyValueTypeDefHelper.fromName(valueType));
+		}
 		return qualifier;
 	}
 
