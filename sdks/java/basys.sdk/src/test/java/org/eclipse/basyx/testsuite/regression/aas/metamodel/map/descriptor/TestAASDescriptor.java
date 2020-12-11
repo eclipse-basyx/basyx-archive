@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
@@ -34,7 +35,7 @@ public class TestAASDescriptor {
 		map = new HashMap<String, Object>();
 		map.put(Referable.IDSHORT, "123");
 		map.put(Identifiable.IDENTIFICATION, new Identifier(IdentifierType.IRDI, "123"));
-		map.put(AssetAdministrationShell.ENDPOINTS, Arrays.asList(new HashMap<String, String>()));
+		map.put(ModelDescriptor.ENDPOINTS, Arrays.asList(new HashMap<String, String>()));
 		map.put(AssetAdministrationShell.SUBMODELS, new HashSet<SubmodelDescriptor>());
 	}
 
@@ -96,19 +97,19 @@ public class TestAASDescriptor {
 	
 	@Test(expected = MalformedRequestException.class)
 	public void testValidateNoEndpoints() {
-		map.remove(AssetAdministrationShell.ENDPOINTS);
+		map.remove(ModelDescriptor.ENDPOINTS);
 		new AASDescriptor(map);
 	}
 	
 	@Test(expected = MalformedRequestException.class)
 	public void testValidateNullEndpoints() {
-		map.put(AssetAdministrationShell.ENDPOINTS, null);
+		map.put(ModelDescriptor.ENDPOINTS, null);
 		new AASDescriptor(map);
 	}
 	
 	@Test(expected = MalformedRequestException.class)
 	public void testValidateWrongEndpoints() {
-		map.put(AssetAdministrationShell.ENDPOINTS, "testEndpoint");
+		map.put(ModelDescriptor.ENDPOINTS, "testEndpoint");
 		new AASDescriptor(map);
 	}
 	
