@@ -49,7 +49,7 @@ public class TestConnectedSubmodelElementCollection {
 		operation.setIdShort(OPERATION);
 
 		// Create ComplexDataProperty containing the created operation and property
-		SubmodelElementCollection complex = new SubmodelElementCollection();
+		SubmodelElementCollection complex = new SubmodelElementCollection("SubmodelCollectionId");
 		complex.addSubModelElement(propertyMeta);
 		complex.addSubModelElement(operation);
 		complex.setIdShort("CollectionId");

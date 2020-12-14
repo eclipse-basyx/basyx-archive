@@ -7,12 +7,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.map.AasEnv;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.junit.Test;
 
@@ -60,19 +64,26 @@ public class TestAasEnv {
 		Map<String, Object> asset = new HashMap<>();
 		asset.put(ModelType.MODELTYPE, Asset.MODELTYPE);
 		asset.put(Referable.IDSHORT, "TestAsset");
+		asset.put(Asset.KIND, AssetKind.INSTANCE);
+		asset.put(Identifiable.IDENTIFICATION, new Identifier(IdentifierType.IRI, "testAssetIdShort"));
 		
 		Map<String, Object> assetAdministrationShell = new HashMap<>();
 		assetAdministrationShell.put(ModelType.MODELTYPE, AssetAdministrationShell.MODELTYPE);
 		assetAdministrationShell.put(Referable.IDSHORT, "TestAssetAdministrationShell");
-
+		assetAdministrationShell.put(AssetAdministrationShell.ASSET, asset);
+		assetAdministrationShell.put(Identifiable.IDENTIFICATION, new Identifier(IdentifierType.IRI, "testAASIdShort"));
+		
+		
 		Map<String, Object> submodel = new HashMap<>();
 		submodel.put(ModelType.MODELTYPE, SubModel.MODELTYPE);
 		submodel.put(Referable.IDSHORT, "TestSubmodel");
 		submodel.put(SubModel.SUBMODELELEMENT, new ArrayList<Object>());
+		submodel.put(Identifiable.IDENTIFICATION, new Identifier(IdentifierType.IRI, "testSubmodelIdShort"));
 		
 		Map<String, Object> conceptDescription = new HashMap<>();
-		submodel.put(ModelType.MODELTYPE, ConceptDescription.MODELTYPE);
-		submodel.put(Referable.IDSHORT, "TestConceptDescription");
+		conceptDescription.put(ModelType.MODELTYPE, ConceptDescription.MODELTYPE);
+		conceptDescription.put(Referable.IDSHORT, "TestConceptDescription");
+		conceptDescription.put(Identifiable.IDENTIFICATION, new Identifier(IdentifierType.IRI, "testConceptDesIdShort"));
 		
 		
 		Map<String, Object> aasEnvAsMap = new HashMap<>();

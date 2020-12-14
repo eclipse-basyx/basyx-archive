@@ -36,7 +36,7 @@ public class TestSubmodelElement {
 	
 	@Before
 	public void buidSubmodelElement() {
-		submodelElement = new Property("testId");
+		submodelElement = new Property("testIdShort", "testId");
 	}
 	
 	@Test

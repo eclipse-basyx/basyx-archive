@@ -55,9 +55,10 @@ public class TestSubmodelElementCollection {
 		elements1.add(getOperation());
 
 		elements2 = new ArrayList<ISubmodelElement>();
-		elements2.add(new Property("testId1"));
-		elements2.add(new Property("testId2"));
+		elements2.add(new Property("idShort1", "testId1"));
+		elements2.add(new Property("idShort2","testId2"));
 		elementCollection = new SubmodelElementCollection(elements2, false, false);
+		elementCollection.setIdShort("testCollectionId");
 	} 
 
 	@Test

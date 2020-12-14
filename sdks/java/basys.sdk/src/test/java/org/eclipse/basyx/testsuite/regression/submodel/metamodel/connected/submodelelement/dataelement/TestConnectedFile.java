@@ -25,6 +25,7 @@ public class TestConnectedFile {
 	@Before
 	public void build() {
 		file = new File();
+		file.setIdShort("testIdShort");
 		file.setValue("FILE_VALUE");
 		file.setMimeType("mimeType");
 		

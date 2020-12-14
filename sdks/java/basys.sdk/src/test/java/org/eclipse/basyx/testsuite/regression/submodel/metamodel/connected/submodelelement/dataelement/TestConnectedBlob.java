@@ -28,9 +28,8 @@ public class TestConnectedBlob {
 	
 	@Before
 	public void build() {
-		blob = new Blob();
+		blob = new Blob("testIdShort", "mimeType");
 		blob.setValue("BLOB_VALUE".getBytes());
-		blob.setMimeType("mimeType");
 		
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
 				new SubmodelElementProvider(new TypeDestroyingProvider(new VABLambdaProvider(blob))));

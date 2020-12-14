@@ -3,6 +3,7 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.submodelel
 import static org.junit.Assert.assertEquals;
 
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +16,7 @@ import org.junit.Test;
  *
  */
 public class TestOperationVariable {
-	private static final Property PROPERTY = new Property("testOpVariable");
+	private static final Property PROPERTY = new Property("testIdShort", "testOpVariable");
 	
 	private OperationVariable operationVariable;
 	@Before
@@ -30,7 +31,7 @@ public class TestOperationVariable {
 	
 	@Test
 	public void testSetValue() {
-		Property property = new Property("testNewProperty");
+		Property property = new Property("testIdShort", PropertyValueTypeDef.String);
 		operationVariable.setValue(property);
 		assertEquals(property, operationVariable.getValue());
 	}

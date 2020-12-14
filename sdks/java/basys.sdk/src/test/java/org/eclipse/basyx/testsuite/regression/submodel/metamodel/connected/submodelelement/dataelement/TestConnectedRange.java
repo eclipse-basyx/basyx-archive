@@ -27,7 +27,7 @@ public class TestConnectedRange {
 	@Before
 	public void build() {
 		range = new Range(PropertyValueTypeDef.Integer, new Integer(1), new Integer(10));
-		
+		range.setIdShort("testIdShort");
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
 				new SubmodelElementProvider(new TypeDestroyingProvider(new VABLambdaProvider(range))));
 

@@ -31,9 +31,9 @@ public abstract class TestOperationSuite {
 	protected static final String IN_VALUE = "inValue";
 	protected static final String OUT_VALUE = "outValue";
 	protected static final String INOUT_VALUE = "inOutValue";
-	protected static final Collection<OperationVariable> IN = Collections.singletonList(new OperationVariable(new Property(IN_VALUE)));
-	protected static final Collection<OperationVariable> OUT = Collections.singletonList(new OperationVariable(new Property(OUT_VALUE)));
-	protected static final Collection<OperationVariable> INOUT = Collections.singletonList(new OperationVariable(new Property(INOUT_VALUE)));
+	protected static final Collection<OperationVariable> IN = Collections.singletonList(new OperationVariable(new Property("testId1", IN_VALUE)));
+	protected static final Collection<OperationVariable> OUT = Collections.singletonList(new OperationVariable(new Property("testId2", OUT_VALUE)));;
+	protected static final Collection<OperationVariable> INOUT = Collections.singletonList(new OperationVariable(new Property("testId3", INOUT_VALUE)));;
 	
 	protected static final Function<Object[], Object> FUNC = (Function<Object[], Object>) v -> {
 		return (int)v[0] + (int)v[1];
