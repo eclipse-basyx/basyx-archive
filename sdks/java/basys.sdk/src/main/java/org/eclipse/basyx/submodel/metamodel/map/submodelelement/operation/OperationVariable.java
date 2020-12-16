@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
@@ -49,9 +50,25 @@ public class OperationVariable extends VABModelMap<Object> implements IOperation
 			return null;
 		}
 		
+		if (!isValid(obj)) {
+			throw new MetamodelConstructionException(OperationVariable.class, obj);	
+		}
+		
 		OperationVariable facade = new OperationVariable();
 		facade.setMap(obj);
 		return facade;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	@SuppressWarnings("unchecked")
+	public static boolean isValid(Map<String, Object> obj) {
+		return obj != null &&
+				obj.containsKey(Property.VALUE) && 
+				SubmodelElement.isValid((Map<String, Object>) obj.get(Property.VALUE));
 	}
 
 	public void setValue(ISubmodelElement value) {

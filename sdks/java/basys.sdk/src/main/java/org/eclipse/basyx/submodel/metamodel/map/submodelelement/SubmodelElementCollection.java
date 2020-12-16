@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.IElementContainer;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
@@ -94,8 +95,21 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		if (obj == null) {
 			return null;
 		}
-
+		
+		if (!isValid(obj)) {
+			throw new MetamodelConstructionException(SubmodelElementCollection.class, obj);
+		}
+		
 		return SubmodelElementMapCollectionConverter.mapToSmECollection(obj);
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> obj) {
+		return SubmodelElement.isValid(obj);
 	}
 	
 	/**

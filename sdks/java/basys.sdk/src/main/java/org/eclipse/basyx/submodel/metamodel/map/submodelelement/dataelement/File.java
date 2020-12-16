@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
@@ -67,9 +68,22 @@ public class File extends DataElement implements IFile{
 			return null;
 		}
 		
+		if (!isValid(obj)) {
+			throw new MetamodelConstructionException(File.class, obj);
+		}
+		
 		File facade = new File();
 		facade.setMap(obj);
 		return facade;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> obj) {
+		return DataElement.isValid(obj) && obj.containsKey(File.MIMETYPE);
 	}
 
 	/**

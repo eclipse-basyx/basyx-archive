@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ran
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IRange;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
@@ -62,9 +63,22 @@ public class Range extends DataElement implements IRange {
 			return null;
 		}
 		
+		if (!isValid(obj)) {
+			throw new MetamodelConstructionException(Range.class, obj);
+		}
+		
 		Range facade = new Range();
 		facade.setMap(obj);
 		return facade;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> obj) {
+		return DataElement.isValid(obj) && obj.containsKey(VALUETYPE);
 	}
 	
 	/**

@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.pro
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
@@ -86,9 +87,22 @@ public class Property extends DataElement implements IProperty {
 			return null;
 		}
 		
+		if (!isValid(obj)) {
+			throw new MetamodelConstructionException(Property.class, obj);
+		}
+		
 		Property facade = new Property();
 		facade.setMap(obj);
 		return facade;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> obj) {
+		return DataElement.isValid(obj) && obj.containsKey(Property.VALUETYPE);
 	}
 
 	/**

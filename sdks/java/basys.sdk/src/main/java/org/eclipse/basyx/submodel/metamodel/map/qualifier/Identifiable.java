@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
@@ -69,7 +70,41 @@ public class Identifiable extends Referable implements IIdentifiable {
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(Identifiable.class, map);
+		}
+		
+		Identifiable ret = new Identifiable();
+		ret.setMap(map);
+		ret.setElementType(type);
+		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	@SuppressWarnings("unchecked")
+	public static boolean isValid(Map<String, Object> map) {
+		return Referable.isValid(map) &&
+				map.containsKey(Identifiable.IDENTIFICATION) &&
+				Identifier.isValid((Map<String, Object>)map.get(Identifiable.IDENTIFICATION));
+	}
+	
+	/**
+	 * Creates an Identifiable object from a map
+	 * Without checking mandatory attributes present
+	 * @param map
+	 * @param type
+	 * @return
+	 */
+	public static Identifiable createAsFacadeNonStrict(Map<String, Object> map, KeyElements type) {
+		if (map == null) {
+			return null;
+		}
+		
 		Identifiable ret = new Identifiable();
 		ret.setMap(map);
 		ret.setElementType(type);

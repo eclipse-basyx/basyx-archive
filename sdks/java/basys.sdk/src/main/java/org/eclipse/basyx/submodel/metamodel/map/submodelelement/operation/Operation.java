@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
@@ -128,9 +129,22 @@ public class Operation extends SubmodelElement implements IOperation {
 			return null;
 		}
 		
+		if (!isValid(obj)) {
+			throw new MetamodelConstructionException(Operation.class, obj);
+		}
+		
 		Operation ret = new Operation();
 		ret.setMap(obj);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> obj) {
+		return SubmodelElement.isValid(obj);
 	}
 
 	/**

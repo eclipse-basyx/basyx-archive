@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -91,12 +92,43 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(Referable.class, map);
+		}
 		Referable ret = new Referable();
 		ret.setMap(map);
 		ret.setElementType(type);
 
-		return ret;
+		return ret;	
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return map != null && map.get(Referable.IDSHORT) != null;
+	}
+	
+	/**
+	 * Creates a Referable object from a map
+	 * without checking the mandatory attributes present
+	 * @param map
+	 * @param type
+	 * @return
+	 */
+	public static Referable createAsFacadeNonStrict(Map<String, Object> map, KeyElements type) {
+		if (map == null) {
+			return null;
+		}
+		
+		Referable ret = new Referable();
+		ret.setMap(map);
+		ret.setElementType(type);
+
+		return ret;	
 	}
 
 	@Override

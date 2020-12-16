@@ -1,6 +1,5 @@
 package org.eclipse.basyx.vab.protocol.http.connector;
 
-import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -8,10 +7,12 @@ import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
+import org.eclipse.basyx.vab.protocol.http.server.ExceptionToHTTPCodeMapper;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -161,11 +162,13 @@ public class HTTPConnector implements IBaSyxConnector {
 		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
-		Response rsp;
+		Response rsp = null;
 		try {
 			rsp = request.get();
-		} catch (ProcessingException e) {
-			throw this.handleProcessingException(HttpMethod.GET, e);
+		} finally {
+			if (!isRequestSuccess(rsp)) {
+				throw this.handleProcessingException(HttpMethod.GET, getStatusCode(rsp));	
+			}
 		}
 
 		// Return response message (header)
@@ -178,11 +181,13 @@ public class HTTPConnector implements IBaSyxConnector {
 		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
-		Response rsp;
+		Response rsp = null;
 		try {
 			rsp = request.put(Entity.entity(newValue, mediaType));
-		} catch (ProcessingException e) {
-			throw this.handleProcessingException(HttpMethod.PUT, e);
+		} finally {
+			if (!isRequestSuccess(rsp)) {
+				throw this.handleProcessingException(HttpMethod.PUT, getStatusCode(rsp));	
+			}
 		}
 
 		// Return response message (header)
@@ -194,11 +199,13 @@ public class HTTPConnector implements IBaSyxConnector {
 		logger.trace("[HTTP Patch] {} {}", VABPathTools.concatenatePaths(address, servicePath), newValue);
 
 		// Create and invoke HTTP PATCH request
-		Response rsp;
+		Response rsp = null;
 		try {
 			rsp = this.client.target(VABPathTools.concatenatePaths(address, servicePath)).request().build("PATCH", Entity.text(newValue)).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
-		} catch (ProcessingException e) {
-			throw this.handleProcessingException(HttpMethod.PATCH, e);
+		} finally {
+			if (!isRequestSuccess(rsp)) {
+				throw this.handleProcessingException(HttpMethod.PATCH, getStatusCode(rsp));	
+			}
 		}
 
 		// Return response message (header)
@@ -211,11 +218,13 @@ public class HTTPConnector implements IBaSyxConnector {
 		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
-		Response rsp;
+		Response rsp = null;
 		try {
 			rsp = request.post(Entity.entity(parameter, mediaType));
-		} catch (ProcessingException e) {
-			throw this.handleProcessingException(HttpMethod.POST, e);
+		} finally {
+			if (!isRequestSuccess(rsp)) {
+				throw this.handleProcessingException(HttpMethod.POST, getStatusCode(rsp));	
+			}
 		}
 
 		// Return response message (header)
@@ -228,11 +237,13 @@ public class HTTPConnector implements IBaSyxConnector {
 		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
-		Response rsp;
+		Response rsp = null;
 		try {
 			rsp = request.delete();
-		} catch (ProcessingException e) {
-			throw this.handleProcessingException(HttpMethod.DELETE, e);
+		} finally {
+			if (!isRequestSuccess(rsp)) {
+				throw this.handleProcessingException(HttpMethod.DELETE, getStatusCode(rsp));	
+			}
 		}
 
 		// Return response message (header)
@@ -255,8 +266,26 @@ public class HTTPConnector implements IBaSyxConnector {
 		return buildRequest(client, VABPathTools.concatenatePaths(address, servicePath));
 	}
 
-	private ProviderException handleProcessingException(HttpMethod method, ProcessingException e) {
-		return new ProviderException("[HTTP " + method.name() + "] Failed to request " + this.address + " with mediatype " + this.mediaType);
+	private ProviderException handleProcessingException(HttpMethod method, int statusCode) {
+		return ExceptionToHTTPCodeMapper.mapToException(statusCode, "[HTTP " + method.name() + "] Failed to request " + this.address + " with mediatype " + this.mediaType);
+	}
+	
+	/**
+	 * Get status code from HTTP Response
+	 * @param rsp
+	 * @return
+	 */
+	private int getStatusCode(Response rsp) {
+		return rsp != null ? rsp.getStatus() : 0;
+	}
+	
+	/**
+	 * Returns true if the response is succeeded
+	 * @param rsp
+	 * @return
+	 */
+	private boolean isRequestSuccess(Response rsp) {
+		return rsp != null && rsp.getStatusInfo().getFamily() == Status.Family.SUCCESSFUL;
 	}
 
 	/**

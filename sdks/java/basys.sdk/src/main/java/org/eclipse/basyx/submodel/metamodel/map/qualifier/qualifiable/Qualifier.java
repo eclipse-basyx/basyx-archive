@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifier;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
@@ -77,10 +78,25 @@ public class Qualifier extends Constraint implements IQualifier {
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(Qualifier.class, map);
+		}
+		
 		Qualifier ret = new Qualifier();
 		ret.setMap(map);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return map != null &&
+				map.containsKey(TYPE) &&
+				map.containsKey(VALUETYPE);
 	}
 
 	public void setType(String obj) {

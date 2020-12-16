@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.reference;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
@@ -74,10 +75,27 @@ public class Key extends VABModelMap<Object> implements IKey {
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(Key.class, map);
+		}
+		
 		Key ret = new Key();
 		ret.setMap(map);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return map != null &&
+				map.containsKey(TYPE) &&
+				map.containsKey(LOCAL) &&
+				map.containsKey(VALUE) &&
+				map.containsKey(IDTYPE);
 	}
 	
 	@SuppressWarnings("unchecked")

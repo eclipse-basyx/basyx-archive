@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.IElementContainer;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
@@ -122,17 +123,29 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 		operations.forEach(this::addSubModelElement);
 	}
 
-
 	public static SubModel createAsFacade(Map<String, Object> map) {
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(SubModel.class, map);
+		}
+		
 		if (!map.containsKey(SUBMODELELEMENT)) {
 			map.put(SUBMODELELEMENT, new ArrayList<>());
 		}
 
-		return SubmodelElementMapCollectionConverter.mapToSM(map);
+		return SubmodelElementMapCollectionConverter.mapToSM(map);	
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return Identifiable.isValid(map);
 	}
 
 	@Override
@@ -163,7 +176,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	}
 
 	public void setIdentification(IdentifierType idType, String id) {
-		Identifiable.createAsFacade(this, getKeyElement()).setIdentification(idType, id);
+		Identifiable.createAsFacadeNonStrict(this, getKeyElement()).setIdentification(idType, id);
 	}
 
 	@Override
@@ -199,7 +212,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	}
 
 	public void setIdShort(String id) {
-		Referable.createAsFacade(this, getKeyElement()).setIdShort(id);
+		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(id);
 	}
 
 	public void setProperties(Map<String, IProperty> properties) {

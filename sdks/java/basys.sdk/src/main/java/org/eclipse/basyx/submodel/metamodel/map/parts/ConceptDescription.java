@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -66,10 +67,23 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(ConceptDescription.class, map);
+		}
+		
 		ConceptDescription ret = new ConceptDescription();
 		ret.setMap(map);
-		return ret;
+		return ret;	
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return Identifiable.isValid(map);
 	}
 
 	@Override
@@ -105,7 +119,7 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 	}
 
 	public void setIdentification(IdentifierType idType, String id) {
-		Identifiable.createAsFacade(this, getKeyElement()).setIdentification(idType, id);
+		Identifiable.createAsFacadeNonStrict(this, getKeyElement()).setIdentification(idType, id);
 	}
 
 	@Override
@@ -137,7 +151,7 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 	}
 
 	public void setIdShort(String idShort) {
-		Referable.createAsFacade(this, getKeyElement()).setIdShort(idShort);
+		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(idShort);
 
 	}
 
