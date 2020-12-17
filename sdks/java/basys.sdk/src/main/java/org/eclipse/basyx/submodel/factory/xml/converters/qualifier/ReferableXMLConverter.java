@@ -11,6 +11,8 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.google.common.base.Strings;
+
 /**
  * Handles the conversion between an IReferable object and the XML tags<br>
  * &lt;aas:idShort&gt;, &lt;aas:category&gt;, &lt;aas:parent&gt; and &lt;aas:description&gt; in both directions
@@ -26,26 +28,33 @@ public class ReferableXMLConverter {
 	public static final String DESCRIPTION = "aas:description";
 
 	/**
-	 * Populates a given IReferable object with the data form the given XML
+	 * Populates a given Referable object with the data form the given XML
 	 * 
 	 * @param xmlObject the XML map containing the tag relevant for IReferable
-	 * @param referable the IReferable object to be populated -treated as Map here-
+	 * @param referable the Referable object to be populated
 	 */
 	@SuppressWarnings("unchecked")
-	public static void populateReferable(Map<String, Object> xmlObject, Map<String, Object> referable) {
-		//The IReferable object has to be treated as Map here, as the Interface has no Setters
-
+	public static void populateReferable(Map<String, Object> xmlObject, Referable referable) {
 		String idShort = XMLHelper.getString(xmlObject.get(ID_SHORT));
 		String category = XMLHelper.getString(xmlObject.get(CATEGORY));
 		
 		LangStrings description = parseDescription(xmlObject);
 		
 		Reference parent = ReferenceXMLConverter.parseReference((Map<String, Object>) xmlObject.get(PARENT));
+		if (Strings.isNullOrEmpty(idShort)) {
+			throw new RuntimeException("Invalid XML of Referable. No valid idShort is present. " + xmlObject.toString());
+		}
+		referable.setIdShort(idShort);
 		
-		referable.put(Referable.IDSHORT, idShort);
-		referable.put(Referable.CATEGORY, category);
-		referable.put(Referable.DESCRIPTION, description);
-		referable.put(Referable.PARENT, parent);
+		if (!Strings.isNullOrEmpty(category)) {
+			referable.setCategory(category);
+		}
+		if (description != null) {
+			referable.setDescription(description);
+		}
+		if (parent != null) {
+			referable.setParent(parent);
+		}
 	}
 	
 
@@ -60,7 +69,7 @@ public class ReferableXMLConverter {
 		
 		Map<String, Object> descObj = (Map<String, Object>) xmlObject.get(DESCRIPTION);
 		if (descObj == null) {
-			return new LangStrings();
+			return null;
 		}
 		
 		return LangStringsXMLConverter.parseLangStrings(descObj);
@@ -91,7 +100,7 @@ public class ReferableXMLConverter {
 			root.appendChild(categoryElem);
 		}
 		
-		if(!referable.getDescription().isEmpty()) {
+		if(referable.getDescription() != null && !referable.getDescription().isEmpty()) {
 			Element descriptionRoot = document.createElement(DESCRIPTION);
 			LangStringsXMLConverter.buildLangStringsXML(document, descriptionRoot, referable.getDescription());
 			root.appendChild(descriptionRoot);

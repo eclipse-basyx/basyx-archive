@@ -4,9 +4,12 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.IHasKind;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import com.google.common.base.Strings;
 
 /**
  * Handles the conversion between an IHasKind object and the XML tag &lt;aas:kind&gt; in both directions
@@ -20,16 +23,16 @@ public class HasKindXMLConverter {
 	
 	
 	/**
-	 * Populates a given IHasKind object with the data form the given XML
+	 * Populates a given HasKind object with the data form the given XML
 	 * 
 	 * @param xmlObject the XML map containing the &lt;aas:kind&gt; tag
-	 * @param hasKind the IHasKind object to be populated -treated as Map here-
+	 * @param hasKind the HasKind object to be populated
 	 */
-	public static void populateHasKind(Map<String, Object> xmlObject, Map<String, Object> hasKind) {
-		//The IHasKind object has to be treated as Map here, as the Interface has no Setters
-		
+	public static void populateHasKind(Map<String, Object> xmlObject, HasKind hasKind) {
 		String hasKindValue = XMLHelper.getString(xmlObject.get(KIND));
-		hasKind.put(HasKind.KIND, hasKindValue);
+		if (!Strings.isNullOrEmpty(hasKindValue)) {
+			hasKind.setModelingKind(ModelingKind.fromString(hasKindValue));	
+		}
 	}
 	
 	

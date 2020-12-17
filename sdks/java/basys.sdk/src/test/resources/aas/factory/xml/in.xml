@@ -553,9 +553,8 @@
 		</aas:submodel>
 		<!-- This is a Submodel with only the minimal required information in it. To test for Nullpointers and such. -->
 		<aas:submodel>
-			<aas:idShort></aas:idShort>
-			<aas:identification>
-			</aas:identification>
+			<aas:idShort>testSubmodelIdShort2</aas:idShort>
+			<aas:identification idType="IRI">http://www.zvei.de/demo/submodel/12345679</aas:identification>
 			<aas:submodelElements></aas:submodelElements>
 		</aas:submodel>
 	</aas:submodels>

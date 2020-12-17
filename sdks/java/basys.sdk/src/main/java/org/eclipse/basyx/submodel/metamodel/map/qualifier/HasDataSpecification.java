@@ -69,7 +69,7 @@ public class HasDataSpecification extends VABModelMap<Object> implements IHasDat
 	@Override
 	public Collection<IEmbeddedDataSpecification> getEmbeddedDataSpecifications() {
 		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) get(EMBEDDEDDATASPECIFICATIONS);
-		return collection.stream().map(EmbeddedDataSpecification::createAsFacade).collect(Collectors.toSet());
+		return collection == null ? new HashSet<IEmbeddedDataSpecification>() : collection.stream().map(EmbeddedDataSpecification::createAsFacade).collect(Collectors.toSet());
 	}
 
 	public void setEmbeddedDataSpecifications(Collection<IEmbeddedDataSpecification> embeddedDataSpecifications) {

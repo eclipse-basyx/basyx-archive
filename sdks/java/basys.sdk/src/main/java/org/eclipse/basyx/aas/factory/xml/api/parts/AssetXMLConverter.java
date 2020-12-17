@@ -13,6 +13,10 @@ import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.IdentifiableX
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.haskind.HasKindXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.reference.ReferenceXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -43,9 +47,9 @@ public class AssetXMLConverter {
 		for (Map<String, Object> xmlAsset : xmlAssets) {
 			Asset asset = new Asset();
 			
-			IdentifiableXMLConverter.populateIdentifiable(xmlAsset, asset);
-			HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlAsset, asset);
-			HasKindXMLConverter.populateHasKind(xmlAsset, asset);
+			IdentifiableXMLConverter.populateIdentifiable(xmlAsset, Identifiable.createAsFacadeNonStrict(asset, KeyElements.ASSET));
+			HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlAsset, HasDataSpecification.createAsFacade(asset));
+			HasKindXMLConverter.populateHasKind(xmlAsset, HasKind.createAsFacade(asset));
 			
 			if(xmlAsset.containsKey(ASSET_IDENTIFICATION_MODEL_REF)) {
 				asset.setAssetIdentificationModel(parseAssetIdentificationModelRef(xmlAsset));

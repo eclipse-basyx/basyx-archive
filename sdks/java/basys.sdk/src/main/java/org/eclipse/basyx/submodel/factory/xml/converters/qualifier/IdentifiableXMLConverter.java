@@ -5,11 +5,12 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import com.google.common.base.Strings;
 
 /**
  * Handles the conversion between an IIdentifiable object and the XML tags<br>
@@ -28,36 +29,32 @@ public class IdentifiableXMLConverter {
 	
 	
 	/**
-	 * Populates a given IIdentifiable object with the data form the given XML
+	 * Populates a given Identifiable object with the data form the given XML
 	 * 
 	 * @param xmlObject the XML map containing the &lt;aas:administration&gt; and &lt;aas:identification&gt; tags
-	 * @param identifiable the IIdentifiable object to be populated -treated as Map here-
+	 * @param identifiable the Identifiable object to be populated
 	 */
 	@SuppressWarnings("unchecked")
-	public static void populateIdentifiable(Map<String, Object> xmlObject, Map<String, Object> identifiable) {
-		//The IIdentifiable object has to be treated as Map here, as the Interface has no Setters
-		
-		String id="";
-		String idType="";
-		String version="";
-		String revision="";
-		
+	public static void populateIdentifiable(Map<String, Object> xmlObject, Identifiable identifiable) {
 		ReferableXMLConverter.populateReferable(xmlObject, identifiable);
 		
 		Map<String, Object> identierFromXML = (Map<String, Object>) xmlObject.get(IDENTIFICATION);
-		if(identierFromXML != null) {
-			id = XMLHelper.getString(identierFromXML.get(XMLHelper.TEXT));
-			idType = XMLHelper.getString(identierFromXML.get(IDTYPE));
+		if (identierFromXML == null) {
+			throw createInvalidIdentifierException(xmlObject);
 		}
+		String id = XMLHelper.getString(identierFromXML.get(XMLHelper.TEXT));
+		String idType = XMLHelper.getString(identierFromXML.get(IDTYPE));
+		if (Strings.isNullOrEmpty(id) || Strings.isNullOrEmpty(idType)) {
+			throw createInvalidIdentifierException(xmlObject);
+		}
+		identifiable.setIdentification(IdentifierType.fromString(idType), id);
 
-		if(xmlObject.containsKey(ADMINISTRATION)) {
-			Map<String, Object> administrationFromXML = (Map<String, Object>) xmlObject.get(ADMINISTRATION);
-			version = XMLHelper.getString(administrationFromXML.get(VERSION));
-			revision = XMLHelper.getString(administrationFromXML.get(REVISION));	
+		Map<String, Object> administrationFromXML = (Map<String, Object>) xmlObject.get(ADMINISTRATION);
+		if(administrationFromXML != null) {
+			String version = XMLHelper.getString(administrationFromXML.get(VERSION));
+			String revision = XMLHelper.getString(administrationFromXML.get(REVISION));
+			identifiable.setAdministration(new AdministrativeInformation(version, revision));
 		}
-		
-		identifiable.put(Identifiable.ADMINISTRATION, new AdministrativeInformation(version, revision));
-		identifiable.put(Identifiable.IDENTIFICATION, new Identifier(IdentifierType.fromString(idType), id));
 	}
 	
 
@@ -116,5 +113,9 @@ public class IdentifiableXMLConverter {
 				root.appendChild(administrationRoot);
 			}
 		}	
+	}
+	
+	private static RuntimeException createInvalidIdentifierException(Map<String, Object> xmlObject) {
+		return new RuntimeException("Invalid XML of Identifiable. No valid identification is present. " + xmlObject.toString());
 	}
 }

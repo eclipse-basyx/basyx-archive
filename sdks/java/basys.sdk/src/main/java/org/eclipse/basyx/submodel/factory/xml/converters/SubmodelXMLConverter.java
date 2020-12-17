@@ -13,8 +13,14 @@ import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.haskind.HasKi
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.qualifiable.QualifiableXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.SubmodelElementXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -42,11 +48,11 @@ public class SubmodelXMLConverter {
 		for (Map<String, Object> xmlSubmodel : xmlSubmodels) {
 			SubModel submodel = new SubModel();
 			
-			IdentifiableXMLConverter.populateIdentifiable(xmlSubmodel, submodel);
-			HasSemanticsXMLConverter.populateHasSemantics(xmlSubmodel, submodel);
-			HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlSubmodel, submodel);
-			QualifiableXMLConverter.populateQualifiable(xmlSubmodel, submodel);
-			HasKindXMLConverter.populateHasKind(xmlSubmodel, submodel);
+			IdentifiableXMLConverter.populateIdentifiable(xmlSubmodel, Identifiable.createAsFacadeNonStrict(submodel, KeyElements.SUBMODEL));
+			HasSemanticsXMLConverter.populateHasSemantics(xmlSubmodel, HasSemantics.createAsFacade(submodel));
+			HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlSubmodel, HasDataSpecification.createAsFacade(submodel));
+			QualifiableXMLConverter.populateQualifiable(xmlSubmodel, Qualifiable.createAsFacade(submodel));
+			HasKindXMLConverter.populateHasKind(xmlSubmodel, HasKind.createAsFacade(submodel));
 						
 			List<ISubmodelElement> submodelElements = SubmodelElementXMLConverter.parseSubmodelElements(xmlSubmodel);
 						

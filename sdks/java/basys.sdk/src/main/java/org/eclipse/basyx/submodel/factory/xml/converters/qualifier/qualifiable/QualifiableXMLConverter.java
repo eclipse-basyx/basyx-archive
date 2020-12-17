@@ -13,6 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IFormula;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifiable;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifier;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Formula;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
@@ -44,17 +45,17 @@ public class QualifiableXMLConverter {
 	
 
 	/**
-	 * Populates a given IQualifiable object with the data form the given XML
+	 * Populates a given Qualifiable object with the data form the given XML
 	 * 
 	 * @param xmlObject the XML map containing the &lt;aas:qualifier&gt; tag
-	 * @param qualifiable the IQualifiable object to be populated -treated as Map here-
+	 * @param qualifiable the Qualifiable object to be populated
 	 */
 	@SuppressWarnings("unchecked")
-	public static void populateQualifiable(Map<String, Object> xmlObject, Map<String, Object> qualifiable) {
-		//The IQualifiable object has to be treated as Map here, as the Interface has no Setters
-		
+	public static void populateQualifiable(Map<String, Object> xmlObject, Qualifiable qualifiable) {
 		Map<String, Object> qualifierObj = (Map<String, Object>) xmlObject.get(QUALIFIER);
-		qualifiable.put(Qualifiable.QUALIFIERS, parseConstraints(qualifierObj));
+		if (qualifierObj != null) {
+			qualifiable.setQualifiers(parseConstraints(qualifierObj));
+		}
 	}
 	
 	
@@ -117,7 +118,7 @@ public class QualifiableXMLConverter {
 		Reference ref = ReferenceXMLConverter.parseReference(qualifierValueIdObj);
 		
 		Qualifier qualifier = new Qualifier();
-		HasSemanticsXMLConverter.populateHasSemantics(xmlQualifier, qualifier);
+		HasSemanticsXMLConverter.populateHasSemantics(xmlQualifier, HasSemantics.createAsFacade(qualifier));
 		
 		qualifier.setType(type);
 		qualifier.setValue(value);

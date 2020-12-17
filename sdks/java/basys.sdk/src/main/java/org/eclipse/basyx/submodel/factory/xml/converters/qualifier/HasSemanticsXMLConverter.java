@@ -21,17 +21,17 @@ public class HasSemanticsXMLConverter {
 	
 
 	/**
-	 * Populates a given IHasSemantics object with the data form the given XML
+	 * Populates a given HasSemantics object with the data form the given XML
 	 * 
 	 * @param xmlObject the XML map containing the &lt;aas:semanticId&gt; tag
-	 * @param hasSemantics the IHasDataSpecification object to be populated -treated as Map here-
+	 * @param hasSemantics the HasSemantics object to be populated
 	 */
 	@SuppressWarnings("unchecked")
-	public static void populateHasSemantics(Map<String, Object> xmlObject, Map<String, Object> hasSemantics) {
-		//The IHasSemantics object has to be treated as Map here, as the Interface has no Setters
-		
+	public static void populateHasSemantics(Map<String, Object> xmlObject, HasSemantics hasSemantics) {
 		Map<String, Object> xmlSemanticIDObj = (Map<String, Object>) xmlObject.get(SEMANTIC_ID);
-		hasSemantics.put(HasSemantics.SEMANTICID, ReferenceXMLConverter.parseReference(xmlSemanticIDObj));
+		if (xmlSemanticIDObj != null) {
+			hasSemantics.setSemanticID(ReferenceXMLConverter.parseReference(xmlSemanticIDObj));
+		}
 	}
 	
 	

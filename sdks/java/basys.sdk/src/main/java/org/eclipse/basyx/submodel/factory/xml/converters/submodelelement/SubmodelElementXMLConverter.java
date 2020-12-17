@@ -21,6 +21,7 @@ import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.entity.
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.event.BasicEventXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.operation.OperationXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.relationship.RelationshipElementXMLConverter;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
@@ -33,6 +34,11 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.IEntity;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.event.IBasicEvent;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
@@ -167,11 +173,11 @@ public class SubmodelElementXMLConverter {
 	 */
 	@SuppressWarnings("unchecked")
 	protected static void populateSubmodelElement(Map<String, Object> xmlObject, ISubmodelElement submodelElement) {
-		ReferableXMLConverter.populateReferable(xmlObject, (Map<String, Object>) submodelElement);
-		QualifiableXMLConverter.populateQualifiable(xmlObject, (Map<String, Object>) submodelElement);
-		HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlObject, (Map<String, Object>) submodelElement);
-		HasSemanticsXMLConverter.populateHasSemantics(xmlObject, (Map<String, Object>) submodelElement);
-		HasKindXMLConverter.populateHasKind(xmlObject, (Map<String, Object>) submodelElement);
+		ReferableXMLConverter.populateReferable(xmlObject, Referable.createAsFacadeNonStrict((Map<String, Object>) submodelElement, KeyElements.SUBMODELELEMENT));
+		QualifiableXMLConverter.populateQualifiable(xmlObject, Qualifiable.createAsFacade((Map<String, Object>) submodelElement));
+		HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlObject, HasDataSpecification.createAsFacade((Map<String, Object>) submodelElement));
+		HasSemanticsXMLConverter.populateHasSemantics(xmlObject, HasSemantics.createAsFacade((Map<String, Object>) submodelElement));
+		HasKindXMLConverter.populateHasKind(xmlObject, HasKind.createAsFacade((Map<String, Object>) submodelElement));
 	}
 	
 
