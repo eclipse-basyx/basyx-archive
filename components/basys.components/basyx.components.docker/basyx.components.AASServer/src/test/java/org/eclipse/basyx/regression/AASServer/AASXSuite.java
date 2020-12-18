@@ -100,7 +100,7 @@ public abstract class AASXSuite {
 		ISubModel nameplate = getConnectedSubmodel();
 		// Get the submodel element collection marking_rcm
 		ConnectedSubmodelElementCollection marking_rcm = (ConnectedSubmodelElementCollection) nameplate.getSubmodelElements().get("Marking_RCM");
-		Collection<ISubmodelElement> values = marking_rcm.getValue().values();
+		Collection<ISubmodelElement> values = marking_rcm.getValue();
 
 		// navigate to the File element
 		Iterator<ISubmodelElement> iter = values.iterator();

@@ -2,6 +2,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -182,7 +183,7 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 
 	@Override
 	public Collection<ISubmodelElement> getValue() {
-		return (getSubmodelElements()).values();
+		return Collections.unmodifiableList(new ArrayList<>((getSubmodelElements()).values()));
 	}
 
 	public void setOrdered(boolean value) {

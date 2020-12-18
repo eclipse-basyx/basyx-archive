@@ -25,14 +25,18 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.Test;
@@ -46,15 +50,20 @@ import org.junit.Test;
  */
 public abstract class TestSubmodelSuite {
 	// String constants used in this test case
-	// private final static String OP = "add";
 	private final static String PROP = "prop1";
 	private final static String ID = "TestId";
 
-	// private final String OPERATION_ID = "operation_id";
 	private final String PROPERTY_ID = "property_id";
 	private final String BLOB_ID = "blob_id";
 	private final String RELATIONSHIP_ELEM_ID = "relElem_id";
 	private final String SUBMODEL_ELEM_COLLECTION_ID = "elemCollection_id";
+	private final String RANGE_ID = "range_id";
+	private final String FILE_ID = "file_id";
+	private final String MULTI_LANG_PROP_ID = "multi_lang_prop_id";
+	private final String REFERENCE_ELEMENT_ID = "reference_element_id";
+	private final String BASIC_EVENT_ID = "basic_event_id";
+	private final String PROPERTY_ID2 = "property_id2";
+	
 
 	private final static Reference testSemanticIdRef = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "testVal", IdentifierType.CUSTOM));
 
@@ -205,7 +214,7 @@ public abstract class TestSubmodelSuite {
 		}
 
 		Map<String, Object> values = submodel.getValues();
-		assertEquals(3, values.size());
+		assertEquals(9, values.size());
 
 		// Check if all expected Values are present
 		assertEquals(100, values.get(PROP));
@@ -216,6 +225,12 @@ public abstract class TestSubmodelSuite {
 		Map<String, Object> collection = (Map<String, Object>) values.get(SUBMODEL_ELEM_COLLECTION_ID);
 
 		assertTrue(collection.containsKey(BLOB_ID));
+		assertTrue(values.containsKey(PROPERTY_ID2));
+		assertTrue(values.containsKey(RANGE_ID));
+		assertTrue(values.containsKey(MULTI_LANG_PROP_ID));
+		assertTrue(values.containsKey(FILE_ID));
+		assertTrue(values.containsKey(REFERENCE_ELEMENT_ID));
+		assertTrue(values.containsKey(BASIC_EVENT_ID));
 	}
 
 	/**
@@ -282,6 +297,25 @@ public abstract class TestSubmodelSuite {
 		RelationshipElement relElement = new RelationshipElement(RELATIONSHIP_ELEM_ID, first, second);
 		ret.put(relElement.getIdShort(), relElement);
 
+		Property property = new Property(PROPERTY_ID2, PropertyValueTypeDef.AnySimpleType);
+		ret.put(property.getIdShort(), property);
+		
+		Range range = new Range(RANGE_ID, PropertyValueTypeDef.AnyType);
+		ret.put(range.getIdShort(), range);
+		
+		File file = new File("text/plain");
+		file.setIdShort(FILE_ID);
+		ret.put(file.getIdShort(), file);
+		
+		MultiLanguageProperty languageProperty = new MultiLanguageProperty(MULTI_LANG_PROP_ID);
+		ret.put(languageProperty.getIdShort(), languageProperty);
+		
+		ReferenceElement referenceElement = new ReferenceElement(REFERENCE_ELEMENT_ID);
+		ret.put(referenceElement.getIdShort(), referenceElement);
+		
+		BasicEvent basicEvent = new BasicEvent(BASIC_EVENT_ID, first);
+		ret.put(basicEvent.getIdShort(), basicEvent);
+
 		return ret;
 	}
 
@@ -296,11 +330,11 @@ public abstract class TestSubmodelSuite {
 		// Check value and type of each property in the submodel
 		expected.forEach((id, prop) -> {
 			IProperty expectedProperty = expected.get(PROPERTY_ID);
-			IProperty acutalProperty = (IProperty) actual.get(PROPERTY_ID);
-			assertNotNull(acutalProperty);
+			IProperty actualProperty = (IProperty) actual.get(PROPERTY_ID);
+			assertNotNull(actualProperty);
 			try {
-				assertEquals(expectedProperty.getValue(), acutalProperty.getValue());
-				assertEquals(expectedProperty.getValueType(), acutalProperty.getValueType());
+				assertEquals(expectedProperty.getValue(), actualProperty.getValue());
+				assertEquals(expectedProperty.getValueType(), actualProperty.getValueType());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -329,11 +363,13 @@ public abstract class TestSubmodelSuite {
 
 		assertEquals(expectedCollection.getSubmodelElements().size(), elements.size());
 
-		IRelationshipElement expectedRelElem = (IRelationshipElement) expected.get(RELATIONSHIP_ELEM_ID);
-		IRelationshipElement actualRelElem = (IRelationshipElement) actual.get(RELATIONSHIP_ELEM_ID);
-
-		assertNotNull(actualRelElem);
-		assertEquals(expectedRelElem.getIdShort(), actualRelElem.getIdShort());
+		// Check value of all submodel elements
+		for (ISubmodelElement elem : expected.values()) {
+			// Equality of Ids is implicitly checked by this retrieval
+			ISubmodelElement actualElem = actual.get(elem.getIdShort());
+			assertNotNull(actualElem);
+			assertEquals(elem.getValue(), actualElem.getValue());
+		}
 	}
 
 	/**

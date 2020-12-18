@@ -35,7 +35,7 @@ public class ConnectedElement implements IElement {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected VABModelMap<Object> getElemLive() {
+	public VABModelMap<Object> getElemLive() {
 		VABModelMap<Object> map = new VABModelMap<>((Map<String, Object>) getProxy().getModelPropertyValue(""));
 		// update cache
 		cached = map;
@@ -49,7 +49,7 @@ public class ConnectedElement implements IElement {
 	 * 
 	 * @return
 	 */
-	protected VABModelMap<Object> getElem() {
+	public VABModelMap<Object> getElem() {
 		if (cached == null) {
 			return getElemLive();
 		} else {

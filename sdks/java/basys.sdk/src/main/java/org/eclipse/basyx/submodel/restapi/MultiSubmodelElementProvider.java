@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -102,6 +104,7 @@ public class MultiSubmodelElementProvider extends MetaModelProvider {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void createValue(String path, Object newEntity) throws ProviderException {
 		String[] pathElements = VABPathTools.splitPath(path);
 		String qualifier = pathElements[0];
@@ -112,6 +115,13 @@ public class MultiSubmodelElementProvider extends MetaModelProvider {
 			throw new MalformedRequestException("Given path '" + path + "' does not start with /submodelElements");
 		}
 		
+		// Check if the passed element is a SubmodelElementCollection. If yes, the value
+		// of the "value" key needs to be handled
+		if (SubmodelElementCollection.isSubmodelElementCollection((Map<String, Object>) newEntity)) {
+			SubmodelElementCollection smCollection = SubmodelElementCollection.createAsFacade((Map<String, Object>) newEntity);
+			newEntity = SubmodelElementMapCollectionConverter.mapToSmECollection(smCollection);
+		}
+
 		if (pathElements.length == 2) {
 			modelProvider.createValue(pathElements[1], newEntity);
 		} else {

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.basyx.submodel.metamodel.connected.ConnectedElement;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
 
 /**
@@ -196,6 +197,9 @@ public class VABModelMap<V extends Object> implements Map<String, V> {
 			return true;
 		if (obj == null)
 			return false;
+		if (obj instanceof ConnectedElement) {
+			obj = ((ConnectedElement) obj).getElemLive();
+		}
 		if (!Map.class.isAssignableFrom(obj.getClass()))
 			return false;
 
