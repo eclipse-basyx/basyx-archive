@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.zip.ZipEntry;
@@ -24,7 +25,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
 import org.eclipse.basyx.components.xml.XMLAASBundleFactory;
+import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
 import org.eclipse.basyx.support.bundle.AASBundle;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -53,6 +59,11 @@ public class AASXPackageManager {
 	 * AAS bundle factory
 	 */
 	private XMLAASBundleFactory bundleFactory;
+	
+	/**
+	 * Cache for generated Bundles
+	 */
+	private Set<AASBundle> bundles;
 
 	/**
 	 * Logger
@@ -67,9 +78,17 @@ public class AASXPackageManager {
 	}
 
 	public Set<AASBundle> retrieveAASBundles() throws IOException, ParserConfigurationException, SAXException {
+		
+		// If the XML was already parsed return cached Bundles
+		if(bundles != null) {
+			return bundles;
+		}
+		
 		bundleFactory = new XMLAASBundleFactory(getXMLResourceString(aasxPath));
 		
-		return bundleFactory.create();
+		bundles = bundleFactory.create();
+		
+		return bundles;
 	}
 
 	/**
@@ -212,42 +231,65 @@ public class AASXPackageManager {
 	 * @throws ParserConfigurationException
 	 * 
 	 */
-	private List<String> parseReferencedFilePathsFromAASX(String aasxFilePath)
+	private List<String> parseReferencedFilePathsFromAASX()
 			throws IOException, ParserConfigurationException, SAXException {
-		String xmlPath;
-		logger.info("AASX filepath: " + aasxFilePath);
-		try (ZipInputStream stream = getZipInputStream(aasxFilePath)) {
-			// find the aasx xml file
-			xmlPath = this.findAASXml(stream);
+		
+		Set<AASBundle> bundles = retrieveAASBundles();
+		
+		List<ISubModel> submodels = new ArrayList<>();
+		
+		// Get the Submodels from all AASBundles
+		for(AASBundle bundle: bundles) {
+			submodels.addAll(bundle.getSubmodels());
 		}
+		
+		List<String> paths = new ArrayList<String>();
 
-		try (ZipInputStream stream = getZipInputStream(aasxFilePath)) {
-			// find the relationship file next to the aas xml file
-			String[] xmlPathParts = xmlPath.split("/");
-			String relPath = xmlPath.substring(0, xmlPath.lastIndexOf("/")) + "/_rels/" + xmlPathParts[xmlPathParts.length - 1] + ".rels";
-
-			// Find the entry of the xml .rel file
-			ZipInputStream streamPointingToEntry = this.returnFileEntryStream(relPath, stream);
-
-			// Return all files referenced in this relationship file
-			return parseReferencedFilePathsFromRelationship(streamPointingToEntry);
+		for(ISubModel sm: submodels) {
+			paths.addAll(parseElements(sm.getSubmodelElements().values()));
 		}
+		return paths;
+	}
+	
+	/**
+	 * Gets the paths from a collection of ISubmodelElement
+	 * 
+	 * @param elements
+	 * @return the Paths from the File elements
+	 */
+	private List<String> parseElements(Collection<ISubmodelElement> elements) {
+		List<String> paths = new ArrayList<String>();
+		
+		for(ISubmodelElement element: elements) {
+			if(element instanceof IFile) {
+				IFile file = (IFile) element;
+				// If the path contains a "://", we can assume, that the Path is a link to an other server
+				// e.g. http://localhost:8080/aasx/...
+				if(!file.getValue().contains("://")) {
+					paths.add(file.getValue());
+				}
+			}
+			else if(element instanceof ISubmodelElementCollection) {
+				ISubmodelElementCollection collection = (ISubmodelElementCollection) element;
+				paths.addAll(parseElements(collection.getSubmodelElements().values()));
+			}
+		}
+		return paths;
 	}
 
 	/**
 	 * Unzips all files referenced by the aasx file according to its relationships
 	 * 
-	 * @param filePath - path the AASX
 	 * 
 	 * @throws IOException
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 * @throws URISyntaxException
 	 */
-	public void unzipRelatedFiles(String aasxFilePath)
+	public void unzipRelatedFiles()
 			throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
 		// load folder which stores the files
-		List<String> files = parseReferencedFilePathsFromAASX(aasxFilePath);
+		List<String> files = parseReferencedFilePathsFromAASX();
 		for (String filePath : files) {
 			// name of the folder
 			unzipFile(filePath, aasxPath);
@@ -282,7 +324,7 @@ public class AASXPackageManager {
 			filePath = filePath.substring(1);
 		}
 		logger.info("Unzipping " + filePath + " to root folder:");
-		String relativePath = filePath.substring(0, filePath.lastIndexOf("/"));
+		String relativePath = "files/" + VABPathTools.getParentPath(filePath);
 		Path rootPath = getRootFolder();
 		Path destDir = rootPath.resolve(relativePath);
 		logger.info("Unzipping to " + destDir);
@@ -323,8 +365,7 @@ public class AASXPackageManager {
 	 * @throws IOException
 	 */
 	private File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
-		int i = zipEntry.getName().lastIndexOf("/");
-		String filename = zipEntry.getName().substring(i);
+		String filename = VABPathTools.getLastElement(zipEntry.getName());
 
 		File destFile = new File(destinationDir, filename);
 
@@ -336,47 +377,6 @@ public class AASXPackageManager {
 		}
 
 		return destFile;
-	}
-	
-	/**
-	 * Find path of the referenced file with reference type aas-suppl
-	 * 
-	 * @param insRelFile - the input stream of the relationship file
-	 * @return
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
-	 */
-	private List<String> parseReferencedFilePathsFromRelationship(InputStream insRelFile)
-			throws ParserConfigurationException, SAXException, IOException {
-		List<String> files = new ArrayList<>();
-
-		if (insRelFile == null) {
-			return files;
-		}
-
-		// create the XML document parser
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		Document doc = dBuilder.parse(insRelFile);
-		doc.getDocumentElement().normalize();
-
-		// Get the tag with "Relationships"
-		NodeList relList = doc.getElementsByTagName("Relationship");
-		for (int i = 0; i < relList.getLength(); i++) {
-			Node node = relList.item(i);
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				// get the target file path
-				String targetFile = ((Element) node).getAttribute("Target");
-				String type = ((Element) node).getAttribute("Type");
-
-				// validate the relationship type
-				if (type.endsWith("aas-suppl")) {
-					files.add(targetFile);
-				}
-			}
-		}
-		return files;
 	}
 
 	private ZipInputStream getZipInputStream(String aasxFilePath) throws IOException {

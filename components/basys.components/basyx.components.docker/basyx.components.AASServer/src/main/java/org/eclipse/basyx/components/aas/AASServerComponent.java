@@ -137,7 +137,7 @@ public class AASServerComponent implements IComponent {
 		// An initial AAS has been loaded from the drive?
 		if (aasBundles != null) {
 			// 1. Also provide the files
-			context.addServletMapping("/aasx/*", new DefaultServlet());
+			context.addServletMapping("/files/*", new DefaultServlet());
 
 			// 2. Fix the file paths according to the servlet configuration
 			modifyFilePaths(contextConfig.getHostname(), contextConfig.getPort(), contextConfig.getContextPath());
@@ -185,7 +185,7 @@ public class AASServerComponent implements IComponent {
 		AASXPackageManager packageManager = new AASXPackageManager(aasxPath);
 
 		// Unpack the files referenced by the aas
-		packageManager.unzipRelatedFiles(aasxPath);
+		packageManager.unzipRelatedFiles();
 
 		// Retrieve the aas from the package
 		this.aasBundles = packageManager.retrieveAASBundles();
@@ -271,6 +271,7 @@ public class AASServerComponent implements IComponent {
 	 * Fixes the File submodel element value paths according to the given endpoint configuration
 	 */
 	private void modifyFilePaths(String hostName, int port, String rootPath) {
+		rootPath = rootPath + "/files";
 		for (AASBundle bundle : aasBundles) {
 			Set<ISubModel> submodels = bundle.getSubmodels();
 			for (ISubModel sm : submodels) {

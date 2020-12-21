@@ -92,8 +92,8 @@ public abstract class AASXSuite {
 
 	@Test
 	public void testGetSingleModule() throws Exception {
-		final String FILE_ENDING = "aasx/Nameplate/marking_rcm.jpg";
-		final String FILE_PATH = rootEndpoint + "aasx/Nameplate/marking_rcm.jpg";
+		final String FILE_ENDING = "files/aasx/Nameplate/marking_rcm.jpg";
+		final String FILE_PATH = rootEndpoint + "files/aasx/Nameplate/marking_rcm.jpg";
 		checkFile(FILE_PATH);
 
 		// Get the submdoel nameplate
@@ -125,13 +125,6 @@ public abstract class AASXSuite {
 		Map<String, ISubModel> submodels = aas.getSubModels();
 		logger.info("# Submodels: " + submodels.size());
 		for (ISubModel sm : submodels.values()) {
-			// FIXME: In Identification, there's a file referenced that is not contained in aasx folder. 
-			// Since the current code only works with files in /aasx folder, this will create an error for now
-			// Remove this after this issue is fixed!
-			if (sm.getIdShort().equals("Identification")) {
-				continue;
-			}
-			
 			logger.info("Checking submodel: " + sm.getIdShort());
 			checkElementCollectionFiles(sm.getSubmodelElements().values());
 		}
