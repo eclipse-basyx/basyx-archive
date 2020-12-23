@@ -1,0 +1,32 @@
+package org.eclipse.basyx.hello_world;
+
+import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
+import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
+import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+
+/**
+ * This class connects to the server created in Server
+ * 
+ * It retrieves the Submodel and prints the
+ * idShort and Value of the contained Property to the console
+ * 
+ * @author schnicke, conradi
+ *
+ */
+public class Client {
+	public static void main(String[] args) {
+		// Create Manager
+		ConnectedAssetAdministrationShellManager manager =
+				new ConnectedAssetAdministrationShellManager(new AASRegistryProxy(Server.REGISTRYPATH));
+
+		// Retrieve submodel
+		ISubModel submodel = manager.retrieveSubModel(Server.OVENAASID, Server.DOCUSMID);
+
+		// Retrieve MaxTemp Property
+		ISubmodelElement maxTemp = submodel.getSubmodelElement(Server.MAXTEMPID);
+
+		// Print value
+		System.out.println(maxTemp.getIdShort() + " is " + maxTemp.getValue());
+	}
+}
