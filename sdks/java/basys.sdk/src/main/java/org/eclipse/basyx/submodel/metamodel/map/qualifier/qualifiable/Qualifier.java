@@ -36,15 +36,6 @@ public class Qualifier extends Constraint implements IQualifier {
 	public Qualifier() {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
-
-		// Add all attributes from HasSemantics
-		this.putAll(new HasSemantics());
-
-		// Default values
-		put(TYPE, "");
-		put(VALUE, null);
-		put(VALUEID, null);
-		put(VALUETYPE, null);
 	}
 	
 	/**
@@ -57,10 +48,6 @@ public class Qualifier extends Constraint implements IQualifier {
 	}
 
 	public Qualifier(String type, String value, String valueType, Reference valueId) {
-		// Add all attributes from HasSemantics
-		this.putAll(new HasSemantics());
-
-		// Default values
 		put(TYPE,type);
 		put(VALUE, PropertyValueTypeDefHelper.prepareForSerialization(value));
 		put(VALUEID, valueId);

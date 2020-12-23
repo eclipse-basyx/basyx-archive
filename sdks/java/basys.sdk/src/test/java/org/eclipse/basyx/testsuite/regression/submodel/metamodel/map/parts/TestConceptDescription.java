@@ -40,7 +40,7 @@ public class TestConceptDescription {
 	
 	@Before
 	public void buildConceptDescription() {
-		description = new ConceptDescription();
+		description = new ConceptDescription("testConceptDescriptionID", new Identifier(IdentifierType.IRDI,  "testId"));
 	}
 	
 	@Test

@@ -316,7 +316,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public void addConceptDescription(IConceptDescription description) {
 		Collection<IConceptDictionary> dictionaries = (Collection<IConceptDictionary>) get(AssetAdministrationShell.CONCEPTDICTIONARY);
 		if (dictionaries.isEmpty()) {
-			dictionaries.add(new ConceptDictionary());
+			dictionaries.add(new ConceptDictionary("defaultConceptDictionary"));
 		}
 		ConceptDictionary dictionary = (ConceptDictionary) dictionaries.iterator().next();
 		dictionary.addConceptDescription(description);

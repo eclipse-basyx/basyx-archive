@@ -42,8 +42,8 @@ public class TestConnectedProperty {
 
 	@Test
 	public void testEmptyProperty() throws Exception {
-		Property propertyMeta = new Property();
-		propertyMeta.setValueType(PropertyValueTypeDef.String);
+		Property propertyMeta = new Property("testIdShort", PropertyValueTypeDef.String);
+		propertyMeta.set(null);
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(propertyMeta);
 		prop = new ConnectedProperty(
 				new VABConnectionManagerStub(new SubmodelElementProvider(new VABMapProvider(destroyType)))

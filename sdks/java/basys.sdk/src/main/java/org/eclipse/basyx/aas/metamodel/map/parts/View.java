@@ -39,9 +39,7 @@ public class View extends VABModelMap<Object> implements IView {
 		putAll(new ModelType(MODELTYPE));
 
 		// Add qualifiers
-		putAll(new HasSemantics());
 		putAll(new HasDataSpecification());
-		putAll(new Referable());
 
 		// Default values
 		put(CONTAINEDELEMENT, new HashSet<Reference>());

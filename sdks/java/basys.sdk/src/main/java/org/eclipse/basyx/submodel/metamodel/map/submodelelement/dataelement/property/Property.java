@@ -54,10 +54,6 @@ public class Property extends DataElement implements IProperty {
 		
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
-
-		// Put attributes
-		put(Property.VALUE, null);
-		put(Property.VALUEID, null);
 	}
 	
 	/**

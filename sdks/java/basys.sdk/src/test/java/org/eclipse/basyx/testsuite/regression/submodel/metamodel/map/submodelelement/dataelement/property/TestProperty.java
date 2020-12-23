@@ -14,6 +14,7 @@ import java.util.Collections;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -121,7 +122,8 @@ public class TestProperty {
 
 	@Test
 	public void testAddConceptDescription() {
-		ConceptDescription description = new ConceptDescription();
+		String id = "idShort";
+		ConceptDescription description = new ConceptDescription(id, new Identifier(IdentifierType.IRDI, id));
 		Property property = new Property(VALUE);
 		property.addConceptDescription(description);
 		assertEquals(new Reference(description, KeyElements.CONCEPTDESCRIPTION, true), property.getSemanticId());

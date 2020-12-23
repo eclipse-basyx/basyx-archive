@@ -63,8 +63,10 @@ public abstract class TestRegistryProviderSuite {
 		// Create assets
 		asset1 = new Asset(new Reference(new Identifier(IdentifierType.CUSTOM, "asset001"), KeyElements.ASSET, false));
 		asset1.setIdentification(IdentifierType.CUSTOM, "asset001");
+		asset1.setIdShort("asset001");
 		asset2 = new Asset(new Reference(new Identifier(IdentifierType.CUSTOM, "asset002"), KeyElements.ASSET, false));
 		asset2.setIdentification(IdentifierType.CUSTOM, "asset002");
+		asset2.setIdShort("asset002");
 		// Create descriptors for AAS and submodels
 		AASDescriptor aasDesc1 = new AASDescriptor(aasIdShort1, aasId1, asset1, aasEndpoint1);
 		aasDesc1.addSubmodelDescriptor(new SubmodelDescriptor(smIdShort1, smId1, smEndpoint1));

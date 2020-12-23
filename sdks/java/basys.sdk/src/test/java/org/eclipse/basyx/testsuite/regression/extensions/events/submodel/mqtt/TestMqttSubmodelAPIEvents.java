@@ -49,8 +49,7 @@ public class TestMqttSubmodelAPIEvents {
 		mqttBroker.startServer(classPathConfig);
 
 		// Create submodel
-		SubModel sm = new SubModel();
-		sm.setIdentification(new Identifier(IdentifierType.CUSTOM, "testSM"));
+		SubModel sm = new SubModel("testSM", new Identifier(IdentifierType.CUSTOM, "testSM"));
 		VABSubmodelAPI vabAPI = new VABSubmodelAPI(new VABMapProvider(sm));
 		eventAPI = new MqttSubmodelAPI(vabAPI, "tcp://localhost:1884", "testClient");
 	}

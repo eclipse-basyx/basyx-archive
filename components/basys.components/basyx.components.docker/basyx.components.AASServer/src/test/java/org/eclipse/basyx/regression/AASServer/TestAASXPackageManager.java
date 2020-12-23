@@ -119,9 +119,6 @@ public class TestAASXPackageManager {
 		assertEquals("Festo_3S7PM0CP4BD", aas.getIdShort());
 		assertEquals("CONSTANT", aas.getCategory());
 
-		assertEquals("", aas.getDescription().get("EN"));
-		assertEquals("", aas.getDescription().get("DE"));
-
 		// verify id and id-type
 		assertEquals("smart.festo.com/demo/aas/1/1/454576463545648365874", aas.getIdentification().getId());
 		assertEquals(IdentifierType.IRI, aas.getIdentification().getIdType());

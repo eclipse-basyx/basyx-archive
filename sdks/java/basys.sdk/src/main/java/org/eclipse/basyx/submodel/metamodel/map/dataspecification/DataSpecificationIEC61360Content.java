@@ -37,22 +37,7 @@ public class DataSpecificationIEC61360Content extends VABModelMap<Object> implem
 	/**
 	 * Constructor
 	 */
-	public DataSpecificationIEC61360Content() {
-		// Default values
-		put(PREFERREDNAME, null);
-		put(SHORTNAME, null);
-		put(UNIT, null);
-		put(UNITID, null);
-		put(SOURCEOFDEFINITION, null);
-		put(SYMBOL, null);
-		put(DATATYPE, null);
-		put(DEFINITION, null);
-		put(VALUEFORMAT, null);
-		put(VALUELIST, null);
-		put(VALUE, null);
-		put(VALUEID, null);
-		put(LEVELTYPE, null);
-	}
+	public DataSpecificationIEC61360Content() {}
 
 	/**
 	 * Constructor

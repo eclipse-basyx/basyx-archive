@@ -5,9 +5,11 @@ import static org.junit.Assert.assertEquals;
 import java.util.Map;
 
 import org.eclipse.basyx.components.aas.aasx.SubmodelFileEndpointLoader;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.junit.Before;
@@ -36,8 +38,7 @@ public class TestFileEndpointLoader {
 		File fCol = new File(relativePath, "application/json");
 		fCol.setIdShort("fInside");
 		col.addSubModelElement(fCol);
-		submodel = new SubModel();
-		submodel.setIdShort("FileTestSubmodel");
+		submodel = new SubModel("FileTestSubmodel", new Identifier(IdentifierType.IRDI, "FileTestSubmodel"));
 		submodel.addSubModelElement(fRel);
 		submodel.addSubModelElement(fAbs);
 		submodel.addSubModelElement(col);

@@ -43,16 +43,6 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 	public Referable() {
 		// Identifies an element within its name space (String)
 		put(IDSHORT, "");
-		// Coded value that gives further meta information w.r.t. to the type of the
-		// element. It affects the
-		// expected existence of attributes and the applicability of constraints.
-		// (String)
-		put(CATEGORY, "");
-		// Description or comments on the element (String)
-		
-		put(DESCRIPTION, new LangStrings());
-		// Reference to the parent of this element (Referable)
-		put(PARENT, null);
 	}
 	
 	/**
@@ -82,8 +72,6 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 		put(CATEGORY, category);
 		// Description or comments on the element
 		put(DESCRIPTION, description);
-		// Reference to the parent of this element (Referable)
-		put(PARENT, null);
 	}
 
 	/**

@@ -18,11 +18,7 @@ public class HasKind extends VABModelMap<Object> implements IHasKind {
 	/**
 	 * Constructor
 	 */
-	public HasKind() {
-		// Default value
-
-		put(KIND, null);
-	}
+	public HasKind() {}
 
 	/**
 	 * Constructor that takes

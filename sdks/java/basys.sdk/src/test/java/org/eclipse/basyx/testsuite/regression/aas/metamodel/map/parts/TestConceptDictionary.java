@@ -39,7 +39,8 @@ public class TestConceptDictionary {
 	public void buildConceptDictionary() {
 		List<IReference> refs = new ArrayList<>();
 		refs.add(REFERENCE);
-		dictionary = new ConceptDictionary(refs);
+		dictionary = new ConceptDictionary("testIdShort");
+		dictionary.setConceptDescriptionReferences(refs);
 	}
 	
 	@Test
@@ -86,9 +87,9 @@ public class TestConceptDictionary {
 	
 	@Test
 	public void testSetConceptDescriptions() {
-		ConceptDescription description1 = new ConceptDescription();
+		ConceptDescription description1 = new ConceptDescription("testIdShort1", new Identifier(IdentifierType.IRDI, "testIdShort1"));
 		description1.setCategory("cat1");
-		ConceptDescription description2 = new ConceptDescription();
+		ConceptDescription description2 = new ConceptDescription("testIdShort2", new Identifier(IdentifierType.IRDI, "testIdShort2"));
 		description2.setCategory("cat2");
 		Collection<IConceptDescription> descriptions = new ArrayList<IConceptDescription>();
 		descriptions.add(description1);
@@ -101,8 +102,7 @@ public class TestConceptDictionary {
 	public void testAddConceptDescription() {
 		IdentifierType idType = IdentifierType.IRI;
 		String id = "testId";
-		ConceptDescription description = new ConceptDescription();
-		description.setIdentification(idType, id);
+		ConceptDescription description = new ConceptDescription("testIdShort", new Identifier(idType, id));
 		description.setCategory("testCategory");
 		dictionary.addConceptDescription(description);
 		assertEquals(Collections.singletonList(description), dictionary.getConceptDescriptions());

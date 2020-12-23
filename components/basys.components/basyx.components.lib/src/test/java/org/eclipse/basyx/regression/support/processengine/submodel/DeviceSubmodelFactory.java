@@ -52,9 +52,9 @@ public class DeviceSubmodelFactory {
 		propList.add(property2);
 		propList.add(property3);
 		// create the sub-model and add the property and operations to the sub-model
-		SubModel sm = new SubModel(propList, opList);
-		sm.setIdentification(new Identifier(IdentifierType.CUSTOM, id + "Custom"));
-		sm.setIdShort(id);
+		SubModel sm = new SubModel(id, new Identifier(IdentifierType.CUSTOM, id + "Custom"));
+		propList.forEach(sm::addSubModelElement);
+		opList.forEach(sm::addSubModelElement);
 		return sm;
 	}
 }

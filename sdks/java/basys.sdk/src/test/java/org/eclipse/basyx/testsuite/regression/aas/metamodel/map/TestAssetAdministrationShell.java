@@ -101,6 +101,7 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 		shell.addConceptDescription(description);
 		Collection<IConceptDictionary> dictionaries = new HashSet<IConceptDictionary>();
 		ConceptDictionary dictionary = new ConceptDictionary();
+		dictionary.setIdShort("defaultConceptDictionary");
 		dictionary.addConceptDescription(description);
 		dictionaries.add(dictionary);
 		assertEquals(dictionaries, shell.getConceptDictionary());

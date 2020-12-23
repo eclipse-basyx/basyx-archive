@@ -23,8 +23,6 @@ public class DataSpecificationIEC61360 extends EmbeddedDataSpecification {
 	 * Creates an empty DataSpecificationIEC61360
 	 */
 	public DataSpecificationIEC61360() {
-		// Add model type
-		put(CONTENT, null);
 		put(DATASPECIFICATION, TEMPLATE_REFERENCE);
 	}
 

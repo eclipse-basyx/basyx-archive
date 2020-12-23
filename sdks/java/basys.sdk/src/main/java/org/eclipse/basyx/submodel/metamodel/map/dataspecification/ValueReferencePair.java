@@ -26,10 +26,7 @@ public class ValueReferencePair extends VABModelMap<Object> implements IValueRef
 	/**
 	 * Constructor
 	 */
-	public ValueReferencePair() {
-		setValue(null);
-		setValueId(null);
-	}
+	public ValueReferencePair() {}
 
 	/**
 	 * Constructs a reference based on an {@link IIdentifiable} and additional

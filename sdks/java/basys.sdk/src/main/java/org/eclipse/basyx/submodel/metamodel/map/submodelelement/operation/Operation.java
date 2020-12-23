@@ -49,9 +49,6 @@ public class Operation extends SubmodelElement implements IOperation {
 
 		// Variables, that are input and output
 		put(INOUT, new ArrayList<OperationVariable>());
-
-		// Extension of DAAS specification for function storage
-		put(INVOKABLE, null);
 	}
 	
 	/**
@@ -71,9 +68,6 @@ public class Operation extends SubmodelElement implements IOperation {
 
 		// Variables, that are input and output
 		setInOutputVariables(new ArrayList<OperationVariable>());
-
-		// Extension of DAAS specification for function storage
-		setInvocable(null);
 	}
 
 	/**

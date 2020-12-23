@@ -63,11 +63,8 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	 */
 	public SubModel() {
 		// Add qualifiers
-		putAll(new HasSemantics());
 		putAll(new Identifiable());
-		putAll(new Qualifiable());
 		putAll(new HasDataSpecification());
-		putAll(new HasKind());
 
 		// Add model type
 		putAll(new ModelType(MODELTYPE));

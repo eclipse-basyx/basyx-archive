@@ -23,11 +23,7 @@ public class Security extends VABModelMap<Object> implements ISecurity {
 	/**
 	 * Constructor
 	 */
-	public Security() {
-		// Default values
-		put(ACCESSCONTROLPOLICYPOINTS, null);
-		put(CERTIFICATE, null);
-	}
+	public Security() {}
 
 	/**
 	 * Creates a Security object from a map

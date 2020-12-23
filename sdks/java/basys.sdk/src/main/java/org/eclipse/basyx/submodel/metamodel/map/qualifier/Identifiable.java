@@ -28,9 +28,6 @@ public class Identifiable extends Referable implements IIdentifiable {
 	public Identifiable() {
 		// Add qualifier
 		putAll(new Referable());
-
-		// Administrative information of an element. (AdministrativeInformation)
-		put(ADMINISTRATION, new AdministrativeInformation());
 		// The globally unique identification of an element. (Identificator)
 		put(IDENTIFICATION, new Identifier());
 	}
@@ -43,7 +40,6 @@ public class Identifiable extends Referable implements IIdentifiable {
 	public Identifiable(String idShort, IIdentifier identification) {
 		super(idShort);
 		setIdentification(identification.getIdType(), identification.getId());
-		setAdministration(new AdministrativeInformation());
 	}
 
 	/**

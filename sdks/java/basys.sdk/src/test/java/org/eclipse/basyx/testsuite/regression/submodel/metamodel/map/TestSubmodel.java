@@ -9,8 +9,10 @@ import java.util.Map;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -60,7 +62,8 @@ public class TestSubmodel extends TestSubmodelSuite {
 		expected.setIdShort(propId);
 
 		// Create test submodel and force key SUBMODELELEMENT to contain a list
-		SubModel sm = new SubModel();
+		String id = "testIdShort";
+		SubModel sm = new SubModel(id, new Identifier(IdentifierType.IRDI, id));
 		sm.put(SubModel.SUBMODELELEMENT, Collections.singleton(expected));
 
 		// Check if the facade converts the SUBMODELELEMENT value correctly

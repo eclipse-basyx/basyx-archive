@@ -26,9 +26,6 @@ public class AdministrativeInformation extends VABModelMap<Object> implements IA
 		// Add qualifier
 		putAll(new HasDataSpecification());
 
-		// Default values
-		put(VERSION, "");
-		put(REVISION, "");
 	}
 
 	/**

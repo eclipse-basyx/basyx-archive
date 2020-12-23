@@ -30,9 +30,6 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	public RelationshipElement() {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
-
-		put(FIRST, null);
-		put(SECOND, null);
 	}
 
 	/**

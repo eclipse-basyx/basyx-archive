@@ -1,10 +1,14 @@
 package org.eclipse.basyx.examples.support;
 
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 
 /**
  * This class is used to build AssetAdministrationShells and Submodels
@@ -32,23 +36,18 @@ public class ExampleComponentBuilder {
 	 * @return the new Submodel
 	 */
 	public static SubModel buildExampleSubmodel(String idShort, String id) {
-		SubModel submodel = new SubModel();
-		submodel.setIdShort(idShort);
-		submodel.setIdentification(IdentifierType.CUSTOM, id);
+		SubModel submodel = new SubModel(idShort, new Identifier(IdentifierType.CUSTOM, id));
 		
 		// Add a Property to the Submodel
-		Property property = new Property();
-		property.setIdShort(PROPERTY_ID);
+		Property property = new Property(PROPERTY_ID, PropertyValueTypeDef.Int32);
 		property.setValue(PROPERTY_VALUE);
 		submodel.addSubModelElement(property);
 				
 		// Add a SubmodelElementCollection
-		SubmodelElementCollection collection = new SubmodelElementCollection();
-		collection.setIdShort(COLLECTION_ID);
+		SubmodelElementCollection collection = new SubmodelElementCollection(COLLECTION_ID);
 		
 		// Add a Property to the SubmodelElementCollection
-		Property property2 = new Property();
-		property2.setIdShort(COLLECTION_PROPERTY_ID);
+		Property property2 = new Property(COLLECTION_PROPERTY_ID, PropertyValueTypeDef.String);
 		property2.setValue(COLLECTION_PROPERTY_VALUE);
 		collection.addSubModelElement(property2);
 		submodel.addSubModelElement(collection);
@@ -64,10 +63,10 @@ public class ExampleComponentBuilder {
 	 * @return the new AAS
 	 */
 	public static AssetAdministrationShell buildExampleAAS(String idShort, String id) {
-		AssetAdministrationShell aas = new AssetAdministrationShell();
-		aas.setIdShort(idShort);
-		
-		aas.setIdentification(IdentifierType.CUSTOM, id);
+		Identifier aasIdentifier = new Identifier(IdentifierType.CUSTOM, id);
+		Identifier assetIdentifier = new Identifier(IdentifierType.CUSTOM, id + "asset");
+		Asset asset = new Asset(idShort + "asset", assetIdentifier, AssetKind.INSTANCE);
+		AssetAdministrationShell aas = new AssetAdministrationShell(idShort, aasIdentifier, asset);
 		
 		return aas;
 	}

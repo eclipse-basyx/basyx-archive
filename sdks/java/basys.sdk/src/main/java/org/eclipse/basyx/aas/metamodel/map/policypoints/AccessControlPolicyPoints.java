@@ -20,14 +20,7 @@ public class AccessControlPolicyPoints extends VABModelMap<Object> implements IA
 	/**
 	 * Constructor
 	 */
-	public AccessControlPolicyPoints() {
-		// Default values
-		put(POLICYADMINISTRATIONPOINT, null);
-		put(POLICYDECISIONPOINT, null);
-		put(POLICYENFORECEMENTPOINT, null);
-
-		put(POLICYINFORMATIONPOINTS, null);
-	}
+	public AccessControlPolicyPoints() {}
 
 	/**
 	 * Creates a DataSpecificationIEC61360 object from a map

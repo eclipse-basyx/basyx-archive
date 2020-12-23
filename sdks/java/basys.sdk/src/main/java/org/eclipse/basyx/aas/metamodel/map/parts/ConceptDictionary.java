@@ -33,7 +33,6 @@ public class ConceptDictionary extends VABModelMap<Object> implements IConceptDi
 	 * Constructor
 	 */
 	public ConceptDictionary() {
-		putAll(new Referable());
 		put(CONCEPTDESCRIPTION, new ArrayList<IReference>());
 		put(CONCEPTDESCRIPTIONS, new ArrayList<IConceptDescription>());
 	}

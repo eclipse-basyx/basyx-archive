@@ -34,7 +34,8 @@ public class TestView {
 	
 	@Before
 	public void buildConceptDictionary() {
-		view = new View(Collections.singleton(REFERENCE));
+		view = new View("testIdShort");
+		view.setContainedElement(Collections.singleton(REFERENCE));
 		references = new HashSet<IReference>();
 		references.add(REFERENCE);
 		references.add(REFERENCE2);
