@@ -3,6 +3,7 @@ package org.eclipse.basyx.vab.protocol.http.server;
 import java.io.File;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServlet;
 
@@ -45,6 +46,10 @@ public class AASHTTPServer {
 	public AASHTTPServer(BaSyxContext context) {
 		// Instantiate and setup Tomcat server
 		tomcat = new Tomcat();
+
+		// Set random name to prevent lifecycle expections during shutdown of multiple
+		// instances
+		tomcat.getEngine().setName(UUID.randomUUID().toString());
 		
 		if (context.isSecuredConnectionEnabled()) {
 			Connector httpsConnector = tomcat.getConnector();
