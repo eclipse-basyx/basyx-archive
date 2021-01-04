@@ -1,8 +1,11 @@
 package org.eclipse.basyx.testsuite.regression.aas.metamodel.map.descriptor;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.junit.Test;
 
 /**
@@ -34,6 +37,7 @@ public class TestModelUrn {
 		ModelUrn modelUrn = new ModelUrn(legalEntity, subUnit, subModel, version, revision, elementId, elementInstance);
 		String appendedString = "urn:" + legalEntity + ":" + subUnit + ":" + subModel + ":" + version + ":" + revision + ":" + elementId + "#"+ elementInstance;
 		assertEquals(appendedString, modelUrn.getURN());
+		assertEquals(IdentifierType.IRI, modelUrn.getIdType());
 	}
 	
 	@Test
@@ -42,5 +46,11 @@ public class TestModelUrn {
 		ModelUrn modelUrn = new ModelUrn(rawURN);
 		ModelUrn newModelUrn = modelUrn.append(suffix);
 		assertEquals(rawURN + suffix, newModelUrn.getURN());
+	}
+
+	@Test
+	public void testValidIdentifier() {
+		ModelUrn modelUrn = new ModelUrn(rawURN);
+		assertTrue(Identifier.isValid(modelUrn));
 	}
 }

@@ -3,8 +3,8 @@ package org.eclipse.basyx.aas.metamodel.map.descriptor;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,23 +14,20 @@ import org.slf4j.LoggerFactory;
  * @author kuhn
  *
  */
-public class ModelUrn implements IIdentifier {
+public class ModelUrn extends Identifier {
 
 	private static Logger logger = LoggerFactory.getLogger(ModelUrn.class);
 
-	
-	/**
-	 * URN string
-	 */
-	protected String urnString = null;
-	
-	
+	private ModelUrn() {
+		setIdType(IdentifierType.IRI);
+	}
 	
 	/**
 	 * Constructor that accepts a single, raw URN
 	 */
 	public ModelUrn(String rawURN) {
-		urnString = rawURN;
+		this();
+		setId(rawURN);
 	}
 	
 	
@@ -38,6 +35,7 @@ public class ModelUrn implements IIdentifier {
 	 * Constructor that build a URN
 	 */
 	public ModelUrn(String legalEntity, String subUnit, String subModel, String version, String revision, String elementId, String elementInstance) {
+		this();
 		// Goal is: urn:<legalEntity>:<subUnit>:<subModel>:<version>:<revision>:<elementID>#<elementInstance>
 		StringBuffer urnBuilder = new StringBuffer();
 		
@@ -54,7 +52,7 @@ public class ModelUrn implements IIdentifier {
 		if (elementInstance != null) urnBuilder.append("#"+elementInstance);
 		
 		// Build URN
-		urnString = urnBuilder.toString();
+		setId(urnBuilder.toString());
 	}
 	
 	
@@ -63,7 +61,7 @@ public class ModelUrn implements IIdentifier {
 	 * Get URN as string
 	 */
 	public String getURN() {
-		return urnString;
+		return getId();
 	}
 	
 	
@@ -73,7 +71,7 @@ public class ModelUrn implements IIdentifier {
 	public String getEncodedURN() {
 		try {
 			// Try to encode urn string
-			return URLEncoder.encode(urnString, "UTF-8");
+			return URLEncoder.encode(getId(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			// Catch block
 			logger.error("Exception in getEncodedURN", e);
@@ -86,44 +84,7 @@ public class ModelUrn implements IIdentifier {
 	 */
 	public ModelUrn append(String suffix) {
 		// Append suffix
-		return new ModelUrn(urnString + suffix);
-	}
-	
-	/**
-	 * A ModelUrn is a unique identifier and is a specialization of an URI
-	 */
-	@Override
-	public IdentifierType getIdType() {
-		return IdentifierType.IRI;
-	}
-
-	/**
-	 * A ModelUrn is a unique identifier => the urn is the id
-	 */
-	@Override
-	public String getId() {
-		return getURN();
-	}
-	
-	/**
-	 * HashCode method - required to be able to use this class as hashmap key
-	 */
-	@Override
-	public int hashCode() {
-		return urnString.hashCode();
-	}
-	
-	
-	/**
-	 * Check equality - required to be able to use this class as hashmap key
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		// Type check
-		if (!(obj instanceof ModelUrn)) return false;
-		
-		// Check values
-		return urnString.equals(((ModelUrn) obj).urnString);
+		return new ModelUrn(getId() + suffix);
 	}
 }
 
