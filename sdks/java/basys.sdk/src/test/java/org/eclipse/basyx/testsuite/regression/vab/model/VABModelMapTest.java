@@ -63,4 +63,46 @@ public class VABModelMapTest {
 		assertNotEquals(expected, map);
 	}
 
+	@Test
+	public void testEqualsFirstEntryNull() {
+		VABModelMap<Object> expected = new VABModelMap<>();
+		expected.put("a", null);
+		expected.put("x", "b");
+
+		VABModelMap<Object> map = new VABModelMap<>();
+		map.put("a", null);
+		map.put("x", "c");
+
+		assertNotEquals(map, expected);
+	}
+
+	@Test
+	public void testEqualsFirstEntrySame() {
+		VABModelMap<Object> expected = new VABModelMap<>();
+		expected.put("a", "1");
+		expected.put("x", "b");
+
+		VABModelMap<Object> map = new VABModelMap<>();
+		map.put("a", "1");
+		map.put("x", "c");
+
+		assertNotEquals(map, expected);
+	}
+
+	@Test
+	public void testEqualsMapEntrySame() {
+		VABModelMap<Object> contained = new VABModelMap<>();
+		contained.put("hello", "world");
+
+		VABModelMap<Object> expected = new VABModelMap<>();
+		expected.put("a", contained);
+		expected.put("x", "b");
+
+		VABModelMap<Object> map = new VABModelMap<>();
+		map.put("a", contained);
+		map.put("x", "c");
+
+		assertNotEquals(map, expected);
+	}
+
 }

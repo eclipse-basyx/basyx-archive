@@ -2,7 +2,6 @@ package org.eclipse.basyx.vab.support;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,6 +9,9 @@ import java.util.Set;
 
 /**
  * Removes type information similar to what a communication over VAB would do
+ * <br>
+ * Additionally, Sets are changed to Lists
+ * 
  * @author rajashek
  *
  */
@@ -40,8 +42,8 @@ public class TypeDestroyer {
 		}
 	}
 	
-	private static Set<Object> handleSet(Set<Object> set) {
-		Set<Object> ret = new HashSet<>();
+	private static List<Object> handleSet(Set<Object> set) {
+		List<Object> ret = new ArrayList<>();
 		for (Object o : set) {
 			ret.add(handle(o));
 		}

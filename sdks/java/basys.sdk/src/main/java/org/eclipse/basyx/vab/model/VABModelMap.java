@@ -212,42 +212,8 @@ public class VABModelMap<V extends Object> implements Map<String, V> {
 			return otherMap == null;
 		} else {
 			Map<String, Object> thisMap = TypeDestroyer.destroyType((Map<String, Object>) map);
-			return testEquivalence(thisMap, otherMap);
+			return thisMap.equals(otherMap);
 		}
-	}
- 
-	@SuppressWarnings("unchecked")
-	private boolean testEquivalence(Map<String, Object> a, Map<String, Object> b) {
-		if (a.size() != b.size()) {
-			return false;
-		}
-
-		for (String k : a.keySet()) {
-			Object aVal = a.get(k);
-			Object bVal = b.get(k);
-			if (aVal instanceof Map<?, ?> && !(bVal instanceof Map<?, ?>)) {
-				return false;
-			} else if (aVal instanceof Map<?, ?> && bVal instanceof Map<?, ?>) {
-				return testEquivalence((Map<String, Object>) aVal, (Map<String, Object>) bVal);
-			} else {
-				if (aVal == null) {
-					return bVal == null;
-				} else {
-					if (aVal.equals(bVal)) {
-						return true;
-					} else {
-						if (aVal instanceof Collection<?> && bVal instanceof Collection<?>) {
-							Collection<?> aCol = (Collection<?>) aVal;
-							Collection<?> bCol = (Collection<?>) bVal;
-							return aCol.size() == bCol.size() && aCol.containsAll(bCol);
-						} else {
-							return false;
-						}
-					}
-				}
-			}
-		}
-		return true;
 	}
 
 	@Override

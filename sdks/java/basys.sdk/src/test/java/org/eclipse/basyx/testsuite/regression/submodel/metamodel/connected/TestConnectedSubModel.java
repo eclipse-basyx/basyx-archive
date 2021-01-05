@@ -18,6 +18,7 @@ import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.metamodel.TestSubmodelSuite;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
+import org.eclipse.basyx.vab.support.TypeDestroyer;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,7 +90,15 @@ public class TestConnectedSubModel extends TestSubmodelSuite {
 
 	@Test
 	public void testGetLocalCopy() {
-		assertEquals(getReferenceSubmodel(), submodel.getLocalCopy());
+		SubModel reference = getReferenceSubmodel();
+		SubModelProvider provider = new SubModelProvider(new TypeDestroyingProvider(new VABLambdaProvider(reference)));
+
+		// Create the ConnectedSubModel based on the manager
+		ConnectedSubModel cSM = new ConnectedSubModel(new VABConnectionManagerStub(provider).connectToVABElement(""));
+
+		Object expected = TypeDestroyer.destroyType(reference);
+		Object actual = cSM.getLocalCopy();
+		assertEquals(expected, actual);
 	}
 
 	/**
