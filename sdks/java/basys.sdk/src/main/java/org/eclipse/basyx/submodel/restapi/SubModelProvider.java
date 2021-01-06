@@ -35,7 +35,7 @@ import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
  * @author espen, schnicke
  *
  */
-public class SubModelProvider extends MetaModelProvider {
+public class SubModelProvider implements IModelProvider {
 
 	public static final String VALUES = "values";
 	public static final String SUBMODEL = "submodel";

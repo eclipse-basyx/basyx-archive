@@ -15,7 +15,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  * @author schnicke
  *
  */
-public class PropertyProvider extends MetaModelProvider {
+public class PropertyProvider implements IModelProvider {
 
 	private IModelProvider proxy;
 
@@ -38,7 +38,7 @@ public class PropertyProvider extends MetaModelProvider {
 			// Handle "" path by returning complete property
 			return proxy.getModelPropertyValue("");
 		} else {
-			throw getUnknownPathException(path);
+			throw new MalformedRequestException("Unknown path: " + path);
 		}
 	}
 

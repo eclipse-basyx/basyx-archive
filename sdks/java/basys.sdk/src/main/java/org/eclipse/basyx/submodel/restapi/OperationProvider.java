@@ -16,7 +16,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  * @author schnicke
  *
  */
-public class OperationProvider extends MetaModelProvider {
+public class OperationProvider implements IModelProvider {
 
 	IModelProvider modelProvider;
 	
@@ -102,6 +102,26 @@ public class OperationProvider extends MetaModelProvider {
 			// already checked that it is an Operation, if the Provider is used as intended
 			throw new ProviderException("The Object this OperationProvider is pointing to is not an Operation");
 		}
+	}
+
+	/**
+	 * Unwraps a parameter by retrieving the "value" entry
+	 *
+	 * @param parameter
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private Object unwrapParameter(Object parameter) {
+		if (parameter instanceof Map<?, ?>) {
+			Map<String, Object> map = (Map<String, Object>) parameter;
+			// Parameters have a strictly defined order and may not be omitted at all.
+			// Enforcing the structure with valueType is ok, but we should unwrap null
+			// values, too.
+			if (map.get("valueType") != null && map.containsKey("value")) {
+				return map.get("value");
+			}
+		}
+		return parameter;
 	}
 
 }

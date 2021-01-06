@@ -18,7 +18,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  * @author espen, conradi
  *
  */
-public class MultiSubmodelElementProvider extends MetaModelProvider {
+public class MultiSubmodelElementProvider implements IModelProvider {
 	// Constants for API-Access
 	public static final String ELEMENTS = "submodelElements";
 	public static final String VALUE = "value";

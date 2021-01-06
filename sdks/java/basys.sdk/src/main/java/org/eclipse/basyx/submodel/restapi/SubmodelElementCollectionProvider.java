@@ -15,7 +15,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  *
  * @author espen, conradi
  */
-public class SubmodelElementCollectionProvider extends MetaModelProvider {
+public class SubmodelElementCollectionProvider implements IModelProvider {
 
 	private IModelProvider proxy;
 
