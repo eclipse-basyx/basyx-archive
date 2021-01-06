@@ -43,7 +43,7 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getValueId() {
-		return Reference.createAsFacade((Map<String, Object>) getProxy().getModelPropertyValue(Property.VALUEID));
+		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(Property.VALUEID));
 	}
 
 	@SuppressWarnings("unchecked")

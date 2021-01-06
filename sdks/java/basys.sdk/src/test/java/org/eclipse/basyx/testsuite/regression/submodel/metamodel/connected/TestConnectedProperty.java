@@ -4,8 +4,12 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedProperty;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
@@ -25,11 +29,13 @@ public class TestConnectedProperty {
 
 	IProperty prop;
 	private static final int VALUE = 10;
+	private static final Reference VALUEID = new Reference(new Key(KeyElements.ACCESSPERMISSIONRULE, true, "testValue", IdentifierType.CUSTOM));
 
 	@Before
 	public void build() {
 		// Create PropertySingleValued containing the simple value
-		Property propertyMeta = new Property(VALUE);
+		Property propertyMeta = new Property("testProp", VALUE);
+		propertyMeta.setValueId(VALUEID);
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(propertyMeta);
 		prop = new ConnectedProperty(new VABConnectionManagerStub(new SubmodelElementProvider(new VABMapProvider(destroyType))).connectToVABElement(""));
 	}
@@ -78,6 +84,11 @@ public class TestConnectedProperty {
 		prop.set(123);
 		int val = (int) prop.getValue();
 		assertEquals(123, val);
+	}
+
+	@Test
+	public void testGetValueId() {
+		assertEquals(VALUEID, prop.getValueId());
 	}
 
 }
