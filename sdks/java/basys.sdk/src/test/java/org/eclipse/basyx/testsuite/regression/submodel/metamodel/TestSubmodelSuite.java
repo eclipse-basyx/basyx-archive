@@ -241,19 +241,19 @@ public abstract class TestSubmodelSuite {
 
 		Property property = new Property();
 		property.setIdShort(PROPERTY_ID);
-		property.set("test2");
+		property.setValue("test2");
 		ret.put(property.getIdShort(), property);
 
 		Property byteProp = new Property();
 		byteProp.setIdShort("byte_prop01");
 		Byte byteNumber = Byte.parseByte("2");
-		byteProp.set(byteNumber);
+		byteProp.setValue(byteNumber);
 		ret.put(byteProp.getIdShort(), byteProp);
 
 		Property durationProp = new Property();
 		durationProp.setIdShort("duration_prop01");
 		Duration duration = Duration.ofSeconds(10);
-		durationProp.set(duration);
+		durationProp.setValue(duration);
 		ret.put(durationProp.getIdShort(), durationProp);
 
 		Property periodProp = new Property();
@@ -261,13 +261,13 @@ public abstract class TestSubmodelSuite {
 		LocalDate today = LocalDate.now();
 		LocalDate birthday = LocalDate.of(1960, Month.JANUARY, 1);
 		Period p = Period.between(birthday, today);
-		periodProp.set(p);
+		periodProp.setValue(p);
 		ret.put(periodProp.getIdShort(), periodProp);
 
 		Property bigNumberProp = new Property();
 		bigNumberProp.setIdShort("bignumber_prop01");
 		BigInteger bignumber = new BigInteger("9223372036854775817");
-		property.set(bignumber);
+		property.setValue(bignumber);
 		ret.put(bigNumberProp.getIdShort(), bigNumberProp);
 
 		return ret;

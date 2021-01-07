@@ -44,7 +44,7 @@ public class TestAASLambdaPropertyHelper {
 		
 		// Check value is correctly written by property
 		double expectedValue = 2.1;
-		connectedProperty.set(expectedValue);
+		connectedProperty.setValue(expectedValue);
 		assertEquals(expectedValue, connectedProperty.get());
 		assertEquals(expectedValue, testValue, 0);
 	}

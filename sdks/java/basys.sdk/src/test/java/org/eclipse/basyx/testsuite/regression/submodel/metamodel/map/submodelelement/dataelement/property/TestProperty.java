@@ -72,20 +72,20 @@ public class TestProperty {
 	public void testSet(){
 		Property booleanProp = new Property();
 		Boolean isSomething = true;
-		booleanProp.set(isSomething);
+		booleanProp.setValue(isSomething);
 		assertEquals(isSomething, booleanProp.get());
 		assertEquals(isSomething, booleanProp.getValue());
 		assertEquals(PropertyValueTypeDef.Boolean, booleanProp.getValueType());
 
 		Byte byteNumber = new Byte("2");
 		Property byteProp = new Property();
-		byteProp.set(byteNumber);
+		byteProp.setValue(byteNumber);
 		assertEquals(byteNumber, byteProp.get());
 		assertEquals(PropertyValueTypeDef.Int8, byteProp.getValueType());
 		
 		Duration duration = Duration.ofSeconds(10);
 		Property durationProp = new Property();
-		durationProp.set(duration);
+		durationProp.setValue(duration);
 		assertEquals(duration, durationProp.get());
 		assertEquals(PropertyValueTypeDef.Duration, durationProp.getValueType());
 
@@ -93,13 +93,13 @@ public class TestProperty {
 		LocalDate today = LocalDate.now();
 		LocalDate birthday = LocalDate.of(1960, Month.JANUARY, 1);
 		Period p = Period.between(birthday, today);
-		periodProp.set(p);
+		periodProp.setValue(p);
 		assertEquals(p, periodProp.get());
 		assertEquals(PropertyValueTypeDef.YearMonthDuration, periodProp.getValueType());
 
 		Property bigNumberProp = new Property();
 		BigInteger bignumber = new BigInteger("9223372036854775817");
-		bigNumberProp.set(bignumber);
+		bigNumberProp.setValue(bignumber);
 		assertEquals(bignumber, bigNumberProp.get());
 		assertEquals(PropertyValueTypeDef.PositiveInteger, bigNumberProp.getValueType());
 	}

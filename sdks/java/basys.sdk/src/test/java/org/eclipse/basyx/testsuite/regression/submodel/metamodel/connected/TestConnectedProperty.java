@@ -48,7 +48,7 @@ public class TestConnectedProperty {
 		prop = new ConnectedProperty(
 				new VABConnectionManagerStub(new SubmodelElementProvider(new VABMapProvider(destroyType)))
 						.connectToVABElement(""));
-		prop.set("content");
+		prop.setValue("content");
 		assertEquals("content", prop.getValue());
 	}
 
@@ -81,7 +81,7 @@ public class TestConnectedProperty {
 	 */
 	@Test
 	public void testSet() throws Exception {
-		prop.set(123);
+		prop.setValue(123);
 		int val = (int) prop.getValue();
 		assertEquals(123, val);
 	}

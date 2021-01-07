@@ -13,7 +13,7 @@ import org.eclipse.basyx.vab.exception.provider.ProviderException;
  */
 public interface IProperty extends IElement, IDataElement {
 	/**
-	 * Will be replaced by getValue()
+	 * Will be replaced by {@link #getValue() }<br>
 	 * Get property value
 	 * 
 	 * @return Property value
@@ -23,10 +23,12 @@ public interface IProperty extends IElement, IDataElement {
 	public Object get() throws Exception;
 
 	/**
+	 * Will be replaced by {@link #setValue(Object)} <br>
 	 * Set property value
 	 * 
 	 * @throws ProviderException
 	 */
+	@Deprecated
 	public void set(Object newValue) throws ProviderException;
 
 	/**
