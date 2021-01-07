@@ -190,4 +190,15 @@ public class VABPathToolsTest {
 		assertEquals("id/value", VABPathTools.stripInvokeFromPath("id/value"));
 		assertEquals("", VABPathTools.stripInvokeFromPath(""));
 	}
+	
+	@Test
+	public void testGetPathFromURL() {
+		
+		String[] urls = {"http://localhost:8080/test/elem.aasx", "http://localhost/test/elem.aasx",
+				"basyx://127.0.0.1:4000//http://localhost:8080/test/elem.aasx", "/test/elem.aasx", "test/elem.aasx"};
+		
+		for(String url: urls) {
+			assertEquals("/test/elem.aasx", VABPathTools.getPathFromURL(url));
+		}
+	}
 }
