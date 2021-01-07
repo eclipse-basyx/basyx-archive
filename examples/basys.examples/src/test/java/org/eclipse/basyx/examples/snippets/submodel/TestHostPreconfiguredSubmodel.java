@@ -1,0 +1,48 @@
+package org.eclipse.basyx.examples.snippets.submodel;
+
+
+import static org.junit.Assert.assertEquals;
+
+import org.eclipse.basyx.aas.metamodel.map.descriptor.CustomId;
+import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
+import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
+import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnector;
+import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.junit.After;
+import org.junit.Test;
+
+/**
+ * Test for the HostPreconfiguredSubmodel snippet
+ * 
+ * @author schnicke
+ *
+ */
+public class TestHostPreconfiguredSubmodel {
+
+	// Used for test case tear down
+	private AASHTTPServer server;
+
+	@Test
+	public void testHostPreconfiguredSubmodel() {
+		SubModel sm = new SubModel("testSubmodelIdShort", new CustomId("testSubmodel"));
+		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration(4040, "");
+		server = HostPreconfiguredSubmodel.hostPreconfiguredSubmodel(contextConfig, sm);
+		String smPath = "http://localhost:4040/" + sm.getIdShort() + "/submodel";
+
+		// Here, for simplicity reason of the test, the ConnectedSubmodel is created by hand. 
+		// In a real-world application, the AASManager would be used instead.
+		ConnectedSubModel cSm = new ConnectedSubModel(new VABElementProxy("", new JSONConnector(new HTTPConnector(smPath))));
+		assertEquals(sm.getIdentification(), cSm.getIdentification());
+	}
+
+	// Ensures that the started server is shut down regardless of test result
+	@After
+	public void tearDown() {
+		if (server != null) {
+			server.shutdown();
+		}
+	}
+}
