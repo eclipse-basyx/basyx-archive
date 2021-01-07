@@ -69,7 +69,7 @@ public class AASAggregatorSuiteWithDefinedURL extends AASAggregatorSuite {
 		AASXPackageManager packageManager = new AASXPackageManager(aasxPath);
 
 		// Unpack the files referenced by the aas
-		packageManager.unzipRelatedFiles(aasxPath);
+		packageManager.unzipRelatedFiles();
 
 		// Retrieve the aas from the package
 		aasBundles = packageManager.retrieveAASBundles();
