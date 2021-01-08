@@ -35,7 +35,7 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 		putAll(new ModelType(MODELTYPE));
 		setModelingKind(ModelingKind.INSTANCE);
 	}
-	
+
 	/**
 	 * Constructor with only mandatory attribute
 	 * @param idShort
@@ -182,5 +182,12 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 	@Override
 	public void setValue(Object value) {
 		throw new UnsupportedOperationException("setValue is only possible in specific Element");
+	}
+
+	public SubmodelElement getLocalCopy() {
+		// Return a shallow copy
+		SubmodelElement copy = new SubmodelElement();
+		copy.putAll(this);
+		return copy;
 	}
 }

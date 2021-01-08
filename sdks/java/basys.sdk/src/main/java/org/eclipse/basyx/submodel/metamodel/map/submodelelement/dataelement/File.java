@@ -101,7 +101,7 @@ public class File extends DataElement implements IFile{
 	@Override
 	public void setValue(Object value) {
 		if(value instanceof String) {
-			put(Property.VALUE, (String) value);
+			put(Property.VALUE, value);
 		}
 		else {
 			throw new IllegalArgumentException("Given Object is not a String");
@@ -126,5 +126,13 @@ public class File extends DataElement implements IFile{
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.FILE;
+	}
+
+	@Override
+	public File getLocalCopy() {
+		// Return a shallow copy
+		File copy = new File();
+		copy.putAll(this);
+		return copy;
 	}
 }

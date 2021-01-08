@@ -71,4 +71,8 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 		this.set(value);
 	}
 
+	@Override
+	public Property getLocalCopy() {
+		return Property.createAsFacade(getElem()).getLocalCopy();
+	}
 }

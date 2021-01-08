@@ -53,4 +53,9 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 	public RelationshipElementValue getValue() {
 		return new RelationshipElementValue(getFirst(), getSecond());
 	}
+
+	@Override
+	public RelationshipElement getLocalCopy() {
+		return RelationshipElement.createAsFacade(getElem()).getLocalCopy();
+	}
 }

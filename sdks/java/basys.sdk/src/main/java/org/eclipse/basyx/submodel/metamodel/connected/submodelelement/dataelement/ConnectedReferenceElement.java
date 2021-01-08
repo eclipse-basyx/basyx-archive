@@ -6,6 +6,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -30,4 +31,8 @@ public class ConnectedReferenceElement extends ConnectedDataElement implements I
 		return KeyElements.REFERENCEELEMENT;
 	}
 
+	@Override
+	public ReferenceElement getLocalCopy() {
+		return ReferenceElement.createAsFacade(getElem()).getLocalCopy();
+	}
 }

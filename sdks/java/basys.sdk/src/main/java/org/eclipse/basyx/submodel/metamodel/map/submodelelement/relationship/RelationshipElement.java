@@ -149,4 +149,12 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 			throw new IllegalArgumentException("Given Object is not an RelationshipElementValue");
 		}
 	}
+
+	@Override
+	public RelationshipElement getLocalCopy() {
+		// Return a shallow copy
+		RelationshipElement copy = new RelationshipElement();
+		copy.putAll(this);
+		return copy;
+	}
 }

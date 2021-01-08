@@ -148,4 +148,11 @@ public class Range extends DataElement implements IRange {
 		}
 	}
 
+	@Override
+	public Range getLocalCopy() {
+		// Return a shallow copy
+		Range copy = new Range();
+		copy.putAll(this);
+		return copy;
+	}
 }

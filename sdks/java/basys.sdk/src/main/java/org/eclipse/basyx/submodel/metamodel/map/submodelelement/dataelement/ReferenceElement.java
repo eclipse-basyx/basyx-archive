@@ -115,4 +115,11 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 		return KeyElements.REFERENCEELEMENT;
 	}
 
+	@Override
+	public ReferenceElement getLocalCopy() {
+		// Return a shallow copy
+		ReferenceElement copy = new ReferenceElement();
+		copy.putAll(this);
+		return copy;
+	}
 }

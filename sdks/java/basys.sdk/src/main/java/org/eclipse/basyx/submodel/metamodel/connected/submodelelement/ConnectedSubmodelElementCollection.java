@@ -104,4 +104,9 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 		
 		getProxy().setModelPropertyValue(element.getIdShort(), element);
 	}
+
+	@Override
+	public SubmodelElementCollection getLocalCopy() {
+		return SubmodelElementCollection.createAsFacade(getElem()).getLocalCopy();
+	}
 }

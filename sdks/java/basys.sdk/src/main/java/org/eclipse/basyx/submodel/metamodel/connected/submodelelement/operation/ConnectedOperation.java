@@ -108,4 +108,9 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		}
 		return result;
 	}
+
+	@Override
+	public Operation getLocalCopy() {
+		return Operation.createAsFacade(getElem()).getLocalCopy();
+	}
 }

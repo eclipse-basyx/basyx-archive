@@ -68,4 +68,9 @@ public class ConnectedRange extends ConnectedDataElement implements IRange {
 			throw new IllegalArgumentException("Given object " + value + " is not a RangeValue");
 		}
 	}
+
+	@Override
+	public Range getLocalCopy() {
+		return Range.createAsFacade(getElem()).getLocalCopy();
+	}
 }

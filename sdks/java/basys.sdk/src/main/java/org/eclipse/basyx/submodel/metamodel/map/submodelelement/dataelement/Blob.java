@@ -146,4 +146,12 @@ public class Blob extends DataElement implements IBlob {
 	protected KeyElements getKeyElement() {
 		return KeyElements.BLOB;
 	}
+
+	@Override
+	public Blob getLocalCopy() {
+		// Return a shallow copy
+		Blob copy = new Blob();
+		copy.putAll(this);
+		return copy;
+	}
 }

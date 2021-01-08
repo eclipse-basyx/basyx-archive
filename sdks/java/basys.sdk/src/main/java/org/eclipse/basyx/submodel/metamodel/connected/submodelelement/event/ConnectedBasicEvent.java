@@ -36,4 +36,9 @@ public class ConnectedBasicEvent extends ConnectedSubmodelElement implements IBa
 	public IReference getValue() {
 		return getObserved();
 	}
+
+	@Override
+	public BasicEvent getLocalCopy() {
+		return BasicEvent.createAsFacade(getElem()).getLocalCopy();
+	}
 }

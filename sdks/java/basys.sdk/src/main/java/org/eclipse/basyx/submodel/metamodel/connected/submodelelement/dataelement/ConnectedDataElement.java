@@ -3,6 +3,7 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataeleme
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.DataElement;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -24,5 +25,10 @@ public class ConnectedDataElement extends ConnectedSubmodelElement implements ID
 	@Override
 	public Object getValue() {
 		throw new UnsupportedOperationException("getValue is only possible in specific Element");
+	}
+
+	@Override
+	public DataElement getLocalCopy() {
+		return DataElement.createAsFacade(getElem()).getLocalCopy();
 	}
 }

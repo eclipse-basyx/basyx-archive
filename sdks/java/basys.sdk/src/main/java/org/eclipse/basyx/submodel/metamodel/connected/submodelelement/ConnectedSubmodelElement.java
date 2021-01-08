@@ -17,6 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -94,5 +95,10 @@ public abstract class ConnectedSubmodelElement extends ConnectedElement implemen
 	@Override
 	public void setValue(Object value) {
 		getProxy().setModelPropertyValue(MultiSubmodelElementProvider.VALUE, value);
+	}
+
+	@Override
+	public SubmodelElement getLocalCopy() {
+		return SubmodelElement.createAsFacade(getElem()).getLocalCopy();
 	}
 }

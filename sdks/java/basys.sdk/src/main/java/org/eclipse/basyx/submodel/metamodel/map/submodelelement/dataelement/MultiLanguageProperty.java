@@ -112,4 +112,12 @@ public class MultiLanguageProperty extends DataElement implements IMultiLanguage
 			throw new IllegalArgumentException("Given Object is not a LangStrings");
 		}
 	}
+
+	@Override
+	public MultiLanguageProperty getLocalCopy() {
+		// Return a shallow copy
+		MultiLanguageProperty copy = new MultiLanguageProperty();
+		copy.putAll(this);
+		return copy;
+	}
 }

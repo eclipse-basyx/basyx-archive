@@ -6,6 +6,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasSemantics;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.IHasKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifiable;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 
 /**
  * A submodel element is an element suitable for the description and
@@ -20,4 +21,6 @@ public interface ISubmodelElement extends IElement, IHasDataSpecification, IRefe
 	public Object getValue();
 	
 	public void setValue(Object value);
+
+	public SubmodelElement getLocalCopy();
 }

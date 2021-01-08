@@ -108,4 +108,12 @@ public class BasicEvent extends SubmodelElement implements IBasicEvent {
 			throw new IllegalArgumentException("Given Object is not a Reference");
 		}
 	}
+
+	@Override
+	public BasicEvent getLocalCopy() {
+		// Return a shallow copy
+		BasicEvent copy = new BasicEvent();
+		copy.putAll(this);
+		return copy;
+	}
 }

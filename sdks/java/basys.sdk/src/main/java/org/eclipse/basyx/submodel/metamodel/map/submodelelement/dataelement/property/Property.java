@@ -43,6 +43,7 @@ public class Property extends DataElement implements IProperty {
 	
 	/**
 	 * Constructor accepting only mandatory attribute
+	 * 
 	 * @param idShort
 	 * @param valueType
 	 */
@@ -206,7 +207,6 @@ public class Property extends DataElement implements IProperty {
 		} else {
 			return PropertyValueTypeDefHelper.fromName(valueType);
 		}
-
 	}
 
 	/**
@@ -234,5 +234,13 @@ public class Property extends DataElement implements IProperty {
 	@Override
 	public void setValue(Object value) {
 		set(value);
+	}
+
+	@Override
+	public Property getLocalCopy() {
+		// Return a shallow copy
+		Property copy = new Property();
+		copy.putAll(this);
+		return copy;
 	}
 }

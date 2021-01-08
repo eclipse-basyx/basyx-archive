@@ -34,4 +34,8 @@ public class ConnectedFile extends ConnectedDataElement implements IFile {
 		return KeyElements.FILE;
 	}
 
+	@Override
+	public File getLocalCopy() {
+		return File.createAsFacade(getElem()).getLocalCopy();
+	}
 }

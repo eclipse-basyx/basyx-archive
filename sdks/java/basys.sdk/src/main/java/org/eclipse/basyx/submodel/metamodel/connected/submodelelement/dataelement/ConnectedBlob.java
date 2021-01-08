@@ -33,5 +33,10 @@ public class ConnectedBlob extends ConnectedDataElement implements IBlob {
 	protected KeyElements getKeyElement() {
 		return KeyElements.BLOB;
 	}
+
+	@Override
+	public Blob getLocalCopy() {
+		return Blob.createAsFacade(getElem()).getLocalCopy();
+	}
 }
 

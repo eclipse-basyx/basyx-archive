@@ -145,4 +145,12 @@ public class Entity extends SubmodelElement implements IEntity {
 			throw new IllegalArgumentException("Given Object is not an EntityValue");
 		}
 	}
+
+	@Override
+	public Entity getLocalCopy() {
+		// Return a shallow copy
+		Entity copy = new Entity();
+		copy.putAll(this);
+		return copy;
+	}
 }

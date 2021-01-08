@@ -260,4 +260,27 @@ public class Operation extends SubmodelElement implements IOperation {
 	public void setValue(Object value) {
 		throw new UnsupportedOperationException("An Operation has no value");
 	}
+
+	@Override
+	public Operation getLocalCopy() {
+		// Create a shallow copy
+		Operation copy = new Operation();
+		copy.putAll(this);
+		// Copy InputVariables
+		Collection<IOperationVariable> inVars = copy.getInputVariables();
+		Collection<OperationVariable> inVarCopy = new ArrayList<>();
+		inVars.stream().forEach(v -> inVarCopy.add(new OperationVariable(v.getValue().getLocalCopy())));
+		copy.setInputVariables(inVarCopy);
+		// Copy OutputVariables
+		Collection<IOperationVariable> outVars = copy.getOutputVariables();
+		Collection<OperationVariable> outVarCopy = new ArrayList<>();
+		outVars.stream().forEach(v -> outVarCopy.add(new OperationVariable(v.getValue().getLocalCopy())));
+		copy.setOutputVariables(outVarCopy);
+		// Copy Input/Output-Variables
+		Collection<IOperationVariable> inoutVars = copy.getInOutputVariables();
+		Collection<OperationVariable> inoutVarCopy = new ArrayList<>();
+		inoutVars.stream().forEach(v -> inoutVarCopy.add(new OperationVariable(v.getValue().getLocalCopy())));
+		copy.setInOutputVariables(inoutVarCopy);
+		return copy;
+	}
 }

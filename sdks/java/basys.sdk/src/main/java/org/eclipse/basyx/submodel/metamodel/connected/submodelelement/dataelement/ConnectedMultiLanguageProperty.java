@@ -38,4 +38,9 @@ public class ConnectedMultiLanguageProperty extends ConnectedDataElement impleme
 	protected KeyElements getKeyElement() {
 		return KeyElements.MULTILANGUAGEPROPERTY;
 	}
+
+	@Override
+	public MultiLanguageProperty getLocalCopy() {
+		return MultiLanguageProperty.createAsFacade(getElem()).getLocalCopy();
+	}
 }

@@ -275,4 +275,18 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	protected KeyElements getKeyElement() {
 		return KeyElements.SUBMODELELEMENTCOLLECTION;
 	}
+
+	@Override
+	public SubmodelElementCollection getLocalCopy() {
+		// Create a shallow copy
+		SubmodelElementCollection copy = new SubmodelElementCollection();
+		copy.putAll(this);
+		// Then clone all submodelElements
+		Collection<ISubmodelElement> value = getValue();
+		Collection<ISubmodelElement> clonedValue = new ArrayList<>();
+		value.forEach(element -> clonedValue.add(element.getLocalCopy()));
+		// And return this copy with the cloned values
+		copy.setValue(clonedValue);
+		return copy;
+	}
 }

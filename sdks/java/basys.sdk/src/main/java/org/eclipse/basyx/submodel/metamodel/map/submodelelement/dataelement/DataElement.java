@@ -72,4 +72,12 @@ public class DataElement extends SubmodelElement implements IDataElement {
 	protected KeyElements getKeyElement() {
 		return KeyElements.DATAELEMENT;
 	}
+
+	@Override
+	public DataElement getLocalCopy() {
+		// Return a shallow copy
+		DataElement copy = new DataElement();
+		copy.putAll(this);
+		return copy;
+	}
 }
