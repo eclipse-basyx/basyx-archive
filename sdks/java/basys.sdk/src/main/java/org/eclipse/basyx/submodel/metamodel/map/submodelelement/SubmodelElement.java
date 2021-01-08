@@ -10,6 +10,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstrain
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.SubmodelElementIdShortBlacklist;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
@@ -116,6 +117,10 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 	}
 
 	public void setIdShort(String idShort) {
+		if (SubmodelElementIdShortBlacklist.isBlacklisted(idShort)) {
+			throw new RuntimeException("The passed idShort " + idShort + " is blacklisted.");
+		}
+
 		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(idShort);
 	}
 

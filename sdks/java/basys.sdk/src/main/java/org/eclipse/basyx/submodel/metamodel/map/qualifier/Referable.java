@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.IdShortValidator;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
@@ -14,6 +15,8 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.vab.model.VABModelMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Referable class
@@ -22,6 +25,8 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  *
  */
 public class Referable extends VABModelMap<Object> implements IReferable {
+	private static Logger logger = LoggerFactory.getLogger(Referable.class);
+
 	public static final String IDSHORT="idShort";
 	
 	public static final String CATEGORY="category";
@@ -154,6 +159,15 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 	}
 
 	public void setIdShort(String idShort) {
+		if(!IdShortValidator.isValid(idShort)) {
+			/*
+			 * Currently, the AASX package explorer does support creating arbitrary
+			 * idShorts. Thus, if this is an exception, AASX files created with the AASX
+			 * package explorer may not be loadable 
+			 * TODO: Replace this with a RuntimeException
+			 */
+			logger.warn("The passed idShort " + idShort + " is not valid! It has to satisfy the RegEx " + IdShortValidator.IDSHORT_REGEX);
+		}
 		put(Referable.IDSHORT, idShort);
 	}
 
