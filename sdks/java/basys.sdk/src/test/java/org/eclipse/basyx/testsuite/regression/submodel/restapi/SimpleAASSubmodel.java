@@ -43,8 +43,8 @@ public class SimpleAASSubmodel extends SubModel {
 		stringProp.setIdShort("stringProperty");
 		addSubModelElement(stringProp);
 
-		Property nullProp = new Property(null, PropertyValueTypeDef.String);
-		nullProp.setIdShort("nullProperty");
+		Property nullProp = new Property("nullProperty", PropertyValueTypeDef.String);
+		nullProp.setValue(null);
 		addSubModelElement(nullProp);
 
 		// Create example operations
