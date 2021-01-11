@@ -2,6 +2,8 @@ package org.eclipse.basyx.examples.snippets.submodel;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.function.Function;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
@@ -14,7 +16,9 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.junit.After;
@@ -52,6 +56,11 @@ public class TestExecuteOperation extends AbstractSnippetTest {
 		Operation operation = new Operation((Function<Object[], Object>) v -> {
 			return (int) v[0] + (int) v[1];
 		});
+		OperationVariable a = new OperationVariable(new Property("a", 1));
+		OperationVariable b = new OperationVariable(new Property("b", 2));
+		OperationVariable r = new OperationVariable(new Property("r", 3));
+		operation.setInputVariables(Arrays.asList(a, b));
+		operation.setOutputVariables(Collections.singletonList(r));
 		operation.setIdShort(OPERATION_ID);
 		submodel.addSubModelElement(operation);
 		

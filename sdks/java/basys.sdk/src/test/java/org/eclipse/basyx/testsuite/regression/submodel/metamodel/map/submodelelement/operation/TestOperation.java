@@ -1,6 +1,7 @@
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.submodelelement.operation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,6 +14,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.junit.Test;
 
@@ -52,7 +54,20 @@ public class TestOperation extends TestOperationSuite {
 		
 		assertEquals(1, operation.invoke(3,2));
 	}
-	
+
+	@Override
+	@Test
+	public void testInvokeWithSubmodelElements() {
+		Property param1 = new Property("testIn1", 1);
+		Property param2 = new Property("testIn2", 1);
+		try {
+			operation.invoke(param1, param2);
+			// Only unwrapped invokation is supported for local operations
+			fail();
+		} catch (UnsupportedOperationException e) {
+		}
+	}
+
 	@Test
 	public void testSetDataSpecificationReferences() {
 		Operation operation = new Operation(IN, OUT, INOUT, FUNC);

@@ -15,6 +15,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
+import org.eclipse.basyx.vab.exception.provider.WrongNumberOfParametersException;
 
 /**
  * Operation as defined in DAAS document <br/>
@@ -195,8 +196,17 @@ public class Operation extends SubmodelElement implements IOperation {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object invoke(Object... params) throws Exception {
+	public Object invoke(Object... params) {
+		if (params.length != getInputVariables().size()) {
+			throw new WrongNumberOfParametersException(getIdShort(), getInputVariables(), params);
+		}
 		return ((Function<Object[], Object>) get(INVOKABLE)).apply(params);
+	}
+
+	@Override
+	public SubmodelElement[] invoke(SubmodelElement... elems) {
+		throw new UnsupportedOperationException(
+				"SubmodelElement matching logic is only supported for connected Operations");
 	}
 
 	@Override

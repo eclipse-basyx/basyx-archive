@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -13,7 +15,9 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.metamodel.TestSubmodelSuite;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
@@ -46,6 +50,11 @@ public class TestConnectedSubModel extends TestSubmodelSuite {
 		Operation op = new Operation((Function<Object[], Object> & Serializable) obj -> {
 			return (int) obj[0] + (int) obj[1];
 		});
+		OperationVariable a = new OperationVariable(new Property("a", 1));
+		OperationVariable b = new OperationVariable(new Property("b", 2));
+		OperationVariable r = new OperationVariable(new Property("r", 3));
+		op.setInputVariables(Arrays.asList(a, b));
+		op.setOutputVariables(Collections.singletonList(r));
 		op.setIdShort(OP);
 		reference.addSubModelElement(op);
 

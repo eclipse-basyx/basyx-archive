@@ -1,5 +1,7 @@
 package org.eclipse.basyx.testsuite.regression.submodel.restapi;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.function.Function;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
@@ -8,6 +10,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementC
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 
 /**
@@ -51,6 +54,9 @@ public class SimpleAASSubmodel extends SubModel {
 		Operation complex = new Operation((Function<Object[], Object>) v -> {
 			return (int) v[0] - (int) v[1];
 		});
+		complex.setInputVariables(Arrays.asList(new OperationVariable(new Property("complexIn1", 0)),
+				new OperationVariable(new Property("complexIn2", 0))));
+		complex.setOutputVariables(Collections.singleton(new OperationVariable(new Property("complexOut", 0))));
 		complex.setIdShort("complex");
 		addSubModelElement(complex);
 

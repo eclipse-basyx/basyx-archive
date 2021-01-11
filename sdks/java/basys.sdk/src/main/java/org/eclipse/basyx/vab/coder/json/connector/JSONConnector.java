@@ -1,9 +1,9 @@
 package org.eclipse.basyx.vab.coder.json.connector;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.UUID;
 
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.InvokationRequest;
 import org.eclipse.basyx.vab.coder.json.metaprotocol.IMetaProtocolHandler;
 import org.eclipse.basyx.vab.coder.json.metaprotocol.MetaprotocolHandler;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
@@ -156,12 +156,12 @@ public class JSONConnector implements IModelProvider {
 		VABPathTools.checkPathForNull(path);
 
 		// Serialize parameter
-		List<Object> params = new ArrayList<>();
-		for (Object o : parameter) {
-			params.add(o);
+		String jsonString;
+		if (parameter.length == 1 && parameter[0] instanceof InvokationRequest) {
+			jsonString = serializer.serialize(parameter[0]);
+		} else {
+			jsonString = serializer.serialize(Arrays.asList(parameter));
 		}
-
-		String jsonString = serializer.serialize(params);
 
 		String message = provider.invokeOperation(path, jsonString);
 

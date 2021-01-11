@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.eclipse.basyx.submodel.metamodel.api.IElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 
 /**
  * An operation is a submodel element with input and output variables.
@@ -37,18 +38,30 @@ public interface IOperation extends IElement, ISubmodelElement {
 	/**
 	 * Invoke operation with given parameter
 	 * 
+	 * 
 	 * @param params
-	 *            Operation parameter
+	 *               Operation parameter
 	 * @return If multiple values are returned, Object is here a list of Objects
 	 * @throws Exception
 	 */
-	public Object invoke(Object... params) throws Exception;
+	public Object invoke(Object... params);
 	
+	/**
+	 * Invoke operation with parameters wrapped as SubmodelElements
+	 * 
+	 * 
+	 * @param params
+	 *               Operation parameters
+	 * @return List of results
+	 * @throws Exception
+	 */
+	public SubmodelElement[] invoke(SubmodelElement... elems);
+
 	/**
 	 * Invoke operation with given parameter asynchronously
 	 * 
 	 * @param params
-	 *            Operation parameter
+	 *               Operation parameter
 	 * @return An IAsyncInvocation
 	 */
 	public IAsyncInvocation invokeAsync(Object... params);

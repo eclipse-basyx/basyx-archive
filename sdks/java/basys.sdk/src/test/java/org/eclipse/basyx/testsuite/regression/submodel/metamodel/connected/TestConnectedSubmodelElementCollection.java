@@ -3,7 +3,9 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.connected;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
@@ -15,6 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
@@ -46,6 +49,11 @@ public class TestConnectedSubmodelElementCollection {
 		Operation operation = new Operation(arr -> {
 			return (int) arr[0] + (int) arr[1];
 		});
+		OperationVariable a = new OperationVariable(new Property("a", 1));
+		OperationVariable b = new OperationVariable(new Property("b", 2));
+		OperationVariable r = new OperationVariable(new Property("r", 3));
+		operation.setInputVariables(Arrays.asList(a, b));
+		operation.setOutputVariables(Collections.singletonList(r));
 		operation.setIdShort(OPERATION);
 
 		// Create ComplexDataProperty containing the created operation and property

@@ -1,6 +1,7 @@
 package org.eclipse.basyx.regression.support.processengine.submodel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -10,6 +11,7 @@ import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 
 
 public class DeviceSubmodelFactory {
@@ -28,12 +30,16 @@ public class DeviceSubmodelFactory {
 		Operation op1 = new Operation((Function<Object[], Object>) obj -> {
 			return coilcar.liftTo((int)obj[0]);
 		});
+		op1.setInputVariables(Collections.singletonList(new OperationVariable(new Property("position", 0))));
+		op1.setOutputVariables(Collections.singletonList(new OperationVariable(new Property("result", 0))));
 		op1.setIdShort("liftTo");
 		
 		Operation op2 = new Operation((Function<Object[], Object>) obj -> {
 			coilcar.moveTo((int)obj[0]);
 			return true;
 		});
+		op2.setInputVariables(Collections.singletonList(new OperationVariable(new Property("position", 0))));
+		op2.setOutputVariables(Collections.singletonList(new OperationVariable(new Property("result", 0))));
 		op2.setIdShort("moveTo");
 		
 		// create a list for defined operations
