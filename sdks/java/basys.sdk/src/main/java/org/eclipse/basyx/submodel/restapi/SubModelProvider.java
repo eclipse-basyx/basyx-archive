@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
@@ -117,7 +118,7 @@ public class SubModelProvider implements IModelProvider {
 				path = removeSMElementPrefix(path);
 
                 if (endsWithValue(splitted)) { // Request for the value of an property
-                    String idShortPath = path.replace("/value", "");
+                    String idShortPath = path.replaceFirst(Pattern.quote("/value"), "");
                     return submodelAPI.getSubmodelElementValue(idShortPath);
                 } else if (isInvocationListPath(splitted)) {
                     List<String> idShorts = getIdShorts(splitted);
@@ -167,7 +168,7 @@ public class SubModelProvider implements IModelProvider {
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
 			path = removeSMElementPrefix(path);
-			String idshortPath = path.replace("/value", "");
+			String idshortPath = path.replaceFirst(Pattern.quote("/value"), "");
 			if (endsWithValue(splitted)) {
 				submodelAPI.updateSubmodelElement(idshortPath, newValue);
 			} else {
@@ -227,7 +228,7 @@ public class SubModelProvider implements IModelProvider {
 			if (VABPathTools.isOperationInvokationPath(path)) {
 				if(path.endsWith(OperationProvider.ASYNC)) {
 					path = removeSMElementPrefix(path);
-					path = path.replace(Operation.INVOKE + OperationProvider.ASYNC, "");
+					path = path.replaceFirst(Pattern.quote(Operation.INVOKE + OperationProvider.ASYNC), "");
 					return submodelAPI.invokeAsync(path, parameters);
 				} else {
 					path = removeSMElementPrefix(path);
@@ -244,6 +245,6 @@ public class SubModelProvider implements IModelProvider {
 	}
 	
 	private String removeSMElementPrefix(String path) {
-		return  path.replace("submodelElements", "");
+		return  path.replaceFirst(MultiSubmodelElementProvider.ELEMENTS, "");
 	}
 }

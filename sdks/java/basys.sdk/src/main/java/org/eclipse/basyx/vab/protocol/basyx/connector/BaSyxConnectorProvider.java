@@ -23,7 +23,7 @@ public class BaSyxConnectorProvider extends ConnectorProvider {
 	protected IModelProvider createProvider(String address) {
 		// Create address
 		address = VABPathTools.getFirstEndpoint(address);
-		address = address.replace("basyx://", "");
+		address = address.replaceFirst("basyx://", "");
 		String hostName = address.substring(0, address.indexOf(':'));
 		String[] splitted = address.split("/");
 		int hostPort = Integer.parseInt(splitted[0].substring(address.indexOf(':') + 1));
@@ -32,7 +32,7 @@ public class BaSyxConnectorProvider extends ConnectorProvider {
 		IModelProvider provider = new JSONConnector(new BaSyxConnector(hostName, hostPort));
 		
 		// Create a proxy, if necessary
-		String path = address.replace(hostName + ":" + hostPort, "");
+		String path = address.replaceFirst(hostName + ":" + hostPort, "");
 		if (!path.isEmpty() && !path.equals("/")) {
 			provider = new VABElementProxy(path, provider);
 		}

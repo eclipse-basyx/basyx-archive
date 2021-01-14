@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.registration.restapi.DirectoryModelProvider;
@@ -49,10 +50,10 @@ public class TaggedDirectoryProvider extends DirectoryModelProvider {
 
 	private Set<String> extractTags(String path) {
 		path = VABPathTools.stripSlashes(path);
-		path = path.replace(PREFIX, "");
+		path = path.replaceFirst(PREFIX, "");
 
 		// Paths now does only contain ?tags=a,b,c
-		path = path.replace(API_ACCESS, "");
+		path = path.replaceFirst(Pattern.quote(API_ACCESS), "");
 		return Arrays.stream(path.split(",")).collect(Collectors.toSet());
 	}
 

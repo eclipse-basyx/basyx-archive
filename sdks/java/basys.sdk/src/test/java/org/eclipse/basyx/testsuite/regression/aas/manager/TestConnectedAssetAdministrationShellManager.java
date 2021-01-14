@@ -233,9 +233,8 @@ public class TestConnectedAssetAdministrationShellManager {
 	 * @param provider
 	 */
 	private void prepareConnectorProvider(IModelProvider provider) {
-		VABElementProxy proxy = new VABElementProxy("/shells", provider);
-		connectorProvider.addMapping("shells", proxy);
-		connectorProvider.addMapping("", proxy);
+		connectorProvider.addMapping("", new VABElementProxy("", provider));
+		connectorProvider.addMapping("shells", new VABElementProxy("shells", provider));
 	}
 
 	private AssetAdministrationShell createTestAAS(IIdentifier aasId, String aasIdShort) {
