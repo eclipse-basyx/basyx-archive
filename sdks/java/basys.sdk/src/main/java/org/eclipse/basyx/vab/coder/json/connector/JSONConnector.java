@@ -3,7 +3,7 @@ package org.eclipse.basyx.vab.coder.json.connector;
 import java.util.Arrays;
 import java.util.UUID;
 
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.InvokationRequest;
+import org.eclipse.basyx.submodel.restapi.operation.InvocationRequest;
 import org.eclipse.basyx.vab.coder.json.metaprotocol.IMetaProtocolHandler;
 import org.eclipse.basyx.vab.coder.json.metaprotocol.MetaprotocolHandler;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
@@ -157,7 +157,7 @@ public class JSONConnector implements IModelProvider {
 
 		// Serialize parameter
 		String jsonString;
-		if (parameter.length == 1 && parameter[0] instanceof InvokationRequest) {
+		if (parameter.length == 1 && parameter[0] instanceof InvocationRequest) {
 			jsonString = serializer.serialize(parameter[0]);
 		} else {
 			jsonString = serializer.serialize(Arrays.asList(parameter));

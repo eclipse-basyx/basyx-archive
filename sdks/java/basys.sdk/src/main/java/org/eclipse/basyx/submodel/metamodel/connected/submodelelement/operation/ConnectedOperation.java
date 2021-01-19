@@ -3,7 +3,6 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +17,10 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedS
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.InvokationRequest;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.InvokationResponse;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
+import org.eclipse.basyx.submodel.restapi.operation.InvocationRequest;
+import org.eclipse.basyx.submodel.restapi.operation.InvocationResponse;
 import org.eclipse.basyx.vab.exception.provider.WrongNumberOfParametersException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -33,6 +31,9 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  *
  */
 public class ConnectedOperation extends ConnectedSubmodelElement implements IOperation {
+	// Default timeout for asynchronous operation calls
+	public static final int DEFAULT_ASYNC_TIMEOUT = Operation.DEFAULT_ASYNC_TIMEOUT;
+
 	public ConnectedOperation(VABElementProxy proxy) {
 		super(proxy);
 	}
@@ -70,18 +71,12 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	@SuppressWarnings("unchecked")
 	@Override
 	public SubmodelElement[] invoke(SubmodelElement... elems) {
-		// Wrap parameters in operation variables
-		Collection<IOperationVariable> inputArguments = Arrays.asList(elems).stream().map(OperationVariable::new)
-				.collect(Collectors.toList());
-		// Generate random request id
-		String requestId = UUID.randomUUID().toString();
-
-		// Create invokation request
-		InvokationRequest request = new InvokationRequest(requestId, new ArrayList<>(), inputArguments, 10000);
+		// Create request
+		InvocationRequest request = createInvocationRequest(DEFAULT_ASYNC_TIMEOUT, elems);
 
 		// Invoke the operation
 		Object responseObj = getProxy().invokeOperation(Operation.INVOKE, request);
-		InvokationResponse response = InvokationResponse.createAsFacade((Map<String, Object>) responseObj);
+		InvocationResponse response = InvocationResponse.createAsFacade((Map<String, Object>) responseObj);
 
 		// Extract the output elements
 		Collection<IOperationVariable> outputArguments = response.getOutputArguments();
@@ -92,6 +87,17 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		SubmodelElement[] result = new SubmodelElement[elements.size()];
 		elements.toArray(result);
 		return result;
+	}
+
+	private InvocationRequest createInvocationRequest(int timeout, SubmodelElement... elems) {
+		// Wrap parameters in operation variables
+		Collection<IOperationVariable> inputArguments = Arrays.asList(elems).stream().map(OperationVariable::new)
+				.collect(Collectors.toList());
+		// Generate random request id
+		String requestId = UUID.randomUUID().toString();
+
+		// Create invokation request
+		return new InvocationRequest(requestId, new ArrayList<>(), inputArguments, timeout);
 	}
 
 	private SubmodelElement[] createElementWrapper(Object... params) {
@@ -118,11 +124,18 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 	@Override
 	public ConnectedAsyncInvocation invokeAsync(Object... params) {
-		ConnectedAsyncInvocation invocation =
-				new ConnectedAsyncInvocation(getProxy(), getIdShort(), wrapParameters(params));
-		return invocation;
+		SubmodelElement[] smElements = createElementWrapper(params);
+		InvocationRequest request = createInvocationRequest(DEFAULT_ASYNC_TIMEOUT, smElements);
+		return new ConnectedAsyncInvocation(getProxy(), getIdShort(), request);
 	}
 	
+	@Override
+	public ConnectedAsyncInvocation invokeAsyncWithTimeout(int timeout, Object... params) {
+		SubmodelElement[] smElements = createElementWrapper(params);
+		InvocationRequest request = createInvocationRequest(timeout, smElements);
+		return new ConnectedAsyncInvocation(getProxy(), getIdShort(), request);
+	}
+
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.OPERATION;
@@ -136,22 +149,6 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	@Override
 	public void setValue(Object value) {
 		throw new UnsupportedOperationException("An Operation has no value");
-	}
-	
-	private Object[] wrapParameters(Object[] parameters) {
-		Object[] result = new Object[parameters.length];
-		
-		// Wrap parameter with valuetype information
-		int i = 0;
-		for (Object param : parameters) {
-			HashMap<String, Object> valueWrapper = new HashMap<>();
-			valueWrapper.put(Property.VALUETYPE, PropertyValueTypeDefHelper.getType(param).toString());
-			valueWrapper.put(Property.VALUE, param);
-
-			result[i] = valueWrapper;
-			i++;
-		}
-		return result;
 	}
 	
 	@SuppressWarnings("unchecked")

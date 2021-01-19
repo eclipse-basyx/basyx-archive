@@ -1,10 +1,16 @@
 package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation;
 
+import java.util.Map;
+
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IAsyncInvocation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationExecutionErrorException;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationExecutionTimeoutException;
 import org.eclipse.basyx.submodel.restapi.OperationProvider;
-import org.eclipse.basyx.submodel.restapi.operation.OperationResult;
+import org.eclipse.basyx.submodel.restapi.operation.CallbackResponse;
+import org.eclipse.basyx.submodel.restapi.operation.ExecutionState;
+import org.eclipse.basyx.submodel.restapi.operation.InvocationRequest;
+import org.eclipse.basyx.submodel.restapi.operation.InvocationResponse;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -25,75 +31,103 @@ public class ConnectedAsyncInvocation implements IAsyncInvocation {
 	private Object result = null;
 	private boolean resultRetrieved = false;
 	
-	public ConnectedAsyncInvocation(VABElementProxy proxy, String operationId, Object... parameters) {
+	@SuppressWarnings("unchecked")
+	public ConnectedAsyncInvocation(VABElementProxy proxy, String operationId, InvocationRequest request) {
 		this.proxy = proxy;
 		this.operationId = operationId;
-		requestId = (String) proxy.invokeOperation(Operation.INVOKE + OperationProvider.ASYNC, parameters);
+		CallbackResponse response = CallbackResponse.createAsFacade((Map<String, Object>) proxy.invokeOperation(Operation.INVOKE + OperationProvider.ASYNC, request));
+		requestId = response.getRequestId();
 	}
 	
 	@Override
 	public Object getResult() {
-		
 		// Wait for Operation to finish
-		while(!isFinished()) {
+		while (!isFinished()) {
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
 			}
 		}
 		
-		if(!resultRetrieved) {
-			// If the result was not already retrieved, do it now
-			
-			try {
-				result = proxy.getModelPropertyValue(getListPath());
-			} catch (Exception e) {
-				// Save the Exception as result for later handling
-				result = e;
-			}
-		}
-		
-		if(result instanceof Exception || result.equals(OperationResult.EXECUTION_ERROR.toString())) {
+		// Side-effect of isFinished is querying the result.
+		// Thus, it can be assumed, the the result will be available here
+
+		if (result instanceof Exception) {
 			throw new OperationExecutionErrorException("Exception while executing Invocation '"
 					+ requestId + "' of Operation '" + operationId + "'");
+		} else if (ExecutionState.FAILED == result) {
+			throw new OperationExecutionErrorException("Exception while executing Invocation '" + requestId
+					+ "' of Operation '" + operationId + "'; Operation failed");
+		} else if (ExecutionState.TIMEOUT == result) {
+			throw new OperationExecutionTimeoutException(
+					"Invocation '" + requestId + "' of Operation '" + operationId + "' timed out");
 		} else {
 			return result;
 		}
-		
 	}
 	
+	/**
+	 * Queries the operation with the connected proxy to see, if the result is already finished
+	 */
 	@Override
 	public boolean isFinished() {
-		
-		if(resultRetrieved) {
+		if (resultRetrieved) {
 			// If the result was already retrieved the Operation is done
 			return true;
 		}
-		
+
+		retrieveResultDirectly();
+		return resultRetrieved;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void retrieveResultDirectly() {
+		// 1. Retrieve InvocationResponse from proxy
+		Object responseObj = null;
 		try {
-			 result = proxy.getModelPropertyValue(getListPath());
+			 responseObj = proxy.getModelPropertyValue(getListPath());
 		} catch (ProviderException e) {
 			// As the Submodel-API does not specify a request to ask whether
 			// the operation is finished, it has to be done via the retrieval of the value.
 			// If the execution resulted in an Exception this Exception would be thrown here
 			// -> if a ProviderException with a RuntimeException as cause is thrown,
 			// the Operation is finished.
-			if(e.getCause() instanceof RuntimeException) {
+			if (e.getCause() instanceof RuntimeException) {
 				resultRetrieved = true;
 				result = e;
-				return true;
 			} else {
 				// If it is something else -> rethrow it
 				throw e;
 			}
 		}
-		
-		if(result.equals(OperationResult.EXECUTION_NOT_YET_FINISHED.toString())) {
-			return false;
+
+		// 2. Cast response to InvocationResponse
+		InvocationResponse response = null;
+		if ( responseObj instanceof InvocationResponse ) {
+			response = (InvocationResponse) responseObj;
+		} else if ( result instanceof Map<?, ?> ) {
+			response = InvocationResponse.createAsFacade((Map<String, Object>) result);
+		} else {
+			// got no valid InvocationResponse
+			throw new ProviderException("Response for requestId " + requestId + " invalid!");
 		}
-		
-		resultRetrieved = true;
-		return true;
+
+		// 3. Transform to direct result
+		switch (response.getExecutionState()) {
+			case COMPLETED:
+				// Finished => set internal state
+				resultRetrieved = true;
+				result = response.getFirstOutput();
+				break;
+			case FAILED:
+			case TIMEOUT:
+				// Finished, but no result => set internal state
+				resultRetrieved = true;
+				result = response.getExecutionState();
+				break;
+			default:
+				// Not finished, yet, result hasn't been retrieved
+		}
 	}
 
 	public String getRequestId() {

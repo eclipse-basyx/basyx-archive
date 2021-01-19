@@ -1,8 +1,13 @@
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.submodelelement.operation;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.function.Function;
 
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 
 /**
  * Helperclass for testing async invocations of Operations
@@ -13,6 +18,10 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operat
 public class AsyncOperationHelper {
 	
 	public static final String ASYNC_OP_ID = "asyncOperation";
+	public static final Collection<OperationVariable> IN = Arrays.asList(
+			new OperationVariable(new Property("asyncIn1", "")), new OperationVariable(new Property("asyncIn2", "")));
+	protected static final Collection<OperationVariable> OUT = Collections
+			.singletonList(new OperationVariable(new Property("asyncOut", "")));;
 	public static final String ASYNC_EXCEPTION_OP_ID = "asyncExceptionOperation";
 
 	private Object waitObject = new Object();
@@ -48,6 +57,8 @@ public class AsyncOperationHelper {
 		shouldWait = true;
 		Operation op = new Operation(ASYNC_FUNC);
 		op.setIdShort(ASYNC_OP_ID);
+		op.setInputVariables(IN);
+		op.setOutputVariables(OUT);
 		return op;
 	}
 	
@@ -66,7 +77,7 @@ public class AsyncOperationHelper {
 		
 		// Give the Operation a bit of time to finish
 		try {
-			Thread.sleep(10);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 		}
 	}

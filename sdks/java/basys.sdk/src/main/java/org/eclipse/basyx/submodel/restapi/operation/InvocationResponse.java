@@ -1,11 +1,13 @@
-package org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation;
+package org.eclipse.basyx.submodel.restapi.operation;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
@@ -14,16 +16,16 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  * @author espen
  *
  */
-public class InvokationResponse extends VABModelMap<Object> {
+public class InvocationResponse extends VABModelMap<Object> {
 	public static final String REQUESTID = "requestId";
 	public static final String INOUTARGUMENTS = "inoutputArguments";
 	public static final String OUTPUTARGUMENTS = "outputArguments";
 	public static final String EXECUTIONSTATE = "executionState";
 
-	private InvokationResponse() {
+	private InvocationResponse() {
 	}
 
-	public InvokationResponse(String requestId, Collection<IOperationVariable> inoutArguments,
+	public InvocationResponse(String requestId, Collection<IOperationVariable> inoutArguments,
 			Collection<IOperationVariable> outputArguments, ExecutionState executionState) {
 		put(REQUESTID, requestId);
 		put(INOUTARGUMENTS, inoutArguments);
@@ -31,12 +33,12 @@ public class InvokationResponse extends VABModelMap<Object> {
 		put(EXECUTIONSTATE, executionState.toString());
 	}
 
-	public static InvokationResponse createAsFacade(Map<String, Object> map) {
+	public static InvocationResponse createAsFacade(Map<String, Object> map) {
 		if (map == null) {
 			return null;
 		}
 
-		InvokationResponse resp = new InvokationResponse();
+		InvocationResponse resp = new InvocationResponse();
 		resp.setRequestId((String) map.get(REQUESTID));
 		Collection<IOperationVariable> inoutArguments = createInoutArguments(map);
 		resp.setInOutArguments(inoutArguments);
@@ -76,6 +78,20 @@ public class InvokationResponse extends VABModelMap<Object> {
 		}
 	}
 
+	/**
+	 * Gets the first output value of this response
+	 * 
+	 * @return The output value and null, if there is no output
+	 */
+	public Object getFirstOutput() {
+		try {
+			IOperationVariable next = getOutputArguments().iterator().next();
+			return next.getValue().getValue();
+		} catch (NoSuchElementException e) {
+			return null;
+		}
+	}
+
 	private void setRequestId(String request) {
 		put(REQUESTID, request);
 	}
@@ -88,7 +104,7 @@ public class InvokationResponse extends VABModelMap<Object> {
 		put(OUTPUTARGUMENTS, inputArguments);
 	}
 
-	private void setExecutionState(ExecutionState state) {
+	public void setExecutionState(ExecutionState state) {
 		put(EXECUTIONSTATE, state.toString());
 	}
 

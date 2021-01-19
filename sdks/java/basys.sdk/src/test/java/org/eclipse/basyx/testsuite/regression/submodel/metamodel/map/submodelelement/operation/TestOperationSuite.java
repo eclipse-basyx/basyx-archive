@@ -18,6 +18,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationExecutionErrorException;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationExecutionTimeoutException;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.vab.exception.provider.WrongNumberOfParametersException;
 import org.junit.Before;
@@ -121,6 +122,45 @@ public abstract class TestOperationSuite {
 		assertEquals(5, invocation.getResult());
 	}
 	
+	@Test
+	public void testInvokeMultipleAsync() throws Exception {
+		AsyncOperationHelper helper = new AsyncOperationHelper();
+		IOperation operation = prepareOperation(helper.getAsyncOperation());
+
+		IAsyncInvocation invocation1 = operation.invokeAsync(1, 2);
+		IAsyncInvocation invocation2 = operation.invokeAsync(6, 2);
+
+		assertFalse(invocation1.isFinished());
+		assertFalse(invocation2.isFinished());
+
+		helper.releaseWaitingOperation();
+
+		assertTrue(invocation1.isFinished());
+		assertTrue(invocation2.isFinished());
+		assertEquals(3, invocation1.getResult());
+		assertEquals(8, invocation2.getResult());
+	}
+
+	@Test
+	public void testInvokeAsyncTimeout() throws Exception {
+		AsyncOperationHelper helper = new AsyncOperationHelper();
+		IOperation operation = prepareOperation(helper.getAsyncOperation());
+
+		// timeout of 1ms
+		IAsyncInvocation invocation = operation.invokeAsyncWithTimeout(1, 3, 2);
+
+		// Should be more than enough to trigger the timeout exception
+		Thread.sleep(100);
+		helper.releaseWaitingOperation();
+
+		assertTrue(invocation.isFinished());
+		try {
+			invocation.getResult();
+			fail();
+		} catch (OperationExecutionTimeoutException e) {
+		}
+	}
+
 	@Test
 	public void testInvokeExceptionAsync() throws Exception {
 		AsyncOperationHelper helper = new AsyncOperationHelper();

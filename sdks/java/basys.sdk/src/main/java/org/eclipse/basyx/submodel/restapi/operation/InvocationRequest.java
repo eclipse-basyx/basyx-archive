@@ -1,11 +1,13 @@
-package org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation;
+package org.eclipse.basyx.submodel.restapi.operation;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
@@ -14,28 +16,28 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  * @author schnicke
  *
  */
-public class InvokationRequest extends VABModelMap<Object> {
+public class InvocationRequest extends VABModelMap<Object> {
 	public static final String REQUESTID = "requestId";
 	public static final String INOUTARGUMENTS = "inoutputArguments";
 	public static final String INPUTARGUMENTS = "inputArguments";
 	public static final String TIMEOUT = "timeout";
 
-	private InvokationRequest() {
+	private InvocationRequest() {
 	}
 
-	public InvokationRequest(String requestId, Collection<IOperationVariable> inoutArguments, Collection<IOperationVariable> inputArguments, int timeout) {
+	public InvocationRequest(String requestId, Collection<IOperationVariable> inoutArguments, Collection<IOperationVariable> inputArguments, int timeout) {
 		put(REQUESTID, requestId);
 		put(INOUTARGUMENTS, inoutArguments);
 		put(INPUTARGUMENTS, inputArguments);
 		put(TIMEOUT, timeout);
 	}
 
-	public static InvokationRequest createAsFacade(Map<String, Object> map) {
+	public static InvocationRequest createAsFacade(Map<String, Object> map) {
 		if (map == null) {
 			return null;
 		}
 		
-		InvokationRequest ret = new InvokationRequest();
+		InvocationRequest ret = new InvocationRequest();
 		ret.setRequestId((String) map.get(REQUESTID));
 		Collection<IOperationVariable> inoutArguments = createInoutArguments(map);
 		ret.setInOutArguments(inoutArguments);
@@ -46,6 +48,24 @@ public class InvokationRequest extends VABModelMap<Object> {
 		ret.setTimeout((int) map.get(TIMEOUT));
 
 		return ret;
+	}
+
+	/**
+	 * Unwraps the values of the inputVars in the order of occurance in the collection of input arguments
+	 * 
+	 * @return
+	 */
+	public Object[] unwrapInputParameters() {
+		Collection<IOperationVariable> inputArguments = getInputArguments();
+		Object[] unwrappedParameters = new Object[inputArguments.size()];
+		Iterator<IOperationVariable> iterator = inputArguments.iterator();
+		int i = 0;
+		while (iterator.hasNext()) {
+			IOperationVariable next = iterator.next();
+			unwrappedParameters[i] = next.getValue().getValue();
+			i++;
+		}
+		return unwrappedParameters;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -1,6 +1,7 @@
 package org.eclipse.basyx.testsuite.regression.submodel.restapi;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -21,7 +22,9 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.OperationProvider;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
-import org.eclipse.basyx.submodel.restapi.operation.OperationResult;
+import org.eclipse.basyx.submodel.restapi.operation.CallbackResponse;
+import org.eclipse.basyx.submodel.restapi.operation.ExecutionState;
+import org.eclipse.basyx.submodel.restapi.operation.InvocationResponse;
 import org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.submodelelement.operation.AsyncOperationHelper;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.TestsuiteDirectory;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
@@ -416,33 +419,36 @@ public class SubModelProviderTest {
 		assertEquals(null, values.get("nullProperty"));
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testInvokeAsync() throws Exception {
-		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
+		VABElementProxy elementProxy = getConnectionManager().connectToVABElement(submodelAddr);
 		AsyncOperationHelper helper = new AsyncOperationHelper();
 		
 		String path = VABPathTools.concatenatePaths("submodel", MultiSubmodelElementProvider.ELEMENTS, AsyncOperationHelper.ASYNC_OP_ID);
-		submodelElement.setModelPropertyValue(path, helper.getAsyncOperation());
+		elementProxy.setModelPropertyValue(path, helper.getAsyncOperation());
 		
 		// Wrap parameters before invoking add-operation
 		Map<String, Object> param1 = wrapParameter("FirstNumber", 5);
 		Map<String, Object> param2 = wrapParameter("SecondNumber", 2);
 		
 		path = VABPathTools.concatenatePaths("submodel", MultiSubmodelElementProvider.ELEMENTS, AsyncOperationHelper.ASYNC_OP_ID, "invoke?async=true");
-		String requestId = (String) submodelElement.invokeOperation(path, param1, param2);
 		
+		CallbackResponse response = CallbackResponse.createAsFacade((Map<String, Object>) elementProxy.invokeOperation(path, param1, param2));
+		String requestId = response.getRequestId();
+
 		String listPath = VABPathTools.concatenatePaths("submodel", MultiSubmodelElementProvider.ELEMENTS, AsyncOperationHelper.ASYNC_OP_ID, OperationProvider.INVOCATION_LIST);
 		
 		// Try correct operationId, wrong requestId
 		try {
-			submodelElement.getModelPropertyValue(VABPathTools.append(listPath, "nonexistent"));
+			elementProxy.getModelPropertyValue(VABPathTools.append(listPath, "nonexistent"));
 			fail();
 		} catch (ResourceNotFoundException e) {
 		}
 		
 		// Try wrong operationId, correct requestId
 		try {
-			submodelElement.getModelPropertyValue("/submodel/submodelElements/simple/invocationList/" + requestId);
+			elementProxy.getModelPropertyValue("/submodel/submodelElements/simple/invocationList/" + requestId);
 			fail();
 		} catch (ResourceNotFoundException e) {
 		}
@@ -450,22 +456,23 @@ public class SubModelProviderTest {
 		String requestPath = VABPathTools.append(listPath, requestId);
 		
 		// Check that it has not finished yet
-		Object result = submodelElement.getModelPropertyValue(requestPath);
-		assertEquals(result, OperationResult.EXECUTION_NOT_YET_FINISHED.toString());
+		InvocationResponse result = (InvocationResponse) elementProxy.getModelPropertyValue(requestPath);
+		assertEquals(ExecutionState.INITIATED, result.getExecutionState());
 		
 		helper.releaseWaitingOperation();
 		
-		result = submodelElement.getModelPropertyValue(requestPath);
-		assertEquals(7, result);
+		result = (InvocationResponse) elementProxy.getModelPropertyValue(requestPath);
+		assertEquals(7, result.getFirstOutput());
 		
 		// Check if the async-invocation is deleted after retrieving its result
 		try {
-			submodelElement.getModelPropertyValue(requestPath);
+			elementProxy.getModelPropertyValue(requestPath);
 			fail();
 		} catch (ResourceNotFoundException e) {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testInvokeAsyncException() throws Exception {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
@@ -477,20 +484,24 @@ public class SubModelProviderTest {
 		path = VABPathTools.concatenatePaths("submodel", MultiSubmodelElementProvider.ELEMENTS,
 				AsyncOperationHelper.ASYNC_EXCEPTION_OP_ID, "invoke?async=true");
 		
-		String requestId = (String) submodelElement.invokeOperation(path);
+		CallbackResponse response = (CallbackResponse) submodelElement.invokeOperation(path);
+		String requestId = response.getRequestId();
 		
 		String requestPath = VABPathTools.concatenatePaths("submodel", MultiSubmodelElementProvider.ELEMENTS,
 				AsyncOperationHelper.ASYNC_EXCEPTION_OP_ID, OperationProvider.INVOCATION_LIST, requestId);
 		
 		// Check that it has not finished yet
-		Object result = submodelElement.getModelPropertyValue(requestPath);
-		assertEquals(result, OperationResult.EXECUTION_NOT_YET_FINISHED.toString());
+		InvocationResponse invResp = InvocationResponse
+				.createAsFacade((Map<String, Object>) submodelElement.getModelPropertyValue(requestPath));
+		assertNotEquals(ExecutionState.COMPLETED, invResp.getExecutionState());
+		assertNotEquals(ExecutionState.FAILED, invResp.getExecutionState());
 		
 		helper.releaseWaitingOperation();
 		
-		
-		result = submodelElement.getModelPropertyValue(requestPath);
-		assertEquals(result, OperationResult.EXECUTION_ERROR.toString());
+
+		invResp = InvocationResponse
+				.createAsFacade((Map<String, Object>) submodelElement.getModelPropertyValue(requestPath));
+		assertEquals(ExecutionState.FAILED, invResp.getExecutionState());
 		
 		// Check if the async-invocation is deleted after retrieving its result
 		try {

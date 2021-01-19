@@ -8,6 +8,7 @@ import java.util.function.Function;
 import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IAsyncInvocation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
@@ -25,6 +26,9 @@ import org.eclipse.basyx.vab.exception.provider.WrongNumberOfParametersException
  *
  */
 public class Operation extends SubmodelElement implements IOperation {
+	// Default timeout for asynchronous operation calls
+	public static final int DEFAULT_ASYNC_TIMEOUT = 10000;
+
 	public static final String IN = "inputVariables";
 	public static final String OUT = "outputVariables";
 	public static final String INOUT = "inoutputVariables";
@@ -205,8 +209,12 @@ public class Operation extends SubmodelElement implements IOperation {
 
 	@Override
 	public AsyncInvocation invokeAsync(Object... params) {
-		AsyncInvocation invocation = new AsyncInvocation(this, params);
-		return invocation;
+		return new AsyncInvocation(this, 10000, params);
+	}
+
+	@Override
+	public IAsyncInvocation invokeAsyncWithTimeout(int timeout, Object... params) {
+		return new AsyncInvocation(this, timeout, params);
 	}
 
 	public void setInputVariables(Collection<OperationVariable> in) {
