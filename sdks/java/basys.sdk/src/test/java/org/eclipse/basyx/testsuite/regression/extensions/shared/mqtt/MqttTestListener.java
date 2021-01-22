@@ -1,4 +1,4 @@
-package org.eclipse.basyx.testsuite.regression.extensions.events.submodel.mqtt;
+package org.eclipse.basyx.testsuite.regression.extensions.shared.mqtt;
 
 import java.nio.charset.StandardCharsets;
 

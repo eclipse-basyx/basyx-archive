@@ -1,17 +1,18 @@
-package org.eclipse.basyx.testsuite.regression.extensions.events.submodel.mqtt;
+package org.eclipse.basyx.testsuite.regression.extensions.submodel.mqtt;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
 
-import org.eclipse.basyx.extensions.events.submodel.mqtt.MqttSubmodelAPI;
+import org.eclipse.basyx.extensions.submodel.mqtt.MqttSubmodelAPI;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
+import org.eclipse.basyx.testsuite.regression.extensions.shared.mqtt.MqttTestListener;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.junit.After;

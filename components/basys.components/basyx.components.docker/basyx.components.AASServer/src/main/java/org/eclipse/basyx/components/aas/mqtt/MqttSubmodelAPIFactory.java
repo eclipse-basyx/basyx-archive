@@ -3,7 +3,7 @@ package org.eclipse.basyx.components.aas.mqtt;
 import java.util.Set;
 
 import org.eclipse.basyx.components.configuration.BaSyxMqttConfiguration;
-import org.eclipse.basyx.extensions.events.submodel.mqtt.MqttSubmodelAPI;
+import org.eclipse.basyx.extensions.submodel.mqtt.MqttSubmodelAPI;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
