@@ -39,7 +39,7 @@ private:
     frame::BaSyxNativeFrameProcessor* frameProcessor;
 
     // Buffers
-    static constexpr std::size_t default_buffer_size = 4096;
+    static constexpr std::size_t default_buffer_size = 8192;
     std::array<char, default_buffer_size> recv_buffer;
     std::array<char, default_buffer_size> send_buffer;
 
