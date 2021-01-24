@@ -60,3 +60,4 @@
 launchSettings.json
 *.pubxml
 /sdks/dotnet/basyx-components/NewtonsoftJsonAdapter
+Properties
