@@ -43,7 +43,7 @@ public class Range extends DataElement implements IRange {
 		super(idShort);
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
-		put(VALUETYPE, valueType);
+		setValueType(valueType);
 	}
 	
 	public Range(PropertyValueTypeDef valueType, Object min, Object max) {
