@@ -18,7 +18,6 @@ using BaSyx.Models.Extensions;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Communication;
 using System.Web;
-using System.ComponentModel;
 
 namespace BaSyx.API.Http.Controllers
 {
@@ -219,6 +218,7 @@ namespace BaSyx.API.Http.Controllers
 
             seIdShortPath = HttpUtility.UrlDecode(seIdShortPath);
 
+            var submodelElement = serviceProvider.RetrieveSubmodelElement(seIdShortPath);
             ElementValue elementValue = new ElementValue(value, value.GetType());
             var result = serviceProvider.UpdateSubmodelElementValue(seIdShortPath, elementValue);
             return result.CreateActionResult(CrudOperation.Update);
