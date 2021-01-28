@@ -398,7 +398,7 @@ namespace BaSyx.Components.Common
                 
                 if (requestPath.Contains("submodelElements/"))
                 {
-                    Match valueMatch = Regex.Match(requestPath, "(?<=submodelElements/)(.*)(?=/value|/invoke|/invocationList)");
+                    Match valueMatch = Regex.Match(requestPath, "(?<=submodelElements/)(.*)(?=/value|/invoke|/invocationList|/upload)");
                     if(valueMatch.Success && !string.IsNullOrEmpty(valueMatch.Value))
                     {
                         string elementPath = HttpUtility.UrlEncode(valueMatch.Value);
