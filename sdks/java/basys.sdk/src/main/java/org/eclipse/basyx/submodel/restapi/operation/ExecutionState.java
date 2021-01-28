@@ -1,4 +1,4 @@
-package org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation;
+package org.eclipse.basyx.submodel.restapi.operation;
 
 import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnum;
 import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnumHelper;

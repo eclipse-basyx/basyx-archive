@@ -1,56 +1,80 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
+import org.apache.poi.ss.formula.functions.T;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IAsyncInvocation;
-import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
 /**
- * Local implementation of IAsyncInvocation
+ * Local implementation of IAsyncInvocation.
  * 
- * @author conradi
+ * @author conradi, espen
  *
  */
 public class AsyncInvocation implements IAsyncInvocation {
-	
-	private static final String DEFAULT_REQUEST_ID = "0";
+	// Delayer for timeouts
+	private static ScheduledThreadPoolExecutor delayer = new ScheduledThreadPoolExecutor(0);
 
 	private String operationId;
-	private String requestId;
-	
-	private CompletableFuture<Object> future;
-	
+	private CompletableFuture<Void> future;
+	private Object result;
+	private RuntimeException exception;
 	
 	@SuppressWarnings("unchecked")
-	public AsyncInvocation(Operation operation, String requestId, Object... parameters) {
+	public AsyncInvocation(Operation operation, int timeout, Object... parameters) {
 		operationId = operation.getIdShort();
-		this.requestId = requestId;
 		
 		Function<Object[], Object> invokable = (Function<Object[], Object>) operation.get(Operation.INVOKABLE);
-		future = CompletableFuture.supplyAsync(() -> invokable.apply(parameters));
+		future = CompletableFuture.supplyAsync(
+				// Run Operation asynchronously
+				() -> invokable.apply(parameters))
+				// Accept either result or throw exception on timeout
+				.acceptEither(setTimeout(timeout),
+					// result accepted => write result (or timeout exception)
+						futureResult -> this.result = futureResult
+				).exceptionally(throwable -> {
+					// result not accepted? set operation state
+					if (throwable.getCause() instanceof OperationExecutionTimeoutException) {
+						exception = (RuntimeException) throwable.getCause();
+					} else {
+						// result not accepted? set operation state
+						exception = new OperationExecutionErrorException(
+								"Exception while executing Operation Operation '" + operationId + "'", throwable);
+					}
+					return null;
+				});
 	}
 	
-	public AsyncInvocation(Operation operation, Object... parameters) {
-		this(operation, DEFAULT_REQUEST_ID, parameters);
+	/**
+	 * Function for scheduling a timeout function with completable futures
+	 */
+	private CompletableFuture<T> setTimeout(int timeout) {
+		CompletableFuture<T> timeoutFuture = new CompletableFuture<>();
+		delayer.schedule(
+				() -> timeoutFuture.completeExceptionally(
+						new OperationExecutionTimeoutException("Operation " + operationId + " timed out")),
+				timeout, TimeUnit.MILLISECONDS);
+		return timeoutFuture;
 	}
-	
-	public AsyncInvocation(IModelProvider provider, String operationId, String requestId, Object... parameters) {
-		this.operationId = operationId;
-		this.requestId = requestId;
-		
-		future = CompletableFuture.supplyAsync(() -> provider.invokeOperation("", parameters));
-	}
-	
+
 	@Override
 	public Object getResult() {
 		try {
-			return future.get();
+			future.get();
 		} catch (Exception e) {
-			// Some RuntimeException occured in the executed function			
-			throw new OperationExecutionErrorException("Exception while executing Invocation '"
-					+ requestId + "' of Operation '" + operationId + "'", e.getCause());
+			// Some RuntimeException occured when finishing the future
+			throw new OperationExecutionErrorException(
+					"Exception while executing Operation Operation '" + operationId + "'", e.getCause());
 		}
+		if (exception instanceof OperationExecutionTimeoutException
+				|| exception instanceof OperationExecutionErrorException) {
+			// Future finished with an exception
+			throw exception;
+		}
+		return result;
 	}
 	
 	@Override
@@ -58,12 +82,7 @@ public class AsyncInvocation implements IAsyncInvocation {
 		return future.isDone();
 	}
 
-	public String getRequestId() {
-		return requestId;
-	}
-
 	public String getOperationId() {
 		return operationId;
 	}
-	
 }

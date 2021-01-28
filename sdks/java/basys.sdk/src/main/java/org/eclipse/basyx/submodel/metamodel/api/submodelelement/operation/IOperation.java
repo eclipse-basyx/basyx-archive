@@ -65,4 +65,15 @@ public interface IOperation extends IElement, ISubmodelElement {
 	 * @return An IAsyncInvocation
 	 */
 	public IAsyncInvocation invokeAsync(Object... params);
+
+	/**
+	 * Invoke operation with given parameter asynchronously and use a user-defined timeout
+	 * 
+	 * @param timeout
+	 *                The timeout in ms
+	 * @param params
+	 *                Operation parameter
+	 * @return An IAsyncInvocation
+	 */
+	public IAsyncInvocation invokeAsyncWithTimeout(int timeout, Object... params);
 }
