@@ -50,8 +50,9 @@ public class AASAggregatorProxy implements IAASAggregator {
 	 * @return
 	 */
 	private static String harmonizeURL(String url) {
+		url = VABPathTools.stripSlashes(url);
 		if (!url.endsWith(AASAggregatorProvider.PREFIX)) {
-			url = url + AASAggregatorProvider.PREFIX;
+			url = url + "/" + AASAggregatorProvider.PREFIX;
 		}
 		return url;
 	}
