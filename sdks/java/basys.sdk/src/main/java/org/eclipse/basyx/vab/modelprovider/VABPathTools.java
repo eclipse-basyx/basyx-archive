@@ -416,4 +416,25 @@ public class VABPathTools {
 			return url;
 		}
 	}
+
+	/**
+	 * Harmonizes a path so that it will always and with the suffix and no ending
+	 * slash (even if the suffix contains one).
+	 * 
+	 * @param path
+	 *            to harmonize
+	 * @param suffix
+	 *            to check for existance and append if necessary
+	 * @return harmonized path
+	 */
+	public static String harmonizePathWithSuffix(String path, String suffix) {
+		String strippedPath = stripSlashes(path);
+		String strippedSuffix = stripSlashes(suffix);
+
+		if (strippedPath.endsWith("/" + strippedSuffix)) {
+			return strippedPath;
+		} else {
+			return VABPathTools.concatenatePaths(strippedPath, strippedSuffix);
+		}
+	}
 }

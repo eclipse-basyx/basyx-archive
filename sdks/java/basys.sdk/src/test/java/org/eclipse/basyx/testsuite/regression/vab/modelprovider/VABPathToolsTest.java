@@ -201,4 +201,31 @@ public class VABPathToolsTest {
 			assertEquals("/test/elem.aasx", VABPathTools.getPathFromURL(url));
 		}
 	}
+
+	@Test
+	public void testHarmonizePathWithSuffix() {
+		String expected = "http://localhost:8080/server/subserver/suffix";
+		String[] toTest = { expected, 
+							"http://localhost:8080/server/subserver/suffix/", 
+							"http://localhost:8080/server/subserver/", 
+				"http://localhost:8080/server/subserver", };
+
+		for (String t : toTest) {
+			String harmonized = VABPathTools.harmonizePathWithSuffix(t, "suffix");
+			assertEquals(expected, harmonized);
+
+			// Check also for suffixes with a leading slash
+			String harmonizedLeadingSlash = VABPathTools.harmonizePathWithSuffix(t, "/suffix");
+			assertEquals(expected, harmonizedLeadingSlash);
+
+			// Check also for suffixes with a ending slash
+			String harmonizedEndingSlash = VABPathTools.harmonizePathWithSuffix(t, "suffix/");
+			assertEquals(expected, harmonizedEndingSlash);
+		}
+
+		// Check for edge case where a path is ending with the suffix, but not on its
+		// own
+		String edgeCaseExpected = "http://localhost:8080/server/subserversuffix/suffix";
+		assertEquals(edgeCaseExpected, VABPathTools.harmonizePathWithSuffix("http://localhost:8080/server/subserversuffix/", "suffix"));
+	}
 }
