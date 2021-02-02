@@ -12,11 +12,19 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 public interface IMultiLanguageProperty extends IDataElement {
 
 	/**
-	 * Gets the value of the property instance
+	 * Gets the {@link LangStrings} value of the property instance
 	 * 
 	 * @return
 	 */
+	@Override
 	LangStrings getValue();
+
+	/**
+	 * Sets the {@link LangStrings} value of the property instance
+	 * 
+	 * @param value
+	 */
+	void setValue(LangStrings value);
 
 	/**
 	 * Gets the reference to the global unique id of a coded value.

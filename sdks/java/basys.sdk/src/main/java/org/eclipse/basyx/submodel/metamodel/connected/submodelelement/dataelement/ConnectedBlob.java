@@ -38,5 +38,10 @@ public class ConnectedBlob extends ConnectedDataElement implements IBlob {
 	public Blob getLocalCopy() {
 		return Blob.createAsFacade(getElem()).getLocalCopy();
 	}
+
+	@Override
+	public void setValue(byte[] value) {
+		setValue((Object) value);
+	}
 }
 

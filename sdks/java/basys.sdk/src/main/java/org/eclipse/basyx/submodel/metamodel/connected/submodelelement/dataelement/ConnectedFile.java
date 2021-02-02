@@ -38,4 +38,9 @@ public class ConnectedFile extends ConnectedDataElement implements IFile {
 	public File getLocalCopy() {
 		return File.createAsFacade(getElem()).getLocalCopy();
 	}
+
+	@Override
+	public void setValue(String value) {
+		setValue((Object) value);
+	}
 }

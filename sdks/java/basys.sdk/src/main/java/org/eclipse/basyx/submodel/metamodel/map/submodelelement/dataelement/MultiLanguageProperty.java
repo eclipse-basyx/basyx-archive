@@ -106,7 +106,8 @@ public class MultiLanguageProperty extends DataElement implements IMultiLanguage
 	@Override
 	public void setValue(Object value) {
 		if(LangStrings.isLangStrings(value)) {
-			put(VALUE, LangStrings.createAsFacade((Collection<Map<String, Object>>) value));
+			LangStrings strings = LangStrings.createAsFacade((Collection<Map<String, Object>>) value);
+			setValue(strings);
 		}
 		else {
 			throw new IllegalArgumentException("Given Object is not a LangStrings");
@@ -119,5 +120,10 @@ public class MultiLanguageProperty extends DataElement implements IMultiLanguage
 		MultiLanguageProperty copy = new MultiLanguageProperty();
 		copy.putAll(this);
 		return copy;
+	}
+
+	@Override
+	public void setValue(LangStrings value) {
+		put(VALUE, value);
 	}
 }

@@ -35,4 +35,9 @@ public class ConnectedReferenceElement extends ConnectedDataElement implements I
 	public ReferenceElement getLocalCopy() {
 		return ReferenceElement.createAsFacade(getElem()).getLocalCopy();
 	}
+
+	@Override
+	public void setValue(IReference value) {
+		setValue((Object) value);
+	}
 }

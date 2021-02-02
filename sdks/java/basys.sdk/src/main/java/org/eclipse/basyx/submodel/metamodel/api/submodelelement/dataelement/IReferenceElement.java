@@ -18,6 +18,15 @@ public interface IReferenceElement extends ISubmodelElement {
 	 * 
 	 * @return
 	 */
+	@Override
 	public IReference getValue();
+
+	/**
+	 * Sets the reference to any other referable element of the same or of any other
+	 * AAS or a reference to an external object or entity
+	 * 
+	 * @param value
+	 */
+	public void setValue(IReference value);
 
 }

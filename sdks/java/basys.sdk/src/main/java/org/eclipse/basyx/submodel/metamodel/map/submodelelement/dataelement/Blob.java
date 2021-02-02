@@ -100,15 +100,7 @@ public class Blob extends DataElement implements IBlob {
 	@Override
 	public void setValue(Object value) {
 		if(value instanceof byte[]) {
-			List<Byte> list = new ArrayList<>();
-			
-			byte[] bytes = (byte[]) value;
-			
-			for (int i = 0; i < bytes.length; i++) {
-				list.add(bytes[i]);
-			}
-			
-			put(Property.VALUE, list);
+			setValue((byte[]) value);
 		}
 		else {
 			throw new IllegalArgumentException("Given Object is not a byte[]");
@@ -153,5 +145,18 @@ public class Blob extends DataElement implements IBlob {
 		Blob copy = new Blob();
 		copy.putAll(this);
 		return copy;
+	}
+
+	@Override
+	public void setValue(byte[] value) {
+		List<Byte> list = new ArrayList<>();
+
+		byte[] bytes = value;
+
+		for (int i = 0; i < bytes.length; i++) {
+			list.add(bytes[i]);
+		}
+
+		put(Property.VALUE, list);
 	}
 }

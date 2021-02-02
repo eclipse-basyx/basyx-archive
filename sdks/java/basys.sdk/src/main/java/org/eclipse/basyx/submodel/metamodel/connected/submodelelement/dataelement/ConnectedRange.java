@@ -54,16 +54,7 @@ public class ConnectedRange extends ConnectedDataElement implements IRange {
 	public void setValue(Object value) {
 		if(RangeValue.isRangeValue(value)) {
 			RangeValue rangeValue = RangeValue.createAsFacade((Map<String, Object>) value);
-			Object minRaw = rangeValue.getMin();
-			Object maxRaw = rangeValue.getMax();
-
-			RangeValue prepared = new RangeValue(
-					PropertyValueTypeDefHelper.prepareForSerialization(minRaw),
-					PropertyValueTypeDefHelper.prepareForSerialization(maxRaw)
-				);
-					
-			
-			getProxy().setModelPropertyValue(MultiSubmodelElementProvider.VALUE, prepared);
+			setValue(rangeValue);
 		} else {
 			throw new IllegalArgumentException("Given object " + value + " is not a RangeValue");
 		}
@@ -72,5 +63,19 @@ public class ConnectedRange extends ConnectedDataElement implements IRange {
 	@Override
 	public Range getLocalCopy() {
 		return Range.createAsFacade(getElem()).getLocalCopy();
+	}
+
+	@Override
+	public void setValue(RangeValue rangeValue) {
+		Object minRaw = rangeValue.getMin();
+		Object maxRaw = rangeValue.getMax();
+
+		RangeValue prepared = new RangeValue(
+				PropertyValueTypeDefHelper.prepareForSerialization(minRaw),
+				PropertyValueTypeDefHelper.prepareForSerialization(maxRaw)
+			);
+				
+		
+		getProxy().setModelPropertyValue(MultiSubmodelElementProvider.VALUE, prepared);
 	}
 }

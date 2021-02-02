@@ -13,8 +13,16 @@ public interface IBlob extends IDataElement {
 	 * 
 	 * @return
 	 */
+	@Override
 	public byte[] getValue();
 	
+	/**
+	 * Sets the value of the BLOB instance of a blob data element.
+	 * 
+	 * @param bytes
+	 */
+	public void setValue(byte[] value);
+
 	/**
 	 * Gets the mime type of the content of the BLOB. The mime type states which
 	 * file extension the file has. <br />

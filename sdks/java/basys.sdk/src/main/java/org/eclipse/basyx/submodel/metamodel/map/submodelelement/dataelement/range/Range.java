@@ -135,16 +135,21 @@ public class Range extends DataElement implements IRange {
 	public void setValue(Object value) {
 		if(RangeValue.isRangeValue(value)) {
 			RangeValue rv = RangeValue.createAsFacade((Map<String, Object>) value);
-			Object minValue = rv.getMin();
-			Object maxValue = rv.getMax();
-			
-			put(Range.MIN, PropertyValueTypeDefHelper.prepareForSerialization(minValue));
-			put(Range.MAX, PropertyValueTypeDefHelper.prepareForSerialization(maxValue));
-			if(getValueType() == null) { 
-				setValueType(PropertyValueTypeDefHelper.getType(minValue));
-			}
+			setValue(rv);
 		} else {
 			throw new IllegalArgumentException("Given Object is not a RangeValue");
+		}
+	}
+
+	@Override
+	public void setValue(RangeValue rv) {
+		Object minValue = rv.getMin();
+		Object maxValue = rv.getMax();
+
+		put(Range.MIN, PropertyValueTypeDefHelper.prepareForSerialization(minValue));
+		put(Range.MAX, PropertyValueTypeDefHelper.prepareForSerialization(maxValue));
+		if (getValueType() == null) {
+			setValueType(PropertyValueTypeDefHelper.getType(minValue));
 		}
 	}
 

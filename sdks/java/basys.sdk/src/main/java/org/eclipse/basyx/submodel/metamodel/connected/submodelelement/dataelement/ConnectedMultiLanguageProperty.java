@@ -43,4 +43,9 @@ public class ConnectedMultiLanguageProperty extends ConnectedDataElement impleme
 	public MultiLanguageProperty getLocalCopy() {
 		return MultiLanguageProperty.createAsFacade(getElem()).getLocalCopy();
 	}
+
+	@Override
+	public void setValue(LangStrings value) {
+		setValue((Object) value);
+	}
 }

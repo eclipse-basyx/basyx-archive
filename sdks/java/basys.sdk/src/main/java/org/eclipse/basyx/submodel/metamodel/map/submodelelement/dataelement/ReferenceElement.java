@@ -103,7 +103,7 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 	@Override
 	public void setValue(Object value) {
 		if(Reference.isReference(value)) {
-			put(Property.VALUE, Reference.createAsFacade((Map<String, Object>) value));
+			setValue(Reference.createAsFacade((Map<String, Object>) value));
 		}
 		else {
 			throw new IllegalArgumentException("Given Object is not a Reference");
@@ -121,5 +121,10 @@ public class ReferenceElement extends DataElement implements IReferenceElement {
 		ReferenceElement copy = new ReferenceElement();
 		copy.putAll(this);
 		return copy;
+	}
+
+	@Override
+	public void setValue(IReference value) {
+		put(Property.VALUE, value);
 	}
 }

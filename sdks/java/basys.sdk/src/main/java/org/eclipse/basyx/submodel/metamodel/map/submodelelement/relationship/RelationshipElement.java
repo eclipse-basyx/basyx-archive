@@ -140,8 +140,7 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 		if(RelationshipElementValue.isRelationshipElementValue(value)) {
 			RelationshipElementValue rev = 
 					RelationshipElementValue.createAsFacade((Map<String, Object>) value);
-			setFirst(rev.getFirst());
-			setSecond(rev.getSecond());
+			setValue(rev);
 		} else {
 			throw new IllegalArgumentException("Given Object is not an RelationshipElementValue");
 		}
@@ -153,5 +152,11 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 		RelationshipElement copy = new RelationshipElement();
 		copy.putAll(this);
 		return copy;
+	}
+
+	@Override
+	public void setValue(RelationshipElementValue value) {
+		setFirst(value.getFirst());
+		setSecond(value.getSecond());
 	}
 }

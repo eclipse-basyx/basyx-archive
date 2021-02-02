@@ -14,8 +14,17 @@ public interface IFile extends IDataElement {
 	 * 
 	 * @return
 	 */
+	@Override
 	public String getValue();
 	
+	/**
+	 * Sets path and name of the referenced file (with file extension). The path can
+	 * be absolute or relative.
+	 * 
+	 * @param value
+	 */
+	public void setValue(String value);
+
 	/**
 	 * Gets mime type of the content of the file.
 	 * 
