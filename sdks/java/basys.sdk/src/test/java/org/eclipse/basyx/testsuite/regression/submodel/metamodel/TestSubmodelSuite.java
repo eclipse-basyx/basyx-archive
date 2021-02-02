@@ -1,5 +1,6 @@
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -26,6 +27,8 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangString;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
@@ -36,7 +39,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Refe
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.RangeValue;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.Test;
@@ -57,11 +60,11 @@ public abstract class TestSubmodelSuite {
 	private final String BLOB_ID = "blob_id";
 	private final String RELATIONSHIP_ELEM_ID = "relElem_id";
 	private final String SUBMODEL_ELEM_COLLECTION_ID = "elemCollection_id";
+	private final String PROPERTY_CONTAINED_ID = "containedProp";
 	private final String RANGE_ID = "range_id";
 	private final String FILE_ID = "file_id";
 	private final String MULTI_LANG_PROP_ID = "multi_lang_prop_id";
 	private final String REFERENCE_ELEMENT_ID = "reference_element_id";
-	private final String BASIC_EVENT_ID = "basic_event_id";
 	private final String PROPERTY_ID2 = "property_id2";
 	
 
@@ -214,6 +217,7 @@ public abstract class TestSubmodelSuite {
 		}
 
 		Map<String, Object> values = submodel.getValues();
+
 		assertEquals(9, values.size());
 
 		// Check if all expected Values are present
@@ -224,13 +228,13 @@ public abstract class TestSubmodelSuite {
 		assertTrue(values.containsKey(SUBMODEL_ELEM_COLLECTION_ID));
 		Map<String, Object> collection = (Map<String, Object>) values.get(SUBMODEL_ELEM_COLLECTION_ID);
 
-		assertTrue(collection.containsKey(BLOB_ID));
+		assertTrue(collection.containsKey(PROPERTY_CONTAINED_ID));
 		assertTrue(values.containsKey(PROPERTY_ID2));
+		assertTrue(values.containsKey(BLOB_ID));
 		assertTrue(values.containsKey(RANGE_ID));
 		assertTrue(values.containsKey(MULTI_LANG_PROP_ID));
 		assertTrue(values.containsKey(FILE_ID));
 		assertTrue(values.containsKey(REFERENCE_ELEMENT_ID));
-		assertTrue(values.containsKey(BASIC_EVENT_ID));
 	}
 
 	/**
@@ -281,15 +285,18 @@ public abstract class TestSubmodelSuite {
 		SubmodelElementCollection smECollection = new SubmodelElementCollection();
 		smECollection.setIdShort(SUBMODEL_ELEM_COLLECTION_ID);
 
-		// Create a Blob to use as Value for smECollection
-		Blob blob = new Blob(BLOB_ID, "text/json");
-		blob.setValue(new byte[] { 1, 2, 3 });
-
+		// Create a Property to use as Value for smECollection
 		List<ISubmodelElement> values = new ArrayList<>();
-		values.add(blob);
+		Property contained = new Property(PROPERTY_CONTAINED_ID, true);
+		values.add(contained);
+
 
 		smECollection.setValue(values);
 		ret.put(smECollection.getIdShort(), smECollection);
+
+		Blob blob = new Blob(BLOB_ID, "text/json");
+		blob.setValue(new byte[] { 1, 2, 3 });
+		ret.put(blob.getIdShort(), blob);
 
 		Reference first = new Reference(new Key(KeyElements.BASICEVENT, true, "testFirst", IdentifierType.CUSTOM));
 		Reference second = new Reference(new Key(KeyElements.BASICEVENT, true, "testSecond", IdentifierType.CUSTOM));
@@ -300,21 +307,21 @@ public abstract class TestSubmodelSuite {
 		Property property = new Property(PROPERTY_ID2, PropertyValueTypeDef.AnySimpleType);
 		ret.put(property.getIdShort(), property);
 		
-		Range range = new Range(RANGE_ID, PropertyValueTypeDef.AnyType);
+		Range range = new Range(RANGE_ID, PropertyValueTypeDef.Integer);
+		range.setValue(new RangeValue(-100, +100));
 		ret.put(range.getIdShort(), range);
 		
 		File file = new File("text/plain");
 		file.setIdShort(FILE_ID);
+		file.setValue("fileUrl");
 		ret.put(file.getIdShort(), file);
 		
 		MultiLanguageProperty languageProperty = new MultiLanguageProperty(MULTI_LANG_PROP_ID);
+		languageProperty.setValue(new LangStrings(new LangString("en-en", "TestDescription")));
 		ret.put(languageProperty.getIdShort(), languageProperty);
 		
-		ReferenceElement referenceElement = new ReferenceElement(REFERENCE_ELEMENT_ID);
+		ReferenceElement referenceElement = new ReferenceElement(REFERENCE_ELEMENT_ID, first);
 		ret.put(referenceElement.getIdShort(), referenceElement);
-		
-		BasicEvent basicEvent = new BasicEvent(BASIC_EVENT_ID, first);
-		ret.put(basicEvent.getIdShort(), basicEvent);
 
 		return ret;
 	}
@@ -356,10 +363,10 @@ public abstract class TestSubmodelSuite {
 
 		Collection<ISubmodelElement> elements = actualCollection.getSubmodelElements().values();
 
+
 		// Check for correct Type
-		for (ISubmodelElement iSubmodelElement : elements) {
-			assertTrue(iSubmodelElement instanceof IBlob);
-		}
+		assertEquals(1, elements.size());
+		assertTrue(elements.iterator().next() instanceof IProperty);
 
 		assertEquals(expectedCollection.getSubmodelElements().size(), elements.size());
 
@@ -368,7 +375,13 @@ public abstract class TestSubmodelSuite {
 			// Equality of Ids is implicitly checked by this retrieval
 			ISubmodelElement actualElem = actual.get(elem.getIdShort());
 			assertNotNull(actualElem);
-			assertEquals(elem.getValue(), actualElem.getValue());
+
+			// Blob needs to be handled separately due to array content
+			if (elem instanceof IBlob) {
+				assertArrayEquals((byte[]) elem.getValue(), (byte[]) actualElem.getValue());
+			} else {
+				assertEquals(elem.getValue(), actualElem.getValue());
+			}
 		}
 	}
 

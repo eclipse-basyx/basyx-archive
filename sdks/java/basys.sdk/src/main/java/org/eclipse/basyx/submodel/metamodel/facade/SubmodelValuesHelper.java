@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 
 /**
  * Helperclass for getting the /values Map from a SubModel.
@@ -31,7 +32,8 @@ public class SubmodelValuesHelper {
 	
 	@SuppressWarnings("unchecked")
 	private static Object handleValue(Object value) {
-		if(value instanceof Collection<?>) {
+		// Check if it is a collection but not a LangStrings (is internally also a Collection)
+		if (value instanceof Collection<?> && !(value instanceof LangStrings)) {
 			return handleValueCollection((Collection<ISubmodelElement>) value);
 		} else {
 			// The value is not a collection -> return it as is
