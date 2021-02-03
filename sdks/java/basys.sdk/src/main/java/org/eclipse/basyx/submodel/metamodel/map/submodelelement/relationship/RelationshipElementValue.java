@@ -15,7 +15,8 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  */
 public class RelationshipElementValue extends VABModelMap<Object> {
 
-	private RelationshipElementValue() {}
+	protected RelationshipElementValue() {
+	}
 	
 	public RelationshipElementValue(IReference first, IReference second) {
 		put(RelationshipElement.FIRST, first);

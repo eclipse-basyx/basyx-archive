@@ -107,7 +107,6 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 		
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
 	public IReference getFirst() {
 		return Reference.createAsFacade((Map<String, Object>) get(RelationshipElement.FIRST));
@@ -118,7 +117,6 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 		
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
 	public IReference getSecond() {
 		return Reference.createAsFacade((Map<String, Object>) get(RelationshipElement.SECOND));

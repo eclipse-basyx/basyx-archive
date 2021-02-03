@@ -8,6 +8,7 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.relationsh
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElementValue;
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
@@ -32,7 +33,7 @@ public class TestConnectedRelationshipElement {
 		Reference ref1 = new Reference(new Key(KeyElements.BLOB, true, "1", IdentifierType.CUSTOM));
 		Reference ref2 = new Reference(new Key(KeyElements.FILE, false, "2", IdentifierType.IRDI));
 		
-		relElem = new RelationshipElement(ref1, ref2);
+		relElem = new RelationshipElement("testId", ref1, ref2);
 		
 		
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
@@ -42,18 +43,13 @@ public class TestConnectedRelationshipElement {
 	}
 
 	/**
-	 * Tests if getFirst() returns the correct value
+	 * Tests if getValue() returns the correct value
 	 */
 	@Test
-	public void testGetFirst() {
-		assertEquals(relElem.getFirst(), connectedRelElem.getFirst());
+	public void testGetValue() {
+		RelationshipElementValue value = connectedRelElem.getValue();
+		assertEquals(relElem.getFirst(), value.getFirst());
+		assertEquals(relElem.getSecond(), value.getSecond());
 	}
 
-	/**
-	 * Tests if getSecond() returns the correct value
-	 */
-	@Test
-	public void testGetSecond() {
-		assertEquals(relElem.getSecond(), connectedRelElem.getSecond());
-	}
 }

@@ -8,6 +8,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElementValue;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -59,13 +60,15 @@ public class RelationshipElementXMLConverter extends SubmodelElementXMLConverter
 		
 		populateSubmodelElement(document, relElemRoot, relElem);
 
-		IReference first = relElem.getFirst();
+		RelationshipElementValue value = relElem.getValue();
+
+		IReference first = value.getFirst();
 		if(first != null) {
 			Element derivedFromRoot = document.createElement(FIRST);
 			derivedFromRoot.appendChild(ReferenceXMLConverter.buildReferenceXML(document, first)); 
 			relElemRoot.appendChild(derivedFromRoot);
 		}		
-		IReference second = relElem.getSecond();
+		IReference second = value.getSecond();
 		if(second != null) {
 			Element derivedFromRoot = document.createElement(SECOND);
 			derivedFromRoot.appendChild(ReferenceXMLConverter.buildReferenceXML(document, second)); 
