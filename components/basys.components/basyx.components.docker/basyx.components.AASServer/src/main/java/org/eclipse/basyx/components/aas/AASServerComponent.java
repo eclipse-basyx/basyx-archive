@@ -2,6 +2,8 @@ package org.eclipse.basyx.components.aas;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -165,15 +167,26 @@ public class AASServerComponent implements IComponent {
 		server.shutdown();
 	}
 
+	private String loadBundleString(String filePath) throws IOException {
+		String content;
+		try {
+			content = new String(Files.readAllBytes(Paths.get(filePath)));
+		} catch (IOException e) {
+			logger.info("Could not find a corresponding file. Loading from default resource.");
+			content = BaSyxConfiguration.getResourceString(filePath);
+		}
+		return content;
+	}
+
 	private void loadBundleFromXML(String xmlPath) throws IOException, ParserConfigurationException, SAXException {
 		logger.info("Loading aas from xml \"" + xmlPath + "\"");
-		String xmlContent = BaSyxConfiguration.getResourceString(xmlPath);
+		String xmlContent = loadBundleString(xmlPath);
 		this.aasBundles = new XMLAASBundleFactory(xmlContent).create();
 	}
 
-	private void loadBundleFromJSON(String jsonPath) throws IOException, ParserConfigurationException, SAXException {
+	private void loadBundleFromJSON(String jsonPath) throws IOException {
 		logger.info("Loading aas from json \"" + jsonPath + "\"");
-		String jsonContent = BaSyxConfiguration.getResourceString(jsonPath);
+		String jsonContent = loadBundleString(jsonPath);
 		this.aasBundles = new JSONAASBundleFactory(jsonContent).create();
 	}
 
@@ -221,8 +234,8 @@ public class AASServerComponent implements IComponent {
 				loadBundleFromXML(aasSource);
 			}
 		} catch (IOException | ParserConfigurationException | SAXException | URISyntaxException e) {
-			logger.error("Could not load initial AAS from source " + aasSource);
-			e.printStackTrace();
+			logger.error("Could not load initial AAS from source '" + aasSource + "'");
+			logger.info("Starting empty server instead");
 		}
 	}
 
