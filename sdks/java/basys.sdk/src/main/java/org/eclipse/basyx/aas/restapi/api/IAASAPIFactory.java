@@ -1,6 +1,6 @@
 package org.eclipse.basyx.aas.restapi.api;
 
-import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 
 /**
  * Interface for providing an AAS API
@@ -14,5 +14,5 @@ public interface IAASAPIFactory {
 	 * 
 	 * @return
 	 */
-	public IAASAPI getAASApi(IModelProvider aasProvider);
+	public IAASAPI getAASApi(AssetAdministrationShell aas);
 }

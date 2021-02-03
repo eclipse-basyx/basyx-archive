@@ -4,13 +4,12 @@ import java.util.Set;
 
 import org.eclipse.basyx.components.configuration.BaSyxMqttConfiguration;
 import org.eclipse.basyx.extensions.submodel.mqtt.MqttSubmodelAPI;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
 import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
-import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,13 +34,13 @@ public class MqttSubmodelAPIFactory implements ISubmodelAPIFactory {
 	}
 
 	@Override
-	public ISubmodelAPI getSubmodelAPI(IModelProvider smProvider) {
+	public ISubmodelAPI getSubmodelAPI(SubModel sm) {
 		// Get the submodel's id from the given provider
-		String idPath = VABPathTools.concatenatePaths(Identifiable.IDENTIFICATION, Identifier.ID);
-		String smId = (String) smProvider.getModelPropertyValue(idPath);
+		String smId = sm.getIdentification().getId();
 		
 		// Create the API
-		VABSubmodelAPI observedApi = new VABSubmodelAPI(smProvider);
+		IModelProvider provider = new VABLambdaProvider(sm);
+		VABSubmodelAPI observedApi = new VABSubmodelAPI(provider);
 
 		// Configure the API according to the given configs
 		String brokerEndpoint = config.getServer();

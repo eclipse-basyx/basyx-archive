@@ -23,9 +23,9 @@ import org.junit.Test;
  */
 public abstract class AASServerSuite {
 	protected IAASRegistryService aasRegistry;
-	private ConnectedAssetAdministrationShellManager manager;
+	protected ConnectedAssetAdministrationShellManager manager;
 
-	private String aasId = "testId";
+	protected String aasId = "testId";
 
 	protected abstract String getURL();
 
@@ -50,5 +50,4 @@ public abstract class AASServerSuite {
 		IAssetAdministrationShell remote = manager.retrieveAAS(identifier);
 		assertEquals(shell.getIdShort(), remote.getIdShort());
 	}
-
 }

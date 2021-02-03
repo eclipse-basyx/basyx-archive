@@ -1,6 +1,6 @@
 package org.eclipse.basyx.submodel.restapi.api;
 
-import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 
 /**
  * Interface for providing an Submodel API
@@ -14,5 +14,5 @@ public interface ISubmodelAPIFactory {
 	 * 
 	 * @return
 	 */
-	public ISubmodelAPI getSubmodelAPI(IModelProvider submodelProvider);
+	public ISubmodelAPI getSubmodelAPI(SubModel submodel);
 }
