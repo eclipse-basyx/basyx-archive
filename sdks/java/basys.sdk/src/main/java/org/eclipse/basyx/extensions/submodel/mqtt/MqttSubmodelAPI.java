@@ -2,10 +2,13 @@ package org.eclipse.basyx.extensions.submodel.mqtt;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.basyx.extensions.shared.mqtt.MqttEventService;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
@@ -27,10 +30,10 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 	private static Logger logger = LoggerFactory.getLogger(MqttSubmodelAPI.class);
 
 	// List of topics
-	public static final String TOPIC_ADDSUBMODEL = "registeredSubmodel";
-	public static final String TOPIC_ADDELEMENT = "addSubmodelElement";
-	public static final String TOPIC_DELETEELEMENT = "removeSubmodelElement";
-	public static final String TOPIC_UPDATEELEMENT = "updateSubmodelElement";
+	public static final String TOPIC_CREATESUBMODEL = "BaSyxSubmodel_createdSubmodel";
+	public static final String TOPIC_ADDELEMENT = "BaSyxSubmodel_addedSubmodelElement";
+	public static final String TOPIC_DELETEELEMENT = "BaSyxSubmodel_removedSubmodelElement";
+	public static final String TOPIC_UPDATEELEMENT = "BaSyxSubmodel_updatedSubmodelElement";
 
 	// The underlying SubmodelAPI
 	protected ISubmodelAPI observedAPI;
@@ -49,7 +52,7 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 		super(serverEndpoint, clientId);
 		logger.info("Create new MQTT submodel for endpoint " + serverEndpoint);
 		this.observedAPI = observedAPI;
-		sendMqttMessage(TOPIC_ADDSUBMODEL, observedAPI.getSubmodel().getIdentification().getId());
+		sendMqttMessage(TOPIC_CREATESUBMODEL, observedAPI.getSubmodel().getIdentification().getId());
 	}
 
 	/**
@@ -63,7 +66,7 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 		super(serverEndpoint, clientId, user, pw);
 		logger.info("Create new MQTT submodel for endpoint " + serverEndpoint);
 		this.observedAPI = observedAPI;
-		sendMqttMessage(TOPIC_ADDSUBMODEL, observedAPI.getSubmodel().getIdentification().getId());
+		sendMqttMessage(TOPIC_CREATESUBMODEL, observedAPI.getSubmodel().getIdentification().getId());
 	}
 
 	/**
@@ -76,7 +79,7 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 	public MqttSubmodelAPI(ISubmodelAPI observedAPI, MqttClient client) throws MqttException {
 		super(client);
 		this.observedAPI = observedAPI;
-		sendMqttMessage(TOPIC_ADDSUBMODEL, observedAPI.getSubmodel().getIdentification().getId());
+		sendMqttMessage(TOPIC_CREATESUBMODEL, observedAPI.getSubmodel().getIdentification().getId());
 	}
 
 	/**
@@ -127,16 +130,15 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 	public void addSubmodelElement(ISubmodelElement elem) {
 		observedAPI.addSubmodelElement(elem);
 		if (filter(elem.getIdShort())) {
-			sendMqttMessage(TOPIC_ADDELEMENT, elem.getIdShort());
+			sendMqttMessage(TOPIC_ADDELEMENT, getCombinedMessage(getAASId(), getSubmodelId(), elem.getIdShort()));
 		}
 	}
 
 	@Override
 	public void addSubmodelElement(String idShortPath, ISubmodelElement elem) {
 		observedAPI.addSubmodelElement(idShortPath, elem);
-		idShortPath = VABPathTools.stripSlashes(idShortPath);
 		if (filter(idShortPath)) {
-			sendMqttMessage(TOPIC_ADDELEMENT, idShortPath);
+			sendMqttMessage(TOPIC_ADDELEMENT, getCombinedMessage(getAASId(), getSubmodelId(), idShortPath));
 		}
 	}
 
@@ -148,9 +150,8 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 	@Override
 	public void deleteSubmodelElement(String idShortPath) {
 		observedAPI.deleteSubmodelElement(idShortPath);
-		idShortPath = VABPathTools.stripSlashes(idShortPath);
 		if (filter(idShortPath)) {
-			sendMqttMessage(TOPIC_DELETEELEMENT, idShortPath);
+			sendMqttMessage(TOPIC_DELETEELEMENT, getCombinedMessage(getAASId(), getSubmodelId(), idShortPath));
 		}
 	}
 
@@ -167,9 +168,8 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 	@Override
 	public void updateSubmodelElement(String idShortPath, Object newValue) {
 		observedAPI.updateSubmodelElement(idShortPath, newValue);
-		idShortPath = VABPathTools.stripSlashes(idShortPath);
 		if (filter(idShortPath)) {
-			sendMqttMessage(TOPIC_UPDATEELEMENT, idShortPath);
+			sendMqttMessage(TOPIC_UPDATEELEMENT, getCombinedMessage(getAASId(), getSubmodelId(), idShortPath));
 		}
 	}
 
@@ -192,8 +192,31 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 	public Object getOperationResult(String idShort, String requestId) {
 		return observedAPI.getOperationResult(idShort, requestId);
 	}
+	
+	public static String getCombinedMessage(String aasId, String submodelId, String elementPart) {
+		elementPart = VABPathTools.stripSlashes(elementPart);
+		return "(" + aasId + "," + submodelId + "," + elementPart + ")";
+	}
 
 	private boolean filter(String idShort) {
+		idShort = VABPathTools.stripSlashes(idShort);
 		return !useWhitelist || whitelist.contains(idShort);
+	}
+	
+	private String getSubmodelId() {
+		ISubModel submodel = getSubmodel();
+		return submodel.getIdentification().getId();
+	}
+	
+	private String getAASId() {
+		ISubModel submodel = getSubmodel();
+		IReference parentReference = submodel.getParent();
+		if (parentReference != null) {
+			List<IKey> keys = parentReference.getKeys();
+			if (keys != null && keys.size() > 0) {
+				return keys.get(0).getValue();
+			}
+		}
+		return null;
 	}
 }

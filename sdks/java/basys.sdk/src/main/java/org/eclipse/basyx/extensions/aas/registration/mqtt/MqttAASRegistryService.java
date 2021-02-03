@@ -25,10 +25,10 @@ public class MqttAASRegistryService extends MqttEventService implements IAASRegi
 	private static Logger logger = LoggerFactory.getLogger(MqttAASRegistryService.class);
 
 	// List of topics
-	public static final String TOPIC_REGISTERAAS = "Registry_registeredAAS";
-	public static final String TOPIC_REGISTERSUBMODEL = "Registry_registeredSubmodel";
-	public static final String TOPIC_DELETEAAS = "Registry_deletedAAS";
-	public static final String TOPIC_DELETESUBMODEL = "Registry_deletedSubmodel";
+	public static final String TOPIC_REGISTERAAS = "BaSyxRegistry_registeredAAS";
+	public static final String TOPIC_REGISTERSUBMODEL = "BaSyxRegistry_registeredSubmodel";
+	public static final String TOPIC_DELETEAAS = "BaSyxRegistry_deletedAAS";
+	public static final String TOPIC_DELETESUBMODEL = "BaSyxRegistry_deletedSubmodel";
 
 	// The underlying AASRegistryService
 	protected IAASRegistryService observedRegistryService;

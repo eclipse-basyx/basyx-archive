@@ -7,8 +7,11 @@ import java.io.IOException;
 
 import org.eclipse.basyx.extensions.submodel.mqtt.MqttSubmodelAPI;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
@@ -34,6 +37,9 @@ import io.moquette.broker.config.ResourceLoaderConfig;
  *
  */
 public class TestMqttSubmodelAPIEvents {
+	private static final String AASID = "testaasid";
+	private static final String SUBMODELID = "testsubmodelid";
+	
 	private static Server mqttBroker;
 	private static MqttSubmodelAPI eventAPI;
 	private MqttTestListener listener;
@@ -50,7 +56,10 @@ public class TestMqttSubmodelAPIEvents {
 		mqttBroker.startServer(classPathConfig);
 
 		// Create submodel
-		SubModel sm = new SubModel("testSM", new Identifier(IdentifierType.CUSTOM, "testSM"));
+		SubModel sm = new SubModel(SUBMODELID, new Identifier(IdentifierType.CUSTOM, SUBMODELID));
+		Reference parentRef = new Reference(new Key(KeyElements.ASSETADMINISTRATIONSHELL, true, AASID, IdentifierType.IRDI));
+		sm.setParent(parentRef);
+		
 		VABSubmodelAPI vabAPI = new VABSubmodelAPI(new VABMapProvider(sm));
 		eventAPI = new MqttSubmodelAPI(vabAPI, "tcp://localhost:1884", "testClient");
 	}
@@ -73,48 +82,52 @@ public class TestMqttSubmodelAPIEvents {
 
 	@Test
 	public void testAddSubmodelElement() throws InterruptedException {
+		String elemIdShort = "testAddProp"; 
 		Property prop = new Property(true);
-		prop.setIdShort("testAddProp");
+		prop.setIdShort(elemIdShort);
 		eventAPI.addSubmodelElement(prop);
 
-		assertEquals("testAddProp", listener.lastPayload);
+		assertEquals(MqttSubmodelAPI.getCombinedMessage(AASID, SUBMODELID, elemIdShort), listener.lastPayload);
 		assertEquals(MqttSubmodelAPI.TOPIC_ADDELEMENT, listener.lastTopic);
 	}
 
 	@Test
 	public void testAddNestedSubmodelElement() {
+		String idShortPath = "/testColl/testAddProp/";
 		SubmodelElementCollection coll = new SubmodelElementCollection();
 		coll.setIdShort("testColl");
 		eventAPI.addSubmodelElement(coll);
 
 		Property prop = new Property(true);
 		prop.setIdShort("testAddProp");
-		eventAPI.addSubmodelElement("/testColl/testAddProp/", prop);
+		eventAPI.addSubmodelElement(idShortPath, prop);
 
-		assertEquals("testColl/testAddProp", listener.lastPayload);
+		assertEquals(MqttSubmodelAPI.getCombinedMessage(AASID, SUBMODELID, idShortPath), listener.lastPayload);
 		assertEquals(MqttSubmodelAPI.TOPIC_ADDELEMENT, listener.lastTopic);
 	}
 
 	@Test
 	public void testDeleteSubmodelElement() {
+		String idShortPath = "/testDeleteProp";
 		Property prop = new Property(true);
 		prop.setIdShort("testDeleteProp");
 		eventAPI.addSubmodelElement(prop);
-		eventAPI.deleteSubmodelElement("/testDeleteProp");
+		eventAPI.deleteSubmodelElement(idShortPath);
 
-		assertEquals("testDeleteProp", listener.lastPayload);
+		assertEquals(MqttSubmodelAPI.getCombinedMessage(AASID, SUBMODELID, idShortPath), listener.lastPayload);
 		assertEquals(MqttSubmodelAPI.TOPIC_DELETEELEMENT, listener.lastTopic);
 	}
 
 	@Test
 	public void testUpdateSubmodelElement() {
+		String idShortPath = "testUpdateProp";
 		Property prop = new Property(true);
-		prop.setIdShort("testUpdateProp");
+		prop.setIdShort(idShortPath);
 		eventAPI.addSubmodelElement(prop);
-		eventAPI.updateSubmodelElement("testUpdateProp", false);
+		eventAPI.updateSubmodelElement(idShortPath, false);
 
-		assertFalse((boolean) eventAPI.getSubmodelElementValue("testUpdateProp"));
-		assertEquals("testUpdateProp", listener.lastPayload);
+		assertFalse((boolean) eventAPI.getSubmodelElementValue(idShortPath));
+		assertEquals(MqttSubmodelAPI.getCombinedMessage(AASID, SUBMODELID, idShortPath), listener.lastPayload);
 		assertEquals(MqttSubmodelAPI.TOPIC_UPDATEELEMENT, listener.lastTopic);
 	}
 }

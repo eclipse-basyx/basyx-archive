@@ -26,9 +26,9 @@ public class MqttAASAggregator extends MqttEventService implements IAASAggregato
 	private static Logger logger = LoggerFactory.getLogger(MqttAASAggregator.class);
 
 	// List of topics
-	public static final String TOPIC_CREATEAAS = "Aggregator_createdAAS";
-	public static final String TOPIC_DELETEAAS = "Aggregator_deletedAAS";
-	public static final String TOPIC_UPDATEAAS = "Aggregator_updatedAAS";
+	public static final String TOPIC_CREATEAAS = "BaSyxAggregator_createdAAS";
+	public static final String TOPIC_DELETEAAS = "BaSyxAggregator_deletedAAS";
+	public static final String TOPIC_UPDATEAAS = "BaSyxAggregator_updatedAAS";
 
 	// The underlying AASAggregator
 	protected IAASAggregator observedAASAggregator;
