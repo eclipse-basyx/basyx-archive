@@ -11,14 +11,12 @@ import java.util.Map;
  */
 public class BaSyxMongoDBConfiguration extends BaSyxConfiguration {
 	// Default BaSyx SQL configuration
-	public static final String DEFAULT_USER = "admin";
 	public static final String DEFAULT_CONNECTIONURL = "mongodb://127.0.0.1:27017/";
 	public static final String DEFAULT_DATABASE = "admin";
 	public static final String DEFAULT_REGISTRY_COLLECTION = "basyxregistry";
 	public static final String DEFAULT_AAS_COLLECTION = "basyxaas";
 	public static final String DEFAULT_SUBMODEL_COLLECTION = "basyxsubmodel";
 
-	public static final String USER = "dbuser";
 	public static final String DATABASE = "dbname";
 	public static final String CONNECTIONURL = "dbconnectionstring";
 	public static final String REGISTRY_COLLECTION = "dbcollectionRegistry";
@@ -33,7 +31,6 @@ public class BaSyxMongoDBConfiguration extends BaSyxConfiguration {
 
 	public static Map<String, String> getDefaultProperties() {
 		Map<String, String> defaultProps = new HashMap<>();
-		defaultProps.put(USER, DEFAULT_USER);
 		defaultProps.put(CONNECTIONURL, DEFAULT_CONNECTIONURL);
 		defaultProps.put(DATABASE, DEFAULT_DATABASE);
 		defaultProps.put(REGISTRY_COLLECTION, DEFAULT_REGISTRY_COLLECTION);
@@ -60,17 +57,15 @@ public class BaSyxMongoDBConfiguration extends BaSyxConfiguration {
 	/**
 	 * Constructor with initial configuration
 	 * 
-	 * @param user               The username for the mongodb
 	 * @param connectionUrl      Connection-URL for the mongodb
 	 * @param database           The database that shall be used
 	 * @param registryCollection Collection name for the registry data
 	 * @param aasCollection      Collection name for the AAS data
 	 * @param submodelCollection Collection name for the submodel data
 	 */
-	public BaSyxMongoDBConfiguration(String user, String connectionUrl, String database, String registryCollection,
+	public BaSyxMongoDBConfiguration(String connectionUrl, String database, String registryCollection,
 			String aasCollection, String submodelCollection) {
 		this();
-		setUser(user);
 		setConnectionUrl(connectionUrl);
 		setDatabase(database);
 		setRegistryCollection(registryCollection);
@@ -81,16 +76,14 @@ public class BaSyxMongoDBConfiguration extends BaSyxConfiguration {
 	/**
 	 * Constructor with initial configuration (without registry collection)
 	 * 
-	 * @param user               The username for the mongodb
 	 * @param connectionUrl      Connection-URL for the mongodb
 	 * @param database           The database that shall be used
 	 * @param aasCollection      Collection name for the AAS data
 	 * @param submodelCollection Collection name for the submodel data
 	 */
-	public BaSyxMongoDBConfiguration(String user, String connectionUrl, String database, String aasCollection,
+	public BaSyxMongoDBConfiguration(String connectionUrl, String database, String aasCollection,
 			String submodelCollection) {
 		this();
-		setUser(user);
 		setConnectionUrl(connectionUrl);
 		setDatabase(database);
 		setAASCollection(aasCollection);
@@ -100,15 +93,13 @@ public class BaSyxMongoDBConfiguration extends BaSyxConfiguration {
 	/**
 	 * Constructor with initial configuration (without aas collection)
 	 * 
-	 * @param user               The username for the mongodb
 	 * @param connectionUrl      Connection-URL for the mongodb
 	 * @param database           The database that shall be used
 	 * @param aasCollection      Collection name for the AAS data
 	 * @param submodelCollection Collection name for the submodel data
 	 */
-	public BaSyxMongoDBConfiguration(String user, String connectionUrl, String database, String registryCollection) {
+	public BaSyxMongoDBConfiguration(String connectionUrl, String database, String registryCollection) {
 		this();
-		setUser(user);
 		setConnectionUrl(connectionUrl);
 		setDatabase(database);
 		setRegistryCollection(registryCollection);
@@ -116,14 +107,6 @@ public class BaSyxMongoDBConfiguration extends BaSyxConfiguration {
 
 	public void loadFromDefaultSource() {
 		loadFileOrDefaultResource(DEFAULT_FILE_KEY, DEFAULT_CONFIG_PATH);
-	}
-
-	public String getUser() {
-		return getProperty(USER);
-	}
-
-	public void setUser(String user) {
-		setProperty(USER, user);
 	}
 
 	public String getDatabase() {
