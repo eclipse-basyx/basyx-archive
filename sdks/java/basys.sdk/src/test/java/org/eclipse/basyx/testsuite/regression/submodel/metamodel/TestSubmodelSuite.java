@@ -25,6 +25,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangString;
@@ -40,6 +41,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.RangeValue;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.AnnotatedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.Test;
@@ -59,6 +61,7 @@ public abstract class TestSubmodelSuite {
 	private final String PROPERTY_ID = "property_id";
 	private final String BLOB_ID = "blob_id";
 	private final String RELATIONSHIP_ELEM_ID = "relElem_id";
+	private final String ANNOTATED_RELATIONSHIP_ELEM_ID = "annotatedRelElem_id";
 	private final String SUBMODEL_ELEM_COLLECTION_ID = "elemCollection_id";
 	private final String PROPERTY_CONTAINED_ID = "containedProp";
 	private final String RANGE_ID = "range_id";
@@ -218,7 +221,7 @@ public abstract class TestSubmodelSuite {
 
 		Map<String, Object> values = submodel.getValues();
 
-		assertEquals(9, values.size());
+		assertEquals(10, values.size());
 
 		// Check if all expected Values are present
 		assertEquals(100, values.get(PROP));
@@ -300,10 +303,17 @@ public abstract class TestSubmodelSuite {
 
 		Reference first = new Reference(new Key(KeyElements.BASICEVENT, true, "testFirst", IdentifierType.CUSTOM));
 		Reference second = new Reference(new Key(KeyElements.BASICEVENT, true, "testSecond", IdentifierType.CUSTOM));
-
+		
 		RelationshipElement relElement = new RelationshipElement(RELATIONSHIP_ELEM_ID, first, second);
 		ret.put(relElement.getIdShort(), relElement);
 
+		AnnotatedRelationshipElement annotatedRelElement = new AnnotatedRelationshipElement(ANNOTATED_RELATIONSHIP_ELEM_ID, first, second);
+		List<IDataElement> annotations = new ArrayList<>();
+		Property annotationProperty = new Property("id", 10);
+		annotations.add(annotationProperty);
+		annotatedRelElement.setAnnotation(annotations);
+		ret.put(annotatedRelElement.getIdShort(), annotatedRelElement);
+		
 		Property property = new Property(PROPERTY_ID2, PropertyValueTypeDef.AnySimpleType);
 		ret.put(property.getIdShort(), property);
 		

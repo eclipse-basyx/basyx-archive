@@ -13,6 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.rang
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.entity.Entity;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.AnnotatedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 
 /**
@@ -48,6 +49,8 @@ public class SubmodelElementFacadeFactory {
 			return ReferenceElement.createAsFacade(submodelElement);
 		} else if (RelationshipElement.isRelationshipElement(submodelElement)) {
 			return RelationshipElement.createAsFacade(submodelElement);
+		} else if (AnnotatedRelationshipElement.isAnnotatedRelationshipElement(submodelElement)) {
+			return AnnotatedRelationshipElement.createAsFacade(submodelElement);
 		} else if (Operation.isOperation(submodelElement)) {
 			return Operation.createAsFacade(submodelElement);
 		} else if (BasicEvent.isBasicEvent(submodelElement)) {

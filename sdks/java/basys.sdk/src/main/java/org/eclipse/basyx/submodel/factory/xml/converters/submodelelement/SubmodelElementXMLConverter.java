@@ -20,6 +20,7 @@ import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.dataele
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.entity.EntityXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.event.BasicEventXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.operation.OperationXMLConverter;
+import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.relationship.AnnotatedRelationshipElementXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.relationship.RelationshipElementXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
@@ -33,6 +34,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IRef
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.IEntity;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.event.IBasicEvent;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IAnnotatedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
@@ -50,6 +52,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.rang
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.entity.Entity;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.AnnotatedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -65,6 +68,7 @@ public class SubmodelElementXMLConverter {
 	
 	public static final String SUBMODEL_ELEMENTS = "aas:submodelElements";
 	public static final String SUBMODEL_ELEMENT = "aas:submodelElement";
+	public static final String DATA_ELEMENT = "aas:dataElement";
 	public static final String VALUE = "aas:value";
 	public static final String VALUE_TYPE = "aas:valueType";
 	public static final String VALUE_ID = "aas:valueId";
@@ -110,7 +114,7 @@ public class SubmodelElementXMLConverter {
 	 * @return a List with the ISubmodelElement Objects parsed from the XML 
 	 */
 	@SuppressWarnings("unchecked")
-	protected static SubmodelElement getSubmodelElement(Map<String, Object> xmlObject) {
+	public static SubmodelElement getSubmodelElement(Map<String, Object> xmlObject) {
 		
 		if (xmlObject.containsKey(PropertyXMLConverter.PROPERTY)) {
 			xmlObject = (Map<String, Object>) xmlObject.get(PropertyXMLConverter.PROPERTY);
@@ -155,6 +159,11 @@ public class SubmodelElementXMLConverter {
 			xmlObject = (Map<String, Object>) xmlObject.get(
 					RelationshipElementXMLConverter.RELATIONSHIP_ELEMENT);
 			return RelationshipElementXMLConverter.parseRelationshipElement(xmlObject);
+		}
+		else if(xmlObject.containsKey(AnnotatedRelationshipElementXMLConverter.ANNOTATED_RELATIONSHIP_ELEMENT)) {
+			xmlObject = (Map<String, Object>) xmlObject.get(
+					AnnotatedRelationshipElementXMLConverter.ANNOTATED_RELATIONSHIP_ELEMENT);
+			return AnnotatedRelationshipElementXMLConverter.parseAnnotatedRelationshipElement(xmlObject);
 		}
 		else if(xmlObject.containsKey(OperationXMLConverter.OPERATION)) {
 			xmlObject = (Map<String, Object>) xmlObject.get(OperationXMLConverter.OPERATION);
@@ -222,7 +231,7 @@ public class SubmodelElementXMLConverter {
 	 * @param submodelElement the SubmodelElement to build the XML for
 	 * @return the SubmodelElement XML tag
 	 */
-	protected static Element buildSubmodelElement(Document document, ISubmodelElement submodelElement) {
+	public static Element buildSubmodelElement(Document document, ISubmodelElement submodelElement) {
 		String type = submodelElement.getModelType();	
 		
 		switch (type) {
@@ -250,6 +259,9 @@ public class SubmodelElementXMLConverter {
 			case RelationshipElement.MODELTYPE:
 				return RelationshipElementXMLConverter.buildRelationshipElement(
 						document, (IRelationshipElement) submodelElement);
+			case AnnotatedRelationshipElement.MODELTYPE:
+				return AnnotatedRelationshipElementXMLConverter.buildAnnotatedRelationshipElement(
+						document, (IAnnotatedRelationshipElement) submodelElement);
 			case Operation.MODELTYPE:
 				return OperationXMLConverter.buildOperation(document, (IOperation) submodelElement);
 			default:

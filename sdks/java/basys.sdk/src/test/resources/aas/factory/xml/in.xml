@@ -497,6 +497,39 @@
 					</aas:relationshipElement>
 				</aas:submodelElement>
 				<aas:submodelElement>
+					<aas:annotatedRelationshipElement>
+						<aas:idShort>annotatedRelationshipElement_ID</aas:idShort>
+						<aas:first>
+							<aas:keys>
+								<aas:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#003</aas:key>
+							</aas:keys>
+						</aas:first>
+						<aas:second>
+							<aas:keys>
+								<aas:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#004</aas:key>
+							</aas:keys>
+						</aas:second>
+						<aas:annotations>
+							<aas:dataElement>
+								<aas:property>
+									<aas:idShort>prop1</aas:idShort>
+									<aas:kind>Instance</aas:kind>
+									<aas:value>1</aas:value>
+									<aas:valueType>integer</aas:valueType>
+								</aas:property>
+							</aas:dataElement>
+							<aas:dataElement>
+								<aas:property>
+									<aas:idShort>prop2</aas:idShort>
+									<aas:kind>Instance</aas:kind>
+									<aas:value>2</aas:value>
+									<aas:valueType>integer</aas:valueType>
+								</aas:property>
+							</aas:dataElement>
+						</aas:annotations>
+					</aas:annotatedRelationshipElement>
+				</aas:submodelElement>
+				<aas:submodelElement>
 					<aas:operation>
 						<aas:idShort>operation_ID</aas:idShort>
 						<aas:inoutputVariable>

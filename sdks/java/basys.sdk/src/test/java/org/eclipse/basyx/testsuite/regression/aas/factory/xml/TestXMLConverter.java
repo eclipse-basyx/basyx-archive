@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.FileWriter;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -36,6 +37,7 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.EntityType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -53,6 +55,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.rang
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.entity.Entity;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.AnnotatedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.vab.model.VABModelMap;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
@@ -333,7 +336,7 @@ public class TestXMLConverter {
 	private void checkSubmodelElements(ISubModel submodel) {
 		Map<String, ISubmodelElement> submodelElements = (Map<String, ISubmodelElement>)
 				((Map<String, Object>)submodel).get(SubModel.SUBMODELELEMENT);
-		assertEquals(12, submodelElements.size());
+		assertEquals(13, submodelElements.size());
 		
 		ISubmodelElement element = submodelElements.get("rotationSpeed");
 		assertTrue(element instanceof Property);
@@ -420,6 +423,21 @@ public class TestXMLConverter {
 		keys = relElem.getSecond().getKeys();
 		assertEquals(1, keys.size());
 		assertEquals("0173-1#05-AAA650#002", keys.get(0).getValue());
+		
+		element = submodelElements.get("annotatedRelationshipElement_ID");
+		assertTrue(element instanceof AnnotatedRelationshipElement);
+		AnnotatedRelationshipElement annotatedElem = (AnnotatedRelationshipElement) element;
+		keys = annotatedElem.getFirst().getKeys();
+		assertEquals(1, keys.size());
+		assertEquals("0173-1#05-AAA650#003", keys.get(0).getValue());
+		keys = annotatedElem.getSecond().getKeys();
+		assertEquals(1, keys.size());
+		assertEquals("0173-1#05-AAA650#004", keys.get(0).getValue());
+		Collection<IDataElement> annotations = annotatedElem.getValue().getAnnotations();
+		assertEquals(2, annotations.size());
+		for(IDataElement annotationElement: annotations) {
+			assertTrue(annotationElement instanceof Property);
+		}
 		
 		element = submodelElements.get("operation_ID");
 		assertTrue(element instanceof Operation);

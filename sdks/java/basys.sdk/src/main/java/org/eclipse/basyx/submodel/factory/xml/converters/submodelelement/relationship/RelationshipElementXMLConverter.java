@@ -27,25 +27,36 @@ public class RelationshipElementXMLConverter extends SubmodelElementXMLConverter
 	
 	
 	/**
-	 * Parses a Map containing the content of XML tag &lt;aas:relationshipElement&gt;
+	 * Builds a RelationshipElement object from the given XML
 	 * 
 	 * @param xmlObject the Map with the content of XML tag &lt;aas:relationshipElement&gt;
 	 * @return the parsed RelationshipElement
 	 */
-	@SuppressWarnings("unchecked")
 	public static RelationshipElement parseRelationshipElement(Map<String, Object> xmlObject) {
+		RelationshipElement relElement = new RelationshipElement();
+		populateRelationshipElement(xmlObject, relElement);
+		return relElement;
+	}
+	
+	/**
+	 * Parses a Map containing the content of XML tag &lt;aas:relationshipElement&gt;
+	 * and populates a given RelationshipElement object
+	 * 
+	 * @param xmlObject the Map with the content of XML tag &lt;aas:relationshipElement&gt;
+	 * @param relElement the RelationshipElement to be populated
+	 */
+	@SuppressWarnings("unchecked")
+	public static void populateRelationshipElement(Map<String, Object> xmlObject, IRelationshipElement relElement) {
 		Map<String, Object> firstMap = (Map<String, Object>) xmlObject.get(FIRST);
 		Reference first = ReferenceXMLConverter.parseReference(firstMap);
 		
 		Map<String, Object> secondMap = (Map<String, Object>) xmlObject.get(SECOND);
 		Reference second = ReferenceXMLConverter.parseReference(secondMap);
 		
-		RelationshipElement relElement = new RelationshipElement(first, second);
+		relElement.setValue(new RelationshipElementValue(first, second));
+		
 		populateSubmodelElement(xmlObject, relElement);
-		return relElement;
 	}
-	
-	
 	
 	
 	/**
@@ -57,24 +68,34 @@ public class RelationshipElementXMLConverter extends SubmodelElementXMLConverter
 	 */
 	public static Element buildRelationshipElement(Document document, IRelationshipElement relElem) {
 		Element relElemRoot = document.createElement(RELATIONSHIP_ELEMENT);
+		populateRelationshipElement(document, relElemRoot, relElem);
+		return relElemRoot;
+	}
+	
+	/**
+	 * Builds the content for a given &lt;aas:relationshipElement&gt; XML tag
+	 * 
+	 * @param document the XML document
+	 * @param root the root Element of the new RelationshipElement
+	 * @param relElem the RelationShipElement
+	 */
+	public static void populateRelationshipElement(Document document, Element root, IRelationshipElement relElem) {
+		populateSubmodelElement(document, root, relElem);
 		
-		populateSubmodelElement(document, relElemRoot, relElem);
-
 		RelationshipElementValue value = relElem.getValue();
-
+		
 		IReference first = value.getFirst();
 		if(first != null) {
 			Element derivedFromRoot = document.createElement(FIRST);
 			derivedFromRoot.appendChild(ReferenceXMLConverter.buildReferenceXML(document, first)); 
-			relElemRoot.appendChild(derivedFromRoot);
+			root.appendChild(derivedFromRoot);
 		}		
 		IReference second = value.getSecond();
 		if(second != null) {
 			Element derivedFromRoot = document.createElement(SECOND);
 			derivedFromRoot.appendChild(ReferenceXMLConverter.buildReferenceXML(document, second)); 
-			relElemRoot.appendChild(derivedFromRoot);
+			root.appendChild(derivedFromRoot);
 		}
 		
-		return relElemRoot;
 	}
 }
