@@ -8,6 +8,8 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInforma
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
+import com.google.common.base.Strings;
+
 /**
  * AdministrativeInformation class
  * 
@@ -35,9 +37,7 @@ public class AdministrativeInformation extends VABModelMap<Object> implements IA
 		// Add qualifier
 		putAll(new HasDataSpecification());
 
-		// Default values
-		put(VERSION, version);
-		put(REVISION, revision);
+		setVersionInformation(version, revision);
 	}
 
 	/**
@@ -75,7 +75,29 @@ public class AdministrativeInformation extends VABModelMap<Object> implements IA
 	public void setEmbeddedDataSpecifications(Collection<IEmbeddedDataSpecification> embeddedDataSpecifications) {
 		HasDataSpecification.createAsFacade(this).setEmbeddedDataSpecifications(embeddedDataSpecifications);
 	}
+	
+	/**
+	 * Sets version and revision
+	 * @param version
+	 * @param revision 
+	 * 
+	 * @throws RuntimeException when revision is given without a valid version
+	 */
+	public void setVersionInformation(String version, String revision) {
+		setVersion(version);
+		if (!Strings.isNullOrEmpty(revision)) {
+			if (Strings.isNullOrEmpty(version)) {
+				throw new RuntimeException("revision cannot be set while version is not set");
+			}
+		}
+		setRevision(revision);
+	}
 
+	/**
+	 * @deprecated replaced by method {@link #setVersionInformation(String, String)}
+	 * @param version
+	 */
+	@Deprecated
 	public void setVersion(String version) {
 		put(AdministrativeInformation.VERSION, version);
 	}
@@ -85,6 +107,11 @@ public class AdministrativeInformation extends VABModelMap<Object> implements IA
 		return (String) get(AdministrativeInformation.VERSION);
 	}
 
+	/**
+	 * @deprecated replaced by method {@link #setVersionInformation(String, String)}
+	 * @param revision
+	 */
+	@Deprecated
 	public void setRevision(String revision) {
 		put(AdministrativeInformation.REVISION, revision);
 	}

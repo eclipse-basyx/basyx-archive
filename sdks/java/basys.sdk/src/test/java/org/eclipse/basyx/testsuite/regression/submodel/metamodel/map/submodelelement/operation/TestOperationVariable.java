@@ -2,6 +2,7 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.submodelel
 
 import static org.junit.Assert.assertEquals;
 
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
@@ -21,6 +22,7 @@ public class TestOperationVariable {
 	private OperationVariable operationVariable;
 	@Before
 	public void buildOperationVariable() {
+		PROPERTY.setModelingKind(ModelingKind.TEMPLATE);
 		operationVariable = new OperationVariable(PROPERTY);
 	} 
 	
@@ -32,7 +34,17 @@ public class TestOperationVariable {
 	@Test
 	public void testSetValue() {
 		Property property = new Property("testIdShort", PropertyValueTypeDef.String);
+		property.setModelingKind(ModelingKind.TEMPLATE);
 		operationVariable.setValue(property);
 		assertEquals(property, operationVariable.getValue());
+	}
+	
+	@Test
+	// TODO: Change with 1.0 Release when ModelingKind.Template is obligatory for OperationVariables
+	public void testSetValueChangedModelingKind() {
+		Property property = new Property("testIdShort", PropertyValueTypeDef.String);
+		property.setModelingKind(ModelingKind.INSTANCE);
+		operationVariable.setValue(property);
+		assertEquals(ModelingKind.TEMPLATE, operationVariable.getValue().getModelingKind());
 	}
 }

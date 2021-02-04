@@ -3,13 +3,17 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.vab.model.VABModelMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * OperationVariable as described by DAAS document An operation variable is a
@@ -19,6 +23,8 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  *
  */
 public class OperationVariable extends VABModelMap<Object> implements IOperationVariable {
+	public static final Logger logger = LoggerFactory.getLogger(OperationVariable.class);
+	
 	public static final String MODELTYPE = "OperationVariable";
 
 	/**
@@ -31,7 +37,7 @@ public class OperationVariable extends VABModelMap<Object> implements IOperation
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 		
-		put(Property.VALUE, value);
+		setValue(value);
 	}
 
 	public OperationVariable() {
@@ -71,7 +77,19 @@ public class OperationVariable extends VABModelMap<Object> implements IOperation
 				SubmodelElement.isValid((Map<String, Object>) obj.get(Property.VALUE));
 	}
 
+	/**
+	 * Sets value of operation variable
+	 *
+	 * @param value
+	 * @throws RuntimeException if modelingkind of the value is not of modelingkind.template
+	 */
+	@SuppressWarnings("unchecked")
 	public void setValue(ISubmodelElement value) {
+		if (value.getModelingKind() != ModelingKind.TEMPLATE) {
+			// TODO: Change with 1.0 Release
+			logger.warn("Modeling kind of Operation variable was wrong and automatically changed to ModelingKind.TEMPLATE");
+			HasKind.createAsFacade((Map<String, Object>) value).setModelingKind(ModelingKind.TEMPLATE);
+		}
 		put(Property.VALUE, value);
 	}
 

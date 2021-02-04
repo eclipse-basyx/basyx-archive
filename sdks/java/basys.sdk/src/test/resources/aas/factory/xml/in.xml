@@ -509,6 +509,7 @@
 												<aas:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#003</aas:key>
 											</aas:keys>
 										</aas:value>
+										<aas:kind>Template</aas:kind>
 									</aas:referenceElement>
 								</aas:value>
 							</aas:operationVariable>
@@ -520,6 +521,7 @@
 										<aas:idShort>file_ID</aas:idShort>
 										<aas:mimeType>file_mimetype</aas:mimeType>
 										<aas:value>file_value</aas:value>
+										<aas:kind>Template</aas:kind>
 									</aas:file>
 								</aas:value>
 							</aas:operationVariable>
@@ -529,6 +531,7 @@
 										<aas:idShort>blob_ID</aas:idShort>
 										<aas:value>YmxvYit2YWx1ZQ==</aas:value>
 										<aas:mimeType>blob_mimetype</aas:mimeType>
+										<aas:kind>Template</aas:kind>
 									</aas:blob>
 								</aas:value>
 							</aas:operationVariable>
@@ -543,6 +546,7 @@
 												<aas:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#002</aas:key>
 											</aas:keys>
 										</aas:value>
+										<aas:kind>Template</aas:kind>
 									</aas:referenceElement>
 								</aas:value>
 							</aas:operationVariable>

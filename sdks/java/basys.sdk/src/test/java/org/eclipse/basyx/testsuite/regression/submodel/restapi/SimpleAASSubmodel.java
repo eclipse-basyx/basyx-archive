@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.function.Function;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -54,9 +55,15 @@ public class SimpleAASSubmodel extends SubModel {
 		Operation complex = new Operation((Function<Object[], Object>) v -> {
 			return (int) v[0] - (int) v[1];
 		});
-		complex.setInputVariables(Arrays.asList(new OperationVariable(new Property("complexIn1", 0)),
-				new OperationVariable(new Property("complexIn2", 0))));
-		complex.setOutputVariables(Collections.singleton(new OperationVariable(new Property("complexOut", 0))));
+		Property inProp1 = new Property("complexIn1", 0);
+		inProp1.setModelingKind(ModelingKind.TEMPLATE);
+		Property inProp2 = new Property("complexIn2", 0);
+		inProp2.setModelingKind(ModelingKind.TEMPLATE);
+		Property outProp = new Property("complexOut", 0);
+		outProp.setModelingKind(ModelingKind.TEMPLATE);
+		complex.setInputVariables(Arrays.asList(new OperationVariable(inProp1),
+				new OperationVariable(inProp2)));
+		complex.setOutputVariables(Collections.singleton(new OperationVariable(outProp)));
 		complex.setIdShort("complex");
 		addSubModelElement(complex);
 

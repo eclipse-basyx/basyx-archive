@@ -6,11 +6,10 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.function.Function;
 
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IAsyncInvocation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
@@ -35,11 +34,9 @@ public abstract class TestOperationSuite {
 	protected static final String IN_VALUE = "inValue";
 	protected static final String OUT_VALUE = "outValue";
 	protected static final String INOUT_VALUE = "inOutValue";
-	protected static final Collection<OperationVariable> IN = Arrays.asList(
-			new OperationVariable(new Property("testIn1", IN_VALUE)),
-			new OperationVariable(new Property("testIn2", IN_VALUE)));
-	protected static final Collection<OperationVariable> OUT = Collections.singletonList(new OperationVariable(new Property("testId2", OUT_VALUE)));;
-	protected static final Collection<OperationVariable> INOUT = Collections.singletonList(new OperationVariable(new Property("testId3", INOUT_VALUE)));;
+	protected static Collection<OperationVariable> IN;
+	protected static Collection<OperationVariable> OUT;
+	protected static Collection<OperationVariable> INOUT;
 	
 	protected static final Function<Object[], Object> FUNC = (Function<Object[], Object>) v -> {
 		return (int)v[0] + (int)v[1];
@@ -59,6 +56,22 @@ public abstract class TestOperationSuite {
 	
 	@Before
 	public void setup() {
+		IN = new ArrayList<OperationVariable>();
+		OUT = new ArrayList<OperationVariable>();
+		INOUT = new ArrayList<OperationVariable>();
+		Property inProp1 = new Property("testIn1", IN_VALUE);
+		inProp1.setModelingKind(ModelingKind.TEMPLATE);
+		Property inProp2 = new Property("testIn2", IN_VALUE);
+		inProp2.setModelingKind(ModelingKind.TEMPLATE);
+		Property outProp = new Property("testId2", OUT_VALUE);
+		outProp.setModelingKind(ModelingKind.TEMPLATE);
+		Property inOutProp = new Property("testId3", INOUT_VALUE);
+		inOutProp.setModelingKind(ModelingKind.TEMPLATE);
+		IN.add(new OperationVariable(inProp1));
+		IN.add(new OperationVariable(inProp2));
+		OUT.add(new OperationVariable(outProp));
+		INOUT.add(new OperationVariable(inOutProp));
+		
 		Operation op1 = new Operation(IN, OUT, INOUT, FUNC);
 		op1.setIdShort("op1");
 		operation = prepareOperation(op1);
@@ -89,7 +102,9 @@ public abstract class TestOperationSuite {
 	@Test
 	public void testInvokeWithSubmodelElements() {
 		Property param1 = new Property("testIn1", 2);
+		param1.setModelingKind(ModelingKind.TEMPLATE);
 		Property param2 = new Property("testIn2", 4);
+		param2.setModelingKind(ModelingKind.TEMPLATE);
 		SubmodelElement[] result = operation.invoke(param1, param2);
 		assertEquals(1, result.length);
 		assertEquals(6, result[0].getValue());

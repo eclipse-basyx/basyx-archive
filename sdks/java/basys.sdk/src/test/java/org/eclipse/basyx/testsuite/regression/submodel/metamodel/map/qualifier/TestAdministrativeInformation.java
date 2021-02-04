@@ -55,6 +55,7 @@ public class TestAdministrativeInformation {
 		assertEquals(references, information.getDataSpecificationReferences());
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testSetVersion() {
 		String newVersionString = "2.0";
@@ -62,10 +63,43 @@ public class TestAdministrativeInformation {
 		assertEquals(newVersionString, information.getVersion());
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testSetRevision() {
 		String newRevisionString = "2.0.1";
 		information.setRevision(newRevisionString);
+		assertEquals(newRevisionString, information.getRevision());
+	}
+	
+	@Test
+	public void testSetVersionInformation() {
+		String newVersionString = "2.0";
+		String newRevisionString = "2.0.1";
+		information.setVersionInformation(newVersionString, newRevisionString);
+		assertEquals(newVersionString, information.getVersion());
+		assertEquals(newRevisionString, information.getRevision());
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void testSetVersionInformationExceptionEmptyString() {
+		String newVersionString = "";
+		String newRevisionString = "2.0.1";
+		information.setVersionInformation(newVersionString, newRevisionString);
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void testSetVersionInformationExceptionNullString() {
+		String newVersionString = null;
+		String newRevisionString = "2.0.1";
+		information.setVersionInformation(newVersionString, newRevisionString);
+	}
+	
+	@Test
+	public void testSetVersionInformationNoRevision() {
+		String newVersionString = "";
+		String newRevisionString = "";
+		information.setVersionInformation(newVersionString, newRevisionString);
+		assertEquals(newVersionString, information.getVersion());
 		assertEquals(newRevisionString, information.getRevision());
 	}
 	

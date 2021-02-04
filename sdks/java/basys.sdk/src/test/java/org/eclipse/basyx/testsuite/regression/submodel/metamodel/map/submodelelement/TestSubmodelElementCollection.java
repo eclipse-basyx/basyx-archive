@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
@@ -207,8 +208,10 @@ public class TestSubmodelElementCollection {
 	 * @return operation
 	 */
 	private Operation getOperation() {
+		Property property = new Property("testOpVariableId");
+		property.setModelingKind(ModelingKind.TEMPLATE);
 		List<OperationVariable> variable = Collections
-				.singletonList(new OperationVariable(new Property("testOpVariableId")));
+				.singletonList(new OperationVariable(property));
 		Operation operation = new Operation(variable, variable, variable, null);
 		operation.put(Referable.IDSHORT, OPERATION_ID);
 		return operation;

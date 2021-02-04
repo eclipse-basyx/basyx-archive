@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
@@ -50,9 +51,15 @@ public class TestConnectedSubModel extends TestSubmodelSuite {
 		Operation op = new Operation((Function<Object[], Object> & Serializable) obj -> {
 			return (int) obj[0] + (int) obj[1];
 		});
-		OperationVariable a = new OperationVariable(new Property("a", 1));
-		OperationVariable b = new OperationVariable(new Property("b", 2));
-		OperationVariable r = new OperationVariable(new Property("r", 3));
+		Property aProp = new Property("a", 1);
+		aProp.setModelingKind(ModelingKind.TEMPLATE);
+		Property bProp = new Property("b", 2);
+		bProp.setModelingKind(ModelingKind.TEMPLATE);
+		Property rProp = new Property("r", 3);
+		rProp.setModelingKind(ModelingKind.TEMPLATE);
+		OperationVariable a = new OperationVariable(aProp);
+		OperationVariable b = new OperationVariable(bProp);
+		OperationVariable r = new OperationVariable(rProp);
 		op.setInputVariables(Arrays.asList(a, b));
 		op.setOutputVariables(Collections.singletonList(r));
 		op.setIdShort(OP);
