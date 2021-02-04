@@ -130,6 +130,26 @@ public class BaSyxConfiguration {
 	}
 
 	/**
+	 * Method for subclasses to read specific environment variables
+	 * 
+	 * @param prefix     The prefix of each of the environment variables
+	 * @param properties The name of the properties in the config and environment (with prefix)
+	 */
+	protected void loadFromEnvironmentVariables(String prefix, String... properties) {
+		try {
+			for (String propName : properties) {
+				String result = System.getenv(prefix + propName);
+				if (result != null) {
+					logger.info("Environment - " + propName + ": " + result);
+					setProperty(propName, result);
+				}
+			}
+		} catch (SecurityException e) {
+			logger.info("Reading configs from environment is not permitted");
+		}
+	}
+
+	/**
 	 * Sets a property, if it is contained in this configuration
 	 * 
 	 * @param name  The name of the property

@@ -10,6 +10,9 @@ import java.util.Map;
  *
  */
 public class BaSyxSQLConfiguration extends BaSyxConfiguration {
+	// Prefix for environment variables
+	public static final String ENV_PREFIX = "BaSyxSQL_";
+
 	// Default BaSyx SQL configuration
 	public static final String DEFAULT_USER = "postgres";
 	public static final String DEFAULT_PASS = "admin";
@@ -72,8 +75,14 @@ public class BaSyxSQLConfiguration extends BaSyxConfiguration {
 		setPrefix(prefix);
 	}
 
+	public void loadFromEnvironmentVariables() {
+		String[] properties = { USER, PASS, PATH, DRIVER, PREFIX };
+		loadFromEnvironmentVariables(ENV_PREFIX, properties);
+	}
+
 	public void loadFromDefaultSource() {
 		loadFileOrDefaultResource(DEFAULT_FILE_KEY, DEFAULT_CONFIG_PATH);
+		loadFromEnvironmentVariables();
 	}
 
 	public String getUser() {

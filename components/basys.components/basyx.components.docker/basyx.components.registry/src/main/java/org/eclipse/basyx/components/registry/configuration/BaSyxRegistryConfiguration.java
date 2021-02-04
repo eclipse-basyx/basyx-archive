@@ -13,6 +13,9 @@ import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
  *
  */
 public class BaSyxRegistryConfiguration extends BaSyxConfiguration {
+	// Prefix for environment variables
+	public static final String ENV_PREFIX = "BaSyxRegistry_";
+
 	// Default BaSyx Context configuration
 	public static final String DEFAULT_BACKEND = RegistryBackend.INMEMORY.toString();
 
@@ -44,8 +47,13 @@ public class BaSyxRegistryConfiguration extends BaSyxConfiguration {
 		super(values);
 	}
 
+	public void loadFromEnvironmentVariables() {
+		loadFromEnvironmentVariables(ENV_PREFIX, BACKEND);
+	}
+
 	public void loadFromDefaultSource() {
 		loadFileOrDefaultResource(DEFAULT_FILE_KEY, DEFAULT_CONFIG_PATH);
+		loadFromEnvironmentVariables();
 	}
 
 	public RegistryBackend getRegistryBackend() {

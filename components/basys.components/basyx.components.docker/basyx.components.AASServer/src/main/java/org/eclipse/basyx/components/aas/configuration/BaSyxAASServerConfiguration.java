@@ -13,6 +13,9 @@ import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
  *
  */
 public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
+	// Prefix for environment variables
+	public static final String ENV_PREFIX = "BaSyxAAS_";
+
 	// Default BaSyx AAS configuration
 	public static final String DEFAULT_BACKEND = AASServerBackend.INMEMORY.toString();
 	public static final String DEFAULT_SOURCE = "";
@@ -85,8 +88,14 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 		super(values);
 	}
 
+	public void loadFromEnvironmentVariables() {
+		String[] properties = { REGISTRY, BACKEND, SOURCE, EVENTS };
+		loadFromEnvironmentVariables(ENV_PREFIX, properties);
+	}
+
 	public void loadFromDefaultSource() {
 		loadFileOrDefaultResource(DEFAULT_FILE_KEY, DEFAULT_CONFIG_PATH);
+		loadFromEnvironmentVariables();
 	}
 
 	public AASServerBackend getAASBackend() {
