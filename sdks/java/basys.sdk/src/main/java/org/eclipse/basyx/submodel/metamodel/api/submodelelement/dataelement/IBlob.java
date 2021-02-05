@@ -9,19 +9,48 @@ package org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement;
  */
 public interface IBlob extends IDataElement {
 	/**
-	 * Gets the value of the BLOB instance of a blob data element.
+	 * Gets the value of the Blob instance of a blob data element.
+	 * The returned value is Base64 encoded.
 	 * 
 	 * @return
 	 */
 	@Override
-	public byte[] getValue();
+	public String getValue();
 	
 	/**
-	 * Sets the value of the BLOB instance of a blob data element.
+	 * Sets a Base64 encoded value of the BLOB instance of a blob data element.
 	 * 
 	 * @param bytes
 	 */
-	public void setValue(byte[] value);
+	public void setValue(String value);
+
+	/**
+	 * Gets the value of the Blob instance of a blob data element.
+	 * 
+	 * @return
+	 */
+	public byte[] getByteArrayValue();
+
+	/**
+	 * Sets the value of the Blob instance of a blob data element.
+	 * 
+	 * @param bytes
+	 */
+	public void setByteArrayValue(byte[] value);
+
+	/**
+	 * Returns the ASCII String representation of the byte array BLOB value
+	 *
+	 * @return
+	 */
+	public String getASCIIString();
+
+	/**
+	 * Sets an ASCII string as an encoded byte array in the BLOB data element value
+	 * 
+	 * @param text
+	 */
+	public void setASCIIString(String text);
 
 	/**
 	 * Gets the mime type of the content of the BLOB. The mime type states which

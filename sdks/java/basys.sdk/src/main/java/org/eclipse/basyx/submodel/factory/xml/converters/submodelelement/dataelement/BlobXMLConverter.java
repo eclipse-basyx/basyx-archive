@@ -1,6 +1,5 @@
 package org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.dataelement;
 
-import java.util.Base64;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
@@ -29,12 +28,11 @@ public class BlobXMLConverter extends SubmodelElementXMLConverter {
 	 * @return the parsed Blob
 	 */
 	public static Blob parseBlob(Map<String, Object> xmlObject) {
-		
 		String mimeType = XMLHelper.getString(xmlObject.get(MIME_TYPE));
 		String value = XMLHelper.getString(xmlObject.get(VALUE));
-		byte[] valueBytes = Base64.getDecoder().decode(value.getBytes());
-		
-		Blob blob = new Blob(valueBytes, mimeType);
+		Blob blob = new Blob();
+		blob.setMimeType(mimeType);
+		blob.setValue(value);
 		populateSubmodelElement(xmlObject, blob);
 		return blob;
 	}
@@ -54,7 +52,8 @@ public class BlobXMLConverter extends SubmodelElementXMLConverter {
 		
 		populateSubmodelElement(document, blobRoot, blob);
 		
-		String value = Base64.getEncoder().encodeToString(blob.getValue());
+		// Base64 encoded string
+		String value = blob.getValue();
 		String mimeType = blob.getMimeType();
 		
 		if(value != null) {

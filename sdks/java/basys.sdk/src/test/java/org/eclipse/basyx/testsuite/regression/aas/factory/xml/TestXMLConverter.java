@@ -10,7 +10,6 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -397,7 +396,7 @@ public class TestXMLConverter {
 		assertTrue(element instanceof Blob);
 		Blob blob = (Blob) element;
 		assertEquals("blob_mimetype", blob.getMimeType());
-		assertEquals("YmxvYit2YWx1ZQ==", Base64.getEncoder().encodeToString(blob.getValue()));
+		assertEquals("YmxvYit2YWx1ZQ==", blob.getValue());
 		
 		element = submodelElements.get("reference_ELE_ID");
 		assertTrue(element instanceof ReferenceElement);

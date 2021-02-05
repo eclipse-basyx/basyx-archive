@@ -1,6 +1,5 @@
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -11,6 +10,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +24,6 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
@@ -225,12 +224,11 @@ public abstract class TestSubmodelSuite {
 
 		// Check if all expected Values are present
 		assertEquals(100, values.get(PROP));
+		assertEquals(Base64.getEncoder().encodeToString(new byte[] { 1, 2, 3 }), values.get(BLOB_ID));
 
 		assertTrue(values.containsKey(RELATIONSHIP_ELEM_ID));
-
 		assertTrue(values.containsKey(SUBMODEL_ELEM_COLLECTION_ID));
 		Map<String, Object> collection = (Map<String, Object>) values.get(SUBMODEL_ELEM_COLLECTION_ID);
-
 		assertTrue(collection.containsKey(PROPERTY_CONTAINED_ID));
 		assertTrue(values.containsKey(PROPERTY_ID2));
 		assertTrue(values.containsKey(BLOB_ID));
@@ -298,7 +296,7 @@ public abstract class TestSubmodelSuite {
 		ret.put(smECollection.getIdShort(), smECollection);
 
 		Blob blob = new Blob(BLOB_ID, "text/json");
-		blob.setValue(new byte[] { 1, 2, 3 });
+		blob.setByteArrayValue(new byte[] { 1, 2, 3 });
 		ret.put(blob.getIdShort(), blob);
 
 		Reference first = new Reference(new Key(KeyElements.BASICEVENT, true, "testFirst", IdentifierType.CUSTOM));
@@ -386,12 +384,7 @@ public abstract class TestSubmodelSuite {
 			ISubmodelElement actualElem = actual.get(elem.getIdShort());
 			assertNotNull(actualElem);
 
-			// Blob needs to be handled separately due to array content
-			if (elem instanceof IBlob) {
-				assertArrayEquals((byte[]) elem.getValue(), (byte[]) actualElem.getValue());
-			} else {
-				assertEquals(elem.getValue(), actualElem.getValue());
-			}
+			assertEquals(elem.getValue(), actualElem.getValue());
 		}
 	}
 

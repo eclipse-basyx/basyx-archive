@@ -1,7 +1,7 @@
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
@@ -17,7 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
  *
  */
 public class Blob extends DataElement implements IBlob {
-	public static final String MIMETYPE="mimeType";
+	public static final String MIMETYPE = "mimeType";
 	public static final String MODELTYPE = "Blob";
 	
 	/**
@@ -52,7 +52,7 @@ public class Blob extends DataElement implements IBlob {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 
-		setValue(value);
+		setByteArrayValue(value);
 		setMimeType(mimeType);
 	}
 	
@@ -99,34 +99,45 @@ public class Blob extends DataElement implements IBlob {
 
 	@Override
 	public void setValue(Object value) {
-		if(value instanceof byte[]) {
-			setValue((byte[]) value);
+		if (value instanceof String) {
+			// Assume a Base64 encoded String
+			setValue((String) value);
+		} else {
+			throw new IllegalArgumentException("Given Object is not a String");
 		}
-		else {
-			throw new IllegalArgumentException("Given Object is not a byte[]");
-		}
-		
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public byte[] getValue() {
-		if(!containsKey(Property.VALUE)) {
+	public String getValue() {
+		if (!containsKey(Property.VALUE)) {
 			return null;
 		}
-		List<Number> list = (List<Number>) get(Property.VALUE);
-		byte[] ret = new byte[list.size()];
-		
-		for(int i = 0; i < list.size(); i++) {
-			ret[i] = list.get(i).byteValue();
+		return (String) get(Property.VALUE);
+	}
+	
+	@Override
+	public byte[] getByteArrayValue() {
+		String value = getValue();
+		if ( value != null ) {
+			return Base64.getDecoder().decode(value);
+		} else {
+			return null;
 		}
-		
-		return ret;
+	}
+
+	@Override
+	public String getASCIIString() {
+		byte[] value = getByteArrayValue();
+		return new String(value, StandardCharsets.US_ASCII);
+	}
+
+	@Override
+	public void setASCIIString(String text) {
+		setByteArrayValue(text.getBytes(StandardCharsets.US_ASCII));
 	}
 
 	public void setMimeType(String mimeType) {
 		put(Blob.MIMETYPE, mimeType);
-		
 	}
 
 	@Override
@@ -148,15 +159,16 @@ public class Blob extends DataElement implements IBlob {
 	}
 
 	@Override
-	public void setValue(byte[] value) {
-		List<Byte> list = new ArrayList<>();
-
-		byte[] bytes = value;
-
-		for (int i = 0; i < bytes.length; i++) {
-			list.add(bytes[i]);
+	public void setByteArrayValue(byte[] value) {
+		if (value != null) {
+			setValue(Base64.getEncoder().encodeToString(value));
+		} else {
+			setValue(null);
 		}
+	}
 
-		put(Property.VALUE, list);
+	@Override
+	public void setValue(String value) {
+		put(Property.VALUE, value);
 	}
 }

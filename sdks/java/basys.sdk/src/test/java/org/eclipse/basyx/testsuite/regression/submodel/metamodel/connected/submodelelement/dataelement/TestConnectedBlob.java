@@ -2,9 +2,9 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.connected.subm
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedBlob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
@@ -22,14 +22,16 @@ import org.junit.Test;
  *
  */
 public class TestConnectedBlob {
+	public final String BLOB_CONTENT = "BLOB_VALUE";
 
-	ConnectedBlob connectedBlob;
-	Blob blob;
+	protected ConnectedBlob connectedBlob;
+	protected Blob blob;
 	
 	@Before
 	public void build() {
 		blob = new Blob("testIdShort", "mimeType");
-		blob.setValue("BLOB_VALUE".getBytes());
+		byte[] value = BLOB_CONTENT.getBytes(StandardCharsets.US_ASCII);
+		blob.setByteArrayValue(value);
 		
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
 				new SubmodelElementProvider(new TypeDestroyingProvider(new VABLambdaProvider(blob))));
@@ -42,8 +44,19 @@ public class TestConnectedBlob {
 	 */
 	@Test
 	public void testGetValue() {
-		assertTrue(Arrays.equals(blob.getValue(), connectedBlob.getValue()));
-		assertArrayEquals(blob.getValue(), connectedBlob.getValue());
+		assertEquals(blob.getValue(), connectedBlob.getValue());
+		byte[] byteArray = BLOB_CONTENT.getBytes(StandardCharsets.US_ASCII);
+		assertEquals(Base64.getEncoder().encodeToString(byteArray), blob.getValue());
+
+	}
+
+	/**
+	 * Tests if getByteArrayValue() returns the correct value
+	 */
+	@Test
+	public void testGetByteArrayValue() {
+		assertArrayEquals(blob.getByteArrayValue(), connectedBlob.getByteArrayValue());
+		assertArrayEquals(BLOB_CONTENT.getBytes(StandardCharsets.US_ASCII), connectedBlob.getByteArrayValue());
 	}
 	
 	/**
@@ -54,4 +67,43 @@ public class TestConnectedBlob {
 		assertEquals(blob.getMimeType(), connectedBlob.getMimeType());
 	}
 	
+	/**
+	 * Tests if getASCIIString() returns the correct value
+	 */
+	@Test
+	public void testGetASCII() {
+		assertEquals(BLOB_CONTENT, connectedBlob.getASCIIString());
+	}
+
+	/**
+	 * Tests if SetASCII sets the correct value
+	 */
+	@Test
+	public void testSetASCII() {
+		connectedBlob.setASCIIString("NEW");
+		assertEquals("NEW", connectedBlob.getASCIIString());
+		assertArrayEquals("NEW".getBytes(StandardCharsets.US_ASCII), connectedBlob.getByteArrayValue());
+	}
+
+	/**
+	 * Tests if SetByteArrayValue sets the correct value
+	 */
+	@Test
+	public void testSetByteArray() {
+		byte[] newArrayValue = "NEW".getBytes(StandardCharsets.US_ASCII);
+		connectedBlob.setByteArrayValue(newArrayValue);
+		assertEquals("NEW", connectedBlob.getASCIIString());
+		assertArrayEquals("NEW".getBytes(StandardCharsets.US_ASCII), connectedBlob.getByteArrayValue());
+	}
+
+	/**
+	 * Tests if setValue sets the correct value
+	 */
+	@Test
+	public void testSetValue() {
+		byte[] newArrayValue = "NEW".getBytes(StandardCharsets.US_ASCII);
+		String newStringValue = Base64.getEncoder().encodeToString(newArrayValue);
+		connectedBlob.setValue(newStringValue);
+		assertEquals("NEW", connectedBlob.getASCIIString());
+	}
 }
