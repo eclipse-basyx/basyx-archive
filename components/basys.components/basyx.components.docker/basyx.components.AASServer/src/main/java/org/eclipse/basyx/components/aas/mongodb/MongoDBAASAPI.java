@@ -122,7 +122,7 @@ public class MongoDBAASAPI implements IAASAPI {
 		// Add reference
 		aas.addSubmodelReference(submodel);
 		// Update db entry
-		mongoOps.findAndReplace(hasId, aas);
+		mongoOps.findAndReplace(hasId, aas, collection);
 	}
 
 	@Override
@@ -149,7 +149,7 @@ public class MongoDBAASAPI implements IAASAPI {
 			}
 		}
 		// Update db entry
-		mongoOps.findAndReplace(hasId, aas);
+		mongoOps.findAndReplace(hasId, aas, collection);
 	}
 
 }

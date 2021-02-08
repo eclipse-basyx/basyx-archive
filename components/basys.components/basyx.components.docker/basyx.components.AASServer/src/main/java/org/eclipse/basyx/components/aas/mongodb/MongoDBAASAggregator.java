@@ -18,6 +18,7 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.aas.restapi.api.IAASAPI;
+import org.eclipse.basyx.aas.restapi.api.IAASAPIFactory;
 import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
@@ -29,8 +30,10 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.restapi.SubModelProvider;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
+import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +66,16 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	protected String smCollection;
 
 	private IAASRegistryService registry;
+
+	/**
+	 * Store AAS API Provider. By default, uses the MongoDB API Provider
+	 */
+	protected IAASAPIFactory aasApiProvider;
+
+	/**
+	 * Store Submodel API Provider. By default, uses a MongoDB Submodel Provider
+	 */
+	protected ISubmodelAPIFactory smApiProvider;
 
 	/**
 	 * Receives the path of the configuration.properties file in it's constructor.
@@ -101,11 +114,24 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	 * @param config
 	 */
 	public void setConfiguration(BaSyxMongoDBConfiguration config) {
+		// set mongoDB configuration
 		this.config = config;
 		MongoClient client = MongoClients.create(config.getConnectionUrl());
 		this.mongoOps = new MongoTemplate(client, config.getDatabase());
 		this.aasCollection = config.getAASCollection();
 		this.smCollection = config.getSubmodelCollection();
+
+		// Create API factories with the given configuration
+		this.aasApiProvider = aas -> {
+			MongoDBAASAPI api = new MongoDBAASAPI(config, aas.getIdentification().getId());
+			api.setAAS(aas);
+			return api;
+		};
+		this.smApiProvider = sm -> {
+			MongoDBSubmodelAPI api = new MongoDBSubmodelAPI(config, sm.getIdentification().getId());
+			api.setSubModel(sm);
+			return api;
+		};
 	}
 
 	/**
@@ -120,17 +146,31 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	private void init() {
 		List<AssetAdministrationShell> data = mongoOps.findAll(AssetAdministrationShell.class, aasCollection);
 		for (AssetAdministrationShell aas : data) {
-			logger.info("Adding AAS from DB: " + aas.getIdentification().getId());
-			VABMultiSubmodelProvider provider = createMultiSubmodelProvider(aas);
+			String aasId = aas.getIdentification().getId();
+			logger.info("Adding AAS from DB: " + aasId);
+			MongoDBAASAPI aasApi = new MongoDBAASAPI(config, aasId);
+			VABMultiSubmodelProvider provider = initMultiSubmodelProvider(aasApi);
+			addSubmodelsFromDB(provider, aas);
 			aasProviderMap.put(aas.getIdentification().getId(), provider);
 		}
 	}
 
-	private VABMultiSubmodelProvider createMultiSubmodelProvider(AssetAdministrationShell aas) {
-		IAASAPI aasApi = new MongoDBAASAPI(config, aas.getIdentification().getId());
+	/**
+	 * Initializes and returns a VABMultiSubmodelProvider with only the AssetAdministrationShell
+	 */
+	private VABMultiSubmodelProvider initMultiSubmodelProvider(IAASAPI aasApi) {
 		AASModelProvider aasProvider = new AASModelProvider(aasApi);
-		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider(aasProvider, registry, new HTTPConnectorProvider());
+		IConnectorProvider connProvider = new HTTPConnectorProvider();
+		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider(aasProvider, registry, connProvider,
+				smApiProvider, aasApiProvider);
+		provider.setAssetAdministrationShell(aasProvider);
+		return provider;
+	}
 
+	/**
+	 * Adds submodel providers for submodels in the MongoDB
+	 */
+	private void addSubmodelsFromDB(VABMultiSubmodelProvider provider, AssetAdministrationShell aas) {
 		// Get ids and idShorts from aas
 		Collection<IReference> submodelRefs = aas.getSubmodelReferences();
 		List<String> smIds = new ArrayList<>();
@@ -158,8 +198,6 @@ public class MongoDBAASAggregator implements IAASAggregator {
 			logger.info("Adding Submodel from DB: " + id);
 			addSubmodelProvidersById(id, provider);
 		}
-
-		return provider;
 	}
 
 	private String getSubmodelId(String idShort) {
@@ -205,10 +243,9 @@ public class MongoDBAASAggregator implements IAASAggregator {
 
 	@Override
 	public void createAAS(AssetAdministrationShell aas) {
-		MongoDBAASAPI aasApi = new MongoDBAASAPI(config, aas.getIdentification().getId());
-		aasApi.setAAS(aas);
-		AASModelProvider provider = new AASModelProvider(aasApi);
-		aasProviderMap.put(aas.getIdentification().getId(), new VABMultiSubmodelProvider(provider));
+		IAASAPI aasApi = this.aasApiProvider.getAASApi(aas);
+		VABMultiSubmodelProvider provider = initMultiSubmodelProvider(aasApi);
+		aasProviderMap.put(aas.getIdentification().getId(), provider);
 	}
 
 	@Override

@@ -19,7 +19,6 @@ import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
 import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPIFactory;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 
@@ -125,10 +124,10 @@ public class AASAggregator implements IAASAggregator {
 
 	private VABMultiSubmodelProvider createMultiSubmodelProvider(AssetAdministrationShell aas) {
 		IConnectorProvider connProvider = new HTTPConnectorProvider();
-		VABMultiSubmodelProvider multiAASProvider = new VABMultiSubmodelProvider(registry, connProvider, smApiProvider, aasApiProvider);
-		IAASAPI aasApi = aasApiProvider.getAASApi(new VABLambdaProvider(aas));
+		IAASAPI aasApi = aasApiProvider.getAASApi(aas);
 		AASModelProvider contentProvider = new AASModelProvider(aasApi);
-		multiAASProvider.setAssetAdministrationShell(contentProvider);
+		VABMultiSubmodelProvider multiAASProvider = new VABMultiSubmodelProvider(contentProvider, registry,
+				connProvider, smApiProvider, aasApiProvider);
 		return multiAASProvider;
 	}
 
