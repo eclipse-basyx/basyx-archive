@@ -10,6 +10,9 @@ import java.util.Map;
  *
  */
 public class BaSyxDockerConfiguration extends BaSyxConfiguration {
+	// Prefix for environment variables
+	public static final String ENV_PREFIX = "BaSyxDocker_";
+
 	// Default BaSyx Context configuration
 	public static final int DEFAULT_HOSTPORT = 8082;
 	public static final int DEFAULT_CONTAINERPORT = 4000;
@@ -67,8 +70,14 @@ public class BaSyxDockerConfiguration extends BaSyxConfiguration {
 		setContainerName(containerName);
 	}
 
+	public void loadFromEnvironmentVariables() {
+		String[] properties = { HOSTPORT, CONTAINERPORT, IMAGENAME, CONTAINERNAME };
+		loadFromEnvironmentVariables(ENV_PREFIX, properties);
+	}
+
 	public void loadFromDefaultSource() {
 		loadFileOrDefaultResource(DEFAULT_FILE_KEY, DEFAULT_CONFIG_PATH);
+		loadFromEnvironmentVariables();
 	}
 
 	public int getHostPort() {

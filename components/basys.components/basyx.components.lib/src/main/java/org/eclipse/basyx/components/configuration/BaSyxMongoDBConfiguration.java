@@ -10,6 +10,9 @@ import java.util.Map;
  *
  */
 public class BaSyxMongoDBConfiguration extends BaSyxConfiguration {
+	// Prefix for environment variables
+	public static final String ENV_PREFIX = "BaSyxMongoDB_";
+
 	// Default BaSyx SQL configuration
 	public static final String DEFAULT_CONNECTIONURL = "mongodb://127.0.0.1:27017/";
 	public static final String DEFAULT_DATABASE = "admin";
@@ -105,8 +108,14 @@ public class BaSyxMongoDBConfiguration extends BaSyxConfiguration {
 		setRegistryCollection(registryCollection);
 	}
 
+	public void loadFromEnvironmentVariables() {
+		String[] properties = { DATABASE, CONNECTIONURL, REGISTRY_COLLECTION, AAS_COLLECTION, SUBMODEL_COLLECTION };
+		loadFromEnvironmentVariables(ENV_PREFIX, properties);
+	}
+
 	public void loadFromDefaultSource() {
 		loadFileOrDefaultResource(DEFAULT_FILE_KEY, DEFAULT_CONFIG_PATH);
+		loadFromEnvironmentVariables();
 	}
 
 	public String getDatabase() {

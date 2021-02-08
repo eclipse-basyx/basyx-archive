@@ -13,6 +13,9 @@ import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
  *
  */
 public class BaSyxContextConfiguration extends BaSyxConfiguration {
+	// Prefix for environment variables
+	public static final String ENV_PREFIX = "BaSyxContext_";
+
 	// Default BaSyx Context configuration
 	public static final String DEFAULT_CONTEXTPATH = "/basys.sdk";
 	public static final String DEFAULT_DOCBASE = System.getProperty("java.io.tmpdir");
@@ -81,8 +84,14 @@ public class BaSyxContextConfiguration extends BaSyxConfiguration {
 		setPort(port);
 	}
 
+	public void loadFromEnvironmentVariables() {
+		String[] properties = { CONTEXTPATH, DOCBASE, HOSTNAME, PORT };
+		loadFromEnvironmentVariables(ENV_PREFIX, properties);
+	}
+
 	public void loadFromDefaultSource() {
 		loadFileOrDefaultResource(DEFAULT_FILE_KEY, DEFAULT_CONFIG_PATH);
+		loadFromEnvironmentVariables();
 	}
 
 	public BaSyxContext createBaSyxContext() {

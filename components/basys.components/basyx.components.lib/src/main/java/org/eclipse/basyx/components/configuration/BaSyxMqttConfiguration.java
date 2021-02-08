@@ -14,6 +14,9 @@ import java.util.Set;
  *
  */
 public class BaSyxMqttConfiguration extends BaSyxConfiguration {
+	// Prefix for environment variables
+	public static final String ENV_PREFIX = "BaSyxMQTT_";
+
 	// Default BaSyx MQTT configuration
 	public static final String DEFAULT_USER = "";
 	public static final String DEFAULT_PASS = "";
@@ -60,11 +63,10 @@ public class BaSyxMqttConfiguration extends BaSyxConfiguration {
 	/**
 	 * Constructor with initial configuration
 	 * 
-	 * @param user   Username for SQL database
-	 * @param pass   Password for SQL database
-	 * @param path   SQL connection path
-	 * @param driver SQL driver
-	 * @param prefix SQL driver prefix
+	 * @param user   Username for MQTT connection
+	 * @param pass   Password for MQTT connection
+	 * @param server MQTT broker address
+	 * @param qos    MQTT quality of service level
 	 */
 	public BaSyxMqttConfiguration(String user, String pass, String server, int qos) {
 		this();
@@ -74,8 +76,17 @@ public class BaSyxMqttConfiguration extends BaSyxConfiguration {
 		setQoS(qos);
 	}
 
+	/**
+	 * Load all settings except of the whitelist config part
+	 */
+	public void loadFromEnvironmentVariables() {
+		String[] properties = { USER, PASS, SERVER, QOS };
+		loadFromEnvironmentVariables(ENV_PREFIX, properties);
+	}
+
 	public void loadFromDefaultSource() {
 		loadFileOrDefaultResource(DEFAULT_FILE_KEY, DEFAULT_CONFIG_PATH);
+		loadFromEnvironmentVariables();
 	}
 
 	public String getUser() {
