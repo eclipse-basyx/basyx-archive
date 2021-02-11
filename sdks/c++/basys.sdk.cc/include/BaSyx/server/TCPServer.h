@@ -114,7 +114,7 @@ public:
                 if (socket->is_open())
                     socket->close();
             } catch (std::exception& e) {
-                log.warn("Socket closed unexpectedly.");
+                log.warn("Socket closed unexpectedly: {}", e.what());
             }
         };
 
