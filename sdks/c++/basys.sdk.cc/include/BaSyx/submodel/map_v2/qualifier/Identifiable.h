@@ -18,7 +18,7 @@ public:
     static constexpr char IdType[] = "idType";
     static constexpr char Id[] = "id";
     static constexpr char AdministrativeInformation[] = "administrativeInformation";
-    static constexpr char Identifier[] = "Identification";
+    static constexpr char Identifier[] = "identification";
   };
 private:
 	map::AdministrativeInformation administrativeInformation;
