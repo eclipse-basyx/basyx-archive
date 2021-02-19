@@ -3,6 +3,7 @@ package org.eclipse.basyx.components.configuration;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 
 /**
@@ -17,7 +18,7 @@ public class BaSyxContextConfiguration extends BaSyxConfiguration {
 	public static final String ENV_PREFIX = "BaSyxContext_";
 
 	// Default BaSyx Context configuration
-	public static final String DEFAULT_CONTEXTPATH = "/basys.sdk";
+	public static final String DEFAULT_CONTEXTPATH = "basys.sdk";
 	public static final String DEFAULT_DOCBASE = System.getProperty("java.io.tmpdir");
 	public static final String DEFAULT_HOSTNAME = "localhost";
 	public static final int DEFAULT_PORT = 4000;
@@ -107,7 +108,7 @@ public class BaSyxContextConfiguration extends BaSyxConfiguration {
 	}
 
 	public void setContextPath(String contextPath) {
-		setProperty(CONTEXTPATH, contextPath);
+		setProperty(CONTEXTPATH, VABPathTools.stripSlashes(contextPath));
 	}
 
 	public String getDocBasePath() {
@@ -135,6 +136,12 @@ public class BaSyxContextConfiguration extends BaSyxConfiguration {
 	}
 
 	public String getUrl() {
-		return "http://" + getHostname() + ":" + getPort() + "/" + getContextPath();
+		String contextPath = getContextPath();
+		String base = "http://" + getHostname() + ":" + getPort();
+		if (contextPath.isEmpty()) {
+			return base;
+		} else {
+			return VABPathTools.concatenatePaths(base, contextPath);
+		}
 	}
 }
