@@ -72,13 +72,13 @@ public class ConnectedBlob extends ConnectedDataElement implements IBlob {
 	}
 
 	@Override
-	public String getASCIIString() {
-		return getLocalCopy().getASCIIString();
+	public String getUTF8String() {
+		return getLocalCopy().getUTF8String();
 	}
 
 	@Override
-	public void setASCIIString(String text) {
-		byte[] byteArray = text.getBytes(StandardCharsets.US_ASCII);
+	public void setUTF8String(String text) {
+		byte[] byteArray = text.getBytes(StandardCharsets.UTF_8);
 		setByteArrayValue(byteArray);
 	}
 }

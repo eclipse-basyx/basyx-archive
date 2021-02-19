@@ -126,14 +126,14 @@ public class Blob extends DataElement implements IBlob {
 	}
 
 	@Override
-	public String getASCIIString() {
+	public String getUTF8String() {
 		byte[] value = getByteArrayValue();
-		return new String(value, StandardCharsets.US_ASCII);
+		return new String(value, StandardCharsets.UTF_8);
 	}
 
 	@Override
-	public void setASCIIString(String text) {
-		setByteArrayValue(text.getBytes(StandardCharsets.US_ASCII));
+	public void setUTF8String(String text) {
+		setByteArrayValue(text.getBytes(StandardCharsets.UTF_8));
 	}
 
 	public void setMimeType(String mimeType) {

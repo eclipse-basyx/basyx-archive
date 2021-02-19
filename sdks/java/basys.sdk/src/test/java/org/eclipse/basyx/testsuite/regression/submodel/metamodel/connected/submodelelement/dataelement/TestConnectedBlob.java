@@ -30,7 +30,7 @@ public class TestConnectedBlob {
 	@Before
 	public void build() {
 		blob = new Blob("testIdShort", "mimeType");
-		byte[] value = BLOB_CONTENT.getBytes(StandardCharsets.US_ASCII);
+		byte[] value = BLOB_CONTENT.getBytes(StandardCharsets.UTF_8);
 		blob.setByteArrayValue(value);
 		
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
@@ -45,7 +45,7 @@ public class TestConnectedBlob {
 	@Test
 	public void testGetValue() {
 		assertEquals(blob.getValue(), connectedBlob.getValue());
-		byte[] byteArray = BLOB_CONTENT.getBytes(StandardCharsets.US_ASCII);
+		byte[] byteArray = BLOB_CONTENT.getBytes(StandardCharsets.UTF_8);
 		assertEquals(Base64.getEncoder().encodeToString(byteArray), blob.getValue());
 
 	}
@@ -56,7 +56,7 @@ public class TestConnectedBlob {
 	@Test
 	public void testGetByteArrayValue() {
 		assertArrayEquals(blob.getByteArrayValue(), connectedBlob.getByteArrayValue());
-		assertArrayEquals(BLOB_CONTENT.getBytes(StandardCharsets.US_ASCII), connectedBlob.getByteArrayValue());
+		assertArrayEquals(BLOB_CONTENT.getBytes(StandardCharsets.UTF_8), connectedBlob.getByteArrayValue());
 	}
 	
 	/**
@@ -68,21 +68,21 @@ public class TestConnectedBlob {
 	}
 	
 	/**
-	 * Tests if getASCIIString() returns the correct value
+	 * Tests if getUTF8String() returns the correct value
 	 */
 	@Test
-	public void testGetASCII() {
-		assertEquals(BLOB_CONTENT, connectedBlob.getASCIIString());
+	public void testGetUTF8() {
+		assertEquals(BLOB_CONTENT, connectedBlob.getUTF8String());
 	}
 
 	/**
-	 * Tests if SetASCII sets the correct value
+	 * Tests if SetUTF8 sets the correct value
 	 */
 	@Test
-	public void testSetASCII() {
-		connectedBlob.setASCIIString("NEW");
-		assertEquals("NEW", connectedBlob.getASCIIString());
-		assertArrayEquals("NEW".getBytes(StandardCharsets.US_ASCII), connectedBlob.getByteArrayValue());
+	public void testSetUTF8() {
+		connectedBlob.setUTF8String("NEW");
+		assertEquals("NEW", connectedBlob.getUTF8String());
+		assertArrayEquals("NEW".getBytes(StandardCharsets.UTF_8), connectedBlob.getByteArrayValue());
 	}
 
 	/**
@@ -90,10 +90,10 @@ public class TestConnectedBlob {
 	 */
 	@Test
 	public void testSetByteArray() {
-		byte[] newArrayValue = "NEW".getBytes(StandardCharsets.US_ASCII);
+		byte[] newArrayValue = "NEW".getBytes(StandardCharsets.UTF_8);
 		connectedBlob.setByteArrayValue(newArrayValue);
-		assertEquals("NEW", connectedBlob.getASCIIString());
-		assertArrayEquals("NEW".getBytes(StandardCharsets.US_ASCII), connectedBlob.getByteArrayValue());
+		assertEquals("NEW", connectedBlob.getUTF8String());
+		assertArrayEquals("NEW".getBytes(StandardCharsets.UTF_8), connectedBlob.getByteArrayValue());
 	}
 
 	/**
@@ -101,9 +101,9 @@ public class TestConnectedBlob {
 	 */
 	@Test
 	public void testSetValue() {
-		byte[] newArrayValue = "NEW".getBytes(StandardCharsets.US_ASCII);
+		byte[] newArrayValue = "NEW".getBytes(StandardCharsets.UTF_8);
 		String newStringValue = Base64.getEncoder().encodeToString(newArrayValue);
 		connectedBlob.setValue(newStringValue);
-		assertEquals("NEW", connectedBlob.getASCIIString());
+		assertEquals("NEW", connectedBlob.getUTF8String());
 	}
 }

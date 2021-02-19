@@ -39,18 +39,18 @@ public interface IBlob extends IDataElement {
 	public void setByteArrayValue(byte[] value);
 
 	/**
-	 * Returns the ASCII String representation of the byte array BLOB value
+	 * Returns the UTF8 String representation of the byte array BLOB value
 	 *
 	 * @return
 	 */
-	public String getASCIIString();
+	public String getUTF8String();
 
 	/**
-	 * Sets an ASCII string as an encoded byte array in the BLOB data element value
+	 * Sets an UTF8 string as an encoded byte array in the BLOB data element value
 	 * 
 	 * @param text
 	 */
-	public void setASCIIString(String text);
+	public void setUTF8String(String text);
 
 	/**
 	 * Gets the mime type of the content of the BLOB. The mime type states which

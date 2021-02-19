@@ -22,7 +22,7 @@ public class TestBlob {
 
 	protected Blob blob;
 	protected String testString = "NEW!";
-	protected byte[] testBytes = testString.getBytes(StandardCharsets.US_ASCII);
+	protected byte[] testBytes = testString.getBytes(StandardCharsets.UTF_8);
 	protected String testBase64 = Base64.getEncoder().encodeToString(testBytes);
 	
 	@Before
@@ -52,18 +52,18 @@ public class TestBlob {
 	@Test
 	public void testSetValue() {
 		blob.setValue(testBase64);
-		assertEquals(testString, blob.getASCIIString());
+		assertEquals(testString, blob.getUTF8String());
 		assertArrayEquals(testBytes, blob.getByteArrayValue());
 		assertEquals(testBase64, blob.getValue());
 	}
 	
 	/**
-	 * Tests if setASCII sets the correct value
+	 * Tests if setUTF8 sets the correct value
 	 */
 	@Test
-	public void testSetASCII() {
-		blob.setASCIIString(testString);
-		assertEquals(testString, blob.getASCIIString());
+	public void testSetUTF8() {
+		blob.setUTF8String(testString);
+		assertEquals(testString, blob.getUTF8String());
 		assertArrayEquals(testBytes, blob.getByteArrayValue());
 		assertEquals(testBase64, blob.getValue());
 	}
@@ -74,7 +74,7 @@ public class TestBlob {
 	@Test
 	public void testSetByteArray() {
 		blob.setByteArrayValue(testBytes);
-		assertEquals(testString, blob.getASCIIString());
+		assertEquals(testString, blob.getUTF8String());
 		assertArrayEquals(testBytes, blob.getByteArrayValue());
 		assertEquals(testBase64, blob.getValue());
 	}
