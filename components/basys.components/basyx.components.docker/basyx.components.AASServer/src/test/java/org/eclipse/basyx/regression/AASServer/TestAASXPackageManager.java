@@ -3,7 +3,9 @@ package org.eclipse.basyx.regression.AASServer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -12,19 +14,33 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.eclipse.basyx.aas.factory.aasx.AASXFactory;
+import org.eclipse.basyx.aas.factory.aasx.InMemoryFile;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
+import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.components.aas.aasx.AASXPackageManager;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.support.bundle.AASBundle;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -33,26 +49,34 @@ import org.xml.sax.SAXException;
  * submodels, assets and concept-descriptions. it also checks whether the aas
  * have correct references to the asets and submodels
  * 
- * @author zhangzai
+ * @author zhangzai, conradi
  *
  */
 public class TestAASXPackageManager {
 	/**
 	 * path to the aasx package
 	 */
-	private String aasxPath = "aasx/01_Festo.aasx";
+	private static final String aasxPath = "aasx/01_Festo.aasx";
+	
+	private static final String CREATED_AASX_PATH = "test.aasx";
 
 	/**
 	 * the aasx package converter
 	 */
-	private AASXPackageManager packageConverter;
+	private static AASXPackageManager packageConverter;
 
 	/**
 	 * this string array is used to check the refs to submodels of aas
 	 */
 	private String[] submodelids = { "www.company.com/ids/sm/6053_5072_7091_5102", "smart.festo.com/demo/sm/instance/1/1/13B7CCD9BF7A3F24", "www.company.com/ids/sm/4343_5072_7091_3242", "www.company.com/ids/sm/2543_5072_7091_2660",
 			"www.company.com/ids/sm/6563_5072_7091_4267"
-
+			
+	};
+	
+	/**
+	 * Files that are unzipped
+	 */
+	private static String[] unzipFiles = { "target/files/aasx/Document/docu.pdf", "target/files/icon.png"
 	};
 
 	/**
@@ -68,8 +92,8 @@ public class TestAASXPackageManager {
 	/**
 	 * Initialize the AASX package converter
 	 */
-	@Before
-	public void setup() {
+	@BeforeClass
+	public static void setup() {
 		// Create the aasx package converter with the path to the aasx package
 		packageConverter = new AASXPackageManager(aasxPath);
 	}
@@ -82,7 +106,7 @@ public class TestAASXPackageManager {
 		// Parse aas from the XML and create the AAS Bundle with refs to submodels
 		try {
 			aasBundles = packageConverter.retrieveAASBundles();
-		} catch (ParserConfigurationException | SAXException | IOException e) {
+		} catch (ParserConfigurationException | SAXException | IOException | InvalidFormatException e) {
 			e.printStackTrace();
 		}
 
@@ -92,6 +116,87 @@ public class TestAASXPackageManager {
 		// Check the submodels
 		checkSubmodels(submodels);
 	}
+	
+	
+	/**
+	 * Creates a new .aasx using the AASXFactory and tries to parse it
+	 */
+	@Test
+	public void testLoadGeneratedAASX()
+			throws InvalidFormatException, IOException, ParserConfigurationException, SAXException, TransformerException, URISyntaxException {
+		
+		List<IAssetAdministrationShell> aasList = new ArrayList<>();
+		List<ISubModel> submodelList = new ArrayList<>();
+		List<IAsset> assetList = new ArrayList<>();
+		List<IConceptDescription> conceptDescriptionList = new ArrayList<>();
+
+		List<InMemoryFile> fileList = new ArrayList<>();
+		
+		Asset asset = new Asset("asset-id", new ModelUrn("ASSET_IDENTIFICATION"), AssetKind.INSTANCE);
+		AssetAdministrationShell aas = new AssetAdministrationShell("aasIdShort", new ModelUrn("aasId"), asset);
+		aas.setAssetReference((Reference) asset.getReference());
+		
+		SubModel sm = new SubModel("smIdShort", new ModelUrn("smId"));
+		
+		// Create File SubmodelElements
+		File file1 = new File("/icon.png", "image/png");
+		file1.setIdShort("file1");
+		File file2 = new File("/aasx/Document/docu.pdf", "application/pdf");
+		file2.setIdShort("file2");
+		
+		SubmodelElementCollection collection = new SubmodelElementCollection("Marking_RCM");
+		collection.addSubModelElement(file1);
+		
+		sm.addSubModelElement(collection);
+		sm.addSubModelElement(file2);
+		aas.addSubModel(sm);
+		
+		aasList.add(aas);
+		submodelList.add(sm);
+		assetList.add(asset);
+
+		// Build InMemoryFiles for .aasx
+		byte[] content1 = {5,6,7,8,9};
+		InMemoryFile file = new InMemoryFile(content1, "/icon.png");
+		fileList.add(file);
+		
+		byte[] content2 = {10,11,12,13,14};
+		file = new InMemoryFile(content2, "aasx/Document/docu.pdf");
+		fileList.add(file);
+		
+		// Build AASX
+		FileOutputStream out = new FileOutputStream(CREATED_AASX_PATH);
+		AASXFactory.buildAASX(aasList, assetList, conceptDescriptionList, submodelList, fileList, out);
+		
+		AASXPackageManager packageManager = new AASXPackageManager(CREATED_AASX_PATH);
+		
+		checkBundle(packageManager.retrieveAASBundles(), aas, sm);
+		
+		// Unzip files from the .aasx
+		packageManager.unzipRelatedFiles();
+		
+		// Check if all expected files are present
+		for(String path: unzipFiles) {
+			assertTrue(new java.io.File(path).exists());
+		}
+		
+	}
+	
+	private void checkBundle(Set<AASBundle> bundles, IAssetAdministrationShell aas, ISubModel sm) {
+		assertEquals(1, bundles.size());
+		AASBundle bundle = bundles.stream().findFirst().get();
+		
+		IAssetAdministrationShell parsedAAS = bundle.getAAS();
+		assertEquals(aas.getIdShort(), parsedAAS.getIdShort());
+		assertEquals(aas.getIdentification().getId(), parsedAAS.getIdentification().getId());
+		
+		assertEquals(1, bundle.getSubmodels().size());
+		ISubModel parsedSubmodel = bundle.getSubmodels().stream().findFirst().get();
+		assertEquals(sm.getIdShort(), parsedSubmodel.getIdShort());
+		assertEquals(sm.getIdentification().getId(), parsedSubmodel.getIdentification().getId());
+		assertEquals(sm.getSubmodelElements().size(), parsedSubmodel.getSubmodelElements().size());
+	}
+	
 
 	/**
 	 * Check the parsed aas with expected ones
@@ -258,6 +363,18 @@ public class TestAASXPackageManager {
 		Property prop2 = (Property) smElemMap.get("Street");
 		assertEquals("Street", prop2.getIdShort());
 		assertEquals("Ruiter Straße 82", prop2.get());
+	}
+	
+	
+	/**
+	 * Delete created files
+	 */
+	@AfterClass
+	public static void cleanUp() {
+		for(String path: unzipFiles) {
+			new java.io.File(path).delete();
+		}
+		new java.io.File(CREATED_AASX_PATH).delete();
 	}
 
 }

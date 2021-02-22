@@ -1,13 +1,13 @@
 package org.eclipse.basyx.examples.scenarios.staticdynamic;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.eclipse.basyx.aas.aggregator.proxy.AASAggregatorProxy;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.IComponent;
@@ -45,11 +45,11 @@ public class StaticDynamicScenario {
 	
 	
 	
-	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
+	public static void main(String[] args) throws InvalidFormatException, IOException, ParserConfigurationException, SAXException {
 		new StaticDynamicScenario();
 	}
 
-	public StaticDynamicScenario() throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
+	public StaticDynamicScenario() throws InvalidFormatException, IOException, ParserConfigurationException, SAXException {
 		
 		// Startup the registry server
 		startRegistry();

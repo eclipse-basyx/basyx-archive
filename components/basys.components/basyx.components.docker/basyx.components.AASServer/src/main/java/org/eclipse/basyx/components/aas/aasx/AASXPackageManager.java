@@ -2,9 +2,10 @@ package org.eclipse.basyx.components.aas.aasx;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -15,14 +16,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.openxml4j.opc.PackagePart;
+import org.apache.poi.openxml4j.opc.PackageRelationshipCollection;
+import org.apache.poi.openxml4j.opc.PackagingURIHelper;
 import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
 import org.eclipse.basyx.components.xml.XMLAASBundleFactory;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
@@ -33,23 +36,24 @@ import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
 /**
  * The AASX package converter converts a aasx package into a list of aas, a list
  * of submodels a list of assets, a list of Concept descriptions
  * 
  * The aas provides the references to the submodels and assets
  * 
- * @author zhangzai
+ * @author zhangzai, conradi
  *
  */
 public class AASXPackageManager {
 
 
+	private static final String XML_TYPE = "http://www.admin-shell.io/aasx/relationships/aas-spec";
+	private static final String AASX_ORIGIN = "/aasx/aasx-origin";
+	
+	
 	/**
 	 * Path to the AASX package
 	 */
@@ -77,14 +81,16 @@ public class AASXPackageManager {
 		aasxPath = path;
 	}
 
-	public Set<AASBundle> retrieveAASBundles() throws IOException, ParserConfigurationException, SAXException {
+	public Set<AASBundle> retrieveAASBundles() throws IOException, ParserConfigurationException, SAXException, InvalidFormatException {
 		
 		// If the XML was already parsed return cached Bundles
 		if(bundles != null) {
 			return bundles;
 		}
 		
-		bundleFactory = new XMLAASBundleFactory(getXMLResourceString(aasxPath));
+		OPCPackage aasxRoot = OPCPackage.open(getInputStream(aasxPath));
+		
+		bundleFactory = new XMLAASBundleFactory(getXMLResourceString(aasxRoot));
 		
 		bundles = bundleFactory.create();
 		
@@ -92,133 +98,37 @@ public class AASXPackageManager {
 	}
 
 	/**
-	 * Find the path of the aas-xml file
-	 * 
-	 * @param stream - Stream of the aasx package
-	 * @return Path of the aas xml file, empty string if not found
-	 * @throws IOException
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 */
-	private String findAASXml(ZipInputStream stream) throws IOException, ParserConfigurationException, SAXException {
-		String path = "";
-		// find the entry of the aasx
-		for (ZipEntry entry; (entry = stream.getNextEntry()) != null;) {
-
-			// get name of the entry
-			String name = entry.getName();
-
-			// find the relationship file in the directory /aasx/_rels/aas_origin.rels
-			if (!entry.isDirectory() && name.startsWith("aasx/_rels")) {
-				// find the file aasx-origin.rels
-				if (name.endsWith("aasx-origin.rels")) {
-					// Get path of the aas xml
-					String aasXmlPath = findAASXMLAddress(stream);
-					if (!aasXmlPath.isEmpty()) {
-						path = aasXmlPath;
-						break;
-					}
-				}
-			}
-		}
-		return path;
-	}
-
-	/**
-	 * Get entry of a file
-	 * 
-	 * @param filename - name of a file with path
-	 * @return a file entry
-	 * @throws IOException
-	 */
-	private ZipInputStream returnFileEntryStream(String filename, ZipInputStream stream) throws IOException {
-		ZipInputStream str = null;
-		if (filename.startsWith("/")) {
-			filename = filename.substring(1);
-		}
-
-		// get all entries of the aasx
-		for (ZipEntry e; (e = stream.getNextEntry()) != null;) {
-			// get name of the entry
-			String name = e.getName();
-			if (name.equals(filename)) {
-				str = stream;
-				break;
-			}
-		}
-		return str;
-	}
-
-	/**
-	 * Parse the relationship file and find the path of the aas-XML file describing
-	 * the aas
-	 * 
-	 * @param ins - input stream of this relationship file
-	 * @return path of the aas-xml file
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
-	 */
-	private String findAASXMLAddress(InputStream ins) throws ParserConfigurationException, SAXException, IOException {
-		String path = "";
-
-		// create the XML document parser
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		Document doc = dBuilder.parse(ins);
-		doc.getDocumentElement().normalize();
-
-		// Get the tag with "Relationships"
-		logger.info("Root element :" + doc.getDocumentElement().getNodeName());
-		NodeList relList = doc.getElementsByTagName("Relationship");
-
-		// If there is only 1 relationship pointing to the aas-xml file, this should be
-		// the case
-		if (relList.getLength() == 1) {
-			Node first = relList.item(0);
-
-			if (first.getNodeType() == Node.ELEMENT_NODE) {
-				logger.info("\nCurrent Element :" + first.getNodeName());
-				// get the target file path
-				String targetFile = ((Element) first).getAttribute("Target");
-				String type = ((Element) first).getAttribute("Type");
-
-				// validate the relationship type
-				if (type.endsWith("aas-spec")) {
-					logger.info("target file name : " + targetFile);
-					path = targetFile;
-				}
-			}
-		}
-		return path;
-	}
-
-	/**
 	 * Return the Content of the xml file in the aasx-package as String
 	 * 
-	 * @param filePath - path to the aasx package
+	 * @param aasxPackage - the root package of the AASX
 	 * @return Content of XML as String
+	 * @throws InvalidFormatException 
 	 * @throws IOException
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
 	 */
-	private String getXMLResourceString(String filePath) throws IOException, ParserConfigurationException, SAXException {
-		String aasXmlPath;
-		// Create the zip input stream
-		try (ZipInputStream stream = getZipInputStream(filePath)) {
+	private String getXMLResourceString(OPCPackage aasxPackage) throws InvalidFormatException, IOException {
 
-			// find the path of the aas xml
-			aasXmlPath = this.findAASXml(stream);
+		// Get the "/aasx/aasx-origin" Part. It is Relationship source for the XML-Document
+		PackagePart originPart = aasxPackage.getPart(PackagingURIHelper.createPartName(AASX_ORIGIN));
+		
+		// Get the Relation to the XML Document
+		PackageRelationshipCollection originRelationships = originPart.getRelationshipsByType(XML_TYPE);
+		
+		
+		// If there is more than one or no XML-Document that is an error
+		if(originRelationships.size() > 1) {
+			throw new RuntimeException("More than one 'aasx-spec' document found in .aasx");
+		} else if(originRelationships.size() == 0) {
+			throw new RuntimeException("No 'aasx-spec' document found in .aasx");
 		}
-
-		try (ZipInputStream stream = getZipInputStream(filePath)) {
-			// Find the entry of the aas xml
-			ZipInputStream streamPointingToEntry = this.returnFileEntryStream(aasXmlPath, stream);
-
-			// create the xml-converter with the input stream
-			String text = IOUtils.toString(streamPointingToEntry, StandardCharsets.UTF_8.name());
-			return text;
-		}
+		
+		// Get the PackagePart of the XML-Document
+		PackagePart xmlPart = originPart.getRelatedPart(originRelationships.getRelationship(0));
+		
+		// Read the content from the PackagePart
+		InputStream stream = xmlPart.getInputStream();
+		StringWriter writer = new StringWriter();
+		IOUtils.copy(stream, writer, StandardCharsets.UTF_8);
+		return writer.toString();
 	}
 
 	/**
@@ -229,10 +139,11 @@ public class AASXPackageManager {
 	 * @throws IOException
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
+	 * @throws InvalidFormatException 
 	 * 
 	 */
 	private List<String> parseReferencedFilePathsFromAASX()
-			throws IOException, ParserConfigurationException, SAXException {
+			throws IOException, ParserConfigurationException, SAXException, InvalidFormatException {
 		
 		Set<AASBundle> bundles = retrieveAASBundles();
 		
@@ -285,14 +196,16 @@ public class AASXPackageManager {
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 * @throws URISyntaxException
+	 * @throws InvalidFormatException 
 	 */
 	public void unzipRelatedFiles()
-			throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
+			throws IOException, ParserConfigurationException, SAXException, URISyntaxException, InvalidFormatException {
 		// load folder which stores the files
 		List<String> files = parseReferencedFilePathsFromAASX();
+		OPCPackage aasxRoot = OPCPackage.open(getInputStream(aasxPath));
 		for (String filePath : files) {
 			// name of the folder
-			unzipFile(filePath, aasxPath);
+			unzipFile(filePath, aasxRoot);
 		}
 	}
 
@@ -316,9 +229,9 @@ public class AASXPackageManager {
 	 * @param aasxPath    - aasx path
 	 * @throws IOException
 	 * @throws URISyntaxException
+	 * @throws InvalidFormatException 
 	 */
-	private void unzipFile(String filePath, String aasxPath)
-			throws IOException, URISyntaxException {
+	private void unzipFile(String filePath, OPCPackage aasxRoot) throws IOException, URISyntaxException, InvalidFormatException {
 		// Create destination directory
 		if (filePath.startsWith("/")) {
 			filePath = filePath.substring(1);
@@ -329,62 +242,31 @@ public class AASXPackageManager {
 		Path destDir = rootPath.resolve(relativePath);
 		logger.info("Unzipping to " + destDir);
 		Files.createDirectories(destDir);
-
-		// create buffer for the folder binary
-		byte[] buffer = new byte[1024];
-
-		// Find the file with the "filePath"
-		try (ZipInputStream stream = getZipInputStream(aasxPath)) {
-			ZipEntry zipEntry = stream.getNextEntry();
-			while (zipEntry != null) {
-				if (!zipEntry.isDirectory() && zipEntry.getName().contains(filePath)) {
-					// Create the file object in the destination directory
-					File newFile = newFile(destDir.toFile(), zipEntry);
-
-					// Create the file output stream
-					try (FileOutputStream fos = new FileOutputStream(newFile)) {
-						int len;
-						// Write the binary to the file
-						while ((len = stream.read(buffer)) > 0) {
-							fos.write(buffer, 0, len);
-						}
-					}
-					return;
-				}
-				zipEntry = stream.getNextEntry();
-			}
+		
+		PackagePart part = aasxRoot.getPart(PackagingURIHelper.createPartName("/" + filePath));
+		
+		if(part == null) {
+			logger.error("File '" + filePath + "' cloud not be unzipped. It does not exist in .aasx.");
+			throw new FileNotFoundException("File '" + filePath + "' cloud not be unzipped. It does not exist in .aasx.");
 		}
+		
+		String targetPath = destDir.toString() + "/" + VABPathTools.getLastElement(filePath);
+		InputStream stream = part.getInputStream();
+		FileUtils.copyInputStreamToFile(stream, new File(targetPath));
 	}
-
-	/**
-	 * Preventing Zip Slip, create a file
-	 * 
-	 * @param destinationDir
-	 * @param zipEntry
-	 * @return
-	 * @throws IOException
-	 */
-	private File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
-		String filename = VABPathTools.getLastElement(zipEntry.getName());
-
-		File destFile = new File(destinationDir, filename);
-
-		String destDirPath = destinationDir.getCanonicalPath();
-		String destFilePath = destFile.getCanonicalPath();
-
-		if (!destFilePath.startsWith(destDirPath + File.separator)) {
-			throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
-		}
-
-		return destFile;
-	}
-
-	private ZipInputStream getZipInputStream(String aasxFilePath) throws IOException {
-		try {
-			return new ZipInputStream(BaSyxConfiguration.getResourceStream(aasxFilePath));
-		} catch (NullPointerException ex) {
+	
+	private InputStream getInputStream(String aasxFilePath) throws IOException {
+		InputStream stream = BaSyxConfiguration.getResourceStream(aasxFilePath);
+		if(stream != null) {
+			return stream;
+		} else {
 			// Alternativ, if resource has not been found: load from a file
-			return new ZipInputStream(new FileInputStream(aasxFilePath));
+			try {
+				return new FileInputStream(aasxFilePath);
+			} catch (FileNotFoundException e) {
+				logger.error("File '" + aasxFilePath + "' to be loaded was not found.");
+				throw e;
+			}
 		}
 	}
 }

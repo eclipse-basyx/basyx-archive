@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.catalina.servlets.DefaultServlet;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
@@ -191,7 +192,7 @@ public class AASServerComponent implements IComponent {
 	}
 
 	private void loadBundleFromAASX(String aasxPath)
-			throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
+			throws IOException, ParserConfigurationException, SAXException, URISyntaxException, InvalidFormatException {
 		logger.info("Loading aas from aasx \"" + aasxPath + "\"");
 
 		// Instantiate the aasx package manager
@@ -233,7 +234,7 @@ public class AASServerComponent implements IComponent {
 			} else if (aasSource.endsWith(".xml")) {
 				loadBundleFromXML(aasSource);
 			}
-		} catch (IOException | ParserConfigurationException | SAXException | URISyntaxException e) {
+		} catch (IOException | ParserConfigurationException | SAXException | URISyntaxException | InvalidFormatException e) {
 			logger.error("Could not load initial AAS from source '" + aasSource + "'");
 			logger.info("Starting empty server instead");
 		}
