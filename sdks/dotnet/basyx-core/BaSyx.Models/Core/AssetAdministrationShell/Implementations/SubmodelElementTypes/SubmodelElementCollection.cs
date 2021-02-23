@@ -10,11 +10,13 @@
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.Common;
+using BaSyx.Models.Extensions;
 using BaSyx.Utils.ResultHandling;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
@@ -49,9 +51,9 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
         public bool IsRoot => Value.IsRoot;
         [IgnoreDataMember, JsonIgnore]
         public IElementContainer<ISubmodelElement> ParentContainer { get => this; set { } }
-
+        [IgnoreDataMember, JsonIgnore]
         public int Count => Value.Count;
-
+        [IgnoreDataMember, JsonIgnore]
         public bool IsReadOnly => Value.IsReadOnly;
 
         [IgnoreDataMember, JsonIgnore]
@@ -195,6 +197,97 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
         public bool Remove(ISubmodelElement item)
         {
             return Value.Remove(item);
+        }
+    }
+
+    [DataContract, JsonObject]
+    public class SubmodelElementCollection<T> : SubmodelElementCollection, IList<T>
+    {
+        [JsonConstructor]
+        public SubmodelElementCollection(string idShort) : base(idShort)
+        {
+            AllowDuplicates = true;
+            Ordered = true;
+        }
+
+        public SubmodelElementCollection(string idShort, IEnumerable<T> enumerable) : this(idShort)
+        {
+            if(enumerable?.Count() > 0)
+            {
+                foreach (var item in enumerable)
+                {
+                    this.Add(item);
+                }
+            }
+        }
+
+        T IList<T>.this[int index] { 
+            get => Value[index].Cast<IProperty>().ToObject<T>(); 
+            set => Value[index].Cast<IProperty>().Value = value; }
+
+        public void Add(T item)
+        {
+            string idShort = (Value.Count + 1).ToString();
+            Value.Add(new Property<T>(idShort, item));
+        }
+
+        public bool Contains(T item)
+        {
+            List<ISubmodelElement> list = Value.Flatten()?.ToList();
+            if (list == null)
+                return false;
+
+            return list.Find(p => p.Cast<IProperty<T>>().Value.Equals(item)) == null;
+        }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            List<T> list = Value.Flatten()?.ToList()?.ConvertAll(c => c.Cast<IProperty<T>>().Value);
+            list?.CopyTo(array, arrayIndex);
+        }
+
+        public int IndexOf(T item)
+        {
+            List<ISubmodelElement> list = Value.Flatten()?.ToList();
+            if (list == null)
+                return -1;
+
+            return list.FindIndex(p => p.Cast<IProperty<T>>().Value.Equals(item));
+        }
+
+        public void Insert(int index, T item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove(T item)
+        {
+            List<ISubmodelElement> list = Value.Flatten()?.ToList();
+            if (list == null)
+                return false;
+
+            var index = list.FindIndex(p => p.Cast<IProperty<T>>().Value.Equals(item));
+            if (index != -1)
+            {
+                RemoveAt(index);
+                return true;
+            }
+            else
+                return false;   
+        }
+
+        public void RemoveAt(int index)
+        {
+            string idShort = Value[index]?.IdShort;
+
+            if (!string.IsNullOrEmpty(idShort))
+                Remove(idShort);
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            List<T> list = Value.Flatten()?.ToList()?.ConvertAll(c => c.Cast<IProperty<T>>().Value);
+            return list?.GetEnumerator();
         }
     }
 }

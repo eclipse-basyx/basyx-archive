@@ -19,7 +19,7 @@ namespace BaSyx.Models.Core.Common
     public enum ModelTypes
     {
         Asset,
-        AssetAdministationShell,
+        AssetAdministrationShell,
         Submodel,
         SubmodelElement,
         SubmodelElementCollection,
@@ -52,7 +52,7 @@ namespace BaSyx.Models.Core.Common
     public class ModelType : DataObjectType, IEquatable<ModelType>
     {
         public static readonly ModelType Asset = new ModelType("Asset");
-        public static readonly ModelType AssetAdministationShell = new ModelType("AssetAdministationShell");
+        public static readonly ModelType AssetAdministrationShell = new ModelType("AssetAdministrationShell");
         public static readonly ModelType Submodel = new ModelType("Submodel");
         public static readonly ModelType SubmodelElement = new ModelType("SubmodelElement");
         public static readonly ModelType SubmodelElementCollection = new ModelType("SubmodelElementCollection");

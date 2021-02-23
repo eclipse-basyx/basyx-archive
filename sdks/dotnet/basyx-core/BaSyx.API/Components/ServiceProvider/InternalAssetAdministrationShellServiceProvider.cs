@@ -12,9 +12,9 @@ using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 
 namespace BaSyx.API.Components
 {
-    internal sealed class InternalAssetAdministationShellServiceProvider : AssetAdministrationShellServiceProvider
+    internal sealed class InternalAssetAdministrationShellServiceProvider : AssetAdministrationShellServiceProvider
     {
-        internal InternalAssetAdministationShellServiceProvider(IAssetAdministrationShell aas) : base(aas)
+        internal InternalAssetAdministrationShellServiceProvider(IAssetAdministrationShell aas) : base(aas)
         { }
 
         public override IAssetAdministrationShell BuildAssetAdministrationShell()
