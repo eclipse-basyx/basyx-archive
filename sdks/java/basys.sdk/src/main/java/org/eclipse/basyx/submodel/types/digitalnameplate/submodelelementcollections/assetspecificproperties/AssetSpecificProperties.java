@@ -96,9 +96,18 @@ public class AssetSpecificProperties extends SubmodelElementCollection {
 	public static boolean isValid(Map<String, Object> obj) {
 		AssetSpecificProperties props = createAsFacadeNonStrict(obj);
 		
-		return SubmodelElementCollection.isValid(obj)
+		if (SubmodelElementCollection.isValid(obj)
 				&& props.getGuidelineSpecificProperties() != null
-				&& props.getGuidelineSpecificProperties().size() > 0;
+				&& props.getGuidelineSpecificProperties().size() > 0) {
+			for (GuidelineSpecificProperties prop : props.getGuidelineSpecificProperties()) {
+				if (!GuidelineSpecificProperties.isValid((Map<String, Object>) prop)) {
+					return false;
+				}
+			}
+			return true;
+		} else {
+			return false;	
+		}
 	}
 	
 	public void setGuidelineSpecificProperties(List<GuidelineSpecificProperties> properties) {

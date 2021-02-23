@@ -111,11 +111,12 @@ public class Marking extends SubmodelElementCollection {
 	 * 
 	 * @return true/false
 	 */
+	@SuppressWarnings("unchecked")
 	public static boolean isValid(Map<String, Object> obj) {
 		Marking marking = createAsFacadeNonStrict(obj);
 		return SubmodelElementCollection.isValid(obj)
-				&& marking.getMarkingName() != null
-				&& marking.getMarkingFile() != null;
+				&& Property.isValid((Map<String, Object>) marking.getMarkingName())
+				&& File.isValid((Map<String, Object>) marking.getMarkingFile());
 	}
 	
 	/**

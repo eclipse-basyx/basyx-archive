@@ -13,7 +13,9 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangString;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
@@ -23,7 +25,6 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Mult
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollections.address.Address;
-import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollections.address.Fax;
 import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollections.assetspecificproperties.AssetSpecificProperties;
 import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollections.markings.Marking;
 import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollections.markings.Markings;
@@ -52,7 +53,7 @@ public class TestDigitalNameplateSubmodel {
 	public static Property yearsOfConstruction = new Property(DigitalNameplateSubmodel.YEARSOFCONSTRUCTIONID, PropertyValueTypeDef.String);
 	public static Markings markings;
 	public static AssetSpecificProperties assetSpecificProperties = new AssetSpecificProperties(Collections.singletonList(TestAssetSpecificProperties.guidelineSpecificProperties));
-	
+	public static Identifier identifier = new Identifier(IdentifierType.IRI, "https://admin-shell.io/zvei/nameplate/1/0/Nameplate");
 	private Map<String, Object> submodelMap = new HashMap<String, Object>();
 	
 	@Before
@@ -88,6 +89,7 @@ public class TestDigitalNameplateSubmodel {
 		submodelMap.put(Referable.IDSHORT, DigitalNameplateSubmodel.SUBMODELID);
 		submodelMap.put(HasSemantics.SEMANTICID, DigitalNameplateSubmodel.SEMANTICID);
 		submodelMap.put(SubModel.SUBMODELELEMENT, elements);
+		submodelMap.put(Identifiable.IDENTIFICATION, identifier);
 	}
 
 	@Test
@@ -103,12 +105,19 @@ public class TestDigitalNameplateSubmodel {
 		assertEquals(markings, submodelFromMap.getMarkings());
 		assertEquals(assetSpecificProperties, submodelFromMap.getAssetSpecificProperties());
 		assertEquals(DigitalNameplateSubmodel.SUBMODELID, submodelFromMap.getIdShort());
+		assertEquals(identifier, submodelFromMap.getIdentification());
 	}
 	
 	@Test (expected = MetamodelConstructionException.class)
 	public void testCreateAsFacadeExceptionIdShort() {
 		submodelMap.remove(Referable.IDSHORT);
-		Fax.createAsFacade(submodelMap);
+		DigitalNameplateSubmodel.createAsFacade(submodelMap);
+	}
+	
+	@Test (expected = MetamodelConstructionException.class)
+	public void testCreateAsFacadeExceptionIdentifier() {
+		submodelMap.remove(Identifiable.IDENTIFICATION);
+		DigitalNameplateSubmodel.createAsFacade(submodelMap);
 	}
 	
 	@SuppressWarnings("unchecked")

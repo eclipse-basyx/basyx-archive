@@ -102,9 +102,12 @@ public class Email extends SubmodelElementCollection {
 	 * 
 	 * @return true/false
 	 */
+	@SuppressWarnings("unchecked")
 	public static boolean isValid(Map<String, Object> obj) {
+		Email email = createAsFacadeNonStrict(obj);
+		
 		return SubmodelElementCollection.isValid(obj)
-				&& createAsFacadeNonStrict(obj).getEmailAddress() != null;
+				&& Property.isValid((Map<String, Object>) email.getEmailAddress());
 	}
 	
 	/**

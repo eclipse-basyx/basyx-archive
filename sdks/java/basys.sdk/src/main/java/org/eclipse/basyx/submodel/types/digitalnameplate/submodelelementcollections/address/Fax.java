@@ -100,9 +100,11 @@ public class Fax extends SubmodelElementCollection {
 	 * 
 	 * @return true/false
 	 */
+	@SuppressWarnings("unchecked")
 	public static boolean isValid(Map<String, Object> obj) {
+		Fax fax = createAsFacadeNonStrict(obj);
 		return SubmodelElementCollection.isValid(obj)
-				&& createAsFacadeNonStrict(obj).getFaxNumber() != null;
+				&& MultiLanguageProperty.isValid((Map<String, Object>) fax.getFaxNumber());
 	}
 	
 	/**

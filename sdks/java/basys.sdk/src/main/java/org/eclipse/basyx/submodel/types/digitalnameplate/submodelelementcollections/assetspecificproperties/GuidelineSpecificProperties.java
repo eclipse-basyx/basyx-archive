@@ -104,13 +104,24 @@ public class GuidelineSpecificProperties extends SubmodelElementCollection {
 	 * 
 	 * @return true/false
 	 */
+	@SuppressWarnings("unchecked")
 	public static boolean isValid(Map<String, Object> obj) {
 		GuidelineSpecificProperties props = createAsFacadeNonStrict(obj);
 		
-		return SubmodelElementCollection.isValid(obj)
-				&& props.getGuidelineForConformityDeclaration() != null
+		if (SubmodelElementCollection.isValid(obj)
+				&& Property.isValid((Map<String, Object>) props.getGuidelineForConformityDeclaration())
 				&& props.getArbitrary() != null
-				&& props.getArbitrary().size() > 0;
+				&& props.getArbitrary().size() > 0) {
+			for (IProperty arbitrary: props.getArbitrary()) {
+				if (!Property.isValid((Map<String, Object>) arbitrary)) {
+					return false;
+				}	
+			}
+			return true;
+		}
+		else {
+			return false;	
+		}
 	}
 	
 	/**

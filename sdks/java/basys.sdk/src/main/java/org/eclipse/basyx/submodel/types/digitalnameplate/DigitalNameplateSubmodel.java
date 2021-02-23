@@ -17,7 +17,6 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangString;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
@@ -186,15 +185,16 @@ public class DigitalNameplateSubmodel extends SubModel {
 	 * 
 	 * @return true/false
 	 */
+	@SuppressWarnings("unchecked")
 	public static boolean isValid(Map<String, Object> obj) {
 		DigitalNameplateSubmodel submodel = createAsFacadeNonStrict(obj);
 		
-		return SubmodelElementCollection.isValid(obj)
-				&& submodel.getManufacturerName() != null
-				&& submodel.getManufacturerProductDesignation() != null
-				&& submodel.getAddress() != null
-				&& submodel.getManufacturerProductFamily() != null
-				&& submodel.getYearOfConstruction() != null;
+		return SubModel.isValid(obj)
+				&& MultiLanguageProperty.isValid((Map<String, Object>) submodel.getManufacturerName())
+				&& MultiLanguageProperty.isValid((Map<String, Object>) submodel.getManufacturerProductDesignation())
+				&& Address.isValid((Map<String, Object>) submodel.getAddress())
+				&& MultiLanguageProperty.isValid((Map<String, Object>) submodel.getManufacturerProductFamily())
+				&& Property.isValid((Map<String, Object>) submodel.getYearOfConstruction());
 	}
 	
 	/**

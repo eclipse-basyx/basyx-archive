@@ -152,13 +152,15 @@ public class Address extends SubmodelElementCollection {
 	 * 
 	 * @return true/false
 	 */
+	@SuppressWarnings("unchecked")
 	public static boolean isValid(Map<String, Object> obj) {
 		Address address = createAsFacadeNonStrict(obj);
+		
 		return SubmodelElementCollection.isValid(obj)
-				&& address.getStreet() != null
-				&& address.getZipCode() != null
-				&& address.getCityTown() != null
-				&& address.getNationalCode() != null;
+				&& MultiLanguageProperty.isValid((Map<String, Object>) address.getStreet())
+				&& MultiLanguageProperty.isValid((Map<String, Object>) address.getZipCode())
+				&& MultiLanguageProperty.isValid((Map<String, Object>) address.getCityTown())
+				&& MultiLanguageProperty.isValid((Map<String, Object>) address.getNationalCode());
 	}
 
 	/**

@@ -97,9 +97,20 @@ public class Markings extends SubmodelElementCollection {
 	 */
 	public static boolean isValid(Map<String, Object> obj) {
 		Markings markings = createAsFacadeNonStrict(obj);
-		return SubmodelElementCollection.isValid(obj)
+		
+		if (SubmodelElementCollection.isValid(obj)
 				&& markings.getMarking() != null
-				&& markings.getMarking().size() > 0;
+				&& markings.getMarking().size() > 0) {
+			for (Marking marking : markings.getMarking()) {
+				if (!Marking.isValid((Map<String, Object>) marking)) {
+					return false;
+				}	
+			}
+			return true;
+		}
+		else {
+			return false;	
+		}
 	}
 	
 	/**

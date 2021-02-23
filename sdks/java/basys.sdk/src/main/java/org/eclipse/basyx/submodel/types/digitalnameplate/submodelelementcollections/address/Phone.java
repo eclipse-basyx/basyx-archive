@@ -100,9 +100,12 @@ public class Phone extends SubmodelElementCollection {
 	 * 
 	 * @return true/false
 	 */
+	@SuppressWarnings("unchecked")
 	public static boolean isValid(Map<String, Object> obj) {
+		Phone phone = createAsFacadeNonStrict(obj);
+		
 		return SubmodelElementCollection.isValid(obj)
-				&& createAsFacadeNonStrict(obj).getTelephoneNumber() != null;
+				&& MultiLanguageProperty.isValid((Map<String, Object>) phone.getTelephoneNumber());
 	}
 	
 	/**
