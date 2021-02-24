@@ -63,7 +63,7 @@ public:
             if (this->clientSocket.is_open())
                 this->clientSocket.close();
         } catch (std::exception& e) {
-            log.warn("Exception in closing socket");
+            log.warn("Exception in closing socket: {}", e.what());
         };
     }
 
@@ -124,7 +124,7 @@ public:
             frame);
 
         auto size_field = reinterpret_cast<uint32_t*>(&send_buffer[0]);
-        *size_field = frame.size();
+        *size_field = static_cast<uint32_t>(frame.size());
 
         return sendData(send_buffer.data(), frame.size() + BASYX_FRAMESIZE_SIZE);
     };

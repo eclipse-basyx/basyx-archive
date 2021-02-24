@@ -117,11 +117,11 @@ void NativeConnector::sendData(char* msg, size_t size)
 	log.trace("    msg: 0x{0:x}", (std::size_t)msg);
 	log.trace("    size: {}", size);
 
-	CoderTools::setInt32(msg, 0, size);
+	CoderTools::setInt32(msg, 0, static_cast<uint32_t>(size));
 	size += BASYX_FRAMESIZE_SIZE;
 
 	log.debug("Sending {} bytes.", size);
-	int sent_bytes = this->socket.Send(basyx::net::make_buffer(msg, size));
+	auto sent_bytes = this->socket.Send(basyx::net::make_buffer(msg, size));
 	log.debug("Sent {} bytes.", sent_bytes);
 
 	if (sent_bytes < 0) {
@@ -136,7 +136,7 @@ size_t NativeConnector::receiveData(char* data)
 	log.trace("    data: 0x{0:x}", (std::size_t)data);
 
 	// recv(data, DEFAULT_BUFFER_LENGTH, 0);
-	int recv_bytes = this->socket.Receive(basyx::net::make_buffer(data, default_buffer_length));
+	auto recv_bytes = this->socket.Receive(basyx::net::make_buffer(data, default_buffer_length));
 
 	log.debug("Received {} bytes.", recv_bytes);
 

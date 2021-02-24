@@ -29,7 +29,7 @@ public:
 	 * Assumes that target is big enough to carry the content of str
 	 */
 	static std::size_t toArray(std::string const& str, char* target) {
-		CoderTools::setInt32(target, 0, str.length());
+		CoderTools::setInt32(target, 0, static_cast<uint32_t>(str.length()));
 		target += 4;
 		std::memcpy(target, str.c_str(), str.length());
 		return str.length() + 4;
