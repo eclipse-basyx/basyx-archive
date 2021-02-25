@@ -34,7 +34,6 @@ namespace BaSyx.Registry.Client.Http
         public const string SUBMODEL_PATH = "submodels";
         public const string PATH_SEPERATOR = "/";
 
-        private int RepeatRegistrationInterval = -1;
         private string baseUrl = null;
         
         private CancellationTokenSource RepeatRegistrationCancellationToken = null;
@@ -43,9 +42,6 @@ namespace BaSyx.Registry.Client.Http
         public void LoadSettings(RegistryClientSettings settings)
         {
             LoadProxy(settings.ProxyConfig);
-
-            if (settings.RegistryConfig.RepeatRegistration.HasValue)
-                RepeatRegistrationInterval = settings.RegistryConfig.RepeatRegistration.Value;
 
             if (settings.ClientConfig.RequestConfig.RequestTimeout.HasValue)
                 RequestTimeout = settings.ClientConfig.RequestConfig.RequestTimeout.Value;
@@ -85,7 +81,7 @@ namespace BaSyx.Registry.Client.Http
             return new Uri(path);
         }
 
-        public void RepeatRegistration(IAssetAdministrationShellDescriptor aasDescriptor, CancellationTokenSource cancellationToken)
+        public void RepeatRegistration(IAssetAdministrationShellDescriptor aasDescriptor, TimeSpan interval, CancellationTokenSource cancellationToken)
         {
             RepeatRegistrationCancellationToken = cancellationToken;
             Task.Factory.StartNew(async () =>
@@ -94,7 +90,7 @@ namespace BaSyx.Registry.Client.Http
                 {
                     IResult<IAssetAdministrationShellDescriptor> result = CreateOrUpdateAssetAdministrationShellRegistration(aasDescriptor.Identification.Id, aasDescriptor);
                     logger.Info("Registration-Renewal - Success: " + result.Success + " | Messages: " + result.Messages.ToString());
-                    await Task.Delay(RepeatRegistrationInterval);
+                    await Task.Delay(interval);
                 }
             }, cancellationToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         } 
@@ -156,9 +152,6 @@ namespace BaSyx.Registry.Client.Http
         {
             if (string.IsNullOrEmpty(aasId))
                 return new Result(new ArgumentNullException(nameof(aasId)));
-
-            if (RepeatRegistrationInterval > 0)
-                RepeatRegistrationCancellationToken?.Cancel();
 
             var request = base.CreateRequest(GetUri(aasId), HttpMethod.Delete);
             var response = base.SendRequest(request, RequestTimeout);

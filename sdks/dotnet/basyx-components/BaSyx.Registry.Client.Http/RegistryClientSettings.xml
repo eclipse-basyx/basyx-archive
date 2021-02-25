@@ -7,7 +7,6 @@
   </ClientConfig>
   <RegistryConfig>
     <RegistryUrl>http://localhost:4999</RegistryUrl>
-    <RepeatRegistration>10000</RepeatRegistration>
   </RegistryConfig>
   <ProxyConfig>
     <UseProxy>false</UseProxy>
