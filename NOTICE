@@ -19,4 +19,79 @@ The project maintains the following source code repositories:
 
 ## Third-party Content
 
-TBD
+Eclipse Milo
+ 
+ * License: EPL 2.0
+ 
+javax.servlet-api
+
+ * License: CDDL
+ 
+javax.ws.rs-api 
+
+ * License: EPL 2.0
+ 
+jersey-client 
+
+ * License: EPL 2.0
+
+jersey-hk2 
+
+ * License: EPL 2.0
+ 
+Tomcat-catalina
+
+ * License: Apache License 2.0
+ 
+Apache poi-ooxml
+
+ * License: Apache License 2.0
+ 
+Logback 
+
+ * License: EPL 1.0
+
+Janino 
+
+ * License: BSD 3
+
+Eclipse Paho
+
+ * License:  EPL 2.0
+ 
+Postgres
+
+ * License: PostgreSQL Licence
+ 
+GSON 
+
+ * License: Apache License 2.0
+ 
+HikariCP 
+
+ * License: EPL 1.0
+ 
+mongodb-driver-sync
+
+ * License: Apache License 2.0
+ 
+spring-data-mongodb
+
+ * License: Apache License 2.0
+ 
+Moquette
+
+ * License: Apache License 2.0
+ 
+
+To be extended
+
+
+## Cryptography
+
+Content may contain encryption software. The country in which you are currently
+may have restrictions on the import, possession, and use, and/or re-export to
+another country, of encryption software. BEFORE using any encryption software,
+please check the country's laws, regulations and policies concerning the import,
+possession, or use, and re-export of encryption software, to see if this is
+permitted.
