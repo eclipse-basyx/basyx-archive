@@ -302,7 +302,7 @@ namespace BaSyx.Models.Export
         {
             foreach (var smElement in submodelElements)
             {
-                if (smElement.Constraints?.Count > 0)
+                if (smElement.Constraints?.Count() > 0)
                     (smElement as SubmodelElement).Constraints = null;
                 if (smElement is IOperation operation)
                 {
