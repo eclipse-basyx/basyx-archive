@@ -17,20 +17,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="C:\Users\ZIC5HO\.nuget\packages\basyx.aas.server.http\1.0.0\contentFiles\any\netcoreapp3.1\ServerSettings.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="BaSyx.AAS.Server.Http" Version="1.0.0" />
     <PackageReference Include="BaSyx.API.Http.Controllers.AASX" Version="1.0.0" />
     <PackageReference Include="BaSyx.Common.UI" Version="1.0.0" />
     <PackageReference Include="BaSyx.Common.UI.Swagger" Version="1.0.0" />
+    <PackageReference Include="BaSyx.Discovery.mDNS" Version="1.0.0" />
     <PackageReference Include="BaSyx.Models.Export" Version="1.0.0" />
+    <PackageReference Include="BaSyx.Registry.Client.Http" Version="1.0.0" />
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="RegistryClientSettings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="ServerSettings.xml">

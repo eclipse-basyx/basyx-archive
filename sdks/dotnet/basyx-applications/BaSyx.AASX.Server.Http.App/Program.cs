@@ -16,6 +16,8 @@ using BaSyx.Common.UI.Swagger;
 using BaSyx.Models.Connectivity;
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Export;
+using BaSyx.Registry.Client.Http;
+using BaSyx.Utils.Logging;
 using BaSyx.Utils.Settings.Types;
 using CommandLine;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +29,7 @@ using System.IO.Packaging;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace BaSyx.AASX.Server.Http.App
 {
@@ -36,7 +39,9 @@ namespace BaSyx.AASX.Server.Http.App
         private static FileSystemWatcher watcher;
         private static AssetAdministrationShellRepositoryHttpServer repositoryServer;
         private static AssetAdministrationShellRepositoryServiceProvider repositoryService;
+        private static List<HttpEndpoint> endpoints;
         private static ServerSettings serverSettings;
+        private static RegistryHttpClient registryHttpClient;
 
         public class Options
         {
@@ -106,9 +111,10 @@ namespace BaSyx.AASX.Server.Http.App
             }
             else
             {
+                registryHttpClient = new RegistryHttpClient();
                 repositoryServer = new AssetAdministrationShellRepositoryHttpServer(serverSettings);
                 repositoryService = new AssetAdministrationShellRepositoryServiceProvider();
-                var endpoints = serverSettings.ServerConfig.Hosting.Urls.ConvertAll(c =>
+                endpoints = serverSettings.ServerConfig.Hosting.Urls.ConvertAll(c =>
                 {
                     string address = c.Replace("+", "127.0.0.1");
                     logger.Info("Using " + address + " as base endpoint url");
@@ -131,6 +137,18 @@ namespace BaSyx.AASX.Server.Http.App
                 {
                     LoadAASX(inputFiles[i]);
                 }
+
+                repositoryServer.ApplicationStopping = () =>
+                {
+                    var providers = repositoryService.GetAssetAdministrationShellServiceProviders().Entity;
+                    foreach (var shellProvider in providers)
+                    {
+                        var result = registryHttpClient
+                        .DeleteAssetAdministrationShellRegistration(shellProvider.ServiceDescriptor.Identification.Id);
+
+                        result.LogResult(logger, LogLevel.Info);
+                    }
+                };
 
                 repositoryServer.Run();
             }
@@ -173,7 +191,20 @@ namespace BaSyx.AASX.Server.Http.App
             foreach (var shell in assetAdministrationShells)
             {
                 var aasServiceProvider = shell.CreateServiceProvider(true);
+                var aasServiceEndpoints = endpoints.ConvertAll(e =>
+                {
+                    return new HttpEndpoint(
+                        new Uri(e.Url, 
+                        new Uri("/shells/" + HttpUtility.UrlEncode(shell.Identification.Id), UriKind.Relative)));
+                });
+
+                aasServiceProvider.UseDefaultEndpointRegistration(aasServiceEndpoints);
                 repositoryService.RegisterAssetAdministrationShellServiceProvider(shell.Identification.Id, aasServiceProvider);
+
+                var result = registryHttpClient.CreateOrUpdateAssetAdministrationShellRegistration(
+                    shell.Identification.Id, aasServiceProvider.ServiceDescriptor);
+
+                result.LogResult(logger, LogLevel.Info);
             }
 
             string aasIdName = assetAdministrationShells.First().Identification.Id;
