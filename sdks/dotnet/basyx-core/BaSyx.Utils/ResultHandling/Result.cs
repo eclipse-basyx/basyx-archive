@@ -120,6 +120,14 @@ namespace BaSyx.Utils.ResultHandling
                 resultTxt += " | Messages: " + messageTxt;
             return resultTxt;
         }
+
+        public bool ShouldSerializeMessages()
+        {
+            if (Messages?.Count() > 0)
+                return true;
+            else
+                return false;
+        }
     }
 
     public class Result<TEntity> : Result, IResult<TEntity>
