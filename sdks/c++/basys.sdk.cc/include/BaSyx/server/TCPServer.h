@@ -37,20 +37,21 @@ private:
 public:
     TCPServer(Backend* backend, int port)
         : backend { backend }
-        , running { true }
-        , io_context { 0 }
+        , running { false }
+        , io_context { 1 }
         , acceptor { io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port) }
         , log { "TCPServer" }
     {
         // ToDo: Check health of acceptor
         log.info("Starting server on port {}", port);
-        //			acceptor.listen();
-        start_accept();
+        acceptor.listen();
     }
 
     void run()
     {
-        this->io_context.run();
+		start_accept();
+		this->running.store(true);
+		this->io_context.run();
     };
 
     void stop()
@@ -62,15 +63,8 @@ public:
     {
         asio::error_code ec;
         auto client_socket = util::make_unique<asio::ip::tcp::socket>(io_context);
-        //this->acceptor.accept(*client_socket.get(), ec);
 
-        //auto error = WSAGetLastError();
-
-        //if (!client_socket->is_open()) {
-        //	log.warn("Incoming connection failed");
-        //	return;
-        //}
-        sockets.emplace_back(std::move(client_socket));
+		sockets.emplace_back(std::move(client_socket));
 
         acceptor.async_accept(*sockets.back(),
             std::bind(&TCPServer::handle_accept, this,
@@ -136,7 +130,7 @@ public:
     void update()
     {
         if (isRunning()) {
-            log.info("Accepting new connections.");
+            log.info("Accepting new connections."); 
 
             auto ClientSocket = util::make_unique<asio::ip::tcp::socket>(io_context);
             this->acceptor.accept(*ClientSocket.get());
