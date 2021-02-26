@@ -34,6 +34,18 @@ public:
 		return func(&obj);
 	};
 
+	// Wrap void function with no arguments
+	static functionWrapper wrap_func(std::function<void(void)> f)
+	{
+		functionWrapper fw;
+		fw.func = [f](basyx::object*)
+		{
+			f();
+			return basyx::object::make_null();
+		};
+		return fw;
+	};
+
 	// Wrap function with no arguments
 	template<typename RetType>
 	static functionWrapper wrap_func(std::function<RetType(void)> f)
