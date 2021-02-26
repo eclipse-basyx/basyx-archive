@@ -134,7 +134,7 @@ public class GuidelineSpecificProperties extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * sets guideline, stipulation or legislation used for determining conformity
+	 * Sets guideline, stipulation or legislation used for determining conformity
 	 * 
 	 * @param declaration {@link Property}
 	 */
@@ -143,7 +143,7 @@ public class GuidelineSpecificProperties extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * sets guideline, stipulation or legislation used for determining conformity
+	 * Sets guideline, stipulation or legislation used for determining conformity
 	 * 
 	 * @param declaration {@link String}
 	 */
@@ -155,12 +155,13 @@ public class GuidelineSpecificProperties extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * gets sets guideline, stipulation or legislation used for determining conformity
+	 * Gets guideline, stipulation or legislation used for determining conformity
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IProperty getGuidelineForConformityDeclaration() {
-		return (IProperty) getSubmodelElement(GUIDELINEFORCONFORMITYDECLARATIONID);
+		return Property.createAsFacade((Map<String, Object>) getSubmodelElement(GUIDELINEFORCONFORMITYDECLARATIONID));
 	}
 	
 	/**

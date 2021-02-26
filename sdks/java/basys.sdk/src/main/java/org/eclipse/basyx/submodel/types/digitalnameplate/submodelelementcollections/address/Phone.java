@@ -159,15 +159,17 @@ public class Phone extends SubmodelElementCollection {
 	 * Gets characterization of a telephone according to its location or usage enumeration
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IProperty getTypeOfTelephone() {
-		return (IProperty) getSubmodelElement(TYPEOFTELEPHONEID);
+		return Property.createAsFacade((Map<String, Object>) getSubmodelElement(TYPEOFTELEPHONEID));
 	}
 	
 	/**
 	 * Gets complete telephone number to be called to reach a business partner
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getTelephoneNumber() {
-		return (IMultiLanguageProperty) getSubmodelElement(TELEPHONENUMBERID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(TELEPHONENUMBERID));
 	}
 }

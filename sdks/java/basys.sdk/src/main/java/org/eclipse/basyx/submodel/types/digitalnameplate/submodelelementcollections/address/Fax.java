@@ -160,8 +160,9 @@ public class Fax extends SubmodelElementCollection {
 	 * Gets characterization of the fax according its location or usage
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IProperty getTypeOfFaxNumber() {
-		return (IProperty) getSubmodelElement(TYPEOFFAXID);
+		return Property.createAsFacade((Map<String, Object>) getSubmodelElement(TYPEOFFAXID));
 	}
 	
 	/**
@@ -169,7 +170,8 @@ public class Fax extends SubmodelElementCollection {
 	 * business partner's fax machine
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getFaxNumber() {
-		return (IMultiLanguageProperty) getSubmodelElement(FAXNUMBERID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(FAXNUMBERID));
 	}
 }

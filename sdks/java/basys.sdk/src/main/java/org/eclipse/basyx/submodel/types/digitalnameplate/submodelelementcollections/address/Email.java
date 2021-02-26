@@ -120,7 +120,7 @@ public class Email extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * sets electronic mail address of a business partner
+	 * Sets electronic mail address of a business partner
 	 * @param emailAddress Property
 	 */
 	public void setEmailAddress(Property emailAddress) {
@@ -128,7 +128,7 @@ public class Email extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * sets electronic mail address of a business partner
+	 * Sets electronic mail address of a business partner
 	 * @param emailAddress String
 	 */
 	public void setEmailAddress(String emailAddress) {
@@ -139,15 +139,16 @@ public class Email extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * gets electronic mail address of a business partner
+	 * Gets electronic mail address of a business partner
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IProperty getEmailAddress() {
-		return (IProperty) getSubmodelElement(EMAILADDRESSID);
+		return Property.createAsFacade((Map<String, Object>) getSubmodelElement(EMAILADDRESSID));
 	}
 	
 	/**
-	 * sets public part of an unsymmetrical key pair to sign or encrypt text or messages
+	 * Sets public part of an unsymmetrical key pair to sign or encrypt text or messages
 	 * @param key {@link MultiLanguageProperty}
 	 */
 	public void setPublicKey(MultiLanguageProperty key) {
@@ -155,7 +156,7 @@ public class Email extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * sets public part of an unsymmetrical key pair to sign or encrypt text or messages
+	 * Sets public part of an unsymmetrical key pair to sign or encrypt text or messages
 	 * @param key {@link LangString}
 	 */
 	public void setPublicKey(LangString key) {
@@ -166,15 +167,16 @@ public class Email extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * gets public part of an unsymmetrical key pair to sign or encrypt text or messages
+	 * Gets public part of an unsymmetrical key pair to sign or encrypt text or messages
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getPublicKey() {
-		return (IMultiLanguageProperty) getSubmodelElement(PUBLICKEYID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(PUBLICKEYID));
 	}
 	
 	/**
-	 * sets characterization of an e-mail address according to its location or usage
+	 * Sets characterization of an e-mail address according to its location or usage
 	 * enumeration
 	 * @param type {@link Property}
 	 */
@@ -183,7 +185,7 @@ public class Email extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * sets characterization of an e-mail address according to its location or usage
+	 * Sets characterization of an e-mail address according to its location or usage
 	 * enumeration
 	 * @param type {@link MailType}
 	 */
@@ -195,16 +197,17 @@ public class Email extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * gets characterization of an e-mail address according to its location or usage
+	 * Gets characterization of an e-mail address according to its location or usage
 	 * enumeration
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IProperty getTypeOfEmailAddress() {
-		return (IProperty) getSubmodelElement(TYPEOFEMAILADDRESSID);
+		return Property.createAsFacade((Map<String, Object>) getSubmodelElement(TYPEOFEMAILADDRESSID));
 	}
 	
 	/**
-	 * sets characterization of a public key according to its encryption process
+	 * Sets characterization of a public key according to its encryption process
 	 * @param key {@link MultiLanguageProperty}
 	 */
 	public void setTypeOfPublicKey(MultiLanguageProperty key) {
@@ -212,7 +215,7 @@ public class Email extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * sets characterization of a public key according to its encryption process
+	 * Sets characterization of a public key according to its encryption process
 	 * @param key {@link LangString}
 	 */
 	public void setTypeOfPublicKey(LangString key) {
@@ -223,10 +226,11 @@ public class Email extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * gets characterization of a public key according to its encryption process
+	 * Gets characterization of a public key according to its encryption process
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getTypeOfPublicKey() {
-		return (IMultiLanguageProperty) getSubmodelElement(TYPEOFPUBLICKEYID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(TYPEOFPUBLICKEYID));
 	}
 }

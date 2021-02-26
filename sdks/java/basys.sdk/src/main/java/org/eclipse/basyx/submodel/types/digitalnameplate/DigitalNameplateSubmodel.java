@@ -207,7 +207,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * sets manufacturerName
+	 * Sets manufacturerName
 	 * legally valid designation of the natural or judicial person which is directly
      * responsible for the design, production, packaging and labeling of a product
      * in respect to its being brought into circulation
@@ -220,7 +220,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * sets manufacturerName
+	 * Sets manufacturerName
 	 * legally valid designation of the natural or judicial person which is directly
      * responsible for the design, production, packaging and labeling of a product
      * in respect to its being brought into circulation
@@ -237,7 +237,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	
 	/**
 	 * 
-	 * gets manufacturerName
+	 * Gets manufacturerName
 	 * legally valid designation of the natural or judicial person which is directly
      * responsible for the design, production, packaging and labeling of a product
      * in respect to its being brought into circulation
@@ -245,12 +245,13 @@ public class DigitalNameplateSubmodel extends SubModel {
      * 2006/42/EC.
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getManufacturerName() {
-		return (IMultiLanguageProperty) getSubmodelElement(MANUFACTURERNAMEID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(MANUFACTURERNAMEID));
 	}
 	
 	/**
-	 * sets Short description of the product (short text)
+	 * Sets Short description of the product (short text)
 	 * Note: mandatory property according to EU Machine Directive
 	 * 2006/42/EC.
 	 * @param manufacturerProductDesignation {@link MultiLanguageProperty}
@@ -260,7 +261,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * sets Short description of the product (short text)
+	 * Sets Short description of the product (short text)
 	 * Note: mandatory property according to EU Machine Directive
 	 * 2006/42/EC.
 	 * @param manufacturerProductDesignation {@link LangString}
@@ -273,17 +274,18 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * gets Short description of the product (short text)
+	 * Gets Short description of the product (short text)
 	 * Note: mandatory property according to EU Machine Directive
 	 * 2006/42/EC.
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getManufacturerProductDesignation() {
-		return (IMultiLanguageProperty) getSubmodelElement(MANUFACTURERPRODUCTDESIGNATIONID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(MANUFACTURERPRODUCTDESIGNATIONID));
 	}
 	
 	/**
-	 * sets address information of a business partner
+	 * Sets address information of a business partner
 	 * 
 	 * Note: mandatory property according to EU Machine Directive
 	 * 2006/42/EC.
@@ -294,7 +296,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * gets address information of a business partner
+	 * Gets address information of a business partner
 	 * 
 	 * Note: mandatory property according to EU Machine Directive
 	 * 2006/42/EC.
@@ -307,7 +309,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * sets 2nd level of a 3 level manufacturer specific product hierarchy
+	 * Sets 2nd level of a 3 level manufacturer specific product hierarchy
 	 * Note: mandatory property according to EU Machine Directive
 	 * 2006/42/EC.
 	 * @param manufacturerProductFamily {@link MultiLanguageProperty}
@@ -317,7 +319,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * sets 2nd level of a 3 level manufacturer specific product hierarchy
+	 * Sets 2nd level of a 3 level manufacturer specific product hierarchy
 	 * Note: mandatory property according to EU Machine Directive
 	 * 2006/42/EC.
 	 * @param manufacturerProductFamily {@link LangString}
@@ -330,17 +332,18 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * gets 2nd level of a 3 level manufacturer specific product hierarchy
+	 * Gets 2nd level of a 3 level manufacturer specific product hierarchy
 	 * Note: mandatory property according to EU Machine Directive
 	 * 2006/42/EC.
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getManufacturerProductFamily() {
-		return (IMultiLanguageProperty) getSubmodelElement(MANUFACTURERPRODUCTFAMILYID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(MANUFACTURERPRODUCTFAMILYID));
 	}
 	
 	/**
-	 * sets unique combination of numbers and letters used to identify the device
+	 * Sets unique combination of numbers and letters used to identify the device
 	 * once it has been manufactured
 	 * @param serialNumber
 	 */
@@ -349,7 +352,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * sets unique combination of numbers and letters used to identify the device
+	 * Sets unique combination of numbers and letters used to identify the device
 	 * once it has been manufactured
 	 * @param serialNumber
 	 */
@@ -361,16 +364,17 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * gets unique combination of numbers and letters used to identify the device
+	 * Gets unique combination of numbers and letters used to identify the device
 	 * once it has been manufactured
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IProperty getSerialNumber() {
-		return (IProperty) getSubmodelElement(SERIALNUMBERID);
+		return Property.createAsFacade((Map<String, Object>) getSubmodelElement(SERIALNUMBERID));
 	}
 	
 	/**
-	 * sets year as completion date of object
+	 * Sets year as completion date of object
 	 * Note: mandatory property according to EU Machine Directive 2006/42/EC.
 	 * @param yearsOfConstruction
 	 */
@@ -379,7 +383,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * sets year as completion date of object
+	 * Sets year as completion date of object
 	 * Note: mandatory property according to EU Machine Directive 2006/42/EC.
 	 * @param yearsOfConstruction
 	 */
@@ -391,16 +395,17 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * gets year as completion date of object
+	 * Gets year as completion date of object
 	 * Note: mandatory property according to EU Machine Directive 2006/42/EC.
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IProperty getYearOfConstruction() {
-		return (IProperty) getSubmodelElement(YEARSOFCONSTRUCTIONID);
+		return Property.createAsFacade((Map<String, Object>) getSubmodelElement(YEARSOFCONSTRUCTIONID));
 	}
 	
 	/**
-	 * sets collection of product markings
+	 * Sets collection of product markings
 	 * Note: CE marking is declared as mandatory according to EU Machine
 	 * Directive 2006/42/EC.
 	 * @param markings
@@ -410,7 +415,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * gets collection of product markings
+	 * Gets collection of product markings
 	 * Note: CE marking is declared as mandatory according to EU Machine
 	 * Directive 2006/42/EC.
 	 * @return
@@ -422,7 +427,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * sets Collection of guideline specific properties
+	 * Sets collection of guideline specific properties
 	 * @param assetSpecificProperties
 	 */
 	public void setAssetSpecificProperties(AssetSpecificProperties assetSpecificProperties) {
@@ -430,7 +435,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	}
 	
 	/**
-	 * gets Collection of guideline specific properties
+	 * Gets collection of guideline specific properties
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")

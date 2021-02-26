@@ -7,7 +7,7 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package org.eclipse.basyx.testsuite.regression.submodel.types.digitalnameplate.submodelelementcollections;
+package org.eclipse.basyx.testsuite.regression.submodel.types.digitalnameplate;
 
 import static org.junit.Assert.assertEquals;
 

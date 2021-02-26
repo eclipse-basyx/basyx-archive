@@ -21,7 +21,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionC
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
-import org.eclipse.basyx.submodel.types.digitalnameplate.helper.DigitalNameplateSubmodelHelper;
+import org.eclipse.basyx.submodel.types.helper.SubmodelElementRetrievalHelper;
 
 /**
  * AssetSpecificProperties as defined in the AAS Digital Nameplate Template document <br/>
@@ -130,7 +130,7 @@ public class AssetSpecificProperties extends SubmodelElementCollection {
 	@SuppressWarnings("unchecked")
 	public List<GuidelineSpecificProperties> getGuidelineSpecificProperties() {
 		List<GuidelineSpecificProperties> ret = new ArrayList<GuidelineSpecificProperties>();
-		List<ISubmodelElement> elements = DigitalNameplateSubmodelHelper.getSubmodelElementsByIdPrefix(GUIDELINESPECIFICPROPERTYPREFIX, getSubmodelElements());
+		List<ISubmodelElement> elements = SubmodelElementRetrievalHelper.getSubmodelElementsByIdPrefix(GUIDELINESPECIFICPROPERTYPREFIX, getSubmodelElements());
 		
 		for (ISubmodelElement element: elements) {
 			ret.add(GuidelineSpecificProperties.createAsFacade((Map<String, Object>) element));

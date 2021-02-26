@@ -7,7 +7,7 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package org.eclipse.basyx.submodel.types.digitalnameplate.helper;
+package org.eclipse.basyx.submodel.types.helper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 
-public class DigitalNameplateSubmodelHelper {
+public class SubmodelElementRetrievalHelper {
 	
 	public static List<ISubmodelElement> getSubmodelElementsByIdPrefix(String prefix, Map<String, ISubmodelElement> elemMap) {
 		if (elemMap != null && elemMap.size() > 0) {

@@ -27,7 +27,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementC
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.types.digitalnameplate.helper.DigitalNameplateSubmodelHelper;
+import org.eclipse.basyx.submodel.types.helper.SubmodelElementRetrievalHelper;
 
 /**
  * Marking as defined in the AAS Digital Nameplate Template document <br/>
@@ -129,7 +129,7 @@ public class Marking extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * sets common name of the marking
+	 * Sets common name of the marking
 	 * 
 	 * Note: CE marking is declared as mandatory according to EU
      * Machine Directive 2006/42/EC.
@@ -140,7 +140,7 @@ public class Marking extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * sets common name of the marking
+	 * Sets common name of the marking
 	 * 
 	 * Note: CE marking is declared as mandatory according to EU
      * Machine Directive 2006/42/EC.
@@ -154,18 +154,19 @@ public class Marking extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * gets common name of the marking
+	 * Gets common name of the marking
 	 * 
 	 * Note: CE marking is declared as mandatory according to EU
      * Machine Directive 2006/42/EC.
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IProperty getMarkingName() {
-		return (IProperty) getSubmodelElement(MARKINGNAMEID);
+		return Property.createAsFacade((Map<String, Object>) getSubmodelElement(MARKINGNAMEID));
 	}
 	
 	/**
-	 * sets picture of the marking
+	 * Sets picture of the marking
      * 
      * Note: CE marking is declared as mandatory according to EU
      * Machine Directive 2006/42/EC.
@@ -176,18 +177,19 @@ public class Marking extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * gets picture of the marking
+	 * Gets picture of the marking
      * 
      * Note: CE marking is declared as mandatory according to EU
      * Machine Directive 2006/42/EC.
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IFile getMarkingFile() {
-		return (IFile) getSubmodelElement(MARKINGFILEID);
+		return File.createAsFacade((Map<String, Object>) getSubmodelElement(MARKINGFILEID));
 	}
 	
 	/**
-	 * sets where applicable, additional information on the marking in
+	 * Sets where applicable, additional information on the marking in
      * plain text
 	 * @param markingAdditionalText
 	 */
@@ -200,13 +202,13 @@ public class Marking extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * gets where applicable, additional information on the marking in
+	 * Gets where applicable, additional information on the marking in
      * plain text
 	 * @return
 	 */
 	public List<IProperty> getMarkingAdditionalText() {
 		List<IProperty> ret = new ArrayList<IProperty>();
-		List<ISubmodelElement> elements = DigitalNameplateSubmodelHelper.getSubmodelElementsByIdPrefix(MARKINGADDITIONALTEXTPREFIX, getSubmodelElements());
+		List<ISubmodelElement> elements = SubmodelElementRetrievalHelper.getSubmodelElementsByIdPrefix(MARKINGADDITIONALTEXTPREFIX, getSubmodelElements());
 		
 		for (ISubmodelElement element: elements) {
 			ret.add((IProperty) element);

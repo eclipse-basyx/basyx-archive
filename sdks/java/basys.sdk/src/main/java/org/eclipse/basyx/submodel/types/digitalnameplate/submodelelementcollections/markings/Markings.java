@@ -21,7 +21,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionC
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
-import org.eclipse.basyx.submodel.types.digitalnameplate.helper.DigitalNameplateSubmodelHelper;
+import org.eclipse.basyx.submodel.types.helper.SubmodelElementRetrievalHelper;
 
 /**
  * Markings as defined in the AAS Digital Nameplate Template document <br/>
@@ -123,7 +123,7 @@ public class Markings extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * sets information about the marking labelled on the device
+	 * Sets information about the marking labelled on the device
 
      * Note: CE marking is declared as mandatory according to EU Machine
      * Directive 2006/42/EC.
@@ -138,7 +138,7 @@ public class Markings extends SubmodelElementCollection {
 	}
 	
 	/**
-	 * gets information about the marking labelled on the device
+	 * Gets information about the marking labelled on the device
 
      * Note: CE marking is declared as mandatory according to EU Machine
      * Directive 2006/42/EC.
@@ -147,7 +147,7 @@ public class Markings extends SubmodelElementCollection {
 	@SuppressWarnings("unchecked")
 	public List<Marking> getMarking() {
 		List<Marking> ret = new ArrayList<Marking>();
-		List<ISubmodelElement> elements = DigitalNameplateSubmodelHelper.getSubmodelElementsByIdPrefix(MARKINGPREFIX, getSubmodelElements());
+		List<ISubmodelElement> elements = SubmodelElementRetrievalHelper.getSubmodelElementsByIdPrefix(MARKINGPREFIX, getSubmodelElements());
 		
 		for (ISubmodelElement element: elements) {
 			ret.add(Marking.createAsFacade((Map<String, Object>) element));

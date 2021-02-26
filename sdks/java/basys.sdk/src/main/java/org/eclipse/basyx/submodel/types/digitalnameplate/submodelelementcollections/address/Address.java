@@ -29,7 +29,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementC
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.types.digitalnameplate.helper.DigitalNameplateSubmodelHelper;
+import org.eclipse.basyx.submodel.types.helper.SubmodelElementRetrievalHelper;
 
 /**
  * Address as defined in the AAS Digital Nameplate Template document <br/>
@@ -176,8 +176,9 @@ public class Address extends SubmodelElementCollection {
 	 * Gets administrative section within an organisation where a business partner is located
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getDepartment() {
-		return (IMultiLanguageProperty) getSubmodelElement(DEPARTMENTID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(DEPARTMENTID));
 	}
 
 	/**
@@ -204,8 +205,9 @@ public class Address extends SubmodelElementCollection {
      * Note: mandatory property according to EU Machine Directive 2006/42/EC.
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getStreet() {
-		return (IMultiLanguageProperty) getSubmodelElement(STREETID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(STREETID));
 	}
 
 	/**
@@ -234,8 +236,9 @@ public class Address extends SubmodelElementCollection {
      * Note: mandatory property according to EU Machine Directive 2006/42/EC.
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getZipCode() {
-		return (IMultiLanguageProperty) getSubmodelElement(ZIPCODEID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(ZIPCODEID));
 	}
 
 	/**
@@ -263,8 +266,9 @@ public class Address extends SubmodelElementCollection {
 	 * Gets P.O. box number
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getPOBox() {
-		return (IMultiLanguageProperty) getSubmodelElement(POBOXID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(POBOXID));
 	}
 
 	/**
@@ -290,8 +294,9 @@ public class Address extends SubmodelElementCollection {
 	 * Gets ZIP code of P.O. box address
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getZipCodeOfPOBox() {
-		return (IMultiLanguageProperty) getSubmodelElement(ZIPCODEOFPOBOXID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(ZIPCODEOFPOBOXID));
 	}
 
 	/**
@@ -318,8 +323,9 @@ public class Address extends SubmodelElementCollection {
      * Note: mandatory property according to EU Machine Directive 2006/42/EC.
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getCityTown() {
-		return (IMultiLanguageProperty) getSubmodelElement(CITYTOWNID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(CITYTOWNID));
 	}
 	
 	/**
@@ -347,8 +353,9 @@ public class Address extends SubmodelElementCollection {
 	 * Gets federal state a part of a state
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getStateCounty() {
-		return (IMultiLanguageProperty) getSubmodelElement(STATECOUNTYID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(STATECOUNTYID));
 	}
 
 	/**
@@ -376,8 +383,9 @@ public class Address extends SubmodelElementCollection {
      * Note: mandatory property according to EU Machine Directive 2006/42/EC.
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getNationalCode() {
-		return (IMultiLanguageProperty) getSubmodelElement(NATIONALCODEID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(NATIONALCODEID));
 	}
 
 	/**
@@ -407,8 +415,9 @@ public class Address extends SubmodelElementCollection {
 	 * Gets VAT identification number of the business partner
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getVatNumber() {
-		return (IMultiLanguageProperty) getSubmodelElement(VATNUMBERID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(VATNUMBERID));
 	}
 
 	/**
@@ -434,8 +443,9 @@ public class Address extends SubmodelElementCollection {
 	 * Gets plain text characterizing address information for which there is no property
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IMultiLanguageProperty getAddressRemarks() {
-		return (IMultiLanguageProperty) getSubmodelElement(ADDRESSREMARKSID);
+		return MultiLanguageProperty.createAsFacade((Map<String, Object>) getSubmodelElement(ADDRESSREMARKSID));
 	}
 
 	/**
@@ -461,8 +471,9 @@ public class Address extends SubmodelElementCollection {
 	 * Gets web site address where information about the product or contact is given
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public IProperty getAddressOfAdditionalLink() {
-		return (IProperty) getSubmodelElement(ADDRESSOFADDITIONALLINKID);
+		return Property.createAsFacade((Map<String, Object>) getSubmodelElement(ADDRESSOFADDITIONALLINKID));
 	}
 
 	/**
@@ -491,7 +502,7 @@ public class Address extends SubmodelElementCollection {
 	@SuppressWarnings("unchecked")
 	public List<Phone> getPhone() {
 		List<Phone> ret = new ArrayList<Phone>();
-		List<ISubmodelElement> elements = DigitalNameplateSubmodelHelper.getSubmodelElementsByIdPrefix(PHONEPREFIX, getSubmodelElements());
+		List<ISubmodelElement> elements = SubmodelElementRetrievalHelper.getSubmodelElementsByIdPrefix(PHONEPREFIX, getSubmodelElements());
 		
 		for (ISubmodelElement element: elements) {
 			ret.add(Phone.createAsFacade((Map<String, Object>) element));
@@ -518,7 +529,7 @@ public class Address extends SubmodelElementCollection {
 	@SuppressWarnings("unchecked")
 	public List<Fax> getFax() {
 		List<Fax> ret = new ArrayList<Fax>();
-		List<ISubmodelElement> elements = DigitalNameplateSubmodelHelper.getSubmodelElementsByIdPrefix(FAXPREFIX, getSubmodelElements());
+		List<ISubmodelElement> elements = SubmodelElementRetrievalHelper.getSubmodelElementsByIdPrefix(FAXPREFIX, getSubmodelElements());
 		
 		for (ISubmodelElement element: elements) {
 			ret.add(Fax.createAsFacade((Map<String, Object>) element));
@@ -545,7 +556,7 @@ public class Address extends SubmodelElementCollection {
 	@SuppressWarnings("unchecked")
 	public List<Email> getEmail() {
 		List<Email> ret = new ArrayList<Email>();
-		List<ISubmodelElement> elements = DigitalNameplateSubmodelHelper.getSubmodelElementsByIdPrefix(EMAILPREFIX, getSubmodelElements());
+		List<ISubmodelElement> elements = SubmodelElementRetrievalHelper.getSubmodelElementsByIdPrefix(EMAILPREFIX, getSubmodelElements());
 		
 		for (ISubmodelElement element: elements) {
 			ret.add(Email.createAsFacade((Map<String, Object>) element));
