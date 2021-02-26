@@ -30,13 +30,13 @@ using namespace submodel;
     switch(type)
     {
       case type::valueType::Bool:
-        return "xsd::boolean";
+        return "boolean";
       case type::valueType::Int:
-        return "xsd::integer";
+        return "integer";
       case type::valueType::Float:
-        return "xsd::float";
+        return "float";
       case type::valueType::String:
-        return "xsd::string";
+        return "string";
       default:
         return "Type not supported!";
     }
@@ -57,7 +57,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:boolean";
+      return "boolean";
     }
 
     static const inline bool getXSDRepresentation(const bool & bool_value)
@@ -76,7 +76,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:integer";
+      return "integer";
     }
 
     static const inline int getXSDRepresentation(const int & int_value)
@@ -95,7 +95,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:long";
+      return "long";
     }
 
     static const inline long getXSDRepresentation(const long & long_value)
@@ -114,7 +114,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:short";
+      return "short";
     }
 
     static const inline short getXSDRepresentation(const short & short_value)
@@ -133,7 +133,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:unsignedInt";
+      return "unsignedInt";
     }
 
     static const inline unsigned int getXSDRepresentation(const unsigned int & uint_value)
@@ -152,7 +152,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:unsignedShort";
+      return "unsignedShort";
     }
 
     static const inline unsigned short getXSDRepresentation(const unsigned short & ushort_value)
@@ -171,7 +171,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:unsignedLong";
+      return "unsignedLong";
     }
 
     static const inline unsigned long getXSDRepresentation(const unsigned long & ulong_value)
@@ -190,7 +190,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:double";
+      return "double";
     }
 
     static const inline double getXSDRepresentation(const double & double_value)
@@ -209,7 +209,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:float";
+      return "float";
     }
 
     static const inline float getXSDRepresentation(const float & float_value)
@@ -228,7 +228,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:string";
+      return "string";
     }
 
     static const inline std::string getXSDRepresentation(const std::string & string)
@@ -247,7 +247,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:anyURI";
+      return "anyURI";
     }
 
     static const inline std::string getXSDRepresentation(const simple::AnyURI & uri)
@@ -268,7 +268,7 @@ template<>
 
     static const std::string getDataTypeDef()
     {
-      return "xsd:date";
+      return "date";
     }
 
     static const inline std::string getXSDRepresentation(const simple::Date & date)
@@ -300,7 +300,7 @@ template<>
 
     static const std::string getDataTypeDef()
     {
-      return "xsd:dateTime";
+      return "dateTime";
     }
 
     static const inline std::string getXSDRepresentation(const simple::DateTime & dateTime)
@@ -334,7 +334,7 @@ template<>
 
     static const std::string getDataTypeDef()
     {
-      return "xsd:dayTimeDuration";
+      return "dayTimeDuration";
     }
 
     static const inline std::string getXSDRepresentation(const simple::DayTimeDuration & dayTimeDuration)
@@ -402,7 +402,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:yearMonthDuration";
+      return "yearMonthDuration";
     }
 
     static const inline std::string getXSDRepresentation(const simple::YearMonthDuration & yearMonthDuration)
@@ -455,7 +455,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:time";
+      return "time";
     }
 
     static const inline std::string getXSDRepresentation(const simple::Time & time)
@@ -501,7 +501,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:gYearMonth";
+      return "gYearMonth";
     }
 
     static const inline std::string getXSDRepresentation(const simple::GYearMonth & date)
@@ -536,7 +536,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:gYear";
+      return "gYear";
     }
 
     static const inline std::string getXSDRepresentation(const simple::GYear & year)
@@ -570,7 +570,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:gMonthDay";
+      return "gMonthDay";
     }
 
     static const inline std::string getXSDRepresentation(const simple::GMonthDay & monthDay)
@@ -602,7 +602,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:gDay";
+      return "gDay";
     }
 
     static const inline std::string getXSDRepresentation(const simple::GDay & day)
@@ -633,7 +633,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "xsd:gMonth";
+      return "gMonth";
     }
 
     static const inline std::string getXSDRepresentation(const simple::GMonth & month)
