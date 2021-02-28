@@ -27,6 +27,8 @@ namespace BaSyx.Models.Core.Common
         OperationVariable,
         Event,
         BasicEvent,
+        EventElement,
+        EventMessage,
         View,
         RelationshipElement,
         AnnotatedRelationshipElement,
@@ -60,6 +62,8 @@ namespace BaSyx.Models.Core.Common
         public static readonly ModelType OperationVariable = new ModelType("OperationVariable");
         public static readonly ModelType Event = new ModelType("Event");
         public static readonly ModelType BasicEvent = new ModelType("BasicEvent");
+        public static readonly ModelType EventElement = new ModelType("EventElement");
+        public static readonly ModelType EventMessage = new ModelType("EventMessage");
         public static readonly ModelType View = new ModelType("View");
         public static readonly ModelType RelationshipElement = new ModelType("RelationshipElement");
         public static readonly ModelType AnnotatedRelationshipElement = new ModelType("AnnotatedRelationshipElement");
