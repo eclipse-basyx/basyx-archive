@@ -245,6 +245,10 @@ public class AASXPackageManager {
 		if (filePath.startsWith("/")) {
 			filePath = filePath.substring(1);
 		}
+		if(filePath.isEmpty()) {
+			logger.warn("A file with empty path can not be unzipped.");
+			return;
+		}
 		logger.info("Unzipping " + filePath + " to root folder:");
 		String relativePath = "files/" + VABPathTools.getParentPath(filePath);
 		Path rootPath = getRootFolder();
@@ -255,8 +259,8 @@ public class AASXPackageManager {
 		PackagePart part = aasxRoot.getPart(PackagingURIHelper.createPartName("/" + filePath));
 		
 		if(part == null) {
-			logger.error("File '" + filePath + "' cloud not be unzipped. It does not exist in .aasx.");
-			throw new FileNotFoundException("File '" + filePath + "' cloud not be unzipped. It does not exist in .aasx.");
+			logger.warn("File '" + filePath + "' could not be unzipped. It does not exist in .aasx.");
+			return;
 		}
 		
 		String targetPath = destDir.toString() + "/" + VABPathTools.getLastElement(filePath);
