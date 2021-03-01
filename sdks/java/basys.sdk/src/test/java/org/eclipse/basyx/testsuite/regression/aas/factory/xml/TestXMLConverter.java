@@ -299,7 +299,7 @@ public class TestXMLConverter {
 		assertEquals("3s7plfdrs35_asset1", asset.getIdShort());
 		assertEquals("asset1_Description", asset.getDescription().get("EN"));
 		assertEquals(IdentifierType.IRI, asset.getIdentification().getIdType());
-		assertEquals("Instance", asset.getAssetKind().toString());
+		assertEquals("Type", asset.getAssetKind().toString());
 		assertEquals("www.festo.com/dic/08111234", asset.getAssetIdentificationModel().getKeys().get(0).getValue());
 	}
 	

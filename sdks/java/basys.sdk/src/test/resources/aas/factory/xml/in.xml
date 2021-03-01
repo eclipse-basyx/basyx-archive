@@ -201,11 +201,12 @@
 					<aas:key type="ConceptDescription" local="true" idType="IRI">www.festo.com/dic/08111234</aas:key>
 				</aas:keys>
 			</aas:assetIdentificationModelRef>
-			<aas:kind>Instance</aas:kind>
+			<aas:kind>Type</aas:kind>
 		</aas:asset>
 		<aas:asset>
 			<aas:idShort>emptyAsset</aas:idShort>
 			<aas:identification idType="IRI">http://pk.festo.com/q30j38dlajx</aas:identification>
+			<aas:kind>Instance</aas:kind>
 		</aas:asset>
 	</aas:assets>
 	<aas:submodels>

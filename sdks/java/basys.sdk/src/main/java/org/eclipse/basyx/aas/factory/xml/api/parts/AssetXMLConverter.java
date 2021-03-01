@@ -14,20 +14,21 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.HasDataSpecificationXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.IdentifiableXMLConverter;
-import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.haskind.HasKindXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.reference.ReferenceXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import com.google.common.base.Strings;
 
 /**
  * Handles the conversion between IAsset objects and the XML tag &lt;aas:assets&gt; in both directions
@@ -58,7 +59,7 @@ public class AssetXMLConverter {
 			
 			IdentifiableXMLConverter.populateIdentifiable(xmlAsset, Identifiable.createAsFacadeNonStrict(asset, KeyElements.ASSET));
 			HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlAsset, HasDataSpecification.createAsFacade(asset));
-			HasKindXMLConverter.populateHasKind(xmlAsset, HasKind.createAsFacade(asset));
+			asset.setAssetKind(parseAssetKind(xmlAsset));
 			
 			if(xmlAsset.containsKey(ASSET_IDENTIFICATION_MODEL_REF)) {
 				asset.setAssetIdentificationModel(parseAssetIdentificationModelRef(xmlAsset));
@@ -80,6 +81,22 @@ public class AssetXMLConverter {
 	private static IReference parseAssetIdentificationModelRef(Map<String, Object> xmlObject) {
 		Map<String, Object> semanticIDObj = (Map<String, Object>) xmlObject.get(ASSET_IDENTIFICATION_MODEL_REF);
 		return ReferenceXMLConverter.parseReference(semanticIDObj);
+	}
+	
+
+	/**
+	 * Parses &lt;aas:akind&gt; and gets the correct AssetKind from it
+	 * 
+	 * @param xmlObject a Map containing the XML tag &lt;aas:kind&gt;
+	 * @return the parsed AssetKind or null if none was present
+	 */
+	private static AssetKind parseAssetKind(Map<String, Object> xmlObject) {
+		String assetKindValue = XMLHelper.getString(xmlObject.get(ASSET_KIND));
+		if (!Strings.isNullOrEmpty(assetKindValue)) {
+			return AssetKind.fromString(assetKindValue);
+		} else {
+			throw new RuntimeException("Necessary value 'AssetKind' was not found for one of the Assets in the XML file.");
+		}
 	}
 	
 	
