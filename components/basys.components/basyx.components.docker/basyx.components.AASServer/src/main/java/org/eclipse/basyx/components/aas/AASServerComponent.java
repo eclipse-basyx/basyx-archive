@@ -174,6 +174,10 @@ public class AASServerComponent implements IComponent {
 
 	@Override
 	public void stopComponent() {
+		
+		// Remove all AASs/SMs that were registered on startup
+		AASBundleIntegrator.deregister(registry, aasBundles);
+		
 		server.shutdown();
 	}
 

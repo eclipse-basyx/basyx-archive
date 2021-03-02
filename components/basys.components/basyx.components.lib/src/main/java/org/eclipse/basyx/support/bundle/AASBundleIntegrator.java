@@ -17,8 +17,11 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
 import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -29,6 +32,8 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  *
  */
 public class AASBundleIntegrator {
+	
+	private static Logger logger = LoggerFactory.getLogger(AASBundleIntegrator.class);
 
 	/**
 	 * Checks (by ID) if all AASs/SMs contained<br>
@@ -99,5 +104,35 @@ public class AASBundleIntegrator {
 	 */
 	public static void register(IAASRegistryService registry, Collection<AASBundle> bundles, String aasAggregatorPath) {
 		bundles.stream().map(b -> AASBundleDescriptorFactory.createAASDescriptor(b, aasAggregatorPath)).forEach(registry::register);
+	}
+	
+	/**
+	 * Deregisters a given set of bundles from a given registry
+	 * 
+	 * @param registry the registry to deregister from
+	 * @param bundles the AASBundles to be deregistred
+	 */
+	public static void deregister(IAASRegistryService registry, Collection<AASBundle> bundles) {
+		if(registry != null && bundles != null) {
+			for(AASBundle bundle: bundles) {
+				IAssetAdministrationShell aas = bundle.getAAS();
+				
+				try {
+					registry.delete(aas.getIdentification());
+				} catch (ProviderException e) {
+					logger.info("The AAS '" + aas.getIdShort() + "' can't be deregistered. It was not found in registry.");
+					// Just continue if deregistration failed
+				}
+				
+				for(ISubModel sm: bundle.getSubmodels()) {
+					try {
+						registry.delete(sm.getIdentification());
+					} catch (ProviderException e) {
+						logger.info("The SM '" + sm.getIdShort() + "' can't be deregistered. It was not found in registry.");
+						// Just continue if deregistration failed
+					}
+				}
+			}
+		}
 	}
 }
