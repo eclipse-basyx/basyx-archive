@@ -54,7 +54,7 @@ public class AssetSpecificProperties extends SubmodelElementCollection {
 	 */
 	public AssetSpecificProperties(String idShort, List<GuidelineSpecificProperties> guidelineSpecificProperties) {
 		super(idShort);
-		setSemanticID(SEMANTICID);
+		setSemanticId(SEMANTICID);
 		setGuidelineSpecificProperties(guidelineSpecificProperties);
 	}
 	

@@ -160,7 +160,7 @@ public class Submodel extends VABModelMap<Object> implements IElementContainer, 
 	}
 
 	public void setSemanticId(IReference ref) {
-		HasSemantics.createAsFacade(this).setSemanticID(ref);
+		HasSemantics.createAsFacade(this).setSemanticId(ref);
 	}
 
 	@Override

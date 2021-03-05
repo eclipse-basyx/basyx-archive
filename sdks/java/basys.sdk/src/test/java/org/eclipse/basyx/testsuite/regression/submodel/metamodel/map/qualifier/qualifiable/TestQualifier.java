@@ -92,7 +92,7 @@ public class TestQualifier {
 	@Test
 	public void testSetSemanticID() {
 		Reference reference = new Reference(new Identifier(IdentifierType.IRI, "newId"), KeyElements.BLOB, true);
-		qualifier.setSemanticID(reference);
+		qualifier.setSemanticId(reference);
 		assertEquals(reference, qualifier.getSemanticId());
 	}
 }

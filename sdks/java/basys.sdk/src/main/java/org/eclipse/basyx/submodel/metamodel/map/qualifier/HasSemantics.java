@@ -34,7 +34,7 @@ public class HasSemantics extends VABModelMap<Object> implements IHasSemantics {
 	 * Constructor
 	 */
 	public HasSemantics(IReference ref) {
-		this.setSemanticID(ref);
+		this.setSemanticId(ref);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class HasSemantics extends VABModelMap<Object> implements IHasSemantics {
 		return Reference.createAsFacade((Map<String, Object>) get(HasSemantics.SEMANTICID));
 	}
 
-	public void setSemanticID(IReference ref) {
+	public void setSemanticId(IReference ref) {
 		put(HasSemantics.SEMANTICID, ref);
 	}
 }

@@ -56,7 +56,7 @@ public class Markings extends SubmodelElementCollection {
 	 */
 	public Markings(String idShort, List<Marking> markings) {
 		super(idShort);
-		setSemanticID(SEMANTICID);
+		setSemanticId(SEMANTICID);
 		setMarking(markings);
 	}
 	

@@ -50,7 +50,7 @@ public class Fax extends SubmodelElementCollection {
 	 */
 	public Fax(String idShort, LangString faxNumber) {
 		super(idShort);
-		setSemanticID(SEMANTICID);
+		setSemanticId(SEMANTICID);
 		setFaxNumber(faxNumber);
 	}
 	
@@ -61,7 +61,7 @@ public class Fax extends SubmodelElementCollection {
 	 */
 	public Fax(String idShort, MultiLanguageProperty faxNumber) {
 		super(idShort);
-		setSemanticID(SEMANTICID);
+		setSemanticId(SEMANTICID);
 		setFaxNumber(faxNumber);
 	}
 	
@@ -132,7 +132,7 @@ public class Fax extends SubmodelElementCollection {
 	 */
 	public void setFaxNumber(LangString faxNumber) {
 		MultiLanguageProperty faxProp = new MultiLanguageProperty(FAXNUMBERID);
-		faxProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO195#002", IdentifierType.IRDI)));
+		faxProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO195#002", IdentifierType.IRDI)));
 		faxProp.setValue(new LangStrings(faxNumber));
 		setFaxNumber(faxProp);
 	}
@@ -151,7 +151,7 @@ public class Fax extends SubmodelElementCollection {
 	 */
 	public void setTypeOfFaxNumber(FaxType type) {
 		Property faxTypeProp = new Property(TYPEOFFAXID, ValueType.String);
-		faxTypeProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO196#003", IdentifierType.IRDI)));
+		faxTypeProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO196#003", IdentifierType.IRDI)));
 		faxTypeProp.set(type.toString());
 		setTypeOfFaxNumber(faxTypeProp);
 	}

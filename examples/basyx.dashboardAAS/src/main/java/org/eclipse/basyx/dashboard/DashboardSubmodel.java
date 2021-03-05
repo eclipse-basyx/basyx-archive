@@ -55,7 +55,7 @@ public class DashboardSubmodel extends Submodel {
 		// Ref by identifier:
 		Key key = new Key(KeyElements.CONCEPTDESCRIPTION, true, "0112/2///61360_4#AAF891#001", KeyType.IRDI);
 		IReference refByIdentifier = new Reference(key);
-		temperatureProperty.setSemanticID(refByIdentifier);
+		temperatureProperty.setSemanticId(refByIdentifier);
 		addSubmodelElement(temperatureProperty);
 	}
 

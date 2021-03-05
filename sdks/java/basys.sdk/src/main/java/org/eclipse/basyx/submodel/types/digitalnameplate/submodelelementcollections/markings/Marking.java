@@ -55,7 +55,7 @@ public class Marking extends SubmodelElementCollection {
 	 */
 	public Marking(String idShort, Property markingName, File markingFile) {
 		super(idShort);
-		setSemanticID(SEMANTICID);
+		setSemanticId(SEMANTICID);
 		setMarkingAdditionalText(new ArrayList<Property>());
 		setMarkingName(markingName);
 		setMarkingFile(markingFile);
@@ -70,7 +70,7 @@ public class Marking extends SubmodelElementCollection {
 	 */
 	public Marking(String idShort, String markingName, File markingFile) {
 		super(idShort);
-		setSemanticID(SEMANTICID);
+		setSemanticId(SEMANTICID);
 		setMarkingAdditionalText(new ArrayList<Property>());
 		setMarkingName(markingName);
 		setMarkingFile(markingFile);
@@ -148,7 +148,7 @@ public class Marking extends SubmodelElementCollection {
 	 */
 	public void setMarkingName(String markingName) {
 		Property markingNameProp = new Property(MARKINGNAMEID, ValueType.String);
-		markingNameProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/zvei/nameplate/1/0/Nameplate/Markings/Marking/MarkingName", IdentifierType.IRDI)));
+		markingNameProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/zvei/nameplate/1/0/Nameplate/Markings/Marking/MarkingName", IdentifierType.IRDI)));
 		markingNameProp.set(markingName);
 		setMarkingName(markingNameProp);
 	}

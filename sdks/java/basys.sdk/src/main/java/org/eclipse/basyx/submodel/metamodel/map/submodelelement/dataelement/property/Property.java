@@ -223,7 +223,7 @@ public class Property extends DataElement implements IProperty {
 	 */
 	public void addConceptDescription(IConceptDescription description) {
 		Reference ref = new Reference(description, KeyElements.CONCEPTDESCRIPTION, true);
-		setSemanticID(ref);
+		setSemanticId(ref);
 	}
 
 	@Override

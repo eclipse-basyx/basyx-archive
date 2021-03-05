@@ -146,7 +146,7 @@ public class Qualifier extends Constraint implements IQualifier {
 		return HasSemantics.createAsFacade(this).getSemanticId();
 	}
 
-	public void setSemanticID(IReference ref) {
-		HasSemantics.createAsFacade(this).setSemanticID(ref);
+	public void setSemanticId(IReference ref) {
+		HasSemantics.createAsFacade(this).setSemanticId(ref);
 	}
 }

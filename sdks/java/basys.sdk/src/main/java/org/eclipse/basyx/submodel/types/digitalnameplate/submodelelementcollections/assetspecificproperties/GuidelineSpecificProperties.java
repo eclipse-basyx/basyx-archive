@@ -50,7 +50,7 @@ public class GuidelineSpecificProperties extends SubmodelElementCollection {
 	 */
 	public GuidelineSpecificProperties(String idShort, Property declaration, List<Property> arbitrary) {
 		super(idShort);
-		setSemanticID(SEMANTICID);
+		setSemanticId(SEMANTICID);
 		setGuidelineForConformityDeclaration(declaration);
 		setArbitrary(arbitrary);
 	}
@@ -64,7 +64,7 @@ public class GuidelineSpecificProperties extends SubmodelElementCollection {
 	 */
 	public GuidelineSpecificProperties(String idShort, String declaration, List<Property> arbitrary) {
 		super(idShort);
-		setSemanticID(SEMANTICID);
+		setSemanticId(SEMANTICID);
 		setGuidelineForConformityDeclaration(declaration);
 		setArbitrary(arbitrary);
 	}
@@ -149,7 +149,7 @@ public class GuidelineSpecificProperties extends SubmodelElementCollection {
 	 */
 	public void setGuidelineForConformityDeclaration(String declaration) {
 		Property declarationProp = new Property(GUIDELINEFORCONFORMITYDECLARATIONID, ValueType.String);
-		declarationProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO856#002", IdentifierType.IRDI)));
+		declarationProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO856#002", IdentifierType.IRDI)));
 		declarationProp.set(declaration);
 		setGuidelineForConformityDeclaration(declarationProp);
 	}

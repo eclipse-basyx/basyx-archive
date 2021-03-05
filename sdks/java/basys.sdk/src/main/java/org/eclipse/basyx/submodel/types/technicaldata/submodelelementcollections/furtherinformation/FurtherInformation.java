@@ -73,7 +73,7 @@ public class FurtherInformation extends SubmodelElementCollection {
 	 */
 	public FurtherInformation(String idShort, Property validDate) {
 		super(idShort);
-		setSemanticID(SEMANTICID);
+		setSemanticId(SEMANTICID);
 		setValidDate(validDate);
 		setTextStatements(new ArrayList<MultiLanguageProperty>());
 	}
@@ -86,7 +86,7 @@ public class FurtherInformation extends SubmodelElementCollection {
 	 */
 	public FurtherInformation(String idShort, XMLGregorianCalendar validDate) {
 		super(idShort);
-		setSemanticID(SEMANTICID);
+		setSemanticId(SEMANTICID);
 		setValidDate(validDate);
 		setTextStatements(new ArrayList<MultiLanguageProperty>());
 	}
@@ -204,7 +204,7 @@ public class FurtherInformation extends SubmodelElementCollection {
 	 */
 	public void setValidDate(XMLGregorianCalendar validDate) {
 		Property validDateProp = new Property(VALIDDATEID, ValueType.DateTime);
-		validDateProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ValidDate/1/1", IdentifierType.IRI)));
+		validDateProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ValidDate/1/1", IdentifierType.IRI)));
 		validDateProp.set(validDate);
 		setValidDate(validDateProp);
 	}

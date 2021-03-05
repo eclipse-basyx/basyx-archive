@@ -159,8 +159,8 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 		return HasSemantics.createAsFacade(this).getSemanticId();
 	}
 
-	public void setSemanticID(IReference ref) {
-		HasSemantics.createAsFacade(this).setSemanticID(ref);
+	public void setSemanticId(IReference ref) {
+		HasSemantics.createAsFacade(this).setSemanticId(ref);
 	}
 
 	@Override

@@ -80,7 +80,7 @@ public class SubmodelDescriptor extends ModelDescriptor implements IHasSemantics
 	}
 
 	public void setSemanticId(Reference ref) {
-		HasSemantics.createAsFacade(this).setSemanticID(ref);
+		HasSemantics.createAsFacade(this).setSemanticId(ref);
 	}
 
 }

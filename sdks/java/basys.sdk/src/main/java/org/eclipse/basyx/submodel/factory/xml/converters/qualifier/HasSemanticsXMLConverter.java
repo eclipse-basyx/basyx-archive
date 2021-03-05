@@ -39,7 +39,7 @@ public class HasSemanticsXMLConverter {
 	public static void populateHasSemantics(Map<String, Object> xmlObject, HasSemantics hasSemantics) {
 		Map<String, Object> xmlSemanticIDObj = (Map<String, Object>) xmlObject.get(SEMANTIC_ID);
 		if (xmlSemanticIDObj != null) {
-			hasSemantics.setSemanticID(ReferenceXMLConverter.parseReference(xmlSemanticIDObj));
+			hasSemantics.setSemanticId(ReferenceXMLConverter.parseReference(xmlSemanticIDObj));
 		}
 	}
 	

@@ -91,7 +91,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	 */
 	public GeneralInformation(String idShort, Property manufacturerName, MultiLanguageProperty manufacturerProductDesignation, Property manufacturerPartNumber, Property manufacturerOrderCode) {
 		super(idShort);
-		setSemanticID(SEMANTICID);
+		setSemanticId(SEMANTICID);
 		setManufacturerName(manufacturerName);
 		setManufacturerProductDesignation(manufacturerProductDesignation);
 		setManufacturerPartNumber(manufacturerPartNumber);
@@ -109,7 +109,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	 */
 	public GeneralInformation(String idShort, String manufacturerName, LangString manufacturerProductDesignation, String manufacturerPartNumber, String manufacturerOrderCode) {
 		super(idShort);
-		setSemanticID(SEMANTICID);
+		setSemanticId(SEMANTICID);
 		setManufacturerName(manufacturerName);
 		setManufacturerProductDesignation(manufacturerProductDesignation);
 		setManufacturerPartNumber(manufacturerPartNumber);
@@ -186,7 +186,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	 */
 	public void setManufacturerName(String name) {
 		Property nameProp = new Property(MANUFACTURERNAMEID, ValueType.String);
-		nameProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerName/1/1", IdentifierType.IRI)));
+		nameProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerName/1/1", IdentifierType.IRI)));
 		nameProp.set(name);
 		setManufacturerName(nameProp);
 	}
@@ -240,7 +240,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	 */
 	public void setManufacturerProductDesignation(LangString designation) {
 		MultiLanguageProperty designationProp = new MultiLanguageProperty(MANUFACTURERPRODUCTDESIGNATIONID);
-		designationProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerProductDesignation/1/1", IdentifierType.IRI)));
+		designationProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerProductDesignation/1/1", IdentifierType.IRI)));
 		designationProp.setValue(new LangStrings(designation));
 		setManufacturerProductDesignation(designationProp);
 	}
@@ -274,7 +274,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	 */
 	public void setManufacturerPartNumber(String partNumber) {
 		Property partNumberProp = new Property(MANUFACTURERPARTNUMBERID, ValueType.String);
-		partNumberProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerPartNumber/1/1", IdentifierType.IRI)));
+		partNumberProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerPartNumber/1/1", IdentifierType.IRI)));
 		partNumberProp.set(partNumber);
 		setManufacturerPartNumber(partNumberProp);
 	}
@@ -306,7 +306,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	 */
 	public void setManufacturerOrderCode(String orderCode) {
 		Property orderCodeProp = new Property(MANUFACTURERORDERCODEID, ValueType.String);
-		orderCodeProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerOrderCode/1/1", IdentifierType.IRI)));
+		orderCodeProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerOrderCode/1/1", IdentifierType.IRI)));
 		orderCodeProp.set(orderCode);
 		setManufacturerOrderCode(orderCodeProp);
 	}

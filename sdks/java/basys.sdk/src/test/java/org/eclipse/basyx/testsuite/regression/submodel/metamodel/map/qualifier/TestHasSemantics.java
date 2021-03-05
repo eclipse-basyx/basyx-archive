@@ -54,7 +54,7 @@ public class TestHasSemantics {
 		KeyElements keyElements = KeyElements.BLOB;
 		boolean isLocal = true;
 		Reference reference = new Reference(identifier, keyElements, isLocal);
-		semantics.setSemanticID(reference);
+		semantics.setSemanticId(reference);
 		assertEquals(reference, semantics.getSemanticId());
 	}
 }

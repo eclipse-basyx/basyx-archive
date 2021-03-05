@@ -98,7 +98,7 @@ public class TestSubmodelElement {
 	
 	@Test
 	public void testSetSemanticID() {
-		submodelElement.setSemanticID(REFERENCE);
+		submodelElement.setSemanticId(REFERENCE);
 		assertEquals(REFERENCE, submodelElement.getSemanticId());
 	}
 	

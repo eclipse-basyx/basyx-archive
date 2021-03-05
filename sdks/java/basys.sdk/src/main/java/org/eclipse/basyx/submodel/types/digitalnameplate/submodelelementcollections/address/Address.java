@@ -93,7 +93,7 @@ public class Address extends SubmodelElementCollection {
 	 */
 	public Address(String idShort, MultiLanguageProperty street, MultiLanguageProperty zipCode, MultiLanguageProperty cityTown, MultiLanguageProperty nationalCode) {
 		super(idShort);
-		setSemanticID(SEMANTICID);
+		setSemanticId(SEMANTICID);
 		setStreet(street);
 		setZipCode(zipCode);
 		setCityTown(cityTown);
@@ -110,7 +110,7 @@ public class Address extends SubmodelElementCollection {
 	 */
 	public Address(String idShort, LangString street, LangString zipCode, LangString cityTown, LangString nationalCode) {
 		super(idShort);
-		setSemanticID(SEMANTICID);
+		setSemanticId(SEMANTICID);
 		setStreet(street);
 		setZipCode(zipCode);
 		setCityTown(cityTown);
@@ -195,7 +195,7 @@ public class Address extends SubmodelElementCollection {
 	 */
 	public void setDepartment(LangString department) {
 		MultiLanguageProperty deptProp = new MultiLanguageProperty(DEPARTMENTID);
-		deptProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO127#003", IdentifierType.IRDI)));
+		deptProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO127#003", IdentifierType.IRDI)));
 		deptProp.setValue(new LangStrings(department));
 		setDepartment(deptProp);
 	}
@@ -226,7 +226,7 @@ public class Address extends SubmodelElementCollection {
 	 */
 	public void setStreet(LangString street) {
 		MultiLanguageProperty streetProp = new MultiLanguageProperty(STREETID);
-		streetProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO128#002", IdentifierType.IRDI)));
+		streetProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO128#002", IdentifierType.IRDI)));
 		streetProp.setValue(new LangStrings(street));
 		setStreet(streetProp);
 	}
@@ -257,7 +257,7 @@ public class Address extends SubmodelElementCollection {
 	 */
 	public void setZipCode(LangString zipCode) {
 		MultiLanguageProperty zipCodeProp = new MultiLanguageProperty(ZIPCODEID);
-		zipCodeProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO129#002", IdentifierType.IRDI)));
+		zipCodeProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO129#002", IdentifierType.IRDI)));
 		zipCodeProp.setValue(new LangStrings(zipCode));
 		setZipCode(zipCodeProp);
 	}
@@ -285,7 +285,7 @@ public class Address extends SubmodelElementCollection {
 	 */
 	public void setPOBox(LangString poBox) {
 		MultiLanguageProperty poBoxProp = new MultiLanguageProperty(POBOXID);
-		poBoxProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO130#002", IdentifierType.IRDI)));
+		poBoxProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO130#002", IdentifierType.IRDI)));
 		poBoxProp.setValue(new LangStrings(poBox));
 		setPOBox(poBoxProp);
 	}
@@ -313,7 +313,7 @@ public class Address extends SubmodelElementCollection {
 	 */
 	public void setZipCodeOfPOBox(LangString zipCodeOfPoBox) {
 		MultiLanguageProperty zipCodeOfPoBoxProp = new MultiLanguageProperty(ZIPCODEOFPOBOXID);
-		zipCodeOfPoBoxProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO131#002", IdentifierType.IRDI)));
+		zipCodeOfPoBoxProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO131#002", IdentifierType.IRDI)));
 		zipCodeOfPoBoxProp.setValue(new LangStrings(zipCodeOfPoBox));
 		setZipCodeOfPOBox(zipCodeOfPoBoxProp);
 	}
@@ -344,7 +344,7 @@ public class Address extends SubmodelElementCollection {
 	 */
 	public void setCityTown(LangString cityTown) {
 		MultiLanguageProperty cityTownProp = new MultiLanguageProperty(CITYTOWNID);
-		cityTownProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO132#002", IdentifierType.IRDI)));
+		cityTownProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO132#002", IdentifierType.IRDI)));
 		cityTownProp.setValue(new LangStrings(cityTown));
 		setCityTown(cityTownProp);
 	}
@@ -372,7 +372,7 @@ public class Address extends SubmodelElementCollection {
 	 */
 	public void setStateCounty(LangString stateCounty) {
 		MultiLanguageProperty stateCountyProp = new MultiLanguageProperty(STATECOUNTYID);
-		stateCountyProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO133#002", IdentifierType.IRDI)));
+		stateCountyProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO133#002", IdentifierType.IRDI)));
 		stateCountyProp.setValue(new LangStrings(stateCounty));
 		setStateCounty(stateCountyProp);
 	}
@@ -406,7 +406,7 @@ public class Address extends SubmodelElementCollection {
 	 */
 	public void setNationalCode(LangString nationalCode) {
 		MultiLanguageProperty nationalCodeProp = new MultiLanguageProperty(NATIONALCODEID);
-		nationalCodeProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO134#002", IdentifierType.IRDI)));
+		nationalCodeProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO134#002", IdentifierType.IRDI)));
 		nationalCodeProp.setValue(new LangStrings(nationalCode));
 		setNationalCode(nationalCodeProp);
 	}
@@ -434,7 +434,7 @@ public class Address extends SubmodelElementCollection {
 	 */
 	public void setVatNumber(LangString vatNumber) {
 		MultiLanguageProperty vatNumberProp = new MultiLanguageProperty(VATNUMBERID);
-		vatNumberProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO135#002", IdentifierType.IRDI)));
+		vatNumberProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO135#002", IdentifierType.IRDI)));
 		vatNumberProp.setValue(new LangStrings(vatNumber));
 		setVatNumber(vatNumberProp);
 	}
@@ -462,7 +462,7 @@ public class Address extends SubmodelElementCollection {
 	 */
 	public void setAddressRemarks(LangString addressRemarks) {
 		MultiLanguageProperty addressRemarksProp = new MultiLanguageProperty(ADDRESSREMARKSID);
-		addressRemarksProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO202#003", IdentifierType.IRDI)));
+		addressRemarksProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO202#003", IdentifierType.IRDI)));
 		addressRemarksProp.setValue(new LangStrings(addressRemarks));
 		setAddressRemarks(addressRemarksProp);
 	}
@@ -490,7 +490,7 @@ public class Address extends SubmodelElementCollection {
 	 */
 	public void setAddressOfAdditionalLink(String addressOfAdditionalLink) {
 		Property addressOfAdditionalLinkProp = new Property(ADDRESSOFADDITIONALLINKID, ValueType.String);
-		addressOfAdditionalLinkProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAQ326#002", IdentifierType.IRDI)));
+		addressOfAdditionalLinkProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAQ326#002", IdentifierType.IRDI)));
 		addressOfAdditionalLinkProp.set(addressOfAdditionalLink);
 		setAddressOfAdditionalLink(addressOfAdditionalLinkProp);
 	}

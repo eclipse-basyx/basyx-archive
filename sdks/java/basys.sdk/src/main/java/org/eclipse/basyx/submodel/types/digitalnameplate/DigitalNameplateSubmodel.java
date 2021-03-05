@@ -230,7 +230,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	 */
 	public void setManufacturerName(LangString manufacturerName) {
 		MultiLanguageProperty manufacturerNameProp = new MultiLanguageProperty(MANUFACTURERNAMEID);
-		manufacturerNameProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO677#002", IdentifierType.IRDI)));
+		manufacturerNameProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO677#002", IdentifierType.IRDI)));
 		manufacturerNameProp.setValue(new LangStrings(manufacturerName));
 		setManufacturerName(manufacturerNameProp);
 	}
@@ -268,7 +268,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	 */
 	public void setManufacturerProductDesignation(LangString manufacturerProductDesignation) {
 		MultiLanguageProperty manufacturerProductDesignationProp = new MultiLanguageProperty(MANUFACTURERPRODUCTDESIGNATIONID);
-		manufacturerProductDesignationProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAW338#001", IdentifierType.IRDI)));
+		manufacturerProductDesignationProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAW338#001", IdentifierType.IRDI)));
 		manufacturerProductDesignationProp.setValue(new LangStrings(manufacturerProductDesignation));
 		setManufacturerProductDesignation(manufacturerProductDesignationProp);
 	}
@@ -326,7 +326,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	 */
 	public void setManufacturerProductFamily(LangString manufacturerProductFamily) {
 		MultiLanguageProperty manufacturerProductFamilyProp = new MultiLanguageProperty(MANUFACTURERPRODUCTFAMILYID);
-		manufacturerProductFamilyProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAU731#001", IdentifierType.IRDI)));
+		manufacturerProductFamilyProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAU731#001", IdentifierType.IRDI)));
 		manufacturerProductFamilyProp.setValue(new LangStrings(manufacturerProductFamily));
 		setManufacturerProductFamily(manufacturerProductFamilyProp);
 	}
@@ -358,7 +358,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	 */
 	public void setSerialNumber(String serialNumber) {
 		Property serialNumberProp = new Property(SERIALNUMBERID, ValueType.String);
-		serialNumberProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAM556#002", IdentifierType.IRDI)));
+		serialNumberProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAM556#002", IdentifierType.IRDI)));
 		serialNumberProp.set(serialNumber);
 		setSerialNumber(serialNumberProp);
 	}
@@ -389,7 +389,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	 */
 	public void setYearOfConstruction(String yearsOfConstruction) {
 		Property yearsOfConstructionProp = new Property(YEARSOFCONSTRUCTIONID, ValueType.String);
-		yearsOfConstructionProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAP906#001", IdentifierType.IRDI)));
+		yearsOfConstructionProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAP906#001", IdentifierType.IRDI)));
 		yearsOfConstructionProp.set(yearsOfConstruction);
 		setYearOfConstruction(yearsOfConstructionProp);
 	}
