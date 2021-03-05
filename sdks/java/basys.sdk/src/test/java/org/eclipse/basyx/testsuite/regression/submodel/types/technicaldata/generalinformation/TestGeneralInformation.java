@@ -27,7 +27,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.technicaldata.submodelelementcollections.generalinformation.GeneralInformation;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.Before;
@@ -41,11 +41,11 @@ import org.junit.Test;
  *
  */
 public class TestGeneralInformation {
-	public static Property manufacturerName = new Property(GeneralInformation.MANUFACTURERNAMEID, PropertyValueTypeDef.String);
+	public static Property manufacturerName = new Property(GeneralInformation.MANUFACTURERNAMEID, ValueType.String);
 	public static File manufacturerLogo = new File("image/png");
 	public static MultiLanguageProperty designation = new MultiLanguageProperty(GeneralInformation.MANUFACTURERPRODUCTDESIGNATIONID);
-	public static Property partNumber = new Property(GeneralInformation.MANUFACTURERPARTNUMBERID, PropertyValueTypeDef.String);
-	public static Property orderCode = new Property(GeneralInformation.MANUFACTURERORDERCODEID, PropertyValueTypeDef.String);
+	public static Property partNumber = new Property(GeneralInformation.MANUFACTURERPARTNUMBERID, ValueType.String);
+	public static Property orderCode = new Property(GeneralInformation.MANUFACTURERORDERCODEID, ValueType.String);
 	public static File image = new File("image/jpg");
 	
 	private Map<String, Object> InfoMap = new HashMap<String, Object>();

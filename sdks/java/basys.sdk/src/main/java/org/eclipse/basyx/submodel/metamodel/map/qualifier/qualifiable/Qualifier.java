@@ -17,8 +17,8 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 
 /**
  * Qualifier class
@@ -58,7 +58,7 @@ public class Qualifier extends Constraint implements IQualifier {
 
 	public Qualifier(String type, String value, String valueType, Reference valueId) {
 		put(TYPE,type);
-		put(VALUE, PropertyValueTypeDefHelper.prepareForSerialization(value));
+		put(VALUE, ValueTypeHelper.prepareForSerialization(value));
 		put(VALUEID, valueId);
 		put(VALUETYPE, valueType);
 	}
@@ -105,10 +105,10 @@ public class Qualifier extends Constraint implements IQualifier {
 	}
 
 	public void setValue(Object obj) {
-		put(Qualifier.VALUE, PropertyValueTypeDefHelper.prepareForSerialization(obj));
+		put(Qualifier.VALUE, ValueTypeHelper.prepareForSerialization(obj));
 		// Value type is only set if it is not set before
 		if(getValueType() == null) {
-			put(Qualifier.VALUETYPE, PropertyValueTypeDefHelper.getType(obj).toString());
+			put(Qualifier.VALUETYPE, ValueTypeHelper.getType(obj).toString());
 		}
 	}
 
@@ -116,7 +116,7 @@ public class Qualifier extends Constraint implements IQualifier {
 	public Object getValue() {
 		Object value = get(Qualifier.VALUE);
 		if(value instanceof String) {
-			return PropertyValueTypeDefHelper.getJavaObject(value, getValueType());
+			return ValueTypeHelper.getJavaObject(value, getValueType());
 		}else {
 			return value;
 		}
@@ -132,13 +132,13 @@ public class Qualifier extends Constraint implements IQualifier {
 		return Reference.createAsFacade((Map<String, Object>) get(Qualifier.VALUEID));
 	}
 
-	public void setValueType(PropertyValueTypeDef obj) {
+	public void setValueType(ValueType obj) {
 		put(Qualifier.VALUETYPE, obj.toString());
 	}
 	
 	@Override
-	public PropertyValueTypeDef getValueType() {
-		return PropertyValueTypeDefHelper.readTypeDef(get(Qualifier.VALUETYPE));
+	public ValueType getValueType() {
+		return ValueTypeHelper.readTypeDef(get(Qualifier.VALUETYPE));
 	}
 
 	@Override

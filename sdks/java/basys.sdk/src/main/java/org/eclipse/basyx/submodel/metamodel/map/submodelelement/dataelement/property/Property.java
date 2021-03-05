@@ -22,8 +22,8 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.DataElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 
 /**
@@ -56,7 +56,7 @@ public class Property extends DataElement implements IProperty {
 	 * @param idShort
 	 * @param valueType
 	 */
-	public Property(String idShort, PropertyValueTypeDef valueType) {
+	public Property(String idShort, ValueType valueType) {
 		super(idShort);
 		setValueType(valueType);
 		setIdShort(idShort);
@@ -149,7 +149,7 @@ public class Property extends DataElement implements IProperty {
 	 * @param type
 	 *             manually determined type of the value
 	 */
-	public void setValueType(PropertyValueTypeDef type) {
+	public void setValueType(ValueType type) {
 		if(type == null) {
 			throw new RuntimeException("Can not set null as valueType");
 		}
@@ -170,7 +170,7 @@ public class Property extends DataElement implements IProperty {
 
 	@Override
 	public void set(Object value) {
-		put(Property.VALUE, PropertyValueTypeDefHelper.prepareForSerialization(value));
+		put(Property.VALUE, ValueTypeHelper.prepareForSerialization(value));
 		// Value type is only set if it is not set before
 		if(getValueType() == null) {
 			
@@ -180,7 +180,7 @@ public class Property extends DataElement implements IProperty {
 				throw new RuntimeException("Can not set mandatory attribute 'valueType' with null as value");
 			}
 			
-			put(Property.VALUETYPE, PropertyValueTypeDefHelper.getType(value).toString());
+			put(Property.VALUETYPE, ValueTypeHelper.getType(value).toString());
 		}
 	}
 
@@ -189,7 +189,7 @@ public class Property extends DataElement implements IProperty {
 	 * 
 	 * @throws ProviderException
 	 */
-	public void set(Object newValue, PropertyValueTypeDef newType) throws ProviderException {
+	public void set(Object newValue, ValueType newType) throws ProviderException {
 		put(Property.VALUE, newValue);
 		setValueType(newType);
 	}
@@ -198,19 +198,19 @@ public class Property extends DataElement implements IProperty {
 	public Object get() {
 		Object value = get(Property.VALUE);
 		if(value instanceof String) {
-			return PropertyValueTypeDefHelper.getJavaObject(value, getValueType());
+			return ValueTypeHelper.getJavaObject(value, getValueType());
 		}else {
 			return value;
 		}
 	}
 
 	@Override
-	public PropertyValueTypeDef getValueType() {
+	public ValueType getValueType() {
 		String valueType = (String) get(Property.VALUETYPE);
 		if (valueType == null) {
 			return null;
 		} else {
-			return PropertyValueTypeDefHelper.fromName(valueType);
+			return ValueTypeHelper.fromName(valueType);
 		}
 	}
 

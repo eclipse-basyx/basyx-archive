@@ -23,7 +23,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 
 /**
  * ProductClassificationItem as described in the Submodel Template AAS Technical Data Document
@@ -141,7 +141,7 @@ public class ProductClassificationItem extends SubmodelElementCollection {
 	 * @param system
 	 */
 	public void setProductClassificationSystem(String system) {
-		Property productClassificationSystemProp = new Property(PRODUCTCLASSIFICATIONSYSTEMID, PropertyValueTypeDef.String);
+		Property productClassificationSystemProp = new Property(PRODUCTCLASSIFICATIONSYSTEMID, ValueType.String);
 		productClassificationSystemProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ProductClassificationSystem/1/1", IdentifierType.IRI)));
 		productClassificationSystemProp.set(system);
 		setProductClassificationSystem(productClassificationSystemProp);
@@ -175,7 +175,7 @@ public class ProductClassificationItem extends SubmodelElementCollection {
 	 * @param system
 	 */
 	public void setClassificationSystemVersion(String version) {
-		Property versionProp = new Property(CLASSIFICATIONSYSTEMVERSIONID, PropertyValueTypeDef.String);
+		Property versionProp = new Property(CLASSIFICATIONSYSTEMVERSIONID, ValueType.String);
 		versionProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ClassificationSystemVersion/1/1", IdentifierType.IRI)));
 		versionProp.set(version);
 		setClassificationSystemVersion(versionProp);
@@ -209,7 +209,7 @@ public class ProductClassificationItem extends SubmodelElementCollection {
 	 * @param id
 	 */
 	public void setProductClassId(String id) {
-		Property idProp = new Property(PRODUCTCLASSID, PropertyValueTypeDef.String);
+		Property idProp = new Property(PRODUCTCLASSID, ValueType.String);
 		idProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ProductClassId/1/1", IdentifierType.IRI)));
 		idProp.set(id);
 		setProductClassId(idProp);

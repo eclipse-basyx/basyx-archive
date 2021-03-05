@@ -57,7 +57,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.entity.Entity;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
@@ -353,13 +353,13 @@ public class TestXMLConverter {
 		assertEquals(1, keys.size());
 		assertEquals("0173-1#05-AAA650#002", keys.get(0).getValue());
 		assertEquals(2000.0, property.get());
-		assertEquals(PropertyValueTypeDef.Double, property.getValueType());
+		assertEquals(ValueType.Double, property.getValueType());
 		assertEquals("rotationSpeed", property.getIdShort());
 		
 		element = submodelElements.get("emptyDouble");
 		assertTrue(element instanceof Property);
 		property = (Property) element;
-		assertEquals(PropertyValueTypeDef.Double, property.getValueType());
+		assertEquals(ValueType.Double, property.getValueType());
 		
 		element = submodelElements.get("basic_event_id");
 		assertTrue(element instanceof BasicEvent);
@@ -390,7 +390,7 @@ public class TestXMLConverter {
 		element = submodelElements.get("range_id");
 		assertTrue(element instanceof Range);
 		Range range = (Range) element;
-		assertEquals(PropertyValueTypeDef.Integer, range.getValueType());
+		assertEquals(ValueType.Integer, range.getValueType());
 		assertEquals("1", range.getMin());
 		assertEquals("10", range.getMax());
 		

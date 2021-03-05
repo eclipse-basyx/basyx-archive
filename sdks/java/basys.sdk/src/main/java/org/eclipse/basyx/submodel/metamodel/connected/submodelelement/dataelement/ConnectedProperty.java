@@ -16,8 +16,8 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
@@ -41,12 +41,12 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 
 	@Override
 	public void set(Object newValue) throws ProviderException {
-		getProxy().setModelPropertyValue(Property.VALUE, PropertyValueTypeDefHelper.prepareForSerialization(newValue));
+		getProxy().setModelPropertyValue(Property.VALUE, ValueTypeHelper.prepareForSerialization(newValue));
 	}
 
 	@Override
-	public PropertyValueTypeDef getValueType() {
-		return PropertyValueTypeDefHelper.readTypeDef(getElem().getPath(Property.VALUETYPE));
+	public ValueType getValueType() {
+		return ValueTypeHelper.readTypeDef(getElem().getPath(Property.VALUETYPE));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -69,7 +69,7 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 	public Object getValue() {
 		Object value =  retrieveObject();
 		if(value instanceof String) {
-			return PropertyValueTypeDefHelper.getJavaObject(value, getValueType());
+			return ValueTypeHelper.getJavaObject(value, getValueType());
 		}else {
 			return value;
 		}

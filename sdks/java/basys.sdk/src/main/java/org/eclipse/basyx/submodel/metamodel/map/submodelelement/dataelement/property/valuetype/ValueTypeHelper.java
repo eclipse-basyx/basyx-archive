@@ -7,7 +7,7 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef;
+package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype;
 
 import java.math.BigInteger;
 import java.time.Duration;
@@ -23,7 +23,7 @@ import javax.xml.namespace.QName;
 
 /**
  * Provides utility functions for
- * {@link org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef
+ * {@link org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType
  * PropertyValueTypeDef} <br />
  * * Creating a PropertyValueTypeDef from name <br/>
  * * Creating a PropertyValueTypeDef for an object
@@ -31,13 +31,13 @@ import javax.xml.namespace.QName;
  * @author schnicke
  *
  */
-public class PropertyValueTypeDefHelper {
-	private static Map<String, PropertyValueTypeDef> typeMap = new HashMap<>();
+public class ValueTypeHelper {
+	private static Map<String, ValueType> typeMap = new HashMap<>();
 
 	// insert all types into a Map to allow getting a PropertyValueType based on a
 	// String
 	static {
-		for (PropertyValueTypeDef t : PropertyValueTypeDef.values()) {
+		for (ValueType t : ValueType.values()) {
 			typeMap.put(t.toString(), t);
 		}
 	}
@@ -52,7 +52,7 @@ public class PropertyValueTypeDefHelper {
 	 * @param name
 	 * @return
 	 */
-	public static PropertyValueTypeDef fromName(String name) {
+	public static ValueType fromName(String name) {
 		if (typeMap.containsKey(name)) {
 			return typeMap.get(name);
 		} else {
@@ -66,50 +66,50 @@ public class PropertyValueTypeDefHelper {
 	 * @param obj
 	 * @return
 	 */
-	public static PropertyValueTypeDef getType(Object obj) {
-		PropertyValueTypeDef objectType;
+	public static ValueType getType(Object obj) {
+		ValueType objectType;
 		
 		if (obj == null) {
-			objectType = PropertyValueTypeDef.None;
+			objectType = ValueType.None;
 		} else {
 			Class<?> c = obj.getClass();
 			if(c == byte.class || c == Byte.class) {
-				objectType = PropertyValueTypeDef.Int8;
+				objectType = ValueType.Int8;
 			}else if(c == short.class || c == Short.class) {
-				objectType = PropertyValueTypeDef.Int16;
+				objectType = ValueType.Int16;
 			}else if (c == int.class || c == Integer.class) {
-				objectType = PropertyValueTypeDef.Integer;
+				objectType = ValueType.Integer;
 			} else if (c == long.class || c == Long.class) {
-				objectType = PropertyValueTypeDef.Int64;
+				objectType = ValueType.Int64;
 			} else if (c == BigInteger.class) {
 				BigInteger tmp = (BigInteger) obj;
 				if (tmp.compareTo(new BigInteger("0")) > 0) {
-					objectType = PropertyValueTypeDef.PositiveInteger;
+					objectType = ValueType.PositiveInteger;
 				} else if (tmp.compareTo(new BigInteger("0")) < 0) {
-					objectType = PropertyValueTypeDef.NegativeInteger;
+					objectType = ValueType.NegativeInteger;
 				} else {
-					objectType = PropertyValueTypeDef.NonNegativeInteger;
+					objectType = ValueType.NonNegativeInteger;
 				}
 
 			} else if (c == void.class || c == Void.class) {
-				objectType = PropertyValueTypeDef.None;
+				objectType = ValueType.None;
 			} else if (c == boolean.class || c == Boolean.class) {
-				objectType = PropertyValueTypeDef.Boolean;
+				objectType = ValueType.Boolean;
 			} else if (c == float.class || c == Float.class) {
 				// TODO C# deprecated due to new serialization
-				objectType = PropertyValueTypeDef.Float;
+				objectType = ValueType.Float;
 			} else if (c == double.class || c == Double.class) {
-				objectType = PropertyValueTypeDef.Double;
+				objectType = ValueType.Double;
 			} else if (c == String.class) {
-				objectType = PropertyValueTypeDef.String;
+				objectType = ValueType.String;
 			} else if (c == Duration.class) {
-				objectType = PropertyValueTypeDef.Duration;
+				objectType = ValueType.Duration;
 			} else if (c == Period.class) {
-				objectType = PropertyValueTypeDef.YearMonthDuration;
+				objectType = ValueType.YearMonthDuration;
 			} else if (c == QName.class) {
-				objectType = PropertyValueTypeDef.QName;
+				objectType = ValueType.QName;
 			} else if (c == XMLGregorianCalendar.class) {
-				objectType = PropertyValueTypeDef.DateTime;
+				objectType = ValueType.DateTime;
 			} else {
 				throw new RuntimeException("Cannot map object " + obj + " to any PropertyValueTypeDef");
 			}
@@ -121,7 +121,7 @@ public class PropertyValueTypeDefHelper {
 	 * Map the PropertyValueType to Java type
 	 * 
 	 */
-	public static Object getJavaObject(Object value, PropertyValueTypeDef objType) {
+	public static Object getJavaObject(Object value, ValueType objType) {
 		Object target = null;
 		if(objType != null) {
 			switch(objType) {
@@ -228,7 +228,7 @@ public class PropertyValueTypeDefHelper {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static PropertyValueTypeDef readTypeDef(Object vTypeMap) {
+	public static ValueType readTypeDef(Object vTypeMap) {
 		if (vTypeMap instanceof String) {
 			// From xml/json-schema point of view, this should be only a string.
 			return fromName((String) vTypeMap);

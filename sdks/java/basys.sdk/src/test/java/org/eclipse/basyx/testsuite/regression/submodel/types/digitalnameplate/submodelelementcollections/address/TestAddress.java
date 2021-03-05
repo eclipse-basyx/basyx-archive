@@ -24,7 +24,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollections.address.Address;
 import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollections.address.Email;
 import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollections.address.Fax;
@@ -52,7 +52,7 @@ public class TestAddress {
 	public static MultiLanguageProperty nationalCode = new MultiLanguageProperty(Address.NATIONALCODEID);
 	public static MultiLanguageProperty vatNumber = new MultiLanguageProperty(Address.VATNUMBERID);
 	public static MultiLanguageProperty addressRemarks = new MultiLanguageProperty(Address.ADDRESSREMARKSID);
-	public static Property additLink = new Property(Address.ADDRESSOFADDITIONALLINKID, PropertyValueTypeDef.String);
+	public static Property additLink = new Property(Address.ADDRESSOFADDITIONALLINKID, ValueType.String);
 	public static Phone phone1 = new Phone("Phone01", new LangString("DE", "123456789"));
 	public static Phone phone2 = new Phone("Phone02", new LangString("US", "123456711"));
 	public static Fax fax1 = new Fax("Fax01", new LangString("DE", "123456789"));

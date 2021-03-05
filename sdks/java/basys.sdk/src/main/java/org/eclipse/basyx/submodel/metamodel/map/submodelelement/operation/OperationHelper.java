@@ -11,10 +11,10 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 
 public class OperationHelper {
-	public static Property createPropertyTemplate(PropertyValueTypeDef type) {
+	public static Property createPropertyTemplate(ValueType type) {
 		Property prop = new Property();
 		prop.setValueType(type);
 		prop.setModelingKind(ModelingKind.TEMPLATE);

@@ -16,8 +16,8 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IRange;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.DataElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 
 /**
  * A range element as defined in DAAS document
@@ -38,7 +38,7 @@ public class Range extends DataElement implements IRange {
 		putAll(new ModelType(MODELTYPE));
 	}
 	
-	public Range(PropertyValueTypeDef valueType) {
+	public Range(ValueType valueType) {
 		this();
 		setValueType(valueType);
 	}
@@ -48,14 +48,14 @@ public class Range extends DataElement implements IRange {
 	 * @param idShort
 	 * @param valueType
 	 */
-	public Range(String idShort, PropertyValueTypeDef valueType) {
+	public Range(String idShort, ValueType valueType) {
 		super(idShort);
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 		setValueType(valueType);
 	}
 	
-	public Range(PropertyValueTypeDef valueType, Object min, Object max) {
+	public Range(ValueType valueType, Object min, Object max) {
 		this(valueType);
 		put(MIN, min);
 		put(MAX, max);
@@ -100,20 +100,20 @@ public class Range extends DataElement implements IRange {
 				|| (modelType == null && (map.containsKey(MIN) && map.containsKey(MAX) && map.containsKey(VALUETYPE)));
 	}
 
-	private void setValueType(PropertyValueTypeDef valueType) {
+	private void setValueType(ValueType valueType) {
 		put(Range.VALUETYPE, valueType.toString());
 	}
 
 	@Override
-	public PropertyValueTypeDef getValueType() {
-		return PropertyValueTypeDefHelper.readTypeDef(get(Range.VALUETYPE));
+	public ValueType getValueType() {
+		return ValueTypeHelper.readTypeDef(get(Range.VALUETYPE));
 	}
 
 	@Override
 	public Object getMin() {
 		Object value = get(MIN);
 		if(value instanceof String) {
-			return PropertyValueTypeDefHelper.getJavaObject(value, getValueType());
+			return ValueTypeHelper.getJavaObject(value, getValueType());
 		}else {
 			return value;
 		}
@@ -123,7 +123,7 @@ public class Range extends DataElement implements IRange {
 	public Object getMax() {
 		Object value = get(MAX);
 		if(value instanceof String) {
-			return PropertyValueTypeDefHelper.getJavaObject(value, getValueType());
+			return ValueTypeHelper.getJavaObject(value, getValueType());
 		}else {
 			return value;
 		}
@@ -155,10 +155,10 @@ public class Range extends DataElement implements IRange {
 		Object minValue = rv.getMin();
 		Object maxValue = rv.getMax();
 
-		put(Range.MIN, PropertyValueTypeDefHelper.prepareForSerialization(minValue));
-		put(Range.MAX, PropertyValueTypeDefHelper.prepareForSerialization(maxValue));
+		put(Range.MIN, ValueTypeHelper.prepareForSerialization(minValue));
+		put(Range.MAX, ValueTypeHelper.prepareForSerialization(maxValue));
 		if (getValueType() == null) {
-			setValueType(PropertyValueTypeDefHelper.getType(minValue));
+			setValueType(ValueTypeHelper.getType(minValue));
 		}
 	}
 

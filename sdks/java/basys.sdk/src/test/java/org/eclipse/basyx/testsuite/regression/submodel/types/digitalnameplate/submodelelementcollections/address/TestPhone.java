@@ -24,7 +24,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.digitalnameplate.enums.PhoneType;
 import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollections.address.Phone;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
@@ -41,7 +41,7 @@ import org.junit.Test;
 public class TestPhone {
 	public static final String IDSHORT = "testPhoneId";
 	public static MultiLanguageProperty telephone = new MultiLanguageProperty(Phone.TELEPHONENUMBERID);
-	public static Property typeOfTelephone = new Property(Phone.TYPEOFTELEPHONEID, PropertyValueTypeDef.String);
+	public static Property typeOfTelephone = new Property(Phone.TYPEOFTELEPHONEID, ValueType.String);
 	private Map<String, Object> phoneMap = new HashMap<String, Object>();
 	
 	@Before

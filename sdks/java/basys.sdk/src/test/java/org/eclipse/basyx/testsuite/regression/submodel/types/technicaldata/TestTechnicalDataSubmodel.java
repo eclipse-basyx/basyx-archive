@@ -29,7 +29,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangString;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.technicaldata.TechnicalDataSubmodel;
 import org.eclipse.basyx.submodel.types.technicaldata.submodelelementcollections.furtherinformation.FurtherInformation;
 import org.eclipse.basyx.submodel.types.technicaldata.submodelelementcollections.generalinformation.GeneralInformation;
@@ -51,7 +51,7 @@ public class TestTechnicalDataSubmodel {
 	public static GeneralInformation generalInformation = new GeneralInformation(TestGeneralInformation.manufacturerName, TestGeneralInformation.designation, TestGeneralInformation.partNumber, TestGeneralInformation.orderCode);
 	public static ProductClassifications productClassifications = new ProductClassifications(TechnicalDataSubmodel.PRODUCTCLASSIFICATIONSID);
 	public static TechnicalProperties technicalProperties = new TechnicalProperties(TechnicalDataSubmodel.TECHNICALPROPERTIESID);
-	public static FurtherInformation furtherInformation = new FurtherInformation(new Property(FurtherInformation.VALIDDATEID, PropertyValueTypeDef.DateTime));
+	public static FurtherInformation furtherInformation = new FurtherInformation(new Property(FurtherInformation.VALIDDATEID, ValueType.DateTime));
 	
 	public static Identifier identifier = new Identifier(IdentifierType.IRI, "http://admin-shell.io/ZVEI/TechnicalData/Submodel/1/1");
 	private Map<String, Object> submodelMap = new HashMap<String, Object>();

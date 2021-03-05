@@ -7,7 +7,7 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef;
+package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype;
 
 import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnum;
 import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnumHelper;
@@ -20,7 +20,7 @@ import org.eclipse.basyx.submodel.metamodel.enumhelper.StandardizedLiteralEnumHe
  * @author schnicke
  *
  */
-public enum PropertyValueTypeDef implements StandardizedLiteralEnum {
+public enum ValueType implements StandardizedLiteralEnum {
 	Int8("byte"), Int16("short"), Int32("int"), Int64("long"),
 	UInt8("unsignedByte"), UInt16("unsignedShort"), UInt32("unsignedInt"), UInt64("unsignedLong"),
 	String("string"), LangString("langString"),
@@ -34,7 +34,7 @@ public enum PropertyValueTypeDef implements StandardizedLiteralEnum {
 
 	private String standardizedLiteral;
 
-	private PropertyValueTypeDef(String standardizedLiteral) {
+	private ValueType(String standardizedLiteral) {
 		this.standardizedLiteral = standardizedLiteral;
 	}
 
@@ -48,8 +48,8 @@ public enum PropertyValueTypeDef implements StandardizedLiteralEnum {
 		return standardizedLiteral;
 	}
 
-	public static PropertyValueTypeDef fromString(String str) {
-		return StandardizedLiteralEnumHelper.fromLiteral(PropertyValueTypeDef.class, str);
+	public static ValueType fromString(String str) {
+		return StandardizedLiteralEnumHelper.fromLiteral(ValueType.class, str);
 	}
 
 }

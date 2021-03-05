@@ -30,7 +30,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.helper.SubmodelElementRetrievalHelper;
 
 /**
@@ -203,7 +203,7 @@ public class FurtherInformation extends SubmodelElementCollection {
 	 * @param validDate
 	 */
 	public void setValidDate(XMLGregorianCalendar validDate) {
-		Property validDateProp = new Property(VALIDDATEID, PropertyValueTypeDef.DateTime);
+		Property validDateProp = new Property(VALIDDATEID, ValueType.DateTime);
 		validDateProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ValidDate/1/1", IdentifierType.IRI)));
 		validDateProp.set(validDate);
 		setValidDate(validDateProp);

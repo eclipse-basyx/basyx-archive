@@ -35,7 +35,7 @@ import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.testsuite.regression.aas.metamodel.AssetAdministrationShellSuite;
 import org.junit.Before;
 import org.junit.Test;
@@ -120,12 +120,12 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 	public void testSetSubmodels() {
 		// Create submodels
 		Submodel subModel1 = new Submodel("newSubmodelId1", new Identifier(IdentifierType.CUSTOM, "smId1"));
-		Property prop1 = new Property("prop1Id", PropertyValueTypeDef.String);
+		Property prop1 = new Property("prop1Id", ValueType.String);
 		prop1.setValue("testProperty1");
 		subModel1.addSubmodelElement(prop1);
 
 		Submodel subModel2 = new Submodel("newSubmodelId2", new Identifier(IdentifierType.CUSTOM, "smId2"));
-		Property prop2 = new Property("prop2Id", PropertyValueTypeDef.String);
+		Property prop2 = new Property("prop2Id", ValueType.String);
 		prop2.setValue("testProperty2");
 		subModel2.addSubmodelElement(prop2);
 		

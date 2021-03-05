@@ -28,7 +28,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.helper.SubmodelElementRetrievalHelper;
 
 /**
@@ -489,7 +489,7 @@ public class Address extends SubmodelElementCollection {
 	 * @param addressOfAdditionalLink {@link String}
 	 */
 	public void setAddressOfAdditionalLink(String addressOfAdditionalLink) {
-		Property addressOfAdditionalLinkProp = new Property(ADDRESSOFADDITIONALLINKID, PropertyValueTypeDef.String);
+		Property addressOfAdditionalLinkProp = new Property(ADDRESSOFADDITIONALLINKID, ValueType.String);
 		addressOfAdditionalLinkProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAQ326#002", IdentifierType.IRDI)));
 		addressOfAdditionalLinkProp.set(addressOfAdditionalLink);
 		setAddressOfAdditionalLink(addressOfAdditionalLinkProp);

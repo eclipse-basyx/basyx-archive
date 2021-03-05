@@ -22,7 +22,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollections.assetspecificproperties.GuidelineSpecificProperties;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.Before;
@@ -37,8 +37,8 @@ import org.junit.Test;
  */
 public class TestGuidelineSpecificProperties {
 	public static final String IDSHORT = "GuidelineSpecificProperties01";
-	public static Property conformityDeclaration = new Property(GuidelineSpecificProperties.GUIDELINEFORCONFORMITYDECLARATIONID, PropertyValueTypeDef.String);
-	public static Property arbitrary = new Property("arbitraryId", PropertyValueTypeDef.String);
+	public static Property conformityDeclaration = new Property(GuidelineSpecificProperties.GUIDELINEFORCONFORMITYDECLARATIONID, ValueType.String);
+	public static Property arbitrary = new Property("arbitraryId", ValueType.String);
 	
 	private Map<String, Object> guidelineMap = new HashMap<String, Object>();
 	

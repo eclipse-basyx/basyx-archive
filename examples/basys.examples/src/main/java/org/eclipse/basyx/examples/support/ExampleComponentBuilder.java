@@ -17,7 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 
 /**
  * This class is used to build AssetAdministrationShells and Submodels
@@ -48,7 +48,7 @@ public class ExampleComponentBuilder {
 		Submodel submodel = new Submodel(idShort, new Identifier(IdentifierType.CUSTOM, id));
 		
 		// Add a Property to the Submodel
-		Property property = new Property(PROPERTY_ID, PropertyValueTypeDef.Int32);
+		Property property = new Property(PROPERTY_ID, ValueType.Int32);
 		property.setValue(PROPERTY_VALUE);
 		submodel.addSubmodelElement(property);
 				
@@ -56,7 +56,7 @@ public class ExampleComponentBuilder {
 		SubmodelElementCollection collection = new SubmodelElementCollection(COLLECTION_ID);
 		
 		// Add a Property to the SubmodelElementCollection
-		Property property2 = new Property(COLLECTION_PROPERTY_ID, PropertyValueTypeDef.String);
+		Property property2 = new Property(COLLECTION_PROPERTY_ID, ValueType.String);
 		property2.setValue(COLLECTION_PROPERTY_VALUE);
 		collection.addSubmodelElement(property2);
 		submodel.addSubmodelElement(collection);

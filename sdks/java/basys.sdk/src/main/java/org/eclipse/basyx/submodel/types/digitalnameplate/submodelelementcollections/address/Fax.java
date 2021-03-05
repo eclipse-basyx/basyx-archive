@@ -25,7 +25,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.digitalnameplate.enums.FaxType;
 
 /**
@@ -150,7 +150,7 @@ public class Fax extends SubmodelElementCollection {
 	 * @param type {@link FaxType}
 	 */
 	public void setTypeOfFaxNumber(FaxType type) {
-		Property faxTypeProp = new Property(TYPEOFFAXID, PropertyValueTypeDef.String);
+		Property faxTypeProp = new Property(TYPEOFFAXID, ValueType.String);
 		faxTypeProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO196#003", IdentifierType.IRDI)));
 		faxTypeProp.set(type.toString());
 		setTypeOfFaxNumber(faxTypeProp);

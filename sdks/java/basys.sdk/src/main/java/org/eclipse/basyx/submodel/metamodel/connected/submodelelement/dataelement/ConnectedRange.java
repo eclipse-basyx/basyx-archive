@@ -13,8 +13,8 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IRange;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.RangeValue;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
@@ -32,20 +32,20 @@ public class ConnectedRange extends ConnectedDataElement implements IRange {
 	}
 
 	@Override
-	public PropertyValueTypeDef getValueType() {
-		return PropertyValueTypeDefHelper.readTypeDef(getElem().getPath(Range.VALUETYPE));
+	public ValueType getValueType() {
+		return ValueTypeHelper.readTypeDef(getElem().getPath(Range.VALUETYPE));
 	}
 
 	@Override
 	public Object getMin() {
 		Object min = getElem().getPath(Range.MIN);
-		return PropertyValueTypeDefHelper.getJavaObject(min, getValueType());
+		return ValueTypeHelper.getJavaObject(min, getValueType());
 	}
 
 	@Override
 	public Object getMax() {
 		Object max = getElem().getPath(Range.MAX);
-		return PropertyValueTypeDefHelper.getJavaObject(max, getValueType());
+		return ValueTypeHelper.getJavaObject(max, getValueType());
 	}
 
 	@Override
@@ -80,8 +80,8 @@ public class ConnectedRange extends ConnectedDataElement implements IRange {
 		Object maxRaw = rangeValue.getMax();
 
 		RangeValue prepared = new RangeValue(
-				PropertyValueTypeDefHelper.prepareForSerialization(minRaw),
-				PropertyValueTypeDefHelper.prepareForSerialization(maxRaw)
+				ValueTypeHelper.prepareForSerialization(minRaw),
+				ValueTypeHelper.prepareForSerialization(maxRaw)
 			);
 				
 		

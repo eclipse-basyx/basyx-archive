@@ -46,7 +46,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -313,7 +313,7 @@ public class TestAASXPackageManager {
 		assertTrue(sele.getModelingKind().name().equalsIgnoreCase("Instance"));
 		Property prop = (Property) sele;
 		assertEquals("Festo AG & Co. KG", prop.get());
-		assertEquals(PropertyValueTypeDef.String, prop.getValueType());
+		assertEquals(ValueType.String, prop.getValueType());
 
 		// get semantic id
 		IReference semantic = sele.getSemanticId();
@@ -333,7 +333,7 @@ public class TestAASXPackageManager {
 		assertTrue(sele.getModelingKind().name().equalsIgnoreCase("Instance"));
 		prop = (Property) sele;
 		assertEquals("OVEL Vacuum generator", prop.get());
-		assertEquals(PropertyValueTypeDef.String, prop.getValueType());
+		assertEquals(ValueType.String, prop.getValueType());
 
 		// get semantic id
 		semantic = sele.getSemanticId();

@@ -22,7 +22,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.technicaldata.submodelelementcollections.productclassifications.ProductClassificationItem;
 import org.eclipse.basyx.submodel.types.technicaldata.submodelelementcollections.productclassifications.ProductClassifications;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
@@ -37,9 +37,9 @@ import org.junit.Test;
  *
  */
 public class TestProductClassificationItem {
-	public static Property classificationSystem = new Property(ProductClassificationItem.PRODUCTCLASSIFICATIONSYSTEMID, PropertyValueTypeDef.String);
-	public static Property version = new Property(ProductClassificationItem.CLASSIFICATIONSYSTEMVERSIONID, PropertyValueTypeDef.String);
-	public static Property productClass = new Property(ProductClassificationItem.PRODUCTCLASSID, PropertyValueTypeDef.String);
+	public static Property classificationSystem = new Property(ProductClassificationItem.PRODUCTCLASSIFICATIONSYSTEMID, ValueType.String);
+	public static Property version = new Property(ProductClassificationItem.CLASSIFICATIONSYSTEMVERSIONID, ValueType.String);
+	public static Property productClass = new Property(ProductClassificationItem.PRODUCTCLASSID, ValueType.String);
 	
 	private Map<String, Object> classificationMap = new HashMap<String, Object>();
 	

@@ -18,7 +18,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -56,7 +56,7 @@ public class SimpleAASSubmodel extends Submodel {
 		stringProp.setIdShort("stringProperty");
 		addSubmodelElement(stringProp);
 
-		Property nullProp = new Property("nullProperty", PropertyValueTypeDef.String);
+		Property nullProp = new Property("nullProperty", ValueType.String);
 		nullProp.setValue(null);
 		addSubmodelElement(nullProp);
 

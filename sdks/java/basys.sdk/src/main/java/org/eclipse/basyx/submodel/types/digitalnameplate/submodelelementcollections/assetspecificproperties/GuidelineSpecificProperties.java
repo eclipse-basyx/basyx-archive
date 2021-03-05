@@ -24,7 +24,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 
 /**
  * GuidelineSpecificProperties as defined in the AAS Digital Nameplate Template document <br/>
@@ -148,7 +148,7 @@ public class GuidelineSpecificProperties extends SubmodelElementCollection {
 	 * @param declaration {@link String}
 	 */
 	public void setGuidelineForConformityDeclaration(String declaration) {
-		Property declarationProp = new Property(GUIDELINEFORCONFORMITYDECLARATIONID, PropertyValueTypeDef.String);
+		Property declarationProp = new Property(GUIDELINEFORCONFORMITYDECLARATIONID, ValueType.String);
 		declarationProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO856#002", IdentifierType.IRDI)));
 		declarationProp.set(declaration);
 		setGuidelineForConformityDeclaration(declarationProp);

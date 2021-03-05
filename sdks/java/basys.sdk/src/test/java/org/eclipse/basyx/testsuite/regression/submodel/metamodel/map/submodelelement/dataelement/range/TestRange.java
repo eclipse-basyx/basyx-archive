@@ -11,7 +11,7 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.submodelel
 
 import static org.junit.Assert.assertEquals;
 
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.RangeValue;
 import org.junit.Before;
@@ -32,7 +32,7 @@ public class TestRange {
 	
 	@Before
 	public void buildRange() {
-		range = new Range(PropertyValueTypeDef.Integer, MIN, MAX);
+		range = new Range(ValueType.Integer, MIN, MAX);
 	}
 	
 	@Test

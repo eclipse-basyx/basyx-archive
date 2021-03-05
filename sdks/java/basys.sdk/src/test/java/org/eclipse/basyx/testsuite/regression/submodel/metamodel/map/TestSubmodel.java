@@ -25,7 +25,7 @@ import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.testsuite.regression.submodel.metamodel.TestSubmodelSuite;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class TestSubmodel extends TestSubmodelSuite {
 
 	@Test
 	public void testParentAddSubmodelElement() {
-		Property prop = new Property("propIdShort", PropertyValueTypeDef.String);
+		Property prop = new Property("propIdShort", ValueType.String);
 		IIdentifier identifier = new ModelUrn("testId");
 		Submodel submodel = new Submodel("smIdShort", identifier);
 		submodel.addSubmodelElement(prop);

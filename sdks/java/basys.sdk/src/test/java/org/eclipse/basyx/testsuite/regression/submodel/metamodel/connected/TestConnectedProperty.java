@@ -20,7 +20,7 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelemen
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
@@ -51,7 +51,7 @@ public class TestConnectedProperty {
 
 	@Test
 	public void testEmptyProperty() throws Exception {
-		Property propertyMeta = new Property("testIdShort", PropertyValueTypeDef.String);
+		Property propertyMeta = new Property("testIdShort", ValueType.String);
 		propertyMeta.set(null);
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(propertyMeta);
 		prop = new ConnectedProperty(
@@ -79,8 +79,8 @@ public class TestConnectedProperty {
 	 */
 	@Test
 	public void testValueTypeRetrieval() {
-		PropertyValueTypeDef valueType = prop.getValueType();
-		assertEquals(PropertyValueTypeDef.Integer, valueType);
+		ValueType valueType = prop.getValueType();
+		assertEquals(ValueType.Integer, valueType);
 	}
 
 	/**

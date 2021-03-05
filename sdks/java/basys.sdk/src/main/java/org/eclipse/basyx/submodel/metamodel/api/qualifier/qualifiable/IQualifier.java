@@ -11,7 +11,7 @@ package org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasSemantics;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 
 /**
  * Interface for Qualifier
@@ -27,5 +27,5 @@ public interface IQualifier extends IHasSemantics, IConstraint {
 
 	public IReference getValueId();
 	
-	public PropertyValueTypeDef  getValueType();
+	public ValueType  getValueType();
 }

@@ -18,7 +18,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IPro
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubmodel;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnector;
@@ -43,7 +43,7 @@ public class TestCreateLambdaProperty {
 	@Test
 	public void testCreateLambdaProperty() {
 		// The type cast in the setter is necessary due to the Consumer<Object> definition
-		Property lambdaProp = CreateLambdaProperty.createLambdaProperty("lambdaProp", PropertyValueTypeDef.Integer, () -> testValue, (v) -> testValue = (int) v);
+		Property lambdaProp = CreateLambdaProperty.createLambdaProperty("lambdaProp", ValueType.Integer, () -> testValue, (v) -> testValue = (int) v);
 
 		// Package it in a test submodel and host it
 		Submodel sm = new Submodel("testSubmodelIdShort", new CustomId("testSubmodelId"));

@@ -16,8 +16,8 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,7 +49,7 @@ public class TestQualifier {
 	public void testConstructor() {
 		assertEquals(TYPE, qualifier.getType());
 		assertEquals(VALUE, qualifier.getValue());
-		assertEquals(PropertyValueTypeDefHelper.fromName(VALUE_TYPE), qualifier.getValueType());
+		assertEquals(ValueTypeHelper.fromName(VALUE_TYPE), qualifier.getValueType());
 		assertEquals(VALUE_ID, qualifier.getValueId());
 	}
 	
@@ -76,7 +76,7 @@ public class TestQualifier {
 	
 	@Test
 	public void testSetValueType() {
-		PropertyValueTypeDef newValueTypeString = PropertyValueTypeDef.AnyType;
+		ValueType newValueTypeString = ValueType.AnyType;
 		qualifier.setValueType(newValueTypeString);
 		assertEquals(newValueTypeString, qualifier.getValueType());
 	}
@@ -86,7 +86,7 @@ public class TestQualifier {
 	public void testSetValueCorrectValueType() {
 		Qualifier emptyQualifier = new Qualifier();
 		emptyQualifier.setValue("Test");
-		assertEquals(PropertyValueTypeDef.String.toString(), emptyQualifier.get(Qualifier.VALUETYPE));
+		assertEquals(ValueType.String.toString(), emptyQualifier.get(Qualifier.VALUETYPE));
 	}
 
 	@Test

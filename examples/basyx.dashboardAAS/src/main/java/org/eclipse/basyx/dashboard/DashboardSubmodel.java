@@ -17,7 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
 
 /**
@@ -50,7 +50,7 @@ public class DashboardSubmodel extends Submodel {
 		temperatureProperty.setIdShort("temperature");
 		temperatureProperty.set(VABLambdaProviderHelper.createSimple(() -> {
 			return Math.random() * (maxValue - minValue) + minValue;
-		}, null), PropertyValueTypeDef.Double);
+		}, null), ValueType.Double);
 		// Adds a reference to a semantic ID to specify the property semantics (see CDD)
 		// Ref by identifier:
 		Key key = new Key(KeyElements.CONCEPTDESCRIPTION, true, "0112/2///61360_4#AAF891#001", KeyType.IRDI);
@@ -64,7 +64,7 @@ public class DashboardSubmodel extends Submodel {
 		dummyProperty.setIdShort("dummy");
 		dummyProperty.set(VABLambdaProviderHelper.createSimple(() -> {
 			return (Math.random() > 0.5);
-		}, null), PropertyValueTypeDef.Boolean);
+		}, null), ValueType.Boolean);
 		addSubmodelElement(dummyProperty);
 	}
 }

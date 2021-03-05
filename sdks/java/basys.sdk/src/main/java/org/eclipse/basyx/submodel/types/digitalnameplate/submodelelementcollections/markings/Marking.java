@@ -26,7 +26,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.helper.SubmodelElementRetrievalHelper;
 
 /**
@@ -147,7 +147,7 @@ public class Marking extends SubmodelElementCollection {
 	 * @param markingName
 	 */
 	public void setMarkingName(String markingName) {
-		Property markingNameProp = new Property(MARKINGNAMEID, PropertyValueTypeDef.String);
+		Property markingNameProp = new Property(MARKINGNAMEID, ValueType.String);
 		markingNameProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/zvei/nameplate/1/0/Nameplate/Markings/Marking/MarkingName", IdentifierType.IRDI)));
 		markingNameProp.set(markingName);
 		setMarkingName(markingNameProp);

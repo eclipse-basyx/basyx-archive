@@ -46,7 +46,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.RangeValue;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.AnnotatedRelationshipElement;
@@ -84,7 +84,7 @@ public abstract class TestSubmodelSuite {
 	public Submodel getReferenceSubmodel() {
 
 		// Create a simple value property
-		Property propertyMeta = new Property(PROP, PropertyValueTypeDef.Integer);
+		Property propertyMeta = new Property(PROP, ValueType.Integer);
 		propertyMeta.setValue(100);
 
 		// Create the Submodel using the created property and operation
@@ -321,10 +321,10 @@ public abstract class TestSubmodelSuite {
 		annotatedRelElement.setAnnotation(annotations);
 		ret.put(annotatedRelElement.getIdShort(), annotatedRelElement);
 		
-		Property property = new Property(PROPERTY_ID2, PropertyValueTypeDef.AnySimpleType);
+		Property property = new Property(PROPERTY_ID2, ValueType.AnySimpleType);
 		ret.put(property.getIdShort(), property);
 		
-		Range range = new Range(RANGE_ID, PropertyValueTypeDef.Integer);
+		Range range = new Range(RANGE_ID, ValueType.Integer);
 		range.setValue(new RangeValue(-100, +100));
 		ret.put(range.getIdShort(), range);
 		

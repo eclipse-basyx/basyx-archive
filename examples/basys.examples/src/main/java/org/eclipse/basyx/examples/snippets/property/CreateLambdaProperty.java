@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.AASLambdaPropertyHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 
 /**
  * This snippet showcases how create a lambda Property, i.e. a property that
@@ -48,7 +48,7 @@ public class CreateLambdaProperty {
 	 *            setter to be used
 	 * @return the created lambda property
 	 */
-	public static Property createLambdaProperty(String propertyIdShort, PropertyValueTypeDef type, Supplier<Object> get, Consumer<Object> set) {
+	public static Property createLambdaProperty(String propertyIdShort, ValueType type, Supplier<Object> get, Consumer<Object> set) {
 		Property prop = new Property(propertyIdShort, type);
 
 		AASLambdaPropertyHelper.setLambdaValue(prop, get, set);

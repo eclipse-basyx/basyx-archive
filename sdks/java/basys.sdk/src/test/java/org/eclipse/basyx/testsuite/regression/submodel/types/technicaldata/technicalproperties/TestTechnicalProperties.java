@@ -29,7 +29,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.technicaldata.submodelelementcollections.technicalproperties.TechnicalProperties;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,8 +44,8 @@ import org.junit.Test;
 public class TestTechnicalProperties {
 	public static SubmodelElementCollection mainSection = new SubmodelElementCollection(TechnicalProperties.MAINSECTIONPREFIX + "01");
 	public static SubmodelElementCollection subSection = new SubmodelElementCollection(TechnicalProperties.SUBSECTIONPREFIX + "01");
-	public static SubmodelElement arbitrary1 = new Property("arbitraryId1", PropertyValueTypeDef.String);
-	public static SubmodelElement arbitrary2 = new Property("arbitraryId2", PropertyValueTypeDef.String);
+	public static SubmodelElement arbitrary1 = new Property("arbitraryId1", ValueType.String);
+	public static SubmodelElement arbitrary2 = new Property("arbitraryId2", ValueType.String);
 	
 	private Map<String, Object> technicalMap = new HashMap<String, Object>();
 	

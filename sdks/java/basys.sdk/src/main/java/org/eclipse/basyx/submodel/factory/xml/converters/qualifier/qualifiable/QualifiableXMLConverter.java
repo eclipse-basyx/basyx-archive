@@ -27,7 +27,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Formula;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -136,7 +136,7 @@ public class QualifiableXMLConverter {
 		if (valueType == null || valueType.isEmpty()) {
 			logger.warn("Creating element " + xmlQualifier + " without mandatory valueType!");
 		} else {
-			qualifier.setValueType(PropertyValueTypeDefHelper.fromName(valueType));
+			qualifier.setValueType(ValueTypeHelper.fromName(valueType));
 		}
 		return qualifier;
 	}

@@ -9,7 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement;
 
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.RangeValue;
 
 /**
@@ -24,7 +24,7 @@ public interface IRange extends IDataElement {
 	 * 
 	 * @return
 	 */
-	PropertyValueTypeDef getValueType();
+	ValueType getValueType();
 
 	/**
 	 * Returns the minimum value of the range. <br />

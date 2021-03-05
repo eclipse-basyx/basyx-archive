@@ -24,7 +24,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.digitalnameplate.enums.MailType;
 import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollections.address.Email;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
@@ -40,9 +40,9 @@ import org.junit.Test;
  */
 public class TestEmail {
 	public static final String IDSHORT = "testEmailId";
-	public static Property emailAddress = new Property(Email.EMAILADDRESSID, PropertyValueTypeDef.String);
+	public static Property emailAddress = new Property(Email.EMAILADDRESSID, ValueType.String);
 	public static MultiLanguageProperty publicKey = new MultiLanguageProperty(Email.PUBLICKEYID);
-	public static Property typeOfEmailAddress = new Property(Email.TYPEOFEMAILADDRESSID, PropertyValueTypeDef.String);
+	public static Property typeOfEmailAddress = new Property(Email.TYPEOFEMAILADDRESSID, ValueType.String);
 	public static MultiLanguageProperty typeOfPublicKey = new MultiLanguageProperty(Email.TYPEOFPUBLICKEYID);
 
 	private Map<String, Object> emailMap = new HashMap<String, Object>();

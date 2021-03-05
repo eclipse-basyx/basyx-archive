@@ -21,7 +21,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
 import org.junit.Test;
 
@@ -69,7 +69,7 @@ public class TestSubmodelElementMapCollectionConverter {
 
 	private Submodel getSM() {
 		Submodel sm = new Submodel("submodelIdShort", new ModelUrn("submodelUrn"));
-		Property property = new Property(ID_SHORT, PropertyValueTypeDef.String);
+		Property property = new Property(ID_SHORT, ValueType.String);
 		
 		sm.addSubmodelElement(property);
 		return sm;

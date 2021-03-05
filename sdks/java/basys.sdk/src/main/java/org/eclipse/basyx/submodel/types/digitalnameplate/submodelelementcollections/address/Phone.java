@@ -25,7 +25,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.digitalnameplate.enums.PhoneType;
 
 /**
@@ -149,7 +149,7 @@ public class Phone extends SubmodelElementCollection {
 	 * @param type {@link PhoneType}
 	 */
 	public void setTypeOfTelephone(PhoneType type) {
-		Property phoneTypeProp = new Property(TYPEOFTELEPHONEID, PropertyValueTypeDef.String);
+		Property phoneTypeProp = new Property(TYPEOFTELEPHONEID, ValueType.String);
 		phoneTypeProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO137#003", IdentifierType.IRDI)));
 		phoneTypeProp.set(type.toString());
 		setTypeOfTelephone(phoneTypeProp);

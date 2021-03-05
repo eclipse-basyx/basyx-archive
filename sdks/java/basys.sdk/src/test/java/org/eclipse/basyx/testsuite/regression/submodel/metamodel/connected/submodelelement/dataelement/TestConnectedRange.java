@@ -12,7 +12,7 @@ package org.eclipse.basyx.testsuite.regression.submodel.metamodel.connected.subm
 import static org.junit.Assert.assertEquals;
 
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedRange;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.RangeValue;
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
@@ -35,7 +35,7 @@ public class TestConnectedRange {
 	
 	@Before
 	public void build() {
-		range = new Range(PropertyValueTypeDef.Integer, new Integer(1), new Integer(10));
+		range = new Range(ValueType.Integer, new Integer(1), new Integer(10));
 		range.setIdShort("testIdShort");
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
 				new SubmodelElementProvider(new TypeDestroyingProvider(new VABLambdaProvider(range))));

@@ -32,7 +32,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiabl
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,7 +46,7 @@ import org.junit.Test;
  */
 public class TestProperty {
 	private static final String VALUE = "testValue";
-	private static final PropertyValueTypeDef STRING_TYPE = PropertyValueTypeDef.String;
+	private static final ValueType STRING_TYPE = ValueType.String;
 	private Property property;
 
 	@Before
@@ -74,7 +74,7 @@ public class TestProperty {
 	
 	@Test
 	public void testSetValueType() {
-		property.setValueType(PropertyValueTypeDef.String);
+		property.setValueType(ValueType.String);
 		assertEquals(STRING_TYPE, property.getValueType());
 	} 
 	
@@ -85,19 +85,19 @@ public class TestProperty {
 		booleanProp.setValue(isSomething);
 		assertEquals(isSomething, booleanProp.get());
 		assertEquals(isSomething, booleanProp.getValue());
-		assertEquals(PropertyValueTypeDef.Boolean, booleanProp.getValueType());
+		assertEquals(ValueType.Boolean, booleanProp.getValueType());
 
 		Byte byteNumber = new Byte("2");
 		Property byteProp = new Property();
 		byteProp.setValue(byteNumber);
 		assertEquals(byteNumber, byteProp.get());
-		assertEquals(PropertyValueTypeDef.Int8, byteProp.getValueType());
+		assertEquals(ValueType.Int8, byteProp.getValueType());
 		
 		Duration duration = Duration.ofSeconds(10);
 		Property durationProp = new Property();
 		durationProp.setValue(duration);
 		assertEquals(duration, durationProp.get());
-		assertEquals(PropertyValueTypeDef.Duration, durationProp.getValueType());
+		assertEquals(ValueType.Duration, durationProp.getValueType());
 
 		Property periodProp = new Property();
 		LocalDate today = LocalDate.now();
@@ -105,20 +105,20 @@ public class TestProperty {
 		Period p = Period.between(birthday, today);
 		periodProp.setValue(p);
 		assertEquals(p, periodProp.get());
-		assertEquals(PropertyValueTypeDef.YearMonthDuration, periodProp.getValueType());
+		assertEquals(ValueType.YearMonthDuration, periodProp.getValueType());
 
 		Property bigNumberProp = new Property();
 		BigInteger bignumber = new BigInteger("9223372036854775817");
 		bigNumberProp.setValue(bignumber);
 		assertEquals(bignumber, bigNumberProp.get());
-		assertEquals(PropertyValueTypeDef.PositiveInteger, bigNumberProp.getValueType());
+		assertEquals(ValueType.PositiveInteger, bigNumberProp.getValueType());
 	}
 
 	@Test
 	public void testSetCustom(){
-		property.set(null, PropertyValueTypeDef.String);
+		property.set(null, ValueType.String);
 		assertEquals(null, property.get());
-		assertEquals(PropertyValueTypeDef.String, property.getValueType());
+		assertEquals(ValueType.String, property.getValueType());
 	}
 
 	@Test

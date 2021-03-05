@@ -32,7 +32,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementC
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.helper.SubmodelElementRetrievalHelper;
 
 /**
@@ -185,7 +185,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	 * @param name
 	 */
 	public void setManufacturerName(String name) {
-		Property nameProp = new Property(MANUFACTURERNAMEID, PropertyValueTypeDef.String);
+		Property nameProp = new Property(MANUFACTURERNAMEID, ValueType.String);
 		nameProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerName/1/1", IdentifierType.IRI)));
 		nameProp.set(name);
 		setManufacturerName(nameProp);
@@ -273,7 +273,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	 * @param partNumber
 	 */
 	public void setManufacturerPartNumber(String partNumber) {
-		Property partNumberProp = new Property(MANUFACTURERPARTNUMBERID, PropertyValueTypeDef.String);
+		Property partNumberProp = new Property(MANUFACTURERPARTNUMBERID, ValueType.String);
 		partNumberProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerPartNumber/1/1", IdentifierType.IRI)));
 		partNumberProp.set(partNumber);
 		setManufacturerPartNumber(partNumberProp);
@@ -305,7 +305,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	 * @param orderCode
 	 */
 	public void setManufacturerOrderCode(String orderCode) {
-		Property orderCodeProp = new Property(MANUFACTURERORDERCODEID, PropertyValueTypeDef.String);
+		Property orderCodeProp = new Property(MANUFACTURERORDERCODEID, ValueType.String);
 		orderCodeProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerOrderCode/1/1", IdentifierType.IRI)));
 		orderCodeProp.set(orderCode);
 		setManufacturerOrderCode(orderCodeProp);

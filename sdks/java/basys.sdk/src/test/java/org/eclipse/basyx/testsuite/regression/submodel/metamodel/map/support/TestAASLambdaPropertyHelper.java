@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.AASLambdaPropertyHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
@@ -44,7 +44,7 @@ public class TestAASLambdaPropertyHelper {
 		ConnectedProperty connectedProperty = new ConnectedProperty(new VABElementProxy("", provider));
 
 		// Check correct property type
-		PropertyValueTypeDef expectedType = PropertyValueTypeDef.Double;
+		ValueType expectedType = ValueType.Double;
 		assertEquals(expectedType, connectedProperty.getValueType());
 		
 		// Check value is correctly retrievable by property

@@ -28,7 +28,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollections.address.Address;
 import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollections.assetspecificproperties.AssetSpecificProperties;
 import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollections.markings.Markings;
@@ -357,7 +357,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	 * @param serialNumber
 	 */
 	public void setSerialNumber(String serialNumber) {
-		Property serialNumberProp = new Property(SERIALNUMBERID, PropertyValueTypeDef.String);
+		Property serialNumberProp = new Property(SERIALNUMBERID, ValueType.String);
 		serialNumberProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAM556#002", IdentifierType.IRDI)));
 		serialNumberProp.set(serialNumber);
 		setSerialNumber(serialNumberProp);
@@ -388,7 +388,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	 * @param yearsOfConstruction
 	 */
 	public void setYearOfConstruction(String yearsOfConstruction) {
-		Property yearsOfConstructionProp = new Property(YEARSOFCONSTRUCTIONID, PropertyValueTypeDef.String);
+		Property yearsOfConstructionProp = new Property(YEARSOFCONSTRUCTIONID, ValueType.String);
 		yearsOfConstructionProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAP906#001", IdentifierType.IRDI)));
 		yearsOfConstructionProp.set(yearsOfConstruction);
 		setYearOfConstruction(yearsOfConstructionProp);

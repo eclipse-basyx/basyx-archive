@@ -12,7 +12,7 @@ package org.eclipse.basyx.submodel.restapi;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -58,7 +58,7 @@ public class PropertyProvider implements IModelProvider {
 		if (path.equals(Property.VALUE)) {
 			// Set value and type
 			proxy.setModelPropertyValue(Property.VALUE, newValue);
-			proxy.setModelPropertyValue(Property.VALUETYPE, PropertyValueTypeDefHelper.getType(newValue).toString());
+			proxy.setModelPropertyValue(Property.VALUETYPE, ValueTypeHelper.getType(newValue).toString());
 		} else {
 			throw new MalformedRequestException("Given Set path '" + path + "' does not end in /value");
 		}

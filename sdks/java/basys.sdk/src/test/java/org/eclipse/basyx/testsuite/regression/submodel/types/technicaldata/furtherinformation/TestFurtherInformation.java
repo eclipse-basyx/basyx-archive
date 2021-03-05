@@ -26,7 +26,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.technicaldata.submodelelementcollections.furtherinformation.FurtherInformation;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.Before;
@@ -41,7 +41,7 @@ import org.junit.Test;
  */
 public class TestFurtherInformation {
 	public static MultiLanguageProperty statement = new MultiLanguageProperty(FurtherInformation.TEXTSTATEMENTPREFIX + "01");
-	public static Property validDate = new Property(FurtherInformation.VALIDDATEID, PropertyValueTypeDef.DateTime);
+	public static Property validDate = new Property(FurtherInformation.VALIDDATEID, ValueType.DateTime);
 	private Map<String, Object> furtherInfoMap = new HashMap<String, Object>();
 	
 	@Before

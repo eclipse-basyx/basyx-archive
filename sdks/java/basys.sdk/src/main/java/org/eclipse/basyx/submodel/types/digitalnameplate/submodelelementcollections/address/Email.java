@@ -25,7 +25,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.types.digitalnameplate.enums.MailType;
 
 /**
@@ -132,7 +132,7 @@ public class Email extends SubmodelElementCollection {
 	 * @param emailAddress String
 	 */
 	public void setEmailAddress(String emailAddress) {
-		Property emailProp = new Property(EMAILADDRESSID, PropertyValueTypeDef.String);
+		Property emailProp = new Property(EMAILADDRESSID, ValueType.String);
 		emailProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO198#002", IdentifierType.IRDI)));
 		emailProp.set(emailAddress);
 		setEmailAddress(emailProp);
@@ -190,7 +190,7 @@ public class Email extends SubmodelElementCollection {
 	 * @param type {@link MailType}
 	 */
 	public void setTypeOfEmailAddress(MailType type) {
-		Property mailTypeProp = new Property(TYPEOFEMAILADDRESSID, PropertyValueTypeDef.String);
+		Property mailTypeProp = new Property(TYPEOFEMAILADDRESSID, ValueType.String);
 		mailTypeProp.setSemanticID(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO199#003", IdentifierType.IRDI)));
 		mailTypeProp.set(type.toString());
 		setTypeOfEmailAddress(mailTypeProp);

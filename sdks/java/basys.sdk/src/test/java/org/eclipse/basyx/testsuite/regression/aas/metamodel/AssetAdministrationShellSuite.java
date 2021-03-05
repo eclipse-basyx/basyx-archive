@@ -37,7 +37,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformat
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.junit.Test;
 
 
@@ -177,7 +177,7 @@ public abstract class AssetAdministrationShellSuite {
 		String smId = "newSubmodelId";
 		String testId = "smIdTest";
 		Submodel subModel = new Submodel(smId, new ModelUrn(testId));
-		Property prop = new Property("prop1", PropertyValueTypeDef.String);
+		Property prop = new Property("prop1", ValueType.String);
 		prop.setValue("testProperty");
 		subModel.addSubmodelElement(prop);
 		

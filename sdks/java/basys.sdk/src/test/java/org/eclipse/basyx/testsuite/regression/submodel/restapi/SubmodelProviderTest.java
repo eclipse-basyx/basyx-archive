@@ -27,7 +27,7 @@ import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.OperationProvider;
 import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
@@ -524,7 +524,7 @@ public class SubmodelProviderTest {
 		Map<String, Object> param = new HashMap<>();
 		param.put(Identifiable.IDSHORT, name);
 		param.put(Property.VALUE, value);
-		param.put(Property.VALUETYPE, PropertyValueTypeDefHelper.getType(value).toString());
+		param.put(Property.VALUETYPE, ValueTypeHelper.getType(value).toString());
 		return param;
 	}
 }
