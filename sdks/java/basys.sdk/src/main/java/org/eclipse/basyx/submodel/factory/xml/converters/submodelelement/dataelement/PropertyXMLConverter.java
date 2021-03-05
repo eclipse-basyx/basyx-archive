@@ -45,7 +45,7 @@ public class PropertyXMLConverter extends SubmodelElementXMLConverter {
 	 * @return the parsed Property
 	 */
 	@SuppressWarnings("unchecked")
-	public static Property parsePropery(Map<String, Object> xmlObject) {
+	public static Property parseProperty(Map<String, Object> xmlObject) {
 		
 		Property property = new Property();
 		

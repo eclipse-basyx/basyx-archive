@@ -127,7 +127,7 @@ public class SubmodelElementXMLConverter {
 		
 		if (xmlObject.containsKey(PropertyXMLConverter.PROPERTY)) {
 			xmlObject = (Map<String, Object>) xmlObject.get(PropertyXMLConverter.PROPERTY);
-			return PropertyXMLConverter.parsePropery(xmlObject);
+			return PropertyXMLConverter.parseProperty(xmlObject);
 		}
 		else if (xmlObject.containsKey(BasicEventXMLConverter.BASIC_EVENT)) {
 			xmlObject = (Map<String, Object>) xmlObject.get(BasicEventXMLConverter.BASIC_EVENT);
