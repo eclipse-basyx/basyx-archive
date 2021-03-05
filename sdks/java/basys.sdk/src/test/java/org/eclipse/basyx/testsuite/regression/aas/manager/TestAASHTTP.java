@@ -25,7 +25,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IPro
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.testsuite.regression.aas.restapi.StubAASServlet;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.eclipse.basyx.vab.registry.memory.VABInMemoryRegistry;
 import org.junit.Before;
@@ -80,7 +80,7 @@ public class TestAASHTTP {
 		registry.register(aasDescriptor);
 		
 		// Create manager using the directory stub an the HTTPConnectorProvider
-		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorProvider());
+		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorFactory());
 	}
 
 	/**

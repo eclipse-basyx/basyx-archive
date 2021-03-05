@@ -17,7 +17,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.filesystem.FileSystemProvider;
 import org.eclipse.basyx.vab.modelprovider.filesystem.filesystem.FileSystem;
 import org.eclipse.basyx.vab.modelprovider.filesystem.filesystem.GenericFileSystem;
-import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.ConnectorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ public class TestFileSystemProvider extends TestProvider {
 	@Override
 	protected VABConnectionManager getConnectionManager() {
 		if (connManager == null) {
-			connManager = new VABConnectionManager(new TestsuiteDirectory(), new ConnectorProvider() {
+			connManager = new VABConnectionManager(new TestsuiteDirectory(), new ConnectorFactory() {
 				@Override
 				protected IModelProvider createProvider(String addr) {
 

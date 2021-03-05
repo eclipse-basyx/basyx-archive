@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.eclipse.basyx.vab.gateway.ConnectorProviderMapper;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
 import org.junit.Test;
 
 /**
@@ -37,7 +37,7 @@ public class TestConnectorProviderMapper {
 		ConnectorProviderMapper provider = new ConnectorProviderMapper();
 
 		// Add basyx IConnectorProvider stub
-		provider.addConnectorProvider("basyx", new IConnectorProvider() {
+		provider.addConnectorProvider("basyx", new IConnectorFactory() {
 
 			@Override
 			public IModelProvider getConnector(String addr) {
@@ -47,7 +47,7 @@ public class TestConnectorProviderMapper {
 		});
 
 		// Add http IConnectorProvider stub
-		provider.addConnectorProvider("http", new IConnectorProvider() {
+		provider.addConnectorProvider("http", new IConnectorFactory() {
 
 			@Override
 			public IModelProvider getConnector(String addr) {

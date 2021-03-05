@@ -17,7 +17,7 @@ import org.eclipse.basyx.vab.coder.json.provider.JSONProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
-import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.ConnectorFactory;
 
 /**
  * Test JSONConnector against JSONProvider
@@ -28,7 +28,7 @@ import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
 public class TestJSONConnectorProviderIntegration extends TestProvider {
 
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(),
-			new ConnectorProvider() {
+			new ConnectorFactory() {
 
 				@Override
 				protected IModelProvider createProvider(String addr) {

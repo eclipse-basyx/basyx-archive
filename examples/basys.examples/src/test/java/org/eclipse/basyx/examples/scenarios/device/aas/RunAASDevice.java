@@ -20,7 +20,7 @@ import org.eclipse.basyx.examples.mockup.servers.SupplierStatusServlet;
 import org.eclipse.basyx.examples.scenarios.device.BaSyxExampleScenario;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -38,7 +38,7 @@ public class RunAASDevice extends BaSyxExampleScenario {
 	/**
 	 * VAB connection manager backend
 	 */
-	protected VABConnectionManager connManager = new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorProvider());
+	protected VABConnectionManager connManager = new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorFactory());
 
 
 	/**

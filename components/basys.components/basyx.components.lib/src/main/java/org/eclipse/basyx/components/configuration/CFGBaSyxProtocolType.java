@@ -9,9 +9,9 @@
  ******************************************************************************/
 package org.eclipse.basyx.components.configuration;
 
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
-import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
+import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorFactory;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 
 
 
@@ -53,10 +53,10 @@ public enum CFGBaSyxProtocolType {
 	/**
 	 * Create protocol instance
 	 */
-	public IConnectorProvider createInstance() {
+	public IConnectorFactory createInstance() {
 		// Create protocol instance
-		if (this.equals(HTTP))  return new HTTPConnectorProvider();
-		if (this.equals(BASYX)) return new BaSyxConnectorProvider();
+		if (this.equals(HTTP))  return new HTTPConnectorFactory();
+		if (this.equals(BASYX)) return new BaSyxConnectorFactory();
 		
 		// Unknown protocol
 		return null;

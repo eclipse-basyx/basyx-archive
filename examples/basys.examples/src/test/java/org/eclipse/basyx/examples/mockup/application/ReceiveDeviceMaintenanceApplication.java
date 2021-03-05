@@ -21,7 +21,7 @@ import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirecto
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 
 
 
@@ -51,7 +51,7 @@ public class ReceiveDeviceMaintenanceApplication extends BaseBaSyxService {
 		setRegistry(new AASRegistryProxy("http://localhost:8080/" + BaSyxExamplesContext.REGISTRYURL));
 		
 		// Service connection manager
-		setConnectionManager(new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorProvider()));
+		setConnectionManager(new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorFactory()));
 
 		// Register URNs of used objects
 		addShortcut("AAS",        new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001"));

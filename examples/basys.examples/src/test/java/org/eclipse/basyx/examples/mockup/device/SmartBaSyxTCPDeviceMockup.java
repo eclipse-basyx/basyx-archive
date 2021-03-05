@@ -29,7 +29,7 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 
 /**
  * This class implements a mockup of a smart manufacturing device
@@ -83,7 +83,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 
 		// Configure BaSyx service - registry and connection manager
 		setRegistry(new AASRegistryProxy("http://localhost:8080/" + BaSyxExamplesContext.REGISTRYURL));
-		setConnectionManager(new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorProvider()));
+		setConnectionManager(new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorFactory()));
 	}
 
 	

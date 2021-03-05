@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.basyx.testsuite.regression.vab.modelprovider.IModelProviderStub;
 import org.eclipse.basyx.vab.gateway.DelegatingModelProvider;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
 import org.junit.Test;
 
 /**
@@ -40,7 +40,7 @@ public class TestDelegatingModelProvider {
 
 		// Create DelegatingModelProvider with a stub writing the address and returning
 		// the IModelProviderStub
-		DelegatingModelProvider provider = new DelegatingModelProvider(new IConnectorProvider() {
+		DelegatingModelProvider provider = new DelegatingModelProvider(new IConnectorFactory() {
 
 			@Override
 			public IModelProvider getConnector(String addr) {

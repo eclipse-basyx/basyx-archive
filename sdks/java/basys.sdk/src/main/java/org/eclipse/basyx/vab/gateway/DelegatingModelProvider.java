@@ -12,7 +12,7 @@ package org.eclipse.basyx.vab.gateway;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
 
 /**
  * IModelProvider that delegates all calls to a Connector to enable gateway
@@ -26,9 +26,9 @@ public class DelegatingModelProvider implements IModelProvider {
 	// Provider that provides the connectors
 	private ModelProxyFactory proxyFactory;
 
-	public DelegatingModelProvider(IConnectorProvider connectorProvider) {
+	public DelegatingModelProvider(IConnectorFactory connectorFactory) {
 		super();
-		this.proxyFactory = new ModelProxyFactory(connectorProvider);
+		this.proxyFactory = new ModelProxyFactory(connectorFactory);
 	}
 
 	@Override

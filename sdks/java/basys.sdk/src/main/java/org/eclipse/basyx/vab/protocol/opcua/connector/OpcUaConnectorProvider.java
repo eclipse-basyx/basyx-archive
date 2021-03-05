@@ -10,7 +10,7 @@
 package org.eclipse.basyx.vab.protocol.opcua.connector;
 
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.ConnectorFactory;
 
 /**
  * OPC UA connector provider class
@@ -18,7 +18,7 @@ import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
  * @author kdorofeev
  *
  */
-public class OpcUaConnectorProvider extends ConnectorProvider {
+public class OpcUaConnectorProvider extends ConnectorFactory {
 
 	/**
 	 * returns HTTPConnetor wrapped with ConnectedHashmapProvider that handles

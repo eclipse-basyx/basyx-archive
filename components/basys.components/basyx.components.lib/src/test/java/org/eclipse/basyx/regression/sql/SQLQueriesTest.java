@@ -18,7 +18,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class SQLQueriesTest {
 	/**
 	 * Store HTTP asset administration shell manager backend
 	 */
-	protected VABConnectionManager connManager = new VABConnectionManager(new ComponentsTestsuiteDirectory(), new HTTPConnectorProvider());
+	protected VABConnectionManager connManager = new VABConnectionManager(new ComponentsTestsuiteDirectory(), new HTTPConnectorFactory());
 
 	/** 
 	 * Makes sure Tomcat Server is started

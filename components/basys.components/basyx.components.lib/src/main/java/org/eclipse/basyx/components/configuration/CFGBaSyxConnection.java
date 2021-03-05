@@ -9,7 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.components.configuration;
 
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
 import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
 
 
@@ -78,7 +78,7 @@ public class CFGBaSyxConnection {
 	/**
 	 * Create protocol provider
 	 */
-	public IConnectorProvider createConnectorProvider() {
+	public IConnectorFactory createConnectorProvider() {
 		// Create connector provider instance
 		return protocol.createInstance();
 	}

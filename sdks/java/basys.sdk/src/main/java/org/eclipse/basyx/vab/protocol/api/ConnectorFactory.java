@@ -20,7 +20,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  * @author schnicke
  *
  */
-public abstract class ConnectorProvider implements IConnectorProvider {
+public abstract class ConnectorFactory implements IConnectorFactory {
 
 	private Map<String, IModelProvider> providerMap = new HashMap<>();
 

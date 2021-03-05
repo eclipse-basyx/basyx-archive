@@ -31,7 +31,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -101,7 +101,7 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 		
 		// register the aas
 		registry.register(ccDescriptor);
-		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorProvider());
+		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorFactory());
 		
 		
 	}

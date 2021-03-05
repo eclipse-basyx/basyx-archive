@@ -35,8 +35,8 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedFile;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -83,8 +83,8 @@ public abstract class AASXSuite {
 
 		// Create a ConnectedAssetAdministrationShell using a
 		// ConnectedAssetAdministrationShellManager
-		IConnectorProvider connectorProvider = new HTTPConnectorProvider();
-		manager = new ConnectedAssetAdministrationShellManager(aasRegistry, connectorProvider);
+		IConnectorFactory connectorFactory = new HTTPConnectorFactory();
+		manager = new ConnectedAssetAdministrationShellManager(aasRegistry, connectorFactory);
 	}
 
 	@Test

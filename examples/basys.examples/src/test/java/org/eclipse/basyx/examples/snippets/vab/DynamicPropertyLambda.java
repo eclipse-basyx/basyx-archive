@@ -22,7 +22,7 @@ import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirecto
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -55,7 +55,7 @@ public class DynamicPropertyLambda {
 			new ExamplesPreconfiguredDirectory()
 				// Add example specific mappings
 			    .addMapping("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003",  "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/"),
-			new HTTPConnectorProvider());
+			new HTTPConnectorFactory());
 
 	
 	/**

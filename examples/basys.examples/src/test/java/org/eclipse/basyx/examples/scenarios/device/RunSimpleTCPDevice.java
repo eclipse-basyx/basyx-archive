@@ -18,7 +18,7 @@ import org.eclipse.basyx.examples.mockup.device.SimpleTCPDeviceMockup;
 import org.eclipse.basyx.examples.mockup.devicemanager.ManufacturingDeviceManager;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -41,7 +41,7 @@ public class RunSimpleTCPDevice extends BaSyxExampleScenario {
 	/**
 	 * VAB connection manager backend
 	 */
-	protected VABConnectionManager connManager = new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorProvider());
+	protected VABConnectionManager connManager = new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorFactory());
 
 
 	/**

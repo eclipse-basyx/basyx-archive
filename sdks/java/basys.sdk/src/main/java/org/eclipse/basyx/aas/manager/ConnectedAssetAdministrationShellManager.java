@@ -28,8 +28,8 @@ import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 
 /**
  * Implement a AAS manager backend that communicates via HTTP/REST<br />
@@ -41,7 +41,7 @@ import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 public class ConnectedAssetAdministrationShellManager implements IAssetAdministrationShellManager {
 
 	protected IAASRegistry aasDirectory;
-	protected IConnectorProvider connectorProvider;
+	protected IConnectorFactory connectorFactory;
 	protected ModelProxyFactory proxyFactory;
 
 	/**
@@ -50,7 +50,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	 * @param directory
 	 */
 	public ConnectedAssetAdministrationShellManager(IAASRegistry directory) {
-		this(directory, new HTTPConnectorProvider());
+		this(directory, new HTTPConnectorFactory());
 	}
 
 	/**
@@ -58,9 +58,9 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	 * @param providerProvider
 	 */
 	public ConnectedAssetAdministrationShellManager(IAASRegistry directory,
-			IConnectorProvider provider) {
+			IConnectorFactory provider) {
 		this.aasDirectory = directory;
-		this.connectorProvider = provider;
+		this.connectorFactory = provider;
 		this.proxyFactory = new ModelProxyFactory(provider);
 	}
 
@@ -167,7 +167,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 			endpoint += "/" + AASAggregatorProvider.PREFIX;
 		}
 
-		IModelProvider provider = connectorProvider.getConnector(endpoint);
+		IModelProvider provider = connectorFactory.getConnector(endpoint);
 		AASAggregatorProxy proxy = new AASAggregatorProxy(provider);
 		proxy.createAAS(aas);
 		try {

@@ -24,7 +24,7 @@ import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
-import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.ConnectorFactory;
 
 /**
  * Tests the functionality of the VABLambdaProvider according to the test cases
@@ -45,7 +45,7 @@ public class TestLambdaProvider extends TestProvider {
 	private static HashMap<String, Object> mapElement = (HashMap<String, Object>) structureElement.get("map");
 
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(),
-			new ConnectorProvider() {
+			new ConnectorFactory() {
 
 				@Override
 				protected IModelProvider createProvider(String addr) {

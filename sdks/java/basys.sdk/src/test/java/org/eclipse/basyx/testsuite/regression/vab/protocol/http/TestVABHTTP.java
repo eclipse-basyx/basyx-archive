@@ -25,7 +25,7 @@ import org.eclipse.basyx.testsuite.regression.vab.support.RecordingProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 import org.junit.Rule;
@@ -39,7 +39,7 @@ import org.junit.Test;
  */
 public class TestVABHTTP extends TestProvider {
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(),
-			new HTTPConnectorProvider());
+			new HTTPConnectorFactory());
 
 	private RecordingProvider recorder = new RecordingProvider(new VABMapProvider(new HashMap<>()));
 

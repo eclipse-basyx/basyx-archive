@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
 
 /**
  * A simple ConnectorProvider stub returning connectors based on a String
@@ -22,7 +22,7 @@ import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
  * @author schnicke
  *
  */
-public class ConnectorProviderStub implements IConnectorProvider {
+public class ConnectorProviderStub implements IConnectorFactory {
 	private Map<String, IModelProvider> providerMap = new HashMap<>();
 
 	public void addMapping(String addr, IModelProvider provider) {

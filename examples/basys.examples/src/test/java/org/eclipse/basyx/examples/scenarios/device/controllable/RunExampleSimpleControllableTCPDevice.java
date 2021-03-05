@@ -24,7 +24,7 @@ import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnector;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -40,7 +40,7 @@ public class RunExampleSimpleControllableTCPDevice extends BaSyxExampleScenario 
 	/**
 	 * VAB connection manager backend
 	 */
-	protected VABConnectionManager connManager = new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorProvider());
+	protected VABConnectionManager connManager = new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorFactory());
 
 	
 	/**

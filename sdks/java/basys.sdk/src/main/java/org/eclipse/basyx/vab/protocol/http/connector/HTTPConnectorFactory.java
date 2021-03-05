@@ -11,9 +11,9 @@ package org.eclipse.basyx.vab.protocol.http.connector;
 
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.ConnectorFactory;
 
-public class HTTPConnectorProvider extends ConnectorProvider {
+public class HTTPConnectorFactory extends ConnectorFactory {
 
 	/**
 	 * returns HTTPConnetor wrapped with ConnectedHashmapProvider that handles

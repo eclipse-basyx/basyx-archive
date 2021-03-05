@@ -34,8 +34,8 @@ import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 
 /**
  * Provider class that implements the AssetAdministrationShellServices <br />
@@ -118,7 +118,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 	/**
 	 * Store HTTP Connector
 	 */
-	protected IConnectorProvider connectorProvider = null;
+	protected IConnectorFactory connectorFactory = null;
 
 	/**
 	 * Store AAS API Provider. By default, uses the VAB API Provider
@@ -174,20 +174,20 @@ public class MultiSubmodelProvider implements IModelProvider {
 	 * @param registry
 	 * @param provider
 	 */
-	public MultiSubmodelProvider(IAASRegistry registry, IConnectorProvider provider) {
+	public MultiSubmodelProvider(IAASRegistry registry, IConnectorFactory provider) {
 		this();
 		this.registry = registry;
-		this.connectorProvider = provider;
+		this.connectorFactory = provider;
 	}
 	
 	/**
 	 * Constructor that accepts a registry, a connection provider and API providers
 	 */
 	public MultiSubmodelProvider(AASModelProvider contentProvider, IAASRegistry registry,
-			IConnectorProvider connectorProvider, ISubmodelAPIFactory smApiProvider, IAASAPIFactory aasApiProvider) {
+			IConnectorFactory connectorFactory, ISubmodelAPIFactory smApiProvider, IAASAPIFactory aasApiProvider) {
 		this(contentProvider, aasApiProvider, smApiProvider);
 		this.registry = registry;
-		this.connectorProvider = connectorProvider;
+		this.connectorFactory = connectorFactory;
 	}
 
 	/**
@@ -197,10 +197,10 @@ public class MultiSubmodelProvider implements IModelProvider {
 	 * @param registry
 	 * @param provider
 	 */
-	public MultiSubmodelProvider(AASModelProvider contentProvider, IAASRegistry registry, HTTPConnectorProvider provider) {
+	public MultiSubmodelProvider(AASModelProvider contentProvider, IAASRegistry registry, HTTPConnectorFactory provider) {
 		this(contentProvider);
 		this.registry = registry;
-		this.connectorProvider = provider;
+		this.connectorFactory = provider;
 	}
 
 	/**
@@ -322,7 +322,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 					}
 				}
 				
-				List<Submodel> remoteSms = missingEndpoints.stream().map(endpoint -> connectorProvider.getConnector(endpoint)).
+				List<Submodel> remoteSms = missingEndpoints.stream().map(endpoint -> connectorFactory.getConnector(endpoint)).
 						map(p -> (Map<String, Object>) p.getValue("")).map(m -> Submodel.createAsFacade(m)).collect(Collectors.toList());
 				submodels.addAll(remoteSms);
 			}
@@ -488,7 +488,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 		// Remove "/submodel" since it will be readded later
 		endpoint = endpoint.substring(0, endpoint.length() - SubmodelProvider.SUBMODEL.length() - 1);
 
-		return connectorProvider.getConnector(endpoint);
+		return connectorFactory.getConnector(endpoint);
 	}
 	
 	/**

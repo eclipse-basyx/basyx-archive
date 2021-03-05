@@ -11,7 +11,7 @@ package org.eclipse.basyx.testsuite.regression.vab.protocol.https;
 
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.ConnectorFactory;
 
 /**
  * An HTTPS Connector provider class
@@ -19,7 +19,7 @@ import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
  * @author haque
  *
  */
-public class HTTPSConnectorProvider extends ConnectorProvider {
+public class HTTPSConnectorProvider extends ConnectorFactory {
 
 	/**
 	 * returns HTTPSConnetor wrapped with ConnectedHashmapProvider that handles

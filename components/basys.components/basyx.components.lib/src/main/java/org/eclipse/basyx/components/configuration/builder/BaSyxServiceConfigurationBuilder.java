@@ -15,7 +15,7 @@ import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.configuration.CFGBaSyxProtocolType;
 import org.eclipse.basyx.components.configuration.ConfigurableComponent;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
 
 /**
@@ -103,7 +103,7 @@ public class BaSyxServiceConfigurationBuilder<T extends BaSyxServiceConfiguratio
 	 */
 	public VABConnectionManager getConnectionManager() {
 		// Create and return VABConnectionManager
-		return new VABConnectionManager(vabDirectory, new HTTPConnectorProvider());
+		return new VABConnectionManager(vabDirectory, new HTTPConnectorFactory());
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class BaSyxServiceConfigurationBuilder<T extends BaSyxServiceConfiguratio
 	 */
 	public ConnectedAssetAdministrationShellManager getConnetedAASManager() {
 		// Create and return connected AAS-manager
-		return new ConnectedAssetAdministrationShellManager(getRegistry(), new HTTPConnectorProvider());
+		return new ConnectedAssetAdministrationShellManager(getRegistry(), new HTTPConnectorFactory());
 	}
 }
 

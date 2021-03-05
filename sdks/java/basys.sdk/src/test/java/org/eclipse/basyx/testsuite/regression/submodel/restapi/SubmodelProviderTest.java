@@ -42,7 +42,7 @@ import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.ConnectorFactory;
 import org.junit.Test;
 
 public class SubmodelProviderTest {
@@ -51,7 +51,7 @@ public class SubmodelProviderTest {
 
 	protected VABConnectionManager getConnectionManager() {
 		if (connManager == null) {
-			connManager = new VABConnectionManager(new TestsuiteDirectory(), new ConnectorProvider() {
+			connManager = new VABConnectionManager(new TestsuiteDirectory(), new ConnectorFactory() {
 				@Override
 				protected IModelProvider createProvider(String addr) {
 					// Simple submodel for testing specific mappings for submodels

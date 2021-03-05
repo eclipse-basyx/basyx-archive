@@ -18,8 +18,8 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,8 +44,8 @@ public abstract class AASServerSuite {
 		aasRegistry = new InMemoryRegistry();
 
 		// Create ConnectedAASManager
-		IConnectorProvider connectorProvider = new HTTPConnectorProvider();
-		manager = new ConnectedAssetAdministrationShellManager(aasRegistry, connectorProvider);
+		IConnectorFactory connectorFactory = new HTTPConnectorFactory();
+		manager = new ConnectedAssetAdministrationShellManager(aasRegistry, connectorFactory);
 	}
 
 	@Test

@@ -24,8 +24,8 @@ import org.eclipse.basyx.components.aas.configuration.AASServerBackend;
 import org.eclipse.basyx.components.aas.configuration.BaSyxAASServerConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -81,8 +81,8 @@ public class TestJSONAASServer {
 
 		// Create a ConnectedAssetAdministrationShell using a
 		// ConnectedAssetAdministrationShellManager
-		IConnectorProvider connectorProvider = new HTTPConnectorProvider();
-		manager = new ConnectedAssetAdministrationShellManager(registry, connectorProvider);
+		IConnectorFactory connectorFactory = new HTTPConnectorFactory();
+		manager = new ConnectedAssetAdministrationShellManager(registry, connectorFactory);
 	}
 
 

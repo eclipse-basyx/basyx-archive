@@ -11,7 +11,7 @@ package org.eclipse.basyx.vab.manager;
 
 import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
 import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
 
 
@@ -33,7 +33,7 @@ public class VABConnectionManager {
 	/**
 	 * Store connection providers
 	 */
-	protected IConnectorProvider connectorProvider = null;
+	protected IConnectorFactory connectorFactory = null;
 	
 	/**
 	 * Factory for creating proxies for addresses with multiple endpoints
@@ -47,12 +47,12 @@ public class VABConnectionManager {
 	 * @param providerProvider
 	 *            used to get the appropriate connector for the selected address
 	 */
-	public VABConnectionManager(IVABRegistryService networkDirectoryService, IConnectorProvider providerProvider) {
+	public VABConnectionManager(IVABRegistryService networkDirectoryService, IConnectorFactory providerProvider) {
 		// Set directory service reference
 		directoryService = networkDirectoryService;
 
 		// Set connector reference
-		this.connectorProvider = providerProvider;
+		this.connectorFactory = providerProvider;
 		
 		// Set proxy factory
 		this.proxyFactory = new ModelProxyFactory(providerProvider);

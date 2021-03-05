@@ -26,7 +26,7 @@ import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 
 /**
  * Example manufacturing device manager code
@@ -79,7 +79,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		
 		
 		// Set service connection manager and create AAS server connection
-		setConnectionManager(new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorProvider()));
+		setConnectionManager(new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorFactory()));
 		// - Create AAS server connection
 		aasServerConnection = getConnectionManager().connectToVABElement("AASServer");
 		

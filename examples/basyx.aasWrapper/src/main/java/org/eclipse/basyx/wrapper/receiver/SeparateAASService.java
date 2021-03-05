@@ -28,7 +28,7 @@ import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.eclipse.basyx.wrapper.exception.WrapperRequestException;
 import org.eclipse.basyx.wrapper.receiver.configuration.AASPropertyConfiguration;
 import org.eclipse.basyx.wrapper.receiver.configuration.PropertyConfiguration;
@@ -125,7 +125,7 @@ public class SeparateAASService implements IPropertyWrapperService {
 		String propEndpoint = VABPathTools.concatenatePaths(smEndpoint, MultiSubmodelElementProvider.ELEMENTS, shortId);
 
 		// Create a "ConnectedProperty" that gives access to the property
-		ModelProxyFactory mpf = new ModelProxyFactory(new HTTPConnectorProvider());
+		ModelProxyFactory mpf = new ModelProxyFactory(new HTTPConnectorFactory());
 		return new ConnectedProperty(mpf.createProxy(propEndpoint));
 	}
 

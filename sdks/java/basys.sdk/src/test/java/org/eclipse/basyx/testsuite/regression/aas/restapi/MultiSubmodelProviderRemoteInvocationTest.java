@@ -36,7 +36,7 @@ import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
-import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
+import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorFactory;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
 import org.eclipse.basyx.vab.service.api.BaSyxService;
 import org.junit.After;
@@ -86,7 +86,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 		
 
 		// Create a VABMultiSubmodelProvider using the registry and a http connector
-		provider = new MultiSubmodelProvider(registry, new BaSyxConnectorProvider());
+		provider = new MultiSubmodelProvider(registry, new BaSyxConnectorFactory());
 		
 		// Create and add an AAS to the provider with same id as the AAS in the registry
 		AssetAdministrationShell aas = new AssetAdministrationShell();

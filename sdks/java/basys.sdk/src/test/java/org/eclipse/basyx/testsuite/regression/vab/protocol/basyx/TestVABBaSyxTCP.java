@@ -18,7 +18,7 @@ import org.eclipse.basyx.testsuite.regression.vab.modelprovider.TestProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnector;
-import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
+import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorFactory;
 import org.eclipse.basyx.vab.protocol.basyx.server.VABBaSyxTCPInterface;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,7 +31,7 @@ import org.junit.Test;
  */
 public class TestVABBaSyxTCP extends TestProvider {
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory_BaSyxNative(),
-			new BaSyxConnectorProvider());
+			new BaSyxConnectorFactory());
 
 	@Rule
 	public VABTCPServerResource res = new VABTCPServerResource(new VABMapProvider(new SimpleVABElement()));

@@ -21,9 +21,9 @@ import org.eclipse.basyx.vab.gateway.DelegatingModelProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
-import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
+import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorFactory;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
@@ -55,8 +55,8 @@ public class TestGateway {
 		// Create ConnectorProviderMapper and add mapping from "basyx" to
 		// BaSyxConnectorProvider for gateway
 		ConnectorProviderMapper gatewayMapper = new ConnectorProviderMapper();
-		gatewayMapper.addConnectorProvider("basyx", new BaSyxConnectorProvider());
-		gatewayMapper.addConnectorProvider("http", new HTTPConnectorProvider());
+		gatewayMapper.addConnectorProvider("basyx", new BaSyxConnectorFactory());
+		gatewayMapper.addConnectorProvider("http", new HTTPConnectorFactory());
 
 		// Create tcp gateway using DelegatingModelProvider
 		basyxGateway = new BaSyxTCPServer<>(new DelegatingModelProvider(gatewayMapper), 6999);
@@ -103,7 +103,7 @@ public class TestGateway {
 
 		// Create ConnectionProviderMapper for client
 		ConnectorProviderMapper clientMapper = new ConnectorProviderMapper();
-		clientMapper.addConnectorProvider("http", new HTTPConnectorProvider());
+		clientMapper.addConnectorProvider("http", new HTTPConnectorFactory());
 
 		// Create VABConnectionManager
 		VABConnectionManager manager = new VABConnectionManager(directory, clientMapper);

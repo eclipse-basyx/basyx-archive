@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
 
 /**
  * Maps an incoming address to an IConnectorProvider based on the protocol used
@@ -24,9 +24,9 @@ import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
  * @author schnicke
  *
  */
-public class ConnectorProviderMapper implements IConnectorProvider {
+public class ConnectorProviderMapper implements IConnectorFactory {
 
-	private Map<String, IConnectorProvider> providerMap = new HashMap<>();
+	private Map<String, IConnectorFactory> providerMap = new HashMap<>();
 
 	/**
 	 * 
@@ -35,7 +35,7 @@ public class ConnectorProviderMapper implements IConnectorProvider {
 	 *            <i>basyx://</i>
 	 * @param provider
 	 */
-	public void addConnectorProvider(String prefix, IConnectorProvider provider) {
+	public void addConnectorProvider(String prefix, IConnectorFactory provider) {
 		providerMap.put(prefix, provider);
 	}
 

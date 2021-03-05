@@ -42,8 +42,8 @@ import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -169,7 +169,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	 */
 	private MultiSubmodelProvider initMultiSubmodelProvider(IAASAPI aasApi) {
 		AASModelProvider aasProvider = new AASModelProvider(aasApi);
-		IConnectorProvider connProvider = new HTTPConnectorProvider();
+		IConnectorFactory connProvider = new HTTPConnectorFactory();
 		MultiSubmodelProvider provider = new MultiSubmodelProvider(aasProvider, registry, connProvider,
 				smApiProvider, aasApiProvider);
 		provider.setAssetAdministrationShell(aasProvider);
