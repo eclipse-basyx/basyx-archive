@@ -11,12 +11,10 @@ package org.eclipse.basyx.support.bundle;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.components.servlet.aas.AASBundleServlet;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 
 /**
- * Helper class that supports AASDescriptor utilization for an AASBundle under
- * the assumption, that is is hosted using {@link AASBundleServlet}
+ * Helper class that supports AASDescriptor utilization for an AASBundle
  * 
  * @author schnicke
  *
@@ -24,8 +22,9 @@ import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 public class AASBundleDescriptorFactory {
 	/**
 	 * Creates the AASDescriptor for the given bundle and hostPath
+	 * 
 	 * @param bundle
-	 * @param hostBasePath the hostBasePath the  {@link AASBundleServlet} will be hosted on
+	 * @param hostBasePath
 	 * @return
 	 */
 	public static AASDescriptor createAASDescriptor(AASBundle bundle, String hostBasePath) {
