@@ -37,36 +37,27 @@ namespace BaSyx.Registry.Client.Http
         private string baseUrl = null;
         
         private CancellationTokenSource RepeatRegistrationCancellationToken = null;
-        public int RequestTimeout = DEFAULT_REQUEST_TIMEOUT;
 
         public void LoadSettings(RegistryClientSettings settings)
         {
             LoadProxy(settings.ProxyConfig);
 
             if (settings.ClientConfig.RequestConfig.RequestTimeout.HasValue)
-                RequestTimeout = settings.ClientConfig.RequestConfig.RequestTimeout.Value;
-            else
-                RequestTimeout = DEFAULT_REQUEST_TIMEOUT;
+                SetDefaultTimeout(TimeSpan.FromMilliseconds(settings.ClientConfig.RequestConfig.RequestTimeout.Value));
 
             baseUrl = settings.RegistryConfig.RegistryUrl.TrimEnd('/') + PATH_SEPERATOR + REGISTRY_BASE_PATH;
         }
 
-        private RegistryHttpClient(HttpClientHandler clientHandler, RegistryClientSettings registryClientSettings) : base(clientHandler) 
+        public RegistryHttpClient() : this(null, null)
+        { }
+        public RegistryHttpClient(RegistryClientSettings registryClientSettings) : this(registryClientSettings, null)
+        { }
+        public RegistryHttpClient(RegistryClientSettings registryClientSettings, HttpMessageHandler messageHandler) : base(messageHandler)
         {
             JsonSerializerSettings = new DependencyInjectionJsonSerializerSettings();
-
-            Settings = registryClientSettings ?? RegistryClientSettings.LoadSettings();
-            Settings = Settings ?? throw new NullReferenceException("Settings is null");
-
+            Settings = registryClientSettings ?? RegistryClientSettings.LoadSettings() ?? throw new NullReferenceException("Settings is null");
             LoadSettings(Settings);
         }
-
-        public RegistryHttpClient() : this (DEFAULT_HTTP_CLIENT_HANDLER, null)
-        { }
-        public RegistryHttpClient(RegistryClientSettings registryClientSettings) : this(DEFAULT_HTTP_CLIENT_HANDLER, registryClientSettings)
-        { }
-        public RegistryHttpClient(RegistryClientSettings registryClientSettings, HttpClientHandler clientHandler) : this(clientHandler, registryClientSettings)
-        { }
 
         public Uri GetUri(params string[] pathElements)
         {
@@ -108,8 +99,10 @@ namespace BaSyx.Registry.Client.Http
                 return new Result<IAssetAdministrationShellDescriptor>(new ArgumentNullException(nameof(aasDescriptor)));
 
             var request = base.CreateJsonContentRequest(GetUri(aasId), HttpMethod.Put, aasDescriptor);
-            var response = base.SendRequest(request, RequestTimeout);
-            return base.EvaluateResponse<IAssetAdministrationShellDescriptor>(response, response.Entity);
+            var response = base.SendRequest(request, CancellationToken.None);
+            var result = base.EvaluateResponse<IAssetAdministrationShellDescriptor>(response, response.Entity);
+            response?.Entity?.Dispose();
+            return result;
         }
 
         public IResult<IAssetAdministrationShellDescriptor> RetrieveAssetAdministrationShellRegistration(string aasId)
@@ -118,8 +111,10 @@ namespace BaSyx.Registry.Client.Http
                 return new Result<IAssetAdministrationShellDescriptor>(new ArgumentNullException(nameof(aasId)));
 
             var request = base.CreateRequest(GetUri(aasId), HttpMethod.Get);
-            var response = base.SendRequest(request, RequestTimeout);
-            return base.EvaluateResponse<IAssetAdministrationShellDescriptor>(response, response.Entity);
+            var response = base.SendRequest(request, CancellationToken.None);
+            var result = base.EvaluateResponse<IAssetAdministrationShellDescriptor>(response, response.Entity);
+            response?.Entity?.Dispose();
+            return result;
         }
 
         public IResult<IQueryableElementContainer<IAssetAdministrationShellDescriptor>> RetrieveAllAssetAdministrationShellRegistrations(Predicate<IAssetAdministrationShellDescriptor> predicate)
@@ -128,13 +123,17 @@ namespace BaSyx.Registry.Client.Http
                 return new Result<IQueryableElementContainer<IAssetAdministrationShellDescriptor>>(new ArgumentNullException(nameof(predicate)));
 
             var request = base.CreateRequest(GetUri(), HttpMethod.Get);
-            var response = base.SendRequest(request, RequestTimeout);
+            var response = base.SendRequest(request, CancellationToken.None);
             var result = base.EvaluateResponse<IEnumerable<IAssetAdministrationShellDescriptor>>(response, response.Entity);
 
             if (!result.Success || result.Entity == null)
+            {
+                response?.Entity?.Dispose();
                 return new Result<IQueryableElementContainer<IAssetAdministrationShellDescriptor>>(result);
+            }
             else
             {
+                response?.Entity?.Dispose();
                 var foundItems = result.Entity.Where(w => predicate.Invoke(w));
                 return new Result<IQueryableElementContainer<IAssetAdministrationShellDescriptor>>(result.Success, foundItems?.AsQueryableElementContainer(), result.Messages);
             }
@@ -143,8 +142,9 @@ namespace BaSyx.Registry.Client.Http
         public IResult<IQueryableElementContainer<IAssetAdministrationShellDescriptor>> RetrieveAllAssetAdministrationShellRegistrations()
         {
             var request = base.CreateRequest(GetUri(), HttpMethod.Get);
-            var response = base.SendRequest(request, RequestTimeout);
+            var response = base.SendRequest(request, CancellationToken.None);
             var result = base.EvaluateResponse<IEnumerable<IAssetAdministrationShellDescriptor>>(response, response.Entity);
+            response?.Entity?.Dispose();
             return new Result<IQueryableElementContainer<IAssetAdministrationShellDescriptor>>(result.Success, result.Entity?.AsQueryableElementContainer(), result.Messages);
         }
 
@@ -154,8 +154,10 @@ namespace BaSyx.Registry.Client.Http
                 return new Result(new ArgumentNullException(nameof(aasId)));
 
             var request = base.CreateRequest(GetUri(aasId), HttpMethod.Delete);
-            var response = base.SendRequest(request, RequestTimeout);
-            return base.EvaluateResponse(response, response.Entity);
+            var response = base.SendRequest(request, CancellationToken.None);
+            var result = base.EvaluateResponse(response, response.Entity);
+            response?.Entity?.Dispose();
+            return result;
         }
 
         public IResult<ISubmodelDescriptor> CreateOrUpdateSubmodelRegistration(string aasId, string submodelId, ISubmodelDescriptor submodelDescriptor)
@@ -168,8 +170,10 @@ namespace BaSyx.Registry.Client.Http
                 return new Result<ISubmodelDescriptor>(new ArgumentNullException(nameof(submodelDescriptor)));
 
             var request = base.CreateJsonContentRequest(GetUri(aasId, SUBMODEL_PATH, submodelId), HttpMethod.Put, submodelDescriptor);
-            var response = base.SendRequest(request, RequestTimeout);
-            return base.EvaluateResponse<ISubmodelDescriptor>(response, response.Entity);
+            var response = base.SendRequest(request, CancellationToken.None);
+            var result = base.EvaluateResponse<ISubmodelDescriptor>(response, response.Entity);
+            response?.Entity?.Dispose();
+            return result;
         }
 
         public IResult<IQueryableElementContainer<ISubmodelDescriptor>> RetrieveAllSubmodelRegistrations(string aasId, Predicate<ISubmodelDescriptor> predicate)
@@ -180,13 +184,17 @@ namespace BaSyx.Registry.Client.Http
                 return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(new ArgumentNullException(nameof(predicate)));
 
             var request = base.CreateRequest(GetUri(aasId, SUBMODEL_PATH), HttpMethod.Get);
-            var response = base.SendRequest(request, RequestTimeout);
+            var response = base.SendRequest(request, CancellationToken.None);
             var result = base.EvaluateResponse<IEnumerable<ISubmodelDescriptor>>(response, response.Entity);
 
             if (!result.Success || result.Entity == null)
+            {
+                response?.Entity?.Dispose();
                 return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(result);
+            }
             else
             {
+                response?.Entity?.Dispose();
                 var foundItems = result.Entity.Where(w => predicate.Invoke(w));
                 return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(result.Success, foundItems?.AsQueryableElementContainer(), result.Messages);
             }
@@ -198,9 +206,9 @@ namespace BaSyx.Registry.Client.Http
                 return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(new ArgumentNullException(nameof(aasId)));
 
             var request = base.CreateRequest(GetUri(aasId, SUBMODEL_PATH), HttpMethod.Get);
-            var response = base.SendRequest(request, RequestTimeout);
+            var response = base.SendRequest(request, CancellationToken.None);
             var result = base.EvaluateResponse<IEnumerable<ISubmodelDescriptor>>(response, response.Entity);
-
+            response?.Entity?.Dispose();
             return new Result<IQueryableElementContainer<ISubmodelDescriptor>>(result.Success, result.Entity?.AsQueryableElementContainer(), result.Messages);
         }
 
@@ -212,8 +220,10 @@ namespace BaSyx.Registry.Client.Http
                 return new Result<ISubmodelDescriptor>(new ArgumentNullException(nameof(submodelId)));
 
             var request = base.CreateRequest(GetUri(aasId, SUBMODEL_PATH, submodelId), HttpMethod.Get);
-            var response = base.SendRequest(request, RequestTimeout);
-            return base.EvaluateResponse<ISubmodelDescriptor>(response, response.Entity);
+            var response = base.SendRequest(request, CancellationToken.None);
+            var result = base.EvaluateResponse<ISubmodelDescriptor>(response, response.Entity);
+            response?.Entity?.Dispose();
+            return result;
         }
 
         public IResult DeleteSubmodelRegistration(string aasId, string submodelId)
@@ -224,8 +234,10 @@ namespace BaSyx.Registry.Client.Http
                 return new Result(new ArgumentNullException(nameof(submodelId)));
 
             var request = base.CreateRequest(GetUri(aasId, SUBMODEL_PATH, submodelId), HttpMethod.Delete);
-            var response = base.SendRequest(request, RequestTimeout);
-            return base.EvaluateResponse(response, response.Entity);
+            var response = base.SendRequest(request, CancellationToken.None);
+            var result = base.EvaluateResponse(response, response.Entity);
+            response?.Entity?.Dispose();
+            return result;
         }   
     }
 }
