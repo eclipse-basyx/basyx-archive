@@ -10,7 +10,7 @@
 package org.eclipse.basyx.testsuite.regression.aas.registration.restapi;
 
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
-import org.eclipse.basyx.aas.registration.restapi.DirectoryModelProvider;
+import org.eclipse.basyx.aas.registration.restapi.AASRegistryModelProvider;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
 /**
@@ -19,14 +19,14 @@ import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
  * 
  * @author espen
  */
-public class DirectoryProviderServlet extends VABHTTPInterface<DirectoryModelProvider> {
+public class AASRegistryServlet extends VABHTTPInterface<AASRegistryModelProvider> {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor with ModelProvider based on an InMemoryRegistry
 	 */
-	public DirectoryProviderServlet() {
-		super(new DirectoryModelProvider(new InMemoryRegistry()));
+	public AASRegistryServlet() {
+		super(new AASRegistryModelProvider(new InMemoryRegistry()));
 
 	}
 }

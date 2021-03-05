@@ -9,7 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.components.registry.servlet;
 
-import org.eclipse.basyx.aas.registration.restapi.DirectoryModelProvider;
+import org.eclipse.basyx.aas.registration.restapi.AASRegistryModelProvider;
 import org.eclipse.basyx.components.configuration.BaSyxSQLConfiguration;
 import org.eclipse.basyx.components.registry.sql.SQLRegistry;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
@@ -20,7 +20,7 @@ import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
  * 
  * @author kuhn, pschorn, espen
  */
-public class SQLRegistryServlet extends VABHTTPInterface<DirectoryModelProvider> {
+public class SQLRegistryServlet extends VABHTTPInterface<AASRegistryModelProvider> {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -28,10 +28,10 @@ public class SQLRegistryServlet extends VABHTTPInterface<DirectoryModelProvider>
 	 * SQLDirectoryProvider as backend
 	 */
 	public SQLRegistryServlet() {
-		super(new DirectoryModelProvider(new SQLRegistry()));
+		super(new AASRegistryModelProvider(new SQLRegistry()));
 	}
 
 	public SQLRegistryServlet(BaSyxSQLConfiguration sqlConfig) {
-		super(new DirectoryModelProvider(new SQLRegistry(sqlConfig)));
+		super(new AASRegistryModelProvider(new SQLRegistry(sqlConfig)));
 	}
 }

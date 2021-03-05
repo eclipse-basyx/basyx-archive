@@ -10,7 +10,7 @@
 package org.eclipse.basyx.components.registry.servlet;
 
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
-import org.eclipse.basyx.aas.registration.restapi.DirectoryModelProvider;
+import org.eclipse.basyx.aas.registration.restapi.AASRegistryModelProvider;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
 /**
@@ -21,14 +21,14 @@ import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
  * 
  * @author espen
  */
-public class InMemoryRegistryServlet extends VABHTTPInterface<DirectoryModelProvider> {
+public class InMemoryRegistryServlet extends VABHTTPInterface<AASRegistryModelProvider> {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor with ModelProvider based on an InMemoryRegistry
 	 */
 	public InMemoryRegistryServlet() {
-		super(new DirectoryModelProvider(new InMemoryRegistry()));
+		super(new AASRegistryModelProvider(new InMemoryRegistry()));
 
 	}
 }

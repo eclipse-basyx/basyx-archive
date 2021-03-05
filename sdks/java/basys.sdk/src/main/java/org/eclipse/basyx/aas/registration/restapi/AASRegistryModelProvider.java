@@ -23,7 +23,6 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
-import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -34,18 +33,18 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  * @author schnicke, conradi
  *
  */
-public class DirectoryModelProvider implements IModelProvider {
+public class AASRegistryModelProvider implements IModelProvider {
 
 	IAASRegistryService registry;
 
 	public static final String PREFIX = "api/v1/registry";
 	public static final String SUBMODELS = "submodels";
 
-	public DirectoryModelProvider(IAASRegistryService registry) {
+	public AASRegistryModelProvider(IAASRegistryService registry) {
 		this.registry = registry;
 	}
 
-	public DirectoryModelProvider() {
+	public AASRegistryModelProvider() {
 		this(new InMemoryRegistry());
 	}
 
@@ -243,45 +242,7 @@ public class DirectoryModelProvider implements IModelProvider {
 
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
-		String[] splitted = preparePath(path);
-
-		// Creating new entry
-		if (splitted.length == 0) {
-			
-			AASDescriptor aas = createAASDescriptorFromMap(newEntity);
-			
-			// Check if resource does already exist
-			try {
-				registry.lookupAAS(aas.getIdentifier());
-				throw new ResourceAlreadyExistsException("AAS with Id '" +
-						aas.getIdentifier().getId() + "' already exists. Try update instead.");
-			} catch (ResourceNotFoundException e) {
-				registry.register(aas);
-			}
-			
-		// Creating new submodel entry for existing aas
-		} else if (splitted.length == 2) { 
-			ModelUrn aasId = retrieveModelURN(splitted[0]);
-			
-			SubmodelDescriptor smDescriptor = createSMDescriptorFromMap(newEntity);
-			String smId = smDescriptor.getIdentifier().getId();
-			
-			//a submodel with this Id already exists in given aas
-			//getSmDescriptorFromAAS also checks if aas exists
-			try {
-				getSmDescriptorFromAAS(aasId, smId);
-				throw new ResourceAlreadyExistsException("A Submodel with id '" + smId +
-						"' already exists in aas '" + splitted[0] + "'. Try update instead.");
-			} catch (ResourceNotFoundException e) {
-				registry.register(aasId, smDescriptor);
-			}
-		} else {
-			throw new MalformedRequestException("Create was called with an unsupported path: " + path);
-		}
-	}
-
-	private ModelUrn retrieveModelURN(String str) {
-		return new ModelUrn(str);
+		throw new MalformedRequestException("Create (POST) on a registry is not supported. Please, use put");
 	}
 
 	@Override

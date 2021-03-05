@@ -11,7 +11,7 @@ package org.eclipse.basyx.testsuite.regression.aas.registration.restapi;
 
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
-import org.eclipse.basyx.aas.registration.restapi.DirectoryModelProvider;
+import org.eclipse.basyx.aas.registration.restapi.AASRegistryModelProvider;
 import org.eclipse.basyx.testsuite.regression.aas.registration.TestRegistryProviderSuite;
 
 /**
@@ -24,7 +24,7 @@ import org.eclipse.basyx.testsuite.regression.aas.registration.TestRegistryProvi
 public class TestDirectoryModelProvider extends TestRegistryProviderSuite {
 	@Override
 	protected IAASRegistryService getRegistryService() {
-		DirectoryModelProvider provider = new DirectoryModelProvider();
+		AASRegistryModelProvider provider = new AASRegistryModelProvider();
 		return new AASRegistryProxy(provider);
 	}
 

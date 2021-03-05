@@ -10,7 +10,7 @@
 package org.eclipse.basyx.components.registry.servlet;
 
 import org.eclipse.basyx.aas.registration.memory.AASRegistry;
-import org.eclipse.basyx.aas.registration.restapi.DirectoryModelProvider;
+import org.eclipse.basyx.aas.registration.restapi.AASRegistryModelProvider;
 import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
 import org.eclipse.basyx.components.registry.mongodb.MongoDBRegistryHandler;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
@@ -21,7 +21,7 @@ import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
  * 
  * @author espen
  */
-public class MongoDBRegistryServlet extends VABHTTPInterface<DirectoryModelProvider> {
+public class MongoDBRegistryServlet extends VABHTTPInterface<AASRegistryModelProvider> {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -29,10 +29,10 @@ public class MongoDBRegistryServlet extends VABHTTPInterface<DirectoryModelProvi
 	 * SQLDirectoryProvider as backend
 	 */
 	public MongoDBRegistryServlet() {
-		super(new DirectoryModelProvider(new AASRegistry(new MongoDBRegistryHandler())));
+		super(new AASRegistryModelProvider(new AASRegistry(new MongoDBRegistryHandler())));
 	}
 
 	public MongoDBRegistryServlet(BaSyxMongoDBConfiguration config) {
-		super(new DirectoryModelProvider(new AASRegistry(new MongoDBRegistryHandler(config))));
+		super(new AASRegistryModelProvider(new AASRegistry(new MongoDBRegistryHandler(config))));
 	}
 }

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
-import org.eclipse.basyx.aas.registration.restapi.DirectoryModelProvider;
+import org.eclipse.basyx.aas.registration.restapi.AASRegistryModelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -60,8 +60,8 @@ public class AASRegistryProxy extends VABRegistryProxy implements IAASRegistrySe
 	 * @return
 	 */
 	private static String harmonizeURL(String url) {
-		if (url.endsWith(DirectoryModelProvider.PREFIX)) {
-			url = url.substring(0, url.length() - DirectoryModelProvider.PREFIX.length());
+		if (url.endsWith(AASRegistryModelProvider.PREFIX)) {
+			url = url.substring(0, url.length() - AASRegistryModelProvider.PREFIX.length());
 		}
 		return url;
 	}
@@ -77,7 +77,7 @@ public class AASRegistryProxy extends VABRegistryProxy implements IAASRegistrySe
 	}
 
 	private static VABElementProxy createProxy(IModelProvider provider) {
-		return new VABElementProxy(DirectoryModelProvider.PREFIX, provider);
+		return new VABElementProxy(AASRegistryModelProvider.PREFIX, provider);
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class AASRegistryProxy extends VABRegistryProxy implements IAASRegistrySe
 	private String buildSubmodelPath(IIdentifier aas) throws ProviderException {
 		// Encode id to handle usage of reserved symbols, e.g. /
 		String encodedAASId = VABPathTools.encodePathElement(aas.getId());
-		return VABPathTools.concatenatePaths(encodedAASId, DirectoryModelProvider.SUBMODELS);
+		return VABPathTools.concatenatePaths(encodedAASId, AASRegistryModelProvider.SUBMODELS);
 	}
 
 	@SuppressWarnings("unchecked")

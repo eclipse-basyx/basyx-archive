@@ -30,7 +30,7 @@ public class TestDirectoryModelProviderServlet extends TestRegistryProviderSuite
 	@Rule
 	public AASHTTPServerResource res = new AASHTTPServerResource(
 			new BaSyxContext("/basys.sdk", System.getProperty("java.io.tmpdir"))
-					.addServletMapping("/Testsuite/directory/*", new DirectoryProviderServlet()));
+					.addServletMapping("/Testsuite/directory/*", new AASRegistryServlet()));
 
 	@Override
 	protected IAASRegistryService getRegistryService() {
