@@ -122,7 +122,7 @@ public class Operation extends SubmodelElement implements IOperation {
 	 */
 	public Operation(Function<Object[], Object> function) {
 		this();
-		setInvocable(function);
+		setInvokable(function);
 	}
 
 	/**
@@ -238,7 +238,7 @@ public class Operation extends SubmodelElement implements IOperation {
 		put(Operation.INOUT, inOut);
 	}
 
-	public void setInvocable(Function<Object[], Object> endpoint) {
+	public void setInvokable(Function<Object[], Object> endpoint) {
 		put(Operation.INVOKABLE, endpoint);
 	}
 

@@ -59,7 +59,7 @@ public class TestOperation extends TestOperationSuite {
 		Function<Object[], Object> newFunction = (Function<Object[], Object>) v -> {
 			return (int)v[0] - (int)v[1];
 		};
-		operation.setInvocable(newFunction);
+		operation.setInvokable(newFunction);
 		
 		assertEquals(1, operation.invoke(3,2));
 	}
