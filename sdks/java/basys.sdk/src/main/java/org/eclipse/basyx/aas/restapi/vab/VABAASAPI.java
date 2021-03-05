@@ -7,7 +7,7 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package org.eclipse.basyx.aas.restapi;
+package org.eclipse.basyx.aas.restapi.vab;
 
 import java.util.Collection;
 import java.util.Iterator;
