@@ -92,7 +92,7 @@ import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
  * @author kuhn, pschorn
  *
  */
-public class VABMultiSubmodelProvider implements IModelProvider {
+public class MultiSubmodelProvider implements IModelProvider {
 
 	/**
 	 * Store aas providers
@@ -132,7 +132,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	/**
 	 * Constructor with empty default aas and default VAB APIs
 	 */
-	public VABMultiSubmodelProvider() {
+	public MultiSubmodelProvider() {
 		this.aasApiProvider = new VABAASAPIFactory();
 		this.smApiProvider = new VABSubmodelAPIFactory();
 		IAASAPI aasApi = aasApiProvider.getAASApi(new AssetAdministrationShell());
@@ -142,7 +142,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	/**
 	 * Constructor for using custom APIs
 	 */
-	public VABMultiSubmodelProvider(AASModelProvider contentProvider, IAASAPIFactory aasApiProvider,
+	public MultiSubmodelProvider(AASModelProvider contentProvider, IAASAPIFactory aasApiProvider,
 			ISubmodelAPIFactory smApiProvider) {
 		this.aasApiProvider = aasApiProvider;
 		this.smApiProvider = smApiProvider;
@@ -152,7 +152,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	/**
 	 * Constructor that accepts an AAS
 	 */
-	public VABMultiSubmodelProvider(AASModelProvider contentProvider) {
+	public MultiSubmodelProvider(AASModelProvider contentProvider) {
 		this.aasApiProvider = new VABAASAPIFactory();
 		this.smApiProvider = new VABSubmodelAPIFactory();
 		// Store content provider
@@ -162,10 +162,10 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	/**
 	 * Constructor that accepts Submodel
 	 */
-	public VABMultiSubmodelProvider(String smID, SubmodelProvider contentProvider) {
+	public MultiSubmodelProvider(SubmodelProvider contentProvider) {
 		this();
 		// Store content provider
-		addSubmodel(smID, contentProvider);
+		addSubmodel(contentProvider);
 	}
 	
 	/**
@@ -173,7 +173,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * @param registry
 	 * @param provider
 	 */
-	public VABMultiSubmodelProvider(IAASRegistryService registry, IConnectorProvider provider) {
+	public MultiSubmodelProvider(IAASRegistryService registry, IConnectorProvider provider) {
 		this();
 		this.registry = registry;
 		this.connectorProvider = provider;
@@ -182,7 +182,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	/**
 	 * Constructor that accepts a registry, a connection provider and API providers
 	 */
-	public VABMultiSubmodelProvider(AASModelProvider contentProvider, IAASRegistryService registry,
+	public MultiSubmodelProvider(AASModelProvider contentProvider, IAASRegistryService registry,
 			IConnectorProvider connectorProvider, ISubmodelAPIFactory smApiProvider, IAASAPIFactory aasApiProvider) {
 		this(contentProvider, aasApiProvider, smApiProvider);
 		this.registry = registry;
@@ -196,7 +196,7 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 	 * @param registry
 	 * @param provider
 	 */
-	public VABMultiSubmodelProvider(AASModelProvider contentProvider, IAASRegistryService registry, HTTPConnectorProvider provider) {
+	public MultiSubmodelProvider(AASModelProvider contentProvider, IAASRegistryService registry, HTTPConnectorProvider provider) {
 		this(contentProvider);
 		this.registry = registry;
 		this.connectorProvider = provider;
@@ -215,26 +215,6 @@ public class VABMultiSubmodelProvider implements IModelProvider {
 		// Add model provider
 		aas_provider = modelContentProvider;
 		aasId = AssetAdministrationShell.createAsFacade((Map<String, Object>) modelContentProvider.getModelPropertyValue("")).getIdentification();
-	}
-
-	/**
-	 * Add a Submodel to the provider
-	 * 
-	 * @param elementId
-	 *            Element ID
-	 * @param modelContentProvider
-	 *            Model content provider
-	 */
-	@SuppressWarnings("unchecked")
-	@Deprecated
-	public void addSubmodel(String elementId, SubmodelProvider modelContentProvider) {
-		// Add model provider
-		submodel_providers.put(elementId, modelContentProvider);
-
-		Submodel sm = Submodel.createAsFacade((Map<String, Object>) modelContentProvider.getModelPropertyValue("/"));
-
-		// Adds a new submodel to the registered AAS
-		aas_provider.createValue("/submodels", sm);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -27,7 +27,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -63,7 +63,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 
 	private List<BaSyxService> services = new ArrayList<>();
 
-	private VABMultiSubmodelProvider provider;
+	private MultiSubmodelProvider provider;
 	
 	// Creating a new AAS Registry
 	private IAASRegistryService registry = new InMemoryRegistry();
@@ -86,7 +86,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 		
 
 		// Create a VABMultiSubmodelProvider using the registry and a http connector
-		provider = new VABMultiSubmodelProvider(registry, new BaSyxConnectorProvider());
+		provider = new MultiSubmodelProvider(registry, new BaSyxConnectorProvider());
 		
 		// Create and add an AAS to the provider with same id as the AAS in the registry
 		AssetAdministrationShell aas = new AssetAdministrationShell();

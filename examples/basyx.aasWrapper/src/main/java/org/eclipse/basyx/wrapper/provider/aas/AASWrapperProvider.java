@@ -17,7 +17,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
@@ -42,7 +42,7 @@ public class AASWrapperProvider implements IWrapperProvider {
 	private final String host;
 	private final int port;
 
-	private VABMultiSubmodelProvider provider;
+	private MultiSubmodelProvider provider;
 
 	private String providerPath = "/aas";
 
@@ -72,7 +72,7 @@ public class AASWrapperProvider implements IWrapperProvider {
 				configs);
 		aas.addSubmodel(sm);
 
-		provider = new VABMultiSubmodelProvider(new AASModelProvider(aas));
+		provider = new MultiSubmodelProvider(new AASModelProvider(aas));
 		provider.addSubmodel(new SubmodelProvider(sm));
 
 		// Register the aas

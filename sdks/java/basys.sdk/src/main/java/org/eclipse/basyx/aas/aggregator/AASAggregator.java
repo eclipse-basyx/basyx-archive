@@ -20,7 +20,7 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABAASAPIFactory;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.aas.restapi.api.IAASAPI;
 import org.eclipse.basyx.aas.restapi.api.IAASAPIFactory;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
@@ -39,7 +39,7 @@ import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
  */
 public class AASAggregator implements IAASAggregator {
 
-	protected Map<String, VABMultiSubmodelProvider> aasProviderMap = new HashMap<>();
+	protected Map<String, MultiSubmodelProvider> aasProviderMap = new HashMap<>();
 
 	protected IAASRegistryService registry;
 
@@ -131,11 +131,11 @@ public class AASAggregator implements IAASAggregator {
 		aasProviderMap.put(aas.getIdentification().getId(), createMultiSubmodelProvider(aas));
 	}
 
-	private VABMultiSubmodelProvider createMultiSubmodelProvider(AssetAdministrationShell aas) {
+	private MultiSubmodelProvider createMultiSubmodelProvider(AssetAdministrationShell aas) {
 		IConnectorProvider connProvider = new HTTPConnectorProvider();
 		IAASAPI aasApi = aasApiProvider.getAASApi(aas);
 		AASModelProvider contentProvider = new AASModelProvider(aasApi);
-		VABMultiSubmodelProvider multiAASProvider = new VABMultiSubmodelProvider(contentProvider, registry,
+		MultiSubmodelProvider multiAASProvider = new MultiSubmodelProvider(contentProvider, registry,
 				connProvider, smApiProvider, aasApiProvider);
 		return multiAASProvider;
 	}
@@ -147,7 +147,7 @@ public class AASAggregator implements IAASAggregator {
 
 	@Override
 	public IModelProvider getAASProvider(IIdentifier aasId) {
-		VABMultiSubmodelProvider provider = aasProviderMap.get(aasId.getId());
+		MultiSubmodelProvider provider = aasProviderMap.get(aasId.getId());
 
 		if (provider == null) {
 			throw new ResourceNotFoundException("AAS with Id " + aasId.getId() + " does not exist");

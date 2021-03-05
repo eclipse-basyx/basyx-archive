@@ -18,7 +18,7 @@ import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
@@ -80,7 +80,7 @@ public class AASExecutable {
 	}
 
 	private static void createServlet(AssetAdministrationShell aas, Submodel... submodels) {
-		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
+		MultiSubmodelProvider provider = new MultiSubmodelProvider();
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
 		for (Submodel sm : submodels) {
 			provider.addSubmodel(new SubmodelProvider(sm));

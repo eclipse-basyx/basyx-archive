@@ -21,7 +21,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
@@ -45,7 +45,7 @@ public class TestConnectedAssetAdministrationShell extends AssetAdministrationSh
 
 	@Before
 	public void build() throws Exception {
-		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
+		MultiSubmodelProvider provider = new MultiSubmodelProvider();
 		AssetAdministrationShell shell = retrieveBaselineShell();
 		provider.setAssetAdministrationShell(new AASModelProvider(AssetAdministrationShell.createAsFacade(TypeDestroyer.destroyType(shell))));
 

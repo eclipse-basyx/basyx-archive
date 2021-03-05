@@ -25,7 +25,7 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.aas.restapi.api.IAASAPI;
 import org.eclipse.basyx.aas.restapi.api.IAASAPIFactory;
 import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
@@ -68,7 +68,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	private static final String IDSHORTPATH = Referable.IDSHORT;
 	private static final String IDPATH = Identifiable.IDENTIFICATION + "." + Identifier.ID;
 
-	protected Map<String, VABMultiSubmodelProvider> aasProviderMap = new HashMap<>();
+	protected Map<String, MultiSubmodelProvider> aasProviderMap = new HashMap<>();
 	protected BaSyxMongoDBConfiguration config;
 	protected MongoOperations mongoOps;
 	protected String aasCollection;
@@ -158,7 +158,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 			String aasId = aas.getIdentification().getId();
 			logger.info("Adding AAS from DB: " + aasId);
 			MongoDBAASAPI aasApi = new MongoDBAASAPI(config, aasId);
-			VABMultiSubmodelProvider provider = initMultiSubmodelProvider(aasApi);
+			MultiSubmodelProvider provider = initMultiSubmodelProvider(aasApi);
 			addSubmodelsFromDB(provider, aas);
 			aasProviderMap.put(aas.getIdentification().getId(), provider);
 		}
@@ -167,10 +167,10 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	/**
 	 * Initializes and returns a VABMultiSubmodelProvider with only the AssetAdministrationShell
 	 */
-	private VABMultiSubmodelProvider initMultiSubmodelProvider(IAASAPI aasApi) {
+	private MultiSubmodelProvider initMultiSubmodelProvider(IAASAPI aasApi) {
 		AASModelProvider aasProvider = new AASModelProvider(aasApi);
 		IConnectorProvider connProvider = new HTTPConnectorProvider();
-		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider(aasProvider, registry, connProvider,
+		MultiSubmodelProvider provider = new MultiSubmodelProvider(aasProvider, registry, connProvider,
 				smApiProvider, aasApiProvider);
 		provider.setAssetAdministrationShell(aasProvider);
 		return provider;
@@ -179,7 +179,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	/**
 	 * Adds submodel providers for submodels in the MongoDB
 	 */
-	private void addSubmodelsFromDB(VABMultiSubmodelProvider provider, AssetAdministrationShell aas) {
+	private void addSubmodelsFromDB(MultiSubmodelProvider provider, AssetAdministrationShell aas) {
 		// Get ids and idShorts from aas
 		Collection<IReference> submodelRefs = aas.getSubmodelReferences();
 		List<String> smIds = new ArrayList<>();
@@ -217,7 +217,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 		return null;
 	}
 
-	private void addSubmodelProvidersById(String smId, VABMultiSubmodelProvider provider) {
+	private void addSubmodelProvidersById(String smId, MultiSubmodelProvider provider) {
 		ISubmodelAPI smApi = new MongoDBSubmodelAPI(smId);
 		SubmodelProvider smProvider = new SubmodelProvider(smApi);
 		provider.addSubmodel(smProvider);
@@ -253,7 +253,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	@Override
 	public void createAAS(AssetAdministrationShell aas) {
 		IAASAPI aasApi = this.aasApiProvider.getAASApi(aas);
-		VABMultiSubmodelProvider provider = initMultiSubmodelProvider(aasApi);
+		MultiSubmodelProvider provider = initMultiSubmodelProvider(aasApi);
 		aasProviderMap.put(aas.getIdentification().getId(), provider);
 	}
 
@@ -269,13 +269,13 @@ public class MongoDBAASAggregator implements IAASAggregator {
 		aasProviderMap.remove(aasId.getId());
 	}
 
-	public VABMultiSubmodelProvider getProviderForAASId(String aasId) {
+	public MultiSubmodelProvider getProviderForAASId(String aasId) {
 		return aasProviderMap.get(aasId);
 	}
 
 	@Override
 	public IModelProvider getAASProvider(IIdentifier aasId) {
-		VABMultiSubmodelProvider provider = aasProviderMap.get(aasId.getId());
+		MultiSubmodelProvider provider = aasProviderMap.get(aasId.getId());
 
 		if (provider == null) {
 			throw new ResourceNotFoundException("AAS with Id " + aasId.getId() + " does not exist");

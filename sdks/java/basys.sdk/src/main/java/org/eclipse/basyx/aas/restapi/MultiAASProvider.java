@@ -25,7 +25,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  *
  */
 public class MultiAASProvider implements IModelProvider {
-	protected HashMap<String, VABMultiSubmodelProvider> aas_providers;
+	protected HashMap<String, MultiSubmodelProvider> aas_providers;
 
 	public MultiAASProvider() {
 		aas_providers = new HashMap<>();
@@ -40,7 +40,7 @@ public class MultiAASProvider implements IModelProvider {
 	 * @param modelProvider
 	 *            The provider that contains the Asset Administration Shell.
 	 */
-	public void addMultiSubmodelProvider(String aasIdShort, VABMultiSubmodelProvider modelProvider) {
+	public void addMultiSubmodelProvider(String aasIdShort, MultiSubmodelProvider modelProvider) {
 		aas_providers.put(aasIdShort, modelProvider);
 	}
 
@@ -54,7 +54,7 @@ public class MultiAASProvider implements IModelProvider {
 	@Override
 	public Object getModelPropertyValue(String path) throws ProviderException {
 		String aasId = getId(path);
-		VABMultiSubmodelProvider provider = aas_providers.get(aasId);
+		MultiSubmodelProvider provider = aas_providers.get(aasId);
 		if (provider == null) {
 			throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 		}
@@ -65,7 +65,7 @@ public class MultiAASProvider implements IModelProvider {
 	@Override
 	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
 		String aasId = getId(path);
-		VABMultiSubmodelProvider provider = aas_providers.get(aasId);
+		MultiSubmodelProvider provider = aas_providers.get(aasId);
 		if (provider == null) {
 			throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 		}
@@ -76,7 +76,7 @@ public class MultiAASProvider implements IModelProvider {
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
 		String aasId = getId(path);
-		VABMultiSubmodelProvider provider = aas_providers.get(aasId);
+		MultiSubmodelProvider provider = aas_providers.get(aasId);
 		if (provider == null) {
 			throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 		}
@@ -87,7 +87,7 @@ public class MultiAASProvider implements IModelProvider {
 	@Override
 	public void deleteValue(String path) throws ProviderException {
 		String aasId = getId(path);
-		VABMultiSubmodelProvider provider = aas_providers.get(aasId);
+		MultiSubmodelProvider provider = aas_providers.get(aasId);
 		if (provider == null) {
 			throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 		}
@@ -98,7 +98,7 @@ public class MultiAASProvider implements IModelProvider {
 	@Override
 	public void deleteValue(String path, Object obj) throws ProviderException {
 		String aasId = getId(path);
-		VABMultiSubmodelProvider provider = aas_providers.get(aasId);
+		MultiSubmodelProvider provider = aas_providers.get(aasId);
 		if (provider == null) {
 			throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 		}
@@ -109,7 +109,7 @@ public class MultiAASProvider implements IModelProvider {
 	@Override
 	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
 		String aasId = getId(path);
-		VABMultiSubmodelProvider provider = aas_providers.get(aasId);
+		MultiSubmodelProvider provider = aas_providers.get(aasId);
 		if (provider == null) {
 			throw new ResourceNotFoundException("AAS with ID \"" + aasId + "\" does not exist.");
 		}

@@ -16,7 +16,7 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
@@ -50,7 +50,7 @@ public class MultiSubmodelProviderTest {
 	public void build() {
 		VABConnectionManagerStub stub = new VABConnectionManagerStub();
 		String urn = "urn:fhg:es.iese:aas:1:1:submodel";
-		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
+		MultiSubmodelProvider provider = new MultiSubmodelProvider();
 
 		// set dummy aas
 		AssetAdministrationShell aas = new AssetAdministrationShell(AASIDSHORT, AASURN, new Asset("assetIdShort", new Identifier(IdentifierType.CUSTOM, "assetId"), AssetKind.INSTANCE));

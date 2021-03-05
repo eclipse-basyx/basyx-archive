@@ -12,13 +12,13 @@ package org.eclipse.basyx.testsuite.regression.aas.restapi;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
-public class StubAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
+public class StubAASServlet extends VABHTTPInterface<MultiSubmodelProvider> {
 	private static final long serialVersionUID = 8859337501045845823L;
 
 	// Used short ids
@@ -30,7 +30,7 @@ public class StubAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 	public static final ModelUrn SMURN = new ModelUrn("urn:fhg:es.iese:aas:1:1:mySM#001");
 
 	public StubAASServlet() {
-		super(new VABMultiSubmodelProvider());
+		super(new MultiSubmodelProvider());
 
 		Submodel sm = new Submodel();
 		sm.setIdentification(SMURN.getIdType(), SMURN.getId());
