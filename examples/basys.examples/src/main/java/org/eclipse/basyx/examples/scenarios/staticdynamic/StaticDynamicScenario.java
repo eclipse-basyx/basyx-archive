@@ -28,7 +28,7 @@ import org.eclipse.basyx.components.registry.configuration.BaSyxRegistryConfigur
 import org.eclipse.basyx.components.registry.configuration.RegistryBackend;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.support.bundle.AASBundle;
-import org.eclipse.basyx.support.bundle.AASBundleIntegrator;
+import org.eclipse.basyx.support.bundle.AASBundleHelper;
 import org.xml.sax.SAXException;
 
 /**
@@ -80,11 +80,11 @@ public class StaticDynamicScenario {
 		bundle.getSubmodels().add(sm);
 		
 		// Load the new Bundles to the Server
-		AASBundleIntegrator.integrate(new AASAggregatorProxy(SERVER_URL), bundles);
+		AASBundleHelper.integrate(new AASAggregatorProxy(SERVER_URL), bundles);
 		
 		// Get a RegistryProxy and register all Objects contained in the Bundles
 		AASRegistryProxy proxy = new AASRegistryProxy(REGISTRY_URL);
-		AASBundleIntegrator.register(proxy, bundles, SERVER_URL);
+		AASBundleHelper.register(proxy, bundles, SERVER_URL);
 				
 	}
 	

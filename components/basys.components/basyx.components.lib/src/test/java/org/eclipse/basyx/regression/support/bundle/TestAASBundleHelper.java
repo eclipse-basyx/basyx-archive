@@ -34,7 +34,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionC
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.support.bundle.AASBundle;
-import org.eclipse.basyx.support.bundle.AASBundleIntegrator;
+import org.eclipse.basyx.support.bundle.AASBundleHelper;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.junit.Before;
@@ -46,7 +46,7 @@ import org.junit.Test;
  * @author conradi
  *
  */
-public class TestAASBundleIntegrator {
+public class TestAASBundleHelper {
 
 	private static final String AAS_ID = "TestAAS";
 	private static final String SM_ID = "TestSM";
@@ -82,7 +82,7 @@ public class TestAASBundleIntegrator {
 		pushAAS(aas);
 		pushSubmodel(sm, aas.getIdentification());
 		
-		assertFalse(AASBundleIntegrator.integrate(aggregator, bundles));
+		assertFalse(AASBundleHelper.integrate(aggregator, bundles));
 		checkAggregatorContent();
 	}
 	
@@ -100,7 +100,7 @@ public class TestAASBundleIntegrator {
 		AssetAdministrationShell aas = (AssetAdministrationShell) bundle.getAAS();
 		pushAAS(aas);
 		
-		assertTrue(AASBundleIntegrator.integrate(aggregator, bundles));
+		assertTrue(AASBundleHelper.integrate(aggregator, bundles));
 		checkAggregatorContent();
 	}
 	
@@ -114,7 +114,7 @@ public class TestAASBundleIntegrator {
 		AASBundle bundle = getTestBundle();
 		bundles.add(bundle);
 		
-		assertTrue(AASBundleIntegrator.integrate(aggregator, bundles));
+		assertTrue(AASBundleHelper.integrate(aggregator, bundles));
 		checkAggregatorContent();
 	}
 	
@@ -134,7 +134,7 @@ public class TestAASBundleIntegrator {
 		AASBundle bundle = getTestBundle();
 		bundles.add(bundle);
 
-		assertTrue(AASBundleIntegrator.integrate(aggregator, bundles));
+		assertTrue(AASBundleHelper.integrate(aggregator, bundles));
 		checkAggregatorContent();
 	}
 

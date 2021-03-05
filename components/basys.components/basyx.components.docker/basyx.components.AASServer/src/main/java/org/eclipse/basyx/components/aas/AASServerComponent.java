@@ -47,7 +47,7 @@ import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.support.bundle.AASBundleDescriptorFactory;
-import org.eclipse.basyx.support.bundle.AASBundleIntegrator;
+import org.eclipse.basyx.support.bundle.AASBundleHelper;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.slf4j.Logger;
@@ -176,7 +176,7 @@ public class AASServerComponent implements IComponent {
 	public void stopComponent() {
 		
 		// Remove all AASs/SMs that were registered on startup
-		AASBundleIntegrator.deregister(registry, aasBundles);
+		AASBundleHelper.deregister(registry, aasBundles);
 		
 		server.shutdown();
 	}
@@ -227,7 +227,7 @@ public class AASServerComponent implements IComponent {
 
 		// Integrate the loaded bundles into the aggregator
 		if (aasBundles != null) {
-			AASBundleIntegrator.integrate(aggregator, aasBundles);
+			AASBundleHelper.integrate(aggregator, aasBundles);
 		}
 
 		// Return the servlet for the resulting aggregator

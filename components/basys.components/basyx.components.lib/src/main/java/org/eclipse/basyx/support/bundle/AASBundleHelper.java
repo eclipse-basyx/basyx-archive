@@ -31,9 +31,9 @@ import org.slf4j.LoggerFactory;
  * @author conradi
  *
  */
-public class AASBundleIntegrator {
+public class AASBundleHelper {
 	
-	private static Logger logger = LoggerFactory.getLogger(AASBundleIntegrator.class);
+	private static Logger logger = LoggerFactory.getLogger(AASBundleHelper.class);
 
 	/**
 	 * Checks (by ID) if all AASs/SMs contained<br>
