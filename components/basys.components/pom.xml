@@ -5,7 +5,7 @@
 	
 	<groupId>org.eclipse.basyx</groupId>
 	<artifactId>basyx.components</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>BaSyx Components</name>
 
 	<packaging>pom</packaging>
@@ -121,14 +121,14 @@
 			<dependency>
 				<groupId>org.eclipse.basyx</groupId>
 				<artifactId>basyx.sdk</artifactId>
-				<version>0.1.0-SNAPSHOT</version>
+				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
 		
 			<!-- BaSyx SDK tests -->
 			<dependency>
 				<groupId>org.eclipse.basyx</groupId>
 				<artifactId>basyx.sdk</artifactId>
-				<version>0.1.0-SNAPSHOT</version>
+				<version>1.0.0-SNAPSHOT</version>
 				<classifier>tests</classifier>
 				<scope>test</scope>
 			</dependency>
